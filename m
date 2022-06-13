@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD33548ECB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A1E6548E19
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354711AbiFMLdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44418 "EHLO
+        id S1343644AbiFMKrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354364AbiFML3X (ORCPT
+        with ESMTP id S1346763AbiFMKnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DA1D137;
-        Mon, 13 Jun 2022 03:43:31 -0700 (PDT)
+        Mon, 13 Jun 2022 06:43:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF7ECE1E;
+        Mon, 13 Jun 2022 03:24:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B99AB80D41;
-        Mon, 13 Jun 2022 10:43:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6BAAC34114;
-        Mon, 13 Jun 2022 10:43:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B15660AEB;
+        Mon, 13 Jun 2022 10:24:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EE5C34114;
+        Mon, 13 Jun 2022 10:24:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117009;
-        bh=bNxTvQwfvlCQhLBV5XP5eB24HHOeNW7RiIDKe2u+9rk=;
+        s=korg; t=1655115894;
+        bh=4aKb9UEG4FDgEHvpYFNsNGvy7uct1jE3NM9reyVSyPg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wOE6F/eW/t0N3aqUf8E2eau9+phuBI7VeP3ZTHaqdDGjN1JWiooUoYjgwa0O9JBOz
-         xWRitlksoFXTBHfUCSOUshG4/9b/MQo+6En0vvcGb7NSR86uNcbXLbR6EefPb6K9j/
-         YR2Uy8zkNgoJy1Qy16AYTrB78GXs2MXIto6wV8r8=
+        b=D2YX7tteakGAaTlb/jGSqQRmsGdA4snE080jT8J1JIh0Rx81UpTE2xuMJyNiVU+vL
+         qj6sygvLvzmRopxWDrY2arwSsYHvqRCu9bHHXWPdxmy+0UKpbGQoCwMdxUIgiXxo6r
+         dsz4p7BMBzj+8sfcMFvECVPF9DOhiiq0jbhbjImc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 5.4 254/411] um: Fix out-of-bounds read in LDT setup
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 069/218] media: uvcvideo: Fix missing check to determine if element is found in list
 Date:   Mon, 13 Jun 2022 12:08:47 +0200
-Message-Id: <20220613094936.384518858@linuxfoundation.org>
+Message-Id: <20220613094922.188023754@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,71 +56,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vincent Whitchurch <vincent.whitchurch@axis.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 2a4a62a14be1947fa945c5c11ebf67326381a568 upstream.
+[ Upstream commit 261f33388c29f6f3c12a724e6d89172b7f6d5996 ]
 
-syscall_stub_data() expects the data_count parameter to be the number of
-longs, not bytes.
+The list iterator will point to a bogus position containing HEAD if
+the list is empty or the element is not found in list. This case
+should be checked before any use of the iterator, otherwise it will
+lead to a invalid memory access. The missing check here is before
+"pin = iterm->id;", just add check here to fix the security bug.
 
- ==================================================================
- BUG: KASAN: stack-out-of-bounds in syscall_stub_data+0x70/0xe0
- Read of size 128 at addr 000000006411f6f0 by task swapper/1
+In addition, the list iterator value will *always* be set and non-NULL
+by list_for_each_entry(), so it is incorrect to assume that the iterator
+value will be NULL if the element is not found in list, considering
+the (mis)use here: "if (iterm == NULL".
 
- CPU: 0 PID: 1 Comm: swapper Not tainted 5.18.0+ #18
- Call Trace:
-  show_stack.cold+0x166/0x2a7
-  __dump_stack+0x3a/0x43
-  dump_stack_lvl+0x1f/0x27
-  print_report.cold+0xdb/0xf81
-  kasan_report+0x119/0x1f0
-  kasan_check_range+0x3a3/0x440
-  memcpy+0x52/0x140
-  syscall_stub_data+0x70/0xe0
-  write_ldt_entry+0xac/0x190
-  init_new_ldt+0x515/0x960
-  init_new_context+0x2c4/0x4d0
-  mm_init.constprop.0+0x5ed/0x760
-  mm_alloc+0x118/0x170
-  0x60033f48
-  do_one_initcall+0x1d7/0x860
-  0x60003e7b
-  kernel_init+0x6e/0x3d4
-  new_thread_handler+0x1e7/0x2c0
+Use a new value 'it' as the list iterator, while use the old value
+'iterm' as a dedicated pointer to point to the found element, which
+1. can fix this bug, due to 'iterm' is NULL only if it's not found.
+2. do not need to change all the uses of 'iterm' after the loop.
+3. can also limit the scope of the list iterator 'it' *only inside*
+   the traversal loop by simply declaring 'it' inside the loop in the
+   future, as usage of the iterator outside of the list_for_each_entry
+   is considered harmful. https://lkml.org/lkml/2022/2/17/1032
 
- The buggy address belongs to stack of task swapper/1
-  and is located at offset 64 in frame:
-  init_new_ldt+0x0/0x960
-
- This frame has 2 objects:
-  [32, 40) 'addr'
-  [64, 80) 'desc'
- ==================================================================
-
-Fixes: 858259cf7d1c443c83 ("uml: maintain own LDT entries")
-Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d5e90b7a6cd1c ("[media] uvcvideo: Move to video_ioctl2")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/um/ldt.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/media/usb/uvc/uvc_v4l2.c | 20 +++++++++++---------
+ 1 file changed, 11 insertions(+), 9 deletions(-)
 
---- a/arch/x86/um/ldt.c
-+++ b/arch/x86/um/ldt.c
-@@ -23,9 +23,11 @@ static long write_ldt_entry(struct mm_id
- {
- 	long res;
- 	void *stub_addr;
-+
-+	BUILD_BUG_ON(sizeof(*desc) % sizeof(long));
-+
- 	res = syscall_stub_data(mm_idp, (unsigned long *)desc,
--				(sizeof(*desc) + sizeof(long) - 1) &
--				    ~(sizeof(long) - 1),
-+				sizeof(*desc) / sizeof(long),
- 				addr, &stub_addr);
- 	if (!res) {
- 		unsigned long args[] = { func,
+diff --git a/drivers/media/usb/uvc/uvc_v4l2.c b/drivers/media/usb/uvc/uvc_v4l2.c
+index 2b0ca32d7196..800b37a5bbe8 100644
+--- a/drivers/media/usb/uvc/uvc_v4l2.c
++++ b/drivers/media/usb/uvc/uvc_v4l2.c
+@@ -841,29 +841,31 @@ static int uvc_ioctl_enum_input(struct file *file, void *fh,
+ 	struct uvc_video_chain *chain = handle->chain;
+ 	const struct uvc_entity *selector = chain->selector;
+ 	struct uvc_entity *iterm = NULL;
++	struct uvc_entity *it;
+ 	u32 index = input->index;
+-	int pin = 0;
+ 
+ 	if (selector == NULL ||
+ 	    (chain->dev->quirks & UVC_QUIRK_IGNORE_SELECTOR_UNIT)) {
+ 		if (index != 0)
+ 			return -EINVAL;
+-		list_for_each_entry(iterm, &chain->entities, chain) {
+-			if (UVC_ENTITY_IS_ITERM(iterm))
++		list_for_each_entry(it, &chain->entities, chain) {
++			if (UVC_ENTITY_IS_ITERM(it)) {
++				iterm = it;
+ 				break;
++			}
+ 		}
+-		pin = iterm->id;
+ 	} else if (index < selector->bNrInPins) {
+-		pin = selector->baSourceID[index];
+-		list_for_each_entry(iterm, &chain->entities, chain) {
+-			if (!UVC_ENTITY_IS_ITERM(iterm))
++		list_for_each_entry(it, &chain->entities, chain) {
++			if (!UVC_ENTITY_IS_ITERM(it))
+ 				continue;
+-			if (iterm->id == pin)
++			if (it->id == selector->baSourceID[index]) {
++				iterm = it;
+ 				break;
++			}
+ 		}
+ 	}
+ 
+-	if (iterm == NULL || iterm->id != pin)
++	if (iterm == NULL)
+ 		return -EINVAL;
+ 
+ 	memset(input, 0, sizeof(*input));
+-- 
+2.35.1
+
 
 

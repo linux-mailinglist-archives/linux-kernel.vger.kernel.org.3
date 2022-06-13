@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12DB3549958
+	by mail.lfdr.de (Postfix) with ESMTP id 7C1CF54995A
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240781AbiFMQ4a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 12:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
+        id S235002AbiFMQ4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 12:56:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241653AbiFMQzz (ORCPT
+        with ESMTP id S241392AbiFMQ4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 12:55:55 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A0A1FBF41
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 07:42:50 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso3238664wml.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 07:42:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fastly.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=4akf6xAeEiDNjRf0JScpXKKSBtHxsVRKodRNZRz5EDY=;
-        b=R2WnXSyJngnsQ+NbG7DzfsJjV5QDqtdWcY1C0rqi0/Bhr3GvQ0EHgW9Zc7uMoYf8tt
-         RRHPPA+wYE525krSzi2wZ7lSsafbJtlCWuyA3JWW8c/RKS70+5pPKpeyobYlu8N7mKaV
-         lYG0CDicCSmRkHSAG5601Rn2/euMz1aFdr6fE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=4akf6xAeEiDNjRf0JScpXKKSBtHxsVRKodRNZRz5EDY=;
-        b=qeWxSuy670Bl9jZhSFSLqZ/Okws8qOZWsfLGvBwSTnMUum1Z8ndMRnSw2Oy1rLccqo
-         C1jh4mM72q4ZLNNb0Pq4Gm0a0NklGYpRgjqcox9XzDtJRUJ8OjxFhN+yhPXbwv0CdRJJ
-         jkGMx+aGVIeJlEhTtDx50IPe1i9NxDY2wqRnnq5zT4GGKhik3GTl2673bRiTgWYyu7pu
-         xifo2F6FJqvA49XMphUrnMo9QVTyBwPt+0fHdnyMbyYztDftApXEc1TJMeTx0e+dAO3E
-         ref/B9vCyZ8Q/MUUK057ySes0cVwHmSlZklgJfzvbO7Ra5U5Etz2fbgMAr9SSWvYSeGg
-         IuJw==
-X-Gm-Message-State: AOAM532QYPvR411KO+ZWtMs2fXZwUT2EZQb3aE+lgwjgi6TL3cqH3z2x
-        BXq83HHzfMOdtGqht4JWeLVaYA==
-X-Google-Smtp-Source: ABdhPJx6xngD3camuVYIgxpYorAMd/3Laxs4bbbGX1nJePdn2jj1GVyU0vVwhfD1Xyzsu9DGPVoWSA==
-X-Received: by 2002:a05:600c:1906:b0:39c:7f82:3090 with SMTP id j6-20020a05600c190600b0039c7f823090mr15046232wmq.152.1655131368874;
-        Mon, 13 Jun 2022 07:42:48 -0700 (PDT)
-Received: from fastly.com ([178.130.153.185])
-        by smtp.gmail.com with ESMTPSA id t18-20020a7bc3d2000000b0039bc95cf4b2sm9728838wmj.11.2022.06.13.07.42.47
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 13 Jun 2022 07:42:47 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 07:42:45 -0700
-From:   Joe Damato <jdamato@fastly.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC,iov_iter v2 3/8] iov_iter: add copyin_iovec helper
-Message-ID: <20220613144244.GA77534@fastly.com>
-References: <1655024280-23827-1-git-send-email-jdamato@fastly.com>
- <1655024280-23827-4-git-send-email-jdamato@fastly.com>
- <8f6771a01fe74cde86641e780d31a2ce@AcuMS.aculab.com>
+        Mon, 13 Jun 2022 12:56:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 824311FBF4D;
+        Mon, 13 Jun 2022 07:42:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E62E6612DF;
+        Mon, 13 Jun 2022 14:42:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A49B6C34114;
+        Mon, 13 Jun 2022 14:42:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655131373;
+        bh=6RUtcC2ezgxpX0fcc7bhWT61oNaYVTXSim1tOI9z8ZI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SJ/loUNhH/OFKFpMUaBwV6LdfZLnQhohXNWEWhWZZgygtBSiW13RgUyaulpl8BmEi
+         ucPy0xYLklhNYOPl20R5wBljMzm5+DPKd9qfAP+6fZJyz1RzVt8VlhaH5Cx3X09b2p
+         mICq8nY+LSElP8mXQq8CXjhBfqMPeoHprkcE3LGoi4aAo9voiryR52k4jDDdYSI/m4
+         t7+xI1CgIawQ+0m6dNriXcNvoiWOX/ZczXSysNWJKop+wagu7qvPLSlBhoJNZae5bs
+         KhQthrat/tTrKrlaR47jO0tfyzpybTeXfD4XoA7l3cR/pfxEMZKpVrsk35Izc26kGu
+         +ln4q3PXv3Jgg==
+Date:   Mon, 13 Jun 2022 16:42:49 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        linux-i2c@vger.kernel.org, Peter Korsgaard <peter@korsgaard.com>,
+        Andrew Lunn <andrew@lunn.ch>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: Rectify entry for OPENCORES I2C BUS DRIVER
+Message-ID: <YqdM6TAFKAQAyGrA@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        linux-i2c@vger.kernel.org, Peter Korsgaard <peter@korsgaard.com>,
+        Andrew Lunn <andrew@lunn.ch>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220610105154.2358-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Humb4uRqxbTH4IS/"
 Content-Disposition: inline
-In-Reply-To: <8f6771a01fe74cde86641e780d31a2ce@AcuMS.aculab.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220610105154.2358-1-lukas.bulwahn@gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,58 +63,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 07:53:19AM +0000, David Laight wrote:
-> From: Joe Damato
-> > Sent: 12 June 2022 09:58
-> > 
-> > copyin_iovec is a helper which wraps copyin and selects the right copy
-> > method based on the iter_copy_type.
-> 
-> A pretty bad description.
 
-Thanks, David. I'll be sure to fix the commit description in the next
-revision.
+--Humb4uRqxbTH4IS/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > Signed-off-by: Joe Damato <jdamato@fastly.com>
-> > ---
-> >  lib/iov_iter.c | 19 ++++++++++++++-----
-> >  1 file changed, 14 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-> > index d32d7e5..6720cb2 100644
-> > --- a/lib/iov_iter.c
-> > +++ b/lib/iov_iter.c
-> > @@ -168,6 +168,15 @@ static int copyin(void *to, const void __user *from, size_t n)
-> >  	return n;
-> >  }
-> > 
-> > +static int copyin_iovec(void *to, const void __user *from, size_t n,
-> > +			struct iov_iter *i)
-> > +{
-> > +	if (unlikely(iov_iter_copy_is_nt(i)))
-> > +		return __copy_from_user_nocache(to, from, n);
-> > +	else
-> > +		return copyin(to, from, n);
-> > +}
-> 
-> Isn't this extra conditional going to have a measurable impact
-> on all the normal copy paths?
+On Fri, Jun 10, 2022 at 12:51:54PM +0200, Lukas Bulwahn wrote:
+> Commit 8ad69f490516 ("dt-bindings: i2c: convert ocores binding to yaml")
+> converts i2c-ocores.txt to opencores,i2c-ocores.yaml, but then adjust its
+> reference in MAINTAINERS to a slightly wrong new filename.
+>=20
+> Hence, ./scripts/get_maintainer.pl --self-test=3Dpatterns complains about=
+ a
+> broken reference.
+>=20
+> Repair this file reference in OPENCORES I2C BUS DRIVER.
+>=20
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-The kernel already does a conditional for tx-nocache-copy on TCP sockets
-when copying skbs to check for the NETIF_F_NOCACHE_COPY bit, but I hear
-what you are saying.
+Applied to for-next, thanks!
 
-I suppose I could push the NT copy check logic out of iov_iter, but to do
-that I think I'd probably have to significantly refactor the iov code to
-break apart copy_page_from_iter_iovec.
 
-I'll spend a bit more time thinking through this, but I'm open to
-suggestions if you have one; the benefit of supporting non-temporal copies
-in this path is pretty significant, so I hope a path forward can be found.
+--Humb4uRqxbTH4IS/
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> The additional costs of all the 'iovec' types is bad enough
-> already.
+-----BEGIN PGP SIGNATURE-----
 
-Do you have data you can share on this?
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKnTOUACgkQFA3kzBSg
+KbYCzQ/8CnVbVX/n9OOuxdaPSvaelEt7wJ7ti1XWUYHrqBjQ5Jf8d5Duy70IoW3G
+/2o0k7BUxaCMVbLjwiVHBXQai+5ms1jca0qtu3vd0KbtcGMyLvNL0m1/Eoeb2hFH
+7o1buKsv5dbuZvGf3QwgvE2BbvQ/dIg3e0OfsKqu/2yAMu3UBz3bbaA3iuva4QbK
+ODXGRUsJn3ZmoLGrTaIc9/R6g4gMjKulDefWuF+Mx0uFkfjtOMcf3ggTNDaTu+0s
+w0Sh1OulFx2+2gQZ2ebLJcUXFrqSxaTX2rjcHf8f9UoCoLGOLA3L/bKNNmzJgsrq
+Ng1inbdMbWsHmys88y2MxTyVvvU0pd2qCOrVt8duhaoIj0BsyRlQT1K4JCl0Q06Y
+vBybjZiEgGs7d9uVvZy7a4g8AvTp9n+QIeZcecjNvPEmM5gN/28edIshrx5ODtnJ
+3Ek66WPsXnY+y6uPCHbAvt0LirFM3q3tVbawWCKLQMqOQFXceNmUFhytofPzJh34
+o/8JXsxE4fs1SFGN88mRbsUOSjrQTBGJM1gurSee6ZrU58DqrSFLT64/VHEWfe3G
+er86rmAv1Tq7iWvN0Al1H0zC7xCsmUjtIoL/QxFh2pdCH7UgYusfYuY4eXMD8dA+
+vVWufqGZaYl1GiJrLCW5rPRDVYw/1HcslRcdA/ThJxhY+HROgb8=
+=wLIF
+-----END PGP SIGNATURE-----
 
-Thanks for taking a look!
+--Humb4uRqxbTH4IS/--

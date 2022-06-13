@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D8D5491AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4759B5488CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379033AbiFMNqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:46:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S242449AbiFMKZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379225AbiFMNkE (ORCPT
+        with ESMTP id S242924AbiFMKXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:40:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA433D114;
-        Mon, 13 Jun 2022 04:30:45 -0700 (PDT)
+        Mon, 13 Jun 2022 06:23:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E6520191;
+        Mon, 13 Jun 2022 03:17:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69942B80D3A;
-        Mon, 13 Jun 2022 11:30:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4298C34114;
-        Mon, 13 Jun 2022 11:30:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 636DE60765;
+        Mon, 13 Jun 2022 10:17:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EC76C34114;
+        Mon, 13 Jun 2022 10:17:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119843;
-        bh=MNaiuG4N1VwUKOrgpMZ+BnxOCSCj0LiesIi3WOBys/I=;
+        s=korg; t=1655115475;
+        bh=v08BkH7BAVYVN+ff+HIyV6Hzd31WVjJQmaTDV3f3l+k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M8GAzGJtQEOzgOv9ZtLQM0Y/wpGgDKXoXkTozSITazjF7V37NCwGdfJEZ9YTO+sUp
-         6dyPZ+V12GocKXigHXw6drzyM/XM24BNoDTMqzZ0oRWc7ZX5nObGt14HnIiL3qWZ40
-         P1IOUopb6EjUK3iNFX4yl36soQNT0KBhsNBNWc/Y=
+        b=HQyichGEo5y2q6wpENyne5EY1+qQyDNHVjX2OuaqnlgBK+d/ilM7UC4xln21WBaVe
+         cYkOZ6AfzZMGsbNRTPaHrwID05D2d8B5VobFTpTpch+BySIA2KVO7vf7Qk2/s+/ZkA
+         ghTHFinRaxCQg5dL94YHJWmqnUHJO2DndKPtnGm0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 139/339] gpio: pca953x: use the correct register address to do regcache sync
+        stable@vger.kernel.org,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH 4.9 090/167] RDMA/hfi1: Fix potential integer multiplication overflow errors
 Date:   Mon, 13 Jun 2022 12:09:24 +0200
-Message-Id: <20220613094930.899043513@linuxfoundation.org>
+Message-Id: <20220613094902.010851477@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,76 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+From: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
 
-[ Upstream commit 43624eda86c98b0de726d0b6f2516ccc3ef7313f ]
+commit f93e91a0372c922c20d5bee260b0f43b4b8a1bee upstream.
 
-For regcache_sync_region, need to use pca953x_recalc_addr() to get
-the real register address.
+When multiplying of different types, an overflow is possible even when
+storing the result in a larger type. This is because the conversion is
+done after the multiplication. So arithmetic overflow and thus in
+incorrect value is possible.
 
-Fixes: b76574300504 ("gpio: pca953x: Restore registers after suspend/resume cycle")
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Correct an instance of this in the inter packet delay calculation.  Fix by
+ensuring one of the operands is u64 which will promote the other to u64 as
+well ensuring no overflow.
+
+Cc: stable@vger.kernel.org
+Fixes: 7724105686e7 ("IB/hfi1: add driver files")
+Link: https://lore.kernel.org/r/20220520183712.48973.29855.stgit@awfm-01.cornelisnetworks.com
+Reviewed-by: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+Signed-off-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpio/gpio-pca953x.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ drivers/infiniband/hw/hfi1/init.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-index 8726921a1129..33683295a0bf 100644
---- a/drivers/gpio/gpio-pca953x.c
-+++ b/drivers/gpio/gpio-pca953x.c
-@@ -1108,20 +1108,21 @@ static int pca953x_regcache_sync(struct device *dev)
- {
- 	struct pca953x_chip *chip = dev_get_drvdata(dev);
- 	int ret;
-+	u8 regaddr;
- 
+--- a/drivers/infiniband/hw/hfi1/init.c
++++ b/drivers/infiniband/hw/hfi1/init.c
+@@ -371,7 +371,7 @@ void set_link_ipg(struct hfi1_pportdata
+ 	u16 shift, mult;
+ 	u64 src;
+ 	u32 current_egress_rate; /* Mbits /sec */
+-	u32 max_pkt_time;
++	u64 max_pkt_time;
  	/*
- 	 * The ordering between direction and output is important,
- 	 * sync these registers first and only then sync the rest.
- 	 */
--	ret = regcache_sync_region(chip->regmap, chip->regs->direction,
--				   chip->regs->direction + NBANK(chip));
-+	regaddr = pca953x_recalc_addr(chip, chip->regs->direction, 0);
-+	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
- 	if (ret) {
- 		dev_err(dev, "Failed to sync GPIO dir registers: %d\n", ret);
- 		return ret;
- 	}
- 
--	ret = regcache_sync_region(chip->regmap, chip->regs->output,
--				   chip->regs->output + NBANK(chip));
-+	regaddr = pca953x_recalc_addr(chip, chip->regs->output, 0);
-+	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
- 	if (ret) {
- 		dev_err(dev, "Failed to sync GPIO out registers: %d\n", ret);
- 		return ret;
-@@ -1129,16 +1130,18 @@ static int pca953x_regcache_sync(struct device *dev)
- 
- #ifdef CONFIG_GPIO_PCA953X_IRQ
- 	if (chip->driver_data & PCA_PCAL) {
--		ret = regcache_sync_region(chip->regmap, PCAL953X_IN_LATCH,
--					   PCAL953X_IN_LATCH + NBANK(chip));
-+		regaddr = pca953x_recalc_addr(chip, PCAL953X_IN_LATCH, 0);
-+		ret = regcache_sync_region(chip->regmap, regaddr,
-+					   regaddr + NBANK(chip));
- 		if (ret) {
- 			dev_err(dev, "Failed to sync INT latch registers: %d\n",
- 				ret);
- 			return ret;
- 		}
- 
--		ret = regcache_sync_region(chip->regmap, PCAL953X_INT_MASK,
--					   PCAL953X_INT_MASK + NBANK(chip));
-+		regaddr = pca953x_recalc_addr(chip, PCAL953X_INT_MASK, 0);
-+		ret = regcache_sync_region(chip->regmap, regaddr,
-+					   regaddr + NBANK(chip));
- 		if (ret) {
- 			dev_err(dev, "Failed to sync INT mask registers: %d\n",
- 				ret);
--- 
-2.35.1
-
+ 	 * max_pkt_time is the maximum packet egress time in units
+ 	 * of the fabric clock period 1/(805 MHz).
 
 

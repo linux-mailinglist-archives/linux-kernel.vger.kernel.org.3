@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B885495BC
+	by mail.lfdr.de (Postfix) with ESMTP id A5CE75495BA
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377878AbiFMNfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50712 "EHLO
+        id S1344907AbiFMKfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378511AbiFMNbo (ORCPT
+        with ESMTP id S1344853AbiFMKb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:31:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE5B703EB;
-        Mon, 13 Jun 2022 04:26:14 -0700 (PDT)
+        Mon, 13 Jun 2022 06:31:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B3F27CC0;
+        Mon, 13 Jun 2022 03:21:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19F6761038;
-        Mon, 13 Jun 2022 11:26:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25E54C341C5;
-        Mon, 13 Jun 2022 11:26:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22EE3B80E59;
+        Mon, 13 Jun 2022 10:21:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95E42C3411E;
+        Mon, 13 Jun 2022 10:21:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119573;
-        bh=P2WvBvhNObln23cDiRXI50hZO+1ujw4dGKh/BQBU3KY=;
+        s=korg; t=1655115703;
+        bh=hxKkS62U9ALvBp+JqKwQV60CfqU/ls8qBQP0BkI0t/s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZamHkhetZCOUjBD982UhCCC5YbZVu61E/Qa2UcZlTd2k4iAYTEeCR4CeFzG0IgJjT
-         dtbS6c7rIjL1gJWebKE5QqFYAaCau/Nn/oW/C550qekcYn1GYKa76537uyW3w/V0b3
-         VOKSI9K5FCR9/9owfu0Gcoj1WO9wLeLaWNgRigaQ=
+        b=F3RtxUEDwPup7UpTzaQrfpq+wubSvJMoBZ0gyx9ZKgshJxVAaSWdfBk3ufk6RnyyQ
+         8I/TOSvwEDJ52yVEJGpP9OUIyVnmp973otENUN40PVYLBmCoWXFWcq24Uv547hD06d
+         UPpzRHdNVffPSBiRmutt26RpKaUa75DwsIJLDw4Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 044/339] power: supply: ab8500_fg: Allocate wq in probe
+        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 011/218] b43: Fix assigning negative value to unsigned variable
 Date:   Mon, 13 Jun 2022 12:07:49 +0200
-Message-Id: <20220613094927.858126177@linuxfoundation.org>
+Message-Id: <20220613094911.006876554@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Walleij <linus.walleij@linaro.org>
+From: Haowen Bai <baihaowen@meizu.com>
 
-[ Upstream commit 010ddb813f3554cbbf8bd13b731452236a2c8017 ]
+[ Upstream commit 11800d893b38e0e12d636c170c1abc19c43c730c ]
 
-The workqueue is allocated in bind() but all interrupts are
-registered in probe().
+fix warning reported by smatch:
+drivers/net/wireless/broadcom/b43/phy_n.c:585 b43_nphy_adjust_lna_gain_table()
+warn: assigning (-2) to unsigned variable '*(lna_gain[0])'
 
-Some interrupts put work on the workqueue, which can have
-bad side effects.
-
-Allocate the workqueue in probe() instead, destroy it in
-.remove() and make unbind() simply flush the workqueue.
-
-Fixes: 1c1f13a006ed ("power: supply: ab8500: Move to componentized binding")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/1648203315-28093-1-git-send-email-baihaowen@meizu.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/ab8500_fg.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ drivers/net/wireless/broadcom/b43/phy_n.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 97ac588a9e9c..ec8a404d71b4 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -3037,13 +3037,6 @@ static int ab8500_fg_bind(struct device *dev, struct device *master,
- {
- 	struct ab8500_fg *di = dev_get_drvdata(dev);
+diff --git a/drivers/net/wireless/broadcom/b43/phy_n.c b/drivers/net/wireless/broadcom/b43/phy_n.c
+index d1afa74aa144..9cbc17c2751c 100644
+--- a/drivers/net/wireless/broadcom/b43/phy_n.c
++++ b/drivers/net/wireless/broadcom/b43/phy_n.c
+@@ -594,7 +594,7 @@ static void b43_nphy_adjust_lna_gain_table(struct b43_wldev *dev)
+ 	u16 data[4];
+ 	s16 gain[2];
+ 	u16 minmax[2];
+-	static const u16 lna_gain[4] = { -2, 10, 19, 25 };
++	static const s16 lna_gain[4] = { -2, 10, 19, 25 };
  
--	/* Create a work queue for running the FG algorithm */
--	di->fg_wq = alloc_ordered_workqueue("ab8500_fg_wq", WQ_MEM_RECLAIM);
--	if (di->fg_wq == NULL) {
--		dev_err(dev, "failed to create work queue\n");
--		return -ENOMEM;
--	}
--
- 	di->bat_cap.max_mah_design = di->bm->bi->charge_full_design_uah;
- 	di->bat_cap.max_mah = di->bat_cap.max_mah_design;
- 	di->vbat_nom_uv = di->bm->bi->voltage_max_design_uv;
-@@ -3067,8 +3060,7 @@ static void ab8500_fg_unbind(struct device *dev, struct device *master,
- 	if (ret)
- 		dev_err(dev, "failed to disable coulomb counter\n");
- 
--	destroy_workqueue(di->fg_wq);
--	flush_scheduled_work();
-+	flush_workqueue(di->fg_wq);
- }
- 
- static const struct component_ops ab8500_fg_component_ops = {
-@@ -3117,6 +3109,13 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	ab8500_fg_charge_state_to(di, AB8500_FG_CHARGE_INIT);
- 	ab8500_fg_discharge_state_to(di, AB8500_FG_DISCHARGE_INIT);
- 
-+	/* Create a work queue for running the FG algorithm */
-+	di->fg_wq = alloc_ordered_workqueue("ab8500_fg_wq", WQ_MEM_RECLAIM);
-+	if (di->fg_wq == NULL) {
-+		dev_err(dev, "failed to create work queue\n");
-+		return -ENOMEM;
-+	}
-+
- 	/* Init work for running the fg algorithm instantly */
- 	INIT_WORK(&di->fg_work, ab8500_fg_instant_work);
- 
-@@ -3227,6 +3226,8 @@ static int ab8500_fg_remove(struct platform_device *pdev)
- {
- 	struct ab8500_fg *di = platform_get_drvdata(pdev);
- 
-+	destroy_workqueue(di->fg_wq);
-+	flush_scheduled_work();
- 	component_del(&pdev->dev, &ab8500_fg_component_ops);
- 	list_del(&di->node);
- 	ab8500_fg_sysfs_exit(di);
+ 	if (nphy->hang_avoid)
+ 		b43_nphy_stay_in_carrier_search(dev, 1);
 -- 
 2.35.1
 

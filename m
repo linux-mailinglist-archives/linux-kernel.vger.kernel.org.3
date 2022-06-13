@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C215493D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC9B5497BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386052AbiFMOv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
+        id S1345117AbiFMMlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386135AbiFMOtF (ORCPT
+        with ESMTP id S1355778AbiFMMjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:49:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407EAC1ECA;
-        Mon, 13 Jun 2022 04:53:18 -0700 (PDT)
+        Mon, 13 Jun 2022 08:39:17 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD6033890;
+        Mon, 13 Jun 2022 04:09:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 206D561449;
-        Mon, 13 Jun 2022 11:48:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1BDC34114;
-        Mon, 13 Jun 2022 11:48:14 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7FD34CE1171;
+        Mon, 13 Jun 2022 11:09:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91110C34114;
+        Mon, 13 Jun 2022 11:09:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120894;
-        bh=PAF/TjJ7I6lN/081b11GH9REtxTMzr1Vb9F9Oe3Mr+M=;
+        s=korg; t=1655118568;
+        bh=icyfI8Yx907IkhsOmmzicj4spu+VAF7EmjddPir0bXY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fFzYhvBp9f5jeNXGDOD+ogsUC3B0PRlTk2jYYn4CZGBKgB8tXQiHPX97UCWjd2Xgv
-         3JtPrcVZPT1zhP+T98KijRLPdbIvlYF0u1mSBYTt33dEPRRPmkRrkclE347fjmcdtr
-         dmX6MxDAlcQpEn3/F41Jv+bDw/Ohk9biUdUSpaCM=
+        b=NcuXUNefjH+KvRSKPLPKxd2LBdLhpCc7EKPxb39U/JnfIdjVbvfK84rpw6bm8JSVk
+         HDDALxK4szLcfe007eCm0janJEiETr8V6R02YA3SMtDggfR/v/eaMbf/RL3/5rr0Bd
+         PrJ5IqJLnkhjWmxALHM+IA8q/7wrVeoI/7MFeDfM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Feras Daoud <ferasda@nvidia.com>,
+        Roy Novich <royno@nvidia.com>,
+        Moshe Shemesh <moshe@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 174/298] af_unix: Fix a data-race in unix_dgram_peer_wake_me().
+Subject: [PATCH 5.10 108/172] net/mlx5: Rearm the FW tracer after each tracer event
 Date:   Mon, 13 Jun 2022 12:11:08 +0200
-Message-Id: <20220613094930.210946100@linuxfoundation.org>
+Message-Id: <20220613094916.230224893@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuniyuki Iwashima <kuniyu@amazon.com>
+From: Feras Daoud <ferasda@nvidia.com>
 
-[ Upstream commit 662a80946ce13633ae90a55379f1346c10f0c432 ]
+[ Upstream commit 8bf94e6414c9481bfa28269022688ab445d0081d ]
 
-unix_dgram_poll() calls unix_dgram_peer_wake_me() without `other`'s
-lock held and check if its receive queue is full.  Here we need to
-use unix_recvq_full_lockless() instead of unix_recvq_full(), otherwise
-KCSAN will report a data-race.
+The current design does not arm the tracer if traces are available before
+the tracer string database is fully loaded, leading to an unfunctional tracer.
+This fix will rearm the tracer every time the FW triggers tracer event
+regardless of the tracer strings database status.
 
-Fixes: 7d267278a9ec ("unix: avoid use-after-free in ep_remove_wait_queue")
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
-Link: https://lore.kernel.org/r/20220605232325.11804-1-kuniyu@amazon.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: c71ad41ccb0c ("net/mlx5: FW tracer, events handling")
+Signed-off-by: Feras Daoud <ferasda@nvidia.com>
+Signed-off-by: Roy Novich <royno@nvidia.com>
+Reviewed-by: Moshe Shemesh <moshe@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/unix/af_unix.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx5/core/diag/fw_tracer.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-index 1e7ed5829ed5..99c56922abf5 100644
---- a/net/unix/af_unix.c
-+++ b/net/unix/af_unix.c
-@@ -490,7 +490,7 @@ static int unix_dgram_peer_wake_me(struct sock *sk, struct sock *other)
- 	 * -ECONNREFUSED. Otherwise, if we haven't queued any skbs
- 	 * to other and its full, we will hang waiting for POLLOUT.
- 	 */
--	if (unix_recvq_full(other) && !sock_flag(other, SOCK_DEAD))
-+	if (unix_recvq_full_lockless(other) && !sock_flag(other, SOCK_DEAD))
- 		return 1;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/diag/fw_tracer.c b/drivers/net/ethernet/mellanox/mlx5/core/diag/fw_tracer.c
+index 857be86b4a11..e8a4adccd2b2 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/diag/fw_tracer.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/diag/fw_tracer.c
+@@ -675,6 +675,9 @@ static void mlx5_fw_tracer_handle_traces(struct work_struct *work)
+ 	if (!tracer->owner)
+ 		return;
  
- 	if (connected)
++	if (unlikely(!tracer->str_db.loaded))
++		goto arm;
++
+ 	block_count = tracer->buff.size / TRACER_BLOCK_SIZE_BYTE;
+ 	start_offset = tracer->buff.consumer_index * TRACER_BLOCK_SIZE_BYTE;
+ 
+@@ -732,6 +735,7 @@ static void mlx5_fw_tracer_handle_traces(struct work_struct *work)
+ 						      &tmp_trace_block[TRACES_PER_BLOCK - 1]);
+ 	}
+ 
++arm:
+ 	mlx5_fw_tracer_arm(dev);
+ }
+ 
+@@ -1138,8 +1142,7 @@ static int fw_tracer_event(struct notifier_block *nb, unsigned long action, void
+ 			queue_work(tracer->work_queue, &tracer->ownership_change_work);
+ 		break;
+ 	case MLX5_TRACER_SUBTYPE_TRACES_AVAILABLE:
+-		if (likely(tracer->str_db.loaded))
+-			queue_work(tracer->work_queue, &tracer->handle_traces_work);
++		queue_work(tracer->work_queue, &tracer->handle_traces_work);
+ 		break;
+ 	default:
+ 		mlx5_core_dbg(dev, "FWTracer: Event with unrecognized subtype: sub_type %d\n",
 -- 
 2.35.1
 

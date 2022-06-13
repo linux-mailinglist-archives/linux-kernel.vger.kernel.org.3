@@ -2,129 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D37549ED5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4247B549ED6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346875AbiFMURh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
+        id S1347352AbiFMURk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349329AbiFMUQ6 (ORCPT
+        with ESMTP id S231437AbiFMURW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:16:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88C85C0E37
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 11:55:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655146499;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=twODBOMo1H0OlE0mw4AXAcH5DtMeaVs68JEX7EwBl18=;
-        b=Enfa0fwrrEnDkOPZTankRumB6apKff+xcxvVr4PV5sGnmdGsYyYyvms5sJzsGvCCwLHl4u
-        KUwaSXHOZZsZapWUSDWVqVuHfsKtzCjjYUYyJexoE8Kz1eG4TNdvxtjw4lt4r2aFvaEYHY
-        QbTRTvCjbR928+FFvgNgqcWTpz2GDck=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-194-gTFMQczbOi62EkMEe4Lr5Q-1; Mon, 13 Jun 2022 14:54:53 -0400
-X-MC-Unique: gTFMQczbOi62EkMEe4Lr5Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF19829AA3B0;
-        Mon, 13 Jun 2022 18:54:52 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4941D4010E4D;
-        Mon, 13 Jun 2022 18:54:52 +0000 (UTC)
-Message-ID: <a2b40ed8-54e8-50c8-557e-99fba8d3f270@redhat.com>
-Date:   Mon, 13 Jun 2022 14:54:52 -0400
+        Mon, 13 Jun 2022 16:17:22 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E61AC1EC3;
+        Mon, 13 Jun 2022 11:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655146513; x=1686682513;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=inO0kVsYPwubIHU/Lc+8Us9pBNkjnlVt647PW9FkfD4=;
+  b=kFiYvfYDma04KuneN9hDic1XXd7P53w9a44kXJg8uWxmzXAl2iALK5JB
+   wYDh1Ic4HJJZdifqcKAUzdFGQUOtTW1Enz2FwTAvE71f/3RtTbcALJh7I
+   qzxBRwDa5UHTddW93rfF4Rj+4iVKtKGDv8ZSFKokpq8xvXv7iNNpDrh2p
+   FjlXhf7VmzluBCSVNdiDu58+GJSQlM+LYxLH3/Amkk+nMvBAV/0LK1gPn
+   pTe3H51ieyPnGT3aymq9HDQSEKbmKraGYfr3CNgkIx1eMKNGao0wrGAoW
+   5XlXQQPL/luQwnvKeUTim4z+O8CpkrXlAnKPTZgggDq/HNsXoSUjGGQUs
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="279425921"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="279425921"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 11:55:13 -0700
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="568796226"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 11:55:10 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o0pDP-000bIi-4d;
+        Mon, 13 Jun 2022 21:55:07 +0300
+Date:   Mon, 13 Jun 2022 21:55:06 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-usb@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: [PATCH v2 04/16] thunderbolt: ACPI: Replace tb_acpi_find_port()
+ with acpi_find_child_by_adr()
+Message-ID: <YqeICh2mrZP1LX9n@smile.fi.intel.com>
+References: <1843211.tdWV9SEqCh@kreacher>
+ <2653857.mvXUDI8C0e@kreacher>
+ <2851774.e9J7NaK4W3@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] rcu-tasks: Delay rcu_tasks_verify_self_tests() to avoid
- missed callbacks
-Content-Language: en-US
-To:     paulmck@kernel.org
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-References: <20220610184212.822113-1-longman@redhat.com>
- <20220610205814.GK1790663@paulmck-ThinkPad-P17-Gen-1>
- <5aae210e-2553-57ca-e4d5-0b0f20ec92cd@redhat.com>
- <20220613175600.GG1790663@paulmck-ThinkPad-P17-Gen-1>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220613175600.GG1790663@paulmck-ThinkPad-P17-Gen-1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2851774.e9J7NaK4W3@kreacher>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/13/22 13:56, Paul E. McKenney wrote:
-> On Mon, Jun 13, 2022 at 12:01:24PM -0400, Waiman Long wrote:
->> On 6/10/22 16:58, Paul E. McKenney wrote:
->>> On Fri, Jun 10, 2022 at 02:42:12PM -0400, Waiman Long wrote:
->>>> Even though rcu_tasks selftest is initiated early in the boot process,
->>>> the verification done at late initcall time may not be late enough to
->>>> catch all the callbacks especially on systems with just a few cpus and
->>>> small memory.
->>>>
->>>> After 12 bootup's On a s390x system, 1 of them had failed rcu_tasks
->>>> verification test.
->>>>
->>>> [    8.183013] call_rcu_tasks() has been failed.
->>>> [    8.183041] WARNING: CPU: 0 PID: 1 at kernel/rcu/tasks.h:1696 rcu_tasks_verify_self_tests+0x64/0xd0
->>>> [    8.203246] Callback from call_rcu_tasks() invoked.
->>>>
->>>> In this particular case, the callback missed the check by about
->>>> 20ms. Similar rcu_tasks selftest failures are also seen in ppc64le
->>>> systems.
->>>>
->>>> [    0.313391] call_rcu_tasks() has been failed.
->>>> [    0.313407] WARNING: CPU: 0 PID: 1 at kernel/rcu/tasks.h:1696 rcu_tasks_verify_self_tests+0x5c/0xa0
->>>> [    0.335569] Callback from call_rcu_tasks() invoked.
->>>>
->>>> Avoid this missed callback by delaying the verification using
->>>> delayed_work. The delay is set to be about 0.1s which hopefully will
->>>> be long enough to catch all the callbacks on systems with few cpus and
->>>> small memory.
->>>>
->>>> Fixes: bfba7ed084f8 ("rcu-tasks: Add RCU-tasks self tests")
->>>> Signed-off-by: Waiman Long <longman@redhat.com>
->>> Good catch, thank you!
->>>
->>> A few days ago, I queued this:
->>>
->>> 2585014188d5 ("rcu-tasks: Be more patient for RCU Tasks boot-time testing")
->>>
->>> This is shown in full at the end of this email.  Does this fix this
->>> problem for you?
->> I think your patch should fix the false positive warning and it give plenty
->> of time for this to happen.
->>
->> I do have one question though. rcu_tasks_verify_selft_tests() is called from
->> do_initcalls(). Since it may not be the last late initcall, does that mean
->> other late initcalls queued after that may be delayed by a second or more?
-> Indeed.  Which is why I would welcome the workqueues portion of your
-> patch on top of the above patch in -rcu.  ;-)
+On Mon, Jun 13, 2022 at 08:11:36PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Use acpi_find_child_by_adr() to find the child matching a given bus
+> address instead of tb_acpi_find_port() that walks the list of children
+> of an ACPI device directly for this purpose and drop the latter.
+> 
+> Apart from simplifying the code, this will help to eliminate the
+> children list head from struct acpi_device as it is redundant and it
+> is used in questionable ways in some places (in particular, locking is
+> needed for walking the list pointed to it safely, but it is often
+> missing).
 
-Sure. I will work on such a follow-up patch.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Cheers,
-Longman
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> v1 -> v2:
+>    * Drop tb_acpi_find_port() (Heikki, Andy).
+>    * Change the subject accordingly
+> 
+> ---
+>  drivers/thunderbolt/acpi.c |   27 ++++-----------------------
+>  1 file changed, 4 insertions(+), 23 deletions(-)
+> 
+> Index: linux-pm/drivers/thunderbolt/acpi.c
+> ===================================================================
+> --- linux-pm.orig/drivers/thunderbolt/acpi.c
+> +++ linux-pm/drivers/thunderbolt/acpi.c
+> @@ -301,26 +301,6 @@ static bool tb_acpi_bus_match(struct dev
+>  	return tb_is_switch(dev) || tb_is_usb4_port_device(dev);
+>  }
+>  
+> -static struct acpi_device *tb_acpi_find_port(struct acpi_device *adev,
+> -					     const struct tb_port *port)
+> -{
+> -	struct acpi_device *port_adev;
+> -
+> -	if (!adev)
+> -		return NULL;
+> -
+> -	/*
+> -	 * Device routers exists under the downstream facing USB4 port
+> -	 * of the parent router. Their _ADR is always 0.
+> -	 */
+> -	list_for_each_entry(port_adev, &adev->children, node) {
+> -		if (acpi_device_adr(port_adev) == port->port)
+> -			return port_adev;
+> -	}
+> -
+> -	return NULL;
+> -}
+> -
+>  static struct acpi_device *tb_acpi_switch_find_companion(struct tb_switch *sw)
+>  {
+>  	struct acpi_device *adev = NULL;
+> @@ -331,7 +311,8 @@ static struct acpi_device *tb_acpi_switc
+>  		struct tb_port *port = tb_port_at(tb_route(sw), parent_sw);
+>  		struct acpi_device *port_adev;
+>  
+> -		port_adev = tb_acpi_find_port(ACPI_COMPANION(&parent_sw->dev), port);
+> +		port_adev = acpi_find_child_by_adr(ACPI_COMPANION(&parent_sw->dev),
+> +						   port->port);
+>  		if (port_adev)
+>  			adev = acpi_find_child_device(port_adev, 0, false);
+>  	} else {
+> @@ -364,8 +345,8 @@ static struct acpi_device *tb_acpi_find_
+>  	if (tb_is_switch(dev))
+>  		return tb_acpi_switch_find_companion(tb_to_switch(dev));
+>  	else if (tb_is_usb4_port_device(dev))
+> -		return tb_acpi_find_port(ACPI_COMPANION(dev->parent),
+> -					 tb_to_usb4_port_device(dev)->port);
+> +		return acpi_find_child_by_adr(ACPI_COMPANION(dev->parent),
+> +					      tb_to_usb4_port_device(dev)->port->port);
+>  	return NULL;
+>  }
+>  
+> 
+> 
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 

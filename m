@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC93548DB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:16:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57DE9549519
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384564AbiFMOgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
+        id S1352418AbiFMLRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385459AbiFMObN (ORCPT
+        with ESMTP id S1352664AbiFMLOK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:31:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8D6ABE42;
-        Mon, 13 Jun 2022 04:48:55 -0700 (PDT)
+        Mon, 13 Jun 2022 07:14:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D605B366B0;
+        Mon, 13 Jun 2022 03:36:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14B19B80EE2;
-        Mon, 13 Jun 2022 11:48:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 667D2C34114;
-        Mon, 13 Jun 2022 11:48:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0FA6610AB;
+        Mon, 13 Jun 2022 10:36:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B78F0C385A5;
+        Mon, 13 Jun 2022 10:36:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120891;
-        bh=di+rlPStseU+iqxIuStF2OeBZTDVaIS8ROUsB/WG8bY=;
+        s=korg; t=1655116599;
+        bh=VLAUu/pBbU0WbMGamu1ApVdJKC+8dNefuYHs3rDbbgo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vsX8UthsGuT0jL/6gTTld2pnRc0jYzB+/xS8EiInsznZ6jFnO1qv+mDeM9H7OhK3+
-         UMrz8hngzXAG5r0gqBphAF1rDiGqavK48KS3kFaX0gvXdSjZNqKvMBHDLrs4IRcEF7
-         zxkReOs11RZ20GhXJGvDFBt4C6+9rFi/vGSOyQ8c=
+        b=jU4nROSlNmV04WICNuK1p73iwjCy7fTLwpVDXkbo7jiyF9Pe9/F8EpFWc76cb0Mte
+         vXUzvCG/HPZNKhYlq4658UUvVz2L/Zyf0El/qkdtKdBzJ3UAoK0BaNkhnAPYBm2kVr
+         V5lzQKZPo+SUQt/hC9TzxBUHVsd/hDyFJwfpbANE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 173/298] stmmac: intel: Fix an error handling path in intel_eth_pci_probe()
-Date:   Mon, 13 Jun 2022 12:11:07 +0200
-Message-Id: <20220613094930.180659430@linuxfoundation.org>
+        stable@vger.kernel.org, Martin Faltesek <mfaltesek@google.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 4.14 210/218] nfc: st21nfca: fix memory leaks in EVT_TRANSACTION handling
+Date:   Mon, 13 Jun 2022 12:11:08 +0200
+Message-Id: <20220613094926.993839081@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Martin Faltesek <mfaltesek@google.com>
 
-[ Upstream commit 5e74a4b3ec1816e3bbfd715d46ae29d2508079cb ]
+commit 996419e0594abb311fb958553809f24f38e7abbe upstream.
 
-When the managed API is used, there is no need to explicitly call
-pci_free_irq_vectors().
+Error paths do not free previously allocated memory. Add devm_kfree() to
+those failure paths.
 
-This looks to be a left-over from the commit in the Fixes tag. Only the
-.remove() function had been updated.
-
-So remove this unused function call and update goto label accordingly.
-
-Fixes: 8accc467758e ("stmmac: intel: use managed PCI function on probe and resume")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
-Link: https://lore.kernel.org/r/1ac9b6787b0db83b0095711882c55c77c8ea8da0.1654462241.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 26fc6c7f02cb ("NFC: st21nfca: Add HCI transaction event support")
+Fixes: 4fbcc1a4cb20 ("nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION")
+Cc: stable@vger.kernel.org
+Signed-off-by: Martin Faltesek <mfaltesek@google.com>
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/nfc/st21nfca/se.c |   13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-index 6f87e296a410..502fbbc082fb 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -1073,13 +1073,11 @@ static int intel_eth_pci_probe(struct pci_dev *pdev,
+--- a/drivers/nfc/st21nfca/se.c
++++ b/drivers/nfc/st21nfca/se.c
+@@ -332,22 +332,29 @@ int st21nfca_connectivity_event_received
+ 		transaction->aid_len = skb->data[1];
  
- 	ret = stmmac_dvr_probe(&pdev->dev, plat, &res);
- 	if (ret) {
--		goto err_dvr_probe;
-+		goto err_alloc_irq;
- 	}
+ 		/* Checking if the length of the AID is valid */
+-		if (transaction->aid_len > sizeof(transaction->aid))
++		if (transaction->aid_len > sizeof(transaction->aid)) {
++			devm_kfree(dev, transaction);
+ 			return -EINVAL;
++		}
  
- 	return 0;
+ 		memcpy(transaction->aid, &skb->data[2],
+ 		       transaction->aid_len);
  
--err_dvr_probe:
--	pci_free_irq_vectors(pdev);
- err_alloc_irq:
- 	clk_disable_unprepare(plat->stmmac_clk);
- 	clk_unregister_fixed_rate(plat->stmmac_clk);
--- 
-2.35.1
-
+ 		/* Check next byte is PARAMETERS tag (82) */
+ 		if (skb->data[transaction->aid_len + 2] !=
+-		    NFC_EVT_TRANSACTION_PARAMS_TAG)
++		    NFC_EVT_TRANSACTION_PARAMS_TAG) {
++			devm_kfree(dev, transaction);
+ 			return -EPROTO;
++		}
+ 
+ 		transaction->params_len = skb->data[transaction->aid_len + 3];
+ 
+ 		/* Total size is allocated (skb->len - 2) minus fixed array members */
+-		if (transaction->params_len > ((skb->len - 2) - sizeof(struct nfc_evt_transaction)))
++		if (transaction->params_len > ((skb->len - 2) -
++		    sizeof(struct nfc_evt_transaction))) {
++			devm_kfree(dev, transaction);
+ 			return -EINVAL;
++		}
+ 
+ 		memcpy(transaction->params, skb->data +
+ 		       transaction->aid_len + 4, transaction->params_len);
 
 

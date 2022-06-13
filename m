@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 427BC5490EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51448548AE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376738AbiFMNTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
+        id S1384615AbiFMOge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359666AbiFMNKV (ORCPT
+        with ESMTP id S1385534AbiFMObR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:10:21 -0400
+        Mon, 13 Jun 2022 10:31:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230C63B290;
-        Mon, 13 Jun 2022 04:21:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C580ABF4A;
+        Mon, 13 Jun 2022 04:49:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 713EC60FAD;
-        Mon, 13 Jun 2022 11:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B557C34114;
-        Mon, 13 Jun 2022 11:21:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35F74613CA;
+        Mon, 13 Jun 2022 11:49:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47091C34114;
+        Mon, 13 Jun 2022 11:49:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119275;
-        bh=KcOo1oA3ujYCM/X6/pxf5zQ0h3TH3jWllfC3FvL+cl8=;
+        s=korg; t=1655120940;
+        bh=Z8ey3TR9HSAz7Jk3DAJWQVnOD8FtyqL33tzMAuZs4Lc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=owGaEqLPr8oZuoR4vj1LK1oTn2quvHnSk7yAqODppMZ/caIKhXM7cVRlvk/mxNU9Q
-         6LkxXIphtzyndzjFJ/t8JhCQFQLyDAYXa0yjbU+edIMTXiYETiB1mKA3cArF8yP7QB
-         fmejMi0887rT7ONH/SF4Dw4r4JjEMieHMni3IJ3k=
+        b=MnGw1j3k6osJPP9nrP4AvtcQBUJre1amrLDQQfH9mX2LcVd9M80EKM3NLYWsGNLVm
+         GVGRSmzLX0zSiesHZjQiy1sqrtIGu4IyNviCSARl64dKHem6Dl6/ZzEVgL31N+dCEM
+         J9ZICUXwDvEW7G5XbE/3M/F/eTUqs6iAZ6o6hwNQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        stable@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 204/247] jump_label,noinstr: Avoid instrumentation for JUMP_LABEL=n builds
-Date:   Mon, 13 Jun 2022 12:11:46 +0200
-Message-Id: <20220613094929.131691875@linuxfoundation.org>
+Subject: [PATCH 5.17 213/298] usb: dwc2: gadget: dont reset gadgets driver->bus
+Date:   Mon, 13 Jun 2022 12:11:47 +0200
+Message-Id: <20220613094931.565712585@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Marek Szyprowski <m.szyprowski@samsung.com>
 
-[ Upstream commit 656d054e0a15ec327bd82801ccd58201e59f6896 ]
+[ Upstream commit 3120aac6d0ecd9accf56894aeac0e265f74d3d5a ]
 
-When building x86_64 with JUMP_LABEL=n it's possible for
-instrumentation to sneak into noinstr:
+UDC driver should not touch gadget's driver internals, especially it
+should not reset driver->bus. This wasn't harmful so far, but since
+commit fc274c1e9973 ("USB: gadget: Add a new bus for gadgets") gadget
+subsystem got it's own bus and messing with ->bus triggers the
+following NULL pointer dereference:
 
-vmlinux.o: warning: objtool: exit_to_user_mode+0x14: call to static_key_count.constprop.0() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_exit_to_user_mode+0x2d: call to static_key_count.constprop.0() leaves .noinstr.text section
-vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0x1b: call to static_key_count.constprop.0() leaves .noinstr.text section
+dwc2 12480000.hsotg: bound driver g_ether
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference at virtual address 00000000
+[00000000] *pgd=00000000
+Internal error: Oops: 5 [#1] SMP ARM
+Modules linked in: ...
+CPU: 0 PID: 620 Comm: modprobe Not tainted 5.18.0-rc5-next-20220504 #11862
+Hardware name: Samsung Exynos (Flattened Device Tree)
+PC is at module_add_driver+0x44/0xe8
+LR is at sysfs_do_create_link_sd+0x84/0xe0
+...
+Process modprobe (pid: 620, stack limit = 0x(ptrval))
+...
+ module_add_driver from bus_add_driver+0xf4/0x1e4
+ bus_add_driver from driver_register+0x78/0x10c
+ driver_register from usb_gadget_register_driver_owner+0x40/0xb4
+ usb_gadget_register_driver_owner from do_one_initcall+0x44/0x1e0
+ do_one_initcall from do_init_module+0x44/0x1c8
+ do_init_module from load_module+0x19b8/0x1b9c
+ load_module from sys_finit_module+0xdc/0xfc
+ sys_finit_module from ret_fast_syscall+0x0/0x54
+Exception stack(0xf1771fa8 to 0xf1771ff0)
+...
+dwc2 12480000.hsotg: new device is high-speed
+---[ end trace 0000000000000000 ]---
 
-Switch to arch_ prefixed atomic to avoid the explicit instrumentation.
+Fix this by removing driver->bus entry reset.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Link: https://lore.kernel.org/r/20220505104618.22729-1-m.szyprowski@samsung.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/jump_label.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/dwc2/gadget.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
-index 48b9b2a82767..019e55c13248 100644
---- a/include/linux/jump_label.h
-+++ b/include/linux/jump_label.h
-@@ -261,9 +261,9 @@ extern void static_key_disable_cpuslocked(struct static_key *key);
- #include <linux/atomic.h>
- #include <linux/bug.h>
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index eee3504397e6..fe2a58c75861 100644
+--- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -4544,7 +4544,6 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
  
--static inline int static_key_count(struct static_key *key)
-+static __always_inline int static_key_count(struct static_key *key)
- {
--	return atomic_read(&key->enabled);
-+	return arch_atomic_read(&key->enabled);
- }
+ 	WARN_ON(hsotg->driver);
  
- static __always_inline void jump_label_init(void)
+-	driver->driver.bus = NULL;
+ 	hsotg->driver = driver;
+ 	hsotg->gadget.dev.of_node = hsotg->dev->of_node;
+ 	hsotg->gadget.speed = USB_SPEED_UNKNOWN;
 -- 
 2.35.1
 

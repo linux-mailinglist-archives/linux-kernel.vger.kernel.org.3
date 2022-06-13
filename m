@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E89AF5489DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D062549489
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376922AbiFMNXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
+        id S1386087AbiFMOqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377088AbiFMNUA (ORCPT
+        with ESMTP id S1386145AbiFMOok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:20:00 -0400
+        Mon, 13 Jun 2022 10:44:40 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920B06973E;
-        Mon, 13 Jun 2022 04:23:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9FBB57A8;
+        Mon, 13 Jun 2022 04:51:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84F1160F18;
-        Mon, 13 Jun 2022 11:22:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95224C3411C;
-        Mon, 13 Jun 2022 11:22:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3160C61499;
+        Mon, 13 Jun 2022 11:51:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E948C3411C;
+        Mon, 13 Jun 2022 11:51:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119358;
-        bh=2hBjMjiZ041N5Z0Yg7mhxSGjvQprD2H+8vtm5RyJEns=;
+        s=korg; t=1655121069;
+        bh=fphWgj6blX7Mwg172MoSu8DWPSEvMv8Yw5V5OMgkO+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YgY2wEzjC2rWgYkQRF6vyOMQ631nz59nOqCJz1L20ogVEyRyFV6freIFbbOmppsUo
-         hG2KZ1rO4nqbtqi2P1w4wzZyo4U9nXbIXnQA6byhCVeZfOUDebZ0mulbBwfMhKGiaj
-         WtSVCB+GKBI5T4o6loKTw/i7eOg27/v8EC2IemRA=
+        b=gPOULlx0n/etT1ZSqA39eE/fu6sg3i3YLOs0/wyEkZe0kz07kUG0nNvmgltEtVCPm
+         nXlgE9TBJqWuJaHycF0R/zEi60gJea/c3Edo0aWHQ+X+W61Mf7Iz0E3W+0aOXnyBkm
+         Br8S1BMO3LFLudbLwbAN0dcjTSMzcdU1DamXhzp4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.15 234/247] powerpc: Dont select HAVE_IRQ_EXIT_ON_IRQ_STACK
-Date:   Mon, 13 Jun 2022 12:12:16 +0200
-Message-Id: <20220613094930.041280594@linuxfoundation.org>
+        stable@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 243/298] nbd: fix io hung while disconnecting device
+Date:   Mon, 13 Jun 2022 12:12:17 +0200
+Message-Id: <20220613094932.456773601@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,52 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Yu Kuai <yukuai3@huawei.com>
 
-commit 1346d00e1bdfd4067f92bc14e8a6131a01de4190 upstream.
+[ Upstream commit 09dadb5985023e27d4740ebd17e6fea4640110e5 ]
 
-The HAVE_IRQ_EXIT_ON_IRQ_STACK option tells generic code that irq_exit()
-is called while still running on the hard irq stack (hardirq_ctx[] in
-the powerpc code).
+In our tests, "qemu-nbd" triggers a io hung:
 
-Selecting the option means the generic code will *not* switch to the
-softirq stack before running softirqs, because the code is already
-running on the (mostly empty) hard irq stack.
+INFO: task qemu-nbd:11445 blocked for more than 368 seconds.
+      Not tainted 5.18.0-rc3-next-20220422-00003-g2176915513ca #884
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:qemu-nbd        state:D stack:    0 pid:11445 ppid:     1 flags:0x00000000
+Call Trace:
+ <TASK>
+ __schedule+0x480/0x1050
+ ? _raw_spin_lock_irqsave+0x3e/0xb0
+ schedule+0x9c/0x1b0
+ blk_mq_freeze_queue_wait+0x9d/0xf0
+ ? ipi_rseq+0x70/0x70
+ blk_mq_freeze_queue+0x2b/0x40
+ nbd_add_socket+0x6b/0x270 [nbd]
+ nbd_ioctl+0x383/0x510 [nbd]
+ blkdev_ioctl+0x18e/0x3e0
+ __x64_sys_ioctl+0xac/0x120
+ do_syscall_64+0x35/0x80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7fd8ff706577
+RSP: 002b:00007fd8fcdfebf8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000040000000 RCX: 00007fd8ff706577
+RDX: 000000000000000d RSI: 000000000000ab00 RDI: 000000000000000f
+RBP: 000000000000000f R08: 000000000000fbe8 R09: 000055fe497c62b0
+R10: 00000002aff20000 R11: 0000000000000246 R12: 000000000000006d
+R13: 0000000000000000 R14: 00007ffe82dc5e70 R15: 00007fd8fcdff9c0
 
-But since commit 1b1b6a6f4cc0 ("powerpc: handle irq_enter/irq_exit in
-interrupt handler wrappers"), irq_exit() is now called on the regular task
-stack, not the hard irq stack.
+"qemu-ndb -d" will call ioctl 'NBD_DISCONNECT' first, however, following
+message was found:
 
-That's because previously irq_exit() was called in __do_irq() which is
-run on the hard irq stack, but now it is called in
-interrupt_async_exit_prepare() which is called from do_irq() constructed
-by the wrapper macro, which is after the switch back to the task stack.
+block nbd0: Send disconnect failed -32
 
-So drop HAVE_IRQ_EXIT_ON_IRQ_STACK from the Kconfig. This will mean an
-extra stack switch when processing some interrupts, but should
-significantly reduce the likelihood of stack overflow.
+Which indicate that something is wrong with the server. Then,
+"qemu-nbd -d" will call ioctl 'NBD_CLEAR_SOCK', however ioctl can't clear
+requests after commit 2516ab1543fd("nbd: only clear the queue on device
+teardown"). And in the meantime, request can't complete through timeout
+because nbd_xmit_timeout() will always return 'BLK_EH_RESET_TIMER', which
+means such request will never be completed in this situation.
 
-It also means the softirq stack will be used for running softirqs from
-other interrupts that don't use the hard irq stack, eg. timer interrupts.
+Now that the flag 'NBD_CMD_INFLIGHT' can make sure requests won't
+complete multiple times, switch back to call nbd_clear_sock() in
+nbd_clear_sock_ioctl(), so that inflight requests can be cleared.
 
-Fixes: 1b1b6a6f4cc0 ("powerpc: handle irq_enter/irq_exit in interrupt handler wrappers")
-Cc: stable@vger.kernel.org # v5.12+
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220525032639.1947280-1-mpe@ellerman.id.au
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Reviewed-by: Josef Bacik <josef@toxicpanda.com>
+Link: https://lore.kernel.org/r/20220521073749.3146892-5-yukuai3@huawei.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/Kconfig |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/block/nbd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -217,7 +217,6 @@ config PPC
- 	select HAVE_HARDLOCKUP_DETECTOR_PERF	if PERF_EVENTS && HAVE_PERF_EVENTS_NMI && !HAVE_HARDLOCKUP_DETECTOR_ARCH
- 	select HAVE_HW_BREAKPOINT		if PERF_EVENTS && (PPC_BOOK3S || PPC_8xx)
- 	select HAVE_IOREMAP_PROT
--	select HAVE_IRQ_EXIT_ON_IRQ_STACK
- 	select HAVE_IRQ_TIME_ACCOUNTING
- 	select HAVE_KERNEL_GZIP
- 	select HAVE_KERNEL_LZMA			if DEFAULT_UIMAGE
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index 7af1c9dbe9f5..151264a4be36 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -1434,7 +1434,7 @@ static int nbd_start_device_ioctl(struct nbd_device *nbd, struct block_device *b
+ static void nbd_clear_sock_ioctl(struct nbd_device *nbd,
+ 				 struct block_device *bdev)
+ {
+-	sock_shutdown(nbd);
++	nbd_clear_sock(nbd);
+ 	__invalidate_device(bdev, true);
+ 	nbd_bdev_reset(bdev);
+ 	if (test_and_clear_bit(NBD_RT_HAS_CONFIG_REF,
+-- 
+2.35.1
+
 
 

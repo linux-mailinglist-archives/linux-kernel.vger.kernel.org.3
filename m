@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F0AD54950C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0B4B548CFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354242AbiFMLby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:31:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
+        id S1378177AbiFMNiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353255AbiFMLZe (ORCPT
+        with ESMTP id S1377677AbiFMNe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:25:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E465E3CFC4;
-        Mon, 13 Jun 2022 03:42:30 -0700 (PDT)
+        Mon, 13 Jun 2022 09:34:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8697D73572;
+        Mon, 13 Jun 2022 04:27:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3647DB80EB4;
-        Mon, 13 Jun 2022 10:42:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83F3EC34114;
-        Mon, 13 Jun 2022 10:42:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA95261036;
+        Mon, 13 Jun 2022 11:27:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEFD7C3411C;
+        Mon, 13 Jun 2022 11:27:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116947;
-        bh=RZgDdum0msf2g8pnmfSjWw5PkHFRPMvuZw+fPrm/v+8=;
+        s=korg; t=1655119631;
+        bh=71fgyx31FlJXB3KBqqZRjsjypAgRiOnHSNsD/a22XSY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eeI6Y7wt7y75zw4QR0uE73oaYBo7szKRrAuPyUkUqgwARwzP39JHIcLV3XJZo3ZWz
-         phezxRGO1GzYog3UbskE4vhmBrZrATZuN6P4F00sw4XPcKvKowL4yUuAQQYYWAGptZ
-         nXl5hyzcN41qLIKv+1L52FWT8HWXHkJgIjh2BnTM=
+        b=ijkLp3HW7xlyph3Idha2qsYC7B7WCpJnnFOGCJcQjYD5D2dRkcxqlATSRzokbJGPn
+         U1gu7GoPsH6Vq0xgtUOf8l3QXq47zyrjAjod3o/5DniwD9SZDGF5fGk6nOPhkf80ry
+         RafGfjDzz2KkBWu/4EIYQiAwRFkx0Ih2rFogyZig=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
-        David Teigland <teigland@redhat.com>
-Subject: [PATCH 5.4 235/411] dlm: fix missing lkb refcount handling
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 083/339] scsi: sd: Dont call blk_cleanup_disk() in sd_probe()
 Date:   Mon, 13 Jun 2022 12:08:28 +0200
-Message-Id: <20220613094935.831402076@linuxfoundation.org>
+Message-Id: <20220613094929.035356697@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Aring <aahringo@redhat.com>
+From: Christoph Hellwig <hch@lst.de>
 
-commit 1689c169134f4b5a39156122d799b7dca76d8ddb upstream.
+[ Upstream commit 7274ce0558adb4b9b1f5c5b613fb4fe331c18911 ]
 
-We always call hold_lkb(lkb) if we increment lkb->lkb_wait_count.
-So, we always need to call unhold_lkb(lkb) if we decrement
-lkb->lkb_wait_count. This patch will add missing unhold_lkb(lkb) if we
-decrement lkb->lkb_wait_count. In case of setting lkb->lkb_wait_count to
-zero we need to countdown until reaching zero and call unhold_lkb(lkb).
-The waiters list unhold_lkb(lkb) can be removed because it's done for
-the last lkb_wait_count decrement iteration as it's done in
-_remove_from_waiters().
+In SCSI the midlayer has ownership of the request_queue, so on probe
+failure we must only put the gendisk, but leave the request_queue alone.
 
-This issue was discovered by a dlm gfs2 test case which use excessively
-dlm_unlock(LKF_CANCEL) feature. Probably the lkb->lkb_wait_count value
-never reached above 1 if this feature isn't used and so it was not
-discovered before.
-
-The testcase ended in a rsb on the rsb keep data structure with a
-refcount of 1 but no lkb was associated with it, which is itself
-an invalid behaviour. A side effect of that was a condition in which
-the dlm was sending remove messages in a looping behaviour. With this
-patch that has not been reproduced.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Alexander Aring <aahringo@redhat.com>
-Signed-off-by: David Teigland <teigland@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220523083813.227935-1-hch@lst.de
+Fixes: 03252259e18e ("scsi: sd: Clean up gendisk if device_add_disk() failed")
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/dlm/lock.c |   11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ drivers/scsi/sd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/dlm/lock.c
-+++ b/fs/dlm/lock.c
-@@ -1551,6 +1551,7 @@ static int _remove_from_waiters(struct d
- 		lkb->lkb_wait_type = 0;
- 		lkb->lkb_flags &= ~DLM_IFL_OVERLAP_CANCEL;
- 		lkb->lkb_wait_count--;
-+		unhold_lkb(lkb);
- 		goto out_del;
+diff --git a/drivers/scsi/sd.c b/drivers/scsi/sd.c
+index dc6e55761fd1..5539d75dcfe7 100644
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -3475,7 +3475,7 @@ static int sd_probe(struct device *dev)
+ 	error = device_add_disk(dev, gd, NULL);
+ 	if (error) {
+ 		put_device(&sdkp->disk_dev);
+-		blk_cleanup_disk(gd);
++		put_disk(gd);
+ 		goto out;
  	}
  
-@@ -1577,6 +1578,7 @@ static int _remove_from_waiters(struct d
- 		log_error(ls, "remwait error %x reply %d wait_type %d overlap",
- 			  lkb->lkb_id, mstype, lkb->lkb_wait_type);
- 		lkb->lkb_wait_count--;
-+		unhold_lkb(lkb);
- 		lkb->lkb_wait_type = 0;
- 	}
- 
-@@ -5312,11 +5314,16 @@ int dlm_recover_waiters_post(struct dlm_
- 		lkb->lkb_flags &= ~DLM_IFL_OVERLAP_UNLOCK;
- 		lkb->lkb_flags &= ~DLM_IFL_OVERLAP_CANCEL;
- 		lkb->lkb_wait_type = 0;
--		lkb->lkb_wait_count = 0;
-+		/* drop all wait_count references we still
-+		 * hold a reference for this iteration.
-+		 */
-+		while (lkb->lkb_wait_count) {
-+			lkb->lkb_wait_count--;
-+			unhold_lkb(lkb);
-+		}
- 		mutex_lock(&ls->ls_waiters_mutex);
- 		list_del_init(&lkb->lkb_wait_reply);
- 		mutex_unlock(&ls->ls_waiters_mutex);
--		unhold_lkb(lkb); /* for waiters list */
- 
- 		if (oc || ou) {
- 			/* do an unlock or cancel instead of resending */
+-- 
+2.35.1
+
 
 

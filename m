@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C1C5498AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E88B5491A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359192AbiFMNJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S1380168AbiFMN6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356323AbiFMM4L (ORCPT
+        with ESMTP id S1380111AbiFMNxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:56:11 -0400
+        Mon, 13 Jun 2022 09:53:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B62813DE3;
-        Mon, 13 Jun 2022 04:17:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5F46D3BF;
+        Mon, 13 Jun 2022 04:33:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5F2060F0F;
-        Mon, 13 Jun 2022 11:17:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E302FC34114;
-        Mon, 13 Jun 2022 11:17:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34D056124E;
+        Mon, 13 Jun 2022 11:33:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42251C3411E;
+        Mon, 13 Jun 2022 11:33:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119034;
-        bh=rjxsIwg46VZA4ILaUjf3PFMiMW6Z/2VxOFD/CXfhqF0=;
+        s=korg; t=1655120028;
+        bh=4oxHm1p9md4OCeao8DceTL8n6o67+unER+HdBMgk2n8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vbhisusi0eLCJpIR2KY37lkngzCOv+2enxZQyEgLS1hPMhSDNWX9XShZPEhujNSsj
-         k7oov+wfhnHDOXXetLQomhmDJf90hhaabiv7xFnnDcBzD7v1GG1x+tfwl7IwQjDkrM
-         Tt5AE4RaKmEuyppczRjmqPijTfdE7eCwr46c4q0k=
+        b=J9xNr2aK25w6ZROtrBpkOK5h1SDP8V00QRv7LWduUFSbKEU++f5ImxljtmDm2n1/p
+         OS/DeTKuJmC9JwtjoJ5ShkOrK/JLGBcaBjlaAHVr2FrdGtkaoUS0CQH/nlQ1Wwb6W2
+         QjvOFy/OJuI/AvSYBktawQUPvyR8kPJ2HhDS+1q0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 117/247] iommu/arm-smmu-v3: check return value after calling platform_get_resource()
-Date:   Mon, 13 Jun 2022 12:10:19 +0200
-Message-Id: <20220613094926.512273643@linuxfoundation.org>
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 195/339] xen: unexport __init-annotated xen_xlate_map_ballooned_pages()
+Date:   Mon, 13 Jun 2022 12:10:20 +0200
+Message-Id: <20220613094932.582639033@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,34 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-[ Upstream commit b131fa8c1d2afd05d0b7598621114674289c2fbb ]
+[ Upstream commit dbac14a5a05ff8e1ce7c0da0e1f520ce39ec62ea ]
 
-It will cause null-ptr-deref if platform_get_resource() returns NULL,
-we need check the return value.
+EXPORT_SYMBOL and __init is a bad combination because the .init.text
+section is freed up after the initialization. Hence, modules cannot
+use symbols annotated __init. The access to a freed symbol may end up
+with kernel panic.
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220425114525.2651143-1-yangyingliang@huawei.com
-Signed-off-by: Will Deacon <will@kernel.org>
+modpost used to detect it, but it has been broken for a decade.
+
+Recently, I fixed modpost so it started to warn it again, then this
+showed up in linux-next builds.
+
+There are two ways to fix it:
+
+  - Remove __init
+  - Remove EXPORT_SYMBOL
+
+I chose the latter for this case because none of the in-tree call-sites
+(arch/arm/xen/enlighten.c, arch/x86/xen/grant-table.c) is compiled as
+modular.
+
+Fixes: 243848fc018c ("xen/grant-table: Move xlated_setup_gnttab_pages to common place")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Acked-by: Stefano Stabellini <sstabellini@kernel.org>
+Link: https://lore.kernel.org/r/20220606045920.4161881-1-masahiroy@kernel.org
+Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/xen/xlate_mmu.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 430315135cff..79edfdca6607 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -3786,6 +3786,8 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
+diff --git a/drivers/xen/xlate_mmu.c b/drivers/xen/xlate_mmu.c
+index 34742c6e189e..f17c4c03db30 100644
+--- a/drivers/xen/xlate_mmu.c
++++ b/drivers/xen/xlate_mmu.c
+@@ -261,7 +261,6 @@ int __init xen_xlate_map_ballooned_pages(xen_pfn_t **gfns, void **virt,
  
- 	/* Base address */
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res)
-+		return -EINVAL;
- 	if (resource_size(res) < arm_smmu_resource_size(smmu)) {
- 		dev_err(dev, "MMIO region too small (%pr)\n", res);
- 		return -EINVAL;
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(xen_xlate_map_ballooned_pages);
+ 
+ struct remap_pfn {
+ 	struct mm_struct *mm;
 -- 
 2.35.1
 

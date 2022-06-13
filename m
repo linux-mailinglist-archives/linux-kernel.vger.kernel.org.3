@@ -2,230 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BEE0549BE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20D2549BE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343795AbiFMSmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
+        id S1344180AbiFMSmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343737AbiFMSlf (ORCPT
+        with ESMTP id S236744AbiFMSlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:41:35 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5127427B35
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:22:21 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id n18so5374441plg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:22:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QriVKtPYPMjffyzAchOzVri+9s1RNxaid+oPI6/3qyk=;
-        b=nMA5bwwYcv1OJRm4RabHPqtxsP5/fOnadu+DlNXVkKd9gG73CUJ9fvNT8WFa/oGGUh
-         qnQfbVITDJdLBX+s8/ZA2pQ3RzFEUOjMYoWu9MiuwUKOynwD7vkqblTOthvbMgIAMx9t
-         F9dQW8FKSt1ddO0ZsZCRgMuhjLmGgpXau5yGQHBFfALCRvTL/AozLIkhn+LUq/RNQ1tY
-         IjjMMFYAlZ9rf0aFTldZTmrDmz9VAQUWVnB9+n+yZ9DsUyML1x/RkniSvO++AV2LOfks
-         +IQ4kQvOG3KxhOlSbrXL2ESRMbLPli0ct9+ujZvAWYNsJc5KGFPrsqTwHgRnyB6kk2zM
-         fQvw==
+        Mon, 13 Jun 2022 14:41:36 -0400
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E802527FC1;
+        Mon, 13 Jun 2022 08:22:43 -0700 (PDT)
+Received: by mail-qv1-f42.google.com with SMTP id a9so4535941qvt.6;
+        Mon, 13 Jun 2022 08:22:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=QriVKtPYPMjffyzAchOzVri+9s1RNxaid+oPI6/3qyk=;
-        b=DpELw4QKdVrveWMku4gewl4H2j+7j5uNzkJedhfYZOr43Rn/taYI78jhWRK48HCmch
-         vbnv2e6cJf6SQEfgXKzhGYxpPZOOJ7tx42OAWyc2M9U96UGgeWUZk/ZkLv/Cu6sPR/z+
-         N/MLbQHH3ScloJzDyRt5vXP/ayBQiOPdVj67vrCtleFOdOPhC6Vyybc2CMFvzKtPlmm/
-         2eH7jL6pINjR1b6DeqtFNc39Ug/4h2Ho8KVhPm4kyflDrlzAOgsbyjAmRdiIPGvLVs6P
-         nRuwq+iCaRebwawAZEeadqyi4fo8Id5pK9OvoyxZBt2ekhHhW5Jnw/DY2RR/MHhqFLh7
-         Ye9g==
-X-Gm-Message-State: AOAM532TD0KxXWf6ggQIOaca9PVsqcgh40gZihrTxDpj+ziAforqKrmz
-        PsItnvmof8/sHr6eH6XYxmC5r/UEsvAamHqr
-X-Google-Smtp-Source: ABdhPJzwdd6UO5KYk51wrui2bdwQpj0l/SkUNaEcIZLUM2ATiFKAKESw79G3RxPNEiuHkfgGuLrpKA==
-X-Received: by 2002:a17:902:d2d1:b0:167:4c33:d5d3 with SMTP id n17-20020a170902d2d100b001674c33d5d3mr52125114plc.81.1655133740483;
-        Mon, 13 Jun 2022 08:22:20 -0700 (PDT)
-Received: from DESKTOP-IM4PCEA.localdomain ([49.207.204.161])
-        by smtp.googlemail.com with ESMTPSA id d14-20020a17090ad3ce00b001e25e3ba05csm19752317pjw.2.2022.06.13.08.22.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 08:22:20 -0700 (PDT)
-From:   Mintu Patel <mintupatel89@gmail.com>
-To:     mintupatel89@gmail.com
-Cc:     Chinmoy Ghosh <chinmoyghosh2001@gmail.com>,
-        Vishal Badole <badolevishal1116@gmail.com>,
-        Vimal Kumar <vimal.kumar32@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] rt_spin_lock: To list the correct owner of rt_spin_lock
-Date:   Mon, 13 Jun 2022 20:52:04 +0530
-Message-Id: <20220613152205.262-1-mintupatel89@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qcugiPICJLPzQVbJaMNvRLiNwKZci/LNeFue+3qV07c=;
+        b=QOxSPO2OkOZkyfuTU+urLlI0TBuGEyVYL31+208ARrWq7zyVEEqhz4L7oUEAITV2VP
+         QruLsgFZLjUYyQJeRz1MdYqqidC+VXO1hv+GNOan0PwdVJ7hl9El05BVtnI3St24FDMI
+         ceLQ/xmTxMDqay/tQf1dJ5u+1ZEuicjO/QJxySq/z8auIRvgZJHp/hCq9lpYlVaUXvnT
+         Ji4GzcM7EsVXDBVyoqGLUgDmhD3Y77bWhEnUmM5cDbKERo5TVbc5k3VgQOx2ZKcMI9kd
+         JtpJN5k/tPAqu6egujEWzM+0UyEn3vIUOmWqVFr6Kekg1C1aDgAA5QdGImwsrQvT83xG
+         C/oA==
+X-Gm-Message-State: AJIora9T9io/VxswjBbeeoUrR0OO7OFyTpN9GIIBx+khJ8bKCuLEaAwf
+        fp3IxZPw7RrZDxt3S9Q0/OYvytzLjBKY1Q==
+X-Google-Smtp-Source: AGRyM1tR23QUPLSYmCAd7BQK6XX/kwgM+nwgjzZ6OZZ6JQ76t/Z0rwIfTCBiFtqIB/RLnwSKOCTAgg==
+X-Received: by 2002:a05:6214:623:b0:46b:9512:b355 with SMTP id a3-20020a056214062300b0046b9512b355mr172620qvx.8.1655133762571;
+        Mon, 13 Jun 2022 08:22:42 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id w2-20020a05622a134200b003051ba1f8bcsm5095399qtk.15.2022.06.13.08.22.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 08:22:42 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id k2so10427683ybj.3;
+        Mon, 13 Jun 2022 08:22:41 -0700 (PDT)
+X-Received: by 2002:a25:d748:0:b0:65c:6b00:55af with SMTP id
+ o69-20020a25d748000000b0065c6b0055afmr55080ybg.365.1655133761358; Mon, 13 Jun
+ 2022 08:22:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
+ <CAMuHMdUZCaPN2B6bvmja9rDm3qCc4mYYAOSEB2W0R0pws8peqw@mail.gmail.com> <20220613142645.1176423-1-alexandr.lobakin@intel.com>
+In-Reply-To: <20220613142645.1176423-1-alexandr.lobakin@intel.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 13 Jun 2022 17:22:30 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVayS6hV3CWW6FS-1cQKoGTCDxgVhZVPSyBMvJHBxVwJA@mail.gmail.com>
+Message-ID: <CAMuHMdVayS6hV3CWW6FS-1cQKoGTCDxgVhZVPSyBMvJHBxVwJA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/6] bitops: let optimize out non-atomic bitops on
+ compile-time constants
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        alpha <linux-alpha@vger.kernel.org>,
+        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-   rt_spin_lock is actually mutex on RT Kernel so it goes for contention
-   for lock. Currently owners of rt_spin_lock are decided before actual
-   acquiring of lock. This patch would depict the correct owner of
-   rt_spin_lock. The patch would help in solving crashes and deadlock
-   due to race condition of lock
+Hi Olek,
 
-acquiring rt_spin_lock        acquired the lock       released the lock
-                    <-------->                <------->
-                    contention period         Held period
+On Mon, Jun 13, 2022 at 4:28 PM Alexander Lobakin
+<alexandr.lobakin@intel.com> wrote:
+> From: Geert Uytterhoeven <geert@linux-m68k.org>
+> > On Fri, Jun 10, 2022 at 1:35 PM Alexander Lobakin
+> > <alexandr.lobakin@intel.com> wrote:
+> > On m68k, using gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04), this
+> > blows up immediately with:
+>
+> Yeah I saw the kernel bot report already, sorry for that >_< Fixed
+> in v3 already, will send in 1-2 days.
 
-Thread1                                 Thread2
+Is it simple to fix?
+I might be able to give the fixed v2 a try before that.
+Thanks!
 
-__try_to_take_rt_mutex+0x95c+0x74   enqueue_task_dl+0x8cc/0x8dc
-rt_spin_lock_slowlock_locked+0xac+2 rt_mutex_setprio+0x28c/0x574
-rt_spin_lock_slowlock+0x5c/0x90     task_blocks_rt_mutex+0x240/0x310
-rt_spin_lock+0x58/0x5c              rt_spin_lock_slowlock_locked+0xac/0x2
-driverA_acquire_lock+0x28/0x56      rt_spin_lock_slowlock+0x5c/0x90
-				    rt_spin_lock+0x58/0x5c
-                                    driverB_acquire_lock+0x48/0x6c
+Gr{oetje,eeting}s,
 
-As per above call traces sample, Thread1 acquired the rt_spin_lock and
-went to critical section on the other hand Thread2 kept trying to acquire
-the same rt_spin_lock held by Thread1 ie contention period is too high.
-Finally Thread2 entered to dl queue due to high held time of the lock by
-Thread1. The below patch would help us to know the correct owner of
-rt_spin_lock and point us the driver's critical section. Respective driver
-need to be debugged for longer held period of lock.
+                        Geert
 
-   ex: cat /sys/kernel/debug/tracing/trace
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-   kworker/u13:0-150   [003] .....11   202.761025: rt_spinlock_acquire:
-Process: kworker/u13:0 is acquiring lock: &kbdev->hwaccess_lock
-   kworker/u13:0-150   [003] .....11   202.761039: rt_spinlock_acquired:
-Process: kworker/u13:0 has acquired lock: &kbdev->hwaccess_lock
-   kworker/u13:0-150   [003] .....11   202.761042: rt_spinlock_released:
-Process: kworker/u13:0 has released lock: &kbdev->hwaccess_lock
-
-Signed-off-by: Mintu Patel <mintupatel89@gmail.com>
-Signed-off-by: Chinmoy Ghosh <chinmoyghosh2001@gmail.com>
-Signed-off-by: Vishal Badole <badolevishal1116@gmail.com>
-Signed-off-by: Vimal Kumar <vimal.kumar32@gmail.com>
----
- include/trace/events/lock.h | 60 +++++++++++++++++++++++++++++++++++++
- kernel/locking/rtmutex.c    | 10 +++++++
- 2 files changed, 70 insertions(+)
-
-diff --git a/include/trace/events/lock.h b/include/trace/events/lock.h
-index d7512129a324..8bb21b31c9a9 100644
---- a/include/trace/events/lock.h
-+++ b/include/trace/events/lock.h
-@@ -36,6 +36,66 @@ TRACE_EVENT(lock_acquire,
- 		  __get_str(name))
- );
- 
-+TRACE_EVENT(rt_spinlock_acquire,
-+
-+	TP_PROTO(struct lockdep_map *lock, struct task_struct *pname),
-+
-+	TP_ARGS(lock, pname),
-+
-+	TP_STRUCT__entry(
-+		__string(name, lock->name)
-+		__string(process_name, pname->comm)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name, lock->name);
-+		__assign_str(process_name, pname->comm);
-+	),
-+
-+	TP_printk("Process: %s is acquiring lock: %s",  __get_str(process_name),
-+		  __get_str(name))
-+);
-+
-+TRACE_EVENT(rt_spinlock_acquired,
-+
-+	TP_PROTO(struct lockdep_map *lock, struct task_struct *pname),
-+
-+	TP_ARGS(lock, pname),
-+
-+	TP_STRUCT__entry(
-+		__string(name, lock->name)
-+		__string(process_name, pname->comm)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name, lock->name);
-+		__assign_str(process_name, pname->comm);
-+	),
-+
-+	TP_printk("Process: %s has acquired lock: %s", __get_str(process_name),
-+		  __get_str(name))
-+);
-+
-+TRACE_EVENT(rt_spinlock_released,
-+
-+	TP_PROTO(struct lockdep_map *lock, struct task_struct *pname),
-+
-+	TP_ARGS(lock, pname),
-+
-+	TP_STRUCT__entry(
-+		__string(name, lock->name)
-+		__string(process_name, pname->comm)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name, lock->name);
-+		__assign_str(process_name, pname->comm);
-+	),
-+
-+	TP_printk("Process: %s has released lock: %s", __get_str(process_name),
-+		  __get_str(name))
-+);
-+
- DECLARE_EVENT_CLASS(lock,
- 
- 	TP_PROTO(struct lockdep_map *lock, unsigned long ip),
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 08e233b7dc21..fb10c4e44f09 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -25,6 +25,7 @@
- #include <linux/timer.h>
- #include <linux/ww_mutex.h>
- #include <linux/blkdev.h>
-+#include <trace/events/lock.h>
- 
- #include "rtmutex_common.h"
- 
-@@ -1144,7 +1145,13 @@ void __lockfunc rt_spin_lock(spinlock_t *lock)
- 	sleeping_lock_inc();
- 	migrate_disable();
- 	spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
-+#ifdef CONFIG_RT_SPIN_LOCK_TRACING
-+	trace_rt_spinlock_acquire(&lock->dep_map, current);
-+#endif
- 	rt_spin_lock_fastlock(&lock->lock, rt_spin_lock_slowlock);
-+#ifdef CONFIG_RT_SPIN_LOCK_TRACING
-+	trace_rt_spinlock_acquired(&lock->dep_map, current);
-+#endif
- }
- EXPORT_SYMBOL(rt_spin_lock);
- 
-@@ -1168,6 +1175,9 @@ void __lockfunc rt_spin_unlock(spinlock_t *lock)
- {
- 	/* NOTE: we always pass in '1' for nested, for simplicity */
- 	spin_release(&lock->dep_map, 1, _RET_IP_);
-+#ifdef CONFIG_RT_SPIN_LOCK_TRACING
-+	trace_rt_spinlock_released(&lock->dep_map, current);
-+#endif
- 	rt_spin_lock_fastunlock(&lock->lock, rt_spin_lock_slowunlock);
- 	migrate_enable();
- 	sleeping_lock_dec();
--- 
-2.25.1
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

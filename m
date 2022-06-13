@@ -2,86 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C28AA549D25
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C086549D3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235126AbiFMTOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39592 "EHLO
+        id S235346AbiFMTRG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:17:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239018AbiFMTOI (ORCPT
+        with ESMTP id S241269AbiFMTQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:14:08 -0400
-Received: from mailrelay2-1.pub.mailoutpod1-cph3.one.com (mailrelay2-1.pub.mailoutpod1-cph3.one.com [46.30.210.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DED8CE3D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:12:42 -0700 (PDT)
+        Mon, 13 Jun 2022 15:16:39 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C7F248F7;
+        Mon, 13 Jun 2022 10:13:58 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso9395762pjl.3;
+        Mon, 13 Jun 2022 10:13:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=lHjgrdlCsJlZNExw2i+5p/H7UmbCDOq2p/NEOrPWfhI=;
-        b=LpfJ3oPYuuqg6i3ho0XikhkAPNOBaQbZr82eZv0bUP4ve0Z4PFc69HjP4A1M56gmZKZ2eeqWeEmaK
-         /bUI2rk7ZHbhQLN3iywV3rXmHhTZmEd1p2FLPwDnC7hvKoXzu9/hs2Zxr+nrvWNjhCw34+f4LZh6pZ
-         RCZs2OIgx//zHcR4YywpNgW/VFVFDy3TU6TxoiGBxMJb2k/wI0CT68I90+bLDAH02G0QrW943PVKpd
-         AsUU63h3+s0KtUXIcN+1Au7F8a79oACmCtcr/1pCrG9iPqlQmT2DjilP0pjq9DvnxVpd8eUlSAiHTT
-         hgQfucYdZ9sfLrjuWUEjgqP/jBu8daA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=lHjgrdlCsJlZNExw2i+5p/H7UmbCDOq2p/NEOrPWfhI=;
-        b=ldsO6NEhLw+vp3UB1ZOzR2Yob+FMPpcyEw0+v01Wvw2DdWcTcV26CW6XMjhQ+5z+CJAUaadOaYIWC
-         Icw4EPWAg==
-X-HalOne-Cookie: 392d8748579318f935a12eb6f32b987bbdd36c36
-X-HalOne-ID: 0764a83b-eb3c-11ec-a913-d0431ea8a290
-Received: from mailproxy3.cst.dirpod4-cph3.one.com (80-162-45-141-cable.dk.customer.tdc.net [80.162.45.141])
-        by mailrelay2.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 0764a83b-eb3c-11ec-a913-d0431ea8a290;
-        Mon, 13 Jun 2022 17:12:40 +0000 (UTC)
-Date:   Mon, 13 Jun 2022 19:12:38 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Liviu Dudau <Liviu.Dudau@arm.com>,
-        Andre Przywara <andre.przywara@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] dt-bindings: display: Add Arm virtual platforms
- display
-Message-ID: <YqdwBoMldyuh+vjg@ravnborg.org>
-References: <20220613145709.3729053-1-robh@kernel.org>
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=vP2a/CCt7HshyUEbxtRkeXFVL2WuGiSYuvG6ycnh8y0=;
+        b=QRxXmPyawmBy6y60a7KFnp7fUMASsoifDYKT+iEalt/zagbPhOnXVQEdBVe/Y3HHvO
+         3VSogICEYC0XQaPBGttJ/Bop/xgzQlgJi0PBRXiiipHIqSRg53Q7sFzevYSnghNP1hFf
+         B1HigkU/gNNt2M2B07iHIZaxcFTdj8lsgDppo3IMMk3MfudL70d5ms8/xEryb76aCYn8
+         HGWckQmrIEE67rCVLdjgRTGaWGdkBPuSJAfdQMQ1DD3xvYwEEe150f/69w7TfdSWLbeF
+         mj8QJDMYf/rcXX1ORbJ/lycjJCwwXWKfOjU4yfv2U4l9b6q6T6KaGGh/IsQkfhpEzL+d
+         m9bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=vP2a/CCt7HshyUEbxtRkeXFVL2WuGiSYuvG6ycnh8y0=;
+        b=TT24sP4wBTJ98b70m881SFjt76opNSk7WUCu1+oKv4zlHbBEubho6XchQUgbJGAwTE
+         10pflM4kWtVTtXv2vmibyHRr9ctQ8KIO1INL57yURInos5ax4CFRgfTnsAxqSyOgP8Xa
+         CLwNELuNXEAjEkD7AhkWv14IvUJnsSvNBOVWNQXphgzlNAuNZa26u0v9zQARShFcs2E/
+         rwgRxlPkJixqBB84sS65lp1SdO7lbhDAXH8K6RvgmGTqcIhW06fx4IKp7tkqmVNye9Na
+         oMbFp6gk5YQDEqPMupdq0p8G2eoN8VMkYBDe4Di2MSu8HOm5rIlqER0FwJi4qzTU0XZ4
+         /Umw==
+X-Gm-Message-State: AJIora8WQaIn4jnR+2hD/JkXh+WnE2LC1BphVvvExQF9GIxXfXqBtR6/
+        xDjqvhCLLtQSDvEqLdJjuGg=
+X-Google-Smtp-Source: AGRyM1vMykkDHn0jeBqj2shRkDwy+j687E8Th6EKkaFkwCaU9m48ptBa2fy8+SgYlMK9fIXkrM7OMw==
+X-Received: by 2002:a17:903:11c6:b0:167:90e5:59ac with SMTP id q6-20020a17090311c600b0016790e559acmr596604plh.143.1655140437815;
+        Mon, 13 Jun 2022 10:13:57 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id d20-20020a170902f15400b0015e8d4eb285sm5367110plb.207.2022.06.13.10.13.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 10:13:57 -0700 (PDT)
+Message-ID: <5b677140-c395-f59c-e8e4-6f50cea2a529@gmail.com>
+Date:   Mon, 13 Jun 2022 10:13:53 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613145709.3729053-1-robh@kernel.org>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 2/3] ARM: dts: add dts files for bcmbca SoC bcm6855
+Content-Language: en-US
+To:     William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     tomer.yacoby@broadcom.com, anand.gore@broadcom.com,
+        dan.beygelman@broadcom.com, kursad.oney@broadcom.com,
+        philippe.reynes@softathome.com, joel.peshkin@broadcom.com,
+        f.fainelli@gmail.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        samyon.furman@broadcom.com, Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, soc@kernel.org
+References: <20220607172646.32369-1-william.zhang@broadcom.com>
+ <20220607172646.32369-3-william.zhang@broadcom.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220607172646.32369-3-william.zhang@broadcom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob, thanks!
-On Mon, Jun 13, 2022 at 08:57:09AM -0600, Rob Herring wrote:
-> 'arm,rtsm-display' is a panel for Arm, Ltd. virtual platforms (e.g. FVP).
-> The binding has been in use for a long time, but was never documented.
+On 6/7/22 10:26, William Zhang wrote:
+> Add dts for ARMv7 based broadband SoC BCM6855. bcm6855.dtsi is the SoC
+> description dts header and bcm96855.dts is a simple dts file for
+> Broadcom BCM96855 Reference board that only enable the UART port.
 > 
-> Some users and an example have a 'panel-dpi' compatible, but that's not
-> needed without a 'panel-timing' node which none of the users have since
-> commit 928faf5e3e8d ("arm64: dts: fvp: Remove panel timings"). The
-> example does have a 'panel-timing' node, but it should not for the
-> same reasons the node was removed in the dts files. So update the
-> example in arm,pl11x.yaml to match the schema.
-> 
-> Cc: Linus Walleij <linus.walleij@linaro.org>
-> Cc: Robin Murphy <robin.murphy@arm.com>
-> Cc: Andre Przywara <andre.przywara@arm.com>
-> Signed-off-by: Rob Herring <robh@kernel.org>
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, 
+thanks!
+-- 
+Florian

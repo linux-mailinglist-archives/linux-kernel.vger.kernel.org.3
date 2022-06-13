@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96160548867
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4B7C54864D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352364AbiFMLMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
+        id S1379846AbiFMN7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351665AbiFMLJy (ORCPT
+        with ESMTP id S1380249AbiFMNx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:09:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D95A34644;
-        Mon, 13 Jun 2022 03:35:47 -0700 (PDT)
+        Mon, 13 Jun 2022 09:53:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9D02B248;
+        Mon, 13 Jun 2022 04:34:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 687C3B80EA7;
-        Mon, 13 Jun 2022 10:35:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5BAFC34114;
-        Mon, 13 Jun 2022 10:35:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A0C0612BC;
+        Mon, 13 Jun 2022 11:34:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF330C34114;
+        Mon, 13 Jun 2022 11:34:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116544;
-        bh=DAYQ0OroB66563gRhhqeAiJCMl89W3TJBKmM10sxpcA=;
+        s=korg; t=1655120056;
+        bh=/iUON9WW6bsYbfVqaGxLRyqJA2zgabLnd46UiDlgoD8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fATL98HFVL3Udq42KzqDhvyKKn+98S5fH+jCzGeofiWgTZUCnfsJ6h3SWhlVT7h9H
-         TGkH/aKEswD2uv3xw/Xy6kchR+0iWgdcz5Xy/mnC36n9kI7h1h3qoGlQNvXvwvAH8N
-         c0C634Q9IFDh0Z9CxIUR6mHpsvp4pIWcJGNBhcH0=
+        b=ZdYyQ7iOmAPtX6sv1gx9XRPgbF4B/N+WnSZsjj9/DMXuUGFcnXg7JT4p5R1XdjGrA
+         I6UfmpTDYhShMRhFCJy++VvlHP3ihTpXxhjAtPdiLeZPnK0y37sDHAGFoQLXytDg72
+         fouM2fCK7YDlzyZdfIgd57HqDvy2yoxN3KB4fibg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
-        Yu Kuai <yukuai3@huawei.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 201/218] nbd: call genl_unregister_family() first in nbd_cleanup()
-Date:   Mon, 13 Jun 2022 12:10:59 +0200
-Message-Id: <20220613094926.719036746@linuxfoundation.org>
+        stable@vger.kernel.org, Zhen Ni <nizhen@uniontech.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 235/339] USB: host: isp116x: check return value after calling platform_get_resource()
+Date:   Mon, 13 Jun 2022 12:11:00 +0200
+Message-Id: <20220613094933.785529602@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,72 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+From: Zhen Ni <nizhen@uniontech.com>
 
-[ Upstream commit 06c4da89c24e7023ea448cadf8e9daf06a0aae6e ]
+[ Upstream commit 134a3408c2d3f7e23eb0e4556e0a2d9f36c2614e ]
 
-Otherwise there may be race between module removal and the handling of
-netlink command, which can lead to the oops as shown below:
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-  BUG: kernel NULL pointer dereference, address: 0000000000000098
-  Oops: 0002 [#1] SMP PTI
-  CPU: 1 PID: 31299 Comm: nbd-client Tainted: G            E     5.14.0-rc4
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
-  RIP: 0010:down_write+0x1a/0x50
-  Call Trace:
-   start_creating+0x89/0x130
-   debugfs_create_dir+0x1b/0x130
-   nbd_start_device+0x13d/0x390 [nbd]
-   nbd_genl_connect+0x42f/0x748 [nbd]
-   genl_family_rcv_msg_doit.isra.0+0xec/0x150
-   genl_rcv_msg+0xe5/0x1e0
-   netlink_rcv_skb+0x55/0x100
-   genl_rcv+0x29/0x40
-   netlink_unicast+0x1a8/0x250
-   netlink_sendmsg+0x21b/0x430
-   ____sys_sendmsg+0x2a4/0x2d0
-   ___sys_sendmsg+0x81/0xc0
-   __sys_sendmsg+0x62/0xb0
-   __x64_sys_sendmsg+0x1f/0x30
-   do_syscall_64+0x3b/0xc0
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
-  Modules linked in: nbd(E-)
-
-Signed-off-by: Hou Tao <houtao1@huawei.com>
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Josef Bacik <josef@toxicpanda.com>
-Link: https://lore.kernel.org/r/20220521073749.3146892-2-yukuai3@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Signed-off-by: Zhen Ni <nizhen@uniontech.com>
+Link: https://lore.kernel.org/r/20220302033716.31272-1-nizhen@uniontech.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/nbd.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/usb/host/isp116x-hcd.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 826b3877a157..1c9f866d9338 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -2319,6 +2319,12 @@ static void __exit nbd_cleanup(void)
- 	struct nbd_device *nbd;
- 	LIST_HEAD(del_list);
+diff --git a/drivers/usb/host/isp116x-hcd.c b/drivers/usb/host/isp116x-hcd.c
+index 8835f6bd528e..8c7f0991c21b 100644
+--- a/drivers/usb/host/isp116x-hcd.c
++++ b/drivers/usb/host/isp116x-hcd.c
+@@ -1541,10 +1541,12 @@ static int isp116x_remove(struct platform_device *pdev)
  
-+	/*
-+	 * Unregister netlink interface prior to waiting
-+	 * for the completion of netlink commands.
-+	 */
-+	genl_unregister_family(&nbd_genl_family);
-+
- 	nbd_dbg_close();
+ 	iounmap(isp116x->data_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-	release_mem_region(res->start, 2);
++	if (res)
++		release_mem_region(res->start, 2);
+ 	iounmap(isp116x->addr_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	release_mem_region(res->start, 2);
++	if (res)
++		release_mem_region(res->start, 2);
  
- 	mutex_lock(&nbd_index_mutex);
-@@ -2334,7 +2340,6 @@ static void __exit nbd_cleanup(void)
- 	}
- 
- 	idr_destroy(&nbd_index_idr);
--	genl_unregister_family(&nbd_genl_family);
- 	unregister_blkdev(NBD_MAJOR, "nbd");
- }
- 
+ 	usb_put_hcd(hcd);
+ 	return 0;
 -- 
 2.35.1
 

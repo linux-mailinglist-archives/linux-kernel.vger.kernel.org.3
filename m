@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67FD5486E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1A4548767
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349501AbiFMMLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:11:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54234 "EHLO
+        id S1357644AbiFMNG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359042AbiFMMFL (ORCPT
+        with ESMTP id S1354745AbiFMMzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:05:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44B525C48;
-        Mon, 13 Jun 2022 03:58:42 -0700 (PDT)
+        Mon, 13 Jun 2022 08:55:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AC111807;
+        Mon, 13 Jun 2022 04:16:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6FE9AB80D3A;
-        Mon, 13 Jun 2022 10:58:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA2A3C34114;
-        Mon, 13 Jun 2022 10:58:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 858D5B80EA8;
+        Mon, 13 Jun 2022 11:16:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6491C34114;
+        Mon, 13 Jun 2022 11:16:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117920;
-        bh=UyTGTZOw/Ev9o5JpBoq+FIzadi3yCuLzcQ0l8Ah+elw=;
+        s=korg; t=1655118995;
+        bh=6ZdnYJ8rf0Ij1VeTv832SGgZbKN5b0dfE5OP1OorB9I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mC5M1XozrAGeem8jY2FIlQVNzhcO70bhbMbaSGELLeIvfBsWVbMst3DJJ0Mp3EZ6s
-         7H9byXSq6Wrui3KjFIVSukixoHSZHZK18QzOCkEByNrHZ6YOj2dTx0nyAMqg8tmD18
-         qMaLE7zssI+g4vpJVe8fvthfyk0EZ+gQVkGdsf5Y=
+        b=OsmL0VzDMra+asSGoSJtcMoJXskk7dMmnVTmGdC2wTnd1tU0+yXb45jHRmTBqlc5m
+         uGXSfJGGuCF7mpXkXJPQUp0/tDA9cVptxK+upmcwYvoxJs/93nG64jGfRMfhpfSQus
+         vO0tuXmJoysnxp6hra8haQI+TvWCQFiuKX7qSqt4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Christian Lamparter <chunkeey@gmail.com>,
-        Kalle Valo <quic_kvalo@quicinc.com>
-Subject: [PATCH 4.19 178/287] carl9170: tx: fix an incorrect use of list iterator
-Date:   Mon, 13 Jun 2022 12:10:02 +0200
-Message-Id: <20220613094929.267955726@linuxfoundation.org>
+        stable@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 102/247] s390/mcck: isolate SIE instruction when setting CIF_MCCK_GUEST flag
+Date:   Mon, 13 Jun 2022 12:10:04 +0200
+Message-Id: <20220613094926.049928025@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Alexander Gordeev <agordeev@linux.ibm.com>
 
-commit 54a6f29522da3c914da30e50721dedf51046449a upstream.
+[ Upstream commit 29ccaa4b35ea874ddd50518e5c2c746b9238a792 ]
 
-If the previous list_for_each_entry_continue_rcu() don't exit early
-(no goto hit inside the loop), the iterator 'cvif' after the loop
-will be a bogus pointer to an invalid structure object containing
-the HEAD (&ar->vif_list). As a result, the use of 'cvif' after that
-will lead to a invalid memory access (i.e., 'cvif->id': the invalid
-pointer dereference when return back to/after the callsite in the
-carl9170_update_beacon()).
+Commit d768bd892fc8 ("s390: add options to change branch prediction
+behaviour for the kernel") introduced .Lsie_exit label - supposedly
+to fence off SIE instruction. However, the corresponding address
+range length .Lsie_crit_mcck_length was not updated, which led to
+BPON code potentionally marked with CIF_MCCK_GUEST flag.
 
-The original intention should have been to return the valid 'cvif'
-when found in list, NULL otherwise. So just return NULL when no
-entry found, to fix this bug.
+Both .Lsie_exit and .Lsie_crit_mcck_length were removed with commit
+0b0ed657fe00 ("s390: remove critical section cleanup from entry.S"),
+but the issue persisted - currently BPOFF and BPENTER macros might
+get wrongly considered by the machine check handler as a guest.
 
-Cc: stable@vger.kernel.org
-Fixes: 1f1d9654e183c ("carl9170: refactor carl9170_update_beacon")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Acked-by: Christian Lamparter <chunkeey@gmail.com>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220328122820.1004-1-xiam0nd.tong@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d768bd892fc8 ("s390: add options to change branch prediction behaviour for the kernel")
+Reviewed-by: Sven Schnelle <svens@linux.ibm.com>
+Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/carl9170/tx.c |    3 +++
- 1 file changed, 3 insertions(+)
+ arch/s390/kernel/entry.S | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/net/wireless/ath/carl9170/tx.c
-+++ b/drivers/net/wireless/ath/carl9170/tx.c
-@@ -1554,6 +1554,9 @@ static struct carl9170_vif_info *carl917
- 					goto out;
- 			}
- 		} while (ar->beacon_enabled && i--);
-+
-+		/* no entry found in list */
-+		return NULL;
- 	}
- 
- out:
+diff --git a/arch/s390/kernel/entry.S b/arch/s390/kernel/entry.S
+index 4c9b967290ae..d530eb4dc413 100644
+--- a/arch/s390/kernel/entry.S
++++ b/arch/s390/kernel/entry.S
+@@ -248,6 +248,10 @@ ENTRY(sie64a)
+ 	BPEXIT	__SF_SIE_FLAGS(%r15),(_TIF_ISOLATE_BP|_TIF_ISOLATE_BP_GUEST)
+ .Lsie_entry:
+ 	sie	0(%r14)
++# Let the next instruction be NOP to avoid triggering a machine check
++# and handling it in a guest as result of the instruction execution.
++	nopr	7
++.Lsie_leave:
+ 	BPOFF
+ 	BPENTER	__SF_SIE_FLAGS(%r15),(_TIF_ISOLATE_BP|_TIF_ISOLATE_BP_GUEST)
+ .Lsie_skip:
+@@ -536,7 +540,7 @@ ENTRY(mcck_int_handler)
+ 	jno	.Lmcck_panic
+ #if IS_ENABLED(CONFIG_KVM)
+ 	OUTSIDE	%r9,.Lsie_gmap,.Lsie_done,6f
+-	OUTSIDE	%r9,.Lsie_entry,.Lsie_skip,4f
++	OUTSIDE	%r9,.Lsie_entry,.Lsie_leave,4f
+ 	oi	__LC_CPU_FLAGS+7, _CIF_MCCK_GUEST
+ 	j	5f
+ 4:	CHKSTG	.Lmcck_panic
+-- 
+2.35.1
+
 
 

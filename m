@@ -2,86 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 504FF54A181
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4094754A186
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352078AbiFMVbx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Jun 2022 17:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
+        id S1352480AbiFMVcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 17:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352120AbiFMVaJ (ORCPT
+        with ESMTP id S1343543AbiFMVaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 17:30:09 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFCBF192
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 14:29:50 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-170-9N43S4nTPaqalKCbtLkcWA-1; Mon, 13 Jun 2022 22:29:47 +0100
-X-MC-Unique: 9N43S4nTPaqalKCbtLkcWA-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Mon, 13 Jun 2022 22:29:46 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Mon, 13 Jun 2022 22:29:46 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     "'Luck, Tony'" <tony.luck@intel.com>,
-        "Lobakin, Alexandr" <alexandr.lobakin@intel.com>,
-        Marco Elver <elver@google.com>
-CC:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Yury Norov <yury.norov@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Borislav Petkov <bp@suse.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 2/6] bitops: always define asm-generic non-atomic
- bitops
-Thread-Topic: [PATCH v2 2/6] bitops: always define asm-generic non-atomic
- bitops
-Thread-Index: AQHYfL4xWJEoq3eTcEeKREBjFjjrHK1JHg2A//+t5kCAAH9LAIAEkeOA//+tDzCAAFKXkA==
-Date:   Mon, 13 Jun 2022 21:29:46 +0000
-Message-ID: <5d65491caf6249c8b72c7a6ced95614c@AcuMS.aculab.com>
-References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
- <20220610113427.908751-3-alexandr.lobakin@intel.com>
- <YqNMO0ioGzJ1IkoA@smile.fi.intel.com>
- <22042c14bc6a437d9c6b235fbfa32c8a@intel.com>
- <CANpmjNNZAeMQjzNyXLeKY4cp_m-xJBU1vs7PgT+7_sJwxtEEAg@mail.gmail.com>
- <20220613141947.1176100-1-alexandr.lobakin@intel.com>
- <c82877aa7cc244f2bf0f65dfb2b617e7@intel.com>
-In-Reply-To: <c82877aa7cc244f2bf0f65dfb2b617e7@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 13 Jun 2022 17:30:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83102A4;
+        Mon, 13 Jun 2022 14:30:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A80F9B815E5;
+        Mon, 13 Jun 2022 21:30:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E91FC3411C;
+        Mon, 13 Jun 2022 21:30:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655155821;
+        bh=RcDh9o9PXC+xSwXW/nZeAZBZrz0xvylKTEyCuXSTkuc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=snI6zuYtunnjEyezYSZyynO4hvrbhn7HnkGB6QhYGneQ/wahpOzZw3iCJp5lNN+Gm
+         QNPAkbKF+tgJQp/tto8gvxNroSDEDAhhxoqb3KK0TBr9l4oJDSvT6ilVRP+IENSMB6
+         eKZ8lEanu6p1NSI1bMJmKtq05Bl4rgdv3V6VXwRFI7qwPmtxsy1/567ewNXO3J8TFq
+         FyJQEKEaG60vXNBCsgqDmd58/y1cpl41JRGJ98MRriLwLxYnPFDM1Zz5awKvZNw2y4
+         xa/hxm1KIEijsYnKBtw63+VLBOBgFUV7gSOMtjPBGs3upMqdHCYZvdQ1Vocjq8GdBz
+         FqawezRRVvLIQ==
+Received: by mail-vs1-f50.google.com with SMTP id e20so7159615vso.4;
+        Mon, 13 Jun 2022 14:30:21 -0700 (PDT)
+X-Gm-Message-State: AJIora/Sl6RgBY2NP6xuVyuLwWumY0E7YPtBgUTMp+8BoU4WpbvN8v/E
+        8oeDb0ndqh+mOkAw6Sl5Ydn7afYVMW70pe5Hyw==
+X-Google-Smtp-Source: AGRyM1tLuv8d5QD/UbHdhsN9UvYFl6xc6e+X3OCBXTT+IsNl1tijgv7xEbdvPPY2i3m0s6ecWDB11WH5VFl0fJvUlmU=
+X-Received: by 2002:a67:d38c:0:b0:349:d028:c8ea with SMTP id
+ b12-20020a67d38c000000b00349d028c8eamr702530vsj.6.1655155820388; Mon, 13 Jun
+ 2022 14:30:20 -0700 (PDT)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <bf04adfd1dae519cb9377bcc7222089399690a22.1655147787.git.thomas.lendacky@amd.com>
+In-Reply-To: <bf04adfd1dae519cb9377bcc7222089399690a22.1655147787.git.thomas.lendacky@amd.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Mon, 13 Jun 2022 15:30:08 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJ5+vt-1xU4eo+pAWJbVQyA7=-fNquh32kqjLusvr1O6Q@mail.gmail.com>
+Message-ID: <CAL_JsqJ5+vt-1xU4eo+pAWJbVQyA7=-fNquh32kqjLusvr1O6Q@mail.gmail.com>
+Subject: Re: [PATCH] crypto: ccp - Fix device IRQ counting by using platform_irq_count()
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
+        <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        John Allen <john.allen@amd.com>, Marc Zyngier <maz@kernel.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,39 +67,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luck, Tony
-> Sent: 13 June 2022 17:27
-> 
-> >> It's listed in Documentation/atomic_bitops.txt.
-> >
-> > Oh, so my memory was actually correct that I saw it in the docs
-> > somewhere.
-> > WDYT, should I mention this here in the code (block comment) as well
-> > that it's atomic and must not lose `volatile` as Andy suggested or
-> > it's sufficient to have it in the docs (+ it's not underscored)?
-> 
-> I think a comment that the "volatile" is required to prevent re-ordering
-> is enough.
-> 
-> But maybe others are sufficiently clear on the meaning? I once wasted
-> time looking for the non-atomic __test_bit() version (to use in some code
-> that was already protected by a spin lock, so didn't need the overhead
-> of an "atomic" version) before realizing there wasn't a non-atomic one.
+On Mon, Jun 13, 2022 at 1:16 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+>
+> The ccp driver loops through the platform device resources array to get
+> the IRQ count for the device. With commit a1a2b7125e10 ("of/platform: Drop
+> static setup of IRQ resource from DT core"), the IRQ resources are no
+> longer stored in the platform device resource array. As a result, the IRQ
+> count is now always zero. This causes the driver to issue a second call to
+> platform_get_irq(), which fails if the IRQ count is really 1, causing the
+> loading of the driver to fail.
+>
+> Replace looping through the resources array to count the number of IRQs
+> with a call to platform_irq_count().
+>
+> Fixes: a1a2b7125e10 ("of/platform: Drop static setup of IRQ resource from DT core")
+> Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+> ---
+>  drivers/crypto/ccp/sp-platform.c | 12 ++----------
+>  1 file changed, 2 insertions(+), 10 deletions(-)
 
-Does it make any sense for 'test bit' to be atomic?
-
-I'm not even sure is needs any ordering constraints either.
-The result is always stale - the value can be changed by
-another cpu at any time.
-
-The set/clear atomic bit-ops require a RMW bus cycle - which has
-to be locked (or similar) to avoid corruption.
-
-The atomic 'test and set' (etc) are RMW and return a valid state.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Reviewed-by: Rob Herring <robh@kernel.org>

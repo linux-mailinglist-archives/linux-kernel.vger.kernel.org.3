@@ -2,62 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD9D754960F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77467548C68
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385978AbiFMOqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
+        id S1386314AbiFMOw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:52:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385910AbiFMOoE (ORCPT
+        with ESMTP id S1385964AbiFMOuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:44:04 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51B3B41DC;
-        Mon, 13 Jun 2022 04:51:03 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id v25so6754374eda.6;
-        Mon, 13 Jun 2022 04:51:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=zgX/PVEPf8nMw9zVAy2wbzfkUCGcHSawa+uHP8BTd9Q=;
-        b=W0U6MAI0+IGC5YwFTD8F834ELZTvP7B5fUkYdbdyuxf0nQu4SdET6AOTpyLBIeqGI4
-         gIS9CHA+sbJFRkAhQC30VY8LVz7DnVV48C508IaDcJXkUp6ai4kCIc8i5K2fZ6sB/nO+
-         hcfYVV54+yUh0QOQs5dFwnoUTelOGVKVrN86EuiOaXj64jRdErGVFRbTPe+icFNxNCsL
-         oyBkAf3dCzi+g/+RiGvtc58+65OH4uIJ2S3OstdxpYJx/PMsxIOEnvF/pl/fA1RmiQ4X
-         TZb2Kf3qdDtosTlCPhRiFkJpb2U4ii4INFWR0pSbFBTqMTW7m+0nLByM3mnZb4lNI94f
-         mDPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=zgX/PVEPf8nMw9zVAy2wbzfkUCGcHSawa+uHP8BTd9Q=;
-        b=0KtzXGea8ir2QQ0c1uh7Ve7bNSTtE3jzV1Z2Z4N4+LAwUMLqg6dqeIeLjEFtslZtZ2
-         pToj0E2Lp57SjXdMBtRouzs28pQz8BQ8QjC8zbn92K08fgGyHFwRbXdAEsO7baJTiizq
-         8c30AcuhN3c7P6IjY1MDPgBR8NpozYxAFpE41DBJAlSg+fi8k057LkfdyyoHNb90oraN
-         NT4axKBfe8eDJQTtKMCiT/MvvG2lY3egir/4VTsnWhiU1TisDd5egzk2Wo3leBVD1bld
-         XO+CGwCfIfgHC9whgg+wKf3rmgIv+VVGn2xlRc+7qli1Oh11M0WeXAVvqG+KBUxhTwi5
-         r4PQ==
-X-Gm-Message-State: AOAM533MRhmHjZqi/7z9wemTPHvwTaMkz6nQQFX4u/vND+U4+5dcxkjt
-        5php7zIgIKi3hIn4vTZlfiB9Hm1AckE=
-X-Google-Smtp-Source: ABdhPJxeyfxnfKceAb/4rg82X1D+qsKnKPtx3yG4v5B5zF0L2yMkiRBXOD5V0dybGThWRkSMqexNCw==
-X-Received: by 2002:aa7:c34d:0:b0:42d:ce57:5df2 with SMTP id j13-20020aa7c34d000000b0042dce575df2mr64383362edr.315.1655121061007;
-        Mon, 13 Jun 2022 04:51:01 -0700 (PDT)
-Received: from felia.fritz.box (200116b8260df50011e978c0f780de03.dip.versatel-1u1.de. [2001:16b8:260d:f500:11e9:78c0:f780:de03])
-        by smtp.gmail.com with ESMTPSA id 12-20020a170906308c00b006ff0b457cdasm3734771ejv.53.2022.06.13.04.51.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 04:51:00 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>, linux-iio@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: add include/dt-bindings/iio to IIO SUBSYSTEM AND DRIVERS
-Date:   Mon, 13 Jun 2022 13:50:45 +0200
-Message-Id: <20220613115045.24326-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 13 Jun 2022 10:50:23 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8F124979;
+        Mon, 13 Jun 2022 04:54:58 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LM91S5pwBz1K9RY;
+        Mon, 13 Jun 2022 19:53:00 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 19:54:56 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 19:54:54 +0800
+Message-ID: <fa1416be-f940-4c28-5c67-911e61ac024f@huawei.com>
+Date:   Mon, 13 Jun 2022 19:54:53 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 6/6] memblock: Disable mirror feature if kernelcore is
+ not specified
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>, Mike Rapoport <rppt@kernel.org>
+CC:     Wupeng Ma <mawupeng1@huawei.com>, <corbet@lwn.net>,
+        <will@kernel.org>, <catalin.marinas@arm.com>, <tglx@linutronix.de>,
+        <mingo@redhat.com>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+        <x86@kernel.org>, <hpa@zytor.com>, <dvhart@infradead.org>,
+        <andy@infradead.org>, <akpm@linux-foundation.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <paulmck@kernel.org>,
+        <keescook@chromium.org>, <songmuchun@bytedance.com>,
+        <rdunlap@infradead.org>, <damien.lemoal@opensource.wdc.com>,
+        <swboyd@chromium.org>, <wei.liu@kernel.org>,
+        <robin.murphy@arm.com>, <david@redhat.com>,
+        <anshuman.khandual@arm.com>, <thunder.leizhen@huawei.com>,
+        <gpiccoli@igalia.com>, <chenhuacai@kernel.org>,
+        <geert@linux-m68k.org>, <vijayb@linux.microsoft.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-efi@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-riscv@lists.infradead.org>
+References: <20220613082147.183145-1-mawupeng1@huawei.com>
+ <20220613082147.183145-7-mawupeng1@huawei.com> <YqcZ4O3pwceVtKYm@kernel.org>
+ <CAMj1kXGwOczo1bgftMX9xTf8fRkrVYq8BjXJ6=XPj_yarbDYrA@mail.gmail.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <CAMj1kXGwOczo1bgftMX9xTf8fRkrVYq8BjXJ6=XPj_yarbDYrA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,32 +73,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maintainers of the directory Documentation/devicetree/bindings/iio
-are also the maintainers of the corresponding directory
-include/dt-bindings/iio.
 
-Add the file entry for include/dt-bindings/iio to the appropriate
-section in MAINTAINERS.
+On 2022/6/13 19:25, Ard Biesheuvel wrote:
+> On Mon, 13 Jun 2022 at 13:05, Mike Rapoport <rppt@kernel.org> wrote:
+>> On Mon, Jun 13, 2022 at 04:21:47PM +0800, Wupeng Ma wrote:
+>>> From: Ma Wupeng <mawupeng1@huawei.com>
+>>>
+>>> If system have some mirrored memory and mirrored feature is not specified
+>>> in boot parameter, the basic mirrored feature will be enabled and this will
+>>> lead to the following situations:
+>>>
+>>> - memblock memory allocation prefers mirrored region. This may have some
+>>>    unexpected influence on numa affinity.
+>>>
+>>> - contiguous memory will be split into several parts if parts of them
+>>>    is mirrored memory via memblock_mark_mirror().
+...
+> Also, on second thought, I don't think marking as mirror is what
+> should be affected by the policy. Instead, choose_memblock_flags()
+> should take this into account, in a way that we could refine later if
+> needed.
+> .
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Jonathan, Lars-Peter, please pick this MAINTAINERS addition to your section.
+The choose_memblock_flags() only solve the issue of memblock allocation, but
 
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+the memblock could be splitted and fragmentized, the kernel won't treat the
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 2b8aec742e6e..503b8042784e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9656,6 +9656,7 @@ F:	Documentation/ABI/testing/sysfs-bus-iio*
- F:	Documentation/devicetree/bindings/iio/
- F:	drivers/iio/
- F:	drivers/staging/iio/
-+F:	include/dt-bindings/iio/
- F:	include/linux/iio/
- F:	tools/iio/
- 
--- 
-2.17.1
+mirror memory as special if no mirrored_kernelcore for now, so I think 
+we'd better
+
+to add the check into memblock_mark_mirror().
 

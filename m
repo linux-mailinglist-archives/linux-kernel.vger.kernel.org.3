@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AAB548C35
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F75054919D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383430AbiFMOPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50546 "EHLO
+        id S1379520AbiFMNoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380294AbiFMOGT (ORCPT
+        with ESMTP id S1379190AbiFMNkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:06:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2CB980A9;
-        Mon, 13 Jun 2022 04:41:18 -0700 (PDT)
+        Mon, 13 Jun 2022 09:40:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F32F63;
+        Mon, 13 Jun 2022 04:29:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 046A76124E;
-        Mon, 13 Jun 2022 11:41:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFAFEC34114;
-        Mon, 13 Jun 2022 11:41:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9F606101F;
+        Mon, 13 Jun 2022 11:29:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 078A2C34114;
+        Mon, 13 Jun 2022 11:29:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120477;
-        bh=dHrpiGBjW9rbIO3xNAUzBvjMwbqUsruwtApSEy5CXQc=;
+        s=korg; t=1655119777;
+        bh=zXBnwl3dRR2fllwyEC5SpVSqZXvI6ZpxC9v+Z9lz+78=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gjupAc2L9MPS5t/PmP69uUBZhP5rgFs0xJeOJqxexXAjUZ53sEXMLtpALSyX19lLV
-         xh0gImRgL9I4/uaZkH2OIFNThGYMysTOwJFDfsNR2AlCIMtKUpcUU6jVGe1deWI6Hi
-         MCExEaa578kCUgua4kdYKMT0y5JnhwX8BysAp2Yk=
+        b=khwLBk/mWWMxwJbPkRH2sB3vTJHeLZQIHK3hDxE6sF2J3ItJExhFXk3apZHDnFBWC
+         2bVteDIFqYxOynErvLOqG+Q44Nf/tsOFLwNEFyD5nKfyQ12Hz+QcZ+iwggbUWUn5OS
+         3iR2Sx9CRkwJdIidnFGogYwyusc/lvp+4r7f1/9E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xin Xiong <xiongx18@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <stfrench@microsoft.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 047/298] ksmbd: fix reference count leak in smb_check_perm_dacl()
+        stable@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 116/339] block: make bioset_exit() fully resilient against being called twice
 Date:   Mon, 13 Jun 2022 12:09:01 +0200
-Message-Id: <20220613094926.372665260@linuxfoundation.org>
+Message-Id: <20220613094930.027035477@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,41 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Xiong <xiongx18@fudan.edu.cn>
+From: Jens Axboe <axboe@kernel.dk>
 
-[ Upstream commit d21a580dafc69aa04f46e6099616146a536b0724 ]
+[ Upstream commit 605f7415ecfb426610195dd6c7577b30592b3369 ]
 
-The issue happens in a specific path in smb_check_perm_dacl(). When
-"id" and "uid" have the same value, the function simply jumps out of
-the loop without decrementing the reference count of the object
-"posix_acls", which is increased by get_acl() earlier. This may
-result in memory leaks.
+Most of bioset_exit() is fine being called twice, as it clears the
+various allocations etc when they are freed. The exception is
+bio_alloc_cache_destroy(), which does not clear ->cache when it has
+freed it.
 
-Fix it by decreasing the reference count of "posix_acls" before
-jumping to label "check_access_bits".
+This isn't necessarily a bug, but can be if buggy users does call the
+exit path more then once, or with just a memset() bioset which has
+never been initialized. dm appears to be one such user.
 
-Fixes: 777cad1604d6 ("ksmbd: remove select FS_POSIX_ACL in Kconfig")
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-Acked-by: Namjae Jeon <linkinjeon@kernel.org>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Fixes: be4d234d7aeb ("bio: add allocation cache abstraction")
+Link: https://lore.kernel.org/linux-block/YpK7m+14A+pZKs5k@casper.infradead.org/
+Reported-by: Matthew Wilcox <willy@infradead.org>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ksmbd/smbacl.c | 1 +
+ block/bio.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/fs/ksmbd/smbacl.c b/fs/ksmbd/smbacl.c
-index 6ecf55ea1fed..38f23bf981ac 100644
---- a/fs/ksmbd/smbacl.c
-+++ b/fs/ksmbd/smbacl.c
-@@ -1261,6 +1261,7 @@ int smb_check_perm_dacl(struct ksmbd_conn *conn, struct path *path,
- 					if (!access_bits)
- 						access_bits =
- 							SET_MINIMUM_RIGHTS;
-+					posix_acl_release(posix_acls);
- 					goto check_access_bits;
- 				}
- 			}
+diff --git a/block/bio.c b/block/bio.c
+index ac29c87c6735..d3ca79c3ebdf 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -693,6 +693,7 @@ static void bio_alloc_cache_destroy(struct bio_set *bs)
+ 		bio_alloc_cache_prune(cache, -1U);
+ 	}
+ 	free_percpu(bs->cache);
++	bs->cache = NULL;
+ }
+ 
+ /**
 -- 
 2.35.1
 

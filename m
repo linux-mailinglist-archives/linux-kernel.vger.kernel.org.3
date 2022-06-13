@@ -2,92 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5F18549082
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC061549544
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377459AbiFMN1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
+        id S1377657AbiFMNdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:33:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357425AbiFMNYx (ORCPT
+        with ESMTP id S1378044AbiFMNas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:24:53 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D4D6C0D8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 04:24:15 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 50D7C21CC7;
-        Mon, 13 Jun 2022 11:24:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655119454; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oVDyyQNRZdOpJs5Ykd60IDoqlaom7m+VsdjwLrey5C4=;
-        b=l7TxDF/FRkFqe6u/FqVZiF7Ihqp5aGKfbXpdYa9J5gK2wPjMO7VFhYqh42d1WpkPlSFmlV
-        mPRuubJBOa4M4vF19l1U3+6IU3ee+UOpbo5JyDQ9EMDrSDxvRmjpzsCekD2hspvQC7fwKg
-        pdEsnXGZvSTphJrd1x52d/duHpuQ6iQ=
-Received: from suse.cz (unknown [10.100.201.202])
+        Mon, 13 Jun 2022 09:30:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6498C6EC62;
+        Mon, 13 Jun 2022 04:25:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 29D2C2C141;
-        Mon, 13 Jun 2022 11:24:14 +0000 (UTC)
-Date:   Mon, 13 Jun 2022 13:24:10 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
-Subject: Re: [BUG] Threaded printk breaks early debugging
-Message-ID: <YqceWi1524yuVITi@alley>
-References: <CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com>
- <87y1y48spg.fsf@jogness.linutronix.de>
- <CAMdYzYr-Wo713Y4qjboTpoK6GcrYfKCfRJAEizwXw6-=dymVzg@mail.gmail.com>
- <87zgihlbst.fsf@jogness.linutronix.de>
- <CAMdYzYosXiQc9=t7daPaWWS=rnTVT6nnZvVBXDycBQvfR-1FAA@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 903B46101F;
+        Mon, 13 Jun 2022 11:25:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFC27C341C4;
+        Mon, 13 Jun 2022 11:25:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655119527;
+        bh=7W3RCHPt+tsv4dUVuAHZPUmYNjQsn6MQMQZiltiHPMo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=BYeZAMVPRmwlA54Ck5SoP5JNY1uzX1oKBuBKOEW0/18L/N7SH1Q6Pz9oeAFuPK1GE
+         Ptzikw+GpSyVlczUN29YAhruuXdl1iBwdleFwXj61A8Bjm6Oap6QobCHLuR6IlGnrG
+         a867EL6fHjHeZqJiTG32UY8WKmmCidwwJxDMWSPSUuFcrVt24whdpbUYvFaLs3dxYn
+         AnpWvYOJmpWmr+DcDVSHh8dj91Y3P9JW0WcBwHlU2aG5hZNYY1rBi91fVlWG/958dW
+         EgY1jhEIQqrZrlsm7hkIRXVSmVgXDCBEI8MnB+noz8cDuV9nyp8ck0qtHSevV3zFqO
+         QMZCGqo3oQqRQ==
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1014b2752c1so970922fac.11;
+        Mon, 13 Jun 2022 04:25:26 -0700 (PDT)
+X-Gm-Message-State: AOAM5300mjgZjXs5Ylm4yVobjPfl6gqUuHS6O99QC8FmhVsMdt5F9sV+
+        Alj7Gda5QTfMQxDeM9Nq164nP9GylQFMkkUXLHM=
+X-Google-Smtp-Source: ABdhPJwye+3Ce8gz8k+4lo9ehXOBU1aZPcGoJ+NlVwPSgSQ16T74tDI4+9Z8khhO9pTdsWAwon+Bdee0S9o3i5/Vjzs=
+X-Received: by 2002:a05:6871:5c8:b0:f3:3c1c:126f with SMTP id
+ v8-20020a05687105c800b000f33c1c126fmr7435011oan.126.1655119515578; Mon, 13
+ Jun 2022 04:25:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMdYzYosXiQc9=t7daPaWWS=rnTVT6nnZvVBXDycBQvfR-1FAA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220613082147.183145-1-mawupeng1@huawei.com> <20220613082147.183145-7-mawupeng1@huawei.com>
+ <YqcZ4O3pwceVtKYm@kernel.org>
+In-Reply-To: <YqcZ4O3pwceVtKYm@kernel.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 13 Jun 2022 13:25:02 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGwOczo1bgftMX9xTf8fRkrVYq8BjXJ6=XPj_yarbDYrA@mail.gmail.com>
+Message-ID: <CAMj1kXGwOczo1bgftMX9xTf8fRkrVYq8BjXJ6=XPj_yarbDYrA@mail.gmail.com>
+Subject: Re: [PATCH v4 6/6] memblock: Disable mirror feature if kernelcore is
+ not specified
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Wupeng Ma <mawupeng1@huawei.com>, corbet@lwn.net, will@kernel.org,
+        catalin.marinas@arm.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, dvhart@infradead.org, andy@infradead.org,
+        akpm@linux-foundation.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, paulmck@kernel.org,
+        keescook@chromium.org, songmuchun@bytedance.com,
+        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
+        swboyd@chromium.org, wei.liu@kernel.org, robin.murphy@arm.com,
+        david@redhat.com, anshuman.khandual@arm.com,
+        thunder.leizhen@huawei.com, wangkefeng.wang@huawei.com,
+        gpiccoli@igalia.com, chenhuacai@kernel.org, geert@linux-m68k.org,
+        vijayb@linux.microsoft.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-mm@kvack.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun 2022-06-12 19:30:27, Peter Geis wrote:
-> On Sun, Jun 12, 2022 at 7:08 PM John Ogness <john.ogness@linutronix.de> wrote:
+On Mon, 13 Jun 2022 at 13:05, Mike Rapoport <rppt@kernel.org> wrote:
+>
+> On Mon, Jun 13, 2022 at 04:21:47PM +0800, Wupeng Ma wrote:
+> > From: Ma Wupeng <mawupeng1@huawei.com>
 > >
-> > On 2022-06-10, Peter Geis <pgwipeout@gmail.com> wrote:
-> > > This might be a side effect of the fact that this is on a low powered
-> > > arm64 board. I noticed with threading enabled during large bursts the
-> > > console drops an excessive amount of messages.
-
-What do you mean that console drops an excessive amount of messages,
-please?
-
-Do you see "dropped XXX messages" in the console output?
-Or something else?
-
-> > > It's especially
-> > > apparent during the handover from earlycon to the normal console.
+> > If system have some mirrored memory and mirrored feature is not specified
+> > in boot parameter, the basic mirrored feature will be enabled and this will
+> > lead to the following situations:
 > >
-> > I guess you have a very small kernel buffer and are generating unusually
-> > high amounts of messages? Is there a reason you cannot use a larger
-> > buffer?
-> 
-> The buffer isn't an issue here, everything is available in dmesg when
-> userspace becomes available. Instead some messages bound for the
-> serial console are never output.
+> > - memblock memory allocation prefers mirrored region. This may have some
+> >   unexpected influence on numa affinity.
+> >
+> > - contiguous memory will be split into several parts if parts of them
+> >   is mirrored memory via memblock_mark_mirror().
+> >
+> > To fix this, variable mirrored_kernelcore will be checked in
+> > memblock_mark_mirror(). Mark mirrored memory with flag MEMBLOCK_MIRROR iff
+> > kernelcore=mirror is added in the kernel parameters.
+> >
+> > Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+> > ---
+> >  mm/internal.h   | 2 ++
+> >  mm/memblock.c   | 3 +++
+> >  mm/page_alloc.c | 2 +-
+> >  3 files changed, 6 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/mm/internal.h b/mm/internal.h
+> > index c0f8fbe0445b..ddd2d6a46f1b 100644
+> > --- a/mm/internal.h
+> > +++ b/mm/internal.h
+> > @@ -861,4 +861,6 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags);
+> >
+> >  DECLARE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
+> >
+> > +extern bool mirrored_kernelcore;
+> > +
+> >  #endif       /* __MM_INTERNAL_H */
+> > diff --git a/mm/memblock.c b/mm/memblock.c
+> > index b1d2a0009733..a9f18b988b7f 100644
+> > --- a/mm/memblock.c
+> > +++ b/mm/memblock.c
+> > @@ -924,6 +924,9 @@ int __init_memblock memblock_clear_hotplug(phys_addr_t base, phys_addr_t size)
+> >   */
+> >  int __init_memblock memblock_mark_mirror(phys_addr_t base, phys_addr_t size)
+> >  {
+> > +     if (!mirrored_kernelcore)
+> > +             return 0;
+> > +
+>
+> Hmm, this changes the way x86 uses mirrored memory.
+> This change makes sense for x86 as well, but we should get an Ack from x86 folks.
+>
 
-This is strage. The message "dropped XXX messages" is printed only
-when the buffer was full and the oldest messages were overwritten
-before they were pushed to the console. If "dmesg" shows all messages
-it means that no messages were overwritten.
-
-Best Regards,
-Petr
+Also, on second thought, I don't think marking as mirror is what
+should be affected by the policy. Instead, choose_memblock_flags()
+should take this into account, in a way that we could refine later if
+needed.

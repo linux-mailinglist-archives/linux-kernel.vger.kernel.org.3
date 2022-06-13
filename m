@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE482548A16
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E83548EB9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358166AbiFMMBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41538 "EHLO
+        id S1382023AbiFMOQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:16:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358088AbiFML7Y (ORCPT
+        with ESMTP id S1381670AbiFMOIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:59:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9338C4E394;
-        Mon, 13 Jun 2022 03:56:28 -0700 (PDT)
+        Mon, 13 Jun 2022 10:08:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06D59874B;
+        Mon, 13 Jun 2022 04:41:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB7DFB80E5E;
-        Mon, 13 Jun 2022 10:56:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 367E4C34114;
-        Mon, 13 Jun 2022 10:56:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31E0B612AB;
+        Mon, 13 Jun 2022 11:41:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43C96C34114;
+        Mon, 13 Jun 2022 11:41:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117785;
-        bh=36Zrg68NAiHkWfHvcxxtjEKPT6SjuU9L+QXdBxVKI2s=;
+        s=korg; t=1655120493;
+        bh=CrkCWVSL0i8pqXnfO+c68e2gA3PsrZBJFkdZ5anU2jE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yjpXAjsT9mK/Ki1OCS+dqP/gz40yWvYiLAHL2YyN/+fxXoathzd/Z/F/uT/KnN1DR
-         U6rSK62UaR0X+QxuQ/zhWlBpQmXnRO20cs+gO5eZFnBYwVSsl0pgib8YrQaQm5h0mr
-         I76yp3e4P79u8W8JjI9Pn1g9gXaTfZEKc/asP0k4=
+        b=wqiy3dmuplRs4ClijHFVZnDOBSwVxvfIh682CXss6qNuYM0KKMPzANyG8z2QiVsny
+         oKzYxZAYF98I5klVsFzC2vAzkd43eQEK+Kh2stkFSzNowIcO/a6esqB11jYQM9VZB8
+         gviQKBTlyp/kRCBHBFrRjLurmW+Rg7WTPwR4q1Yo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Igor Zhbanov <izh1979@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 123/287] powerpc/idle: Fix return value of __setup() handler
+Subject: [PATCH 5.17 053/298] rtc: mt6397: check return value after calling platform_get_resource()
 Date:   Mon, 13 Jun 2022 12:09:07 +0200
-Message-Id: <20220613094927.610396039@linuxfoundation.org>
+Message-Id: <20220613094926.559127413@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit b793a01000122d2bd133ba451a76cc135b5e162c ]
+[ Upstream commit d3b43eb505bffb8e4cdf6800c15660c001553fe6 ]
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings.
-
-Also, error return codes don't mean anything to obsolete_checksetup() --
-only non-zero (usually 1) or zero. So return 1 from powersave_off().
-
-Fixes: 302eca184fb8 ("[POWERPC] cell: use ppc_md->power_save instead of cbe_idle_loop")
-Reported-by: Igor Zhbanov <izh1979@gmail.com>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220502192925.19954-1-rdunlap@infradead.org
+Fixes: fc2979118f3f ("rtc: mediatek: Add MT6397 RTC driver")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20220505125043.1594771-1-yangyingliang@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/kernel/idle.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/rtc/rtc-mt6397.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/powerpc/kernel/idle.c b/arch/powerpc/kernel/idle.c
-index d7216c9abda1..ca79aacfeda2 100644
---- a/arch/powerpc/kernel/idle.c
-+++ b/arch/powerpc/kernel/idle.c
-@@ -41,7 +41,7 @@ static int __init powersave_off(char *arg)
- {
- 	ppc_md.power_save = NULL;
- 	cpuidle_disable = IDLE_POWERSAVE_OFF;
--	return 0;
-+	return 1;
- }
- __setup("powersave=off", powersave_off);
+diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
+index 80dc479a6ff0..1d297af80f87 100644
+--- a/drivers/rtc/rtc-mt6397.c
++++ b/drivers/rtc/rtc-mt6397.c
+@@ -269,6 +269,8 @@ static int mtk_rtc_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
  
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return -EINVAL;
+ 	rtc->addr_base = res->start;
+ 
+ 	rtc->data = of_device_get_match_data(&pdev->dev);
 -- 
 2.35.1
 

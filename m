@@ -2,105 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725AC549857
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3FD548AC6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358218AbiFML7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
+        id S1381438AbiFMONG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357081AbiFMLwr (ORCPT
+        with ESMTP id S1382269AbiFMOFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:52:47 -0400
+        Mon, 13 Jun 2022 10:05:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2022496A;
-        Mon, 13 Jun 2022 03:55:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7F094184;
+        Mon, 13 Jun 2022 04:40:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 367B760EFE;
-        Mon, 13 Jun 2022 10:55:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FEC1C34114;
-        Mon, 13 Jun 2022 10:55:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0220612A8;
+        Mon, 13 Jun 2022 11:40:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE7F5C34114;
+        Mon, 13 Jun 2022 11:40:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117730;
-        bh=qj9kc3Rdta5egmC5sSG3Rk829TRTfWb6UP5H+wlWJgo=;
+        s=korg; t=1655120429;
+        bh=HU1drH/HG1ZCFizUqiGDmW+GZ5VmIqZHoHG37lCZZCE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=psEs7mQmA6xFbUNVfxQgkq0HsVbK5dAc5kiFdCop4FtHHkY92NvMjvXgVfwFF/LsC
-         127t/x6VfRjJEBEIQEVPMfZRsKgGjnkt0PDP98vEmIlFdE8PGzZfz4cvmVzHRiwgFN
-         VFrobgvAwMQv6S5PjJQL+AIxveDq6SZHl7O32eSM=
+        b=vDUe4pQd1EkMMCf3BROhhPSGxtd5G8uG2u4wbfDQ2+j7TfE/FkyxgdkvoB7SMxGuF
+         oTJUOF/uUyRZ5uGprB+C/w7b6mO1BxuHR73Q/4OelWujK+Nx3gFWZD8RTdcjHcYQYy
+         hBtpbPRgU2EXeOdOAIQrR9d1bS/3jwKediGJgl3A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Rodin <mrodin@de.adit-jv.com>,
-        LUU HOAI <hoai.luu.ub@renesas.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Hangyu Hua <hbh25y@gmail.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 099/287] media: vsp1: Fix offset calculation for plane cropping
+Subject: [PATCH 5.17 029/298] rpmsg: virtio: Fix the unregistration of the device rpmsg_ctrl
 Date:   Mon, 13 Jun 2022 12:08:43 +0200
-Message-Id: <20220613094926.882562592@linuxfoundation.org>
+Message-Id: <20220613094925.814570958@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Rodin <mrodin@de.adit-jv.com>
+From: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
 
-[ Upstream commit 5f25abec8f21b7527c1223a354d23c270befddb3 ]
+[ Upstream commit df191796985922488e4e6b64f7bd79c3934412f2 ]
 
-The vertical subsampling factor is currently not considered in the
-offset calculation for plane cropping done in rpf_configure_partition.
-This causes a distortion (shift of the color plane) when formats with
-the vsub factor larger than 1 are used (e.g. NV12, see
-vsp1_video_formats in vsp1_pipe.c). This commit considers vsub factor
-for all planes except plane 0 (luminance).
+Unregister the rpmsg_ctrl device instead of just freeing the
+the virtio_rpmsg_channel structure.
+This will properly unregister the device and call
+virtio_rpmsg_release_device() that frees the structure.
 
-Drop generalization of the offset calculation to reduce the binary size.
-
-Fixes: e5ad37b64de9 ("[media] v4l: vsp1: Add cropping support")
-Signed-off-by: Michael Rodin <mrodin@de.adit-jv.com>
-Signed-off-by: LUU HOAI <hoai.luu.ub@renesas.com>
-Signed-off-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
+Signed-off-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
+Reviewed-by: Hangyu Hua <hbh25y@gmail.com>
+Link: https://lore.kernel.org/r/20220426060536.15594-4-hbh25y@gmail.com
+Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/vsp1/vsp1_rpf.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/rpmsg/virtio_rpmsg_bus.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/vsp1/vsp1_rpf.c b/drivers/media/platform/vsp1/vsp1_rpf.c
-index f8005b60b9d2..abaf4dde3802 100644
---- a/drivers/media/platform/vsp1/vsp1_rpf.c
-+++ b/drivers/media/platform/vsp1/vsp1_rpf.c
-@@ -290,11 +290,11 @@ static void rpf_configure_partition(struct vsp1_entity *entity,
- 		     + crop.left * fmtinfo->bpp[0] / 8;
+diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
+index 99e0de65733a..ed26e9226834 100644
+--- a/drivers/rpmsg/virtio_rpmsg_bus.c
++++ b/drivers/rpmsg/virtio_rpmsg_bus.c
+@@ -862,7 +862,7 @@ static void rpmsg_virtio_del_ctrl_dev(struct rpmsg_device *rpdev_ctrl)
+ {
+ 	if (!rpdev_ctrl)
+ 		return;
+-	kfree(to_virtio_rpmsg_channel(rpdev_ctrl));
++	device_unregister(&rpdev_ctrl->dev);
+ }
  
- 	if (format->num_planes > 1) {
-+		unsigned int bpl = format->plane_fmt[1].bytesperline;
- 		unsigned int offset;
- 
--		offset = crop.top * format->plane_fmt[1].bytesperline
--		       + crop.left / fmtinfo->hsub
--		       * fmtinfo->bpp[1] / 8;
-+		offset = crop.top / fmtinfo->vsub * bpl
-+		       + crop.left / fmtinfo->hsub * fmtinfo->bpp[1] / 8;
- 		mem.addr[1] += offset;
- 		mem.addr[2] += offset;
- 	}
+ static int rpmsg_probe(struct virtio_device *vdev)
 -- 
 2.35.1
 

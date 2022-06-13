@@ -2,133 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF2554A206
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 00:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218F554A205
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 00:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237686AbiFMWT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 18:19:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S235338AbiFMWT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 18:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231618AbiFMWTz (ORCPT
+        with ESMTP id S230471AbiFMWTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 18:19:55 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45FB2DAB7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 15:19:53 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id g7so9117479eda.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 15:19:53 -0700 (PDT)
+        Mon, 13 Jun 2022 18:19:54 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7A22DAB6;
+        Mon, 13 Jun 2022 15:19:53 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id u2so6975627pfc.2;
+        Mon, 13 Jun 2022 15:19:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iiyBV98F9xICzYyJTkP6FjyBl5T6Mi+mUKFDOCM92KU=;
-        b=klyXrSi658IJdvf/FimbWgaAprMRP4Gl89sPeMRWaYsKtTIDlGXNU84jXtksjGeKuZ
-         YN9DZqiH7mqKnbYfiYAjbb9DY3FfRyVIIjHjdvbZi1N9Vlffy8nv8b1GWSGUVT4q76wg
-         yITIyKDsl8jEx4zN2uftjpdy0R/hCB2jOH9eg=
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=4oO06QHRa7Tsa9zm7yhX8grvQoZfHrAKdmnnG2E3EUg=;
+        b=fCPXCHcn8I7ifG6jP2CRX5lMEiSLQ0x948pBLjar0krjXGUer2CxSlVoo3YDhaOJlZ
+         v/BSI2azQubR+V2w++UDp6dqxDVLj9LGRHe5Z8Q/V3VhGW7thltL7zTfgIkeWPne+GjF
+         BQmyyvss/72q7MDKOc2vUtkVSRclkdSBTG0awLiN0ZeGG+nZPv+uxNlkjci861MutsOq
+         9A3ctAvKRJvTb2MIdx4/R45leHsmgiyxrdPQ8KOanjIJNSHB5jhGspniiWFU0CyD6A2q
+         4Vo20uTTcR7DBm577KShMF9oyVgkyJ5l2r9zo3GCDvXT2qicAqeaqv0rr5C8KYt8D1nI
+         5bMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iiyBV98F9xICzYyJTkP6FjyBl5T6Mi+mUKFDOCM92KU=;
-        b=7sztJD+SVfeSN4CTwF+PfNAMCXtl71pY70VrLpqzl1RykTxYIRhKHVYCNX/IPNkOXJ
-         +1PuEmhrzQ3k41llBA3fEGeD1Gq5f/bqAMGNA+lfSgcsbD+lb+i5h1KHu8HKOkFaRCQ+
-         5h1ZIKBLMfLNsteyd5iHcoWCn31B58ZIvbuVBuTsjdZNZ68KSvZuUoThEMtOuEBVSBaU
-         9BV0P3iw4iJtmVGsMkHDtl2FveA6cr74ChOJj64HGxnE2GgAi3HhnrzY3UzGl44LQ30K
-         Smgl9PFSM07te60ZFOIRjsZsWdTYR/K7+V+M6RX4brgFudaMM+4o+JTqDuLXwYBzemFf
-         BZfA==
-X-Gm-Message-State: AJIora8VE9E5W9ARsTFZLJajcbQB96cxeynn9WaShFcCvJ/XbWaE1dQJ
-        WBIWBolq2rtQ5ZmkWu0FwmR5Z2DXnn1Q6Q==
-X-Google-Smtp-Source: ABdhPJwXBYm/fD+jJ3rzUvp9kuyeFLdhzlIYsLf6/tLIQyh12xs1ycrQ3SDqaWguuwSKQ5EbPPapYg==
-X-Received: by 2002:a05:6402:f05:b0:42d:d709:b497 with SMTP id i5-20020a0564020f0500b0042dd709b497mr2259251eda.231.1655158792048;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=4oO06QHRa7Tsa9zm7yhX8grvQoZfHrAKdmnnG2E3EUg=;
+        b=VnzG12T6pMhG46iM49qVgH6PUwzHONKV4XPXeUpbCaLiG6vggrx6ESSX1+onN43xLW
+         wjUqKE5WJ4rKu1BE+bl7RSKSiaK8Gq++OKMNYO3/PC3fB3k6n8/IuB3jC6LNMXloKHRC
+         LcVtdfbUP0w2Y9i+Z+D5/jItz6wSf+G154+y+gFGg7Yxt3X/3LSUobiMcZCqZeZA0Ipz
+         OjeEilaCe71AP27UEE94/AguuFrecSNCOkoE3U/KW3pZeYvjul9yjuqT+bNwhcuiVubB
+         scnegrcPhP60IQ3n/8e8WS4z0ip7bLh3BtQH3uTtHx7EK98ENWC+GmReC2F3A4nZbwgD
+         A15w==
+X-Gm-Message-State: AOAM532tdBqzUoH9Nqc5l6jxnUgaj39FT+/otlOlFuWEwys8cksUNIIH
+        K1HNbuzd2E5X3lnLCJuyZ+k=
+X-Google-Smtp-Source: ABdhPJzI888D6k1A7qS0MNiMEh0GoQoEVDwhHcf03ZDwWHMw7tSegtC6pRsf12VELcfKeiXMmpRwSg==
+X-Received: by 2002:a05:6a00:1305:b0:512:ebab:3b20 with SMTP id j5-20020a056a00130500b00512ebab3b20mr1467769pfu.82.1655158792415;
         Mon, 13 Jun 2022 15:19:52 -0700 (PDT)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id m26-20020a056402051a00b0042dd2f2bec7sm5760642edv.56.2022.06.13.15.19.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 15:19:51 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id x6-20020a1c7c06000000b003972dfca96cso3827296wmc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 15:19:51 -0700 (PDT)
-X-Received: by 2002:a05:600c:202:b0:39c:40de:ec19 with SMTP id
- 2-20020a05600c020200b0039c40deec19mr852639wmi.29.1655158790748; Mon, 13 Jun
- 2022 15:19:50 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:b964])
+        by smtp.gmail.com with ESMTPSA id p4-20020a170902780400b0015edc07dcf3sm5661261pll.21.2022.06.13.15.19.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 15:19:52 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 13 Jun 2022 12:19:50 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     paulmck@kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        cgroups@vger.kernel.org, brauner@kernel.org, hannes@cmpxchg.org,
+        shisiyuan <shisiyuan19870131@gmail.com>,
+        Li Zefan <lizefan@huawei.com>,
+        Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Subject: [PATCH cgroup/for-5.19-fixes] cgroup: Use separate src/dst nodes
+ when preloading css_sets for migration
+Message-ID: <Yqe4BjMZRohur3UM@slm.duckdns.org>
+References: <549de740-1356-7ad2-3ee5-c52bc355fd99@quicinc.com>
+ <Yh+RGIJ0f3nrqIiN@slm.duckdns.org>
+ <8d21e655-4ce9-c7b3-2010-e484161bdbe9@quicinc.com>
+ <20220516203417.GY1790663@paulmck-ThinkPad-P17-Gen-1>
+ <9a93cf2d-0efe-5a46-dcd5-7dcd8f173188@quicinc.com>
 MIME-Version: 1.0
-References: <20220602190621.1646679-1-swboyd@chromium.org> <CAD=FV=X6702aSaEnpXUhF40b0kZuz1QvOBLNg-xcNDYbVCbsDw@mail.gmail.com>
-In-Reply-To: <CAD=FV=X6702aSaEnpXUhF40b0kZuz1QvOBLNg-xcNDYbVCbsDw@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 13 Jun 2022 15:19:38 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UH35GLqzhCuJzqBX12BNw7m4hkF0qdCeAGxOwdnMVqmA@mail.gmail.com>
-Message-ID: <CAD=FV=UH35GLqzhCuJzqBX12BNw7m4hkF0qdCeAGxOwdnMVqmA@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: qcom: Remove duplicate sc7180-trogdor
- include on lazor/homestar
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        LKML <linux-kernel@vger.kernel.org>, patches@lists.linux.dev,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        "Joseph S. Barrera III" <joebar@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a93cf2d-0efe-5a46-dcd5-7dcd8f173188@quicinc.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Each cset (css_set) is pinned by its tasks. When we're moving tasks around
+across csets for a migration, we need to hold the source and destination
+csets to ensure that they don't go away while we're moving tasks about. This
+is done by linking cset->mg_preload_node on either the
+mgctx->preloaded_dst_csets or mgctx->preloaded_dst_csets list. Using the
+same cset->mg_preload_node for both the src and dst lists was deemed okay as
+a cset can't be both the source and destination at the same time.
 
-On Thu, Jun 2, 2022 at 1:08 PM Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Thu, Jun 2, 2022 at 12:06 PM Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > The sc7180-trogdor-{lazor,homestar}-*.dtsi files all include
-> > sc7180-trogdor.dtsi and sc7180-trogdor-lazor.dtsi or
-> > sc7180-trogdor-homestar.dtsi, so including it here in the
-> > sc7180-trogdor-{lazor,homestar}.dtsi file means we have a duplicate
-> > include after commit 19794489fa24 ("arm64: dts: qcom: Only include
-> > sc7180.dtsi in sc7180-trogdor.dtsi"). We include the sc7180-trogdor.dtsi
-> > file in a board like sc7180-trogdor-lazor-r1.dts so that we can include
-> > the display bridge snippet (e.g. sc7180-trogdor-ti-sn65dsi86.dtsi)
-> > instead of making ever increasing variants like
-> > sc7180-trogdor-lazor-ti-sn65dsi86.dtsi.
-> >
-> > Unfortunately, having the double include like this means the display
-> > bridge's i2c bus is left disabled instead of enabled by the bridge
-> > snippet. Any boards that use the i2c bus for the display bridge will
-> > have the bus disabled when we include sc7180-trogdor.dtsi the second
-> > time, which picks up the i2c status="disabled" line from sc7180.dtsi.
-> > This leads to the display not turning on and black screens at boot on
-> > lazor and homestar devices.
-> >
-> > Fix this by dropping the include and making a note that the
-> > sc7180-trogdor-{lazor,homestar}.dtsi file must be included after
-> > sc7180-trogdor.dtsi
-> >
-> > Reported-by: Douglas Anderson <dianders@chromium.org>
-> > Cc: "Joseph S. Barrera III" <joebar@chromium.org>
-> > Cc: Matthias Kaehlcke <mka@chromium.org>
-> > Fixes: 19794489fa24 ("arm64: dts: qcom: Only include sc7180.dtsi in sc7180-trogdor.dtsi")
-> > Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-> > ---
-> >
-> > It would be great to get this into -rc1 if possible to fix broken
-> > display.
->
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
->
-> I tested and this fixes the "no display" problem on Linus's tree on
-> both homestar and lazor.
->
-> Tested-by: Douglas Anderson <dianders@chromium.org>
+Unfortunately, this overloading becomes problematic when multiple tasks are
+involved in a migration and some of them are identity noop migrations while
+others are actually moving across cgroups. For example, this can happen with
+the following sequence on cgroup1:
 
-Given that this fixes problems in mainline, it would be keen to see it
-land sooner rather than later. Is it blocked on anything?
+ #1> mkdir -p /sys/fs/cgroup/misc/a/b
+ #2> echo $$ > /sys/fs/cgroup/misc/a/cgroup.procs
+ #3> RUN_A_COMMAND_WHICH_CREATES_MULTIPLE_THREADS &
+ #4> PID=$!
+ #5> echo $PID > /sys/fs/cgroup/misc/a/b/tasks
+ #6> echo $PID > /sys/fs/cgroup/misc/a/cgroup.procs
 
-Thanks!
+#5 moves the group leader thread into a/b and then #6 moves all threads of
+the process including the group leader back into a. In this final migration,
+non-leader threads would be doing identity migration while the group leader
+is doing an actual one.
 
--Doug
+After #3, let's say the whole process was in cset A, and that after #4, the
+leader moves to cset B. Then, during #6, the following happens:
+
+ 1. cgroup_migrate_add_src() is called on B for the leader.
+
+ 2. cgroup_migrate_add_src() is called on A for the other threads.
+
+ 3. cgroup_migrate_prepare_dst() is called. It scans the src list.
+
+ 3. It notices that B wants to migrate to A, so it tries to A to the dst
+    list but realizes that its ->mg_preload_node is already busy.
+
+ 4. and then it notices A wants to migrate to A as it's an identity
+    migration, it culls it by list_del_init()'ing its ->mg_preload_node and
+    putting references accordingly.
+
+ 5. The rest of migration takes place with B on the src list but nothing on
+    the dst list.
+
+This means that A isn't held while migration is in progress. If all tasks
+leave A before the migration finishes and the incoming task pins it, the
+cset will be destroyed leading to use-after-free.
+
+This is caused by overloading cset->mg_preload_node for both src and dst
+preload lists. We wanted to exclude the cset from the src list but ended up
+inadvertently excluding it from the dst list too.
+
+This patch fixes the issue by separating out cset->mg_preload_node into
+->mg_src_preload_node and ->mg_dst_preload_node, so that the src and dst
+preloadings don't interfere with each other.
+
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Reported-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Reported-by: shisiyuan <shisiyuan19870131@gmail.com>
+Link: http://lkml.kernel.org/r/1654187688-27411-1-git-send-email-shisiyuan@xiaomi.com
+Link: https://www.spinics.net/lists/cgroups/msg33313.html
+Fixes: f817de98513d ("cgroup: prepare migration path for unified hierarchy")
+Cc: stable@vger.kernel.org # v3.16+
+---
+Hello,
+
+Shisiyuan and Mukesh, can you guys please confirm that this fixes the
+problem you're seeing? This is a different approach from Shisiyuan's patch
+which most likely would work too but this is a bit more straightforward.
+
+Thanks.
+
+ include/linux/cgroup-defs.h |    3 ++-
+ kernel/cgroup/cgroup.c      |   37 +++++++++++++++++++++++--------------
+ 2 files changed, 25 insertions(+), 15 deletions(-)
+
+diff --git a/include/linux/cgroup-defs.h b/include/linux/cgroup-defs.h
+index 1bfcfb1af3524..d4427d0a0e187 100644
+--- a/include/linux/cgroup-defs.h
++++ b/include/linux/cgroup-defs.h
+@@ -264,7 +264,8 @@ struct css_set {
+ 	 * List of csets participating in the on-going migration either as
+ 	 * source or destination.  Protected by cgroup_mutex.
+ 	 */
+-	struct list_head mg_preload_node;
++	struct list_head mg_src_preload_node;
++	struct list_head mg_dst_preload_node;
+ 	struct list_head mg_node;
+ 
+ 	/*
+diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
+index 1779ccddb734d..13c8e91d78620 100644
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -765,7 +765,8 @@ struct css_set init_css_set = {
+ 	.task_iters		= LIST_HEAD_INIT(init_css_set.task_iters),
+ 	.threaded_csets		= LIST_HEAD_INIT(init_css_set.threaded_csets),
+ 	.cgrp_links		= LIST_HEAD_INIT(init_css_set.cgrp_links),
+-	.mg_preload_node	= LIST_HEAD_INIT(init_css_set.mg_preload_node),
++	.mg_src_preload_node	= LIST_HEAD_INIT(init_css_set.mg_src_preload_node),
++	.mg_dst_preload_node	= LIST_HEAD_INIT(init_css_set.mg_dst_preload_node),
+ 	.mg_node		= LIST_HEAD_INIT(init_css_set.mg_node),
+ 
+ 	/*
+@@ -1240,7 +1241,8 @@ static struct css_set *find_css_set(struct css_set *old_cset,
+ 	INIT_LIST_HEAD(&cset->threaded_csets);
+ 	INIT_HLIST_NODE(&cset->hlist);
+ 	INIT_LIST_HEAD(&cset->cgrp_links);
+-	INIT_LIST_HEAD(&cset->mg_preload_node);
++	INIT_LIST_HEAD(&cset->mg_src_preload_node);
++	INIT_LIST_HEAD(&cset->mg_dst_preload_node);
+ 	INIT_LIST_HEAD(&cset->mg_node);
+ 
+ 	/* Copy the set of subsystem state objects generated in
+@@ -2597,21 +2599,27 @@ int cgroup_migrate_vet_dst(struct cgroup *dst_cgrp)
+  */
+ void cgroup_migrate_finish(struct cgroup_mgctx *mgctx)
+ {
+-	LIST_HEAD(preloaded);
+ 	struct css_set *cset, *tmp_cset;
+ 
+ 	lockdep_assert_held(&cgroup_mutex);
+ 
+ 	spin_lock_irq(&css_set_lock);
+ 
+-	list_splice_tail_init(&mgctx->preloaded_src_csets, &preloaded);
+-	list_splice_tail_init(&mgctx->preloaded_dst_csets, &preloaded);
++	list_for_each_entry_safe(cset, tmp_cset, &mgctx->preloaded_src_csets,
++				 mg_src_preload_node) {
++		cset->mg_src_cgrp = NULL;
++		cset->mg_dst_cgrp = NULL;
++		cset->mg_dst_cset = NULL;
++		list_del_init(&cset->mg_src_preload_node);
++		put_css_set_locked(cset);
++	}
+ 
+-	list_for_each_entry_safe(cset, tmp_cset, &preloaded, mg_preload_node) {
++	list_for_each_entry_safe(cset, tmp_cset, &mgctx->preloaded_dst_csets,
++				 mg_dst_preload_node) {
+ 		cset->mg_src_cgrp = NULL;
+ 		cset->mg_dst_cgrp = NULL;
+ 		cset->mg_dst_cset = NULL;
+-		list_del_init(&cset->mg_preload_node);
++		list_del_init(&cset->mg_dst_preload_node);
+ 		put_css_set_locked(cset);
+ 	}
+ 
+@@ -2651,7 +2659,7 @@ void cgroup_migrate_add_src(struct css_set *src_cset,
+ 	if (src_cset->dead)
+ 		return;
+ 
+-	if (!list_empty(&src_cset->mg_preload_node))
++	if (!list_empty(&src_cset->mg_src_preload_node))
+ 		return;
+ 
+ 	src_cgrp = cset_cgroup_from_root(src_cset, dst_cgrp->root);
+@@ -2664,7 +2672,7 @@ void cgroup_migrate_add_src(struct css_set *src_cset,
+ 	src_cset->mg_src_cgrp = src_cgrp;
+ 	src_cset->mg_dst_cgrp = dst_cgrp;
+ 	get_css_set(src_cset);
+-	list_add_tail(&src_cset->mg_preload_node, &mgctx->preloaded_src_csets);
++	list_add_tail(&src_cset->mg_src_preload_node, &mgctx->preloaded_src_csets);
+ }
+ 
+ /**
+@@ -2689,7 +2697,7 @@ int cgroup_migrate_prepare_dst(struct cgroup_mgctx *mgctx)
+ 
+ 	/* look up the dst cset for each src cset and link it to src */
+ 	list_for_each_entry_safe(src_cset, tmp_cset, &mgctx->preloaded_src_csets,
+-				 mg_preload_node) {
++				 mg_src_preload_node) {
+ 		struct css_set *dst_cset;
+ 		struct cgroup_subsys *ss;
+ 		int ssid;
+@@ -2708,7 +2716,7 @@ int cgroup_migrate_prepare_dst(struct cgroup_mgctx *mgctx)
+ 		if (src_cset == dst_cset) {
+ 			src_cset->mg_src_cgrp = NULL;
+ 			src_cset->mg_dst_cgrp = NULL;
+-			list_del_init(&src_cset->mg_preload_node);
++			list_del_init(&src_cset->mg_src_preload_node);
+ 			put_css_set(src_cset);
+ 			put_css_set(dst_cset);
+ 			continue;
+@@ -2716,8 +2724,8 @@ int cgroup_migrate_prepare_dst(struct cgroup_mgctx *mgctx)
+ 
+ 		src_cset->mg_dst_cset = dst_cset;
+ 
+-		if (list_empty(&dst_cset->mg_preload_node))
+-			list_add_tail(&dst_cset->mg_preload_node,
++		if (list_empty(&dst_cset->mg_dst_preload_node))
++			list_add_tail(&dst_cset->mg_dst_preload_node,
+ 				      &mgctx->preloaded_dst_csets);
+ 		else
+ 			put_css_set(dst_cset);
+@@ -2963,7 +2971,8 @@ static int cgroup_update_dfl_csses(struct cgroup *cgrp)
+ 		goto out_finish;
+ 
+ 	spin_lock_irq(&css_set_lock);
+-	list_for_each_entry(src_cset, &mgctx.preloaded_src_csets, mg_preload_node) {
++	list_for_each_entry(src_cset, &mgctx.preloaded_src_csets,
++			    mg_src_preload_node) {
+ 		struct task_struct *task, *ntask;
+ 
+ 		/* all tasks in src_csets need to be migrated */

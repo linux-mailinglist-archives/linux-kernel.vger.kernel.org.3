@@ -2,85 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DE5E54A1F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 00:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5526C54A1F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 00:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234939AbiFMWLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 18:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48244 "EHLO
+        id S235751AbiFMWNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 18:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232054AbiFMWLr (ORCPT
+        with ESMTP id S235260AbiFMWNQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 18:11:47 -0400
-Received: from nautica.notk.org (ipv6.notk.org [IPv6:2001:41d0:1:7a93::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C28B205DF
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 15:11:45 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id D6197C009; Tue, 14 Jun 2022 00:11:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655158302; bh=Ux/4hT39c14afeoew7+c9hXnBH4Wop2/T43c8QUzsXE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=3MtmjjnW/1Y+i6EFALMsGOv6GfF2dSqFOyZoeJvzGxVBIvRudwj8YIKRzJveL5GMu
-         2MAy7S+5LT9dNvm0JsDLy0iO5CANeWwe1wlnhuqR9/Gd++UEQTmj2znYka9o/BS/ca
-         FbJsQIPh4aGwFjELvjZOm/pDVBHLktrC8GgQvfxQhGN2fT9PO5TY6RMJo1TBXavJlm
-         0docKaQFwaFt0b4KJx2yOWpEtENC6Bj+H9XL/tez/m1kcErCGO16xmor3nJlRW6+PS
-         J0IOIRsX+RdgA482DF7/leFBggU79O8ywcTh3S0m5Fzz7BP+3EX6kYVMX2ZsZ8avhl
-         ZucXbIv1ioS1Q==
+        Mon, 13 Jun 2022 18:13:16 -0400
+Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B3B2C65F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 15:13:14 -0700 (PDT)
+Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-fe51318ccfso10330619fac.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 15:13:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxtx.org; s=google;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Lc4K8RsLGk18u69XSrrdslpuv+fN2QSu71JhQ9oZTW4=;
+        b=JmybJk1YgjlaeU2ap54ZIJrl853//femtoqOLhzR46grQe6ZYs60dVf8s/NmdUVelf
+         n3ytIo2DN/BCgVyUUJpSY4ma9b0RYcmm8VGY29U1Ds3e49Ua/RXiAYCjFMqW1+3ZUSg6
+         9rfzZpQtBpyC6VDaJCDk1XVkudKOLUDiaNrR8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Lc4K8RsLGk18u69XSrrdslpuv+fN2QSu71JhQ9oZTW4=;
+        b=Hf6rmZz6ZAJMMUKmmDXcmSMr5XHBp93zaLTN79ip8tzZnKosM1pyjLhvTNTZvqhg5j
+         QH9gcB6JYOnPSS6d+VI+V00RHUbsd8E72OqeBjtQHNR1X4KXSebzhQNimahDwHnKT1+7
+         h4zxAiR9mD8y6lJo1qX3YVXoo4hMAtt6MmpPgmnqMnl8tUngFlUc8ZMIac6fJhwW2Kyf
+         nI559tvFnxiMrHG23IV5csdkWrO2a+5/lGwpzfRd5JTKkBFOox4a6FccZtfkPvPIs2X6
+         fWvLOyiaog0q0zuQsEEGzPV81K4jDScd1/sQvBTRT3boO2AxZTANc7dHJZp05/PrdreR
+         CNKw==
+X-Gm-Message-State: AJIora+gHRbNnzt4nGtWBC/jTHZWI+IjZKJBeRbA45wn82xh+PY32LDH
+        96pIquwei2fd6iwrVdqcTGTX8g==
+X-Google-Smtp-Source: AGRyM1uh3y5oZl+9eZeXsgSG9KmAC+HxwrO4t4/KqDGhylry+qZYX9Vrsi9olNqpwINlAjzfmppkaw==
+X-Received: by 2002:a05:6870:b48a:b0:101:40eb:63a3 with SMTP id y10-20020a056870b48a00b0010140eb63a3mr537578oap.193.1655158393346;
+        Mon, 13 Jun 2022 15:13:13 -0700 (PDT)
+Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
+        by smtp.gmail.com with ESMTPSA id n9-20020a056870558900b000f318ad4957sm4626032oao.11.2022.06.13.15.13.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 15:13:12 -0700 (PDT)
+Sender: Justin Forbes <jmforbes@linuxtx.org>
+Date:   Mon, 13 Jun 2022 17:13:11 -0500
+From:   Justin Forbes <jforbes@fedoraproject.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.17 000/303] 5.17.15-rc2 review
+Message-ID: <Yqe2dz80Juzd4+PU@fedora64.linuxtx.org>
+References: <20220613181529.324450680@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220613181529.324450680@linuxfoundation.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 8156BC009;
-        Tue, 14 Jun 2022 00:11:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655158302; bh=Ux/4hT39c14afeoew7+c9hXnBH4Wop2/T43c8QUzsXE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=3MtmjjnW/1Y+i6EFALMsGOv6GfF2dSqFOyZoeJvzGxVBIvRudwj8YIKRzJveL5GMu
-         2MAy7S+5LT9dNvm0JsDLy0iO5CANeWwe1wlnhuqR9/Gd++UEQTmj2znYka9o/BS/ca
-         FbJsQIPh4aGwFjELvjZOm/pDVBHLktrC8GgQvfxQhGN2fT9PO5TY6RMJo1TBXavJlm
-         0docKaQFwaFt0b4KJx2yOWpEtENC6Bj+H9XL/tez/m1kcErCGO16xmor3nJlRW6+PS
-         J0IOIRsX+RdgA482DF7/leFBggU79O8ywcTh3S0m5Fzz7BP+3EX6kYVMX2ZsZ8avhl
-         ZucXbIv1ioS1Q==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 5e5af06f;
-        Mon, 13 Jun 2022 22:11:36 +0000 (UTC)
-Date:   Tue, 14 Jun 2022 07:11:21 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: bad commits in the v9fs tree
-Message-ID: <Yqe2CT0whmf8mYLj@codewreck.org>
-References: <20220614075223.5c2ea764@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220614075223.5c2ea764@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stephen Rothwell wrote on Tue, Jun 14, 2022 at 07:52:23AM +1000:
->   04608d78b66c ("Linux 5.19-rc1")
->   9383b9134c66 ("fix the breakage in close_fd_get_file() calling conventions change")
+On Mon, Jun 13, 2022 at 08:18:43PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.15 release.
+> There are 303 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> look like they were rebased or cherry-picked from Linus' tree.from
-> Linus' tree.  From commits f2906aa86338 and 40a1926022d1 respectively.
+> Responses should be made by Wed, 15 Jun 2022 18:14:43 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.15-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Ugh, thank you for noticing.
-I had an overly eager `rebase -i` that are usually noop and don't touch
-the top patches if left alone, but that only works if no merge is
-involved and that wasn't the case here -- I'll be more careful with my
-rebase root from now on so it hopefully won't happen again.
+Tested rc2 against the Fedora build system (aarch64, armv7, ppc64le,
+s390x, x86_64), and boot tested x86_64. No regressions noted.
 
-Fixed my 9p-next branch so these two should be gone next time you
-update.
-
-
-Thanks,
--- 
-Dominique
-
+Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>

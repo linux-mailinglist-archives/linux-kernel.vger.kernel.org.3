@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8DC5486AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8052D548854
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244333AbiFMK0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45650 "EHLO
+        id S1383460AbiFMO0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:26:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245348AbiFMKYd (ORCPT
+        with ESMTP id S1383520AbiFMOX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:24:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814A3205FA;
-        Mon, 13 Jun 2022 03:18:52 -0700 (PDT)
+        Mon, 13 Jun 2022 10:23:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8577246B0C;
+        Mon, 13 Jun 2022 04:44:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E50360AE7;
-        Mon, 13 Jun 2022 10:18:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 009E5C34114;
-        Mon, 13 Jun 2022 10:18:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCBFB61425;
+        Mon, 13 Jun 2022 11:44:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB8FDC34114;
+        Mon, 13 Jun 2022 11:44:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115531;
-        bh=w4aNFqmZ3RyZUHLp6CD9hqlFUPY2Q/FaKB24OoyPk/E=;
+        s=korg; t=1655120670;
+        bh=4uPzDoDtm+L7EnFXiMH8EH9hH4YgpoC0Sl0c04Rut6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pii/nKBlzwNEfOR8jtMAsZWbYpi1fm8ZMXyrHKkJd+JFOVjCzI8SJ7SSOGoMF6Zo7
-         d8hceBne0ew1jzBpGGPAa1cQ7QRcoGJAQXP5/zvmYassQtlCvV9tZz6+QZgs4ixLAa
-         4RIWwsEQJNviAYhWBmX2tgO2YJkJ+DeHAV+40Uqs=
+        b=aK+aoo7m4IAYpfuBAYFlpEmTLqWpykyUFJYsOjAIEynVLX/t4DA65EuMzSPINejv/
+         LqpJK4Mz03tH9tmHhAlmS+fsp37HEkgH7d63QeOJxZGEes7qA0deUxYZoFSxlEKquU
+         favfbezn6ZyvK7LVS1r9Gv9qIqIvquB0Bdao9khA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        Hangyu Hua <hbh25y@gmail.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 110/167] usb: usbip: fix a refcount leak in stub_probe()
-Date:   Mon, 13 Jun 2022 12:09:44 +0200
-Message-Id: <20220613094906.600470047@linuxfoundation.org>
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Richard Weinberger <richard@nod.at>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 091/298] ubi: ubi_create_volume: Fix use-after-free when volume creation failed
+Date:   Mon, 13 Jun 2022 12:09:45 +0200
+Message-Id: <20220613094927.709694293@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
 
-[ Upstream commit 9ec4cbf1cc55d126759051acfe328d489c5d6e60 ]
+[ Upstream commit 8c03a1c21d72210f81cb369cc528e3fde4b45411 ]
 
-usb_get_dev() is called in stub_device_alloc(). When stub_probe() fails
-after that, usb_put_dev() needs to be called to release the reference.
+There is an use-after-free problem for 'eba_tbl' in ubi_create_volume()'s
+error handling path:
 
-Fix this by moving usb_put_dev() to sdev_free error path handling.
+  ubi_eba_replace_table(vol, eba_tbl)
+    vol->eba_tbl = tbl
+out_mapping:
+  ubi_eba_destroy_table(eba_tbl)   // Free 'eba_tbl'
+out_unlock:
+  put_device(&vol->dev)
+    vol_release
+      kfree(tbl->entries)	  // UAF
 
-Find this by code review.
+Fix it by removing redundant 'eba_tbl' releasing.
+Fetch a reproducer in [Link].
 
-Fixes: 3ff67445750a ("usbip: fix error handling in stub_probe()")
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Link: https://lore.kernel.org/r/20220412020257.9767-1-hbh25y@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 493cfaeaa0c9b ("mtd: utilize new cdev_device_add helper function")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215965
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/usbip/stub_dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mtd/ubi/vmt.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
-index cec5805feb25..ca76ee4058c9 100644
---- a/drivers/usb/usbip/stub_dev.c
-+++ b/drivers/usb/usbip/stub_dev.c
-@@ -441,7 +441,6 @@ static int stub_probe(struct usb_device *udev)
- 			     (struct usb_dev_state *) udev);
- err_port:
- 	dev_set_drvdata(&udev->dev, NULL);
--	usb_put_dev(udev);
- 
- 	/* we already have busid_priv, just lock busid_lock */
- 	spin_lock(&busid_priv->busid_lock);
-@@ -456,6 +455,7 @@ static int stub_probe(struct usb_device *udev)
- 	put_busid_priv(busid_priv);
- 
- sdev_free:
-+	usb_put_dev(udev);
- 	stub_device_free(sdev);
- 
- 	return rc;
+diff --git a/drivers/mtd/ubi/vmt.c b/drivers/mtd/ubi/vmt.c
+index 1bc7b3a05604..6ea95ade4ca6 100644
+--- a/drivers/mtd/ubi/vmt.c
++++ b/drivers/mtd/ubi/vmt.c
+@@ -309,7 +309,6 @@ int ubi_create_volume(struct ubi_device *ubi, struct ubi_mkvol_req *req)
+ 	ubi->volumes[vol_id] = NULL;
+ 	ubi->vol_count -= 1;
+ 	spin_unlock(&ubi->volumes_lock);
+-	ubi_eba_destroy_table(eba_tbl);
+ out_acc:
+ 	spin_lock(&ubi->volumes_lock);
+ 	ubi->rsvd_pebs -= vol->reserved_pebs;
 -- 
 2.35.1
 

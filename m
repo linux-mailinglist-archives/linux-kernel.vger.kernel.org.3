@@ -2,59 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 297BD549BC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B40549BC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245492AbiFMSj2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Jun 2022 14:39:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
+        id S1343614AbiFMSjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345144AbiFMSir (ORCPT
+        with ESMTP id S1345661AbiFMSi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:38:47 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 255E835DE8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:31:56 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-156-O7Q4oYRGM8G5ydqL0wX4hQ-1; Mon, 13 Jun 2022 16:31:54 +0100
-X-MC-Unique: O7Q4oYRGM8G5ydqL0wX4hQ-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Mon, 13 Jun 2022 16:31:52 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Mon, 13 Jun 2022 16:31:52 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Joe Damato' <jdamato@fastly.com>
-CC:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RFC,iov_iter v2 3/8] iov_iter: add copyin_iovec helper
-Thread-Topic: [RFC,iov_iter v2 3/8] iov_iter: add copyin_iovec helper
-Thread-Index: AQHYfjsvbNyOWJFJ/E+wgYg8ABCKpa1M98IwgABis4CAABxiIA==
-Date:   Mon, 13 Jun 2022 15:31:51 +0000
-Message-ID: <8f65149b1d9a4a7f97f18df05a41f728@AcuMS.aculab.com>
-References: <1655024280-23827-1-git-send-email-jdamato@fastly.com>
- <1655024280-23827-4-git-send-email-jdamato@fastly.com>
- <8f6771a01fe74cde86641e780d31a2ce@AcuMS.aculab.com>
- <20220613144244.GA77534@fastly.com>
-In-Reply-To: <20220613144244.GA77534@fastly.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 13 Jun 2022 14:38:56 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4964F36305;
+        Mon, 13 Jun 2022 08:33:21 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id DD35F1E80D53;
+        Mon, 13 Jun 2022 23:32:06 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Ph1dDZH7zWRn; Mon, 13 Jun 2022 23:32:04 +0800 (CST)
+Received: from [172.30.21.244] (unknown [180.167.10.98])
+        (Authenticated sender: liqiong@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id CB06C1E80D05;
+        Mon, 13 Jun 2022 23:32:03 +0800 (CST)
+From:   liqiong <liqiong@nfschina.com>
+Subject: Re: [PATCH] smackfs: check for allocation failure of kmalloc()
+To:     Casey Schaufler <casey@schaufler-ca.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yuzhe@nfschina.com,
+        renyu@nfschina.com
+References: <20220613062202.29194-1-liqiong@nfschina.com>
+ <88718d10-4435-f5a8-9123-afc73257e0ca@schaufler-ca.com>
+Message-ID: <f2e6beb0-bce9-0e73-aefc-8f6c6b5509f4@nfschina.com>
+Date:   Mon, 13 Jun 2022 23:33:16 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+In-Reply-To: <88718d10-4435-f5a8-9123-afc73257e0ca@schaufler-ca.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RDNS_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,23 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joe Damato
-> Sent: 13 June 2022 15:43
-...
-> > The additional costs of all the 'iovec' types is bad enough
-> > already.
-> 
-> Do you have data you can share on this?
 
-I was thinking of the performance drop noticed when (IIRC)
-reads/writes of /dev/null were pushed through the iovec code.
 
-But there is a lot of overhead code for the usual case
-of a single user buffer being copied.
+在 2022年06月13日 22:53, Casey Schaufler 写道:
+> On 6/12/2022 11:22 PM, Li Qiong wrote:
+>> As the possible failure of the kmalloc(), it should be better
+>> to check it and print a warning message.
+>
+> The allocation is done with __GFP_NOFAIL, which assures
+> it will not fail.
 
-	David
+Thanks,  my mistake.
+Drop this patch.
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
 
+
+>
+>>
+>> Signed-off-by: Li Qiong <liqiong@nfschina.com>
+>> ---
+>>   security/smack/smackfs.c | 5 +++++
+>>   1 file changed, 5 insertions(+)
+>>
+>> diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+>> index 4b58526450d4..0d11ba3cb4cd 100644
+>> --- a/security/smack/smackfs.c
+>> +++ b/security/smack/smackfs.c
+>> @@ -695,6 +695,11 @@ static void smk_cipso_doi(void)
+>>                  __func__, __LINE__, rc);
+>>         doip = kmalloc(sizeof(struct cipso_v4_doi), GFP_KERNEL | __GFP_NOFAIL);
+>> +    if (unlikely(!doip)) {
+>> +        printk(KERN_WARNING "%s:%d failed to allocate a memory for doip\n",
+>> +               __func__, __LINE__);
+>> +        return;
+>> +    }
+>>       doip->map.std = NULL;
+>>       doip->doi = smk_cipso_doi_value;
+>>       doip->type = CIPSO_V4_MAP_PASS;

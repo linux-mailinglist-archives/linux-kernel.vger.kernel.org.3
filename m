@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 435CE54956D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E6D549326
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382135AbiFMOQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:16:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52988 "EHLO
+        id S1356620AbiFMM46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381788AbiFMOJe (ORCPT
+        with ESMTP id S1357446AbiFMMyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:09:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08969874C;
-        Mon, 13 Jun 2022 04:41:38 -0700 (PDT)
+        Mon, 13 Jun 2022 08:54:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A4165D22;
+        Mon, 13 Jun 2022 04:13:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBC266124E;
-        Mon, 13 Jun 2022 11:41:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBDF0C34114;
-        Mon, 13 Jun 2022 11:41:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8CE560B7C;
+        Mon, 13 Jun 2022 11:13:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C942AC34114;
+        Mon, 13 Jun 2022 11:13:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120496;
-        bh=c2aNa0WSTPINaaEVfNO7vaNrky3Fd5u8zr9Pepbdaso=;
+        s=korg; t=1655118788;
+        bh=p2xRm+9G+qjCSlFGrHTFKeqMTugLPxbgRQ/rMbsfVyk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YQtP73c1VlWG+EREaALQqehDRnKzwT5U1EpAF7RR4Yc3AU6hsuzihnhK/rzsbAtgB
-         3mDKFPdifFSb6y59oxinopNxhH6VykxqwmqgKKcJl3ESnoPWfGiFPV2ENAWLP4BoKC
-         7vANL9F1EyV75PxZAv65TaMIjSGIjAFt97KXpGIY=
+        b=dZ1xn8NqsVonvktvGAQ1iZkAMx1xn7XKVV4dnWnjIQC/FaSTAXPZivxtn1j8uuV9l
+         zwph58GyFcscbqyEmWYpWd2JnRL4sPGMxJN1JPNdSrtZpihTQfZ/5NytF4rFV4p4K0
+         xq6Org5h4eKu3QnaWAm2LiDx4E2xY5MD++wt32nQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Evan Green <evgreen@chromium.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 036/298] phy: qcom-qmp: fix pipe-clock imbalance on power-on failure
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 028/247] iio: adc: stmpe-adc: Fix wait_for_completion_timeout return value check
 Date:   Mon, 13 Jun 2022 12:08:50 +0200
-Message-Id: <20220613094926.028502004@linuxfoundation.org>
+Message-Id: <20220613094923.789535183@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 5e73b2d9867998278479ccc065a8a8227a5513ef ]
+[ Upstream commit d345b23200bcdbd2bd3582213d738c258b77718f ]
 
-Make sure to disable the pipe clock also if ufs-reset deassertion fails
-during power on.
+wait_for_completion_timeout() returns unsigned long not long.
+it returns 0 if timed out, and positive if completed.
+The check for <= 0 is ambiguous and should be == 0 here
+indicating timeout which is the only error case
 
-Note that the ufs-reset is asserted in qcom_qmp_phy_com_exit().
-
-Fixes: c9b589791fc1 ("phy: qcom: Utilize UFS reset controller")
-Cc: Evan Green <evgreen@chromium.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Link: https://lore.kernel.org/r/20220502133130.4125-2-johan+linaro@kernel.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: e813dde6f833 ("iio: stmpe-adc: Use wait_for_completion_timeout")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Philippe Schenker <philippe.schenker@toradex.com>
+Link: https://lore.kernel.org/r/20220412065150.14486-1-linmq006@gmail.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/adc/stmpe-adc.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-index c2b878128e2c..7493fd634c1d 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -5246,7 +5246,7 @@ static int qcom_qmp_phy_power_on(struct phy *phy)
+diff --git a/drivers/iio/adc/stmpe-adc.c b/drivers/iio/adc/stmpe-adc.c
+index fba659bfdb40..64305d9fa560 100644
+--- a/drivers/iio/adc/stmpe-adc.c
++++ b/drivers/iio/adc/stmpe-adc.c
+@@ -61,7 +61,7 @@ struct stmpe_adc {
+ static int stmpe_read_voltage(struct stmpe_adc *info,
+ 		struct iio_chan_spec const *chan, int *val)
+ {
+-	long ret;
++	unsigned long ret;
  
- 	ret = reset_control_deassert(qmp->ufs_reset);
- 	if (ret)
--		goto err_lane_rst;
-+		goto err_pcs_ready;
+ 	mutex_lock(&info->lock);
  
- 	qcom_qmp_phy_configure(pcs_misc, cfg->regs, cfg->pcs_misc_tbl,
- 			       cfg->pcs_misc_tbl_num);
+@@ -79,7 +79,7 @@ static int stmpe_read_voltage(struct stmpe_adc *info,
+ 
+ 	ret = wait_for_completion_timeout(&info->completion, STMPE_ADC_TIMEOUT);
+ 
+-	if (ret <= 0) {
++	if (ret == 0) {
+ 		stmpe_reg_write(info->stmpe, STMPE_REG_ADC_INT_STA,
+ 				STMPE_ADC_CH(info->channel));
+ 		mutex_unlock(&info->lock);
+@@ -96,7 +96,7 @@ static int stmpe_read_voltage(struct stmpe_adc *info,
+ static int stmpe_read_temp(struct stmpe_adc *info,
+ 		struct iio_chan_spec const *chan, int *val)
+ {
+-	long ret;
++	unsigned long ret;
+ 
+ 	mutex_lock(&info->lock);
+ 
+@@ -114,7 +114,7 @@ static int stmpe_read_temp(struct stmpe_adc *info,
+ 
+ 	ret = wait_for_completion_timeout(&info->completion, STMPE_ADC_TIMEOUT);
+ 
+-	if (ret <= 0) {
++	if (ret == 0) {
+ 		mutex_unlock(&info->lock);
+ 		return -ETIMEDOUT;
+ 	}
 -- 
 2.35.1
 

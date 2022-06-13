@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60B0548ACE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2CE548A0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346544AbiFMKvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:51:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        id S1358308AbiFMMGJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:06:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348145AbiFMKtK (ORCPT
+        with ESMTP id S1358269AbiFMMCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:49:10 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8847A20F56;
-        Mon, 13 Jun 2022 03:26:44 -0700 (PDT)
+        Mon, 13 Jun 2022 08:02:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F594F465;
+        Mon, 13 Jun 2022 03:57:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C43BFCE0EEB;
-        Mon, 13 Jun 2022 10:26:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABC73C34114;
-        Mon, 13 Jun 2022 10:26:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7C912B80E93;
+        Mon, 13 Jun 2022 10:57:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF284C3411F;
+        Mon, 13 Jun 2022 10:57:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116001;
-        bh=N+XI1wzcd9Kxu8XYioKt1zD2W6+6VitmPYqJQxlxEXc=;
+        s=korg; t=1655117827;
+        bh=tyA0ejAS9z+0uiLzoyWjMGJJNFCiypMG0doZNc98FoQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VEFABxKBHmeuUIDdR7H0U+pI7dQ03Q2UdWyccLQnNGt0iEPbexp+b+3RvsL1pExY5
-         43GaLG0B6Xm5KSFMWzqJyYTrBEN7PbBFXQWdxDIG1p3P29pAtwrh5OUMOtu2rS9qK5
-         k4J5ejoYRWkXRlKAU+D/dAOkC+kSCPzRlAWmCKeE=
+        b=yMm9pUeSCAiwuasDg7yxq/QVixT+LvUN0QdNp8ePkjlguz9IazhRwSz5qLD1F1Vmq
+         EPF29yGd+bsnqrjZDWQAaPPOLZlUrISH1cMekfGAcpGJU69aPDikHbzFMgkcBAQq1B
+         w4oLdaWya8WUDfgxiFjO/mx2t0U9+xE+T7mSN9ls=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
-        Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: =?UTF-8?q?=5BPATCH=204=2E14=20104/218=5D=20fs-writeback=3A=20writeback=5Fsb=5Finodes=EF=BC=9ARecalculate=20wrote=20according=20skipped=20pages?=
+        stable@vger.kernel.org,
+        Amelie Delaunay <amelie.delaunay@foss.st.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 138/287] dmaengine: stm32-mdma: remove GISR1 register
 Date:   Mon, 13 Jun 2022 12:09:22 +0200
-Message-Id: <20220613094923.709526796@linuxfoundation.org>
+Message-Id: <20220613094928.062694848@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,151 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhihao Cheng <chengzhihao1@huawei.com>
+From: Amelie Delaunay <amelie.delaunay@foss.st.com>
 
-commit 68f4c6eba70df70a720188bce95c85570ddfcc87 upstream.
+[ Upstream commit 9d6a2d92e450926c483e45eaf426080a19219f4e ]
 
-Commit 505a666ee3fc ("writeback: plug writeback in wb_writeback() and
-writeback_inodes_wb()") has us holding a plug during wb_writeback, which
-may cause a potential ABBA dead lock:
+GISR1 was described in a not up-to-date documentation when the stm32-mdma
+driver has been developed. This register has not been added in reference
+manual of STM32 SoC with MDMA, which have only 32 MDMA channels.
+So remove it from stm32-mdma driver.
 
-    wb_writeback		fat_file_fsync
-blk_start_plug(&plug)
-for (;;) {
-  iter i-1: some reqs have been added into plug->mq_list  // LOCK A
-  iter i:
-    progress = __writeback_inodes_wb(wb, work)
-    . writeback_sb_inodes // fat's bdev
-    .   __writeback_single_inode
-    .   . generic_writepages
-    .   .   __block_write_full_page
-    .   .   . . 	    __generic_file_fsync
-    .   .   . . 	      sync_inode_metadata
-    .   .   . . 	        writeback_single_inode
-    .   .   . . 		  __writeback_single_inode
-    .   .   . . 		    fat_write_inode
-    .   .   . . 		      __fat_write_inode
-    .   .   . . 		        sync_dirty_buffer	// fat's bdev
-    .   .   . . 			  lock_buffer(bh)	// LOCK B
-    .   .   . . 			    submit_bh
-    .   .   . . 			      blk_mq_get_tag	// LOCK A
-    .   .   . trylock_buffer(bh)  // LOCK B
-    .   .   .   redirty_page_for_writepage
-    .   .   .     wbc->pages_skipped++
-    .   .   --wbc->nr_to_write
-    .   wrote += write_chunk - wbc.nr_to_write  // wrote > 0
-    .   requeue_inode
-    .     redirty_tail_locked
-    if (progress)    // progress > 0
-      continue;
-  iter i+1:
-      queue_io
-      // similar process with iter i, infinite for-loop !
-}
-blk_finish_plug(&plug)   // flush plug won't be called
-
-Above process triggers a hungtask like:
-[  399.044861] INFO: task bb:2607 blocked for more than 30 seconds.
-[  399.046824]       Not tainted 5.18.0-rc1-00005-gefae4d9eb6a2-dirty
-[  399.051539] task:bb              state:D stack:    0 pid: 2607 ppid:
-2426 flags:0x00004000
-[  399.051556] Call Trace:
-[  399.051570]  __schedule+0x480/0x1050
-[  399.051592]  schedule+0x92/0x1a0
-[  399.051602]  io_schedule+0x22/0x50
-[  399.051613]  blk_mq_get_tag+0x1d3/0x3c0
-[  399.051640]  __blk_mq_alloc_requests+0x21d/0x3f0
-[  399.051657]  blk_mq_submit_bio+0x68d/0xca0
-[  399.051674]  __submit_bio+0x1b5/0x2d0
-[  399.051708]  submit_bio_noacct+0x34e/0x720
-[  399.051718]  submit_bio+0x3b/0x150
-[  399.051725]  submit_bh_wbc+0x161/0x230
-[  399.051734]  __sync_dirty_buffer+0xd1/0x420
-[  399.051744]  sync_dirty_buffer+0x17/0x20
-[  399.051750]  __fat_write_inode+0x289/0x310
-[  399.051766]  fat_write_inode+0x2a/0xa0
-[  399.051783]  __writeback_single_inode+0x53c/0x6f0
-[  399.051795]  writeback_single_inode+0x145/0x200
-[  399.051803]  sync_inode_metadata+0x45/0x70
-[  399.051856]  __generic_file_fsync+0xa3/0x150
-[  399.051880]  fat_file_fsync+0x1d/0x80
-[  399.051895]  vfs_fsync_range+0x40/0xb0
-[  399.051929]  __x64_sys_fsync+0x18/0x30
-
-In my test, 'need_resched()' (which is imported by 590dca3a71 "fs-writeback:
-unplug before cond_resched in writeback_sb_inodes") in function
-'writeback_sb_inodes()' seldom comes true, unless cond_resched() is deleted
-from write_cache_pages().
-
-Fix it by correcting wrote number according number of skipped pages
-in writeback_sb_inodes().
-
-Goto Link to find a reproducer.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215837
-Cc: stable@vger.kernel.org # v4.3
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220510133805.1988292-1-chengzhihao1@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: a4ffb13c8946 ("dmaengine: Add STM32 MDMA driver")
+Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
+Link: https://lore.kernel.org/r/20220504155322.121431-2-amelie.delaunay@foss.st.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/fs-writeback.c |   13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/dma/stm32-mdma.c | 21 +++++----------------
+ 1 file changed, 5 insertions(+), 16 deletions(-)
 
---- a/fs/fs-writeback.c
-+++ b/fs/fs-writeback.c
-@@ -1565,11 +1565,12 @@ static long writeback_sb_inodes(struct s
- 	};
- 	unsigned long start_time = jiffies;
- 	long write_chunk;
--	long wrote = 0;  /* count both pages and inodes */
-+	long total_wrote = 0;  /* count both pages and inodes */
+diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
+index 8585fed84e83..3259c450544c 100644
+--- a/drivers/dma/stm32-mdma.c
++++ b/drivers/dma/stm32-mdma.c
+@@ -50,7 +50,6 @@
+ 					 STM32_MDMA_SHIFT(mask))
  
- 	while (!list_empty(&wb->b_io)) {
- 		struct inode *inode = wb_inode(wb->b_io.prev);
- 		struct bdi_writeback *tmp_wb;
-+		long wrote;
+ #define STM32_MDMA_GISR0		0x0000 /* MDMA Int Status Reg 1 */
+-#define STM32_MDMA_GISR1		0x0004 /* MDMA Int Status Reg 2 */
  
- 		if (inode->i_sb != sb) {
- 			if (work->sb) {
-@@ -1645,7 +1646,9 @@ static long writeback_sb_inodes(struct s
+ /* MDMA Channel x interrupt/status register */
+ #define STM32_MDMA_CISR(x)		(0x40 + 0x40 * (x)) /* x = 0..62 */
+@@ -206,7 +205,7 @@
  
- 		wbc_detach_inode(&wbc);
- 		work->nr_pages -= write_chunk - wbc.nr_to_write;
--		wrote += write_chunk - wbc.nr_to_write;
-+		wrote = write_chunk - wbc.nr_to_write - wbc.pages_skipped;
-+		wrote = wrote < 0 ? 0 : wrote;
-+		total_wrote += wrote;
+ #define STM32_MDMA_MAX_BUF_LEN		128
+ #define STM32_MDMA_MAX_BLOCK_LEN	65536
+-#define STM32_MDMA_MAX_CHANNELS		63
++#define STM32_MDMA_MAX_CHANNELS		32
+ #define STM32_MDMA_MAX_REQUESTS		256
+ #define STM32_MDMA_MAX_BURST		128
+ #define STM32_MDMA_VERY_HIGH_PRIORITY	0x11
+@@ -1361,21 +1360,11 @@ static irqreturn_t stm32_mdma_irq_handler(int irq, void *devid)
  
- 		if (need_resched()) {
- 			/*
-@@ -1667,7 +1670,7 @@ static long writeback_sb_inodes(struct s
- 		tmp_wb = inode_to_wb_and_lock_list(inode);
- 		spin_lock(&inode->i_lock);
- 		if (!(inode->i_state & I_DIRTY_ALL))
--			wrote++;
-+			total_wrote++;
- 		requeue_inode(inode, tmp_wb, &wbc);
- 		inode_sync_complete(inode);
- 		spin_unlock(&inode->i_lock);
-@@ -1681,14 +1684,14 @@ static long writeback_sb_inodes(struct s
- 		 * bail out to wb_writeback() often enough to check
- 		 * background threshold and other termination conditions.
- 		 */
--		if (wrote) {
-+		if (total_wrote) {
- 			if (time_is_before_jiffies(start_time + HZ / 10UL))
- 				break;
- 			if (work->nr_pages <= 0)
- 				break;
- 		}
+ 	/* Find out which channel generates the interrupt */
+ 	status = readl_relaxed(dmadev->base + STM32_MDMA_GISR0);
+-	if (status) {
+-		id = __ffs(status);
+-	} else {
+-		status = readl_relaxed(dmadev->base + STM32_MDMA_GISR1);
+-		if (!status) {
+-			dev_dbg(mdma2dev(dmadev), "spurious it\n");
+-			return IRQ_NONE;
+-		}
+-		id = __ffs(status);
+-		/*
+-		 * As GISR0 provides status for channel id from 0 to 31,
+-		 * so GISR1 provides status for channel id from 32 to 62
+-		 */
+-		id += 32;
++	if (!status) {
++		dev_dbg(mdma2dev(dmadev), "spurious it\n");
++		return IRQ_NONE;
  	}
--	return wrote;
-+	return total_wrote;
- }
++	id = __ffs(status);
  
- static long __writeback_inodes_wb(struct bdi_writeback *wb,
+ 	chan = &dmadev->chan[id];
+ 	if (!chan) {
+-- 
+2.35.1
+
 
 

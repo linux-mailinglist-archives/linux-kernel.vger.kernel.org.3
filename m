@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08ECC549024
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C36548FCE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354896AbiFMLgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S1357672AbiFMNDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:03:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354534AbiFML3l (ORCPT
+        with ESMTP id S1358351AbiFMMzL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:41 -0400
+        Mon, 13 Jun 2022 08:55:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E4E205C6;
-        Mon, 13 Jun 2022 03:45:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D83826F4;
+        Mon, 13 Jun 2022 04:15:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F22E61016;
-        Mon, 13 Jun 2022 10:45:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E40EC34114;
-        Mon, 13 Jun 2022 10:44:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEA3D60B6B;
+        Mon, 13 Jun 2022 11:15:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCF50C34114;
+        Mon, 13 Jun 2022 11:15:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117099;
-        bh=R7Ai4jnL60FXxpcklSo4vI6jPD0lfh8NErbALngp7OA=;
+        s=korg; t=1655118907;
+        bh=HV73AQN1kNcjmqMkArhjy0PLs8x/DcI7HaSRZwf/Jeg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DJ6PVvAQ7aVMuXZ0ugZ47Tg/Vk1+mSBCJWTZprvVuRV60mePBaXVUoXC8DlIFWfVV
-         0JaHHAU/q/SpS+u97Cah2u6GCP5izL7JfDiWC7/u4jPQu0WAPN4LDtPUiV0MEA4cSQ
-         dh58lBswYQiQ94BXzl6X7seiGbojQb5AGemu0aqQ=
+        b=wVexd7ii8FaqOnDmG4nYHOZaivLc1C0IhFaOF5UBjb3NWHNOWbAAoZIET1OdI2K23
+         /lHhpQbH/qAYuikpX+5ses3LErOdgfNAxgZ1zdu5BsNgpu4lXBbCKd0kg+Nsvh/15L
+         vRnAvQedXS2mCmK+lKbR21A1W4WxtXLtZQ8nfbPM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cixi Geng <cixi.geng1@unisoc.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 298/411] iio: adc: sc27xx: Fine tune the scale calibration values
-Date:   Mon, 13 Jun 2022 12:09:31 +0200
-Message-Id: <20220613094937.694734487@linuxfoundation.org>
+Subject: [PATCH 5.15 070/247] clocksource/drivers/oxnas-rps: Fix irq_of_parse_and_map() return value
+Date:   Mon, 13 Jun 2022 12:09:32 +0200
+Message-Id: <20220613094925.082500845@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +57,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cixi Geng <cixi.geng1@unisoc.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit 5a7a184b11c6910f47600ff5cbbee34168f701a8 ]
+[ Upstream commit 9c04a8ff03def4df3f81219ffbe1ec9b44ff5348 ]
 
-Small adjustment the scale calibration value for the sc2731,
-use new name sc2731_[big|small]_scale_graph_calib, and remove
-the origin [big|small]_scale_graph_calib struct for unused.
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-Fixes: 8ba0dbfd07a35 (iio: adc: sc27xx: Add ADC scale calibration)
-Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-Link: https://lore.kernel.org/r/20220419142458.884933-4-gengcixi@gmail.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 89355274e1f7 ("clocksource/drivers/oxnas-rps: Add Oxford Semiconductor RPS Dual Timer")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220422104101.55754-1-krzysztof.kozlowski@linaro.org
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/adc/sc27xx_adc.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ drivers/clocksource/timer-oxnas-rps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
-index dcc01cdcff3f..5b79c8b9ccde 100644
---- a/drivers/iio/adc/sc27xx_adc.c
-+++ b/drivers/iio/adc/sc27xx_adc.c
-@@ -103,14 +103,14 @@ static struct sc27xx_adc_linear_graph small_scale_graph = {
- 	100, 341,
- };
+diff --git a/drivers/clocksource/timer-oxnas-rps.c b/drivers/clocksource/timer-oxnas-rps.c
+index 56c0cc32d0ac..d514b44e67dd 100644
+--- a/drivers/clocksource/timer-oxnas-rps.c
++++ b/drivers/clocksource/timer-oxnas-rps.c
+@@ -236,7 +236,7 @@ static int __init oxnas_rps_timer_init(struct device_node *np)
+ 	}
  
--static const struct sc27xx_adc_linear_graph big_scale_graph_calib = {
--	4200, 856,
--	3600, 733,
-+static const struct sc27xx_adc_linear_graph sc2731_big_scale_graph_calib = {
-+	4200, 850,
-+	3600, 728,
- };
- 
--static const struct sc27xx_adc_linear_graph small_scale_graph_calib = {
--	1000, 833,
--	100, 80,
-+static const struct sc27xx_adc_linear_graph sc2731_small_scale_graph_calib = {
-+	1000, 838,
-+	100, 84,
- };
- 
- static int sc27xx_adc_get_calib_data(u32 calib_data, int calib_adc)
-@@ -130,11 +130,11 @@ static int sc27xx_adc_scale_calibration(struct sc27xx_adc_data *data,
- 	size_t len;
- 
- 	if (big_scale) {
--		calib_graph = &big_scale_graph_calib;
-+		calib_graph = &sc2731_big_scale_graph_calib;
- 		graph = &big_scale_graph;
- 		cell_name = "big_scale_calib";
- 	} else {
--		calib_graph = &small_scale_graph_calib;
-+		calib_graph = &sc2731_small_scale_graph_calib;
- 		graph = &small_scale_graph;
- 		cell_name = "small_scale_calib";
+ 	rps->irq = irq_of_parse_and_map(np, 0);
+-	if (rps->irq < 0) {
++	if (!rps->irq) {
+ 		ret = -EINVAL;
+ 		goto err_iomap;
  	}
 -- 
 2.35.1

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D2A54868A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A7C0548662
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242114AbiFMKTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60978 "EHLO
+        id S1383281AbiFMOUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242766AbiFMKSe (ORCPT
+        with ESMTP id S1382289AbiFMON4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:18:34 -0400
+        Mon, 13 Jun 2022 10:13:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5D620BDC;
-        Mon, 13 Jun 2022 03:16:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B31A9AE49;
+        Mon, 13 Jun 2022 04:42:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A1DC614BA;
-        Mon, 13 Jun 2022 10:16:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE79C34114;
-        Mon, 13 Jun 2022 10:16:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E842B613F9;
+        Mon, 13 Jun 2022 11:42:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01816C34114;
+        Mon, 13 Jun 2022 11:42:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115380;
-        bh=ITYIFrUnHYpsV539xmrC608F3msk7H+aUAsKiM0u9Jc=;
+        s=korg; t=1655120535;
+        bh=XHXZMpOCvpB+hVo3r4vGG0BGyFr/7psW/iBEtN1fhuo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z917gircGH4MJFUMLm9EYW9A57O245WzE6FLUh79V7fZnKWPHtwdKN9jnMlCvUQUG
-         vzVVCZF35hty84FuDsExDvawA5yBxrIVh95cw6Bi/VZ4ZtHTsVdd5Pmw254gbBS2Hf
-         /eGEpKxedZkPRFHiPR6SCr5KagHOjtvhWlb/M0Dc=
+        b=zGgJDeIwq8gOD4StGYMUC6NBIMJ85hHoJErDtBhjezYW+DN9E+xAtjOlx3e6aPZbW
+         /VbJaYEYvJtoJIpoUnrc3JKX9/ezfgHRnYqH9SvZ6EoOQ+D8MdyUZgEMSMUjbynvAq
+         6LV09rjx7Xs6txBr62f0zaiNPFZQNK9Zo2WAjrcY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 053/167] ASoC: mxs-saif: Fix refcount leak in mxs_saif_probe
-Date:   Mon, 13 Jun 2022 12:08:47 +0200
-Message-Id: <20220613094853.364404336@linuxfoundation.org>
+Subject: [PATCH 5.17 034/298] rpmsg: qcom_smd: Fix returning 0 if irq_of_parse_and_map() fails
+Date:   Mon, 13 Jun 2022 12:08:48 +0200
+Message-Id: <20220613094925.966586535@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit 2be84f73785fa9ed6443e3c5b158730266f1c2ee ]
+[ Upstream commit 59d6f72f6f9c92fec8757d9e29527da828e9281f ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
+irq_of_parse_and_map() returns 0 on failure, so this should not be
+passed further as error return code.
 
-Fixes: 08641c7c74dd ("ASoC: mxs: add device tree support for mxs-saif")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220511133725.39039-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 1a358d350664 ("rpmsg: qcom_smd: Fix irq_of_parse_and_map() return value")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220423093932.32136-1-krzysztof.kozlowski@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mxs/mxs-saif.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/rpmsg/qcom_smd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/mxs/mxs-saif.c b/sound/soc/mxs/mxs-saif.c
-index 5977a2011d9e..76e1059e7f15 100644
---- a/sound/soc/mxs/mxs-saif.c
-+++ b/sound/soc/mxs/mxs-saif.c
-@@ -748,6 +748,7 @@ static int mxs_saif_probe(struct platform_device *pdev)
- 		saif->master_id = saif->id;
- 	} else {
- 		ret = of_alias_get_id(master, "saif");
-+		of_node_put(master);
- 		if (ret < 0)
- 			return ret;
- 		else
+diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
+index d4b54eebe15d..4ad90945518f 100644
+--- a/drivers/rpmsg/qcom_smd.c
++++ b/drivers/rpmsg/qcom_smd.c
+@@ -1406,7 +1406,7 @@ static int qcom_smd_parse_edge(struct device *dev,
+ 	irq = irq_of_parse_and_map(node, 0);
+ 	if (!irq) {
+ 		dev_err(dev, "required smd interrupt missing\n");
+-		ret = irq;
++		ret = -EINVAL;
+ 		goto put_node;
+ 	}
+ 
 -- 
 2.35.1
 

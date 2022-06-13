@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005325494BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4F7548DEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346380AbiFMK75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43734 "EHLO
+        id S1379413AbiFMNsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350174AbiFMKyo (ORCPT
+        with ESMTP id S1378611AbiFMNmA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3580CE1B;
-        Mon, 13 Jun 2022 03:29:52 -0700 (PDT)
+        Mon, 13 Jun 2022 09:42:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67ECE23BDE;
+        Mon, 13 Jun 2022 04:31:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B7B8B80E94;
-        Mon, 13 Jun 2022 10:29:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFE7BC34114;
-        Mon, 13 Jun 2022 10:29:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEF126124B;
+        Mon, 13 Jun 2022 11:31:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAEEBC34114;
+        Mon, 13 Jun 2022 11:31:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116190;
-        bh=96ceQgJASxyzZfSQvr0juwSMRmN1lL3Esf2pvX28VOk=;
+        s=korg; t=1655119881;
+        bh=HTO52MIx8f+xtj5n1cIJO/R2zEK3ZQZy29evrOfFB3k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=URykTnEE1IqZGcMHZCwLp+VIkX/wivHEJ2khv6wh9SapA8sulsUEEHrA6Bht+aMm7
-         5LLdmq0SdPWia6C++UU8L49XjCDETRmbGvBUYJlG2qUR4ShxU/ZDo7CLurWMJFI6J7
-         M1Oj2dkzOm/hEkxuKczY38P1qrasjQn8Tgro3EyA=
+        b=G+qKVJ/HpoFKbeZtwrQPyd3HDiMZ+DUGE05K3KaFzgHFUVVHw8Xdbrw2rdPu8ty9/
+         8yLEupM/3YXJtWhbm/SqYsWSbj3sG2nDtCEZt5gkTJtXO3mbynYoEHVr6KyGq0nV8B
+         MuR+GOjPPpK1y/1vVrpbkPGv9pgNSWFzm7rYQZAo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Stephen Zhang <starzhangzsd@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [PATCH 4.14 138/218] MIPS: IP27: Remove incorrect `cpu_has_fpu override
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 171/339] video: fbdev: pxa3xx-gcu: release the resources correctly in pxa3xx_gcu_probe/remove()
 Date:   Mon, 13 Jun 2022 12:09:56 +0200
-Message-Id: <20220613094924.771143010@linuxfoundation.org>
+Message-Id: <20220613094931.864924186@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maciej W. Rozycki <macro@orcam.me.uk>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-commit 424c3781dd1cb401857585331eaaa425a13f2429 upstream.
+[ Upstream commit d87ad457f7e1b8d2492ca5b1531eb35030a1cc8f ]
 
-Remove unsupported forcing of `cpu_has_fpu' to 1, which makes the `nofpu'
-kernel parameter non-functional, and also causes a link error:
+In pxa3xx_gcu_probe(), the sequence of error lable is wrong, it will
+leads some resource leaked, so adjust the sequence to handle the error
+correctly, and if pxa3xx_gcu_add_buffer() fails, pxa3xx_gcu_free_buffers()
+need be called.
+In pxa3xx_gcu_remove(), add missing clk_disable_unpreprare().
 
-ld: arch/mips/kernel/traps.o: in function `trap_init':
-./arch/mips/include/asm/msa.h:(.init.text+0x348): undefined reference to `handle_fpe'
-ld: ./arch/mips/include/asm/msa.h:(.init.text+0x354): undefined reference to `handle_fpe'
-ld: ./arch/mips/include/asm/msa.h:(.init.text+0x360): undefined reference to `handle_fpe'
-
-where the CONFIG_MIPS_FP_SUPPORT configuration option has been disabled.
-
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-Reported-by: Stephen Zhang <starzhangzsd@gmail.com>
-Fixes: 0ebb2f4159af ("MIPS: IP27: Update/restructure CPU overrides")
-Cc: stable@vger.kernel.org # v4.2+
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/video/fbdev/pxa3xx-gcu.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
---- a/arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h
-+++ b/arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h
-@@ -28,7 +28,6 @@
- #define cpu_has_6k_cache		0
- #define cpu_has_8k_cache		0
- #define cpu_has_tx39_cache		0
--#define cpu_has_fpu			1
- #define cpu_has_nofpuex			0
- #define cpu_has_32fpr			1
- #define cpu_has_counter			1
+diff --git a/drivers/video/fbdev/pxa3xx-gcu.c b/drivers/video/fbdev/pxa3xx-gcu.c
+index 350b3139c863..043cc8f9ef1c 100644
+--- a/drivers/video/fbdev/pxa3xx-gcu.c
++++ b/drivers/video/fbdev/pxa3xx-gcu.c
+@@ -646,6 +646,7 @@ static int pxa3xx_gcu_probe(struct platform_device *pdev)
+ 	for (i = 0; i < 8; i++) {
+ 		ret = pxa3xx_gcu_add_buffer(dev, priv);
+ 		if (ret) {
++			pxa3xx_gcu_free_buffers(dev, priv);
+ 			dev_err(dev, "failed to allocate DMA memory\n");
+ 			goto err_disable_clk;
+ 		}
+@@ -662,15 +663,15 @@ static int pxa3xx_gcu_probe(struct platform_device *pdev)
+ 			SHARED_SIZE, irq);
+ 	return 0;
+ 
+-err_free_dma:
+-	dma_free_coherent(dev, SHARED_SIZE,
+-			priv->shared, priv->shared_phys);
++err_disable_clk:
++	clk_disable_unprepare(priv->clk);
+ 
+ err_misc_deregister:
+ 	misc_deregister(&priv->misc_dev);
+ 
+-err_disable_clk:
+-	clk_disable_unprepare(priv->clk);
++err_free_dma:
++	dma_free_coherent(dev, SHARED_SIZE,
++			  priv->shared, priv->shared_phys);
+ 
+ 	return ret;
+ }
+@@ -683,6 +684,7 @@ static int pxa3xx_gcu_remove(struct platform_device *pdev)
+ 	pxa3xx_gcu_wait_idle(priv);
+ 	misc_deregister(&priv->misc_dev);
+ 	dma_free_coherent(dev, SHARED_SIZE, priv->shared, priv->shared_phys);
++	clk_disable_unprepare(priv->clk);
+ 	pxa3xx_gcu_free_buffers(dev, priv);
+ 
+ 	return 0;
+-- 
+2.35.1
+
 
 

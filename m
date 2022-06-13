@@ -2,146 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AD7B549DBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF1B549DB8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350301AbiFMTaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
+        id S1350191AbiFMT37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351694AbiFMT3i (ORCPT
+        with ESMTP id S1351709AbiFMT3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Jun 2022 15:29:38 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CCE65AEF5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:54:07 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id y6so751807pfr.13
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:54:07 -0700 (PDT)
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62AE3DA4A;
+        Mon, 13 Jun 2022 10:54:09 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id w13so3578342qts.6;
+        Mon, 13 Jun 2022 10:54:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EpkxShZgsyvOC558FK0jGzBMP0ZDetJPHuYDFcyKyHc=;
-        b=eG1Pt6SNmAWAbkQk0PJbYFEvmFih5RDAoAG3SGj9P+NC9N4y2TBh/8isp3VZBGLNND
-         yDB1cZ+gI8hf7X/1TgWUueDSwHZUKcPPgJ8cvQxWYoqNtqMYspH5vxuMOlOSjlodhHgo
-         NCF/c7tLgHjo6IkzT/GNDMo7q8CeO9mlRyslgemmXeCc883bzaJZfz0iTITTCdAieJX1
-         edRMTkN+sI6nqjdHKTnzFJFXwTllkMb7mraT8WCdDi9rXA1U7aFLKpDBTa0k3OproqJ8
-         9eps/zayaB+UUjZYpaXGOrKephUjO/9VYF+pKzdVEs0hQ1YTJ/FL/r85EY3lAxNctwzO
-         /0vA==
+        d=gmail.com; s=20210112;
+        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
+         :content-transfer-encoding;
+        bh=MQ6Gm6rEcKWgPoZvxj3NUFNwBirG2CnGEdL2DutlzIQ=;
+        b=joXD2Wtj8NaDaXR+5hJSdoaWOTNyBxtsLmkoFylc/33cizkqdQKRxkzKf0UlQE15bI
+         PRppazDhC0xj+Fe3DTGn8ewe8fG68LGzK+KBD2WymPPh/j3bnBzaIH+U+GGL66l/mYfl
+         KfVassBVNwh6ezplUxVW5IONWCdB1nF3F3ol0d82gdC/VBSEL2ER7AVQcXgYZOnsvAw7
+         rcsUcDX7vEmTBL/Q9Av1o/ma3mLnwZjiRxuueKeOw1xDCp0gN4VluDjxe4+sr7GazoXo
+         Bkir+7pgIgzWMzLymH5/p1naiiJRcJZQWIjygscbj0eDMlS7WFd5EPbZQzvR1IDiY8Y7
+         GnLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EpkxShZgsyvOC558FK0jGzBMP0ZDetJPHuYDFcyKyHc=;
-        b=nlc4cOLhc5mEnxNer13S78cuYpSMF6gzHoJaqjWNJYar+4XhriOvCKh9rNUWR3V9rS
-         8G49PaPfkpcWJyMr1/wEEwN31n1JYi9o6kgx46wqjIMY/5UsFiyc+Bnpu+STL60jVDFQ
-         A9FTmKtX0deLdCehQrEZxTILKKfaWdBkiAy/I5GbSzcLNbsU0FIk7PzFbEROAjXyc8sx
-         IIgMgwBXpO8hvVUZYFNwntEr080P9/pZasIjZbAIvUia2wWYh6Cr/EtD6gKd4XiisdvC
-         8CkwlkopNlVORPeA0dsvJsDqkKFLuPCI7/Wtp7Fgnqzkmm+EtDlvNCKw12oLkbeE+X44
-         IB7Q==
-X-Gm-Message-State: AOAM53371sdhaIulMpigEhXX5DHejQD8N9rUQPeZDN2uneDu6+K9H0JT
-        vI+O+drbjzttvmTnf/HEhjUKSA==
-X-Google-Smtp-Source: ABdhPJwmaLN1NSMSGFo0uwnuNY059nYyRtqZVSuz1JztPm/dzXwvfwgkAcmuxoNDA0S+IlGMwxsw4A==
-X-Received: by 2002:a63:f25:0:b0:401:d066:2727 with SMTP id e37-20020a630f25000000b00401d0662727mr700401pgl.386.1655142846731;
-        Mon, 13 Jun 2022 10:54:06 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id f20-20020a17090a639400b001ea75a02805sm7735594pjj.52.2022.06.13.10.54.06
+        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=MQ6Gm6rEcKWgPoZvxj3NUFNwBirG2CnGEdL2DutlzIQ=;
+        b=sm4Clh/HYABiCRpFO0G3FXIvqyoaWyPKZ0tQiTGEP+7RuMf7jbBrgMXtPdsU9mkGHy
+         1Qf8XKb0Vu84/JSczfG9dhj9795bXSuzjPzRhVDKb/4SSGICXyyKPEdyBdCSKwlibD0b
+         XsRp5lBVgR1BxVJRs/Z8mAmsGttpoaRVhI6CxPczgRfgJlHShJh8VC0Q5AmNqVfd4AxE
+         /cKDGkuIoJ7hIeR3mtJtFqpH21B1H1JkE/fZ5VFeEa9L2bl4lRE1xjUbh6yUr5unqBnZ
+         HLf+h4FlrCKvw0vviFbV8i8csgTx9ahgM2COJq4smhCcdiVF0GXF1HEZ/A1l8S0EaO+U
+         dZlQ==
+X-Gm-Message-State: AOAM5321o9l4xNui3sna5xGLmAhAGhDPwWFAWw8zqJNMBLNys+aHV0A9
+        7JsPK2F89Idn/w7oAIzB8ffvsOJP04I=
+X-Google-Smtp-Source: ABdhPJx0sAHi+4PMHwNszPdJysQo5Oh8DBgyF1D4IUtP45fNmpWG58yU8cVLYzW6xN4NldgDgnPlkw==
+X-Received: by 2002:a05:622a:287:b0:305:150:a73d with SMTP id z7-20020a05622a028700b003050150a73dmr834462qtw.570.1655142848901;
+        Mon, 13 Jun 2022 10:54:08 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id o18-20020a05620a2a1200b006a370031c3esm7400298qkp.106.2022.06.13.10.54.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 10:54:06 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 17:54:02 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     syzbot <syzbot+4688c50a9c8e68e7aaa1@syzkaller.appspotmail.com>
-Cc:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        jmattson@google.com, joro@8bytes.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        pbonzini@redhat.com, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org
-Subject: Re: [syzbot] WARNING in handle_exception_nmi (2)
-Message-ID: <Yqd5upAHNOxD0wrQ@google.com>
-References: <0000000000000a5eae05d8947adb@google.com>
- <0000000000003719fc05e13b37e3@google.com>
+        Mon, 13 Jun 2022 10:54:08 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm@kernel.org, soc@kernel.org, Hauke Mehrtens <hauke@hauke-m.de>,
+        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <zajec5@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 11/48] ARM: dts: broadcom: align gpio-key node names with dtschema
+Date:   Mon, 13 Jun 2022 10:54:05 -0700
+Message-Id: <20220613175405.244712-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220609113938.380466-2-krzysztof.kozlowski@linaro.org>
+References: <20220609113721.379932-1-krzysztof.kozlowski@linaro.org> <20220609113938.380466-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000003719fc05e13b37e3@google.com>
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 12, 2022, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
+On Thu,  9 Jun 2022 13:39:30 +0200, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+> The node names should be generic and DT schema expects certain pattern
+> (e.g. with key/button/switch).
 > 
-> HEAD commit:    7a68065eb9cd Merge tag 'gpio-fixes-for-v5.19-rc2' of git:/..
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=177df408080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=20ac3e0ebf0db3bd
-> dashboard link: https://syzkaller.appspot.com/bug?extid=4688c50a9c8e68e7aaa1
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12087173f00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16529343f00000
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+4688c50a9c8e68e7aaa1@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 3609 at arch/x86/kvm/vmx/vmx.c:4896 handle_exception_nmi+0xfdc/0x1190 arch/x86/kvm/vmx/vmx.c:4896
-> Modules linked in:
-> CPU: 0 PID: 3609 Comm: syz-executor169 Not tainted 5.19.0-rc1-syzkaller-00303-g7a68065eb9cd #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-I'm pretty sure this is a bug in GCE's L0 KVM.  Per syzbot's bisection, the WARN
-repros all the way back to v5.11 on GCE.  The test is doing VMWRITE from its L1
-(effective L2) with a memory operand that takes a #PF.  The #PF ends up in L1,
-which triggers the splat as KVM (real L1) isn't intercepting #PFs.
-
-I've repro'd this on a GCE host running a GCE kernel, and verified the same host
-running a v5.18 kernel does _not_ trigger the splat.
-
-I'll route this to someone internally.
-
-> RIP: 0010:handle_exception_nmi+0xfdc/0x1190 arch/x86/kvm/vmx/vmx.c:4896
-> Code: 0f 84 c8 f3 ff ff e8 33 5c 58 00 48 89 ef c7 85 84 0d 00 00 00 00 00 00 e8 21 35 ec ff 41 89 c4 e9 af f3 ff ff e8 14 5c 58 00 <0f> 0b e9 69 f6 ff ff e8 08 5c 58 00 be f5 ff ff ff bf 01 00 00 00
-> RSP: 0018:ffffc9000309faf8 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff88801ba1d880 RSI: ffffffff8122171c RDI: 0000000000000001
-> RBP: ffff88807cd88000 R08: 0000000000000001 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000001 R12: 00000000a0000975
-> R13: ffff88807cd88248 R14: 0000000000000000 R15: 0000000080000300
-> FS:  0000555556c8d300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000000 CR3: 00000000229ca000 CR4: 00000000003526e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 00000000b8fecd19 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  __vmx_handle_exit arch/x86/kvm/vmx/vmx.c:6174 [inline]
->  vmx_handle_exit+0x498/0x1950 arch/x86/kvm/vmx/vmx.c:6191
->  vcpu_enter_guest arch/x86/kvm/x86.c:10361 [inline]
->  vcpu_run arch/x86/kvm/x86.c:10450 [inline]
->  kvm_arch_vcpu_ioctl_run+0x4208/0x66f0 arch/x86/kvm/x86.c:10654
->  kvm_vcpu_ioctl+0x570/0xf30 arch/x86/kvm/../../../virt/kvm/kvm_main.c:3944
->  vfs_ioctl fs/ioctl.c:51 [inline]
->  __do_sys_ioctl fs/ioctl.c:870 [inline]
->  __se_sys_ioctl fs/ioctl.c:856 [inline]
->  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x46/0xb0
-> RIP: 0033:0x7f56efaee199
-> Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffc37353158 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f56efaee199
-> RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 0000000000000005
-> RBP: 00007f56efab1bf0 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000246 R12: 00007f56efab1c80
-> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
->  </TASK>
-> 
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
+--
+Florian

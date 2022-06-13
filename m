@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6998D548E37
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D57D549707
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384367AbiFMOgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
+        id S1345427AbiFMMRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385525AbiFMObQ (ORCPT
+        with ESMTP id S1358705AbiFMMOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:31:16 -0400
+        Mon, 13 Jun 2022 08:14:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9887FABE76;
-        Mon, 13 Jun 2022 04:49:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 345DF5468B;
+        Mon, 13 Jun 2022 04:01:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D80C76149A;
-        Mon, 13 Jun 2022 11:48:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1AD3C36AFE;
-        Mon, 13 Jun 2022 11:48:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE07961435;
+        Mon, 13 Jun 2022 11:01:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF87FC34114;
+        Mon, 13 Jun 2022 11:01:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120897;
-        bh=VXZhxryh72Og4GqGI4MTbJbRPGLEe+3cwrtMAV1XFcY=;
+        s=korg; t=1655118115;
+        bh=JNL82SmDWxYNCtU/gNOc7WAO0pSHqkbMptkPcQIA5c8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2ilUniEpbzdLVpDzgiCwrnA4JofJ3yiu6hCxn3cq6/UeCOymvvLdIiQpuCyx0K0Wy
-         TNaqSoUIbEhCqyHXaUO8muPWJMNIqscCxFC/2ge+WxNCulXdK9NLimmaodnizZqeOu
-         9ovvptTyl9HSjxRkED468CCBJRrs9TlKF89w3bG8=
+        b=tsQIOkW/QWV6vwyhlkC9OCPqTAz328qH39V3wY1ZL7TQLFMBceSalfgoJ/5Jh374g
+         YMH6YoNh+7VUg6mGMxy0KuFpwg//7sLlfVH+/Uau2xBAa7+3a66TkFzxMHKtIsa8QA
+         bfdr2zlGBmfipXq10zgfUJZfSlRdS8+sp1UQ+I3c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Kinglong Mee <kinglongmee@gmail.com>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 165/298] netfilter: nf_tables: release new hooks on unsupported flowtable flags
+Subject: [PATCH 4.19 235/287] xprtrdma: treat all calls not a bcall when bc_serv is NULL
 Date:   Mon, 13 Jun 2022 12:10:59 +0200
-Message-Id: <20220613094929.936874350@linuxfoundation.org>
+Message-Id: <20220613094931.142922411@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,44 +56,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Kinglong Mee <kinglongmee@gmail.com>
 
-[ Upstream commit c271cc9febaaa1bcbc0842d1ee30466aa6148ea8 ]
+[ Upstream commit 11270e7ca268e8d61b5d9e5c3a54bd1550642c9c ]
 
-Release the list of new hooks that are pending to be registered in case
-that unsupported flowtable flags are provided.
+When a rdma server returns a fault format reply, nfs v3 client may
+treats it as a bcall when bc service is not exist.
 
-Fixes: 78d9f48f7f44 ("netfilter: nf_tables: add devices to existing flowtable")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+The debug message at rpcrdma_bc_receive_call are,
+
+[56579.837169] RPC:       rpcrdma_bc_receive_call: callback XID
+00000001, length=20
+[56579.837174] RPC:       rpcrdma_bc_receive_call: 00 00 00 01 00 00 00
+00 00 00 00 00 00 00 00 00 00 00 00 04
+
+After that, rpcrdma_bc_receive_call will meets NULL pointer as,
+
+[  226.057890] BUG: unable to handle kernel NULL pointer dereference at
+00000000000000c8
+...
+[  226.058704] RIP: 0010:_raw_spin_lock+0xc/0x20
+...
+[  226.059732] Call Trace:
+[  226.059878]  rpcrdma_bc_receive_call+0x138/0x327 [rpcrdma]
+[  226.060011]  __ib_process_cq+0x89/0x170 [ib_core]
+[  226.060092]  ib_cq_poll_work+0x26/0x80 [ib_core]
+[  226.060257]  process_one_work+0x1a7/0x360
+[  226.060367]  ? create_worker+0x1a0/0x1a0
+[  226.060440]  worker_thread+0x30/0x390
+[  226.060500]  ? create_worker+0x1a0/0x1a0
+[  226.060574]  kthread+0x116/0x130
+[  226.060661]  ? kthread_flush_work_fn+0x10/0x10
+[  226.060724]  ret_from_fork+0x35/0x40
+...
+
+Signed-off-by: Kinglong Mee <kinglongmee@gmail.com>
+Reviewed-by: Chuck Lever <chuck.lever@oracle.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ net/sunrpc/xprtrdma/rpc_rdma.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index ee7adb42a97d..2abad256f0aa 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -7348,11 +7348,15 @@ static int nft_flowtable_update(struct nft_ctx *ctx, const struct nlmsghdr *nlh,
+diff --git a/net/sunrpc/xprtrdma/rpc_rdma.c b/net/sunrpc/xprtrdma/rpc_rdma.c
+index f2eaf264726b..3d65a2bccfc7 100644
+--- a/net/sunrpc/xprtrdma/rpc_rdma.c
++++ b/net/sunrpc/xprtrdma/rpc_rdma.c
+@@ -980,6 +980,7 @@ static bool
+ rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep)
+ #if defined(CONFIG_SUNRPC_BACKCHANNEL)
+ {
++	struct rpc_xprt *xprt = &r_xprt->rx_xprt;
+ 	struct xdr_stream *xdr = &rep->rr_stream;
+ 	__be32 *p;
  
- 	if (nla[NFTA_FLOWTABLE_FLAGS]) {
- 		flags = ntohl(nla_get_be32(nla[NFTA_FLOWTABLE_FLAGS]));
--		if (flags & ~NFT_FLOWTABLE_MASK)
--			return -EOPNOTSUPP;
-+		if (flags & ~NFT_FLOWTABLE_MASK) {
-+			err = -EOPNOTSUPP;
-+			goto err_flowtable_update_hook;
-+		}
- 		if ((flowtable->data.flags & NFT_FLOWTABLE_HW_OFFLOAD) ^
--		    (flags & NFT_FLOWTABLE_HW_OFFLOAD))
--			return -EOPNOTSUPP;
-+		    (flags & NFT_FLOWTABLE_HW_OFFLOAD)) {
-+			err = -EOPNOTSUPP;
-+			goto err_flowtable_update_hook;
-+		}
- 	} else {
- 		flags = flowtable->data.flags;
- 	}
+@@ -1003,6 +1004,10 @@ rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep)
+ 	if (*p != cpu_to_be32(RPC_CALL))
+ 		return false;
+ 
++	/* No bc service. */
++	if (xprt->bc_serv == NULL)
++		return false;
++
+ 	/* Now that we are sure this is a backchannel call,
+ 	 * advance to the RPC header.
+ 	 */
 -- 
 2.35.1
 

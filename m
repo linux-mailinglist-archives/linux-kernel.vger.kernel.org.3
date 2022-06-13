@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22FD9549170
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB84548D43
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380259AbiFMN6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33020 "EHLO
+        id S1359324AbiFMNPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:15:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380153AbiFMNxm (ORCPT
+        with ESMTP id S1359242AbiFMNJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:53:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A20D712EA;
-        Mon, 13 Jun 2022 04:33:56 -0700 (PDT)
+        Mon, 13 Jun 2022 09:09:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5CDD38D9F;
+        Mon, 13 Jun 2022 04:19:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E93FB80EAB;
-        Mon, 13 Jun 2022 11:33:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B16F8C3411E;
-        Mon, 13 Jun 2022 11:33:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 57D1660EAE;
+        Mon, 13 Jun 2022 11:19:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67574C34114;
+        Mon, 13 Jun 2022 11:19:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120034;
-        bh=Rv2aAz7IGiMWJhkLpbWc7rlXzioTsKnTqNMEJ2Jd4O8=;
+        s=korg; t=1655119177;
+        bh=4oxHm1p9md4OCeao8DceTL8n6o67+unER+HdBMgk2n8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WMFgaVVHLltIJQiNBsXivBjD4FwtwDQasJqJCCyGfODrqzPk9jY0D9r90sR/ADnit
-         7Rh1kfS4GbP4lIBLH/H2p4CAW+tkOgCw9Z0TPUNU7raIwLR7K/oxTtvttd9b/r7DZR
-         G6JGvqi/583YQehPJnAjOmYcEatLRY5dUp0E0ZoU=
+        b=CfABduFJgM4RGCTakR26/ijHcnL61kPWSOVTxlasP1XyTVZn31Mm+L04xnAmeyvqh
+         mpIleytIu1EG7opMlccmThy0XF/YGQoTMH7KPZUQP4wZ0cSSTFCjXixrHwqHqU4z7h
+         kJDiU/RV/4E0K0y8X3sxanMIx01TCdtjNN3Q1IEk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 219/339] drm: imx: fix compiler warning with gcc-12
+Subject: [PATCH 5.15 142/247] xen: unexport __init-annotated xen_xlate_map_ballooned_pages()
 Date:   Mon, 13 Jun 2022 12:10:44 +0200
-Message-Id: <20220613094933.301731272@linuxfoundation.org>
+Message-Id: <20220613094927.261176974@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Torvalds <torvalds@linux-foundation.org>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-[ Upstream commit 7aefd8b53815274f3ef398d370a3c9b27dd9f00c ]
+[ Upstream commit dbac14a5a05ff8e1ce7c0da0e1f520ce39ec62ea ]
 
-Gcc-12 correctly warned about this code using a non-NULL pointer as a
-truth value:
+EXPORT_SYMBOL and __init is a bad combination because the .init.text
+section is freed up after the initialization. Hence, modules cannot
+use symbols annotated __init. The access to a freed symbol may end up
+with kernel panic.
 
-  drivers/gpu/drm/imx/ipuv3-crtc.c: In function ‘ipu_crtc_disable_planes’:
-  drivers/gpu/drm/imx/ipuv3-crtc.c:72:21: error: the comparison will always evaluate as ‘true’ for the address of ‘plane’ will never be NULL [-Werror=address]
-     72 |                 if (&ipu_crtc->plane[1] && plane == &ipu_crtc->plane[1]->base)
-        |                     ^
+modpost used to detect it, but it has been broken for a decade.
 
-due to the extraneous '&' address-of operator.
+Recently, I fixed modpost so it started to warn it again, then this
+showed up in linux-next builds.
 
-Philipp Zabel points out that The mistake had no adverse effect since
-the following condition doesn't actually dereference the NULL pointer,
-but the intent of the code was obviously to check for it, not to take
-the address of the member.
+There are two ways to fix it:
 
-Fixes: eb8c88808c83 ("drm/imx: add deferred plane disabling")
-Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+  - Remove __init
+  - Remove EXPORT_SYMBOL
+
+I chose the latter for this case because none of the in-tree call-sites
+(arch/arm/xen/enlighten.c, arch/x86/xen/grant-table.c) is compiled as
+modular.
+
+Fixes: 243848fc018c ("xen/grant-table: Move xlated_setup_gnttab_pages to common place")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Acked-by: Stefano Stabellini <sstabellini@kernel.org>
+Link: https://lore.kernel.org/r/20220606045920.4161881-1-masahiroy@kernel.org
+Signed-off-by: Juergen Gross <jgross@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/imx/ipuv3-crtc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/xen/xlate_mmu.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/imx/ipuv3-crtc.c b/drivers/gpu/drm/imx/ipuv3-crtc.c
-index 9c8829f945b2..f7863d6dea80 100644
---- a/drivers/gpu/drm/imx/ipuv3-crtc.c
-+++ b/drivers/gpu/drm/imx/ipuv3-crtc.c
-@@ -69,7 +69,7 @@ static void ipu_crtc_disable_planes(struct ipu_crtc *ipu_crtc,
- 	drm_atomic_crtc_state_for_each_plane(plane, old_crtc_state) {
- 		if (plane == &ipu_crtc->plane[0]->base)
- 			disable_full = true;
--		if (&ipu_crtc->plane[1] && plane == &ipu_crtc->plane[1]->base)
-+		if (ipu_crtc->plane[1] && plane == &ipu_crtc->plane[1]->base)
- 			disable_partial = true;
- 	}
+diff --git a/drivers/xen/xlate_mmu.c b/drivers/xen/xlate_mmu.c
+index 34742c6e189e..f17c4c03db30 100644
+--- a/drivers/xen/xlate_mmu.c
++++ b/drivers/xen/xlate_mmu.c
+@@ -261,7 +261,6 @@ int __init xen_xlate_map_ballooned_pages(xen_pfn_t **gfns, void **virt,
  
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(xen_xlate_map_ballooned_pages);
+ 
+ struct remap_pfn {
+ 	struct mm_struct *mm;
 -- 
 2.35.1
 

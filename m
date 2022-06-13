@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44710548E65
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 998E6549660
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356234AbiFMMzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
+        id S1381970AbiFMOMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355207AbiFMMxg (ORCPT
+        with ESMTP id S1381650AbiFMOEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:53:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822571EAE4;
-        Mon, 13 Jun 2022 04:12:43 -0700 (PDT)
+        Mon, 13 Jun 2022 10:04:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506AD2CDF6;
+        Mon, 13 Jun 2022 04:39:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3941A60B6B;
-        Mon, 13 Jun 2022 11:12:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 470B9C34114;
-        Mon, 13 Jun 2022 11:12:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8BE92B80E2C;
+        Mon, 13 Jun 2022 11:39:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7493C3411B;
+        Mon, 13 Jun 2022 11:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118757;
-        bh=VMEpLp3jl/DqBn9a/YOkRUBB4mDMM4VZdl9IrsDdYLE=;
+        s=korg; t=1655120396;
+        bh=QPpyqDNcc0ZpC7vz0Bfvva8MxCf7bn2sJAenfa8zVWM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YBch0KqCzXVA1JXsFn024I46KGhIBViwUMa/pg43qM9dRcepL/+uAstASSrwmHOWJ
-         ZBZ8qbku3ax8IsLnzTEuTNAYPbwcXmgMh2lxgcfdEzJC8lmSoeyR72F6QUzoxpWpx7
-         JlCCNd0RLBN/2EgoN5avl2Xpc4ODN/pthVL5PiNI=
+        b=MCQhJ4+3ZuUj85LC5ElNwFvBdxkwy2VocFEY7O93VtvagvErPGK4M1L7WUQhuuSwX
+         K+T7WlTlSruVSwaovI6wT7QLHaKSN0O7BUtreUDA1Dtz8W3d0Naiwjux4hdpUeuRkL
+         9edBM3Fm2hu+uZeN03UNb2pBn0Ed+5cS/qmYKvsM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Vaibhav Agarwal <vaibhav.sr@gmail.com>,
-        Mark Greer <mgreer@animalcreek.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
+        stable@vger.kernel.org, Sherry Sun <sherry.sun@nxp.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 002/247] staging: greybus: codecs: fix type confusion of list iterator variable
+Subject: [PATCH 5.17 010/298] tty: serial: fsl_lpuart: fix potential bug when using both of_alias_get_id and ida_simple_get
 Date:   Mon, 13 Jun 2022 12:08:24 +0200
-Message-Id: <20220613094922.952614659@linuxfoundation.org>
+Message-Id: <20220613094925.236514375@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,41 +54,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakob Koschel <jakobkoschel@gmail.com>
+From: Sherry Sun <sherry.sun@nxp.com>
 
-[ Upstream commit 84ef256550196bc06e6849a34224c998b45bd557 ]
+[ Upstream commit f398e0aa325c61fa20903833a5b534ecb8e6e418 ]
 
-If the list does not exit early then data == NULL and 'module' does not
-point to a valid list element.
-Using 'module' in such a case is not valid and was therefore removed.
+Now fsl_lpuart driver use both of_alias_get_id() and ida_simple_get() in
+.probe(), which has the potential bug. For example, when remove the
+lpuart7 alias in dts, of_alias_get_id() will return error, then call
+ida_simple_get() to allocate the id 0 for lpuart7, this may confilct
+with the lpuart4 which has alias 0.
 
-Fixes: 6dd67645f22c ("greybus: audio: Use single codec driver registration")
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Vaibhav Agarwal <vaibhav.sr@gmail.com>
-Reviewed-by: Mark Greer <mgreer@animalcreek.com>
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-Link: https://lore.kernel.org/r/20220321123626.3068639-1-jakobkoschel@gmail.com
+    aliases {
+	...
+        serial0 = &lpuart4;
+        serial1 = &lpuart5;
+        serial2 = &lpuart6;
+        serial3 = &lpuart7;
+    }
+
+So remove the ida_simple_get() in .probe(), return an error directly
+when calling of_alias_get_id() fails, which is consistent with other
+uart drivers behavior.
+
+Fixes: 3bc3206e1c0f ("serial: fsl_lpuart: Remove the alias node dependence")
+Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
+Link: https://lore.kernel.org/r/20220321112211.8895-1-sherry.sun@nxp.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/greybus/audio_codec.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/tty/serial/fsl_lpuart.c | 24 ++++--------------------
+ 1 file changed, 4 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/staging/greybus/audio_codec.c b/drivers/staging/greybus/audio_codec.c
-index b589cf6b1d03..e19b91e7a72e 100644
---- a/drivers/staging/greybus/audio_codec.c
-+++ b/drivers/staging/greybus/audio_codec.c
-@@ -599,8 +599,8 @@ static int gbcodec_mute_stream(struct snd_soc_dai *dai, int mute, int stream)
- 			break;
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index d32c25bc973b..b1307ef34468 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -239,8 +239,6 @@
+ /* IMX lpuart has four extra unused regs located at the beginning */
+ #define IMX_REG_OFF	0x10
+ 
+-static DEFINE_IDA(fsl_lpuart_ida);
+-
+ enum lpuart_type {
+ 	VF610_LPUART,
+ 	LS1021A_LPUART,
+@@ -276,7 +274,6 @@ struct lpuart_port {
+ 	int			rx_dma_rng_buf_len;
+ 	unsigned int		dma_tx_nents;
+ 	wait_queue_head_t	dma_wait;
+-	bool			id_allocated;
+ };
+ 
+ struct lpuart_soc_data {
+@@ -2711,23 +2708,18 @@ static int lpuart_probe(struct platform_device *pdev)
+ 
+ 	ret = of_alias_get_id(np, "serial");
+ 	if (ret < 0) {
+-		ret = ida_simple_get(&fsl_lpuart_ida, 0, UART_NR, GFP_KERNEL);
+-		if (ret < 0) {
+-			dev_err(&pdev->dev, "port line is full, add device failed\n");
+-			return ret;
+-		}
+-		sport->id_allocated = true;
++		dev_err(&pdev->dev, "failed to get alias id, errno %d\n", ret);
++		return ret;
  	}
- 	if (!data) {
--		dev_err(dai->dev, "%s:%s DATA connection missing\n",
--			dai->name, module->name);
-+		dev_err(dai->dev, "%s DATA connection missing\n",
-+			dai->name);
- 		mutex_unlock(&codec->lock);
- 		return -ENODEV;
+ 	if (ret >= ARRAY_SIZE(lpuart_ports)) {
+ 		dev_err(&pdev->dev, "serial%d out of range\n", ret);
+-		ret = -EINVAL;
+-		goto failed_out_of_range;
++		return -EINVAL;
  	}
+ 	sport->port.line = ret;
+ 
+ 	ret = lpuart_enable_clks(sport);
+ 	if (ret)
+-		goto failed_clock_enable;
++		return ret;
+ 	sport->port.uartclk = lpuart_get_baud_clk_rate(sport);
+ 
+ 	lpuart_ports[sport->port.line] = sport;
+@@ -2775,10 +2767,6 @@ static int lpuart_probe(struct platform_device *pdev)
+ 	uart_remove_one_port(&lpuart_reg, &sport->port);
+ failed_attach_port:
+ 	lpuart_disable_clks(sport);
+-failed_clock_enable:
+-failed_out_of_range:
+-	if (sport->id_allocated)
+-		ida_simple_remove(&fsl_lpuart_ida, sport->port.line);
+ 	return ret;
+ }
+ 
+@@ -2788,9 +2776,6 @@ static int lpuart_remove(struct platform_device *pdev)
+ 
+ 	uart_remove_one_port(&lpuart_reg, &sport->port);
+ 
+-	if (sport->id_allocated)
+-		ida_simple_remove(&fsl_lpuart_ida, sport->port.line);
+-
+ 	lpuart_disable_clks(sport);
+ 
+ 	if (sport->dma_tx_chan)
+@@ -2920,7 +2905,6 @@ static int __init lpuart_serial_init(void)
+ 
+ static void __exit lpuart_serial_exit(void)
+ {
+-	ida_destroy(&fsl_lpuart_ida);
+ 	platform_driver_unregister(&lpuart_driver);
+ 	uart_unregister_driver(&lpuart_reg);
+ }
 -- 
 2.35.1
 

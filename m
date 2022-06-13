@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C82548C38
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2E3548EC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382113AbiFMOM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
+        id S1354521AbiFMLc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382110AbiFMOFP (ORCPT
+        with ESMTP id S1354247AbiFML3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:05:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE2B9398E;
-        Mon, 13 Jun 2022 04:40:23 -0700 (PDT)
+        Mon, 13 Jun 2022 07:29:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3852A3ED05;
+        Mon, 13 Jun 2022 03:43:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AABFD60EAE;
-        Mon, 13 Jun 2022 11:40:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B17D4C34114;
-        Mon, 13 Jun 2022 11:40:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD6146120F;
+        Mon, 13 Jun 2022 10:43:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB89C34114;
+        Mon, 13 Jun 2022 10:43:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120421;
-        bh=0fLRRqfF3K12v1PzU3KVqPJmFNu0jucA711johY6/OU=;
+        s=korg; t=1655116984;
+        bh=Xvs3Hif9Ug6sEW4GtZhKm3Ql8kmVD8B7BE1wcEUV/Fs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b4hnvDYQDaNfwGdgyuIg93ojy+PkdX2Eoly/NR0Ml9viAZVV5DSM0I79wUC7yhPo4
-         FvbfhZOemZNQCxsAVpvLxOm1l0XuOJr/Cn7JbbxE1savdEpHiKfzNLKFyB4pL7n6Pk
-         0CVgoKa0MCQofHoowNjezDRi7D+8IGb/N0j1tsIo=
+        b=nOebNRsVgO0I871ScSKqblSmlQRgNHKrlSo5Y1X3N+rQOjm0Qu3QSWIQkPZo4XG/S
+         ALtWTJKwohYq9COxkexPWyE6Ro+pnZKTVy5IsOqdZqOC9OT0Bawk05MqedaN6v0BMP
+         EW3RLoQhWF+tputKPa62t5xawhCUEBCUPOBaxGmY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 027/298] rpmsg: virtio: Fix possible double free in rpmsg_probe()
+        stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.4 248/411] Kconfig: Add option for asm goto w/ tied outputs to workaround clang-13 bug
 Date:   Mon, 13 Jun 2022 12:08:41 +0200
-Message-Id: <20220613094925.754205866@linuxfoundation.org>
+Message-Id: <20220613094936.209985399@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Sean Christopherson <seanjc@google.com>
 
-[ Upstream commit c2eecefec5df1306eafce28ccdf1ca159a552ecc ]
+commit 1aa0e8b144b6474c4914439d232d15bfe883636b upstream.
 
-vch will be free in virtio_rpmsg_release_device() when
-rpmsg_ns_register_device() fails. There is no need to call kfree() again.
+Add a config option to guard (future) usage of asm_volatile_goto() that
+includes "tied outputs", i.e. "+" constraints that specify both an input
+and output parameter.  clang-13 has a bug[1] that causes compilation of
+such inline asm to fail, and KVM wants to use a "+m" constraint to
+implement a uaccess form of CMPXCHG[2].  E.g. the test code fails with
 
-Fix this by changing error path from free_vch to free_ctrldev.
+  <stdin>:1:29: error: invalid operand in inline asm: '.long (${1:l}) - .'
+  int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }
+                            ^
+  <stdin>:1:29: error: unknown token in expression
+  <inline asm>:1:9: note: instantiated into assembly here
+          .long () - .
+                 ^
+  2 errors generated.
 
-Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Tested-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Link: https://lore.kernel.org/r/20220426060536.15594-2-hbh25y@gmail.com
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+on clang-13, but passes on gcc (with appropriate asm goto support).  The
+bug is fixed in clang-14, but won't be backported to clang-13 as the
+changes are too invasive/risky.
+
+gcc also had a similar bug[3], fixed in gcc-11, where gcc failed to
+account for its behavior of assigning two numbers to tied outputs (one
+for input, one for output) when evaluating symbolic references.
+
+[1] https://github.com/ClangBuiltLinux/linux/issues/1512
+[2] https://lore.kernel.org/all/YfMruK8%2F1izZ2VHS@google.com
+[3] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98096
+
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20220202004945.2540433-2-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/rpmsg/virtio_rpmsg_bus.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ init/Kconfig |    5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-index ac764e04c898..1c39e9c4fa02 100644
---- a/drivers/rpmsg/virtio_rpmsg_bus.c
-+++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-@@ -973,7 +973,8 @@ static int rpmsg_probe(struct virtio_device *vdev)
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -33,6 +33,11 @@ config CC_CAN_LINK
+ config CC_HAS_ASM_GOTO
+ 	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
  
- 		err = rpmsg_ns_register_device(rpdev_ns);
- 		if (err)
--			goto free_vch;
-+			/* vch will be free in virtio_rpmsg_release_device() */
-+			goto free_ctrldev;
- 	}
++config CC_HAS_ASM_GOTO_TIED_OUTPUT
++	depends on CC_HAS_ASM_GOTO_OUTPUT
++	# Detect buggy gcc and clang, fixed in gcc-11 clang-14.
++	def_bool $(success,echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | $CC -x c - -c -o /dev/null)
++
+ config TOOLS_SUPPORT_RELR
+ 	def_bool $(success,env "CC=$(CC)" "LD=$(LD)" "NM=$(NM)" "OBJCOPY=$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
  
- 	/*
-@@ -997,8 +998,6 @@ static int rpmsg_probe(struct virtio_device *vdev)
- 
- 	return 0;
- 
--free_vch:
--	kfree(vch);
- free_ctrldev:
- 	rpmsg_virtio_del_ctrl_dev(rpdev_ctrl);
- free_coherent:
--- 
-2.35.1
-
 
 

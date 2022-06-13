@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732F8549D2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A7F549D22
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346296AbiFMTPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39048 "EHLO
+        id S243736AbiFMTOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:14:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244254AbiFMTOz (ORCPT
+        with ESMTP id S1348906AbiFMTNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:14:55 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470E0DFBD;
-        Mon, 13 Jun 2022 10:32:19 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 8BA722D6;
-        Mon, 13 Jun 2022 17:32:18 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 8BA722D6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1655141538; bh=CAbykZa7LGiaL2uhDi89WkbWfjlRfKkHuNP3EFQo03s=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=N42M3GdSdWLMCo+/tgB3jVt6aSIRdm0RFtxr9QoLJDLbbauCOZZV/SFLtBq062D/1
-         5Xg6JO9smW9/dAEFIJ/0RoQmwP9F0pyqRArtYuljLm2oZ/4zO6qq5vVAXSjFBjcXTC
-         1mFyIB2na3LoZwX+1rNLS82NQfN4to/Cmyv1fqzBYqr1JYLL74DBwJd952tYKuN10o
-         ADVUzrwcwkHQsCnt9aqd6y2HFKPTAV+xT9tYuYoPxa0VuYBDGmJrn9zN7CSFgi5CCF
-         v1P6gGOmFPz6guG2M4pHFzDL4pof3LEBOBr60sNzEtLf0mVbuVKQIwtWdemeNDmKMi
-         B43eEj9evcuzQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Martin =?utf-8?Q?Li=C5=A1ka?= <mliska@suse.cz>, akiyks@gmail.com
-Cc:     bagasdotme@gmail.com, catalin.marinas@arm.com,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mliska@suse.cz, will@kernel.org
-Subject: Re: [PATCH v3] docs/arm64: elf_hwcaps: Unify HWCAP lists as
- description lists
-In-Reply-To: <d0e576ab-6121-b7d7-da5b-7750f05ca7f4@suse.cz>
-References: <0846c96d-62fa-555f-b0ab-1f5ec33fd5fb@gmail.com>
- <d0e576ab-6121-b7d7-da5b-7750f05ca7f4@suse.cz>
-Date:   Mon, 13 Jun 2022 11:32:17 -0600
-Message-ID: <874k0o1nby.fsf@meer.lwn.net>
+        Mon, 13 Jun 2022 15:13:40 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47F3645ACD;
+        Mon, 13 Jun 2022 10:34:37 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A65923A;
+        Mon, 13 Jun 2022 10:34:37 -0700 (PDT)
+Received: from bogus (unknown [10.57.4.242])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 450673F792;
+        Mon, 13 Jun 2022 10:34:35 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 18:33:48 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc:     mst@redhat.com, jasowang@redhat.com, cristian.marussi@arm.com,
+        Sudeep Holla <sudeep.holla@arm.com>, quic_sramana@quicinc.com,
+        vincent.guittot@linaro.org, linux-arm-kernel@lists.infradead.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC 1/3] dt-bindings: arm: Add document for SCMI Virtio backend
+ device
+Message-ID: <20220613173348.t4ibrtzzs5pe6nii@bogus>
+References: <20220609071956.5183-1-quic_neeraju@quicinc.com>
+ <20220609071956.5183-2-quic_neeraju@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220609071956.5183-2-quic_neeraju@quicinc.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,18 +47,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Martin Li=C5=A1ka <mliska@suse.cz> writes:
-
-> Signed-off-by: Martin Liska <mliska@suse.cz>
+On Thu, Jun 09, 2022 at 12:49:54PM +0530, Neeraj Upadhyay wrote:
+> Document the properties for ARM SCMI Virtio backend device
+> node.
+> 
+> Signed-off-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
 > ---
->  Documentation/arm64/elf_hwcaps.rst | 23 -----------------------
->  1 file changed, 23 deletions(-)
+>  .../firmware/arm,scmi-vio-backend.yaml        | 85 +++++++++++++++++++
+>  1 file changed, 85 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/firmware/arm,scmi-vio-backend.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/firmware/arm,scmi-vio-backend.yaml b/Documentation/devicetree/bindings/firmware/arm,scmi-vio-backend.yaml
+> new file mode 100644
+> index 000000000000..c95d4e093a3c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/firmware/arm,scmi-vio-backend.yaml
+> @@ -0,0 +1,85 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/firmware/arm,scmi-vio-backend.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: System Control and Management Interface (SCMI) Virtio backend bindings
+> +
+> +maintainers:
+> +  - Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> +
+> +description: |
+> +  This binding defines the interface for configuring the ARM SCMI Virtio
+> +  backend using device tree.
+> +
+> +properties:
+> +  $nodename:
+> +    const: scmi-vio-backend
+> +
+> +  compatible:
+> +    const: arm,scmi-vio-backend
+> +
 
-This patch has been sitting for about three weeks, which seems like long
-enough, so I've gone ahead and applied it.  I've added a bit of a
-changelog to it, which I'd rather not have to do; Martin, please be sure
-to include a changelog in future patches.
+One only change between this and the existing DT binding is the compatible.
+I don't see any explanation here as why this deserves to be separate binding
+document. What can't you just add the compatible to the existing one if there
+is no other change. If not, please provide details and examples on how it
+differs.
 
-Thanks,
-
-jon
+-- 
+Regards,
+Sudeep

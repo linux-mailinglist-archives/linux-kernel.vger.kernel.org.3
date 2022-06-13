@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2CA8549881
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1AC549742
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384806AbiFMOeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
+        id S1380521AbiFMOAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384636AbiFMO3y (ORCPT
+        with ESMTP id S1380338AbiFMNyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:29:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D933DA5A93;
-        Mon, 13 Jun 2022 04:47:57 -0700 (PDT)
+        Mon, 13 Jun 2022 09:54:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237C642EFC;
+        Mon, 13 Jun 2022 04:34:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 176C8B80ECC;
-        Mon, 13 Jun 2022 11:47:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6690EC34114;
-        Mon, 13 Jun 2022 11:47:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8E1E1B80EC7;
+        Mon, 13 Jun 2022 11:34:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B1CC3411F;
+        Mon, 13 Jun 2022 11:34:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120845;
-        bh=dYN5m8A1X57ja0pJf/+4aO2HmBpmziRUzvX2+F8DtVk=;
+        s=korg; t=1655120093;
+        bh=wH7/90BcNZzwB2bJOgzMEcaResWqJwE5uqhLmPT9ENA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A03Xpt5ID2WkfaTNcX3R5w57hmrE3DYvhtlzLxPSafGXPCLvxqq254lAgr/IYHV4t
-         nFvOSJ7P0rs8ppeaRwxlyHd1ntYBzRDgwE4/nM7vc53HHdRxkepn9zRU35hk1Pg3bY
-         utRsAlem/Y8OOoPXqSDdXpyRdwqv0Od43UjsIMkE=
+        b=plhwczOrxv8KhMOrOQypvl5Pyv9UJDyZNZBZS6JsLXjCW72DapxDc6OIm/4u5a7L4
+         X+UbwbBKaaiWjgSsqOCf9o9oB48HmtzEw0BiaIDnvX4Qob9OK44ykFxM08ZSkl/J1D
+         I9ly82FEGO9OJagxQraWmqYElCGLFQFm4XGCcNHs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        stable@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 179/298] i40e: xsk: Move tmp desc array from driver to pool
+Subject: [PATCH 5.18 248/339] clocksource/drivers/sp804: Avoid error on multiple instances
 Date:   Mon, 13 Jun 2022 12:11:13 +0200
-Message-Id: <20220613094930.363070696@linuxfoundation.org>
+Message-Id: <20220613094934.176246058@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,248 +56,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Magnus Karlsson <magnus.karlsson@intel.com>
+From: Andre Przywara <andre.przywara@arm.com>
 
-[ Upstream commit d1bc532e99becf104635ed4da6fefa306f452321 ]
+[ Upstream commit a98399cbc1e05f7b977419f03905501d566cf54e ]
 
-Move desc_array from the driver to the pool. The reason behind this is
-that we can then reuse this array as a temporary storage for descriptors
-in all zero-copy drivers that use the batched interface. This will make
-it easier to add batching to more drivers.
+When a machine sports more than one SP804 timer instance, we only bring
+up the first one, since multiple timers of the same kind are not useful
+to Linux. As this is intentional behaviour, we should not return an
+error message, as we do today:
+===============
+[    0.000800] Failed to initialize '/bus@8000000/motherboard-bus@8000000/iofpga-bus@300000000/timer@120000': -22
+===============
 
-i40e is the only driver that has a batched Tx zero-copy
-implementation, so no need to touch any other driver.
+Replace the -EINVAL return with a debug message and return 0 instead.
 
-Signed-off-by: Magnus Karlsson <magnus.karlsson@intel.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Link: https://lore.kernel.org/bpf/20220125160446.78976-6-maciej.fijalkowski@intel.com
+Also we do not reach the init function anymore if the DT node is
+disabled (as this is now handled by OF_DECLARE), so remove the explicit
+check for that case.
+
+This fixes a long standing bogus error when booting ARM's fastmodels.
+
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+Link: https://lore.kernel.org/r/20220506162522.3675399-1-andre.przywara@arm.com
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_txrx.c | 11 -----------
- drivers/net/ethernet/intel/i40e/i40e_txrx.h |  1 -
- drivers/net/ethernet/intel/i40e/i40e_xsk.c  |  4 ++--
- include/net/xdp_sock_drv.h                  |  5 ++---
- include/net/xsk_buff_pool.h                 |  1 +
- net/xdp/xsk.c                               | 13 ++++++-------
- net/xdp/xsk_buff_pool.c                     |  7 +++++++
- net/xdp/xsk_queue.h                         | 12 ++++++------
- 8 files changed, 24 insertions(+), 30 deletions(-)
+ drivers/clocksource/timer-sp804.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.c b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-index 66cc79500c10..af9c88e71452 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.c
-@@ -830,8 +830,6 @@ void i40e_free_tx_resources(struct i40e_ring *tx_ring)
- 	i40e_clean_tx_ring(tx_ring);
- 	kfree(tx_ring->tx_bi);
- 	tx_ring->tx_bi = NULL;
--	kfree(tx_ring->xsk_descs);
--	tx_ring->xsk_descs = NULL;
+diff --git a/drivers/clocksource/timer-sp804.c b/drivers/clocksource/timer-sp804.c
+index 401d592e85f5..e6a87f4af2b5 100644
+--- a/drivers/clocksource/timer-sp804.c
++++ b/drivers/clocksource/timer-sp804.c
+@@ -259,6 +259,11 @@ static int __init sp804_of_init(struct device_node *np, struct sp804_timer *time
+ 	struct clk *clk1, *clk2;
+ 	const char *name = of_get_property(np, "compatible", NULL);
  
- 	if (tx_ring->desc) {
- 		dma_free_coherent(tx_ring->dev, tx_ring->size,
-@@ -1433,13 +1431,6 @@ int i40e_setup_tx_descriptors(struct i40e_ring *tx_ring)
- 	if (!tx_ring->tx_bi)
- 		goto err;
- 
--	if (ring_is_xdp(tx_ring)) {
--		tx_ring->xsk_descs = kcalloc(I40E_MAX_NUM_DESCRIPTORS, sizeof(*tx_ring->xsk_descs),
--					     GFP_KERNEL);
--		if (!tx_ring->xsk_descs)
--			goto err;
--	}
--
- 	u64_stats_init(&tx_ring->syncp);
- 
- 	/* round up to nearest 4K */
-@@ -1463,8 +1454,6 @@ int i40e_setup_tx_descriptors(struct i40e_ring *tx_ring)
- 	return 0;
- 
- err:
--	kfree(tx_ring->xsk_descs);
--	tx_ring->xsk_descs = NULL;
- 	kfree(tx_ring->tx_bi);
- 	tx_ring->tx_bi = NULL;
- 	return -ENOMEM;
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_txrx.h b/drivers/net/ethernet/intel/i40e/i40e_txrx.h
-index bfc2845c99d1..f6d91fa1562e 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_txrx.h
-+++ b/drivers/net/ethernet/intel/i40e/i40e_txrx.h
-@@ -390,7 +390,6 @@ struct i40e_ring {
- 	u16 rx_offset;
- 	struct xdp_rxq_info xdp_rxq;
- 	struct xsk_buff_pool *xsk_pool;
--	struct xdp_desc *xsk_descs;      /* For storing descriptors in the AF_XDP ZC path */
- } ____cacheline_internodealigned_in_smp;
- 
- static inline bool ring_uses_build_skb(struct i40e_ring *ring)
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index e5e72b5bb619..c1d25b0b0ca2 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -470,11 +470,11 @@ static void i40e_set_rs_bit(struct i40e_ring *xdp_ring)
-  **/
- static bool i40e_xmit_zc(struct i40e_ring *xdp_ring, unsigned int budget)
- {
--	struct xdp_desc *descs = xdp_ring->xsk_descs;
-+	struct xdp_desc *descs = xdp_ring->xsk_pool->tx_descs;
- 	u32 nb_pkts, nb_processed = 0;
- 	unsigned int total_bytes = 0;
- 
--	nb_pkts = xsk_tx_peek_release_desc_batch(xdp_ring->xsk_pool, descs, budget);
-+	nb_pkts = xsk_tx_peek_release_desc_batch(xdp_ring->xsk_pool, budget);
- 	if (!nb_pkts)
- 		return true;
- 
-diff --git a/include/net/xdp_sock_drv.h b/include/net/xdp_sock_drv.h
-index 443d45951564..4aa031849668 100644
---- a/include/net/xdp_sock_drv.h
-+++ b/include/net/xdp_sock_drv.h
-@@ -13,7 +13,7 @@
- 
- void xsk_tx_completed(struct xsk_buff_pool *pool, u32 nb_entries);
- bool xsk_tx_peek_desc(struct xsk_buff_pool *pool, struct xdp_desc *desc);
--u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *desc, u32 max);
-+u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max);
- void xsk_tx_release(struct xsk_buff_pool *pool);
- struct xsk_buff_pool *xsk_get_pool_from_qid(struct net_device *dev,
- 					    u16 queue_id);
-@@ -142,8 +142,7 @@ static inline bool xsk_tx_peek_desc(struct xsk_buff_pool *pool,
- 	return false;
- }
- 
--static inline u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *desc,
--						 u32 max)
-+static inline u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max)
- {
- 	return 0;
- }
-diff --git a/include/net/xsk_buff_pool.h b/include/net/xsk_buff_pool.h
-index ddeefc4a1040..5554ee75e7da 100644
---- a/include/net/xsk_buff_pool.h
-+++ b/include/net/xsk_buff_pool.h
-@@ -60,6 +60,7 @@ struct xsk_buff_pool {
- 	 */
- 	dma_addr_t *dma_pages;
- 	struct xdp_buff_xsk *heads;
-+	struct xdp_desc *tx_descs;
- 	u64 chunk_mask;
- 	u64 addrs_cnt;
- 	u32 free_list_cnt;
-diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-index 39a82bfb5caa..7d3a00cb24ec 100644
---- a/net/xdp/xsk.c
-+++ b/net/xdp/xsk.c
-@@ -343,9 +343,9 @@ bool xsk_tx_peek_desc(struct xsk_buff_pool *pool, struct xdp_desc *desc)
- }
- EXPORT_SYMBOL(xsk_tx_peek_desc);
- 
--static u32 xsk_tx_peek_release_fallback(struct xsk_buff_pool *pool, struct xdp_desc *descs,
--					u32 max_entries)
-+static u32 xsk_tx_peek_release_fallback(struct xsk_buff_pool *pool, u32 max_entries)
- {
-+	struct xdp_desc *descs = pool->tx_descs;
- 	u32 nb_pkts = 0;
- 
- 	while (nb_pkts < max_entries && xsk_tx_peek_desc(pool, &descs[nb_pkts]))
-@@ -355,8 +355,7 @@ static u32 xsk_tx_peek_release_fallback(struct xsk_buff_pool *pool, struct xdp_d
- 	return nb_pkts;
- }
- 
--u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *descs,
--				   u32 max_entries)
-+u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, u32 max_entries)
- {
- 	struct xdp_sock *xs;
- 	u32 nb_pkts;
-@@ -365,7 +364,7 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *
- 	if (!list_is_singular(&pool->xsk_tx_list)) {
- 		/* Fallback to the non-batched version */
- 		rcu_read_unlock();
--		return xsk_tx_peek_release_fallback(pool, descs, max_entries);
-+		return xsk_tx_peek_release_fallback(pool, max_entries);
- 	}
- 
- 	xs = list_first_or_null_rcu(&pool->xsk_tx_list, struct xdp_sock, tx_list);
-@@ -374,7 +373,7 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *
- 		goto out;
- 	}
- 
--	nb_pkts = xskq_cons_peek_desc_batch(xs->tx, descs, pool, max_entries);
-+	nb_pkts = xskq_cons_peek_desc_batch(xs->tx, pool, max_entries);
- 	if (!nb_pkts) {
- 		xs->tx->queue_empty_descs++;
- 		goto out;
-@@ -386,7 +385,7 @@ u32 xsk_tx_peek_release_desc_batch(struct xsk_buff_pool *pool, struct xdp_desc *
- 	 * packets. This avoids having to implement any buffering in
- 	 * the Tx path.
- 	 */
--	nb_pkts = xskq_prod_reserve_addr_batch(pool->cq, descs, nb_pkts);
-+	nb_pkts = xskq_prod_reserve_addr_batch(pool->cq, pool->tx_descs, nb_pkts);
- 	if (!nb_pkts)
- 		goto out;
- 
-diff --git a/net/xdp/xsk_buff_pool.c b/net/xdp/xsk_buff_pool.c
-index 0202a90b65e3..af040ffa14ff 100644
---- a/net/xdp/xsk_buff_pool.c
-+++ b/net/xdp/xsk_buff_pool.c
-@@ -37,6 +37,7 @@ void xp_destroy(struct xsk_buff_pool *pool)
- 	if (!pool)
- 		return;
- 
-+	kvfree(pool->tx_descs);
- 	kvfree(pool->heads);
- 	kvfree(pool);
- }
-@@ -58,6 +59,12 @@ struct xsk_buff_pool *xp_create_and_assign_umem(struct xdp_sock *xs,
- 	if (!pool->heads)
- 		goto out;
- 
-+	if (xs->tx) {
-+		pool->tx_descs = kcalloc(xs->tx->nentries, sizeof(*pool->tx_descs), GFP_KERNEL);
-+		if (!pool->tx_descs)
-+			goto out;
++	if (initialized) {
++		pr_debug("%pOF: skipping further SP804 timer device\n", np);
++		return 0;
 +	}
 +
- 	pool->chunk_mask = ~((u64)umem->chunk_size - 1);
- 	pool->addrs_cnt = umem->size;
- 	pool->heads_cnt = umem->chunks;
-diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-index e9aa2c236356..638138fbe475 100644
---- a/net/xdp/xsk_queue.h
-+++ b/net/xdp/xsk_queue.h
-@@ -205,11 +205,11 @@ static inline bool xskq_cons_read_desc(struct xsk_queue *q,
- 	return false;
- }
+ 	base = of_iomap(np, 0);
+ 	if (!base)
+ 		return -ENXIO;
+@@ -270,11 +275,6 @@ static int __init sp804_of_init(struct device_node *np, struct sp804_timer *time
+ 	writel(0, timer1_base + timer->ctrl);
+ 	writel(0, timer2_base + timer->ctrl);
  
--static inline u32 xskq_cons_read_desc_batch(struct xsk_queue *q,
--					    struct xdp_desc *descs,
--					    struct xsk_buff_pool *pool, u32 max)
-+static inline u32 xskq_cons_read_desc_batch(struct xsk_queue *q, struct xsk_buff_pool *pool,
-+					    u32 max)
- {
- 	u32 cached_cons = q->cached_cons, nb_entries = 0;
-+	struct xdp_desc *descs = pool->tx_descs;
- 
- 	while (cached_cons != q->cached_prod && nb_entries < max) {
- 		struct xdp_rxtx_ring *ring = (struct xdp_rxtx_ring *)q->ring;
-@@ -282,12 +282,12 @@ static inline bool xskq_cons_peek_desc(struct xsk_queue *q,
- 	return xskq_cons_read_desc(q, desc, pool);
- }
- 
--static inline u32 xskq_cons_peek_desc_batch(struct xsk_queue *q, struct xdp_desc *descs,
--					    struct xsk_buff_pool *pool, u32 max)
-+static inline u32 xskq_cons_peek_desc_batch(struct xsk_queue *q, struct xsk_buff_pool *pool,
-+					    u32 max)
- {
- 	u32 entries = xskq_cons_nb_entries(q, max);
- 
--	return xskq_cons_read_desc_batch(q, descs, pool, entries);
-+	return xskq_cons_read_desc_batch(q, pool, entries);
- }
- 
- /* To improve performance in the xskq_cons_release functions, only update local state here.
+-	if (initialized || !of_device_is_available(np)) {
+-		ret = -EINVAL;
+-		goto err;
+-	}
+-
+ 	clk1 = of_clk_get(np, 0);
+ 	if (IS_ERR(clk1))
+ 		clk1 = NULL;
 -- 
 2.35.1
 

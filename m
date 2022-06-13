@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AAC5493ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F3C54925C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238040AbiFMLh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:37:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
+        id S1352405AbiFMML3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354846AbiFMLaN (ORCPT
+        with ESMTP id S1358852AbiFMMEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:30:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078FF3FBE3;
-        Mon, 13 Jun 2022 03:45:54 -0700 (PDT)
+        Mon, 13 Jun 2022 08:04:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808D950462;
+        Mon, 13 Jun 2022 03:58:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF6E6B80D19;
-        Mon, 13 Jun 2022 10:45:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0987CC34114;
-        Mon, 13 Jun 2022 10:45:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 32C2361372;
+        Mon, 13 Jun 2022 10:58:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4332AC34114;
+        Mon, 13 Jun 2022 10:58:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117151;
-        bh=BeBqk5VRdbWi7Ojglx8xzis/qKTh3Zs6eNwGThBryHE=;
+        s=korg; t=1655117884;
+        bh=dt8xZhMxuuCWYJ5EOaNtQVPRqm0fP9U0QnW2yVBRQiU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AUojk8F988vEujsT8SCMLQiacJDkhWUi8AVjXBYugG9v7jTUaN/zrK9cff4GxMIVa
-         Yp/QRXLPUdrrt6fYG3ZiF+H8BJogGjMeRPz/uP+EnoYdNU4wwtBtFrcMyhIkyGdS1/
-         zwgFxmDJjWPeI4wmCvE4JTUB+WbAbxf0TGaXeFNs=
+        b=kq7p4xPH3jFdsEVsv9QXSjQkZlsNbj/JWFijX4h+2OtRpmFPRUE+vRtfcJNya4PH1
+         kAqx5wyZ9H3bIuwJZ7UYgtYUNWi2MycP+iRIDgdFTxmIo9jDPeJi86WyDklVDZXmt6
+         HUPUTXCdcJKmv/lscLb5yQXaFESmKhVakOyqXzZc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
-        Anup Patel <anup@brainfault.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 304/411] clocksource/drivers/riscv: Events are stopped during CPU suspend
+        stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH 4.19 153/287] PCI: qcom: Fix runtime PM imbalance on probe errors
 Date:   Mon, 13 Jun 2022 12:09:37 +0200
-Message-Id: <20220613094937.868065045@linuxfoundation.org>
+Message-Id: <20220613094928.517197940@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +58,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Samuel Holland <samuel@sholland.org>
+From: Johan Hovold <johan+linaro@kernel.org>
 
-[ Upstream commit 232ccac1bd9b5bfe73895f527c08623e7fa0752d ]
+commit 87d83b96c8d6c6c2d2096bd0bdba73bcf42b8ef0 upstream.
 
-Some implementations of the SBI time extension depend on hart-local
-state (for example, CSRs) that are lost or hardware that is powered
-down when a CPU is suspended. To be safe, the clockevents driver
-cannot assume that timer IRQs will be received during CPU suspend.
+Drop the leftover pm_runtime_disable() calls from the late probe error
+paths that would, for example, prevent runtime PM from being reenabled
+after a probe deferral.
 
-Fixes: 62b019436814 ("clocksource: new RISC-V SBI timer driver")
-Signed-off-by: Samuel Holland <samuel@sholland.org>
-Reviewed-by: Anup Patel <anup@brainfault.org>
-Link: https://lore.kernel.org/r/20220509012121.40031-1-samuel@sholland.org
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220401133854.10421-2-johan+linaro@kernel.org
+Fixes: 6e5da6f7d824 ("PCI: qcom: Fix error handling in runtime PM support")
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
+Cc: stable@vger.kernel.org      # 4.20
+Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clocksource/timer-riscv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pci/controller/dwc/pcie-qcom.c |    5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
-index 4b04ffbe5e7e..e3be5c2f57b8 100644
---- a/drivers/clocksource/timer-riscv.c
-+++ b/drivers/clocksource/timer-riscv.c
-@@ -26,7 +26,7 @@ static int riscv_clock_next_event(unsigned long delta,
+--- a/drivers/pci/controller/dwc/pcie-qcom.c
++++ b/drivers/pci/controller/dwc/pcie-qcom.c
+@@ -1331,17 +1331,14 @@ static int qcom_pcie_probe(struct platfo
+ 	}
  
- static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_event) = {
- 	.name			= "riscv_timer_clockevent",
--	.features		= CLOCK_EVT_FEAT_ONESHOT,
-+	.features		= CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_C3STOP,
- 	.rating			= 100,
- 	.set_next_event		= riscv_clock_next_event,
- };
--- 
-2.35.1
-
+ 	ret = phy_init(pcie->phy);
+-	if (ret) {
+-		pm_runtime_disable(&pdev->dev);
++	if (ret)
+ 		goto err_pm_runtime_put;
+-	}
+ 
+ 	platform_set_drvdata(pdev, pcie);
+ 
+ 	ret = dw_pcie_host_init(pp);
+ 	if (ret) {
+ 		dev_err(dev, "cannot initialize host\n");
+-		pm_runtime_disable(&pdev->dev);
+ 		goto err_pm_runtime_put;
+ 	}
+ 
 
 

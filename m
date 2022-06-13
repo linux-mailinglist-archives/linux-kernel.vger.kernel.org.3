@@ -2,54 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC99549351
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D045489B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385564AbiFMOuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
+        id S1381045AbiFMOHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385502AbiFMOpu (ORCPT
+        with ESMTP id S1380851AbiFMOCI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:45:50 -0400
+        Mon, 13 Jun 2022 10:02:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A81FBC6C2;
-        Mon, 13 Jun 2022 04:52:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3BC8E18C;
+        Mon, 13 Jun 2022 04:38:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCFFF61425;
-        Mon, 13 Jun 2022 11:51:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C57C34114;
-        Mon, 13 Jun 2022 11:51:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 10AFA612AC;
+        Mon, 13 Jun 2022 11:38:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 233CBC34114;
+        Mon, 13 Jun 2022 11:38:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655121105;
-        bh=NXa1J+I2sAkxDWNmDYdzt2EPtQnTfLbT30iET12VL7w=;
+        s=korg; t=1655120292;
+        bh=ESJOXc+ulgUDWDeGKaExj2KeP38AFg76sXrosl5PjqU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BkMAK0cNcK1tgRK5R9zxzqhOREtZ2atrf6VKPyMwl1eeiB2G0IPfO6FDiqynJVkcS
-         uVJOFri/AFcMaeOWCQd3yAf+F8kFN4nvnl4nHivU/YTqz4rb8C8KpuZCoXc8EQeVC6
-         aujYrK1l98gF0UeFWLectxBtUJ/520c7JvoXR/5A=
+        b=VEP5UoulzWNunN4RrukIYGNzdMyrmAEBM3FdO7olRgEspP3QM2er0Ay4k2by/d7o+
+         CWWMiXaFVZEfZEuvN8E9kj6qpd7kII7mTJc96/c988tTId3DZ732J/dMOEejWyDIpR
+         h6mGXE5pfLbwWE5Axg6c8jdmVCSWudZOI/w6UD6Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 250/298] drm/amd/pm: use bitmap_{from,to}_arr32 where appropriate
-Date:   Mon, 13 Jun 2022 12:12:24 +0200
-Message-Id: <20220613094932.664902223@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        Olivier Matz <olivier.matz@6wind.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.18 320/339] ixgbe: fix bcast packets Rx on VF after promisc removal
+Date:   Mon, 13 Jun 2022 12:12:25 +0200
+Message-Id: <20220613094936.453729811@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -64,59 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yury Norov <yury.norov@gmail.com>
+From: Olivier Matz <olivier.matz@6wind.com>
 
-[ Upstream commit 525d6515604eb1373ce5e6372a6b6640953b2d6a ]
+commit 803e9895ea2b0fe80bc85980ae2d7a7e44037914 upstream.
 
-The smu_v1X_0_set_allowed_mask() uses bitmap_copy() to convert
-bitmap to 32-bit array. This may be wrong due to endiannes issues.
-Fix it by switching to bitmap_{from,to}_arr32.
+After a VF requested to remove the promiscuous flag on an interface, the
+broadcast packets are not received anymore. This breaks some protocols
+like ARP.
 
-CC: Alexander Gordeev <agordeev@linux.ibm.com>
-CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC: Christian Borntraeger <borntraeger@linux.ibm.com>
-CC: Claudio Imbrenda <imbrenda@linux.ibm.com>
-CC: David Hildenbrand <david@redhat.com>
-CC: Heiko Carstens <hca@linux.ibm.com>
-CC: Janosch Frank <frankja@linux.ibm.com>
-CC: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-CC: Sven Schnelle <svens@linux.ibm.com>
-CC: Vasily Gorbik <gor@linux.ibm.com>
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+In ixgbe_update_vf_xcast_mode(), we should keep the IXGBE_VMOLR_BAM
+bit (Broadcast Accept) on promiscuous removal.
+
+This flag is already set by default in ixgbe_set_vmolr() on VF reset.
+
+Fixes: 8443c1a4b192 ("ixgbe, ixgbevf: Add new mbox API xcast mode")
+Cc: stable@vger.kernel.org
+Cc: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Signed-off-by: Olivier Matz <olivier.matz@6wind.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c | 2 +-
- drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-index 4e9e2cf39859..5fcbec9dd45d 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-@@ -777,7 +777,7 @@ int smu_v11_0_set_allowed_mask(struct smu_context *smu)
- 		goto failed;
- 	}
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
+@@ -1184,9 +1184,9 @@ static int ixgbe_update_vf_xcast_mode(st
  
--	bitmap_copy((unsigned long *)feature_mask, feature->allowed, 64);
-+	bitmap_to_arr32(feature_mask, feature->allowed, 64);
- 
- 	ret = smu_cmn_send_smc_msg_with_param(smu, SMU_MSG_SetAllowedFeaturesMaskHigh,
- 					  feature_mask[1], NULL);
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-index b54790d3483e..4a5e91b59f0c 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-@@ -726,7 +726,7 @@ int smu_v13_0_set_allowed_mask(struct smu_context *smu)
- 	if (bitmap_empty(feature->allowed, SMU_FEATURE_MAX) || feature->feature_num < 64)
- 		goto failed;
- 
--	bitmap_copy((unsigned long *)feature_mask, feature->allowed, 64);
-+	bitmap_to_arr32(feature_mask, feature->allowed, 64);
- 
- 	ret = smu_cmn_send_smc_msg_with_param(smu, SMU_MSG_SetAllowedFeaturesMaskHigh,
- 					      feature_mask[1], NULL);
--- 
-2.35.1
-
+ 	switch (xcast_mode) {
+ 	case IXGBEVF_XCAST_MODE_NONE:
+-		disable = IXGBE_VMOLR_BAM | IXGBE_VMOLR_ROMPE |
++		disable = IXGBE_VMOLR_ROMPE |
+ 			  IXGBE_VMOLR_MPE | IXGBE_VMOLR_UPE | IXGBE_VMOLR_VPE;
+-		enable = 0;
++		enable = IXGBE_VMOLR_BAM;
+ 		break;
+ 	case IXGBEVF_XCAST_MODE_MULTI:
+ 		disable = IXGBE_VMOLR_MPE | IXGBE_VMOLR_UPE | IXGBE_VMOLR_VPE;
 
 

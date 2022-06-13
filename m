@@ -2,84 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1913549D5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76D0549D36
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:16:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348254AbiFMTUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
+        id S245016AbiFMTQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233381AbiFMTQk (ORCPT
+        with ESMTP id S244090AbiFMTPR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:16:40 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 200D3562DA;
-        Mon, 13 Jun 2022 10:28:28 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id z17so6331284pff.7;
-        Mon, 13 Jun 2022 10:28:28 -0700 (PDT)
+        Mon, 13 Jun 2022 15:15:17 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C973856769
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:30:35 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso6664066pjk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:30:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=yv4/HdDYVjkX/YAztaZebjL1a0eQClbhVe6udK7q55Q=;
-        b=R4KQhc65mAGubUVJTJuWOM9bF5a4E4aR2gWSHzop0dE6laiurPYFF44248RO1CN/49
-         WGb5A/2tKnAUyTlNMto07nWaja1JSdE0p5FCaIOBCx0GpqRcN6UnwOfVVvtl9+g0krxZ
-         UyaGiIURgykSXcIYLf9MJ59TgoMP3BburahgZgyuOCcoEL5Wno83fRLSagiwcmEG8Z7L
-         t+D45/nsuHfvfQfooZUVeKI2gOrZlvXwlvj0TJmpMa5ttYI7M3o7z2+dC2wBOYu6NLWy
-         f1G3g8SRqYk7jGR6uWZj9DZV2Cm8hnqHoeEfoRwikam2u3kgDwXnQ1m0xEMETKYD9EI3
-         X91Q==
+         :content-disposition:in-reply-to;
+        bh=wKqpDyJggm7b0f9UQvkgztMJ+TPUivgjBn1axRErEvQ=;
+        b=Qo1PAJdWEUTItUEqm09BhFPEhRGkluSKUjuSCMR8Oh/YdeKgdkNSJFPdNgcZcSYdct
+         YgsNaprlJ0qtSX/OnLKZfU923a8Daly/cmvERPvrQ78MjasSbw3FKBYl7hiFlmp8sdqf
+         qpLeaDQ9V7ZLqWgZPVbSJhxfaVtpebdqLTGNSfXpEcBwcGQAl57IuVX2/57HYlBKzJcW
+         F5jaUrwxHBpehJXWjJWqzqewd9ht+nBf5mJteCtAxWo0vAJzGkggV2K8klQEwt7JvUeT
+         jP+gXghpKDbbePakRiXK1e8V5BUdOjyuDasvHi841XNIFjiNjZY+cTTyrFNQnu/WAIAs
+         hkPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=yv4/HdDYVjkX/YAztaZebjL1a0eQClbhVe6udK7q55Q=;
-        b=0exH7V8dY+pqJNYT4OggtW+Hh23cXrgGahMb/JlYa3qRTSehwxjPMub0injxdm8cwY
-         B/qffLeZ6pWLy8iBIWXUVvYW5Kp/cmrTmlgZuXyqykb5slIdWYgCz+mHqRAtRvGjc1hb
-         iSw+L3PGkkAEgSgAmUgvm3a2Ps7uZ21+DZN9aFbjTViJx/AESHWwGFJvYDuFVPhpYE9e
-         0ZAd3jIhp8ppxPQx2yNPXP4ePTTonXRdvBqYTqse1p2Gnc6KCtQfvrtfw3lYLKilS2Iz
-         1CWcWSivFD3hsxvOPPK10PBC1Yc1jnTdBgmCCziSXC91ZpfHZR3UAVrj2JBaLzXnmvMf
-         kYyw==
-X-Gm-Message-State: AOAM532V2dYmbTw9meKt93LIHTWvqHUw9tlO+1NtFg2JS63zQNjmtB3u
-        XQQ+S2UN3OJLNJtZbY8UYDQ=
-X-Google-Smtp-Source: AGRyM1v+z2rPkn1qb0UFNOFd9//S65o7RvxU3mSJDSoDEAw40pCYl1wX79IBkc8c8nQeVnqvpQb2Tg==
-X-Received: by 2002:a05:6a00:2392:b0:51b:fe0e:2b8 with SMTP id f18-20020a056a00239200b0051bfe0e02b8mr31643pfc.84.1655141307321;
-        Mon, 13 Jun 2022 10:28:27 -0700 (PDT)
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=wKqpDyJggm7b0f9UQvkgztMJ+TPUivgjBn1axRErEvQ=;
+        b=AtShw++JXP+aQvIatHtFnRqmZPQ6j/Ar+DiYG6zQs4WMRGO0rh5dEVp03MTmNbqX9H
+         CfdqybjIQxh2U9z+xPal2jGaH9XCtEIX7qZX0zJAbPuoAx1P/CVgHZ9cZBsNq6j6qeA1
+         zB+xj0XlGZlaM9gTFV+CInA80StTWrgILPymgFgUuHkfga/lf184lC3HLbfvLMzVcq3F
+         85eiwSZzmMw1O7emcVYHtr8IxONbMhTva3r35cGLlU4L3ucqFX5+BXy1wt/wyGXqslEH
+         OJUYqC0D+wAscD37bvQ5EL+0u5iVI3INo35Zl8e4QY3EqXFgMokWrtpqQj+FRqeF/9Yx
+         1hvw==
+X-Gm-Message-State: AJIora+OGCENNS+AMmaz3CSMOu+S86RF/mF650gQwXRP5R8EhqKC5fsO
+        rBKQoCerZGrjmZBls8LfImI=
+X-Google-Smtp-Source: AGRyM1s8yGZUU+XxoyDpuDsvvN3kmuzm3vvwQE4B03t8rzFiPLfQ52FnP2QC3qWu6V/HIhy9UmSjlA==
+X-Received: by 2002:a17:902:7792:b0:168:d1fd:3013 with SMTP id o18-20020a170902779200b00168d1fd3013mr111116pll.29.1655141434698;
+        Mon, 13 Jun 2022 10:30:34 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id b27-20020a63931b000000b003fe22d73d52sm5752410pge.74.2022.06.13.10.28.26
+        by smtp.gmail.com with ESMTPSA id e3-20020a17090301c300b0016196bd15f4sm5397253plh.15.2022.06.13.10.30.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 10:28:26 -0700 (PDT)
+        Mon, 13 Jun 2022 10:30:34 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 13 Jun 2022 07:28:25 -1000
+Date:   Mon, 13 Jun 2022 07:30:32 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc:     Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <YqdzuSQuAeiPXQvy@slm.duckdns.org>
-References: <20220510153413.400020-1-longman@redhat.com>
- <20220510153413.400020-8-longman@redhat.com>
- <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
- <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
- <YqarMyNo9oHxhZFh@slm.duckdns.org>
- <20220613142452.GB6910@blackbody.suse.cz>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     viro@zeniv.linux.org.uk, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v4 1/4] kernfs: make ->attr.open RCU protected.
+Message-ID: <Yqd0OJupifpplENB@slm.duckdns.org>
+References: <20220602063907.136569-1-imran.f.khan@oracle.com>
+ <20220602063907.136569-2-imran.f.khan@oracle.com>
+ <YqYpTShTDLvAp4vx@slm.duckdns.org>
+ <6d1c5a49-fc16-5fc7-e527-8cb91ec0d25c@oracle.com>
+ <YqalHuEB6OjjUosV@slm.duckdns.org>
+ <c8a8a616-da4c-f2ce-0bb2-e0cba69db24d@oracle.com>
+ <Yqaqbas1JaWz25jB@slm.duckdns.org>
+ <61868aa1-6c88-ecd2-beb2-67b87673b805@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220613142452.GB6910@blackbody.suse.cz>
+In-Reply-To: <61868aa1-6c88-ecd2-beb2-67b87673b805@oracle.com>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -91,32 +79,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Mon, Jun 13, 2022 at 04:24:52PM +0200, Michal Koutný wrote:
-> On Sun, Jun 12, 2022 at 05:12:51PM -1000, Tejun Heo <tj@kernel.org> wrote:
-> > On Sun, Jun 12, 2022 at 11:02:38PM -0400, Waiman Long wrote:
-> > > That is the behavior enforced by setting the CPU_EXCLUSIVE bit in cgroup v1.
-> > > I haven't explicitly change it to make it different in cgroup v2. The major
-> > > reason is that I don't want change to one cpuset to affect a sibling
-> > > partition as it may make the code more complicate to validate if a partition
-> > > is valid.
-> > 
-> > If at all possible, I'd really like to avoid situations where a parent can't
-> > withdraw resources due to something that a descendant does.
+On Mon, Jun 13, 2022 at 01:56:43PM +1000, Imran Khan wrote:
+> Agree. I did over think this and went for the safest interface that I could
+> think of in each of the use cases. I will remove
+> kernfs_check_open_node_protected and use kernfs_deref_open_node_protected in its
+> place as well. This will cover all accesses under kernfs_open_file_mutex.
 > 
-> My understanding of the discussed paragraph is that the changes are only
-> disallowed only among siblings on one level (due to exclusivity rule,
-> checked in validate_change()). A change in parent won't affect
-> (non)exclusivity of (valid) children so it's simply allowed.
+> But we will still need kernfs_deref_open_node for cases where
+> !list_empty(&of->list) ensures safe access of ->attr.open and where we can't
+> ensure holding of kernfs_open_file_mutex. So we will need 2 deref accessors.
+> Right? Just asking this because you mentioned above to come up with one deref
+> accessor that can be used in all three use cases
 > 
-> So the docs (and implementation by a quick look) is sensible.
+> Please let me if this sounds okay. I can send updated patch-set with these
+> changes in place.
 
-I see. Is this part even necessary? All the .cpus files of the siblings are
-owned by the parent who's responsible for configuring both the mode that the
-cgroup subtree is gonna be in and their cpumasks. Given that all the other
-errors it can make are notified through "invalid (REASON)" in the mode file,
-wouldn't it fit better to notify cpus configuration error the same way too?
+Just merge all three into one accessor. You can list both the !list_empty
+condition and lock held conditions on the same rcu_dereference_check() call.
 
 Thanks.
 

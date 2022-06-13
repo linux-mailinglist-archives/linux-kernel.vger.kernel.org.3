@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFCB15492B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9B2548FEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349167AbiFMMK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49898 "EHLO
+        id S1354225AbiFMLg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358328AbiFMMCy (ORCPT
+        with ESMTP id S1354560AbiFML3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:02:54 -0400
+        Mon, 13 Jun 2022 07:29:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48C1252A0;
-        Mon, 13 Jun 2022 03:57:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88092205F0;
+        Mon, 13 Jun 2022 03:45:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA40461346;
-        Mon, 13 Jun 2022 10:57:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE29BC34114;
-        Mon, 13 Jun 2022 10:57:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A9F2C6125A;
+        Mon, 13 Jun 2022 10:45:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB0CC3411C;
+        Mon, 13 Jun 2022 10:45:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117835;
-        bh=NMJ0Q3mzGfxxTNw7cOKiHx7s6OMZBmRl14vQe8MNUQA=;
+        s=korg; t=1655117105;
+        bh=vbmKdU1NFSiLQsrkloUNv+RG297hIcC/MuNTFaIQXfE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b1+Ypgh4qcnFCugIaCK/1084D8f88LcBZgDZsdy7ZmVlUtP02ZLbJ88Nm/Grc9wiD
-         28B3O2JmjiIS71h5fVmu7CjXDnGv6thATgCZGhgSwzSlEc1m/ou0SogveIxtcLAyeO
-         APEC3y42iOymZYxda6rYy3w5lKNQfy3pxpemA3SQ=
+        b=W0NPtAnmbLpRLal3g70MebCPoHhmn/3HT5A2vLOoz0AyD14bszXEZAUMkiTBS8BR0
+         S84jZYbndHyBsT3uWeEF6BqSEBAw2sn7zFVeVDMTdMnBhfFgox/AsVVvIfP1Cqs22f
+         /ozvoSgGCn0oilWMxNX0Wp3Zqczcu0ggZ8ZjfOoQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 4.19 149/287] ext4: verify dir block before splitting it
+        stable@vger.kernel.org, Evan Green <evgreen@chromium.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 300/411] phy: qcom-qmp: fix pipe-clock imbalance on power-on failure
 Date:   Mon, 13 Jun 2022 12:09:33 +0200
-Message-Id: <20220613094928.394744339@linuxfoundation.org>
+Message-Id: <20220613094937.753080765@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,88 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Johan Hovold <johan+linaro@kernel.org>
 
-commit 46c116b920ebec58031f0a78c5ea9599b0d2a371 upstream.
+[ Upstream commit 5e73b2d9867998278479ccc065a8a8227a5513ef ]
 
-Before splitting a directory block verify its directory entries are sane
-so that the splitting code does not access memory it should not.
+Make sure to disable the pipe clock also if ufs-reset deassertion fails
+during power on.
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220518093332.13986-1-jack@suse.cz
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Note that the ufs-reset is asserted in qcom_qmp_phy_com_exit().
+
+Fixes: c9b589791fc1 ("phy: qcom: Utilize UFS reset controller")
+Cc: Evan Green <evgreen@chromium.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Link: https://lore.kernel.org/r/20220502133130.4125-2-johan+linaro@kernel.org
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/namei.c |   32 +++++++++++++++++++++-----------
- 1 file changed, 21 insertions(+), 11 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -272,9 +272,9 @@ static struct dx_frame *dx_probe(struct
- 				 struct dx_hash_info *hinfo,
- 				 struct dx_frame *frame);
- static void dx_release(struct dx_frame *frames);
--static int dx_make_map(struct inode *dir, struct ext4_dir_entry_2 *de,
--		       unsigned blocksize, struct dx_hash_info *hinfo,
--		       struct dx_map_entry map[]);
-+static int dx_make_map(struct inode *dir, struct buffer_head *bh,
-+		       struct dx_hash_info *hinfo,
-+		       struct dx_map_entry *map_tail);
- static void dx_sort_map(struct dx_map_entry *map, unsigned count);
- static struct ext4_dir_entry_2 *dx_move_dirents(char *from, char *to,
- 		struct dx_map_entry *offsets, int count, unsigned blocksize);
-@@ -1203,15 +1203,23 @@ static inline int search_dirblock(struct
-  * Create map of hash values, offsets, and sizes, stored at end of block.
-  * Returns number of entries mapped.
-  */
--static int dx_make_map(struct inode *dir, struct ext4_dir_entry_2 *de,
--		       unsigned blocksize, struct dx_hash_info *hinfo,
-+static int dx_make_map(struct inode *dir, struct buffer_head *bh,
-+		       struct dx_hash_info *hinfo,
- 		       struct dx_map_entry *map_tail)
- {
- 	int count = 0;
--	char *base = (char *) de;
-+	struct ext4_dir_entry_2 *de = (struct ext4_dir_entry_2 *)bh->b_data;
-+	unsigned int buflen = bh->b_size;
-+	char *base = bh->b_data;
- 	struct dx_hash_info h = *hinfo;
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
+index ff5955fb4d8b..21d40c665854 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+@@ -1517,7 +1517,7 @@ static int qcom_qmp_phy_enable(struct phy *phy)
+ 	qcom_qmp_phy_configure(pcs, cfg->regs, cfg->pcs_tbl, cfg->pcs_tbl_num);
+ 	ret = reset_control_deassert(qmp->ufs_reset);
+ 	if (ret)
+-		goto err_lane_rst;
++		goto err_pcs_ready;
  
--	while ((char *) de < base + blocksize) {
-+	if (ext4_has_metadata_csum(dir->i_sb))
-+		buflen -= sizeof(struct ext4_dir_entry_tail);
-+
-+	while ((char *) de < base + buflen) {
-+		if (ext4_check_dir_entry(dir, NULL, de, bh, base, buflen,
-+					 ((char *)de) - base))
-+			return -EFSCORRUPTED;
- 		if (de->name_len && de->inode) {
- 			ext4fs_dirhash(de->name, de->name_len, &h);
- 			map_tail--;
-@@ -1221,8 +1229,7 @@ static int dx_make_map(struct inode *dir
- 			count++;
- 			cond_resched();
- 		}
--		/* XXX: do we need to check rec_len == 0 case? -Chris */
--		de = ext4_next_entry(de, blocksize);
-+		de = ext4_next_entry(de, dir->i_sb->s_blocksize);
- 	}
- 	return count;
- }
-@@ -1756,8 +1763,11 @@ static struct ext4_dir_entry_2 *do_split
- 
- 	/* create map in the end of data2 block */
- 	map = (struct dx_map_entry *) (data2 + blocksize);
--	count = dx_make_map(dir, (struct ext4_dir_entry_2 *) data1,
--			     blocksize, hinfo, map);
-+	count = dx_make_map(dir, *bh, hinfo, map);
-+	if (count < 0) {
-+		err = count;
-+		goto journal_error;
-+	}
- 	map -= count;
- 	dx_sort_map(map, count);
- 	/* Ensure that neither split block is over half full */
+ 	/*
+ 	 * Pull out PHY from POWER DOWN state.
+-- 
+2.35.1
+
 
 

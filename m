@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F7B548D95
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CD05490B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384907AbiFMOaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        id S1351738AbiFMLJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384030AbiFMOYb (ORCPT
+        with ESMTP id S1351854AbiFMLFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:31 -0400
+        Mon, 13 Jun 2022 07:05:09 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A478447ACB;
-        Mon, 13 Jun 2022 04:46:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A13220F1;
+        Mon, 13 Jun 2022 03:34:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2114BB80D3A;
-        Mon, 13 Jun 2022 11:46:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89B51C34114;
-        Mon, 13 Jun 2022 11:46:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B820B80E93;
+        Mon, 13 Jun 2022 10:34:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1728DC34114;
+        Mon, 13 Jun 2022 10:34:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120790;
-        bh=WSnIb8c1EK7S1Ug1rp1Uyxgzi6wIMQAdTOBGWLHDaWk=;
+        s=korg; t=1655116456;
+        bh=5BluxnSDrX5xmfsuO8eB9nr6S+Osya+W3XJiCwT/gNQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ilDXSdL/CMXSJypmoKQ6v7UqDA2MndPJlbVLkPS3BmTcnDXiZn9H0Y4LdbC5RFEEh
-         oTXI9BBG6KNP1mGePKQbVmqJmOeRvQ4OQfJ/xW4qAvXOarosM6Fs3/9TkvN5ZvcJyr
-         AYp3GOztr6uPnZhFckz+iHoyYeH07ID5Z5286hR0=
+        b=r8whNj21cdGe7qaXWm2VN4oWe4wbqrfBycsOnHqdwKo5HDilPoyYh3HmO/uhknkeg
+         NA9v3j2wwYoz5Bc/B+R1mqYg3U+vCTFbtXgqn2OCBwSmgKuEMK/VjyemulzvyyqFa1
+         ZwobYqr/kVuoKkiXMqJ+3m4BVvXj2az+C1Gpuah4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yi Chen <yiche@redhat.com>,
-        Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org,
+        syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Wang Cheng <wanngchenng@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 158/298] netfilter: nat: really support inet nat without l3 address
+Subject: [PATCH 4.14 194/218] staging: rtl8712: fix uninit-value in r871xu_drv_init()
 Date:   Mon, 13 Jun 2022 12:10:52 +0200
-Message-Id: <20220613094929.728184662@linuxfoundation.org>
+Message-Id: <20220613094926.503844770@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,101 +57,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Wang Cheng <wanngchenng@gmail.com>
 
-[ Upstream commit 282e5f8fe907dc3f2fbf9f2103b0e62ffc3a68a5 ]
+[ Upstream commit 0458e5428e5e959d201a40ffe71d762a79ecedc4 ]
 
-When no l3 address is given, priv->family is set to NFPROTO_INET and
-the evaluation function isn't called.
+When 'tmpU1b' returns from r8712_read8(padapter, EE_9346CR) is 0,
+'mac[6]' will not be initialized.
 
-Call it too so l4-only rewrite can work.
-Also add a test case for this.
+BUG: KMSAN: uninit-value in r871xu_drv_init+0x2d54/0x3070 drivers/staging/rtl8712/usb_intf.c:541
+ r871xu_drv_init+0x2d54/0x3070 drivers/staging/rtl8712/usb_intf.c:541
+ usb_probe_interface+0xf19/0x1600 drivers/usb/core/driver.c:396
+ really_probe+0x653/0x14b0 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
+ driver_probe_device drivers/base/dd.c:782 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach+0x593/0x8e0 drivers/base/dd.c:970
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
+ bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
+ device_add+0x1fff/0x26e0 drivers/base/core.c:3405
+ usb_set_configuration+0x37e9/0x3ed0 drivers/usb/core/message.c:2170
+ usb_generic_driver_probe+0x13c/0x300 drivers/usb/core/generic.c:238
+ usb_probe_device+0x309/0x570 drivers/usb/core/driver.c:293
+ really_probe+0x653/0x14b0 drivers/base/dd.c:596
+ __driver_probe_device+0x3e9/0x530 drivers/base/dd.c:752
+ driver_probe_device drivers/base/dd.c:782 [inline]
+ __device_attach_driver+0x79f/0x1120 drivers/base/dd.c:899
+ bus_for_each_drv+0x2d6/0x3f0 drivers/base/bus.c:427
+ __device_attach+0x593/0x8e0 drivers/base/dd.c:970
+ device_initial_probe+0x4a/0x60 drivers/base/dd.c:1017
+ bus_probe_device+0x17b/0x3e0 drivers/base/bus.c:487
+ device_add+0x1fff/0x26e0 drivers/base/core.c:3405
+ usb_new_device+0x1b8e/0x2950 drivers/usb/core/hub.c:2566
+ hub_port_connect drivers/usb/core/hub.c:5358 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5502 [inline]
+ port_event drivers/usb/core/hub.c:5660 [inline]
+ hub_event+0x58e3/0x89e0 drivers/usb/core/hub.c:5742
+ process_one_work+0xdb6/0x1820 kernel/workqueue.c:2307
+ worker_thread+0x10b3/0x21e0 kernel/workqueue.c:2454
+ kthread+0x3c7/0x500 kernel/kthread.c:377
+ ret_from_fork+0x1f/0x30
 
-Fixes: a33f387ecd5aa ("netfilter: nft_nat: allow to specify layer 4 protocol NAT only")
-Reported-by: Yi Chen <yiche@redhat.com>
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Local variable mac created at:
+ r871xu_drv_init+0x1771/0x3070 drivers/staging/rtl8712/usb_intf.c:394
+ usb_probe_interface+0xf19/0x1600 drivers/usb/core/driver.c:396
+
+KMSAN: uninit-value in r871xu_drv_init
+https://syzkaller.appspot.com/bug?id=3cd92b1d85428b128503bfa7a250294c9ae00bd8
+
+Reported-by: <syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com>
+Tested-by: <syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com>
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
+Link: https://lore.kernel.org/r/14c3886173dfa4597f0704547c414cfdbcd11d16.1652618244.git.wanngchenng@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nft_nat.c                      |  3 +-
- tools/testing/selftests/netfilter/nft_nat.sh | 43 ++++++++++++++++++++
- 2 files changed, 45 insertions(+), 1 deletion(-)
+ drivers/staging/rtl8712/usb_intf.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/netfilter/nft_nat.c b/net/netfilter/nft_nat.c
-index be1595d6979d..db8f9116eeb4 100644
---- a/net/netfilter/nft_nat.c
-+++ b/net/netfilter/nft_nat.c
-@@ -334,7 +334,8 @@ static void nft_nat_inet_eval(const struct nft_expr *expr,
- {
- 	const struct nft_nat *priv = nft_expr_priv(expr);
- 
--	if (priv->family == nft_pf(pkt))
-+	if (priv->family == nft_pf(pkt) ||
-+	    priv->family == NFPROTO_INET)
- 		nft_nat_eval(expr, regs, pkt);
- }
- 
-diff --git a/tools/testing/selftests/netfilter/nft_nat.sh b/tools/testing/selftests/netfilter/nft_nat.sh
-index eb8543b9a5c4..924ecb3f1f73 100755
---- a/tools/testing/selftests/netfilter/nft_nat.sh
-+++ b/tools/testing/selftests/netfilter/nft_nat.sh
-@@ -374,6 +374,45 @@ EOF
- 	return $lret
- }
- 
-+test_local_dnat_portonly()
-+{
-+	local family=$1
-+	local daddr=$2
-+	local lret=0
-+	local sr_s
-+	local sr_r
-+
-+ip netns exec "$ns0" nft -f /dev/stdin <<EOF
-+table $family nat {
-+	chain output {
-+		type nat hook output priority 0; policy accept;
-+		meta l4proto tcp dnat to :2000
-+
-+	}
-+}
-+EOF
-+	if [ $? -ne 0 ]; then
-+		if [ $family = "inet" ];then
-+			echo "SKIP: inet port test"
-+			test_inet_nat=false
-+			return
-+		fi
-+		echo "SKIP: Could not add $family dnat hook"
-+		return
-+	fi
-+
-+	echo SERVER-$family | ip netns exec "$ns1" timeout 5 socat -u STDIN TCP-LISTEN:2000 &
-+	sc_s=$!
-+
-+	result=$(ip netns exec "$ns0" timeout 1 socat TCP:$daddr:2000 STDOUT)
-+
-+	if [ "$result" = "SERVER-inet" ];then
-+		echo "PASS: inet port rewrite without l3 address"
-+	else
-+		echo "ERROR: inet port rewrite"
-+		ret=1
-+	fi
-+}
- 
- test_masquerade6()
- {
-@@ -1148,6 +1187,10 @@ fi
- reset_counters
- test_local_dnat ip
- test_local_dnat6 ip6
-+
-+reset_counters
-+test_local_dnat_portonly inet 10.0.1.99
-+
- reset_counters
- $test_inet_nat && test_local_dnat inet
- $test_inet_nat && test_local_dnat6 inet
+diff --git a/drivers/staging/rtl8712/usb_intf.c b/drivers/staging/rtl8712/usb_intf.c
+index 8be4fcc54ad6..b7bd37b62861 100644
+--- a/drivers/staging/rtl8712/usb_intf.c
++++ b/drivers/staging/rtl8712/usb_intf.c
+@@ -569,13 +569,13 @@ static int r871xu_drv_init(struct usb_interface *pusb_intf,
+ 		} else {
+ 			AutoloadFail = false;
+ 		}
+-		if (((mac[0] == 0xff) && (mac[1] == 0xff) &&
++		if ((!AutoloadFail) ||
++		    ((mac[0] == 0xff) && (mac[1] == 0xff) &&
+ 		     (mac[2] == 0xff) && (mac[3] == 0xff) &&
+ 		     (mac[4] == 0xff) && (mac[5] == 0xff)) ||
+ 		    ((mac[0] == 0x00) && (mac[1] == 0x00) &&
+ 		     (mac[2] == 0x00) && (mac[3] == 0x00) &&
+-		     (mac[4] == 0x00) && (mac[5] == 0x00)) ||
+-		     (!AutoloadFail)) {
++		     (mac[4] == 0x00) && (mac[5] == 0x00))) {
+ 			mac[0] = 0x00;
+ 			mac[1] = 0xe0;
+ 			mac[2] = 0x4c;
 -- 
 2.35.1
 

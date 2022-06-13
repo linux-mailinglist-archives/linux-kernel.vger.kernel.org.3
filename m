@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C9D354989F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F689548E1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382583AbiFMOSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
+        id S1354409AbiFMLfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:35:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381387AbiFMOLB (ORCPT
+        with ESMTP id S1354433AbiFML33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:11:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1FD996A7;
-        Mon, 13 Jun 2022 04:42:06 -0700 (PDT)
+        Mon, 13 Jun 2022 07:29:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75CDCDEC9;
+        Mon, 13 Jun 2022 03:44:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5707A60EAE;
-        Mon, 13 Jun 2022 11:41:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FBACC34114;
-        Mon, 13 Jun 2022 11:41:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12C6F61016;
+        Mon, 13 Jun 2022 10:44:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E316C34114;
+        Mon, 13 Jun 2022 10:44:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120512;
-        bh=uJ9QvgGDukh7QF8+CD8vD4uIYQ5lNJe9QAK7iyDkAzY=;
+        s=korg; t=1655117080;
+        bh=GEkAqDSx45s2LHhDPiB/BSff7zw8Jn2i+SxePh6pqgk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gZJrfZlQoAvIEUyVvcZv3iiJx9/JqIC0otWAfr02WPmHiwbua7BfXAx68B44Z/62C
-         45XdnN0Kc2e3IXYOxBYEDpJAfAXTh40ip6y2Uj7FmXRv8JB7bw1S0SQhwqtj9rvh5W
-         aiTUFyp4xw5uO7XGSsP/1eNg02/YIoW4mEBSBrFw=
+        b=FjItmqZf7xKa77xre5UkrA/yOpxTnBkL1GfxBawlKA+BWYelsz9cYmi7s8r7iyD6I
+         wk/hdPkr8dT5BswGzUYFU7U889/60UaIWcKvJcYMeFT4Lp1oiBO1AcUQ869eiLGo9Y
+         eAg3pN+mETiLIEtP6gG8U0LIvga+CCxb4Jn0OEIc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sean Anderson <sean.anderson@seco.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 059/298] serial: uartlite: Fix BRKINT clearing
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>, Coly Li <colyli@suse.de>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: [PATCH 5.4 280/411] md: bcache: check the return value of kzalloc() in detached_dev_do_request()
 Date:   Mon, 13 Jun 2022 12:09:13 +0200
-Message-Id: <20220613094926.739968981@linuxfoundation.org>
+Message-Id: <20220613094937.156132240@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-[ Upstream commit 3f7fed405c118607d4d42255f2572072db728399 ]
+commit 40f567bbb3b0639d2ec7d1c6ad4b1b018f80cf19 upstream.
 
-BRKINT is within c_iflag rather than c_cflag.
+The function kzalloc() in detached_dev_do_request() can fail, so its
+return value should be checked.
 
-Fixes: ea017f5853e9 (tty: serial: uartlite: Prevent changing fixed parameters)
-Reviewed-by: Sean Anderson <sean.anderson@seco.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-2-ilpo.jarvinen@linux.intel.com
+Fixes: bc082a55d25c ("bcache: fix inaccurate io state for detached bcache devices")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Signed-off-by: Coly Li <colyli@suse.de>
+Link: https://lore.kernel.org/r/20220527152818.27545-4-colyli@suse.de
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/uartlite.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/md/bcache/request.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
-index e1fa52d31474..7c788c697f3e 100644
---- a/drivers/tty/serial/uartlite.c
-+++ b/drivers/tty/serial/uartlite.c
-@@ -321,7 +321,8 @@ static void ulite_set_termios(struct uart_port *port, struct ktermios *termios,
- 	struct uartlite_data *pdata = port->private_data;
- 
- 	/* Set termios to what the hardware supports */
--	termios->c_cflag &= ~(BRKINT | CSTOPB | PARENB | PARODD | CSIZE);
-+	termios->c_iflag &= ~BRKINT;
-+	termios->c_cflag &= ~(CSTOPB | PARENB | PARODD | CSIZE);
- 	termios->c_cflag |= pdata->cflags & (PARENB | PARODD | CSIZE);
- 	tty_termios_encode_baud_rate(termios, pdata->baud, pdata->baud);
- 
--- 
-2.35.1
-
+--- a/drivers/md/bcache/request.c
++++ b/drivers/md/bcache/request.c
+@@ -1119,6 +1119,12 @@ static void detached_dev_do_request(stru
+ 	 * which would call closure_get(&dc->disk.cl)
+ 	 */
+ 	ddip = kzalloc(sizeof(struct detached_dev_io_private), GFP_NOIO);
++	if (!ddip) {
++		bio->bi_status = BLK_STS_RESOURCE;
++		bio->bi_end_io(bio);
++		return;
++	}
++
+ 	ddip->d = d;
+ 	ddip->start_time = jiffies;
+ 	ddip->bi_end_io = bio->bi_end_io;
 
 

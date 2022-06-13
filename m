@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DEBD548850
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2488548712
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244389AbiFMKez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
+        id S1348325AbiFMMkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343795AbiFMKbQ (ORCPT
+        with ESMTP id S1352727AbiFMMik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:31:16 -0400
+        Mon, 13 Jun 2022 08:38:40 -0400
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B9D275CA;
-        Mon, 13 Jun 2022 03:21:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9990B5C771;
+        Mon, 13 Jun 2022 04:08:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2CF9DCE116D;
-        Mon, 13 Jun 2022 10:21:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2318EC3411C;
-        Mon, 13 Jun 2022 10:21:29 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A928DCE1193;
+        Mon, 13 Jun 2022 11:08:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFA0DC34114;
+        Mon, 13 Jun 2022 11:08:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115690;
-        bh=ZbzBs39XZYEIr01mYJiJsXTEB9wR7xUlcmhU/QgTZy0=;
+        s=korg; t=1655118491;
+        bh=pVbQQJnC2klcxehKXrT4BratL+k4FXGLii9HIRyxjdQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zRXNaSO+x2oth4X0XPfV1Kgsczpd4r/5Z0FKyTy7Glweh654fcXfVpq0tLSy3NxWS
-         fS3OQ3CpY/p/7JOndcMvdWXt4fegQbgFU9YlRHvf4wOEblrhWuuZNaW2KeqTBCPAJg
-         Q3BN7nDk/3whsKmYx3CG80MAYMzxJNLP7ljRlUJA=
+        b=LMJwTC5klwa8SOhSDnmOuaPkXrCDhWqLXVh1UFGaFnNl3v+GAvYOoXTWX+G+dA6wj
+         2l6v3J81iVqcKnneYv1hKbUVy8UHBF8lQmnPJRJPGcShBe9gTsaviT5OJZWp2CMMST
+         85LLa2gn2OI50WhXNW5jaLbZqCIasFC+YSTmrrvc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michal Kubecek <mkubecek@suse.cz>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
+        stable@vger.kernel.org, Guoju Fang <gjfang@linux.alibaba.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 153/167] Revert "net: af_key: add check for pfkey_broadcast in function pfkey_process"
+Subject: [PATCH 5.10 067/172] net: sched: add barrier to fix packet stuck problem for lockless qdisc
 Date:   Mon, 13 Jun 2022 12:10:27 +0200
-Message-Id: <20220613094916.809997232@linuxfoundation.org>
+Message-Id: <20220613094906.477256914@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Kubecek <mkubecek@suse.cz>
+From: Guoju Fang <gjfang@linux.alibaba.com>
 
-[ Upstream commit 9c90c9b3e50e16d03c7f87d63e9db373974781e0 ]
+[ Upstream commit 2e8728c955ce0624b958eee6e030a37aca3a5d86 ]
 
-This reverts commit 4dc2a5a8f6754492180741facf2a8787f2c415d7.
+In qdisc_run_end(), the spin_unlock() only has store-release semantic,
+which guarantees all earlier memory access are visible before it. But
+the subsequent test_bit() has no barrier semantics so may be reordered
+ahead of the spin_unlock(). The store-load reordering may cause a packet
+stuck problem.
 
-A non-zero return value from pfkey_broadcast() does not necessarily mean
-an error occurred as this function returns -ESRCH when no registered
-listener received the message. In particular, a call with
-BROADCAST_PROMISC_ONLY flag and null one_sk argument can never return
-zero so that this commit in fact prevents processing any PF_KEY message.
-One visible effect is that racoon daemon fails to find encryption
-algorithms like aes and refuses to start.
+The concurrent operations can be described as below,
+         CPU 0                      |          CPU 1
+   qdisc_run_end()                  |     qdisc_run_begin()
+          .                         |           .
+ ----> /* may be reorderd here */   |           .
+|         .                         |           .
+|     spin_unlock()                 |         set_bit()
+|         .                         |         smp_mb__after_atomic()
+ ---- test_bit()                    |         spin_trylock()
+          .                         |          .
 
-Excluding -ESRCH return value would fix this but it's not obvious that
-we really want to bail out here and most other callers of
-pfkey_broadcast() also ignore the return value. Also, as pointed out by
-Steffen Klassert, PF_KEY is kind of deprecated and newer userspace code
-should use netlink instead so that we should only disturb the code for
-really important fixes.
+Consider the following sequence of events:
+    CPU 0 reorder test_bit() ahead and see MISSED = 0
+    CPU 1 calls set_bit()
+    CPU 1 calls spin_trylock() and return fail
+    CPU 0 executes spin_unlock()
 
-v2: add a comment explaining why is the return value ignored
+At the end of the sequence, CPU 0 calls spin_unlock() and does nothing
+because it see MISSED = 0. The skb on CPU 1 has beed enqueued but no one
+take it, until the next cpu pushing to the qdisc (if ever ...) will
+notice and dequeue it.
 
-Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+This patch fix this by adding one explicit barrier. As spin_unlock() and
+test_bit() ordering is a store-load ordering, a full memory barrier
+smp_mb() is needed here.
+
+Fixes: a90c57f2cedd ("net: sched: fix packet stuck problem for lockless qdisc")
+Signed-off-by: Guoju Fang <gjfang@linux.alibaba.com>
+Link: https://lore.kernel.org/r/20220528101628.120193-1-gjfang@linux.alibaba.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/key/af_key.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ include/net/sch_generic.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/net/key/af_key.c b/net/key/af_key.c
-index d5dc614af2f9..0737fc7b7ebd 100644
---- a/net/key/af_key.c
-+++ b/net/key/af_key.c
-@@ -2861,10 +2861,12 @@ static int pfkey_process(struct sock *sk, struct sk_buff *skb, const struct sadb
- 	void *ext_hdrs[SADB_EXT_MAX];
- 	int err;
+diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+index 769764bda7a8..bed2387af456 100644
+--- a/include/net/sch_generic.h
++++ b/include/net/sch_generic.h
+@@ -197,6 +197,12 @@ static inline void qdisc_run_end(struct Qdisc *qdisc)
+ 	if (qdisc->flags & TCQ_F_NOLOCK) {
+ 		spin_unlock(&qdisc->seqlock);
  
--	err = pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
--			      BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
--	if (err)
--		return err;
-+	/* Non-zero return value of pfkey_broadcast() does not always signal
-+	 * an error and even on an actual error we may still want to process
-+	 * the message so rather ignore the return value.
-+	 */
-+	pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
-+			BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
- 
- 	memset(ext_hdrs, 0, sizeof(ext_hdrs));
- 	err = parse_exthdrs(skb, hdr, ext_hdrs);
++		/* spin_unlock() only has store-release semantic. The unlock
++		 * and test_bit() ordering is a store-load ordering, so a full
++		 * memory barrier is needed here.
++		 */
++		smp_mb();
++
+ 		if (unlikely(test_bit(__QDISC_STATE_MISSED,
+ 				      &qdisc->state))) {
+ 			clear_bit(__QDISC_STATE_MISSED, &qdisc->state);
 -- 
 2.35.1
 

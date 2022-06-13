@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111CC54933B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 164F35496DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379519AbiFMNuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
+        id S1355313AbiFMMK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:10:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379149AbiFMNnr (ORCPT
+        with ESMTP id S1359154AbiFMMFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:43:47 -0400
+        Mon, 13 Jun 2022 08:05:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FE2B3ED39;
-        Mon, 13 Jun 2022 04:31:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C1A13F14;
+        Mon, 13 Jun 2022 03:59:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A668161260;
-        Mon, 13 Jun 2022 11:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4A45C34114;
-        Mon, 13 Jun 2022 11:31:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 80C7B611B3;
+        Mon, 13 Jun 2022 10:59:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CED2C34114;
+        Mon, 13 Jun 2022 10:59:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119909;
-        bh=DomDQ4mdKcRF9vS+JjxZAcDVVlPSmxLS53QjuIlwXMQ=;
+        s=korg; t=1655117944;
+        bh=f3DN3R4qDTmG+VEo6CC4DF1yy9+sS/4k6P6oCJko18Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aHBTFcPldpB9wzARIk+momIYB+OvegURGU1rEQu4xjEwCD+4ZQXOGRWcGuPxnQ1o9
-         xQp3vMjxpk1rq8bMVThBlU229xnzZ7bwreVFb5PDWzCkMGyc/GhsVuYcMQhS+lEZzQ
-         NJ8DwchJbFq6x5k6WGpB7RmCw9Te3Z+MVxdS6kng=
+        b=P8ycLD3BkchYfnwqTAvkX9Tb0cTfM7lHiOGCJT2oonRn/quCYdVRlJro5PTWV1Wbk
+         psvCWAy4pq2nm3DbiBaZhAAFQr4FIheJ5Gz8pBXWB/x/FgjpWKWtcALMTLjY7SqJGX
+         9LQvqt810S19HLbvjfTK0Ts5QsRGntWBBhG6RAvw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 174/339] rtla/Makefile: Properly handle dependencies
+        stable@vger.kernel.org, Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: [PATCH 4.19 175/287] hugetlb: fix huge_pmd_unshare address update
 Date:   Mon, 13 Jun 2022 12:09:59 +0200
-Message-Id: <20220613094931.954991873@linuxfoundation.org>
+Message-Id: <20220613094929.178122027@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,136 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Bristot de Oliveira <bristot@kernel.org>
+From: Mike Kravetz <mike.kravetz@oracle.com>
 
-[ Upstream commit fe4d0d5dde457bb5832b866418b5036f4f0c8d13 ]
+commit 48381273f8734d28ef56a5bdf1966dd8530111bc upstream.
 
-Linus had a problem compiling RTLA, saying:
+The routine huge_pmd_unshare() is passed a pointer to an address
+associated with an area which may be unshared.  If unshare is successful
+this address is updated to 'optimize' callers iterating over huge page
+addresses.  For the optimization to work correctly, address should be
+updated to the last huge page in the unmapped/unshared area.  However, in
+the common case where the passed address is PUD_SIZE aligned, the address
+is incorrectly updated to the address of the preceding huge page.  That
+wastes CPU cycles as the unmapped/unshared range is scanned twice.
 
-"[...] I wish the tracing tools would do a bit more package
-checking and helpful error messages too, rather than just
-fail with:
-
-    fatal error: tracefs.h: No such file or directory"
-
-Which is indeed not a helpful message. Update the Makefile, adding
-proper checks for the dependencies, with useful information about
-how to resolve possible problems.
-
-For example, the previous error is now reported as:
-
-    $ make
-    ********************************************
-    ** NOTICE: libtracefs version 1.3 or higher not found
-    **
-    ** Consider installing the latest libtracefs from your
-    ** distribution, e.g., 'dnf install libtracefs' on Fedora,
-    ** or from source:
-    **
-    **  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
-    **
-    ********************************************
-
-These messages are inspired by the ones used on trace-cmd, as suggested
-by Stevel Rostedt.
-
-Link: https://lore.kernel.org/r/CAHk-=whxmA86E=csNv76DuxX_wYsg8mW15oUs3XTabu2Yc80yw@mail.gmail.com/
-
-Changes from V1:
- - Moved the rst2man check to the install phase (when it is used).
- - Removed the procps-ng lib check [1] as it is being removed.
-
-[1] a0f9f8c1030c66305c9b921057c3d483064d5529.1651220820.git.bristot@kernel.org
-
-Link: https://lkml.kernel.org/r/3f1fac776c37e4b67c876a94e5a0e45ed022ff3d.1651238057.git.bristot@kernel.org
-
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Suggested-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lkml.kernel.org/r/20220524205003.126184-1-mike.kravetz@oracle.com
+Fixes: 39dde65c9940 ("shared page table for hugetlb page")
+Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+Acked-by: Muchun Song <songmuchun@bytedance.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/tools/rtla/Makefile | 14 ++++++++++++-
- tools/tracing/rtla/Makefile       | 35 +++++++++++++++++++++++++++++++
- 2 files changed, 48 insertions(+), 1 deletion(-)
+ mm/hugetlb.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/tools/rtla/Makefile b/Documentation/tools/rtla/Makefile
-index 9f2b84af1a6c..093af6d7a0e9 100644
---- a/Documentation/tools/rtla/Makefile
-+++ b/Documentation/tools/rtla/Makefile
-@@ -17,9 +17,21 @@ DOC_MAN1	= $(addprefix $(OUTPUT),$(_DOC_MAN1))
- RST2MAN_DEP	:= $(shell command -v rst2man 2>/dev/null)
- RST2MAN_OPTS	+= --verbose
- 
-+TEST_RST2MAN = $(shell sh -c "rst2man --version > /dev/null 2>&1 || echo n")
-+
- $(OUTPUT)%.1: %.rst
- ifndef RST2MAN_DEP
--	$(error "rst2man not found, but required to generate man pages")
-+	$(info ********************************************)
-+	$(info ** NOTICE: rst2man not found)
-+	$(info **)
-+	$(info ** Consider installing the latest rst2man from your)
-+	$(info ** distribution, e.g., 'dnf install python3-docutils' on Fedora,)
-+	$(info ** or from source:)
-+	$(info **)
-+	$(info **  https://docutils.sourceforge.io/docs/dev/repository.html )
-+	$(info **)
-+	$(info ********************************************)
-+	$(error NOTICE: rst2man required to generate man pages)
- endif
- 	rst2man $(RST2MAN_OPTS) $< > $@
- 
-diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-index 523f0a8c38c2..3822f4ea5f49 100644
---- a/tools/tracing/rtla/Makefile
-+++ b/tools/tracing/rtla/Makefile
-@@ -58,6 +58,41 @@ else
- DOCSRC	=	$(SRCTREE)/../../../Documentation/tools/rtla/
- endif
- 
-+LIBTRACEEVENT_MIN_VERSION = 1.5
-+LIBTRACEFS_MIN_VERSION = 1.3
-+
-+TEST_LIBTRACEEVENT = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEEVENT_MIN_VERSION) libtraceevent > /dev/null 2>&1 || echo n")
-+ifeq ("$(TEST_LIBTRACEEVENT)", "n")
-+.PHONY: warning_traceevent
-+warning_traceevent:
-+	@echo "********************************************"
-+	@echo "** NOTICE: libtraceevent version $(LIBTRACEEVENT_MIN_VERSION) or higher not found"
-+	@echo "**"
-+	@echo "** Consider installing the latest libtraceevent from your"
-+	@echo "** distribution, e.g., 'dnf install libtraceevent' on Fedora,"
-+	@echo "** or from source:"
-+	@echo "**"
-+	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/ "
-+	@echo "**"
-+	@echo "********************************************"
-+endif
-+
-+TEST_LIBTRACEFS = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEFS_MIN_VERSION) libtracefs > /dev/null 2>&1 || echo n")
-+ifeq ("$(TEST_LIBTRACEFS)", "n")
-+.PHONY: warning_tracefs
-+warning_tracefs:
-+	@echo "********************************************"
-+	@echo "** NOTICE: libtracefs version $(LIBTRACEFS_MIN_VERSION) or higher not found"
-+	@echo "**"
-+	@echo "** Consider installing the latest libtracefs from your"
-+	@echo "** distribution, e.g., 'dnf install libtracefs' on Fedora,"
-+	@echo "** or from source:"
-+	@echo "**"
-+	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/ "
-+	@echo "**"
-+	@echo "********************************************"
-+endif
-+
- .PHONY:	all
- all:	rtla
- 
--- 
-2.35.1
-
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4837,7 +4837,14 @@ int huge_pmd_unshare(struct mm_struct *m
+ 	pud_clear(pud);
+ 	put_page(virt_to_page(ptep));
+ 	mm_dec_nr_pmds(mm);
+-	*addr = ALIGN(*addr, HPAGE_SIZE * PTRS_PER_PTE) - HPAGE_SIZE;
++	/*
++	 * This update of passed address optimizes loops sequentially
++	 * processing addresses in increments of huge page size (PMD_SIZE
++	 * in this case).  By clearing the pud, a PUD_SIZE area is unmapped.
++	 * Update address to the 'last page' in the cleared area so that
++	 * calling loop can move to first page past this area.
++	 */
++	*addr |= PUD_SIZE - PMD_SIZE;
+ 	return 1;
+ }
+ #define want_pmd_share()	(1)
 
 

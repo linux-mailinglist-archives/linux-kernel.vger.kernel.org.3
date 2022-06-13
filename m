@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52548547DB6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC330547DBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236780AbiFMCuP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 22:50:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
+        id S238200AbiFMCuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 22:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234141AbiFMCuN (ORCPT
+        with ESMTP id S236546AbiFMCus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 22:50:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB75536E10
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 19:50:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655088611;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r5H0CNcahQjHmS/4jBwaskIQiBC4tSy1HTQWL7RLcJA=;
-        b=XmmChJPGvEUUkMpBXHSv7MUcI1UjzA1hb4BOZJjvWtot0gyowNX3YlehFiDduQ/b1iKAHd
-        tGsK2IuUvGIwxs3FeOLR3aa0PtR1mRplWZPvV4KXL40tmZl1XkWYctFg4J/iRNHyJzE7rn
-        DdkzV4ZAYLF32Arlv7RIl389IvvS1sg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-385-FjGOdKJEPMOhyDe_ujr9pg-1; Sun, 12 Jun 2022 22:50:07 -0400
-X-MC-Unique: FjGOdKJEPMOhyDe_ujr9pg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF27C101AA45;
-        Mon, 13 Jun 2022 02:50:06 +0000 (UTC)
-Received: from [10.22.16.100] (unknown [10.22.16.100])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B9D0D2026D64;
-        Mon, 13 Jun 2022 02:50:05 +0000 (UTC)
-Message-ID: <23002f21-9dfb-31b4-c6c7-86f4e292dfea@redhat.com>
-Date:   Sun, 12 Jun 2022 22:50:05 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v11 3/8] cgroup/cpuset: Allow no-task partition to have
- empty cpuset.cpus.effective
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-References: <20220510153413.400020-1-longman@redhat.com>
- <20220510153413.400020-4-longman@redhat.com>
- <YqYlCRywdgSYtwKk@slm.duckdns.org>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YqYlCRywdgSYtwKk@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 12 Jun 2022 22:50:48 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4684236E1B;
+        Sun, 12 Jun 2022 19:50:47 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id s23so4771361iog.13;
+        Sun, 12 Jun 2022 19:50:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=rmYoTFjwwfLHaEAKyMwepQVd6Fyyjo475AJRyY0r/yQ=;
+        b=YUSsW6W19zhbhRvuS0DwdHWUQOZiglEd1pOjHXaqb3nOWVzd88lu1muS2jSg0J8mDm
+         ENa0esP3n+JpDJsqui+secRM3CZmi10jCXhTHdZwUzoCm2tTNwjs8/FscivzMk52tDxi
+         LaD7TmzMUI+IbnvKg7PqfkE5bhXVo4AJ1ykGgbaanu7d1er8OneJVbvvT+oCZYkz0qqh
+         n+kjk22MrrUfVohWHRG0OAlAkt6lhcB9L1ybCYyGLon3T7Xv9bI+YDvLN0XJAWiQjVcp
+         O5fAk9WNSVUnp+AtSZ5sbrE5575dl277/fI+Z3hmCp6hzM/A9fUBccjHMO7T52WxZhxL
+         zW7Q==
+X-Gm-Message-State: AOAM533JWv68DRmbk1wmc3WCO6AsG5nc8qzNmknSxIdFpp36klRN++4j
+        08Rc/jx0gMJ1F8bT+01WEQ==
+X-Google-Smtp-Source: ABdhPJxyFckgQT337XDCiRAwgwtx3vUFkJL/tbw8qlrIqOoTtJpo2NVfXZ2udavPLZEGvQXL+u+/Tg==
+X-Received: by 2002:a05:6638:dc5:b0:332:3180:fd5e with SMTP id m5-20020a0566380dc500b003323180fd5emr5261454jaj.285.1655088645082;
+        Sun, 12 Jun 2022 19:50:45 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id w4-20020a056e021c8400b002d10dc367a1sm3261489ill.49.2022.06.12.19.50.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jun 2022 19:50:44 -0700 (PDT)
+Received: (nullmailer pid 2612895 invoked by uid 1000);
+        Mon, 13 Jun 2022 02:50:42 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Johnson Wang <johnson.wang@mediatek.com>
+Cc:     sboyd@kernel.org, linux-arm-kernel@lists.infradead.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>,
+        devicetree@vger.kernel.org
+In-Reply-To: <20220612135414.3003-2-johnson.wang@mediatek.com>
+References: <20220612135414.3003-1-johnson.wang@mediatek.com> <20220612135414.3003-2-johnson.wang@mediatek.com>
+Subject: Re: [RFC PATCH 1/2] dt-bindings: arm: mediatek: Add new bindings of MediaTek frequency hopping
+Date:   Sun, 12 Jun 2022 20:50:42 -0600
+Message-Id: <1655088642.973172.2612894.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 12 Jun 2022 21:54:13 +0800, Johnson Wang wrote:
+> This patch adds the new binding documentation for frequency hopping
+> and spread spectrum clocking control on MT8186.
+> 
+> Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> ---
+>  .../bindings/arm/mediatek/mediatek,fhctl.yaml | 149 ++++++++++++++++++
+>  1 file changed, 149 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
+> 
 
-On 6/12/22 13:40, Tejun Heo wrote:
-> Hello,
->
-> Sorry about the long delay.
->
-> On Tue, May 10, 2022 at 11:34:08AM -0400, Waiman Long wrote:
->> Once a partition with empty "cpuset.cpus.effective" is formed, no
->> new task can be moved into it until "cpuset.cpus.effective" becomes
->> non-empty.
-> This is always true due to no-tasks-in-intermediate-cgroups requirement,
-> right?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-I seems to remember there are corner cases where a task can be moved to 
-an intermediate cgroup under circumstances. I need to dig further to 
-find out what it is.
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml:44:111: [warning] line too long (133 > 110 characters) (line-length)
 
-Cheers,
-Longman
+dtschema/dtc warnings/errors:
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

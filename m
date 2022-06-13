@@ -2,221 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B719547E47
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 05:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D3F547E48
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 05:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231640AbiFMD5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 23:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
+        id S233233AbiFMD5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 23:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbiFMD5C (ORCPT
+        with ESMTP id S231715AbiFMD5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 23:57:02 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC212F00D
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 20:57:00 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25CLCQp1029706;
-        Mon, 13 Jun 2022 03:56:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=KG14P2TM148vVQXg7+Ea7fiMQd0OFS2RupI3bS6V/IM=;
- b=bzUa9NeHLOPmuqJijE1Q3zblmL5y1E8cQ4VARxnh9+izhoyqLW7dJfo0aADfCuidxL4j
- WrmpOgeT71fuaVQJsKJ4Oir5Wiku2hleZQ2xMZO6fIyJkcJZ8B66MtRaPQOcNXPVvLg5
- SKzX6fALWQUbWDDvW9kI5/eeEgpNqqpqfPZZIuyZvYukcgTeVYUPc4dRhrKndSNPu2DI
- Wp7+LATotq+oiO2w1iHpUOD4Qmqtmmqt1P7TASoLVmLPQ73ZAZTKd8Y55xy46TiMKkED
- yJbvqh+eps97k2JxbSvGG3rSffTMeeJziSQ1vqP4quJuYYl2g7xYW5eMtJU4DGugOGmK Gw== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gmkkt9y49-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Jun 2022 03:56:56 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25D3uoLi019918;
-        Mon, 13 Jun 2022 03:56:55 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2106.outbound.protection.outlook.com [104.47.70.106])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gmhg2x3ds-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Jun 2022 03:56:55 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BnR7n6MCuixzjoqc8lqH6PHgFuXZxxEWsk9yjr4WNj7RUiXoNNk5PdOkslIufYVXzVwznOMg6j3NFfAlCXSiiB0YS785MYdfd7XnDfI4hpdD/F7AQ0GTIzKj0HYO34tnM4YEkAEIbBe8teNht4XkAQ25ctoBd0PoiynrkMlxmWdbmdsORBLKDFESgdLvzFMvX554jxgv30IbkgiTQ9Zlezo9tC2s6PwO39nmzDYraBBmx+4T+EjsclTdDOwL3OngUjweNSOou7jfuYXulZqC9F/9wlvhr5IdtKG0OW6j93PhQZb9gXm/XaAGgOELMMybzbaj687qhiNSPrRw0v201A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KG14P2TM148vVQXg7+Ea7fiMQd0OFS2RupI3bS6V/IM=;
- b=i3KXGX4jKJif9CDeaKz1eN3NoM5Wl6afqWXrA524Go4fDaoKyOJT+nDkBYgi164oR2k4cQqO5Kr0QgaQj8mIkIJBJtppuKifcJc72bcUCtNGv28EMcrZrIvsgjKSGyQhn9hLRAjcUu5oG4YZ6jeJ1gHffrhNGjHzVXX8qFmdnAAz+sTb+UpB7pVrCHSUtwq6IQ6li39AEStq8Hjg52HoX73qrGroToKwVbm5yw+UXR9dfqCf4s6QiOWcxAF0Fx4Hff561GyzzjNBbagbeZmpeHpSEB8IRFCm9xubBGADmCpwGJ1TEsF9Fq5J8QwXLfTizdmq8uRiMm30KT+sxIbiUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KG14P2TM148vVQXg7+Ea7fiMQd0OFS2RupI3bS6V/IM=;
- b=gVtMqqCseCNsbbKBpS84U6nI0M05OHrLJz3dNLPfrR5H9W7Ewg17BRlCZQFPQoiKvURqmB20DTR8by3RQS/XLHIwEn1kaCjOpViEmvy6eLn1KiFvNXrpB12QxP0yXVnDr/aNEi9PvFPRLqOut74cg8J9vDea+1biug0ohP86B0E=
-Received: from CO1PR10MB4468.namprd10.prod.outlook.com (2603:10b6:303:6c::24)
- by PH0PR10MB5514.namprd10.prod.outlook.com (2603:10b6:510:106::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Mon, 13 Jun
- 2022 03:56:52 +0000
-Received: from CO1PR10MB4468.namprd10.prod.outlook.com
- ([fe80::e9bd:ba52:c1c2:11e0]) by CO1PR10MB4468.namprd10.prod.outlook.com
- ([fe80::e9bd:ba52:c1c2:11e0%9]) with mapi id 15.20.5332.020; Mon, 13 Jun 2022
- 03:56:51 +0000
-Message-ID: <61868aa1-6c88-ecd2-beb2-67b87673b805@oracle.com>
-Date:   Mon, 13 Jun 2022 13:56:43 +1000
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH RESEND v4 1/4] kernfs: make ->attr.open RCU protected.
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     viro@zeniv.linux.org.uk, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org
-References: <20220602063907.136569-1-imran.f.khan@oracle.com>
- <20220602063907.136569-2-imran.f.khan@oracle.com>
- <YqYpTShTDLvAp4vx@slm.duckdns.org>
- <6d1c5a49-fc16-5fc7-e527-8cb91ec0d25c@oracle.com>
- <YqalHuEB6OjjUosV@slm.duckdns.org>
- <c8a8a616-da4c-f2ce-0bb2-e0cba69db24d@oracle.com>
- <Yqaqbas1JaWz25jB@slm.duckdns.org>
-From:   Imran Khan <imran.f.khan@oracle.com>
-In-Reply-To: <Yqaqbas1JaWz25jB@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SYBPR01CA0012.ausprd01.prod.outlook.com (2603:10c6:10::24)
- To CO1PR10MB4468.namprd10.prod.outlook.com (2603:10b6:303:6c::24)
+        Sun, 12 Jun 2022 23:57:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9972F003;
+        Sun, 12 Jun 2022 20:57:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED7A8B80C2C;
+        Mon, 13 Jun 2022 03:57:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99530C34114;
+        Mon, 13 Jun 2022 03:57:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655092631;
+        bh=n6L7+GN6c98KlXxT67e3KTi1pAifCS4pa6ZwyCqoFaQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=G4fa0bIQPV4WF5AYAJv4Ec2BuJwAkQQvM7ardgZNR6yGsXRwuOsUHO1hmqIzpygGC
+         6K7193MoarxePSR5eX5CHzlkL29/SNHf9GjDGoKdQ9TNtHjJbTqjPxRk+hGphPWA5y
+         AFn32WHLbRQjYy3uyKxjwel3rtSt9zogLvWquuWx5aVwTGk4tg/jXeQn7WQB9CxDqR
+         V2JVs4cRraCitbPuRP6CncAh8n5jOsJMxOZDDgOd/gXsP58icSLToglYse4TIxCQgS
+         CWNF6RZWAjhD3+TNZgucF37I5pYN+Up8n9gjYVNU0PQbb38eXW7w9lnD8X5UIxbq2P
+         O+nxJPiv9YnjQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 3A9C25C059E; Sun, 12 Jun 2022 20:57:11 -0700 (PDT)
+Date:   Sun, 12 Jun 2022 20:57:11 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        rcu@vger.kernel.org, Lai Jiangshan <jiangshanlai@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Shameerali Kolothum Thodi 
+        <shameerali.kolothum.thodi@huawei.com>, mtosatti@redhat.com,
+        sheng.yang@intel.com
+Subject: Re: Commit 282d8998e997 (srcu: Prevent expedited GPs and blocking
+ readers from consuming CPU) cause qemu boot slow
+Message-ID: <20220613035711.GY1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20615615-0013-5adc-584f-2b1d5c03ebfc@linaro.org>
+ <20220611165956.GO1790663@paulmck-ThinkPad-P17-Gen-1>
+ <tencent_80D2801BC03B7006BB2230B6A1D5C69B9209@qq.com>
+ <20220612133631.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+ <tencent_2B7B5B8DBE69330DA041AEE36C1029826905@qq.com>
+ <20220612162029.GR1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220612164002.GA1242564@paulmck-ThinkPad-P17-Gen-1>
+ <560f7d27-fe38-0db9-834a-50dda5fa6157@redhat.com>
+ <20220612184944.GU1790663@paulmck-ThinkPad-P17-Gen-1>
+ <tencent_E306F58EAEC1D188ED6D5F358A269F34C707@qq.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d8d54d11-111e-4cd8-11e6-08da4cf0bf99
-X-MS-TrafficTypeDiagnostic: PH0PR10MB5514:EE_
-X-Microsoft-Antispam-PRVS: <PH0PR10MB5514A43111156D8226A48DCBB0AB9@PH0PR10MB5514.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: IVHr8XFGdRVXKn8VvJ4HUYGiMTtAfjYYfCxbsoaQQLcr3vsoDCM43dq/wWvyANHkuU0AxFLwCTAZY0yEmg/ppvl+reoVl4puMsTFsccKi8PVKOiCiWFO7qyHsCRvShfFJKDR4We7aWbW9ogkQUC3JePmQkLw5yfZOvP79K9w0RUYox78j40zSoEVZDuZeQCCx3SLr/kbzOBFl8OlxhuOvRgO5rTOu/OUpiOaLENw0z5TSz2LPhPuGZ7WaWFBz6volJafG99ndnq/5/WRxo/5YXmwWlNe4bCHyMIlMhcjqbI22OYsurwk7SB9Syr9jLDp7M7YxrfnM1lQLHYEi+S3C7+kXpGaIfwC1zB58YfMj9d3pMWxr29cvfVKkZe+xLkJ/1BcqPf2vQlWpL6quCA5zLw78YLuudp8cem2iWo4yMbmR+c1nL0q19+bB/Q2iy61DXT/MO1J39HhtRKAhXkJLDUW7+3aSdYTCI0Q3z94Gx1FZA6nli9JomcG5oWTwiNojnJ4Y7yuFkJ/WdM5V26PwKmV5xIFE+9K/+B8wuqNH7vUC+foZDla30AMYVrrbpAqKaNcuO2u/jV+DQrfYnUHGXcl1hX8GwuVhvNv6oYDH+kM6jauC3SRP6w8qAQY3MaBk9x6RErdtmabg0PmH+33dx0Nk5g5nnaGPszw010Iow0xNtdoQpK9UrgYLdZyxmdOB0Pz+CCnqZYWGVwdUR2ZY1uAHMBqHQRmyPcx5dULi8w=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4468.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(6486002)(8676002)(66556008)(4326008)(86362001)(508600001)(31696002)(6916009)(316002)(66946007)(66476007)(38100700002)(2616005)(53546011)(6506007)(26005)(186003)(6512007)(6666004)(83380400001)(5660300002)(31686004)(2906002)(36756003)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R1Q3R2k2WURKN3lzS2toNjRjSXg3NE1yajNWN0wyeGZHZERsT1hyaExyMUsx?=
- =?utf-8?B?aDRrVGNjckRLcTBncWhWQWF6cHNzc05TRTIyVytuS0t5TWxkOFg4NGt3TE9M?=
- =?utf-8?B?LytKZnhPL3ExMEZ2KzBPZ0NFNGFBMlVCbzB5dHFEM092dXFqMzJQbHE3VWFU?=
- =?utf-8?B?WXlFYlpmQ2p0TjZuUE90VVcwckVRVUcwaVZ5em1aazNnL2Vhb09NaDVlQmg1?=
- =?utf-8?B?N3ZhZFdBYzVTS0U2Q3VHSTJrZXkyNHJ3Y3VVNmRWMlpsQWJ5UmowdmgzK2hw?=
- =?utf-8?B?LzZoWWI2cm44Q1BJK3owOEVHOURmc0I4TzkxM3dQZjYzYnhOTUJvZWtxaVlR?=
- =?utf-8?B?R1ByZEhyODBZc2RjOTZic2xWS3UrQzBGb2lzbWxnUW4rZ2RtOEJ5dDVJVFpF?=
- =?utf-8?B?T2JybW0zWEZwV1IwNEw0Sis1czJYMVhGWkFXT09pcDZ6aXROSTNsSm1DazIv?=
- =?utf-8?B?UmJEMHppSnlqczVlUFdRU1d0WU8vWmNqMk4rSk54VEZTbnFNSi9IZ1RBQWp1?=
- =?utf-8?B?d1IzelgxOVdFWGJRRnZNWVB4enUwZ1FjN1hFWTR4ZnB0cXZVd3hjUHk2UXVp?=
- =?utf-8?B?M2FTU2F6TTEzRVhici9YdldoU3d6ZDhMMFJRVDA0c0h0NkpRWUVMeGt3Ym5T?=
- =?utf-8?B?dlZkQVorQXFoYXVNM0xxN1RSZmlFNkpuc2N4Y0RvMWJ5dHFhdWNtLzhIVUgy?=
- =?utf-8?B?cmRRcEZQYWNBdmpWN1QwTlczQ0Y0cjdHQkQrY3V0SEZJTWtGLzQ4Yy9MQUZi?=
- =?utf-8?B?MUpuQ1hDY0pDTXFxbUZsODNUdWU2dzVZQW1lT1pyd3l5MXg4NVR0ZXhQdzF5?=
- =?utf-8?B?SzJJbkxxNUpCTFVjeDh5YUsrUmdDNHJ1ZTJlY3dGLzllQlhPOGJ6OWdFWmhT?=
- =?utf-8?B?SzNaTjN3VE9mNEdNK0NDY3VtZ2JORVpwNmI0ejFTTnh4U0d3UlYxZWViVk1r?=
- =?utf-8?B?V3ZVUlNVNWN2S3NoRUNDYzF0Mk5PY2U0bGNCQ2tiQXdZVk9hS2ozWGx2NHZL?=
- =?utf-8?B?em8ySm9SaUxvVnFRa2lMUkZpZThTalFmQ1FidmJtQllEL3BlZ2QzOHJyellS?=
- =?utf-8?B?TTlFZThNd1c3bEJYSTNlRlFvWm90UTZiT09HYnhlM3NudUtLNXRRZXVCVWJn?=
- =?utf-8?B?cjJXU05qUGdQenVnaFhUU3l2R2RLRHZ0VVZSWndqTjBTSnhxUkFBSXZSM1M4?=
- =?utf-8?B?ZUN2QUIzR01CYXpJQUVWaEZ0QW56NkxCVFVhdVU2MmlHR1JROHptcDg1S0Vu?=
- =?utf-8?B?Y2hXYnRGdElMRVdKNGN6QXc5anJBVXNRcjJ6dHg5TUh2eVI0aVpkU3dNN0s4?=
- =?utf-8?B?SUNmY0dJb0UvbVo3c0JzdmtZU1BNbzlhZWxJeHZwcHBKVFVTc24rMnVZbm1J?=
- =?utf-8?B?emZKWUZZejhVbUUxMUo0bVIxaFlTUnJzUlJLUkRzMy84Nlp3bExrU29BUUV5?=
- =?utf-8?B?WFBHZEJ1QzZDV1M5T2M3MzhlYWVwcFNXenZ0RHQrR05lWGg1MnpSOUVsSito?=
- =?utf-8?B?UGswNEl2bi9JaytXdkdTNG15QjhTUkovOWVQalhCVTlUUnNwclhNWGplUWlo?=
- =?utf-8?B?cDBhbFpoVGk4eEFmQmI5ZDZnWTBYZVliV09kWEh1Tk1RczhaZDhJTGRzQTQv?=
- =?utf-8?B?Q0NvaTNSMGIvZHhaRkkrTWhPb3dvS1FhMGI1dVRjYW9jMTZ2cFZSdk9jbk5G?=
- =?utf-8?B?U1VhcjNUSEJhcVFyTVpZQmdycGs1OEduZERBMUVsOUxsUTkvcmdPb1VqdXFX?=
- =?utf-8?B?MWIzNFRWMk5RWW1ETXFKeEtGaUtJenRDTHJ2bUgrZEJDR2p3UDBld0pTcEtn?=
- =?utf-8?B?OGdvTjJDRmxOMzlZOFhqSUVlWVFwbXNGSXhXUmkxNGQrclZ3NXprN2xERUt0?=
- =?utf-8?B?ME5yZGFvdWY0aE9ZWm9YM0wyaEFDQiswOHRtWnBNUHVlamUrMmRxUHJ1anV5?=
- =?utf-8?B?b3lhbW8xUWRQNHNiNElhZnhnbXBZdlJFNmZvS0ErT2ZsN2o4UXMzQ2ZENDZh?=
- =?utf-8?B?a09pRGswZVRSOXFqTWgzb1RMa3pxN0x6ZnJzRE5uVWgzL2p6bnpYUThHaDd0?=
- =?utf-8?B?T1ozK0dDTlg2dEpMUWhoMkxxWWhuSnQ4OWtrQ21vZ1QrZ2x4bGZ6V05xOG5v?=
- =?utf-8?B?dGVrSExEaUNYV1ovMUxJZzIzQ3BsZGJzMDkzeGYzWktmUW5WRGVkcXJsWGxE?=
- =?utf-8?B?T2Jwb3hyY2JQRTNDdHhhMUcyWE04aVk0SXY5aUEzMDlUU2FxWWZWM201ZmNW?=
- =?utf-8?B?UTdIVFlZRFo0T0NDY2JxU1VKNjR5Y1l3Y2dCMklybTN3aUhLbjFQZisyanBO?=
- =?utf-8?B?Nm9kZVFiR1Z5OTBCN1NrVHMrUy9DOUpiVWNyRXhKTXlDcDVjRUZWa2R2d2VY?=
- =?utf-8?Q?m2ANOJKM0Xbw24y0=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8d54d11-111e-4cd8-11e6-08da4cf0bf99
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4468.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2022 03:56:51.7638
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xbU9LRRiIuXJLKKLTcC49XoD+v6XfSGvGPz9KcdIIQVNOtufDdnYX27rhs/KSYWmKVA68O2ta5RDQ+B3fEvrtg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5514
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
- definitions=2022-06-13_01:2022-06-09,2022-06-13 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=625 mlxscore=0 spamscore=0
- bulkscore=0 malwarescore=0 phishscore=0 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
- definitions=main-2206130016
-X-Proofpoint-GUID: g3geutz3wgzg7U_h6gN0FBOgeCMx1t7N
-X-Proofpoint-ORIG-GUID: g3geutz3wgzg7U_h6gN0FBOgeCMx1t7N
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <tencent_E306F58EAEC1D188ED6D5F358A269F34C707@qq.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Tejun,
-
-On 13/6/22 1:09 pm, Tejun Heo wrote:
-> On Mon, Jun 13, 2022 at 12:55:14PM +1000, Imran Khan wrote:
->> I took below phrases as reference:
->>
->> If the access might be within an RCU read-side critical section on the one hand,
->> or protected by (say) my_lock on the other, use rcu_dereference_check(), for
->> example:
->>
->> p1 = rcu_dereference_check(p->rcu_protected_pointer,
->>                            lockdep_is_held(&my_lock));
->>
->>
->> and
->>
->>
->> If the access might be within an RCU read-side critical section on the one hand,
->> or protected by either my_lock or your_lock on the other, again use
->> rcu_dereference_check(), for example:
->>
->> p1 = rcu_dereference_check(p->rcu_protected_pointer,
->>                            lockdep_is_held(&my_lock) ||
->>                            lockdep_is_held(&your_lock));
+On Mon, Jun 13, 2022 at 11:04:39AM +0800, zhangfei.gao@foxmail.com wrote:
+> Hi, Paul
 > 
-> So, both are saying that if a given reference can be under both read
-> critical section or a lock which blocks updates, you can use deref_check to
-> cover both cases - we're just using the stronger form of derefing even
-> though that's not necessary while update side is locked out, which is fine.
+> On 2022/6/13 上午2:49, Paul E. McKenney wrote:
+> > On Sun, Jun 12, 2022 at 07:29:30PM +0200, Paolo Bonzini wrote:
+> > > On 6/12/22 18:40, Paul E. McKenney wrote:
+> > > > > Do these reserved memory regions really need to be allocated separately?
+> > > > > (For example, are they really all non-contiguous?  If not, that is, if
+> > > > > there are a lot of contiguous memory regions, could you sort the IORT
+> > > > > by address and do one ioctl() for each set of contiguous memory regions?)
+> > > > > 
+> > > > > Are all of these reserved memory regions set up before init is spawned?
+> > > > > 
+> > > > > Are all of these reserved memory regions set up while there is only a
+> > > > > single vCPU up and running?
+> > > > > 
+> > > > > Is the SRCU grace period really needed in this case?  (I freely confess
+> > > > > to not being all that familiar with KVM.)
+> > > > Oh, and there was a similar many-requests problem with networking many
+> > > > years ago.  This was solved by adding a new syscall/ioctl()/whatever
+> > > > that permitted many requests to be presented to the kernel with a single
+> > > > system call.
+> > > > 
+> > > > Could a new ioctl() be introduced that requested a large number
+> > > > of these memory regions in one go so as to make each call to
+> > > > synchronize_rcu_expedited() cover a useful fraction of your 9000+
+> > > > requests?  Adding a few of the KVM guys on CC for their thoughts.
+> > > Unfortunately not.  Apart from this specific case, in general the calls to
+> > > KVM_SET_USER_MEMORY_REGION are triggered by writes to I/O registers in the
+> > > guest, and those writes then map to a ioctl.  Typically the guest sets up a
+> > > device at a time, and each setup step causes a synchronize_srcu()---and
+> > > expedited at that.
+> > I was afraid of something like that...
+> > 
+> > > KVM has two SRCUs:
+> > > 
+> > > 1) kvm->irq_srcu is hardly relying on the "sleepable" part; it has readers
+> > > that are very very small, but it needs extremely fast detection of grace
+> > > periods; see commit 719d93cd5f5c ("kvm/irqchip: Speed up
+> > > KVM_SET_GSI_ROUTING", 2014-05-05) which split it off kvm->srcu.  Readers are
+> > > not so frequent.
+> > > 
+> > > 2) kvm->srcu is nastier because there are readers all the time.  The
+> > > read-side critical section are still short-ish, but they need the sleepable
+> > > part because they access user memory.
+> > Which one of these two is in play in this case?
+> > 
+> > > Writers are not frequent per se; the problem is they come in very large
+> > > bursts when a guest boots.  And while the whole boot path overall can be
+> > > quadratic, O(n) expensive calls to synchronize_srcu() can have a larger
+> > > impact on runtime than the O(n^2) parts, as demonstrated here.
+> > > 
+> > > Therefore, we operated on the assumption that the callers of
+> > > synchronized_srcu_expedited were _anyway_ busy running CPU-bound guest code
+> > > and the desire was to get past the booting phase as fast as possible.  If
+> > > the guest wants to eat host CPU it can "for(;;)" as much as it wants;
+> > > therefore, as long as expedited GPs didn't eat CPU *throughout the whole
+> > > system*, a preemptable busy wait in synchronize_srcu_expedited() were not
+> > > problematic.
+> > > 
+> > > This assumptions did match the SRCU code when kvm->srcu and kvm->irq_srcu
+> > > were was introduced (respectively in 2009 and 2014).  But perhaps they do
+> > > not hold anymore now that each SRCU is not as independent as it used to be
+> > > in those years, and instead they use workqueues instead?
+> > The problem was not internal to SRCU, but rather due to the fact
+> > that kernel live patching (KLP) had problems with the CPU-bound tasks
+> > resulting from repeated synchronize_rcu_expedited() invocations.  So I
+> > added heuristics to get the occasional sleep in there for KLP's benefit.
+> > Perhaps these heuristics need to be less aggressive about adding sleep.
+> > 
+> > These heuristics have these aspects:
+> > 
+> > 1.	The longer readers persist in an expedited SRCU grace period,
+> > 	the longer the wait between successive checks of the reader
+> > 	state.  Roughly speaking, we wait as long as the grace period
+> > 	has currently been in effect, capped at ten jiffies.
+> > 
+> > 2.	SRCU grace periods have several phases.  We reset so that each
+> > 	phase starts by not waiting (new phase, new set of readers,
+> > 	so don't penalize this set for the sins of the previous set).
+> > 	But once we get to the point of adding delay, we add the
+> > 	delay based on the beginning of the full grace period.
+> > 
+> > Right now, the checking for grace-period length does not allow for the
+> > possibility that a grace period might start just before the jiffies
+> > counter gets incremented (because I didn't realize that anyone cared),
+> > so that is one possible thing to change.  I can also allow more no-delay
+> > checks per SRCU grace-period phase.
+> > 
+> > Zhangfei, does something like the patch shown below help?
+> > 
+> > Additional adjustments are likely needed to avoid re-breaking KLP,
+> > but we have to start somewhere...
+> > 
+> > 							Thanx, Paul
+> > 
+> > ------------------------------------------------------------------------
+> > 
+> > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> > index 50ba70f019dea..6a354368ac1d1 100644
+> > --- a/kernel/rcu/srcutree.c
+> > +++ b/kernel/rcu/srcutree.c
+> > @@ -513,7 +513,7 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
+> >   #define SRCU_INTERVAL		1	// Base delay if no expedited GPs pending.
+> >   #define SRCU_MAX_INTERVAL	10	// Maximum incremental delay from slow readers.
+> > -#define SRCU_MAX_NODELAY_PHASE	1	// Maximum per-GP-phase consecutive no-delay instances.
+> > +#define SRCU_MAX_NODELAY_PHASE	3	// Maximum per-GP-phase consecutive no-delay instances.
+> >   #define SRCU_MAX_NODELAY	100	// Maximum consecutive no-delay instances.
+> >   /*
+> > @@ -522,12 +522,18 @@ static bool srcu_readers_active(struct srcu_struct *ssp)
+> >    */
+> >   static unsigned long srcu_get_delay(struct srcu_struct *ssp)
+> >   {
+> > +	unsigned long gpstart;
+> > +	unsigned long j;
+> >   	unsigned long jbase = SRCU_INTERVAL;
+> >   	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
+> >   		jbase = 0;
+> > -	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)))
+> > -		jbase += jiffies - READ_ONCE(ssp->srcu_gp_start);
+> > +	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq))) {
+> > +		j = jiffies - 1;
+> > +		gpstart = READ_ONCE(ssp->srcu_gp_start);
+> > +		if (time_after(j, gpstart))
+> > +			jbase += j - gpstart;
+> > +	}
+> >   	if (!jbase) {
+> >   		WRITE_ONCE(ssp->srcu_n_exp_nodelay, READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
+> >   		if (READ_ONCE(ssp->srcu_n_exp_nodelay) > SRCU_MAX_NODELAY_PHASE)
+> Unfortunately, this patch does not helpful.
 > 
-> The protected one is different in that it doesn't enforce the load ordering
-> which is required for accesses with only RCU read lock. Given that all
-> that's required is dependency ordering, I doubt it makes any actual
-> difference and it likely is more useful in marking a specific dereference as
-> always being with the update side locked.> tl;dr is that you're way over-thinking the rcu deref code. Just make one
-> deref accessor which encompasses all three use cases.
+> Then re-add the debug info.
 > 
+> During the qemu boot
+> [  232.997667]  __synchronize_srcu loop=1000
 > 
+> [  361.094493]  __synchronize_srcu loop=9000
+> [  361.094501] Call trace:
+> [  361.094502]  dump_backtrace+0xe4/0xf0
+> [  361.094505]  show_stack+0x20/0x70
+> [  361.094507]  dump_stack_lvl+0x8c/0xb8
+> [  361.094509]  dump_stack+0x18/0x34
+> [  361.094511]  __synchronize_srcu+0x120/0x128
+> [  361.094514]  synchronize_srcu_expedited+0x2c/0x40
+> [  361.094515]  kvm_swap_active_memslots+0x130/0x198
+> [  361.094519]  kvm_activate_memslot+0x40/0x68
+> [  361.094520]  kvm_set_memslot+0x2f8/0x3b0
+> [  361.094523]  __kvm_set_memory_region+0x2e4/0x438
+> [  361.094524]  kvm_set_memory_region+0x78/0xb8
+> [  361.094526]  kvm_vm_ioctl+0x5a0/0x13e0
+> [  361.094528]  __arm64_sys_ioctl+0xb0/0xf8
+> [  361.094530]  invoke_syscall+0x4c/0x110
+> [  361.094533]  el0_svc_common.constprop.0+0x68/0x128
+> [  361.094536]  do_el0_svc+0x34/0xc0
+> [  361.094538]  el0_svc+0x30/0x98
+> [  361.094541]  el0t_64_sync_handler+0xb8/0xc0
+> [  361.094544]  el0t_64_sync+0x18c/0x190
+> [  363.942817]  kvm_set_memory_region loop=6000
 
-Agree. I did over think this and went for the safest interface that I could
-think of in each of the use cases. I will remove
-kernfs_check_open_node_protected and use kernfs_deref_open_node_protected in its
-place as well. This will cover all accesses under kernfs_open_file_mutex.
+Huh.
 
-But we will still need kernfs_deref_open_node for cases where
-!list_empty(&of->list) ensures safe access of ->attr.open and where we can't
-ensure holding of kernfs_open_file_mutex. So we will need 2 deref accessors.
-Right? Just asking this because you mentioned above to come up with one deref
-accessor that can be used in all three use cases
+One possibility is that the "if (!jbase)" block needs to be nested
+within the "if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq))) {" block.
 
-Please let me if this sounds okay. I can send updated patch-set with these
-changes in place.
+One additional debug is to apply the patch below on top of the one you
+just now kindly tested, then use whatever debug technique you wish to
+work out what fraction of the time during that critical interval that
+srcu_get_delay() returns non-zero.
 
-Thanks,
--- Imran
+Other thoughts?
 
+							Thanx, Paul

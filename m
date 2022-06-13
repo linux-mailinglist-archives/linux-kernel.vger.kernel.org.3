@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE01B549467
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E694548E6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241960AbiFMOt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
+        id S1385777AbiFMOuG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:50:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386503AbiFMOpW (ORCPT
+        with ESMTP id S1386559AbiFMOqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:45:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4F7BCE80;
-        Mon, 13 Jun 2022 04:52:13 -0700 (PDT)
+        Mon, 13 Jun 2022 10:46:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE8EBF133;
+        Mon, 13 Jun 2022 04:52:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED9D6B80EDF;
-        Mon, 13 Jun 2022 11:52:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C6E0C34114;
-        Mon, 13 Jun 2022 11:52:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DD0546133B;
+        Mon, 13 Jun 2022 11:52:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB819C34114;
+        Mon, 13 Jun 2022 11:52:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655121129;
-        bh=LudaSicy4OVyJG6CHKbBAEisNx6AAPDGofTlDKfw0xE=;
+        s=korg; t=1655121135;
+        bh=MmMkYtXo0kaC/SGumxIQWqcUBTgb+3KADcP4UnpW0gM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zFoBokGttxWAeO17CeOwTBr8fVNTVDDDoYNTwC50LqKsxmdgj685oXHalVnD9Iljr
-         MzlRwh1v+v5VrFwr+PmOzO1QTZiMRCjF5XMjaT2iQs1KTTJ+qRkVfofjSbOdm6GmyH
-         55FpEfFkvTLVxxP27tg52ZQgxuZgFfh8ty8waCKg=
+        b=rbGxBohw4UXA9p3bb3bLpvnnrn6CXwQcorIP/Yi0KvQEf0ICGy34b6RHKGvsG+KC3
+         YRgGWXe6Drme1lkcc+ix0oTsLR98lZR51/gsXUDHGAnBRF5cOXlkTqZRr7N8EzJbVG
+         5eOUyZBTBZFCglMMIcSXJwKJNSUUQN1qoPscc0cA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.17 283/298] powerpc: Dont select HAVE_IRQ_EXIT_ON_IRQ_STACK
-Date:   Mon, 13 Jun 2022 12:12:57 +0200
-Message-Id: <20220613094933.665209395@linuxfoundation.org>
+        stable@vger.kernel.org, Liu Ying <victor.liu@oss.nxp.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: [PATCH 5.17 285/298] drm/atomic: Force bridge self-refresh-exit on CRTC switch
+Date:   Mon, 13 Jun 2022 12:12:59 +0200
+Message-Id: <20220613094933.725811695@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
 References: <20220613094924.913340374@linuxfoundation.org>
@@ -53,52 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Brian Norris <briannorris@chromium.org>
 
-commit 1346d00e1bdfd4067f92bc14e8a6131a01de4190 upstream.
+commit e54a4424925a27ed94dff046db3ce5caf4b1e748 upstream.
 
-The HAVE_IRQ_EXIT_ON_IRQ_STACK option tells generic code that irq_exit()
-is called while still running on the hard irq stack (hardirq_ctx[] in
-the powerpc code).
+It's possible to change which CRTC is in use for a given
+connector/encoder/bridge while we're in self-refresh without fully
+disabling the connector/encoder/bridge along the way. This can confuse
+the bridge encoder/bridge, because
+(a) it needs to track the SR state (trying to perform "active"
+    operations while the panel is still in SR can be Bad(TM)); and
+(b) it tracks the SR state via the CRTC state (and after the switch, the
+    previous SR state is lost).
 
-Selecting the option means the generic code will *not* switch to the
-softirq stack before running softirqs, because the code is already
-running on the (mostly empty) hard irq stack.
+Thus, we need to either somehow carry the self-refresh state over to the
+new CRTC, or else force an encoder/bridge self-refresh transition during
+such a switch.
 
-But since commit 1b1b6a6f4cc0 ("powerpc: handle irq_enter/irq_exit in
-interrupt handler wrappers"), irq_exit() is now called on the regular task
-stack, not the hard irq stack.
+I choose the latter, so we disable the encoder (and exit PSR) before
+attaching it to the new CRTC (where we can continue to assume a clean
+(non-self-refresh) state).
 
-That's because previously irq_exit() was called in __do_irq() which is
-run on the hard irq stack, but now it is called in
-interrupt_async_exit_prepare() which is called from do_irq() constructed
-by the wrapper macro, which is after the switch back to the task stack.
+This fixes PSR issues seen on Rockchip RK3399 systems with
+drivers/gpu/drm/bridge/analogix/analogix_dp_core.c.
 
-So drop HAVE_IRQ_EXIT_ON_IRQ_STACK from the Kconfig. This will mean an
-extra stack switch when processing some interrupts, but should
-significantly reduce the likelihood of stack overflow.
+Change in v2:
 
-It also means the softirq stack will be used for running softirqs from
-other interrupts that don't use the hard irq stack, eg. timer interrupts.
+- Drop "->enable" condition; this could possibly be "->active" to
+  reflect the intended hardware state, but it also is a little
+  over-specific. We want to make a transition through "disabled" any
+  time we're exiting PSR at the same time as a CRTC switch.
+  (Thanks Liu Ying)
 
-Fixes: 1b1b6a6f4cc0 ("powerpc: handle irq_enter/irq_exit in interrupt handler wrappers")
-Cc: stable@vger.kernel.org # v5.12+
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220525032639.1947280-1-mpe@ellerman.id.au
+Cc: Liu Ying <victor.liu@oss.nxp.com>
+Cc: <stable@vger.kernel.org>
+Fixes: 1452c25b0e60 ("drm: Add helpers to kick off self refresh mode in drivers")
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Reviewed-by: Sean Paul <seanpaul@chromium.org>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220228122522.v2.2.Ic15a2ef69c540aee8732703103e2cff51fb9c399@changeid
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/Kconfig |    1 -
- 1 file changed, 1 deletion(-)
+ drivers/gpu/drm/drm_atomic_helper.c |   16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -211,7 +211,6 @@ config PPC
- 	select HAVE_HARDLOCKUP_DETECTOR_PERF	if PERF_EVENTS && HAVE_PERF_EVENTS_NMI && !HAVE_HARDLOCKUP_DETECTOR_ARCH
- 	select HAVE_HW_BREAKPOINT		if PERF_EVENTS && (PPC_BOOK3S || PPC_8xx)
- 	select HAVE_IOREMAP_PROT
--	select HAVE_IRQ_EXIT_ON_IRQ_STACK
- 	select HAVE_IRQ_TIME_ACCOUNTING
- 	select HAVE_KERNEL_GZIP
- 	select HAVE_KERNEL_LZMA			if DEFAULT_UIMAGE
+--- a/drivers/gpu/drm/drm_atomic_helper.c
++++ b/drivers/gpu/drm/drm_atomic_helper.c
+@@ -1011,9 +1011,19 @@ crtc_needs_disable(struct drm_crtc_state
+ 		return drm_atomic_crtc_effectively_active(old_state);
+ 
+ 	/*
+-	 * We need to run through the crtc_funcs->disable() function if the CRTC
+-	 * is currently on, if it's transitioning to self refresh mode, or if
+-	 * it's in self refresh mode and needs to be fully disabled.
++	 * We need to disable bridge(s) and CRTC if we're transitioning out of
++	 * self-refresh and changing CRTCs at the same time, because the
++	 * bridge tracks self-refresh status via CRTC state.
++	 */
++	if (old_state->self_refresh_active &&
++	    old_state->crtc != new_state->crtc)
++		return true;
++
++	/*
++	 * We also need to run through the crtc_funcs->disable() function if
++	 * the CRTC is currently on, if it's transitioning to self refresh
++	 * mode, or if it's in self refresh mode and needs to be fully
++	 * disabled.
+ 	 */
+ 	return old_state->active ||
+ 	       (old_state->self_refresh_active && !new_state->active) ||
 
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B991D549115
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7B554941E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350149AbiFMMZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
+        id S1378443AbiFMNq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354965AbiFMMXv (ORCPT
+        with ESMTP id S1379197AbiFMNkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:23:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0BA31511;
-        Mon, 13 Jun 2022 04:04:04 -0700 (PDT)
+        Mon, 13 Jun 2022 09:40:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDFE388E;
+        Mon, 13 Jun 2022 04:29:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1EA7DB80E92;
-        Mon, 13 Jun 2022 11:04:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D4C5C34114;
-        Mon, 13 Jun 2022 11:04:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12F0A61046;
+        Mon, 13 Jun 2022 11:29:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 248AEC3411E;
+        Mon, 13 Jun 2022 11:29:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118241;
-        bh=go+bLNCXMVhWeT4gE5HjpGEJBCskRbxmxK2/0B/cnJY=;
+        s=korg; t=1655119788;
+        bh=Ua2pOqxFic8s1/hHtX7ElNiaJNpH7dmOCcAyvxB0wAE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LiHJ7ArFuE4Pg64EWkv+rBo+4YXiASsUIBxym//enqt16lI0BUlleOytLM2CIeRwd
-         Wdwjas4BChUZCPvPY9lJkx5zQllJSmTrKKfIRFR4T8vLETcM6LuENoF0dMx3ihSWXA
-         yMeZyzlVJpG/QOU2g6Dmwty4I1g4QynXlMzyuu18=
+        b=CID9E5299N79XKcxmHvhYfpf0lkpI2yXnI3wl1KvLVGaeCO4HrGvhWr96CLWmjHYf
+         03hQT2Sd1h7DGZGX2kwCxOXhvN3d/w0XGjq+Vl383M+1yUERKvuglSwDNv60yUix9w
+         u6TyFpZOOYftsDy/ypLLcL7JF4np+VPcj1j9agy0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 005/172] tty: goldfish: Use tty_port_destroy() to destroy port
+Subject: [PATCH 5.18 140/339] afs: Fix infinite loop found by xfstest generic/676
 Date:   Mon, 13 Jun 2022 12:09:25 +0200
-Message-Id: <20220613094851.624021318@linuxfoundation.org>
+Message-Id: <20220613094930.930897521@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,46 +57,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Weiyang <wangweiyang2@huawei.com>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit 507b05063d1b7a1fcb9f7d7c47586fc4f3508f98 ]
+[ Upstream commit 17eabd42560f4636648ad65ba5b20228071e2363 ]
 
-In goldfish_tty_probe(), the port initialized through tty_port_init()
-should be destroyed in error paths.In goldfish_tty_remove(), qtty->port
-also should be destroyed or else might leak resources.
+In AFS, a directory is handled as a file that the client downloads and
+parses locally for the purposes of performing lookup and getdents
+operations.  The in-kernel afs filesystem has a number of functions that
+do this.
 
-Fix the above by calling tty_port_destroy().
+A directory file is arranged as a series of 2K blocks divided into
+32-byte slots, where a directory entry occupies one or more slots, plus
+each block starts with one or more metadata blocks.
 
-Fixes: 666b7793d4bf ("goldfish: tty driver")
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-Signed-off-by: Wang Weiyang <wangweiyang2@huawei.com>
-Link: https://lore.kernel.org/r/20220328115844.86032-1-wangweiyang2@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+When parsing a block, if the last slots are occupied by a dirent that
+occupies more than a single slot and the file position points at a slot
+that's not the initial one, the logic in afs_dir_iterate_block() that
+skips over it won't advance the file pointer to the end of it.  This
+will cause an infinite loop in getdents() as it will keep retrying that
+block and failing to advance beyond the final entry.
+
+Fix this by advancing the file pointer if the next entry will be beyond
+it when we skip a block.
+
+This was found by the generic/676 xfstest but can also be triggered with
+something like:
+
+	~/xfstests-dev/src/t_readdir_3 /xfstest.test/z 4000 1
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
+Tested-by: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: http://lore.kernel.org/r/165391973497.110268.2939296942213894166.stgit@warthog.procyon.org.uk/
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/goldfish.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/afs/dir.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
-index c8c5cdfc5e19..abc84d84f638 100644
---- a/drivers/tty/goldfish.c
-+++ b/drivers/tty/goldfish.c
-@@ -407,6 +407,7 @@ static int goldfish_tty_probe(struct platform_device *pdev)
- err_tty_register_device_failed:
- 	free_irq(irq, qtty);
- err_dec_line_count:
-+	tty_port_destroy(&qtty->port);
- 	goldfish_tty_current_line_count--;
- 	if (goldfish_tty_current_line_count == 0)
- 		goldfish_tty_delete_driver();
-@@ -428,6 +429,7 @@ static int goldfish_tty_remove(struct platform_device *pdev)
- 	iounmap(qtty->base);
- 	qtty->base = NULL;
- 	free_irq(qtty->irq, pdev);
-+	tty_port_destroy(&qtty->port);
- 	goldfish_tty_current_line_count--;
- 	if (goldfish_tty_current_line_count == 0)
- 		goldfish_tty_delete_driver();
+diff --git a/fs/afs/dir.c b/fs/afs/dir.c
+index 932e61e28e5d..bdac73554e6e 100644
+--- a/fs/afs/dir.c
++++ b/fs/afs/dir.c
+@@ -463,8 +463,11 @@ static int afs_dir_iterate_block(struct afs_vnode *dvnode,
+ 		}
+ 
+ 		/* skip if starts before the current position */
+-		if (offset < curr)
++		if (offset < curr) {
++			if (next > curr)
++				ctx->pos = blkoff + next * sizeof(union afs_xdr_dirent);
+ 			continue;
++		}
+ 
+ 		/* found the next entry */
+ 		if (!dir_emit(ctx, dire->u.name, nlen,
 -- 
 2.35.1
 

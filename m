@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09DF8548B46
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B68D548E00
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359534AbiFMNNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
+        id S1350752AbiFMMmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358659AbiFMNHN (ORCPT
+        with ESMTP id S1355359AbiFMMjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:07:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55192381A0;
-        Mon, 13 Jun 2022 04:18:46 -0700 (PDT)
+        Mon, 13 Jun 2022 08:39:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDE45DD15;
+        Mon, 13 Jun 2022 04:08:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E8B960B6E;
-        Mon, 13 Jun 2022 11:18:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD97EC34114;
-        Mon, 13 Jun 2022 11:18:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BCF160907;
+        Mon, 13 Jun 2022 11:08:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CCADC34114;
+        Mon, 13 Jun 2022 11:08:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119125;
-        bh=XGML3YZdCB8pHt7L9TOGhy/gKBjQ+AGJw/xGujIi+wg=;
+        s=korg; t=1655118532;
+        bh=A57Kn9yHKSruzqPikY/KKRTooadEtFehntpAzkDeDag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vYA9cRavKcKzSQcUYeR+ozJ4hPZVWhotmZgTwrpZsOnE5JW0gjBv445a2A1oEbGm3
-         902IvonmeaQ5lhzb/XPrK8rx9rH395LentV5RSH0ZB8ebz2vXYmyNmwORmoXAuKWYV
-         xYSY1n57qxWo4jmqbFt7HtdE74OBryarTydO/QQQ=
+        b=lW28sc894HO5WD4pzuGZMeH8aCZwSygINUfoAZSKQKxV9tpdGFQ9csWh0FUyjDNLZ
+         4DoiK1nCOZR498GoBmEbiy1idqDqPYXCC6yqO+LuRK/izvJwKsvm3yun0t+aicQbME
+         d/yVK44UNRWsilAr7ycxrlM0D9ahYZgTKR4nu8J8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
-        NeilBrown <neilb@suse.de>,
-        "J. Bruce Fields" <bfields@fieldses.org>,
+        stable@vger.kernel.org, Erhard Furtner <erhard_f@mailbox.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 150/247] SUNRPC: Fix the calculation of xdr->end in xdr_get_next_encode_buffer()
-Date:   Mon, 13 Jun 2022 12:10:52 +0200
-Message-Id: <20220613094927.504464728@linuxfoundation.org>
+Subject: [PATCH 5.10 093/172] powerpc/kasan: Force thread size increase with KASAN
+Date:   Mon, 13 Jun 2022 12:10:53 +0200
+Message-Id: <20220613094912.790337258@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuck Lever <chuck.lever@oracle.com>
+From: Michael Ellerman <mpe@ellerman.id.au>
 
-[ Upstream commit 6c254bf3b637dd4ef4f78eb78c7447419c0161d7 ]
+[ Upstream commit 3e8635fb2e072672cbc650989ffedf8300ad67fb ]
 
-I found that NFSD's new NFSv3 READDIRPLUS XDR encoder was screwing up
-right at the end of the page array. xdr_get_next_encode_buffer() does
-not compute the value of xdr->end correctly:
+KASAN causes increased stack usage, which can lead to stack overflows.
 
- * The check to see if we're on the final available page in xdr->buf
-   needs to account for the space consumed by @nbytes.
+The logic in Kconfig to suggest a larger default doesn't work if a user
+has CONFIG_EXPERT enabled and has an existing .config with a smaller
+value.
 
- * The new xdr->end value needs to account for the portion of @nbytes
-   that is to be encoded into the previous buffer.
+Follow the lead of x86 and arm64, and force the thread size to be
+increased when KASAN is enabled.
 
-Fixes: 2825a7f90753 ("nfsd4: allow encoding across page boundaries")
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
-Reviewed-by: NeilBrown <neilb@suse.de>
-Reviewed-by: J. Bruce Fields <bfields@fieldses.org>
+That also has the effect of enlarging the stack for 64-bit KASAN builds,
+which is also desirable.
+
+Fixes: edbadaf06710 ("powerpc/kasan: Fix stack overflow by increasing THREAD_SHIFT")
+Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+Reported-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+[mpe: Use MIN_THREAD_SHIFT as suggested by Christophe]
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220601143114.133524-1-mpe@ellerman.id.au
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/xdr.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ arch/powerpc/Kconfig                   |  1 -
+ arch/powerpc/include/asm/thread_info.h | 10 ++++++++--
+ 2 files changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/net/sunrpc/xdr.c b/net/sunrpc/xdr.c
-index ca10ba2626f2..85473264cccf 100644
---- a/net/sunrpc/xdr.c
-+++ b/net/sunrpc/xdr.c
-@@ -979,7 +979,11 @@ static __be32 *xdr_get_next_encode_buffer(struct xdr_stream *xdr,
- 	 */
- 	xdr->p = (void *)p + frag2bytes;
- 	space_left = xdr->buf->buflen - xdr->buf->len;
--	xdr->end = (void *)p + min_t(int, space_left, PAGE_SIZE);
-+	if (space_left - nbytes >= PAGE_SIZE)
-+		xdr->end = (void *)p + PAGE_SIZE;
-+	else
-+		xdr->end = (void *)p + space_left - frag1bytes;
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index 5afa0ebd78ca..78dd6be8b31d 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -786,7 +786,6 @@ config THREAD_SHIFT
+ 	range 13 15
+ 	default "15" if PPC_256K_PAGES
+ 	default "14" if PPC64
+-	default "14" if KASAN
+ 	default "13"
+ 	help
+ 	  Used to define the stack size. The default is almost always what you
+diff --git a/arch/powerpc/include/asm/thread_info.h b/arch/powerpc/include/asm/thread_info.h
+index 46a210b03d2b..6de3517bea94 100644
+--- a/arch/powerpc/include/asm/thread_info.h
++++ b/arch/powerpc/include/asm/thread_info.h
+@@ -14,10 +14,16 @@
+ 
+ #ifdef __KERNEL__
+ 
+-#if defined(CONFIG_VMAP_STACK) && CONFIG_THREAD_SHIFT < PAGE_SHIFT
++#ifdef CONFIG_KASAN
++#define MIN_THREAD_SHIFT	(CONFIG_THREAD_SHIFT + 1)
++#else
++#define MIN_THREAD_SHIFT	CONFIG_THREAD_SHIFT
++#endif
 +
- 	xdr->buf->page_len += frag2bytes;
- 	xdr->buf->len += nbytes;
- 	return p;
++#if defined(CONFIG_VMAP_STACK) && MIN_THREAD_SHIFT < PAGE_SHIFT
+ #define THREAD_SHIFT		PAGE_SHIFT
+ #else
+-#define THREAD_SHIFT		CONFIG_THREAD_SHIFT
++#define THREAD_SHIFT		MIN_THREAD_SHIFT
+ #endif
+ 
+ #define THREAD_SIZE		(1 << THREAD_SHIFT)
 -- 
 2.35.1
 

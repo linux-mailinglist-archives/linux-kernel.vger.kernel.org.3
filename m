@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 824EF548B1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5FDD549876
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353263AbiFMMrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
+        id S1381060AbiFMODl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348647AbiFMMkp (ORCPT
+        with ESMTP id S1381269AbiFMN4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:40:45 -0400
+        Mon, 13 Jun 2022 09:56:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE655FF38;
-        Mon, 13 Jun 2022 04:10:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC92D880E8;
+        Mon, 13 Jun 2022 04:36:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE89060B76;
-        Mon, 13 Jun 2022 11:10:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086C0C34114;
-        Mon, 13 Jun 2022 11:10:39 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03FAC612D0;
+        Mon, 13 Jun 2022 11:36:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 168AEC34114;
+        Mon, 13 Jun 2022 11:36:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118640;
-        bh=vtKWyOoQaRMqiRfNd1NHO7HzFxwuPjrXjpQnKder8Dw=;
+        s=korg; t=1655120204;
+        bh=aqBhceqBGhC+HNxaI5YNjyD+0ZRKEAmv1OOd4cUY2SY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SMwFKd95BdvzBlJ/tbKtko9lYcglNKhjQRKrZfMwxfiNGHXc+grQJ6eU3exObkUVC
-         HweL28/TobUPJtz/rnLba22vgRlHqfOy17OExC+O4OGBCMQSV4yQMcPxZjA3tEAGyn
-         +Pcln97elK+5c6Y4EFdhjrsnJIeIzNMl9BtmgYHU=
+        b=VHAXVGrdNSwv4whQkmwm5dImKfpUWzk5UeUaOf6KrfH8tK68JXl4+77ISmyQvApb3
+         ULl1cgeAAtuz9i3Wce/g2hygbzGOcf8XpjYpnb/6Vg0jELEggEivoMuphfyEct3r0Q
+         bbsJBejk8Dsk+YMPco2U52gZL0j5iVSvXo24ZBtw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Petr Mladek <pmladek@suse.com>,
-        John Ogness <john.ogness@linutronix.de>,
+        stable@vger.kernel.org, Lijo Lazar <lijo.lazar@amd.com>,
+        Yang Wang <kevinyang.wang@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 132/172] serial: msm_serial: disable interrupts in __msm_console_write()
-Date:   Mon, 13 Jun 2022 12:11:32 +0200
-Message-Id: <20220613094921.310160275@linuxfoundation.org>
+Subject: [PATCH 5.18 268/339] drm/amd/pm: Fix missing thermal throttler status
+Date:   Mon, 13 Jun 2022 12:11:33 +0200
+Message-Id: <20220613094934.775240847@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,57 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Ogness <john.ogness@linutronix.de>
+From: Lijo Lazar <lijo.lazar@amd.com>
 
-[ Upstream commit aabdbb1b7a5819e18c403334a31fb0cc2c06ad41 ]
+[ Upstream commit b0f4d663fce6a4232d3c20ce820f919111b1c60b ]
 
-__msm_console_write() assumes that interrupts are disabled, but
-with threaded console printers it is possible that the write()
-callback of the console is called with interrupts enabled.
+On aldebaran, when thermal throttling happens due to excessive GPU
+temperature, the reason for throttling event is missed in warning
+message. This patch fixes it.
 
-Explicitly disable interrupts using local_irq_save() to preserve
-the assumed context.
-
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
-Link: https://lore.kernel.org/r/20220506213324.470461-1-john.ogness@linutronix.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Lijo Lazar <lijo.lazar@amd.com>
+Reviewed-by: Yang Wang <kevinyang.wang@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/msm_serial.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
-index 26bcbec5422e..27023a56f3ac 100644
---- a/drivers/tty/serial/msm_serial.c
-+++ b/drivers/tty/serial/msm_serial.c
-@@ -1593,6 +1593,7 @@ static inline struct uart_port *msm_get_port_from_line(unsigned int line)
- static void __msm_console_write(struct uart_port *port, const char *s,
- 				unsigned int count, bool is_uartdm)
- {
-+	unsigned long flags;
- 	int i;
- 	int num_newlines = 0;
- 	bool replaced = false;
-@@ -1610,6 +1611,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
- 			num_newlines++;
- 	count += num_newlines;
- 
-+	local_irq_save(flags);
-+
- 	if (port->sysrq)
- 		locked = 0;
- 	else if (oops_in_progress)
-@@ -1655,6 +1658,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
- 
- 	if (locked)
- 		spin_unlock(&port->lock);
-+
-+	local_irq_restore(flags);
- }
- 
- static void msm_console_write(struct console *co, const char *s,
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
+index cd81f848d45a..7f998f24af81 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/aldebaran_ppt.c
+@@ -1664,6 +1664,7 @@ static const struct throttling_logging_label {
+ 	uint32_t feature_mask;
+ 	const char *label;
+ } logging_label[] = {
++	{(1U << THROTTLER_TEMP_GPU_BIT), "GPU"},
+ 	{(1U << THROTTLER_TEMP_MEM_BIT), "HBM"},
+ 	{(1U << THROTTLER_TEMP_VR_GFX_BIT), "VR of GFX rail"},
+ 	{(1U << THROTTLER_TEMP_VR_MEM_BIT), "VR of HBM rail"},
 -- 
 2.35.1
 

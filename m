@@ -2,96 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80389548095
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0110A548090
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:34:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234150AbiFMH2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 03:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60256 "EHLO
+        id S237859AbiFMHcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 03:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239350AbiFMH23 (ORCPT
+        with ESMTP id S235638AbiFMHcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 03:28:29 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 128C81B796
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 00:28:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1655105307; x=1686641307;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ioVbeCZUDKKWK4KyDAA+d0UWPzUSkKFLUq/QnEjSJTk=;
-  b=RImUlLsNqviQRPAeBqTx9Dt8YgWGmBG9usx1fktRkD0YuuUmkODhaQ9e
-   mNs6HIViNEnaRX1Xldbmw/dysMDZNuJB7wz3m8wgtoEX8AchlH088Wn3+
-   K5OdKdlj81PUN6wPIt7XmCUZ5TPOCvzz22+mIcjbe49HLIYmy7LeeY6fH
-   +Ohbk0jw1qXxluUpZ2CxRq05nbcoETnN6M4OnNak1RCovExqjSG27AqAm
-   LaIgmLipRqKLbxZ51vEma3e8KdnI2cy7fLJBOxR2egIKUGABSAApGo9U2
-   /46sRKaHBbJMpZH6n7vBVn1s/qZn5rws2Kxgb5f7sMJniDik8GWJtYb82
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.91,296,1647273600"; 
-   d="scan'208";a="207827390"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 13 Jun 2022 15:28:26 +0800
-IronPort-SDR: il2CxPHQH8sipLpRb5XPeRbUufCAoHr36s8MS4FyUB3MUDf6NoQjcy0YUDNh3XFV6LX0zhQVL9
- oWeI6qxUatN/+gflWHG4qjWRSkSsoHjKUZ5yqngKNqaUR5bEhJs+1bNi5WLPe/R+dj5yfzwdVB
- NPVpM8Jvdw0lXxDl5p3ORN5i4S8BSsHpO9iv/ZFWDuVYpjA82eqdDhakVqDa3C9ZC397A+NSVh
- Vc/xCy/uLZZH7zgS8nmJ7KR7M/3c3p5Bn78BbM4KUVFdSjevFoiMxRmb1BAQiTkvq4TS50ldRk
- IGF4QhIvHpn6AY2+rIEUArJz
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 Jun 2022 23:51:31 -0700
-IronPort-SDR: deZfY/IP09941omncvavWD/JItkA5IgD4EST8rDJpcxQG9zfP61xX+lihOX2XC3mjh+XmT4dPy
- qHTJDt3WM9r23875YXQhEAxQA0SlHUJo8t2rHBM0VRA5kcxzslsstgl4Tisu2UOSNFIavNqxz6
- GlwYtfuHf6d3qEtVVqA6NWal8IBNdkrxoIXbOXDLX8H+tZMPpERiy9Gryw8CKfUYlFU3O5BvT2
- MdUenuvofIOOsSHKMJakV2dc0KjD+qsQZJ1HEgVmmKwKoEZIQ3EiMOB035UbSKtdqQ1jWd3Zzn
- IUc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Jun 2022 00:28:28 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LM38C40cTz1SVp2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 00:28:27 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1655105307; x=1657697308; bh=ioVbeCZUDKKWK4KyDAA+d0UWPzUSkKFLUq/
-        QnEjSJTk=; b=ZLIYkurlcWMcd3KRU8iJpMcCMEwUiAuiT7HdDS0pSkufNRpAsuu
-        DP9quFszcuFbJ734A5HH37ieeQqs0DsDRhFa44O6jdNOZPFRo0goGWOmQ8mz2HhY
-        karvD8eXhDBOfvaloELwy4CaEFmTKt9CXW/EnfqBN1SNjam9jr85xzIzgq9E/MWE
-        PmiPeO9lv2gyQqzAWZNh9E/RDrNDJ9z4QUHZm86/j4RTHhkzdcmTRwvg+ydz7vvZ
-        KkL+YhauXYZkLq6x2F9XQ3uV05d0aBL404BKw0LXCiW09ECGL2CYJoJWNE+UOQdi
-        meUCdkhRDlK4KHcOaT6/dIBdA+c3D4UBrTg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id cufNTEzT0Tjk for <linux-kernel@vger.kernel.org>;
-        Mon, 13 Jun 2022 00:28:27 -0700 (PDT)
-Received: from [10.225.163.77] (unknown [10.225.163.77])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LM3895YRtz1Rvlc;
-        Mon, 13 Jun 2022 00:28:25 -0700 (PDT)
-Message-ID: <671ce4c0-77b0-5d39-5f65-dce6e47ac48e@opensource.wdc.com>
-Date:   Mon, 13 Jun 2022 16:28:24 +0900
+        Mon, 13 Jun 2022 03:32:32 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E928DF89
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 00:32:30 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1o0eYV-00060s-4U; Mon, 13 Jun 2022 09:32:11 +0200
+Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id DA39493918;
+        Mon, 13 Jun 2022 07:32:08 +0000 (UTC)
+Date:   Mon, 13 Jun 2022 09:32:08 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v3 12/13] can: slcan: extend the protocol with error info
+Message-ID: <20220613073208.anak24kpffnngube@pengutronix.de>
+References: <20220612213927.3004444-1-dario.binacchi@amarulasolutions.com>
+ <20220612213927.3004444-13-dario.binacchi@amarulasolutions.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/4] pm8001 driver improvements
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, jinpu.wang@cloud.ionos.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hare@suse.de, Ajish.Koshy@microchip.com
-References: <1654879602-33497-1-git-send-email-john.garry@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <1654879602-33497-1-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hi4omindgk2aohao"
+Content-Disposition: inline
+In-Reply-To: <20220612213927.3004444-13-dario.binacchi@amarulasolutions.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,33 +65,222 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/11/22 01:46, John Garry wrote:
-> This small series includes the following:
-> - Rework how some shost values are set
-> - Fix a longstanding bug that the driver attempts to use tags before they
->   are configured
-> - Stop using {set, clear}_bit()
-> - Expose HW queues
-> 
-> Any testing would be appreciated as this driver is still broken for my
-> arm64 system, i.e. just broken.
-> 
-> John Garry (4):
->   scsi: pm8001: Rework shost initial values
->   scsi: pm8001: Setup tags before using them
->   scsi: pm8001: Use non-atomic bitmap ops for tag alloc + free
->   scsi: pm8001: Expose HW queues for pm80xx hw
-> 
->  drivers/scsi/pm8001/pm8001_hwi.c  |  5 +++
->  drivers/scsi/pm8001/pm8001_init.c | 73 +++++++++++++++++++++----------
->  drivers/scsi/pm8001/pm8001_sas.c  | 10 +++--
->  drivers/scsi/pm8001/pm8001_sas.h  |  3 ++
->  drivers/scsi/pm8001/pm80xx_hwi.c  | 46 +++++++++++++++----
->  5 files changed, 101 insertions(+), 36 deletions(-)
-> 
 
-Tested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+--hi4omindgk2aohao
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Damien Le Moal
-Western Digital Research
+On 12.06.2022 23:39:26, Dario Binacchi wrote:
+> It extends the protocol to receive the adapter CAN communication errors
+> and forward them to the netdev upper levels.
+>=20
+> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+>=20
+> ---
+>=20
+> (no changes since v2)
+>=20
+> Changes in v2:
+> - Protect decoding against the case the len value is longer than the
+>   received data.
+
+Where is that check?
+
+> - Continue error handling even if no skb can be allocated.
+>=20
+>  drivers/net/can/slcan/slcan-core.c | 130 ++++++++++++++++++++++++++++-
+>  1 file changed, 129 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/s=
+lcan-core.c
+> index 3df35ae8f040..48077edb9497 100644
+> --- a/drivers/net/can/slcan/slcan-core.c
+> +++ b/drivers/net/can/slcan/slcan-core.c
+> @@ -175,8 +175,118 @@ int slcan_enable_err_rst_on_open(struct net_device =
+*ndev, bool on)
+>    *			STANDARD SLCAN DECAPSULATION			 *
+>    **********************************************************************=
+**/
+> =20
+> +static void slc_bump_err(struct slcan *sl)
+> +{
+> +	struct net_device *dev =3D sl->dev;
+> +	struct sk_buff *skb;
+> +	struct can_frame *cf;
+> +	char *cmd =3D sl->rbuff;
+> +	bool rx_errors =3D false, tx_errors =3D false;
+> +	int i, len;
+> +
+> +	if (*cmd !=3D 'e')
+> +		return;
+
+This has already been checked in the caller, right?
+
+> +
+> +	cmd +=3D SLC_CMD_LEN;
+> +	/* get len from sanitized ASCII value */
+> +	len =3D *cmd++;
+> +	if (len >=3D '0' && len < '9')
+> +		len -=3D '0';
+> +	else
+> +		return;
+> +
+> +	skb =3D alloc_can_err_skb(dev, &cf);
+> +
+> +	if (skb)
+> +		cf->can_id |=3D CAN_ERR_PROT | CAN_ERR_BUSERROR;
+> +
+> +	for (i =3D 0; i < len; i++, cmd++) {
+> +		switch (*cmd) {
+> +		case 'a':
+> +			netdev_dbg(dev, "ACK error\n");
+> +			tx_errors =3D true;
+
+Nitpick:
+Please decide if you want to set tx/tx_errors here and increment at the
+end of the function....or.....
+
+> +			if (skb) {
+> +				cf->can_id |=3D CAN_ERR_ACK;
+> +				cf->data[3] =3D CAN_ERR_PROT_LOC_ACK;
+> +			}
+> +
+> +			break;
+> +		case 'b':
+> +			netdev_dbg(dev, "Bit0 error\n");
+> +			tx_errors =3D true;
+> +			if (skb)
+> +				cf->data[2] |=3D CAN_ERR_PROT_BIT0;
+> +
+> +			break;
+> +		case 'B':
+> +			netdev_dbg(dev, "Bit1 error\n");
+> +			tx_errors =3D true;
+> +			if (skb)
+> +				cf->data[2] |=3D CAN_ERR_PROT_BIT1;
+> +
+> +			break;
+> +		case 'c':
+> +			netdev_dbg(dev, "CRC error\n");
+> +			rx_errors =3D true;
+> +			if (skb) {
+> +				cf->data[2] |=3D CAN_ERR_PROT_BIT;
+> +				cf->data[3] =3D CAN_ERR_PROT_LOC_CRC_SEQ;
+> +			}
+> +
+> +			break;
+> +		case 'f':
+> +			netdev_dbg(dev, "Form Error\n");
+> +			rx_errors =3D true;
+> +			if (skb)
+> +				cf->data[2] |=3D CAN_ERR_PROT_FORM;
+> +
+> +			break;
+> +		case 'o':
+> +			netdev_dbg(dev, "Rx overrun error\n");
+> +			dev->stats.rx_over_errors++;
+> +			dev->stats.rx_errors++;
+
+=2E...if you want to increment in the case.
+
+> +			if (skb) {
+> +				cf->can_id |=3D CAN_ERR_CRTL;
+> +				cf->data[1] =3D CAN_ERR_CRTL_RX_OVERFLOW;
+> +			}
+> +
+> +			break;
+> +		case 'O':
+> +			netdev_dbg(dev, "Tx overrun error\n");
+> +			dev->stats.tx_errors++;
+> +			if (skb) {
+> +				cf->can_id |=3D CAN_ERR_CRTL;
+> +				cf->data[1] =3D CAN_ERR_CRTL_TX_OVERFLOW;
+> +			}
+> +
+> +			break;
+> +		case 's':
+> +			netdev_dbg(dev, "Stuff error\n");
+> +			rx_errors =3D true;
+> +			if (skb)
+> +				cf->data[2] |=3D CAN_ERR_PROT_STUFF;
+> +
+> +			break;
+> +		default:
+> +			if (skb)
+> +				dev_kfree_skb(skb);
+> +
+> +			return;
+> +		}
+> +	}
+> +
+> +	if (rx_errors)
+> +		dev->stats.rx_errors++;
+> +
+> +	if (tx_errors)
+> +		dev->stats.tx_errors++;
+> +
+> +	if (skb)
+> +		netif_rx(skb);
+> +}
+> +
+>  /* Send one completely decapsulated can_frame to the network layer */
+> -static void slc_bump(struct slcan *sl)
+> +static void slc_bump_frame(struct slcan *sl)
+>  {
+>  	struct sk_buff *skb;
+>  	struct can_frame *cf;
+> @@ -255,6 +365,24 @@ static void slc_bump(struct slcan *sl)
+>  	dev_kfree_skb(skb);
+>  }
+> =20
+> +static void slc_bump(struct slcan *sl)
+> +{
+> +	switch (sl->rbuff[0]) {
+> +	case 'r':
+> +		fallthrough;
+> +	case 't':
+> +		fallthrough;
+> +	case 'R':
+> +		fallthrough;
+> +	case 'T':
+> +		return slc_bump_frame(sl);
+> +	case 'e':
+> +		return slc_bump_err(sl);
+> +	default:
+> +		return;
+> +	}
+> +}
+> +
+>  /* parse tty input stream */
+>  static void slcan_unesc(struct slcan *sl, unsigned char s)
+>  {
+> --=20
+> 2.32.0
+>=20
+>=20
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--hi4omindgk2aohao
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKm5/UACgkQrX5LkNig
+011BTAf+LVMpE9mxzEZB/h0rR6tDLiBIjNvITU9UdnF/yiCZCmW0Yd7XqgM/2d/B
+MaW/KH5KEN+MspVoNy0urOdxUbWa8PNE9W3EQpqFc8ZrZ7K2ADu26OHWEosAMNDx
+vFAPl6H0mATaUyNLgUli+Eb5822i88AwM7//IiDWrmM4c992Oywff9+Z7JVtC5CH
+1A2pd2dleefWs7obcDTORI0dlDuWIXserMeJQbdQkbndA2dn7OIEcViDyySH8sdL
+qKpNZeC+/HIeEgEEBrl7ag6Fa/ZVP2LZJilk55GRKp0xSSmlxoXkxTjlXz39UGW5
+E7OvzB8Lij+ENpX4AR/gGrey/NxzkA==
+=pIY1
+-----END PGP SIGNATURE-----
+
+--hi4omindgk2aohao--

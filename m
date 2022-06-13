@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37EF2548853
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CDC054878A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376399AbiFMNVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51842 "EHLO
+        id S1353371AbiFMMui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359022AbiFMNPb (ORCPT
+        with ESMTP id S1357740AbiFMMtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:15:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EDD55F59;
-        Mon, 13 Jun 2022 04:22:29 -0700 (PDT)
+        Mon, 13 Jun 2022 08:49:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FF462CC6;
+        Mon, 13 Jun 2022 04:11:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 809FAB80E59;
-        Mon, 13 Jun 2022 11:22:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0327C3411C;
-        Mon, 13 Jun 2022 11:22:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36C75608C3;
+        Mon, 13 Jun 2022 11:11:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A534C34114;
+        Mon, 13 Jun 2022 11:11:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119325;
-        bh=sXhm+oMCrui/y0I0+QBtmpIK+POYQhAS48jgfA/2Ycw=;
+        s=korg; t=1655118716;
+        bh=E4rQH1VFVcVFFMQSB2xDZNS++oZ3MPwR5If0rkwwWrM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nmllbXWxgLa4kDVeP88BtUZCSYYeoQ1/OqQxtNBnCHhVKGnwccg0UT46kqB/iFgqt
-         G8A5RxPMUQXPwVJzuIKhpuGmPBr0uth+cy3KK3D/nmxDaGDRq+EZcc+Vv0yuuaSqQU
-         gyx/gm2KTrQko7SVx+U0lXS2xWe62m0cjgnZsq1I=
+        b=kPc+vqmm/3w/HMKqltp/B4D8SQE8k/l0nUiaNAULDhBt9cqkkMtcNZDQHTXzSklpy
+         fjbqDa0IwXxAM/IEd/iDwSPMe0xm1AxqOr4I5H9ZElQJIJjcGAOWteaTicN++s0GzK
+         45XG2I8l6lwlHK3CkSCA8iH9/u5yVMLtv37hUZBo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Safford <david.safford@gmail.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>
-Subject: [PATCH 5.15 221/247] KEYS: trusted: tpm2: Fix migratable logic
-Date:   Mon, 13 Jun 2022 12:12:03 +0200
-Message-Id: <20220613094929.646580519@linuxfoundation.org>
+        stable@vger.kernel.org, Brian Norris <briannorris@chromium.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: [PATCH 5.10 164/172] drm/bridge: analogix_dp: Support PSR-exit to disable transition
+Date:   Mon, 13 Jun 2022 12:12:04 +0200
+Message-Id: <20220613094923.242471484@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +55,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Safford <david.safford@gmail.com>
+From: Brian Norris <briannorris@chromium.org>
 
-commit dda5384313a40ecbaafd8a9a80f47483255e4c4d upstream.
+commit ca871659ec1606d33b1e76de8d4cf924cf627e34 upstream.
 
-When creating (sealing) a new trusted key, migratable
-trusted keys have the FIXED_TPM and FIXED_PARENT attributes
-set, and non-migratable keys don't. This is backwards, and
-also causes creation to fail when creating a migratable key
-under a migratable parent. (The TPM thinks you are trying to
-seal a non-migratable blob under a migratable parent.)
+Most eDP panel functions only work correctly when the panel is not in
+self-refresh. In particular, analogix_dp_bridge_disable() tends to hit
+AUX channel errors if the panel is in self-refresh.
 
-The following simple patch fixes the logic, and has been
-tested for all four combinations of migratable and non-migratable
-trusted keys and parent storage keys. With this logic, you will
-get a proper failure if you try to create a non-migratable
-trusted key under a migratable parent storage key, and all other
-combinations work correctly.
+Given the above, it appears that so far, this driver assumes that we are
+never in self-refresh when it comes time to fully disable the bridge.
+Prior to commit 846c7dfc1193 ("drm/atomic: Try to preserve the crtc
+enabled state in drm_atomic_remove_fb, v2."), this tended to be true,
+because we would automatically disable the pipe when framebuffers were
+removed, and so we'd typically disable the bridge shortly after the last
+display activity.
 
-Cc: stable@vger.kernel.org # v5.13+
-Fixes: e5fb5d2c5a03 ("security: keys: trusted: Make sealed key properly interoperable")
-Signed-off-by: David Safford <david.safford@gmail.com>
-Reviewed-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+However, that is not guaranteed: an idle (self-refresh) display pipe may
+be disabled, e.g., when switching CRTCs. We need to exit PSR first.
+
+Stable notes: this is definitely a bugfix, and the bug has likely
+existed in some form for quite a while. It may predate the "PSR helpers"
+refactor, but the code looked very different before that, and it's
+probably not worth rewriting the fix.
+
+Cc: <stable@vger.kernel.org>
+Fixes: 6c836d965bad ("drm/rockchip: Use the helpers for PSR")
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+Reviewed-by: Sean Paul <seanpaul@chromium.org>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220228122522.v2.1.I161904be17ba14526f78536ccd78b85818449b51@changeid
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- security/keys/trusted-keys/trusted_tpm2.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/bridge/analogix/analogix_dp_core.c |   42 +++++++++++++++++++--
+ 1 file changed, 38 insertions(+), 4 deletions(-)
 
---- a/security/keys/trusted-keys/trusted_tpm2.c
-+++ b/security/keys/trusted-keys/trusted_tpm2.c
-@@ -283,8 +283,8 @@ int tpm2_seal_trusted(struct tpm_chip *c
- 	/* key properties */
- 	flags = 0;
- 	flags |= options->policydigest_len ? 0 : TPM2_OA_USER_WITH_AUTH;
--	flags |= payload->migratable ? (TPM2_OA_FIXED_TPM |
--					TPM2_OA_FIXED_PARENT) : 0;
-+	flags |= payload->migratable ? 0 : (TPM2_OA_FIXED_TPM |
-+					    TPM2_OA_FIXED_PARENT);
- 	tpm_buf_append_u32(&buf, flags);
+--- a/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
++++ b/drivers/gpu/drm/bridge/analogix/analogix_dp_core.c
+@@ -1269,6 +1269,25 @@ static int analogix_dp_bridge_attach(str
+ }
  
- 	/* policy */
+ static
++struct drm_crtc *analogix_dp_get_old_crtc(struct analogix_dp_device *dp,
++					  struct drm_atomic_state *state)
++{
++	struct drm_encoder *encoder = dp->encoder;
++	struct drm_connector *connector;
++	struct drm_connector_state *conn_state;
++
++	connector = drm_atomic_get_old_connector_for_encoder(state, encoder);
++	if (!connector)
++		return NULL;
++
++	conn_state = drm_atomic_get_old_connector_state(state, connector);
++	if (!conn_state)
++		return NULL;
++
++	return conn_state->crtc;
++}
++
++static
+ struct drm_crtc *analogix_dp_get_new_crtc(struct analogix_dp_device *dp,
+ 					  struct drm_atomic_state *state)
+ {
+@@ -1448,14 +1467,16 @@ analogix_dp_bridge_atomic_disable(struct
+ {
+ 	struct drm_atomic_state *old_state = old_bridge_state->base.state;
+ 	struct analogix_dp_device *dp = bridge->driver_private;
+-	struct drm_crtc *crtc;
++	struct drm_crtc *old_crtc, *new_crtc;
++	struct drm_crtc_state *old_crtc_state = NULL;
+ 	struct drm_crtc_state *new_crtc_state = NULL;
++	int ret;
+ 
+-	crtc = analogix_dp_get_new_crtc(dp, old_state);
+-	if (!crtc)
++	new_crtc = analogix_dp_get_new_crtc(dp, old_state);
++	if (!new_crtc)
+ 		goto out;
+ 
+-	new_crtc_state = drm_atomic_get_new_crtc_state(old_state, crtc);
++	new_crtc_state = drm_atomic_get_new_crtc_state(old_state, new_crtc);
+ 	if (!new_crtc_state)
+ 		goto out;
+ 
+@@ -1464,6 +1485,19 @@ analogix_dp_bridge_atomic_disable(struct
+ 		return;
+ 
+ out:
++	old_crtc = analogix_dp_get_old_crtc(dp, old_state);
++	if (old_crtc) {
++		old_crtc_state = drm_atomic_get_old_crtc_state(old_state,
++							       old_crtc);
++
++		/* When moving from PSR to fully disabled, exit PSR first. */
++		if (old_crtc_state && old_crtc_state->self_refresh_active) {
++			ret = analogix_dp_disable_psr(dp);
++			if (ret)
++				DRM_ERROR("Failed to disable psr (%d)\n", ret);
++		}
++	}
++
+ 	analogix_dp_bridge_disable(bridge);
+ }
+ 
 
 

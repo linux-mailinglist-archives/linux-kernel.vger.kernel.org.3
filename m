@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3330C548631
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AC32548642
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352235AbiFMMRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:17:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
+        id S1356379AbiFMLs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358488AbiFMMOL (ORCPT
+        with ESMTP id S1356716AbiFMLo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:14:11 -0400
+        Mon, 13 Jun 2022 07:44:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C58454182;
-        Mon, 13 Jun 2022 04:01:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2F948883;
+        Mon, 13 Jun 2022 03:51:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3B69B80EB2;
-        Mon, 13 Jun 2022 11:01:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55249C34114;
-        Mon, 13 Jun 2022 11:01:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E4E37B80E07;
+        Mon, 13 Jun 2022 10:51:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5363BC34114;
+        Mon, 13 Jun 2022 10:51:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118101;
-        bh=6poQA8HptYF9vPIgarkR6mmoUzdWP/wv3YOZWLj7vEM=;
+        s=korg; t=1655117465;
+        bh=OeYBXK7Vd8Z7875GdHc2vCw+10nPHVIVgJicLuUH/T0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vk9f9FaXDZnVuTxRgMj/8ft4B+q6L9MyckFJAOQxUniPE2u0MbpPGn/6sEbzlGk1/
-         YkB/JzHRFQk0m/MNUyN3TB9OApbLbekr7Sc0ZeNdTM59LVWSNkDoGVUntemYUyQj0I
-         d9YNj3YPR0Bpnop7yAxHoceHDifqdWAdytIsCZSI=
+        b=0/PH84VfejeX27z0lZp4bWxkT3u4Aos+aZ9Srl8Rcaf3eWno5D/Tdj3KKJgD3mqTY
+         XBWpXXAwNiuamh4IE7RT1DbcEMNVFcBOCOh0l18U0ebFCj8UJ6L+GD2zMMNkdUS/XT
+         On9wM+8+XN4MM+XpMEVHL3YCvZNdayzS6N6UzY0k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 230/287] i2c: cadence: Increase timeout per message if necessary
-Date:   Mon, 13 Jun 2022 12:10:54 +0200
-Message-Id: <20220613094930.990342960@linuxfoundation.org>
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Petr Mladek <pmladek@suse.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 382/411] serial: msm_serial: disable interrupts in __msm_console_write()
+Date:   Mon, 13 Jun 2022 12:10:55 +0200
+Message-Id: <20220613094940.121008282@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Tanure <tanureal@opensource.cirrus.com>
+From: John Ogness <john.ogness@linutronix.de>
 
-[ Upstream commit 96789dce043f5bff8b7d62aa28d52a7c59403a84 ]
+[ Upstream commit aabdbb1b7a5819e18c403334a31fb0cc2c06ad41 ]
 
-Timeout as 1 second sets an upper limit on the length
-of the transfer executed, but there is no maximum length
-of a write or read message set in i2c_adapter_quirks for
-this controller.
+__msm_console_write() assumes that interrupts are disabled, but
+with threaded console printers it is possible that the write()
+callback of the console is called with interrupts enabled.
 
-This upper limit affects devices that require sending
-large firmware blobs over I2C.
+Explicitly disable interrupts using local_irq_save() to preserve
+the assumed context.
 
-To remove that limitation, calculate the minimal time
-necessary, plus some wiggle room, for every message and
-use it instead of the default one second, if more than
-one second.
-
-Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
-Acked-by: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Link: https://lore.kernel.org/r/20220506213324.470461-1-john.ogness@linutronix.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-cadence.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+ drivers/tty/serial/msm_serial.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
-index c5475bb4fae6..2150afdcc083 100644
---- a/drivers/i2c/busses/i2c-cadence.c
-+++ b/drivers/i2c/busses/i2c-cadence.c
-@@ -511,7 +511,7 @@ static void cdns_i2c_master_reset(struct i2c_adapter *adap)
- static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
- 		struct i2c_adapter *adap)
+diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
+index 5129c2dfbe07..aac96659694d 100644
+--- a/drivers/tty/serial/msm_serial.c
++++ b/drivers/tty/serial/msm_serial.c
+@@ -1579,6 +1579,7 @@ static inline struct uart_port *msm_get_port_from_line(unsigned int line)
+ static void __msm_console_write(struct uart_port *port, const char *s,
+ 				unsigned int count, bool is_uartdm)
  {
--	unsigned long time_left;
-+	unsigned long time_left, msg_timeout;
- 	u32 reg;
++	unsigned long flags;
+ 	int i;
+ 	int num_newlines = 0;
+ 	bool replaced = false;
+@@ -1596,6 +1597,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
+ 			num_newlines++;
+ 	count += num_newlines;
  
- 	id->p_msg = msg;
-@@ -536,8 +536,16 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
- 	else
- 		cdns_i2c_msend(id);
++	local_irq_save(flags);
++
+ 	if (port->sysrq)
+ 		locked = 0;
+ 	else if (oops_in_progress)
+@@ -1641,6 +1644,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
  
-+	/* Minimal time to execute this message */
-+	msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) / id->i2c_clk);
-+	/* Plus some wiggle room */
-+	msg_timeout += msecs_to_jiffies(500);
+ 	if (locked)
+ 		spin_unlock(&port->lock);
 +
-+	if (msg_timeout < adap->timeout)
-+		msg_timeout = adap->timeout;
-+
- 	/* Wait for the signal of completion */
--	time_left = wait_for_completion_timeout(&id->xfer_done, adap->timeout);
-+	time_left = wait_for_completion_timeout(&id->xfer_done, msg_timeout);
- 	if (time_left == 0) {
- 		cdns_i2c_master_reset(adap);
- 		dev_err(id->adap.dev.parent,
++	local_irq_restore(flags);
+ }
+ 
+ static void msm_console_write(struct console *co, const char *s,
 -- 
 2.35.1
 

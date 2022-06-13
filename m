@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31269548C10
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7B0548928
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381175AbiFMOH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
+        id S1381207AbiFMOIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:08:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380901AbiFMOCl (ORCPT
+        with ESMTP id S1380932AbiFMOCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:02:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081198FD41;
-        Mon, 13 Jun 2022 04:38:17 -0700 (PDT)
+        Mon, 13 Jun 2022 10:02:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111878FD53;
+        Mon, 13 Jun 2022 04:38:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 517C3B80E2C;
-        Mon, 13 Jun 2022 11:38:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C31BDC34114;
-        Mon, 13 Jun 2022 11:38:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5BED061306;
+        Mon, 13 Jun 2022 11:38:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BCDAC34114;
+        Mon, 13 Jun 2022 11:38:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120295;
-        bh=wY5OO8+bRJitJI7tVcOO8KmKkYfRGZhRGEXSNp5PWHo=;
+        s=korg; t=1655120297;
+        bh=pbz9DlEqA5TwTXAkZWWpEn6u8/MCy1hJFPIoVEmfs4U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fHHDVKufRer6tPLS17BjRXtowjiFFZsx0vdGCF/jOj7gGA+e4Bof079ETj3zqL0WA
-         ZSZ6WvwmdJy1xtk5QDvRmJ36QaLi/cCme0ci1J7f8MMhs8wnOiMCaWPAaDMboIigVb
-         hdc11BLErf8RQEUp9Km0HJLQWVjqEuU9XwKbVXIM=
+        b=aXvVBaQNaZdqxitqs1N19ZFR+edREYa+BJvLw3R5eUoATn55E0Oi6XhJB+ifIu4Nz
+         L47XRlX+iEFPZN00+c5L7nOIMCU5xM7XusSGhaGAi5I2QVL/VQJtHvw0TCa6SeES8U
+         32ON7EOdcjNhLqKdmNfKv3PB16cHYwz8JuXVd018=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        Olivier Matz <olivier.matz@6wind.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>
-Subject: [PATCH 5.18 321/339] ixgbe: fix unexpected VLAN Rx in promisc mode on VF
-Date:   Mon, 13 Jun 2022 12:12:26 +0200
-Message-Id: <20220613094936.482964838@linuxfoundation.org>
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 5.18 322/339] Input: bcm5974 - set missing URB_NO_TRANSFER_DMA_MAP urb flag
+Date:   Mon, 13 Jun 2022 12:12:27 +0200
+Message-Id: <20220613094936.513051621@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
 References: <20220613094926.497929857@linuxfoundation.org>
@@ -57,65 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Olivier Matz <olivier.matz@6wind.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-commit 7bb0fb7c63df95d6027dc50d6af3bc3bbbc25483 upstream.
+commit c42e65664390be7c1ef3838cd84956d3a2739d60 upstream.
 
-When the promiscuous mode is enabled on a VF, the IXGBE_VMOLR_VPE
-bit (VLAN Promiscuous Enable) is set. This means that the VF will
-receive packets whose VLAN is not the same than the VLAN of the VF.
+The bcm5974 driver does the allocation and dma mapping of the usb urb
+data buffer, but driver does not set the URB_NO_TRANSFER_DMA_MAP flag
+to let usb core know the buffer is already mapped.
 
-For instance, in this situation:
+usb core tries to map the already mapped buffer, causing a warning:
+"xhci_hcd 0000:00:14.0: rejecting DMA map of vmalloc memory"
 
-┌────────┐    ┌────────┐    ┌────────┐
-│        │    │        │    │        │
-│        │    │        │    │        │
-│     VF0├────┤VF1  VF2├────┤VF3     │
-│        │    │        │    │        │
-└────────┘    └────────┘    └────────┘
-   VM1           VM2           VM3
+Fix this by setting the URB_NO_TRANSFER_DMA_MAP, letting usb core
+know buffer is already mapped by bcm5974 driver
 
-vf 0:  vlan 1000
-vf 1:  vlan 1000
-vf 2:  vlan 1001
-vf 3:  vlan 1001
-
-If we tcpdump on VF3, we see all the packets, even those transmitted
-on vlan 1000.
-
-This behavior prevents to bridge VF1 and VF2 in VM2, because it will
-create a loop: packets transmitted on VF1 will be received by VF2 and
-vice-versa, and bridged again through the software bridge.
-
-This patch remove the activation of VLAN Promiscuous when a VF enables
-the promiscuous mode. However, the IXGBE_VMOLR_UPE bit (Unicast
-Promiscuous) is kept, so that a VF receives all packets that has the
-same VLAN, whatever the destination MAC address.
-
-Fixes: 8443c1a4b192 ("ixgbe, ixgbevf: Add new mbox API xcast mode")
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 Cc: stable@vger.kernel.org
-Cc: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Signed-off-by: Olivier Matz <olivier.matz@6wind.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215890
+Link: https://lore.kernel.org/r/20220606113636.588955-1-mathias.nyman@linux.intel.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/input/mouse/bcm5974.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
-@@ -1208,9 +1208,9 @@ static int ixgbe_update_vf_xcast_mode(st
- 			return -EPERM;
- 		}
+--- a/drivers/input/mouse/bcm5974.c
++++ b/drivers/input/mouse/bcm5974.c
+@@ -942,17 +942,22 @@ static int bcm5974_probe(struct usb_inte
+ 	if (!dev->tp_data)
+ 		goto err_free_bt_buffer;
  
--		disable = 0;
-+		disable = IXGBE_VMOLR_VPE;
- 		enable = IXGBE_VMOLR_BAM | IXGBE_VMOLR_ROMPE |
--			 IXGBE_VMOLR_MPE | IXGBE_VMOLR_UPE | IXGBE_VMOLR_VPE;
-+			 IXGBE_VMOLR_MPE | IXGBE_VMOLR_UPE;
- 		break;
- 	default:
- 		return -EOPNOTSUPP;
+-	if (dev->bt_urb)
++	if (dev->bt_urb) {
+ 		usb_fill_int_urb(dev->bt_urb, udev,
+ 				 usb_rcvintpipe(udev, cfg->bt_ep),
+ 				 dev->bt_data, dev->cfg.bt_datalen,
+ 				 bcm5974_irq_button, dev, 1);
+ 
++		dev->bt_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
++	}
++
+ 	usb_fill_int_urb(dev->tp_urb, udev,
+ 			 usb_rcvintpipe(udev, cfg->tp_ep),
+ 			 dev->tp_data, dev->cfg.tp_datalen,
+ 			 bcm5974_irq_trackpad, dev, 1);
+ 
++	dev->tp_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
++
+ 	/* create bcm5974 device */
+ 	usb_make_path(udev, dev->phys, sizeof(dev->phys));
+ 	strlcat(dev->phys, "/input0", sizeof(dev->phys));
 
 

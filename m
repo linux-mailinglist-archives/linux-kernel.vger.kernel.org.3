@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B849B54838F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D098548331
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239307AbiFMJTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59696 "EHLO
+        id S240699AbiFMJTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:19:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiFMJTM (ORCPT
+        with ESMTP id S229510AbiFMJT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:19:12 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1F014029
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655111951; x=1686647951;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Rbm5thygbWWefU+4Ju3dMFUcjhR/h/QPLN3Eqrm7vno=;
-  b=e1wc+3zH/HTl17iCo+LQZkiFElBoha35FZHUp5/IHIE2OcGcIVXD3p75
-   iQSGqeetF4w3cw6fdueXRCUlyIxC/Chp6pCYiOu2j+6fhaJ/Zf7CWOTCg
-   vpuaUAxfvI1Hgi5Yqz6fjKYsO3HyuUy+vju5x07JucOpIi9Uae8LRmdkD
-   E=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Jun 2022 02:19:11 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 02:19:11 -0700
-Received: from [10.50.55.236] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 13 Jun
- 2022 02:19:08 -0700
-Message-ID: <6b665002-b68e-5392-a7ff-908a1c853663@quicinc.com>
-Date:   Mon, 13 Jun 2022 14:49:05 +0530
+        Mon, 13 Jun 2022 05:19:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A8E4714D1E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:19:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655111964;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w+/GwuuQGFS111woXNsLKjQljVwtMltJeO1V2zF9Vjo=;
+        b=OXfG0gHHepiYL44lqwJxL1RmwGMvuYK+GXgNrEi0PSfMWis5kAG2SfhNxR+nEGJ0JlFDBg
+        7XNceyuyUm+MYNDkDXad0thlTFGAkNcUQesp83fw60yKaQjgL5uEBNlr1ZlmKvNKIxzia1
+        MHPjLqode15kaFi+YIuxOcdsrUJkjN4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-619-t37ddbngOHOr1NtMTjiYhg-1; Mon, 13 Jun 2022 05:19:21 -0400
+X-MC-Unique: t37ddbngOHOr1NtMTjiYhg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2B90A101E9BE;
+        Mon, 13 Jun 2022 09:19:21 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.62])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 201EC492CA2;
+        Mon, 13 Jun 2022 09:19:19 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <YqSQ++8UnEW0AJ2y@zeniv-ca.linux.org.uk>
+References: <YqSQ++8UnEW0AJ2y@zeniv-ca.linux.org.uk> <YqRyL2sIqQNDfky2@debian> <YqSGv6uaZzLxKfmG@zeniv-ca.linux.org.uk> <YqSMmC/UuQpXdxtR@zeniv-ca.linux.org.uk>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     dhowells@redhat.com, Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Mike Marshall <hubcap@omnibond.com>,
+        Gao Xiang <xiang@kernel.org>, linux-afs@lists.infradead.org,
+        v9fs-developer@lists.sourceforge.net, devel@lists.orangefs.org,
+        linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: mainline build failure due to 6c77676645ad ("iov_iter: Fix iter_xarray_get_pages{,_alloc}()")
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V0 1/1] asoc: msm: use hashtable to check kcontrol
-Content-Language: en-US
-To:     Takashi Iwai <tiwai@suse.de>
-CC:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        "Liam Girdwood" <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>,
-        Krishna Jha <quic_kkishorj@quicinc.com>
-References: <cover.1653813866.git.quic_rbankapu@quicinc.com>
- <ad55bbd41cc253acb9af6ac068c15dd1545ecd81.1653813866.git.quic_rbankapu@quicinc.com>
- <8735gsznnt.wl-tiwai@suse.de>
- <f3a25238-fcc6-2381-e329-0bd80a3632a5@quicinc.com>
- <874k0tnjkw.wl-tiwai@suse.de>
-From:   Raghu Ballappa Bankapur <quic_rbankapu@quicinc.com>
-In-Reply-To: <874k0tnjkw.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1075695.1655111958.1@warthog.procyon.org.uk>
+Date:   Mon, 13 Jun 2022 10:19:18 +0100
+Message-ID: <1075696.1655111958@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,32 +70,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Takashi
+Al Viro <viro@zeniv.linux.org.uk> wrote:
 
-v2 patch looks fine. Can we use this patch to submit to android common 
-kernel? There is code freeze for KMI on june 17.
+> The reason we can't overflow on multiplication there, BTW, is that we have
+> nr <= count, and count has come from weirdly open-coded
+> 	DIV_ROUND_UP(size + offset, PAGE_SIZE)
+> IMO we'd better make it explicit, so how about the following:
+> 
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
 
-Please share your opinion.
+It seems reasonable.
 
+Reviewed-by: David Howells <dhowells@redhat.com>
 
-Thanks
-
-Raghu Bankapur
-
-On 6/10/2022 11:31 AM, Takashi Iwai wrote:
-> On Thu, 09 Jun 2022 20:16:52 +0200,
-> Raghu Ballappa Bankapur wrote:
->>
->> Hi Takashi
->>
->> Our implementation also falls inline with your approach  [PATCH RFC] ALSA:
->> control: Use xarray for faster lookups (kernel.org), but you approach looks to
->> be clean with xarray.
->>
->> is it possible to upstream those changes?
-> I submitted a v2 patch, please check it out.
->
->
-> thanks,
->
-> Takashi

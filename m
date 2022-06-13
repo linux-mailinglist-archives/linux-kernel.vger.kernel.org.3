@@ -2,141 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D589548045
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:16:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCABB54802E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 09:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238927AbiFMHLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 03:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
+        id S239257AbiFMHOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 03:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238870AbiFMHLL (ORCPT
+        with ESMTP id S239245AbiFMHN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 03:11:11 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8AB6324
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 00:11:10 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1o0eE0-0002iA-Tp; Mon, 13 Jun 2022 09:11:00 +0200
-Received: from pengutronix.de (unknown [IPv6:2a01:4f8:1c1c:29e9:22:41ff:fe00:1400])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id D00E4938AD;
-        Mon, 13 Jun 2022 07:10:58 +0000 (UTC)
-Date:   Mon, 13 Jun 2022 09:10:58 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>
-Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
-        Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH v3 05/13] can: netlink: dump bitrate 0 if
- can_priv::bittiming.bitrate is -1U
-Message-ID: <20220613071058.h6bmy6emswh76q5s@pengutronix.de>
-References: <20220612213927.3004444-1-dario.binacchi@amarulasolutions.com>
- <20220612213927.3004444-6-dario.binacchi@amarulasolutions.com>
+        Mon, 13 Jun 2022 03:13:59 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5486D1A39D;
+        Mon, 13 Jun 2022 00:13:57 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 25D7Cm7g023904-25D7Cm7j023904
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 13 Jun 2022 15:12:53 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     Julia Lawall <Julia.Lawall@inria.fr>,
+        Nicolas Palix <nicolas.palix@imag.fr>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>, cocci@inria.fr,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dev-tools: fix one invalid url
+Date:   Mon, 13 Jun 2022 15:12:42 +0800
+Message-Id: <20220613071243.12961-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wqlpeg65xesvx6zf"
-Content-Disposition: inline
-In-Reply-To: <20220612213927.3004444-6-dario.binacchi@amarulasolutions.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
---wqlpeg65xesvx6zf
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix the invalid url about Semantic Patch Language
 
-On 12.06.2022 23:39:19, Dario Binacchi wrote:
-> Adding Netlink support to the slcan driver made it necessary to set the
-> bitrate to a fake value (-1U) to prevent open_candev() from failing. In
-> this case the command `ip --details -s -s link show' would print
-> 4294967295 as the bitrate value. The patch change this value in 0.
->=20
-> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
->=20
-> (no changes since v1)
->=20
->  drivers/net/can/dev/netlink.c | 12 +++++++++---
->  1 file changed, 9 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/net/can/dev/netlink.c b/drivers/net/can/dev/netlink.c
-> index 7633d98e3912..788a6752fcc7 100644
-> --- a/drivers/net/can/dev/netlink.c
-> +++ b/drivers/net/can/dev/netlink.c
-> @@ -505,11 +505,16 @@ static int can_fill_info(struct sk_buff *skb, const=
- struct net_device *dev)
->  	struct can_ctrlmode cm =3D {.flags =3D priv->ctrlmode};
->  	struct can_berr_counter bec =3D { };
->  	enum can_state state =3D priv->state;
-> +	__u32 bitrate =3D priv->bittiming.bitrate;
-> +	int ret =3D 0;
-> =20
->  	if (priv->do_get_state)
->  		priv->do_get_state(dev, &state);
-> =20
-> -	if ((priv->bittiming.bitrate &&
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+---
+ Documentation/dev-tools/coccinelle.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What about changing this line to:
+diff --git a/Documentation/dev-tools/coccinelle.rst b/Documentation/dev-tools/coccinelle.rst
+index 9c454de5a7f7..d9976069ed12 100644
+--- a/Documentation/dev-tools/coccinelle.rst
++++ b/Documentation/dev-tools/coccinelle.rst
+@@ -66,7 +66,7 @@ The wiki documentation always refers to the linux-next version of the script.
+ 
+ For Semantic Patch Language(SmPL) grammar documentation refer to:
+ 
+-http://coccinelle.lip6.fr/documentation.php
++https://coccinelle.gitlabpages.inria.fr/website/docs/main_grammar.html
+ 
+ Using Coccinelle on the Linux kernel
+ ------------------------------------
+-- 
+2.25.1
 
-        if ((priv->bittiming.bitrate && priv->bittiming.bitrate !=3D -1 &&
-
-This would make the code a lot cleaner. Can you think of a nice macro
-name for the -1?
-
-0 could be CAN_BITRATE_UNCONFIGURED or _UNSET. For -1 I cannot find a
-catchy name, something like CAN_BITRATE_CONFIGURED_UNKOWN or
-SET_UNKNOWN.
-
-The macros can be added to bittiming.h and be part of this patch. Ofq
-course the above code (and slcan.c) would make use of the macros instead
-of using 0 and -1.
-
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---wqlpeg65xesvx6zf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmKm4v8ACgkQrX5LkNig
-012N+AgAufc0XxLRDeCmzKBduVV9FwFJOYJbL8GeEu0Z+ieKqhu1JFmtYUlhdz2P
-Nyp+PAa6MktIkhdtqdn4hTSP6WvLIJzh6q6e5t1oD6iQ2qZHx8OjGYcPG+30sX4h
-QU12t6LQeuczbgnwckZ88ISrrYk23SAfiIqC0Wqg9ub33Mftw1IFZokg7Jm9rfZm
-8VZ9upwndUGMMCCnXiPkoCPvzM+kYLOR8E906bbU/xrnF2ZTaY0fGx81Zd7p45Fq
-gFr3muZW/bhbRRzZ/RV5w2yiCuHWIo6n3sUpk3B8afZSYgR28zBtYacN9EUtB/jG
-erc+pALb0wCES8YFwoy2qTMF+CPkqQ==
-=nP2n
------END PGP SIGNATURE-----
-
---wqlpeg65xesvx6zf--

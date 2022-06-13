@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB39548D79
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB8E549610
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384987AbiFMOiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46946 "EHLO
+        id S1385829AbiFMOk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384115AbiFMOhH (ORCPT
+        with ESMTP id S1384856AbiFMOhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:37:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC16245A0;
-        Mon, 13 Jun 2022 04:49:41 -0700 (PDT)
+        Mon, 13 Jun 2022 10:37:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8254D25D;
+        Mon, 13 Jun 2022 04:49:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F24B4B80D31;
-        Mon, 13 Jun 2022 11:49:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64972C34114;
-        Mon, 13 Jun 2022 11:49:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 957F1B80EB3;
+        Mon, 13 Jun 2022 11:49:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 130F4C34114;
+        Mon, 13 Jun 2022 11:49:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120978;
-        bh=tr70xxc53W5Nk0uXoYC1qf6w1/Hrbng4LDt78jiW/74=;
+        s=korg; t=1655120981;
+        bh=3TszrS3lAtEjZ2rupo4rzyU9qtS2/kAgbkhSgz7ytFE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tl24B66GnSJG5JHet/DoyYXsH/lmVhIufAox30vkI+hLcVDL0S5nPhPFS0/S7UAm6
-         yn8T5RYkQjlrEdvxMT+uhg23d6jnYptb7HHIDBPvHpudxx6xJJDr7nUKTEJoVYqr2K
-         aecUstHyPKvRrSXPxeyng7T0oR4I3WPyaKrJaUr0=
+        b=C6XYUsOrrqjxV3OD77jEdKTHqntm5wFkFRi3Nu/+16IjOX8CJalp/vtVCW4jWVsss
+         NsgMB/keLf3NO5uyBE1CkFSLuZpGYZ/Gk6uADozceOzKUVa/WruJGyF/GEZFp5tQ3E
+         h7P6G44gBTJL+n6rXOxRUU3Q99tg/XQVzgbvxZOo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Oder Chiou <oder_chiou@realtek.com>,
-        Sameer Pujar <spujar@nvidia.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Michal Kubecek <mkubecek@suse.cz>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 228/298] ASoC: rt5640: Do not manipulate pin "Platform Clock" if the "Platform Clock" is not in the DAPM
-Date:   Mon, 13 Jun 2022 12:12:02 +0200
-Message-Id: <20220613094932.012512777@linuxfoundation.org>
+Subject: [PATCH 5.17 229/298] Revert "net: af_key: add check for pfkey_broadcast in function pfkey_process"
+Date:   Mon, 13 Jun 2022 12:12:03 +0200
+Message-Id: <20220613094932.041641587@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
 References: <20220613094924.913340374@linuxfoundation.org>
@@ -56,105 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oder Chiou <oder_chiou@realtek.com>
+From: Michal Kubecek <mkubecek@suse.cz>
 
-[ Upstream commit 832296804bc7171730884e78c761c29f6d258e13 ]
+[ Upstream commit 9c90c9b3e50e16d03c7f87d63e9db373974781e0 ]
 
-The pin "Platform Clock" was only used by the Intel Byt CR platform. In the
-others, the error log will be informed. The patch will set the flag to
-avoid the pin "Platform Clock" manipulated by the other platforms.
+This reverts commit 4dc2a5a8f6754492180741facf2a8787f2c415d7.
 
-Signed-off-by: Oder Chiou <oder_chiou@realtek.com>
-Reported-by: Sameer Pujar <spujar@nvidia.com>
-Link: https://lore.kernel.org/r/20220516103055.20003-1-oder_chiou@realtek.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+A non-zero return value from pfkey_broadcast() does not necessarily mean
+an error occurred as this function returns -ESRCH when no registered
+listener received the message. In particular, a call with
+BROADCAST_PROMISC_ONLY flag and null one_sk argument can never return
+zero so that this commit in fact prevents processing any PF_KEY message.
+One visible effect is that racoon daemon fails to find encryption
+algorithms like aes and refuses to start.
+
+Excluding -ESRCH return value would fix this but it's not obvious that
+we really want to bail out here and most other callers of
+pfkey_broadcast() also ignore the return value. Also, as pointed out by
+Steffen Klassert, PF_KEY is kind of deprecated and newer userspace code
+should use netlink instead so that we should only disturb the code for
+really important fixes.
+
+v2: add a comment explaining why is the return value ignored
+
+Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/codecs/rt5640.c             | 11 +++++++++--
- sound/soc/codecs/rt5640.h             |  2 ++
- sound/soc/intel/boards/bytcr_rt5640.c |  2 ++
- 3 files changed, 13 insertions(+), 2 deletions(-)
+ net/key/af_key.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/codecs/rt5640.c b/sound/soc/codecs/rt5640.c
-index e7a82565b905..f078463346e8 100644
---- a/sound/soc/codecs/rt5640.c
-+++ b/sound/soc/codecs/rt5640.c
-@@ -2097,12 +2097,14 @@ EXPORT_SYMBOL_GPL(rt5640_sel_asrc_clk_src);
- void rt5640_enable_micbias1_for_ovcd(struct snd_soc_component *component)
- {
- 	struct snd_soc_dapm_context *dapm = snd_soc_component_get_dapm(component);
-+	struct rt5640_priv *rt5640 = snd_soc_component_get_drvdata(component);
+diff --git a/net/key/af_key.c b/net/key/af_key.c
+index 339d95df19d3..d93bde657359 100644
+--- a/net/key/af_key.c
++++ b/net/key/af_key.c
+@@ -2826,10 +2826,12 @@ static int pfkey_process(struct sock *sk, struct sk_buff *skb, const struct sadb
+ 	void *ext_hdrs[SADB_EXT_MAX];
+ 	int err;
  
- 	snd_soc_dapm_mutex_lock(dapm);
- 	snd_soc_dapm_force_enable_pin_unlocked(dapm, "LDO2");
- 	snd_soc_dapm_force_enable_pin_unlocked(dapm, "MICBIAS1");
- 	/* OVCD is unreliable when used with RCCLK as sysclk-source */
--	snd_soc_dapm_force_enable_pin_unlocked(dapm, "Platform Clock");
-+	if (rt5640->use_platform_clock)
-+		snd_soc_dapm_force_enable_pin_unlocked(dapm, "Platform Clock");
- 	snd_soc_dapm_sync_unlocked(dapm);
- 	snd_soc_dapm_mutex_unlock(dapm);
- }
-@@ -2111,9 +2113,11 @@ EXPORT_SYMBOL_GPL(rt5640_enable_micbias1_for_ovcd);
- void rt5640_disable_micbias1_for_ovcd(struct snd_soc_component *component)
- {
- 	struct snd_soc_dapm_context *dapm = snd_soc_component_get_dapm(component);
-+	struct rt5640_priv *rt5640 = snd_soc_component_get_drvdata(component);
+-	err = pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
+-			      BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
+-	if (err)
+-		return err;
++	/* Non-zero return value of pfkey_broadcast() does not always signal
++	 * an error and even on an actual error we may still want to process
++	 * the message so rather ignore the return value.
++	 */
++	pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
++			BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
  
- 	snd_soc_dapm_mutex_lock(dapm);
--	snd_soc_dapm_disable_pin_unlocked(dapm, "Platform Clock");
-+	if (rt5640->use_platform_clock)
-+		snd_soc_dapm_disable_pin_unlocked(dapm, "Platform Clock");
- 	snd_soc_dapm_disable_pin_unlocked(dapm, "MICBIAS1");
- 	snd_soc_dapm_disable_pin_unlocked(dapm, "LDO2");
- 	snd_soc_dapm_sync_unlocked(dapm);
-@@ -2538,6 +2542,9 @@ static void rt5640_enable_jack_detect(struct snd_soc_component *component,
- 		rt5640->jd_gpio_irq_requested = true;
- 	}
- 
-+	if (jack_data && jack_data->use_platform_clock)
-+		rt5640->use_platform_clock = jack_data->use_platform_clock;
-+
- 	ret = request_irq(rt5640->irq, rt5640_irq,
- 			  IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
- 			  "rt5640", rt5640);
-diff --git a/sound/soc/codecs/rt5640.h b/sound/soc/codecs/rt5640.h
-index 9e49b9a0ccaa..505c93514051 100644
---- a/sound/soc/codecs/rt5640.h
-+++ b/sound/soc/codecs/rt5640.h
-@@ -2155,11 +2155,13 @@ struct rt5640_priv {
- 	bool jd_inverted;
- 	unsigned int ovcd_th;
- 	unsigned int ovcd_sf;
-+	bool use_platform_clock;
- };
- 
- struct rt5640_set_jack_data {
- 	int codec_irq_override;
- 	struct gpio_desc *jd_gpio;
-+	bool use_platform_clock;
- };
- 
- int rt5640_dmic_enable(struct snd_soc_component *component,
-diff --git a/sound/soc/intel/boards/bytcr_rt5640.c b/sound/soc/intel/boards/bytcr_rt5640.c
-index b5ac226c59e1..754cc4fc706d 100644
---- a/sound/soc/intel/boards/bytcr_rt5640.c
-+++ b/sound/soc/intel/boards/bytcr_rt5640.c
-@@ -1191,12 +1191,14 @@ static int byt_rt5640_init(struct snd_soc_pcm_runtime *runtime)
- {
- 	struct snd_soc_card *card = runtime->card;
- 	struct byt_rt5640_private *priv = snd_soc_card_get_drvdata(card);
-+	struct rt5640_set_jack_data *jack_data = &priv->jack_data;
- 	struct snd_soc_component *component = asoc_rtd_to_codec(runtime, 0)->component;
- 	const struct snd_soc_dapm_route *custom_map = NULL;
- 	int num_routes = 0;
- 	int ret;
- 
- 	card->dapm.idle_bias_off = true;
-+	jack_data->use_platform_clock = true;
- 
- 	/* Start with RC clk for jack-detect (we disable MCLK below) */
- 	if (byt_rt5640_quirk & BYT_RT5640_MCLK_EN)
+ 	memset(ext_hdrs, 0, sizeof(ext_hdrs));
+ 	err = parse_exthdrs(skb, hdr, ext_hdrs);
 -- 
 2.35.1
 

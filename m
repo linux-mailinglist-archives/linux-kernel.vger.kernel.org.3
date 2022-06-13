@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8052D548854
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E98154873B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383460AbiFMO0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
+        id S1383498AbiFMO0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383520AbiFMOX1 (ORCPT
+        with ESMTP id S1383582AbiFMOXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:23:27 -0400
+        Mon, 13 Jun 2022 10:23:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8577246B0C;
-        Mon, 13 Jun 2022 04:44:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3B345AE6;
+        Mon, 13 Jun 2022 04:44:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCBFB61425;
-        Mon, 13 Jun 2022 11:44:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB8FDC34114;
-        Mon, 13 Jun 2022 11:44:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BC8B613F9;
+        Mon, 13 Jun 2022 11:44:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3D89C34114;
+        Mon, 13 Jun 2022 11:44:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120670;
-        bh=4uPzDoDtm+L7EnFXiMH8EH9hH4YgpoC0Sl0c04Rut6E=;
+        s=korg; t=1655120673;
+        bh=h2GAPVA3uVAAFtMjriXrr9QUlUNYuhwWbO0AJOL+LgI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aK+aoo7m4IAYpfuBAYFlpEmTLqWpykyUFJYsOjAIEynVLX/t4DA65EuMzSPINejv/
-         LqpJK4Mz03tH9tmHhAlmS+fsp37HEkgH7d63QeOJxZGEes7qA0deUxYZoFSxlEKquU
-         favfbezn6ZyvK7LVS1r9Gv9qIqIvquB0Bdao9khA=
+        b=mAldeU+cto4Y4YXk3PsmbjT0zl3mUP6hfTr/1V/sytHzVGlbJnqcGwQXX8nPe0raC
+         aEvRF+Es9nYUUpGqzmYgt/mYXlN/sqOJ9oSfen0jfHRI7hg6m2peKS1f7yUZdJ/16x
+         bdgLdHxc3ulfzsK+0uCCWCVI42cTAVKKHxCCsaAI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
-        Richard Weinberger <richard@nod.at>,
+        stable@vger.kernel.org, Yonghong Song <yhs@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 091/298] ubi: ubi_create_volume: Fix use-after-free when volume creation failed
-Date:   Mon, 13 Jun 2022 12:09:45 +0200
-Message-Id: <20220613094927.709694293@linuxfoundation.org>
+Subject: [PATCH 5.17 092/298] selftests/bpf: fix selftest after random: Urandom_read tracepoint removal
+Date:   Mon, 13 Jun 2022 12:09:46 +0200
+Message-Id: <20220613094927.739915034@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
 References: <20220613094924.913340374@linuxfoundation.org>
@@ -55,46 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhihao Cheng <chengzhihao1@huawei.com>
+From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit 8c03a1c21d72210f81cb369cc528e3fde4b45411 ]
+[ Upstream commit 99dea2c664d7bc7e4f6f6947182d0d365165a998 ]
 
-There is an use-after-free problem for 'eba_tbl' in ubi_create_volume()'s
-error handling path:
+14c174633f34 ("random: remove unused tracepoints") removed all the
+tracepoints from drivers/char/random.c, one of which,
+random:urandom_read, was used by stacktrace_build_id selftest to trigger
+stack trace capture.
 
-  ubi_eba_replace_table(vol, eba_tbl)
-    vol->eba_tbl = tbl
-out_mapping:
-  ubi_eba_destroy_table(eba_tbl)   // Free 'eba_tbl'
-out_unlock:
-  put_device(&vol->dev)
-    vol_release
-      kfree(tbl->entries)	  // UAF
+Fix breakage by switching to kprobing urandom_read() function.
 
-Fix it by removing redundant 'eba_tbl' releasing.
-Fetch a reproducer in [Link].
-
-Fixes: 493cfaeaa0c9b ("mtd: utilize new cdev_device_add helper function")
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215965
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Suggested-by: Yonghong Song <yhs@fb.com>
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Yonghong Song <yhs@fb.com>
+Link: https://lore.kernel.org/bpf/20220325225643.2606-1-andrii@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/ubi/vmt.c | 1 -
- 1 file changed, 1 deletion(-)
+ .../selftests/bpf/progs/test_stacktrace_build_id.c   | 12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/mtd/ubi/vmt.c b/drivers/mtd/ubi/vmt.c
-index 1bc7b3a05604..6ea95ade4ca6 100644
---- a/drivers/mtd/ubi/vmt.c
-+++ b/drivers/mtd/ubi/vmt.c
-@@ -309,7 +309,6 @@ int ubi_create_volume(struct ubi_device *ubi, struct ubi_mkvol_req *req)
- 	ubi->volumes[vol_id] = NULL;
- 	ubi->vol_count -= 1;
- 	spin_unlock(&ubi->volumes_lock);
--	ubi_eba_destroy_table(eba_tbl);
- out_acc:
- 	spin_lock(&ubi->volumes_lock);
- 	ubi->rsvd_pebs -= vol->reserved_pebs;
+diff --git a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
+index 36a707e7c7a7..6c62bfb8bb6f 100644
+--- a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
++++ b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
+@@ -39,16 +39,8 @@ struct {
+ 	__type(value, stack_trace_t);
+ } stack_amap SEC(".maps");
+ 
+-/* taken from /sys/kernel/debug/tracing/events/random/urandom_read/format */
+-struct random_urandom_args {
+-	unsigned long long pad;
+-	int got_bits;
+-	int pool_left;
+-	int input_left;
+-};
+-
+-SEC("tracepoint/random/urandom_read")
+-int oncpu(struct random_urandom_args *args)
++SEC("kprobe/urandom_read")
++int oncpu(struct pt_regs *args)
+ {
+ 	__u32 max_len = sizeof(struct bpf_stack_build_id)
+ 			* PERF_MAX_STACK_DEPTH;
 -- 
 2.35.1
 

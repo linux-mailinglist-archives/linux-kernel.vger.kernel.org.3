@@ -2,132 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7915483DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F5D54844B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:16:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239352AbiFMKBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38920 "EHLO
+        id S239065AbiFMKBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235480AbiFMKBM (ORCPT
+        with ESMTP id S235736AbiFMKBn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:01:12 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7CB1CFF2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:01:10 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id j5-20020a05600c1c0500b0039c5dbbfa48so4254491wms.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:01:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BXL2Lw4zT1IVwqhSEjXK+P84WMP4plTQkpOVGJlhBIA=;
-        b=ZDZIsn9c7ugi0coJdHHAzqz7LC9hiSymPF+sxu4AnAYi0JsbcIyjPab7wa+3S93DPt
-         P4HmJ8FtO26nbTUy/2rxxnx3kL4tjwvCRRlKJgfRKjJ52tbJTfn1lIolTBNd4TL9mWhf
-         cczSgS5F5FOW4FcKVePQ5xUZokvv7OQV2eGXixMfuPBOne8iTEXf5v+Bv+ZIqPFYNi76
-         GqOohJ9wt6MEfAj8UnBoytnTqNwlGjBr2BsEq3a24nReT8E9/Z4GtBVUyVE26t0o9rX/
-         TA9CtY8RzHG+nt7N/sBa9tKiuq8AQUHthtlDloZBqQiTIF2vZsOZ/iW7TJxic36z/Qtc
-         L3+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BXL2Lw4zT1IVwqhSEjXK+P84WMP4plTQkpOVGJlhBIA=;
-        b=dR90P40cER1TO8c0OnHbUoOWB1ZkDHFmuVIEXs1q/qJzi2wqtb4uV7/uqkx8+er3gy
-         9O0765uwj/DfPTzwkR6rzh+P6eV0otJMMts5/HU3D4V5rFNs5YY/Ycuynr6ja5nNkEiK
-         eCpMsAc4pfi4d4kppKJdOHnidH2EhSFPt4bRuULU/wCM59y8NPrhAEfaGRPSOIZkUmsx
-         vVLyPVfhpTDkWTjZ8C6skrDiZNRYXWjeFBmsFzLbAMz8obAB0D15MkOVsucBHCcfStJ3
-         Zl36Dv+/bSbPHaYW5Y2fth8S+ljNwrfEINH456iS2mnSKWE9FMNWQ3n+pKN/qM3pLwSG
-         TpiQ==
-X-Gm-Message-State: AOAM53363UtiaxCnekbO08EZmwkSQXzWubKI+F83Aw2QC+Gs8O9vmrf3
-        wG9R0++cPuQM/AC1P7nUfUY=
-X-Google-Smtp-Source: ABdhPJy7//M5Jfa+8jDuILscPRJU1dGZvEQ9blmTTUOALSKYYxivr8+CrYCs22CrgbjLpQRmpWprUA==
-X-Received: by 2002:a05:600c:1f0c:b0:39c:600e:6d51 with SMTP id bd12-20020a05600c1f0c00b0039c600e6d51mr13536097wmb.3.1655114468558;
-        Mon, 13 Jun 2022 03:01:08 -0700 (PDT)
-Received: from lshz10676.. ([2a01:e0a:4cc:a210:2e0:4cff:fe4b:7422])
-        by smtp.gmail.com with ESMTPSA id bh4-20020a05600005c400b002103bd9c5acsm8276137wrb.105.2022.06.13.03.01.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 03:01:07 -0700 (PDT)
-From:   Antonio Borneo <borneo.antonio@gmail.com>
-To:     Joe Perches <joe@perches.com>, Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Antonio Borneo <borneo.antonio@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH v2] checkpatch: fix incorrect camelcase detection on numeric constant
-Date:   Mon, 13 Jun 2022 12:00:55 +0200
-Message-Id: <20220613100055.77821-1-borneo.antonio@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <93eb25ab04c2f7436a49f301c2c79a49cb209c44.camel@perches.com>
-References: <93eb25ab04c2f7436a49f301c2c79a49cb209c44.camel@perches.com>
+        Mon, 13 Jun 2022 06:01:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88ABD1D0F4;
+        Mon, 13 Jun 2022 03:01:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08C11D6E;
+        Mon, 13 Jun 2022 03:01:35 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.38.134])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C11BB3F66F;
+        Mon, 13 Jun 2022 03:01:28 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        peterz@infradead.org, acme@kernel.org, mark.rutland@arm.com,
+        will@kernel.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH 0/8] arm64/perf: Enable branch stack sampling
+Date:   Mon, 13 Jun 2022 15:31:11 +0530
+Message-Id: <20220613100119.684673-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code fragment below
-	int foo(int *array, int index)
-	{
-		return array[index & 0xFF];
-	}
-triggers an incorrect camelcase detection by checking a substring
-of the hex constant:
-	CHECK: Avoid CamelCase: <xFF>
-	#3: FILE: test.c:3:
-	+	return array[index & 0xFF];
+This series enables perf branch stack sampling support on arm64 platform
+via a new arch feature called Branch Record Buffer Extension (BRBE). All
+relevant register definitions could be accessed here.
 
-This is caused by passing the whole string "array[index & 0xFF]"
-to the inner loop that iterates over a "$Ident" match.
-The numeric constant is not a $Ident as it doesn't start with
-[A-Za-z_] and should be excluded from the match.
+https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
 
-Similar issue can be detected with other constants like "1uL",
-"0xffffU".
+This series applies on v5.19-rc2 after the BRBE related perf ABI changes series
+(V6) that was posted earlier.
 
-Force the match to start at word boundary so the $Ident will be
-properly checked starting from its first char and the constants
-will be filtered-out.
+https://lore.kernel.org/linux-arm-kernel/20220610035101.424112-1-anshuman.khandual@arm.com/
 
-Signed-off-by: Antonio Borneo <borneo.antonio@gmail.com>
----
+Following issues remain inconclusive
 
-Well, already one year has passed from v1, but anyway here is v2.
+- Jame's concerns regarding permission inadequacy related to perfmon_capable()
+- Jame's concerns regarding using perf_event_paranoid along with perfmon_capable()
+- Rob's concerns regarding the series structure, arm_pmu callbacks based framework
 
-Joe,
-I have modified the commit message, hope it fully matches your
-review.
+Changes in V1:
 
-v1 -> v2:
-	fix description in commit message
-	rebase on v5.19-rc2
+- Added CONFIG_PERF_EVENTS wrapper for all branch sample filter helpers
+- Process new perf branch types via PERF_BR_EXTEND_ABI
 
----
- scripts/checkpatch.pl | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in RFC V2:
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 503e8abbb2c1..ef4c656a99b3 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -5720,7 +5720,7 @@ sub process {
- 			    $var !~ /^(?:[a-z0-9_]*|[A-Z0-9_]*)?_?[a-z][A-Z](?:_[a-z0-9_]+|_[A-Z0-9_]+)?$/ &&
- #Ignore some three character SI units explicitly, like MiB and KHz
- 			    $var !~ /^(?:[a-z_]*?)_?(?:[KMGT]iB|[KMGT]?Hz)(?:_[a-z_]+)?$/) {
--				while ($var =~ m{($Ident)}g) {
-+				while ($var =~ m{\b($Ident)}g) {
- 					my $word = $1;
- 					next if ($word !~ /[A-Z][a-z]|[a-z][A-Z]/);
- 					if ($check) {
+https://lore.kernel.org/linux-arm-kernel/20220412115455.293119-1-anshuman.khandual@arm.com/
 
-base-commit: b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+- Added branch_sample_priv() while consolidating other branch sample filter helpers
+- Changed all SYS_BRBXXXN_EL1 register definition encodings per Marc
+- Changed the BRBE driver as per proposed BRBE related perf ABI changes (V5)
+- Added documentation for struct arm_pmu changes, updated commit message
+- Updated commit message for BRBE detection infrastructure patch
+- PERF_SAMPLE_BRANCH_KERNEL gets checked during arm event init (outside the driver)
+- Branch privilege state capture mechanism has now moved inside the driver
+
+Changes in RFC V1:
+
+https://lore.kernel.org/all/1642998653-21377-1-git-send-email-anshuman.khandual@arm.com/
+
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: James Clark <james.clark@arm.com>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-perf-users@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (8):
+  perf: Consolidate branch sample filter helpers
+  arm64/perf: Add register definitions for BRBE
+  arm64/perf: Update struct arm_pmu for BRBE
+  arm64/perf: Update struct pmu_hw_events for BRBE
+  driver/perf/arm_pmu_platform: Add support for BRBE attributes detection
+  arm64/perf: Drive BRBE from perf event states
+  arm64/perf: Add BRBE driver
+  arm64/perf: Enable branch stack sampling
+
+ arch/arm64/include/asm/sysreg.h | 222 ++++++++++++++++
+ arch/arm64/kernel/perf_event.c  |  48 ++++
+ drivers/perf/Kconfig            |  11 +
+ drivers/perf/Makefile           |   1 +
+ drivers/perf/arm_pmu.c          |  72 +++++-
+ drivers/perf/arm_pmu_brbe.c     | 442 ++++++++++++++++++++++++++++++++
+ drivers/perf/arm_pmu_brbe.h     | 259 +++++++++++++++++++
+ drivers/perf/arm_pmu_platform.c |  34 +++
+ include/linux/perf/arm_pmu.h    |  63 +++++
+ include/linux/perf_event.h      |  26 ++
+ kernel/events/core.c            |   9 +-
+ 11 files changed, 1177 insertions(+), 10 deletions(-)
+ create mode 100644 drivers/perf/arm_pmu_brbe.c
+ create mode 100644 drivers/perf/arm_pmu_brbe.h
+
 -- 
-2.36.1
+2.25.1
 

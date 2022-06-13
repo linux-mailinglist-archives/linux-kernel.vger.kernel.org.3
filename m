@@ -2,106 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D6954A2BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 01:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E80954A2BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 01:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346172AbiFMX0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 19:26:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
+        id S231671AbiFMXd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 19:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242275AbiFMX0H (ORCPT
+        with ESMTP id S229527AbiFMXdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 19:26:07 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6ECC326C8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 16:26:06 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id 19so7738027iou.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 16:26:06 -0700 (PDT)
+        Mon, 13 Jun 2022 19:33:50 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801E43055C
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 16:33:49 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id h190-20020a636cc7000000b003fd5d5452cfso4059613pgc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 16:33:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cbxRBPwDsE33S/4VWlMl76EK8aUfLE1juYHGI23Fd9s=;
-        b=Q7KcmegsUIXtRK/aUvN0dfl38itVsJxSdSzTcmQADGwvhawJSCjwQwVZ0S8tUk0MLT
-         sMnvKm08Vjq/p4mvxxELqyBzAmAjWGgT7rWjMhrgeHhzxIhiWA+1OfCJLNEYSXGBiuwX
-         KKgoji0LufhQdFZhgUnLRooUwbeqYKZVNWnzk=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=Lpl6bFxJI4CHRgZzmX1LV+v0qDroFLN/nvNicZhBWbk=;
+        b=PBbqm2oEvfRdfqUL7Z30R+/pfa0TDaOZnOfFZ0FGkyyXTVfaeA859rqjWm5M1jgU4x
+         x9JF9CHjapYA+Mh3kZOTZBfRwi95ukBYi4SdXiCXBziNv0P/HPw9E1dCWO6gbH+BcCKm
+         tkhDkanIMftPysWbsqKlgR9QcfvPiyPBDZ/GSuklEWBnmW3oudZLo8ywT96P48LV6iA4
+         XmsVCsryoiDxhn+5j4mLRhSC2gJiFeyyEotYhoPswCKK6KwnReLTepOho7gwxE37W1Zi
+         K/rIYy1sy8uQjBLmW9Eh+KI/HR8kZ34ztVrGSb3dFKCZ8WMgaXsxVEFfLfbbLSPqJGOj
+         6gTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cbxRBPwDsE33S/4VWlMl76EK8aUfLE1juYHGI23Fd9s=;
-        b=Xb7Epx+F6d0j7QbLVmNv2CYE7Lhw6kmi7tSFT2+8D1sJ3qgRAkr9P7dKcsFls70Sav
-         oxAKq6cSniGEbqZvCd/a8PY0GReiksOFHKDgoELLmrfgZsWWdVP6T+z0T+v6/FrGdbCK
-         MOhcXpd/r0J46l2iGZfkMv8cCqtnZcUKIJlo6MfSRJ5/Y/UFnNLcjx7LJQSLZ8fYxqCi
-         Nkz1R3jUk9Nd4mWr4vRr3nY8aHzhu/6zeaSCqz99oNPQQnD7EYbTODdxlb5BpJDraIQQ
-         tfczc3D9XNJntR1oq2x0OAT6vND3DNAFdHAaCRzO0XlXJ2VXnaGZqQJV9Y6g6+WwqPWm
-         AJQw==
-X-Gm-Message-State: AOAM532+eKvYnpHj/VBxWGwVsUhyBUmI2wA5CHuatNaVAaaKoUZSZW3U
-        d1HTRrAeNyBlzpgkGgyJPjJi/GwwzRWRoagraH3Cvw==
-X-Google-Smtp-Source: ABdhPJz6BzkhxT4qPiTDFCP9A72GGdJ/EGAHIkamJTf26bfTUwgdrW/qNn+EcsJTpA9WG7RlmeDt//ajXwXTAncS/68=
-X-Received: by 2002:a05:6602:2d4b:b0:669:f213:c6e1 with SMTP id
- d11-20020a0566022d4b00b00669f213c6e1mr1080945iow.77.1655162766187; Mon, 13
- Jun 2022 16:26:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220613232224.2466278-1-swboyd@chromium.org>
-In-Reply-To: <20220613232224.2466278-1-swboyd@chromium.org>
-From:   Gwendal Grignou <gwendal@chromium.org>
-Date:   Mon, 13 Jun 2022 16:25:55 -0700
-Message-ID: <CAPUE2usiMSi-njO5G9wELOdRuL428Vw9BtS4NfbKX1wtVCMaWA@mail.gmail.com>
-Subject: Re: [PATCH] iio:proximity:sx9324: Check ret value of device_property_read_u32_array()
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Aashish Sharma <shraash@google.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-iio@vger.kernel.org, kernel test robot <lkp@intel.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=Lpl6bFxJI4CHRgZzmX1LV+v0qDroFLN/nvNicZhBWbk=;
+        b=bMvAOz+Tnp76BMeN0cUjPaIQ0zTGpC2Th7CsWzPMP2v8BvtjphUi/Sh8rOzQ8g6wsC
+         FelDTmIgNVZzvCtS4qbcofr6Iq+AbqWQRUIqd7nLY3SGge49RYQda5xM7tuvLgTXHqe0
+         M4yH9wCtDygADYuUn5JhE24XY2L86bNi5B+8ie02OP15ylVQ2w6gQpNYU/Rt518caeRm
+         jLGSrcd9lv+6UjnVbDSqPKYakUQLkU3tFLUJ1sXsPw/v7TphD0aAYcIbP4k0D/86EI0w
+         3PK9SXonnfmMO8zT7rOd4fpgWpA4CYujZnDxSSZ8OwD5tgxaD0ImKfbc8Zvgg8UkMIvz
+         ZpTQ==
+X-Gm-Message-State: AJIora8w13Mq+BrKZD4a0i8527KhMIP59W1XBCBgkyULf5Cr4I+PRlol
+        ME0ZNnTo0DjalrcAANlQTegFoqfBfIA=
+X-Google-Smtp-Source: AGRyM1txbt+9NgJBywZye18wHMFrzrxDjzOEouzPoc8+gANuChnXlXGrxwM174nRDA4EmaMfxx9wSKZ3OXQ=
+X-Received: from edliaw.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4be])
+ (user=edliaw job=sendgmr) by 2002:a17:90a:e7c8:b0:1e6:92fe:84c2 with SMTP id
+ kb8-20020a17090ae7c800b001e692fe84c2mr1259645pjb.194.1655163228891; Mon, 13
+ Jun 2022 16:33:48 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 23:33:21 +0000
+Message-Id: <20220613233321.431282-1-edliaw@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+Subject: [PATCH v1] userfaultfd: selftests: infinite loop in faulting_process
+From:   Edward Liaw <edliaw@google.com>
+To:     shuah@kernel.org
+Cc:     axelrasmussen@google.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com, Edward Liaw <edliaw@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 4:22 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> From: Aashish Sharma <shraash@google.com>
->
-> 0-day reports:
->
-> drivers/iio/proximity/sx9324.c:868:3: warning: Value stored
-> to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
->
-> Put an if condition to break out of switch if ret is non-zero.
->
-> Signed-off-by: Aashish Sharma <shraash@google.com>
-> Fixes: a8ee3b32f5da ("iio:proximity:sx9324: Add dt_binding support")
-> Reported-by: kernel test robot <lkp@intel.com>
-> [swboyd@chromium.org: Reword commit subject, add fixes tag]
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Gwendal Grignou <gwendal@chromium.org>
-> ---
->  drivers/iio/proximity/sx9324.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/drivers/iio/proximity/sx9324.c b/drivers/iio/proximity/sx9324.c
-> index 70c37f664f6d..63fbcaa4cac8 100644
-> --- a/drivers/iio/proximity/sx9324.c
-> +++ b/drivers/iio/proximity/sx9324.c
-> @@ -885,6 +885,9 @@ sx9324_get_default_reg(struct device *dev, int idx,
->                         break;
->                 ret = device_property_read_u32_array(dev, prop, pin_defs,
->                                                      ARRAY_SIZE(pin_defs));
-> +               if (ret)
-> +                       break;
-> +
->                 for (pin = 0; pin < SX9324_NUM_PINS; pin++)
->                         raw |= (pin_defs[pin] << (2 * pin)) &
->                                SX9324_REG_AFE_PH0_PIN_MASK(pin);
->
-> base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
-> --
-> https://chromeos.dev
->
+On Android this test is getting stuck in an infinite loop due to
+indeterminate behavior:
+
+The local variables steps and signalled were being reset to 1 and 0
+respectively after every jump back to sigsetjmp by siglongjmp in the
+signal handler. The test was incrementing them and expecting them to
+retain their incremented values. The documentation for siglongjmp says:
+
+All accessible objects have values as of the time sigsetjmp() was
+called, except that the values of objects of automatic storage duration
+which are local to the function containing the invocation of the
+corresponding sigsetjmp() which do not have volatile-qualified type and
+which are changed between the sigsetjmp() invocation and siglongjmp()
+call are indeterminate.
+
+Tagging steps and signalled with volatile enabled the test to pass.
+
+Signed-off-by: Edward Liaw <edliaw@google.com>
+---
+ tools/testing/selftests/vm/userfaultfd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/vm/userfaultfd.c b/tools/testing/selftests/vm/userfaultfd.c
+index 0bdfc1955229..2b2a68722ae1 100644
+--- a/tools/testing/selftests/vm/userfaultfd.c
++++ b/tools/testing/selftests/vm/userfaultfd.c
+@@ -931,7 +931,7 @@ static int faulting_process(int signal_test)
+ 	unsigned long split_nr_pages;
+ 	unsigned long lastnr;
+ 	struct sigaction act;
+-	unsigned long signalled = 0;
++	volatile unsigned long signalled = 0;
+ 
+ 	split_nr_pages = (nr_pages + 1) / 2;
+ 
+@@ -946,7 +946,7 @@ static int faulting_process(int signal_test)
+ 	}
+ 
+ 	for (nr = 0; nr < split_nr_pages; nr++) {
+-		int steps = 1;
++		volatile int steps = 1;
+ 		unsigned long offset = nr * page_size;
+ 
+ 		if (signal_test) {
+-- 
+2.36.1.476.g0c4daa206d-goog
+

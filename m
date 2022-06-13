@@ -2,157 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9307547D82
+	by mail.lfdr.de (Postfix) with ESMTP id 244AC547D80
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 03:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232965AbiFMBt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 21:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38072 "EHLO
+        id S236156AbiFMBto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 21:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238134AbiFMBss (ORCPT
+        with ESMTP id S234998AbiFMBtj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 21:48:48 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2128.outbound.protection.outlook.com [40.107.255.128])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 854201116A;
-        Sun, 12 Jun 2022 18:48:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BPgYzLsSXCFEGJBpHYdv52ccaT4ikW/7nKVfY+6r0zypS8CW4lCei1JeSh+JvqQbPrdRzva3fA0u+NbBAIL39IVeodk9Ktnsp3qeTvYSgfXgnuxubZ6tdWKEzeudRWcz5wPKHAjQ4uqlygzgeHggKoUnuOjNTBnvlBa1FkEYQd/0HZrxmfTaAPS4L+3d2ZlIMIgE3W+3Lp3gsiMEv063NRt4m8uDK+AyWTklUc1LP1We5u6MZ8kDRIH4SqoG9nuvP9v7tSAwwbeYVdtONDVd0WgR/Kw6yd6IuBgj0JOX124mOpc/j2GR6wc7uZsaX+f/ZHBL1XaeFPAwodRs1dHAZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Llaoh9lET4S/OhAnOsW7ujDL8Mp+iVabaCQrrDpp6RU=;
- b=B9CLZ4klGD9HC/C8IHy79Mo4ce212g1ByaPmjjV9WsF1Ilyu19eU3ICWeX4dEc2aGTYpXrkPHGpB2IaZbEFOauc1lwK97thS5DJfMMwcXEJwzb9KLuUKgqXK4EfAFA3QQwYeP5ClPThN1MM9triFiSjjnwpqtlhsRCJGnT3foyXlcwsjYreZb2Um87RFTGumTCYTSsHdYE3BlliLWVzWq7iw7JRTkv8ioAjZlB2pOYXY2yJeOVe2umT480sbmxGxhIJtlN+4ytfdmoTbG74q78EFvBSguJVVgA0HWxROG4p8v/L0BSQSIrIVbmRoGgWlo/uFSzmJucY4kg7mDsEyWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Llaoh9lET4S/OhAnOsW7ujDL8Mp+iVabaCQrrDpp6RU=;
- b=fehad8pzkLHpN+l10OjHMr56LXHlhUQkfZQt0q1qAirJCmUf8pobFcuq0Ucn9K0EXoiJXk9MBhjt++0vvtTNj0QZY2pcfYawnSHgZVu0skLuzKfg2QBjL/6vnBAoD/TuvugcAxl+ZZOcl0oCAjVxrsFjt8ajowzvbvZ4HsVSljHGEy2F0QRdF1/5j+xT+sToJAOx58n6La8Z1zyOGCFEjBmbXtybIdOjy0l2lq8kOUJrRvFxUHHZ/PspS3XaCv8oaBMc+bDr+5w7kZoEEqPvX4ksUYJeNNgu29XsWwc5HdD9s55WRTw+NnHo7eceLkxoI0mwNmv4pVRaUHR/URrQEQ==
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
- by TYAPR06MB2350.apcprd06.prod.outlook.com (2603:1096:404:20::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Mon, 13 Jun
- 2022 01:48:40 +0000
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::7c42:9783:92c9:f237]) by HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::7c42:9783:92c9:f237%7]) with mapi id 15.20.5332.020; Mon, 13 Jun 2022
- 01:48:40 +0000
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Dhananjay Phadke <dphadke@linux.microsoft.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Johnny Huang <johnny_huang@aspeedtech.com>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 5/5] crypto: aspeed: add HACE crypto driver
-Thread-Topic: [PATCH 5/5] crypto: aspeed: add HACE crypto driver
-Thread-Index: AQHYdXplWC114bhAXUSzdjTWoGD8KK1F8lyAgAaw5zA=
-Date:   Mon, 13 Jun 2022 01:48:40 +0000
-Message-ID: <HK0PR06MB32022ABEDDDFD9FB24B8103D80AB9@HK0PR06MB3202.apcprd06.prod.outlook.com>
-References: <20220601054204.1522976-1-neal_liu@aspeedtech.com>
- <20220601054204.1522976-6-neal_liu@aspeedtech.com>
- <6f9e1481-db9c-cd5f-c38d-bdcd3040315f@linux.microsoft.com>
-In-Reply-To: <6f9e1481-db9c-cd5f-c38d-bdcd3040315f@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b91685ad-be78-4042-8188-08da4cded716
-x-ms-traffictypediagnostic: TYAPR06MB2350:EE_
-x-microsoft-antispam-prvs: <TYAPR06MB2350727C054A3F577E17A80380AB9@TYAPR06MB2350.apcprd06.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qOpG5giejNQZwdqpXn+2Y4qAWb+x0ccp5bWI+YSPUCyWXXWzT7xddmpgJAZtESYvCJj01xepRTpYIUPSUMAf3xnLI80S+mPhEeObYjBge0asS4MxRVuE3cvtnVS+/4ipeZAdqaZXHgWyy5ayUbU/q2BGhHkP0jVC9rz+Gi5fEs/FGqUwrwoX2/gl8bmaJzy4zvYSRONmQPTWzmq85rkYDb0xyCVVZqCaNCOHQNMcSA3iWWXfBnA2FwgkmiYmmCD3678p3d7yk4t1EQ232IaTnYdVi9f8KLOfeQTEeSX2ad9eyd7Khcqjc4ztaXZowKc31dOarUO7K1evI+CCA2i4DgTyJKqoqUnXixx+Z5sxoBF3t5gRo01Q7G3cOSras5Ygt6kMVs1FdUoNSVCWwih6vIq3YHMst3tFL1QO3e28lRr2QrcSqr5e/tBWmOfE/qR/eAkBhyPgdugAngrUatyLrHrK2ulp2xAy55aRrpIcGCS3uYpKyEdEF4DBLvgTIXzy40ZY/k0SXXMPRHje2MOWTFIFsxAFLx0unakMtS22atTr+K+M8O0OWRWeGk+qibVYvqPiGkbktHiDZztPkQrxqMT3FvX45VHD2cD37kSofigpvpf8OKmQYYlrVRcmkXPYmuF88New7S9F+sDuyt6nQJss8UUv32dd7YflsQvCLbpAz6YYvjycC3rXTAI/x+QG+PJvuajaELTevpW1e3elyQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(366004)(346002)(396003)(39840400004)(41300700001)(26005)(53546011)(9686003)(7696005)(6506007)(54906003)(6636002)(66446008)(110136005)(76116006)(66946007)(66556008)(66476007)(316002)(64756008)(508600001)(71200400001)(86362001)(186003)(38100700002)(122000001)(38070700005)(52536014)(8676002)(2906002)(4326008)(33656002)(5660300002)(55016003)(8936002)(7416002)(4744005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eVRKNk1IU3g2M2dXVGlFdVJJcitocGx5TUNmVHMrSjFEZ0phRE1ubVRZQzAw?=
- =?utf-8?B?VWxxeGhnTHoreU5XU0FIbGJyU3dyazNMdTM0OFg0NVNkeHFSK3JjRTlyK2dS?=
- =?utf-8?B?TjZhaWFNb2h6WWNUeUVFNDNGUTc2VlBBeTFNZkQ4NjlYVHdzS3M0dlNueEJK?=
- =?utf-8?B?Tkk5U1JpQ1hYcXk4RGVVRFZNK1YzcGdoM01MbG44Tm5sQUpHY0VDL0ZGOS9a?=
- =?utf-8?B?RzVGOGVyalpua0xBbU1UdWQxREtjZnRPbk9uZU04WDkzc3JwTlZYMkFMK3JB?=
- =?utf-8?B?Uk1DQURiZDM1SDA5U2ZqalZWcks4TjVOdlRPT2Q2RWIzc3REYnBmVDYwaCt1?=
- =?utf-8?B?bGpiTnJpeS8rYmxoSU1WQ1NXb0cvV2R6bzF4RCtYdlhROHMzM2NBV1ZzVi95?=
- =?utf-8?B?bTlaaGtKVkVaWTkvcjdtd0o3ZTVCcFhoQW00ZXlRUU5uT3pCcnBJcTd5cWxp?=
- =?utf-8?B?RVBtNnBvQy95b0xpWlJYSm56YlJyWkN5YTdKZzlsUHdqbWFsK3V6dHkxVFFD?=
- =?utf-8?B?Q05VdGN3QXFucUVobGhsWElOYTExY2UzQVFPalk1SWJ3dTY4OTZpbDVxY0Iy?=
- =?utf-8?B?eUc3Sy9vSGxTQlVtbzVUeGZCRmxsK0FJekRmN1pEamJldEowTkhZdk9LZnNt?=
- =?utf-8?B?ZTFYZnoyR1dxSGE5T2MxYlBXWlJlYXYweFpNaUM2cTdzTTJDMFU4MFE0QlBH?=
- =?utf-8?B?R1JUWHNGc1UxTjNRczF2NFpPRURTR1JZUElrYjRVTzV6L2N2NE5YM1lETUU5?=
- =?utf-8?B?RE92UVQzN0RMai9sSXo0cTZmbHAwandlQXFDNjRYUlVaV21pcDdlWE9UYjRX?=
- =?utf-8?B?azk1UzFVRC82WDdzVmRrNWQzWWpXQTZEdGdEeEw2RXhSNVFib0VFK1huMURo?=
- =?utf-8?B?a0VSOGRjRmpwWnVWbVhSNDdaNkVUQVVvY0Z6MXpFeGZ3ZTJnbUNjVU1ZTEZJ?=
- =?utf-8?B?TG94MktpdDZuMFQrRmRUM1Nyd2todkxtbXZnQ1FqZkFnaCtsNkM0L1F6OEx0?=
- =?utf-8?B?ZTBTOWdhUElCbFFVZDZmY0xFMEE0UDZKcU1BYlYvT0ZKSU1PMEVPamd1SlFM?=
- =?utf-8?B?enlHRlpaU1B2NGo1d1FIYzFOV1FBZ013MTUvM29hdWJFMU9vOXdWOUZoNm1E?=
- =?utf-8?B?R2xQUWxxc1pPL3BFbVA4SG5TVUFsNTczN0ZzUmRBM2VnZSs2blFXR2VWV3VY?=
- =?utf-8?B?ZmQvN2RVcnhydHdEb3QzSkUyVmtJd1oxdkRJSHBZRzN4K29LTXBURGxUQzhp?=
- =?utf-8?B?cHpVc0VFWUQ4eFpjK3FiZjR4R3lTTUpKSUVUU0RUcm83RjQrS2t2ZjR5U3Fo?=
- =?utf-8?B?Vmw0eDZoWHpoZUliblB4Z2dqQnVvcTdPb1RMK1BSTmlhd0tvTTFxR1dKaEhP?=
- =?utf-8?B?bVhWOTNuUlZJVlRvSlNraFhRSTZvUDI3SUNkYmtSRHRIZWpla1RxQmRFMGVN?=
- =?utf-8?B?SytSNlZYeVpqN0x2SDJaRkZWK1AxTndtUDR1aUsxdjFWTENCeVVlQU1oYlht?=
- =?utf-8?B?QjI2eDU4aWp3aFhiZEF6UUFFNjM0d1lDWVJHT09IVlVEOXU5cXY3a0U0RXpJ?=
- =?utf-8?B?c3YrSzRjZ1p1bSs5WTFGeE5SQWtLRFhRL2pHa3hEQ3JaZXk3SzkvVDZKK3Zy?=
- =?utf-8?B?dzV2bGNad3lLNFNVaDVPN1o5ck81RGl0K0NQbWV1SXhmV1JXL2FXcnEvanVB?=
- =?utf-8?B?NUErdWRNREd1WWtETlZmRjJ1UG4vaTd2S21Oc0p6TDZnVkpRU2xLMmQvaTFR?=
- =?utf-8?B?Q2Uzakx2c1JLSE1FU0U4WU56WjdZRHVIaUpERTlnVTFwZUVUKzVqQ0I1c1pD?=
- =?utf-8?B?TXFxVEhFcE9TQWRFTXlrUExCWndiNE1RUHNtYWxGcDR2ZGl3RHdEbmF6VWRk?=
- =?utf-8?B?TUxKQ1FxK0FTcFI0UzgrZ20zYmh3eFRUSHJ5K0pTZEZUaWpGaCtuUHRlS0tT?=
- =?utf-8?B?NWJ3WmhVUGxIcTJwUW94NnlFT1lRT3FrcXdTbEhHVDdXWk5DRHdHbUdsZVA3?=
- =?utf-8?B?R043SEQrd3NaUXNObklBU3hld3JWaXMxMks5d3pQbmpqUkhJcWVHM2FrQTlp?=
- =?utf-8?B?N3huNFFqSE5pZ08xRCtmRGNNTG16L2RwbzBWTzcvOUZHSGkzYSs1bFBBMEhw?=
- =?utf-8?B?UVFUcmkvNGwreW5Pa1IxcXVHaGFyemFNMHpoQkNYdTBCT3lJSUFEZmRkN2xC?=
- =?utf-8?B?MmNUV1FPblZ4a0wwdjZmbVc2RGxoam9xT0xIK3R2d2RwYXo2ZVRtZWpuZnFT?=
- =?utf-8?B?NnBWTFpEUEVGYjN4RGkwc25sa0dPaHg1RjlwT3FCdnAvWlEvRDYxbFhlaTM4?=
- =?utf-8?B?WnI0OERFeWVRZlRSbmt6dHNoWXlRRnljR2pGSWpaajlJWUltU08ydz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sun, 12 Jun 2022 21:49:39 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC2E1C92B;
+        Sun, 12 Jun 2022 18:49:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655084976; x=1686620976;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=KEvqJmodYkXAm7rle1m50G3c2lLNghHk6k8Yu0x2Xzo=;
+  b=X8S1CToXRyRtZ3paErgOwY4a1JzaMSRvHb/8MpP1Vw2YC9L19tD5nUlB
+   k8urL0m3YfrlVTHG4pg/DrX9xnrW+8LBtHoQobbT8Bn6WgGseYTNljl28
+   OUAJbG57mKuEP6EtvCHowwGS3bW4TCE3I8kOfScLzxCdkfMnMx8y1rdI+
+   w=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 12 Jun 2022 18:49:29 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 18:49:29 -0700
+Received: from [10.253.36.250] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 12 Jun
+ 2022 18:49:21 -0700
+Message-ID: <8eceb966-b5c1-8913-ac97-95348f92650d@quicinc.com>
+Date:   Mon, 13 Jun 2022 09:48:50 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b91685ad-be78-4042-8188-08da4cded716
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jun 2022 01:48:40.0904
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JSZGZhqdm+kBFuGDfphxrzoK11mvbZGgYUT97z5OAYofrtOsOJZxkp0y98H+yLpi6HVdRyn4/aYQXVG0hlTovg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR06MB2350
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+From:   Qiang Yu <quic_qianyu@quicinc.com>
+Subject: Re: [PATCH] bus: mhi: Disable IRQs instead of freeing them during
+ power down
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>, <mani@kernel.org>,
+        <quic_hemantk@quicinc.com>, <loic.poulain@linaro.org>
+CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_cang@quicinc.com>
+References: <1654782215-70383-1-git-send-email-quic_qianyu@quicinc.com>
+ <62d09e6f-9898-6233-dfd6-b5ba5d837571@quicinc.com>
+ <9659ecb9-9727-a146-e286-d28d656483c3@quicinc.com>
+ <9a11394d-f7df-e549-8afb-0834f7d30202@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <9a11394d-f7df-e549-8afb-0834f7d30202@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiA2LzYvMjAyMiA4OjQzIFBNLCBOZWFsIExpdSB3cm90ZToNCj4gPj4+ICtzdHJ1Y3QgYXNw
-ZWVkX2hhY2VfYWxnIHsNCj4gPj4+ICsJc3RydWN0IGFzcGVlZF9oYWNlX2RldgkJKmhhY2VfZGV2
-Ow0KPiA+Pj4gKwl1bmlvbiB7DQo+ID4+PiArCQlzdHJ1Y3Qgc2tjaXBoZXJfYWxnCXNrY2lwaGVy
-Ow0KPiA+Pj4gKwkJc3RydWN0IGFlYWRfYWxnCQlhZWFkOw0KPiA+Pj4gKwkJc3RydWN0IGFoYXNo
-X2FsZwlhaGFzaDsNCj4gPj4+ICsJCXN0cnVjdCBrcHBfYWxnCQlrcHA7DQo+ID4+PiArCQlzdHJ1
-Y3QgYWtjaXBoZXJfYWxnCWFrY2lwaGVyOw0KPiA+Pg0KPiA+PiBZb3VyIHBhdGNoIGRvbnQgZG8g
-YW55IGtwcCBvciBha2NpcGhlciAoYW5kIGFlYWQvc2tjaXBoZXIgYWxzbykuDQo+ID4+IFBsZWFz
-ZSBkcm9wIHRoaXMuDQo+ID4NCj4gPiBJIG1pc3MgdGhpcyBwYXJ0LCBJJ2xsIHJldmlzZSBpdCBp
-biBuZXh0IHBhdGNoLCB0aGFua3MuDQo+IA0KPiBIaSBOZWFsLA0KPiANCj4gQXJlIHlvdSBwbGFu
-bmluZyB0byBzdWJtaXQgYWVhZCBzZXBhcmF0ZWx5PyBIVyBwcm9ncmFtbWluZyBpbnRlcmZhY2Ug
-Zm9yDQo+IGFlcy1nY20gaXMgYWxtb3N0IHNhbWUgYXMgb3RoZXIgYWVzIG1vZGVzIGV4Y2VwdCBl
-eHRyYSByZWdzL2ZpZWxkcyBmb3IgdGFnDQo+IGV0Yy4NCj4gDQo+IA0KPiBUaGFua3MsDQo+IERo
-YW5hbmpheQ0KPiANClRoaXMgZW5naW5lIGRvIG5vdCBzdXBwb3J0IGFlYWQgY3VycmVudGx5LCBz
-byBpdCBuZWVkcyB0byBiZSByZW1vdmVkLg0KVGhhbmtzDQoNCi1OZWFsDQoNCg0K
+
+On 6/10/2022 10:00 PM, Jeffrey Hugo wrote:
+> On 6/9/2022 9:21 PM, Qiang Yu wrote:
+>> On 6/9/2022 9:54 PM, Jeffrey Hugo wrote:
+>>
+>>> On 6/9/2022 7:43 AM, Qiang Yu wrote:
+>>>> EP tends to read MSI address/data once and cache them after BME is 
+>>>> set.
+>>>> So host should avoid changing MSI address/data after BME is set.
+>>>>
+>>>> In pci reset function, host invokes free_irq(), which also clears MSI
+>>>> address/data in EP's PCIe config space. If the invalid address/data
+>>>> are cached and used by EP, MSI triggered by EP wouldn't be received by
+>>>> host, because an invalid MSI data is sent to an invalid MSI address.
+>>>>
+>>>> To fix this issue, after host runs request_irq() successfully during
+>>>> mhi driver probe, let's invoke enable_irq()/disable_irq() instead of
+>>>> request_irq()/free_irq() when we want to power on and power down MHI.
+>>>> Meanwhile, Host should invoke free_irq() when mhi host driver is
+>>>> removed.
+>>>
+>>> I don't think this works for hotplug, nor cases where there are 
+>>> multiple MHI devices on the system.
+>>>
+>>> The EP shouldn't be caching this information for multiple reasons. 
+>>> Masking the MSIs, disabling the MSIs, changing the address when the 
+>>> affinity changes, etc.
+>>>
+>>> It really feels like we are solving the problem in the wrong place.
+>>>
+>>> Right now, this gets a NACK from me.
+>>>
+>> After free_irq(), MSI is still enabled but MSI address and data are 
+>> cleared. So there is a chance that device initiates MSI using zero 
+>> address. How to fix this race conditions.
+>
+> On what system is MSI still enabled?  I just removed the AIC100 
+> controller on an random x86 system, and lspci is indicating MSIs are 
+> disabled -
+>
+> Capabilities: [50] MSI: Enable- Count=32/32 Maskable+ 64bit+
+
+system: Ubuntu18.04, 5.4.0-89-generic,  Intel(R) Core(TM) i7-6700 CPU @ 
+3.40GHz
+
+After removing MHI driver, I also see MSI enable is cleared.  But I 
+don't think free_irq clears it. I add log before free_irq and after 
+free_irq as following show:
+
+[62777.625111] msi cap before free irq
+[62777.625125] msi control=0x1bb, address=0xfee00318, data=0x0
+[62777.625301] msi cap after free irq
+[62777.625313] msi control=0x1bb, address=0x0, data=0x0
+[62777.625496] mhi-pci-generic 0000:01:00.0: mhi_pci_remove end of line, 
+block 90 secs.
+# lspci -vvs 01:00.0
+         Capabilities: [50] MSI: Enable+ Count=8/32 Maskable+ 64bit+
+                 Address: 0000000000000000  Data: 0000
+                 Masking: ffffffff  Pending: 00000000
+[62868.692186] mhi-pci-generic 0000:01:00.0: mhi_pci_remove 90 sec expire.
+# lspci -vvs 01:00.0
+         Capabilities: [50] MSI: Enable- Count=8/32 Maskable+ 64bit+
+                 Address: 0000000000000000  Data: 0000
+                 Masking: 00000000  Pending: 00000000
+
+I also add msleep() at last of remove callback to block the remove 
+operation, then lspci shows MSI is still enabled  and after MHI driver 
+is removed,
+
+lspci shows MSI is disabled. It proves free_irq does not clear MSI 
+enable, although I am not sure who does it (probably pci framework 
+clears but I don 't find it).
+
+I delete pci_free_irq_vectors() when I test.
+
+>
+>> Maybe EP should not cache MSI data and address. But I think this 
+>> patch is necessary and we will talk with EP POC.
+>>
+>>>>
+>>>> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
+>>>> ---
+>>>>   drivers/bus/mhi/host/init.c        | 31 
+>>>> +++++++++++++++++++++++++++++++
+>>>>   drivers/bus/mhi/host/pci_generic.c |  2 ++
+>>>>   drivers/bus/mhi/host/pm.c          |  4 ++--
+>>>>   3 files changed, 35 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+>>>> index cbb86b2..48cb093 100644
+>>>> --- a/drivers/bus/mhi/host/init.c
+>>>> +++ b/drivers/bus/mhi/host/init.c
+>>>> @@ -18,6 +18,7 @@
+>>>>   #include <linux/slab.h>
+>>>>   #include <linux/vmalloc.h>
+>>>>   #include <linux/wait.h>
+>>>> +#include <linux/irq.h>
+>>>
+>>> Should be in alphabetical order
+>>>
+>>>>   #include "internal.h"
+>>>>     static DEFINE_IDA(mhi_controller_ida);
+>>>> @@ -168,6 +169,22 @@ int mhi_init_irq_setup(struct mhi_controller 
+>>>> *mhi_cntrl)
+>>>>       unsigned long irq_flags = IRQF_SHARED | IRQF_NO_SUSPEND;
+>>>>       int i, ret;
+>>>>   +    /*
+>>>> +     * if irq[0] has action, it represents all MSI IRQs have been
+>>>> +     * requested, so we just need to enable them.
+>>>> +     */
+>>>
+>>> This seems like an assumption about how the interrupts are allocated 
+>>> and assigned that may not hold true for all devices.
+>>
+>> All interrupts are allocated and assigned together in 
+>> mhi_pci_get_irqs() and mhi_init_irq_setup().
+>>
+>> So I think if irq[0] has action, other irqs must be requested 
+>> successfully. If any other msi request fail, irq[0] should have been 
+>> freed.
+>>
+>>>> +    if (irq_has_action(mhi_cntrl->irq[0])) {
+>>>> +        enable_irq(mhi_cntrl->irq[0]);
+>>>> +
+>>>> +        for (i = 0; i < mhi_cntrl->total_ev_rings; i++, 
+>>>> mhi_event++) {
+>>>> +            if (mhi_event->offload_ev)
+>>>> +                continue;
+>>>> +
+>>>> + enable_irq(mhi_cntrl->irq[mhi_event->irq]);
+>>>> +        }
+>>>> +        return 0;
+>>>> +    }
+>>>> +
+>>>>       /* if controller driver has set irq_flags, use it */
+>>>>       if (mhi_cntrl->irq_flags)
+>>>>           irq_flags = mhi_cntrl->irq_flags;
+>>>> @@ -179,6 +196,11 @@ int mhi_init_irq_setup(struct mhi_controller 
+>>>> *mhi_cntrl)
+>>>>                      "bhi", mhi_cntrl);
+>>>>       if (ret)
+>>>>           return ret;
+>>>> +    /*
+>>>> +     * IRQ marked IRQF_SHARED isn't recommended to use IRQ_NOAUTOEN,
+>>>> +     * so disable it explicitly.
+>>>> +     */
+>>>> +    disable_irq(mhi_cntrl->irq[0]);
+>>>>         for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+>>>>           if (mhi_event->offload_ev)
+>>>> @@ -200,6 +222,8 @@ int mhi_init_irq_setup(struct mhi_controller 
+>>>> *mhi_cntrl)
+>>>>                   mhi_cntrl->irq[mhi_event->irq], i);
+>>>>               goto error_request;
+>>>>           }
+>>>> +
+>>>> +        disable_irq(mhi_cntrl->irq[mhi_event->irq]);
+>>>>       }
+>>>>         return 0;
+>>>> @@ -1003,8 +1027,14 @@ int mhi_register_controller(struct 
+>>>> mhi_controller *mhi_cntrl,
+>>>>         mhi_create_debugfs(mhi_cntrl);
+>>>>   +    ret = mhi_init_irq_setup(mhi_cntrl);
+>>>> +    if (ret)
+>>>> +        goto error_setup_irq;
+>>>> +
+>>>>       return 0;
+>>>>   +error_setup_irq:
+>>>> +    mhi_destroy_debugfs(mhi_cntrl);
+>>>>   err_release_dev:
+>>>>       put_device(&mhi_dev->dev);
+>>>>   err_ida_free:
+>>>> @@ -1027,6 +1057,7 @@ void mhi_unregister_controller(struct 
+>>>> mhi_controller *mhi_cntrl)
+>>>>       struct mhi_chan *mhi_chan = mhi_cntrl->mhi_chan;
+>>>>       unsigned int i;
+>>>>   +    mhi_deinit_free_irq(mhi_cntrl);
+>>>>       mhi_destroy_debugfs(mhi_cntrl);
+>>>>         destroy_workqueue(mhi_cntrl->hiprio_wq);
+>>>> diff --git a/drivers/bus/mhi/host/pci_generic.c 
+>>>> b/drivers/bus/mhi/host/pci_generic.c
+>>>> index 6fbc591..60020d0 100644
+>>>> --- a/drivers/bus/mhi/host/pci_generic.c
+>>>> +++ b/drivers/bus/mhi/host/pci_generic.c
+>>>> @@ -945,6 +945,8 @@ static void mhi_pci_remove(struct pci_dev *pdev)
+>>>>         mhi_unregister_controller(mhi_cntrl);
+>>>>       pci_disable_pcie_error_reporting(pdev);
+>>>> +
+>>>> +    pci_free_irq_vectors(pdev);
+>>>>   }
+>>>>     static void mhi_pci_shutdown(struct pci_dev *pdev)
+>>>> diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
+>>>> index dc2e8ff..190231c 100644
+>>>> --- a/drivers/bus/mhi/host/pm.c
+>>>> +++ b/drivers/bus/mhi/host/pm.c
+>>>> @@ -500,7 +500,7 @@ static void mhi_pm_disable_transition(struct 
+>>>> mhi_controller *mhi_cntrl)
+>>>>       for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
+>>>>           if (mhi_event->offload_ev)
+>>>>               continue;
+>>>> -        free_irq(mhi_cntrl->irq[mhi_event->irq], mhi_event);
+>>>> +        disable_irq(mhi_cntrl->irq[mhi_event->irq]);
+>>>>           tasklet_kill(&mhi_event->task);
+>>>>       }
+>>>>   @@ -1182,7 +1182,7 @@ void mhi_power_down(struct mhi_controller 
+>>>> *mhi_cntrl, bool graceful)
+>>>>       /* Wait for shutdown to complete */
+>>>>       flush_work(&mhi_cntrl->st_worker);
+>>>>   -    free_irq(mhi_cntrl->irq[0], mhi_cntrl);
+>>>> +    disable_irq(mhi_cntrl->irq[0]);
+>>>>   }
+>>>>   EXPORT_SYMBOL_GPL(mhi_power_down);
+>>>
+>

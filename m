@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81F4B548990
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0B0454979C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355221AbiFMLaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
+        id S1382175AbiFMONW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353959AbiFMLUU (ORCPT
+        with ESMTP id S1382465AbiFMOFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:20:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073CC3BFA2;
-        Mon, 13 Jun 2022 03:42:01 -0700 (PDT)
+        Mon, 13 Jun 2022 10:05:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5231195A18;
+        Mon, 13 Jun 2022 04:40:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D27D9611E6;
-        Mon, 13 Jun 2022 10:42:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDEB4C34114;
-        Mon, 13 Jun 2022 10:41:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 142BC61236;
+        Mon, 13 Jun 2022 11:40:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F0EBC3411B;
+        Mon, 13 Jun 2022 11:40:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116920;
-        bh=PUTPjROtLyVNT58smec3UBqX9VYk+lysdAUTKWyczE0=;
+        s=korg; t=1655120443;
+        bh=AsXd4pQ9cFEd10STZjFmrqlZ/EuZiXMpQlQ1ZA6OWnM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wDKQWgVROrMLM7gsVmig1zVKb5S3wv94/mAqa4FxXvvQLmzneey0yQPWGtQcO5KVM
-         U6l0Gm5s45DBPFH22aDvLW42XxZFM7iJdyaY5vMobrhv/mWvJiQ92dM6n4sqwpxDpD
-         7KTm6a33RBdRe1S1UaAucThkWzmuh0ARcngvwdSI=
+        b=PuX2Sy31aFQ/FqmRiUt44V+sVTGYfqdHTRXCHvI/rSektpUYgsPL/9I6WaZHfg67B
+         X7rxLaJzjx2nqmH1QBBxlL4rruzklacXyeye4TSBqMn/6C1HcMu+1G9UT2u4Z2kSA4
+         hOYws0WIFCFd3S02o9Xs50VCWN8g7ktI8JYmUZCc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Oscar Salvador <osalvador@suse.de>,
-        Don Dutile <ddutile@redhat.com>,
-        Wonhyuk Yang <vvghjk1234@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 5.4 233/411] mm, compaction: fast_find_migrateblock() should return pfn in the target zone
+        stable@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 012/298] phy: rockchip-inno-usb2: Fix muxed interrupt support
 Date:   Mon, 13 Jun 2022 12:08:26 +0200
-Message-Id: <20220613094935.773417425@linuxfoundation.org>
+Message-Id: <20220613094925.298273946@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,49 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+From: Samuel Holland <samuel@sholland.org>
 
-commit bbe832b9db2e1ad21522f8f0bf02775fff8a0e0e upstream.
+[ Upstream commit 6a98df08ccd55e87947d253b19925691763e755c ]
 
-At present, pages not in the target zone are added to cc->migratepages
-list in isolate_migratepages_block().  As a result, pages may migrate
-between nodes unintentionally.
+This commit fixes two issues with the muxed interrupt handler. First,
+the OTG port has the "bvalid" interrupt enabled, not "linestate". Since
+only the linestate interrupt was handled, and not the bvalid interrupt,
+plugging in a cable to the OTG port caused an interrupt storm.
 
-This would be a serious problem for older kernels without commit
-a984226f457f849e ("mm: memcontrol: remove the pgdata parameter of
-mem_cgroup_page_lruvec"), because it can corrupt the lru list by
-handling pages in list without holding proper lru_lock.
+Second, the return values from the individual port IRQ handlers need to
+be OR-ed together. Otherwise, the lack of an interrupt from the last
+port would cause the handler to erroneously return IRQ_NONE.
 
-Avoid returning a pfn outside the target zone in the case that it is
-not aligned with a pageblock boundary.  Otherwise
-isolate_migratepages_block() will handle pages not in the target zone.
-
-Link: https://lkml.kernel.org/r/20220511044300.4069-1-yamamoto.rei@jp.fujitsu.com
-Fixes: 70b44595eafe ("mm, compaction: use free lists to quickly locate a migration source")
-Signed-off-by: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
-Cc: Don Dutile <ddutile@redhat.com>
-Cc: Wonhyuk Yang <vvghjk1234@gmail.com>
-Cc: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: ed2b5a8e6b98 ("phy: phy-rockchip-inno-usb2: support muxed interrupts")
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+Tested-by: Michael Riesch <michael.riesch@wolfvision.net>
+Link: https://lore.kernel.org/r/20220414032258.40984-2-samuel@sholland.org
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/compaction.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
---- a/mm/compaction.c
-+++ b/mm/compaction.c
-@@ -1709,6 +1709,8 @@ static unsigned long fast_find_migratebl
+diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+index eca77e44a4c1..cba5c32cbaee 100644
+--- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
++++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
+@@ -940,8 +940,14 @@ static irqreturn_t rockchip_usb2phy_irq(int irq, void *data)
+ 		if (!rport->phy)
+ 			continue;
  
- 				update_fast_start_pfn(cc, free_pfn);
- 				pfn = pageblock_start_pfn(free_pfn);
-+				if (pfn < cc->zone->zone_start_pfn)
-+					pfn = cc->zone->zone_start_pfn;
- 				cc->fast_search_fail = 0;
- 				found_block = true;
- 				set_pageblock_skip(freepage);
+-		/* Handle linestate irq for both otg port and host port */
+-		ret = rockchip_usb2phy_linestate_irq(irq, rport);
++		switch (rport->port_id) {
++		case USB2PHY_PORT_OTG:
++			ret |= rockchip_usb2phy_otg_mux_irq(irq, rport);
++			break;
++		case USB2PHY_PORT_HOST:
++			ret |= rockchip_usb2phy_linestate_irq(irq, rport);
++			break;
++		}
+ 	}
+ 
+ 	return ret;
+-- 
+2.35.1
+
 
 

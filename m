@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E6D549326
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3248D5492A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356620AbiFMM46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
+        id S245751AbiFMKra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:47:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357446AbiFMMyX (ORCPT
+        with ESMTP id S1347036AbiFMKnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:54:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A4165D22;
-        Mon, 13 Jun 2022 04:13:09 -0700 (PDT)
+        Mon, 13 Jun 2022 06:43:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66F0DF2F;
+        Mon, 13 Jun 2022 03:25:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8CE560B7C;
-        Mon, 13 Jun 2022 11:13:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C942AC34114;
-        Mon, 13 Jun 2022 11:13:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 283D460F07;
+        Mon, 13 Jun 2022 10:25:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 367D4C3411E;
+        Mon, 13 Jun 2022 10:25:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118788;
-        bh=p2xRm+9G+qjCSlFGrHTFKeqMTugLPxbgRQ/rMbsfVyk=;
+        s=korg; t=1655115902;
+        bh=X+yRmY49qQ+vJXONkRbFaKbxGptgVbKxURcw4SeclfY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dZ1xn8NqsVonvktvGAQ1iZkAMx1xn7XKVV4dnWnjIQC/FaSTAXPZivxtn1j8uuV9l
-         zwph58GyFcscbqyEmWYpWd2JnRL4sPGMxJN1JPNdSrtZpihTQfZ/5NytF4rFV4p4K0
-         xq6Org5h4eKu3QnaWAm2LiDx4E2xY5MD++wt32nQ=
+        b=fPGuwlaqyp5M768vRM16h5RtKr980l41X7J5750AA6vv9V7cOxcN2owfg5l9DXICi
+         Ql8ixXK/XAv66stwItErrUGHM+peqgTOO6VyJ+9I2//+YoBVIxFjm+u7bimEeFQWhh
+         tG152cQTtqLZlw1lbTy6gTKNZ0nfUtxWagb7k3YQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Hugues Fruchet <hugues.fruchet@foss.st.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 028/247] iio: adc: stmpe-adc: Fix wait_for_completion_timeout return value check
+Subject: [PATCH 4.14 072/218] media: st-delta: Fix PM disable depth imbalance in delta_probe
 Date:   Mon, 13 Jun 2022 12:08:50 +0200
-Message-Id: <20220613094923.789535183@linuxfoundation.org>
+Message-Id: <20220613094922.435447285@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,63 +59,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit d345b23200bcdbd2bd3582213d738c258b77718f ]
+[ Upstream commit 94e3dba710fe0afc772172305444250023fc2d30 ]
 
-wait_for_completion_timeout() returns unsigned long not long.
-it returns 0 if timed out, and positive if completed.
-The check for <= 0 is ambiguous and should be == 0 here
-indicating timeout which is the only error case
+The pm_runtime_enable will decrease power disable depth.
+If the probe fails, we should use pm_runtime_disable() to balance
+pm_runtime_enable().
 
-Fixes: e813dde6f833 ("iio: stmpe-adc: Use wait_for_completion_timeout")
+Fixes: f386509e4959 ("[media] st-delta: STiH4xx multi-format video decoder v4l2 driver")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Philippe Schenker <philippe.schenker@toradex.com>
-Link: https://lore.kernel.org/r/20220412065150.14486-1-linmq006@gmail.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/adc/stmpe-adc.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/platform/sti/delta/delta-v4l2.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/iio/adc/stmpe-adc.c b/drivers/iio/adc/stmpe-adc.c
-index fba659bfdb40..64305d9fa560 100644
---- a/drivers/iio/adc/stmpe-adc.c
-+++ b/drivers/iio/adc/stmpe-adc.c
-@@ -61,7 +61,7 @@ struct stmpe_adc {
- static int stmpe_read_voltage(struct stmpe_adc *info,
- 		struct iio_chan_spec const *chan, int *val)
- {
--	long ret;
-+	unsigned long ret;
- 
- 	mutex_lock(&info->lock);
- 
-@@ -79,7 +79,7 @@ static int stmpe_read_voltage(struct stmpe_adc *info,
- 
- 	ret = wait_for_completion_timeout(&info->completion, STMPE_ADC_TIMEOUT);
- 
--	if (ret <= 0) {
-+	if (ret == 0) {
- 		stmpe_reg_write(info->stmpe, STMPE_REG_ADC_INT_STA,
- 				STMPE_ADC_CH(info->channel));
- 		mutex_unlock(&info->lock);
-@@ -96,7 +96,7 @@ static int stmpe_read_voltage(struct stmpe_adc *info,
- static int stmpe_read_temp(struct stmpe_adc *info,
- 		struct iio_chan_spec const *chan, int *val)
- {
--	long ret;
-+	unsigned long ret;
- 
- 	mutex_lock(&info->lock);
- 
-@@ -114,7 +114,7 @@ static int stmpe_read_temp(struct stmpe_adc *info,
- 
- 	ret = wait_for_completion_timeout(&info->completion, STMPE_ADC_TIMEOUT);
- 
--	if (ret <= 0) {
-+	if (ret == 0) {
- 		mutex_unlock(&info->lock);
- 		return -ETIMEDOUT;
+diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
+index 7c925f309158..a489d0d17989 100644
+--- a/drivers/media/platform/sti/delta/delta-v4l2.c
++++ b/drivers/media/platform/sti/delta/delta-v4l2.c
+@@ -1880,7 +1880,7 @@ static int delta_probe(struct platform_device *pdev)
+ 	if (ret) {
+ 		dev_err(delta->dev, "%s failed to initialize firmware ipc channel\n",
+ 			DELTA_PREFIX);
+-		goto err;
++		goto err_pm_disable;
  	}
+ 
+ 	/* register all available decoders */
+@@ -1894,7 +1894,7 @@ static int delta_probe(struct platform_device *pdev)
+ 	if (ret) {
+ 		dev_err(delta->dev, "%s failed to register V4L2 device\n",
+ 			DELTA_PREFIX);
+-		goto err;
++		goto err_pm_disable;
+ 	}
+ 
+ 	delta->work_queue = create_workqueue(DELTA_NAME);
+@@ -1919,6 +1919,8 @@ static int delta_probe(struct platform_device *pdev)
+ 	destroy_workqueue(delta->work_queue);
+ err_v4l2:
+ 	v4l2_device_unregister(&delta->v4l2_dev);
++err_pm_disable:
++	pm_runtime_disable(dev);
+ err:
+ 	return ret;
+ }
 -- 
 2.35.1
 

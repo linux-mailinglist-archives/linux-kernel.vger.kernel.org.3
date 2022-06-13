@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5F8548F5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175C05494F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376647AbiFMNZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
+        id S1381006AbiFMOHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377423AbiFMNUX (ORCPT
+        with ESMTP id S1380673AbiFMOBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:20:23 -0400
+        Mon, 13 Jun 2022 10:01:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 088E66AA7D;
-        Mon, 13 Jun 2022 04:23:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBE74506D;
+        Mon, 13 Jun 2022 04:38:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F55561055;
-        Mon, 13 Jun 2022 11:22:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADB98C34114;
-        Mon, 13 Jun 2022 11:22:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A6957612A8;
+        Mon, 13 Jun 2022 11:38:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8E74C34114;
+        Mon, 13 Jun 2022 11:38:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119378;
-        bh=cPC2nl5KtX0DM8H4h+2boCX+EngE08ToIqekSePQ444=;
+        s=korg; t=1655120287;
+        bh=3BWxhKNulzcCbnNSV6FQ23n1YY6LfjnJnjidMBbqzYI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MZMJIWU2uLkNlS/+OMSaThvZ9gJlrLCLJ56wBiaPr+AU+88UdKdiyuN9wHMT7K++/
-         IRzbfnRLTY7BvoDuKE6X29uWY1EMAnVGjZfhRHUFineG4ohw+QiMcv9r5wURt/JZSr
-         W/bRXIlPtEd0UbF3t5Cuxr6DR/AwMrYUC1Zknmkw=
+        b=XZNdnBkOVoib+9EOSkBhd4ue2tUJojkCeA6Mg7yRb1olS6/OX3WZGJYt4JbAfYG6O
+         nmhJ6LbzmHX8x6c+LXnKFyJVKDzeNEWVrhM2clmaxLJ0dl26FhNcrEbDech4f4I8Ek
+         ZjGZgKiwTuUs2klZG4cUiFalZcqmBtuv8Lc8mGhQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH 5.15 241/247] random: avoid checking crng_ready() twice in random_init()
+        stable@vger.kernel.org, Martin Faltesek <mfaltesek@google.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.18 318/339] nfc: st21nfca: fix memory leaks in EVT_TRANSACTION handling
 Date:   Mon, 13 Jun 2022 12:12:23 +0200
-Message-Id: <20220613094930.257227164@linuxfoundation.org>
+Message-Id: <20220613094936.394754267@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+From: Martin Faltesek <mfaltesek@google.com>
 
-commit 9b29b6b20376ab64e1b043df6301d8a92378e631 upstream.
+commit 996419e0594abb311fb958553809f24f38e7abbe upstream.
 
-The current flow expands to:
+Error paths do not free previously allocated memory. Add devm_kfree() to
+those failure paths.
 
-    if (crng_ready())
-       ...
-    else if (...)
-        if (!crng_ready())
-            ...
-
-The second crng_ready() call is redundant, but can't so easily be
-optimized out by the compiler.
-
-This commit simplifies that to:
-
-    if (crng_ready()
-        ...
-    else if (...)
-        ...
-
-Fixes: 560181c27b58 ("random: move initialization functions out of hot pages")
+Fixes: 26fc6c7f02cb ("NFC: st21nfca: Add HCI transaction event support")
+Fixes: 4fbcc1a4cb20 ("nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION")
 Cc: stable@vger.kernel.org
-Cc: Dominik Brodowski <linux@dominikbrodowski.net>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Martin Faltesek <mfaltesek@google.com>
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/random.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nfc/st21nfca/se.c |   13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -838,7 +838,7 @@ int __init random_init(const char *comma
- 	if (crng_ready())
- 		crng_reseed();
- 	else if (trust_cpu)
--		credit_init_bits(arch_bytes * 8);
-+		_credit_init_bits(arch_bytes * 8);
+--- a/drivers/nfc/st21nfca/se.c
++++ b/drivers/nfc/st21nfca/se.c
+@@ -326,22 +326,29 @@ int st21nfca_connectivity_event_received
+ 		transaction->aid_len = skb->data[1];
  
- 	return 0;
- }
+ 		/* Checking if the length of the AID is valid */
+-		if (transaction->aid_len > sizeof(transaction->aid))
++		if (transaction->aid_len > sizeof(transaction->aid)) {
++			devm_kfree(dev, transaction);
+ 			return -EINVAL;
++		}
+ 
+ 		memcpy(transaction->aid, &skb->data[2],
+ 		       transaction->aid_len);
+ 
+ 		/* Check next byte is PARAMETERS tag (82) */
+ 		if (skb->data[transaction->aid_len + 2] !=
+-		    NFC_EVT_TRANSACTION_PARAMS_TAG)
++		    NFC_EVT_TRANSACTION_PARAMS_TAG) {
++			devm_kfree(dev, transaction);
+ 			return -EPROTO;
++		}
+ 
+ 		transaction->params_len = skb->data[transaction->aid_len + 3];
+ 
+ 		/* Total size is allocated (skb->len - 2) minus fixed array members */
+-		if (transaction->params_len > ((skb->len - 2) - sizeof(struct nfc_evt_transaction)))
++		if (transaction->params_len > ((skb->len - 2) -
++		    sizeof(struct nfc_evt_transaction))) {
++			devm_kfree(dev, transaction);
+ 			return -EINVAL;
++		}
+ 
+ 		memcpy(transaction->params, skb->data +
+ 		       transaction->aid_len + 4, transaction->params_len);
 
 

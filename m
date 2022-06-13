@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF97548681
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54793548810
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359309AbiFMNM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
+        id S1349900AbiFMLHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:07:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357815AbiFMNGc (ORCPT
+        with ESMTP id S1351383AbiFMK7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:06:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F1037A9F;
-        Mon, 13 Jun 2022 04:18:37 -0700 (PDT)
+        Mon, 13 Jun 2022 06:59:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1703731236;
+        Mon, 13 Jun 2022 03:33:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E1E90B80EAA;
-        Mon, 13 Jun 2022 11:18:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54D47C34114;
-        Mon, 13 Jun 2022 11:18:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4154060AE6;
+        Mon, 13 Jun 2022 10:32:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F984C34114;
+        Mon, 13 Jun 2022 10:32:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119105;
-        bh=N2lN/vr6RoxqrZh8pRE7zdpxZbQoDCiCU9uHcpBJTxU=;
+        s=korg; t=1655116378;
+        bh=1HHNl2/qevY9HHkcc+PsSUTlLFN389SZEZAU/LuTha8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bekMBayag3qsFO7hlAnpG62Nw3faNiqfbfrtrLCR8xwu6hKnJrD6ESjfQgyHb+YZ+
-         HfXxU49rckEb0rV3D46Oi2Aing8NKepQcFiUeYD39idDw6ENhG/Of0iai3UW+KkVM3
-         NHtFVwBGhArNm6CXkLLZtRsNJCYDiyG3I+NlaDxY=
+        b=W6WjgKtwgpi4hDtbuztUiK3L8Mjxo+eYWHJPdHlBRkPhapiM/cWr/KvVOzXxSDNXT
+         CEQieUZagIgqj9QhRvYKsnP1+sCnhmn8/3TBCEoNq3Luy2wOKR65x/zbMworUdlyZ7
+         oKdG+aYl8D50NYf8roUhbJLAHA70NVgGdislvDAc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Erhard Furtner <erhard_f@mailbox.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Philipp Zabel <p.zabel@pengutronix.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 135/247] powerpc/kasan: Force thread size increase with KASAN
-Date:   Mon, 13 Jun 2022 12:10:37 +0200
-Message-Id: <20220613094927.053595378@linuxfoundation.org>
+Subject: [PATCH 4.14 180/218] drm: imx: fix compiler warning with gcc-12
+Date:   Mon, 13 Jun 2022 12:10:38 +0200
+Message-Id: <20220613094926.067496625@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,69 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit 3e8635fb2e072672cbc650989ffedf8300ad67fb ]
+[ Upstream commit 7aefd8b53815274f3ef398d370a3c9b27dd9f00c ]
 
-KASAN causes increased stack usage, which can lead to stack overflows.
+Gcc-12 correctly warned about this code using a non-NULL pointer as a
+truth value:
 
-The logic in Kconfig to suggest a larger default doesn't work if a user
-has CONFIG_EXPERT enabled and has an existing .config with a smaller
-value.
+  drivers/gpu/drm/imx/ipuv3-crtc.c: In function ‘ipu_crtc_disable_planes’:
+  drivers/gpu/drm/imx/ipuv3-crtc.c:72:21: error: the comparison will always evaluate as ‘true’ for the address of ‘plane’ will never be NULL [-Werror=address]
+     72 |                 if (&ipu_crtc->plane[1] && plane == &ipu_crtc->plane[1]->base)
+        |                     ^
 
-Follow the lead of x86 and arm64, and force the thread size to be
-increased when KASAN is enabled.
+due to the extraneous '&' address-of operator.
 
-That also has the effect of enlarging the stack for 64-bit KASAN builds,
-which is also desirable.
+Philipp Zabel points out that The mistake had no adverse effect since
+the following condition doesn't actually dereference the NULL pointer,
+but the intent of the code was obviously to check for it, not to take
+the address of the member.
 
-Fixes: edbadaf06710 ("powerpc/kasan: Fix stack overflow by increasing THREAD_SHIFT")
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Reported-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-[mpe: Use MIN_THREAD_SHIFT as suggested by Christophe]
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220601143114.133524-1-mpe@ellerman.id.au
+Fixes: eb8c88808c83 ("drm/imx: add deferred plane disabling")
+Acked-by: Philipp Zabel <p.zabel@pengutronix.de>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/powerpc/Kconfig                   |  1 -
- arch/powerpc/include/asm/thread_info.h | 10 ++++++++--
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/imx/ipuv3-crtc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 6b9f523882c5..3bd3a3f16648 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -768,7 +768,6 @@ config THREAD_SHIFT
- 	range 13 15
- 	default "15" if PPC_256K_PAGES
- 	default "14" if PPC64
--	default "14" if KASAN
- 	default "13"
- 	help
- 	  Used to define the stack size. The default is almost always what you
-diff --git a/arch/powerpc/include/asm/thread_info.h b/arch/powerpc/include/asm/thread_info.h
-index 2a4ea0e213a9..87013ac2a640 100644
---- a/arch/powerpc/include/asm/thread_info.h
-+++ b/arch/powerpc/include/asm/thread_info.h
-@@ -14,10 +14,16 @@
+diff --git a/drivers/gpu/drm/imx/ipuv3-crtc.c b/drivers/gpu/drm/imx/ipuv3-crtc.c
+index 12dd261fc308..628de21c03d2 100644
+--- a/drivers/gpu/drm/imx/ipuv3-crtc.c
++++ b/drivers/gpu/drm/imx/ipuv3-crtc.c
+@@ -72,7 +72,7 @@ static void ipu_crtc_disable_planes(struct ipu_crtc *ipu_crtc,
+ 	drm_atomic_crtc_state_for_each_plane(plane, old_crtc_state) {
+ 		if (plane == &ipu_crtc->plane[0]->base)
+ 			disable_full = true;
+-		if (&ipu_crtc->plane[1] && plane == &ipu_crtc->plane[1]->base)
++		if (ipu_crtc->plane[1] && plane == &ipu_crtc->plane[1]->base)
+ 			disable_partial = true;
+ 	}
  
- #ifdef __KERNEL__
- 
--#if defined(CONFIG_VMAP_STACK) && CONFIG_THREAD_SHIFT < PAGE_SHIFT
-+#ifdef CONFIG_KASAN
-+#define MIN_THREAD_SHIFT	(CONFIG_THREAD_SHIFT + 1)
-+#else
-+#define MIN_THREAD_SHIFT	CONFIG_THREAD_SHIFT
-+#endif
-+
-+#if defined(CONFIG_VMAP_STACK) && MIN_THREAD_SHIFT < PAGE_SHIFT
- #define THREAD_SHIFT		PAGE_SHIFT
- #else
--#define THREAD_SHIFT		CONFIG_THREAD_SHIFT
-+#define THREAD_SHIFT		MIN_THREAD_SHIFT
- #endif
- 
- #define THREAD_SIZE		(1 << THREAD_SHIFT)
 -- 
 2.35.1
 

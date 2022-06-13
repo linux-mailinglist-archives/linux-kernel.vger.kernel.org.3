@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9420A5497F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB54548F4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:22:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377531AbiFMNdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
+        id S1353751AbiFMLYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377964AbiFMNam (ORCPT
+        with ESMTP id S1352627AbiFMLQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:30:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EC66EB27;
-        Mon, 13 Jun 2022 04:25:19 -0700 (PDT)
+        Mon, 13 Jun 2022 07:16:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9472C38BF9;
+        Mon, 13 Jun 2022 03:40:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C63261221;
-        Mon, 13 Jun 2022 11:25:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C76C34114;
-        Mon, 13 Jun 2022 11:25:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0B15B80EA3;
+        Mon, 13 Jun 2022 10:40:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D5A9C3411C;
+        Mon, 13 Jun 2022 10:40:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119518;
-        bh=NnYNH6IYy9RIKjB57M8bXB1He/zInldRkDkUMteEkPI=;
+        s=korg; t=1655116810;
+        bh=MU2+vNNvD/C4Et7c0mjGwxnPA8RogRxCydOV6Jl+oY8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V+rjMh7U0fDKNYAP6H3rFmAOhFDqEc99DYNZ+Oz1SaKvhAAf6vB5On1kyz1c2Xd4s
-         wmGFPOmA+T7kF/TR5OkVjCkTgNeE6Ys5D/Unu4E/5PbRziEk8iV8ciwb+l7tw0s5He
-         eE4NwH2rN10pzwdKi1aawKnLh2mCyI4VEb+ln08M=
+        b=Eg+nkekb1nHCLOXXkwF8QtLMN9fNmw1nL4wy1tRinVKsjxbGrx2CzIFgPxfEBFzgU
+         vesG1VR7E0rnemEhk3RV4zErCo/TAAbwXkXx9NheNV7RkWHkGqUs+6dvApd2cSPlr/
+         Z2plP+ySpd8FOKqVVp3i2D2GLnAjwH3bq8Pyu8gI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Bj=C3=B6rn=20Ard=C3=B6?= <bjorn.ardo@axis.com>,
+        Jassi Brar <jaswinder.singh@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 041/339] power: supply: core: Initialize struct to zero
+Subject: [PATCH 5.4 193/411] mailbox: forward the hrtimer if not queued and under a lock
 Date:   Mon, 13 Jun 2022 12:07:46 +0200
-Message-Id: <20220613094927.765614010@linuxfoundation.org>
+Message-Id: <20220613094934.448101736@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +56,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Walleij <linus.walleij@linaro.org>
+From: Björn Ardö <bjorn.ardo@axis.com>
 
-[ Upstream commit e56a4be2843c95c08cf8421dc1f8e880cafbaf91 ]
+[ Upstream commit bca1a1004615efe141fd78f360ecc48c60bc4ad5 ]
 
-As we rely on pointers in the battery info to be zero-initialized
-such as in the helper function power_supply_supports_vbat2ri()
-we certainly need to allocate the struct power_supply_battery_info
-with kzalloc() as well. Else this happens:
+This reverts commit c7dacf5b0f32957b24ef29df1207dc2cd8307743,
+"mailbox: avoid timer start from callback"
 
-Unable to handle kernel paging request at virtual address 00280000
-(...)
-PC is at power_supply_vbat2ri+0x50/0x12c
-LR is at ab8500_fg_battery_resistance+0x34/0x108
+The previous commit was reverted since it lead to a race that
+caused the hrtimer to not be started at all. The check for
+hrtimer_active() in msg_submit() will return true if the
+callback function txdone_hrtimer() is currently running. This
+function could return HRTIMER_NORESTART and then the timer
+will not be restarted, and also msg_submit() will not start
+the timer. This will lead to a message actually being submitted
+but no timer will start to check for its compleation.
 
-Fixes: e9e7d165b4b0 ("power: supply: Support VBAT-to-Ri lookup tables")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+The original fix that added checking hrtimer_active() was added to
+avoid a warning with hrtimer_forward. Looking in the kernel
+another solution to avoid this warning is to check hrtimer_is_queued()
+before calling hrtimer_forward_now() instead. This however requires a
+lock so the timer is not started by msg_submit() inbetween this check
+and the hrtimer_forward() call.
+
+Fixes: c7dacf5b0f32 ("mailbox: avoid timer start from callback")
+Signed-off-by: Björn Ardö <bjorn.ardo@axis.com>
+Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/power_supply_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/mailbox/mailbox.c          | 19 +++++++++++++------
+ include/linux/mailbox_controller.h |  1 +
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index d925cb137e12..fad5890c899e 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -616,7 +616,7 @@ int power_supply_get_battery_info(struct power_supply *psy,
- 		goto out_put_node;
+diff --git a/drivers/mailbox/mailbox.c b/drivers/mailbox/mailbox.c
+index 3e7d4b20ab34..4229b9b5da98 100644
+--- a/drivers/mailbox/mailbox.c
++++ b/drivers/mailbox/mailbox.c
+@@ -82,11 +82,11 @@ static void msg_submit(struct mbox_chan *chan)
+ exit:
+ 	spin_unlock_irqrestore(&chan->lock, flags);
+ 
+-	/* kick start the timer immediately to avoid delays */
+ 	if (!err && (chan->txdone_method & TXDONE_BY_POLL)) {
+-		/* but only if not already active */
+-		if (!hrtimer_active(&chan->mbox->poll_hrt))
+-			hrtimer_start(&chan->mbox->poll_hrt, 0, HRTIMER_MODE_REL);
++		/* kick start the timer immediately to avoid delays */
++		spin_lock_irqsave(&chan->mbox->poll_hrt_lock, flags);
++		hrtimer_start(&chan->mbox->poll_hrt, 0, HRTIMER_MODE_REL);
++		spin_unlock_irqrestore(&chan->mbox->poll_hrt_lock, flags);
+ 	}
+ }
+ 
+@@ -120,20 +120,26 @@ static enum hrtimer_restart txdone_hrtimer(struct hrtimer *hrtimer)
+ 		container_of(hrtimer, struct mbox_controller, poll_hrt);
+ 	bool txdone, resched = false;
+ 	int i;
++	unsigned long flags;
+ 
+ 	for (i = 0; i < mbox->num_chans; i++) {
+ 		struct mbox_chan *chan = &mbox->chans[i];
+ 
+ 		if (chan->active_req && chan->cl) {
+-			resched = true;
+ 			txdone = chan->mbox->ops->last_tx_done(chan);
+ 			if (txdone)
+ 				tx_tick(chan, 0);
++			else
++				resched = true;
+ 		}
  	}
  
--	info = devm_kmalloc(&psy->dev, sizeof(*info), GFP_KERNEL);
-+	info = devm_kzalloc(&psy->dev, sizeof(*info), GFP_KERNEL);
- 	if (!info) {
- 		err = -ENOMEM;
- 		goto out_put_node;
+ 	if (resched) {
+-		hrtimer_forward_now(hrtimer, ms_to_ktime(mbox->txpoll_period));
++		spin_lock_irqsave(&mbox->poll_hrt_lock, flags);
++		if (!hrtimer_is_queued(hrtimer))
++			hrtimer_forward_now(hrtimer, ms_to_ktime(mbox->txpoll_period));
++		spin_unlock_irqrestore(&mbox->poll_hrt_lock, flags);
++
+ 		return HRTIMER_RESTART;
+ 	}
+ 	return HRTIMER_NORESTART;
+@@ -500,6 +506,7 @@ int mbox_controller_register(struct mbox_controller *mbox)
+ 		hrtimer_init(&mbox->poll_hrt, CLOCK_MONOTONIC,
+ 			     HRTIMER_MODE_REL);
+ 		mbox->poll_hrt.function = txdone_hrtimer;
++		spin_lock_init(&mbox->poll_hrt_lock);
+ 	}
+ 
+ 	for (i = 0; i < mbox->num_chans; i++) {
+diff --git a/include/linux/mailbox_controller.h b/include/linux/mailbox_controller.h
+index 36d6ce673503..6fee33cb52f5 100644
+--- a/include/linux/mailbox_controller.h
++++ b/include/linux/mailbox_controller.h
+@@ -83,6 +83,7 @@ struct mbox_controller {
+ 				      const struct of_phandle_args *sp);
+ 	/* Internal to API */
+ 	struct hrtimer poll_hrt;
++	spinlock_t poll_hrt_lock;
+ 	struct list_head node;
+ };
+ 
 -- 
 2.35.1
 

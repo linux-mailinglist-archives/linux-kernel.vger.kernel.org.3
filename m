@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 950795488F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4AB0549525
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351634AbiFMLHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
+        id S1356236AbiFMLoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350904AbiFMK7B (ORCPT
+        with ESMTP id S1355615AbiFMLjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:59:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A7EB25EB7;
-        Mon, 13 Jun 2022 03:32:41 -0700 (PDT)
+        Mon, 13 Jun 2022 07:39:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333A92408D;
+        Mon, 13 Jun 2022 03:49:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6505FB80EAA;
-        Mon, 13 Jun 2022 10:32:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC926C34114;
-        Mon, 13 Jun 2022 10:32:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C565A6112A;
+        Mon, 13 Jun 2022 10:49:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A63C34114;
+        Mon, 13 Jun 2022 10:49:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116359;
-        bh=Q01MA/xE19LFBgpdqYkg0EJBDx4BvOaJ2SbB90FT5Ek=;
+        s=korg; t=1655117353;
+        bh=umwNkXTx7sDT3ai+IsIbt1bhi7bdx1N7XGvJqxUXjCA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZfPRCIWc/qjbYbanx4jHhxZwiO7yR0B9xsQsqrfTEckqbNzJI6CrQl4TPn8AQjy1/
-         iRyNNtbCmGS2xM6u3L3bffDv4y5LLkOicYdZLtRqMGe20Otg1Pe4p68gElKkVqyCke
-         /jDoV9CaowIgp5oHxz0O7VD22QwX6lTXtmHWVauk=
+        b=UJfI4HPSMyI3CCSgrOYE/TEmcjONfMO7JZbkAzYS68uwLXuWuoeL/tOFLn73bR/O0
+         pTQdW+jianpnw1nVBWMOYdhh02A6bUZZzSGsGfTYwQ2qV+UBDHIwKImQgrygxi1wca
+         Ad0e+JLzk62R/tooWssoNyQLlLhD1b3vRMMheEMs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        stable@vger.kernel.org, Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 167/218] tracing: Avoid adding tracer option before update_tracer_options
+Subject: [PATCH 5.4 352/411] af_unix: Fix a data-race in unix_dgram_peer_wake_me().
 Date:   Mon, 13 Jun 2022 12:10:25 +0200
-Message-Id: <20220613094925.667541682@linuxfoundation.org>
+Message-Id: <20220613094939.258047663@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,64 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
 
-[ Upstream commit ef9188bcc6ca1d8a2ad83e826b548e6820721061 ]
+[ Upstream commit 662a80946ce13633ae90a55379f1346c10f0c432 ]
 
-To prepare for support asynchronous tracer_init_tracefs initcall,
-avoid calling create_trace_option_files before __update_tracer_options.
-Otherwise, create_trace_option_files will show warning because
-some tracers in trace_types list are already in tr->topts.
+unix_dgram_poll() calls unix_dgram_peer_wake_me() without `other`'s
+lock held and check if its receive queue is full.  Here we need to
+use unix_recvq_full_lockless() instead of unix_recvq_full(), otherwise
+KCSAN will report a data-race.
 
-For example, hwlat_tracer call register_tracer in late_initcall,
-and global_trace.dir is already created in tracing_init_dentry,
-hwlat_tracer will be put into tr->topts.
-Then if the __update_tracer_options is executed after hwlat_tracer
-registered, create_trace_option_files find that hwlat_tracer is
-already in tr->topts.
-
-Link: https://lkml.kernel.org/r/20220426122407.17042-2-mark-pk.tsai@mediatek.com
-
-Link: https://lore.kernel.org/lkml/20220322133339.GA32582@xsang-OptiPlex-9020/
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Fixes: 7d267278a9ec ("unix: avoid use-after-free in ep_remove_wait_queue")
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+Link: https://lore.kernel.org/r/20220605232325.11804-1-kuniyu@amazon.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ net/unix/af_unix.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index aaf1194be551..60a1733abbb7 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -5363,12 +5363,18 @@ static void tracing_set_nop(struct trace_array *tr)
- 	tr->current_trace = &nop_trace;
- }
+diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+index 05470ca91bd9..f33e90bd0683 100644
+--- a/net/unix/af_unix.c
++++ b/net/unix/af_unix.c
+@@ -440,7 +440,7 @@ static int unix_dgram_peer_wake_me(struct sock *sk, struct sock *other)
+ 	 * -ECONNREFUSED. Otherwise, if we haven't queued any skbs
+ 	 * to other and its full, we will hang waiting for POLLOUT.
+ 	 */
+-	if (unix_recvq_full(other) && !sock_flag(other, SOCK_DEAD))
++	if (unix_recvq_full_lockless(other) && !sock_flag(other, SOCK_DEAD))
+ 		return 1;
  
-+static bool tracer_options_updated;
-+
- static void add_tracer_options(struct trace_array *tr, struct tracer *t)
- {
- 	/* Only enable if the directory has been created already. */
- 	if (!tr->dir)
- 		return;
- 
-+	/* Only create trace option files after update_tracer_options finish */
-+	if (!tracer_options_updated)
-+		return;
-+
- 	create_trace_option_files(tr, t);
- }
- 
-@@ -7733,6 +7739,7 @@ static void __update_tracer_options(struct trace_array *tr)
- static void update_tracer_options(struct trace_array *tr)
- {
- 	mutex_lock(&trace_types_lock);
-+	tracer_options_updated = true;
- 	__update_tracer_options(tr);
- 	mutex_unlock(&trace_types_lock);
- }
+ 	if (connected)
 -- 
 2.35.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123E854933C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E25548E83
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354301AbiFMLcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:32:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46042 "EHLO
+        id S1378404AbiFMNmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353848AbiFMLZg (ORCPT
+        with ESMTP id S1379041AbiFMNjm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:25:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63313CFFA;
-        Mon, 13 Jun 2022 03:42:36 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED3237981D;
+        Mon, 13 Jun 2022 04:28:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2471B80D3A;
-        Mon, 13 Jun 2022 10:42:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F558C3411E;
-        Mon, 13 Jun 2022 10:42:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 736F361036;
+        Mon, 13 Jun 2022 11:28:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8039AC34114;
+        Mon, 13 Jun 2022 11:28:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116953;
-        bh=JXGmPGfuIxVnVfbaHBzLdU8nrx6hyq3Fd6Fa/1LQNo8=;
+        s=korg; t=1655119710;
+        bh=qHJWRt6JAniE3k7YYbpJB8AFjQEVSMDk2DDe4PaqYYM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gMWi16KrMuY8EELBQVVrSjMBSHSsYNbD9VKGogDCc0jEV6M9yvckgHbeFzu5z/w29
-         dKGe346RE2N5hjWpzbibysTHz63Ve+4CJPW+5EKhs8R4c2mkzFdwmgP8qyQbCqoQ0J
-         yu9ApbFZkFfhE6yF/xM5cv0Ekfik82xSC8Rftseo=
+        b=jaeLHhQen8INvEPQqHiAAxeBLIR6xHQ/Ja483zIu64hk6YjQqMlkZDOKPMK4A7X27
+         1mZ31eFsbEvBn5vFgdDwUVg8TZRpFzQ/fcsfboJPDPdMf1lB978qTlL2ODlFc36JT+
+         3qkwOCs8lCi4Ayb+kPLuS3fiZP1hJPjhxkmMppkk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tokunori Ikegami <ikegami.t@gmail.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: [PATCH 5.4 245/411] mtd: cfi_cmdset_0002: Move and rename chip_check/chip_ready/chip_good_for_write
+        stable@vger.kernel.org, Vincent Ray <vray@kalrayinc.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 093/339] net: sched: fixed barrier to prevent skbuff sticking in qdisc backlog
 Date:   Mon, 13 Jun 2022 12:08:38 +0200
-Message-Id: <20220613094936.121895817@linuxfoundation.org>
+Message-Id: <20220613094929.334981825@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,269 +56,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tokunori Ikegami <ikegami.t@gmail.com>
+From: Vincent Ray <vray@kalrayinc.com>
 
-commit 083084df578a8bdb18334f69e7b32d690aaa3247 upstream.
+[ Upstream commit a54ce3703613e41fe1d98060b62ec09a3984dc28 ]
 
-This is a preparation patch for the S29GL064N buffer writes fix. There
-is no functional change.
+In qdisc_run_begin(), smp_mb__before_atomic() used before test_bit()
+does not provide any ordering guarantee as test_bit() is not an atomic
+operation. This, added to the fact that the spin_trylock() call at
+the beginning of qdisc_run_begin() does not guarantee acquire
+semantics if it does not grab the lock, makes it possible for the
+following statement :
 
-Link: https://lore.kernel.org/r/b687c259-6413-26c9-d4c9-b3afa69ea124@pengutronix.de/
-Fixes: dfeae1073583("mtd: cfi_cmdset_0002: Change write buffer to check correct value")
-Signed-off-by: Tokunori Ikegami <ikegami.t@gmail.com>
-Cc: stable@vger.kernel.org
-Acked-by: Vignesh Raghavendra <vigneshr@ti.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220323170458.5608-2-ikegami.t@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+if (test_bit(__QDISC_STATE_MISSED, &qdisc->state))
+
+to be executed before an enqueue operation called before
+qdisc_run_begin().
+
+As a result the following race can happen :
+
+           CPU 1                             CPU 2
+
+      qdisc_run_begin()               qdisc_run_begin() /* true */
+        set(MISSED)                            .
+      /* returns false */                      .
+          .                            /* sees MISSED = 1 */
+          .                            /* so qdisc not empty */
+          .                            __qdisc_run()
+          .                                    .
+          .                              pfifo_fast_dequeue()
+ ----> /* may be done here */                  .
+|         .                                clear(MISSED)
+|         .                                    .
+|         .                                smp_mb __after_atomic();
+|         .                                    .
+|         .                                /* recheck the queue */
+|         .                                /* nothing => exit   */
+|   enqueue(skb1)
+|         .
+|   qdisc_run_begin()
+|         .
+|     spin_trylock() /* fail */
+|         .
+|     smp_mb__before_atomic() /* not enough */
+|         .
+ ---- if (test_bit(MISSED))
+        return false;   /* exit */
+
+In the above scenario, CPU 1 and CPU 2 both try to grab the
+qdisc->seqlock at the same time. Only CPU 2 succeeds and enters the
+bypass code path, where it emits its skb then calls __qdisc_run().
+
+CPU1 fails, sets MISSED and goes down the traditionnal enqueue() +
+dequeue() code path. But when executing qdisc_run_begin() for the
+second time, after enqueuing its skbuff, it sees the MISSED bit still
+set (by itself) and consequently chooses to exit early without setting
+it again nor trying to grab the spinlock again.
+
+Meanwhile CPU2 has seen MISSED = 1, cleared it, checked the queue
+and found it empty, so it returned.
+
+At the end of the sequence, we end up with skb1 enqueued in the
+backlog, both CPUs out of __dev_xmit_skb(), the MISSED bit not set,
+and no __netif_schedule() called made. skb1 will now linger in the
+qdisc until somebody later performs a full __qdisc_run(). Associated
+to the bypass capacity of the qdisc, and the ability of the TCP layer
+to avoid resending packets which it knows are still in the qdisc, this
+can lead to serious traffic "holes" in a TCP connection.
+
+We fix this by replacing the smp_mb__before_atomic() / test_bit() /
+set_bit() / smp_mb__after_atomic() sequence inside qdisc_run_begin()
+by a single test_and_set_bit() call, which is more concise and
+enforces the needed memory barriers.
+
+Fixes: 89837eb4b246 ("net: sched: add barrier to ensure correct ordering for lockless qdisc")
+Signed-off-by: Vincent Ray <vray@kalrayinc.com>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Link: https://lore.kernel.org/r/20220526001746.2437669-1-eric.dumazet@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/chips/cfi_cmdset_0002.c |   95 ++++++++++++------------------------
- 1 file changed, 32 insertions(+), 63 deletions(-)
+ include/net/sch_generic.h | 36 ++++++++----------------------------
+ 1 file changed, 8 insertions(+), 28 deletions(-)
 
---- a/drivers/mtd/chips/cfi_cmdset_0002.c
-+++ b/drivers/mtd/chips/cfi_cmdset_0002.c
-@@ -798,21 +798,25 @@ static struct mtd_info *cfi_amdstd_setup
- }
+diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+index 9bab396c1f3b..80973ce820f3 100644
+--- a/include/net/sch_generic.h
++++ b/include/net/sch_generic.h
+@@ -187,37 +187,17 @@ static inline bool qdisc_run_begin(struct Qdisc *qdisc)
+ 		if (spin_trylock(&qdisc->seqlock))
+ 			return true;
  
- /*
-- * Return true if the chip is ready.
-+ * Return true if the chip is ready and has the correct value.
-  *
-  * Ready is one of: read mode, query mode, erase-suspend-read mode (in any
-  * non-suspended sector) and is indicated by no toggle bits toggling.
-  *
-+ * Error are indicated by toggling bits or bits held with the wrong value,
-+ * or with bits toggling.
-+ *
-  * Note that anything more complicated than checking if no bits are toggling
-  * (including checking DQ5 for an error status) is tricky to get working
-  * correctly and is therefore not done	(particularly with interleaved chips
-  * as each chip must be checked independently of the others).
-  */
- static int __xipram chip_ready(struct map_info *map, struct flchip *chip,
--			       unsigned long addr)
-+			       unsigned long addr, map_word *expected)
- {
- 	struct cfi_private *cfi = map->fldrv_priv;
- 	map_word d, t;
-+	int ret;
- 
- 	if (cfi_use_status_reg(cfi)) {
- 		map_word ready = CMD(CFI_SR_DRB);
-@@ -822,57 +826,20 @@ static int __xipram chip_ready(struct ma
+-		/* Paired with smp_mb__after_atomic() to make sure
+-		 * STATE_MISSED checking is synchronized with clearing
+-		 * in pfifo_fast_dequeue().
++		/* No need to insist if the MISSED flag was already set.
++		 * Note that test_and_set_bit() also gives us memory ordering
++		 * guarantees wrt potential earlier enqueue() and below
++		 * spin_trylock(), both of which are necessary to prevent races
  		 */
- 		cfi_send_gen_cmd(0x70, cfi->addr_unlock1, chip->start, map, cfi,
- 				 cfi->device_type, NULL);
--		d = map_read(map, addr);
-+		t = map_read(map, addr);
- 
--		return map_word_andequal(map, d, ready, ready);
-+		return map_word_andequal(map, t, ready, ready);
- 	}
- 
- 	d = map_read(map, addr);
- 	t = map_read(map, addr);
- 
--	return map_word_equal(map, d, t);
--}
+-		smp_mb__before_atomic();
 -
--/*
-- * Return true if the chip is ready and has the correct value.
-- *
-- * Ready is one of: read mode, query mode, erase-suspend-read mode (in any
-- * non-suspended sector) and it is indicated by no bits toggling.
-- *
-- * Error are indicated by toggling bits or bits held with the wrong value,
-- * or with bits toggling.
-- *
-- * Note that anything more complicated than checking if no bits are toggling
-- * (including checking DQ5 for an error status) is tricky to get working
-- * correctly and is therefore not done	(particularly with interleaved chips
-- * as each chip must be checked independently of the others).
-- *
-- */
--static int __xipram chip_good(struct map_info *map, struct flchip *chip,
--			      unsigned long addr, map_word expected)
--{
--	struct cfi_private *cfi = map->fldrv_priv;
--	map_word oldd, curd;
--
--	if (cfi_use_status_reg(cfi)) {
--		map_word ready = CMD(CFI_SR_DRB);
--
--		/*
--		 * For chips that support status register, check device
--		 * ready bit
+-		/* If the MISSED flag is set, it means other thread has
+-		 * set the MISSED flag before second spin_trylock(), so
+-		 * we can return false here to avoid multi cpus doing
+-		 * the set_bit() and second spin_trylock() concurrently.
 -		 */
--		cfi_send_gen_cmd(0x70, cfi->addr_unlock1, chip->start, map, cfi,
--				 cfi->device_type, NULL);
--		curd = map_read(map, addr);
+-		if (test_bit(__QDISC_STATE_MISSED, &qdisc->state))
++		if (test_and_set_bit(__QDISC_STATE_MISSED, &qdisc->state))
+ 			return false;
+ 
+-		/* Set the MISSED flag before the second spin_trylock(),
+-		 * if the second spin_trylock() return false, it means
+-		 * other cpu holding the lock will do dequeuing for us
+-		 * or it will see the MISSED flag set after releasing
+-		 * lock and reschedule the net_tx_action() to do the
+-		 * dequeuing.
+-		 */
+-		set_bit(__QDISC_STATE_MISSED, &qdisc->state);
 -
--		return map_word_andequal(map, curd, ready, ready);
--	}
-+	ret = map_word_equal(map, d, t);
- 
--	oldd = map_read(map, addr);
--	curd = map_read(map, addr);
-+	if (!ret || !expected)
-+		return ret;
- 
--	return	map_word_equal(map, oldd, curd) &&
--		map_word_equal(map, curd, expected);
-+	return map_word_equal(map, t, *expected);
- }
- 
- static int get_chip(struct map_info *map, struct flchip *chip, unsigned long adr, int mode)
-@@ -889,7 +856,7 @@ static int get_chip(struct map_info *map
- 
- 	case FL_STATUS:
- 		for (;;) {
--			if (chip_ready(map, chip, adr))
-+			if (chip_ready(map, chip, adr, NULL))
- 				break;
- 
- 			if (time_after(jiffies, timeo)) {
-@@ -927,7 +894,7 @@ static int get_chip(struct map_info *map
- 		chip->state = FL_ERASE_SUSPENDING;
- 		chip->erase_suspended = 1;
- 		for (;;) {
--			if (chip_ready(map, chip, adr))
-+			if (chip_ready(map, chip, adr, NULL))
- 				break;
- 
- 			if (time_after(jiffies, timeo)) {
-@@ -1459,7 +1426,7 @@ static int do_otp_lock(struct map_info *
- 	/* wait for chip to become ready */
- 	timeo = jiffies + msecs_to_jiffies(2);
- 	for (;;) {
--		if (chip_ready(map, chip, adr))
-+		if (chip_ready(map, chip, adr, NULL))
- 			break;
- 
- 		if (time_after(jiffies, timeo)) {
-@@ -1691,11 +1658,11 @@ static int __xipram do_write_oneword_onc
- 		}
- 
- 		/*
--		 * We check "time_after" and "!chip_good" before checking
--		 * "chip_good" to avoid the failure due to scheduling.
-+		 * We check "time_after" and "!chip_ready" before checking
-+		 * "chip_ready" to avoid the failure due to scheduling.
+-		/* spin_trylock() only has load-acquire semantic, so use
+-		 * smp_mb__after_atomic() to ensure STATE_MISSED is set
+-		 * before doing the second spin_trylock().
+-		 */
+-		smp_mb__after_atomic();
+-
+-		/* Retry again in case other CPU may not see the new flag
+-		 * after it releases the lock at the end of qdisc_run_end().
++		/* Try to take the lock again to make sure that we will either
++		 * grab it or the CPU that still has it will see MISSED set
++		 * when testing it in qdisc_run_end()
  		 */
- 		if (time_after(jiffies, timeo) &&
--		    !chip_good(map, chip, adr, datum)) {
-+		    !chip_ready(map, chip, adr, &datum)) {
- 			xip_enable(map, chip, adr);
- 			printk(KERN_WARNING "MTD %s(): software timeout\n", __func__);
- 			xip_disable(map, chip, adr);
-@@ -1703,7 +1670,7 @@ static int __xipram do_write_oneword_onc
- 			break;
- 		}
- 
--		if (chip_good(map, chip, adr, datum)) {
-+		if (chip_ready(map, chip, adr, &datum)) {
- 			if (cfi_check_err_status(map, chip, adr))
- 				ret = -EIO;
- 			break;
-@@ -1971,18 +1938,18 @@ static int __xipram do_write_buffer_wait
- 		}
- 
- 		/*
--		 * We check "time_after" and "!chip_good" before checking
--		 * "chip_good" to avoid the failure due to scheduling.
-+		 * We check "time_after" and "!chip_ready" before checking
-+		 * "chip_ready" to avoid the failure due to scheduling.
- 		 */
- 		if (time_after(jiffies, timeo) &&
--		    !chip_good(map, chip, adr, datum)) {
-+		    !chip_ready(map, chip, adr, &datum)) {
- 			pr_err("MTD %s(): software timeout, address:0x%.8lx.\n",
- 			       __func__, adr);
- 			ret = -EIO;
- 			break;
- 		}
- 
--		if (chip_good(map, chip, adr, datum)) {
-+		if (chip_ready(map, chip, adr, &datum)) {
- 			if (cfi_check_err_status(map, chip, adr))
- 				ret = -EIO;
- 			break;
-@@ -2191,7 +2158,7 @@ static int cfi_amdstd_panic_wait(struct
- 	 * If the driver thinks the chip is idle, and no toggle bits
- 	 * are changing, then the chip is actually idle for sure.
- 	 */
--	if (chip->state == FL_READY && chip_ready(map, chip, adr))
-+	if (chip->state == FL_READY && chip_ready(map, chip, adr, NULL))
- 		return 0;
- 
- 	/*
-@@ -2208,7 +2175,7 @@ static int cfi_amdstd_panic_wait(struct
- 
- 		/* wait for the chip to become ready */
- 		for (i = 0; i < jiffies_to_usecs(timeo); i++) {
--			if (chip_ready(map, chip, adr))
-+			if (chip_ready(map, chip, adr, NULL))
- 				return 0;
- 
- 			udelay(1);
-@@ -2272,13 +2239,13 @@ retry:
- 	map_write(map, datum, adr);
- 
- 	for (i = 0; i < jiffies_to_usecs(uWriteTimeout); i++) {
--		if (chip_ready(map, chip, adr))
-+		if (chip_ready(map, chip, adr, NULL))
- 			break;
- 
- 		udelay(1);
+ 		return spin_trylock(&qdisc->seqlock);
  	}
- 
--	if (!chip_good(map, chip, adr, datum) ||
-+	if (!chip_ready(map, chip, adr, &datum) ||
- 	    cfi_check_err_status(map, chip, adr)) {
- 		/* reset on all failures. */
- 		map_write(map, CMD(0xF0), chip->start);
-@@ -2420,6 +2387,7 @@ static int __xipram do_erase_chip(struct
- 	DECLARE_WAITQUEUE(wait, current);
- 	int ret = 0;
- 	int retry_cnt = 0;
-+	map_word datum = map_word_ff(map);
- 
- 	adr = cfi->addr_unlock1;
- 
-@@ -2474,7 +2442,7 @@ static int __xipram do_erase_chip(struct
- 			chip->erase_suspended = 0;
- 		}
- 
--		if (chip_good(map, chip, adr, map_word_ff(map))) {
-+		if (chip_ready(map, chip, adr, &datum)) {
- 			if (cfi_check_err_status(map, chip, adr))
- 				ret = -EIO;
- 			break;
-@@ -2519,6 +2487,7 @@ static int __xipram do_erase_oneblock(st
- 	DECLARE_WAITQUEUE(wait, current);
- 	int ret = 0;
- 	int retry_cnt = 0;
-+	map_word datum = map_word_ff(map);
- 
- 	adr += chip->start;
- 
-@@ -2573,7 +2542,7 @@ static int __xipram do_erase_oneblock(st
- 			chip->erase_suspended = 0;
- 		}
- 
--		if (chip_good(map, chip, adr, map_word_ff(map))) {
-+		if (chip_ready(map, chip, adr, &datum)) {
- 			if (cfi_check_err_status(map, chip, adr))
- 				ret = -EIO;
- 			break;
-@@ -2767,7 +2736,7 @@ static int __maybe_unused do_ppb_xxlock(
- 	 */
- 	timeo = jiffies + msecs_to_jiffies(2000);	/* 2s max (un)locking */
- 	for (;;) {
--		if (chip_ready(map, chip, adr))
-+		if (chip_ready(map, chip, adr, NULL))
- 			break;
- 
- 		if (time_after(jiffies, timeo)) {
+-- 
+2.35.1
+
 
 

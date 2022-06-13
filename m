@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6261254920A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DDB548E98
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376757AbiFMNX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54834 "EHLO
+        id S1380936AbiFMOHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377311AbiFMNUP (ORCPT
+        with ESMTP id S1380388AbiFMOAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:20:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585B76A421;
-        Mon, 13 Jun 2022 04:23:28 -0700 (PDT)
+        Mon, 13 Jun 2022 10:00:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F678DDC5;
+        Mon, 13 Jun 2022 04:38:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0633AB80EA7;
-        Mon, 13 Jun 2022 11:22:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EA19C34114;
-        Mon, 13 Jun 2022 11:22:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CD06612A8;
+        Mon, 13 Jun 2022 11:38:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E2D8C34114;
+        Mon, 13 Jun 2022 11:38:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119368;
-        bh=1wZ063nPCYAb+23XcVbHHG6i9zVjkAUHDUBFO3C4ZZI=;
+        s=korg; t=1655120281;
+        bh=YLhttcZMZGaOIF9jhTmY3/sTXVBFMSJCqpPCbEzUyKY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jZt25fs1ClLgj9DuVFyNRqktDboYidwCyYLz5PZ5F5e9VdZ4THOI0bM5+MKOX4l3Q
-         DtHAjx71lmJfJcq+vOq0qji5yyfeq2UnK89ItDFUrSi3wek0S1H5zs9PdVOcDsGFUb
-         vr6T2fMiNjMR/32rYl/G0PDlRxTLhNhKL9fQKBVo=
+        b=ZFWws8Sk4JtYr6poOnB6poq04MMDVLikGkdMjDSjbsZhhTIvNVOtZJCCtrS/mH5nB
+         rth6QSgaFesRi/ltjht6yx5CiZEw/IdxafwHo/zZ/YvoFajgdpeObaeRv/rm7LaAc/
+         wa5U7Qx6Aj2yyyJ2bBfYshMmO4bkaHMK4qyOJSNg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ariel Miculas <ariel.miculas@belden.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.15 238/247] powerpc/32: Fix overread/overwrite of thread_struct via ptrace
-Date:   Mon, 13 Jun 2022 12:12:20 +0200
-Message-Id: <20220613094930.163903842@linuxfoundation.org>
+        stable@vger.kernel.org, Jchao Sun <sunjunchao2870@gmail.com>,
+        Jan Kara <jack@suse.cz>
+Subject: [PATCH 5.18 316/339] writeback: Fix inode->i_io_list not be protected by inode->i_lock error
+Date:   Mon, 13 Jun 2022 12:12:21 +0200
+Message-Id: <20220613094936.332889957@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,119 +54,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Ellerman <mpe@ellerman.id.au>
+From: Jchao Sun <sunjunchao2870@gmail.com>
 
-commit 8e1278444446fc97778a5e5c99bca1ce0bbc5ec9 upstream.
+commit 10e14073107dd0b6d97d9516a02845a8e501c2c9 upstream.
 
-The ptrace PEEKUSR/POKEUSR (aka PEEKUSER/POKEUSER) API allows a process
-to read/write registers of another process.
+Commit b35250c0816c ("writeback: Protect inode->i_io_list with
+inode->i_lock") made inode->i_io_list not only protected by
+wb->list_lock but also inode->i_lock, but inode_io_list_move_locked()
+was missed. Add lock there and also update comment describing
+things protected by inode->i_lock. This also fixes a race where
+__mark_inode_dirty() could move inode under flush worker's hands
+and thus sync(2) could miss writing some inodes.
 
-To get/set a register, the API takes an index into an imaginary address
-space called the "USER area", where the registers of the process are
-laid out in some fashion.
-
-The kernel then maps that index to a particular register in its own data
-structures and gets/sets the value.
-
-The API only allows a single machine-word to be read/written at a time.
-So 4 bytes on 32-bit kernels and 8 bytes on 64-bit kernels.
-
-The way floating point registers (FPRs) are addressed is somewhat
-complicated, because double precision float values are 64-bit even on
-32-bit CPUs. That means on 32-bit kernels each FPR occupies two
-word-sized locations in the USER area. On 64-bit kernels each FPR
-occupies one word-sized location in the USER area.
-
-Internally the kernel stores the FPRs in an array of u64s, or if VSX is
-enabled, an array of pairs of u64s where one half of each pair stores
-the FPR. Which half of the pair stores the FPR depends on the kernel's
-endianness.
-
-To handle the different layouts of the FPRs depending on VSX/no-VSX and
-big/little endian, the TS_FPR() macro was introduced.
-
-Unfortunately the TS_FPR() macro does not take into account the fact
-that the addressing of each FPR differs between 32-bit and 64-bit
-kernels. It just takes the index into the "USER area" passed from
-userspace and indexes into the fp_state.fpr array.
-
-On 32-bit there are 64 indexes that address FPRs, but only 32 entries in
-the fp_state.fpr array, meaning the user can read/write 256 bytes past
-the end of the array. Because the fp_state sits in the middle of the
-thread_struct there are various fields than can be overwritten,
-including some pointers. As such it may be exploitable.
-
-It has also been observed to cause systems to hang or otherwise
-misbehave when using gdbserver, and is probably the root cause of this
-report which could not be easily reproduced:
-  https://lore.kernel.org/linuxppc-dev/dc38afe9-6b78-f3f5-666b-986939e40fc6@keymile.com/
-
-Rather than trying to make the TS_FPR() macro even more complicated to
-fix the bug, or add more macros, instead add a special-case for 32-bit
-kernels. This is more obvious and hopefully avoids a similar bug
-happening again in future.
-
-Note that because 32-bit kernels never have VSX enabled the code doesn't
-need to consider TS_FPRWIDTH/OFFSET at all. Add a BUILD_BUG_ON() to
-ensure that 32-bit && VSX is never enabled.
-
-Fixes: 87fec0514f61 ("powerpc: PTRACE_PEEKUSR/PTRACE_POKEUSER of FPR registers in little endian builds")
-Cc: stable@vger.kernel.org # v3.13+
-Reported-by: Ariel Miculas <ariel.miculas@belden.com>
-Tested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220609133245.573565-1-mpe@ellerman.id.au
+Fixes: b35250c0816c ("writeback: Protect inode->i_io_list with inode->i_lock")
+Link: https://lore.kernel.org/r/20220524150540.12552-1-sunjunchao2870@gmail.com
+CC: stable@vger.kernel.org
+Signed-off-by: Jchao Sun <sunjunchao2870@gmail.com>
+Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/kernel/ptrace/ptrace-fpu.c |   20 ++++++++++++++------
- arch/powerpc/kernel/ptrace/ptrace.c     |    3 +++
- 2 files changed, 17 insertions(+), 6 deletions(-)
+ fs/fs-writeback.c |   37 ++++++++++++++++++++++++++++---------
+ fs/inode.c        |    2 +-
+ 2 files changed, 29 insertions(+), 10 deletions(-)
 
---- a/arch/powerpc/kernel/ptrace/ptrace-fpu.c
-+++ b/arch/powerpc/kernel/ptrace/ptrace-fpu.c
-@@ -17,9 +17,13 @@ int ptrace_get_fpr(struct task_struct *c
+--- a/fs/fs-writeback.c
++++ b/fs/fs-writeback.c
+@@ -120,6 +120,7 @@ static bool inode_io_list_move_locked(st
+ 				      struct list_head *head)
+ {
+ 	assert_spin_locked(&wb->list_lock);
++	assert_spin_locked(&inode->i_lock);
  
- #ifdef CONFIG_PPC_FPU_REGS
- 	flush_fp_to_thread(child);
--	if (fpidx < (PT_FPSCR - PT_FPR0))
--		memcpy(data, &child->thread.TS_FPR(fpidx), sizeof(long));
--	else
-+	if (fpidx < (PT_FPSCR - PT_FPR0)) {
-+		if (IS_ENABLED(CONFIG_PPC32))
-+			// On 32-bit the index we are passed refers to 32-bit words
-+			*data = ((u32 *)child->thread.fp_state.fpr)[fpidx];
-+		else
-+			memcpy(data, &child->thread.TS_FPR(fpidx), sizeof(long));
-+	} else
- 		*data = child->thread.fp_state.fpscr;
- #else
- 	*data = 0;
-@@ -39,9 +43,13 @@ int ptrace_put_fpr(struct task_struct *c
+ 	list_move(&inode->i_io_list, head);
  
- #ifdef CONFIG_PPC_FPU_REGS
- 	flush_fp_to_thread(child);
--	if (fpidx < (PT_FPSCR - PT_FPR0))
--		memcpy(&child->thread.TS_FPR(fpidx), &data, sizeof(long));
--	else
-+	if (fpidx < (PT_FPSCR - PT_FPR0)) {
-+		if (IS_ENABLED(CONFIG_PPC32))
-+			// On 32-bit the index we are passed refers to 32-bit words
-+			((u32 *)child->thread.fp_state.fpr)[fpidx] = data;
-+		else
-+			memcpy(&child->thread.TS_FPR(fpidx), &data, sizeof(long));
-+	} else
- 		child->thread.fp_state.fpscr = data;
- #endif
+@@ -1365,9 +1366,9 @@ static int move_expired_inodes(struct li
+ 		inode = wb_inode(delaying_queue->prev);
+ 		if (inode_dirtied_after(inode, dirtied_before))
+ 			break;
++		spin_lock(&inode->i_lock);
+ 		list_move(&inode->i_io_list, &tmp);
+ 		moved++;
+-		spin_lock(&inode->i_lock);
+ 		inode->i_state |= I_SYNC_QUEUED;
+ 		spin_unlock(&inode->i_lock);
+ 		if (sb_is_blkdev_sb(inode->i_sb))
+@@ -1383,7 +1384,12 @@ static int move_expired_inodes(struct li
+ 		goto out;
+ 	}
  
---- a/arch/powerpc/kernel/ptrace/ptrace.c
-+++ b/arch/powerpc/kernel/ptrace/ptrace.c
-@@ -446,4 +446,7 @@ void __init pt_regs_check(void)
- 	 * real registers.
- 	 */
- 	BUILD_BUG_ON(PT_DSCR < sizeof(struct user_pt_regs) / sizeof(unsigned long));
+-	/* Move inodes from one superblock together */
++	/*
++	 * Although inode's i_io_list is moved from 'tmp' to 'dispatch_queue',
++	 * we don't take inode->i_lock here because it is just a pointless overhead.
++	 * Inode is already marked as I_SYNC_QUEUED so writeback list handling is
++	 * fully under our control.
++	 */
+ 	while (!list_empty(&tmp)) {
+ 		sb = wb_inode(tmp.prev)->i_sb;
+ 		list_for_each_prev_safe(pos, node, &tmp) {
+@@ -1826,8 +1832,8 @@ static long writeback_sb_inodes(struct s
+ 			 * We'll have another go at writing back this inode
+ 			 * when we completed a full scan of b_io.
+ 			 */
+-			spin_unlock(&inode->i_lock);
+ 			requeue_io(inode, wb);
++			spin_unlock(&inode->i_lock);
+ 			trace_writeback_sb_inodes_requeue(inode);
+ 			continue;
+ 		}
+@@ -2358,6 +2364,7 @@ void __mark_inode_dirty(struct inode *in
+ {
+ 	struct super_block *sb = inode->i_sb;
+ 	int dirtytime = 0;
++	struct bdi_writeback *wb = NULL;
+ 
+ 	trace_writeback_mark_inode_dirty(inode, flags);
+ 
+@@ -2410,13 +2417,24 @@ void __mark_inode_dirty(struct inode *in
+ 		inode->i_state |= flags;
+ 
+ 		/*
++		 * Grab inode's wb early because it requires dropping i_lock and we
++		 * need to make sure following checks happen atomically with dirty
++		 * list handling so that we don't move inodes under flush worker's
++		 * hands.
++		 */
++		if (!was_dirty) {
++			wb = locked_inode_to_wb_and_lock_list(inode);
++			spin_lock(&inode->i_lock);
++		}
 +
-+	// ptrace_get/put_fpr() rely on PPC32 and VSX being incompatible
-+	BUILD_BUG_ON(IS_ENABLED(CONFIG_PPC32) && IS_ENABLED(CONFIG_VSX));
++		/*
+ 		 * If the inode is queued for writeback by flush worker, just
+ 		 * update its dirty state. Once the flush worker is done with
+ 		 * the inode it will place it on the appropriate superblock
+ 		 * list, based upon its state.
+ 		 */
+ 		if (inode->i_state & I_SYNC_QUEUED)
+-			goto out_unlock_inode;
++			goto out_unlock;
+ 
+ 		/*
+ 		 * Only add valid (hashed) inodes to the superblock's
+@@ -2424,22 +2442,19 @@ void __mark_inode_dirty(struct inode *in
+ 		 */
+ 		if (!S_ISBLK(inode->i_mode)) {
+ 			if (inode_unhashed(inode))
+-				goto out_unlock_inode;
++				goto out_unlock;
+ 		}
+ 		if (inode->i_state & I_FREEING)
+-			goto out_unlock_inode;
++			goto out_unlock;
+ 
+ 		/*
+ 		 * If the inode was already on b_dirty/b_io/b_more_io, don't
+ 		 * reposition it (that would break b_dirty time-ordering).
+ 		 */
+ 		if (!was_dirty) {
+-			struct bdi_writeback *wb;
+ 			struct list_head *dirty_list;
+ 			bool wakeup_bdi = false;
+ 
+-			wb = locked_inode_to_wb_and_lock_list(inode);
+-
+ 			inode->dirtied_when = jiffies;
+ 			if (dirtytime)
+ 				inode->dirtied_time_when = jiffies;
+@@ -2453,6 +2468,7 @@ void __mark_inode_dirty(struct inode *in
+ 							       dirty_list);
+ 
+ 			spin_unlock(&wb->list_lock);
++			spin_unlock(&inode->i_lock);
+ 			trace_writeback_dirty_inode_enqueue(inode);
+ 
+ 			/*
+@@ -2467,6 +2483,9 @@ void __mark_inode_dirty(struct inode *in
+ 			return;
+ 		}
+ 	}
++out_unlock:
++	if (wb)
++		spin_unlock(&wb->list_lock);
+ out_unlock_inode:
+ 	spin_unlock(&inode->i_lock);
  }
+--- a/fs/inode.c
++++ b/fs/inode.c
+@@ -27,7 +27,7 @@
+  * Inode locking rules:
+  *
+  * inode->i_lock protects:
+- *   inode->i_state, inode->i_hash, __iget()
++ *   inode->i_state, inode->i_hash, __iget(), inode->i_io_list
+  * Inode LRU list locks protect:
+  *   inode->i_sb->s_inode_lru, inode->i_lru
+  * inode->i_sb->s_inode_list_lock protects:
 
 

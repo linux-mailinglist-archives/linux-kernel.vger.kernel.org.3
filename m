@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79219548DC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ACF15494DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381076AbiFMOMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
+        id S242347AbiFMKSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381842AbiFMOEw (ORCPT
+        with ESMTP id S241671AbiFMKRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:04:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD08D9271D;
-        Mon, 13 Jun 2022 04:40:04 -0700 (PDT)
+        Mon, 13 Jun 2022 06:17:47 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349CBD12A;
+        Mon, 13 Jun 2022 03:15:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E368EB80ECE;
-        Mon, 13 Jun 2022 11:40:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 488E3C3411C;
-        Mon, 13 Jun 2022 11:40:01 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0EC32CE1109;
+        Mon, 13 Jun 2022 10:15:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F24ACC3411C;
+        Mon, 13 Jun 2022 10:15:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120401;
-        bh=m9aKvLlwoqBpoRkNHQC6FXm1NXIxoi5txZor1xMVKQQ=;
+        s=korg; t=1655115338;
+        bh=9I/GjD4aHksi/15bfsartGYolBCbeN+8cPg/9xg+7aY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UbIiXe6D2RHXpv5zYbz4ot8LSp2+/ZgYTbhoBuJPngeCF0rCrYNsaHF5a/P7MZHdW
-         00uXE4NQxX3k4m5GV154E/7mrSluzGWLC90MAPW5MhnYiMp9ucUb0UchpB4EUjrLrG
-         nrcg6AAt2EIVJMYEbhVY5i6Ktdai5ENr6UktT0Vo=
+        b=VNOJyc7jRSotwyXAB4CG+dm5lGmimGViMiHBzqj3Yy+z2zO9zjWe4Dj+AOpzrjVqX
+         r5d52RcvbfH2ZRB1mRigH6vPl16IIuKAOK5Y0BbnlkeHgSG1+MO0/xo76R8XZfbLmk
+         Atn8Xz34NCE6xROsmkNAIGrcMPQ+lm3BfPvw2HHI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 020/298] rpmsg: qcom_smd: Fix irq_of_parse_and_map() return value
+Subject: [PATCH 4.9 040/167] spi: spi-ti-qspi: Fix return value handling of wait_for_completion_timeout
 Date:   Mon, 13 Jun 2022 12:08:34 +0200
-Message-Id: <20220613094925.543473455@linuxfoundation.org>
+Message-Id: <20220613094850.290100819@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 1a358d35066487d228a68303d808bc4721c6b1b9 ]
+[ Upstream commit 8b1ea69a63eb62f97cef63e6d816b64ed84e8760 ]
 
-The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
+wait_for_completion_timeout() returns unsigned long not int.
+It returns 0 if timed out, and positive if completed.
+The check for <= 0 is ambiguous and should be == 0 here
+indicating timeout which is the only error case.
 
-Fixes: 53e2822e56c7 ("rpmsg: Introduce Qualcomm SMD backend")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220422105326.78713-1-krzysztof.kozlowski@linaro.org
+Fixes: 5720ec0a6d26 ("spi: spi-ti-qspi: Add DMA support for QSPI mmap read")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220411111034.24447-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rpmsg/qcom_smd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-ti-qspi.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/rpmsg/qcom_smd.c b/drivers/rpmsg/qcom_smd.c
-index 540e027f08c4..d4b54eebe15d 100644
---- a/drivers/rpmsg/qcom_smd.c
-+++ b/drivers/rpmsg/qcom_smd.c
-@@ -1404,7 +1404,7 @@ static int qcom_smd_parse_edge(struct device *dev,
- 		edge->name = node->name;
+diff --git a/drivers/spi/spi-ti-qspi.c b/drivers/spi/spi-ti-qspi.c
+index b0a5486936c0..0b0f69551da0 100644
+--- a/drivers/spi/spi-ti-qspi.c
++++ b/drivers/spi/spi-ti-qspi.c
+@@ -401,6 +401,7 @@ static int ti_qspi_dma_xfer(struct ti_qspi *qspi, dma_addr_t dma_dst,
+ 	enum dma_ctrl_flags flags = DMA_CTRL_ACK | DMA_PREP_INTERRUPT;
+ 	struct dma_async_tx_descriptor *tx;
+ 	int ret;
++	unsigned long time_left;
  
- 	irq = irq_of_parse_and_map(node, 0);
--	if (irq < 0) {
-+	if (!irq) {
- 		dev_err(dev, "required smd interrupt missing\n");
- 		ret = irq;
- 		goto put_node;
+ 	tx = dma_dev->device_prep_dma_memcpy(chan, dma_dst, dma_src,
+ 					     len, flags);
+@@ -420,9 +421,9 @@ static int ti_qspi_dma_xfer(struct ti_qspi *qspi, dma_addr_t dma_dst,
+ 	}
+ 
+ 	dma_async_issue_pending(chan);
+-	ret = wait_for_completion_timeout(&qspi->transfer_complete,
++	time_left = wait_for_completion_timeout(&qspi->transfer_complete,
+ 					  msecs_to_jiffies(len));
+-	if (ret <= 0) {
++	if (time_left == 0) {
+ 		dmaengine_terminate_sync(chan);
+ 		dev_err(qspi->dev, "DMA wait_for_completion_timeout\n");
+ 		return -ETIMEDOUT;
 -- 
 2.35.1
 

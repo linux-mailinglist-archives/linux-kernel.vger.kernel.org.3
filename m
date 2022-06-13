@@ -2,106 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 609B154A0CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4D754A0CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:06:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351626AbiFMVF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 17:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54762 "EHLO
+        id S1351732AbiFMVGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 17:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352630AbiFMVEb (ORCPT
+        with ESMTP id S1353149AbiFMVFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 17:04:31 -0400
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE7A33981A;
-        Mon, 13 Jun 2022 13:39:51 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id y79so7375187iof.2;
-        Mon, 13 Jun 2022 13:39:51 -0700 (PDT)
+        Mon, 13 Jun 2022 17:05:05 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D50E22296
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:40:58 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id g7so8824704eda.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HfmXHviBVE0o3HCHUdS6+8UmjzDzxiux613KeakQDqU=;
+        b=PZWPoYp+2PbenEf3ERwBjT4BMMcm6VBJJjKmkOmnD2bo/dDEyuNP6EuoVBt3iDfr7V
+         KwQp/h7BrRRKlOK12kI8odiDgVTBY0YDh5t1xgQKkTy7rxe+8uYUrG/VtfR58u+/zama
+         zpZpgeRI5yLJY8yUsjAz/tBZqCS/beclAyCPDlP1XfDbSjZCsDwzcYbaTrtq5dRyThMB
+         wH8gu+VYtrVuJAxlLWxGsLtVdyqtpw3kdrZGJD1LgZBXzPUFkNuEUv3NHQkWt9FdNzY9
+         74LcCimIhP+N8IHT/QGlsRuTqIqxw9FXtrPtq8y3LtaZSHEpFzZkKkTDcPeCapioHIeg
+         bLHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Jfed8WHo8TWNvxCiSvI5rcyrYQLVvZOkDmByiHpwcb4=;
-        b=R/y71E7QOY6woE382+bK9glJduIZ41l7A6wrwXeq6fpfqICgtjIWPLB48KyjA2UGxO
-         RWzVXV4soUsBDINcnPrt2lIVmYmAfbsu54YrLvL5cWvMlHLICdkJIN2QiL11CWxe+zfk
-         fUMcuhBE/JkMYVF2HGpEoWu2SpWND/ZRT9tvrEIobltZMO+1uDdEUsiRw9tAeLnMtT7j
-         OeMllGfoapaK0ro129uzfm04dzJZXxGBKcW0C/cxi/9kpu7odVPrmxE13yQhHwm0FKJu
-         1bGpMEtcT97KrZuI7gxsowfPCzFi+1fI8FI4hyJXe4uc7zCKBY9HhTdqQC69SY94bJe0
-         OkWA==
-X-Gm-Message-State: AOAM5302xIxFIF0mB4V4JSr+FOtdpHM1aVvKf/yXY+A5wQy4KvboWV3o
-        LJ8DS2a/quoPQIHgoo7NPw==
-X-Google-Smtp-Source: ABdhPJx7nR5T7M0L4hzZ6y5vQUaF5sNik9SF5ruUtWjDfNKqK4EuWnDm5nKY2r7qbgu01ui2ucAQoQ==
-X-Received: by 2002:a6b:6003:0:b0:668:160b:db94 with SMTP id r3-20020a6b6003000000b00668160bdb94mr769352iog.204.1655152790868;
-        Mon, 13 Jun 2022 13:39:50 -0700 (PDT)
-Received: from robh.at.kernel.org ([69.39.28.171])
-        by smtp.gmail.com with ESMTPSA id c9-20020a023f49000000b0033156d6016asm3939471jaf.91.2022.06.13.13.39.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 13:39:50 -0700 (PDT)
-Received: (nullmailer pid 42858 invoked by uid 1000);
-        Mon, 13 Jun 2022 20:39:49 -0000
-Date:   Mon, 13 Jun 2022 14:39:49 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Minghuan Lian <minghuan.Lian@nxp.com>,
-        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 13/18] PCI: dwc: Add start_link/stop_link inliners
-Message-ID: <20220613203949.GB28636-robh@kernel.org>
-References: <20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru>
- <20220610082535.12802-14-Sergey.Semin@baikalelectronics.ru>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HfmXHviBVE0o3HCHUdS6+8UmjzDzxiux613KeakQDqU=;
+        b=QP2FutBAdMuRsQEZcWeS/i6AC222XX4qBWFeGUN8LOJSFN3L2hSKav8SXXx29uuHAh
+         +rSUq12CjXLXPb9G3pRsBUdde2/eDyC7lZEDu5SVYbUQ2gUJmUnV3QngkQ5O7PZwFBuL
+         CmNBZ7cYzdlbUu3491NMNKs7teFeoA1MTXUU9qwa5eKHYhN3GBZrn/x4lJSbSP8McDJX
+         GkrvyYwRMY37jRjQ+W5vYre5mC9fuD4E6bPxOaHMw8q8Aixf3zpAqMr5sXkyUl0jNLfw
+         kl5k3wpBl/+d2AHkhT6O3zkCXeSTRuDQ6TAGiON8ZCtI/2TiD0lb1BF0ES88B4rEp+g9
+         zcvA==
+X-Gm-Message-State: AOAM533cfNy2pwiZbD5ixpcZxS6NaSahoUpbBaBmEOo3PDBRWmLm7Dh0
+        hdRYwgBwubKNYZdeFhM6O8Y=
+X-Google-Smtp-Source: AGRyM1vpVm7eBeDc2tw8ECHvWLsSplSmSPRlSc74+ct2mEQku8nUVQQI8dhEds1V2Wurb7kQ+uT0wQ==
+X-Received: by 2002:a05:6402:22ad:b0:433:d474:1fb with SMTP id cx13-20020a05640222ad00b00433d47401fbmr1779604edb.129.1655152856749;
+        Mon, 13 Jun 2022 13:40:56 -0700 (PDT)
+Received: from ?IPV6:2a02:a466:68ed:1:9c12:8f08:a584:7d53? (2a02-a466-68ed-1-9c12-8f08-a584-7d53.fixed6.kpn.net. [2a02:a466:68ed:1:9c12:8f08:a584:7d53])
+        by smtp.gmail.com with ESMTPSA id wl21-20020a170907311500b0070759e37183sm4217579ejb.59.2022.06.13.13.40.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 13:40:56 -0700 (PDT)
+Message-ID: <77a486ae-06bb-7f1b-17ab-8d60ccfbdee6@gmail.com>
+Date:   Mon, 13 Jun 2022 22:40:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610082535.12802-14-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1 1/1] phy: ti: tusb1210: Don't check for write errors
+ when powering on
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>
+References: <20220613160848.82746-1-andriy.shevchenko@linux.intel.com>
+From:   Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <20220613160848.82746-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:25:29AM +0300, Serge Semin wrote:
-> There are several places in the generic DW PCIe code where the
-> platform-specific PCIe link start/stop methods are called after making
-> sure the ops handler and the callbacks are specified. Instead of repeating
-> the same pattern over and over let's define the static-inline methods in
-> the DW PCIe header file and use them in the relevant parts of the driver.
-> 
-> Note returning a negative error from the EP link start procedure if the
-> start_link pointer isn't specified doesn't really make much sense since it
-> perfectly normal to have such platform. Moreover even pci_epc_start()
-> doesn't fail if no epc->ops->start callback is spotted. As a side-effect
-> of this modification we can set the generic DW PCIe and Layerscape EP
-> platform drivers free from the empty start_link callbacks and as such
-> entirely dummy dw_pcie_ops instances.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v4:
-> - This is a new patch created on the v4 lap of the series.
-> ---
->  drivers/pci/controller/dwc/pci-layerscape-ep.c    | 12 ------------
->  drivers/pci/controller/dwc/pcie-designware-ep.c   |  8 ++------
->  drivers/pci/controller/dwc/pcie-designware-host.c | 10 ++++------
->  drivers/pci/controller/dwc/pcie-designware-plat.c | 10 ----------
->  drivers/pci/controller/dwc/pcie-designware.h      | 14 ++++++++++++++
->  5 files changed, 20 insertions(+), 34 deletions(-)
+Hi
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Op 13-06-2022 om 18:08 schreef Andy Shevchenko:
+> On some platforms, like Intel Merrifield, the writing values during power on
+> may timeout:
+>
+>     tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41 to reg 0x80
+with the patch this error continues to appear in the logs
+>     phy phy-dwc3.0.auto.ulpi.0: phy poweron failed --> -110
+>     dwc3 dwc3.0.auto: error -ETIMEDOUT: failed to initialize core
+>     dwc3: probe of dwc3.0.auto failed with error -110
+these errors are gone
+> which effectively fails the probe of the USB controller.
+
+and probe of dwc3 succeeds
+
+Tested on Intel Edison (Merrifield)
+
+> Drop the check as it was before the culprit commit (see Fixes tag).
+>
+> Fixes: 09a3512681b3 ("phy: ti: tusb1210: Improve ulpi_read()/_write() error checking")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>   drivers/phy/ti/phy-tusb1210.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/phy/ti/phy-tusb1210.c b/drivers/phy/ti/phy-tusb1210.c
+> index c3ab4b69ea68..669c13d6e402 100644
+> --- a/drivers/phy/ti/phy-tusb1210.c
+> +++ b/drivers/phy/ti/phy-tusb1210.c
+> @@ -105,8 +105,9 @@ static int tusb1210_power_on(struct phy *phy)
+>   	msleep(TUSB1210_RESET_TIME_MS);
+>   
+>   	/* Restore the optional eye diagram optimization value */
+> -	return tusb1210_ulpi_write(tusb, TUSB1210_VENDOR_SPECIFIC2,
+> -				   tusb->vendor_specific2);
+> +	tusb1210_ulpi_write(tusb, TUSB1210_VENDOR_SPECIFIC2, tusb->vendor_specific2);
+> +
+> +	return 0;
+>   }
+>   
+>   static int tusb1210_power_off(struct phy *phy)

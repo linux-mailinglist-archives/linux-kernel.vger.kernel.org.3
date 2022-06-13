@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC41548DC3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:16:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2CB549686
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357863AbiFML6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
+        id S1383001AbiFMOPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356618AbiFMLur (ORCPT
+        with ESMTP id S1381973AbiFMOFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:50:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2942496B;
-        Mon, 13 Jun 2022 03:54:42 -0700 (PDT)
+        Mon, 13 Jun 2022 10:05:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8205E92D30;
+        Mon, 13 Jun 2022 04:40:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE30860F00;
-        Mon, 13 Jun 2022 10:54:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE508C34114;
-        Mon, 13 Jun 2022 10:54:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79F0060EAE;
+        Mon, 13 Jun 2022 11:40:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8765DC34114;
+        Mon, 13 Jun 2022 11:40:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117681;
-        bh=1m6/EIMpGD2Yh5Dld9xGWKJ9tHNx3A1+nVUUHQqiN/A=;
+        s=korg; t=1655120412;
+        bh=bC8T7uT7FYJDWO5DKqqBbB+YzNhKQdkD77ypdZPon1Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=paasS5reOilLHsxlPwrn4WQh6ZC8HGb9vJlsyCbfClQ/lb+DjsyviAsuHGy6Ek0rt
-         q0cTZesj7HGSKzmQ6MRm9tp1vcut1xU2gH6jDtjOrLZPbWfaizelEZAElXQBhaj+Ag
-         8IhFDCj9B08ULRUMm6kIojzSGXvDkZx6uHyjDe2Q=
+        b=2mQ8oP0qMNcFJwb3Chsxhjo71XoiBKCbrU7i3aJ9wGFR4ncAC3guABkxwMeWHNSKf
+         da8Z1jBthnls9HziASnvNY1A3mpCjkYgyYM8PleCeQd0tncu505q6K36mxy1sL7m+D
+         UcLnpEDqeZgSE2TiQMf2wayV3V+KmsjYpxKRi5Po=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 093/287] ASoC: mxs-saif: Fix refcount leak in mxs_saif_probe
-Date:   Mon, 13 Jun 2022 12:08:37 +0200
-Message-Id: <20220613094926.699394462@linuxfoundation.org>
+Subject: [PATCH 5.17 024/298] misc: fastrpc: fix an incorrect NULL check on list iterator
+Date:   Mon, 13 Jun 2022 12:08:38 +0200
+Message-Id: <20220613094925.662735700@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +54,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit 2be84f73785fa9ed6443e3c5b158730266f1c2ee ]
+[ Upstream commit 5ac11fe03a0a83042d1a040dbce4fa2fb5521e23 ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
+The bug is here:
+	if (!buf) {
 
-Fixes: 08641c7c74dd ("ASoC: mxs: add device tree support for mxs-saif")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220511133725.39039-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+The list iterator value 'buf' will *always* be set and non-NULL
+by list_for_each_entry(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty (in this case, the
+check 'if (!buf) {' will always be false and never exit expectly).
+
+To fix the bug, use a new variable 'iter' as the list iterator,
+while use the original variable 'buf' as a dedicated pointer to
+point to the found element.
+
+Fixes: 2419e55e532de ("misc: fastrpc: add mmap/unmap support")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Link: https://lore.kernel.org/r/20220327062202.5720-1-xiam0nd.tong@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mxs/mxs-saif.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/misc/fastrpc.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/mxs/mxs-saif.c b/sound/soc/mxs/mxs-saif.c
-index 93c019670199..6d0ab4e75518 100644
---- a/sound/soc/mxs/mxs-saif.c
-+++ b/sound/soc/mxs/mxs-saif.c
-@@ -780,6 +780,7 @@ static int mxs_saif_probe(struct platform_device *pdev)
- 		saif->master_id = saif->id;
- 	} else {
- 		ret = of_alias_get_id(master, "saif");
-+		of_node_put(master);
- 		if (ret < 0)
- 			return ret;
- 		else
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index aa1682b94a23..45aaf54a7560 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -1353,17 +1353,18 @@ static int fastrpc_req_munmap_impl(struct fastrpc_user *fl,
+ 				   struct fastrpc_req_munmap *req)
+ {
+ 	struct fastrpc_invoke_args args[1] = { [0] = { 0 } };
+-	struct fastrpc_buf *buf, *b;
++	struct fastrpc_buf *buf = NULL, *iter, *b;
+ 	struct fastrpc_munmap_req_msg req_msg;
+ 	struct device *dev = fl->sctx->dev;
+ 	int err;
+ 	u32 sc;
+ 
+ 	spin_lock(&fl->lock);
+-	list_for_each_entry_safe(buf, b, &fl->mmaps, node) {
+-		if ((buf->raddr == req->vaddrout) && (buf->size == req->size))
++	list_for_each_entry_safe(iter, b, &fl->mmaps, node) {
++		if ((iter->raddr == req->vaddrout) && (iter->size == req->size)) {
++			buf = iter;
+ 			break;
+-		buf = NULL;
++		}
+ 	}
+ 	spin_unlock(&fl->lock);
+ 
 -- 
 2.35.1
 

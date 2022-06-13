@@ -2,48 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D734C54981D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0495492CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376670AbiFMNWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
+        id S1381892AbiFMOEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377266AbiFMNUM (ORCPT
+        with ESMTP id S1381640AbiFMN5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:20:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF5E6A03F;
-        Mon, 13 Jun 2022 04:23:20 -0700 (PDT)
+        Mon, 13 Jun 2022 09:57:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240235F79;
+        Mon, 13 Jun 2022 04:37:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE6C3B80EB7;
-        Mon, 13 Jun 2022 11:23:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5769FC34114;
-        Mon, 13 Jun 2022 11:23:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B183612D2;
+        Mon, 13 Jun 2022 11:37:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 266B4C34114;
+        Mon, 13 Jun 2022 11:37:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119380;
-        bh=HAxRoji8uG/RdFQsI1RZvPTs7xTUfZBGIXUkTYvNiBU=;
+        s=korg; t=1655120240;
+        bh=NeRGJsTd+8ow5SSHdLq19FLakGfB6AOFr65nju1xt/M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=np+gDYpBf+o1pa4GmoNUq7YfG2fOCMWlBQLGch3BL4dQwAC2+ggfBY1dtg1sA5ltE
-         XAqie5yTdpRQl0QeihoMrpAPErIwtAx8CCHUKgvKaHOm3XP7J0MPpJO4LO2SC7mmTh
-         MPdXwVotwV/WdGUI3Spc7D4gfNaxxVy7JJpRFOsg=
+        b=Ya1u09gHt1qMtcbzb7dpV8zQEhf/DbyQKzAmMyx67pPBeFyGcPw1SPC/wju53S05I
+         787AqxHIU9fBHi3c7M7WaeyV3vTZeoyoxrTI32p/eDDCKgZR088iSMACqp/sF0zReW
+         MGSVS2a1D2QxBDL9l/FGHy62+1HbOLKUOfIzn3c8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Sit, Michael Wei Hong" <michael.wei.hong.sit@intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Tan Tee Min <tee.min.tan@linux.intel.com>,
-        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
-        Sit@vger.kernel.org
-Subject: [PATCH 5.15 224/247] net: phy: dp83867: retrigger SGMII AN when link change
+        Michael English <michael.english@seagate.com>,
+        Muhammad Ahmad <muhammad.ahmad@seagate.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Hannes Reinecke <hare@suse.de>,
+        Tyler Erickson <tyler.erickson@seagate.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.18 301/339] scsi: sd: Fix interpretation of VPD B9h length
 Date:   Mon, 13 Jun 2022 12:12:06 +0200
-Message-Id: <20220613094929.739601502@linuxfoundation.org>
+Message-Id: <20220613094935.891462941@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,89 +60,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tan Tee Min <tee.min.tan@linux.intel.com>
+From: Tyler Erickson <tyler.erickson@seagate.com>
 
-commit c76acfb7e19dcc3a0964e0563770b1d11b8d4540 upstream.
+commit f92de9d110429e39929a49240d823251c2fe903e upstream.
 
-There is a limitation in TI DP83867 PHY device where SGMII AN is only
-triggered once after the device is booted up. Even after the PHY TPI is
-down and up again, SGMII AN is not triggered and hence no new in-band
-message from PHY to MAC side SGMII.
+Fixing the interpretation of the length of the B9h VPD page (Concurrent
+Positioning Ranges). Adding 4 is necessary as the first 4 bytes of the page
+is the header with page number and length information.  Adding 3 was likely
+a misinterpretation of the SBC-5 specification which sets all offsets
+starting at zero.
 
-This could cause an issue during power up, when PHY is up prior to MAC.
-At this condition, once MAC side SGMII is up, MAC side SGMII wouldn`t
-receive new in-band message from TI PHY with correct link status, speed
-and duplex info.
+This fixes the error in dmesg:
 
-As suggested by TI, implemented a SW solution here to retrigger SGMII
-Auto-Neg whenever there is a link change.
+[ 9.014456] sd 1:0:0:0: [sda] Invalid Concurrent Positioning Ranges VPD page
 
-v2: Add Fixes tag in commit message.
-
-Fixes: 2a10154abcb7 ("net: phy: dp83867: Add TI dp83867 phy")
-Cc: <stable@vger.kernel.org> # 5.4.x
-Signed-off-by: Sit, Michael Wei Hong <michael.wei.hong.sit@intel.com>
-Reviewed-by: Voon Weifeng <weifeng.voon@intel.com>
-Signed-off-by: Tan Tee Min <tee.min.tan@linux.intel.com>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Link: https://lore.kernel.org/r/20220526090347.128742-1-tee.min.tan@linux.intel.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20220602225113.10218-4-tyler.erickson@seagate.com
+Fixes: e815d36548f0 ("scsi: sd: add concurrent positioning ranges support")
+Cc: stable@vger.kernel.org
+Tested-by: Michael English <michael.english@seagate.com>
+Reviewed-by: Muhammad Ahmad <muhammad.ahmad@seagate.com>
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Tyler Erickson <tyler.erickson@seagate.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/phy/dp83867.c |   29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ drivers/scsi/sd.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/net/phy/dp83867.c
-+++ b/drivers/net/phy/dp83867.c
-@@ -137,6 +137,7 @@
- #define DP83867_DOWNSHIFT_2_COUNT	2
- #define DP83867_DOWNSHIFT_4_COUNT	4
- #define DP83867_DOWNSHIFT_8_COUNT	8
-+#define DP83867_SGMII_AUTONEG_EN	BIT(7)
+--- a/drivers/scsi/sd.c
++++ b/drivers/scsi/sd.c
+@@ -3067,7 +3067,7 @@ static void sd_read_cpr(struct scsi_disk
+ 		goto out;
  
- /* CFG3 bits */
- #define DP83867_CFG3_INT_OE			BIT(7)
-@@ -836,6 +837,32 @@ static int dp83867_phy_reset(struct phy_
- 			 DP83867_PHYCR_FORCE_LINK_GOOD, 0);
- }
- 
-+static void dp83867_link_change_notify(struct phy_device *phydev)
-+{
-+	/* There is a limitation in DP83867 PHY device where SGMII AN is
-+	 * only triggered once after the device is booted up. Even after the
-+	 * PHY TPI is down and up again, SGMII AN is not triggered and
-+	 * hence no new in-band message from PHY to MAC side SGMII.
-+	 * This could cause an issue during power up, when PHY is up prior
-+	 * to MAC. At this condition, once MAC side SGMII is up, MAC side
-+	 * SGMII wouldn`t receive new in-band message from TI PHY with
-+	 * correct link status, speed and duplex info.
-+	 * Thus, implemented a SW solution here to retrigger SGMII Auto-Neg
-+	 * whenever there is a link change.
-+	 */
-+	if (phydev->interface == PHY_INTERFACE_MODE_SGMII) {
-+		int val = 0;
-+
-+		val = phy_clear_bits(phydev, DP83867_CFG2,
-+				     DP83867_SGMII_AUTONEG_EN);
-+		if (val < 0)
-+			return;
-+
-+		phy_set_bits(phydev, DP83867_CFG2,
-+			     DP83867_SGMII_AUTONEG_EN);
-+	}
-+}
-+
- static struct phy_driver dp83867_driver[] = {
- 	{
- 		.phy_id		= DP83867_PHY_ID,
-@@ -860,6 +887,8 @@ static struct phy_driver dp83867_driver[
- 
- 		.suspend	= genphy_suspend,
- 		.resume		= genphy_resume,
-+
-+		.link_change_notify = dp83867_link_change_notify,
- 	},
- };
- module_phy_driver(dp83867_driver);
+ 	/* We must have at least a 64B header and one 32B range descriptor */
+-	vpd_len = get_unaligned_be16(&buffer[2]) + 3;
++	vpd_len = get_unaligned_be16(&buffer[2]) + 4;
+ 	if (vpd_len > buf_len || vpd_len < 64 + 32 || (vpd_len & 31)) {
+ 		sd_printk(KERN_ERR, sdkp,
+ 			  "Invalid Concurrent Positioning Ranges VPD page\n");
 
 

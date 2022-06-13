@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E9DF5496A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C098B548E90
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356995AbiFMLzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:55:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S241402AbiFMKQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356400AbiFMLu0 (ORCPT
+        with ESMTP id S241895AbiFMKQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:50:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1B0140F9;
-        Mon, 13 Jun 2022 03:53:58 -0700 (PDT)
+        Mon, 13 Jun 2022 06:16:33 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9485DF81;
+        Mon, 13 Jun 2022 03:15:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1518960F9A;
-        Mon, 13 Jun 2022 10:53:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 264FFC34114;
-        Mon, 13 Jun 2022 10:53:56 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 13BD3CE116D;
+        Mon, 13 Jun 2022 10:15:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD773C34114;
+        Mon, 13 Jun 2022 10:15:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117637;
-        bh=6aWu4mTOjgDRKgDU5fF44X8Oar1SBo8cFQBv3hFjkB4=;
+        s=korg; t=1655115308;
+        bh=LZSVzGm+eApsXK45dI2BFu9jzJnYL96WdCNobNzk1qI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vg7rKNJDqtim3/tRscoUHpVg6R5/iN3V3TIZlWunf4F7/291wbGvQ7hz2NTdAS5jk
-         ugiga5SSQ49pTcpTm/oWgUX1cOW+vCVxzWqDYwKHgq3F9McOrswbzWbi05eT0NSMcy
-         umyE2aNPY2LffBcnT+/1ew8Y8uCvWDFSZBSvNtpw=
+        b=yandbVBhs3DMfyinrUDa5/s4uE6R8stXOSx9myXrWlTxtj4ZPcAarfBm6L4adRyWR
+         UdTpui0IDY8Jr8gAFj6TWnTqgvj5PPOnfI0ljB6xLUSTE7WdW+p7G2ag8gvnE84a+j
+         pAbJ0Lh2DKWHLEHMUD3e+T5qoElBtOgNjVNLEeeA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-        Rob Herring <robh@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 077/287] of: overlay: do not break notify on NOTIFY_{OK|STOP}
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Zixuan Fu <r33s3n6@gmail.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 027/167] fs: jfs: fix possible NULL pointer dereference in dbFree()
 Date:   Mon, 13 Jun 2022 12:08:21 +0200
-Message-Id: <20220613094926.208912676@linuxfoundation.org>
+Message-Id: <20220613094847.160310293@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nuno Sá <nuno.sa@analog.com>
+From: Zixuan Fu <r33s3n6@gmail.com>
 
-[ Upstream commit 5f756a2eaa4436d7d3dc1e040147f5e992ae34b5 ]
+[ Upstream commit 0d4837fdb796f99369cf7691d33de1b856bcaf1f ]
 
-We should not break overlay notifications on NOTIFY_{OK|STOP}
-otherwise we might break on the first fragment. We should only stop
-notifications if a *real* errno is returned by one of the listeners.
+In our fault-injection testing, the variable "nblocks" in dbFree() can be
+zero when kmalloc_array() fails in dtSearch(). In this case, the variable
+ "mp" in dbFree() would be NULL and then it is dereferenced in
+"write_metapage(mp)".
 
-Fixes: a1d19bd4cf1fe ("of: overlay: pr_err from return NOTIFY_OK to overlay apply/remove")
-Signed-off-by: Nuno Sá <nuno.sa@analog.com>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20220420130205.89435-1-nuno.sa@analog.com
+The failure log is listed as follows:
+
+[   13.824137] BUG: kernel NULL pointer dereference, address: 0000000000000020
+...
+[   13.827416] RIP: 0010:dbFree+0x5f7/0x910 [jfs]
+[   13.834341] Call Trace:
+[   13.834540]  <TASK>
+[   13.834713]  txFreeMap+0x7b4/0xb10 [jfs]
+[   13.835038]  txUpdateMap+0x311/0x650 [jfs]
+[   13.835375]  jfs_lazycommit+0x5f2/0xc70 [jfs]
+[   13.835726]  ? sched_dynamic_update+0x1b0/0x1b0
+[   13.836092]  kthread+0x3c2/0x4a0
+[   13.836355]  ? txLockFree+0x160/0x160 [jfs]
+[   13.836763]  ? kthread_unuse_mm+0x160/0x160
+[   13.837106]  ret_from_fork+0x1f/0x30
+[   13.837402]  </TASK>
+...
+
+This patch adds a NULL check of "mp" before "write_metapage(mp)" is called.
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/of/overlay.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ fs/jfs/jfs_dmap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
-index a77bfeac867d..fef5b6c2fae2 100644
---- a/drivers/of/overlay.c
-+++ b/drivers/of/overlay.c
-@@ -170,9 +170,7 @@ static int overlay_notify(struct overlay_changeset *ovcs,
+diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
+index 6dac48e29d28..a07fbb60ac3c 100644
+--- a/fs/jfs/jfs_dmap.c
++++ b/fs/jfs/jfs_dmap.c
+@@ -398,7 +398,8 @@ int dbFree(struct inode *ip, s64 blkno, s64 nblocks)
+ 	}
  
- 		ret = blocking_notifier_call_chain(&overlay_notify_chain,
- 						   action, &nd);
--		if (ret == NOTIFY_OK || ret == NOTIFY_STOP)
--			return 0;
--		if (ret) {
-+		if (notifier_to_errno(ret)) {
- 			ret = notifier_to_errno(ret);
- 			pr_err("overlay changeset %s notifier error %d, target: %pOF\n",
- 			       of_overlay_action_name[action], ret, nd.target);
+ 	/* write the last buffer. */
+-	write_metapage(mp);
++	if (mp)
++		write_metapage(mp);
+ 
+ 	IREAD_UNLOCK(ipbmap);
+ 
 -- 
 2.35.1
 

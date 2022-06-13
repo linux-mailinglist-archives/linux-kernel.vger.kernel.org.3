@@ -2,133 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3BC054813C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834EE548143
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238870AbiFMIC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
+        id S231379AbiFMICw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239307AbiFMICH (ORCPT
+        with ESMTP id S239014AbiFMIC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:02:07 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC7615A24;
-        Mon, 13 Jun 2022 01:02:06 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id k12-20020a17090a404c00b001eaabc1fe5dso2222014pjg.1;
-        Mon, 13 Jun 2022 01:02:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=p1C8yN+vY8r/BHzAHLXxk073G3pWCMQ/vUB+HuPD1g4=;
-        b=aSepHBzqKyR8Qo5Ni0Ko6/WPnq+LpRSeEYfmQngvGmWanOcbzx2aiaaZQa8eQadyJ9
-         dDlrjox3fpUosoUz8TVBuRrVDb+97Wl2wvvmZQ5PjWF+MckNqtoF0Yqjfp1JiEGapoH9
-         wz1pf8EuHtCVmFBbIXiY9LmPpzE9OQpoIIgx91IYpnQxpyTRTtfb+1GAi3DxhIKrbkKN
-         N1NK74nkvvYnOtImC2zpVWDa2FwLrek2i8y6h66bEXMWyg0IOiDQAdHJY5QSIbr2K94S
-         gdujIYqPT1xp+21GLpVsPtRLshj81Who+zb4KBxHDhX6J7NLhycAWX+JQaOSSNbDRwf4
-         bSxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=p1C8yN+vY8r/BHzAHLXxk073G3pWCMQ/vUB+HuPD1g4=;
-        b=alPhgJ9J3a1QqtxWyWasHuSvBayF3JL4dTB7Scq+BEAeY2qLkwmX4vqFYINNYOY9X3
-         hBMX53dR5hrmVnDSj36cfbTWt0s0Q+kE8SwRp7Uyojh+yccQpYAxkb1V7L3AX8dONPPd
-         les8+fBLI+ybcrePMGmIr0dMVVpooSKauyfy6BIqgtznb7CdvvG15lv60eZkx83i0XHq
-         WmxknNbOnFFeY1F8K9XJgJKUy9KbUTiL+YMz98j3fqBv0x/2V3IFHVjhf/xI5Pqu2ohb
-         l8qIJxw4Y4Fu37kq+mR5OGCUps5G6SE1Gbp6Xb649wj6AS8FRnKkpsaZrDG3z3zkNmzF
-         +/mg==
-X-Gm-Message-State: AOAM53276Im6mQfPx7T8h2Crcu4oOA+/LL3KyzLux0wgnd2vOpcriaNf
-        xqnWie7wFRANtnt/081F9Mk=
-X-Google-Smtp-Source: ABdhPJyvL+v4MFBf2+W3Xz3H2xuY0V3wLF4p+6lH0Y3cve/USE1Poi/owF+J0aydCJ7qDD3UPUlfcA==
-X-Received: by 2002:a17:90b:350f:b0:1e6:94e1:bd17 with SMTP id ls15-20020a17090b350f00b001e694e1bd17mr14587004pjb.162.1655107326065;
-        Mon, 13 Jun 2022 01:02:06 -0700 (PDT)
-Received: from liuchao-VM ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id ct21-20020a056a000f9500b0051c0784cb45sm4728274pfb.99.2022.06.13.01.02.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 01:02:05 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 16:02:00 +0800
-From:   Chao Liu <chaoliu719@gmail.com>
-To:     Matthew Wilcox <willy@infradead.org>, Chao Yu <chao@kernel.org>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        linux-f2fs-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
-        Wayne Zhang <zhangwen@coolpad.com>,
-        Chao Liu <liuchao@coolpad.com>
-Subject: Re: [PATCH v2] docs: filesystems: f2fs: fix description about
- compress ioctl
-Message-ID: <Yqbu+BArbUNGvft9@liuchao-VM>
-References: <20220613020800.3379482-1-chaoliu719@gmail.com>
- <Yqaw3VTD46PAMN8O@casper.infradead.org>
+        Mon, 13 Jun 2022 04:02:26 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2085.outbound.protection.outlook.com [40.107.94.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AA2BBC;
+        Mon, 13 Jun 2022 01:02:26 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FMH0dW6p847t+5v6O0R9NWcEGRbD8GG7Dc/S0dD/kzFxWHRlx/1njMQDsi8auWaowONiHlucxoXStAGcdDG33vUacxAPQ9b178pZjAKwvDCkBq3zFqvpvDOOS2N9L87KxKOfo52YEqOb6xxCQG7y2VcDReVd8V54utB/A/gjCbKqtaEERBGxZ46K5YRj/oZkrfnMIDhPvln0i3iqoVZBiqm8pb8wcOBj6pTP2eWAaPBdtKqGV120Yvp/YjyInzs8X/fK2XUHK3QpkWapsIt0zF/CzbBS3ml2b1Ijv8lZDmkuqZsd/R1NAVgx1Ql/7U8IfFUzitFjReQG1Z32bIHLog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tErt4+11mi2B8bzKvlv5RAq1+z9jC7EyTqyqLEhCxZs=;
+ b=nXtHR46HLwZ72sLDktK31H+pGIUt5xgJWUpMrGQevDe83JjYTnZ1hnHqf2RVr+LghCR4qxYEDqbvJ3AcumIdP87Y6BLMr3fPjQka8O1vbAZb2jYO08SY3/tme/7ErNPM/ZTXwlQZIGqfENQF6yImsVEC63l05ZGdSbTxMQrlokr1elny6SqZ2zcF2TtWZl8VPuQkDGrnWOWdNngIDnS8eu7zh2jVSr5HoASqjEIIO4aG8PqHgiCswvjNvrW1SnGiWkRCDqfLXqEqsFb3djEeSNZ9cNRYgCFwi+tk5wlI2EiGwxgpLGAAel1R0x2V9lexhsz3v6eJD6Vp4yS0vRVWpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tErt4+11mi2B8bzKvlv5RAq1+z9jC7EyTqyqLEhCxZs=;
+ b=OtRGePgyBe/Gy1v52CxoDt174ZiISZlwbW83NrOqTKchpQdkH47jhgslAfRioFOMo2d2rX9MPOGIa/xKTbBYjuEnRgIEu54b5P6q7tUw0lRINaOX9Fnt8hV5+qTmF5jMt4tNaohunxg+HAtuvPZ+Wr9W0XyHTCpgOnbYL/3LOUYaMs/nktgpbqaCB9qPcSwodxXd/ShfUR9e0RvaqUlO3BUxZa8LO0Ldu2XdOSVmALzKYX2GPgP/RukdFLvAqgVHZIOuReAxVGQjvvzySluqpzvWkqjTkiSy6OAXyKnYN627FhggDfQ3RkVCGvnN+/Uoid8JvQF+WloBqxl8Z7+hQw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com (2603:10b6:408:69::18)
+ by DM6PR12MB3051.namprd12.prod.outlook.com (2603:10b6:5:119::29) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.14; Mon, 13 Jun
+ 2022 08:02:24 +0000
+Received: from BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::d0a7:164b:8ea0:b670]) by BN8PR12MB2900.namprd12.prod.outlook.com
+ ([fe80::d0a7:164b:8ea0:b670%7]) with mapi id 15.20.5332.020; Mon, 13 Jun 2022
+ 08:02:23 +0000
+Message-ID: <ded0e4f1-ed94-7518-f190-ed7aff1bc832@nvidia.com>
+Date:   Mon, 13 Jun 2022 13:32:11 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v4 06/18] PCI: dwc: Enable CDM-check independently from
+ the num_lanes value
+Content-Language: en-US
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Thierry Reding <treding@nvidia.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610082535.12802-7-Sergey.Semin@baikalelectronics.ru>
+From:   Vidya Sagar <vidyas@nvidia.com>
+In-Reply-To: <20220610082535.12802-7-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MAXPR0101CA0063.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a00:e::25) To BN8PR12MB2900.namprd12.prod.outlook.com
+ (2603:10b6:408:69::18)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqaw3VTD46PAMN8O@casper.infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9540bedd-87bb-4dc5-7d7a-08da4d130c4c
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3051:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR12MB3051F3DE9222E699AFCC6670B8AB9@DM6PR12MB3051.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: N/UBOvCUJvjWsAVRkdpO+jpl7nf0xa+Dx5vNKg3mU4wK96yxmuFv9suufwVHfCkAj0fQmO1ybHCjbaDRs6mSmU/B4ok3QOivxoGm5IWtKnegc5WH/nzjY06GTGrP14Si/VwMcIFYiewHBATGubHvZQqa6/VlKOP7DRcayuY/8ZyRyye1pugu1W6XYTma/yKhkVPqepSEBjECq1lEdkzVZMslTWSQmhXmq4Hm1gbKDJgDPDYDELrkGMgc8X9is5ixFXyAfSn56OmTqL/yRJPpcSEj7No0obonpt7W1qLjF62pQt6Uloqz9yo/p62pMDpgU9IyxAkmNoDKBQKIcjLCLuuPVhV/iw+ZEj85MjavxcNE8TQSOmUEbNiIrfU3Iejnknb2kW4cCCosF9qI0G7bljDrsl8j+/BB1BPcAWE3BpMe4VWG8HAtxGaH253ZF2uxu5goDM+KY1We3Qy+nS9TGZFqmkOUgaKkOGFvAJ1InekKMIQYXO4imeyI0sZqvxEYp4YFlKmfv20xDzqUlXl9eWmgs+oKwvQjqSU/Z3dd3ctBI1myWhg/xZWKKNUNpcpirpfT4ZYlxm+5gmKfaa8IQWrRf2+w1XW595cTdKxThDVGWBcm5dSINoof2ng74PwTnQihOH8CMUxFDtfTi6yHZ7Nd0WCy46M4XSSEMFezze5sx7MGk/KTb8NcPscHtSon7KYkRdgdIqvthZ77H5w+EVtKQxZs6Gj/+shCLk+6h00=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB2900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(31686004)(2616005)(54906003)(2906002)(6636002)(83380400001)(26005)(110136005)(316002)(36756003)(186003)(6512007)(6506007)(4326008)(8676002)(53546011)(66556008)(66946007)(31696002)(66476007)(86362001)(6666004)(508600001)(8936002)(38100700002)(7416002)(5660300002)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WklJaTR2ZmlITTJGWXZrTTJianVKQnNLOUkvWjdlMVVPZGpnZjFMZDlqajZ3?=
+ =?utf-8?B?Z05URytNTkt4RlAwd0VRdnZBcm93UHMzMFg2UHgvZ2FPMWhsZ3RzbWR4cElU?=
+ =?utf-8?B?K3lwM3RsVDNCNE1EOC9vN29kVWdxdG9LU2tGTmNKSCtvbUVFeXN5UWhnZW9w?=
+ =?utf-8?B?NTUzVTl1dy9hc2IzRFBLS0FkVWdlTmRVaGhCTjNRTk9VNFhzaWg3R29RVnhX?=
+ =?utf-8?B?MnVLY3lUWjFuQ1JEdnB6TjBvMElPVmk0MW5oUDJ5dWZ1ZzNqZkxZR2VJVC9G?=
+ =?utf-8?B?NjFzRGRNZHBhTVFMWUs5N1NDS2FDa3hESDZDcGxlK2VtOTNpSFJsVEhPSlpI?=
+ =?utf-8?B?UkJlWTNsU1dUSC9ZQ3hXYWNXMFg5TlRqMmp1cHErTjJFNU5yR042TFl0MGJF?=
+ =?utf-8?B?NDBXUk8zYmplb2d5emJKdFhIQjkzdWVOSktkbUowRlFGN29nVzUyRnFrck45?=
+ =?utf-8?B?ZmRKdnlqSWp6QUkvNWhVcytKU3pCR3dUcXJvZWRlQ0Y0czVORi9ZeE9rSDFw?=
+ =?utf-8?B?RmNKYURaR3R5YUtydkR4Mnk3TVV0RUM0NXQ0RmNERW9kY1ZkOWh0blN6MnZH?=
+ =?utf-8?B?M1RLQ0l5NjN5eXc4T2VTNEREaXJnRWw0VFJWWW8yNjBrd2RaUlNNYzAzRDV5?=
+ =?utf-8?B?MGxoRTdmOElTbTFtdFd3eVZjY2lqSjdXUzJrai9sczMrVXdYSktDS2tDTDRZ?=
+ =?utf-8?B?bjJIWlUyc3ZDTnJTd2Q2cjd0Y2Q2RTJpZ1hXN0kxd1hWMWJ5cHV5bFpvWk45?=
+ =?utf-8?B?M3FNR0h3MXZodHQxbm1sSU5Scnd1MkhVWTlVRTdkZzFlaFgwNGZsVVpWbTZP?=
+ =?utf-8?B?UFdpeE02UXFDUjRXS3hOWG9YWk9vQ2QyeVhnZ1MxM3VvVW9yd3U4WHJ1OTZh?=
+ =?utf-8?B?Njl5ZG8zNzd0Y2Nsd0lwMU9UTER3QVEyQld6dVd6VkJpMm1pU3dYYzJ1RjZM?=
+ =?utf-8?B?bFY1YmVoVVhpMUNPQmNrQnNuS1RqUmxiMEtJSkg1NHBwL3lBY2x6ck50K0hV?=
+ =?utf-8?B?ekx4ZDc0K3VPYW9XSVBnNlY4ZERZdjhheVNhQlhUYndWbUZWcTVOelRUaElY?=
+ =?utf-8?B?cTg3YWNHSmNmUDJrblI2L1VHaDBrVzBySWJoVXkybW50WkdWeUREY1EwZ0Mz?=
+ =?utf-8?B?eGt5Zm5IQVVwcnJTM0RQUUcyYk9ERE5pNW1lMkl3VU0zelFuODA0QndBcHN3?=
+ =?utf-8?B?T21pakl3L3NueEgyMWpIcW9keFdOQ2tjUE1lVFR1NjlSWWtpWkt2SjE0SlJo?=
+ =?utf-8?B?K3FnTE5UTG1Vd2RwRTRaNnZuZ242bjY0UzYyYmNVV2E0MnovYWpvb1ZtUmQw?=
+ =?utf-8?B?UkR0a0svdDIzci80cGJ5M1NBNHhIeHAzZWMrWVk1U1F1Q3RnZkRWZVJSbDkz?=
+ =?utf-8?B?ZVcrbERYSEE5ODdmZTFBREhQckppc3ZRTnpvSU9IUUs0cWpXak1JbjhBY0x2?=
+ =?utf-8?B?WTdDQXU0cWZRNE1lVGZXZXRTVGV6NXQ1UXQyNGhwL1I5R2RKNmF1T2dVMis2?=
+ =?utf-8?B?WWs0Z0Jzc2NDMmdsMER4ek4yRFA2RHdsRXphQ055a2tUd0dMZG1meTZzYnJ4?=
+ =?utf-8?B?eE5NTG90WElnSGwrZjVxMjVVeDZpa1FBNFBIQlJYbG5ldnk3SjdoaDdycHY1?=
+ =?utf-8?B?SnQwWmo3a25KMDJEMDlKOEo0QloyQ1NCb2t1VDRXaTAxSEhsNkh6aXByMG9j?=
+ =?utf-8?B?SGVDZ1lmdWdWL09jaG1TczlJVlFQKzQ3a2xRYWVNSnNHbm9VZHlocXVDZEs5?=
+ =?utf-8?B?bGZYQjNoYjd1REJvS3Zid2YzMU8rUkNmTDIvSVEvekc1V0kvNWZKaG5ySFpR?=
+ =?utf-8?B?bUM0d1RwK3J4cytyakcydWk4TlJ2b1UyUG5ReFZERUZQZmhBRDQ2MHkzUE9K?=
+ =?utf-8?B?MzYxd0ZEeDJyalV3d3dML3Z1WWpUSE15NllRWkpQczlIZmlPQkJ6bVk3bklo?=
+ =?utf-8?B?QUxDTC9QeFNINTdMa1RHQm03ek1FakJnb1ROUWNPTGdvaTJBeWlPVy9YeEtO?=
+ =?utf-8?B?NXM0YnJ1djZNNVZHdmtmK3l1TEdud0ovQXFNTEQ0eGxJWDhEZGxrUHIraUdU?=
+ =?utf-8?B?MFQ0UnlTNlZWVGxXVWszdFlhQ3NodjA5S0ZhaFVYcjRrbWpzb05GeFl5TUpn?=
+ =?utf-8?B?c1d0OGt4VEN6UmZkbHY3VmJMOWkzTkVNbFMxK2VqT1h6NEFUbjMzQ2ljcjJH?=
+ =?utf-8?B?ZjNLMThmVjVsNmNhU2hEcjUrb3RFR1BWb1h1Q3VEQzJscC8yNjUzWEp6dDBh?=
+ =?utf-8?B?Z3QrbE9VMmtGVmw1K1RMSUhkcEhsR2NIRFVLRGVGK0Q4a3hzaEdLWFh4UUFD?=
+ =?utf-8?B?bkp5end4TzY0T2Jzd2VLMEM1SjBocHU0UFVCSHMxSnBNSTdsMDFXdz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9540bedd-87bb-4dc5-7d7a-08da4d130c4c
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB2900.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2022 08:02:23.5840
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GoFausHBtz0ZHtZPLgZG4cNnz0jUtTqzip9MyjdUeiYjJj6mCqsEq0oenoDvsevb+x+JIa3bBF51cnloY+OTGA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3051
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 04:37:01AM +0100, Matthew Wilcox wrote:
-> On Mon, Jun 13, 2022 at 10:08:00AM +0800, Chao Liu wrote:
-> > v2:
-> > - s/file size/filesize/
->
-> Why would you change it to be wrong?
->
+Thanks for pushing this change.
 
-This is a suggestion from Chao Yu. Maybe he has some other considerations.
+Reviewed-by: Vidya Sagar <vidyas@nvidia.com>
 
-Hi Chao,
-
-Can you help with this question?
-
-Thanks.
-
-> >  Documentation/filesystems/f2fs.rst | 13 +++++++------
-> >  1 file changed, 7 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
-> > index ad8dc8c040a2..531b0f8a3946 100644
-> > --- a/Documentation/filesystems/f2fs.rst
-> > +++ b/Documentation/filesystems/f2fs.rst
-> > @@ -818,10 +818,11 @@ Compression implementation
-> >    Instead, the main goal is to reduce data writes to flash disk as much as
-> >    possible, resulting in extending disk life time as well as relaxing IO
-> >    congestion. Alternatively, we've added ioctl(F2FS_IOC_RELEASE_COMPRESS_BLOCKS)
-> > -  interface to reclaim compressed space and show it to user after putting the
-> > -  immutable bit. Immutable bit, after release, it doesn't allow writing/mmaping
-> > -  on the file, until reserving compressed space via
-> > -  ioctl(F2FS_IOC_RESERVE_COMPRESS_BLOCKS) or truncating filesize to zero.
-> > +  interface to reclaim compressed space and show it to user after setting a
-> > +  special flag to the inode. Once the compressed space is released, the flag
-> > +  will block writing data to the file until either the compressed space is
-> > +  reserved via ioctl(F2FS_IOC_RESERVE_COMPRESS_BLOCKS) or the filesize is
-> > +  truncated to zero.
-> >
-> >  Compress metadata layout::
-> >
-> > @@ -830,12 +831,12 @@ Compress metadata layout::
-> >  		| cluster 1 | cluster 2 | ......... | cluster N |
-> >  		+-----------------------------------------------+
-> >  		.           .                       .           .
-> > -	.                       .                .                      .
-> > +	  .                      .                .                      .
-> >      .         Compressed Cluster       .        .        Normal Cluster            .
-> >      +----------+---------+---------+---------+  +---------+---------+---------+---------+
-> >      |compr flag| block 1 | block 2 | block 3 |  | block 1 | block 2 | block 3 | block 4 |
-> >      +----------+---------+---------+---------+  +---------+---------+---------+---------+
-> > -	    .                             .
-> > +	       .                             .
-> >  	    .                                           .
-> >  	.                                                           .
-> >  	+-------------+-------------+----------+----------------------------+
-> > --
-> > 2.36.1
-> >
+On 6/10/2022 1:55 PM, Serge Semin wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> Currently the embedded CDM IOs consistency check-engine is enabled only if
+> the num_lanes field of dw_pcie structure is set to non-zero value. It's
+> definitely wrong since the CDM checking has nothing to do with the PCIe
+> lanes settings, while that feature will be left disabled for the platforms
+> which expect it being enabled and prefer keeping the default lanes setup.
+> Let's fix that by enabling the CDM-check feature before the num_lanes
+> parameter is handled.
+> 
+> Fixes: 07f123def73e ("PCI: dwc: Add support to enable CDM register check")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Changelog v4:
+> - This is a new patch created on v4 lap of the series.
+> ---
+>   drivers/pci/controller/dwc/pcie-designware.c | 14 +++++++-------
+>   1 file changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index 347251bf87d0..5848cc520b52 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -740,6 +740,13 @@ void dw_pcie_setup(struct dw_pcie *pci)
+>          val |= PORT_LINK_DLL_LINK_EN;
+>          dw_pcie_writel_dbi(pci, PCIE_PORT_LINK_CONTROL, val);
+> 
+> +       if (of_property_read_bool(np, "snps,enable-cdm-check")) {
+> +               val = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS);
+> +               val |= PCIE_PL_CHK_REG_CHK_REG_CONTINUOUS |
+> +                      PCIE_PL_CHK_REG_CHK_REG_START;
+> +               dw_pcie_writel_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS, val);
+> +       }
+> +
+>          of_property_read_u32(np, "num-lanes", &pci->num_lanes);
+>          if (!pci->num_lanes) {
+>                  dev_dbg(pci->dev, "Using h/w default number of lanes\n");
+> @@ -786,11 +793,4 @@ void dw_pcie_setup(struct dw_pcie *pci)
+>                  break;
+>          }
+>          dw_pcie_writel_dbi(pci, PCIE_LINK_WIDTH_SPEED_CONTROL, val);
+> -
+> -       if (of_property_read_bool(np, "snps,enable-cdm-check")) {
+> -               val = dw_pcie_readl_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS);
+> -               val |= PCIE_PL_CHK_REG_CHK_REG_CONTINUOUS |
+> -                      PCIE_PL_CHK_REG_CHK_REG_START;
+> -               dw_pcie_writel_dbi(pci, PCIE_PL_CHK_REG_CONTROL_STATUS, val);
+> -       }
+>   }
+> --
+> 2.35.1
+> 

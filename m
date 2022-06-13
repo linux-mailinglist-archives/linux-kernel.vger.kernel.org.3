@@ -2,105 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66760549F9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C65CE549FA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:41:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233552AbiFMUkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
+        id S232217AbiFMUl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345008AbiFMUk3 (ORCPT
+        with ESMTP id S242261AbiFMUk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:40:29 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2572B40A05
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:35:55 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id h15-20020a9d600f000000b0060c02d737ecso5063278otj.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:35:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HHeM+flxVNdPvHzfTQjqznJk16sWGVQxv7Ca8t6SBsE=;
-        b=PwUb1TcOxrtFXEqynPal0Dxxtb/hVSDxNVg4mx9FbFVF5rReXGUJwcc/Pax9tA95H6
-         TADpK0GOwfs+Lc7b2WXDmiyGRetPDAaUGwWX7n/bnq0ZHEaP1LZx0ZMtNo5l3N4u23Tb
-         cn4zXIBv5CtVdDEnfadxC482jDX9tVqbO1CxlvXJLtFSTcGe0Mi/b5pESx5ZC5pJ28Hy
-         yxH6D+eMfVRUepQPYm5JXHMvolauypojTH5i1HuLoXq1zt2RTr0Y4zhwkzepx2xgu4cc
-         qdnxFIEIEhwyPY05rmblVrJOLj3NBWuMNeo1a5qXg8/7pJNfBLTAo6e55wnFnQBRMuQ/
-         zDqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HHeM+flxVNdPvHzfTQjqznJk16sWGVQxv7Ca8t6SBsE=;
-        b=GUsDBdGQdwFcLCoi5+pan2uxy1X4qfW1mi2q7jK0otLucCsOqAKNlWP0OjPksE5IAb
-         0xXzdmpbLWwO3X8EEjNzGsc6Zcy+8lfYN46SQepRS8pHkManlFkv+5gMEXuLKQ4W7+P/
-         aoXfUti0MhTwNOtF7zjv396qxQbMyFJ876IrlBv939MqzGwP0j4zTMkYA80K7UphY3C6
-         cm+8NXrjJhbw14Vrjj5nxYaVaHy9/1Cx4KC8m00Wa02k97Y+6/FdukPsr9dI2m4rgzUz
-         27lDBMqa0pckhM/6EBtk4QImr4QNLsFwUMgmp1MITs6Bw3/8amG0a2iouRgr8tIlp4Yh
-         GW1w==
-X-Gm-Message-State: AOAM530jDVHUEzTxSbo/n7U+h+Ra+TWkkZvAiNyVK/0ZN8k4wnpHXkzh
-        oAwG74HE9b1t/iYVMIqhEcDpvS21t+0DhA6VL++6yNBZTnE=
-X-Google-Smtp-Source: ABdhPJyjsaXGe67Xx3Ewbm6uDJybR+EoKHifbqcPUm5dy4plOXPn29b4R60AZwOELru2ZiGWTU1QMUT9lR/gncH8L8k=
-X-Received: by 2002:a9d:665a:0:b0:60c:81b0:3a72 with SMTP id
- q26-20020a9d665a000000b0060c81b03a72mr186371otm.14.1655148954224; Mon, 13 Jun
- 2022 12:35:54 -0700 (PDT)
+        Mon, 13 Jun 2022 16:40:59 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FBB45B887
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:38:11 -0700 (PDT)
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id BDFC520C154C;
+        Mon, 13 Jun 2022 12:38:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BDFC520C154C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1655149091;
+        bh=Nlhe89f21s2Nn6sZlzNNWxjIOhCd8EeCNee7Yy+xEvU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ikjQZmtHOZ+WLe7eXSv06sgC+WIMy6qYOHsYl7R3s+ezYufbTNoh1MQu0ZSQzrnng
+         xYlX8CztPE8odeMby13fHDEYRtASMSs4m0XSf4+JW3cYWTVZbxjIdlxMwQbapVww7H
+         VaYAyOL+V7jxcNjtFFJJebiJadQAYuPPUzUWKM6k=
+Date:   Mon, 13 Jun 2022 14:38:07 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Jianyong Wu <jianyong.wu@arm.com>,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] 9p: Fix refcounting during full path walks for
+ fid lookups
+Message-ID: <20220613193807.GF7401@sequoia>
+References: <20220527000003.355812-1-tyhicks@linux.microsoft.com>
+ <20220527000003.355812-2-tyhicks@linux.microsoft.com>
+ <YqUifCFPTG8Qmn7a@codewreck.org>
 MIME-Version: 1.0
-References: <20220613161942.1586791-1-seanjc@google.com> <20220613161942.1586791-2-seanjc@google.com>
- <CALMp9eRBNqPrBMi_XDMMK8HpdoYRUfoe_jSVZAW80wSxWbDJVA@mail.gmail.com> <YqeQx2fbdVVnRcxS@google.com>
-In-Reply-To: <YqeQx2fbdVVnRcxS@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Mon, 13 Jun 2022 12:35:43 -0700
-Message-ID: <CALMp9eRj9AWATJ=76Xio1cb7E_j=e2haH++nbccdv=MJ26N=GQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] KVM: selftests: Add a missing apostrophe in comment
- to show ownership
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Jones <drjones@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqUifCFPTG8Qmn7a@codewreck.org>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 12:32 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Mon, Jun 13, 2022, Jim Mattson wrote:
-> > On Mon, Jun 13, 2022 at 12:01 PM Sean Christopherson <seanjc@google.com> wrote:
-> > >
-> > > Add an apostrophe in a comment about it being the caller's, not callers,
-> > > responsibility to free an object.
-> > >
-> > > Reported-by: Andrew Jones <drjones@redhat.com>
-> > > Fixes: 768e9a61856b ("KVM: selftests: Purge vm+vcpu_id == vcpu silliness")
-> > > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > > ---
-> > >  tools/testing/selftests/kvm/lib/kvm_util.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > >
-> > > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > > index 39f2f5f1338f..0c550fb0dab2 100644
-> > > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> > > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > > @@ -1434,7 +1434,7 @@ void vcpu_run_complete_io(struct kvm_vcpu *vcpu)
-> > >  /*
-> > >   * Get the list of guest registers which are supported for
-> > >   * KVM_GET_ONE_REG/KVM_SET_ONE_REG ioctls.  Returns a kvm_reg_list pointer,
-> > > - * it is the callers responsibility to free the list.
-> > > + * it is the caller's responsibility to free the list.
-> > >   */
-> > Shouldn't that be callers'? Or are you assuming there is only ever
-> > going to be one caller?
->
-> No?  Regardless of the number of users of the function, for any given invocation
-> and allocation, there is exactly one caller.
+On 2022-06-12 08:17:16, Dominique Martinet wrote:
+> Tyler Hicks wrote on Thu, May 26, 2022 at 06:59:59PM -0500:
+> > Decrement the refcount of the parent dentry's fid after walking
+> > each path component during a full path walk for a lookup. Failure to do
+> > so can lead to fids that are not clunked until the filesystem is
+> > unmounted, as indicated by this warning:
+> > 
+> >  9pnet: found fid 3 not clunked
+> > 
+> > The improper refcounting after walking resulted in open(2) returning
+> > -EIO on any directories underneath the mount point when using the virtio
+> > transport. When using the fd transport, there's no apparent issue until
+> > the filesytem is unmounted and the warning above is emitted to the logs.
+> > 
+> > In some cases, the user may not yet be attached to the filesystem and a
+> > new root fid, associated with the user, is created and attached to the
+> > root dentry before the full path walk is performed. Increment the new
+> > root fid's refcount to two in that situation so that it can be safely
+> > decremented to one after it is used for the walk operation. The new fid
+> > will still be attached to the root dentry when
+> > v9fs_fid_lookup_with_uid() returns so a final refcount of one is
+> > correct/expected.
+> > 
+> > Fixes: 6636b6dcc3db ("9p: add refcount to p9_fid struct")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+> > ---
+> >  fs/9p/fid.c | 17 +++++------------
+> >  1 file changed, 5 insertions(+), 12 deletions(-)
+> > 
+> > diff --git a/fs/9p/fid.c b/fs/9p/fid.c
+> > index 79df61fe0e59..5a469b79c1ee 100644
+> > --- a/fs/9p/fid.c
+> > +++ b/fs/9p/fid.c
+> > @@ -152,7 +152,7 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+> >  	const unsigned char **wnames, *uname;
+> >  	int i, n, l, clone, access;
+> >  	struct v9fs_session_info *v9ses;
+> > -	struct p9_fid *fid, *old_fid = NULL;
+> > +	struct p9_fid *fid, *old_fid;
+> >  
+> >  	v9ses = v9fs_dentry2v9ses(dentry);
+> >  	access = v9ses->flags & V9FS_ACCESS_MASK;
+> > @@ -194,13 +194,12 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+> >  		if (IS_ERR(fid))
+> >  			return fid;
+> >  
+> > +		refcount_inc(&fid->count);
+> >  		v9fs_fid_add(dentry->d_sb->s_root, fid);
+> >  	}
+> >  	/* If we are root ourself just return that */
+> > -	if (dentry->d_sb->s_root == dentry) {
+> > -		refcount_inc(&fid->count);
+> > +	if (dentry->d_sb->s_root == dentry)
+> >  		return fid;
+> > -	}
+> >  	/*
+> >  	 * Do a multipath walk with attached root.
+> >  	 * When walking parent we need to make sure we
+> > @@ -212,6 +211,7 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+> >  		fid = ERR_PTR(n);
+> >  		goto err_out;
+> >  	}
+> > +	old_fid = fid;
+> >  	clone = 1;
+> >  	i = 0;
+> >  	while (i < n) {
+> > @@ -221,15 +221,8 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+> >  		 * walk to ensure none of the patch component change
+> >  		 */
+> >  		fid = p9_client_walk(fid, l, &wnames[i], clone);
+> > +		p9_client_clunk(old_fid);
+> 
+> hmm, if we're not cloning then fid == old_fid and the refcount is not
+> increased? (I think... I didn't even realize/remember that walk had a
+> no-clone mode, sorry.)
+> 
+> So we'd only need to clunk if old fid here if we're cloning (old fid is
+> the initial root fid), but I'm not sure how to test this path as I
+> couldn't think of any pattern that'd trigger a multi-level lookup,
+> so I'm not 100% sure; I'll try a bit more.
 
-Statically, there may be multiple callers, and each is responsible for
-freeing the list, right?
+Yes, you're correct. Nice catch!
+
+Tyler
+
+> 
+> -- 
+> Dominique
+> 

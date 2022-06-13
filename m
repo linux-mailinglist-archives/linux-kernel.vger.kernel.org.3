@@ -2,91 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4FF54A096
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3215E54A036
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237916AbiFMU5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36464 "EHLO
+        id S244842AbiFMUya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352330AbiFMUyZ (ORCPT
+        with ESMTP id S1348470AbiFMUxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:54:25 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E412AE2E;
-        Mon, 13 Jun 2022 13:23:03 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id h187so9102394oif.4;
-        Mon, 13 Jun 2022 13:23:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pWsit0XtntT6J2RTRZ0ujYWmdRDTbMZCbVmpGrfCYhA=;
-        b=DrGzYq5D9Y2CcEeM9Bd5UjW9DU11eGCY1W7+VI4JU2LyajBxb/5/JtUN1lT8z+QMUg
-         FveTy5nLgT5QNfemLV9Bx5PqsLqKesflDx7D1yzMw+P9W31CZxt6TH7qcdpqunEquvbM
-         192aDNy1EW1FWJmtsoHit0rRI+UnXHcJHH37mG4Mb9Yqc54ZBbYWMd1b9ot1HpMZU++X
-         rQfGH0YSdwX/qKzVIARuruKvVwZUn1hTCIQ4zlIiRzIkmqo5io+WOV51VLhoj2XIqlaK
-         qiHhcUiwzTdnsM56n097+hnSTcKkElH1oBuXUvbYQHhdOT4PF11nbNr1dGtXeAVGHlEL
-         HoDQ==
-X-Gm-Message-State: AOAM532kgN9CnIiKntm9V3/eEYkfvwrIyTbpk5Em4gvP4fmy3h3ACHPy
-        uCsw0Wjh3JcgyccOrbzu/g==
-X-Google-Smtp-Source: ABdhPJzo2BcmC/VIfVQzsrFJ8doyeGKwKmqH/pmvy+HKvx0w6Zh7cJYQumivPmCaX4tpdaBO6WF6gQ==
-X-Received: by 2002:a05:6808:11c7:b0:2f9:f96c:d0ee with SMTP id p7-20020a05680811c700b002f9f96cd0eemr266770oiv.134.1655151782945;
-        Mon, 13 Jun 2022 13:23:02 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:20d2:bb97:4381:7341:60ed:a4a1])
-        by smtp.gmail.com with ESMTPSA id go13-20020a056870da0d00b000f324b1e645sm4504754oab.22.2022.06.13.13.23.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 13:23:02 -0700 (PDT)
-Received: (nullmailer pid 453 invoked by uid 1000);
-        Mon, 13 Jun 2022 20:10:43 -0000
-Date:   Mon, 13 Jun 2022 14:10:43 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 07/18] PCI: dwc: Add braces to the multi-line if-else
- statements
-Message-ID: <20220613201043.GC4188875-robh@kernel.org>
-References: <20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru>
- <20220610082535.12802-8-Sergey.Semin@baikalelectronics.ru>
+        Mon, 13 Jun 2022 16:53:00 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 65BA7D59
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:12:44 -0700 (PDT)
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id AF05120C29A6;
+        Mon, 13 Jun 2022 13:12:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AF05120C29A6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1655151164;
+        bh=HWaF1QNmxsIR85mJlUFoIZu1n8vlMMKl1k718oV97FY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Rgkl+iIpE6OKLauIfR74wAB6KRvdMtoESL9vSIufW93thHl16YFEvhVZifRVbiUu0
+         okM9FabZGQj+SsIFQ/0x3Z5PzzvEL2NBkyRKzsuqZAM9kUrt+C5Exm+Jm8AiQyQKhp
+         0eiBsjty9nTvwQ25AoDx290CPSd7qIp/f1Cp8d50=
+Date:   Mon, 13 Jun 2022 15:12:41 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 06/06] 9p fid refcount: cleanup p9_fid_put calls
+Message-ID: <20220613201241.GH7401@sequoia>
+References: <20220612085330.1451496-1-asmadeus@codewreck.org>
+ <20220612085330.1451496-7-asmadeus@codewreck.org>
+ <20220613175509.GE7401@sequoia>
+ <YqeVFTkREfWUfPFi@codewreck.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220610082535.12802-8-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YqeVFTkREfWUfPFi@codewreck.org>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:25:23AM +0300, Serge Semin wrote:
-> In accordance with [1] if there is at least one multi-line if-else
-> clause in the statement, then each clause will need to be surrounded by
-> the braces. The driver code violates that coding style rule in a few
-> places. Let's fix it.
+On 2022-06-14 04:50:45, Dominique Martinet wrote:
+> Thanks for the reviews,
 > 
-> [1] Documentation/process/coding-style.rst
+> Tyler Hicks wrote on Mon, Jun 13, 2022 at 12:55:09PM -0500:
+> > > @@ -189,13 +197,13 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+> > >  		else
+> > >  			uname = v9ses->uname;
+> > >  
+> > > -		root_fid = p9_client_attach(v9ses->clnt, NULL, uname, uid,
+> > > -					    v9ses->aname);
+> > > -		if (IS_ERR(root_fid))
+> > > -			return root_fid;
+> > > +		fid = p9_client_attach(v9ses->clnt, NULL, uname, uid,
+> > 
+> > To keep the readability benefits in my "9p: Track the root fid with its
+> > own variable during lookups" patch, I think root_fid should be assigned
+> > here and then used in the error check and return statement.
+> > 
+> > > +				       v9ses->aname);
+> > > +		if (IS_ERR(fid))
+> > > +			return fid;
+> > >  
+> > > -		p9_fid_get(root_fid);
+> > > -		v9fs_fid_add(dentry->d_sb->s_root, root_fid);
+> > > +		root_fid = p9_fid_get(fid);
+> > > +		v9fs_fid_add(dentry->d_sb->s_root, &fid);
+> > 
+> > root_fid should be used in the two lines above, too.
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  drivers/pci/controller/dwc/pcie-designware-ep.c | 4 ++--
->  drivers/pci/controller/dwc/pcie-designware.c    | 3 ++-
->  2 files changed, 4 insertions(+), 3 deletions(-)
+> This actually was the only place where we still want to use the root_fid
+> after calling v9fs_fid_add; if we keep root_fid above we need to do
+> something like
+> 
+> fid = p9_fid_get(root_fid);
+> v9fs_Fid_add(dentry->d_sb->s_root, &root_fid);
+> root_fid = fid;
+> // fid = NULL; ? not strictly needed as we set it again shortly afterwards
+> 
+> which I wanted to avoid, but I guess I don't mind strongly either way --
+> pick your poison.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Ah, very good point. I missed that subtly.
+
+> I could also just keep v9fs_fid_add as a non-stealing version, but I
+> think it's better that way as it strongly signal that we stashed that
+> ref away and shouldn't use the fid anymore unless another ref was
+> obtained through fid_get like we do here.
+> (I was actually tempted to do the same with p9_fid_put, but checking
+> other kernel "put"s I didn't see any code that does this so I refrained
+> from that churn)
+
+I like the stealing version. Lets go with it and keep this patch as-is.
+
+Please feel free to slap this tag on it:
+
+ Reviewed-by: Tyler Hicks <tyhicks@linux.microsoft.com>
+
+
+Tyler
+
+> 
+> -- 
+> Dominique
+> 

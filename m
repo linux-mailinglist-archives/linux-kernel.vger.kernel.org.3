@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29B05487E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DE7548641
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351986AbiFMMfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
+        id S1351752AbiFMLKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354944AbiFMMdv (ORCPT
+        with ESMTP id S1351872AbiFMLFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:33:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46001192A6;
-        Mon, 13 Jun 2022 04:07:37 -0700 (PDT)
+        Mon, 13 Jun 2022 07:05:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A2F27FD7;
+        Mon, 13 Jun 2022 03:34:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BD0D9B80D31;
-        Mon, 13 Jun 2022 11:07:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB3CC34114;
-        Mon, 13 Jun 2022 11:07:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24F3160EF5;
+        Mon, 13 Jun 2022 10:34:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 345FDC34114;
+        Mon, 13 Jun 2022 10:34:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118455;
-        bh=k/D5J55DGOPHu+CtgfOk8/cAeltQ3W05ljaoIyGNbpo=;
+        s=korg; t=1655116464;
+        bh=vYzLSmQkbnTtiS//7dQpP11ufnfqxIvecp/s4C8a2C8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gdGZOECtukcVWeo1t0lL+A89hv6scjza6A1oQ/v80uAsONL+biLbcJ8RmQnBHJRp6
-         B97uWQSDjc0Ep1wXC91ifqUFZO8OuNA6CD2tUPopt4tFxItodRrGMeT6ES3X3wIhMF
-         4eyuXiAxS7bVthUOU+ej0n9yPtsmiTx/z/ejjVmk=
+        b=m8IYnK8LlRkAS4fv3F/7CuzzVzsk0xFvaE9lZOdnbZVXwXIMzIwrAjFzMqF6+Ti4X
+         CIGYCqryTC2Gka7n6Cza9M9BpoCeIxMemecmcE3QilqlPDGfoxDwaXijmsPis3dtDt
+         kfTpmtAWrdXD3S1ZHvtL9GS/O6D13aHXJHdbj6Ew=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+763ae12a2ede1d99d4dc@syzkaller.appspotmail.com,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        stable@vger.kernel.org, Zhen Ni <nizhen@uniontech.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 082/172] f2fs: remove WARN_ON in f2fs_is_valid_blkaddr
-Date:   Mon, 13 Jun 2022 12:10:42 +0200
-Message-Id: <20220613094910.086919920@linuxfoundation.org>
+Subject: [PATCH 4.14 186/218] USB: host: isp116x: check return value after calling platform_get_resource()
+Date:   Mon, 13 Jun 2022 12:10:44 +0200
+Message-Id: <20220613094926.254631404@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,58 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Zhen Ni <nizhen@uniontech.com>
 
-[ Upstream commit dc2f78e2d4cc844a1458653d57ce1b54d4a29f21 ]
+[ Upstream commit 134a3408c2d3f7e23eb0e4556e0a2d9f36c2614e ]
 
-Syzbot triggers two WARNs in f2fs_is_valid_blkaddr and
-__is_bitmap_valid. For example, in f2fs_is_valid_blkaddr,
-if type is DATA_GENERIC_ENHANCE or DATA_GENERIC_ENHANCE_READ,
-it invokes WARN_ON if blkaddr is not in the right range.
-The call trace is as follows:
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
- f2fs_get_node_info+0x45f/0x1070
- read_node_page+0x577/0x1190
- __get_node_page.part.0+0x9e/0x10e0
- __get_node_page
- f2fs_get_node_page+0x109/0x180
- do_read_inode
- f2fs_iget+0x2a5/0x58b0
- f2fs_fill_super+0x3b39/0x7ca0
-
-Fix these two WARNs by replacing WARN_ON with dump_stack.
-
-Reported-by: syzbot+763ae12a2ede1d99d4dc@syzkaller.appspotmail.com
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Signed-off-by: Zhen Ni <nizhen@uniontech.com>
+Link: https://lore.kernel.org/r/20220302033716.31272-1-nizhen@uniontech.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/checkpoint.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/usb/host/isp116x-hcd.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index 77f30320f862..1c49b9959b32 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -148,7 +148,7 @@ static bool __is_bitmap_valid(struct f2fs_sb_info *sbi, block_t blkaddr,
- 		f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit bitmap:%d",
- 			 blkaddr, exist);
- 		set_sbi_flag(sbi, SBI_NEED_FSCK);
--		WARN_ON(1);
-+		dump_stack();
- 	}
- 	return exist;
- }
-@@ -186,7 +186,7 @@ bool f2fs_is_valid_blkaddr(struct f2fs_sb_info *sbi,
- 			f2fs_warn(sbi, "access invalid blkaddr:%u",
- 				  blkaddr);
- 			set_sbi_flag(sbi, SBI_NEED_FSCK);
--			WARN_ON(1);
-+			dump_stack();
- 			return false;
- 		} else {
- 			return __is_bitmap_valid(sbi, blkaddr, type);
+diff --git a/drivers/usb/host/isp116x-hcd.c b/drivers/usb/host/isp116x-hcd.c
+index 73fec38754f9..83eb62001679 100644
+--- a/drivers/usb/host/isp116x-hcd.c
++++ b/drivers/usb/host/isp116x-hcd.c
+@@ -1551,10 +1551,12 @@ static int isp116x_remove(struct platform_device *pdev)
+ 
+ 	iounmap(isp116x->data_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-	release_mem_region(res->start, 2);
++	if (res)
++		release_mem_region(res->start, 2);
+ 	iounmap(isp116x->addr_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	release_mem_region(res->start, 2);
++	if (res)
++		release_mem_region(res->start, 2);
+ 
+ 	usb_put_hcd(hcd);
+ 	return 0;
 -- 
 2.35.1
 

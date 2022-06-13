@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06933548713
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D353548703
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379389AbiFMNsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
+        id S245486AbiFMK1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378507AbiFMNlp (ORCPT
+        with ESMTP id S242862AbiFMKZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:41:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C7E237F2;
-        Mon, 13 Jun 2022 04:31:18 -0700 (PDT)
+        Mon, 13 Jun 2022 06:25:13 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DD520F56;
+        Mon, 13 Jun 2022 03:19:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A2B4B80EA7;
-        Mon, 13 Jun 2022 11:31:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9101FC34114;
-        Mon, 13 Jun 2022 11:31:15 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 684C0CE1171;
+        Mon, 13 Jun 2022 10:19:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AD33C36B07;
+        Mon, 13 Jun 2022 10:19:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119875;
-        bh=yDpd7oAWsynJGccSydOf6o7OH6T+QbeLge5NLgiCdfA=;
+        s=korg; t=1655115569;
+        bh=rqe1LHISFnnv3Z/S7gTCTi4SI/ic37tYHlVQ+3h2UqU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZGWfkDQo+mykqO8dT+B63hxJ/+u+6tzBHp8K2cF6mSjmR3gjf4ReI8P4HDzI9QmUP
-         Wa2OJxjePEomYwpDyYizGjAFt4GjrgyM9yvBoynl7xNTo1bTlvdhZpHrLQXsOiEYK2
-         r/6tjdU/WjjiKTsb0iSMPwNETh3Uc0eTIs0HaW6c=
+        b=tBgW3YJxeoKAgWB94JMOsMkA9QhPV630OtdV2K0FrSR/DQFIrG5yYIokRdEym01U0
+         IcEPtPaReXGHo4U+dXfPFR4Ll46+s6xS1KFQGHo1mZq1PBQ4cBSDE6CnnNACOgcLLq
+         Q2BLWnGyhJjkvMRph3akpP3JhhXrQwxa2SRNvstk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Saurabh Sengar <ssengar@linux.microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>, Helge Deller <deller@gmx.de>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 170/339] video: fbdev: hyperv_fb: Allow resolutions with size > 64 MB for Gen1
+Subject: [PATCH 4.9 121/167] firmware: dmi-sysfs: Fix memory leak in dmi_sysfs_register_handle
 Date:   Mon, 13 Jun 2022 12:09:55 +0200
-Message-Id: <20220613094931.835421989@linuxfoundation.org>
+Message-Id: <20220613094909.163627244@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,61 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saurabh Sengar <ssengar@linux.microsoft.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit c4b4d7047f16a8d138ce76da65faefb7165736f2 ]
+[ Upstream commit 660ba678f9998aca6db74f2dd912fa5124f0fa31 ]
 
-This patch fixes a bug where GEN1 VMs doesn't allow resolutions greater
-than 64 MB size (eg 7680x4320). Unnecessary PCI check limits Gen1 VRAM
-to legacy PCI BAR size only (ie 64MB). Thus any, resolution requesting
-greater then 64MB (eg 7680x4320) would fail. MMIO region assigning this
-memory shouldn't be limited by PCI bar size.
+kobject_init_and_add() takes reference even when it fails.
+According to the doc of kobject_init_and_add()
 
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+   If this function returns an error, kobject_put() must be called to
+   properly clean up the memory associated with the object.
+
+Fix this issue by calling kobject_put().
+
+Fixes: 948af1f0bbc8 ("firmware: Basic dmi-sysfs support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220511071421.9769-1-linmq006@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/hyperv_fb.c | 19 +------------------
- 1 file changed, 1 insertion(+), 18 deletions(-)
+ drivers/firmware/dmi-sysfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/hyperv_fb.c b/drivers/video/fbdev/hyperv_fb.c
-index c8e0ea27caf1..58c304a3b7c4 100644
---- a/drivers/video/fbdev/hyperv_fb.c
-+++ b/drivers/video/fbdev/hyperv_fb.c
-@@ -1009,7 +1009,6 @@ static int hvfb_getmem(struct hv_device *hdev, struct fb_info *info)
- 	struct pci_dev *pdev  = NULL;
- 	void __iomem *fb_virt;
- 	int gen2vm = efi_enabled(EFI_BOOT);
--	resource_size_t pot_start, pot_end;
- 	phys_addr_t paddr;
- 	int ret;
+diff --git a/drivers/firmware/dmi-sysfs.c b/drivers/firmware/dmi-sysfs.c
+index ef76e5eecf0b..37f76daa2b3d 100644
+--- a/drivers/firmware/dmi-sysfs.c
++++ b/drivers/firmware/dmi-sysfs.c
+@@ -601,7 +601,7 @@ static void __init dmi_sysfs_register_handle(const struct dmi_header *dh,
+ 				    "%d-%d", dh->type, entry->instance);
  
-@@ -1060,23 +1059,7 @@ static int hvfb_getmem(struct hv_device *hdev, struct fb_info *info)
- 	dio_fb_size =
- 		screen_width * screen_height * screen_depth / 8;
+ 	if (*ret) {
+-		kfree(entry);
++		kobject_put(&entry->kobj);
+ 		return;
+ 	}
  
--	if (gen2vm) {
--		pot_start = 0;
--		pot_end = -1;
--	} else {
--		if (!(pci_resource_flags(pdev, 0) & IORESOURCE_MEM) ||
--		    pci_resource_len(pdev, 0) < screen_fb_size) {
--			pr_err("Resource not available or (0x%lx < 0x%lx)\n",
--			       (unsigned long) pci_resource_len(pdev, 0),
--			       (unsigned long) screen_fb_size);
--			goto err1;
--		}
--
--		pot_end = pci_resource_end(pdev, 0);
--		pot_start = pot_end - screen_fb_size + 1;
--	}
--
--	ret = vmbus_allocate_mmio(&par->mem, hdev, pot_start, pot_end,
-+	ret = vmbus_allocate_mmio(&par->mem, hdev, 0, -1,
- 				  screen_fb_size, 0x100000, true);
- 	if (ret != 0) {
- 		pr_err("Unable to allocate framebuffer memory\n");
 -- 
 2.35.1
 

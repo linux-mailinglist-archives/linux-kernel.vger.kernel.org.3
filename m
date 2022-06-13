@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51135549C61
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:57:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278BC549C5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345144AbiFMS5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60290 "EHLO
+        id S233163AbiFMS53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237408AbiFMSxA (ORCPT
+        with ESMTP id S1343922AbiFMSxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:53:00 -0400
+        Mon, 13 Jun 2022 14:53:06 -0400
 Received: from mx2.veeam.com (mx2.veeam.com [64.129.123.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EE2F45F4;
-        Mon, 13 Jun 2022 08:55:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B30F5059;
+        Mon, 13 Jun 2022 08:55:21 -0700 (PDT)
 Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx2.veeam.com (Postfix) with ESMTPS id 95DB6431DB;
-        Mon, 13 Jun 2022 11:55:14 -0400 (EDT)
+        by mx2.veeam.com (Postfix) with ESMTPS id 9C18843023;
+        Mon, 13 Jun 2022 11:55:17 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
-        s=mx2-2022; t=1655135714;
-        bh=m5WZciF763E0+xCIFmFDSURLec1OZVtfXv6gTUhZ7xc=;
+        s=mx2-2022; t=1655135717;
+        bh=6Cwo/SxoNVP3OE3qPkaFglLUcEDMuSRtn+M7BoPqfwI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=KEZcWRF1G+QDkNvQa4Gq7V1cn+XBwcXUTvTg4DapPGa38uy8tGN4hoEtzj0sO+a+6
-         AhsseO7rfJX8AzoDrzbxK1IucG/Bf2t3rvmkSv8GAEBLqZXLIEFxeoi3U+P/cSAMY5
-         Demo556Ii1jrHE+iJZ8LBxJeLO2EW/HSCDo/hjI28+MePQwnugtKqNtVUPDbw0EwUu
-         dWL4DNkU0u6Z65tyYjI6lWd8YpRO/N+3l0n1QCv/7fWEqPOJaQFZXS84h7kA8kqpDp
-         uWCVugL6DwwLQgaFUYTwrg5UEGLIJszs8WR5Ud6ek83dxrKhPHrtwRQe0ZlF4p/vBK
-         x/QIqdZ/HKh+A==
+        b=GrUDrOH6sXXEnPaB2INMtSUDWP9te2/XtEi3880mLTgB0PbuY8nUgNkk9tuIx610D
+         PvYZWDAWnl1iSLdv8ypNOtpyZ0PZb/aLRa8PZcpPjEfhVwDZjdQo93g5mXwLsvh3/+
+         VsrN267XXkCYOplMy9dh3pU7Hspq1YCVjs7ZMDLV51ezupbrUX5+dg+lfhYp/5RC1D
+         Wjvv5s/Pib51Q2UXrMg+0sNXHF8eRavyN80qSlnf41c5fPX7ZwOdirBTGbzsj15nuy
+         6DEbWq4NOHvPew2nv7vXUq/jQFt1udYONqqK2mjV+1lRo399h24QNAMM1wo3dA9DWR
+         MiY/UyLJUihKw==
 Received: from prgdevlinuxpatch01.amust.local (172.24.14.5) by
  prgmbx01.amust.local (172.24.128.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.9; Mon, 13 Jun 2022 17:54:53 +0200
+ 15.2.1118.9; Mon, 13 Jun 2022 17:54:57 +0200
 From:   Sergei Shtepa <sergei.shtepa@veeam.com>
 To:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Sergei Shtepa <sergei.shtepa@veeam.com>
-Subject: [PATCH 17/20] block, blksnap: debugging mechanism for monitoring memory consumption
-Date:   Mon, 13 Jun 2022 18:53:10 +0300
-Message-ID: <1655135593-1900-18-git-send-email-sergei.shtepa@veeam.com>
+Subject: [PATCH 18/20] block, blksnap: Kconfig
+Date:   Mon, 13 Jun 2022 18:53:11 +0300
+Message-ID: <1655135593-1900-19-git-send-email-sergei.shtepa@veeam.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
 References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
@@ -62,172 +62,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Of course, the kernel contains mechanisms for detecting memory leaks.
-There are tools for monitoring memory consumption. However, this
-mechanism turned out to be very simple and convenient for debugging,
-and therefore it was decided to leave it in the current version.
+The module configuration file allows you to set default values for
+module parameters.
 
 Signed-off-by: Sergei Shtepa <sergei.shtepa@veeam.com>
 ---
- drivers/block/blksnap/memory_checker.c | 100 +++++++++++++++++++++++++
- drivers/block/blksnap/memory_checker.h |  41 ++++++++++
- 2 files changed, 141 insertions(+)
- create mode 100644 drivers/block/blksnap/memory_checker.c
- create mode 100644 drivers/block/blksnap/memory_checker.h
+ drivers/block/blksnap/Kconfig | 101 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 101 insertions(+)
+ create mode 100644 drivers/block/blksnap/Kconfig
 
-diff --git a/drivers/block/blksnap/memory_checker.c b/drivers/block/blksnap/memory_checker.c
+diff --git a/drivers/block/blksnap/Kconfig b/drivers/block/blksnap/Kconfig
 new file mode 100644
-index 000000000000..96988ed99f08
+index 000000000000..8588a89e30ad
 --- /dev/null
-+++ b/drivers/block/blksnap/memory_checker.c
-@@ -0,0 +1,100 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
-+#define pr_fmt(fmt) KBUILD_MODNAME "-memory_checker: " fmt
-+#include <linux/atomic.h>
-+#include <linux/module.h>
-+#include "memory_checker.h"
++++ b/drivers/block/blksnap/Kconfig
+@@ -0,0 +1,101 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# block io layer filter module configuration
++#
++#
 +
-+char *memory_object_names[] = {
-+	/*alloc_page*/
-+	"page",
-+	/*kzalloc*/
-+	"cbt_map",
-+	"chunk",
-+	"blk_snap_snaphot_event",
-+	"diff_area",
-+	"big_buffer",
-+	"diff_io",
-+	"diff_storage",
-+	"storage_bdev",
-+	"storage_block",
-+	"diff_region",
-+	"diff_buffer",
-+	"event",
-+	"snapimage",
-+	"snapshot",
-+	"tracker",
-+	"tracked_device",
-+	/*kcalloc*/
-+	"blk_snap_cbt_info",
-+	"blk_snap_block_range",
-+	"blk_snap_dev_t",
-+	"tracker_array",
-+	"snapimage_array",
-+	"superblock_array",
-+	"blk_snap_image_info",
-+	/*end*/
-+};
++config BLK_SNAP
++	tristate "Block device snapshot and change tracker module"
++	depends on BLK_FILTER
++	help
++	  Allow to create snapshots and track block changes for a block
++	  devices. Designed for creating backups for any block devices
++	  (without device mapper). Snapshots are temporary and are released
++	  then backup is completed. Change block tracking allows you to
++	  create incremental or differential backups.
 +
-+static_assert(
-+	sizeof(memory_object_names) == (memory_object_count * sizeof(char *)),
-+	"The size of enum memory_object_type is not equal to size of memory_object_names array.");
++config BLK_SNAP_TRACKING_BLOCK_MINIMUM_SHIFT
++	depends on BLK_SNAP
++	int "The power of 2 for minimum trackings block size"
++	default 16
++	help
++	  The minimum tracking block size by default is 64 KB (shift 16)
++	  It's looks good for block device 128 GB or lower.
++	  In this case, the block device is divided into 2097152 blocks.
 +
-+static atomic_t memory_counter[memory_object_count];
-+static atomic_t memory_counter_max[memory_object_count];
++config BLK_SNAP_TRACKING_BLOCK_MAXIMUM_COUNT
++	depends on BLK_SNAP
++	int "The limit of the maximum number of trackings blocks"
++	default 2097152
++	help
++	  As the size of the block device grows, the size of the tracking block
++	  size should also grow. For this purpose, the limit of the maximum
++	  number of block size is set.
 +
-+void memory_object_inc(enum memory_object_type type)
-+{
-+	int value;
++config BLK_SNAP_CHUNK_MINIMUM_SHIFT
++	depends on BLK_SNAP
++	int "The power of 2 for minimum snapshots chunk size"
++	default 18
++	help
++	  The minimum chunk size by default is 256 KB (shift 18)
++	  It's looks good for block device 128 GB or lower.
++	  In this case, the block device is divided into 524288 chunks.
 +
-+	if (unlikely(type >= memory_object_count))
-+		return;
++config BLK_SNAP_CHUNK_MAXIMUM_COUNT
++	depends on BLK_SNAP
++	int "The limit of the maximum number of snapshots chunks"
++	default 2097152
++	help
++	  As the size of the block device grows, the size of the chunk
++	  should also grow. For this purpose, the limit of the maximum number
++	  of chunks is set.
 +
-+	value = atomic_inc_return(&memory_counter[type]);
-+	if (value > atomic_read(&memory_counter_max[type]))
-+		atomic_inc(&memory_counter_max[type]);
-+}
++config BLK_SNAP_CHUNK_MAXIMUM_IN_CACHE
++	depends on BLK_SNAP
++	int "The limit of the maximum chunks in memory cache"
++	default 64
++	help
++	  Since reading and writing to snapshots is performed in large chunks,
++	  a cache is implemented to optimize reading small portions of data
++	  from the snapshot image. As the number of chunks in the cache
++	  increases, memory consumption also increases.
++	  The minimum recommended value is four.
 +
-+void memory_object_dec(enum memory_object_type type)
-+{
-+	if (unlikely(type >= memory_object_count))
-+		return;
++config BLK_SNAP_FREE_DIFF_BUFFER_POOL_SIZE
++	depends on BLK_SNAP
++	int "The maximum size of the free buffers pool"
++	default 128
++	help
++	  A buffer can be allocated for each chunk. After use, this buffer is
++	  not released immediately, but is sent to the pool of free buffers.
++	  However, if there are too many free buffers in the pool, they are
++	  released immediately. The maximum size of the pool is regulated by
++	  this define.
 +
-+	atomic_dec(&memory_counter[type]);
-+}
++config BLK_SNAP_DIFF_STORAGE_MINIMUM
++	depends on BLK_SNAP
++	int "The minimum allowable size of the difference storage in sectors"
++	default 2097152
++	help
++	  When reached, an event is generated about the lack of free space.
 +
-+int memory_object_print(void)
-+{
-+	int inx;
-+	int not_free = 0;
++config BLK_SNAP_DEBUG_MEMORY_LEAK
++	depends on BLK_SNAP
++	bool "Enable memory leak detector"
++	default n
++	help
++	  Enables debugging code to monitor memory consumption by the module.
 +
-+	pr_info("Objects in memory:\n");
-+	for (inx = 0; inx < memory_object_count; inx++) {
-+		int count = atomic_read(&memory_counter[inx]);
++	  If unsure, say N.
 +
-+		if (count) {
-+			not_free += count;
-+			pr_info("%s: %d\n", memory_object_names[inx], count);
-+		}
-+	}
-+	if (not_free)
-+		pr_info("Found %d allocated objects\n", not_free);
-+	else
-+		pr_info("All objects have been released\n");
-+	return not_free;
-+}
++config BLK_SNAP_ALLOW_DIFF_STORAGE_IN_MEMORY
++	depends on BLK_SNAP
++	bool "Allow difference storage in memory"
++	default n
++	help
++	  Enables the ability to create a repository of changes in memory.
++	  This feature can be useful for debugging. Or it can be used for
++	  mobile phones or other devices if there are guaranteed not to be
++	  a large number of writings during the snapshot hold.
 +
-+void memory_object_max_print(void)
-+{
-+	int inx;
-+
-+	pr_info("Maximim objects in memory:\n");
-+	for (inx = 0; inx < memory_object_count; inx++) {
-+		int count = atomic_read(&memory_counter_max[inx]);
-+
-+		if (count)
-+			pr_info("%s: %d\n", memory_object_names[inx], count);
-+	}
-+	pr_info(".\n");
-+}
-+#endif
-diff --git a/drivers/block/blksnap/memory_checker.h b/drivers/block/blksnap/memory_checker.h
-new file mode 100644
-index 000000000000..b19a2584d0ce
---- /dev/null
-+++ b/drivers/block/blksnap/memory_checker.h
-@@ -0,0 +1,41 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#pragma once
-+#ifdef CONFIG_BLK_SNAP_DEBUG_MEMORY_LEAK
-+
-+enum memory_object_type {
-+	/*alloc_page*/
-+	memory_object_page,
-+	/*kzalloc*/
-+	memory_object_cbt_map,
-+	memory_object_chunk,
-+	memory_object_blk_snap_snapshot_event,
-+	memory_object_diff_area,
-+	memory_object_big_buffer,
-+	memory_object_diff_io,
-+	memory_object_diff_storage,
-+	memory_object_storage_bdev,
-+	memory_object_storage_block,
-+	memory_object_diff_region,
-+	memory_object_diff_buffer,
-+	memory_object_event,
-+	memory_object_snapimage,
-+	memory_object_snapshot,
-+	memory_object_tracker,
-+	memory_object_tracked_device,
-+	/*kcalloc*/
-+	memory_object_blk_snap_cbt_info,
-+	memory_object_blk_snap_block_range,
-+	memory_object_blk_snap_dev_t,
-+	memory_object_tracker_array,
-+	memory_object_snapimage_array,
-+	memory_object_superblock_array,
-+	memory_object_blk_snap_image_info,
-+	/*end*/
-+	memory_object_count
-+};
-+
-+void memory_object_inc(enum memory_object_type type);
-+void memory_object_dec(enum memory_object_type type);
-+int  memory_object_print(void);
-+void memory_object_max_print(void);
-+#endif
++	  If unsure, say N.
 -- 
 2.20.1
 

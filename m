@@ -2,110 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071EF548192
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCCA4548184
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237935AbiFMIJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60776 "EHLO
+        id S239606AbiFMILk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239835AbiFMIIP (ORCPT
+        with ESMTP id S239615AbiFMILJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:08:15 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92AF07669;
-        Mon, 13 Jun 2022 01:08:12 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25D1kSHm032240;
-        Mon, 13 Jun 2022 10:07:55 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=Kav0w6MVj5vV9UqBAzR4zzVyod+R3FYL6arVbUtgXas=;
- b=3+LjQTSkR0A8XFdVXMEah+/Fgs9Vij7EATTCB8JQdRTL3tpazBQf9DyFsTZ7QjnrtMRR
- 1Q7+6ojhPZHtKAvNK3OxLlPhYKIDDLG7jkbonYFXYiFQkJDzXy7q2F7N8evbrrFXB/9W
- 4qtqJ4xHhx2Ph7edeZCA9q+9bN8q0x6EP505M8UPWDVDlGDZMziCJKPwBZFWpQiagchA
- RZWeSv4tOWDlBYgA+1KvonyWsXhyXZc++uikOqwihcdLzQ+spCaCMl+qT01VWRDFxl7r
- juaQsIbx0FQL9WvwS/izAaIl3aT0m6jiBAfBOpU2zVFquhYcsjWkP2PgupSV+xXis2KF 4Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gmgfmafjg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Jun 2022 10:07:55 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 042B210002A;
-        Mon, 13 Jun 2022 10:07:54 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id F27F921230B;
-        Mon, 13 Jun 2022 10:07:53 +0200 (CEST)
-Received: from [10.201.21.93] (10.75.127.118) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 13 Jun
- 2022 10:07:53 +0200
-Message-ID: <ef315d12-cdf3-f859-3c72-4a1280319c5f@foss.st.com>
-Date:   Mon, 13 Jun 2022 10:07:53 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH 2/2] ARM: dts: stm: adjust whitespace around '='
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mon, 13 Jun 2022 04:11:09 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DAF1E3EB;
+        Mon, 13 Jun 2022 01:11:09 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LM41f4W8fzRhyq;
+        Mon, 13 Jun 2022 16:07:50 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 16:11:01 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 16:11:00 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Eric Biederman <ebiederm@xmission.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        <kexec@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220526203632.831039-1-krzysztof.kozlowski@linaro.org>
- <20220526203632.831039-2-krzysztof.kozlowski@linaro.org>
-From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
-In-Reply-To: <20220526203632.831039-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.118]
-X-ClientProxiedBy: GPXDAG2NODE5.st.com (10.75.127.69) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-13_02,2022-06-09_02,2022-02-23_01
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Jonathan Corbet <corbet@lwn.net>, <linux-doc@vger.kernel.org>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>,
+        "John Donnelly" <John.p.donnelly@oracle.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>
+Subject: [PATCH 0/5] arm64: kdump: Function supplement and performance optimization
+Date:   Mon, 13 Jun 2022 16:09:27 +0800
+Message-ID: <20220613080932.663-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof
+After the basic functions of "support reserving crashkernel above 4G on arm64
+kdump"(see https://lkml.org/lkml/2022/5/6/428) are implemented, we still have
+three features to be improved.
+1. When crashkernel=X,high is specified but crashkernel=Y,low is not specified,
+   the default crash low memory size is provided.
+2. For crashkernel=X without '@offset', if the low memory fails to be allocated,
+   fall back to reserve region from high memory(above DMA zones).
+3. If crashkernel=X,high is used, page mapping is performed only for the crash
+   high memory, and block mapping is still used for other linear address spaces.
+   Compared to the previous version:
+   (1) For crashkernel=X[@offset], the memory above 4G is not changed to block
+       mapping, leave it to the next time.
+   (2) The implementation method is modified. Now the implementation is simpler
+       and clearer.
 
-On 5/26/22 22:36, Krzysztof Kozlowski wrote:
-> Fix whitespace coding style: use single space instead of tabs or
-> multiple spaces around '=' sign in property assignment.  No functional
-> changes (same DTB).
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Output compared with dtx_diff and fdtdump.
-> ---
->   arch/arm/boot/dts/stm32429i-eval.dts    | 8 ++++----
->   arch/arm/boot/dts/stm32h743.dtsi        | 4 ++--
->   arch/arm/boot/dts/stm32h743i-disco.dts  | 8 ++++----
->   arch/arm/boot/dts/stm32h743i-eval.dts   | 8 ++++----
->   arch/arm/boot/dts/stm32h750i-art-pi.dts | 8 ++++----
->   5 files changed, 18 insertions(+), 18 deletions(-)
-> 
-> diff --git a/arch/arm/boot/dts/stm32429i-eval.dts b/arch/arm/boot/dts/stm32429i-eval.dts
-> index 0d98aca01736..3de0e9dbe030 100644
-> --- a/arch/arm/boot/dts/stm32429i-eval.dts
-> +++ b/arch/arm/boot/dts/stm32429i-eval.dts
-> @@ -251,10 +251,10 @@ ltdc_out_rgb: endpoint {
->   
+Zhen Lei (5):
+  arm64: kdump: Provide default size when crashkernel=Y,low is not
+    specified
+  arm64: kdump: Support crashkernel=X fall back to reserve region above
+    DMA zones
+  arm64: kdump: Remove some redundant checks in map_mem()
+  arm64: kdump: Decide when to reserve crash memory in
+    reserve_crashkernel()
+  arm64: kdump: Don't defer the reservation of crash high memory
 
-Applied on stm32-next. I just slightly updated the commit title.
+ .../admin-guide/kernel-parameters.txt         |  10 +-
+ arch/arm64/mm/init.c                          | 109 ++++++++++++++++--
+ arch/arm64/mm/mmu.c                           |  25 ++--
+ 3 files changed, 112 insertions(+), 32 deletions(-)
 
-Thanks.
-Alex
+-- 
+2.25.1
+

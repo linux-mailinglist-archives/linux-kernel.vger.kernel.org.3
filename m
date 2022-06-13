@@ -2,83 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B646549D17
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB47C549D1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240662AbiFMTMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S245278AbiFMTNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351945AbiFMTK0 (ORCPT
+        with ESMTP id S1347918AbiFMTK7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:10:26 -0400
-Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3710B5044F;
-        Mon, 13 Jun 2022 10:09:40 -0700 (PDT)
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 25DH9AWi022790;
-        Tue, 14 Jun 2022 02:09:12 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 25DH9AWi022790
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1655140153;
-        bh=UA9/fYJvchh2CGLlij799ZPBSTxPFYv5eF54/TVtR6E=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WWWI68zP5I/8k4ImNqC3654WYfwV9CnNSxCzHFwuucAF54sVRdAiBsjDs1rCYxJVk
-         2vvtvtMzeqYAnpItw8GYekLzUyDb77BtI293WkdVMEcOj61c0H3PUyX5voBXq6lAsw
-         8yWL3RGwsgKmYKCbBv8Qmow9YjS7iEAW1tLH4bXG7Fq2axmeN/+CXAjrOWwdUA3AVn
-         ALeRgmAskZrhMNcWBXjKuF9lV4utKM0MJHRA9dih7nRuKHDh34ue+nnoMW6Riyfl/C
-         G7PDH/GeX0e51CD81Sq9AGz2CVcVbgKEZMT1rdVMLv5PBnpKBklNNNZc3hOxVMlyTN
-         da1vnWMVWUyCQ==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Mon, 13 Jun 2022 15:10:59 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 667494504C;
+        Mon, 13 Jun 2022 10:10:24 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id h1so5588639plf.11;
+        Mon, 13 Jun 2022 10:10:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+E0qOXmIaYGrgKKOxyXbseCzmUGGWWVHHHzfQyyHi4o=;
+        b=cDomZjTb89wINr+qLZAISKobOH9y0iLu8+lPSo9XbgOKJ4MVHIl/lT2dQIYkZlmIxA
+         qg0OwroWZx/DdS2nJxJJVCBQc4hQ+2+KZquTYii+v6839OayuLQpiy3vJUP8glSexjz6
+         uexyVKw7EV/IHN4IzeNyNWoUyH6WjsGUTpNEvmneKUwyKSupG7CMUzMKuoV5Ys4rjnOV
+         3xQVteThlCIhBYviJNm54arhLENUBBWGlNVY7W2IarsddL63ULIXhr4EINrLh1l5g4+0
+         PS/q5YVb6Ig049TMJZhQ/8HUF2ud36QwNhvpQGUOkTrrEEY2Z69Al1t4yXSsH00osTHy
+         6ZIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+E0qOXmIaYGrgKKOxyXbseCzmUGGWWVHHHzfQyyHi4o=;
+        b=PkfxUl9+RPGkvwVfwKpcMqNHt7j3sCKGirzqXF0m2bHZr6yfp4EQtxWqGYCusb/lBR
+         hzwZ8Fw7f4vEKD845ktL7r5Iy3PbpoIcmKemhzqk6mX/VkyOh3Pj5oGi19y0wpktwJSl
+         /KALItoRrdKEXB44P4Wr3T3uRG1UmxXg9J3goosF476IsdVBbids+Gv3gsNmZ1HnLSAO
+         ST20xvzxuISiQIZtYt5ljlilBdNsczanqp6u221tDMBBFGj2wNONBqPSdCxMERpMtxf1
+         f8Qr8GC+01J3a401WW1EP/KfIyJdtmD2SMN6olr5OKNpB+vhiflaNW0jpefcz6OuIvh9
+         NrWA==
+X-Gm-Message-State: AOAM532a9DgAAaiyVVsJ9Eq2fMz7Q5HLPrRFY3Z9NhHScvsagRhoOSbp
+        YXss+yL4OsGxSSoeaFU8WII=
+X-Google-Smtp-Source: ABdhPJz7sM+c99Vg7g5GR9Dl0h78U9tsv/R55WGSbYCXMBmLzwbLN7k6LwX1UuFBpJxcmI3tqmZSLg==
+X-Received: by 2002:a17:90b:4ac8:b0:1e3:4f6a:2d04 with SMTP id mh8-20020a17090b4ac800b001e34f6a2d04mr16988528pjb.233.1655140223871;
+        Mon, 13 Jun 2022 10:10:23 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id n7-20020a63b447000000b00401afc3401esm5650775pgu.35.2022.06.13.10.10.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 10:10:23 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     tomer.yacoby@broadcom.com, anand.gore@broadcom.com,
+        dan.beygelman@broadcom.com, kursad.oney@broadcom.com,
+        philippe.reynes@softathome.com, joel.peshkin@broadcom.com,
+        samyon.furman@broadcom.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] s390/purgatory: remove duplicated build rule of kexec-purgatory.o
-Date:   Tue, 14 Jun 2022 02:09:02 +0900
-Message-Id: <20220613170902.1775211-3-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220613170902.1775211-1-masahiroy@kernel.org>
-References: <20220613170902.1775211-1-masahiroy@kernel.org>
+Subject: Re: [PATCH 1/3] dt-bindings: arm: add BCM6855 SoC
+Date:   Mon, 13 Jun 2022 10:10:21 -0700
+Message-Id: <20220613171021.238548-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220607172646.32369-2-william.zhang@broadcom.com>
+References: <20220607172646.32369-1-william.zhang@broadcom.com> <20220607172646.32369-2-william.zhang@broadcom.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is equivalent to the pattern rule in scripts/Makefile.build.
+On Tue,  7 Jun 2022 10:26:44 -0700, William Zhang <william.zhang@broadcom.com> wrote:
+> Add BCM6855 SoC device tree description to bcmbca binding document.
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> ---
 
-Having the dependency on $(obj)/purgatory.ro is enough.
-
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
-
- arch/s390/purgatory/Makefile | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/arch/s390/purgatory/Makefile b/arch/s390/purgatory/Makefile
-index 3e2c17ba04de..d237bc6841cb 100644
---- a/arch/s390/purgatory/Makefile
-+++ b/arch/s390/purgatory/Makefile
-@@ -48,7 +48,6 @@ OBJCOPYFLAGS_purgatory.ro += --remove-section='.note.*'
- $(obj)/purgatory.ro: $(obj)/purgatory $(obj)/purgatory.chk FORCE
- 		$(call if_changed,objcopy)
- 
--$(obj)/kexec-purgatory.o: $(obj)/kexec-purgatory.S $(obj)/purgatory.ro FORCE
--	$(call if_changed_rule,as_o_S)
-+$(obj)/kexec-purgatory.o: $(obj)/purgatory.ro
- 
- obj-y += kexec-purgatory.o
--- 
-2.32.0
-
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
+--
+Florian

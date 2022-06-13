@@ -2,88 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763A1547E3B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 05:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D95547E41
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 05:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233333AbiFMDtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 23:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
+        id S233629AbiFMDuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 23:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbiFMDtL (ORCPT
+        with ESMTP id S230125AbiFMDuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 23:49:11 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4074318377
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 20:49:09 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso4804874pjk.0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 20:49:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=36dPqle/rlmpKapipF+KE1d4JPgoWr3C6RG6AlhQkWA=;
-        b=Ugkkbu10YeDB3fFkCXZ732hz1icH485fPCKzAPb6Hfdy9IcTXnhDHiCTgWBulae2sI
-         HCTEP9hdisGZk9fh5/56WCLuBfYD0VKVqsRLRXvFXo+v05O1bUIShZDIJR2hd1dZmmIM
-         FXNZ5iOZ7IlBKe9WI5ZamyPsEBFlkXuIRi6U0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=36dPqle/rlmpKapipF+KE1d4JPgoWr3C6RG6AlhQkWA=;
-        b=Qji6PgU76OJN/XNBTPQhnmpkA2yJhoVXqb1U6tpDgp1rznze+CcQq15vdhVw4cbQJy
-         buJDFsnjWZQOgog8GA3ACead6ucBs58zd8XzEBYY71bDdexx1nZrB/vgvT0KN+Ip8yjn
-         vgxQ4bcudAnkDH8sUGp7KSoFN8fD4WAJjxGzpwQfHGsTK8rWdFFNiw37n+hjQ5BwXJIr
-         zd/m38rMbfZKQNFI6fyIpBFu1xrSFuOvf5HCCUj5ANcksLL2/t8ihISr9SlkehJXAtVe
-         FgNNjiLjebxXlsJRCd1PIxOUzR8EgfFsF9LlKywum23yQZytyeRuZLpRIqByM3hFYcSM
-         +v/w==
-X-Gm-Message-State: AOAM5329q+WVohtuuIgL+x3vOanSkdiG+nYIoi9obC/SAd/9k3aMyCMH
-        +UlE6kFJEVHx0PgbjkZhhIDQ1w==
-X-Google-Smtp-Source: ABdhPJzp4MllA13fAg38/cBxUsQG0hCqm8mssIZuQ/i/A4EmGw1NniOS8zrFvEDb+JlT9qh2I9h7Vg==
-X-Received: by 2002:a17:90b:1c8f:b0:1b8:c6dc:ca61 with SMTP id oo15-20020a17090b1c8f00b001b8c6dcca61mr13258788pjb.13.1655092148795;
-        Sun, 12 Jun 2022 20:49:08 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:de22:3777:8b31:5148])
-        by smtp.gmail.com with ESMTPSA id m26-20020a63941a000000b003fc5b1db26fsm4150680pge.52.2022.06.12.20.49.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 20:49:08 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 12:49:03 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
-Subject: Re: [BUG] Threaded printk breaks early debugging
-Message-ID: <Yqazr060OLp2Rpbk@google.com>
-References: <CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com>
- <87y1y48spg.fsf@jogness.linutronix.de>
- <YqVZ4CyWTiDgngkA@google.com>
- <8735g9mqo0.fsf@jogness.linutronix.de>
+        Sun, 12 Jun 2022 23:50:52 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580FB193EF;
+        Sun, 12 Jun 2022 20:50:50 -0700 (PDT)
+Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LLyFH4SkkzRj1f;
+        Mon, 13 Jun 2022 11:47:31 +0800 (CST)
+Received: from [10.67.111.227] (10.67.111.227) by
+ kwepemi500014.china.huawei.com (7.221.188.232) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 11:50:47 +0800
+Subject: Re: [PATCH] clk: qcom: clk-rpmh: Fix if statement to match comment
+To:     Stephen Boyd <sboyd@kernel.org>, <quic_tdas@quicinc.com>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220531094539.252642-1-lizhengyu3@huawei.com>
+ <20220610195856.A2D7EC3411C@smtp.kernel.org>
+From:   "lizhengyu (E)" <lizhengyu3@huawei.com>
+Message-ID: <788c25d7-0968-9d69-7753-d7cb8010a9f5@huawei.com>
+Date:   Mon, 13 Jun 2022 11:50:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8735g9mqo0.fsf@jogness.linutronix.de>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220610195856.A2D7EC3411C@smtp.kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.111.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500014.china.huawei.com (7.221.188.232)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/06/13 01:08), John Ogness wrote:
-> On 2022-06-12, Sergey Senozhatsky <senozhatsky@chromium.org> wrote:
-> > Should a situation when we have only one online CPU be enough of a
-> > reason to do direct printing? Otherwise we might not have CPUs to
-> > wakeup khtread on, e.g. when CPU that printk is in atomic section for
-> > too long.
-> 
-> IMHO, no. Especially in that situation, we do not want printk causing
-> that atomic section to become even longer. If the machine has entered
-> normal operation, we want printk out of the way.
 
-At the same time printk throttles itself in such cases: new messages are
-not added at much higher pace that they are printed at. So we lower the
-chances of missing messages.
+On Fri, 10 Jun 2022 12:58:54 -0700, Stephen Boyd <sboyd@kernel.org> wrote:
+> Quoting Li Zhengyu (2022-05-31 02:45:39)
+>> (c->state) is u32, (enable) is bool. It returns false when
+>> (c->state) > 1 and (enable) is true. Convert (c->state) to bool.
+>>
+>> Signed-off-by: Li Zhengyu <lizhengyu3@huawei.com>
+> Nice catch! It looks like it fixes an optimization, where we don't want
+> to run through and check has_state_changed() if this clk is already
+> enabled or disabled. But how does this ever happen? The clk framework
+> already reference counts prepare/unprepare, so how can we get into this
+> function when the condition would be true, after this patch?
+>
+> I think we can simply remove the if condition entirely. Do you agree?
+
+Sure. It seems Taniya Das (also I) hasn't mind the prepare/unprepare
+
+of clk framework. As the result,  this if condition should be never true.
+
+I will send a patch to remove it.
+
+>> ---
+>>   drivers/clk/qcom/clk-rpmh.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+>> index aed907982344..851e127432a9 100644
+>> --- a/drivers/clk/qcom/clk-rpmh.c
+>> +++ b/drivers/clk/qcom/clk-rpmh.c
+>> @@ -196,7 +196,7 @@ static int clk_rpmh_aggregate_state_send_command(struct clk_rpmh *c,
+>>          int ret;
+>>   
+>>          /* Nothing required to be done if already off or on */
+>> -       if (enable == c->state)
+>> +       if (enable == !!c->state)
+>>                  return 0;
+>>   
+>>          c->state = enable ? c->valid_state_mask : 0;
+> .

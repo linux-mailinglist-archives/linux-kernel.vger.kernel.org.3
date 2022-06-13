@@ -2,125 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F227548C64
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDEC548950
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356888AbiFMMAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
+        id S1357814AbiFMMAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357706AbiFMLzC (ORCPT
+        with ESMTP id S1357841AbiFMLzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:55:02 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD942F39B;
-        Mon, 13 Jun 2022 03:55:52 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 956946601674;
-        Mon, 13 Jun 2022 11:55:49 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655117750;
-        bh=AYCMDXpnrnlhea7/vMZzgZlR6eZJdympQCVtx5OxpTM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=a9CdHFRNL1cXCAvRh3XboG6jOiwZc4fzSdgrsQOHaYR4U5YU91vlz5msxD2p5T685
-         lrRe0P/w83HJGc/dmA+zxPrEaVOblxEPEL0usxx2u0eC9sul7icX7gHrUJTO3im7AJ
-         9lOGwrKI80poQ9yvcbLTRhmP4tFA5tfCyrQM7DHFPvr/s4Dftv1ZxlgnUcTZ0EKc4F
-         x2b7lXzuSt9Cke9UIztn45OivAJewKp5eRJqWd0GqVINKHCq6zQOteErj3iFsO9fTw
-         ZoMeIxiT4MBZK49qKgdXbIBC4tpTk6P+2KtV9C+l8PSenJ4oIOBMiR1L7XB4fJ1QAK
-         fRb9Z8IS6IG4w==
-Message-ID: <7d2a1d75-e400-71aa-7127-144e257f408d@collabora.com>
-Date:   Mon, 13 Jun 2022 12:55:46 +0200
+        Mon, 13 Jun 2022 07:55:33 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E332F67A;
+        Mon, 13 Jun 2022 03:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655117761; x=1686653761;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vbuPPm2ZNkUse/X0oH12l21pmvWvlzFHAvFZQz0hTnA=;
+  b=mJ4H9cbcCxO+Uu9n74cyqMWQoGiDQ1+IMUtnAGj52zfZavn1sQnbr1DZ
+   oydIm9mRfuGDQvwld//R2pk6AgJqJI5IZ0BR1fAOrdyQcgofyRy6EyrD0
+   CCt0EV0SbVYFk+SatrX7DALZPtpoNoDPedi+S/iW2UX4EJqYYx0gF90V7
+   4=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 13 Jun 2022 03:56:01 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 03:56:00 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 13 Jun 2022 03:56:00 -0700
+Received: from [10.216.14.138] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 13 Jun
+ 2022 03:55:54 -0700
+Message-ID: <23bb9f5d-85fe-d7a7-d178-1185981f1b89@quicinc.com>
+Date:   Mon, 13 Jun 2022 16:25:51 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v11 10/12] drm/mediatek: dpi: Add dpintf support
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 1/2] ASoC: dt-bindings: lpass-cpu: Update external mclck0
+ name
 Content-Language: en-US
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, chunkuang.hu@kernel.org,
-        p.zabel@pengutronix.de, daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        airlied@linux.ie
-Cc:     msp@baylibre.com, granquet@baylibre.com, jitao.shi@mediatek.com,
-        wenst@chromium.org, ck.hu@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
- <20220613064841.10481-11-rex-bc.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220613064841.10481-11-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>
+CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <lgirdwood@gmail.com>, <quic_plai@quicinc.com>,
+        <bgoswami@quicinc.com>, <perex@perex.cz>, <tiwai@suse.com>,
+        <srinivas.kandagatla@linaro.org>, <quic_rohkumar@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
+References: <1654169206-12255-1-git-send-email-quic_srivasam@quicinc.com>
+ <1654169206-12255-2-git-send-email-quic_srivasam@quicinc.com>
+ <20220602143245.GA2256965-robh@kernel.org> <YpjL3X73LyefYjI7@sirena.org.uk>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <YpjL3X73LyefYjI7@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 13/06/22 08:48, Bo-Chen Chen ha scritto:
-> From: Guillaume Ranquet <granquet@baylibre.com>
-> 
-> dpintf is the displayport interface hardware unit. This unit is similar
-> to dpi and can reuse most of the code.
-> 
-> This patch adds support for mt8195-dpintf to this dpi driver. Main
-> differences are:
->   - Some features/functional components are not available for dpintf
->     which are now excluded from code execution once is_dpintf is set
->   - dpintf can and needs to choose between different clockdividers based
->     on the clockspeed. This is done by choosing a different clock parent.
->   - There are two additional clocks that need to be managed. These are
->     only set for dpintf and will be set to NULL if not supplied. The
->     clk_* calls handle these as normal clocks then.
->   - Some register contents differ slightly between the two components. To
->     work around this I added register bits/masks with a DPINTF_ prefix
->     and use them where different.
-> 
-> Based on a separate driver for dpintf created by
-> Jitao shi <jitao.shi@mediatek.com>.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> [Bo-Chen: Modify reviewers' comments.]
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
->   drivers/gpu/drm/mediatek/mtk_dpi.c          | 115 ++++++++++++++++++--
->   drivers/gpu/drm/mediatek/mtk_dpi_regs.h     |  13 +++
->   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |   4 +
->   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |   1 +
->   drivers/gpu/drm/mediatek/mtk_drm_drv.c      |   3 +
->   5 files changed, 126 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index 6b8cf648a5b5..08c8f21b4421 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -71,6 +71,7 @@ struct mtk_dpi {
->   	void __iomem *regs;
->   	struct device *dev;
->   	struct clk *engine_clk;
-> +	struct clk *pll_gate_clk;
 
-You don't need this clock in this driver, at all.
+On 6/2/2022 8:10 PM, Mark Brown wrote:
+Thanks for your time Mark Brown and Rob Herring!!!
+> On Thu, Jun 02, 2022 at 09:32:45AM -0500, Rob Herring wrote:
+>> On Thu, Jun 02, 2022 at 04:56:45PM +0530, Srinivasa Rao Mandadapu wrote:
+>>> Update "audio_cc_ext_mclk0" name to "core_cc_ext_mclk0",
+>>> as MI2S mclk is being used is from lpass core cc.
+>> This is safe to change breaking the ABI because ...
+> The driver was only just merged so didn't make it into a full
+> release.
+yes. DTS changes are still in review state.
+>
+>> Names are supposed to be local to the module, not based on their source.
+> Indeed.
 
-`pll_gate` would be CLK_VDO0_DP_INTF0_DP_INTF (parent = CLK_TOP_EDP);
+Okay. Will take care next time. As external MCLK is supported from both 
+modules, audio cc and core cc,
 
-Currently, you're assigning CLK_TOP_EDP to "pixel", but you can, at this point,
-simply assign CLK_VDO0_DP_INTF0_DP_INTF to "pixel" instead... as when you call
-clk_prepare_enable() on it, that'll also take care of enabling its CLK_TOP_EDP
-parent for you.
-
-You're not doing anything special if not taking care of enabling/disabling it.
-
-Regards,
-Angelo
+for now it's mandatory to change the name to avoid confusion.
 

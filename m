@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CABD548811
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 189F6548824
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377989AbiFMNgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
+        id S245687AbiFMKl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378447AbiFMNbg (ORCPT
+        with ESMTP id S1348400AbiFMKji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:31:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9001703DF;
-        Mon, 13 Jun 2022 04:26:07 -0700 (PDT)
+        Mon, 13 Jun 2022 06:39:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9C2220E5;
+        Mon, 13 Jun 2022 03:23:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 571AEB80E93;
-        Mon, 13 Jun 2022 11:26:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4249C34114;
-        Mon, 13 Jun 2022 11:26:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C89460EF5;
+        Mon, 13 Jun 2022 10:23:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75B77C3411E;
+        Mon, 13 Jun 2022 10:23:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119565;
-        bh=rp7BVa+YdVp1no5nrT8jUWCSbXCylb1klRp57aAm3fM=;
+        s=korg; t=1655115803;
+        bh=ZtsaDR2IWu8SvqQ6ynaqLlc+4Y8bj/DYVgveu4E+KqU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oW8ki3qOu21usA3h1vlOrjPHCY67HR1GQ8kmcQxCuaR4diQJE4eMT8JU5Wr3JPjeo
-         641i4GXSJkd+Ss3nRSLgZHdHuad+miXyvCCa1+ID7CCh0O57gdUtkwOPUvYlWtO3GX
-         5Ij2OVcLKylyhaWUdwJZw3vbytGx+Kag33L9LSQQ=
+        b=pKeFaXJd6M27+chx8CembQusmzsxLIG+hq1TPQ6jSxK3t6hG0DMevcxaHZuoBTXnH
+         VSWx3g8+PhhD3u0VPebhh7Z50/Jr7oRz8+pPHcpFEg7aNKpQ+nB53yjfGxkHWHhomd
+         8fI1QIC8JgQpZmYvbMFE7gt+Ghy9l7Gygx+7QTtM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Howard Chiu <howard_chiu@aspeedtech.com>,
-        Joel Stanley <joel@jms.id.au>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 059/339] ARM: dts: aspeed: ast2600-evb: Enable RX delay for MAC0/MAC1
+        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
+        Corey Minyard <cminyard@mvista.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 026/218] ipmi:ssif: Check for NULL msg when handling events and messages
 Date:   Mon, 13 Jun 2022 12:08:04 +0200
-Message-Id: <20220613094928.311639057@linuxfoundation.org>
+Message-Id: <20220613094914.510203556@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Howard Chiu <howard_chiu@aspeedtech.com>
+From: Corey Minyard <cminyard@mvista.com>
 
-[ Upstream commit 4d338ee40ba89e508c5d3e1b4af956af7cb5e12e ]
+[ Upstream commit 7602b957e2404e5f98d9a40b68f1fd27f0028712 ]
 
-Since mac0/1 and mac2/3 are physically located on different die,
-they have different properties by nature, which is mac0/1 has smaller delay step.
+Even though it's not possible to get into the SSIF_GETTING_MESSAGES and
+SSIF_GETTING_EVENTS states without a valid message in the msg field,
+it's probably best to be defensive here and check and print a log, since
+that means something else went wrong.
 
-The property 'phy-mode' on ast2600 mac0 and mac1 is recommended to set to 'rgmii-rxid'
-which enables the RX interface delay from the PHY chip.
-Refer page 45 of SDK User Guide v08.00
-https://github.com/AspeedTech-BMC/openbmc/releases/download/v08.00/SDK_User_Guide_v08.00.pdf
+Also add a default clause to that switch statement to release the lock
+and print a log, in case the state variable gets messed up somehow.
 
-Fixes: 2ca5646b5c2f ("ARM: dts: aspeed: Add AST2600 and EVB")
-Signed-off-by: Howard Chiu <howard_chiu@aspeedtech.com>
-Link: https://lore.kernel.org/r/SG2PR06MB23152A548AAE81140B57DD69E6E09@SG2PR06MB2315.apcprd06.prod.outlook.com
-Signed-off-by: Joel Stanley <joel@jms.id.au>
+Reported-by: Haowen Bai <baihaowen@meizu.com>
+Signed-off-by: Corey Minyard <cminyard@mvista.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/aspeed-ast2600-evb.dts | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/char/ipmi/ipmi_ssif.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
 
-diff --git a/arch/arm/boot/dts/aspeed-ast2600-evb.dts b/arch/arm/boot/dts/aspeed-ast2600-evb.dts
-index b7eb552640cb..788448cdd6b3 100644
---- a/arch/arm/boot/dts/aspeed-ast2600-evb.dts
-+++ b/arch/arm/boot/dts/aspeed-ast2600-evb.dts
-@@ -103,7 +103,7 @@
- &mac0 {
- 	status = "okay";
+diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
+index cf87bfe971e6..171c54c86356 100644
+--- a/drivers/char/ipmi/ipmi_ssif.c
++++ b/drivers/char/ipmi/ipmi_ssif.c
+@@ -816,6 +816,14 @@ static void msg_done_handler(struct ssif_info *ssif_info, int result,
+ 		break;
  
--	phy-mode = "rgmii";
-+	phy-mode = "rgmii-rxid";
- 	phy-handle = <&ethphy0>;
+ 	case SSIF_GETTING_EVENTS:
++		if (!msg) {
++			/* Should never happen, but just in case. */
++			dev_warn(&ssif_info->client->dev,
++				 "No message set while getting events\n");
++			ipmi_ssif_unlock_cond(ssif_info, flags);
++			break;
++		}
++
+ 		if ((result < 0) || (len < 3) || (msg->rsp[2] != 0)) {
+ 			/* Error getting event, probably done. */
+ 			msg->done(msg);
+@@ -839,6 +847,14 @@ static void msg_done_handler(struct ssif_info *ssif_info, int result,
+ 		break;
  
- 	pinctrl-names = "default";
-@@ -114,7 +114,7 @@
- &mac1 {
- 	status = "okay";
+ 	case SSIF_GETTING_MESSAGES:
++		if (!msg) {
++			/* Should never happen, but just in case. */
++			dev_warn(&ssif_info->client->dev,
++				 "No message set while getting messages\n");
++			ipmi_ssif_unlock_cond(ssif_info, flags);
++			break;
++		}
++
+ 		if ((result < 0) || (len < 3) || (msg->rsp[2] != 0)) {
+ 			/* Error getting event, probably done. */
+ 			msg->done(msg);
+@@ -861,6 +877,13 @@ static void msg_done_handler(struct ssif_info *ssif_info, int result,
+ 			deliver_recv_msg(ssif_info, msg);
+ 		}
+ 		break;
++
++	default:
++		/* Should never happen, but just in case. */
++		dev_warn(&ssif_info->client->dev,
++			 "Invalid state in message done handling: %d\n",
++			 ssif_info->ssif_state);
++		ipmi_ssif_unlock_cond(ssif_info, flags);
+ 	}
  
--	phy-mode = "rgmii";
-+	phy-mode = "rgmii-rxid";
- 	phy-handle = <&ethphy1>;
- 
- 	pinctrl-names = "default";
+ 	flags = ipmi_ssif_lock_cond(ssif_info, &oflags);
 -- 
 2.35.1
 

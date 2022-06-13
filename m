@@ -2,77 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AA24549B59
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECA3549B5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244511AbiFMSVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38896 "EHLO
+        id S244865AbiFMSVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244959AbiFMSUt (ORCPT
+        with ESMTP id S240480AbiFMSUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:20:49 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAFC0EAD;
-        Mon, 13 Jun 2022 07:24:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 13 Jun 2022 14:20:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598C82625;
+        Mon, 13 Jun 2022 07:24:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8666221C43;
-        Mon, 13 Jun 2022 14:24:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655130294; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0QxbXQTWScLBHdZkYfR8jKfBuUw2/vlOoxDD3FnCzX0=;
-        b=CMvjzQmOEJZmJ+aCXYUtYR6cV2a6B/yT0U+mHCBSEypUkXGJFDyWBPHB0Z7IkXFKBXiRob
-        WaN/MSCTSa5yUU5jEZUlmEXKUyG+tp45OcGy7/VDzJHcTwEDmzJg2g6ueidLXSqAt3+sjI
-        8jYUsq6TWTWCGAp7ockBvOyJRSK4p7w=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 37AEF134CF;
-        Mon, 13 Jun 2022 14:24:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id P9iuDLZIp2I6QwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 13 Jun 2022 14:24:54 +0000
-Date:   Mon, 13 Jun 2022 16:24:52 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <20220613142452.GB6910@blackbody.suse.cz>
-References: <20220510153413.400020-1-longman@redhat.com>
- <20220510153413.400020-8-longman@redhat.com>
- <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
- <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
- <YqarMyNo9oHxhZFh@slm.duckdns.org>
+        by ams.source.kernel.org (Postfix) with ESMTPS id B3FAEB81057;
+        Mon, 13 Jun 2022 14:24:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62760C34114;
+        Mon, 13 Jun 2022 14:24:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655130294;
+        bh=dPms+2tRdPeMRCtz5LXIpvIE+GN1BU34aLWsVdJu1Vk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JBTCOzqCdMJBT8yKGC8YXsLHu1BdhDo6koMJFVf/GILP1HthKupIsCQfoXloEIOq0
+         F6GdbxuDQNRYechTnfhIp2MM0jx5V6TMKzgg3fb8KwTSWejdVE37h6TkVq7WpN18+H
+         95+3/bl/hWhZpgFGGyAAW2yTcqohBauj82LkNOWCGDw3vcD9rl1chwSZVH0oXYgcxD
+         Deg6iXRDclnXIRKwFI5Ch9/KdgT2nO9DDax0hjPbo1AooM4w6UINUUOL7D9dNq3s/T
+         4T7c698TqI1jgFynuLEc0c73ZdufT5PxMds8+ccCUfugLdi5EyadZUAg+JW6zHz35T
+         QKSOQ5/GIrF6A==
+Message-ID: <b72c10cd-c9da-d66f-f3db-f5206ba13f3d@kernel.org>
+Date:   Mon, 13 Jun 2022 09:24:52 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="1UWUbFP1cBYEclgG"
-Content-Disposition: inline
-In-Reply-To: <YqarMyNo9oHxhZFh@slm.duckdns.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Subject: Re: [PATCH] firmware: stratix10-svc: remove extraneous asterisk from
+ #define comments
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>,
+        Ang Tien Sung <tien.sung.ang@intel.com>,
+        Richard Gong <richard.gong@intel.com>,
+        linux-kernel@vger.kernel.org
+References: <202206120445.FeU5wA93-lkp@intel.com>
+ <20220612012253.16583-1-bagasdotme@gmail.com>
+ <967fa124-5ebc-6b0d-fa1a-27619eb01b8c@infradead.org>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <967fa124-5ebc-6b0d-fa1a-27619eb01b8c@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,47 +64,68 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---1UWUbFP1cBYEclgG
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jun 12, 2022 at 05:12:51PM -1000, Tejun Heo <tj@kernel.org> wrote:
-> Hello,
->=20
-> On Sun, Jun 12, 2022 at 11:02:38PM -0400, Waiman Long wrote:
-> > That is the behavior enforced by setting the CPU_EXCLUSIVE bit in cgrou=
-p v1.
-> > I haven't explicitly change it to make it different in cgroup v2. The m=
-ajor
-> > reason is that I don't want change to one cpuset to affect a sibling
-> > partition as it may make the code more complicate to validate if a part=
-ition
-> > is valid.
->=20
-> If at all possible, I'd really like to avoid situations where a parent ca=
-n't
-> withdraw resources due to something that a descendant does.
+On 6/11/22 20:31, Randy Dunlap wrote:
+> Hi,
+> 
+> On 6/11/22 18:22, Bagas Sanjaya wrote:
+>> kernel test robot reported kernel-doc warning:
+>>
+>>>> include/linux/firmware/intel/stratix10-svc-client.h:19: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>>
+>> The warning above is because comments above #define statements are prefixed
+>> with double asterisk, which kernel-doc script mistook these as actual
+>> kernel-doc comment.
+>>
+>> Remove extraneouse asterisk from these comments.
+> 
+>           extraneous
+> 
+>>
+>> Link: https://lore.kernel.org/lkml/202206120445.FeU5wA93-lkp@intel.com/
+>> Fixes: 88f42ac48b8968 ("firmware: stratix10-svc: Add support for FCS")
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Cc: Ang Tien Sung <tien.sung.ang@intel.com>
+>> Cc: Richard Gong <richard.gong@intel.com>
+>> Cc: Dinh Nguyen <dinguyen@kernel.org>
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> 
+> Acked-by: Randy Dunlap <rdunlap@infraded.org>
+> 
+> Thanks.
+> 
+>> ---
+>>   include/linux/firmware/intel/stratix10-svc-client.h | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/include/linux/firmware/intel/stratix10-svc-client.h b/include/linux/firmware/intel/stratix10-svc-client.h
+>> index 5098dbba138d0f..63927aba0b5699 100644
+>> --- a/include/linux/firmware/intel/stratix10-svc-client.h
+>> +++ b/include/linux/firmware/intel/stratix10-svc-client.h
+>> @@ -15,7 +15,7 @@
+>>   #define SVC_CLIENT_FPGA			"fpga"
+>>   #define SVC_CLIENT_RSU			"rsu"
+>>   #define SVC_CLIENT_FCS			"fcs"
+>> -/**
+>> +/*
+>>    * Status of the sent command, in bit number
+>>    *
+>>    * SVC_STATUS_OK:
+>> @@ -50,7 +50,7 @@
+>>   #define SVC_STATUS_ERROR		5
+>>   #define SVC_STATUS_NO_SUPPORT		6
+>>   #define SVC_STATUS_INVALID_PARAM	7
+>> -/**
+>> +/*
+>>    * Flag bit for COMMAND_RECONFIG
+>>    *
+>>    * COMMAND_RECONFIG_FLAG_PARTIAL:
+>>
+>> base-commit: 107da326a0a3e7b6e81557c4225548db670a2647
+> 
 
-My understanding of the discussed paragraph is that the changes are only
-disallowed only among siblings on one level (due to exclusivity rule,
-checked in validate_change()). A change in parent won't affect
-(non)exclusivity of (valid) children so it's simply allowed.
+Applied!
 
-So the docs (and implementation by a quick look) is sensible.
-
-Michal
-
---1UWUbFP1cBYEclgG
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCYqdIsgAKCRAkDQmsBEOq
-uQsKAQCuQgJeY8pngbeck33qpmT/9IqMQLfNBYRRLLM9dlUPbgEAw+wDMnZ9MjQW
-KY6lhKrvUT5CEfFIjAzZay9tJBO/BAU=
-=JcWM
------END PGP SIGNATURE-----
-
---1UWUbFP1cBYEclgG--
+Thanks,
+Dinh

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 762835494F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7216548E0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384186AbiFMOdX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:33:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38438 "EHLO
+        id S1359183AbiFMNR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384699AbiFMO36 (ORCPT
+        with ESMTP id S1359038AbiFMNJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:29:58 -0400
+        Mon, 13 Jun 2022 09:09:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85DACA76CC;
-        Mon, 13 Jun 2022 04:48:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6266238BDE;
+        Mon, 13 Jun 2022 04:19:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6D296124E;
-        Mon, 13 Jun 2022 11:47:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D04C34114;
-        Mon, 13 Jun 2022 11:47:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3B81608C3;
+        Mon, 13 Jun 2022 11:19:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E558C3411C;
+        Mon, 13 Jun 2022 11:19:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120862;
-        bh=/KZlrmAG9MD6AIoMpaa5iSedaR3bX++VdsOxGzPYYiE=;
+        s=korg; t=1655119152;
+        bh=k1gz7nGO4oxju0RSotWhCuwJ7Mo5sIbJ/FYjRV09LfE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dlMy9jlay4L2Hd2zLElQQizvB4ornJ56yhwxZQSt+JvFeseR+7tF7JVEViUVIcyCa
-         3wk5f3jNgiX/h7uVdoxrcyiVrf9+vHtpjmR8e+eerk0Fe6Zko+nc1y5w3axhdwVXyp
-         HCHRHLX1GtuF4k8XokYjSj4BEuZNBPaFoWBjzW2o=
+        b=jMAlHXLd5X0dK8VhfSMrMD0gP+VB5MurO9YOn52GlKp3jgsWqjMYV6u2VJw+Vx9f+
+         cOR9yCJc4+7pBhZyk6gGeBEraC0WXyhhOf/7GDclzff+DLcR0qoM700aY7ax3uUGnP
+         BeLI/v47/9lyFib8XsAhFhkJ8N8yFVIez+2ZM8wU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 167/298] netfilter: nf_tables: bail out early if hardware offload is not supported
+Subject: [PATCH 5.15 159/247] net: altera: Fix refcount leak in altera_tse_mdio_create
 Date:   Mon, 13 Jun 2022 12:11:01 +0200
-Message-Id: <20220613094929.997532200@linuxfoundation.org>
+Message-Id: <20220613094927.778213571@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,119 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 3a41c64d9c1185a2f3a184015e2a9b78bfc99c71 ]
+[ Upstream commit 11ec18b1d8d92b9df307d31950dcba0b3dd7283c ]
 
-If user requests for NFT_CHAIN_HW_OFFLOAD, then check if either device
-provides the .ndo_setup_tc interface or there is an indirect flow block
-that has been registered. Otherwise, bail out early from the preparation
-phase. Moreover, validate that family == NFPROTO_NETDEV and hook is
-NF_NETDEV_INGRESS.
+Every iteration of for_each_child_of_node() decrements
+the reference count of the previous node.
+When break from a for_each_child_of_node() loop,
+we need to explicitly call of_node_put() on the child node when
+not need anymore.
+Add missing of_node_put() to avoid refcount leak.
 
-Fixes: c9626a2cbdb2 ("netfilter: nf_tables: add hardware offload support")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: bbd2190ce96d ("Altera TSE: Add main and header file for Altera Ethernet Driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220607041144.7553-1-linmq006@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/flow_offload.h                |  1 +
- include/net/netfilter/nf_tables_offload.h |  2 +-
- net/core/flow_offload.c                   |  6 ++++++
- net/netfilter/nf_tables_api.c             |  2 +-
- net/netfilter/nf_tables_offload.c         | 23 ++++++++++++++++++++++-
- 5 files changed, 31 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/altera/altera_tse_main.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/include/net/flow_offload.h b/include/net/flow_offload.h
-index 5b8c54eb7a6b..7a10e4ed5540 100644
---- a/include/net/flow_offload.h
-+++ b/include/net/flow_offload.h
-@@ -591,5 +591,6 @@ int flow_indr_dev_setup_offload(struct net_device *dev, struct Qdisc *sch,
- 				enum tc_setup_type type, void *data,
- 				struct flow_block_offload *bo,
- 				void (*cleanup)(struct flow_block_cb *block_cb));
-+bool flow_indr_dev_exists(void);
+diff --git a/drivers/net/ethernet/altera/altera_tse_main.c b/drivers/net/ethernet/altera/altera_tse_main.c
+index 804b37c76b1e..b51f5b9577e0 100644
+--- a/drivers/net/ethernet/altera/altera_tse_main.c
++++ b/drivers/net/ethernet/altera/altera_tse_main.c
+@@ -163,7 +163,8 @@ static int altera_tse_mdio_create(struct net_device *dev, unsigned int id)
+ 	mdio = mdiobus_alloc();
+ 	if (mdio == NULL) {
+ 		netdev_err(dev, "Error allocating MDIO bus\n");
+-		return -ENOMEM;
++		ret = -ENOMEM;
++		goto put_node;
+ 	}
  
- #endif /* _NET_FLOW_OFFLOAD_H */
-diff --git a/include/net/netfilter/nf_tables_offload.h b/include/net/netfilter/nf_tables_offload.h
-index 797147843958..3568b6a2f5f0 100644
---- a/include/net/netfilter/nf_tables_offload.h
-+++ b/include/net/netfilter/nf_tables_offload.h
-@@ -92,7 +92,7 @@ int nft_flow_rule_offload_commit(struct net *net);
- 	NFT_OFFLOAD_MATCH(__key, __base, __field, __len, __reg)		\
- 	memset(&(__reg)->mask, 0xff, (__reg)->len);
+ 	mdio->name = ALTERA_TSE_RESOURCE_NAME;
+@@ -180,6 +181,7 @@ static int altera_tse_mdio_create(struct net_device *dev, unsigned int id)
+ 			   mdio->id);
+ 		goto out_free_mdio;
+ 	}
++	of_node_put(mdio_node);
  
--int nft_chain_offload_priority(struct nft_base_chain *basechain);
-+bool nft_chain_offload_support(const struct nft_base_chain *basechain);
- 
- int nft_offload_init(void);
- void nft_offload_exit(void);
-diff --git a/net/core/flow_offload.c b/net/core/flow_offload.c
-index 73f68d4625f3..929f6379a279 100644
---- a/net/core/flow_offload.c
-+++ b/net/core/flow_offload.c
-@@ -595,3 +595,9 @@ int flow_indr_dev_setup_offload(struct net_device *dev,	struct Qdisc *sch,
- 	return (bo && list_empty(&bo->cb_list)) ? -EOPNOTSUPP : count;
- }
- EXPORT_SYMBOL(flow_indr_dev_setup_offload);
-+
-+bool flow_indr_dev_exists(void)
-+{
-+	return !list_empty(&flow_block_indr_dev_list);
-+}
-+EXPORT_SYMBOL(flow_indr_dev_exists);
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index 5a2d585e180c..8eac1915ec73 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -2087,7 +2087,7 @@ static int nft_basechain_init(struct nft_base_chain *basechain, u8 family,
- 	chain->flags |= NFT_CHAIN_BASE | flags;
- 	basechain->policy = NF_ACCEPT;
- 	if (chain->flags & NFT_CHAIN_HW_OFFLOAD &&
--	    nft_chain_offload_priority(basechain) < 0)
-+	    !nft_chain_offload_support(basechain))
- 		return -EOPNOTSUPP;
- 
- 	flow_block_init(&basechain->flow_block);
-diff --git a/net/netfilter/nf_tables_offload.c b/net/netfilter/nf_tables_offload.c
-index 2d36952b1392..910ef881c3b8 100644
---- a/net/netfilter/nf_tables_offload.c
-+++ b/net/netfilter/nf_tables_offload.c
-@@ -208,7 +208,7 @@ static int nft_setup_cb_call(enum tc_setup_type type, void *type_data,
- 	return 0;
+ 	if (netif_msg_drv(priv))
+ 		netdev_info(dev, "MDIO bus %s: created\n", mdio->id);
+@@ -189,6 +191,8 @@ static int altera_tse_mdio_create(struct net_device *dev, unsigned int id)
+ out_free_mdio:
+ 	mdiobus_free(mdio);
+ 	mdio = NULL;
++put_node:
++	of_node_put(mdio_node);
+ 	return ret;
  }
  
--int nft_chain_offload_priority(struct nft_base_chain *basechain)
-+static int nft_chain_offload_priority(const struct nft_base_chain *basechain)
- {
- 	if (basechain->ops.priority <= 0 ||
- 	    basechain->ops.priority > USHRT_MAX)
-@@ -217,6 +217,27 @@ int nft_chain_offload_priority(struct nft_base_chain *basechain)
- 	return 0;
- }
- 
-+bool nft_chain_offload_support(const struct nft_base_chain *basechain)
-+{
-+	struct net_device *dev;
-+	struct nft_hook *hook;
-+
-+	if (nft_chain_offload_priority(basechain) < 0)
-+		return false;
-+
-+	list_for_each_entry(hook, &basechain->hook_list, list) {
-+		if (hook->ops.pf != NFPROTO_NETDEV ||
-+		    hook->ops.hooknum != NF_NETDEV_INGRESS)
-+			return false;
-+
-+		dev = hook->ops.dev;
-+		if (!dev->netdev_ops->ndo_setup_tc && !flow_indr_dev_exists())
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
- static void nft_flow_cls_offload_setup(struct flow_cls_offload *cls_flow,
- 				       const struct nft_base_chain *basechain,
- 				       const struct nft_rule *rule,
 -- 
 2.35.1
 

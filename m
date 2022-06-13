@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 998E6549660
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 628BE548914
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381970AbiFMOMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        id S1357968AbiFML6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381650AbiFMOEi (ORCPT
+        with ESMTP id S1356663AbiFMLuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:04:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506AD2CDF6;
-        Mon, 13 Jun 2022 04:39:59 -0700 (PDT)
+        Mon, 13 Jun 2022 07:50:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02984DFFC;
+        Mon, 13 Jun 2022 03:55:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8BE92B80E2C;
-        Mon, 13 Jun 2022 11:39:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7493C3411B;
-        Mon, 13 Jun 2022 11:39:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8D92C61257;
+        Mon, 13 Jun 2022 10:55:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92F4AC34114;
+        Mon, 13 Jun 2022 10:55:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120396;
-        bh=QPpyqDNcc0ZpC7vz0Bfvva8MxCf7bn2sJAenfa8zVWM=;
+        s=korg; t=1655117706;
+        bh=AlZ4nhJSuZq0YlAI1TESDrmyl/fYuX8Jh5XcGT+6TBo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MCQhJ4+3ZuUj85LC5ElNwFvBdxkwy2VocFEY7O93VtvagvErPGK4M1L7WUQhuuSwX
-         K+T7WlTlSruVSwaovI6wT7QLHaKSN0O7BUtreUDA1Dtz8W3d0Naiwjux4hdpUeuRkL
-         9edBM3Fm2hu+uZeN03UNb2pBn0Ed+5cS/qmYKvsM=
+        b=sRSozxY/n/+gj0ak5FfSf5SzePj2jeZLQtTosv3LSlhqEKwVBjo+OiiuOcx2rZ0Tl
+         7B6DrKBAToNj5Ohi3PN6qJ3nDIXtfrPhNGfdTVLQD621Om9aZ9qHoEJT5Qy3r3K3r0
+         /7ZD40NzMTEL+yCk2swYJM8Eu9j0WEO64+RBJd9Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sherry Sun <sherry.sun@nxp.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 010/298] tty: serial: fsl_lpuart: fix potential bug when using both of_alias_get_id and ida_simple_get
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 080/287] x86/speculation: Add missing prototype for unpriv_ebpf_notify()
 Date:   Mon, 13 Jun 2022 12:08:24 +0200
-Message-Id: <20220613094925.236514375@linuxfoundation.org>
+Message-Id: <20220613094926.303117010@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,115 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sherry Sun <sherry.sun@nxp.com>
+From: Josh Poimboeuf <jpoimboe@redhat.com>
 
-[ Upstream commit f398e0aa325c61fa20903833a5b534ecb8e6e418 ]
+[ Upstream commit 2147c438fde135d6c145a96e373d9348e7076f7f ]
 
-Now fsl_lpuart driver use both of_alias_get_id() and ida_simple_get() in
-.probe(), which has the potential bug. For example, when remove the
-lpuart7 alias in dts, of_alias_get_id() will return error, then call
-ida_simple_get() to allocate the id 0 for lpuart7, this may confilct
-with the lpuart4 which has alias 0.
+Fix the following warnings seen with "make W=1":
 
-    aliases {
-	...
-        serial0 = &lpuart4;
-        serial1 = &lpuart5;
-        serial2 = &lpuart6;
-        serial3 = &lpuart7;
-    }
+  kernel/sysctl.c:183:13: warning: no previous prototype for ‘unpriv_ebpf_notify’ [-Wmissing-prototypes]
+    183 | void __weak unpriv_ebpf_notify(int new_state)
+        |             ^~~~~~~~~~~~~~~~~~
 
-So remove the ida_simple_get() in .probe(), return an error directly
-when calling of_alias_get_id() fails, which is consistent with other
-uart drivers behavior.
+  arch/x86/kernel/cpu/bugs.c:659:6: warning: no previous prototype for ‘unpriv_ebpf_notify’ [-Wmissing-prototypes]
+    659 | void unpriv_ebpf_notify(int new_state)
+        |      ^~~~~~~~~~~~~~~~~~
 
-Fixes: 3bc3206e1c0f ("serial: fsl_lpuart: Remove the alias node dependence")
-Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
-Link: https://lore.kernel.org/r/20220321112211.8895-1-sherry.sun@nxp.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 44a3918c8245 ("x86/speculation: Include unprivileged eBPF status in Spectre v2 mitigation reporting")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/5689d065f739602ececaee1e05e68b8644009608.1650930000.git.jpoimboe@redhat.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/fsl_lpuart.c | 24 ++++--------------------
- 1 file changed, 4 insertions(+), 20 deletions(-)
+ include/linux/bpf.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index d32c25bc973b..b1307ef34468 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -239,8 +239,6 @@
- /* IMX lpuart has four extra unused regs located at the beginning */
- #define IMX_REG_OFF	0x10
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 48e6d68ec5ee..766ea96bf5b8 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -689,6 +689,8 @@ void bpf_offload_dev_netdev_unregister(struct bpf_offload_dev *offdev,
+ 				       struct net_device *netdev);
+ bool bpf_offload_dev_match(struct bpf_prog *prog, struct net_device *netdev);
  
--static DEFINE_IDA(fsl_lpuart_ida);
--
- enum lpuart_type {
- 	VF610_LPUART,
- 	LS1021A_LPUART,
-@@ -276,7 +274,6 @@ struct lpuart_port {
- 	int			rx_dma_rng_buf_len;
- 	unsigned int		dma_tx_nents;
- 	wait_queue_head_t	dma_wait;
--	bool			id_allocated;
- };
++void unpriv_ebpf_notify(int new_state);
++
+ #if defined(CONFIG_NET) && defined(CONFIG_BPF_SYSCALL)
+ int bpf_prog_offload_init(struct bpf_prog *prog, union bpf_attr *attr);
  
- struct lpuart_soc_data {
-@@ -2711,23 +2708,18 @@ static int lpuart_probe(struct platform_device *pdev)
- 
- 	ret = of_alias_get_id(np, "serial");
- 	if (ret < 0) {
--		ret = ida_simple_get(&fsl_lpuart_ida, 0, UART_NR, GFP_KERNEL);
--		if (ret < 0) {
--			dev_err(&pdev->dev, "port line is full, add device failed\n");
--			return ret;
--		}
--		sport->id_allocated = true;
-+		dev_err(&pdev->dev, "failed to get alias id, errno %d\n", ret);
-+		return ret;
- 	}
- 	if (ret >= ARRAY_SIZE(lpuart_ports)) {
- 		dev_err(&pdev->dev, "serial%d out of range\n", ret);
--		ret = -EINVAL;
--		goto failed_out_of_range;
-+		return -EINVAL;
- 	}
- 	sport->port.line = ret;
- 
- 	ret = lpuart_enable_clks(sport);
- 	if (ret)
--		goto failed_clock_enable;
-+		return ret;
- 	sport->port.uartclk = lpuart_get_baud_clk_rate(sport);
- 
- 	lpuart_ports[sport->port.line] = sport;
-@@ -2775,10 +2767,6 @@ static int lpuart_probe(struct platform_device *pdev)
- 	uart_remove_one_port(&lpuart_reg, &sport->port);
- failed_attach_port:
- 	lpuart_disable_clks(sport);
--failed_clock_enable:
--failed_out_of_range:
--	if (sport->id_allocated)
--		ida_simple_remove(&fsl_lpuart_ida, sport->port.line);
- 	return ret;
- }
- 
-@@ -2788,9 +2776,6 @@ static int lpuart_remove(struct platform_device *pdev)
- 
- 	uart_remove_one_port(&lpuart_reg, &sport->port);
- 
--	if (sport->id_allocated)
--		ida_simple_remove(&fsl_lpuart_ida, sport->port.line);
--
- 	lpuart_disable_clks(sport);
- 
- 	if (sport->dma_tx_chan)
-@@ -2920,7 +2905,6 @@ static int __init lpuart_serial_init(void)
- 
- static void __exit lpuart_serial_exit(void)
- {
--	ida_destroy(&fsl_lpuart_ida);
- 	platform_driver_unregister(&lpuart_driver);
- 	uart_unregister_driver(&lpuart_reg);
- }
 -- 
 2.35.1
 

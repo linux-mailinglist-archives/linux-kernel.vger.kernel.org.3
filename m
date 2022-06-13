@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2CB549686
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83CC4549223
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383001AbiFMOPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
+        id S1358372AbiFML74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:59:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381973AbiFMOFA (ORCPT
+        with ESMTP id S1356886AbiFMLxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:05:00 -0400
+        Mon, 13 Jun 2022 07:53:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8205E92D30;
-        Mon, 13 Jun 2022 04:40:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E562ED57;
+        Mon, 13 Jun 2022 03:55:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 79F0060EAE;
-        Mon, 13 Jun 2022 11:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8765DC34114;
-        Mon, 13 Jun 2022 11:40:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90D3E61375;
+        Mon, 13 Jun 2022 10:55:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A22AEC341D3;
+        Mon, 13 Jun 2022 10:55:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120412;
-        bh=bC8T7uT7FYJDWO5DKqqBbB+YzNhKQdkD77ypdZPon1Q=;
+        s=korg; t=1655117744;
+        bh=0MVcLKtOiJ1en+qFatDzRtpZOqV8V0+YNba66rRBLvA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2mQ8oP0qMNcFJwb3Chsxhjo71XoiBKCbrU7i3aJ9wGFR4ncAC3guABkxwMeWHNSKf
-         da8Z1jBthnls9HziASnvNY1A3mpCjkYgyYM8PleCeQd0tncu505q6K36mxy1sL7m+D
-         UcLnpEDqeZgSE2TiQMf2wayV3V+KmsjYpxKRi5Po=
+        b=GchJcHpowOyslPrAVJB4C21NsiFnnoaxwVLfBE/oNXkUtAVWEyTBNK1+WHABWx4T4
+         jmOCMA3qw8Fb7imfJ9qwzUcOeiinBZjVTpzvcVfEBDdRvh3LDqsMeZfzuLkQNq0v0y
+         lz/p7m2rDdKLcPoNrcQtq4hXvpvUvcQGPTQ1OIrw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 024/298] misc: fastrpc: fix an incorrect NULL check on list iterator
+Subject: [PATCH 4.19 094/287] regulator: pfuze100: Fix refcount leak in pfuze_parse_regulators_dt
 Date:   Mon, 13 Jun 2022 12:08:38 +0200
-Message-Id: <20220613094925.662735700@linuxfoundation.org>
+Message-Id: <20220613094926.729668023@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 5ac11fe03a0a83042d1a040dbce4fa2fb5521e23 ]
+[ Upstream commit afaa7b933ef00a2d3262f4d1252087613fb5c06d ]
 
-The bug is here:
-	if (!buf) {
+of_node_get() returns a node with refcount incremented.
+Calling of_node_put() to drop the reference when not needed anymore.
 
-The list iterator value 'buf' will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty (in this case, the
-check 'if (!buf) {' will always be false and never exit expectly).
-
-To fix the bug, use a new variable 'iter' as the list iterator,
-while use the original variable 'buf' as a dedicated pointer to
-point to the found element.
-
-Fixes: 2419e55e532de ("misc: fastrpc: add mmap/unmap support")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220327062202.5720-1-xiam0nd.tong@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 3784b6d64dc5 ("regulator: pfuze100: add pfuze100 regulator driver")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220511113506.45185-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/fastrpc.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/regulator/pfuze100-regulator.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index aa1682b94a23..45aaf54a7560 100644
---- a/drivers/misc/fastrpc.c
-+++ b/drivers/misc/fastrpc.c
-@@ -1353,17 +1353,18 @@ static int fastrpc_req_munmap_impl(struct fastrpc_user *fl,
- 				   struct fastrpc_req_munmap *req)
- {
- 	struct fastrpc_invoke_args args[1] = { [0] = { 0 } };
--	struct fastrpc_buf *buf, *b;
-+	struct fastrpc_buf *buf = NULL, *iter, *b;
- 	struct fastrpc_munmap_req_msg req_msg;
- 	struct device *dev = fl->sctx->dev;
- 	int err;
- 	u32 sc;
- 
- 	spin_lock(&fl->lock);
--	list_for_each_entry_safe(buf, b, &fl->mmaps, node) {
--		if ((buf->raddr == req->vaddrout) && (buf->size == req->size))
-+	list_for_each_entry_safe(iter, b, &fl->mmaps, node) {
-+		if ((iter->raddr == req->vaddrout) && (iter->size == req->size)) {
-+			buf = iter;
- 			break;
--		buf = NULL;
-+		}
+diff --git a/drivers/regulator/pfuze100-regulator.c b/drivers/regulator/pfuze100-regulator.c
+index 4b8306594c3f..8b1940110561 100644
+--- a/drivers/regulator/pfuze100-regulator.c
++++ b/drivers/regulator/pfuze100-regulator.c
+@@ -513,6 +513,7 @@ static int pfuze_parse_regulators_dt(struct pfuze_chip *chip)
+ 	parent = of_get_child_by_name(np, "regulators");
+ 	if (!parent) {
+ 		dev_err(dev, "regulators node not found\n");
++		of_node_put(np);
+ 		return -EINVAL;
  	}
- 	spin_unlock(&fl->lock);
  
+@@ -542,6 +543,7 @@ static int pfuze_parse_regulators_dt(struct pfuze_chip *chip)
+ 	}
+ 
+ 	of_node_put(parent);
++	of_node_put(np);
+ 	if (ret < 0) {
+ 		dev_err(dev, "Error parsing regulator init data: %d\n",
+ 			ret);
 -- 
 2.35.1
 

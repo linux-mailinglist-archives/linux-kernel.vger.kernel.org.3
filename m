@@ -2,154 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1351549A10
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AC6549A0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:33:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241850AbiFMRe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 13:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
+        id S241756AbiFMRcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:32:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240749AbiFMReM (ORCPT
+        with ESMTP id S241363AbiFMRcQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 13:34:12 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D0FE032
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:56:05 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o0jbm-00029k-GG; Mon, 13 Jun 2022 14:55:54 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1o0jbk-0001fo-7K; Mon, 13 Jun 2022 14:55:52 +0200
-Date:   Mon, 13 Jun 2022 14:55:52 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Michal Kubecek <mkubecek@suse.cz>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 1/1] net: phy: add remote fault support
-Message-ID: <20220613125552.GA4536@pengutronix.de>
-References: <20220608093403.3999446-1-o.rempel@pengutronix.de>
- <YqS+zYHf6eHMWJlD@lunn.ch>
+        Mon, 13 Jun 2022 13:32:16 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759BE3525C;
+        Mon, 13 Jun 2022 05:55:59 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id w27so6993576edl.7;
+        Mon, 13 Jun 2022 05:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=eTQgrOtNKXeuE24E4z1BZTvFXtuq4jZXbc2fnCBYhC4=;
+        b=Nj4MPAUCb8OsNfEZnsGGbUCGhFTknfSsE2F2y/SD3ys8pENJtRCBqv0QGE5MeJqZKf
+         4ujqAiYBhiFAQIIMPaygZHU0/g+3YknfQZZNi4Zk1JY22jEvvgIxbsyGHQl/L5VMCTv+
+         PhibmZ6Q8zOwiyhaUUxlLced1et9/+osLVbICikxeqZICFXFHZtDonOd+BrKN251SWnv
+         dxbwERu7dgYthvRMX8FfmxERfODU787Zqp6sW7mpxaFLu2txINVkCxHxdrUWAlAktt3B
+         5jBGTrYKi//rCcqiMtbP1tfziE+slRshLlGSrrgWkutmG5+D2MFut4UwQ9MF72FkL5M7
+         IRPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=eTQgrOtNKXeuE24E4z1BZTvFXtuq4jZXbc2fnCBYhC4=;
+        b=5ZDEipQaL0rIPJwEMV8LCu5GO+LFGB0BV3reYVan/Daj8VZVo+RK3PPvrdlpSK7BZw
+         79PAysxVCrrZLnz2JA2oaGsMhYnWdSZw4kwuvf77lEIEOpIv/5mvZ0Ynr8Of+aOfnTqP
+         hJMSj45tRTdCG/6DKYhpeQXQ73kR/UURlYDKGeANmEj+L/5sKlu6z7J4fPBo/wPpV+1g
+         IhVaaX8SH0qWP8Vh0W508QAIPmxlvqKT3xxxnWXa6CKTay7dlXxu14LxFp8LO6PhJbgO
+         mWYoLiYLHAPxFenVVkXo8huIiP+FqeC5pO1myAt1Ls7yWxEAGVrKDm/al1rTz3VBrBr5
+         zBAg==
+X-Gm-Message-State: AOAM533T4ApCOt10bUFXaiCRm2xa3MCBYrmOP2i70jwSnNkhdEnarhlZ
+        K+6cvk/yMrr/rMyMaYbeyVU=
+X-Google-Smtp-Source: ABdhPJyT0uwBN5ukf/MuNShwizt1LoZp0+Oby2zBTUXp3fSO81I8QLT2dBcsK6cZgTnu+DBQ4P/AYA==
+X-Received: by 2002:a05:6402:1e92:b0:42d:dc34:e233 with SMTP id f18-20020a0564021e9200b0042ddc34e233mr65598749edf.386.1655124957390;
+        Mon, 13 Jun 2022 05:55:57 -0700 (PDT)
+Received: from [192.168.178.21] (p57b0b659.dip0.t-ipconnect.de. [87.176.182.89])
+        by smtp.gmail.com with ESMTPSA id v20-20020a1709060b5400b0070662b3b792sm3765548ejg.222.2022.06.13.05.55.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 05:55:56 -0700 (PDT)
+Message-ID: <34daa8ab-a9f4-8f7b-0ea7-821bc36b9497@gmail.com>
+Date:   Mon, 13 Jun 2022 14:55:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YqS+zYHf6eHMWJlD@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 03/13] mm: shmem: provide oom badness for shmem files
+Content-Language: en-US
+To:     Michal Hocko <mhocko@suse.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        nouveau@lists.freedesktop.org, linux-tegra@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        alexander.deucher@amd.com, daniel@ffwll.ch,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        hughd@google.com, andrey.grodzovsky@amd.com
+References: <YqIB0bavUeU8Abwl@dhcp22.suse.cz>
+ <d4a19481-7a9f-19bf-c270-d89baa0970fc@amd.com>
+ <YqIMmK18mb/+s5de@dhcp22.suse.cz>
+ <3f7d3d96-0858-fb6d-07a3-4c18964f888e@gmail.com>
+ <YqMuq/ZrV8loC3jE@dhcp22.suse.cz>
+ <2e7e050e-04eb-0c0a-0675-d7f1c3ae7aed@amd.com>
+ <YqNSSFQELx/LeEHR@dhcp22.suse.cz>
+ <288528c3-411e-fb25-2f08-92d4bb9f1f13@gmail.com>
+ <Yqbq/Q5jz2ou87Jx@dhcp22.suse.cz>
+ <b8b9aba5-575e-8a34-e627-79bef4ed7f97@amd.com>
+ <YqcpZY3Xx7Mk2ROH@dhcp22.suse.cz>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <YqcpZY3Xx7Mk2ROH@dhcp22.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 06:11:57PM +0200, Andrew Lunn wrote:
-> > diff --git a/drivers/net/phy/phy-c45.c b/drivers/net/phy/phy-c45.c
-> > index c67bf3060173..6c55c7f9b680 100644
-> > --- a/drivers/net/phy/phy-c45.c
-> > +++ b/drivers/net/phy/phy-c45.c
-> > @@ -205,7 +205,7 @@ static int genphy_c45_baset1_an_config_aneg(struct phy_device *phydev)
-> >  		break;
-> >  	case MASTER_SLAVE_CFG_UNKNOWN:
-> >  	case MASTER_SLAVE_CFG_UNSUPPORTED:
-> > -		return 0;
-> > +		break;
-> >  	default:
-> >  		phydev_warn(phydev, "Unsupported Master/Slave mode\n");
-> >  		return -EOPNOTSUPP;
-> > @@ -223,11 +223,16 @@ static int genphy_c45_baset1_an_config_aneg(struct phy_device *phydev)
-> >  		break;
-> >  	}
-> >  
-> > +	if (phydev->remote_fault_set >= REMOTE_FAULT_CFG_ERROR)
-> > +		adv_l |= MDIO_AN_T1_ADV_L_REMOTE_FAULT;
-> > +
-> >  	adv_l |= linkmode_adv_to_mii_t1_adv_l_t(phydev->advertising);
-> >  
-> >  	ret = phy_modify_mmd_changed(phydev, MDIO_MMD_AN, MDIO_AN_T1_ADV_L,
-> > -				     (MDIO_AN_T1_ADV_L_FORCE_MS | MDIO_AN_T1_ADV_L_PAUSE_CAP
-> > -				     | MDIO_AN_T1_ADV_L_PAUSE_ASYM), adv_l);
-> > +				     (MDIO_AN_T1_ADV_L_FORCE_MS |
-> > +				      MDIO_AN_T1_ADV_L_PAUSE_CAP |
-> > +				      MDIO_AN_T1_ADV_L_PAUSE_ASYM |
-> > +				      MDIO_AN_T1_ADV_L_REMOTE_FAULT), adv_l);
-> 
-> Since this is part of config_aneg, i assume you have to trigger an
-> renegotiation, which will put the link down for a while. Is that
-> actually required? Can the fault indicator be set at runtime without a
-> full auto-neg? I suppose for a fault indicator, it probably does not
-> matter, there is a fault... 
-According to IEEE 802.3-2018:
-"28.2.3.5 Remote fault sensing function
+Am 13.06.22 um 14:11 schrieb Michal Hocko:
+> [SNIP]
+>>>> Alternative I could try to track the "owner" of a buffer (e.g. a shmem
+>>>> file), but then it can happen that one processes creates the object and
+>>>> another one is writing to it and actually allocating the memory.
+>>> If you can enforce that the owner is really responsible for the
+>>> allocation then all should be fine. That would require MAP_POPULATE like
+>>> semantic and I suspect this is not really feasible with the existing
+>>> userspace. It would be certainly hard to enforce for bad players.
+>> I've tried this today and the result was: "BUG: Bad rss-counter state
+>> mm:000000008751d9ff type:MM_FILEPAGES val:-571286".
+>>
+>> The problem is once more that files are not informed when the process
+>> clones. So what happened is that somebody called fork() with an mm_struct
+>> I've accounted my pages to. The result is just that we messed up the
+>> rss_stats and  the the "BUG..." above.
+>>
+>> The key difference between normal allocated pages and the resources here is
+>> just that we are not bound to an mm_struct in any way.
+> It is not really clear to me what exactly you have tried.
 
-The Remote Fault function may indicate to the Link Partner that a fault
-condition has occurred using the Remote Fault bit and, optionally, the Next
-Page function
-...
-A Local Device may indicate it has sensed a fault to its Link Partner by
-setting the Remote Fault bit in the Auto-Negotiation advertisement register and
-renegotiating.
+I've tried to track the "owner" of a driver connection by keeping a 
+reference to the mm_struct who created this connection inside our file 
+private and then use add_mm_counter() to account all the allocations of 
+the driver to this mm_struct.
 
-If the Local Device sets the Remote Fault bit to logic one, it may also use the
-Next Page function to specify information about the fault that has occurred.
-Remote Fault Message Page Codes have been specified for this purpose.
-..."
+This works to the extend that now the right process is killed in an OOM 
+situation. The problem with this approach is that the driver is not 
+informed about operations like fork() or clone(), so what happens is 
+that after a fork()/clone() we have an unbalanced rss-counter.
 
-If I see it correctly, there is no way to notify about remote fault when
-the link is up. The remote fault bit is transferred withing Link Code
-Word as part of FLP burst. At least in this part of specification.
+Let me maybe get back to the initial question: We have resources which 
+are not related to the virtual address space of a process, how should we 
+tell the OOM killer about them?
 
-> But i'm wondering about future extensions which might want to send values
-> when the link is up. I've seen some PHYs indicate their make/model, etc.
-> What sort of API would be needed for that?
-
-We understand the spec that the Base Link Code Word and the optional (extended)
-next pages are only send during autoneg. The local PHY capabilities (link
-speed, duplex, remote fault...) are communicated via the Base Link Code Word.
-So from our point of view it seems local to put the next pages next to the
-local PHY capabilities. If the user space wants to set a next page, the
-interface could be similar to remote fault, but we need to transfer more a
-whole page, not just a single bit :) via netlink.
-
-> It might also be useful if we could send an event to userspace when
-> the receive state changes, so there is no need to poll. I thought
-> something link a linkstate message was broadcast under some
-> conditions? That again my suggest ksetting is maybe not the best place
-> for this?
-
-So receiving remote fault information via linkstate and send remote fault via
-ksetting?
-
-The next logical question is, if a remote fault is RX'ed (potentially with a
-reason) who will react on this. There might be different policies on how to
-react on same reason.
-
-> I see no problem in exposing this information, but i would like to be
-> sure we get the API correct.
-
-ACK!
-
-Regards,
-Oleksij & Marc
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Thanks for all the input so far,
+Christian.

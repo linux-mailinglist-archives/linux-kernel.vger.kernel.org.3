@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 690E15488C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27FBB548FA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380701AbiFMOBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36454 "EHLO
+        id S1376266AbiFMNRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380683AbiFMNy5 (ORCPT
+        with ESMTP id S1359332AbiFMNJt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:54:57 -0400
+        Mon, 13 Jun 2022 09:09:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE29813E7;
-        Mon, 13 Jun 2022 04:35:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A732839155;
+        Mon, 13 Jun 2022 04:20:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FCCD612A8;
-        Mon, 13 Jun 2022 11:35:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94BB4C34114;
-        Mon, 13 Jun 2022 11:35:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 03D9D60B6B;
+        Mon, 13 Jun 2022 11:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DAA7C34114;
+        Mon, 13 Jun 2022 11:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120129;
-        bh=Z8ey3TR9HSAz7Jk3DAJWQVnOD8FtyqL33tzMAuZs4Lc=;
+        s=korg; t=1655119217;
+        bh=aT6YvPhoPElGUTTysLZKWXB1UMLXmkhkzGyEYMZj38o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=colhRk9iaeqkx4gIBrT1DSyCW0qK/TCvqIKUCScGTlXoaBvj2HnHxUImLS0o6K/hF
-         Xv+r6zTjm6sIkLN9m1waQAG41nI9tQb8+Ej+p9ll17b+gQ3KsDEZOv6C2tceNQf+3H
-         TH3gomxciFbkcP2LfYD5/2A1Rvu8Hp35TQqrZGYQ=
+        b=BHYjNakHHkBMqdsauLT2fpKtn6pTWk7Gc9+RZAYL/cWuxH7SFjhGaZUkglO+GncON
+         pKTMZ9DE13KMaQKE5o7xA8uhAhm9U9E7otF3Y0iuuDjNU3O/Hu2a8Y111Imx6JlQlB
+         A8RB2qB+AugAYK1Uixdkg424VMv0VtUENlzrBoBU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        stable@vger.kernel.org, Xiaoke Wang <xkernel.wang@foxmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 241/339] usb: dwc2: gadget: dont reset gadgets driver->bus
-Date:   Mon, 13 Jun 2022 12:11:06 +0200
-Message-Id: <20220613094933.964928182@linuxfoundation.org>
+Subject: [PATCH 5.15 165/247] iio: dummy: iio_simple_dummy: check the return value of kstrdup()
+Date:   Mon, 13 Jun 2022 12:11:07 +0200
+Message-Id: <20220613094927.963104757@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +55,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Szyprowski <m.szyprowski@samsung.com>
+From: Xiaoke Wang <xkernel.wang@foxmail.com>
 
-[ Upstream commit 3120aac6d0ecd9accf56894aeac0e265f74d3d5a ]
+[ Upstream commit ba93642188a6fed754bf7447f638bc410e05a929 ]
 
-UDC driver should not touch gadget's driver internals, especially it
-should not reset driver->bus. This wasn't harmful so far, but since
-commit fc274c1e9973 ("USB: gadget: Add a new bus for gadgets") gadget
-subsystem got it's own bus and messing with ->bus triggers the
-following NULL pointer dereference:
+kstrdup() is also a memory allocation-related function, it returns NULL
+when some memory errors happen. So it is better to check the return
+value of it so to catch the memory error in time. Besides, there should
+have a kfree() to clear up the allocation if we get a failure later in
+this function to prevent memory leak.
 
-dwc2 12480000.hsotg: bound driver g_ether
-8<--- cut here ---
-Unable to handle kernel NULL pointer dereference at virtual address 00000000
-[00000000] *pgd=00000000
-Internal error: Oops: 5 [#1] SMP ARM
-Modules linked in: ...
-CPU: 0 PID: 620 Comm: modprobe Not tainted 5.18.0-rc5-next-20220504 #11862
-Hardware name: Samsung Exynos (Flattened Device Tree)
-PC is at module_add_driver+0x44/0xe8
-LR is at sysfs_do_create_link_sd+0x84/0xe0
-...
-Process modprobe (pid: 620, stack limit = 0x(ptrval))
-...
- module_add_driver from bus_add_driver+0xf4/0x1e4
- bus_add_driver from driver_register+0x78/0x10c
- driver_register from usb_gadget_register_driver_owner+0x40/0xb4
- usb_gadget_register_driver_owner from do_one_initcall+0x44/0x1e0
- do_one_initcall from do_init_module+0x44/0x1c8
- do_init_module from load_module+0x19b8/0x1b9c
- load_module from sys_finit_module+0xdc/0xfc
- sys_finit_module from ret_fast_syscall+0x0/0x54
-Exception stack(0xf1771fa8 to 0xf1771ff0)
-...
-dwc2 12480000.hsotg: new device is high-speed
----[ end trace 0000000000000000 ]---
-
-Fix this by removing driver->bus entry reset.
-
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Link: https://lore.kernel.org/r/20220505104618.22729-1-m.szyprowski@samsung.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
+Link: https://lore.kernel.org/r/tencent_C920CFCC33B9CC1C63141FE1334A39FF8508@qq.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc2/gadget.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/iio/dummy/iio_simple_dummy.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index eee3504397e6..fe2a58c75861 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -4544,7 +4544,6 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
+diff --git a/drivers/iio/dummy/iio_simple_dummy.c b/drivers/iio/dummy/iio_simple_dummy.c
+index c0b7ef900735..c24f609c2ade 100644
+--- a/drivers/iio/dummy/iio_simple_dummy.c
++++ b/drivers/iio/dummy/iio_simple_dummy.c
+@@ -575,10 +575,9 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ 	 */
  
- 	WARN_ON(hsotg->driver);
+ 	swd = kzalloc(sizeof(*swd), GFP_KERNEL);
+-	if (!swd) {
+-		ret = -ENOMEM;
+-		goto error_kzalloc;
+-	}
++	if (!swd)
++		return ERR_PTR(-ENOMEM);
++
+ 	/*
+ 	 * Allocate an IIO device.
+ 	 *
+@@ -590,7 +589,7 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ 	indio_dev = iio_device_alloc(parent, sizeof(*st));
+ 	if (!indio_dev) {
+ 		ret = -ENOMEM;
+-		goto error_ret;
++		goto error_free_swd;
+ 	}
  
--	driver->driver.bus = NULL;
- 	hsotg->driver = driver;
- 	hsotg->gadget.dev.of_node = hsotg->dev->of_node;
- 	hsotg->gadget.speed = USB_SPEED_UNKNOWN;
+ 	st = iio_priv(indio_dev);
+@@ -616,6 +615,10 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ 	 *    indio_dev->name = spi_get_device_id(spi)->name;
+ 	 */
+ 	indio_dev->name = kstrdup(name, GFP_KERNEL);
++	if (!indio_dev->name) {
++		ret = -ENOMEM;
++		goto error_free_device;
++	}
+ 
+ 	/* Provide description of available channels */
+ 	indio_dev->channels = iio_dummy_channels;
+@@ -632,7 +635,7 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ 
+ 	ret = iio_simple_dummy_events_register(indio_dev);
+ 	if (ret < 0)
+-		goto error_free_device;
++		goto error_free_name;
+ 
+ 	ret = iio_simple_dummy_configure_buffer(indio_dev);
+ 	if (ret < 0)
+@@ -649,11 +652,12 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
+ 	iio_simple_dummy_unconfigure_buffer(indio_dev);
+ error_unregister_events:
+ 	iio_simple_dummy_events_unregister(indio_dev);
++error_free_name:
++	kfree(indio_dev->name);
+ error_free_device:
+ 	iio_device_free(indio_dev);
+-error_ret:
++error_free_swd:
+ 	kfree(swd);
+-error_kzalloc:
+ 	return ERR_PTR(ret);
+ }
+ 
 -- 
 2.35.1
 

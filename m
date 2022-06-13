@@ -2,51 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2FC548B63
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10B05495F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381420AbiFMOEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54726 "EHLO
+        id S1384637AbiFMO3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380287AbiFMNyB (ORCPT
+        with ESMTP id S1383977AbiFMOYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:54:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A4D42A21;
-        Mon, 13 Jun 2022 04:34:26 -0700 (PDT)
+        Mon, 13 Jun 2022 10:24:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19C87649;
+        Mon, 13 Jun 2022 04:46:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91BBF612D0;
-        Mon, 13 Jun 2022 11:34:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DE7FC34114;
-        Mon, 13 Jun 2022 11:34:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3DBCB80D3A;
+        Mon, 13 Jun 2022 11:46:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 225E4C34114;
+        Mon, 13 Jun 2022 11:46:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120065;
-        bh=ZjDVsKHFBSnws36ePAnZg275uQcp5H4PcRvFzlD2OCY=;
+        s=korg; t=1655120774;
+        bh=sjq+uvEskXImUSCiB9r9NxsnISKPzeXwVxIV991CFtI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GdOw7yAMTFxOtA1uIG2rgNiapakQfWnLMWiyHKauhP60cOEWFLhhU6YCfuehZ7/3F
-         SEMXPUP2zht6b6B9NZ5JUOBkLujbvj8izhd3/QNwn8xvHfP6o+PN9XsSrQZDUAe3tu
-         G+4cVlx+UfapznwBQ8Vo+Zp5V5G4MeRrM+yCMJTE=
+        b=ZeoEuDVl+5jSjkV5jVcz7s409MjWFiVrmT7WS0x6epYZEwXIV/1Y4ZTL0I0g31OmH
+         Otq7Ss3HXS7TkD3KeIl11hNstGC0kiyv6muwhogfQ+Vm8re54496+gFuyxKigt3rZw
+         FDVfPsyGWn+VsiIq8VulP5QN939ljRNNn5Rtw9G4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Mike Marshall <hubcap@omnibond.com>,
-        Gao Xiang <xiang@kernel.org>, linux-afs@lists.infradead.org,
-        v9fs-developer@lists.sourceforge.net, devel@lists.orangefs.org,
-        linux-erofs@lists.ozlabs.org, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 222/339] iov_iter: Fix iter_xarray_get_pages{,_alloc}()
+        stable@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 153/298] rtla/Makefile: Properly handle dependencies
 Date:   Mon, 13 Jun 2022 12:10:47 +0200
-Message-Id: <20220613094933.390057932@linuxfoundation.org>
+Message-Id: <20220613094929.576845300@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,97 +58,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Daniel Bristot de Oliveira <bristot@kernel.org>
 
-[ Upstream commit 6c77676645ad42993e0a8bdb8dafa517851a352a ]
+[ Upstream commit fe4d0d5dde457bb5832b866418b5036f4f0c8d13 ]
 
-The maths at the end of iter_xarray_get_pages() to calculate the actual
-size doesn't work under some circumstances, such as when it's been asked to
-extract a partial single page.  Various terms of the equation cancel out
-and you end up with actual == offset.  The same issue exists in
-iter_xarray_get_pages_alloc().
+Linus had a problem compiling RTLA, saying:
 
-Fix these to just use min() to select the lesser amount from between the
-amount of page content transcribed into the buffer, minus the offset, and
-the size limit specified.
+"[...] I wish the tracing tools would do a bit more package
+checking and helpful error messages too, rather than just
+fail with:
 
-This doesn't appear to have caused a problem yet upstream because network
-filesystems aren't getting the pages from an xarray iterator, but rather
-passing it directly to the socket, which just iterates over it.  Cachefiles
-*does* do DIO from one to/from ext4/xfs/btrfs/etc. but it always asks for
-whole pages to be written or read.
+    fatal error: tracefs.h: No such file or directory"
 
-Fixes: 7ff5062079ef ("iov_iter: Add ITER_XARRAY")
-Reported-by: Jeff Layton <jlayton@kernel.org>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Alexander Viro <viro@zeniv.linux.org.uk>
-cc: Dominique Martinet <asmadeus@codewreck.org>
-cc: Mike Marshall <hubcap@omnibond.com>
-cc: Gao Xiang <xiang@kernel.org>
-cc: linux-afs@lists.infradead.org
-cc: v9fs-developer@lists.sourceforge.net
-cc: devel@lists.orangefs.org
-cc: linux-erofs@lists.ozlabs.org
-cc: linux-cachefs@redhat.com
-cc: linux-fsdevel@vger.kernel.org
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+Which is indeed not a helpful message. Update the Makefile, adding
+proper checks for the dependencies, with useful information about
+how to resolve possible problems.
+
+For example, the previous error is now reported as:
+
+    $ make
+    ********************************************
+    ** NOTICE: libtracefs version 1.3 or higher not found
+    **
+    ** Consider installing the latest libtracefs from your
+    ** distribution, e.g., 'dnf install libtracefs' on Fedora,
+    ** or from source:
+    **
+    **  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
+    **
+    ********************************************
+
+These messages are inspired by the ones used on trace-cmd, as suggested
+by Stevel Rostedt.
+
+Link: https://lore.kernel.org/r/CAHk-=whxmA86E=csNv76DuxX_wYsg8mW15oUs3XTabu2Yc80yw@mail.gmail.com/
+
+Changes from V1:
+ - Moved the rst2man check to the install phase (when it is used).
+ - Removed the procps-ng lib check [1] as it is being removed.
+
+[1] a0f9f8c1030c66305c9b921057c3d483064d5529.1651220820.git.bristot@kernel.org
+
+Link: https://lkml.kernel.org/r/3f1fac776c37e4b67c876a94e5a0e45ed022ff3d.1651238057.git.bristot@kernel.org
+
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/iov_iter.c | 20 ++++----------------
- 1 file changed, 4 insertions(+), 16 deletions(-)
+ Documentation/tools/rtla/Makefile | 14 ++++++++++++-
+ tools/tracing/rtla/Makefile       | 35 +++++++++++++++++++++++++++++++
+ 2 files changed, 48 insertions(+), 1 deletion(-)
 
-diff --git a/lib/iov_iter.c b/lib/iov_iter.c
-index 6dd5330f7a99..dda6d5f481c1 100644
---- a/lib/iov_iter.c
-+++ b/lib/iov_iter.c
-@@ -1434,7 +1434,7 @@ static ssize_t iter_xarray_get_pages(struct iov_iter *i,
- {
- 	unsigned nr, offset;
- 	pgoff_t index, count;
--	size_t size = maxsize, actual;
-+	size_t size = maxsize;
- 	loff_t pos;
+diff --git a/Documentation/tools/rtla/Makefile b/Documentation/tools/rtla/Makefile
+index 9f2b84af1a6c..093af6d7a0e9 100644
+--- a/Documentation/tools/rtla/Makefile
++++ b/Documentation/tools/rtla/Makefile
+@@ -17,9 +17,21 @@ DOC_MAN1	= $(addprefix $(OUTPUT),$(_DOC_MAN1))
+ RST2MAN_DEP	:= $(shell command -v rst2man 2>/dev/null)
+ RST2MAN_OPTS	+= --verbose
  
- 	if (!size || !maxpages)
-@@ -1461,13 +1461,7 @@ static ssize_t iter_xarray_get_pages(struct iov_iter *i,
- 	if (nr == 0)
- 		return 0;
++TEST_RST2MAN = $(shell sh -c "rst2man --version > /dev/null 2>&1 || echo n")
++
+ $(OUTPUT)%.1: %.rst
+ ifndef RST2MAN_DEP
+-	$(error "rst2man not found, but required to generate man pages")
++	$(info ********************************************)
++	$(info ** NOTICE: rst2man not found)
++	$(info **)
++	$(info ** Consider installing the latest rst2man from your)
++	$(info ** distribution, e.g., 'dnf install python3-docutils' on Fedora,)
++	$(info ** or from source:)
++	$(info **)
++	$(info **  https://docutils.sourceforge.io/docs/dev/repository.html )
++	$(info **)
++	$(info ********************************************)
++	$(error NOTICE: rst2man required to generate man pages)
+ endif
+ 	rst2man $(RST2MAN_OPTS) $< > $@
  
--	actual = PAGE_SIZE * nr;
--	actual -= offset;
--	if (nr == count && size > 0) {
--		unsigned last_offset = (nr > 1) ? 0 : offset;
--		actual -= PAGE_SIZE - (last_offset + size);
--	}
--	return actual;
-+	return min(nr * PAGE_SIZE - offset, maxsize);
- }
+diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
+index 4b635d4de018..32ed2e7535c5 100644
+--- a/tools/tracing/rtla/Makefile
++++ b/tools/tracing/rtla/Makefile
+@@ -58,6 +58,41 @@ else
+ DOCSRC	=	$(SRCTREE)/../../../Documentation/tools/rtla/
+ endif
  
- /* must be done on non-empty ITER_IOVEC one */
-@@ -1602,7 +1596,7 @@ static ssize_t iter_xarray_get_pages_alloc(struct iov_iter *i,
- 	struct page **p;
- 	unsigned nr, offset;
- 	pgoff_t index, count;
--	size_t size = maxsize, actual;
-+	size_t size = maxsize;
- 	loff_t pos;
++LIBTRACEEVENT_MIN_VERSION = 1.5
++LIBTRACEFS_MIN_VERSION = 1.3
++
++TEST_LIBTRACEEVENT = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEEVENT_MIN_VERSION) libtraceevent > /dev/null 2>&1 || echo n")
++ifeq ("$(TEST_LIBTRACEEVENT)", "n")
++.PHONY: warning_traceevent
++warning_traceevent:
++	@echo "********************************************"
++	@echo "** NOTICE: libtraceevent version $(LIBTRACEEVENT_MIN_VERSION) or higher not found"
++	@echo "**"
++	@echo "** Consider installing the latest libtraceevent from your"
++	@echo "** distribution, e.g., 'dnf install libtraceevent' on Fedora,"
++	@echo "** or from source:"
++	@echo "**"
++	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/ "
++	@echo "**"
++	@echo "********************************************"
++endif
++
++TEST_LIBTRACEFS = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEFS_MIN_VERSION) libtracefs > /dev/null 2>&1 || echo n")
++ifeq ("$(TEST_LIBTRACEFS)", "n")
++.PHONY: warning_tracefs
++warning_tracefs:
++	@echo "********************************************"
++	@echo "** NOTICE: libtracefs version $(LIBTRACEFS_MIN_VERSION) or higher not found"
++	@echo "**"
++	@echo "** Consider installing the latest libtracefs from your"
++	@echo "** distribution, e.g., 'dnf install libtracefs' on Fedora,"
++	@echo "** or from source:"
++	@echo "**"
++	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/ "
++	@echo "**"
++	@echo "********************************************"
++endif
++
+ .PHONY:	all
+ all:	rtla
  
- 	if (!size)
-@@ -1631,13 +1625,7 @@ static ssize_t iter_xarray_get_pages_alloc(struct iov_iter *i,
- 	if (nr == 0)
- 		return 0;
- 
--	actual = PAGE_SIZE * nr;
--	actual -= offset;
--	if (nr == count && size > 0) {
--		unsigned last_offset = (nr > 1) ? 0 : offset;
--		actual -= PAGE_SIZE - (last_offset + size);
--	}
--	return actual;
-+	return min(nr * PAGE_SIZE - offset, maxsize);
- }
- 
- ssize_t iov_iter_get_pages_alloc(struct iov_iter *i,
 -- 
 2.35.1
 

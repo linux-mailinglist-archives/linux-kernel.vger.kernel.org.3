@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B43925495AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B94548FFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382662AbiFMOWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
+        id S1354968AbiFMLgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:36:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383555AbiFMOQF (ORCPT
+        with ESMTP id S1354568AbiFML3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:16:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61009EB60;
-        Mon, 13 Jun 2022 04:43:24 -0700 (PDT)
+        Mon, 13 Jun 2022 07:29:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1ED20BD5;
+        Mon, 13 Jun 2022 03:45:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7670B80D31;
-        Mon, 13 Jun 2022 11:43:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E472C3411B;
-        Mon, 13 Jun 2022 11:43:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BBD960FDB;
+        Mon, 13 Jun 2022 10:45:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77EE7C34114;
+        Mon, 13 Jun 2022 10:45:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120601;
-        bh=BLK0FkCC59iYGwOJeMojtafFTczPpvl2QeNDU3bI/vQ=;
+        s=korg; t=1655117107;
+        bh=T7zgCZdrnSI9zOst5mi3apWNt045/z6rDMsSMmV8L38=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y9ZjJmoDOdJmWRz36Y2agfl74NWbWJucidEAolTLKDJcRh7tuZVG6jutPhGImeif4
-         +TJqieVGdJUGK+9apBhtYSFWvuGUSiAFOsitZdmilzQkbHIGxjb8knxJ2FX9PC9CMa
-         4/elQgTi4pMOtH3unKy43T30TPC8rtlwQM2Hrckc=
+        b=y3qImokIKhLGLqCAnhp5gc9SV6kRMLH4b2SFae/6N81SAeGo6/SO8n+EnlNq5zRa+
+         uahkj3vC6tmmk2anGtYCY0/2gO2uibziozZf04CrfxQW/PuSbP433TfcEGNUv6X0Bx
+         BGOzbogMcJPWAbJN3cc5joz+sWfRIKZoLGzA8RCk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Romain Naour <romain.naour@smile.fr>,
-        Tony Lindgren <tony@atomide.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 068/298] bus: ti-sysc: Fix warnings for unbind for serial
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Lin Ma <linma@zju.edu.cn>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 289/411] USB: storage: karma: fix rio_karma_init return
 Date:   Mon, 13 Jun 2022 12:09:22 +0200
-Message-Id: <20220613094927.009154999@linuxfoundation.org>
+Message-Id: <20220613094937.425345309@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Lindgren <tony@atomide.com>
+From: Lin Ma <linma@zju.edu.cn>
 
-[ Upstream commit c337125b8834f9719dfda0e40b25eaa266f1b8cf ]
+[ Upstream commit b92ffb1eddd9a66a90defc556dcbf65a43c196c7 ]
 
-We can get "failed to disable" clock_unprepare warnings on unbind at least
-for the serial console device if the unbind is done before the device has
-been idled.
+The function rio_karam_init() should return -ENOMEM instead of
+value 0 (USB_STOR_TRANSPORT_GOOD) when allocation fails.
 
-As some devices are using deferred idle, we must check the status for
-pending idle work to idle the device.
+Similarly, it should return -EIO when rio_karma_send_command() fails.
 
-Fixes: 76f0f772e469 ("bus: ti-sysc: Improve handling for no-reset-on-init and no-idle-on-init")
-Cc: Romain Naour <romain.naour@smile.fr>
-Reviewed-by: Romain Naour <romain.naour@smile.fr>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
-Link: https://lore.kernel.org/r/20220512053021.61650-1-tony@atomide.com
+Fixes: dfe0d3ba20e8 ("USB Storage: add rio karma eject support")
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220412144359.28447-1-linma@zju.edu.cn
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/bus/ti-sysc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/usb/storage/karma.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
-index 7a1b1f9e4933..70d00cea9d22 100644
---- a/drivers/bus/ti-sysc.c
-+++ b/drivers/bus/ti-sysc.c
-@@ -3395,7 +3395,9 @@ static int sysc_remove(struct platform_device *pdev)
- 	struct sysc *ddata = platform_get_drvdata(pdev);
- 	int error;
+diff --git a/drivers/usb/storage/karma.c b/drivers/usb/storage/karma.c
+index 05cec81dcd3f..38ddfedef629 100644
+--- a/drivers/usb/storage/karma.c
++++ b/drivers/usb/storage/karma.c
+@@ -174,24 +174,25 @@ static void rio_karma_destructor(void *extra)
  
--	cancel_delayed_work_sync(&ddata->idle_work);
-+	/* Device can still be enabled, see deferred idle quirk in probe */
-+	if (cancel_delayed_work_sync(&ddata->idle_work))
-+		ti_sysc_idle(&ddata->idle_work.work);
+ static int rio_karma_init(struct us_data *us)
+ {
+-	int ret = 0;
+ 	struct karma_data *data = kzalloc(sizeof(struct karma_data), GFP_NOIO);
  
- 	error = pm_runtime_resume_and_get(ddata->dev);
- 	if (error < 0) {
+ 	if (!data)
+-		goto out;
++		return -ENOMEM;
+ 
+ 	data->recv = kmalloc(RIO_RECV_LEN, GFP_NOIO);
+ 	if (!data->recv) {
+ 		kfree(data);
+-		goto out;
++		return -ENOMEM;
+ 	}
+ 
+ 	us->extra = data;
+ 	us->extra_destructor = rio_karma_destructor;
+-	ret = rio_karma_send_command(RIO_ENTER_STORAGE, us);
+-	data->in_storage = (ret == 0);
+-out:
+-	return ret;
++	if (rio_karma_send_command(RIO_ENTER_STORAGE, us))
++		return -EIO;
++
++	data->in_storage = 1;
++
++	return 0;
+ }
+ 
+ static struct scsi_host_template karma_host_template;
 -- 
 2.35.1
 

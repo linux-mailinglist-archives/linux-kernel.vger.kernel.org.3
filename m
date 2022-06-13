@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA9CE5495DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A07549595
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245348AbiFMK1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:27:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
+        id S1358815AbiFMNHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343779AbiFMKZB (ORCPT
+        with ESMTP id S239217AbiFMMzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:25:01 -0400
+        Mon, 13 Jun 2022 08:55:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A963CE28;
-        Mon, 13 Jun 2022 03:19:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 907A6DFC8;
+        Mon, 13 Jun 2022 04:16:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B56560B8E;
-        Mon, 13 Jun 2022 10:19:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD1DDC34114;
-        Mon, 13 Jun 2022 10:19:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D03960B6B;
+        Mon, 13 Jun 2022 11:16:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EC9CC34114;
+        Mon, 13 Jun 2022 11:16:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115567;
-        bh=OSx5Plsy9bUj2pyXOeEwEF2U7wIAunktWya3GWs0sF0=;
+        s=korg; t=1655118964;
+        bh=JvD0aaCdi1KOqBVa71WtDHZ7Uwi3CKeJnRuEToyDQoY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LskNaxqXeDN3TDOG9iYPEEFRzivkM4RsyeHlqxSGDTR4FItDFS4SnRHbXiErDyzEi
-         eksiMx8n2wXxXIZErmGAlhG1gZ2BXUgu0AoPag4Go//NsuSV+XufGLY8XvCQDx1ZSz
-         EemmaiGLH4sIKp/ZZF25/ScUeI2JaiKlto3+2n+k=
+        b=NSY+4BoBgiy4QEgqIVM31+s8wvW39iIxqkg2EkaQMGaAqkgwO4vr6a0tEC4myczHX
+         jvs5YWV9stRx2BLpuJ95FhYAH6+Fz4GPECt3cwuGqmzefOlvBxmqcn0I6FsEaR+cdB
+         18tLvjph9UnjvxnMTVnPS3SvEUv2wT8lRNQpHkEM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 120/167] serial: st-asc: Sanitize CSIZE and correct PARENB for CS7
+Subject: [PATCH 5.15 092/247] virtio: pci: Fix an error handling path in vp_modern_probe()
 Date:   Mon, 13 Jun 2022 12:09:54 +0200
-Message-Id: <20220613094908.870484747@linuxfoundation.org>
+Message-Id: <20220613094925.747641168@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-[ Upstream commit 52bb1cb7118564166b04d52387bd8403632f5190 ]
+[ Upstream commit 7a836a2aba09479c8e71fa43249eecc4af945f61 ]
 
-Only CS7 and CS8 seem supported but CSIZE is not sanitized from CS5 or
-CS6 to CS8. In addition, ASC_CTL_MODE_7BIT_PAR suggests that CS7 has
-to have parity, thus add PARENB.
+If an error occurs after a successful pci_request_selected_regions() call,
+it should be undone by a corresponding pci_release_selected_regions() call,
+as already done in vp_modern_remove().
 
-Incorrect CSIZE results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
-
-Fixes: c4b058560762 (serial:st-asc: Add ST ASC driver.)
-Cc: Srinivas Kandagatla <srinivas.kandagatla@st.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-8-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: fd502729fbbf ("virtio-pci: introduce modern device module")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Message-Id: <237109725aad2c3c03d14549f777b1927c84b045.1648977064.git.christophe.jaillet@wanadoo.fr>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/st-asc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/virtio/virtio_pci_modern_dev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
-index 379e5bd37df9..b845cd05e350 100644
---- a/drivers/tty/serial/st-asc.c
-+++ b/drivers/tty/serial/st-asc.c
-@@ -509,10 +509,14 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
- 	/* set character length */
- 	if ((cflag & CSIZE) == CS7) {
- 		ctrl_val |= ASC_CTL_MODE_7BIT_PAR;
-+		cflag |= PARENB;
- 	} else {
- 		ctrl_val |= (cflag & PARENB) ?  ASC_CTL_MODE_8BIT_PAR :
- 						ASC_CTL_MODE_8BIT;
-+		cflag &= ~CSIZE;
-+		cflag |= CS8;
- 	}
-+	termios->c_cflag = cflag;
- 
- 	/* set stop bit */
- 	ctrl_val |= (cflag & CSTOPB) ? ASC_CTL_STOP_2BIT : ASC_CTL_STOP_1BIT;
+diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+index e11ed748e661..9ab66e44738e 100644
+--- a/drivers/virtio/virtio_pci_modern_dev.c
++++ b/drivers/virtio/virtio_pci_modern_dev.c
+@@ -340,6 +340,7 @@ int vp_modern_probe(struct virtio_pci_modern_device *mdev)
+ err_map_isr:
+ 	pci_iounmap(pci_dev, mdev->common);
+ err_map_common:
++	pci_release_selected_regions(pci_dev, mdev->modern_bars);
+ 	return err;
+ }
+ EXPORT_SYMBOL_GPL(vp_modern_probe);
 -- 
 2.35.1
 

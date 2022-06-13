@@ -2,302 +2,442 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E267554910D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DD15493BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243352AbiFMPfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 11:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51632 "EHLO
+        id S241925AbiFMPgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 11:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241511AbiFMPeq (ORCPT
+        with ESMTP id S244020AbiFMPg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 11:34:46 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF7B377EE;
-        Mon, 13 Jun 2022 06:07:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655125625; x=1686661625;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RjncP8fHJaZm0GW9zoaAk/zj6fE5CQig6aRBxp/wKTw=;
-  b=djcktMo1eMQYk4skgRSd/00BST+0fk2iSOAm4MjxRjvXarLGz5lqJVK2
-   +dPiqBXO/T5URDSHz+LViRtV6SvhVDKWYiPg6NKhjG/292NIjErY7LFZf
-   kpFItpZSEnZu1AMpwtj2GHyW4rBCb10DELma1wrw3l62pZ0EBR78mVArB
-   w=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Jun 2022 06:07:04 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 06:07:04 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 13 Jun 2022 06:07:04 -0700
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 13 Jun
- 2022 06:07:03 -0700
-Message-ID: <b3f5e49d-8917-79ab-8f59-29ad6cec3973@quicinc.com>
-Date:   Mon, 13 Jun 2022 07:07:02 -0600
+        Mon, 13 Jun 2022 11:36:29 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228FE37A1E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655125782; x=1686661782;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8BT33jqkr0Mey1KPDiX0RaT6a0Pzs/wL0Ht2rrQ6CV8=;
+  b=kF0R6S4T41OzFhQn7UGkvgxkcGrGIXg4rsCiWXaF82LUkhropyl08dvE
+   HEijZzXq2Ml8CuHHkWonnTSUCKa5GgRMrAS+NHPlQv4W7MF9I9IJXrRVE
+   V8y//haWTuK4IqTWKVRNg9vSxWnoQRDAP2DgCbiJQI07AmYvBhz3wT6Dp
+   sFXXpBgeBpbqKLMMmcjiPYsIPSKQIhrD5W37d2BodXrSILHGDfhjk92Xp
+   2MKl1FT5jc4MvswIjru1ebe0M2jehxhA11EvV8UB58aeMOP9GmiWQZ3vE
+   IjwzoIYe+SfpQ5om81GooC91TuDB7iB2UQfxSQOgtBQochxa0y6SDrLan
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="261312355"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="261312355"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 06:07:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="686037911"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 13 Jun 2022 06:07:45 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o0jnE-000KpH-N5;
+        Mon, 13 Jun 2022 13:07:44 +0000
+Date:   Mon, 13 Jun 2022 21:07:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hector Martin <marcan@marcan.st>
+Subject: [asahilinux:bits/070-audio 2/20] drivers/dma/apple-admac.c:202:26:
+ warning: format '%llx' expects argument of type 'long long unsigned int',
+ but argument 5 has type 'dma_addr_t' {aka 'unsigned int'}
+Message-ID: <202206132033.WzFAP6E9-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] bus: mhi: Disable IRQs instead of freeing them during
- power down
-Content-Language: en-US
-To:     Qiang Yu <quic_qianyu@quicinc.com>, <mani@kernel.org>,
-        <quic_hemantk@quicinc.com>, <loic.poulain@linaro.org>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_cang@quicinc.com>
-References: <1654782215-70383-1-git-send-email-quic_qianyu@quicinc.com>
- <62d09e6f-9898-6233-dfd6-b5ba5d837571@quicinc.com>
- <9659ecb9-9727-a146-e286-d28d656483c3@quicinc.com>
- <9a11394d-f7df-e549-8afb-0834f7d30202@quicinc.com>
- <8eceb966-b5c1-8913-ac97-95348f92650d@quicinc.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <8eceb966-b5c1-8913-ac97-95348f92650d@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/12/2022 7:48 PM, Qiang Yu wrote:
-> 
-> On 6/10/2022 10:00 PM, Jeffrey Hugo wrote:
->> On 6/9/2022 9:21 PM, Qiang Yu wrote:
->>> On 6/9/2022 9:54 PM, Jeffrey Hugo wrote:
->>>
->>>> On 6/9/2022 7:43 AM, Qiang Yu wrote:
->>>>> EP tends to read MSI address/data once and cache them after BME is 
->>>>> set.
->>>>> So host should avoid changing MSI address/data after BME is set.
->>>>>
->>>>> In pci reset function, host invokes free_irq(), which also clears MSI
->>>>> address/data in EP's PCIe config space. If the invalid address/data
->>>>> are cached and used by EP, MSI triggered by EP wouldn't be received by
->>>>> host, because an invalid MSI data is sent to an invalid MSI address.
->>>>>
->>>>> To fix this issue, after host runs request_irq() successfully during
->>>>> mhi driver probe, let's invoke enable_irq()/disable_irq() instead of
->>>>> request_irq()/free_irq() when we want to power on and power down MHI.
->>>>> Meanwhile, Host should invoke free_irq() when mhi host driver is
->>>>> removed.
->>>>
->>>> I don't think this works for hotplug, nor cases where there are 
->>>> multiple MHI devices on the system.
->>>>
->>>> The EP shouldn't be caching this information for multiple reasons. 
->>>> Masking the MSIs, disabling the MSIs, changing the address when the 
->>>> affinity changes, etc.
->>>>
->>>> It really feels like we are solving the problem in the wrong place.
->>>>
->>>> Right now, this gets a NACK from me.
->>>>
->>> After free_irq(), MSI is still enabled but MSI address and data are 
->>> cleared. So there is a chance that device initiates MSI using zero 
->>> address. How to fix this race conditions.
->>
->> On what system is MSI still enabled?  I just removed the AIC100 
->> controller on an random x86 system, and lspci is indicating MSIs are 
->> disabled -
->>
->> Capabilities: [50] MSI: Enable- Count=32/32 Maskable+ 64bit+
-> 
-> system: Ubuntu18.04, 5.4.0-89-generic,  Intel(R) Core(TM) i7-6700 CPU @ 
-> 3.40GHz
-> 
-> After removing MHI driver, I also see MSI enable is cleared.  But I 
-> don't think free_irq clears it. I add log before free_irq and after 
-> free_irq as following show:
-> 
-> [62777.625111] msi cap before free irq
-> [62777.625125] msi control=0x1bb, address=0xfee00318, data=0x0
-> [62777.625301] msi cap after free irq
-> [62777.625313] msi control=0x1bb, address=0x0, data=0x0
-> [62777.625496] mhi-pci-generic 0000:01:00.0: mhi_pci_remove end of line, 
-> block 90 secs.
-> # lspci -vvs 01:00.0
->          Capabilities: [50] MSI: Enable+ Count=8/32 Maskable+ 64bit+
->                  Address: 0000000000000000  Data: 0000
->                  Masking: ffffffff  Pending: 00000000
+tree:   https://github.com/AsahiLinux/linux bits/070-audio
+head:   401ef594286e6abfe89c2d92664087bc5d6ca657
+commit: d2b3a34a7f529cd3e338989d7b4c71981180ad30 [2/20] dmaengine: apple-admac: Add Apple ADMAC driver
+config: h8300-allyesconfig (https://download.01.org/0day-ci/archive/20220613/202206132033.WzFAP6E9-lkp@intel.com/config)
+compiler: h8300-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/AsahiLinux/linux/commit/d2b3a34a7f529cd3e338989d7b4c71981180ad30
+        git remote add asahilinux https://github.com/AsahiLinux/linux
+        git fetch --no-tags asahilinux bits/070-audio
+        git checkout d2b3a34a7f529cd3e338989d7b4c71981180ad30
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=h8300 SHELL=/bin/bash drivers/dma/
 
-At this point, the MSI functionality is still enabled, but every MSI is 
-masked out (Masking), so per the PCIe spec, the endpoint may not trigger 
-a MSI to the host.  The device advertises that it supports maskable MSIs 
-(Maskable+), so this is appropiate.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-If your device can still send a MSI at this point, then it violates the 
-PCIe spec.
+All warnings (new ones prefixed by >>):
 
-disable_irq() will not help you with this as it will do the same thing.
+   In file included from include/linux/build_bug.h:5,
+                    from include/linux/bits.h:22,
+                    from drivers/dma/apple-admac.c:1:
+   include/linux/scatterlist.h: In function 'sg_set_buf':
+   include/asm-generic/page.h:89:51: warning: ordered comparison of pointer with null pointer [-Wextra]
+      89 | #define virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
+         |                                                   ^~
+   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
+      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                             ^
+   include/linux/scatterlist.h:160:9: note: in expansion of macro 'BUG_ON'
+     160 |         BUG_ON(!virt_addr_valid(buf));
+         |         ^~~~~~
+   include/linux/scatterlist.h:160:17: note: in expansion of macro 'virt_addr_valid'
+     160 |         BUG_ON(!virt_addr_valid(buf));
+         |                 ^~~~~~~~~~~~~~~
+   In file included from include/linux/printk.h:555,
+                    from include/asm-generic/bug.h:22,
+                    from arch/h8300/include/asm/bug.h:8,
+                    from include/linux/bug.h:5,
+                    from include/linux/thread_info.h:13,
+                    from include/asm-generic/current.h:5,
+                    from ./arch/h8300/include/generated/asm/current.h:1,
+                    from include/linux/sched.h:12,
+                    from include/linux/ratelimit.h:6,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from drivers/dma/apple-admac.c:3:
+   drivers/dma/apple-admac.c: In function 'admac_cyclic_write_one_desc':
+>> drivers/dma/apple-admac.c:202:26: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 5 has type 'dma_addr_t' {aka 'unsigned int'} [-Wformat=]
+     202 |         dev_dbg(ad->dev, "ch%d descriptor: addr=0x%llx len=0x%x flags=0x%lx\n",
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:29: note: in definition of macro '__dynamic_func_call'
+     134 |                 func(&id, ##__VA_ARGS__);               \
+         |                             ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:166:9: note: in expansion of macro '_dynamic_func_call'
+     166 |         _dynamic_func_call(fmt,__dynamic_dev_dbg,               \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:9: note: in expansion of macro 'dynamic_dev_dbg'
+     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:155:30: note: in expansion of macro 'dev_fmt'
+     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                              ^~~~~~~
+   drivers/dma/apple-admac.c:202:9: note: in expansion of macro 'dev_dbg'
+     202 |         dev_dbg(ad->dev, "ch%d descriptor: addr=0x%llx len=0x%x flags=0x%lx\n",
+         |         ^~~~~~~
+   drivers/dma/apple-admac.c:202:54: note: format string is defined here
+     202 |         dev_dbg(ad->dev, "ch%d descriptor: addr=0x%llx len=0x%x flags=0x%lx\n",
+         |                                                   ~~~^
+         |                                                      |
+         |                                                      long long unsigned int
+         |                                                   %x
+   drivers/dma/apple-admac.c:206:53: warning: right shift count >= width of type [-Wshift-count-overflow]
+     206 |         admac_poke(ad, REG_DESC_WRITE(channo), addr >> 32);
+         |                                                     ^~
+   drivers/dma/apple-admac.c: At top level:
+>> drivers/dma/apple-admac.c:260:5: warning: no previous prototype for 'admac_cyclic_read_residue' [-Wmissing-prototypes]
+     260 | u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
 
-I still think you are trying to fix an issue in the wrong location (host 
-vs EP), and causing additional issues by doing so.
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
+   Depends on HAS_IOMEM && DRM && MMU
+   Selected by
+   - DRM_SSD130X && HAS_IOMEM && DRM
 
-> [62868.692186] mhi-pci-generic 0000:01:00.0: mhi_pci_remove 90 sec expire.
-> # lspci -vvs 01:00.0
->          Capabilities: [50] MSI: Enable- Count=8/32 Maskable+ 64bit+
->                  Address: 0000000000000000  Data: 0000
->                  Masking: 00000000  Pending: 00000000
-> 
-> I also add msleep() at last of remove callback to block the remove 
-> operation, then lspci shows MSI is still enabled  and after MHI driver 
-> is removed,
-> 
-> lspci shows MSI is disabled. It proves free_irq does not clear MSI 
-> enable, although I am not sure who does it (probably pci framework 
-> clears but I don 't find it).
-> 
-> I delete pci_free_irq_vectors() when I test.
-> 
->>
->>> Maybe EP should not cache MSI data and address. But I think this 
->>> patch is necessary and we will talk with EP POC.
->>>
->>>>>
->>>>> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
->>>>> ---
->>>>>   drivers/bus/mhi/host/init.c        | 31 
->>>>> +++++++++++++++++++++++++++++++
->>>>>   drivers/bus/mhi/host/pci_generic.c |  2 ++
->>>>>   drivers/bus/mhi/host/pm.c          |  4 ++--
->>>>>   3 files changed, 35 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
->>>>> index cbb86b2..48cb093 100644
->>>>> --- a/drivers/bus/mhi/host/init.c
->>>>> +++ b/drivers/bus/mhi/host/init.c
->>>>> @@ -18,6 +18,7 @@
->>>>>   #include <linux/slab.h>
->>>>>   #include <linux/vmalloc.h>
->>>>>   #include <linux/wait.h>
->>>>> +#include <linux/irq.h>
->>>>
->>>> Should be in alphabetical order
->>>>
->>>>>   #include "internal.h"
->>>>>     static DEFINE_IDA(mhi_controller_ida);
->>>>> @@ -168,6 +169,22 @@ int mhi_init_irq_setup(struct mhi_controller 
->>>>> *mhi_cntrl)
->>>>>       unsigned long irq_flags = IRQF_SHARED | IRQF_NO_SUSPEND;
->>>>>       int i, ret;
->>>>>   +    /*
->>>>> +     * if irq[0] has action, it represents all MSI IRQs have been
->>>>> +     * requested, so we just need to enable them.
->>>>> +     */
->>>>
->>>> This seems like an assumption about how the interrupts are allocated 
->>>> and assigned that may not hold true for all devices.
->>>
->>> All interrupts are allocated and assigned together in 
->>> mhi_pci_get_irqs() and mhi_init_irq_setup().
->>>
->>> So I think if irq[0] has action, other irqs must be requested 
->>> successfully. If any other msi request fail, irq[0] should have been 
->>> freed.
->>>
->>>>> +    if (irq_has_action(mhi_cntrl->irq[0])) {
->>>>> +        enable_irq(mhi_cntrl->irq[0]);
->>>>> +
->>>>> +        for (i = 0; i < mhi_cntrl->total_ev_rings; i++, 
->>>>> mhi_event++) {
->>>>> +            if (mhi_event->offload_ev)
->>>>> +                continue;
->>>>> +
->>>>> + enable_irq(mhi_cntrl->irq[mhi_event->irq]);
->>>>> +        }
->>>>> +        return 0;
->>>>> +    }
->>>>> +
->>>>>       /* if controller driver has set irq_flags, use it */
->>>>>       if (mhi_cntrl->irq_flags)
->>>>>           irq_flags = mhi_cntrl->irq_flags;
->>>>> @@ -179,6 +196,11 @@ int mhi_init_irq_setup(struct mhi_controller 
->>>>> *mhi_cntrl)
->>>>>                      "bhi", mhi_cntrl);
->>>>>       if (ret)
->>>>>           return ret;
->>>>> +    /*
->>>>> +     * IRQ marked IRQF_SHARED isn't recommended to use IRQ_NOAUTOEN,
->>>>> +     * so disable it explicitly.
->>>>> +     */
->>>>> +    disable_irq(mhi_cntrl->irq[0]);
->>>>>         for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
->>>>>           if (mhi_event->offload_ev)
->>>>> @@ -200,6 +222,8 @@ int mhi_init_irq_setup(struct mhi_controller 
->>>>> *mhi_cntrl)
->>>>>                   mhi_cntrl->irq[mhi_event->irq], i);
->>>>>               goto error_request;
->>>>>           }
->>>>> +
->>>>> +        disable_irq(mhi_cntrl->irq[mhi_event->irq]);
->>>>>       }
->>>>>         return 0;
->>>>> @@ -1003,8 +1027,14 @@ int mhi_register_controller(struct 
->>>>> mhi_controller *mhi_cntrl,
->>>>>         mhi_create_debugfs(mhi_cntrl);
->>>>>   +    ret = mhi_init_irq_setup(mhi_cntrl);
->>>>> +    if (ret)
->>>>> +        goto error_setup_irq;
->>>>> +
->>>>>       return 0;
->>>>>   +error_setup_irq:
->>>>> +    mhi_destroy_debugfs(mhi_cntrl);
->>>>>   err_release_dev:
->>>>>       put_device(&mhi_dev->dev);
->>>>>   err_ida_free:
->>>>> @@ -1027,6 +1057,7 @@ void mhi_unregister_controller(struct 
->>>>> mhi_controller *mhi_cntrl)
->>>>>       struct mhi_chan *mhi_chan = mhi_cntrl->mhi_chan;
->>>>>       unsigned int i;
->>>>>   +    mhi_deinit_free_irq(mhi_cntrl);
->>>>>       mhi_destroy_debugfs(mhi_cntrl);
->>>>>         destroy_workqueue(mhi_cntrl->hiprio_wq);
->>>>> diff --git a/drivers/bus/mhi/host/pci_generic.c 
->>>>> b/drivers/bus/mhi/host/pci_generic.c
->>>>> index 6fbc591..60020d0 100644
->>>>> --- a/drivers/bus/mhi/host/pci_generic.c
->>>>> +++ b/drivers/bus/mhi/host/pci_generic.c
->>>>> @@ -945,6 +945,8 @@ static void mhi_pci_remove(struct pci_dev *pdev)
->>>>>         mhi_unregister_controller(mhi_cntrl);
->>>>>       pci_disable_pcie_error_reporting(pdev);
->>>>> +
->>>>> +    pci_free_irq_vectors(pdev);
->>>>>   }
->>>>>     static void mhi_pci_shutdown(struct pci_dev *pdev)
->>>>> diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
->>>>> index dc2e8ff..190231c 100644
->>>>> --- a/drivers/bus/mhi/host/pm.c
->>>>> +++ b/drivers/bus/mhi/host/pm.c
->>>>> @@ -500,7 +500,7 @@ static void mhi_pm_disable_transition(struct 
->>>>> mhi_controller *mhi_cntrl)
->>>>>       for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
->>>>>           if (mhi_event->offload_ev)
->>>>>               continue;
->>>>> -        free_irq(mhi_cntrl->irq[mhi_event->irq], mhi_event);
->>>>> +        disable_irq(mhi_cntrl->irq[mhi_event->irq]);
->>>>>           tasklet_kill(&mhi_event->task);
->>>>>       }
->>>>>   @@ -1182,7 +1182,7 @@ void mhi_power_down(struct mhi_controller 
->>>>> *mhi_cntrl, bool graceful)
->>>>>       /* Wait for shutdown to complete */
->>>>>       flush_work(&mhi_cntrl->st_worker);
->>>>>   -    free_irq(mhi_cntrl->irq[0], mhi_cntrl);
->>>>> +    disable_irq(mhi_cntrl->irq[0]);
->>>>>   }
->>>>>   EXPORT_SYMBOL_GPL(mhi_power_down);
->>>>
->>
 
+vim +202 drivers/dma/apple-admac.c
+
+   > 3	#include <linux/device.h>
+     4	#include <linux/init.h>
+     5	#include <linux/module.h>
+     6	#include <linux/of_device.h>
+     7	#include <linux/of_dma.h>
+     8	#include <linux/interrupt.h>
+     9	#include <linux/spinlock.h>
+    10	#include <linux/pm_runtime.h>
+    11	
+    12	#include "dmaengine.h"
+    13	
+    14	#define NCHANNELS_MAX	64
+    15	
+    16	#define RING_WRITE_SLOT		GENMASK(1, 0)
+    17	#define RING_READ_SLOT		GENMASK(5, 4)
+    18	#define RING_FULL  		BIT(9)
+    19	#define RING_EMPTY 		BIT(8)
+    20	#define RING_ERR   		BIT(10)
+    21	
+    22	#define STATUS_DESC_DONE	BIT(0)
+    23	#define STATUS_ERR		BIT(6)
+    24	
+    25	#define FLAG_DESC_NOTIFY	BIT(16)
+    26	
+    27	#define REG_TX_START		0x0000
+    28	#define REG_TX_STOP		0x0004
+    29	#define REG_RX_START		0x0008
+    30	#define REG_RX_STOP		0x000c
+    31	
+    32	#define REG_CHAN_CTL(ch)	(0x8000 + (ch)*0x200)
+    33	#define REG_CHAN_CTL_RST_RINGS	BIT(0)
+    34	
+    35	#define REG_DESC_RING(ch)	(0x8070 + (ch)*0x200)
+    36	#define REG_REPORT_RING(ch)	(0x8074 + (ch)*0x200)
+    37	
+    38	#define REG_RESIDUE(ch)		(0x8064 + (ch)*0x200)
+    39	
+    40	#define REG_BUS_WIDTH(ch)	(0x8040 + (ch)*0x200)
+    41	
+    42	#define BUS_WIDTH_8BIT		0x00
+    43	#define BUS_WIDTH_16BIT		0x01
+    44	#define BUS_WIDTH_32BIT		0x02
+    45	#define BUS_WIDTH_FRAME_2_WORDS	0x10
+    46	#define BUS_WIDTH_FRAME_4_WORDS	0x20
+    47	
+    48	#define REG_CHAN_BURSTSIZE(ch)  (0x8054 + (ch)*0x200)
+    49	
+    50	#define REG_DESC_WRITE(ch)	(0x10000 + (ch / 2) * 0x4 + (ch & 1) * 0x4000)
+    51	#define REG_REPORT_READ(ch)	(0x10100 + (ch / 2) * 0x4 + (ch & 1) * 0x4000)
+    52	
+    53	#define IRQ_INDEX_MAX		3
+    54	
+    55	#define REG_TX_INTSTATE(idx)		(0x0030 + (idx) * 4)
+    56	#define REG_RX_INTSTATE(idx)		(0x0040 + (idx) * 4)
+    57	#define REG_CHAN_INTSTATUS(ch,idx)	(0x8010 + (ch) * 0x200 + (idx) * 4)
+    58	#define REG_CHAN_INTMASK(ch,idx)	(0x8020 + (ch) * 0x200 + (idx) * 4)
+    59	
+    60	struct admac_data;
+    61	struct admac_tx;
+    62	
+    63	struct admac_chan {
+    64		int no;
+    65		struct admac_data *host;
+    66		struct dma_chan chan;
+    67		struct tasklet_struct tasklet;
+    68	
+    69		spinlock_t lock;
+    70		struct admac_tx *current_tx;
+    71		int nperiod_acks;
+    72	
+    73		struct list_head submitted;
+    74		struct list_head issued;
+    75	};
+    76	
+    77	struct admac_data {
+    78		struct dma_device dma;
+    79		struct device *dev;
+    80		__iomem void *base;
+    81	
+    82		int irq_index;
+    83		int nchannels;
+    84		struct admac_chan channels[];
+    85	};
+    86	
+    87	struct admac_tx {
+    88		struct dma_async_tx_descriptor tx;
+    89		bool cyclic;
+    90		dma_addr_t buf_addr;
+    91		dma_addr_t buf_end;
+    92		size_t buf_len;
+    93		size_t period_len;
+    94	
+    95		size_t submitted_pos;
+    96		size_t reclaimed_pos;
+    97	
+    98		struct list_head node;
+    99	};
+   100	
+   101	static void admac_poke(struct admac_data *ad, int reg, u32 val)
+   102	{
+   103		writel_relaxed(val, ad->base + reg);
+   104	}
+   105	
+   106	static u32 admac_peek(struct admac_data *ad, int reg)
+   107	{
+   108		return readl_relaxed(ad->base + reg);
+   109	}
+   110	
+   111	static void admac_modify(struct admac_data *ad, int reg, u32 mask, u32 val)
+   112	{
+   113		void __iomem *addr = ad->base + reg;
+   114		u32 curr = readl_relaxed(addr);
+   115	
+   116		writel_relaxed((curr & ~mask) | (val & mask), addr);
+   117	}
+   118	
+   119	static struct admac_chan *to_admac_chan(struct dma_chan *chan)
+   120	{
+   121		return container_of(chan, struct admac_chan, chan);
+   122	}
+   123	
+   124	static struct admac_tx *to_admac_tx(struct dma_async_tx_descriptor *tx)
+   125	{
+   126		return container_of(tx, struct admac_tx, tx);
+   127	}
+   128	
+   129	static enum dma_transfer_direction admac_chan_direction(int channo)
+   130	{
+   131		return (channo & 1) ? DMA_DEV_TO_MEM : DMA_MEM_TO_DEV;
+   132	}
+   133	
+   134	static dma_cookie_t admac_tx_submit(struct dma_async_tx_descriptor *tx)
+   135	{
+   136		struct admac_tx *adtx = to_admac_tx(tx);
+   137		struct admac_chan *adchan = to_admac_chan(tx->chan);
+   138		unsigned long flags;
+   139		dma_cookie_t cookie;
+   140	
+   141		spin_lock_irqsave(&adchan->lock, flags);
+   142		cookie = dma_cookie_assign(tx);
+   143		list_add_tail(&adtx->node, &adchan->submitted);
+   144		spin_unlock_irqrestore(&adchan->lock, flags);
+   145	
+   146		return cookie;
+   147	}
+   148	
+   149	static int admac_desc_free(struct dma_async_tx_descriptor *tx)
+   150	{
+   151		struct admac_tx *adtx = to_admac_tx(tx);
+   152		devm_kfree(to_admac_chan(tx->chan)->host->dev, adtx);
+   153		return 0;
+   154	}
+   155	
+   156	static struct dma_async_tx_descriptor *admac_prep_dma_cyclic(
+   157			struct dma_chan *chan, dma_addr_t buf_addr, size_t buf_len,
+   158			size_t period_len, enum dma_transfer_direction direction,
+   159			unsigned long flags)
+   160	{
+   161		struct admac_chan *adchan = container_of(chan, struct admac_chan, chan);
+   162		struct admac_tx *adtx;
+   163	
+   164		if (direction != admac_chan_direction(adchan->no))
+   165			return NULL;
+   166	
+   167		adtx = devm_kzalloc(adchan->host->dev, sizeof(*adtx), GFP_NOWAIT);
+   168		if (!adtx)
+   169			return NULL;
+   170	
+   171		adtx->cyclic = true;
+   172	
+   173		adtx->buf_addr = buf_addr;
+   174		adtx->buf_len = buf_len;
+   175		adtx->buf_end = buf_addr + buf_len;
+   176		adtx->period_len = period_len;
+   177	
+   178		adtx->submitted_pos = 0;
+   179		adtx->reclaimed_pos = 0;
+   180	
+   181		dma_async_tx_descriptor_init(&adtx->tx, chan);
+   182		adtx->tx.tx_submit = admac_tx_submit;
+   183		adtx->tx.desc_free = admac_desc_free;
+   184	
+   185		return &adtx->tx;
+   186	}
+   187	
+   188	/*
+   189	 * Write one hardware descriptor for a dmaegine cyclic transaction.
+   190	 */
+   191	static void admac_cyclic_write_one_desc(struct admac_data *ad, int channo,
+   192						struct admac_tx *tx)
+   193	{
+   194		dma_addr_t addr;
+   195	
+   196		if (WARN_ON(!tx->cyclic))
+   197			return;
+   198	
+   199		addr = tx->buf_addr + (tx->submitted_pos % tx->buf_len);
+   200		WARN_ON(addr + tx->period_len > tx->buf_end);
+   201	
+ > 202		dev_dbg(ad->dev, "ch%d descriptor: addr=0x%llx len=0x%x flags=0x%lx\n",
+   203			channo, addr, (u32) tx->period_len, FLAG_DESC_NOTIFY);
+   204	
+   205		admac_poke(ad, REG_DESC_WRITE(channo), addr);
+ > 206		admac_poke(ad, REG_DESC_WRITE(channo), addr >> 32);
+   207		admac_poke(ad, REG_DESC_WRITE(channo), tx->period_len);
+   208		admac_poke(ad, REG_DESC_WRITE(channo), FLAG_DESC_NOTIFY);
+   209	
+   210		tx->submitted_pos += tx->period_len;
+   211		tx->submitted_pos %= 2 * tx->buf_len;
+   212	}
+   213	
+   214	/*
+   215	 * Write all the hardware descriptors for a cyclic transaction
+   216	 * there is space for.
+   217	 */
+   218	static void admac_cyclic_write_desc(struct admac_data *ad, int channo,
+   219						struct admac_tx *tx)
+   220	{
+   221		int i;
+   222	
+   223		for (i = 0; i < 4; i++) {
+   224			if (admac_peek(ad, REG_DESC_RING(channo)) & RING_FULL)
+   225				break;
+   226			admac_cyclic_write_one_desc(ad, channo, tx);
+   227		}
+   228	}
+   229	
+   230	static int admac_alloc_chan_resources(struct dma_chan *chan)
+   231	{
+   232		return 0;
+   233	}
+   234	
+   235	static void admac_free_chan_resources(struct dma_chan *chan)
+   236	{
+   237		// TODO
+   238	}
+   239	
+   240	static int admac_ring_noccupied_slots(int ringval)
+   241	{
+   242		int wrslot = FIELD_GET(RING_WRITE_SLOT, ringval);
+   243		int rdslot = FIELD_GET(RING_READ_SLOT, ringval);
+   244	
+   245		if (wrslot != rdslot) {
+   246			return (wrslot + 4 - rdslot) % 4;
+   247		} else {
+   248			WARN_ON((ringval & (RING_FULL | RING_EMPTY)) == 0);
+   249	
+   250			if (ringval & RING_FULL)
+   251				return 4;
+   252			else
+   253				return 0;
+   254		}
+   255	}
+   256	
+   257	/*
+   258	 * Read from hardware the residue of a cyclic dmaengine transaction.
+   259	 */
+ > 260	u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
+   261	{
+   262		u32 ring1, ring2;
+   263		u32 residue1, residue2;
+   264		int nreports;
+   265		size_t pos;
+   266	
+   267		ring1 =    admac_peek(ad, REG_REPORT_RING(channo));
+   268		residue1 = admac_peek(ad, REG_RESIDUE(channo));
+   269		ring2 =    admac_peek(ad, REG_REPORT_RING(channo));
+   270		residue2 = admac_peek(ad, REG_RESIDUE(channo));
+   271	
+   272		if (residue2 > residue1) {
+   273			// engine must have loaded next descriptor between the two residue reads
+   274			nreports = admac_ring_noccupied_slots(ring1) + 1;
+   275		} else {
+   276			// no descriptor load between the two reads, ring2 is safe to use
+   277			nreports = admac_ring_noccupied_slots(ring2);
+   278		}
+   279	
+   280		pos = adtx->reclaimed_pos + adtx->period_len * (nreports + 1) \
+   281							 - residue2;
+   282	
+   283		return adtx->buf_len - pos % adtx->buf_len;
+   284	}
+   285	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

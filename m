@@ -2,103 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A56454A022
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:49:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B6E54A09A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:59:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351124AbiFMUtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
+        id S1352337AbiFMU7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348989AbiFMUsV (ORCPT
+        with ESMTP id S1352273AbiFMUyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:48:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD921038;
-        Mon, 13 Jun 2022 13:06:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 142FC61571;
-        Mon, 13 Jun 2022 20:06:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B61C34114;
-        Mon, 13 Jun 2022 20:06:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655150772;
-        bh=shKSr/RiV2YcabImw7K3ffFlzf7xs/cPOaAF6/t5ZCY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H6L7u8jMeuHogNoG/VW04jHZnGwXKCZBPaTJGxSSqpB0MMqThvHKRUfAgUAse7XMi
-         Fq9RKmJsGedh9kVH4+rJBcqEKiGRR+Fe/JTZIWXbpG8slKGaFz4kPODA8XySEx/67p
-         n+0uVqzRAMWG9d4fFJqZA4fGynEycyzh2VFZBrkYZvWf4BgPHVCxm0NKCmOvEXMOlt
-         YcWcJZDR21nkVN1hJdZHNDAUXXpx4sUkMRraL62CEKWXw7PIoK7BL9bxlwjO1/QwN4
-         EkynUGfbS3HuQDo8J0t9AE175CXIA13cUq3ChEUnymiyQDH96C3SjpWgo+FlzTJ+P3
-         o/XGffJtFCgXA==
-Date:   Mon, 13 Jun 2022 22:06:07 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     Codrin.Ciubotariu@microchip.com, linux-i2c@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Ludovic.Desroches@microchip.com,
-        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        robh+dt@kernel.org, kamel.bouhara@bootlin.com
-Subject: Re: Regression: at24 eeprom writing times out on sama5d3
-Message-ID: <YqeYr6b2k0rXsvIv@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Peter Rosin <peda@axentia.se>, Codrin.Ciubotariu@microchip.com,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Ludovic.Desroches@microchip.com, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
-        kamel.bouhara@bootlin.com
-References: <074b39c5-55fc-2bc1-072d-aef1070e284d@axentia.se>
- <2bb4868b-90ab-887e-bf13-9de8b79231bd@microchip.com>
- <YqdQoJbsgwjQ9PYh@shikoro>
- <0ce8b9d7-8a9e-cded-1762-71e230f4246c@axentia.se>
+        Mon, 13 Jun 2022 16:54:20 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB3E2A964;
+        Mon, 13 Jun 2022 13:22:38 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1014b2752c1so2900174fac.11;
+        Mon, 13 Jun 2022 13:22:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lFaHexaRdxVPNQFCPy8/FvVmE4l1eLWQzNnchldgYbs=;
+        b=YrLbkqCztE6TLX90V79SP4M5jh1HZQ/n6pvDDWGOVtG4x6dfN2jEfSbdDF25pnmZJS
+         RZVCHYRABbOVFFtEDKrdiyPvy7+aN9X7kmxrHx8fgaX72uiZTbLQpgjDw2uek94Wv4vy
+         3HXduWawg3awJUQmcCy+/YF/EPH5iRlwze6fL0fK4MAVaKdbTVklj51SDau+ssMUk/fC
+         9pD3SN99ncxSf1TUOraSK3PV30cIcOUFjQK4MzlmQQIDpH/U0KprTyOBTbgyNxZWH7FG
+         AkpCbVQ6zzXEXcVFfKl4dDZWw8xGNqH+fPArAgz7G60tkwCm9dO+rl/gxMZ1ST2V9M4w
+         tlbA==
+X-Gm-Message-State: AJIora/oxIeouRsg7fB1mmv8cUZNFNt34KTuKT6LXkEb1M0I9yqhPPO/
+        AjwhmaJf+dqQeH7KnbSEMA==
+X-Google-Smtp-Source: AGRyM1upkueqH09VtqepikgMZaTQKtGBzRMHbpoNwtgDrb4vQTSM5Zs42JumHg1Omehfdv/EuZ8a8A==
+X-Received: by 2002:a05:6870:471f:b0:f3:43f9:720c with SMTP id b31-20020a056870471f00b000f343f9720cmr334687oaq.106.1655151758117;
+        Mon, 13 Jun 2022 13:22:38 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:20d2:bb97:4381:7341:60ed:a4a1])
+        by smtp.gmail.com with ESMTPSA id s27-20020a056808209b00b0032eafcbd294sm3675433oiw.16.2022.06.13.13.22.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 13:22:37 -0700 (PDT)
+Received: (nullmailer pid 4189918 invoked by uid 1000);
+        Mon, 13 Jun 2022 20:07:51 -0000
+Date:   Mon, 13 Jun 2022 14:07:51 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Pankaj Dubey <pankaj.dubey@samsung.com>,
+        Shradha Todi <shradha.t@samsung.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 04/18] PCI: dwc: Set INCREASE_REGION_SIZE flag based
+ on limit address
+Message-ID: <20220613200751.GA4188875-robh@kernel.org>
+References: <20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610082535.12802-5-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ogV34CoYxK6HOSzb"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0ce8b9d7-8a9e-cded-1762-71e230f4246c@axentia.se>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220610082535.12802-5-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 10, 2022 at 11:25:20AM +0300, Serge Semin wrote:
+> It was wrong to use the region size parameter in order to determine
+> whether the INCREASE_REGION_SIZE flag needs to be set for the outbound
+> iATU entry because in general there are cases when combining a region base
+> address and size together produces the out of bounds upper range limit
+> while upper_32_bits(size) still returns zero. So having a region size
+> within the permitted values doesn't mean the region limit address will fit
+> to the corresponding CSR. Here is the way iATU calculates the in- and
+> outbound untranslated regions if the INCREASE_REGION_SIZE flag is cleared
+> [1]:
+> 
+>   Start address:                      End address:
+> 63              31              0   63              31              0
+> +---------------+---------------+   +---------------+---------------+
+> |               |         |  0s |   |               |         |  Fs |
+> +---------------+---------------+   +---------------+---------------+
+>    upper base   |   lower base       !upper! base   | limit address
+>      address          address           address
+> 
+> So the region start address is determined by the iATU lower and upper base
+> address registers, while the region upper boundary is calculated based on
+> the 32-bits limit address register and the upper part of the base address.
+> In accordance with that logic for instance the range
+> 0xf0000000 @ 0x20000000 does have the size smaller than 4GB, but the
+> actual limit address turns to be invalid forming the untranslated address
+> map as [0xf0000000; 0x1000FFFF], which isn't what the original range was.
+> In order to fix that we need to check whether the size after being added
+> to the lower part of the base address causes the 4GB range overflow. If it
+> does then we need to set the INCREASE_REGION_SIZE flag thus activating the
+> extended limit address by means of an additional iATU CSR (upper limit
+> address register) [2]:
+> 
+>   Start address:                      End address:
+> 63              31              0   63      x       31              0
+> +---------------+---------------+   +---------------+---------------+
+> |               |         |  0s |   |       |       |         |  Fs |
+> +---------------+---------------+   +---------------+---------------+
+>    upper base   |  lower base         upper | upper | limit address
+>      address         address          base  | limit |
+>                                      address|address|
+> 
+> Otherwise there is enough room in the 32-bits wide limit address register,
+> and the flag can be left unset.
+> 
+> Note the case when the size-based flag setting approach is correct implies
+> requiring to have the size-aligned base addresses only. But that
+> constraint isn't relevant to the PCIe ranges accepted by the kernel.
+> There is also no point in implementing it either seeing the problem can be
+> easily fixed by checking the whole limit address instead of the region
+> size.
+> 
+> [1] DesignWare Cores PCI Express Controller Databook - DWC PCIe Root Port,
+>     v5.40a, March 2019, fig.3-36, p.175
+> [2] DesignWare Cores PCI Express Controller Databook - DWC PCIe Root Port,
+>     v5.40a, March 2019, fig.3-37, p.176
+> 
+> Fixes: 5b4cf0f65324 ("PCI: dwc: Add upper limit address for outbound iATU")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> 
+> ---
+> 
+> Changelog v2:
+> - Fix the end address in the example of the patch log. It should be
+>   0x1000FFFF and not 0x0000FFFF (@Manivannan).
+> ---
+>  drivers/pci/controller/dwc/pcie-designware.c | 16 ++++++++++------
+>  1 file changed, 10 insertions(+), 6 deletions(-)
 
---ogV34CoYxK6HOSzb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-
-> I replied to patch 1/3 and 2/3 but have not seen them on the lists and
-> patchwork also appears to be in the dark.
-> Did the replies make it anywhere? Should I resend?
-
-I didn't get them. Yeah, maybe a resend will help?
-
-
---ogV34CoYxK6HOSzb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKnmK8ACgkQFA3kzBSg
-KbbJWBAAlS8SaQDw0SsR0R3wckRC2LN0TZ1ehFWsm9akX38NgWXfprCt5Y1HcKsu
-DcyHwWdwVKoT6lCPkAKeZsfF+3ipoKBf4CedKk5zYwL/3o/I80S3+sYSw+akUV05
-X3HWMjpCRlWAqGRod4TWafawWqEA1U4GlDmApYl3TB7PWEk27lJp+3BgwBgnSs0l
-9dT7CnfeqkeIVZ8LapGQksqwC/fKMsa4dVNyluCDHHm9DlsDHFgW4fYzWJgg8WlS
-rhTC2QnXYmcRS0uWQR7W+FNnHjRK2ARyP+So2rzbes7/tqBBMAMWlvMzpNHd3ucb
-ZkQWVxRs4cXcpprtyuhA0axvAGfYCc4lvGr8IdRoFyPnDSv8U3hUZ4ZU2bH8C//2
-CbyRTFGBu7C1UV5YwjswBkAmvUeFrnM6gSH+/ZcZcOQlQ23RHG4TFMCe93MPJPv4
-RbKLzX/WhBnzY+b7Vk0Y+lGgM1QX5CsEiL8S82dpxhylypGXv9GX8d0F2sXP/lXT
-hNJ0BqA1Tp7umUUom7ZTM0h8IZnEWn8k0RRr7XMTvKQOA4cIhVccBHRCJHIrfMm0
-qsJp7dJpm6nuCfipS3yW1UXZjhq1NRKRNLQrt+aQPwYZVHvdPBq9di6uqmQdOnHg
-7gB1dExjEtarnUpcMfsABDJ/jz1nL0fZRZLKPoM6HGiisxfQKD8=
-=Rl7P
------END PGP SIGNATURE-----
-
---ogV34CoYxK6HOSzb--
+Reviewed-by: Rob Herring <robh@kernel.org>

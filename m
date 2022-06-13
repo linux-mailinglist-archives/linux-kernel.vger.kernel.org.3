@@ -2,109 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD2A15481D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8B35481B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239922AbiFMIYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
+        id S239986AbiFMIYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239902AbiFMIYG (ORCPT
+        with ESMTP id S239937AbiFMIYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:24:06 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813E11A390
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 01:24:05 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id u18so4505695plb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 01:24:05 -0700 (PDT)
+        Mon, 13 Jun 2022 04:24:32 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C4B18B01;
+        Mon, 13 Jun 2022 01:24:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+CJUH0/L+lNEkylRzdIbrkY/KTmlUTqUzOzvWe/voi8=;
-        b=0YuVYFrlpNbnZb+V6c9WFsLYKBkaCggjDhAq/i0UKLtkp/CAn4HdoX9/ExpzmdDBJw
-         7bhOVOmrg0nNabrn2NKesHAtq2BbmUXj7FrBN/uzP7mhZtNKDOZhknaqJvK167CLSLV0
-         mD4gzNeOxk3OIYsD9VeGRIKsMDJDmFedbSfzQbKD3m9T8VmX8r8O0YcNuicPQc1ajjyW
-         D0Weae53u7bEp8dyzYreEC15/Eukj7VBA03XnopxiZD7ID30Hw5Lc27u+Kd/RBr+4Z11
-         SduTLXDH02tSKIb1LKAZ92aF9mdnLGThnswnLI2N/nlFjClt4q+/Fdi+pemWHk8H5reE
-         IQQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+CJUH0/L+lNEkylRzdIbrkY/KTmlUTqUzOzvWe/voi8=;
-        b=ly6mWK7FrBjAfiBRdpzfTCCz8bIHQjuHIuDHCKA5KG6j7JDeddU8R8QJlWIq0bzQFe
-         exNsbxb9bbheJlVNQKrEKaGPI0pgCLlL2ZbIk0Ce/1MGCNsZCIpLmd9Us2EgVTIpRtvI
-         mX/szkAWzMZnh0gCRQII2igTYZCrst1ra6qjMGRSUAB9L5RYnZGMrJSamAS3/jkjAPZR
-         S9COISizd4jtQBBQm5/oGKkawLYRjb7N2BqnzfbPR2OCNJq9rPnYxNM8KhfTLN35bCoP
-         0UVRfMojEq0rGnq8mre61BJsMZoS8wCXx/DAS0aM6ijgg0ur43zuxUheavGZK+tsfHUm
-         +7bw==
-X-Gm-Message-State: AOAM533+h3W/e/FbdUzD5hhFGLgE5DyuMUAUbaamnBkKmLhRcdaXUDlQ
-        fyF8iOSMRsEZxNDDUDIHP0ljzQ==
-X-Google-Smtp-Source: ABdhPJxgZpj4yZu5zSzgVjx+hru3WQ7XK5bsyKaytc39j7tnHYI7NtQtmYwN/rNa6cLpKIF6nMgcwQ==
-X-Received: by 2002:a17:90a:bc98:b0:1e8:6895:645e with SMTP id x24-20020a17090abc9800b001e86895645emr14764049pjr.131.1655108644994;
-        Mon, 13 Jun 2022 01:24:04 -0700 (PDT)
-Received: from localhost ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id q29-20020aa7843d000000b0051810d460adsm4648164pfn.114.2022.06.13.01.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 01:24:04 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 16:24:01 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     Oscar Salvador <osalvador@suse.de>
-Cc:     mike.kravetz@oracle.com, david@redhat.com,
-        akpm@linux-foundation.org, corbet@lwn.net, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 2/6] mm: hugetlb_vmemmap: optimize vmemmap_optimize_mode
- handling
-Message-ID: <Yqb0Ia7YwVq30Id4@FVFYT0MHHV2J.usts.net>
-References: <20220613063512.17540-1-songmuchun@bytedance.com>
- <20220613063512.17540-3-songmuchun@bytedance.com>
- <Yqbw4IYwtLQaoarB@localhost.localdomain>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655108670; x=1686644670;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=YcRzvNF6OIPEmcbfbfdNRXkpW0N+rzRUGDeaIa3XXcQ=;
+  b=oQBB57aYyGlcuKWKZxAdBwzVGYhwehekjBqtsK72qk9CsUR/rL97Jg6t
+   quYHtJPvXnxdsQratNIzqe5Q0MvrQ8EvcQHncMDEDbiA0+fiDypykVLj6
+   RQC/DEAMTfiiFr4xMLmVL8nNXGu4K+I+0DnGmAgu7HzVW0boCxJSanOva
+   Q=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 13 Jun 2022 01:24:30 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 01:24:29 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 13 Jun 2022 01:24:29 -0700
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 13 Jun 2022 01:24:25 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        "Venkata Prasad Potturu" <quic_potturu@quicinc.com>
+Subject: [PATCH v15 1/4] arm64: dts: qcom: sc7280: Add pinmux for I2S speaker and Headset
+Date:   Mon, 13 Jun 2022 13:54:02 +0530
+Message-ID: <1655108645-1517-2-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1655108645-1517-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1655108645-1517-1-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqbw4IYwtLQaoarB@localhost.localdomain>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 10:10:08AM +0200, Oscar Salvador wrote:
-> On Mon, Jun 13, 2022 at 02:35:08PM +0800, Muchun Song wrote:
-> > We hold an another reference to hugetlb_optimize_vmemmap_key when
-> > making vmemmap_optimize_mode on, because we use static_key to tell
-> > memory_hotplug that memory_hotplug.memmap_on_memory should be
-> > overridden.  However, this rule has gone when we have introduced
-> > SECTION_CANNOT_OPTIMIZE_VMEMMAP.  Therefore, we could simplify
-> > vmemmap_optimize_mode handling by not holding an another reference
-> > to hugetlb_optimize_vmemmap_key.
-> > 
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> 
-> LGTM, and it looks way nicer, so
-> 
-> Reviewed-by: Oscar Salvador <osalvador@suse.de>
->
+Add pinmux nodes for primary and secondary I2S for SC7280 based platforms.
 
-Thanks for taking a look.
+Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+---
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 14 +++++++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi     | 40 ++++++++++++++++++++++++++++++++
+ 2 files changed, 54 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index 5eb6689..acf407a 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -367,6 +367,20 @@
+ 	bias-disable;
+ };
  
-> One question below though
-> 
-> > -static enum vmemmap_optimize_mode vmemmap_optimize_mode =
-> > +static bool vmemmap_optimize_enabled =
-> >  	IS_ENABLED(CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON);
-> 
-> So, by default vmemmap_optimize_enabled will be on if we have
-> CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON, but we can always override that
-> via cmdline, as below, right?
-> 
++&mi2s1_data0 {
++	drive-strength = <6>;
++	bias-disable;
++};
++
++&mi2s1_sclk {
++	drive-strength = <6>;
++	bias-disable;
++};
++
++&mi2s1_ws {
++	drive-strength = <6>;
++};
++
+ &pm7325_gpios {
+ 	key_vol_up_default: key-vol-up-default {
+ 		pins = "gpio6";
+diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+index e66fc67..fde55c3 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+@@ -3898,6 +3898,46 @@
+ 				function = "edp_hot";
+ 			};
+ 
++			mi2s0_data0: mi2s0-data0 {
++				pins = "gpio98";
++				function = "mi2s0_data0";
++			};
++
++			mi2s0_data1: mi2s0-data1 {
++				pins = "gpio99";
++				function = "mi2s0_data1";
++			};
++
++			mi2s0_mclk: mi2s0-mclk {
++				pins = "gpio96";
++				function = "pri_mi2s";
++			};
++
++			mi2s0_sclk: mi2s0-sclk {
++				pins = "gpio97";
++				function = "mi2s0_sck";
++			};
++
++			mi2s0_ws: mi2s0-ws {
++				pins = "gpio100";
++				function = "mi2s0_ws";
++			};
++
++			mi2s1_data0: mi2s1-data0 {
++				pins = "gpio107";
++				function = "mi2s1_data0";
++			};
++
++			mi2s1_sclk: mi2s1-sclk {
++				pins = "gpio106";
++				function = "mi2s1_sck";
++			};
++
++			mi2s1_ws: mi2s1-ws {
++				pins = "gpio108";
++				function = "mi2s1_ws";
++			};
++
+ 			pcie1_clkreq_n: pcie1-clkreq-n {
+ 				pins = "gpio79";
+ 				function = "pcie1_clkreqn";
+-- 
+2.7.4
 
-Totally right. CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP_DEFAULT_ON only control
-if the feature is enabled by default when the users do not specify "it should
-be off" via cmdline. 
-
-Thanks.

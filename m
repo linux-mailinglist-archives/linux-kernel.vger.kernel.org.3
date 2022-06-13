@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189F6548824
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE13548702
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245687AbiFMKl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
+        id S1344267AbiFMKkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348400AbiFMKji (ORCPT
+        with ESMTP id S1347341AbiFMKiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:39:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9C2220E5;
-        Mon, 13 Jun 2022 03:23:24 -0700 (PDT)
+        Mon, 13 Jun 2022 06:38:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB6B13EBA;
+        Mon, 13 Jun 2022 03:23:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C89460EF5;
-        Mon, 13 Jun 2022 10:23:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75B77C3411E;
-        Mon, 13 Jun 2022 10:23:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B896CB80EA3;
+        Mon, 13 Jun 2022 10:23:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 260E8C3411C;
+        Mon, 13 Jun 2022 10:23:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115803;
-        bh=ZtsaDR2IWu8SvqQ6ynaqLlc+4Y8bj/DYVgveu4E+KqU=;
+        s=korg; t=1655115784;
+        bh=svTYRwQoEOZR9ALrZn3icahIfblnTbsuQORE2Oif/Ag=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pKeFaXJd6M27+chx8CembQusmzsxLIG+hq1TPQ6jSxK3t6hG0DMevcxaHZuoBTXnH
-         VSWx3g8+PhhD3u0VPebhh7Z50/Jr7oRz8+pPHcpFEg7aNKpQ+nB53yjfGxkHWHhomd
-         8fI1QIC8JgQpZmYvbMFE7gt+Ghy9l7Gygx+7QTtM=
+        b=vaox896f9rAYvSodYoc1n/p+dg8NQdS84Z/EST5OFGvwDb+S7s8q//WhAkVyxSUXB
+         fl2eEhfDdaKTDNnVUKJJfTNiAMZLADZJ0g9nitUDR6tCiym0ov9MapsUTg2+sZxcBW
+         O6fwoq28LWOw9yLaSQmFsFlP0dLKcaV0N5G0EONg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haowen Bai <baihaowen@meizu.com>,
-        Corey Minyard <cminyard@mvista.com>,
+        stable@vger.kernel.org, Kyle Smith <kyles@hpe.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Hannes Reinecke <hare@suse.de>, Christoph Hellwig <hch@lst.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 026/218] ipmi:ssif: Check for NULL msg when handling events and messages
-Date:   Mon, 13 Jun 2022 12:08:04 +0200
-Message-Id: <20220613094914.510203556@linuxfoundation.org>
+Subject: [PATCH 4.14 029/218] nvme-pci: fix a NULL pointer dereference in nvme_alloc_admin_tags
+Date:   Mon, 13 Jun 2022 12:08:07 +0200
+Message-Id: <20220613094915.157160552@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
 References: <20220613094908.257446132@linuxfoundation.org>
@@ -55,73 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Corey Minyard <cminyard@mvista.com>
+From: Smith, Kyle Miller (Nimble Kernel) <kyles@hpe.com>
 
-[ Upstream commit 7602b957e2404e5f98d9a40b68f1fd27f0028712 ]
+[ Upstream commit da42761181627e9bdc37d18368b827948a583929 ]
 
-Even though it's not possible to get into the SSIF_GETTING_MESSAGES and
-SSIF_GETTING_EVENTS states without a valid message in the msg field,
-it's probably best to be defensive here and check and print a log, since
-that means something else went wrong.
+In nvme_alloc_admin_tags, the admin_q can be set to an error (typically
+-ENOMEM) if the blk_mq_init_queue call fails to set up the queue, which
+is checked immediately after the call. However, when we return the error
+message up the stack, to nvme_reset_work the error takes us to
+nvme_remove_dead_ctrl()
+  nvme_dev_disable()
+   nvme_suspend_queue(&dev->queues[0]).
 
-Also add a default clause to that switch statement to release the lock
-and print a log, in case the state variable gets messed up somehow.
+Here, we only check that the admin_q is non-NULL, rather than not
+an error or NULL, and begin quiescing a queue that never existed, leading
+to bad / NULL pointer dereference.
 
-Reported-by: Haowen Bai <baihaowen@meizu.com>
-Signed-off-by: Corey Minyard <cminyard@mvista.com>
+Signed-off-by: Kyle Smith <kyles@hpe.com>
+Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/char/ipmi/ipmi_ssif.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ drivers/nvme/host/pci.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/char/ipmi/ipmi_ssif.c b/drivers/char/ipmi/ipmi_ssif.c
-index cf87bfe971e6..171c54c86356 100644
---- a/drivers/char/ipmi/ipmi_ssif.c
-+++ b/drivers/char/ipmi/ipmi_ssif.c
-@@ -816,6 +816,14 @@ static void msg_done_handler(struct ssif_info *ssif_info, int result,
- 		break;
- 
- 	case SSIF_GETTING_EVENTS:
-+		if (!msg) {
-+			/* Should never happen, but just in case. */
-+			dev_warn(&ssif_info->client->dev,
-+				 "No message set while getting events\n");
-+			ipmi_ssif_unlock_cond(ssif_info, flags);
-+			break;
-+		}
-+
- 		if ((result < 0) || (len < 3) || (msg->rsp[2] != 0)) {
- 			/* Error getting event, probably done. */
- 			msg->done(msg);
-@@ -839,6 +847,14 @@ static void msg_done_handler(struct ssif_info *ssif_info, int result,
- 		break;
- 
- 	case SSIF_GETTING_MESSAGES:
-+		if (!msg) {
-+			/* Should never happen, but just in case. */
-+			dev_warn(&ssif_info->client->dev,
-+				 "No message set while getting messages\n");
-+			ipmi_ssif_unlock_cond(ssif_info, flags);
-+			break;
-+		}
-+
- 		if ((result < 0) || (len < 3) || (msg->rsp[2] != 0)) {
- 			/* Error getting event, probably done. */
- 			msg->done(msg);
-@@ -861,6 +877,13 @@ static void msg_done_handler(struct ssif_info *ssif_info, int result,
- 			deliver_recv_msg(ssif_info, msg);
+diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
+index 92f269a0846c..de23f2814877 100644
+--- a/drivers/nvme/host/pci.c
++++ b/drivers/nvme/host/pci.c
+@@ -1424,6 +1424,7 @@ static int nvme_alloc_admin_tags(struct nvme_dev *dev)
+ 		dev->ctrl.admin_q = blk_mq_init_queue(&dev->admin_tagset);
+ 		if (IS_ERR(dev->ctrl.admin_q)) {
+ 			blk_mq_free_tag_set(&dev->admin_tagset);
++			dev->ctrl.admin_q = NULL;
+ 			return -ENOMEM;
  		}
- 		break;
-+
-+	default:
-+		/* Should never happen, but just in case. */
-+		dev_warn(&ssif_info->client->dev,
-+			 "Invalid state in message done handling: %d\n",
-+			 ssif_info->ssif_state);
-+		ipmi_ssif_unlock_cond(ssif_info, flags);
- 	}
- 
- 	flags = ipmi_ssif_lock_cond(ssif_info, &oflags);
+ 		if (!blk_get_queue(dev->ctrl.admin_q)) {
 -- 
 2.35.1
 

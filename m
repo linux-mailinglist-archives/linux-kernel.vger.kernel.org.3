@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8BC5493E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37182549257
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377465AbiFMNUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41664 "EHLO
+        id S1380473AbiFMOCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359336AbiFMNJt (ORCPT
+        with ESMTP id S1380806AbiFMNzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:09:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFCC39163;
-        Mon, 13 Jun 2022 04:20:25 -0700 (PDT)
+        Mon, 13 Jun 2022 09:55:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5055C8199B;
+        Mon, 13 Jun 2022 04:35:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55D96B80D31;
-        Mon, 13 Jun 2022 11:20:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1F94C34114;
-        Mon, 13 Jun 2022 11:20:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 115FC612D0;
+        Mon, 13 Jun 2022 11:35:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E1C2C34114;
+        Mon, 13 Jun 2022 11:35:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119223;
-        bh=uR7CQe4V55FxsHzDZ0qleDY1nvIx7lIoX7D3hsclkWQ=;
+        s=korg; t=1655120152;
+        bh=IsJ3NMnoAFJ7wjN7A21WKBIHAnKxNuqqCDed6n0bc3Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZWyH7qMzF4XDfeQz3AVGIGeBoUoXQ4xZ6p6+uZ0MbhKOGFUoW8/SDBwyVG2Mbl4h4
-         y2fAZcMoV2RV6Mnx4rEnJkJOLSLWL/bgQLjVDpkoCnlPkklp4vJcP9vNepnnxC2zUj
-         x971VSZYeOuBtxtfx7L302SCokj1BtAfnkxt5GHo=
+        b=NaSovLv8v47duwjp3V0SffVX4uei+cxErNNmL7QtMVnt6kCK5Nszb4ohc0Z0VDrmh
+         nSJoxpuBHZFKZKYbR0eczYt1sYg6Gx4NqRVlOEx/BSGZF9GmP9asO0gNOEJT1kNRq4
+         dVMc3I+0TWwgavKW6l1nGisVh4+TjJMbJ6/UCPx4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        stable@vger.kernel.org, Xiubo Li <xiubli@redhat.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 184/247] misc: rtsx: set NULL intfdata when probe fails
+Subject: [PATCH 5.18 261/339] ceph: flush the mdlog for filesystem sync
 Date:   Mon, 13 Jun 2022 12:11:26 +0200
-Message-Id: <20220613094928.533329453@linuxfoundation.org>
+Message-Id: <20220613094934.568016028@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +56,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shuah Khan <skhan@linuxfoundation.org>
+From: Xiubo Li <xiubli@redhat.com>
 
-[ Upstream commit f861d36e021e1ac4a0a2a1f6411d623809975d63 ]
+[ Upstream commit 1b2ba3c5616e17ff951359e25c658a1c3f146f1e ]
 
-rtsx_usb_probe() doesn't call usb_set_intfdata() to null out the
-interface pointer when probe fails. This leaves a stale pointer.
-Noticed the missing usb_set_intfdata() while debugging an unrelated
-invalid DMA mapping problem.
+Before waiting for a request's safe reply, we will send the mdlog flush
+request to the relevant MDS. And this will also flush the mdlog for all
+the other unsafe requests in the same session, so we can record the last
+session and no need to flush mdlog again in the next loop. But there
+still have cases that it may send the mdlog flush requst twice or more,
+but that should be not often.
 
-Fix it with a call to usb_set_intfdata(..., NULL).
+Rename wait_unsafe_requests() to
+flush_mdlog_and_wait_mdsc_unsafe_requests() to make it more
+descriptive.
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Link: https://lore.kernel.org/r/20220429210913.46804-1-skhan@linuxfoundation.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[xiubli: fold in MDS request refcount leak fix from Jeff]
+
+URL: https://tracker.ceph.com/issues/55284
+URL: https://tracker.ceph.com/issues/55411
+Signed-off-by: Xiubo Li <xiubli@redhat.com>
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/cardreader/rtsx_usb.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/ceph/mds_client.c | 33 +++++++++++++++++++++++++++------
+ 1 file changed, 27 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/misc/cardreader/rtsx_usb.c b/drivers/misc/cardreader/rtsx_usb.c
-index 59eda55d92a3..1ef9b61077c4 100644
---- a/drivers/misc/cardreader/rtsx_usb.c
-+++ b/drivers/misc/cardreader/rtsx_usb.c
-@@ -667,6 +667,7 @@ static int rtsx_usb_probe(struct usb_interface *intf,
- 	return 0;
+diff --git a/fs/ceph/mds_client.c b/fs/ceph/mds_client.c
+index 1bd3e1bb0fdf..8c249511344d 100644
+--- a/fs/ceph/mds_client.c
++++ b/fs/ceph/mds_client.c
+@@ -4700,15 +4700,17 @@ void ceph_mdsc_pre_umount(struct ceph_mds_client *mdsc)
+ }
  
- out_init_fail:
-+	usb_set_intfdata(ucr->pusb_intf, NULL);
- 	usb_free_coherent(ucr->pusb_dev, IOBUF_SIZE, ucr->iobuf,
- 			ucr->iobuf_dma);
- 	return ret;
+ /*
+- * wait for all write mds requests to flush.
++ * flush the mdlog and wait for all write mds requests to flush.
+  */
+-static void wait_unsafe_requests(struct ceph_mds_client *mdsc, u64 want_tid)
++static void flush_mdlog_and_wait_mdsc_unsafe_requests(struct ceph_mds_client *mdsc,
++						 u64 want_tid)
+ {
+ 	struct ceph_mds_request *req = NULL, *nextreq;
++	struct ceph_mds_session *last_session = NULL;
+ 	struct rb_node *n;
+ 
+ 	mutex_lock(&mdsc->mutex);
+-	dout("wait_unsafe_requests want %lld\n", want_tid);
++	dout("%s want %lld\n", __func__, want_tid);
+ restart:
+ 	req = __get_oldest_req(mdsc);
+ 	while (req && req->r_tid <= want_tid) {
+@@ -4720,14 +4722,32 @@ static void wait_unsafe_requests(struct ceph_mds_client *mdsc, u64 want_tid)
+ 			nextreq = NULL;
+ 		if (req->r_op != CEPH_MDS_OP_SETFILELOCK &&
+ 		    (req->r_op & CEPH_MDS_OP_WRITE)) {
++			struct ceph_mds_session *s = req->r_session;
++
++			if (!s) {
++				req = nextreq;
++				continue;
++			}
++
+ 			/* write op */
+ 			ceph_mdsc_get_request(req);
+ 			if (nextreq)
+ 				ceph_mdsc_get_request(nextreq);
++			s = ceph_get_mds_session(s);
+ 			mutex_unlock(&mdsc->mutex);
+-			dout("wait_unsafe_requests  wait on %llu (want %llu)\n",
++
++			/* send flush mdlog request to MDS */
++			if (last_session != s) {
++				send_flush_mdlog(s);
++				ceph_put_mds_session(last_session);
++				last_session = s;
++			} else {
++				ceph_put_mds_session(s);
++			}
++			dout("%s wait on %llu (want %llu)\n", __func__,
+ 			     req->r_tid, want_tid);
+ 			wait_for_completion(&req->r_safe_completion);
++
+ 			mutex_lock(&mdsc->mutex);
+ 			ceph_mdsc_put_request(req);
+ 			if (!nextreq)
+@@ -4742,7 +4762,8 @@ static void wait_unsafe_requests(struct ceph_mds_client *mdsc, u64 want_tid)
+ 		req = nextreq;
+ 	}
+ 	mutex_unlock(&mdsc->mutex);
+-	dout("wait_unsafe_requests done\n");
++	ceph_put_mds_session(last_session);
++	dout("%s done\n", __func__);
+ }
+ 
+ void ceph_mdsc_sync(struct ceph_mds_client *mdsc)
+@@ -4771,7 +4792,7 @@ void ceph_mdsc_sync(struct ceph_mds_client *mdsc)
+ 	dout("sync want tid %lld flush_seq %lld\n",
+ 	     want_tid, want_flush);
+ 
+-	wait_unsafe_requests(mdsc, want_tid);
++	flush_mdlog_and_wait_mdsc_unsafe_requests(mdsc, want_tid);
+ 	wait_caps_flush(mdsc, want_flush);
+ }
+ 
 -- 
 2.35.1
 

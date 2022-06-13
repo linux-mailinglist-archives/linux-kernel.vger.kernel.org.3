@@ -2,139 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5290E549B7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EEA1549B97
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242509AbiFMS3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
+        id S245272AbiFMSed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241854AbiFMS1o (ORCPT
+        with ESMTP id S245179AbiFMSeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:27:44 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8C41FE4DF;
-        Mon, 13 Jun 2022 07:51:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1162B8105B;
-        Mon, 13 Jun 2022 14:51:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A9FFC3411B;
-        Mon, 13 Jun 2022 14:51:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655131895;
-        bh=TLxFZAPhXdD/lskt5ABL7Yyvc76typsZSU+wq7k76S8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=nC33P0zIEEDZN6u3S/HZm0+GRAnfXvOGbb7rQDH01pkLftaiZTdzsxZu7Xyebbpin
-         7iZJl7IWnGkRJAfwOIqc8K+j8IwSTaK3F0MHmyUTMc7CgLJgR4VJD+UGpyJJkhrqLX
-         pWeZakRI7cH0l9gg+YPdjnVNTfJ5uxNC/QoxSM1Q4+DGXBNKSm7+Cr0t5ee2RguLg7
-         uVqQjAJeEaO0Ka+V0HlIZAym1GivjWVzSNmIneaDGM/5HviE+hY2yp+gPqKFauvgmz
-         O4OH3HWNBRR1vFg6SRwbt3uLYW5nw58tlPFvpBRcH5bh9uz1ym1TUrI00o4VTDPc5K
-         zXFrxSWwbIgGA==
-Date:   Mon, 13 Jun 2022 09:51:33 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Meng Tang <tangmeng@uniontech.com>
-Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, kuba@kernel.org, bhelgaas@google.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Subject: Re: [PATCH 5.10 1/2] commit 1d71eb53e451 ("Revert "PCI: Make
- pci_enable_ptm() private"")
-Message-ID: <20220613145133.GA701092@bhelgaas>
+        Mon, 13 Jun 2022 14:34:06 -0400
+Received: from sonic304-27.consmr.mail.ne1.yahoo.com (sonic304-27.consmr.mail.ne1.yahoo.com [66.163.191.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E04C9651
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 07:53:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1655132021; bh=0SgoT7OQEOKIkib3oIGruLdZdvQGYAiUQ4MXiAUTnPI=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=FXke69JqlRRNJrFFWvEOaPCujhPRK221IP9c3YDlGwPEBRdFzJZzFtjHPUmW1k4q+b7iMdili2lrpgJj+l4qie8Wkqyb1eP36fWrIdUAQb51SG+unKpw/p30eIEJoDi3uoSan+LUESE7hNGLwJLoEWNjwKyYq54CMvxYa9nfrX4mBujcERvRSlnPDXDko0Q5vVyUe/p92IDzW4sZ3cMivBx6DWqKFsCG2jILkSBO7N5BPHm2VgZTriYrOPOrK9tLghcWARHBIQkGtOMgRXi7SUm3zHAXKpD/5QUGtjVsnKpcX//uqeQUughn6WMR+OJmNQtwC/dmiCeIomrKh/k+Jw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1655132021; bh=grY/OEdyoXdDjlfXN0/WNt7lg26XYsq3xUM46loWHYq=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=TXf93jjHQtF0SYfWaqpCmU+mfcET2+RuDUTrRJwdRV9TCx1YMk2pcbcK/y2ZbO0Z6+23EBR5NzHIMTZVqXB7AJQabf1dCGzkRc6EoFxsIjz5J7sfhb1o/4lEkP0Og9UQR5MaljnZHylHgN+qVlpW5ADFIbSDfGeEkbP/vMx1F2W+HQAmzZnQltqmPJXgG57ONDL18qZptZ3UVUkHYEBDO3q+78jnhqrCi2cWlUnEfWNO/JQAAfyP5YEB+yn/MFQAHBxvbimq6r1fr7h+vGss4sA5gIbLfKH6RAPsNKACkaslNMzobmTDV6bhq2CUiwgbKN41K+H3fb/lJoAQJt/4Nw==
+X-YMail-OSG: CBD8m6sVM1mWWJAJktVvFXOdXPIh01AqOykUKU6tjLybFlu0MbXn8siUQnJPdK5
+ pJkRlW9z8kTyajt73IQ.H9kO7TFfFYeVEWc2CagvVFNTngALaInQWI_7BRHuHUYAvAJ1M7s1uVah
+ lV35hC.5gp95I1TBStohgbUNkUy_NFhTcnAJYXNAVHaKss2REl5Yvj6rlAnJE8pXvjQiU0pZUUIQ
+ Mk78gDxnb2GfQy50e86oad1rWJZsAdYrOmXxR3dI8ZFzhDBoZa_gYB_gPPzG0ZPTbXuazxtUDG6Y
+ wUgehSGMSm1Ju3QNMQH12EP.SVcFLqACieUK2FVZ3H4oHfvG2NoJRLztiHkKd4c6eUMSWFOahXSL
+ .ErMKIAqZh855oc8DIgg3b3inMk2AowuXePypXU42vWt22gzHRP53ntPkCicrafYs_8Uj4wx3H5u
+ eWQwtNOewGndsVCwgmAKbH5SEvwo7naOOPjJcNo2M5adkrVC4sGuc2a74.i3kpq9FTm5UflngbNe
+ vTcnNTbXglj_iC1h0lyU7cWone4DPYPbvmQYYFGHZHek9jEdRv5CI22YCbkkZDHLodtWowWYt3By
+ BHDGmnKow6weKsqErZ9.B7q.P1_rUAB07SExKYF70xhrWR_2d7AuvJM68pdIN3Aihzg8EYpipmJw
+ V5hArBMtyzoYiTUJ6Y7otrADachTRw6PEQVlSY8DxRidimBOqPVU1zhQHJDWCerHo7pi4VBhf8I3
+ .vyNxj3bKxKOkyk2H.kQILzlWpAhcUeWbx84Iv0jh_XftG01DopPcO2PDVAYd3ZA6uu9oDB_vtUo
+ .pVNf1ewC7Jt4THvozxFVTsSuoUKmw3m_zs4XNttcgPu.qUWB5iRSsSirWeCV2OG468GLlwOGpQu
+ OdiRffzwLFEcEW6BA7UMhOvsHfhJAS1FpegaRmgvyFNv4SI60odpz7OoKraLjSTPlAv.eapbC9wj
+ YTRzA7c2.s3Cn_jexuGsOQX98WeJXRMsy81_b6bycp14iFdQfWVbtxyTktRK59DacI3HVDh50WPq
+ d_e113GdPG.CJl6yuZe.YOExvlRj0QtUclZGjXHYaLKMdw_7BRRjkkWqkDUP36f1mzoZMHsAmUjN
+ AJR95D1cvkTahP1i16WwqyMwexJ8xtsf2GxDStXkXXWQLm2H5TYBbN8U_kSiXfKKxB7pdGsWUtqQ
+ L_93lbD6lKH8HanxeZP2rh0GBThm36V9OlS1EiVNYRMWDBU82wnbSRLclTEsEG_h1ee3.4iDFKb0
+ dvbLNStL2mj_U.pBYcv7DmsCmtcXLBr8IimYx2P0cO5Gj.7DYMR6msy1XuvvUTMh4Adt.kBJ7SUN
+ 1tXfUMlFIYN.nHGY_AQjo4Jhvcfy9BKV9w3HMwkkko4C_YufHcAFte6AyC4OXwkopn6JZQqN13va
+ 0dEe35j9xsJ6nsqHDWgIla34.HThBHx8s8zEguHdtIz7kVYe4vo3_esmvCE3yXFJaBzaRWVyFcIZ
+ vVWa_otkQ2abgjV.XqHNVbz5Cpx6WUjRmSD2jppojRdaqIvSvoJtAs19GTeKa6mHcG_pQCcy98pi
+ eWBth_xHQyKOSdSWIilg6kPO8lKRO0YYbiDwRvMGThH4zetoMlj4rHKqDOcGIaOLfyLVV1gZ7A4I
+ ue_gPyCT7M9wqRwSApoV3T6U3zEDHkyGdrx1bFJGTGxNknnrDx9.4hScHWHbhhxli1xZMCob_ZIb
+ vYEzAkFZWwtiXTDeWWtEv3S83I40YeRyvLiHED3x9RsyvV9vtNnGReMTf.woXnQ9qnIALAa25PgL
+ cGGNkea1Zuy3O02n7o6EmQNwSS5g4QPdh7Hlw2vRe3BcscZHQ.hcGDru_z3YzMp2AA6HUnIZaYen
+ 9Yi9CdpnmO5y.C3uVVAJ2JLGqBo90MRgJjmBzj1nLG1eFnhNJuhcYdJ35tBvBt1ApOCeEY_Op8UV
+ DDdhsfeZIaB39pj785P7krEy_pxh5PRkw93.YFtec8j96XtjW1Hg0bWiGt0iW5GvnhIgnpVd8xp.
+ VGYyaM7g9pBG4zQW9KlE3NAvn5JPtDzg1_FjtRtx.VSRsLkct2jJ5P8im49_.P80d1NWjcek7ggy
+ _3RNuPGuGUmuxKLi3RrYEGuS9x_oyWytgHLmOGuNAF_G5hIZBJjgaLy.D3h72mWVS6qCQLRlJ0yG
+ bozTQwZrsaTYPCpgf0gU1Fbh3bcIfDtUe_7ZAY6SExM.4zT.6IjKHnAYhwbXS.77lkpJCK3ucN9c
+ fYp1YbIxb7gK8n0v4e3c4wYExBTspHn7OFyJh_c_cU2I1kTu_hJEwmZb.apIj4xJUI3T5mfTjZsX
+ 0Ppt.lSaHZ5Q7S.T4KzL.TWzrSWZiRvk-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.ne1.yahoo.com with HTTP; Mon, 13 Jun 2022 14:53:41 +0000
+Received: by hermes--canary-production-bf1-856dbf94db-lkxdg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 1de6620996886a81d03d658fd9893895;
+          Mon, 13 Jun 2022 14:53:39 +0000 (UTC)
+Message-ID: <88718d10-4435-f5a8-9123-afc73257e0ca@schaufler-ca.com>
+Date:   Mon, 13 Jun 2022 07:53:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613111907.25490-1-tangmeng@uniontech.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] smackfs: check for allocation failure of kmalloc()
+Content-Language: en-US
+To:     Li Qiong <liqiong@nfschina.com>, James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yuzhe@nfschina.com,
+        renyu@nfschina.com, Casey Schaufler <casey@schaufler-ca.com>
+References: <20220613062202.29194-1-liqiong@nfschina.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20220613062202.29194-1-liqiong@nfschina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20280 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 07:19:06PM +0800, Meng Tang wrote:
-> From: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-> 
-> Make pci_enable_ptm() accessible from the drivers.
-> 
-> Exposing this to the driver enables the driver to use the
-> 'ptm_enabled' field of 'pci_dev' to check if PTM is enabled or not.
-> 
-> This reverts commit ac6c26da29c1 ("PCI: Make pci_enable_ptm() private").
-> 
-> In the 5.10 kernel version, even to the latest confirmed version,
-> the following error will still be reported when I225-V network card
-> is used.
-> 
-> kernel: [    1.031581] igc: probe of 0000:01:00.0 failed with error -2
-> kernel: [    1.066574] igc: probe of 0000:02:00.0 failed with error -2
-> kernel: [    1.096152] igc: probe of 0000:03:00.0 failed with error -2
-> kernel: [    1.127251] igc: probe of 0000:04:00.0 failed with error -2
-> 
-> Even though I confirmed that 7c496de538eebd8212dc2a3c9a468386b2640d4
-> and 47bca7de6a4fb8dcb564c7ca4d885c91ed19e03 have been merged into the
-> kernel 5.10, the bug is still occurred, and the
-> "commit 1b5d73fb8624 ("igc: Enable PCIe PTM")" can fixes it.
-> 
-> And this patch is the pre-patch of
-> 1b5d73fb862414106cf270a1a7300ce8ae77de83.
+On 6/12/2022 11:22 PM, Li Qiong wrote:
+> As the possible failure of the kmalloc(), it should be better
+> to check it and print a warning message.
 
-I guess the point of this is to backport 1d71eb53e451 ("Revert "PCI:
-Make pci_enable_ptm() private"") to a v5.10 stable kernel?
+The allocation is done with __GFP_NOFAIL, which assures
+it will not fail.
 
-If so, I would think you'd want to send this to
-stable@vger.kernel.org.
-
-> Signed-off-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-> Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-> Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+>
+> Signed-off-by: Li Qiong <liqiong@nfschina.com>
 > ---
->  drivers/pci/pci.h   | 3 ---
->  include/linux/pci.h | 7 +++++++
->  2 files changed, 7 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
-> index a96dc6f53076..4084764bf0b1 100644
-> --- a/drivers/pci/pci.h
-> +++ b/drivers/pci/pci.h
-> @@ -585,11 +585,8 @@ static inline void pcie_ecrc_get_policy(char *str) { }
->  
->  #ifdef CONFIG_PCIE_PTM
->  void pci_ptm_init(struct pci_dev *dev);
-> -int pci_enable_ptm(struct pci_dev *dev, u8 *granularity);
->  #else
->  static inline void pci_ptm_init(struct pci_dev *dev) { }
-> -static inline int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
-> -{ return -EINVAL; }
->  #endif
->  
->  struct pci_dev_reset_methods {
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index bc5a1150f072..692ce678c5f1 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -1599,6 +1599,13 @@ static inline bool pci_aer_available(void) { return false; }
->  
->  bool pci_ats_disabled(void);
->  
-> +#ifdef CONFIG_PCIE_PTM
-> +int pci_enable_ptm(struct pci_dev *dev, u8 *granularity);
-> +#else
-> +static inline int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
-> +{ return -EINVAL; }
-> +#endif
-> +
->  void pci_cfg_access_lock(struct pci_dev *dev);
->  bool pci_cfg_access_trylock(struct pci_dev *dev);
->  void pci_cfg_access_unlock(struct pci_dev *dev);
-> -- 
-> 2.20.1
-> 
-> 
-> 
+>   security/smack/smackfs.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+>
+> diff --git a/security/smack/smackfs.c b/security/smack/smackfs.c
+> index 4b58526450d4..0d11ba3cb4cd 100644
+> --- a/security/smack/smackfs.c
+> +++ b/security/smack/smackfs.c
+> @@ -695,6 +695,11 @@ static void smk_cipso_doi(void)
+>   		       __func__, __LINE__, rc);
+>   
+>   	doip = kmalloc(sizeof(struct cipso_v4_doi), GFP_KERNEL | __GFP_NOFAIL);
+> +	if (unlikely(!doip)) {
+> +		printk(KERN_WARNING "%s:%d failed to allocate a memory for doip\n",
+> +		       __func__, __LINE__);
+> +		return;
+> +	}
+>   	doip->map.std = NULL;
+>   	doip->doi = smk_cipso_doi_value;
+>   	doip->type = CIPSO_V4_MAP_PASS;

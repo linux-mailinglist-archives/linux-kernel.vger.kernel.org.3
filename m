@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC330547DBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499A0547DBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238200AbiFMCuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 22:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        id S238204AbiFMCuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 22:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236546AbiFMCus (ORCPT
+        with ESMTP id S238159AbiFMCuu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 22:50:48 -0400
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4684236E1B;
-        Sun, 12 Jun 2022 19:50:47 -0700 (PDT)
-Received: by mail-io1-f44.google.com with SMTP id s23so4771361iog.13;
-        Sun, 12 Jun 2022 19:50:47 -0700 (PDT)
+        Sun, 12 Jun 2022 22:50:50 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E909377D7;
+        Sun, 12 Jun 2022 19:50:49 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id e80so4813840iof.3;
+        Sun, 12 Jun 2022 19:50:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=rmYoTFjwwfLHaEAKyMwepQVd6Fyyjo475AJRyY0r/yQ=;
-        b=YUSsW6W19zhbhRvuS0DwdHWUQOZiglEd1pOjHXaqb3nOWVzd88lu1muS2jSg0J8mDm
-         ENa0esP3n+JpDJsqui+secRM3CZmi10jCXhTHdZwUzoCm2tTNwjs8/FscivzMk52tDxi
-         LaD7TmzMUI+IbnvKg7PqfkE5bhXVo4AJ1ykGgbaanu7d1er8OneJVbvvT+oCZYkz0qqh
-         n+kjk22MrrUfVohWHRG0OAlAkt6lhcB9L1ybCYyGLon3T7Xv9bI+YDvLN0XJAWiQjVcp
-         O5fAk9WNSVUnp+AtSZ5sbrE5575dl277/fI+Z3hmCp6hzM/A9fUBccjHMO7T52WxZhxL
-         zW7Q==
-X-Gm-Message-State: AOAM533JWv68DRmbk1wmc3WCO6AsG5nc8qzNmknSxIdFpp36klRN++4j
-        08Rc/jx0gMJ1F8bT+01WEQ==
-X-Google-Smtp-Source: ABdhPJxyFckgQT337XDCiRAwgwtx3vUFkJL/tbw8qlrIqOoTtJpo2NVfXZ2udavPLZEGvQXL+u+/Tg==
-X-Received: by 2002:a05:6638:dc5:b0:332:3180:fd5e with SMTP id m5-20020a0566380dc500b003323180fd5emr5261454jaj.285.1655088645082;
-        Sun, 12 Jun 2022 19:50:45 -0700 (PDT)
+        bh=ex2ldVBZZOLPyGXJ1joosoKNwHYbBC23z6wBX0YiLPc=;
+        b=c4Aj0QmW8cQHTHjDR/HfR4D7b5peacg4GO9UzP4GB6vaaBjoWs8tIzlawHWuMqBMWi
+         8EjG+gqpH0gxaY8mq7dl74rnYpil1+GWgCNdmyxTygh3qE66ZTiawSEMv7JGgakFgDuD
+         UydwiMYjVhToasg5ustxfHOfCQQsZDISPLMGAAhGSXdytLCdQE8ZOOiiSo9JgoADVhkt
+         AVqU3zm2eFs4W5OOiqVjH1/xMQ1kcjT+XbftcmGNvnQCl5VDf1XKrrcFFDGKwIiE+yj+
+         Drn5/XK//08lSFkh+P9NjA/406TC2Jj/5rwuM3TXpb/FBJzvKjI0HXDy7L0GeLvS8xoI
+         e1Lw==
+X-Gm-Message-State: AOAM533CUGM8lrp2ipD3ZPmj01wRel89Ej9Nwsfry9xB0ksDOORb3z17
+        aCRmP7IDUXiKe5CLNCUYXw==
+X-Google-Smtp-Source: ABdhPJzhzSp+6kz2CQ8SuCbS2FqxGMvYT2GRKaaRl/f8tYODquYLh75JQmdd5Zq0tnojtNSQhcIDCQ==
+X-Received: by 2002:a05:6638:d83:b0:331:f0ea:676d with SMTP id l3-20020a0566380d8300b00331f0ea676dmr13901069jaj.11.1655088647436;
+        Sun, 12 Jun 2022 19:50:47 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id w4-20020a056e021c8400b002d10dc367a1sm3261489ill.49.2022.06.12.19.50.43
+        by smtp.gmail.com with ESMTPSA id p5-20020a056e0206c500b002d11888a1acsm3284393ils.34.2022.06.12.19.50.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 19:50:44 -0700 (PDT)
-Received: (nullmailer pid 2612895 invoked by uid 1000);
+        Sun, 12 Jun 2022 19:50:46 -0700 (PDT)
+Received: (nullmailer pid 2612898 invoked by uid 1000);
         Mon, 13 Jun 2022 02:50:42 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Johnson Wang <johnson.wang@mediatek.com>
-Cc:     sboyd@kernel.org, linux-arm-kernel@lists.infradead.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Edward-JW Yang <edward-jw.yang@mediatek.com>,
-        devicetree@vger.kernel.org
-In-Reply-To: <20220612135414.3003-2-johnson.wang@mediatek.com>
-References: <20220612135414.3003-1-johnson.wang@mediatek.com> <20220612135414.3003-2-johnson.wang@mediatek.com>
-Subject: Re: [RFC PATCH 1/2] dt-bindings: arm: mediatek: Add new bindings of MediaTek frequency hopping
+To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        UNGLinuxDriver@microchip.com, devicetree@vger.kernel.org,
+        nicolas.ferre@microchip.com, linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski+dt@linaro.org, Kavyasree.Kotagiri@microchip.com
+In-Reply-To: <20220612152604.24280-2-kavyasree.kotagiri@microchip.com>
+References: <20220612152604.24280-1-kavyasree.kotagiri@microchip.com> <20220612152604.24280-2-kavyasree.kotagiri@microchip.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: mfd: atmel,flexcom: Convert to json-schema
 Date:   Sun, 12 Jun 2022 20:50:42 -0600
-Message-Id: <1655088642.973172.2612894.nullmailer@robh.at.kernel.org>
+Message-Id: <1655088642.987858.2612897.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -64,25 +62,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 12 Jun 2022 21:54:13 +0800, Johnson Wang wrote:
-> This patch adds the new binding documentation for frequency hopping
-> and spread spectrum clocking control on MT8186.
+On Sun, 12 Jun 2022 20:56:02 +0530, Kavyasree Kotagiri wrote:
+> Convert the Atmel flexcom device tree bindings to json schema.
 > 
-> Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
-> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
 > ---
->  .../bindings/arm/mediatek/mediatek,fhctl.yaml | 149 ++++++++++++++++++
->  1 file changed, 149 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
+> v2 -> v3:
+>  - used enum for compatible string.
+>  - changed irq flag to IRQ_TYPE_LEVEL_HIGH in example.
+>  - fixed dtschema errors.
+> 
+> v1 -> v2:
+>  - Fix title.
+> 
+>  .../bindings/mfd/atmel,flexcom.yaml           | 103 ++++++++++++++++++
+>  .../devicetree/bindings/mfd/atmel-flexcom.txt |  63 -----------
+>  2 files changed, 103 insertions(+), 63 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml:44:111: [warning] line too long (133 > 110 characters) (line-length)
 
 dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml: properties:compatible:enum: 'atmel,sama5d2-flexcom' is not of type 'array'
+	from schema $id: http://json-schema.org/draft-07/schema#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml: properties:compatible:enum: 'atmel,sama5d2-flexcom' is not of type 'array'
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml: properties:compatible:enum: 'atmel,sama5d2-flexcom' is not of type 'array'
+	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml: ignoring, error in schema: properties: compatible: enum
+Documentation/devicetree/bindings/mfd/atmel,flexcom.example.dtb:0:0: /example-0/flexcom@f8034000: failed to match any schema with compatible: ['atmel,sama5d2-flexcom']
+Documentation/devicetree/bindings/mfd/atmel,flexcom.example.dtb:0:0: /example-0/flexcom@f8034000/spi@400: failed to match any schema with compatible: ['atmel,at91rm9200-spi']
 
 doc reference errors (make refcheckdocs):
 

@@ -2,104 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3621C549D85
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82ED549D96
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349683AbiFMTWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
+        id S1349875AbiFMTYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343931AbiFMTVg (ORCPT
+        with ESMTP id S1349732AbiFMTWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:21:36 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C455E110B;
-        Mon, 13 Jun 2022 10:18:08 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 0A335736;
-        Mon, 13 Jun 2022 17:18:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0A335736
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1655140688; bh=c6lIsFQ+NWEImD41NwrKBPBx7AxmBW0WsXXocbKtZ3Q=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=HPiyOJpDMdEGGeZSyRLvvB0lyI08Vz4LJhuP+R8C6aAeLLjgfB0h/TyvkVu5v1LNL
-         XGicJSLAO9iuy+kEuNncqAVlORTHKxOHXvePMI4oZimAdvcTzuzhPRp9OcwVjs/tm0
-         H+CprU+qGn9dwV+ZAIgc12wSx6cPwDUpNHh7z09L012UqYilubpMCXmP3m7gcosqUm
-         b9crKXu+FvsgH2vJJHJD1AuTEtCIbfk+j1+HxulpJHI2tH+wALlcVc2/jkxLyYErST
-         +NJbsqqRLtdOq8LNy4shyWHQNXusfw6k2/lIOKeGWL15jMDjRu+aSc402EA0GCyEaD
-         27PPFWsecTDSQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@corigine.com>,
-        linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, oss-drivers@corigine.com,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@corigine.com>
-Subject: Re: [PATCH v2] scripts: kernel-doc: Always increment warnings counter
-In-Reply-To: <20220613090510.3088294-1-niklas.soderlund@corigine.com>
-References: <20220613090510.3088294-1-niklas.soderlund@corigine.com>
-Date:   Mon, 13 Jun 2022 11:18:07 -0600
-Message-ID: <87h74o1nzk.fsf@meer.lwn.net>
+        Mon, 13 Jun 2022 15:22:49 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E87532ED7;
+        Mon, 13 Jun 2022 10:18:16 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id y79so6801553iof.2;
+        Mon, 13 Jun 2022 10:18:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=2mnX/lv1CoSM2GJgNr/IeYJZ7Y+yiMOfA3Jp6IUIPGQ=;
+        b=wK3R7Qdmm9ctJdd4k0HyzT+RIAV+PJ1c5rPCj4TFH1iElbP+RTfI6/gajhFf/kI0M1
+         lS5HABbzirAC1QTSiuWwgenge0+KuOnj8b+DKsoqnHpk5Kn0EFg1Lkzje9OipNsC54Y4
+         c/qSSZKnayOEaTtLWqoBnS485keIiVj3SBeFqdlvTmtmvdZXSqJ4VSF1PN9o4RqTP43l
+         lXdXHERqKMIViLxj7DQ3SuIEsGTzDSfbCRoD05xpkQUFLOo4Al4fv0ipka2TNdoUQesZ
+         gN7xqCK86tVsg3FaOpf8rAJ9UJrQDdR6e2f5APFcGyeAxzV72C2fPMflm+nE2hpI7VZ0
+         OIcg==
+X-Gm-Message-State: AOAM532W6JLtm/XGgptEJg413wpyJxzh/3rRtQN3CK71XJWgePd22rkr
+        AR3MwtCYIXucI24fx0nVtQ==
+X-Google-Smtp-Source: ABdhPJyT+r+axI1HGJ7u/QULVEEOiPQMBKwM12KG6nBrTwWFQLTAWYm0Y3TfwVYELfwpCFVfsRf3pw==
+X-Received: by 2002:a05:6638:22d4:b0:333:f776:e896 with SMTP id j20-20020a05663822d400b00333f776e896mr475569jat.75.1655140694423;
+        Mon, 13 Jun 2022 10:18:14 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.251])
+        by smtp.googlemail.com with ESMTPSA id ck19-20020a0566383f1300b00331a211407fsm3740374jab.93.2022.06.13.10.18.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 10:18:14 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] dt-bindings: vexpress-sysreg: Allow for no child nodes
+Date:   Mon, 13 Jun 2022 11:18:08 -0600
+Message-Id: <20220613171809.3928949-2-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220613171809.3928949-1-robh@kernel.org>
+References: <20220613171809.3928949-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Niklas S=C3=B6derlund <niklas.soderlund@corigine.com> writes:
+It is valid for arm,vexpress-sysreg to have no child nodes when either
+the deprecated binding without child nodes is used or a platform
+has no GPIOs. If there are no child nodes, then "#address-cells" and
+"#size-cells" should not be required. However, "reg" should be present
+in all cases, so let's add it now.
 
-> Some warnings do not increment the warnings counter making the behavior
-> of running kernel-doc with -Werror unlogical as some warnings will be
-> generated but not treated as errors.
->
-> Fix this by creating a helper function that always incrementing the
-> warnings counter every time a warning is emitted. There is one location
-> in get_sphinx_version() where a warning is not touched as it concerns
-> the execution environment of the kernel-doc and not the documentation
-> being processed.
->
-> Incrementing the counter only have effect when running kernel-doc in
-> either verbose mode (-v or environment variable KBUILD_VERBOSE) or when
-> treating warnings as errors (-Werror or environment variable
-> KDOC_WERROR). In both cases the number of warnings printed is printed to
-> stderr and for the later the exit code of kernel-doc is non-zero if
-> warnings where encountered.
->
-> Simple test case to demo one of the warnings,
->
->     $ cat test.c
->     /**
->      * foo() - Description
->      */
->     int bar();
->
->     # Without this change
->     $ ./scripts/kernel-doc -Werror -none test.c
->     test.c:4: warning: expecting prototype for foo(). Prototype was for
->     bar() instead
->
->     # With this change
->     $ ./scripts/kernel-doc -Werror -none test.c
->     test.c:4: warning: expecting prototype for foo(). Prototype was for
->     bar() instead
->     1 warnings as Errors
->
-> Signed-off-by: Niklas S=C3=B6derlund <niklas.soderlund@corigine.com>
-> ---
-> * Changes since v1
-> - Added a helper emit_warning() to print the message and increment the
->   counter instead of adding statements to increment the counter where it
->   was missing.
+Cc: Andre Przywara <andre.przywara@arm.com>
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/arm/vexpress-sysreg.yaml | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thanks for making this change.  Anything that rationalizes this horrific
-script even a little bit is more than welcome.
+diff --git a/Documentation/devicetree/bindings/arm/vexpress-sysreg.yaml b/Documentation/devicetree/bindings/arm/vexpress-sysreg.yaml
+index 2d2afada5ad1..f04db802a732 100644
+--- a/Documentation/devicetree/bindings/arm/vexpress-sysreg.yaml
++++ b/Documentation/devicetree/bindings/arm/vexpress-sysreg.yaml
+@@ -74,8 +74,7 @@ patternProperties:
+ 
+ required:
+   - compatible
+-  - "#address-cells"
+-  - "#size-cells"
++  - reg
+ 
+ examples:
+   - |
+-- 
+2.34.1
 
-I've applied the patch, thanks.
-
-jon

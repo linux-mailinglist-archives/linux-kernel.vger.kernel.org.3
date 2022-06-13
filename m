@@ -2,143 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D637C5499EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D8F5499F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241480AbiFMRZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 13:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
+        id S239473AbiFMR1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238038AbiFMRZb (ORCPT
+        with ESMTP id S232375AbiFMR1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 13:25:31 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0641B5DA45
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:41:33 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id v81so9720175ybe.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:41:32 -0700 (PDT)
+        Mon, 13 Jun 2022 13:27:23 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D9549242;
+        Mon, 13 Jun 2022 05:43:23 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id s1so6966666wra.9;
+        Mon, 13 Jun 2022 05:43:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=24s+okEIr+8frZCp+e+0zEDsJWLbgNN42DapWqRqg/U=;
-        b=wweaNRnfsA2aLMCcUoLybDHhyN8pjk5uBuWZyn3ywy90Ulvdc3wuhOClABcwdlFF0z
-         CW8qwev/jsryJy9m++xp5XgFg4dJbIcACCx2E/dJNseQ9BIKiCfGcBgsXds1S/LvDuVR
-         CjdvyY3jDG7RAnfF62ogRONES21Mr9v3o1pFX8D4DQ7r6kedTRnZJWAoPp/4WsnKSquZ
-         3q9md4Ao0IT/zLgA5YUO+06rCbvAYkwV9fahSeFo+89Sk74cVLdtNJoM97FoT2oXemhR
-         w2ZSsA2SSzZKWVHlp/ZuwBk5E+IGtIqDyda3+PVVO26p+1v8h3edex++teeGtp8fuxZR
-         wSWA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=gWZ2iuIrN0ujnQkPHV+TXRlSbNOjanWQAKWTOlhoEcw=;
+        b=m77Tk6N3ACPMUA59bi65hTpTPrRkAmreeEkyPDG3GSgXJ4ZskPgxVFTCgLrtL3XMIN
+         ptdPRIejAHUs/msgd9kwUcXEjXH9h7iZTcPwQxmlBnAUS7pH5Fm0NyuuqMXMP7CiLvVO
+         A9X9U3iJN+KG2ON0S31rL3jMCzil1eJebmUdSlTO0cApaAKzK6aiS/YCtN5nqUvbdiWe
+         gIf7Zmiz6VM37j6dsu/XmcwtVHHpYInnIywvwAg1s0q6KNVE7YG/xv2O93IgV/yg+P7Q
+         s2pNHc1o5iLoQm+lbRaHYNVnObrF+/BXhSd9zlqbOuRTur8kUpI7PWlWdET9InW86Eqd
+         fw+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=24s+okEIr+8frZCp+e+0zEDsJWLbgNN42DapWqRqg/U=;
-        b=V+OnJsdSiUP3o2/ehIATHOycKSXibyYfp6PBXbc8NTsE2iYomTtKM/8LsjJ6vVgqf1
-         rZfpmDdnYKZJdfXJcOI8QyzWJv895z50I8afM7wHYF1MPJiOZdUwc+YlMpLSkUoKkflQ
-         hy6XV9/hV2Kei0nqE0JFac1LckZ8ERvQEPhooJbTl8FiUJsq8xKIEc9fil55FMUvwcSn
-         wFNVdiIsd/uZRrYn9eB7CVS64Q0ZYgDmVRgm79FCHG+w8SoAXfPFeNAjPBpyCPmlzkQR
-         gWrnucctuNIOID8jeOVlbt+lnefeAdfVUdJhhVWt4/lbso0kfmBJBokTbjoYOjJ01svr
-         HaNQ==
-X-Gm-Message-State: AOAM533SsvYEZNWCl8V1rqWmuXay4mnckPE2xK4Rt9niHmzO2HutV9Ir
-        DWBRzvev/wO52vqMf/zVB/s7yypMtK4I5/oKEAGrZg==
-X-Google-Smtp-Source: ABdhPJzq8ObTdRvrg3KeDgeBHDlgX67xjddWEjh3SgADP1H43aepYKAtYgXrAh4O45qLJnKn9e/2eKeOF3/+RKb2m9o=
-X-Received: by 2002:a25:cec6:0:b0:65c:98f5:a06a with SMTP id
- x189-20020a25cec6000000b0065c98f5a06amr58114814ybe.355.1655124092193; Mon, 13
- Jun 2022 05:41:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220316200633.28974-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <CAMSo37US03pKhPR=a1sJnWMF6L+WDvhWz469G=+0XY2WX-p=bg@mail.gmail.com> <CA+V-a8t2w14bJVCiiHQq8bwgetw5za1-t_OSfyr6Cwo4eZOt2Q@mail.gmail.com>
-In-Reply-To: <CA+V-a8t2w14bJVCiiHQq8bwgetw5za1-t_OSfyr6Cwo4eZOt2Q@mail.gmail.com>
-From:   Yongqin Liu <yongqin.liu@linaro.org>
-Date:   Mon, 13 Jun 2022 20:41:21 +0800
-Message-ID: <CAMSo37V4ye8wb_ctKQO0QE6QCJXUEaPC1-27911zCcXHN-+C2Q@mail.gmail.com>
-Subject: Re: [RFC PATCH] of/platform: Drop static setup of IRQ resource from
- DT core
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=gWZ2iuIrN0ujnQkPHV+TXRlSbNOjanWQAKWTOlhoEcw=;
+        b=5UXfS2fjCGSQkFlZKZMLo7c5axWa4m3Kt3jmYQXnhZE0ixUw/JXD/7+twL8O1TLAJN
+         fysoJ3KT6V4UlbZf/Guyheg0iyQ0QiS4Mt7heHEUw42PNDNNa2SrbwsiYMsFONH1jTTw
+         jCeAOjVXDp8RQeHeTySsRgLehHkBBcsBfy5IFQb+gi1ZWrm3i2SAR3BeRsCJXEx/Pl0p
+         RKbgtvHTK+oCOKrL0cn2sdZFbVNRQq6tSOZZUyeeG2PYuYKaYno/nQnAf/X3/pUgzgXu
+         r/77B0XdUgSXATWzNqMGiCvHR2BKKKmOB0/YTVFpjSWCnV4+I83C0sZtqBTe/K5fQ04x
+         PSnw==
+X-Gm-Message-State: AOAM530OEGRwbAcENhZcw5qSn79f/IVpN5gEzMcpo7Isd7uiWQu9DIm3
+        xygdv/9i86k6axmXGHGjHpg=
+X-Google-Smtp-Source: ABdhPJxmRpI3gbTnGIrNNYzB/skcfriE8YOSY4phl7jCU0+HLVMzMpV8RT5xLa1lCuYOs16Wh9CFCA==
+X-Received: by 2002:a5d:6c62:0:b0:218:3e13:4b17 with SMTP id r2-20020a5d6c62000000b002183e134b17mr38913538wrz.673.1655124201670;
+        Mon, 13 Jun 2022 05:43:21 -0700 (PDT)
+Received: from felia.fritz.box (200116b8260df50011e978c0f780de03.dip.versatel-1u1.de. [2001:16b8:260d:f500:11e9:78c0:f780:de03])
+        by smtp.gmail.com with ESMTPSA id y3-20020adfd083000000b002103cfd2fbasm8383940wrh.65.2022.06.13.05.43.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 05:43:21 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: add include/dt-bindings/thermal to THERMAL
+Date:   Mon, 13 Jun 2022 14:43:09 +0200
+Message-Id: <20220613124309.28790-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Lad
+Maintainers of the directory Documentation/devicetree/bindings/thermal
+are also the maintainers of the corresponding directory
+include/dt-bindings/thermal.
 
-Thanks a lot for the links and suggestions!
-Finally I resolved the problem with the call of
-platform_get_irq_byname and irq_get_trigger_type.
+Add the file entry for include/dt-bindings/thermal to the appropriate
+section in MAINTAINERS.
 
-Btw, I just have a question about  the of_irq_to_resource function.
-At the beginning I tried to use platform_get_irq and of_irq_to_resource
-to get the irq name and flags information, but it seems of_irq_to_resource
-does not work as expected, maybe I called incorrectly somewhere,
-here I just want to ask, do you think that if of_irq_to_resource still
-could be used to
-get the resource with the irq returned from platform_get_irq?
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Rafael, Daniel, please pick this MAINTAINERS addition to your section.
 
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thanks,
-Yongqin Liu
-
-On Sat, 11 Jun 2022 at 16:01, Lad, Prabhakar <prabhakar.csengg@gmail.com> wrote:
->
-> Hi Yongqin,
->
-> On Sat, Jun 11, 2022 at 6:28 AM Yongqin Liu <yongqin.liu@linaro.org> wrote:
-> >
-> > Hi, Lad
-> >
-> > # sorry for the confusion if you have received it before with the
-> > non-plain-text mode
-> >
-> > In this change you said "all the DT drivers have switched to
-> > platform_get_irq()",
-> > could you please help share with me one example about the above change
-> > as reference?
-> The change is we just switch to using platform_get_irq() [0] for
-> fetching IRQ numbers.
->
-> > We have one hikey960 android build with some out of tree changes,
-> > which could not boot
-> > successfully with some errors on surfaceflinger(I am not sure it's a
-> > problem with the gpu or display),
-> > but could boot if I have this change reverted.
-> >
-> > I guess it needs some changes on the gpu/display dts or driver side to
-> > have it work
-> Just the changes to the driver is needed.
->
-> > with this change, not sure if you could give some suggestions on the fix.
-> >
-> > And here are two out of tree changes might be related listed here just
-> > for reference in case:
-> > https://android-review.linaro.org/c/kernel/common/+/21680
-> > https://android-review.linaro.org/c/kernel/common/+/21682
-> >
->
-> [0] https://lore.kernel.org/lkml/20211221213547.1553-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
->
-> Cheers,
-> Prabhakar
-
-
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index ec2e764a22ee..4fd2c1080aa5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19858,6 +19858,7 @@ F:	Documentation/ABI/testing/sysfs-class-thermal
+ F:	Documentation/devicetree/bindings/thermal/
+ F:	Documentation/driver-api/thermal/
+ F:	drivers/thermal/
++F:	include/dt-bindings/thermal/
+ F:	include/linux/cpu_cooling.h
+ F:	include/linux/thermal.h
+ F:	include/uapi/linux/thermal.h
 -- 
-Best Regards,
-Yongqin Liu
----------------------------------------------------------------
-#mailing list
-linaro-android@lists.linaro.org
-http://lists.linaro.org/mailman/listinfo/linaro-android
+2.17.1
+

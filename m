@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9B2548D34
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F9C548A15
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357587AbiFMLyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
+        id S1378310AbiFMNlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356093AbiFMLtv (ORCPT
+        with ESMTP id S1378583AbiFMNjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:49:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F5C24597;
-        Mon, 13 Jun 2022 03:53:52 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FD878903;
+        Mon, 13 Jun 2022 04:27:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B459B80EA3;
-        Mon, 13 Jun 2022 10:53:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4E9FC34114;
-        Mon, 13 Jun 2022 10:53:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B67AB80EA7;
+        Mon, 13 Jun 2022 11:27:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1A87C3411C;
+        Mon, 13 Jun 2022 11:27:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117629;
-        bh=hF5zkt/Jx8jXycD1YJ87TiWOnvd+ShFZyFFjcRf1zRk=;
+        s=korg; t=1655119661;
+        bh=en1CA4PgGFixgLpDhr7POFl9urAhKt9dpcuax8g1kts=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KFfhNorXHOvWK/ZmjEz2bo1hlmtBl+dxvu3cdDJ+zmkZ/3KkCMsCcWWu+ACqDOT8w
-         iPgj3AJwhGvQnKAh1HS/J+i2Yw31SuNjm9FF2BQKFh3HYqkQITEEmS+oUfbx5DhtTo
-         J8SUUG18aNks0lAyqb57FpDEsrULc04ujpfnJVL4=
+        b=TKO1GF5yRp38AAFO9LHig/t1rx40v+0WButPNgAXHplurfcIZ4hsQNTvEBEyjzlse
+         IcaPPu3iBzOZAR+Q21TW7L5oXS6W7uRPTGzKIInYmos0XkE/8GRH+8k9X0rzZlr1/U
+         3/GR99ObkjhyHW13psyZ2bdG3SuoBb/4u8oG2eSo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 074/287] ath9k_htc: fix potential out of bounds access with invalid rxstatus->rs_keyix
+Subject: [PATCH 5.18 073/339] serial: st-asc: Sanitize CSIZE and correct PARENB for CS7
 Date:   Mon, 13 Jun 2022 12:08:18 +0200
-Message-Id: <20220613094926.117409090@linuxfoundation.org>
+Message-Id: <20220613094928.736274885@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit 2dc509305cf956381532792cb8dceef2b1504765 ]
+[ Upstream commit 52bb1cb7118564166b04d52387bd8403632f5190 ]
 
-The "rxstatus->rs_keyix" eventually gets passed to test_bit() so we need to
-ensure that it is within the bitmap.
+Only CS7 and CS8 seem supported but CSIZE is not sanitized from CS5 or
+CS6 to CS8. In addition, ASC_CTL_MODE_7BIT_PAR suggests that CS7 has
+to have parity, thus add PARENB.
 
-drivers/net/wireless/ath/ath9k/common.c:46 ath9k_cmn_rx_accept()
-error: passing untrusted data 'rx_stats->rs_keyix' to 'test_bit()'
+Incorrect CSIZE results in miscalculation of the frame bits in
+tty_get_char_size() or in its predecessor where the roughly the same
+code is directly within uart_update_timeout().
 
-Fixes: 4ed1a8d4a257 ("ath9k_htc: use ath9k_cmn_rx_accept")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220409061225.GA5447@kili
+Fixes: c4b058560762 (serial:st-asc: Add ST ASC driver.)
+Cc: Srinivas Kandagatla <srinivas.kandagatla@st.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-8-ilpo.jarvinen@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath9k/htc_drv_txrx.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/tty/serial/st-asc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-index d567fbe79cff..3cd3f3ca1000 100644
---- a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-+++ b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-@@ -1005,6 +1005,14 @@ static bool ath9k_rx_prepare(struct ath9k_htc_priv *priv,
- 		goto rx_next;
+diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
+index d7fd692286cf..1b0da603ab54 100644
+--- a/drivers/tty/serial/st-asc.c
++++ b/drivers/tty/serial/st-asc.c
+@@ -535,10 +535,14 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	/* set character length */
+ 	if ((cflag & CSIZE) == CS7) {
+ 		ctrl_val |= ASC_CTL_MODE_7BIT_PAR;
++		cflag |= PARENB;
+ 	} else {
+ 		ctrl_val |= (cflag & PARENB) ?  ASC_CTL_MODE_8BIT_PAR :
+ 						ASC_CTL_MODE_8BIT;
++		cflag &= ~CSIZE;
++		cflag |= CS8;
  	}
++	termios->c_cflag = cflag;
  
-+	if (rxstatus->rs_keyix >= ATH_KEYMAX &&
-+	    rxstatus->rs_keyix != ATH9K_RXKEYIX_INVALID) {
-+		ath_dbg(common, ANY,
-+			"Invalid keyix, dropping (keyix: %d)\n",
-+			rxstatus->rs_keyix);
-+		goto rx_next;
-+	}
-+
- 	/* Get the RX status information */
- 
- 	memset(rx_status, 0, sizeof(struct ieee80211_rx_status));
+ 	/* set stop bit */
+ 	ctrl_val |= (cflag & CSTOPB) ? ASC_CTL_STOP_2BIT : ASC_CTL_STOP_1BIT;
 -- 
 2.35.1
 

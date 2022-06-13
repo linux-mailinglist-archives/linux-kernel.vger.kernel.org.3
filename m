@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EE6D549C45
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:55:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1779549C52
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345321AbiFMSzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        id S1345681AbiFMSz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244778AbiFMSzU (ORCPT
+        with ESMTP id S1345043AbiFMSz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:55:20 -0400
+        Mon, 13 Jun 2022 14:55:27 -0400
 Received: from mx4.veeam.com (mx4.veeam.com [104.41.138.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CF9DFC839;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D94FC832;
         Mon, 13 Jun 2022 08:59:53 -0700 (PDT)
 Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx4.veeam.com (Postfix) with ESMTPS id 2AAB8CCE21;
-        Mon, 13 Jun 2022 18:54:02 +0300 (MSK)
+        by mx4.veeam.com (Postfix) with ESMTPS id 0DCA8CCE1D;
+        Mon, 13 Jun 2022 18:54:08 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
-        s=mx4-2022; t=1655135642;
-        bh=7SqasGcsGPk7lF68LbZBSDsnkrJS5LAXkYNjoErasw8=;
+        s=mx4-2022; t=1655135648;
+        bh=1CZu+NgUluLzuDOy8s0m30AZwSGa0Kwnz7+ACG3wGDQ=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=e5vrwEkyBCZCpd5m9rPnsZ3Z7+1uBaMBqA6PRKbfWwylOanZA7lsLZh7P0EfzCucN
-         QNbA6jgV9819xiGh8aFj0dLAn436nCTG1QHikPbt4kpA6Ysjj6k7wjw19RxibkqiNL
-         9xbDvwHkaiJB+KB1Jvg+/TLs182V4npLU00+DRJ2dgX0hvhh4D+cfi5vM7ysXLBrTu
-         6fu4laij0Lr7sT1ZCFf3zO06GlPSLXDBJXuaVqKokfCsoEddLunlqQ/Dhh60FkzD6r
-         U5/Yg7eUNkUUjoPQUDipY5hkQ3oJ6PODJbSid9zWOwoXJ7ATlURkOS8DLVL/MeHWUs
-         LkFEuoxbCYmvw==
+        b=oNMQjnthcNyrdCzyxDrD9naBj2jK9qAc7n3bVgk9x/4LPgV90kmXGI8pQgStKFdtP
+         JmcljKToa2ZyiYZSrs/ADqvTRTUGW818ToADfD3y9vTR8MI3MBMO8TqIiiNDIHPniG
+         ntOlFX59+CTsJxOXJfaMExnw3jhmnzKr/M7kce+kDhpgdlswggVp80b3pu/3vHrCEk
+         HIdJD5MQazYzwKFnzFZZEPLEvXo8ZcoKO4xo0xl4QTcwqPguhcVTf//zjIw0Wo8Aea
+         x7lEX32IHnmSKufW5rtoq9EyfdPU4SkeRBo7LhIfp+lKCeYWCMbIMZrzybO76fO3Q2
+         NmI1JFhT299Ag==
 Received: from prgdevlinuxpatch01.amust.local (172.24.14.5) by
  prgmbx01.amust.local (172.24.128.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.9; Mon, 13 Jun 2022 17:53:59 +0200
+ 15.2.1118.9; Mon, 13 Jun 2022 17:54:03 +0200
 From:   Sergei Shtepa <sergei.shtepa@veeam.com>
 To:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Sergei Shtepa <sergei.shtepa@veeam.com>
-Subject: [PATCH 01/20] block, blk_filter: enable block device filters
-Date:   Mon, 13 Jun 2022 18:52:54 +0300
-Message-ID: <1655135593-1900-2-git-send-email-sergei.shtepa@veeam.com>
+Subject: [PATCH 02/20] block, blksnap: header file of the module interface
+Date:   Mon, 13 Jun 2022 18:52:55 +0300
+Message-ID: <1655135593-1900-3-git-send-email-sergei.shtepa@veeam.com>
 X-Mailer: git-send-email 1.8.3.1
 In-Reply-To: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
 References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
@@ -62,434 +62,481 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allows to attach block device filters to the block devices.
-Kernel modules can use this functionality to extend the
-capabilities of the block layer.
+The header file contains a set of declarations, structures and control
+requests (ioctl) that allows to manage the module from the user space.
 
 Signed-off-by: Sergei Shtepa <sergei.shtepa@veeam.com>
 ---
- block/Kconfig             |   8 +++
- block/bdev.c              | 129 ++++++++++++++++++++++++++++++++++++++
- block/blk-core.c          |  88 ++++++++++++++++++++++++++
- include/linux/blk_types.h |  22 +++++++
- include/linux/blkdev.h    |  81 ++++++++++++++++++++++++
- 5 files changed, 328 insertions(+)
+ include/linux/blk_snap.h | 460 +++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 460 insertions(+)
+ create mode 100644 include/linux/blk_snap.h
 
-diff --git a/block/Kconfig b/block/Kconfig
-index 50b17e260fa2..256483e00224 100644
---- a/block/Kconfig
-+++ b/block/Kconfig
-@@ -225,6 +225,14 @@ config BLK_MQ_RDMA
- config BLK_PM
- 	def_bool PM
- 
-+config BLK_FILTER
-+	bool "Enable block device filters"
-+	default n
-+	help
-+	  Enabling this lets the block layer filters handle bio requests.
-+	  Kernel modules can use this feature to extend the functionality
-+	  of the block layer.
+diff --git a/include/linux/blk_snap.h b/include/linux/blk_snap.h
+new file mode 100644
+index 000000000000..a3753a6a9527
+--- /dev/null
++++ b/include/linux/blk_snap.h
+@@ -0,0 +1,460 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#pragma once
++#include <linux/types.h>
++#include <linux/uuid.h>
 +
- # do not use in new code
- config BLOCK_HOLDER_DEPRECATED
- 	bool
-diff --git a/block/bdev.c b/block/bdev.c
-index 5fe06c1f2def..4bcd9f4378e3 100644
---- a/block/bdev.c
-+++ b/block/bdev.c
-@@ -426,8 +426,15 @@ static void init_once(void *data)
- 	inode_init_once(&ei->vfs_inode);
- }
- 
-+#ifdef CONFIG_BLK_FILTER
-+static void bdev_filter_cleanup(struct block_device *bdev);
-+#endif
++#define BLK_SNAP_MODULE_NAME "blksnap"
++#define BLK_SNAP_IMAGE_NAME "blksnap-image"
++#define BLK_SNAP 'V'
 +
- static void bdev_evict_inode(struct inode *inode)
- {
-+#ifdef CONFIG_BLK_FILTER
-+	bdev_filter_cleanup(I_BDEV(inode));
-+#endif
- 	truncate_inode_pages_final(&inode->i_data);
- 	invalidate_inode_buffers(inode); /* is it needed here? */
- 	clear_inode(inode);
-@@ -503,6 +510,11 @@ struct block_device *bdev_alloc(struct gendisk *disk, u8 partno)
- 		return NULL;
- 	}
- 	bdev->bd_disk = disk;
-+
-+#ifdef CONFIG_BLK_FILTER
-+	memset(bdev->bd_filters, 0, sizeof(bdev->bd_filters));
-+	spin_lock_init(&bdev->bd_filters_lock);
-+#endif
- 	return bdev;
- }
- 
-@@ -1071,3 +1083,120 @@ void sync_bdevs(bool wait)
- 	spin_unlock(&blockdev_superblock->s_inode_list_lock);
- 	iput(old_inode);
- }
-+
-+#ifdef CONFIG_BLK_FILTER
-+static void bdev_filter_cleanup(struct block_device *bdev)
-+{
-+	int altitude;
-+	struct bdev_filter *flt;
-+
-+	for (altitude = 0; altitude < bdev_filter_alt_end; altitude++) {
-+		spin_lock(&bdev->bd_filters_lock);
-+		flt = bdev->bd_filters[altitude];
-+		bdev->bd_filters[altitude] = NULL;
-+		spin_unlock(&bdev->bd_filters_lock);
-+
-+		bdev_filter_put(flt);
-+	}
-+}
-+
-+/**
-+ * bdev_filter_attach - Attach a filter to the original block device.
-+ * @bdev:
-+ *	Block device.
-+ * @name:
-+ *	Name of the block device filter.
-+ * @altitude:
-+ *	Altituda number of the block device filter.
-+ * @flt:
-+ *	Pointer to the filter structure.
-+ *
-+ * Before adding a filter, it is necessary to initialize &struct bdev_filter.
-+ *
-+ * The bdev_filter_detach() function allows to detach the filter from the block
-+ * device.
-+ *
-+ * Return:
-+ * 0 - OK
-+ * -EALREADY - a filter with this name already exists
-+ */
-+int bdev_filter_attach(struct block_device *bdev, const char *name,
-+		       const enum bdev_filter_altitudes altitude,
-+		       struct bdev_filter *flt)
-+{
-+	int ret = 0;
-+
-+	spin_lock(&bdev->bd_filters_lock);
-+	if (bdev->bd_filters[altitude])
-+		ret = -EALREADY;
-+	else
-+		bdev->bd_filters[altitude] = flt;
-+	spin_unlock(&bdev->bd_filters_lock);
-+
-+	if (!ret)
-+		pr_info("block device filter '%s' has been attached to %d:%d",
-+			name, MAJOR(bdev->bd_dev), MINOR(bdev->bd_dev));
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(bdev_filter_attach);
-+
-+/**
-+ * bdev_filter_detach - Detach a filter from the block device.
-+ * @bdev:
-+ *	Block device.
-+ * @name:
-+ *	Name of the block device filter.
-+ * @altitude:
-+ *	Altituda number of the block device filter.
-+ *
-+ * The filter should be added using the bdev_filter_attach() function.
-+ *
-+ * Return:
-+ * 0 - OK
-+ * -ENOENT - the filter was not found in the linked list
-+ */
-+int bdev_filter_detach(struct block_device *bdev, const char *name,
-+		       const enum bdev_filter_altitudes altitude)
-+{
-+	struct bdev_filter *flt = NULL;
-+
-+	spin_lock(&bdev->bd_filters_lock);
-+	flt = bdev->bd_filters[altitude];
-+	bdev->bd_filters[altitude] = NULL;
-+	spin_unlock(&bdev->bd_filters_lock);
-+
-+	if (!flt)
-+		return -ENOENT;
-+
-+	bdev_filter_put(flt);
-+	pr_info("block device filter '%s' has been detached from %d:%d",
-+		name, MAJOR(bdev->bd_dev), MINOR(bdev->bd_dev));
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(bdev_filter_detach);
-+
-+/**
-+ * bdev_filter_get_by_altitude - Get filter by altitude.
-+ * @bdev:
-+ *	Pointer to the block device structure.
-+ *
-+ * Return:
-+ * pointer - pointer to filters structure from &struct blk_filter
-+ * NULL - no filter has been set
-+ */
-+struct bdev_filter *bdev_filter_get_by_altitude(struct block_device *bdev,
-+				const enum bdev_filter_altitudes altitude)
-+{
-+	struct bdev_filter *flt;
-+
-+	spin_lock(&bdev->bd_filters_lock);
-+	flt = bdev->bd_filters[altitude];
-+	if (flt)
-+		bdev_filter_get(flt);
-+	spin_unlock(&bdev->bd_filters_lock);
-+
-+	return flt;
-+}
-+EXPORT_SYMBOL_GPL(bdev_filter_get_by_altitude);
-+#endif
-diff --git a/block/blk-core.c b/block/blk-core.c
-index 06ff5bbfe8f6..a44906fb08aa 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -757,6 +757,86 @@ void submit_bio_noacct_nocheck(struct bio *bio)
- 		__submit_bio_noacct(bio);
- }
- 
-+#ifdef CONFIG_BLK_FILTER
-+
-+/**
-+ * __filter_bio() - Process bio by the block device filter.
-+ * @flt:
-+ *	Block device filter.
-+ * @bio:
-+ *	Original I/O unit.
-+ *
-+ * Return:
-+ * bdev_filter_pass - original bio should be submitted
-+ * bdev_filter_skip - do not submit original bio
-+ * bdev_filter_redirect - repeat bio processing for another block device
-+ */
-+static inline enum bdev_filter_result __filter_bio(struct bdev_filter *flt,
-+						   struct bio *bio)
-+{
-+	enum bdev_filter_result result;
-+	struct bio *new_bio;
-+	struct bio_list bio_list[2] = { };
-+
-+	do {
-+		bio_list_init(&bio_list[0]);
-+		current->bio_list = bio_list;
-+
-+		result = flt->fops->submit_bio_cb(bio, flt);
-+
-+		current->bio_list = NULL;
-+
-+		while ((new_bio = bio_list_pop(&bio_list[0]))) {
-+			bio_set_flag(new_bio, BIO_FILTERED);
-+			submit_bio_noacct(new_bio);
-+		};
-+	} while (result == bdev_filter_repeat);
-+
-+	return result;
-+}
-+
-+/**
-+ * filter_bio() - Pass bio to the block device filters.
-+ * @bio:
-+ *	Original I/O unit.
-+ *
-+ * Return:
-+ * true - original bio should be submitted
-+ * false - do not submit original bio
-+ */
-+static bool filter_bio(struct bio *bio)
-+{
-+	enum bdev_filter_result result = bdev_filter_pass;
-+
-+	if (bio_flagged(bio, BIO_FILTERED))
-+		return true;
-+	do {
-+		struct block_device *bdev = bio->bi_bdev;
-+		unsigned int altitude = 0;
-+
-+		while (altitude < bdev_filter_alt_end) {
-+			struct bdev_filter *flt;
-+
-+			spin_lock(&bdev->bd_filters_lock);
-+			flt = bdev->bd_filters[altitude];
-+			if (flt)
-+				bdev_filter_get(flt);
-+			spin_unlock(&bdev->bd_filters_lock);
-+
-+			if (flt) {
-+				result = __filter_bio(flt, bio);
-+				bdev_filter_put(flt);
-+				if (result != bdev_filter_pass)
-+					break;
-+			}
-+			altitude++;
-+		}
-+	} while (result == bdev_filter_redirect);
-+
-+	return (result == bdev_filter_pass);
-+}
-+#endif
-+
- /**
-  * submit_bio_noacct - re-submit a bio to the block device layer for I/O
-  * @bio:  The bio describing the location in memory and on the device.
-@@ -790,6 +870,14 @@ void submit_bio_noacct(struct bio *bio)
- 		goto end_io;
- 	if (unlikely(bio_check_ro(bio)))
- 		goto end_io;
-+#ifdef CONFIG_BLK_FILTER
++enum blk_snap_ioctl {
 +	/*
-+	 * It looks like should_fail_bio() and bio_check_ro() can be placed
-+	 * in a separate block device filter for debugging.
++	 * Service controls
 +	 */
-+	if (!filter_bio(bio))
-+		goto end_io;
-+#endif
- 	if (!bio_flagged(bio, BIO_REMAPPED)) {
- 		if (unlikely(bio_check_eod(bio)))
- 			goto end_io;
-diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
-index a24d4078fb21..b88f506ea59e 100644
---- a/include/linux/blk_types.h
-+++ b/include/linux/blk_types.h
-@@ -37,6 +37,23 @@ struct bio_crypt_ctx;
- #define PAGE_SECTORS		(1 << PAGE_SECTORS_SHIFT)
- #define SECTOR_MASK		(PAGE_SECTORS - 1)
- 
-+#ifdef CONFIG_BLK_FILTER
-+/**
-+ * enum bdev_filter_altitudes - Set of reserved altitudes for block device
-+ *	filters.
-+ *
-+ * @bdev_filter_alt_blksnap:
-+ *	An altitude for the blksnap module.
-+ * @bdev_filter_alt_end:
-+ *	Indicates the end of the altitude set.
-+ */
-+enum bdev_filter_altitudes {
-+	bdev_filter_alt_blksnap = 0,
-+	bdev_filter_alt_end
-+};
-+struct bdev_filter;
-+#endif
-+
- struct block_device {
- 	sector_t		bd_start_sect;
- 	sector_t		bd_nr_sectors;
-@@ -68,6 +85,10 @@ struct block_device {
- #ifdef CONFIG_FAIL_MAKE_REQUEST
- 	bool			bd_make_it_fail;
- #endif
-+#ifdef CONFIG_BLK_FILTER
-+	struct bdev_filter	*bd_filters[bdev_filter_alt_end];
-+	spinlock_t		bd_filters_lock;
-+#endif
- } __randomize_layout;
- 
- #define bdev_whole(_bdev) \
-@@ -332,6 +353,7 @@ enum {
- 	BIO_QOS_MERGED,		/* but went through rq_qos merge path */
- 	BIO_REMAPPED,
- 	BIO_ZONE_WRITE_LOCKED,	/* Owns a zoned device zone write lock */
-+	BIO_FILTERED,		/* bio has already been filtered */
- 	BIO_FLAG_LAST
- };
- 
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 608d577734c2..24cb5293897f 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1573,4 +1573,85 @@ struct io_comp_batch {
- 
- #define DEFINE_IO_COMP_BATCH(name)	struct io_comp_batch name = { }
- 
-+#ifdef CONFIG_BLK_FILTER
-+/**
-+ * enum bdev_filter_result - The result of bio processing by
-+ *	the block device filter.
-+ *
-+ * @bdev_filter_skip:
-+ *	Original bio does not need to be submitted.
-+ * @bdev_filter_pass:
-+ *	It is necessary to submit the original request.
-+ * @bdev_filter_repeat:
-+ *	Bio processing has not been completed, a second call is required.
-+ * @bdev_filter_redirect:
-+ *	Original bio was redirected to another block device. The set
-+ *	of filters on it is different, so processing must be repeated.
-+ */
-+enum bdev_filter_result {
-+	bdev_filter_skip = 0,
-+	bdev_filter_pass,
-+	bdev_filter_repeat,
-+	bdev_filter_redirect
-+};
-+struct bdev_filter;
-+/**
-+ * bdev_filter_operations - List of callback functions for the filter.
-+ *
-+ * @submit_bio_cb:
-+ *	A callback function for bio processing.
-+ * @detach_cb:
-+ *	A callback function to disable the filter when removing a block
-+ *	device from the system.
-+ */
-+struct bdev_filter_operations {
-+	enum bdev_filter_result (*submit_bio_cb)(struct bio *bio,
-+						 struct bdev_filter *flt);
-+	void (*detach_cb)(struct kref *kref);
-+};
-+/**
-+ * struct bdev_filter - Block device filter.
-+ *
-+ * @kref:
-+ *	Kernel reference counter.
-+ * @fops:
-+ *	The pointer to &struct bdev_filter_operations with callback
-+ *	functions for the filter.
-+ */
-+struct bdev_filter {
-+	struct kref kref;
-+	const struct bdev_filter_operations *fops;
-+};
-+/**
-+ * bdev_filter_init - Initialization of the filter structure.
-+ * @flt:
-+ *	Pointer to the &struct bdev_filter to be initialized.
-+ * @fops:
-+ *	The callback functions for the filter.
-+ */
-+static inline void bdev_filter_init(struct bdev_filter *flt,
-+		const struct bdev_filter_operations *fops)
-+{
-+	kref_init(&flt->kref);
-+	flt->fops = fops;
-+};
-+int bdev_filter_attach(struct block_device *bdev, const char *name,
-+		       const enum bdev_filter_altitudes altitude,
-+		       struct bdev_filter *flt);
-+int bdev_filter_detach(struct block_device *bdev, const char *name,
-+		       const enum bdev_filter_altitudes altitude);
-+struct bdev_filter *bdev_filter_get_by_altitude(struct block_device *bdev,
-+		       const enum bdev_filter_altitudes altitude);
-+static inline void bdev_filter_get(struct bdev_filter *flt)
-+{
-+	kref_get(&flt->kref);
-+}
-+static inline void bdev_filter_put(struct bdev_filter *flt)
-+{
-+	if (flt)
-+		kref_put(&flt->kref, flt->fops->detach_cb);
++	blk_snap_ioctl_version,
++	/*
++	 * Contols for tracking
++	 */
++	blk_snap_ioctl_tracker_remove,
++	blk_snap_ioctl_tracker_collect,
++	blk_snap_ioctl_tracker_read_cbt_map,
++	blk_snap_ioctl_tracker_mark_dirty_blocks,
++	/*
++	 * Snapshot contols
++	 */
++	blk_snap_ioctl_snapshot_create,
++	blk_snap_ioctl_snapshot_destroy,
++	blk_snap_ioctl_snapshot_append_storage,
++	blk_snap_ioctl_snapshot_take,
++	blk_snap_ioctl_snapshot_collect,
++	blk_snap_ioctl_snapshot_collect_images,
++	blk_snap_ioctl_snapshot_wait_event,
++	blk_snap_ioctl_end,
 +};
 +
-+#endif
++/**
++ * struct blk_snap_version - Result for the &IOCTL_BLK_SNAP_VERSION control.
++ * @major:
++ *	Version major part.
++ * @minor:
++ *	Version minor part.
++ * @revision:
++ *	Revision number.
++ * @build:
++ *	Build number. Should be zero.
++ */
++struct blk_snap_version {
++	__u16 major;
++	__u16 minor;
++	__u16 revision;
++	__u16 build;
++};
++/**
++ * IOCTL_BLK_SNAP_VERSION - Get version and compatibility flags.
++ *
++ * Linking the product behavior to the version code does not seem to be a very
++ * good idea. Version is only for logs.
++ */
++#define IOCTL_BLK_SNAP_VERSION                                                 \
++	_IOW(BLK_SNAP, blk_snap_ioctl_version, struct blk_snap_version)
 +
- #endif /* _LINUX_BLKDEV_H */
++/*
++ * The main functionality of the module is change block tracking (CBT).
++ * Next, a number of ioctls will describe the interface for the CBT mechanism.
++ */
++
++/**
++ * struct blk_snap_dev_t - Block device ID.
++ * @mj:
++ *	Device ID major part.
++ * @mn:
++ *	Device ID minor part.
++ *
++ * In user space and in kernel space, block devices are encoded differently.
++ * We need to enter our own type to guarantee the correct transmission of the
++ * major and minor parts.
++ */
++struct blk_snap_dev_t {
++	__u32 mj;
++	__u32 mn;
++};
++
++/**
++ * struct blk_snap_tracker_remove - Input argument for the
++ *	&IOCTL_BLK_SNAP_TRACKER_REMOVE control.
++ * @dev_id:
++ *	Device ID.
++ */
++struct blk_snap_tracker_remove {
++	struct blk_snap_dev_t dev_id;
++};
++/**
++ * IOCTL_BLK_SNAP_TRACKER_REMOVE - Remove a device from tracking.
++ *
++ * Removes the device from tracking changes.
++ * Adding a device for tracking is performed when creating a snapshot
++ * that includes this device.
++ */
++#define IOCTL_BLK_SNAP_TRACKER_REMOVE                                          \
++	_IOW(BLK_SNAP, blk_snap_ioctl_tracker_remove,                          \
++	     struct blk_snap_tracker_remove)
++
++/**
++ * struct blk_snap_cbt_info - Information about change tracking for a block
++ *	device.
++ * @dev_id:
++ *	Device ID.
++ * @blk_size:
++ *	Block size in bytes.
++ * @device_capacity:
++ *	Device capacity in bytes.
++ * @blk_count:
++ *	Number of blocks.
++ * @generation_id:
++ *	Unique identification number of change tracking generation.
++ * @snap_number:
++ *	Current changes number.
++ */
++struct blk_snap_cbt_info {
++	struct blk_snap_dev_t dev_id;
++	__u32 blk_size;
++	__u64 device_capacity;
++	__u32 blk_count;
++	uuid_t generation_id;
++	__u8 snap_number;
++};
++/**
++ * struct blk_snap_tracker_collect - Argument for the
++ *	&IOCTL_BLK_SNAP_TRACKER_COLLECT control.
++ * @count:
++ *	Size of @cbt_info_array in the number of &struct blk_snap_cbt_info.
++ *	If @cbt_info_array has not enough space, it will contain the required
++ *	size of the array.
++ * @cbt_info_array:
++ *	Pointer to the array for output.
++ */
++struct blk_snap_tracker_collect {
++	__u32 count;
++	struct blk_snap_cbt_info *cbt_info_array;
++};
++/**
++ * IOCTL_BLK_SNAP_TRACKER_COLLECT - Collect all tracked devices.
++ *
++ * Getting information about all devices under tracking.
++ * This ioctl returns the same information that the module outputs
++ * to sysfs for each device under tracking.
++ */
++#define IOCTL_BLK_SNAP_TRACKER_COLLECT                                         \
++	_IOW(BLK_SNAP, blk_snap_ioctl_tracker_collect,                         \
++	     struct blk_snap_tracker_collect)
++
++/**
++ * struct blk_snap_tracker_read_cbt_bitmap - Argument for the
++ *	&IOCTL_BLK_SNAP_TRACKER_READ_CBT_MAP control.
++ * @dev_id:
++ *	Device ID.
++ * @offset:
++ *	Offset from the beginning of the CBT bitmap in bytes.
++ * @length:
++ *	Size of @buff in bytes.
++ * @buff:
++ *	Pointer to the buffer for output.
++ */
++struct blk_snap_tracker_read_cbt_bitmap {
++	struct blk_snap_dev_t dev_id;
++	__u32 offset;
++	__u32 length;
++	__u8 *buff;
++};
++/**
++ * IOCTL_BLK_SNAP_TRACKER_READ_CBT_MAP - Read the CBT map.
++ *
++ * This ioctl allows to read the table of changes. Sysfs also has a file that
++ * allows to read this table.
++ */
++#define IOCTL_BLK_SNAP_TRACKER_READ_CBT_MAP                                    \
++	_IOR(BLK_SNAP, blk_snap_ioctl_tracker_read_cbt_map,                    \
++	     struct blk_snap_tracker_read_cbt_bitmap)
++
++/**
++ * struct blk_snap_block_range - Element of array for
++ *	&struct blk_snap_tracker_mark_dirty_blocks.
++ * @sector_offset:
++ *	Offset from the beginning of the disk in sectors.
++ * @sector_count:
++ *	Number of sectors.
++ */
++struct blk_snap_block_range {
++	__u64 sector_offset;
++	__u64 sector_count;
++};
++/**
++ * struct blk_snap_tracker_mark_dirty_blocks - Argument for the
++ *	&IOCTL_BLK_SNAP_TRACKER_MARK_DIRTY_BLOCKS control.
++ * @dev_id:
++ *	Device ID.
++ * @count:
++ *	Size of @dirty_blocks_array in the number of
++ *	&struct blk_snap_block_range.
++ * @dirty_blocks_array:
++ *	Pointer to the array of &struct blk_snap_block_range.
++ */
++struct blk_snap_tracker_mark_dirty_blocks {
++	struct blk_snap_dev_t dev_id;
++	__u32 count;
++	struct blk_snap_block_range *dirty_blocks_array;
++};
++/**
++ * IOCTL_BLK_SNAP_TRACKER_MARK_DIRTY_BLOCKS - Set dirty blocks in the CBT map.
++ *
++ * There are cases when some blocks need to be marked as changed.
++ * This ioctl allows to do this.
++ */
++#define IOCTL_BLK_SNAP_TRACKER_MARK_DIRTY_BLOCKS                               \
++	_IOR(BLK_SNAP, blk_snap_ioctl_tracker_mark_dirty_blocks,               \
++	     struct blk_snap_tracker_mark_dirty_blocks)
++
++/*
++ * Next, there will be a description of the interface for working with
++ * snapshots.
++ */
++
++/**
++ * struct blk_snap_snapshot_create - Argument for the
++ *	&IOCTL_BLK_SNAP_SNAPSHOT_CREATE control.
++ * @count:
++ *	Size of @dev_id_array in the number of &struct blk_snap_dev_t.
++ * @dev_id_array:
++ *	Pointer to the array of &struct blk_snap_dev_t.
++ * @id:
++ *	Return ID of the created snapshot.
++ */
++struct blk_snap_snapshot_create {
++	__u32 count;
++	struct blk_snap_dev_t *dev_id_array;
++	uuid_t id;
++};
++/**
++ * This ioctl creates a snapshot structure in the memory and allocates an
++ * identifier for it. Further interaction with the snapshot is possible by
++ * this identifier.
++ * Several snapshots can be created at the same time, but with the condition
++ * that one block device can only be included in one snapshot.
++ */
++#define IOCTL_BLK_SNAP_SNAPSHOT_CREATE                                         \
++	_IOW(BLK_SNAP, blk_snap_ioctl_snapshot_create,                         \
++	     struct blk_snap_snapshot_create)
++
++/**
++ * struct blk_snap_snapshot_destroy - Argument for the
++ *	&IOCTL_BLK_SNAP_SNAPSHOT_DESTROY control.
++ * @id:
++ *	Snapshot ID.
++ */
++struct blk_snap_snapshot_destroy {
++	uuid_t id;
++};
++/**
++ * IOCTL_BLK_SNAP_SNAPSHOT_DESTROY - Release and destroy the snapshot.
++ *
++ * Destroys all snapshot structures and releases all its allocated resources.
++ */
++#define IOCTL_BLK_SNAP_SNAPSHOT_DESTROY                                        \
++	_IOR(BLK_SNAP, blk_snap_ioctl_snapshot_destroy,                        \
++	     struct blk_snap_snapshot_destroy)
++
++/**
++ * struct blk_snap_snapshot_append_storage - Argument for the
++ *	&IOCTL_BLK_SNAP_SNAPSHOT_APPEND_STORAGE control.
++ * @id:
++ *	Snapshot ID.
++ * @dev_id:
++ *	Device ID.
++ * @count:
++ *	Size of @ranges in the number of &struct blk_snap_block_range.
++ * @ranges:
++ *	Pointer to the array of &struct blk_snap_block_range.
++ */
++struct blk_snap_snapshot_append_storage {
++	uuid_t id;
++	struct blk_snap_dev_t dev_id;
++	__u32 count;
++	struct blk_snap_block_range *ranges;
++};
++/**
++ * IOCTL_BLK_SNAP_SNAPSHOT_APPEND_STORAGE - Append storage to the difference
++ *	storage of the snapshot.
++ *
++ * The snapshot difference storage can be set either before or after creating
++ * the snapshot images. This allows to dynamically expand the difference
++ * storage while holding the snapshot.
++ */
++#define IOCTL_BLK_SNAP_SNAPSHOT_APPEND_STORAGE                                 \
++	_IOW(BLK_SNAP, blk_snap_ioctl_snapshot_append_storage,                 \
++	     struct blk_snap_snapshot_append_storage)
++
++/**
++ * struct blk_snap_snapshot_take - Argument for the
++ *	&IOCTL_BLK_SNAP_SNAPSHOT_TAKE control.
++ * @id:
++ *	Snapshot ID.
++ */
++struct blk_snap_snapshot_take {
++	uuid_t id;
++};
++/**
++ * IOCTL_BLK_SNAP_SNAPSHOT_TAKE - Take snapshot.
++ *
++ * This ioctl creates snapshot images of block devices and switches CBT tables.
++ * The snapshot must be created before this call, and the areas of block
++ * devices should be added to the difference storage.
++ */
++#define IOCTL_BLK_SNAP_SNAPSHOT_TAKE                                           \
++	_IOR(BLK_SNAP, blk_snap_ioctl_snapshot_take,                           \
++	     struct blk_snap_snapshot_take)
++
++/**
++ * struct blk_snap_snapshot_collect - Argument for the
++ *	&IOCTL_BLK_SNAP_SNAPSHOT_COLLECT control.
++ * @count:
++ *	Size of @ids in the number of &uuid_t.
++ *	If @ids has not enough space, it will contain the required
++ *      size of the array.
++ * @ids:
++ *	Pointer to the array with the snapshot ID for output. If the pointer is
++ *	zero, the ioctl returns the number of active snapshots in &count.
++ *
++ */
++struct blk_snap_snapshot_collect {
++	__u32 count;
++	uuid_t *ids;
++};
++/**
++ * IOCTL_BLK_SNAP_SNAPSHOT_COLLECT - Get collection of created snapshots.
++ *
++ * This information can also be obtained from files from sysfs.
++ */
++#define IOCTL_BLK_SNAP_SNAPSHOT_COLLECT                                        \
++	_IOW(BLK_SNAP, blk_snap_ioctl_snapshot_collect,                        \
++	     struct blk_snap_snapshot_collect)
++/**
++ * struct blk_snap_image_info - Associates the original device in the snapshot
++ *	and the corresponding snapshot image.
++ * @orig_dev_id:
++ *	Device ID.
++ * @image_dev_id:
++ *	Image ID.
++ */
++struct blk_snap_image_info {
++	struct blk_snap_dev_t orig_dev_id;
++	struct blk_snap_dev_t image_dev_id;
++};
++/**
++ * struct blk_snap_snapshot_collect_images - Argument for the
++ *	&IOCTL_BLK_SNAP_SNAPSHOT_COLLECT_IMAGES control.
++ * @id:
++ *	Snapshot ID.
++ * @count:
++ *	Size of @image_info_array in the number of &struct blk_snap_image_info.
++ *	If @image_info_array has not enough space, it will contain the required
++ *      size of the array.
++ * @image_info_array:
++ *	Pointer to the array for output.
++ */
++struct blk_snap_snapshot_collect_images {
++	uuid_t id;
++	__u32 count;
++	struct blk_snap_image_info *image_info_array;
++};
++/**
++ * IOCTL_BLK_SNAP_SNAPSHOT_COLLECT_IMAGES - Get a collection of devices and
++ *	their snapshot images.
++ *
++ * While holding the snapshot, this ioctl allows you to get a table of
++ * correspondences of the original devices and their snapshot images.
++ * This information can also be obtained from files from sysfs.
++ */
++#define IOCTL_BLK_SNAP_SNAPSHOT_COLLECT_IMAGES                                 \
++	_IOW(BLK_SNAP, blk_snap_ioctl_snapshot_collect_images,                 \
++	     struct blk_snap_snapshot_collect_images)
++
++enum blk_snap_event_codes {
++	/**
++	 * Low free space in difference storage event.
++	 *
++	 * If the free space in the difference storage is reduced to the
++	 * specified limit, the module generates this event.
++	 */
++	blk_snap_event_code_low_free_space,
++	/**
++	 * Snapshot image is corrupted event.
++	 *
++	 * If a chunk could not be allocated when trying to save data to the
++	 * difference storage, this event is generated.
++	 * However, this does not mean that the backup process was interrupted
++	 * with an error. If the snapshot image has been read to the end by
++	 * this time, the backup process is considered successful.
++	 */
++	blk_snap_event_code_corrupted,
++};
++
++/**
++ * struct blk_snap_snapshot_event - Argument for the
++ *	&IOCTL_BLK_SNAP_SNAPSHOT_WAIT_EVENT control.
++ * @id:
++ *	Snapshot ID.
++ * @timeout_ms:
++ *	Timeout for waiting in milliseconds.
++ * @time_label:
++ *	Timestamp of the received event.
++ * @code:
++ *	Code of the received event.
++ * @data:
++ *	The received event body.
++ */
++struct blk_snap_snapshot_event {
++	uuid_t id;
++	__u32 timeout_ms;
++	__u32 code;
++	__s64 time_label;
++	__u8 data[4096 - 32];
++};
++static_assert(
++	sizeof(struct blk_snap_snapshot_event) == 4096,
++	"The size struct blk_snap_snapshot_event should be equal to the size of the page.");
++
++/**
++ * IOCTL_BLK_SNAP_SNAPSHOT_WAIT_EVENT - Wait and get the event from the
++ *	snapshot.
++ *
++ * While holding the snapshot, the kernel module can transmit information about
++ * changes in its state in the form of events to the user level.
++ * It is very important to receive these events as quickly as possible, so the
++ * user's thread is in the state of interruptable sleep.
++ */
++#define IOCTL_BLK_SNAP_SNAPSHOT_WAIT_EVENT                                     \
++	_IOW(BLK_SNAP, blk_snap_ioctl_snapshot_wait_event,                     \
++	     struct blk_snap_snapshot_event)
++
++/**
++ * struct blk_snap_event_low_free_space - Data for the
++ *	&blk_snap_event_code_low_free_space event.
++ * @requested_nr_sect:
++ *	The required number of sectors.
++ */
++struct blk_snap_event_low_free_space {
++	__u64 requested_nr_sect;
++};
++
++/**
++ * struct blk_snap_event_corrupted - Data for the
++ *	&blk_snap_event_code_corrupted event.
++ * @orig_dev_id:
++ *	Device ID.
++ * @err_code:
++ *	Error code.
++ */
++struct blk_snap_event_corrupted {
++	struct blk_snap_dev_t orig_dev_id;
++	__s32 err_code;
++};
 -- 
 2.20.1
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E6A554933A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6496548B0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379269AbiFMNn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36178 "EHLO
+        id S1357657AbiFMM7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379146AbiFMNjz (ORCPT
+        with ESMTP id S1358024AbiFMMy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:39:55 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C503DA7D;
-        Mon, 13 Jun 2022 04:28:58 -0700 (PDT)
+        Mon, 13 Jun 2022 08:54:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48AB1016;
+        Mon, 13 Jun 2022 04:13:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 55717CE110D;
-        Mon, 13 Jun 2022 11:28:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ABAFC34114;
-        Mon, 13 Jun 2022 11:28:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44ACB608C3;
+        Mon, 13 Jun 2022 11:13:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57E87C3411C;
+        Mon, 13 Jun 2022 11:13:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119735;
-        bh=3Avsel2L6qQgV3X7BOOhbwHe0V7A+QJopTMpCRyGBJc=;
+        s=korg; t=1655118837;
+        bh=rp7BVa+YdVp1no5nrT8jUWCSbXCylb1klRp57aAm3fM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dZg32QZE3c4cKYfeab8DpQsvn4gWqSoZ248JZiYfC+6gsIilN3Xjhd8d6QFAphu03
-         WDfmcpWEa7FxQ36Le8HPd0+oQvANWwUs2X19zsmJhQf4OI0gNpCsGFjsEOSo/eJ61U
-         hDW5O/QTmjlqZE7Z86dJepsWhxkMRJ1eOMDB1yzE=
+        b=J1oTwYt2duZ6S6YNRa6b5xdKbHSq10bNLGYkuJ5oAEGIvKhGFeV6FdaFCywTpvG0o
+         bHO4WJropnefLOkyznS55v33WI/7SCDmjdaHbYGgoNH7g/JJoZgT3RYEeUbqKl1tVw
+         dRhWMIW3mfsuMEyIZOdxRlQZJymVVAcMrN0MA3Fg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Weizhao Ouyang <o451686892@gmail.com>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Yue Hu <huyue2@coolpad.com>, Chao Yu <chao@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 121/339] erofs: fix backmost member of z_erofs_decompress_frontend
-Date:   Mon, 13 Jun 2022 12:09:06 +0200
-Message-Id: <20220613094930.178767865@linuxfoundation.org>
+        stable@vger.kernel.org, Howard Chiu <howard_chiu@aspeedtech.com>,
+        Joel Stanley <joel@jms.id.au>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 045/247] ARM: dts: aspeed: ast2600-evb: Enable RX delay for MAC0/MAC1
+Date:   Mon, 13 Jun 2022 12:09:07 +0200
+Message-Id: <20220613094924.316187433@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Weizhao Ouyang <o451686892@gmail.com>
+From: Howard Chiu <howard_chiu@aspeedtech.com>
 
-[ Upstream commit 4398d3c31b582db0d640b23434bf344a6c8df57c ]
+[ Upstream commit 4d338ee40ba89e508c5d3e1b4af956af7cb5e12e ]
 
-Initialize 'backmost' to true in DECOMPRESS_FRONTEND_INIT.
+Since mac0/1 and mac2/3 are physically located on different die,
+they have different properties by nature, which is mac0/1 has smaller delay step.
 
-Fixes: 5c6dcc57e2e5 ("erofs: get rid of `struct z_erofs_collector'")
-Signed-off-by: Weizhao Ouyang <o451686892@gmail.com>
-Reviewed-by: Gao Xiang <hsiangkao@linux.alibaba.com>
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
-Link: https://lore.kernel.org/r/20220530075114.918874-1-o451686892@gmail.com
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+The property 'phy-mode' on ast2600 mac0 and mac1 is recommended to set to 'rgmii-rxid'
+which enables the RX interface delay from the PHY chip.
+Refer page 45 of SDK User Guide v08.00
+https://github.com/AspeedTech-BMC/openbmc/releases/download/v08.00/SDK_User_Guide_v08.00.pdf
+
+Fixes: 2ca5646b5c2f ("ARM: dts: aspeed: Add AST2600 and EVB")
+Signed-off-by: Howard Chiu <howard_chiu@aspeedtech.com>
+Link: https://lore.kernel.org/r/SG2PR06MB23152A548AAE81140B57DD69E6E09@SG2PR06MB2315.apcprd06.prod.outlook.com
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/erofs/zdata.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm/boot/dts/aspeed-ast2600-evb.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index e6dea6dfca16..3e3e96043b5b 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -214,7 +214,7 @@ struct z_erofs_decompress_frontend {
+diff --git a/arch/arm/boot/dts/aspeed-ast2600-evb.dts b/arch/arm/boot/dts/aspeed-ast2600-evb.dts
+index b7eb552640cb..788448cdd6b3 100644
+--- a/arch/arm/boot/dts/aspeed-ast2600-evb.dts
++++ b/arch/arm/boot/dts/aspeed-ast2600-evb.dts
+@@ -103,7 +103,7 @@
+ &mac0 {
+ 	status = "okay";
  
- #define DECOMPRESS_FRONTEND_INIT(__i) { \
- 	.inode = __i, .owned_head = Z_EROFS_PCLUSTER_TAIL, \
--	.mode = COLLECT_PRIMARY_FOLLOWED }
-+	.mode = COLLECT_PRIMARY_FOLLOWED, .backmost = true }
+-	phy-mode = "rgmii";
++	phy-mode = "rgmii-rxid";
+ 	phy-handle = <&ethphy0>;
  
- static struct page *z_pagemap_global[Z_EROFS_VMAP_GLOBAL_PAGES];
- static DEFINE_MUTEX(z_pagemap_global_lock);
+ 	pinctrl-names = "default";
+@@ -114,7 +114,7 @@
+ &mac1 {
+ 	status = "okay";
+ 
+-	phy-mode = "rgmii";
++	phy-mode = "rgmii-rxid";
+ 	phy-handle = <&ethphy1>;
+ 
+ 	pinctrl-names = "default";
 -- 
 2.35.1
 

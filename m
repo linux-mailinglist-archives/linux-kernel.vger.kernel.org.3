@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8155548870
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67AC0548B91
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383327AbiFMOWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
+        id S241759AbiFMKXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383511AbiFMOQB (ORCPT
+        with ESMTP id S243202AbiFMKWH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:16:01 -0400
+        Mon, 13 Jun 2022 06:22:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CF09E9FC;
-        Mon, 13 Jun 2022 04:43:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162342228A;
+        Mon, 13 Jun 2022 03:17:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62F61613F9;
-        Mon, 13 Jun 2022 11:43:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74061C34114;
-        Mon, 13 Jun 2022 11:43:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BAEB60765;
+        Mon, 13 Jun 2022 10:17:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BDB8C34114;
+        Mon, 13 Jun 2022 10:17:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120598;
-        bh=58t3a21QM1+D/RKpGEpYCld2O32dL7KkNcO/l5AN8Pg=;
+        s=korg; t=1655115470;
+        bh=tPVdObRCf4jD02zkVDH9d2P8GA52Yveimx0Zooul6Vg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tAguwrarXcy+bsN70RohmFy4pcTFiwfStzitTcMlU2ijVd2IU4P/CwsZkA1FgFHf8
-         RkQYS4s04G2ZW/5oDcUxcFk7FArXcposbdMhp11EsLC0gc528eujcldXPdl99+AUzu
-         SWSSbfBhhn7QUWpvNUdJ9SBL//UyGp6qaZnCqSRs=
+        b=uhu1WkFvpob2Ok3Q45kRmYh4p7jHqSCUvWHQ/GtjIfl4l4XriXGKdVBVM/YynH0mF
+         wIH7dXCfTnZAz603+rhiglWXGYcr7lbbx3UQ0c1ZzgRGT2diWqY4gVSxiVpZ/CN7AV
+         eBA0c5I2vtU9H/gyhWUk/0w/UaTrhoiodVi/ez2o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 067/298] firmware: dmi-sysfs: Fix memory leak in dmi_sysfs_register_handle
-Date:   Mon, 13 Jun 2022 12:09:21 +0200
-Message-Id: <20220613094926.978743451@linuxfoundation.org>
+        stable@vger.kernel.org, Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH 4.9 088/167] md: fix an incorrect NULL check in does_sb_need_changing
+Date:   Mon, 13 Jun 2022 12:09:22 +0200
+Message-Id: <20220613094901.545593883@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit 660ba678f9998aca6db74f2dd912fa5124f0fa31 ]
+commit fc8738343eefc4ea8afb6122826dea48eacde514 upstream.
 
-kobject_init_and_add() takes reference even when it fails.
-According to the doc of kobject_init_and_add()
+The bug is here:
+	if (!rdev)
 
-   If this function returns an error, kobject_put() must be called to
-   properly clean up the memory associated with the object.
+The list iterator value 'rdev' will *always* be set and non-NULL
+by rdev_for_each(), so it is incorrect to assume that the iterator
+value will be NULL if the list is empty or no element found.
+Otherwise it will bypass the NULL check and lead to invalid memory
+access passing the check.
 
-Fix this issue by calling kobject_put().
+To fix the bug, use a new variable 'iter' as the list iterator,
+while using the original variable 'rdev' as a dedicated pointer to
+point to the found element.
 
-Fixes: 948af1f0bbc8 ("firmware: Basic dmi-sysfs support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220511071421.9769-1-linmq006@gmail.com
+Cc: stable@vger.kernel.org
+Fixes: 2aa82191ac36 ("md-cluster: Perform a lazy update")
+Acked-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Acked-by: Goldwyn Rodrigues <rgoldwyn@suse.com>
+Signed-off-by: Song Liu <song@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/dmi-sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/md/md.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/firmware/dmi-sysfs.c b/drivers/firmware/dmi-sysfs.c
-index 3a353776bd34..66727ad3361b 100644
---- a/drivers/firmware/dmi-sysfs.c
-+++ b/drivers/firmware/dmi-sysfs.c
-@@ -604,7 +604,7 @@ static void __init dmi_sysfs_register_handle(const struct dmi_header *dh,
- 				    "%d-%d", dh->type, entry->instance);
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -2254,14 +2254,16 @@ static void sync_sbs(struct mddev *mddev
  
- 	if (*ret) {
--		kfree(entry);
-+		kobject_put(&entry->kobj);
- 		return;
- 	}
+ static bool does_sb_need_changing(struct mddev *mddev)
+ {
+-	struct md_rdev *rdev;
++	struct md_rdev *rdev = NULL, *iter;
+ 	struct mdp_superblock_1 *sb;
+ 	int role;
  
--- 
-2.35.1
-
+ 	/* Find a good rdev */
+-	rdev_for_each(rdev, mddev)
+-		if ((rdev->raid_disk >= 0) && !test_bit(Faulty, &rdev->flags))
++	rdev_for_each(iter, mddev)
++		if ((iter->raid_disk >= 0) && !test_bit(Faulty, &iter->flags)) {
++			rdev = iter;
+ 			break;
++		}
+ 
+ 	/* No good device found. */
+ 	if (!rdev)
 
 

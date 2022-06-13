@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9B2548FEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CE15498C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354225AbiFMLg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56220 "EHLO
+        id S1382618AbiFMOVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354560AbiFML3n (ORCPT
+        with ESMTP id S1383030AbiFMOPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88092205F0;
-        Mon, 13 Jun 2022 03:45:06 -0700 (PDT)
+        Mon, 13 Jun 2022 10:15:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4816E9C2C7;
+        Mon, 13 Jun 2022 04:42:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A9F2C6125A;
-        Mon, 13 Jun 2022 10:45:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB0CC3411C;
-        Mon, 13 Jun 2022 10:45:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EAFB8612D0;
+        Mon, 13 Jun 2022 11:42:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06C27C34114;
+        Mon, 13 Jun 2022 11:42:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117105;
-        bh=vbmKdU1NFSiLQsrkloUNv+RG297hIcC/MuNTFaIQXfE=;
+        s=korg; t=1655120566;
+        bh=fk0snry+InHU+B4/QPetFWBQtBuKmh2RmoCROynAung=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W0NPtAnmbLpRLal3g70MebCPoHhmn/3HT5A2vLOoz0AyD14bszXEZAUMkiTBS8BR0
-         S84jZYbndHyBsT3uWeEF6BqSEBAw2sn7zFVeVDMTdMnBhfFgox/AsVVvIfP1Cqs22f
-         /ozvoSgGCn0oilWMxNX0Wp3Zqczcu0ggZ8ZjfOoQ=
+        b=TisOdVl3B1ivfciQE07nlor//UL0IQ3A9h5z9/v/ckOqNnF50hPER18D7baMH3Sim
+         yOm7YRWvOiVb/QDqq7IaJmyo/kQEKCrkhdIbO5M+LImIY6m9JhICkVOJmqxUDOes2J
+         hyyk0bx6ehCUwuvlWuJrX9a27kKMHPszF54yqSYs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Evan Green <evgreen@chromium.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 300/411] phy: qcom-qmp: fix pipe-clock imbalance on power-on failure
+        stable@vger.kernel.org, liuyacan <liuyacan@corp.netease.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 079/298] net/smc: set ini->smcrv2.ib_dev_v2 to NULL if SMC-Rv2 is unavailable
 Date:   Mon, 13 Jun 2022 12:09:33 +0200
-Message-Id: <20220613094937.753080765@linuxfoundation.org>
+Message-Id: <20220613094927.342258382@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: liuyacan <liuyacan@corp.netease.com>
 
-[ Upstream commit 5e73b2d9867998278479ccc065a8a8227a5513ef ]
+[ Upstream commit b3b1a17538d3ef6a9667b2271216fd16d7678ab5 ]
 
-Make sure to disable the pipe clock also if ufs-reset deassertion fails
-during power on.
+In the process of checking whether RDMAv2 is available, the current
+implementation first sets ini->smcrv2.ib_dev_v2, and then allocates
+smc buf desc and register rmb, but the latter may fail. In this case,
+the pointer should be reset.
 
-Note that the ufs-reset is asserted in qcom_qmp_phy_com_exit().
-
-Fixes: c9b589791fc1 ("phy: qcom: Utilize UFS reset controller")
-Cc: Evan Green <evgreen@chromium.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Link: https://lore.kernel.org/r/20220502133130.4125-2-johan+linaro@kernel.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: e49300a6bf62 ("net/smc: add listen processing for SMC-Rv2")
+Signed-off-by: liuyacan <liuyacan@corp.netease.com>
+Reviewed-by: Karsten Graul <kgraul@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220525085408.812273-1-liuyacan@corp.netease.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/smc/af_smc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-index ff5955fb4d8b..21d40c665854 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -1517,7 +1517,7 @@ static int qcom_qmp_phy_enable(struct phy *phy)
- 	qcom_qmp_phy_configure(pcs, cfg->regs, cfg->pcs_tbl, cfg->pcs_tbl_num);
- 	ret = reset_control_deassert(qmp->ufs_reset);
- 	if (ret)
--		goto err_lane_rst;
-+		goto err_pcs_ready;
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index b9fe31834354..4bc6b16669f3 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -1973,6 +1973,7 @@ static void smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
  
- 	/*
- 	 * Pull out PHY from POWER DOWN state.
+ not_found:
+ 	ini->smcr_version &= ~SMC_V2;
++	ini->smcrv2.ib_dev_v2 = NULL;
+ 	ini->check_smcrv2 = false;
+ }
+ 
 -- 
 2.35.1
 

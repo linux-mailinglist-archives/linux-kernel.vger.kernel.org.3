@@ -2,75 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39277547EF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 07:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E39C547EFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 07:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232290AbiFMFeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 01:34:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36550 "EHLO
+        id S231925AbiFMFec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 01:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232622AbiFMFeI (ORCPT
+        with ESMTP id S231387AbiFMFeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 01:34:08 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D4512AB3
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 22:34:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655098440; x=1686634440;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/TIkaE5l1WeJcJM5zEjR0mrwq7QJSRWRIniuYy9P52s=;
-  b=McLVqxosXxhglfCEojSyO3hO+i9u2XGWz52CNH9AM+ya8vS3vvWxRa9i
-   aKGUTPiTDBjVQlWw1XJI3iI4Cl/Y9C6lRq0VStXuC1Ag79PyRgcB6krUy
-   Q/cdninbKrMok11nEzkPlWNgze/IXBEexNn+zMQhQqRemv3pdBpd7qPyv
-   5AgU5MynHtWgBOxOkl1AGPJOerTa4yc/sooTYNxklAy6wan940sLsYxZA
-   5prbaZl4khg29dUomnbViXiZQqajAXTIupKbrEeAYqg4GHT7LJ0PZKgCs
-   DtFsOz5orus+BlQFaQcsIzOM47Zp4Pu6s2CXpt15MgKrJevRPNhKPXfZy
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="258609584"
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="258609584"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 22:34:00 -0700
-X-IronPort-AV: E=Sophos;i="5.91,296,1647327600"; 
-   d="scan'208";a="587598034"
-Received: from xinyangc-mobl.ccr.corp.intel.com ([10.254.214.65])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jun 2022 22:33:55 -0700
-Message-ID: <33b42a802a07721c639db99ed208ed43f743bb37.camel@intel.com>
-Subject: Re: [PATCH v6 03/13] mm/demotion: Return error on write to
- numa_demotion sysfs
-From:   Ying Huang <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>
-Date:   Mon, 13 Jun 2022 13:33:52 +0800
-In-Reply-To: <9da3c6ef-ba0d-6229-2188-0956222b04f1@linux.ibm.com>
-References: <20220610135229.182859-1-aneesh.kumar@linux.ibm.com>
-         <20220610135229.182859-4-aneesh.kumar@linux.ibm.com>
-         <7ed1f9f544937b5c82ab380a4977e5ae22a98c43.camel@intel.com>
-         <9da3c6ef-ba0d-6229-2188-0956222b04f1@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Mon, 13 Jun 2022 01:34:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7545EE00
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 22:34:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 514A9D6E;
+        Sun, 12 Jun 2022 22:34:04 -0700 (PDT)
+Received: from a077893.arm.com (unknown [10.163.38.134])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4CA4D3F66F;
+        Sun, 12 Jun 2022 22:34:02 -0700 (PDT)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-mm@kvack.org
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V2 0/2] mm/mmap: Drop __SXXX/__PXXX macros from across platforms
+Date:   Mon, 13 Jun 2022 11:03:52 +0530
+Message-Id: <20220613053354.553579-1-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,52 +41,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-13 at 09:05 +0530, Aneesh Kumar K V wrote:
-> On 6/13/22 8:56 AM, Ying Huang wrote:
-> > On Fri, 2022-06-10 at 19:22 +0530, Aneesh Kumar K.V wrote:
-> > > With CONFIG_MIGRATION disabled return EINVAL on write.
-> > > 
-> > > Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> > > ---
-> > >   mm/memory-tiers.c | 3 +++
-> > >   1 file changed, 3 insertions(+)
-> > > 
-> > > diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-> > > index 9c6b40d7e0bf..c3123a457d90 100644
-> > > --- a/mm/memory-tiers.c
-> > > +++ b/mm/memory-tiers.c
-> > > @@ -105,6 +105,9 @@ static ssize_t numa_demotion_enabled_store(struct kobject *kobj,
-> > >   {
-> > >   	ssize_t ret;
-> > >   
-> > > 
-> > > 
-> > > +	if (!IS_ENABLED(CONFIG_MIGRATION))
-> > > +		return -EINVAL;
-> > > +
-> > 
-> > How about enclose numa_demotion_enabled_xxx related code with CONFIG_MIGRATION?
-> > 
-> 
-> IIUC there is a desire to use IS_ENABLED() in the kernel instead of 
-> #ifdef since that helps in more compile time checks. Because there are 
-> no dead codes during compile now with IS_ENABLED().
+__SXXX/__PXXX macros is an unnecessary abstraction layer in creating the
+generic protection_map[] array which is used for vm_get_page_prot(). This
+abstraction layer can be avoided, if the platforms just define the array
+protection_map[] for all possible vm_flags access permission combinations.
 
-IS_ENABLED() is used to reduce usage of "#ifdef" in ".c" file,
-especially inside a function.  We have good build test coverage with
-0Day now.
+This series drops __SXXX/__PXXX macros from across platforms in the tree.
+First it makes protection_map[] array private (static) on platforms which
+enable ARCH_HAS_VM_GET_PAGE_PROT, later moves protection_map[] array into
+arch for all remaining platforms (!ARCH_HAS_VM_GET_PAGE_PROT), dropping
+the generic one. In the process __SXXX/__PXXX macros become redundant and
+thus get dropped off completely. I understand that the diff stat is large
+here, but please do suggest if there is a better way. This series applies
+on v5.19-rc1 and has been build tested for multiple platforms.
 
-To avoid code size inflate, it's better to use #ifdef CONFIG_MIGRATION.
+The CC list for this series has been reduced to just minimum, until there
+is some initial agreement.
 
-> W.r.t leaving the sysfs file visible even when CONFIG_MIGRATION is 
-> disabled, I was thinking it gives better visibility into numa_demotion 
-> status. I could switch to hide numa_demotion file if that is desirable.
-> 
-> > >   	ret = kstrtobool(buf, &numa_demotion_enabled);
-> > >   	if (ret)
-> > >   		return ret;
-> > 
+- Anshuman
 
-Best Regards,
-Huang, Ying
+Changes in V2:
+
+- Add 'const' identifier to protection_map[] on powerpc
+- Dropped #ifndef CONFIG_ARCH_HAS_VM_GET_PAGE_PROT check from sparc 32
+- Dropped protection_map[] init from sparc 64
+- Dropped all new platform changes subscribing ARCH_HAS_VM_GET_PAGE_PROT
+- Added a second patch which moves generic protection_map[] array into
+  all remaining platforms (!ARCH_HAS_VM_GET_PAGE_PROT)
+
+Changes in V1:
+
+https://lore.kernel.org/linux-mm/20220603101411.488970-1-anshuman.khandual@arm.com/
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+
+Anshuman Khandual (2):
+  mm/mmap: Restrict generic protection_map[] array visibility
+  mm/mmap: Drop generic protection_map[] array
+
+ arch/alpha/include/asm/pgtable.h          | 17 -------
+ arch/alpha/mm/init.c                      | 21 +++++++++
+ arch/arc/include/asm/pgtable-bits-arcv2.h | 18 --------
+ arch/arc/mm/mmap.c                        | 19 ++++++++
+ arch/arm/include/asm/pgtable.h            | 17 -------
+ arch/arm/lib/uaccess_with_memcpy.c        |  2 +-
+ arch/arm/mm/mmu.c                         | 19 ++++++++
+ arch/arm64/include/asm/pgtable-prot.h     | 18 --------
+ arch/arm64/mm/mmap.c                      | 21 +++++++++
+ arch/csky/include/asm/pgtable.h           | 18 --------
+ arch/csky/mm/init.c                       | 19 ++++++++
+ arch/hexagon/include/asm/pgtable.h        | 27 ------------
+ arch/hexagon/mm/init.c                    | 41 +++++++++++++++++
+ arch/ia64/include/asm/pgtable.h           | 18 --------
+ arch/ia64/mm/init.c                       | 27 +++++++++++-
+ arch/loongarch/include/asm/pgtable-bits.h | 19 --------
+ arch/loongarch/mm/cache.c                 | 45 +++++++++++++++++++
+ arch/m68k/include/asm/mcf_pgtable.h       | 54 -----------------------
+ arch/m68k/include/asm/motorola_pgtable.h  | 22 ---------
+ arch/m68k/include/asm/sun3_pgtable.h      | 17 -------
+ arch/m68k/mm/mcfmmu.c                     | 54 +++++++++++++++++++++++
+ arch/m68k/mm/motorola.c                   | 19 ++++++++
+ arch/m68k/mm/sun3mmu.c                    | 19 ++++++++
+ arch/microblaze/include/asm/pgtable.h     | 17 -------
+ arch/microblaze/mm/init.c                 | 19 ++++++++
+ arch/mips/include/asm/pgtable.h           | 22 ---------
+ arch/mips/mm/cache.c                      |  2 +
+ arch/nios2/include/asm/pgtable.h          | 16 -------
+ arch/nios2/mm/init.c                      | 19 ++++++++
+ arch/openrisc/include/asm/pgtable.h       | 18 --------
+ arch/openrisc/mm/init.c                   | 19 ++++++++
+ arch/parisc/include/asm/pgtable.h         | 18 --------
+ arch/parisc/mm/init.c                     | 19 ++++++++
+ arch/powerpc/include/asm/pgtable.h        | 18 --------
+ arch/powerpc/mm/book3s64/pgtable.c        |  1 +
+ arch/powerpc/mm/pgtable.c                 | 19 ++++++++
+ arch/riscv/include/asm/pgtable.h          | 20 ---------
+ arch/riscv/mm/init.c                      | 19 ++++++++
+ arch/s390/include/asm/pgtable.h           | 17 -------
+ arch/s390/mm/mmap.c                       | 19 ++++++++
+ arch/sh/include/asm/pgtable.h             | 17 -------
+ arch/sh/mm/mmap.c                         | 19 ++++++++
+ arch/sparc/include/asm/pgtable_32.h       | 19 --------
+ arch/sparc/include/asm/pgtable_64.h       | 19 --------
+ arch/sparc/mm/init_32.c                   | 19 ++++++++
+ arch/sparc/mm/init_64.c                   |  3 ++
+ arch/um/include/asm/pgtable.h             | 17 -------
+ arch/um/kernel/mem.c                      | 19 ++++++++
+ arch/x86/include/asm/pgtable_types.h      | 19 --------
+ arch/x86/mm/pgprot.c                      | 19 ++++++++
+ arch/x86/um/mem_32.c                      |  2 +-
+ arch/xtensa/include/asm/pgtable.h         | 18 --------
+ arch/xtensa/mm/init.c                     | 19 ++++++++
+ include/linux/mm.h                        |  2 +
+ mm/mmap.c                                 | 19 --------
+ 55 files changed, 541 insertions(+), 522 deletions(-)
+
+-- 
+2.25.1
 

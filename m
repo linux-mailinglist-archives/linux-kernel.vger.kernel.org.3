@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 331BB5494A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC6B548DD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379405AbiFMNoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S1379444AbiFMNoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:44:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379170AbiFMNj5 (ORCPT
+        with ESMTP id S1379177AbiFMNj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:39:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6833DDD0;
-        Mon, 13 Jun 2022 04:29:14 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:59 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6762C22500;
+        Mon, 13 Jun 2022 04:29:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C084B80D3A;
-        Mon, 13 Jun 2022 11:29:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBA7FC34114;
-        Mon, 13 Jun 2022 11:29:11 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D11F0CE116E;
+        Mon, 13 Jun 2022 11:29:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA99EC34114;
+        Mon, 13 Jun 2022 11:29:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119752;
-        bh=C/WmO2LlukpJ69iEqbpbD30LwP2REadEzSEAWtmskFk=;
+        s=korg; t=1655119758;
+        bh=z/mWIolJZgTMBgzawBWRRAfSw6ZnpezM3yJE1Y/TOYA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HYOhTuYv8xdlajl3IsoOCo6474DS3CozwhZh3m6mD12niKbCZpgKlCwa+pbg4H7Cy
-         iAJ0+FnoZNaSGMw+OXyTs/NXASwwKsPRcxBpJhHn5+ZY2d67XfOhjjZ7hoyMFGBp3y
-         tVxk0nQ8C8xIFArlGWm1ptIjvZK1fZZFqaS2i2Bw=
+        b=qfIBLxpSbV6Ou+xZUFUwuv28xC2qAm01iReBoZfmU73T+fV2fBodC5gC9mFkKYpPR
+         cDTRYgxYHEkj4K4cYtvvBnolO2hzfMjlMLd0iar//ioHeI+RjKt/iJrP9p1SAc1UrZ
+         qB0YBb9Vg1sKSUdOtm/gqzyWj+xr0ZmGqEcd4ik4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
-        Karsten Nielsen <karsten@foo-bar.dk>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Gal Pressman <gal@nvidia.com>,
+        stable@vger.kernel.org, Changcheng Liu <jerrliu@nvidia.com>,
         Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 127/339] net/mlx5e: Disable softirq in mlx5e_activate_rq to avoid race condition
-Date:   Mon, 13 Jun 2022 12:09:12 +0200
-Message-Id: <20220613094930.360893613@linuxfoundation.org>
+Subject: [PATCH 5.18 128/339] net/mlx5: correct ECE offset in query qp output
+Date:   Mon, 13 Jun 2022 12:09:13 +0200
+Message-Id: <20220613094930.391560520@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
 References: <20220613094926.497929857@linuxfoundation.org>
@@ -58,211 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxim Mikityanskiy <maximmi@nvidia.com>
+From: Changcheng Liu <jerrliu@nvidia.com>
 
-[ Upstream commit 2e642afb61b24401a7ec819d27ddcd69c7c29784 ]
+[ Upstream commit 3fc2a9e89b3508a5cc0c324f26d7b4740ba8c456 ]
 
-When the driver activates the channels, it assumes NAPI isn't running
-yet. mlx5e_activate_rq posts a NOP WQE to ICOSQ to trigger a hardware
-interrupt and start NAPI, which will run mlx5e_alloc_rx_mpwqe and post
-UMR WQEs to ICOSQ to be able to receive packets with striding RQ.
+ECE field should be after opt_param_mask in query qp output.
 
-Unfortunately, a race condition is possible if NAPI is triggered by
-something else (for example, TX) at a bad timing, before
-mlx5e_activate_rq finishes. In this case, mlx5e_alloc_rx_mpwqe may post
-UMR WQEs to ICOSQ, and with the bad timing, the wqe_info of the first
-UMR may be overwritten by the wqe_info of the NOP posted by
-mlx5e_activate_rq.
-
-The consequence is that icosq->db.wqe_info[0].num_wqebbs will be changed
-from MLX5E_UMR_WQEBBS to 1, disrupting the integrity of the array-based
-linked list in wqe_info[]. mlx5e_poll_ico_cq will hang in an infinite
-loop after processing wqe_info[0], because after the corruption, the
-next item to be processed will be wqe_info[1], which is filled with
-zeros, and `sqcc += wi->num_wqebbs` will never move further.
-
-This commit fixes this race condition by using async_icosq to post the
-NOP and trigger the interrupt. async_icosq is always protected with a
-spinlock, eliminating the race condition.
-
-Fixes: bc77b240b3c5 ("net/mlx5e: Add fragmented memory support for RX multi packet WQE")
-Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
-Reported-by: Karsten Nielsen <karsten@foo-bar.dk>
-Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
-Reviewed-by: Gal Pressman <gal@nvidia.com>
+Fixes: 6b646a7e4af6 ("net/mlx5: Add ability to read and write ECE options")
+Signed-off-by: Changcheng Liu <jerrliu@nvidia.com>
 Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/en.h  |  4 ++++
- .../net/ethernet/mellanox/mlx5/core/en/ptp.c  |  1 +
- .../mellanox/mlx5/core/en/reporter_rx.c       |  6 +++++
- .../net/ethernet/mellanox/mlx5/core/en/trap.c |  1 +
- .../ethernet/mellanox/mlx5/core/en/xsk/pool.c |  1 +
- .../mellanox/mlx5/core/en/xsk/setup.c         |  5 +---
- .../net/ethernet/mellanox/mlx5/core/en_main.c | 24 +++++++++++++------
- 7 files changed, 31 insertions(+), 11 deletions(-)
+ include/linux/mlx5/mlx5_ifc.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-index ee34e861d3af..d0d14325a0d9 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-@@ -765,6 +765,7 @@ struct mlx5e_rq {
- 	u8                     wq_type;
- 	u32                    rqn;
- 	struct mlx5_core_dev  *mdev;
-+	struct mlx5e_channel  *channel;
- 	u32  umr_mkey;
- 	struct mlx5e_dma_info  wqe_overflow;
+diff --git a/include/linux/mlx5/mlx5_ifc.h b/include/linux/mlx5/mlx5_ifc.h
+index 7d2d0ba82144..2e162ec2a3d3 100644
+--- a/include/linux/mlx5/mlx5_ifc.h
++++ b/include/linux/mlx5/mlx5_ifc.h
+@@ -5180,12 +5180,11 @@ struct mlx5_ifc_query_qp_out_bits {
  
-@@ -1077,6 +1078,9 @@ void mlx5e_close_cq(struct mlx5e_cq *cq);
- int mlx5e_open_locked(struct net_device *netdev);
- int mlx5e_close_locked(struct net_device *netdev);
+ 	u8         syndrome[0x20];
  
-+void mlx5e_trigger_napi_icosq(struct mlx5e_channel *c);
-+void mlx5e_trigger_napi_sched(struct napi_struct *napi);
-+
- int mlx5e_open_channels(struct mlx5e_priv *priv,
- 			struct mlx5e_channels *chs);
- void mlx5e_close_channels(struct mlx5e_channels *chs);
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
-index 335b20b6383b..047f88f09203 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/ptp.c
-@@ -736,6 +736,7 @@ void mlx5e_ptp_activate_channel(struct mlx5e_ptp *c)
- 	if (test_bit(MLX5E_PTP_STATE_RX, c->state)) {
- 		mlx5e_ptp_rx_set_fs(c->priv);
- 		mlx5e_activate_rq(&c->rq);
-+		mlx5e_trigger_napi_sched(&c->napi);
- 	}
- }
+-	u8         reserved_at_40[0x20];
+-	u8         ece[0x20];
++	u8         reserved_at_40[0x40];
  
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c
-index 2684e9da9f41..fc366e66d0b0 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/reporter_rx.c
-@@ -123,6 +123,8 @@ static int mlx5e_rx_reporter_err_icosq_cqe_recover(void *ctx)
- 		xskrq->stats->recover++;
- 	}
+ 	u8         opt_param_mask[0x20];
  
-+	mlx5e_trigger_napi_icosq(icosq->channel);
-+
- 	mutex_unlock(&icosq->channel->icosq_recovery_lock);
+-	u8         reserved_at_a0[0x20];
++	u8         ece[0x20];
  
- 	return 0;
-@@ -166,6 +168,10 @@ static int mlx5e_rx_reporter_err_rq_cqe_recover(void *ctx)
- 	clear_bit(MLX5E_RQ_STATE_RECOVERING, &rq->state);
- 	mlx5e_activate_rq(rq);
- 	rq->stats->recover++;
-+	if (rq->channel)
-+		mlx5e_trigger_napi_icosq(rq->channel);
-+	else
-+		mlx5e_trigger_napi_sched(rq->cq.napi);
- 	return 0;
- out:
- 	clear_bit(MLX5E_RQ_STATE_RECOVERING, &rq->state);
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/trap.c b/drivers/net/ethernet/mellanox/mlx5/core/en/trap.c
-index 857840ab1e91..11f2a7fb72a9 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/trap.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/trap.c
-@@ -179,6 +179,7 @@ static void mlx5e_activate_trap(struct mlx5e_trap *trap)
- {
- 	napi_enable(&trap->napi);
- 	mlx5e_activate_rq(&trap->rq);
-+	mlx5e_trigger_napi_sched(&trap->napi);
- }
+ 	struct mlx5_ifc_qpc_bits qpc;
  
- void mlx5e_deactivate_trap(struct mlx5e_priv *priv)
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/pool.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/pool.c
-index 279cd8f4e79f..2c520394aa1d 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/pool.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/pool.c
-@@ -117,6 +117,7 @@ static int mlx5e_xsk_enable_locked(struct mlx5e_priv *priv,
- 		goto err_remove_pool;
- 
- 	mlx5e_activate_xsk(c);
-+	mlx5e_trigger_napi_icosq(c);
- 
- 	/* Don't wait for WQEs, because the newer xdpsock sample doesn't provide
- 	 * any Fill Ring entries at the setup stage.
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-index 3ad7f1301fa8..98ed9ef3a6bd 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xsk/setup.c
-@@ -64,6 +64,7 @@ static int mlx5e_init_xsk_rq(struct mlx5e_channel *c,
- 	rq->clock        = &mdev->clock;
- 	rq->icosq        = &c->icosq;
- 	rq->ix           = c->ix;
-+	rq->channel      = c;
- 	rq->mdev         = mdev;
- 	rq->hw_mtu       = MLX5E_SW2HW_MTU(params, params->sw_mtu);
- 	rq->xdpsq        = &c->rq_xdpsq;
-@@ -179,10 +180,6 @@ void mlx5e_activate_xsk(struct mlx5e_channel *c)
- 	mlx5e_reporter_icosq_resume_recovery(c);
- 
- 	/* TX queue is created active. */
--
--	spin_lock_bh(&c->async_icosq_lock);
--	mlx5e_trigger_irq(&c->async_icosq);
--	spin_unlock_bh(&c->async_icosq_lock);
- }
- 
- void mlx5e_deactivate_xsk(struct mlx5e_channel *c)
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-index 72867a8ff48b..6a35af2c2c8b 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-@@ -478,6 +478,7 @@ static int mlx5e_init_rxq_rq(struct mlx5e_channel *c, struct mlx5e_params *param
- 	rq->clock        = &mdev->clock;
- 	rq->icosq        = &c->icosq;
- 	rq->ix           = c->ix;
-+	rq->channel      = c;
- 	rq->mdev         = mdev;
- 	rq->hw_mtu       = MLX5E_SW2HW_MTU(params, params->sw_mtu);
- 	rq->xdpsq        = &c->rq_xdpsq;
-@@ -1072,13 +1073,6 @@ int mlx5e_open_rq(struct mlx5e_params *params, struct mlx5e_rq_param *param,
- void mlx5e_activate_rq(struct mlx5e_rq *rq)
- {
- 	set_bit(MLX5E_RQ_STATE_ENABLED, &rq->state);
--	if (rq->icosq) {
--		mlx5e_trigger_irq(rq->icosq);
--	} else {
--		local_bh_disable();
--		napi_schedule(rq->cq.napi);
--		local_bh_enable();
--	}
- }
- 
- void mlx5e_deactivate_rq(struct mlx5e_rq *rq)
-@@ -2233,6 +2227,20 @@ static int mlx5e_channel_stats_alloc(struct mlx5e_priv *priv, int ix, int cpu)
- 	return 0;
- }
- 
-+void mlx5e_trigger_napi_icosq(struct mlx5e_channel *c)
-+{
-+	spin_lock_bh(&c->async_icosq_lock);
-+	mlx5e_trigger_irq(&c->async_icosq);
-+	spin_unlock_bh(&c->async_icosq_lock);
-+}
-+
-+void mlx5e_trigger_napi_sched(struct napi_struct *napi)
-+{
-+	local_bh_disable();
-+	napi_schedule(napi);
-+	local_bh_enable();
-+}
-+
- static int mlx5e_open_channel(struct mlx5e_priv *priv, int ix,
- 			      struct mlx5e_params *params,
- 			      struct mlx5e_channel_param *cparam,
-@@ -2314,6 +2322,8 @@ static void mlx5e_activate_channel(struct mlx5e_channel *c)
- 
- 	if (test_bit(MLX5E_CHANNEL_STATE_XSK, c->state))
- 		mlx5e_activate_xsk(c);
-+
-+	mlx5e_trigger_napi_icosq(c);
- }
- 
- static void mlx5e_deactivate_channel(struct mlx5e_channel *c)
 -- 
 2.35.1
 

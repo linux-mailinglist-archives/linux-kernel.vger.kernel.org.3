@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BF485489D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D946A549360
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351849AbiFMLIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
+        id S1359245AbiFMNPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350803AbiFMLDN (ORCPT
+        with ESMTP id S1359236AbiFMNJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:03:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15B631932;
-        Mon, 13 Jun 2022 03:33:28 -0700 (PDT)
+        Mon, 13 Jun 2022 09:09:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBD5638D9B;
+        Mon, 13 Jun 2022 04:19:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8D011B80EA3;
-        Mon, 13 Jun 2022 10:33:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1728C341C5;
-        Mon, 13 Jun 2022 10:33:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93E2FB80E93;
+        Mon, 13 Jun 2022 11:19:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE0B2C34114;
+        Mon, 13 Jun 2022 11:19:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116403;
-        bh=c+ctPUQM9DoagDrIqdEoBv221V9tAwf8N+RV88BNbt4=;
+        s=korg; t=1655119172;
+        bh=UzkXVXcVlQIyOt/ib8J7ffHnS3VEqMrdDTeztC7n3xY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VuR6ItbqtXFTdjVpInpirUQqHiGSu2l8rQoCIqP4PKSMCC/sQ1KNUdn6YhJcwtW/f
-         9Dj3D3JfroKwVkclR3TkLdhIeYKQ+rU/x5sDUOYoztfVuNWAdRcSkvt4T8yRspTvvE
-         wAqgMcRhorh3boZ45WqJtfjBhmsZSAXDrrIqD1pk=
+        b=WexvY1yMED/yCYKvsSlgkKUTXWVhJfV90CocJLJm5k3BbMx5Obd53VboHZPLxfHiI
+         6zuT37BrS/HwLwZ4jGHSBFx3YH0EpQ/plE60dTTrvQQKShEZBdBmjbbO2AgL4ITqZd
+         QBrSotyAY17z1RsCowSNiaAOrsfTIyxh33QY0Gz4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Huang Guobin <huangguobin4@huawei.com>,
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 184/218] tty: Fix a possible resource leak in icom_probe
+Subject: [PATCH 5.15 140/247] netfilter: nf_tables: memleak flow rule from commit path
 Date:   Mon, 13 Jun 2022 12:10:42 +0200
-Message-Id: <20220613094926.193028771@linuxfoundation.org>
+Message-Id: <20220613094927.202216181@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Huang Guobin <huangguobin4@huawei.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit ee157a79e7c82b01ae4c25de0ac75899801f322c ]
+[ Upstream commit 9dd732e0bdf538b1b76dc7c157e2b5e560ff30d3 ]
 
-When pci_read_config_dword failed, call pci_release_regions() and
-pci_disable_device() to recycle the resource previously allocated.
+Abort path release flow rule object, however, commit path does not.
+Update code to destroy these objects before releasing the transaction.
 
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-Signed-off-by: Huang Guobin <huangguobin4@huawei.com>
-Link: https://lore.kernel.org/r/20220331091005.3290753-1-huangguobin4@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: c9626a2cbdb2 ("netfilter: nf_tables: add hardware offload support")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/icom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/netfilter/nf_tables_api.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/tty/serial/icom.c b/drivers/tty/serial/icom.c
-index fe92d74f4ea5..4711b3ec2c56 100644
---- a/drivers/tty/serial/icom.c
-+++ b/drivers/tty/serial/icom.c
-@@ -1515,7 +1515,7 @@ static int icom_probe(struct pci_dev *dev,
- 	retval = pci_read_config_dword(dev, PCI_COMMAND, &command_reg);
- 	if (retval) {
- 		dev_err(&dev->dev, "PCI Config read FAILED\n");
--		return retval;
-+		goto probe_exit0;
- 	}
- 
- 	pci_write_config_dword(dev, PCI_COMMAND,
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index af2ae42cc5c7..1528620df34c 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -8228,6 +8228,9 @@ static void nft_commit_release(struct nft_trans *trans)
+ 		nf_tables_chain_destroy(&trans->ctx);
+ 		break;
+ 	case NFT_MSG_DELRULE:
++		if (trans->ctx.chain->flags & NFT_CHAIN_HW_OFFLOAD)
++			nft_flow_rule_destroy(nft_trans_flow_rule(trans));
++
+ 		nf_tables_rule_destroy(&trans->ctx, nft_trans_rule(trans));
+ 		break;
+ 	case NFT_MSG_DELSET:
+@@ -8667,6 +8670,9 @@ static int nf_tables_commit(struct net *net, struct sk_buff *skb)
+ 			nf_tables_rule_notify(&trans->ctx,
+ 					      nft_trans_rule(trans),
+ 					      NFT_MSG_NEWRULE);
++			if (trans->ctx.chain->flags & NFT_CHAIN_HW_OFFLOAD)
++				nft_flow_rule_destroy(nft_trans_flow_rule(trans));
++
+ 			nft_trans_destroy(trans);
+ 			break;
+ 		case NFT_MSG_DELRULE:
 -- 
 2.35.1
 

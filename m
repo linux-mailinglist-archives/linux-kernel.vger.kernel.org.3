@@ -2,44 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6589548ABF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF221548E4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377696AbiFMNdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S1353177AbiFMLXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378047AbiFMNas (ORCPT
+        with ESMTP id S1353711AbiFMLQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:30:48 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF646EC65;
-        Mon, 13 Jun 2022 04:25:29 -0700 (PDT)
+        Mon, 13 Jun 2022 07:16:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01CBF13E0B;
+        Mon, 13 Jun 2022 03:39:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C3553CE1171;
-        Mon, 13 Jun 2022 11:25:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D269DC3411C;
-        Mon, 13 Jun 2022 11:25:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95A7060F9A;
+        Mon, 13 Jun 2022 10:39:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81038C34114;
+        Mon, 13 Jun 2022 10:39:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119526;
-        bh=1xszyAWmAXrHPNwGf/ECL0SC2iB4AxurzvpCenhi4aY=;
+        s=korg; t=1655116769;
+        bh=TQKI0+2Q4AOCk0WBEz8z1ZdDhJQFWxYdz9HhUNCDDyM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dmpEywhhtE6KCqpqYzURtPgOEBeqRaCe7FXCLWFJdSSagr6k82PZv1XgqG5Da/fFF
-         3Xmxn43s/3o1WIpssZU+jrXK3f+Va8HClsWBfLKdGDFV27RQbP9aeMKQ1wHigFxiW7
-         Pn7wk7iYHR3u50lCvqDuWT7BDSMYKTe8aMSSpFkI=
+        b=Xjhm4z2PPWWrWY2k0qxDQXCZUbz7fXm9gA0Hj5lywMXUALVROP6m7rcOeNaVD5o1k
+         8Bi3z3qtAID7OB/+5sluRj//PWmdlLTEGkuPHt35O4b9chCenj5saZk4R17atDsnwl
+         qBQiIZnLsBUOI3SoIYTwBemXQAKu0nWoXyI5TxRY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wesley Cheng <quic_wcheng@quicinc.com>,
+        stable@vger.kernel.org, Muchun Song <songmuchun@bytedance.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Alistair Popple <apopple@nvidia.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ross Zwisler <zwisler@kernel.org>,
+        Xiongchun Duan <duanxiongchun@bytedance.com>,
+        Xiyu Yang <xiyuyang19@fudan.edu.cn>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 025/339] usb: dwc3: gadget: Replace list_for_each_entry_safe() if using giveback
-Date:   Mon, 13 Jun 2022 12:07:30 +0200
-Message-Id: <20220613094927.273339008@linuxfoundation.org>
+Subject: [PATCH 5.4 178/411] dax: fix cache flush on PMD-mapped pages
+Date:   Mon, 13 Jun 2022 12:07:31 +0200
+Message-Id: <20220613094933.995887877@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,113 +67,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wesley Cheng <quic_wcheng@quicinc.com>
+From: Muchun Song <songmuchun@bytedance.com>
 
-[ Upstream commit bf594d1d0c1d7b895954018043536ffd327844f9 ]
+[ Upstream commit e583b5c472bd23d450e06f148dc1f37be74f7666 ]
 
-The list_for_each_entry_safe() macro saves the current item (n) and
-the item after (n+1), so that n can be safely removed without
-corrupting the list.  However, when traversing the list and removing
-items using gadget giveback, the DWC3 lock is briefly released,
-allowing other routines to execute.  There is a situation where, while
-items are being removed from the cancelled_list using
-dwc3_gadget_ep_cleanup_cancelled_requests(), the pullup disable
-routine is running in parallel (due to UDC unbind).  As the cleanup
-routine removes n, and the pullup disable removes n+1, once the
-cleanup retakes the DWC3 lock, it references a request who was already
-removed/handled.  With list debug enabled, this leads to a panic.
-Ensure all instances of the macro are replaced where gadget giveback
-is used.
+The flush_cache_page() only remove a PAGE_SIZE sized range from the cache.
+However, it does not cover the full pages in a THP except a head page.
+Replace it with flush_cache_range() to fix this issue.  This is just a
+documentation issue with the respect to properly documenting the expected
+usage of cache flushing before modifying the pmd.  However, in practice
+this is not a problem due to the fact that DAX is not available on
+architectures with virtually indexed caches per:
 
-Example call stack:
+  commit d92576f1167c ("dax: does not work correctly with virtual aliasing caches")
 
-Thread#1:
-__dwc3_gadget_ep_set_halt() - CLEAR HALT
-  -> dwc3_gadget_ep_cleanup_cancelled_requests()
-    ->list_for_each_entry_safe()
-    ->dwc3_gadget_giveback(n)
-      ->dwc3_gadget_del_and_unmap_request()- n deleted[cancelled_list]
-      ->spin_unlock
-      ->Thread#2 executes
-      ...
-    ->dwc3_gadget_giveback(n+1)
-      ->Already removed!
-
-Thread#2:
-dwc3_gadget_pullup()
-  ->waiting for dwc3 spin_lock
-  ...
-  ->Thread#1 released lock
-  ->dwc3_stop_active_transfers()
-    ->dwc3_remove_requests()
-      ->fetches n+1 item from cancelled_list (n removed by Thread#1)
-      ->dwc3_gadget_giveback()
-        ->dwc3_gadget_del_and_unmap_request()- n+1 deleted[cancelled_list]
-        ->spin_unlock
-
-Fixes: d4f1afe5e896 ("usb: dwc3: gadget: move requests to cancelled_list")
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-Link: https://lore.kernel.org/r/20220414183521.23451-1-quic_wcheng@quicinc.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lkml.kernel.org/r/20220403053957.10770-3-songmuchun@bytedance.com
+Fixes: f729c8c9b24f ("dax: wrprotect pmd_t in dax_mapping_entry_mkclean")
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+Reviewed-by: Dan Williams <dan.j.williams@intel.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+Cc: Alistair Popple <apopple@nvidia.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Jan Kara <jack@suse.cz>
+Cc: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: Ralph Campbell <rcampbell@nvidia.com>
+Cc: Ross Zwisler <zwisler@kernel.org>
+Cc: Xiongchun Duan <duanxiongchun@bytedance.com>
+Cc: Xiyu Yang <xiyuyang19@fudan.edu.cn>
+Cc: Yang Shi <shy828301@gmail.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/gadget.c | 20 ++++++++++++++++----
- 1 file changed, 16 insertions(+), 4 deletions(-)
+ fs/dax.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 026fc360cc50..6936d8ce8981 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -2001,10 +2001,10 @@ static void dwc3_gadget_ep_skip_trbs(struct dwc3_ep *dep, struct dwc3_request *r
- static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
- {
- 	struct dwc3_request		*req;
--	struct dwc3_request		*tmp;
- 	struct dwc3			*dwc = dep->dwc;
+diff --git a/fs/dax.c b/fs/dax.c
+index 12953e892bb2..bcb7c6b43fb2 100644
+--- a/fs/dax.c
++++ b/fs/dax.c
+@@ -819,7 +819,8 @@ static void dax_entry_mkclean(struct address_space *mapping, pgoff_t index,
+ 			if (!pmd_dirty(*pmdp) && !pmd_write(*pmdp))
+ 				goto unlock_pmd;
  
--	list_for_each_entry_safe(req, tmp, &dep->cancelled_list, list) {
-+	while (!list_empty(&dep->cancelled_list)) {
-+		req = next_request(&dep->cancelled_list);
- 		dwc3_gadget_ep_skip_trbs(dep, req);
- 		switch (req->status) {
- 		case DWC3_REQUEST_STATUS_DISCONNECTED:
-@@ -2021,6 +2021,12 @@ static void dwc3_gadget_ep_cleanup_cancelled_requests(struct dwc3_ep *dep)
- 			dwc3_gadget_giveback(dep, req, -ECONNRESET);
- 			break;
- 		}
-+		/*
-+		 * The endpoint is disabled, let the dwc3_remove_requests()
-+		 * handle the cleanup.
-+		 */
-+		if (!dep->endpoint.desc)
-+			break;
- 	}
- }
- 
-@@ -3333,15 +3339,21 @@ static void dwc3_gadget_ep_cleanup_completed_requests(struct dwc3_ep *dep,
- 		const struct dwc3_event_depevt *event, int status)
- {
- 	struct dwc3_request	*req;
--	struct dwc3_request	*tmp;
- 
--	list_for_each_entry_safe(req, tmp, &dep->started_list, list) {
-+	while (!list_empty(&dep->started_list)) {
- 		int ret;
- 
-+		req = next_request(&dep->started_list);
- 		ret = dwc3_gadget_ep_cleanup_completed_request(dep, event,
- 				req, status);
- 		if (ret)
- 			break;
-+		/*
-+		 * The endpoint is disabled, let the dwc3_remove_requests()
-+		 * handle the cleanup.
-+		 */
-+		if (!dep->endpoint.desc)
-+			break;
- 	}
- }
- 
+-			flush_cache_page(vma, address, pfn);
++			flush_cache_range(vma, address,
++					  address + HPAGE_PMD_SIZE);
+ 			pmd = pmdp_invalidate(vma, address, pmdp);
+ 			pmd = pmd_wrprotect(pmd);
+ 			pmd = pmd_mkclean(pmd);
 -- 
 2.35.1
 

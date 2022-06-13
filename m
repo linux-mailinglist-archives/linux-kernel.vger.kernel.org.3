@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E28548FC5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9751D548941
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384341AbiFMO3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
+        id S1351132AbiFMLDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383926AbiFMOYU (ORCPT
+        with ESMTP id S1350539AbiFMKy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78F5C47543;
-        Mon, 13 Jun 2022 04:45:55 -0700 (PDT)
+        Mon, 13 Jun 2022 06:54:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2537E21257;
+        Mon, 13 Jun 2022 03:31:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3396EB80D3A;
-        Mon, 13 Jun 2022 11:45:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1D50C3411C;
-        Mon, 13 Jun 2022 11:45:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B49FE60EF5;
+        Mon, 13 Jun 2022 10:31:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C303BC34114;
+        Mon, 13 Jun 2022 10:31:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120753;
-        bh=MNaiuG4N1VwUKOrgpMZ+BnxOCSCj0LiesIi3WOBys/I=;
+        s=korg; t=1655116298;
+        bh=oMk0Ft44FqbK0peOx4FqfoOomQEWe7BHGqVBQiA0TKU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n+wz6JIarX4DJ7O4nAtUx5Q5MxZL5bt1lCVKAYnXBpLPx/uILu8CDycwPoC+H4L7J
-         THt/i7qin9TNwq4a5mDoAwzgpg0Ff/ca3UZRiAXotnyC0HRLaTkvo+2Gwa/RVtoB2T
-         78XiJlUEJhGhylkbPIpqydxQsD26ko89PDY4egi0=
+        b=LnsZiuq5oxHYHlTVDntDSfnceH62CS037cqeQe1Q4Tk1iKM/NHpcIUa0CCDmFC/qH
+         r3L9jZmaV1CErzmmOjigcD08y/IIYxFOSiYIZDhfxEtYS7IQ2t+tLKoaZmWZihZeVf
+         KkxwijvtoiVqC6eDoAxQ941WnZOz9siV9oiUOwWY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 121/298] gpio: pca953x: use the correct register address to do regcache sync
+Subject: [PATCH 4.14 157/218] clocksource/drivers/oxnas-rps: Fix irq_of_parse_and_map() return value
 Date:   Mon, 13 Jun 2022 12:10:15 +0200
-Message-Id: <20220613094928.613589437@linuxfoundation.org>
+Message-Id: <20220613094925.356234208@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,74 +57,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit 43624eda86c98b0de726d0b6f2516ccc3ef7313f ]
+[ Upstream commit 9c04a8ff03def4df3f81219ffbe1ec9b44ff5348 ]
 
-For regcache_sync_region, need to use pca953x_recalc_addr() to get
-the real register address.
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-Fixes: b76574300504 ("gpio: pca953x: Restore registers after suspend/resume cycle")
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Fixes: 89355274e1f7 ("clocksource/drivers/oxnas-rps: Add Oxford Semiconductor RPS Dual Timer")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220422104101.55754-1-krzysztof.kozlowski@linaro.org
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpio-pca953x.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ drivers/clocksource/timer-oxnas-rps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-index 8726921a1129..33683295a0bf 100644
---- a/drivers/gpio/gpio-pca953x.c
-+++ b/drivers/gpio/gpio-pca953x.c
-@@ -1108,20 +1108,21 @@ static int pca953x_regcache_sync(struct device *dev)
- {
- 	struct pca953x_chip *chip = dev_get_drvdata(dev);
- 	int ret;
-+	u8 regaddr;
- 
- 	/*
- 	 * The ordering between direction and output is important,
- 	 * sync these registers first and only then sync the rest.
- 	 */
--	ret = regcache_sync_region(chip->regmap, chip->regs->direction,
--				   chip->regs->direction + NBANK(chip));
-+	regaddr = pca953x_recalc_addr(chip, chip->regs->direction, 0);
-+	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
- 	if (ret) {
- 		dev_err(dev, "Failed to sync GPIO dir registers: %d\n", ret);
- 		return ret;
+diff --git a/drivers/clocksource/timer-oxnas-rps.c b/drivers/clocksource/timer-oxnas-rps.c
+index 30c6f4ce672b..cfcd54e66c57 100644
+--- a/drivers/clocksource/timer-oxnas-rps.c
++++ b/drivers/clocksource/timer-oxnas-rps.c
+@@ -247,7 +247,7 @@ static int __init oxnas_rps_timer_init(struct device_node *np)
  	}
  
--	ret = regcache_sync_region(chip->regmap, chip->regs->output,
--				   chip->regs->output + NBANK(chip));
-+	regaddr = pca953x_recalc_addr(chip, chip->regs->output, 0);
-+	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
- 	if (ret) {
- 		dev_err(dev, "Failed to sync GPIO out registers: %d\n", ret);
- 		return ret;
-@@ -1129,16 +1130,18 @@ static int pca953x_regcache_sync(struct device *dev)
- 
- #ifdef CONFIG_GPIO_PCA953X_IRQ
- 	if (chip->driver_data & PCA_PCAL) {
--		ret = regcache_sync_region(chip->regmap, PCAL953X_IN_LATCH,
--					   PCAL953X_IN_LATCH + NBANK(chip));
-+		regaddr = pca953x_recalc_addr(chip, PCAL953X_IN_LATCH, 0);
-+		ret = regcache_sync_region(chip->regmap, regaddr,
-+					   regaddr + NBANK(chip));
- 		if (ret) {
- 			dev_err(dev, "Failed to sync INT latch registers: %d\n",
- 				ret);
- 			return ret;
- 		}
- 
--		ret = regcache_sync_region(chip->regmap, PCAL953X_INT_MASK,
--					   PCAL953X_INT_MASK + NBANK(chip));
-+		regaddr = pca953x_recalc_addr(chip, PCAL953X_INT_MASK, 0);
-+		ret = regcache_sync_region(chip->regmap, regaddr,
-+					   regaddr + NBANK(chip));
- 		if (ret) {
- 			dev_err(dev, "Failed to sync INT mask registers: %d\n",
- 				ret);
+ 	rps->irq = irq_of_parse_and_map(np, 0);
+-	if (rps->irq < 0) {
++	if (!rps->irq) {
+ 		ret = -EINVAL;
+ 		goto err_iomap;
+ 	}
 -- 
 2.35.1
 

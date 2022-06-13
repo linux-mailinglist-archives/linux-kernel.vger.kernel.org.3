@@ -2,323 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4665483A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A957C548339
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239585AbiFMJcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48056 "EHLO
+        id S235055AbiFMJbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:31:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234476AbiFMJcC (ORCPT
+        with ESMTP id S234726AbiFMJbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:32:02 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9176C1902A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:32:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655112720; x=1686648720;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=HenzMw3TO2R2zh9Do1HWZPuoecncHXidGIwE0OXVkdk=;
-  b=h4e087tuFMWcAdE8MS9vW1sX+2fh9Q1Ys8qUyct3sVTWzyaXuM3R5V2d
-   bTbunDCKfpSi19/ZEe8lDpP8XYkhlnIM/u5r92j974Hj1uC+eIPMlgNNi
-   raM7BP6XziWG8Nz9REo8btC3knHq5xjMrWZGmT0wjQ7IYPOvRNlBopQug
-   FEqNK5cASelr2gXE3DdwAnCJzNxfYRij3onh6EstmShjwsCTIHz0QK9io
-   0IbyQpmvljo2F18vECU4maoJ2jYCNVyOxvk09mZtFbZvBQaVxPLks9EM1
-   fbibUQj99zymPa48vetBJfsKjLty7TDE0PjmrFShS4w/TtTnAH87N042M
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="278949505"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="278949505"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 02:31:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="587703777"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Jun 2022 02:31:58 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0gQP-000KgD-NY;
-        Mon, 13 Jun 2022 09:31:57 +0000
-Date:   Mon, 13 Jun 2022 17:31:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Yury Norov <yury.norov@gmail.com>
-Subject: [alobakin:bitops 3/6] include/linux/bitops.h:39:35: error:
- 'arch___set_bit' undeclared here (not in a function); did you mean
- 'generic___set_bit'?
-Message-ID: <202206131730.NRGzSajz-lkp@intel.com>
+        Mon, 13 Jun 2022 05:31:43 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DCE18B0A
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:31:41 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id s1so6318269wra.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:31:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/OqFsaupcKkbN5ZhwB7cTTOB/jJJt4KZYzQeTPC35+8=;
+        b=4FIRDPlyNK+WMh7PnfjoRzqlLl6R8KV6uBkS/FTTx0qa70c8hfiqGl6hXSnxRKX4g5
+         M2td+xg4QJnj+FOdx0QYC/F4PW/x9pGstgIMkvb/2FpiaMbxw1+rzbaZK2FrF+hW4NTb
+         y5F4eHtHLtCifjnZAfhL6VCr+RXXM8dV1h3FML7iQJ6vmkiZvvI8AzeSZtvGSCHUgG6o
+         kB5zQBUTJ4yylxGEnVe9GJ57fuyClEacPwME303K79FAzK29Zy4rPhFsD+hLjZkTT100
+         TIoN1irlZbmAyzA4JMLK2A2Vpv5bzPvU1cx9Gj+Cz6C3+CL/LFLV9pakLe+Ga74LTxDG
+         jAIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/OqFsaupcKkbN5ZhwB7cTTOB/jJJt4KZYzQeTPC35+8=;
+        b=MIPQcKQ7UzSL5WDMsfEDYrFp9ByCKWHmxJ81vmOVXGghd9ABXAykxycfRpXrGKvTz2
+         Yq3gR8j9J2t4QKjT2lcFEeyar259X+Pw4q8g1QwKxC0LD8gHdNYX1zbYhlbVHLmqRr/I
+         cAQntTaHeOpsfHbj+egWqvV2AqXj2yrpbE5Do2uyNX8/9/+qxmD88jVMiquLBCK7rIZZ
+         ABo+zeWqO+MHnfIZJ03J+EOtfv0l2RTwKlTgGbL+gJPcYCP44URa8rd0ndNm0grKarmy
+         TdADq7CtgNu6aig+20CbgO/LOTIFaRtw7gbBer7Crb8DElqNtcaGHmRtnrXs3Y899Q3D
+         CQew==
+X-Gm-Message-State: AOAM531pWVtk+ty9NQGrUiA2O+RGFD90aRBAL9qwybVuVTlx8mrc4mbJ
+        GXKK1f7e6PUzKtD7KN8r6H0SCfdb0nmI7wfAFBKTtg==
+X-Google-Smtp-Source: ABdhPJyJxuBV/uJZZhzzNbRjrZxQLROU+4Ucqqbti5noEvVDrdiFWuCWiOyFcxZFCb/sBhiP8wYqX4LQ++GrBZJzJPc=
+X-Received: by 2002:a05:6000:1f18:b0:20f:e61b:520e with SMTP id
+ bv24-20020a0560001f1800b0020fe61b520emr56401364wrb.214.1655112699798; Mon, 13
+ Jun 2022 02:31:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220613085307.260256-1-alexandre.ghiti@canonical.com>
+In-Reply-To: <20220613085307.260256-1-alexandre.ghiti@canonical.com>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Mon, 13 Jun 2022 15:01:28 +0530
+Message-ID: <CAAhSdy1gr_WvCJUMXMwtZUux9qBsW-b_LGFg4=tdnkv5b538sg@mail.gmail.com>
+Subject: Re: [PATCH -fixes v2] riscv: Fix missing PAGE_PFN_MASK
+To:     Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        KVM General <kvm@vger.kernel.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR RISC-V (KVM/riscv)" 
+        <kvm-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/alobakin/linux bitops
-head:   d8371d0e4328c4cb6fa25350bd5132f25b386672
-commit: 4f9a98e0945a7cb9130bb04be4b3ecec35e16a81 [3/6] bitops: unify non-atomic bitops prototypes across architectures
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20220613/202206131730.NRGzSajz-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/alobakin/linux/commit/4f9a98e0945a7cb9130bb04be4b3ecec35e16a81
-        git remote add alobakin https://github.com/alobakin/linux
-        git fetch --no-tags alobakin bitops
-        git checkout 4f9a98e0945a7cb9130bb04be4b3ecec35e16a81
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=m68k prepare
+On Mon, Jun 13, 2022 at 2:23 PM Alexandre Ghiti
+<alexandre.ghiti@canonical.com> wrote:
+>
+> There are a bunch of functions that use the PFN from a page table entry
+> that end up with the svpbmt upper-bits because they are missing the newly
+> introduced PAGE_PFN_MASK which leads to wrong addresses conversions and
+> then crash: fix this by adding this mask.
+>
+> Fixes: 100631b48ded ("riscv: Fix accessing pfn bits in PTEs for non-32bit variants")
+> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Looks good to me.
 
-All errors (new ones prefixed by >>):
+Reviewed-by: Anup Patel <anup@brainfault.org>
 
-   In file included from include/linux/bits.h:22,
-                    from include/linux/ratelimit_types.h:5,
-                    from include/linux/printk.h:9,
-                    from include/asm-generic/bug.h:22,
-                    from arch/m68k/include/asm/bug.h:32,
-                    from include/linux/bug.h:5,
-                    from include/linux/page-flags.h:10,
-                    from kernel/bounds.c:10:
->> include/linux/bitops.h:39:35: error: 'arch___set_bit' undeclared here (not in a function); did you mean 'generic___set_bit'?
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                                   ^~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:42:1: note: in expansion of macro '__check_bitop_pr'
-      42 | __check_bitop_pr(__set_bit);
-         | ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:293:27: error: expression in static assertion is not an integer
-     293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:42:1: note: in expansion of macro '__check_bitop_pr'
-      42 | __check_bitop_pr(__set_bit);
-         | ^~~~~~~~~~~~~~~~
->> include/linux/bitops.h:39:35: error: 'arch___clear_bit' undeclared here (not in a function); did you mean 'generic___clear_bit'?
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                                   ^~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:43:1: note: in expansion of macro '__check_bitop_pr'
-      43 | __check_bitop_pr(__clear_bit);
-         | ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:293:27: error: expression in static assertion is not an integer
-     293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:43:1: note: in expansion of macro '__check_bitop_pr'
-      43 | __check_bitop_pr(__clear_bit);
-         | ^~~~~~~~~~~~~~~~
->> include/linux/bitops.h:39:35: error: 'arch___change_bit' undeclared here (not in a function); did you mean 'bfchg_mem_change_bit'?
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                                   ^~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:44:1: note: in expansion of macro '__check_bitop_pr'
-      44 | __check_bitop_pr(__change_bit);
-         | ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:293:27: error: expression in static assertion is not an integer
-     293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:44:1: note: in expansion of macro '__check_bitop_pr'
-      44 | __check_bitop_pr(__change_bit);
-         | ^~~~~~~~~~~~~~~~
->> include/linux/bitops.h:39:35: error: 'arch___test_and_set_bit' undeclared here (not in a function); did you mean 'generic___test_and_set_bit'?
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                                   ^~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:45:1: note: in expansion of macro '__check_bitop_pr'
-      45 | __check_bitop_pr(__test_and_set_bit);
-         | ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:293:27: error: expression in static assertion is not an integer
-     293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:45:1: note: in expansion of macro '__check_bitop_pr'
-      45 | __check_bitop_pr(__test_and_set_bit);
-         | ^~~~~~~~~~~~~~~~
->> include/linux/bitops.h:39:35: error: 'arch___test_and_clear_bit' undeclared here (not in a function); did you mean 'generic___test_and_clear_bit'?
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                                   ^~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:46:1: note: in expansion of macro '__check_bitop_pr'
-      46 | __check_bitop_pr(__test_and_clear_bit);
-         | ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:293:27: error: expression in static assertion is not an integer
-     293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:46:1: note: in expansion of macro '__check_bitop_pr'
-      46 | __check_bitop_pr(__test_and_clear_bit);
-         | ^~~~~~~~~~~~~~~~
->> include/linux/bitops.h:39:35: error: 'arch___test_and_change_bit' undeclared here (not in a function); did you mean 'bfchg_mem_test_and_change_bit'?
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                                   ^~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:47:1: note: in expansion of macro '__check_bitop_pr'
-      47 | __check_bitop_pr(__test_and_change_bit);
-         | ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:293:27: error: expression in static assertion is not an integer
-     293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:47:1: note: in expansion of macro '__check_bitop_pr'
-      47 | __check_bitop_pr(__test_and_change_bit);
-         | ^~~~~~~~~~~~~~~~
->> include/linux/bitops.h:39:35: error: 'arch_test_bit' undeclared here (not in a function); did you mean 'test_bit'?
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                                   ^~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:48:1: note: in expansion of macro '__check_bitop_pr'
-      48 | __check_bitop_pr(test_bit);
-         | ^~~~~~~~~~~~~~~~
-   include/linux/compiler_types.h:293:27: error: expression in static assertion is not an integer
-     293 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
-         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
-      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
-         |                                                        ^~~~
-   include/linux/bitops.h:39:9: note: in expansion of macro 'static_assert'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |         ^~~~~~~~~~~~~
-   include/linux/bitops.h:39:23: note: in expansion of macro '__same_type'
-      39 |         static_assert(__same_type(arch_##name, generic_##name) &&       \
-         |                       ^~~~~~~~~~~
-   include/linux/bitops.h:48:1: note: in expansion of macro '__check_bitop_pr'
-      48 | __check_bitop_pr(test_bit);
-         | ^~~~~~~~~~~~~~~~
-   make[2]: *** [scripts/Makefile.build:117: kernel/bounds.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1200: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+@Palmer let me know if you want me to take this through the KVM repo.
 
+Regards,
+Anup
 
-vim +39 include/linux/bitops.h
-
-    36	
-    37	/* Check that the bitops prototypes are sane */
-    38	#define __check_bitop_pr(name)						\
-  > 39		static_assert(__same_type(arch_##name, generic_##name) &&	\
-    40			      __same_type(name, generic_##name))
-    41	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  arch/riscv/include/asm/pgtable-64.h | 12 ++++++------
+>  arch/riscv/include/asm/pgtable.h    |  6 +++---
+>  arch/riscv/kvm/mmu.c                |  2 +-
+>  3 files changed, 10 insertions(+), 10 deletions(-)
+>
+> diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
+> index 5c2aba5efbd0..dc42375c2357 100644
+> --- a/arch/riscv/include/asm/pgtable-64.h
+> +++ b/arch/riscv/include/asm/pgtable-64.h
+> @@ -175,7 +175,7 @@ static inline pud_t pfn_pud(unsigned long pfn, pgprot_t prot)
+>
+>  static inline unsigned long _pud_pfn(pud_t pud)
+>  {
+> -       return pud_val(pud) >> _PAGE_PFN_SHIFT;
+> +       return __page_val_to_pfn(pud_val(pud));
+>  }
+>
+>  static inline pmd_t *pud_pgtable(pud_t pud)
+> @@ -278,13 +278,13 @@ static inline p4d_t pfn_p4d(unsigned long pfn, pgprot_t prot)
+>
+>  static inline unsigned long _p4d_pfn(p4d_t p4d)
+>  {
+> -       return p4d_val(p4d) >> _PAGE_PFN_SHIFT;
+> +       return __page_val_to_pfn(p4d_val(p4d));
+>  }
+>
+>  static inline pud_t *p4d_pgtable(p4d_t p4d)
+>  {
+>         if (pgtable_l4_enabled)
+> -               return (pud_t *)pfn_to_virt(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
+> +               return (pud_t *)pfn_to_virt(__page_val_to_pfn(p4d_val(p4d)));
+>
+>         return (pud_t *)pud_pgtable((pud_t) { p4d_val(p4d) });
+>  }
+> @@ -292,7 +292,7 @@ static inline pud_t *p4d_pgtable(p4d_t p4d)
+>
+>  static inline struct page *p4d_page(p4d_t p4d)
+>  {
+> -       return pfn_to_page(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
+> +       return pfn_to_page(__page_val_to_pfn(p4d_val(p4d)));
+>  }
+>
+>  #define pud_index(addr) (((addr) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
+> @@ -347,7 +347,7 @@ static inline void pgd_clear(pgd_t *pgd)
+>  static inline p4d_t *pgd_pgtable(pgd_t pgd)
+>  {
+>         if (pgtable_l5_enabled)
+> -               return (p4d_t *)pfn_to_virt(pgd_val(pgd) >> _PAGE_PFN_SHIFT);
+> +               return (p4d_t *)pfn_to_virt(__page_val_to_pfn(pgd_val(pgd)));
+>
+>         return (p4d_t *)p4d_pgtable((p4d_t) { pgd_val(pgd) });
+>  }
+> @@ -355,7 +355,7 @@ static inline p4d_t *pgd_pgtable(pgd_t pgd)
+>
+>  static inline struct page *pgd_page(pgd_t pgd)
+>  {
+> -       return pfn_to_page(pgd_val(pgd) >> _PAGE_PFN_SHIFT);
+> +       return pfn_to_page(__page_val_to_pfn(pgd_val(pgd)));
+>  }
+>  #define pgd_page(pgd)  pgd_page(pgd)
+>
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index 1d1be9d9419c..5dbd6610729b 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -261,7 +261,7 @@ static inline pgd_t pfn_pgd(unsigned long pfn, pgprot_t prot)
+>
+>  static inline unsigned long _pgd_pfn(pgd_t pgd)
+>  {
+> -       return pgd_val(pgd) >> _PAGE_PFN_SHIFT;
+> +       return __page_val_to_pfn(pgd_val(pgd));
+>  }
+>
+>  static inline struct page *pmd_page(pmd_t pmd)
+> @@ -590,14 +590,14 @@ static inline pmd_t pmd_mkinvalid(pmd_t pmd)
+>         return __pmd(pmd_val(pmd) & ~(_PAGE_PRESENT|_PAGE_PROT_NONE));
+>  }
+>
+> -#define __pmd_to_phys(pmd)  (pmd_val(pmd) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
+> +#define __pmd_to_phys(pmd)  (__page_val_to_pfn(pmd_val(pmd)) << PAGE_SHIFT)
+>
+>  static inline unsigned long pmd_pfn(pmd_t pmd)
+>  {
+>         return ((__pmd_to_phys(pmd) & PMD_MASK) >> PAGE_SHIFT);
+>  }
+>
+> -#define __pud_to_phys(pud)  (pud_val(pud) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
+> +#define __pud_to_phys(pud)  (__page_val_to_pfn(pud_val(pud)) << PAGE_SHIFT)
+>
+>  static inline unsigned long pud_pfn(pud_t pud)
+>  {
+> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> index 1c00695ebee7..9826073fbc67 100644
+> --- a/arch/riscv/kvm/mmu.c
+> +++ b/arch/riscv/kvm/mmu.c
+> @@ -54,7 +54,7 @@ static inline unsigned long gstage_pte_index(gpa_t addr, u32 level)
+>
+>  static inline unsigned long gstage_pte_page_vaddr(pte_t pte)
+>  {
+> -       return (unsigned long)pfn_to_virt(pte_val(pte) >> _PAGE_PFN_SHIFT);
+> +       return (unsigned long)pfn_to_virt(__page_val_to_pfn(pte_val(pte)));
+>  }
+>
+>  static int gstage_page_size_to_level(unsigned long page_size, u32 *out_level)
+> --
+> 2.34.1
+>

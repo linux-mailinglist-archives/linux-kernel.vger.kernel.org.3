@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C4215487EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81FAE54871A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355322AbiFMLeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S1378956AbiFMNnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354413AbiFML32 (ORCPT
+        with ESMTP id S1379136AbiFMNjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC389A456;
-        Mon, 13 Jun 2022 03:44:12 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD85A3DA52;
+        Mon, 13 Jun 2022 04:28:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B528B80D3F;
-        Mon, 13 Jun 2022 10:44:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3A7BC3411F;
-        Mon, 13 Jun 2022 10:44:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58FBD61046;
+        Mon, 13 Jun 2022 11:28:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66DEEC34114;
+        Mon, 13 Jun 2022 11:28:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117050;
-        bh=dCeVzC/jF/iTDOn+inmUhCo29O8Nt84UucMF/ifylBA=;
+        s=korg; t=1655119732;
+        bh=2hyf1cQmfW94cWq/If7w064AVZti1g8GtemsxPSoOSI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zWNvIsa5F1ZQsz1SeyLhBxdpmEq4hQ/AXj2d/NABVxWN1lcGzSQShAUy2ES62eIPz
-         ldmBoIQNjL+5SVmtKhCcPa2A/rTjvs36R19E2Az4ldHHYOnQSK1ZreB7ErU9qpfja0
-         A8DJdPsUQLst9yCO6JK95k4nfkKHE9y4vCSb+mLI=
+        b=UCpJvRD56ke+Lvt3g7BYtIn00YIRrtbHZG8CMn0AKl9dQ2WceJaO8P5Z4aMNCEyaB
+         Mes6h6vghuwG81OmikHGzt184vIgr+/bHK9yaA/deWYkUmH8l08uUFT+4DIE2I4n8x
+         ZUU54HBHf81S18YXMlK6YDh9LE55Li/d+PSRSxmY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>
-Subject: [PATCH 5.4 268/411] dt-bindings: gpio: altera: correct interrupt-cells
-Date:   Mon, 13 Jun 2022 12:09:01 +0200
-Message-Id: <20220613094936.795147837@linuxfoundation.org>
+        stable@vger.kernel.org, Li Liang <liali@redhat.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 120/339] bonding: show NS IPv6 targets in proc master info
+Date:   Mon, 13 Jun 2022 12:09:05 +0200
+Message-Id: <20220613094930.148189277@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,40 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dinh Nguyen <dinguyen@kernel.org>
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-commit 3a21c3ac93aff7b4522b152399df8f6a041df56d upstream.
+[ Upstream commit 4a1f14df55d1e9ecdfa797a87a80131207cbd66f ]
 
-update documentation to correctly state the interrupt-cells to be 2.
+When adding bond new parameter ns_targets. I forgot to print this
+in bond master proc info. After updating, the bond master info will look
+like:
 
-Cc: stable@vger.kernel.org
-Fixes: 4fd9bbc6e071 ("drivers/gpio: Altera soft IP GPIO driver devicetree binding")
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ARP IP target/s (n.n.n.n form): 192.168.1.254
+NS IPv6 target/s (XX::XX form): 2022::1, 2022::2
+
+Fixes: 4e24be018eb9 ("bonding: add new parameter ns_targets")
+Reported-by: Li Liang <liali@redhat.com>
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Link: https://lore.kernel.org/r/20220530062639.37179-1-liuhangbin@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/gpio/gpio-altera.txt |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/net/bonding/bond_procfs.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
---- a/Documentation/devicetree/bindings/gpio/gpio-altera.txt
-+++ b/Documentation/devicetree/bindings/gpio/gpio-altera.txt
-@@ -9,8 +9,9 @@ Required properties:
-   - The second cell is reserved and is currently unused.
- - gpio-controller : Marks the device node as a GPIO controller.
- - interrupt-controller: Mark the device node as an interrupt controller
--- #interrupt-cells : Should be 1. The interrupt type is fixed in the hardware.
-+- #interrupt-cells : Should be 2. The interrupt type is fixed in the hardware.
-   - The first cell is the GPIO offset number within the GPIO controller.
-+  - The second cell is the interrupt trigger type and level flags.
- - interrupts: Specify the interrupt.
- - altr,interrupt-type: Specifies the interrupt trigger type the GPIO
-   hardware is synthesized. This field is required if the Altera GPIO controller
-@@ -38,6 +39,6 @@ gpio_altr: gpio@ff200000 {
- 	altr,interrupt-type = <IRQ_TYPE_EDGE_RISING>;
- 	#gpio-cells = <2>;
- 	gpio-controller;
--	#interrupt-cells = <1>;
-+	#interrupt-cells = <2>;
- 	interrupt-controller;
- };
+diff --git a/drivers/net/bonding/bond_procfs.c b/drivers/net/bonding/bond_procfs.c
+index cfe37be42be4..43be458422b3 100644
+--- a/drivers/net/bonding/bond_procfs.c
++++ b/drivers/net/bonding/bond_procfs.c
+@@ -129,6 +129,21 @@ static void bond_info_show_master(struct seq_file *seq)
+ 			printed = 1;
+ 		}
+ 		seq_printf(seq, "\n");
++
++#if IS_ENABLED(CONFIG_IPV6)
++		printed = 0;
++		seq_printf(seq, "NS IPv6 target/s (xx::xx form):");
++
++		for (i = 0; (i < BOND_MAX_NS_TARGETS); i++) {
++			if (ipv6_addr_any(&bond->params.ns_targets[i]))
++				break;
++			if (printed)
++				seq_printf(seq, ",");
++			seq_printf(seq, " %pI6c", &bond->params.ns_targets[i]);
++			printed = 1;
++		}
++		seq_printf(seq, "\n");
++#endif
+ 	}
+ 
+ 	if (BOND_MODE(bond) == BOND_MODE_8023AD) {
+-- 
+2.35.1
+
 
 

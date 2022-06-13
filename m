@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55AF9549799
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 710D4549074
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384768AbiFMOeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
+        id S1353124AbiFMMWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385401AbiFMObJ (ORCPT
+        with ESMTP id S1358525AbiFMMTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:31:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D055AAB0F6;
-        Mon, 13 Jun 2022 04:48:53 -0700 (PDT)
+        Mon, 13 Jun 2022 08:19:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B280656C05;
+        Mon, 13 Jun 2022 04:03:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE736B80ECD;
-        Mon, 13 Jun 2022 11:48:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FB5AC34114;
-        Mon, 13 Jun 2022 11:48:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A4E0C613E9;
+        Mon, 13 Jun 2022 11:03:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE924C34114;
+        Mon, 13 Jun 2022 11:03:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120905;
-        bh=BBbKxzBTSgGkElDL5HOf2Rr4T8+XctVQOFZU15enauU=;
+        s=korg; t=1655118181;
+        bh=R1fg0jbArUk76OFDbNDPtgKbT9ANofjb4LAD13xul88=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cYCtM5MhIakcHE0j2FQkMRko13ATHHUrwJZcddUxvTDjIgClxp8n6rb30yECiCclH
-         //j1VrI6xsQrCvXToZT1gwFa5NQFOY0ZjHq2SKEWvH9M/S/6l2NS+iSrda4tCrtaGV
-         6F9fMlm85Xbsi5cZZChSO/ecQ+89bqLNr9Sh3yiA=
+        b=O7ChxfnEi51K/UX8gXfMYD/gdw5qEkrlGzbc1lm0Khw6txB7k0ZWWC97rZkUJ6vLo
+         qZDbsWvQ+xREIsWoVMlFFkoXXxgWFBdzIT816MD5SfYyqNhMbiabTJJ6N99LRLt/AT
+         wRKcWo9ieJjZ/EICzIrcolRklGv5EgNlqfhe8co8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 201/298] drivers: staging: rtl8192bs: Fix deadlock in rtw_joinbss_event_prehandle()
+        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
+        Yu Kuai <yukuai3@huawei.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 271/287] nbd: fix race between nbd_alloc_config() and module removal
 Date:   Mon, 13 Jun 2022 12:11:35 +0200
-Message-Id: <20220613094931.201356439@linuxfoundation.org>
+Message-Id: <20220613094932.217851632@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,73 +56,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Yu Kuai <yukuai3@huawei.com>
 
-[ Upstream commit 041879b12ddb0c6c83ed9c0bdd10dc82a056f2fc ]
+[ Upstream commit c55b2b983b0fa012942c3eb16384b2b722caa810 ]
 
-There is a deadlock in rtw_joinbss_event_prehandle(), which is shown
-below:
+When nbd module is being removing, nbd_alloc_config() may be
+called concurrently by nbd_genl_connect(), although try_module_get()
+will return false, but nbd_alloc_config() doesn't handle it.
 
-   (Thread 1)                |      (Thread 2)
-                             | _set_timer()
-rtw_joinbss_event_prehandle()|  mod_timer()
- spin_lock_bh() //(1)        |  (wait a time)
- ...                         | _rtw_join_timeout_handler()
- del_timer_sync()            |  spin_lock_bh() //(2)
- (wait timer to stop)        |  ...
+The race may lead to the leak of nbd_config and its related
+resources (e.g, recv_workq) and oops in nbd_read_stat() due
+to the unload of nbd module as shown below:
 
-We hold pmlmepriv->lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need pmlmepriv->lock in position (2) of thread 2.
-As a result, rtw_joinbss_event_prehandle() will block forever.
+  BUG: kernel NULL pointer dereference, address: 0000000000000040
+  Oops: 0000 [#1] SMP PTI
+  CPU: 5 PID: 13840 Comm: kworker/u17:33 Not tainted 5.14.0+ #1
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+  Workqueue: knbd16-recv recv_work [nbd]
+  RIP: 0010:nbd_read_stat.cold+0x130/0x1a4 [nbd]
+  Call Trace:
+   recv_work+0x3b/0xb0 [nbd]
+   process_one_work+0x1ed/0x390
+   worker_thread+0x4a/0x3d0
+   kthread+0x12a/0x150
+   ret_from_fork+0x22/0x30
 
-This patch extracts del_timer_sync() from the protection of
-spin_lock_bh(), which could let timer handler to obtain
-the needed lock. What`s more, we change spin_lock_bh() to
-spin_lock_irq() in _rtw_join_timeout_handler() in order to
-prevent deadlock.
+Fixing it by checking the return value of try_module_get()
+in nbd_alloc_config(). As nbd_alloc_config() may return ERR_PTR(-ENODEV),
+assign nbd->config only when nbd_alloc_config() succeeds to ensure
+the value of nbd->config is binary (valid or NULL).
 
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220409064953.67420-1-duoming@zju.edu.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Also adding a debug message to check the reference counter
+of nbd_config during module removal.
+
+Signed-off-by: Hou Tao <houtao1@huawei.com>
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Reviewed-by: Josef Bacik <josef@toxicpanda.com>
+Link: https://lore.kernel.org/r/20220521073749.3146892-3-yukuai3@huawei.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/rtl8723bs/core/rtw_mlme.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/block/nbd.c | 28 +++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme.c b/drivers/staging/rtl8723bs/core/rtw_mlme.c
-index a6e5f2332e12..c29e3c68e61e 100644
---- a/drivers/staging/rtl8723bs/core/rtw_mlme.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_mlme.c
-@@ -1240,8 +1240,10 @@ void rtw_joinbss_event_prehandle(struct adapter *adapter, u8 *pbuf)
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index 29bed6397173..f48553979b85 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -1395,15 +1395,20 @@ static struct nbd_config *nbd_alloc_config(void)
+ {
+ 	struct nbd_config *config;
  
- 			spin_unlock_bh(&pmlmepriv->scanned_queue.lock);
- 
-+			spin_unlock_bh(&pmlmepriv->lock);
- 			/* s5. Cancel assoc_timer */
- 			del_timer_sync(&pmlmepriv->assoc_timer);
-+			spin_lock_bh(&pmlmepriv->lock);
- 		} else {
- 			spin_unlock_bh(&(pmlmepriv->scanned_queue.lock));
- 		}
-@@ -1547,7 +1549,7 @@ void _rtw_join_timeout_handler(struct timer_list *t)
- 	if (adapter->bDriverStopped || adapter->bSurpriseRemoved)
- 		return;
- 
--	spin_lock_bh(&pmlmepriv->lock);
-+	spin_lock_irq(&pmlmepriv->lock);
- 
- 	if (rtw_to_roam(adapter) > 0) { /* join timeout caused by roaming */
- 		while (1) {
-@@ -1575,7 +1577,7 @@ void _rtw_join_timeout_handler(struct timer_list *t)
- 
- 	}
- 
--	spin_unlock_bh(&pmlmepriv->lock);
-+	spin_unlock_irq(&pmlmepriv->lock);
++	if (!try_module_get(THIS_MODULE))
++		return ERR_PTR(-ENODEV);
++
+ 	config = kzalloc(sizeof(struct nbd_config), GFP_NOFS);
+-	if (!config)
+-		return NULL;
++	if (!config) {
++		module_put(THIS_MODULE);
++		return ERR_PTR(-ENOMEM);
++	}
++
+ 	atomic_set(&config->recv_threads, 0);
+ 	init_waitqueue_head(&config->recv_wq);
+ 	init_waitqueue_head(&config->conn_wait);
+ 	config->blksize = NBD_DEF_BLKSIZE;
+ 	atomic_set(&config->live_connections, 0);
+-	try_module_get(THIS_MODULE);
+ 	return config;
  }
  
- /*
+@@ -1430,12 +1435,13 @@ static int nbd_open(struct block_device *bdev, fmode_t mode)
+ 			mutex_unlock(&nbd->config_lock);
+ 			goto out;
+ 		}
+-		config = nbd->config = nbd_alloc_config();
+-		if (!config) {
+-			ret = -ENOMEM;
++		config = nbd_alloc_config();
++		if (IS_ERR(config)) {
++			ret = PTR_ERR(config);
+ 			mutex_unlock(&nbd->config_lock);
+ 			goto out;
+ 		}
++		nbd->config = config;
+ 		refcount_set(&nbd->config_refs, 1);
+ 		refcount_inc(&nbd->refs);
+ 		mutex_unlock(&nbd->config_lock);
+@@ -1820,13 +1826,14 @@ static int nbd_genl_connect(struct sk_buff *skb, struct genl_info *info)
+ 		nbd_put(nbd);
+ 		return -EINVAL;
+ 	}
+-	config = nbd->config = nbd_alloc_config();
+-	if (!nbd->config) {
++	config = nbd_alloc_config();
++	if (IS_ERR(config)) {
+ 		mutex_unlock(&nbd->config_lock);
+ 		nbd_put(nbd);
+ 		printk(KERN_ERR "nbd: couldn't allocate config\n");
+-		return -ENOMEM;
++		return PTR_ERR(config);
+ 	}
++	nbd->config = config;
+ 	refcount_set(&nbd->config_refs, 1);
+ 	set_bit(NBD_BOUND, &config->runtime_flags);
+ 
+@@ -2352,6 +2359,9 @@ static void __exit nbd_cleanup(void)
+ 	while (!list_empty(&del_list)) {
+ 		nbd = list_first_entry(&del_list, struct nbd_device, list);
+ 		list_del_init(&nbd->list);
++		if (refcount_read(&nbd->config_refs))
++			printk(KERN_ERR "nbd: possibly leaking nbd_config (ref %d)\n",
++					refcount_read(&nbd->config_refs));
+ 		if (refcount_read(&nbd->refs) != 1)
+ 			printk(KERN_ERR "nbd: possibly leaking a device\n");
+ 		nbd_put(nbd);
 -- 
 2.35.1
 

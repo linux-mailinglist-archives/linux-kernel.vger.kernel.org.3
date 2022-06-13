@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE536548C9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63182549288
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355276AbiFMLer (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46066 "EHLO
+        id S1379140AbiFMNrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354412AbiFML32 (ORCPT
+        with ESMTP id S1379188AbiFMNkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E99CE1E;
-        Mon, 13 Jun 2022 03:44:10 -0700 (PDT)
+        Mon, 13 Jun 2022 09:40:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67409D11A;
+        Mon, 13 Jun 2022 04:29:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C36D2B80D3A;
-        Mon, 13 Jun 2022 10:44:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 356F4C34114;
-        Mon, 13 Jun 2022 10:44:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FBD1B80D3A;
+        Mon, 13 Jun 2022 11:29:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51CBEC34114;
+        Mon, 13 Jun 2022 11:29:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117047;
-        bh=raNARxJxJ8ZK2MaWnYTMF/mmOU1OqQLSOnfV4nYk1Wc=;
+        s=korg; t=1655119774;
+        bh=Oft2PCz9ZpwDHqNmmhzMYwQzs95U4ue05pIQQSuNDrQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dISAv4l1PBoQRcO4vMAnO5ifNw/bwmxLpr53zt7D6kFHaSOdsA0IxywWbpfrzWMy8
-         rIbKiEw4XTxJZBgMIyyHgDQ1+cG/5ef0FrNViV11GYabwZBDY1eAy/czm566DWrCjw
-         VRZxnqEysvBUrK73yfwjtBnsLvwypBPTbT9kNXAY=
+        b=KV+SR9kc2fWLOVEKqDgcJmpmEn1z7MpFobBT9YJN4lVkyOmD3E9CzidxoUiZpa3wn
+         +D5ROMh+tKcMPYXI1JTpEshLElKfBcSDRa7VklPihUgK+Tv3A/tS9QbTSyyOIS4thJ
+         0uoKATHBdlnKZIC4ZjpMdgwvP34i9UGlntMzU7fg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH 5.4 267/411] docs/conf.py: Cope with removal of language=None in Sphinx 5.0.0
+        stable@vger.kernel.org, Tianhao Zhao <tizhao@redhat.com>,
+        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 115/339] sfc: fix wrong tx channel offset with efx_separate_tx_channels
 Date:   Mon, 13 Jun 2022 12:09:00 +0200
-Message-Id: <20220613094936.766667163@linuxfoundation.org>
+Message-Id: <20220613094929.997480380@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +56,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Akira Yokosawa <akiyks@gmail.com>
+From: Íñigo Huguet <ihuguet@redhat.com>
 
-commit 627f01eab93d8671d4e4afee9b148f9998d20e7c upstream.
+[ Upstream commit c308dfd1b43ef0d4c3e57b741bb3462eb7a7f4a2 ]
 
-One of the changes in Sphinx 5.0.0 [1] says [sic]:
+tx_channel_offset is calculated in efx_allocate_msix_channels, but it is
+also calculated again in efx_set_channels because it was originally done
+there, and when efx_allocate_msix_channels was introduced it was
+forgotten to be removed from efx_set_channels.
 
-    5.0.0 final
+Moreover, the old calculation is wrong when using
+efx_separate_tx_channels because now we can have XDP channels after the
+TX channels, so n_channels - n_tx_channels doesn't point to the first TX
+channel.
 
-     - #10474: language does not accept None as it value.
-       The default value of language becomes to 'en' now.
+Remove the old calculation from efx_set_channels, and add the
+initialization of this variable if MSI or legacy interrupts are used,
+next to the initialization of the rest of the related variables, where
+it was missing.
 
-[1]: https://www.sphinx-doc.org/en/master/changes.html#release-5-0-0-released-may-30-2022
-
-It results in a new warning from Sphinx 5.0.0 [sic]:
-
-    WARNING: Invalid configuration value found: 'language = None'.
-    Update your configuration to a valid langauge code. Falling
-    back to 'en' (English).
-
-Silence the warning by using 'en'.
-It works with all the Sphinx versions required for building
-kernel documentation (1.7.9 or later).
-
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Link: https://lore.kernel.org/r/bd0c2ddc-2401-03cb-4526-79ca664e1cbe@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Jonathan Corbet <corbet@lwn.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 3990a8fffbda ("sfc: allocate channels for XDP tx queues")
+Reported-by: Tianhao Zhao <tizhao@redhat.com>
+Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/conf.py |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/sfc/efx_channels.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---- a/Documentation/conf.py
-+++ b/Documentation/conf.py
-@@ -98,7 +98,7 @@ finally:
- #
- # This is also used if you do content translation via gettext catalogs.
- # Usually you set "language" from the command line for these cases.
--language = None
-+language = 'en'
+diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet/sfc/efx_channels.c
+index 40df910aa140..b9cf873e1e42 100644
+--- a/drivers/net/ethernet/sfc/efx_channels.c
++++ b/drivers/net/ethernet/sfc/efx_channels.c
+@@ -324,6 +324,7 @@ int efx_probe_interrupts(struct efx_nic *efx)
+ 		efx->n_channels = 1;
+ 		efx->n_rx_channels = 1;
+ 		efx->n_tx_channels = 1;
++		efx->tx_channel_offset = 0;
+ 		efx->n_xdp_channels = 0;
+ 		efx->xdp_channel_offset = efx->n_channels;
+ 		rc = pci_enable_msi(efx->pci_dev);
+@@ -344,6 +345,7 @@ int efx_probe_interrupts(struct efx_nic *efx)
+ 		efx->n_channels = 1 + (efx_separate_tx_channels ? 1 : 0);
+ 		efx->n_rx_channels = 1;
+ 		efx->n_tx_channels = 1;
++		efx->tx_channel_offset = 1;
+ 		efx->n_xdp_channels = 0;
+ 		efx->xdp_channel_offset = efx->n_channels;
+ 		efx->legacy_irq = efx->pci_dev->irq;
+@@ -979,10 +981,6 @@ int efx_set_channels(struct efx_nic *efx)
+ 	struct efx_channel *channel;
+ 	int rc;
  
- # There are two options for replacing |today|: either, you set today to some
- # non-false value, then it is used:
+-	efx->tx_channel_offset =
+-		efx_separate_tx_channels ?
+-		efx->n_channels - efx->n_tx_channels : 0;
+-
+ 	if (efx->xdp_tx_queue_count) {
+ 		EFX_WARN_ON_PARANOID(efx->xdp_tx_queues);
+ 
+-- 
+2.35.1
+
 
 

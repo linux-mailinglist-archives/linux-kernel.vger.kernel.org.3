@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B966154A016
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6F9954A019
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:49:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351336AbiFMUss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
+        id S243848AbiFMUs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351032AbiFMUrG (ORCPT
+        with ESMTP id S1351238AbiFMUrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:47:06 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DAA37BCD;
-        Mon, 13 Jun 2022 13:01:11 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id i25so4723083qtq.0;
-        Mon, 13 Jun 2022 13:01:11 -0700 (PDT)
+        Mon, 13 Jun 2022 16:47:16 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE9F2A940;
+        Mon, 13 Jun 2022 13:03:12 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id v25so8694588eda.6;
+        Mon, 13 Jun 2022 13:03:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=eU3DLuUn9fCOPEhfzrbg7JSzV8OW8CVvXW+e7KmEHk0=;
-        b=DSxrLsSpuUfF9kM5thQWDoAgIzl5K2oZb3HltNBhhmEA6jYylOhyuTlrOtC8I/E3DE
-         HpEX9WexZW9gyKUV/E5ty7TviUbFWcUYxsAHs0uWzTGv0rMmH0Z6SRex82Xf+kmaAmfV
-         SFh8N32a0HO0La2vduHNvGTQ84k62IiiSA7NvvK5rbQPEr13D0qyedsAO+72Rn5xGmI7
-         WgrWnnfqHeLw9e5LrNz3dHGhj/TZ5ARERtbNbfA6fZgmHc7vd/L3zo8lbUzx/no3/NwQ
-         9pxdHtQU6ToQ4+JNSUOZnWl5bQUfXNeZKTMamRoxouzyooX6nQ+kNGOfiVLTmZugLhVG
-         t/0A==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=O2td3YP3JdUJuU07d3g8dndjMkX/4E+coAFBXOpD16E=;
+        b=JMkGk63f6veModCTgkLMWMKyGEaydw5MgeRkLBOCjl+edkC8l6swYd6lK5XvGB1uDI
+         C6j2NjFSj1Y+VNJoX+K3fXxfv4BCldHpQP1G4DF6WAPjgMWTtwk2A+iD5j8/2f70X4Zl
+         PL6VeYes3d1ImWkIkEL8JK081lUKcpvfIOlyonY2g8oorwEKgKoh/f3RpfcT4Y86wZkh
+         AR5rzkq41X9KEy5t18yxRzj9Q9jr29jMJGCILcWUk3tLjS7apGXFwRqDJ2fxiQdlLdff
+         RcnJn3/nQogPSbr6nF03vZ2dB4WyJYeznggeZ1FX92Laz/D1R2959Up9yIBOrNysZH5p
+         Hoew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=eU3DLuUn9fCOPEhfzrbg7JSzV8OW8CVvXW+e7KmEHk0=;
-        b=3VkjDrKE6Po4vgXbwkGwzPEQCF3Pea5QWXmtHX3JVjzcPAlTq5hF2QPCNFskfK+l51
-         xp3SaXqc7cSefksKyk5nWjx6esstQJtVwbGKUhJc1HPOUzj2+NXm6RQeLmODneCBcM7z
-         jvHma5gVdizv9KVnkVfhMjO9mUACpiDkJbw+jmIoNdu8ebPGbydgSnbLnDj3kfMUM1fw
-         PRh8DdGmACGpA2dFVGzFseps0YVe3j39ZQMSFx8rv3KRMov7NwgPbmmpydDFkuBhmQcA
-         BgH9B+W9j6A+zVsJTrnFFuzZQn9rmt3G0x4kmlC8ECcw2lbK680Vh5Aa+xUrhuVVvXhE
-         b3mg==
-X-Gm-Message-State: AOAM533zTZYDwqFhxNnvLUQELzVTTdNPh+W8lMkpvksskLyeQ+AI5007
-        LddMHk5qqFanLSzgMBDorq0nfjKOq8Q=
-X-Google-Smtp-Source: ABdhPJxA8LjkglFi0lI/OcvxwAVgmNVVtpC89YokY919Nl9Qm9M0JH904UxKIkzKBLobFiaztRpX0w==
-X-Received: by 2002:ac8:5d86:0:b0:305:2b38:af7c with SMTP id d6-20020ac85d86000000b003052b38af7cmr1290499qtx.497.1655150470303;
-        Mon, 13 Jun 2022 13:01:10 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id l188-20020a37bbc5000000b006a6bbc2725esm7097561qkf.118.2022.06.13.13.01.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 13:01:09 -0700 (PDT)
-Message-ID: <2741d09d-679f-7c10-e6ad-4f0e6692ad0c@gmail.com>
-Date:   Mon, 13 Jun 2022 13:01:06 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=O2td3YP3JdUJuU07d3g8dndjMkX/4E+coAFBXOpD16E=;
+        b=kTXLS/DzElqRoIzpjzxwqA8X0ZBGGvgQsmrpjjjVzkgdiTQnUFmvSrbGAOKjEhk6WC
+         D2YWKwT3yLuhjx9SiA6yvIGyEWZ1k9Bvfpn6StXGa2SMpazwFZmDwEyjI8tHfknIOM99
+         vmzTnSVU1FFIfrnmsYK2oOYa87kOHVv88Ef0y1eVInzUST5JZhOUAf5VFpcVWmxok2HO
+         b3OPDjY56UClgcUiuzW1fJxzikk8q8cp5nueU2iUbMORgmaHLbGDjLTqMiRGXoFn0wpS
+         Nvn3bTelscIgniZNelSUehtpOLHXuCKvJSmK5BBpm8PAT+tux4yJAgklWXc/p2/+ivvq
+         iuxQ==
+X-Gm-Message-State: AOAM533L2VHfrx9OLBtQ+7FC+WO4+43/5FAmPOfnke6HzE90Dg/KR7Zw
+        D9x8Ay0i8pi7nn6tonJ6nWlRjBfDt3zKzM7BN64NmhFD+l8=
+X-Google-Smtp-Source: ABdhPJw2yRloQpbm6sxa+GrLKvGbTyCPyWW+lcJOlNOcBAd9ZPR5hEzRjfBokj5OwA6RXjIWWGTL3Pfzc7umGHPa950=
+X-Received: by 2002:a05:6402:3546:b0:42e:2f58:2c90 with SMTP id
+ f6-20020a056402354600b0042e2f582c90mr1710971edd.84.1655150590514; Mon, 13 Jun
+ 2022 13:03:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.10 000/173] 5.10.122-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220613181850.655683495@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220613181850.655683495@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+References: <297d2547ff2ee627731662abceeab9dbdaf23231.1655068321.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <297d2547ff2ee627731662abceeab9dbdaf23231.1655068321.git.christophe.jaillet@wanadoo.fr>
+From:   Christian Lamparter <chunkeey@gmail.com>
+Date:   Mon, 13 Jun 2022 22:02:58 +0200
+Message-ID: <CAAd0S9DgctqyRx+ppfT6dNntUR-cpySnsYaL=unboQ+qTK2wGQ@mail.gmail.com>
+Subject: Re: [PATCH v2] p54: Fix an error handling path in p54spi_probe()
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Christian Lamparter <chunkeey@web.de>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,27 +75,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/13/22 11:19, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.122 release.
-> There are 173 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 15 Jun 2022 18:18:23 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.122-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Sun, Jun 12, 2022 at 11:12 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> If an error occurs after a successful call to p54spi_request_firmware(), it
+> must be undone by a corresponding release_firmware() as already done in
+> the error handling path of p54spi_request_firmware() and in the .remove()
+> function.
+>
+> Add the missing call in the error handling path and remove it from
+> p54spi_request_firmware() now that it is the responsibility of the caller
+> to release the firmawre
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+that last word hast a typo:  firmware. (maybe Kalle can fix this in post).
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> Fixes: cd8d3d321285 ("p54spi: p54spi driver")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Acked-by: Christian Lamparter <chunkeey@gmail.com>
+(Though, v1 was fine too.)
+> ---
+> v2: reduce diffstat and take advantage on the fact that release_firmware()
+> checks for NULL
+
+Heh, ok ;) . Now that I see it,  the "ret = p54_parse_firmware(...); ... "
+could have been replaced with "return p54_parse_firmware(dev, priv->firmware);"
+so the p54spi.c could shrink another 5-6 lines.
+
+I think leaving p54spi_request_firmware() callee to deal with
+releasing the firmware
+in the error case as well is nicer because it gets rid of a "but in
+this case" complexity.
+
+(I still have hope for the devres-firmware to hit some day).
+
+Cheers
+Christian
+
+> ---
+>  drivers/net/wireless/intersil/p54/p54spi.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/wireless/intersil/p54/p54spi.c b/drivers/net/wireless/intersil/p54/p54spi.c
+> index f99b7ba69fc3..19152fd449ba 100644
+> --- a/drivers/net/wireless/intersil/p54/p54spi.c
+> +++ b/drivers/net/wireless/intersil/p54/p54spi.c
+> @@ -164,7 +164,7 @@ static int p54spi_request_firmware(struct ieee80211_hw *dev)
+>
+>         ret = p54_parse_firmware(dev, priv->firmware);
+>         if (ret) {
+> -               release_firmware(priv->firmware);
+> +               /* the firmware is released by the caller */
+>                 return ret;
+>         }
+>
+> @@ -659,6 +659,7 @@ static int p54spi_probe(struct spi_device *spi)
+>         return 0;
+>
+>  err_free_common:
+> +       release_firmware(priv->firmware);
+>         free_irq(gpio_to_irq(p54spi_gpio_irq), spi);
+>  err_free_gpio_irq:
+>         gpio_free(p54spi_gpio_irq);
+> --
+> 2.34.1
+>

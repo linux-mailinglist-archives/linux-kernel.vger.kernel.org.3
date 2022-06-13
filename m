@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37D2A549D5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04B6549D5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348078AbiFMTUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44884 "EHLO
+        id S1348409AbiFMTUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351257AbiFMTTa (ORCPT
+        with ESMTP id S1351305AbiFMTTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:19:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F8C53711;
-        Mon, 13 Jun 2022 10:24:30 -0700 (PDT)
+        Mon, 13 Jun 2022 15:19:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA6653727;
+        Mon, 13 Jun 2022 10:24:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58F3260C7C;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87AEFB81178;
+        Mon, 13 Jun 2022 17:24:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36435C341C4;
         Mon, 13 Jun 2022 17:24:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CE14C34114;
-        Mon, 13 Jun 2022 17:24:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655141069;
-        bh=Ytg1O0ZnWN5OTWz6shxsOZCb9jEbZHGc71Fqqpj9HYQ=;
+        s=k20201202; t=1655141072;
+        bh=eoHItYWwkT7G17he8Tx1cCRce9KFe+Gp8AbhML0uuyA=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=VOZ9whWtDqTEXBLPpw8fAFY9Z/rPqKNVKU0ybnGewq4UL9zWOJLSxkUfE7LmrQ0uI
-         7MpviS+7JyCy7DVqy/pc5UfFJrfp+Y6QEknhDSo+NxofDb2ZyIlmxf1PJehTlUcqP3
-         7loQ9SucdK6itgT+7Q96NhEwONdaArUDSLdCSROwjTd/vMuPl8+mSvW1+DybJ2Jjxv
-         BP4G8R44bEEaBhQPCGHjWUBvo9iYNVZ1AF+C95A44K7Q69QM7CcQloeHg5rA+l+ZcU
-         Lgqw+mt08B+6wXOWpabL5sG+3qL06ms68AMJXUp6vhT55bc97wYJbL33kmCyX7Kwt+
-         2feBQiG5DG0hQ==
+        b=FW+sYM13exb+1Eb7IAWJwAI3rFNhIOzFT6Tc2Ll69RZ45GOl8TW3hBX4G2xIjBUZ5
+         IIsjNxz9W33I33vfuANCeur8603JIsr0w6ubNoq/jh3hAOfqoUYT/f4hZrgKrxTd5D
+         YHQUMPrkBT4CVNEaaC3ad4KixWSF0Apd2dYcTS/Vd6UisiA1clUbziqEJYAR6chH95
+         vIhcAsGYNZ7n50P8Yqh2K0H2HSNNzj6BruwTktpF67UH5O4eXnaKoByGKpQpZDSdTL
+         Qax7BJdDtxMkvHJz9RGSH5WZIWVc+Jnn8Gn142EXH1cmN5Za/oiqdfbU6oBtfspCBY
+         /tZhxvvn0sdsw==
 From:   Mark Brown <broonie@kernel.org>
 To:     jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
         ashishsingha@nvidia.com, robh+dt@kernel.org,
@@ -39,11 +39,11 @@ To:     jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
         kyarlagadda@nvidia.com
 Cc:     skomatineni@nvidia.com, devicetree@vger.kernel.org,
         ldewangan@nvidia.com, linux-kernel@vger.kernel.org
-In-Reply-To: <20220513080828.22079-1-kyarlagadda@nvidia.com>
-References: <20220513080828.22079-1-kyarlagadda@nvidia.com>
-Subject: Re: [Patch V2 0/3] spi: tegra quad: Add Tegra Grace features
-Message-Id: <165514106736.671611.17346483728237955492.b4-ty@kernel.org>
-Date:   Mon, 13 Jun 2022 18:24:27 +0100
+In-Reply-To: <20220607114659.54314-1-kyarlagadda@nvidia.com>
+References: <20220607114659.54314-1-kyarlagadda@nvidia.com>
+Subject: Re: [Patch V3 0/3] spi: tegra quad: Add Tegra Grace features
+Message-Id: <165514106994.671611.15197276209820795833.b4-ty@kernel.org>
+Date:   Mon, 13 Jun 2022 18:24:29 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,9 +57,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 13 May 2022 13:38:25 +0530, Krishna Yarlagadda wrote:
+On Tue, 7 Jun 2022 17:16:56 +0530, Krishna Yarlagadda wrote:
 > Add multiple chip select lines supported on Tegra 241
 > 
+> Changes in v3:
+> Handle review comments.
+> Move controller's properties to "nvidia,tegra210-quad.yaml".
+> Fix style errors in peripheral yaml doc.
 > Changes in v2:
 > Split Wait polling changes to be handled later
 > Change chip name to convention followed (Grace to 241)

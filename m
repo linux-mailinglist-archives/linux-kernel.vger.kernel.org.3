@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17645495DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B44F5496EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356155AbiFMM2n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:28:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60838 "EHLO
+        id S1358500AbiFMMGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356000AbiFMMYA (ORCPT
+        with ESMTP id S1358406AbiFMMDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:24:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D680327CC7;
-        Mon, 13 Jun 2022 04:05:19 -0700 (PDT)
+        Mon, 13 Jun 2022 08:03:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA70BA2;
+        Mon, 13 Jun 2022 03:57:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 83BB4B80D31;
-        Mon, 13 Jun 2022 11:05:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E335DC3411C;
-        Mon, 13 Jun 2022 11:05:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0F53613E9;
+        Mon, 13 Jun 2022 10:57:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC921C341C7;
+        Mon, 13 Jun 2022 10:57:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118317;
-        bh=whWcgIcAKow3MItdKC2ltqT2clk6qkQ3/wx3WuEen0s=;
+        s=korg; t=1655117838;
+        bh=bZgoxt8+mkkmp6XpfosU+qkrogRbtpJT5SJTVZ1NZV0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mxBP+kwxmNoWx6jolB4EVEobBTXND9ExwhOBTFXfurPrHN0deqnx3nu1DECNxtb1R
-         pSr1vPppp8LYjQZqnGfm0FA/JKd8TS5oW4EIDYmqraCQBM4x69pTUJt57JBhgIpw2f
-         NYWG44cdALNbpowx+BYBUTMLGzFRhJkwEJFm4728=
+        b=UrNcYikUSDzgwaop0zkF0fq0neS9VQVVbIkIx1b5kTqa0vBLLgicRrlR9fRfL31je
+         5QdUUrLMfY6bcqix5MRSho0sygGiZ1IoEwtw+c6SaOAzwTXzo4wDwvRzvfOF023WIF
+         uoyrXCWko5OZEuTMcuo/MR4zWb6fb3uLq+XQ5xV4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 014/172] pwm: lp3943: Fix duty calculation in case period was clamped
+        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 4.19 150/287] ext4: avoid cycles in directory h-tree
 Date:   Mon, 13 Jun 2022 12:09:34 +0200
-Message-Id: <20220613094853.880833714@linuxfoundation.org>
+Message-Id: <20220613094928.425440227@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,37 +54,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit 5e3b07ca5cc78cd4a987e78446849e41288d87cb ]
+commit 3ba733f879c2a88910744647e41edeefbc0d92b2 upstream.
 
-The hardware only supports periods <= 1.6 ms and if a bigger period is
-requested it is clamped to 1.6 ms. In this case duty_cycle might be bigger
-than 1.6 ms and then the duty cycle register is written with a value
-bigger than LP3943_MAX_DUTY. So clamp duty_cycle accordingly.
+A maliciously corrupted filesystem can contain cycles in the h-tree
+stored inside a directory. That can easily lead to the kernel corrupting
+tree nodes that were already verified under its hands while doing a node
+split and consequently accessing unallocated memory. Fix the problem by
+verifying traversed block numbers are unique.
 
-Fixes: af66b3c0934e ("pwm: Add LP3943 PWM driver")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Signed-off-by: Thierry Reding <thierry.reding@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220518093332.13986-2-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pwm/pwm-lp3943.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/ext4/namei.c |   22 +++++++++++++++++++---
+ 1 file changed, 19 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/pwm/pwm-lp3943.c b/drivers/pwm/pwm-lp3943.c
-index bf3f14fb5f24..05e4120fd702 100644
---- a/drivers/pwm/pwm-lp3943.c
-+++ b/drivers/pwm/pwm-lp3943.c
-@@ -125,6 +125,7 @@ static int lp3943_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
- 	if (err)
- 		return err;
+--- a/fs/ext4/namei.c
++++ b/fs/ext4/namei.c
+@@ -748,12 +748,14 @@ static struct dx_frame *
+ dx_probe(struct ext4_filename *fname, struct inode *dir,
+ 	 struct dx_hash_info *hinfo, struct dx_frame *frame_in)
+ {
+-	unsigned count, indirect;
++	unsigned count, indirect, level, i;
+ 	struct dx_entry *at, *entries, *p, *q, *m;
+ 	struct dx_root *root;
+ 	struct dx_frame *frame = frame_in;
+ 	struct dx_frame *ret_err = ERR_PTR(ERR_BAD_DX_DIR);
+ 	u32 hash;
++	ext4_lblk_t block;
++	ext4_lblk_t blocks[EXT4_HTREE_LEVEL];
  
-+	duty_ns = min(duty_ns, period_ns);
- 	val = (u8)(duty_ns * LP3943_MAX_DUTY / period_ns);
+ 	memset(frame_in, 0, EXT4_HTREE_LEVEL * sizeof(frame_in[0]));
+ 	frame->bh = ext4_read_dirblock(dir, 0, INDEX);
+@@ -809,6 +811,8 @@ dx_probe(struct ext4_filename *fname, st
+ 	}
  
- 	return lp3943_write_byte(lp3943, reg_duty, val);
--- 
-2.35.1
-
+ 	dxtrace(printk("Look up %x", hash));
++	level = 0;
++	blocks[0] = 0;
+ 	while (1) {
+ 		count = dx_get_count(entries);
+ 		if (!count || count > dx_get_limit(entries)) {
+@@ -850,15 +854,27 @@ dx_probe(struct ext4_filename *fname, st
+ 			       dx_get_block(at)));
+ 		frame->entries = entries;
+ 		frame->at = at;
+-		if (!indirect--)
++
++		block = dx_get_block(at);
++		for (i = 0; i <= level; i++) {
++			if (blocks[i] == block) {
++				ext4_warning_inode(dir,
++					"dx entry: tree cycle block %u points back to block %u",
++					blocks[level], block);
++				goto fail;
++			}
++		}
++		if (++level > indirect)
+ 			return frame;
++		blocks[level] = block;
+ 		frame++;
+-		frame->bh = ext4_read_dirblock(dir, dx_get_block(at), INDEX);
++		frame->bh = ext4_read_dirblock(dir, block, INDEX);
+ 		if (IS_ERR(frame->bh)) {
+ 			ret_err = (struct dx_frame *) frame->bh;
+ 			frame->bh = NULL;
+ 			goto fail;
+ 		}
++
+ 		entries = ((struct dx_node *) frame->bh->b_data)->entries;
+ 
+ 		if (dx_get_limit(entries) != dx_node_limit(dir)) {
 
 

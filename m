@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F9FC5498BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31269548C10
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241843AbiFMOpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
+        id S1381175AbiFMOH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385642AbiFMOni (ORCPT
+        with ESMTP id S1380901AbiFMOCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:43:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00B6B2E8A;
-        Mon, 13 Jun 2022 04:50:51 -0700 (PDT)
+        Mon, 13 Jun 2022 10:02:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081198FD41;
+        Mon, 13 Jun 2022 04:38:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7782FB80EE6;
-        Mon, 13 Jun 2022 11:50:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C871CC341C6;
-        Mon, 13 Jun 2022 11:50:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 517C3B80E2C;
+        Mon, 13 Jun 2022 11:38:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C31BDC34114;
+        Mon, 13 Jun 2022 11:38:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655121045;
-        bh=O1BECb1BwhYEIW1CUebpdzDbEJQLtGkgaLnnWW6lRNQ=;
+        s=korg; t=1655120295;
+        bh=wY5OO8+bRJitJI7tVcOO8KmKkYfRGZhRGEXSNp5PWHo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m86mfXN9srmtNV2v94lh/z1MWclq3obJTDDr4PtXMPp/9NLceiziPR8uJ1KGpyVU4
-         95kk+v2+FgnAMwQL4ITLei0/QRETZ9WRwaL5ROpAKnakJCxcNNHu1z3tGyCuQqnk27
-         WcaI/h+TywEMyxoCCPn2vBIfO2WpExHbDFzh/uhk=
+        b=fHHDVKufRer6tPLS17BjRXtowjiFFZsx0vdGCF/jOj7gGA+e4Bof079ETj3zqL0WA
+         ZSZ6WvwmdJy1xtk5QDvRmJ36QaLi/cCme0ci1J7f8MMhs8wnOiMCaWPAaDMboIigVb
+         hdc11BLErf8RQEUp9Km0HJLQWVjqEuU9XwKbVXIM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 252/298] vringh: Fix loop descriptors check in the indirect cases
+        stable@vger.kernel.org,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        Olivier Matz <olivier.matz@6wind.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.18 321/339] ixgbe: fix unexpected VLAN Rx in promisc mode on VF
 Date:   Mon, 13 Jun 2022 12:12:26 +0200
-Message-Id: <20220613094932.724487421@linuxfoundation.org>
+Message-Id: <20220613094936.482964838@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,63 +57,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xie Yongji <xieyongji@bytedance.com>
+From: Olivier Matz <olivier.matz@6wind.com>
 
-[ Upstream commit dbd29e0752286af74243cf891accf472b2f3edd8 ]
+commit 7bb0fb7c63df95d6027dc50d6af3bc3bbbc25483 upstream.
 
-We should use size of descriptor chain to test loop condition
-in the indirect case. And another statistical count is also introduced
-for indirect descriptors to avoid conflict with the statistical count
-of direct descriptors.
+When the promiscuous mode is enabled on a VF, the IXGBE_VMOLR_VPE
+bit (VLAN Promiscuous Enable) is set. This means that the VF will
+receive packets whose VLAN is not the same than the VLAN of the VF.
 
-Fixes: f87d0fbb5798 ("vringh: host-side implementation of virtio rings.")
-Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-Signed-off-by: Fam Zheng <fam.zheng@bytedance.com>
-Message-Id: <20220505100910.137-1-xieyongji@bytedance.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+For instance, in this situation:
+
+┌────────┐    ┌────────┐    ┌────────┐
+│        │    │        │    │        │
+│        │    │        │    │        │
+│     VF0├────┤VF1  VF2├────┤VF3     │
+│        │    │        │    │        │
+└────────┘    └────────┘    └────────┘
+   VM1           VM2           VM3
+
+vf 0:  vlan 1000
+vf 1:  vlan 1000
+vf 2:  vlan 1001
+vf 3:  vlan 1001
+
+If we tcpdump on VF3, we see all the packets, even those transmitted
+on vlan 1000.
+
+This behavior prevents to bridge VF1 and VF2 in VM2, because it will
+create a loop: packets transmitted on VF1 will be received by VF2 and
+vice-versa, and bridged again through the software bridge.
+
+This patch remove the activation of VLAN Promiscuous when a VF enables
+the promiscuous mode. However, the IXGBE_VMOLR_UPE bit (Unicast
+Promiscuous) is kept, so that a VF receives all packets that has the
+same VLAN, whatever the destination MAC address.
+
+Fixes: 8443c1a4b192 ("ixgbe, ixgbevf: Add new mbox API xcast mode")
+Cc: stable@vger.kernel.org
+Cc: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Signed-off-by: Olivier Matz <olivier.matz@6wind.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/vhost/vringh.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-index 14e2043d7685..eab55accf381 100644
---- a/drivers/vhost/vringh.c
-+++ b/drivers/vhost/vringh.c
-@@ -292,7 +292,7 @@ __vringh_iov(struct vringh *vrh, u16 i,
- 	     int (*copy)(const struct vringh *vrh,
- 			 void *dst, const void *src, size_t len))
- {
--	int err, count = 0, up_next, desc_max;
-+	int err, count = 0, indirect_count = 0, up_next, desc_max;
- 	struct vring_desc desc, *descs;
- 	struct vringh_range range = { -1ULL, 0 }, slowrange;
- 	bool slow = false;
-@@ -349,7 +349,12 @@ __vringh_iov(struct vringh *vrh, u16 i,
- 			continue;
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
+@@ -1208,9 +1208,9 @@ static int ixgbe_update_vf_xcast_mode(st
+ 			return -EPERM;
  		}
  
--		if (count++ == vrh->vring.num) {
-+		if (up_next == -1)
-+			count++;
-+		else
-+			indirect_count++;
-+
-+		if (count > vrh->vring.num || indirect_count > desc_max) {
- 			vringh_bad("Descriptor loop in %p", descs);
- 			err = -ELOOP;
- 			goto fail;
-@@ -411,6 +416,7 @@ __vringh_iov(struct vringh *vrh, u16 i,
- 				i = return_from_indirect(vrh, &up_next,
- 							 &descs, &desc_max);
- 				slow = false;
-+				indirect_count = 0;
- 			} else
- 				break;
- 		}
--- 
-2.35.1
-
+-		disable = 0;
++		disable = IXGBE_VMOLR_VPE;
+ 		enable = IXGBE_VMOLR_BAM | IXGBE_VMOLR_ROMPE |
+-			 IXGBE_VMOLR_MPE | IXGBE_VMOLR_UPE | IXGBE_VMOLR_VPE;
++			 IXGBE_VMOLR_MPE | IXGBE_VMOLR_UPE;
+ 		break;
+ 	default:
+ 		return -EOPNOTSUPP;
 
 

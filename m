@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5173C549913
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9FD54984A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355928AbiFMLmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:42:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
+        id S1353649AbiFMLYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355012AbiFMLg6 (ORCPT
+        with ESMTP id S1353694AbiFMLQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:36:58 -0400
+        Mon, 13 Jun 2022 07:16:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6455545046;
-        Mon, 13 Jun 2022 03:48:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB9713DE6;
+        Mon, 13 Jun 2022 03:39:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59B3061283;
-        Mon, 13 Jun 2022 10:48:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68C70C34114;
-        Mon, 13 Jun 2022 10:48:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C7BC60AE6;
+        Mon, 13 Jun 2022 10:39:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58DB1C34114;
+        Mon, 13 Jun 2022 10:39:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117292;
-        bh=pUOebfwrLtqNLWZkg1nxnGxWaIJhgX1AI/gxr2smE+c=;
+        s=korg; t=1655116746;
+        bh=TEyi3OH9X77Dmi3sI/sc/3+TjArekS69CqgUMczDuug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cHtaiKDs+VJpa+0PsFSAX59aHI7pfPQtz5HU/mszDm3A1UVVp9I/r7GrK52lDloso
-         rrqzO7OxWRUWA2uek5Ko8gyKFoAhiGQuB62Qs6+jQhXQUOjnYwpkEEz3zTz+p/+xy4
-         3Dm0y8BVIj3IdfIfHqg788Tg74pDDwN5NYZfb+t4=
+        b=HpwPUKoCibgZKeO+eZIMch+t+sCViCgP9vVdnffV7dMIl2u42x0D1S/k/b/nNQmPA
+         BfK2GLMGueroC0pqrtJKi4ShLBEoGlk7mdz/jOkky9++qWyVCbJBOp5WK2iXpYqNIH
+         u6734xWrkAuBGNWtgHk/a9QBY8dMawPPbiubI/eI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nikolay Borisov <nborisov@suse.com>,
-        Qu Wenruo <wqu@suse.com>, David Sterba <dsterba@suse.com>
-Subject: [PATCH 4.19 007/287] btrfs: add "0x" prefix for unsupported optional features
-Date:   Mon, 13 Jun 2022 12:07:11 +0200
-Message-Id: <20220613094924.070422538@linuxfoundation.org>
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 159/411] soc: qcom: smsm: Fix missing of_node_put() in smsm_parse_ipc
+Date:   Mon, 13 Jun 2022 12:07:12 +0200
+Message-Id: <20220613094933.428875205@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Wenruo <wqu@suse.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit d5321a0fa8bc49f11bea0b470800962c17d92d8f upstream.
+[ Upstream commit aad66a3c78da668f4506356c2fdb70b7a19ecc76 ]
 
-The following error message lack the "0x" obviously:
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-  cannot mount because of unsupported optional features (4000)
-
-Add the prefix to make it less confusing. This can happen on older
-kernels that try to mount a filesystem with newer features so it makes
-sense to backport to older trees.
-
-CC: stable@vger.kernel.org # 4.14+
-Reviewed-by: Nikolay Borisov <nborisov@suse.com>
-Signed-off-by: Qu Wenruo <wqu@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: c97c4090ff72 ("soc: qcom: smsm: Add driver for Qualcomm SMSM")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220308073648.24634-1-linmq006@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/disk-io.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/soc/qcom/smsm.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/btrfs/disk-io.c
-+++ b/fs/btrfs/disk-io.c
-@@ -2855,7 +2855,7 @@ int open_ctree(struct super_block *sb,
- 		~BTRFS_FEATURE_INCOMPAT_SUPP;
- 	if (features) {
- 		btrfs_err(fs_info,
--		    "cannot mount because of unsupported optional features (%llx)",
-+		    "cannot mount because of unsupported optional features (0x%llx)",
- 		    features);
- 		err = -EINVAL;
- 		goto fail_alloc;
-@@ -2915,7 +2915,7 @@ int open_ctree(struct super_block *sb,
- 		~BTRFS_FEATURE_COMPAT_RO_SUPP;
- 	if (!sb_rdonly(sb) && features) {
- 		btrfs_err(fs_info,
--	"cannot mount read-write because of unsupported optional features (%llx)",
-+	"cannot mount read-write because of unsupported optional features (0x%llx)",
- 		       features);
- 		err = -EINVAL;
- 		goto fail_alloc;
+diff --git a/drivers/soc/qcom/smsm.c b/drivers/soc/qcom/smsm.c
+index c428d0f78816..6564f15c5319 100644
+--- a/drivers/soc/qcom/smsm.c
++++ b/drivers/soc/qcom/smsm.c
+@@ -359,6 +359,7 @@ static int smsm_parse_ipc(struct qcom_smsm *smsm, unsigned host_id)
+ 		return 0;
+ 
+ 	host->ipc_regmap = syscon_node_to_regmap(syscon);
++	of_node_put(syscon);
+ 	if (IS_ERR(host->ipc_regmap))
+ 		return PTR_ERR(host->ipc_regmap);
+ 
+-- 
+2.35.1
+
 
 

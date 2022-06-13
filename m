@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D1A548B29
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66202548E76
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358079AbiFML7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55934 "EHLO
+        id S1357944AbiFMM7e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:59:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356650AbiFMLux (ORCPT
+        with ESMTP id S1356815AbiFMMyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:50:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1361134;
-        Mon, 13 Jun 2022 03:55:00 -0700 (PDT)
+        Mon, 13 Jun 2022 08:54:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465E26352F;
+        Mon, 13 Jun 2022 04:13:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FFB6B80E07;
-        Mon, 13 Jun 2022 10:54:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 619CCC34114;
-        Mon, 13 Jun 2022 10:54:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E11F4B80E93;
+        Mon, 13 Jun 2022 11:12:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26DABC34114;
+        Mon, 13 Jun 2022 11:12:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117697;
-        bh=joiCWW40TiZXDs5a67F1rdFj68GRlZTtQcAh3LvNEkY=;
+        s=korg; t=1655118776;
+        bh=HRL1W3H3oXzbvv3ZmLRhHB16qHoYyZT0QHPA9gHqHuw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jd5l1M03wmoqQ2N1+Vx97pn4jXgmgGE4M7jittEkx2cZtwMhzblV3mzpvX88SiIhM
-         TyS4f7eRlQYWcEGk79Hn6JhhnZ0KkoGRXPcIKCisKFkYGrgUjXlWfQyOXBkmm0ILRI
-         vaqnbkeuzBBfVy3/t1MDtdQjfn4xXrMyrSbRabXk=
+        b=QPCdqhhQeQb97cbzLVd3zTWgW38Rx2/+CsvsKO8mUhWR9elMAtH4ft/x7D654VgDx
+         LPdDqgndKher8UgUdnHi7GcAto9lFnZwTk2yD6muJ2WubtlsOAdlNJOOa5e8733cPP
+         SgY6DKGRHHdsxxnSQAaeIQOC6kWFOmy+peUuywkc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 087/287] x86/mm: Cleanup the control_va_addr_alignment() __setup handler
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 009/247] serial: 8250_aspeed_vuart: Fix potential NULL dereference in aspeed_vuart_probe
 Date:   Mon, 13 Jun 2022 12:08:31 +0200
-Message-Id: <20220613094926.516647239@linuxfoundation.org>
+Message-Id: <20220613094923.200706705@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 1ef64b1e89e6d4018da46e08ffc32779a31160c7 ]
+[ Upstream commit 0e0fd55719fa081de6f9e5d9e6cef48efb04d34a ]
 
-Clean up control_va_addr_alignment():
+platform_get_resource() may fail and return NULL, so we should
+better check it's return value to avoid a NULL pointer dereference.
 
-a. Make '=' required instead of optional (as documented).
-b. Print a warning if an invalid option value is used.
-c. Return 1 from the __setup handler when an invalid option value is
-   used. This prevents the kernel from polluting init's (limited)
-   environment space with the entire string.
-
-Fixes: dfb09f9b7ab0 ("x86, amd: Avoid cache aliasing penalties on AMD family 15h")
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Link: https://lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Link: https://lore.kernel.org/r/20220315001045.7680-1-rdunlap@infradead.org
+Fixes: 54da3e381c2b ("serial: 8250_aspeed_vuart: use UPF_IOREMAP to set up register mapping")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220404143842.16960-1-linmq006@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/sys_x86_64.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/tty/serial/8250/8250_aspeed_vuart.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/x86/kernel/sys_x86_64.c b/arch/x86/kernel/sys_x86_64.c
-index 6a78d4b36a79..9fb266c797fb 100644
---- a/arch/x86/kernel/sys_x86_64.c
-+++ b/arch/x86/kernel/sys_x86_64.c
-@@ -70,9 +70,6 @@ static int __init control_va_addr_alignment(char *str)
- 	if (*str == 0)
- 		return 1;
+diff --git a/drivers/tty/serial/8250/8250_aspeed_vuart.c b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+index c2cecc6f47db..179bb1375636 100644
+--- a/drivers/tty/serial/8250/8250_aspeed_vuart.c
++++ b/drivers/tty/serial/8250/8250_aspeed_vuart.c
+@@ -429,6 +429,8 @@ static int aspeed_vuart_probe(struct platform_device *pdev)
+ 	timer_setup(&vuart->unthrottle_timer, aspeed_vuart_unthrottle_exp, 0);
  
--	if (*str == '=')
--		str++;
--
- 	if (!strcmp(str, "32"))
- 		va_align.flags = ALIGN_VA_32;
- 	else if (!strcmp(str, "64"))
-@@ -82,11 +79,11 @@ static int __init control_va_addr_alignment(char *str)
- 	else if (!strcmp(str, "on"))
- 		va_align.flags = ALIGN_VA_32 | ALIGN_VA_64;
- 	else
--		return 0;
-+		pr_warn("invalid option value: 'align_va_addr=%s'\n", str);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return -EINVAL;
  
- 	return 1;
- }
--__setup("align_va_addr", control_va_addr_alignment);
-+__setup("align_va_addr=", control_va_addr_alignment);
- 
- SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
- 		unsigned long, prot, unsigned long, flags,
+ 	memset(&port, 0, sizeof(port));
+ 	port.port.private_data = vuart;
 -- 
 2.35.1
 

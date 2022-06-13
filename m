@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C18549179
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B087E548A50
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379071AbiFMNrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36362 "EHLO
+        id S1358601AbiFMMHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379237AbiFMNkE (ORCPT
+        with ESMTP id S1358868AbiFMMEz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:40:04 -0400
+        Mon, 13 Jun 2022 08:04:55 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A719DECA;
-        Mon, 13 Jun 2022 04:30:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDB450455;
+        Mon, 13 Jun 2022 03:57:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE618B80E93;
-        Mon, 13 Jun 2022 11:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C00BC34114;
-        Mon, 13 Jun 2022 11:30:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B512FB80D3A;
+        Mon, 13 Jun 2022 10:57:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D1CBC34114;
+        Mon, 13 Jun 2022 10:57:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119856;
-        bh=4Xyz1TaRF/XXV039t0Aul1JmJDrTFaYwd9udg5pOY3k=;
+        s=korg; t=1655117876;
+        bh=LRWRfcT9EZj9+yfD0l9tY7R/KoEQVzOpr6MYzMIoa5g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ovoP4AW1u7R8hwi/YIiBrigfPfGMbS/L7GXRQKeQKOPhR1Pdyz6JvBTdJhl4JmXnv
-         vwjB2hHFG20eJ5vSJlVWizZjIaegwGyV9g+szw0dWaktH8O2Y1ca6ZA4b4TYpa3d90
-         kG4VgjQ2EhsskVRafANPsu+ih++lJQ7HY9dkTRYk=
+        b=rhRW7YkFpl1AaTXWc38+lQ+WMmXvxmDYVAR1cxOlpNwJ6MqJIC5C9KYQ/8VOqUWYr
+         yB1iUbzAYmp98HoAIDhmJ76IzTGrMaghwC/XJvH9Phq/hmNA7ndG+uV1eunkCpsYLe
+         wBYd3sMQq6tanUZDNbQaMLoNglBK0+d00XWvwtTk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+763ae12a2ede1d99d4dc@syzkaller.appspotmail.com,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 163/339] f2fs: remove WARN_ON in f2fs_is_valid_blkaddr
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH 4.19 164/287] md: fix an incorrect NULL check in md_reload_sb
 Date:   Mon, 13 Jun 2022 12:09:48 +0200
-Message-Id: <20220613094931.626393345@linuxfoundation.org>
+Message-Id: <20220613094928.849964226@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,60 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongliang Mu <mudongliangabcd@gmail.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit dc2f78e2d4cc844a1458653d57ce1b54d4a29f21 ]
+commit 64c54d9244a4efe9bc6e9c98e13c4bbb8bb39083 upstream.
 
-Syzbot triggers two WARNs in f2fs_is_valid_blkaddr and
-__is_bitmap_valid. For example, in f2fs_is_valid_blkaddr,
-if type is DATA_GENERIC_ENHANCE or DATA_GENERIC_ENHANCE_READ,
-it invokes WARN_ON if blkaddr is not in the right range.
-The call trace is as follows:
+The bug is here:
+	if (!rdev || rdev->desc_nr != nr) {
 
- f2fs_get_node_info+0x45f/0x1070
- read_node_page+0x577/0x1190
- __get_node_page.part.0+0x9e/0x10e0
- __get_node_page
- f2fs_get_node_page+0x109/0x180
- do_read_inode
- f2fs_iget+0x2a5/0x58b0
- f2fs_fill_super+0x3b39/0x7ca0
+The list iterator value 'rdev' will *always* be set and non-NULL
+by rdev_for_each_rcu(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty or no element
+found (In fact, it will be a bogus pointer to an invalid struct
+object containing the HEAD). Otherwise it will bypass the check
+and lead to invalid memory access passing the check.
 
-Fix these two WARNs by replacing WARN_ON with dump_stack.
+To fix the bug, use a new variable 'iter' as the list iterator,
+while using the original variable 'pdev' as a dedicated pointer to
+point to the found element.
 
-Reported-by: syzbot+763ae12a2ede1d99d4dc@syzkaller.appspotmail.com
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 70bcecdb1534 ("md-cluster: Improve md_reload_sb to be less error prone")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Signed-off-by: Song Liu <song@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/f2fs/checkpoint.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/md/md.c |   10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-index 909085a78f9c..71b1e93cbe0c 100644
---- a/fs/f2fs/checkpoint.c
-+++ b/fs/f2fs/checkpoint.c
-@@ -158,7 +158,7 @@ static bool __is_bitmap_valid(struct f2fs_sb_info *sbi, block_t blkaddr,
- 		f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit bitmap:%d",
- 			 blkaddr, exist);
- 		set_sbi_flag(sbi, SBI_NEED_FSCK);
--		WARN_ON(1);
-+		dump_stack();
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -9325,16 +9325,18 @@ static int read_rdev(struct mddev *mddev
+ 
+ void md_reload_sb(struct mddev *mddev, int nr)
+ {
+-	struct md_rdev *rdev;
++	struct md_rdev *rdev = NULL, *iter;
+ 	int err;
+ 
+ 	/* Find the rdev */
+-	rdev_for_each_rcu(rdev, mddev) {
+-		if (rdev->desc_nr == nr)
++	rdev_for_each_rcu(iter, mddev) {
++		if (iter->desc_nr == nr) {
++			rdev = iter;
+ 			break;
++		}
  	}
- 	return exist;
- }
-@@ -196,7 +196,7 @@ bool f2fs_is_valid_blkaddr(struct f2fs_sb_info *sbi,
- 			f2fs_warn(sbi, "access invalid blkaddr:%u",
- 				  blkaddr);
- 			set_sbi_flag(sbi, SBI_NEED_FSCK);
--			WARN_ON(1);
-+			dump_stack();
- 			return false;
- 		} else {
- 			return __is_bitmap_valid(sbi, blkaddr, type);
--- 
-2.35.1
-
+ 
+-	if (!rdev || rdev->desc_nr != nr) {
++	if (!rdev) {
+ 		pr_warn("%s: %d Could not find rdev with nr %d\n", __func__, __LINE__, nr);
+ 		return;
+ 	}
 
 

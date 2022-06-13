@@ -2,442 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DD15493BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38DDD549A4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:42:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241925AbiFMPgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 11:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
+        id S242537AbiFMRmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244020AbiFMPg3 (ORCPT
+        with ESMTP id S244262AbiFMRjW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 11:36:29 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228FE37A1E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:09:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655125782; x=1686661782;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=8BT33jqkr0Mey1KPDiX0RaT6a0Pzs/wL0Ht2rrQ6CV8=;
-  b=kF0R6S4T41OzFhQn7UGkvgxkcGrGIXg4rsCiWXaF82LUkhropyl08dvE
-   HEijZzXq2Ml8CuHHkWonnTSUCKa5GgRMrAS+NHPlQv4W7MF9I9IJXrRVE
-   V8y//haWTuK4IqTWKVRNg9vSxWnoQRDAP2DgCbiJQI07AmYvBhz3wT6Dp
-   sFXXpBgeBpbqKLMMmcjiPYsIPSKQIhrD5W37d2BodXrSILHGDfhjk92Xp
-   2MKl1FT5jc4MvswIjru1ebe0M2jehxhA11EvV8UB58aeMOP9GmiWQZ3vE
-   IjwzoIYe+SfpQ5om81GooC91TuDB7iB2UQfxSQOgtBQochxa0y6SDrLan
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="261312355"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="261312355"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 06:07:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="686037911"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Jun 2022 06:07:45 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0jnE-000KpH-N5;
-        Mon, 13 Jun 2022 13:07:44 +0000
-Date:   Mon, 13 Jun 2022 21:07:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/070-audio 2/20] drivers/dma/apple-admac.c:202:26:
- warning: format '%llx' expects argument of type 'long long unsigned int',
- but argument 5 has type 'dma_addr_t' {aka 'unsigned int'}
-Message-ID: <202206132033.WzFAP6E9-lkp@intel.com>
+        Mon, 13 Jun 2022 13:39:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09C5437BC7;
+        Mon, 13 Jun 2022 06:08:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DB44DD6E;
+        Mon, 13 Jun 2022 06:08:46 -0700 (PDT)
+Received: from [192.168.99.12] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C294E3F792;
+        Mon, 13 Jun 2022 06:08:45 -0700 (PDT)
+Message-ID: <ae8bdc2c-a444-74c1-70d5-c97d27b22ec5@foss.arm.com>
+Date:   Mon, 13 Jun 2022 14:08:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH 2/3] perf test: Shell - only run .sh shell files to skip
+ other files
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+References: <20220309122859.31487-1-carsten.haitzler@foss.arm.com>
+ <20220309122859.31487-2-carsten.haitzler@foss.arm.com>
+ <20220410022846.GB14326@leoy-ThinkPad-X240s>
+ <9ab780aa-7e78-b0f9-21ed-cf30f41f8fab@foss.arm.com>
+ <20220526101423.GB795802@leoy-ThinkPad-X240s>
+From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
+Organization: Arm Ltd.
+In-Reply-To: <20220526101423.GB795802@leoy-ThinkPad-X240s>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/AsahiLinux/linux bits/070-audio
-head:   401ef594286e6abfe89c2d92664087bc5d6ca657
-commit: d2b3a34a7f529cd3e338989d7b4c71981180ad30 [2/20] dmaengine: apple-admac: Add Apple ADMAC driver
-config: h8300-allyesconfig (https://download.01.org/0day-ci/archive/20220613/202206132033.WzFAP6E9-lkp@intel.com/config)
-compiler: h8300-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/AsahiLinux/linux/commit/d2b3a34a7f529cd3e338989d7b4c71981180ad30
-        git remote add asahilinux https://github.com/AsahiLinux/linux
-        git fetch --no-tags asahilinux bits/070-audio
-        git checkout d2b3a34a7f529cd3e338989d7b4c71981180ad30
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=h8300 SHELL=/bin/bash drivers/dma/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/build_bug.h:5,
-                    from include/linux/bits.h:22,
-                    from drivers/dma/apple-admac.c:1:
-   include/linux/scatterlist.h: In function 'sg_set_buf':
-   include/asm-generic/page.h:89:51: warning: ordered comparison of pointer with null pointer [-Wextra]
-      89 | #define virt_addr_valid(kaddr)  (((void *)(kaddr) >= (void *)PAGE_OFFSET) && \
-         |                                                   ^~
-   include/linux/compiler.h:78:45: note: in definition of macro 'unlikely'
-      78 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   include/linux/scatterlist.h:160:9: note: in expansion of macro 'BUG_ON'
-     160 |         BUG_ON(!virt_addr_valid(buf));
-         |         ^~~~~~
-   include/linux/scatterlist.h:160:17: note: in expansion of macro 'virt_addr_valid'
-     160 |         BUG_ON(!virt_addr_valid(buf));
-         |                 ^~~~~~~~~~~~~~~
-   In file included from include/linux/printk.h:555,
-                    from include/asm-generic/bug.h:22,
-                    from arch/h8300/include/asm/bug.h:8,
-                    from include/linux/bug.h:5,
-                    from include/linux/thread_info.h:13,
-                    from include/asm-generic/current.h:5,
-                    from ./arch/h8300/include/generated/asm/current.h:1,
-                    from include/linux/sched.h:12,
-                    from include/linux/ratelimit.h:6,
-                    from include/linux/dev_printk.h:16,
-                    from include/linux/device.h:15,
-                    from drivers/dma/apple-admac.c:3:
-   drivers/dma/apple-admac.c: In function 'admac_cyclic_write_one_desc':
->> drivers/dma/apple-admac.c:202:26: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 5 has type 'dma_addr_t' {aka 'unsigned int'} [-Wformat=]
-     202 |         dev_dbg(ad->dev, "ch%d descriptor: addr=0x%llx len=0x%x flags=0x%lx\n",
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dynamic_debug.h:134:29: note: in definition of macro '__dynamic_func_call'
-     134 |                 func(&id, ##__VA_ARGS__);               \
-         |                             ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:166:9: note: in expansion of macro '_dynamic_func_call'
-     166 |         _dynamic_func_call(fmt,__dynamic_dev_dbg,               \
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:9: note: in expansion of macro 'dynamic_dev_dbg'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:155:30: note: in expansion of macro 'dev_fmt'
-     155 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                              ^~~~~~~
-   drivers/dma/apple-admac.c:202:9: note: in expansion of macro 'dev_dbg'
-     202 |         dev_dbg(ad->dev, "ch%d descriptor: addr=0x%llx len=0x%x flags=0x%lx\n",
-         |         ^~~~~~~
-   drivers/dma/apple-admac.c:202:54: note: format string is defined here
-     202 |         dev_dbg(ad->dev, "ch%d descriptor: addr=0x%llx len=0x%x flags=0x%lx\n",
-         |                                                   ~~~^
-         |                                                      |
-         |                                                      long long unsigned int
-         |                                                   %x
-   drivers/dma/apple-admac.c:206:53: warning: right shift count >= width of type [-Wshift-count-overflow]
-     206 |         admac_poke(ad, REG_DESC_WRITE(channo), addr >> 32);
-         |                                                     ^~
-   drivers/dma/apple-admac.c: At top level:
->> drivers/dma/apple-admac.c:260:5: warning: no previous prototype for 'admac_cyclic_read_residue' [-Wmissing-prototypes]
-     260 | u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_GEM_SHMEM_HELPER
-   Depends on HAS_IOMEM && DRM && MMU
-   Selected by
-   - DRM_SSD130X && HAS_IOMEM && DRM
 
 
-vim +202 drivers/dma/apple-admac.c
+On 5/26/22 11:14, Leo Yan wrote:
+> On Thu, Apr 21, 2022 at 05:21:27PM +0100, Carsten Haitzler wrote:
+>> On 4/10/22 03:28, Leo Yan wrote:
+>>> On Wed, Mar 09, 2022 at 12:28:58PM +0000, carsten.haitzler@foss.arm.com wrote:
+>>>> From: Carsten Haitzler <carsten.haitzler@arm.com>
+>>>>
+>>>> You edit your scripts in the tests and end up with your usual shell
+>>>> backup files with ~ or .bak or something else at the end, but then your
+>>>> next perf test run wants to run the backups too. You might also have perf
+>>>> .data files in the directory or something else undesireable as well. You end
+>>>> up chasing which test is the one you edited and the backup and have to keep
+>>>> removing all the backup files, so automatically skip any files that are
+>>>> not plain *.sh scripts to limit the time wasted in chasing ghosts.
+>>>>
+>>>> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+>>>>
+>>>> ---
+>>>>    tools/perf/tests/builtin-test.c | 17 +++++++++++++++--
+>>>>    1 file changed, 15 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/tools/perf/tests/builtin-test.c b/tools/perf/tests/builtin-test.c
+>>>> index 3c34cb766724..3a02ba7a7a89 100644
+>>>> --- a/tools/perf/tests/builtin-test.c
+>>>> +++ b/tools/perf/tests/builtin-test.c
+>>>> @@ -296,9 +296,22 @@ static const char *shell_test__description(char *description, size_t size,
+>>>>    #define for_each_shell_test(entlist, nr, base, ent)	                \
+>>>>    	for (int __i = 0; __i < nr && (ent = entlist[__i]); __i++)	\
+>>>> -		if (!is_directory(base, ent) && \
+>>>> +		if (ent->d_name[0] != '.' && \
+>>>> +			!is_directory(base, ent) && \
+>>>>    			is_executable_file(base, ent) && \
+>>>> -			ent->d_name[0] != '.')
+>>>> +			is_shell_script(ent->d_name))
+>>>
+>>> Just nitpick: since multiple conditions are added, seems to me it's good
+>>> to use a single function is_executable_shell_script() to make decision
+>>> if a file is an executable shell script.
+>>
+>> I'd certainly make a function if this was being re-used, but as the "coding
+>> pattern" was to do all the tests already inside the if() in only one place,
+>> I kept with the style there and didn't change the code that didn't need
+>> changing. I can rewrite this code and basically make a function that is just
+>> an if ...:
+>>
+>> bool is_exe_shell_script(const char *base, struct dirent *ent) {
+>>     return ent->d_name[0] != '.'         && !is_directory(base, ent) &&
+>>            is_executable_file(base, ent) && is_shell_script(ent->d_name);
+>> }
+>>
+>> And macro becomes:
+>>
+>> #define for_each_shell_test(entlist, nr, base, ent) \
+>>    for (int __i = 0; __i < nr && (ent = entlist[__i]); __i++) \
+>>      if (is_shell(base, ent))
+> 
+> Sorry for long latency.
 
-   > 3	#include <linux/device.h>
-     4	#include <linux/init.h>
-     5	#include <linux/module.h>
-     6	#include <linux/of_device.h>
-     7	#include <linux/of_dma.h>
-     8	#include <linux/interrupt.h>
-     9	#include <linux/spinlock.h>
-    10	#include <linux/pm_runtime.h>
-    11	
-    12	#include "dmaengine.h"
-    13	
-    14	#define NCHANNELS_MAX	64
-    15	
-    16	#define RING_WRITE_SLOT		GENMASK(1, 0)
-    17	#define RING_READ_SLOT		GENMASK(5, 4)
-    18	#define RING_FULL  		BIT(9)
-    19	#define RING_EMPTY 		BIT(8)
-    20	#define RING_ERR   		BIT(10)
-    21	
-    22	#define STATUS_DESC_DONE	BIT(0)
-    23	#define STATUS_ERR		BIT(6)
-    24	
-    25	#define FLAG_DESC_NOTIFY	BIT(16)
-    26	
-    27	#define REG_TX_START		0x0000
-    28	#define REG_TX_STOP		0x0004
-    29	#define REG_RX_START		0x0008
-    30	#define REG_RX_STOP		0x000c
-    31	
-    32	#define REG_CHAN_CTL(ch)	(0x8000 + (ch)*0x200)
-    33	#define REG_CHAN_CTL_RST_RINGS	BIT(0)
-    34	
-    35	#define REG_DESC_RING(ch)	(0x8070 + (ch)*0x200)
-    36	#define REG_REPORT_RING(ch)	(0x8074 + (ch)*0x200)
-    37	
-    38	#define REG_RESIDUE(ch)		(0x8064 + (ch)*0x200)
-    39	
-    40	#define REG_BUS_WIDTH(ch)	(0x8040 + (ch)*0x200)
-    41	
-    42	#define BUS_WIDTH_8BIT		0x00
-    43	#define BUS_WIDTH_16BIT		0x01
-    44	#define BUS_WIDTH_32BIT		0x02
-    45	#define BUS_WIDTH_FRAME_2_WORDS	0x10
-    46	#define BUS_WIDTH_FRAME_4_WORDS	0x20
-    47	
-    48	#define REG_CHAN_BURSTSIZE(ch)  (0x8054 + (ch)*0x200)
-    49	
-    50	#define REG_DESC_WRITE(ch)	(0x10000 + (ch / 2) * 0x4 + (ch & 1) * 0x4000)
-    51	#define REG_REPORT_READ(ch)	(0x10100 + (ch / 2) * 0x4 + (ch & 1) * 0x4000)
-    52	
-    53	#define IRQ_INDEX_MAX		3
-    54	
-    55	#define REG_TX_INTSTATE(idx)		(0x0030 + (idx) * 4)
-    56	#define REG_RX_INTSTATE(idx)		(0x0040 + (idx) * 4)
-    57	#define REG_CHAN_INTSTATUS(ch,idx)	(0x8010 + (ch) * 0x200 + (idx) * 4)
-    58	#define REG_CHAN_INTMASK(ch,idx)	(0x8020 + (ch) * 0x200 + (idx) * 4)
-    59	
-    60	struct admac_data;
-    61	struct admac_tx;
-    62	
-    63	struct admac_chan {
-    64		int no;
-    65		struct admac_data *host;
-    66		struct dma_chan chan;
-    67		struct tasklet_struct tasklet;
-    68	
-    69		spinlock_t lock;
-    70		struct admac_tx *current_tx;
-    71		int nperiod_acks;
-    72	
-    73		struct list_head submitted;
-    74		struct list_head issued;
-    75	};
-    76	
-    77	struct admac_data {
-    78		struct dma_device dma;
-    79		struct device *dev;
-    80		__iomem void *base;
-    81	
-    82		int irq_index;
-    83		int nchannels;
-    84		struct admac_chan channels[];
-    85	};
-    86	
-    87	struct admac_tx {
-    88		struct dma_async_tx_descriptor tx;
-    89		bool cyclic;
-    90		dma_addr_t buf_addr;
-    91		dma_addr_t buf_end;
-    92		size_t buf_len;
-    93		size_t period_len;
-    94	
-    95		size_t submitted_pos;
-    96		size_t reclaimed_pos;
-    97	
-    98		struct list_head node;
-    99	};
-   100	
-   101	static void admac_poke(struct admac_data *ad, int reg, u32 val)
-   102	{
-   103		writel_relaxed(val, ad->base + reg);
-   104	}
-   105	
-   106	static u32 admac_peek(struct admac_data *ad, int reg)
-   107	{
-   108		return readl_relaxed(ad->base + reg);
-   109	}
-   110	
-   111	static void admac_modify(struct admac_data *ad, int reg, u32 mask, u32 val)
-   112	{
-   113		void __iomem *addr = ad->base + reg;
-   114		u32 curr = readl_relaxed(addr);
-   115	
-   116		writel_relaxed((curr & ~mask) | (val & mask), addr);
-   117	}
-   118	
-   119	static struct admac_chan *to_admac_chan(struct dma_chan *chan)
-   120	{
-   121		return container_of(chan, struct admac_chan, chan);
-   122	}
-   123	
-   124	static struct admac_tx *to_admac_tx(struct dma_async_tx_descriptor *tx)
-   125	{
-   126		return container_of(tx, struct admac_tx, tx);
-   127	}
-   128	
-   129	static enum dma_transfer_direction admac_chan_direction(int channo)
-   130	{
-   131		return (channo & 1) ? DMA_DEV_TO_MEM : DMA_MEM_TO_DEV;
-   132	}
-   133	
-   134	static dma_cookie_t admac_tx_submit(struct dma_async_tx_descriptor *tx)
-   135	{
-   136		struct admac_tx *adtx = to_admac_tx(tx);
-   137		struct admac_chan *adchan = to_admac_chan(tx->chan);
-   138		unsigned long flags;
-   139		dma_cookie_t cookie;
-   140	
-   141		spin_lock_irqsave(&adchan->lock, flags);
-   142		cookie = dma_cookie_assign(tx);
-   143		list_add_tail(&adtx->node, &adchan->submitted);
-   144		spin_unlock_irqrestore(&adchan->lock, flags);
-   145	
-   146		return cookie;
-   147	}
-   148	
-   149	static int admac_desc_free(struct dma_async_tx_descriptor *tx)
-   150	{
-   151		struct admac_tx *adtx = to_admac_tx(tx);
-   152		devm_kfree(to_admac_chan(tx->chan)->host->dev, adtx);
-   153		return 0;
-   154	}
-   155	
-   156	static struct dma_async_tx_descriptor *admac_prep_dma_cyclic(
-   157			struct dma_chan *chan, dma_addr_t buf_addr, size_t buf_len,
-   158			size_t period_len, enum dma_transfer_direction direction,
-   159			unsigned long flags)
-   160	{
-   161		struct admac_chan *adchan = container_of(chan, struct admac_chan, chan);
-   162		struct admac_tx *adtx;
-   163	
-   164		if (direction != admac_chan_direction(adchan->no))
-   165			return NULL;
-   166	
-   167		adtx = devm_kzalloc(adchan->host->dev, sizeof(*adtx), GFP_NOWAIT);
-   168		if (!adtx)
-   169			return NULL;
-   170	
-   171		adtx->cyclic = true;
-   172	
-   173		adtx->buf_addr = buf_addr;
-   174		adtx->buf_len = buf_len;
-   175		adtx->buf_end = buf_addr + buf_len;
-   176		adtx->period_len = period_len;
-   177	
-   178		adtx->submitted_pos = 0;
-   179		adtx->reclaimed_pos = 0;
-   180	
-   181		dma_async_tx_descriptor_init(&adtx->tx, chan);
-   182		adtx->tx.tx_submit = admac_tx_submit;
-   183		adtx->tx.desc_free = admac_desc_free;
-   184	
-   185		return &adtx->tx;
-   186	}
-   187	
-   188	/*
-   189	 * Write one hardware descriptor for a dmaegine cyclic transaction.
-   190	 */
-   191	static void admac_cyclic_write_one_desc(struct admac_data *ad, int channo,
-   192						struct admac_tx *tx)
-   193	{
-   194		dma_addr_t addr;
-   195	
-   196		if (WARN_ON(!tx->cyclic))
-   197			return;
-   198	
-   199		addr = tx->buf_addr + (tx->submitted_pos % tx->buf_len);
-   200		WARN_ON(addr + tx->period_len > tx->buf_end);
-   201	
- > 202		dev_dbg(ad->dev, "ch%d descriptor: addr=0x%llx len=0x%x flags=0x%lx\n",
-   203			channo, addr, (u32) tx->period_len, FLAG_DESC_NOTIFY);
-   204	
-   205		admac_poke(ad, REG_DESC_WRITE(channo), addr);
- > 206		admac_poke(ad, REG_DESC_WRITE(channo), addr >> 32);
-   207		admac_poke(ad, REG_DESC_WRITE(channo), tx->period_len);
-   208		admac_poke(ad, REG_DESC_WRITE(channo), FLAG_DESC_NOTIFY);
-   209	
-   210		tx->submitted_pos += tx->period_len;
-   211		tx->submitted_pos %= 2 * tx->buf_len;
-   212	}
-   213	
-   214	/*
-   215	 * Write all the hardware descriptors for a cyclic transaction
-   216	 * there is space for.
-   217	 */
-   218	static void admac_cyclic_write_desc(struct admac_data *ad, int channo,
-   219						struct admac_tx *tx)
-   220	{
-   221		int i;
-   222	
-   223		for (i = 0; i < 4; i++) {
-   224			if (admac_peek(ad, REG_DESC_RING(channo)) & RING_FULL)
-   225				break;
-   226			admac_cyclic_write_one_desc(ad, channo, tx);
-   227		}
-   228	}
-   229	
-   230	static int admac_alloc_chan_resources(struct dma_chan *chan)
-   231	{
-   232		return 0;
-   233	}
-   234	
-   235	static void admac_free_chan_resources(struct dma_chan *chan)
-   236	{
-   237		// TODO
-   238	}
-   239	
-   240	static int admac_ring_noccupied_slots(int ringval)
-   241	{
-   242		int wrslot = FIELD_GET(RING_WRITE_SLOT, ringval);
-   243		int rdslot = FIELD_GET(RING_READ_SLOT, ringval);
-   244	
-   245		if (wrslot != rdslot) {
-   246			return (wrslot + 4 - rdslot) % 4;
-   247		} else {
-   248			WARN_ON((ringval & (RING_FULL | RING_EMPTY)) == 0);
-   249	
-   250			if (ringval & RING_FULL)
-   251				return 4;
-   252			else
-   253				return 0;
-   254		}
-   255	}
-   256	
-   257	/*
-   258	 * Read from hardware the residue of a cyclic dmaengine transaction.
-   259	 */
- > 260	u32 admac_cyclic_read_residue(struct admac_data *ad, int channo, struct admac_tx *adtx)
-   261	{
-   262		u32 ring1, ring2;
-   263		u32 residue1, residue2;
-   264		int nreports;
-   265		size_t pos;
-   266	
-   267		ring1 =    admac_peek(ad, REG_REPORT_RING(channo));
-   268		residue1 = admac_peek(ad, REG_RESIDUE(channo));
-   269		ring2 =    admac_peek(ad, REG_REPORT_RING(channo));
-   270		residue2 = admac_peek(ad, REG_RESIDUE(channo));
-   271	
-   272		if (residue2 > residue1) {
-   273			// engine must have loaded next descriptor between the two residue reads
-   274			nreports = admac_ring_noccupied_slots(ring1) + 1;
-   275		} else {
-   276			// no descriptor load between the two reads, ring2 is safe to use
-   277			nreports = admac_ring_noccupied_slots(ring2);
-   278		}
-   279	
-   280		pos = adtx->reclaimed_pos + adtx->period_len * (nreports + 1) \
-   281							 - residue2;
-   282	
-   283		return adtx->buf_len - pos % adtx->buf_len;
-   284	}
-   285	
+No problem.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> If the condition checking gets complex, seems to me it is reasonable to
+> use a static function (or a macro?) to encapsulate the logics.
+
+Well normally my rule i s - if it gets re-used then do it, otherwise it 
+just involves more indirection to follow. :) But regardless of that, 
+given some other things you ask for that kind of makes this discussion 
+moot as it requires much bigger wholesale changes to the test infra 
+which will make these patches a lot more work. I'll get to that later in 
+mails.
+
+>> But one catch... it really should be is_non_hidden_exe_shell_script() as
+>> it's checking that it's not a hidden file AND is a shell script. Or do I
+>> keep the hidden file test outside of the function in the if? If we're nit
+>> picking then I need to know exactly what you want here as your suggested
+>> name is actually incorrect.
+> 
+> I personally prefer to use the condition:
+> 
+>    if (is_exe_shell_script() && ent->d_name[0] != '.')
+>        do_something...
+> 
+> The reason is the function is_exe_shell_script() is more common and we
+> use it easily in wider scope.
+
+As above - will probably have to redo a lot of the test infra involving 
+the shell tests to handle some of your other requests, but if we don't 
+go that way, I have got where you want to go and I can do this.
+
+>>> And the condition checking 'ent->d_name[0] != '.'' would be redundant
+>>> after we have checked the file suffix '.sh'.
+>>
+>> This isn't actually redundant. You can have .something.sh :) If the idea is
+>> we skip anything with a . at the start first always... then the if (to me)
+>> is obvious.
+> 
+> Yeah, I agree the checking the start char '.' is the right thing
+> to do.
+
+:)

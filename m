@@ -2,147 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369CF54A20A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 00:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CAEA54A20F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 00:22:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234922AbiFMWVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 18:21:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
+        id S239622AbiFMWWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 18:22:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiFMWVX (ORCPT
+        with ESMTP id S236264AbiFMWWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 18:21:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11842DD58;
-        Mon, 13 Jun 2022 15:21:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B357614E1;
-        Mon, 13 Jun 2022 22:21:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B347C34114;
-        Mon, 13 Jun 2022 22:21:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655158881;
-        bh=nlwQXs75cmtdhpBdJq2NMEj5gmKBm8iKQVRpWIQ9K8I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=KruTBi4WgF++vsI5D55FT3ww4QRsubCGiagi2uhIqOTED9DxwCtIyIwLBP+6g6foZ
-         x0/beM3ci/OJa2cB2BKMQCD6KpZZ6EyVdNJbztIzvYNoQ6f94ibgiGohlngzODMy89
-         WJDBoaViGjpqBOeRmSk+agruwWndko5q74DNpCG9jpOIJpkPf2c44Viy4ZF0RABh29
-         JeweSZGX/sOK3tMVO+NXte/+stMmirExcmWdo3OsoiaAR+5ZqafWLzsRp2+s+/6Tu4
-         HMj2maiy7ifbUZ+SOpVb/pMth7cKOYPfukqNj4DYOpexPtwNzO5+57hWdZk4tZUvwS
-         WPYam8tCCJ5bw==
-Date:   Mon, 13 Jun 2022 17:21:19 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     l.stach@pengutronix.de, bhelgaas@google.com, robh+dt@kernel.org,
-        broonie@kernel.org, lorenzo.pieralisi@arm.com, festevam@gmail.com,
-        francesco.dolcini@toradex.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: Re: [PATCH v10 6/7] PCI: imx6: Mark the link down as none fatal error
-Message-ID: <20220613222119.GA716475@bhelgaas>
+        Mon, 13 Jun 2022 18:22:44 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87F96342;
+        Mon, 13 Jun 2022 15:22:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1655158932;
+        bh=/K38MCAmHWxqyV1M9IU8mCPprustLYV8uXAeCmwAeEQ=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=bqJRkVrfmrxiWp4dHM+lZQYZYWy4oUodCG5GQOBxWKeiD9v2xehtL/oXUA92CTC5u
+         UEwDXKvqlCKD6fcpx2lBqW2I+mUBDxkmW6IxjRVZgunZZMgc2QHLBjjMDs8hJns0gd
+         UsD2FP3cG2SEpgE3Fp8kSsDtrtvAMLfSAdKXk4XE=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.33] ([46.223.3.220]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MhlKs-1nVvLI0TwG-00drMA; Tue, 14
+ Jun 2022 00:22:12 +0200
+Subject: Re: [PATCH v6 5/6] serial: Support for RS-485 multipoint addresses
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lukas Wunner <lukas.wunner@intel.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        linux-api@vger.kernel.org
+References: <20220613075227.10394-1-ilpo.jarvinen@linux.intel.com>
+ <20220613075227.10394-6-ilpo.jarvinen@linux.intel.com>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <cd72151d-b087-0fdf-2775-6068999f7d05@gmx.de>
+Date:   Tue, 14 Jun 2022 00:22:10 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1655110538-10914-7-git-send-email-hongxing.zhu@nxp.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220613075227.10394-6-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:qnVCycgo6Woco+A3lDsqIOO1oP7H1X4CPI8yz97JmGIl88WWKr0
+ w9veZfbN+pE+xEqp+BlWuETwaVnzMVZDlca/2HiEABVfIsJC4cTm8uNC+2s445Ze6HGOFXH
+ V78VCdX4v523Sy487dlPg1XVplazwhZ/fR0yxSu0CQOCaYnp4cQk5WSlashwrv2xjUJJyD9
+ 36uU5KhofP6iYfTGwyFgQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MVjJOMYMOwE=:7gX1hIQ2xDO46urdrI1QL9
+ Bsm1JLAJtVtr1qB/BAypHnrYt+3H+E9FYQkuaBg1FF0egLYxWGXXFnJbz0WZSBOYTNKHiAIQM
+ 7PuDrugoiJcK/TFBJZ+47jVlxRVJneOo8FgDUhRR1AJutoezw6lOZzkAjQ6NWKGsopqgOq8cO
+ 7Ya8DQfdAoPRg68Uyklj6rRI6Y9bADWP5CNuB2XMMoq2GSuGmJUQU2RLPP+Vm6jGjPUDYHxFT
+ EY8z1IEwEbbhD1TOK4PXU1glK1UhSv3xyW4shxyt+L1nBn31I5e3O3njPOBmhAMiiToScmVm9
+ e9h9O/QByjhcYSlxs5/yO+kACi7r/8EZXUKWbtRoNZ4euq2wT59nz+zIy8a9Ej5YTiA7/j+WE
+ vEIFUvpZEWB3yqHkRt9h+uxoVs47PI7aOUqfkg3SbQtKTTNNzlM+dVG/6B30kBMWcY9lfIlIg
+ b3/uTr8Bh8anwgbKgQNgofQ4dfrjwJDIdETka0s15Pz0t6PNO2Uh4vHIxCiezv/1jJru5TDW6
+ op1G1WNieZNoGZLImWXZC7P0CEov8TsxCrx99rTujMXj0RADh57F79aItcj6lzWxliry4kGs/
+ c+waCLTx0wnrYxxHLFw8D72/bVwnT03ZJMaar7kWIX3hvor7uRqSKvYB5uG6sQe3Fr9iz9/b1
+ baUPbtMASGfljpmSafxOaUzX5l7e6NxgnxO++e+qSpETu4n+DIXfOz/U3R/TWR1scj9dthZKa
+ ojE6iy7vdiGvL8Z/v4kOCDg13HOw4bLdNCf+XHcEYzKs9uByllHPbgClKjbymuAVIsg/fScVW
+ HeKcG4cVv6Ap+93IlfKZAvijJZOrcCvETnC0r4zOnVgk8YYSJITmQk580zUnPfGtDXKDAKq/a
+ yFLMZ1y+/Kp9+UpudB7SJM53zXfz3PJxh9tncVCTOgE/hU63f2HD8UNIdApMbvqyc/+NT+y0k
+ zgHocbKY2VqXmOT3t5pJwlIshrk6fJ0z6UBUE5PRQoPremSjFmmy94XE0ik/w0T44eSjO60aj
+ 1+Ox5B2+lEySItRi0xhtv9k6vaxeuoqVpZgL1lHerbLRxVXQI/UGOLUd/xnl2s7kQGXbNBube
+ 61VGT7urLlqHAQadzgyz0Xfn5f1digeRTQ9fXNiXKGSjUXiGvzCxJUXag==
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 04:55:37PM +0800, Richard Zhu wrote:
-> let the driver probe successfully, return zero in imx6_pcie_start_link()
-> when PCIe link is down.
-> 
-> Because i.MX PCIe doesn't support hot-plug feature.
-> In this link down scenario, only start the PCIe link training in resume
-> when the link is up before system suspend to avoid the long latency in
-> the link training period.
 
-This looks like two changes that should be separate patches:
+Hi,
 
-  1) Make driver probe successful even if link is down.
+there are some typos in the documentation and comments (see below).
 
-  2) Reduce resume time by only starting the link if it was up before
-     suspend.
 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index c02748393aac..ac6ec2d691a0 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -67,6 +67,7 @@ struct imx6_pcie {
->  	struct dw_pcie		*pci;
->  	int			reset_gpio;
->  	bool			gpio_active_high;
-> +	bool			link_is_up;
->  	struct clk		*pcie_bus;
->  	struct clk		*pcie_phy;
->  	struct clk		*pcie_inbound_axi;
-> @@ -845,7 +846,9 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
->  	/* Start LTSSM. */
->  	imx6_pcie_ltssm_enable(dev);
->  
-> -	dw_pcie_wait_for_link(pci);
-> +	ret = dw_pcie_wait_for_link(pci);
-> +	if (ret)
-> +		goto err_reset_phy;
->  
->  	if (pci->link_gen == 2) {
->  		/* Allow Gen2 mode after the link is up. */
-> @@ -881,11 +884,14 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
->  		}
->  
->  		/* Make sure link training is finished as well! */
-> -		dw_pcie_wait_for_link(pci);
-> +		ret = dw_pcie_wait_for_link(pci);
-> +		if (ret)
-> +			goto err_reset_phy;
->  	} else {
->  		dev_info(dev, "Link: Gen2 disabled\n");
->  	}
->  
-> +	imx6_pcie->link_is_up = true;
->  	tmp = dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKSTA);
->  	dev_info(dev, "Link up, Gen%i\n", tmp & PCI_EXP_LNKSTA_CLS);
->  	return 0;
-> @@ -895,7 +901,7 @@ static int imx6_pcie_start_link(struct dw_pcie *pci)
->  		dw_pcie_readl_dbi(pci, PCIE_PORT_DEBUG0),
->  		dw_pcie_readl_dbi(pci, PCIE_PORT_DEBUG1));
->  	imx6_pcie_reset_phy(imx6_pcie);
-> -	return ret;
-> +	return 0;
->  }
->  
->  static int imx6_pcie_host_init(struct pcie_port *pp)
-> @@ -1022,10 +1028,8 @@ static int imx6_pcie_resume_noirq(struct device *dev)
->  	imx6_pcie_init_phy(imx6_pcie);
->  	imx6_pcie_deassert_core_reset(imx6_pcie);
->  	dw_pcie_setup_rc(pp);
-> -
-> -	ret = imx6_pcie_start_link(imx6_pcie->pci);
-> -	if (ret < 0)
-> -		dev_info(dev, "pcie link is down after resume.\n");
-> +	if (imx6_pcie->link_is_up)
-> +		imx6_pcie_start_link(imx6_pcie->pci);
->  
->  	return 0;
->  }
-> -- 
-> 2.25.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+On 13.06.22 at 09:52, Ilpo J=C3=A4rvinen wrote:
+
+> -5. References
+> +5. Multipoint Addressing
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+> +
+> +   The Linux kernel provides addressiong mode for multipoint RS-485 ser=
+ial
+
+addressiong -> addressing
+
+> +   communications line. The addressing mode is enabled with SER_RS485_A=
+DDRB
+> +   flag in serial_rs485. Struct serial_rs485 fhas two additional flags =
+and
+
+fhas -> has
+
+> +   fields for enabling reveive and destination addresses.
+
+reveive -> receive
+
+> +
+> +   Address mode flags:
+> +	- SER_RS485_ADDRB: Enabled addressing mode (sets also ADDRB in termios=
+).
+> +	- SER_RS485_ADDR_RECV: Receive (filter) address enabled.
+> +	- SER_RS485_ADDR_DEST: Set destination address.
+> +
+> +   Address fields (enabled with corresponding SER_RS485_ADDR_* flag):
+> +	- addr_recv: Receive address.
+> +	- addr_dest: Destination address.
+> +
+> +   Once a receive address is set, the communication can occur only with=
+ the
+> +   particular device and other peers are filtered out. It is left up to=
+ the
+> +   receiver side to enforce the filtering. Receive address will be clea=
+red
+> +   if SER_RS485_ADDR_RECV is not set.
+> +
+> +   Note: not all devices supporting RS485 support multipoint addressing=
+.
+> +
+> +6. References
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>   [1]	include/uapi/linux/serial.h
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/seria=
+l_core.c
+> index 76bb1b77b06e..bc18018e8d4b 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -1294,6 +1294,17 @@ static int uart_check_rs485_flags(struct uart_por=
+t *port, struct serial_rs485 *r
+>  	if (flags & ~port->rs485_supported->flags)
+>  		return -EINVAL;
+>
+> +	/* Asking for address w/o addressing mode? */
+> +	if (!(rs485->flags & SER_RS485_ADDRB) &&
+> +	    (rs485->flags & (SER_RS485_ADDR_RECV|SER_RS485_ADDR_DEST)))
+> +		return -EINVAL;
+> +
+> +	/* Address gived but not enabled? */
+
+gived -> given
+
+
+
+Regards,
+Lino

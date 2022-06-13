@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796B45489D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32AC548B70
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239228AbiFMM2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
+        id S1358118AbiFMNEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355458AbiFMMX4 (ORCPT
+        with ESMTP id S1355421AbiFMM4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:23:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D06131539;
-        Mon, 13 Jun 2022 04:04:59 -0700 (PDT)
+        Mon, 13 Jun 2022 08:56:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8358412AA3;
+        Mon, 13 Jun 2022 04:16:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE2B561435;
-        Mon, 13 Jun 2022 11:04:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBAE5C34114;
-        Mon, 13 Jun 2022 11:04:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 341FDB80EA7;
+        Mon, 13 Jun 2022 11:16:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 917CEC3411C;
+        Mon, 13 Jun 2022 11:16:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118298;
-        bh=IhebxJ8vLQHB+MvIrD20QJoz2NfHUxkg+wA2gpF3CwY=;
+        s=korg; t=1655119015;
+        bh=cG+LYyyqTXdLp8xKOZRZfji8RxNcDMGKguzynXlIy/g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n/R7fJ5ecWCTNRy8jSlv4v24YhNT2LGnN4pZ+ZwymsmBMO8SfBZiOQ/tmlqrm3z9u
-         QHsSh/2oLidmcKJDrcjMTqTIw07rMCG6YPOwYs4minkw77EHkKhmfB5Cs6tIFeANed
-         9FazOIigjCR4GLSWm1WTkYi/Cm8AFmoMONqy0S3U=
+        b=0fz7lVMccvVlDLX1Vg7GOCU2RbEJi4mVVrjwdUowypx5Anz1iYRJzu7p6P1I3bBW7
+         2rD3DRTK7LSVb4gP45LysVuix5t4sjR+AVXtNFhnoO7yPC6ytBq72xklhOscvzvVe9
+         CuPVwu5m4JYCFWvRseUqcFHodAgP+qSdWaezIvFA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Evan Green <evgreen@chromium.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 025/172] phy: qcom-qmp: fix pipe-clock imbalance on power-on failure
+        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 083/247] block: take destination bvec offsets into account in bio_copy_data_iter
 Date:   Mon, 13 Jun 2022 12:09:45 +0200
-Message-Id: <20220613094856.463782806@linuxfoundation.org>
+Message-Id: <20220613094925.473831846@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: Christoph Hellwig <hch@lst.de>
 
-[ Upstream commit 5e73b2d9867998278479ccc065a8a8227a5513ef ]
+[ Upstream commit 403d50341cce6b5481a92eb481e6df60b1f49b55 ]
 
-Make sure to disable the pipe clock also if ufs-reset deassertion fails
-during power on.
+Appartly bcache can copy into bios that do not just contain fresh
+pages but can have offsets into the bio_vecs.  Restore support for tht
+in bio_copy_data_iter.
 
-Note that the ufs-reset is asserted in qcom_qmp_phy_com_exit().
-
-Fixes: c9b589791fc1 ("phy: qcom: Utilize UFS reset controller")
-Cc: Evan Green <evgreen@chromium.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Link: https://lore.kernel.org/r/20220502133130.4125-2-johan+linaro@kernel.org
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Fixes: f8b679a070c5 ("block: rewrite bio_copy_data_iter to use bvec_kmap_local and memcpy_to_bvec")
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Link: https://lore.kernel.org/r/20220524143919.1155501-1-hch@lst.de
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ block/bio.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-index ea46950c5d2a..afcc82ab3202 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -3141,7 +3141,7 @@ static int qcom_qmp_phy_power_on(struct phy *phy)
+diff --git a/block/bio.c b/block/bio.c
+index 8906c9856a7d..9b28381412d2 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -1289,10 +1289,12 @@ void bio_copy_data_iter(struct bio *dst, struct bvec_iter *dst_iter,
+ 		struct bio_vec src_bv = bio_iter_iovec(src, *src_iter);
+ 		struct bio_vec dst_bv = bio_iter_iovec(dst, *dst_iter);
+ 		unsigned int bytes = min(src_bv.bv_len, dst_bv.bv_len);
+-		void *src_buf;
++		void *src_buf = bvec_kmap_local(&src_bv);
++		void *dst_buf = bvec_kmap_local(&dst_bv);
  
- 	ret = reset_control_deassert(qmp->ufs_reset);
- 	if (ret)
--		goto err_lane_rst;
-+		goto err_pcs_ready;
+-		src_buf = bvec_kmap_local(&src_bv);
+-		memcpy_to_bvec(&dst_bv, src_buf);
++		memcpy(dst_buf, src_buf, bytes);
++
++		kunmap_local(dst_buf);
+ 		kunmap_local(src_buf);
  
- 	qcom_qmp_phy_configure(pcs_misc, cfg->regs, cfg->pcs_misc_tbl,
- 			       cfg->pcs_misc_tbl_num);
+ 		bio_advance_iter_single(src, src_iter, bytes);
 -- 
 2.35.1
 

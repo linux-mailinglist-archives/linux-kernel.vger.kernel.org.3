@@ -2,101 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85EB654A0B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:00:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CADD854A0A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351520AbiFMU75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
+        id S241928AbiFMU7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:59:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348989AbiFMUzs (ORCPT
+        with ESMTP id S1349028AbiFMUzs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Jun 2022 16:55:48 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C61C3F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:28:25 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id bd16so1043393oib.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:28:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=F1BsEzeoJMGJfvvWlT/Yu0nVhqbd5OzaqJq8yfmd928=;
-        b=JE0WnPM6vgb2044eluqDd1QRq5BRoZM06OJVAu+pqiZAxQBntiuabuVIEJzTs29mq0
-         LuWHt3nNEIguHoHF7n2TRWK8oxP49PJzX8zigOUmK/fufogl0VpOd/FSJhPcY9uVaBqC
-         fFK6/zI+CTG48d48ohqGB+XgxBJ8bgy0GeIkBoHTddeBxaOsJVNfyINcbEjSj8tHY69G
-         WViB6Ggo6eNlW1YLG1HkDKHj4dyBYBV2fMdGJItoNPdU+1XkzVNwAGH/OiwvR3mUClQl
-         ovNg/5deQcZtwWLI0KZl/J4j2rCcyF70dcUGmybFGp3xv31hD2bETZFxAUK5cBqrcUoc
-         TXsg==
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85892BA;
+        Mon, 13 Jun 2022 13:28:37 -0700 (PDT)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-fe51318ccfso10002325fac.0;
+        Mon, 13 Jun 2022 13:28:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=F1BsEzeoJMGJfvvWlT/Yu0nVhqbd5OzaqJq8yfmd928=;
-        b=tpqupJDR//khn88VfTuS9n1s2I0Cto5T/DPiYXjDonu2zzzUo6emkVp+u7QKJltHIW
-         MDrQyIDgBqPqAdeFU/P6f1uDiNc8wU25DBlYcJqVLqNbCHgMOyELo+DbIpyLpLBN+fCB
-         g2UbtmQ86Csjr+3UPt1JMurSh1Q93AkhWgLawVlgCXGHt59ac8oY+nF08M1UkMfBcWvY
-         uKSLWWfvKtZNu8aYc5pkCJxqtDzigWBa+GctHf6vfOzIrdYmWbrSLlVOgNUb1EKizlHL
-         cK/+mXHdZmWYcQy1wqspEkcTtF4KAi+0PFtVimI4LwerlDTZHPaBvPqmhGnejft7g4O1
-         Nbyw==
-X-Gm-Message-State: AOAM530hyUnYIaYk+r9nCIq+1C0Vh2cN55+AfeMvvYdyBQJKs4UIMJMu
-        lGCr7LWnfwTuqFNdPvmj7XFM39PAr8zn7dqlRjyjFQ==
-X-Google-Smtp-Source: ABdhPJwb061Tr8q4AswjXAIT3ltkV7Vxsykz1cnTDu6h03hM4CDgmE8X8tOldoAZyk7w/HTImFqlver27uiqFjBKnZ0=
-X-Received: by 2002:a05:6808:1189:b0:32b:7fb5:f443 with SMTP id
- j9-20020a056808118900b0032b7fb5f443mr268221oil.269.1655152104815; Mon, 13 Jun
- 2022 13:28:24 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g+MycQEHVLS0G3Jp47J4dPsMXopl+aBAELiT0jx3BxM=;
+        b=y4wc3MZS3lXg4/ZTsle84DEZOq5pRu+BI/FI7ahMbz6Sg3g7HYzL++6qGONkPSMSCh
+         owhNYRs0vyTy5k/a9+ZR9+cOc6ECZ/kAaIF6j38VcpKED+Tc3cvqZJhjiM+OxcrFuALQ
+         XA1NQgPvW32RsbN1vqFdOJdTSvL7cEhRB3tADgGFtJQ9XQJatrNj3burFJkAakg1+myt
+         tBFJHVnEHBA8+n/SOPI8Ypy6i+WKavlAK9+OSiKZiaeHQWLEoa6IKLVhNWlww+jHzVLG
+         0ne+K01JWAfn50NQInye8pk5/x/J2CrW+nkuLTMKQx2wvTOzQ11r+jrY/dM4uc56yT3o
+         fOIg==
+X-Gm-Message-State: AJIora/19chDhdinKyTNz8ble6vE1FaAWx8DSivdMb27dgzkvzWNFxQt
+        IjMkvf7FrGQ4B1jamUmdvg==
+X-Google-Smtp-Source: AGRyM1tvwC9bduY8bxzqWREuAHNwiFAwzpSzRs1ILRb1JzaAGZb+YH0O1A7QOk6i0DmNy9eU8s/frA==
+X-Received: by 2002:a05:6870:46a6:b0:f5:ecd6:befb with SMTP id a38-20020a05687046a600b000f5ecd6befbmr331021oap.57.1655152116990;
+        Mon, 13 Jun 2022 13:28:36 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:20d2:bb97:4381:7341:60ed:a4a1])
+        by smtp.gmail.com with ESMTPSA id f8-20020a4ada48000000b0035eb4e5a6d6sm4057166oou.44.2022.06.13.13.28.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 13:28:36 -0700 (PDT)
+Received: (nullmailer pid 30275 invoked by uid 1000);
+        Mon, 13 Jun 2022 20:28:32 -0000
+Date:   Mon, 13 Jun 2022 14:28:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 12/18] PCI: dwc: Re-use local pointer to the resource
+ data
+Message-ID: <20220613202832.GA28636-robh@kernel.org>
+References: <20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610082535.12802-13-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <161188083424.28787.9510741752032213167.stgit@bmoger-ubuntu>
- <161188100955.28787.11816849358413330720.stgit@bmoger-ubuntu>
- <CALMp9eTU5h4juDyGePnuDN39FudYUqyAnnQdALZM8KfiMo93YA@mail.gmail.com>
- <5d380b11-079f-e941-25cf-747f66310695@amd.com> <CALMp9eRnC1RgRwj64TJcXdhhL6g835N_-E8FbeHVre6aX=18-A@mail.gmail.com>
- <17a3d97e-3087-e79a-120d-b4a45f6c4fba@amd.com>
-In-Reply-To: <17a3d97e-3087-e79a-120d-b4a45f6c4fba@amd.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Mon, 13 Jun 2022 13:28:13 -0700
-Message-ID: <CALMp9eT1_G1yp30K=DqEUsV=yK_w9KoU_ANnSPq4ueqzBTkLZw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] KVM: SVM: Add support for Virtual SPEC_CTRL
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Babu Moger <babu.moger@amd.com>, pbonzini@redhat.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        fenghua.yu@intel.com, tony.luck@intel.com, wanpengli@tencent.com,
-        kvm@vger.kernel.org, peterz@infradead.org, seanjc@google.com,
-        joro@8bytes.org, x86@kernel.org, kyung.min.park@intel.com,
-        linux-kernel@vger.kernel.org, krish.sadhukhan@oracle.com,
-        hpa@zytor.com, mgross@linux.intel.com, vkuznets@redhat.com,
-        kim.phillips@amd.com, wei.huang2@amd.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610082535.12802-13-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 1:16 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
+On Fri, Jun 10, 2022 at 11:25:28AM +0300, Serge Semin wrote:
+> The dw_pcie_host_init() method has two instances of the resource structure
+> pointers used in non-related places of the method. It's pointless to have
+> two different local storages for them since the corresponding code is
+> small and having resource specific names doesn't make it more readable.
+> Let's convert these parts of the function to using just a common pointer
+> to the resource structure instance. That shall make the code a bit nicer
+> looking.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Changelog v4:
+> - This is a new patch created on the v4 lap of the series.
+> ---
+>  .../pci/controller/dwc/pcie-designware-host.c    | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
 
-> Ah, yes, I get it now. I wasn't picking up on the aspect of running older
-> KVM versions on the newer hardware, sorry.
->
-> I understand what you're driving at, now. We do tell the hardware teams
-> that add this type of feature that we need a VMCB enable bit, e.g. make it
-> an opt in feature. I'll be sure to communicate that to them again so that
-> this type of issue can be avoided in the future.
-
-Thank you so much. Might I also ask that new features get promptly
-documented in the APM?
-
-It took us an incredibly long time to figure out why just one vCPU
-thread would run slow on every GCE AMD instance. It wasn't always the
-same thread, but the slow vCPU thread would still be slow even after
-live migration. On a guest reboot, the slowness might migrate to a
-different vCPU thread. How bizarre, right?
-
-It turns out that, on UEFI-enabled images, one vCPU makes an EFI
-firmware call, which sets IBRS. You can't see that IBRS is on from
-within the guest, but it is, because of the sticky first non-zero
-write behavior induced by virtual SPEC_CTRL.
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4CFE54864F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB93D548656
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354826AbiFMLf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56244 "EHLO
+        id S1358178AbiFMMBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354472AbiFML3g (ORCPT
+        with ESMTP id S1358126AbiFML7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62B2BDF28;
-        Mon, 13 Jun 2022 03:44:51 -0700 (PDT)
+        Mon, 13 Jun 2022 07:59:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBAB4E3A8;
+        Mon, 13 Jun 2022 03:56:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 150D6B80D3A;
-        Mon, 13 Jun 2022 10:44:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F811C34114;
-        Mon, 13 Jun 2022 10:44:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3BA861257;
+        Mon, 13 Jun 2022 10:56:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D0CEC36B00;
+        Mon, 13 Jun 2022 10:56:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117088;
-        bh=A2kOf+YUalMSyW3ba6LpRQec2UkZUl6itbbNZD+h3Uk=;
+        s=korg; t=1655117788;
+        bh=Ir1rYjo3alo8qSTxL/ehnAekfnmDw3mCZWfS6ECO2Ks=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zFfalB4HttQShkXy9PQDeimxn2g1MPrfztG7sLAIHhZEBeRAFHNTdRAHreLSuWkce
-         8A2OiKIaHVMLIsqawYCoPNVwNpkPk1nE8/OcNpvIfoFjP6jUb/xakLKbGDUHudwte8
-         7ZwKCUv49UD5RQzcET03eiVRNf509vRm8357dX50=
+        b=0F0CiGK+8l4UWRjRC8TQmeCx8E2Bg/Hlh+TEuu56Aq/IXvC67ab465tF6DFF/eaFI
+         2I+VWDXPWfMPQ0WyPeBWkzNT4Hgbgp5QFJhrBJadISaIrz2ZTiyHOiv8v2W9dTyBZP
+         y4KDXTrgBSPYMX5l7X7P8kTbhx31STRUktESNf+k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 283/411] iio: adc: ad7124: Remove shift from scan_type
+Subject: [PATCH 4.19 132/287] f2fs: fix dereference of stale list iterator after loop body
 Date:   Mon, 13 Jun 2022 12:09:16 +0200
-Message-Id: <20220613094937.243746057@linuxfoundation.org>
+Message-Id: <20220613094927.881449853@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexandru Tachici <alexandru.tachici@analog.com>
+From: Jakob Koschel <jakobkoschel@gmail.com>
 
-[ Upstream commit fe78ccf79b0e29fd6d8dc2e2c3b0dbeda4ce3ad8 ]
+[ Upstream commit 2aaf51dd39afb6d01d13f1e6fe20b684733b37d5 ]
 
-The 24 bits data is stored in 32 bits in BE. There
-is no need to shift it. This confuses user-space apps.
+The list iterator variable will be a bogus pointer if no break was hit.
+Dereferencing it (cur->page in this case) could load an out-of-bounds/undefined
+value making it unsafe to use that in the comparision to determine if the
+specific element was found.
 
-Fixes: b3af341bbd966 ("iio: adc: Add ad7124 support")
-Signed-off-by: Alexandru Tachici <alexandru.tachici@analog.com>
-Link: https://lore.kernel.org/r/20220322105029.86389-2-alexandru.tachici@analog.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Since 'cur->page' *can* be out-ouf-bounds it cannot be guaranteed that
+by chance (or intention of an attacker) it matches the value of 'page'
+even though the correct element was not found.
+
+This is fixed by using a separate list iterator variable for the loop
+and only setting the original variable if a suitable element was found.
+Then determing if the element was found is simply checking if the
+variable is set.
+
+Fixes: 8c242db9b8c0 ("f2fs: fix stale ATOMIC_WRITTEN_PAGE private pointer")
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/adc/ad7124.c | 1 -
- 1 file changed, 1 deletion(-)
+ fs/f2fs/segment.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/adc/ad7124.c b/drivers/iio/adc/ad7124.c
-index 635cc1e7b123..793a803919c5 100644
---- a/drivers/iio/adc/ad7124.c
-+++ b/drivers/iio/adc/ad7124.c
-@@ -142,7 +142,6 @@ static const struct iio_chan_spec ad7124_channel_template = {
- 		.sign = 'u',
- 		.realbits = 24,
- 		.storagebits = 32,
--		.shift = 8,
- 		.endianness = IIO_BE,
- 	},
- };
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index 0e3e590a250f..6fbf0471323e 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -354,16 +354,19 @@ void f2fs_drop_inmem_page(struct inode *inode, struct page *page)
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+ 	struct list_head *head = &fi->inmem_pages;
+ 	struct inmem_pages *cur = NULL;
++	struct inmem_pages *tmp;
+ 
+ 	f2fs_bug_on(sbi, !IS_ATOMIC_WRITTEN_PAGE(page));
+ 
+ 	mutex_lock(&fi->inmem_lock);
+-	list_for_each_entry(cur, head, list) {
+-		if (cur->page == page)
++	list_for_each_entry(tmp, head, list) {
++		if (tmp->page == page) {
++			cur = tmp;
+ 			break;
++		}
+ 	}
+ 
+-	f2fs_bug_on(sbi, list_empty(head) || cur->page != page);
++	f2fs_bug_on(sbi, !cur);
+ 	list_del(&cur->list);
+ 	mutex_unlock(&fi->inmem_lock);
+ 
 -- 
 2.35.1
 

@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FD7549829
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F635494A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356631AbiFMLtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
+        id S1377825AbiFMNej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357271AbiFMLpz (ORCPT
+        with ESMTP id S1378252AbiFMNbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:45:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DB54A3FE;
-        Mon, 13 Jun 2022 03:52:01 -0700 (PDT)
+        Mon, 13 Jun 2022 09:31:07 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CEE56FA18;
+        Mon, 13 Jun 2022 04:25:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 684B3B80E56;
-        Mon, 13 Jun 2022 10:52:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6D93C34114;
-        Mon, 13 Jun 2022 10:51:58 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 81CC3CE1171;
+        Mon, 13 Jun 2022 11:25:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51FD9C34114;
+        Mon, 13 Jun 2022 11:25:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117519;
-        bh=QsgEGlWyZ5KfG9+7DZ5KncemJyCDriy+OJ1G3S+RR38=;
+        s=korg; t=1655119545;
+        bh=/2108pRDFRfrsSrSUV7Yy/lazrzX7KKagVieVpc9FoE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jZkT/qGhCVAovbJ5An5gkAVj7OMUODy/N2ZUpU2H0EpuSNNPR5NwWTNUMaD7s6DgS
-         cfER6x35Cr6aHAx3m7+IaOsyyrIVsEtRkHaKN+up0CiMGY2rPSjc7vQwoNBgeYE66e
-         OocV/pjur+lacbnZVSZ7MyZldxJ73gOCGpuiHArs=
+        b=vSzJElPfR8eY9wE59zNg/uOQTpfprYGCk/UuotySXyVgYEvkmxvLL+qG+GnAahl9v
+         7xof9n+5gGq+n6s1CCCfIjQaN8ByMoCn6sS7e6kr5XNABrvlwVEl20qh+PGXovmNCB
+         OAH1/k/eRFG6i36MhORoGDdtkL9qFAFWGGEv18Vc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vasily Averin <vvs@openvz.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 053/287] tracing: incorrect isolate_mote_t cast in mm_vmscan_lru_isolate
+        stable@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        =?UTF-8?q?P=C3=A9ter=20Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 052/339] soundwire: qcom: return error when pm_runtime_get_sync fails
 Date:   Mon, 13 Jun 2022 12:07:57 +0200
-Message-Id: <20220613094925.475722191@linuxfoundation.org>
+Message-Id: <20220613094928.101275873@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +58,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vasily Averin <vvs@openvz.org>
+From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-[ Upstream commit 2b132903de7124dd9a758be0c27562e91a510848 ]
+[ Upstream commit f6ee6c8499226eb158ca30457d346511f5e329ce ]
 
-Fixes following sparse warnings:
+For some reason there's a missing error return in two places.
 
-  CHECK   mm/vmscan.c
-mm/vmscan.c: note: in included file (through
-include/trace/trace_events.h, include/trace/define_trace.h,
-include/trace/events/vmscan.h):
-./include/trace/events/vmscan.h:281:1: sparse: warning:
- cast to restricted isolate_mode_t
-./include/trace/events/vmscan.h:281:1: sparse: warning:
- restricted isolate_mode_t degrades to integer
-
-Link: https://lkml.kernel.org/r/e85d7ff2-fd10-53f8-c24e-ba0458439c1b@openvz.org
-Signed-off-by: Vasily Averin <vvs@openvz.org>
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: 74e79da9fd46a ("soundwire: qcom: add runtime pm support")
+Fixes: 04d46a7b38375 ("soundwire: qcom: add in-band wake up interrupt support")
+Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Link: https://lore.kernel.org/r/20220426235623.4253-2-yung-chuan.liao@linux.intel.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/trace/events/vmscan.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/soundwire/qcom.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/include/trace/events/vmscan.h b/include/trace/events/vmscan.h
-index a1cb91342231..7add8c87fe22 100644
---- a/include/trace/events/vmscan.h
-+++ b/include/trace/events/vmscan.h
-@@ -294,7 +294,7 @@ TRACE_EVENT(mm_vmscan_lru_isolate,
- 		__field(unsigned long, nr_scanned)
- 		__field(unsigned long, nr_skipped)
- 		__field(unsigned long, nr_taken)
--		__field(isolate_mode_t, isolate_mode)
-+		__field(unsigned int, isolate_mode)
- 		__field(int, lru)
- 	),
+diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+index dd9f67f895b2..b38525b35bec 100644
+--- a/drivers/soundwire/qcom.c
++++ b/drivers/soundwire/qcom.c
+@@ -516,6 +516,7 @@ static irqreturn_t qcom_swrm_wake_irq_handler(int irq, void *dev_id)
+ 				    "pm_runtime_get_sync failed in %s, ret %d\n",
+ 				    __func__, ret);
+ 		pm_runtime_put_noidle(swrm->dev);
++		return ret;
+ 	}
  
-@@ -305,7 +305,7 @@ TRACE_EVENT(mm_vmscan_lru_isolate,
- 		__entry->nr_scanned = nr_scanned;
- 		__entry->nr_skipped = nr_skipped;
- 		__entry->nr_taken = nr_taken;
--		__entry->isolate_mode = isolate_mode;
-+		__entry->isolate_mode = (__force unsigned int)isolate_mode;
- 		__entry->lru = lru;
- 	),
+ 	if (swrm->wake_irq > 0) {
+@@ -1258,6 +1259,7 @@ static int swrm_reg_show(struct seq_file *s_file, void *data)
+ 				    "pm_runtime_get_sync failed in %s, ret %d\n",
+ 				    __func__, ret);
+ 		pm_runtime_put_noidle(swrm->dev);
++		return ret;
+ 	}
  
+ 	for (reg = 0; reg <= SWR_MSTR_MAX_REG_ADDR; reg += 4) {
 -- 
 2.35.1
 

@@ -2,392 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C588E54A1E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:57:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0357454A1ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 00:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbiFMV5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 17:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35714 "EHLO
+        id S233943AbiFMWGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 18:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347989AbiFMV5S (ORCPT
+        with ESMTP id S232149AbiFMWG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 17:57:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2B6B21E04
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 14:57:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655157433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=irWr0I38nZmpu9iLL6jCzX59OAvIBGtZqnJM5UHpQc8=;
-        b=Of6Pyc/S70cphPgboUHYm/z20IYBTQ8KlcdN3Tlr67s8fQk9pZZ4fhif/GWsEIU7nvCw8C
-        KDnXJt65MZMCDffV1+QowIkNDHL74q/CndxuKIA14atXkhWh9JabTuokUHklfFX+qI1sja
-        GfAinD0vrwnDVthK9LcHM+ZKODr6krg=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-195-qGBiYIp3PeWSrY2tir1taw-1; Mon, 13 Jun 2022 17:57:10 -0400
-X-MC-Unique: qGBiYIp3PeWSrY2tir1taw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3E2F21C0CE93;
-        Mon, 13 Jun 2022 21:57:10 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.62])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 08A4B404E4C5;
-        Mon, 13 Jun 2022 21:57:08 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 2/2] certs: Add FIPS selftests
-From:   David Howells <dhowells@redhat.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Simo Sorce <simo@redhat.com>, dhowells@redhat.com, simo@redhat.com,
-        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 13 Jun 2022 22:57:08 +0100
-Message-ID: <165515742832.1554877.2073456606206090838.stgit@warthog.procyon.org.uk>
-In-Reply-To: <165515741424.1554877.9363755381201121213.stgit@warthog.procyon.org.uk>
-References: <165515741424.1554877.9363755381201121213.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.4
+        Mon, 13 Jun 2022 18:06:29 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67FEB2BB02
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 15:06:28 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25DJdPde004107;
+        Mon, 13 Jun 2022 22:06:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : in-reply-to : references : date : message-id : content-type :
+ mime-version; s=corp-2021-07-09;
+ bh=rAuHnYn60m9mg4RNOdl75QDZoQIy4nVQkrOTtPufOes=;
+ b=yokKmYSbBQYGD9hOT7+Oy39BYVoI5hfBxYMB7SGy9GsZsH9HY6f+TA3S84iNBFwIU+7l
+ 71N/XL6MMJh9cVo8HdndBiOIHK7yehAp5eN32eqXm+GJCcl6NciHUybDOWZ7EB/TFF/1
+ aWlcfykva/AB49o8/JvpQ1J1jM6tBFQwjmynQIDH6vgyK0DR2ZwQki1tSHRqJw9AFSwR
+ 89TVfG3lYk9PlaD92+1utsP7a2jNGRtDlFIMBo9p0mVrp/0td4WMlRgV8PUXS6TBEi8v
+ IisQWFYjQyzXEMziAPVeoIQ2yG036TXPFuWl1+8o5vqDwJ92g9pOPXIZRCH3VnAQGudH yA== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gmhu2mavv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Jun 2022 22:06:08 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25DM4Ysf034944;
+        Mon, 13 Jun 2022 22:06:07 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2100.outbound.protection.outlook.com [104.47.70.100])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gpdhugbyk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Jun 2022 22:06:06 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hahiQulVo03NwbKi+vBaQMnwlbG5nMHweaOAoB6rMuZ+e+NJh4tSMa55ilI/xt7cL/a+Hs2du9kA6dQ2xWA9Vo5sYK2fHKybnhc2PeRieTBPROkEejbAd95bYGS1c8Vqvfn89oGP82la9DelvS3HWMg+hx6EzZMC03s/BcmsD0wLmjx7biuqtpj/m/lht8dB/jt0wHzOwvgsS1Rc6T85LVakzYOXXplGXYX92kM/3y4tMNzEkUpwX3pGTr6saYkJjasK61YilXYiCBr6/HXYRhzvaNDEwdiaDi8M1yX1Ag6WDYQkXolfZjt7Phnyts5v9+dAso3U6xdKilIm2cJDKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rAuHnYn60m9mg4RNOdl75QDZoQIy4nVQkrOTtPufOes=;
+ b=Lw6TdMbF0UNQ6lSUumiEUNCon46gfTknGO89HOhJ95tE/P602dXveywyMYCtKlov9UDIpMLKIrIKOPvzTFu9daC55LjCTrlV/XhpVozJiM1C5nDhhfmAmIobrZogW9OTdhTL/ZbtyhOh9ODG3ljReiVG4DIBwF1Pv2uaA9QF9umIgnj3tY2sfc0gM0SOP+yxkBOxGpipiwC+eaxu0R1ZNHF5G+y16X9wiqPzWTEazrytT4l7/uTL7agXFeEcOq0qjyhoROsv5C5Rc5eAqlgZboXxquhNP+ufcD8emujeMbYX/6viLCoSmQtXFfuXnPkbijTTlPtzBASVTKOBU3BhBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rAuHnYn60m9mg4RNOdl75QDZoQIy4nVQkrOTtPufOes=;
+ b=Pizo1bU1ScXOdxD56Di07BhNNuuYOYc3qO4xUBRoAlaVCyZx10doFaakMTWOp69ZFXB8y3s1e6GID4A4D3xGdsfvVNm+u310t38iZmbnWceGKEpCrEv+To9ta3SWvjx7KG2x5N7iSvTByFbRFZ2i317C5Jo5CrmlOqrrW66KmYU=
+Received: from CH2PR10MB4166.namprd10.prod.outlook.com (2603:10b6:610:78::20)
+ by SN6PR10MB2975.namprd10.prod.outlook.com (2603:10b6:805:d2::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Mon, 13 Jun
+ 2022 22:00:01 +0000
+Received: from CH2PR10MB4166.namprd10.prod.outlook.com
+ ([fe80::4d84:324a:aeaf:8f2b]) by CH2PR10MB4166.namprd10.prod.outlook.com
+ ([fe80::4d84:324a:aeaf:8f2b%7]) with mapi id 15.20.5332.020; Mon, 13 Jun 2022
+ 22:00:01 +0000
+From:   Stephen Brennan <stephen.s.brennan@oracle.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org,
+        kexec@lists.infradead.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Dave Young <dyoung@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bixuan Cui <cuibixuan@huawei.com>,
+        David Vernet <void@manifault.com>,
+        Vivek Goyal <vgoyal@redhat.com>,
+        Sami Tolvanen <samitolvanen@google.com>
+Subject: Re: [PATCH 0/2] Expose kallsyms data in vmcoreinfo note
+In-Reply-To: <20220613142609.3e4be0f2f45671341450232d@linux-foundation.org>
+References: <20220517000508.777145-1-stephen.s.brennan@oracle.com>
+ <20220613142609.3e4be0f2f45671341450232d@linux-foundation.org>
+Date:   Mon, 13 Jun 2022 14:59:44 -0700
+Message-ID: <87edzsrzqn.fsf@oracle.com>
+Content-Type: text/plain
+X-ClientProxiedBy: SN4PR0401CA0016.namprd04.prod.outlook.com
+ (2603:10b6:803:21::26) To CH2PR10MB4166.namprd10.prod.outlook.com
+ (2603:10b6:610:78::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b2b41c45-b724-4c72-4695-08da4d881082
+X-MS-TrafficTypeDiagnostic: SN6PR10MB2975:EE_
+X-Microsoft-Antispam-PRVS: <SN6PR10MB2975EC4483C98C9C8D832B92DBAB9@SN6PR10MB2975.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jUTOROqGw25KOqDasg1zr4zKwJN2yqoQeW0Pz0ASNol9R6E7Mo08CpNH2jvCDm62Lb8NtXupSIrETpUHY900l5phqUMgwSBFhs4QkyIYuUmBp71K8/cZxcXH1yAiJUKvFy8pqnhQr5Sc1GoGeNRcxSkeSsA8m16JeHwDPyJUsoNK6T6o2ItSZzKxtnsdSqOXvYLoiRdHvAyZyb0YUQn0F6jkJRPYUDuTECOeW/qy/ZklijvX+pjLkexW57qK6OsZUjdpK0m9xM3b63t+mtbzneNf4KWEYdKsLaOCDa+1OUCljkOWMGAQukKtIrT3695tolPGSjUQhiZT7DledFula67oVk7FplU2PsLfcMIrpIX7HRJaJaOEETG14U93scYymQOoZuzd4CunUfFHrssHoqnuNtztRdS+MrGqTmqtPcrQofJvK+Vw7ID1fDBO5YQpRYEnPVRgShdrjwZKiL2VOmvxMqWenSO4TmYwl/dCD5xrWcssvZTL2tlq7+PDXLh139bJlRYEPakYSRvqILa33z680peboZjz7+1B1jYmhMv49QTKMhQY1RnLKh9cThSvGse9bgrRXbc/mUn5MzyB35QRFdX6xCwa+im//JeAyoQa81ygXRi8HIJ9TTDRoWvgM8GQIDKYhL2GjZcjUhz99LPH61l+/SNJCAekilmvwXk1uy5wM19AND8nMRk5od0FxlYFKopZrt79SKlo1rGjY6LI+J4THE1BNlo6WRZ4i+iOo97/cE/pwRCjx+3rtJNPQbJmIV/el5FUjDQj6aKCcg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR10MB4166.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(6506007)(6666004)(66946007)(8936002)(6916009)(2906002)(6486002)(316002)(6512007)(26005)(38100700002)(966005)(54906003)(508600001)(5660300002)(7416002)(2616005)(36756003)(186003)(4326008)(83380400001)(8676002)(66476007)(86362001)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tUSgBJrEljWxtU6U61QG6sBOTh/dkz/1X0KIVakxMS5v6diZEAWZLXoLsgVX?=
+ =?us-ascii?Q?JObs67iQUNxFG6kAcG0hQt/OSz0bP9hnEXlzOUqLRB1OAespRnNkaKY7dBly?=
+ =?us-ascii?Q?ucV3kANUqTkOJXaGYPfgIUnPLawU087dOqVbWLsFqZVwK52em18eEiV2Kn5A?=
+ =?us-ascii?Q?Jb5ciuTH2xPI+KGWad783MxLJG6LkqrQx25TkDuKQ9FPMjJc9brBU6+W43vJ?=
+ =?us-ascii?Q?NLEmUylMmq+eHl3NLXwFbpT9c51H5Ca1T+Y0Atug0Mdln9FUbYvn5DQs+g6D?=
+ =?us-ascii?Q?0vMOGJZ/44yE8CCcZ8IHKZqtoyHQRUfkDGQZSd44LtVxlyL/DYa6/1/cwOOE?=
+ =?us-ascii?Q?yvTiYmqR5VMYbtJAs/jIZlFiAqB8Pp/YSKmw3TibCQsUr8ue3VIACKT8xswg?=
+ =?us-ascii?Q?5GNxGZUffiVbllpeKdzfeEHhQdTOmz9sWuNqUWI8Z+U1C7T+5zod/lhPYhEj?=
+ =?us-ascii?Q?ggNfTdu7Zhd+09JxS6lPZAdYrPh4CURD4Sd8UMATDYs54LzNZ6+4Tbni2K4U?=
+ =?us-ascii?Q?bFjihlAioqQYa4ENxDEde1MZLJLWhpNvO/MPzUsmgRxq9sRXBUoTDMHsuSic?=
+ =?us-ascii?Q?Fo6kc7LqeeFCvUEnPYIrU5jAEdva4MVCubzkCfrUvGd7AugF8RO6v2GBoK31?=
+ =?us-ascii?Q?HzFxiD2GY60KBOzygWon62BuZ6HVLSzfV2biSCdH4Fv2D+d1KP0QWIgmFWH8?=
+ =?us-ascii?Q?sYD1b0cktK/wUHe8eSr5dti3TE7jGT3KTQ3RBsKzQRnazEQ9fP98GRlgEU3t?=
+ =?us-ascii?Q?eRscPMP2ns9RZ37GTHNXnbiq+8b/i/1eUadslNF3MjoY1lDQpw0a8WI5BU+k?=
+ =?us-ascii?Q?QfX+bxnjJiH+XvP26D5kjrbXeyi68uarMJsMFSeBD2r1hXfr8HMu44Y3uq6H?=
+ =?us-ascii?Q?h9BiKQbuqV4mI7ROMw7njRbD0oNpNlUh4PjnWxags4/E01UBYk9XXY2qNgc7?=
+ =?us-ascii?Q?PAsn0saL7rF4fd0UH+/3QgQvBQ24DZAiv/j9eafIi5CBINVFUhyGFOCpGN0c?=
+ =?us-ascii?Q?2TjxB+1lsgsadFPya3M0keeYj+iA5Lg6mxlHhqkipwf0NAgtRRQ+OBGaqr1r?=
+ =?us-ascii?Q?frzpT5/PMAfH5Qvruq5BraPavUWx57/K5bEg0OzZvbrBVYNIdfANWAB0j0eZ?=
+ =?us-ascii?Q?wwQay2/ao/7O4u6LcBfDVXSbmPHtkMLg9lHraHQqhaXPCWcUloj++Jx3Z2qQ?=
+ =?us-ascii?Q?GxEL9/xFcHW/39Mah62xJSs/JeT0dlHANBbcHqbuzD6c1A6zQoVDCgREffZn?=
+ =?us-ascii?Q?zOZfzfVD6/F9YwNXBKR+RAYl5gvh6RGI+ToAQIGWai9z/va9uf6jJ6YEen60?=
+ =?us-ascii?Q?mw7ai3yAaitjC/RLi9U4ihOSEZzDpRKkSMay8TlfDne9tMtqKIs3ADeF9x54?=
+ =?us-ascii?Q?pQS/5wPsy35Oj4uvhAaBzjGODr94dYtI2Rkf+bWY9h8LZlFZq521QKxbR4CN?=
+ =?us-ascii?Q?92lyfdZHL/Da1ExI77L0t6D5vqVQS5U7iPkflVfMMy+25u2X47epzvh2oCKx?=
+ =?us-ascii?Q?X6IbNbGHf6JPFT6k7bWG+vyM9QqIDwjkmr9K4HZ0fVTEYAqj6EnXf0h3ZpOZ?=
+ =?us-ascii?Q?ekaLZUycQBXWWMU8FQ/T6iITBKP08zak+/HMc3prAd0YVQjQGCE7Rc3bW97P?=
+ =?us-ascii?Q?Zr9TEYneq/V07Qg0NvRCiP/+Aest5MJ9WrwXTpTIrE5KUU9FhkJCeNDdNuN4?=
+ =?us-ascii?Q?lfNIf51tqeqTRVkfJ60iV4+TLz3WbzN75YJW2wVoQlRtE0cPeJUZlKQdpJYp?=
+ =?us-ascii?Q?FcE/e5zt2M5JTPLvI6AR0faj4vmEb1s=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2b41c45-b724-4c72-4695-08da4d881082
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR10MB4166.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2022 22:00:01.5929
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rlYjkvI5+3gs0tmfp1RKqoLVi+LOs0qxYiTWjLaEwsH29hDZqrG44r/JH5S/5URLnr3j98FZb53+9D8/adGdJY0Nw6fkJY5ASoTQNV//mq0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR10MB2975
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
+ definitions=2022-06-13_09:2022-06-13,2022-06-13 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ phishscore=0 adultscore=0 mlxscore=0 bulkscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2204290000 definitions=main-2206130086
+X-Proofpoint-GUID: hMRV-kFWFo7kDfVEw_KBx-EBIMhTEj7g
+X-Proofpoint-ORIG-GUID: hMRV-kFWFo7kDfVEw_KBx-EBIMhTEj7g
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add some selftests for signature checking when FIPS mode is enabled.  These
-need to be done before we start actually using the signature checking for
-things and must panic the kernel upon failure.
+Andrew Morton <akpm@linux-foundation.org> writes:
+> On Mon, 16 May 2022 17:05:06 -0700 Stephen Brennan <stephen.s.brennan@oracle.com> wrote:
+>
+>> The kernel can be configured to contain a lot of introspection or
+>> debugging information built-in, such as ORC for unwinding stack traces,
+>> BTF for type information, and of course kallsyms. Debuggers could use
+>> this information to navigate a core dump or live system, but they need
+>> to be able to find it.
+>> 
+>> This patch series adds the necessary symbols into vmcoreinfo, which
+>> would allow a debugger to find and interpret the kallsyms table. Using
+>> the kallsyms data, the debugger can then lookup any symbol, allowing it
+>> to find ORC, BTF, or any other useful data.
+>> 
+>> This would allow a live kernel, or core dump, to be debugged without
+>> any DWARF debuginfo. This is useful for many cases: the debuginfo may
+>> not have been generated, or you may not want to deploy the large files
+>> everywhere you need them.
+>
+> Am trying to understand the value of all of this.  Can you explain
+> further why carrying the dwarf info is problematic?  How problematic
+> are these large files?
 
-Note that the tests must not check the blacklist lest this provide a way to
-prevent a kernel from booting by installing a hash of a test key in the
-appropriate UEFI table.
+The primary value I see in this is that it unlocks data that's already
+present in core dumps. Most distribution kernels already have
+CONFIG_KALLSYMS_ALL, but you can't reliably find the symbol table in a
+core dump without a change like this. Most distribution kernels already
+have a fair amount of type information via BTF already built-in (though
+as I mention below, there's a bit more that would be useful). So this
+change can unlock that data, and make core dumps self-describing: you
+can open one up at any time without extra debuginfo, and start reading
+symbols and data values out of memory.
 
-Reported-by: Simo Sorce <simo@redhat.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
----
+As far as the DWARF, I do find it unwieldy, we're talking about file
+sizes ranging from 500 MiB to a 1 GiB or maybe a bit more. This isn't
+huge for on-disk storage. But for things like OS images, it's pretty
+hefty just for the off-chance that you need debugging.
 
- crypto/asymmetric_keys/Kconfig           |   10 +
- crypto/asymmetric_keys/Makefile          |    1 
- crypto/asymmetric_keys/selftest.c        |  224 ++++++++++++++++++++++++++++++
- crypto/asymmetric_keys/x509_parser.h     |    9 +
- crypto/asymmetric_keys/x509_public_key.c |    8 +
- 5 files changed, 251 insertions(+), 1 deletion(-)
- create mode 100644 crypto/asymmetric_keys/selftest.c
+A bigger concern than the size of the files is that, we frequently deal
+with customers who, due to some sort of requirements, have a policy
+against installing debuginfo packages on production machine. When they
+inevitably ask folks like me to help debug the kernel on their "no
+debuginfo" machines, I'd like to be able to just get my job done using
+the info already there, rather than battling them over debuginfo.
 
-diff --git a/crypto/asymmetric_keys/Kconfig b/crypto/asymmetric_keys/Kconfig
-index 460bc5d0a828..3df3fe4ed95f 100644
---- a/crypto/asymmetric_keys/Kconfig
-+++ b/crypto/asymmetric_keys/Kconfig
-@@ -75,4 +75,14 @@ config SIGNED_PE_FILE_VERIFICATION
- 	  This option provides support for verifying the signature(s) on a
- 	  signed PE binary.
- 
-+config FIPS_SIGNATURE_SELFTEST
-+	bool "Run FIPS selftests on the X.509+PKCS7 signature verification"
-+	help
-+	  This option causes some selftests to be run on the signature
-+	  verification code, using some built in data.  This is required
-+	  for FIPS.
-+	depends on KEYS
-+	depends on ASYMMETRIC_KEY_TYPE
-+	depends on PKCS7_MESSAGE_PARSER
-+
- endif # ASYMMETRIC_KEY_TYPE
-diff --git a/crypto/asymmetric_keys/Makefile b/crypto/asymmetric_keys/Makefile
-index 0f190500dd87..0d1fa1b692c6 100644
---- a/crypto/asymmetric_keys/Makefile
-+++ b/crypto/asymmetric_keys/Makefile
-@@ -22,6 +22,7 @@ x509_key_parser-y := \
- 	x509_cert_parser.o \
- 	x509_loader.o \
- 	x509_public_key.o
-+x509_key_parser-$(CONFIG_FIPS_SIGNATURE_SELFTEST) += selftest.o
- 
- $(obj)/x509_cert_parser.o: \
- 	$(obj)/x509.asn1.h \
-diff --git a/crypto/asymmetric_keys/selftest.c b/crypto/asymmetric_keys/selftest.c
-new file mode 100644
-index 000000000000..fa0bf7f24284
---- /dev/null
-+++ b/crypto/asymmetric_keys/selftest.c
-@@ -0,0 +1,224 @@
-+/* Self-testing for signature checking.
-+ *
-+ * Copyright (C) 2022 Red Hat, Inc. All Rights Reserved.
-+ * Written by David Howells (dhowells@redhat.com)
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/cred.h>
-+#include <linux/key.h>
-+#include <crypto/pkcs7.h>
-+#include "x509_parser.h"
-+
-+struct certs_test {
-+	const u8	*data;
-+	size_t		data_len;
-+	const u8	*pkcs7;
-+	size_t		pkcs7_len;
-+};
-+
-+/*
-+ * Set of X.509 certificates to provide public keys for the tests.  These will
-+ * be loaded into a temporary keyring for the duration of the testing.
-+ */
-+static const __initconst u8 certs_selftest_keys[] = {
-+	"\x30\x82\x05\x55\x30\x82\x03\x3d\xa0\x03\x02\x01\x02\x02\x14\x73"
-+	"\x98\xea\x98\x2d\xd0\x2e\xa8\xb1\xcf\x57\xc7\xf2\x97\xb3\xe6\x1a"
-+	"\xfc\x8c\x0a\x30\x0d\x06\x09\x2a\x86\x48\x86\xf7\x0d\x01\x01\x0b"
-+	"\x05\x00\x30\x34\x31\x32\x30\x30\x06\x03\x55\x04\x03\x0c\x29\x43"
-+	"\x65\x72\x74\x69\x66\x69\x63\x61\x74\x65\x20\x76\x65\x72\x69\x66"
-+	"\x69\x63\x61\x74\x69\x6f\x6e\x20\x73\x65\x6c\x66\x2d\x74\x65\x73"
-+	"\x74\x69\x6e\x67\x20\x6b\x65\x79\x30\x20\x17\x0d\x32\x32\x30\x35"
-+	"\x31\x38\x32\x32\x33\x32\x34\x31\x5a\x18\x0f\x32\x31\x32\x32\x30"
-+	"\x34\x32\x34\x32\x32\x33\x32\x34\x31\x5a\x30\x34\x31\x32\x30\x30"
-+	"\x06\x03\x55\x04\x03\x0c\x29\x43\x65\x72\x74\x69\x66\x69\x63\x61"
-+	"\x74\x65\x20\x76\x65\x72\x69\x66\x69\x63\x61\x74\x69\x6f\x6e\x20"
-+	"\x73\x65\x6c\x66\x2d\x74\x65\x73\x74\x69\x6e\x67\x20\x6b\x65\x79"
-+	"\x30\x82\x02\x22\x30\x0d\x06\x09\x2a\x86\x48\x86\xf7\x0d\x01\x01"
-+	"\x01\x05\x00\x03\x82\x02\x0f\x00\x30\x82\x02\x0a\x02\x82\x02\x01"
-+	"\x00\xcc\xac\x49\xdd\x3b\xca\xb0\x15\x7e\x84\x6a\xb2\x0a\x69\x5f"
-+	"\x1c\x0a\x61\x82\x3b\x4f\x2c\xa3\x95\x2c\x08\x58\x4b\xb1\x5d\x99"
-+	"\xe0\xc3\xc1\x79\xc2\xb3\xeb\xc0\x1e\x6d\x3e\x54\x1d\xbd\xb7\x92"
-+	"\x7b\x4d\xb5\x95\x58\xb2\x52\x2e\xc6\x24\x4b\x71\x63\x80\x32\x77"
-+	"\xa7\x38\x5e\xdb\x72\xae\x6e\x0d\xec\xfb\xb6\x6d\x01\x7f\xe9\x55"
-+	"\x66\xdf\xbf\x1d\x76\x78\x02\x31\xe8\xe5\x07\xf8\xb7\x82\x5c\x0d"
-+	"\xd4\xbb\xfb\xa2\x59\x0d\x2e\x3a\x78\x95\x3a\x8b\x46\x06\x47\x44"
-+	"\x46\xd7\xcd\x06\x6a\x41\x13\xe3\x19\xf6\xbb\x6e\x38\xf4\x83\x01"
-+	"\xa3\xbf\x4a\x39\x4f\xd7\x0a\xe9\x38\xb3\xf5\x94\x14\x4e\xdd\xf7"
-+	"\x43\xfd\x24\xb2\x49\x3c\xa5\xf7\x7a\x7c\xd4\x45\x3d\x97\x75\x68"
-+	"\xf1\xed\x4c\x42\x0b\x70\xca\x85\xf3\xde\xe5\x88\x2c\xc5\xbe\xb6"
-+	"\x97\x34\xba\x24\x02\xcd\x8b\x86\x9f\xa9\x73\xca\x73\xcf\x92\x81"
-+	"\xee\x75\x55\xbb\x18\x67\x5c\xff\x3f\xb5\xdd\x33\x1b\x0c\xe9\x78"
-+	"\xdb\x5c\xcf\xaa\x5c\x43\x42\xdf\x5e\xa9\x6d\xec\xd7\xd7\xff\xe6"
-+	"\xa1\x3a\x92\x1a\xda\xae\xf6\x8c\x6f\x7b\xd5\xb4\x6e\x06\xe9\x8f"
-+	"\xe8\xde\x09\x31\x89\xed\x0e\x11\xa1\xfa\x8a\xe9\xe9\x64\x59\x62"
-+	"\x53\xda\xd1\x70\xbe\x11\xd4\x99\x97\x11\xcf\x99\xde\x0b\x9d\x94"
-+	"\x7e\xaa\xb8\x52\xea\x37\xdb\x90\x7e\x35\xbd\xd9\xfe\x6d\x0a\x48"
-+	"\x70\x28\xdd\xd5\x0d\x7f\x03\x80\x93\x14\x23\x8f\xb9\x22\xcd\x7c"
-+	"\x29\xfe\xf1\x72\xb5\x5c\x0b\x12\xcf\x9c\x15\xf6\x11\x4c\x7a\x45"
-+	"\x25\x8c\x45\x0a\x34\xac\x2d\x9a\x81\xca\x0b\x13\x22\xcd\xeb\x1a"
-+	"\x38\x88\x18\x97\x96\x08\x81\xaa\xcc\x8f\x0f\x8a\x32\x7b\x76\x68"
-+	"\x03\x68\x43\xbf\x11\xba\x55\x60\xfd\x80\x1c\x0d\x9b\x69\xb6\x09"
-+	"\x72\xbc\x0f\x41\x2f\x07\x82\xc6\xe3\xb2\x13\x91\xc4\x6d\x14\x95"
-+	"\x31\xbe\x19\xbd\xbc\xed\xe1\x4c\x74\xa2\xe0\x78\x0b\xbb\x94\xec"
-+	"\x4c\x53\x3a\xa2\xb5\x84\x1d\x4b\x65\x7e\xdc\xf7\xdb\x36\x7d\xbe"
-+	"\x9e\x3b\x36\x66\x42\x66\x76\x35\xbf\xbe\xf0\xc1\x3c\x7c\xe9\x42"
-+	"\x5c\x24\x53\x03\x05\xa8\x67\x24\x50\x02\x75\xff\x24\x46\x3b\x35"
-+	"\x89\x76\xe6\x70\xda\xc5\x51\x8c\x9a\xe5\x05\xb0\x0b\xd0\x2d\xd4"
-+	"\x7d\x57\x75\x94\x6b\xf9\x0a\xad\x0e\x41\x00\x15\xd0\x4f\xc0\x7f"
-+	"\x90\x2d\x18\x48\x8f\x28\xfe\x5d\xa7\xcd\x99\x9e\xbd\x02\x6c\x8a"
-+	"\x31\xf3\x1c\xc7\x4b\xe6\x93\xcd\x42\xa2\xe4\x68\x10\x47\x9d\xfc"
-+	"\x21\x02\x03\x01\x00\x01\xa3\x5d\x30\x5b\x30\x0c\x06\x03\x55\x1d"
-+	"\x13\x01\x01\xff\x04\x02\x30\x00\x30\x0b\x06\x03\x55\x1d\x0f\x04"
-+	"\x04\x03\x02\x07\x80\x30\x1d\x06\x03\x55\x1d\x0e\x04\x16\x04\x14"
-+	"\xf5\x87\x03\xbb\x33\xce\x1b\x73\xee\x02\xec\xcd\xee\x5b\x88\x17"
-+	"\x51\x8f\xe3\xdb\x30\x1f\x06\x03\x55\x1d\x23\x04\x18\x30\x16\x80"
-+	"\x14\xf5\x87\x03\xbb\x33\xce\x1b\x73\xee\x02\xec\xcd\xee\x5b\x88"
-+	"\x17\x51\x8f\xe3\xdb\x30\x0d\x06\x09\x2a\x86\x48\x86\xf7\x0d\x01"
-+	"\x01\x0b\x05\x00\x03\x82\x02\x01\x00\xc0\x2e\x12\x41\x7b\x73\x85"
-+	"\x16\xc8\xdb\x86\x79\xe8\xf5\xcd\x44\xf4\xc6\xe2\x81\x23\x5e\x47"
-+	"\xcb\xab\x25\xf1\x1e\x58\x3e\x31\x7f\x78\xad\x85\xeb\xfe\x14\x88"
-+	"\x60\xf7\x7f\xd2\x26\xa2\xf4\x98\x2a\xfd\xba\x05\x0c\x20\x33\x12"
-+	"\xcc\x4d\x14\x61\x64\x81\x93\xd3\x33\xed\xc8\xff\xf1\x78\xcc\x5f"
-+	"\x51\x9f\x09\xd7\xbe\x0d\x5c\x74\xfd\x9b\xdf\x52\x4a\xc9\xa8\x71"
-+	"\x25\x33\x04\x10\x67\x36\xd0\xb3\x0b\xc9\xa1\x40\x72\xae\x41\x7b"
-+	"\x68\xe6\xe4\x7b\xd0\x28\xf7\x6d\xe7\x3f\x50\xfc\x91\x7c\x91\x56"
-+	"\xd4\xdf\xa6\xbb\xe8\x4d\x1b\x58\xaa\x28\xfa\xc1\x19\xeb\x11\x2f"
-+	"\x24\x8b\x7c\xc5\xa9\x86\x26\xaa\x6e\xb7\x9b\xd5\xf8\x06\xfb\x02"
-+	"\x52\x7b\x9c\x9e\xa1\xe0\x07\x8b\x5e\xe4\xb8\x55\x29\xf6\x48\x52"
-+	"\x1c\x1b\x54\x2d\x46\xd8\xe5\x71\xb9\x60\xd1\x45\xb5\x92\x89\x8a"
-+	"\x63\x58\x2a\xb3\xc6\xb2\x76\xe2\x3c\x82\x59\x04\xae\x5a\xc4\x99"
-+	"\x7b\x2e\x4b\x46\x57\xb8\x29\x24\xb2\xfd\xee\x2c\x0d\xa4\x83\xfa"
-+	"\x65\x2a\x07\x35\x8b\x97\xcf\xbd\x96\x2e\xd1\x7e\x6c\xc2\x1e\x87"
-+	"\xb6\x6c\x76\x65\xb5\xb2\x62\xda\x8b\xe9\x73\xe3\xdb\x33\xdd\x13"
-+	"\x3a\x17\x63\x6a\x76\xde\x8d\x8f\xe0\x47\x61\x28\x3a\x83\xff\x8f"
-+	"\xe7\xc7\xe0\x4a\xa3\xe5\x07\xcf\xe9\x8c\x35\x35\x2e\xe7\x80\x66"
-+	"\x31\xbf\x91\x58\x0a\xe1\x25\x3d\x38\xd3\xa4\xf0\x59\x34\x47\x07"
-+	"\x62\x0f\xbe\x30\xdd\x81\x88\x58\xf0\x28\xb0\x96\xe5\x82\xf8\x05"
-+	"\xb7\x13\x01\xbc\xfa\xc6\x1f\x86\x72\xcc\xf9\xee\x8e\xd9\xd6\x04"
-+	"\x8c\x24\x6c\xbf\x0f\x5d\x37\x39\xcf\x45\xc1\x93\x3a\xd2\xed\x5c"
-+	"\x58\x79\x74\x86\x62\x30\x7e\x8e\xbb\xdd\x7a\xa9\xed\xca\x40\xcb"
-+	"\x62\x47\xf4\xb4\x9f\x52\x7f\x72\x63\xa8\xf0\x2b\xaf\x45\x2a\x48"
-+	"\x19\x6d\xe3\xfb\xf9\x19\x66\x69\xc8\xcc\x62\x87\x6c\x53\x2b\x2d"
-+	"\x6e\x90\x6c\x54\x3a\x82\x25\x41\xcb\x18\x6a\xa4\x22\xa8\xa1\xc4"
-+	"\x47\xd7\x81\x00\x1c\x15\x51\x0f\x1a\xaf\xef\x9f\xa6\x61\x8c\xbd"
-+	"\x6b\x8b\xed\xe6\xac\x0e\xb6\x3a\x4c\x92\xe6\x0f\x91\x0a\x0f\x71"
-+	"\xc7\xa0\xb9\x0d\x3a\x17\x5a\x6f\x35\xc8\xe7\x50\x4f\x46\xe8\x70"
-+	"\x60\x48\x06\x82\x8b\x66\x58\xe6\x73\x91\x9c\x12\x3d\x35\x8e\x46"
-+	"\xad\x5a\xf5\xb3\xdb\x69\x21\x04\xfd\xd3\x1c\xdf\x94\x9d\x56\xb0"
-+	"\x0a\xd1\x95\x76\x8d\xec\x9e\xdd\x0b\x15\x97\x64\xad\xe5\xf2\x62"
-+	"\x02\xfc\x9e\x5f\x56\x42\x39\x05\xb3"
-+};
-+
-+/*
-+ * Signed data and detached signature blobs that form the verification tests.
-+ */
-+static const __initconst u8 certs_selftest_1_data[] = {
-+	"\x54\x68\x69\x73\x20\x69\x73\x20\x73\x6f\x6d\x65\x20\x74\x65\x73"
-+	"\x74\x20\x64\x61\x74\x61\x20\x75\x73\x65\x64\x20\x66\x6f\x72\x20"
-+	"\x73\x65\x6c\x66\x2d\x74\x65\x73\x74\x69\x6e\x67\x20\x63\x65\x72"
-+	"\x74\x69\x66\x69\x63\x61\x74\x65\x20\x76\x65\x72\x69\x66\x69\x63"
-+	"\x61\x74\x69\x6f\x6e\x2e\x0a"
-+};
-+
-+static const __initconst u8 certs_selftest_1_pkcs7[] = {
-+	"\x30\x82\x02\xab\x06\x09\x2a\x86\x48\x86\xf7\x0d\x01\x07\x02\xa0"
-+	"\x82\x02\x9c\x30\x82\x02\x98\x02\x01\x01\x31\x0d\x30\x0b\x06\x09"
-+	"\x60\x86\x48\x01\x65\x03\x04\x02\x01\x30\x0b\x06\x09\x2a\x86\x48"
-+	"\x86\xf7\x0d\x01\x07\x01\x31\x82\x02\x75\x30\x82\x02\x71\x02\x01"
-+	"\x01\x30\x4c\x30\x34\x31\x32\x30\x30\x06\x03\x55\x04\x03\x0c\x29"
-+	"\x43\x65\x72\x74\x69\x66\x69\x63\x61\x74\x65\x20\x76\x65\x72\x69"
-+	"\x66\x69\x63\x61\x74\x69\x6f\x6e\x20\x73\x65\x6c\x66\x2d\x74\x65"
-+	"\x73\x74\x69\x6e\x67\x20\x6b\x65\x79\x02\x14\x73\x98\xea\x98\x2d"
-+	"\xd0\x2e\xa8\xb1\xcf\x57\xc7\xf2\x97\xb3\xe6\x1a\xfc\x8c\x0a\x30"
-+	"\x0b\x06\x09\x60\x86\x48\x01\x65\x03\x04\x02\x01\x30\x0d\x06\x09"
-+	"\x2a\x86\x48\x86\xf7\x0d\x01\x01\x01\x05\x00\x04\x82\x02\x00\xac"
-+	"\xb0\xf2\x07\xd6\x99\x6d\xc0\xc0\xd9\x8d\x31\x0d\x7e\x04\xeb\xc3"
-+	"\x88\x90\xc4\x58\x46\xd4\xe2\xa0\xa3\x25\xe3\x04\x50\x37\x85\x8c"
-+	"\x91\xc6\xfc\xc5\xd4\x92\xfd\x05\xd8\xb8\xa3\xb8\xba\x89\x13\x00"
-+	"\x88\x79\x99\x51\x6b\x5b\x28\x31\xc0\xb3\x1b\x7a\x68\x2c\x00\xdb"
-+	"\x4b\x46\x11\xf3\xfa\x50\x8e\x19\x89\xa2\x4c\xda\x4c\x89\x01\x11"
-+	"\x89\xee\xd3\xc8\xc1\xe7\xa7\xf6\xb2\xa2\xf8\x65\xb8\x35\x20\x33"
-+	"\xba\x12\x62\xd5\xbd\xaa\x71\xe5\x5b\xc0\x6a\x32\xff\x6a\x2e\x23"
-+	"\xef\x2b\xb6\x58\xb1\xfb\x5f\x82\x34\x40\x6d\x9f\xbc\x27\xac\x37"
-+	"\x23\x99\xcf\x7d\x20\xb2\x39\x01\xc0\x12\xce\xd7\x5d\x2f\xb6\xab"
-+	"\xb5\x56\x4f\xef\xf4\x72\x07\x58\x65\xa9\xeb\x1f\x75\x1c\x5f\x0c"
-+	"\x88\xe0\xa4\xe2\xcd\x73\x2b\x9e\xb2\x05\x7e\x12\xf8\xd0\x66\x41"
-+	"\xcc\x12\x63\xd4\xd6\xac\x9b\x1d\x14\x77\x8d\x1c\x57\xd5\x27\xc6"
-+	"\x49\xa2\x41\x43\xf3\x59\x29\xe5\xcb\xd1\x75\xbc\x3a\x97\x2a\x72"
-+	"\x22\x66\xc5\x3b\xc1\xba\xfc\x53\x18\x98\xe2\x21\x64\xc6\x52\x87"
-+	"\x13\xd5\x7c\x42\xe8\xfb\x9c\x9a\x45\x32\xd5\xa5\x22\x62\x9d\xd4"
-+	"\xcb\xa4\xfa\x77\xbb\x50\x24\x0b\x8b\x88\x99\x15\x56\xa9\x1e\x92"
-+	"\xbf\x5d\x94\x77\xb6\xf1\x67\x01\x60\x06\x58\x5c\xdf\x18\x52\x79"
-+	"\x37\x30\x93\x7d\x87\x04\xf1\xe0\x55\x59\x52\xf3\xc2\xb1\x1c\x5b"
-+	"\x12\x7c\x49\x87\xfb\xf7\xed\xdd\x95\x71\xec\x4b\x1a\x85\x08\xb0"
-+	"\xa0\x36\xc4\x7b\xab\x40\xe0\xf1\x98\xcc\xaf\x19\x40\x8f\x47\x6f"
-+	"\xf0\x6c\x84\x29\x7f\x7f\x04\x46\xcb\x08\x0f\xe0\xc1\xc9\x70\x6e"
-+	"\x95\x3b\xa4\xbc\x29\x2b\x53\x67\x45\x1b\x0d\xbc\x13\xa5\x76\x31"
-+	"\xaf\xb9\xd0\xe0\x60\x12\xd2\xf4\xb7\x7c\x58\x7e\xf6\x2d\xbb\x24"
-+	"\x14\x5a\x20\x24\xa8\x12\xdf\x25\xbd\x42\xce\x96\x7c\x2e\xba\x14"
-+	"\x1b\x81\x9f\x18\x45\xa4\xc6\x70\x3e\x0e\xf0\xd3\x7b\x9c\x10\xbe"
-+	"\xb8\x7a\x89\xc5\x9e\xd9\x97\xdf\xd7\xe7\xc6\x1d\xc0\x20\x6c\xb8"
-+	"\x1e\x3a\x63\xb8\x39\x8e\x8e\x62\xd5\xd2\xb4\xcd\xff\x46\xfc\x8e"
-+	"\xec\x07\x35\x0c\xff\xb0\x05\xe6\xf4\xe5\xfe\xa2\xe3\x0a\xe6\x36"
-+	"\xa7\x4a\x7e\x62\x1d\xc4\x50\x39\x35\x4e\x28\xcb\x4a\xfb\x9d\xdb"
-+	"\xdd\x23\xd6\x53\xb1\x74\x77\x12\xf7\x9c\xf0\x9a\x6b\xf7\xa9\x64"
-+	"\x2d\x86\x21\x2a\xcf\xc6\x54\xf5\xc9\xad\xfa\xb5\x12\xb4\xf3\x51"
-+	"\x77\x55\x3c\x6f\x0c\x32\xd3\x8c\x44\x39\x71\x25\xfe\x96\xd2"
-+};
-+
-+/*
-+ * List of tests to be run.
-+ */
-+#define TEST(data, pkcs7) { data, sizeof(data) - 1, pkcs7, sizeof(pkcs7) - 1 }
-+static const struct certs_test certs_tests[] __initconst = {
-+	TEST(certs_selftest_1_data, certs_selftest_1_pkcs7),
-+};
-+
-+int __init fips_signature_selftest(void)
-+{
-+	struct key *keyring;
-+	int ret, i;
-+
-+	pr_notice("Running certificate verification selftests\n");
-+
-+	keyring = keyring_alloc(".certs_selftest",
-+				GLOBAL_ROOT_UID, GLOBAL_ROOT_GID, current_cred(),
-+				(KEY_POS_ALL & ~KEY_POS_SETATTR) |
-+				KEY_USR_VIEW | KEY_USR_READ |
-+				KEY_USR_SEARCH,
-+				KEY_ALLOC_NOT_IN_QUOTA,
-+				NULL, NULL);
-+	if (IS_ERR(keyring))
-+		panic("Can't allocate certs selftest keyring: %ld\n",
-+		      PTR_ERR(keyring));
-+
-+	ret = x509_load_certificate_list(certs_selftest_keys,
-+					 sizeof(certs_selftest_keys) - 1, keyring);
-+	if (ret < 0)
-+		panic("Can't allocate certs selftest keyring: %d\n", ret);
-+
-+	for (i = 0; i < ARRAY_SIZE(certs_tests); i++) {
-+		const struct certs_test *test = &certs_tests[i];
-+		struct pkcs7_message *pkcs7;
-+
-+		pkcs7 = pkcs7_parse_message(test->pkcs7, test->pkcs7_len);
-+		if (IS_ERR(pkcs7))
-+			panic("Certs selftest %d: pkcs7_parse_message() = %d\n", i, ret);
-+
-+		pkcs7_supply_detached_data(pkcs7, test->data, test->data_len);
-+
-+		ret = pkcs7_verify(pkcs7, VERIFYING_MODULE_SIGNATURE);
-+		if (ret < 0)
-+			panic("Certs selftest %d: pkcs7_verify() = %d\n", i, ret);
-+
-+		ret = pkcs7_validate_trust(pkcs7, keyring);
-+		if (ret < 0)
-+			panic("Certs selftest %d: pkcs7_validate_trust() = %d\n", i, ret);
-+
-+		pkcs7_free_message(pkcs7);
-+	}
-+
-+	key_put(keyring);
-+	return 0;
-+}
-diff --git a/crypto/asymmetric_keys/x509_parser.h b/crypto/asymmetric_keys/x509_parser.h
-index 97a886cbe01c..a299c9c56f40 100644
---- a/crypto/asymmetric_keys/x509_parser.h
-+++ b/crypto/asymmetric_keys/x509_parser.h
-@@ -40,6 +40,15 @@ struct x509_certificate {
- 	bool		blacklisted;
- };
- 
-+/*
-+ * selftest.c
-+ */
-+#ifdef CONFIG_FIPS_SIGNATURE_SELFTEST
-+extern int __init fips_signature_selftest(void);
-+#else
-+static inline int fips_signature_selftest(void) { return 0; }
-+#endif
-+
- /*
-  * x509_cert_parser.c
-  */
-diff --git a/crypto/asymmetric_keys/x509_public_key.c b/crypto/asymmetric_keys/x509_public_key.c
-index 77ed4e93ad56..0b4943a4592b 100644
---- a/crypto/asymmetric_keys/x509_public_key.c
-+++ b/crypto/asymmetric_keys/x509_public_key.c
-@@ -244,9 +244,15 @@ static struct asymmetric_key_parser x509_key_parser = {
- /*
-  * Module stuff
-  */
-+extern int __init certs_selftest(void);
- static int __init x509_key_init(void)
- {
--	return register_asymmetric_key_parser(&x509_key_parser);
-+	int ret;
-+
-+	ret = register_asymmetric_key_parser(&x509_key_parser);
-+	if (ret < 0)
-+		return ret;
-+	return fips_signature_selftest();
- }
- 
- static void __exit x509_key_exit(void)
+There's also some corner cases. I've definitely taken a core dump on my
+personal machine, only to find that the debuginfo had been deleted due
+to a kernel package upgrade, so the core dump was useless. And some
+distributions build kernels with no debuginfo packages. This can suit
+all of those possibilities without undue overhead.
 
+>> I've demonstrated a proof of concept for this at LSF/MM+BPF during a
+>> lighting talk. Using a work-in-progress branch of the drgn debugger, and
+>> an extended set of BTF generated by a patched version of dwarves, I've
+>> been able to open a core dump without any DWARF info and do basic tasks
+>> such as enumerating slab caches, block devices, tasks, and doing
+>> backtraces. I hope this series can be a first step toward a new
+>> possibility of "DWARFless debugging".
+>> 
+>> Related discussion around the BTF side of this:
+>> https://lore.kernel.org/bpf/586a6288-704a-f7a7-b256-e18a675927df@oracle.com/T/#u
+>> 
+>> Some work-in-progress branches using this feature:
+>> https://github.com/brenns10/dwarves/tree/remove_percpu_restriction_1
+>> https://github.com/brenns10/drgn/tree/kallsyms_plus_btf
+>
+> What's the story on using gdb with this?
 
+There is no story with GDB as of yet. I was already familiar with the
+code of drgn when I started down this path, so that's what I used. Drgn
+happens to have a very extensible type system which made it quite simple
+to do. I'd love to see support for doing this with GDB, and might look
+into the feasibility of it, but it's not on my roadmap right now.
+
+That said, the drgn work is moving ahead nicely, much of this code has
+moved from a "work-in-progress branch" to pull requests which are in
+review. I have every intention of seeing those changes through.
+
+Thanks for taking a look at this. I'm happy to answer more questions or
+clarify anytihng you want.
+
+Stephen

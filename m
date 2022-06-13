@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196D95492DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1533F549023
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238093AbiFMMRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
+        id S1351542AbiFMMkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358844AbiFMMOW (ORCPT
+        with ESMTP id S1355530AbiFMMjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:14:22 -0400
+        Mon, 13 Jun 2022 08:39:10 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2949B54BCC;
-        Mon, 13 Jun 2022 04:02:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A6C3388B;
+        Mon, 13 Jun 2022 04:09:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B58BAB80E92;
-        Mon, 13 Jun 2022 11:02:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27894C34114;
-        Mon, 13 Jun 2022 11:01:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2514DB80EAA;
+        Mon, 13 Jun 2022 11:09:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E0BCC34114;
+        Mon, 13 Jun 2022 11:09:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118120;
-        bh=D+zeTU6SXXi0V2t/Dy+iOTkgmgB5f1gBGleEo3rDDCg=;
+        s=korg; t=1655118546;
+        bh=z3JeTc4QV3sbDogezC0WvQrnNPjcN+SUQtDaUubSRX8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QUsS2f/fkFhIcdm3E3E0fWjePXLgifQmsPe/SXCmvA4w8H4fnktawmxHSySS2CnI3
-         JfsQRgE5ms+rXtL/oOJZohgk7+3Sa+KCN3FyRGn5OIwmtZp4htYH5Ez6Gik1cHro04
-         DT4XRxVz7VY0rh72KRgxJ4sxCzuGIU0CcyvdMpfo=
+        b=gIDxidRaX8cjfqK3+uQx4Ry4vR8vl4QUv4qzgvnF+3q3ppmHTEipk9vhQv1eRRWUO
+         MkmiQW9tX98ECX+Tu26HkFbY/ER3Q++bRJIfSn7vdIqZeklMEgPNy6IdNoa1I6i8jE
+         s+1tRYlXbK7t1t2hH+N9dkddWBGjCkZZZf8eYIgw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -36,19 +36,19 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 243/287] net: ipv6: unexport __init-annotated seg6_hmac_init()
+Subject: [PATCH 5.10 107/172] net: ipv6: unexport __init-annotated seg6_hmac_init()
 Date:   Mon, 13 Jun 2022 12:11:07 +0200
-Message-Id: <20220613094931.384937546@linuxfoundation.org>
+Message-Id: <20220613094915.980170904@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,10 +89,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 deletion(-)
 
 diff --git a/net/ipv6/seg6_hmac.c b/net/ipv6/seg6_hmac.c
-index 8546f94f30d4..a886a8f4c0cb 100644
+index 85dddfe3a2c6..b9179708e3c1 100644
 --- a/net/ipv6/seg6_hmac.c
 +++ b/net/ipv6/seg6_hmac.c
-@@ -406,7 +406,6 @@ int __init seg6_hmac_init(void)
+@@ -400,7 +400,6 @@ int __init seg6_hmac_init(void)
  {
  	return seg6_hmac_init_algo();
  }

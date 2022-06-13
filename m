@@ -2,106 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45953549A54
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96E4F54991E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232304AbiFMRob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 13:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
+        id S244408AbiFMPov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 11:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241927AbiFMRoO (ORCPT
+        with ESMTP id S1351258AbiFMPoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 13:44:14 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D98D168D15;
-        Mon, 13 Jun 2022 06:18:41 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id a10so5603330pju.3;
-        Mon, 13 Jun 2022 06:18:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=GqcjIBiZHdkiFQqTyaXjMxy6knKrlT2JCmzywSrR6F4=;
-        b=W6Stz7yNDgHrafTk7QMKI2bwWX8VJq3RL1tKe0dtoZAC9IKwoc/ga5MzReVsIFu4Dz
-         QoY+auFOsQVCqFHQcxwPsDgQy5Pwug8khg+wJ2WWNLvM3i+EGKDlsuniQV8NDUjs/ihC
-         dqOE/gWGix6+NgoklW5oEQIujMeaKFeaDq84mzvNsyDvF3CHYRlZbMWAMurZoQMp1cQI
-         QXH3Jxx6UxNCdAy1wHPu4flkEOtDc945/d9jZQG5rQL/nq6L6WNsxHUJVW5POUOADclk
-         1MpfYPYrDuqQmYuZxyVds9SVpa1AVLhhp0wzgctFpTbcaKb9KUU6dyNw8XW464wT9nPj
-         hf9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=GqcjIBiZHdkiFQqTyaXjMxy6knKrlT2JCmzywSrR6F4=;
-        b=I38iXnN8g4bnC4Dm+Rkikg6jK73LhpqcibB/6Usdp0DCmjVXIza0MsZYLryrCJxt4E
-         IssC5+cPnIghh915MPpNdajUQQPypA7Dbl/R56bGkSiCQbHfD+9lcwtgnxh3kQr5unOk
-         ihahJqaFft8pHgbkxSlOdtT/cvSVJQ28GQ6nYo508wxHMK8wHowaWi2hVddyRhWL4zTy
-         LrirjoBfxRFkAFu7lvgaIb5J0E39bY2BRFluXCf+euGbOrGdnjK0mu9qA/cFdNUBak5y
-         O+pIoHX7osRTd7xsuvLj5BPT71D1w0lFtWyBqM+ioAyREm5anCelkad/JRI+DLOzJKJu
-         KALw==
-X-Gm-Message-State: AOAM530DYUXScd3TexBKkUqPTx5YOKZjebzMc8ecdsmG1/C7vGAg0oT2
-        7eTmu7SOaARh9JTS0MELK2k=
-X-Google-Smtp-Source: ABdhPJxSXN3t0e9qsGy4v9kZozVl7y++GOeJiSptH8f6Zw38nYb+LQeHXkHR2poHPSudLwd9DSR4RA==
-X-Received: by 2002:a17:90a:5409:b0:1e8:664e:41dd with SMTP id z9-20020a17090a540900b001e8664e41ddmr15785311pjh.173.1655126320488;
-        Mon, 13 Jun 2022 06:18:40 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 19-20020a170902e9d300b001639f038250sm5070965plk.220.2022.06.13.06.18.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 06:18:39 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 13 Jun 2022 06:18:38 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/247] 5.15.47-rc1 review
-Message-ID: <20220613131838.GA3571788@roeck-us.net>
-References: <20220613094922.843438024@linuxfoundation.org>
+        Mon, 13 Jun 2022 11:44:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F27AAE84
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:19:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655126346;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f5Lm2wWyGosZM6z8k7SEF9qOMpYtGM8nzWGhua6hIYw=;
+        b=aQxCYw6/0qtiepuqjaiGzkIVo00LZiNleFV24Qojp6Wud5YmGbSFxjGrd6f/QbuL4Vna9t
+        x+o7MDJCdLIajaXtf4+zYHd3Zw4Ey4SBtxSmBX/mGojjiILgZ8SswDob8UYA3DoGhPLHHv
+        3aughk/Hi/Fk/g9sJBBANkj6Z62KSwg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-569--wfr7ystMWKUEgkXXr7izQ-1; Mon, 13 Jun 2022 09:19:04 -0400
+X-MC-Unique: -wfr7ystMWKUEgkXXr7izQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9B8B28224F2;
+        Mon, 13 Jun 2022 13:18:56 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0BF2F2026D64;
+        Mon, 13 Jun 2022 13:18:56 +0000 (UTC)
+Message-ID: <8d7ddb5a-0d0b-3f2e-e049-900360e95fc6@redhat.com>
+Date:   Mon, 13 Jun 2022 09:18:55 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20220510153413.400020-1-longman@redhat.com>
+ <20220510153413.400020-8-longman@redhat.com>
+ <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
+ <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
+ <YqarMyNo9oHxhZFh@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YqarMyNo9oHxhZFh@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 12:08:22PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.47 release.
-> There are 247 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 15 Jun 2022 09:47:08 +0000.
-> Anything received after that time might be too late.
-> 
+On 6/12/22 23:12, Tejun Heo wrote:
+> Hello,
+>
+> On Sun, Jun 12, 2022 at 11:02:38PM -0400, Waiman Long wrote:
+>> That is the behavior enforced by setting the CPU_EXCLUSIVE bit in cgroup v1.
+>> I haven't explicitly change it to make it different in cgroup v2. The major
+>> reason is that I don't want change to one cpuset to affect a sibling
+>> partition as it may make the code more complicate to validate if a partition
+>> is valid.
+> If at all possible, I'd really like to avoid situations where a parent can't
+> withdraw resources due to something that a descendant does.
 
-Early feedback:
+No, it doesn't affect parent at all. It just limit whats the siblings 
+can do due to their mutual constraint. If this is what the confusion is 
+about, I will try to reword the doc text.
 
-Building arm:allmodconfig ... failed
---------------
-Error log:
-In file included from include/linux/kernel.h:16,
-                 from include/linux/crypto.h:16,
-                 from include/crypto/hash.h:11,
-                 from lib/iov_iter.c:2:
-lib/iov_iter.c: In function 'iter_xarray_get_pages':
-include/linux/minmax.h:20:35: error: comparison of distinct pointer types lacks a cast
+Cheers,
+Longman
 
-This will likely affect affects all branches where commit 6c77676645ad
-("iov_iter: Fix iter_xarray_get_pages{,_alloc}()") was backported.
-
-The fix is upstream commit 1c27f1fc1549 ("iov_iter: fix build issue due
-to possible type mis-match").
-
-Guenter

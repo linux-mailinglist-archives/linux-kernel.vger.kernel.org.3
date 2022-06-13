@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E83548EB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A49E54895F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382023AbiFMOQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52980 "EHLO
+        id S243216AbiFMKWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:22:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381670AbiFMOIx (ORCPT
+        with ESMTP id S242947AbiFMKUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:08:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06D59874B;
-        Mon, 13 Jun 2022 04:41:34 -0700 (PDT)
+        Mon, 13 Jun 2022 06:20:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C0E210;
+        Mon, 13 Jun 2022 03:17:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31E0B612AB;
-        Mon, 13 Jun 2022 11:41:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43C96C34114;
-        Mon, 13 Jun 2022 11:41:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C1A84CE1166;
+        Mon, 13 Jun 2022 10:17:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3125C34114;
+        Mon, 13 Jun 2022 10:17:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120493;
-        bh=CrkCWVSL0i8pqXnfO+c68e2gA3PsrZBJFkdZ5anU2jE=;
+        s=korg; t=1655115437;
+        bh=SOaqGZShnNaHr8H3G8tENc/Lx6XCp24eDgVvTmgJi/g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wqiy3dmuplRs4ClijHFVZnDOBSwVxvfIh682CXss6qNuYM0KKMPzANyG8z2QiVsny
-         oKzYxZAYF98I5klVsFzC2vAzkd43eQEK+Kh2stkFSzNowIcO/a6esqB11jYQM9VZB8
-         gviQKBTlyp/kRCBHBFrRjLurmW+Rg7WTPwR4q1Yo=
+        b=phv3RFYhBAoUyxc4QZfDhlOAQWUhyFhXrsluu1mES1I+OBrDnUhhQGzq79Rj+ibLD
+         TbmiavcEaTypIX3ZaSzf/VOFnyak7ARWErB5AM1L3BXYSBeodmt5aOXq1bQMOa6w6T
+         teO/JkK/8zNtupMQhC6Oh7OHMG7on/nv3DDz/CIA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 053/298] rtc: mt6397: check return value after calling platform_get_resource()
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 073/167] video: fbdev: clcdfb: Fix refcount leak in clcdfb_of_vram_setup
 Date:   Mon, 13 Jun 2022 12:09:07 +0200
-Message-Id: <20220613094926.559127413@linuxfoundation.org>
+Message-Id: <20220613094858.000197973@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,36 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit d3b43eb505bffb8e4cdf6800c15660c001553fe6 ]
+[ Upstream commit b23789a59fa6f00e98a319291819f91fbba0deb8 ]
 
-It will cause null-ptr-deref if platform_get_resource() returns NULL,
-we need check the return value.
+of_parse_phandle() returns a node pointer with refcount incremented, we should
+use of_node_put() on it when not need anymore.  Add missing of_node_put() to
+avoid refcount leak.
 
-Fixes: fc2979118f3f ("rtc: mediatek: Add MT6397 RTC driver")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Link: https://lore.kernel.org/r/20220505125043.1594771-1-yangyingliang@huawei.com
+Fixes: d10715be03bd ("video: ARM CLCD: Add DT support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rtc/rtc-mt6397.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/video/fbdev/amba-clcd.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
-index 80dc479a6ff0..1d297af80f87 100644
---- a/drivers/rtc/rtc-mt6397.c
-+++ b/drivers/rtc/rtc-mt6397.c
-@@ -269,6 +269,8 @@ static int mtk_rtc_probe(struct platform_device *pdev)
+diff --git a/drivers/video/fbdev/amba-clcd.c b/drivers/video/fbdev/amba-clcd.c
+index 89880b70cc28..ca3707e59633 100644
+--- a/drivers/video/fbdev/amba-clcd.c
++++ b/drivers/video/fbdev/amba-clcd.c
+@@ -849,12 +849,15 @@ static int clcdfb_of_vram_setup(struct clcd_fb *fb)
+ 		return -ENODEV;
+ 
+ 	fb->fb.screen_base = of_iomap(memory, 0);
+-	if (!fb->fb.screen_base)
++	if (!fb->fb.screen_base) {
++		of_node_put(memory);
  		return -ENOMEM;
++	}
  
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	if (!res)
-+		return -EINVAL;
- 	rtc->addr_base = res->start;
+ 	fb->fb.fix.smem_start = of_translate_address(memory,
+ 			of_get_address(memory, 0, &size, NULL));
+ 	fb->fb.fix.smem_len = size;
++	of_node_put(memory);
  
- 	rtc->data = of_device_get_match_data(&pdev->dev);
+ 	return 0;
+ }
 -- 
 2.35.1
 

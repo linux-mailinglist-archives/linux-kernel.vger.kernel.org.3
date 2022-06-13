@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 898CD5490DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76321548A3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351606AbiFMLGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:06:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        id S1379184AbiFMN5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350868AbiFMK7A (ORCPT
+        with ESMTP id S1379993AbiFMNwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:59:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ABB91928A;
-        Mon, 13 Jun 2022 03:32:30 -0700 (PDT)
+        Mon, 13 Jun 2022 09:52:10 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E1055B7;
+        Mon, 13 Jun 2022 04:33:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7EB18B80EA3;
-        Mon, 13 Jun 2022 10:32:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D95BBC34114;
-        Mon, 13 Jun 2022 10:32:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BCB1CCE1166;
+        Mon, 13 Jun 2022 11:33:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A35D4C34114;
+        Mon, 13 Jun 2022 11:33:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116348;
-        bh=/gEi9uoEGtw9vFKpk5iTBlPbocY+K5T7zTqsewRdOx8=;
+        s=korg; t=1655120009;
+        bh=SvdoKDO845DJKIMOR1OY8H7Us3qIkHAwANgwu9W1094=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JgoHuS260zbY8LTHsFkTfqhD19Guo9yXFvd1M7wIluxamqFS9di/aBM44N+s9lHTb
-         Z4LQyUYpS+9YILilP9gDEzak+/dv0bNxc3rc9jsdqoQrbpI9bwiwNzsLJsy5arWTL0
-         4/8iVaiEH66qicJBGK5OjPJcHNnCzJrFsGRYz97w=
+        b=J0Zed07+u81k1isGWmGszON1FnoYyS4wvimZj32UHC6WbbUwTmk23Zr4lV/AqaP8c
+         nxCDWD8+dioE2sNvQaQ7GpE1WGjE02aWxaYmRiK6Vu3UI7d2YkYyAxCTHHWNooJTXX
+         Zq6QcOPQDM0fOMKyt4W2sTxss4BOuzk4qk205bjo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gong Yuanjun <ruc_gongyuanjun@163.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
+        Lina Wang <lina.wang@mediatek.com>,
+        Song Liu <songliubraving@fb.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 165/218] mips: cpc: Fix refcount leak in mips_cpc_default_phys_base
+Subject: [PATCH 5.18 198/339] selftests net: fix bpf build error
 Date:   Mon, 13 Jun 2022 12:10:23 +0200
-Message-Id: <20220613094925.605068397@linuxfoundation.org>
+Message-Id: <20220613094932.671794098@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,33 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gong Yuanjun <ruc_gongyuanjun@163.com>
+From: Lina Wang <lina.wang@mediatek.com>
 
-[ Upstream commit 4107fa700f314592850e2c64608f6ede4c077476 ]
+[ Upstream commit cf67838c4422eab826679b076dad99f96152b4de ]
 
-Add the missing of_node_put() to release the refcount incremented
-by of_find_compatible_node().
+bpf_helpers.h has been moved to tools/lib/bpf since 5.10, so add more
+including path.
 
-Signed-off-by: Gong Yuanjun <ruc_gongyuanjun@163.com>
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fixes: edae34a3ed92 ("selftests net: add UDP GRO fraglist + bpf self-tests")
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Signed-off-by: Lina Wang <lina.wang@mediatek.com>
+Acked-by: Song Liu <songliubraving@fb.com>
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Link: https://lore.kernel.org/r/20220606064517.8175-1-lina.wang@mediatek.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/kernel/mips-cpc.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/net/bpf/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/kernel/mips-cpc.c b/arch/mips/kernel/mips-cpc.c
-index fcf9af492d60..cf46502c605e 100644
---- a/arch/mips/kernel/mips-cpc.c
-+++ b/arch/mips/kernel/mips-cpc.c
-@@ -31,6 +31,7 @@ phys_addr_t __weak mips_cpc_default_phys_base(void)
- 	cpc_node = of_find_compatible_node(of_root, NULL, "mti,mips-cpc");
- 	if (cpc_node) {
- 		err = of_address_to_resource(cpc_node, 0, &res);
-+		of_node_put(cpc_node);
- 		if (!err)
- 			return res.start;
- 	}
+diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
+index f91bf14bbee7..8a69c91fcca0 100644
+--- a/tools/testing/selftests/net/bpf/Makefile
++++ b/tools/testing/selftests/net/bpf/Makefile
+@@ -2,6 +2,7 @@
+ 
+ CLANG ?= clang
+ CCINCLUDE += -I../../bpf
++CCINCLUDE += -I../../../lib
+ CCINCLUDE += -I../../../../../usr/include/
+ 
+ TEST_CUSTOM_PROGS = $(OUTPUT)/bpf/nat6to4.o
+@@ -10,5 +11,4 @@ all: $(TEST_CUSTOM_PROGS)
+ $(OUTPUT)/%.o: %.c
+ 	$(CLANG) -O2 -target bpf -c $< $(CCINCLUDE) -o $@
+ 
+-clean:
+-	rm -f $(TEST_CUSTOM_PROGS)
++EXTRA_CLEAN := $(TEST_CUSTOM_PROGS)
 -- 
 2.35.1
 

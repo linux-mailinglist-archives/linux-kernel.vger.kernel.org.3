@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0C1548FDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 789C3548924
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357508AbiFMLyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
+        id S1376497AbiFMNTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355406AbiFMLtn (ORCPT
+        with ESMTP id S1359490AbiFMNJ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:49:43 -0400
+        Mon, 13 Jun 2022 09:09:58 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17F84D691;
-        Mon, 13 Jun 2022 03:53:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6072F3A1AB;
+        Mon, 13 Jun 2022 04:20:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D1065B80E59;
-        Mon, 13 Jun 2022 10:53:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449EAC34114;
-        Mon, 13 Jun 2022 10:53:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EAC35B80D3A;
+        Mon, 13 Jun 2022 11:20:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5436FC34114;
+        Mon, 13 Jun 2022 11:20:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117607;
-        bh=XZ3DXHceYrXFRJWGQOc38JciDUeO9kXH2roFkHG6OwE=;
+        s=korg; t=1655119256;
+        bh=UZ5Dc/FfKOsM7z4voa90CsZSNexUen7lsXLITcFOEA0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BFoaS6HOEwA4foEds9f8QNWcEr/k4UMFFlH/yzDUWVm28IKr3bJyxnPdEODqgo6ei
-         QbG2TWLlb3IIEsOfey7SgcZChFO9U8bN5rvR59FNjSC2ur6tvyYxDiuMw9no6qzyYa
-         ktjLKMKSZOGd1A6N6ow8l2bSa4plS9tXYhlh6hyA=
+        b=OHm6Jz7ZBPj0lBT5i7taaK8dTi6QL5E508dQpc0hzZOd/xf1HifYAI0OGpSksq8/c
+         imM6BUYQ5iUaXdFxJ3V7UkM8uqiq1Nspx3K2zhuX2iqJvYLOhBj5pJp0zhZVVI4hT/
+         eHjiH7crnlE/t44BkVikS2vycr/FjT4O40TOR0Ik=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 398/411] vringh: Fix loop descriptors check in the indirect cases
+Subject: [PATCH 5.15 169/247] drivers: staging: rtl8723bs: Fix deadlock in rtw_surveydone_event_callback()
 Date:   Mon, 13 Jun 2022 12:11:11 +0200
-Message-Id: <20220613094940.596787076@linuxfoundation.org>
+Message-Id: <20220613094928.083747391@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,61 +54,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xie Yongji <xieyongji@bytedance.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit dbd29e0752286af74243cf891accf472b2f3edd8 ]
+[ Upstream commit cc7ad0d77b51c872d629bcd98aea463a3c4109e7 ]
 
-We should use size of descriptor chain to test loop condition
-in the indirect case. And another statistical count is also introduced
-for indirect descriptors to avoid conflict with the statistical count
-of direct descriptors.
+There is a deadlock in rtw_surveydone_event_callback(),
+which is shown below:
 
-Fixes: f87d0fbb5798 ("vringh: host-side implementation of virtio rings.")
-Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-Signed-off-by: Fam Zheng <fam.zheng@bytedance.com>
-Message-Id: <20220505100910.137-1-xieyongji@bytedance.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
+   (Thread 1)                  |      (Thread 2)
+                               | _set_timer()
+rtw_surveydone_event_callback()|  mod_timer()
+ spin_lock_bh() //(1)          |  (wait a time)
+ ...                           | rtw_scan_timeout_handler()
+ del_timer_sync()              |  spin_lock_bh() //(2)
+ (wait timer to stop)          |  ...
+
+We hold pmlmepriv->lock in position (1) of thread 1 and use
+del_timer_sync() to wait timer to stop, but timer handler
+also need pmlmepriv->lock in position (2) of thread 2.
+As a result, rtw_surveydone_event_callback() will block forever.
+
+This patch extracts del_timer_sync() from the protection of
+spin_lock_bh(), which could let timer handler to obtain
+the needed lock. What`s more, we change spin_lock_bh() in
+rtw_scan_timeout_handler() to spin_lock_irq(). Otherwise,
+spin_lock_bh() will also cause deadlock() in timer handler.
+
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220409061836.60529-1-duoming@zju.edu.cn
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/vhost/vringh.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/staging/rtl8723bs/core/rtw_mlme.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-index 4653de001e26..264cbe385a63 100644
---- a/drivers/vhost/vringh.c
-+++ b/drivers/vhost/vringh.c
-@@ -264,7 +264,7 @@ __vringh_iov(struct vringh *vrh, u16 i,
- 	     gfp_t gfp,
- 	     int (*copy)(void *dst, const void *src, size_t len))
- {
--	int err, count = 0, up_next, desc_max;
-+	int err, count = 0, indirect_count = 0, up_next, desc_max;
- 	struct vring_desc desc, *descs;
- 	struct vringh_range range = { -1ULL, 0 }, slowrange;
- 	bool slow = false;
-@@ -321,7 +321,12 @@ __vringh_iov(struct vringh *vrh, u16 i,
- 			continue;
- 		}
+diff --git a/drivers/staging/rtl8723bs/core/rtw_mlme.c b/drivers/staging/rtl8723bs/core/rtw_mlme.c
+index cf79bec916c5..2c20bf26b10e 100644
+--- a/drivers/staging/rtl8723bs/core/rtw_mlme.c
++++ b/drivers/staging/rtl8723bs/core/rtw_mlme.c
+@@ -749,7 +749,9 @@ void rtw_surveydone_event_callback(struct adapter	*adapter, u8 *pbuf)
+ 	}
  
--		if (count++ == vrh->vring.num) {
-+		if (up_next == -1)
-+			count++;
-+		else
-+			indirect_count++;
-+
-+		if (count > vrh->vring.num || indirect_count > desc_max) {
- 			vringh_bad("Descriptor loop in %p", descs);
- 			err = -ELOOP;
- 			goto fail;
-@@ -383,6 +388,7 @@ __vringh_iov(struct vringh *vrh, u16 i,
- 				i = return_from_indirect(vrh, &up_next,
- 							 &descs, &desc_max);
- 				slow = false;
-+				indirect_count = 0;
- 			} else
- 				break;
- 		}
+ 	if (check_fwstate(pmlmepriv, _FW_UNDER_SURVEY)) {
++		spin_unlock_bh(&pmlmepriv->lock);
+ 		del_timer_sync(&pmlmepriv->scan_to_timer);
++		spin_lock_bh(&pmlmepriv->lock);
+ 		_clr_fwstate_(pmlmepriv, _FW_UNDER_SURVEY);
+ 	}
+ 
+@@ -1584,11 +1586,11 @@ void rtw_scan_timeout_handler(struct timer_list *t)
+ 						  mlmepriv.scan_to_timer);
+ 	struct	mlme_priv *pmlmepriv = &adapter->mlmepriv;
+ 
+-	spin_lock_bh(&pmlmepriv->lock);
++	spin_lock_irq(&pmlmepriv->lock);
+ 
+ 	_clr_fwstate_(pmlmepriv, _FW_UNDER_SURVEY);
+ 
+-	spin_unlock_bh(&pmlmepriv->lock);
++	spin_unlock_irq(&pmlmepriv->lock);
+ 
+ 	rtw_indicate_scan_done(adapter, true);
+ }
 -- 
 2.35.1
 

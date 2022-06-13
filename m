@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D196549393
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F275F548F76
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354484AbiFMMqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
+        id S1355485AbiFMMaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358531AbiFMMkV (ORCPT
+        with ESMTP id S1354285AbiFMMXg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:40:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2966A5F26B;
-        Mon, 13 Jun 2022 04:10:33 -0700 (PDT)
+        Mon, 13 Jun 2022 08:23:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776AF580C1;
+        Mon, 13 Jun 2022 04:03:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CEB7EB80EB5;
-        Mon, 13 Jun 2022 11:10:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21D81C34114;
-        Mon, 13 Jun 2022 11:10:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 164C961347;
+        Mon, 13 Jun 2022 11:03:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22CF7C34114;
+        Mon, 13 Jun 2022 11:03:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118618;
-        bh=ZxmjvAyRXC2LFYdT7yWmSVT58DifZY7x0GFuK+Fi3t4=;
+        s=korg; t=1655118219;
+        bh=7ZJdOB8NWztNFmJga+HULPqObVqV573O24/WNfw5IOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ifnmst9961mOJd8J9D3AfsPqLY4CPuiFKphFN3KeTOkZGjFzw/47y04NfYnhUSKMX
-         FQFBhw1OrFym53Q3gFGzvDMFPsF1R13xQM2wncEyhiDENNUZ81P5V/zZuaS57TU1wO
-         VWJ1nEoKkjC3cmUK2vqBkCzsinNBFlo4ywNwXwvw=
+        b=bs5P8EuWTZrNNXBYkbdEIHdCjWsH9FOsbzt7AB7EUdQSPQU3VfRJzPd4c6fPehXIe
+         sAFPGnWRUSFhhTvmMHzlXZd26KMoh7CL+Jj+448abflepfjbe5ijtFA+xcE6xM0VlI
+         5o9RMvH9l6f4xI5whZ7vx07tyXkAJI0mdC76YUvg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 141/172] x86/cpu: Elide KCSAN for cpu_has() and friends
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 4.19 277/287] ata: libata-transport: fix {dma|pio|xfer}_mode sysfs files
 Date:   Mon, 13 Jun 2022 12:11:41 +0200
-Message-Id: <20220613094922.046118448@linuxfoundation.org>
+Message-Id: <20220613094932.396481278@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-[ Upstream commit a6a5eb269f6f3a2fe392f725a8d9052190c731e2 ]
+commit 72aad489f992871e908ff6d9055b26c6366fb864 upstream.
 
-As x86 uses the <asm-generic/bitops/instrumented-*.h> headers, the
-regular forms of all bitops are instrumented with explicit calls to
-KASAN and KCSAN checks. As these are explicit calls, these are not
-suppressed by the noinstr function attribute.
+The {dma|pio}_mode sysfs files are incorrectly documented as having a
+list of the supported DMA/PIO transfer modes, while the corresponding
+fields of the *struct* ata_device hold the transfer mode IDs, not masks.
 
-This can result in calls to those check functions in noinstr code, which
-objtool warns about:
+To match these docs, the {dma|pio}_mode (and even xfer_mode!) sysfs
+files are handled by the ata_bitfield_name_match() macro which leads to
+reading such kind of nonsense from them:
 
-vmlinux.o: warning: objtool: enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x28: call to __kcsan_check_access() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+$ cat /sys/class/ata_device/dev3.0/pio_mode
+XFER_UDMA_7, XFER_UDMA_6, XFER_UDMA_5, XFER_UDMA_4, XFER_MW_DMA_4,
+XFER_PIO_6, XFER_PIO_5, XFER_PIO_4, XFER_PIO_3, XFER_PIO_2, XFER_PIO_1,
+XFER_PIO_0
 
-Prevent this by using the arch_*() bitops, which are the underlying
-bitops without explciit instrumentation.
+Using the correct ata_bitfield_name_search() macro fixes that:
 
-[null: Changelog]
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220502111216.290518605@infradead.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+$ cat /sys/class/ata_device/dev3.0/pio_mode
+XFER_PIO_4
+
+While fixing the file documentation, somewhat reword the {dma|pio}_mode
+file doc and add a note about being mostly useful for PATA devices to
+the xfer_mode file doc...
+
+Fixes: d9027470b886 ("[libata] Add ATA transport class")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc: stable@vger.kernel.org
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/cpufeature.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/ABI/testing/sysfs-ata |   11 ++++++-----
+ drivers/ata/libata-transport.c      |    2 +-
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-index 59bf91c57aa8..619c1f80a2ab 100644
---- a/arch/x86/include/asm/cpufeature.h
-+++ b/arch/x86/include/asm/cpufeature.h
-@@ -49,7 +49,7 @@ extern const char * const x86_power_flags[32];
- extern const char * const x86_bug_flags[NBUGINTS*32];
+--- a/Documentation/ABI/testing/sysfs-ata
++++ b/Documentation/ABI/testing/sysfs-ata
+@@ -107,13 +107,14 @@ Description:
+ 				described in ATA8 7.16 and 7.17. Only valid if
+ 				the device is not a PM.
  
- #define test_cpu_cap(c, bit)						\
--	 test_bit(bit, (unsigned long *)((c)->x86_capability))
-+	 arch_test_bit(bit, (unsigned long *)((c)->x86_capability))
+-		pio_mode:	(RO) Transfer modes supported by the device when
+-				in PIO mode. Mostly used by PATA device.
++		pio_mode:	(RO) PIO transfer mode used by the device.
++				Mostly used by PATA devices.
+ 
+-		xfer_mode:	(RO) Current transfer mode
++		xfer_mode:	(RO) Current transfer mode. Mostly used by
++				PATA devices.
+ 
+-		dma_mode:	(RO) Transfer modes supported by the device when
+-				in DMA mode. Mostly used by PATA device.
++		dma_mode:	(RO) DMA transfer mode used by the device.
++				Mostly used by PATA devices.
+ 
+ 		class:		(RO) Device class. Can be "ata" for disk,
+ 				"atapi" for packet device, "pmp" for PM, or
+--- a/drivers/ata/libata-transport.c
++++ b/drivers/ata/libata-transport.c
+@@ -196,7 +196,7 @@ static struct {
+ 	{ XFER_PIO_0,			"XFER_PIO_0" },
+ 	{ XFER_PIO_SLOW,		"XFER_PIO_SLOW" }
+ };
+-ata_bitfield_name_match(xfer,ata_xfer_names)
++ata_bitfield_name_search(xfer, ata_xfer_names)
  
  /*
-  * There are 32 bits/features in each mask word.  The high bits
--- 
-2.35.1
-
+  * ATA Port attributes
 
 

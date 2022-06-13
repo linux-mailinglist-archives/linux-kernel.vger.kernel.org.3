@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293F5548BD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859E9548CD8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358592AbiFMMHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:07:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
+        id S1346991AbiFMKvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:51:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358523AbiFMMEO (ORCPT
+        with ESMTP id S1348199AbiFMKtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:04:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D6210B7;
-        Mon, 13 Jun 2022 03:57:29 -0700 (PDT)
+        Mon, 13 Jun 2022 06:49:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B51F2DD4D;
+        Mon, 13 Jun 2022 03:26:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 679F3B80E5E;
-        Mon, 13 Jun 2022 10:57:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C7DC34114;
-        Mon, 13 Jun 2022 10:57:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D3BD660AEB;
+        Mon, 13 Jun 2022 10:26:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D97F6C34114;
+        Mon, 13 Jun 2022 10:26:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117846;
-        bh=6kX7lQ3SI7tLqVTe2jkdJTUIYjwZCLNYfm1aGQ1vbEs=;
+        s=korg; t=1655116009;
+        bh=4SgZ93K4izLIRG+/5o4JaxKKXjWiS68cLfgaBrU9xEU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mRjGoRNLipBcIXKfUhFyAevd2hoFJw6Qp0uAVGB+apTYyGrvKsVlrKs1SSX+/oN+m
-         cbmaTCItc55PWkROYf/mEMG5Y2HaLpqum5MW32U3TDI97bHDYuNJ9CCmS5BtDGKYbN
-         TX8LRM9NHZnjNUMlUqfK745MbNLcLzq6EjbqFIyQ=
+        b=cM8fzjNeg27GD+9SPZHKHMKoQRQ+quKIbaw9jJHOOxhkrbUGkYfZExV0askdhCoax
+         GY9pG5JdRfz9PjiYLwJNGugPS5eay9aoL/WeCCutd6F3EGuZoeH51lRBBcYaS1sMol
+         pemFcAO2y9BG4owKejz8RVrnbIAZht0BXtFk1HNs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kan Liang <kan.liang@linux.intel.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 141/287] perf jevents: Fix event syntax error caused by ExtSel
+        stable@vger.kernel.org, Jan Kara <jack@suse.cz>,
+        Theodore Tso <tytso@mit.edu>
+Subject: [PATCH 4.14 107/218] ext4: verify dir block before splitting it
 Date:   Mon, 13 Jun 2022 12:09:25 +0200
-Message-Id: <20220613094928.152252119@linuxfoundation.org>
+Message-Id: <20220613094923.804849291@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,59 +54,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+From: Jan Kara <jack@suse.cz>
 
-[ Upstream commit f4df0dbbe62ee8e4405a57b27ccd54393971c773 ]
+commit 46c116b920ebec58031f0a78c5ea9599b0d2a371 upstream.
 
-In the origin code, when "ExtSel" is 1, the eventcode will change to
-"eventcode |= 1 << 21”. For event “UNC_Q_RxL_CREDITS_CONSUMED_VN0.DRS",
-its "ExtSel" is "1", its eventcode will change from 0x1E to 0x20001E,
-but in fact the eventcode should <=0x1FF, so this will cause the parse
-fail:
+Before splitting a directory block verify its directory entries are sane
+so that the splitting code does not access memory it should not.
 
-  # perf stat -e "UNC_Q_RxL_CREDITS_CONSUMED_VN0.DRS" -a sleep 0.1
-  event syntax error: '.._RxL_CREDITS_CONSUMED_VN0.DRS'
-                                    \___ value too big for format, maximum is 511
-
-On the perf kernel side, the kernel assumes the valid bits are continuous.
-It will adjust the 0x100 (bit 8 for perf tool) to bit 21 in HW.
-
-DEFINE_UNCORE_FORMAT_ATTR(event_ext, event, "config:0-7,21");
-
-So the perf tool follows the kernel side and just set bit8 other than bit21.
-
-Fixes: fedb2b518239cbc0 ("perf jevents: Add support for parsing uncore json files")
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-Signed-off-by: Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Acked-by: Ian Rogers <irogers@google.com>
-Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexander Shishkin <alexander.shishkin@intel.com>
-Cc: Andi Kleen <ak@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220525140410.1706851-1-zhengjun.xing@linux.intel.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220518093332.13986-1-jack@suse.cz
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/pmu-events/jevents.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ext4/namei.c |   32 +++++++++++++++++++++-----------
+ 1 file changed, 21 insertions(+), 11 deletions(-)
 
-diff --git a/tools/perf/pmu-events/jevents.c b/tools/perf/pmu-events/jevents.c
-index 31331c42b0e3..0f5a63026d21 100644
---- a/tools/perf/pmu-events/jevents.c
-+++ b/tools/perf/pmu-events/jevents.c
-@@ -563,7 +563,7 @@ int json_events(const char *fn,
- 			} else if (json_streq(map, field, "ExtSel")) {
- 				char *code = NULL;
- 				addfield(map, &code, "", "", val);
--				eventcode |= strtoul(code, NULL, 0) << 21;
-+				eventcode |= strtoul(code, NULL, 0) << 8;
- 				free(code);
- 			} else if (json_streq(map, field, "EventName")) {
- 				addfield(map, &name, "", "", val);
--- 
-2.35.1
-
+--- a/fs/ext4/namei.c
++++ b/fs/ext4/namei.c
+@@ -271,9 +271,9 @@ static struct dx_frame *dx_probe(struct
+ 				 struct dx_hash_info *hinfo,
+ 				 struct dx_frame *frame);
+ static void dx_release(struct dx_frame *frames);
+-static int dx_make_map(struct inode *dir, struct ext4_dir_entry_2 *de,
+-		       unsigned blocksize, struct dx_hash_info *hinfo,
+-		       struct dx_map_entry map[]);
++static int dx_make_map(struct inode *dir, struct buffer_head *bh,
++		       struct dx_hash_info *hinfo,
++		       struct dx_map_entry *map_tail);
+ static void dx_sort_map(struct dx_map_entry *map, unsigned count);
+ static struct ext4_dir_entry_2 *dx_move_dirents(char *from, char *to,
+ 		struct dx_map_entry *offsets, int count, unsigned blocksize);
+@@ -1202,15 +1202,23 @@ static inline int search_dirblock(struct
+  * Create map of hash values, offsets, and sizes, stored at end of block.
+  * Returns number of entries mapped.
+  */
+-static int dx_make_map(struct inode *dir, struct ext4_dir_entry_2 *de,
+-		       unsigned blocksize, struct dx_hash_info *hinfo,
++static int dx_make_map(struct inode *dir, struct buffer_head *bh,
++		       struct dx_hash_info *hinfo,
+ 		       struct dx_map_entry *map_tail)
+ {
+ 	int count = 0;
+-	char *base = (char *) de;
++	struct ext4_dir_entry_2 *de = (struct ext4_dir_entry_2 *)bh->b_data;
++	unsigned int buflen = bh->b_size;
++	char *base = bh->b_data;
+ 	struct dx_hash_info h = *hinfo;
+ 
+-	while ((char *) de < base + blocksize) {
++	if (ext4_has_metadata_csum(dir->i_sb))
++		buflen -= sizeof(struct ext4_dir_entry_tail);
++
++	while ((char *) de < base + buflen) {
++		if (ext4_check_dir_entry(dir, NULL, de, bh, base, buflen,
++					 ((char *)de) - base))
++			return -EFSCORRUPTED;
+ 		if (de->name_len && de->inode) {
+ 			ext4fs_dirhash(de->name, de->name_len, &h);
+ 			map_tail--;
+@@ -1220,8 +1228,7 @@ static int dx_make_map(struct inode *dir
+ 			count++;
+ 			cond_resched();
+ 		}
+-		/* XXX: do we need to check rec_len == 0 case? -Chris */
+-		de = ext4_next_entry(de, blocksize);
++		de = ext4_next_entry(de, dir->i_sb->s_blocksize);
+ 	}
+ 	return count;
+ }
+@@ -1737,8 +1744,11 @@ static struct ext4_dir_entry_2 *do_split
+ 
+ 	/* create map in the end of data2 block */
+ 	map = (struct dx_map_entry *) (data2 + blocksize);
+-	count = dx_make_map(dir, (struct ext4_dir_entry_2 *) data1,
+-			     blocksize, hinfo, map);
++	count = dx_make_map(dir, *bh, hinfo, map);
++	if (count < 0) {
++		err = count;
++		goto journal_error;
++	}
+ 	map -= count;
+ 	dx_sort_map(map, count);
+ 	/* Ensure that neither split block is over half full */
 
 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E355495A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFAE054947C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378385AbiFMNlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
+        id S1378508AbiFMNlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378657AbiFMNjH (ORCPT
+        with ESMTP id S1378911AbiFMNjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:39:07 -0400
+        Mon, 13 Jun 2022 09:39:24 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6B278929;
-        Mon, 13 Jun 2022 04:27:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF0F0793A4;
+        Mon, 13 Jun 2022 04:28:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DBAE60B6E;
-        Mon, 13 Jun 2022 11:27:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7970CC34114;
-        Mon, 13 Jun 2022 11:27:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 072CA61243;
+        Mon, 13 Jun 2022 11:28:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 130E0C3411E;
+        Mon, 13 Jun 2022 11:28:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119666;
-        bh=OW9TanCI/TQSFzGgkQDobyBKng33JAZMRBLKjnfSQd8=;
+        s=korg; t=1655119697;
+        bh=rrdUq0+U2ydsV3HuaJAwxcFjpuqb+aKuO/e9fbI9Kmg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KFpPWvI7Rw7eU2Qe9BlgngZaAFscWn0kXR0GxXykl3R+y2Dl8sewBvVnVQ/7ft7cj
-         q9sBtDxb8mqg/Wq41VteAnV/IrXnMviSyn15JCekrDk/OFJuaGsuWq1E+a/JoSzy3b
-         g9TT3W/otgw5UQVzbFUhTdeShMk7gVslSunx5tmE=
+        b=AhWMC1qNHTsfVHC5NH/vQUQti5pgkTfUWvhlNb/P/NoW7d43GDMI2ODXectv9AJn6
+         xw9X1jgVA4EwhsHsP2DAZXiCrvNEDT9eztToQgy7lNxfZ7sS9Xf0RXfBSdg6vcZIao
+         cSWVDoILXPD7//8KjmM3R0wR7Tt+66zT/R22J0/c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Siddharth Vadapalli <s-vadapalli@ti.com>,
+        stable@vger.kernel.org, liuyacan <liuyacan@corp.netease.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 088/339] net: ethernet: ti: am65-cpsw: Fix fwnode passed to phylink_create()
-Date:   Mon, 13 Jun 2022 12:08:33 +0200
-Message-Id: <20220613094929.185381069@linuxfoundation.org>
+Subject: [PATCH 5.18 089/339] net/smc: set ini->smcrv2.ib_dev_v2 to NULL if SMC-Rv2 is unavailable
+Date:   Mon, 13 Jun 2022 12:08:34 +0200
+Message-Id: <20220613094929.215867138@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
 References: <20220613094926.497929857@linuxfoundation.org>
@@ -55,51 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddharth Vadapalli <s-vadapalli@ti.com>
+From: liuyacan <liuyacan@corp.netease.com>
 
-[ Upstream commit 0b7180072a9df5e18af5b58410fec38230848a8d ]
+[ Upstream commit b3b1a17538d3ef6a9667b2271216fd16d7678ab5 ]
 
-am65-cpsw-nuss driver incorrectly uses fwnode member of common
-ethernet device's "struct device_node" instead of using fwnode
-member of the port's "struct device_node" in phylink_create().
-This results in all ports having the same phy data when there
-are multiple ports with their phy properties populated in their
-respective nodes rather than the common ethernet device node.
+In the process of checking whether RDMAv2 is available, the current
+implementation first sets ini->smcrv2.ib_dev_v2, and then allocates
+smc buf desc and register rmb, but the latter may fail. In this case,
+the pointer should be reset.
 
-Fix it here by using fwnode member of the port's node.
-
-Fixes: e8609e69470f ("net: ethernet: ti: am65-cpsw: Convert to PHYLINK")
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-Link: https://lore.kernel.org/r/20220524062558.19296-1-s-vadapalli@ti.com
+Fixes: e49300a6bf62 ("net/smc: add listen processing for SMC-Rv2")
+Signed-off-by: liuyacan <liuyacan@corp.netease.com>
+Reviewed-by: Karsten Graul <kgraul@linux.ibm.com>
+Link: https://lore.kernel.org/r/20220525085408.812273-1-liuyacan@corp.netease.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/ti/am65-cpsw-nuss.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ net/smc/af_smc.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index d2747e9db286..98969070ed4b 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -9,6 +9,7 @@
- #include <linux/etherdevice.h>
- #include <linux/if_vlan.h>
- #include <linux/interrupt.h>
-+#include <linux/irqdomain.h>
- #include <linux/kernel.h>
- #include <linux/kmemleak.h>
- #include <linux/module.h>
-@@ -1989,7 +1990,9 @@ am65_cpsw_nuss_init_port_ndev(struct am65_cpsw_common *common, u32 port_idx)
+diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
+index 45a24d24210f..540b32d86d9b 100644
+--- a/net/smc/af_smc.c
++++ b/net/smc/af_smc.c
+@@ -2136,6 +2136,7 @@ static void smc_find_rdma_v2_device_serv(struct smc_sock *new_smc,
  
- 	phy_interface_set_rgmii(port->slave.phylink_config.supported_interfaces);
+ not_found:
+ 	ini->smcr_version &= ~SMC_V2;
++	ini->smcrv2.ib_dev_v2 = NULL;
+ 	ini->check_smcrv2 = false;
+ }
  
--	phylink = phylink_create(&port->slave.phylink_config, dev->fwnode, port->slave.phy_if,
-+	phylink = phylink_create(&port->slave.phylink_config,
-+				 of_node_to_fwnode(port->slave.phy_node),
-+				 port->slave.phy_if,
- 				 &am65_cpsw_phylink_mac_ops);
- 	if (IS_ERR(phylink))
- 		return PTR_ERR(phylink);
 -- 
 2.35.1
 

@@ -2,46 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E54D548C89
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF79548B24
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359131AbiFMNJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
+        id S1383958AbiFMO2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357635AbiFMM7J (ORCPT
+        with ESMTP id S1383860AbiFMOYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:59:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EFFBC08;
-        Mon, 13 Jun 2022 04:17:53 -0700 (PDT)
+        Mon, 13 Jun 2022 10:24:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F6121803;
+        Mon, 13 Jun 2022 04:45:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87DFCB80EA8;
-        Mon, 13 Jun 2022 11:17:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2561C34114;
-        Mon, 13 Jun 2022 11:17:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 086A8B80D31;
+        Mon, 13 Jun 2022 11:45:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EC41C3411C;
+        Mon, 13 Jun 2022 11:45:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119070;
-        bh=Wwdj1T6USH3co4gF2VcgO1aHK75MJbjaGejTGlFHUT8=;
+        s=korg; t=1655120733;
+        bh=cFMng5oSijTo5gpNi/AeI5RyKOms4r0P6/RbIrF9OBc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=et1w4K1WKS1sdSwL2DnRu4a8dQTzo9tqwdZ9YsH8o6ZahNoOhfzzp+qnnGuBnKBek
-         UmQqpRxa5hKBK7Q9w0/0AIeo3tYd9EYIj2R7O3dGj0QCWZpgKKvxbESfFrz6KwIzHG
-         4e+n4oOaxG+LCNPsNAfLv2a6Tvv9816KGHQ5PSJc=
+        b=bH8oi/h2/XJHNnm31Mo901Z1No2Mdq/4ZBT8LEInYUDlhbg5iiv2G6bGTpPFya9yQ
+         /ayHXdhVzwCXnbjUiG6TkEeToQEuBLpeNwrLEVQJ4W0DflncyunhFmJRL4KVqtTuO4
+         WUwrwihZmGQhVrBOuPposeyznFrHfsEH38na/xU4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kinglong Mee <kinglongmee@gmail.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        stable@vger.kernel.org,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 129/247] xprtrdma: treat all calls not a bcall when bc_serv is NULL
+Subject: [PATCH 5.17 137/298] bootconfig: Make the bootconfig.o as a normal object file
 Date:   Mon, 13 Jun 2022 12:10:31 +0200
-Message-Id: <20220613094926.873283886@linuxfoundation.org>
+Message-Id: <20220613094929.099497550@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,71 +64,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kinglong Mee <kinglongmee@gmail.com>
+From: Masami Hiramatsu <mhiramat@kernel.org>
 
-[ Upstream commit 11270e7ca268e8d61b5d9e5c3a54bd1550642c9c ]
+[ Upstream commit 6014a23638cdee63a71ef13c51d7c563eb5829ee ]
 
-When a rdma server returns a fault format reply, nfs v3 client may
-treats it as a bcall when bc service is not exist.
+Since the APIs defined in the bootconfig.o are not individually used,
+it is meaningless to build it as library by lib-y. Use obj-y for that.
 
-The debug message at rpcrdma_bc_receive_call are,
+Link: https://lkml.kernel.org/r/164921225875.1090670.15565363126983098971.stgit@devnote2
 
-[56579.837169] RPC:       rpcrdma_bc_receive_call: callback XID
-00000001, length=20
-[56579.837174] RPC:       rpcrdma_bc_receive_call: 00 00 00 01 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 04
-
-After that, rpcrdma_bc_receive_call will meets NULL pointer as,
-
-[  226.057890] BUG: unable to handle kernel NULL pointer dereference at
-00000000000000c8
-...
-[  226.058704] RIP: 0010:_raw_spin_lock+0xc/0x20
-...
-[  226.059732] Call Trace:
-[  226.059878]  rpcrdma_bc_receive_call+0x138/0x327 [rpcrdma]
-[  226.060011]  __ib_process_cq+0x89/0x170 [ib_core]
-[  226.060092]  ib_cq_poll_work+0x26/0x80 [ib_core]
-[  226.060257]  process_one_work+0x1a7/0x360
-[  226.060367]  ? create_worker+0x1a0/0x1a0
-[  226.060440]  worker_thread+0x30/0x390
-[  226.060500]  ? create_worker+0x1a0/0x1a0
-[  226.060574]  kthread+0x116/0x130
-[  226.060661]  ? kthread_flush_work_fn+0x10/0x10
-[  226.060724]  ret_from_fork+0x35/0x40
-...
-
-Signed-off-by: Kinglong Mee <kinglongmee@gmail.com>
-Reviewed-by: Chuck Lever <chuck.lever@oracle.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Cc: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Reported-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/xprtrdma/rpc_rdma.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ lib/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/sunrpc/xprtrdma/rpc_rdma.c b/net/sunrpc/xprtrdma/rpc_rdma.c
-index c335c1361564..e9c69e9f4299 100644
---- a/net/sunrpc/xprtrdma/rpc_rdma.c
-+++ b/net/sunrpc/xprtrdma/rpc_rdma.c
-@@ -1120,6 +1120,7 @@ static bool
- rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep)
- #if defined(CONFIG_SUNRPC_BACKCHANNEL)
- {
-+	struct rpc_xprt *xprt = &r_xprt->rx_xprt;
- 	struct xdr_stream *xdr = &rep->rr_stream;
- 	__be32 *p;
+diff --git a/lib/Makefile b/lib/Makefile
+index 300f569c626b..4c0220cb4329 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -279,7 +279,7 @@ $(foreach file, $(libfdt_files), \
+ 	$(eval CFLAGS_$(file) = -I $(srctree)/scripts/dtc/libfdt))
+ lib-$(CONFIG_LIBFDT) += $(libfdt_files)
  
-@@ -1143,6 +1144,10 @@ rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep)
- 	if (*p != cpu_to_be32(RPC_CALL))
- 		return false;
+-lib-$(CONFIG_BOOT_CONFIG) += bootconfig.o
++obj-$(CONFIG_BOOT_CONFIG) += bootconfig.o
  
-+	/* No bc service. */
-+	if (xprt->bc_serv == NULL)
-+		return false;
-+
- 	/* Now that we are sure this is a backchannel call,
- 	 * advance to the RPC header.
- 	 */
+ obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
+ obj-$(CONFIG_INTERVAL_TREE_TEST) += interval_tree_test.o
 -- 
 2.35.1
 

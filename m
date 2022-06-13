@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E07C55487E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B36D5486A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345304AbiFMKfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
+        id S1353942AbiFML0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345232AbiFMKeD (ORCPT
+        with ESMTP id S1353349AbiFMLTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:34:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B540E27FF4;
-        Mon, 13 Jun 2022 03:22:03 -0700 (PDT)
+        Mon, 13 Jun 2022 07:19:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72BF43AA51;
+        Mon, 13 Jun 2022 03:41:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30EC2B80E5C;
-        Mon, 13 Jun 2022 10:22:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91A96C34114;
-        Mon, 13 Jun 2022 10:22:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 759FB60FDB;
+        Mon, 13 Jun 2022 10:41:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80E20C3411C;
+        Mon, 13 Jun 2022 10:41:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115721;
-        bh=CD6WxXosFKQrtBvXyfGc7Fyyn8KGvMB2XzXAX8vEwm8=;
+        s=korg; t=1655116870;
+        bh=JBdysYnTCOqo85vNwlQFdf3X2vArao3AMOxh5xGOC+w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iLTlUoZQeuVUa5rfLktdjgxsN9j0UIR+h5y74s6KyBKK7BGxyLU42DR/Dvt+aMG6T
-         Zv2g9hw4DAeDa9HBK6n3ESbIcWglTGWnsr9wrZOCJe50eA4UYfbng8v2fZXsNlc/7v
-         bZ+W/Gp8v8++vzNzcy06oKJItwSFTL4QczIu2Mqg=
+        b=xPsDoHdaEzoYQV/7hhZfGcKybFS1sI5fryhc6tqDCydlR8DEXQyQOcLzmoZlzY7Rj
+         TkBgGHkVNbrxqoxQT/38tDrX2FPQ0u67Hpw+URuQFbabBoo2CA39msluAKtNyvdNH/
+         gZXGmhR27JjLTnWCkWd1wSdr+f0il1gy9jXvzRX0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 4.14 005/218] ptrace: Reimplement PTRACE_KILL by always sending SIGKILL
-Date:   Mon, 13 Jun 2022 12:07:43 +0200
-Message-Id: <20220613094909.557220766@linuxfoundation.org>
+        stable@vger.kernel.org, Olga Kornievskaia <aglo@umich.edu>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 203/411] NFSv4/pNFS: Do not fail I/O when we fail to allocate the pNFS layout
+Date:   Mon, 13 Jun 2022 12:07:56 +0200
+Message-Id: <20220613094934.746280586@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,71 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-commit 6a2d90ba027adba528509ffa27097cffd3879257 upstream.
+[ Upstream commit 3764a17e31d579cf9b4bd0a69894b577e8d75702 ]
 
-The current implementation of PTRACE_KILL is buggy and has been for
-many years as it assumes it's target has stopped in ptrace_stop.  At a
-quick skim it looks like this assumption has existed since ptrace
-support was added in linux v1.0.
+Commit 587f03deb69b caused pnfs_update_layout() to stop returning ENOMEM
+when the memory allocation fails, and hence causes it to fall back to
+trying to do I/O through the MDS. There is no guarantee that this will
+fare any better. If we're failing the pNFS layout allocation, then we
+should just redirty the page and retry later.
 
-While PTRACE_KILL has been deprecated we can not remove it as
-a quick search with google code search reveals many existing
-programs calling it.
-
-When the ptracee is not stopped at ptrace_stop some fields would be
-set that are ignored except in ptrace_stop.  Making the userspace
-visible behavior of PTRACE_KILL a noop in those case.
-
-As the usual rules are not obeyed it is not clear what the
-consequences are of calling PTRACE_KILL on a running process.
-Presumably userspace does not do this as it achieves nothing.
-
-Replace the implementation of PTRACE_KILL with a simple
-send_sig_info(SIGKILL) followed by a return 0.  This changes the
-observable user space behavior only in that PTRACE_KILL on a process
-not stopped in ptrace_stop will also kill it.  As that has always
-been the intent of the code this seems like a reasonable change.
-
-Cc: stable@vger.kernel.org
-Reported-by: Al Viro <viro@zeniv.linux.org.uk>
-Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
-Tested-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
-Link: https://lkml.kernel.org/r/20220505182645.497868-7-ebiederm@xmission.com
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Olga Kornievskaia <aglo@umich.edu>
+Fixes: 587f03deb69b ("pnfs: refactor send_layoutget")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/step.c |    3 +--
- kernel/ptrace.c        |    5 ++---
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ fs/nfs/pnfs.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/arch/x86/kernel/step.c
-+++ b/arch/x86/kernel/step.c
-@@ -175,8 +175,7 @@ void set_task_blockstep(struct task_stru
- 	 *
- 	 * NOTE: this means that set/clear TIF_BLOCKSTEP is only safe if
- 	 * task is current or it can't be running, otherwise we can race
--	 * with __switch_to_xtra(). We rely on ptrace_freeze_traced() but
--	 * PTRACE_KILL is not safe.
-+	 * with __switch_to_xtra(). We rely on ptrace_freeze_traced().
- 	 */
- 	local_irq_disable();
- 	debugctl = get_debugctlmsr();
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -1127,9 +1127,8 @@ int ptrace_request(struct task_struct *c
- 		return ptrace_resume(child, request, data);
+diff --git a/fs/nfs/pnfs.c b/fs/nfs/pnfs.c
+index 0471b6e0da16..2fe48982fbb4 100644
+--- a/fs/nfs/pnfs.c
++++ b/fs/nfs/pnfs.c
+@@ -1961,6 +1961,7 @@ pnfs_update_layout(struct inode *ino,
+ 	lo = pnfs_find_alloc_layout(ino, ctx, gfp_flags);
+ 	if (lo == NULL) {
+ 		spin_unlock(&ino->i_lock);
++		lseg = ERR_PTR(-ENOMEM);
+ 		trace_pnfs_update_layout(ino, pos, count, iomode, lo, lseg,
+ 				 PNFS_UPDATE_LAYOUT_NOMEM);
+ 		goto out;
+@@ -2090,6 +2091,7 @@ pnfs_update_layout(struct inode *ino,
  
- 	case PTRACE_KILL:
--		if (child->exit_state)	/* already dead */
--			return 0;
--		return ptrace_resume(child, request, SIGKILL);
-+		send_sig_info(SIGKILL, SEND_SIG_NOINFO, child);
-+		return 0;
- 
- #ifdef CONFIG_HAVE_ARCH_TRACEHOOK
- 	case PTRACE_GETREGSET:
+ 	lgp = pnfs_alloc_init_layoutget_args(ino, ctx, &stateid, &arg, gfp_flags);
+ 	if (!lgp) {
++		lseg = ERR_PTR(-ENOMEM);
+ 		trace_pnfs_update_layout(ino, pos, count, iomode, lo, NULL,
+ 					 PNFS_UPDATE_LAYOUT_NOMEM);
+ 		nfs_layoutget_end(lo);
+-- 
+2.35.1
+
 
 

@@ -2,71 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7365481E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 498E75481CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239460AbiFMIFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55632 "EHLO
+        id S239504AbiFMIGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239582AbiFMIFA (ORCPT
+        with ESMTP id S234954AbiFMIGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:05:00 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06EE1DA64;
-        Mon, 13 Jun 2022 01:04:59 -0700 (PDT)
-Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
-        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25D7xS51019797;
-        Mon, 13 Jun 2022 01:04:55 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pfpt0220; bh=4kEqJsoH0xPOSiWdOim4stej7xTujvgJgudqDoTK4fo=;
- b=iH9K3s4peRHmMsEpNIdt27NMjZ0s3xLwPLU9Jh9BQ8KBRDlLVa9TPRdTri5leWUZ8Cok
- C77F14a5/+pdeMRmBGfpYJ9BNZF37PSwS1kkHL3YSzj+2YqgCDRz6YDFVBHDnjgWkPIF
- EzdxPyEjOg+VA7t1L6tyvHQNiQKFwRD6YjOaQcbiaW15sBE6Yr0r/lOpDmGkF4Ewrg2X
- M/9WpoZMcPUu/iSOvdRjF2W/KO7GP5qpa3kple4ncHHmpqdcE4QTJUR80NYxi5UA+ghj
- aDYTxgY39v7tazlkfM7CrOEYBFk2+j98ailX+w1bNqS0SGDHYOcxKcuHoCEHQPhDcMum vw== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3gmtjnwc3w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Mon, 13 Jun 2022 01:04:54 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 13 Jun
- 2022 01:04:52 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Mon, 13 Jun 2022 01:04:52 -0700
-Received: from Dell2s-9 (unknown [10.110.150.250])
-        by maili.marvell.com (Postfix) with ESMTP id 8D36D3F7067;
-        Mon, 13 Jun 2022 01:04:52 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 01:04:52 -0700
-From:   Piyush Malgujar <pmalgujar@marvell.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <brgl@bgdev.pl>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <rric@kernel.org>, <cchavva@marvell.com>, <wsadowski@marvell.com>
-Subject: Re: [PATCH 2/5] dt-bindings: gpio: gpio-thunderx: Describe pin-cfg
- option
-Message-ID: <20220613080452.GA1884@Dell2s-9>
-References: <20220427144620.9105-1-pmalgujar@marvell.com>
- <20220427144620.9105-3-pmalgujar@marvell.com>
- <CACRpkdaqeTs-jHPBmtdiz+LdMM0pz0zqt4diX=e+YpgaGr0Jbw@mail.gmail.com>
- <20220603090618.GA27121@Dell2s-9>
- <CACRpkdaOd0-k_mt0ZrKT-DbVc3f0b5uXXmXpBNH=hq3BGCB+vQ@mail.gmail.com>
+        Mon, 13 Jun 2022 04:06:13 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3567D1DA66
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 01:06:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=8ffIOw5XsQfPp5hHz5PV6qY3XyAav+N05RmGhN9z6Ps=; b=SINAdsM/DQ9UeRWwaSUKeDaP6d
+        uupQQcpR1Zntn2XNgifUeiWUXFaS+Tmt9lYuEHWqemLTXYKxTHbZuasn/oaHvhELKH9E+Ec6uK3mM
+        iCE+/35L6vE0RRFzMDMuGJ+kY8WTlnmvmR/JFN/rDwidc7fOR2b8/c5co9aOZwx4Qb9uXp9Ba9AD3
+        66Ncl0QNU2H6ZkVodeohuTkbtGMs8wpnYw7c/wvSH5z77DoyftwHYlUSUltxV3PvOEvcoUH+EFRS3
+        sdsIHbm+St+aAVFx8ATx67w18dsc8qg+3bqIW/40kkeW1YDyYeSVsC1+5010tTyxToHkxQVbeBmTz
+        f3Obi5jg==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o0f50-007VHj-6I; Mon, 13 Jun 2022 08:05:47 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E6CDF3005B7;
+        Mon, 13 Jun 2022 10:05:43 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D1CDE28498CA5; Mon, 13 Jun 2022 10:05:43 +0200 (CEST)
+Date:   Mon, 13 Jun 2022 10:05:43 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] locking/lockdep: Use sched_clock() for random numbers.
+Message-ID: <Yqbv17P9eLH0YdPG@hirez.programming.kicks-ass.net>
+References: <YoNn3pTkm5+QzE5k@linutronix.de>
+ <YoNwp+9ko89Tf1ep@zx2c4.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACRpkdaOd0-k_mt0ZrKT-DbVc3f0b5uXXmXpBNH=hq3BGCB+vQ@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-GUID: bNpaeJuNQQ4maPDNeFH19KvJexjJLJFL
-X-Proofpoint-ORIG-GUID: bNpaeJuNQQ4maPDNeFH19KvJexjJLJFL
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-13_02,2022-06-09_02,2022-02-23_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <YoNwp+9ko89Tf1ep@zx2c4.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,35 +64,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 03, 2022 at 12:35:57PM +0200, Linus Walleij wrote:
-> On Fri, Jun 3, 2022 at 11:06 AM Piyush Malgujar <pmalgujar@marvell.com> wrote:
+On Tue, May 17, 2022 at 11:53:43AM +0200, Jason A. Donenfeld wrote:
+> Hi Sebastian,
 > 
-> > The purpose of this pin-cfg entry is different than the standard GPIO pin config usage.
-> > It is to write a value to GPIO_BIT_CFG register which is used to configure fields like
-> > pin function, selecting which signal is reported to GPIO output or which signal GPIO
-> > input need to connect, filters, XOR and output mode.
+> Interesting RT consideration. I hope there aren't too many of these
+> special cases that would necessitate a general mechanism. Fingers
+> crossed this is the only one.
 > 
-> Then implement pin control for this driver instead of inventing a custom hack?
-> https://docs.kernel.org/driver-api/pin-control.html
-> 
-> Several drivers implement pin control with a GPIO front-end, for example:
-> drivers/gpio/gpio-pl061.c is used as a front end with
-> drivers/pinctrl/pinctrl-single.c
-> 
-> There are also composite drivers in drivers/pinctrl that implement both
-> pincontrol (incl muxing) and GPIO, such as drivers/pinctrl/pinctrl-sx150x.c
-> 
-> Yours,
-> Linus Walleij
+> On Tue, May 17, 2022 at 11:16:14AM +0200, Sebastian Andrzej Siewior wrote:
+> > -			cookie.val = 1 + (prandom_u32() >> 16);
+> > +			cookie.val = 1 + (sched_clock() & 0xffff);
+> >  			hlock->pin_count += cookie.val;
+>  
+> I have no idea what the requirements here are.
 
-Hi Linus,
+Mostly nothing. It's debug code, and if someone wants to circumvent they
+can, but then their code is ugly and stands out like a sort thumb which
+then serves its goal as it won't pass review etc..
 
-Thanks for the reply.
-But as in this case, we expect a 32 bit reg value via DTS for this driver
-only from user with internal understanding of marvell soc and this reg bit
-value can have many different combinations as the register fields can vary
-for different marvell SoCs.
-This patch just reads the reg value from DTS and writes it to the register.
+> What would happen if you
+> just did atomic_inc_return(&some_global) instead? That'd be faster
+> anyhow, and it's not like 16 bits gives you much variance anyway...
 
-Thanks,
-Piyush
+That would in fact be slower, sched_clock() will, on any sane hardware,
+be a rdtsc, mul and shr, which are all local.

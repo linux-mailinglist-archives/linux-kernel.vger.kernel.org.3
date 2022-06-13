@@ -2,41 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F12548640
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 497855486C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385600AbiFMOro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35790 "EHLO
+        id S1386271AbiFMOwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385929AbiFMOoQ (ORCPT
+        with ESMTP id S1385899AbiFMOss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:44:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D48AB41F1;
-        Mon, 13 Jun 2022 04:51:04 -0700 (PDT)
+        Mon, 13 Jun 2022 10:48:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB5BC047E;
+        Mon, 13 Jun 2022 04:53:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B4050612AC;
-        Mon, 13 Jun 2022 11:51:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C430AC3411B;
-        Mon, 13 Jun 2022 11:51:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A57C61425;
+        Mon, 13 Jun 2022 11:53:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 350A9C34114;
+        Mon, 13 Jun 2022 11:52:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655121064;
-        bh=rxbr1Y6tY5vCrqN0GZ6O31nAcp1+t7/ChYjrzFVsJF0=;
+        s=korg; t=1655121179;
+        bh=B7tnLXZ9zOFwqW4lhSdUyligTwXyJWYFGo6O+Ex6O7U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rRbNRL+xe1JEFT47sleWjXbdTzOkzJ415i5XVXmI3tMdLEnh7u8Og5HxlSLdVcPID
-         U8ytRqKm6FaZ6g9Z5N09qOyrddg1282ssJ0z5Ze8nUV4/iu9hbu1reccofdVQJukcc
-         lGSjqtmc/zg25J6XYHP4RQqqRS8lgi6EHZNFBLNY=
+        b=ekT9F0orK09gyrOiv+HF26iJ+yKR21hsv1JdK5FGrnAGZifekzdjj8c5oEdvo/vGX
+         LGfCcTADGHMH6Crghq0UYTXwHxzVVIT2L2kNr6op99sqbmECWeF02wsqs7Z79pxAsq
+         unEj2+qVY25lhGWUS0xHFvxDMmE0QMHk+3doLU+o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, huangwenhui <huangwenhuia@uniontech.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.17 259/298] ALSA: hda/conexant - Fix loopback issue with CX20632
-Date:   Mon, 13 Jun 2022 12:12:33 +0200
-Message-Id: <20220613094932.931537292@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Tyler Erickson <tyler.erickson@seagate.com>,
+        Muhammad Ahmad <muhammad.ahmad@seagate.com>,
+        Michael English <michael.english@seagate.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 5.17 267/298] libata: fix reading concurrent positioning ranges log
+Date:   Mon, 13 Jun 2022 12:12:41 +0200
+Message-Id: <20220613094933.170957037@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
 References: <20220613094924.913340374@linuxfoundation.org>
@@ -54,37 +57,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: huangwenhui <huangwenhuia@uniontech.com>
+From: Tyler Erickson <tyler.erickson@seagate.com>
 
-commit d5ea7544c32ba27c2c5826248e4ff58bd50a2518 upstream.
+commit c745dfc541e78428ba3986f1d17fe1dfdaca8184 upstream.
 
-On a machine with CX20632, Alsamixer doesn't have 'Loopback
-Mixing' and 'Line'.
+The concurrent positioning ranges log is not a fixed size and may depend
+on how many ranges are supported by the device. This patch uses the size
+reported in the GPL directory to determine the number of pages supported
+by the device before attempting to read this log page.
 
-Signed-off-by: huangwenhui <huangwenhuia@uniontech.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220607065631.10708-1-huangwenhuia@uniontech.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+This resolves this error from the dmesg output:
+    ata6.00: Read log 0x47 page 0x00 failed, Emask 0x1
+
+Cc: stable@vger.kernel.org
+Fixes: fe22e1c2f705 ("libata: support concurrent positioning ranges log")
+Signed-off-by: Tyler Erickson <tyler.erickson@seagate.com>
+Reviewed-by: Muhammad Ahmad <muhammad.ahmad@seagate.com>
+Tested-by: Michael English <michael.english@seagate.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_conexant.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/ata/libata-core.c |   21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
---- a/sound/pci/hda/patch_conexant.c
-+++ b/sound/pci/hda/patch_conexant.c
-@@ -1052,6 +1052,13 @@ static int patch_conexant_auto(struct hd
- 		snd_hda_pick_fixup(codec, cxt5051_fixup_models,
- 				   cxt5051_fixups, cxt_fixups);
- 		break;
-+	case 0x14f15098:
-+		codec->pin_amp_workaround = 1;
-+		spec->gen.mixer_nid = 0x22;
-+		spec->gen.add_stereo_mix_input = HDA_HINT_STEREO_MIX_AUTO;
-+		snd_hda_pick_fixup(codec, cxt5066_fixup_models,
-+				   cxt5066_fixups, cxt_fixups);
-+		break;
- 	case 0x14f150f2:
- 		codec->power_save_node = 1;
- 		fallthrough;
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -2003,16 +2003,16 @@ retry:
+ 	return err_mask;
+ }
+ 
+-static bool ata_log_supported(struct ata_device *dev, u8 log)
++static int ata_log_supported(struct ata_device *dev, u8 log)
+ {
+ 	struct ata_port *ap = dev->link->ap;
+ 
+ 	if (dev->horkage & ATA_HORKAGE_NO_LOG_DIR)
+-		return false;
++		return 0;
+ 
+ 	if (ata_read_log_page(dev, ATA_LOG_DIRECTORY, 0, ap->sector_buf, 1))
+-		return false;
+-	return get_unaligned_le16(&ap->sector_buf[log * 2]) ? true : false;
++		return 0;
++	return get_unaligned_le16(&ap->sector_buf[log * 2]);
+ }
+ 
+ static bool ata_identify_page_supported(struct ata_device *dev, u8 page)
+@@ -2448,15 +2448,20 @@ static void ata_dev_config_cpr(struct at
+ 	struct ata_cpr_log *cpr_log = NULL;
+ 	u8 *desc, *buf = NULL;
+ 
+-	if (ata_id_major_version(dev->id) < 11 ||
+-	    !ata_log_supported(dev, ATA_LOG_CONCURRENT_POSITIONING_RANGES))
++	if (ata_id_major_version(dev->id) < 11)
++		goto out;
++
++	buf_len = ata_log_supported(dev, ATA_LOG_CONCURRENT_POSITIONING_RANGES);
++	if (buf_len == 0)
+ 		goto out;
+ 
+ 	/*
+ 	 * Read the concurrent positioning ranges log (0x47). We can have at
+-	 * most 255 32B range descriptors plus a 64B header.
++	 * most 255 32B range descriptors plus a 64B header. This log varies in
++	 * size, so use the size reported in the GPL directory. Reading beyond
++	 * the supported length will result in an error.
+ 	 */
+-	buf_len = (64 + 255 * 32 + 511) & ~511;
++	buf_len <<= 9;
+ 	buf = kzalloc(buf_len, GFP_KERNEL);
+ 	if (!buf)
+ 		goto out;
 
 

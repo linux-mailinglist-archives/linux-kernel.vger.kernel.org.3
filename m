@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE06E549870
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FEA554897C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352243AbiFMLLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45240 "EHLO
+        id S1384563AbiFMOeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350962AbiFMLIK (ORCPT
+        with ESMTP id S1385051AbiFMOad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:08:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E729633A18;
-        Mon, 13 Jun 2022 03:35:16 -0700 (PDT)
+        Mon, 13 Jun 2022 10:30:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9412A8684;
+        Mon, 13 Jun 2022 04:48:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F03CCB80EA3;
-        Mon, 13 Jun 2022 10:35:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26683C34114;
-        Mon, 13 Jun 2022 10:35:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1517612D0;
+        Mon, 13 Jun 2022 11:47:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5677C34114;
+        Mon, 13 Jun 2022 11:47:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116508;
-        bh=LaYa5idQ1yJxJe8+9meCByz64bMEhW5oj9iw1k0GRMs=;
+        s=korg; t=1655120878;
+        bh=0Iwo5Gcye3VS9NYYrO2aH3mgsqiNWBDrItlwXSltw2Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wsU7c6/YKc0QLKaNCZc/qZijqKkGj4K4hmzf3JnGpwDcOydwDLp63n5yWnDp0puNF
-         9udVhpWWUVoCmYQTtf+SIdi2PpxT95KEp4aw2GvbQXZb/i8aiPWXAmLGv1Z+rKgyP2
-         f0YIZ6heBKuDOwED9vnz2JF8h6htHynQEp5R1K5I=
+        b=wIROrH6FYYL5EvXNcPpkHx7Fw60GbHDGqB/fEV2gIyAabdwxBlWLns1Pfj/TTyhrb
+         MkxBVvVMbtopNsY1OgEIehNfwN6vO8IEl/QDI7sRC8FV1Nlq/BDPRnsiNEIMQl17K5
+         2RKaNKHJePabb/McapxB1UuUPMEQ64KhvM4hDui8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe de Dinechin <dinechin@redhat.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Kees Cook <keescook@chromium.org>,
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Taehee Yoo <ap420073@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 204/218] nodemask: Fix return values to be unsigned
+Subject: [PATCH 5.17 168/298] amt: fix wrong usage of pskb_may_pull()
 Date:   Mon, 13 Jun 2022 12:11:02 +0200
-Message-Id: <20220613094926.809951377@linuxfoundation.org>
+Message-Id: <20220613094930.027648622@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,184 +55,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Taehee Yoo <ap420073@gmail.com>
 
-[ Upstream commit 0dfe54071d7c828a02917b595456bfde1afdddc9 ]
+[ Upstream commit f55a07074fdd38cab8c097ac5bd397d68eff733c ]
 
-The nodemask routines had mixed return values that provided potentially
-signed return values that could never happen. This was leading to the
-compiler getting confusing about the range of possible return values
-(it was thinking things could be negative where they could not be). Fix
-all the nodemask routines that should be returning unsigned
-(or bool) values. Silences:
+It adds missing pskb_may_pull() in amt_update_handler() and
+amt_multicast_data_handler().
+And it fixes wrong parameter of pskb_may_pull() in
+amt_advertisement_handler() and amt_membership_query_handler().
 
- mm/swapfile.c: In function ‘setup_swap_info’:
- mm/swapfile.c:2291:47: error: array subscript -1 is below array bounds of ‘struct plist_node[]’ [-Werror=array-bounds]
-  2291 |                                 p->avail_lists[i].prio = 1;
-       |                                 ~~~~~~~~~~~~~~^~~
- In file included from mm/swapfile.c:16:
- ./include/linux/swap.h:292:27: note: while referencing ‘avail_lists’
-   292 |         struct plist_node avail_lists[]; /*
-       |                           ^~~~~~~~~~~
-
-Reported-by: Christophe de Dinechin <dinechin@redhat.com>
-Link: https://lore.kernel.org/lkml/20220414150855.2407137-3-dinechin@redhat.com/
-Cc: Alexey Dobriyan <adobriyan@gmail.com>
-Cc: Yury Norov <yury.norov@gmail.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Zhen Lei <thunder.leizhen@huawei.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Reported-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: cbc21dc1cfe9 ("amt: add data plane of amt interface")
+Signed-off-by: Taehee Yoo <ap420073@gmail.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/nodemask.h | 38 +++++++++++++++++++-------------------
- lib/nodemask.c           |  4 ++--
- 2 files changed, 21 insertions(+), 21 deletions(-)
+ drivers/net/amt.c | 55 +++++++++++++++++++++++++++++++----------------
+ 1 file changed, 37 insertions(+), 18 deletions(-)
 
-diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-index da9f53586932..13f6248151b9 100644
---- a/include/linux/nodemask.h
-+++ b/include/linux/nodemask.h
-@@ -42,11 +42,11 @@
-  * void nodes_shift_right(dst, src, n)	Shift right
-  * void nodes_shift_left(dst, src, n)	Shift left
-  *
-- * int first_node(mask)			Number lowest set bit, or MAX_NUMNODES
-- * int next_node(node, mask)		Next node past 'node', or MAX_NUMNODES
-- * int next_node_in(node, mask)		Next node past 'node', or wrap to first,
-+ * unsigned int first_node(mask)	Number lowest set bit, or MAX_NUMNODES
-+ * unsigend int next_node(node, mask)	Next node past 'node', or MAX_NUMNODES
-+ * unsigned int next_node_in(node, mask) Next node past 'node', or wrap to first,
-  *					or MAX_NUMNODES
-- * int first_unset_node(mask)		First node not set in mask, or 
-+ * unsigned int first_unset_node(mask)	First node not set in mask, or
-  *					MAX_NUMNODES
-  *
-  * nodemask_t nodemask_of_node(node)	Return nodemask with bit 'node' set
-@@ -144,7 +144,7 @@ static inline void __nodes_clear(nodemask_t *dstp, unsigned int nbits)
+diff --git a/drivers/net/amt.c b/drivers/net/amt.c
+index d23eac9ce858..d8c47c4e6559 100644
+--- a/drivers/net/amt.c
++++ b/drivers/net/amt.c
+@@ -2220,8 +2220,7 @@ static bool amt_advertisement_handler(struct amt_dev *amt, struct sk_buff *skb)
+ 	struct amt_header_advertisement *amta;
+ 	int hdr_size;
  
- #define node_test_and_set(node, nodemask) \
- 			__node_test_and_set((node), &(nodemask))
--static inline int __node_test_and_set(int node, nodemask_t *addr)
-+static inline bool __node_test_and_set(int node, nodemask_t *addr)
+-	hdr_size = sizeof(*amta) - sizeof(struct amt_header);
+-
++	hdr_size = sizeof(*amta) + sizeof(struct udphdr);
+ 	if (!pskb_may_pull(skb, hdr_size))
+ 		return true;
+ 
+@@ -2251,19 +2250,27 @@ static bool amt_multicast_data_handler(struct amt_dev *amt, struct sk_buff *skb)
+ 	struct ethhdr *eth;
+ 	struct iphdr *iph;
+ 
++	hdr_size = sizeof(*amtmd) + sizeof(struct udphdr);
++	if (!pskb_may_pull(skb, hdr_size))
++		return true;
++
+ 	amtmd = (struct amt_header_mcast_data *)(udp_hdr(skb) + 1);
+ 	if (amtmd->reserved || amtmd->version)
+ 		return true;
+ 
+-	hdr_size = sizeof(*amtmd) + sizeof(struct udphdr);
+ 	if (iptunnel_pull_header(skb, hdr_size, htons(ETH_P_IP), false))
+ 		return true;
++
+ 	skb_reset_network_header(skb);
+ 	skb_push(skb, sizeof(*eth));
+ 	skb_reset_mac_header(skb);
+ 	skb_pull(skb, sizeof(*eth));
+ 	eth = eth_hdr(skb);
++
++	if (!pskb_may_pull(skb, sizeof(*iph)))
++		return true;
+ 	iph = ip_hdr(skb);
++
+ 	if (iph->version == 4) {
+ 		if (!ipv4_is_multicast(iph->daddr))
+ 			return true;
+@@ -2274,6 +2281,9 @@ static bool amt_multicast_data_handler(struct amt_dev *amt, struct sk_buff *skb)
+ 	} else if (iph->version == 6) {
+ 		struct ipv6hdr *ip6h;
+ 
++		if (!pskb_may_pull(skb, sizeof(*ip6h)))
++			return true;
++
+ 		ip6h = ipv6_hdr(skb);
+ 		if (!ipv6_addr_is_multicast(&ip6h->daddr))
+ 			return true;
+@@ -2306,8 +2316,7 @@ static bool amt_membership_query_handler(struct amt_dev *amt,
+ 	struct iphdr *iph;
+ 	int hdr_size, len;
+ 
+-	hdr_size = sizeof(*amtmq) - sizeof(struct amt_header);
+-
++	hdr_size = sizeof(*amtmq) + sizeof(struct udphdr);
+ 	if (!pskb_may_pull(skb, hdr_size))
+ 		return true;
+ 
+@@ -2315,22 +2324,27 @@ static bool amt_membership_query_handler(struct amt_dev *amt,
+ 	if (amtmq->reserved || amtmq->version)
+ 		return true;
+ 
+-	hdr_size = sizeof(*amtmq) + sizeof(struct udphdr) - sizeof(*eth);
++	hdr_size -= sizeof(*eth);
+ 	if (iptunnel_pull_header(skb, hdr_size, htons(ETH_P_TEB), false))
+ 		return true;
++
+ 	oeth = eth_hdr(skb);
+ 	skb_reset_mac_header(skb);
+ 	skb_pull(skb, sizeof(*eth));
+ 	skb_reset_network_header(skb);
+ 	eth = eth_hdr(skb);
++	if (!pskb_may_pull(skb, sizeof(*iph)))
++		return true;
++
+ 	iph = ip_hdr(skb);
+ 	if (iph->version == 4) {
+-		if (!ipv4_is_multicast(iph->daddr))
+-			return true;
+ 		if (!pskb_may_pull(skb, sizeof(*iph) + AMT_IPHDR_OPTS +
+ 				   sizeof(*ihv3)))
+ 			return true;
+ 
++		if (!ipv4_is_multicast(iph->daddr))
++			return true;
++
+ 		ihv3 = skb_pull(skb, sizeof(*iph) + AMT_IPHDR_OPTS);
+ 		skb_reset_transport_header(skb);
+ 		skb_push(skb, sizeof(*iph) + AMT_IPHDR_OPTS);
+@@ -2345,15 +2359,17 @@ static bool amt_membership_query_handler(struct amt_dev *amt,
+ 		ip_eth_mc_map(iph->daddr, eth->h_dest);
+ #if IS_ENABLED(CONFIG_IPV6)
+ 	} else if (iph->version == 6) {
+-		struct ipv6hdr *ip6h = ipv6_hdr(skb);
+ 		struct mld2_query *mld2q;
++		struct ipv6hdr *ip6h;
+ 
+-		if (!ipv6_addr_is_multicast(&ip6h->daddr))
+-			return true;
+ 		if (!pskb_may_pull(skb, sizeof(*ip6h) + AMT_IP6HDR_OPTS +
+ 				   sizeof(*mld2q)))
+ 			return true;
+ 
++		ip6h = ipv6_hdr(skb);
++		if (!ipv6_addr_is_multicast(&ip6h->daddr))
++			return true;
++
+ 		mld2q = skb_pull(skb, sizeof(*ip6h) + AMT_IP6HDR_OPTS);
+ 		skb_reset_transport_header(skb);
+ 		skb_push(skb, sizeof(*ip6h) + AMT_IP6HDR_OPTS);
+@@ -2389,23 +2405,23 @@ static bool amt_update_handler(struct amt_dev *amt, struct sk_buff *skb)
  {
- 	return test_and_set_bit(node, addr->bits);
- }
-@@ -191,7 +191,7 @@ static inline void __nodes_complement(nodemask_t *dstp,
+ 	struct amt_header_membership_update *amtmu;
+ 	struct amt_tunnel_list *tunnel;
+-	struct udphdr *udph;
+ 	struct ethhdr *eth;
+ 	struct iphdr *iph;
+-	int len;
++	int len, hdr_size;
  
- #define nodes_equal(src1, src2) \
- 			__nodes_equal(&(src1), &(src2), MAX_NUMNODES)
--static inline int __nodes_equal(const nodemask_t *src1p,
-+static inline bool __nodes_equal(const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	return bitmap_equal(src1p->bits, src2p->bits, nbits);
-@@ -199,7 +199,7 @@ static inline int __nodes_equal(const nodemask_t *src1p,
+ 	iph = ip_hdr(skb);
+-	udph = udp_hdr(skb);
  
- #define nodes_intersects(src1, src2) \
- 			__nodes_intersects(&(src1), &(src2), MAX_NUMNODES)
--static inline int __nodes_intersects(const nodemask_t *src1p,
-+static inline bool __nodes_intersects(const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	return bitmap_intersects(src1p->bits, src2p->bits, nbits);
-@@ -207,20 +207,20 @@ static inline int __nodes_intersects(const nodemask_t *src1p,
+-	if (__iptunnel_pull_header(skb, sizeof(*udph), skb->protocol,
+-				   false, false))
++	hdr_size = sizeof(*amtmu) + sizeof(struct udphdr);
++	if (!pskb_may_pull(skb, hdr_size))
+ 		return true;
  
- #define nodes_subset(src1, src2) \
- 			__nodes_subset(&(src1), &(src2), MAX_NUMNODES)
--static inline int __nodes_subset(const nodemask_t *src1p,
-+static inline bool __nodes_subset(const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	return bitmap_subset(src1p->bits, src2p->bits, nbits);
- }
+-	amtmu = (struct amt_header_membership_update *)skb->data;
++	amtmu = (struct amt_header_membership_update *)(udp_hdr(skb) + 1);
+ 	if (amtmu->reserved || amtmu->version)
+ 		return true;
  
- #define nodes_empty(src) __nodes_empty(&(src), MAX_NUMNODES)
--static inline int __nodes_empty(const nodemask_t *srcp, unsigned int nbits)
-+static inline bool __nodes_empty(const nodemask_t *srcp, unsigned int nbits)
- {
- 	return bitmap_empty(srcp->bits, nbits);
- }
+-	skb_pull(skb, sizeof(*amtmu));
++	if (iptunnel_pull_header(skb, hdr_size, skb->protocol, false))
++		return true;
++
+ 	skb_reset_network_header(skb);
  
- #define nodes_full(nodemask) __nodes_full(&(nodemask), MAX_NUMNODES)
--static inline int __nodes_full(const nodemask_t *srcp, unsigned int nbits)
-+static inline bool __nodes_full(const nodemask_t *srcp, unsigned int nbits)
- {
- 	return bitmap_full(srcp->bits, nbits);
- }
-@@ -251,15 +251,15 @@ static inline void __nodes_shift_left(nodemask_t *dstp,
-           > MAX_NUMNODES, then the silly min_ts could be dropped. */
+ 	list_for_each_entry_rcu(tunnel, &amt->tunnel_list, list) {
+@@ -2426,6 +2442,9 @@ static bool amt_update_handler(struct amt_dev *amt, struct sk_buff *skb)
+ 	return true;
  
- #define first_node(src) __first_node(&(src))
--static inline int __first_node(const nodemask_t *srcp)
-+static inline unsigned int __first_node(const nodemask_t *srcp)
- {
--	return min_t(int, MAX_NUMNODES, find_first_bit(srcp->bits, MAX_NUMNODES));
-+	return min_t(unsigned int, MAX_NUMNODES, find_first_bit(srcp->bits, MAX_NUMNODES));
- }
- 
- #define next_node(n, src) __next_node((n), &(src))
--static inline int __next_node(int n, const nodemask_t *srcp)
-+static inline unsigned int __next_node(int n, const nodemask_t *srcp)
- {
--	return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
-+	return min_t(unsigned int, MAX_NUMNODES, find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
- }
- 
- /*
-@@ -267,7 +267,7 @@ static inline int __next_node(int n, const nodemask_t *srcp)
-  * the first node in src if needed.  Returns MAX_NUMNODES if src is empty.
-  */
- #define next_node_in(n, src) __next_node_in((n), &(src))
--int __next_node_in(int node, const nodemask_t *srcp);
-+unsigned int __next_node_in(int node, const nodemask_t *srcp);
- 
- static inline void init_nodemask_of_node(nodemask_t *mask, int node)
- {
-@@ -287,9 +287,9 @@ static inline void init_nodemask_of_node(nodemask_t *mask, int node)
- })
- 
- #define first_unset_node(mask) __first_unset_node(&(mask))
--static inline int __first_unset_node(const nodemask_t *maskp)
-+static inline unsigned int __first_unset_node(const nodemask_t *maskp)
- {
--	return min_t(int,MAX_NUMNODES,
-+	return min_t(unsigned int, MAX_NUMNODES,
- 			find_first_zero_bit(maskp->bits, MAX_NUMNODES));
- }
- 
-@@ -425,11 +425,11 @@ static inline int num_node_state(enum node_states state)
- 
- #define first_online_node	first_node(node_states[N_ONLINE])
- #define first_memory_node	first_node(node_states[N_MEMORY])
--static inline int next_online_node(int nid)
-+static inline unsigned int next_online_node(int nid)
- {
- 	return next_node(nid, node_states[N_ONLINE]);
- }
--static inline int next_memory_node(int nid)
-+static inline unsigned int next_memory_node(int nid)
- {
- 	return next_node(nid, node_states[N_MEMORY]);
- }
-diff --git a/lib/nodemask.c b/lib/nodemask.c
-index 3aa454c54c0d..e22647f5181b 100644
---- a/lib/nodemask.c
-+++ b/lib/nodemask.c
-@@ -3,9 +3,9 @@
- #include <linux/module.h>
- #include <linux/random.h>
- 
--int __next_node_in(int node, const nodemask_t *srcp)
-+unsigned int __next_node_in(int node, const nodemask_t *srcp)
- {
--	int ret = __next_node(node, srcp);
-+	unsigned int ret = __next_node(node, srcp);
- 
- 	if (ret == MAX_NUMNODES)
- 		ret = __first_node(srcp);
+ report:
++	if (!pskb_may_pull(skb, sizeof(*iph)))
++		return true;
++
+ 	iph = ip_hdr(skb);
+ 	if (iph->version == 4) {
+ 		if (ip_mc_check_igmp(skb)) {
 -- 
 2.35.1
 

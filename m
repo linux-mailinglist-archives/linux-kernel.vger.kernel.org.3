@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B32C5488A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579D75488D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353404AbiFMMpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50038 "EHLO
+        id S1380040AbiFMNxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351545AbiFMMiC (ORCPT
+        with ESMTP id S1379830AbiFMNtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:38:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FEE5C373;
-        Mon, 13 Jun 2022 04:08:09 -0700 (PDT)
+        Mon, 13 Jun 2022 09:49:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAB129C81;
+        Mon, 13 Jun 2022 04:33:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1A61608D6;
-        Mon, 13 Jun 2022 11:08:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 006F2C3411C;
-        Mon, 13 Jun 2022 11:08:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1573AB80EAB;
+        Mon, 13 Jun 2022 11:33:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 704C9C34114;
+        Mon, 13 Jun 2022 11:33:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118488;
-        bh=hU62tz+upeQQ0ixMl73jGcb/66oi/GX988epYqit+zU=;
+        s=korg; t=1655119989;
+        bh=ra5SKTL67sGRGZjPWkurUSjGUHswi1Ovj4X4M4AasQg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ct0/7Q8KiikhTJmlHLmh9XJ6ld2MyNoUsUrB8pXaKUiVoCTNR7tdNdSzyqo+GA90k
-         1CQV4NNiUkxVvCV6UWGgk4hoRopX0L1nKqsZAWTvkUYTuVuFrCKFkk66wVSDfaStma
-         8IhplwuZlvPPoSwbEyyyCK3cEz/tVZPNtYq69J+o=
+        b=AhgI5Mf/VSm7/1h54xeLQuvzynzuLnwQwHNxqdxyMJp4QC2WWFpflso1ez+HUmv+L
+         qeRUz/cdpzf0nD4QCHKxj34wVCkrSiezN4Ihsfrjct6s1zaFvYGQFC/DsVjG/5uGVZ
+         AaksiIljb7a28GflTZnMjiamd9RxH1JLuL35BSao=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gong Yuanjun <ruc_gongyuanjun@163.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 076/172] mips: cpc: Fix refcount leak in mips_cpc_default_phys_base
+        stable@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Maher Sanalla <msanalla@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Mark Bloch <mbloch@nvidia.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 211/339] net/mlx5: Fix mlx5_get_next_dev() peer device matching
 Date:   Mon, 13 Jun 2022 12:10:36 +0200
-Message-Id: <20220613094908.660511109@linuxfoundation.org>
+Message-Id: <20220613094933.063781956@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,33 +58,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gong Yuanjun <ruc_gongyuanjun@163.com>
+From: Saeed Mahameed <saeedm@nvidia.com>
 
-[ Upstream commit 4107fa700f314592850e2c64608f6ede4c077476 ]
+[ Upstream commit 1c5de097bea31760c3f0467ac0c84ba0dc3525d5 ]
 
-Add the missing of_node_put() to release the refcount incremented
-by of_find_compatible_node().
+In some use-cases, mlx5 instances will need to search for their peer
+device (the other port on the same HCA). For that, mlx5 device matching
+mechanism relied on auxiliary_find_device() to search, and used a bad matching
+callback function.
 
-Signed-off-by: Gong Yuanjun <ruc_gongyuanjun@163.com>
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+This approach has two issues:
+
+1) next_phys_dev() the matching function, assumed all devices are
+   of the type mlx5_adev (mlx5 auxiliary device) which is wrong and
+   could lead to crashes, this worked for a while, since only lately
+   other drivers started registering auxiliary devices.
+
+2) using the auxiliary class bus (auxiliary_find_device) to search for
+   mlx5_core_dev devices, who are actually PCIe device instances, is wrong.
+   This works since mlx5_core always has at least one mlx5_adev instance
+   hanging around in the aux bus.
+
+As suggested by others we can fix 1. by comparing device names prefixes
+if they have the string "mlx5_core" in them, which is not a best practice !
+but even with that fixed, still 2. needs fixing, we are trying to
+match pcie device peers so we should look in the right bus (pci bus),
+hence this fix.
+
+The fix:
+1) search the pci bus for mlx5 peer devices, instead of the aux bus
+2) to validated devices are the same type "mlx5_core_dev" compare if
+   they have the same driver, which is bulletproof.
+
+   This wouldn't have worked with the aux bus since the various mlx5 aux
+   device types don't share the same driver, even if they share the same device
+   wrapper struct (mlx5_adev) "which helped to find the parent device"
+
+Fixes: a925b5e309c9 ("net/mlx5: Register mlx5 devices to auxiliary virtual bus")
+Reported-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Reported-by: Maher Sanalla <msanalla@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Reviewed-by: Mark Bloch <mbloch@nvidia.com>
+Reviewed-by: Maher Sanalla <msanalla@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/kernel/mips-cpc.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/mellanox/mlx5/core/dev.c | 34 +++++++++++++------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
 
-diff --git a/arch/mips/kernel/mips-cpc.c b/arch/mips/kernel/mips-cpc.c
-index 8d2535123f11..d005be84c482 100644
---- a/arch/mips/kernel/mips-cpc.c
-+++ b/arch/mips/kernel/mips-cpc.c
-@@ -27,6 +27,7 @@ phys_addr_t __weak mips_cpc_default_phys_base(void)
- 	cpc_node = of_find_compatible_node(of_root, NULL, "mti,mips-cpc");
- 	if (cpc_node) {
- 		err = of_address_to_resource(cpc_node, 0, &res);
-+		of_node_put(cpc_node);
- 		if (!err)
- 			return res.start;
- 	}
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/dev.c b/drivers/net/ethernet/mellanox/mlx5/core/dev.c
+index 3e750b827a19..c5d7bf662784 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/dev.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/dev.c
+@@ -571,18 +571,32 @@ static int _next_phys_dev(struct mlx5_core_dev *mdev,
+ 	return 1;
+ }
+ 
++static void *pci_get_other_drvdata(struct device *this, struct device *other)
++{
++	if (this->driver != other->driver)
++		return NULL;
++
++	return pci_get_drvdata(to_pci_dev(other));
++}
++
+ static int next_phys_dev(struct device *dev, const void *data)
+ {
+-	struct mlx5_adev *madev = container_of(dev, struct mlx5_adev, adev.dev);
+-	struct mlx5_core_dev *mdev = madev->mdev;
++	struct mlx5_core_dev *mdev, *this = (struct mlx5_core_dev *)data;
++
++	mdev = pci_get_other_drvdata(this->device, dev);
++	if (!mdev)
++		return 0;
+ 
+ 	return _next_phys_dev(mdev, data);
+ }
+ 
+ static int next_phys_dev_lag(struct device *dev, const void *data)
+ {
+-	struct mlx5_adev *madev = container_of(dev, struct mlx5_adev, adev.dev);
+-	struct mlx5_core_dev *mdev = madev->mdev;
++	struct mlx5_core_dev *mdev, *this = (struct mlx5_core_dev *)data;
++
++	mdev = pci_get_other_drvdata(this->device, dev);
++	if (!mdev)
++		return 0;
+ 
+ 	if (!MLX5_CAP_GEN(mdev, vport_group_manager) ||
+ 	    !MLX5_CAP_GEN(mdev, lag_master) ||
+@@ -595,19 +609,17 @@ static int next_phys_dev_lag(struct device *dev, const void *data)
+ static struct mlx5_core_dev *mlx5_get_next_dev(struct mlx5_core_dev *dev,
+ 					       int (*match)(struct device *dev, const void *data))
+ {
+-	struct auxiliary_device *adev;
+-	struct mlx5_adev *madev;
++	struct device *next;
+ 
+ 	if (!mlx5_core_is_pf(dev))
+ 		return NULL;
+ 
+-	adev = auxiliary_find_device(NULL, dev, match);
+-	if (!adev)
++	next = bus_find_device(&pci_bus_type, NULL, dev, match);
++	if (!next)
+ 		return NULL;
+ 
+-	madev = container_of(adev, struct mlx5_adev, adev);
+-	put_device(&adev->dev);
+-	return madev->mdev;
++	put_device(next);
++	return pci_get_drvdata(to_pci_dev(next));
+ }
+ 
+ /* Must be called with intf_mutex held */
 -- 
 2.35.1
 

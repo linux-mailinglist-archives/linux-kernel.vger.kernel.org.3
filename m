@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10626548705
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F045487A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379225AbiFMNrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35914 "EHLO
+        id S243361AbiFMKVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379184AbiFMNkA (ORCPT
+        with ESMTP id S243214AbiFMKTF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:40:00 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519BE22B0A;
-        Mon, 13 Jun 2022 04:29:29 -0700 (PDT)
+        Mon, 13 Jun 2022 06:19:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B65B9DFED;
+        Mon, 13 Jun 2022 03:16:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C738ECE116E;
-        Mon, 13 Jun 2022 11:29:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD518C34114;
-        Mon, 13 Jun 2022 11:29:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D4F4608C3;
+        Mon, 13 Jun 2022 10:16:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E939C34114;
+        Mon, 13 Jun 2022 10:16:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119766;
-        bh=zaJ54aqljYU3glLctuLdXw0T4Jh9fBKyskzpmi1NTio=;
+        s=korg; t=1655115412;
+        bh=pt3L8h/zW3PR6Pt79ZwW/76CYq13TZw4x6cKPhtkCc8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gQ95zkduYSwznI0OHVljsaPT/JujjVXJNHoniEai+rCZw8wml5LEA7N3pSBX2/YXw
-         tFYus8lNBNsgomdWBRpcbNJyuhBJsRh+i8OMVmrXpLOkvTcKuxY8Us+Bb7qaUNCTR1
-         OxSbzWkLz4tdQ+ZHIfzsWJBw8k3SKgJRihQsyi/k=
+        b=2kt4kDZNMpE036KQBcxy3DTbq8g+Nu/vtHrd/hX1hnElWgKVt0xd3h+ZZ0dGiuaCw
+         tiSyPRpmT8Vy4vLAV1Ki/A60s7mesieThMb8bG7fSvibjT4F+RFS7pLeJLfiBfWft6
+         nqHkFQt2/RWgPYLtEazq/1p6mkPYjwaCl1R3Gk1w=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 112/339] block: use bio_queue_enter instead of blk_queue_enter in bio_poll
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 063/167] soc: qcom: smp2p: Fix missing of_node_put() in smp2p_parse_ipc
 Date:   Mon, 13 Jun 2022 12:08:57 +0200
-Message-Id: <20220613094929.908659843@linuxfoundation.org>
+Message-Id: <20220613094855.713430802@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christoph Hellwig <hch@lst.de>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit ebd076bf7d5deef488ec7ebc3fdbf781eafae269 ]
+[ Upstream commit 8fd3f18ea31a398ecce4a6d3804433658678b0a3 ]
 
-We want to have a valid live gendisk to call ->poll and not just a
-request_queue, so call the right helper.
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-Fixes: 3e08773c3841 ("block: switch polling to be bio based")
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220523124302.526186-1-hch@lst.de
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes: 50e99641413e ("soc: qcom: smp2p: Qualcomm Shared Memory Point to Point")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220308071942.22942-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/blk-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/soc/qcom/smp2p.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/block/blk-core.c b/block/blk-core.c
-index bc0506772152..84f7b7884d07 100644
---- a/block/blk-core.c
-+++ b/block/blk-core.c
-@@ -948,7 +948,7 @@ int bio_poll(struct bio *bio, struct io_comp_batch *iob, unsigned int flags)
+diff --git a/drivers/soc/qcom/smp2p.c b/drivers/soc/qcom/smp2p.c
+index 4c5767c73b7a..a0562dec9604 100644
+--- a/drivers/soc/qcom/smp2p.c
++++ b/drivers/soc/qcom/smp2p.c
+@@ -416,6 +416,7 @@ static int smp2p_parse_ipc(struct qcom_smp2p *smp2p)
+ 	}
  
- 	blk_flush_plug(current->plug, false);
+ 	smp2p->ipc_regmap = syscon_node_to_regmap(syscon);
++	of_node_put(syscon);
+ 	if (IS_ERR(smp2p->ipc_regmap))
+ 		return PTR_ERR(smp2p->ipc_regmap);
  
--	if (blk_queue_enter(q, BLK_MQ_REQ_NOWAIT))
-+	if (bio_queue_enter(bio))
- 		return 0;
- 	if (queue_is_mq(q)) {
- 		ret = blk_mq_poll(q, cookie, iob, flags);
 -- 
 2.35.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA89C549193
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F0A54978D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384886AbiFMOhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40734 "EHLO
+        id S1351603AbiFMMYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384021AbiFMOeu (ORCPT
+        with ESMTP id S1351517AbiFMMW0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:34:50 -0400
+        Mon, 13 Jun 2022 08:22:26 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63392AE255;
-        Mon, 13 Jun 2022 04:49:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF500579BD;
+        Mon, 13 Jun 2022 04:03:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C003613CA;
-        Mon, 13 Jun 2022 11:49:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79FE6C34114;
-        Mon, 13 Jun 2022 11:49:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DF7F614A8;
+        Mon, 13 Jun 2022 11:03:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 260ADC34114;
+        Mon, 13 Jun 2022 11:03:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120956;
-        bh=Dw/3gXXoXHY7mgJ/HZYNJmtxF73sLdFYSq0budvTY5M=;
+        s=korg; t=1655118208;
+        bh=ZjjU0/dkLm5kXM0wvK8rlULMZPZvcNcrfRe3LCRpX7M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ou1aLlT3P2pS2N08Kvi/D0S2vXkoFEP9kVSg9Vhe8R83NlIyKFTOSmVvWaUfEe5Zo
-         RAeO22VEhWxM1dyGwapPVQ2KV2pwSK2CkA+gOu/VF+PJM4mV5+Eo7Eo6Y5PoinK2K9
-         qRJLJ4u/jPa/UT/DfMNgu9YyOouz+YnUt5S8/6L4=
+        b=tkWsrtNaPi/yQSnEB1662H17Ty8RBT87qLZ92jjJ8dD1j8KJJ8QwfQKDqt0pdEYKu
+         J+0NVmLjLYdyZ9zalEFMWOcVbe34pjizfGH2pcfPKoaSyim3gURXm3Jp2hBv2q1xIH
+         /QRIOfBtkN8b9Wr9NDjj+bC9grazLDal+5F6zcaY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Xiaoke Wang <xkernel.wang@foxmail.com>,
+        stable@vger.kernel.org, Venky Shankar <vshankar@redhat.com>,
+        Xiubo Li <xiubli@redhat.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 197/298] staging: rtl8712: fix a potential memory leak in r871xu_drv_init()
+Subject: [PATCH 4.19 267/287] ceph: allow ceph.dir.rctime xattr to be updatable
 Date:   Mon, 13 Jun 2022 12:11:31 +0200
-Message-Id: <20220613094931.081668757@linuxfoundation.org>
+Message-Id: <20220613094932.099299261@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,79 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+From: Venky Shankar <vshankar@redhat.com>
 
-[ Upstream commit 7288ff561de650d4139fab80e9cb0da9b5b32434 ]
+[ Upstream commit d7a2dc523085f8b8c60548ceedc696934aefeb0e ]
 
-In r871xu_drv_init(), if r8712_init_drv_sw() fails, then the memory
-allocated by r8712_alloc_io_queue() in r8712_usb_dvobj_init() is not
-properly released as there is no action will be performed by
-r8712_usb_dvobj_deinit().
-To properly release it, we should call r8712_free_io_queue() in
-r8712_usb_dvobj_deinit().
+`rctime' has been a pain point in cephfs due to its buggy
+nature - inconsistent values reported and those sorts.
+Fixing rctime is non-trivial needing an overall redesign
+of the entire nested statistics infrastructure.
 
-Besides, in r871xu_dev_remove(), r8712_usb_dvobj_deinit() will be called
-by r871x_dev_unload() under condition `padapter->bup` and
-r8712_free_io_queue() is called by r8712_free_drv_sw().
-However, r8712_usb_dvobj_deinit() does not rely on `padapter->bup` and
-calling r8712_free_io_queue() in r8712_free_drv_sw() is negative for
-better understading the code.
-So I move r8712_usb_dvobj_deinit() into r871xu_dev_remove(), and remove
-r8712_free_io_queue() from r8712_free_drv_sw().
+As a workaround, PR
 
-Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-Link: https://lore.kernel.org/r/tencent_B8048C592777830380A23A7C4409F9DF1305@qq.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+     http://github.com/ceph/ceph/pull/37938
+
+allows this extended attribute to be manually set. This allows
+users to "fixup" inconsistent rctime values. While this sounds
+messy, its probably the wisest approach allowing users/scripts
+to workaround buggy rctime values.
+
+The above PR enables Ceph MDS to allow manually setting
+rctime extended attribute with the corresponding user-land
+changes. We may as well allow the same to be done via kclient
+for parity.
+
+Signed-off-by: Venky Shankar <vshankar@redhat.com>
+Reviewed-by: Xiubo Li <xiubli@redhat.com>
+Signed-off-by: Ilya Dryomov <idryomov@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/staging/rtl8712/os_intfs.c | 1 -
- drivers/staging/rtl8712/usb_intf.c | 6 +++---
- 2 files changed, 3 insertions(+), 4 deletions(-)
+ fs/ceph/xattr.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/staging/rtl8712/os_intfs.c b/drivers/staging/rtl8712/os_intfs.c
-index d15d52c0d1a7..003e97205124 100644
---- a/drivers/staging/rtl8712/os_intfs.c
-+++ b/drivers/staging/rtl8712/os_intfs.c
-@@ -332,7 +332,6 @@ void r8712_free_drv_sw(struct _adapter *padapter)
- 	r8712_free_evt_priv(&padapter->evtpriv);
- 	r8712_DeInitSwLeds(padapter);
- 	r8712_free_mlme_priv(&padapter->mlmepriv);
--	r8712_free_io_queue(padapter);
- 	_free_xmit_priv(&padapter->xmitpriv);
- 	_r8712_free_sta_priv(&padapter->stapriv);
- 	_r8712_free_recv_priv(&padapter->recvpriv);
-diff --git a/drivers/staging/rtl8712/usb_intf.c b/drivers/staging/rtl8712/usb_intf.c
-index ee4c61f85a07..56450ede9f23 100644
---- a/drivers/staging/rtl8712/usb_intf.c
-+++ b/drivers/staging/rtl8712/usb_intf.c
-@@ -265,6 +265,7 @@ static uint r8712_usb_dvobj_init(struct _adapter *padapter)
- 
- static void r8712_usb_dvobj_deinit(struct _adapter *padapter)
- {
-+	r8712_free_io_queue(padapter);
- }
- 
- void rtl871x_intf_stop(struct _adapter *padapter)
-@@ -302,9 +303,6 @@ void r871x_dev_unload(struct _adapter *padapter)
- 			rtl8712_hal_deinit(padapter);
- 		}
- 
--		/*s6.*/
--		if (padapter->dvobj_deinit)
--			padapter->dvobj_deinit(padapter);
- 		padapter->bup = false;
+diff --git a/fs/ceph/xattr.c b/fs/ceph/xattr.c
+index a09ce27ab220..6fa9a784676b 100644
+--- a/fs/ceph/xattr.c
++++ b/fs/ceph/xattr.c
+@@ -273,6 +273,14 @@ static size_t ceph_vxattrcb_quota_max_files(struct ceph_inode_info *ci,
  	}
- }
-@@ -607,6 +605,8 @@ static void r871xu_dev_remove(struct usb_interface *pusb_intf)
- 	/* Stop driver mlme relation timer */
- 	r8712_stop_drv_timers(padapter);
- 	r871x_dev_unload(padapter);
-+	if (padapter->dvobj_deinit)
-+		padapter->dvobj_deinit(padapter);
- 	r8712_free_drv_sw(padapter);
- 	free_netdev(pnetdev);
- 
+ #define XATTR_RSTAT_FIELD(_type, _name)			\
+ 	XATTR_NAME_CEPH(_type, _name, VXATTR_FLAG_RSTAT)
++#define XATTR_RSTAT_FIELD_UPDATABLE(_type, _name)			\
++	{								\
++		.name = CEPH_XATTR_NAME(_type, _name),			\
++		.name_size = sizeof (CEPH_XATTR_NAME(_type, _name)),	\
++		.getxattr_cb = ceph_vxattrcb_ ## _type ## _ ## _name,	\
++		.exists_cb = NULL,					\
++		.flags = VXATTR_FLAG_RSTAT,				\
++	}
+ #define XATTR_LAYOUT_FIELD(_type, _name, _field)			\
+ 	{								\
+ 		.name = CEPH_XATTR_NAME2(_type, _name, _field),	\
+@@ -310,7 +318,7 @@ static struct ceph_vxattr ceph_dir_vxattrs[] = {
+ 	XATTR_RSTAT_FIELD(dir, rfiles),
+ 	XATTR_RSTAT_FIELD(dir, rsubdirs),
+ 	XATTR_RSTAT_FIELD(dir, rbytes),
+-	XATTR_RSTAT_FIELD(dir, rctime),
++	XATTR_RSTAT_FIELD_UPDATABLE(dir, rctime),
+ 	{
+ 		.name = "ceph.quota",
+ 		.name_size = sizeof("ceph.quota"),
 -- 
 2.35.1
 

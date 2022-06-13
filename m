@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DE0A549570
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1EAE5495FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359381AbiFMMJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:09:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54300 "EHLO
+        id S1355394AbiFMMbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:31:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359043AbiFMMFL (ORCPT
+        with ESMTP id S1355536AbiFMM04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:05:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DE5BD3;
-        Mon, 13 Jun 2022 03:58:43 -0700 (PDT)
+        Mon, 13 Jun 2022 08:26:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4D7580FE;
+        Mon, 13 Jun 2022 04:05:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7075E61346;
-        Mon, 13 Jun 2022 10:58:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E431C34114;
-        Mon, 13 Jun 2022 10:58:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5386F61347;
+        Mon, 13 Jun 2022 11:05:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6600EC34114;
+        Mon, 13 Jun 2022 11:05:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117922;
-        bh=XEYdQj+nG/p83wdweF1uBpntbavIDU+Y+1Fsi+0wt+Y=;
+        s=korg; t=1655118347;
+        bh=n6SzDndHEPUeNrIaKwwJ4XJ47Vvoh3ClZO6TlxlfqHE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hukt7/vkorriNRjIiSFX3IkzR/Uht1cN0uzplrBteM30kgv2eZtMsUscoUmlONT+d
-         VJtEzBFnkpUZ/NbHKUQ6/KFqqP/6EfQCdglub7+knpGlkCU681TySzwXcbXCpKQ9Xj
-         o+PZpzSSC8CtVlWnqPJd/F/avPIFgofmBJwwqMCw=
+        b=SLGHvM7/Z5fuyBh/fvR5RRJCeRzi7Xujgg/UW3vynnG0IQqdueztx3G+lXqsb0f95
+         yTTHXvi69eM1ARbjqd7Cy3xrH1caldEvi3ZgXDFybNYo24bE6SGuqSTaz7bA/tUe/Y
+         U2d+G48VrQmGEGziebZqS9ruSnm5pBq859b3AHZA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Subject: [PATCH 4.19 179/287] gma500: fix an incorrect NULL check on list iterator
+        stable@vger.kernel.org, Schspa Shi <schspa@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 043/172] driver: base: fix UAF when driver_attach failed
 Date:   Mon, 13 Jun 2022 12:10:03 +0200
-Message-Id: <20220613094929.297466623@linuxfoundation.org>
+Message-Id: <20220613094900.747026140@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,49 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Schspa Shi <schspa@gmail.com>
 
-commit bdef417d84536715145f6dc9cc3275c46f26295a upstream.
+[ Upstream commit 310862e574001a97ad02272bac0fd13f75f42a27 ]
 
-The bug is here:
-	return crtc;
+When driver_attach(drv); failed, the driver_private will be freed.
+But it has been added to the bus, which caused a UAF.
 
-The list iterator value 'crtc' will *always* be set and non-NULL by
-list_for_each_entry(), so it is incorrect to assume that the iterator
-value will be NULL if the list is empty or no element is found.
+To fix it, we need to delete it from the bus when failed.
 
-To fix the bug, return 'crtc' when found, otherwise return NULL.
-
-Cc: stable@vger.kernel.org
-fixes: 89c78134cc54d ("gma500: Add Poulsbo support")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Signed-off-by: Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220327052028.2013-1-xiam0nd.tong@gmail.com
+Fixes: 190888ac01d0 ("driver core: fix possible missing of device probe")
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+Link: https://lore.kernel.org/r/20220513112444.45112-1-schspa@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/gma500/psb_intel_display.c |    7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/base/bus.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/gma500/psb_intel_display.c
-+++ b/drivers/gpu/drm/gma500/psb_intel_display.c
-@@ -543,14 +543,15 @@ void psb_intel_crtc_init(struct drm_devi
- 
- struct drm_crtc *psb_intel_get_crtc_from_pipe(struct drm_device *dev, int pipe)
- {
--	struct drm_crtc *crtc = NULL;
-+	struct drm_crtc *crtc;
- 
- 	list_for_each_entry(crtc, &dev->mode_config.crtc_list, head) {
- 		struct gma_crtc *gma_crtc = to_gma_crtc(crtc);
-+
- 		if (gma_crtc->pipe == pipe)
--			break;
-+			return crtc;
+diff --git a/drivers/base/bus.c b/drivers/base/bus.c
+index a9c23ecebc7c..df85e928b97f 100644
+--- a/drivers/base/bus.c
++++ b/drivers/base/bus.c
+@@ -621,7 +621,7 @@ int bus_add_driver(struct device_driver *drv)
+ 	if (drv->bus->p->drivers_autoprobe) {
+ 		error = driver_attach(drv);
+ 		if (error)
+-			goto out_unregister;
++			goto out_del_list;
  	}
--	return crtc;
-+	return NULL;
- }
+ 	module_add_driver(drv->owner, drv);
  
- int gma_connector_clones(struct drm_device *dev, int type_mask)
+@@ -648,6 +648,8 @@ int bus_add_driver(struct device_driver *drv)
+ 
+ 	return 0;
+ 
++out_del_list:
++	klist_del(&priv->knode_bus);
+ out_unregister:
+ 	kobject_put(&priv->kobj);
+ 	/* drv->p is freed in driver_release()  */
+-- 
+2.35.1
+
 
 

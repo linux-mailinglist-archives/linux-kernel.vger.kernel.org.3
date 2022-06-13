@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24D2B548B32
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6AE548D98
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350185AbiFMLGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44824 "EHLO
+        id S1347430AbiFMMhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349581AbiFMK5W (ORCPT
+        with ESMTP id S1353376AbiFMMfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:57:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F82725C68;
-        Mon, 13 Jun 2022 03:32:17 -0700 (PDT)
+        Mon, 13 Jun 2022 08:35:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 650591C13F;
+        Mon, 13 Jun 2022 04:07:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 73165B80EA8;
-        Mon, 13 Jun 2022 10:32:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A80C34114;
-        Mon, 13 Jun 2022 10:32:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 826D5608D6;
+        Mon, 13 Jun 2022 11:07:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96547C34114;
+        Mon, 13 Jun 2022 11:07:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116334;
-        bh=3sEpLrvvO/uTRcRbh2J/sUJLoAvJDDtp0BA43wGp+94=;
+        s=korg; t=1655118471;
+        bh=Wvzg1eIbq/VH+8v4OxYzY979R1uuGnEZjw4IN6qm7tk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=R4A6SSTuVujUh2WBLNA9bg83E2/v3TY4K3XOD7N9v2srhFGhDr4q/pf1Xn1kqXS+i
-         9Ab/gUJIkF6HbiB/I2Bn4sevPaZx8Bez+W6MvEC2/JwdEoJx49PVSnUPBUtAvqTHUT
-         egoN2AJRSnQ9Iivl6ouaOhdsT8GyQvEOZZ3WWOrQ=
+        b=OMHvy/oVBTIaFmb9UeJF0qp13wzW3QzWMcnLgpJb8t0nyzRbxBEV0RD9w0QdJ4y6+
+         4TudnCSakhWwgII28Q+CK4arZZC4fSRwOm6FRcIWznr0tm2PtO1ojEWgOBoY17lXQA
+         ryI2TqM5I8D0hBnVuqCswLiUKnnaYnfqfhLZ9Wi4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kinglong Mee <kinglongmee@gmail.com>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 172/218] xprtrdma: treat all calls not a bcall when bc_serv is NULL
+Subject: [PATCH 5.10 070/172] afs: Fix infinite loop found by xfstest generic/676
 Date:   Mon, 13 Jun 2022 12:10:30 +0200
-Message-Id: <20220613094925.821320025@linuxfoundation.org>
+Message-Id: <20220613094907.280795648@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,71 +57,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kinglong Mee <kinglongmee@gmail.com>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit 11270e7ca268e8d61b5d9e5c3a54bd1550642c9c ]
+[ Upstream commit 17eabd42560f4636648ad65ba5b20228071e2363 ]
 
-When a rdma server returns a fault format reply, nfs v3 client may
-treats it as a bcall when bc service is not exist.
+In AFS, a directory is handled as a file that the client downloads and
+parses locally for the purposes of performing lookup and getdents
+operations.  The in-kernel afs filesystem has a number of functions that
+do this.
 
-The debug message at rpcrdma_bc_receive_call are,
+A directory file is arranged as a series of 2K blocks divided into
+32-byte slots, where a directory entry occupies one or more slots, plus
+each block starts with one or more metadata blocks.
 
-[56579.837169] RPC:       rpcrdma_bc_receive_call: callback XID
-00000001, length=20
-[56579.837174] RPC:       rpcrdma_bc_receive_call: 00 00 00 01 00 00 00
-00 00 00 00 00 00 00 00 00 00 00 00 04
+When parsing a block, if the last slots are occupied by a dirent that
+occupies more than a single slot and the file position points at a slot
+that's not the initial one, the logic in afs_dir_iterate_block() that
+skips over it won't advance the file pointer to the end of it.  This
+will cause an infinite loop in getdents() as it will keep retrying that
+block and failing to advance beyond the final entry.
 
-After that, rpcrdma_bc_receive_call will meets NULL pointer as,
+Fix this by advancing the file pointer if the next entry will be beyond
+it when we skip a block.
 
-[  226.057890] BUG: unable to handle kernel NULL pointer dereference at
-00000000000000c8
-...
-[  226.058704] RIP: 0010:_raw_spin_lock+0xc/0x20
-...
-[  226.059732] Call Trace:
-[  226.059878]  rpcrdma_bc_receive_call+0x138/0x327 [rpcrdma]
-[  226.060011]  __ib_process_cq+0x89/0x170 [ib_core]
-[  226.060092]  ib_cq_poll_work+0x26/0x80 [ib_core]
-[  226.060257]  process_one_work+0x1a7/0x360
-[  226.060367]  ? create_worker+0x1a0/0x1a0
-[  226.060440]  worker_thread+0x30/0x390
-[  226.060500]  ? create_worker+0x1a0/0x1a0
-[  226.060574]  kthread+0x116/0x130
-[  226.060661]  ? kthread_flush_work_fn+0x10/0x10
-[  226.060724]  ret_from_fork+0x35/0x40
-...
+This was found by the generic/676 xfstest but can also be triggered with
+something like:
 
-Signed-off-by: Kinglong Mee <kinglongmee@gmail.com>
-Reviewed-by: Chuck Lever <chuck.lever@oracle.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+	~/xfstests-dev/src/t_readdir_3 /xfstest.test/z 4000 1
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: David Howells <dhowells@redhat.com>
+Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
+Tested-by: Marc Dionne <marc.dionne@auristor.com>
+cc: linux-afs@lists.infradead.org
+Link: http://lore.kernel.org/r/165391973497.110268.2939296942213894166.stgit@warthog.procyon.org.uk/
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sunrpc/xprtrdma/rpc_rdma.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ fs/afs/dir.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/net/sunrpc/xprtrdma/rpc_rdma.c b/net/sunrpc/xprtrdma/rpc_rdma.c
-index 991d5a96f35b..030bf17a20b6 100644
---- a/net/sunrpc/xprtrdma/rpc_rdma.c
-+++ b/net/sunrpc/xprtrdma/rpc_rdma.c
-@@ -974,6 +974,7 @@ rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep,
- 		 __be32 xid, __be32 proc)
- #if defined(CONFIG_SUNRPC_BACKCHANNEL)
- {
-+	struct rpc_xprt *xprt = &r_xprt->rx_xprt;
- 	struct xdr_stream *xdr = &rep->rr_stream;
- 	__be32 *p;
+diff --git a/fs/afs/dir.c b/fs/afs/dir.c
+index 262c0ae505af..159795059547 100644
+--- a/fs/afs/dir.c
++++ b/fs/afs/dir.c
+@@ -412,8 +412,11 @@ static int afs_dir_iterate_block(struct afs_vnode *dvnode,
+ 		}
  
-@@ -997,6 +998,10 @@ rpcrdma_is_bcall(struct rpcrdma_xprt *r_xprt, struct rpcrdma_rep *rep,
- 	if (*p != cpu_to_be32(RPC_CALL))
- 		return false;
+ 		/* skip if starts before the current position */
+-		if (offset < curr)
++		if (offset < curr) {
++			if (next > curr)
++				ctx->pos = blkoff + next * sizeof(union afs_xdr_dirent);
+ 			continue;
++		}
  
-+	/* No bc service. */
-+	if (xprt->bc_serv == NULL)
-+		return false;
-+
- 	/* Now that we are sure this is a backchannel call,
- 	 * advance to the RPC header.
- 	 */
+ 		/* found the next entry */
+ 		if (!dir_emit(ctx, dire->u.name, nlen,
 -- 
 2.35.1
 

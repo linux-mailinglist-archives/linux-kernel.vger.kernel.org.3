@@ -2,166 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11716549C23
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3C1549C24
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242610AbiFMStK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57054 "EHLO
+        id S1345031AbiFMSts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345661AbiFMSse (ORCPT
+        with ESMTP id S1344563AbiFMSt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:48:34 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFCFD6B0B9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:46:42 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso6359285pjk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:46:42 -0700 (PDT)
+        Mon, 13 Jun 2022 14:49:28 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949B4E86C4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:47:34 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id v7so4545573ilo.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 08:47:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=0oMsZUdX7QBDUeBrNm/sP+J3C89hNojWjZGJeo5/1Dw=;
-        b=ftHc2uarMQSmfELWVIaFl3k1WRxhaT9KN93JMzqqxeZAq8ddH+gTYc7S+eyU52XkxM
-         /P9ZiyKLlzci7mMnBLEgSPFAn3DtwqNaMYEhtFhLWxEG2HWk2szPqOyOi+ySu23wWcoH
-         k43Gjt2tGZEEXCSiuWH9NOyqrI8u3Ipda6gVgR10pxxMWErWYj6erGUNCk4I544iY2oN
-         81M5R6UWGeqAUzWnUaRAEPpAYYQo2050U/kWZZjKnIXT1Uga/TgERl07Lck5TLgZI4N4
-         MPklKEE/uI0VZbIBSYOahPiz67u7JqPaEw5wDTjEsrSz5HxY+bQra3DllM5jUXUa7BUc
-         /tmg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3y6nQUpREDLkWe7yKa0UAwuMqX3hq5w915YYWK2imJA=;
+        b=dfO6y+K+eEEw+nHowr64bloavX1KPc8PRVoqFmcf+aWlEilrashyB632gGEfGmOFM9
+         0Njo5NPQAdGI+1e5XMn/E5nBtdPPM/qly7ovhx5ErL+dbsJzsDFyxvy+fEpPJ76/XBGc
+         b2lqU9w7djr5BM+e32FltdjMLXCOi/ORouMImp327Cv13MIbMaTq2UV3+cXHKQWJkyZo
+         xgIVLQwWEzDwTIvKlR4H8e1Wr5Wjnuzqopjykh6Yzh0TsCY2ZIGeOtEjstO9A7mENRnd
+         4OuDRZBLbOCOomiXN2LhWoWm3LdGF+nAVQX9ZWmfil2DR5tnPU+p8qzfPW0SOCPfQKg1
+         ySXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=0oMsZUdX7QBDUeBrNm/sP+J3C89hNojWjZGJeo5/1Dw=;
-        b=5Zk9o+hzDuiUeHS49ELjMw/FMtVIOwk1IYTjdqtLmPbe0fl7KrI32BQ6XK9kN3gNSg
-         WrtB7M41hsqQ63L6kBBM0RYPiCmJplnISsssJoBHT8R0QyCTi2EyFT3V+XT3TqHn243b
-         xQZVLTl6S5wq72jAvlYaB6+RGwccARJvgQyMen9y44srrWRKLrpm2T7RFlEqUGHmdNbT
-         zm6WwUzP7NQWJu1VNm2CxHPmeDVuKFprxM0DVgkr9L/ox/YDTGahLPtqsc8ElM6CmgRR
-         KPWOwPX2i6On1+w8UGUYr5VnkMsDiWH+X8W82rFm/sgLAs5WDZArwEsm32re8YchOgHP
-         prfg==
-X-Gm-Message-State: AJIora+r6FybLfG6vLreopgRd/euPkEcRqkCJggJHZ7upKW+ddGWZX9P
-        VpL0oUGCdYc/wRKOfHz0BWlNbxCqZ+A=
-X-Google-Smtp-Source: AGRyM1sZ5FLejULCQGnqhuRhwUqc7/pR77wUYgwFIcr+0YWGCaSExHJQ0fym76CKY18M4f1YUx8C7A==
-X-Received: by 2002:a17:90a:86c8:b0:1e6:7147:8b4d with SMTP id y8-20020a17090a86c800b001e671478b4dmr423988pjv.45.1655135201999;
-        Mon, 13 Jun 2022 08:46:41 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 10-20020a62150a000000b0050dc76281d3sm5729558pfv.173.2022.06.13.08.46.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 08:46:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 13 Jun 2022 08:46:40 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 5.19-rc2
-Message-ID: <20220613154640.GA3881687@roeck-us.net>
-References: <CAHk-=wiLDbZ9ch9vSLxrYBdr-bBujr5sehH_HszWzSah54UiQw@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3y6nQUpREDLkWe7yKa0UAwuMqX3hq5w915YYWK2imJA=;
+        b=4zLfLC6E13ES1Imedi1We+lomTfJj+wGvOB3//pwnqJ7wYtkMkcgRe9qGqHYe+JTuK
+         UFy0wo212+NwKamlNRFLyFOGOdpEy3fPgf6TbREKbsEPkbQUsk6d3ccXDP8ESPjREJNH
+         N6WCQG6ctVbajzA0ewwK08WhWjcjy/KZUQW77KdXe76ZfUA7hyhMElxBPi9DZmnxMEef
+         lxUMneA0RQcrn6aPLJIVxARV5j/xnzoQY1bYlaR/CSOLshWtr9iAjdD5grxrSiXjU25h
+         myZM3St7AoCPkOOlPpTmHec8IeTMh94nm16RBWX5ab14rJTGFU3+y/l5WsqUBW5p1+YP
+         4oGA==
+X-Gm-Message-State: AJIora/8MvBtDH56yhKJm/bOtYPr4oJJB1OFf8jhy7bIFx7eQZfeVGzr
+        4NmUkRteGJZlnf9VLWYAIjn/uygN2arM2ObraAdkmg==
+X-Google-Smtp-Source: AGRyM1utYZtUJPmmO0YH5rQY1H+QkoLxHbX0qkfAdMz/XCRVb0XG2N2qMO4MC8xySY77TbTFJmHmuYWkYpRBCT9nKZ4=
+X-Received: by 2002:a92:ca0e:0:b0:2d3:dc52:35e9 with SMTP id
+ j14-20020a92ca0e000000b002d3dc5235e9mr272117ils.44.1655135253763; Mon, 13 Jun
+ 2022 08:47:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wiLDbZ9ch9vSLxrYBdr-bBujr5sehH_HszWzSah54UiQw@mail.gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <Yp59WCODvEDbpxOY@sol.localdomain> <CANp29Y7yEocOnLMhE_hc37L8wAzpvON9hwpjvuBLoMdQzhw+xA@mail.gmail.com>
+ <Yp/wGYVsKR8M9eXI@sol.localdomain>
+In-Reply-To: <Yp/wGYVsKR8M9eXI@sol.localdomain>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Mon, 13 Jun 2022 17:47:22 +0200
+Message-ID: <CANp29Y7Y-5KY8D8=tFQfYF_aHwNOh8pz3sumLuKM930EHW7msg@mail.gmail.com>
+Subject: Re: Auto-invalidating old syzbot reports?
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     syzkaller <syzkaller@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 04:36:20PM -0700, Linus Torvalds wrote:
-> It's Sunday afternoon, so it must be time for another release candidate.
-> 
-> As usual, rc2 is fairly small, and there isn't really a ton going on
-> here. Fixes spread all over, and the diffstat is fairly flat apart
-> from a few notable things that had bigger changes: some amdgpu fixes,
-> the xen stub iommu driver, and some ceph and zonefs fixes. The rest is
-> all pretty much one- or few-liners spread out mostly everywhere.
-> 
-> And yes, because I expected the rc2 week to be fairly quiet, I did a
-> system update on my workstation, and as a result I spent a day or two
-> then sorting out most of the fallout from the resulting compiler
-> upgrade to gcc-12. Some of it ended up being a bit heavy-handed, and
-> we'll be tweaking things further. And some of it ends up being an
-> actual compiler misfeature, but it's being discussed too and is
-> limited to just one file on the 32-bit i386 side (and does not seem to
-> result in any actual bad code, just excessive stack use).
-> 
-> Anyway, nothing hugely scary going on, let's just keep testing and
-> fixing things.
-> 
+On Wed, Jun 8, 2022 at 2:41 AM Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> On Tue, Jun 07, 2022 at 04:37:42PM +0200, 'Aleksandr Nogikh' via syzkaller wrote:
+> > Hi Eric,
+> >
+> > Thanks for contacting us!
+> > These are very interesting points.
+> >
+> > Syzbot indeed only closes old bugs without a reproducer, because if we
+> > have a repro, then we can periodically do a fix bisection. And yes,
+> > this mechanism unfortunately does not always work perfectly.
+> >
+> > I think we could split the problem you described into two parts.
+> > 1) Some bugs that are "open" on the dashboard are actually no longer
+> > relevant and should be closed.
+> >
+> > If you know some old opened bugs with repro, which are actually
+> > already fixed, could you please share them? It would be helpful to
+> > figure out the exact reason why they are still open.
+> > There are some cases when we can close bugs with a repro without
+> > losing too much -- e.g. for bugs from -next there was a discussion in
+> > https://github.com/google/syzkaller/issues/1957.
+> > Also, if the fix bisection fails, but the repro no longer triggers the
+> > crash on the HEAD, then we could probably "cancel" the repro and let
+> > the bug be auto-closed (actually, auto-invalidated) later?
+> >
+>
+> Just to give the first definitive example I could find,
+> https://syzkaller.appspot.com/bug?id=06c43cd0a71aec08de8ea55ca5cda816c45ab4e0
+> ("KMSAN: uninit-value in _mix_pool_bytes") is a 3-year old bug that is still
+> open even though it was fixed by commit f45a4248ea4c ("net: usb: rtl8150: set
+> random MAC address when set_ethernet_addr() fails").
 
-Build results:
-	total: 149 pass: 146 fail: 3
-Failed builds:
-	arm:allmodconfig
-	mips:loongson2k_defconfig
-	powerpc:allmodconfig
-Qemu test results:
-	total: 489 pass: 489 fail: 0
+Thanks for providing the example!
+Yes, KMSAN bugs are unfortunately a bit special at the moment - we
+cannot do a proper fix bisection because the KMSAN repo is regularly
+rebased. Correct Reported-by tag and manual fix reporting (#syz fix)
+are right now the only ways to get KMSAN bugs closed.
 
----
-arm:allmodconfig
+For this particular bug the problem was that the fixing commit
+referenced (Reported-by:
+syzbot+abbc768b560c84d92fd3@syzkaller.appspotmail.com) another bug
+(https://syzkaller.appspot.com/bug?extid=abbc768b560c84d92fd3).
 
-ERROR: modpost: missing MODULE_LICENSE() in drivers/watchdog/gxp-wdt.o
+>
+> From working on syzbot reports in the past, I can say that the "already fixed"
+> case for old reports is very common.  It is hard and time-consuming to actually
+> identify them as such though, since it requires root-causing the bug.  If it was
+> quick and easy to do so, there wouldn't be hundreds of such open reports...
+>
+> > 2) Some bugs were reported to the mailing lists, but became forgotten.
+> >
+> > We could periodically take maintainers as per the latest commit and
+> > send a reminder email to them. What do you think, would people go mad
+> > if we did that for each bug e.g. every 6 months? :) Only if the bug
+> > still happens on syzbot, of course.
+>
+> That is greatly needed, but to get there we first need to get past the
+> assumption that every syzbot report will get properly handled by humans and thus
+> should never be automatically closed.  That assumption has been tried for the
+> last 5 years, and unfortunately it isn't working.  (If responding to syzbot
+> reports was being properly funded, it would be possible, but it's not.)  It
+> looks like you agree, as per your suggestion that only crashes that still happen
+> in syzbot should be reminded about.  I think syzbot actually needs to go further
+> and close the old bug reports, not merely suppress reminders about them...
 
-The fix is in -next, so hopefully Wim will send a pull request soon.
+I've filed an issue about making syzbot periodically re-test the
+reproducers. If the repro doesn't trigger a bug anymore, syzkaller
+will pretend there's no repro and close the bug once crashes are not
+happening anymore. This should hopefully resolve the problem with old
+irrelevant bugs.
+https://github.com/google/syzkaller/issues/3193
 
----
-mips:loongson2k_defconfig
+>
+> In any case, reminders *must* include the latest crash details in a way that
+> clearly shows that the bug is still relevant.
 
-drivers/irqchip/irq-loongson-liointc.c: In function 'liointc_chained_handle_irq':
-drivers/irqchip/irq-loongson-liointc.c:60:20: error: implicit declaration of function 'cpu_logical_map'
+That's a good point, thanks!
 
-Caused by commit fa84f89395e03 ("irqchip/loongson-liointc: Fix build error for LoongArch").
+>
+> > At some point we were also considering sending aggregated reminders
+> > (e.g. sth like "we still have X open bugs for the subsystem you
+> > maintain/have actively contributed to, here they are:"), but to do
+> > that, we first need to learn how to more or less reliably classify the
+> > bugs into the subsystems.
+>
+> Well syzbot already identifies subsystems via the stack trace; it's just not as
+> good as a human expert, and probably never will be since the correct subsystem
+> can be very non-obvious.  For a short time, I was actually manually classifying
+> the subsystems for syzbot reports and sending out reminders --- see
+> https://lore.kernel.org/linux-kernel/?q=%22open+syzbot+bugs%22 --- but I gave up
+> due to lack of support from my job for doing that work, combined with receiving
+> somewhat less engagement than I had hoped.
 
----
-powerpc:allmodconfig
+Hmm, yes, maybe we can indeed give even the existing subsystem
+detection mechanism a try.
+And it looks like it's better to only send grouped reminders -- given
+how much negative reaction one can see under your link(s), I wonder
+what would there be if we send per-bug reminders :)
 
-Error: External symbol 'memset' referenced from prom_init.c
-powerpc64-linux-ld:
-	drivers/gpu/drm/amd/amdgpu/../display/dc/dml/display_mode_lib.o uses hard float,
-	drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_resource.o uses soft float
-and similar errors. No change since last week.
+Hopefully I'll be able to get to the implementation in some foreseeable future.
 
----
-Runtime warning:
-
-OF: amba_device_add() failed (-19) for /amba/smc@10100000
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1 at lib/refcount.c:28 of_platform_bus_create+0x33c/0x3dc
-refcount_t: underflow; use-after-free.
-
-Fixed in -next.
-
-There are also various UAF and "spinlock bad magic" BUG/WARNING logs in arm
-boot tests. I don't know if those are new or if I just see them now because
-I enabled KFENCE. Here is an (incomplete) sample.
-
-[    0.430290] printk: console [ramoops-1] printing thread started
-[    0.436219] BUG: spinlock bad magic on CPU#0, kdevtmpfs/23
-[    0.436250]  lock: noop_backing_dev_info+0x6c/0x3b0, .magic: 00000000, .owner: <none>/-1, .owner_cpu: 0
-[    0.436808] CPU: 0 PID: 23 Comm: kdevtmpfs Not tainted 5.19.0-rc2 #1
-
----
-
-[    7.918940] ------------[ cut here ]------------
-[    7.919062] WARNING: CPU: 0 PID: 0 at kernel/smp.c:913 smp_call_function_many_cond+0x38c/0x3a4
-[    7.919875] Modules linked in:
-[    7.920155] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.19.0-rc2 #1
-[    7.920248] Hardware name: ARM-Versatile Express
-[    7.920458]  unwind_backtrace from show_stack+0x10/0x14
-[    7.920549]  show_stack from dump_stack_lvl+0x50/0x6c
-[    7.920585]  dump_stack_lvl from __warn+0xcc/0x19c
-[    7.920614]  __warn from warn_slowpath_fmt+0x5c/0xb4
-[    7.920644]  warn_slowpath_fmt from smp_call_function_many_cond+0x38c/0x3a4
-[    7.920674]  smp_call_function_many_cond from smp_call_function+0x3c/0x50
-[    7.920702]  smp_call_function from set_memory_valid+0x74/0x94
-[    7.920733]  set_memory_valid from kfence_guarded_free+0x280/0x4bc
-[    7.920767]  kfence_guarded_free from kmem_cache_free+0x2f4/0x394
-
-I'll try to bisect as I find the time.
-
-Guenter
+>
+> Perhaps the best solution would be to crowdsource by providing a self-service
+> "#syz subsystem $FOO" command.
+>
+> - Eric

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC32548642
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B59C45486FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356379AbiFMLs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33496 "EHLO
+        id S1353579AbiFMMnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:43:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356716AbiFMLo6 (ORCPT
+        with ESMTP id S1355427AbiFMMjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:44:58 -0400
+        Mon, 13 Jun 2022 08:39:08 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2F948883;
-        Mon, 13 Jun 2022 03:51:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B88DE5DD1B;
+        Mon, 13 Jun 2022 04:09:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4E37B80E07;
-        Mon, 13 Jun 2022 10:51:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5363BC34114;
-        Mon, 13 Jun 2022 10:51:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B965B80D31;
+        Mon, 13 Jun 2022 11:09:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B18C34114;
+        Mon, 13 Jun 2022 11:09:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117465;
-        bh=OeYBXK7Vd8Z7875GdHc2vCw+10nPHVIVgJicLuUH/T0=;
+        s=korg; t=1655118541;
+        bh=1w3LGqQZEQz4fLKWn07r3txskOEpLiVmDPSUNw17sq4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0/PH84VfejeX27z0lZp4bWxkT3u4Aos+aZ9Srl8Rcaf3eWno5D/Tdj3KKJgD3mqTY
-         XBWpXXAwNiuamh4IE7RT1DbcEMNVFcBOCOh0l18U0ebFCj8UJ6L+GD2zMMNkdUS/XT
-         On9wM+8+XN4MM+XpMEVHL3YCvZNdayzS6N6UzY0k=
+        b=Eyu+EofVIxZW/+wym8bHsteJ4jlbtAjQXaOLoG16+mcfh0AW0ROp0CiBiNF9oDjeo
+         YVqalI6FiRWpiiBTZH79UpMJdOtwa/wVLhq01NYsbEYrcroxC7WCnMjV87ZYuCRaWr
+         qV1f52CaWIjduJGJmYXspm6juxJLprsjypAovnqs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Petr Mladek <pmladek@suse.com>,
-        John Ogness <john.ogness@linutronix.de>,
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 382/411] serial: msm_serial: disable interrupts in __msm_console_write()
-Date:   Mon, 13 Jun 2022 12:10:55 +0200
-Message-Id: <20220613094940.121008282@linuxfoundation.org>
+Subject: [PATCH 5.10 096/172] netfilter: nf_tables: release new hooks on unsupported flowtable flags
+Date:   Mon, 13 Jun 2022 12:10:56 +0200
+Message-Id: <20220613094913.477315747@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,57 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: John Ogness <john.ogness@linutronix.de>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit aabdbb1b7a5819e18c403334a31fb0cc2c06ad41 ]
+[ Upstream commit c271cc9febaaa1bcbc0842d1ee30466aa6148ea8 ]
 
-__msm_console_write() assumes that interrupts are disabled, but
-with threaded console printers it is possible that the write()
-callback of the console is called with interrupts enabled.
+Release the list of new hooks that are pending to be registered in case
+that unsupported flowtable flags are provided.
 
-Explicitly disable interrupts using local_irq_save() to preserve
-the assumed context.
-
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
-Link: https://lore.kernel.org/r/20220506213324.470461-1-john.ogness@linutronix.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 78d9f48f7f44 ("netfilter: nf_tables: add devices to existing flowtable")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/msm_serial.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ net/netfilter/nf_tables_api.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
-index 5129c2dfbe07..aac96659694d 100644
---- a/drivers/tty/serial/msm_serial.c
-+++ b/drivers/tty/serial/msm_serial.c
-@@ -1579,6 +1579,7 @@ static inline struct uart_port *msm_get_port_from_line(unsigned int line)
- static void __msm_console_write(struct uart_port *port, const char *s,
- 				unsigned int count, bool is_uartdm)
- {
-+	unsigned long flags;
- 	int i;
- 	int num_newlines = 0;
- 	bool replaced = false;
-@@ -1596,6 +1597,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
- 			num_newlines++;
- 	count += num_newlines;
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index b90e45f1ffa0..2872722488c9 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -6694,11 +6694,15 @@ static int nft_flowtable_update(struct nft_ctx *ctx, const struct nlmsghdr *nlh,
  
-+	local_irq_save(flags);
-+
- 	if (port->sysrq)
- 		locked = 0;
- 	else if (oops_in_progress)
-@@ -1641,6 +1644,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
- 
- 	if (locked)
- 		spin_unlock(&port->lock);
-+
-+	local_irq_restore(flags);
- }
- 
- static void msm_console_write(struct console *co, const char *s,
+ 	if (nla[NFTA_FLOWTABLE_FLAGS]) {
+ 		flags = ntohl(nla_get_be32(nla[NFTA_FLOWTABLE_FLAGS]));
+-		if (flags & ~NFT_FLOWTABLE_MASK)
+-			return -EOPNOTSUPP;
++		if (flags & ~NFT_FLOWTABLE_MASK) {
++			err = -EOPNOTSUPP;
++			goto err_flowtable_update_hook;
++		}
+ 		if ((flowtable->data.flags & NFT_FLOWTABLE_HW_OFFLOAD) ^
+-		    (flags & NFT_FLOWTABLE_HW_OFFLOAD))
+-			return -EOPNOTSUPP;
++		    (flags & NFT_FLOWTABLE_HW_OFFLOAD)) {
++			err = -EOPNOTSUPP;
++			goto err_flowtable_update_hook;
++		}
+ 	} else {
+ 		flags = flowtable->data.flags;
+ 	}
 -- 
 2.35.1
 

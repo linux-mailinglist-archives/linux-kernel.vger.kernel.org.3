@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3BB95490D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E419548F3F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:22:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354856AbiFMLeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:34:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
+        id S1343584AbiFMKro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354388AbiFML30 (ORCPT
+        with ESMTP id S1347489AbiFMKn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:26 -0400
+        Mon, 13 Jun 2022 06:43:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE271DE90;
-        Mon, 13 Jun 2022 03:43:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54FE0205C2;
+        Mon, 13 Jun 2022 03:25:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 697E760FDB;
-        Mon, 13 Jun 2022 10:43:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7478DC34114;
-        Mon, 13 Jun 2022 10:43:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F8FC60EF1;
+        Mon, 13 Jun 2022 10:25:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F84C3411C;
+        Mon, 13 Jun 2022 10:25:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117033;
-        bh=7rZF2IHgBj9mwQs69gc9xvfSda+RUPXmcviHiBRUdWU=;
+        s=korg; t=1655115908;
+        bh=DXp4qhQ3VpemHg8dVOiMzj//7ZSZNoqJkisoCVkrn5w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cg7JnBReY7blu3RiNx6rRXH3GtD7l0RsvlCe/ZqOTUm5yhyXn0DJGdWPuCuCaUFTa
-         vUsQq0zVfs+P4Klz1hs+kzKd3CKZ3YP+mW8ItfP09k0Kcdxcs10vGm2bu6OZr3Z8Ug
-         p+pIVLfK3YUBezxF463tBF/gWLDsW4QMxeNsu7Rs=
+        b=ZyDtF+nO9Dpv/Cbwzg4dnoX0Ca8DrLrEqHsC6KEOqcFFWsa7aPKrv0uAcpCKHstCd
+         +oEpN0l1arb6xuqb1xEtdfGZt3a1mPnZTzgDrpn520p1xMyQGqPArYvXMyEr4JKKfu
+         RzCCO0/SgcAqnSnYnQfz5s2hxc+8WeivAJRI8+eg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Jyri Sarha <jyri.sarha@iki.fi>
-Subject: [PATCH 5.4 262/411] tilcdc: tilcdc_external: fix an incorrect NULL check on list iterator
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Vlad Yasevich <vyasevich@gmail.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 077/218] sctp: read sk->sk_bound_dev_if once in sctp_rcv()
 Date:   Mon, 13 Jun 2022 12:08:55 +0200
-Message-Id: <20220613094936.619869235@linuxfoundation.org>
+Message-Id: <20220613094922.771689192@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,52 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Eric Dumazet <edumazet@google.com>
 
-commit 8b917cbe38e9b0d002492477a9fc2bfee2412ce4 upstream.
+[ Upstream commit a20ea298071f46effa3aaf965bf9bb34c901db3f ]
 
-The bug is here:
-	if (!encoder) {
+sctp_rcv() reads sk->sk_bound_dev_if twice while the socket
+is not locked. Another cpu could change this field under us.
 
-The list iterator value 'encoder' will *always* be set and non-NULL
-by list_for_each_entry(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty or no element
-is found.
-
-To fix the bug, use a new variable 'iter' as the list iterator,
-while use the original variable 'encoder' as a dedicated pointer
-to point to the found element.
-
-Cc: stable@vger.kernel.org
-Fixes: ec9eab097a500 ("drm/tilcdc: Add drm bridge support for attaching drm bridge drivers")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Reviewed-by: Jyri Sarha <jyri.sarha@iki.fi>
-Tested-by: Jyri Sarha <jyri.sarha@iki.fi>
-Signed-off-by: Jyri Sarha <jyri.sarha@iki.fi>
-Link: https://patchwork.freedesktop.org/patch/msgid/20220327061516.5076-1-xiam0nd.tong@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 0fd9a65a76e8 ("[SCTP] Support SO_BINDTODEVICE socket option on incoming packets.")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Neil Horman <nhorman@tuxdriver.com>
+Cc: Vlad Yasevich <vyasevich@gmail.com>
+Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/tilcdc/tilcdc_external.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ net/sctp/input.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/gpu/drm/tilcdc/tilcdc_external.c
-+++ b/drivers/gpu/drm/tilcdc/tilcdc_external.c
-@@ -58,11 +58,13 @@ struct drm_connector *tilcdc_encoder_fin
- int tilcdc_add_component_encoder(struct drm_device *ddev)
- {
- 	struct tilcdc_drm_private *priv = ddev->dev_private;
--	struct drm_encoder *encoder;
-+	struct drm_encoder *encoder = NULL, *iter;
- 
--	list_for_each_entry(encoder, &ddev->mode_config.encoder_list, head)
--		if (encoder->possible_crtcs & (1 << priv->crtc->index))
-+	list_for_each_entry(iter, &ddev->mode_config.encoder_list, head)
-+		if (iter->possible_crtcs & (1 << priv->crtc->index)) {
-+			encoder = iter;
- 			break;
-+		}
- 
- 	if (!encoder) {
- 		dev_err(ddev->dev, "%s: No suitable encoder found\n", __func__);
+diff --git a/net/sctp/input.c b/net/sctp/input.c
+index b20a1fbea8bf..3305e11035fd 100644
+--- a/net/sctp/input.c
++++ b/net/sctp/input.c
+@@ -103,6 +103,7 @@ int sctp_rcv(struct sk_buff *skb)
+ 	struct sctp_chunk *chunk;
+ 	union sctp_addr src;
+ 	union sctp_addr dest;
++	int bound_dev_if;
+ 	int family;
+ 	struct sctp_af *af;
+ 	struct net *net = dev_net(skb->dev);
+@@ -180,7 +181,8 @@ int sctp_rcv(struct sk_buff *skb)
+ 	 * If a frame arrives on an interface and the receiving socket is
+ 	 * bound to another interface, via SO_BINDTODEVICE, treat it as OOTB
+ 	 */
+-	if (sk->sk_bound_dev_if && (sk->sk_bound_dev_if != af->skb_iif(skb))) {
++	bound_dev_if = READ_ONCE(sk->sk_bound_dev_if);
++	if (bound_dev_if && (bound_dev_if != af->skb_iif(skb))) {
+ 		if (transport) {
+ 			sctp_transport_put(transport);
+ 			asoc = NULL;
+-- 
+2.35.1
+
 
 

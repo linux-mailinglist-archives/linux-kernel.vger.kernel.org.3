@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F275F548F76
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9B2548C0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355485AbiFMMaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54740 "EHLO
+        id S1359443AbiFMNWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354285AbiFMMXg (ORCPT
+        with ESMTP id S1376846AbiFMNTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:23:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776AF580C1;
-        Mon, 13 Jun 2022 04:03:40 -0700 (PDT)
+        Mon, 13 Jun 2022 09:19:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6C668332;
+        Mon, 13 Jun 2022 04:23:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 164C961347;
-        Mon, 13 Jun 2022 11:03:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22CF7C34114;
-        Mon, 13 Jun 2022 11:03:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B5ADB80EAA;
+        Mon, 13 Jun 2022 11:22:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03E48C3411E;
+        Mon, 13 Jun 2022 11:22:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118219;
-        bh=7ZJdOB8NWztNFmJga+HULPqObVqV573O24/WNfw5IOk=;
+        s=korg; t=1655119336;
+        bh=14TsCn54a3xzE/a5cVI/njMjihJEWCBEFwfM8vZP8RI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bs5P8EuWTZrNNXBYkbdEIHdCjWsH9FOsbzt7AB7EUdQSPQU3VfRJzPd4c6fPehXIe
-         sAFPGnWRUSFhhTvmMHzlXZd26KMoh7CL+Jj+448abflepfjbe5ijtFA+xcE6xM0VlI
-         5o9RMvH9l6f4xI5whZ7vx07tyXkAJI0mdC76YUvg=
+        b=QAOt6aFI1yAB5w36EGqDXWtYjzpsKx0ZPJB8P7GI6ITM+MumTCmr+bbCKAX79mbXz
+         rKQ+Gq34j0KJJYU1NbnUCecErTGpOMh3Eg1Ur/2w/KtD+ozbKbhX3z+GZJb1+2lHOY
+         dMKpVPKclJLJ9JhNq1mQ245SEl6xZnMqU9Y9/ZzE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 4.19 277/287] ata: libata-transport: fix {dma|pio|xfer}_mode sysfs files
+        stable@vger.kernel.org, Gong Yuanjun <ruc_gongyuanjun@163.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 199/247] drm/radeon: fix a possible null pointer dereference
 Date:   Mon, 13 Jun 2022 12:11:41 +0200
-Message-Id: <20220613094932.396481278@linuxfoundation.org>
+Message-Id: <20220613094928.983331830@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,74 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sergey Shtylyov <s.shtylyov@omp.ru>
+From: Gong Yuanjun <ruc_gongyuanjun@163.com>
 
-commit 72aad489f992871e908ff6d9055b26c6366fb864 upstream.
+[ Upstream commit a2b28708b645c5632dc93669ab06e97874c8244f ]
 
-The {dma|pio}_mode sysfs files are incorrectly documented as having a
-list of the supported DMA/PIO transfer modes, while the corresponding
-fields of the *struct* ata_device hold the transfer mode IDs, not masks.
+In radeon_fp_native_mode(), the return value of drm_mode_duplicate()
+is assigned to mode, which will lead to a NULL pointer dereference
+on failure of drm_mode_duplicate(). Add a check to avoid npd.
 
-To match these docs, the {dma|pio}_mode (and even xfer_mode!) sysfs
-files are handled by the ata_bitfield_name_match() macro which leads to
-reading such kind of nonsense from them:
+The failure status of drm_cvt_mode() on the other path is checked too.
 
-$ cat /sys/class/ata_device/dev3.0/pio_mode
-XFER_UDMA_7, XFER_UDMA_6, XFER_UDMA_5, XFER_UDMA_4, XFER_MW_DMA_4,
-XFER_PIO_6, XFER_PIO_5, XFER_PIO_4, XFER_PIO_3, XFER_PIO_2, XFER_PIO_1,
-XFER_PIO_0
-
-Using the correct ata_bitfield_name_search() macro fixes that:
-
-$ cat /sys/class/ata_device/dev3.0/pio_mode
-XFER_PIO_4
-
-While fixing the file documentation, somewhat reword the {dma|pio}_mode
-file doc and add a note about being mostly useful for PATA devices to
-the xfer_mode file doc...
-
-Fixes: d9027470b886 ("[libata] Add ATA transport class")
-Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
-Cc: stable@vger.kernel.org
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Gong Yuanjun <ruc_gongyuanjun@163.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/ABI/testing/sysfs-ata |   11 ++++++-----
- drivers/ata/libata-transport.c      |    2 +-
- 2 files changed, 7 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/radeon/radeon_connectors.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/Documentation/ABI/testing/sysfs-ata
-+++ b/Documentation/ABI/testing/sysfs-ata
-@@ -107,13 +107,14 @@ Description:
- 				described in ATA8 7.16 and 7.17. Only valid if
- 				the device is not a PM.
+diff --git a/drivers/gpu/drm/radeon/radeon_connectors.c b/drivers/gpu/drm/radeon/radeon_connectors.c
+index 1546abcadacf..d157bb9072e8 100644
+--- a/drivers/gpu/drm/radeon/radeon_connectors.c
++++ b/drivers/gpu/drm/radeon/radeon_connectors.c
+@@ -473,6 +473,8 @@ static struct drm_display_mode *radeon_fp_native_mode(struct drm_encoder *encode
+ 	    native_mode->vdisplay != 0 &&
+ 	    native_mode->clock != 0) {
+ 		mode = drm_mode_duplicate(dev, native_mode);
++		if (!mode)
++			return NULL;
+ 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
+ 		drm_mode_set_name(mode);
  
--		pio_mode:	(RO) Transfer modes supported by the device when
--				in PIO mode. Mostly used by PATA device.
-+		pio_mode:	(RO) PIO transfer mode used by the device.
-+				Mostly used by PATA devices.
- 
--		xfer_mode:	(RO) Current transfer mode
-+		xfer_mode:	(RO) Current transfer mode. Mostly used by
-+				PATA devices.
- 
--		dma_mode:	(RO) Transfer modes supported by the device when
--				in DMA mode. Mostly used by PATA device.
-+		dma_mode:	(RO) DMA transfer mode used by the device.
-+				Mostly used by PATA devices.
- 
- 		class:		(RO) Device class. Can be "ata" for disk,
- 				"atapi" for packet device, "pmp" for PM, or
---- a/drivers/ata/libata-transport.c
-+++ b/drivers/ata/libata-transport.c
-@@ -196,7 +196,7 @@ static struct {
- 	{ XFER_PIO_0,			"XFER_PIO_0" },
- 	{ XFER_PIO_SLOW,		"XFER_PIO_SLOW" }
- };
--ata_bitfield_name_match(xfer,ata_xfer_names)
-+ata_bitfield_name_search(xfer, ata_xfer_names)
- 
- /*
-  * ATA Port attributes
+@@ -487,6 +489,8 @@ static struct drm_display_mode *radeon_fp_native_mode(struct drm_encoder *encode
+ 		 * simpler.
+ 		 */
+ 		mode = drm_cvt_mode(dev, native_mode->hdisplay, native_mode->vdisplay, 60, true, false, false);
++		if (!mode)
++			return NULL;
+ 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
+ 		DRM_DEBUG_KMS("Adding cvt approximation of native panel mode %s\n", mode->name);
+ 	}
+-- 
+2.35.1
+
 
 

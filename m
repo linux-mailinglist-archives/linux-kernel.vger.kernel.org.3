@@ -2,76 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04CCD54992B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CFD154978B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243476AbiFMQKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 12:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
+        id S244900AbiFMQNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 12:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243280AbiFMQJ3 (ORCPT
+        with ESMTP id S244865AbiFMQMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 12:09:29 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430ED1ABA54;
-        Mon, 13 Jun 2022 07:02:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6CDF121B9C;
-        Mon, 13 Jun 2022 14:02:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655128928; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 13 Jun 2022 12:12:20 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFFD2314C;
+        Mon, 13 Jun 2022 07:04:18 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 732A81BF204;
+        Mon, 13 Jun 2022 14:04:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1655129056;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dH96i6OHzwC4qIcatlfFaUeHgKDc3G4KvUuOT69KD6U=;
-        b=jKmUvylV66P3EkHqBQvMGTtVkWvt3Wx/VA/PZBaOos9trJT4344bWhR6bLjSmrFKY20UEl
-        StmiA+zFdv2T74AbHfLh2YLHX7k3Vg9sqDrqaSJPEgdZHIWaU5wTS00B0KEGoy5/XNqkFT
-        UQXWzd05W3OVdfDU/9WRQ8W9KcenvM0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 19BF0134CF;
-        Mon, 13 Jun 2022 14:02:08 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id soFdBWBDp2JROgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 13 Jun 2022 14:02:08 +0000
-Date:   Mon, 13 Jun 2022 16:02:06 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v11 3/8] cgroup/cpuset: Allow no-task partition to have
- empty cpuset.cpus.effective
-Message-ID: <20220613140206.GA6910@blackbody.suse.cz>
-References: <20220510153413.400020-1-longman@redhat.com>
- <20220510153413.400020-4-longman@redhat.com>
- <YqYlCRywdgSYtwKk@slm.duckdns.org>
- <YqYlOQjKtQCBsQuT@slm.duckdns.org>
- <ce3106c1-a3c4-b449-bafc-6940d672bd94@redhat.com>
- <YqanEZZooeZwtutA@slm.duckdns.org>
+        bh=vgP4W2WcGLch0G1Z/a9d2JFCittPWMEM8INjyTTlF+o=;
+        b=RHeR1FQ/oaGkFKglO95swbvRFaOAhB3zVTr+Iu4qezNsX0NWdqd7VE7g+YxKY7iFNIVvpD
+        MRpE2qdYhxKxv4prc6X1uYby+AmIMIrmMKOW5nDMKrbDKLpjCe34ppD9oFa07wgsvyE3DY
+        EohfY0giovrsbV8ylO/1gDQjesMK33L6IoOhYAVGPb6Ei/9+SDN7Gl5sAqQ406fyQ5FcbH
+        TjZcAVfd5btd9c2VyMjB3W2zfTCFIfEiC47EM29IDqY0fopU4MX4Bp+YwiRGWOH3cYXBTi
+        a6JfGmL63vnILBbjFDpLHbGSBRhUAqJf0GRIE95tXyPs5qDjFuE4VPDITSQZhw==
+Date:   Mon, 13 Jun 2022 16:04:11 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tom Rini <trini@konsulko.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V3 1/2] mtd: allow getting MTD device associated with a
+ specific DT node
+Message-ID: <20220613160411.48b07515@xps-13>
+In-Reply-To: <20220611204651.19947-1-zajec5@gmail.com>
+References: <20220611204651.19947-1-zajec5@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/04w6evG8XlLl3ft"
-Content-Disposition: inline
-In-Reply-To: <YqanEZZooeZwtutA@slm.duckdns.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,31 +62,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Rafa=C5=82,
 
---/04w6evG8XlLl3ft
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+zajec5@gmail.com wrote on Sat, 11 Jun 2022 22:46:50 +0200:
 
-On Sun, Jun 12, 2022 at 04:55:13PM -1000, Tejun Heo <tj@kernel.org> wrote:
-> But how would that happen? A lot of other things would break too if that
-> were to happen.
+> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+>=20
+> MTD subsystem API allows interacting with MTD devices (e.g. reading,
+> writing, handling bad blocks). So far a random driver could get MTD
+> device only by its name (get_mtd_device_nm()). This change allows
+> getting them also by a DT node.
+>=20
+> This API is required for drivers handling DT defined MTD partitions in a
+> specific way (e.g. U-Boot (sub)partition with environment variables).
+>=20
+> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+> ---
+> V3: First introduction of of_get_mtd_device_by_node()
+>=20
+> mtd maintainers: please let know how would you like this patch
+> processed. Would that be OK for you to Review/Ack it and let it go
+> through NVMEM tree?
 
-cpuset is a threaded controller where the internal-node-constraint does
-not hold. So the additional condition for cpuset migrations is IMO
-warranted (and needed if there's no "fall up").
+Yes
 
-Michal
+> ---
+>  drivers/mtd/mtdcore.c   | 28 ++++++++++++++++++++++++++++
+>  include/linux/mtd/mtd.h |  1 +
+>  2 files changed, 29 insertions(+)
+>=20
+> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+> index 9eb0680db312..7dc214271c85 100644
+> --- a/drivers/mtd/mtdcore.c
+> +++ b/drivers/mtd/mtdcore.c
+> @@ -1154,6 +1154,34 @@ int __get_mtd_device(struct mtd_info *mtd)
+>  }
+>  EXPORT_SYMBOL_GPL(__get_mtd_device);
+> =20
+> +/**
+> + * of_get_mtd_device_by_node - obtain an MTD device associated with a gi=
+ven node
+> + *
+> + * @np: device tree node
+> + */
+> +struct mtd_info *of_get_mtd_device_by_node(struct device_node *np)
 
---/04w6evG8XlLl3ft
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
+Shall we try to use a more of-agnostic syntax or is it too complex here?
 
------BEGIN PGP SIGNATURE-----
+> +{
+> +	struct mtd_info *mtd =3D NULL;
+> +	struct mtd_info *tmp;
+> +	int err;
+> +
+> +	mutex_lock(&mtd_table_mutex);
+> +
+> +	err =3D -ENODEV;
+> +	mtd_for_each_device(tmp) {
+> +		if (mtd_get_of_node(tmp) =3D=3D np) {
+> +			mtd =3D tmp;
+> +			err =3D __get_mtd_device(mtd);
+> +			break;
+> +		}
+> +	}
+> +
+> +	mutex_unlock(&mtd_table_mutex);
+> +
+> +	return err ? ERR_PTR(err) : mtd;
+> +}
+> +EXPORT_SYMBOL_GPL(of_get_mtd_device_by_node);
+> +
+>  /**
+>   *	get_mtd_device_nm - obtain a validated handle for an MTD device by
+>   *	device name
+> diff --git a/include/linux/mtd/mtd.h b/include/linux/mtd/mtd.h
+> index 955aee14b0f7..6fc841ceef31 100644
+> --- a/include/linux/mtd/mtd.h
+> +++ b/include/linux/mtd/mtd.h
+> @@ -677,6 +677,7 @@ extern int mtd_device_unregister(struct mtd_info *mas=
+ter);
+>  extern struct mtd_info *get_mtd_device(struct mtd_info *mtd, int num);
+>  extern int __get_mtd_device(struct mtd_info *mtd);
+>  extern void __put_mtd_device(struct mtd_info *mtd);
+> +extern struct mtd_info *of_get_mtd_device_by_node(struct device_node *np=
+);
+>  extern struct mtd_info *get_mtd_device_nm(const char *name);
+>  extern void put_mtd_device(struct mtd_info *mtd);
+> =20
 
-iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCYqdDXAAKCRAkDQmsBEOq
-uVxRAPwMiG5QiY65xj/WyfY3nCUyKyx+lDQh6bCpufc5IIQORgD9FIrNztTt7lmR
-ic79LsvKPERP5RiY2PezetNtf5xH9wA=
-=VnhP
------END PGP SIGNATURE-----
 
---/04w6evG8XlLl3ft--
+Thanks,
+Miqu=C3=A8l

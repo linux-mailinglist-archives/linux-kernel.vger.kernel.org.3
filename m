@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4FC548911
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D38554976E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348965AbiFMMm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
+        id S1352149AbiFMLKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355384AbiFMMjH (ORCPT
+        with ESMTP id S1350108AbiFMLFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:39:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D2FA5DD16;
-        Mon, 13 Jun 2022 04:08:58 -0700 (PDT)
+        Mon, 13 Jun 2022 07:05:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E75F286D3;
+        Mon, 13 Jun 2022 03:34:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC90BB80D31;
-        Mon, 13 Jun 2022 11:08:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31B08C34114;
-        Mon, 13 Jun 2022 11:08:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DBDC60FF9;
+        Mon, 13 Jun 2022 10:34:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D598C34114;
+        Mon, 13 Jun 2022 10:34:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118535;
-        bh=pT7785Ohg0r3skHhXpyCWWFMi3Oem+VOf1LFKkR1ya0=;
+        s=korg; t=1655116491;
+        bh=AOS42axP5OYCMDW3Jk1g2LLUuQWM2TgCSl0hK4lOMR0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XWd79YbhoFP1rbxDTW8pdrOrIbyGiF7dq1bFofcRM6Qpwo2XCaMTlMDZBcOkQ/fQa
-         CPHtbvK6aDBUyzsdABo+G9gwppolEwtpFRMBi41d21aki8N4XhFEaQUWpMT/PdQlnu
-         4uhIcng7Xa3BzULqJpyK8YhF/X6lThWh4tcWrD3U=
+        b=sfXSwVSMH7EeUwxsUZa0mYwAu4fPi8/QKdp2GJiAUNmD/3Ig5xQIHUPEHnJn5KhGH
+         y5mNP71F3kbEaW1w8P63JlfNbEGyGqqGOUMlx3BinRf8U8E6dgMWrBMLi70wOSbmrY
+         oJJRhnaS/gb8Q5mIG1rlQRF/HQ1lp7JKkkasUFd4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 094/172] netfilter: nf_tables: always initialize flowtable hook list in transaction
-Date:   Mon, 13 Jun 2022 12:10:54 +0200
-Message-Id: <20220613094913.013873847@linuxfoundation.org>
+        stable@vger.kernel.org, Donald Buczek <buczek@molgen.mpg.de>,
+        Guoqing Jiang <guoqing.jiang@linux.dev>,
+        Song Liu <song@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 197/218] md: protect md_unregister_thread from reentrancy
+Date:   Mon, 13 Jun 2022 12:10:55 +0200
+Message-Id: <20220613094926.595648403@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Guoqing Jiang <guoqing.jiang@cloud.ionos.com>
 
-[ Upstream commit 2c9e4559773c261900c674a86b8e455911675d71 ]
+[ Upstream commit 1e267742283a4b5a8ca65755c44166be27e9aa0f ]
 
-The hook list is used if nft_trans_flowtable_update(trans) == true. However,
-initialize this list for other cases for safety reasons.
+Generally, the md_unregister_thread is called with reconfig_mutex, but
+raid_message in dm-raid doesn't hold reconfig_mutex to unregister thread,
+so md_unregister_thread can be called simulitaneously from two call sites
+in theory.
 
-Fixes: 78d9f48f7f44 ("netfilter: nf_tables: add devices to existing flowtable")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Then after previous commit which remove the protection of reconfig_mutex
+for md_unregister_thread completely, the potential issue could be worse
+than before.
+
+Let's take pers_lock at the beginning of function to ensure reentrancy.
+
+Reported-by: Donald Buczek <buczek@molgen.mpg.de>
+Signed-off-by: Guoqing Jiang <guoqing.jiang@linux.dev>
+Signed-off-by: Song Liu <song@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/md/md.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index a5779790e337..b90e45f1ffa0 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -481,6 +481,7 @@ static int nft_trans_flowtable_add(struct nft_ctx *ctx, int msg_type,
- 	if (msg_type == NFT_MSG_NEWFLOWTABLE)
- 		nft_activate_next(ctx->net, flowtable);
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index 9b0270dc37f4..36d4cc1d7429 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -7590,17 +7590,22 @@ EXPORT_SYMBOL(md_register_thread);
  
-+	INIT_LIST_HEAD(&nft_trans_flowtable_hooks(trans));
- 	nft_trans_flowtable(trans) = flowtable;
- 	list_add_tail(&trans->list, &ctx->net->nft.commit_list);
+ void md_unregister_thread(struct md_thread **threadp)
+ {
+-	struct md_thread *thread = *threadp;
+-	if (!thread)
+-		return;
+-	pr_debug("interrupting MD-thread pid %d\n", task_pid_nr(thread->tsk));
+-	/* Locking ensures that mddev_unlock does not wake_up a
++	struct md_thread *thread;
++
++	/*
++	 * Locking ensures that mddev_unlock does not wake_up a
+ 	 * non-existent thread
+ 	 */
+ 	spin_lock(&pers_lock);
++	thread = *threadp;
++	if (!thread) {
++		spin_unlock(&pers_lock);
++		return;
++	}
+ 	*threadp = NULL;
+ 	spin_unlock(&pers_lock);
  
++	pr_debug("interrupting MD-thread pid %d\n", task_pid_nr(thread->tsk));
+ 	kthread_stop(thread->tsk);
+ 	kfree(thread);
+ }
 -- 
 2.35.1
 

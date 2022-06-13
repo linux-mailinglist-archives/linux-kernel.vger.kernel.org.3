@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD12548668
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE9D5487FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351440AbiFMMaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
+        id S1344692AbiFMKbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357306AbiFMMYS (ORCPT
+        with ESMTP id S243834AbiFMKZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:24:18 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A315431DE2;
-        Mon, 13 Jun 2022 04:05:32 -0700 (PDT)
+        Mon, 13 Jun 2022 06:25:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F39245A1;
+        Mon, 13 Jun 2022 03:19:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3F2E4CE1179;
-        Mon, 13 Jun 2022 11:05:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1418DC3411C;
-        Mon, 13 Jun 2022 11:05:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 364D460AEA;
+        Mon, 13 Jun 2022 10:19:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44116C34114;
+        Mon, 13 Jun 2022 10:19:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118328;
-        bh=1okDpxG+2HAeH3YlR9vj5KO6UWz/SMYp93/ULZFDgus=;
+        s=korg; t=1655115580;
+        bh=X57FLXK/sZrQYkPEBhG57IZ4/8Z2UlPgRRxegroWD3o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dPIa7Mp9KUUAF3mHen2tY7J9Ko6nQe6JcL9vNxvYQbj5agAPl3Zzg13epyxMUiu/x
-         woC6/mNAwiWCeFwZIOGSJUZNJsoRbeJvhzzYQx5EzkzRn/BMqo08ilgQr7ja7LIKqi
-         Ta87Eb+RC8UHbT7PTwXeEqVo4Wmn8xozbWUxWQHQ=
+        b=vaw62YitBEO/75XEtckkkuZnAvIRjqI1kWDhMm878yD4cOUAQEpaTD5b9vg1+uTyh
+         AuuMnEIrjDLtqjIpCBfPPen69c+mbBWnggxgzvhX9aDLkgP/VYm23sZ6W9wUP8PDHv
+         P3obf7nJyuhwglO6jA0Bl1cyniSDgT4Y/2bXt2xk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Li Jun <jun.li@nxp.com>, Chanwoo Choi <cw00.choi@samsung.com>,
+        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 028/172] extcon: ptn5150: Add queue work sync before driver release
-Date:   Mon, 13 Jun 2022 12:09:48 +0200
-Message-Id: <20220613094857.166749117@linuxfoundation.org>
+Subject: [PATCH 4.9 115/167] rtc: mt6397: check return value after calling platform_get_resource()
+Date:   Mon, 13 Jun 2022 12:09:49 +0200
+Message-Id: <20220613094907.693616948@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Li Jun <jun.li@nxp.com>
+From: Yang Yingliang <yangyingliang@huawei.com>
 
-[ Upstream commit 782cd939cbe0f569197cd1c9b0477ee213167f04 ]
+[ Upstream commit d3b43eb505bffb8e4cdf6800c15660c001553fe6 ]
 
-Add device managed action to sync pending queue work, otherwise
-the queued work may run after the work is destroyed.
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-Fixes: 4ed754de2d66 ("extcon: Add support for ptn5150 extcon driver")
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Li Jun <jun.li@nxp.com>
-Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
+Fixes: fc2979118f3f ("rtc: mediatek: Add MT6397 RTC driver")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
+Link: https://lore.kernel.org/r/20220505125043.1594771-1-yangyingliang@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/extcon/extcon-ptn5150.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/rtc/rtc-mt6397.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/extcon/extcon-ptn5150.c b/drivers/extcon/extcon-ptn5150.c
-index 5b9a3cf8df26..2a7874108df8 100644
---- a/drivers/extcon/extcon-ptn5150.c
-+++ b/drivers/extcon/extcon-ptn5150.c
-@@ -194,6 +194,13 @@ static int ptn5150_init_dev_type(struct ptn5150_info *info)
- 	return 0;
- }
+diff --git a/drivers/rtc/rtc-mt6397.c b/drivers/rtc/rtc-mt6397.c
+index 494a7fbd512b..7e37ec7c8e02 100644
+--- a/drivers/rtc/rtc-mt6397.c
++++ b/drivers/rtc/rtc-mt6397.c
+@@ -339,6 +339,8 @@ static int mtk_rtc_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
  
-+static void ptn5150_work_sync_and_put(void *data)
-+{
-+	struct ptn5150_info *info = data;
-+
-+	cancel_work_sync(&info->irq_work);
-+}
-+
- static int ptn5150_i2c_probe(struct i2c_client *i2c)
- {
- 	struct device *dev = &i2c->dev;
-@@ -284,6 +291,10 @@ static int ptn5150_i2c_probe(struct i2c_client *i2c)
- 	if (ret)
- 		return -EINVAL;
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	if (!res)
++		return -EINVAL;
+ 	rtc->addr_base = res->start;
  
-+	ret = devm_add_action_or_reset(dev, ptn5150_work_sync_and_put, info);
-+	if (ret)
-+		return ret;
-+
- 	/*
- 	 * Update current extcon state if for example OTG connection was there
- 	 * before the probe
+ 	res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
 -- 
 2.35.1
 

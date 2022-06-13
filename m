@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 090E7549454
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37B75495AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344968AbiFMKf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
+        id S1377841AbiFMNg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244206AbiFMKck (ORCPT
+        with ESMTP id S1378626AbiFMNbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:32:40 -0400
+        Mon, 13 Jun 2022 09:31:55 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C14627CE4;
-        Mon, 13 Jun 2022 03:21:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E098712F1;
+        Mon, 13 Jun 2022 04:26:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3290060AEB;
-        Mon, 13 Jun 2022 10:21:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 399EFC34114;
-        Mon, 13 Jun 2022 10:21:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCEB660B6E;
+        Mon, 13 Jun 2022 11:26:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6E61C34114;
+        Mon, 13 Jun 2022 11:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115709;
-        bh=l+AybNHC05BqQuQ3Dkj3uvVIIyZwvXV3Ggmj5WIMdqE=;
+        s=korg; t=1655119584;
+        bh=RAPHGV+rtvwWQJEXunWfr637QO4/abkhlqk7qVnMv14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UpPvOt4JHAsSGHkN2EMhzMFGLbihYuLn4me17vzF/oACwJhuyymngL4dyKCMuPMqv
-         7/OY9hOB10HfdHnq5GytLY4epfRcjrJXU5kPsRCcJ51mm3zxdlWApzYBpqcAg2VsUC
-         dwB7F33H2GDJGZ9QoLkaMlE+T11Z9sPIbMzJLxXY=
+        b=t1pa3B5w2bBQIrAUIqWsfuEGOOiNOFoucrc9iHbArcmMMmsrapZMPgS3SYIipoOtj
+         8+HdDyLtmOwjXb8hTsyOSmqd2jz64l/494kOqfQwjGbNhZIes6fFsCjOBwbCna7UPY
+         W6gWHQ56X8RikGaYaYAde8cuQbMIVe/bcGx+SIvg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        stable@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Jessica Yu <jeyu@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Matthias Maennich <maennich@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 013/218] ACPICA: Avoid cache flush inside virtual machines
+Subject: [PATCH 5.18 046/339] export: fix string handling of namespace in EXPORT_SYMBOL_NS
 Date:   Mon, 13 Jun 2022 12:07:51 +0200
-Message-Id: <20220613094911.494259234@linuxfoundation.org>
+Message-Id: <20220613094927.920126897@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,69 +59,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-[ Upstream commit e2efb6359e620521d1e13f69b2257de8ceaa9475 ]
+[ Upstream commit d143b9db8069f0e2a0fa34484e806a55a0dd4855 ]
 
-While running inside virtual machine, the kernel can bypass cache
-flushing. Changing sleep state in a virtual machine doesn't affect the
-host system sleep state and cannot lead to data loss.
+Commit c3a6cf19e695 ("export: avoid code duplication in
+include/linux/export.h") broke the ability for a defined string to be
+used as a namespace value.  Fix this up by using stringify to properly
+encode the namespace name.
 
-Before entering sleep states, the ACPI code flushes caches to prevent
-data loss using the WBINVD instruction.  This mechanism is required on
-bare metal.
-
-But, any use WBINVD inside of a guest is worthless.  Changing sleep
-state in a virtual machine doesn't affect the host system sleep state
-and cannot lead to data loss, so most hypervisors simply ignore it.
-Despite this, the ACPI code calls WBINVD unconditionally anyway.
-It's useless, but also normally harmless.
-
-In TDX guests, though, WBINVD stops being harmless; it triggers a
-virtualization exception (#VE).  If the ACPI cache-flushing WBINVD
-were left in place, TDX guests would need handling to recover from
-the exception.
-
-Avoid using WBINVD whenever running under a hypervisor.  This both
-removes the useless WBINVDs and saves TDX from implementing WBINVD
-handling.
-
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
-Reviewed-by: Dan Williams <dan.j.williams@intel.com>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lkml.kernel.org/r/20220405232939.73860-30-kirill.shutemov@linux.intel.com
+Fixes: c3a6cf19e695 ("export: avoid code duplication in include/linux/export.h")
+Cc: Miroslav Benes <mbenes@suse.cz>
+Cc: Emil Velikov <emil.l.velikov@gmail.com>
+Cc: Jessica Yu <jeyu@kernel.org>
+Cc: Quentin Perret <qperret@google.com>
+Cc: Matthias Maennich <maennich@google.com>
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+Link: https://lore.kernel.org/r/20220427090442.2105905-1-gregkh@linuxfoundation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/acenv.h | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ include/linux/export.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/acenv.h b/arch/x86/include/asm/acenv.h
-index 1b010a859b8b..6de59a4f723c 100644
---- a/arch/x86/include/asm/acenv.h
-+++ b/arch/x86/include/asm/acenv.h
-@@ -16,7 +16,19 @@
+diff --git a/include/linux/export.h b/include/linux/export.h
+index 27d848712b90..5910ccb66ca2 100644
+--- a/include/linux/export.h
++++ b/include/linux/export.h
+@@ -2,6 +2,8 @@
+ #ifndef _LINUX_EXPORT_H
+ #define _LINUX_EXPORT_H
  
- /* Asm macros */
++#include <linux/stringify.h>
++
+ /*
+  * Export symbols from the kernel to modules.  Forked from module.h
+  * to reduce the amount of pointless cruft we feed to gcc when only
+@@ -154,7 +156,6 @@ struct kernel_symbol {
+ #endif /* CONFIG_MODULES */
  
--#define ACPI_FLUSH_CPU_CACHE()	wbinvd()
-+/*
-+ * ACPI_FLUSH_CPU_CACHE() flushes caches on entering sleep states.
-+ * It is required to prevent data loss.
-+ *
-+ * While running inside virtual machine, the kernel can bypass cache flushing.
-+ * Changing sleep state in a virtual machine doesn't affect the host system
-+ * sleep state and cannot lead to data loss.
-+ */
-+#define ACPI_FLUSH_CPU_CACHE()					\
-+do {								\
-+	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))	\
-+		wbinvd();					\
-+} while (0)
+ #ifdef DEFAULT_SYMBOL_NAMESPACE
+-#include <linux/stringify.h>
+ #define _EXPORT_SYMBOL(sym, sec)	__EXPORT_SYMBOL(sym, sec, __stringify(DEFAULT_SYMBOL_NAMESPACE))
+ #else
+ #define _EXPORT_SYMBOL(sym, sec)	__EXPORT_SYMBOL(sym, sec, "")
+@@ -162,8 +163,8 @@ struct kernel_symbol {
  
- int __acpi_acquire_global_lock(unsigned int *lock);
- int __acpi_release_global_lock(unsigned int *lock);
+ #define EXPORT_SYMBOL(sym)		_EXPORT_SYMBOL(sym, "")
+ #define EXPORT_SYMBOL_GPL(sym)		_EXPORT_SYMBOL(sym, "_gpl")
+-#define EXPORT_SYMBOL_NS(sym, ns)	__EXPORT_SYMBOL(sym, "", #ns)
+-#define EXPORT_SYMBOL_NS_GPL(sym, ns)	__EXPORT_SYMBOL(sym, "_gpl", #ns)
++#define EXPORT_SYMBOL_NS(sym, ns)	__EXPORT_SYMBOL(sym, "", __stringify(ns))
++#define EXPORT_SYMBOL_NS_GPL(sym, ns)	__EXPORT_SYMBOL(sym, "_gpl", __stringify(ns))
+ 
+ #endif /* !__ASSEMBLY__ */
+ 
 -- 
 2.35.1
 

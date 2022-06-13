@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F24548B2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E295489F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357238AbiFMLxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43190 "EHLO
+        id S241719AbiFMKRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356649AbiFMLtX (ORCPT
+        with ESMTP id S241683AbiFMKOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:49:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8262E4CD6E;
-        Mon, 13 Jun 2022 03:53:13 -0700 (PDT)
+        Mon, 13 Jun 2022 06:14:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DAB35F49;
+        Mon, 13 Jun 2022 03:14:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17057B80E92;
-        Mon, 13 Jun 2022 10:53:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67A50C34114;
-        Mon, 13 Jun 2022 10:53:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7431B61499;
+        Mon, 13 Jun 2022 10:14:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82D10C34114;
+        Mon, 13 Jun 2022 10:14:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117590;
-        bh=3TpWI1KdoN8i7CxcBm0R+0xZDhLuJMO/7QjZY2GbSkk=;
+        s=korg; t=1655115277;
+        bh=8Ic3YfIspf4SZu0wJZZZYDsTRyDu74+FGba6hXMd06o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UmgxQUC6okVSk6cCNPjZW0mH+cTEYl6BKekwN7juMdKQf0Nbjsscj0pTMyUrZ8YBS
-         Ex1RnIxdFBrCRy3nw3YhYcRz56OOHHVNEhKKjnKuAt5yO5C201UG8b2BLC4AI6AdCu
-         1ZuRKRuJD1ZBgStiVf9RyFptN+vquqWgmUpCaiBQ=
+        b=fJp70URJjVFQbFlBfP34w/mOt2CzMg+a5LA+PVJ2sVo1SVzUQang1qOICrumFQcXb
+         /qVNVLt/inUoxkmibJ7/zSAy9k3YaP858DXL90diZ9t6jsKLA5dsE5UNKczU5dPyC8
+         YW4bfzsAEcpZZYz33Ey3PrAe3ZUTWGNbGJievAjY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes.berg@intel.com>,
+        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 067/287] nl80211: show SSID for P2P_GO interfaces
-Date:   Mon, 13 Jun 2022 12:08:11 +0200
-Message-Id: <20220613094925.902247184@linuxfoundation.org>
+Subject: [PATCH 4.9 018/167] ASoC: dapm: Dont fold register value changes into notifications
+Date:   Mon, 13 Jun 2022 12:08:12 +0200
+Message-Id: <20220613094845.163516319@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,35 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Berg <johannes.berg@intel.com>
+From: Mark Brown <broonie@kernel.org>
 
-[ Upstream commit a75971bc2b8453630e9f85e0beaa4da8db8277a3 ]
+[ Upstream commit ad685980469b9f9b99d4d6ea05f4cb8f57cb2234 ]
 
-There's no real reason not to send the SSID to userspace
-when it requests information about P2P_GO, it is, in that
-respect, exactly the same as AP interfaces. Fix that.
+DAPM tracks and reports the value presented to the user from DAPM controls
+separately to the register value, these may diverge during initialisation
+or when an autodisable control is in use.
 
-Fixes: 44905265bc15 ("nl80211: don't expose wdev->ssid for most interfaces")
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
-Link: https://lore.kernel.org/r/20220318134656.14354ae223f0.Ia25e85a512281b92e1645d4160766a4b1a471597@changeid
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+When writing DAPM controls we currently report that a change has occurred
+if either the DAPM value or the value stored in the register has changed,
+meaning that if the two are out of sync we may appear to report a spurious
+event to userspace. Since we use this folded in value for nothing other
+than the value reported to userspace simply drop the folding in of the
+register change.
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20220428161833.3690050-1-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/wireless/nl80211.c | 1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/soc-dapm.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/net/wireless/nl80211.c b/net/wireless/nl80211.c
-index 2799ff117f5a..534f57363f4a 100644
---- a/net/wireless/nl80211.c
-+++ b/net/wireless/nl80211.c
-@@ -2885,6 +2885,7 @@ static int nl80211_send_iface(struct sk_buff *msg, u32 portid, u32 seq, int flag
- 	wdev_lock(wdev);
- 	switch (wdev->iftype) {
- 	case NL80211_IFTYPE_AP:
-+	case NL80211_IFTYPE_P2P_GO:
- 		if (wdev->ssid_len &&
- 		    nla_put(msg, NL80211_ATTR_SSID, wdev->ssid_len, wdev->ssid))
- 			goto nla_put_failure_locked;
+diff --git a/sound/soc/soc-dapm.c b/sound/soc/soc-dapm.c
+index 878a4fc97f04..40bf50cd87bc 100644
+--- a/sound/soc/soc-dapm.c
++++ b/sound/soc/soc-dapm.c
+@@ -3165,7 +3165,6 @@ int snd_soc_dapm_put_volsw(struct snd_kcontrol *kcontrol,
+ 			update.val = val;
+ 			card->update = &update;
+ 		}
+-		change |= reg_change;
+ 
+ 		ret = soc_dapm_mixer_update_power(card, kcontrol, connect);
+ 
+@@ -3270,7 +3269,6 @@ int snd_soc_dapm_put_enum_double(struct snd_kcontrol *kcontrol,
+ 			update.val = val;
+ 			card->update = &update;
+ 		}
+-		change |= reg_change;
+ 
+ 		ret = soc_dapm_mux_update_power(card, kcontrol, item[0], e);
+ 
 -- 
 2.35.1
 

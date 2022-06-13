@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2485A548961
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BB6549313
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383939AbiFMO2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
+        id S1353289AbiFMMNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383823AbiFMOYI (ORCPT
+        with ESMTP id S1359297AbiFMMJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EE62E9E2;
-        Mon, 13 Jun 2022 04:45:25 -0700 (PDT)
+        Mon, 13 Jun 2022 08:09:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682C33057E;
+        Mon, 13 Jun 2022 04:00:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 18907B80EA7;
-        Mon, 13 Jun 2022 11:45:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FDCFC34114;
-        Mon, 13 Jun 2022 11:45:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93A1861435;
+        Mon, 13 Jun 2022 11:00:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CDA7C34114;
+        Mon, 13 Jun 2022 11:00:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120722;
-        bh=71pftw3OoNE6+mQQHohO9Rn9Lsf9BTrdcnxHCcIWmas=;
+        s=korg; t=1655118028;
+        bh=7D1GkUqhv24YRdgcOkyv0AeyZuyUkj12hWoNtjzEWWU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NRnLHPMACniKj4BdN83iud7j8SUPnie9yokJNV127gTyu88LrygW6CO8H89lj3qjU
-         sXnnvJH9cuofbK6mgz2+CKqUIce/YCPGvSY/KMI5JkkwM3/SH4a1ml24mqDsBkWH9n
-         jPPKWaRjEL61SesFeuStK1ZtYxbjQQLkKQrpG0Zs=
+        b=TA/Y0TKGIpV2rEIDnGIpdSQ9agFx53NaETac5hRuATblocAXvtY8uygzdDdBp6u3e
+         Di+30rsSRjH/coo7QHiXs8H6ViwQlbug1+KvnCQvBwTmGph/jid4rNKI9hv1R2ZXm7
+         40RWO/W9+ZR8gpmMpaFLkEOlqfTuGiuq6ddRkJGA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+        Anup Patel <anup@brainfault.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 133/298] Bluetooth: hci_sync: Fix attempting to suspend with unfiltered passive scan
+Subject: [PATCH 4.19 203/287] clocksource/drivers/riscv: Events are stopped during CPU suspend
 Date:   Mon, 13 Jun 2022 12:10:27 +0200
-Message-Id: <20220613094928.978289369@linuxfoundation.org>
+Message-Id: <20220613094930.018803122@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,142 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Samuel Holland <samuel@sholland.org>
 
-[ Upstream commit 3b42055388c30f2761a2d9cd9af2c99611dfe457 ]
+[ Upstream commit 232ccac1bd9b5bfe73895f527c08623e7fa0752d ]
 
-When suspending the passive scanning _must_ have its filter_policy set
-to 0x01 to use the accept list otherwise _any_ advertise report would
-end up waking up the system.
+Some implementations of the SBI time extension depend on hart-local
+state (for example, CSRs) that are lost or hardware that is powered
+down when a CPU is suspended. To be safe, the clockevents driver
+cannot assume that timer IRQs will be received during CPU suspend.
 
-In order to fix the filter_policy the code now checks for
-hdev->suspended && HCI_CONN_FLAG_REMOTE_WAKEUP
-first, since the MGMT_OP_SET_DEVICE_FLAGS will reject any attempt to
-set HCI_CONN_FLAG_REMOTE_WAKEUP when it cannot be programmed in the
-acceptlist, so it can return success causing the proper filter_policy
-to be used.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215768
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Fixes: 62b019436814 ("clocksource: new RISC-V SBI timer driver")
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+Reviewed-by: Anup Patel <anup@brainfault.org>
+Link: https://lore.kernel.org/r/20220509012121.40031-1-samuel@sholland.org
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/hci_sync.c | 58 +++++++++++++++++++++++++++++-----------
- 1 file changed, 43 insertions(+), 15 deletions(-)
+ drivers/clocksource/riscv_timer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/bluetooth/hci_sync.c b/net/bluetooth/hci_sync.c
-index 13600bf120b0..6b8d1cd65de4 100644
---- a/net/bluetooth/hci_sync.c
-+++ b/net/bluetooth/hci_sync.c
-@@ -1664,20 +1664,19 @@ static int hci_le_add_accept_list_sync(struct hci_dev *hdev,
- 	struct hci_cp_le_add_to_accept_list cp;
- 	int err;
+diff --git a/drivers/clocksource/riscv_timer.c b/drivers/clocksource/riscv_timer.c
+index 4e8b347e43e2..0d5b99ca3bbd 100644
+--- a/drivers/clocksource/riscv_timer.c
++++ b/drivers/clocksource/riscv_timer.c
+@@ -33,7 +33,7 @@ static int riscv_clock_next_event(unsigned long delta,
  
-+	/* During suspend, only wakeable devices can be in acceptlist */
-+	if (hdev->suspended &&
-+	    !test_bit(HCI_CONN_FLAG_REMOTE_WAKEUP, params->flags))
-+		return 0;
-+
- 	/* Select filter policy to accept all advertising */
- 	if (*num_entries >= hdev->le_accept_list_size)
- 		return -ENOSPC;
- 
- 	/* Accept list can not be used with RPAs */
- 	if (!use_ll_privacy(hdev) &&
--	    hci_find_irk_by_addr(hdev, &params->addr, params->addr_type)) {
-+	    hci_find_irk_by_addr(hdev, &params->addr, params->addr_type))
- 		return -EINVAL;
--	}
--
--	/* During suspend, only wakeable devices can be in acceptlist */
--	if (hdev->suspended &&
--	    !test_bit(HCI_CONN_FLAG_REMOTE_WAKEUP, params->flags))
--		return 0;
- 
- 	/* Attempt to program the device in the resolving list first to avoid
- 	 * having to rollback in case it fails since the resolving list is
-@@ -4881,10 +4880,28 @@ static int hci_update_event_filter_sync(struct hci_dev *hdev)
- 	return 0;
- }
- 
-+/* This function disables scan (BR and LE) and mark it as paused */
-+static int hci_pause_scan_sync(struct hci_dev *hdev)
-+{
-+	if (hdev->scanning_paused)
-+		return 0;
-+
-+	/* Disable page scan if enabled */
-+	if (test_bit(HCI_PSCAN, &hdev->flags))
-+		hci_write_scan_enable_sync(hdev, SCAN_DISABLED);
-+
-+	hci_scan_disable_sync(hdev);
-+
-+	hdev->scanning_paused = true;
-+
-+	return 0;
-+}
-+
- /* This function performs the HCI suspend procedures in the follow order:
-  *
-  * Pause discovery (active scanning/inquiry)
-  * Pause Directed Advertising/Advertising
-+ * Pause Scanning (passive scanning in case discovery was not active)
-  * Disconnect all connections
-  * Set suspend_status to BT_SUSPEND_DISCONNECT if hdev cannot wakeup
-  * otherwise:
-@@ -4910,15 +4927,11 @@ int hci_suspend_sync(struct hci_dev *hdev)
- 	/* Pause other advertisements */
- 	hci_pause_advertising_sync(hdev);
- 
--	/* Disable page scan if enabled */
--	if (test_bit(HCI_PSCAN, &hdev->flags))
--		hci_write_scan_enable_sync(hdev, SCAN_DISABLED);
--
- 	/* Suspend monitor filters */
- 	hci_suspend_monitor_sync(hdev);
- 
- 	/* Prevent disconnects from causing scanning to be re-enabled */
--	hdev->scanning_paused = true;
-+	hci_pause_scan_sync(hdev);
- 
- 	/* Soft disconnect everything (power off) */
- 	err = hci_disconnect_all_sync(hdev, HCI_ERROR_REMOTE_POWER_OFF);
-@@ -4989,6 +5002,22 @@ static void hci_resume_monitor_sync(struct hci_dev *hdev)
- 	}
- }
- 
-+/* This function resume scan and reset paused flag */
-+static int hci_resume_scan_sync(struct hci_dev *hdev)
-+{
-+	if (!hdev->scanning_paused)
-+		return 0;
-+
-+	hci_update_scan_sync(hdev);
-+
-+	/* Reset passive scanning to normal */
-+	hci_update_passive_scan_sync(hdev);
-+
-+	hdev->scanning_paused = false;
-+
-+	return 0;
-+}
-+
- /* This function performs the HCI suspend procedures in the follow order:
-  *
-  * Restore event mask
-@@ -5011,10 +5040,9 @@ int hci_resume_sync(struct hci_dev *hdev)
- 
- 	/* Clear any event filters and restore scan state */
- 	hci_clear_event_filter_sync(hdev);
--	hci_update_scan_sync(hdev);
- 
--	/* Reset passive scanning to normal */
--	hci_update_passive_scan_sync(hdev);
-+	/* Resume scanning */
-+	hci_resume_scan_sync(hdev);
- 
- 	/* Resume monitor filters */
- 	hci_resume_monitor_sync(hdev);
+ static DEFINE_PER_CPU(struct clock_event_device, riscv_clock_event) = {
+ 	.name			= "riscv_timer_clockevent",
+-	.features		= CLOCK_EVT_FEAT_ONESHOT,
++	.features		= CLOCK_EVT_FEAT_ONESHOT | CLOCK_EVT_FEAT_C3STOP,
+ 	.rating			= 100,
+ 	.set_next_event		= riscv_clock_next_event,
+ };
 -- 
 2.35.1
 

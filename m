@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04B6549D5F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:20:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EED55549D66
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348409AbiFMTUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:20:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
+        id S241634AbiFMTUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351305AbiFMTTd (ORCPT
+        with ESMTP id S1351353AbiFMTTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:19:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA6653727;
-        Mon, 13 Jun 2022 10:24:34 -0700 (PDT)
+        Mon, 13 Jun 2022 15:19:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3E853B43;
+        Mon, 13 Jun 2022 10:24:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87AEFB81178;
-        Mon, 13 Jun 2022 17:24:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36435C341C4;
-        Mon, 13 Jun 2022 17:24:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A781B81178;
+        Mon, 13 Jun 2022 17:24:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C642EC3411B;
+        Mon, 13 Jun 2022 17:24:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655141072;
-        bh=eoHItYWwkT7G17he8Tx1cCRce9KFe+Gp8AbhML0uuyA=;
+        s=k20201202; t=1655141074;
+        bh=WhFcv1EH9geGyT4FKQyR7YpypEd1X5ddAYODqZhxQiU=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=FW+sYM13exb+1Eb7IAWJwAI3rFNhIOzFT6Tc2Ll69RZ45GOl8TW3hBX4G2xIjBUZ5
-         IIsjNxz9W33I33vfuANCeur8603JIsr0w6ubNoq/jh3hAOfqoUYT/f4hZrgKrxTd5D
-         YHQUMPrkBT4CVNEaaC3ad4KixWSF0Apd2dYcTS/Vd6UisiA1clUbziqEJYAR6chH95
-         vIhcAsGYNZ7n50P8Yqh2K0H2HSNNzj6BruwTktpF67UH5O4eXnaKoByGKpQpZDSdTL
-         Qax7BJdDtxMkvHJz9RGSH5WZIWVc+Jnn8Gn142EXH1cmN5Za/oiqdfbU6oBtfspCBY
-         /tZhxvvn0sdsw==
+        b=bIt6/NjQpUm9hagE+jYFaN7jaGYRwZVtDciGgAfNK3Qb5tIyrMdV294tUdE/kyVHJ
+         8OToqFezlHWN7qFpFkQakyQNvN/3Smhd2XmdBhb0cjaVOYDb0V/M5CWI/wvMfkcZMf
+         FF65AnHsL/A028n3Jv80EalHs0tm5N7qDfZRr+YelvlkJgO2WBng7pVWENehJe81do
+         IeNyWAiuaupY+7a/4CDMs5pp+45j2s9y58tZmd76r2MuwmSpV+Rm3iBCs35pW1ug1G
+         EEFqd0tjWeeF5lKGD0zmuf03BWdsiY+LpHuYSVgTeJ43Ge3g+4MQGyn6j8mPpDClEj
+         hIPO17I5vVapw==
 From:   Mark Brown <broonie@kernel.org>
-To:     jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        ashishsingha@nvidia.com, robh+dt@kernel.org,
-        linux-spi@vger.kernel.org, thierry.reding@gmail.com,
-        kyarlagadda@nvidia.com
-Cc:     skomatineni@nvidia.com, devicetree@vger.kernel.org,
-        ldewangan@nvidia.com, linux-kernel@vger.kernel.org
-In-Reply-To: <20220607114659.54314-1-kyarlagadda@nvidia.com>
-References: <20220607114659.54314-1-kyarlagadda@nvidia.com>
-Subject: Re: [Patch V3 0/3] spi: tegra quad: Add Tegra Grace features
-Message-Id: <165514106994.671611.15197276209820795833.b4-ty@kernel.org>
-Date:   Mon, 13 Jun 2022 18:24:29 +0100
+To:     conor.dooley@microchip.com, lewis.hanly@microchip.com,
+        wupeng58@huawei.com
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liwei391@huawei.com, linux-riscv@lists.infradead.org
+In-Reply-To: <20220611021117.40494-1-wupeng58@huawei.com>
+References: <20220611021117.40494-1-wupeng58@huawei.com>
+Subject: Re: [PATCH] spi: micro: fix unreasonable clk_prepare_enable() on error in mchp_corespi_probe()
+Message-Id: <165514107253.671611.10664601205751933959.b4-ty@kernel.org>
+Date:   Mon, 13 Jun 2022 18:24:32 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,19 +55,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Jun 2022 17:16:56 +0530, Krishna Yarlagadda wrote:
-> Add multiple chip select lines supported on Tegra 241
+On Sat, 11 Jun 2022 02:11:17 +0000, Peng Wu wrote:
+> Fix the unreasonable clk_prepare_enable() with clk_disable_unprepare()
+> before return from mchp_corespi_probe() in the error handling case.
 > 
-> Changes in v3:
-> Handle review comments.
-> Move controller's properties to "nvidia,tegra210-quad.yaml".
-> Fix style errors in peripheral yaml doc.
-> Changes in v2:
-> Split Wait polling changes to be handled later
-> Change chip name to convention followed (Grace to 241)
-> Add tegra qspi peripherals yaml file
 > 
-> [...]
 
 Applied to
 
@@ -77,12 +67,8 @@ Applied to
 
 Thanks!
 
-[1/3] spi: tegra210-quad: Multi-cs support
-      commit: b76134178168b5104851b3c72d9b1092b7414ff9
-[2/3] spi: dt-bindings: split peripheral prods
-      commit: e23917822d3cb1f5270ab0d327da713cda72f8f2
-[3/3] spi: dt-bindings: Add compatible for Tegra241 QSPI
-      commit: 4f37809f4cdf0cdb8d4431e779f56d1f0dec3fb5
+[1/1] spi: micro: fix unreasonable clk_prepare_enable() on error in mchp_corespi_probe()
+      commit: 116679aef2f92d535ea8049ef2a610bc73f94660
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

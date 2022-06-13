@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DBD5490FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA516548E86
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381244AbiFMOEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
+        id S1376291AbiFMNVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381453AbiFMN4g (ORCPT
+        with ESMTP id S1358848AbiFMNP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:56:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC114474A;
-        Mon, 13 Jun 2022 04:37:07 -0700 (PDT)
+        Mon, 13 Jun 2022 09:15:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800B02AE1;
+        Mon, 13 Jun 2022 04:22:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 11FB46132F;
-        Mon, 13 Jun 2022 11:37:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2447BC385A5;
-        Mon, 13 Jun 2022 11:37:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E81D9B80E93;
+        Mon, 13 Jun 2022 11:22:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D7BC34114;
+        Mon, 13 Jun 2022 11:22:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120226;
-        bh=7ADl3RCTi5szIbdV9dQaztuoAWCbVvDcEQP+ca+yidw=;
+        s=korg; t=1655119322;
+        bh=4JkfOxC5gmI0LRB5f/6vslBdwhuK+DX353B085otTAA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eElvYX3Vve8ZfWrO4SHtMjmAoYyz++bgbUkJrPlWBvU6iqHnFUry0WUz5gTNdHUpr
-         rsx5vEhU44O7Z7JtdoXULsE6E56It2qM0uF355u7AU+uFgiVIwmQKQalivP+zNYTb/
-         CdbwhbVwcoTe8tv7mW9wVSO3usr/GI5wrS6b/Vos=
+        b=yGzIptBmK7Kwx1hxH2iXpMfRAu1RdD6u43732+IRDO/v00dHe9Kni9jQbxqbTDcAG
+         xSCna+RbEXKpBWggiCEBAVgzjTIy/vlhLeaLHe62cHGgVyBpS2JNQ8jHnmbbPeUiII
+         XF94GYYBHAhLfODOWL0TX+dxhzH6uUdL+9q3FDR0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cameron Berkenpas <cam@neo-zeon.de>,
-        Takashi Iwai <tiwai@suse.de>,
-        Songine <donglingluoying@gmail.com>
-Subject: [PATCH 5.18 296/339] ALSA: hda/realtek: Fix for quirk to enable speaker output on the Lenovo Yoga DuetITL 2021
-Date:   Mon, 13 Jun 2022 12:12:01 +0200
-Message-Id: <20220613094935.744002248@linuxfoundation.org>
+        stable@vger.kernel.org, Satadru Pramanik <satadru@gmail.com>,
+        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.15 220/247] cifs: fix reconnect on smb3 mount types
+Date:   Mon, 13 Jun 2022 12:12:02 +0200
+Message-Id: <20220613094929.616109209@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +55,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cameron Berkenpas <cam@neo-zeon.de>
+From: Paulo Alcantara <pc@cjr.nz>
 
-commit 85743a847caeab696dafc4ce1a7e1e2b7e29a0f6 upstream.
+commit c36ee7dab7749f7be21f7a72392744490b2a9a2b upstream.
 
-Enables the ALC287_FIXUP_YOGA7_14ITL_SPEAKERS quirk for the Lenovo
-Yoga DuetITL 2021 laptop to fix speaker output.
+cifs.ko defines two file system types: cifs & smb3, and
+__cifs_get_super() was not including smb3 file system type when
+looking up superblocks, therefore failing to reconnect tcons in
+cifs_tree_connect().
 
-[ re-sorted in the SSID order by tiwai ]
+Fix this by calling iterate_supers_type() on both file system types.
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=208555
-Signed-off-by: Cameron Berkenpas <cam@neo-zeon.de>
-Co-authored-by: Songine <donglingluoying@gmail.com>
-Cc: stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220606002329.215330-1-cam@neo-zeon.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Link: https://lore.kernel.org/r/CAFrh3J9soC36+BVuwHB=g9z_KB5Og2+p2_W+BBoBOZveErz14w@mail.gmail.com
+Cc: stable@vger.kernel.org
+Tested-by: Satadru Pramanik <satadru@gmail.com>
+Reported-by: Satadru Pramanik <satadru@gmail.com>
+Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ fs/cifs/cifsfs.c |    2 +-
+ fs/cifs/cifsfs.h |    2 +-
+ fs/cifs/misc.c   |   27 ++++++++++++++++-----------
+ 3 files changed, 18 insertions(+), 13 deletions(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9310,6 +9310,7 @@ static const struct snd_pci_quirk alc269
- 	SND_PCI_QUIRK(0x17aa, 0x3176, "ThinkCentre Station", ALC283_FIXUP_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x17aa, 0x3178, "ThinkCentre Station", ALC283_FIXUP_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x17aa, 0x31af, "ThinkCentre Station", ALC623_FIXUP_LENOVO_THINKSTATION_P340),
-+	SND_PCI_QUIRK(0x17aa, 0x3802, "Lenovo Yoga DuetITL 2021", ALC287_FIXUP_YOGA7_14ITL_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3813, "Legion 7i 15IMHG05", ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS),
- 	SND_PCI_QUIRK(0x17aa, 0x3818, "Lenovo C940", ALC298_FIXUP_LENOVO_SPK_VOLUME),
- 	SND_PCI_QUIRK(0x17aa, 0x3819, "Lenovo 13s Gen2 ITL", ALC287_FIXUP_13S_GEN2_SPEAKERS),
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -1074,7 +1074,7 @@ struct file_system_type cifs_fs_type = {
+ };
+ MODULE_ALIAS_FS("cifs");
+ 
+-static struct file_system_type smb3_fs_type = {
++struct file_system_type smb3_fs_type = {
+ 	.owner = THIS_MODULE,
+ 	.name = "smb3",
+ 	.init_fs_context = smb3_init_fs_context,
+--- a/fs/cifs/cifsfs.h
++++ b/fs/cifs/cifsfs.h
+@@ -38,7 +38,7 @@ static inline unsigned long cifs_get_tim
+ 	return (unsigned long) dentry->d_fsdata;
+ }
+ 
+-extern struct file_system_type cifs_fs_type;
++extern struct file_system_type cifs_fs_type, smb3_fs_type;
+ extern const struct address_space_operations cifs_addr_ops;
+ extern const struct address_space_operations cifs_addr_ops_smallbuf;
+ 
+--- a/fs/cifs/misc.c
++++ b/fs/cifs/misc.c
+@@ -1212,18 +1212,23 @@ static struct super_block *__cifs_get_su
+ 		.data = data,
+ 		.sb = NULL,
+ 	};
++	struct file_system_type **fs_type = (struct file_system_type *[]) {
++		&cifs_fs_type, &smb3_fs_type, NULL,
++	};
+ 
+-	iterate_supers_type(&cifs_fs_type, f, &sd);
+-
+-	if (!sd.sb)
+-		return ERR_PTR(-EINVAL);
+-	/*
+-	 * Grab an active reference in order to prevent automounts (DFS links)
+-	 * of expiring and then freeing up our cifs superblock pointer while
+-	 * we're doing failover.
+-	 */
+-	cifs_sb_active(sd.sb);
+-	return sd.sb;
++	for (; *fs_type; fs_type++) {
++		iterate_supers_type(*fs_type, f, &sd);
++		if (sd.sb) {
++			/*
++			 * Grab an active reference in order to prevent automounts (DFS links)
++			 * of expiring and then freeing up our cifs superblock pointer while
++			 * we're doing failover.
++			 */
++			cifs_sb_active(sd.sb);
++			return sd.sb;
++		}
++	}
++	return ERR_PTR(-EINVAL);
+ }
+ 
+ static void __cifs_put_super(struct super_block *sb)
 
 

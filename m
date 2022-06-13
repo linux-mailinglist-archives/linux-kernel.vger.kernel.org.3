@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AACDE549204
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B535488C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356701AbiFMNBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:01:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
+        id S1346061AbiFMKvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:51:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358193AbiFMMzG (ORCPT
+        with ESMTP id S1347936AbiFMKtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D267E3586B;
-        Mon, 13 Jun 2022 04:14:35 -0700 (PDT)
+        Mon, 13 Jun 2022 06:49:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A61C2D1FD;
+        Mon, 13 Jun 2022 03:26:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F93BB80EA7;
-        Mon, 13 Jun 2022 11:14:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7BF5C34114;
-        Mon, 13 Jun 2022 11:14:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE3B660F0F;
+        Mon, 13 Jun 2022 10:26:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70F0C34114;
+        Mon, 13 Jun 2022 10:26:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118873;
-        bh=P/nzK0UNFvAdOrbmeXLbhiCspT6Z32fGD2W+9m5or6A=;
+        s=korg; t=1655115998;
+        bh=REuaWyW5uskEwir9+iUVh14ktdiKIXAINWSm23//9Ks=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oowszK6QS+FxIuZEM/l//Ap6iAB4xEwPqiBE70eZTfuxom39C1P/3XL1tIiiXo76P
-         wFKZFP4+8bSkSNx3rksZlJZCOJXFRREjdU2kV4jkzESnxmGHa4yYDdFAaR1i1caDrH
-         z4PP0JXxMpw6VEXDTMVvtlhJfdc9Jp0ny1v8Yoew=
+        b=uydgBWH5bHQGcG12IWVa5jSmIrJdwtFVJ1vmSVpNb88gnRyWTE01cTO2alQZWUX0V
+         B1y13iqS54B02XorXmzu8dKQj2RguXTBR+9NaJTzyaFscafQYRC32lE2oULnLAJ0RI
+         OHeN7WA+eZCJJFb6uzSD6dMuclokH3nNn90qn3VQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 059/247] serial: sifive: Sanitize CSIZE and c_iflag
+        stable@vger.kernel.org,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: [PATCH 4.14 103/218] iwlwifi: mvm: fix assert 1F04 upon reconfig
 Date:   Mon, 13 Jun 2022 12:09:21 +0200
-Message-Id: <20220613094924.747234519@linuxfoundation.org>
+Message-Id: <20220613094923.678228913@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
 
-[ Upstream commit c069d2756c01ed36121fae6a42c14fdf1325c71d ]
+commit 9d096e3d3061dbf4ee10e2b59fc2c06e05bdb997 upstream.
 
-Only CS8 is supported but CSIZE was not sanitized to CS8.
+When we reconfig we must not send the MAC_POWER command that relates to
+a MAC that was not yet added to the firmware.
 
-Set CSIZE correctly so that userspace knows the effective value.
-Incorrect CSIZE also results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
+Ignore those in the iterator.
 
-Similarly, INPCK, PARMRK, and BRKINT are reported textually unsupported
-but were not cleared in termios c_iflag which is the machine-readable
-format.
-
-Fixes: 45c054d0815b (tty: serial: add driver for the SiFive UART)
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-7-ilpo.jarvinen@linux.intel.com
+Cc: stable@vger.kernel.org
+Signed-off-by: Emmanuel Grumbach <emmanuel.grumbach@intel.com>
+Signed-off-by: Gregory Greenman <gregory.greenman@intel.com>
+Link: https://lore.kernel.org/r/20220517120044.ed2ffc8ce732.If786e19512d0da4334a6382ea6148703422c7d7b@changeid
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/sifive.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/net/wireless/intel/iwlwifi/mvm/power.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/tty/serial/sifive.c b/drivers/tty/serial/sifive.c
-index a579d46ed78c..4b0fa91e9f9a 100644
---- a/drivers/tty/serial/sifive.c
-+++ b/drivers/tty/serial/sifive.c
-@@ -666,12 +666,16 @@ static void sifive_serial_set_termios(struct uart_port *port,
- 	int rate;
- 	char nstop;
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/power.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/power.c
+@@ -611,6 +611,9 @@ static void iwl_mvm_power_get_vifs_itera
+ 	struct iwl_power_vifs *power_iterator = _data;
+ 	bool active = mvmvif->phy_ctxt && mvmvif->phy_ctxt->id < NUM_PHY_CTX;
  
--	if ((termios->c_cflag & CSIZE) != CS8)
-+	if ((termios->c_cflag & CSIZE) != CS8) {
- 		dev_err_once(ssp->port.dev, "only 8-bit words supported\n");
-+		termios->c_cflag &= ~CSIZE;
-+		termios->c_cflag |= CS8;
-+	}
- 	if (termios->c_iflag & (INPCK | PARMRK))
- 		dev_err_once(ssp->port.dev, "parity checking not supported\n");
- 	if (termios->c_iflag & BRKINT)
- 		dev_err_once(ssp->port.dev, "BREAK detection not supported\n");
-+	termios->c_iflag &= ~(INPCK|PARMRK|BRKINT);
- 
- 	/* Set number of stop bits */
- 	nstop = (termios->c_cflag & CSTOPB) ? 2 : 1;
--- 
-2.35.1
-
++	if (!mvmvif->uploaded)
++		return;
++
+ 	switch (ieee80211_vif_type_p2p(vif)) {
+ 	case NL80211_IFTYPE_P2P_DEVICE:
+ 		break;
 
 

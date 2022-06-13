@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1272E5493F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33BE754951E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354440AbiFMLfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46122 "EHLO
+        id S1379132AbiFMNnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:43:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354428AbiFML33 (ORCPT
+        with ESMTP id S1379154AbiFMNj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 101FDD114;
-        Mon, 13 Jun 2022 03:44:21 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173323DDC3;
+        Mon, 13 Jun 2022 04:29:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AE165B80D3A;
-        Mon, 13 Jun 2022 10:44:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12DE5C34114;
-        Mon, 13 Jun 2022 10:44:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0B3661046;
+        Mon, 13 Jun 2022 11:29:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86F8FC3411C;
+        Mon, 13 Jun 2022 11:29:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117058;
-        bh=ks8AUTzv45BBMdK0AfXxP1LnKPwk7Pdv4+o0tAPD4VI=;
+        s=korg; t=1655119741;
+        bh=XYV1h9CdCm68f/OE4ysMTqhDqVh1boCsnpiBvrjKYfM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JM4BY4f+iV/cZVKJ6xg+mlA6uk0D4CUxkWr9yPyb7lejs85I2rojiCNdUhlRaLqjC
-         8QDn1FG54uojmrvG+KqvpxlPLt6+vLldt1Bu9yC3XYp7fmoRvBHok06IZFMAfYfi+w
-         61e8Wkk+3IMI3gxw0EmPfylK2HE6zff6TsPgB+vw=
+        b=Dt7VUN3IVNDTZ/0VdKezVoL2sk5XHvspWdhpTM6eG06PJiYU0OLkJb73l3iFWUWP8
+         GZy2/QxgDTQx76NEqzOJXH0OgxiIvcqKiufbFeWSkWieY+qE92gFMaFTrxMZndX9aQ
+         L6XqCh4Ve+qSvBsjPmEzWO+KogoD7FInAEcX/5gw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "yukuai (C)" <yukuai3@huawei.com>, Jan Kara <jack@suse.cz>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>
-Subject: [PATCH 5.4 275/411] bfq: Drop pointless unlock-lock pair
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 123/339] virtio: pci: Fix an error handling path in vp_modern_probe()
 Date:   Mon, 13 Jun 2022 12:09:08 +0200
-Message-Id: <20220613094937.003901965@linuxfoundation.org>
+Message-Id: <20220613094930.241357719@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,39 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kara <jack@suse.cz>
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-commit fc84e1f941b91221092da5b3102ec82da24c5673 upstream.
+[ Upstream commit 7a836a2aba09479c8e71fa43249eecc4af945f61 ]
 
-In bfq_insert_request() we unlock bfqd->lock only to call
-trace_block_rq_insert() and then lock bfqd->lock again. This is really
-pointless since tracing is disabled if we really care about performance
-and even if the tracepoint is enabled, it is a quick call.
+If an error occurs after a successful pci_request_selected_regions() call,
+it should be undone by a corresponding pci_release_selected_regions() call,
+as already done in vp_modern_remove().
 
-CC: stable@vger.kernel.org
-Tested-by: "yukuai (C)" <yukuai3@huawei.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220401102752.8599-5-jack@suse.cz
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: fd502729fbbf ("virtio-pci: introduce modern device module")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Message-Id: <237109725aad2c3c03d14549f777b1927c84b045.1648977064.git.christophe.jaillet@wanadoo.fr>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bfq-iosched.c |    3 ---
- 1 file changed, 3 deletions(-)
+ drivers/virtio/virtio_pci_modern_dev.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -5529,11 +5529,8 @@ static void bfq_insert_request(struct bl
- 		return;
- 	}
- 
--	spin_unlock_irq(&bfqd->lock);
--
- 	blk_mq_sched_request_inserted(rq);
- 
--	spin_lock_irq(&bfqd->lock);
- 	bfqq = bfq_init_rq(rq);
- 	if (!bfqq || at_head || blk_rq_is_passthrough(rq)) {
- 		if (at_head)
+diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+index 591738ad3d56..4093f9cca7a6 100644
+--- a/drivers/virtio/virtio_pci_modern_dev.c
++++ b/drivers/virtio/virtio_pci_modern_dev.c
+@@ -347,6 +347,7 @@ int vp_modern_probe(struct virtio_pci_modern_device *mdev)
+ err_map_isr:
+ 	pci_iounmap(pci_dev, mdev->common);
+ err_map_common:
++	pci_release_selected_regions(pci_dev, mdev->modern_bars);
+ 	return err;
+ }
+ EXPORT_SYMBOL_GPL(vp_modern_probe);
+-- 
+2.35.1
+
 
 

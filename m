@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D55F549929
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:38:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60AEC548FA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377900AbiFMNfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
+        id S1353901AbiFMLZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378668AbiFMNb5 (ORCPT
+        with ESMTP id S1353153AbiFMLTM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:31:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59814719CD;
-        Mon, 13 Jun 2022 04:26:28 -0700 (PDT)
+        Mon, 13 Jun 2022 07:19:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256C23A5C3;
+        Mon, 13 Jun 2022 03:41:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C74A60F18;
-        Mon, 13 Jun 2022 11:26:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACFBDC3411C;
-        Mon, 13 Jun 2022 11:26:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D920B80EAA;
+        Mon, 13 Jun 2022 10:41:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF97BC34114;
+        Mon, 13 Jun 2022 10:40:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119587;
-        bh=rCSIA7RsX1fxH+QSFK64nbPN6ho0+M4zZF4daOD5wXg=;
+        s=korg; t=1655116860;
+        bh=jGeZxlUIN3xLJC961hH/xnbk8vx7G1hFEgsXY9u7FGE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1FHFyxWCKFEGeAwdDJmuXRqnTTxmghhmEZ3e/H04Je7yYrq7EfAZR7E1DKswPPRRp
-         twl/rw3m9pQG8TNQrIPY03q3WQz+BWeWlXUbDjNVTz6vY00I1U7UpmS5iLFLIG5H8X
-         cE6h6a04KFZVU8KBz8miAR+GDeaeR0nkfnl6phAI=
+        b=D/ya9+4xOnV7SYw7w47rSnfAcPA8V91KxuxVWYZWZ6AJWSTXOclX6acxMNHmMyIib
+         OxiB9rQ2+aRDJ0I6YWpjqst9e5NAt2DZKEKc9gzBBoSsajpV6cxgk4vHQi4dbaZ7Dt
+         dKIbYJc33yr4A04TIXmtFghUIA3Q+efhPnjzyQDk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Biju Das <biju.das.jz@bp.renesas.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 047/339] watchdog: rzg2l_wdt: Fix 32bit overflow issue
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        Michael Walle <michael@walle.cc>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 199/411] i2c: at91: Initialize dma_buf in at91_twi_xfer()
 Date:   Mon, 13 Jun 2022 12:07:52 +0200
-Message-Id: <20220613094927.950446747@linuxfoundation.org>
+Message-Id: <20220613094934.628406459@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,45 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit ea2949df22a533cdf75e4583c00b1ce94cd5a83b ]
+[ Upstream commit 6977262c2eee111645668fe9e235ef2f5694abf7 ]
 
-The value of timer_cycle_us can be 0 due to 32bit overflow.
-For eg:- If we assign the counter value "0xfff" for computing
-maxval.
+Clang warns:
 
-This patch fixes this issue by appending ULL to 1024, so that
-it is promoted to 64bit.
+  drivers/i2c/busses/i2c-at91-master.c:707:6: warning: variable 'dma_buf' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+          if (dev->use_dma) {
+              ^~~~~~~~~~~~
+  drivers/i2c/busses/i2c-at91-master.c:717:27: note: uninitialized use occurs here
+          i2c_put_dma_safe_msg_buf(dma_buf, m_start, !ret);
+                                   ^~~~~~~
 
-This patch also fixes the warning message, 'watchdog: Invalid min and
-max timeout values, resetting to 0!'.
+Initialize dma_buf to NULL, as i2c_put_dma_safe_msg_buf() is a no-op
+when the first argument is NULL, which will work for the !dev->use_dma
+case.
 
-Fixes: 2cbc5cd0b55fa2 ("watchdog: Add Watchdog Timer driver for RZ/G2L")
-Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Link: https://lore.kernel.org/r/20220225175320.11041-2-biju.das.jz@bp.renesas.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+Fixes: 03fbb903c8bf ("i2c: at91: use dma safe buffers")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1629
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Michael Walle <michael@walle.cc>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/rzg2l_wdt.c | 2 +-
+ drivers/i2c/busses/i2c-at91-master.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/watchdog/rzg2l_wdt.c b/drivers/watchdog/rzg2l_wdt.c
-index 6b426df34fd6..96f2a018ab62 100644
---- a/drivers/watchdog/rzg2l_wdt.c
-+++ b/drivers/watchdog/rzg2l_wdt.c
-@@ -53,7 +53,7 @@ static void rzg2l_wdt_wait_delay(struct rzg2l_wdt_priv *priv)
+diff --git a/drivers/i2c/busses/i2c-at91-master.c b/drivers/i2c/busses/i2c-at91-master.c
+index 44502024cc10..f74d5ad2f1fa 100644
+--- a/drivers/i2c/busses/i2c-at91-master.c
++++ b/drivers/i2c/busses/i2c-at91-master.c
+@@ -609,7 +609,7 @@ static int at91_twi_xfer(struct i2c_adapter *adap, struct i2c_msg *msg, int num)
+ 	unsigned int_addr_flag = 0;
+ 	struct i2c_msg *m_start = msg;
+ 	bool is_read;
+-	u8 *dma_buf;
++	u8 *dma_buf = NULL;
  
- static u32 rzg2l_wdt_get_cycle_usec(unsigned long cycle, u32 wdttime)
- {
--	u64 timer_cycle_us = 1024 * 1024 * (wdttime + 1) * MICRO;
-+	u64 timer_cycle_us = 1024 * 1024ULL * (wdttime + 1) * MICRO;
+ 	dev_dbg(&adap->dev, "at91_xfer: processing %d messages:\n", num);
  
- 	return div64_ul(timer_cycle_us, cycle);
- }
 -- 
 2.35.1
 

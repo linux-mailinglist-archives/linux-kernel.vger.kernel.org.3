@@ -2,75 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5506D547F7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 08:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57512547F6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 08:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233908AbiFMGZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 02:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
+        id S234963AbiFMGNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 02:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233350AbiFMGZy (ORCPT
+        with ESMTP id S234315AbiFMGNF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 02:25:54 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601D110B
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 23:25:53 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id s37so2221871pfg.11
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 23:25:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=kHvqhKfwkSYWgIBUppKUElAVHImwDcI/W0up7OF2SsA=;
-        b=N9/7xWdL+HXkVKNIefr4jQkYWZnbgsjUNbgoLWMP4TCLxMIhGeUaY8X6T3BBP3Axqc
-         gxQtgwfKmD1ejA90+u8othcUaq4bqsnIhcWOF2fo1TC+ewajCDy+jTRmCYcUifDAiBSX
-         FoqCgTMER28/yETHsW++HS37kHkvwI9MBXK3UVHgNLMeGIIApwxt06CW1Cea3crebfWX
-         liAszq8zCYTU0DbH/Y0WcZXj1BkCk84A1hqTt7Gd1hQSHR7kA6Jrhch0ms4AibRzZN1F
-         5IebhWYoTll7oSPKFw4VC2JIVEZaIgIIBtvyneZrYwS/M9DNbFJPfmgRDtU1b1T9yJ5Y
-         7nzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=kHvqhKfwkSYWgIBUppKUElAVHImwDcI/W0up7OF2SsA=;
-        b=djssKDrAJTLpNuA0NXZ001OS6ao34XQ+ooPZFS7gMzt+MYy6AY5wLcIrqYaF4n5XBu
-         CwvuNUoF81aBWjnIPyXyWz6bnbf6rjgbNdTRht5DL08hGnhKd7HcOri9Zq/ezUS9vysT
-         k3xjOKDK4Hxnw/owdQ8Tebn2wsncDJJqX2K0r48O/Q5IQJvJML2NZJr+v78l++e9RRY1
-         9EcRWzxavTaiHIDkA8T+4KF2tx39LnwgdWKNMgBORdf4bfx9e1iR1kZJdGpftkkKZyqk
-         GfTXWSk+PUP1BTe4daVK2Hx1G0Yhplh1pUgJYqGPzQuGtGpDAOpKdObSMjB7fI1NEbhe
-         mrXQ==
-X-Gm-Message-State: AOAM533umz+i9tb5PZAXqTa3dNsZj+W7SOkkZP/vy//EmeN5WYEwmwSz
-        jcvZLUmL/krUUbmZL+BcS2jWvSzKIans9gdU4Q==
-X-Google-Smtp-Source: ABdhPJz9dN8Mrj5SZvaZfuDsIYAAEBjxYZlMoCiHXKewSlf0Nbo1ZYb/1Xl4ZPoynFNiIbmYX0J3UmwUII8lJJhgKLU=
-X-Received: by 2002:a63:4853:0:b0:3fa:dc6:7ac2 with SMTP id
- x19-20020a634853000000b003fa0dc67ac2mr50697028pgk.298.1655101552926; Sun, 12
- Jun 2022 23:25:52 -0700 (PDT)
+        Mon, 13 Jun 2022 02:13:05 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29A713F22;
+        Sun, 12 Jun 2022 23:13:04 -0700 (PDT)
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LM1PP3ybmzRj08;
+        Mon, 13 Jun 2022 14:09:45 +0800 (CST)
+Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 14:13:01 +0800
+Received: from zelda.huawei.com (10.175.103.14) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 13 Jun 2022 14:13:00 +0800
+From:   Jin Xiaoyun <jinxiaoyun2@huawei.com>
+To:     <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <amitk@kernel.org>, <rui.zhang@intel.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jin Xiaoyun <jinxiaoyun2@huawei.com>,
+        Hulk Robot <hulkci@huawei.com>
+Subject: [PATCH -next] thermal: k3_j72xx_bandgap: Make k3_j72xx_bandgap_j721e_data and k3_j72xx_bandgap_j7200_data static
+Date:   Mon, 13 Jun 2022 14:31:11 +0800
+Message-ID: <20220613063111.654893-1-jinxiaoyun2@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:a05:6a20:d2c7:b0:84:398b:ef0b with HTTP; Sun, 12 Jun 2022
- 23:25:52 -0700 (PDT)
-Reply-To: peterwhite202101@gmail.com
-From:   Peter White <petersamuel20118@gmail.com>
-Date:   Mon, 13 Jun 2022 06:25:52 +0000
-Message-ID: <CACU92gfcpxL-w0b0A8TZaNMRVMMXDAaAcCEnwbKZ7nd0aa9Cwg@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.4 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.14]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings from here.
+Fix sparse warnings:
 
-I want to know if this email address is still valid to write to you.
-There is something important I would like to discuss with you.
+drivers/thermal/k3_j72xx_bandgap.c:532:36: sparse: sparse: symbol 'k3_j72xx_bandgap_j721e_data' was not declared. Should it be static?
+drivers/thermal/k3_j72xx_bandgap.c:536:36: sparse: sparse: symbol 'k3_j72xx_bandgap_j7200_data' was not declared. Should it be static?
 
-Thank you
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Jin Xiaoyun <jinxiaoyun2@huawei.com>
+---
+ drivers/thermal/k3_j72xx_bandgap.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Mr. Peter White
+diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
+index 64e323158952..f8ff20feb120 100644
+--- a/drivers/thermal/k3_j72xx_bandgap.c
++++ b/drivers/thermal/k3_j72xx_bandgap.c
+@@ -529,11 +529,11 @@ static int k3_j72xx_bandgap_remove(struct platform_device *pdev)
+ 	return 0;
+ }
+
+-const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j721e_data = {
++static const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j721e_data = {
+ 	.has_errata_i2128 = 1,
+ };
+
+-const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j7200_data = {
++static const struct k3_j72xx_bandgap_data k3_j72xx_bandgap_j7200_data = {
+ 	.has_errata_i2128 = 0,
+ };
+
+--
+2.25.1
+

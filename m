@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758C85486C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB7B548793
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350882AbiFMLJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
+        id S1352175AbiFMLLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351841AbiFMLFI (ORCPT
+        with ESMTP id S1350932AbiFMLFl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:05:08 -0400
+        Mon, 13 Jun 2022 07:05:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1A127FC1;
-        Mon, 13 Jun 2022 03:34:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656A410FD;
+        Mon, 13 Jun 2022 03:34:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB7A2B80E5C;
-        Mon, 13 Jun 2022 10:34:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5901CC34114;
-        Mon, 13 Jun 2022 10:34:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4143B80EAA;
+        Mon, 13 Jun 2022 10:34:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35490C34114;
+        Mon, 13 Jun 2022 10:34:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116453;
-        bh=4MhuP+PzGuPC0rV50BO8x+3UT4LdGj2SK5oU1LoYP6E=;
+        s=korg; t=1655116494;
+        bh=liqDYnBITC4aho+0gENp/8bVnL2kel+KNoF6yUOwYMA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fWSz6cHBVRnC2a7V9uU/140LvThNMpy92ADM+/VHmUt8eZNSMIX6sET2+yTItbTWf
-         vWC6WDyaLDkQArlvLGh38aVeU6024qLORvHzRA/GzV/1cjslreXwgRAS3VKfD4SoFy
-         eRKNCvV8x+XorcFSovjClWQI6omM0B/p5cJZCsEI=
+        b=QcyA5DO187glUxep5+W6MjP7IzpcWM5xxPiBYbHAGucU0/3HCEShMEeGC1eXCFi0r
+         EF27Qu/TLciZO5hkmEJNZTWHdA3S3NAKqF+fuzhI/ZuVyU6HKSaLoFxcTNTnNnu6aS
+         LsXaaa1EScnFQmPybSn9pABCJTwvZr0MJFNC3cPI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
+        stable@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 089/411] drm/vc4: txp: Force alpha to be 0xff if its disabled
-Date:   Mon, 13 Jun 2022 12:06:02 +0200
-Message-Id: <20220613094931.350002662@linuxfoundation.org>
+Subject: [PATCH 5.4 096/411] efi: Add missing prototype for efi_capsule_setup_info
+Date:   Mon, 13 Jun 2022 12:06:09 +0200
+Message-Id: <20220613094931.560133489@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -55,45 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Jan Kiszka <jan.kiszka@siemens.com>
 
-[ Upstream commit 5453343a88ede8b12812fced81ecd24cb888ccc3 ]
+[ Upstream commit aa480379d8bdb33920d68acfd90f823c8af32578 ]
 
-If we use a format that has padding instead of the alpha component (such
-as XRGB8888), it appears that the Transposer will fill the padding to 0,
-disregarding what was stored in the input buffer padding.
+Fixes "no previous declaration for 'efi_capsule_setup_info'" warnings
+under W=1.
 
-This leads to issues with IGT, since it will set the padding to 0xff,
-but will then compare the CRC of the two frames which will thus fail.
-Another nice side effect is that it is now possible to just use the
-buffer as ARGB.
-
-Fixes: 008095e065a8 ("drm/vc4: Add support for the transposer block")
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Link: https://lore.kernel.org/r/20220328153659.2382206-4-maxime@cerno.tech
+Fixes: 2959c95d510c ("efi/capsule: Add support for Quark security header")
+Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
+Link: https://lore.kernel.org/r/c28d3f86-dd72-27d1-e2c2-40971b8da6bd@siemens.com
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_txp.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/linux/efi.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_txp.c b/drivers/gpu/drm/vc4/vc4_txp.c
-index 2342b49c16dd..0d9263f65d95 100644
---- a/drivers/gpu/drm/vc4/vc4_txp.c
-+++ b/drivers/gpu/drm/vc4/vc4_txp.c
-@@ -291,6 +291,12 @@ static void vc4_txp_connector_atomic_commit(struct drm_connector *conn,
+diff --git a/include/linux/efi.h b/include/linux/efi.h
+index c82ef0eba4f8..f9b9f9a2fd4a 100644
+--- a/include/linux/efi.h
++++ b/include/linux/efi.h
+@@ -165,6 +165,8 @@ struct capsule_info {
+ 	size_t			page_bytes_remain;
+ };
  
- 	if (fb->format->has_alpha)
- 		ctrl |= TXP_ALPHA_ENABLE;
-+	else
-+		/*
-+		 * If TXP_ALPHA_ENABLE isn't set and TXP_ALPHA_INVERT is, the
-+		 * hardware will force the output padding to be 0xff.
-+		 */
-+		ctrl |= TXP_ALPHA_INVERT;
++int efi_capsule_setup_info(struct capsule_info *cap_info, void *kbuff,
++                           size_t hdr_bytes);
+ int __efi_capsule_setup_info(struct capsule_info *cap_info);
  
- 	gem = drm_fb_cma_get_gem_obj(fb, 0);
- 	TXP_WRITE(TXP_DST_PTR, gem->paddr + fb->offsets[0]);
+ /*
 -- 
 2.35.1
 

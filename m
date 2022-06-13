@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 489AB54922A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A702E548E2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352340AbiFMLMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
+        id S1377155AbiFMNUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352202AbiFMLJ2 (ORCPT
+        with ESMTP id S1358973AbiFMNIq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:09:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EB4A1B9;
-        Mon, 13 Jun 2022 03:35:34 -0700 (PDT)
+        Mon, 13 Jun 2022 09:08:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9731FCFF;
+        Mon, 13 Jun 2022 04:19:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E687460EF5;
-        Mon, 13 Jun 2022 10:35:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A08C34114;
-        Mon, 13 Jun 2022 10:35:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA79EB80EA7;
+        Mon, 13 Jun 2022 11:19:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2BA4C34114;
+        Mon, 13 Jun 2022 11:19:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116533;
-        bh=Vn10bNQPc5pbtkyvWaaTmAUvAzjVuNIpxar3jUlAj00=;
+        s=korg; t=1655119141;
+        bh=mMjDWJlacooFiZ2ImmHkyR7vekvzqW++iLlyOOmOz5s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TFCGyHUaJRzCu5YbWw41gavVUc6xuRCELZIFslGXREjbuIqpSBcui942rvQwaAWFA
-         qWOkjBmSMyvOxiSOiZKYkyKZz74voZ90wtevnKugnHsW2gJfQgAnlyghC64mvHy1zk
-         mUMjr7YD/EaT7axzM4xZ4AVsFKissiJPHchCeZHI=
+        b=YD1q5cgsw4BWW8hBd/C7CPccO23/f/SUFvi0Ocw4d6GhmSTqz9SlNAa1Wgdn9Q63h
+         1faH1JDACpH9lE5S91wIESwYjMRrMyDeCFfv1rlYJTaSwpZhY7BTAILt/k6+SqeqVC
+         PgpnZ7vCdt3gx5ZHIhe2TCeA0391MjgL2cwwdaqI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gong Yuanjun <ruc_gongyuanjun@163.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 199/218] drm/radeon: fix a possible null pointer dereference
+        stable@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Maher Sanalla <msanalla@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Mark Bloch <mbloch@nvidia.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 155/247] net/mlx5: Fix mlx5_get_next_dev() peer device matching
 Date:   Mon, 13 Jun 2022 12:10:57 +0200
-Message-Id: <20220613094926.658172989@linuxfoundation.org>
+Message-Id: <20220613094927.656795102@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +58,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gong Yuanjun <ruc_gongyuanjun@163.com>
+From: Saeed Mahameed <saeedm@nvidia.com>
 
-[ Upstream commit a2b28708b645c5632dc93669ab06e97874c8244f ]
+[ Upstream commit 1c5de097bea31760c3f0467ac0c84ba0dc3525d5 ]
 
-In radeon_fp_native_mode(), the return value of drm_mode_duplicate()
-is assigned to mode, which will lead to a NULL pointer dereference
-on failure of drm_mode_duplicate(). Add a check to avoid npd.
+In some use-cases, mlx5 instances will need to search for their peer
+device (the other port on the same HCA). For that, mlx5 device matching
+mechanism relied on auxiliary_find_device() to search, and used a bad matching
+callback function.
 
-The failure status of drm_cvt_mode() on the other path is checked too.
+This approach has two issues:
 
-Signed-off-by: Gong Yuanjun <ruc_gongyuanjun@163.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+1) next_phys_dev() the matching function, assumed all devices are
+   of the type mlx5_adev (mlx5 auxiliary device) which is wrong and
+   could lead to crashes, this worked for a while, since only lately
+   other drivers started registering auxiliary devices.
+
+2) using the auxiliary class bus (auxiliary_find_device) to search for
+   mlx5_core_dev devices, who are actually PCIe device instances, is wrong.
+   This works since mlx5_core always has at least one mlx5_adev instance
+   hanging around in the aux bus.
+
+As suggested by others we can fix 1. by comparing device names prefixes
+if they have the string "mlx5_core" in them, which is not a best practice !
+but even with that fixed, still 2. needs fixing, we are trying to
+match pcie device peers so we should look in the right bus (pci bus),
+hence this fix.
+
+The fix:
+1) search the pci bus for mlx5 peer devices, instead of the aux bus
+2) to validated devices are the same type "mlx5_core_dev" compare if
+   they have the same driver, which is bulletproof.
+
+   This wouldn't have worked with the aux bus since the various mlx5 aux
+   device types don't share the same driver, even if they share the same device
+   wrapper struct (mlx5_adev) "which helped to find the parent device"
+
+Fixes: a925b5e309c9 ("net/mlx5: Register mlx5 devices to auxiliary virtual bus")
+Reported-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Reported-by: Maher Sanalla <msanalla@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Reviewed-by: Mark Bloch <mbloch@nvidia.com>
+Reviewed-by: Maher Sanalla <msanalla@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/radeon/radeon_connectors.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/ethernet/mellanox/mlx5/core/dev.c | 34 +++++++++++++------
+ 1 file changed, 23 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/gpu/drm/radeon/radeon_connectors.c b/drivers/gpu/drm/radeon/radeon_connectors.c
-index fc021b8e4077..dd7d771d13b5 100644
---- a/drivers/gpu/drm/radeon/radeon_connectors.c
-+++ b/drivers/gpu/drm/radeon/radeon_connectors.c
-@@ -489,6 +489,8 @@ static struct drm_display_mode *radeon_fp_native_mode(struct drm_encoder *encode
- 	    native_mode->vdisplay != 0 &&
- 	    native_mode->clock != 0) {
- 		mode = drm_mode_duplicate(dev, native_mode);
-+		if (!mode)
-+			return NULL;
- 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
- 		drm_mode_set_name(mode);
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/dev.c b/drivers/net/ethernet/mellanox/mlx5/core/dev.c
+index 94411b34799e..949f12ede3d2 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/dev.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/dev.c
+@@ -559,18 +559,32 @@ static int _next_phys_dev(struct mlx5_core_dev *mdev,
+ 	return 1;
+ }
  
-@@ -503,6 +505,8 @@ static struct drm_display_mode *radeon_fp_native_mode(struct drm_encoder *encode
- 		 * simpler.
- 		 */
- 		mode = drm_cvt_mode(dev, native_mode->hdisplay, native_mode->vdisplay, 60, true, false, false);
-+		if (!mode)
-+			return NULL;
- 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
- 		DRM_DEBUG_KMS("Adding cvt approximation of native panel mode %s\n", mode->name);
- 	}
++static void *pci_get_other_drvdata(struct device *this, struct device *other)
++{
++	if (this->driver != other->driver)
++		return NULL;
++
++	return pci_get_drvdata(to_pci_dev(other));
++}
++
+ static int next_phys_dev(struct device *dev, const void *data)
+ {
+-	struct mlx5_adev *madev = container_of(dev, struct mlx5_adev, adev.dev);
+-	struct mlx5_core_dev *mdev = madev->mdev;
++	struct mlx5_core_dev *mdev, *this = (struct mlx5_core_dev *)data;
++
++	mdev = pci_get_other_drvdata(this->device, dev);
++	if (!mdev)
++		return 0;
+ 
+ 	return _next_phys_dev(mdev, data);
+ }
+ 
+ static int next_phys_dev_lag(struct device *dev, const void *data)
+ {
+-	struct mlx5_adev *madev = container_of(dev, struct mlx5_adev, adev.dev);
+-	struct mlx5_core_dev *mdev = madev->mdev;
++	struct mlx5_core_dev *mdev, *this = (struct mlx5_core_dev *)data;
++
++	mdev = pci_get_other_drvdata(this->device, dev);
++	if (!mdev)
++		return 0;
+ 
+ 	if (!MLX5_CAP_GEN(mdev, vport_group_manager) ||
+ 	    !MLX5_CAP_GEN(mdev, lag_master) ||
+@@ -583,19 +597,17 @@ static int next_phys_dev_lag(struct device *dev, const void *data)
+ static struct mlx5_core_dev *mlx5_get_next_dev(struct mlx5_core_dev *dev,
+ 					       int (*match)(struct device *dev, const void *data))
+ {
+-	struct auxiliary_device *adev;
+-	struct mlx5_adev *madev;
++	struct device *next;
+ 
+ 	if (!mlx5_core_is_pf(dev))
+ 		return NULL;
+ 
+-	adev = auxiliary_find_device(NULL, dev, match);
+-	if (!adev)
++	next = bus_find_device(&pci_bus_type, NULL, dev, match);
++	if (!next)
+ 		return NULL;
+ 
+-	madev = container_of(adev, struct mlx5_adev, adev);
+-	put_device(&adev->dev);
+-	return madev->mdev;
++	put_device(next);
++	return pci_get_drvdata(to_pci_dev(next));
+ }
+ 
+ /* Must be called with intf_mutex held */
 -- 
 2.35.1
 

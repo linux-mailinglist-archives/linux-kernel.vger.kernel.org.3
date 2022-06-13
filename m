@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A005F54916F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3F75490FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383672AbiFMO1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
+        id S1349486AbiFMM1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383676AbiFMOXq (ORCPT
+        with ESMTP id S1355336AbiFMMXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:23:46 -0400
+        Mon, 13 Jun 2022 08:23:55 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06AA46CB9;
-        Mon, 13 Jun 2022 04:44:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1568027B14;
+        Mon, 13 Jun 2022 04:04:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 73937B80EA7;
-        Mon, 13 Jun 2022 11:44:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB9FC34114;
-        Mon, 13 Jun 2022 11:44:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD2F4B80D31;
+        Mon, 13 Jun 2022 11:04:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB27C34114;
+        Mon, 13 Jun 2022 11:04:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120684;
-        bh=Lb60rln3aOojiHgVdkvSl8i3tDqPa2q1r9uXhxhDlsc=;
+        s=korg; t=1655118284;
+        bh=p2xRm+9G+qjCSlFGrHTFKeqMTugLPxbgRQ/rMbsfVyk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vkp2/CPHzYqvmJPX5nzaGg/FPBLfi9KgkaHAvnwTKqLVgjo8ogCEnA+oY6QbBessu
-         V20E4uW1x+BRPM03w1yvCeJpTzwJLf9mP1F3yCi5IxdUlwQlpAasTggVwsWvMi9meD
-         oOmt0Erv2ARrCW0jxYrOAApRsKOykrZFUZPLNsjM=
+        b=kmBJH8yaxO3STzWwm3bWYOw842Q7X62RaMc2+uIfuWrKcG6zjkh+6Om9AKBpjxsD6
+         NKHO+yyTYRUfiRZhS0XMjRDEUOAVOpmE3KWWGPpNBjljQAfeIjMJRhep2rtmF0YlEU
+         DAW5/ESDIKFQOJr3NH2vCqIhDIoGkUD9BrB7GaFw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 086/298] net: dsa: mv88e6xxx: Fix refcount leak in mv88e6xxx_mdios_register
+Subject: [PATCH 5.10 020/172] iio: adc: stmpe-adc: Fix wait_for_completion_timeout return value check
 Date:   Mon, 13 Jun 2022 12:09:40 +0200
-Message-Id: <20220613094927.556818493@linuxfoundation.org>
+Message-Id: <20220613094855.223678523@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,37 +58,63 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 02ded5a173619b11728b8bf75a3fd995a2c1ff28 ]
+[ Upstream commit d345b23200bcdbd2bd3582213d738c258b77718f ]
 
-of_get_child_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
+wait_for_completion_timeout() returns unsigned long not long.
+it returns 0 if timed out, and positive if completed.
+The check for <= 0 is ambiguous and should be == 0 here
+indicating timeout which is the only error case
 
-mv88e6xxx_mdio_register() pass the device node to of_mdiobus_register().
-We don't need the device node after it.
-
-Add missing of_node_put() to avoid refcount leak.
-
-Fixes: a3c53be55c95 ("net: dsa: mv88e6xxx: Support multiple MDIO busses")
+Fixes: e813dde6f833 ("iio: stmpe-adc: Use wait_for_completion_timeout")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Reviewed-by: Philippe Schenker <philippe.schenker@toradex.com>
+Link: https://lore.kernel.org/r/20220412065150.14486-1-linmq006@gmail.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/mv88e6xxx/chip.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/iio/adc/stmpe-adc.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index cf7754dddad7..283ae376f469 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -3482,6 +3482,7 @@ static int mv88e6xxx_mdios_register(struct mv88e6xxx_chip *chip,
- 	 */
- 	child = of_get_child_by_name(np, "mdio");
- 	err = mv88e6xxx_mdio_register(chip, child, false);
-+	of_node_put(child);
- 	if (err)
- 		return err;
+diff --git a/drivers/iio/adc/stmpe-adc.c b/drivers/iio/adc/stmpe-adc.c
+index fba659bfdb40..64305d9fa560 100644
+--- a/drivers/iio/adc/stmpe-adc.c
++++ b/drivers/iio/adc/stmpe-adc.c
+@@ -61,7 +61,7 @@ struct stmpe_adc {
+ static int stmpe_read_voltage(struct stmpe_adc *info,
+ 		struct iio_chan_spec const *chan, int *val)
+ {
+-	long ret;
++	unsigned long ret;
  
+ 	mutex_lock(&info->lock);
+ 
+@@ -79,7 +79,7 @@ static int stmpe_read_voltage(struct stmpe_adc *info,
+ 
+ 	ret = wait_for_completion_timeout(&info->completion, STMPE_ADC_TIMEOUT);
+ 
+-	if (ret <= 0) {
++	if (ret == 0) {
+ 		stmpe_reg_write(info->stmpe, STMPE_REG_ADC_INT_STA,
+ 				STMPE_ADC_CH(info->channel));
+ 		mutex_unlock(&info->lock);
+@@ -96,7 +96,7 @@ static int stmpe_read_voltage(struct stmpe_adc *info,
+ static int stmpe_read_temp(struct stmpe_adc *info,
+ 		struct iio_chan_spec const *chan, int *val)
+ {
+-	long ret;
++	unsigned long ret;
+ 
+ 	mutex_lock(&info->lock);
+ 
+@@ -114,7 +114,7 @@ static int stmpe_read_temp(struct stmpe_adc *info,
+ 
+ 	ret = wait_for_completion_timeout(&info->completion, STMPE_ADC_TIMEOUT);
+ 
+-	if (ret <= 0) {
++	if (ret == 0) {
+ 		mutex_unlock(&info->lock);
+ 		return -ETIMEDOUT;
+ 	}
 -- 
 2.35.1
 

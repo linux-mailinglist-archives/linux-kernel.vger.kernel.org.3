@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DFF754944E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F18549082
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377112AbiFMNZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:25:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
+        id S1377459AbiFMN1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359479AbiFMNUn (ORCPT
+        with ESMTP id S1357425AbiFMNYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:20:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7E5C66B08E;
-        Mon, 13 Jun 2022 04:23:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74E311596;
-        Mon, 13 Jun 2022 04:23:28 -0700 (PDT)
-Received: from [10.57.35.216] (unknown [10.57.35.216])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E24DF3F73B;
-        Mon, 13 Jun 2022 04:23:26 -0700 (PDT)
-Message-ID: <675ccf44-872d-904c-af6c-672c8afd405e@arm.com>
-Date:   Mon, 13 Jun 2022 12:23:25 +0100
+        Mon, 13 Jun 2022 09:24:53 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D4D6C0D8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 04:24:15 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 50D7C21CC7;
+        Mon, 13 Jun 2022 11:24:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655119454; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oVDyyQNRZdOpJs5Ykd60IDoqlaom7m+VsdjwLrey5C4=;
+        b=l7TxDF/FRkFqe6u/FqVZiF7Ihqp5aGKfbXpdYa9J5gK2wPjMO7VFhYqh42d1WpkPlSFmlV
+        mPRuubJBOa4M4vF19l1U3+6IU3ee+UOpbo5JyDQ9EMDrSDxvRmjpzsCekD2hspvQC7fwKg
+        pdEsnXGZvSTphJrd1x52d/duHpuQ6iQ=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 29D2C2C141;
+        Mon, 13 Jun 2022 11:24:14 +0000 (UTC)
+Date:   Mon, 13 Jun 2022 13:24:10 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
+Subject: Re: [BUG] Threaded printk breaks early debugging
+Message-ID: <YqceWi1524yuVITi@alley>
+References: <CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com>
+ <87y1y48spg.fsf@jogness.linutronix.de>
+ <CAMdYzYr-Wo713Y4qjboTpoK6GcrYfKCfRJAEizwXw6-=dymVzg@mail.gmail.com>
+ <87zgihlbst.fsf@jogness.linutronix.de>
+ <CAMdYzYosXiQc9=t7daPaWWS=rnTVT6nnZvVBXDycBQvfR-1FAA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/3] thermal: cpufreq_cooling: Use a copy of local ops for
- each cooling device
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        rafael@kernel.org, dietmar.eggemann@arm.com
-References: <20220610100343.32378-1-lukasz.luba@arm.com>
- <20220613091611.ncd2hziu4nbyip4x@vireshk-i7>
- <5bac6f98-e1ba-3584-6eac-21eeaaa0ed26@arm.com>
- <20220613105311.jdyjubid4jrgofwu@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220613105311.jdyjubid4jrgofwu@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMdYzYosXiQc9=t7daPaWWS=rnTVT6nnZvVBXDycBQvfR-1FAA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun 2022-06-12 19:30:27, Peter Geis wrote:
+> On Sun, Jun 12, 2022 at 7:08 PM John Ogness <john.ogness@linutronix.de> wrote:
+> >
+> > On 2022-06-10, Peter Geis <pgwipeout@gmail.com> wrote:
+> > > This might be a side effect of the fact that this is on a low powered
+> > > arm64 board. I noticed with threading enabled during large bursts the
+> > > console drops an excessive amount of messages.
 
+What do you mean that console drops an excessive amount of messages,
+please?
 
-On 6/13/22 11:53, Viresh Kumar wrote:
-> On 13-06-22, 11:37, Lukasz Luba wrote:
->> Hi Viresh,
->>
->> Thank you for the ACKs in the other patches and suggestion in this one.
->>
->> On 6/13/22 10:16, Viresh Kumar wrote:
->>> On 10-06-22, 11:03, Lukasz Luba wrote:
->>>> It is very unlikely that one CPU cluster would have the EM and some other
->>>> won't have it (because EM registration failed or DT lacks needed entry).
->>>> Although, we should avoid modifying global variable with callbacks anyway.
->>>> Redesign this and add safety for such situation.
->>>>
->>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>>> ---
->>>>    drivers/thermal/cpufreq_cooling.c | 16 +++++++++++++---
->>>>    1 file changed, 13 insertions(+), 3 deletions(-)
->>>>
->>>> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
->>>> index b8151d95a806..e33183785fac 100644
->>>> --- a/drivers/thermal/cpufreq_cooling.c
->>>> +++ b/drivers/thermal/cpufreq_cooling.c
->>>> @@ -554,7 +554,12 @@ __cpufreq_cooling_register(struct device_node *np,
->>>>    	/* max_level is an index, not a counter */
->>>>    	cpufreq_cdev->max_level = i - 1;
->>>> -	cooling_ops = &cpufreq_cooling_ops;
->>>> +	cooling_ops = kmemdup(&cpufreq_cooling_ops, sizeof(*cooling_ops),
->>>> +			      GFP_KERNEL);
->>>
->>> I don't like the way we are duplicating the ops here. Instead of this it would
->>> be better to add the OPs field in the cooling device structure and fill its
->>> fields from here. The ops structure will be allocated with the cooling device
->>> itself.
->>>
->>
->> I think I know what you mean. Make sense. There are quite a few
->> different cooling types of devices which are using the API
->> thermal_of_cooling_device_register() with the custom 'ops'. We
->> probably don't want to disturb that well working drivers and ecosystem.
-> 
-> I was just suggesting to update "struct cpufreq_cooling_device" :)
-> 
-> This is what I was, wrongly, referring to as cooling device.
-> 
-> I should have written the exact structure name instead, my bad.
-> 
+Do you see "dropped XXX messages" in the console output?
+Or something else?
 
-No worries. Thanks, I'll send a v2 with these changes.
+> > > It's especially
+> > > apparent during the handover from earlycon to the normal console.
+> >
+> > I guess you have a very small kernel buffer and are generating unusually
+> > high amounts of messages? Is there a reason you cannot use a larger
+> > buffer?
+> 
+> The buffer isn't an issue here, everything is available in dmesg when
+> userspace becomes available. Instead some messages bound for the
+> serial console are never output.
+
+This is strage. The message "dropped XXX messages" is printed only
+when the buffer was full and the oldest messages were overwritten
+before they were pushed to the console. If "dmesg" shows all messages
+it means that no messages were overwritten.
+
+Best Regards,
+Petr

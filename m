@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60DD8548BED
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D8D5491AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243435AbiFMKX1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:23:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44014 "EHLO
+        id S1379033AbiFMNqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241989AbiFMKWl (ORCPT
+        with ESMTP id S1379225AbiFMNkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:22:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0961FCFB;
-        Mon, 13 Jun 2022 03:17:54 -0700 (PDT)
+        Mon, 13 Jun 2022 09:40:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA433D114;
+        Mon, 13 Jun 2022 04:30:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AEBD6066C;
-        Mon, 13 Jun 2022 10:17:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DB5AC3411C;
-        Mon, 13 Jun 2022 10:17:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69942B80D3A;
+        Mon, 13 Jun 2022 11:30:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4298C34114;
+        Mon, 13 Jun 2022 11:30:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115472;
-        bh=yQaSjnJx43yFK8oDB8LXKvE+rIhRgPudwBeneeFl5Iw=;
+        s=korg; t=1655119843;
+        bh=MNaiuG4N1VwUKOrgpMZ+BnxOCSCj0LiesIi3WOBys/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0QatUJ3cdxuaxnu2pM7tjywigLDKE3vg++EPUkAV0ifXL8rUfnbcFQFXRoHyqupjU
-         kERysvpRFOTt8jpoa4NifAOWTzqoGDMHACGUkVPzq2T+Vqps29cFpmq3FJo31aBavj
-         XQ47mvU3n3s2yh9U+lYRLtSSgrYRFvvaAoR8l5cE=
+        b=M8GAzGJtQEOzgOv9ZtLQM0Y/wpGgDKXoXkTozSITazjF7V37NCwGdfJEZ9YTO+sUp
+         6dyPZ+V12GocKXigHXw6drzyM/XM24BNoDTMqzZ0oRWc7ZX5nObGt14HnIiL3qWZ40
+         P1IOUopb6EjUK3iNFX4yl36soQNT0KBhsNBNWc/Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Song Liu <song@kernel.org>
-Subject: [PATCH 4.9 089/167] md: fix an incorrect NULL check in md_reload_sb
-Date:   Mon, 13 Jun 2022 12:09:23 +0200
-Message-Id: <20220613094901.752890280@linuxfoundation.org>
+        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 139/339] gpio: pca953x: use the correct register address to do regcache sync
+Date:   Mon, 13 Jun 2022 12:09:24 +0200
+Message-Id: <20220613094930.899043513@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,57 +55,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Haibo Chen <haibo.chen@nxp.com>
 
-commit 64c54d9244a4efe9bc6e9c98e13c4bbb8bb39083 upstream.
+[ Upstream commit 43624eda86c98b0de726d0b6f2516ccc3ef7313f ]
 
-The bug is here:
-	if (!rdev || rdev->desc_nr != nr) {
+For regcache_sync_region, need to use pca953x_recalc_addr() to get
+the real register address.
 
-The list iterator value 'rdev' will *always* be set and non-NULL
-by rdev_for_each_rcu(), so it is incorrect to assume that the
-iterator value will be NULL if the list is empty or no element
-found (In fact, it will be a bogus pointer to an invalid struct
-object containing the HEAD). Otherwise it will bypass the check
-and lead to invalid memory access passing the check.
-
-To fix the bug, use a new variable 'iter' as the list iterator,
-while using the original variable 'pdev' as a dedicated pointer to
-point to the found element.
-
-Cc: stable@vger.kernel.org
-Fixes: 70bcecdb1534 ("md-cluster: Improve md_reload_sb to be less error prone")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Signed-off-by: Song Liu <song@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: b76574300504 ("gpio: pca953x: Restore registers after suspend/resume cycle")
+Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/md.c |   10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/gpio/gpio-pca953x.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -8882,16 +8882,18 @@ static int read_rdev(struct mddev *mddev
- 
- void md_reload_sb(struct mddev *mddev, int nr)
+diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
+index 8726921a1129..33683295a0bf 100644
+--- a/drivers/gpio/gpio-pca953x.c
++++ b/drivers/gpio/gpio-pca953x.c
+@@ -1108,20 +1108,21 @@ static int pca953x_regcache_sync(struct device *dev)
  {
--	struct md_rdev *rdev;
-+	struct md_rdev *rdev = NULL, *iter;
- 	int err;
+ 	struct pca953x_chip *chip = dev_get_drvdata(dev);
+ 	int ret;
++	u8 regaddr;
  
- 	/* Find the rdev */
--	rdev_for_each_rcu(rdev, mddev) {
--		if (rdev->desc_nr == nr)
-+	rdev_for_each_rcu(iter, mddev) {
-+		if (iter->desc_nr == nr) {
-+			rdev = iter;
- 			break;
-+		}
+ 	/*
+ 	 * The ordering between direction and output is important,
+ 	 * sync these registers first and only then sync the rest.
+ 	 */
+-	ret = regcache_sync_region(chip->regmap, chip->regs->direction,
+-				   chip->regs->direction + NBANK(chip));
++	regaddr = pca953x_recalc_addr(chip, chip->regs->direction, 0);
++	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
+ 	if (ret) {
+ 		dev_err(dev, "Failed to sync GPIO dir registers: %d\n", ret);
+ 		return ret;
  	}
  
--	if (!rdev || rdev->desc_nr != nr) {
-+	if (!rdev) {
- 		pr_warn("%s: %d Could not find rdev with nr %d\n", __func__, __LINE__, nr);
- 		return;
- 	}
+-	ret = regcache_sync_region(chip->regmap, chip->regs->output,
+-				   chip->regs->output + NBANK(chip));
++	regaddr = pca953x_recalc_addr(chip, chip->regs->output, 0);
++	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
+ 	if (ret) {
+ 		dev_err(dev, "Failed to sync GPIO out registers: %d\n", ret);
+ 		return ret;
+@@ -1129,16 +1130,18 @@ static int pca953x_regcache_sync(struct device *dev)
+ 
+ #ifdef CONFIG_GPIO_PCA953X_IRQ
+ 	if (chip->driver_data & PCA_PCAL) {
+-		ret = regcache_sync_region(chip->regmap, PCAL953X_IN_LATCH,
+-					   PCAL953X_IN_LATCH + NBANK(chip));
++		regaddr = pca953x_recalc_addr(chip, PCAL953X_IN_LATCH, 0);
++		ret = regcache_sync_region(chip->regmap, regaddr,
++					   regaddr + NBANK(chip));
+ 		if (ret) {
+ 			dev_err(dev, "Failed to sync INT latch registers: %d\n",
+ 				ret);
+ 			return ret;
+ 		}
+ 
+-		ret = regcache_sync_region(chip->regmap, PCAL953X_INT_MASK,
+-					   PCAL953X_INT_MASK + NBANK(chip));
++		regaddr = pca953x_recalc_addr(chip, PCAL953X_INT_MASK, 0);
++		ret = regcache_sync_region(chip->regmap, regaddr,
++					   regaddr + NBANK(chip));
+ 		if (ret) {
+ 			dev_err(dev, "Failed to sync INT mask registers: %d\n",
+ 				ret);
+-- 
+2.35.1
+
 
 

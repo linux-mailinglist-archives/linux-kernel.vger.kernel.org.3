@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C08515490EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 551F5549344
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354467AbiFMM2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34328 "EHLO
+        id S1355554AbiFMLjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355482AbiFMMX4 (ORCPT
+        with ESMTP id S1354710AbiFML35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:23:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A056527B1C;
-        Mon, 13 Jun 2022 04:05:04 -0700 (PDT)
+        Mon, 13 Jun 2022 07:29:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916B42B18B;
+        Mon, 13 Jun 2022 03:45:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BD68614A1;
-        Mon, 13 Jun 2022 11:05:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49BA0C3411C;
-        Mon, 13 Jun 2022 11:05:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E622B80D3B;
+        Mon, 13 Jun 2022 10:45:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D115C34114;
+        Mon, 13 Jun 2022 10:45:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118303;
-        bh=xZMuTpWursdJJdYloy8uMjAmfjbR/M9GPbci0Jb3eq4=;
+        s=korg; t=1655117126;
+        bh=f619H1Y0UIbByrVUtvQiNjnfNNFzRcSFuh6z6FdYzYM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Dn1ayOHNR6q29BSUqutlCNWmd8NV2BweRtv6P763POj6qGoqDZUkGmGkabGG71m4w
-         N7yVTyfdpcVhxo7yfBG84eclpMslAlnLU7CJ6rPoLbTAnwHSVTU9YuV5+lzZv+HWLO
-         D06wp6dXCtfpbBWGDNSMQ1T4nrC67vWGLNXGWX2Y=
+        b=twH5aX5Y1iugKRzsvu1hA9vSySzcqLehHYbDsNNWuhbFAgzJ5aeMVIFJ6sNB59unI
+         JqwTH6WiApGnVIqZ5ogWmnvQtaYL4/Nesfhe6/Tsz2Ab2hhdL6e3aimeSA4IexbJKN
+         TYa3qUvsyMLHwqNp27CBktc400PEy7kD0R+fTxjQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        Hangyu Hua <hbh25y@gmail.com>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 009/172] usb: usbip: fix a refcount leak in stub_probe()
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 296/411] iio: adc: stmpe-adc: Fix wait_for_completion_timeout return value check
 Date:   Mon, 13 Jun 2022 12:09:29 +0200
-Message-Id: <20220613094852.630058915@linuxfoundation.org>
+Message-Id: <20220613094937.634194336@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,47 +56,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 9ec4cbf1cc55d126759051acfe328d489c5d6e60 ]
+[ Upstream commit d345b23200bcdbd2bd3582213d738c258b77718f ]
 
-usb_get_dev() is called in stub_device_alloc(). When stub_probe() fails
-after that, usb_put_dev() needs to be called to release the reference.
+wait_for_completion_timeout() returns unsigned long not long.
+it returns 0 if timed out, and positive if completed.
+The check for <= 0 is ambiguous and should be == 0 here
+indicating timeout which is the only error case
 
-Fix this by moving usb_put_dev() to sdev_free error path handling.
-
-Find this by code review.
-
-Fixes: 3ff67445750a ("usbip: fix error handling in stub_probe()")
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Link: https://lore.kernel.org/r/20220412020257.9767-1-hbh25y@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e813dde6f833 ("iio: stmpe-adc: Use wait_for_completion_timeout")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Philippe Schenker <philippe.schenker@toradex.com>
+Link: https://lore.kernel.org/r/20220412065150.14486-1-linmq006@gmail.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/usbip/stub_dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/adc/stmpe-adc.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
-index d8d3892e5a69..3c6d452e3bf4 100644
---- a/drivers/usb/usbip/stub_dev.c
-+++ b/drivers/usb/usbip/stub_dev.c
-@@ -393,7 +393,6 @@ static int stub_probe(struct usb_device *udev)
+diff --git a/drivers/iio/adc/stmpe-adc.c b/drivers/iio/adc/stmpe-adc.c
+index bd72727fc417..35ae801c4d35 100644
+--- a/drivers/iio/adc/stmpe-adc.c
++++ b/drivers/iio/adc/stmpe-adc.c
+@@ -61,7 +61,7 @@ struct stmpe_adc {
+ static int stmpe_read_voltage(struct stmpe_adc *info,
+ 		struct iio_chan_spec const *chan, int *val)
+ {
+-	long ret;
++	unsigned long ret;
  
- err_port:
- 	dev_set_drvdata(&udev->dev, NULL);
--	usb_put_dev(udev);
+ 	mutex_lock(&info->lock);
  
- 	/* we already have busid_priv, just lock busid_lock */
- 	spin_lock(&busid_priv->busid_lock);
-@@ -408,6 +407,7 @@ static int stub_probe(struct usb_device *udev)
- 	put_busid_priv(busid_priv);
+@@ -79,7 +79,7 @@ static int stmpe_read_voltage(struct stmpe_adc *info,
  
- sdev_free:
-+	usb_put_dev(udev);
- 	stub_device_free(sdev);
+ 	ret = wait_for_completion_timeout(&info->completion, STMPE_ADC_TIMEOUT);
  
- 	return rc;
+-	if (ret <= 0) {
++	if (ret == 0) {
+ 		stmpe_reg_write(info->stmpe, STMPE_REG_ADC_INT_STA,
+ 				STMPE_ADC_CH(info->channel));
+ 		mutex_unlock(&info->lock);
+@@ -96,7 +96,7 @@ static int stmpe_read_voltage(struct stmpe_adc *info,
+ static int stmpe_read_temp(struct stmpe_adc *info,
+ 		struct iio_chan_spec const *chan, int *val)
+ {
+-	long ret;
++	unsigned long ret;
+ 
+ 	mutex_lock(&info->lock);
+ 
+@@ -114,7 +114,7 @@ static int stmpe_read_temp(struct stmpe_adc *info,
+ 
+ 	ret = wait_for_completion_timeout(&info->completion, STMPE_ADC_TIMEOUT);
+ 
+-	if (ret <= 0) {
++	if (ret == 0) {
+ 		mutex_unlock(&info->lock);
+ 		return -ETIMEDOUT;
+ 	}
 -- 
 2.35.1
 

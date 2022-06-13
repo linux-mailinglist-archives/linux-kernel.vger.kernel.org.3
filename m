@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF13548A17
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5C654903A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354531AbiFMMoE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:44:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
+        id S1357156AbiFML42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355690AbiFMMjR (ORCPT
+        with ESMTP id S1356494AbiFMLuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:39:17 -0400
+        Mon, 13 Jun 2022 07:50:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F62D646F;
-        Mon, 13 Jun 2022 04:09:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C946248DC;
+        Mon, 13 Jun 2022 03:54:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EE65060907;
-        Mon, 13 Jun 2022 11:09:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0282DC34114;
-        Mon, 13 Jun 2022 11:09:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE003612C5;
+        Mon, 13 Jun 2022 10:54:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE8E8C34114;
+        Mon, 13 Jun 2022 10:54:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118563;
-        bh=93RaP5+sjMAjGExeJo5h97vFM+a0K8BZ5IZE4OzmE1U=;
+        s=korg; t=1655117651;
+        bh=pbz9DlEqA5TwTXAkZWWpEn6u8/MCy1hJFPIoVEmfs4U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ekXtdH+cmKnvgSZ7b6Xye+U0pPC90ct3uLn65LWBhTOPZ27PpB9/79NaBkZbAKugg
-         Qfzlb6qf4rdC1iVxcMdbmI6Y+RRjLPPCCroCjBqZnCOJfbHRn03NnXVkXhAS62+h0Z
-         WrxQ0Zou+df4Uh1h6QLOvZtbKog4iYOgQKeOlLp8=
+        b=dD9ukSlsAn2p0aZGm+UaGvjPFs/X8S0MEiqheAEtwJwMtVvGRozfR3Z9qZHCoGk4m
+         dbhF0ocajE6bWoY54kOrQFPuNfl5yqAHjkrNXzmZiWTVuAcQXkglivRGo9MNUL/t37
+         8e5AiyOhG4rDjaN8v8+bbIVyJwYbADXBCXFJgtBE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhen Ni <nizhen@uniontech.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 121/172] USB: host: isp116x: check return value after calling platform_get_resource()
+        stable@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 5.4 408/411] Input: bcm5974 - set missing URB_NO_TRANSFER_DMA_MAP urb flag
 Date:   Mon, 13 Jun 2022 12:11:21 +0200
-Message-Id: <20220613094919.547013087@linuxfoundation.org>
+Message-Id: <20220613094941.054285545@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhen Ni <nizhen@uniontech.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-[ Upstream commit 134a3408c2d3f7e23eb0e4556e0a2d9f36c2614e ]
+commit c42e65664390be7c1ef3838cd84956d3a2739d60 upstream.
 
-It will cause null-ptr-deref if platform_get_resource() returns NULL,
-we need check the return value.
+The bcm5974 driver does the allocation and dma mapping of the usb urb
+data buffer, but driver does not set the URB_NO_TRANSFER_DMA_MAP flag
+to let usb core know the buffer is already mapped.
 
-Signed-off-by: Zhen Ni <nizhen@uniontech.com>
-Link: https://lore.kernel.org/r/20220302033716.31272-1-nizhen@uniontech.com
+usb core tries to map the already mapped buffer, causing a warning:
+"xhci_hcd 0000:00:14.0: rejecting DMA map of vmalloc memory"
+
+Fix this by setting the URB_NO_TRANSFER_DMA_MAP, letting usb core
+know buffer is already mapped by bcm5974 driver
+
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: stable@vger.kernel.org
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215890
+Link: https://lore.kernel.org/r/20220606113636.588955-1-mathias.nyman@linux.intel.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/isp116x-hcd.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/input/mouse/bcm5974.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/host/isp116x-hcd.c b/drivers/usb/host/isp116x-hcd.c
-index 3055d9abfec3..3e5c54742bef 100644
---- a/drivers/usb/host/isp116x-hcd.c
-+++ b/drivers/usb/host/isp116x-hcd.c
-@@ -1541,10 +1541,12 @@ static int isp116x_remove(struct platform_device *pdev)
+--- a/drivers/input/mouse/bcm5974.c
++++ b/drivers/input/mouse/bcm5974.c
+@@ -942,17 +942,22 @@ static int bcm5974_probe(struct usb_inte
+ 	if (!dev->tp_data)
+ 		goto err_free_bt_buffer;
  
- 	iounmap(isp116x->data_reg);
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
--	release_mem_region(res->start, 2);
-+	if (res)
-+		release_mem_region(res->start, 2);
- 	iounmap(isp116x->addr_reg);
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	release_mem_region(res->start, 2);
-+	if (res)
-+		release_mem_region(res->start, 2);
+-	if (dev->bt_urb)
++	if (dev->bt_urb) {
+ 		usb_fill_int_urb(dev->bt_urb, udev,
+ 				 usb_rcvintpipe(udev, cfg->bt_ep),
+ 				 dev->bt_data, dev->cfg.bt_datalen,
+ 				 bcm5974_irq_button, dev, 1);
  
- 	usb_put_hcd(hcd);
- 	return 0;
--- 
-2.35.1
-
++		dev->bt_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
++	}
++
+ 	usb_fill_int_urb(dev->tp_urb, udev,
+ 			 usb_rcvintpipe(udev, cfg->tp_ep),
+ 			 dev->tp_data, dev->cfg.tp_datalen,
+ 			 bcm5974_irq_trackpad, dev, 1);
+ 
++	dev->tp_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
++
+ 	/* create bcm5974 device */
+ 	usb_make_path(udev, dev->phys, sizeof(dev->phys));
+ 	strlcat(dev->phys, "/input0", sizeof(dev->phys));
 
 

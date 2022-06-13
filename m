@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9BCD548A64
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DE965489F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353387AbiFMMmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56216 "EHLO
+        id S1380376AbiFMOCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354700AbiFMMi5 (ORCPT
+        with ESMTP id S1380800AbiFMNzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:38:57 -0400
+        Mon, 13 Jun 2022 09:55:08 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237E95DA46;
-        Mon, 13 Jun 2022 04:08:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272F281994;
+        Mon, 13 Jun 2022 04:35:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDBB5B80EB4;
-        Mon, 13 Jun 2022 11:08:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E9AFC34114;
-        Mon, 13 Jun 2022 11:08:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5A42B80EC7;
+        Mon, 13 Jun 2022 11:35:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47AECC34114;
+        Mon, 13 Jun 2022 11:35:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118513;
-        bh=yB94sC6Ai7wyzWspHN9iLZjqyLPm2rBloruxLiB/koQ=;
+        s=korg; t=1655120149;
+        bh=zHMW9ppmNkXJaFgtQFqNOJ8lJrK/3DXGtn+qX81wGKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fN+jzn4x1Qat9aYzf2sUz7PJedALE63Wldpv5eYsIl9CiC0kfXD5BbzqqTcfZFJzg
-         4Ic//9eeLplVVjqqyZk8jvknOKmz8/7PcmGoKdr7eDLrEvLFddHgTKu8LWXU/CyvVk
-         iXxLmMdh8uWvC3jNfSqV9dZFDxHaSrJhaRxMiJxg=
+        b=JayABLVMNimR3KBVKMXne5EdkNkZB1al7qGvnaMqnQOfUOEjIX1lECa7e75XF1Biq
+         tV8weJriBDawRBGzF+qPGjzeOrcV8Bet6ttuUvT2qwuX7abOhqvrUUCvh7O3iozPdt
+         RGAnyPIq+T2WvESpctGhP59kD6Y8a0izYl8Z0JLQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Evan Green <evgreen@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 103/172] net/mlx4_en: Fix wrong return value on ioctl EEPROM query failure
+Subject: [PATCH 5.18 238/339] USB: hcd-pci: Fully suspend across freeze/thaw cycle
 Date:   Mon, 13 Jun 2022 12:11:03 +0200
-Message-Id: <20220613094915.096858860@linuxfoundation.org>
+Message-Id: <20220613094933.874721606@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,36 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gal Pressman <gal@nvidia.com>
+From: Evan Green <evgreen@chromium.org>
 
-[ Upstream commit f5826c8c9d57210a17031af5527056eefdc2b7eb ]
+[ Upstream commit 63acaa8e9c65dc34dc249440216f8e977f5d2748 ]
 
-The ioctl EEPROM query wrongly returns success on read failures, fix
-that by returning the appropriate error code.
+The documentation for the freeze() method says that it "should quiesce
+the device so that it doesn't generate IRQs or DMA". The unspoken
+consequence of not doing this is that MSIs aimed at non-boot CPUs may
+get fully lost if they're sent during the period where the target CPU is
+offline.
 
-Fixes: 7202da8b7f71 ("ethtool, net/mlx4_en: Cable info, get_module_info/eeprom ethtool support")
-Signed-off-by: Gal Pressman <gal@nvidia.com>
-Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
-Link: https://lore.kernel.org/r/20220606115718.14233-1-tariqt@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+The current callbacks for USB HCD do not fully quiesce interrupts,
+specifically on XHCI. Change to use the full suspend/resume flow for
+freeze/thaw to ensure interrupts are fully quiesced. This fixes issues
+where USB devices fail to thaw during hibernation because XHCI misses
+its interrupt and cannot recover.
+
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Evan Green <evgreen@chromium.org>
+Link: https://lore.kernel.org/r/20220421103751.v3.2.I8226c7fdae88329ef70957b96a39b346c69a914e@changeid
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx4/en_ethtool.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/core/hcd-pci.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c b/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
-index 01275c376721..962851000ace 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
-@@ -2099,7 +2099,7 @@ static int mlx4_en_get_module_eeprom(struct net_device *dev,
- 			en_err(priv,
- 			       "mlx4_get_module_info i(%d) offset(%d) bytes_to_read(%d) - FAILED (0x%x)\n",
- 			       i, offset, ee->len - i, ret);
--			return 0;
-+			return ret;
- 		}
- 
- 		i += ret;
+diff --git a/drivers/usb/core/hcd-pci.c b/drivers/usb/core/hcd-pci.c
+index 8176bc81a635..ae5e6d572376 100644
+--- a/drivers/usb/core/hcd-pci.c
++++ b/drivers/usb/core/hcd-pci.c
+@@ -616,10 +616,10 @@ const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+ 	.suspend_noirq	= hcd_pci_suspend_noirq,
+ 	.resume_noirq	= hcd_pci_resume_noirq,
+ 	.resume		= hcd_pci_resume,
+-	.freeze		= check_root_hub_suspended,
++	.freeze		= hcd_pci_suspend,
+ 	.freeze_noirq	= check_root_hub_suspended,
+ 	.thaw_noirq	= NULL,
+-	.thaw		= NULL,
++	.thaw		= hcd_pci_resume,
+ 	.poweroff	= hcd_pci_suspend,
+ 	.poweroff_noirq	= hcd_pci_suspend_noirq,
+ 	.restore_noirq	= hcd_pci_resume_noirq,
 -- 
 2.35.1
 

@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56C354928D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFF2548CA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383147AbiFMOP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S1354581AbiFMLd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382262AbiFMOFi (ORCPT
+        with ESMTP id S1354330AbiFML3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:05:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7866394180;
-        Mon, 13 Jun 2022 04:40:34 -0700 (PDT)
+        Mon, 13 Jun 2022 07:29:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE8B22B20;
+        Mon, 13 Jun 2022 03:43:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B66AC61306;
-        Mon, 13 Jun 2022 11:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEE7BC34114;
-        Mon, 13 Jun 2022 11:40:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98D1360F9A;
+        Mon, 13 Jun 2022 10:43:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0640C34114;
+        Mon, 13 Jun 2022 10:43:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120432;
-        bh=cJI/Ff5eCY4YKk09fUdLQV5mFqySbVgI0sF7RBQJTzk=;
+        s=korg; t=1655117001;
+        bh=Z2Rg58H6WDvcZdH9B/nMDIno5SexIFF77zf26ZQUojA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WivYVYtufpViLfzy4i1GAMQfokPqWHrOv2xT+n3V1FCv5f9y5sSw8N+pui7QotER1
-         pp1O9aLEtkHjWyHJci9E+cCS6HIyilD2PirH0nPwm3phUwc5p733bZ+vzRfiJb2udL
-         gKCaLNBI+pFvwvWDlnH6EoWM6BUTuQG7X8cX9jWM=
+        b=rJU8tG/eP0lfvlxHI0jaQLVJvB9MmoeHYPpNT1zx7QwOPaG/aJa+PKuWf7+AFXyE7
+         6CJsIpRTRmGKIjI/R9JEhNuKWysyW+4ch4sWkEo539Z5UNE9vb06QuYg19Li7gF01g
+         guC1Hw+cmqfCl7xWtdgZ/DzpxvtbNP7Vy+cmxpLk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 030/298] iio: adc: stmpe-adc: Fix wait_for_completion_timeout return value check
+        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH 5.4 251/411] irqchip: irq-xtensa-mx: fix initial IRQ affinity
 Date:   Mon, 13 Jun 2022 12:08:44 +0200
-Message-Id: <20220613094925.845754621@linuxfoundation.org>
+Message-Id: <20220613094936.297010791@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,67 +53,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Max Filippov <jcmvbkbc@gmail.com>
 
-[ Upstream commit d345b23200bcdbd2bd3582213d738c258b77718f ]
+commit a255ee29252066d621df5d6b420bf534c6ba5bc0 upstream.
 
-wait_for_completion_timeout() returns unsigned long not long.
-it returns 0 if timed out, and positive if completed.
-The check for <= 0 is ambiguous and should be == 0 here
-indicating timeout which is the only error case
+When irq-xtensa-mx chip is used in non-SMP configuration its
+irq_set_affinity callback is not called leaving IRQ affinity set empty.
+As a result IRQ delivery does not work in that configuration.
+Initialize IRQ affinity of the xtensa MX interrupt distributor to CPU 0
+for all external IRQ lines.
 
-Fixes: e813dde6f833 ("iio: stmpe-adc: Use wait_for_completion_timeout")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Philippe Schenker <philippe.schenker@toradex.com>
-Link: https://lore.kernel.org/r/20220412065150.14486-1-linmq006@gmail.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iio/adc/stmpe-adc.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/irqchip/irq-xtensa-mx.c |   18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/iio/adc/stmpe-adc.c b/drivers/iio/adc/stmpe-adc.c
-index d2d405388499..83e0ac4467ca 100644
---- a/drivers/iio/adc/stmpe-adc.c
-+++ b/drivers/iio/adc/stmpe-adc.c
-@@ -61,7 +61,7 @@ struct stmpe_adc {
- static int stmpe_read_voltage(struct stmpe_adc *info,
- 		struct iio_chan_spec const *chan, int *val)
+--- a/drivers/irqchip/irq-xtensa-mx.c
++++ b/drivers/irqchip/irq-xtensa-mx.c
+@@ -151,14 +151,25 @@ static struct irq_chip xtensa_mx_irq_chi
+ 	.irq_set_affinity = xtensa_mx_irq_set_affinity,
+ };
+ 
++static void __init xtensa_mx_init_common(struct irq_domain *root_domain)
++{
++	unsigned int i;
++
++	irq_set_default_host(root_domain);
++	secondary_init_irq();
++
++	/* Initialize default IRQ routing to CPU 0 */
++	for (i = 0; i < XCHAL_NUM_EXTINTERRUPTS; ++i)
++		set_er(1, MIROUT(i));
++}
++
+ int __init xtensa_mx_init_legacy(struct device_node *interrupt_parent)
  {
--	long ret;
-+	unsigned long ret;
+ 	struct irq_domain *root_domain =
+ 		irq_domain_add_legacy(NULL, NR_IRQS - 1, 1, 0,
+ 				&xtensa_mx_irq_domain_ops,
+ 				&xtensa_mx_irq_chip);
+-	irq_set_default_host(root_domain);
+-	secondary_init_irq();
++	xtensa_mx_init_common(root_domain);
+ 	return 0;
+ }
  
- 	mutex_lock(&info->lock);
- 
-@@ -79,7 +79,7 @@ static int stmpe_read_voltage(struct stmpe_adc *info,
- 
- 	ret = wait_for_completion_timeout(&info->completion, STMPE_ADC_TIMEOUT);
- 
--	if (ret <= 0) {
-+	if (ret == 0) {
- 		stmpe_reg_write(info->stmpe, STMPE_REG_ADC_INT_STA,
- 				STMPE_ADC_CH(info->channel));
- 		mutex_unlock(&info->lock);
-@@ -96,7 +96,7 @@ static int stmpe_read_voltage(struct stmpe_adc *info,
- static int stmpe_read_temp(struct stmpe_adc *info,
- 		struct iio_chan_spec const *chan, int *val)
- {
--	long ret;
-+	unsigned long ret;
- 
- 	mutex_lock(&info->lock);
- 
-@@ -114,7 +114,7 @@ static int stmpe_read_temp(struct stmpe_adc *info,
- 
- 	ret = wait_for_completion_timeout(&info->completion, STMPE_ADC_TIMEOUT);
- 
--	if (ret <= 0) {
-+	if (ret == 0) {
- 		mutex_unlock(&info->lock);
- 		return -ETIMEDOUT;
- 	}
--- 
-2.35.1
-
+@@ -168,8 +179,7 @@ static int __init xtensa_mx_init(struct
+ 	struct irq_domain *root_domain =
+ 		irq_domain_add_linear(np, NR_IRQS, &xtensa_mx_irq_domain_ops,
+ 				&xtensa_mx_irq_chip);
+-	irq_set_default_host(root_domain);
+-	secondary_init_irq();
++	xtensa_mx_init_common(root_domain);
+ 	return 0;
+ }
+ IRQCHIP_DECLARE(xtensa_mx_irq_chip, "cdns,xtensa-mx", xtensa_mx_init);
 
 

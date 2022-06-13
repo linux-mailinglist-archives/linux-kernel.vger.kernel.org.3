@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24615490A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E1B548DE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349973AbiFMMLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:11:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49900 "EHLO
+        id S1355052AbiFMLhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358977AbiFMMFD (ORCPT
+        with ESMTP id S1354779AbiFMLaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:05:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED2250E31;
-        Mon, 13 Jun 2022 03:58:27 -0700 (PDT)
+        Mon, 13 Jun 2022 07:30:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693BB3F895;
+        Mon, 13 Jun 2022 03:45:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 703E161257;
-        Mon, 13 Jun 2022 10:58:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F1D2C34114;
-        Mon, 13 Jun 2022 10:58:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 06B0A6125B;
+        Mon, 13 Jun 2022 10:45:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7614C341C5;
+        Mon, 13 Jun 2022 10:45:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117905;
-        bh=88S4UqxzOaOPnauPhayDirdJ9qnG1tlVJt8mICmGb1U=;
+        s=korg; t=1655117140;
+        bh=tMHChbYYjVBJpTD7YytOaNZeLSoCVoyzRz2g8h/goQk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aJ1ddicuGtZLminLaNJzn/t4rRsAQNuhWrcp/GsWI63kyiUR6pT4Ng9a4/HZ08apP
-         B/DhslwHGyyuj3vxOOCvXhVWNt2QsE12UcGCxtA3K9wJGDp/3hcC4Wn3lPPOvAFObQ
-         U2XD30rtlppFkCEzj8NJXwoqdS6uFJpSuq6qKsgc=
+        b=jQckH0LouPtDvmIWSSpUIbuleZXYpdV3FKRRsC7ZchQe6jkI5u2WCTyZ6rUFlxmqx
+         apuo33UG4qwC7XvOlrJlqLY8jsQ+1Wv5C0VzVtdhfC153eXAuXARVx6uNjYNh7mUfC
+         rSnJHnVhOT0N9J20fffDsFAbikjcS6yrhP39EXpY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 4.19 159/287] scsi: ufs: qcom: Add a readl() to make sure ref_clk gets enabled
-Date:   Mon, 13 Jun 2022 12:09:43 +0200
-Message-Id: <20220613094928.700931655@linuxfoundation.org>
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 311/411] serial: sh-sci: Dont allow CS5-6
+Date:   Mon, 13 Jun 2022 12:09:44 +0200
+Message-Id: <20220613094938.072987533@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,51 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-commit 8eecddfca30e1651dc1c74531ed5eef21dcce7e3 upstream.
+[ Upstream commit 9b87162de8be26bf3156460b37deee6399fd0fcb ]
 
-In ufs_qcom_dev_ref_clk_ctrl(), it was noted that the ref_clk needs to be
-stable for at least 1us. Even though there is wmb() to make sure the write
-gets "completed", there is no guarantee that the write actually reached the
-UFS device. There is a good chance that the write could be stored in a
-Write Buffer (WB). In that case, even though the CPU waits for 1us, the
-ref_clk might not be stable for that period.
+Only CS7 and CS8 seem supported but CSIZE is not sanitized from
+CS5 or CS6 to CS8.
 
-So lets do a readl() to make sure that the previous write has reached the
-UFS device before udelay().
+Set CSIZE correctly so that userspace knows the effective value.
+Incorrect CSIZE also results in miscalculation of the frame bits in
+tty_get_char_size() or in its predecessor where the roughly the same
+code is directly within uart_update_timeout().
 
-Also, the wmb() after writel_relaxed() is not really needed. Both writel()
-and readl() are ordered on all architectures and the CPU won't speculate
-instructions after readl() due to the in-built control dependency with read
-value on weakly ordered architectures. So it can be safely removed.
-
-Link: https://lore.kernel.org/r/20220504084212.11605-4-manivannan.sadhasivam@linaro.org
-Fixes: f06fcc7155dc ("scsi: ufs-qcom: add QUniPro hardware support and power optimizations")
-Cc: stable@vger.kernel.org
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: 1da177e4c3f4 (Linux-2.6.12-rc2)
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-6-ilpo.jarvinen@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/ufs/ufs-qcom.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/tty/serial/sh-sci.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/scsi/ufs/ufs-qcom.c
-+++ b/drivers/scsi/ufs/ufs-qcom.c
-@@ -910,8 +910,11 @@ static void ufs_qcom_dev_ref_clk_ctrl(st
+diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+index ecff9b208808..c066bb7f07b0 100644
+--- a/drivers/tty/serial/sh-sci.c
++++ b/drivers/tty/serial/sh-sci.c
+@@ -2395,8 +2395,12 @@ static void sci_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	int best_clk = -1;
+ 	unsigned long flags;
  
- 		writel_relaxed(temp, host->dev_ref_clk_ctrl_mmio);
- 
--		/* ensure that ref_clk is enabled/disabled before we return */
--		wmb();
-+		/*
-+		 * Make sure the write to ref_clk reaches the destination and
-+		 * not stored in a Write Buffer (WB).
-+		 */
-+		readl(host->dev_ref_clk_ctrl_mmio);
- 
- 		/*
- 		 * If we call hibern8 exit after this, we need to make sure that
+-	if ((termios->c_cflag & CSIZE) == CS7)
++	if ((termios->c_cflag & CSIZE) == CS7) {
+ 		smr_val |= SCSMR_CHR;
++	} else {
++		termios->c_cflag &= ~CSIZE;
++		termios->c_cflag |= CS8;
++	}
+ 	if (termios->c_cflag & PARENB)
+ 		smr_val |= SCSMR_PE;
+ 	if (termios->c_cflag & PARODD)
+-- 
+2.35.1
+
 
 

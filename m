@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8FC54991C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A15548CD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357485AbiFMMag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
+        id S1379237AbiFMNuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356733AbiFMMYL (ORCPT
+        with ESMTP id S1379077AbiFMNnn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:24:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925D11FCC7;
-        Mon, 13 Jun 2022 04:05:25 -0700 (PDT)
+        Mon, 13 Jun 2022 09:43:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 921683EB8D;
+        Mon, 13 Jun 2022 04:31:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15232B80EAB;
-        Mon, 13 Jun 2022 11:05:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F24C34114;
-        Mon, 13 Jun 2022 11:05:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2FE36125A;
+        Mon, 13 Jun 2022 11:31:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9CA4C34114;
+        Mon, 13 Jun 2022 11:31:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118322;
-        bh=zW+2x77bqaM5lcgA4zPuxWYPKaH99HYp4WgkQ+XVlik=;
+        s=korg; t=1655119906;
+        bh=r+9jZckJhU5GOlndnobg0898jPtm8X7hVE+DfhMLKLs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YObQPQz0rMPjgPrAKFe53/Ec9Thlg4FSccKm+tx5201eQGZlw/Xh7T5bBRPWky63n
-         9HXZcX1fzitcyXOR+vz0e6QRptBmTzqrPEhV1Q2tc9iZZOK3+RL9XaMshfUar7wTJA
-         TrUDyCMByVBVaEoTzP5ANcOq++rQNG6ORdGSeGz8=
+        b=Tgto6gzApPgMlGWeD64sc5eJSIp0luy1bd+GVSRfjKbda2oDrYLU5m2fk31ukgs5f
+         a4YG8sd4no5gT7TEE+TjudPlSMe7G2ViFBk4lBltxe2ACy3Qo5M0unPM1K8t7/ahgO
+         CHe3RIMkeAHjUcsH/fK+17KgTFKlaEGHGhQWrn50=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheng Yongjun <zhengyongjun3@huawei.com>,
+        stable@vger.kernel.org,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 016/172] usb: dwc3: pci: Fix pm_runtime_get_sync() error checking
+Subject: [PATCH 5.18 151/339] Bluetooth: MGMT: Add conditions for setting HCI_CONN_FLAG_REMOTE_WAKEUP
 Date:   Mon, 13 Jun 2022 12:09:36 +0200
-Message-Id: <20220613094854.316915427@linuxfoundation.org>
+Message-Id: <20220613094931.264269801@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,36 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheng Yongjun <zhengyongjun3@huawei.com>
+From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 
-[ Upstream commit a03e2ddab8e735e2cc315609b297b300e9cc60d2 ]
+[ Upstream commit a9a347655d224fa2841877957b34fc9d491fc2d7 ]
 
-If the device is already in a runtime PM enabled state
-pm_runtime_get_sync() will return 1, so a test for negative
-value should be used to check for errors.
+HCI_CONN_FLAG_REMOTE_WAKEUP can only be set if device can be programmed
+in the allowlist which in case of device using RPA requires LL Privacy
+support to be enabled.
 
-Fixes: 8eed00b237a28 ("usb: dwc3: pci: Runtime resume child device from wq")
-Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
-Link: https://lore.kernel.org/r/20220422062652.10575-1-zhengyongjun3@huawei.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215768
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-pci.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/bluetooth/mgmt.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/drivers/usb/dwc3/dwc3-pci.c b/drivers/usb/dwc3/dwc3-pci.c
-index 98df8d52c765..a5a8c5712bce 100644
---- a/drivers/usb/dwc3/dwc3-pci.c
-+++ b/drivers/usb/dwc3/dwc3-pci.c
-@@ -213,7 +213,7 @@ static void dwc3_pci_resume_work(struct work_struct *work)
- 	int ret;
+diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+index d2d390534e54..74937a834648 100644
+--- a/net/bluetooth/mgmt.c
++++ b/net/bluetooth/mgmt.c
+@@ -4529,6 +4529,23 @@ static int set_device_flags(struct sock *sk, struct hci_dev *hdev, void *data,
+ 		params = hci_conn_params_lookup(hdev, &cp->addr.bdaddr,
+ 						le_addr_type(cp->addr.type));
+ 		if (params) {
++			DECLARE_BITMAP(flags, __HCI_CONN_NUM_FLAGS);
++
++			bitmap_from_u64(flags, current_flags);
++
++			/* Devices using RPAs can only be programmed in the
++			 * acceptlist LL Privacy has been enable otherwise they
++			 * cannot mark HCI_CONN_FLAG_REMOTE_WAKEUP.
++			 */
++			if (test_bit(HCI_CONN_FLAG_REMOTE_WAKEUP, flags) &&
++			    !use_ll_privacy(hdev) &&
++			    hci_find_irk_by_addr(hdev, &params->addr,
++						 params->addr_type)) {
++				bt_dev_warn(hdev,
++					    "Cannot set wakeable for RPA");
++				goto unlock;
++			}
++
+ 			bitmap_from_u64(params->flags, current_flags);
+ 			status = MGMT_STATUS_SUCCESS;
  
- 	ret = pm_runtime_get_sync(&dwc3->dev);
--	if (ret) {
-+	if (ret < 0) {
- 		pm_runtime_put_sync_autosuspend(&dwc3->dev);
- 		return;
+@@ -4545,6 +4562,7 @@ static int set_device_flags(struct sock *sk, struct hci_dev *hdev, void *data,
+ 		}
  	}
+ 
++unlock:
+ 	hci_dev_unlock(hdev);
+ 
+ done:
 -- 
 2.35.1
 

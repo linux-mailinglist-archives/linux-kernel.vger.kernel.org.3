@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1FE7548E6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9ED548C54
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379957AbiFMNvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41926 "EHLO
+        id S1354162AbiFMNEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379884AbiFMNp0 (ORCPT
+        with ESMTP id S1354880AbiFMMzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:45:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 885E91056E;
-        Mon, 13 Jun 2022 04:32:43 -0700 (PDT)
+        Mon, 13 Jun 2022 08:55:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1113911831;
+        Mon, 13 Jun 2022 04:16:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A12A6124E;
-        Mon, 13 Jun 2022 11:32:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F55AC34114;
-        Mon, 13 Jun 2022 11:32:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 992C660B6B;
+        Mon, 13 Jun 2022 11:16:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A412BC34114;
+        Mon, 13 Jun 2022 11:16:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119962;
-        bh=ztj+oUbb6Cd9GnpvGfJ0R4kOLlLI60vw4D0kCAyDj0U=;
+        s=korg; t=1655119001;
+        bh=MNaiuG4N1VwUKOrgpMZ+BnxOCSCj0LiesIi3WOBys/I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZGpf0NKdrCgRFktgzWhMYA05EEcgsNVtiyQKgMEgZ1x/AoLQSbufOUl7fvl4DtgSf
-         1VS9nYgc2mxFgl0fkaLO8UtLMyCsa/THpzHat7xlqzYez+JCJvSJmcy4JBCFfGb02E
-         usiOZnp+lpQH+ar3aQWCgSnOTSKTF+sYzzjmftJQ=
+        b=C0+4pNx6l6ESYLCptqfPJqOp9M6a6hvcB1Re7YJ+3LXCe0SJXRFAvZfTGdsu91mRl
+         2vJCuh3IJHjDbw9qblhBFJMjBoaH+D69BLYUzqt209xDM9RBkhjGedusvBf5Ao7cg9
+         80QnyPnvuhLG10y0BWMtKoPirNw4xLCCv3p0ScNw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 181/339] netfilter: nf_tables: use kfree_rcu(ptr, rcu) to release hooks in clean_net path
+Subject: [PATCH 5.15 104/247] gpio: pca953x: use the correct register address to do regcache sync
 Date:   Mon, 13 Jun 2022 12:10:06 +0200
-Message-Id: <20220613094932.169162107@linuxfoundation.org>
+Message-Id: <20220613094926.111147019@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +55,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Haibo Chen <haibo.chen@nxp.com>
 
-[ Upstream commit ab5e5c062f67c5ae8cd07f0632ffa62dc0e7d169 ]
+[ Upstream commit 43624eda86c98b0de726d0b6f2516ccc3ef7313f ]
 
-Use kfree_rcu(ptr, rcu) variant instead as described by ae089831ff28
-("netfilter: nf_tables: prefer kfree_rcu(ptr, rcu) variant").
+For regcache_sync_region, need to use pca953x_recalc_addr() to get
+the real register address.
 
-Fixes: f9a43007d3f7 ("netfilter: nf_tables: double hook unregistration in netns path")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: b76574300504 ("gpio: pca953x: Restore registers after suspend/resume cycle")
+Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpio/gpio-pca953x.c | 19 +++++++++++--------
+ 1 file changed, 11 insertions(+), 8 deletions(-)
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index b6a920813005..a0981e7cb211 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -7326,7 +7326,7 @@ static void __nft_unregister_flowtable_net_hooks(struct net *net,
- 		nf_unregister_net_hook(net, &hook->ops);
- 		if (release_netdev) {
- 			list_del(&hook->list);
--			kfree_rcu(hook);
-+			kfree_rcu(hook, rcu);
- 		}
+diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
+index 8726921a1129..33683295a0bf 100644
+--- a/drivers/gpio/gpio-pca953x.c
++++ b/drivers/gpio/gpio-pca953x.c
+@@ -1108,20 +1108,21 @@ static int pca953x_regcache_sync(struct device *dev)
+ {
+ 	struct pca953x_chip *chip = dev_get_drvdata(dev);
+ 	int ret;
++	u8 regaddr;
+ 
+ 	/*
+ 	 * The ordering between direction and output is important,
+ 	 * sync these registers first and only then sync the rest.
+ 	 */
+-	ret = regcache_sync_region(chip->regmap, chip->regs->direction,
+-				   chip->regs->direction + NBANK(chip));
++	regaddr = pca953x_recalc_addr(chip, chip->regs->direction, 0);
++	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
+ 	if (ret) {
+ 		dev_err(dev, "Failed to sync GPIO dir registers: %d\n", ret);
+ 		return ret;
  	}
- }
+ 
+-	ret = regcache_sync_region(chip->regmap, chip->regs->output,
+-				   chip->regs->output + NBANK(chip));
++	regaddr = pca953x_recalc_addr(chip, chip->regs->output, 0);
++	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
+ 	if (ret) {
+ 		dev_err(dev, "Failed to sync GPIO out registers: %d\n", ret);
+ 		return ret;
+@@ -1129,16 +1130,18 @@ static int pca953x_regcache_sync(struct device *dev)
+ 
+ #ifdef CONFIG_GPIO_PCA953X_IRQ
+ 	if (chip->driver_data & PCA_PCAL) {
+-		ret = regcache_sync_region(chip->regmap, PCAL953X_IN_LATCH,
+-					   PCAL953X_IN_LATCH + NBANK(chip));
++		regaddr = pca953x_recalc_addr(chip, PCAL953X_IN_LATCH, 0);
++		ret = regcache_sync_region(chip->regmap, regaddr,
++					   regaddr + NBANK(chip));
+ 		if (ret) {
+ 			dev_err(dev, "Failed to sync INT latch registers: %d\n",
+ 				ret);
+ 			return ret;
+ 		}
+ 
+-		ret = regcache_sync_region(chip->regmap, PCAL953X_INT_MASK,
+-					   PCAL953X_INT_MASK + NBANK(chip));
++		regaddr = pca953x_recalc_addr(chip, PCAL953X_INT_MASK, 0);
++		ret = regcache_sync_region(chip->regmap, regaddr,
++					   regaddr + NBANK(chip));
+ 		if (ret) {
+ 			dev_err(dev, "Failed to sync INT mask registers: %d\n",
+ 				ret);
 -- 
 2.35.1
 

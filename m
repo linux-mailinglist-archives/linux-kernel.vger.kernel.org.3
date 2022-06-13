@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2138548E42
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABEEA549803
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357638AbiFMLyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56348 "EHLO
+        id S241931AbiFMKQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:16:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356163AbiFMLuD (ORCPT
+        with ESMTP id S241612AbiFMKQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:50:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F202EA0A;
-        Mon, 13 Jun 2022 03:53:55 -0700 (PDT)
+        Mon, 13 Jun 2022 06:16:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9099DF95;
+        Mon, 13 Jun 2022 03:15:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51F1CB80E07;
-        Mon, 13 Jun 2022 10:53:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D1F0C34114;
-        Mon, 13 Jun 2022 10:53:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4982861490;
+        Mon, 13 Jun 2022 10:15:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 552AFC3411C;
+        Mon, 13 Jun 2022 10:15:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117632;
-        bh=UXuQefQutvPn6nHbF+TpBNd3dPHMCJ67gIY7ZQM4Km4=;
+        s=korg; t=1655115302;
+        bh=08EMK0gOc1s8fDqsa5otPCkfPEWHoIcvRbnM1fHm79s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eXBHIPjNS2RaP66OZT+TXxnumEAhCwfJjDY6LlBmtGdvFo/puoJFJrpA8Gb0qjkUd
-         Sifo7THAlbAMZvF8GIJHmxe54c2/vuVCQ4fqASfJpUwwKK6LIeYjKC4zR4QJMailWS
-         6XapUvXckdou85HDp/UnyM6AiiLRie+HnpdFmBUs=
+        b=fw5KJBkngj9pxI4tHlHr2tKATz1011HMeNYkZbKBS3egKJGjfVqXXbtjrNdes/g7u
+         w2VsSTcCgMS0v+xxTj2xxdneUIQbKha+WkZuMlHWhZbKgNmgzEm3+cDi7qor+tWoRb
+         f0vCTgFi+IsM8d0ysg7Ct543OlCeOoQTHxu6Shqs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
-        Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 075/287] inotify: show inotify mask flags in proc fdinfo
+        stable@vger.kernel.org, Marc Dionne <marc.dionne@auristor.com>,
+        David Howells <dhowells@redhat.com>,
+        linux-afs@lists.infradead.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 025/167] rxrpc: Return an error to sendmsg if call failed
 Date:   Mon, 13 Jun 2022 12:08:19 +0200
-Message-Id: <20220613094926.148511904@linuxfoundation.org>
+Message-Id: <20220613094846.691228631@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,84 +57,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amir Goldstein <amir73il@gmail.com>
+From: David Howells <dhowells@redhat.com>
 
-[ Upstream commit a32e697cda27679a0327ae2cafdad8c7170f548f ]
+[ Upstream commit 4ba68c5192554876bd8c3afd904e3064d2915341 ]
 
-The inotify mask flags IN_ONESHOT and IN_EXCL_UNLINK are not "internal
-to kernel" and should be exposed in procfs fdinfo so CRIU can restore
-them.
+If at the end of rxrpc sendmsg() or rxrpc_kernel_send_data() the call that
+was being given data was aborted remotely or otherwise failed, return an
+error rather than returning the amount of data buffered for transmission.
 
-Fixes: 6933599697c9 ("inotify: hide internal kernel bits from fdinfo")
-Link: https://lore.kernel.org/r/20220422120327.3459282-2-amir73il@gmail.com
-Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Jan Kara <jack@suse.cz>
+The call (presumably) did not complete, so there's not much point
+continuing with it.  AF_RXRPC considers it "complete" and so will be
+unwilling to do anything else with it - and won't send a notification for
+it, deeming the return from sendmsg sufficient.
+
+Not returning an error causes afs to incorrectly handle a StoreData
+operation that gets interrupted by a change of address due to NAT
+reconfiguration.
+
+This doesn't normally affect most operations since their request parameters
+tend to fit into a single UDP packet and afs_make_call() returns before the
+server responds; StoreData is different as it involves transmission of a
+lot of data.
+
+This can be triggered on a client by doing something like:
+
+	dd if=/dev/zero of=/afs/example.com/foo bs=1M count=512
+
+at one prompt, and then changing the network address at another prompt,
+e.g.:
+
+	ifconfig enp6s0 inet 192.168.6.2 && route add 192.168.6.1 dev enp6s0
+
+Tracing packets on an Auristor fileserver looks something like:
+
+192.168.6.1 -> 192.168.6.3  RX 107 ACK Idle  Seq: 0  Call: 4  Source Port: 7000  Destination Port: 7001
+192.168.6.3 -> 192.168.6.1  AFS (RX) 1482 FS Request: Unknown(64538) (64538)
+192.168.6.3 -> 192.168.6.1  AFS (RX) 1482 FS Request: Unknown(64538) (64538)
+192.168.6.1 -> 192.168.6.3  RX 107 ACK Idle  Seq: 0  Call: 4  Source Port: 7000  Destination Port: 7001
+<ARP exchange for 192.168.6.2>
+192.168.6.2 -> 192.168.6.1  AFS (RX) 1482 FS Request: Unknown(0) (0)
+192.168.6.2 -> 192.168.6.1  AFS (RX) 1482 FS Request: Unknown(0) (0)
+192.168.6.1 -> 192.168.6.2  RX 107 ACK Exceeds Window  Seq: 0  Call: 4  Source Port: 7000  Destination Port: 7001
+192.168.6.1 -> 192.168.6.2  RX 74 ABORT  Seq: 0  Call: 4  Source Port: 7000  Destination Port: 7001
+192.168.6.1 -> 192.168.6.2  RX 74 ABORT  Seq: 29321  Call: 4  Source Port: 7000  Destination Port: 7001
+
+The Auristor fileserver logs code -453 (RXGEN_SS_UNMARSHAL), but the abort
+code received by kafs is -5 (RX_PROTOCOL_ERROR) as the rx layer sees the
+condition and generates an abort first and the unmarshal error is a
+consequence of that at the application layer.
+
+Reported-by: Marc Dionne <marc.dionne@auristor.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-afs@lists.infradead.org
+Link: http://lists.infradead.org/pipermail/linux-afs/2021-December/004810.html # v1
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/notify/fdinfo.c               | 11 ++---------
- fs/notify/inotify/inotify.h      | 12 ++++++++++++
- fs/notify/inotify/inotify_user.c |  2 +-
- 3 files changed, 15 insertions(+), 10 deletions(-)
+ net/rxrpc/sendmsg.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/fs/notify/fdinfo.c b/fs/notify/fdinfo.c
-index 86fcf5814279..74aeabbf0ea4 100644
---- a/fs/notify/fdinfo.c
-+++ b/fs/notify/fdinfo.c
-@@ -83,16 +83,9 @@ static void inotify_fdinfo(struct seq_file *m, struct fsnotify_mark *mark)
- 	inode_mark = container_of(mark, struct inotify_inode_mark, fsn_mark);
- 	inode = igrab(fsnotify_conn_inode(mark->connector));
- 	if (inode) {
--		/*
--		 * IN_ALL_EVENTS represents all of the mask bits
--		 * that we expose to userspace.  There is at
--		 * least one bit (FS_EVENT_ON_CHILD) which is
--		 * used only internally to the kernel.
--		 */
--		u32 mask = mark->mask & IN_ALL_EVENTS;
--		seq_printf(m, "inotify wd:%x ino:%lx sdev:%x mask:%x ignored_mask:%x ",
-+		seq_printf(m, "inotify wd:%x ino:%lx sdev:%x mask:%x ignored_mask:0 ",
- 			   inode_mark->wd, inode->i_ino, inode->i_sb->s_dev,
--			   mask, mark->ignored_mask);
-+			   inotify_mark_user_mask(mark));
- 		show_mark_fhandle(m, inode);
- 		seq_putc(m, '\n');
- 		iput(inode);
-diff --git a/fs/notify/inotify/inotify.h b/fs/notify/inotify/inotify.h
-index 7e4578d35b61..5d94c00b1233 100644
---- a/fs/notify/inotify/inotify.h
-+++ b/fs/notify/inotify/inotify.h
-@@ -21,6 +21,18 @@ static inline struct inotify_event_info *INOTIFY_E(struct fsnotify_event *fse)
- 	return container_of(fse, struct inotify_event_info, fse);
- }
+diff --git a/net/rxrpc/sendmsg.c b/net/rxrpc/sendmsg.c
+index 2ec1c29eeba4..b8e87804296c 100644
+--- a/net/rxrpc/sendmsg.c
++++ b/net/rxrpc/sendmsg.c
+@@ -336,6 +336,12 @@ static int rxrpc_send_data(struct rxrpc_sock *rx,
  
-+/*
-+ * INOTIFY_USER_FLAGS represents all of the mask bits that we expose to
-+ * userspace.  There is at least one bit (FS_EVENT_ON_CHILD) which is
-+ * used only internally to the kernel.
-+ */
-+#define INOTIFY_USER_MASK (IN_ALL_EVENTS | IN_ONESHOT | IN_EXCL_UNLINK)
-+
-+static inline __u32 inotify_mark_user_mask(struct fsnotify_mark *fsn_mark)
-+{
-+	return fsn_mark->mask & INOTIFY_USER_MASK;
-+}
-+
- extern void inotify_ignored_and_remove_idr(struct fsnotify_mark *fsn_mark,
- 					   struct fsnotify_group *group);
- extern int inotify_handle_event(struct fsnotify_group *group,
-diff --git a/fs/notify/inotify/inotify_user.c b/fs/notify/inotify/inotify_user.c
-index 97a51690338e..83d0b9356844 100644
---- a/fs/notify/inotify/inotify_user.c
-+++ b/fs/notify/inotify/inotify_user.c
-@@ -96,7 +96,7 @@ static inline __u32 inotify_arg_to_mask(u32 arg)
- 	mask = (FS_IN_IGNORED | FS_EVENT_ON_CHILD | FS_UNMOUNT);
- 
- 	/* mask off the flags used to open the fd */
--	mask |= (arg & (IN_ALL_EVENTS | IN_ONESHOT | IN_EXCL_UNLINK));
-+	mask |= (arg & INOTIFY_USER_MASK);
- 
- 	return mask;
- }
+ success:
+ 	ret = copied;
++	if (READ_ONCE(call->state) == RXRPC_CALL_COMPLETE) {
++		read_lock_bh(&call->state_lock);
++		if (call->error < 0)
++			ret = call->error;
++		read_unlock_bh(&call->state_lock);
++	}
+ out:
+ 	call->tx_pending = skb;
+ 	_leave(" = %d", ret);
 -- 
 2.35.1
 

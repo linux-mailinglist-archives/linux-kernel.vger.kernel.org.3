@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2563549132
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23376548CF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356437AbiFMLtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33498 "EHLO
+        id S1377799AbiFMNeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356178AbiFMLnv (ORCPT
+        with ESMTP id S1378093AbiFMNaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:43:51 -0400
+        Mon, 13 Jun 2022 09:30:52 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE0046663;
-        Mon, 13 Jun 2022 03:50:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945256EC61;
+        Mon, 13 Jun 2022 04:25:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 413A3612C3;
-        Mon, 13 Jun 2022 10:50:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45782C34114;
-        Mon, 13 Jun 2022 10:50:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2999A61038;
+        Mon, 13 Jun 2022 11:25:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06CF7C34114;
+        Mon, 13 Jun 2022 11:25:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117424;
-        bh=SCrb2B54rfJkpjKpDTRTPDuM7Oj8CekCHGji+4OOpcY=;
+        s=korg; t=1655119534;
+        bh=pxwfveOQbs3q4CWvuvWKEN9ZYUsSv29hVviNEHGwBkA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2PYxKuXJXCU8DNYwRZVsyJF8tYJES2foW4RueQskrUHghGT6qkwPkH68iRnKfkzq9
-         XFHa0pvq/FzD5kD3aWR2xqMwkRYvGWWUP3ZpZjup1QMF1PwZhVS7jpvJ0cU2+bAoI5
-         NzKdgoOVJBzufOIPSSUzwwXZmVKx7T1YcCEL1X7Q=
+        b=URHO8aOBrOeTZnKupBLkpkGMuPj6NqkKojjbCYvIhkz6cGKhtxGWRdAGf0JPgw5f+
+         9vpEsJhQ6cdDGAhv5jczsdJeA5idxKTQaqes6HbeIJR1ruVUOqTw0Xkrncnp0Btnun
+         sEaN9/iyVjVZD7N2240SrOMAcYf42T7PHU9miNeE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 028/287] ASoC: dapm: Dont fold register value changes into notifications
-Date:   Mon, 13 Jun 2022 12:07:32 +0200
-Message-Id: <20220613094924.718182639@linuxfoundation.org>
+Subject: [PATCH 5.18 028/339] misc: fastrpc: fix an incorrect NULL check on list iterator
+Date:   Mon, 13 Jun 2022 12:07:33 +0200
+Message-Id: <20220613094927.366173223@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Brown <broonie@kernel.org>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-[ Upstream commit ad685980469b9f9b99d4d6ea05f4cb8f57cb2234 ]
+[ Upstream commit 5ac11fe03a0a83042d1a040dbce4fa2fb5521e23 ]
 
-DAPM tracks and reports the value presented to the user from DAPM controls
-separately to the register value, these may diverge during initialisation
-or when an autodisable control is in use.
+The bug is here:
+	if (!buf) {
 
-When writing DAPM controls we currently report that a change has occurred
-if either the DAPM value or the value stored in the register has changed,
-meaning that if the two are out of sync we may appear to report a spurious
-event to userspace. Since we use this folded in value for nothing other
-than the value reported to userspace simply drop the folding in of the
-register change.
+The list iterator value 'buf' will *always* be set and non-NULL
+by list_for_each_entry(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty (in this case, the
+check 'if (!buf) {' will always be false and never exit expectly).
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Link: https://lore.kernel.org/r/20220428161833.3690050-1-broonie@kernel.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
+To fix the bug, use a new variable 'iter' as the list iterator,
+while use the original variable 'buf' as a dedicated pointer to
+point to the found element.
+
+Fixes: 2419e55e532de ("misc: fastrpc: add mmap/unmap support")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Link: https://lore.kernel.org/r/20220327062202.5720-1-xiam0nd.tong@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-dapm.c | 2 --
- 1 file changed, 2 deletions(-)
+ drivers/misc/fastrpc.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/sound/soc/soc-dapm.c b/sound/soc/soc-dapm.c
-index af9f28dd957d..4d70e6bc2c12 100644
---- a/sound/soc/soc-dapm.c
-+++ b/sound/soc/soc-dapm.c
-@@ -3302,7 +3302,6 @@ int snd_soc_dapm_put_volsw(struct snd_kcontrol *kcontrol,
- 			update.val = val;
- 			card->update = &update;
- 		}
--		change |= reg_change;
+diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
+index 29cf292c0aba..93ebd174d848 100644
+--- a/drivers/misc/fastrpc.c
++++ b/drivers/misc/fastrpc.c
+@@ -1606,17 +1606,18 @@ static int fastrpc_req_munmap_impl(struct fastrpc_user *fl,
+ 				   struct fastrpc_req_munmap *req)
+ {
+ 	struct fastrpc_invoke_args args[1] = { [0] = { 0 } };
+-	struct fastrpc_buf *buf, *b;
++	struct fastrpc_buf *buf = NULL, *iter, *b;
+ 	struct fastrpc_munmap_req_msg req_msg;
+ 	struct device *dev = fl->sctx->dev;
+ 	int err;
+ 	u32 sc;
  
- 		ret = soc_dapm_mixer_update_power(card, kcontrol, connect,
- 						  rconnect);
-@@ -3408,7 +3407,6 @@ int snd_soc_dapm_put_enum_double(struct snd_kcontrol *kcontrol,
- 			update.val = val;
- 			card->update = &update;
- 		}
--		change |= reg_change;
- 
- 		ret = soc_dapm_mux_update_power(card, kcontrol, item[0], e);
+ 	spin_lock(&fl->lock);
+-	list_for_each_entry_safe(buf, b, &fl->mmaps, node) {
+-		if ((buf->raddr == req->vaddrout) && (buf->size == req->size))
++	list_for_each_entry_safe(iter, b, &fl->mmaps, node) {
++		if ((iter->raddr == req->vaddrout) && (iter->size == req->size)) {
++			buf = iter;
+ 			break;
+-		buf = NULL;
++		}
+ 	}
+ 	spin_unlock(&fl->lock);
  
 -- 
 2.35.1

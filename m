@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA58C54945B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3486E549281
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352269AbiFMLJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
+        id S1356769AbiFMLvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351828AbiFMLFH (ORCPT
+        with ESMTP id S1357065AbiFMLp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:05:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF96F27CF7;
-        Mon, 13 Jun 2022 03:34:11 -0700 (PDT)
+        Mon, 13 Jun 2022 07:45:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F39B63;
+        Mon, 13 Jun 2022 03:51:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B53E60F9A;
-        Mon, 13 Jun 2022 10:34:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BE6C34114;
-        Mon, 13 Jun 2022 10:34:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 059A7B80E07;
+        Mon, 13 Jun 2022 10:51:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63B48C34114;
+        Mon, 13 Jun 2022 10:51:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116451;
-        bh=Wk2SiS2mceLsePYCLyZsYF5/o+rOjRU/tSOFOuEtzhI=;
+        s=korg; t=1655117496;
+        bh=jMZXmEP/+RK0uQl0NLibbp+SHDtq/RGALhCcm54ehP8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lTm7UTcCcqvWmuWZkv03/QfVzgE5MbW5/J2WWpqaxqk9Sgmg7kyOYVCdUN0waAAoQ
-         HETStm58XJJlvUZl1Mgz1rOs0UnRGMnWgWkEVVKv1piWsQ6kNYlXt6+rP+a4okHnwz
-         sjHcvTdSwko1dtRXbRerCgng9qCzqTmY7GdXHH2Q=
+        b=q58wUsw/QOIDN3URvAwdPhSa/1MJRXy4fETA5uyh8K5IOsjdcSA1AQUCBROtvbEgK
+         lSDjhrDSfpfl4dCCuo4qrKsqiAaZe4mySAQ5yA8loAKcvxJ+bqgndvdsR2EegV79Rt
+         ypjDJsNCqPfTrQSLnBmxyrf9jB4foJzEi1wMybuo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        stable@vger.kernel.org, bumwoo lee <bw365.lee@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 193/218] clocksource/drivers/sp804: Avoid error on multiple instances
+Subject: [PATCH 5.4 378/411] extcon: Modify extcon device to be created after driver data is set
 Date:   Mon, 13 Jun 2022 12:10:51 +0200
-Message-Id: <20220613094926.472717198@linuxfoundation.org>
+Message-Id: <20220613094940.006563268@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,63 +55,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andre Przywara <andre.przywara@arm.com>
+From: bumwoo lee <bw365.lee@samsung.com>
 
-[ Upstream commit a98399cbc1e05f7b977419f03905501d566cf54e ]
+[ Upstream commit 5dcc2afe716d69f5112ce035cb14f007461ff189 ]
 
-When a machine sports more than one SP804 timer instance, we only bring
-up the first one, since multiple timers of the same kind are not useful
-to Linux. As this is intentional behaviour, we should not return an
-error message, as we do today:
-===============
-[    0.000800] Failed to initialize '/bus@8000000/motherboard-bus@8000000/iofpga-bus@300000000/timer@120000': -22
-===============
+Currently, someone can invoke the sysfs such as state_show()
+intermittently before dev_set_drvdata() is done.
+And it can be a cause of kernel Oops because of edev is Null at that time.
+So modified the driver registration to after setting drviver data.
 
-Replace the -EINVAL return with a debug message and return 0 instead.
+- Oops's backtrace.
 
-Also we do not reach the init function anymore if the DT node is
-disabled (as this is now handled by OF_DECLARE), so remove the explicit
-check for that case.
+Backtrace:
+[<c067865c>] (state_show) from [<c05222e8>] (dev_attr_show)
+[<c05222c0>] (dev_attr_show) from [<c02c66e0>] (sysfs_kf_seq_show)
+[<c02c6648>] (sysfs_kf_seq_show) from [<c02c496c>] (kernfs_seq_show)
+[<c02c4938>] (kernfs_seq_show) from [<c025e2a0>] (seq_read)
+[<c025e11c>] (seq_read) from [<c02c50a0>] (kernfs_fop_read)
+[<c02c5064>] (kernfs_fop_read) from [<c0231cac>] (__vfs_read)
+[<c0231c5c>] (__vfs_read) from [<c0231ee0>] (vfs_read)
+[<c0231e34>] (vfs_read) from [<c0232464>] (ksys_read)
+[<c02323f0>] (ksys_read) from [<c02324fc>] (sys_read)
+[<c02324e4>] (sys_read) from [<c00091d0>] (__sys_trace_return)
 
-This fixes a long standing bogus error when booting ARM's fastmodels.
-
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-Link: https://lore.kernel.org/r/20220506162522.3675399-1-andre.przywara@arm.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: bumwoo lee <bw365.lee@samsung.com>
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clocksource/timer-sp804.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/extcon/extcon.c | 29 +++++++++++++++++------------
+ 1 file changed, 17 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/clocksource/timer-sp804.c b/drivers/clocksource/timer-sp804.c
-index 3ac9dec9a038..42cac9262630 100644
---- a/drivers/clocksource/timer-sp804.c
-+++ b/drivers/clocksource/timer-sp804.c
-@@ -227,6 +227,11 @@ static int __init sp804_of_init(struct device_node *np)
- 	struct clk *clk1, *clk2;
- 	const char *name = of_get_property(np, "compatible", NULL);
+diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+index 5c9e156cd086..6b905c3d30f4 100644
+--- a/drivers/extcon/extcon.c
++++ b/drivers/extcon/extcon.c
+@@ -1230,19 +1230,14 @@ int extcon_dev_register(struct extcon_dev *edev)
+ 		edev->dev.type = &edev->extcon_dev_type;
+ 	}
  
-+	if (initialized) {
-+		pr_debug("%pOF: skipping further SP804 timer device\n", np);
-+		return 0;
-+	}
-+
- 	base = of_iomap(np, 0);
- 	if (!base)
- 		return -ENXIO;
-@@ -235,11 +240,6 @@ static int __init sp804_of_init(struct device_node *np)
- 	writel(0, base + TIMER_CTRL);
- 	writel(0, base + TIMER_2_BASE + TIMER_CTRL);
- 
--	if (initialized || !of_device_is_available(np)) {
--		ret = -EINVAL;
--		goto err;
+-	ret = device_register(&edev->dev);
+-	if (ret) {
+-		put_device(&edev->dev);
+-		goto err_dev;
 -	}
 -
- 	clk1 = of_clk_get(np, 0);
- 	if (IS_ERR(clk1))
- 		clk1 = NULL;
+ 	spin_lock_init(&edev->lock);
+-	edev->nh = devm_kcalloc(&edev->dev, edev->max_supported,
+-				sizeof(*edev->nh), GFP_KERNEL);
+-	if (!edev->nh) {
+-		ret = -ENOMEM;
+-		device_unregister(&edev->dev);
+-		goto err_dev;
++	if (edev->max_supported) {
++		edev->nh = kcalloc(edev->max_supported, sizeof(*edev->nh),
++				GFP_KERNEL);
++		if (!edev->nh) {
++			ret = -ENOMEM;
++			goto err_alloc_nh;
++		}
+ 	}
+ 
+ 	for (index = 0; index < edev->max_supported; index++)
+@@ -1253,6 +1248,12 @@ int extcon_dev_register(struct extcon_dev *edev)
+ 	dev_set_drvdata(&edev->dev, edev);
+ 	edev->state = 0;
+ 
++	ret = device_register(&edev->dev);
++	if (ret) {
++		put_device(&edev->dev);
++		goto err_dev;
++	}
++
+ 	mutex_lock(&extcon_dev_list_lock);
+ 	list_add(&edev->entry, &extcon_dev_list);
+ 	mutex_unlock(&extcon_dev_list_lock);
+@@ -1260,6 +1261,9 @@ int extcon_dev_register(struct extcon_dev *edev)
+ 	return 0;
+ 
+ err_dev:
++	if (edev->max_supported)
++		kfree(edev->nh);
++err_alloc_nh:
+ 	if (edev->max_supported)
+ 		kfree(edev->extcon_dev_type.groups);
+ err_alloc_groups:
+@@ -1320,6 +1324,7 @@ void extcon_dev_unregister(struct extcon_dev *edev)
+ 	if (edev->max_supported) {
+ 		kfree(edev->extcon_dev_type.groups);
+ 		kfree(edev->cables);
++		kfree(edev->nh);
+ 	}
+ 
+ 	put_device(&edev->dev);
 -- 
 2.35.1
 

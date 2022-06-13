@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AFE548B6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C206F5496E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383768AbiFMO1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
+        id S1351185AbiFMLDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383681AbiFMOXq (ORCPT
+        with ESMTP id S1350594AbiFMKzA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:23:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B73DA2E6A0;
-        Mon, 13 Jun 2022 04:44:50 -0700 (PDT)
+        Mon, 13 Jun 2022 06:55:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3155621E21;
+        Mon, 13 Jun 2022 03:31:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 540DA612A8;
-        Mon, 13 Jun 2022 11:44:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E27DC34114;
-        Mon, 13 Jun 2022 11:44:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4653B80E5E;
+        Mon, 13 Jun 2022 10:31:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40C15C3411C;
+        Mon, 13 Jun 2022 10:31:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120689;
-        bh=E3eQsWqo+oeKPDTgSdbGSmsVmraEOtwmrlowGmSCaqs=;
+        s=korg; t=1655116303;
+        bh=jbhtL23dw1SOfwSe9CIJ573qi3P1HYRs60jkyA5yyuE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aPol168qGCz8d89CwZQFMXdH7uzpUHshV6w7z/liETWrkNTlV7hg4405szknWkS6u
-         AkU3bkVpM3M2HoA6+E2dukom4VNoj9dsnpO2TBqm8w9UXpL0hjtRIBEabHRwtvpUTK
-         GzdGkwqkaQGJhhGVML8ZDFLW7VO8JwZUBiSadOLc=
+        b=rP705kCAYFd7auY/LH61pLpWBO6aqF3zavpHdW8L5bCUrw6a8E7yJGTa2BQcaTnMJ
+         SH6EQ9PxaVTt3Kaium80+4Ndi4CqbVl2onnOd+YtgDOTb4dCxttsREUv3DzspnlT3v
+         PnDwzl4CYXQI9lTMrrCUd7VGQ/7ckePNKQlM75G0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 122/298] afs: Fix infinite loop found by xfstest generic/676
+Subject: [PATCH 4.14 158/218] net: ethernet: mtk_eth_soc: out of bounds read in mtk_hwlro_get_fdir_entry()
 Date:   Mon, 13 Jun 2022 12:10:16 +0200
-Message-Id: <20220613094928.642942854@linuxfoundation.org>
+Message-Id: <20220613094925.386465718@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,63 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Howells <dhowells@redhat.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 17eabd42560f4636648ad65ba5b20228071e2363 ]
+[ Upstream commit e7e7104e2d5ddf3806a28695670f21bef471f1e1 ]
 
-In AFS, a directory is handled as a file that the client downloads and
-parses locally for the purposes of performing lookup and getdents
-operations.  The in-kernel afs filesystem has a number of functions that
-do this.
+The "fsp->location" variable comes from user via ethtool_get_rxnfc().
+Check that it is valid to prevent an out of bounds read.
 
-A directory file is arranged as a series of 2K blocks divided into
-32-byte slots, where a directory entry occupies one or more slots, plus
-each block starts with one or more metadata blocks.
-
-When parsing a block, if the last slots are occupied by a dirent that
-occupies more than a single slot and the file position points at a slot
-that's not the initial one, the logic in afs_dir_iterate_block() that
-skips over it won't advance the file pointer to the end of it.  This
-will cause an infinite loop in getdents() as it will keep retrying that
-block and failing to advance beyond the final entry.
-
-Fix this by advancing the file pointer if the next entry will be beyond
-it when we skip a block.
-
-This was found by the generic/676 xfstest but can also be triggered with
-something like:
-
-	~/xfstests-dev/src/t_readdir_3 /xfstest.test/z 4000 1
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Marc Dionne <marc.dionne@auristor.com>
-Tested-by: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
-Link: http://lore.kernel.org/r/165391973497.110268.2939296942213894166.stgit@warthog.procyon.org.uk/
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 7aab747e5563 ("net: ethernet: mediatek: add ethtool functions to configure RX flows of HW LRO")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/afs/dir.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/mediatek/mtk_eth_soc.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/fs/afs/dir.c b/fs/afs/dir.c
-index da9b4f8577a1..7f1cb3b73874 100644
---- a/fs/afs/dir.c
-+++ b/fs/afs/dir.c
-@@ -462,8 +462,11 @@ static int afs_dir_iterate_block(struct afs_vnode *dvnode,
- 		}
+diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+index dbd16dd5aa04..ade72b46e93c 100644
+--- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
++++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
+@@ -1579,6 +1579,9 @@ static int mtk_hwlro_get_fdir_entry(struct net_device *dev,
+ 	struct ethtool_rx_flow_spec *fsp =
+ 		(struct ethtool_rx_flow_spec *)&cmd->fs;
  
- 		/* skip if starts before the current position */
--		if (offset < curr)
-+		if (offset < curr) {
-+			if (next > curr)
-+				ctx->pos = blkoff + next * sizeof(union afs_xdr_dirent);
- 			continue;
-+		}
- 
- 		/* found the next entry */
- 		if (!dir_emit(ctx, dire->u.name, nlen,
++	if (fsp->location >= ARRAY_SIZE(mac->hwlro_ip))
++		return -EINVAL;
++
+ 	/* only tcp dst ipv4 is meaningful, others are meaningless */
+ 	fsp->flow_type = TCP_V4_FLOW;
+ 	fsp->h_u.tcp_ip4_spec.ip4dst = ntohl(mac->hwlro_ip[fsp->location]);
 -- 
 2.35.1
 

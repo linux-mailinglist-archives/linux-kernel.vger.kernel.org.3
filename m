@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A2A854873F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F6E05487F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385243AbiFMOl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:41:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        id S1376638AbiFMNWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1385615AbiFMOka (ORCPT
+        with ESMTP id S1376926AbiFMNTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:40:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61B5CAFAEF;
-        Mon, 13 Jun 2022 04:50:15 -0700 (PDT)
+        Mon, 13 Jun 2022 09:19:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD4869494;
+        Mon, 13 Jun 2022 04:23:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A3DA4B80EC8;
-        Mon, 13 Jun 2022 11:50:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA651C34114;
-        Mon, 13 Jun 2022 11:50:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 258FB60B6E;
+        Mon, 13 Jun 2022 11:22:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 337F9C34114;
+        Mon, 13 Jun 2022 11:22:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655121012;
-        bh=QNxyg8a/EeMSToOh3j6ZgqqKkIM/59Fix+XBI1emb1w=;
+        s=korg; t=1655119352;
+        bh=pbz9DlEqA5TwTXAkZWWpEn6u8/MCy1hJFPIoVEmfs4U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qtL9EsBRdgpvuYnw/9Ykn0SVsqQv6Sze/s0RszbzJcoL6TJSWo6rtuIrreTxKLeQ9
-         Ppjag1myR/fLJMdp/3ShYiilp+v1MLiyzm5BYAv4sAO6ic5NTguUVZ6/6wtAMe861h
-         uI9WZQkXxPViyl36Wbmken7TDxOgoCy66hH88iIc=
+        b=DmohrEpDF9fp1QezU6sMWJ5vgNV1o41VuQAwvv5ql3MvStg8/Lw6fLjgZUknJkFnA
+         Yz95mThD86CttzBuerFceuPQJA6rCeRXz34yy/rsCKDrFURUO4JpI1+ScVupVszNaj
+         jkQXRxYGhLsO6UgNtb7Msp0fDUfroR0wP+pDD2YE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 239/298] x86/cpu: Elide KCSAN for cpu_has() and friends
-Date:   Mon, 13 Jun 2022 12:12:13 +0200
-Message-Id: <20220613094932.337292827@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 5.15 232/247] Input: bcm5974 - set missing URB_NO_TRANSFER_DMA_MAP urb flag
+Date:   Mon, 13 Jun 2022 12:12:14 +0200
+Message-Id: <20220613094929.981418237@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
 
-[ Upstream commit a6a5eb269f6f3a2fe392f725a8d9052190c731e2 ]
+commit c42e65664390be7c1ef3838cd84956d3a2739d60 upstream.
 
-As x86 uses the <asm-generic/bitops/instrumented-*.h> headers, the
-regular forms of all bitops are instrumented with explicit calls to
-KASAN and KCSAN checks. As these are explicit calls, these are not
-suppressed by the noinstr function attribute.
+The bcm5974 driver does the allocation and dma mapping of the usb urb
+data buffer, but driver does not set the URB_NO_TRANSFER_DMA_MAP flag
+to let usb core know the buffer is already mapped.
 
-This can result in calls to those check functions in noinstr code, which
-objtool warns about:
+usb core tries to map the already mapped buffer, causing a warning:
+"xhci_hcd 0000:00:14.0: rejecting DMA map of vmalloc memory"
 
-vmlinux.o: warning: objtool: enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x28: call to __kcsan_check_access() leaves .noinstr.text section
-vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x24: call to __kcsan_check_access() leaves .noinstr.text section
-vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x24: call to __kcsan_check_access() leaves .noinstr.text section
+Fix this by setting the URB_NO_TRANSFER_DMA_MAP, letting usb core
+know buffer is already mapped by bcm5974 driver
 
-Prevent this by using the arch_*() bitops, which are the underlying
-bitops without explciit instrumentation.
-
-[null: Changelog]
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20220502111216.290518605@infradead.org
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: stable@vger.kernel.org
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215890
+Link: https://lore.kernel.org/r/20220606113636.588955-1-mathias.nyman@linux.intel.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/cpufeature.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/input/mouse/bcm5974.c |    7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-index 1261842d006c..49a3b122279e 100644
---- a/arch/x86/include/asm/cpufeature.h
-+++ b/arch/x86/include/asm/cpufeature.h
-@@ -51,7 +51,7 @@ extern const char * const x86_power_flags[32];
- extern const char * const x86_bug_flags[NBUGINTS*32];
+--- a/drivers/input/mouse/bcm5974.c
++++ b/drivers/input/mouse/bcm5974.c
+@@ -942,17 +942,22 @@ static int bcm5974_probe(struct usb_inte
+ 	if (!dev->tp_data)
+ 		goto err_free_bt_buffer;
  
- #define test_cpu_cap(c, bit)						\
--	 test_bit(bit, (unsigned long *)((c)->x86_capability))
-+	 arch_test_bit(bit, (unsigned long *)((c)->x86_capability))
+-	if (dev->bt_urb)
++	if (dev->bt_urb) {
+ 		usb_fill_int_urb(dev->bt_urb, udev,
+ 				 usb_rcvintpipe(udev, cfg->bt_ep),
+ 				 dev->bt_data, dev->cfg.bt_datalen,
+ 				 bcm5974_irq_button, dev, 1);
  
- /*
-  * There are 32 bits/features in each mask word.  The high bits
--- 
-2.35.1
-
++		dev->bt_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
++	}
++
+ 	usb_fill_int_urb(dev->tp_urb, udev,
+ 			 usb_rcvintpipe(udev, cfg->tp_ep),
+ 			 dev->tp_data, dev->cfg.tp_datalen,
+ 			 bcm5974_irq_trackpad, dev, 1);
+ 
++	dev->tp_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
++
+ 	/* create bcm5974 device */
+ 	usb_make_path(udev, dev->phys, sizeof(dev->phys));
+ 	strlcat(dev->phys, "/input0", sizeof(dev->phys));
 
 

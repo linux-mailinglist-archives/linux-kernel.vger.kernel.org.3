@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191A354938A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D8E549300
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354737AbiFMLd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44466 "EHLO
+        id S1378482AbiFMNlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:41:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354365AbiFML3X (ORCPT
+        with ESMTP id S1378860AbiFMNjX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A433AD129;
-        Mon, 13 Jun 2022 03:43:34 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FF17937A;
+        Mon, 13 Jun 2022 04:28:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62554B80D3F;
-        Mon, 13 Jun 2022 10:43:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3748C34114;
-        Mon, 13 Jun 2022 10:43:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C853E6114A;
+        Mon, 13 Jun 2022 11:28:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7C44C34114;
+        Mon, 13 Jun 2022 11:28:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117012;
-        bh=5sG71ck5ZMmLjVZK8aDhf006yDRneYMHdW7nGNQM4cI=;
+        s=korg; t=1655119686;
+        bh=AWG9gvMcYACCQztBZWgs0FhjmGr5NkuGSG93WBuDqX0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BuXYrUywCXV9i+BxziE1T6wBSLil8RQixZMLpDFXAX1sGG8Tm5G9CBYTXBeYzl8yY
-         v/D/VGdFSMtrI4CMJZ51p8/hbaO2p3Upk0MWVNyJMOjaLYKCO6te92qErjz3HVw+wf
-         Eelt4z8tTDphGiQjx39riZSdd+ZGxL1DMsB4egWU=
+        b=vSPKZZyETxh8CWR9KMqGeaFYMQAhR0Cyz//y5oacxXDu8g2RgOoodqICl8tnBzqDr
+         UWd/6OHqRldU86Z21jkV1pHsXpOJWjVBuh1DV1mrKBURkNiuaIsENZa82zXBBapIwH
+         oCYJXw/+9vsD2SxpXtz989T2z7ZAG/ze0XOXALWA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: [PATCH 5.4 255/411] iommu/msm: Fix an incorrect NULL check on list iterator
+        stable@vger.kernel.org, Mykola Lysenko <mykolal@fb.com>,
+        Song Liu <song@kernel.org>, David Vernet <void@manifault.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 103/339] selftests/bpf: fix stacktrace_build_id with missing kprobe/urandom_read
 Date:   Mon, 13 Jun 2022 12:08:48 +0200
-Message-Id: <20220613094936.413353270@linuxfoundation.org>
+Message-Id: <20220613094929.637161973@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Song Liu <song@kernel.org>
 
-commit 8b9ad480bd1dd25f4ff4854af5685fa334a2f57a upstream.
+[ Upstream commit 59ed76fe2f981bccde37bdddb465f260a96a2404 ]
 
-The bug is here:
-	if (!iommu || iommu->dev->of_node != spec->np) {
+Kernel function urandom_read is replaced with urandom_read_iter.
+Therefore, kprobe on urandom_read is not working any more:
 
-The list iterator value 'iommu' will *always* be set and non-NULL by
-list_for_each_entry(), so it is incorrect to assume that the iterator
-value will be NULL if the list is empty or no element is found (in fact,
-it will point to a invalid structure object containing HEAD).
+[root@eth50-1 bpf]# ./test_progs -n 161
+test_stacktrace_build_id:PASS:skel_open_and_load 0 nsec
+libbpf: kprobe perf_event_open() failed: No such file or directory
+libbpf: prog 'oncpu': failed to create kprobe 'urandom_read+0x0' \
+        perf event: No such file or directory
+libbpf: prog 'oncpu': failed to auto-attach: -2
+test_stacktrace_build_id:FAIL:attach_tp err -2
+161     stacktrace_build_id:FAIL
 
-To fix the bug, use a new value 'iter' as the list iterator, while use
-the old value 'iommu' as a dedicated variable to point to the found one,
-and remove the unneeded check for 'iommu->dev->of_node != spec->np'
-outside the loop.
+Fix this by replacing urandom_read with urandom_read_iter in the test.
 
-Cc: stable@vger.kernel.org
-Fixes: f78ebca8ff3d6 ("iommu/msm: Add support for generic master bindings")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220501132823.12714-1-xiam0nd.tong@gmail.com
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 1b388e7765f2 ("random: convert to using fops->read_iter()")
+Reported-by: Mykola Lysenko <mykolal@fb.com>
+Signed-off-by: Song Liu <song@kernel.org>
+Acked-by: David Vernet <void@manifault.com>
+Link: https://lore.kernel.org/r/20220526191608.2364049-1-song@kernel.org
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/msm_iommu.c |   11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/iommu/msm_iommu.c
-+++ b/drivers/iommu/msm_iommu.c
-@@ -636,16 +636,19 @@ static void insert_iommu_master(struct d
- static int qcom_iommu_of_xlate(struct device *dev,
- 			       struct of_phandle_args *spec)
+diff --git a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
+index 6c62bfb8bb6f..0c4426592a26 100644
+--- a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
++++ b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
+@@ -39,7 +39,7 @@ struct {
+ 	__type(value, stack_trace_t);
+ } stack_amap SEC(".maps");
+ 
+-SEC("kprobe/urandom_read")
++SEC("kprobe/urandom_read_iter")
+ int oncpu(struct pt_regs *args)
  {
--	struct msm_iommu_dev *iommu;
-+	struct msm_iommu_dev *iommu = NULL, *iter;
- 	unsigned long flags;
- 	int ret = 0;
- 
- 	spin_lock_irqsave(&msm_iommu_lock, flags);
--	list_for_each_entry(iommu, &qcom_iommu_devices, dev_node)
--		if (iommu->dev->of_node == spec->np)
-+	list_for_each_entry(iter, &qcom_iommu_devices, dev_node) {
-+		if (iter->dev->of_node == spec->np) {
-+			iommu = iter;
- 			break;
-+		}
-+	}
- 
--	if (!iommu || iommu->dev->of_node != spec->np) {
-+	if (!iommu) {
- 		ret = -ENODEV;
- 		goto fail;
- 	}
+ 	__u32 max_len = sizeof(struct bpf_stack_build_id)
+-- 
+2.35.1
+
 
 

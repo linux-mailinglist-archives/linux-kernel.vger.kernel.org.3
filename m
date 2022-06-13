@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC162548D73
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75487549488
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357985AbiFML65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
+        id S1344254AbiFMKrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356674AbiFMLuy (ORCPT
+        with ESMTP id S1346797AbiFMKns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:50:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FBF7F59B;
-        Mon, 13 Jun 2022 03:55:12 -0700 (PDT)
+        Mon, 13 Jun 2022 06:43:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95FB7DEC1;
+        Mon, 13 Jun 2022 03:24:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF80161259;
-        Mon, 13 Jun 2022 10:55:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BFEBC34114;
-        Mon, 13 Jun 2022 10:55:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55935B80E93;
+        Mon, 13 Jun 2022 10:24:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF96CC34114;
+        Mon, 13 Jun 2022 10:24:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117711;
-        bh=sY9TOZk7GY4Wu29gQGTtg3X8ZM2A/cchPntbY4v5ngA=;
+        s=korg; t=1655115897;
+        bh=1m6/EIMpGD2Yh5Dld9xGWKJ9tHNx3A1+nVUUHQqiN/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y4fHehUIZSY8HQnC1TEa24+oYwBC8izZgeEyhAEpMBEM9NQxIsN4/g2ZQ4tlNDxj/
-         cWNinb3VtA7Z5kGxUJUUd+phoai+XTaCZAAenr5gFPxumj+gYmS7k2UUN6v1VbAg0X
-         uwv/8VAD6yym+dRZxOI4keZ0pcnJtcAOZkIm45Lg=
+        b=zGmGClYmWVkFpQo5v0vcgysCkqFT7AirI1VtPM6Y7Ro5xhqhzO6+orwXSgx7xAl8t
+         moVYlN1HMW2bLQPsnSlrcyMusPDcHAmdltvNZlxG89KTyRBs9ruyy9gKvvGfGRVgBX
+         1Kq+pohHZn1yn40IcT7mDkd/lgGsiKRjIkEs18zM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 104/287] drm: msm: fix possible memory leak in mdp5_crtc_cursor_set()
+Subject: [PATCH 4.14 070/218] ASoC: mxs-saif: Fix refcount leak in mxs_saif_probe
 Date:   Mon, 13 Jun 2022 12:08:48 +0200
-Message-Id: <20220613094927.032604974@linuxfoundation.org>
+Message-Id: <20220613094922.260176242@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 947a844bb3ebff0f4736d244d792ce129f6700d7 ]
+[ Upstream commit 2be84f73785fa9ed6443e3c5b158730266f1c2ee ]
 
-drm_gem_object_lookup will call drm_gem_object_get inside. So cursor_bo
-needs to be put when msm_gem_get_and_pin_iova fails.
+of_parse_phandle() returns a node pointer with refcount
+incremented, we should use of_node_put() on it when done.
 
-Fixes: e172d10a9c4a ("drm/msm/mdp5: Add hardware cursor support")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Link: https://lore.kernel.org/r/20220509061125.18585-1-hbh25y@gmail.com
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+Fixes: 08641c7c74dd ("ASoC: mxs: add device tree support for mxs-saif")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220511133725.39039-1-linmq006@gmail.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ sound/soc/mxs/mxs-saif.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
-index 76639a108ff5..b8a01c95b831 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_crtc.c
-@@ -911,8 +911,10 @@ static int mdp5_crtc_cursor_set(struct drm_crtc *crtc,
- 
- 	ret = msm_gem_get_iova(cursor_bo, kms->aspace,
- 			&mdp5_crtc->cursor.iova);
--	if (ret)
-+	if (ret) {
-+		drm_gem_object_put(cursor_bo);
- 		return -EINVAL;
-+	}
- 
- 	pm_runtime_get_sync(&pdev->dev);
- 
+diff --git a/sound/soc/mxs/mxs-saif.c b/sound/soc/mxs/mxs-saif.c
+index 93c019670199..6d0ab4e75518 100644
+--- a/sound/soc/mxs/mxs-saif.c
++++ b/sound/soc/mxs/mxs-saif.c
+@@ -780,6 +780,7 @@ static int mxs_saif_probe(struct platform_device *pdev)
+ 		saif->master_id = saif->id;
+ 	} else {
+ 		ret = of_alias_get_id(master, "saif");
++		of_node_put(master);
+ 		if (ret < 0)
+ 			return ret;
+ 		else
 -- 
 2.35.1
 

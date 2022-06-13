@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02916548ECA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:21:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBD4548E75
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384519AbiFMOZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54550 "EHLO
+        id S243316AbiFMKcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383135AbiFMOWt (ORCPT
+        with ESMTP id S1344083AbiFMK2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:22:49 -0400
+        Mon, 13 Jun 2022 06:28:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C902346141;
-        Mon, 13 Jun 2022 04:44:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E002E252AC;
+        Mon, 13 Jun 2022 03:20:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04FAA61236;
-        Mon, 13 Jun 2022 11:44:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16FB3C34114;
-        Mon, 13 Jun 2022 11:44:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07DD060B8B;
+        Mon, 13 Jun 2022 10:20:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1242FC34114;
+        Mon, 13 Jun 2022 10:20:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120653;
-        bh=XNjxLmJGu8ecZt2msTS2AZnlRK5Hazu7g1QlCE2HidA=;
+        s=korg; t=1655115616;
+        bh=du0eATYz8AcUzrUh6DHs+n4PUByRCeS13TXKdzW3pbA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qu2gq5ZPjFI+1qSh2OyQTV/hpN6HVyS1NPkj5iyOXExOHwoNotrpmMfi8y/O9jOfU
-         aHXHuCU68yZ6gxbGDBwmqOe701AG0bQdeADBWQ/jY++cBb8nXcy44+zbZ+G/Pzai8D
-         BwZxp+Ss4xW9EvRR7uWcp8w8DyJwLzT4KyRRaE0g=
+        b=YqUgSzmJlG4ha6fEe1TFP+rhRO2cXxAyjero6msk5uEquRad35yNS6rHPW4EhJTag
+         tCFE64uqKnecTMO4tXogrZNRfjAQyeV3k4sn2ofi/xC0GaGWxnA1kE2eb+3nbKXd8Q
+         7crpQwGpMFZFNERjvReS55HlLU0C+nkprukXy2Og=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 108/298] net/mlx5: Dont use already freed action pointer
+        stable@vger.kernel.org,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 128/167] i2c: cadence: Increase timeout per message if necessary
 Date:   Mon, 13 Jun 2022 12:10:02 +0200
-Message-Id: <20220613094928.223823872@linuxfoundation.org>
+Message-Id: <20220613094910.870657093@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leon Romanovsky <leonro@nvidia.com>
+From: Lucas Tanure <tanureal@opensource.cirrus.com>
 
-[ Upstream commit 80b2bd737d0e833e6a2b77e482e5a714a79c86a4 ]
+[ Upstream commit 96789dce043f5bff8b7d62aa28d52a7c59403a84 ]
 
-The call to mlx5dr_action_destroy() releases "action" memory. That
-pointer is set to miss_action later and generates the following smatch
-error:
+Timeout as 1 second sets an upper limit on the length
+of the transfer executed, but there is no maximum length
+of a write or read message set in i2c_adapter_quirks for
+this controller.
 
- drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c:53 set_miss_action()
- warn: 'action' was already freed.
+This upper limit affects devices that require sending
+large firmware blobs over I2C.
 
-Make sure that the pointer is always valid by setting NULL after destroy.
+To remove that limitation, calculate the minimal time
+necessary, plus some wiggle room, for every message and
+use it instead of the default one second, if more than
+one second.
 
-Fixes: 6a48faeeca10 ("net/mlx5: Add direct rule fs_cmd implementation")
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+Acked-by: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/i2c/busses/i2c-cadence.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c b/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
-index 05393fe11132..caeaa3c29353 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/steering/fs_dr.c
-@@ -44,11 +44,10 @@ static int set_miss_action(struct mlx5_flow_root_namespace *ns,
- 	err = mlx5dr_table_set_miss_action(ft->fs_dr_table.dr_table, action);
- 	if (err && action) {
- 		err = mlx5dr_action_destroy(action);
--		if (err) {
--			action = NULL;
--			mlx5_core_err(ns->dev, "Failed to destroy action (%d)\n",
--				      err);
--		}
-+		if (err)
-+			mlx5_core_err(ns->dev,
-+				      "Failed to destroy action (%d)\n", err);
-+		action = NULL;
- 	}
- 	ft->fs_dr_table.miss_action = action;
- 	if (old_miss_action) {
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index 23ee1a423654..a29ac9bae6d5 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -511,7 +511,7 @@ static void cdns_i2c_master_reset(struct i2c_adapter *adap)
+ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
+ 		struct i2c_adapter *adap)
+ {
+-	unsigned long time_left;
++	unsigned long time_left, msg_timeout;
+ 	u32 reg;
+ 
+ 	id->p_msg = msg;
+@@ -536,8 +536,16 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
+ 	else
+ 		cdns_i2c_msend(id);
+ 
++	/* Minimal time to execute this message */
++	msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) / id->i2c_clk);
++	/* Plus some wiggle room */
++	msg_timeout += msecs_to_jiffies(500);
++
++	if (msg_timeout < adap->timeout)
++		msg_timeout = adap->timeout;
++
+ 	/* Wait for the signal of completion */
+-	time_left = wait_for_completion_timeout(&id->xfer_done, adap->timeout);
++	time_left = wait_for_completion_timeout(&id->xfer_done, msg_timeout);
+ 	if (time_left == 0) {
+ 		cdns_i2c_master_reset(adap);
+ 		dev_err(id->adap.dev.parent,
 -- 
 2.35.1
 

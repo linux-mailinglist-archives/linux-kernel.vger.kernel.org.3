@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B40775493BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0250B54959A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383968AbiFMOhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
+        id S1355069AbiFMMuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384135AbiFMOdG (ORCPT
+        with ESMTP id S1356301AbiFMMsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:33:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABF04BB88;
-        Mon, 13 Jun 2022 04:49:09 -0700 (PDT)
+        Mon, 13 Jun 2022 08:48:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3566223C;
+        Mon, 13 Jun 2022 04:11:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6BC8CB80EA7;
-        Mon, 13 Jun 2022 11:48:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D3EC34114;
-        Mon, 13 Jun 2022 11:48:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F751608C3;
+        Mon, 13 Jun 2022 11:11:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5884EC34114;
+        Mon, 13 Jun 2022 11:11:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120924;
-        bh=KPi+PDnXetNqe8k0T50PiyVPHdsSkTnx9m4diIFuL3I=;
+        s=korg; t=1655118686;
+        bh=IhUtz9jVbqvCOmOqsUmTRlRO4beTo/ueWOj5DeHBtek=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TTXsSuV4IFsaQnlfbpOesp5YQYWAtjXay/fnfFyeueO+xyvcg94YGHA9mLT9Oisre
-         qQVx7YyvQk69Sv/ARFfs8k+edSz/vZ1vcq5E+43Ni0mSYF5LvQYMUCT8rYZvvaIrRe
-         NstnXpbXiHhHP6ViT/ZIs19igB4kei52RhwaVr+U=
+        b=VZxJAJ6gOu3jw4JwQLd1iY9Ll/Fv7d4bVCPdFtxSipkK0wKPqaKfysInZFSeISouQ
+         GitLNHFTEJCtj2Jd+fJYK4aA03TqLo3B0lfKDBb6ZlxKwrMH4JYkHl9UY+IEsCMDCq
+         +Twzvfs1sRqiQhOkaLqhdMsvIxUZKH3rH77r0ffY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 208/298] drivers: tty: serial: Fix deadlock in sa1100_set_termios()
+Subject: [PATCH 5.10 142/172] jump_label,noinstr: Avoid instrumentation for JUMP_LABEL=n builds
 Date:   Mon, 13 Jun 2022 12:11:42 +0200
-Message-Id: <20220613094931.414335123@linuxfoundation.org>
+Message-Id: <20220613094922.100865784@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,59 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Peter Zijlstra <peterz@infradead.org>
 
-[ Upstream commit 62b2caef400c1738b6d22f636c628d9f85cd4c4c ]
+[ Upstream commit 656d054e0a15ec327bd82801ccd58201e59f6896 ]
 
-There is a deadlock in sa1100_set_termios(), which is shown
-below:
+When building x86_64 with JUMP_LABEL=n it's possible for
+instrumentation to sneak into noinstr:
 
-   (Thread 1)              |      (Thread 2)
-                           | sa1100_enable_ms()
-sa1100_set_termios()       |  mod_timer()
- spin_lock_irqsave() //(1) |  (wait a time)
- ...                       | sa1100_timeout()
- del_timer_sync()          |  spin_lock_irqsave() //(2)
- (wait timer to stop)      |  ...
+vmlinux.o: warning: objtool: exit_to_user_mode+0x14: call to static_key_count.constprop.0() leaves .noinstr.text section
+vmlinux.o: warning: objtool: syscall_exit_to_user_mode+0x2d: call to static_key_count.constprop.0() leaves .noinstr.text section
+vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0x1b: call to static_key_count.constprop.0() leaves .noinstr.text section
 
-We hold sport->port.lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need sport->port.lock in position (2) of thread 2. As a result,
-sa1100_set_termios() will block forever.
+Switch to arch_ prefixed atomic to avoid the explicit instrumentation.
 
-This patch moves del_timer_sync() before spin_lock_irqsave()
-in order to prevent the deadlock.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220417111626.7802-1-duoming@zju.edu.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/sa1100.c | 4 ++--
+ include/linux/jump_label.h | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
-index 697b6a002a16..4ddcc985621a 100644
---- a/drivers/tty/serial/sa1100.c
-+++ b/drivers/tty/serial/sa1100.c
-@@ -446,6 +446,8 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
- 	baud = uart_get_baud_rate(port, termios, old, 0, port->uartclk/16); 
- 	quot = uart_get_divisor(port, baud);
+diff --git a/include/linux/jump_label.h b/include/linux/jump_label.h
+index 32809624d422..e67ee4d7318f 100644
+--- a/include/linux/jump_label.h
++++ b/include/linux/jump_label.h
+@@ -249,9 +249,9 @@ extern void static_key_disable_cpuslocked(struct static_key *key);
+ #include <linux/atomic.h>
+ #include <linux/bug.h>
  
-+	del_timer_sync(&sport->timer);
-+
- 	spin_lock_irqsave(&sport->port.lock, flags);
+-static inline int static_key_count(struct static_key *key)
++static __always_inline int static_key_count(struct static_key *key)
+ {
+-	return atomic_read(&key->enabled);
++	return arch_atomic_read(&key->enabled);
+ }
  
- 	sport->port.read_status_mask &= UTSR0_TO_SM(UTSR0_TFS);
-@@ -476,8 +478,6 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
- 				UTSR1_TO_SM(UTSR1_ROR);
- 	}
- 
--	del_timer_sync(&sport->timer);
--
- 	/*
- 	 * Update the per-port timeout.
- 	 */
+ static __always_inline void jump_label_init(void)
 -- 
 2.35.1
 

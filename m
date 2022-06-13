@@ -2,172 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F37A549FAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:44:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC3B54A099
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:59:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237576AbiFMUoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48592 "EHLO
+        id S1351537AbiFMU6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245459AbiFMUnD (ORCPT
+        with ESMTP id S1348741AbiFMUnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:43:03 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6AFE030;
-        Mon, 13 Jun 2022 12:46:14 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id e24so6591483pjt.0;
-        Mon, 13 Jun 2022 12:46:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8PJJNUcJj53ev3AqJRn3xVtb+ZpTb0J1fJRS/I1pZqo=;
-        b=j/Xl5g9NFS0JUQC69FXYr+svQcCT14l0bivAxI2nyR+X8FM6UQZKcoEoVsihPU7lWO
-         i19+z9tQemZeYruJR5ghpoevoYa3r7x8g0nl3neKATakG/axZF+CQjn/qn2PI4lSotee
-         KYczE/L1R/e483aBjj2+BU4xanG3sJNL7fWdDHp5OFltj46W7ATvG74EoiTBroqErfDi
-         W1C0Z95EMYGO94zakXZqcFOTKs/AMONEiRpxMGTKDr2S1YSPOWjBlMgE24ZNe/8TOjZI
-         H5P5vzZJqzaiaRsSaUyFu0QeMK7GW/Gbv1uEjmS858q+Y/E1Nz88iDCZ3IzUta4UvgAX
-         FBRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8PJJNUcJj53ev3AqJRn3xVtb+ZpTb0J1fJRS/I1pZqo=;
-        b=WxRgJeEpGw8KClvTq3QKAj1oWPUDXG/OOZEwtj74WHdYVfqZT9/CygCrkZUrK8Z2of
-         dt3hSz29ICC39f4AQiU3du539Tfhc9siIsLmuwabwBh+J37feanKEUnjHR4tpb9sYsaJ
-         vas9ypuLi0JD5fnySOj8kXicVkOQq7zNL/jwiVcUxxuDtCU+077OUC1Ubg95QVNccn09
-         +8NOIV0yVx6+B2IXpNn7uLKHBBR5su7NetDxLyawqjBq365EFNmFFBqVFzxLaLx+7zW+
-         zj6luBAJaPYGlMgCKnAVKx0u6J8Y3BPWRDP0DqOJuMSwFsciWgfmFD7u60lGCfLuXOCZ
-         dVUg==
-X-Gm-Message-State: AOAM531lWui5Oc5Fb1q6tzI2RHBd+FtO+nEpPv8TKHTV7QB79HLzCOWZ
-        YtVsAVEGld9Hy8p/33AIAw8=
-X-Google-Smtp-Source: AGRyM1thfR5WcCUpEKNj9m6vRAIv50Kk1vGSAieTTtgXiETCAqb603bEsvDIQhWxcu3vrC8MEVnyoA==
-X-Received: by 2002:a17:903:2c2:b0:168:e323:d471 with SMTP id s2-20020a17090302c200b00168e323d471mr667931plk.147.1655149573799;
-        Mon, 13 Jun 2022 12:46:13 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id jj18-20020a170903049200b0015ee24acf38sm5474487plb.212.2022.06.13.12.46.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 12:46:12 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm: Deprecate MSM_BO_UNCACHED harder
-Date:   Mon, 13 Jun 2022 12:46:23 -0700
-Message-Id: <20220613194623.2588353-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Mon, 13 Jun 2022 16:43:22 -0400
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAB53CFF9;
+        Mon, 13 Jun 2022 12:47:25 -0700 (PDT)
+Received: from [192.168.1.103] (178.176.74.127) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Mon, 13 Jun
+ 2022 22:47:17 +0300
+Subject: Re: [PATCH 4.14 208/218] ata: libata-transport: fix
+ {dma|pio|xfer}_mode sysfs files
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+References: <20220613094908.257446132@linuxfoundation.org>
+ <20220613094926.933251321@linuxfoundation.org>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <7089e1f1-b017-85f2-84bf-d6e792011b9e@omp.ru>
+Date:   Mon, 13 Jun 2022 22:47:17 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220613094926.933251321@linuxfoundation.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.74.127]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.20, Database issued on: 06/13/2022 19:30:34
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 171077 [Jun 13 2022]
+X-KSE-AntiSpam-Info: Version: 5.9.20.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 489 489 b67d2e276d358fa514f5991440453e6a402e3a26
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.74.127 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: 178.176.74.127:7.1.2;omp.ru:7.1.1;127.0.0.199:7.1.2;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.74.127
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/13/2022 19:33:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 6/13/2022 4:53:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+On 6/13/22 1:11 PM, Greg Kroah-Hartman wrote:
 
-Handle the demotion to MSM_BO_WC at the userspace ABI level, and fix
-the remaining internal MSM_BO_UNCACHED user.
+> From: Sergey Shtylyov <s.shtylyov@omp.ru>
+> 
+> commit 72aad489f992871e908ff6d9055b26c6366fb864 upstream.
+> 
+> The {dma|pio}_mode sysfs files are incorrectly documented as having a
+> list of the supported DMA/PIO transfer modes, while the corresponding
+> fields of the *struct* ata_device hold the transfer mode IDs, not masks.
+> 
+> To match these docs, the {dma|pio}_mode (and even xfer_mode!) sysfs
+> files are handled by the ata_bitfield_name_match() macro which leads to
+> reading such kind of nonsense from them:
+> 
+> $ cat /sys/class/ata_device/dev3.0/pio_mode
+> XFER_UDMA_7, XFER_UDMA_6, XFER_UDMA_5, XFER_UDMA_4, XFER_MW_DMA_4,
+> XFER_PIO_6, XFER_PIO_5, XFER_PIO_4, XFER_PIO_3, XFER_PIO_2, XFER_PIO_1,
+> XFER_PIO_0
+> 
+> Using the correct ata_bitfield_name_search() macro fixes that:
+> 
+> $ cat /sys/class/ata_device/dev3.0/pio_mode
+> XFER_PIO_4
+> 
+> While fixing the file documentation, somewhat reword the {dma|pio}_mode
+> file doc and add a note about being mostly useful for PATA devices to
+> the xfer_mode file doc...
+> 
+> Fixes: d9027470b886 ("[libata] Add ATA transport class")
+> Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  Documentation/ABI/testing/sysfs-ata |    5 +++--
+>  drivers/ata/libata-transport.c      |    2 +-
+>  2 files changed, 4 insertions(+), 3 deletions(-)
+> 
+> --- a/Documentation/ABI/testing/sysfs-ata
+> +++ b/Documentation/ABI/testing/sysfs-ata
+> @@ -59,17 +59,18 @@ class
+>  
+>  dma_mode
+>  
+> -	Transfer modes supported by the device when in DMA mode.
+> +	DMA transfer mode used by the device.
+>  	Mostly used by PATA device.
+>  
+>  pio_mode
+>  
+> -	Transfer modes supported by the device when in PIO mode.
+> +	PIO transfer mode used by the device.
+>  	Mostly used by PATA device.
+>  
+>  xfer_mode
+>  
+>  	Current transfer mode.
+> +	Mostly used by PATA device.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/msm_drv.c | 13 +++++++++++++
- drivers/gpu/drm/msm/msm_gem.c |  7 +++----
- drivers/gpu/drm/msm/msm_gpu.c |  2 +-
- 3 files changed, 17 insertions(+), 5 deletions(-)
+   Missed s/device/devices/, as I've reported already...
 
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 57a66093e671..acc940d32ab4 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -633,12 +633,25 @@ static int msm_ioctl_gem_new(struct drm_device *dev, void *data,
- 		struct drm_file *file)
- {
- 	struct drm_msm_gem_new *args = data;
-+	uint32_t flags = args->flags;
- 
- 	if (args->flags & ~MSM_BO_FLAGS) {
- 		DRM_ERROR("invalid flags: %08x\n", args->flags);
- 		return -EINVAL;
- 	}
- 
-+	/*
-+	 * Uncached CPU mappings are deprecated, as of:
-+	 *
-+	 * 9ef364432db4 ("drm/msm: deprecate MSM_BO_UNCACHED (map as writecombine instead)")
-+	 *
-+	 * So promote them to WC.
-+	 */
-+	if (flags & MSM_BO_UNCACHED) {
-+		flags &= ~MSM_BO_CACHED;
-+		flags |= MSM_BO_WC;
-+	}
-+
- 	return msm_gem_new_handle(dev, file, args->size,
- 			args->flags, &args->handle, NULL);
- }
-diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-index 9a73e48a3049..35845e273d81 100644
---- a/drivers/gpu/drm/msm/msm_gem.c
-+++ b/drivers/gpu/drm/msm/msm_gem.c
-@@ -129,7 +129,7 @@ static struct page **get_pages(struct drm_gem_object *obj)
- 		/* For non-cached buffers, ensure the new pages are clean
- 		 * because display controller, GPU, etc. are not coherent:
- 		 */
--		if (msm_obj->flags & (MSM_BO_WC|MSM_BO_UNCACHED))
-+		if (msm_obj->flags & MSM_BO_WC)
- 			sync_for_device(msm_obj);
- 
- 		update_inactive(msm_obj);
-@@ -160,7 +160,7 @@ static void put_pages(struct drm_gem_object *obj)
- 			 * pages are clean because display controller,
- 			 * GPU, etc. are not coherent:
- 			 */
--			if (msm_obj->flags & (MSM_BO_WC|MSM_BO_UNCACHED))
-+			if (msm_obj->flags & MSM_BO_WC)
- 				sync_for_cpu(msm_obj);
- 
- 			sg_free_table(msm_obj->sgt);
-@@ -213,7 +213,7 @@ void msm_gem_put_pages(struct drm_gem_object *obj)
- 
- static pgprot_t msm_gem_pgprot(struct msm_gem_object *msm_obj, pgprot_t prot)
- {
--	if (msm_obj->flags & (MSM_BO_WC|MSM_BO_UNCACHED))
-+	if (msm_obj->flags & MSM_BO_WC)
- 		return pgprot_writecombine(prot);
- 	return prot;
- }
-@@ -1122,7 +1122,6 @@ static int msm_gem_new_impl(struct drm_device *dev,
- 	struct msm_gem_object *msm_obj;
- 
- 	switch (flags & MSM_BO_CACHE_MASK) {
--	case MSM_BO_UNCACHED:
- 	case MSM_BO_CACHED:
- 	case MSM_BO_WC:
- 		break;
-diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-index f99292eaf529..e59a757578df 100644
---- a/drivers/gpu/drm/msm/msm_gpu.c
-+++ b/drivers/gpu/drm/msm/msm_gpu.c
-@@ -952,7 +952,7 @@ int msm_gpu_init(struct drm_device *drm, struct platform_device *pdev,
- 
- 	memptrs = msm_gem_kernel_new(drm,
- 		sizeof(struct msm_rbmemptrs) * nr_rings,
--		check_apriv(gpu, MSM_BO_UNCACHED), gpu->aspace, &gpu->memptrs_bo,
-+		check_apriv(gpu, MSM_BO_WC), gpu->aspace, &gpu->memptrs_bo,
- 		&memptrs_iova);
- 
- 	if (IS_ERR(memptrs)) {
--- 
-2.36.1
-
+MBR, Sergey

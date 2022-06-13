@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9D554879F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF1D5486F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351997AbiFMMfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41850 "EHLO
+        id S1353215AbiFMMfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349406AbiFMMbS (ORCPT
+        with ESMTP id S1353881AbiFMMdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:31:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94812B865;
-        Mon, 13 Jun 2022 04:07:26 -0700 (PDT)
+        Mon, 13 Jun 2022 08:33:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5AA5004B;
+        Mon, 13 Jun 2022 04:07:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 667FF614C3;
-        Mon, 13 Jun 2022 11:07:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 702C4C34114;
-        Mon, 13 Jun 2022 11:07:07 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 39463CE1171;
+        Mon, 13 Jun 2022 11:07:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44D42C34114;
+        Mon, 13 Jun 2022 11:07:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118427;
-        bh=BaivaKI+6LKe4QyubgCLaVmnqy1TW00F7HM8aV6lwss=;
+        s=korg; t=1655118430;
+        bh=lhtprTkKFnRrGIVIM8RG2c70Q4mX3uoDkShtcPkGlZs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j/T9GmvNDzL47B1iikmGipG6rCkH00VAZzGK8EliDK6b3GEMRc6wJpMLtKIk9HSuD
-         sMnvk0xlAfB9u1FVJlQ5m68N43k2q8Fgk+YFKKIouIwyrbTl+rKKILXop3y47Romx/
-         NsOiLZI9u3QJcWvCYyEipt1DN75D+UUg93f4gPms=
+        b=pd0LOPbndcfkmZME+3TGcVHiIWdY70VEJ4i5assH1VOWJS62cETmvaUBjCNcfKDuh
+         VonyH96o0pfA3j3pa6iNbrjkbQWovr6LG86YkwLvXGE9UWmTIlQ4RbqtHnXYTbg2JZ
+         MvTlDlq2zMVH8YNtoeFPOKimEKeFY9sdMF0n4QFE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 053/172] net: dsa: mv88e6xxx: Fix refcount leak in mv88e6xxx_mdios_register
-Date:   Mon, 13 Jun 2022 12:10:13 +0200
-Message-Id: <20220613094903.133590832@linuxfoundation.org>
+Subject: [PATCH 5.10 054/172] modpost: fix removing numeric suffixes
+Date:   Mon, 13 Jun 2022 12:10:14 +0200
+Message-Id: <20220613094903.357162421@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
 References: <20220613094850.166931805@linuxfoundation.org>
@@ -56,39 +57,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-[ Upstream commit 02ded5a173619b11728b8bf75a3fd995a2c1ff28 ]
+[ Upstream commit b5beffa20d83c4e15306c991ffd00de0d8628338 ]
 
-of_get_child_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
+With the `-z unique-symbol` linker flag or any similar mechanism,
+it is possible to trigger the following:
 
-mv88e6xxx_mdio_register() pass the device node to of_mdiobus_register().
-We don't need the device node after it.
+ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
 
-Add missing of_node_put() to avoid refcount leak.
+The reason is that for now the condition from remove_dot():
 
-Fixes: a3c53be55c95 ("net: dsa: mv88e6xxx: Support multiple MDIO busses")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+if (m && (s[n + m] == '.' || s[n + m] == 0))
+
+which was designed to test if it's a dot or a '\0' after the suffix
+is never satisfied.
+This is due to that `s[n + m]` always points to the last digit of a
+numeric suffix, not on the symbol next to it (from a custom debug
+print added to modpost):
+
+param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
+
+So it's off-by-one and was like that since 2014.
+
+Fix this for the sake of any potential upcoming features, but don't
+bother stable-backporting, as it's well hidden -- apart from that
+LD flag, it can be triggered only with GCC LTO which never landed
+upstream.
+
+Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/dsa/mv88e6xxx/chip.c | 1 +
- 1 file changed, 1 insertion(+)
+ scripts/mod/modpost.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index e79a808375fc..7b7a8a74405d 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -3148,6 +3148,7 @@ static int mv88e6xxx_mdios_register(struct mv88e6xxx_chip *chip,
- 	 */
- 	child = of_get_child_by_name(np, "mdio");
- 	err = mv88e6xxx_mdio_register(chip, child, false);
-+	of_node_put(child);
- 	if (err)
- 		return err;
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index e08f75aed429..a21aa74b4948 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1982,7 +1982,7 @@ static char *remove_dot(char *s)
  
+ 	if (n && s[n]) {
+ 		size_t m = strspn(s + n + 1, "0123456789");
+-		if (m && (s[n + m] == '.' || s[n + m] == 0))
++		if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
+ 			s[n] = 0;
+ 	}
+ 	return s;
 -- 
 2.35.1
 

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE12A548889
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6335354892B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358716AbiFMMH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59592 "EHLO
+        id S1353301AbiFMM1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358853AbiFMMEw (ORCPT
+        with ESMTP id S1355321AbiFMMXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:04:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817295046F;
-        Mon, 13 Jun 2022 03:58:08 -0700 (PDT)
+        Mon, 13 Jun 2022 08:23:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37B627B08;
+        Mon, 13 Jun 2022 04:04:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC879613EF;
-        Mon, 13 Jun 2022 10:58:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF533C34114;
-        Mon, 13 Jun 2022 10:58:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F1FDB80D3A;
+        Mon, 13 Jun 2022 11:04:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB09C34114;
+        Mon, 13 Jun 2022 11:04:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117887;
-        bh=xF8yIWbEetOHnmhmGQHznR5lIx4juxK+WgkFwVon71Y=;
+        s=korg; t=1655118278;
+        bh=DVuoSLpXFYn0xvPXOjmci7OKoKFd0NEQdP8HpaluuNQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2J3a+ckZY+BgiTs2UvL/kqcMz5/ktSsjEA9eRfdRrWog+602HCFKzdH1IJYjz8uU2
-         zaqMDr3BlZxVvCYuI4VaxdgLcHM8+k/jpiGI4TWV96l9ckZ1R/9K3GVvfqLVbQof2G
-         6JoMtcUTQW3qnsk4Ff6VB6lu1UlfvKNE7iiesQj8=
+        b=C74kxJioJ3cwFlvGWmz4duMssmg+mvYoyAxFwpwrComykj8oRmXzVwIzWoUjRiWnT
+         oAmYhlKUXV0+0ZQal2JUiZ52PzBBQ16ZAfvC/Hl3TycPYRhlgWn+J7qes9ap4wcXLF
+         MIQ0T5FFkuQGb139xUeQeQp6E5DMcS9YxYk7IIcQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Stanimir Varbanov <svarbanov@mm-sol.com>
-Subject: [PATCH 4.19 154/287] PCI: qcom: Fix unbalanced PHY init on probe errors
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 018/172] firmware: stratix10-svc: fix a missing check on list iterator
 Date:   Mon, 13 Jun 2022 12:09:38 +0200
-Message-Id: <20220613094928.548465973@linuxfoundation.org>
+Message-Id: <20220613094854.743678347@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,42 +54,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan+linaro@kernel.org>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 83013631f0f9961416abd812e228c8efbc2f6069 upstream.
+[ Upstream commit 5a0793ac66ac0e254d292f129a4d6c526f9f2aff ]
 
-Undo the PHY initialisation (e.g. balance runtime PM) if host
-initialisation fails during probe.
+The bug is here:
+	pmem->vaddr = NULL;
 
-Link: https://lore.kernel.org/r/20220401133854.10421-3-johan+linaro@kernel.org
-Fixes: 82a823833f4e ("PCI: qcom: Add Qualcomm PCIe controller driver")
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Acked-by: Stanimir Varbanov <svarbanov@mm-sol.com>
-Cc: stable@vger.kernel.org      # 4.5
+The list iterator 'pmem' will point to a bogus position containing
+HEAD if the list is empty or no element is found. This case must
+be checked before any use of the iterator, otherwise it will
+lead to a invalid memory access.
+
+To fix this bug, just gen_pool_free/set NULL/list_del() and return
+when found, otherwise list_del HEAD and return;
+
+Fixes: 7ca5ce896524f ("firmware: add Intel Stratix10 service layer driver")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Link: https://lore.kernel.org/r/20220414035609.2239-1-xiam0nd.tong@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/dwc/pcie-qcom.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/firmware/stratix10-svc.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1339,11 +1339,13 @@ static int qcom_pcie_probe(struct platfo
- 	ret = dw_pcie_host_init(pp);
- 	if (ret) {
- 		dev_err(dev, "cannot initialize host\n");
--		goto err_pm_runtime_put;
-+		goto err_phy_exit;
- 	}
+diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
+index 53c7e3f8cfde..7dd0ac1a0cfc 100644
+--- a/drivers/firmware/stratix10-svc.c
++++ b/drivers/firmware/stratix10-svc.c
+@@ -941,17 +941,17 @@ EXPORT_SYMBOL_GPL(stratix10_svc_allocate_memory);
+ void stratix10_svc_free_memory(struct stratix10_svc_chan *chan, void *kaddr)
+ {
+ 	struct stratix10_svc_data_mem *pmem;
+-	size_t size = 0;
  
- 	return 0;
+ 	list_for_each_entry(pmem, &svc_data_mem, node)
+ 		if (pmem->vaddr == kaddr) {
+-			size = pmem->size;
+-			break;
++			gen_pool_free(chan->ctrl->genpool,
++				       (unsigned long)kaddr, pmem->size);
++			pmem->vaddr = NULL;
++			list_del(&pmem->node);
++			return;
+ 		}
  
-+err_phy_exit:
-+	phy_exit(pcie->phy);
- err_pm_runtime_put:
- 	pm_runtime_put(dev);
- 	pm_runtime_disable(dev);
+-	gen_pool_free(chan->ctrl->genpool, (unsigned long)kaddr, size);
+-	pmem->vaddr = NULL;
+-	list_del(&pmem->node);
++	list_del(&svc_data_mem);
+ }
+ EXPORT_SYMBOL_GPL(stratix10_svc_free_memory);
+ 
+-- 
+2.35.1
+
 
 

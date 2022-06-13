@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4006A548B83
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D66795493B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236622AbiFMKbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S1354222AbiFMMMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345221AbiFMK3c (ORCPT
+        with ESMTP id S1358952AbiFMMIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:29:32 -0400
+        Mon, 13 Jun 2022 08:08:54 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9A0E036;
-        Mon, 13 Jun 2022 03:20:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7297D52503;
+        Mon, 13 Jun 2022 04:00:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 284FBB80E93;
-        Mon, 13 Jun 2022 10:20:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97B5CC34114;
-        Mon, 13 Jun 2022 10:20:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58B2AB80D31;
+        Mon, 13 Jun 2022 11:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D61C34114;
+        Mon, 13 Jun 2022 11:00:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115641;
-        bh=wsDuzAc9NqsM7BkZpBqt7GwC66dvPJnn9XcP8LB5P/c=;
+        s=korg; t=1655118017;
+        bh=1e8TP90XrpQPoe+wJZsWh5Rw/22MW2LoLZJC6jbCfwA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ryhrdyfJp3qSbHlf5vmGPK7osrPRp68iUmtfHmTrjJhyOXTyOJkGbdS5HO9Nr5lXT
-         hg1cDmX9BXHFTCOn6LkVAgckbM9NJLbpubg7m6gNmqzT65V0qF6S8Acbr+0eVDJEp7
-         3jp7y8Uq2KXj8W1bUDg86cCSagFvfAoDtFg0Kxuk=
+        b=IJDD14lHmdSXxL0bpMDnXeV9tFW4Ji04WZvgrGgLav9wx2m9PlVnXpakXA/vQPpFH
+         eaJ+sQmOcH48YXm1o/b5CyVwNpoYmvtvRxLPKlSLiA3ENJODz9+Jui8DAkQTCIFIk5
+         h8wpeFmNoQsIMHwJOSrTG4RJGLJt2gvBenK6fVgs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        stable@vger.kernel.org, Cixi Geng <cixi.geng1@unisoc.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 148/167] misc: rtsx: set NULL intfdata when probe fails
-Date:   Mon, 13 Jun 2022 12:10:22 +0200
-Message-Id: <20220613094915.603526997@linuxfoundation.org>
+Subject: [PATCH 4.19 199/287] iio: adc: sc27xx: fix read big scale voltage not right
+Date:   Mon, 13 Jun 2022 12:10:23 +0200
+Message-Id: <20220613094929.897918358@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,37 +56,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shuah Khan <skhan@linuxfoundation.org>
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-[ Upstream commit f861d36e021e1ac4a0a2a1f6411d623809975d63 ]
+[ Upstream commit ad930a75613282400179361e220e58b87386b8c7 ]
 
-rtsx_usb_probe() doesn't call usb_set_intfdata() to null out the
-interface pointer when probe fails. This leaves a stale pointer.
-Noticed the missing usb_set_intfdata() while debugging an unrelated
-invalid DMA mapping problem.
+Fix wrong configuration value of SC27XX_ADC_SCALE_MASK and
+SC27XX_ADC_SCALE_SHIFT by spec documetation.
 
-Fix it with a call to usb_set_intfdata(..., NULL).
-
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Link: https://lore.kernel.org/r/20220429210913.46804-1-skhan@linuxfoundation.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 5df362a6cf49c (iio: adc: Add Spreadtrum SC27XX PMICs ADC support)
+Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
+Link: https://lore.kernel.org/r/20220419142458.884933-3-gengcixi@gmail.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/rtsx_usb.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/iio/adc/sc27xx_adc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mfd/rtsx_usb.c b/drivers/mfd/rtsx_usb.c
-index 691dab791f7a..e94f855eac15 100644
---- a/drivers/mfd/rtsx_usb.c
-+++ b/drivers/mfd/rtsx_usb.c
-@@ -678,6 +678,7 @@ static int rtsx_usb_probe(struct usb_interface *intf,
- 	return 0;
+diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
+index 2b60efea0c39..4095e1f7d756 100644
+--- a/drivers/iio/adc/sc27xx_adc.c
++++ b/drivers/iio/adc/sc27xx_adc.c
+@@ -35,8 +35,8 @@
  
- out_init_fail:
-+	usb_set_intfdata(ucr->pusb_intf, NULL);
- 	usb_free_coherent(ucr->pusb_dev, IOBUF_SIZE, ucr->iobuf,
- 			ucr->iobuf_dma);
- 	return ret;
+ /* Bits and mask definition for SC27XX_ADC_CH_CFG register */
+ #define SC27XX_ADC_CHN_ID_MASK		GENMASK(4, 0)
+-#define SC27XX_ADC_SCALE_MASK		GENMASK(10, 8)
+-#define SC27XX_ADC_SCALE_SHIFT		8
++#define SC27XX_ADC_SCALE_MASK		GENMASK(10, 9)
++#define SC27XX_ADC_SCALE_SHIFT		9
+ 
+ /* Bits definitions for SC27XX_ADC_INT_EN registers */
+ #define SC27XX_ADC_IRQ_EN		BIT(0)
 -- 
 2.35.1
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A547549114
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B098F549572
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353494AbiFMMVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
+        id S1381722AbiFMOEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358412AbiFMMTb (ORCPT
+        with ESMTP id S1381300AbiFMN4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:19:31 -0400
+        Mon, 13 Jun 2022 09:56:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B047756B36;
-        Mon, 13 Jun 2022 04:03:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF608A049;
+        Mon, 13 Jun 2022 04:36:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95276B80EA7;
-        Mon, 13 Jun 2022 11:02:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC41DC34114;
-        Mon, 13 Jun 2022 11:02:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84FA3B80EC7;
+        Mon, 13 Jun 2022 11:36:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEEB7C3411F;
+        Mon, 13 Jun 2022 11:36:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118178;
-        bh=t+St0Pk2AC2R0+BnigYqFdbjAKksUu1/qNvnLzMwKmY=;
+        s=korg; t=1655120207;
+        bh=gXYvlZnPFUNaM7G9ja0Y0pLazVMlcUftyKWO1ibNkxM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BZCD/ZeddLsip9D7j8TbVQkHbBFA2Y6DgWrq9ux9qLINCOhsZgnXJoYC9yjZ1NUEh
-         YXPnF/aS2QnAKf75l3DUOJLlHG3rluofJmIQEHV9B/bsFJsj+war93aXXCxClqZH4m
-         qgCelOPMrRmMmSaO8E0qnb6bAMuG1TKe0lZhGgM4=
+        b=se6vbjxvqz6sPPJM7qpusnwiYJde+BL6HrvJBBOJMh5dXC8TiWtedd72E/RdKdKMY
+         2mooWW7qsyf0x86qG/5uVheNXpup2vwvTCoVBCOXIvgRGQodXq3Xzki2ni9X0K/O9B
+         adO5Fp2QthsBF6wqDEJgpcHnRNHlKzGZ359evh28=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hou Tao <houtao1@huawei.com>,
-        Yu Kuai <yukuai3@huawei.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 270/287] nbd: call genl_unregister_family() first in nbd_cleanup()
+        stable@vger.kernel.org, Evan Quan <evan.quan@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 269/339] drm/amd/pm: correct the metrics version for SMU 11.0.11/12/13
 Date:   Mon, 13 Jun 2022 12:11:34 +0200
-Message-Id: <20220613094932.187882529@linuxfoundation.org>
+Message-Id: <20220613094934.804918162@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,72 +55,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+From: Evan Quan <evan.quan@amd.com>
 
-[ Upstream commit 06c4da89c24e7023ea448cadf8e9daf06a0aae6e ]
+[ Upstream commit 396beb91a9eb86cbfa404e4220cca8f3ada70777 ]
 
-Otherwise there may be race between module removal and the handling of
-netlink command, which can lead to the oops as shown below:
+Correct the metrics version used for SMU 11.0.11/12/13.
+Fixes misreported GPU metrics (e.g., fan speed, etc.) depending
+on which version of SMU firmware is loaded.
 
-  BUG: kernel NULL pointer dereference, address: 0000000000000098
-  Oops: 0002 [#1] SMP PTI
-  CPU: 1 PID: 31299 Comm: nbd-client Tainted: G            E     5.14.0-rc4
-  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
-  RIP: 0010:down_write+0x1a/0x50
-  Call Trace:
-   start_creating+0x89/0x130
-   debugfs_create_dir+0x1b/0x130
-   nbd_start_device+0x13d/0x390 [nbd]
-   nbd_genl_connect+0x42f/0x748 [nbd]
-   genl_family_rcv_msg_doit.isra.0+0xec/0x150
-   genl_rcv_msg+0xe5/0x1e0
-   netlink_rcv_skb+0x55/0x100
-   genl_rcv+0x29/0x40
-   netlink_unicast+0x1a8/0x250
-   netlink_sendmsg+0x21b/0x430
-   ____sys_sendmsg+0x2a4/0x2d0
-   ___sys_sendmsg+0x81/0xc0
-   __sys_sendmsg+0x62/0xb0
-   __x64_sys_sendmsg+0x1f/0x30
-   do_syscall_64+0x3b/0xc0
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
-  Modules linked in: nbd(E-)
-
-Signed-off-by: Hou Tao <houtao1@huawei.com>
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Josef Bacik <josef@toxicpanda.com>
-Link: https://lore.kernel.org/r/20220521073749.3146892-2-yukuai3@huawei.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1925
+Signed-off-by: Evan Quan <evan.quan@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/nbd.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ .../amd/pm/swsmu/smu11/sienna_cichlid_ppt.c   | 57 ++++++++++++++-----
+ 1 file changed, 44 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index 81b955670b12..29bed6397173 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -2337,6 +2337,12 @@ static void __exit nbd_cleanup(void)
- 	struct nbd_device *nbd;
- 	LIST_HEAD(del_list);
+diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
+index 38f04836c82f..7a1e225fb823 100644
+--- a/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
++++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/sienna_cichlid_ppt.c
+@@ -586,12 +586,28 @@ static int sienna_cichlid_get_smu_metrics_data(struct smu_context *smu,
+ 	uint16_t average_gfx_activity;
+ 	int ret = 0;
  
-+	/*
-+	 * Unregister netlink interface prior to waiting
-+	 * for the completion of netlink commands.
-+	 */
-+	genl_unregister_family(&nbd_genl_family);
-+
- 	nbd_dbg_close();
+-	if ((smu->adev->ip_versions[MP1_HWIP][0] == IP_VERSION(11, 0, 7)) &&
+-		(smu->smc_fw_version >= 0x3A4900))
+-		use_metrics_v3 = true;
+-	else if ((smu->adev->ip_versions[MP1_HWIP][0] == IP_VERSION(11, 0, 7)) &&
+-		(smu->smc_fw_version >= 0x3A4300))
+-		use_metrics_v2 =  true;
++	switch (smu->adev->ip_versions[MP1_HWIP][0]) {
++	case IP_VERSION(11, 0, 7):
++		if (smu->smc_fw_version >= 0x3A4900)
++			use_metrics_v3 = true;
++		else if (smu->smc_fw_version >= 0x3A4300)
++			use_metrics_v2 = true;
++		break;
++	case IP_VERSION(11, 0, 11):
++		if (smu->smc_fw_version >= 0x412D00)
++			use_metrics_v2 = true;
++		break;
++	case IP_VERSION(11, 0, 12):
++		if (smu->smc_fw_version >= 0x3B2300)
++			use_metrics_v2 = true;
++		break;
++	case IP_VERSION(11, 0, 13):
++		if (smu->smc_fw_version >= 0x491100)
++			use_metrics_v2 = true;
++		break;
++	default:
++		break;
++	}
  
- 	mutex_lock(&nbd_index_mutex);
-@@ -2352,7 +2358,6 @@ static void __exit nbd_cleanup(void)
- 	}
+ 	ret = smu_cmn_get_metrics_table(smu,
+ 					NULL,
+@@ -3701,13 +3717,28 @@ static ssize_t sienna_cichlid_get_gpu_metrics(struct smu_context *smu,
+ 	uint16_t average_gfx_activity;
+ 	int ret = 0;
  
- 	idr_destroy(&nbd_index_idr);
--	genl_unregister_family(&nbd_genl_family);
- 	unregister_blkdev(NBD_MAJOR, "nbd");
- }
+-	if ((adev->ip_versions[MP1_HWIP][0] == IP_VERSION(11, 0, 7)) &&
+-		(smu->smc_fw_version >= 0x3A4900))
+-		use_metrics_v3 = true;
+-	else if ((adev->ip_versions[MP1_HWIP][0] == IP_VERSION(11, 0, 7)) &&
+-		(smu->smc_fw_version >= 0x3A4300))
+-		use_metrics_v2 = true;
+-
++	switch (smu->adev->ip_versions[MP1_HWIP][0]) {
++	case IP_VERSION(11, 0, 7):
++		if (smu->smc_fw_version >= 0x3A4900)
++			use_metrics_v3 = true;
++		else if (smu->smc_fw_version >= 0x3A4300)
++			use_metrics_v2 = true;
++		break;
++	case IP_VERSION(11, 0, 11):
++		if (smu->smc_fw_version >= 0x412D00)
++			use_metrics_v2 = true;
++		break;
++	case IP_VERSION(11, 0, 12):
++		if (smu->smc_fw_version >= 0x3B2300)
++			use_metrics_v2 = true;
++		break;
++	case IP_VERSION(11, 0, 13):
++		if (smu->smc_fw_version >= 0x491100)
++			use_metrics_v2 = true;
++		break;
++	default:
++		break;
++	}
  
+ 	ret = smu_cmn_get_metrics_table(smu,
+ 					&metrics_external,
 -- 
 2.35.1
 

@@ -2,135 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9205549DC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE6F549DC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243506AbiFMTbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
+        id S1350304AbiFMTb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244674AbiFMTaf (ORCPT
+        with ESMTP id S1348653AbiFMTaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:30:35 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7073BBE7;
-        Mon, 13 Jun 2022 10:55:52 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 13 Jun 2022 15:30:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58179544D9;
+        Mon, 13 Jun 2022 10:56:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id C34EA1F912;
-        Mon, 13 Jun 2022 17:55:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655142950; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AzS01aA3Xyy9CDel2JXDJs9iyrs3QpwSpqahshjzX74=;
-        b=cqnjztUqJrCHTfw9V8Ca5DYeE4hhSffVbVP2M7yHzGtkufmdle7iK/rqZUXXVJWwvILc+6
-        EdHXTnZWsO2XWqTSSZiB36tUtLKfOeQZOLoNGPczPNYP4F54eWRp6cXpT5TwvRwJNGCBjJ
-        lkBJEdxZ0YrWvHlqX3P3gIIFXIfUN6Q=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 66504134CF;
-        Mon, 13 Jun 2022 17:55:50 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kb/iFiZ6p2JHEwAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 13 Jun 2022 17:55:50 +0000
-Date:   Mon, 13 Jun 2022 19:55:49 +0200
-From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Waiman Long <longman@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v11 7/8] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <20220613175548.GB21665@blackbody.suse.cz>
-References: <20220510153413.400020-1-longman@redhat.com>
- <20220510153413.400020-8-longman@redhat.com>
- <YqYnQ4U4t6j/3UaL@slm.duckdns.org>
- <404171dc-0da3-21f2-5003-9718f875e967@redhat.com>
- <YqarMyNo9oHxhZFh@slm.duckdns.org>
- <20220613142452.GB6910@blackbody.suse.cz>
- <YqdzuSQuAeiPXQvy@slm.duckdns.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B8AFC60F64;
+        Mon, 13 Jun 2022 17:56:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E7EC34114;
+        Mon, 13 Jun 2022 17:56:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655142961;
+        bh=AVWCuJVYHA5oCbeZjk3SDRgDnVqRCyQjJmFyFxBfLpo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=A2QNILqgYE/bty/x4wKU6pbVgb/uqOtincNhO9XKRqNA7Aqhzlji6xQkvIlJI6q72
+         PLCECeYbkBx/XMWr9Lzvb3nUKdPPucOx71v2LNtT5cNU5SO6IGWqT1RRyb1My8AfpX
+         We7FQnT2ywiCrpAhwS214D/7bxvjV2WAQmSlqdoFmZoKkYf/I8ZGYkMMaJaU29cYzQ
+         IqoTWhF39WeHXomEYaSrnkkDxSxO9r5w8HzbSMMmwPb8Dbhz22p+60aa04Iosc73D5
+         rCHiy+1Id3FfTuFwhri60grOjueVolzE7rB2wHl2qm5eR775+3ptNghVDKQm1jgeq8
+         nKYRqrOxeWhwA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id AC6765C0510; Mon, 13 Jun 2022 10:56:00 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 10:56:00 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Subject: Re: [PATCH] rcu-tasks: Delay rcu_tasks_verify_self_tests() to avoid
+ missed callbacks
+Message-ID: <20220613175600.GG1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220610184212.822113-1-longman@redhat.com>
+ <20220610205814.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+ <5aae210e-2553-57ca-e4d5-0b0f20ec92cd@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="v9Ux+11Zm5mwPlX6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqdzuSQuAeiPXQvy@slm.duckdns.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <5aae210e-2553-57ca-e4d5-0b0f20ec92cd@redhat.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 13, 2022 at 12:01:24PM -0400, Waiman Long wrote:
+> On 6/10/22 16:58, Paul E. McKenney wrote:
+> > On Fri, Jun 10, 2022 at 02:42:12PM -0400, Waiman Long wrote:
+> > > Even though rcu_tasks selftest is initiated early in the boot process,
+> > > the verification done at late initcall time may not be late enough to
+> > > catch all the callbacks especially on systems with just a few cpus and
+> > > small memory.
+> > > 
+> > > After 12 bootup's On a s390x system, 1 of them had failed rcu_tasks
+> > > verification test.
+> > > 
+> > > [    8.183013] call_rcu_tasks() has been failed.
+> > > [    8.183041] WARNING: CPU: 0 PID: 1 at kernel/rcu/tasks.h:1696 rcu_tasks_verify_self_tests+0x64/0xd0
+> > > [    8.203246] Callback from call_rcu_tasks() invoked.
+> > > 
+> > > In this particular case, the callback missed the check by about
+> > > 20ms. Similar rcu_tasks selftest failures are also seen in ppc64le
+> > > systems.
+> > > 
+> > > [    0.313391] call_rcu_tasks() has been failed.
+> > > [    0.313407] WARNING: CPU: 0 PID: 1 at kernel/rcu/tasks.h:1696 rcu_tasks_verify_self_tests+0x5c/0xa0
+> > > [    0.335569] Callback from call_rcu_tasks() invoked.
+> > > 
+> > > Avoid this missed callback by delaying the verification using
+> > > delayed_work. The delay is set to be about 0.1s which hopefully will
+> > > be long enough to catch all the callbacks on systems with few cpus and
+> > > small memory.
+> > > 
+> > > Fixes: bfba7ed084f8 ("rcu-tasks: Add RCU-tasks self tests")
+> > > Signed-off-by: Waiman Long <longman@redhat.com>
+> > Good catch, thank you!
+> > 
+> > A few days ago, I queued this:
+> > 
+> > 2585014188d5 ("rcu-tasks: Be more patient for RCU Tasks boot-time testing")
+> > 
+> > This is shown in full at the end of this email.  Does this fix this
+> > problem for you?
+> 
+> I think your patch should fix the false positive warning and it give plenty
+> of time for this to happen.
+> 
+> I do have one question though. rcu_tasks_verify_selft_tests() is called from
+> do_initcalls(). Since it may not be the last late initcall, does that mean
+> other late initcalls queued after that may be delayed by a second or more?
 
---v9Ux+11Zm5mwPlX6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Indeed.  Which is why I would welcome the workqueues portion of your
+patch on top of the above patch in -rcu.  ;-)
 
-On Mon, Jun 13, 2022 at 07:28:25AM -1000, Tejun Heo <tj@kernel.org> wrote:
-> I see. Is this part even necessary? All the .cpus files of the siblings a=
-re
-> owned by the parent who's responsible for configuring both the mode that =
-the
-> cgroup subtree is gonna be in and their cpumasks.=20
+							Thanx, Paul
 
-Do you mean such an example:
-
-    parent	cpuset.cpus=3DSET (root)	cpuset.cpus.partition=3Disolated=20
-    `- child_1	cpuset.cpus=3Dpartition_of(SET) (root)	cpuset.cpus.partition=
-=3Disolated
-    `- ...
-    `- child_n	cpuset.cpus=3Dpartition_of(SET) (root)	cpuset.cpus.partition=
-=3Disolated
-?
-
-I don't think child_*/cpuset.cpus must be owned by root.
-Actually, the root would only configure the parent, i.e.
-parent/cpuset.cpus (whose changes would be disallowed to the
-unprivileged tasks) and the distribution among siblings would up to the
-whatever runs below.
-
-> Given that all the other errors it can make are notified through
-> "invalid (REASON)" in the mode file, wouldn't it fit better to notify
-> cpus configuration error the same way too?
-
-Do you suggest that a write into child_*/cpuset.cpus that'd not be
-exclusive wrt a sibling would result in an error string in
-parent/cpuset.cpus.partition?
-
-Thanks,
-Michal
-
---v9Ux+11Zm5mwPlX6
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: Digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCYqd6IgAKCRAkDQmsBEOq
-uTj0AQCj12EX4WPcqDcmcwMKbJzlpJ02i8IqULaAkdHb+ptGcwEA8e1nvXYC0yDJ
-hezmngAtFbdLR+r20pDT8tTEBO6BKAs=
-=xTZE
------END PGP SIGNATURE-----
-
---v9Ux+11Zm5mwPlX6--
+> > > ---
+> > >   kernel/rcu/tasks.h | 19 ++++++++++++++++---
+> > >   1 file changed, 16 insertions(+), 3 deletions(-)
+> > > 
+> > > diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> > > index 3925e32159b5..25f964a671ba 100644s
+> > > --- a/kernel/rcu/tasks.h
+> > > +++ b/kernel/rcu/tasks.h
+> > > @@ -1735,7 +1735,7 @@ static void rcu_tasks_initiate_self_tests(void)
+> > >   #endif
+> > >   }
+> > > -static int rcu_tasks_verify_self_tests(void)
+> > > +static void rcu_tasks_verify_self_tests(struct work_struct *work __maybe_unused)
+> > >   {
+> > >   	int ret = 0;
+> > >   	int i;
+> > > @@ -1749,10 +1749,23 @@ static int rcu_tasks_verify_self_tests(void)
+> > >   	if (ret)
+> > >   		WARN_ON(1);
+> > > +}
+> > > +
+> > > +static struct delayed_work rcu_tasks_verify_work;
+> > > -	return ret;
+> > > +/*
+> > > + * The rcu_tasks verification is done indirectly via the work queue to
+> > > + * introduce an additional 0.1s delay to catch all the callbacks before
+> > > + * the verification is done as late_initcall time may not be late enough
+> > > + * to have all the callbacks fired.
+> > > + */
+> > > +static int rcu_tasks_verify_schedule_work(void)
+> > > +{
+> > > +	INIT_DELAYED_WORK(&rcu_tasks_verify_work, rcu_tasks_verify_self_tests);
+> > > +	schedule_delayed_work(&rcu_tasks_verify_work, HZ/10);
+> > > +	return 0;
+> > >   }
+> > > -late_initcall(rcu_tasks_verify_self_tests);
+> > > +late_initcall(rcu_tasks_verify_schedule_work);
+> > >   #else /* #ifdef CONFIG_PROVE_RCU */
+> > >   static void rcu_tasks_initiate_self_tests(void) { }
+> > >   #endif /* #else #ifdef CONFIG_PROVE_RCU */
+> > > -- 
+> > > 2.31.1
+> > ------------------------------------------------------------------------
+> > 
+> > commit 2585014188d5e66052b4226b42602b6f3d921389
+> > Author: Paul E. McKenney <paulmck@kernel.org>
+> > Date:   Tue Jun 7 15:23:52 2022 -0700
+> > 
+> >      rcu-tasks: Be more patient for RCU Tasks boot-time testing
+> >      The RCU-Tasks family of grace-period primitives can take some time to
+> >      complete, and the amount of time can depend on the exact hardware and
+> >      software configuration.  Some configurations boot up fast enough that the
+> >      RCU-Tasks verification process gets false-positive failures.  This commit
+> >      therefore allows up to 30 seconds for the grace periods to complete, with
+> >      this value adjustable downwards using the rcupdate.rcu_task_stall_timeout
+> >      kernel boot parameter.
+> >      Reported-by: Matthew Wilcox <willy@infradead.org>
+> >      Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> >      Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> >      Tested-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > 
+> > diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> > index df6b2cb2f205d..fcbd0ec33c866 100644
+> > --- a/kernel/rcu/tasks.h
+> > +++ b/kernel/rcu/tasks.h
+> > @@ -145,6 +145,7 @@ static int rcu_task_ipi_delay __read_mostly = RCU_TASK_IPI_DELAY;
+> >   module_param(rcu_task_ipi_delay, int, 0644);
+> >   /* Control stall timeouts.  Disable with <= 0, otherwise jiffies till stall. */
+> > +#define RCU_TASK_BOOT_STALL_TIMEOUT (HZ * 30)
+> >   #define RCU_TASK_STALL_TIMEOUT (HZ * 60 * 10)
+> >   static int rcu_task_stall_timeout __read_mostly = RCU_TASK_STALL_TIMEOUT;
+> >   module_param(rcu_task_stall_timeout, int, 0644);
+> > @@ -1776,23 +1777,24 @@ struct rcu_tasks_test_desc {
+> >   	struct rcu_head rh;
+> >   	const char *name;
+> >   	bool notrun;
+> > +	unsigned long runstart;
+> >   };
+> >   static struct rcu_tasks_test_desc tests[] = {
+> >   	{
+> >   		.name = "call_rcu_tasks()",
+> >   		/* If not defined, the test is skipped. */
+> > -		.notrun = !IS_ENABLED(CONFIG_TASKS_RCU),
+> > +		.notrun = IS_ENABLED(CONFIG_TASKS_RCU),
+> >   	},
+> >   	{
+> >   		.name = "call_rcu_tasks_rude()",
+> >   		/* If not defined, the test is skipped. */
+> > -		.notrun = !IS_ENABLED(CONFIG_TASKS_RUDE_RCU),
+> > +		.notrun = IS_ENABLED(CONFIG_TASKS_RUDE_RCU),
+> >   	},
+> >   	{
+> >   		.name = "call_rcu_tasks_trace()",
+> >   		/* If not defined, the test is skipped. */
+> > -		.notrun = !IS_ENABLED(CONFIG_TASKS_TRACE_RCU)
+> > +		.notrun = IS_ENABLED(CONFIG_TASKS_TRACE_RCU)
+> >   	}
+> >   };
+> > @@ -1803,23 +1805,28 @@ static void test_rcu_tasks_callback(struct rcu_head *rhp)
+> >   	pr_info("Callback from %s invoked.\n", rttd->name);
+> > -	rttd->notrun = true;
+> > +	rttd->notrun = false;
+> >   }
+> >   static void rcu_tasks_initiate_self_tests(void)
+> >   {
+> > +	unsigned long j = jiffies;
+> > +
+> >   	pr_info("Running RCU-tasks wait API self tests\n");
+> >   #ifdef CONFIG_TASKS_RCU
+> > +	tests[0].runstart = j;
+> >   	synchronize_rcu_tasks();
+> >   	call_rcu_tasks(&tests[0].rh, test_rcu_tasks_callback);
+> >   #endif
+> >   #ifdef CONFIG_TASKS_RUDE_RCU
+> > +	tests[1].runstart = j;
+> >   	synchronize_rcu_tasks_rude();
+> >   	call_rcu_tasks_rude(&tests[1].rh, test_rcu_tasks_callback);
+> >   #endif
+> >   #ifdef CONFIG_TASKS_TRACE_RCU
+> > +	tests[2].runstart = j;
+> >   	synchronize_rcu_tasks_trace();
+> >   	call_rcu_tasks_trace(&tests[2].rh, test_rcu_tasks_callback);
+> >   #endif
+> > @@ -1829,11 +1836,18 @@ static int rcu_tasks_verify_self_tests(void)
+> >   {
+> >   	int ret = 0;
+> >   	int i;
+> > +	unsigned long bst = rcu_task_stall_timeout;
+> > +	if (bst <= 0 || bst > RCU_TASK_BOOT_STALL_TIMEOUT)
+> > +		bst = RCU_TASK_BOOT_STALL_TIMEOUT;
+> >   	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+> > -		if (!tests[i].notrun) {		// still hanging.
+> > -			pr_err("%s has been failed.\n", tests[i].name);
+> > -			ret = -1;
+> > +		while (tests[i].notrun) {		// still hanging.
+> > +			if (time_after(jiffies, tests[i].runstart + bst)) {
+> > +				pr_err("%s has failed boot-time tests.\n", tests[i].name);
+> > +				ret = -1;
+> > +				break;
+> > +			}
+> > +			schedule_timeout_uninterruptible(1);
+> >   		}
+> >   	}
+> > 
+> 

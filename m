@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27FBB548FA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EF4549539
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376266AbiFMNRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43520 "EHLO
+        id S1380233AbiFMOBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359332AbiFMNJt (ORCPT
+        with ESMTP id S1380711AbiFMNy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:09:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A732839155;
-        Mon, 13 Jun 2022 04:20:18 -0700 (PDT)
+        Mon, 13 Jun 2022 09:54:59 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E31C81495;
+        Mon, 13 Jun 2022 04:35:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 03D9D60B6B;
-        Mon, 13 Jun 2022 11:20:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DAA7C34114;
-        Mon, 13 Jun 2022 11:20:16 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 85FB7CE1233;
+        Mon, 13 Jun 2022 11:35:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71820C34114;
+        Mon, 13 Jun 2022 11:35:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119217;
-        bh=aT6YvPhoPElGUTTysLZKWXB1UMLXmkhkzGyEYMZj38o=;
+        s=korg; t=1655120132;
+        bh=jGr8WXM1jdPMD04g4tRJ+Sq3zW2YgJpdz6hJ9tysoig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BHYjNakHHkBMqdsauLT2fpKtn6pTWk7Gc9+RZAYL/cWuxH7SFjhGaZUkglO+GncON
-         pKTMZ9DE13KMaQKE5o7xA8uhAhm9U9E7otF3Y0iuuDjNU3O/Hu2a8Y111Imx6JlQlB
-         A8RB2qB+AugAYK1Uixdkg424VMv0VtUENlzrBoBU=
+        b=H8XjONzZgUkpabJSdOxJX3caSYz57RVtLh0sm8cVfFm5JsD1ZQh+51xkDER6QLWHc
+         3sRLwBQIyLNNbzId5F4ohzQZjV/oLt+EQc+IHZZA+G1V7sLqMDEfmz34OVBFW0xKsc
+         1EHxVoRNMfmy5XNvR8YLdvdHz9uLmWBcnelh2jDQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaoke Wang <xkernel.wang@foxmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 165/247] iio: dummy: iio_simple_dummy: check the return value of kstrdup()
+Subject: [PATCH 5.18 242/339] usb: dwc3: host: Stop setting the ACPI companion
 Date:   Mon, 13 Jun 2022 12:11:07 +0200
-Message-Id: <20220613094927.963104757@linuxfoundation.org>
+Message-Id: <20220613094933.994206590@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,85 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoke Wang <xkernel.wang@foxmail.com>
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-[ Upstream commit ba93642188a6fed754bf7447f638bc410e05a929 ]
+[ Upstream commit 7fd069d65da2e20b1caec3b7bcf9dfbe28c04bb2 ]
 
-kstrdup() is also a memory allocation-related function, it returns NULL
-when some memory errors happen. So it is better to check the return
-value of it so to catch the memory error in time. Besides, there should
-have a kfree() to clear up the allocation if we get a failure later in
-this function to prevent memory leak.
+It is no longer needed. The sysdev pointer is now used when
+assigning the ACPI companions to the xHCI ports and USB
+devices.
 
-Signed-off-by: Xiaoke Wang <xkernel.wang@foxmail.com>
-Link: https://lore.kernel.org/r/tencent_C920CFCC33B9CC1C63141FE1334A39FF8508@qq.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Assigning the ACPI companion here resulted in the
+fwnode->secondary pointer to be replaced also for the parent
+dwc3 device since the primary fwnode (the ACPI companion)
+was shared. That was unintentional and it created potential
+side effects like resource leaks.
+
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Link: https://lore.kernel.org/r/20220428111056.3558-3-heikki.krogerus@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/dummy/iio_simple_dummy.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ drivers/usb/dwc3/host.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/drivers/iio/dummy/iio_simple_dummy.c b/drivers/iio/dummy/iio_simple_dummy.c
-index c0b7ef900735..c24f609c2ade 100644
---- a/drivers/iio/dummy/iio_simple_dummy.c
-+++ b/drivers/iio/dummy/iio_simple_dummy.c
-@@ -575,10 +575,9 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
- 	 */
+diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
+index eda871973d6c..f56c30cf151e 100644
+--- a/drivers/usb/dwc3/host.c
++++ b/drivers/usb/dwc3/host.c
+@@ -7,7 +7,6 @@
+  * Authors: Felipe Balbi <balbi@ti.com>,
+  */
  
- 	swd = kzalloc(sizeof(*swd), GFP_KERNEL);
--	if (!swd) {
--		ret = -ENOMEM;
--		goto error_kzalloc;
--	}
-+	if (!swd)
-+		return ERR_PTR(-ENOMEM);
-+
- 	/*
- 	 * Allocate an IIO device.
- 	 *
-@@ -590,7 +589,7 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
- 	indio_dev = iio_device_alloc(parent, sizeof(*st));
- 	if (!indio_dev) {
- 		ret = -ENOMEM;
--		goto error_ret;
-+		goto error_free_swd;
+-#include <linux/acpi.h>
+ #include <linux/irq.h>
+ #include <linux/of.h>
+ #include <linux/platform_device.h>
+@@ -83,7 +82,6 @@ int dwc3_host_init(struct dwc3 *dwc)
  	}
  
- 	st = iio_priv(indio_dev);
-@@ -616,6 +615,10 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
- 	 *    indio_dev->name = spi_get_device_id(spi)->name;
- 	 */
- 	indio_dev->name = kstrdup(name, GFP_KERNEL);
-+	if (!indio_dev->name) {
-+		ret = -ENOMEM;
-+		goto error_free_device;
-+	}
+ 	xhci->dev.parent	= dwc->dev;
+-	ACPI_COMPANION_SET(&xhci->dev, ACPI_COMPANION(dwc->dev));
  
- 	/* Provide description of available channels */
- 	indio_dev->channels = iio_dummy_channels;
-@@ -632,7 +635,7 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
- 
- 	ret = iio_simple_dummy_events_register(indio_dev);
- 	if (ret < 0)
--		goto error_free_device;
-+		goto error_free_name;
- 
- 	ret = iio_simple_dummy_configure_buffer(indio_dev);
- 	if (ret < 0)
-@@ -649,11 +652,12 @@ static struct iio_sw_device *iio_dummy_probe(const char *name)
- 	iio_simple_dummy_unconfigure_buffer(indio_dev);
- error_unregister_events:
- 	iio_simple_dummy_events_unregister(indio_dev);
-+error_free_name:
-+	kfree(indio_dev->name);
- error_free_device:
- 	iio_device_free(indio_dev);
--error_ret:
-+error_free_swd:
- 	kfree(swd);
--error_kzalloc:
- 	return ERR_PTR(ret);
- }
+ 	dwc->xhci = xhci;
  
 -- 
 2.35.1

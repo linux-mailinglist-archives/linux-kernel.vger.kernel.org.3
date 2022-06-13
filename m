@@ -2,203 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96875498D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8828548F8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243431AbiFMKVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:21:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S1346191AbiFMKg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242999AbiFMKUo (ORCPT
+        with ESMTP id S244757AbiFMKe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:20:44 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D34CE8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 03:17:24 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LM6sQ4xtyzjXgk;
-        Mon, 13 Jun 2022 18:15:54 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 18:17:22 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 18:17:21 +0800
-Message-ID: <476432e2-125f-13d6-ce7a-19d94465c138@huawei.com>
-Date:   Mon, 13 Jun 2022 18:17:21 +0800
+        Mon, 13 Jun 2022 06:34:57 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC99638B;
+        Mon, 13 Jun 2022 03:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655115754; x=1686651754;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=aCHcEVeIE6fw+AwZoNsZtOvyrpqrZZV9YMb3ufFhSHM=;
+  b=ctiXMKP1Q8BcZzKvxHir7sVRhnepHVC2hrCPVPdv8RSivwj+Ed1YIa3c
+   oGbtRDzee/zXIfZIH1BeCkQyI2T6rknUWuFyBfOfauiRC8ijVGrwTiwnh
+   EhnuZ8XP2oFHYnZHq4uQGgSUE+Zi4roUYpgqwHNjYgo1WG2S4D0hEm288
+   8=;
+Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Jun 2022 03:22:33 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 03:22:33 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 13 Jun 2022 03:22:32 -0700
+Received: from hu-srivasam-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 13 Jun 2022 03:22:28 -0700
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
+        <dianders@chromium.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>
+CC:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: [PATCH v13 00/12] Add soundcard support for sc7280 based platforms.
+Date:   Mon, 13 Jun 2022 15:52:01 +0530
+Message-ID: <1655115733-16309-1-git-send-email-quic_srivasam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] ARM: Mark the FDT_FIXED sections as shareable
-Content-Language: en-US
-To:     Zhen Lei <thunder.leizhen@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Pitre <nico@fluxnic.net>
-References: <20220613091901.730-1-thunder.leizhen@huawei.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20220613091901.730-1-thunder.leizhen@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch set is to add bolero digital macros, WCD and maxim codecs nodes
+for audio on sc7280 based platforms.
 
-On 2022/6/13 17:19, Zhen Lei wrote:
-> commit 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear
-> region") use FDT_FIXED_BASE to map the whole FDT_FIXED_SIZE memory area
-> which contains fdt. But it only reserves the exact physical memory that
-> fdt occupied. Unfortunately, this mapping is non-shareable. An illegal or
-> speculative read access can bring the RAM content from non-fdt zone into
-> cache, PIPT makes it to be hit by subsequently read access through
-> shareable mapping(such as linear mapping), and the cache consistency
-> between cores is lost due to non-shareable property.
->
-> |<---------FDT_FIXED_SIZE------>|
-> |                               |
->   -------------------------------
-> | <non-fdt> | <fdt> | <non-fdt> |
->   -------------------------------
->
-> 1. CoreA read <non-fdt> through MT_ROM mapping, the old data is loaded
->     into the cache.
-> 2. CoreB write <non-fdt> to update data through linear mapping. CoreA
->     received the notification to invalid the corresponding cachelines, but
->     the property non-shareable makes it to be ignored.
-> 3. CoreA read <non-fdt> through linear mapping, cache hit, the old data
->     is read.
->
-> To eliminate this risk, add a new memory type MT_MEMORY_RO. Compared to
-> MT_ROM, it is shareable and non-executable.
->
-> Here's an example:
->    list_del corruption. prev->next should be c0ecbf74, but was c08410dc
->    kernel BUG at lib/list_debug.c:53!
->    ... ...
->    PC is at __list_del_entry_valid+0x58/0x98
->    LR is at __list_del_entry_valid+0x58/0x98
->    psr: 60000093
->    sp : c0ecbf30  ip : 00000000  fp : 00000001
->    r10: c08410d0  r9 : 00000001  r8 : c0825e0c
->    r7 : 20000013  r6 : c08410d0  r5 : c0ecbf74  r4 : c0ecbf74
->    r3 : c0825d08  r2 : 00000000  r1 : df7ce6f4  r0 : 00000044
->    ... ...
->    Stack: (0xc0ecbf30 to 0xc0ecc000)
->    bf20:                                     c0ecbf74 c0164fd0 c0ecbf70 c0165170
->    bf40: c0eca000 c0840c00 c0840c00 c0824500 c0825e0c c0189bbc c088f404 60000013
->    bf60: 60000013 c0e85100 000004ec 00000000 c0ebcdc0 c0ecbf74 c0ecbf74 c0825d08
->    ... ...                                           <  next     prev  >
->    (__list_del_entry_valid) from (__list_del_entry+0xc/0x20)
->    (__list_del_entry) from (finish_swait+0x60/0x7c)
->    (finish_swait) from (rcu_gp_kthread+0x560/0xa20)
->    (rcu_gp_kthread) from (kthread+0x14c/0x15c)
->    (kthread) from (ret_from_fork+0x14/0x24)
->
-> The faulty list node to be deleted is a local variable, its address is
-> c0ecbf74. The dumped stack shows that 'prev' = c0ecbf74, but its value
-> before lib/list_debug.c:53 is c08410dc. A large amount of printing results
-> in swapping out the cacheline containing the old data(MT_ROM mapping is
-> read only, so the cacheline cannot be dirty), and the subsequent dump
-> operation obtains new data from the DDR.
->
-> Fixes: 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear region")
-> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
->   arch/arm/include/asm/mach/map.h |  1 +
->   arch/arm/mm/mmu.c               | 15 ++++++++++++++-
->   2 files changed, 15 insertions(+), 1 deletion(-)
->
-> v1 --> v2:
-> As Ard Biesheuvel's suggestion, add a new memory type MT_MEMORY_RO instead of
-> add a new memory type MT_ROM_XIP.
->
-> diff --git a/arch/arm/include/asm/mach/map.h b/arch/arm/include/asm/mach/map.h
-> index 92282558caf7cdb..2b8970d8e5a2ff8 100644
-> --- a/arch/arm/include/asm/mach/map.h
-> +++ b/arch/arm/include/asm/mach/map.h
-> @@ -27,6 +27,7 @@ enum {
->   	MT_HIGH_VECTORS,
->   	MT_MEMORY_RWX,
->   	MT_MEMORY_RW,
-> +	MT_MEMORY_RO,
->   	MT_ROM,
->   	MT_MEMORY_RWX_NONCACHED,
->   	MT_MEMORY_RW_DTCM,
-> diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
-> index 5e2be37a198e29e..cd17e324aa51ea6 100644
-> --- a/arch/arm/mm/mmu.c
-> +++ b/arch/arm/mm/mmu.c
-> @@ -296,6 +296,13 @@ static struct mem_type mem_types[] __ro_after_init = {
->   		.prot_sect = PMD_TYPE_SECT | PMD_SECT_AP_WRITE,
->   		.domain    = DOMAIN_KERNEL,
->   	},
-> +	[MT_MEMORY_RO] = {
-> +		.prot_pte  = L_PTE_PRESENT | L_PTE_YOUNG | L_PTE_DIRTY |
-> +			     L_PTE_XN | L_PTE_RDONLY,
-> +		.prot_l1   = PMD_TYPE_TABLE,
-> +		.prot_sect = PMD_TYPE_SECT,
-> +		.domain    = DOMAIN_KERNEL,
-> +	},
->   	[MT_ROM] = {
->   		.prot_sect = PMD_TYPE_SECT,
->   		.domain    = DOMAIN_KERNEL,
-> @@ -489,6 +496,7 @@ static void __init build_mem_type_table(void)
->   
->   			/* Also setup NX memory mapping */
->   			mem_types[MT_MEMORY_RW].prot_sect |= PMD_SECT_XN;
-> +			mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_XN;
->   		}
->   		if (cpu_arch >= CPU_ARCH_ARMv7 && (cr & CR_TRE)) {
->   			/*
-> @@ -568,6 +576,7 @@ static void __init build_mem_type_table(void)
->   		mem_types[MT_ROM].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
->   		mem_types[MT_MINICLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
->   		mem_types[MT_CACHECLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
-> +		mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
->   #endif
->   
->   		/*
-> @@ -587,6 +596,8 @@ static void __init build_mem_type_table(void)
->   			mem_types[MT_MEMORY_RWX].prot_pte |= L_PTE_SHARED;
->   			mem_types[MT_MEMORY_RW].prot_sect |= PMD_SECT_S;
->   			mem_types[MT_MEMORY_RW].prot_pte |= L_PTE_SHARED;
-> +			mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_S;
-> +			mem_types[MT_MEMORY_RO].prot_pte |= L_PTE_SHARED;
->   			mem_types[MT_MEMORY_DMA_READY].prot_pte |= L_PTE_SHARED;
->   			mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= PMD_SECT_S;
->   			mem_types[MT_MEMORY_RWX_NONCACHED].prot_pte |= L_PTE_SHARED;
-> @@ -647,6 +658,8 @@ static void __init build_mem_type_table(void)
->   	mem_types[MT_MEMORY_RWX].prot_pte |= kern_pgprot;
->   	mem_types[MT_MEMORY_RW].prot_sect |= ecc_mask | cp->pmd;
->   	mem_types[MT_MEMORY_RW].prot_pte |= kern_pgprot;
-> +	mem_types[MT_MEMORY_RO].prot_sect |= ecc_mask | cp->pmd;
-> +	mem_types[MT_MEMORY_RO].prot_pte |= kern_pgprot;
->   	mem_types[MT_MEMORY_DMA_READY].prot_pte |= kern_pgprot;
->   	mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= ecc_mask;
->   	mem_types[MT_ROM].prot_sect |= cp->pmd;
-> @@ -1360,7 +1373,7 @@ static void __init devicemaps_init(const struct machine_desc *mdesc)
->   		map.pfn = __phys_to_pfn(__atags_pointer & SECTION_MASK);
->   		map.virtual = FDT_FIXED_BASE;
->   		map.length = FDT_FIXED_SIZE;
-> -		map.type = MT_ROM;
-> +		map.type = MT_MEMORY_RO;
->   		create_mapping(&map);
->   	}
->   
+This patch set depends on:
+    [LPASS DTS: pinmux changes]
+    -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=649733
+    [LPASS DTS: l17b LDO regulator changes]
+    -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=634597
+    [LPASS Platform Driver: External MCLK name dtbinding changes]
+    -- https://patchwork.kernel.org/project/alsa-devel/list/?series=646859
+    [Clock DTS: reset control changes]
+    -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=638002
+    [Clock: External MCLK and reset control driver changes]
+    -- https://patchwork.kernel.org/project/linux-clk/list/?series=647366
+    [Clock DTS: lpasscc node disable and lpasscore node name changes]
+    -- https://patchwork.kernel.org/project/linux-arm-msm/list/?series=644250
+
+Changes Since V12:
+    -- Update 'lpasscore' clock node name to lpass_core to match latest clock patches.
+    -- Update external mclk0 name and it's source node.
+    -- Move sound node to separate wcd specific dtsi file.
+    -- Move CRD specific lpass_cpu node Enabling to separate wcd specific dtsi file.
+    -- Update dependency list.
+Changes Since V11:
+    -- Remove output-low pinconf setting in wcd-reset-n-sleep node.
+    -- Update dependency list.
+Changes Since V10:
+    -- Modify digital macro codecs pin control labels.
+    -- Updated dependency list.
+Changes Since V9:
+    -- Move wcd codec and digital codec nodes to sc7280-qcard file.
+    -- Modify the reg property as per link number in sound node.
+    -- Fix the us-euro pin control usage in wcd codec node.
+    -- Move wcd pin control nodes to specific crd board files.
+    -- Sort max98360a codec node in alphabetical order.
+    -- Modify the commit messages.
+Changes Since V8:
+    -- Split patches as per sc7280 CRD revision 3, 4 and 5 boards.
+    -- Add corresponding dt nodes for herobrine crd boards.
+    -- Update dai-link node names as per dt-bindings in sound node.
+    -- Add reg property in sound node as per dt-bindings which was removed in previous series.
+    -- Fix typo errors.
+    -- Update wcd codec pin control properties in board specific files.
+Changes Since V7:
+    -- Remove redundant interrupt names in soundwire node.
+    -- Fix typo errors.
+    -- Remove redundant reg property in sound node.
+    -- Rebased on top of latest kernel tip.
+Changes Since V6:
+    -- Modify link-names and audio routing in a sound node.
+    -- Move amp_en pin control node to appropriate consumer patch.
+    -- Split patches as per digital macro codecs and board specific codecs and sort it.
+    -- Modify label and node names to lpass specific.
+Changes Since V5:
+    -- Move soc specific bolero digital codec nodes to soc specific file.
+    -- Bring wcd938x codec reset pin control and US/EURO HS selection nodes from other series.
+    -- Change node name and remove redundant status property in sound node.
+Changes Since V4:
+    -- Update nodes in sorting order.
+    -- Update DTS node names as per dt-bindings.
+    -- Update Node properties in proper order.
+    -- Update missing pinctrl properties like US/EURO HS selection, wcd reset control.
+    -- Remove redundant labels.
+    -- Remove unused size cells and address cells in tx macro node.
+    -- Keep all same nodes at one place, which are defined in same file.
+    -- Add max98360a codec node to herobrine board specific targets.
+Changes Since V3:
+    -- Move digital codec macro nodes to board specific dtsi file.
+    -- Update pin controls in lpass cpu node.
+    -- Update dependency patch list.
+    -- Create patches on latest kernel.
+Changes Since V2:
+    -- Add power domains to digital codec macro nodes.
+    -- Change clock node usage in lpass cpu node.
+    -- Add codec mem clock to lpass cpu node.
+    -- Modify the node names to be generic.
+    -- Move sound and codec nodes to root node.
+    -- sort dai links as per reg.
+    -- Fix typo errors.
+Changes Since V1:
+    -- Update the commit message of cpu node patch.
+    -- Add gpio control property to support Euro headset in wcd938x node.
+    -- Fix clock properties in lpass cpu and digital codec macro node.
+
+Srinivasa Rao Mandadapu (12):
+  arm64: dts: qcom: sc7280: Add nodes for soundwire and va tx rx digital
+    macro codecs
+  arm64: dts: qcom: sc7280: Enable digital codecs and soundwire for CRD
+    1.0/2.0 and IDP boards
+  arm64: dts: qcom: sc7280: Enable digital codecs and soundwire for CRD
+    3.0/3.1
+  arm64: dts: qcom: sc7280: Add wcd9385 codec node for CRD 1.0/2.0 and
+    IDP boards
+  arm64: dts: qcom: sc7280: Add wcd9385 codec node for CRD 3.0/3.1
+  arm64: dts: qcom: sc7280: Add max98360a codec for CRD 1.0/2.0 and IDP
+    boards
+  arm64: dts: qcom: sc7280: herobrine: Add max98360a codec node
+  arm64: dts: qcom: sc7280: Add lpass cpu node
+  arm64: dts: qcom: sc7280: Enable lpass cpu node for CRD 1.0/2.0 and
+    IDP boards.
+  arm64: dts: qcom: sc7280: Enable lpass cpu node for CRD 3.0/3.1
+  arm64: dts: qcom: sc7280: Add sound node for CRD 1.0/2.0 and IDP
+    boards
+  arm64: dts: qcom: sc7280: Add sound node for CRD 3.0/3.1
+
+ arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts         |  37 ++++
+ .../dts/qcom/sc7280-herobrine-audio-wcd9385.dtsi   | 129 ++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dts  |  24 +++
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi     |   8 +
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi           | 217 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi         |  74 +++++++
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               | 190 ++++++++++++++++++
+ 7 files changed, 679 insertions(+)
+
+-- 
+2.7.4
+

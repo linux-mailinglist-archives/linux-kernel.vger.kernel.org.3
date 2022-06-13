@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB1A548B39
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B34D254930D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382573AbiFMOSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
+        id S1347016AbiFMKst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381103AbiFMOKg (ORCPT
+        with ESMTP id S1346080AbiFMKnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:10:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A882D1E3;
-        Mon, 13 Jun 2022 04:42:07 -0700 (PDT)
+        Mon, 13 Jun 2022 06:43:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C56DECA;
+        Mon, 13 Jun 2022 03:24:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B555B80EB2;
-        Mon, 13 Jun 2022 11:41:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E791DC34114;
-        Mon, 13 Jun 2022 11:41:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5C47EB80E90;
+        Mon, 13 Jun 2022 10:24:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A76F2C34114;
+        Mon, 13 Jun 2022 10:24:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120518;
-        bh=wKYQNm6xG3nOwG/8tiktpJg4CqIDjgkr82oZoP7izT4=;
+        s=korg; t=1655115878;
+        bh=rQ5Q1vZuUz/XgLIvT3oShsL4hfqQwG5DHqAKjtJrHHM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ibSR8U0fTQivdfTFvOonOyByoT7jxau/B54GXM/JEsvYLSdPdZUyDdqiUXZzMSHqr
-         up58GENHjlCsNL+sgT6yDuQJGoJShDJsz1+SFZxGlhpyqB8pVNqfVUMK3O6LR+uTxU
-         guB6xlr0U7LnhqqJYizQijfLDAVMm9L9ceHMwlJs=
+        b=ClJenaYbvRtMaToZ5Bv6CczLkpEh2Fdk/fqW7I06DwvwkWmhaIpZtXBkvR5srSTas
+         UXRNjJBTH3uBwkus5rkKW51cQP3MrLTLbmEYGVOUx1lTnXgcEuR2++1J8bFzJJEheE
+         WLovnkIlao/EVUgWyzCaycWbhwm9GxgllrtB38As=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 038/298] power: supply: ab8500_fg: Allocate wq in probe
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com
+Subject: [PATCH 4.14 074/218] media: pvrusb2: fix array-index-out-of-bounds in pvr2_i2c_core_init
 Date:   Mon, 13 Jun 2022 12:08:52 +0200
-Message-Id: <20220613094926.091998782@linuxfoundation.org>
+Message-Id: <20220613094922.592722459@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,78 +57,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linus Walleij <linus.walleij@linaro.org>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit 010ddb813f3554cbbf8bd13b731452236a2c8017 ]
+[ Upstream commit 471bec68457aaf981add77b4f590d65dd7da1059 ]
 
-The workqueue is allocated in bind() but all interrupts are
-registered in probe().
+Syzbot reported that -1 is used as array index. The problem was in
+missing validation check.
 
-Some interrupts put work on the workqueue, which can have
-bad side effects.
+hdw->unit_number is initialized with -1 and then if init table walk fails
+this value remains unchanged. Since code blindly uses this member for
+array indexing adding sanity check is the easiest fix for that.
 
-Allocate the workqueue in probe() instead, destroy it in
-.remove() and make unbind() simply flush the workqueue.
+hdw->workpoll initialization moved upper to prevent warning in
+__flush_work.
 
-Fixes: 1c1f13a006ed ("power: supply: ab8500: Move to componentized binding")
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Reported-and-tested-by: syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com
+
+Fixes: d855497edbfb ("V4L/DVB (4228a): pvrusb2 to kernel 2.6.18")
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/ab8500_fg.c | 19 ++++++++++---------
- 1 file changed, 10 insertions(+), 9 deletions(-)
+ drivers/media/usb/pvrusb2/pvrusb2-hdw.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
-index 09a4cbd69676..23adcb597ff9 100644
---- a/drivers/power/supply/ab8500_fg.c
-+++ b/drivers/power/supply/ab8500_fg.c
-@@ -2995,13 +2995,6 @@ static int ab8500_fg_bind(struct device *dev, struct device *master,
- {
- 	struct ab8500_fg *di = dev_get_drvdata(dev);
+diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+index 4ca7e1fad08b..4b0d44e25396 100644
+--- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
++++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
+@@ -2563,6 +2563,11 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
+ 	} while (0);
+ 	mutex_unlock(&pvr2_unit_mtx);
  
--	/* Create a work queue for running the FG algorithm */
--	di->fg_wq = alloc_ordered_workqueue("ab8500_fg_wq", WQ_MEM_RECLAIM);
--	if (di->fg_wq == NULL) {
--		dev_err(dev, "failed to create work queue\n");
--		return -ENOMEM;
--	}
--
- 	di->bat_cap.max_mah_design = di->bm->bi->charge_full_design_uah;
- 	di->bat_cap.max_mah = di->bat_cap.max_mah_design;
- 	di->vbat_nom_uv = di->bm->bi->voltage_max_design_uv;
-@@ -3025,8 +3018,7 @@ static void ab8500_fg_unbind(struct device *dev, struct device *master,
- 	if (ret)
- 		dev_err(dev, "failed to disable coulomb counter\n");
- 
--	destroy_workqueue(di->fg_wq);
--	flush_scheduled_work();
-+	flush_workqueue(di->fg_wq);
- }
- 
- static const struct component_ops ab8500_fg_component_ops = {
-@@ -3070,6 +3062,13 @@ static int ab8500_fg_probe(struct platform_device *pdev)
- 	ab8500_fg_charge_state_to(di, AB8500_FG_CHARGE_INIT);
- 	ab8500_fg_discharge_state_to(di, AB8500_FG_DISCHARGE_INIT);
- 
-+	/* Create a work queue for running the FG algorithm */
-+	di->fg_wq = alloc_ordered_workqueue("ab8500_fg_wq", WQ_MEM_RECLAIM);
-+	if (di->fg_wq == NULL) {
-+		dev_err(dev, "failed to create work queue\n");
-+		return -ENOMEM;
-+	}
++	INIT_WORK(&hdw->workpoll, pvr2_hdw_worker_poll);
 +
- 	/* Init work for running the fg algorithm instantly */
- 	INIT_WORK(&di->fg_work, ab8500_fg_instant_work);
++	if (hdw->unit_number == -1)
++		goto fail;
++
+ 	cnt1 = 0;
+ 	cnt2 = scnprintf(hdw->name+cnt1,sizeof(hdw->name)-cnt1,"pvrusb2");
+ 	cnt1 += cnt2;
+@@ -2574,8 +2579,6 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
+ 	if (cnt1 >= sizeof(hdw->name)) cnt1 = sizeof(hdw->name)-1;
+ 	hdw->name[cnt1] = 0;
  
-@@ -3181,6 +3180,8 @@ static int ab8500_fg_remove(struct platform_device *pdev)
- 	int ret = 0;
- 	struct ab8500_fg *di = platform_get_drvdata(pdev);
+-	INIT_WORK(&hdw->workpoll,pvr2_hdw_worker_poll);
+-
+ 	pvr2_trace(PVR2_TRACE_INIT,"Driver unit number is %d, name is %s",
+ 		   hdw->unit_number,hdw->name);
  
-+	destroy_workqueue(di->fg_wq);
-+	flush_scheduled_work();
- 	component_del(&pdev->dev, &ab8500_fg_component_ops);
- 	list_del(&di->node);
- 	ab8500_fg_sysfs_exit(di);
 -- 
 2.35.1
 

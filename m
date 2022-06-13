@@ -2,65 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9208549058
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7CF6549691
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385395AbiFMObI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
+        id S1353406AbiFMMcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383719AbiFMOXt (ORCPT
+        with ESMTP id S1358343AbiFMM3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:23:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853EF2E6BD;
-        Mon, 13 Jun 2022 04:45:04 -0700 (PDT)
+        Mon, 13 Jun 2022 08:29:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22724286F0;
+        Mon, 13 Jun 2022 04:06:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 223C9612AC;
-        Mon, 13 Jun 2022 11:45:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C3DCC34114;
-        Mon, 13 Jun 2022 11:45:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6939B80EA7;
+        Mon, 13 Jun 2022 11:06:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 182E7C34114;
+        Mon, 13 Jun 2022 11:06:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120703;
-        bh=IwDaFil21y+RmqPmcFfu8yD/yJO63gJXtYpW6HqIQbw=;
+        s=korg; t=1655118399;
+        bh=vwXcdhnVOCrYk5dtqcAHOP3Nk/WMBvVWYBtNL46+VZE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dJw1HkuNsphHgcAptC6mbbUQfWJR/HEmwSGldL5/0RS/C/4+49RR4H4B8GhQtwLnT
-         3jW5lOyrDBzf9QI1UXzIj0X/LCO6P4QwlhYob0e95uUEsHWf5+uPvWJifVhaeNuqVB
-         vdC1VElNt5dlsGOJAnSjLW5O6HQbX1AuDKx0W/bc=
+        b=enhgt5VRzCZ2kZvXT0r8nyUubbuRWJm2CJqXnrErlUZL3klMnvQ/8sc4JmMyMlde2
+         ztHiQ0eRGmcmmmkAp2kizfIuCHEP1UCsZYFfEHlwoHgT4Z7BNwN18QHWHecnYqyagA
+         bCFiMnu2vB86OB80cOEWa3+D+U94Ec7cqWKxWYqU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Stultz <jstultz@google.com>,
+        stable@vger.kernel.org, Tianhao Zhao <tizhao@redhat.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
         "David S. Miller" <davem@davemloft.net>,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Basil Eljuse <Basil.Eljuse@arm.com>,
-        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        linux-pm@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 127/298] driver core: Fix wait_for_device_probe() & deferred_probe_timeout interaction
-Date:   Mon, 13 Jun 2022 12:10:21 +0200
-Message-Id: <20220613094928.793712131@linuxfoundation.org>
+Subject: [PATCH 5.10 062/172] sfc: fix considering that all channels have TX queues
+Date:   Mon, 13 Jun 2022 12:10:22 +0200
+Message-Id: <20220613094905.310212719@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -75,104 +57,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saravana Kannan <saravanak@google.com>
+From: Martin Habets <habetsm.xilinx@gmail.com>
 
-[ Upstream commit 5ee76c256e928455212ab759c51d198fedbe7523 ]
+[ Upstream commit 2e102b53f8a778f872dc137f4c7ac548705817aa ]
 
-Mounting NFS rootfs was timing out when deferred_probe_timeout was
-non-zero [1].  This was because ip_auto_config() initcall times out
-waiting for the network interfaces to show up when
-deferred_probe_timeout was non-zero. While ip_auto_config() calls
-wait_for_device_probe() to make sure any currently running deferred
-probe work or asynchronous probe finishes, that wasn't sufficient to
-account for devices being deferred until deferred_probe_timeout.
+Normally, all channels have RX and TX queues, but this is not true if
+modparam efx_separate_tx_channels=1 is used. In that cases, some
+channels only have RX queues and others only TX queues (or more
+preciselly, they have them allocated, but not initialized).
 
-Commit 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits
-until the deferred_probe_timeout fires") tried to fix that by making
-sure wait_for_device_probe() waits for deferred_probe_timeout to expire
-before returning.
+Fix efx_channel_has_tx_queues to return the correct value for this case
+too.
 
-However, if wait_for_device_probe() is called from the kernel_init()
-context:
+Messages shown at probe time before the fix:
+ sfc 0000:03:00.0 ens6f0np0: MC command 0x82 inlen 544 failed rc=-22 (raw=0) arg=0
+ ------------[ cut here ]------------
+ netdevice: ens6f0np0: failed to initialise TXQ -1
+ WARNING: CPU: 1 PID: 626 at drivers/net/ethernet/sfc/ef10.c:2393 efx_ef10_tx_init+0x201/0x300 [sfc]
+ [...] stripped
+ RIP: 0010:efx_ef10_tx_init+0x201/0x300 [sfc]
+ [...] stripped
+ Call Trace:
+  efx_init_tx_queue+0xaa/0xf0 [sfc]
+  efx_start_channels+0x49/0x120 [sfc]
+  efx_start_all+0x1f8/0x430 [sfc]
+  efx_net_open+0x5a/0xe0 [sfc]
+  __dev_open+0xd0/0x190
+  __dev_change_flags+0x1b3/0x220
+  dev_change_flags+0x21/0x60
+ [...] stripped
 
-- Before deferred_probe_initcall() [2], it causes the boot process to
-  hang due to a deadlock.
+Messages shown at remove time before the fix:
+ sfc 0000:03:00.0 ens6f0np0: failed to flush 10 queues
+ sfc 0000:03:00.0 ens6f0np0: failed to flush queues
 
-- After deferred_probe_initcall() [3], it blocks kernel_init() from
-  continuing till deferred_probe_timeout expires and beats the point of
-  deferred_probe_timeout that's trying to wait for userspace to load
-  modules.
-
-Neither of this is good. So revert the changes to
-wait_for_device_probe().
-
-[1] - https://lore.kernel.org/lkml/TYAPR01MB45443DF63B9EF29054F7C41FD8C60@TYAPR01MB4544.jpnprd01.prod.outlook.com/
-[2] - https://lore.kernel.org/lkml/YowHNo4sBjr9ijZr@dev-arch.thelio-3990X/
-[3] - https://lore.kernel.org/lkml/Yo3WvGnNk3LvLb7R@linutronix.de/
-
-Fixes: 35a672363ab3 ("driver core: Ensure wait_for_device_probe() waits until the deferred_probe_timeout fires")
-Cc: John Stultz <jstultz@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
-Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Rob Herring <robh@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc: Robin Murphy <robin.murphy@arm.com>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: Basil Eljuse <Basil.Eljuse@arm.com>
-Cc: Ferry Toth <fntoth@gmail.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Anders Roxell <anders.roxell@linaro.org>
-Cc: linux-pm@vger.kernel.org
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Reported-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Tested-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Acked-by: John Stultz <jstultz@google.com>
-Signed-off-by: Saravana Kannan <saravanak@google.com>
-Link: https://lore.kernel.org/r/20220526034609.480766-2-saravanak@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 8700aff08984 ("sfc: fix channel allocation with brute force")
+Reported-by: Tianhao Zhao <tizhao@redhat.com>
+Signed-off-by: Martin Habets <habetsm.xilinx@gmail.com>
+Tested-by: Íñigo Huguet <ihuguet@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/dd.c | 5 -----
- 1 file changed, 5 deletions(-)
+ drivers/net/ethernet/sfc/net_driver.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 977e94cf669e..86fd2ea35656 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -257,7 +257,6 @@ DEFINE_SHOW_ATTRIBUTE(deferred_devs);
+diff --git a/drivers/net/ethernet/sfc/net_driver.h b/drivers/net/ethernet/sfc/net_driver.h
+index 9f7dfdf708cf..8aecb4bd2c0d 100644
+--- a/drivers/net/ethernet/sfc/net_driver.h
++++ b/drivers/net/ethernet/sfc/net_driver.h
+@@ -1522,7 +1522,7 @@ static inline bool efx_channel_is_xdp_tx(struct efx_channel *channel)
  
- int driver_deferred_probe_timeout;
- EXPORT_SYMBOL_GPL(driver_deferred_probe_timeout);
--static DECLARE_WAIT_QUEUE_HEAD(probe_timeout_waitqueue);
- 
- static int __init deferred_probe_timeout_setup(char *str)
+ static inline bool efx_channel_has_tx_queues(struct efx_channel *channel)
  {
-@@ -312,7 +311,6 @@ static void deferred_probe_timeout_work_func(struct work_struct *work)
- 	list_for_each_entry(p, &deferred_probe_pending_list, deferred_probe)
- 		dev_info(p->device, "deferred probe pending\n");
- 	mutex_unlock(&deferred_probe_mutex);
--	wake_up_all(&probe_timeout_waitqueue);
+-	return true;
++	return channel && channel->channel >= channel->efx->tx_channel_offset;
  }
- static DECLARE_DELAYED_WORK(deferred_probe_timeout_work, deferred_probe_timeout_work_func);
  
-@@ -720,9 +718,6 @@ int driver_probe_done(void)
-  */
- void wait_for_device_probe(void)
- {
--	/* wait for probe timeout */
--	wait_event(probe_timeout_waitqueue, !driver_deferred_probe_timeout);
--
- 	/* wait for the deferred probe workqueue to finish */
- 	flush_work(&deferred_probe_work);
- 
+ static inline unsigned int efx_channel_num_tx_queues(struct efx_channel *channel)
 -- 
 2.35.1
 

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A815498E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A005488EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349433AbiFMK5M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:57:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44320 "EHLO
+        id S1357918AbiFMNEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349746AbiFMKy1 (ORCPT
+        with ESMTP id S1358373AbiFMMzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D6B2FE47;
-        Mon, 13 Jun 2022 03:28:21 -0700 (PDT)
+        Mon, 13 Jun 2022 08:55:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA297CE26;
+        Mon, 13 Jun 2022 04:15:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 941AEB80E90;
-        Mon, 13 Jun 2022 10:28:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05D0AC34114;
-        Mon, 13 Jun 2022 10:28:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4960460B6C;
+        Mon, 13 Jun 2022 11:15:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E3DCC34114;
+        Mon, 13 Jun 2022 11:15:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116099;
-        bh=wg/jeH1nD6ezVz3KPJLq9fuNHsOUPOmgIWwYN1gPBtY=;
+        s=korg; t=1655118953;
+        bh=ObCTs0xkg7XNnYFq31uEHAWVf5xq+3r0Y5NMqivMLp0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2ZJz30uVjaraupxB9Bykifca8/0nXgQrS5QXnkK1NDFk5QG3vTeHFzvxbVPsTL18R
-         lChvjjPw3IN0mM8lvftkksM8rUTKDq+7/xBAX568LXI6jCyEaOfc2c6SjRL12P7PRa
-         /DLiTuawkuiwaWY/2Ojzvt4ih/X7oRbZonnU0Jfk=
+        b=jo5mfMYr7ZiCvxcS+HF4W9A+yaQgjuIe57nX24+TY+ejvGFkWhu28N3uBgHL2pUno
+         rZYTC2Omb63r4DETP37IwLFKPsTTYhiUK/+q/88JMF7HS4Dc9+hqmbqfzkDx7Ru4nQ
+         V3SX8Vlibtjn9XtcgAij0uZPfGHcu3fZfGhYrrK8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kathiravan T <quic_kathirav@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH 4.14 132/218] arm64: dts: qcom: ipq8074: fix the sleep clock frequency
+        stable@vger.kernel.org, Tianhao Zhao <tizhao@redhat.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 088/247] sfc: fix considering that all channels have TX queues
 Date:   Mon, 13 Jun 2022 12:09:50 +0200
-Message-Id: <20220613094924.584223320@linuxfoundation.org>
+Message-Id: <20220613094925.625485735@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +57,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kathiravan T <quic_kathirav@quicinc.com>
+From: Martin Habets <habetsm.xilinx@gmail.com>
 
-commit f607dd767f5d6800ffbdce5b99ba81763b023781 upstream.
+[ Upstream commit 2e102b53f8a778f872dc137f4c7ac548705817aa ]
 
-Sleep clock frequency should be 32768Hz. Lets fix it.
+Normally, all channels have RX and TX queues, but this is not true if
+modparam efx_separate_tx_channels=1 is used. In that cases, some
+channels only have RX queues and others only TX queues (or more
+preciselly, they have them allocated, but not initialized).
 
-Cc: stable@vger.kernel.org
-Fixes: 41dac73e243d ("arm64: dts: Add ipq8074 SoC and HK01 board support")
-Link: https://lore.kernel.org/all/e2a447f8-6024-0369-f698-2027b6edcf9e@codeaurora.org/
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/1644581655-11568-1-git-send-email-quic_kathirav@quicinc.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fix efx_channel_has_tx_queues to return the correct value for this case
+too.
+
+Messages shown at probe time before the fix:
+ sfc 0000:03:00.0 ens6f0np0: MC command 0x82 inlen 544 failed rc=-22 (raw=0) arg=0
+ ------------[ cut here ]------------
+ netdevice: ens6f0np0: failed to initialise TXQ -1
+ WARNING: CPU: 1 PID: 626 at drivers/net/ethernet/sfc/ef10.c:2393 efx_ef10_tx_init+0x201/0x300 [sfc]
+ [...] stripped
+ RIP: 0010:efx_ef10_tx_init+0x201/0x300 [sfc]
+ [...] stripped
+ Call Trace:
+  efx_init_tx_queue+0xaa/0xf0 [sfc]
+  efx_start_channels+0x49/0x120 [sfc]
+  efx_start_all+0x1f8/0x430 [sfc]
+  efx_net_open+0x5a/0xe0 [sfc]
+  __dev_open+0xd0/0x190
+  __dev_change_flags+0x1b3/0x220
+  dev_change_flags+0x21/0x60
+ [...] stripped
+
+Messages shown at remove time before the fix:
+ sfc 0000:03:00.0 ens6f0np0: failed to flush 10 queues
+ sfc 0000:03:00.0 ens6f0np0: failed to flush queues
+
+Fixes: 8700aff08984 ("sfc: fix channel allocation with brute force")
+Reported-by: Tianhao Zhao <tizhao@redhat.com>
+Signed-off-by: Martin Habets <habetsm.xilinx@gmail.com>
+Tested-by: Íñigo Huguet <ihuguet@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/ipq8074.dtsi |    2 +-
+ drivers/net/ethernet/sfc/net_driver.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq8074.dtsi
-@@ -181,7 +181,7 @@
- 	clocks {
- 		sleep_clk: sleep_clk {
- 			compatible = "fixed-clock";
--			clock-frequency = <32000>;
-+			clock-frequency = <32768>;
- 			#clock-cells = <0>;
- 		};
+diff --git a/drivers/net/ethernet/sfc/net_driver.h b/drivers/net/ethernet/sfc/net_driver.h
+index f6981810039d..bf097264d8fb 100644
+--- a/drivers/net/ethernet/sfc/net_driver.h
++++ b/drivers/net/ethernet/sfc/net_driver.h
+@@ -1533,7 +1533,7 @@ static inline bool efx_channel_is_xdp_tx(struct efx_channel *channel)
  
+ static inline bool efx_channel_has_tx_queues(struct efx_channel *channel)
+ {
+-	return true;
++	return channel && channel->channel >= channel->efx->tx_channel_offset;
+ }
+ 
+ static inline unsigned int efx_channel_num_tx_queues(struct efx_channel *channel)
+-- 
+2.35.1
+
 
 

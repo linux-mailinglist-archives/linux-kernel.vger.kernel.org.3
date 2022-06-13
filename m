@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E08549515
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37B5F54912D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355698AbiFMLk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56746 "EHLO
+        id S1355274AbiFMLmG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:42:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354358AbiFMLcR (ORCPT
+        with ESMTP id S1355019AbiFMLeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:32:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06813424B7;
-        Mon, 13 Jun 2022 03:47:16 -0700 (PDT)
+        Mon, 13 Jun 2022 07:34:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18891433AD;
+        Mon, 13 Jun 2022 03:47:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 965116112A;
-        Mon, 13 Jun 2022 10:47:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3F5AC34114;
-        Mon, 13 Jun 2022 10:47:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7BC69B80EAA;
+        Mon, 13 Jun 2022 10:47:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC40CC34114;
+        Mon, 13 Jun 2022 10:47:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117235;
-        bh=2YNfuwdMsGXTIWbZJF9jNk6c9Dj6DXMPOKVnNhrjD5M=;
+        s=korg; t=1655117262;
+        bh=3xcd3CMZiQnx8j+zrFZDh4QsHMgdVew02B6wf7ESE9Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hXyeicdolYqSONcPlzR7lE6m/sAoJu6Kd+bl2DFBTjQuUQB1PInSUKbeK6rIJbD+Y
-         SGJ0iM/Lc8xbXbge9QLVBQYvu/OR0hG1avb6RCXhT4nm0RkzlxIZWWY5t6qbZ1ehPw
-         DKvNK8RbltTPNTWgl45uDHfGlop2UNRXTcWMaHVo=
+        b=nT4QlsfNKKQYRia5ZJ98vjek3xZ+AGd0B+Tg9Ak1SNac5qtv+HfJ5N30MUxPwGtYf
+         +qb5v1/tqyYAz816fGelVjon9PTZfCwKR/cpUSV9KJ7rYdYj6P9RKH1cy1xLI8FVMD
+         s8P69OxncAmsPiwtxoKc2A3PIrTWS15F/I53x8K4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
-        Mark-PK Tsai <mark-pk.tsai@mediatek.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        stable@vger.kernel.org,
+        syzbot+763ae12a2ede1d99d4dc@syzkaller.appspotmail.com,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 339/411] tracing: Avoid adding tracer option before update_tracer_options
-Date:   Mon, 13 Jun 2022 12:10:12 +0200
-Message-Id: <20220613094938.880650020@linuxfoundation.org>
+Subject: [PATCH 5.4 340/411] f2fs: remove WARN_ON in f2fs_is_valid_blkaddr
+Date:   Mon, 13 Jun 2022 12:10:13 +0200
+Message-Id: <20220613094938.909028005@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -56,64 +57,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit ef9188bcc6ca1d8a2ad83e826b548e6820721061 ]
+[ Upstream commit dc2f78e2d4cc844a1458653d57ce1b54d4a29f21 ]
 
-To prepare for support asynchronous tracer_init_tracefs initcall,
-avoid calling create_trace_option_files before __update_tracer_options.
-Otherwise, create_trace_option_files will show warning because
-some tracers in trace_types list are already in tr->topts.
+Syzbot triggers two WARNs in f2fs_is_valid_blkaddr and
+__is_bitmap_valid. For example, in f2fs_is_valid_blkaddr,
+if type is DATA_GENERIC_ENHANCE or DATA_GENERIC_ENHANCE_READ,
+it invokes WARN_ON if blkaddr is not in the right range.
+The call trace is as follows:
 
-For example, hwlat_tracer call register_tracer in late_initcall,
-and global_trace.dir is already created in tracing_init_dentry,
-hwlat_tracer will be put into tr->topts.
-Then if the __update_tracer_options is executed after hwlat_tracer
-registered, create_trace_option_files find that hwlat_tracer is
-already in tr->topts.
+ f2fs_get_node_info+0x45f/0x1070
+ read_node_page+0x577/0x1190
+ __get_node_page.part.0+0x9e/0x10e0
+ __get_node_page
+ f2fs_get_node_page+0x109/0x180
+ do_read_inode
+ f2fs_iget+0x2a5/0x58b0
+ f2fs_fill_super+0x3b39/0x7ca0
 
-Link: https://lkml.kernel.org/r/20220426122407.17042-2-mark-pk.tsai@mediatek.com
+Fix these two WARNs by replacing WARN_ON with dump_stack.
 
-Link: https://lore.kernel.org/lkml/20220322133339.GA32582@xsang-OptiPlex-9020/
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Mark-PK Tsai <mark-pk.tsai@mediatek.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Reported-by: syzbot+763ae12a2ede1d99d4dc@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ fs/f2fs/checkpoint.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index ce9165de019c..55da88f18342 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -5638,12 +5638,18 @@ static void tracing_set_nop(struct trace_array *tr)
- 	tr->current_trace = &nop_trace;
+diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
+index 54f0d2c4c7d8..44c5110e18f0 100644
+--- a/fs/f2fs/checkpoint.c
++++ b/fs/f2fs/checkpoint.c
+@@ -149,7 +149,7 @@ static bool __is_bitmap_valid(struct f2fs_sb_info *sbi, block_t blkaddr,
+ 		f2fs_err(sbi, "Inconsistent error blkaddr:%u, sit bitmap:%d",
+ 			 blkaddr, exist);
+ 		set_sbi_flag(sbi, SBI_NEED_FSCK);
+-		WARN_ON(1);
++		dump_stack();
+ 	}
+ 	return exist;
  }
- 
-+static bool tracer_options_updated;
-+
- static void add_tracer_options(struct trace_array *tr, struct tracer *t)
- {
- 	/* Only enable if the directory has been created already. */
- 	if (!tr->dir)
- 		return;
- 
-+	/* Only create trace option files after update_tracer_options finish */
-+	if (!tracer_options_updated)
-+		return;
-+
- 	create_trace_option_files(tr, t);
- }
- 
-@@ -8391,6 +8397,7 @@ static void __update_tracer_options(struct trace_array *tr)
- static void update_tracer_options(struct trace_array *tr)
- {
- 	mutex_lock(&trace_types_lock);
-+	tracer_options_updated = true;
- 	__update_tracer_options(tr);
- 	mutex_unlock(&trace_types_lock);
- }
+@@ -187,7 +187,7 @@ bool f2fs_is_valid_blkaddr(struct f2fs_sb_info *sbi,
+ 			f2fs_warn(sbi, "access invalid blkaddr:%u",
+ 				  blkaddr);
+ 			set_sbi_flag(sbi, SBI_NEED_FSCK);
+-			WARN_ON(1);
++			dump_stack();
+ 			return false;
+ 		} else {
+ 			return __is_bitmap_valid(sbi, blkaddr, type);
 -- 
 2.35.1
 

@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 696F9548FFA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 215BA548A54
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243034AbiFMPEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 11:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57060 "EHLO
+        id S244366AbiFMPF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 11:05:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386768AbiFMPDi (ORCPT
+        with ESMTP id S1386392AbiFMPFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 11:03:38 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8524EFF21;
-        Mon, 13 Jun 2022 05:10:22 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id o7so10788965eja.1;
-        Mon, 13 Jun 2022 05:10:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=nM1ToNddtuPmZmKp34E+C0azOheh3w4b7TSvswDeFiQ=;
-        b=DEg9vurSZxRH4cSk2zXW9txEvtrNLgfxVRta6QlCi+LrOdsSVTdufVJNLkWXm3i+77
-         ZzkokCTOBgOqTxn0bBg+uE712WEGb0W/1SXzwb5b4LSalQjNdp8/Sz3sidk+xd0r2MzT
-         0l1UbAYNSv1MujwTn8QWIUU1+hqyACRG27Mz0Wlrh4l+WOjfEwth9Ax6zxKP4/PI62Q1
-         LO5Z/2RJR+60qpK9KSvthTY2WMmMxZUWW/nF5HQd8qCAdEgq/ky3coUWFXK3oS1uPTqB
-         Eq7pfKmSN2t65cWwzuvzp+sfaObZbNQ78b2NMv+ZSTvZjYMdQPmH7DTJC9eb/IIr0cCB
-         YUsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=nM1ToNddtuPmZmKp34E+C0azOheh3w4b7TSvswDeFiQ=;
-        b=ZSU37UtsVLEnFWOT8n5z54bSBN7ye1au8aHGfq0DsTixYb5/Vkmkul9qTOFkZofeg0
-         rFYh5OVzgF4j42ipQsdpUYV9TBKuxjDZ4oG9aAFRsD0JXQby0Da0+yKjB97mHGPYkmwT
-         fvmQUsNbQkCMle5Qx8eGq2wxyq6uyW+LIj9HivuGhvduJoaL18B7dvZIuydaC2nNheXG
-         jELnc4QzLMjJ81emyx7qeS7wXcaCPm/Oz6D3VhGwHxM3F3JNKrIchnhCvQWb4F+MHdUg
-         lZVxcxEx87hd7gLFfzto6yfLRk3rnzXpNFTmVt9fllNHuKIWxUsaSAgi8r9P2OSfAOYo
-         re9w==
-X-Gm-Message-State: AOAM532pLJTaJa34UmNrNe2bF1s5AejU4Daom3oN+sGM39kuYGKVY/1d
-        /dVKdIc0+WBUffsMR5+WuEiqhY22fI8=
-X-Google-Smtp-Source: ABdhPJz7kuEWA784iJJ7FkL/0fAuCrBN5O1XxoGltVSCrkKX2BjLkd9USAyINg9V+2OoGGLTwBGqXw==
-X-Received: by 2002:a17:906:9b96:b0:711:d21c:1b0b with SMTP id dd22-20020a1709069b9600b00711d21c1b0bmr34797271ejc.365.1655122220343;
-        Mon, 13 Jun 2022 05:10:20 -0700 (PDT)
-Received: from felia.fritz.box (200116b8260df50011e978c0f780de03.dip.versatel-1u1.de. [2001:16b8:260d:f500:11e9:78c0:f780:de03])
-        by smtp.gmail.com with ESMTPSA id lo16-20020a170906fa1000b00708e906faecsm3761336ejb.124.2022.06.13.05.10.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 05:10:19 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: add include/dt-bindings/media to MEDIA INPUT INFRASTRUCTURE
-Date:   Mon, 13 Jun 2022 14:10:07 +0200
-Message-Id: <20220613121007.6181-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Jun 2022 11:05:36 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4ACF7499;
+        Mon, 13 Jun 2022 05:11:25 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id ED1C71F38A;
+        Mon, 13 Jun 2022 12:11:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655122279; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cWi4yPYQYuWcLCZhlzRL/FUwfVjRk7PfFZtsphXFstQ=;
+        b=fWc9Ypl2KcwfmmeUMR5vxJsHU3nImiAo3Pbtm/FripjpX/mp8Fjs3Rh1gZ6Tn3ex0cZ3W+
+        0OvfKRLBxncV3yGLDHAgrGqvdZlefo3rLxodVymu5Y4osdFhZqLOhmsWXnI11DWNlx/VZ0
+        h9lRYJlBhcSh3hyTWiqlBbym/yTUmaw=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 66AB32C141;
+        Mon, 13 Jun 2022 12:11:18 +0000 (UTC)
+Date:   Mon, 13 Jun 2022 14:11:17 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= 
+        <ckoenig.leichtzumerken@gmail.com>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, alexander.deucher@amd.com, daniel@ffwll.ch,
+        viro@zeniv.linux.org.uk, akpm@linux-foundation.org,
+        hughd@google.com, andrey.grodzovsky@amd.com
+Subject: Re: [PATCH 03/13] mm: shmem: provide oom badness for shmem files
+Message-ID: <YqcpZY3Xx7Mk2ROH@dhcp22.suse.cz>
+References: <YqIB0bavUeU8Abwl@dhcp22.suse.cz>
+ <d4a19481-7a9f-19bf-c270-d89baa0970fc@amd.com>
+ <YqIMmK18mb/+s5de@dhcp22.suse.cz>
+ <3f7d3d96-0858-fb6d-07a3-4c18964f888e@gmail.com>
+ <YqMuq/ZrV8loC3jE@dhcp22.suse.cz>
+ <2e7e050e-04eb-0c0a-0675-d7f1c3ae7aed@amd.com>
+ <YqNSSFQELx/LeEHR@dhcp22.suse.cz>
+ <288528c3-411e-fb25-2f08-92d4bb9f1f13@gmail.com>
+ <Yqbq/Q5jz2ou87Jx@dhcp22.suse.cz>
+ <b8b9aba5-575e-8a34-e627-79bef4ed7f97@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b8b9aba5-575e-8a34-e627-79bef4ed7f97@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Maintainers of the directory Documentation/devicetree/bindings/media
-are also the maintainers of the corresponding directory
-include/dt-bindings/media.
+On Mon 13-06-22 13:50:28, Christian König wrote:
+> Am 13.06.22 um 09:45 schrieb Michal Hocko:
+> > On Sat 11-06-22 10:06:18, Christian König wrote:
+> > > Am 10.06.22 um 16:16 schrieb Michal Hocko:
+[...]
+> > > Alternative I could try to track the "owner" of a buffer (e.g. a shmem
+> > > file), but then it can happen that one processes creates the object and
+> > > another one is writing to it and actually allocating the memory.
+> > If you can enforce that the owner is really responsible for the
+> > allocation then all should be fine. That would require MAP_POPULATE like
+> > semantic and I suspect this is not really feasible with the existing
+> > userspace. It would be certainly hard to enforce for bad players.
+> 
+> I've tried this today and the result was: "BUG: Bad rss-counter state
+> mm:000000008751d9ff type:MM_FILEPAGES val:-571286".
+> 
+> The problem is once more that files are not informed when the process
+> clones. So what happened is that somebody called fork() with an mm_struct
+> I've accounted my pages to. The result is just that we messed up the
+> rss_stats and  the the "BUG..." above.
+> 
+> The key difference between normal allocated pages and the resources here is
+> just that we are not bound to an mm_struct in any way.
 
-Add the file entry for include/dt-bindings/media to the appropriate
-section in MAINTAINERS.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Mauro, please pick this MAINTAINERS addition to your section.
-
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 856ac3231a54..1b30f6b69477 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12501,6 +12501,7 @@ F:	Documentation/driver-api/media/
- F:	Documentation/userspace-api/media/
- F:	drivers/media/
- F:	drivers/staging/media/
-+F:	include/dt-bindings/media/
- F:	include/linux/platform_data/media/
- F:	include/media/
- F:	include/uapi/linux/dvb/
+It is not really clear to me what exactly you have tried.
 -- 
-2.17.1
-
+Michal Hocko
+SUSE Labs

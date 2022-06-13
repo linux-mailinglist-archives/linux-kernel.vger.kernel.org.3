@@ -2,44 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABED54960B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C73795490F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355360AbiFMLia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
+        id S1357684AbiFMMA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354379AbiFML30 (ORCPT
+        with ESMTP id S1357806AbiFMLz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B89FB1D8;
-        Mon, 13 Jun 2022 03:43:48 -0700 (PDT)
+        Mon, 13 Jun 2022 07:55:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57D12F3BD;
+        Mon, 13 Jun 2022 03:55:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0DF8AB80D3A;
-        Mon, 13 Jun 2022 10:43:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65124C34114;
-        Mon, 13 Jun 2022 10:43:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A26A260EFE;
+        Mon, 13 Jun 2022 10:55:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2471C34114;
+        Mon, 13 Jun 2022 10:55:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117025;
-        bh=3pLThGddqS+pgh7vhgBI/WZp5Itn5226pClHkobufI0=;
+        s=korg; t=1655117755;
+        bh=0Y+q/tL+Nn5pG/ZcL1PUe+mncPQntbDCokN4LDNIT14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iIp8ZiYSHatKZBg6Z4eRRN6rB4p3/kNBa93VE7NWC+/XyDmm45yeaDT5mJKgGiUwZ
-         DFQQTjTpQMOlWgDtT+Su6Xqex2gIfn+R8gfLypNpO8AxMplikVPh5E586NGI0z4g6K
-         Eo18vQCGb0HYfohii/eIBGf7cKiRZ49lnjlq0rgE=
+        b=coCDY3V8DoTiYDGgKcwPTkY9nuSeC7ZUZd++GqLv0OS8q0fEjCgeOERs3lHODLV8F
+         LvKJDPV/eijH7pTk/gy4uo3QyQJUZHAwAMP0DFbG5jGzT9GyDawjRtEh7Xn0yux1e4
+         HacLl6eqoj+NxI3gTyvzdjklvQhQ8DVUiHXbACiA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.4 271/411] Kconfig: add config option for asm goto w/ outputs
+        stable@vger.kernel.org, Miaohe Lin <linmiaohe@huawei.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mel Gorman <mel@csn.ul.ie>,
+        Minchan Kim <minchan.kim@gmail.com>,
+        KAMEZAWA Hiroyuki <kamezawa.hiroyu@jp.fujitsu.com>,
+        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 120/287] drivers/base/node.c: fix compaction sysfs file leak
 Date:   Mon, 13 Jun 2022 12:09:04 +0200
-Message-Id: <20220613094936.886224146@linuxfoundation.org>
+Message-Id: <20220613094927.518359538@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +60,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Desaulniers <ndesaulniers@google.com>
+From: Miaohe Lin <linmiaohe@huawei.com>
 
-commit 587f17018a2c6c414e41a312b002faaef60cf423 upstream.
+[ Upstream commit da63dc84befaa9e6079a0bc363ff0eaa975f9073 ]
 
-This allows C code to make use of compilers with support for output
-variables along the fallthrough path via preprocessor define:
+Compaction sysfs file is created via compaction_register_node in
+register_node.  But we forgot to remove it in unregister_node.  Thus
+compaction sysfs file is leaked.  Using compaction_unregister_node to fix
+this issue.
 
-  CONFIG_CC_HAS_ASM_GOTO_OUTPUT
-
-[ This is not used anywhere yet, and currently released compilers don't
-  support this yet, but it's coming, and I have some local experimental
-  patches to take advantage of it when it does   - Linus ]
-
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lkml.kernel.org/r/20220401070905.43679-1-linmiaohe@huawei.com
+Fixes: ed4a6d7f0676 ("mm: compaction: add /sys trigger for per-node memory compaction")
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Rafael J. Wysocki <rafael@kernel.org>
+Cc: Mel Gorman <mel@csn.ul.ie>
+Cc: Minchan Kim <minchan.kim@gmail.com>
+Cc: KAMEZAWA Hiroyuki <kamezawa.hiroyu@jp.fujitsu.com>
+Cc: KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- init/Kconfig |    4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/base/node.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -38,6 +38,10 @@ config CC_HAS_ASM_GOTO_TIED_OUTPUT
- 	# Detect buggy gcc and clang, fixed in gcc-11 clang-14.
- 	def_bool $(success,echo 'int foo(int *x) { asm goto (".long (%l[bar]) - .\n": "+m"(*x) ::: bar); return *x; bar: return 0; }' | $CC -x c - -c -o /dev/null)
+diff --git a/drivers/base/node.c b/drivers/base/node.c
+index 503e2f90e58e..60c2e32f9f61 100644
+--- a/drivers/base/node.c
++++ b/drivers/base/node.c
+@@ -339,6 +339,7 @@ static int register_node(struct node *node, int num)
+  */
+ void unregister_node(struct node *node)
+ {
++	compaction_unregister_node(node);
+ 	hugetlb_unregister_node(node);		/* no-op, if memoryless node */
  
-+config CC_HAS_ASM_GOTO_OUTPUT
-+	depends on CC_HAS_ASM_GOTO
-+	def_bool $(success,echo 'int foo(int x) { asm goto ("": "=r"(x) ::: bar); return x; bar: return 0; }' | $(CC) -x c - -c -o /dev/null)
-+
- config TOOLS_SUPPORT_RELR
- 	def_bool $(success,env "CC=$(CC)" "LD=$(LD)" "NM=$(NM)" "OBJCOPY=$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
- 
+ 	device_unregister(&node->dev);
+-- 
+2.35.1
+
 
 

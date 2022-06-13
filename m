@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A69549732
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 870CC548D59
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384601AbiFMO3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S1352224AbiFMLJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383979AbiFMOYZ (ORCPT
+        with ESMTP id S1351772AbiFMLFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B0B95B2;
-        Mon, 13 Jun 2022 04:46:18 -0700 (PDT)
+        Mon, 13 Jun 2022 07:05:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995B827B2B;
+        Mon, 13 Jun 2022 03:34:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5331612AC;
-        Mon, 13 Jun 2022 11:46:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9282C34114;
-        Mon, 13 Jun 2022 11:46:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38593B80E93;
+        Mon, 13 Jun 2022 10:34:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92201C34114;
+        Mon, 13 Jun 2022 10:33:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120777;
-        bh=EGleJe67j/wtenNzkr2evwCWXHHiKXNmVSepmgjzxS8=;
+        s=korg; t=1655116440;
+        bh=wsDuzAc9NqsM7BkZpBqt7GwC66dvPJnn9XcP8LB5P/c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HWr7m1hUCGixl2vKFIQizGDSVDuImffPfcpMaZE9Wgkm8OtSx4jKziqAlmq1NgW6z
-         2P5xvMsSYV8sgo40p35rP4Pg4x/dEF07rJ9ez/dJBSrbV01s1s4Tb2Amfckq2tkI5B
-         3Gdj5HWbZUTsoSFYAbGekG0wHqLe8VDgWBjMooKo=
+        b=YRyI+a76Q8YTSRlEH7SRXm0sgXtbnho/t0A0abbW5AFtxg4wB0I9Xmil443hbmhLU
+         jTxTw07t+pqWEiT4tcjboxXeuht+7+KZvA37aw5cVakhxZoFKRe9pCqpEmE/fvzLRM
+         rmUtP1FzDnh3W+TiGNh5mItZL6bBUWA6aocB4BK8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chao Yu <chao.yu@oppo.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
+        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 154/298] f2fs: fix to tag gcing flag on page during file defragment
-Date:   Mon, 13 Jun 2022 12:10:48 +0200
-Message-Id: <20220613094929.607849575@linuxfoundation.org>
+Subject: [PATCH 4.14 191/218] misc: rtsx: set NULL intfdata when probe fails
+Date:   Mon, 13 Jun 2022 12:10:49 +0200
+Message-Id: <20220613094926.410459080@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,33 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Yu <chao@kernel.org>
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-[ Upstream commit 2d1fe8a86bf5e0663866fd0da83c2af1e1b0e362 ]
+[ Upstream commit f861d36e021e1ac4a0a2a1f6411d623809975d63 ]
 
-In order to garantee migrated data be persisted during checkpoint,
-otherwise out-of-order persistency between data and node may cause
-data corruption after SPOR.
+rtsx_usb_probe() doesn't call usb_set_intfdata() to null out the
+interface pointer when probe fails. This leaves a stale pointer.
+Noticed the missing usb_set_intfdata() while debugging an unrelated
+invalid DMA mapping problem.
 
-Signed-off-by: Chao Yu <chao.yu@oppo.com>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+Fix it with a call to usb_set_intfdata(..., NULL).
+
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220429210913.46804-1-skhan@linuxfoundation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/file.c | 1 +
+ drivers/mfd/rtsx_usb.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 29cd65f7c9eb..a2b7dead68e0 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -2679,6 +2679,7 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
- 			}
+diff --git a/drivers/mfd/rtsx_usb.c b/drivers/mfd/rtsx_usb.c
+index 691dab791f7a..e94f855eac15 100644
+--- a/drivers/mfd/rtsx_usb.c
++++ b/drivers/mfd/rtsx_usb.c
+@@ -678,6 +678,7 @@ static int rtsx_usb_probe(struct usb_interface *intf,
+ 	return 0;
  
- 			set_page_dirty(page);
-+			set_page_private_gcing(page);
- 			f2fs_put_page(page, 1);
- 
- 			idx++;
+ out_init_fail:
++	usb_set_intfdata(ucr->pusb_intf, NULL);
+ 	usb_free_coherent(ucr->pusb_dev, IOBUF_SIZE, ucr->iobuf,
+ 			ucr->iobuf_dma);
+ 	return ret;
 -- 
 2.35.1
 

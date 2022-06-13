@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF619548CEC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F3DD5491DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345983AbiFMKgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42078 "EHLO
+        id S1356990AbiFMLwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346939AbiFMKej (ORCPT
+        with ESMTP id S1357568AbiFMLqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:34:39 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44FB2709;
-        Mon, 13 Jun 2022 03:22:32 -0700 (PDT)
+        Mon, 13 Jun 2022 07:46:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EDA13DF1;
+        Mon, 13 Jun 2022 03:52:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D7A4DCE0EEB;
-        Mon, 13 Jun 2022 10:22:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0931C34114;
-        Mon, 13 Jun 2022 10:22:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A0EAB80E92;
+        Mon, 13 Jun 2022 10:52:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 737E8C3411E;
+        Mon, 13 Jun 2022 10:52:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115748;
-        bh=kvByzdNQK2btTZ+fpFAvasfh10IP/7TU2FF2HCwqQdA=;
+        s=korg; t=1655117561;
+        bh=zlr3C4xgJD135dQdTWBXK1U0qwJZQAP7U25NcO+I5cQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TX5y2osss+UgMqQXxVp938QSQNuslBwFTosBGROq2+cEsK2EfNBe1TCGcaS6czO9F
-         S2tOABfQXGqws2vO1aSc/Hv1Eu9WIIa90QD9YZ+MBYPypbSrBPkPbjdCEU1i+5A0hH
-         j6G44rbyp5Ddcw9keKP6K86C7aYcxe8lVcs6N088=
+        b=wix5TWUgTaUgEk9HyqXO7ovGU8bZXqrH+Kxaz8Kqvl99y8laNnYVAfsO5FEcxuWmD
+         mD443wVnFcK6KRfQRkkcP5feTlAf7eI2st/wT7J6tGySUr/1+pI4GDSuXlHOtUkkMy
+         UCt5pfHgOKCtFC9ULSjz2mUZuI9J14w7X9amPOuQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 017/218] media: venus: hfi: avoid null dereference in deinit
+        stable@vger.kernel.org, Peng Wu <wupeng58@huawei.com>,
+        Wei Xu <xuwei5@hisilicon.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 051/287] ARM: hisi: Add missing of_node_put after of_find_compatible_node
 Date:   Mon, 13 Jun 2022 12:07:55 +0200
-Message-Id: <20220613094912.414041489@linuxfoundation.org>
+Message-Id: <20220613094925.415728586@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,39 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Weiss <luca.weiss@fairphone.com>
+From: Peng Wu <wupeng58@huawei.com>
 
-[ Upstream commit 86594f6af867b5165d2ba7b5a71fae3a5961e56c ]
+[ Upstream commit 9bc72e47d4630d58a840a66a869c56b29554cfe4 ]
 
-If venus_probe fails at pm_runtime_put_sync the error handling first
-calls hfi_destroy and afterwards hfi_core_deinit. As hfi_destroy sets
-core->ops to NULL, hfi_core_deinit cannot call the core_deinit function
-anymore.
+of_find_compatible_node  will increment the refcount of the returned
+device_node. Calling of_node_put() to avoid the refcount leak
 
-Avoid this null pointer derefence by skipping the call when necessary.
-
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-Signed-off-by: Stanimir Varbanov <stanimir.varbanov@linaro.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Peng Wu <wupeng58@huawei.com>
+Signed-off-by: Wei Xu <xuwei5@hisilicon.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/qcom/venus/hfi.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm/mach-hisi/platsmp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/media/platform/qcom/venus/hfi.c b/drivers/media/platform/qcom/venus/hfi.c
-index ba29fd4d4984..7d1d3e64007c 100644
---- a/drivers/media/platform/qcom/venus/hfi.c
-+++ b/drivers/media/platform/qcom/venus/hfi.c
-@@ -117,6 +117,9 @@ int hfi_core_deinit(struct venus_core *core, bool blocking)
- 		mutex_lock(&core->lock);
+diff --git a/arch/arm/mach-hisi/platsmp.c b/arch/arm/mach-hisi/platsmp.c
+index da5689ababf7..d7fbfb6d293d 100644
+--- a/arch/arm/mach-hisi/platsmp.c
++++ b/arch/arm/mach-hisi/platsmp.c
+@@ -70,14 +70,17 @@ static void __init hi3xxx_smp_prepare_cpus(unsigned int max_cpus)
+ 		}
+ 		ctrl_base = of_iomap(np, 0);
+ 		if (!ctrl_base) {
++			of_node_put(np);
+ 			pr_err("failed to map address\n");
+ 			return;
+ 		}
+ 		if (of_property_read_u32(np, "smp-offset", &offset) < 0) {
++			of_node_put(np);
+ 			pr_err("failed to find smp-offset property\n");
+ 			return;
+ 		}
+ 		ctrl_base += offset;
++		of_node_put(np);
  	}
+ }
  
-+	if (!core->ops)
-+		goto unlock;
-+
- 	ret = core->ops->core_deinit(core);
+@@ -163,6 +166,7 @@ static int hip01_boot_secondary(unsigned int cpu, struct task_struct *idle)
+ 	if (WARN_ON(!node))
+ 		return -1;
+ 	ctrl_base = of_iomap(node, 0);
++	of_node_put(node);
  
- 	if (!ret)
+ 	/* set the secondary core boot from DDR */
+ 	remap_reg_value = readl_relaxed(ctrl_base + REG_SC_CTRL);
 -- 
 2.35.1
 

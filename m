@@ -2,77 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAEA54A20F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 00:22:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A931354A211
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 00:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239622AbiFMWWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 18:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59466 "EHLO
+        id S236213AbiFMWYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 18:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236264AbiFMWWo (ORCPT
+        with ESMTP id S230339AbiFMWYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 18:22:44 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87F96342;
-        Mon, 13 Jun 2022 15:22:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655158932;
-        bh=/K38MCAmHWxqyV1M9IU8mCPprustLYV8uXAeCmwAeEQ=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=bqJRkVrfmrxiWp4dHM+lZQYZYWy4oUodCG5GQOBxWKeiD9v2xehtL/oXUA92CTC5u
-         UEwDXKvqlCKD6fcpx2lBqW2I+mUBDxkmW6IxjRVZgunZZMgc2QHLBjjMDs8hJns0gd
-         UsD2FP3cG2SEpgE3Fp8kSsDtrtvAMLfSAdKXk4XE=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.3.220]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MhlKs-1nVvLI0TwG-00drMA; Tue, 14
- Jun 2022 00:22:12 +0200
-Subject: Re: [PATCH v6 5/6] serial: Support for RS-485 multipoint addresses
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lukas Wunner <lukas.wunner@intel.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        linux-api@vger.kernel.org
-References: <20220613075227.10394-1-ilpo.jarvinen@linux.intel.com>
- <20220613075227.10394-6-ilpo.jarvinen@linux.intel.com>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <cd72151d-b087-0fdf-2775-6068999f7d05@gmx.de>
-Date:   Tue, 14 Jun 2022 00:22:10 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Mon, 13 Jun 2022 18:24:35 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73E1730F41;
+        Mon, 13 Jun 2022 15:24:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMR254LXbz4xXD;
+        Tue, 14 Jun 2022 08:24:29 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655159070;
+        bh=aT25+qFi2ASsveLSmhiMwh2DQNJSO4mLealoIl2BhVE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IPPjs5hP5YMAjtLiQ+A0u2seIPNRaKGx9S4K74iIAK/w9UTTjtTJGvAfJpn5u8TxR
+         yxsxK7oFT856eU7sKOWMevhQI4aNtD/v54pimS7Ogt174gO9n8RW8/4feeScAyUJBz
+         ymkJZg5GiEnhCJpnC68pCm6+l4m5xX+MnEpoBwEBcCzL8+i1qmm9JyHivARyGrnsg4
+         WD1G5pzV8n8egAcAtIcJAaIUSOK/aEJbGXA3rud9JpjzuebBmrj9+7DbWv50uXZcgO
+         iKPNd2qdXZJRtvNQbSgyJKihBCXPlsELL2yJ7p2vOV2CyNQr6BN734CdEV3gtfvuUT
+         ZNEDPcdWh4geA==
+Date:   Tue, 14 Jun 2022 08:24:25 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the selinux tree
+Message-ID: <20220614082425.415adffc@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20220613075227.10394-6-ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:qnVCycgo6Woco+A3lDsqIOO1oP7H1X4CPI8yz97JmGIl88WWKr0
- w9veZfbN+pE+xEqp+BlWuETwaVnzMVZDlca/2HiEABVfIsJC4cTm8uNC+2s445Ze6HGOFXH
- V78VCdX4v523Sy487dlPg1XVplazwhZ/fR0yxSu0CQOCaYnp4cQk5WSlashwrv2xjUJJyD9
- 36uU5KhofP6iYfTGwyFgQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:MVjJOMYMOwE=:7gX1hIQ2xDO46urdrI1QL9
- Bsm1JLAJtVtr1qB/BAypHnrYt+3H+E9FYQkuaBg1FF0egLYxWGXXFnJbz0WZSBOYTNKHiAIQM
- 7PuDrugoiJcK/TFBJZ+47jVlxRVJneOo8FgDUhRR1AJutoezw6lOZzkAjQ6NWKGsopqgOq8cO
- 7Ya8DQfdAoPRg68Uyklj6rRI6Y9bADWP5CNuB2XMMoq2GSuGmJUQU2RLPP+Vm6jGjPUDYHxFT
- EY8z1IEwEbbhD1TOK4PXU1glK1UhSv3xyW4shxyt+L1nBn31I5e3O3njPOBmhAMiiToScmVm9
- e9h9O/QByjhcYSlxs5/yO+kACi7r/8EZXUKWbtRoNZ4euq2wT59nz+zIy8a9Ej5YTiA7/j+WE
- vEIFUvpZEWB3yqHkRt9h+uxoVs47PI7aOUqfkg3SbQtKTTNNzlM+dVG/6B30kBMWcY9lfIlIg
- b3/uTr8Bh8anwgbKgQNgofQ4dfrjwJDIdETka0s15Pz0t6PNO2Uh4vHIxCiezv/1jJru5TDW6
- op1G1WNieZNoGZLImWXZC7P0CEov8TsxCrx99rTujMXj0RADh57F79aItcj6lzWxliry4kGs/
- c+waCLTx0wnrYxxHLFw8D72/bVwnT03ZJMaar7kWIX3hvor7uRqSKvYB5uG6sQe3Fr9iz9/b1
- baUPbtMASGfljpmSafxOaUzX5l7e6NxgnxO++e+qSpETu4n+DIXfOz/U3R/TWR1scj9dthZKa
- ojE6iy7vdiGvL8Z/v4kOCDg13HOw4bLdNCf+XHcEYzKs9uByllHPbgClKjbymuAVIsg/fScVW
- HeKcG4cVv6Ap+93IlfKZAvijJZOrcCvETnC0r4zOnVgk8YYSJITmQk580zUnPfGtDXKDAKq/a
- yFLMZ1y+/Kp9+UpudB7SJM53zXfz3PJxh9tncVCTOgE/hU63f2HD8UNIdApMbvqyc/+NT+y0k
- zgHocbKY2VqXmOT3t5pJwlIshrk6fJ0z6UBUE5PRQoPremSjFmmy94XE0ik/w0T44eSjO60aj
- 1+Ox5B2+lEySItRi0xhtv9k6vaxeuoqVpZgL1lHerbLRxVXQI/UGOLUd/xnl2s7kQGXbNBube
- 61VGT7urLlqHAQadzgyz0Xfn5f1digeRTQ9fXNiXKGSjUXiGvzCxJUXag==
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/3Zgp=F4bWVmC3DV9u_ejB9m";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,81 +51,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/3Zgp=F4bWVmC3DV9u_ejB9m
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi all,
 
-there are some typos in the documentation and comments (see below).
+In commit
 
+  e81ee824e8a1 ("docs: selinux: add '=3D' signs to kernel boot options")
 
-On 13.06.22 at 09:52, Ilpo J=C3=A4rvinen wrote:
+Fixes tag
 
-> -5. References
-> +5. Multipoint Addressing
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
-> +
-> +   The Linux kernel provides addressiong mode for multipoint RS-485 ser=
-ial
+  Fixes: ^1da177e4c3f4 ("Linux-2.6.12-rc2")
 
-addressiong -> addressing
+has these problem(s):
 
-> +   communications line. The addressing mode is enabled with SER_RS485_A=
-DDRB
-> +   flag in serial_rs485. Struct serial_rs485 fhas two additional flags =
-and
+  - No SHA1 recognised
 
-fhas -> has
+Also, I don't think that is a relevent or useful Fixes tag anyway.
 
-> +   fields for enabling reveive and destination addresses.
+--=20
+Cheers,
+Stephen Rothwell
 
-reveive -> receive
+--Sig_/3Zgp=F4bWVmC3DV9u_ejB9m
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-> +
-> +   Address mode flags:
-> +	- SER_RS485_ADDRB: Enabled addressing mode (sets also ADDRB in termios=
-).
-> +	- SER_RS485_ADDR_RECV: Receive (filter) address enabled.
-> +	- SER_RS485_ADDR_DEST: Set destination address.
-> +
-> +   Address fields (enabled with corresponding SER_RS485_ADDR_* flag):
-> +	- addr_recv: Receive address.
-> +	- addr_dest: Destination address.
-> +
-> +   Once a receive address is set, the communication can occur only with=
- the
-> +   particular device and other peers are filtered out. It is left up to=
- the
-> +   receiver side to enforce the filtering. Receive address will be clea=
-red
-> +   if SER_RS485_ADDR_RECV is not set.
-> +
-> +   Note: not all devices supporting RS485 support multipoint addressing=
-.
-> +
-> +6. References
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
->   [1]	include/uapi/linux/serial.h
-> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/seria=
-l_core.c
-> index 76bb1b77b06e..bc18018e8d4b 100644
-> --- a/drivers/tty/serial/serial_core.c
-> +++ b/drivers/tty/serial/serial_core.c
-> @@ -1294,6 +1294,17 @@ static int uart_check_rs485_flags(struct uart_por=
-t *port, struct serial_rs485 *r
->  	if (flags & ~port->rs485_supported->flags)
->  		return -EINVAL;
->
-> +	/* Asking for address w/o addressing mode? */
-> +	if (!(rs485->flags & SER_RS485_ADDRB) &&
-> +	    (rs485->flags & (SER_RS485_ADDR_RECV|SER_RS485_ADDR_DEST)))
-> +		return -EINVAL;
-> +
-> +	/* Address gived but not enabled? */
+-----BEGIN PGP SIGNATURE-----
 
-gived -> given
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKnuRkACgkQAVBC80lX
+0GwVcAf/SFo4WbqtCM3a1OJNIDEIQh18GKho0TVPbNHqlUH7GiS2A7DxlBYzSPDN
+gtzDOQedB4Et997GICKV/YUjjemV3UcoGwX/JnFxk20C0bY/NlTV3kvkCNcRz9gh
+d8Oh+IKHC5HAsh98KNjxZwjoFGhJv7zI7mkMUGKorMVJx+fnFN1hgvMdiIxvfFpU
+G/vAlLddpV+mkWt94rPDfjRw8CyXLDmCVQhokHsAbQTYhkv6S3pUtKqmHk5WhIgo
+sN8juH6VrLodUyNTg5WYzoiaQInW27NWzkgrSkQDTYUk8B9LyEXb75nAaKXqsBTb
+tHugIyhObBQU4YKURvbjVvUXB3aPug==
+=/Axo
+-----END PGP SIGNATURE-----
 
-
-
-Regards,
-Lino
+--Sig_/3Zgp=F4bWVmC3DV9u_ejB9m--

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB8E549610
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29888549400
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385829AbiFMOk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47278 "EHLO
+        id S1381796AbiFMOEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384856AbiFMOhK (ORCPT
+        with ESMTP id S1381565AbiFMN45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:37:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8254D25D;
-        Mon, 13 Jun 2022 04:49:44 -0700 (PDT)
+        Mon, 13 Jun 2022 09:56:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DCA8B086;
+        Mon, 13 Jun 2022 04:37:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 957F1B80EB3;
-        Mon, 13 Jun 2022 11:49:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 130F4C34114;
-        Mon, 13 Jun 2022 11:49:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C38AB80EC7;
+        Mon, 13 Jun 2022 11:37:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8B96C34114;
+        Mon, 13 Jun 2022 11:37:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120981;
-        bh=3TszrS3lAtEjZ2rupo4rzyU9qtS2/kAgbkhSgz7ytFE=;
+        s=korg; t=1655120232;
+        bh=2Bnq75o17SAeC1aGnsuLEf+b1BM26FPk/fvf4u8So08=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C6XYUsOrrqjxV3OD77jEdKTHqntm5wFkFRi3Nu/+16IjOX8CJalp/vtVCW4jWVsss
-         NsgMB/keLf3NO5uyBE1CkFSLuZpGYZ/Gk6uADozceOzKUVa/WruJGyF/GEZFp5tQ3E
-         h7P6G44gBTJL+n6rXOxRUU3Q99tg/XQVzgbvxZOo=
+        b=tJRothVroaUtAjcpoeMa/wrjyRxhSysyPk8cGZHfpbpzUDeSBXpJOvsSX7eAyjcOD
+         mTfvy2hN5ia+zSgjORLbPruQwJ/hh6+16LoYh+SIZJYqhsWN5b2BVKmmLwdYROHPpK
+         lokKwNF14Ye13VKbxmsWzBllI80iQuPwNlpCJndA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michal Kubecek <mkubecek@suse.cz>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 229/298] Revert "net: af_key: add check for pfkey_broadcast in function pfkey_process"
+        stable@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
+        Enzo Matsumiya <ematsumiya@suse.de>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.18 298/339] cifs: return errors during session setup during reconnects
 Date:   Mon, 13 Jun 2022 12:12:03 +0200
-Message-Id: <20220613094932.041641587@linuxfoundation.org>
+Message-Id: <20220613094935.803460548@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,59 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Kubecek <mkubecek@suse.cz>
+From: Shyam Prasad N <sprasad@microsoft.com>
 
-[ Upstream commit 9c90c9b3e50e16d03c7f87d63e9db373974781e0 ]
+commit 8ea21823aa584b55ba4b861307093b78054b0c1b upstream.
 
-This reverts commit 4dc2a5a8f6754492180741facf2a8787f2c415d7.
+During reconnects, we check the return value from
+cifs_negotiate_protocol, and have handlers for both success
+and failures. But if that passes, and cifs_setup_session
+returns any errors other than -EACCES, we do not handle
+that. This fix adds a handler for that, so that we don't
+go ahead and try a tree_connect on a failed session.
 
-A non-zero return value from pfkey_broadcast() does not necessarily mean
-an error occurred as this function returns -ESRCH when no registered
-listener received the message. In particular, a call with
-BROADCAST_PROMISC_ONLY flag and null one_sk argument can never return
-zero so that this commit in fact prevents processing any PF_KEY message.
-One visible effect is that racoon daemon fails to find encryption
-algorithms like aes and refuses to start.
-
-Excluding -ESRCH return value would fix this but it's not obvious that
-we really want to bail out here and most other callers of
-pfkey_broadcast() also ignore the return value. Also, as pointed out by
-Steffen Klassert, PF_KEY is kind of deprecated and newer userspace code
-should use netlink instead so that we should only disturb the code for
-really important fixes.
-
-v2: add a comment explaining why is the return value ignored
-
-Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
+Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
+Cc: stable@vger.kernel.org
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/key/af_key.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ fs/cifs/smb2pdu.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/net/key/af_key.c b/net/key/af_key.c
-index 339d95df19d3..d93bde657359 100644
---- a/net/key/af_key.c
-+++ b/net/key/af_key.c
-@@ -2826,10 +2826,12 @@ static int pfkey_process(struct sock *sk, struct sk_buff *skb, const struct sadb
- 	void *ext_hdrs[SADB_EXT_MAX];
- 	int err;
- 
--	err = pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
--			      BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
--	if (err)
--		return err;
-+	/* Non-zero return value of pfkey_broadcast() does not always signal
-+	 * an error and even on an actual error we may still want to process
-+	 * the message so rather ignore the return value.
-+	 */
-+	pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
-+			BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
- 
- 	memset(ext_hdrs, 0, sizeof(ext_hdrs));
- 	err = parse_exthdrs(skb, hdr, ext_hdrs);
--- 
-2.35.1
-
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+@@ -288,6 +288,9 @@ smb2_reconnect(__le16 smb2_command, stru
+ 			mutex_unlock(&ses->session_mutex);
+ 			rc = -EHOSTDOWN;
+ 			goto failed;
++		} else if (rc) {
++			mutex_unlock(&ses->session_mutex);
++			goto out;
+ 		}
+ 	} else {
+ 		mutex_unlock(&ses->session_mutex);
 
 

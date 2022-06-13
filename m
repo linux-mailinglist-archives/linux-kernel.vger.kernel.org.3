@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DA35488B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418065492FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377118AbiFMNeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
+        id S237886AbiFMLWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378113AbiFMNax (ORCPT
+        with ESMTP id S1351692AbiFMLQf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:30:53 -0400
+        Mon, 13 Jun 2022 07:16:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C7D313D6A;
-        Mon, 13 Jun 2022 04:25:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C30413F70;
+        Mon, 13 Jun 2022 03:40:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAE5E60F18;
-        Mon, 13 Jun 2022 11:25:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E52C36B07;
-        Mon, 13 Jun 2022 11:25:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5FB1610A0;
+        Mon, 13 Jun 2022 10:39:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA86BC3411E;
+        Mon, 13 Jun 2022 10:39:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119537;
-        bh=b/9qIeG94uHBo4HSzdZoF9DK2yKWhDCwVZXzJ95coXI=;
+        s=korg; t=1655116799;
+        bh=zeFraWsJc3yTSgQb3pzJ/B6qVY2pED3bey0qvc0sm3I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mcjtbUIL9ahrf5EWb11Q/dNj8ArcwREoAqq1T3TmX0CFY1oFH93FrMJlfzlWijVQ6
-         Pa1J/lnL6Iip74bJva+Ml/tog+hjq580YykE94y5s2BrNplaX2KGwhEZtFlIueh7ko
-         PxyTEmz26y+F4Mi7TmTyNFDsx2kVHhGP0RKUPTKE=
+        b=LN+lNYhpCEG8hK85bOmQcvUSUx8TfyjtYjLEvJzN9DXftqNy8enn18lhNML39/VGT
+         kZ321/QbuKClOXPqfFTIztF+ghei4Nle3al6jhU/DkQsumHDqdDwQCKFw9bRs+ueUH
+         VHd1fvcUORz7XqTwcoiluTdGSl7vy7v6RLB4Ze3Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        stable@vger.kernel.org, Igor Zhbanov <izh1979@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 029/339] firmware: stratix10-svc: fix a missing check on list iterator
+Subject: [PATCH 5.4 181/411] powerpc/4xx/cpm: Fix return value of __setup() handler
 Date:   Mon, 13 Jun 2022 12:07:34 +0200
-Message-Id: <20220613094927.397080499@linuxfoundation.org>
+Message-Id: <20220613094934.087002905@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 5a0793ac66ac0e254d292f129a4d6c526f9f2aff ]
+[ Upstream commit 5bb99fd4090fe1acfdb90a97993fcda7f8f5a3d6 ]
 
-The bug is here:
-	pmem->vaddr = NULL;
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
 
-The list iterator 'pmem' will point to a bogus position containing
-HEAD if the list is empty or no element is found. This case must
-be checked before any use of the iterator, otherwise it will
-lead to a invalid memory access.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) argument or environment
+strings.
 
-To fix this bug, just gen_pool_free/set NULL/list_del() and return
-when found, otherwise list_del HEAD and return;
+Also, error return codes don't mean anything to obsolete_checksetup() --
+only non-zero (usually 1) or zero. So return 1 from cpm_powersave_off().
 
-Fixes: 7ca5ce896524f ("firmware: add Intel Stratix10 service layer driver")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220414035609.2239-1-xiam0nd.tong@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d164f6d4f910 ("powerpc/4xx: Add suspend and idle support")
+Reported-by: Igor Zhbanov <izh1979@gmail.com>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220502192941.20955-1-rdunlap@infradead.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/stratix10-svc.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/powerpc/platforms/4xx/cpm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
-index 8177a0fae11d..14663f671323 100644
---- a/drivers/firmware/stratix10-svc.c
-+++ b/drivers/firmware/stratix10-svc.c
-@@ -948,17 +948,17 @@ EXPORT_SYMBOL_GPL(stratix10_svc_allocate_memory);
- void stratix10_svc_free_memory(struct stratix10_svc_chan *chan, void *kaddr)
+diff --git a/arch/powerpc/platforms/4xx/cpm.c b/arch/powerpc/platforms/4xx/cpm.c
+index ae8b812c9202..2481e78c0423 100644
+--- a/arch/powerpc/platforms/4xx/cpm.c
++++ b/arch/powerpc/platforms/4xx/cpm.c
+@@ -327,6 +327,6 @@ late_initcall(cpm_init);
+ static int __init cpm_powersave_off(char *arg)
  {
- 	struct stratix10_svc_data_mem *pmem;
--	size_t size = 0;
- 
- 	list_for_each_entry(pmem, &svc_data_mem, node)
- 		if (pmem->vaddr == kaddr) {
--			size = pmem->size;
--			break;
-+			gen_pool_free(chan->ctrl->genpool,
-+				       (unsigned long)kaddr, pmem->size);
-+			pmem->vaddr = NULL;
-+			list_del(&pmem->node);
-+			return;
- 		}
- 
--	gen_pool_free(chan->ctrl->genpool, (unsigned long)kaddr, size);
--	pmem->vaddr = NULL;
--	list_del(&pmem->node);
-+	list_del(&svc_data_mem);
+ 	cpm.powersave_off = 1;
+-	return 0;
++	return 1;
  }
- EXPORT_SYMBOL_GPL(stratix10_svc_free_memory);
- 
+ __setup("powersave=off", cpm_powersave_off);
 -- 
 2.35.1
 

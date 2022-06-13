@@ -2,153 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B5F549A5A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31B28549A77
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237321AbiFMRtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 13:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
+        id S242366AbiFMRxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235209AbiFMRtX (ORCPT
+        with ESMTP id S242016AbiFMRwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 13:49:23 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1646971DBE
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:35:28 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id y79so6081863iof.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:35:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=hgVCAkJ07oFv8/cEINUlyfPO5L+SF88mUJYnJuI7BR8=;
-        b=bkXCxeueNKXIrkkLIRNvb4tKlMBkZhgHFbn5IbbRfuxZFz2nJ2TYpMDB8F5dqlpw6x
-         K5ccGTNANZdRErsnKsU381r6D7dvlB3/ZCHSDa5er+8tIBj6MuQQ72HMLEeh4lILmWQE
-         15jN22N0hH54oDLhUiPrS6uHvl5IUiytzM7ynUTdubeLfLc0GpKc6eRKte4tYAPiu5PS
-         PNJQKuVY7IVhJLjFg3gkz/aqlQ25HJvJ86Ozqochr9QAfOAKUzWv0V9CIqyQWgRn18Hk
-         Dtme9gsmSFNT5HaoXNDyr36ORtg+5Bt6Wfs2mleGuwkwD4r51VMNju6+SYhF/Taxln+y
-         WGYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to:content-transfer-encoding;
-        bh=hgVCAkJ07oFv8/cEINUlyfPO5L+SF88mUJYnJuI7BR8=;
-        b=Q2aUdciziUSwyI68Jpn8wMASu4SqXwCUc+HU9eFMLJ5/LKFHHguU4KMtAOtGBbDkhw
-         M8GB5+r2+YNgwKn3QM+PQwCHbVuPzE/T3q/7ltr9kX7DEl3/w+WmOMrsH8filuiXEYfP
-         Z97HIIQHtGi+KZpdMncJNgTdKqZ4UQMgtmVY7zzeOu7OqQc8xkTxCXma00/W+24j6XNA
-         r9kHwKoL4pF7YhFENfmbyA4rQtwUywEHzhJj+cpi8gchHKn7RTQji6FiaJ9VJbEl8exJ
-         4kOpibzRHs1H3Sq4ZWDuc/N46apqd0pPyIk7/QDSp5a8kJ+oBPA7eobgpqOpSVYSbD/G
-         to8A==
-X-Gm-Message-State: AOAM531/vQMCgFJzMJpd0b6Fo50qjQ8vviGzgy9kvicZlu9HSJ3PVqNa
-        jm+bRubxvbuMOChNIYq8zH61EyOZeuabisZtGQE=
-X-Google-Smtp-Source: ABdhPJweCqNTwcHDewhNJNp0HD8YmHOApxs4+VMlQYYRZktcBzHkaA7zEIYobZefwwXRN7WUZJesHh7S4eXzQLYcyMk=
-X-Received: by 2002:a05:6638:3b8:b0:331:6e8b:990c with SMTP id
- z24-20020a05663803b800b003316e8b990cmr30243832jap.308.1655127327120; Mon, 13
- Jun 2022 06:35:27 -0700 (PDT)
+        Mon, 13 Jun 2022 13:52:50 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC3874DC3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655127529; x=1686663529;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bbuir7+M76SzGly2yS37ZmAUAl9BctEhBOZRYhVfaFI=;
+  b=BIf8iJlu5dDBX8GUnA9Dvjq+Y8GatrUAwGEO/1TrAKAEdY2+yYZDcrS8
+   0qrARb+De8ppk71e3UW3byaakFbq8+vruuAAagM4TkY9bcmZ8EkwbavcD
+   hOhuBr4cZQPs+LPRdhU/+gxR3gq6Fr64SWsi9Z+uHSCZpvRv6Q5bbgJv7
+   jUvR6AfH7XqQYC8AggZHZHcQ9PtPU9pCZc35myKj6mURyNLJOreI/zzE3
+   EN31ts4rnxbWa2K0EzEXNchti5CljeoY4WMTQQoTmCcJT3tbcFy/oc3ta
+   CZlNzqtJqiJLAPuO7cgPBVE/maDVsr6t+Ees9Gk7gjWbBxMymckK78KzU
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="258118177"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="258118177"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 06:38:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="726273252"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Jun 2022 06:38:46 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o0kHF-000KqF-B7;
+        Mon, 13 Jun 2022 13:38:45 +0000
+Date:   Mon, 13 Jun 2022 21:37:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ren Yu <renyu@nfschina.com>, cl@linux.com
+Cc:     kbuild-all@lists.01.org, penberg@kernel.org, rientjes@google.com,
+        iamjoonsoo.kim@lge.com, akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
+        qixu@nfschina.com, hukun@nfschina.com, yuzhe@nfschina.com,
+        Ren Yu <renyu@nfschina.com>
+Subject: Re: [PATCH] mm: check the function kmalloc_slab return value
+Message-ID: <202206132134.VtqdhH9v-lkp@intel.com>
+References: <20220613102438.27723-1-renyu@nfschina.com>
 MIME-Version: 1.0
-Sender: agaddafi917@gmail.com
-Received: by 2002:a5d:83d5:0:0:0:0:0 with HTTP; Mon, 13 Jun 2022 06:35:26
- -0700 (PDT)
-From:   "Mrs Yu. Ging Yunnan" <yunnanmrsyuging@gmail.com>
-Date:   Mon, 13 Jun 2022 13:35:26 +0000
-X-Google-Sender-Auth: BUprGNC0avOxSecjtLEhN4FB9Q0
-Message-ID: <CADBFX31U72f4X-vC1fck3i1CaUfn77yc+Nm0mz+85Zfn-adP-A@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.7 required=5.0 tests=ADVANCE_FEE_5_NEW,BAYES_99,
-        BAYES_999,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,MILLION_HUNDRED,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d36 listed in]
-        [list.dnswl.org]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [agaddafi917[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [yunnanmrsyuging[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.4 ADVANCE_FEE_5_NEW Appears to be advance fee fraud (Nigerian
-        *      419)
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220613102438.27723-1-renyu@nfschina.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings Dearest One,
+Hi Ren,
 
-This letter may come to you as a surprise, but I want you to
-understand that it is only through an opportunity that people can meet
-each other and become friends and business partners in life.
+Thank you for the patch! Perhaps something to improve:
 
-I am Mrs.Aisha El Gaddafi, the only daughters of the late embattled
-president of Libya (Col.Muammar Gaddafi) I am currently residing in
-one of the African Countries, unfortunately as a refugee. At the
-meantime, my family is the target of Western nations led by Nato who
-lead the death of my father at all costs and Our investments and bank
-accounts in several countries are their targets to freeze.
+[auto build test WARNING on akpm-mm/mm-everything]
 
-I have no option rather to contact an interested foreign
-investor/partner who will be able to take absolute control of part of
-the vast cash available in a private account that my late father open
-on my behalf here in the country before his sudden death by the
-western world.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ren-Yu/mm-check-the-function-kmalloc_slab-return-value/20220613-182849
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220613/202206132134.VtqdhH9v-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/5ba2024be9e85177c986e9078e903798cac72f74
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ren-Yu/mm-check-the-function-kmalloc_slab-return-value/20220613-182849
+        git checkout 5ba2024be9e85177c986e9078e903798cac72f74
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
 
-kindly reply me back immediately for more details on how to execute
-the project.Please one more very important thing here, is that you
-don=E2=80=99t have to disclose it to any body because of what is going with=
- my
-entire family, if the united nation happens to know this account, they
-will freeze it as they freeze others so keep this transaction for
-yourself only until we finalize it. I want to transfer this money into
-your account immediately for onward investment in your country because
-I don=E2=80=99t want the united nation to know about this account of which =
-you
-are aware of my family problems.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-About me and the reason why I am now in BURKINA FASO as you can read
-more in the linked below Please inter the link to read and know more
-about me and the reason why I contacted you.
+All warnings (new ones prefixed by >>):
 
-http://www.telegraph.co.uk/news/worldnews/africaandindianocean/libya/996720=
-3/Gaddafis-daughter-thrown-out-of-Algeria-after-she-set-fire-to-presidentia=
-l-residence.html
+   mm/slab.c: In function '__kmem_cache_create':
+>> mm/slab.c:2068:38: warning: returning 'struct kmem_cache *' from a function with return type 'int' makes integer from pointer without a cast [-Wint-conversion]
+    2068 |                         return cachep->freelist_cache;
+         |                                ~~~~~~^~~~~~~~~~~~~~~~
 
-I have the sum of US$ 6.5 Six Million Five Hundred Thousand in  Bank
-Of Africa (BOA).
 
-Therefore if you are capable of running an establishment and can
-maintain the high level of secrecy required in this project, kindly
-reply with the following information for details of the project it it
-interest you.
+vim +2068 mm/slab.c
 
-You are advice to contact me immediately for more details if you are
-really interested. As soon as i hear from you, i will give you more
-details of this transaction.
+  2063	
+  2064		if (OFF_SLAB(cachep)) {
+  2065			cachep->freelist_cache =
+  2066				kmalloc_slab(cachep->freelist_size, 0u);
+  2067			if (unlikely(ZERO_OR_NULL_PTR(cachep->freelist_cache)))
+> 2068				return cachep->freelist_cache;
+  2069		}
+  2070	
+  2071		err = setup_cpu_cache(cachep, gfp);
+  2072		if (err) {
+  2073			__kmem_cache_release(cachep);
+  2074			return err;
+  2075		}
+  2076	
+  2077		return 0;
+  2078	}
+  2079	
 
-Best Regard
-Mrs.Aisha El Gaddafi
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

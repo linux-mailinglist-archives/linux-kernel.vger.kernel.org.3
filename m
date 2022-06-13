@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3248D5492A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E3354956E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245751AbiFMKra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
+        id S1378109AbiFMNmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347036AbiFMKnu (ORCPT
+        with ESMTP id S1378942AbiFMNj0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:43:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66F0DF2F;
-        Mon, 13 Jun 2022 03:25:03 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E39D79390;
+        Mon, 13 Jun 2022 04:28:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 283D460F07;
-        Mon, 13 Jun 2022 10:25:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 367D4C3411E;
-        Mon, 13 Jun 2022 10:25:02 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3171961037;
+        Mon, 13 Jun 2022 11:28:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F33C34114;
+        Mon, 13 Jun 2022 11:28:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115902;
-        bh=X+yRmY49qQ+vJXONkRbFaKbxGptgVbKxURcw4SeclfY=;
+        s=korg; t=1655119694;
+        bh=jFnYDH/ga59f/Td+EUa/dt0CS7+r9A8tKGC76gbt254=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fPGuwlaqyp5M768vRM16h5RtKr980l41X7J5750AA6vv9V7cOxcN2owfg5l9DXICi
-         Ql8ixXK/XAv66stwItErrUGHM+peqgTOO6VyJ+9I2//+YoBVIxFjm+u7bimEeFQWhh
-         tG152cQTtqLZlw1lbTy6gTKNZ0nfUtxWagb7k3YQ=
+        b=sXHDPtjQD7BhqHvnhLAETRXIIjwz7Xlf/Lrik8gCc8p7xJtwy9XLc3AiMSOtg6VtP
+         iVT5CuhLMrtmvai31+ouHFbrlponrOQ/qifYf5luNJgLG/P2PRxYP6SA17msGlm6bL
+         MCLoowtFJStT9XUEhmbOF6Ds/D7fTNk0j4xrnLqk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Hugues Fruchet <hugues.fruchet@foss.st.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 072/218] media: st-delta: Fix PM disable depth imbalance in delta_probe
-Date:   Mon, 13 Jun 2022 12:08:50 +0200
-Message-Id: <20220613094922.435447285@linuxfoundation.org>
+        stable@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 106/339] nbd: dont clear NBD_CMD_INFLIGHT flag if request is not completed
+Date:   Mon, 13 Jun 2022 12:08:51 +0200
+Message-Id: <20220613094929.727046931@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,55 +54,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Yu Kuai <yukuai3@huawei.com>
 
-[ Upstream commit 94e3dba710fe0afc772172305444250023fc2d30 ]
+[ Upstream commit 2895f1831e911ca87d4efdf43e35eb72a0c7e66e ]
 
-The pm_runtime_enable will decrease power disable depth.
-If the probe fails, we should use pm_runtime_disable() to balance
-pm_runtime_enable().
+Otherwise io will hung because request will only be completed if the
+cmd has the flag 'NBD_CMD_INFLIGHT'.
 
-Fixes: f386509e4959 ("[media] st-delta: STiH4xx multi-format video decoder v4l2 driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Acked-by: Hugues Fruchet <hugues.fruchet@foss.st.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 07175cb1baf4 ("nbd: make sure request completion won't concurrent")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Link: https://lore.kernel.org/r/20220521073749.3146892-4-yukuai3@huawei.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/sti/delta/delta-v4l2.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/block/nbd.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/sti/delta/delta-v4l2.c b/drivers/media/platform/sti/delta/delta-v4l2.c
-index 7c925f309158..a489d0d17989 100644
---- a/drivers/media/platform/sti/delta/delta-v4l2.c
-+++ b/drivers/media/platform/sti/delta/delta-v4l2.c
-@@ -1880,7 +1880,7 @@ static int delta_probe(struct platform_device *pdev)
- 	if (ret) {
- 		dev_err(delta->dev, "%s failed to initialize firmware ipc channel\n",
- 			DELTA_PREFIX);
--		goto err;
-+		goto err_pm_disable;
+diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
+index 284557041336..ed678037ba6d 100644
+--- a/drivers/block/nbd.c
++++ b/drivers/block/nbd.c
+@@ -404,13 +404,14 @@ static enum blk_eh_timer_return nbd_xmit_timeout(struct request *req,
+ 	if (!mutex_trylock(&cmd->lock))
+ 		return BLK_EH_RESET_TIMER;
+ 
+-	if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
++	if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
+ 		mutex_unlock(&cmd->lock);
+ 		return BLK_EH_DONE;
  	}
  
- 	/* register all available decoders */
-@@ -1894,7 +1894,7 @@ static int delta_probe(struct platform_device *pdev)
- 	if (ret) {
- 		dev_err(delta->dev, "%s failed to register V4L2 device\n",
- 			DELTA_PREFIX);
--		goto err;
-+		goto err_pm_disable;
+ 	if (!refcount_inc_not_zero(&nbd->config_refs)) {
+ 		cmd->status = BLK_STS_TIMEOUT;
++		__clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
+ 		mutex_unlock(&cmd->lock);
+ 		goto done;
+ 	}
+@@ -479,6 +480,7 @@ static enum blk_eh_timer_return nbd_xmit_timeout(struct request *req,
+ 	dev_err_ratelimited(nbd_to_dev(nbd), "Connection timed out\n");
+ 	set_bit(NBD_RT_TIMEDOUT, &config->runtime_flags);
+ 	cmd->status = BLK_STS_IOERR;
++	__clear_bit(NBD_CMD_INFLIGHT, &cmd->flags);
+ 	mutex_unlock(&cmd->lock);
+ 	sock_shutdown(nbd);
+ 	nbd_config_put(nbd);
+@@ -746,7 +748,7 @@ static struct nbd_cmd *nbd_handle_reply(struct nbd_device *nbd, int index,
+ 	cmd = blk_mq_rq_to_pdu(req);
+ 
+ 	mutex_lock(&cmd->lock);
+-	if (!__test_and_clear_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
++	if (!test_bit(NBD_CMD_INFLIGHT, &cmd->flags)) {
+ 		dev_err(disk_to_dev(nbd->disk), "Suspicious reply %d (status %u flags %lu)",
+ 			tag, cmd->status, cmd->flags);
+ 		ret = -ENOENT;
+@@ -855,8 +857,16 @@ static void recv_work(struct work_struct *work)
+ 		}
+ 
+ 		rq = blk_mq_rq_from_pdu(cmd);
+-		if (likely(!blk_should_fake_timeout(rq->q)))
+-			blk_mq_complete_request(rq);
++		if (likely(!blk_should_fake_timeout(rq->q))) {
++			bool complete;
++
++			mutex_lock(&cmd->lock);
++			complete = __test_and_clear_bit(NBD_CMD_INFLIGHT,
++							&cmd->flags);
++			mutex_unlock(&cmd->lock);
++			if (complete)
++				blk_mq_complete_request(rq);
++		}
+ 		percpu_ref_put(&q->q_usage_counter);
  	}
  
- 	delta->work_queue = create_workqueue(DELTA_NAME);
-@@ -1919,6 +1919,8 @@ static int delta_probe(struct platform_device *pdev)
- 	destroy_workqueue(delta->work_queue);
- err_v4l2:
- 	v4l2_device_unregister(&delta->v4l2_dev);
-+err_pm_disable:
-+	pm_runtime_disable(dev);
- err:
- 	return ret;
- }
 -- 
 2.35.1
 

@@ -2,185 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5152E549ECB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D37549ED5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351019AbiFMURO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:17:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
+        id S1346875AbiFMURh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350960AbiFMUQy (ORCPT
+        with ESMTP id S1349329AbiFMUQ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:16:54 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A501737AA;
-        Mon, 13 Jun 2022 11:54:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655146485; x=1686682485;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rrteT8J06qadrldMcQRzRLZphFKmersKJgLFFUeBMAw=;
-  b=acZCmGCyIAErSAEvtzRqpmxCogNIu7Kx1odcmKEC80A+F3SCN1890qMk
-   5jhVe6X8vBNAaCEJyXllB2lrzKQtYbBc187mf/UCcfbq/tWT1kTHoJ6Hs
-   YcouSYYeZdDrK2uPj1e0niTPUdLoFi8PsUA/Ofu00hnzilW6n1Ri6YFuS
-   kShvxtnbZzhD0o1Bz3xaE8kjxMD/4Rob6AzYa4xkkRPqhkCqoDnklsJrR
-   U7XCLh6xBhzz5Dl2fQHhk0xIugkyXQaSpSFyPM9f/vOaQPK2HvbUEmMyg
-   1u5QKX607sIHXm3a0CgjyYg+vKL+mH0/rpmxsxTB5VQxjWyN7yk3hQKLP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="278412731"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="278412731"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 11:54:43 -0700
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="686212131"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 11:54:39 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o0pCu-000bIa-OV;
-        Mon, 13 Jun 2022 21:54:36 +0300
-Date:   Mon, 13 Jun 2022 21:54:36 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
-        Mark Gross <markgross@kernel.org>,
-        ibm-acpi-devel@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org
-Subject: Re: [PATCH v2 12/16] platform/x86/thinkpad_acpi: Use
- acpi_dev_for_each_child()
-Message-ID: <YqeH7G8pJMelXYaJ@smile.fi.intel.com>
-References: <1843211.tdWV9SEqCh@kreacher>
- <2653857.mvXUDI8C0e@kreacher>
- <2091400.OBFZWjSADL@kreacher>
+        Mon, 13 Jun 2022 16:16:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88C85C0E37
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 11:55:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655146499;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=twODBOMo1H0OlE0mw4AXAcH5DtMeaVs68JEX7EwBl18=;
+        b=Enfa0fwrrEnDkOPZTankRumB6apKff+xcxvVr4PV5sGnmdGsYyYyvms5sJzsGvCCwLHl4u
+        KUwaSXHOZZsZapWUSDWVqVuHfsKtzCjjYUYyJexoE8Kz1eG4TNdvxtjw4lt4r2aFvaEYHY
+        QbTRTvCjbR928+FFvgNgqcWTpz2GDck=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-194-gTFMQczbOi62EkMEe4Lr5Q-1; Mon, 13 Jun 2022 14:54:53 -0400
+X-MC-Unique: gTFMQczbOi62EkMEe4Lr5Q-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF19829AA3B0;
+        Mon, 13 Jun 2022 18:54:52 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4941D4010E4D;
+        Mon, 13 Jun 2022 18:54:52 +0000 (UTC)
+Message-ID: <a2b40ed8-54e8-50c8-557e-99fba8d3f270@redhat.com>
+Date:   Mon, 13 Jun 2022 14:54:52 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2091400.OBFZWjSADL@kreacher>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] rcu-tasks: Delay rcu_tasks_verify_self_tests() to avoid
+ missed callbacks
+Content-Language: en-US
+To:     paulmck@kernel.org
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+References: <20220610184212.822113-1-longman@redhat.com>
+ <20220610205814.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+ <5aae210e-2553-57ca-e4d5-0b0f20ec92cd@redhat.com>
+ <20220613175600.GG1790663@paulmck-ThinkPad-P17-Gen-1>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220613175600.GG1790663@paulmck-ThinkPad-P17-Gen-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 08:30:19PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Instead of walking the list of children of an ACPI device directly,
-> use acpi_dev_for_each_child() to carry out an action for all of
-> the given ACPI device's children.
-> 
-> This will help to eliminate the children list head from struct
-> acpi_device as it is redundant and it is used in questionable ways
-> in some places (in particular, locking is needed for walking the
-> list pointed to it safely, but it is often missing).
+On 6/13/22 13:56, Paul E. McKenney wrote:
+> On Mon, Jun 13, 2022 at 12:01:24PM -0400, Waiman Long wrote:
+>> On 6/10/22 16:58, Paul E. McKenney wrote:
+>>> On Fri, Jun 10, 2022 at 02:42:12PM -0400, Waiman Long wrote:
+>>>> Even though rcu_tasks selftest is initiated early in the boot process,
+>>>> the verification done at late initcall time may not be late enough to
+>>>> catch all the callbacks especially on systems with just a few cpus and
+>>>> small memory.
+>>>>
+>>>> After 12 bootup's On a s390x system, 1 of them had failed rcu_tasks
+>>>> verification test.
+>>>>
+>>>> [    8.183013] call_rcu_tasks() has been failed.
+>>>> [    8.183041] WARNING: CPU: 0 PID: 1 at kernel/rcu/tasks.h:1696 rcu_tasks_verify_self_tests+0x64/0xd0
+>>>> [    8.203246] Callback from call_rcu_tasks() invoked.
+>>>>
+>>>> In this particular case, the callback missed the check by about
+>>>> 20ms. Similar rcu_tasks selftest failures are also seen in ppc64le
+>>>> systems.
+>>>>
+>>>> [    0.313391] call_rcu_tasks() has been failed.
+>>>> [    0.313407] WARNING: CPU: 0 PID: 1 at kernel/rcu/tasks.h:1696 rcu_tasks_verify_self_tests+0x5c/0xa0
+>>>> [    0.335569] Callback from call_rcu_tasks() invoked.
+>>>>
+>>>> Avoid this missed callback by delaying the verification using
+>>>> delayed_work. The delay is set to be about 0.1s which hopefully will
+>>>> be long enough to catch all the callbacks on systems with few cpus and
+>>>> small memory.
+>>>>
+>>>> Fixes: bfba7ed084f8 ("rcu-tasks: Add RCU-tasks self tests")
+>>>> Signed-off-by: Waiman Long <longman@redhat.com>
+>>> Good catch, thank you!
+>>>
+>>> A few days ago, I queued this:
+>>>
+>>> 2585014188d5 ("rcu-tasks: Be more patient for RCU Tasks boot-time testing")
+>>>
+>>> This is shown in full at the end of this email.  Does this fix this
+>>> problem for you?
+>> I think your patch should fix the false positive warning and it give plenty
+>> of time for this to happen.
+>>
+>> I do have one question though. rcu_tasks_verify_selft_tests() is called from
+>> do_initcalls(). Since it may not be the last late initcall, does that mean
+>> other late initcalls queued after that may be delayed by a second or more?
+> Indeed.  Which is why I would welcome the workqueues portion of your
+> patch on top of the above patch in -rcu.  ;-)
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Sure. I will work on such a follow-up patch.
 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> v1 -> v2:
->    * Eliminate unnecessary branch (Andy).
-> 
-> ---
->  drivers/platform/x86/thinkpad_acpi.c |   53 +++++++++++++++++------------------
->  1 file changed, 27 insertions(+), 26 deletions(-)
-> 
-> Index: linux-pm/drivers/platform/x86/thinkpad_acpi.c
-> ===================================================================
-> --- linux-pm.orig/drivers/platform/x86/thinkpad_acpi.c
-> +++ linux-pm/drivers/platform/x86/thinkpad_acpi.c
-> @@ -6841,6 +6841,31 @@ static const struct backlight_ops ibm_ba
->  
->  /* --------------------------------------------------------------------- */
->  
-> +static int __init tpacpi_evaluate_bcl(struct acpi_device *adev, void *not_used)
-> +{
-> +	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-> +	union acpi_object *obj;
-> +	acpi_status status;
-> +	int rc;
-> +
-> +	status = acpi_evaluate_object(adev->handle, "_BCL", NULL, &buffer);
-> +	if (ACPI_FAILURE(status))
-> +		return 0;
-> +
-> +	obj = buffer.pointer;
-> +	if (!obj || obj->type != ACPI_TYPE_PACKAGE) {
-> +		acpi_handle_info(adev->handle,
-> +				 "Unknown _BCL data, please report this to %s\n",
-> +				 TPACPI_MAIL);
-> +		rc = 0;
-> +	} else {
-> +		rc = obj->package.count;
-> +	}
-> +	kfree(obj);
-> +
-> +	return rc;
-> +}
-> +
->  /*
->   * Call _BCL method of video device.  On some ThinkPads this will
->   * switch the firmware to the ACPI brightness control mode.
-> @@ -6848,37 +6873,13 @@ static const struct backlight_ops ibm_ba
->  
->  static int __init tpacpi_query_bcl_levels(acpi_handle handle)
->  {
-> -	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
-> -	union acpi_object *obj;
-> -	struct acpi_device *device, *child;
-> -	int rc;
-> +	struct acpi_device *device;
->  
->  	device = acpi_fetch_acpi_dev(handle);
->  	if (!device)
->  		return 0;
->  
-> -	rc = 0;
-> -	list_for_each_entry(child, &device->children, node) {
-> -		acpi_status status = acpi_evaluate_object(child->handle, "_BCL",
-> -							  NULL, &buffer);
-> -		if (ACPI_FAILURE(status)) {
-> -			buffer.length = ACPI_ALLOCATE_BUFFER;
-> -			continue;
-> -		}
-> -
-> -		obj = (union acpi_object *)buffer.pointer;
-> -		if (!obj || (obj->type != ACPI_TYPE_PACKAGE)) {
-> -			pr_err("Unknown _BCL data, please report this to %s\n",
-> -				TPACPI_MAIL);
-> -			rc = 0;
-> -		} else {
-> -			rc = obj->package.count;
-> -		}
-> -		break;
-> -	}
-> -
-> -	kfree(buffer.pointer);
-> -	return rc;
-> +	return acpi_dev_for_each_child(device, tpacpi_evaluate_bcl, NULL);
->  }
->  
->  
-> 
-> 
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+Cheers,
+Longman
 

@@ -2,105 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F54254A2AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 01:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B14A54A2AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 01:23:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244254AbiFMXWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 19:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55274 "EHLO
+        id S1344756AbiFMXW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 19:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344104AbiFMXWi (ORCPT
+        with ESMTP id S245007AbiFMXW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 19:22:38 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231D71277B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 16:22:26 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id o17so6352593pla.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 16:22:26 -0700 (PDT)
+        Mon, 13 Jun 2022 19:22:56 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED6331DF7;
+        Mon, 13 Jun 2022 16:22:54 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id j5-20020a05600c1c0500b0039c5dbbfa48so5324153wms.5;
+        Mon, 13 Jun 2022 16:22:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B3RxiogwxQ3efUX3+sbp3cwVCT5XzvkaPhVLnHLET4Y=;
-        b=BqiMiN+lQO+8l/tGBuOxJn2dFR3aFYKX4uFwvVPTVw9Tj0NCQMlDy4L3Ic/ONqIl31
-         wzplWXTVffQhgKN0pb8Qe6+UaeYgrIuAGQgjchacCAgw3eH84QGONtmqN+2GuLf5sKqy
-         8neAm2iWJ61No+MZXjc82pQNWaZZjB6WB5IMQ=
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=N6LCBec1W8ZWJCovHT0K9vDII0S3kSkxQgIBwwCRgLY=;
+        b=meIQyKG3JMG/oYSUKrWK+xDlvmc0UzfQSZi4U06ahLbbBnQGpIz+3GIP2sfyajmjhK
+         Tpxl9xXlPiIrE7rTPIqTxxo1RTD8Pt8jgosvRzA7OmMXVWAsCTns2aJ1rXcdGhDtwttC
+         7WgRZOM2BsFGTpqYMfXr2vwTBNNFm2sx1Dq3gxpTfVwCZbva5JH8dm9wa93pg+SChGQZ
+         7jPlnDcI52R2M8T505nWuG4iPjyKDSer6ax8fGLMhdCbJDwesd5OYAbgS9BQzW39XUWz
+         BnuRFkVdPdVoxgC6zGb1qKfLNLUG8pAC+ILxrk369Qbns0o8bKi2NxT9bnXNR4xN7oep
+         XqZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B3RxiogwxQ3efUX3+sbp3cwVCT5XzvkaPhVLnHLET4Y=;
-        b=4FJMYVWPI8q92DcR+I1vOPAVyLrDur9nDfRKDD+FQpAbGjkqm9RK5GF6O0XjT1ye1W
-         /zd6zL+O/hVsi8q+O0t5cufRBK5SZOylxkVAHaUh5qBI+S3lmjSGWVfMUJ/blmEuRrMI
-         Zivoxz6RM+fCi5+DE9MjOlnlPnJVufliUfv7yYi5ngFTsGTl5Nur/1QX7g6nE7+Iwwi2
-         J7pFfEoxw7ahvigo1qX/FqhYOR7eJLIeZjYFjEoWdcw0cdY/jKoNoNhUMmuGQdPHVVCc
-         Qfn4vFtMi3qdhJ5kyN0kAxV433jle78Xka+muNxJoAAjF3YDazvb8T+uDRnYi+iPgSnO
-         dTUA==
-X-Gm-Message-State: AJIora/3ALnuxkR9KMljRsgyaIJOoh8jycAk556huBYz5dURpKZ4G9Ng
-        vbDB/9m1IGuRmeUVWp8/8MrUbK2/cK5law==
-X-Google-Smtp-Source: AGRyM1uhlZCnyIP4x2P9IFkCataXFtmzmEbxJHxrC4AW0Y0NWP6mb3j4cyOf8LdmLE/f++Ma2sk8Zg==
-X-Received: by 2002:a17:902:d50b:b0:165:2aa0:4b22 with SMTP id b11-20020a170902d50b00b001652aa04b22mr1358214plg.131.1655162545532;
-        Mon, 13 Jun 2022 16:22:25 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:82ae:1136:b202:95da])
-        by smtp.gmail.com with ESMTPSA id s9-20020a63af49000000b003f5d7f0ad6asm6057407pgo.48.2022.06.13.16.22.24
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=N6LCBec1W8ZWJCovHT0K9vDII0S3kSkxQgIBwwCRgLY=;
+        b=5VF9PevWyGDoowqp1c/gMmwheizC4yl5IsFFmxW7kX+HLfqK4AXxdXLQzBSdMZyzfI
+         4FBU6AJAsuOEBqBOEsQSoDQzi9dJxZyc37woCS5hzF1XlnV1uD88J5EgjgRQvWyuIRFK
+         3qgqAlnXPROjwMAnbjdlkxIAs21SOvAwXCqyJQz+PiqxbZ3AnZ+Vk9mq6/L07CghZmGQ
+         kKQ+7Sr6l6IiSK8yjver7bqFZKotABk3BD5bhIBDFoVVyu9eYhaU5RKu1yaDO6TvucH4
+         aR6xGfy0ARgIg0AFMQczMhzvXzIuaFl5OmuB5d02gP0Ou+mfzUFQeElvD3L02bI8Tm4v
+         X0Tw==
+X-Gm-Message-State: AOAM532LkUNQvy7DwMseEO39c+jxncxA6EuBqLMxSaGdWlP5ktG7zBYl
+        KTkIWEzyV1kaFyLv5lYAZ/k=
+X-Google-Smtp-Source: ABdhPJxh9f7PwyRxtKu1GN1I22pEHEnqpSxoBB3/oxueimhNH50jAQKvLfwGDxDG5FyBY66ah+U20A==
+X-Received: by 2002:a1c:cc07:0:b0:39c:7416:6a52 with SMTP id h7-20020a1ccc07000000b0039c74166a52mr1060917wmb.119.1655162573167;
+        Mon, 13 Jun 2022 16:22:53 -0700 (PDT)
+Received: from opensuse.localnet (host-87-16-96-199.retail.telecomitalia.it. [87.16.96.199])
+        by smtp.gmail.com with ESMTPSA id m3-20020a7bcb83000000b0039c95b31812sm4564479wmi.31.2022.06.13.16.22.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 16:22:25 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Aashish Sharma <shraash@google.com>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, linux-iio@vger.kernel.org,
-        Gwendal Grignou <gwendal@chromium.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] iio:proximity:sx9324: Check ret value of device_property_read_u32_array()
-Date:   Mon, 13 Jun 2022 16:22:24 -0700
-Message-Id: <20220613232224.2466278-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+        Mon, 13 Jun 2022 16:22:51 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     dsterba@suse.cz
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Filipe Manana <fdmanana@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] btrfs: Replace kmap() with kmap_local_page() in zstd.c
+Date:   Tue, 14 Jun 2022 01:22:50 +0200
+Message-ID: <1936552.usQuhbGJ8B@opensuse>
+In-Reply-To: <20220613183913.GD20633@twin.jikos.cz>
+References: <20220611135203.27992-1-fmdefrancesco@gmail.com> <20220613183913.GD20633@twin.jikos.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aashish Sharma <shraash@google.com>
+On luned=C3=AC 13 giugno 2022 20:39:13 CEST David Sterba wrote:
+> On Sat, Jun 11, 2022 at 03:52:03PM +0200, Fabio M. De Francesco wrote:
+> > The use of kmap() is being deprecated in favor of kmap_local_page().=20
+With
+> > kmap_local_page(), the mapping is per thread, CPU local and not=20
+globally
+> > visible.
+> >=20
+> > Therefore, use kmap_local_page() / kunmap_local() in zstd.c because in
+> > this file the mappings are per thread and are not visible in other
+> > contexts; meanwhile refactor zstd_compress_pages() to comply with=20
+nested
+> > local mapping / unmapping ordering rules.
+> >=20
+> > Tested with xfstests on a QEMU + KVM 32 bits VM with 4GB of RAM and
+> > HIGHMEM64G enabled.
+> >=20
+> > Cc: Filipe Manana <fdmanana@kernel.org>
+> > Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > ---
+> >=20
+> > @@ -477,15 +479,16 @@ int zstd_compress_pages(struct list_head *ws,=20
+struct address_space *mapping,
+> >  		/* Check if we need more input */
+> >  		if (workspace->in_buf.pos =3D=3D workspace->in_buf.size) {
+> >  			tot_in +=3D PAGE_SIZE;
+> > -			kunmap(in_page);
+> > +			kunmap_local(workspace->out_buf.dst);
+> > +			kunmap_local((void *)workspace->in_buf.src);
+>=20
+> Why is the cast needed?
 
-0-day reports:
+As I wrote in an email I sent some days ago ("[RFC PATCH] btrfs: Replace=20
+kmap() with kmap_local_page() in zstd.c")[1] I get a series of errors like=
+=20
+the following:
 
-drivers/iio/proximity/sx9324.c:868:3: warning: Value stored
-to 'ret' is never read [clang-analyzer-deadcode.DeadStores]
+/usr/src/git/kernels/linux/fs/btrfs/zstd.c:547:33: warning: passing=20
+argument 1 of '__kunmap_local' discards 'const' qualifier from pointer=20
+target type [-Wdiscarded-qualifiers]
+  547 |   kunmap_local(workspace->in_buf.src);
+      |                ~~~~~~~~~~~~~~~~~^~~~
+/usr/src/git/kernels/linux/include/linux/highmem-internal.h:284:17: note:=20
+in definition of macro 'kunmap_local'
+  284 |  __kunmap_local(__addr);     \
+      |                 ^~~~~~
+/usr/src/git/kernels/linux/include/linux/highmem-internal.h:92:41: note:=20
+expected 'void *' but argument is of type 'const void *'
+   92 | static inline void __kunmap_local(void *vaddr)
+      |                                   ~~~~~~^~~~~
 
-Put an if condition to break out of switch if ret is non-zero.
+Therefore, this is a (bad?) hack to make these changes compile.
+A better solution is changing the prototype of __kunmap_local(); I
+suppose that Andrew won't object, but who knows?
 
-Signed-off-by: Aashish Sharma <shraash@google.com>
-Fixes: a8ee3b32f5da ("iio:proximity:sx9324: Add dt_binding support")
-Reported-by: kernel test robot <lkp@intel.com>
-[swboyd@chromium.org: Reword commit subject, add fixes tag]
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/iio/proximity/sx9324.c | 3 +++
- 1 file changed, 3 insertions(+)
+(+Cc Andrew Morton).
 
-diff --git a/drivers/iio/proximity/sx9324.c b/drivers/iio/proximity/sx9324.c
-index 70c37f664f6d..63fbcaa4cac8 100644
---- a/drivers/iio/proximity/sx9324.c
-+++ b/drivers/iio/proximity/sx9324.c
-@@ -885,6 +885,9 @@ sx9324_get_default_reg(struct device *dev, int idx,
- 			break;
- 		ret = device_property_read_u32_array(dev, prop, pin_defs,
- 						     ARRAY_SIZE(pin_defs));
-+		if (ret)
-+			break;
-+
- 		for (pin = 0; pin < SX9324_NUM_PINS; pin++)
- 			raw |= (pin_defs[pin] << (2 * pin)) &
- 			       SX9324_REG_AFE_PH0_PIN_MASK(pin);
+I was waiting for your comments. At now I've done about 15 conversions=20
+across the kernel but it's the first time I had to pass a pointer to const=
+=20
+void to kunmap_local(). Therefore, I was not sure if changing the API were=
+=20
+better suited (however I have already discussed this with Ira).
 
-base-commit: f2906aa863381afb0015a9eb7fefad885d4e5a56
--- 
-https://chromeos.dev
+> I see that it leads to a warning but we pass a
+> const buffer and that breaks the API contract as in kunmap it would be
+> accessed as non-const and potentially changed without warning or
+> compiler error. If kunmap_local does not touch the buffer
+
+Yes, correct, kunmap_local() does _not_ touch the buffer.
+
+> and 'const
+> void*' would work too, then it should be fixed.
+
+I'll send an RFC patch for changing __kunmap_local() and the other
+functions of the calls chain down to kunmap_local_indexed().
+=46urthermore, changes to kunmap_local_indexed() prototype require also=20
+changes to __kunmap_atomic() (if I recall correctly...).
+
+Thanks for your review,
+
+=46abio
+
 

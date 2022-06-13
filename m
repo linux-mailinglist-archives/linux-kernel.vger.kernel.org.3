@@ -2,48 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6E00549697
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D70F54941F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378422AbiFMNlb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:41:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
+        id S1354815AbiFMLeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:34:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378821AbiFMNjQ (ORCPT
+        with ESMTP id S1354370AbiFML3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:39:16 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7037936A;
-        Mon, 13 Jun 2022 04:28:12 -0700 (PDT)
+        Mon, 13 Jun 2022 07:29:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D012314F;
+        Mon, 13 Jun 2022 03:43:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AA4C9CE1192;
-        Mon, 13 Jun 2022 11:28:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BBF8C34114;
-        Mon, 13 Jun 2022 11:28:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2850FB80D3B;
+        Mon, 13 Jun 2022 10:43:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5905EC34114;
+        Mon, 13 Jun 2022 10:43:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119689;
-        bh=H7hRngXPMwAE0BVbWnal+00dHYV5bdYvCflzGFGpIE0=;
+        s=korg; t=1655117014;
+        bh=1deBv8pWO4EhlblSV+d3qc0OS1zA34siQuYQ1ppkR98=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B7f1NW0Z4PjetxBgLrPlPF9VCaa+XZWzxF2L2dqg2ghTdDU7JT4ClctNj8MzwNVkn
-         K4ZpEXEzyYmFfZhs0AqAz5qyV8EuLWarsTzGo8X/a9ldYJ3cay1fFOvjVcgt6ZXhYb
-         jDCgfpPw8fUuG5rjwgCa/PR2fOsgsMtO0CV10EuE=
+        b=bxcBibQvBElkkDbmkwCo0mKwVVL7xeDVGL6wQvvKMOetj2sXXnNDgMa1XkYOpE91L
+         DByhTGyRmlM32GoRTTmCZdry1hjZ/FNY1zetXQ5d42WpBBcO1mXtgzDM7jQWApo0sU
+         Qaa1q5VTBEjJpJq69E7Xpnl0NI1em+K3xS2iRwrs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Menglong Dong <imagedong@tencent.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jiang Biao <benbjiang@tencent.com>,
-        Hao Peng <flyingpeng@tencent.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 104/339] bpf: Fix probe read error in ___bpf_prog_run()
+        stable@vger.kernel.org,
+        Christophe de Dinechin <christophe@dinechin.org>,
+        Christophe de Dinechin <dinechin@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ben Segall <bsegall@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH 5.4 256/411] nodemask.h: fix compilation error with GCC12
 Date:   Mon, 13 Jun 2022 12:08:49 +0200
-Message-Id: <20220613094929.667429203@linuxfoundation.org>
+Message-Id: <20220613094936.441817314@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,95 +68,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+From: Christophe de Dinechin <dinechin@redhat.com>
 
-[ Upstream commit caff1fa4118cec4dfd4336521ebd22a6408a1e3e ]
+commit 37462a920392cb86541650a6f4121155f11f1199 upstream.
 
-I think there is something wrong with BPF_PROBE_MEM in ___bpf_prog_run()
-in big-endian machine. Let's make a test and see what will happen if we
-want to load a 'u16' with BPF_PROBE_MEM.
+With gcc version 12.0.1 20220401 (Red Hat 12.0.1-0), building with
+defconfig results in the following compilation error:
 
-Let's make the src value '0x0001', the value of dest register will become
-0x0001000000000000, as the value will be loaded to the first 2 byte of
-DST with following code:
+|   CC      mm/swapfile.o
+| mm/swapfile.c: In function `setup_swap_info':
+| mm/swapfile.c:2291:47: error: array subscript -1 is below array bounds
+|  of `struct plist_node[]' [-Werror=array-bounds]
+|  2291 |                                 p->avail_lists[i].prio = 1;
+|       |                                 ~~~~~~~~~~~~~~^~~
+| In file included from mm/swapfile.c:16:
+| ./include/linux/swap.h:292:27: note: while referencing `avail_lists'
+|   292 |         struct plist_node avail_lists[]; /*
+|       |                           ^~~~~~~~~~~
 
-  bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) (SRC + insn->off));
+This is due to the compiler detecting that the mask in
+node_states[__state] could theoretically be zero, which would lead to
+first_node() returning -1 through find_first_bit.
 
-Obviously, the value in DST is not correct. In fact, we can compare
-BPF_PROBE_MEM with LDX_MEM_H:
+I believe that the warning/error is legitimate.  I first tried adding a
+test to check that the node mask is not emtpy, since a similar test exists
+in the case where MAX_NUMNODES == 1.
 
-  DST = *(SIZE *)(unsigned long) (SRC + insn->off);
+However, adding the if statement causes other warnings to appear in
+for_each_cpu_node_but, because it introduces a dangling else ambiguity.
+And unfortunately, GCC is not smart enough to detect that the added test
+makes the case where (node) == -1 impossible, so it still complains with
+the same message.
 
-If the memory load is done by LDX_MEM_H, the value in DST will be 0x1 now.
+This is why I settled on replacing that with a harmless, but relatively
+useless (node) >= 0 test.  Based on the warning for the dangling else, I
+also decided to fix the case where MAX_NUMNODES == 1 by moving the
+condition inside the for loop.  It will still only be tested once.  This
+ensures that the meaning of an else following for_each_node_mask or
+derivatives would not silently have a different meaning depending on the
+configuration.
 
-And I think this error results in the test case 'test_bpf_sk_storage_map'
-failing:
-
-  test_bpf_sk_storage_map:PASS:bpf_iter_bpf_sk_storage_map__open_and_load 0 nsec
-  test_bpf_sk_storage_map:PASS:socket 0 nsec
-  test_bpf_sk_storage_map:PASS:map_update 0 nsec
-  test_bpf_sk_storage_map:PASS:socket 0 nsec
-  test_bpf_sk_storage_map:PASS:map_update 0 nsec
-  test_bpf_sk_storage_map:PASS:socket 0 nsec
-  test_bpf_sk_storage_map:PASS:map_update 0 nsec
-  test_bpf_sk_storage_map:PASS:attach_iter 0 nsec
-  test_bpf_sk_storage_map:PASS:create_iter 0 nsec
-  test_bpf_sk_storage_map:PASS:read 0 nsec
-  test_bpf_sk_storage_map:FAIL:ipv6_sk_count got 0 expected 3
-  $10/26 bpf_iter/bpf_sk_storage_map:FAIL
-
-The code of the test case is simply, it will load sk->sk_family to the
-register with BPF_PROBE_MEM and check if it is AF_INET6. With this patch,
-now the test case 'bpf_iter' can pass:
-
-  $10  bpf_iter:OK
-
-Fixes: 2a02759ef5f8 ("bpf: Add support for BTF pointers to interpreter")
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Jiang Biao <benbjiang@tencent.com>
-Reviewed-by: Hao Peng <flyingpeng@tencent.com>
-Cc: Ilya Leoshkevich <iii@linux.ibm.com>
-Link: https://lore.kernel.org/bpf/20220524021228.533216-1-imagedong@tencent.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lkml.kernel.org/r/20220414150855.2407137-3-dinechin@redhat.com
+Signed-off-by: Christophe de Dinechin <christophe@dinechin.org>
+Signed-off-by: Christophe de Dinechin <dinechin@redhat.com>
+Reviewed-by: Andrew Morton <akpm@linux-foundation.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc: Jason Wang <jasowang@redhat.com>
+Cc: Zhen Lei <thunder.leizhen@huawei.com>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/bpf/core.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+ include/linux/nodemask.h |   13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 05e701f0da81..1e92b52fc814 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -1950,6 +1950,11 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 		CONT;							\
- 	LDX_MEM_##SIZEOP:						\
- 		DST = *(SIZE *)(unsigned long) (SRC + insn->off);	\
-+		CONT;							\
-+	LDX_PROBE_MEM_##SIZEOP:						\
-+		bpf_probe_read_kernel(&DST, sizeof(SIZE),		\
-+				      (const void *)(long) (SRC + insn->off));	\
-+		DST = *((SIZE *)&DST);					\
- 		CONT;
+--- a/include/linux/nodemask.h
++++ b/include/linux/nodemask.h
+@@ -375,14 +375,13 @@ static inline void __nodes_fold(nodemask
+ }
  
- 	LDST(B,   u8)
-@@ -1957,15 +1962,6 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
- 	LDST(W,  u32)
- 	LDST(DW, u64)
- #undef LDST
--#define LDX_PROBE(SIZEOP, SIZE)							\
--	LDX_PROBE_MEM_##SIZEOP:							\
--		bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) (SRC + insn->off));	\
--		CONT;
--	LDX_PROBE(B,  1)
--	LDX_PROBE(H,  2)
--	LDX_PROBE(W,  4)
--	LDX_PROBE(DW, 8)
--#undef LDX_PROBE
+ #if MAX_NUMNODES > 1
+-#define for_each_node_mask(node, mask)			\
+-	for ((node) = first_node(mask);			\
+-		(node) < MAX_NUMNODES;			\
+-		(node) = next_node((node), (mask)))
++#define for_each_node_mask(node, mask)				    \
++	for ((node) = first_node(mask);				    \
++	     (node >= 0) && (node) < MAX_NUMNODES;		    \
++	     (node) = next_node((node), (mask)))
+ #else /* MAX_NUMNODES == 1 */
+-#define for_each_node_mask(node, mask)			\
+-	if (!nodes_empty(mask))				\
+-		for ((node) = 0; (node) < 1; (node)++)
++#define for_each_node_mask(node, mask)                                  \
++	for ((node) = 0; (node) < 1 && !nodes_empty(mask); (node)++)
+ #endif /* MAX_NUMNODES */
  
- #define ATOMIC_ALU_OP(BOP, KOP)						\
- 		case BOP:						\
--- 
-2.35.1
-
+ /*
 
 

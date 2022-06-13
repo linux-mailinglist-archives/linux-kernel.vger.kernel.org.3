@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E788548FA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 173735496DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356853AbiFMNAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
+        id S1378642AbiFMNnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358061AbiFMMzC (ORCPT
+        with ESMTP id S1378956AbiFMNja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F57D7654;
-        Mon, 13 Jun 2022 04:14:15 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570B37937B;
+        Mon, 13 Jun 2022 04:28:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA07E608C3;
-        Mon, 13 Jun 2022 11:14:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7AA7C34114;
-        Mon, 13 Jun 2022 11:14:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C805460F18;
+        Mon, 13 Jun 2022 11:28:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5C52C34114;
+        Mon, 13 Jun 2022 11:28:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118854;
-        bh=Nyc7+4kSyLIRmZeoBpvTr7OYTrPEJP86sSagwb0Vm3E=;
+        s=korg; t=1655119683;
+        bh=4uPzDoDtm+L7EnFXiMH8EH9hH4YgpoC0Sl0c04Rut6E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kzzWkBdlH0fn0gR8UhTWbIEP2Kt6yJGFx6TZN4veK8TRVJzjxiCeV/CzfOSXWZ9TH
-         83NQEOhlnzNTWdx5bHdUFOQHoccl0gTPnXFOWTGqhNlfmgzprkCqt5jJhim76CJQHJ
-         MXuvKzo50tg7bRo7yElEV6qg4l2/FjgM0HD0eOFI=
+        b=lEbbh7VAzaLjrWaw8moXdvKr6ylYOTZCPddI/x+uraCFCEosoGx+Y9Hmq1yWj+mBK
+         w4d1LmjofKdkDeR3TIxjhD1JsN8L7QlTrkNQ83sbYYH6IGTIrlmrTXYO55ugESu9O9
+         1C0YxbSSebfjTUuFAcz3iFVS6V7qcg9szBNqdNkQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Richard Weinberger <richard@nod.at>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 025/247] rpmsg: virtio: Fix possible double free in rpmsg_probe()
+Subject: [PATCH 5.18 102/339] ubi: ubi_create_volume: Fix use-after-free when volume creation failed
 Date:   Mon, 13 Jun 2022 12:08:47 +0200
-Message-Id: <20220613094923.697010265@linuxfoundation.org>
+Message-Id: <20220613094929.606095549@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
 
-[ Upstream commit c2eecefec5df1306eafce28ccdf1ca159a552ecc ]
+[ Upstream commit 8c03a1c21d72210f81cb369cc528e3fde4b45411 ]
 
-vch will be free in virtio_rpmsg_release_device() when
-rpmsg_ns_register_device() fails. There is no need to call kfree() again.
+There is an use-after-free problem for 'eba_tbl' in ubi_create_volume()'s
+error handling path:
 
-Fix this by changing error path from free_vch to free_ctrldev.
+  ubi_eba_replace_table(vol, eba_tbl)
+    vol->eba_tbl = tbl
+out_mapping:
+  ubi_eba_destroy_table(eba_tbl)   // Free 'eba_tbl'
+out_unlock:
+  put_device(&vol->dev)
+    vol_release
+      kfree(tbl->entries)	  // UAF
 
-Fixes: c486682ae1e2 ("rpmsg: virtio: Register the rpmsg_char device")
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Tested-by: Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>
-Link: https://lore.kernel.org/r/20220426060536.15594-2-hbh25y@gmail.com
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Fix it by removing redundant 'eba_tbl' releasing.
+Fetch a reproducer in [Link].
+
+Fixes: 493cfaeaa0c9b ("mtd: utilize new cdev_device_add helper function")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215965
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/rpmsg/virtio_rpmsg_bus.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/mtd/ubi/vmt.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-index 8e49a3bacfc7..834a0811e371 100644
---- a/drivers/rpmsg/virtio_rpmsg_bus.c
-+++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-@@ -964,7 +964,8 @@ static int rpmsg_probe(struct virtio_device *vdev)
- 
- 		err = rpmsg_ns_register_device(rpdev_ns);
- 		if (err)
--			goto free_vch;
-+			/* vch will be free in virtio_rpmsg_release_device() */
-+			goto free_ctrldev;
- 	}
- 
- 	/*
-@@ -988,8 +989,6 @@ static int rpmsg_probe(struct virtio_device *vdev)
- 
- 	return 0;
- 
--free_vch:
--	kfree(vch);
- free_ctrldev:
- 	rpmsg_virtio_del_ctrl_dev(rpdev_ctrl);
- free_coherent:
+diff --git a/drivers/mtd/ubi/vmt.c b/drivers/mtd/ubi/vmt.c
+index 1bc7b3a05604..6ea95ade4ca6 100644
+--- a/drivers/mtd/ubi/vmt.c
++++ b/drivers/mtd/ubi/vmt.c
+@@ -309,7 +309,6 @@ int ubi_create_volume(struct ubi_device *ubi, struct ubi_mkvol_req *req)
+ 	ubi->volumes[vol_id] = NULL;
+ 	ubi->vol_count -= 1;
+ 	spin_unlock(&ubi->volumes_lock);
+-	ubi_eba_destroy_table(eba_tbl);
+ out_acc:
+ 	spin_lock(&ubi->volumes_lock);
+ 	ubi->rsvd_pebs -= vol->reserved_pebs;
 -- 
 2.35.1
 

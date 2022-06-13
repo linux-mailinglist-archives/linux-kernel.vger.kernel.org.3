@@ -2,350 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6211549FA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06ADF549FAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234431AbiFMUnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
+        id S235651AbiFMUoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345939AbiFMUmS (ORCPT
+        with ESMTP id S1344519AbiFMUnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:42:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F3AE60B8E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:43:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655149392;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HDqlotByJMstfI4LC1bmK8gv4FcVPnKTp9/kVyb1+GI=;
-        b=RJPKmLA8G/GOSU+zZ3FLrOyGuAK3O8vAxCgy8jg3K+ELNtMVm0HuwqtcHtPXUwZZNktW6Y
-        rjd7ugmwUbsLLM6dAd9rgZcvtXc5q0+tgZEILIEOwowVgNXRy3c9+5+ucgbXLRnOCT+jQH
-        aUue2bi/42+7U/zK+VkOdpDqTJc5Q8w=
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
- [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-655-8JipS8hhOnKK7BiS2Wm4NA-1; Mon, 13 Jun 2022 15:43:10 -0400
-X-MC-Unique: 8JipS8hhOnKK7BiS2Wm4NA-1
-Received: by mail-il1-f198.google.com with SMTP id i16-20020a056e021d1000b002d3bbe39232so5228450ila.20
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:43:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HDqlotByJMstfI4LC1bmK8gv4FcVPnKTp9/kVyb1+GI=;
-        b=td5TotIrA9TsAmuLP01vUalGeXkbAyPoDFuTdCixuOUhcHJd9hMGb1C3TmwYWOV8j0
-         NKo+gXiQGOc/l6hwCo80mYmurZLwvuvnwg2Z7H41SSrvdMgBSchdvoj697ZbQPOnC6kK
-         gKOuASvunACrIsGeSJ3Vz29EtKOJD6VNzhOGz89xg0nb1F70qmstZ6DtGAE8rFuHDVzw
-         nwfBxxHdfh63aQuWdqLNVDHHY8xFswUFgFKAyK3/LlBh9jjZaz0W8TguIFm0HIj/T97J
-         ENMgxKUaCWkpgvL4/8zzevZklMIuXQA5lLHoGPJTVXo1eue9hKex2TLbL35mZ1CIW+kA
-         mHug==
-X-Gm-Message-State: AOAM530dIjDxdmjXXgfl1UYX6f5J4oL/wsTIPU8F3Z2fvoZoTXbFPaz5
-        /1yl0NbXOZdTCJ3vLSAXCuHN2dN/S87OIWuek3zk617+g7lG0LJ0lVimNndMSTvNTLt8yGUv6BG
-        J9GAYEhmgNXeW+nmwoJOmWNoX
-X-Received: by 2002:a05:6638:1450:b0:332:6b4:e894 with SMTP id l16-20020a056638145000b0033206b4e894mr798327jad.296.1655149389993;
-        Mon, 13 Jun 2022 12:43:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyqrNbBO9laOjlwUPj0YQfGeuFdnhMajhoX4oYxF5hXmMT9Y+KxAFJkpN9H+u/Q6sntfkxeuA==
-X-Received: by 2002:a05:6638:1450:b0:332:6b4:e894 with SMTP id l16-20020a056638145000b0033206b4e894mr798318jad.296.1655149389738;
-        Mon, 13 Jun 2022 12:43:09 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id s13-20020a6bd30d000000b006656f9eefa3sm4288890iob.18.2022.06.13.12.43.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 12:43:08 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 15:43:06 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Nadav Amit <nadav.amit@gmail.com>,
-        David Hildenbrand <david@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Collingbourne <pcc@google.com>
-Subject: Re: [PATCH v2] mm/mprotect: try avoiding write faults for exclusive
- anonymous pages when changing protection
-Message-ID: <YqeTSj98t/KfOAJ9@xz-m1.local>
-References: <20220610181436.84713-1-david@redhat.com>
- <5DFB7262-6E32-4984-A346-B7DE5040B12F@gmail.com>
+        Mon, 13 Jun 2022 16:43:06 -0400
+Received: from smtpq1.tb.ukmail.iss.as9143.net (smtpq1.tb.ukmail.iss.as9143.net [212.54.57.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D26062A251
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:46:24 -0700 (PDT)
+Received: from [212.54.57.105] (helo=csmtp1.tb.ukmail.iss.as9143.net)
+        by smtpq1.tb.ukmail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <zarniwhoop@ntlworld.com>)
+        id 1o0q11-0007hu-4T
+        for linux-kernel@vger.kernel.org; Mon, 13 Jun 2022 21:46:23 +0200
+Received: from llamedos.mydomain ([81.97.236.130])
+        by cmsmtp with ESMTPA
+        id 0q10oMdyp2Ckp0q10oMdd4; Mon, 13 Jun 2022 21:46:23 +0200
+X-SourceIP: 81.97.236.130
+X-Authenticated-Sender: zarniwhoop@ntlworld.com
+X-Spam: 0
+X-Authority: v=2.4 cv=S5fKfagP c=1 sm=1 tr=0 ts=62a7940f cx=a_exe
+ a=OGiDJHazYrvzwCbh7ZIPzQ==:117 a=OGiDJHazYrvzwCbh7ZIPzQ==:17
+ a=IkcTkHD0fZMA:10 a=JPEYwPQDsx4A:10 a=VwQbUJbxAAAA:8 a=lAgNKBcoAAAA:8
+ a=e5mUnYsNAAAA:8 a=NEAV23lmAAAA:8 a=XEvPOTf6ql8ZxkX-kUwA:9 a=QEXdDO2ut3YA:10
+ a=s7WzIJ968vAA:10 a=oEyQGRKERE8A:10 a=-FEs8UIgK8oA:10
+ a=AjGcO6oz07-iQ99wixmX:22 a=drE6d5tx1tjNRBs8zHOc:22 a=Vxmtnl_E_bksehYqCbjh:22
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ntlworld.com;
+        s=meg.feb2017; t=1655149583;
+        bh=RNfcCIKdVJ/iG8hi0PXRos+6xeUX7TSDceFHiaLae90=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=FqGA2psNIzF3xmCoUS3yKuvPQ2RCW6eRy1kRkbHogTxNX7XzJOObkvfg7T5wWIO6m
+         twsPgi196Peg7p0zyMBj1qm/9POOm4XGOPWsjho6QWQYkfsOi2dJc09n9b+OAAGi5o
+         G3oY0V3qUIHa58H/9Vd8M7K2/qTEkpwvuIVjV9NxPDPwLlvhUpW/OjQ3Lj36MiunfW
+         yXGgfDPeyxNC7SohsRKODgOB9IXiKY7mRvOUsC1dQiAt225zFSpeKZr+z4GxrmSugf
+         B4zVVHsplLsFtUsp4QNvOPRJucxrd43Ulok2nErrGzePnEaPoOAhPrbL1QGBfbodwG
+         TxBdYCcrGE4pg==
+Received: by llamedos.mydomain (Postfix, from userid 1000)
+        id 862148DB58; Mon, 13 Jun 2022 20:46:22 +0100 (BST)
+Date:   Mon, 13 Jun 2022 20:46:22 +0100
+From:   Ken Moffat <zarniwhoop@ntlworld.com>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     linux-kernel@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: regression, 5.19.0-rc1 not powering off when hibernated
+Message-ID: <YqeUDpo+8RLVKH8r@llamedos.localdomain>
+References: <YqE22nS9k2+AldI6@llamedos.localdomain>
+ <84d01637-febb-f602-2d03-fe1600e85ae3@leemhuis.info>
+ <YqTPlGM9KQ0FqHdc@llamedos.localdomain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5DFB7262-6E32-4984-A346-B7DE5040B12F@gmail.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Clacks-Overhead: GNU Terry Pratchett
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YqTPlGM9KQ0FqHdc@llamedos.localdomain>
+User-Agent: Mutt/2.2.3 (2022-04-12)
+X-CMAE-Envelope: MS4xfDxJHgYY1ZVrfwtqpYG4N9qA3bY9O3LSFgEquyIXDU2AU8/FacIQofadO389OjNuDhn90OJsU7m2WdZqDiTt1DgFxnd+JUUwDhUOS97R9XBRJX5AZLuR
+ 5V4bxk4IFUgaNVyg3wnBkGtnln687Q4ykAhiQ66Cx2m/TZKMlS4S9zrolIomeBkz4rdNI28RDBIXRWoFOmGFyzVtJLTR5rpKo1FOfgZlGY42J83fV8EMcJH9
+ 6zNHY+g5WNOOhR48kIGYCZAbbxwgHWSHD/+DqdHqBo4hZN0FKSsK726QEwxMCOG2QIq/mU+GUXO70Sch0QkWa+U4rEFuyrAAJ7yxTuZzOmfXgZIq6wPl4hdI
+ fEyFKRMKusMuciMhO07SIOeXIMarDA==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, David,
-
-On Fri, Jun 10, 2022 at 11:42:06AM -0700, Nadav Amit wrote:
-> On Jun 10, 2022, at 11:14 AM, David Hildenbrand <david@redhat.com> wrote:
+On Sat, Jun 11, 2022 at 06:23:32PM +0100, Ken Moffat wrote:
+> On Sat, Jun 11, 2022 at 03:53:44PM +0200, Thorsten Leemhuis wrote:
+> > Hi, this is your Linux kernel regression tracker.
+> > 
+> > CCing the regression mailing list, as it should be in the loop for all
+> > regressions, as explained here:
+> > https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+> > Also CCing the hibernation maintainers and Linux-pm.
+> > 
+> > On 09.06.22 01:55, Ken Moffat wrote:
+> > > Up to 5.18.0 hibernation has worked ok on my ryzen 5 3400G : screen
+> > > blanks, disk activity for the write to swap, screen briefly has a
+> > > trashed display, machine powers off.  When powering up from
+> > > hibernation, after the saved files are loaded X starts with a
+> > > briefly trashed display before my desktop reappears.
+> > > 
+> > > But with 5.19.0-rc1 the screen is blank throughtout the hibernation,
+> > > and briefly when restoring (no complaint about that), but when
+> > > hibernating it no longer powers off and I have to hold the on/off
+> > > switch to power off.
+> > > 
+> > > Is this a known problem ?
+> > 
+> > Thanks for the report. Maybe the hibernation maintainers might know, but
+> > often issues like this are caused by other things like drivers. If they
+> > don#t have a idea, you likely need to do a bisection to get down to the
+> > change that introduced this regressions.
+> > 
+> > Anyway: To be sure below issue doesn't fall through the cracks
+> > unnoticed, I'm adding it to regzbot, my Linux kernel regression tracking
+> > bot:
+> > 
+> > #regzbot ^introduced v5.18..v5.19-rc1
+> > #regzbot title hibernate: Not powering off when hibernated
+> > #regzbot ignore-activity
+> > 
+> > This isn't a regression? This issue or a fix for it are already
+> > discussed somewhere else? It was fixed already? You want to clarify when
+> > the regression started to happen? Or point out I got the title or
+> > something else totally wrong? Then just reply -- ideally with also
+> > telling regzbot about it, as explained here:
+> > https://linux-regtracking.leemhuis.info/tracked-regression/
+> > 
+> > Reminder for developers: When fixing the issue, add 'Link:' tags
+> > pointing to the report (the mail this one replied to), as the kernel's
+> > documentation call for; above page explains why this is important for
+> > tracked regressions.
+> > 
+> > Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> > 
+> > P.S.: As the Linux kernel's regression tracker I deal with a lot of
+> > reports and sometimes miss something important when writing mails like
+> > this. If that's the case here, don't hesitate to tell me in a public
+> > reply, it's in everyone's interest to set the public record straight.
 > 
-> > Similar to our MM_CP_DIRTY_ACCT handling for shared, writable mappings, we
-> > can try mapping anonymous pages writable if they are exclusive,
-> > the PTE is already dirty, and no special handling applies. Mapping the
-> > PTE writable is essentially the same thing the write fault handler would do
-> > in this case.
-> > 
-> > Special handling is required for uffd-wp and softdirty tracking, so take
-> > care of that properly. Also, leave PROT_NONE handling alone for now;
-> > in the future, we could similarly extend the logic in do_numa_page() or
-> > use pte_mk_savedwrite() here. Note that we'll now also check for uffd-wp in
-> > case of VM_SHARED -- which is harmless and prepares for uffd-wp support for
-> > shmem.
-> > 
-> > While this improves mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE)
-> > performance, it should also be a valuable optimization for uffd-wp, when
-> > un-protecting.
-> > 
-> > Applying the same logic to PMDs (anonymous THP, anonymous hugetlb) is
-> > probably not worth the trouble, but could similarly be added if there is
-> > demand.
-
-My memory was that Andrea had a version that used to have thp optimized
-too.  It'll be a slight pity to lose it if still possible, then we treat
-thp and small pages the same logic and be all fair.  Or is there any other
-challenge that we're facing?
-
-> > 
-> > Results of a simple microbenchmark on my Ryzen 9 3900X, comparing the new
-> > optimization (avoiding write faults) during mprotect() with softdirty
-> > tracking, where we require a write fault.
-
-Are we comparing the mprotect() sequence operations against softdirty
-clearing operation?  Would it make more sense if we compare the same
-mprotect() sequence to kernels that are before/after this patch applied?
-
-> > 
-> >  Running 1000 iterations each
-> > 
-> >  ==========================================================
-> >  Measuring memset() of 4096 bytes
-> >   First write access:
-> >    Min: 169 ns, Max: 8997 ns, Avg: 830 ns
-> >   Second write access:
-> >    Min: 80 ns, Max: 251 ns, Avg: 168 ns
-> >   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-> >    Min: 180 ns, Max: 290 ns, Avg: 190 ns
-> >   Write access after clearing softdirty:
-> >    Min: 451 ns, Max: 1774 ns, Avg: 470 ns
-> >  -> mprotect = 1.131 * second [avg]
-> >  -> mprotect = 0.404 * softdirty [avg]
-
-(I don't understand these two lines.. but maybe I'm the only one?)
-
-> >  ----------------------------------------------------------
-> >  Measuring single byte access per page of 4096 bytes
-> >   First write access:
-> >    Min: 761 ns, Max: 1152 ns, Avg: 784 ns
-> >   Second write access:
-> >    Min: 130 ns, Max: 181 ns, Avg: 137 ns
-> >   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-> >    Min: 150 ns, Max: 1553 ns, Avg: 155 ns
-> >   Write access after clearing softdirty:
-> >    Min: 169 ns, Max: 1783 ns, Avg: 432 ns
-> >  -> mprotect = 1.131 * second [avg]
-> >  -> mprotect = 0.359 * softdirty [avg]
-> >  ==========================================================
-> >  Measuring memset() of 16384 bytes
-> >   First write access:
-> >    Min: 1594 ns, Max: 3497 ns, Avg: 2143 ns
-> >   Second write access:
-> >    Min: 250 ns, Max: 381 ns, Avg: 260 ns
-> >   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-> >    Min: 290 ns, Max: 1643 ns, Avg: 300 ns
-> >   Write access after clearing softdirty:
-> >    Min: 1242 ns, Max: 8987 ns, Avg: 1297 ns
-> >  -> mprotect = 1.154 * second [avg]
-> >  -> mprotect = 0.231 * softdirty [avg]
-> >  ----------------------------------------------------------
-> >  Measuring single byte access per page of 16384 bytes
-> >   First write access:
-> >    Min: 1953 ns, Max: 2945 ns, Avg: 2008 ns
-> >   Second write access:
-> >    Min: 130 ns, Max: 912 ns, Avg: 142 ns
-> >   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-> >    Min: 160 ns, Max: 240 ns, Avg: 166 ns
-> >   Write access after clearing softdirty:
-> >    Min: 1112 ns, Max: 1513 ns, Avg: 1126 ns
-> >  -> mprotect = 1.169 * second [avg]
-> >  -> mprotect = 0.147 * softdirty [avg]
-> >  ==========================================================
-> >  Measuring memset() of 65536 bytes
-> >   First write access:
-> >    Min: 7524 ns, Max: 15650 ns, Avg: 7680 ns
-> >   Second write access:
-> >    Min: 251 ns, Max: 1323 ns, Avg: 648 ns
-> >   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-> >    Min: 270 ns, Max: 1282 ns, Avg: 736 ns
-> >   Write access after clearing softdirty:
-> >    Min: 4558 ns, Max: 12524 ns, Avg: 4623 ns
-> >  -> mprotect = 1.136 * second [avg]
-> >  -> mprotect = 0.159 * softdirty [avg]
-> >  ----------------------------------------------------------
-> >  Measuring single byte access per page of 65536 bytes
-> >   First write access:
-> >    Min: 7083 ns, Max: 9027 ns, Avg: 7241 ns
-> >   Second write access:
-> >    Min: 140 ns, Max: 201 ns, Avg: 156 ns
-> >   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-> >    Min: 190 ns, Max: 451 ns, Avg: 197 ns
-> >   Write access after clearing softdirty:
-> >    Min: 3707 ns, Max: 5119 ns, Avg: 3958 ns
-> >  -> mprotect = 1.263 * second [avg]
-> >  -> mprotect = 0.050 * softdirty [avg]
-> >  ==========================================================
-> >  Measuring memset() of 524288 bytes
-> >   First write access:
-> >    Min: 58470 ns, Max: 87754 ns, Avg: 59353 ns
-> >   Second write access:
-> >    Min: 5180 ns, Max: 6863 ns, Avg: 5318 ns
-> >   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-> >    Min: 5871 ns, Max: 9358 ns, Avg: 6028 ns
-> >   Write access after clearing softdirty:
-> >    Min: 35797 ns, Max: 41338 ns, Avg: 36710 ns
-> >  -> mprotect = 1.134 * second [avg]
-> >  -> mprotect = 0.164 * softdirty [avg]
-> >  ----------------------------------------------------------
-> >  Measuring single byte access per page of 524288 bytes
-> >   First write access:
-> >    Min: 53751 ns, Max: 59431 ns, Avg: 54506 ns
-> >   Second write access:
-> >    Min: 781 ns, Max: 2194 ns, Avg: 1123 ns
-> >   Write access after mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE):
-> >    Min: 161 ns, Max: 1282 ns, Avg: 622 ns
-> >   Write access after clearing softdirty:
-> >    Min: 30888 ns, Max: 34565 ns, Avg: 31229 ns
-> >  -> mprotect = 0.554 * second [avg]
-> >  -> mprotect = 0.020 * softdirty [avg]
-> > 
-> > Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Nadav Amit <nadav.amit@gmail.com>
-> > Cc: Dave Hansen <dave.hansen@intel.com>
-> > Cc: Andrea Arcangeli <aarcange@redhat.com>
-> > Cc: Peter Xu <peterx@redhat.com>
-> > Cc: Yang Shi <shy828301@gmail.com>
-> > Cc: Hugh Dickins <hughd@google.com>
-> > Cc: Mel Gorman <mgorman@techsingularity.net>
-> > Signed-off-by: David Hildenbrand <david@redhat.com>
-> > ---
-> > 
-> > v1 -> v2:
-> > * Rebased on v5.19-rc1
-> > * Rerun benchmark
-> > * Fix minor spelling issues in subject+description
-> > * Drop IS_ENABLED(CONFIG_MEM_SOFT_DIRTY) check
-> > * Move pte_write() check into caller
-> > 
-> > ---
-> > mm/mprotect.c | 67 ++++++++++++++++++++++++++++++++++++++++++---------
-> > 1 file changed, 55 insertions(+), 12 deletions(-)
-> > 
-> > diff --git a/mm/mprotect.c b/mm/mprotect.c
-> > index ba5592655ee3..728772bf41c7 100644
-> > --- a/mm/mprotect.c
-> > +++ b/mm/mprotect.c
-> > @@ -38,6 +38,45 @@
-> > 
-> > #include "internal.h"
-> > 
-> > +static inline bool can_change_pte_writable(struct vm_area_struct *vma,
-> > +					   unsigned long addr, pte_t pte,
-> > +					   unsigned long cp_flags)
-> > +{
-> > +	struct page *page;
-> > +
-> > +	if ((vma->vm_flags & VM_SHARED) && !(cp_flags & MM_CP_DIRTY_ACCT))
-> > +		/*
-> > +		 * MM_CP_DIRTY_ACCT is only expressive for shared mappings;
-> > +		 * without MM_CP_DIRTY_ACCT, there is nothing to do.
-> > +		 */
-> > +		return false;
-> > +
-> > +	if (pte_protnone(pte) || !pte_dirty(pte))
-> > +		return false;
-> > +
-> > +	/* Do we need write faults for softdirty tracking? */
-> > +	if ((vma->vm_flags & VM_SOFTDIRTY) && !pte_soft_dirty(pte))
-> > +		return false;
-> > +
-> > +	/* Do we need write faults for uffd-wp tracking? */
-> > +	if (userfaultfd_pte_wp(vma, pte))
-> > +		return false;
-> > +
-> > +	if (!(vma->vm_flags & VM_SHARED)) {
-> > +		/*
-> > +		 * We can only special-case on exclusive anonymous pages,
-> > +		 * because we know that our write-fault handler similarly would
-> > +		 * map them writable without any additional checks while holding
-> > +		 * the PT lock.
-> > +		 */
-> > +		page = vm_normal_page(vma, addr, pte);
-> > +		if (!page || !PageAnon(page) || !PageAnonExclusive(page))
-> > +			return false;
-> > +	}
-> > +
-> > +	return true;
-> > +}
-> > +
+> Thanks.  I've started to bisect, but I've got a lot else on and it
+> might be a few days before I get a result.  All I know so far is
+> that whatever got rid of the garbled screens was fine, and the
+> problem seems to have arisen in the last 800+ commits for 5.19-rc1.
 > 
-> Looks good in general. Just wondering (out loud) whether it makes more sense
-> to do all the vm_flags and cp_flags related checks in one of the callers
-> (mprotect_fixup()?) and propagate whether to try to write-unprotect in
-> cp_flags (e.g., by introducing new MM_CP_TRY_WRITE_UNPROTECT).
+I think I must have gone wrong somewhere in that bisection, it took
+me through a load of habanalabs commits which were all good, and
+blamed the merge which for this which *was* definitely bad, but seems
+to have nothing related to the box not powering off on hibernation::
 
-I can see why David put it like that, because most of the checks are on
-ptes not vm_flags.
+[6f9b5ed8caddfbc94af8307c557ed57a8ec5c65c] Merge tag 'char-misc-5.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc
 
-But I also agree on this point, especially if to put it in another way:
-IMHO it'll be confusing if we keey MM_CP_DIRTY_ACCT==false for all private
-pages even if we're going to take them into account and do smart unprotect
-operations.
+Not Cc'ing Greg at this point, I really don't believe that result.
 
-So I'm wondering whether we could still at least move vm_flags check into
-the mprotect_fixup() as suggested by Nadav, perhaps something like:
+Starting over.
 
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index ba5592655ee3..aefd5fe982af 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -583,7 +583,11 @@ mprotect_fixup(struct mmu_gather *tlb, struct vm_area_struct *vma,
-         * held in write mode.
-         */
-        vma->vm_flags = newflags;
--       dirty_accountable = vma_wants_writenotify(vma, vma->vm_page_prot);
-+       if (vma->vm_flags & VM_SHARED)
-+               dirty_accountable = vma_wants_writenotify(vma, vma->vm_page_prot);
-+       else
-+               /* For private mappings, only if it's writable */
-+               dirty_accountable = vma->vm_flags & VM_WRITE;
-        vma_set_page_prot(vma);
- 
-        change_protection(tlb, vma, start, end, vma->vm_page_prot,
+ĸen
+ ----
 
-Then IIUC we could drop both the VM_WRITE check in change_pte_range(), and
-also the VM_SHARED check above in can_change_pte_writable().  Not sure
-whether that'll look slightly cleaner.
+Details from this run, with resulting kernel versions -
 
-I'm also copying Peter Collingbourne <pcc@google.com> because afaict he
-proposed the initial idea (maybe worth some credit in the commit message?),
-and IIRC he has a good use case of it too.
+git bisect start
+git bisect good v5.18
+git bisect bad  v5.19-rc1
 
-Thanks,
+Bisecting: 7030 revisions left to test after this (roughly 13 steps)
+[2518f226c60d8e04d18ba4295500a5b0b8ac7659] Merge tag 'drm-next-2022-05-25' of git://anongit.freedesktop.org/drm/drm
 
+ 5.18.0-06942-g2518f226c60d
+
+git bisct good
+
+Bisecting: 3527 revisions left to test after this (roughly 12 steps)
+[aef1ff15927421a55312b4b9b2881a89a344bd80] Merge tag 'jfs-5.19' of https://github.com/kleikamp/linux-shaggy
+
+ 5.18.0-10445-gaef1ff159274
+
+git bisect good
+
+Bisecting: 834 revisions left to test after this (roughly 10 steps)
+[54c2cc79194c961a213c1d375fe3aa4165664cc4] Merge tag 'usb-5.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb
+
+ 5.18.0-13138-g54c2cc79194c
+
+git bisect good
+
+Bisecting: 428 revisions left to test after this (roughly 9 steps)
+[7036440eab3e2d47a775d4616909f8235488d714] ARM: omap1: enable multiplatform
+
+ 5.18.0-13544-g7036440eab3e
+
+git bisect bad
+
+Bisecting: 203 revisions left to test after this (roughly 8 steps)
+[46ee6bcac9838b7f74ff91f9cf38511c901ea9c5] Merge tag 'mhi-for-v5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/mani/mhi into char-work-next
+
+ 5.18.0-rc5-00202-g46ee6bcac983
+
+git bisect good
+
+Bisecting: 99 revisions left to test after this (roughly 7 steps)
+[dc6a7effb48e7267c9f1314e3aa8cfe539bd6096] Merge tag 'lkdtm-next' of https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux into char-misc-next
+
+ 5.18.0-rc5-00306-gdc6a7effb48e
+
+git bisect good
+
+Bisecting: 49 revisions left to test after this (roughly 6 steps)
+[b19768d81a6bd1591872952075ff9d960bd4e8d8] habanalabs/gaudi: increase submission resources
+
+ 5.18.0-rc5-00356-gb19768d81a6b
+
+git bisect good
+
+Bisecting: 24 revisions left to test after this (roughly 5 steps)
+[ab4ea5872842766b0155b2517db61a4ae99d98e0] habanalabs: use for_each_sgtable_dma_sg for dma sgt
+
+ 5.18.0-rc5-00381-gab4ea5872842
+
+git bisect good
+
+Bisecting: 12 revisions left to test after this (roughly 4 steps)
+[c37803388c95833c4728b089e6c94996dc457d95] habanalabs: handle race in driver fini
+
+ 5.18.0-rc5-00393-gc37803388c95
+
+git bisect good
+
+Bisecting: 6 revisions left to test after this (roughly 3 steps)
+[83617f5a87f4ad8403bf1177708fedc98b0a1059] habanalabs: order memory manager messages
+
+ 5.18.0-rc5-00399-g83617f5a87f4
+
+git bisect good
+
+Bisecting: 3 revisions left to test after this (roughly 2 steps)
+[f873a27fd50d161111d0e52087af0f5b2111c5c4] habanalabs: fix missing handle shift during mmap
+
+ 5.18.0-rc5-00402-gf873a27fd50d
+
+git bisect good
+
+Bisecting: 1 revision left to test after this (roughly 1 step)
+[6f9b5ed8caddfbc94af8307c557ed57a8ec5c65c] Merge tag 'char-misc-5.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc
+
+  5.18.0-13542-g6f9b5ed8cadd
+  bad
+
+git bisect bad
+
+Bisecting: 0 revisions left to test after this (roughly 0 steps)
+[90de6805267f8c79cd2b1a36805071e257c39b5c] habanalabs: use separate structure info for each error collect data
+
+ 5.18.0-rc5-00403-g90de6805267f
+
+git bisect good
+
+ ----
 -- 
-Peter Xu
-
+      Remembering The People's Republic of Treacle Mine Road.
+        Truth!  Justice!  Freedom!  Reasonably priced Love!
+                 And a Hard-boiled Egg!

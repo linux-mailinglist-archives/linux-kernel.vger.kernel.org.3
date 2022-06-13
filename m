@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80001549521
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3B554946F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356387AbiFMLoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
+        id S1358993AbiFMNIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355658AbiFMLjW (ORCPT
+        with ESMTP id S1357313AbiFMM6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:39:22 -0400
+        Mon, 13 Jun 2022 08:58:39 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F14932C654;
-        Mon, 13 Jun 2022 03:49:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43562BC3;
+        Mon, 13 Jun 2022 04:17:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DAD561260;
-        Mon, 13 Jun 2022 10:49:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98AB6C3411C;
-        Mon, 13 Jun 2022 10:49:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B342360F0D;
+        Mon, 13 Jun 2022 11:17:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1B8AC34114;
+        Mon, 13 Jun 2022 11:17:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117375;
-        bh=bxcbrjOop6/rQKL0YUOq5KXbnkoO+6fgYRiUhhb5KcA=;
+        s=korg; t=1655119062;
+        bh=orI7NLzyYAo4r79BAJZsq8oCnJd/A00pdqYpG0bPBhw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z/znVqgVkkdmH7SJha0x5M5MPcC1GTOURuCZk1C21H9YUzicnaOvucPbTrJg+TCpV
-         40bYdCxNea0B3m4bdxBIGlFMzgVKxvIyZGAKoBne1NnsDRXO4nrj8r5RRkeq7uZoTa
-         l25JRgVBwkBcCtONMRXIZ553nxbUzVX9YMYyQELI=
+        b=tLkrBctfky2R9cv4dnvIPfr8qTqSgi/Dx899ummZqwnn3yzolAw3LCAWLrVJqEkZZ
+         JmpWd8XJnioqA9ryqu6M9fDSyg4F/f1cIeBr3pPgLIixHts5uyNR7bBvtjNvFtB83F
+         NTi6HCe3NDWYkQhScd77R8ezfwquxoMFVezdHK0M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gal Pressman <gal@nvidia.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Liao Chang <liaochang1@huawei.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 355/411] net/mlx4_en: Fix wrong return value on ioctl EEPROM query failure
+Subject: [PATCH 5.15 126/247] RISC-V: use memcpy for kexec_file mode
 Date:   Mon, 13 Jun 2022 12:10:28 +0200
-Message-Id: <20220613094939.343949863@linuxfoundation.org>
+Message-Id: <20220613094926.782568314@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gal Pressman <gal@nvidia.com>
+From: Liao Chang <liaochang1@huawei.com>
 
-[ Upstream commit f5826c8c9d57210a17031af5527056eefdc2b7eb ]
+[ Upstream commit b7fb4d78a6ade6026d9e5cf438c2a46ab962e032 ]
 
-The ioctl EEPROM query wrongly returns success on read failures, fix
-that by returning the appropriate error code.
+The pointer to buffer loading kernel binaries is in kernel space for
+kexec_fil mode, When copy_from_user copies data from pointer to a block
+of memory, it checkes that the pointer is in the user space range, on
+RISCV-V that is:
 
-Fixes: 7202da8b7f71 ("ethtool, net/mlx4_en: Cable info, get_module_info/eeprom ethtool support")
-Signed-off-by: Gal Pressman <gal@nvidia.com>
-Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
-Link: https://lore.kernel.org/r/20220606115718.14233-1-tariqt@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+static inline bool __access_ok(unsigned long addr, unsigned long size)
+{
+	return size <= TASK_SIZE && addr <= TASK_SIZE - size;
+}
+
+and TASK_SIZE is 0x4000000000 for 64-bits, which now causes
+copy_from_user to reject the access of the field 'buf' of struct
+kexec_segment that is in range [CONFIG_PAGE_OFFSET - VMALLOC_SIZE,
+CONFIG_PAGE_OFFSET), is invalid user space pointer.
+
+This patch fixes this issue by skipping access_ok(), use mempcy() instead.
+
+Signed-off-by: Liao Chang <liaochang1@huawei.com>
+Link: https://lore.kernel.org/r/20220408100914.150110-3-lizhengyu3@huawei.com
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mellanox/mlx4/en_ethtool.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/riscv/kernel/machine_kexec.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c b/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
-index dd029d91bbc2..b711148a9d50 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_ethtool.c
-@@ -2083,7 +2083,7 @@ static int mlx4_en_get_module_eeprom(struct net_device *dev,
- 			en_err(priv,
- 			       "mlx4_get_module_info i(%d) offset(%d) bytes_to_read(%d) - FAILED (0x%x)\n",
- 			       i, offset, ee->len - i, ret);
--			return 0;
-+			return ret;
- 		}
+diff --git a/arch/riscv/kernel/machine_kexec.c b/arch/riscv/kernel/machine_kexec.c
+index cbef0fc73afa..df8e24559035 100644
+--- a/arch/riscv/kernel/machine_kexec.c
++++ b/arch/riscv/kernel/machine_kexec.c
+@@ -65,7 +65,9 @@ machine_kexec_prepare(struct kimage *image)
+ 		if (image->segment[i].memsz <= sizeof(fdt))
+ 			continue;
  
- 		i += ret;
+-		if (copy_from_user(&fdt, image->segment[i].buf, sizeof(fdt)))
++		if (image->file_mode)
++			memcpy(&fdt, image->segment[i].buf, sizeof(fdt));
++		else if (copy_from_user(&fdt, image->segment[i].buf, sizeof(fdt)))
+ 			continue;
+ 
+ 		if (fdt_check_header(&fdt))
 -- 
 2.35.1
 

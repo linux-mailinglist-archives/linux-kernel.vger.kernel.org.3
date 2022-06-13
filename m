@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF35548639
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811C65486E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376338AbiFMNV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
+        id S1354801AbiFMMtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359474AbiFMNQA (ORCPT
+        with ESMTP id S1357571AbiFMMtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:16:00 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93AEF2BD3;
-        Mon, 13 Jun 2022 04:22:24 -0700 (PDT)
+        Mon, 13 Jun 2022 08:49:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E7862BDA;
+        Mon, 13 Jun 2022 04:11:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A9B3ACE116E;
-        Mon, 13 Jun 2022 11:22:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 927E1C34114;
-        Mon, 13 Jun 2022 11:21:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98F34B80EAA;
+        Mon, 13 Jun 2022 11:11:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E832FC34114;
+        Mon, 13 Jun 2022 11:11:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119320;
-        bh=BYast1xJx4G75uM/TxVxWpvd0mUwjdU6xHyeVfE7E7Q=;
+        s=korg; t=1655118711;
+        bh=2kdVZxq7QhwiMhHg48ux5Jq1HvMBVruEQH6DiUTxjWA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RxWPvVxQMqFO7pk4Z+yQAhrVh3qkVeNTB8rd3EBUjMeGhbR9HVSa8UBivQllu7idW
-         cT6aa1Iv14D0DhrF4YID158KnGdqOUVO6hiVN8lM/Dtc+B8+h1CYqC5IeO9jiG/F8Y
-         o0nKvZaJ9Pu9tJFAMCQFfoWirbnuEKyA/YpAcF/g=
+        b=H9qkdvZmOX9fgYAiff3B8X/5v+sa54SBfCfHDkH/GFN/Rc62iBJn1f4LH0kBUBTvW
+         p9udlEjT9HFWKgq1oZS9HsB/Mo1RNcYnTHkMbwRMvbbtnbY+Af9KJeqw9F5LDcJeKv
+         0aXnIipHkCRZO14Ulza4AMU//cX/JB7qOYPmMB9Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
-        Enzo Matsumiya <ematsumiya@suse.de>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.15 219/247] cifs: return errors during session setup during reconnects
-Date:   Mon, 13 Jun 2022 12:12:01 +0200
-Message-Id: <20220613094929.585646630@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
+        Olivier Matz <olivier.matz@6wind.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>
+Subject: [PATCH 5.10 162/172] ixgbe: fix unexpected VLAN Rx in promisc mode on VF
+Date:   Mon, 13 Jun 2022 12:12:02 +0200
+Message-Id: <20220613094923.179920710@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +57,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shyam Prasad N <sprasad@microsoft.com>
+From: Olivier Matz <olivier.matz@6wind.com>
 
-commit 8ea21823aa584b55ba4b861307093b78054b0c1b upstream.
+commit 7bb0fb7c63df95d6027dc50d6af3bc3bbbc25483 upstream.
 
-During reconnects, we check the return value from
-cifs_negotiate_protocol, and have handlers for both success
-and failures. But if that passes, and cifs_setup_session
-returns any errors other than -EACCES, we do not handle
-that. This fix adds a handler for that, so that we don't
-go ahead and try a tree_connect on a failed session.
+When the promiscuous mode is enabled on a VF, the IXGBE_VMOLR_VPE
+bit (VLAN Promiscuous Enable) is set. This means that the VF will
+receive packets whose VLAN is not the same than the VLAN of the VF.
 
-Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
-Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
+For instance, in this situation:
+
+┌────────┐    ┌────────┐    ┌────────┐
+│        │    │        │    │        │
+│        │    │        │    │        │
+│     VF0├────┤VF1  VF2├────┤VF3     │
+│        │    │        │    │        │
+└────────┘    └────────┘    └────────┘
+   VM1           VM2           VM3
+
+vf 0:  vlan 1000
+vf 1:  vlan 1000
+vf 2:  vlan 1001
+vf 3:  vlan 1001
+
+If we tcpdump on VF3, we see all the packets, even those transmitted
+on vlan 1000.
+
+This behavior prevents to bridge VF1 and VF2 in VM2, because it will
+create a loop: packets transmitted on VF1 will be received by VF2 and
+vice-versa, and bridged again through the software bridge.
+
+This patch remove the activation of VLAN Promiscuous when a VF enables
+the promiscuous mode. However, the IXGBE_VMOLR_UPE bit (Unicast
+Promiscuous) is kept, so that a VF receives all packets that has the
+same VLAN, whatever the destination MAC address.
+
+Fixes: 8443c1a4b192 ("ixgbe, ixgbevf: Add new mbox API xcast mode")
 Cc: stable@vger.kernel.org
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Cc: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Signed-off-by: Olivier Matz <olivier.matz@6wind.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/cifs/smb2pdu.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -268,6 +268,9 @@ smb2_reconnect(__le16 smb2_command, stru
- 			ses->binding_chan = NULL;
- 			mutex_unlock(&tcon->ses->session_mutex);
- 			goto failed;
-+		} else if (rc) {
-+			mutex_unlock(&ses->session_mutex);
-+			goto out;
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_sriov.c
+@@ -1181,9 +1181,9 @@ static int ixgbe_update_vf_xcast_mode(st
+ 			return -EPERM;
  		}
- 	}
- 	/*
+ 
+-		disable = 0;
++		disable = IXGBE_VMOLR_VPE;
+ 		enable = IXGBE_VMOLR_BAM | IXGBE_VMOLR_ROMPE |
+-			 IXGBE_VMOLR_MPE | IXGBE_VMOLR_UPE | IXGBE_VMOLR_VPE;
++			 IXGBE_VMOLR_MPE | IXGBE_VMOLR_UPE;
+ 		break;
+ 	default:
+ 		return -EOPNOTSUPP;
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C898D548DA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D96054925A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357138AbiFML4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
+        id S1346345AbiFMKj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356492AbiFMLug (ORCPT
+        with ESMTP id S1344741AbiFMKhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:50:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DFA2EA05;
-        Mon, 13 Jun 2022 03:54:10 -0700 (PDT)
+        Mon, 13 Jun 2022 06:37:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C358F12D35;
+        Mon, 13 Jun 2022 03:22:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4572B80D3F;
-        Mon, 13 Jun 2022 10:54:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1905AC34114;
-        Mon, 13 Jun 2022 10:54:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D928660AE9;
+        Mon, 13 Jun 2022 10:22:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2E26C3411E;
+        Mon, 13 Jun 2022 10:22:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117648;
-        bh=rzpCF9NGA5bwgOxj0c20j7PjcvxHifuuAdoYtyCVaoI=;
+        s=korg; t=1655115773;
+        bh=LZSVzGm+eApsXK45dI2BFu9jzJnYL96WdCNobNzk1qI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1lDU104Rqwz1GXAFtA0xErM1fRHLHdqpVcUyeUDsFq8GV5SccdNVt5GbeStVUJOyg
-         Jz09HFNEaouwK/uIlbDMf4NQd+YYd/fndmKxaXKs8wXnvS3/jDjpdVvaDOdu7eh0ug
-         yJHoeR5KnABFpGWtHVVSOrTRQugi+33Sj8Q+ECjA=
+        b=H631xtKvoT23BZAT9jH4NgqxSHDpSVVSyIs5dyIsaMZzzXaUj5XcANsxWjFTYhA9G
+         tIqkOxvt+dOcOlJloRii0XTfMxSNWNoBpg4gk8NPHLszTSX/Yu78MdzY2Z2ILRy+GL
+         v2TbcWQhwukKYKQNWXf3xPyYPs3aDSU6YfR5MHYc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Zixuan Fu <r33s3n6@gmail.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 070/287] efi: Add missing prototype for efi_capsule_setup_info
+Subject: [PATCH 4.14 036/218] fs: jfs: fix possible NULL pointer dereference in dbFree()
 Date:   Mon, 13 Jun 2022 12:08:14 +0200
-Message-Id: <20220613094925.993249933@linuxfoundation.org>
+Message-Id: <20220613094916.886990683@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kiszka <jan.kiszka@siemens.com>
+From: Zixuan Fu <r33s3n6@gmail.com>
 
-[ Upstream commit aa480379d8bdb33920d68acfd90f823c8af32578 ]
+[ Upstream commit 0d4837fdb796f99369cf7691d33de1b856bcaf1f ]
 
-Fixes "no previous declaration for 'efi_capsule_setup_info'" warnings
-under W=1.
+In our fault-injection testing, the variable "nblocks" in dbFree() can be
+zero when kmalloc_array() fails in dtSearch(). In this case, the variable
+ "mp" in dbFree() would be NULL and then it is dereferenced in
+"write_metapage(mp)".
 
-Fixes: 2959c95d510c ("efi/capsule: Add support for Quark security header")
-Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
-Link: https://lore.kernel.org/r/c28d3f86-dd72-27d1-e2c2-40971b8da6bd@siemens.com
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+The failure log is listed as follows:
+
+[   13.824137] BUG: kernel NULL pointer dereference, address: 0000000000000020
+...
+[   13.827416] RIP: 0010:dbFree+0x5f7/0x910 [jfs]
+[   13.834341] Call Trace:
+[   13.834540]  <TASK>
+[   13.834713]  txFreeMap+0x7b4/0xb10 [jfs]
+[   13.835038]  txUpdateMap+0x311/0x650 [jfs]
+[   13.835375]  jfs_lazycommit+0x5f2/0xc70 [jfs]
+[   13.835726]  ? sched_dynamic_update+0x1b0/0x1b0
+[   13.836092]  kthread+0x3c2/0x4a0
+[   13.836355]  ? txLockFree+0x160/0x160 [jfs]
+[   13.836763]  ? kthread_unuse_mm+0x160/0x160
+[   13.837106]  ret_from_fork+0x1f/0x30
+[   13.837402]  </TASK>
+...
+
+This patch adds a NULL check of "mp" before "write_metapage(mp)" is called.
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/efi.h | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/jfs/jfs_dmap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/efi.h b/include/linux/efi.h
-index 9a5d4b499271..ec89e8bcc92f 100644
---- a/include/linux/efi.h
-+++ b/include/linux/efi.h
-@@ -150,6 +150,8 @@ struct capsule_info {
- 	size_t			page_bytes_remain;
- };
+diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
+index 6dac48e29d28..a07fbb60ac3c 100644
+--- a/fs/jfs/jfs_dmap.c
++++ b/fs/jfs/jfs_dmap.c
+@@ -398,7 +398,8 @@ int dbFree(struct inode *ip, s64 blkno, s64 nblocks)
+ 	}
  
-+int efi_capsule_setup_info(struct capsule_info *cap_info, void *kbuff,
-+                           size_t hdr_bytes);
- int __efi_capsule_setup_info(struct capsule_info *cap_info);
+ 	/* write the last buffer. */
+-	write_metapage(mp);
++	if (mp)
++		write_metapage(mp);
  
- /*
+ 	IREAD_UNLOCK(ipbmap);
+ 
 -- 
 2.35.1
 

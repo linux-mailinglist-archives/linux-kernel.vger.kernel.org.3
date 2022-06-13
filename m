@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41FA548E33
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 260945495DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377597AbiFMNed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51980 "EHLO
+        id S1346422AbiFMKhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378229AbiFMNbF (ORCPT
+        with ESMTP id S1345601AbiFMKgL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:31:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211C36F4B8;
-        Mon, 13 Jun 2022 04:25:49 -0700 (PDT)
+        Mon, 13 Jun 2022 06:36:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB7CE0BC;
+        Mon, 13 Jun 2022 03:22:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 358AA60F18;
-        Mon, 13 Jun 2022 11:25:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E0AC34114;
-        Mon, 13 Jun 2022 11:25:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FFA6B80E5E;
+        Mon, 13 Jun 2022 10:22:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12D9AC3411E;
+        Mon, 13 Jun 2022 10:22:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119548;
-        bh=dus5GhVCCGRZl6vw1Z0GLTyGcpHSSBRD+KW0xEHSI3c=;
+        s=korg; t=1655115756;
+        bh=l+X116IPdIcDhimPMpbxyK/QJ3o3fL8KICaWCEnn5fo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RjuT51fH6HXH4Q40Z2N9R/LXAQYG9knzGg/bws4krT/02bH5+7j+zUlHuXkr1+Dr0
-         Hpcl1GrtKXV2E6WyEogmepj3JGFBPcuOPqczXlNRsNrfDmsP+XWZAreZYB6i7no8uK
-         yfCw3QwtraODqPIoN2DrsEgtQCr5by6O34qe0MeU=
+        b=FTFmuS4a4zB9HyXA/79OOvDs7n1P6zDn7VDmTJhDBfdKXqr0hahzcMuFq7ETDMele
+         nNDSeVRjy1jazo6Cn4iqQ37fbQq9aIKLV7NNh5s9KU0GDXA0hNb8lXT9vkY6eEtr8j
+         Ep6/KTB+nCjPfS9TwLQyFSp0dDBqAR+kVD0PseE8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Lv Ruyi <lv.ruyi@zte.com.cn>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 053/339] coresight: cpu-debug: Replace mutex with mutex_trylock on panic notifier
+Subject: [PATCH 4.14 020/218] scsi: megaraid: Fix error check return value of register_chrdev()
 Date:   Mon, 13 Jun 2022 12:07:58 +0200
-Message-Id: <20220613094928.131944220@linuxfoundation.org>
+Message-Id: <20220613094913.090196163@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,61 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guilherme G. Piccoli <gpiccoli@igalia.com>
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-[ Upstream commit 1adff542d67a2ed1120955cb219bfff8a9c53f59 ]
+[ Upstream commit c5acd61dbb32b6bda0f3a354108f2b8dcb788985 ]
 
-The panic notifier infrastructure executes registered callbacks when
-a panic event happens - such callbacks are executed in atomic context,
-with interrupts and preemption disabled in the running CPU and all other
-CPUs disabled. That said, mutexes in such context are not a good idea.
+If major equals 0, register_chrdev() returns an error code when it fails.
+This function dynamically allocates a major and returns its number on
+success, so we should use "< 0" to check it instead of "!".
 
-This patch replaces a regular mutex with a mutex_trylock safer approach;
-given the nature of the mutex used in the driver, it should be pretty
-uncommon being unable to acquire such mutex in the panic path, hence
-no functional change should be observed (and if it is, that would be
-likely a deadlock with the regular mutex).
-
-Fixes: 2227b7c74634 ("coresight: add support for CPU debug module")
-Cc: Leo Yan <leo.yan@linaro.org>
-Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc: Mike Leach <mike.leach@linaro.org>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-Link: https://lore.kernel.org/r/20220427224924.592546-10-gpiccoli@igalia.com
+Link: https://lore.kernel.org/r/20220418105755.2558828-1-lv.ruyi@zte.com.cn
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwtracing/coresight/coresight-cpu-debug.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/scsi/megaraid.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwtracing/coresight/coresight-cpu-debug.c b/drivers/hwtracing/coresight/coresight-cpu-debug.c
-index 8845ec4b4402..1874df7c6a73 100644
---- a/drivers/hwtracing/coresight/coresight-cpu-debug.c
-+++ b/drivers/hwtracing/coresight/coresight-cpu-debug.c
-@@ -380,9 +380,10 @@ static int debug_notifier_call(struct notifier_block *self,
- 	int cpu;
- 	struct debug_drvdata *drvdata;
- 
--	mutex_lock(&debug_lock);
-+	/* Bail out if we can't acquire the mutex or the functionality is off */
-+	if (!mutex_trylock(&debug_lock))
-+		return NOTIFY_DONE;
- 
--	/* Bail out if the functionality is disabled */
- 	if (!debug_enable)
- 		goto skip_dump;
- 
-@@ -401,7 +402,7 @@ static int debug_notifier_call(struct notifier_block *self,
- 
- skip_dump:
- 	mutex_unlock(&debug_lock);
--	return 0;
-+	return NOTIFY_DONE;
- }
- 
- static struct notifier_block debug_notifier = {
+diff --git a/drivers/scsi/megaraid.c b/drivers/scsi/megaraid.c
+index f5c09bbf9374..eed6d45b8025 100644
+--- a/drivers/scsi/megaraid.c
++++ b/drivers/scsi/megaraid.c
+@@ -4707,7 +4707,7 @@ static int __init megaraid_init(void)
+ 	 * major number allocation.
+ 	 */
+ 	major = register_chrdev(0, "megadev_legacy", &megadev_fops);
+-	if (!major) {
++	if (major < 0) {
+ 		printk(KERN_WARNING
+ 				"megaraid: failed to register char device\n");
+ 	}
 -- 
 2.35.1
 

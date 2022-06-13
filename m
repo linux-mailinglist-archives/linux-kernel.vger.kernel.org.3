@@ -2,165 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C412554994D
+	by mail.lfdr.de (Postfix) with ESMTP id 2474854994B
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241359AbiFMQwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 12:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
+        id S237301AbiFMQw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 12:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236579AbiFMQvu (ORCPT
+        with ESMTP id S240718AbiFMQwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 12:51:50 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1469B1C2045
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 07:37:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mt3fuP+cCSiA3z/WonoxJoieU0BtWY4bTV+4sIenAvw=; b=iuiTqtcML6fcps3YzLvQaYNOUK
-        8UvXhncw5yePv7qZ8anU8Js6hub5k6UZ1rT+3bFZRkxy0HVa4EOrSP1FesCLokSGLokv0IauUIoeG
-        R9Es3/oUj1agM3e9FWdBHawZvy5S/XO/fDMzFdeLD1x0QlusDYGqClbMzELqfQQewPw29kN/dBzEE
-        JWnSlhi/syYVUv95kO8CElU/V1JxoR9ppeBXY0TxoVIbLky5ARD4mBF4Bf9aDFvxJrE8t6MdOfd6+
-        +1nwzBMBPifi1Mj/6FKcOGpRwGPYRyrkliqXZN79TJfF8K6d2V7Tlz6KcjsIuf1qSPkdUzWkqhmyQ
-        K35bAUSA==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o0lBW-00Gv2G-NR; Mon, 13 Jun 2022 14:36:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 5190F302E11;
-        Mon, 13 Jun 2022 16:36:54 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3A2442029F884; Mon, 13 Jun 2022 16:36:54 +0200 (CEST)
-Date:   Mon, 13 Jun 2022 16:36:54 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, alexey.budankov@linux.intel.com,
-        ak@linux.intel.com, mark.rutland@arm.com, megha.dey@intel.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        kim.phillips@amd.com, linux-kernel@vger.kernel.org,
-        santosh.shukla@amd.com
-Subject: Re: [RFC v2] perf: Rewrite core context handling
-Message-ID: <YqdLhrJnJUqONjim@hirez.programming.kicks-ass.net>
-References: <20220113134743.1292-1-ravi.bangoria@amd.com>
- <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
+        Mon, 13 Jun 2022 12:52:40 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFCA11F2F2A;
+        Mon, 13 Jun 2022 07:37:42 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o0lCE-00010b-AB; Mon, 13 Jun 2022 16:37:38 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Guo Ren <guoren@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Cc:     Alexandre Ghiti <alexandre.ghiti@canonical.com>
+Subject: Re: [PATCH -fixes v2] riscv: Fix missing PAGE_PFN_MASK
+Date:   Mon, 13 Jun 2022 16:37:37 +0200
+Message-ID: <2110796.irdbgypaU6@diego>
+In-Reply-To: <20220613085307.260256-1-alexandre.ghiti@canonical.com>
+References: <20220613085307.260256-1-alexandre.ghiti@canonical.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqdLH+ZU/sf4n0pa@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 04:35:11PM +0200, Peter Zijlstra wrote:
+Am Montag, 13. Juni 2022, 10:53:07 CEST schrieb Alexandre Ghiti:
+> There are a bunch of functions that use the PFN from a page table entry
+> that end up with the svpbmt upper-bits because they are missing the newly
+> introduced PAGE_PFN_MASK which leads to wrong addresses conversions and
+> then crash: fix this by adding this mask.
 > 
+> Fixes: 100631b48ded ("riscv: Fix accessing pfn bits in PTEs for non-32bit variants")
+> Signed-off-by: Alexandre Ghiti <alexandre.ghiti@canonical.com>
+
+Looks great now
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+
+On both qemu-riscv64 and d1-nezha
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+
+
+
+> ---
+>  arch/riscv/include/asm/pgtable-64.h | 12 ++++++------
+>  arch/riscv/include/asm/pgtable.h    |  6 +++---
+>  arch/riscv/kvm/mmu.c                |  2 +-
+>  3 files changed, 10 insertions(+), 10 deletions(-)
 > 
-> Right, so sorry for being incredibly tardy on this. Find below the
-> patch fwd ported to something recent.
-> 
-> I'll reply to this with fixes and comments.
-
-You write:
-
->> A simple perf stat/record/top survives with the patch but machine
->> crashes with first run of perf test (stale cpc->task_epc causing the
->>crash). Lockdep is also screaming a lot :)
-
-
-> @@ -7669,20 +7877,15 @@ static void perf_event_addr_filters_exec
->  void perf_event_exec(void)
->  {
->  	struct perf_event_context *ctx;
-> -	int ctxn;
-> -
-> -	for_each_task_context_nr(ctxn) {
-> -		perf_event_enable_on_exec(ctxn);
-> -		perf_event_remove_on_exec(ctxn);
+> diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
+> index 5c2aba5efbd0..dc42375c2357 100644
+> --- a/arch/riscv/include/asm/pgtable-64.h
+> +++ b/arch/riscv/include/asm/pgtable-64.h
+> @@ -175,7 +175,7 @@ static inline pud_t pfn_pud(unsigned long pfn, pgprot_t prot)
 >  
-> -		rcu_read_lock();
-> -		ctx = rcu_dereference(current->perf_event_ctxp[ctxn]);
-> -		if (ctx) {
-> -			perf_iterate_ctx(ctx, perf_event_addr_filters_exec,
-> -					 NULL, true);
-> -		}
-> -		rcu_read_unlock();
-> +	rcu_read_lock();
-> +	ctx = rcu_dereference(current->perf_event_ctxp);
-> +	if (ctx) {
-> +		perf_event_enable_on_exec(ctx);
-> +		perf_event_remove_on_exec(ctx);
-> +		perf_iterate_ctx(ctx, perf_event_addr_filters_exec, NULL, true);
->  	}
-> +	rcu_read_unlock();
+>  static inline unsigned long _pud_pfn(pud_t pud)
+>  {
+> -	return pud_val(pud) >> _PAGE_PFN_SHIFT;
+> +	return __page_val_to_pfn(pud_val(pud));
 >  }
 >  
->  struct remote_output {
+>  static inline pmd_t *pud_pgtable(pud_t pud)
+> @@ -278,13 +278,13 @@ static inline p4d_t pfn_p4d(unsigned long pfn, pgprot_t prot)
+>  
+>  static inline unsigned long _p4d_pfn(p4d_t p4d)
+>  {
+> -	return p4d_val(p4d) >> _PAGE_PFN_SHIFT;
+> +	return __page_val_to_pfn(p4d_val(p4d));
+>  }
+>  
+>  static inline pud_t *p4d_pgtable(p4d_t p4d)
+>  {
+>  	if (pgtable_l4_enabled)
+> -		return (pud_t *)pfn_to_virt(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
+> +		return (pud_t *)pfn_to_virt(__page_val_to_pfn(p4d_val(p4d)));
+>  
+>  	return (pud_t *)pud_pgtable((pud_t) { p4d_val(p4d) });
+>  }
+> @@ -292,7 +292,7 @@ static inline pud_t *p4d_pgtable(p4d_t p4d)
+>  
+>  static inline struct page *p4d_page(p4d_t p4d)
+>  {
+> -	return pfn_to_page(p4d_val(p4d) >> _PAGE_PFN_SHIFT);
+> +	return pfn_to_page(__page_val_to_pfn(p4d_val(p4d)));
+>  }
+>  
+>  #define pud_index(addr) (((addr) >> PUD_SHIFT) & (PTRS_PER_PUD - 1))
+> @@ -347,7 +347,7 @@ static inline void pgd_clear(pgd_t *pgd)
+>  static inline p4d_t *pgd_pgtable(pgd_t pgd)
+>  {
+>  	if (pgtable_l5_enabled)
+> -		return (p4d_t *)pfn_to_virt(pgd_val(pgd) >> _PAGE_PFN_SHIFT);
+> +		return (p4d_t *)pfn_to_virt(__page_val_to_pfn(pgd_val(pgd)));
+>  
+>  	return (p4d_t *)p4d_pgtable((p4d_t) { pgd_val(pgd) });
+>  }
+> @@ -355,7 +355,7 @@ static inline p4d_t *pgd_pgtable(pgd_t pgd)
+>  
+>  static inline struct page *pgd_page(pgd_t pgd)
+>  {
+> -	return pfn_to_page(pgd_val(pgd) >> _PAGE_PFN_SHIFT);
+> +	return pfn_to_page(__page_val_to_pfn(pgd_val(pgd)));
+>  }
+>  #define pgd_page(pgd)	pgd_page(pgd)
+>  
+> diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+> index 1d1be9d9419c..5dbd6610729b 100644
+> --- a/arch/riscv/include/asm/pgtable.h
+> +++ b/arch/riscv/include/asm/pgtable.h
+> @@ -261,7 +261,7 @@ static inline pgd_t pfn_pgd(unsigned long pfn, pgprot_t prot)
+>  
+>  static inline unsigned long _pgd_pfn(pgd_t pgd)
+>  {
+> -	return pgd_val(pgd) >> _PAGE_PFN_SHIFT;
+> +	return __page_val_to_pfn(pgd_val(pgd));
+>  }
+>  
+>  static inline struct page *pmd_page(pmd_t pmd)
+> @@ -590,14 +590,14 @@ static inline pmd_t pmd_mkinvalid(pmd_t pmd)
+>  	return __pmd(pmd_val(pmd) & ~(_PAGE_PRESENT|_PAGE_PROT_NONE));
+>  }
+>  
+> -#define __pmd_to_phys(pmd)  (pmd_val(pmd) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
+> +#define __pmd_to_phys(pmd)  (__page_val_to_pfn(pmd_val(pmd)) << PAGE_SHIFT)
+>  
+>  static inline unsigned long pmd_pfn(pmd_t pmd)
+>  {
+>  	return ((__pmd_to_phys(pmd) & PMD_MASK) >> PAGE_SHIFT);
+>  }
+>  
+> -#define __pud_to_phys(pud)  (pud_val(pud) >> _PAGE_PFN_SHIFT << PAGE_SHIFT)
+> +#define __pud_to_phys(pud)  (__page_val_to_pfn(pud_val(pud)) << PAGE_SHIFT)
+>  
+>  static inline unsigned long pud_pfn(pud_t pud)
+>  {
+> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+> index 1c00695ebee7..9826073fbc67 100644
+> --- a/arch/riscv/kvm/mmu.c
+> +++ b/arch/riscv/kvm/mmu.c
+> @@ -54,7 +54,7 @@ static inline unsigned long gstage_pte_index(gpa_t addr, u32 level)
+>  
+>  static inline unsigned long gstage_pte_page_vaddr(pte_t pte)
+>  {
+> -	return (unsigned long)pfn_to_virt(pte_val(pte) >> _PAGE_PFN_SHIFT);
+> +	return (unsigned long)pfn_to_virt(__page_val_to_pfn(pte_val(pte)));
+>  }
+>  
+>  static int gstage_page_size_to_level(unsigned long page_size, u32 *out_level)
+> 
 
-The above goes *bang* because perf_event_remove_on_exec() will take a
-mutex, which isn't allowed under rcu_read_lock().
 
-The below cures.
 
----
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -4384,8 +4384,6 @@ static void perf_event_remove_on_exec(st
- 	unsigned long flags;
- 	bool modified = false;
- 
--	perf_pin_task_context(current);
--
- 	mutex_lock(&ctx->mutex);
- 
- 	if (WARN_ON_ONCE(ctx->task != current))
-@@ -4406,13 +4404,11 @@ static void perf_event_remove_on_exec(st
- 	raw_spin_lock_irqsave(&ctx->lock, flags);
- 	if (modified)
- 		clone_ctx = unclone_ctx(ctx);
--	--ctx->pin_count;
- 	raw_spin_unlock_irqrestore(&ctx->lock, flags);
- 
- unlock:
- 	mutex_unlock(&ctx->mutex);
- 
--	put_ctx(ctx);
- 	if (clone_ctx)
- 		put_ctx(clone_ctx);
- }
-@@ -7878,14 +7874,16 @@ void perf_event_exec(void)
- {
- 	struct perf_event_context *ctx;
- 
--	rcu_read_lock();
--	ctx = rcu_dereference(current->perf_event_ctxp);
--	if (ctx) {
--		perf_event_enable_on_exec(ctx);
--		perf_event_remove_on_exec(ctx);
--		perf_iterate_ctx(ctx, perf_event_addr_filters_exec, NULL, true);
--	}
--	rcu_read_unlock();
-+	ctx = perf_pin_task_context(current);
-+	if (!ctx)
-+		return;
-+
-+	perf_event_enable_on_exec(ctx);
-+	perf_event_remove_on_exec(ctx);
-+	perf_iterate_ctx(ctx, perf_event_addr_filters_exec, NULL, true);
-+
-+	perf_unpin_context(ctx);
-+	put_ctx(ctx);
- }
- 
- struct remote_output {
+

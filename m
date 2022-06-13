@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 564C25489F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C023549656
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357463AbiFMLyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
+        id S1380776AbiFMOBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356896AbiFMLtl (ORCPT
+        with ESMTP id S1380765AbiFMNzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:49:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B124D63D;
-        Mon, 13 Jun 2022 03:53:23 -0700 (PDT)
+        Mon, 13 Jun 2022 09:55:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24C3443DF;
+        Mon, 13 Jun 2022 04:35:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B0AF66135B;
-        Mon, 13 Jun 2022 10:53:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C46EC34114;
-        Mon, 13 Jun 2022 10:53:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7ADF8B80EC8;
+        Mon, 13 Jun 2022 11:35:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4097C34114;
+        Mon, 13 Jun 2022 11:35:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117602;
-        bh=KizqXqBV+SzCuIw5EL894417bb2lTU9qsNwZVgGoGr4=;
+        s=korg; t=1655120141;
+        bh=uR7CQe4V55FxsHzDZ0qleDY1nvIx7lIoX7D3hsclkWQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dzWmGEsf0ag6pncsfsmMV7yj0+xx+dwzG9T4cjM9PtQ/ev1qvOLpiAhWDZdo7/D16
-         mzKn5iNylqNT9z/YJe64ebw2WVofmhCIGTPRCam1tLAQiwKCsfXX58Rm9k3fzLPf2V
-         7GtGy/2umiKqD0At67R666ABX2WhYjUAQaqMjJvg=
+        b=WrvbfKK+Jdsdz9OFf81TVSDG2kJgq4bseGIdmN72Gk9MN8LnApmEEF9colUH8NpzV
+         cvbOSSCJBD7oSsY6JhLtxUJIJzOMR8+zRNXhEMGropuDDxtg9vATO3wE+2VilV4Bwu
+         7p81WF5Pqz9jkWOu779KOm+Nhg2rBRCWMEauPAVg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe de Dinechin <dinechin@redhat.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Kees Cook <keescook@chromium.org>,
+        stable@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 397/411] nodemask: Fix return values to be unsigned
+Subject: [PATCH 5.18 245/339] misc: rtsx: set NULL intfdata when probe fails
 Date:   Mon, 13 Jun 2022 12:11:10 +0200
-Message-Id: <20220613094940.567957464@linuxfoundation.org>
+Message-Id: <20220613094934.087061244@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,184 +54,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Shuah Khan <skhan@linuxfoundation.org>
 
-[ Upstream commit 0dfe54071d7c828a02917b595456bfde1afdddc9 ]
+[ Upstream commit f861d36e021e1ac4a0a2a1f6411d623809975d63 ]
 
-The nodemask routines had mixed return values that provided potentially
-signed return values that could never happen. This was leading to the
-compiler getting confusing about the range of possible return values
-(it was thinking things could be negative where they could not be). Fix
-all the nodemask routines that should be returning unsigned
-(or bool) values. Silences:
+rtsx_usb_probe() doesn't call usb_set_intfdata() to null out the
+interface pointer when probe fails. This leaves a stale pointer.
+Noticed the missing usb_set_intfdata() while debugging an unrelated
+invalid DMA mapping problem.
 
- mm/swapfile.c: In function ‘setup_swap_info’:
- mm/swapfile.c:2291:47: error: array subscript -1 is below array bounds of ‘struct plist_node[]’ [-Werror=array-bounds]
-  2291 |                                 p->avail_lists[i].prio = 1;
-       |                                 ~~~~~~~~~~~~~~^~~
- In file included from mm/swapfile.c:16:
- ./include/linux/swap.h:292:27: note: while referencing ‘avail_lists’
-   292 |         struct plist_node avail_lists[]; /*
-       |                           ^~~~~~~~~~~
+Fix it with a call to usb_set_intfdata(..., NULL).
 
-Reported-by: Christophe de Dinechin <dinechin@redhat.com>
-Link: https://lore.kernel.org/lkml/20220414150855.2407137-3-dinechin@redhat.com/
-Cc: Alexey Dobriyan <adobriyan@gmail.com>
-Cc: Yury Norov <yury.norov@gmail.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Zhen Lei <thunder.leizhen@huawei.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220429210913.46804-1-skhan@linuxfoundation.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/nodemask.h | 38 +++++++++++++++++++-------------------
- lib/nodemask.c           |  4 ++--
- 2 files changed, 21 insertions(+), 21 deletions(-)
+ drivers/misc/cardreader/rtsx_usb.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-index 8a404dfeec42..a8d79f5b9a52 100644
---- a/include/linux/nodemask.h
-+++ b/include/linux/nodemask.h
-@@ -42,11 +42,11 @@
-  * void nodes_shift_right(dst, src, n)	Shift right
-  * void nodes_shift_left(dst, src, n)	Shift left
-  *
-- * int first_node(mask)			Number lowest set bit, or MAX_NUMNODES
-- * int next_node(node, mask)		Next node past 'node', or MAX_NUMNODES
-- * int next_node_in(node, mask)		Next node past 'node', or wrap to first,
-+ * unsigned int first_node(mask)	Number lowest set bit, or MAX_NUMNODES
-+ * unsigend int next_node(node, mask)	Next node past 'node', or MAX_NUMNODES
-+ * unsigned int next_node_in(node, mask) Next node past 'node', or wrap to first,
-  *					or MAX_NUMNODES
-- * int first_unset_node(mask)		First node not set in mask, or 
-+ * unsigned int first_unset_node(mask)	First node not set in mask, or
-  *					MAX_NUMNODES
-  *
-  * nodemask_t nodemask_of_node(node)	Return nodemask with bit 'node' set
-@@ -153,7 +153,7 @@ static inline void __nodes_clear(nodemask_t *dstp, unsigned int nbits)
+diff --git a/drivers/misc/cardreader/rtsx_usb.c b/drivers/misc/cardreader/rtsx_usb.c
+index 59eda55d92a3..1ef9b61077c4 100644
+--- a/drivers/misc/cardreader/rtsx_usb.c
++++ b/drivers/misc/cardreader/rtsx_usb.c
+@@ -667,6 +667,7 @@ static int rtsx_usb_probe(struct usb_interface *intf,
+ 	return 0;
  
- #define node_test_and_set(node, nodemask) \
- 			__node_test_and_set((node), &(nodemask))
--static inline int __node_test_and_set(int node, nodemask_t *addr)
-+static inline bool __node_test_and_set(int node, nodemask_t *addr)
- {
- 	return test_and_set_bit(node, addr->bits);
- }
-@@ -200,7 +200,7 @@ static inline void __nodes_complement(nodemask_t *dstp,
- 
- #define nodes_equal(src1, src2) \
- 			__nodes_equal(&(src1), &(src2), MAX_NUMNODES)
--static inline int __nodes_equal(const nodemask_t *src1p,
-+static inline bool __nodes_equal(const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	return bitmap_equal(src1p->bits, src2p->bits, nbits);
-@@ -208,7 +208,7 @@ static inline int __nodes_equal(const nodemask_t *src1p,
- 
- #define nodes_intersects(src1, src2) \
- 			__nodes_intersects(&(src1), &(src2), MAX_NUMNODES)
--static inline int __nodes_intersects(const nodemask_t *src1p,
-+static inline bool __nodes_intersects(const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	return bitmap_intersects(src1p->bits, src2p->bits, nbits);
-@@ -216,20 +216,20 @@ static inline int __nodes_intersects(const nodemask_t *src1p,
- 
- #define nodes_subset(src1, src2) \
- 			__nodes_subset(&(src1), &(src2), MAX_NUMNODES)
--static inline int __nodes_subset(const nodemask_t *src1p,
-+static inline bool __nodes_subset(const nodemask_t *src1p,
- 					const nodemask_t *src2p, unsigned int nbits)
- {
- 	return bitmap_subset(src1p->bits, src2p->bits, nbits);
- }
- 
- #define nodes_empty(src) __nodes_empty(&(src), MAX_NUMNODES)
--static inline int __nodes_empty(const nodemask_t *srcp, unsigned int nbits)
-+static inline bool __nodes_empty(const nodemask_t *srcp, unsigned int nbits)
- {
- 	return bitmap_empty(srcp->bits, nbits);
- }
- 
- #define nodes_full(nodemask) __nodes_full(&(nodemask), MAX_NUMNODES)
--static inline int __nodes_full(const nodemask_t *srcp, unsigned int nbits)
-+static inline bool __nodes_full(const nodemask_t *srcp, unsigned int nbits)
- {
- 	return bitmap_full(srcp->bits, nbits);
- }
-@@ -260,15 +260,15 @@ static inline void __nodes_shift_left(nodemask_t *dstp,
-           > MAX_NUMNODES, then the silly min_ts could be dropped. */
- 
- #define first_node(src) __first_node(&(src))
--static inline int __first_node(const nodemask_t *srcp)
-+static inline unsigned int __first_node(const nodemask_t *srcp)
- {
--	return min_t(int, MAX_NUMNODES, find_first_bit(srcp->bits, MAX_NUMNODES));
-+	return min_t(unsigned int, MAX_NUMNODES, find_first_bit(srcp->bits, MAX_NUMNODES));
- }
- 
- #define next_node(n, src) __next_node((n), &(src))
--static inline int __next_node(int n, const nodemask_t *srcp)
-+static inline unsigned int __next_node(int n, const nodemask_t *srcp)
- {
--	return min_t(int,MAX_NUMNODES,find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
-+	return min_t(unsigned int, MAX_NUMNODES, find_next_bit(srcp->bits, MAX_NUMNODES, n+1));
- }
- 
- /*
-@@ -276,7 +276,7 @@ static inline int __next_node(int n, const nodemask_t *srcp)
-  * the first node in src if needed.  Returns MAX_NUMNODES if src is empty.
-  */
- #define next_node_in(n, src) __next_node_in((n), &(src))
--int __next_node_in(int node, const nodemask_t *srcp);
-+unsigned int __next_node_in(int node, const nodemask_t *srcp);
- 
- static inline void init_nodemask_of_node(nodemask_t *mask, int node)
- {
-@@ -296,9 +296,9 @@ static inline void init_nodemask_of_node(nodemask_t *mask, int node)
- })
- 
- #define first_unset_node(mask) __first_unset_node(&(mask))
--static inline int __first_unset_node(const nodemask_t *maskp)
-+static inline unsigned int __first_unset_node(const nodemask_t *maskp)
- {
--	return min_t(int,MAX_NUMNODES,
-+	return min_t(unsigned int, MAX_NUMNODES,
- 			find_first_zero_bit(maskp->bits, MAX_NUMNODES));
- }
- 
-@@ -434,11 +434,11 @@ static inline int num_node_state(enum node_states state)
- 
- #define first_online_node	first_node(node_states[N_ONLINE])
- #define first_memory_node	first_node(node_states[N_MEMORY])
--static inline int next_online_node(int nid)
-+static inline unsigned int next_online_node(int nid)
- {
- 	return next_node(nid, node_states[N_ONLINE]);
- }
--static inline int next_memory_node(int nid)
-+static inline unsigned int next_memory_node(int nid)
- {
- 	return next_node(nid, node_states[N_MEMORY]);
- }
-diff --git a/lib/nodemask.c b/lib/nodemask.c
-index 3aa454c54c0d..e22647f5181b 100644
---- a/lib/nodemask.c
-+++ b/lib/nodemask.c
-@@ -3,9 +3,9 @@
- #include <linux/module.h>
- #include <linux/random.h>
- 
--int __next_node_in(int node, const nodemask_t *srcp)
-+unsigned int __next_node_in(int node, const nodemask_t *srcp)
- {
--	int ret = __next_node(node, srcp);
-+	unsigned int ret = __next_node(node, srcp);
- 
- 	if (ret == MAX_NUMNODES)
- 		ret = __first_node(srcp);
+ out_init_fail:
++	usb_set_intfdata(ucr->pusb_intf, NULL);
+ 	usb_free_coherent(ucr->pusb_dev, IOBUF_SIZE, ucr->iobuf,
+ 			ucr->iobuf_dma);
+ 	return ret;
 -- 
 2.35.1
 

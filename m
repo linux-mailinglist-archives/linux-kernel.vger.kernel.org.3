@@ -2,227 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E801A54835B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D99054835F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240941AbiFMJio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:38:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
+        id S240938AbiFMJkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240930AbiFMJim (ORCPT
+        with ESMTP id S240915AbiFMJkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:38:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C001114F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:38:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8507E61380
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 09:38:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEDE2C341CC
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 09:38:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655113118;
-        bh=M/Tq8yOehWGxB0zCTsA6p0ek349s6TsEfOU83FCzIbg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hDQ1BUCdME5iFKrmtnyOAacZcjjjRJ+TTrUgkaCVsABZYaWIaJJ78QPhjO6DEGyRv
-         /Mo4t8cTTwgRHuQJ4KTem1Ev7GydLXlrLqE2Qd9JYCvWc51YlsyIhrUP7BV6uiBUvM
-         KCI09b7iyVO15JLStE8ctcIk4UpCMIrujqFSgMm3Fk43Bqk+n0uX/XEa8/WB7GZAt3
-         DZunPbj93Of8I+9bl3+rVlULXrRYbRABqRq/fGDlg15Iwok5ifV1/Vm5MrS+Mcq83P
-         /tZGC0QBMXBf8zLj8y/FCn+F1sYVKUrllSxTdeuFtYqcoT5P+E0zA9eIiLjQMP1OwY
-         fyrhEpnyNZvkA==
-Received: by mail-ot1-f46.google.com with SMTP id a8-20020a05683012c800b0060c027c8afdso3990344otq.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:38:38 -0700 (PDT)
-X-Gm-Message-State: AOAM530wmmTW6J3cOnq20LxdeYcwDIS20JFYoLUkp698aKLslGwCafJ8
-        H4/ti28QeDQAyUJbhbqRH6U4Klh20/ECJxcl4oY=
-X-Google-Smtp-Source: ABdhPJzMOh9FiBRHo6qHs+aiQIFQXtCW4weZ/HjuRniSyVIfzscVKyqlpBln6BDOP3U3vRyYiMRnr09V9GiRHXa4q+0=
-X-Received: by 2002:a9d:37a3:0:b0:60c:5427:1f56 with SMTP id
- x32-20020a9d37a3000000b0060c54271f56mr3095599otb.71.1655113117976; Mon, 13
- Jun 2022 02:38:37 -0700 (PDT)
+        Mon, 13 Jun 2022 05:40:01 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2134.outbound.protection.outlook.com [40.107.220.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF3E13CE6;
+        Mon, 13 Jun 2022 02:40:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LNe0Qb5z8iyx6SycSzf9g7JNyjLaY/GRZDtvVnKez87xo9e4u6abYZ1Lj6WB3ZDNLq3K47k0m6ydJmxIMks98K/dGeYMXi3yb7sc+u3yVWW+I8gJXI+eQ3QXnGsGet3xvph10KXvATQRhT1y0F5GnMxOTBhGp5aFBUGrmrtF/5PE1j31pO5IAA8s78DuHd2vw23AtyrFa6Cfjs94WB5LqpuuRbUbvgjNiLdgF6vdP/DWgNYgOPdoNAgjPi4ohMxlVIx+Exh6X7hhv6t4gxsR3x0aBag4Ua/7At+gxXQ5zNYlQnG3m6JXVSXkidnUBrE/ucvQVqpLOiwulVs6CBacYw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KdToBZUtLn/PXoQNa86XXrO5eM+EwNY4u9N6PAO5wLc=;
+ b=Dnyvp3EuFtJHqOceWpM3M7a2FMS5AA6zklb3HRLnK7sFue/pbNRzk920gYhNva3TbyPaCpHzxDZg/ekBPylUXW8HoaOWovurRJCoAN1MK8bwus19l1SP6cXHZ7nwCQUIY6Wtcr6Kg26LChHBkUSdYyf6BnuTIsNPY9Eny0THiFP5DlzFwKmXqcHyRwRHfEToVXmAXZ78I2NHTxungSjwHLkrPizn5UMH1l88guB80Kfl6Gx0FAohtYtQmnc+br0C8/kR5nebFiNL4okFCXTw5HQxxZPt0hKYlUGMHhCKE7RmPfDOqx5sNZFm+DtN8KUQEUEgRhxAz9J9OsuWw9/GeA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
+ header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KdToBZUtLn/PXoQNa86XXrO5eM+EwNY4u9N6PAO5wLc=;
+ b=xflzY4+hKwxl1GfE6YMzA634/0TR9ZlgnendS4f4Mh1oW46LfoutN1HSS+FUroyoa88GAfcMBCPLPtv8jOE/Sgec73n3GRVrpsLK/ecdXb2E9HSSP8QtiSUv702kDTf7a34ZNEwonzen8quqIZYWwesnFkLmUnem49w3iu1rOTQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=analogixsemi.com;
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
+ by SJ0PR04MB7472.namprd04.prod.outlook.com (2603:10b6:a03:294::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Mon, 13 Jun
+ 2022 09:39:56 +0000
+Received: from BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::ec96:5112:c2d5:9377]) by BY5PR04MB6739.namprd04.prod.outlook.com
+ ([fe80::ec96:5112:c2d5:9377%8]) with mapi id 15.20.5332.020; Mon, 13 Jun 2022
+ 09:39:55 +0000
+Date:   Mon, 13 Jun 2022 17:39:48 +0800
+From:   Xin Ji <xji@analogixsemi.com>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        bliang@analogixsemi.com, qwen@analogixsemi.com,
+        jli@analogixsemi.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v9 1/3] usb: typec: tcpci: move tcpci.h to
+ include/linux/usb/
+Message-ID: <20220613093948.GA1454902@anxtwsw-Precision-3640-Tower>
+References: <20220309023404.1221453-1-xji@analogixsemi.com>
+ <YqMaUroS87rjnCny@kroah.com>
+ <YqMyxQGzPSs/HwVi@kuha.fi.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqMyxQGzPSs/HwVi@kuha.fi.intel.com>
+X-ClientProxiedBy: TY2PR0101CA0022.apcprd01.prod.exchangelabs.com
+ (2603:1096:404:92::34) To BY5PR04MB6739.namprd04.prod.outlook.com
+ (2603:10b6:a03:229::8)
 MIME-Version: 1.0
-References: <20220613091901.730-1-thunder.leizhen@huawei.com>
-In-Reply-To: <20220613091901.730-1-thunder.leizhen@huawei.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 13 Jun 2022 11:38:25 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGgH2DpvQ_jRfMG5hSOxiqOqYHqThp_eqk-Yuhe=2dAjA@mail.gmail.com>
-Message-ID: <CAMj1kXGgH2DpvQ_jRfMG5hSOxiqOqYHqThp_eqk-Yuhe=2dAjA@mail.gmail.com>
-Subject: Re: [PATCH v2] ARM: Mark the FDT_FIXED sections as shareable
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Pitre <nico@fluxnic.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 3dd966cc-10d7-467c-fe51-08da4d20ac7c
+X-MS-TrafficTypeDiagnostic: SJ0PR04MB7472:EE_
+X-Microsoft-Antispam-PRVS: <SJ0PR04MB7472CBB53C6517891F28ACC6C7AB9@SJ0PR04MB7472.namprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XASgv3aBIoK/9XrkqIjNWy+Zdqr99H8PrrDzV1we/m0uWhmXKt29RRAXrfnXATc6eLsW7X4527WrtCPuXKB/dYmcaXX9SSNcSVz5GNApbbogG4OJv2JZrnCkFq9Zu5lb6TM+mmQJnCvg2VVenuyyEfgh8Sec3EJBr310u6jPhpWOJ/FbiVvF25KtmbDB2f3c4GdSemvN9LwXtftevYDKEratFHpVHzXaQVT4FOf5dPBTUKT687vq2QHdgoPwf1s4N17Ur79PBSG2WRrDbGBlWsXmnhnxGNzHD9lMorBBTsqKa7UYXv8UqqX+SyG7DvhnOjib2arDeomOCeWr3fNQsseFg+wPhfMOjhWlvgcFUsWViutJtIhpkuOzgFGUxorzmbIbY5fIUD/bXCyDriz5z2r0wtvfSOmUWc/9GaZkCV/18s+5rOGVo9j+Gg92YUuy51BRAvA2LYQvgMSPkiprc8l53U/pxWJNFamGObPo7P57ly507Jmc0UyCrMAZU6b2VOr5HA4/A3nX4SqSKBZOv+Nfcibf0jbw9jJ/DBmsqgXjKpCZoyUiP4QGxJ4w1s7cMTwshwyyb3s8penAF6sAK0VtHzinFk66JqEQdB5fslVQcmCi6iFRK+j6T+5DRo2md5pMnPPJVA/3JS7MLafwGwBuWAoCKPQXHQw19lsIyHAr+tV3pudLjpuVOdzNIvlz9iu2DmzEVLh3C5OA8WDw2g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(186003)(1076003)(8936002)(33716001)(83380400001)(6506007)(38100700002)(6666004)(38350700002)(55236004)(6916009)(9686003)(6512007)(52116002)(54906003)(508600001)(66946007)(316002)(6486002)(66556008)(8676002)(66476007)(4326008)(86362001)(2906002)(5660300002)(26005)(33656002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GzEc59HF21w03VxqlM6ReFS61Y6NstPTY+podrVQ7JXmjXXQVPNx1gfrrO3s?=
+ =?us-ascii?Q?CA6wSULfXftIcpCm7GI1BKICBm0HHdVvcmMsytwvQzYpoN5g7Y5n6314MAmN?=
+ =?us-ascii?Q?JJzUBvAdQIWJ6LvHNyCKv15PzX8htWCwmeb5qN64B7fSB+CfNDeAO8dcWWi9?=
+ =?us-ascii?Q?s+AAQfGyQMCFd9iNFVw3qlBDv5iew0huZwEfaba8xaEFPfscft/gJwJQ70kk?=
+ =?us-ascii?Q?fHCYzGcLXMVu1WHpKZ1b/FBIulCvXxL37h7pdx+oipIN0LltrvT2OB1KlqRG?=
+ =?us-ascii?Q?5oGiziuuhHF6jrSlC/qfIA9ipDbcfAEVeadNNn+jUmcHyuEXULtxZf6giFhD?=
+ =?us-ascii?Q?e8LwbE63vOdOeOzGrY5sJKHjskx5mEcTWruPoMpQp1c+M1k299fnkM/IUJIX?=
+ =?us-ascii?Q?8pTWKL2HquFsjsDZNxkhynjErOLuUAjbZjxAomgUgb9oZbBkDTdEt/QviZF4?=
+ =?us-ascii?Q?Cm4TXKUJNTFbrCpgxaF0CFHAwhPngdMqcL+hPNuSRN17Eq5UMHdsyiLwGqPI?=
+ =?us-ascii?Q?gZ/csKIwCaa+N6XWZydcKMNFbbogRHoFdOGIupweTSyO86KYDSy4No2TKBvN?=
+ =?us-ascii?Q?Fl6Pa00wev5ayZFuawm7E9ntojqSI7gKPUMPWdZ7+pdx+87YyOwSpSpPS41t?=
+ =?us-ascii?Q?cMbDeFYqX8ws8/aHAJnbHhZQzw3YJBwUwT6PByPaGRPFrDeF/t8mj4xmRnHI?=
+ =?us-ascii?Q?dQ7SeIuOSy5xSC7YcUDty8FuG+YPlfNPvb45upP4/I3Fa16V/lRpzRPM2iZ6?=
+ =?us-ascii?Q?YiWwRS6/+sDRdgGjfCMG7rPVjDbiz3DvQPmJqYVmlPn+77r7l2QdDvGV3fvh?=
+ =?us-ascii?Q?4rR6Iye3RKJkK9vFCVww5d81n4ZAvs8r85k6bq1Fb/CsoZkbQyfxxH7298mb?=
+ =?us-ascii?Q?IAWtE05vMMjSAcJidMgVYrKeKjHr6RJKSma/ihbfUcVzv1lEd2FyOgzSWlL4?=
+ =?us-ascii?Q?+/KBNNwuG083CG0GtO6PpytJd56CGm6xmWl5tmqDwOFOw1NQrkblnxhLsAE2?=
+ =?us-ascii?Q?ZNF2VIwffQH914Ic45TFCRVzD6a8qxGlONt5rJw4yNxfm2kcrJ71bBxoTSTA?=
+ =?us-ascii?Q?wd0nj/B2UEDkBQx1jtF2DYvuiD0kefPapTqJns2961dBPiYc050uhF2q6dvk?=
+ =?us-ascii?Q?yvg5UHDkaVmdXw6kZv6BX4h+M5zZQ5g/hT+CcvdUC+eUwj79klS+Ebu08lte?=
+ =?us-ascii?Q?XhioxXGFpGI5/Oa22kO0CqPysNujVDlgf79VvU5OGx3UjKJ0EWNVNUfwHqOf?=
+ =?us-ascii?Q?O5norcfOKVQfA86TP8NLh0RB6+xi409uPdHGyTHRP9XwJXZ96YR2TkT+ykv7?=
+ =?us-ascii?Q?Xn3FvRGMNABK3azHYUrvPESxXZ+AMuGF50CzdqBpez5TOpkDFWDvCoxqLWdN?=
+ =?us-ascii?Q?D7nCNS5i4k2fJNUeMU2SlLCpUbsHwOLRsf/qNWfSDGwosRw9J3QzMNLlB24C?=
+ =?us-ascii?Q?+qhVwU5B9n3XDAq7S8fFm0dXqX+LM1LB0bHTdbkwQkZc5uvDEX0OhrUniUCX?=
+ =?us-ascii?Q?/loD8KftEGSQ5wcyJIY2/GsJvmGf14arx+aybspO79tUHn5DCGnV8P/2T1FG?=
+ =?us-ascii?Q?ar70AOYtmMXlZfxYlA0MXqWZ2ePqmxUFJ45JiYbW7DxthL7Qw8v43OPUZ4Uz?=
+ =?us-ascii?Q?lQD/3agOPWqSKH5vj4ygy+AhkD0AOK0NDJiWySTw0u7CQgUWoKFm8IxNUYJW?=
+ =?us-ascii?Q?auVK+1kQLQXwU3UkoZ51gjPYrELNGZFyDM6exUtdCORfuYd19buNrZY/uqRG?=
+ =?us-ascii?Q?4xaIAgy22g=3D=3D?=
+X-OriginatorOrg: analogixsemi.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3dd966cc-10d7-467c-fe51-08da4d20ac7c
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2022 09:39:55.7167
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: U0wEW2GQxiWRUUwJybJePv1JpYuxIVdToU/sIvOTf5n1GWam8EspYFc5mtdrehc1QZWm7JvbGIA69X2KkPeWfg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR04MB7472
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Jun 2022 at 11:19, Zhen Lei <thunder.leizhen@huawei.com> wrote:
->
-> commit 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear
-> region") use FDT_FIXED_BASE to map the whole FDT_FIXED_SIZE memory area
-> which contains fdt. But it only reserves the exact physical memory that
-> fdt occupied. Unfortunately, this mapping is non-shareable. An illegal or
-> speculative read access can bring the RAM content from non-fdt zone into
-> cache, PIPT makes it to be hit by subsequently read access through
-> shareable mapping(such as linear mapping), and the cache consistency
-> between cores is lost due to non-shareable property.
->
-> |<---------FDT_FIXED_SIZE------>|
-> |                               |
->  -------------------------------
-> | <non-fdt> | <fdt> | <non-fdt> |
->  -------------------------------
->
-> 1. CoreA read <non-fdt> through MT_ROM mapping, the old data is loaded
->    into the cache.
-> 2. CoreB write <non-fdt> to update data through linear mapping. CoreA
->    received the notification to invalid the corresponding cachelines, but
->    the property non-shareable makes it to be ignored.
-> 3. CoreA read <non-fdt> through linear mapping, cache hit, the old data
->    is read.
->
-> To eliminate this risk, add a new memory type MT_MEMORY_RO. Compared to
-> MT_ROM, it is shareable and non-executable.
->
-> Here's an example:
->   list_del corruption. prev->next should be c0ecbf74, but was c08410dc
->   kernel BUG at lib/list_debug.c:53!
->   ... ...
->   PC is at __list_del_entry_valid+0x58/0x98
->   LR is at __list_del_entry_valid+0x58/0x98
->   psr: 60000093
->   sp : c0ecbf30  ip : 00000000  fp : 00000001
->   r10: c08410d0  r9 : 00000001  r8 : c0825e0c
->   r7 : 20000013  r6 : c08410d0  r5 : c0ecbf74  r4 : c0ecbf74
->   r3 : c0825d08  r2 : 00000000  r1 : df7ce6f4  r0 : 00000044
->   ... ...
->   Stack: (0xc0ecbf30 to 0xc0ecc000)
->   bf20:                                     c0ecbf74 c0164fd0 c0ecbf70 c0165170
->   bf40: c0eca000 c0840c00 c0840c00 c0824500 c0825e0c c0189bbc c088f404 60000013
->   bf60: 60000013 c0e85100 000004ec 00000000 c0ebcdc0 c0ecbf74 c0ecbf74 c0825d08
->   ... ...                                           <  next     prev  >
->   (__list_del_entry_valid) from (__list_del_entry+0xc/0x20)
->   (__list_del_entry) from (finish_swait+0x60/0x7c)
->   (finish_swait) from (rcu_gp_kthread+0x560/0xa20)
->   (rcu_gp_kthread) from (kthread+0x14c/0x15c)
->   (kthread) from (ret_from_fork+0x14/0x24)
->
-> The faulty list node to be deleted is a local variable, its address is
-> c0ecbf74. The dumped stack shows that 'prev' = c0ecbf74, but its value
-> before lib/list_debug.c:53 is c08410dc. A large amount of printing results
-> in swapping out the cacheline containing the old data(MT_ROM mapping is
-> read only, so the cacheline cannot be dirty), and the subsequent dump
-> operation obtains new data from the DDR.
->
-> Fixes: 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear region")
-> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-
-Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-
-Please put this in Russell's patch tracker
-
-As I indicated in my reply to v1, we still need to reduce the the size
-of the mapping as well: the non-fdt surplus might cover physical pages
-that are NOMAP or mapped with different attributes, and so having a
-cacheable, shareable alias could potentially be problematic as well.
-
-I'll propose a patch for that once this lands.
-
+On Fri, Jun 10, 2022 at 03:02:13PM +0300, Heikki Krogerus wrote:
+> On Fri, Jun 10, 2022 at 12:17:54PM +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Mar 09, 2022 at 10:34:01AM +0800, Xin Ji wrote:
+> > > USB PD controllers which consisting of a microcontroller (acting as the TCPM)
+> > > and a port controller (TCPC) - may require that the driver for the PD
+> > > controller accesses directly also the on-chip port controller in some cases.
+> > > 
+> > > Move tcpci.h to include/linux/usb/ is convenience access TCPC registers.
+> > > 
+> > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> > > 
+> > > ---
+> > > V8 -> V9: Add more commit message
+> > > V7 -> V8: Fix Guanter's comment, remove unnecessary explain
+> > > 
+> > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
+> > > ---
+> > >  drivers/usb/typec/tcpm/tcpci.c                        | 3 +--
+> > >  drivers/usb/typec/tcpm/tcpci_maxim.c                  | 3 +--
+> > >  drivers/usb/typec/tcpm/tcpci_mt6360.c                 | 3 +--
+> > >  drivers/usb/typec/tcpm/tcpci_rt1711h.c                | 2 +-
+> > >  {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h | 1 +
+> > >  5 files changed, 5 insertions(+), 7 deletions(-)
+> > >  rename {drivers/usb/typec/tcpm => include/linux/usb}/tcpci.h (99%)
+> > 
+> > I need an ack by the typec maintainers/developers before I can take this
+> > (hint...)
+> 
+> I'm sorry for the delayed response.
+> 
+> Xin, you need to rebase this. It does not apply cleanly anymore.
+> 
+> thanks,
+> 
+> -- 
+> heikki
+Hi heikki, OK, I'll rebase on the latest code and resend.
 Thanks,
-
-
-> ---
->  arch/arm/include/asm/mach/map.h |  1 +
->  arch/arm/mm/mmu.c               | 15 ++++++++++++++-
->  2 files changed, 15 insertions(+), 1 deletion(-)
->
-> v1 --> v2:
-> As Ard Biesheuvel's suggestion, add a new memory type MT_MEMORY_RO instead of
-> add a new memory type MT_ROM_XIP.
->
-> diff --git a/arch/arm/include/asm/mach/map.h b/arch/arm/include/asm/mach/map.h
-> index 92282558caf7cdb..2b8970d8e5a2ff8 100644
-> --- a/arch/arm/include/asm/mach/map.h
-> +++ b/arch/arm/include/asm/mach/map.h
-> @@ -27,6 +27,7 @@ enum {
->         MT_HIGH_VECTORS,
->         MT_MEMORY_RWX,
->         MT_MEMORY_RW,
-> +       MT_MEMORY_RO,
->         MT_ROM,
->         MT_MEMORY_RWX_NONCACHED,
->         MT_MEMORY_RW_DTCM,
-> diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
-> index 5e2be37a198e29e..cd17e324aa51ea6 100644
-> --- a/arch/arm/mm/mmu.c
-> +++ b/arch/arm/mm/mmu.c
-> @@ -296,6 +296,13 @@ static struct mem_type mem_types[] __ro_after_init = {
->                 .prot_sect = PMD_TYPE_SECT | PMD_SECT_AP_WRITE,
->                 .domain    = DOMAIN_KERNEL,
->         },
-> +       [MT_MEMORY_RO] = {
-> +               .prot_pte  = L_PTE_PRESENT | L_PTE_YOUNG | L_PTE_DIRTY |
-> +                            L_PTE_XN | L_PTE_RDONLY,
-> +               .prot_l1   = PMD_TYPE_TABLE,
-> +               .prot_sect = PMD_TYPE_SECT,
-> +               .domain    = DOMAIN_KERNEL,
-> +       },
->         [MT_ROM] = {
->                 .prot_sect = PMD_TYPE_SECT,
->                 .domain    = DOMAIN_KERNEL,
-> @@ -489,6 +496,7 @@ static void __init build_mem_type_table(void)
->
->                         /* Also setup NX memory mapping */
->                         mem_types[MT_MEMORY_RW].prot_sect |= PMD_SECT_XN;
-> +                       mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_XN;
->                 }
->                 if (cpu_arch >= CPU_ARCH_ARMv7 && (cr & CR_TRE)) {
->                         /*
-> @@ -568,6 +576,7 @@ static void __init build_mem_type_table(void)
->                 mem_types[MT_ROM].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
->                 mem_types[MT_MINICLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
->                 mem_types[MT_CACHECLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
-> +               mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
->  #endif
->
->                 /*
-> @@ -587,6 +596,8 @@ static void __init build_mem_type_table(void)
->                         mem_types[MT_MEMORY_RWX].prot_pte |= L_PTE_SHARED;
->                         mem_types[MT_MEMORY_RW].prot_sect |= PMD_SECT_S;
->                         mem_types[MT_MEMORY_RW].prot_pte |= L_PTE_SHARED;
-> +                       mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_S;
-> +                       mem_types[MT_MEMORY_RO].prot_pte |= L_PTE_SHARED;
->                         mem_types[MT_MEMORY_DMA_READY].prot_pte |= L_PTE_SHARED;
->                         mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= PMD_SECT_S;
->                         mem_types[MT_MEMORY_RWX_NONCACHED].prot_pte |= L_PTE_SHARED;
-> @@ -647,6 +658,8 @@ static void __init build_mem_type_table(void)
->         mem_types[MT_MEMORY_RWX].prot_pte |= kern_pgprot;
->         mem_types[MT_MEMORY_RW].prot_sect |= ecc_mask | cp->pmd;
->         mem_types[MT_MEMORY_RW].prot_pte |= kern_pgprot;
-> +       mem_types[MT_MEMORY_RO].prot_sect |= ecc_mask | cp->pmd;
-> +       mem_types[MT_MEMORY_RO].prot_pte |= kern_pgprot;
->         mem_types[MT_MEMORY_DMA_READY].prot_pte |= kern_pgprot;
->         mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= ecc_mask;
->         mem_types[MT_ROM].prot_sect |= cp->pmd;
-> @@ -1360,7 +1373,7 @@ static void __init devicemaps_init(const struct machine_desc *mdesc)
->                 map.pfn = __phys_to_pfn(__atags_pointer & SECTION_MASK);
->                 map.virtual = FDT_FIXED_BASE;
->                 map.length = FDT_FIXED_SIZE;
-> -               map.type = MT_ROM;
-> +               map.type = MT_MEMORY_RO;
->                 create_mapping(&map);
->         }
->
-> --
-> 2.25.1
->
+Xin

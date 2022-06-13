@@ -2,136 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC061549544
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F2C548E94
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377657AbiFMNdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
+        id S1382073AbiFMOQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378044AbiFMNas (ORCPT
+        with ESMTP id S1381694AbiFMOJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:30:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6498C6EC62;
-        Mon, 13 Jun 2022 04:25:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 13 Jun 2022 10:09:05 -0400
+X-Greylist: delayed 581 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Jun 2022 04:41:41 PDT
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [58.251.27.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B187C98756
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 04:41:36 -0700 (PDT)
+Received: from mxde.zte.com.cn (unknown [10.35.8.64])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4LM8YB6YRzzK82
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 19:31:58 +0800 (CST)
+Received: from mxus.zte.com.cn (unknown [10.207.168.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxde.zte.com.cn (FangMail) with ESMTPS id 4LM8Xw3xyrzCFQtW
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 19:31:44 +0800 (CST)
+Received: from mxhk.zte.com.cn (unknown [192.168.250.138])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxus.zte.com.cn (FangMail) with ESMTPS id 4LM8Xr2XYTz9tyD7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 19:31:40 +0800 (CST)
+Received: from mse-fl2.zte.com.cn (unknown [10.30.14.239])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 903B46101F;
-        Mon, 13 Jun 2022 11:25:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFC27C341C4;
-        Mon, 13 Jun 2022 11:25:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655119527;
-        bh=7W3RCHPt+tsv4dUVuAHZPUmYNjQsn6MQMQZiltiHPMo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=BYeZAMVPRmwlA54Ck5SoP5JNY1uzX1oKBuBKOEW0/18L/N7SH1Q6Pz9oeAFuPK1GE
-         Ptzikw+GpSyVlczUN29YAhruuXdl1iBwdleFwXj61A8Bjm6Oap6QobCHLuR6IlGnrG
-         a867EL6fHjHeZqJiTG32UY8WKmmCidwwJxDMWSPSUuFcrVt24whdpbUYvFaLs3dxYn
-         AnpWvYOJmpWmr+DcDVSHh8dj91Y3P9JW0WcBwHlU2aG5hZNYY1rBi91fVlWG/958dW
-         EgY1jhEIQqrZrlsm7hkIRXVSmVgXDCBEI8MnB+noz8cDuV9nyp8ck0qtHSevV3zFqO
-         QMZCGqo3oQqRQ==
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-1014b2752c1so970922fac.11;
-        Mon, 13 Jun 2022 04:25:26 -0700 (PDT)
-X-Gm-Message-State: AOAM5300mjgZjXs5Ylm4yVobjPfl6gqUuHS6O99QC8FmhVsMdt5F9sV+
-        Alj7Gda5QTfMQxDeM9Nq164nP9GylQFMkkUXLHM=
-X-Google-Smtp-Source: ABdhPJwye+3Ce8gz8k+4lo9ehXOBU1aZPcGoJ+NlVwPSgSQ16T74tDI4+9Z8khhO9pTdsWAwon+Bdee0S9o3i5/Vjzs=
-X-Received: by 2002:a05:6871:5c8:b0:f3:3c1c:126f with SMTP id
- v8-20020a05687105c800b000f33c1c126fmr7435011oan.126.1655119515578; Mon, 13
- Jun 2022 04:25:15 -0700 (PDT)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4LM8Xn00hWz5BNS0;
+        Mon, 13 Jun 2022 19:31:36 +0800 (CST)
+Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
+        by mse-fl2.zte.com.cn with SMTP id 25DBVWvv001928;
+        Mon, 13 Jun 2022 19:31:32 +0800 (GMT-8)
+        (envelope-from wang.yi59@zte.com.cn)
+Received: from fox-cloudhost8.zte.com.cn (unknown [10.234.72.110])
+        by smtp (Zmail) with SMTP;
+        Mon, 13 Jun 2022 19:31:32 +0800
+X-Zmail-TransId: 3e8162a7201401b-f9e61
+From:   Yi Wang <wang.yi59@zte.com.cn>
+To:     yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk
+Cc:     linux-kernel@vger.kernel.org, xue.zhihong@zte.com.cn,
+        wang.yi59@zte.com.cn, wang.liang82@zte.com.cn
+Subject: [PATCH] bitmap: fix a unproper remap when mpol_rebind_nodemask()
+Date:   Mon, 13 Jun 2022 19:29:37 +0800
+Message-Id: <20220613112937.65428-1-wang.yi59@zte.com.cn>
+X-Mailer: git-send-email 2.33.0.rc0.dirty
 MIME-Version: 1.0
-References: <20220613082147.183145-1-mawupeng1@huawei.com> <20220613082147.183145-7-mawupeng1@huawei.com>
- <YqcZ4O3pwceVtKYm@kernel.org>
-In-Reply-To: <YqcZ4O3pwceVtKYm@kernel.org>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 13 Jun 2022 13:25:02 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGwOczo1bgftMX9xTf8fRkrVYq8BjXJ6=XPj_yarbDYrA@mail.gmail.com>
-Message-ID: <CAMj1kXGwOczo1bgftMX9xTf8fRkrVYq8BjXJ6=XPj_yarbDYrA@mail.gmail.com>
-Subject: Re: [PATCH v4 6/6] memblock: Disable mirror feature if kernelcore is
- not specified
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Wupeng Ma <mawupeng1@huawei.com>, corbet@lwn.net, will@kernel.org,
-        catalin.marinas@arm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, dvhart@infradead.org, andy@infradead.org,
-        akpm@linux-foundation.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, paulmck@kernel.org,
-        keescook@chromium.org, songmuchun@bytedance.com,
-        rdunlap@infradead.org, damien.lemoal@opensource.wdc.com,
-        swboyd@chromium.org, wei.liu@kernel.org, robin.murphy@arm.com,
-        david@redhat.com, anshuman.khandual@arm.com,
-        thunder.leizhen@huawei.com, wangkefeng.wang@huawei.com,
-        gpiccoli@igalia.com, chenhuacai@kernel.org, geert@linux-m68k.org,
-        vijayb@linux.microsoft.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 25DBVWvv001928
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.14.novalocal with ID 62A7202D.000 by FangMail milter!
+X-FangMail-Envelope: 1655119919/4LM8YB6YRzzK82/62A7202D.000/10.35.8.64/[10.35.8.64]/mxde.zte.com.cn/<wang.yi59@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 62A7202D.000/4LM8YB6YRzzK82
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Jun 2022 at 13:05, Mike Rapoport <rppt@kernel.org> wrote:
->
-> On Mon, Jun 13, 2022 at 04:21:47PM +0800, Wupeng Ma wrote:
-> > From: Ma Wupeng <mawupeng1@huawei.com>
-> >
-> > If system have some mirrored memory and mirrored feature is not specified
-> > in boot parameter, the basic mirrored feature will be enabled and this will
-> > lead to the following situations:
-> >
-> > - memblock memory allocation prefers mirrored region. This may have some
-> >   unexpected influence on numa affinity.
-> >
-> > - contiguous memory will be split into several parts if parts of them
-> >   is mirrored memory via memblock_mark_mirror().
-> >
-> > To fix this, variable mirrored_kernelcore will be checked in
-> > memblock_mark_mirror(). Mark mirrored memory with flag MEMBLOCK_MIRROR iff
-> > kernelcore=mirror is added in the kernel parameters.
-> >
-> > Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
-> > ---
-> >  mm/internal.h   | 2 ++
-> >  mm/memblock.c   | 3 +++
-> >  mm/page_alloc.c | 2 +-
-> >  3 files changed, 6 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/mm/internal.h b/mm/internal.h
-> > index c0f8fbe0445b..ddd2d6a46f1b 100644
-> > --- a/mm/internal.h
-> > +++ b/mm/internal.h
-> > @@ -861,4 +861,6 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags);
-> >
-> >  DECLARE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
-> >
-> > +extern bool mirrored_kernelcore;
-> > +
-> >  #endif       /* __MM_INTERNAL_H */
-> > diff --git a/mm/memblock.c b/mm/memblock.c
-> > index b1d2a0009733..a9f18b988b7f 100644
-> > --- a/mm/memblock.c
-> > +++ b/mm/memblock.c
-> > @@ -924,6 +924,9 @@ int __init_memblock memblock_clear_hotplug(phys_addr_t base, phys_addr_t size)
-> >   */
-> >  int __init_memblock memblock_mark_mirror(phys_addr_t base, phys_addr_t size)
-> >  {
-> > +     if (!mirrored_kernelcore)
-> > +             return 0;
-> > +
->
-> Hmm, this changes the way x86 uses mirrored memory.
-> This change makes sense for x86 as well, but we should get an Ack from x86 folks.
->
+Consider one situation:
 
-Also, on second thought, I don't think marking as mirror is what
-should be affected by the policy. Instead, choose_memblock_flags()
-should take this into account, in a way that we could refine later if
-needed.
+The app have two vmas which mbind() to node 1 and node3 respectively,
+and its cpuset.mems is 0-3, now set its cpuset.mems to 1,3, according
+to current bitmap_remap(), we got:
+
+    1 => 3
+    3 => 3
+
+This maybe confused because node 1,3 have already in the new settiing
+region but both nodes are binded to the same node 3 now.
+
+Actually we found the situation on a very old libvirt and qemu, but
+this can be easily reproduced in the current kernel, so we try to fix
+it.
+
+A possible fix way is to ignore the bits in @src have already existed
+in @new.
+
+Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
+---
+ lib/bitmap.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/lib/bitmap.c b/lib/bitmap.c
+index b18e31ea6e66..b77bf1b3852e 100644
+--- a/lib/bitmap.c
++++ b/lib/bitmap.c
+@@ -1006,8 +1006,8 @@ unsigned int bitmap_ord_to_pos(const unsigned long *buf, unsigned int ord, unsig
+  * @dst point to the same location, then this routine copies @src
+  * to @dst.
+  *
+- * The positions of unset bits in @old are mapped to themselves
+- * (the identify map).
++ * The positions of unset bits in @old or bits in @src have already
++ * existed in @new are mapped to themselves (the identify map).
+  *
+  * Apply the above specified mapping to @src, placing the result in
+  * @dst, clearing any bits previously set in @dst.
+@@ -1033,7 +1033,7 @@ void bitmap_remap(unsigned long *dst, const unsigned long *src,
+ 	for_each_set_bit(oldbit, src, nbits) {
+ 		int n = bitmap_pos_to_ord(old, oldbit, nbits);
+ 
+-		if (n < 0 || w == 0)
++		if (n < 0 || w == 0 || test_bit(oldbit, new))
+ 			set_bit(oldbit, dst);	/* identity map */
+ 		else
+ 			set_bit(bitmap_ord_to_pos(new, n % w, nbits), dst);
+-- 
+2.33.0.rc0.dirty

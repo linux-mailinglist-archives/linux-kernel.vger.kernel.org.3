@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E69454A296
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 01:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 488C854A2A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 01:22:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241722AbiFMXWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 19:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
+        id S1343880AbiFMXVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 19:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344736AbiFMXVv (ORCPT
+        with ESMTP id S238757AbiFMXVC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 19:21:51 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA09D2B25E;
-        Mon, 13 Jun 2022 16:21:38 -0700 (PDT)
+        Mon, 13 Jun 2022 19:21:02 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4016F3193F;
+        Mon, 13 Jun 2022 16:20:56 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9A93321A94;
-        Mon, 13 Jun 2022 23:21:37 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id F2A431F97B;
+        Mon, 13 Jun 2022 23:20:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655162497; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1655162455; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=H2JdOUtYS+FdB9BrIAmOm6nhk+rYQ/dm6rYDIh55AvU=;
-        b=COvRa52h8t3jlyOI2GLKfLw0FRdz9F/uwAnFIDQ2qhjfAZthIOeXjmVE09j9C5Wi8ibCXD
-        UyIqZS1Ljm5/zzGz4ECoZConPG5hPUYybs5qBEnuYFuImz4/nmmx5n6LNRRNt+iR8Ue14A
-        mvV4+DgVxa7fWelX9YlPuatTUXXSJMQ=
+        bh=Hi+NJU1EkxRpFX0rhWMXFKN8RYkXI07hcWLLJcSj+Iw=;
+        b=Qk8MM4lxyxuscFI/U5jyjURjSgu+7yXFJVTxm/b9ReVhvhBZmz2iewmFxjoVfx91PrN2iB
+        7MW//rnmUk05e1Ka/VaW10Od8QVd3J6QK+3JZ8C5glTPvti/KXQZelT69OSymITsYqz4XL
+        PTPFUF/WwwJR7xJHZF3Oal/EmxhN3ns=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655162497;
+        s=susede2_ed25519; t=1655162455;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=H2JdOUtYS+FdB9BrIAmOm6nhk+rYQ/dm6rYDIh55AvU=;
-        b=8FO1rfDBUEXsdnOBT3BpxLyrw3HAjQeCz6ULNJlPwD6EGxHCnUVkQUcZ9d97e15Gdav3/S
-        jQGZXPeP/bIUMTDw==
+        bh=Hi+NJU1EkxRpFX0rhWMXFKN8RYkXI07hcWLLJcSj+Iw=;
+        b=3yD38L5wibetd93L5oFyPOLph9zHt6MstIvpHDuOGSAKa0kgCCeWPPbn1vWxmBGA9MQa2B
+        W8pR0qZLoA6dcSAg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 624BE134CF;
-        Mon, 13 Jun 2022 23:21:35 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DB3AF134CF;
+        Mon, 13 Jun 2022 23:20:52 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id I5SpB3/Gp2IScAAAMHmgww
-        (envelope-from <neilb@suse.de>); Mon, 13 Jun 2022 23:21:35 +0000
-Subject: [PATCH 09/12] nfsd: support concurrent renames.
+        id WdEhJlTGp2LobwAAMHmgww
+        (envelope-from <neilb@suse.de>); Mon, 13 Jun 2022 23:20:52 +0000
+Subject: [PATCH 07/12] NFS: support parallel updates in the one directory.
 From:   NeilBrown <neilb@suse.de>
 To:     Al Viro <viro@zeniv.linux.org.uk>, Daire Byrne <daire@dneg.com>,
         Trond Myklebust <trond.myklebust@hammerspace.com>,
@@ -57,7 +57,7 @@ To:     Al Viro <viro@zeniv.linux.org.uk>, Daire Byrne <daire@dneg.com>,
 Cc:     Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
         linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
 Date:   Tue, 14 Jun 2022 09:18:22 +1000
-Message-ID: <165516230201.21248.13160043266041158437.stgit@noble.brown>
+Message-ID: <165516230200.21248.14713533079253477888.stgit@noble.brown>
 In-Reply-To: <165516173293.21248.14587048046993234326.stgit@noble.brown>
 References: <165516173293.21248.14587048046993234326.stgit@noble.brown>
 User-Agent: StGit/1.5
@@ -74,111 +74,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the filesystem supports it, renames can now be concurrent with other
-updates.
-We use lock_rename_lookup_one() to do the appropriate locking in the
-right order and to look up the names.
+NFS can easily support parallel updates as the locking is done on the
+server, so this patch enables parallel updates for NFS.
+
+NFS unlink needs to block concurrent opens() once it decides to actually
+unlink the file, rather than rename it to .nfsXXXX (aka sillyrename).
+It currently does this by temporarily unhashing the dentry and relying
+on the exclusive lock on the directory to block a ->lookup().  That
+doesn't work now that unlink uses a shared lock, so an alternate
+approach is needed.
+
+__nfs_lookup_revalidate (->d_revalidate) now blocks if DCACHE_PAR_UPDATE
+is set, and if nfs_unlink() happens to be called with an exclusive lock
+and DCACHE_PAR_UPDATE is not set, it get set during the potential race window.
+
+I'd rather use some other indicator in the dentry to tell
+_nfs_lookup_revalidate() to wait, but we are nearly out of d_flags bits,
+and NFS doesn't have a general-purpose d_fsdata.
+
+NFS "silly-rename" may now be called with only a shared lock on the
+directory, so it needs a bit of extra care to get exclusive access to
+the new name. d_lock_update_nested() and d_unlock_update() help here.
 
 Signed-off-by: NeilBrown <neilb@suse.de>
 ---
- fs/nfsd/vfs.c |   49 +++++++++++++++++++------------------------------
- 1 file changed, 19 insertions(+), 30 deletions(-)
+ fs/nfs/dir.c    |   29 +++++++++++++++++++++++------
+ fs/nfs/inode.c  |    2 ++
+ fs/nfs/unlink.c |    5 ++++-
+ 3 files changed, 29 insertions(+), 7 deletions(-)
 
-diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
-index 6cdd5e407600..b0df216ab3e4 100644
---- a/fs/nfsd/vfs.c
-+++ b/fs/nfsd/vfs.c
-@@ -1584,6 +1584,7 @@ nfsd_rename(struct svc_rqst *rqstp, struct svc_fh *ffhp, char *fname, int flen,
- 	__be32		err;
- 	int		host_err;
- 	bool		close_cached = false;
-+	DECLARE_WAIT_QUEUE_HEAD_ONSTACK(wq);
+diff --git a/fs/nfs/dir.c b/fs/nfs/dir.c
+index a8ecdd527662..54c2c7adcd56 100644
+--- a/fs/nfs/dir.c
++++ b/fs/nfs/dir.c
+@@ -1778,6 +1778,9 @@ __nfs_lookup_revalidate(struct dentry *dentry, unsigned int flags,
+ 	int ret;
  
- 	err = fh_verify(rqstp, ffhp, S_IFDIR, NFSD_MAY_REMOVE);
- 	if (err)
-@@ -1611,41 +1612,37 @@ nfsd_rename(struct svc_rqst *rqstp, struct svc_fh *ffhp, char *fname, int flen,
- 
- 	/* cannot use fh_lock as we need deadlock protective ordering
- 	 * so do it by hand */
--	trap = lock_rename(tdentry, fdentry);
--	ffhp->fh_locked = tfhp->fh_locked = true;
--	fh_fill_pre_attrs(ffhp, true);
--	fh_fill_pre_attrs(tfhp, true);
--
--	odentry = lookup_one_len(fname, fdentry, flen);
--	host_err = PTR_ERR(odentry);
--	if (IS_ERR(odentry))
-+	trap = lock_rename_lookup_one(tdentry, fdentry, &ndentry, &odentry,
-+				      tname, tlen, fname, flen, 0, 0, &wq);
-+	host_err = PTR_ERR(trap);
-+	if (IS_ERR(trap))
- 		goto out_nfserr;
-+	ffhp->fh_locked = tfhp->fh_locked = true;
-+	fh_fill_pre_attrs(ffhp, (ndentry->d_flags & DCACHE_PAR_UPDATE) == 0);
-+	fh_fill_pre_attrs(tfhp, (ndentry->d_flags & DCACHE_PAR_UPDATE) == 0);
- 
- 	host_err = -ENOENT;
- 	if (d_really_is_negative(odentry))
--		goto out_dput_old;
-+		goto out_unlock;
- 	host_err = -EINVAL;
- 	if (odentry == trap)
--		goto out_dput_old;
-+		goto out_unlock;
- 
--	ndentry = lookup_one_len(tname, tdentry, tlen);
--	host_err = PTR_ERR(ndentry);
--	if (IS_ERR(ndentry))
--		goto out_dput_old;
- 	host_err = -ENOTEMPTY;
- 	if (ndentry == trap)
--		goto out_dput_new;
-+		goto out_unlock;
- 
- 	host_err = -EXDEV;
- 	if (ffhp->fh_export->ex_path.mnt != tfhp->fh_export->ex_path.mnt)
--		goto out_dput_new;
-+		goto out_unlock;
- 	if (ffhp->fh_export->ex_path.dentry != tfhp->fh_export->ex_path.dentry)
--		goto out_dput_new;
-+		goto out_unlock;
- 
- 	if ((ndentry->d_sb->s_export_op->flags & EXPORT_OP_CLOSE_BEFORE_UNLINK) &&
- 	    nfsd_has_cached_files(ndentry)) {
- 		close_cached = true;
--		goto out_dput_old;
-+		dget(ndentry);
-+		goto out_unlock;
+ 	if (flags & LOOKUP_RCU) {
++		if (dentry->d_flags & DCACHE_PAR_UPDATE)
++			/* Pending unlink */
++			return -ECHILD;
+ 		parent = READ_ONCE(dentry->d_parent);
+ 		dir = d_inode_rcu(parent);
+ 		if (!dir)
+@@ -1786,6 +1789,9 @@ __nfs_lookup_revalidate(struct dentry *dentry, unsigned int flags,
+ 		if (parent != READ_ONCE(dentry->d_parent))
+ 			return -ECHILD;
  	} else {
- 		struct renamedata rd = {
- 			.old_mnt_userns	= &init_user_ns,
-@@ -1662,23 +1659,15 @@ nfsd_rename(struct svc_rqst *rqstp, struct svc_fh *ffhp, char *fname, int flen,
- 				host_err = commit_metadata(ffhp);
- 		}
- 	}
-- out_dput_new:
--	dput(ndentry);
-- out_dput_old:
--	dput(odentry);
-- out_nfserr:
--	err = nfserrno(host_err);
--	/*
--	 * We cannot rely on fh_unlock on the two filehandles,
--	 * as that would do the wrong thing if the two directories
--	 * were the same, so again we do it by hand.
--	 */
- 	if (!close_cached) {
- 		fh_fill_post_attrs(ffhp);
- 		fh_fill_post_attrs(tfhp);
- 	}
--	unlock_rename(tdentry, fdentry);
-+ out_unlock:
-+	unlock_rename_lookup(tdentry, fdentry, ndentry, odentry);
- 	ffhp->fh_locked = tfhp->fh_locked = false;
-+ out_nfserr:
-+	err = nfserrno(host_err);
- 	fh_drop_write(ffhp);
++		/* Wait for unlink to complete */
++		wait_var_event(&dentry->d_flags,
++			       !(dentry->d_flags & DCACHE_PAR_UPDATE));
+ 		parent = dget_parent(dentry);
+ 		ret = reval(d_inode(parent), dentry, flags);
+ 		dput(parent);
+@@ -2453,7 +2459,7 @@ static int nfs_safe_remove(struct dentry *dentry)
+ int nfs_unlink(struct inode *dir, struct dentry *dentry)
+ {
+ 	int error;
+-	int need_rehash = 0;
++	bool did_set_par_update = false;
  
- 	/*
+ 	dfprintk(VFS, "NFS: unlink(%s/%lu, %pd)\n", dir->i_sb->s_id,
+ 		dir->i_ino, dentry);
+@@ -2468,15 +2474,26 @@ int nfs_unlink(struct inode *dir, struct dentry *dentry)
+ 		error = nfs_sillyrename(dir, dentry);
+ 		goto out;
+ 	}
+-	if (!d_unhashed(dentry)) {
+-		__d_drop(dentry);
+-		need_rehash = 1;
++	/* We must prevent any concurrent open until the unlink
++	 * completes.  ->d_revalidate will wait for DCACHE_PAR_UPDATE
++	 * to clear, but if this happens to a non-parallel update, we
++	 * still want to block opens.  So set DCACHE_PAR_UPDATE
++	 * temporarily.
++	 */
++	if (!(dentry->d_flags & DCACHE_PAR_UPDATE)) {
++		/* Must have exclusive lock on parent */
++		did_set_par_update = true;
++		dentry->d_flags |= DCACHE_PAR_UPDATE;
+ 	}
++
+ 	spin_unlock(&dentry->d_lock);
+ 	error = nfs_safe_remove(dentry);
+ 	nfs_dentry_remove_handle_error(dir, dentry, error);
+-	if (need_rehash)
+-		d_rehash(dentry);
++	if (did_set_par_update) {
++		spin_lock(&dentry->d_lock);
++		dentry->d_flags &= ~DCACHE_PAR_UPDATE;
++		spin_unlock(&dentry->d_lock);
++	}
+ out:
+ 	trace_nfs_unlink_exit(dir, dentry, error);
+ 	return error;
+diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
+index b4e46b0ffa2d..cea2554710d2 100644
+--- a/fs/nfs/inode.c
++++ b/fs/nfs/inode.c
+@@ -481,6 +481,8 @@ nfs_fhget(struct super_block *sb, struct nfs_fh *fh, struct nfs_fattr *fattr)
+ 
+ 		/* We can't support update_atime(), since the server will reset it */
+ 		inode->i_flags |= S_NOATIME|S_NOCMTIME;
++		/* Parallel updates to directories are trivial */
++		inode->i_flags |= S_PAR_UPDATE;
+ 		inode->i_mode = fattr->mode;
+ 		nfsi->cache_validity = 0;
+ 		if ((fattr->valid & NFS_ATTR_FATTR_MODE) == 0
+diff --git a/fs/nfs/unlink.c b/fs/nfs/unlink.c
+index 9697cd5d2561..52a20eb6131c 100644
+--- a/fs/nfs/unlink.c
++++ b/fs/nfs/unlink.c
+@@ -462,6 +462,7 @@ nfs_sillyrename(struct inode *dir, struct dentry *dentry)
+ 	sdentry = NULL;
+ 	do {
+ 		int slen;
++		d_unlock_update(sdentry);
+ 		dput(sdentry);
+ 		sillycounter++;
+ 		slen = scnprintf(silly, sizeof(silly),
+@@ -479,7 +480,8 @@ nfs_sillyrename(struct inode *dir, struct dentry *dentry)
+ 		 */
+ 		if (IS_ERR(sdentry))
+ 			goto out;
+-	} while (d_inode(sdentry) != NULL); /* need negative lookup */
++	} while (!d_lock_update_nested(sdentry, NULL, NULL,
++				       SINGLE_DEPTH_NESTING));
+ 
+ 	ihold(inode);
+ 
+@@ -524,6 +526,7 @@ nfs_sillyrename(struct inode *dir, struct dentry *dentry)
+ 	rpc_put_task(task);
+ out_dput:
+ 	iput(inode);
++	d_unlock_update(sdentry);
+ 	dput(sdentry);
+ out:
+ 	return error;
 
 

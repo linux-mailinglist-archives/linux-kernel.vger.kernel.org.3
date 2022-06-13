@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10AF548C22
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 710CA54981F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351524AbiFMLEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43338 "EHLO
+        id S1355953AbiFMLnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:43:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350487AbiFMKyz (ORCPT
+        with ESMTP id S1354988AbiFMLh4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE89621245;
-        Mon, 13 Jun 2022 03:31:33 -0700 (PDT)
+        Mon, 13 Jun 2022 07:37:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AB24507F;
+        Mon, 13 Jun 2022 03:48:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BD0260B8B;
-        Mon, 13 Jun 2022 10:31:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29549C34114;
-        Mon, 13 Jun 2022 10:31:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8859460AEB;
+        Mon, 13 Jun 2022 10:48:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 988DCC34114;
+        Mon, 13 Jun 2022 10:48:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116292;
-        bh=n+aDPt6cam0itTEtEAUp2ZeB4F2tQKVGVhNwlwvBovI=;
+        s=korg; t=1655117301;
+        bh=6CXYLaPR3cZEPhBGn7qYmfqLElRp0KzwtIAkLwt4JR4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SMC45NwW7fcMciz161ko/wz4DpDwtG5T8uyZQB534S4ZAPXRp1vTdNTQh9C4usIM7
-         pt1G5JbqVDJaBxgiTVCBkvK03c/NEQXEZ8Sn1W+9M+6GFBwTAp+PJjIn+6k960tzn2
-         SBJJVLpSR8ydI8WV3AwsqH80+s6wBkqzFn302vN4=
+        b=XoDnEN2mEbJ0IdLEdRmRn2TynUmPfBabAWtVlbeGPIs11zS5ax3ljEQ+SYfDh1A+r
+         iLpg5VzfK1/OzaS5lvnpWjRDkeB/+hY1XPLVBxnZR6tPDMDgFV9zl8X+qKpukHZmfV
+         WD4EBX1ovse7toSJghF73m5A7+LmW6b/po9yfVOY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 156/218] firmware: dmi-sysfs: Fix memory leak in dmi_sysfs_register_handle
+        stable@vger.kernel.org,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 341/411] i2c: cadence: Increase timeout per message if necessary
 Date:   Mon, 13 Jun 2022 12:10:14 +0200
-Message-Id: <20220613094925.325758399@linuxfoundation.org>
+Message-Id: <20220613094938.937589519@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Lucas Tanure <tanureal@opensource.cirrus.com>
 
-[ Upstream commit 660ba678f9998aca6db74f2dd912fa5124f0fa31 ]
+[ Upstream commit 96789dce043f5bff8b7d62aa28d52a7c59403a84 ]
 
-kobject_init_and_add() takes reference even when it fails.
-According to the doc of kobject_init_and_add()
+Timeout as 1 second sets an upper limit on the length
+of the transfer executed, but there is no maximum length
+of a write or read message set in i2c_adapter_quirks for
+this controller.
 
-   If this function returns an error, kobject_put() must be called to
-   properly clean up the memory associated with the object.
+This upper limit affects devices that require sending
+large firmware blobs over I2C.
 
-Fix this issue by calling kobject_put().
+To remove that limitation, calculate the minimal time
+necessary, plus some wiggle room, for every message and
+use it instead of the default one second, if more than
+one second.
 
-Fixes: 948af1f0bbc8 ("firmware: Basic dmi-sysfs support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220511071421.9769-1-linmq006@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+Acked-by: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/dmi-sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-cadence.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/firmware/dmi-sysfs.c b/drivers/firmware/dmi-sysfs.c
-index d5de6ee8466d..084948a31d2d 100644
---- a/drivers/firmware/dmi-sysfs.c
-+++ b/drivers/firmware/dmi-sysfs.c
-@@ -602,7 +602,7 @@ static void __init dmi_sysfs_register_handle(const struct dmi_header *dh,
- 				    "%d-%d", dh->type, entry->instance);
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index 17f0dd1f891e..8a3a0991bc1c 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -506,7 +506,7 @@ static void cdns_i2c_master_reset(struct i2c_adapter *adap)
+ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
+ 		struct i2c_adapter *adap)
+ {
+-	unsigned long time_left;
++	unsigned long time_left, msg_timeout;
+ 	u32 reg;
  
- 	if (*ret) {
--		kfree(entry);
-+		kobject_put(&entry->kobj);
- 		return;
- 	}
+ 	id->p_msg = msg;
+@@ -531,8 +531,16 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
+ 	else
+ 		cdns_i2c_msend(id);
  
++	/* Minimal time to execute this message */
++	msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) / id->i2c_clk);
++	/* Plus some wiggle room */
++	msg_timeout += msecs_to_jiffies(500);
++
++	if (msg_timeout < adap->timeout)
++		msg_timeout = adap->timeout;
++
+ 	/* Wait for the signal of completion */
+-	time_left = wait_for_completion_timeout(&id->xfer_done, adap->timeout);
++	time_left = wait_for_completion_timeout(&id->xfer_done, msg_timeout);
+ 	if (time_left == 0) {
+ 		cdns_i2c_master_reset(adap);
+ 		dev_err(id->adap.dev.parent,
 -- 
 2.35.1
 

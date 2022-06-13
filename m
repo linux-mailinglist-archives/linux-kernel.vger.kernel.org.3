@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0724554892D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D26E4548E1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353382AbiFMMti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34196 "EHLO
+        id S1376539AbiFMNXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353616AbiFMMqp (ORCPT
+        with ESMTP id S1377303AbiFMNUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:46:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7CD34652;
-        Mon, 13 Jun 2022 04:11:35 -0700 (PDT)
+        Mon, 13 Jun 2022 09:20:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 302456A41B;
+        Mon, 13 Jun 2022 04:23:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5DB1FB80D31;
-        Mon, 13 Jun 2022 11:11:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A66C34114;
-        Mon, 13 Jun 2022 11:11:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC29260B6E;
+        Mon, 13 Jun 2022 11:23:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3987C34114;
+        Mon, 13 Jun 2022 11:23:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118692;
-        bh=1SAexRK/1IupoJKQA4hp3b/IiscexdS8doHabusdCZE=;
+        s=korg; t=1655119402;
+        bh=XGs5xbRuZEFEYbmbCHJHaN8WX/rs0lVDODu8zAdt2rw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SPp/zZ6m8i8zUeikBZ1oN1Bgw7XieZz5yonb1dYn0bKQiA4LGbL9ftkYYsy3QqONm
-         TQQGUxxK1BfYCLEZUh/LclP6wausjNVEOsbrYFpaNz4I2fplElrwZ+RE9pKhOpXgeq
-         tUiNfvutqgBfIrvQXOqStN5cTZLPK05HOHPaxW4Y=
+        b=OXkx/Cx+KQSeVbpoKUKRrPWrnopkATFS6lvhlky6Dy+NK1gl0nbBVdu44ttZCcu6a
+         CdVmrkLpUXk6o4sHT5os1JHa2IkFmoxGwYThyMewZbwSwsiatIkvF38EG1FFudcsLU
+         ZInhK3nXOm1TJyitZZLsUF2JPnY40WSJQhp/3SRI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alex Elder <elder@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Georgi Djakov <djakov@kernel.org>
-Subject: [PATCH 5.10 168/172] interconnect: qcom: sc7180: Drop IP0 interconnects
+        stable@vger.kernel.org, Jchao Sun <sunjunchao2870@gmail.com>,
+        Jan Kara <jack@suse.cz>
+Subject: [PATCH 5.15 226/247] writeback: Fix inode->i_io_list not be protected by inode->i_lock error
 Date:   Mon, 13 Jun 2022 12:12:08 +0200
-Message-Id: <20220613094923.368345547@linuxfoundation.org>
+Message-Id: <20220613094929.801024476@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,161 +54,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephen Boyd <swboyd@chromium.org>
+From: Jchao Sun <sunjunchao2870@gmail.com>
 
-commit 2f3724930eb4bba74f7d10bc3bef5bb22dd323df upstream.
+commit 10e14073107dd0b6d97d9516a02845a8e501c2c9 upstream.
 
-The IPA BCM resource ("IP0") on sc7180 was moved to the clk-rpmh driver
-in commit bcd63d222b60 ("clk: qcom: rpmh: Add IPA clock for SC7180") and
-modeled as a clk, but this interconnect driver still had it modeled as
-an interconnect. This was mostly OK because nobody used the interconnect
-definition, until the interconnect framework started dropping bandwidth
-requests on interconnects that aren't used via the sync_state callback
-in commit 7d3b0b0d8184 ("interconnect: qcom: Use icc_sync_state"). Once
-that patch was applied the IP0 resource was going to be controlled from
-two places, the clk framework and the interconnect framework.
+Commit b35250c0816c ("writeback: Protect inode->i_io_list with
+inode->i_lock") made inode->i_io_list not only protected by
+wb->list_lock but also inode->i_lock, but inode_io_list_move_locked()
+was missed. Add lock there and also update comment describing
+things protected by inode->i_lock. This also fixes a race where
+__mark_inode_dirty() could move inode under flush worker's hands
+and thus sync(2) could miss writing some inodes.
 
-Even then, things were probably going to be OK, because commit
-b95b668eaaa2 ("interconnect: qcom: icc-rpmh: Add BCMs to commit list in
-pre_aggregate") was needed to actually drop bandwidth requests on unused
-interconnects, of which the IPA was one of the interconnect that wasn't
-getting dropped to zero. Combining the three commits together leads to
-bad behavior where the interconnect framework is disabling the IP0
-resource because it has no users while the clk framework thinks the IP0
-resource is on because the only user, the IPA driver, has turned it on
-via clk_prepare_enable(). Depending on when sync_state is called, we can
-get into a situation like below:
-
-  IPA driver probes
-  IPA driver gets notified modem started
-   runtime PM get()
-    IPA clk enabled -> IP0 resource is ON
-  sync_state runs
-   interconnect zeroes out the IP0 resource -> IP0 resource is off
-  IPA driver tries to access a register and blows up
-
-The crash is an unclocked access that manifest as an SError.
-
- SError Interrupt on CPU0, code 0xbe000011 -- SError
- CPU: 0 PID: 3595 Comm: mmdata_mgr Not tainted 5.17.1+ #166
- Hardware name: Google Lazor (rev1 - 2) with LTE (DT)
- pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : mutex_lock+0x4c/0x80
- lr : mutex_lock+0x30/0x80
- sp : ffffffc00da9b9c0
- x29: ffffffc00da9b9c0 x28: 0000000000000000 x27: 0000000000000000
- x26: ffffffc00da9bc90 x25: ffffff80c2024010 x24: ffffff80c2024000
- x23: ffffff8083100000 x22: ffffff80831000d0 x21: ffffff80831000a8
- x20: ffffff80831000a8 x19: ffffff8083100070 x18: 00000000ffff0a00
- x17: 000000002f7254f1 x16: 0000000000000100 x15: 0000000000000000
- x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
- x11: 000000000001f0b8 x10: ffffffc00931f0b8 x9 : 0000000000000000
- x8 : 0000000000000000 x7 : fefefefefeff2f60 x6 : 0000808080808080
- x5 : 0000000000000000 x4 : 8080808080800000 x3 : ffffff80d2d4ee28
- x2 : ffffff808c1d6e40 x1 : 0000000000000000 x0 : ffffff8083100070
- Kernel panic - not syncing: Asynchronous SError Interrupt
- CPU: 0 PID: 3595 Comm: mmdata_mgr Not tainted 5.17.1+ #166
- Hardware name: Google Lazor (rev1 - 2) with LTE (DT)
- Call trace:
-  dump_backtrace+0xf4/0x114
-  show_stack+0x24/0x30
-  dump_stack_lvl+0x64/0x7c
-  dump_stack+0x18/0x38
-  panic+0x150/0x38c
-  nmi_panic+0x88/0xa0
-  arm64_serror_panic+0x74/0x80
-  do_serror+0x0/0x80
-  do_serror+0x58/0x80
-  el1h_64_error_handler+0x34/0x4c
-  el1h_64_error+0x78/0x7c
-  mutex_lock+0x4c/0x80
-  __gsi_channel_start+0x50/0x17c
-  gsi_channel_start+0x54/0x90
-  ipa_endpoint_enable_one+0x34/0xc0
-  ipa_open+0x4c/0x120
-
-Remove all IP0 resource management from the interconnect driver so that
-clk-rpmh is the sole owner. This fixes the issue by preventing the
-interconnect driver from overwriting the IP0 resource data that the
-clk-rpmh driver wrote.
-
-Cc: Alex Elder <elder@linaro.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Taniya Das <quic_tdas@quicinc.com>
-Cc: Mike Tipton <quic_mdtipton@quicinc.com>
-Cc: <stable@vger.kernel.org>	# 5.10.x
-Fixes: b95b668eaaa2 ("interconnect: qcom: icc-rpmh: Add BCMs to commit list in pre_aggregate")
-Fixes: bcd63d222b60 ("clk: qcom: rpmh: Add IPA clock for SC7180")
-Fixes: 7d3b0b0d8184 ("interconnect: qcom: Use icc_sync_state")
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Tested-by: Alex Elder <elder@linaro.org>
-Reviewed-by: Alex Elder <elder@linaro.org>
-Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220412220033.1273607-2-swboyd@chromium.org
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-Signed-off-by: Alex Elder <elder@linaro.org>
+Fixes: b35250c0816c ("writeback: Protect inode->i_io_list with inode->i_lock")
+Link: https://lore.kernel.org/r/20220524150540.12552-1-sunjunchao2870@gmail.com
+CC: stable@vger.kernel.org
+Signed-off-by: Jchao Sun <sunjunchao2870@gmail.com>
+Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/interconnect/qcom/sc7180.c |   21 ---------------------
- 1 file changed, 21 deletions(-)
+ fs/fs-writeback.c |   37 ++++++++++++++++++++++++++++---------
+ fs/inode.c        |    2 +-
+ 2 files changed, 29 insertions(+), 10 deletions(-)
 
---- a/drivers/interconnect/qcom/sc7180.c
-+++ b/drivers/interconnect/qcom/sc7180.c
-@@ -47,7 +47,6 @@ DEFINE_QNODE(qnm_mnoc_sf, SC7180_MASTER_
- DEFINE_QNODE(qnm_snoc_gc, SC7180_MASTER_SNOC_GC_MEM_NOC, 1, 8, SC7180_SLAVE_LLCC);
- DEFINE_QNODE(qnm_snoc_sf, SC7180_MASTER_SNOC_SF_MEM_NOC, 1, 16, SC7180_SLAVE_LLCC);
- DEFINE_QNODE(qxm_gpu, SC7180_MASTER_GFX3D, 2, 32, SC7180_SLAVE_GEM_NOC_SNOC, SC7180_SLAVE_LLCC);
--DEFINE_QNODE(ipa_core_master, SC7180_MASTER_IPA_CORE, 1, 8, SC7180_SLAVE_IPA_CORE);
- DEFINE_QNODE(llcc_mc, SC7180_MASTER_LLCC, 2, 4, SC7180_SLAVE_EBI1);
- DEFINE_QNODE(qhm_mnoc_cfg, SC7180_MASTER_CNOC_MNOC_CFG, 1, 4, SC7180_SLAVE_SERVICE_MNOC);
- DEFINE_QNODE(qxm_camnoc_hf0, SC7180_MASTER_CAMNOC_HF0, 2, 32, SC7180_SLAVE_MNOC_HF_MEM_NOC);
-@@ -129,7 +128,6 @@ DEFINE_QNODE(qhs_mdsp_ms_mpu_cfg, SC7180
- DEFINE_QNODE(qns_gem_noc_snoc, SC7180_SLAVE_GEM_NOC_SNOC, 1, 8, SC7180_MASTER_GEM_NOC_SNOC);
- DEFINE_QNODE(qns_llcc, SC7180_SLAVE_LLCC, 1, 16, SC7180_MASTER_LLCC);
- DEFINE_QNODE(srvc_gemnoc, SC7180_SLAVE_SERVICE_GEM_NOC, 1, 4);
--DEFINE_QNODE(ipa_core_slave, SC7180_SLAVE_IPA_CORE, 1, 8);
- DEFINE_QNODE(ebi, SC7180_SLAVE_EBI1, 2, 4);
- DEFINE_QNODE(qns_mem_noc_hf, SC7180_SLAVE_MNOC_HF_MEM_NOC, 1, 32, SC7180_MASTER_MNOC_HF_MEM_NOC);
- DEFINE_QNODE(qns_mem_noc_sf, SC7180_SLAVE_MNOC_SF_MEM_NOC, 1, 32, SC7180_MASTER_MNOC_SF_MEM_NOC);
-@@ -160,7 +158,6 @@ DEFINE_QBCM(bcm_mc0, "MC0", true, &ebi);
- DEFINE_QBCM(bcm_sh0, "SH0", true, &qns_llcc);
- DEFINE_QBCM(bcm_mm0, "MM0", false, &qns_mem_noc_hf);
- DEFINE_QBCM(bcm_ce0, "CE0", false, &qxm_crypto);
--DEFINE_QBCM(bcm_ip0, "IP0", false, &ipa_core_slave);
- DEFINE_QBCM(bcm_cn0, "CN0", true, &qnm_snoc, &xm_qdss_dap, &qhs_a1_noc_cfg, &qhs_a2_noc_cfg, &qhs_ahb2phy0, &qhs_aop, &qhs_aoss, &qhs_boot_rom, &qhs_camera_cfg, &qhs_camera_nrt_throttle_cfg, &qhs_camera_rt_throttle_cfg, &qhs_clk_ctl, &qhs_cpr_cx, &qhs_cpr_mx, &qhs_crypto0_cfg, &qhs_dcc_cfg, &qhs_ddrss_cfg, &qhs_display_cfg, &qhs_display_rt_throttle_cfg, &qhs_display_throttle_cfg, &qhs_glm, &qhs_gpuss_cfg, &qhs_imem_cfg, &qhs_ipa, &qhs_mnoc_cfg, &qhs_mss_cfg, &qhs_npu_cfg, &qhs_npu_dma_throttle_cfg, &qhs_npu_dsp_throttle_cfg, &qhs_pimem_cfg, &qhs_prng, &qhs_qdss_cfg, &qhs_qm_cfg, &qhs_qm_mpu_cfg, &qhs_qup0, &qhs_qup1, &qhs_security, &qhs_snoc_cfg, &qhs_tcsr, &qhs_tlmm_1, &qhs_tlmm_2, &qhs_tlmm_3, &qhs_ufs_mem_cfg, &qhs_usb3, &qhs_venus_cfg, &qhs_venus_throttle_cfg, &qhs_vsense_ctrl_cfg, &srvc_cnoc);
- DEFINE_QBCM(bcm_mm1, "MM1", false, &qxm_camnoc_hf0_uncomp, &qxm_camnoc_hf1_uncomp, &qxm_camnoc_sf_uncomp, &qhm_mnoc_cfg, &qxm_mdp0, &qxm_rot, &qxm_venus0, &qxm_venus_arm9);
- DEFINE_QBCM(bcm_sh2, "SH2", false, &acm_sys_tcu);
-@@ -372,22 +369,6 @@ static struct qcom_icc_desc sc7180_gem_n
- 	.num_bcms = ARRAY_SIZE(gem_noc_bcms),
- };
+--- a/fs/fs-writeback.c
++++ b/fs/fs-writeback.c
+@@ -120,6 +120,7 @@ static bool inode_io_list_move_locked(st
+ 				      struct list_head *head)
+ {
+ 	assert_spin_locked(&wb->list_lock);
++	assert_spin_locked(&inode->i_lock);
  
--static struct qcom_icc_bcm *ipa_virt_bcms[] = {
--	&bcm_ip0,
--};
+ 	list_move(&inode->i_io_list, head);
+ 
+@@ -1400,9 +1401,9 @@ static int move_expired_inodes(struct li
+ 		inode = wb_inode(delaying_queue->prev);
+ 		if (inode_dirtied_after(inode, dirtied_before))
+ 			break;
++		spin_lock(&inode->i_lock);
+ 		list_move(&inode->i_io_list, &tmp);
+ 		moved++;
+-		spin_lock(&inode->i_lock);
+ 		inode->i_state |= I_SYNC_QUEUED;
+ 		spin_unlock(&inode->i_lock);
+ 		if (sb_is_blkdev_sb(inode->i_sb))
+@@ -1418,7 +1419,12 @@ static int move_expired_inodes(struct li
+ 		goto out;
+ 	}
+ 
+-	/* Move inodes from one superblock together */
++	/*
++	 * Although inode's i_io_list is moved from 'tmp' to 'dispatch_queue',
++	 * we don't take inode->i_lock here because it is just a pointless overhead.
++	 * Inode is already marked as I_SYNC_QUEUED so writeback list handling is
++	 * fully under our control.
++	 */
+ 	while (!list_empty(&tmp)) {
+ 		sb = wb_inode(tmp.prev)->i_sb;
+ 		list_for_each_prev_safe(pos, node, &tmp) {
+@@ -1853,8 +1859,8 @@ static long writeback_sb_inodes(struct s
+ 			 * We'll have another go at writing back this inode
+ 			 * when we completed a full scan of b_io.
+ 			 */
+-			spin_unlock(&inode->i_lock);
+ 			requeue_io(inode, wb);
++			spin_unlock(&inode->i_lock);
+ 			trace_writeback_sb_inodes_requeue(inode);
+ 			continue;
+ 		}
+@@ -2389,6 +2395,7 @@ void __mark_inode_dirty(struct inode *in
+ {
+ 	struct super_block *sb = inode->i_sb;
+ 	int dirtytime = 0;
++	struct bdi_writeback *wb = NULL;
+ 
+ 	trace_writeback_mark_inode_dirty(inode, flags);
+ 
+@@ -2441,13 +2448,24 @@ void __mark_inode_dirty(struct inode *in
+ 		inode->i_state |= flags;
+ 
+ 		/*
++		 * Grab inode's wb early because it requires dropping i_lock and we
++		 * need to make sure following checks happen atomically with dirty
++		 * list handling so that we don't move inodes under flush worker's
++		 * hands.
++		 */
++		if (!was_dirty) {
++			wb = locked_inode_to_wb_and_lock_list(inode);
++			spin_lock(&inode->i_lock);
++		}
++
++		/*
+ 		 * If the inode is queued for writeback by flush worker, just
+ 		 * update its dirty state. Once the flush worker is done with
+ 		 * the inode it will place it on the appropriate superblock
+ 		 * list, based upon its state.
+ 		 */
+ 		if (inode->i_state & I_SYNC_QUEUED)
+-			goto out_unlock_inode;
++			goto out_unlock;
+ 
+ 		/*
+ 		 * Only add valid (hashed) inodes to the superblock's
+@@ -2455,22 +2473,19 @@ void __mark_inode_dirty(struct inode *in
+ 		 */
+ 		if (!S_ISBLK(inode->i_mode)) {
+ 			if (inode_unhashed(inode))
+-				goto out_unlock_inode;
++				goto out_unlock;
+ 		}
+ 		if (inode->i_state & I_FREEING)
+-			goto out_unlock_inode;
++			goto out_unlock;
+ 
+ 		/*
+ 		 * If the inode was already on b_dirty/b_io/b_more_io, don't
+ 		 * reposition it (that would break b_dirty time-ordering).
+ 		 */
+ 		if (!was_dirty) {
+-			struct bdi_writeback *wb;
+ 			struct list_head *dirty_list;
+ 			bool wakeup_bdi = false;
+ 
+-			wb = locked_inode_to_wb_and_lock_list(inode);
 -
--static struct qcom_icc_node *ipa_virt_nodes[] = {
--	[MASTER_IPA_CORE] = &ipa_core_master,
--	[SLAVE_IPA_CORE] = &ipa_core_slave,
--};
--
--static struct qcom_icc_desc sc7180_ipa_virt = {
--	.nodes = ipa_virt_nodes,
--	.num_nodes = ARRAY_SIZE(ipa_virt_nodes),
--	.bcms = ipa_virt_bcms,
--	.num_bcms = ARRAY_SIZE(ipa_virt_bcms),
--};
--
- static struct qcom_icc_bcm *mc_virt_bcms[] = {
- 	&bcm_acv,
- 	&bcm_mc0,
-@@ -611,8 +592,6 @@ static const struct of_device_id qnoc_of
- 	  .data = &sc7180_dc_noc},
- 	{ .compatible = "qcom,sc7180-gem-noc",
- 	  .data = &sc7180_gem_noc},
--	{ .compatible = "qcom,sc7180-ipa-virt",
--	  .data = &sc7180_ipa_virt},
- 	{ .compatible = "qcom,sc7180-mc-virt",
- 	  .data = &sc7180_mc_virt},
- 	{ .compatible = "qcom,sc7180-mmss-noc",
+ 			inode->dirtied_when = jiffies;
+ 			if (dirtytime)
+ 				inode->dirtied_time_when = jiffies;
+@@ -2484,6 +2499,7 @@ void __mark_inode_dirty(struct inode *in
+ 							       dirty_list);
+ 
+ 			spin_unlock(&wb->list_lock);
++			spin_unlock(&inode->i_lock);
+ 			trace_writeback_dirty_inode_enqueue(inode);
+ 
+ 			/*
+@@ -2498,6 +2514,9 @@ void __mark_inode_dirty(struct inode *in
+ 			return;
+ 		}
+ 	}
++out_unlock:
++	if (wb)
++		spin_unlock(&wb->list_lock);
+ out_unlock_inode:
+ 	spin_unlock(&inode->i_lock);
+ }
+--- a/fs/inode.c
++++ b/fs/inode.c
+@@ -27,7 +27,7 @@
+  * Inode locking rules:
+  *
+  * inode->i_lock protects:
+- *   inode->i_state, inode->i_hash, __iget()
++ *   inode->i_state, inode->i_hash, __iget(), inode->i_io_list
+  * Inode LRU list locks protect:
+  *   inode->i_sb->s_inode_lru, inode->i_lru
+  * inode->i_sb->s_inode_list_lock protects:
 
 

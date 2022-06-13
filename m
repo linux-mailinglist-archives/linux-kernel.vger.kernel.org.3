@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A49E54895F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99872548E8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:20:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243216AbiFMKWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:22:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S1379236AbiFMNny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242947AbiFMKUm (ORCPT
+        with ESMTP id S1379150AbiFMNj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:20:42 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C0E210;
-        Mon, 13 Jun 2022 03:17:20 -0700 (PDT)
+        Mon, 13 Jun 2022 09:39:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE22D2253A;
+        Mon, 13 Jun 2022 04:29:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C1A84CE1166;
-        Mon, 13 Jun 2022 10:17:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3125C34114;
-        Mon, 13 Jun 2022 10:17:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 66A18B80D3A;
+        Mon, 13 Jun 2022 11:28:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D28A7C34114;
+        Mon, 13 Jun 2022 11:28:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115437;
-        bh=SOaqGZShnNaHr8H3G8tENc/Lx6XCp24eDgVvTmgJi/g=;
+        s=korg; t=1655119738;
+        bh=XAepP+VO+bU1kBLylU6LOD5IZD0Sfi2Ra4R0TzkzD6I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=phv3RFYhBAoUyxc4QZfDhlOAQWUhyFhXrsluu1mES1I+OBrDnUhhQGzq79Rj+ibLD
-         TbmiavcEaTypIX3ZaSzf/VOFnyak7ARWErB5AM1L3BXYSBeodmt5aOXq1bQMOa6w6T
-         teO/JkK/8zNtupMQhC6Oh7OHMG7on/nv3DDz/CIA=
+        b=BT6D+Qs7DHt2DzYoSCl4V30I03LfNSGVOmACyDZcXPyFCbCSsI9ccZWIgOxLEFLWt
+         BMd9Sl6MQ5F8m3j5QcEgaIp5aJJzyg6SLt5h5Re/4SJxc9+fGJmWJRYG5ID6rFGuxj
+         mP9VY4mk1oQJHabtJrYdzGDN3RcNh1dXJjKhK6Aw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 073/167] video: fbdev: clcdfb: Fix refcount leak in clcdfb_of_vram_setup
+        stable@vger.kernel.org, Si-Wei Liu <si-wei.liu@oracle.com>,
+        Jason Wang <jasowang@redhat.com>, Eli Cohen <elic@nvidia.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 122/339] vdpa: Fix error logic in vdpa_nl_cmd_dev_get_doit
 Date:   Mon, 13 Jun 2022 12:09:07 +0200
-Message-Id: <20220613094858.000197973@linuxfoundation.org>
+Message-Id: <20220613094930.208721378@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +56,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Eli Cohen <elic@nvidia.com>
 
-[ Upstream commit b23789a59fa6f00e98a319291819f91fbba0deb8 ]
+[ Upstream commit 7a6691f1f89784f775fa0c54be57533445726068 ]
 
-of_parse_phandle() returns a node pointer with refcount incremented, we should
-use of_node_put() on it when not need anymore.  Add missing of_node_put() to
-avoid refcount leak.
+In vdpa_nl_cmd_dev_get_doit(), if the call to genlmsg_reply() fails we
+must not call nlmsg_free() since this is done inside genlmsg_reply().
 
-Fixes: d10715be03bd ("video: ARM CLCD: Add DT support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fix it.
+
+Fixes: bc0d90ee021f ("vdpa: Enable user to query vdpa device info")
+Reviewed-by: Si-Wei Liu <si-wei.liu@oracle.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Eli Cohen <elic@nvidia.com>
+Message-Id: <20220518133804.1075129-2-elic@nvidia.com>
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/amba-clcd.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/vdpa/vdpa.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/video/fbdev/amba-clcd.c b/drivers/video/fbdev/amba-clcd.c
-index 89880b70cc28..ca3707e59633 100644
---- a/drivers/video/fbdev/amba-clcd.c
-+++ b/drivers/video/fbdev/amba-clcd.c
-@@ -849,12 +849,15 @@ static int clcdfb_of_vram_setup(struct clcd_fb *fb)
- 		return -ENODEV;
- 
- 	fb->fb.screen_base = of_iomap(memory, 0);
--	if (!fb->fb.screen_base)
-+	if (!fb->fb.screen_base) {
-+		of_node_put(memory);
- 		return -ENOMEM;
-+	}
- 
- 	fb->fb.fix.smem_start = of_translate_address(memory,
- 			of_get_address(memory, 0, &size, NULL));
- 	fb->fb.fix.smem_len = size;
-+	of_node_put(memory);
- 
- 	return 0;
+diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
+index 2b75c00b1005..fac89a0d8178 100644
+--- a/drivers/vdpa/vdpa.c
++++ b/drivers/vdpa/vdpa.c
+@@ -756,14 +756,19 @@ static int vdpa_nl_cmd_dev_get_doit(struct sk_buff *skb, struct genl_info *info)
+ 		goto mdev_err;
+ 	}
+ 	err = vdpa_dev_fill(vdev, msg, info->snd_portid, info->snd_seq, 0, info->extack);
+-	if (!err)
+-		err = genlmsg_reply(msg, info);
++	if (err)
++		goto mdev_err;
++
++	err = genlmsg_reply(msg, info);
++	put_device(dev);
++	mutex_unlock(&vdpa_dev_mutex);
++	return err;
++
+ mdev_err:
+ 	put_device(dev);
+ err:
+ 	mutex_unlock(&vdpa_dev_mutex);
+-	if (err)
+-		nlmsg_free(msg);
++	nlmsg_free(msg);
+ 	return err;
  }
+ 
 -- 
 2.35.1
 

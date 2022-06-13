@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6B72548368
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17B45483AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240743AbiFMJWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
+        id S240734AbiFMJWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240718AbiFMJWh (ORCPT
+        with ESMTP id S232021AbiFMJWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Jun 2022 05:22:37 -0400
 Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC1CD13E16
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D9013D67
         for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:22:33 -0700 (PDT)
 Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 25D9Kgx7000823;
-        Mon, 13 Jun 2022 18:20:42 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 25D9Kgx7000823
+        by conuserg-11.nifty.com with ESMTP id 25D9Kgx8000823;
+        Mon, 13 Jun 2022 18:20:44 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 25D9Kgx8000823
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1655112043;
-        bh=sUeQiGOXKyxAl0UcjFY0Rce/KrFiD5fobjE1eCXei3Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tg5xx0WFjhtsWOYFCUHrzxlt1EIpxO7a0yE3L3du7kUgVp1E6TLXPi6gpOO04yr2e
-         D7SWOpfowWBJbLp8NGBXeol+tTlojiNCRSaqVW0XzexYzV8LBN19Hu50s+wf82sz6t
-         DGTw6LTVPBmGRZ7SLoQaN3EehFvjTU2fu7QS1L1diREfr7VD9gT9s/1wFAE7wcZ44a
-         rbxJGz2RA2pn8neAKkszhzUo10+z27U6iRV+E9RB1AgKaTY2WA1N3nmS6wyL5scb1n
-         ph9G/7oG8TJZyC1DTUI9mUtu1GVO9UY18PryP5+LxfwP2Lp/vp0Jc4B5vb3loDBmJc
-         FmI3ACPNrSOLg==
+        s=dec2015msa; t=1655112044;
+        bh=geZktAm+s7Yy19cRfK3Fa5IfT7B/Uq8q4gOcEHOo8Ys=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=RNrbi+i2RZvCHfXkLID7CANqJ0V+E5DyR04ZodAvDTdqBbf0l/dHDVkK/8QnbzdAL
+         iv0+AcaU93RhU/Ud/jYNKdy/5H7tTTAArZk7ib7f0VuahuthxsfH/DEUtAQp8UtRMG
+         t+obGikq+j/sSQLDU1ce9chr415/9mvGGGwizVfIAH0cav2l6pI1H6ZSRxDcyIHoc/
+         SGnyXci+kGWtHOYU9X/1paPVQnE99/8JGJ/cmXuLBJOsjG2mrHlMRvPI1RMqXGYThs
+         eTS84bqPucHC+DviBfzXirCw6hsRffa7c5gkkWSoL2AMbfk/89LKCC1QYb8uBAKeZL
+         b4z5JcK6c4Hpw==
 X-Nifty-SrcIP: [133.32.177.133]
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
@@ -42,10 +42,12 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
         Keir Fraser <keirf@google.com>, Will Deacon <will@kernel.org>,
         Zenghui Yu <yuzenghui@huawei.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] KVM: arm64: nvhe: rename confusing obj-y
-Date:   Mon, 13 Jun 2022 18:20:25 +0900
-Message-Id: <20220613092026.1705630-1-masahiroy@kernel.org>
+Subject: [PATCH 2/2] KVM: arm64: nvhe: add intermediates to 'targets' instead of extra-y
+Date:   Mon, 13 Jun 2022 18:20:26 +0900
+Message-Id: <20220613092026.1705630-2-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220613092026.1705630-1-masahiroy@kernel.org>
+References: <20220613092026.1705630-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -57,54 +59,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This Makefile appends several objects to obj-y from line 15, but none
-of them is linked to vmlinux in an ordinary way.
-
-obj-y is overwritten at line 30:
-
-  obj-y := kvm_nvhe.o
-
-So, kvm_nvhe.o is the only object directly linked to vmlinux.
-
-Replace the abused obj-y with hyp-obj-y.
+These are generated on demand. Adding them to 'targets' is enough.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- arch/arm64/kvm/hyp/nvhe/Makefile | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ arch/arm64/kvm/hyp/nvhe/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
-index f9fe4dc21b1f..3c6d3a18171c 100644
+index 3c6d3a18171c..a2b0d043dddf 100644
 --- a/arch/arm64/kvm/hyp/nvhe/Makefile
 +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
-@@ -12,13 +12,13 @@ HOST_EXTRACFLAGS += -I$(objtree)/include
- lib-objs := clear_page.o copy_page.o memcpy.o memset.o
- lib-objs := $(addprefix ../../../lib/, $(lib-objs))
+@@ -28,7 +28,7 @@ hyp-obj-y += $(lib-objs)
  
--obj-y := timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o hyp-init.o host.o \
-+hyp-obj-y := timer-sr.o sysreg-sr.o debug-sr.o switch.o tlb.o hyp-init.o host.o \
- 	 hyp-main.o hyp-smp.o psci-relay.o early_alloc.o page_alloc.o \
- 	 cache.o setup.o mm.o mem_protect.o sys_regs.o pkvm.o
--obj-y += ../vgic-v3-sr.o ../aarch32.o ../vgic-v2-cpuif-proxy.o ../entry.o \
-+hyp-obj-y += ../vgic-v3-sr.o ../aarch32.o ../vgic-v2-cpuif-proxy.o ../entry.o \
- 	 ../fpsimd.o ../hyp-entry.o ../exception.o ../pgtable.o
--obj-$(CONFIG_DEBUG_LIST) += list_debug.o
--obj-y += $(lib-objs)
-+hyp-obj-$(CONFIG_DEBUG_LIST) += list_debug.o
-+hyp-obj-y += $(lib-objs)
- 
- ##
- ## Build rules for compiling nVHE hyp code
-@@ -26,7 +26,7 @@ obj-y += $(lib-objs)
- ## file containing all nVHE hyp code and data.
- ##
- 
--hyp-obj := $(patsubst %.o,%.nvhe.o,$(obj-y))
-+hyp-obj := $(patsubst %.o,%.nvhe.o,$(hyp-obj-y))
+ hyp-obj := $(patsubst %.o,%.nvhe.o,$(hyp-obj-y))
  obj-y := kvm_nvhe.o
- extra-y := $(hyp-obj) kvm_nvhe.tmp.o kvm_nvhe.rel.o hyp.lds hyp-reloc.S hyp-reloc.o
+-extra-y := $(hyp-obj) kvm_nvhe.tmp.o kvm_nvhe.rel.o hyp.lds hyp-reloc.S hyp-reloc.o
++targets += $(hyp-obj) kvm_nvhe.tmp.o kvm_nvhe.rel.o hyp.lds hyp-reloc.S hyp-reloc.o
  
+ # 1) Compile all source files to `.nvhe.o` object files. The file extension
+ #    avoids file name clashes for files shared with VHE.
 -- 
 2.32.0
 

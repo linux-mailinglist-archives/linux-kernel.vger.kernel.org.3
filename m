@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A386549221
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF993549590
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245613AbiFMKpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:45:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
+        id S1382102AbiFMOMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237635AbiFMKnT (ORCPT
+        with ESMTP id S1382027AbiFMOFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:43:19 -0400
+        Mon, 13 Jun 2022 10:05:04 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EB92AC6A;
-        Mon, 13 Jun 2022 03:24:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D3092D24;
+        Mon, 13 Jun 2022 04:40:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2454860F03;
-        Mon, 13 Jun 2022 10:24:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36522C34114;
-        Mon, 13 Jun 2022 10:24:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B997F612E9;
+        Mon, 13 Jun 2022 11:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDCB8C341C0;
+        Mon, 13 Jun 2022 11:40:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115858;
-        bh=ae6omjMIf6MoErsJEh4Uefr1x4tAYvABToyamDT53fg=;
+        s=korg; t=1655120410;
+        bh=ZbH9pa4GVZl8chzqpxZ9ElpY38vkVGcomBwO80YJbxU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vh9rkFfujfY1dkbfMo6oTX07dQhVqZlb2e8QHtwzVsJxEAATsqOkBUVRgoNvZPbF+
-         vVSrt6zc3m30+xzsVA+GdE5rvOwWZB7AjmrNVjQqpahu1hyByHnPesG8s//2Qk7U4n
-         aVd/WgV+bo+cDIvf1BIlzN+cCR5x9WQEIDNFW+vk=
+        b=d/CL7FiNJd39RYhzf5mJHIuHJF0AfjJ2ENSi7kkNQtp3gxhRg/E8iSLT9V66jdAX7
+         SaYuOD6JBp2yRGFk3FxtpRx2BHW4X/RYcTO+lsyQ2hCr5FOoYhO/Xu0bkTAID1+c10
+         3LisdtDf8hkRninsHD8exdtAUM3Pta3R3gJwuuaU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <quic_kvalo@quicinc.com>,
+        stable@vger.kernel.org, SeongJae Park <sj@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 058/218] ath9k_htc: fix potential out of bounds access with invalid rxstatus->rs_keyix
-Date:   Mon, 13 Jun 2022 12:08:36 +0200
-Message-Id: <20220613094921.289060082@linuxfoundation.org>
+Subject: [PATCH 5.17 023/298] scripts/get_abi: Fix wrong script file name in the help message
+Date:   Mon, 13 Jun 2022 12:08:37 +0200
+Message-Id: <20220613094925.632616409@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,45 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: SeongJae Park <sj@kernel.org>
 
-[ Upstream commit 2dc509305cf956381532792cb8dceef2b1504765 ]
+[ Upstream commit 5b5bfecaa333fb6a0cce1bfc4852a622dacfed1d ]
 
-The "rxstatus->rs_keyix" eventually gets passed to test_bit() so we need to
-ensure that it is within the bitmap.
+The help message of 'get_abi.pl' is mistakenly saying it's
+'abi_book.pl'.  This commit fixes the wrong name in the help message.
 
-drivers/net/wireless/ath/ath9k/common.c:46 ath9k_cmn_rx_accept()
-error: passing untrusted data 'rx_stats->rs_keyix' to 'test_bit()'
-
-Fixes: 4ed1a8d4a257 ("ath9k_htc: use ath9k_cmn_rx_accept")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
-Link: https://lore.kernel.org/r/20220409061225.GA5447@kili
+Fixes: bbc249f2b859 ("scripts: add an script to parse the ABI files")
+Signed-off-by: SeongJae Park <sj@kernel.org>
+Link: https://lore.kernel.org/r/20220419121636.290407-1-sj@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath9k/htc_drv_txrx.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ scripts/get_abi.pl | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-index 6782c3d0c333..e62ed7f42281 100644
---- a/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-+++ b/drivers/net/wireless/ath/ath9k/htc_drv_txrx.c
-@@ -1005,6 +1005,14 @@ static bool ath9k_rx_prepare(struct ath9k_htc_priv *priv,
- 		goto rx_next;
- 	}
+diff --git a/scripts/get_abi.pl b/scripts/get_abi.pl
+index 6212f58b69c6..0cf501285204 100755
+--- a/scripts/get_abi.pl
++++ b/scripts/get_abi.pl
+@@ -980,11 +980,11 @@ __END__
  
-+	if (rxstatus->rs_keyix >= ATH_KEYMAX &&
-+	    rxstatus->rs_keyix != ATH9K_RXKEYIX_INVALID) {
-+		ath_dbg(common, ANY,
-+			"Invalid keyix, dropping (keyix: %d)\n",
-+			rxstatus->rs_keyix);
-+		goto rx_next;
-+	}
-+
- 	/* Get the RX status information */
+ =head1 NAME
  
- 	memset(rx_status, 0, sizeof(struct ieee80211_rx_status));
+-abi_book.pl - parse the Linux ABI files and produce a ReST book.
++get_abi.pl - parse the Linux ABI files and produce a ReST book.
+ 
+ =head1 SYNOPSIS
+ 
+-B<abi_book.pl> [--debug <level>] [--enable-lineno] [--man] [--help]
++B<get_abi.pl> [--debug <level>] [--enable-lineno] [--man] [--help]
+ 	       [--(no-)rst-source] [--dir=<dir>] [--show-hints]
+ 	       [--search-string <regex>]
+ 	       <COMAND> [<ARGUMENT>]
 -- 
 2.35.1
 

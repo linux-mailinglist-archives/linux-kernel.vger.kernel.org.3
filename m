@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB814548913
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9D354989F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242699AbiFMKVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45652 "EHLO
+        id S1382583AbiFMOSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243123AbiFMKUt (ORCPT
+        with ESMTP id S1381387AbiFMOLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:20:49 -0400
+        Mon, 13 Jun 2022 10:11:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08CF1FA50;
-        Mon, 13 Jun 2022 03:17:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B1FD996A7;
+        Mon, 13 Jun 2022 04:42:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F72660AEE;
-        Mon, 13 Jun 2022 10:17:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51169C3411F;
-        Mon, 13 Jun 2022 10:17:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5707A60EAE;
+        Mon, 13 Jun 2022 11:41:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FBACC34114;
+        Mon, 13 Jun 2022 11:41:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115453;
-        bh=/dd+gH+h32kkhJDh0hPaL67l4m6Mqri3+Z8vaRFQAps=;
+        s=korg; t=1655120512;
+        bh=uJ9QvgGDukh7QF8+CD8vD4uIYQ5lNJe9QAK7iyDkAzY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NkZx2QioNfaZIdisZGZ9Ds46GDg0Ljkic30xL9jlZeP4JpYch50cqdtolCR6SCYTR
-         yNaJy5xzB2tCvmUUjiqt24iBxn6q7JYrYF+KPRC8x5IDeQsYxWcpZRPDJwAM7WJUhd
-         funbfWzefVmmjOubd1oOyQ0e/rzU/U4ea63V2U8o=
+        b=gZJrfZlQoAvIEUyVvcZv3iiJx9/JqIC0otWAfr02WPmHiwbua7BfXAx68B44Z/62C
+         45XdnN0Kc2e3IXYOxBYEDpJAfAXTh40ip6y2Uj7FmXRv8JB7bw1S0SQhwqtj9rvh5W
+         aiTUFyp4xw5uO7XGSsP/1eNg02/YIoW4mEBSBrFw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Ye Bin <yebin10@huawei.com>, Jan Kara <jack@suse.cz>,
-        Theodore Tso <tytso@mit.edu>
-Subject: [PATCH 4.9 079/167] ext4: fix bug_on in ext4_writepages
+        stable@vger.kernel.org, Sean Anderson <sean.anderson@seco.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 059/298] serial: uartlite: Fix BRKINT clearing
 Date:   Mon, 13 Jun 2022 12:09:13 +0200
-Message-Id: <20220613094859.433172320@linuxfoundation.org>
+Message-Id: <20220613094926.739968981@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,107 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-commit ef09ed5d37b84d18562b30cf7253e57062d0db05 upstream.
+[ Upstream commit 3f7fed405c118607d4d42255f2572072db728399 ]
 
-we got issue as follows:
-EXT4-fs error (device loop0): ext4_mb_generate_buddy:1141: group 0, block bitmap and bg descriptor inconsistent: 25 vs 31513 free cls
-------------[ cut here ]------------
-kernel BUG at fs/ext4/inode.c:2708!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-CPU: 2 PID: 2147 Comm: rep Not tainted 5.18.0-rc2-next-20220413+ #155
-RIP: 0010:ext4_writepages+0x1977/0x1c10
-RSP: 0018:ffff88811d3e7880 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffff88811c098000
-RDX: 0000000000000000 RSI: ffff88811c098000 RDI: 0000000000000002
-RBP: ffff888128140f50 R08: ffffffffb1ff6387 R09: 0000000000000000
-R10: 0000000000000007 R11: ffffed10250281ea R12: 0000000000000001
-R13: 00000000000000a4 R14: ffff88811d3e7bb8 R15: ffff888128141028
-FS:  00007f443aed9740(0000) GS:ffff8883aef00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020007200 CR3: 000000011c2a4000 CR4: 00000000000006e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- do_writepages+0x130/0x3a0
- filemap_fdatawrite_wbc+0x83/0xa0
- filemap_flush+0xab/0xe0
- ext4_alloc_da_blocks+0x51/0x120
- __ext4_ioctl+0x1534/0x3210
- __x64_sys_ioctl+0x12c/0x170
- do_syscall_64+0x3b/0x90
+BRKINT is within c_iflag rather than c_cflag.
 
-It may happen as follows:
-1. write inline_data inode
-vfs_write
-  new_sync_write
-    ext4_file_write_iter
-      ext4_buffered_write_iter
-        generic_perform_write
-          ext4_da_write_begin
-            ext4_da_write_inline_data_begin -> If inline data size too
-            small will allocate block to write, then mapping will has
-            dirty page
-                ext4_da_convert_inline_data_to_extent ->clear EXT4_STATE_MAY_INLINE_DATA
-2. fallocate
-do_vfs_ioctl
-  ioctl_preallocate
-    vfs_fallocate
-      ext4_fallocate
-        ext4_convert_inline_data
-          ext4_convert_inline_data_nolock
-            ext4_map_blocks -> fail will goto restore data
-            ext4_restore_inline_data
-              ext4_create_inline_data
-              ext4_write_inline_data
-              ext4_set_inode_state -> set inode EXT4_STATE_MAY_INLINE_DATA
-3. writepages
-__ext4_ioctl
-  ext4_alloc_da_blocks
-    filemap_flush
-      filemap_fdatawrite_wbc
-        do_writepages
-          ext4_writepages
-            if (ext4_has_inline_data(inode))
-              BUG_ON(ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
-
-The root cause of this issue is we destory inline data until call
-ext4_writepages under delay allocation mode.  But there maybe already
-convert from inline to extent.  To solve this issue, we call
-filemap_flush first..
-
-Cc: stable@kernel.org
-Signed-off-by: Ye Bin <yebin10@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Link: https://lore.kernel.org/r/20220516122634.1690462-1-yebin10@huawei.com
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Fixes: ea017f5853e9 (tty: serial: uartlite: Prevent changing fixed parameters)
+Reviewed-by: Sean Anderson <sean.anderson@seco.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-2-ilpo.jarvinen@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/inline.c |   12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/tty/serial/uartlite.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/fs/ext4/inline.c
-+++ b/fs/ext4/inline.c
-@@ -1984,6 +1984,18 @@ int ext4_convert_inline_data(struct inod
- 	if (!ext4_has_inline_data(inode)) {
- 		ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
- 		return 0;
-+	} else if (!ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA)) {
-+		/*
-+		 * Inode has inline data but EXT4_STATE_MAY_INLINE_DATA is
-+		 * cleared. This means we are in the middle of moving of
-+		 * inline data to delay allocated block. Just force writeout
-+		 * here to finish conversion.
-+		 */
-+		error = filemap_flush(inode->i_mapping);
-+		if (error)
-+			return error;
-+		if (!ext4_has_inline_data(inode))
-+			return 0;
- 	}
+diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
+index e1fa52d31474..7c788c697f3e 100644
+--- a/drivers/tty/serial/uartlite.c
++++ b/drivers/tty/serial/uartlite.c
+@@ -321,7 +321,8 @@ static void ulite_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	struct uartlite_data *pdata = port->private_data;
  
- 	needed_blocks = ext4_writepage_trans_blocks(inode);
+ 	/* Set termios to what the hardware supports */
+-	termios->c_cflag &= ~(BRKINT | CSTOPB | PARENB | PARODD | CSIZE);
++	termios->c_iflag &= ~BRKINT;
++	termios->c_cflag &= ~(CSTOPB | PARENB | PARODD | CSIZE);
+ 	termios->c_cflag |= pdata->cflags & (PARENB | PARODD | CSIZE);
+ 	tty_termios_encode_baud_rate(termios, pdata->baud, pdata->baud);
+ 
+-- 
+2.35.1
+
 
 

@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AC65493F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3480549219
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356964AbiFMNBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50420 "EHLO
+        id S242264AbiFMKTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358091AbiFMMzD (ORCPT
+        with ESMTP id S242906AbiFMKSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E0D9590;
-        Mon, 13 Jun 2022 04:14:20 -0700 (PDT)
+        Mon, 13 Jun 2022 06:18:53 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFC520F48;
+        Mon, 13 Jun 2022 03:16:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 34A3460B60;
-        Mon, 13 Jun 2022 11:14:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 413C3C3411C;
-        Mon, 13 Jun 2022 11:14:19 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1A9D2CE1173;
+        Mon, 13 Jun 2022 10:16:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06659C34114;
+        Mon, 13 Jun 2022 10:16:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118859;
-        bh=EO27XRrZvZM3OEMGUga+8QfaUgSMH/01Y5OujwF83w4=;
+        s=korg; t=1655115385;
+        bh=F2yAfrnatgMjdwrZbg2V8vHGdPEi+gb8YFtfCAaM1uA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FFSyrkxDcalFghBqTuMMXYK9aDSd1h3srN10vNHezmnsDJaD457lVEKArGE9aPDSS
-         dykTFwlXBRrlR/CWqzG1dEmJIiHo0B8wuMGWpcJKsM44eHJQyLuWn/HPr/HOp+NY5g
-         fz85MbzFVOhT1hLmUbS/KCPDmAjUo/MWI+F6pa4Y=
+        b=WAOfOockpp7QUei5PYAhKzznU503MGkcgL/MLVd4Xx0fQlmggoCMqqrbU6yHvheTJ
+         Bm2d43+nJY5BLDIgKWGqJrZ+7UAv62Yl+YVb401Or0K2P9O/2NWjcBqieMbpU4R2CI
+         lvWARU9zPLrv07Lc9VPEh7VeZqY6MCqgyWQD6PDM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 017/247] pwm: lp3943: Fix duty calculation in case period was clamped
+        stable@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
+        Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 045/167] inotify: show inotify mask flags in proc fdinfo
 Date:   Mon, 13 Jun 2022 12:08:39 +0200
-Message-Id: <20220613094923.451054502@linuxfoundation.org>
+Message-Id: <20220613094851.500091359@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,35 +54,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Amir Goldstein <amir73il@gmail.com>
 
-[ Upstream commit 5e3b07ca5cc78cd4a987e78446849e41288d87cb ]
+[ Upstream commit a32e697cda27679a0327ae2cafdad8c7170f548f ]
 
-The hardware only supports periods <= 1.6 ms and if a bigger period is
-requested it is clamped to 1.6 ms. In this case duty_cycle might be bigger
-than 1.6 ms and then the duty cycle register is written with a value
-bigger than LP3943_MAX_DUTY. So clamp duty_cycle accordingly.
+The inotify mask flags IN_ONESHOT and IN_EXCL_UNLINK are not "internal
+to kernel" and should be exposed in procfs fdinfo so CRIU can restore
+them.
 
-Fixes: af66b3c0934e ("pwm: Add LP3943 PWM driver")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Signed-off-by: Thierry Reding <thierry.reding@gmail.com>
+Fixes: 6933599697c9 ("inotify: hide internal kernel bits from fdinfo")
+Link: https://lore.kernel.org/r/20220422120327.3459282-2-amir73il@gmail.com
+Signed-off-by: Amir Goldstein <amir73il@gmail.com>
+Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pwm/pwm-lp3943.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/notify/fdinfo.c               | 11 ++---------
+ fs/notify/inotify/inotify.h      | 12 ++++++++++++
+ fs/notify/inotify/inotify_user.c |  2 +-
+ 3 files changed, 15 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/pwm/pwm-lp3943.c b/drivers/pwm/pwm-lp3943.c
-index ea17d446a627..2bd04ecb508c 100644
---- a/drivers/pwm/pwm-lp3943.c
-+++ b/drivers/pwm/pwm-lp3943.c
-@@ -125,6 +125,7 @@ static int lp3943_pwm_config(struct pwm_chip *chip, struct pwm_device *pwm,
- 	if (err)
- 		return err;
+diff --git a/fs/notify/fdinfo.c b/fs/notify/fdinfo.c
+index fd98e5100cab..317b7e7eb2e7 100644
+--- a/fs/notify/fdinfo.c
++++ b/fs/notify/fdinfo.c
+@@ -83,16 +83,9 @@ static void inotify_fdinfo(struct seq_file *m, struct fsnotify_mark *mark)
+ 	inode_mark = container_of(mark, struct inotify_inode_mark, fsn_mark);
+ 	inode = igrab(mark->inode);
+ 	if (inode) {
+-		/*
+-		 * IN_ALL_EVENTS represents all of the mask bits
+-		 * that we expose to userspace.  There is at
+-		 * least one bit (FS_EVENT_ON_CHILD) which is
+-		 * used only internally to the kernel.
+-		 */
+-		u32 mask = mark->mask & IN_ALL_EVENTS;
+-		seq_printf(m, "inotify wd:%x ino:%lx sdev:%x mask:%x ignored_mask:%x ",
++		seq_printf(m, "inotify wd:%x ino:%lx sdev:%x mask:%x ignored_mask:0 ",
+ 			   inode_mark->wd, inode->i_ino, inode->i_sb->s_dev,
+-			   mask, mark->ignored_mask);
++			   inotify_mark_user_mask(mark));
+ 		show_mark_fhandle(m, inode);
+ 		seq_putc(m, '\n');
+ 		iput(inode);
+diff --git a/fs/notify/inotify/inotify.h b/fs/notify/inotify/inotify.h
+index ed855ef6f077..b0440287d7dd 100644
+--- a/fs/notify/inotify/inotify.h
++++ b/fs/notify/inotify/inotify.h
+@@ -20,6 +20,18 @@ static inline struct inotify_event_info *INOTIFY_E(struct fsnotify_event *fse)
+ 	return container_of(fse, struct inotify_event_info, fse);
+ }
  
-+	duty_ns = min(duty_ns, period_ns);
- 	val = (u8)(duty_ns * LP3943_MAX_DUTY / period_ns);
++/*
++ * INOTIFY_USER_FLAGS represents all of the mask bits that we expose to
++ * userspace.  There is at least one bit (FS_EVENT_ON_CHILD) which is
++ * used only internally to the kernel.
++ */
++#define INOTIFY_USER_MASK (IN_ALL_EVENTS | IN_ONESHOT | IN_EXCL_UNLINK)
++
++static inline __u32 inotify_mark_user_mask(struct fsnotify_mark *fsn_mark)
++{
++	return fsn_mark->mask & INOTIFY_USER_MASK;
++}
++
+ extern void inotify_ignored_and_remove_idr(struct fsnotify_mark *fsn_mark,
+ 					   struct fsnotify_group *group);
+ extern int inotify_handle_event(struct fsnotify_group *group,
+diff --git a/fs/notify/inotify/inotify_user.c b/fs/notify/inotify/inotify_user.c
+index 69d1ea3d292a..bb60bf1527e4 100644
+--- a/fs/notify/inotify/inotify_user.c
++++ b/fs/notify/inotify/inotify_user.c
+@@ -97,7 +97,7 @@ static inline __u32 inotify_arg_to_mask(u32 arg)
+ 	mask = (FS_IN_IGNORED | FS_EVENT_ON_CHILD | FS_UNMOUNT);
  
- 	return lp3943_write_byte(lp3943, reg_duty, val);
+ 	/* mask off the flags used to open the fd */
+-	mask |= (arg & (IN_ALL_EVENTS | IN_ONESHOT | IN_EXCL_UNLINK));
++	mask |= (arg & INOTIFY_USER_MASK);
+ 
+ 	return mask;
+ }
 -- 
 2.35.1
 

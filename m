@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 006745494BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E41D65496D0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353517AbiFMNHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49904 "EHLO
+        id S1379244AbiFMNwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354154AbiFMMzh (ORCPT
+        with ESMTP id S1379930AbiFMNpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:37 -0400
+        Mon, 13 Jun 2022 09:45:38 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116B3E0F7;
-        Mon, 13 Jun 2022 04:16:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D84111A3E;
+        Mon, 13 Jun 2022 04:32:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C76CEB80D31;
-        Mon, 13 Jun 2022 11:16:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F59CC34114;
-        Mon, 13 Jun 2022 11:16:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0BBEB80E59;
+        Mon, 13 Jun 2022 11:32:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2821DC34114;
+        Mon, 13 Jun 2022 11:32:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118978;
-        bh=X6kkzVYVdB8A2ze+kclGHClxaeC5m6GxAOdQxN8LbtA=;
+        s=korg; t=1655119967;
+        bh=OwEYFRgpUf80fRMHkCntxKPzyDSeeIknykURCdFO160=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BSnJysYhI2p0e1UpV0C7WLFqT1lmD7weRQ4AYqoOmHn0d7nxE+Kyv7Cfc4lRdLK0b
-         6n8r68e+TV8E/tL7QnCpOcVixKawN0uDUaFeXeThzfyZLLdLlRPjM8A+tdYexEdljw
-         19D5uaBKL+V4WvrxHHGtNvQ0Ahd4Rn/VfeZcPzZk=
+        b=Fm1MQDYi3p8lpiaS7p6GSixcZe4cgK14ji+208/RwS4Wc2a1W9zB4OcX4wpDFUKol
+         OLcwl8hgzfySlgbkAwMkZ7/NlCLVKZfwG2zd+eul9dcSk3OVYIwPULHLQ7n7S+tKpK
+         CqFkVcAkkJYfbchJzYr5aW/r3L30lYQtrB5B5Il0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Changcheng Liu <jerrliu@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Ungerer <gerg@linux-m68k.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 096/247] net/mlx5: correct ECE offset in query qp output
+Subject: [PATCH 5.18 173/339] m68knommu: fix undefined reference to `mach_get_rtc_pll
 Date:   Mon, 13 Jun 2022 12:09:58 +0200
-Message-Id: <20220613094925.868599930@linuxfoundation.org>
+Message-Id: <20220613094931.924956611@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +57,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Changcheng Liu <jerrliu@nvidia.com>
+From: Greg Ungerer <gerg@linux-m68k.org>
 
-[ Upstream commit 3fc2a9e89b3508a5cc0c324f26d7b4740ba8c456 ]
+[ Upstream commit 1300eec9e51f23c34c4487d2b06f58ca22e1ad3d ]
 
-ECE field should be after opt_param_mask in query qp output.
+Configuring for a nommu classic m68k target and enabling the generic rtc
+driver (CONFIG_RTC_DRV_GENERIC) will result in the following compile
+error:
 
-Fixes: 6b646a7e4af6 ("net/mlx5: Add ability to read and write ECE options")
-Signed-off-by: Changcheng Liu <jerrliu@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+   m68k-linux-ld: arch/m68k/kernel/time.o: in function `rtc_ioctl':
+   time.c:(.text+0x82): undefined reference to `mach_get_rtc_pll'
+   m68k-linux-ld: time.c:(.text+0xbc): undefined reference to `mach_set_rtc_pll'
+   m68k-linux-ld: time.c:(.text+0xf4): undefined reference to `mach_set_rtc_pll'
+
+There are no definitions of "mach_set_rtc_pll" and "mach_get_rtc_pll" in the
+nommu code paths. Move these definitions and the associated "mach_hwclk",
+so that they are around their use case in time.c. This means they will
+always be defined on the builds that require them, and not on those that
+cannot use them - such as ColdFire (both with and without MMU enabled).
+
+Reported-by: kernel test robot <lkp@intel.com>
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/mlx5/mlx5_ifc.h | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/m68k/kernel/setup_mm.c | 7 -------
+ arch/m68k/kernel/setup_no.c | 1 -
+ arch/m68k/kernel/time.c     | 9 +++++++++
+ 3 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/include/linux/mlx5/mlx5_ifc.h b/include/linux/mlx5/mlx5_ifc.h
-index fdf4589ab4d4..cd9d1c95129e 100644
---- a/include/linux/mlx5/mlx5_ifc.h
-+++ b/include/linux/mlx5/mlx5_ifc.h
-@@ -5028,12 +5028,11 @@ struct mlx5_ifc_query_qp_out_bits {
+diff --git a/arch/m68k/kernel/setup_mm.c b/arch/m68k/kernel/setup_mm.c
+index 8f94feed969c..07317367ead8 100644
+--- a/arch/m68k/kernel/setup_mm.c
++++ b/arch/m68k/kernel/setup_mm.c
+@@ -87,15 +87,8 @@ void (*mach_sched_init) (void) __initdata = NULL;
+ void (*mach_init_IRQ) (void) __initdata = NULL;
+ void (*mach_get_model) (char *model);
+ void (*mach_get_hardware_list) (struct seq_file *m);
+-/* machine dependent timer functions */
+-int (*mach_hwclk) (int, struct rtc_time*);
+-EXPORT_SYMBOL(mach_hwclk);
+ unsigned int (*mach_get_ss)(void);
+-int (*mach_get_rtc_pll)(struct rtc_pll_info *);
+-int (*mach_set_rtc_pll)(struct rtc_pll_info *);
+ EXPORT_SYMBOL(mach_get_ss);
+-EXPORT_SYMBOL(mach_get_rtc_pll);
+-EXPORT_SYMBOL(mach_set_rtc_pll);
+ void (*mach_reset)( void );
+ void (*mach_halt)( void );
+ void (*mach_power_off)( void );
+diff --git a/arch/m68k/kernel/setup_no.c b/arch/m68k/kernel/setup_no.c
+index 5e4104f07a44..19eea73d3c17 100644
+--- a/arch/m68k/kernel/setup_no.c
++++ b/arch/m68k/kernel/setup_no.c
+@@ -50,7 +50,6 @@ char __initdata command_line[COMMAND_LINE_SIZE];
  
- 	u8         syndrome[0x20];
+ /* machine dependent timer functions */
+ void (*mach_sched_init)(void) __initdata = NULL;
+-int (*mach_hwclk) (int, struct rtc_time*);
  
--	u8         reserved_at_40[0x20];
--	u8         ece[0x20];
-+	u8         reserved_at_40[0x40];
+ /* machine dependent reboot functions */
+ void (*mach_reset)(void);
+diff --git a/arch/m68k/kernel/time.c b/arch/m68k/kernel/time.c
+index 340ffeea0a9d..a97600b2af50 100644
+--- a/arch/m68k/kernel/time.c
++++ b/arch/m68k/kernel/time.c
+@@ -63,6 +63,15 @@ void timer_heartbeat(void)
+ #endif /* CONFIG_HEARTBEAT */
  
- 	u8         opt_param_mask[0x20];
- 
--	u8         reserved_at_a0[0x20];
-+	u8         ece[0x20];
- 
- 	struct mlx5_ifc_qpc_bits qpc;
- 
+ #ifdef CONFIG_M68KCLASSIC
++/* machine dependent timer functions */
++int (*mach_hwclk) (int, struct rtc_time*);
++EXPORT_SYMBOL(mach_hwclk);
++
++int (*mach_get_rtc_pll)(struct rtc_pll_info *);
++int (*mach_set_rtc_pll)(struct rtc_pll_info *);
++EXPORT_SYMBOL(mach_get_rtc_pll);
++EXPORT_SYMBOL(mach_set_rtc_pll);
++
+ #if !IS_BUILTIN(CONFIG_RTC_DRV_GENERIC)
+ void read_persistent_clock64(struct timespec64 *ts)
+ {
 -- 
 2.35.1
 

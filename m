@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFA745493C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8155548870
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379888AbiFMNp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36080 "EHLO
+        id S1383327AbiFMOWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379223AbiFMNkE (ORCPT
+        with ESMTP id S1383511AbiFMOQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:40:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A598CE25;
-        Mon, 13 Jun 2022 04:30:37 -0700 (PDT)
+        Mon, 13 Jun 2022 10:16:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CF09E9FC;
+        Mon, 13 Jun 2022 04:43:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 375F2B80E59;
-        Mon, 13 Jun 2022 11:30:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91D5DC34114;
-        Mon, 13 Jun 2022 11:30:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 62F61613F9;
+        Mon, 13 Jun 2022 11:43:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74061C34114;
+        Mon, 13 Jun 2022 11:43:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119835;
-        bh=l2YBfg34tk5X/O+rDM5zgYJ6lyiB2LpFE7Bnqfy9WVc=;
+        s=korg; t=1655120598;
+        bh=58t3a21QM1+D/RKpGEpYCld2O32dL7KkNcO/l5AN8Pg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PxO1D5QY3JDkCifPSrEPzU0EBf/PiLymllI6iHL2r7gMMQ70zoKVV6Dj8OwY6OTdM
-         BsRLDZL2HusHBKm8igpNRymIB2ixyl6eXrwGjS1A17P1Xd2v+rVrRNADMC/hUjuVsc
-         l+x+Lmx/3ED8LabHfZoGI/5Ut2+dDe1aaIkXwZuI=
+        b=tAguwrarXcy+bsN70RohmFy4pcTFiwfStzitTcMlU2ijVd2IU4P/CwsZkA1FgFHf8
+         RkQYS4s04G2ZW/5oDcUxcFk7FArXcposbdMhp11EsLC0gc528eujcldXPdl99+AUzu
+         SWSSbfBhhn7QUWpvNUdJ9SBL//UyGp6qaZnCqSRs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Fabien Parent <fparent@baylibre.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 136/339] regulator: mt6315-regulator: fix invalid allowed mode
+Subject: [PATCH 5.17 067/298] firmware: dmi-sysfs: Fix memory leak in dmi_sysfs_register_handle
 Date:   Mon, 13 Jun 2022 12:09:21 +0200
-Message-Id: <20220613094930.806771463@linuxfoundation.org>
+Message-Id: <20220613094926.978743451@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Fabien Parent <fparent@baylibre.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 28cbc2d4c54c09a427b18a1604740efb6b2cc2d6 ]
+[ Upstream commit 660ba678f9998aca6db74f2dd912fa5124f0fa31 ]
 
-In the binding example, the regulator mode 4 is shown as a valid mode,
-but the driver actually only support mode 0 to 2:
+kobject_init_and_add() takes reference even when it fails.
+According to the doc of kobject_init_and_add()
 
-This generates an error in dmesg when copy/pasting the binding example:
-[    0.306080] vbuck1: invalid regulator-allowed-modes element 4
-[    0.307290] vbuck2: invalid regulator-allowed-modes element 4
+   If this function returns an error, kobject_put() must be called to
+   properly clean up the memory associated with the object.
 
-This commit fixes this error by removing the invalid mode from the
-examples.
+Fix this issue by calling kobject_put().
 
-Fixes: 977fb5b58469 ("regulator: document binding for MT6315 regulator")
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
-Link: https://lore.kernel.org/r/20220529154613.337559-1-fparent@baylibre.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 948af1f0bbc8 ("firmware: Basic dmi-sysfs support")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220511071421.9769-1-linmq006@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../devicetree/bindings/regulator/mt6315-regulator.yaml       | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/firmware/dmi-sysfs.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml b/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
-index 5d2d989de893..37402c370fbb 100644
---- a/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/mt6315-regulator.yaml
-@@ -55,7 +55,7 @@ examples:
-           regulator-min-microvolt = <300000>;
-           regulator-max-microvolt = <1193750>;
-           regulator-enable-ramp-delay = <256>;
--          regulator-allowed-modes = <0 1 2 4>;
-+          regulator-allowed-modes = <0 1 2>;
-         };
+diff --git a/drivers/firmware/dmi-sysfs.c b/drivers/firmware/dmi-sysfs.c
+index 3a353776bd34..66727ad3361b 100644
+--- a/drivers/firmware/dmi-sysfs.c
++++ b/drivers/firmware/dmi-sysfs.c
+@@ -604,7 +604,7 @@ static void __init dmi_sysfs_register_handle(const struct dmi_header *dh,
+ 				    "%d-%d", dh->type, entry->instance);
  
-         vbuck3 {
-@@ -63,7 +63,7 @@ examples:
-           regulator-min-microvolt = <300000>;
-           regulator-max-microvolt = <1193750>;
-           regulator-enable-ramp-delay = <256>;
--          regulator-allowed-modes = <0 1 2 4>;
-+          regulator-allowed-modes = <0 1 2>;
-         };
-       };
-     };
+ 	if (*ret) {
+-		kfree(entry);
++		kobject_put(&entry->kobj);
+ 		return;
+ 	}
+ 
 -- 
 2.35.1
 

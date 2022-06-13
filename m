@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4147548D54
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D31F6549128
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378237AbiFMNk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35942 "EHLO
+        id S238391AbiFML6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378508AbiFMNi5 (ORCPT
+        with ESMTP id S1356601AbiFMLup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:38:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31FE2762B1;
-        Mon, 13 Jun 2022 04:27:41 -0700 (PDT)
+        Mon, 13 Jun 2022 07:50:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4A72EA18;
+        Mon, 13 Jun 2022 03:54:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0C5BB80E93;
-        Mon, 13 Jun 2022 11:27:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 011ADC34114;
-        Mon, 13 Jun 2022 11:27:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0206AB80D3F;
+        Mon, 13 Jun 2022 10:54:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ACD3C34114;
+        Mon, 13 Jun 2022 10:54:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119658;
-        bh=H65ToNfa6uoL6K3/CKfn57Ny3hBH3z4vRMtAoOAG/hY=;
+        s=korg; t=1655117664;
+        bh=fhjPAmRWyY02XT6ng4KNawILXabYHwz5rSxvO18rIYk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oZu1pnGHb37WTkx84XptBAu81EevNnHvM/iBANCm9ah7viOhKp5E3fWQlpIkRN6LQ
-         vqvnZ2YnCMi89q/hnbgPFAZkUxOW9wLH6vKIfSCxi5RnMp33baH7VJWl4me4ni2kuI
-         MRonUgSyEEw8YBjyiCmpFcxuibzrRGQ+MhvbD8g0=
+        b=cRN0V5bm7RyggXqWSn62pZkCSs2gHntk1YKSJfYyA+Y68hc5looLJawaZ6KydHaPQ
+         a937ME6FLVfUxS6t7AzENWjuPOWhZ/1mLStfcAS28btSgJrXXSA/9wjJqjAn62nlaN
+         qaDmTQRLhdVgLOquVtEZYCnQKUnxa9CqlGSQrMkA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        stable@vger.kernel.org, Zheng Yongjun <zhengyongjun3@huawei.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 072/339] serial: sifive: Sanitize CSIZE and c_iflag
+Subject: [PATCH 4.19 073/287] spi: img-spfi: Fix pm_runtime_get_sync() error checking
 Date:   Mon, 13 Jun 2022 12:08:17 +0200
-Message-Id: <20220613094928.706085544@linuxfoundation.org>
+Message-Id: <20220613094926.086471985@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,53 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Zheng Yongjun <zhengyongjun3@huawei.com>
 
-[ Upstream commit c069d2756c01ed36121fae6a42c14fdf1325c71d ]
+[ Upstream commit cc470d55343056d6b2a5c32e10e0aad06f324078 ]
 
-Only CS8 is supported but CSIZE was not sanitized to CS8.
+If the device is already in a runtime PM enabled state
+pm_runtime_get_sync() will return 1, so a test for negative
+value should be used to check for errors.
 
-Set CSIZE correctly so that userspace knows the effective value.
-Incorrect CSIZE also results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
-
-Similarly, INPCK, PARMRK, and BRKINT are reported textually unsupported
-but were not cleared in termios c_iflag which is the machine-readable
-format.
-
-Fixes: 45c054d0815b (tty: serial: add driver for the SiFive UART)
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-7-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: deba25800a12b ("spi: Add driver for IMG SPFI controller")
+Signed-off-by: Zheng Yongjun <zhengyongjun3@huawei.com>
+Link: https://lore.kernel.org/r/20220422062641.10486-1-zhengyongjun3@huawei.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/sifive.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/spi/spi-img-spfi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/sifive.c b/drivers/tty/serial/sifive.c
-index 6140166b7ed5..776aec6516c4 100644
---- a/drivers/tty/serial/sifive.c
-+++ b/drivers/tty/serial/sifive.c
-@@ -666,12 +666,16 @@ static void sifive_serial_set_termios(struct uart_port *port,
- 	int rate;
- 	char nstop;
+diff --git a/drivers/spi/spi-img-spfi.c b/drivers/spi/spi-img-spfi.c
+index 25a545c985d4..c63cceec6312 100644
+--- a/drivers/spi/spi-img-spfi.c
++++ b/drivers/spi/spi-img-spfi.c
+@@ -774,7 +774,7 @@ static int img_spfi_resume(struct device *dev)
+ 	int ret;
  
--	if ((termios->c_cflag & CSIZE) != CS8)
-+	if ((termios->c_cflag & CSIZE) != CS8) {
- 		dev_err_once(ssp->port.dev, "only 8-bit words supported\n");
-+		termios->c_cflag &= ~CSIZE;
-+		termios->c_cflag |= CS8;
-+	}
- 	if (termios->c_iflag & (INPCK | PARMRK))
- 		dev_err_once(ssp->port.dev, "parity checking not supported\n");
- 	if (termios->c_iflag & BRKINT)
- 		dev_err_once(ssp->port.dev, "BREAK detection not supported\n");
-+	termios->c_iflag &= ~(INPCK|PARMRK|BRKINT);
- 
- 	/* Set number of stop bits */
- 	nstop = (termios->c_cflag & CSTOPB) ? 2 : 1;
+ 	ret = pm_runtime_get_sync(dev);
+-	if (ret) {
++	if (ret < 0) {
+ 		pm_runtime_put_noidle(dev);
+ 		return ret;
+ 	}
 -- 
 2.35.1
 

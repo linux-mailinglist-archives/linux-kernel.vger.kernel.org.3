@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E88F8548728
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2C35487AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238353AbiFMM1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34308 "EHLO
+        id S1379119AbiFMNuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355421AbiFMMXz (ORCPT
+        with ESMTP id S1378923AbiFMNnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:23:55 -0400
+        Mon, 13 Jun 2022 09:43:22 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BE53152A;
-        Mon, 13 Jun 2022 04:04:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA7B3DDF8;
+        Mon, 13 Jun 2022 04:31:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 70444B80D31;
-        Mon, 13 Jun 2022 11:04:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB49BC34114;
-        Mon, 13 Jun 2022 11:04:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 42B16B80EAB;
+        Mon, 13 Jun 2022 11:31:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8988DC34114;
+        Mon, 13 Jun 2022 11:31:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118290;
-        bh=ubSeAJmt3Nr4jnlp+O6kFpUOQt1A5mjy+03QXrdE7ik=;
+        s=korg; t=1655119897;
+        bh=cQh0Tm32Cxs5SXJFQcUaSo0jKtIgTLpmWOK1W5HQlmE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CcccBNHmifm+3nlEQTuGXdn0DI0c2AvUWWGbjSnd35m6tMsKmNt9qk4y9arZ8Nc5j
-         tZxLWQtUJ2nC/hIlKpvDSX60OJpiGVWZM2dDZY0y3bWrPZwhSHQjx5dnNLJG879C4F
-         7lGXBXoNKLiH4Yr7YrUtEvwPp8trivXzzfa51Bxs=
+        b=KVMJ5Js+8vwP2LZw9L1W50G78gv9zZVMUHheuzajQiS8SO9YCr2Ja/F81C6SuVXCK
+         LqJ9P+ZfrPRqjA5raqKMCAJnsQUx2wiFAoHt0fJTaNWAjFeKb63mVsMODLRF0dBZDn
+         uEgWKyYJRa3Sonq/Dt6wCaZanPqGi6yrAj3MH1Dc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cixi Geng <cixi.geng1@unisoc.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org, Jun Miao <jun.miao@intel.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 022/172] iio: adc: sc27xx: fix read big scale voltage not right
-Date:   Mon, 13 Jun 2022 12:09:42 +0200
-Message-Id: <20220613094855.706139329@linuxfoundation.org>
+Subject: [PATCH 5.18 158/339] tracing: Fix sleeping function called from invalid context on RT kernel
+Date:   Mon, 13 Jun 2022 12:09:43 +0200
+Message-Id: <20220613094931.477260765@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +55,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cixi Geng <cixi.geng1@unisoc.com>
+From: Jun Miao <jun.miao@intel.com>
 
-[ Upstream commit ad930a75613282400179361e220e58b87386b8c7 ]
+[ Upstream commit 12025abdc8539ed9d5014e2d647a3fd1bd3de5cd ]
 
-Fix wrong configuration value of SC27XX_ADC_SCALE_MASK and
-SC27XX_ADC_SCALE_SHIFT by spec documetation.
+When setting bootparams="trace_event=initcall:initcall_start tp_printk=1" in the
+cmdline, the output_printk() was called, and the spin_lock_irqsave() was called in the
+atomic and irq disable interrupt context suitation. On the PREEMPT_RT kernel,
+these locks are replaced with sleepable rt-spinlock, so the stack calltrace will
+be triggered.
+Fix it by raw_spin_lock_irqsave when PREEMPT_RT and "trace_event=initcall:initcall_start
+tp_printk=1" enabled.
 
-Fixes: 5df362a6cf49c (iio: adc: Add Spreadtrum SC27XX PMICs ADC support)
-Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
-Link: https://lore.kernel.org/r/20220419142458.884933-3-gengcixi@gmail.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+ BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
+ in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper/0
+ preempt_count: 2, expected: 0
+ RCU nest depth: 0, expected: 0
+ Preemption disabled at:
+ [<ffffffff8992303e>] try_to_wake_up+0x7e/0xba0
+ CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.1-rt17+ #19 34c5812404187a875f32bee7977f7367f9679ea7
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0x60/0x8c
+  dump_stack+0x10/0x12
+  __might_resched.cold+0x11d/0x155
+  rt_spin_lock+0x40/0x70
+  trace_event_buffer_commit+0x2fa/0x4c0
+  ? map_vsyscall+0x93/0x93
+  trace_event_raw_event_initcall_start+0xbe/0x110
+  ? perf_trace_initcall_finish+0x210/0x210
+  ? probe_sched_wakeup+0x34/0x40
+  ? ttwu_do_wakeup+0xda/0x310
+  ? trace_hardirqs_on+0x35/0x170
+  ? map_vsyscall+0x93/0x93
+  do_one_initcall+0x217/0x3c0
+  ? trace_event_raw_event_initcall_level+0x170/0x170
+  ? push_cpu_stop+0x400/0x400
+  ? cblist_init_generic+0x241/0x290
+  kernel_init_freeable+0x1ac/0x347
+  ? _raw_spin_unlock_irq+0x65/0x80
+  ? rest_init+0xf0/0xf0
+  kernel_init+0x1e/0x150
+  ret_from_fork+0x22/0x30
+  </TASK>
+
+Link: https://lkml.kernel.org/r/20220419013910.894370-1-jun.miao@intel.com
+
+Signed-off-by: Jun Miao <jun.miao@intel.com>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/adc/sc27xx_adc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/trace/trace.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
-index aa32a1f385e2..2c0d0d1634c8 100644
---- a/drivers/iio/adc/sc27xx_adc.c
-+++ b/drivers/iio/adc/sc27xx_adc.c
-@@ -36,8 +36,8 @@
+diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+index f6fb04d79eba..8d2b5c5ce5b3 100644
+--- a/kernel/trace/trace.c
++++ b/kernel/trace/trace.c
+@@ -2837,7 +2837,7 @@ trace_event_buffer_lock_reserve(struct trace_buffer **current_rb,
+ }
+ EXPORT_SYMBOL_GPL(trace_event_buffer_lock_reserve);
  
- /* Bits and mask definition for SC27XX_ADC_CH_CFG register */
- #define SC27XX_ADC_CHN_ID_MASK		GENMASK(4, 0)
--#define SC27XX_ADC_SCALE_MASK		GENMASK(10, 8)
--#define SC27XX_ADC_SCALE_SHIFT		8
-+#define SC27XX_ADC_SCALE_MASK		GENMASK(10, 9)
-+#define SC27XX_ADC_SCALE_SHIFT		9
+-static DEFINE_SPINLOCK(tracepoint_iter_lock);
++static DEFINE_RAW_SPINLOCK(tracepoint_iter_lock);
+ static DEFINE_MUTEX(tracepoint_printk_mutex);
  
- /* Bits definitions for SC27XX_ADC_INT_EN registers */
- #define SC27XX_ADC_IRQ_EN		BIT(0)
+ static void output_printk(struct trace_event_buffer *fbuffer)
+@@ -2865,14 +2865,14 @@ static void output_printk(struct trace_event_buffer *fbuffer)
+ 
+ 	event = &fbuffer->trace_file->event_call->event;
+ 
+-	spin_lock_irqsave(&tracepoint_iter_lock, flags);
++	raw_spin_lock_irqsave(&tracepoint_iter_lock, flags);
+ 	trace_seq_init(&iter->seq);
+ 	iter->ent = fbuffer->entry;
+ 	event_call->event.funcs->trace(iter, 0, event);
+ 	trace_seq_putc(&iter->seq, 0);
+ 	printk("%s", iter->seq.buffer);
+ 
+-	spin_unlock_irqrestore(&tracepoint_iter_lock, flags);
++	raw_spin_unlock_irqrestore(&tracepoint_iter_lock, flags);
+ }
+ 
+ int tracepoint_printk_sysctl(struct ctl_table *table, int write,
 -- 
 2.35.1
 

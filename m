@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17319548D6A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C94548A48
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384091AbiFMOcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
+        id S1357312AbiFMLxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384628AbiFMO3y (ORCPT
+        with ESMTP id S1356694AbiFMLt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:29:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D109A5FC9;
-        Mon, 13 Jun 2022 04:48:01 -0700 (PDT)
+        Mon, 13 Jun 2022 07:49:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9384D26A;
+        Mon, 13 Jun 2022 03:53:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1224861425;
-        Mon, 13 Jun 2022 11:47:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 270F6C36AFE;
-        Mon, 13 Jun 2022 11:47:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45E3B6135F;
+        Mon, 13 Jun 2022 10:53:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 275DBC3411C;
+        Mon, 13 Jun 2022 10:53:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120859;
-        bh=UuwuoCKP0zhAIEMCwoBc6I19MSn59HdkRGxknIb62ZI=;
+        s=korg; t=1655117593;
+        bh=2HQSmBnichybBCDp3mrh9Rp8FHzNIOjhmd7G3VIkAU0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UAdBDN0iJ5Ry0cj9/q3AQ9xNjjJ+yEprXKMy63ALhYF4NjTIYltAr2MfUGMTtIoBg
-         VPY7IEu/QvDDHOetHfZcpq6a6m3m4E2LKWZhK+SLu2A57LbOlow19ynyD+fotxQaAP
-         y4M7u+upvtbJzDo3iGAwJzwQL7Hyx2Jw8pKQ7ido=
+        b=ZG/l2uUt1vcGo3MOK5Lxk/e2owBmpp81TvGaEcYmlhPQs6hjT+W+BBaY8UYVVXeMn
+         svabYLyC1YLMD9Ok9jsDZ/AytYuLuPRDMi7QHYuliz1Pf722tzoTUFxMchGVvUgQ/r
+         Ttz4QgER+YdvpvXa92Elj6qZKqqOgaz0dp/wbnEg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 184/298] net: ipv6: unexport __init-annotated seg6_hmac_init()
+        stable@vger.kernel.org, Martin Faltesek <mfaltesek@google.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.4 405/411] nfc: st21nfca: fix memory leaks in EVT_TRANSACTION handling
 Date:   Mon, 13 Jun 2022 12:11:18 +0200
-Message-Id: <20220613094930.511005664@linuxfoundation.org>
+Message-Id: <20220613094940.966488160@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,52 +56,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
+From: Martin Faltesek <mfaltesek@google.com>
 
-[ Upstream commit 5801f064e35181c71857a80ff18af4dbec3c5f5c ]
+commit 996419e0594abb311fb958553809f24f38e7abbe upstream.
 
-EXPORT_SYMBOL and __init is a bad combination because the .init.text
-section is freed up after the initialization. Hence, modules cannot
-use symbols annotated __init. The access to a freed symbol may end up
-with kernel panic.
+Error paths do not free previously allocated memory. Add devm_kfree() to
+those failure paths.
 
-modpost used to detect it, but it has been broken for a decade.
-
-Recently, I fixed modpost so it started to warn it again, then this
-showed up in linux-next builds.
-
-There are two ways to fix it:
-
-  - Remove __init
-  - Remove EXPORT_SYMBOL
-
-I chose the latter for this case because the caller (net/ipv6/seg6.c)
-and the callee (net/ipv6/seg6_hmac.c) belong to the same module.
-It seems an internal function call in ipv6.ko.
-
-Fixes: bf355b8d2c30 ("ipv6: sr: add core files for SR HMAC support")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Fixes: 26fc6c7f02cb ("NFC: st21nfca: Add HCI transaction event support")
+Fixes: 4fbcc1a4cb20 ("nfc: st21nfca: Fix potential buffer overflows in EVT_TRANSACTION")
+Cc: stable@vger.kernel.org
+Signed-off-by: Martin Faltesek <mfaltesek@google.com>
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/seg6_hmac.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/nfc/st21nfca/se.c |   13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/net/ipv6/seg6_hmac.c b/net/ipv6/seg6_hmac.c
-index 29bc4e7c3046..6de01185cc68 100644
---- a/net/ipv6/seg6_hmac.c
-+++ b/net/ipv6/seg6_hmac.c
-@@ -399,7 +399,6 @@ int __init seg6_hmac_init(void)
- {
- 	return seg6_hmac_init_algo();
- }
--EXPORT_SYMBOL(seg6_hmac_init);
+--- a/drivers/nfc/st21nfca/se.c
++++ b/drivers/nfc/st21nfca/se.c
+@@ -331,22 +331,29 @@ int st21nfca_connectivity_event_received
+ 		transaction->aid_len = skb->data[1];
  
- int __net_init seg6_hmac_net_init(struct net *net)
- {
--- 
-2.35.1
-
+ 		/* Checking if the length of the AID is valid */
+-		if (transaction->aid_len > sizeof(transaction->aid))
++		if (transaction->aid_len > sizeof(transaction->aid)) {
++			devm_kfree(dev, transaction);
+ 			return -EINVAL;
++		}
+ 
+ 		memcpy(transaction->aid, &skb->data[2],
+ 		       transaction->aid_len);
+ 
+ 		/* Check next byte is PARAMETERS tag (82) */
+ 		if (skb->data[transaction->aid_len + 2] !=
+-		    NFC_EVT_TRANSACTION_PARAMS_TAG)
++		    NFC_EVT_TRANSACTION_PARAMS_TAG) {
++			devm_kfree(dev, transaction);
+ 			return -EPROTO;
++		}
+ 
+ 		transaction->params_len = skb->data[transaction->aid_len + 3];
+ 
+ 		/* Total size is allocated (skb->len - 2) minus fixed array members */
+-		if (transaction->params_len > ((skb->len - 2) - sizeof(struct nfc_evt_transaction)))
++		if (transaction->params_len > ((skb->len - 2) -
++		    sizeof(struct nfc_evt_transaction))) {
++			devm_kfree(dev, transaction);
+ 			return -EINVAL;
++		}
+ 
+ 		memcpy(transaction->params, skb->data +
+ 		       transaction->aid_len + 4, transaction->params_len);
 
 

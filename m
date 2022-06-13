@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53DCE548B57
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC6F8548A3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242258AbiFMKSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58352 "EHLO
+        id S1354114AbiFMLce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241974AbiFMKRn (ORCPT
+        with ESMTP id S1353830AbiFML1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:17:43 -0400
+        Mon, 13 Jun 2022 07:27:04 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739EDCE2A;
-        Mon, 13 Jun 2022 03:15:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F3F3DA72;
+        Mon, 13 Jun 2022 03:42:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65954B80E5C;
-        Mon, 13 Jun 2022 10:15:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB5E4C34114;
-        Mon, 13 Jun 2022 10:15:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E09B3B80D3C;
+        Mon, 13 Jun 2022 10:42:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B582C34114;
+        Mon, 13 Jun 2022 10:42:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115330;
-        bh=XCrqjfc7I0Avaka7xzYkfiK9KH0nx9ROGhToQyIvzI0=;
+        s=korg; t=1655116964;
+        bh=sU4af+R8hY2Xsfo+mlNUVQheGOnnT4hlS2Cs6ZXmbzA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kWhXGrToMfm4IeDcs6YAUDLjkGlt1VNvoK3k0jyZ+Kb0cf3QpnJf557rvwWWv0Hd/
-         P404vSujyFcIWNtG493HSskjS22LPqQVRtvrJOXLvIe6rBooMW2Le9YZf7FqOysOxd
-         4LfFrRArT46D+Fco367o4QVHZ/WBJ7WF46T7dE7s=
+        b=r/D4xiZwbTd0Yf0R95Vb+YBZll6oThN0jJM1coVMq/s7QXhQ2lDP2tdwAt03KZkJ9
+         dQ+wJPI9ZQkSjsJAFbnY8qSTCkD3D/AN1uBTl+u/bBsa0C1cSWKKMPwr2hrHo9BqxT
+         BmWFzQz7tG/PU50DYgH0drWcBTlBsqbh0flDR3bk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 037/167] ASoC: mediatek: Fix error handling in mt8173_max98090_dev_probe
+        stable@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 5.4 238/411] scsi: ufs: qcom: Add a readl() to make sure ref_clk gets enabled
 Date:   Mon, 13 Jun 2022 12:08:31 +0200
-Message-Id: <20220613094849.570315113@linuxfoundation.org>
+Message-Id: <20220613094935.918367748@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-[ Upstream commit 4f4e0454e226de3bf4efd7e7924d1edc571c52d5 ]
+commit 8eecddfca30e1651dc1c74531ed5eef21dcce7e3 upstream.
 
-Call of_node_put(platform_node) to avoid refcount leak in
-the error path.
+In ufs_qcom_dev_ref_clk_ctrl(), it was noted that the ref_clk needs to be
+stable for at least 1us. Even though there is wmb() to make sure the write
+gets "completed", there is no guarantee that the write actually reached the
+UFS device. There is a good chance that the write could be stored in a
+Write Buffer (WB). In that case, even though the CPU waits for 1us, the
+ref_clk might not be stable for that period.
 
-Fixes: 94319ba10eca ("ASoC: mediatek: Use platform_of_node for machine drivers")
-Fixes: 493433785df0 ("ASoC: mediatek: mt8173: fix device_node leak")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20220404092903.26725-1-linmq006@gmail.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+So lets do a readl() to make sure that the previous write has reached the
+UFS device before udelay().
+
+Also, the wmb() after writel_relaxed() is not really needed. Both writel()
+and readl() are ordered on all architectures and the CPU won't speculate
+instructions after readl() due to the in-built control dependency with read
+value on weakly ordered architectures. So it can be safely removed.
+
+Link: https://lore.kernel.org/r/20220504084212.11605-4-manivannan.sadhasivam@linaro.org
+Fixes: f06fcc7155dc ("scsi: ufs-qcom: add QUniPro hardware support and power optimizations")
+Cc: stable@vger.kernel.org
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/mediatek/mt8173/mt8173-max98090.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/scsi/ufs/ufs-qcom.c |    7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-max98090.c b/sound/soc/mediatek/mt8173/mt8173-max98090.c
-index cab30cb48366..85bf9eafda49 100644
---- a/sound/soc/mediatek/mt8173/mt8173-max98090.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-max98090.c
-@@ -170,7 +170,8 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
- 	if (!codec_node) {
- 		dev_err(&pdev->dev,
- 			"Property 'audio-codec' missing or invalid\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto put_platform_node;
- 	}
- 	for (i = 0; i < card->num_links; i++) {
- 		if (mt8173_max98090_dais[i].codec_name)
-@@ -185,6 +186,8 @@ static int mt8173_max98090_dev_probe(struct platform_device *pdev)
- 			__func__, ret);
+--- a/drivers/scsi/ufs/ufs-qcom.c
++++ b/drivers/scsi/ufs/ufs-qcom.c
+@@ -781,8 +781,11 @@ static void ufs_qcom_dev_ref_clk_ctrl(st
  
- 	of_node_put(codec_node);
-+
-+put_platform_node:
- 	of_node_put(platform_node);
- 	return ret;
- }
--- 
-2.35.1
-
+ 		writel_relaxed(temp, host->dev_ref_clk_ctrl_mmio);
+ 
+-		/* ensure that ref_clk is enabled/disabled before we return */
+-		wmb();
++		/*
++		 * Make sure the write to ref_clk reaches the destination and
++		 * not stored in a Write Buffer (WB).
++		 */
++		readl(host->dev_ref_clk_ctrl_mmio);
+ 
+ 		/*
+ 		 * If we call hibern8 exit after this, we need to make sure that
 
 

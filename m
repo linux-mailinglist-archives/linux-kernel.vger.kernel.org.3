@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3524454954A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D74548F1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344895AbiFMKuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
+        id S1382742AbiFMOVG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:21:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346082AbiFMKsm (ORCPT
+        with ESMTP id S1383115AbiFMOPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:48:42 -0400
+        Mon, 13 Jun 2022 10:15:23 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6932CCA8;
-        Mon, 13 Jun 2022 03:26:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9E09CC81;
+        Mon, 13 Jun 2022 04:42:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DB7E6B80E92;
-        Mon, 13 Jun 2022 10:26:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46B3DC34114;
-        Mon, 13 Jun 2022 10:26:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 507C1B80ECD;
+        Mon, 13 Jun 2022 11:42:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A430BC34114;
+        Mon, 13 Jun 2022 11:42:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115970;
-        bh=GIEjlmh4s8uQ303tOW4OVDf34BA600yDTmYI9jex67g=;
+        s=korg; t=1655120569;
+        bh=mw/Kae021Zd0ilpCkoH0xuovLwi9c677QHtw690TGHg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qG7fZo7BPPUk/OYsOs06fz+mYKUqAgPiFW8TOjNwTw0reD4bsU8lpOrwJ8xzUURir
-         DHMuPdfo46A0G8/ykwus9bN0kQcsEtEWymdE5W7jOM3Pw6iAV6WsbFErGRGvQ/KATl
-         Fq0fkeVJO5cj3DHqDsNFMQLex1uurCgBqTpsNHlU=
+        b=xfchMZCJSsx4iYFocSKDh1wWmpi0MMSFsE8odg+9yr2DAbyHrotWwHDD8RpTcGVpJ
+         rLBh0tFzwT2efvv/4EpzZPRrcojr0obPa7Kz8k6J4mECykCO1GKWU2qT6ItVGY8rsY
+         T1d6NhMFS8EpkkA77Bll87+OVdFMaO1nM3gXEeAY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 098/218] video: fbdev: clcdfb: Fix refcount leak in clcdfb_of_vram_setup
+        stable@vger.kernel.org,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 062/298] serial: txx9: Dont allow CS5-6
 Date:   Mon, 13 Jun 2022 12:09:16 +0200
-Message-Id: <20220613094923.522078230@linuxfoundation.org>
+Message-Id: <20220613094926.829673971@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit b23789a59fa6f00e98a319291819f91fbba0deb8 ]
+[ Upstream commit 79ac88655dc0551e3571ad16bdabdbe65d61553e ]
 
-of_parse_phandle() returns a node pointer with refcount incremented, we should
-use of_node_put() on it when not need anymore.  Add missing of_node_put() to
-avoid refcount leak.
+Only CS7 and CS8 are supported but CSIZE is not sanitized with
+CS5 or CS6 to CS8.
 
-Fixes: d10715be03bd ("video: ARM CLCD: Add DT support")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Set CSIZE correctly so that userspace knows the effective value.
+Incorrect CSIZE also results in miscalculation of the frame bits in
+tty_get_char_size() or in its predecessor where the roughly the same
+code is directly within uart_update_timeout().
+
+Fixes: 1da177e4c3f4 (Linux-2.6.12-rc2)
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-5-ilpo.jarvinen@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/amba-clcd.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/tty/serial/serial_txx9.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/video/fbdev/amba-clcd.c b/drivers/video/fbdev/amba-clcd.c
-index 36d25190b48c..66c7d766e330 100644
---- a/drivers/video/fbdev/amba-clcd.c
-+++ b/drivers/video/fbdev/amba-clcd.c
-@@ -838,12 +838,15 @@ static int clcdfb_of_vram_setup(struct clcd_fb *fb)
- 		return -ENODEV;
+diff --git a/drivers/tty/serial/serial_txx9.c b/drivers/tty/serial/serial_txx9.c
+index aaca4fe38486..1f8362d5e3b9 100644
+--- a/drivers/tty/serial/serial_txx9.c
++++ b/drivers/tty/serial/serial_txx9.c
+@@ -644,6 +644,8 @@ serial_txx9_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	case CS6:	/* not supported */
+ 	case CS8:
+ 		cval |= TXX9_SILCR_UMODE_8BIT;
++		termios->c_cflag &= ~CSIZE;
++		termios->c_cflag |= CS8;
+ 		break;
+ 	}
  
- 	fb->fb.screen_base = of_iomap(memory, 0);
--	if (!fb->fb.screen_base)
-+	if (!fb->fb.screen_base) {
-+		of_node_put(memory);
- 		return -ENOMEM;
-+	}
- 
- 	fb->fb.fix.smem_start = of_translate_address(memory,
- 			of_get_address(memory, 0, &size, NULL));
- 	fb->fb.fix.smem_len = size;
-+	of_node_put(memory);
- 
- 	return 0;
- }
 -- 
 2.35.1
 

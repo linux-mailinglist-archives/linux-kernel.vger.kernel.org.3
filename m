@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CFF2548CA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:13:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB23E54977A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354581AbiFMLd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
+        id S241835AbiFMKTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354330AbiFML3V (ORCPT
+        with ESMTP id S242544AbiFMKSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE8B22B20;
-        Mon, 13 Jun 2022 03:43:22 -0700 (PDT)
+        Mon, 13 Jun 2022 06:18:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA34E20BCC;
+        Mon, 13 Jun 2022 03:16:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98D1360F9A;
-        Mon, 13 Jun 2022 10:43:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0640C34114;
-        Mon, 13 Jun 2022 10:43:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CA6461496;
+        Mon, 13 Jun 2022 10:16:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BC4BC34114;
+        Mon, 13 Jun 2022 10:16:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117001;
-        bh=Z2Rg58H6WDvcZdH9B/nMDIno5SexIFF77zf26ZQUojA=;
+        s=korg; t=1655115371;
+        bh=3vkbMjgCXrBgL/xZkwP7WAfVx/yScR4D/3UM/AEGANA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rJU8tG/eP0lfvlxHI0jaQLVJvB9MmoeHYPpNT1zx7QwOPaG/aJa+PKuWf7+AFXyE7
-         6CJsIpRTRmGKIjI/R9JEhNuKWysyW+4ch4sWkEo539Z5UNE9vb06QuYg19Li7gF01g
-         guC1Hw+cmqfCl7xWtdgZ/DzpxvtbNP7Vy+cmxpLk=
+        b=tN1Z+pQkBW0jmcJd9/1jD4F3eEtirverunYORQbZikWdiupB1yGAz4ZS8QzwtrOHC
+         sw/iu9bTcBfllG6n8OjEjF3D2k9et24AaVcqHufpFgfd7ecv0pnUNyGGz4ZtbpW4cZ
+         OvTuiH5K3UbH9WCiT0Z60ZcmsXTjQNjn/JiO7MiI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 5.4 251/411] irqchip: irq-xtensa-mx: fix initial IRQ affinity
+        stable@vger.kernel.org, Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Borislav Petkov <bp@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 050/167] x86/mm: Cleanup the control_va_addr_alignment() __setup handler
 Date:   Mon, 13 Jun 2022 12:08:44 +0200
-Message-Id: <20220613094936.297010791@linuxfoundation.org>
+Message-Id: <20220613094852.716797967@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,62 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Max Filippov <jcmvbkbc@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit a255ee29252066d621df5d6b420bf534c6ba5bc0 upstream.
+[ Upstream commit 1ef64b1e89e6d4018da46e08ffc32779a31160c7 ]
 
-When irq-xtensa-mx chip is used in non-SMP configuration its
-irq_set_affinity callback is not called leaving IRQ affinity set empty.
-As a result IRQ delivery does not work in that configuration.
-Initialize IRQ affinity of the xtensa MX interrupt distributor to CPU 0
-for all external IRQ lines.
+Clean up control_va_addr_alignment():
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+a. Make '=' required instead of optional (as documented).
+b. Print a warning if an invalid option value is used.
+c. Return 1 from the __setup handler when an invalid option value is
+   used. This prevents the kernel from polluting init's (limited)
+   environment space with the entire string.
+
+Fixes: dfb09f9b7ab0 ("x86, amd: Avoid cache aliasing penalties on AMD family 15h")
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Link: https://lore.kernel.org/r/20220315001045.7680-1-rdunlap@infradead.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/irqchip/irq-xtensa-mx.c |   18 ++++++++++++++----
- 1 file changed, 14 insertions(+), 4 deletions(-)
+ arch/x86/kernel/sys_x86_64.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
---- a/drivers/irqchip/irq-xtensa-mx.c
-+++ b/drivers/irqchip/irq-xtensa-mx.c
-@@ -151,14 +151,25 @@ static struct irq_chip xtensa_mx_irq_chi
- 	.irq_set_affinity = xtensa_mx_irq_set_affinity,
- };
+diff --git a/arch/x86/kernel/sys_x86_64.c b/arch/x86/kernel/sys_x86_64.c
+index 1d4e7fd3e66d..1078705292fc 100644
+--- a/arch/x86/kernel/sys_x86_64.c
++++ b/arch/x86/kernel/sys_x86_64.c
+@@ -66,9 +66,6 @@ static int __init control_va_addr_alignment(char *str)
+ 	if (*str == 0)
+ 		return 1;
  
-+static void __init xtensa_mx_init_common(struct irq_domain *root_domain)
-+{
-+	unsigned int i;
-+
-+	irq_set_default_host(root_domain);
-+	secondary_init_irq();
-+
-+	/* Initialize default IRQ routing to CPU 0 */
-+	for (i = 0; i < XCHAL_NUM_EXTINTERRUPTS; ++i)
-+		set_er(1, MIROUT(i));
-+}
-+
- int __init xtensa_mx_init_legacy(struct device_node *interrupt_parent)
- {
- 	struct irq_domain *root_domain =
- 		irq_domain_add_legacy(NULL, NR_IRQS - 1, 1, 0,
- 				&xtensa_mx_irq_domain_ops,
- 				&xtensa_mx_irq_chip);
--	irq_set_default_host(root_domain);
--	secondary_init_irq();
-+	xtensa_mx_init_common(root_domain);
- 	return 0;
- }
+-	if (*str == '=')
+-		str++;
+-
+ 	if (!strcmp(str, "32"))
+ 		va_align.flags = ALIGN_VA_32;
+ 	else if (!strcmp(str, "64"))
+@@ -78,11 +75,11 @@ static int __init control_va_addr_alignment(char *str)
+ 	else if (!strcmp(str, "on"))
+ 		va_align.flags = ALIGN_VA_32 | ALIGN_VA_64;
+ 	else
+-		return 0;
++		pr_warn("invalid option value: 'align_va_addr=%s'\n", str);
  
-@@ -168,8 +179,7 @@ static int __init xtensa_mx_init(struct
- 	struct irq_domain *root_domain =
- 		irq_domain_add_linear(np, NR_IRQS, &xtensa_mx_irq_domain_ops,
- 				&xtensa_mx_irq_chip);
--	irq_set_default_host(root_domain);
--	secondary_init_irq();
-+	xtensa_mx_init_common(root_domain);
- 	return 0;
+ 	return 1;
  }
- IRQCHIP_DECLARE(xtensa_mx_irq_chip, "cdns,xtensa-mx", xtensa_mx_init);
+-__setup("align_va_addr", control_va_addr_alignment);
++__setup("align_va_addr=", control_va_addr_alignment);
+ 
+ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len,
+ 		unsigned long, prot, unsigned long, flags,
+-- 
+2.35.1
+
 
 

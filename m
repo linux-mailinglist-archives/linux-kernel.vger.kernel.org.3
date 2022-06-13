@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9D45487CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47715548801
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348189AbiFMKxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:53:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
+        id S1351466AbiFMLEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346139AbiFMKvD (ORCPT
+        with ESMTP id S1350185AbiFMKyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:51:03 -0400
+        Mon, 13 Jun 2022 06:54:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96132B1C7;
-        Mon, 13 Jun 2022 03:27:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B034CDFD6;
+        Mon, 13 Jun 2022 03:29:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8395360F0F;
-        Mon, 13 Jun 2022 10:27:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9292DC34114;
-        Mon, 13 Jun 2022 10:27:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E9C460EF5;
+        Mon, 13 Jun 2022 10:29:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59540C34114;
+        Mon, 13 Jun 2022 10:29:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116039;
-        bh=ElTrzJflzTayQDk3IvY4AJqUX+sEJm6xvL79q7KQGwg=;
+        s=korg; t=1655116195;
+        bh=6GPI7gYf07+zFN1Ol/tp6iH7PZSLrK3qLnRFMdReihY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0glQsmXuqgrnypOHFhzg0L01WMdhXq9zLWQg1AV/9hFKr4qeaxgxho+STMNq1uW7j
-         j24S/KR+HhIZ7YAoD4GBcrMbvmZCqo8FBmQD84cKM3FUjXJMm2IycJbp6lwflS/apV
-         sh1/PlNLKsnZRbvTFkXGJq2xCDTUaDtArYHOnWDA=
+        b=iIbPz5P8NquhvWn5KPglFiD7SOTO+r3DK/art/ilEhOmqTsQbzBrn8pgs/48OpH8U
+         /HomGvLMRR7mvTGokQGnoaTJZlYNICLNypbr9u4XGph/bhYiqAb+7YqW5DodmxNPxl
+         Zxa+8VrrNtxglaZu8oiyq0ISdAjdnUurgetRFDnM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        =?UTF-8?q?Luca=20B=C3=A9la=20Palkovics?= 
-        <luca.bela.palkovics@gmail.com>, Qu Wenruo <wqu@suse.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.4 011/411] btrfs: repair super block num_devices automatically
-Date:   Mon, 13 Jun 2022 12:04:44 +0200
-Message-Id: <20220613094928.836533111@linuxfoundation.org>
+        =?UTF-8?q?Thibaut=20VAR=C3=88NE?= <hacks+kernel@slashdirt.org>,
+        Felix Fietkau <nbd@nbd.name>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Kalle Valo <quic_kvalo@quicinc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 025/411] ath9k: fix QCA9561 PA bias level
+Date:   Mon, 13 Jun 2022 12:04:58 +0200
+Message-Id: <20220613094929.256131670@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -56,91 +58,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Wenruo <wqu@suse.com>
+From: Thibaut VARÈNE <hacks+kernel@slashdirt.org>
 
-commit d201238ccd2f30b9bfcfadaeae0972e3a486a176 upstream.
+[ Upstream commit e999a5da28a0e0f7de242d841ef7d5e48f4646ae ]
 
-[BUG]
-There is a report that a btrfs has a bad super block num devices.
+This patch fixes an invalid TX PA DC bias level on QCA9561, which
+results in a very low output power and very low throughput as devices
+are further away from the AP (compared to other 2.4GHz APs).
 
-This makes btrfs to reject the fs completely.
+This patch was suggested by Felix Fietkau, who noted[1]:
+"The value written to that register is wrong, because while the mask
+definition AR_CH0_TOP2_XPABIASLVL uses a different value for 9561, the
+shift definition AR_CH0_TOP2_XPABIASLVL_S is hardcoded to 12, which is
+wrong for 9561."
 
-  BTRFS error (device sdd3): super_num_devices 3 mismatch with num_devices 2 found here
-  BTRFS error (device sdd3): failed to read chunk tree: -22
-  BTRFS error (device sdd3): open_ctree failed
+In real life testing, without this patch the 2.4GHz throughput on
+Yuncore XD3200 is around 10Mbps sitting next to the AP, and closer to
+practical maximum with the patch applied.
 
-[CAUSE]
-During btrfs device removal, chunk tree and super block num devs are
-updated in two different transactions:
+[1] https://lore.kernel.org/all/91c58969-c60e-2f41-00ac-737786d435ae@nbd.name
 
-  btrfs_rm_device()
-  |- btrfs_rm_dev_item(device)
-  |  |- trans = btrfs_start_transaction()
-  |  |  Now we got transaction X
-  |  |
-  |  |- btrfs_del_item()
-  |  |  Now device item is removed from chunk tree
-  |  |
-  |  |- btrfs_commit_transaction()
-  |     Transaction X got committed, super num devs untouched,
-  |     but device item removed from chunk tree.
-  |     (AKA, super num devs is already incorrect)
-  |
-  |- cur_devices->num_devices--;
-  |- cur_devices->total_devices--;
-  |- btrfs_set_super_num_devices()
-     All those operations are not in transaction X, thus it will
-     only be written back to disk in next transaction.
-
-So after the transaction X in btrfs_rm_dev_item() committed, but before
-transaction X+1 (which can be minutes away), a power loss happen, then
-we got the super num mismatch.
-
-This has been fixed by commit bbac58698a55 ("btrfs: remove device item
-and update super block in the same transaction").
-
-[FIX]
-Make the super_num_devices check less strict, converting it from a hard
-error to a warning, and reset the value to a correct one for the current
-or next transaction commit.
-
-As the number of device items is the critical information where the
-super block num_devices is only a cached value (and also useful for
-cross checking), it's safe to automatically update it. Other device
-related problems like missing device are handled after that and may
-require other means to resolve, like degraded mount. With this fix,
-potentially affected filesystems won't fail mount and require the manual
-repair by btrfs check.
-
-Reported-by: Luca Béla Palkovics <luca.bela.palkovics@gmail.com>
-Link: https://lore.kernel.org/linux-btrfs/CA+8xDSpvdm_U0QLBAnrH=zqDq_cWCOH5TiV46CKmp3igr44okQ@mail.gmail.com/
-CC: stable@vger.kernel.org # 4.14+
-Signed-off-by: Qu Wenruo <wqu@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Thibaut VARÈNE <hacks+kernel@slashdirt.org>
+Acked-by: Felix Fietkau <nbd@nbd.name>
+Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
+Link: https://lore.kernel.org/r/20220417145145.1847-1-hacks+kernel@slashdirt.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/volumes.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/wireless/ath/ath9k/ar9003_phy.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/fs/btrfs/volumes.c
-+++ b/fs/btrfs/volumes.c
-@@ -7383,12 +7383,12 @@ int btrfs_read_chunk_tree(struct btrfs_f
- 	 * do another round of validation checks.
- 	 */
- 	if (total_dev != fs_info->fs_devices->total_devices) {
--		btrfs_err(fs_info,
--	   "super_num_devices %llu mismatch with num_devices %llu found here",
-+		btrfs_warn(fs_info,
-+"super block num_devices %llu mismatch with DEV_ITEM count %llu, will be repaired on next transaction commit",
- 			  btrfs_super_num_devices(fs_info->super_copy),
- 			  total_dev);
--		ret = -EINVAL;
--		goto error;
-+		fs_info->fs_devices->total_devices = total_dev;
-+		btrfs_set_super_num_devices(fs_info->super_copy, total_dev);
- 	}
- 	if (btrfs_super_total_bytes(fs_info->super_copy) <
- 	    fs_info->fs_devices->total_rw_bytes) {
+diff --git a/drivers/net/wireless/ath/ath9k/ar9003_phy.h b/drivers/net/wireless/ath/ath9k/ar9003_phy.h
+index a171dbb29fbb..ad949eb02f3d 100644
+--- a/drivers/net/wireless/ath/ath9k/ar9003_phy.h
++++ b/drivers/net/wireless/ath/ath9k/ar9003_phy.h
+@@ -720,7 +720,7 @@
+ #define AR_CH0_TOP2		(AR_SREV_9300(ah) ? 0x1628c : \
+ 					(AR_SREV_9462(ah) ? 0x16290 : 0x16284))
+ #define AR_CH0_TOP2_XPABIASLVL		(AR_SREV_9561(ah) ? 0x1e00 : 0xf000)
+-#define AR_CH0_TOP2_XPABIASLVL_S	12
++#define AR_CH0_TOP2_XPABIASLVL_S	(AR_SREV_9561(ah) ? 9 : 12)
+ 
+ #define AR_CH0_XTAL		(AR_SREV_9300(ah) ? 0x16294 : \
+ 				 ((AR_SREV_9462(ah) || AR_SREV_9565(ah)) ? 0x16298 : \
+-- 
+2.35.1
+
 
 

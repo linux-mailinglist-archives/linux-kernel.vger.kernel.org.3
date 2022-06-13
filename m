@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 312B8548AA7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9740354896F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244614AbiFMKcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
+        id S1352012AbiFMMPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345938AbiFMKaM (ORCPT
+        with ESMTP id S1353816AbiFMMJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:30:12 -0400
+        Mon, 13 Jun 2022 08:09:55 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FAB2127E;
-        Mon, 13 Jun 2022 03:21:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97997532CE;
+        Mon, 13 Jun 2022 04:00:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B006FB80E5C;
-        Mon, 13 Jun 2022 10:21:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 070C7C3411C;
-        Mon, 13 Jun 2022 10:20:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65F41B80EA7;
+        Mon, 13 Jun 2022 11:00:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B61A3C3411C;
+        Mon, 13 Jun 2022 11:00:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115660;
-        bh=aRZPBIfUmeY/7zsPHU6zZqXyFI7wRPCiXmi7Q4AB3YU=;
+        s=korg; t=1655118039;
+        bh=am04AjD6owRvnb+LGNB0GWp0pAqfo+ZlLBOerBB7Xe0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U4vCVgSGEDAM8ykTXbIk4mxe5aj0lA3vwebwm2a00DU3Mz4uj305TXd1/XqSTyl61
-         jLUHaQzECxE3NBEQug6F6t4n+hUkayvhmhAv1M9SsBfkM6UQErH/V9EZ6MLOiFaiAH
-         KO6G4g2EfbqBLUIh9Fyc0/qxusPv6GI1QG6tFxuI=
+        b=KW0hIOWHec03gc3rHIvevK/IwGzafCPBTk18NnviEXeg+goVBcXnLbNCQZyHAKRKm
+         DHP2HbERMQsDXqT5rtpYlUK4ZWFuqhjxF2OgjFjOiEitEKKGrpQsqI8hJdThxdj/Ck
+         44DldnC+ijbgw5KlpU/vuV4ToDA5xve5r1Ewi6dY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH 4.9 163/167] Input: bcm5974 - set missing URB_NO_TRANSFER_DMA_MAP urb flag
+        stable@vger.kernel.org, Romain Naour <romain.naour@smile.fr>,
+        Tony Lindgren <tony@atomide.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 213/287] bus: ti-sysc: Fix warnings for unbind for serial
 Date:   Mon, 13 Jun 2022 12:10:37 +0200
-Message-Id: <20220613094919.196551093@linuxfoundation.org>
+Message-Id: <20220613094930.321973001@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Tony Lindgren <tony@atomide.com>
 
-commit c42e65664390be7c1ef3838cd84956d3a2739d60 upstream.
+[ Upstream commit c337125b8834f9719dfda0e40b25eaa266f1b8cf ]
 
-The bcm5974 driver does the allocation and dma mapping of the usb urb
-data buffer, but driver does not set the URB_NO_TRANSFER_DMA_MAP flag
-to let usb core know the buffer is already mapped.
+We can get "failed to disable" clock_unprepare warnings on unbind at least
+for the serial console device if the unbind is done before the device has
+been idled.
 
-usb core tries to map the already mapped buffer, causing a warning:
-"xhci_hcd 0000:00:14.0: rejecting DMA map of vmalloc memory"
+As some devices are using deferred idle, we must check the status for
+pending idle work to idle the device.
 
-Fix this by setting the URB_NO_TRANSFER_DMA_MAP, letting usb core
-know buffer is already mapped by bcm5974 driver
-
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: stable@vger.kernel.org
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215890
-Link: https://lore.kernel.org/r/20220606113636.588955-1-mathias.nyman@linux.intel.com
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Fixes: 76f0f772e469 ("bus: ti-sysc: Improve handling for no-reset-on-init and no-idle-on-init")
+Cc: Romain Naour <romain.naour@smile.fr>
+Reviewed-by: Romain Naour <romain.naour@smile.fr>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+Link: https://lore.kernel.org/r/20220512053021.61650-1-tony@atomide.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/input/mouse/bcm5974.c |    7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/bus/ti-sysc.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/input/mouse/bcm5974.c
-+++ b/drivers/input/mouse/bcm5974.c
-@@ -956,17 +956,22 @@ static int bcm5974_probe(struct usb_inte
- 	if (!dev->tp_data)
- 		goto err_free_bt_buffer;
+diff --git a/drivers/bus/ti-sysc.c b/drivers/bus/ti-sysc.c
+index b6a278183d82..bc274ddb9767 100644
+--- a/drivers/bus/ti-sysc.c
++++ b/drivers/bus/ti-sysc.c
+@@ -1801,7 +1801,9 @@ static int sysc_remove(struct platform_device *pdev)
+ 	struct sysc *ddata = platform_get_drvdata(pdev);
+ 	int error;
  
--	if (dev->bt_urb)
-+	if (dev->bt_urb) {
- 		usb_fill_int_urb(dev->bt_urb, udev,
- 				 usb_rcvintpipe(udev, cfg->bt_ep),
- 				 dev->bt_data, dev->cfg.bt_datalen,
- 				 bcm5974_irq_button, dev, 1);
+-	cancel_delayed_work_sync(&ddata->idle_work);
++	/* Device can still be enabled, see deferred idle quirk in probe */
++	if (cancel_delayed_work_sync(&ddata->idle_work))
++		ti_sysc_idle(&ddata->idle_work.work);
  
-+		dev->bt_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-+	}
-+
- 	usb_fill_int_urb(dev->tp_urb, udev,
- 			 usb_rcvintpipe(udev, cfg->tp_ep),
- 			 dev->tp_data, dev->cfg.tp_datalen,
- 			 bcm5974_irq_trackpad, dev, 1);
- 
-+	dev->tp_urb->transfer_flags |= URB_NO_TRANSFER_DMA_MAP;
-+
- 	/* create bcm5974 device */
- 	usb_make_path(udev, dev->phys, sizeof(dev->phys));
- 	strlcat(dev->phys, "/input0", sizeof(dev->phys));
+ 	error = pm_runtime_get_sync(ddata->dev);
+ 	if (error < 0) {
+-- 
+2.35.1
+
 
 

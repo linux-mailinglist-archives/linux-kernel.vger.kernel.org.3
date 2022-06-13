@@ -2,57 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FC235491D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C15954997E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:05:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1386221AbiFMOza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45188 "EHLO
+        id S241524AbiFMREj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1387111AbiFMOyv (ORCPT
+        with ESMTP id S244014AbiFMRDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:54:51 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A000D19D4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 04:57:35 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LM92V072xzRhy5;
-        Mon, 13 Jun 2022 19:53:53 +0800 (CST)
-Received: from [10.174.178.157] (10.174.178.157) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 13 Jun 2022 19:57:09 +0800
-Message-ID: <18c2b29b-f70c-bae8-c01e-2ac69aa9ccdd@huawei.com>
-Date:   Mon, 13 Jun 2022 19:57:08 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3] memblock,arm64: Expand the static memblock memory
- table
-Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "will@kernel.org" <will@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "xuqiang (M)" <xuqiang36@huawei.com>
-References: <20220527091832.63489-1-zhouguanghui1@huawei.com>
- <c5ca2c49-94a3-d835-2627-48488296e7fc@arm.com>
- <b8135d70ea10408da115e78fa35f48cf@huawei.com>
- <2a492d62-8ce0-effe-b854-d0b58762be23@arm.com>
-From:   Zhou Guanghui <zhouguanghui1@huawei.com>
-In-Reply-To: <2a492d62-8ce0-effe-b854-d0b58762be23@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.157]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 13 Jun 2022 13:03:10 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328F3E15C9;
+        Mon, 13 Jun 2022 05:02:18 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id m24so6818923wrb.10;
+        Mon, 13 Jun 2022 05:02:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=iAGGMDO3RCjpuDnI12s4tp/U5muUk3K/RmYbixGZ5cY=;
+        b=j+Yp1Y4cfSfJ+AVrsnjA5ETWh4QdGa67V5H3ARF0m2zwsPeGShbVT/A0rxLFgS7AE0
+         B+p6QFJQAaE8fSt1zafzR9UZz4dHWbcKCDUXgl9LvHF+LNUyubjgj1wdxuibfUQVIhks
+         Sb7fIv4nDkYVEy2M3B9oaulLLD4zxcopEk7RNQnVkM/KPcx8zvoacWn8x7a54pyipETU
+         j+eWgGryN0jSxoU510/DRai6znER5XoTmB6XxjZVN0NBL903fgFPzJITO96udsNy2Zd7
+         sqSaHhLeI6KNgmBr1RVXlMqH2015r3QCdktca5AWw+QcpI4UU1BFPEoh+Jwg93RXshlW
+         HP6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=iAGGMDO3RCjpuDnI12s4tp/U5muUk3K/RmYbixGZ5cY=;
+        b=Jw6k0XYQ27MRtYqcQJb9Ddp4MI2hmz6IdJ85QQMEYEDVHy9vlfU2w8Z2xynWn3CMN8
+         sUzzZq+n56BPavFJ/Ygv7e7g9i1jLeUaLMUMeXXVYkmALK8hZW6DEgUSjnI9HnffL6u6
+         fRJ+HWdcMGRltHi8izdjLJZnZjukTtal4O67pqa9dkB/6486mDoDKQKbRm9cETmqeffv
+         ItV9WFZ3hHqwtqDpTy+btQ8Umsy7fz/sUUWHD8eYGsT9OyhzI3nE917S4Uqhnm6JbHmj
+         71fBpFzPFElfLT2GAnIOjz8Y1EV+DL2oKM0RBuoEwGYl9MGoi5hlaG/2BbUIcuNSvSQO
+         RoOQ==
+X-Gm-Message-State: AOAM532ka1v0xT8CLk5iMKNDeDN57NuUrgML3LApC43z3z6U876GTjFS
+        /8anK2GsKdrZ5YTzKO0Trkgh6QyASFo=
+X-Google-Smtp-Source: ABdhPJw6IDp5GNuZncI3s0NeFl8BYG40OMdVjI/u5bAvFe5hXAGcozpvJTybpIK+LUARmdlKWbENOg==
+X-Received: by 2002:a05:6000:12c8:b0:213:584:3d7 with SMTP id l8-20020a05600012c800b00213058403d7mr57282336wrx.125.1655121736420;
+        Mon, 13 Jun 2022 05:02:16 -0700 (PDT)
+Received: from felia.fritz.box (200116b8260df50011e978c0f780de03.dip.versatel-1u1.de. [2001:16b8:260d:f500:11e9:78c0:f780:de03])
+        by smtp.gmail.com with ESMTPSA id q1-20020adff501000000b002117ef160fbsm8437077wro.21.2022.06.13.05.02.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 05:02:16 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: add include/dt-bindings/interrupt-controller to IRQCHIP DRIVERS
+Date:   Mon, 13 Jun 2022 14:02:05 +0200
+Message-Id: <20220613120205.31311-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,150 +64,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Maintainers of the directory
+Documentation/devicetree/bindings/interrupt-controller are also the
+maintainers of the corresponding directory
+include/dt-bindings/interrupt-controller.
 
+Add the file entry for include/dt-bindings/interrupt-controller to the
+appropriate section in MAINTAINERS.
 
-On 2022/6/13 14:38, Anshuman Khandual wrote:
-> 
-> 
-> On 6/13/22 11:33, Zhouguanghui wrote:
->> 在 2022/6/7 14:43, Anshuman Khandual 写道:
->>> Hello Zhou,
->>>
->>> On 5/27/22 14:48, Zhou Guanghui wrote:
->>>> In a system using HBM, a multi-bit ECC error occurs, and the BIOS
->>>> will mark the corresponding area (for example, 2 MB) as unusable.
->>>> When the system restarts next time, these areas are not reported
->>>> or reported as EFI_UNUSABLE_MEMORY. Both cases lead to an increase
->>>> in the number of memblocks, whereas EFI_UNUSABLE_MEMORY leads to a
->>>> larger number of memblocks.
->>>>
->>>> For example, if the EFI_UNUSABLE_MEMORY type is reported:
->>>> ...
->>>> memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
->>>> memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
->>>> memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
->>>> memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
->>>> memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
->>>> memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
->>>> memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
->>>> memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
->>>> memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
->>>> memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
->>>> memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
->>>> memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
->>>> memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
->>>> memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
->>>> ...
->>>
->>> Although this patch did not mention about a real world system requiring
->>> this support, as been reported on the thread, Ampere Altra does seem to
->>> get benefited. Regardless, it's always better to describe platform test
->>> scenarios in more detail.
->>>
->>
->> I encountered this scenario on Huawei Ascend ARM64 SoC.
-> 
-> Please do mention that in the commit message.
-> 
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Thomas, Marc, please pick this MAINTAINERS addition to your section.
 
-I will add this in patch v4.
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
->>
->>>>
->>>> The EFI memory map is parsed to construct the memblock arrays before
->>>> the memblock arrays can be resized. As the result, memory regions
->>>> beyond INIT_MEMBLOCK_REGIONS are lost.
->>>>
->>>> Allow overriding memblock.memory array size with architecture defined
->>>> INIT_MEMBLOCK_MEMORY_REGIONS and make arm64 to set
->>>> INIT_MEMBLOCK_MEMORY_REGIONS to 1024 when CONFIG_EFI is enabled.
->>>
->>> Right, but first this needs to mention that INIT_MEMBLOCK_MEMORY_REGIONS
->>> (new macro) is being added to replace INIT_MEMBLOCK_REGIONS, representing
->>> max memory regions in the memblock. Platform override comes afterwards.
->>>
->>
->> Add a paragraph before the description,like this?
->>
->> Add a new macro INIT_MEMBLOCK_MEMORY_REGTIONS to replace 
->> INIT_MEMBLOCK_REGTIONS to define the size of the static memblock.memory 
->> array.
-> 
-> Right.
-
-I will add this paragraph in patch v4.
-
-> 
->>
->>>>
->>>> Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
->>>> Acked-by: Mike Rapoport <rppt@linux.ibm.com>
->>>> ---
->>>>   arch/arm64/include/asm/memory.h |  9 +++++++++
->>>>   mm/memblock.c                   | 14 +++++++++-----
->>>>   2 files changed, 18 insertions(+), 5 deletions(-)
->>>>
->>>> diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
->>>> index 0af70d9abede..eda61c0389c4 100644
->>>> --- a/arch/arm64/include/asm/memory.h
->>>> +++ b/arch/arm64/include/asm/memory.h
->>>> @@ -364,6 +364,15 @@ void dump_mem_limit(void);
->>>>   # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
->>>>   #endif
->>>>   
->>>> +/*
->>>> + * memory regions which marked with flag MEMBLOCK_NOMAP may divide a continuous
->>>> + * memory block into multiple parts. As a result, the number of memory regions
->>>> + * is large.
->>>> + */
->>>
->>> As mentioned in the previous version's thread,
->>>
->>> This comment needs be more specific about this increased static array size, being
->>> applicable ONLY for MEMBLOCK_NOMAP regions on EFI system with EFI_UNUSABLE_MEMORY
->>> tagging/flag support.
->>>
->>
->> EFI_UNUSABLE_MEMORY is only one type of the MEMBLOCK_NOMAP region, as 
->> shown in the is_usable_memory function. However, However, I currently 
->> have too many memblocks due to this flag.
-> 
-> Okay, but adding EFI_UNUSABLE_MEMORY context in that comment will be helpful.
-> 
-
-I'll add it to the comment in patch v4.
-
->>
->>>> +#ifdef CONFIG_EFI
->>>> +#define INIT_MEMBLOCK_MEMORY_REGIONS	1024
->>>
->>> Although 1024 seems adequate as compared to 128 memory regions in the memblock to
->>> handle such error scenarios, but a co-relation with INIT_MEMBLOCK_REGIONS would
->>> be preferred similar to when INIT_MEMBLOCK_RESERVED_REGIONS gets overridden. This
->>> avoid a precedence when random numbers could get assigned in other archs later on.
->>>
->>> $git grep INIT_MEMBLOCK_RESERVED_REGIONS arch/
->>> arch/arm64/include/asm/memory.h:# define INIT_MEMBLOCK_RESERVED_REGIONS (INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
->>> arch/loongarch/include/asm/sparsemem.h:#define INIT_MEMBLOCK_RESERVED_REGIONS   (INIT_MEMBLOCK_REGIONS + NR_CPUS)
->>>
->>> Something like
->>>
->>> #define INIT_MEMBLOCK_MEMORY_REGIONS	(INIT_MEMBLOCK_REGIONS * 8)
->>>
->>
->> I don't think this is necessary because INIT_MEMBLOCK_REGIONS is not 
->> configurable. The newly added INIT_MEMBLOCK_MEMORY_REGIONS macro is 
->> customized for each platform.
-> 
-> Even an existing macro INIT_MEMBLOCK_RESERVED_REGIONS still depends on
-> INIT_MEMBLOCK_REGIONS (arm64, loongarch) ? The point being, although
-> INIT_MEMBLOCK_REGIONS is not configurable, it still does provide enough
-> base value, as compared to defining a random number in platforms which
-> will override INIT_MEMBLOCK_MEMORY_REGIONS. What is your concern in
-> making it dependent on INIT_MEMBLOCK_REGIONS ?
-> 
-
-In my opinion, the purpose of adding INIT_MEMBLOCK_MEMORY_REGTIONS is to specify a larger size on different platforms. In the future, the base value of INIT_MEMBLOCK_REGTIONS is adjusted to a larger value (for example, 256). On the arm64 platform, it is not necessary to adjust (256 * 8) INIT_MEMBLOCK_MEMORY_REGTIONS.
-
-Thanks!
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 262ed53d544a..30f80e8fe775 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -10490,6 +10490,7 @@ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
+ F:	Documentation/devicetree/bindings/interrupt-controller/
+ F:	drivers/irqchip/
++F:	include/dt-bindings/interrupt-controller/
+ 
+ ISA
+ M:	William Breathitt Gray <vilhelm.gray@gmail.com>
+-- 
+2.17.1
 

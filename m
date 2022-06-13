@@ -2,163 +2,375 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A185481C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813D45481A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236461AbiFMIUC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:20:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S231470AbiFMITd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233189AbiFMIUA (ORCPT
+        with ESMTP id S229437AbiFMITb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:20:00 -0400
-Received: from conuserg-08.nifty.com (conuserg-08.nifty.com [210.131.2.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E9C1EAE5;
-        Mon, 13 Jun 2022 01:19:58 -0700 (PDT)
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-08.nifty.com with ESMTP id 25D8Hqcs011074;
-        Mon, 13 Jun 2022 17:17:52 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-08.nifty.com 25D8Hqcs011074
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1655108273;
-        bh=CmhbukpBhZs7hao25rQlICLG+Ns0/87DXmi5jDvd2iE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hBKp+jS9P7HmrcT7zp7l6kQNJUNh88ugzYtEluVI0KDn7TlAkLIDc8ju3Mi1RuIeH
-         N5S8Z6ThORDDGC/9XFYl+0Zod6QhGHMSD7Ds4vB+DnLevHTpIi8lZcB6NtoxMxRfbX
-         bTCLu7klIZirLYKtICeNotC+RVxKTvmM+qAH2v7jrhz5zjVquH0z4tSbw+U510lBrN
-         oh5JlCQJy7sMEamM1ncpm4+yIe8e/puiVt2+HU+ka2BNfHM9hZY2hio62Oy2Ir1vVO
-         UwKckHWfho3ccbl9oir28ZefJYO1uSj4xgWcjC4wI3buDWwwhHoYScccyxw7eWa4K2
-         IFrRwCAKfKCZg==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Luis Chamberlain <mcgrof@kernel.org>, linux-modules@vger.kernel.org
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        live-patching@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alex Shi <alexs@kernel.org>,
-        Federico Vaga <federico.vaga@vaga.pv.it>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthias Maennich <maennich@google.com>,
-        Yanteng Si <siyanteng@loongson.cn>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] doc: module: update file references
-Date:   Mon, 13 Jun 2022 17:17:40 +0900
-Message-Id: <20220613081741.1699713-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
+        Mon, 13 Jun 2022 04:19:31 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BBC21A05C
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 01:19:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655108368;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D+bE/eIwnNG9XOCQ/1sWd0v88bQkbotgG2HKdCFfZRY=;
+        b=gGOVRUGF2+2lM3PE8Qydn1JSXxSbHT2QWySE/xvJAIpur5j0SAeYqqr5CqpnemHW8i9ld6
+        9V3f7E2ZzC76LsxTASpvnvQ5va9B7Qvbdjy/wiTdERBaWv6qavOj3xjFU2iBAzoEk5NFmU
+        PQMJqVQuaSPBwgveIJRQfC/auCebDlA=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-617-EQlkPpz-OkWTCfxML3pcGw-1; Mon, 13 Jun 2022 04:19:21 -0400
+X-MC-Unique: EQlkPpz-OkWTCfxML3pcGw-1
+Received: by mail-ej1-f71.google.com with SMTP id z7-20020a170906434700b007108b59c212so1504336ejm.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 01:19:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=D+bE/eIwnNG9XOCQ/1sWd0v88bQkbotgG2HKdCFfZRY=;
+        b=0wGWtGGRe4Kt32kgr2yOkjYYXTbSd0ezEJ5l7yQhoLkr8bk4iC86ekeaSzP6C3Tjvf
+         XY4uKs53K+9EwEIhzhmh1iiJspdWkETM6BV/XYNyCKGoPFxZSBQpe00O8S+dQ4T/mulr
+         fjEzpwUWZ/yf286yZxp+aNi3KATUulqi/sgk0jygCCNaKrmOybOy5/hgToS5V/tNpskB
+         cEoqCk+bSQ2c+GzEdaDzBk7eceSFEi6hv7u80VCl2X2pX3rjaD3E9coBcFcrjBKm6lzS
+         EAjMwLQKZjrwkbECOl/8QI4AAV4zWMFL+rl2zZIRhjrFzlEPQh+IzGzYItbDogaMHQzx
+         jAKQ==
+X-Gm-Message-State: AOAM5330mGrgUQzMGuIz81o69sro1qWg4lP/RAMYoR9EYmZX5iS+jc0D
+        PlCxthpXAQ/bRAzAfsaz52cRPwaMi4Mvi063ihyldv7COAgrCQe3H21cAr6A1r9C2wZZzNTO7p0
+        r3gCqBXc2K1UeGRb4ZuYIzO40
+X-Received: by 2002:a05:6402:51d3:b0:431:6c7b:28d with SMTP id r19-20020a05640251d300b004316c7b028dmr39827811edd.281.1655108360016;
+        Mon, 13 Jun 2022 01:19:20 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzedJt36QP43DZ3lXCcLhyT5+s+fFXlsi68dqAyaPTqNbf7jaGH7clhvwaAkZwTjn/VAEM3wA==
+X-Received: by 2002:a05:6402:51d3:b0:431:6c7b:28d with SMTP id r19-20020a05640251d300b004316c7b028dmr39827797edd.281.1655108359802;
+        Mon, 13 Jun 2022 01:19:19 -0700 (PDT)
+Received: from redhat.com ([2a03:c5c0:107c:be5a:1a30:9f6d:4400:4adc])
+        by smtp.gmail.com with ESMTPSA id d1-20020a056402144100b00431665f1203sm4473490edx.73.2022.06.13.01.19.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 01:19:19 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 04:19:13 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH V6 8/9] virtio: harden vring IRQ
+Message-ID: <20220613041416-mutt-send-email-mst@kernel.org>
+References: <20220527060120.20964-1-jasowang@redhat.com>
+ <20220527060120.20964-9-jasowang@redhat.com>
+ <20220611010747-mutt-send-email-mst@kernel.org>
+ <CACGkMEtRP+0Xy63g0SF_y1avv=3rFv6P9+Z7kp9XBS5d+_py8w@mail.gmail.com>
+ <20220613023337-mutt-send-email-mst@kernel.org>
+ <CACGkMEs05ZisiPW+7H6Omp80MzmZWZCpc1mf5Vd99C3H-KUtgA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACGkMEs05ZisiPW+7H6Omp80MzmZWZCpc1mf5Vd99C3H-KUtgA@mail.gmail.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adjust documents to the file moves made by commit cfc1d277891e ("module:
-Move all into module/").
+On Mon, Jun 13, 2022 at 04:07:09PM +0800, Jason Wang wrote:
+> On Mon, Jun 13, 2022 at 3:23 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Mon, Jun 13, 2022 at 01:26:59PM +0800, Jason Wang wrote:
+> > > On Sat, Jun 11, 2022 at 1:12 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > >
+> > > > On Fri, May 27, 2022 at 02:01:19PM +0800, Jason Wang wrote:
+> > > > > This is a rework on the previous IRQ hardening that is done for
+> > > > > virtio-pci where several drawbacks were found and were reverted:
+> > > > >
+> > > > > 1) try to use IRQF_NO_AUTOEN which is not friendly to affinity managed IRQ
+> > > > >    that is used by some device such as virtio-blk
+> > > > > 2) done only for PCI transport
+> > > > >
+> > > > > The vq->broken is re-used in this patch for implementing the IRQ
+> > > > > hardening. The vq->broken is set to true during both initialization
+> > > > > and reset. And the vq->broken is set to false in
+> > > > > virtio_device_ready(). Then vring_interrupt() can check and return
+> > > > > when vq->broken is true. And in this case, switch to return IRQ_NONE
+> > > > > to let the interrupt core aware of such invalid interrupt to prevent
+> > > > > IRQ storm.
+> > > > >
+> > > > > The reason of using a per queue variable instead of a per device one
+> > > > > is that we may need it for per queue reset hardening in the future.
+> > > > >
+> > > > > Note that the hardening is only done for vring interrupt since the
+> > > > > config interrupt hardening is already done in commit 22b7050a024d7
+> > > > > ("virtio: defer config changed notifications"). But the method that is
+> > > > > used by config interrupt can't be reused by the vring interrupt
+> > > > > handler because it uses spinlock to do the synchronization which is
+> > > > > expensive.
+> > > > >
+> > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> > > > > Cc: Marc Zyngier <maz@kernel.org>
+> > > > > Cc: Halil Pasic <pasic@linux.ibm.com>
+> > > > > Cc: Cornelia Huck <cohuck@redhat.com>
+> > > > > Cc: Vineeth Vijayan <vneethv@linux.ibm.com>
+> > > > > Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+> > > > > Cc: linux-s390@vger.kernel.org
+> > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > >
+> > > >
+> > > > Jason, I am really concerned by all the fallout.
+> > > > I propose adding a flag to suppress the hardening -
+> > > > this will be a debugging aid and a work around for
+> > > > users if we find more buggy drivers.
+> > > >
+> > > > suppress_interrupt_hardening ?
+> > >
+> > > I can post a patch but I'm afraid if we disable it by default, it
+> > > won't be used by the users so there's no way for us to receive the bug
+> > > report. Or we need a plan to enable it by default.
+> > >
+> > > It's rc2, how about waiting for 1 and 2 rc? Or it looks better if we
+> > > simply warn instead of disable it by default.
+> > >
+> > > Thanks
+> >
+> > I meant more like a flag in struct virtio_driver.
+> > For now, could you audit all drivers which don't call _ready?
+> > I found 5 of these:
+> >
+> > drivers/bluetooth/virtio_bt.c
+> 
+> This driver seems to be fine, it doesn't use the device/vq in its probe().
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
 
-I did not touch
+But it calls hci_register_dev and that in turn queues all kind of
+work. Also, can linux start using the device immediately after
+it's registered?
 
-  Documentation/translations/zh_CN/core-api/kernel-api.rst
 
-because I cannot modify it.
+> > drivers/gpu/drm/virtio/virtgpu_drv.c
+> 
+> It calles virtio_device_ready() in virtio_gpu_init(), and it looks to
+> me the code is correct.
 
- Documentation/core-api/kernel-api.rst                  |  2 +-
- Documentation/core-api/symbol-namespaces.rst           |  4 ++--
- Documentation/livepatch/module-elf-format.rst          | 10 +++++-----
- .../translations/it_IT/core-api/symbol-namespaces.rst  |  6 +++---
- .../translations/zh_CN/core-api/symbol-namespaces.rst  |  2 +-
- 5 files changed, 12 insertions(+), 12 deletions(-)
+OK.
 
-diff --git a/Documentation/core-api/kernel-api.rst b/Documentation/core-api/kernel-api.rst
-index d6b3f94b9f1f..0793c400d4b0 100644
---- a/Documentation/core-api/kernel-api.rst
-+++ b/Documentation/core-api/kernel-api.rst
-@@ -223,7 +223,7 @@ Module Loading
- Inter Module support
- --------------------
- 
--Refer to the file kernel/module.c for more information.
-+Refer to the files in kernel/module/ for more information.
- 
- Hardware Interfaces
- ===================
-diff --git a/Documentation/core-api/symbol-namespaces.rst b/Documentation/core-api/symbol-namespaces.rst
-index 5ad9e0abe42c..12e4aecdae94 100644
---- a/Documentation/core-api/symbol-namespaces.rst
-+++ b/Documentation/core-api/symbol-namespaces.rst
-@@ -51,8 +51,8 @@ namespace ``USB_STORAGE``, use::
- The corresponding ksymtab entry struct ``kernel_symbol`` will have the member
- ``namespace`` set accordingly. A symbol that is exported without a namespace will
- refer to ``NULL``. There is no default namespace if none is defined. ``modpost``
--and kernel/module.c make use the namespace at build time or module load time,
--respectively.
-+and kernel/module/main.c make use the namespace at build time or module load
-+time, respectively.
- 
- 2.2 Using the DEFAULT_SYMBOL_NAMESPACE define
- =============================================
-diff --git a/Documentation/livepatch/module-elf-format.rst b/Documentation/livepatch/module-elf-format.rst
-index dbe9b400e39f..7347638895a0 100644
---- a/Documentation/livepatch/module-elf-format.rst
-+++ b/Documentation/livepatch/module-elf-format.rst
-@@ -210,11 +210,11 @@ module->symtab.
- =====================================
- Normally, a stripped down copy of a module's symbol table (containing only
- "core" symbols) is made available through module->symtab (See layout_symtab()
--in kernel/module.c). For livepatch modules, the symbol table copied into memory
--on module load must be exactly the same as the symbol table produced when the
--patch module was compiled. This is because the relocations in each livepatch
--relocation section refer to their respective symbols with their symbol indices,
--and the original symbol indices (and thus the symtab ordering) must be
-+in kernel/module/kallsyms.c). For livepatch modules, the symbol table copied
-+into memory on module load must be exactly the same as the symbol table produced
-+when the patch module was compiled. This is because the relocations in each
-+livepatch relocation section refer to their respective symbols with their symbol
-+indices, and the original symbol indices (and thus the symtab ordering) must be
- preserved in order for apply_relocate_add() to find the right symbol.
- 
- For example, take this particular rela from a livepatch module:::
-diff --git a/Documentation/translations/it_IT/core-api/symbol-namespaces.rst b/Documentation/translations/it_IT/core-api/symbol-namespaces.rst
-index 42f5d04e38ec..0f6898860d6d 100644
---- a/Documentation/translations/it_IT/core-api/symbol-namespaces.rst
-+++ b/Documentation/translations/it_IT/core-api/symbol-namespaces.rst
-@@ -50,9 +50,9 @@ Di conseguenza, nella tabella dei simboli del kernel ci sarà una voce
- rappresentata dalla struttura ``kernel_symbol`` che avrà il campo
- ``namespace`` (spazio dei nomi) impostato. Un simbolo esportato senza uno spazio
- dei nomi avrà questo campo impostato a ``NULL``. Non esiste uno spazio dei nomi
--di base. Il programma ``modpost`` e il codice in kernel/module.c usano lo spazio
--dei nomi, rispettivamente, durante la compilazione e durante il caricamento
--di un modulo.
-+di base. Il programma ``modpost`` e il codice in kernel/module/main.c usano lo
-+spazio dei nomi, rispettivamente, durante la compilazione e durante il
-+caricamento di un modulo.
- 
- 2.2 Usare il simbolo di preprocessore DEFAULT_SYMBOL_NAMESPACE
- ==============================================================
-diff --git a/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst b/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst
-index 6abf7ed534ca..bb16f0611046 100644
---- a/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst
-+++ b/Documentation/translations/zh_CN/core-api/symbol-namespaces.rst
-@@ -52,7 +52,7 @@
- 
- 相应的 ksymtab 条目结构体 ``kernel_symbol`` 将有相应的成员 ``命名空间`` 集。
- 导出时未指明命名空间的符号将指向 ``NULL`` 。如果没有定义命名空间，则默认没有。
--``modpost`` 和kernel/module.c分别在构建时或模块加载时使用名称空间。
-+``modpost`` 和kernel/module/main.c分别在构建时或模块加载时使用名称空间。
- 
- 2.2 使用DEFAULT_SYMBOL_NAMESPACE定义
- ====================================
--- 
-2.32.0
+> > drivers/i2c/busses/i2c-virtio.c
+> > drivers/net/caif/caif_virtio.c
+> > drivers/nvdimm/virtio_pmem.c
+> 
+> The above looks fine and we have three more:
+> 
+> arm_scmi: probe() doesn't use vq
+> mac80211_hwsim.c: doesn't use vq (only fill rx), but it kicks the rx,
+> it looks to me we need a device_ready before the kick.
+> virtio_rpmsg_bus.c: doesn't use vq
+> 
+> I will post a patch for mac80211_hwsim.c.
+> Thanks
+
+Same comments for all of the above. Might linux not start using the
+device once it's registered?
+
+> >
+> >
+> >
+> >
+> > > >
+> > > >
+> > > > > ---
+> > > > >  drivers/s390/virtio/virtio_ccw.c       |  4 ++++
+> > > > >  drivers/virtio/virtio.c                | 15 ++++++++++++---
+> > > > >  drivers/virtio/virtio_mmio.c           |  5 +++++
+> > > > >  drivers/virtio/virtio_pci_modern_dev.c |  5 +++++
+> > > > >  drivers/virtio/virtio_ring.c           | 11 +++++++----
+> > > > >  include/linux/virtio_config.h          | 20 ++++++++++++++++++++
+> > > > >  6 files changed, 53 insertions(+), 7 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/s390/virtio/virtio_ccw.c b/drivers/s390/virtio/virtio_ccw.c
+> > > > > index c188e4f20ca3..97e51c34e6cf 100644
+> > > > > --- a/drivers/s390/virtio/virtio_ccw.c
+> > > > > +++ b/drivers/s390/virtio/virtio_ccw.c
+> > > > > @@ -971,6 +971,10 @@ static void virtio_ccw_set_status(struct virtio_device *vdev, u8 status)
+> > > > >       ccw->flags = 0;
+> > > > >       ccw->count = sizeof(status);
+> > > > >       ccw->cda = (__u32)(unsigned long)&vcdev->dma_area->status;
+> > > > > +     /* We use ssch for setting the status which is a serializing
+> > > > > +      * instruction that guarantees the memory writes have
+> > > > > +      * completed before ssch.
+> > > > > +      */
+> > > > >       ret = ccw_io_helper(vcdev, ccw, VIRTIO_CCW_DOING_WRITE_STATUS);
+> > > > >       /* Write failed? We assume status is unchanged. */
+> > > > >       if (ret)
+> > > > > diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+> > > > > index aa1eb5132767..95fac4c97c8b 100644
+> > > > > --- a/drivers/virtio/virtio.c
+> > > > > +++ b/drivers/virtio/virtio.c
+> > > > > @@ -220,6 +220,15 @@ static int virtio_features_ok(struct virtio_device *dev)
+> > > > >   * */
+> > > > >  void virtio_reset_device(struct virtio_device *dev)
+> > > > >  {
+> > > > > +     /*
+> > > > > +      * The below virtio_synchronize_cbs() guarantees that any
+> > > > > +      * interrupt for this line arriving after
+> > > > > +      * virtio_synchronize_vqs() has completed is guaranteed to see
+> > > > > +      * vq->broken as true.
+> > > > > +      */
+> > > > > +     virtio_break_device(dev);
+> > > >
+> > > > So make this conditional
+> > > >
+> > > > > +     virtio_synchronize_cbs(dev);
+> > > > > +
+> > > > >       dev->config->reset(dev);
+> > > > >  }
+> > > > >  EXPORT_SYMBOL_GPL(virtio_reset_device);
+> > > > > @@ -428,6 +437,9 @@ int register_virtio_device(struct virtio_device *dev)
+> > > > >       dev->config_enabled = false;
+> > > > >       dev->config_change_pending = false;
+> > > > >
+> > > > > +     INIT_LIST_HEAD(&dev->vqs);
+> > > > > +     spin_lock_init(&dev->vqs_list_lock);
+> > > > > +
+> > > > >       /* We always start by resetting the device, in case a previous
+> > > > >        * driver messed it up.  This also tests that code path a little. */
+> > > > >       virtio_reset_device(dev);
+> > > > > @@ -435,9 +447,6 @@ int register_virtio_device(struct virtio_device *dev)
+> > > > >       /* Acknowledge that we've seen the device. */
+> > > > >       virtio_add_status(dev, VIRTIO_CONFIG_S_ACKNOWLEDGE);
+> > > > >
+> > > > > -     INIT_LIST_HEAD(&dev->vqs);
+> > > > > -     spin_lock_init(&dev->vqs_list_lock);
+> > > > > -
+> > > > >       /*
+> > > > >        * device_add() causes the bus infrastructure to look for a matching
+> > > > >        * driver.
+> > > > > diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+> > > > > index c9699a59f93c..f9a36bc7ac27 100644
+> > > > > --- a/drivers/virtio/virtio_mmio.c
+> > > > > +++ b/drivers/virtio/virtio_mmio.c
+> > > > > @@ -253,6 +253,11 @@ static void vm_set_status(struct virtio_device *vdev, u8 status)
+> > > > >       /* We should never be setting status to 0. */
+> > > > >       BUG_ON(status == 0);
+> > > > >
+> > > > > +     /*
+> > > > > +      * Per memory-barriers.txt, wmb() is not needed to guarantee
+> > > > > +      * that the the cache coherent memory writes have completed
+> > > > > +      * before writing to the MMIO region.
+> > > > > +      */
+> > > > >       writel(status, vm_dev->base + VIRTIO_MMIO_STATUS);
+> > > > >  }
+> > > > >
+> > > > > diff --git a/drivers/virtio/virtio_pci_modern_dev.c b/drivers/virtio/virtio_pci_modern_dev.c
+> > > > > index 4093f9cca7a6..a0fa14f28a7f 100644
+> > > > > --- a/drivers/virtio/virtio_pci_modern_dev.c
+> > > > > +++ b/drivers/virtio/virtio_pci_modern_dev.c
+> > > > > @@ -467,6 +467,11 @@ void vp_modern_set_status(struct virtio_pci_modern_device *mdev,
+> > > > >  {
+> > > > >       struct virtio_pci_common_cfg __iomem *cfg = mdev->common;
+> > > > >
+> > > > > +     /*
+> > > > > +      * Per memory-barriers.txt, wmb() is not needed to guarantee
+> > > > > +      * that the the cache coherent memory writes have completed
+> > > > > +      * before writing to the MMIO region.
+> > > > > +      */
+> > > > >       vp_iowrite8(status, &cfg->device_status);
+> > > > >  }
+> > > > >  EXPORT_SYMBOL_GPL(vp_modern_set_status);
+> > > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > > > > index 9c231e1fded7..13a7348cedff 100644
+> > > > > --- a/drivers/virtio/virtio_ring.c
+> > > > > +++ b/drivers/virtio/virtio_ring.c
+> > > > > @@ -1688,7 +1688,7 @@ static struct virtqueue *vring_create_virtqueue_packed(
+> > > > >       vq->we_own_ring = true;
+> > > > >       vq->notify = notify;
+> > > > >       vq->weak_barriers = weak_barriers;
+> > > > > -     vq->broken = false;
+> > > > > +     vq->broken = true;
+> > > > >       vq->last_used_idx = 0;
+> > > > >       vq->event_triggered = false;
+> > > > >       vq->num_added = 0;
+> > > >
+> > > > and make this conditional
+> > > >
+> > > > > @@ -2134,8 +2134,11 @@ irqreturn_t vring_interrupt(int irq, void *_vq)
+> > > > >               return IRQ_NONE;
+> > > > >       }
+> > > > >
+> > > > > -     if (unlikely(vq->broken))
+> > > > > -             return IRQ_HANDLED;
+> > > > > +     if (unlikely(vq->broken)) {
+> > > > > +             dev_warn_once(&vq->vq.vdev->dev,
+> > > > > +                           "virtio vring IRQ raised before DRIVER_OK");
+> > > > > +             return IRQ_NONE;
+> > > > > +     }
+> > > > >
+> > > > >       /* Just a hint for performance: so it's ok that this can be racy! */
+> > > > >       if (vq->event)
+> > > > > @@ -2177,7 +2180,7 @@ struct virtqueue *__vring_new_virtqueue(unsigned int index,
+> > > > >       vq->we_own_ring = false;
+> > > > >       vq->notify = notify;
+> > > > >       vq->weak_barriers = weak_barriers;
+> > > > > -     vq->broken = false;
+> > > > > +     vq->broken = true;
+> > > > >       vq->last_used_idx = 0;
+> > > > >       vq->event_triggered = false;
+> > > > >       vq->num_added = 0;
+> > > >
+> > > > and make this conditional
+> > > >
+> > > > > diff --git a/include/linux/virtio_config.h b/include/linux/virtio_config.h
+> > > > > index 25be018810a7..d4edfd7d91bb 100644
+> > > > > --- a/include/linux/virtio_config.h
+> > > > > +++ b/include/linux/virtio_config.h
+> > > > > @@ -256,6 +256,26 @@ void virtio_device_ready(struct virtio_device *dev)
+> > > > >       unsigned status = dev->config->get_status(dev);
+> > > > >
+> > > > >       BUG_ON(status & VIRTIO_CONFIG_S_DRIVER_OK);
+> > > > > +
+> > > > > +     /*
+> > > > > +      * The virtio_synchronize_cbs() makes sure vring_interrupt()
+> > > > > +      * will see the driver specific setup if it sees vq->broken
+> > > > > +      * as false (even if the notifications come before DRIVER_OK).
+> > > > > +      */
+> > > > > +     virtio_synchronize_cbs(dev);
+> > > > > +     __virtio_unbreak_device(dev);
+> > > > > +     /*
+> > > > > +      * The transport should ensure the visibility of vq->broken
+> > > > > +      * before setting DRIVER_OK. See the comments for the transport
+> > > > > +      * specific set_status() method.
+> > > > > +      *
+> > > > > +      * A well behaved device will only notify a virtqueue after
+> > > > > +      * DRIVER_OK, this means the device should "see" the coherenct
+> > > > > +      * memory write that set vq->broken as false which is done by
+> > > > > +      * the driver when it sees DRIVER_OK, then the following
+> > > > > +      * driver's vring_interrupt() will see vq->broken as false so
+> > > > > +      * we won't lose any notification.
+> > > > > +      */
+> > > > >       dev->config->set_status(dev, status | VIRTIO_CONFIG_S_DRIVER_OK);
+> > > > >  }
+> > > > >
+> > > > > --
+> > > > > 2.25.1
+> > > >
+> >
 

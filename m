@@ -2,54 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09759548D1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 939FE549109
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382010AbiFMOFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        id S239752AbiFMMtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380102AbiFMN5r (ORCPT
+        with ESMTP id S1353051AbiFMMrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:57:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82A083DDEF;
-        Mon, 13 Jun 2022 04:37:31 -0700 (PDT)
+        Mon, 13 Jun 2022 08:47:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD1C2DC0;
+        Mon, 13 Jun 2022 04:11:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11267B80ECE;
-        Mon, 13 Jun 2022 11:37:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45CF7C34114;
-        Mon, 13 Jun 2022 11:37:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD58560B6F;
+        Mon, 13 Jun 2022 11:11:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA4D3C34114;
+        Mon, 13 Jun 2022 11:11:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120248;
-        bh=LYQzyA3EYOwaI3hpcICIfprp+dWtUSLsCT350YaAutI=;
+        s=korg; t=1655118681;
+        bh=k+/pVrIT8QfqIWbATLK3wlWEq5hh0GwRx7H7a3D01Zw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vJSZZbfQuVle03O/VKh3yX24Gm72uxjmHHeh8KgvyI3aFAvTmeqKw9n4pX8US3fgJ
-         O5/k5KgegEB4yGCdvN1WAgEWwgwtcqBN2rQgM+JQgzF07XZSjrLNilwWJw1mJD1plE
-         tbojBMiejP69+CIplcb0jv2XZdIZCxm/t23zpBZo=
+        b=jCGogqysW51KsVChoascf9krViimy2O6+ltWMhrlvEYgQxkefqOWKGCplWKdVjK1X
+         AyGsEGt5XDbiYNyO8HY+g7Ey+qlDh45zh6SqMITDqhnyfZPFuqnVXYiA8n90iDYyjh
+         CXVDiHV31OeHG3GTTR7eJbid3+tnUMi773fss80E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Gordeev <agordeev@linux.ibm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Yury Norov <yury.norov@gmail.com>,
+        stable@vger.kernel.org, Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 285/339] drm/amd/pm: use bitmap_{from,to}_arr32 where appropriate
+Subject: [PATCH 5.10 150/172] scripts/gdb: change kernel config dumping method
 Date:   Mon, 13 Jun 2022 12:11:50 +0200
-Message-Id: <20220613094935.277717459@linuxfoundation.org>
+Message-Id: <20220613094922.695739684@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -64,57 +55,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yury Norov <yury.norov@gmail.com>
+From: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
 
-[ Upstream commit 525d6515604eb1373ce5e6372a6b6640953b2d6a ]
+[ Upstream commit 1f7a6cf6b07c74a17343c2559cd5f5018a245961 ]
 
-The smu_v1X_0_set_allowed_mask() uses bitmap_copy() to convert
-bitmap to 32-bit array. This may be wrong due to endiannes issues.
-Fix it by switching to bitmap_{from,to}_arr32.
+MAGIC_START("IKCFG_ST") and MAGIC_END("IKCFG_ED") are moved out
+from the kernel_config_data variable.
 
-CC: Alexander Gordeev <agordeev@linux.ibm.com>
-CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC: Christian Borntraeger <borntraeger@linux.ibm.com>
-CC: Claudio Imbrenda <imbrenda@linux.ibm.com>
-CC: David Hildenbrand <david@redhat.com>
-CC: Heiko Carstens <hca@linux.ibm.com>
-CC: Janosch Frank <frankja@linux.ibm.com>
-CC: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-CC: Sven Schnelle <svens@linux.ibm.com>
-CC: Vasily Gorbik <gor@linux.ibm.com>
-Signed-off-by: Yury Norov <yury.norov@gmail.com>
+Thus, we parse kernel_config_data directly instead of considering
+offset of MAGIC_START and MAGIC_END.
+
+Fixes: 13610aa908dc ("kernel/configs: use .incbin directive to embed config_data.gz")
+Signed-off-by: Kuan-Ying Lee <Kuan-Ying.Lee@mediatek.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c | 2 +-
- drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ scripts/gdb/linux/config.py | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-index b87f550af26b..5f8809f6990d 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu11/smu_v11_0.c
-@@ -781,7 +781,7 @@ int smu_v11_0_set_allowed_mask(struct smu_context *smu)
- 		goto failed;
- 	}
+diff --git a/scripts/gdb/linux/config.py b/scripts/gdb/linux/config.py
+index 90e1565b1967..8843ab3cbadd 100644
+--- a/scripts/gdb/linux/config.py
++++ b/scripts/gdb/linux/config.py
+@@ -24,9 +24,9 @@ class LxConfigDump(gdb.Command):
+             filename = arg
  
--	bitmap_copy((unsigned long *)feature_mask, feature->allowed, 64);
-+	bitmap_to_arr32(feature_mask, feature->allowed, 64);
+         try:
+-            py_config_ptr = gdb.parse_and_eval("kernel_config_data + 8")
+-            py_config_size = gdb.parse_and_eval(
+-                    "sizeof(kernel_config_data) - 1 - 8 * 2")
++            py_config_ptr = gdb.parse_and_eval("&kernel_config_data")
++            py_config_ptr_end = gdb.parse_and_eval("&kernel_config_data_end")
++            py_config_size = py_config_ptr_end - py_config_ptr
+         except gdb.error as e:
+             raise gdb.GdbError("Can't find config, enable CONFIG_IKCONFIG?")
  
- 	ret = smu_cmn_send_smc_msg_with_param(smu, SMU_MSG_SetAllowedFeaturesMaskHigh,
- 					  feature_mask[1], NULL);
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-index cf09e30bdfe0..747430ce6394 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/smu_v13_0.c
-@@ -730,7 +730,7 @@ int smu_v13_0_set_allowed_mask(struct smu_context *smu)
- 	    feature->feature_num < 64)
- 		return -EINVAL;
- 
--	bitmap_copy((unsigned long *)feature_mask, feature->allowed, 64);
-+	bitmap_to_arr32(feature_mask, feature->allowed, 64);
- 
- 	ret = smu_cmn_send_smc_msg_with_param(smu, SMU_MSG_SetAllowedFeaturesMaskHigh,
- 					      feature_mask[1], NULL);
 -- 
 2.35.1
 

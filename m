@@ -2,52 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AFF2549003
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CED9D548B8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349009AbiFMPVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 11:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41594 "EHLO
+        id S243709AbiFMPZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 11:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244020AbiFMPU5 (ORCPT
+        with ESMTP id S1357517AbiFMPXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 11:20:57 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B3C12E83F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:47:09 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id e4-20020a056e020b2400b002d5509de6f3so4519399ilu.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:47:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=rTgFkwumsnbufKY7S9wSNP6dppaQAEhkOhZkIrZ1EJQ=;
-        b=1k/OImlY14CiBRf6ijDchMbg67m5me4WekDT+mIQL7EGHNPr+7nUbcqtMjDkbMDirn
-         ABuC5gUYh8p5051qr819HSE+KNs6ZL2ZA8cK0feIp94eODM0bTTJwg3gEmm6cPaIRHmz
-         ypbSi87WdDavL0uWpAkEF1VT/E9u5zEOSjiIBMBMYjDVa/hnA2s/BzW9ig4cS1+5/60R
-         opt6oqa2QPQEWj/bMxaJkY/2skFdvYppCVGTSskeuqmegblSo8DSqKvmAqOXQBIu00WO
-         lOIqTOXj1ZdCYb2h0lCJs2R0LaYJiq7Sv4JymlKiPyL7MyvxRYkiVtpr0J55LXexofyY
-         TUAQ==
-X-Gm-Message-State: AOAM530slmH70Q1U/62HtRbRdgi0ba4dwXeqmYtjeuQp9lLFar2kJtUY
-        6qXLUTo9/ZG/0Oe2iFFNTvld9GtJGDibX20upHyg/VSUXKhc
-X-Google-Smtp-Source: ABdhPJxU8sGkFGwVMoB6BzvhnQgeCCqMhvZiJ9bYYo/SWwXGh8XSgpgF8o4pKBSSCUv026a+zPY+zfFCawSVNvzD/N3vKlDnMawA
+        Mon, 13 Jun 2022 11:23:49 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E099162131
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655124539; x=1686660539;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=F+Z/xKS8IJ6c8oqyWurA8RR/4fHWWhqaKxllGYROtwo=;
+  b=ffeRtebDGvIawMNiIpBE77FlmSkEKfvVx1c06BMgF4/j7V7geS75DB9P
+   q8gjBvrk62Gw6Esta9FKV8ztGHI46iPMZjXc4IL2mJVWLr+b6XVOEEaTV
+   6fM5FYJdAtODK+hMxRY64rnhuRyqOdGpU3hAd+soLldP+nJu8N1G1Tpw6
+   vTWFWNW9yNF14xwPmQZMYci8cxiYP3LZ0Az1bU9qDdw8ImpYYYVdqWY1B
+   nmqB2ZajV3tVacIiCrZLzzGKOjQyP+FfSSX/wgKWMCaR7Jce9T4TJvQOn
+   7+yN8IbpxXplwqjHY6ROVQiiDtF8PtUNeB/d6XNqxANiR9x6UAvb3TpKa
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="342242573"
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="342242573"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 05:48:34 -0700
+X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
+   d="scan'208";a="910369101"
+Received: from tchuynh1-mobl1.amr.corp.intel.com (HELO [10.212.112.176]) ([10.212.112.176])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 05:48:33 -0700
+Message-ID: <7328fbb2-06af-99c8-5e7f-9d22f8c4e4f6@linux.intel.com>
+Date:   Mon, 13 Jun 2022 07:48:32 -0500
 MIME-Version: 1.0
-X-Received: by 2002:a92:d851:0:b0:2d5:52a0:28be with SMTP id
- h17-20020a92d851000000b002d552a028bemr18854253ilq.313.1655124428284; Mon, 13
- Jun 2022 05:47:08 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 05:47:08 -0700
-In-Reply-To: <20220613104713.1829-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000009b692105e153af25@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in __vma_adjust
-From:   syzbot <syzbot+68771c0e74f7bb7804e5@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH 1/2] soundwire: intel: uniquify debug message
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Bard Liao <yung-chuan.liao@linux.intel.com>,
+        alsa-devel@alsa-project.org, vkoul@kernel.org,
+        vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
+        broonie@kernel.org, srinivas.kandagatla@linaro.org,
+        sanyog.r.kale@intel.com, bard.liao@intel.com
+References: <20220610023537.27223-1-yung-chuan.liao@linux.intel.com>
+ <20220610023537.27223-2-yung-chuan.liao@linux.intel.com>
+ <YqLVwqx9/Pos8T06@kroah.com>
+ <b86e6cbd-3488-a239-d765-cf01bf0d4f70@linux.intel.com>
+ <YqRCKtLGYlRQQ+DU@kroah.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <YqRCKtLGYlRQQ+DU@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,182 +69,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: use-after-free Write in userfaultfd_release
-
-==================================================================
-BUG: KASAN: use-after-free in userfaultfd_release+0x651/0x670 fs/userfaultfd.c:897
-Write of size 8 at addr ffff8880781dfe78 by task syz-executor.0/4090
-
-CPU: 0 PID: 4090 Comm: syz-executor.0 Not tainted 5.19.0-rc1-next-20220610-syzkaller-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- userfaultfd_release+0x651/0x670 fs/userfaultfd.c:897
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- get_signal+0x1c5/0x2600 kernel/signal.c:2634
- arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
- exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
- exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-RIP: 0033:0x7f734c489109
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f734d629168 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-RAX: fffffffffffffe00 RBX: 00007f734c59bf60 RCX: 00007f734c489109
-RDX: 000000000000003c RSI: 0000000020000180 RDI: 0000000000000003
-RBP: 00007f734d6291d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
-R13: 00007ffcee01460f R14: 00007f734d629300 R15: 0000000000022000
- </TASK>
-
-Allocated by task 4069:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- __kasan_slab_alloc+0x90/0xc0 mm/kasan/common.c:469
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:750 [inline]
- slab_alloc_node mm/slub.c:3214 [inline]
- slab_alloc mm/slub.c:3222 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3229 [inline]
- kmem_cache_alloc+0x204/0x3b0 mm/slub.c:3239
- vm_area_dup+0x81/0x380 kernel/fork.c:466
- dup_mmap+0x656/0x1090 kernel/fork.c:640
- dup_mm+0x91/0x370 kernel/fork.c:1520
- copy_mm kernel/fork.c:1569 [inline]
- copy_process+0x3c95/0x7080 kernel/fork.c:2234
- kernel_clone+0xe7/0xab0 kernel/fork.c:2649
- __do_sys_clone+0xba/0x100 kernel/fork.c:2783
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Freed by task 4090:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x166/0x1a0 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1727 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1753
- slab_free mm/slub.c:3507 [inline]
- kmem_cache_free+0xdd/0x5a0 mm/slub.c:3524
- __vma_adjust+0x9ae/0x1910 mm/mmap.c:889
- vma_merge+0x590/0x870 mm/mmap.c:1123
- userfaultfd_release+0x4c5/0x670 fs/userfaultfd.c:888
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- get_signal+0x1c5/0x2600 kernel/signal.c:2634
- arch_do_signal_or_restart+0x82/0x2300 arch/x86/kernel/signal.c:869
- exit_to_user_mode_loop kernel/entry/common.c:166 [inline]
- exit_to_user_mode_prepare+0x15f/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x50 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-The buggy address belongs to the object at ffff8880781dfe58
- which belongs to the cache vm_area_struct of size 152
-The buggy address is located 32 bytes inside of
- 152-byte region [ffff8880781dfe58, ffff8880781dfef0)
-
-The buggy address belongs to the physical page:
-page:ffffea0001e077c0 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x781df
-memcg:ffff88801e8b2f01
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000200 ffffea0000973500 dead000000000007 ffff888140006b40
-raw: 0000000000000000 0000000000120012 00000001ffffffff ffff88801e8b2f01
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x112cc0(GFP_USER|__GFP_NOWARN|__GFP_NORETRY), pid 3812, tgid 3812 (sed), ts 62101588097, free_ts 62100288733
- prep_new_page mm/page_alloc.c:2460 [inline]
- get_page_from_freelist+0xa64/0x3d10 mm/page_alloc.c:4279
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5500
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2279
- alloc_slab_page mm/slub.c:1797 [inline]
- allocate_slab+0x26c/0x3c0 mm/slub.c:1942
- new_slab mm/slub.c:2002 [inline]
- ___slab_alloc+0x985/0xd90 mm/slub.c:3002
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3089
- slab_alloc_node mm/slub.c:3180 [inline]
- slab_alloc mm/slub.c:3222 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3229 [inline]
- kmem_cache_alloc+0x360/0x3b0 mm/slub.c:3239
- vm_area_alloc+0x1c/0xf0 kernel/fork.c:458
- __install_special_mapping+0x2e/0x3a0 mm/mmap.c:3489
- map_vdso+0x131/0x390 arch/x86/entry/vdso/vma.c:268
- load_elf_binary+0x206e/0x4ec0 fs/binfmt_elf.c:1287
- search_binary_handler fs/exec.c:1728 [inline]
- exec_binprm fs/exec.c:1769 [inline]
- bprm_execve fs/exec.c:1838 [inline]
- bprm_execve+0x7ef/0x1970 fs/exec.c:1800
- do_execveat_common+0x724/0x890 fs/exec.c:1943
- do_execve fs/exec.c:2017 [inline]
- __do_sys_execve fs/exec.c:2093 [inline]
- __se_sys_execve fs/exec.c:2088 [inline]
- __x64_sys_execve+0x8f/0xc0 fs/exec.c:2088
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1375 [inline]
- free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1425
- free_unref_page_prepare mm/page_alloc.c:3311 [inline]
- free_unref_page_list+0x184/0x1530 mm/page_alloc.c:3475
- release_pages+0xff1/0x2290 mm/swap.c:980
- tlb_batch_pages_flush+0xa8/0x1a0 mm/mmu_gather.c:58
- tlb_flush_mmu_free mm/mmu_gather.c:255 [inline]
- tlb_flush_mmu mm/mmu_gather.c:262 [inline]
- tlb_finish_mmu+0x147/0x7e0 mm/mmu_gather.c:353
- exit_mmap+0x217/0x750 mm/mmap.c:3209
- __mmput+0x128/0x4c0 kernel/fork.c:1180
- mmput+0x5c/0x70 kernel/fork.c:1201
- exec_mmap fs/exec.c:1038 [inline]
- begin_new_exec+0xfbd/0x2e50 fs/exec.c:1297
- load_elf_binary+0x15a3/0x4ec0 fs/binfmt_elf.c:1002
- search_binary_handler fs/exec.c:1728 [inline]
- exec_binprm fs/exec.c:1769 [inline]
- bprm_execve fs/exec.c:1838 [inline]
- bprm_execve+0x7ef/0x1970 fs/exec.c:1800
- do_execveat_common+0x724/0x890 fs/exec.c:1943
- do_execve fs/exec.c:2017 [inline]
- __do_sys_execve fs/exec.c:2093 [inline]
- __se_sys_execve fs/exec.c:2088 [inline]
- __x64_sys_execve+0x8f/0xc0 fs/exec.c:2088
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Memory state around the buggy address:
- ffff8880781dfd00: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
- ffff8880781dfd80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff8880781dfe00: 00 00 00 fc fc fc fc fc fc fc fc fa fb fb fb fb
-                                                                ^
- ffff8880781dfe80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fc fc
- ffff8880781dff00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
 
 
-Tested on:
+>>>> diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
+>>>> index 505c5ef061e3..808e2f320052 100644
+>>>> --- a/drivers/soundwire/intel.c
+>>>> +++ b/drivers/soundwire/intel.c
+>>>> @@ -1328,8 +1328,8 @@ int intel_link_startup(struct auxiliary_device *auxdev)
+>>>>  
+>>>>  	if (bus->prop.hw_disabled) {
+>>>>  		dev_info(dev,
+>>>> -			 "SoundWire master %d is disabled, ignoring\n",
+>>>> -			 sdw->instance);
+>>>> +			 "%s: SoundWire master %d is disabled, ignoring\n",
+>>>> +			 __func__, sdw->instance);
+>>>
+>>> This is not a debug message, please make it such if you want to have
+>>> __func__  And even then, it's not needed as you can get that from the
+>>> kernel automatically.
+>>
+>> Sorry, I don't understand the feedback at all.
+> 
+> dev_info() is not a way to send debug messages.
+> 
+> If you want this to be only for debugging, use dev_dbg().  And when you
+> use that, you get the __func__ location for free in the output already
+> if you want that.
+> 
+>> This message was added precisely to figure out why the expected
+>> programming sequence was not followed, only to discover that we have
+>> devices with spurious PCI wakes handled below. Without this added
+>> difference with __func__, we wouldn't know if the issue happened during
+>> the expected/regular programming sequence or not.
+> 
+> Perhaps make the text unique then?  Why would an informational message
+> need a function name.  Drivers should be quiet when all is going well.
+> If something is not going well, dev_info() is not the kernel log level
+> to be sending something out at.
 
-commit:         6d0c8068 Add linux-next specific files for 20220610
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=13e7c01bf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a30d6e3e814e5931
-dashboard link: https://syzkaller.appspot.com/bug?extid=68771c0e74f7bb7804e5
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1679062ff00000
+This is not a debug message - unlike all the others. The BIOS and/or the
+user may disable a specific link and it's useful to know.
+
+The intent of __func__ was precisely to make the text unique across all
+cases where we test for hw_disabled, but you have a point that this
+specific info message should be clearer. The text was actually already
+different from the 'disable or not-started' cases, I might have done one
+too many edits in this file. Will fix.
+
+>>>>  		return 0;
+>>>>  	}
+>>>>  
+>>>> @@ -1489,8 +1489,8 @@ int intel_link_process_wakeen_event(struct auxiliary_device *auxdev)
+>>>>  	bus = &sdw->cdns.bus;
+>>>>  
+>>>>  	if (bus->prop.hw_disabled || !sdw->startup_done) {
+>>>> -		dev_dbg(dev, "SoundWire master %d is disabled or not-started, ignoring\n",
+>>>> -			bus->link_id);
+>>>> +		dev_dbg(dev, "%s: SoundWire master %d is disabled or not-started, ignoring\n",
+>>>> +			__func__, bus->link_id);
+>>>>  		return 0;
+>>>>  	}
+>>>>  
+>>>> @@ -1549,8 +1549,8 @@ static int __maybe_unused intel_pm_prepare(struct device *dev)
+>>>>  	int ret;
+>>>>  
+>>>>  	if (bus->prop.hw_disabled || !sdw->startup_done) {
+>>>> -		dev_dbg(dev, "SoundWire master %d is disabled or not-started, ignoring\n",
+>>>> -			bus->link_id);
+>>>> +		dev_dbg(dev, "%s: SoundWire master %d is disabled or not-started, ignoring\n",
+>>>> +			__func__, bus->link_id);
+>>>
+>>> Not needed, it is provided automatically if you ask the kernel for this.
+>>> Same for all other instances in this patch.
+>>
+>> provided how? Your comment is a bit cryptic here.
+> 
+> the dynamic debug code in the kernel already adds the function name
+> where the message was sent from, if you want to know this in userspace.
+> Please read the documentation for details (I think the key is the 'f'
+> flag to be enabled in userspace).
+> 
+> So adding __func__ to dev_dbg() calls are redundant and never needed.
+
+Oh wow, I had no idea - and I am not the only one :-)
+
+Here's what I get with a grep on the kernel code
+
+git grep __func__ | grep dev_dbg | wc -l
+
+3122
+
+
+Doing this for sound/ gives me 356, and that's for single-line logs only.
+
+There's clearly something that was missed by tons of people.
+
+We use an 'sof-dyndbg.conf' file that we provide to users and our CI to
+log what's needed for SOF debug, it's trivial to add a +f option.
+
+options foo dyndbg=+pf
+
+Thanks for the feedback, much appreciated.
+-Pierre
 

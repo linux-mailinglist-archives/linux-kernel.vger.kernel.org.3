@@ -2,114 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499A0547DBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E0E547DBD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238204AbiFMCuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 22:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
+        id S238215AbiFMCwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 22:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238159AbiFMCuu (ORCPT
+        with ESMTP id S232367AbiFMCwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 22:50:50 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E909377D7;
-        Sun, 12 Jun 2022 19:50:49 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id e80so4813840iof.3;
-        Sun, 12 Jun 2022 19:50:49 -0700 (PDT)
+        Sun, 12 Jun 2022 22:52:07 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F0D387A0;
+        Sun, 12 Jun 2022 19:52:06 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso4723062pjk.0;
+        Sun, 12 Jun 2022 19:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=+syu8zXTLNzuwkgu0YpXNp+GQJj3tWOie/YgNIKS4U0=;
+        b=M0eUrqzokBUgw6kx+SeIUwac//UqJb78eJPvjl4zcc7ye76BPFJyAFRItO4se0MfNB
+         baIgwLhM25mHwtekNXBMrtvYAjO4pGOFwzPjWjpioSf89+x0Cd1eJbR4lYcZLUkXiRDu
+         87TOZ6RXlLmR9uebqGC2BzZZwnlNrHO1qCPWtxkSvwa9eubRgcSwJYK94w2h7lPk0/mq
+         oLhlyFXohWdlZt+OmlaHfOsbz0Pyw14uhedYzP8zWmCQNJSJIEf9dKfF5SccD7kyOt5p
+         6ouMbiKRBT04OHIfOvNub3sIEcZ04uRA/pKQO/09k/lUrHvVtdzTexTf5WdAK/4gflB4
+         NwSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=ex2ldVBZZOLPyGXJ1joosoKNwHYbBC23z6wBX0YiLPc=;
-        b=c4Aj0QmW8cQHTHjDR/HfR4D7b5peacg4GO9UzP4GB6vaaBjoWs8tIzlawHWuMqBMWi
-         8EjG+gqpH0gxaY8mq7dl74rnYpil1+GWgCNdmyxTygh3qE66ZTiawSEMv7JGgakFgDuD
-         UydwiMYjVhToasg5ustxfHOfCQQsZDISPLMGAAhGSXdytLCdQE8ZOOiiSo9JgoADVhkt
-         AVqU3zm2eFs4W5OOiqVjH1/xMQ1kcjT+XbftcmGNvnQCl5VDf1XKrrcFFDGKwIiE+yj+
-         Drn5/XK//08lSFkh+P9NjA/406TC2Jj/5rwuM3TXpb/FBJzvKjI0HXDy7L0GeLvS8xoI
-         e1Lw==
-X-Gm-Message-State: AOAM533CUGM8lrp2ipD3ZPmj01wRel89Ej9Nwsfry9xB0ksDOORb3z17
-        aCRmP7IDUXiKe5CLNCUYXw==
-X-Google-Smtp-Source: ABdhPJzhzSp+6kz2CQ8SuCbS2FqxGMvYT2GRKaaRl/f8tYODquYLh75JQmdd5Zq0tnojtNSQhcIDCQ==
-X-Received: by 2002:a05:6638:d83:b0:331:f0ea:676d with SMTP id l3-20020a0566380d8300b00331f0ea676dmr13901069jaj.11.1655088647436;
-        Sun, 12 Jun 2022 19:50:47 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id p5-20020a056e0206c500b002d11888a1acsm3284393ils.34.2022.06.12.19.50.45
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=+syu8zXTLNzuwkgu0YpXNp+GQJj3tWOie/YgNIKS4U0=;
+        b=2/zvAtLBJhqtY49qZpivhl1ibHQjWhtY6KSvjy7mROjhx5lBbuR989Xqdh4UDRKtZz
+         MMSAj+B9yycNHXuGY82KmAAGCIoSguf1KkqqDzxlXR1xB91dcTFbPrnGtGf+pRy5vTr5
+         va7easW1G/2jztVC2j4RP3yJ8JERpFGirCkHlAEQZGFQtaSwD1SREffeuRNsgJPXHd5P
+         csvR3rvtBmYt8GaISyBvyqce9BnVOeGGk5Pdk37Dm/HHwhV9Q0ApwVoAxY1iT8cjaWtH
+         x3EQdFjnWIFmRfCVBmq/9CNefWj8+1Ndzo/lk6j1EWEmQT/aoU+AHMeycAlsxGjtYN4o
+         MUVg==
+X-Gm-Message-State: AOAM530oTf0cRljvl1ciSleLBdrqOYef89ehmryNov1vvMFE3r4i6R5B
+        bn93df3tTK+xpYKjXqHf+B8=
+X-Google-Smtp-Source: ABdhPJx1eYlhYQSPfX7umirYAVUsnMFMYLEGdt9XIy8VcLdLixPOVw8G2uR3P6K9i4Hs+h6lxCZoJw==
+X-Received: by 2002:a17:90b:1c82:b0:1dd:1b46:5aa9 with SMTP id oo2-20020a17090b1c8200b001dd1b465aa9mr13354049pjb.158.1655088726257;
+        Sun, 12 Jun 2022 19:52:06 -0700 (PDT)
+Received: from localhost ([2405:6580:97e0:3100:ae94:2ee7:59a:4846])
+        by smtp.gmail.com with ESMTPSA id x16-20020a1709027c1000b0015e8d4eb276sm3732099pll.192.2022.06.12.19.52.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 19:50:46 -0700 (PDT)
-Received: (nullmailer pid 2612898 invoked by uid 1000);
-        Mon, 13 Jun 2022 02:50:42 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        UNGLinuxDriver@microchip.com, devicetree@vger.kernel.org,
-        nicolas.ferre@microchip.com, linux-arm-kernel@lists.infradead.org,
-        krzysztof.kozlowski+dt@linaro.org, Kavyasree.Kotagiri@microchip.com
-In-Reply-To: <20220612152604.24280-2-kavyasree.kotagiri@microchip.com>
-References: <20220612152604.24280-1-kavyasree.kotagiri@microchip.com> <20220612152604.24280-2-kavyasree.kotagiri@microchip.com>
-Subject: Re: [PATCH v3 1/3] dt-bindings: mfd: atmel,flexcom: Convert to json-schema
-Date:   Sun, 12 Jun 2022 20:50:42 -0600
-Message-Id: <1655088642.987858.2612897.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Sun, 12 Jun 2022 19:52:04 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 11:52:01 +0900
+From:   Benjamin Poirier <benjamin.poirier@gmail.com>
+To:     Srivathsan Sivakumar <sri.skumar05@gmail.com>
+Cc:     Manish Chopra <manishc@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
+        Coiby Xu <coiby.xu@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        netdev@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] staging: qlge: qlge_main.c: rewrite do-while loops
+ into more compact for loops
+Message-ID: <YqamUSc3Y9TBwAEH@d3>
+References: <YqJcLwUQorZQOrkd@Sassy>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqJcLwUQorZQOrkd@Sassy>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 12 Jun 2022 20:56:02 +0530, Kavyasree Kotagiri wrote:
-> Convert the Atmel flexcom device tree bindings to json schema.
+On 2022-06-09 16:46 -0400, Srivathsan Sivakumar wrote:
+> simplify do-while loops into for loops
 > 
-> Signed-off-by: Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>
+> Signed-off-by: Srivathsan Sivakumar <sri.skumar05@gmail.com>
 > ---
-> v2 -> v3:
->  - used enum for compatible string.
->  - changed irq flag to IRQ_TYPE_LEVEL_HIGH in example.
->  - fixed dtschema errors.
+> Changes in v2:
+>  - Rewrite for loops more compactly
 > 
-> v1 -> v2:
->  - Fix title.
-> 
->  .../bindings/mfd/atmel,flexcom.yaml           | 103 ++++++++++++++++++
->  .../devicetree/bindings/mfd/atmel-flexcom.txt |  63 -----------
->  2 files changed, 103 insertions(+), 63 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mfd/atmel-flexcom.txt
-> 
+>  drivers/staging/qlge/qlge_main.c | 24 ++++++++++--------------
+>  1 file changed, 10 insertions(+), 14 deletions(-)
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml: properties:compatible:enum: 'atmel,sama5d2-flexcom' is not of type 'array'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml: properties:compatible:enum: 'atmel,sama5d2-flexcom' is not of type 'array'
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml: properties:compatible:enum: 'atmel,sama5d2-flexcom' is not of type 'array'
-	from schema $id: http://devicetree.org/meta-schemas/string-array.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/atmel,flexcom.yaml: ignoring, error in schema: properties: compatible: enum
-Documentation/devicetree/bindings/mfd/atmel,flexcom.example.dtb:0:0: /example-0/flexcom@f8034000: failed to match any schema with compatible: ['atmel,sama5d2-flexcom']
-Documentation/devicetree/bindings/mfd/atmel,flexcom.example.dtb:0:0: /example-0/flexcom@f8034000/spi@400: failed to match any schema with compatible: ['atmel,at91rm9200-spi']
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Please also update the TODO file to remove the respective entry. The
+other referenced problem instance was already fixed in commit
+41e1bf811ace ("Staging: qlge: Rewrite two while loops as simple for
+loops")

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34B0C548DAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1262D5496BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379369AbiFMNw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
+        id S1355894AbiFMLmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379949AbiFMNpn (ORCPT
+        with ESMTP id S1354766AbiFMLfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:45:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6111263E;
-        Mon, 13 Jun 2022 04:32:51 -0700 (PDT)
+        Mon, 13 Jun 2022 07:35:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D2544762;
+        Mon, 13 Jun 2022 03:48:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0AF5612AC;
-        Mon, 13 Jun 2022 11:32:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9723C34114;
-        Mon, 13 Jun 2022 11:32:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 544F1612C4;
+        Mon, 13 Jun 2022 10:48:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65103C34114;
+        Mon, 13 Jun 2022 10:48:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119970;
-        bh=GEl7BdXUTL8gy1bVosmWG6EdlMfz8WLs1WYhopPFKH8=;
+        s=korg; t=1655117281;
+        bh=IL8GKhdc3Wo8si//BsdbnCBSVkgPlm8kJ4ZPIEMR9HI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xaBnXw+wBXS9wH/DEo76C1GDSVSvok5kJ9/fs3c9NBqDVT8A8lqIPcOfli/0ySFjT
-         bJO2R2gqaCPKWCViC/pcovyKhRoCj+vNnX7yr65srl2ngnDB1wRKhRgLHzkzNkDAEw
-         yb37TA08fupbM4XIA/n+LeWlPlmBfcFr7Ggojk6s=
+        b=hvV+/L/Ya6w+D5OlqztKr355tI1pepFa/wKGKo1eyBGq5BUWxhxYkOf0qC8PjA/CR
+         mUSU1rhWJk8wnt55mHR8byeNnza9HoNPv+J9XpNAMdjcpxyTQ1nVzVPe0SLoSjQ14x
+         IdSysnBQABFb7ow6GaiFA4VNqsq9dDi9+Ws7YJ4s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Wong Vee Khee <vee.khee.wong@linux.intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
+        stable@vger.kernel.org, Yi Chen <yiche@redhat.com>,
+        Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 196/339] stmmac: intel: Fix an error handling path in intel_eth_pci_probe()
+Subject: [PATCH 5.4 348/411] netfilter: nat: really support inet nat without l3 address
 Date:   Mon, 13 Jun 2022 12:10:21 +0200
-Message-Id: <20220613094932.612918234@linuxfoundation.org>
+Message-Id: <20220613094939.142947044@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,47 +56,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit 5e74a4b3ec1816e3bbfd715d46ae29d2508079cb ]
+[ Upstream commit 282e5f8fe907dc3f2fbf9f2103b0e62ffc3a68a5 ]
 
-When the managed API is used, there is no need to explicitly call
-pci_free_irq_vectors().
+When no l3 address is given, priv->family is set to NFPROTO_INET and
+the evaluation function isn't called.
 
-This looks to be a left-over from the commit in the Fixes tag. Only the
-.remove() function had been updated.
+Call it too so l4-only rewrite can work.
+Also add a test case for this.
 
-So remove this unused function call and update goto label accordingly.
-
-Fixes: 8accc467758e ("stmmac: intel: use managed PCI function on probe and resume")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Reviewed-by: Wong Vee Khee <vee.khee.wong@linux.intel.com>
-Link: https://lore.kernel.org/r/1ac9b6787b0db83b0095711882c55c77c8ea8da0.1654462241.git.christophe.jaillet@wanadoo.fr
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: a33f387ecd5aa ("netfilter: nft_nat: allow to specify layer 4 protocol NAT only")
+Reported-by: Yi Chen <yiche@redhat.com>
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ net/netfilter/nft_nat.c                      |  3 +-
+ tools/testing/selftests/netfilter/nft_nat.sh | 43 ++++++++++++++++++++
+ 2 files changed, 45 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-index 0b0be0898ac5..f6d8109e7edc 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -1072,13 +1072,11 @@ static int intel_eth_pci_probe(struct pci_dev *pdev,
+diff --git a/net/netfilter/nft_nat.c b/net/netfilter/nft_nat.c
+index 17c0f75dfcdb..0c5bc3c37ecf 100644
+--- a/net/netfilter/nft_nat.c
++++ b/net/netfilter/nft_nat.c
+@@ -283,7 +283,8 @@ static void nft_nat_inet_eval(const struct nft_expr *expr,
+ {
+ 	const struct nft_nat *priv = nft_expr_priv(expr);
  
- 	ret = stmmac_dvr_probe(&pdev->dev, plat, &res);
- 	if (ret) {
--		goto err_dvr_probe;
-+		goto err_alloc_irq;
- 	}
+-	if (priv->family == nft_pf(pkt))
++	if (priv->family == nft_pf(pkt) ||
++	    priv->family == NFPROTO_INET)
+ 		nft_nat_eval(expr, regs, pkt);
+ }
  
- 	return 0;
+diff --git a/tools/testing/selftests/netfilter/nft_nat.sh b/tools/testing/selftests/netfilter/nft_nat.sh
+index d7e07f4c3d7f..4e15e8167310 100755
+--- a/tools/testing/selftests/netfilter/nft_nat.sh
++++ b/tools/testing/selftests/netfilter/nft_nat.sh
+@@ -374,6 +374,45 @@ EOF
+ 	return $lret
+ }
  
--err_dvr_probe:
--	pci_free_irq_vectors(pdev);
- err_alloc_irq:
- 	clk_disable_unprepare(plat->stmmac_clk);
- 	clk_unregister_fixed_rate(plat->stmmac_clk);
++test_local_dnat_portonly()
++{
++	local family=$1
++	local daddr=$2
++	local lret=0
++	local sr_s
++	local sr_r
++
++ip netns exec "$ns0" nft -f /dev/stdin <<EOF
++table $family nat {
++	chain output {
++		type nat hook output priority 0; policy accept;
++		meta l4proto tcp dnat to :2000
++
++	}
++}
++EOF
++	if [ $? -ne 0 ]; then
++		if [ $family = "inet" ];then
++			echo "SKIP: inet port test"
++			test_inet_nat=false
++			return
++		fi
++		echo "SKIP: Could not add $family dnat hook"
++		return
++	fi
++
++	echo SERVER-$family | ip netns exec "$ns1" timeout 5 socat -u STDIN TCP-LISTEN:2000 &
++	sc_s=$!
++
++	result=$(ip netns exec "$ns0" timeout 1 socat TCP:$daddr:2000 STDOUT)
++
++	if [ "$result" = "SERVER-inet" ];then
++		echo "PASS: inet port rewrite without l3 address"
++	else
++		echo "ERROR: inet port rewrite"
++		ret=1
++	fi
++}
+ 
+ test_masquerade6()
+ {
+@@ -841,6 +880,10 @@ fi
+ reset_counters
+ test_local_dnat ip
+ test_local_dnat6 ip6
++
++reset_counters
++test_local_dnat_portonly inet 10.0.1.99
++
+ reset_counters
+ $test_inet_nat && test_local_dnat inet
+ $test_inet_nat && test_local_dnat6 inet
 -- 
 2.35.1
 

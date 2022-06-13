@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5FB548A39
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0A04549121
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358070AbiFMMBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:01:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40180 "EHLO
+        id S1356410AbiFMM6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356163AbiFMLzk (ORCPT
+        with ESMTP id S1357823AbiFMMyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:55:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45422FFEB;
-        Mon, 13 Jun 2022 03:56:08 -0700 (PDT)
+        Mon, 13 Jun 2022 08:54:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3259E35276;
+        Mon, 13 Jun 2022 04:13:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DBDBB80E59;
-        Mon, 13 Jun 2022 10:56:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C976CC3411C;
-        Mon, 13 Jun 2022 10:56:05 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 42E72CE1184;
+        Mon, 13 Jun 2022 11:13:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE57C34114;
+        Mon, 13 Jun 2022 11:13:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117766;
-        bh=+LkKsYq5Rh7vvyyFH6jG3nFgPpABXyDtRauFwE1mXhc=;
+        s=korg; t=1655118804;
+        bh=fzLWIQmYrPsIEXhtSGEyvG+3MT0KclU5eCm7/1w/720=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N6alSWbEwue4LiLGmq1ojDggZpzni2FyRZMNzB0AdYez9RYXM9MNrhgBMrEgU0Grk
-         vq1EQ9KMP23uyCehKRa/kI8dFIM9rKsSG8oZnULCcP91zPKa30nF+PN2W4OvO0dUxV
-         EjnFkZ+eGUDDm/DmPezdAxWU73naIYKG8rDvOew4=
+        b=s+A7JpG7VS6ZFWcdjg0NW+3vrdpvDHgiS0zxz2eKjz6cjbu4q56RK8a2OE+VrGKX1
+         jQ+DYEbYSEJMItzChyO4kBXaBqH9WWqjPhSYw+6GemGJbfcWWrBAHZC8sDziGvP9Qp
+         LA4BkNp3udOLxvnaQjK9SvGp9SJUl5eouIpc4iSY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        stable@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Mihai Carabas <mihai.carabas@oracle.com>,
+        Shile Zhang <shile.zhang@linux.alibaba.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        zhenwei pi <pizhenwei@bytedance.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 112/287] PCI: rockchip: Fix find_first_zero_bit() limit
+Subject: [PATCH 5.15 034/247] misc/pvpanic: Convert regular spinlock into trylock on panic path
 Date:   Mon, 13 Jun 2022 12:08:56 +0200
-Message-Id: <20220613094927.273947643@linuxfoundation.org>
+Message-Id: <20220613094923.971711730@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +60,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Guilherme G. Piccoli <gpiccoli@igalia.com>
 
-[ Upstream commit 096950e230b8d83645c7cf408b9f399f58c08b96 ]
+[ Upstream commit e918c10265ef2bc82ce8a6fed6d8123d09ec1db3 ]
 
-The ep->ob_region_map bitmap is a long and it has BITS_PER_LONG bits.
+The pvpanic driver relies on panic notifiers to execute a callback
+on panic event. Such function is executed in atomic context - the
+panic function disables local IRQs, preemption and all other CPUs
+that aren't running the panic code.
 
-Link: https://lore.kernel.org/r/20220315065944.GB13572@kili
-Fixes: cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+With that said, it's dangerous to use regular spinlocks in such path,
+as introduced by commit b3c0f8774668 ("misc/pvpanic: probe multiple instances").
+This patch fixes that by replacing regular spinlocks with the trylock
+safer approach.
+
+It also fixes an old comment (about a long gone framebuffer code) and
+the notifier priority - we should execute hypervisor notifiers early,
+deferring this way the panic action to the hypervisor, as expected by
+the users that are setting up pvpanic.
+
+Fixes: b3c0f8774668 ("misc/pvpanic: probe multiple instances")
+Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Mihai Carabas <mihai.carabas@oracle.com>
+Cc: Shile Zhang <shile.zhang@linux.alibaba.com>
+Cc: Wang ShaoBo <bobo.shaobowang@huawei.com>
+Cc: zhenwei pi <pizhenwei@bytedance.com>
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Link: https://lore.kernel.org/r/20220427224924.592546-6-gpiccoli@igalia.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pcie-rockchip-ep.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/misc/pvpanic/pvpanic.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/controller/pcie-rockchip-ep.c
-index caf34661d38d..06dd2ab73b6e 100644
---- a/drivers/pci/controller/pcie-rockchip-ep.c
-+++ b/drivers/pci/controller/pcie-rockchip-ep.c
-@@ -263,8 +263,7 @@ static int rockchip_pcie_ep_map_addr(struct pci_epc *epc, u8 fn,
- 	struct rockchip_pcie *pcie = &ep->rockchip;
- 	u32 r;
+diff --git a/drivers/misc/pvpanic/pvpanic.c b/drivers/misc/pvpanic/pvpanic.c
+index 700d7d02c800..b9e6400a574b 100644
+--- a/drivers/misc/pvpanic/pvpanic.c
++++ b/drivers/misc/pvpanic/pvpanic.c
+@@ -34,7 +34,9 @@ pvpanic_send_event(unsigned int event)
+ {
+ 	struct pvpanic_instance *pi_cur;
  
--	r = find_first_zero_bit(&ep->ob_region_map,
--				sizeof(ep->ob_region_map) * BITS_PER_LONG);
-+	r = find_first_zero_bit(&ep->ob_region_map, BITS_PER_LONG);
- 	/*
- 	 * Region 0 is reserved for configuration space and shouldn't
- 	 * be used elsewhere per TRM, so leave it out.
+-	spin_lock(&pvpanic_lock);
++	if (!spin_trylock(&pvpanic_lock))
++		return;
++
+ 	list_for_each_entry(pi_cur, &pvpanic_list, list) {
+ 		if (event & pi_cur->capability & pi_cur->events)
+ 			iowrite8(event, pi_cur->base);
+@@ -56,9 +58,13 @@ pvpanic_panic_notify(struct notifier_block *nb, unsigned long code,
+ 	return NOTIFY_DONE;
+ }
+ 
++/*
++ * Call our notifier very early on panic, deferring the
++ * action taken to the hypervisor.
++ */
+ static struct notifier_block pvpanic_panic_nb = {
+ 	.notifier_call = pvpanic_panic_notify,
+-	.priority = 1, /* let this called before broken drm_fb_helper() */
++	.priority = INT_MAX,
+ };
+ 
+ static void pvpanic_remove(void *param)
 -- 
 2.35.1
 

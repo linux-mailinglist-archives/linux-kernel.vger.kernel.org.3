@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C2254884A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9358548826
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376970AbiFMNTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:19:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
+        id S1353557AbiFMMsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376260AbiFMNKq (ORCPT
+        with ESMTP id S1353723AbiFMMnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:10:46 -0400
+        Mon, 13 Jun 2022 08:43:40 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1C25BE72;
-        Mon, 13 Jun 2022 04:21:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2D860A92;
+        Mon, 13 Jun 2022 04:10:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 22174B80EAA;
-        Mon, 13 Jun 2022 11:21:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76098C34114;
-        Mon, 13 Jun 2022 11:21:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 215C9B80D31;
+        Mon, 13 Jun 2022 11:10:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A26CC3411C;
+        Mon, 13 Jun 2022 11:10:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119297;
-        bh=O1BECb1BwhYEIW1CUebpdzDbEJQLtGkgaLnnWW6lRNQ=;
+        s=korg; t=1655118656;
+        bh=7ZJdOB8NWztNFmJga+HULPqObVqV573O24/WNfw5IOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yPCRmRWOnd+ctDFeE9FWUwzyYRufK5dfVY3H5SKAe+se4yhN+ZFjb+BhXwO1mj8DL
-         esNhfTGOyCGTZUkEr3pCYIEnReSzP4yutS1ss7sIqIiLNuGCSAVI10bkGgbE6Q1jo5
-         4xFaunG6l2t90+kWvKXKvIUayTE+mrCOKOBNRReA=
+        b=lB3sgca/4URaVcOZmE0hMvIvl1l12qW4G2Ki2brctRYoxZqxW0N0Ep3TqEn35f2m5
+         4iPUccd92YiiAXwijkVXNqhnd1V9kpoWJV9xT4gRMgkJwJMqyCmw9lHNDquJBskDVz
+         t9KrykhOASE7a6msiHt8soSFSKuE7SVRvEehnduQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xie Yongji <xieyongji@bytedance.com>,
-        Fam Zheng <fam.zheng@bytedance.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 212/247] vringh: Fix loop descriptors check in the indirect cases
-Date:   Mon, 13 Jun 2022 12:11:54 +0200
-Message-Id: <20220613094929.370619513@linuxfoundation.org>
+        stable@vger.kernel.org, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: [PATCH 5.10 155/172] ata: libata-transport: fix {dma|pio|xfer}_mode sysfs files
+Date:   Mon, 13 Jun 2022 12:11:55 +0200
+Message-Id: <20220613094922.926435506@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,63 +54,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xie Yongji <xieyongji@bytedance.com>
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-[ Upstream commit dbd29e0752286af74243cf891accf472b2f3edd8 ]
+commit 72aad489f992871e908ff6d9055b26c6366fb864 upstream.
 
-We should use size of descriptor chain to test loop condition
-in the indirect case. And another statistical count is also introduced
-for indirect descriptors to avoid conflict with the statistical count
-of direct descriptors.
+The {dma|pio}_mode sysfs files are incorrectly documented as having a
+list of the supported DMA/PIO transfer modes, while the corresponding
+fields of the *struct* ata_device hold the transfer mode IDs, not masks.
 
-Fixes: f87d0fbb5798 ("vringh: host-side implementation of virtio rings.")
-Signed-off-by: Xie Yongji <xieyongji@bytedance.com>
-Signed-off-by: Fam Zheng <fam.zheng@bytedance.com>
-Message-Id: <20220505100910.137-1-xieyongji@bytedance.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-Acked-by: Jason Wang <jasowang@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+To match these docs, the {dma|pio}_mode (and even xfer_mode!) sysfs
+files are handled by the ata_bitfield_name_match() macro which leads to
+reading such kind of nonsense from them:
+
+$ cat /sys/class/ata_device/dev3.0/pio_mode
+XFER_UDMA_7, XFER_UDMA_6, XFER_UDMA_5, XFER_UDMA_4, XFER_MW_DMA_4,
+XFER_PIO_6, XFER_PIO_5, XFER_PIO_4, XFER_PIO_3, XFER_PIO_2, XFER_PIO_1,
+XFER_PIO_0
+
+Using the correct ata_bitfield_name_search() macro fixes that:
+
+$ cat /sys/class/ata_device/dev3.0/pio_mode
+XFER_PIO_4
+
+While fixing the file documentation, somewhat reword the {dma|pio}_mode
+file doc and add a note about being mostly useful for PATA devices to
+the xfer_mode file doc...
+
+Fixes: d9027470b886 ("[libata] Add ATA transport class")
+Signed-off-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Cc: stable@vger.kernel.org
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/vhost/vringh.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ Documentation/ABI/testing/sysfs-ata |   11 ++++++-----
+ drivers/ata/libata-transport.c      |    2 +-
+ 2 files changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
-index 14e2043d7685..eab55accf381 100644
---- a/drivers/vhost/vringh.c
-+++ b/drivers/vhost/vringh.c
-@@ -292,7 +292,7 @@ __vringh_iov(struct vringh *vrh, u16 i,
- 	     int (*copy)(const struct vringh *vrh,
- 			 void *dst, const void *src, size_t len))
- {
--	int err, count = 0, up_next, desc_max;
-+	int err, count = 0, indirect_count = 0, up_next, desc_max;
- 	struct vring_desc desc, *descs;
- 	struct vringh_range range = { -1ULL, 0 }, slowrange;
- 	bool slow = false;
-@@ -349,7 +349,12 @@ __vringh_iov(struct vringh *vrh, u16 i,
- 			continue;
- 		}
+--- a/Documentation/ABI/testing/sysfs-ata
++++ b/Documentation/ABI/testing/sysfs-ata
+@@ -107,13 +107,14 @@ Description:
+ 				described in ATA8 7.16 and 7.17. Only valid if
+ 				the device is not a PM.
  
--		if (count++ == vrh->vring.num) {
-+		if (up_next == -1)
-+			count++;
-+		else
-+			indirect_count++;
-+
-+		if (count > vrh->vring.num || indirect_count > desc_max) {
- 			vringh_bad("Descriptor loop in %p", descs);
- 			err = -ELOOP;
- 			goto fail;
-@@ -411,6 +416,7 @@ __vringh_iov(struct vringh *vrh, u16 i,
- 				i = return_from_indirect(vrh, &up_next,
- 							 &descs, &desc_max);
- 				slow = false;
-+				indirect_count = 0;
- 			} else
- 				break;
- 		}
--- 
-2.35.1
-
+-		pio_mode:	(RO) Transfer modes supported by the device when
+-				in PIO mode. Mostly used by PATA device.
++		pio_mode:	(RO) PIO transfer mode used by the device.
++				Mostly used by PATA devices.
+ 
+-		xfer_mode:	(RO) Current transfer mode
++		xfer_mode:	(RO) Current transfer mode. Mostly used by
++				PATA devices.
+ 
+-		dma_mode:	(RO) Transfer modes supported by the device when
+-				in DMA mode. Mostly used by PATA device.
++		dma_mode:	(RO) DMA transfer mode used by the device.
++				Mostly used by PATA devices.
+ 
+ 		class:		(RO) Device class. Can be "ata" for disk,
+ 				"atapi" for packet device, "pmp" for PM, or
+--- a/drivers/ata/libata-transport.c
++++ b/drivers/ata/libata-transport.c
+@@ -196,7 +196,7 @@ static struct {
+ 	{ XFER_PIO_0,			"XFER_PIO_0" },
+ 	{ XFER_PIO_SLOW,		"XFER_PIO_SLOW" }
+ };
+-ata_bitfield_name_match(xfer,ata_xfer_names)
++ata_bitfield_name_search(xfer, ata_xfer_names)
+ 
+ /*
+  * ATA Port attributes
 
 

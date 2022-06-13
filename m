@@ -2,166 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02218547FD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 08:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6627A547FD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 08:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238019AbiFMGwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 02:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
+        id S237076AbiFMGyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 02:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238555AbiFMGvg (ORCPT
+        with ESMTP id S237220AbiFMGyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 02:51:36 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2064.outbound.protection.outlook.com [40.107.236.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03161A06C
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 23:51:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VkwIDUpHbKDd6xvWMJqEoggAqpQxj3oFMvklgdgEhjTFNxuu+XMIIlo0VIlUCKQ7KsvlqLFQlOGDN0xnvFcpCnDRAHMzU2YhZAEA5GJNQXP8kjiYpOUGIX/DLDvwt+Djhu4aaRqtBiNXdF1R2QFXaUqJHdhFuVskEkdFbB12YVan+dfO1TLWTkGgthNFbdNUnf8WEnUhFPN8cB0k5GnjrtXo1I3TAPYVTyffdLyytPdbj4h9wQXT6EN2dTIfe22rUJZD4zKCSOItr3MYT2AeHbIZbjVJuIv8t1HJMUEYxtGE0/cXJ37xKzCWnVqCBZM0D9l1tKi1kG+hwnrDmBozAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=arDNSCeXRsklq9mW+JL7BqNOqyj25pMBpThfU9iVk0M=;
- b=OAKVcz8OriZhwhoTc6WwizZmhIjO4iv7r0k7JN/CyPPYOa9g/bOw5b5pSNAn3AWJgj7IZaPU5O0WgIzOeAx9zhqLYRggMkcVko9TQoHcixOIczGA/18zU9mmDiClgamZe0bgOY9S8cQs4pLOT9gflhQKgxUsw+mTnHfcw57mVn8VFoP3txG0WXu1/vCOugAHf71NqKtBmuBxKtR30MxjVEkivOimSNQmcgwfye4ZpR3A/q9Y8Ai6yHHl0CWAtKuP+0f0VR8ue6jg00P1WVlX5QGwPZHjHnYhvQvD/+eRmwm9jSIQcyQwFF5fFufGwRgyWf9IKoZ/2GYvUrHU1f2oXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=arDNSCeXRsklq9mW+JL7BqNOqyj25pMBpThfU9iVk0M=;
- b=BwpnMHJSTKKWMzlzY2mddDnKmDxW/9pyJXDbmTO6/4JD6sNydegtYSaxERNwnABQ9IiSStnsIEYU4LAOQZqCGNrNMbuplTIGKqyRA8aNc3GV536E9iU/qV/wZUnubTbfvWfjkdbMpYhCc/OibCLxZMtLVwT3fKukgxoL4Z0uaTc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by BN8PR12MB3300.namprd12.prod.outlook.com (2603:10b6:408:6a::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Mon, 13 Jun
- 2022 06:51:30 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e0fd:45cf:c701:2731]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::e0fd:45cf:c701:2731%6]) with mapi id 15.20.5332.019; Mon, 13 Jun 2022
- 06:51:28 +0000
-Message-ID: <4845ad23-476c-97b9-9b3f-d8aaa9027d26@amd.com>
-Date:   Mon, 13 Jun 2022 08:51:21 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH -next] drm/syncobj: add missing error return code in
- drm_syncobj_transfer_to_timeline()
-Content-Language: en-US
-To:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     daniel.vetter@ffwll.ch
-References: <20220613063454.2609364-1-yangyingliang@huawei.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220613063454.2609364-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS9PR04CA0082.eurprd04.prod.outlook.com
- (2603:10a6:20b:48b::6) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Mon, 13 Jun 2022 02:54:36 -0400
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C81140D3
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 23:54:34 -0700 (PDT)
+Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
+        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220613065432epoutp022ab9f7df6313929947f66c48583f227f~4G6hTlo3A0639906399epoutp02H
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:54:32 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220613065432epoutp022ab9f7df6313929947f66c48583f227f~4G6hTlo3A0639906399epoutp02H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1655103272;
+        bh=2tnnAu4jOqhkj0fxxtPuGPJ2fJuRLGJoMiIlqPlRKnw=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=DVKFj/cZHBJm1lHat5lPSkYxM19ND43aXD2iqJM7UMo1OfHzxpNSFBaU8XgWE3//w
+         TZDvWWZu0od74qKZSTjhusarGoLnzaQVNP38MrKKl1NE5cqWscrLSlhVZHQHlKjiKi
+         FqYZJ2NEyQ1oyqxVVIIe/O3w5TyUkgwll0r7+vLA=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20220613065432epcas2p22b387045c4356e6243296137617fd970~4G6gzJuPS0247802478epcas2p2F;
+        Mon, 13 Jun 2022 06:54:32 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.102]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4LM2P367RLz4x9QD; Mon, 13 Jun
+        2022 06:54:31 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        1D.17.09694.72FD6A26; Mon, 13 Jun 2022 15:54:31 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
+        20220613065431epcas2p45b77070a453d3d65704a6ba6f8720f50~4G6fpj64a0187501875epcas2p4D;
+        Mon, 13 Jun 2022 06:54:31 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220613065431epsmtrp17d4aa36f32aa58317b7987c2c4d6dc00~4G6focD4W2153621536epsmtrp1H;
+        Mon, 13 Jun 2022 06:54:31 +0000 (GMT)
+X-AuditID: b6c32a48-47fff700000025de-5d-62a6df2761c4
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        5B.20.08924.62FD6A26; Mon, 13 Jun 2022 15:54:30 +0900 (KST)
+Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20220613065430epsmtip1a5afeb0db5342870256a41b410415fd7~4G6fZ3coT1340613406epsmtip1d;
+        Mon, 13 Jun 2022 06:54:30 +0000 (GMT)
+From:   "Chanho Park" <chanho61.park@samsung.com>
+To:     "'Alim Akhtar'" <alim.akhtar@samsung.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>
+Cc:     <devicetree@vger.kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <vkoul@kernel.org>,
+        <avri.altman@wdc.com>, <bvanassche@acm.org>,
+        <martin.petersen@oracle.com>, <pankaj.dubey@samsung.com>,
+        "'Bharat Uppal'" <bharat.uppal@samsung.com>
+In-Reply-To: <20220610104119.66401-7-alim.akhtar@samsung.com>
+Subject: RE: [PATCH v4 6/6] ufs: host: ufs-exynos: add support for fsd ufs
+ hci
+Date:   Mon, 13 Jun 2022 15:54:30 +0900
+Message-ID: <000001d87ef2$6e853a40$4b8faec0$@samsung.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: cf0cc945-79c6-4763-d6f8-08da4d0923c1
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3300:EE_
-X-Microsoft-Antispam-PRVS: <BN8PR12MB3300323E4AEF79D0CD85E0D483AB9@BN8PR12MB3300.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DFKMJUuoQvNmt9odTI55KqP77WhFIiPfnO6Frnmosv2Z1yp0q9/7RbyGzMTbTf0lFjKdguzwGMq5uabnb2pFc4QezaITb99RWn5JdVagsGLEs7j7hcrrGbvX5Qx1Rvu60MA16TuYD6wre4kl+i6xqm+D6Enyv0cNSdO1JmGC2LSCxejQQ/beIgbjildU2yKrKfo73gLD0KSiLTaJhvUjBt7p4dq375t5ZONc9Ye7Xx0lY/sMOVj8vqLxMvPlijwr8+El2jDrmAhdeNc7gFl4Pn9nQwOvS9xFXBTzoD73jyIbfwCC6KvH8qXDUYLh83UBHiZl0Vlyi76+ZvFqTkflDcvNNiDCz1mVtIRYsefTwVqD3qc54p+oiY0brsWA/Uc75iTyaHRsuGTxENlYJEY0zBTKbqRYr5Cmw4oixS1b2kchZMx2elkwnKCg/Jn3Zt5oDVZZ6wpmsnl0dxrfCEpx3hk8H0XMlkSZHiQxZ0h2q4wxJIEnqI1INCCHr85CNH0evQyVWR9FqgzbOUGYpmsaC07tZLyM4YrVB2g9k9Wotjw9XBtDImUUWeRHxQs8Dybfo0Gt+sJd42dE0bVUxsF/E0X3zEwYQg4AtfS2QurtxASEKVSKfI1MYpmMPGzJZanuaVELC+2bBWXC1nm1oe/ckd2p/uFx1BRo9V2z8vY9C4lr7dTlODS0YMzv8eiw+6sPsy77XhPlyFAt8AkBZly8ySV+e+KL9YOb7lCXOcI1FRc=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(31686004)(38100700002)(86362001)(31696002)(66476007)(66556008)(8676002)(316002)(4326008)(66946007)(2906002)(6506007)(5660300002)(8936002)(186003)(66574015)(2616005)(6486002)(6512007)(83380400001)(508600001)(26005)(36756003)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RFIveE94YkI1TlorN0NabFJQMEg3YS9UTEJPWmN2bmFUOWMyYVBlWWRHYlRa?=
- =?utf-8?B?OGlZNVJ4a3Fzck9ualZIMzlvcG45WE9vWHhYMEhrbC96YkljWUthRmRJbjYr?=
- =?utf-8?B?R2FzRUhiekhqOEZPSEhaWDN6VHFUUGRLYXViM0NtTXB6MlVQSFZKSVpDbXZP?=
- =?utf-8?B?RzVFM2R0TlVzbTlaUm96YVZWdnhtMFNicnZEVXlhTk1na0xRb1lmbkRxS3hv?=
- =?utf-8?B?OEhsRjVINnBHYjZjQ0Y2SXNFWEpXV3dXWVQ0NytEWEkxS2NNT3grQWd3YkZX?=
- =?utf-8?B?WHhiem1nRE1sVXp4S3NRTkhSQjBCT2JlOVdOQUZiYXdzRnV4UFFRUHRSR1RJ?=
- =?utf-8?B?SXZUZ1Ftb1NoS2dPUytEWlZRSzdlaXRnc3pWaDcrNWVhbjNMaTREK3dSdjlL?=
- =?utf-8?B?d3dzSUFPYlgwSFZKVVc2UkprdUk1czhpd1dDeTBXemU2MnZpcFJ1blNHaU1u?=
- =?utf-8?B?cmp6QzF1WmZzMVZuVWdSMVdmM2d1SWhuSXlPRlBFMWlVbVJ5MXYvRXVLa0ky?=
- =?utf-8?B?YzZTUG54d0hFTngwdlZKdktMNU1kaVoxRlpjTGo5bmtGS3B1OFFaeHViY29n?=
- =?utf-8?B?M3c1bEUrYVRTSmVsRFlwcHFFWHFEMlgvczkxNmFuMkl1dzlBcytHRHVLckR0?=
- =?utf-8?B?TllQQUVhRU50c2F6REx6S2xIRWlqMzFoN0RJaHBBcGxVamlPdFNSdkdqUHc1?=
- =?utf-8?B?MjdrZFFWeUo4d3pmQzd0RFlFMHBqWi9zcHE3WXlGQ3FiK0ZRV2RUYlhNeEVB?=
- =?utf-8?B?TXpRenh6aVpvT3MyZ2lXcFRBZUtNaUpGbWZtdHRTQ0hPbGdITVp5SGRHcnpH?=
- =?utf-8?B?NEFWQXMvYXlLdHpPQkxqRW5INWdaZzdnM0lwUWZTQWIyQ1d2c3lOWnB5U3o5?=
- =?utf-8?B?R0pSdmZESGsvUUJFUGZ2MnpUS25tQVYzeCtUbkdyZzFiZk5rZ05BZ1dxRHZI?=
- =?utf-8?B?cFdwQm9CQW1YZU01SzBhdkh6d0JxbUpCa0ZqTUJMTlYxbXJFK0FuNnpIdzNH?=
- =?utf-8?B?TzlRVVNoMDVVMC90dUNOUEFpaVBHeVlCU3IzT1JKNjZqRVpyclhFKytGTjNF?=
- =?utf-8?B?V1NzbkxyVTA5SElOSGE0NzV0d3BtZDR0YnJGczRPN2xBUXVZcjYwYVpPWmxJ?=
- =?utf-8?B?SEJVOXB5TGkzaFhxRU5HbnFhN1VQZy9aNWJLMjBtenNRNUdxT3JqelVWQ0ZI?=
- =?utf-8?B?dkxWKzUxMTdDQm8xQjdvbmN1b09qSFZvcy93dzFGQ3BreGRPRWZtTGlZSm5Y?=
- =?utf-8?B?UHdGN3MzeUswSU9lVnpXQmx6c1d0eW1kVjlrU1UvM05IQ2xJdUo5WERYSi95?=
- =?utf-8?B?KzI5alRKZ01FL3VzTVRuei9RZzRUYnlrVUZXZENVZTlBQzlML0Q2T1U1T29K?=
- =?utf-8?B?YzBzZlZNemZJa2ZkcWtJeUw3V3haaytJbVFZSWx0Y1JGc0VjcGFYa3Z1ZTFz?=
- =?utf-8?B?YVZBc3FjWU5aakJmLzhoZk9VejFVQkxnNEM4UzhOVHZ0My90bGN2NlhVT1hD?=
- =?utf-8?B?L3FRYmZ6QzBrYmo3bG1XZzUvL1lNc2FNcXY0YjNIbWh4S3AyS0ZCTlU5MW42?=
- =?utf-8?B?dk9NVUZvdmRuVlZRMjMveW1zcDJSeXMyam5HSFp3T2Fla2o5MUwvMFNISkZP?=
- =?utf-8?B?RUlKOU5OcVJMM1dXU2JRMEU2TStvN2xKaW1ZdldwcEdjeUp1NmkrSGpSU3FK?=
- =?utf-8?B?d2s1aTRHazdqcDlkVVNEZnBhNzJCa1d0WmVnQ2RhSU4rZ0FlekptS2FGOHpE?=
- =?utf-8?B?Y3BZcisrbVZlanJCZWJtdStidlpCZVZaTEZZL2ROb1c5NVc3ejNSR2RnL3ds?=
- =?utf-8?B?dC9xeVJOL1JjeEZFd0VrQUoySjNGM2ZvVjY0S29tOHkxaG9TbUV4K1M3OG5r?=
- =?utf-8?B?NkxVQ0Z4Z1k1ZUVGVHlQOExhbjlXYm9Za2VLQnhJdTViajBJVVFOUFhRbDh6?=
- =?utf-8?B?b0kydjZnOVc4MGJtMXlHeGtXMU1BOEcwNXpjQnovYWZjeVZyR0FMRlU3VmZF?=
- =?utf-8?B?MzZaenkyRGI5NUZReXI4bGpvKzVCeFhYdWRnT2F3bW1RcUlVTGNaMXMraC90?=
- =?utf-8?B?RU14YTZYbm4zS2ZCc0prTGlyMFJFS3JrMnJIWDlSUGdMcHZiblhFSFA4VWJS?=
- =?utf-8?B?bnIrQVRiSmM0K2pnRG1Sc2M0bVg5ZFpubXNRVXZKQ1FzT2FaK3pvR2ZtQlJV?=
- =?utf-8?B?RWpMdVdySEhaREtVZ0RXcC9kWHpNQm04TVczdGxkalEwUk0rVmRRb3dHN1Rl?=
- =?utf-8?B?ekJXcFQ0RWpOb0oyYktObVJlSDI2R05Rd2d1QXNrWjlsamJzckZmUTFvQzRK?=
- =?utf-8?B?dm9IK3pjbWZweUVwNXc3R1ZmTW8xKzdwZ0lXL1UzVldSdHpZSGpwQT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf0cc945-79c6-4763-d6f8-08da4d0923c1
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jun 2022 06:51:27.9265
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4vLu/xK12Df/98/3aK4DLkqT1f6idNIyUfixFz5jTMdNkcJJEr0qcEr5/KSw5jZg
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3300
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQEGezFsbNu8B074Ncmz/1JauiaDCQMwSXY4AgzYL5auxwUn0A==
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrJJsWRmVeSWpSXmKPExsWy7bCmma76/WVJBjvWGlo8mLeNzeLlz6ts
+        FtdeXmC3mPbhJ7PF/CPnWC36Xjxkttj0+BqrxeVdc9gsJqz6xmLRfX0Hm8Xy4/+YLBZt/cJu
+        0br3CLvFzjsnmB34PC5f8fbYtKqTzePOtT1sHpuX1Ht8fHqLxaNvyypGj8+b5DzaD3QzBXBE
+        ZdtkpCampBYppOYl56dk5qXbKnkHxzvHm5oZGOoaWlqYKynkJeam2iq5+AToumXmAJ2tpFCW
+        mFMKFApILC5W0rezKcovLUlVyMgvLrFVSi1IySkwL9ArTswtLs1L18tLLbEyNDAwMgUqTMjO
+        +DTvH2vBZ6aKdZ9WsTYwrmfqYuTkkBAwkThw4Q5LFyMXh5DADkaJm09bWSGcT4wS8z5PYYdw
+        PjNKXJzwmxGmZdKkDqiWXYwSt1+/h6p6wSgx5/9eVpAqNgF9iZcd28BmiYAM/rziE1gLs0An
+        k0T3kQtg6zkFbCVObLnFDGILCwRITFp8B8xmEVCVWHu+D2wfr4ClxOfbk6FsQYmTM5+wgNjM
+        AvIS29/OYYa4SUHi59NlQNs4gLY5SXz5Yg9RIiIxu7ONGWSvhMAdDokTm3ewQtS7SCxZ8R6q
+        V1ji1fEt7BC2lMTL/jYou1hi6axPTBDNDYwSl7f9YoNIGEvMetbOCLKMWUBTYv0ufRBTQkBZ
+        4sgtqNP4JDoO/2WHCPNKdLQJQTSqSxzYPp0FwpaV6J7zmXUCo9IsJI/NQvLYLCQfzELYtYCR
+        ZRWjWGpBcW56arFRgQk8upPzczcxgtO0lscOxtlvP+gdYmTiYDzEKMHBrCTCO/nisiQh3pTE
+        yqrUovz4otKc1OJDjKbAoJ7ILCWanA/MFHkl8YYmlgYmZmaG5kamBuZK4rxeKRsShQTSE0tS
+        s1NTC1KLYPqYODilGpgOfnh1QmVvGM/mpUvllVdecBA7kpbddu7mvaiOrf2TBc0NH9wWuFVv
+        5trNddpxz36vqQK76qoP6LCtFd4zOT7rnu8Mv/C7cQyTXDjMa69Vh1wpLNxquuBje33bmXml
+        XUGvdyfHvf5rJerZxr3z8rdZ54p/bd9svOexn7i3zueLG7ySLwQKGme4GIZeTj+QNmnF96k3
+        z6S/TTJNfyV2Jy+wQz1EKvVxUVKw7xwhBcXTc8KN/M8WGPkJvty6Xew+v8LDrqVZJ5T/rW0s
+        KV/yoWXp0jWKSUt9pXK35YilvRaSzplokiytcr5EyPr6bKa4hF2XjpcbtopfXR5m8WPT/FOf
+        Nbi+ctZd0cxSO10mfFyJpTgj0VCLuag4EQCOcl/gXAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKIsWRmVeSWpSXmKPExsWy7bCSnK7a/WVJBmfnW1g8mLeNzeLlz6ts
+        FtdeXmC3mPbhJ7PF/CPnWC36Xjxkttj0+BqrxeVdc9gsJqz6xmLRfX0Hm8Xy4/+YLBZt/cJu
+        0br3CLvFzjsnmB34PC5f8fbYtKqTzePOtT1sHpuX1Ht8fHqLxaNvyypGj8+b5DzaD3QzBXBE
+        cdmkpOZklqUW6dslcGV8mvePteAzU8W6T6tYGxjXM3UxcnJICJhITJrUwdLFyMUhJLCDUeLu
+        wQYWiISsxLN3O9ghbGGJ+y1HWCGKnjFKzOvfyAaSYBPQl3jZsQ0sISKwh1Gibd4pdhCHWWAy
+        k8Skhq9Qc/czSnQ0nGEEaeEUsJU4seUWM4gtLOAn8X3NRrAdLAKqEmvP94HV8ApYSny+PRnK
+        FpQ4OfMJ2E3MAtoST28+hbLlJba/ncMMcZ+CxM+ny4DO4AA6w0niyxd7iBIRidmdbcwTGIVn
+        IZk0C8mkWUgmzULSsoCRZRWjZGpBcW56brFhgVFearlecWJucWleul5yfu4mRnDMamntYNyz
+        6oPeIUYmDsZDjBIczEoivJMvLksS4k1JrKxKLcqPLyrNSS0+xCjNwaIkznuh62S8kEB6Yklq
+        dmpqQWoRTJaJg1OqgWnaTJM+k04tWXm7u1+P3NixgkeFs+7TSrO31ruvaR/J2V3z9cj7Xs5W
+        /ujZB3g56kNSb87dy7XY3Gcdf2Jm2iqm/Iz5Vp0ZM79eevxETCoyJ+jD7L5KH6cDe1pihdjV
+        EuzXKs17lfCK70Jf6pYpp/au+F7KWMErU+a5Zf0trdcr9d75JCrUlFwPX1lrtNnR89qNmeqq
+        RvPjOwRSfm63KzBR6b4Xp8Ks9eHFBLcVT71E7igu2KiZdi8jaMoiRjXFj9bvfQvKt9oaTGeu
+        mXHvoWTu3V88Ew/9kVZes9dxTXDgDrXd62rOv37Lve+tjRdfdF+5V9fG0DNx/NdPFLRkFc6d
+        7sTwf1tFmaEoQ9DVN0osxRmJhlrMRcWJAGcbnpVIAwAA
+X-CMS-MailID: 20220613065431epcas2p45b77070a453d3d65704a6ba6f8720f50
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220610104359epcas5p17a61f0254148bc1bdb15d91ff6b3f12c
+References: <20220610104119.66401-1-alim.akhtar@samsung.com>
+        <CGME20220610104359epcas5p17a61f0254148bc1bdb15d91ff6b3f12c@epcas5p1.samsung.com>
+        <20220610104119.66401-7-alim.akhtar@samsung.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 13.06.22 um 08:34 schrieb Yang Yingliang:
-> If dma_fence_unwrap_merge() fails, it should return error code
-> in drm_syncobj_transfer_to_timeline()
->
-> Fixes: ec8d985ff26f ("drm: use dma_fence_unwrap_merge() in drm_syncobj")
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> Subject: [PATCH v4 6/6] ufs: host: ufs-exynos: add support for fsd ufs hci
+> 
+> Adds support of UFS HCI which is found in Tesla Full Self-Driving (FSD)
+> SoC.
+> 
+> Signed-off-by: Bharat Uppal <bharat.uppal@samsung.com>
+> Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
+Reviewed-by: Chanho Park <chanho61.park@samsung.com>
 
-Going to push that in a minute.
-
-Thanks,
-Christian.
-
-> ---
->   drivers/gpu/drm/drm_syncobj.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/drm_syncobj.c b/drivers/gpu/drm/drm_syncobj.c
-> index bbad9e4696e7..0c2be8360525 100644
-> --- a/drivers/gpu/drm/drm_syncobj.c
-> +++ b/drivers/gpu/drm/drm_syncobj.c
-> @@ -874,8 +874,10 @@ static int drm_syncobj_transfer_to_timeline(struct drm_file *file_private,
->   
->   	fence = dma_fence_unwrap_merge(tmp);
->   	dma_fence_put(tmp);
-> -	if (!fence)
-> +	if (!fence) {
-> +		ret = -ENOMEM;
->   		goto err_put_timeline;
-> +	}
->   
->   	chain = dma_fence_chain_alloc();
->   	if (!chain) {
+Best Regards,
+Chanho Park
 

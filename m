@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 164F35496DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1AB5494D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355313AbiFMMK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
+        id S244707AbiFMK1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359154AbiFMMFT (ORCPT
+        with ESMTP id S245613AbiFMKYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:05:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C1A13F14;
-        Mon, 13 Jun 2022 03:59:05 -0700 (PDT)
+        Mon, 13 Jun 2022 06:24:44 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23834205FD;
+        Mon, 13 Jun 2022 03:19:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80C7B611B3;
-        Mon, 13 Jun 2022 10:59:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CED2C34114;
-        Mon, 13 Jun 2022 10:59:04 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 76173CE110D;
+        Mon, 13 Jun 2022 10:19:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F953C34114;
+        Mon, 13 Jun 2022 10:19:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117944;
-        bh=f3DN3R4qDTmG+VEo6CC4DF1yy9+sS/4k6P6oCJko18Q=;
+        s=korg; t=1655115550;
+        bh=C/1wgkfCoPY65kNeAyGytBp4GA2vjRzYayx29RryE+s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P8ycLD3BkchYfnwqTAvkX9Tb0cTfM7lHiOGCJT2oonRn/quCYdVRlJro5PTWV1Wbk
-         psvCWAy4pq2nm3DbiBaZhAAFQr4FIheJ5Gz8pBXWB/x/FgjpWKWtcALMTLjY7SqJGX
-         9LQvqt810S19HLbvjfTK0Ts5QsRGntWBBhG6RAvw=
+        b=vEJooU6sAU23InhpIhgpU2Yj+QVxDzG3gshBt4rNfvuDvXWkx/NBROeilN2Xc9zIl
+         h2p2gzrbtraqxwWnDqdn3pTu//3cjdgGHSC6mJeqstZemYC0fKxEumUhj+ParL16w4
+         4yapYdSzU2gDZue/ZoixL6UWc5OZEfv3ussM11vM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 4.19 175/287] hugetlb: fix huge_pmd_unshare address update
+        stable@vger.kernel.org, Baokun Li <libaokun1@huawei.com>,
+        Richard Weinberger <richard@nod.at>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 125/167] jffs2: fix memory leak in jffs2_do_fill_super
 Date:   Mon, 13 Jun 2022 12:09:59 +0200
-Message-Id: <20220613094929.178122027@linuxfoundation.org>
+Message-Id: <20220613094910.147360722@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Kravetz <mike.kravetz@oracle.com>
+From: Baokun Li <libaokun1@huawei.com>
 
-commit 48381273f8734d28ef56a5bdf1966dd8530111bc upstream.
+[ Upstream commit c14adb1cf70a984ed081c67e9d27bc3caad9537c ]
 
-The routine huge_pmd_unshare() is passed a pointer to an address
-associated with an area which may be unshared.  If unshare is successful
-this address is updated to 'optimize' callers iterating over huge page
-addresses.  For the optimization to work correctly, address should be
-updated to the last huge page in the unmapped/unshared area.  However, in
-the common case where the passed address is PUD_SIZE aligned, the address
-is incorrectly updated to the address of the preceding huge page.  That
-wastes CPU cycles as the unmapped/unshared range is scanned twice.
+If jffs2_iget() or d_make_root() in jffs2_do_fill_super() returns
+an error, we can observe the following kmemleak report:
 
-Link: https://lkml.kernel.org/r/20220524205003.126184-1-mike.kravetz@oracle.com
-Fixes: 39dde65c9940 ("shared page table for hugetlb page")
-Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-Acked-by: Muchun Song <songmuchun@bytedance.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+--------------------------------------------
+unreferenced object 0xffff888105a65340 (size 64):
+  comm "mount", pid 710, jiffies 4302851558 (age 58.239s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff859c45e5>] kmem_cache_alloc_trace+0x475/0x8a0
+    [<ffffffff86160146>] jffs2_sum_init+0x96/0x1a0
+    [<ffffffff86140e25>] jffs2_do_mount_fs+0x745/0x2120
+    [<ffffffff86149fec>] jffs2_do_fill_super+0x35c/0x810
+    [<ffffffff8614aae9>] jffs2_fill_super+0x2b9/0x3b0
+    [...]
+unreferenced object 0xffff8881bd7f0000 (size 65536):
+  comm "mount", pid 710, jiffies 4302851558 (age 58.239s)
+  hex dump (first 32 bytes):
+    bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
+    bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb bb  ................
+  backtrace:
+    [<ffffffff858579ba>] kmalloc_order+0xda/0x110
+    [<ffffffff85857a11>] kmalloc_order_trace+0x21/0x130
+    [<ffffffff859c2ed1>] __kmalloc+0x711/0x8a0
+    [<ffffffff86160189>] jffs2_sum_init+0xd9/0x1a0
+    [<ffffffff86140e25>] jffs2_do_mount_fs+0x745/0x2120
+    [<ffffffff86149fec>] jffs2_do_fill_super+0x35c/0x810
+    [<ffffffff8614aae9>] jffs2_fill_super+0x2b9/0x3b0
+    [...]
+--------------------------------------------
+
+This is because the resources allocated in jffs2_sum_init() are not
+released. Call jffs2_sum_exit() to release these resources to solve
+the problem.
+
+Fixes: e631ddba5887 ("[JFFS2] Add erase block summary support (mount time improvement)")
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- mm/hugetlb.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ fs/jffs2/fs.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4837,7 +4837,14 @@ int huge_pmd_unshare(struct mm_struct *m
- 	pud_clear(pud);
- 	put_page(virt_to_page(ptep));
- 	mm_dec_nr_pmds(mm);
--	*addr = ALIGN(*addr, HPAGE_SIZE * PTRS_PER_PTE) - HPAGE_SIZE;
-+	/*
-+	 * This update of passed address optimizes loops sequentially
-+	 * processing addresses in increments of huge page size (PMD_SIZE
-+	 * in this case).  By clearing the pud, a PUD_SIZE area is unmapped.
-+	 * Update address to the 'last page' in the cleared area so that
-+	 * calling loop can move to first page past this area.
-+	 */
-+	*addr |= PUD_SIZE - PMD_SIZE;
- 	return 1;
- }
- #define want_pmd_share()	(1)
+diff --git a/fs/jffs2/fs.c b/fs/jffs2/fs.c
+index d3c9e4c82e57..610e11e76f2d 100644
+--- a/fs/jffs2/fs.c
++++ b/fs/jffs2/fs.c
+@@ -597,6 +597,7 @@ int jffs2_do_fill_super(struct super_block *sb, void *data, int silent)
+ 	jffs2_free_raw_node_refs(c);
+ 	kvfree(c->blocks);
+ 	jffs2_clear_xattr_subsystem(c);
++	jffs2_sum_exit(c);
+  out_inohash:
+ 	kfree(c->inocache_list);
+  out_wbuf:
+-- 
+2.35.1
+
 
 

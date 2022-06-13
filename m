@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4076E548A3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBE95495C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352929AbiFMMnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54844 "EHLO
+        id S1383621AbiFMObq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355817AbiFMMjR (ORCPT
+        with ESMTP id S1383639AbiFMO0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:39:17 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D629D33891;
-        Mon, 13 Jun 2022 04:09:34 -0700 (PDT)
+        Mon, 13 Jun 2022 10:26:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610446164;
+        Mon, 13 Jun 2022 04:47:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 48470CE1184;
-        Mon, 13 Jun 2022 11:09:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6118BC34114;
-        Mon, 13 Jun 2022 11:09:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40C90612A8;
+        Mon, 13 Jun 2022 11:47:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49611C34114;
+        Mon, 13 Jun 2022 11:47:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118571;
-        bh=1jCg8Kfy0hEEFe172v9re+mnxyKLpW4fnDkJcsLiSq8=;
+        s=korg; t=1655120834;
+        bh=DP0GBlWS01HNg1sxk93PKkBpvry1tx4tPZCsHh7VcgQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F4jF5WqxVe5ETVjpa7JmYlw6VmKXNtr+bPBGMB7j0XwEWWrc1wSaH3xb8XNaZ+tjl
-         c7AgE9snofGbBR4IH4i5hMMFGwmnr2UgQsxKTxwdZWxIhrFjTIZkO+Pfu+7VqKxVmo
-         ZAA3AA5zI6LICZ1oqFDXfR5A2hg5KyGg3CziJt70=
+        b=0n2+bJWQIRBNfzofJyWDOAGSKNtLr07p10S2PKNRPl+MJJlmw5V0xhplEblzAKhoj
+         gL84wpfGkMTAZ9xoX1wifhsJhMGYwmywxRzwyDooaJKmktDw9ySEta85dEIBaYdjK6
+         RZvlqSxND384SlTvbD5e7I1qU1GLDFnVPI3+fSvo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
-        Maor Gottlieb <maorg@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org, Jan Beulich <jbeulich@suse.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 109/172] net/mlx5: fs, fail conflicting actions
+Subject: [PATCH 5.17 175/298] x86: drop bogus "cc" clobber from __try_cmpxchg_user_asm()
 Date:   Mon, 13 Jun 2022 12:11:09 +0200
-Message-Id: <20220613094916.482487517@linuxfoundation.org>
+Message-Id: <20220613094930.241839176@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,89 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Bloch <mbloch@nvidia.com>
+From: Jan Beulich <jbeulich@suse.com>
 
-[ Upstream commit 8fa5e7b20e01042b14f8cd684d2da9b638460c74 ]
+[ Upstream commit 1df931d95f4dc1c11db1123e85d4e08156e46ef9 ]
 
-When combining two steering rules into one check
-not only do they share the same actions but those
-actions are also the same. This resolves an issue where
-when creating two different rules with the same match
-the actions are overwritten and one of the rules is deleted
-a FW syndrome can be seen in dmesg.
+As noted (and fixed) a couple of times in the past, "=@cc<cond>" outputs
+and clobbering of "cc" don't work well together. The compiler appears to
+mean to reject such, but doesn't - in its upstream form - quite manage
+to yet for "cc". Furthermore two similar macros don't clobber "cc", and
+clobbering "cc" is pointless in asm()-s for x86 anyway - the compiler
+always assumes status flags to be clobbered there.
 
-mlx5_core 0000:03:00.0: mlx5_cmd_check:819:(pid 2105): DEALLOC_MODIFY_HEADER_CONTEXT(0x941) op_mod(0x0) failed, status bad resource state(0x9), syndrome (0x1ab444)
-
-Fixes: 0d235c3fabb7 ("net/mlx5: Add hash table to search FTEs in a flow-group")
-Signed-off-by: Mark Bloch <mbloch@nvidia.com>
-Reviewed-by: Maor Gottlieb <maorg@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Fixes: 989b5db215a2 ("x86/uaccess: Implement macros for CMPXCHG on user addresses")
+Signed-off-by: Jan Beulich <jbeulich@suse.com>
+Message-Id: <485c0c0b-a3a7-0b7c-5264-7d00c01de032@suse.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/mellanox/mlx5/core/fs_core.c | 35 +++++++++++++++++--
- 1 file changed, 32 insertions(+), 3 deletions(-)
+ arch/x86/include/asm/uaccess.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
-index 15472fb15d7d..4bdcceffe9d3 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/fs_core.c
-@@ -1520,9 +1520,22 @@ static struct mlx5_flow_rule *find_flow_rule(struct fs_fte *fte,
- 	return NULL;
- }
- 
--static bool check_conflicting_actions(u32 action1, u32 action2)
-+static bool check_conflicting_actions_vlan(const struct mlx5_fs_vlan *vlan0,
-+					   const struct mlx5_fs_vlan *vlan1)
- {
--	u32 xored_actions = action1 ^ action2;
-+	return vlan0->ethtype != vlan1->ethtype ||
-+	       vlan0->vid != vlan1->vid ||
-+	       vlan0->prio != vlan1->prio;
-+}
-+
-+static bool check_conflicting_actions(const struct mlx5_flow_act *act1,
-+				      const struct mlx5_flow_act *act2)
-+{
-+	u32 action1 = act1->action;
-+	u32 action2 = act2->action;
-+	u32 xored_actions;
-+
-+	xored_actions = action1 ^ action2;
- 
- 	/* if one rule only wants to count, it's ok */
- 	if (action1 == MLX5_FLOW_CONTEXT_ACTION_COUNT ||
-@@ -1539,6 +1552,22 @@ static bool check_conflicting_actions(u32 action1, u32 action2)
- 			     MLX5_FLOW_CONTEXT_ACTION_VLAN_PUSH_2))
- 		return true;
- 
-+	if (action1 & MLX5_FLOW_CONTEXT_ACTION_PACKET_REFORMAT &&
-+	    act1->pkt_reformat != act2->pkt_reformat)
-+		return true;
-+
-+	if (action1 & MLX5_FLOW_CONTEXT_ACTION_MOD_HDR &&
-+	    act1->modify_hdr != act2->modify_hdr)
-+		return true;
-+
-+	if (action1 & MLX5_FLOW_CONTEXT_ACTION_VLAN_PUSH &&
-+	    check_conflicting_actions_vlan(&act1->vlan[0], &act2->vlan[0]))
-+		return true;
-+
-+	if (action1 & MLX5_FLOW_CONTEXT_ACTION_VLAN_PUSH_2 &&
-+	    check_conflicting_actions_vlan(&act1->vlan[1], &act2->vlan[1]))
-+		return true;
-+
- 	return false;
- }
- 
-@@ -1546,7 +1575,7 @@ static int check_conflicting_ftes(struct fs_fte *fte,
- 				  const struct mlx5_flow_context *flow_context,
- 				  const struct mlx5_flow_act *flow_act)
- {
--	if (check_conflicting_actions(flow_act->action, fte->action.action)) {
-+	if (check_conflicting_actions(flow_act, &fte->action)) {
- 		mlx5_core_warn(get_dev(&fte->node),
- 			       "Found two FTEs with conflicting actions\n");
- 		return -EEXIST;
+diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+index 1c14bcce88f2..729ecf1e546c 100644
+--- a/arch/x86/include/asm/uaccess.h
++++ b/arch/x86/include/asm/uaccess.h
+@@ -466,7 +466,7 @@ do {									\
+ 		       [ptr] "+m" (*_ptr),				\
+ 		       [old] "+a" (__old)				\
+ 		     : [new] ltype (__new)				\
+-		     : "memory", "cc");					\
++		     : "memory");					\
+ 	if (unlikely(__err))						\
+ 		goto label;						\
+ 	if (unlikely(!success))						\
 -- 
 2.35.1
 

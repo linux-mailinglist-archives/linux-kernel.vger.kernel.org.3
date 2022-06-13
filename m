@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967C5549557
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B40775493BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351514AbiFMM0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:26:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S1383968AbiFMOhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355084AbiFMMXx (ORCPT
+        with ESMTP id S1384135AbiFMOdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:23:53 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70ACD313A1;
-        Mon, 13 Jun 2022 04:04:10 -0700 (PDT)
+        Mon, 13 Jun 2022 10:33:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ABF04BB88;
+        Mon, 13 Jun 2022 04:49:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E0A5CCE1176;
-        Mon, 13 Jun 2022 11:04:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDFF4C34114;
-        Mon, 13 Jun 2022 11:04:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6BC8CB80EA7;
+        Mon, 13 Jun 2022 11:48:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D3EC34114;
+        Mon, 13 Jun 2022 11:48:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118247;
-        bh=X2GlBPW4FLORKb18K+0SK7mzNqyfqz6KrvGsXzJTf5w=;
+        s=korg; t=1655120924;
+        bh=KPi+PDnXetNqe8k0T50PiyVPHdsSkTnx9m4diIFuL3I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=caoi3ynOsjQ2odTRgIbFleqZDCsA564bA4++6kThmxrn3TbAQU3ypRnWyakxPVW7k
-         0zg5zc+qp+03UyXpDy+O8frpO7MyadRhbSkWCu1uVQI7cOf+7tstBfVLg4t2WLtpmI
-         WR1TfZXKxWOAo+lRv9FNpX2vfKpJQl1DPRDeutqw=
+        b=TTXsSuV4IFsaQnlfbpOesp5YQYWAtjXay/fnfFyeueO+xyvcg94YGHA9mLT9Oisre
+         qQVx7YyvQk69Sv/ARFfs8k+edSz/vZ1vcq5E+43Ni0mSYF5LvQYMUCT8rYZvvaIrRe
+         NstnXpbXiHhHP6ViT/ZIs19igB4kei52RhwaVr+U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 4.19 278/287] mmc: block: Fix CQE recovery reset success
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 208/298] drivers: tty: serial: Fix deadlock in sa1100_set_termios()
 Date:   Mon, 13 Jun 2022 12:11:42 +0200
-Message-Id: <20220613094932.426223832@linuxfoundation.org>
+Message-Id: <20220613094931.414335123@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +54,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit a051246b786af7e4a9d9219cc7038a6e8a411531 upstream.
+[ Upstream commit 62b2caef400c1738b6d22f636c628d9f85cd4c4c ]
 
-The intention of the use of mmc_blk_reset_success() in
-mmc_blk_cqe_recovery() was to prevent repeated resets when retrying and
-getting the same error. However, that may not be the case - any amount
-of time and I/O may pass before another recovery is needed, in which
-case there would be no reason to deny it the opportunity to recover via
-a reset if necessary. CQE recovery is expected seldom and failure to
-recover (if the clear tasks command fails), even more seldom, so it is
-better to allow the reset always, which can be done by calling
-mmc_blk_reset_success() always.
+There is a deadlock in sa1100_set_termios(), which is shown
+below:
 
-Fixes: 1e8e55b67030c6 ("mmc: block: Add CQE support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-Link: https://lore.kernel.org/r/20220531171922.76080-1-adrian.hunter@intel.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+   (Thread 1)              |      (Thread 2)
+                           | sa1100_enable_ms()
+sa1100_set_termios()       |  mod_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | sa1100_timeout()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
+
+We hold sport->port.lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
+also need sport->port.lock in position (2) of thread 2. As a result,
+sa1100_set_termios() will block forever.
+
+This patch moves del_timer_sync() before spin_lock_irqsave()
+in order to prevent the deadlock.
+
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220417111626.7802-1-duoming@zju.edu.cn
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mmc/core/block.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/tty/serial/sa1100.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -1499,8 +1499,7 @@ void mmc_blk_cqe_recovery(struct mmc_que
- 	err = mmc_cqe_recovery(host);
- 	if (err)
- 		mmc_blk_reset(mq->blkdata, host, MMC_BLK_CQE_RECOVERY);
--	else
--		mmc_blk_reset_success(mq->blkdata, MMC_BLK_CQE_RECOVERY);
-+	mmc_blk_reset_success(mq->blkdata, MMC_BLK_CQE_RECOVERY);
+diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
+index 697b6a002a16..4ddcc985621a 100644
+--- a/drivers/tty/serial/sa1100.c
++++ b/drivers/tty/serial/sa1100.c
+@@ -446,6 +446,8 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	baud = uart_get_baud_rate(port, termios, old, 0, port->uartclk/16); 
+ 	quot = uart_get_divisor(port, baud);
  
- 	pr_debug("%s: CQE recovery done\n", mmc_hostname(host));
- }
++	del_timer_sync(&sport->timer);
++
+ 	spin_lock_irqsave(&sport->port.lock, flags);
+ 
+ 	sport->port.read_status_mask &= UTSR0_TO_SM(UTSR0_TFS);
+@@ -476,8 +478,6 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
+ 				UTSR1_TO_SM(UTSR1_ROR);
+ 	}
+ 
+-	del_timer_sync(&sport->timer);
+-
+ 	/*
+ 	 * Update the per-port timeout.
+ 	 */
+-- 
+2.35.1
+
 
 

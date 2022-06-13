@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76624548791
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509135487E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350753AbiFMK66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:58:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
+        id S1358514AbiFMNG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350093AbiFMKyl (ORCPT
+        with ESMTP id S1354177AbiFMMzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D2424970;
-        Mon, 13 Jun 2022 03:29:11 -0700 (PDT)
+        Mon, 13 Jun 2022 08:55:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5F3101F7;
+        Mon, 13 Jun 2022 04:16:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30475B80E59;
-        Mon, 13 Jun 2022 10:29:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AEDFC34114;
-        Mon, 13 Jun 2022 10:29:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1023F60B6B;
+        Mon, 13 Jun 2022 11:16:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13569C34114;
+        Mon, 13 Jun 2022 11:16:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116149;
-        bh=pOFYgfee5iVtMFAxZz46DsyhKPKQrBcJoxcFBBfq19w=;
+        s=korg; t=1655118981;
+        bh=8AIjeACgi+bYisPTA5NfM+ueUeKZiAQSrBsRTbbfHbY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c08SeGDs8US+g6GmBs5+Hg8uFHB7AGqyQzPYpSQl7YYj3h7QkpBr+i0wo1xnFRx0P
-         bCT7yjG63LqSKq7+GV7momnFXIJ3ra73EOJOUpyvgnN6lxLaOVGvAGvo4awI8JlAM6
-         eonfeBkYMzE85vKDINwDwFYI8krZLGWhuUgVGAt0=
+        b=dWS2KHFyfWtSzDPKTepCpZAV8qBFd7p7Lsw2KXDuIeFVshSp7YBrTjLUNlff/vVW+
+         eE6StTiDPwj7HsuCT8WMEZZGOCTC6Yu5ZVbHKZhDicL4gCQKsgqp9xOOKT3SYI4E87
+         68nNOLkygdws4SEDwobJIbocZ2I2mWpgBslkkwmM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Manuel Lauss <manuel.lauss@gmail.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
+        stable@vger.kernel.org, Maxim Mikityanskiy <maximmi@nvidia.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 140/218] pcmcia: db1xxx_ss: restrict to MIPS_DB1XXX boards
-Date:   Mon, 13 Jun 2022 12:09:58 +0200
-Message-Id: <20220613094924.834796876@linuxfoundation.org>
+Subject: [PATCH 5.15 097/247] net/mlx5e: Update netdev features after changing XDP state
+Date:   Mon, 13 Jun 2022 12:09:59 +0200
+Message-Id: <20220613094925.898900831@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,46 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Maxim Mikityanskiy <maximmi@nvidia.com>
 
-[ Upstream commit 3928cf08334ed895a31458cbebd8d4ec6d84c080 ]
+[ Upstream commit f6279f113ad593971999c877eb69dc3d36a75894 ]
 
-When the MIPS_ALCHEMY board selection is MIPS_XXS1500 instead of
-MIPS_DB1XXX, the PCMCIA driver 'db1xxx_ss' has build errors due
-to missing DB1XXX symbols. The PCMCIA driver should be restricted
-to MIPS_DB1XXX instead of MIPS_ALCHEMY to fix this build error.
+Some features (LRO, HW GRO) conflict with XDP. If there is an attempt to
+enable such features while XDP is active, they will be set to `off
+[requested on]`. In order to activate these features after XDP is turned
+off, the driver needs to call netdev_update_features(). This commit adds
+this missing call after XDP state changes.
 
-ERROR: modpost: "bcsr_read" [drivers/pcmcia/db1xxx_ss.ko] undefined!
-ERROR: modpost: "bcsr_mod" [drivers/pcmcia/db1xxx_ss.ko] undefined!
-
-Fixes: 42a4f17dc356 ("MIPS: Alchemy: remove SOC_AU1X00 in favor of MIPS_ALCHEMY")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Acked-by: Manuel Lauss <manuel.lauss@gmail.com>
-Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
+Fixes: cf6e34c8c22f ("net/mlx5e: Properly block LRO when XDP is enabled")
+Fixes: b0617e7b3500 ("net/mlx5e: Properly block HW GRO when XDP is enabled")
+Signed-off-by: Maxim Mikityanskiy <maximmi@nvidia.com>
+Reviewed-by: Tariq Toukan <tariqt@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pcmcia/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/mellanox/mlx5/core/en_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
-index d3c378b4db6c..20d85d564b80 100644
---- a/drivers/pcmcia/Kconfig
-+++ b/drivers/pcmcia/Kconfig
-@@ -146,7 +146,7 @@ config TCIC
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+index 7efb898e9f96..e00648094fc2 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
+@@ -4181,6 +4181,11 @@ static int mlx5e_xdp_set(struct net_device *netdev, struct bpf_prog *prog)
  
- config PCMCIA_ALCHEMY_DEVBOARD
- 	tristate "Alchemy Db/Pb1xxx PCMCIA socket services"
--	depends on MIPS_ALCHEMY && PCMCIA
-+	depends on MIPS_DB1XXX && PCMCIA
- 	help
- 	  Enable this driver of you want PCMCIA support on your Alchemy
- 	  Db1000, Db/Pb1100, Db/Pb1500, Db/Pb1550, Db/Pb1200, DB1300
+ unlock:
+ 	mutex_unlock(&priv->state_lock);
++
++	/* Need to fix some features. */
++	if (!err)
++		netdev_update_features(netdev);
++
+ 	return err;
+ }
+ 
 -- 
 2.35.1
 

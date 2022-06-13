@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F2D54969B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C30F548B00
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378913AbiFMNsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
+        id S1355126AbiFMLhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379229AbiFMNkE (ORCPT
+        with ESMTP id S1354813AbiFMLaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:40:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF879DE9C;
-        Mon, 13 Jun 2022 04:30:53 -0700 (PDT)
+        Mon, 13 Jun 2022 07:30:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97883F8B9;
+        Mon, 13 Jun 2022 03:45:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 734ABB80D3A;
-        Mon, 13 Jun 2022 11:30:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3898C34114;
-        Mon, 13 Jun 2022 11:30:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8719961248;
+        Mon, 13 Jun 2022 10:45:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9160EC34114;
+        Mon, 13 Jun 2022 10:45:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119851;
-        bh=siH52ZOErEXaKkc+zCZh5cGKWahnj55KtXa/SZyoXvg=;
+        s=korg; t=1655117145;
+        bh=gDBS5ivrfzV13GZedBnzpygN0y4DfOtxPoTKpGomeQo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z3xK5D+UUiGz/vOuh6ZZVMvV881rgOLjcecK9J8zF5C3XPduIvX3xe1mo/gFCwFAd
-         0P9+pxI9TpFZsorojl46njpv+yklyYD2y99/PPnK7kDdtwzZILxSIzXSbHFOTG+HZG
-         2etzzcGHYFT+IHFG2o/F6QLFnYJu/Ceer9QgmsA0=
+        b=Xd5SofzlfmrlpE88qSwCqsrvRKsfYaegkTcBagSSy3RIk7R48Ju8ADz56h1CdShRI
+         qDrV1aPJM4vVmerTKwb+A+s+1uhnIrcW10Jh25D0WI5noVdRV3fe0uaN7yn8Y4qyHB
+         4U55Zazz2WQNbmO5ixSF4fBA/8Z3ZMD2tjlFb2ZI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yang Yingliang <yangyingliang@huawei.com>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 161/339] iommu/arm-smmu: fix possible null-ptr-deref in arm_smmu_device_probe()
+        stable@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 313/411] serial: st-asc: Sanitize CSIZE and correct PARENB for CS7
 Date:   Mon, 13 Jun 2022 12:09:46 +0200
-Message-Id: <20220613094931.566885226@linuxfoundation.org>
+Message-Id: <20220613094938.130107070@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,41 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Yingliang <yangyingliang@huawei.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit d9ed8af1dee37f181096631fb03729ece98ba816 ]
+[ Upstream commit 52bb1cb7118564166b04d52387bd8403632f5190 ]
 
-It will cause null-ptr-deref when using 'res', if platform_get_resource()
-returns NULL, so move using 'res' after devm_ioremap_resource() that
-will check it to avoid null-ptr-deref.
-And use devm_platform_get_and_ioremap_resource() to simplify code.
+Only CS7 and CS8 seem supported but CSIZE is not sanitized from CS5 or
+CS6 to CS8. In addition, ASC_CTL_MODE_7BIT_PAR suggests that CS7 has
+to have parity, thus add PARENB.
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Link: https://lore.kernel.org/r/20220425114136.2649310-1-yangyingliang@huawei.com
-Signed-off-by: Will Deacon <will@kernel.org>
+Incorrect CSIZE results in miscalculation of the frame bits in
+tty_get_char_size() or in its predecessor where the roughly the same
+code is directly within uart_update_timeout().
+
+Fixes: c4b058560762 (serial:st-asc: Add ST ASC driver.)
+Cc: Srinivas Kandagatla <srinivas.kandagatla@st.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/20220519081808.3776-8-ilpo.jarvinen@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iommu/arm/arm-smmu/arm-smmu.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/tty/serial/st-asc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-index 568cce590ccc..52b71f6aee3f 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
-@@ -2092,11 +2092,10 @@ static int arm_smmu_device_probe(struct platform_device *pdev)
- 	if (err)
- 		return err;
+diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
+index 7971997cdead..ce35e3a131b1 100644
+--- a/drivers/tty/serial/st-asc.c
++++ b/drivers/tty/serial/st-asc.c
+@@ -540,10 +540,14 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	/* set character length */
+ 	if ((cflag & CSIZE) == CS7) {
+ 		ctrl_val |= ASC_CTL_MODE_7BIT_PAR;
++		cflag |= PARENB;
+ 	} else {
+ 		ctrl_val |= (cflag & PARENB) ?  ASC_CTL_MODE_8BIT_PAR :
+ 						ASC_CTL_MODE_8BIT;
++		cflag &= ~CSIZE;
++		cflag |= CS8;
+ 	}
++	termios->c_cflag = cflag;
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	ioaddr = res->start;
--	smmu->base = devm_ioremap_resource(dev, res);
-+	smmu->base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
- 	if (IS_ERR(smmu->base))
- 		return PTR_ERR(smmu->base);
-+	ioaddr = res->start;
- 	/*
- 	 * The resource size should effectively match the value of SMMU_TOP;
- 	 * stash that temporarily until we know PAGESIZE to validate it with.
+ 	/* set stop bit */
+ 	ctrl_val |= (cflag & CSTOPB) ? ASC_CTL_STOP_2BIT : ASC_CTL_STOP_1BIT;
 -- 
 2.35.1
 

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C9ED548C54
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3F1549307
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354162AbiFMNEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49954 "EHLO
+        id S1379210AbiFMNwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354880AbiFMMzu (ORCPT
+        with ESMTP id S1379168AbiFMNpa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1113911831;
-        Mon, 13 Jun 2022 04:16:42 -0700 (PDT)
+        Mon, 13 Jun 2022 09:45:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6417665AF;
+        Mon, 13 Jun 2022 04:32:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 992C660B6B;
-        Mon, 13 Jun 2022 11:16:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A412BC34114;
-        Mon, 13 Jun 2022 11:16:40 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09165B80D3A;
+        Mon, 13 Jun 2022 11:32:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F317C34114;
+        Mon, 13 Jun 2022 11:32:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119001;
-        bh=MNaiuG4N1VwUKOrgpMZ+BnxOCSCj0LiesIi3WOBys/I=;
+        s=korg; t=1655119964;
+        bh=OXazcopcHVsshmAECbqpVbYBNTPkMGL4+VntXQPRxZo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C0+4pNx6l6ESYLCptqfPJqOp9M6a6hvcB1Re7YJ+3LXCe0SJXRFAvZfTGdsu91mRl
-         2vJCuh3IJHjDbw9qblhBFJMjBoaH+D69BLYUzqt209xDM9RBkhjGedusvBf5Ao7cg9
-         80QnyPnvuhLG10y0BWMtKoPirNw4xLCCv3p0ScNw=
+        b=W41VsrqwgVqloPsxRzWhPs/JsjMQ3sbQDDKC2TjHub9UnNEvXmRwZZkRfk0baptLQ
+         xP6hyMLbJVPnFSc7T2xFHJJIWR0kqqlJiD3Np/z531xZKeN/csGY6l+RbtG1KVKGAP
+         zARdhxsZURy5GnzeOckohFFBpRbMnwiN2nhBdJA0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haibo Chen <haibo.chen@nxp.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
+        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 104/247] gpio: pca953x: use the correct register address to do regcache sync
-Date:   Mon, 13 Jun 2022 12:10:06 +0200
-Message-Id: <20220613094926.111147019@linuxfoundation.org>
+Subject: [PATCH 5.18 182/339] netfilter: nf_tables: delete flowtable hooks via transaction list
+Date:   Mon, 13 Jun 2022 12:10:07 +0200
+Message-Id: <20220613094932.198971471@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,74 +54,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Chen <haibo.chen@nxp.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 43624eda86c98b0de726d0b6f2516ccc3ef7313f ]
+[ Upstream commit b6d9014a3335194590abdd2a2471ef5147a67645 ]
 
-For regcache_sync_region, need to use pca953x_recalc_addr() to get
-the real register address.
+Remove inactive bool field in nft_hook object that was introduced in
+abadb2f865d7 ("netfilter: nf_tables: delete devices from flowtable").
+Move stale flowtable hooks to transaction list instead.
 
-Fixes: b76574300504 ("gpio: pca953x: Restore registers after suspend/resume cycle")
-Signed-off-by: Haibo Chen <haibo.chen@nxp.com>
-Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Deleting twice the same device does not result in ENOENT.
+
+Fixes: abadb2f865d7 ("netfilter: nf_tables: delete devices from flowtable")
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpio/gpio-pca953x.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ include/net/netfilter/nf_tables.h |  1 -
+ net/netfilter/nf_tables_api.c     | 31 ++++++-------------------------
+ 2 files changed, 6 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-index 8726921a1129..33683295a0bf 100644
---- a/drivers/gpio/gpio-pca953x.c
-+++ b/drivers/gpio/gpio-pca953x.c
-@@ -1108,20 +1108,21 @@ static int pca953x_regcache_sync(struct device *dev)
- {
- 	struct pca953x_chip *chip = dev_get_drvdata(dev);
- 	int ret;
-+	u8 regaddr;
+diff --git a/include/net/netfilter/nf_tables.h b/include/net/netfilter/nf_tables.h
+index 20af9d3557b9..279ae0fff7ad 100644
+--- a/include/net/netfilter/nf_tables.h
++++ b/include/net/netfilter/nf_tables.h
+@@ -1090,7 +1090,6 @@ struct nft_stats {
  
- 	/*
- 	 * The ordering between direction and output is important,
- 	 * sync these registers first and only then sync the rest.
- 	 */
--	ret = regcache_sync_region(chip->regmap, chip->regs->direction,
--				   chip->regs->direction + NBANK(chip));
-+	regaddr = pca953x_recalc_addr(chip, chip->regs->direction, 0);
-+	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
- 	if (ret) {
- 		dev_err(dev, "Failed to sync GPIO dir registers: %d\n", ret);
- 		return ret;
+ struct nft_hook {
+ 	struct list_head	list;
+-	bool			inactive;
+ 	struct nf_hook_ops	ops;
+ 	struct rcu_head		rcu;
+ };
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index a0981e7cb211..f23c40e6caa6 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -1914,7 +1914,6 @@ static struct nft_hook *nft_netdev_hook_alloc(struct net *net,
+ 		goto err_hook_dev;
+ 	}
+ 	hook->ops.dev = dev;
+-	hook->inactive = false;
+ 
+ 	return hook;
+ 
+@@ -7612,6 +7611,7 @@ static int nft_delflowtable_hook(struct nft_ctx *ctx,
+ {
+ 	const struct nlattr * const *nla = ctx->nla;
+ 	struct nft_flowtable_hook flowtable_hook;
++	LIST_HEAD(flowtable_del_list);
+ 	struct nft_hook *this, *hook;
+ 	struct nft_trans *trans;
+ 	int err;
+@@ -7627,7 +7627,7 @@ static int nft_delflowtable_hook(struct nft_ctx *ctx,
+ 			err = -ENOENT;
+ 			goto err_flowtable_del_hook;
+ 		}
+-		hook->inactive = true;
++		list_move(&hook->list, &flowtable_del_list);
  	}
  
--	ret = regcache_sync_region(chip->regmap, chip->regs->output,
--				   chip->regs->output + NBANK(chip));
-+	regaddr = pca953x_recalc_addr(chip, chip->regs->output, 0);
-+	ret = regcache_sync_region(chip->regmap, regaddr, regaddr + NBANK(chip));
- 	if (ret) {
- 		dev_err(dev, "Failed to sync GPIO out registers: %d\n", ret);
- 		return ret;
-@@ -1129,16 +1130,18 @@ static int pca953x_regcache_sync(struct device *dev)
+ 	trans = nft_trans_alloc(ctx, NFT_MSG_DELFLOWTABLE,
+@@ -7640,6 +7640,7 @@ static int nft_delflowtable_hook(struct nft_ctx *ctx,
+ 	nft_trans_flowtable(trans) = flowtable;
+ 	nft_trans_flowtable_update(trans) = true;
+ 	INIT_LIST_HEAD(&nft_trans_flowtable_hooks(trans));
++	list_splice(&flowtable_del_list, &nft_trans_flowtable_hooks(trans));
+ 	nft_flowtable_hook_release(&flowtable_hook);
  
- #ifdef CONFIG_GPIO_PCA953X_IRQ
- 	if (chip->driver_data & PCA_PCAL) {
--		ret = regcache_sync_region(chip->regmap, PCAL953X_IN_LATCH,
--					   PCAL953X_IN_LATCH + NBANK(chip));
-+		regaddr = pca953x_recalc_addr(chip, PCAL953X_IN_LATCH, 0);
-+		ret = regcache_sync_region(chip->regmap, regaddr,
-+					   regaddr + NBANK(chip));
- 		if (ret) {
- 			dev_err(dev, "Failed to sync INT latch registers: %d\n",
- 				ret);
- 			return ret;
- 		}
+ 	nft_trans_commit_list_add_tail(ctx->net, trans);
+@@ -7647,13 +7648,7 @@ static int nft_delflowtable_hook(struct nft_ctx *ctx,
+ 	return 0;
  
--		ret = regcache_sync_region(chip->regmap, PCAL953X_INT_MASK,
--					   PCAL953X_INT_MASK + NBANK(chip));
-+		regaddr = pca953x_recalc_addr(chip, PCAL953X_INT_MASK, 0);
-+		ret = regcache_sync_region(chip->regmap, regaddr,
-+					   regaddr + NBANK(chip));
- 		if (ret) {
- 			dev_err(dev, "Failed to sync INT mask registers: %d\n",
- 				ret);
+ err_flowtable_del_hook:
+-	list_for_each_entry(this, &flowtable_hook.list, list) {
+-		hook = nft_hook_list_find(&flowtable->hook_list, this);
+-		if (!hook)
+-			break;
+-
+-		hook->inactive = false;
+-	}
++	list_splice(&flowtable_del_list, &flowtable->hook_list);
+ 	nft_flowtable_hook_release(&flowtable_hook);
+ 
+ 	return err;
+@@ -8559,17 +8554,6 @@ void nft_chain_del(struct nft_chain *chain)
+ 	list_del_rcu(&chain->list);
+ }
+ 
+-static void nft_flowtable_hooks_del(struct nft_flowtable *flowtable,
+-				    struct list_head *hook_list)
+-{
+-	struct nft_hook *hook, *next;
+-
+-	list_for_each_entry_safe(hook, next, &flowtable->hook_list, list) {
+-		if (hook->inactive)
+-			list_move(&hook->list, hook_list);
+-	}
+-}
+-
+ static void nf_tables_module_autoload_cleanup(struct net *net)
+ {
+ 	struct nftables_pernet *nft_net = nft_pernet(net);
+@@ -8914,8 +8898,6 @@ static int nf_tables_commit(struct net *net, struct sk_buff *skb)
+ 			break;
+ 		case NFT_MSG_DELFLOWTABLE:
+ 			if (nft_trans_flowtable_update(trans)) {
+-				nft_flowtable_hooks_del(nft_trans_flowtable(trans),
+-							&nft_trans_flowtable_hooks(trans));
+ 				nf_tables_flowtable_notify(&trans->ctx,
+ 							   nft_trans_flowtable(trans),
+ 							   &nft_trans_flowtable_hooks(trans),
+@@ -8996,7 +8978,6 @@ static int __nf_tables_abort(struct net *net, enum nfnl_abort_action action)
+ 	struct nftables_pernet *nft_net = nft_pernet(net);
+ 	struct nft_trans *trans, *next;
+ 	struct nft_trans_elem *te;
+-	struct nft_hook *hook;
+ 
+ 	if (action == NFNL_ABORT_VALIDATE &&
+ 	    nf_tables_validate(net) < 0)
+@@ -9127,8 +9108,8 @@ static int __nf_tables_abort(struct net *net, enum nfnl_abort_action action)
+ 			break;
+ 		case NFT_MSG_DELFLOWTABLE:
+ 			if (nft_trans_flowtable_update(trans)) {
+-				list_for_each_entry(hook, &nft_trans_flowtable(trans)->hook_list, list)
+-					hook->inactive = false;
++				list_splice(&nft_trans_flowtable_hooks(trans),
++					    &nft_trans_flowtable(trans)->hook_list);
+ 			} else {
+ 				trans->ctx.table->use++;
+ 				nft_clear(trans->ctx.net, nft_trans_flowtable(trans));
 -- 
 2.35.1
 

@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AEB548232
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9804C548283
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239838AbiFMIoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S239726AbiFMIoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239603AbiFMInd (ORCPT
+        with ESMTP id S239636AbiFMIne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:43:33 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363EB7661;
-        Mon, 13 Jun 2022 01:43:31 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 08:43:28 -0000
+        Mon, 13 Jun 2022 04:43:34 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557C825DB;
+        Mon, 13 Jun 2022 01:43:32 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 08:43:29 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1655109809;
+        s=2020; t=1655109811;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=M+3xFbmd2Gh9/NIxhdlDtkJKD8GDZuK1gnj6+gOsw0U=;
-        b=IJ9s4WyaLsWzOjvlSW43PZtmpR6On9iauKn4FG/mWx1AKcyz80ZiCxksYnLS+1F8G+K6jS
-        7LFJX4JM6Uhbd4oY84d2+3uVsc9RuDex4TJWewvlCgi5pMaGgK6t3JOC+ArDGU2piMg5pz
-        BRfAI7Q+8tNGEVxhaV0bUz762ouIWw6l/QMR62kTnl84UcNHmbc9rkx1dfRr7AQC7tcddB
-        Dt8khVcNpdztpfb2NmjEE2pcetZb+MOtI8LgxBv8GsAxu+JZb57tGQYdz83NGvMvQDanXe
-        SpF82yINhNN8pql8FCtt4QyZBFxiAai5WL+pNaoMUxyH9WXbNIsYYHwT1Mjqkw==
+        bh=gTE31coiVEWVLeTvQGweuYMu9lyT3sZrZA7atEAo6MY=;
+        b=vtfd98rdqnknhqNDJ3TLQStpRGpqXCxdmz8VLl/UrhGyaMl+CF8yPmkma9fSJB0aqJukq+
+        TMPG8ELqZ4mNCeAfXhPEjjU1CClGd8b3a8wZKczi5OPHQtbe2ugNnv+hN8JXbEoTxyEXZC
+        0F/vRvuJp6h1b8OSy5IT/TgzcuhqtmZ5Z0nT79o0fid2z3MqQzpMnS3P5Rd6qBvzJlAnoT
+        k/VMgA3pKUiB7hi+LXwrAgur7+eWpxj1QRm2YEDLTbGYZcqFBgEe84gXtMeCKDplTt+xZA
+        XFXgtrJmSGXFuDHyVADN/fwP+n27rDEpBP7bI2MAxLEVhOEKOs9+DE0nUh46Mw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1655109809;
+        s=2020e; t=1655109811;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=M+3xFbmd2Gh9/NIxhdlDtkJKD8GDZuK1gnj6+gOsw0U=;
-        b=IDCF1Dzh9CiCTQTo+rmhB7c9LHYimzBVvQysSS67ANSPoZrTlC3iwQbmdNs3p5c6bNihtj
-        LYttiwevGxlvAXDg==
+        bh=gTE31coiVEWVLeTvQGweuYMu9lyT3sZrZA7atEAo6MY=;
+        b=bUCS4U9qA1b2dDhRW6KYrnUnQrTrWUgwPtaBBs3hnR/aUkW76zqqJviBjpVE3dQHm/lG4g
+        4+S8u/lawi1FDzBw==
 From:   "tip-bot2 for Mel Gorman" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/numa: Adjust imb_numa_nr to a better
- approximation of memory channels
+Subject: [tip: sched/core] sched/numa: Apply imbalance limitations consistently
 Cc:     Mel Gorman <mgorman@techsingularity.net>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         K Prateek Nayak <kprateek.nayak@amd.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220520103519.1863-5-mgorman@techsingularity.net>
-References: <20220520103519.1863-5-mgorman@techsingularity.net>
+In-Reply-To: <20220520103519.1863-4-mgorman@techsingularity.net>
+References: <20220520103519.1863-4-mgorman@techsingularity.net>
 MIME-Version: 1.0
-Message-ID: <165510980876.4207.9859802458122718132.tip-bot2@tip-bot2>
+Message-ID: <165510980980.4207.5946665132420916159.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,84 +68,190 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     026b98a93bbdbefb37ab8008df84e38e2fedaf92
-Gitweb:        https://git.kernel.org/tip/026b98a93bbdbefb37ab8008df84e38e2fedaf92
+Commit-ID:     cb29a5c19d2d68afc641fb1949e1a1c565b582ea
+Gitweb:        https://git.kernel.org/tip/cb29a5c19d2d68afc641fb1949e1a1c565b582ea
 Author:        Mel Gorman <mgorman@techsingularity.net>
-AuthorDate:    Fri, 20 May 2022 11:35:19 +01:00
+AuthorDate:    Fri, 20 May 2022 11:35:18 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 13 Jun 2022 10:30:00 +02:00
+CommitterDate: Mon, 13 Jun 2022 10:29:59 +02:00
 
-sched/numa: Adjust imb_numa_nr to a better approximation of memory channels
+sched/numa: Apply imbalance limitations consistently
 
-For a single LLC per node, a NUMA imbalance is allowed up until 25%
-of CPUs sharing a node could be active. One intent of the cut-off is
-to avoid an imbalance of memory channels but there is no topological
-information based on active memory channels. Furthermore, there can
-be differences between nodes depending on the number of populated
-DIMMs.
+The imbalance limitations are applied inconsistently at fork time
+and at runtime. At fork, a new task can remain local until there are
+too many running tasks even if the degree of imbalance is larger than
+NUMA_IMBALANCE_MIN which is different to runtime. Secondly, the imbalance
+figure used during load balancing is different to the one used at NUMA
+placement. Load balancing uses the number of tasks that must move to
+restore imbalance where as NUMA balancing uses the total imbalance.
 
-A cut-off of 25% was arbitrary but generally worked. It does have a severe
-corner cases though when an parallel workload is using 25% of all available
-CPUs over-saturates memory channels. This can happen due to the initial
-forking of tasks that get pulled more to one node after early wakeups
-(e.g. a barrier synchronisation) that is not quickly corrected by the
-load balancer. The LB may fail to act quickly as the parallel tasks are
-considered to be poor migrate candidates due to locality or cache hotness.
+In combination, it is possible for a parallel workload that uses a small
+number of CPUs without applying scheduler policies to have very variable
+run-to-run performance.
 
-On a range of modern Intel CPUs, 12.5% appears to be a better cut-off
-assuming all memory channels are populated and is used as the new cut-off
-point. A minimum of 1 is specified to allow a communicating pair to
-remain local even for CPUs with low numbers of cores. For modern AMDs,
-there are multiple LLCs and are not affected.
+[lkp@intel.com: Fix build breakage for arc-allyesconfig]
 
 Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Tested-by: K Prateek Nayak <kprateek.nayak@amd.com>
-Link: https://lore.kernel.org/r/20220520103519.1863-5-mgorman@techsingularity.net
+Link: https://lore.kernel.org/r/20220520103519.1863-4-mgorman@techsingularity.net
 ---
- kernel/sched/topology.c | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+ kernel/sched/fair.c | 81 ++++++++++++++++++++++++--------------------
+ 1 file changed, 45 insertions(+), 36 deletions(-)
 
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 05b6c2a..8739c2a 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -2316,23 +2316,30 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 23da36c..166f5f9 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -1055,6 +1055,33 @@ update_stats_curr_start(struct cfs_rq *cfs_rq, struct sched_entity *se)
+  * Scheduling class queueing methods:
+  */
  
- 				/*
- 				 * For a single LLC per node, allow an
--				 * imbalance up to 25% of the node. This is an
--				 * arbitrary cutoff based on SMT-2 to balance
--				 * between memory bandwidth and avoiding
--				 * premature sharing of HT resources and SMT-4
--				 * or SMT-8 *may* benefit from a different
--				 * cutoff.
-+				 * imbalance up to 12.5% of the node. This is
-+				 * arbitrary cutoff based two factors -- SMT and
-+				 * memory channels. For SMT-2, the intent is to
-+				 * avoid premature sharing of HT resources but
-+				 * SMT-4 or SMT-8 *may* benefit from a different
-+				 * cutoff. For memory channels, this is a very
-+				 * rough estimate of how many channels may be
-+				 * active and is based on recent CPUs with
-+				 * many cores.
- 				 *
- 				 * For multiple LLCs, allow an imbalance
- 				 * until multiple tasks would share an LLC
- 				 * on one node while LLCs on another node
--				 * remain idle.
-+				 * remain idle. This assumes that there are
-+				 * enough logical CPUs per LLC to avoid SMT
-+				 * factors and that there is a correlation
-+				 * between LLCs and memory channels.
- 				 */
- 				nr_llcs = sd->span_weight / child->span_weight;
- 				if (nr_llcs == 1)
--					imb = sd->span_weight >> 2;
-+					imb = sd->span_weight >> 3;
- 				else
- 					imb = nr_llcs;
-+				imb = max(1U, imb);
- 				sd->imb_numa_nr = imb;
++#ifdef CONFIG_NUMA
++#define NUMA_IMBALANCE_MIN 2
++
++static inline long
++adjust_numa_imbalance(int imbalance, int dst_running, int imb_numa_nr)
++{
++	/*
++	 * Allow a NUMA imbalance if busy CPUs is less than the maximum
++	 * threshold. Above this threshold, individual tasks may be contending
++	 * for both memory bandwidth and any shared HT resources.  This is an
++	 * approximation as the number of running tasks may not be related to
++	 * the number of busy CPUs due to sched_setaffinity.
++	 */
++	if (dst_running > imb_numa_nr)
++		return imbalance;
++
++	/*
++	 * Allow a small imbalance based on a simple pair of communicating
++	 * tasks that remain local when the destination is lightly loaded.
++	 */
++	if (imbalance <= NUMA_IMBALANCE_MIN)
++		return 0;
++
++	return imbalance;
++}
++#endif /* CONFIG_NUMA */
++
+ #ifdef CONFIG_NUMA_BALANCING
+ /*
+  * Approximate time to scan a full NUMA task in ms. The task scan period is
+@@ -1548,8 +1575,6 @@ struct task_numa_env {
  
- 				/* Set span based on the first NUMA domain. */
+ static unsigned long cpu_load(struct rq *rq);
+ static unsigned long cpu_runnable(struct rq *rq);
+-static inline long adjust_numa_imbalance(int imbalance,
+-					int dst_running, int imb_numa_nr);
+ 
+ static inline enum
+ numa_type numa_classify(unsigned int imbalance_pct,
+@@ -9068,16 +9093,6 @@ static bool update_pick_idlest(struct sched_group *idlest,
+ }
+ 
+ /*
+- * Allow a NUMA imbalance if busy CPUs is less than 25% of the domain.
+- * This is an approximation as the number of running tasks may not be
+- * related to the number of busy CPUs due to sched_setaffinity.
+- */
+-static inline bool allow_numa_imbalance(int running, int imb_numa_nr)
+-{
+-	return running <= imb_numa_nr;
+-}
+-
+-/*
+  * find_idlest_group() finds and returns the least busy CPU group within the
+  * domain.
+  *
+@@ -9193,6 +9208,7 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+ 		break;
+ 
+ 	case group_has_spare:
++#ifdef CONFIG_NUMA
+ 		if (sd->flags & SD_NUMA) {
+ #ifdef CONFIG_NUMA_BALANCING
+ 			int idlest_cpu;
+@@ -9206,7 +9222,7 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+ 			idlest_cpu = cpumask_first(sched_group_span(idlest));
+ 			if (cpu_to_node(idlest_cpu) == p->numa_preferred_nid)
+ 				return idlest;
+-#endif
++#endif /* CONFIG_NUMA_BALANCING */
+ 			/*
+ 			 * Otherwise, keep the task close to the wakeup source
+ 			 * and improve locality if the number of running tasks
+@@ -9214,9 +9230,14 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
+ 			 * allowed. If there is a real need of migration,
+ 			 * periodic load balance will take care of it.
+ 			 */
+-			if (allow_numa_imbalance(local_sgs.sum_nr_running + 1, sd->imb_numa_nr))
++			imbalance = abs(local_sgs.idle_cpus - idlest_sgs.idle_cpus);
++			if (!adjust_numa_imbalance(imbalance,
++						   local_sgs.sum_nr_running + 1,
++						   sd->imb_numa_nr)) {
+ 				return NULL;
++			}
+ 		}
++#endif /* CONFIG_NUMA */
+ 
+ 		/*
+ 		 * Select group with highest number of idle CPUs. We could also
+@@ -9303,24 +9324,6 @@ next_group:
+ 	}
+ }
+ 
+-#define NUMA_IMBALANCE_MIN 2
+-
+-static inline long adjust_numa_imbalance(int imbalance,
+-				int dst_running, int imb_numa_nr)
+-{
+-	if (!allow_numa_imbalance(dst_running, imb_numa_nr))
+-		return imbalance;
+-
+-	/*
+-	 * Allow a small imbalance based on a simple pair of communicating
+-	 * tasks that remain local when the destination is lightly loaded.
+-	 */
+-	if (imbalance <= NUMA_IMBALANCE_MIN)
+-		return 0;
+-
+-	return imbalance;
+-}
+-
+ /**
+  * calculate_imbalance - Calculate the amount of imbalance present within the
+  *			 groups of a given sched_domain during load balance.
+@@ -9405,7 +9408,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+ 			 */
+ 			env->migration_type = migrate_task;
+ 			lsub_positive(&nr_diff, local->sum_nr_running);
+-			env->imbalance = nr_diff >> 1;
++			env->imbalance = nr_diff;
+ 		} else {
+ 
+ 			/*
+@@ -9413,15 +9416,21 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+ 			 * idle cpus.
+ 			 */
+ 			env->migration_type = migrate_task;
+-			env->imbalance = max_t(long, 0, (local->idle_cpus -
+-						 busiest->idle_cpus) >> 1);
++			env->imbalance = max_t(long, 0,
++					       (local->idle_cpus - busiest->idle_cpus));
+ 		}
+ 
++#ifdef CONFIG_NUMA
+ 		/* Consider allowing a small imbalance between NUMA groups */
+ 		if (env->sd->flags & SD_NUMA) {
+ 			env->imbalance = adjust_numa_imbalance(env->imbalance,
+-				local->sum_nr_running + 1, env->sd->imb_numa_nr);
++							       local->sum_nr_running + 1,
++							       env->sd->imb_numa_nr);
+ 		}
++#endif
++
++		/* Number of tasks to move to restore balance */
++		env->imbalance >>= 1;
+ 
+ 		return;
+ 	}

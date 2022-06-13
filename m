@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2835C5486F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3330C548631
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1384971AbiFMOa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
+        id S1352235AbiFMMRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:17:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1384043AbiFMOYh (ORCPT
+        with ESMTP id S1358488AbiFMMOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:37 -0400
+        Mon, 13 Jun 2022 08:14:11 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8018DF02;
-        Mon, 13 Jun 2022 04:46:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C58454182;
+        Mon, 13 Jun 2022 04:01:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 14F2EB80EB2;
-        Mon, 13 Jun 2022 11:46:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B210C34114;
-        Mon, 13 Jun 2022 11:46:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3B69B80EB2;
+        Mon, 13 Jun 2022 11:01:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55249C34114;
+        Mon, 13 Jun 2022 11:01:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120793;
-        bh=uVB12VocQsbE+gPRI6s6gOgZctIrY/JOq64olD7xgiw=;
+        s=korg; t=1655118101;
+        bh=6poQA8HptYF9vPIgarkR6mmoUzdWP/wv3YOZWLj7vEM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0HfG+hFjbTkGKRLXSCc+0S4PNK6MjFF38C0WBPrKQrDePkECLtRX1pRHSLAOQnCB6
-         1Lv8TIe+yCF639BAOqOWq01cpjwL3WnL/cG5Rp/lPz6Cz34vWkPdflTTa1/Li2UMeN
-         +HPnNKMt7OBbtbRlfiNdkzXrRx0gOOPn/A8zxbHc=
+        b=Vk9f9FaXDZnVuTxRgMj/8ft4B+q6L9MyckFJAOQxUniPE2u0MbpPGn/6sEbzlGk1/
+         YkB/JzHRFQk0m/MNUyN3TB9OApbLbekr7Sc0ZeNdTM59LVWSNkDoGVUntemYUyQj0I
+         d9YNj3YPR0Bpnop7yAxHoceHDifqdWAdytIsCZSI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 159/298] netfilter: nf_tables: use kfree_rcu(ptr, rcu) to release hooks in clean_net path
-Date:   Mon, 13 Jun 2022 12:10:53 +0200
-Message-Id: <20220613094929.758594341@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 230/287] i2c: cadence: Increase timeout per message if necessary
+Date:   Mon, 13 Jun 2022 12:10:54 +0200
+Message-Id: <20220613094930.990342960@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,33 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Lucas Tanure <tanureal@opensource.cirrus.com>
 
-[ Upstream commit ab5e5c062f67c5ae8cd07f0632ffa62dc0e7d169 ]
+[ Upstream commit 96789dce043f5bff8b7d62aa28d52a7c59403a84 ]
 
-Use kfree_rcu(ptr, rcu) variant instead as described by ae089831ff28
-("netfilter: nf_tables: prefer kfree_rcu(ptr, rcu) variant").
+Timeout as 1 second sets an upper limit on the length
+of the transfer executed, but there is no maximum length
+of a write or read message set in i2c_adapter_quirks for
+this controller.
 
-Fixes: f9a43007d3f7 ("netfilter: nf_tables: double hook unregistration in netns path")
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+This upper limit affects devices that require sending
+large firmware blobs over I2C.
+
+To remove that limitation, calculate the minimal time
+necessary, plus some wiggle room, for every message and
+use it instead of the default one second, if more than
+one second.
+
+Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+Acked-by: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_tables_api.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-cadence.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index 42cc703a68e5..07c842b65f6d 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -7247,7 +7247,7 @@ static void __nft_unregister_flowtable_net_hooks(struct net *net,
- 		nf_unregister_net_hook(net, &hook->ops);
- 		if (release_netdev) {
- 			list_del(&hook->list);
--			kfree_rcu(hook);
-+			kfree_rcu(hook, rcu);
- 		}
- 	}
- }
+diff --git a/drivers/i2c/busses/i2c-cadence.c b/drivers/i2c/busses/i2c-cadence.c
+index c5475bb4fae6..2150afdcc083 100644
+--- a/drivers/i2c/busses/i2c-cadence.c
++++ b/drivers/i2c/busses/i2c-cadence.c
+@@ -511,7 +511,7 @@ static void cdns_i2c_master_reset(struct i2c_adapter *adap)
+ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
+ 		struct i2c_adapter *adap)
+ {
+-	unsigned long time_left;
++	unsigned long time_left, msg_timeout;
+ 	u32 reg;
+ 
+ 	id->p_msg = msg;
+@@ -536,8 +536,16 @@ static int cdns_i2c_process_msg(struct cdns_i2c *id, struct i2c_msg *msg,
+ 	else
+ 		cdns_i2c_msend(id);
+ 
++	/* Minimal time to execute this message */
++	msg_timeout = msecs_to_jiffies((1000 * msg->len * BITS_PER_BYTE) / id->i2c_clk);
++	/* Plus some wiggle room */
++	msg_timeout += msecs_to_jiffies(500);
++
++	if (msg_timeout < adap->timeout)
++		msg_timeout = adap->timeout;
++
+ 	/* Wait for the signal of completion */
+-	time_left = wait_for_completion_timeout(&id->xfer_done, adap->timeout);
++	time_left = wait_for_completion_timeout(&id->xfer_done, msg_timeout);
+ 	if (time_left == 0) {
+ 		cdns_i2c_master_reset(adap);
+ 		dev_err(id->adap.dev.parent,
 -- 
 2.35.1
 

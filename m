@@ -2,24 +2,24 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF88F548459
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A8854844D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 12:16:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241319AbiFMJuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
+        id S234429AbiFMJsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241331AbiFMJty (ORCPT
+        with ESMTP id S240506AbiFMJsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:49:54 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E311ADAA;
-        Mon, 13 Jun 2022 02:49:22 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LM6F46fh4zjXfm;
-        Mon, 13 Jun 2022 17:47:52 +0800 (CST)
+        Mon, 13 Jun 2022 05:48:12 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDB113F05;
+        Mon, 13 Jun 2022 02:48:10 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LM6C90FjHzgYrW;
+        Mon, 13 Jun 2022 17:46:13 +0800 (CST)
 Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
  15.1.2375.24; Mon, 13 Jun 2022 17:48:08 +0800
 Received: from ubuntu1804.huawei.com (10.67.174.61) by
@@ -32,9 +32,9 @@ To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
         <jolsa@kernel.org>, <namhyung@kernel.org>,
         <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>
 CC:     <yangjihong1@huawei.com>
-Subject: [RFC 10/13] perf kwork: Implement perf kwork latency
-Date:   Mon, 13 Jun 2022 17:46:02 +0800
-Message-ID: <20220613094605.208401-11-yangjihong1@huawei.com>
+Subject: [RFC 11/13] perf kwork: Add softirq latency support
+Date:   Mon, 13 Jun 2022 17:46:03 +0800
+Message-ID: <20220613094605.208401-12-yangjihong1@huawei.com>
 X-Mailer: git-send-email 2.30.GIT
 In-Reply-To: <20220613094605.208401-1-yangjihong1@huawei.com>
 References: <20220613094605.208401-1-yangjihong1@huawei.com>
@@ -54,322 +54,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implements framework of perf kwork latency, which is used to report time
-properties such as delay time and frequency.
+Implements softirq latency function.
 
 test case:
 
-  Kwork Name                | Cpu  | Avg delay     | Frequency | Max delay     | Max delay start     | Max delay end       |
- ---------------------------------------------------------------------------------------------------------------------------
- ---------------------------------------------------------------------------------------------------------------------------
-  INFO: 37.324% skipped events (33174 including 0 raise, 33174 entry, 0 exit)
+  # perf kwork lat
 
-Since there are no latency-enabled events, the output is empty.
+    Kwork Name                | Cpu  | Avg delay     | Frequency | Max delay     | Max delay start     | Max delay end       |
+   ---------------------------------------------------------------------------------------------------------------------------
+    (s)RCU:9                  | 0006 |      1.338 ms |         1 |      1.338 ms |    2072616.369122 s |    2072616.370461 s |
+    (s)RCU:9                  | 0005 |      0.945 ms |         2 |      1.757 ms |    2072616.368262 s |    2072616.370020 s |
+    (s)RCU:9                  | 0002 |      0.575 ms |        73 |      1.884 ms |    2072616.423139 s |    2072616.425023 s |
+    (s)RCU:9                  | 0000 |      0.327 ms |       105 |      1.365 ms |    2072620.344392 s |    2072620.345757 s |
+    (s)RCU:9                  | 0001 |      0.233 ms |       711 |      2.862 ms |    2072620.639022 s |    2072620.641885 s |
+    (s)NET_RX:3               | 0002 |      0.219 ms |         5 |      0.762 ms |    2072624.174209 s |    2072624.174971 s |
+    (s)RCU:9                  | 0004 |      0.176 ms |         4 |      0.265 ms |    2072620.333206 s |    2072620.333472 s |
+    (s)RCU:9                  | 0007 |      0.172 ms |      3165 |      2.890 ms |    2072616.385706 s |    2072616.388595 s |
+    (s)TIMER:1                | 0000 |      0.168 ms |        11 |      0.307 ms |    2072620.638399 s |    2072620.638706 s |
+    (s)RCU:9                  | 0003 |      0.149 ms |       194 |      1.127 ms |    2072620.617286 s |    2072620.618413 s |
+    (s)SCHED:7                | 0002 |      0.136 ms |        12 |      0.384 ms |    2072617.261300 s |    2072617.261684 s |
+    (s)BLOCK:4                | 0001 |      0.131 ms |        79 |      2.734 ms |    2072620.639022 s |    2072620.641756 s |
+    (s)SCHED:7                | 0000 |      0.127 ms |       360 |      0.989 ms |    2072616.386068 s |    2072616.387057 s |
+    (s)BLOCK:4                | 0000 |      0.125 ms |        13 |      0.209 ms |    2072620.354356 s |    2072620.354564 s |
+    (s)SCHED:7                | 0004 |      0.121 ms |         3 |      0.172 ms |    2072620.333236 s |    2072620.333408 s |
+    (s)SCHED:7                | 0003 |      0.113 ms |        82 |      0.226 ms |    2072618.917223 s |    2072618.917449 s |
+    (s)SCHED:7                | 0001 |      0.098 ms |       209 |      0.986 ms |    2072620.392020 s |    2072620.393007 s |
+    (s)TIMER:1                | 0007 |      0.095 ms |      1550 |      1.274 ms |    2072625.965379 s |    2072625.966653 s |
+    (s)TIMER:1                | 0004 |      0.081 ms |         2 |      0.082 ms |    2072620.333187 s |    2072620.333269 s |
+    (s)TIMER:1                | 0002 |      0.076 ms |        10 |      0.104 ms |    2072617.261239 s |    2072617.261344 s |
+    (s)TIMER:1                | 0003 |      0.065 ms |       245 |      1.023 ms |    2072620.617286 s |    2072620.618309 s |
+    (s)SCHED:7                | 0006 |      0.064 ms |         2 |      0.081 ms |    2072616.370310 s |    2072616.370391 s |
+    (s)SCHED:7                | 0007 |      0.062 ms |      2753 |      0.473 ms |    2072621.357987 s |    2072621.358460 s |
+    (s)TIMER:1                | 0001 |      0.055 ms |       774 |      0.396 ms |    2072617.523145 s |    2072617.523540 s |
+    (s)SCHED:7                | 0005 |      0.040 ms |         2 |      0.042 ms |    2072616.369895 s |    2072616.369937 s |
+   ---------------------------------------------------------------------------------------------------------------------------
+    INFO: 28.605% skipped events (25424 including 2617 raise, 22807 entry, 0 exit)
+
+  # perf kwork lat -C 0,1
+
+    Kwork Name                | Cpu  | Avg delay     | Frequency | Max delay     | Max delay start     | Max delay end       |
+   ---------------------------------------------------------------------------------------------------------------------------
+    (s)RCU:9                  | 0000 |      0.327 ms |       105 |      1.365 ms |    2072620.344392 s |    2072620.345757 s |
+    (s)RCU:9                  | 0001 |      0.233 ms |       711 |      2.862 ms |    2072620.639022 s |    2072620.641885 s |
+    (s)TIMER:1                | 0000 |      0.168 ms |        11 |      0.307 ms |    2072620.638399 s |    2072620.638706 s |
+    (s)BLOCK:4                | 0001 |      0.131 ms |        79 |      2.734 ms |    2072620.639022 s |    2072620.641756 s |
+    (s)SCHED:7                | 0000 |      0.127 ms |       360 |      0.989 ms |    2072616.386068 s |    2072616.387057 s |
+    (s)BLOCK:4                | 0000 |      0.125 ms |        13 |      0.209 ms |    2072620.354356 s |    2072620.354564 s |
+    (s)SCHED:7                | 0001 |      0.098 ms |       209 |      0.986 ms |    2072620.392020 s |    2072620.393007 s |
+    (s)TIMER:1                | 0001 |      0.055 ms |       774 |      0.396 ms |    2072617.523145 s |    2072617.523540 s |
+   ---------------------------------------------------------------------------------------------------------------------------
+    INFO: 26.410% skipped events (23473 including 795 raise, 22678 entry, 0 exit)
+
+  # perf kwork lat -n SCHED
+
+    Kwork Name                | Cpu  | Avg delay     | Frequency | Max delay     | Max delay start     | Max delay end       |
+   ---------------------------------------------------------------------------------------------------------------------------
+    (s)SCHED:7                | 0002 |      0.136 ms |        12 |      0.384 ms |    2072617.261300 s |    2072617.261684 s |
+    (s)SCHED:7                | 0000 |      0.127 ms |       360 |      0.989 ms |    2072616.386068 s |    2072616.387057 s |
+    (s)SCHED:7                | 0004 |      0.121 ms |         3 |      0.172 ms |    2072620.333236 s |    2072620.333408 s |
+    (s)SCHED:7                | 0003 |      0.113 ms |        82 |      0.226 ms |    2072618.917223 s |    2072618.917449 s |
+    (s)SCHED:7                | 0001 |      0.098 ms |       209 |      0.986 ms |    2072620.392020 s |    2072620.393007 s |
+    (s)SCHED:7                | 0006 |      0.064 ms |         2 |      0.081 ms |    2072616.370310 s |    2072616.370391 s |
+    (s)SCHED:7                | 0007 |      0.062 ms |      2753 |      0.473 ms |    2072621.357987 s |    2072621.358460 s |
+    (s)SCHED:7                | 0005 |      0.040 ms |         2 |      0.042 ms |    2072616.369895 s |    2072616.369937 s |
+   ---------------------------------------------------------------------------------------------------------------------------
+    INFO: 0.006% skipped events (5 including 5 raise, 0 entry, 0 exit)
+
+  # perf kwork lat -s freq,max
+
+    Kwork Name                | Cpu  | Avg delay     | Frequency | Max delay     | Max delay start     | Max delay end       |
+   ---------------------------------------------------------------------------------------------------------------------------
+    (s)RCU:9                  | 0007 |      0.172 ms |      3165 |      2.890 ms |    2072616.385706 s |    2072616.388595 s |
+    (s)SCHED:7                | 0007 |      0.062 ms |      2753 |      0.473 ms |    2072621.357987 s |    2072621.358460 s |
+    (s)TIMER:1                | 0007 |      0.095 ms |      1550 |      1.274 ms |    2072625.965379 s |    2072625.966653 s |
+    (s)TIMER:1                | 0001 |      0.055 ms |       774 |      0.396 ms |    2072617.523145 s |    2072617.523540 s |
+    (s)RCU:9                  | 0001 |      0.233 ms |       711 |      2.862 ms |    2072620.639022 s |    2072620.641885 s |
+    (s)SCHED:7                | 0000 |      0.127 ms |       360 |      0.989 ms |    2072616.386068 s |    2072616.387057 s |
+    (s)TIMER:1                | 0003 |      0.065 ms |       245 |      1.023 ms |    2072620.617286 s |    2072620.618309 s |
+    (s)SCHED:7                | 0001 |      0.098 ms |       209 |      0.986 ms |    2072620.392020 s |    2072620.393007 s |
+    (s)RCU:9                  | 0003 |      0.149 ms |       194 |      1.127 ms |    2072620.617286 s |    2072620.618413 s |
+    (s)RCU:9                  | 0000 |      0.327 ms |       105 |      1.365 ms |    2072620.344392 s |    2072620.345757 s |
+    (s)SCHED:7                | 0003 |      0.113 ms |        82 |      0.226 ms |    2072618.917223 s |    2072618.917449 s |
+    (s)BLOCK:4                | 0001 |      0.131 ms |        79 |      2.734 ms |    2072620.639022 s |    2072620.641756 s |
+    (s)RCU:9                  | 0002 |      0.575 ms |        73 |      1.884 ms |    2072616.423139 s |    2072616.425023 s |
+    (s)BLOCK:4                | 0000 |      0.125 ms |        13 |      0.209 ms |    2072620.354356 s |    2072620.354564 s |
+    (s)SCHED:7                | 0002 |      0.136 ms |        12 |      0.384 ms |    2072617.261300 s |    2072617.261684 s |
+    (s)TIMER:1                | 0000 |      0.168 ms |        11 |      0.307 ms |    2072620.638399 s |    2072620.638706 s |
+    (s)TIMER:1                | 0002 |      0.076 ms |        10 |      0.104 ms |    2072617.261239 s |    2072617.261344 s |
+    (s)NET_RX:3               | 0002 |      0.219 ms |         5 |      0.762 ms |    2072624.174209 s |    2072624.174971 s |
+    (s)RCU:9                  | 0004 |      0.176 ms |         4 |      0.265 ms |    2072620.333206 s |    2072620.333472 s |
+    (s)SCHED:7                | 0004 |      0.121 ms |         3 |      0.172 ms |    2072620.333236 s |    2072620.333408 s |
+    (s)RCU:9                  | 0005 |      0.945 ms |         2 |      1.757 ms |    2072616.368262 s |    2072616.370020 s |
+    (s)TIMER:1                | 0004 |      0.081 ms |         2 |      0.082 ms |    2072620.333187 s |    2072620.333269 s |
+    (s)SCHED:7                | 0006 |      0.064 ms |         2 |      0.081 ms |    2072616.370310 s |    2072616.370391 s |
+    (s)SCHED:7                | 0005 |      0.040 ms |         2 |      0.042 ms |    2072616.369895 s |    2072616.369937 s |
+    (s)RCU:9                  | 0006 |      1.338 ms |         1 |      1.338 ms |    2072616.369122 s |    2072616.370461 s |
+   ---------------------------------------------------------------------------------------------------------------------------
+    INFO: 28.605% skipped events (25424 including 2617 raise, 22807 entry, 0 exit)
+
+  # perf kwork lat --time 2072620.333236,
+
+    Kwork Name                | Cpu  | Avg delay     | Frequency | Max delay     | Max delay start     | Max delay end       |
+   ---------------------------------------------------------------------------------------------------------------------------
+    (s)RCU:9                  | 0001 |      0.699 ms |       130 |      2.862 ms |    2072620.639022 s |    2072620.641885 s |
+    (s)RCU:9                  | 0000 |      0.320 ms |        70 |      1.365 ms |    2072620.344392 s |    2072620.345757 s |
+    (s)NET_RX:3               | 0002 |      0.298 ms |         3 |      0.762 ms |    2072624.174209 s |    2072624.174971 s |
+    (s)RCU:9                  | 0002 |      0.297 ms |        13 |      0.687 ms |    2072622.126201 s |    2072622.126888 s |
+    (s)RCU:9                  | 0003 |      0.271 ms |        17 |      1.127 ms |    2072620.617286 s |    2072620.618413 s |
+    (s)TIMER:1                | 0000 |      0.166 ms |         8 |      0.307 ms |    2072620.638399 s |    2072620.638706 s |
+    (s)RCU:9                  | 0004 |      0.146 ms |         3 |      0.253 ms |    2072621.357331 s |    2072621.357584 s |
+    (s)SCHED:7                | 0003 |      0.143 ms |        15 |      0.197 ms |    2072625.973321 s |    2072625.973519 s |
+    (s)TIMER:1                | 0003 |      0.137 ms |        16 |      1.023 ms |    2072620.617286 s |    2072620.618309 s |
+    (s)RCU:9                  | 0005 |      0.133 ms |         1 |      0.133 ms |    2072626.530482 s |    2072626.530615 s |
+    (s)BLOCK:4                | 0001 |      0.131 ms |        79 |      2.734 ms |    2072620.639022 s |    2072620.641756 s |
+    (s)BLOCK:4                | 0000 |      0.125 ms |        13 |      0.209 ms |    2072620.354356 s |    2072620.354564 s |
+    (s)SCHED:7                | 0001 |      0.121 ms |        15 |      0.986 ms |    2072620.392020 s |    2072620.393007 s |
+    (s)SCHED:7                | 0004 |      0.121 ms |         3 |      0.172 ms |    2072620.333236 s |    2072620.333408 s |
+    (s)SCHED:7                | 0000 |      0.115 ms |       269 |      0.987 ms |    2072624.176905 s |    2072624.177892 s |
+    (s)SCHED:7                | 0002 |      0.109 ms |         7 |      0.140 ms |    2072625.966227 s |    2072625.966368 s |
+    (s)RCU:9                  | 0007 |      0.095 ms |      1526 |      1.333 ms |    2072620.616224 s |    2072620.617557 s |
+    (s)TIMER:1                | 0007 |      0.094 ms |      1546 |      1.274 ms |    2072625.965379 s |    2072625.966653 s |
+    (s)TIMER:1                | 0004 |      0.079 ms |         1 |      0.079 ms |    2072621.357313 s |    2072621.357393 s |
+    (s)TIMER:1                | 0002 |      0.072 ms |         7 |      0.082 ms |    2072620.845190 s |    2072620.845272 s |
+    (s)TIMER:1                | 0001 |      0.070 ms |         9 |      0.149 ms |    2072620.360584 s |    2072620.360734 s |
+    (s)SCHED:7                | 0007 |      0.068 ms |      1959 |      0.473 ms |    2072621.357987 s |    2072621.358460 s |
+    (s)SCHED:7                | 0005 |      0.038 ms |         1 |      0.038 ms |    2072626.530536 s |    2072626.530573 s |
+   ---------------------------------------------------------------------------------------------------------------------------
+    INFO: 17.800% skipped events (15821 including 1602 raise, 14219 entry, 0 exit)
 
 Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
 ---
- tools/perf/builtin-kwork.c | 153 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 153 insertions(+)
+ tools/perf/builtin-kwork.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/tools/perf/builtin-kwork.c b/tools/perf/builtin-kwork.c
-index f27ffad223a3..84e318eea832 100644
+index 84e318eea832..e0ffd3291b3a 100644
 --- a/tools/perf/builtin-kwork.c
 +++ b/tools/perf/builtin-kwork.c
-@@ -32,6 +32,7 @@ enum kwork_class_type {
+@@ -816,6 +816,20 @@ static struct kwork_class kwork_irq = {
  };
  
- enum kwork_trace_type {
-+	KWORK_TRACE_RAISE,
- 	KWORK_TRACE_ENTRY,
- 	KWORK_TRACE_EXIT,
- 	KWORK_TRACE_MAX,
-@@ -39,6 +40,7 @@ enum kwork_trace_type {
- 
- enum kwork_report_type {
- 	KWORK_REPORT_RUNTIME,
-+	KWORK_REPORT_LATENCY,
- };
- 
- /*
-@@ -104,6 +106,14 @@ struct kwork_cluster {
- 	u64 max_runtime_start;
- 	u64 max_runtime_end;
- 	u64 total_runtime;
-+
-+	/*
-+	 * latency report
-+	 */
-+	u64 max_latency;
-+	u64 max_latency_start;
-+	u64 max_latency_end;
-+	u64 total_latency;
- };
- 
- struct kwork_class {
-@@ -128,6 +138,10 @@ struct kwork_class {
- 
- struct perf_kwork;
- struct trace_kwork_handler {
-+	int (*raise_event)(struct perf_kwork *kwork,
-+			   struct kwork_class *class, struct evsel *evsel,
-+			   struct perf_sample *sample, struct machine *machine);
-+
- 	int (*entry_event)(struct perf_kwork *kwork,
- 			   struct kwork_class *class, struct evsel *evsel,
- 			   struct perf_sample *sample, struct machine *machine);
-@@ -195,12 +209,14 @@ struct perf_kwork {
- #define PRINT_CPU_WIDTH 4
- #define PRINT_FREQ_WIDTH 9
- #define PRINT_RUNTIME_WIDTH 10
-+#define PRINT_LATENCY_WIDTH 10
- #define PRINT_TIMESTAMP_WIDTH 17
- #define PRINT_KWORK_NAME_WIDTH 25
- #define RPINT_DECIMAL_WIDTH 3
- #define PRINT_TIME_UNIT_SEC_WIDTH 2
- #define PRINT_TIME_UNIT_MESC_WIDTH 3
- #define PRINT_RUNTIME_HEADER_WIDTH (PRINT_RUNTIME_WIDTH + PRINT_TIME_UNIT_MESC_WIDTH)
-+#define PRINT_LATENCY_HEADER_WIDTH (PRINT_LATENCY_WIDTH + PRINT_TIME_UNIT_MESC_WIDTH)
- #define PRINT_TIMESTAMP_HEADER_WIDTH (PRINT_TIMESTAMP_WIDTH + PRINT_TIME_UNIT_SEC_WIDTH)
- 
- struct sort_dimension {
-@@ -254,6 +270,36 @@ static int max_runtime_cmp(struct kwork_cluster *l, struct kwork_cluster *r)
- 	return 0;
- }
- 
-+static int avg_latency_cmp(struct kwork_cluster *l, struct kwork_cluster *r)
+ static struct kwork_class kwork_softirq;
++static int process_softirq_raise_event(struct perf_tool *tool,
++				       struct evsel *evsel,
++				       struct perf_sample *sample,
++				       struct machine *machine)
 +{
-+	u64 avgl, avgr;
++	struct perf_kwork *kwork = container_of(tool, struct perf_kwork, tool);
 +
-+	if (!r->nr_atoms)
-+		return 1;
-+	if (!l->nr_atoms)
-+		return -1;
-+
-+	avgl = l->total_latency / l->nr_atoms;
-+	avgr = r->total_latency / r->nr_atoms;
-+
-+	if (avgl > avgr)
-+		return 1;
-+	if (avgl < avgr)
-+		return -1;
++	if (kwork->tp_handler->raise_event)
++		return kwork->tp_handler->raise_event(kwork, &kwork_softirq,
++						      evsel, sample, machine);
 +
 +	return 0;
 +}
 +
-+static int max_latency_cmp(struct kwork_cluster *l, struct kwork_cluster *r)
-+{
-+	if (l->max_latency > r->max_latency)
-+		return 1;
-+	if (l->max_latency < r->max_latency)
-+		return -1;
-+
-+	return 0;
-+}
-+
- static int sort_dimension__add(struct perf_kwork *kwork __maybe_unused,
- 			       const char *tok, struct list_head *list)
- {
-@@ -274,13 +320,21 @@ static int sort_dimension__add(struct perf_kwork *kwork __maybe_unused,
- 		.name = "freq",
- 		.cmp  = freq_cmp,
- 	};
-+	static struct sort_dimension avg_sort_dimension = {
-+		.name = "avg",
-+		.cmp  = avg_latency_cmp,
-+	};
- 	struct sort_dimension *available_sorts[] = {
- 		&id_sort_dimension,
- 		&max_sort_dimension,
- 		&freq_sort_dimension,
- 		&runtime_sort_dimension,
-+		&avg_sort_dimension,
- 	};
- 
-+	if (kwork->report == KWORK_REPORT_LATENCY)
-+		max_sort_dimension.cmp = max_latency_cmp;
-+
- 	for (i = 0; i < ARRAY_SIZE(available_sorts); i++) {
- 		if (!strcmp(available_sorts[i]->name, tok)) {
- 			list_add_tail(&available_sorts[i]->list, list);
-@@ -639,6 +693,59 @@ static int report_exit_event(struct perf_kwork *kwork,
- 	return 0;
+ static int process_softirq_entry_event(struct perf_tool *tool,
+ 				       struct evsel *evsel,
+ 				       struct perf_sample *sample,
+@@ -845,7 +859,7 @@ static int process_softirq_exit_event(struct perf_tool *tool,
  }
  
-+static void latency_update_entry_event(struct kwork_cluster *cluster,
-+				       struct kwork_atom *atom,
-+				       struct perf_sample *sample)
-+{
-+	u64 delta;
-+	u64 entry_time = sample->time;
-+	u64 raise_time = atom->time;
-+
-+	if ((raise_time != 0) && (entry_time >= raise_time)) {
-+		delta = entry_time - raise_time;
-+		if ((delta > cluster->max_latency) ||
-+		    (cluster->max_latency == 0)) {
-+			cluster->max_latency = delta;
-+			cluster->max_latency_start = raise_time;
-+			cluster->max_latency_end = entry_time;
-+		}
-+		cluster->total_latency += delta;
-+		cluster->nr_atoms++;
-+	}
-+}
-+
-+static int latency_raise_event(struct perf_kwork *kwork,
-+			       struct kwork_class *class,
-+			       struct evsel *evsel,
-+			       struct perf_sample *sample,
-+			       struct machine *machine __maybe_unused)
-+{
-+	return cluster_push_atom(kwork, class, KWORK_TRACE_RAISE,
-+				 KWORK_TRACE_MAX, evsel, sample, NULL);
-+}
-+
-+static int latency_entry_event(struct perf_kwork *kwork,
-+			       struct kwork_class *class,
-+			       struct evsel *evsel,
-+			       struct perf_sample *sample,
-+			       struct machine *machine __maybe_unused)
-+{
-+	struct kwork_atom *atom = NULL;
-+	struct kwork_cluster *cluster = NULL;
-+
-+	atom = cluster_pop_atom(kwork, class, KWORK_TRACE_ENTRY,
-+				KWORK_TRACE_RAISE, evsel, sample, &cluster);
-+	if (cluster == NULL)
-+		return -1;
-+
-+	if (atom != NULL) {
-+		latency_update_entry_event(cluster, atom, sample);
-+		atom_del(atom);
-+	}
-+
-+	return 0;
-+}
-+
- static struct kwork_class kwork_irq;
- static int process_irq_handler_entry_event(struct perf_tool *tool,
- 					   struct evsel *evsel,
-@@ -903,6 +1010,7 @@ static void report_print_cluster(struct perf_kwork *kwork,
- 	int ret = 0;
- 	char kwork_name[PRINT_KWORK_NAME_WIDTH];
- 	char max_runtime_start[32], max_runtime_end[32];
-+	char max_latency_start[32], max_latency_end[32];
- 
- 	printf(" ");
- 
-@@ -928,6 +1036,14 @@ static void report_print_cluster(struct perf_kwork *kwork,
- 		ret += printf(" %*.*f ms |",
- 			      PRINT_RUNTIME_WIDTH, RPINT_DECIMAL_WIDTH,
- 			      (double)cluster->total_runtime / NSEC_PER_MSEC);
-+	/*
-+	 * avg delay
-+	 */
-+	else if (kwork->report == KWORK_REPORT_LATENCY)
-+		ret += printf(" %*.*f ms |",
-+			      PRINT_LATENCY_WIDTH, RPINT_DECIMAL_WIDTH,
-+			      (double)cluster->total_latency /
-+			      cluster->nr_atoms / NSEC_PER_MSEC);
- 
- 	/*
- 	 * frequency
-@@ -951,6 +1067,22 @@ static void report_print_cluster(struct perf_kwork *kwork,
- 			      PRINT_TIMESTAMP_WIDTH, max_runtime_start,
- 			      PRINT_TIMESTAMP_WIDTH, max_runtime_end);
- 	}
-+	/*
-+	 * max delay, max delay start, max delay end
-+	 */
-+	else if (kwork->report == KWORK_REPORT_LATENCY) {
-+		timestamp__scnprintf_usec(cluster->max_latency_start,
-+					  max_latency_start,
-+					  sizeof(max_latency_start));
-+		timestamp__scnprintf_usec(cluster->max_latency_end,
-+					  max_latency_end,
-+					  sizeof(max_latency_end));
-+		ret += printf(" %*.*f ms | %*s s | %*s s |",
-+			      PRINT_LATENCY_WIDTH, RPINT_DECIMAL_WIDTH,
-+			      (double)cluster->max_latency / NSEC_PER_MSEC,
-+			      PRINT_TIMESTAMP_WIDTH, max_latency_start,
-+			      PRINT_TIMESTAMP_WIDTH, max_latency_end);
-+	}
- 
- 	printf("\n");
- }
-@@ -967,6 +1099,9 @@ static int report_print_header(struct perf_kwork *kwork)
- 	if (kwork->report == KWORK_REPORT_RUNTIME)
- 		ret += printf(" %-*s |",
- 			      PRINT_RUNTIME_HEADER_WIDTH, "Total Runtime");
-+	else if (kwork->report == KWORK_REPORT_LATENCY)
-+		ret += printf(" %-*s |",
-+			      PRINT_LATENCY_HEADER_WIDTH, "Avg delay");
- 
- 	ret += printf(" %-*s |", PRINT_FREQ_WIDTH, "Frequency");
- 
-@@ -975,6 +1110,11 @@ static int report_print_header(struct perf_kwork *kwork)
- 			      PRINT_RUNTIME_HEADER_WIDTH, "Max runtime",
- 			      PRINT_TIMESTAMP_HEADER_WIDTH, "Max runtime start",
- 			      PRINT_TIMESTAMP_HEADER_WIDTH, "Max runtime end");
-+	else if (kwork->report == KWORK_REPORT_LATENCY)
-+		ret += printf(" %-*s | %-*s | %-*s |",
-+			      PRINT_LATENCY_HEADER_WIDTH, "Max delay",
-+			      PRINT_TIMESTAMP_HEADER_WIDTH, "Max delay start",
-+			      PRINT_TIMESTAMP_HEADER_WIDTH, "Max delay end");
- 
- 	printf("\n");
- 	print_separator(ret);
-@@ -1008,6 +1148,7 @@ static void print_skipped_events(struct perf_kwork *kwork)
- {
- 	int i;
- 	const char *const kwork_event_str[] = {
-+		[KWORK_TRACE_RAISE] = "raise",
- 		[KWORK_TRACE_ENTRY] = "entry",
- 		[KWORK_TRACE_EXIT]  = "exit",
- 	};
-@@ -1121,11 +1262,18 @@ static int perf_kwork__check_config(struct perf_kwork *kwork,
- 		.entry_event = report_entry_event,
- 		.exit_event  = report_exit_event,
- 	};
-+	static struct trace_kwork_handler latency_ops = {
-+		.raise_event = latency_raise_event,
-+		.entry_event = latency_entry_event,
-+	};
- 
- 	switch (kwork->report) {
- 	case KWORK_REPORT_RUNTIME:
- 		kwork->tp_handler = &report_ops;
- 		break;
-+	case KWORK_REPORT_LATENCY:
-+		kwork->tp_handler = &latency_ops;
-+		break;
- 	default:
- 		pr_debug("Invalid report type %d\n", kwork->report);
- 		break;
-@@ -1330,6 +1478,7 @@ static int perf_kwork__record(struct perf_kwork *kwork,
- int cmd_kwork(int argc, const char **argv)
- {
- 	static const char default_report_sort_order[] = "runtime, max, freq";
-+	static const char default_latency_sort_order[] = "avg, max, freq";
- 	static struct perf_kwork kwork = {
- 		.tool = {
- 			.sample = perf_kwork__process_tracepoint_sample,
-@@ -1463,11 +1612,15 @@ int cmd_kwork(int argc, const char **argv)
- 		setup_sorting(&kwork, report_options, report_usage);
- 		return perf_kwork__report(&kwork);
- 	} else if (strlen(argv[0]) > 2 && strstarts("latency", argv[0])) {
-+		kwork.sort_order = default_latency_sort_order;
- 		if (argc > 1) {
- 			argc = parse_options(argc, argv, latency_options, latency_usage, 0);
- 			if (argc)
- 				usage_with_options(latency_usage, latency_options);
- 		}
-+		kwork.report = KWORK_REPORT_LATENCY;
-+		setup_sorting(&kwork, latency_options, latency_usage);
-+		return perf_kwork__report(&kwork);
- 	} else if (strlen(argv[0]) > 2 && strstarts("timehist", argv[0])) {
- 		if (argc > 1) {
- 			argc = parse_options(argc, argv, timehist_options, timehist_usage, 0);
+ const struct evsel_str_handler softirq_tp_handlers[] = {
+-	{ "irq:softirq_raise", NULL, },
++	{ "irq:softirq_raise", process_softirq_raise_event, },
+ 	{ "irq:softirq_entry", process_softirq_entry_event, },
+ 	{ "irq:softirq_exit",  process_softirq_exit_event, },
+ };
 -- 
 2.30.GIT
 

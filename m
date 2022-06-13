@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 108A4548B67
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12C05491FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352932AbiFMLZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
+        id S1356277AbiFMLsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353029AbiFMLTG (ORCPT
+        with ESMTP id S1356772AbiFMLpC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:19:06 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA2139BBA;
-        Mon, 13 Jun 2022 03:40:55 -0700 (PDT)
+        Mon, 13 Jun 2022 07:45:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63C56B33;
+        Mon, 13 Jun 2022 03:51:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 94952CE1109;
-        Mon, 13 Jun 2022 10:40:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67A37C34114;
-        Mon, 13 Jun 2022 10:40:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3C3D61259;
+        Mon, 13 Jun 2022 10:51:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE790C3411E;
+        Mon, 13 Jun 2022 10:51:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116851;
-        bh=xhk+jTQMkpS4G6E67FnKiOm6izJyEeX+mMpX/wlbihI=;
+        s=korg; t=1655117474;
+        bh=+N1svJ9b7dBVizj/wNX2p9bgXZls3aWC/w3Ff93xYv0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mJhfoL8+/P5z0HQ5FPtpgrXyQ99G1O8G942C0QdCBUF2qkhrSKS4OBb1YeJiEpLeB
-         EZ4BF5AqQDS0VT9rp1KdKzDxPYNOcvsQLytdZOJn1aaNWAWirRcjlvtOIm8GxMvllL
-         v+33v8IFQyp6XZvdZYXb12tqpH+RqZiBVq7dtnWw=
+        b=D7xX6MiJmX5+2xTaQPKyl+3LAmSjZmZWlkfyEUHZlIdbWON1D33JA/B5KSr/zdhIr
+         Y+rtZHH3oSTfTSEFpTNt/CYVUNGTzf1JR/6j7ae5iSCkUbptJw0I7Odl9nPPgerRWg
+         pIQsxUK3GJOfRjbRfq9CVQN0FjLYKPER+mli5b/Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jakob Koschel <jakobkoschel@gmail.com>,
-        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Zixuan Fu <r33s3n6@gmail.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 196/411] f2fs: fix dereference of stale list iterator after loop body
-Date:   Mon, 13 Jun 2022 12:07:49 +0200
-Message-Id: <20220613094934.538790848@linuxfoundation.org>
+Subject: [PATCH 4.19 046/287] fs: jfs: fix possible NULL pointer dereference in dbFree()
+Date:   Mon, 13 Jun 2022 12:07:50 +0200
+Message-Id: <20220613094925.264227986@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,59 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakob Koschel <jakobkoschel@gmail.com>
+From: Zixuan Fu <r33s3n6@gmail.com>
 
-[ Upstream commit 2aaf51dd39afb6d01d13f1e6fe20b684733b37d5 ]
+[ Upstream commit 0d4837fdb796f99369cf7691d33de1b856bcaf1f ]
 
-The list iterator variable will be a bogus pointer if no break was hit.
-Dereferencing it (cur->page in this case) could load an out-of-bounds/undefined
-value making it unsafe to use that in the comparision to determine if the
-specific element was found.
+In our fault-injection testing, the variable "nblocks" in dbFree() can be
+zero when kmalloc_array() fails in dtSearch(). In this case, the variable
+ "mp" in dbFree() would be NULL and then it is dereferenced in
+"write_metapage(mp)".
 
-Since 'cur->page' *can* be out-ouf-bounds it cannot be guaranteed that
-by chance (or intention of an attacker) it matches the value of 'page'
-even though the correct element was not found.
+The failure log is listed as follows:
 
-This is fixed by using a separate list iterator variable for the loop
-and only setting the original variable if a suitable element was found.
-Then determing if the element was found is simply checking if the
-variable is set.
+[   13.824137] BUG: kernel NULL pointer dereference, address: 0000000000000020
+...
+[   13.827416] RIP: 0010:dbFree+0x5f7/0x910 [jfs]
+[   13.834341] Call Trace:
+[   13.834540]  <TASK>
+[   13.834713]  txFreeMap+0x7b4/0xb10 [jfs]
+[   13.835038]  txUpdateMap+0x311/0x650 [jfs]
+[   13.835375]  jfs_lazycommit+0x5f2/0xc70 [jfs]
+[   13.835726]  ? sched_dynamic_update+0x1b0/0x1b0
+[   13.836092]  kthread+0x3c2/0x4a0
+[   13.836355]  ? txLockFree+0x160/0x160 [jfs]
+[   13.836763]  ? kthread_unuse_mm+0x160/0x160
+[   13.837106]  ret_from_fork+0x1f/0x30
+[   13.837402]  </TASK>
+...
 
-Fixes: 8c242db9b8c0 ("f2fs: fix stale ATOMIC_WRITTEN_PAGE private pointer")
-Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-Reviewed-by: Chao Yu <chao@kernel.org>
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+This patch adds a NULL check of "mp" before "write_metapage(mp)" is called.
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/f2fs/segment.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ fs/jfs/jfs_dmap.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 78c54bb7898d..7759323bd775 100644
---- a/fs/f2fs/segment.c
-+++ b/fs/f2fs/segment.c
-@@ -352,16 +352,19 @@ void f2fs_drop_inmem_page(struct inode *inode, struct page *page)
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
- 	struct list_head *head = &fi->inmem_pages;
- 	struct inmem_pages *cur = NULL;
-+	struct inmem_pages *tmp;
- 
- 	f2fs_bug_on(sbi, !IS_ATOMIC_WRITTEN_PAGE(page));
- 
- 	mutex_lock(&fi->inmem_lock);
--	list_for_each_entry(cur, head, list) {
--		if (cur->page == page)
-+	list_for_each_entry(tmp, head, list) {
-+		if (tmp->page == page) {
-+			cur = tmp;
- 			break;
-+		}
+diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
+index f05805a10a50..1014f2a24697 100644
+--- a/fs/jfs/jfs_dmap.c
++++ b/fs/jfs/jfs_dmap.c
+@@ -398,7 +398,8 @@ int dbFree(struct inode *ip, s64 blkno, s64 nblocks)
  	}
  
--	f2fs_bug_on(sbi, list_empty(head) || cur->page != page);
-+	f2fs_bug_on(sbi, !cur);
- 	list_del(&cur->list);
- 	mutex_unlock(&fi->inmem_lock);
+ 	/* write the last buffer. */
+-	write_metapage(mp);
++	if (mp)
++		write_metapage(mp);
+ 
+ 	IREAD_UNLOCK(ipbmap);
  
 -- 
 2.35.1

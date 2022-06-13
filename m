@@ -2,135 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1298E549CD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6497A549CDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347198AbiFMTFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:05:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54904 "EHLO
+        id S1347816AbiFMTGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347352AbiFMTEY (ORCPT
+        with ESMTP id S1347724AbiFMTGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 15:04:24 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044BDAE461;
-        Mon, 13 Jun 2022 09:54:51 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id F1BF8320093C;
-        Mon, 13 Jun 2022 12:54:48 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Mon, 13 Jun 2022 12:54:49 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1655139288; x=1655225688; bh=w4n02oQUKx
-        7H8B+PgNZX4OsXP8VxI6IGI7qQhWHj9MQ=; b=DP7oGg4f3ap5vbyQo/0Q5Cc2si
-        shVZ3tES4aiVNsrWKF2hb6E8Vl1geVzYIpQuTFH2GGqYirAWR+A2WOsWf9sxWwuB
-        uhnaHNdrwynDY2mgJnLaLsQHonSUKlErQvXPlw+Opds3eI7lovBVj26l5flOkCmw
-        hCmfEfmCRVEGY0jLMV6GHxx1xo2sFGxbFX84+K40ScYrLgzgW6mvLUus/sd2JRBh
-        wCoitm0kyg67rkv0IclLqptAmJHiplmf8we9u18X9Nbkq7p0mnivDYh2eG9Bcmty
-        kapiZkOXuryA5Obw/qnyeob0Ianj3z4iEJ2ROWr+iOaRs1UR7JcOdi5zRKoQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1655139288; x=1655225688; bh=w4n02oQUKx7H8B+PgNZX4OsXP8Vx
-        I6IGI7qQhWHj9MQ=; b=CkYUOV+/p8bFjMbeiAMq5LMV0fB6Fl24I/rEAw2nPd1e
-        RTYv2dEyQ49BT2/0Y/u2pgt8KfPuILT89TOsC1qxUbVcAKuK9WvbB8witdDdBccu
-        K1dFxKqg/5s28HAP20erWAlueeEZ1RYhKuvRbRLJM1bZbhW7K4bRwAjz8oP8R0HT
-        AkPGBZcrdj7HPtJVtYE5dxZ81NTxSs4yCE6bbDMU/fjVOAWVm58XYjEWhYn5rI94
-        SfLX8kWyjdM53KhaAUUuZWXVGLdfH2uTVjYqWYNGvQSjR9II8vkSRD/hQeghu+cy
-        fr6UGQDQgbhFBbL65c2aNSLoVl2lMQJISeTxvNPLVg==
-X-ME-Sender: <xms:12unYsxuDyY8MGT0OxK9k2SkJhF_lUo05DHgTvFUmPHi3-Fp6_AUMg>
-    <xme:12unYgSRI2b1_rYkEYvCWHbydjOEYNo1BIqbS14i4d1RvCyD7BrY6Fjwf9two0kz6
-    zCpe1LXjhdp49dWc8I>
-X-ME-Received: <xmr:12unYuWufpDwBBSBdjYzx487Yhb9BiN7XjckAv9CAJGGXvvwEai6FeSW2vcC7ilk7xpoMAjZMbrWX1zuWSNBkAn9OjgUoP1ziyU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddujedguddtgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enfghrlhcuvffnffculdefhedmnecujfgurhepfffhvfevuffkfhggtggujgesghdtreer
-    tddtvdenucfhrhhomheprfgrthhrihgtkhcuhghilhhlihgrmhhsuceophgrthhrihgtkh
-    esshhtfigtgidrgiihiieqnecuggftrfgrthhtvghrnhepheefjeehfedtjeeivdefkeff
-    heeludekudelleffkefgtdeludelvddtgedtheeknecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepphgrthhrihgtkhesshhtfigtgidrgiihii
-X-ME-Proxy: <xmx:12unYqihEW2t3u6yx2veW8CGzdu0EW7ut8a8blqTotcHS4UcWccQDA>
-    <xmx:12unYuCI4jodqEMYBik5Apr9KjhHkZbOBJ1hzB5hDKipE_2guM0T7g>
-    <xmx:12unYrIj1IiuecCDGPtOYug_Sv28UsVXPd15U1PyXmp5VtpKJXb5wg>
-    <xmx:2GunYkBkY16DcueyNZ2bKU7S-zKy-2E_IFuSkx7mC9mFazUhMZ0AEQ>
-Feedback-ID: i68a1478a:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 13 Jun 2022 12:54:46 -0400 (EDT)
-Date:   Mon, 13 Jun 2022 11:54:45 -0500
-From:   Patrick Williams <patrick@stwcx.xyz>
-To:     Potin Lai <potin.lai.pt@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Potin Lai <potin.lai@quantatw.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] Update Facebook Bletchley BMC DTS
-Message-ID: <Yqdr1ZS6d71QeACd@heinlein.stwcx.org.github.beta.tailscale.net>
-References: <20220613095150.21917-1-potin.lai.pt@gmail.com>
+        Mon, 13 Jun 2022 15:06:37 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6D20BA540
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 09:57:53 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id k12-20020a17090a404c00b001eaabc1fe5dso3487290pjg.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 09:57:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6WnBXAP3VJw9uo1dqMEWnA7hq53QXaDQK+ygpUYK+m8=;
+        b=bbkJ8UyYSGZYDx5BMTxVXton0rczQTlxOhqDSn42p8Is+DZniRdmnS2EkoAaSN45A8
+         r7Rhb122NbGhNB+JA21XegJj5Nq2k/cGbBuRIYTDeSoJairL8lvjO+FfAx/jtANPKzbK
+         FlG7i1dPB4lI4A40XFGmFKaadrh2PDtyEP5VqDVnAS8EblnN3I8LVzsVNE8JE8w/fpyX
+         xO58AmRGoaWRiXOMVD1xVpWHPyKHLqLGof0XMigMIuloGIJkRXAzIubhkvVcZiib+dOj
+         kygUxV93Sn4xDBlNFlemRFtOGksWtrl9K14NHZv785eoaJwzt2N6FoNFQWAay72XQwDi
+         nHSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6WnBXAP3VJw9uo1dqMEWnA7hq53QXaDQK+ygpUYK+m8=;
+        b=g9IHLTcOSJWfdlU8Gq3bEUzTmUB6iAR2sNBQSzpHDCrYONvmBRkbkyQNeJnauiOZJE
+         fUvluMgBuBHhQcGkJbQUD4XdjvPDwMgyB1mGCeqYNm+Mcg7VV5T7JSgiP+0EKmhzDkr4
+         LaZRXhUB3DDmmvabysvQ/Xx4viWesuGgndVPHjjzjQisf72q3G75PcHd1yX2iJR69zTQ
+         0f9ENILk4LJoM+YQ8k1z1tySj1DF823GO6i7FZ0k4DPRXUK48msH/OiCmefsrSPZ5LgJ
+         NxbWhzVfloGJKY+tELNTrKaOaSxtSkmXNSQglVQUH8/fbiy+c+f1XZZk1efI728FP5jh
+         1w6Q==
+X-Gm-Message-State: AJIora+ThR348lnvu8XdWQu3esrTzbVjLVI7w3VH2k2+KNX19wgC2OLa
+        AOH57jysNy9tP/Q/f32b8BiGHg==
+X-Google-Smtp-Source: AGRyM1ufnTxIPxw3raWH4v1l5QStubOuXiPZsultTxaadqd10byXlrFmiBHZH+28wbycCnFFShzPtQ==
+X-Received: by 2002:a17:90a:bb92:b0:1e2:f8a0:b0cf with SMTP id v18-20020a17090abb9200b001e2f8a0b0cfmr783062pjr.28.1655139473236;
+        Mon, 13 Jun 2022 09:57:53 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id jg21-20020a17090326d500b001679a4711d9sm5369338plb.162.2022.06.13.09.57.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 09:57:52 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 16:57:49 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Ilias Stamatis <ilstam@amazon.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, mail@anirudhrb.com,
+        kumarpraveen@linux.microsoft.com, wei.liu@kernel.org,
+        robert.bradford@intel.com, liuwe@microsoft.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: nVMX: Don't expose TSC scaling to L1 when on Hyper-V
+Message-ID: <YqdsjW4/zsYaJahf@google.com>
+References: <20220613161611.3567556-1-anrayabh@linux.microsoft.com>
+ <592ab920-51f3-4794-331f-8737e1f5b20a@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="6jmKncZVUj7hG/F1"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220613095150.21917-1-potin.lai.pt@gmail.com>
-X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <592ab920-51f3-4794-331f-8737e1f5b20a@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 13, 2022, Paolo Bonzini wrote:
+> On 6/13/22 18:16, Anirudh Rayabharam wrote:
+> > +	if (!kvm_has_tsc_control)
+> > +		msrs->secondary_ctls_high &= ~SECONDARY_EXEC_TSC_SCALING;
+> > +
+> >   	msrs->secondary_ctls_low = 0;
+> >   	msrs->secondary_ctls_high &=
+> >   		SECONDARY_EXEC_DESC |
+> > @@ -6667,8 +6670,7 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
+> >   		SECONDARY_EXEC_RDRAND_EXITING |
+> >   		SECONDARY_EXEC_ENABLE_INVPCID |
+> >   		SECONDARY_EXEC_RDSEED_EXITING |
+> > -		SECONDARY_EXEC_XSAVES |
+> > -		SECONDARY_EXEC_TSC_SCALING;
+> > +		SECONDARY_EXEC_XSAVES;
+> >   	/*
+> 
+> This is wrong because it _always_ disables SECONDARY_EXEC_TSC_SCALING,
+> even if kvm_has_tsc_control == true.
+> 
+> That said, I think a better implementation of this patch is to just add
+> a version of evmcs_sanitize_exec_ctrls that takes a struct
+> nested_vmx_msrs *, and call it at the end of nested_vmx_setup_ctl_msrs like
+> 
+> 	evmcs_sanitize_nested_vmx_vsrs(msrs);
 
---6jmKncZVUj7hG/F1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Jun 13, 2022 at 05:51:46PM +0800, Potin Lai wrote:
-> Update below items for Facebook Bletchley BMC devicetree.
->=20
-> Potin Lai (4):
->   ARM: dts: aspeed: bletchley: change LED sys_log_id to active low
->   ARM: dts: aspeed: bletchley: disable GPIOV2 pull-down
->   ARM: dts: aspeed: bletchley: bind presence-sledX pins via gpio-keys
->   ARM: dts: aspeed: bletchley: update fusb302 nodes
->=20
->  .../dts/aspeed-bmc-facebook-bletchley.dts     | 197 +++++++++++++-----
->  1 file changed, 148 insertions(+), 49 deletions(-)
-
-The whole patch set looks good to me as the closest domain expert to the
-Bletchley system after Potin.
-
-Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
-
---=20
-Patrick Williams
-
---6jmKncZVUj7hG/F1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmKna9MACgkQqwNHzC0A
-wRkCuA/+Lk/UCnb9WJxnAo+6ujKnM/SuKjGbG23OoaNN+BNsTEja0/9Y7V3DoIjF
-xm71jwxoDsR25X3rt8EUyNq6XNXEKe6y8JR51sdAMegwPCK7tfUuRzXpd5y4zfUd
-hEQOFcauV0oi0aLX5GGSTX80Ka3BDOQx0Fz2RiLQXZaKR/4h+eLnHO3yfAx0GItp
-DlRGxqD3fHWNoK9vji/0ylMIquHvkl8mlKUyrU3cTJj6pT6nSD6EzkSwvYNhuTZA
-hrZKrst3W6NmyrLJRpj/CZCY0A0GGGDSSPv2jpm362tERCX7oEoh3HwtYw/Y2XEj
-kTvw0IjHvqcaovhCHCkYOtuA6yAqenwjYERb8M9sNL4qzjeoinC4YuKdMYxi3tnk
-Q72JUwPC/R2gvth7ysAvlbCs45ioZoS9ZSd2MxI4i9QH3Pri9yg7X1IuG6I4NmG5
-K3NHP8EHgyfsYk+zreVnkWBCl07/VXcTfFHq74m0Qsfqb3IAWzjOjII3S4rdDSPp
-hNqXLGoHvEexruS6K/cDB1wHU2oxCHfPD7lTc2jc+g7b0WLyMbc5KRAhfrG75ljZ
-Of/LUShe9F40XcroLHHnwTmOFLFOFVo2oong9rvdK8Rw7oVmXrufOjr+khgBDYkk
-QbEFpGChKCNKLSaialAnyt+vgD5l8/U2RvnFuWr38uMcFY0xyG0=
-=Ou4S
------END PGP SIGNATURE-----
-
---6jmKncZVUj7hG/F1--
+Any reason not to use the already sanitized vmcs_config?  I can't think of any
+reason why the nested path should blindly use the raw MSR values from hardware.

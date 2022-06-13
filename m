@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9688C549224
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50270549011
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380119AbiFMNxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
+        id S1385285AbiFMObA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379985AbiFMNtz (ORCPT
+        with ESMTP id S1384350AbiFMOZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:49:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D4B2A25C;
-        Mon, 13 Jun 2022 04:33:19 -0700 (PDT)
+        Mon, 13 Jun 2022 10:25:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65E649B72;
+        Mon, 13 Jun 2022 04:47:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FD6960F18;
-        Mon, 13 Jun 2022 11:33:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D992C34114;
-        Mon, 13 Jun 2022 11:33:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89C496146B;
+        Mon, 13 Jun 2022 11:47:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93096C341C0;
+        Mon, 13 Jun 2022 11:47:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119998;
-        bh=R5fTyruJ7o+D4aXdC87l++XcxSa5NYHlcx8nry6x5OA=;
+        s=korg; t=1655120821;
+        bh=EmEjY/2oupTS6JKEbxG775P6fh8XyKSAcBZ6LBmEp34=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OLDsgaCNmwjfBKutvXIwYwwvzQ5jId0Dr/cQPXj/ZCmUd2BHh3aAcLcUhaVYBoU4n
-         ug3RDcAI9Z4UilazHBg5KnuT1xIUaVyqbpactp+11rW373GIXeLpnkjMam8J5NP7Bb
-         EEyXkEVeoizsTDFHhjVBsNtMq8aUXRiyu4j5LOrQ=
+        b=w8+gRMeeT35fRithfUCJ5bJMF/z4J4VS5mD7p2q1vooNH8JwFoD33+Ha79lsoNex1
+         X2YUkweNWniJPHrsVjWy0nH6Bs3DA9ELozrRDGNkgtsMHkFM+vdMX6fPvtRT8psSbr
+         TOfgX7SW5SBwqdbsX8Xo9EHGIK6uK2Q0swP0swfs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Hugh Dickens <hughd@google.com>,
+        Greg Ungerer <gerg@linux-m68k.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 214/339] ip_gre: test csum_start instead of transport header
+Subject: [PATCH 5.17 145/298] m68knommu: set ZERO_PAGE() to the allocated zeroed page
 Date:   Mon, 13 Jun 2022 12:10:39 +0200
-Message-Id: <20220613094933.153662453@linuxfoundation.org>
+Message-Id: <20220613094929.337591505@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,85 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willem de Bruijn <willemb@google.com>
+From: Greg Ungerer <gerg@linux-m68k.org>
 
-[ Upstream commit 8d21e9963bec1aad2280cdd034c8993033ef2948 ]
+[ Upstream commit dc068f46217970d9516f16cd37972a01d50dc055 ]
 
-GRE with TUNNEL_CSUM will apply local checksum offload on
-CHECKSUM_PARTIAL packets.
+The non-MMU m68k pagetable ZERO_PAGE() macro is being set to the
+somewhat non-sensical value of "virt_to_page(0)". The zeroth page
+is not in any way guaranteed to be a page full of "0". So the result
+is that ZERO_PAGE() will almost certainly contain random values.
 
-ipgre_xmit must validate csum_start after an optional skb_pull,
-else lco_csum may trigger an overflow. The original check was
+We already allocate a real "empty_zero_page" in the mm setup code shared
+between MMU m68k and non-MMU m68k. It is just not hooked up to the
+ZERO_PAGE() macro for the non-MMU m68k case.
 
-	if (csum && skb_checksum_start(skb) < skb->data)
-		return -EINVAL;
+Fix ZERO_PAGE() to use the allocated "empty_zero_page" pointer.
 
-This had false positives when skb_checksum_start is undefined:
-when ip_summed is not CHECKSUM_PARTIAL. A discussed refinement
-was straightforward
+I am not aware of any specific issues caused by the old code.
 
-	if (csum && skb->ip_summed == CHECKSUM_PARTIAL &&
-	    skb_checksum_start(skb) < skb->data)
-		return -EINVAL;
-
-But was eventually revised more thoroughly:
-- restrict the check to the only branch where needed, in an
-  uncommon GRE path that uses header_ops and calls skb_pull.
-- test skb_transport_header, which is set along with csum_start
-  in skb_partial_csum_set in the normal header_ops datapath.
-
-Turns out skbs can arrive in this branch without the transport
-header set, e.g., through BPF redirection.
-
-Revise the check back to check csum_start directly, and only if
-CHECKSUM_PARTIAL. Do leave the check in the updated location.
-Check field regardless of whether TUNNEL_CSUM is configured.
-
-Link: https://lore.kernel.org/netdev/YS+h%2FtqCJJiQei+W@shredder/
-Link: https://lore.kernel.org/all/20210902193447.94039-2-willemdebruijn.kernel@gmail.com/T/#u
-Fixes: 8a0ed250f911 ("ip_gre: validate csum_start only on pull")
-Reported-by: syzbot <syzkaller@googlegroups.com>
-Signed-off-by: Willem de Bruijn <willemb@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
-Link: https://lore.kernel.org/r/20220606132107.3582565-1-willemdebruijn.kernel@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/linux-m68k/2a462b23-5b8e-bbf4-ec7d-778434a3b9d7@google.com/T/#t
+Reported-by: Hugh Dickens <hughd@google.com>
+Signed-off-by: Greg Ungerer <gerg@linux-m68k.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/ip_gre.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ arch/m68k/include/asm/pgtable_no.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
-index aacee9dd771b..bc8dfdf1c48a 100644
---- a/net/ipv4/ip_gre.c
-+++ b/net/ipv4/ip_gre.c
-@@ -629,21 +629,20 @@ static netdev_tx_t ipgre_xmit(struct sk_buff *skb,
- 	}
+diff --git a/arch/m68k/include/asm/pgtable_no.h b/arch/m68k/include/asm/pgtable_no.h
+index 87151d67d91e..bce5ca56c388 100644
+--- a/arch/m68k/include/asm/pgtable_no.h
++++ b/arch/m68k/include/asm/pgtable_no.h
+@@ -42,7 +42,8 @@ extern void paging_init(void);
+  * ZERO_PAGE is a global shared page that is always zero: used
+  * for zero-mapped memory areas etc..
+  */
+-#define ZERO_PAGE(vaddr)	(virt_to_page(0))
++extern void *empty_zero_page;
++#define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
  
- 	if (dev->header_ops) {
--		const int pull_len = tunnel->hlen + sizeof(struct iphdr);
--
- 		if (skb_cow_head(skb, 0))
- 			goto free_skb;
- 
- 		tnl_params = (const struct iphdr *)skb->data;
- 
--		if (pull_len > skb_transport_offset(skb))
--			goto free_skb;
--
- 		/* Pull skb since ip_tunnel_xmit() needs skb->data pointing
- 		 * to gre header.
- 		 */
--		skb_pull(skb, pull_len);
-+		skb_pull(skb, tunnel->hlen + sizeof(struct iphdr));
- 		skb_reset_mac_header(skb);
-+
-+		if (skb->ip_summed == CHECKSUM_PARTIAL &&
-+		    skb_checksum_start(skb) < skb->data)
-+			goto free_skb;
- 	} else {
- 		if (skb_cow_head(skb, dev->needed_headroom))
- 			goto free_skb;
+ /*
+  * All 32bit addresses are effectively valid for vmalloc...
 -- 
 2.35.1
 

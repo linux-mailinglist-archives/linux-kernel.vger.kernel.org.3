@@ -2,173 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED9D548B8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2BF549A18
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243709AbiFMPZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 11:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
+        id S245347AbiFMRbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357517AbiFMPXt (ORCPT
+        with ESMTP id S240746AbiFMR30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 11:23:49 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E099162131
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655124539; x=1686660539;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=F+Z/xKS8IJ6c8oqyWurA8RR/4fHWWhqaKxllGYROtwo=;
-  b=ffeRtebDGvIawMNiIpBE77FlmSkEKfvVx1c06BMgF4/j7V7geS75DB9P
-   q8gjBvrk62Gw6Esta9FKV8ztGHI46iPMZjXc4IL2mJVWLr+b6XVOEEaTV
-   6fM5FYJdAtODK+hMxRY64rnhuRyqOdGpU3hAd+soLldP+nJu8N1G1Tpw6
-   vTWFWNW9yNF14xwPmQZMYci8cxiYP3LZ0Az1bU9qDdw8ImpYYYVdqWY1B
-   nmqB2ZajV3tVacIiCrZLzzGKOjQyP+FfSSX/wgKWMCaR7Jce9T4TJvQOn
-   7+yN8IbpxXplwqjHY6ROVQiiDtF8PtUNeB/d6XNqxANiR9x6UAvb3TpKa
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10376"; a="342242573"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="342242573"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 05:48:34 -0700
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="910369101"
-Received: from tchuynh1-mobl1.amr.corp.intel.com (HELO [10.212.112.176]) ([10.212.112.176])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 05:48:33 -0700
-Message-ID: <7328fbb2-06af-99c8-5e7f-9d22f8c4e4f6@linux.intel.com>
-Date:   Mon, 13 Jun 2022 07:48:32 -0500
+        Mon, 13 Jun 2022 13:29:26 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3E762A29
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:49:28 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id d129so5433088pgc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:49:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gPvvSe6FTsRcXPQ951pr09BFrUgePKl3dqQkTDR/CbA=;
+        b=aTF9amwoZBKqnS6EeoUA3wklSe4v5hYF/iEedNdET2+BKeTE4Xa4uyyUI74TeuiQca
+         iqswv0uIgsfH/umy67XVJvPFP30umF1wj5lqLawZ4VCw14X+bZzaKdVY/JH5tWLqfYx0
+         nibRrW9jmT3ywWSNPT2IyGKfUhcuiXnS9JjFqobeeAWi1Y9/NrJj0oaGIObNt3rby4T2
+         xHo3sPFV7Jh8G9tkxm5NBqhd1wv56hDkY3c3857jtoSa1p8HrmJq6Q7ks0k3h2Elmytk
+         a9HQei/J/DioYv3DGrSPkzCu+UI3DsSNl+J7d4kEUFHe9qCaP+epuUs1dkvTq63gtmBK
+         xAqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gPvvSe6FTsRcXPQ951pr09BFrUgePKl3dqQkTDR/CbA=;
+        b=7OfuU+/aLknvbjWYr9kW0NFEJGK5AcLf9x/6DNXEmcOiNmFyxi4AUgXATe4bgjE5X3
+         kzcVMEafq8cBHiOyi12ArGEBldgo/mjPIs2UdsviI/cwZHzKWMExZncxJIhynuGlRNpg
+         b54hkSSpffpAkW+mRzDhxX3Mr1B+tLrIEUZV0G+K4AzMB5CwvaB1hrTkqySrqcEUGiWm
+         ws77Fde2zaBrLSojNEWULeVKM29b+V1fThieNHDCqG2q+L4wS4UpMc0vqfpX7eJmkVzo
+         oVSDBg9gOdNyaXUf+UWpmzyavVIM6Gexit2idoMrjnzGmR32PfzyuQkXE/loUz6qtO1G
+         n2hw==
+X-Gm-Message-State: AOAM531vqotV4hqNCPo7+nLgagHlIapOxU8ZG7R69WEH65Qd9FID5Atj
+        TrdRtbzP4SrfHnCUn4CoIwc=
+X-Google-Smtp-Source: ABdhPJxFIOEU7ll2wYEtvRIrzPzwiiuRm8s/BGB/bNT9QaatYBwZXao9gACSHEgYjz3KDf3im/iSJg==
+X-Received: by 2002:a63:4a4b:0:b0:408:9a69:3610 with SMTP id j11-20020a634a4b000000b004089a693610mr863285pgl.433.1655124567737;
+        Mon, 13 Jun 2022 05:49:27 -0700 (PDT)
+Received: from hyeyoo ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id c125-20020a624e83000000b0051850716942sm5457595pfb.140.2022.06.13.05.49.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 05:49:26 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 21:49:07 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Jann Horn <jannh@google.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/slub: add missing TID updates on slab deactivation
+Message-ID: <YqcyQwCzSuFKkIpr@hyeyoo>
+References: <20220608182205.2945720-1-jannh@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH 1/2] soundwire: intel: uniquify debug message
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Bard Liao <yung-chuan.liao@linux.intel.com>,
-        alsa-devel@alsa-project.org, vkoul@kernel.org,
-        vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
-        broonie@kernel.org, srinivas.kandagatla@linaro.org,
-        sanyog.r.kale@intel.com, bard.liao@intel.com
-References: <20220610023537.27223-1-yung-chuan.liao@linux.intel.com>
- <20220610023537.27223-2-yung-chuan.liao@linux.intel.com>
- <YqLVwqx9/Pos8T06@kroah.com>
- <b86e6cbd-3488-a239-d765-cf01bf0d4f70@linux.intel.com>
- <YqRCKtLGYlRQQ+DU@kroah.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <YqRCKtLGYlRQQ+DU@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608182205.2945720-1-jannh@google.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
->>>> diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
->>>> index 505c5ef061e3..808e2f320052 100644
->>>> --- a/drivers/soundwire/intel.c
->>>> +++ b/drivers/soundwire/intel.c
->>>> @@ -1328,8 +1328,8 @@ int intel_link_startup(struct auxiliary_device *auxdev)
->>>>  
->>>>  	if (bus->prop.hw_disabled) {
->>>>  		dev_info(dev,
->>>> -			 "SoundWire master %d is disabled, ignoring\n",
->>>> -			 sdw->instance);
->>>> +			 "%s: SoundWire master %d is disabled, ignoring\n",
->>>> +			 __func__, sdw->instance);
->>>
->>> This is not a debug message, please make it such if you want to have
->>> __func__  And even then, it's not needed as you can get that from the
->>> kernel automatically.
->>
->> Sorry, I don't understand the feedback at all.
+On Wed, Jun 08, 2022 at 08:22:05PM +0200, Jann Horn wrote:
+> The fastpath in slab_alloc_node() assumes that c->slab is stable as long as
+> the TID stays the same. However, two places in __slab_alloc() currently
+> don't update the TID when deactivating the CPU slab.
 > 
-> dev_info() is not a way to send debug messages.
+> If multiple operations race the right way, this could lead to an object
+> getting lost; or, in an even more unlikely situation, it could even lead to
+> an object being freed onto the wrong slab's freelist, messing up the
+> `inuse` counter and eventually causing a page to be freed to the page
+> allocator while it still contains slab objects.
 > 
-> If you want this to be only for debugging, use dev_dbg().  And when you
-> use that, you get the __func__ location for free in the output already
-> if you want that.
+> (I haven't actually tested these cases though, this is just based on
+> looking at the code. Writing testcases for this stuff seems like it'd be
+> a pain...)
 > 
->> This message was added precisely to figure out why the expected
->> programming sequence was not followed, only to discover that we have
->> devices with spurious PCI wakes handled below. Without this added
->> difference with __func__, we wouldn't know if the issue happened during
->> the expected/regular programming sequence or not.
+> The race leading to state inconsistency is (all operations on the same CPU
+> and kmem_cache):
 > 
-> Perhaps make the text unique then?  Why would an informational message
-> need a function name.  Drivers should be quiet when all is going well.
-> If something is not going well, dev_info() is not the kernel log level
-> to be sending something out at.
+>  - task A: begin do_slab_free():
+>     - read TID
+>     - read pcpu freelist (==NULL)
+>     - check `slab == c->slab` (true)
+>  - [PREEMPT A->B]
+>  - task B: begin slab_alloc_node():
+>     - fastpath fails (`c->freelist` is NULL)
+>     - enter __slab_alloc()
+>     - slub_get_cpu_ptr() (disables preemption)
+>     - enter ___slab_alloc()
+>     - take local_lock_irqsave()
+>     - read c->freelist as NULL
+>     - get_freelist() returns NULL
+>     - write `c->slab = NULL`
+>     - drop local_unlock_irqrestore()
+>     - goto new_slab
+>     - slub_percpu_partial() is NULL
+>     - get_partial() returns NULL
+>     - slub_put_cpu_ptr() (enables preemption)
+>  - [PREEMPT B->A]
+>  - task A: finish do_slab_free():
+>     - this_cpu_cmpxchg_double() succeeds()
+>     - [CORRUPT STATE: c->slab==NULL, c->freelist!=NULL]
 
-This is not a debug message - unlike all the others. The BIOS and/or the
-user may disable a specific link and it's useful to know.
+I can see this happening (!c->slab && c->freelist becoming true)
+when I synthetically add scheduling points in the code:
 
-The intent of __func__ was precisely to make the text unique across all
-cases where we test for hw_disabled, but you have a point that this
-specific info message should be clearer. The text was actually already
-different from the 'disable or not-started' cases, I might have done one
-too many edits in this file. Will fix.
+diff --git a/mm/slub.c b/mm/slub.c
+index b97fa5e21046..b8012fdf2607 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -3001,6 +3001,10 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+ 		goto check_new_slab;
 
->>>>  		return 0;
->>>>  	}
->>>>  
->>>> @@ -1489,8 +1489,8 @@ int intel_link_process_wakeen_event(struct auxiliary_device *auxdev)
->>>>  	bus = &sdw->cdns.bus;
->>>>  
->>>>  	if (bus->prop.hw_disabled || !sdw->startup_done) {
->>>> -		dev_dbg(dev, "SoundWire master %d is disabled or not-started, ignoring\n",
->>>> -			bus->link_id);
->>>> +		dev_dbg(dev, "%s: SoundWire master %d is disabled or not-started, ignoring\n",
->>>> +			__func__, bus->link_id);
->>>>  		return 0;
->>>>  	}
->>>>  
->>>> @@ -1549,8 +1549,8 @@ static int __maybe_unused intel_pm_prepare(struct device *dev)
->>>>  	int ret;
->>>>  
->>>>  	if (bus->prop.hw_disabled || !sdw->startup_done) {
->>>> -		dev_dbg(dev, "SoundWire master %d is disabled or not-started, ignoring\n",
->>>> -			bus->link_id);
->>>> +		dev_dbg(dev, "%s: SoundWire master %d is disabled or not-started, ignoring\n",
->>>> +			__func__, bus->link_id);
->>>
->>> Not needed, it is provided automatically if you ask the kernel for this.
->>> Same for all other instances in this patch.
->>
->> provided how? Your comment is a bit cryptic here.
+ 	slub_put_cpu_ptr(s->cpu_slab);
++
++	if (!in_atomic())
++		schedule();
++
+ 	slab = new_slab(s, gfpflags, node);
+ 	c = slub_get_cpu_ptr(s->cpu_slab);
+
+@@ -3456,9 +3460,13 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
+ 	if (likely(slab == c->slab)) {
+ #ifndef CONFIG_PREEMPT_RT
+ 		void **freelist = READ_ONCE(c->freelist);
++		unsigned long flags;
+
+ 		set_freepointer(s, tail_obj, freelist);
+
++		if (!in_atomic())
++			schedule();
++
+ 		if (unlikely(!this_cpu_cmpxchg_double(
+ 				s->cpu_slab->freelist, s->cpu_slab->tid,
+ 				freelist, tid,
+@@ -3467,6 +3475,10 @@ static __always_inline void do_slab_free(struct kmem_cache *s,
+ 			note_cmpxchg_failure("slab_free", s, tid);
+ 			goto redo;
+ 		}
++
++		local_irq_save(flags);
++		WARN_ON(!READ_ONCE(c->slab) && READ_ONCE(c->freelist));
++		local_irq_restore(flags);
+ #else /* CONFIG_PREEMPT_RT */
+ 		/*
+ 		 * We cannot use the lockless fastpath on PREEMPT_RT because if
+
+
+> From there, the object on c->freelist will get lost if task B is allowed to
+> continue from here: It will proceed to the retry_load_slab label,
+> set c->slab, then jump to load_freelist, which clobbers c->freelist.
+>
+> But if we instead continue as follows, we get worse corruption:
 > 
-> the dynamic debug code in the kernel already adds the function name
-> where the message was sent from, if you want to know this in userspace.
-> Please read the documentation for details (I think the key is the 'f'
-> flag to be enabled in userspace).
+>  - task A: run __slab_free() on object from other struct slab:
+>     - CPU_PARTIAL_FREE case (slab was on no list, is now on pcpu partial)
+>  - task A: run slab_alloc_node() with NUMA node constraint:
+>     - fastpath fails (c->slab is NULL)
+>     - call __slab_alloc()
+>     - slub_get_cpu_ptr() (disables preemption)
+>     - enter ___slab_alloc()
+>     - c->slab is NULL: goto new_slab
+>     - slub_percpu_partial() is non-NULL
+>     - set c->slab to slub_percpu_partial(c)
+>     - [CORRUPT STATE: c->slab points to slab-1, c->freelist has objects
+>       from slab-2]
+>     - goto redo
+>     - node_match() fails
+>     - goto deactivate_slab
+>     - existing c->freelist is passed into deactivate_slab()
+>     - inuse count of slab-1 is decremented to account for object from
+>       slab-2
+
+I didn't try to reproduce this -- but I agree SLUB can be fooled
+by the condition (!c->slab && c->freelist).
+
+> At this point, the inuse count of slab-1 is 1 lower than it should be.
+> This means that if we free all allocated objects in slab-1 except for one,
+> SLUB will think that slab-1 is completely unused, and may free its page,
+> leading to use-after-free.
 > 
-> So adding __func__ to dev_dbg() calls are redundant and never needed.
+> Fixes: c17dda40a6a4e ("slub: Separate out kmem_cache_cpu processing from deactivate_slab")
+> Fixes: 03e404af26dc2 ("slub: fast release on full slab")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jann Horn <jannh@google.com>
+> ---
+>  mm/slub.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index e5535020e0fdf..b97fa5e210469 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -2936,6 +2936,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+>  
+>  	if (!freelist) {
+>  		c->slab = NULL;
+> +		c->tid = next_tid(c->tid);
+>  		local_unlock_irqrestore(&s->cpu_slab->lock, flags);
+>  		stat(s, DEACTIVATE_BYPASS);
+>  		goto new_slab;
+> @@ -2968,6 +2969,7 @@ static void *___slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+>  	freelist = c->freelist;
+>  	c->slab = NULL;
+>  	c->freelist = NULL;
+> +	c->tid = next_tid(c->tid);
+>  	local_unlock_irqrestore(&s->cpu_slab->lock, flags);
+>  	deactivate_slab(s, slab, freelist);
+>  
+> 
+> base-commit: 9886142c7a2226439c1e3f7d9b69f9c7094c3ef6
+> -- 
+> 2.36.1.476.g0c4daa206d-goog
 
-Oh wow, I had no idea - and I am not the only one :-)
+With this patch I couldn't reproduce it.
+This work is really nice. Thanks!
 
-Here's what I get with a grep on the kernel code
+Tested-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-git grep __func__ | grep dev_dbg | wc -l
+BTW I wonder how much this race will affect machines in the real world.
+Maybe just rare and undetectable memory leak?
 
-3122
-
-
-Doing this for sound/ gives me 356, and that's for single-line logs only.
-
-There's clearly something that was missed by tons of people.
-
-We use an 'sof-dyndbg.conf' file that we provide to users and our CI to
-log what's needed for SOF debug, it's trivial to add a +f option.
-
-options foo dyndbg=+pf
-
-Thanks for the feedback, much appreciated.
--Pierre
-
+-- 
+Thanks,
+Hyeonggon

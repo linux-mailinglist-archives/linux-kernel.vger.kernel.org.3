@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14FDB548B80
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C45DB548D52
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244497AbiFMKok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58578 "EHLO
+        id S1354665AbiFMMwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347266AbiFMKlX (ORCPT
+        with ESMTP id S241337AbiFMMwK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:41:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1FC22B3C;
-        Mon, 13 Jun 2022 03:23:50 -0700 (PDT)
+        Mon, 13 Jun 2022 08:52:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00B86416;
+        Mon, 13 Jun 2022 04:12:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 816B2B80E2D;
-        Mon, 13 Jun 2022 10:23:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5558C34114;
-        Mon, 13 Jun 2022 10:23:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3240B80EAA;
+        Mon, 13 Jun 2022 11:12:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B66BC3411C;
+        Mon, 13 Jun 2022 11:12:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115828;
-        bh=16YFqYyhqlF8wjxC3u5YtSZGbIxxSWXzvVuA+3jo0aI=;
+        s=korg; t=1655118730;
+        bh=dt0NDfSA0OeLG6U/SzwHiEhewvTsnGRELX+7q26Ry4U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NdI/GzfLet+JOhq2sUK/RDFz/XM+F399/678cQn1tcBZAbTs5HsbsE56XtzzFkykz
-         nACB0yL9lLKKVQ1tRvdswyFb0DSbeRqTqDPF5djA0M99ry32AaLsc+72kYJfxgz5PL
-         SPYYQgqaoo7gqW2QtHDjlA2Ch3YivqNjrqTtIhW8=
+        b=vze3lQSw5u2NLZ9FAgpdM29KaQo5sSkcN9PLgXh6XWxOpDSTJqG1iXLweHJfEOGcP
+         j//xZgbvzx1V+jAOp2PUXUezTW+19eA/HrqK69EW9qoNXSi4D4FjvLan6PrgyeF3Uh
+         flad/VKbMX48CLU+31ipEl2hOtafSL10/7bfNaiI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Finn Thain <fthain@linux-m68k.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org, Manuel Lauss <manuel.lauss@gmail.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 045/218] macintosh/via-pmu: Fix build failure when CONFIG_INPUT is disabled
+Subject: [PATCH 5.15 001/247] pcmcia: db1xxx_ss: restrict to MIPS_DB1XXX boards
 Date:   Mon, 13 Jun 2022 12:08:23 +0200
-Message-Id: <20220613094919.085019575@linuxfoundation.org>
+Message-Id: <20220613094922.911675304@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,80 +63,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Finn Thain <fthain@linux-m68k.org>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 86ce436e30d86327c9f5260f718104ae7b21f506 ]
+[ Upstream commit 3928cf08334ed895a31458cbebd8d4ec6d84c080 ]
 
-drivers/macintosh/via-pmu-event.o: In function `via_pmu_event':
-via-pmu-event.c:(.text+0x44): undefined reference to `input_event'
-via-pmu-event.c:(.text+0x68): undefined reference to `input_event'
-via-pmu-event.c:(.text+0x94): undefined reference to `input_event'
-via-pmu-event.c:(.text+0xb8): undefined reference to `input_event'
-drivers/macintosh/via-pmu-event.o: In function `via_pmu_event_init':
-via-pmu-event.c:(.init.text+0x20): undefined reference to `input_allocate_device'
-via-pmu-event.c:(.init.text+0xc4): undefined reference to `input_register_device'
-via-pmu-event.c:(.init.text+0xd4): undefined reference to `input_free_device'
-make[1]: *** [Makefile:1155: vmlinux] Error 1
-make: *** [Makefile:350: __build_one_by_one] Error 2
+When the MIPS_ALCHEMY board selection is MIPS_XXS1500 instead of
+MIPS_DB1XXX, the PCMCIA driver 'db1xxx_ss' has build errors due
+to missing DB1XXX symbols. The PCMCIA driver should be restricted
+to MIPS_DB1XXX instead of MIPS_ALCHEMY to fix this build error.
 
-Don't call into the input subsystem unless CONFIG_INPUT is built-in.
+ERROR: modpost: "bcsr_read" [drivers/pcmcia/db1xxx_ss.ko] undefined!
+ERROR: modpost: "bcsr_mod" [drivers/pcmcia/db1xxx_ss.ko] undefined!
 
+Fixes: 42a4f17dc356 ("MIPS: Alchemy: remove SOC_AU1X00 in favor of MIPS_ALCHEMY")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Finn Thain <fthain@linux-m68k.org>
-Tested-by: Randy Dunlap <rdunlap@infradead.org>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/5edbe76ce68227f71e09af4614cc4c1bd61c7ec8.1649326292.git.fthain@linux-m68k.org
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: Kees Cook <keescook@chromium.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org
+Acked-by: Manuel Lauss <manuel.lauss@gmail.com>
+Signed-off-by: Dominik Brodowski <linux@dominikbrodowski.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/macintosh/Kconfig   | 4 ++++
- drivers/macintosh/Makefile  | 3 ++-
- drivers/macintosh/via-pmu.c | 2 +-
- 3 files changed, 7 insertions(+), 2 deletions(-)
+ drivers/pcmcia/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/macintosh/Kconfig b/drivers/macintosh/Kconfig
-index 97a420c11eed..5e47d91da519 100644
---- a/drivers/macintosh/Kconfig
-+++ b/drivers/macintosh/Kconfig
-@@ -77,6 +77,10 @@ config ADB_PMU
- 	  this device; you should do so if your machine is one of those
- 	  mentioned above.
+diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
+index d13b8d1a780a..4868ec03e32f 100644
+--- a/drivers/pcmcia/Kconfig
++++ b/drivers/pcmcia/Kconfig
+@@ -151,7 +151,7 @@ config TCIC
  
-+config ADB_PMU_EVENT
-+	def_bool y
-+	depends on ADB_PMU && INPUT=y
-+
- config ADB_PMU_LED
- 	bool "Support for the Power/iBook front LED"
- 	depends on ADB_PMU
-diff --git a/drivers/macintosh/Makefile b/drivers/macintosh/Makefile
-index ee803638e595..ff099c7d4edd 100644
---- a/drivers/macintosh/Makefile
-+++ b/drivers/macintosh/Makefile
-@@ -12,7 +12,8 @@ obj-$(CONFIG_MAC_EMUMOUSEBTN)	+= mac_hid.o
- obj-$(CONFIG_INPUT_ADBHID)	+= adbhid.o
- obj-$(CONFIG_ANSLCD)		+= ans-lcd.o
- 
--obj-$(CONFIG_ADB_PMU)		+= via-pmu.o via-pmu-event.o
-+obj-$(CONFIG_ADB_PMU)		+= via-pmu.o
-+obj-$(CONFIG_ADB_PMU_EVENT)	+= via-pmu-event.o
- obj-$(CONFIG_ADB_PMU_LED)	+= via-pmu-led.o
- obj-$(CONFIG_PMAC_BACKLIGHT)	+= via-pmu-backlight.o
- obj-$(CONFIG_ADB_CUDA)		+= via-cuda.o
-diff --git a/drivers/macintosh/via-pmu.c b/drivers/macintosh/via-pmu.c
-index f6e040fcad9a..9d6828f49779 100644
---- a/drivers/macintosh/via-pmu.c
-+++ b/drivers/macintosh/via-pmu.c
-@@ -1440,7 +1440,7 @@ pmu_handle_data(unsigned char *data, int len)
- 		pmu_pass_intr(data, len);
- 		/* len == 6 is probably a bad check. But how do I
- 		 * know what PMU versions send what events here? */
--		if (len == 6) {
-+		if (IS_ENABLED(CONFIG_ADB_PMU_EVENT) && len == 6) {
- 			via_pmu_event(PMU_EVT_POWER, !!(data[1]&8));
- 			via_pmu_event(PMU_EVT_LID, data[1]&1);
- 		}
+ config PCMCIA_ALCHEMY_DEVBOARD
+ 	tristate "Alchemy Db/Pb1xxx PCMCIA socket services"
+-	depends on MIPS_ALCHEMY && PCMCIA
++	depends on MIPS_DB1XXX && PCMCIA
+ 	help
+ 	  Enable this driver of you want PCMCIA support on your Alchemy
+ 	  Db1000, Db/Pb1100, Db/Pb1500, Db/Pb1550, Db/Pb1200, DB1300
 -- 
 2.35.1
 

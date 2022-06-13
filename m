@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148015482DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4BC5482EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240079AbiFMJJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41686 "EHLO
+        id S240561AbiFMJLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240062AbiFMJJB (ORCPT
+        with ESMTP id S231329AbiFMJL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:09:01 -0400
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A793235
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 02:08:59 -0700 (PDT)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4LM5N73Srsz9sZR;
-        Mon, 13 Jun 2022 11:08:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1655111335;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/diBHTT7FJGtxv9Ix4yOBCZ8RnU/aeUMZMRq1jZWVd0=;
-        b=Znxifht26gApX39S8dBdMlCkItNVWLXnXVPMEVWY3AG9zAT6gRrWMY9rhTZyANLJTCXA+T
-        /Py+ybJGqRWT/5GkeLRhJZiWzDalGM3ZvZadEpQEYyYCU21C9ACURqw1LrNyUVHsOxWjvx
-        1p9izA8OmzrQ5cxuRmCiyhEfNhVce3b+LqtSrMJHG1exvU+qFVCJb9AZGKmxkawe7s4w+F
-        /Xrajo+QQRwLwU5ACiJOqV5anBx0ps2Y2wIrqp32YeXJCOeBwJm20EiuG6GVGM12Bl5Dy4
-        ebLpFyJ47wP6J1/GG07XltI+NvUdJKpT2sZ8ndEXg24vYNlBTBRianCdqohCbA==
-Message-ID: <51536e97-ca5f-abe4-b46c-ee3eb57f891e@mailbox.org>
-Date:   Mon, 13 Jun 2022 11:08:52 +0200
+        Mon, 13 Jun 2022 05:11:29 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7477F5A4;
+        Mon, 13 Jun 2022 02:11:28 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id 43so3946518qvb.3;
+        Mon, 13 Jun 2022 02:11:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0o2bWkZ5eL+Cgv0KyJpTUTbbygBAqPHJMqEpfwXn/fY=;
+        b=LGDUsHJO8Fn76tUqTfPSRsXSNprLSeRI+2L8yua+zvAQ0kfTBTFmbBwmGFEOtc0qie
+         7wqdBvG8mMnzSOOSrf5HwLRjGGZw5eWqWcNR4RiL7947AGAOrIySA6FBDQ0cQOqUzZ08
+         zyutMx9dq9J4Xb4Z4FdYZCFAobCkJngnOoMiANjC5Yd1Uu8r83ruCZ45RR5gZqrb50ES
+         sen8kXAa/MiNwDxltiwKcbEz7PEIftsho4TSILPovoGFqYA19geoCK9u/p2nQpYBG6lQ
+         v7xbUk3vAx6wdDVGfcsETmq8KhPWi388qVzUGZ0UNM4lZFHONAgdfbjwJq2aSV3bjCeK
+         UsPw==
+X-Gm-Message-State: AOAM533zM0AIqFywindqSoWo/0qWsD4XgxAYYa1gxnQvTyYLoKRdyQoT
+        cwPwPjkJjPelIDE1ouAvYbOp1gWMuRvNCw==
+X-Google-Smtp-Source: ABdhPJzMdhYtqJGs0UxkaBX5BQdmZWm/z02gU//ZqQh62x5yRueEdzOpgBcNnCnDxR7IgxIef3cViA==
+X-Received: by 2002:a0c:f88f:0:b0:46b:8c17:bd18 with SMTP id u15-20020a0cf88f000000b0046b8c17bd18mr31219431qvn.9.1655111487737;
+        Mon, 13 Jun 2022 02:11:27 -0700 (PDT)
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
+        by smtp.gmail.com with ESMTPSA id v12-20020a05620a440c00b0069fc13ce23dsm6430815qkp.110.2022.06.13.02.11.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 02:11:27 -0700 (PDT)
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-30ec2aa3b6cso44391207b3.11;
+        Mon, 13 Jun 2022 02:11:27 -0700 (PDT)
+X-Received: by 2002:a81:f41:0:b0:313:4d6c:49db with SMTP id
+ 62-20020a810f41000000b003134d6c49dbmr33105243ywp.384.1655111486940; Mon, 13
+ Jun 2022 02:11:26 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [PATCH 03/13] mm: shmem: provide oom badness for shmem files
-Content-Language: en-CA
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        Michal Hocko <mhocko@suse.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     andrey.grodzovsky@amd.com, linux-mm@kvack.org,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        hughd@google.com, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, linux-fsdevel@vger.kernel.org,
-        viro@zeniv.linux.org.uk, daniel@ffwll.ch,
-        linux-tegra@vger.kernel.org, alexander.deucher@amd.com,
-        akpm@linux-foundation.org, linux-media@vger.kernel.org
-References: <YqG67sox6L64E6wV@dhcp22.suse.cz>
- <77b99722-fc13-e5c5-c9be-7d4f3830859c@amd.com>
- <YqHuH5brYFQUfW8l@dhcp22.suse.cz>
- <26d3e1c7-d73c-cc95-54ef-58b2c9055f0c@gmail.com>
- <YqIB0bavUeU8Abwl@dhcp22.suse.cz>
- <d4a19481-7a9f-19bf-c270-d89baa0970fc@amd.com>
- <YqIMmK18mb/+s5de@dhcp22.suse.cz>
- <3f7d3d96-0858-fb6d-07a3-4c18964f888e@gmail.com>
- <YqMuq/ZrV8loC3jE@dhcp22.suse.cz>
- <2e7e050e-04eb-0c0a-0675-d7f1c3ae7aed@amd.com>
- <YqNSSFQELx/LeEHR@dhcp22.suse.cz>
- <288528c3-411e-fb25-2f08-92d4bb9f1f13@gmail.com>
-From:   =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>
-In-Reply-To: <288528c3-411e-fb25-2f08-92d4bb9f1f13@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: 577iphbxb4bs3945taqe58kkqzbs8imi
-X-MBO-RS-ID: 72e59480f2d70ddaf00
-X-Rspamd-Queue-Id: 4LM5N73Srsz9sZR
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220525151355.24175-1-wsa+renesas@sang-engineering.com> <YqZDAiB/taLwmamr@shikoro>
+In-Reply-To: <YqZDAiB/taLwmamr@shikoro>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 13 Jun 2022 11:11:15 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWO0zgmRKMpcSXSdshj6Fh8uu3Ch_FCVDEocdaVPaAUUQ@mail.gmail.com>
+Message-ID: <CAMuHMdWO0zgmRKMpcSXSdshj6Fh8uu3Ch_FCVDEocdaVPaAUUQ@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: renesas: r8a779f0: Add thermal support
+To:     Wolfram Sang <wsa@kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linh Phung <linh.phung.jy@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-11 10:06, Christian König wrote:
-> Am 10.06.22 um 16:16 schrieb Michal Hocko:
->> [...]
->>>> Just consider the above mentioned memcg driven model. It doesn't really
->>>> require to chase specific files and do some arbitrary math to share the
->>>> responsibility. It has a clear accounting and responsibility model.
->>> Ok, how does that work then?
->> The memory is accounted to whoever faults that memory in or to the
->> allocating context if that is a kernel memory (in most situations).
-> 
-> That's what I had in mind as well. Problem with this approach is that file descriptors are currently not informed that they are shared between processes.
-> 
-> So to make this work we would need something like attach/detach to process in struct file_operations.
-> 
-> And as I noted, this happens rather often. For example a game which renders 120 frames per second needs to transfer 120 buffers per second between client and X.
+Hi Wolfram,
 
-FWIW, in the steady state, the game will cycle between a small (generally 2-5) set of buffers. The game will not cause new buffers to be exported & imported for every frame.
+On Sun, Jun 12, 2022 at 9:48 PM Wolfram Sang <wsa@kernel.org> wrote:
+> On Wed, May 25, 2022 at 05:13:55PM +0200, Wolfram Sang wrote:
+> > From: Linh Phung <linh.phung.jy@renesas.com>
+> >
+> > Add support for 3 TSC nodes of thermal. The 4th node is for the control
+> > domain and not for Linux.
+> >
+> > Signed-off-by: Linh Phung <linh.phung.jy@renesas.com>
+> > [wsa: rebased, fixed resource size, removed unused 4th node breaking probe]
+> > Signed-off-by: Wolfram Sang <wsa@kernel.org>
+>
+> Eeks, this should have been:
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>
+> Shall I resend?
 
-In general, I'd expect dma-buf export & import to happen relatively rarely, e.g. when a window is opened or resized.
+No need to resend, I can fix that while applying.
+Unless you want to make other changes, which I believe is not the case,
+as only the DT bindings patch needed a new version?
 
+Gr{oetje,eeting}s,
 
--- 
-Earthling Michel Dänzer            |                  https://redhat.com
-Libre software enthusiast          |         Mesa and Xwayland developer
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

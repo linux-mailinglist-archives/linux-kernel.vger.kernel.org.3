@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6BE548ABE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77FBC5495B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378891AbiFMNnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        id S1355386AbiFMLie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379126AbiFMNjx (ORCPT
+        with ESMTP id S1354376AbiFML3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:39:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40027A45A;
-        Mon, 13 Jun 2022 04:28:49 -0700 (PDT)
+        Mon, 13 Jun 2022 07:29:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F7223159;
+        Mon, 13 Jun 2022 03:43:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADE8FB80E93;
-        Mon, 13 Jun 2022 11:28:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D35FC34114;
-        Mon, 13 Jun 2022 11:28:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E96860F9A;
+        Mon, 13 Jun 2022 10:43:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A543DC34114;
+        Mon, 13 Jun 2022 10:43:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119727;
-        bh=P50pTOx/TQ2prKLJ2l40bdgNimtq4ha46DOvNvsWprM=;
+        s=korg; t=1655117023;
+        bh=OpqL0ntLTcZ9fhuT4HdoHr/HvbsByJpZdVcFHVWrTsI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hsaYXvOBdTDBY7KhHHtLCVJAGnqtQBN8zQ4QY/sX4/GVtnTIBPxmjaB6h9ik8co5v
-         +/C1FbVNlu7ryeLbOaAv7hpqteqnG0J3K9HERau4x2OgW6E1J0GTTjx/Z0JN1Wn3wQ
-         o9xvy6Krt7pN+sJ2j4Ihvu0602m0VbaC750KNIGo=
+        b=l6Y4US1AXpU6eh3xtaxkNvG+JZhok9XAFU4aOtf2FESX46hl2eRHSMNGeQy4ouEyu
+         BPfeFF7M21tA+R2+r3M5Yf8RvpXK0YgpVFiiEdpvpqdWPg4k1aGui4ikl9F5pUNTzw
+         rRHUCvEZ/dXBmMNyUgh9fMBCgyg2gumv+xv/OYms=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Haisu Wang <haisuwang@tencent.com>,
-        samuelliao <samuelliao@tencent.com>,
-        Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 118/339] blk-mq: do not update io_ticks with passthrough requests
+        stable@vger.kernel.org, Vivek Gautam <vivek.gautam@codeaurora.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 5.4 270/411] phy: qcom-qmp: fix reset-controller leak on probe errors
 Date:   Mon, 13 Jun 2022 12:09:03 +0200
-Message-Id: <20220613094930.087117371@linuxfoundation.org>
+Message-Id: <20220613094936.856541482@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,44 +57,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haisu Wang <haisuwang@tencent.com>
+From: Johan Hovold <johan+linaro@kernel.org>
 
-[ Upstream commit b81c14ca14b631aa1abae32fb5ae75b5e9251012 ]
+commit 4d2900f20edfe541f75756a00deeb2ffe7c66bc1 upstream.
 
-Flush or passthrough requests are not accounted as normal IO in completion.
-To reflect iostat for slow IO, io_ticks is updated when stat show called
-based on inflight numbers.
-It may cause inconsistent io_ticks calculation result.
+Make sure to release the lane reset controller in case of a late probe
+error (e.g. probe deferral).
 
-So do not account non-passthrough request when check inflight.
+Note that due to the reset controller being defined in devicetree in
+"lane" child nodes, devm_reset_control_get_exclusive() cannot be used
+directly.
 
-Fixes: 86d7331299fd ("block: update io_ticks when io hang")
-Signed-off-by: Haisu Wang <haisuwang@tencent.com>
-Reviewed-by: samuelliao <samuelliao@tencent.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Link: https://lore.kernel.org/r/20220530064059.1120058-1-haisuwang@tencent.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e78f3d15e115 ("phy: qcom-qmp: new qmp phy driver for qcom-chipsets")
+Cc: stable@vger.kernel.org      # 4.12
+Cc: Vivek Gautam <vivek.gautam@codeaurora.org>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220427063243.32576-3-johan+linaro@kernel.org
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- block/blk-mq.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/phy/qualcomm/phy-qcom-qmp.c |    9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 9d33e0032fee..de7fc6957271 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -133,7 +133,8 @@ static bool blk_mq_check_inflight(struct request *rq, void *priv,
+--- a/drivers/phy/qualcomm/phy-qcom-qmp.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
+@@ -1860,6 +1860,11 @@ static const struct phy_ops qcom_qmp_ufs
+ 	.owner		= THIS_MODULE,
+ };
+ 
++static void qcom_qmp_reset_control_put(void *data)
++{
++	reset_control_put(data);
++}
++
+ static
+ int qcom_qmp_phy_create(struct device *dev, struct device_node *np, int id)
  {
- 	struct mq_inflight *mi = priv;
+@@ -1951,6 +1956,10 @@ int qcom_qmp_phy_create(struct device *d
+ 			dev_err(dev, "failed to get lane%d reset\n", id);
+ 			return PTR_ERR(qphy->lane_rst);
+ 		}
++		ret = devm_add_action_or_reset(dev, qcom_qmp_reset_control_put,
++					       qphy->lane_rst);
++		if (ret)
++			return ret;
+ 	}
  
--	if ((!mi->part->bd_partno || rq->part == mi->part) &&
-+	if (rq->part && blk_do_io_stat(rq) &&
-+	    (!mi->part->bd_partno || rq->part == mi->part) &&
- 	    blk_mq_rq_state(rq) == MQ_RQ_IN_FLIGHT)
- 		mi->inflight[rq_data_dir(rq)]++;
- 
--- 
-2.35.1
-
+ 	if (qmp->cfg->type == PHY_TYPE_UFS)
 
 

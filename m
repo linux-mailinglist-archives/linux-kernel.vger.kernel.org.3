@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C3F548EE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31A7549804
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358704AbiFMNEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50370 "EHLO
+        id S244397AbiFMK0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355262AbiFMM4B (ORCPT
+        with ESMTP id S245333AbiFMKYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:56:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497D312754;
-        Mon, 13 Jun 2022 04:16:50 -0700 (PDT)
+        Mon, 13 Jun 2022 06:24:30 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD52023BDE;
+        Mon, 13 Jun 2022 03:18:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DBCC8608C3;
-        Mon, 13 Jun 2022 11:16:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB5F8C3411C;
-        Mon, 13 Jun 2022 11:16:48 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3AF9ECE1102;
+        Mon, 13 Jun 2022 10:18:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F7F3C34114;
+        Mon, 13 Jun 2022 10:18:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119009;
-        bh=zUhWQWXJA/gFCH2+w8XY9HWyVwl5ZvqLtCizUywFNqs=;
+        s=korg; t=1655115528;
+        bh=O2PA9Ni19gaRMiAurHcO57JsR1PvSUrvIXn87F590/8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ca2iDluedkR/bt5s1uf61VrdyHFFcnmfykwqkDpxBWucBNA5458L5npwxvFaAFR+9
-         DYww5cropdBUi0iHspJSpqwVOttrvAS6vO6LMdLts2+MPXgANjfHS0TbAN/iJqeviI
-         GUEvBJVJ+nsb33AcSEIjJuHr/1DQlPun72XDoN/U=
+        b=siQjUZwyhN4v/g2CgPLxX0uCdORmr3wbR1ny7gDfWMhpFgZfX3XRd4ohpnwdjr3N2
+         NL3/lxpqAgT0e5kydl8osAJDUD1cm6I93QeMFl1ssd+gnUJGezu4erEmZce7glKBrI
+         og3fnz8zEXOPvv2bDu0BpqGtkNSEDf/AX4czRLTQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mykola Lysenko <mykolal@fb.com>,
-        Song Liu <song@kernel.org>, David Vernet <void@manifault.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Vaibhav Agarwal <vaibhav.sr@gmail.com>,
+        Mark Greer <mgreer@animalcreek.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 081/247] selftests/bpf: fix stacktrace_build_id with missing kprobe/urandom_read
+Subject: [PATCH 4.9 109/167] staging: greybus: codecs: fix type confusion of list iterator variable
 Date:   Mon, 13 Jun 2022 12:09:43 +0200
-Message-Id: <20220613094925.412303533@linuxfoundation.org>
+Message-Id: <20220613094906.387164737@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,48 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Song Liu <song@kernel.org>
+From: Jakob Koschel <jakobkoschel@gmail.com>
 
-[ Upstream commit 59ed76fe2f981bccde37bdddb465f260a96a2404 ]
+[ Upstream commit 84ef256550196bc06e6849a34224c998b45bd557 ]
 
-Kernel function urandom_read is replaced with urandom_read_iter.
-Therefore, kprobe on urandom_read is not working any more:
+If the list does not exit early then data == NULL and 'module' does not
+point to a valid list element.
+Using 'module' in such a case is not valid and was therefore removed.
 
-[root@eth50-1 bpf]# ./test_progs -n 161
-test_stacktrace_build_id:PASS:skel_open_and_load 0 nsec
-libbpf: kprobe perf_event_open() failed: No such file or directory
-libbpf: prog 'oncpu': failed to create kprobe 'urandom_read+0x0' \
-        perf event: No such file or directory
-libbpf: prog 'oncpu': failed to auto-attach: -2
-test_stacktrace_build_id:FAIL:attach_tp err -2
-161     stacktrace_build_id:FAIL
-
-Fix this by replacing urandom_read with urandom_read_iter in the test.
-
-Fixes: 1b388e7765f2 ("random: convert to using fops->read_iter()")
-Reported-by: Mykola Lysenko <mykolal@fb.com>
-Signed-off-by: Song Liu <song@kernel.org>
-Acked-by: David Vernet <void@manifault.com>
-Link: https://lore.kernel.org/r/20220526191608.2364049-1-song@kernel.org
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Fixes: 6dd67645f22c ("greybus: audio: Use single codec driver registration")
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Vaibhav Agarwal <vaibhav.sr@gmail.com>
+Reviewed-by: Mark Greer <mgreer@animalcreek.com>
+Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+Link: https://lore.kernel.org/r/20220321123626.3068639-1-jakobkoschel@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/staging/greybus/audio_codec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-index 08aee18d9ded..58fbe22a3bf8 100644
---- a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-+++ b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-@@ -39,7 +39,7 @@ struct {
- 	__type(value, stack_trace_t);
- } stack_amap SEC(".maps");
- 
--SEC("kprobe/urandom_read")
-+SEC("kprobe/urandom_read_iter")
- int oncpu(struct pt_regs *args)
- {
- 	__u32 max_len = sizeof(struct bpf_stack_build_id)
+diff --git a/drivers/staging/greybus/audio_codec.c b/drivers/staging/greybus/audio_codec.c
+index 4c2d6c2d4fb4..90bc23408a9c 100644
+--- a/drivers/staging/greybus/audio_codec.c
++++ b/drivers/staging/greybus/audio_codec.c
+@@ -618,8 +618,8 @@ static int gbcodec_mute_stream(struct snd_soc_dai *dai, int mute, int stream)
+ 			break;
+ 	}
+ 	if (!data) {
+-		dev_err(dai->dev, "%s:%s DATA connection missing\n",
+-			dai->name, module->name);
++		dev_err(dai->dev, "%s DATA connection missing\n",
++			dai->name);
+ 		mutex_unlock(&codec->lock);
+ 		return -ENODEV;
+ 	}
 -- 
 2.35.1
 

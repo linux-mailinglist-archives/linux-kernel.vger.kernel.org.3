@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760DA54891F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E40B549271
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355857AbiFMLmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
+        id S236653AbiFMKc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:32:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355136AbiFMLel (ORCPT
+        with ESMTP id S1344926AbiFMK3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:34:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E36B434B3;
-        Mon, 13 Jun 2022 03:47:49 -0700 (PDT)
+        Mon, 13 Jun 2022 06:29:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D67125C62;
+        Mon, 13 Jun 2022 03:20:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B14461248;
-        Mon, 13 Jun 2022 10:47:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 609BDC34114;
-        Mon, 13 Jun 2022 10:47:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C975560C5B;
+        Mon, 13 Jun 2022 10:20:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D540AC34114;
+        Mon, 13 Jun 2022 10:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117267;
-        bh=xtjsKvZys24tV3+kGdskfHL2KBHqGA1fm76Zsp7xHDA=;
+        s=korg; t=1655115630;
+        bh=x3KhVWC0ll/qL0hqYrVnjfMXp95Ww5ZMIt+AkkTdFUI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hXfBGZR8/I4TxJG6N0w5jFXrwzscB02eioNTJKlBO5X7MzR2az38mHMUY549ljX/Y
-         INT7fXF7LbJiB+LZcahDG9/vaffrybkhRiu5NSlgk9TWYgvhTo+N51MPdssIdEYTz+
-         Pb6E6A4TMjKbiz6dMfWZ8Y8qUu262Y2h3a4sKdWo=
+        b=tQhjKnmM1IaxxqE1S65zO138h7QMwu+ewagLP4ABhLJ0r6wGCPyJatpEMPFsB5yle
+         W+qfO2KvkgUwtLrda5tFq/7UKAuVjz7KfaWqQmQiS4P2YTUBL/IVoBRtWyXZEmd037
+         eOha7KgaNnLGhWFxiaLIcthPQjvGl7q3LHl0JDBg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 345/411] NFSv4: Dont hold the layoutget locks across multiple RPC calls
+Subject: [PATCH 4.9 144/167] drivers: tty: serial: Fix deadlock in sa1100_set_termios()
 Date:   Mon, 13 Jun 2022 12:10:18 +0200
-Message-Id: <20220613094939.053365113@linuxfoundation.org>
+Message-Id: <20220613094914.656704097@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +54,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Trond Myklebust <trond.myklebust@hammerspace.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit 6949493884fe88500de4af182588e071cf1544ee ]
+[ Upstream commit 62b2caef400c1738b6d22f636c628d9f85cd4c4c ]
 
-When doing layoutget as part of the open() compound, we have to be
-careful to release the layout locks before we can call any further RPC
-calls, such as setattr(). The reason is that those calls could trigger
-a recall, which could deadlock.
+There is a deadlock in sa1100_set_termios(), which is shown
+below:
 
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
-Signed-off-by: Anna Schumaker <Anna.Schumaker@Netapp.com>
+   (Thread 1)              |      (Thread 2)
+                           | sa1100_enable_ms()
+sa1100_set_termios()       |  mod_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | sa1100_timeout()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
+
+We hold sport->port.lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
+also need sport->port.lock in position (2) of thread 2. As a result,
+sa1100_set_termios() will block forever.
+
+This patch moves del_timer_sync() before spin_lock_irqsave()
+in order to prevent the deadlock.
+
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220417111626.7802-1-duoming@zju.edu.cn
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/nfs4proc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/tty/serial/sa1100.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
-index cf3b00751ff6..ba4a03a69fbf 100644
---- a/fs/nfs/nfs4proc.c
-+++ b/fs/nfs/nfs4proc.c
-@@ -3041,6 +3041,10 @@ static int _nfs4_open_and_get_state(struct nfs4_opendata *opendata,
+diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
+index fd3d1329d48c..68eb1c9faa29 100644
+--- a/drivers/tty/serial/sa1100.c
++++ b/drivers/tty/serial/sa1100.c
+@@ -452,6 +452,8 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	baud = uart_get_baud_rate(port, termios, old, 0, port->uartclk/16); 
+ 	quot = uart_get_divisor(port, baud);
+ 
++	del_timer_sync(&sport->timer);
++
+ 	spin_lock_irqsave(&sport->port.lock, flags);
+ 
+ 	sport->port.read_status_mask &= UTSR0_TO_SM(UTSR0_TFS);
+@@ -482,8 +484,6 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
+ 				UTSR1_TO_SM(UTSR1_ROR);
  	}
  
- out:
-+	if (opendata->lgp) {
-+		nfs4_lgopen_release(opendata->lgp);
-+		opendata->lgp = NULL;
-+	}
- 	if (!opendata->cancelled)
- 		nfs4_sequence_free_slot(&opendata->o_res.seq_res);
- 	return ret;
+-	del_timer_sync(&sport->timer);
+-
+ 	/*
+ 	 * Update the per-port timeout.
+ 	 */
 -- 
 2.35.1
 

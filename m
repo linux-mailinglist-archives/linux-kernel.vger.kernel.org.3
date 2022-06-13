@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD0754937E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95035494B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379554AbiFMOGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
+        id S1380684AbiFMOG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380006AbiFMN7t (ORCPT
+        with ESMTP id S1380195AbiFMOAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:59:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3210D8D683;
-        Mon, 13 Jun 2022 04:37:55 -0700 (PDT)
+        Mon, 13 Jun 2022 10:00:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4981A8D693;
+        Mon, 13 Jun 2022 04:37:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D82C61323;
-        Mon, 13 Jun 2022 11:37:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D16DC34114;
-        Mon, 13 Jun 2022 11:37:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5A206130D;
+        Mon, 13 Jun 2022 11:37:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D069BC341C6;
+        Mon, 13 Jun 2022 11:37:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120273;
-        bh=9uKvnoG4B7uUYhEFbCpI+laNOBVB1oTWCNAqi04Sf4U=;
+        s=korg; t=1655120276;
+        bh=9y3ubL8G56M9GNII/l+BHiIuPm1Ni1Xym+8v3tSfm2A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iEdfJF5k8YxPFU7UMPAa0AMpKwbCKXaJKXvI/KHLd/+oqgB9EBmwMWlFSkxusmoY/
-         tkTw9wq9zUJnVK5HdOrXqaEHGhWO1g5kkgLp4TLtuVoFSRLqgAfthjkO/ChttktHke
-         6206laWORg1MeLM2gI8mR35GgZ5YmD5xGun2N12M=
+        b=kmypeAwAlz/m6HzYofFlldTjz3cyyXshef/RkdIfg3LEqUY/KttlQj5mWb300lpTd
+         MWiLWf0gduBkVX8h99mkurDLJD3WcEkeXJ7h0LHe3flSj7NPUGeAWzB+SNb5joIUrc
+         lc8a82/U2k3Awj0dLgqNw7xT9UdGmgckEpayAj20=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH 5.18 313/339] mmc: block: Fix CQE recovery reset success
-Date:   Mon, 13 Jun 2022 12:12:18 +0200
-Message-Id: <20220613094936.244498816@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Sit, Michael Wei Hong" <michael.wei.hong.sit@intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Tan Tee Min <tee.min.tan@linux.intel.com>,
+        Andrew Lunn <andrew@lunn.ch>, Jakub Kicinski <kuba@kernel.org>,
+        Sit@vger.kernel.org
+Subject: [PATCH 5.18 314/339] net: phy: dp83867: retrigger SGMII AN when link change
+Date:   Mon, 13 Jun 2022 12:12:19 +0200
+Message-Id: <20220613094936.273921464@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
 References: <20220613094926.497929857@linuxfoundation.org>
@@ -54,41 +58,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Tan Tee Min <tee.min.tan@linux.intel.com>
 
-commit a051246b786af7e4a9d9219cc7038a6e8a411531 upstream.
+commit c76acfb7e19dcc3a0964e0563770b1d11b8d4540 upstream.
 
-The intention of the use of mmc_blk_reset_success() in
-mmc_blk_cqe_recovery() was to prevent repeated resets when retrying and
-getting the same error. However, that may not be the case - any amount
-of time and I/O may pass before another recovery is needed, in which
-case there would be no reason to deny it the opportunity to recover via
-a reset if necessary. CQE recovery is expected seldom and failure to
-recover (if the clear tasks command fails), even more seldom, so it is
-better to allow the reset always, which can be done by calling
-mmc_blk_reset_success() always.
+There is a limitation in TI DP83867 PHY device where SGMII AN is only
+triggered once after the device is booted up. Even after the PHY TPI is
+down and up again, SGMII AN is not triggered and hence no new in-band
+message from PHY to MAC side SGMII.
 
-Fixes: 1e8e55b67030c6 ("mmc: block: Add CQE support")
-Cc: stable@vger.kernel.org
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-Link: https://lore.kernel.org/r/20220531171922.76080-1-adrian.hunter@intel.com
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+This could cause an issue during power up, when PHY is up prior to MAC.
+At this condition, once MAC side SGMII is up, MAC side SGMII wouldn`t
+receive new in-band message from TI PHY with correct link status, speed
+and duplex info.
+
+As suggested by TI, implemented a SW solution here to retrigger SGMII
+Auto-Neg whenever there is a link change.
+
+v2: Add Fixes tag in commit message.
+
+Fixes: 2a10154abcb7 ("net: phy: dp83867: Add TI dp83867 phy")
+Cc: <stable@vger.kernel.org> # 5.4.x
+Signed-off-by: Sit, Michael Wei Hong <michael.wei.hong.sit@intel.com>
+Reviewed-by: Voon Weifeng <weifeng.voon@intel.com>
+Signed-off-by: Tan Tee Min <tee.min.tan@linux.intel.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Link: https://lore.kernel.org/r/20220526090347.128742-1-tee.min.tan@linux.intel.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/mmc/core/block.c |    3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/phy/dp83867.c |   29 +++++++++++++++++++++++++++++
+ 1 file changed, 29 insertions(+)
 
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -1482,8 +1482,7 @@ void mmc_blk_cqe_recovery(struct mmc_que
- 	err = mmc_cqe_recovery(host);
- 	if (err)
- 		mmc_blk_reset(mq->blkdata, host, MMC_BLK_CQE_RECOVERY);
--	else
--		mmc_blk_reset_success(mq->blkdata, MMC_BLK_CQE_RECOVERY);
-+	mmc_blk_reset_success(mq->blkdata, MMC_BLK_CQE_RECOVERY);
+--- a/drivers/net/phy/dp83867.c
++++ b/drivers/net/phy/dp83867.c
+@@ -137,6 +137,7 @@
+ #define DP83867_DOWNSHIFT_2_COUNT	2
+ #define DP83867_DOWNSHIFT_4_COUNT	4
+ #define DP83867_DOWNSHIFT_8_COUNT	8
++#define DP83867_SGMII_AUTONEG_EN	BIT(7)
  
- 	pr_debug("%s: CQE recovery done\n", mmc_hostname(host));
+ /* CFG3 bits */
+ #define DP83867_CFG3_INT_OE			BIT(7)
+@@ -855,6 +856,32 @@ static int dp83867_phy_reset(struct phy_
+ 			 DP83867_PHYCR_FORCE_LINK_GOOD, 0);
  }
+ 
++static void dp83867_link_change_notify(struct phy_device *phydev)
++{
++	/* There is a limitation in DP83867 PHY device where SGMII AN is
++	 * only triggered once after the device is booted up. Even after the
++	 * PHY TPI is down and up again, SGMII AN is not triggered and
++	 * hence no new in-band message from PHY to MAC side SGMII.
++	 * This could cause an issue during power up, when PHY is up prior
++	 * to MAC. At this condition, once MAC side SGMII is up, MAC side
++	 * SGMII wouldn`t receive new in-band message from TI PHY with
++	 * correct link status, speed and duplex info.
++	 * Thus, implemented a SW solution here to retrigger SGMII Auto-Neg
++	 * whenever there is a link change.
++	 */
++	if (phydev->interface == PHY_INTERFACE_MODE_SGMII) {
++		int val = 0;
++
++		val = phy_clear_bits(phydev, DP83867_CFG2,
++				     DP83867_SGMII_AUTONEG_EN);
++		if (val < 0)
++			return;
++
++		phy_set_bits(phydev, DP83867_CFG2,
++			     DP83867_SGMII_AUTONEG_EN);
++	}
++}
++
+ static struct phy_driver dp83867_driver[] = {
+ 	{
+ 		.phy_id		= DP83867_PHY_ID,
+@@ -879,6 +906,8 @@ static struct phy_driver dp83867_driver[
+ 
+ 		.suspend	= genphy_suspend,
+ 		.resume		= genphy_resume,
++
++		.link_change_notify = dp83867_link_change_notify,
+ 	},
+ };
+ module_phy_driver(dp83867_driver);
 
 

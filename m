@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EF4549539
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196D95492DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380233AbiFMOBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36606 "EHLO
+        id S238093AbiFMMRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:17:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380711AbiFMNy7 (ORCPT
+        with ESMTP id S1358844AbiFMMOW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:54:59 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E31C81495;
-        Mon, 13 Jun 2022 04:35:36 -0700 (PDT)
+        Mon, 13 Jun 2022 08:14:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2949B54BCC;
+        Mon, 13 Jun 2022 04:02:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 85FB7CE1233;
-        Mon, 13 Jun 2022 11:35:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71820C34114;
-        Mon, 13 Jun 2022 11:35:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B58BAB80E92;
+        Mon, 13 Jun 2022 11:02:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27894C34114;
+        Mon, 13 Jun 2022 11:01:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120132;
-        bh=jGr8WXM1jdPMD04g4tRJ+Sq3zW2YgJpdz6hJ9tysoig=;
+        s=korg; t=1655118120;
+        bh=D+zeTU6SXXi0V2t/Dy+iOTkgmgB5f1gBGleEo3rDDCg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H8XjONzZgUkpabJSdOxJX3caSYz57RVtLh0sm8cVfFm5JsD1ZQh+51xkDER6QLWHc
-         3sRLwBQIyLNNbzId5F4ohzQZjV/oLt+EQc+IHZZA+G1V7sLqMDEfmz34OVBFW0xKsc
-         1EHxVoRNMfmy5XNvR8YLdvdHz9uLmWBcnelh2jDQ=
+        b=QUsS2f/fkFhIcdm3E3E0fWjePXLgifQmsPe/SXCmvA4w8H4fnktawmxHSySS2CnI3
+         JfsQRgE5ms+rXtL/oOJZohgk7+3Sa+KCN3FyRGn5OIwmtZp4htYH5Ez6Gik1cHro04
+         DT4XRxVz7VY0rh72KRgxJ4sxCzuGIU0CcyvdMpfo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 242/339] usb: dwc3: host: Stop setting the ACPI companion
+Subject: [PATCH 4.19 243/287] net: ipv6: unexport __init-annotated seg6_hmac_init()
 Date:   Mon, 13 Jun 2022 12:11:07 +0200
-Message-Id: <20220613094933.994206590@linuxfoundation.org>
+Message-Id: <20220613094931.384937546@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-[ Upstream commit 7fd069d65da2e20b1caec3b7bcf9dfbe28c04bb2 ]
+[ Upstream commit 5801f064e35181c71857a80ff18af4dbec3c5f5c ]
 
-It is no longer needed. The sysdev pointer is now used when
-assigning the ACPI companions to the xHCI ports and USB
-devices.
+EXPORT_SYMBOL and __init is a bad combination because the .init.text
+section is freed up after the initialization. Hence, modules cannot
+use symbols annotated __init. The access to a freed symbol may end up
+with kernel panic.
 
-Assigning the ACPI companion here resulted in the
-fwnode->secondary pointer to be replaced also for the parent
-dwc3 device since the primary fwnode (the ACPI companion)
-was shared. That was unintentional and it created potential
-side effects like resource leaks.
+modpost used to detect it, but it has been broken for a decade.
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Link: https://lore.kernel.org/r/20220428111056.3558-3-heikki.krogerus@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Recently, I fixed modpost so it started to warn it again, then this
+showed up in linux-next builds.
+
+There are two ways to fix it:
+
+  - Remove __init
+  - Remove EXPORT_SYMBOL
+
+I chose the latter for this case because the caller (net/ipv6/seg6.c)
+and the callee (net/ipv6/seg6_hmac.c) belong to the same module.
+It seems an internal function call in ipv6.ko.
+
+Fixes: bf355b8d2c30 ("ipv6: sr: add core files for SR HMAC support")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/host.c | 2 --
- 1 file changed, 2 deletions(-)
+ net/ipv6/seg6_hmac.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/host.c b/drivers/usb/dwc3/host.c
-index eda871973d6c..f56c30cf151e 100644
---- a/drivers/usb/dwc3/host.c
-+++ b/drivers/usb/dwc3/host.c
-@@ -7,7 +7,6 @@
-  * Authors: Felipe Balbi <balbi@ti.com>,
-  */
+diff --git a/net/ipv6/seg6_hmac.c b/net/ipv6/seg6_hmac.c
+index 8546f94f30d4..a886a8f4c0cb 100644
+--- a/net/ipv6/seg6_hmac.c
++++ b/net/ipv6/seg6_hmac.c
+@@ -406,7 +406,6 @@ int __init seg6_hmac_init(void)
+ {
+ 	return seg6_hmac_init_algo();
+ }
+-EXPORT_SYMBOL(seg6_hmac_init);
  
--#include <linux/acpi.h>
- #include <linux/irq.h>
- #include <linux/of.h>
- #include <linux/platform_device.h>
-@@ -83,7 +82,6 @@ int dwc3_host_init(struct dwc3 *dwc)
- 	}
- 
- 	xhci->dev.parent	= dwc->dev;
--	ACPI_COMPANION_SET(&xhci->dev, ACPI_COMPANION(dwc->dev));
- 
- 	dwc->xhci = xhci;
- 
+ int __net_init seg6_hmac_net_init(struct net *net)
+ {
 -- 
 2.35.1
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 282EB549619
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 824EF548B1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1381690AbiFMOEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
+        id S1353263AbiFMMrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381214AbiFMN4O (ORCPT
+        with ESMTP id S1348647AbiFMMkp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:56:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217D7880C8;
-        Mon, 13 Jun 2022 04:36:42 -0700 (PDT)
+        Mon, 13 Jun 2022 08:40:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE655FF38;
+        Mon, 13 Jun 2022 04:10:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51754612AC;
-        Mon, 13 Jun 2022 11:36:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62CE1C34114;
-        Mon, 13 Jun 2022 11:36:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE89060B76;
+        Mon, 13 Jun 2022 11:10:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086C0C34114;
+        Mon, 13 Jun 2022 11:10:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120201;
-        bh=WNRbdnu9zN71jyTXYMJ9X9d3clP+NxZi3j+Y7jPJ+cM=;
+        s=korg; t=1655118640;
+        bh=vtKWyOoQaRMqiRfNd1NHO7HzFxwuPjrXjpQnKder8Dw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vdd/QaSWBP5IADRBYhSBh4s0Y8jbDLsYSmEQQe8iyxdXKG4c5MAOmJRICvRjUMfdv
-         BEgqD5CT65qCwrLBajaMSkl5U2h0NIA4M4dKrVMOsNTIiI1mkm5eQ4ypOWR4/homLx
-         uvDY0h8Lz+HesThshr4wWpvdlDVyhip8907g3B6M=
+        b=SMwFKd95BdvzBlJ/tbKtko9lYcglNKhjQRKrZfMwxfiNGHXc+grQJ6eU3exObkUVC
+         HweL28/TobUPJtz/rnLba22vgRlHqfOy17OExC+O4OGBCMQSV4yQMcPxZjA3tEAGyn
+         +Pcln97elK+5c6Y4EFdhjrsnJIeIzNMl9BtmgYHU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Gong Yuanjun <ruc_gongyuanjun@163.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Petr Mladek <pmladek@suse.com>,
+        John Ogness <john.ogness@linutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 267/339] drm/amd/pm: fix a potential gpu_metrics_table memory leak
+Subject: [PATCH 5.10 132/172] serial: msm_serial: disable interrupts in __msm_console_write()
 Date:   Mon, 13 Jun 2022 12:11:32 +0200
-Message-Id: <20220613094934.745789090@linuxfoundation.org>
+Message-Id: <20220613094921.310160275@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gong Yuanjun <ruc_gongyuanjun@163.com>
+From: John Ogness <john.ogness@linutronix.de>
 
-[ Upstream commit d2f4460a3d9502513419f06cc376c7ade49d5753 ]
+[ Upstream commit aabdbb1b7a5819e18c403334a31fb0cc2c06ad41 ]
 
-gpu_metrics_table is allocated in yellow_carp_init_smc_tables() but
-not freed in yellow_carp_fini_smc_tables().
+__msm_console_write() assumes that interrupts are disabled, but
+with threaded console printers it is possible that the write()
+callback of the console is called with interrupts enabled.
 
-Signed-off-by: Gong Yuanjun <ruc_gongyuanjun@163.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Explicitly disable interrupts using local_irq_save() to preserve
+the assumed context.
+
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Link: https://lore.kernel.org/r/20220506213324.470461-1-john.ogness@linutronix.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/tty/serial/msm_serial.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c b/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
-index 87257b1b028f..feff4f8c927c 100644
---- a/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
-+++ b/drivers/gpu/drm/amd/pm/swsmu/smu13/yellow_carp_ppt.c
-@@ -190,6 +190,9 @@ static int yellow_carp_fini_smc_tables(struct smu_context *smu)
- 	kfree(smu_table->watermarks_table);
- 	smu_table->watermarks_table = NULL;
+diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_serial.c
+index 26bcbec5422e..27023a56f3ac 100644
+--- a/drivers/tty/serial/msm_serial.c
++++ b/drivers/tty/serial/msm_serial.c
+@@ -1593,6 +1593,7 @@ static inline struct uart_port *msm_get_port_from_line(unsigned int line)
+ static void __msm_console_write(struct uart_port *port, const char *s,
+ 				unsigned int count, bool is_uartdm)
+ {
++	unsigned long flags;
+ 	int i;
+ 	int num_newlines = 0;
+ 	bool replaced = false;
+@@ -1610,6 +1611,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
+ 			num_newlines++;
+ 	count += num_newlines;
  
-+	kfree(smu_table->gpu_metrics_table);
-+	smu_table->gpu_metrics_table = NULL;
++	local_irq_save(flags);
 +
- 	return 0;
+ 	if (port->sysrq)
+ 		locked = 0;
+ 	else if (oops_in_progress)
+@@ -1655,6 +1658,8 @@ static void __msm_console_write(struct uart_port *port, const char *s,
+ 
+ 	if (locked)
+ 		spin_unlock(&port->lock);
++
++	local_irq_restore(flags);
  }
  
+ static void msm_console_write(struct console *co, const char *s,
 -- 
 2.35.1
 

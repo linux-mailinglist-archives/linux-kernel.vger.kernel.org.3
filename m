@@ -2,121 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0A6254A063
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AE2E54A0A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344448AbiFMUze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        id S1352016AbiFMU6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351439AbiFMUxc (ORCPT
+        with ESMTP id S1351535AbiFMUxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:53:32 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10360B91;
-        Mon, 13 Jun 2022 13:16:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655151406; x=1686687406;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rtqhOIKVfrnY98rdPBZfGpki572ZKantyZmrTYaiCUk=;
-  b=EFSppI991TrHlQTLJe4TbPuC0YFST+UK9izwZzQt/4XfT2fsBjIHHTur
-   DvxP2pjD2RCZGAW0D/Z+NDFQl64mqOtrIyDdLrl7A/0cThG+3ln2A/Rh+
-   0m01UqGSxm8ohp0Q7nFupwv7N7GeCV6AVqch5O658XHAhvStYs3r79DzO
-   Uku6SJWyxBlN8Ij+DrtM8TdJU5a2nvrMx5jsgZY4b2iZp4e2t9bZTQYnY
-   JShwB0n0TIoQGGlhVKNJz4lBYznzS2IECtO24bXhQ7E+rvIvbPL1xoJoq
-   xOOJQNwkdLPktNic83CDCrMixBYChH0IjtQJ6uAqtivFafONKG86SybDb
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="279445859"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="279445859"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 13:16:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="557942595"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga006.jf.intel.com with ESMTP; 13 Jun 2022 13:16:42 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 4190F18F; Mon, 13 Jun 2022 23:16:45 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Ferry Toth <ftoth@exalondelft.nl>
-Subject: [PATCH v1 1/1] x86/PCI: Disable e820 usage for the resource allocation
-Date:   Mon, 13 Jun 2022 23:16:41 +0300
-Message-Id: <20220613201641.67640-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 13 Jun 2022 16:53:40 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0161A05D;
+        Mon, 13 Jun 2022 13:17:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=fBWi7QPO/F0ytmVW1WCvq92sKKuPA3DpoLxZ9CDOG/k=; b=P1VppJRSb+oHRmLr0pSpjezyww
+        g2/6H9CewlIn9zZRkKrtbcQTPeE8uAqzG/2pPtz8cx+eX9/1EIKU5uu27T/j+zf8PAEq52J1Qf+HD
+        qs9bH+cATvW4OI9AbR09GYH7TZFbFh1xn73nTAADt0Mie3mIhQ2Cqu8IDNfjMzcObV1KmTkvvfNsu
+        Ji3pKltRIyqjnx3TreMEMhYTSRfuvzSI1OAwFOFnGskM+2YHfWASqe+qHrFBhlz6ArtvGEed2gMEH
+        8Yd/bxVP+/1X1BojLJMzjqa/28vDKTpqNsjyo0f9qqR1kUzbpUDJigHN1QWRwVsW+sMXssao+NKH0
+        XvAZL72w==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o0qVC-007fDz-Il; Mon, 13 Jun 2022 20:17:37 +0000
+Message-ID: <915871e4-b156-ab19-043f-b719e03a5711@infradead.org>
+Date:   Mon, 13 Jun 2022 13:17:25 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 11/15] iio: adc: mt6370: Add Mediatek MT6370 support
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, jic23@kernel.org,
+        lars@metafoo.de, matthias.bgg@gmail.com, lee.jones@linaro.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com, ChiaEn Wu <chiaen_wu@richtek.com>
+References: <20220613111146.25221-1-peterwu.pub@gmail.com>
+ <20220613111146.25221-12-peterwu.pub@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220613111146.25221-12-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The resource management improve for PCI on x86 broke booting of Intel MID
-platforms. It seems that the current code removes all available resources
-from the list and none of the PCI device may be initialized. Restore the
-old behaviour by force disabling the e820 usage for the resource allocation.
+Hi,
 
-Fixes: 4c5e242d3e93 ("x86/PCI: Clip only host bridge windows for E820 regions")
-Depends-on: fa6dae5d8208 ("x86/PCI: Add kernel cmdline options to use/ignore E820 reserved regions")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- arch/x86/include/asm/pci_x86.h | 1 +
- arch/x86/pci/acpi.c            | 2 +-
- arch/x86/pci/intel_mid_pci.c   | 1 +
- 3 files changed, 3 insertions(+), 1 deletion(-)
+On 6/13/22 04:11, ChiaEn Wu wrote:
+> diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+> index 71ab0a06aa82..09576fb478ad 100644
+> --- a/drivers/iio/adc/Kconfig
+> +++ b/drivers/iio/adc/Kconfig
+> @@ -737,6 +737,15 @@ config MEDIATEK_MT6360_ADC
+>  	  is used in smartphones and tablets and supports a 11 channel
+>  	  general purpose ADC.
+>  
+> +config MEDIATEK_MT6370_ADC
+> +	tristate "Mediatek MT6370 ADC driver"
+> +	depends on MFD_MT6370
+> +	help
+> +	  Say Y here to enable MT6370 ADC support.
+> +
+> +	  Integrated for System Monitoring includes is used in smartphones
 
-diff --git a/arch/x86/include/asm/pci_x86.h b/arch/x86/include/asm/pci_x86.h
-index f52a886d35cf..503f83fbc686 100644
---- a/arch/x86/include/asm/pci_x86.h
-+++ b/arch/x86/include/asm/pci_x86.h
-@@ -126,6 +126,7 @@ extern const struct pci_raw_ops *raw_pci_ext_ops;
- extern const struct pci_raw_ops pci_mmcfg;
- extern const struct pci_raw_ops pci_direct_conf1;
- extern bool port_cf9_safe;
-+extern bool pci_use_e820;
- 
- /* arch_initcall level */
- #ifdef CONFIG_PCI_DIRECT
-diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
-index a4f43054bc79..ac2f220d50fc 100644
---- a/arch/x86/pci/acpi.c
-+++ b/arch/x86/pci/acpi.c
-@@ -20,7 +20,7 @@ struct pci_root_info {
- #endif
- };
- 
--static bool pci_use_e820 = true;
-+bool pci_use_e820 = true;
- static bool pci_use_crs = true;
- static bool pci_ignore_seg;
- 
-diff --git a/arch/x86/pci/intel_mid_pci.c b/arch/x86/pci/intel_mid_pci.c
-index 8edd62206604..7869b86bff04 100644
---- a/arch/x86/pci/intel_mid_pci.c
-+++ b/arch/x86/pci/intel_mid_pci.c
-@@ -313,6 +313,7 @@ int __init intel_mid_pci_init(void)
- 	pcibios_enable_irq = intel_mid_pci_irq_enable;
- 	pcibios_disable_irq = intel_mid_pci_irq_disable;
- 	pci_root_ops = intel_mid_pci_ops;
-+	pci_use_e820 = false;
- 	pci_soc_mode = 1;
- 	/* Continue with standard init */
- 	acpi_noirq_set();
+Please try again on the help text. I can't decode that.
+
+> +	  and tablets and supports a 9 channel general purpose ADC.
+
 -- 
-2.35.1
-
+~Randy

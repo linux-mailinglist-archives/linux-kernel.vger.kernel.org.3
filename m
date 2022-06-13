@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C61E548684
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AAAF54875F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357095AbiFMLws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
+        id S1355076AbiFMMSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357594AbiFMLq1 (ORCPT
+        with ESMTP id S1358953AbiFMMO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:46:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB68735A95;
-        Mon, 13 Jun 2022 03:52:54 -0700 (PDT)
+        Mon, 13 Jun 2022 08:14:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8D254BE9;
+        Mon, 13 Jun 2022 04:02:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 498B0B80D3C;
-        Mon, 13 Jun 2022 10:52:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B6BAC34114;
-        Mon, 13 Jun 2022 10:52:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1E6DB80EAB;
+        Mon, 13 Jun 2022 11:02:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27EB3C34114;
+        Mon, 13 Jun 2022 11:02:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117572;
-        bh=bbS3wuB1ht8HYgjkKW2/j30gkkPXpposdmaDu83bLEc=;
+        s=korg; t=1655118128;
+        bh=f6QZ+SPNI4r8Yv2jvsCfPHvPvXZ7GqngSb1lVKTLw/k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tvAC2+uFYF2x2+vdtDD2y5zQ6o30aaGW9N5FtIzVTJ2eOCZVkLpvXKL2jXFxNPYAE
-         gzmlSeZyukRDBPq4opw1I4DyyLsGoO0oMEMWzlGWYZ6fyDXjrkqaGsvpPC2RLe55pa
-         bu0WsisrdCsxcUVTg//F6+MmFrkIjyrC3+yg2eFI=
+        b=lOf6cljTMYU0NAU5q7hPrwY5o26iuLe6T+fbnc/6LJulAYQ17lbK+tq8sgQs2lREe
+         j5H+jiOmN4m7uaiiHD3Lqwe7YQdwUSyG3bHHPRjkggfKOlaUdp/T74Zz0Erg4Gmk8g
+         3UQfeLkV9xpl/TZ8yJnh+EdWjuZSYKqsOztR4O/0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
-        Enzo Matsumiya <ematsumiya@suse.de>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.4 401/411] cifs: return errors during session setup during reconnects
-Date:   Mon, 13 Jun 2022 12:11:14 +0200
-Message-Id: <20220613094940.849534536@linuxfoundation.org>
+        stable@vger.kernel.org, Zhen Ni <nizhen@uniontech.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 254/287] USB: host: isp116x: check return value after calling platform_get_resource()
+Date:   Mon, 13 Jun 2022 12:11:18 +0200
+Message-Id: <20220613094931.714875574@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +54,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shyam Prasad N <sprasad@microsoft.com>
+From: Zhen Ni <nizhen@uniontech.com>
 
-commit 8ea21823aa584b55ba4b861307093b78054b0c1b upstream.
+[ Upstream commit 134a3408c2d3f7e23eb0e4556e0a2d9f36c2614e ]
 
-During reconnects, we check the return value from
-cifs_negotiate_protocol, and have handlers for both success
-and failures. But if that passes, and cifs_setup_session
-returns any errors other than -EACCES, we do not handle
-that. This fix adds a handler for that, so that we don't
-go ahead and try a tree_connect on a failed session.
+It will cause null-ptr-deref if platform_get_resource() returns NULL,
+we need check the return value.
 
-Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
-Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
-Cc: stable@vger.kernel.org
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Zhen Ni <nizhen@uniontech.com>
+Link: https://lore.kernel.org/r/20220302033716.31272-1-nizhen@uniontech.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/smb2pdu.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/host/isp116x-hcd.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -356,6 +356,9 @@ smb2_reconnect(__le16 smb2_command, stru
- 			rc = -EHOSTDOWN;
- 			mutex_unlock(&tcon->ses->session_mutex);
- 			goto failed;
-+		} else if (rc) {
-+			mutex_unlock(&ses->session_mutex);
-+			goto out;
- 		}
- 	}
- 	if (rc || !tcon->need_reconnect) {
+diff --git a/drivers/usb/host/isp116x-hcd.c b/drivers/usb/host/isp116x-hcd.c
+index 74da136d322a..361327012c78 100644
+--- a/drivers/usb/host/isp116x-hcd.c
++++ b/drivers/usb/host/isp116x-hcd.c
+@@ -1541,10 +1541,12 @@ static int isp116x_remove(struct platform_device *pdev)
+ 
+ 	iounmap(isp116x->data_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-	release_mem_region(res->start, 2);
++	if (res)
++		release_mem_region(res->start, 2);
+ 	iounmap(isp116x->addr_reg);
+ 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	release_mem_region(res->start, 2);
++	if (res)
++		release_mem_region(res->start, 2);
+ 
+ 	usb_put_hcd(hcd);
+ 	return 0;
+-- 
+2.35.1
+
 
 

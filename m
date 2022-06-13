@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B46B25497EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B92C54956A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383732AbiFMOX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
+        id S1359415AbiFMMJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1381990AbiFMOUd (ORCPT
+        with ESMTP id S1359147AbiFMMFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:20:33 -0400
+        Mon, 13 Jun 2022 08:05:19 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0A746166;
-        Mon, 13 Jun 2022 04:43:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFA1751327;
+        Mon, 13 Jun 2022 03:58:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F433612AC;
-        Mon, 13 Jun 2022 11:43:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 589C1C34114;
-        Mon, 13 Jun 2022 11:43:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 521FE611B3;
+        Mon, 13 Jun 2022 10:58:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB51C34114;
+        Mon, 13 Jun 2022 10:58:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120628;
-        bh=4uEikPqNYYnsw4eDUc24KPYNn8BAYTj6TfzLS5OwBck=;
+        s=korg; t=1655117936;
+        bh=bNxTvQwfvlCQhLBV5XP5eB24HHOeNW7RiIDKe2u+9rk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KLUIhJ8rl5ekAjH3XjT4ok5DsoD5ndX+hY265LH/Pks3f9jbPgH6YFL1LA8pT4uNt
-         9KzjRAdYKK4trTDS0Xmer1/qBo6AESrNuKlwgbQq/XYjRrlt5IBbx7Jk4Cko7UaRcZ
-         AtFuCUVO7uuXMla5YiEkCNdFJ/kuVLX6I+oHE9E4=
+        b=tm5/bZLLIku7eKcVmKtr1lWGQteVDf0QiF52AtoIgZ8bTRSjb8mnoUUjM8nyksGVt
+         u7+5VVHdfbZUdHB3qWljddodhULNPG5M7y/PeJGUmqIfzekHn6U6XAbhL0vpGK0YHx
+         rOp8EKtb0uqzX/wJz4468xxuhBitS2L8+D6UrZMM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tianhao Zhao <tizhao@redhat.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 102/298] sfc: fix considering that all channels have TX queues
+        stable@vger.kernel.org,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 4.19 172/287] um: Fix out-of-bounds read in LDT setup
 Date:   Mon, 13 Jun 2022 12:09:56 +0200
-Message-Id: <20220613094928.046017940@linuxfoundation.org>
+Message-Id: <20220613094929.088862144@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,65 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Habets <habetsm.xilinx@gmail.com>
+From: Vincent Whitchurch <vincent.whitchurch@axis.com>
 
-[ Upstream commit 2e102b53f8a778f872dc137f4c7ac548705817aa ]
+commit 2a4a62a14be1947fa945c5c11ebf67326381a568 upstream.
 
-Normally, all channels have RX and TX queues, but this is not true if
-modparam efx_separate_tx_channels=1 is used. In that cases, some
-channels only have RX queues and others only TX queues (or more
-preciselly, they have them allocated, but not initialized).
+syscall_stub_data() expects the data_count parameter to be the number of
+longs, not bytes.
 
-Fix efx_channel_has_tx_queues to return the correct value for this case
-too.
+ ==================================================================
+ BUG: KASAN: stack-out-of-bounds in syscall_stub_data+0x70/0xe0
+ Read of size 128 at addr 000000006411f6f0 by task swapper/1
 
-Messages shown at probe time before the fix:
- sfc 0000:03:00.0 ens6f0np0: MC command 0x82 inlen 544 failed rc=-22 (raw=0) arg=0
- ------------[ cut here ]------------
- netdevice: ens6f0np0: failed to initialise TXQ -1
- WARNING: CPU: 1 PID: 626 at drivers/net/ethernet/sfc/ef10.c:2393 efx_ef10_tx_init+0x201/0x300 [sfc]
- [...] stripped
- RIP: 0010:efx_ef10_tx_init+0x201/0x300 [sfc]
- [...] stripped
+ CPU: 0 PID: 1 Comm: swapper Not tainted 5.18.0+ #18
  Call Trace:
-  efx_init_tx_queue+0xaa/0xf0 [sfc]
-  efx_start_channels+0x49/0x120 [sfc]
-  efx_start_all+0x1f8/0x430 [sfc]
-  efx_net_open+0x5a/0xe0 [sfc]
-  __dev_open+0xd0/0x190
-  __dev_change_flags+0x1b3/0x220
-  dev_change_flags+0x21/0x60
- [...] stripped
+  show_stack.cold+0x166/0x2a7
+  __dump_stack+0x3a/0x43
+  dump_stack_lvl+0x1f/0x27
+  print_report.cold+0xdb/0xf81
+  kasan_report+0x119/0x1f0
+  kasan_check_range+0x3a3/0x440
+  memcpy+0x52/0x140
+  syscall_stub_data+0x70/0xe0
+  write_ldt_entry+0xac/0x190
+  init_new_ldt+0x515/0x960
+  init_new_context+0x2c4/0x4d0
+  mm_init.constprop.0+0x5ed/0x760
+  mm_alloc+0x118/0x170
+  0x60033f48
+  do_one_initcall+0x1d7/0x860
+  0x60003e7b
+  kernel_init+0x6e/0x3d4
+  new_thread_handler+0x1e7/0x2c0
 
-Messages shown at remove time before the fix:
- sfc 0000:03:00.0 ens6f0np0: failed to flush 10 queues
- sfc 0000:03:00.0 ens6f0np0: failed to flush queues
+ The buggy address belongs to stack of task swapper/1
+  and is located at offset 64 in frame:
+  init_new_ldt+0x0/0x960
 
-Fixes: 8700aff08984 ("sfc: fix channel allocation with brute force")
-Reported-by: Tianhao Zhao <tizhao@redhat.com>
-Signed-off-by: Martin Habets <habetsm.xilinx@gmail.com>
-Tested-by: Íñigo Huguet <ihuguet@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+ This frame has 2 objects:
+  [32, 40) 'addr'
+  [64, 80) 'desc'
+ ==================================================================
+
+Fixes: 858259cf7d1c443c83 ("uml: maintain own LDT entries")
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Richard Weinberger <richard@nod.at>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/sfc/net_driver.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/um/ldt.c |    6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/sfc/net_driver.h b/drivers/net/ethernet/sfc/net_driver.h
-index cc15ee8812d9..8a9eedec177a 100644
---- a/drivers/net/ethernet/sfc/net_driver.h
-+++ b/drivers/net/ethernet/sfc/net_driver.h
-@@ -1533,7 +1533,7 @@ static inline bool efx_channel_is_xdp_tx(struct efx_channel *channel)
- 
- static inline bool efx_channel_has_tx_queues(struct efx_channel *channel)
+--- a/arch/x86/um/ldt.c
++++ b/arch/x86/um/ldt.c
+@@ -23,9 +23,11 @@ static long write_ldt_entry(struct mm_id
  {
--	return true;
-+	return channel && channel->channel >= channel->efx->tx_channel_offset;
- }
- 
- static inline unsigned int efx_channel_num_tx_queues(struct efx_channel *channel)
--- 
-2.35.1
-
+ 	long res;
+ 	void *stub_addr;
++
++	BUILD_BUG_ON(sizeof(*desc) % sizeof(long));
++
+ 	res = syscall_stub_data(mm_idp, (unsigned long *)desc,
+-				(sizeof(*desc) + sizeof(long) - 1) &
+-				    ~(sizeof(long) - 1),
++				sizeof(*desc) / sizeof(long),
+ 				addr, &stub_addr);
+ 	if (!res) {
+ 		unsigned long args[] = { func,
 
 

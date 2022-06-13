@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 188C454862E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEBD548850
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385483AbiFMObO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52800 "EHLO
+        id S244389AbiFMKez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383809AbiFMOYH (ORCPT
+        with ESMTP id S1343795AbiFMKbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:24:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8138E2E9DD;
-        Mon, 13 Jun 2022 04:45:22 -0700 (PDT)
+        Mon, 13 Jun 2022 06:31:16 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B9D275CA;
+        Mon, 13 Jun 2022 03:21:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 334F8B80EB3;
-        Mon, 13 Jun 2022 11:45:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D34C34114;
-        Mon, 13 Jun 2022 11:45:19 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2CF9DCE116D;
+        Mon, 13 Jun 2022 10:21:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2318EC3411C;
+        Mon, 13 Jun 2022 10:21:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120720;
-        bh=PdRcMK7wIRjwXJN2P587ZeIIRGxm5XyqCh0kw16O6vU=;
+        s=korg; t=1655115690;
+        bh=ZbzBs39XZYEIr01mYJiJsXTEB9wR7xUlcmhU/QgTZy0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ec557iOSYUxRudPLogMQFv45fYalW9rZgUF42y3bzhStuIF2AL8KLKc2fF3bk1O/S
-         oWPcQaZekV0s4dQC3ILg4GhR3IQm/xERInGzOPeVZBr+VNxE/VuhbeUIxlxDmLaSqk
-         MLjQnQAi2gPsIyRQTQyQrvXnepGOEeKMt9eCXSlw=
+        b=zRXNaSO+x2oth4X0XPfV1Kgsczpd4r/5Z0FKyTy7Glweh654fcXfVpq0tLSy3NxWS
+         fS3OQ3CpY/p/7JOndcMvdWXt4fegQbgFU9YlRHvf4wOEblrhWuuZNaW2KeqTBCPAJg
+         Q3BN7nDk/3whsKmYx3CG80MAYMzxJNLP7ljRlUJA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
+        stable@vger.kernel.org, Michal Kubecek <mkubecek@suse.cz>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 132/298] Bluetooth: MGMT: Add conditions for setting HCI_CONN_FLAG_REMOTE_WAKEUP
-Date:   Mon, 13 Jun 2022 12:10:26 +0200
-Message-Id: <20220613094928.947092266@linuxfoundation.org>
+Subject: [PATCH 4.9 153/167] Revert "net: af_key: add check for pfkey_broadcast in function pfkey_process"
+Date:   Mon, 13 Jun 2022 12:10:27 +0200
+Message-Id: <20220613094916.809997232@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,58 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+From: Michal Kubecek <mkubecek@suse.cz>
 
-[ Upstream commit a9a347655d224fa2841877957b34fc9d491fc2d7 ]
+[ Upstream commit 9c90c9b3e50e16d03c7f87d63e9db373974781e0 ]
 
-HCI_CONN_FLAG_REMOTE_WAKEUP can only be set if device can be programmed
-in the allowlist which in case of device using RPA requires LL Privacy
-support to be enabled.
+This reverts commit 4dc2a5a8f6754492180741facf2a8787f2c415d7.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215768
-Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+A non-zero return value from pfkey_broadcast() does not necessarily mean
+an error occurred as this function returns -ESRCH when no registered
+listener received the message. In particular, a call with
+BROADCAST_PROMISC_ONLY flag and null one_sk argument can never return
+zero so that this commit in fact prevents processing any PF_KEY message.
+One visible effect is that racoon daemon fails to find encryption
+algorithms like aes and refuses to start.
+
+Excluding -ESRCH return value would fix this but it's not obvious that
+we really want to bail out here and most other callers of
+pfkey_broadcast() also ignore the return value. Also, as pointed out by
+Steffen Klassert, PF_KEY is kind of deprecated and newer userspace code
+should use netlink instead so that we should only disturb the code for
+really important fixes.
+
+v2: add a comment explaining why is the return value ignored
+
+Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
+Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bluetooth/mgmt.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ net/key/af_key.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-index 15eab8b968ce..16cd2e7a10da 100644
---- a/net/bluetooth/mgmt.c
-+++ b/net/bluetooth/mgmt.c
-@@ -4525,6 +4525,23 @@ static int set_device_flags(struct sock *sk, struct hci_dev *hdev, void *data,
- 		params = hci_conn_params_lookup(hdev, &cp->addr.bdaddr,
- 						le_addr_type(cp->addr.type));
- 		if (params) {
-+			DECLARE_BITMAP(flags, __HCI_CONN_NUM_FLAGS);
-+
-+			bitmap_from_u64(flags, current_flags);
-+
-+			/* Devices using RPAs can only be programmed in the
-+			 * acceptlist LL Privacy has been enable otherwise they
-+			 * cannot mark HCI_CONN_FLAG_REMOTE_WAKEUP.
-+			 */
-+			if (test_bit(HCI_CONN_FLAG_REMOTE_WAKEUP, flags) &&
-+			    !use_ll_privacy(hdev) &&
-+			    hci_find_irk_by_addr(hdev, &params->addr,
-+						 params->addr_type)) {
-+				bt_dev_warn(hdev,
-+					    "Cannot set wakeable for RPA");
-+				goto unlock;
-+			}
-+
- 			bitmap_from_u64(params->flags, current_flags);
- 			status = MGMT_STATUS_SUCCESS;
+diff --git a/net/key/af_key.c b/net/key/af_key.c
+index d5dc614af2f9..0737fc7b7ebd 100644
+--- a/net/key/af_key.c
++++ b/net/key/af_key.c
+@@ -2861,10 +2861,12 @@ static int pfkey_process(struct sock *sk, struct sk_buff *skb, const struct sadb
+ 	void *ext_hdrs[SADB_EXT_MAX];
+ 	int err;
  
-@@ -4541,6 +4558,7 @@ static int set_device_flags(struct sock *sk, struct hci_dev *hdev, void *data,
- 		}
- 	}
+-	err = pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
+-			      BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
+-	if (err)
+-		return err;
++	/* Non-zero return value of pfkey_broadcast() does not always signal
++	 * an error and even on an actual error we may still want to process
++	 * the message so rather ignore the return value.
++	 */
++	pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
++			BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
  
-+unlock:
- 	hci_dev_unlock(hdev);
- 
- done:
+ 	memset(ext_hdrs, 0, sizeof(ext_hdrs));
+ 	err = parse_exthdrs(skb, hdr, ext_hdrs);
 -- 
 2.35.1
 

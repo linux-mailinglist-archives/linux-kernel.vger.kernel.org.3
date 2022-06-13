@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89FF954925D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A92A7548BEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349559AbiFMMcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
+        id S1349730AbiFMMJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357792AbiFMM32 (ORCPT
+        with ESMTP id S1359172AbiFMMFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:29:28 -0400
+        Mon, 13 Jun 2022 08:05:24 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E566B5A17D;
-        Mon, 13 Jun 2022 04:06:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FC1118B3E;
+        Mon, 13 Jun 2022 03:59:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E720FB80EB0;
-        Mon, 13 Jun 2022 11:06:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C0C1C34114;
-        Mon, 13 Jun 2022 11:06:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BAE44B80D3A;
+        Mon, 13 Jun 2022 10:59:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC03BC34114;
+        Mon, 13 Jun 2022 10:59:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118380;
-        bh=8BoynCpX+u4I5/YqdrBHR3fbnfwcdAcU8vKEBjbNWAQ=;
+        s=korg; t=1655117970;
+        bh=dCeVzC/jF/iTDOn+inmUhCo29O8Nt84UucMF/ifylBA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PgiFo8SgRTvBIoiFc009+n+runA1n1IKsoq1LhbC1B+G2/fCyCfLP0rzHF9QxkKqK
-         VTmRbr8BacxIQhkzYiSArwq67g4RKHrJZ7psUXPAku9lnSCiP3neWKSop8tkyJ8PBD
-         W5sHhsGqGh7LJrMPnK6dUvgS/be3aM6KfMqHWQAQ=
+        b=Yjv4K4TKNPOC+9uFfVCGMdua/TBU9bIU+kL5vdbTN4r/8VDr3UJApewZKyszqhYSu
+         CCT2NKRtldmsgxjWs82E4xuENHm8YckAFLeNbGJIVU23hknyMvAI2cuED9gId70hqL
+         v3xe6cw4KaDQ2fk4mbhmdsF7Q0ENPK63YLwjimCY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 047/172] ASoC: fsl_sai: Fix FSL_SAI_xDR/xFR definition
+        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>
+Subject: [PATCH 4.19 183/287] dt-bindings: gpio: altera: correct interrupt-cells
 Date:   Mon, 13 Jun 2022 12:10:07 +0200
-Message-Id: <20220613094901.706782846@linuxfoundation.org>
+Message-Id: <20220613094929.415873765@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +53,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shengjiu Wang <shengjiu.wang@nxp.com>
+From: Dinh Nguyen <dinguyen@kernel.org>
 
-[ Upstream commit e4dd748dc87cf431af7b3954963be0d9f6150217 ]
+commit 3a21c3ac93aff7b4522b152399df8f6a041df56d upstream.
 
-There are multiple xDR and xFR registers, the index is
-from 0 to 7. FSL_SAI_xDR and FSL_SAI_xFR is abandoned,
-replace them with FSL_SAI_xDR0 and FSL_SAI_xFR0.
+update documentation to correctly state the interrupt-cells to be 2.
 
-Fixes: 4f7a0728b530 ("ASoC: fsl_sai: Add support for SAI new version")
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Link: https://lore.kernel.org/r/1653284661-18964-1-git-send-email-shengjiu.wang@nxp.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Cc: stable@vger.kernel.org
+Fixes: 4fd9bbc6e071 ("drivers/gpio: Altera soft IP GPIO driver devicetree binding")
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/fsl/fsl_sai.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/devicetree/bindings/gpio/gpio-altera.txt |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/fsl/fsl_sai.h b/sound/soc/fsl/fsl_sai.h
-index 4bbcd0dbe8f1..8923c680f0e0 100644
---- a/sound/soc/fsl/fsl_sai.h
-+++ b/sound/soc/fsl/fsl_sai.h
-@@ -80,8 +80,8 @@
- #define FSL_SAI_xCR3(tx, ofs)	(tx ? FSL_SAI_TCR3(ofs) : FSL_SAI_RCR3(ofs))
- #define FSL_SAI_xCR4(tx, ofs)	(tx ? FSL_SAI_TCR4(ofs) : FSL_SAI_RCR4(ofs))
- #define FSL_SAI_xCR5(tx, ofs)	(tx ? FSL_SAI_TCR5(ofs) : FSL_SAI_RCR5(ofs))
--#define FSL_SAI_xDR(tx, ofs)	(tx ? FSL_SAI_TDR(ofs) : FSL_SAI_RDR(ofs))
--#define FSL_SAI_xFR(tx, ofs)	(tx ? FSL_SAI_TFR(ofs) : FSL_SAI_RFR(ofs))
-+#define FSL_SAI_xDR0(tx)	(tx ? FSL_SAI_TDR0 : FSL_SAI_RDR0)
-+#define FSL_SAI_xFR0(tx)	(tx ? FSL_SAI_TFR0 : FSL_SAI_RFR0)
- #define FSL_SAI_xMR(tx)		(tx ? FSL_SAI_TMR : FSL_SAI_RMR)
- 
- /* SAI Transmit/Receive Control Register */
--- 
-2.35.1
-
+--- a/Documentation/devicetree/bindings/gpio/gpio-altera.txt
++++ b/Documentation/devicetree/bindings/gpio/gpio-altera.txt
+@@ -9,8 +9,9 @@ Required properties:
+   - The second cell is reserved and is currently unused.
+ - gpio-controller : Marks the device node as a GPIO controller.
+ - interrupt-controller: Mark the device node as an interrupt controller
+-- #interrupt-cells : Should be 1. The interrupt type is fixed in the hardware.
++- #interrupt-cells : Should be 2. The interrupt type is fixed in the hardware.
+   - The first cell is the GPIO offset number within the GPIO controller.
++  - The second cell is the interrupt trigger type and level flags.
+ - interrupts: Specify the interrupt.
+ - altr,interrupt-type: Specifies the interrupt trigger type the GPIO
+   hardware is synthesized. This field is required if the Altera GPIO controller
+@@ -38,6 +39,6 @@ gpio_altr: gpio@ff200000 {
+ 	altr,interrupt-type = <IRQ_TYPE_EDGE_RISING>;
+ 	#gpio-cells = <2>;
+ 	gpio-controller;
+-	#interrupt-cells = <1>;
++	#interrupt-cells = <2>;
+ 	interrupt-controller;
+ };
 
 

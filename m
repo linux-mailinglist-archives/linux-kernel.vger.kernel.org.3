@@ -2,99 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F3F5499A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4838B549997
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:15:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239663AbiFMRR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 13:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58142 "EHLO
+        id S240417AbiFMROg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244461AbiFMROD (ORCPT
+        with ESMTP id S244427AbiFMROD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Jun 2022 13:14:03 -0400
-Received: from smtp-42ac.mail.infomaniak.ch (smtp-42ac.mail.infomaniak.ch [84.16.66.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D4B5549E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:20:08 -0700 (PDT)
-Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4LM9cj5FsVzMpwtX;
-        Mon, 13 Jun 2022 14:20:05 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4LM9cd4MYKzlpb2d;
-        Mon, 13 Jun 2022 14:20:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1655122805;
-        bh=P8NVyXj34ZvJVQWESPk01PC8KYswBLc2J5cBfxA5wlI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=aOumEP/IoqVDxckhdOnow8XBOtzF6rPUHSpjAaEiKv4s4qTv9+QazdFI/MV0sY9Oj
-         WNcCDGC2NsIWSWr8htmOXQonlVhjqK6/U6g/yYRD9VTzd/JdIjpyOFwXcDvdlX4LMS
-         ZPoJ0aNzkEJ9Yh+5Wu0QvJ3PdsdwNy2lAdCZDTxY=
-Message-ID: <ff05d732-3202-7c9c-0d4c-d95101ed6ba3@digikod.net>
-Date:   Mon, 13 Jun 2022 14:20:00 +0200
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B5B562DF
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:20:18 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 184so5353673pga.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 05:20:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Z0oEkfDVJe+HvF3K4yQj+I/I4I4F1ajdtFNjkCqfrE4=;
+        b=HvvYkH2n5qn/QCZLJcg/jHbtZWu7OazLAFjOfxK5ql3Y9+4zNyt6n9R8RkcuMy2ClU
+         RJdk8sFbawmM3HQB/1tzN7aST+J6ldbAU0Xg1Oq5UcLgdxxern83DakfCeF7MXKyiJCQ
+         TqxapXtnyHBTqAIqYrk3KzyKJHszezFcombmWN9OKTTpPyV9Z4Ee5F40vGyzj2fFxsWV
+         N2Nv11kjMdymUzUg6yk041oz7xEpSAoYWEh4tKccm5tP+ymXZ0nUemtu2Br6ykn7zMkt
+         Xo9wFWSOYLocpAN6ScJO1bRK8uZ4H8u74/UsIXHXtRTtdKfJX3aR8EkiDCW27bhyxcpJ
+         9zpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Z0oEkfDVJe+HvF3K4yQj+I/I4I4F1ajdtFNjkCqfrE4=;
+        b=i93erp1UrngJE4rS+fVaWg1jjFbgXTm30lKgcGi+s1rpZ4h++nqZwDHzkeOEHfAz0V
+         B7L6Qzbv8Mvxk8YfJEKKn6H+bZ9qbtAVj7bEpebx72rAa0MoU/HFsdFgN7/E03FtbnB2
+         Yv4iXudK6vLlmC7OIhKxptIu6onQHUYrdEY6bL7QqLNYUJJxKJeFUB96aJQx8tfQX7Hx
+         0I3oMny5FAujnJFZVroRRK1eNf9u95ZT1sGJHpU6EAL4qStYG2ZCAxD5xfVnQ5S3NlOP
+         KZIJjQFZKXrCKkdpCnO8F5pdrvExbIcNrO1RtdX9dTguSRWjxJL+DhhdRiNLpuFb6mIB
+         q09w==
+X-Gm-Message-State: AOAM5302/Ev/qqhE2Jp/BPZ03K25Lz1719hdGZuA7bsH/eLUdO1RS9jP
+        40QYU/23SUZbjTzfQVUeueTf0w==
+X-Google-Smtp-Source: ABdhPJzvjve4xAnVW/ZwpbBTzlF6lkZU8LuA+bcz0387m1+Rf+OnvgQ2HZdlwb6VqKgpLYWwS8Na6Q==
+X-Received: by 2002:a63:9c4:0:b0:401:a7b6:ad18 with SMTP id 187-20020a6309c4000000b00401a7b6ad18mr18250278pgj.523.1655122817456;
+        Mon, 13 Jun 2022 05:20:17 -0700 (PDT)
+Received: from localhost ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id x4-20020a170902820400b00163fbb1eec5sm4944428pln.229.2022.06.13.05.20.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 05:20:16 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 20:20:13 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     andrey.konovalov@linux.dev
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: Re: [PATCH v2 1/3] mm: rename kernel_init_free_pages to
+ kernel_init_pages
+Message-ID: <YqcrfaaImHWEYuRK@FVFYT0MHHV2J.usts.net>
+References: <1ecaffc0a9c1404d4d7cf52efe0b2dc8a0c681d8.1654798516.git.andreyknvl@google.com>
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH 1/4] certs/blacklist_hashes.c: fix const confusion in
- certs blacklist
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kbuild@vger.kernel.org
-Cc:     David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Snowberg <eric.snowberg@oracle.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
-References: <20220611172233.1494073-1-masahiroy@kernel.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <20220611172233.1494073-1-masahiroy@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1ecaffc0a9c1404d4d7cf52efe0b2dc8a0c681d8.1654798516.git.andreyknvl@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 09, 2022 at 08:18:45PM +0200, andrey.konovalov@linux.dev wrote:
+> From: Andrey Konovalov <andreyknvl@google.com>
+> 
+> Rename kernel_init_free_pages() to kernel_init_pages(). This function is
+> not only used for free pages but also for pages that were just allocated.
+> 
+> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 
-On 11/06/2022 19:22, Masahiro Yamada wrote:
-> This file fails to compile as follows:
-> 
->    CC      certs/blacklist_hashes.o
-> certs/blacklist_hashes.c:4:1: error: ignoring attribute ‘section (".init.data")’ because it conflicts with previous ‘section (".init.rodata")’ [-Werror=attributes]
->      4 | const char __initdata *const blacklist_hashes[] = {
->        | ^~~~~
-> In file included from certs/blacklist_hashes.c:2:
-> certs/blacklist.h:5:38: note: previous declaration here
->      5 | extern const char __initconst *const blacklist_hashes[];
->        |                                      ^~~~~~~~~~~~~~~~
-> 
-> Apply the same fix as commit 2be04df5668d ("certs/blacklist_nohashes.c:
-> fix const confusion in certs blacklist").
-> 
-> Fixes: 734114f8782f ("KEYS: Add a system blacklist keyring")
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+LGTM.
 
-Reviewed-by: Mickaël Salaün <mic@linux.microsoft.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-> ---
-> 
->   certs/blacklist_hashes.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/certs/blacklist_hashes.c b/certs/blacklist_hashes.c
-> index 344892337be0..d5961aa3d338 100644
-> --- a/certs/blacklist_hashes.c
-> +++ b/certs/blacklist_hashes.c
-> @@ -1,7 +1,7 @@
->   // SPDX-License-Identifier: GPL-2.0
->   #include "blacklist.h"
->   
-> -const char __initdata *const blacklist_hashes[] = {
-> +const char __initconst *const blacklist_hashes[] = {
->   #include CONFIG_SYSTEM_BLACKLIST_HASH_LIST
->   	, NULL
->   };
+Thanks.

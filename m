@@ -2,126 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444C2549B93
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5290E549B7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243882AbiFMSct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60338 "EHLO
+        id S242509AbiFMS3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238656AbiFMScV (ORCPT
+        with ESMTP id S241854AbiFMS1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:32:21 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0514FC3D2E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 07:50:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=g2RC1m/mkaeRN82kXC5R7jd2AVs1
-        ntoJQysP2akaihU=; b=0XUHyLz+T+uIgAuJR+jbGhJvVViKWqRK2GG7jfxuNNqw
-        JJjNKA5244GJG920B5S9Ldy++QpX7jynsFuER/+e4b9pmUMVKcZyu7vCk+RUDPCk
-        bEFYQo0E6ehpN2VFXvHf2GrQIPgK7uv0KPlcDFhiZBcT1U+GudpfDVIuFdVXvFY=
-Received: (qmail 1337493 invoked from network); 13 Jun 2022 16:50:37 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jun 2022 16:50:37 +0200
-X-UD-Smtp-Session: l3s3148p1@YGgvaVXhuDRZD+yY
-Date:   Mon, 13 Jun 2022 16:50:36 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: designware: Use standard optional ref clock
- implementation
-Message-ID: <YqdOvDmixVlDYzjO@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Jan Dabros <jsd@semihalf.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220610074233.9748-1-Sergey.Semin@baikalelectronics.ru>
+        Mon, 13 Jun 2022 14:27:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8C41FE4DF;
+        Mon, 13 Jun 2022 07:51:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1162B8105B;
+        Mon, 13 Jun 2022 14:51:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A9FFC3411B;
+        Mon, 13 Jun 2022 14:51:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655131895;
+        bh=TLxFZAPhXdD/lskt5ABL7Yyvc76typsZSU+wq7k76S8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=nC33P0zIEEDZN6u3S/HZm0+GRAnfXvOGbb7rQDH01pkLftaiZTdzsxZu7Xyebbpin
+         7iZJl7IWnGkRJAfwOIqc8K+j8IwSTaK3F0MHmyUTMc7CgLJgR4VJD+UGpyJJkhrqLX
+         pWeZakRI7cH0l9gg+YPdjnVNTfJ5uxNC/QoxSM1Q4+DGXBNKSm7+Cr0t5ee2RguLg7
+         uVqQjAJeEaO0Ka+V0HlIZAym1GivjWVzSNmIneaDGM/5HviE+hY2yp+gPqKFauvgmz
+         O4OH3HWNBRR1vFg6SRwbt3uLYW5nw58tlPFvpBRcH5bh9uz1ym1TUrI00o4VTDPc5K
+         zXFrxSWwbIgGA==
+Date:   Mon, 13 Jun 2022 09:51:33 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Meng Tang <tangmeng@uniontech.com>
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, bhelgaas@google.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Vinicius Costa Gomes <vinicius.gomes@intel.com>
+Subject: Re: [PATCH 5.10 1/2] commit 1d71eb53e451 ("Revert "PCI: Make
+ pci_enable_ptm() private"")
+Message-ID: <20220613145133.GA701092@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LpjOMnM5Qxa/KRrW"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220610074233.9748-1-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220613111907.25490-1-tangmeng@uniontech.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 13, 2022 at 07:19:06PM +0800, Meng Tang wrote:
+> From: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+> 
+> Make pci_enable_ptm() accessible from the drivers.
+> 
+> Exposing this to the driver enables the driver to use the
+> 'ptm_enabled' field of 'pci_dev' to check if PTM is enabled or not.
+> 
+> This reverts commit ac6c26da29c1 ("PCI: Make pci_enable_ptm() private").
+> 
+> In the 5.10 kernel version, even to the latest confirmed version,
+> the following error will still be reported when I225-V network card
+> is used.
+> 
+> kernel: [    1.031581] igc: probe of 0000:01:00.0 failed with error -2
+> kernel: [    1.066574] igc: probe of 0000:02:00.0 failed with error -2
+> kernel: [    1.096152] igc: probe of 0000:03:00.0 failed with error -2
+> kernel: [    1.127251] igc: probe of 0000:04:00.0 failed with error -2
+> 
+> Even though I confirmed that 7c496de538eebd8212dc2a3c9a468386b2640d4
+> and 47bca7de6a4fb8dcb564c7ca4d885c91ed19e03 have been merged into the
+> kernel 5.10, the bug is still occurred, and the
+> "commit 1b5d73fb8624 ("igc: Enable PCIe PTM")" can fixes it.
+> 
+> And this patch is the pre-patch of
+> 1b5d73fb862414106cf270a1a7300ce8ae77de83.
 
---LpjOMnM5Qxa/KRrW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I guess the point of this is to backport 1d71eb53e451 ("Revert "PCI:
+Make pci_enable_ptm() private"") to a v5.10 stable kernel?
 
-On Fri, Jun 10, 2022 at 10:42:33AM +0300, Serge Semin wrote:
-> Even though the DW I2C controller reference clock source is requested by
-> the method devm_clk_get() with non-optional clock requirement the way the
-> clock handler is used afterwards has a pure optional clock semantic
-> (though in some circumstances we can get a warning about the clock missing
-> printed in the system console). There is no point in reimplementing that
-> functionality seeing the kernel clock framework already supports the
-> optional interface from scratch. Thus let's convert the platform driver to
-> using it.
->=20
-> Note by providing this commit we get to fix two problems. The first one
-> was introduced in commit c62ebb3d5f0d ("i2c: designware: Add support for
-> an interface clock"). It causes not having the interface clock (pclk)
-> enabled/disabled in case if the reference clock isn't provided. The second
-> problem was first introduced in commit b33af11de236 ("i2c: designware: Do
-> not require clock when SSCN and FFCN are provided"). Since that
-> modification the deferred probe procedure has been unsupported in case if
-> the interface clock isn't ready.
->=20
-> Fixes: c62ebb3d5f0d ("i2c: designware: Add support for an interface clock=
-")
-> Fixes: b33af11de236 ("i2c: designware: Do not require clock when SSCN and=
- FFCN are provided")
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+If so, I would think you'd want to send this to
+stable@vger.kernel.org.
 
-Applied to for-current, thanks!
-
-
---LpjOMnM5Qxa/KRrW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKnTrwACgkQFA3kzBSg
-KbahQg//bJVwpD7dUJbwrkCJR/R4p9wzcrnlm3kpsprd/tRq8WSb87PkDFRIP9oN
-13zkFyCOfsYb0OCY8+QwprKEV8BJN9irSQHOukm2bN5ShkZpY2CBxfiScDe757F8
-Nla7I6ez3EBQeKYV1QF0GW1K1Es5+1nqcU+9DKRA/uYzVQmkJ9bMr4mGTotMJzIS
-ey5b7JkDMzIxp/4BLXxdOz0To00WtTVqb/1vSiK7NwCw5ovTdbXlt4o8cL9+G2s7
-NmwQaqvOSlyvEny7+nRDitZZKB+zXF8BPSPWCRUJBmToU1jfzWJzfUJMWnkkpXGX
-BhDXmAsUrVT/JyfzqGAywxywpphrOqbU9IpXS+8I1LU6qCMN9rizfyjbyGcLnldN
-x9HoVQe7vEOUTcEoEQiDbauO6uxnWrHRNFo8ud7KgDECRwJ0ta04vH2UOKCchw7c
-yXxCSob3hP8ew+fg5hwlFUhHRQvuRTnm30WaxE/iIxzTyOSCKtLCnAOmOZg0f9zk
-ZpA/pRDVaVXRTKuesjwU5SKDOm8JFP3wi8IHX/iMMxlJXek3w89NprAdj2SqWdA6
-cI93dQ7Nn/39KyNU+GNp+n+wTzPIRB+cwKFbQ7r8tgMlxmRCZYOGRv4L0q+VDWWG
-nzT6jbHlb622SOIfdm45ZWSVrDh5ZjRMqjeBzjGzFcIMSKEwe+w=
-=unAQ
------END PGP SIGNATURE-----
-
---LpjOMnM5Qxa/KRrW--
+> Signed-off-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+> Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+> Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+> Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+> ---
+>  drivers/pci/pci.h   | 3 ---
+>  include/linux/pci.h | 7 +++++++
+>  2 files changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+> index a96dc6f53076..4084764bf0b1 100644
+> --- a/drivers/pci/pci.h
+> +++ b/drivers/pci/pci.h
+> @@ -585,11 +585,8 @@ static inline void pcie_ecrc_get_policy(char *str) { }
+>  
+>  #ifdef CONFIG_PCIE_PTM
+>  void pci_ptm_init(struct pci_dev *dev);
+> -int pci_enable_ptm(struct pci_dev *dev, u8 *granularity);
+>  #else
+>  static inline void pci_ptm_init(struct pci_dev *dev) { }
+> -static inline int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+> -{ return -EINVAL; }
+>  #endif
+>  
+>  struct pci_dev_reset_methods {
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index bc5a1150f072..692ce678c5f1 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -1599,6 +1599,13 @@ static inline bool pci_aer_available(void) { return false; }
+>  
+>  bool pci_ats_disabled(void);
+>  
+> +#ifdef CONFIG_PCIE_PTM
+> +int pci_enable_ptm(struct pci_dev *dev, u8 *granularity);
+> +#else
+> +static inline int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+> +{ return -EINVAL; }
+> +#endif
+> +
+>  void pci_cfg_access_lock(struct pci_dev *dev);
+>  bool pci_cfg_access_trylock(struct pci_dev *dev);
+>  void pci_cfg_access_unlock(struct pci_dev *dev);
+> -- 
+> 2.20.1
+> 
+> 
+> 

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946AA548266
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1703A54827B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 10:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240144AbiFMI3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 04:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
+        id S240160AbiFMI3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 04:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240116AbiFMI3G (ORCPT
+        with ESMTP id S240124AbiFMI3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 04:29:06 -0400
+        Mon, 13 Jun 2022 04:29:07 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37C9F19FBC;
-        Mon, 13 Jun 2022 01:29:05 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 08:29:02 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3984C1A074;
+        Mon, 13 Jun 2022 01:29:06 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 08:29:03 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1655108943;
+        s=2020; t=1655108944;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gSD8Eqjr+TZZRkZWNzZmMM4WgY0VJDZoWv7skRzV8RY=;
-        b=cRSIpQabmSPmWA739gpycVuPKo14FmPEeagUwtNJDrO9hFdx+sy10ENtptFwoZkFzhm/13
-        Zfux9XEi8vHQX897KfKIvAsCAXgwXXMJwvD1WmY51BZ3DCSIvao6th5EnIVy8fwMUoILlr
-        KHgGdQ2dYCRFgPnvMTyfj90wQHBksAeKzTAujH7hxFqE8f2fkrznp7Gdjzxy6HB2URhgoa
-        cJP6aDlRTAKO6FpQWsXPR7DkFPGLIcpbwIg25wWY883OEw0amu74XatHXdGctdw7MenAA+
-        wSlwAW7ONDH7R0qUIqedhden8T4VqaFVXMA+X4RjPgxYbJqkPD3kLoFLQHv56g==
+        bh=El0/lmQHtq7omgI8LCcZHVTLCGcJfVYoNwsJAGUDouQ=;
+        b=GJfmQ4cC2bu0hkKgUbrAHvR+ADMwnt7ByFgBTNDvX/LLZZels63OgGMt/hpm/4yldr2etP
+        WmBSD+5S585CaSVifg9ot9qbsZbDJitd6/vwbtQpIzzDh8Ex4hXdj9V7SSfnagdC2+3/3C
+        9hRBnStw+gw6WM8h3ndUPrEJxpjESoEWVHjsQfYxy5KCA5GzCDeXUuhuRaCDjJmWyNFXjp
+        GpHW9eehecjYLXw9VdwoIPTHaDlqW3zjXp3P/8mMfYPlTeZHMwN2gDY43cpMwZVbmQn8Gh
+        rPiYRtCVKpGkatydUVgkxAFTFTv6aVSbYcWp8PXAeKXiRjUjFFOKTugjflcF8g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1655108943;
+        s=2020e; t=1655108944;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gSD8Eqjr+TZZRkZWNzZmMM4WgY0VJDZoWv7skRzV8RY=;
-        b=X6UMnU9n2iWdkRVt7t5CXJuqyOnjJTaDTaFdv9ZzPa2ts7hbQva3Yoep7e3m6IMeDmZJrf
-        kaDzUlHc3t6jBODA==
+        bh=El0/lmQHtq7omgI8LCcZHVTLCGcJfVYoNwsJAGUDouQ=;
+        b=gErji1lM2j3dghtZjlTxW0ZesZWbhesKAIpRY1tXpCrstmjJ+rY5tqIiiTdrvwCp9jHFiQ
+        xWt9M+QYOh8AEkBA==
 From:   "tip-bot2 for Sandipan Das" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] perf/x86/amd/uncore: Add PerfMonV2 DF event format
+Subject: [tip: perf/core] perf/x86/amd/uncore: Detect available DF counters
 Cc:     Sandipan Das <sandipan.das@amd.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3Cffc24d5a3375b1d6e457d88e83241114de5c1942=2E16529?=
+In-Reply-To: =?utf-8?q?=3Cbac7b2806561e03f2acc7fdc9db94f102df80e1d=2E16529?=
  =?utf-8?q?54372=2Egit=2Esandipan=2Edas=40amd=2Ecom=3E?=
-References: =?utf-8?q?=3Cffc24d5a3375b1d6e457d88e83241114de5c1942=2E165295?=
+References: =?utf-8?q?=3Cbac7b2806561e03f2acc7fdc9db94f102df80e1d=2E165295?=
  =?utf-8?q?4372=2Egit=2Esandipan=2Edas=40amd=2Ecom=3E?=
 MIME-Version: 1.0
-Message-ID: <165510894274.4207.3868534133693973490.tip-bot2@tip-bot2>
+Message-ID: <165510894372.4207.6081140723094981410.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,133 +69,82 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     c390241a93260b377c84ad9e7cd5242adf667aac
-Gitweb:        https://git.kernel.org/tip/c390241a93260b377c84ad9e7cd5242adf667aac
+Commit-ID:     16b48c3f5ed85b8017526b1acacf5115461b489a
+Gitweb:        https://git.kernel.org/tip/16b48c3f5ed85b8017526b1acacf5115461b489a
 Author:        Sandipan Das <sandipan.das@amd.com>
-AuthorDate:    Thu, 19 May 2022 15:33:33 +05:30
+AuthorDate:    Thu, 19 May 2022 15:33:32 +05:30
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 13 Jun 2022 10:15:14 +02:00
+CommitterDate: Mon, 13 Jun 2022 10:15:13 +02:00
 
-perf/x86/amd/uncore: Add PerfMonV2 DF event format
+perf/x86/amd/uncore: Detect available DF counters
 
 If AMD Performance Monitoring Version 2 (PerfMonV2) is
-supported, use bits 0-7, 32-37 as EventSelect and bits
-8-15, 24-27 as UnitMask for Data Fabric (DF) events.
+supported, use CPUID leaf 0x80000022 EBX to detect the
+number of Data Fabric (DF) PMCs. This offers more
+flexibility if the counts change in later processor
+families.
 
 Signed-off-by: Sandipan Das <sandipan.das@amd.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/ffc24d5a3375b1d6e457d88e83241114de5c1942.1652954372.git.sandipan.das@amd.com
+Link: https://lore.kernel.org/r/bac7b2806561e03f2acc7fdc9db94f102df80e1d.1652954372.git.sandipan.das@amd.com
 ---
- arch/x86/events/amd/uncore.c      | 24 +++++++++++++++++-------
- arch/x86/include/asm/perf_event.h | 13 +++++++++++++
- 2 files changed, 30 insertions(+), 7 deletions(-)
+ arch/x86/events/amd/uncore.c      | 10 ++++++++++
+ arch/x86/include/asm/perf_event.h |  3 +++
+ 2 files changed, 13 insertions(+)
 
 diff --git a/arch/x86/events/amd/uncore.c b/arch/x86/events/amd/uncore.c
-index 233dd40..ff4238e 100644
+index c3e218d..233dd40 100644
 --- a/arch/x86/events/amd/uncore.c
 +++ b/arch/x86/events/amd/uncore.c
-@@ -209,10 +209,14 @@ static int amd_uncore_event_init(struct perf_event *event)
+@@ -30,6 +30,7 @@
+ #undef pr_fmt
+ #define pr_fmt(fmt)	"amd_uncore: " fmt
+ 
++static int pmu_version;
+ static int num_counters_llc;
+ static int num_counters_nb;
+ static bool l3_mask;
+@@ -629,6 +630,7 @@ static int __init amd_uncore_init(void)
  {
- 	struct amd_uncore *uncore;
- 	struct hw_perf_event *hwc = &event->hw;
-+	u64 event_mask = AMD64_RAW_EVENT_MASK_NB;
+ 	struct attribute **df_attr = amd_uncore_df_format_attr;
+ 	struct attribute **l3_attr = amd_uncore_l3_format_attr;
++	union cpuid_0x80000022_ebx ebx;
+ 	int ret = -ENODEV;
  
- 	if (event->attr.type != event->pmu->type)
- 		return -ENOENT;
+ 	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
+@@ -638,6 +640,9 @@ static int __init amd_uncore_init(void)
+ 	if (!boot_cpu_has(X86_FEATURE_TOPOEXT))
+ 		return -ENODEV;
  
-+	if (pmu_version >= 2 && is_nb_event(event))
-+		event_mask = AMD64_PERFMON_V2_RAW_EVENT_MASK_NB;
++	if (boot_cpu_has(X86_FEATURE_PERFMON_V2))
++		pmu_version = 2;
 +
- 	/*
- 	 * NB and Last level cache counters (MSRs) are shared across all cores
- 	 * that share the same NB / Last level cache.  On family 16h and below,
-@@ -221,7 +225,7 @@ static int amd_uncore_event_init(struct perf_event *event)
- 	 * out. So we do not support sampling and per-thread events via
- 	 * CAP_NO_INTERRUPT, and we do not enable counter overflow interrupts:
- 	 */
--	hwc->config = event->attr.config & AMD64_RAW_EVENT_MASK_NB;
-+	hwc->config = event->attr.config & event_mask;
- 	hwc->idx = -1;
+ 	num_counters_nb	= NUM_COUNTERS_NB;
+ 	num_counters_llc = NUM_COUNTERS_L2;
+ 	if (boot_cpu_data.x86 >= 0x17) {
+@@ -666,6 +671,11 @@ static int __init amd_uncore_init(void)
+ 		if (ret)
+ 			goto fail_nb;
  
- 	if (event->cpu < 0)
-@@ -300,8 +304,10 @@ static struct device_attribute format_attr_##_var =			\
- 
- DEFINE_UNCORE_FORMAT_ATTR(event12,	event,		"config:0-7,32-35");
- DEFINE_UNCORE_FORMAT_ATTR(event14,	event,		"config:0-7,32-35,59-60"); /* F17h+ DF */
-+DEFINE_UNCORE_FORMAT_ATTR(event14v2,	event,		"config:0-7,32-37");	   /* PerfMonV2 DF */
- DEFINE_UNCORE_FORMAT_ATTR(event8,	event,		"config:0-7");		   /* F17h+ L3 */
--DEFINE_UNCORE_FORMAT_ATTR(umask,	umask,		"config:8-15");
-+DEFINE_UNCORE_FORMAT_ATTR(umask8,	umask,		"config:8-15");
-+DEFINE_UNCORE_FORMAT_ATTR(umask12,	umask,		"config:8-15,24-27");	   /* PerfMonV2 DF */
- DEFINE_UNCORE_FORMAT_ATTR(coreid,	coreid,		"config:42-44");	   /* F19h L3 */
- DEFINE_UNCORE_FORMAT_ATTR(slicemask,	slicemask,	"config:48-51");	   /* F17h L3 */
- DEFINE_UNCORE_FORMAT_ATTR(threadmask8,	threadmask,	"config:56-63");	   /* F17h L3 */
-@@ -313,14 +319,14 @@ DEFINE_UNCORE_FORMAT_ATTR(sliceid,	sliceid,	"config:48-50");	   /* F19h L3 */
- /* Common DF and NB attributes */
- static struct attribute *amd_uncore_df_format_attr[] = {
- 	&format_attr_event12.attr,	/* event */
--	&format_attr_umask.attr,	/* umask */
-+	&format_attr_umask8.attr,	/* umask */
- 	NULL,
- };
- 
- /* Common L2 and L3 attributes */
- static struct attribute *amd_uncore_l3_format_attr[] = {
- 	&format_attr_event12.attr,	/* event */
--	&format_attr_umask.attr,	/* umask */
-+	&format_attr_umask8.attr,	/* umask */
- 	NULL,				/* threadmask */
- 	NULL,
- };
-@@ -659,8 +665,12 @@ static int __init amd_uncore_init(void)
- 	}
- 
- 	if (boot_cpu_has(X86_FEATURE_PERFCTR_NB)) {
--		if (boot_cpu_data.x86 >= 0x17)
 +		if (pmu_version >= 2) {
-+			*df_attr++ = &format_attr_event14v2.attr;
-+			*df_attr++ = &format_attr_umask12.attr;
-+		} else if (boot_cpu_data.x86 >= 0x17) {
- 			*df_attr = &format_attr_event14.attr;
++			ebx.full = cpuid_ebx(EXT_PERFMON_DEBUG_FEATURES);
++			num_counters_nb = ebx.split.num_df_pmc;
 +		}
- 
- 		amd_uncore_nb = alloc_percpu(struct amd_uncore *);
- 		if (!amd_uncore_nb) {
-@@ -686,11 +696,11 @@ static int __init amd_uncore_init(void)
- 	if (boot_cpu_has(X86_FEATURE_PERFCTR_LLC)) {
- 		if (boot_cpu_data.x86 >= 0x19) {
- 			*l3_attr++ = &format_attr_event8.attr;
--			*l3_attr++ = &format_attr_umask.attr;
-+			*l3_attr++ = &format_attr_umask8.attr;
- 			*l3_attr++ = &format_attr_threadmask2.attr;
- 		} else if (boot_cpu_data.x86 >= 0x17) {
- 			*l3_attr++ = &format_attr_event8.attr;
--			*l3_attr++ = &format_attr_umask.attr;
-+			*l3_attr++ = &format_attr_umask8.attr;
- 			*l3_attr++ = &format_attr_threadmask8.attr;
- 		}
- 
++
+ 		pr_info("%d %s %s counters detected\n", num_counters_nb,
+ 			boot_cpu_data.x86_vendor == X86_VENDOR_HYGON ?  "HYGON" : "",
+ 			amd_nb_pmu.name);
 diff --git a/arch/x86/include/asm/perf_event.h b/arch/x86/include/asm/perf_event.h
-index af157aa..34348ae 100644
+index 409725e..af157aa 100644
 --- a/arch/x86/include/asm/perf_event.h
 +++ b/arch/x86/include/asm/perf_event.h
-@@ -89,6 +89,19 @@
- #define AMD64_RAW_EVENT_MASK_NB		\
- 	(AMD64_EVENTSEL_EVENT        |  \
- 	 ARCH_PERFMON_EVENTSEL_UMASK)
-+
-+#define AMD64_PERFMON_V2_EVENTSEL_EVENT_NB	\
-+	(AMD64_EVENTSEL_EVENT	|		\
-+	 GENMASK_ULL(37, 36))
-+
-+#define AMD64_PERFMON_V2_EVENTSEL_UMASK_NB	\
-+	(ARCH_PERFMON_EVENTSEL_UMASK	|	\
-+	 GENMASK_ULL(27, 24))
-+
-+#define AMD64_PERFMON_V2_RAW_EVENT_MASK_NB		\
-+	(AMD64_PERFMON_V2_EVENTSEL_EVENT_NB	|	\
-+	 AMD64_PERFMON_V2_EVENTSEL_UMASK_NB)
-+
- #define AMD64_NUM_COUNTERS				4
- #define AMD64_NUM_COUNTERS_CORE				6
- #define AMD64_NUM_COUNTERS_NB				4
+@@ -194,6 +194,9 @@ union cpuid_0x80000022_ebx {
+ 	struct {
+ 		/* Number of Core Performance Counters */
+ 		unsigned int	num_core_pmc:4;
++		unsigned int	reserved:6;
++		/* Number of Data Fabric Counters */
++		unsigned int	num_df_pmc:6;
+ 	} split;
+ 	unsigned int		full;
+ };

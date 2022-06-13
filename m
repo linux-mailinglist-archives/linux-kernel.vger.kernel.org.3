@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DADF549709
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16588549220
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354563AbiFMLdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
+        id S1356717AbiFMM5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354282AbiFML3J (ORCPT
+        with ESMTP id S1357676AbiFMMyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:29:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813083EF03;
-        Mon, 13 Jun 2022 03:43:12 -0700 (PDT)
+        Mon, 13 Jun 2022 08:54:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A04A663FE;
+        Mon, 13 Jun 2022 04:13:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2AA74B80D19;
-        Mon, 13 Jun 2022 10:43:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58013C34114;
-        Mon, 13 Jun 2022 10:43:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FADB60B6B;
+        Mon, 13 Jun 2022 11:13:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D7FC385A5;
+        Mon, 13 Jun 2022 11:13:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116989;
-        bh=lWzxDcM+oNVyARterZsgb4KRcuK7rk/l6vBMcvJlKf8=;
+        s=korg; t=1655118793;
+        bh=4vviVn1+C2VUpSO971tgRUItAVlhTOzZO6vrIeqv1ME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=laSjLWH/1nx3AiKlUny8Bwpu6zT8ydCY/eNjrb6xW+XiehlokUjzJxJRiqItf2iDM
-         mdyqr65/eyrvL7ivdTvAiR46S/hT3XCj+gnB9BJ5ZC/8dBPeWJnko8yb/8zLeyapD2
-         YtlkKA/aiJ/AKMP2Fog0Vow53pbynzlbqfuCjugs=
+        b=l86CBaqZKtXo9mPSL8EmZg8oQYq4OUVaUKvmop510D/T340DOwy3VMKKKjvoQXM7Q
+         Ag7xW2fsbhVYQw4dvpCK0vD+jc6aqEQ32R8rzDSqov45kY2AMGYKEbeEn+zwxIPI6m
+         C6V+BxEYh+UkcFG5HNj0YDOSYZ+nEOy866yyIWgs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, pa@panix.com,
-        Alexander Wetzel <alexander@wetzel-home.de>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 5.4 258/411] rtl818x: Prevent using not initialized queues
-Date:   Mon, 13 Jun 2022 12:08:51 +0200
-Message-Id: <20220613094936.501394533@linuxfoundation.org>
+        stable@vger.kernel.org, Cixi Geng <cixi.geng1@unisoc.com>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 030/247] iio: adc: sc27xx: fix read big scale voltage not right
+Date:   Mon, 13 Jun 2022 12:08:52 +0200
+Message-Id: <20220613094923.850639169@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,70 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Wetzel <alexander@wetzel-home.de>
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-commit 746285cf81dc19502ab238249d75f5990bd2d231 upstream.
+[ Upstream commit ad930a75613282400179361e220e58b87386b8c7 ]
 
-Using not existing queues can panic the kernel with rtl8180/rtl8185 cards.
-Ignore the skb priority for those cards, they only have one tx queue. Pierre
-Asselin (pa@panix.com) reported the kernel crash in the Gentoo forum:
+Fix wrong configuration value of SC27XX_ADC_SCALE_MASK and
+SC27XX_ADC_SCALE_SHIFT by spec documetation.
 
-https://forums.gentoo.org/viewtopic-t-1147832-postdays-0-postorder-asc-start-25.html
-
-He also confirmed that this patch fixes the issue. In summary this happened:
-
-After updating wpa_supplicant from 2.9 to 2.10 the kernel crashed with a
-"divide error: 0000" when connecting to an AP. Control port tx now tries to
-use IEEE80211_AC_VO for the priority, which wpa_supplicants starts to use in
-2.10.
-
-Since only the rtl8187se part of the driver supports QoS, the priority
-of the skb is set to IEEE80211_AC_BE (2) by mac80211 for rtl8180/rtl8185
-cards.
-
-rtl8180 is then unconditionally reading out the priority and finally crashes on
-drivers/net/wireless/realtek/rtl818x/rtl8180/dev.c line 544 without this
-patch:
-	idx = (ring->idx + skb_queue_len(&ring->queue)) % ring->entries
-
-"ring->entries" is zero for rtl8180/rtl8185 cards, tx_ring[2] never got
-initialized.
-
-Cc: stable@vger.kernel.org
-Reported-by: pa@panix.com
-Tested-by: pa@panix.com
-Signed-off-by: Alexander Wetzel <alexander@wetzel-home.de>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220422145228.7567-1-alexander@wetzel-home.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 5df362a6cf49c (iio: adc: Add Spreadtrum SC27XX PMICs ADC support)
+Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
+Link: https://lore.kernel.org/r/20220419142458.884933-3-gengcixi@gmail.com
+Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/realtek/rtl818x/rtl8180/dev.c |    8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/iio/adc/sc27xx_adc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/net/wireless/realtek/rtl818x/rtl8180/dev.c
-+++ b/drivers/net/wireless/realtek/rtl818x/rtl8180/dev.c
-@@ -460,8 +460,10 @@ static void rtl8180_tx(struct ieee80211_
- 	struct rtl8180_priv *priv = dev->priv;
- 	struct rtl8180_tx_ring *ring;
- 	struct rtl8180_tx_desc *entry;
-+	unsigned int prio = 0;
- 	unsigned long flags;
--	unsigned int idx, prio, hw_prio;
-+	unsigned int idx, hw_prio;
-+
- 	dma_addr_t mapping;
- 	u32 tx_flags;
- 	u8 rc_flags;
-@@ -470,7 +472,9 @@ static void rtl8180_tx(struct ieee80211_
- 	/* do arithmetic and then convert to le16 */
- 	u16 frame_duration = 0;
+diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
+index 00098caf6d9e..aee076c8e2b1 100644
+--- a/drivers/iio/adc/sc27xx_adc.c
++++ b/drivers/iio/adc/sc27xx_adc.c
+@@ -36,8 +36,8 @@
  
--	prio = skb_get_queue_mapping(skb);
-+	/* rtl8180/rtl8185 only has one useable tx queue */
-+	if (dev->queues > IEEE80211_AC_BK)
-+		prio = skb_get_queue_mapping(skb);
- 	ring = &priv->tx_ring[prio];
+ /* Bits and mask definition for SC27XX_ADC_CH_CFG register */
+ #define SC27XX_ADC_CHN_ID_MASK		GENMASK(4, 0)
+-#define SC27XX_ADC_SCALE_MASK		GENMASK(10, 8)
+-#define SC27XX_ADC_SCALE_SHIFT		8
++#define SC27XX_ADC_SCALE_MASK		GENMASK(10, 9)
++#define SC27XX_ADC_SCALE_SHIFT		9
  
- 	mapping = pci_map_single(priv->pdev, skb->data,
+ /* Bits definitions for SC27XX_ADC_INT_EN registers */
+ #define SC27XX_ADC_IRQ_EN		BIT(0)
+-- 
+2.35.1
+
 
 

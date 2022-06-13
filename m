@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA38954920D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2BB548ADC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344824AbiFMKb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
+        id S1384272AbiFMO3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244699AbiFMK07 (ORCPT
+        with ESMTP id S1383910AbiFMOYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:26:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA8E248CA;
-        Mon, 13 Jun 2022 03:19:49 -0700 (PDT)
+        Mon, 13 Jun 2022 10:24:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDEA473A7;
+        Mon, 13 Jun 2022 04:45:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33E926066C;
-        Mon, 13 Jun 2022 10:19:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41275C34114;
-        Mon, 13 Jun 2022 10:19:48 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED849B80E2C;
+        Mon, 13 Jun 2022 11:45:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56BBCC34114;
+        Mon, 13 Jun 2022 11:45:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115588;
-        bh=lQx9gW3Yr7Nl5zsN5pDITSvemx1zVOWZTy2c3CMR3ts=;
+        s=korg; t=1655120747;
+        bh=BuxRG/7fYp65qFsQi/Rtgm9CLhilBmxDsHrjTk0IRDM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Azb3X6LM7zuOlSeCHDmrAdQwaXUgpe52RqMsYewzoEbuIbQXrbAlbQ88eTv8XpEDy
-         3owlHCOPCnhS8prNrNM901JDA8dRzV0zacaCfkDkOB4vSgupQuyVEf6W6TahdmGX4z
-         jCPw2dIX6NnLSmq+db3vzaWIoXcUEoxw6hP+OuXk=
+        b=WpbxQG+31s+f7LqrOFQ3+rgy7mi8aDHabZXmjIQ6XPe7MlElsY1w7IgMw18tGb/OK
+         e1JLLShUVYYGq+h9/TQbl/xRJhXKOItZVVbUOiZXOXyTgHV6k+h5R9fdx35rG2I130
+         CB3utJSPpkIaekxdwTINq9wKeKhPcajDB05gbBpQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
+        stable@vger.kernel.org, Sven Schnelle <svens@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 139/167] lkdtm/usercopy: Expand size of "out of frame" object
+Subject: [PATCH 5.17 119/298] s390/mcck: isolate SIE instruction when setting CIF_MCCK_GUEST flag
 Date:   Mon, 13 Jun 2022 12:10:13 +0200
-Message-Id: <20220613094913.433606444@linuxfoundation.org>
+Message-Id: <20220613094928.553164975@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,73 +57,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kees Cook <keescook@chromium.org>
+From: Alexander Gordeev <agordeev@linux.ibm.com>
 
-[ Upstream commit f387e86d3a74407bdd9c5815820ac9d060962840 ]
+[ Upstream commit 29ccaa4b35ea874ddd50518e5c2c746b9238a792 ]
 
-To be sufficiently out of range for the usercopy test to see the lifetime
-mismatch, expand the size of the "bad" buffer, which will let it be
-beyond current_stack_pointer regardless of stack growth direction.
-Paired with the recent addition of stack depth checking under
-CONFIG_HARDENED_USERCOPY=y, this will correctly start tripping again.
+Commit d768bd892fc8 ("s390: add options to change branch prediction
+behaviour for the kernel") introduced .Lsie_exit label - supposedly
+to fence off SIE instruction. However, the corresponding address
+range length .Lsie_crit_mcck_length was not updated, which led to
+BPON code potentionally marked with CIF_MCCK_GUEST flag.
 
-Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Link: https://lore.kernel.org/lkml/762faf1b-0443-5ddf-4430-44a20cf2ec4d@collabora.com/
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Both .Lsie_exit and .Lsie_crit_mcck_length were removed with commit
+0b0ed657fe00 ("s390: remove critical section cleanup from entry.S"),
+but the issue persisted - currently BPOFF and BPENTER macros might
+get wrongly considered by the machine check handler as a guest.
+
+Fixes: d768bd892fc8 ("s390: add options to change branch prediction behaviour for the kernel")
+Reviewed-by: Sven Schnelle <svens@linux.ibm.com>
+Reviewed-by: Christian Borntraeger <borntraeger@linux.ibm.com>
+Signed-off-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/lkdtm_usercopy.c | 17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
+ arch/s390/kernel/entry.S | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/misc/lkdtm_usercopy.c b/drivers/misc/lkdtm_usercopy.c
-index 1dd611423d8b..36438947244d 100644
---- a/drivers/misc/lkdtm_usercopy.c
-+++ b/drivers/misc/lkdtm_usercopy.c
-@@ -28,12 +28,12 @@ static const unsigned char test_text[] = "This is a test.\n";
-  */
- static noinline unsigned char *trick_compiler(unsigned char *stack)
- {
--	return stack + 0;
-+	return stack + unconst;
- }
- 
- static noinline unsigned char *do_usercopy_stack_callee(int value)
- {
--	unsigned char buf[32];
-+	unsigned char buf[128];
- 	int i;
- 
- 	/* Exercise stack to avoid everything living in registers. */
-@@ -41,7 +41,12 @@ static noinline unsigned char *do_usercopy_stack_callee(int value)
- 		buf[i] = value & 0xff;
- 	}
- 
--	return trick_compiler(buf);
-+	/*
-+	 * Put the target buffer in the middle of stack allocation
-+	 * so that we don't step on future stack users regardless
-+	 * of stack growth direction.
-+	 */
-+	return trick_compiler(&buf[(128/2)-32]);
- }
- 
- static noinline void do_usercopy_stack(bool to_user, bool bad_frame)
-@@ -64,6 +69,12 @@ static noinline void do_usercopy_stack(bool to_user, bool bad_frame)
- 		bad_stack -= sizeof(unsigned long);
- 	}
- 
-+#ifdef ARCH_HAS_CURRENT_STACK_POINTER
-+	pr_info("stack     : %px\n", (void *)current_stack_pointer);
-+#endif
-+	pr_info("good_stack: %px-%px\n", good_stack, good_stack + sizeof(good_stack));
-+	pr_info("bad_stack : %px-%px\n", bad_stack, bad_stack + sizeof(good_stack));
-+
- 	user_addr = vm_mmap(NULL, 0, PAGE_SIZE,
- 			    PROT_READ | PROT_WRITE | PROT_EXEC,
- 			    MAP_ANONYMOUS | MAP_PRIVATE, 0);
+diff --git a/arch/s390/kernel/entry.S b/arch/s390/kernel/entry.S
+index 01bae1d51113..3bf8aeeec96f 100644
+--- a/arch/s390/kernel/entry.S
++++ b/arch/s390/kernel/entry.S
+@@ -264,6 +264,10 @@ ENTRY(sie64a)
+ 	BPEXIT	__SF_SIE_FLAGS(%r15),(_TIF_ISOLATE_BP|_TIF_ISOLATE_BP_GUEST)
+ .Lsie_entry:
+ 	sie	0(%r14)
++# Let the next instruction be NOP to avoid triggering a machine check
++# and handling it in a guest as result of the instruction execution.
++	nopr	7
++.Lsie_leave:
+ 	BPOFF
+ 	BPENTER	__SF_SIE_FLAGS(%r15),(_TIF_ISOLATE_BP|_TIF_ISOLATE_BP_GUEST)
+ .Lsie_skip:
+@@ -563,7 +567,7 @@ ENTRY(mcck_int_handler)
+ 	jno	.Lmcck_panic
+ #if IS_ENABLED(CONFIG_KVM)
+ 	OUTSIDE	%r9,.Lsie_gmap,.Lsie_done,6f
+-	OUTSIDE	%r9,.Lsie_entry,.Lsie_skip,4f
++	OUTSIDE	%r9,.Lsie_entry,.Lsie_leave,4f
+ 	oi	__LC_CPU_FLAGS+7, _CIF_MCCK_GUEST
+ 	j	5f
+ 4:	CHKSTG	.Lmcck_panic
 -- 
 2.35.1
 

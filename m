@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8F254987B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 988AE548EE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356039AbiFMLnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43606 "EHLO
+        id S1353473AbiFMLX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355491AbiFMLjB (ORCPT
+        with ESMTP id S1353685AbiFMLQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:39:01 -0400
+        Mon, 13 Jun 2022 07:16:12 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C022C110;
-        Mon, 13 Jun 2022 03:48:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81828120B1;
+        Mon, 13 Jun 2022 03:39:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 722C9B80D41;
-        Mon, 13 Jun 2022 10:48:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF838C3411E;
-        Mon, 13 Jun 2022 10:48:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A96CB80EA8;
+        Mon, 13 Jun 2022 10:39:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1540C34114;
+        Mon, 13 Jun 2022 10:39:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117320;
-        bh=v7/epXFF8LQcY4QYLR+XievSCnhEzjfF5wdlYFjgeJ4=;
+        s=korg; t=1655116741;
+        bh=liNhd+rQWFOn1syJrUOicb3uykE30jaLc4TMIIZdHug=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tPSWiOoF75CEgTzzzBLodpKVWi3nScW1ObkwdPkPzFs1aLWZIRkrf0T1ojAQpsAQ0
-         LfnebOJjU11SCQ07KdYv8X+DVfSIh32izJYLRq1BBra1utm57hYbFLMOSwYgW377Gc
-         LjjHCDWJTg57+MLTArUWydOAYiMUJxjaZAXPNVKQ=
+        b=oUQ+Tg4v6zTSYfMF+VZjpZIUpi8fPljcQor2LpMJrcL92RfOlRBJrrV/WDKtcIlmY
+         V2TAMM5HsXKV15DA2QC5m0ylbniL+7AhvyX5m7sC8P2MxOBjVz5WE3TgEKq+PyskHa
+         DDih0LPnKw7L78ns7x37LCwkF+nLsZZEJHeRnPA0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 4.19 006/287] ptrace: Reimplement PTRACE_KILL by always sending SIGKILL
+        stable@vger.kernel.org, Andre Przywara <andre.przywara@arm.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 157/411] ARM: dts: suniv: F1C100: fix watchdog compatible
 Date:   Mon, 13 Jun 2022 12:07:10 +0200
-Message-Id: <20220613094924.037819497@linuxfoundation.org>
+Message-Id: <20220613094933.370022221@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,71 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
+From: Andre Przywara <andre.przywara@arm.com>
 
-commit 6a2d90ba027adba528509ffa27097cffd3879257 upstream.
+[ Upstream commit 01a850ee61cbf0ab77dcbf26bb133fec2dd640d6 ]
 
-The current implementation of PTRACE_KILL is buggy and has been for
-many years as it assumes it's target has stopped in ptrace_stop.  At a
-quick skim it looks like this assumption has existed since ptrace
-support was added in linux v1.0.
+The F1C100 series of SoCs actually have their watchdog IP being
+compatible with the newer Allwinner generation, not the older one.
 
-While PTRACE_KILL has been deprecated we can not remove it as
-a quick search with google code search reveals many existing
-programs calling it.
+The currently described sun4i-a10-wdt actually does not work, neither
+the watchdog functionality (just never fires), nor the reset part
+(reboot hangs).
 
-When the ptracee is not stopped at ptrace_stop some fields would be
-set that are ignored except in ptrace_stop.  Making the userspace
-visible behavior of PTRACE_KILL a noop in those case.
+Replace the compatible string with the one used by the newer generation.
+Verified to work with both the watchdog and reboot functionality on a
+LicheePi Nano.
 
-As the usual rules are not obeyed it is not clear what the
-consequences are of calling PTRACE_KILL on a running process.
-Presumably userspace does not do this as it achieves nothing.
+Also add the missing interrupt line and clock source, to make it binding
+compliant.
 
-Replace the implementation of PTRACE_KILL with a simple
-send_sig_info(SIGKILL) followed by a return 0.  This changes the
-observable user space behavior only in that PTRACE_KILL on a process
-not stopped in ptrace_stop will also kill it.  As that has always
-been the intent of the code this seems like a reasonable change.
-
-Cc: stable@vger.kernel.org
-Reported-by: Al Viro <viro@zeniv.linux.org.uk>
-Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
-Tested-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
-Link: https://lkml.kernel.org/r/20220505182645.497868-7-ebiederm@xmission.com
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 4ba16d17efdd ("ARM: dts: suniv: add initial DTSI file for F1C100s")
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Link: https://lore.kernel.org/r/20220317162349.739636-4-andre.przywara@arm.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kernel/step.c |    3 +--
- kernel/ptrace.c        |    5 ++---
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ arch/arm/boot/dts/suniv-f1c100s.dtsi | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/arch/x86/kernel/step.c
-+++ b/arch/x86/kernel/step.c
-@@ -175,8 +175,7 @@ void set_task_blockstep(struct task_stru
- 	 *
- 	 * NOTE: this means that set/clear TIF_BLOCKSTEP is only safe if
- 	 * task is current or it can't be running, otherwise we can race
--	 * with __switch_to_xtra(). We rely on ptrace_freeze_traced() but
--	 * PTRACE_KILL is not safe.
-+	 * with __switch_to_xtra(). We rely on ptrace_freeze_traced().
- 	 */
- 	local_irq_disable();
- 	debugctl = get_debugctlmsr();
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -1121,9 +1121,8 @@ int ptrace_request(struct task_struct *c
- 		return ptrace_resume(child, request, data);
+diff --git a/arch/arm/boot/dts/suniv-f1c100s.dtsi b/arch/arm/boot/dts/suniv-f1c100s.dtsi
+index 6100d3b75f61..def830101448 100644
+--- a/arch/arm/boot/dts/suniv-f1c100s.dtsi
++++ b/arch/arm/boot/dts/suniv-f1c100s.dtsi
+@@ -104,8 +104,10 @@
  
- 	case PTRACE_KILL:
--		if (child->exit_state)	/* already dead */
--			return 0;
--		return ptrace_resume(child, request, SIGKILL);
-+		send_sig_info(SIGKILL, SEND_SIG_NOINFO, child);
-+		return 0;
+ 		wdt: watchdog@1c20ca0 {
+ 			compatible = "allwinner,suniv-f1c100s-wdt",
+-				     "allwinner,sun4i-a10-wdt";
++				     "allwinner,sun6i-a31-wdt";
+ 			reg = <0x01c20ca0 0x20>;
++			interrupts = <16>;
++			clocks = <&osc32k>;
+ 		};
  
- #ifdef CONFIG_HAVE_ARCH_TRACEHOOK
- 	case PTRACE_GETREGSET:
+ 		uart0: serial@1c25000 {
+-- 
+2.35.1
+
 
 

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E16554948C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2999154961C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354292AbiFMMa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
+        id S1358429AbiFMNGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351893AbiFMMZG (ORCPT
+        with ESMTP id S1354182AbiFMMzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:25:06 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E4727FE4;
-        Mon, 13 Jun 2022 04:05:42 -0700 (PDT)
+        Mon, 13 Jun 2022 08:55:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6140B10FF0;
+        Mon, 13 Jun 2022 04:16:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0490ACE1179;
-        Mon, 13 Jun 2022 11:05:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B88DC34114;
-        Mon, 13 Jun 2022 11:05:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA91060B60;
+        Mon, 13 Jun 2022 11:16:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E823CC34114;
+        Mon, 13 Jun 2022 11:16:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118339;
-        bh=gIozRHWTMU8uI04KtBwRuTUKrP1BLAMx6fJOoYClCS0=;
+        s=korg; t=1655118984;
+        bh=g9IIzdz8fFZu4zLpGSUu9Qx+xG/NwPMEEzYsxd6wuio=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WVexYpjVFnks8nMbPJn+5kTBD6j/kUDNIZdzmSxjMlmpLtmcMUollgS7nojmcqRzy
-         52mhRY3t4XLaeAmteQijsqBZgxqy+gVyvcYrYFO/61ZHrlmHkjbBuc0wzLUBl3Ltoy
-         aHkNC4c0XKsWxbxNbKTXABjY7xJ4rkgITfYt2OPE=
+        b=vK2MsvvJTEgCvFzdl7wdVdZBA3FiAAsDcgdMzQRLZ/8pqiVs1oasGOnB8ZXUv1Ktk
+         kYTJnaplERr9I2Mv9bAHeRcDLjlFLdaBNTr3KGUm0e83YGKqZsFpaIZxSkoK13My71
+         HQBYDhiQb35GG3pC4FQ7uBx/Rjpptjrc9jRU3yuo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Erwan Le Ray <erwan.leray@st.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        stable@vger.kernel.org, Guoju Fang <gjfang@linux.alibaba.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 040/172] serial: stm32-usart: Correct CSIZE, bits, and parity
+Subject: [PATCH 5.15 098/247] net: sched: add barrier to fix packet stuck problem for lockless qdisc
 Date:   Mon, 13 Jun 2022 12:10:00 +0200
-Message-Id: <20220613094900.006815184@linuxfoundation.org>
+Message-Id: <20220613094925.927928910@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,59 +55,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Guoju Fang <gjfang@linux.alibaba.com>
 
-[ Upstream commit 1deeda8d2877c18bc2b9eeee10dd6d2628852848 ]
+[ Upstream commit 2e8728c955ce0624b958eee6e030a37aca3a5d86 ]
 
-Add CSIZE sanitization for unsupported CSIZE configurations. In
-addition, if parity is asked for but CSx was unsupported, the sensible
-result is CS8+parity which requires setting USART_CR1_M0 like with 9
-bits.
+In qdisc_run_end(), the spin_unlock() only has store-release semantic,
+which guarantees all earlier memory access are visible before it. But
+the subsequent test_bit() has no barrier semantics so may be reordered
+ahead of the spin_unlock(). The store-load reordering may cause a packet
+stuck problem.
 
-Incorrect CSIZE results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
+The concurrent operations can be described as below,
+         CPU 0                      |          CPU 1
+   qdisc_run_end()                  |     qdisc_run_begin()
+          .                         |           .
+ ----> /* may be reorderd here */   |           .
+|         .                         |           .
+|     spin_unlock()                 |         set_bit()
+|         .                         |         smp_mb__after_atomic()
+ ---- test_bit()                    |         spin_trylock()
+          .                         |          .
 
-Fixes: c8a9d043947b (serial: stm32: fix word length configuration)
-Cc: Erwan Le Ray <erwan.leray@st.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-9-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Consider the following sequence of events:
+    CPU 0 reorder test_bit() ahead and see MISSED = 0
+    CPU 1 calls set_bit()
+    CPU 1 calls spin_trylock() and return fail
+    CPU 0 executes spin_unlock()
+
+At the end of the sequence, CPU 0 calls spin_unlock() and does nothing
+because it see MISSED = 0. The skb on CPU 1 has beed enqueued but no one
+take it, until the next cpu pushing to the qdisc (if ever ...) will
+notice and dequeue it.
+
+This patch fix this by adding one explicit barrier. As spin_unlock() and
+test_bit() ordering is a store-load ordering, a full memory barrier
+smp_mb() is needed here.
+
+Fixes: a90c57f2cedd ("net: sched: fix packet stuck problem for lockless qdisc")
+Signed-off-by: Guoju Fang <gjfang@linux.alibaba.com>
+Link: https://lore.kernel.org/r/20220528101628.120193-1-gjfang@linux.alibaba.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/stm32-usart.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ include/net/sch_generic.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
-index 6afae051ba8d..8cd9e5b077b6 100644
---- a/drivers/tty/serial/stm32-usart.c
-+++ b/drivers/tty/serial/stm32-usart.c
-@@ -810,13 +810,22 @@ static void stm32_usart_set_termios(struct uart_port *port,
- 	 * CS8 or (CS7 + parity), 8 bits word aka [M1:M0] = 0b00
- 	 * M0 and M1 already cleared by cr1 initialization.
- 	 */
--	if (bits == 9)
-+	if (bits == 9) {
- 		cr1 |= USART_CR1_M0;
--	else if ((bits == 7) && cfg->has_7bits_data)
-+	} else if ((bits == 7) && cfg->has_7bits_data) {
- 		cr1 |= USART_CR1_M1;
--	else if (bits != 8)
-+	} else if (bits != 8) {
- 		dev_dbg(port->dev, "Unsupported data bits config: %u bits\n"
- 			, bits);
-+		cflag &= ~CSIZE;
-+		cflag |= CS8;
-+		termios->c_cflag = cflag;
-+		bits = 8;
-+		if (cflag & PARENB) {
-+			bits++;
-+			cr1 |= USART_CR1_M0;
-+		}
-+	}
+diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
+index 9e9ff13adda8..1958d1260fe9 100644
+--- a/include/net/sch_generic.h
++++ b/include/net/sch_generic.h
+@@ -202,6 +202,12 @@ static inline void qdisc_run_end(struct Qdisc *qdisc)
+ 	if (qdisc->flags & TCQ_F_NOLOCK) {
+ 		spin_unlock(&qdisc->seqlock);
  
- 	if (ofs->rtor != UNDEF_REG && (stm32_port->rx_ch ||
- 				       stm32_port->fifoen)) {
++		/* spin_unlock() only has store-release semantic. The unlock
++		 * and test_bit() ordering is a store-load ordering, so a full
++		 * memory barrier is needed here.
++		 */
++		smp_mb();
++
+ 		if (unlikely(test_bit(__QDISC_STATE_MISSED,
+ 				      &qdisc->state)))
+ 			__netif_schedule(qdisc);
 -- 
 2.35.1
 

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6335354892B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED15C5492F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353301AbiFMM1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
+        id S1358403AbiFMNER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355321AbiFMMXz (ORCPT
+        with ESMTP id S1355492AbiFMM4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:23:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37B627B08;
-        Mon, 13 Jun 2022 04:04:40 -0700 (PDT)
+        Mon, 13 Jun 2022 08:56:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40E7D12D0D;
+        Mon, 13 Jun 2022 04:17:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F1FDB80D3A;
-        Mon, 13 Jun 2022 11:04:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB09C34114;
-        Mon, 13 Jun 2022 11:04:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B79A260B60;
+        Mon, 13 Jun 2022 11:17:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DADC34114;
+        Mon, 13 Jun 2022 11:17:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118278;
-        bh=DVuoSLpXFYn0xvPXOjmci7OKoKFd0NEQdP8HpaluuNQ=;
+        s=korg; t=1655119023;
+        bh=EFH/jpz6Y7HbXvroxBQ+an5CCn0BgHUFSg7kxrGjx/s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C74kxJioJ3cwFlvGWmz4duMssmg+mvYoyAxFwpwrComykj8oRmXzVwIzWoUjRiWnT
-         oAmYhlKUXV0+0ZQal2JUiZ52PzBBQ16ZAfvC/Hl3TycPYRhlgWn+J7qes9ap4wcXLF
-         MIQ0T5FFkuQGb139xUeQeQp6E5DMcS9YxYk7IIcQ=
+        b=VSZyhebbLLKQ59ZhT0eFMw/ptpAJgdvH2JxmaF72eF3tghJQfhyMsQEtlO560Iw06
+         w5j48UeFqUxA56CUE5YPXAJ9xrn1ACbe9Tl10M1mqU6pWFdHawJONsiusq5Os6eyzr
+         bDJNEbglAt0hZnOqqiPucglUi+J9WWqJrFqyYitM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        stable@vger.kernel.org,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 018/172] firmware: stratix10-svc: fix a missing check on list iterator
+Subject: [PATCH 5.15 076/247] modpost: fix removing numeric suffixes
 Date:   Mon, 13 Jun 2022 12:09:38 +0200
-Message-Id: <20220613094854.743678347@linuxfoundation.org>
+Message-Id: <20220613094925.262644048@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,58 +57,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-[ Upstream commit 5a0793ac66ac0e254d292f129a4d6c526f9f2aff ]
+[ Upstream commit b5beffa20d83c4e15306c991ffd00de0d8628338 ]
 
-The bug is here:
-	pmem->vaddr = NULL;
+With the `-z unique-symbol` linker flag or any similar mechanism,
+it is possible to trigger the following:
 
-The list iterator 'pmem' will point to a bogus position containing
-HEAD if the list is empty or no element is found. This case must
-be checked before any use of the iterator, otherwise it will
-lead to a invalid memory access.
+ERROR: modpost: "param_set_uint.0" [vmlinux] is a static EXPORT_SYMBOL
 
-To fix this bug, just gen_pool_free/set NULL/list_del() and return
-when found, otherwise list_del HEAD and return;
+The reason is that for now the condition from remove_dot():
 
-Fixes: 7ca5ce896524f ("firmware: add Intel Stratix10 service layer driver")
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Link: https://lore.kernel.org/r/20220414035609.2239-1-xiam0nd.tong@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+if (m && (s[n + m] == '.' || s[n + m] == 0))
+
+which was designed to test if it's a dot or a '\0' after the suffix
+is never satisfied.
+This is due to that `s[n + m]` always points to the last digit of a
+numeric suffix, not on the symbol next to it (from a custom debug
+print added to modpost):
+
+param_set_uint.0, s[n + m] is '0', s[n + m + 1] is '\0'
+
+So it's off-by-one and was like that since 2014.
+
+Fix this for the sake of any potential upcoming features, but don't
+bother stable-backporting, as it's well hidden -- apart from that
+LD flag, it can be triggered only with GCC LTO which never landed
+upstream.
+
+Fixes: fcd38ed0ff26 ("scripts: modpost: fix compilation warning")
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/firmware/stratix10-svc.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ scripts/mod/modpost.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
-index 53c7e3f8cfde..7dd0ac1a0cfc 100644
---- a/drivers/firmware/stratix10-svc.c
-+++ b/drivers/firmware/stratix10-svc.c
-@@ -941,17 +941,17 @@ EXPORT_SYMBOL_GPL(stratix10_svc_allocate_memory);
- void stratix10_svc_free_memory(struct stratix10_svc_chan *chan, void *kaddr)
- {
- 	struct stratix10_svc_data_mem *pmem;
--	size_t size = 0;
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index ca491aa2b376..7a5bddb8913e 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1971,7 +1971,7 @@ static char *remove_dot(char *s)
  
- 	list_for_each_entry(pmem, &svc_data_mem, node)
- 		if (pmem->vaddr == kaddr) {
--			size = pmem->size;
--			break;
-+			gen_pool_free(chan->ctrl->genpool,
-+				       (unsigned long)kaddr, pmem->size);
-+			pmem->vaddr = NULL;
-+			list_del(&pmem->node);
-+			return;
- 		}
+ 	if (n && s[n]) {
+ 		size_t m = strspn(s + n + 1, "0123456789");
+-		if (m && (s[n + m] == '.' || s[n + m] == 0))
++		if (m && (s[n + m + 1] == '.' || s[n + m + 1] == 0))
+ 			s[n] = 0;
  
--	gen_pool_free(chan->ctrl->genpool, (unsigned long)kaddr, size);
--	pmem->vaddr = NULL;
--	list_del(&pmem->node);
-+	list_del(&svc_data_mem);
- }
- EXPORT_SYMBOL_GPL(stratix10_svc_free_memory);
- 
+ 		/* strip trailing .lto */
 -- 
 2.35.1
 

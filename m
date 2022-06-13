@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 494F75495CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62591549209
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347906AbiFMMep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:34:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
+        id S1350155AbiFMLBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:01:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354741AbiFMMbC (ORCPT
+        with ESMTP id S1350280AbiFMKys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:31:02 -0400
+        Mon, 13 Jun 2022 06:54:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B536328719;
-        Mon, 13 Jun 2022 04:07:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C8E13F6C;
+        Mon, 13 Jun 2022 03:30:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 932E06143D;
-        Mon, 13 Jun 2022 11:07:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1FB5C34114;
-        Mon, 13 Jun 2022 11:07:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D87C60FCE;
+        Mon, 13 Jun 2022 10:30:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76E2AC341C8;
+        Mon, 13 Jun 2022 10:30:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118436;
-        bh=0+3cOnk2z3C+1fmNZLPemFHmvE1ZEFxh/Sv4oC37mqs=;
+        s=korg; t=1655116242;
+        bh=xap97sa4M+AXe1p1mmYFq2dbHFYCbMlJWkn8Vt+k8nA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F5cZMuvBh2Mmert4agyC/ED0UhX7mhWxyBjkz6rme2FTGyy7UTDDYzoy2ztMTDyQi
-         S2a4GNxjeVi9d0P+bRYAArmvCgzYiJe0NK2ZTVw/pwoiVBq4+VCl4NLQuGfMxwZcLx
-         t5n2jxK7Ws6waG2E75JjD6rgQfBpFKK5l+GFS7iw=
+        b=LVlrPozfPzNKCfsoyt8x8/8rYOGeqbEDvg4cSoz+TbhoVWdCGQZRIKpnhs+O/wFVF
+         9VmhUJsb014iDLoGJcvui6n4tencXY9Oi0lJaC1l+32vdsLQu3dXe19KxC8TbPy0a8
+         WVanVFUt14f8uoz4JLRMvfVu7uUtxF1MuOqJpwEA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        stable@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 046/172] watchdog: ts4800_wdt: Fix refcount leak in ts4800_wdt_probe
+Subject: [PATCH 4.14 148/218] coresight: cpu-debug: Replace mutex with mutex_trylock on panic notifier
 Date:   Mon, 13 Jun 2022 12:10:06 +0200
-Message-Id: <20220613094901.463602332@linuxfoundation.org>
+Message-Id: <20220613094925.079027842@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
-References: <20220613094850.166931805@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +58,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Guilherme G. Piccoli <gpiccoli@igalia.com>
 
-[ Upstream commit 5d24df3d690809952528e7a19a43d84bc5b99d44 ]
+[ Upstream commit 1adff542d67a2ed1120955cb219bfff8a9c53f59 ]
 
-of_parse_phandle() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when done.
-Add  missing of_node_put() in some error paths.
+The panic notifier infrastructure executes registered callbacks when
+a panic event happens - such callbacks are executed in atomic context,
+with interrupts and preemption disabled in the running CPU and all other
+CPUs disabled. That said, mutexes in such context are not a good idea.
 
-Fixes: bf9006399939 ("watchdog: ts4800: add driver for TS-4800 watchdog")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20220511114203.47420-1-linmq006@gmail.com
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+This patch replaces a regular mutex with a mutex_trylock safer approach;
+given the nature of the mutex used in the driver, it should be pretty
+uncommon being unable to acquire such mutex in the panic path, hence
+no functional change should be observed (and if it is, that would be
+likely a deadlock with the regular mutex).
+
+Fixes: 2227b7c74634 ("coresight: add support for CPU debug module")
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc: Mike Leach <mike.leach@linaro.org>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Link: https://lore.kernel.org/r/20220427224924.592546-10-gpiccoli@igalia.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/ts4800_wdt.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/hwtracing/coresight/coresight-cpu-debug.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/watchdog/ts4800_wdt.c b/drivers/watchdog/ts4800_wdt.c
-index c137ad2bd5c3..0ea554c7cda5 100644
---- a/drivers/watchdog/ts4800_wdt.c
-+++ b/drivers/watchdog/ts4800_wdt.c
-@@ -125,13 +125,16 @@ static int ts4800_wdt_probe(struct platform_device *pdev)
- 	ret = of_property_read_u32_index(np, "syscon", 1, &reg);
- 	if (ret < 0) {
- 		dev_err(dev, "no offset in syscon\n");
-+		of_node_put(syscon_np);
- 		return ret;
- 	}
+diff --git a/drivers/hwtracing/coresight/coresight-cpu-debug.c b/drivers/hwtracing/coresight/coresight-cpu-debug.c
+index 2f6f46ea68e9..ccd59ba26609 100644
+--- a/drivers/hwtracing/coresight/coresight-cpu-debug.c
++++ b/drivers/hwtracing/coresight/coresight-cpu-debug.c
+@@ -391,9 +391,10 @@ static int debug_notifier_call(struct notifier_block *self,
+ 	int cpu;
+ 	struct debug_drvdata *drvdata;
  
- 	/* allocate memory for watchdog struct */
- 	wdt = devm_kzalloc(dev, sizeof(*wdt), GFP_KERNEL);
--	if (!wdt)
-+	if (!wdt) {
-+		of_node_put(syscon_np);
- 		return -ENOMEM;
-+	}
+-	mutex_lock(&debug_lock);
++	/* Bail out if we can't acquire the mutex or the functionality is off */
++	if (!mutex_trylock(&debug_lock))
++		return NOTIFY_DONE;
  
- 	/* set regmap and offset to know where to write */
- 	wdt->feed_offset = reg;
+-	/* Bail out if the functionality is disabled */
+ 	if (!debug_enable)
+ 		goto skip_dump;
+ 
+@@ -412,7 +413,7 @@ static int debug_notifier_call(struct notifier_block *self,
+ 
+ skip_dump:
+ 	mutex_unlock(&debug_lock);
+-	return 0;
++	return NOTIFY_DONE;
+ }
+ 
+ static struct notifier_block debug_notifier = {
 -- 
 2.35.1
 

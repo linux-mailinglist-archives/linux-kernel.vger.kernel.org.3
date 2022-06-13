@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 100CE5490A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A891548BB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355662AbiFMLtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40996 "EHLO
+        id S1377203AbiFMNUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357465AbiFMLqL (ORCPT
+        with ESMTP id S1359027AbiFMNJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:46:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8BA25DD;
-        Mon, 13 Jun 2022 03:52:21 -0700 (PDT)
+        Mon, 13 Jun 2022 09:09:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46A828720;
+        Mon, 13 Jun 2022 04:19:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7E36B80E59;
-        Mon, 13 Jun 2022 10:52:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BB4AC34114;
-        Mon, 13 Jun 2022 10:52:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D8660EAE;
+        Mon, 13 Jun 2022 11:19:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4666FC34114;
+        Mon, 13 Jun 2022 11:19:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117538;
-        bh=B3CqHOh+r9Ah6UrcI7btJ319nsIqtZeEw+NhcbAMHUo=;
+        s=korg; t=1655119149;
+        bh=D152uMmjUrD38CeiS2u5/G3PcPxeCPUmfJLv+unTGM8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f6WTcSC9hNHsp+o7FFO9AyYV+s9zMARAUNSq5lfasuEgxHDzRkOAsOVher/TV65J9
-         Jz8Uh5Jp0iBIE2R8XJjg5Uj6JuMWYe/KnhQD5P0jWvFax56z5B7Cim5q2EyPDdKZwR
-         YMMKjSCDun3hMGv1avWeAuCxfR3W6TaIJJZHjWhE=
+        b=mBBOkoJJW8gikEvjqemfBhVjltGX/LCOo9OL1de1kDq6/rXHQ8ni3F0sbPkahmHUY
+         QBEIWJFqqqvV8SpevdtD7ucV14earcHMyRFZAPy8cxYYOMWbJjqdPSteECros6YDpV
+         CkVlDIViPkeEUd6/kJkPaAs/6A24wYQONUQrY6cc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michal Kubecek <mkubecek@suse.cz>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
+        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 387/411] Revert "net: af_key: add check for pfkey_broadcast in function pfkey_process"
+Subject: [PATCH 5.15 158/247] ip_gre: test csum_start instead of transport header
 Date:   Mon, 13 Jun 2022 12:11:00 +0200
-Message-Id: <20220613094940.276049065@linuxfoundation.org>
+Message-Id: <20220613094927.748237738@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +58,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michal Kubecek <mkubecek@suse.cz>
+From: Willem de Bruijn <willemb@google.com>
 
-[ Upstream commit 9c90c9b3e50e16d03c7f87d63e9db373974781e0 ]
+[ Upstream commit 8d21e9963bec1aad2280cdd034c8993033ef2948 ]
 
-This reverts commit 4dc2a5a8f6754492180741facf2a8787f2c415d7.
+GRE with TUNNEL_CSUM will apply local checksum offload on
+CHECKSUM_PARTIAL packets.
 
-A non-zero return value from pfkey_broadcast() does not necessarily mean
-an error occurred as this function returns -ESRCH when no registered
-listener received the message. In particular, a call with
-BROADCAST_PROMISC_ONLY flag and null one_sk argument can never return
-zero so that this commit in fact prevents processing any PF_KEY message.
-One visible effect is that racoon daemon fails to find encryption
-algorithms like aes and refuses to start.
+ipgre_xmit must validate csum_start after an optional skb_pull,
+else lco_csum may trigger an overflow. The original check was
 
-Excluding -ESRCH return value would fix this but it's not obvious that
-we really want to bail out here and most other callers of
-pfkey_broadcast() also ignore the return value. Also, as pointed out by
-Steffen Klassert, PF_KEY is kind of deprecated and newer userspace code
-should use netlink instead so that we should only disturb the code for
-really important fixes.
+	if (csum && skb_checksum_start(skb) < skb->data)
+		return -EINVAL;
 
-v2: add a comment explaining why is the return value ignored
+This had false positives when skb_checksum_start is undefined:
+when ip_summed is not CHECKSUM_PARTIAL. A discussed refinement
+was straightforward
 
-Signed-off-by: Michal Kubecek <mkubecek@suse.cz>
-Signed-off-by: Steffen Klassert <steffen.klassert@secunet.com>
+	if (csum && skb->ip_summed == CHECKSUM_PARTIAL &&
+	    skb_checksum_start(skb) < skb->data)
+		return -EINVAL;
+
+But was eventually revised more thoroughly:
+- restrict the check to the only branch where needed, in an
+  uncommon GRE path that uses header_ops and calls skb_pull.
+- test skb_transport_header, which is set along with csum_start
+  in skb_partial_csum_set in the normal header_ops datapath.
+
+Turns out skbs can arrive in this branch without the transport
+header set, e.g., through BPF redirection.
+
+Revise the check back to check csum_start directly, and only if
+CHECKSUM_PARTIAL. Do leave the check in the updated location.
+Check field regardless of whether TUNNEL_CSUM is configured.
+
+Link: https://lore.kernel.org/netdev/YS+h%2FtqCJJiQei+W@shredder/
+Link: https://lore.kernel.org/all/20210902193447.94039-2-willemdebruijn.kernel@gmail.com/T/#u
+Fixes: 8a0ed250f911 ("ip_gre: validate csum_start only on pull")
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
+Link: https://lore.kernel.org/r/20220606132107.3582565-1-willemdebruijn.kernel@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/key/af_key.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ net/ipv4/ip_gre.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/net/key/af_key.c b/net/key/af_key.c
-index dd064d5eff6e..32fe99cd01fc 100644
---- a/net/key/af_key.c
-+++ b/net/key/af_key.c
-@@ -2830,10 +2830,12 @@ static int pfkey_process(struct sock *sk, struct sk_buff *skb, const struct sadb
- 	void *ext_hdrs[SADB_EXT_MAX];
- 	int err;
+diff --git a/net/ipv4/ip_gre.c b/net/ipv4/ip_gre.c
+index 276a3b7b0e9c..f23528c77539 100644
+--- a/net/ipv4/ip_gre.c
++++ b/net/ipv4/ip_gre.c
+@@ -629,21 +629,20 @@ static netdev_tx_t ipgre_xmit(struct sk_buff *skb,
+ 	}
  
--	err = pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
--			      BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
--	if (err)
--		return err;
-+	/* Non-zero return value of pfkey_broadcast() does not always signal
-+	 * an error and even on an actual error we may still want to process
-+	 * the message so rather ignore the return value.
-+	 */
-+	pfkey_broadcast(skb_clone(skb, GFP_KERNEL), GFP_KERNEL,
-+			BROADCAST_PROMISC_ONLY, NULL, sock_net(sk));
+ 	if (dev->header_ops) {
+-		const int pull_len = tunnel->hlen + sizeof(struct iphdr);
+-
+ 		if (skb_cow_head(skb, 0))
+ 			goto free_skb;
  
- 	memset(ext_hdrs, 0, sizeof(ext_hdrs));
- 	err = parse_exthdrs(skb, hdr, ext_hdrs);
+ 		tnl_params = (const struct iphdr *)skb->data;
+ 
+-		if (pull_len > skb_transport_offset(skb))
+-			goto free_skb;
+-
+ 		/* Pull skb since ip_tunnel_xmit() needs skb->data pointing
+ 		 * to gre header.
+ 		 */
+-		skb_pull(skb, pull_len);
++		skb_pull(skb, tunnel->hlen + sizeof(struct iphdr));
+ 		skb_reset_mac_header(skb);
++
++		if (skb->ip_summed == CHECKSUM_PARTIAL &&
++		    skb_checksum_start(skb) < skb->data)
++			goto free_skb;
+ 	} else {
+ 		if (skb_cow_head(skb, dev->needed_headroom))
+ 			goto free_skb;
 -- 
 2.35.1
 

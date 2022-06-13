@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A83954879D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CABD548811
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353184AbiFMLZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46692 "EHLO
+        id S1377989AbiFMNgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352886AbiFMLTB (ORCPT
+        with ESMTP id S1378447AbiFMNbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:19:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A0F289A5;
-        Mon, 13 Jun 2022 03:40:44 -0700 (PDT)
+        Mon, 13 Jun 2022 09:31:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9001703DF;
+        Mon, 13 Jun 2022 04:26:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22347611E6;
-        Mon, 13 Jun 2022 10:40:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EDE2C34114;
-        Mon, 13 Jun 2022 10:40:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 571AEB80E93;
+        Mon, 13 Jun 2022 11:26:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4249C34114;
+        Mon, 13 Jun 2022 11:26:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116843;
-        bh=jfe85s2VWaB63elD4lJMi0XDEoLbF+zQNm8u1KsBBFM=;
+        s=korg; t=1655119565;
+        bh=rp7BVa+YdVp1no5nrT8jUWCSbXCylb1klRp57aAm3fM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iiuz7m3Z6MR8dhxm6EUa80+j6OwKwNjzphMuL3K5yY6KjgLE21MFxcJDLSezT21xc
-         cicGUjKAGf3SlCZ8QWLzTOH6qV7m4VIpfeqgptNXJVpLtanGoZPXgxPPp0X2VZvsP7
-         wQJkvg1vCVVzs4oS3As/7uBFnfcFGOhRyIM+8BKk=
+        b=oW8ki3qOu21usA3h1vlOrjPHCY67HR1GQ8kmcQxCuaR4diQJE4eMT8JU5Wr3JPjeo
+         641i4GXSJkd+Ss3nRSLgZHdHuad+miXyvCCa1+ID7CCh0O57gdUtkwOPUvYlWtO3GX
+         5Ij2OVcLKylyhaWUdwJZw3vbytGx+Kag33L9LSQQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 205/411] dmaengine: stm32-mdma: remove GISR1 register
-Date:   Mon, 13 Jun 2022 12:07:58 +0200
-Message-Id: <20220613094934.805145200@linuxfoundation.org>
+        stable@vger.kernel.org, Howard Chiu <howard_chiu@aspeedtech.com>,
+        Joel Stanley <joel@jms.id.au>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 059/339] ARM: dts: aspeed: ast2600-evb: Enable RX delay for MAC0/MAC1
+Date:   Mon, 13 Jun 2022 12:08:04 +0200
+Message-Id: <20220613094928.311639057@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,71 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Amelie Delaunay <amelie.delaunay@foss.st.com>
+From: Howard Chiu <howard_chiu@aspeedtech.com>
 
-[ Upstream commit 9d6a2d92e450926c483e45eaf426080a19219f4e ]
+[ Upstream commit 4d338ee40ba89e508c5d3e1b4af956af7cb5e12e ]
 
-GISR1 was described in a not up-to-date documentation when the stm32-mdma
-driver has been developed. This register has not been added in reference
-manual of STM32 SoC with MDMA, which have only 32 MDMA channels.
-So remove it from stm32-mdma driver.
+Since mac0/1 and mac2/3 are physically located on different die,
+they have different properties by nature, which is mac0/1 has smaller delay step.
 
-Fixes: a4ffb13c8946 ("dmaengine: Add STM32 MDMA driver")
-Signed-off-by: Amelie Delaunay <amelie.delaunay@foss.st.com>
-Link: https://lore.kernel.org/r/20220504155322.121431-2-amelie.delaunay@foss.st.com
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
+The property 'phy-mode' on ast2600 mac0 and mac1 is recommended to set to 'rgmii-rxid'
+which enables the RX interface delay from the PHY chip.
+Refer page 45 of SDK User Guide v08.00
+https://github.com/AspeedTech-BMC/openbmc/releases/download/v08.00/SDK_User_Guide_v08.00.pdf
+
+Fixes: 2ca5646b5c2f ("ARM: dts: aspeed: Add AST2600 and EVB")
+Signed-off-by: Howard Chiu <howard_chiu@aspeedtech.com>
+Link: https://lore.kernel.org/r/SG2PR06MB23152A548AAE81140B57DD69E6E09@SG2PR06MB2315.apcprd06.prod.outlook.com
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/dma/stm32-mdma.c | 21 +++++----------------
- 1 file changed, 5 insertions(+), 16 deletions(-)
+ arch/arm/boot/dts/aspeed-ast2600-evb.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/dma/stm32-mdma.c b/drivers/dma/stm32-mdma.c
-index a05355d1292e..c902c2480640 100644
---- a/drivers/dma/stm32-mdma.c
-+++ b/drivers/dma/stm32-mdma.c
-@@ -40,7 +40,6 @@
- 					 STM32_MDMA_SHIFT(mask))
+diff --git a/arch/arm/boot/dts/aspeed-ast2600-evb.dts b/arch/arm/boot/dts/aspeed-ast2600-evb.dts
+index b7eb552640cb..788448cdd6b3 100644
+--- a/arch/arm/boot/dts/aspeed-ast2600-evb.dts
++++ b/arch/arm/boot/dts/aspeed-ast2600-evb.dts
+@@ -103,7 +103,7 @@
+ &mac0 {
+ 	status = "okay";
  
- #define STM32_MDMA_GISR0		0x0000 /* MDMA Int Status Reg 1 */
--#define STM32_MDMA_GISR1		0x0004 /* MDMA Int Status Reg 2 */
+-	phy-mode = "rgmii";
++	phy-mode = "rgmii-rxid";
+ 	phy-handle = <&ethphy0>;
  
- /* MDMA Channel x interrupt/status register */
- #define STM32_MDMA_CISR(x)		(0x40 + 0x40 * (x)) /* x = 0..62 */
-@@ -196,7 +195,7 @@
+ 	pinctrl-names = "default";
+@@ -114,7 +114,7 @@
+ &mac1 {
+ 	status = "okay";
  
- #define STM32_MDMA_MAX_BUF_LEN		128
- #define STM32_MDMA_MAX_BLOCK_LEN	65536
--#define STM32_MDMA_MAX_CHANNELS		63
-+#define STM32_MDMA_MAX_CHANNELS		32
- #define STM32_MDMA_MAX_REQUESTS		256
- #define STM32_MDMA_MAX_BURST		128
- #define STM32_MDMA_VERY_HIGH_PRIORITY	0x11
-@@ -1351,21 +1350,11 @@ static irqreturn_t stm32_mdma_irq_handler(int irq, void *devid)
+-	phy-mode = "rgmii";
++	phy-mode = "rgmii-rxid";
+ 	phy-handle = <&ethphy1>;
  
- 	/* Find out which channel generates the interrupt */
- 	status = readl_relaxed(dmadev->base + STM32_MDMA_GISR0);
--	if (status) {
--		id = __ffs(status);
--	} else {
--		status = readl_relaxed(dmadev->base + STM32_MDMA_GISR1);
--		if (!status) {
--			dev_dbg(mdma2dev(dmadev), "spurious it\n");
--			return IRQ_NONE;
--		}
--		id = __ffs(status);
--		/*
--		 * As GISR0 provides status for channel id from 0 to 31,
--		 * so GISR1 provides status for channel id from 32 to 62
--		 */
--		id += 32;
-+	if (!status) {
-+		dev_dbg(mdma2dev(dmadev), "spurious it\n");
-+		return IRQ_NONE;
- 	}
-+	id = __ffs(status);
- 
- 	chan = &dmadev->chan[id];
- 	if (!chan) {
+ 	pinctrl-names = "default";
 -- 
 2.35.1
 

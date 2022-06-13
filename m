@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E98154873B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF43D54882C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383498AbiFMO0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
+        id S1358039AbiFMNEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383582AbiFMOXh (ORCPT
+        with ESMTP id S1355427AbiFMM4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:23:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3B345AE6;
-        Mon, 13 Jun 2022 04:44:34 -0700 (PDT)
+        Mon, 13 Jun 2022 08:56:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEDA12ACB;
+        Mon, 13 Jun 2022 04:17:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BC8B613F9;
-        Mon, 13 Jun 2022 11:44:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3D89C34114;
-        Mon, 13 Jun 2022 11:44:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE901B80E93;
+        Mon, 13 Jun 2022 11:16:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D116C34114;
+        Mon, 13 Jun 2022 11:16:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120673;
-        bh=h2GAPVA3uVAAFtMjriXrr9QUlUNYuhwWbO0AJOL+LgI=;
+        s=korg; t=1655119017;
+        bh=Peq5gzmdgmG8DJ+CvcqQLnVGG1RKzHTqlFTjY4iQTVY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mAldeU+cto4Y4YXk3PsmbjT0zl3mUP6hfTr/1V/sytHzVGlbJnqcGwQXX8nPe0raC
-         aEvRF+Es9nYUUpGqzmYgt/mYXlN/sqOJ9oSfen0jfHRI7hg6m2peKS1f7yUZdJ/16x
-         bdgLdHxc3ulfzsK+0uCCWCVI42cTAVKKHxCCsaAI=
+        b=XZC+L1QglFpbmynsfG+035DCdtRM7Msr3n/Vdt4vHad5RACIhwlkLVWJLb/+9HXAY
+         484KHdMD05B9GZJUFdvNq8QsIxIWLRkFBQ2J7Yo2JOZUBUcfamAtqpY99SFUQ6ad7N
+         iej5zFAGP1XHB8yCH+ysklN9SCy2cck/HrGzcEC4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yonghong Song <yhs@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
+        stable@vger.kernel.org,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 092/298] selftests/bpf: fix selftest after random: Urandom_read tracepoint removal
+Subject: [PATCH 5.15 084/247] riscv: read-only pages should not be writable
 Date:   Mon, 13 Jun 2022 12:09:46 +0200
-Message-Id: <20220613094927.739915034@linuxfoundation.org>
+Message-Id: <20220613094925.503755819@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrii Nakryiko <andrii@kernel.org>
+From: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
 
-[ Upstream commit 99dea2c664d7bc7e4f6f6947182d0d365165a998 ]
+[ Upstream commit 630f972d76d6460235e84e1aa034ee06f9c8c3a9 ]
 
-14c174633f34 ("random: remove unused tracepoints") removed all the
-tracepoints from drivers/char/random.c, one of which,
-random:urandom_read, was used by stacktrace_build_id selftest to trigger
-stack trace capture.
+If EFI pages are marked as read-only,
+we should remove the _PAGE_WRITE flag.
 
-Fix breakage by switching to kprobing urandom_read() function.
+The current code overwrites an unused value.
 
-Suggested-by: Yonghong Song <yhs@fb.com>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-Acked-by: Yonghong Song <yhs@fb.com>
-Link: https://lore.kernel.org/bpf/20220325225643.2606-1-andrii@kernel.org
+Fixes: b91540d52a08b ("RISC-V: Add EFI runtime services")
+Signed-off-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Link: https://lore.kernel.org/r/20220528014132.91052-1-heinrich.schuchardt@canonical.com
+Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../selftests/bpf/progs/test_stacktrace_build_id.c   | 12 ++----------
- 1 file changed, 2 insertions(+), 10 deletions(-)
+ arch/riscv/kernel/efi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-index 36a707e7c7a7..6c62bfb8bb6f 100644
---- a/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-+++ b/tools/testing/selftests/bpf/progs/test_stacktrace_build_id.c
-@@ -39,16 +39,8 @@ struct {
- 	__type(value, stack_trace_t);
- } stack_amap SEC(".maps");
+diff --git a/arch/riscv/kernel/efi.c b/arch/riscv/kernel/efi.c
+index 024159298231..1aa540350abd 100644
+--- a/arch/riscv/kernel/efi.c
++++ b/arch/riscv/kernel/efi.c
+@@ -65,7 +65,7 @@ static int __init set_permissions(pte_t *ptep, unsigned long addr, void *data)
  
--/* taken from /sys/kernel/debug/tracing/events/random/urandom_read/format */
--struct random_urandom_args {
--	unsigned long long pad;
--	int got_bits;
--	int pool_left;
--	int input_left;
--};
--
--SEC("tracepoint/random/urandom_read")
--int oncpu(struct random_urandom_args *args)
-+SEC("kprobe/urandom_read")
-+int oncpu(struct pt_regs *args)
- {
- 	__u32 max_len = sizeof(struct bpf_stack_build_id)
- 			* PERF_MAX_STACK_DEPTH;
+ 	if (md->attribute & EFI_MEMORY_RO) {
+ 		val = pte_val(pte) & ~_PAGE_WRITE;
+-		val = pte_val(pte) | _PAGE_READ;
++		val |= _PAGE_READ;
+ 		pte = __pte(val);
+ 	}
+ 	if (md->attribute & EFI_MEMORY_XP) {
 -- 
 2.35.1
 

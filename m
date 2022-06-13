@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C946548395
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB550548360
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 11:44:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240170AbiFMJgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 05:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53892 "EHLO
+        id S240887AbiFMJif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 05:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiFMJgW (ORCPT
+        with ESMTP id S240948AbiFMJi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 05:36:22 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5D66356;
-        Mon, 13 Jun 2022 02:36:19 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id n10so10017468ejk.5;
-        Mon, 13 Jun 2022 02:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Kxhsb4j+LHktkCeM8EHAsOHU0Xef2/yfMBziY6AVgmc=;
-        b=UVdGvKSRxf1rkD9O+mZfi9f1MOXkwIfGxIJ8NDPLZVP591C2nJTkMEljvhe2taf9BJ
-         LJiZpIAhqTLLfd+IQi50zINWtKdylmjLTZLNHvHRZe/WIhWsQXLecWkoANc4BjvrzjnJ
-         oYtUkNuko8Jn5fovpSoF2MyVDj0t3Itt9lf9fs8A9dyt4StUBtLYSoZtsA0XE4/wOjru
-         dp4VQ1XAArQ36I2qbvC4UwDvcHRRXCYTiFgcLhOW4MPG24rMYV6i+XTAere4il09TtzC
-         uMDZ3sm52bLxFfZyk1O/txRtJdUmgnGR8qD0LaEN3NhI2VUuSgPxfmrX/WrzaYSvJn9D
-         MlGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Kxhsb4j+LHktkCeM8EHAsOHU0Xef2/yfMBziY6AVgmc=;
-        b=QW6/dXqRF+817osULhPNmO8OF3TzGm9NuwlubUn0gq+WWEGgzOntHk/2N2NC0d9Z5w
-         IvtVruyin5evOBHvQrGdqBzEtdGdXM5mcRgwfalYPjO9/AhNiJ2G+Y5SfTc0G5cPwObq
-         UAMCGXHygO+RZK/Met6xvCgPL8/3KTzUIpcs1JEQpurJQSbiKqex4fm+J+DykxMSJzYV
-         1aieaZqZERwHe8M+P6fPEfvPUd9jlHP+ommH98jvgqOaqhV5I7mTjVq2NOOiMD8Umm5B
-         MJtPdLMbL9S9wykfVSoBJZkr83qzUVH9CBztj6Yzbdtcw32653HbA5VR3KTDTb5VWrak
-         FPbw==
-X-Gm-Message-State: AOAM5330OtjuIp31mDttqMGmdLjZqpBlgr22U73ExPT/8vhm3kQFM78V
-        IrhJtJkmuKDUaYzfCfmNhCG3MggXvvg=
-X-Google-Smtp-Source: ABdhPJzgQ9L7Bl8OQAcZPxd6LcZ7d6mZk413LmeDZR/0FkrPRxwaL0vSs8nNlvuwI5e9LK5Yk2FkCA==
-X-Received: by 2002:a17:906:6009:b0:6fe:9813:14ea with SMTP id o9-20020a170906600900b006fe981314eamr51856681ejj.732.1655112978526;
-        Mon, 13 Jun 2022 02:36:18 -0700 (PDT)
-Received: from skbuf ([188.25.255.186])
-        by smtp.gmail.com with ESMTPSA id u10-20020a1709061daa00b00711d546f8a8sm3592471ejh.139.2022.06.13.02.36.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 02:36:17 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 12:36:16 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [RFC Patch net-next v2 08/15] net: dsa: microchip: update the
- ksz_port_mdb_add/del
-Message-ID: <20220613093616.mqpdzqfmapbj4svt@skbuf>
-References: <20220530104257.21485-1-arun.ramadoss@microchip.com>
- <20220530104257.21485-9-arun.ramadoss@microchip.com>
+        Mon, 13 Jun 2022 05:38:28 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BCE1114F;
+        Mon, 13 Jun 2022 02:38:26 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25D79lhg021764;
+        Mon, 13 Jun 2022 11:38:16 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=selector1;
+ bh=O8ZTMrDMtW5Qr5jLCUZYMVMlYqPLGwlTXQ4IA0vXJ8c=;
+ b=uHnnMrnu1IhyBSK8TCHspcxv7eQiFIMh9/Sb7incVMenGogyRJ6wbJ0XytyfvmRA03b3
+ JsdWgYIdHfPq2va3ULtrOkyGce8sFArQDAMPvMmXqHEFaxZM37OFJEcQ6qqMmU+477Gq
+ hLNlOO9N/L+JTJQurWs+taGnpLjmZnx7i3EX9deBOmRZQzC2oxL6/iEZaRhu5+YY41NX
+ khW9LC2OxiaaTXBH1u91EzoAnQH8QU3tiocwZSOD1uJ7UFpYchSefIJ6XSXCkcxhgz3G
+ 9QY0EOLNoYAoo4eTrOLuaeGW1Rbbd2LbsEWmxhSWZVPoAnvUc0o+5inzjhngRJkADUtm Hg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3gmgfmb64u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Jun 2022 11:38:16 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 9A8FD100034;
+        Mon, 13 Jun 2022 11:38:15 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 8E34721515F;
+        Mon, 13 Jun 2022 11:38:15 +0200 (CEST)
+Received: from localhost (10.75.127.48) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Mon, 13 Jun
+ 2022 11:38:15 +0200
+From:   Alexandre Torgue <alexandre.torgue@foss.st.com>
+To:     <robh+dt@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] dt-bindings: rcc: stm32: select the "secure" path for stm32mp13
+Date:   Mon, 13 Jun 2022 11:38:15 +0200
+Message-ID: <20220613093815.18334-1-alexandre.torgue@foss.st.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220530104257.21485-9-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.48]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-13_03,2022-06-09_02,2022-02-23_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 04:12:50PM +0530, Arun Ramadoss wrote:
-> ksz_mdb_add/del in ksz_common.c is specific for the ksz8795.c file. The
+Like for stm32mp15, when stm32 RCC node is used to interact with a secure
+context (using clock SCMI protocol), a different path has to be used for
+yaml verification.
 
-ksz_port_mdb_add
+Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
 
-> ksz9477 has its separate ksz9477_port_mdb_add/del functions.  This patch
-> moves the ksz8795 specific mdb functionality from ksz_common to ksz8795.
-> And this dsa_switch_ops hooks for ksz8795/ksz9477 are invoked through
-> the ksz_port_mdb_add/del.
-> 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
+---
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Hi Rob, Krzysztof, 
+
+If you agree with this patch, I'll apply it directly in my STM32 tree.
+
+Thanks
+Alex
+
+diff --git a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+index f8c474227807..242fe922b035 100644
+--- a/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
++++ b/Documentation/devicetree/bindings/clock/st,stm32mp1-rcc.yaml
+@@ -78,6 +78,7 @@ if:
+       contains:
+         enum:
+           - st,stm32mp1-rcc-secure
++          - st,stm32mp13-rcc
+ then:
+   properties:
+     clocks:
+-- 
+2.17.1
+

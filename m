@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A27B5549501
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A69549732
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352114AbiFMLKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
+        id S1384601AbiFMO3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:29:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351892AbiFMLFM (ORCPT
+        with ESMTP id S1383979AbiFMOYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:05:12 -0400
+        Mon, 13 Jun 2022 10:24:25 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CA22A2;
-        Mon, 13 Jun 2022 03:34:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B0B95B2;
+        Mon, 13 Jun 2022 04:46:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 000B261127;
-        Mon, 13 Jun 2022 10:34:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DF67C341CC;
-        Mon, 13 Jun 2022 10:34:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5331612AC;
+        Mon, 13 Jun 2022 11:46:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9282C34114;
+        Mon, 13 Jun 2022 11:46:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116486;
-        bh=AQJUPapWjuLINSh4e/xYgsJ69ZfH1rTid70rZGLesfg=;
+        s=korg; t=1655120777;
+        bh=EGleJe67j/wtenNzkr2evwCWXHHiKXNmVSepmgjzxS8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rNO64tvBphTONCPUS+RzgJ/S7mPKJlYJpgEhGVJI6tjm/G4ljKd+UX/T0dmc+yNGm
-         N9LX7bO7sumqhEIhVRXeuAsRBr+IE16y3YM8vIeYH/YLu5l8Ix6C8g2TM06xPZOcuF
-         4iwRN+vGDV7eKsvbveZ5VSx+ptrh4FmDUtsS8kdQ=
+        b=HWr7m1hUCGixl2vKFIQizGDSVDuImffPfcpMaZE9Wgkm8OtSx4jKziqAlmq1NgW6z
+         2P5xvMsSYV8sgo40p35rP4Pg4x/dEF07rJ9ez/dJBSrbV01s1s4Tb2Amfckq2tkI5B
+         3Gdj5HWbZUTsoSFYAbGekG0wHqLe8VDgWBjMooKo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
+        stable@vger.kernel.org, Chao Yu <chao.yu@oppo.com>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 190/218] usb: dwc2: gadget: dont reset gadgets driver->bus
+Subject: [PATCH 5.17 154/298] f2fs: fix to tag gcing flag on page during file defragment
 Date:   Mon, 13 Jun 2022 12:10:48 +0200
-Message-Id: <20220613094926.379946681@linuxfoundation.org>
+Message-Id: <20220613094929.607849575@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,64 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marek Szyprowski <m.szyprowski@samsung.com>
+From: Chao Yu <chao@kernel.org>
 
-[ Upstream commit 3120aac6d0ecd9accf56894aeac0e265f74d3d5a ]
+[ Upstream commit 2d1fe8a86bf5e0663866fd0da83c2af1e1b0e362 ]
 
-UDC driver should not touch gadget's driver internals, especially it
-should not reset driver->bus. This wasn't harmful so far, but since
-commit fc274c1e9973 ("USB: gadget: Add a new bus for gadgets") gadget
-subsystem got it's own bus and messing with ->bus triggers the
-following NULL pointer dereference:
+In order to garantee migrated data be persisted during checkpoint,
+otherwise out-of-order persistency between data and node may cause
+data corruption after SPOR.
 
-dwc2 12480000.hsotg: bound driver g_ether
-8<--- cut here ---
-Unable to handle kernel NULL pointer dereference at virtual address 00000000
-[00000000] *pgd=00000000
-Internal error: Oops: 5 [#1] SMP ARM
-Modules linked in: ...
-CPU: 0 PID: 620 Comm: modprobe Not tainted 5.18.0-rc5-next-20220504 #11862
-Hardware name: Samsung Exynos (Flattened Device Tree)
-PC is at module_add_driver+0x44/0xe8
-LR is at sysfs_do_create_link_sd+0x84/0xe0
-...
-Process modprobe (pid: 620, stack limit = 0x(ptrval))
-...
- module_add_driver from bus_add_driver+0xf4/0x1e4
- bus_add_driver from driver_register+0x78/0x10c
- driver_register from usb_gadget_register_driver_owner+0x40/0xb4
- usb_gadget_register_driver_owner from do_one_initcall+0x44/0x1e0
- do_one_initcall from do_init_module+0x44/0x1c8
- do_init_module from load_module+0x19b8/0x1b9c
- load_module from sys_finit_module+0xdc/0xfc
- sys_finit_module from ret_fast_syscall+0x0/0x54
-Exception stack(0xf1771fa8 to 0xf1771ff0)
-...
-dwc2 12480000.hsotg: new device is high-speed
----[ end trace 0000000000000000 ]---
-
-Fix this by removing driver->bus entry reset.
-
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Link: https://lore.kernel.org/r/20220505104618.22729-1-m.szyprowski@samsung.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Chao Yu <chao.yu@oppo.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc2/gadget.c | 1 -
- 1 file changed, 1 deletion(-)
+ fs/f2fs/file.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index dddc5d02b552..14f907cf71a3 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -4302,7 +4302,6 @@ static int dwc2_hsotg_udc_start(struct usb_gadget *gadget,
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index 29cd65f7c9eb..a2b7dead68e0 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -2679,6 +2679,7 @@ static int f2fs_defragment_range(struct f2fs_sb_info *sbi,
+ 			}
  
- 	WARN_ON(hsotg->driver);
+ 			set_page_dirty(page);
++			set_page_private_gcing(page);
+ 			f2fs_put_page(page, 1);
  
--	driver->driver.bus = NULL;
- 	hsotg->driver = driver;
- 	hsotg->gadget.dev.of_node = hsotg->dev->of_node;
- 	hsotg->gadget.speed = USB_SPEED_UNKNOWN;
+ 			idx++;
 -- 
 2.35.1
 

@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A525F548FEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA79549769
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376440AbiFMNVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
+        id S1353323AbiFMM1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376754AbiFMNT3 (ORCPT
+        with ESMTP id S1355237AbiFMMXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:19:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778B45A097;
-        Mon, 13 Jun 2022 04:22:57 -0700 (PDT)
+        Mon, 13 Jun 2022 08:23:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC0B3152B;
+        Mon, 13 Jun 2022 04:04:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01621B80EAB;
-        Mon, 13 Jun 2022 11:22:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 528F1C34114;
-        Mon, 13 Jun 2022 11:22:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 86D5660F9A;
+        Mon, 13 Jun 2022 11:04:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97AE2C34114;
+        Mon, 13 Jun 2022 11:04:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119333;
-        bh=UuT5pcuIYfI0vQXMOvXgNqqRRJ+ochAjLD8cGR0HfcE=;
+        s=korg; t=1655118270;
+        bh=S2nyjzDsl6Qa9SKaZ1k8jiwAYyN6hsEchmkf/gZk/wI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=caHO4I0YsHFrl+cb1FdyeM6ZMVNU2aw+1kmEeuIMZX6mVUlx8860P/LKGSbc6+Eqj
-         psBHIVTgtotJpKHOYfxos9CgKzlgEeZZLRQFWoIQJDNZcXRCvUOlXZPisdgEdPCrXo
-         ou+N6eqVSOGL2HoeBF1/vyjI+LYjWCtsuBDTls6M=
+        b=a5J09sZZrSNhdDy+8VTUU++Y3UbBSPiZpyrnG4wvha6OR1UKDy6J8hUtwhGfNh75U
+         83SKqVwngDlk3pSypcHvLfQYTP+XMZw/ZZwPBsEvWbQGF1liQc+Nkbrk4sXWTUsQaK
+         l1gYHs3sl4g9OPf87+G3AZn1HbBRm8mRexgY1hSo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Martin Leung <Martin.Leung@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        David Galiffi <David.Galiffi@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 198/247] drm/amd/display: Check if modulo is 0 before dividing.
+        stable@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
+        Enzo Matsumiya <ematsumiya@suse.de>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 4.19 276/287] cifs: return errors during session setup during reconnects
 Date:   Mon, 13 Jun 2022 12:11:40 +0200
-Message-Id: <20220613094928.954510878@linuxfoundation.org>
+Message-Id: <20220613094932.366360146@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,45 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Galiffi <David.Galiffi@amd.com>
+From: Shyam Prasad N <sprasad@microsoft.com>
 
-[ Upstream commit 49947b906a6bd9668eaf4f9cf691973c25c26955 ]
+commit 8ea21823aa584b55ba4b861307093b78054b0c1b upstream.
 
-[How & Why]
-If a value of 0 is read, then this will cause a divide-by-0 panic.
+During reconnects, we check the return value from
+cifs_negotiate_protocol, and have handlers for both success
+and failures. But if that passes, and cifs_setup_session
+returns any errors other than -EACCES, we do not handle
+that. This fix adds a handler for that, so that we don't
+go ahead and try a tree_connect on a failed session.
 
-Reviewed-by: Martin Leung <Martin.Leung@amd.com>
-Acked-by: Qingqing Zhuo <qingqing.zhuo@amd.com>
-Signed-off-by: David Galiffi <David.Galiffi@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
+Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
+Cc: stable@vger.kernel.org
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ fs/cifs/smb2pdu.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c b/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c
-index 2c7eb982eabc..054823d12403 100644
---- a/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c
-+++ b/drivers/gpu/drm/amd/display/dc/dce/dce_clock_source.c
-@@ -1013,9 +1013,12 @@ static bool get_pixel_clk_frequency_100hz(
- 			 * not be programmed equal to DPREFCLK
- 			 */
- 			modulo_hz = REG_READ(MODULO[inst]);
--			*pixel_clk_khz = div_u64((uint64_t)clock_hz*
--				clock_source->ctx->dc->clk_mgr->dprefclk_khz*10,
--				modulo_hz);
-+			if (modulo_hz)
-+				*pixel_clk_khz = div_u64((uint64_t)clock_hz*
-+					clock_source->ctx->dc->clk_mgr->dprefclk_khz*10,
-+					modulo_hz);
-+			else
-+				*pixel_clk_khz = 0;
- 		} else {
- 			/* NOTE: There is agreement with VBIOS here that MODULO is
- 			 * programmed equal to DPREFCLK, in which case PHASE will be
--- 
-2.35.1
-
+--- a/fs/cifs/smb2pdu.c
++++ b/fs/cifs/smb2pdu.c
+@@ -265,6 +265,9 @@ smb2_reconnect(__le16 smb2_command, stru
+ 			rc = -EHOSTDOWN;
+ 			mutex_unlock(&tcon->ses->session_mutex);
+ 			goto failed;
++		} else if (rc) {
++			mutex_unlock(&ses->session_mutex);
++			goto out;
+ 		}
+ 	}
+ 	if (rc || !tcon->need_reconnect) {
 
 

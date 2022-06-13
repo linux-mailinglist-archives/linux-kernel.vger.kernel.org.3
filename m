@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8405486E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF1B54875B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1382812AbiFMOZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52238 "EHLO
+        id S1355257AbiFMMdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383383AbiFMOXQ (ORCPT
+        with ESMTP id S1359282AbiFMMaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:23:16 -0400
+        Mon, 13 Jun 2022 08:30:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DFA46661;
-        Mon, 13 Jun 2022 04:44:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E465AEFF;
+        Mon, 13 Jun 2022 04:07:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EB41612AC;
-        Mon, 13 Jun 2022 11:44:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BCA3C34114;
-        Mon, 13 Jun 2022 11:44:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B20961347;
+        Mon, 13 Jun 2022 11:06:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39FF7C34114;
+        Mon, 13 Jun 2022 11:06:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120659;
-        bh=B6GC9o5GZjVAdcvKBkcQ0xllpRE3UeM87D2CQFb1Hm0=;
+        s=korg; t=1655118410;
+        bh=HV73AQN1kNcjmqMkArhjy0PLs8x/DcI7HaSRZwf/Jeg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EDkUP8azt75xPMM+0ZVYLIxLe8pVEQ/l37AEVtFuaWpCf6LzZ9cJUSklXimFT3oQ9
-         /w1tj2lU/f/3J2KyXyXAe6yH3OWzp9vSrs0xRiKzg/X+jyCiMNd9oUDI11vxYEaBLu
-         KC83OFDvYN+pAMOHQFgewesQaMtFHZuHBjIl27vM=
+        b=CZdFgblhse3Ipqwavmyobj29sq2zA80O/veuoVfXsorSHpjFRhFMM7S6e5mkSTN5b
+         Ac3Qkz/JgRiwGLqbSgLffp2Q+sEiERbt8WmbRzFbNnzOPWHMM5jjQFNKaW3XyGhPxQ
+         rdJw2GZee2Fvrxb+ATrJQgmNBlCmRS6HmkIgXbDU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 110/298] net/mlx5: CT: Fix header-rewrite re-use for tupels
-Date:   Mon, 13 Jun 2022 12:10:04 +0200
-Message-Id: <20220613094928.284868469@linuxfoundation.org>
+Subject: [PATCH 5.10 048/172] clocksource/drivers/oxnas-rps: Fix irq_of_parse_and_map() return value
+Date:   Mon, 13 Jun 2022 12:10:08 +0200
+Message-Id: <20220613094901.950124668@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,79 +57,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Blakey <paulb@nvidia.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit 1f2856cde64baa78475e6d3c601fb7b7f693a161 ]
+[ Upstream commit 9c04a8ff03def4df3f81219ffbe1ec9b44ff5348 ]
 
-Tuple entries that don't have nat configured for them
-which are added to the ct nat table will always create
-a new modify header, as we don't check for possible
-re-use on them. The same for tuples that have nat configured
-for them but are added to ct table.
+The irq_of_parse_and_map() returns 0 on failure, not a negative ERRNO.
 
-Fix the above by only avoiding wasteful re-use lookup
-for actually natted entries in ct nat table.
-
-Fixes: 7fac5c2eced3 ("net/mlx5: CT: Avoid reusing modify header context for natted entries")
-Signed-off-by: Paul Blakey <paulb@nvidia.com>
-Reviewed-by: Ariel Levkovich <lariel@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Fixes: 89355274e1f7 ("clocksource/drivers/oxnas-rps: Add Oxford Semiconductor RPS Dual Timer")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
+Link: https://lore.kernel.org/r/20220422104101.55754-1-krzysztof.kozlowski@linaro.org
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../ethernet/mellanox/mlx5/core/en/tc_ct.c    | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ drivers/clocksource/timer-oxnas-rps.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c
-index 9028e9958c72..cf9d48d934ef 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c
-@@ -692,7 +692,7 @@ mlx5_tc_ct_entry_create_mod_hdr(struct mlx5_tc_ct_priv *ct_priv,
- 				struct mlx5_flow_attr *attr,
- 				struct flow_rule *flow_rule,
- 				struct mlx5e_mod_hdr_handle **mh,
--				u8 zone_restore_id, bool nat)
-+				u8 zone_restore_id, bool nat_table, bool has_nat)
- {
- 	DECLARE_MOD_HDR_ACTS_ACTIONS(actions_arr, MLX5_CT_MIN_MOD_ACTS);
- 	DECLARE_MOD_HDR_ACTS(mod_acts, actions_arr);
-@@ -708,11 +708,12 @@ mlx5_tc_ct_entry_create_mod_hdr(struct mlx5_tc_ct_priv *ct_priv,
- 				     &attr->ct_attr.ct_labels_id);
- 	if (err)
- 		return -EOPNOTSUPP;
--	if (nat) {
--		err = mlx5_tc_ct_entry_create_nat(ct_priv, flow_rule,
--						  &mod_acts);
--		if (err)
--			goto err_mapping;
-+	if (nat_table) {
-+		if (has_nat) {
-+			err = mlx5_tc_ct_entry_create_nat(ct_priv, flow_rule, &mod_acts);
-+			if (err)
-+				goto err_mapping;
-+		}
- 
- 		ct_state |= MLX5_CT_STATE_NAT_BIT;
+diff --git a/drivers/clocksource/timer-oxnas-rps.c b/drivers/clocksource/timer-oxnas-rps.c
+index 56c0cc32d0ac..d514b44e67dd 100644
+--- a/drivers/clocksource/timer-oxnas-rps.c
++++ b/drivers/clocksource/timer-oxnas-rps.c
+@@ -236,7 +236,7 @@ static int __init oxnas_rps_timer_init(struct device_node *np)
  	}
-@@ -727,7 +728,7 @@ mlx5_tc_ct_entry_create_mod_hdr(struct mlx5_tc_ct_priv *ct_priv,
- 	if (err)
- 		goto err_mapping;
  
--	if (nat) {
-+	if (nat_table && has_nat) {
- 		attr->modify_hdr = mlx5_modify_header_alloc(ct_priv->dev, ct_priv->ns_type,
- 							    mod_acts.num_actions,
- 							    mod_acts.actions);
-@@ -795,7 +796,9 @@ mlx5_tc_ct_entry_add_rule(struct mlx5_tc_ct_priv *ct_priv,
- 
- 	err = mlx5_tc_ct_entry_create_mod_hdr(ct_priv, attr, flow_rule,
- 					      &zone_rule->mh,
--					      zone_restore_id, nat);
-+					      zone_restore_id,
-+					      nat,
-+					      mlx5_tc_ct_entry_has_nat(entry));
- 	if (err) {
- 		ct_dbg("Failed to create ct entry mod hdr");
- 		goto err_mod_hdr;
+ 	rps->irq = irq_of_parse_and_map(np, 0);
+-	if (rps->irq < 0) {
++	if (!rps->irq) {
+ 		ret = -EINVAL;
+ 		goto err_iomap;
+ 	}
 -- 
 2.35.1
 

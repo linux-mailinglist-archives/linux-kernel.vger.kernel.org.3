@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9828C54A000
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3532549FF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245232AbiFMUro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52120 "EHLO
+        id S1349592AbiFMUrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350060AbiFMUqA (ORCPT
+        with ESMTP id S1350558AbiFMUqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:46:00 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D471AD
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:57:23 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id e11so6666805pfj.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:57:23 -0700 (PDT)
+        Mon, 13 Jun 2022 16:46:04 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2534280
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:57:26 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id h192so6501849pgc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:57:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=pensando.io; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=JHEBqvjkXFtcJ+qUBNW7+1Xm1a5ZEnXcUDy9oMekAWQ=;
-        b=XcS6UQmDf+C8m9YKYGOusnFCVffgrQStj//J+T4vtRpb8VgAsfxoTf7T3GaDso06eH
-         X95kIF4IKwG/8S1JhVbbu1qsZ3G9zyJTb/zdPBrNw3e3u+BsafMvCjumd1H2HqBLF6sR
-         vo5PIEn0Ap5GtqoJ/NomU+CELebXQIrQn0n2C4cFLCMrUu5MjFj33yt1uLkiNNMLY0Sz
-         WG4+Pal6iFcZuCcYFuVLCJ4D8uGDiCXrROR+P1liCdgg0xVZthTk9ga0rBKF1byxNBQp
-         mHgbrxODTBw7F49GcKmx80eRrSHJkNeSYWxOGbrGIt2oP4Xw3sss5OM9tn9bXFGZTI+y
-         w3lA==
+        bh=KlpSKj9JOxZWHiDBe4+ujhnALAH7aoziqzJ/soAilmk=;
+        b=qA9A4Fka8Wr2+BYttjs3IXzbkv10TKHVOFBIwcQb402ENC23qLAb96PDlp0HKFtHBH
+         gDn+EHjSB7rG1NrjM3fc+UPI7M4UaryOzbZTzN9dePt5MZX8Zt8qNc/gPUU5fqPBW3ZN
+         VAw6uNCQxKRg6aj/KdwWkJlIzXQI6o4ZpYvzgYIAAWL/+S7hygXB8d4kporCLmEXflT2
+         TaAmtyCZeXZHTZklEHwGuUctzGtnA/kWBeA72Wqku9EPOKs8kLdPJGW3ULmR86feFpI3
+         zxFMLUez4AQcauxfanrHS0k5QqGdbfh8MUPF5vICDRmYX1oxgmLcJ0twh10uuY5tEvzu
+         j3Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=JHEBqvjkXFtcJ+qUBNW7+1Xm1a5ZEnXcUDy9oMekAWQ=;
-        b=7CgOr448QIH3ZCpmmB0EjcSCRiCewUEbag3Ndav0gTMa7bP0wetzib0XSsBq1xNj9E
-         aj9z6QxLFxgAze5bPwOAEe8Q2jVVIgjtzHpbcIRpIqoM2CJX/7LmqUSw4MZolRLcD4Kp
-         HSd1l26ZNrcga97javdOq3jo7vFn+IuJcdL+ynw8kXI9T+fyfLwfq1FwnZ3uBpaLYZxU
-         sOgAQN7BVQxozNkhGNvNhOl97/rZ0QxXNRLphP2KZ5zZR1d/kr6QmuRswqYMeuac7+6C
-         TaPVofZU37YrcE/0t3BlW+82NxBPW+8/esNMW8nd1E4ef19Tzt6TzsR8yQHGHN2EXt8P
-         dPjg==
-X-Gm-Message-State: AOAM53248GOZs6l5IY+E6thmIEpTmW7f8uTs36QO+jdbwRNxgvIaW6q2
-        mx5DlI7ZMyAh1yrvtJMQFpoQ1g==
-X-Google-Smtp-Source: ABdhPJxL8blns0CtPDB1nVU68TFXxXGjE2/ANBGPsJZvdFrheK2PZLnGISiJk46IluCp/UaTXYGycg==
-X-Received: by 2002:a63:5723:0:b0:3fd:d8b4:c19f with SMTP id l35-20020a635723000000b003fdd8b4c19fmr1081427pgb.137.1655150242909;
-        Mon, 13 Jun 2022 12:57:22 -0700 (PDT)
+        bh=KlpSKj9JOxZWHiDBe4+ujhnALAH7aoziqzJ/soAilmk=;
+        b=7AFfgzSPZqQWzSIRiWHxw91niK3Z1ZfmVdXZROlHaGOu1ki5cyaz5v1WhlCn0tiNsA
+         SPL4GXHCuQx+9H6Bk94P8YbJ76YaKAhlZbdfPQwCwqHr7p4R5aAkgrwTx80/mNI8MrzK
+         QWqH694xnwNN3jkY+2KUcRcp344/f7QWRpKU0tSTvqZYh5HfvJsFPOqQB18HIFeea/FD
+         bH0RTgSd5+Abeqt6jBB+YGt7sbmPlzO2hebRtEukFtw19Va7z3mV/xrQggzGvYpFNn55
+         mLIQvcA5u7x/wldib15phYcCGgolVF6lmMXpkuQ1uzNhY8zk6J89PwaPi9VaNMxlbUg8
+         erxA==
+X-Gm-Message-State: AOAM533X5xsKqqg+1lrkcbJvZQbgu1a8W1ySfysG/RUE+ddu4zgW9+Pc
+        MrPgJn+8Lsuz2x3mki0AhTyNOg==
+X-Google-Smtp-Source: ABdhPJwbv7pRTFzk4+nbaX7oGqRi9qzhXvoemRqwa0xYJcXUwR3JB4aRyw3D7Z04QgbHW03QXG4fdw==
+X-Received: by 2002:a63:234f:0:b0:405:3981:be7 with SMTP id u15-20020a63234f000000b0040539810be7mr1085120pgm.15.1655150246205;
+        Mon, 13 Jun 2022 12:57:26 -0700 (PDT)
 Received: from platform-dev1.pensando.io ([12.226.153.42])
-        by smtp.gmail.com with ESMTPSA id q21-20020a170902edd500b0016797c33b6csm5509357plk.116.2022.06.13.12.57.20
+        by smtp.gmail.com with ESMTPSA id q21-20020a170902edd500b0016797c33b6csm5509357plk.116.2022.06.13.12.57.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 12:57:22 -0700 (PDT)
+        Mon, 13 Jun 2022 12:57:25 -0700 (PDT)
 From:   Brad Larson <brad@pensando.io>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
@@ -61,9 +61,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
         robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
         suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
         ulf.hansson@linaro.org, will@kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH v5 01/15] dt-bindings: arm: add AMD Pensando boards
-Date:   Mon, 13 Jun 2022 12:56:44 -0700
-Message-Id: <20220613195658.5607-2-brad@pensando.io>
+Subject: [PATCH v5 02/15] dt-bindings: mmc: cdns: Add AMD Pensando Elba SoC binding
+Date:   Mon, 13 Jun 2022 12:56:45 -0700
+Message-Id: <20220613195658.5607-3-brad@pensando.io>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220613195658.5607-1-brad@pensando.io>
 References: <20220613195658.5607-1-brad@pensando.io>
@@ -78,46 +78,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Brad Larson <blarson@amd.com>
 
-Document the compatible for AMD Pensando Elba SoC boards.
+AMD Pensando Elba ARM 64-bit SoC is integrated with this IP and
+explicitly controls byte-lane enables.
 
 Signed-off-by: Brad Larson <blarson@amd.com>
 ---
- .../devicetree/bindings/arm/amd,pensando.yaml | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/amd,pensando.yaml
+ .../devicetree/bindings/mmc/cdns,sdhci.yaml        | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/amd,pensando.yaml b/Documentation/devicetree/bindings/arm/amd,pensando.yaml
-new file mode 100644
-index 000000000000..9f3dea681d24
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/amd,pensando.yaml
-@@ -0,0 +1,26 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/amd,pensando.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+index 4207fed62dfe..35bc4cf6f214 100644
+--- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
++++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+@@ -13,10 +13,24 @@ maintainers:
+ allOf:
+   - $ref: mmc-controller.yaml
+ 
++  - if:
++      properties:
++        compatible:
++          enum:
++            - amd,pensando-elba-sd4hc
++    then:
++      properties:
++        reg:
++          items:
++            - description: Cadence host controller registers
++            - description: Byte-lane control register
++          minItems: 2
 +
-+title: AMD Pensando SoC Platforms Device Tree Bindings
-+
-+maintainers:
-+  - Brad Larson <blarson@amd.com>
-+
-+properties:
-+  $nodename:
-+    const: "/"
-+  compatible:
-+    oneOf:
-+
-+      - description: Boards with Pensando Elba SoC
-+        items:
-+          - enum:
-+              - amd,pensando-elba-ortano
-+          - const: amd,pensando-elba
-+
-+additionalProperties: true
-+
-+...
+ properties:
+   compatible:
+     items:
+       - enum:
++          - amd,pensando-elba-sd4hc
+           - microchip,mpfs-sd4hc
+           - socionext,uniphier-sd4hc
+       - const: cdns,sd4hc
 -- 
 2.17.1
 

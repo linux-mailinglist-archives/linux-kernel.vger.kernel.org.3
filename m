@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286CA548B5E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E5554902C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376525AbiFMNXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
+        id S1380913AbiFMOHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377296AbiFMNUO (ORCPT
+        with ESMTP id S1380286AbiFMOAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:20:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3046A413;
-        Mon, 13 Jun 2022 04:23:26 -0700 (PDT)
+        Mon, 13 Jun 2022 10:00:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC858D6BA;
+        Mon, 13 Jun 2022 04:38:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36EA0B80E93;
-        Mon, 13 Jun 2022 11:22:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9697BC34114;
-        Mon, 13 Jun 2022 11:22:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0D7B7B80ECD;
+        Mon, 13 Jun 2022 11:38:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D1D0C34114;
+        Mon, 13 Jun 2022 11:37:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119365;
-        bh=F3boMywTHpy6jFmBUEaGnsOC8huTynRI+Y5GX1k6ocI=;
+        s=korg; t=1655120278;
+        bh=va27Whq9MlqmSQeciQ1mgy6bmhWVQAuq24GMVFNoUUM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FqcDoBCkO0JE4s3tEspFwj6neVjXb3EH9e4bx/u0ihhYkl5AsZWA8yTDGt133ysr/
-         2tJ60eEXM8vf6K6/gmQo4U+VjPAJ7MdCyLlpw2kAm1oQL8mIKwIMaWg70qZ0eyN68O
-         oDfHzEuByJRpcmPTXfNUhHWCvfxGwNNdS8lHo+WE=
+        b=JmB7736erJ7Ed5bGWwxeQSuLDL8iSNjFmOlJvjbS8y7w/jjvH3+KUkKLub3Zp05KO
+         i7r3oNZv2El1dRwtkH4w8L2JzD6RX9TTg5FMJKQ44gfmvCD0rbtD/bWgG+ECYNLSAc
+         5HzYFS6gA3YwkFQxx+0p1OGwaYCDb5WWuF5QsfFc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leo Liu <leo.liu@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.15 237/247] drm/amdgpu: update VCN codec support for Yellow Carp
-Date:   Mon, 13 Jun 2022 12:12:19 +0200
-Message-Id: <20220613094930.133284135@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Frode Nordahl <frode.nordahl@canonical.com>,
+        Ilya Maximets <i.maximets@ovn.org>,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: [PATCH 5.18 315/339] net: openvswitch: fix misuse of the cached connection on tuple changes
+Date:   Mon, 13 Jun 2022 12:12:20 +0200
+Message-Id: <20220613094936.303552729@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +56,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Deucher <alexander.deucher@amd.com>
+From: Ilya Maximets <i.maximets@ovn.org>
 
-commit 97e50305542f384741a5b45699aba349fe9fca73 upstream.
+commit 2061ecfdf2350994e5b61c43e50e98a7a70e95ee upstream.
 
-Supports AV1.  Mesa already has support for this and
-doesn't rely on the kernel caps for yellow carp, so
-this was already working from an application perspective.
+If packet headers changed, the cached nfct is no longer relevant
+for the packet and attempt to re-use it leads to the incorrect packet
+classification.
 
-Fixes: 554398174d98 ("amdgpu/nv.c - Added video codec support for Yellow Carp")
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/2002
-Reviewed-by: Leo Liu <leo.liu@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+This issue is causing broken connectivity in OpenStack deployments
+with OVS/OVN due to hairpin traffic being unexpectedly dropped.
+
+The setup has datapath flows with several conntrack actions and tuple
+changes between them:
+
+  actions:ct(commit,zone=8,mark=0/0x1,nat(src)),
+          set(eth(src=00:00:00:00:00:01,dst=00:00:00:00:00:06)),
+          set(ipv4(src=172.18.2.10,dst=192.168.100.6,ttl=62)),
+          ct(zone=8),recirc(0x4)
+
+After the first ct() action the packet headers are almost fully
+re-written.  The next ct() tries to re-use the existing nfct entry
+and marks the packet as invalid, so it gets dropped later in the
+pipeline.
+
+Clearing the cached conntrack entry whenever packet tuple is changed
+to avoid the issue.
+
+The flow key should not be cleared though, because we should still
+be able to match on the ct_state if the recirculation happens after
+the tuple change but before the next ct() action.
+
 Cc: stable@vger.kernel.org
+Fixes: 7f8a436eaa2c ("openvswitch: Add conntrack action")
+Reported-by: Frode Nordahl <frode.nordahl@canonical.com>
+Link: https://mail.openvswitch.org/pipermail/ovs-discuss/2022-May/051829.html
+Link: https://bugs.launchpad.net/ubuntu/+source/ovn/+bug/1967856
+Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+Link: https://lore.kernel.org/r/20220606221140.488984-1-i.maximets@ovn.org
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/nv.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/openvswitch/actions.c   |    6 ++++++
+ net/openvswitch/conntrack.c |    4 +++-
+ 2 files changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/nv.c b/drivers/gpu/drm/amd/amdgpu/nv.c
-index d016e3c3e221..b3fba8dea63c 100644
---- a/drivers/gpu/drm/amd/amdgpu/nv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/nv.c
-@@ -170,6 +170,7 @@ static const struct amdgpu_video_codec_info yc_video_codecs_decode_array[] = {
- 	{codec_info_build(AMDGPU_INFO_VIDEO_CAPS_CODEC_IDX_HEVC, 8192, 4352, 186)},
- 	{codec_info_build(AMDGPU_INFO_VIDEO_CAPS_CODEC_IDX_VP9, 8192, 4352, 0)},
- 	{codec_info_build(AMDGPU_INFO_VIDEO_CAPS_CODEC_IDX_JPEG, 4096, 4096, 0)},
-+	{codec_info_build(AMDGPU_INFO_VIDEO_CAPS_CODEC_IDX_AV1, 8192, 4352, 0)},
- };
+--- a/net/openvswitch/actions.c
++++ b/net/openvswitch/actions.c
+@@ -373,6 +373,7 @@ static void set_ip_addr(struct sk_buff *
+ 	update_ip_l4_checksum(skb, nh, *addr, new_addr);
+ 	csum_replace4(&nh->check, *addr, new_addr);
+ 	skb_clear_hash(skb);
++	ovs_ct_clear(skb, NULL);
+ 	*addr = new_addr;
+ }
  
- static const struct amdgpu_video_codecs yc_video_codecs_decode = {
--- 
-2.36.1
-
+@@ -420,6 +421,7 @@ static void set_ipv6_addr(struct sk_buff
+ 		update_ipv6_checksum(skb, l4_proto, addr, new_addr);
+ 
+ 	skb_clear_hash(skb);
++	ovs_ct_clear(skb, NULL);
+ 	memcpy(addr, new_addr, sizeof(__be32[4]));
+ }
+ 
+@@ -660,6 +662,7 @@ static int set_nsh(struct sk_buff *skb,
+ static void set_tp_port(struct sk_buff *skb, __be16 *port,
+ 			__be16 new_port, __sum16 *check)
+ {
++	ovs_ct_clear(skb, NULL);
+ 	inet_proto_csum_replace2(check, skb, *port, new_port, false);
+ 	*port = new_port;
+ }
+@@ -699,6 +702,7 @@ static int set_udp(struct sk_buff *skb,
+ 		uh->dest = dst;
+ 		flow_key->tp.src = src;
+ 		flow_key->tp.dst = dst;
++		ovs_ct_clear(skb, NULL);
+ 	}
+ 
+ 	skb_clear_hash(skb);
+@@ -761,6 +765,8 @@ static int set_sctp(struct sk_buff *skb,
+ 	sh->checksum = old_csum ^ old_correct_csum ^ new_csum;
+ 
+ 	skb_clear_hash(skb);
++	ovs_ct_clear(skb, NULL);
++
+ 	flow_key->tp.src = sh->source;
+ 	flow_key->tp.dst = sh->dest;
+ 
+--- a/net/openvswitch/conntrack.c
++++ b/net/openvswitch/conntrack.c
+@@ -1342,7 +1342,9 @@ int ovs_ct_clear(struct sk_buff *skb, st
+ 
+ 	nf_ct_put(ct);
+ 	nf_ct_set(skb, NULL, IP_CT_UNTRACKED);
+-	ovs_ct_fill_key(skb, key, false);
++
++	if (key)
++		ovs_ct_fill_key(skb, key, false);
+ 
+ 	return 0;
+ }
 
 

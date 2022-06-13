@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB7B548793
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E201B54870A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:58:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352175AbiFMLLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        id S1352303AbiFMLLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350932AbiFMLFl (ORCPT
+        with ESMTP id S1351734AbiFMLIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:05:41 -0400
+        Mon, 13 Jun 2022 07:08:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656A410FD;
-        Mon, 13 Jun 2022 03:34:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A64338A8;
+        Mon, 13 Jun 2022 03:35:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C4143B80EAA;
-        Mon, 13 Jun 2022 10:34:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35490C34114;
-        Mon, 13 Jun 2022 10:34:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36A24B80EA7;
+        Mon, 13 Jun 2022 10:35:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D74DC36AFF;
+        Mon, 13 Jun 2022 10:35:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116494;
-        bh=liqDYnBITC4aho+0gENp/8bVnL2kel+KNoF6yUOwYMA=;
+        s=korg; t=1655116506;
+        bh=JsZE5AxHTbW00VZnJgu/U+JfgGO6KlUPjLQsTZoemWU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QcyA5DO187glUxep5+W6MjP7IzpcWM5xxPiBYbHAGucU0/3HCEShMEeGC1eXCFi0r
-         EF27Qu/TLciZO5hkmEJNZTWHdA3S3NAKqF+fuzhI/ZuVyU6HKSaLoFxcTNTnNnu6aS
-         LsXaaa1EScnFQmPybSn9pABCJTwvZr0MJFNC3cPI=
+        b=DRAzjsfuakEGwXNF8g26bCy7cRS52tt4OO71l3bz9i8sCXtMyvOvBABX1pWcjCvgH
+         /fvACpHzlu5nxZCIcbw4LDPVjlcQS1DXTsEGjHQ6y8UuBiDW0RXw8pbzhfzQAxU1z2
+         TBGszImSeY0OmYCOeW8LhTnj6jhECPhMlCrwGBzw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Kiszka <jan.kiszka@siemens.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 096/411] efi: Add missing prototype for efi_capsule_setup_info
-Date:   Mon, 13 Jun 2022 12:06:09 +0200
-Message-Id: <20220613094931.560133489@linuxfoundation.org>
+        stable@vger.kernel.org, Jonathan Teh <jonathan.teh@outlook.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 098/411] HID: hid-led: fix maximum brightness for Dream Cheeky
+Date:   Mon, 13 Jun 2022 12:06:11 +0200
+Message-Id: <20220613094931.619142292@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -55,35 +54,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jan Kiszka <jan.kiszka@siemens.com>
+From: Jonathan Teh <jonathan.teh@outlook.com>
 
-[ Upstream commit aa480379d8bdb33920d68acfd90f823c8af32578 ]
+[ Upstream commit 116c3f4a78ebe478d5ad5a038baf931e93e7d748 ]
 
-Fixes "no previous declaration for 'efi_capsule_setup_info'" warnings
-under W=1.
+Increase maximum brightness for Dream Cheeky to 63. Emperically
+determined based on testing in kernel 4.4 on this device:
 
-Fixes: 2959c95d510c ("efi/capsule: Add support for Quark security header")
-Signed-off-by: Jan Kiszka <jan.kiszka@siemens.com>
-Link: https://lore.kernel.org/r/c28d3f86-dd72-27d1-e2c2-40971b8da6bd@siemens.com
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Bus 003 Device 002: ID 1d34:0004 Dream Cheeky Webmail Notifier
+
+Fixes: 6c7ad07e9e05 ("HID: migrate USB LED driver from usb misc to hid")
+Signed-off-by: Jonathan Teh <jonathan.teh@outlook.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/efi.h | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/hid/hid-led.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/efi.h b/include/linux/efi.h
-index c82ef0eba4f8..f9b9f9a2fd4a 100644
---- a/include/linux/efi.h
-+++ b/include/linux/efi.h
-@@ -165,6 +165,8 @@ struct capsule_info {
- 	size_t			page_bytes_remain;
- };
- 
-+int efi_capsule_setup_info(struct capsule_info *cap_info, void *kbuff,
-+                           size_t hdr_bytes);
- int __efi_capsule_setup_info(struct capsule_info *cap_info);
- 
- /*
+diff --git a/drivers/hid/hid-led.c b/drivers/hid/hid-led.c
+index c2c66ceca132..7d82f8d426bb 100644
+--- a/drivers/hid/hid-led.c
++++ b/drivers/hid/hid-led.c
+@@ -366,7 +366,7 @@ static const struct hidled_config hidled_configs[] = {
+ 		.type = DREAM_CHEEKY,
+ 		.name = "Dream Cheeky Webmail Notifier",
+ 		.short_name = "dream_cheeky",
+-		.max_brightness = 31,
++		.max_brightness = 63,
+ 		.num_leds = 1,
+ 		.report_size = 9,
+ 		.report_type = RAW_REQUEST,
 -- 
 2.35.1
 

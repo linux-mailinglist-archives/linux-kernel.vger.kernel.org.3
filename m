@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF43D54882C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECD12548668
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358039AbiFMNEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
+        id S1351440AbiFMMaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355427AbiFMM4D (ORCPT
+        with ESMTP id S1357306AbiFMMYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:56:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEDA12ACB;
-        Mon, 13 Jun 2022 04:17:00 -0700 (PDT)
+        Mon, 13 Jun 2022 08:24:18 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A315431DE2;
+        Mon, 13 Jun 2022 04:05:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE901B80E93;
-        Mon, 13 Jun 2022 11:16:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D116C34114;
-        Mon, 13 Jun 2022 11:16:57 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3F2E4CE1179;
+        Mon, 13 Jun 2022 11:05:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1418DC3411C;
+        Mon, 13 Jun 2022 11:05:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119017;
-        bh=Peq5gzmdgmG8DJ+CvcqQLnVGG1RKzHTqlFTjY4iQTVY=;
+        s=korg; t=1655118328;
+        bh=1okDpxG+2HAeH3YlR9vj5KO6UWz/SMYp93/ULZFDgus=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XZC+L1QglFpbmynsfG+035DCdtRM7Msr3n/Vdt4vHad5RACIhwlkLVWJLb/+9HXAY
-         484KHdMD05B9GZJUFdvNq8QsIxIWLRkFBQ2J7Yo2JOZUBUcfamAtqpY99SFUQ6ad7N
-         iej5zFAGP1XHB8yCH+ysklN9SCy2cck/HrGzcEC4=
+        b=dPIa7Mp9KUUAF3mHen2tY7J9Ko6nQe6JcL9vNxvYQbj5agAPl3Zzg13epyxMUiu/x
+         woC6/mNAwiWCeFwZIOGSJUZNJsoRbeJvhzzYQx5EzkzRn/BMqo08ilgQr7ja7LIKqi
+         Ta87Eb+RC8UHbT7PTwXeEqVo4Wmn8xozbWUxWQHQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Li Jun <jun.li@nxp.com>, Chanwoo Choi <cw00.choi@samsung.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 084/247] riscv: read-only pages should not be writable
-Date:   Mon, 13 Jun 2022 12:09:46 +0200
-Message-Id: <20220613094925.503755819@linuxfoundation.org>
+Subject: [PATCH 5.10 028/172] extcon: ptn5150: Add queue work sync before driver release
+Date:   Mon, 13 Jun 2022 12:09:48 +0200
+Message-Id: <20220613094857.166749117@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,37 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+From: Li Jun <jun.li@nxp.com>
 
-[ Upstream commit 630f972d76d6460235e84e1aa034ee06f9c8c3a9 ]
+[ Upstream commit 782cd939cbe0f569197cd1c9b0477ee213167f04 ]
 
-If EFI pages are marked as read-only,
-we should remove the _PAGE_WRITE flag.
+Add device managed action to sync pending queue work, otherwise
+the queued work may run after the work is destroyed.
 
-The current code overwrites an unused value.
-
-Fixes: b91540d52a08b ("RISC-V: Add EFI runtime services")
-Signed-off-by: Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Link: https://lore.kernel.org/r/20220528014132.91052-1-heinrich.schuchardt@canonical.com
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+Fixes: 4ed754de2d66 ("extcon: Add support for ptn5150 extcon driver")
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Li Jun <jun.li@nxp.com>
+Signed-off-by: Chanwoo Choi <cw00.choi@samsung.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/riscv/kernel/efi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/extcon/extcon-ptn5150.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/arch/riscv/kernel/efi.c b/arch/riscv/kernel/efi.c
-index 024159298231..1aa540350abd 100644
---- a/arch/riscv/kernel/efi.c
-+++ b/arch/riscv/kernel/efi.c
-@@ -65,7 +65,7 @@ static int __init set_permissions(pte_t *ptep, unsigned long addr, void *data)
+diff --git a/drivers/extcon/extcon-ptn5150.c b/drivers/extcon/extcon-ptn5150.c
+index 5b9a3cf8df26..2a7874108df8 100644
+--- a/drivers/extcon/extcon-ptn5150.c
++++ b/drivers/extcon/extcon-ptn5150.c
+@@ -194,6 +194,13 @@ static int ptn5150_init_dev_type(struct ptn5150_info *info)
+ 	return 0;
+ }
  
- 	if (md->attribute & EFI_MEMORY_RO) {
- 		val = pte_val(pte) & ~_PAGE_WRITE;
--		val = pte_val(pte) | _PAGE_READ;
-+		val |= _PAGE_READ;
- 		pte = __pte(val);
- 	}
- 	if (md->attribute & EFI_MEMORY_XP) {
++static void ptn5150_work_sync_and_put(void *data)
++{
++	struct ptn5150_info *info = data;
++
++	cancel_work_sync(&info->irq_work);
++}
++
+ static int ptn5150_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct device *dev = &i2c->dev;
+@@ -284,6 +291,10 @@ static int ptn5150_i2c_probe(struct i2c_client *i2c)
+ 	if (ret)
+ 		return -EINVAL;
+ 
++	ret = devm_add_action_or_reset(dev, ptn5150_work_sync_and_put, info);
++	if (ret)
++		return ret;
++
+ 	/*
+ 	 * Update current extcon state if for example OTG connection was there
+ 	 * before the probe
 -- 
 2.35.1
 

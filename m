@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F952548900
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05FE5496F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353578AbiFMMMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:12:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
+        id S1380035AbiFMNwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358704AbiFMMHt (ORCPT
+        with ESMTP id S1379682AbiFMNth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:07:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0B1C515BE;
-        Mon, 13 Jun 2022 04:00:11 -0700 (PDT)
+        Mon, 13 Jun 2022 09:49:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B99029353;
+        Mon, 13 Jun 2022 04:33:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D5B4B80D3A;
-        Mon, 13 Jun 2022 11:00:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B875C3411E;
-        Mon, 13 Jun 2022 11:00:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 814EAB80E59;
+        Mon, 13 Jun 2022 11:33:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6341C34114;
+        Mon, 13 Jun 2022 11:33:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118008;
-        bh=gDBS5ivrfzV13GZedBnzpygN0y4DfOtxPoTKpGomeQo=;
+        s=korg; t=1655119984;
+        bh=WXRpZKE4NEt3qEqkn5ixZrMJWLp9ofpYrJK/Qridye0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1L39Lug9eIS1hMaMO9SA58+KfRvynnjxfmRQ7yidNFVRPbEowzpAeiznQ/G+f/ZnK
-         FM3GdCN2BjpmfrPmNAXlBScvTymKTJnJkSn7tvBu5GKLd8+sRv17HCKpjO3MJYgdzr
-         Qss7Cbv+epsE3C7Gn6tT8P5XtYarkjM/fJvJoW1o=
+        b=vtV67ZWkObCgL/UbmHhBTr/C3so90twU0d6J5vuqPLIuP7nQlD24lRazgDBjJQEnH
+         ozlUJyZr0TaKIa6zn2r5Ygpzu1/RrRdU3KXzrQwToYZdZkMt4QpVuHLHDa+MZf5kC5
+         snQZUjVza8iGjwxHAqLdQfAybwQy8h+y3r/rbQXs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@st.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
+        Oz Shlomo <ozsh@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 210/287] serial: st-asc: Sanitize CSIZE and correct PARENB for CS7
+Subject: [PATCH 5.18 209/339] net/mlx5e: CT: Fix cleanup of CT before cleanup of TC ct rules
 Date:   Mon, 13 Jun 2022 12:10:34 +0200
-Message-Id: <20220613094930.230209297@linuxfoundation.org>
+Message-Id: <20220613094933.003798210@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +56,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Paul Blakey <paulb@nvidia.com>
 
-[ Upstream commit 52bb1cb7118564166b04d52387bd8403632f5190 ]
+[ Upstream commit 15ef9efa855cf405fadd78272e1e5d04e09a1cf3 ]
 
-Only CS7 and CS8 seem supported but CSIZE is not sanitized from CS5 or
-CS6 to CS8. In addition, ASC_CTL_MODE_7BIT_PAR suggests that CS7 has
-to have parity, thus add PARENB.
+CT cleanup assumes that all tc rules were deleted first, and so
+is free to delete the CT shared resources (e.g the dr_action
+fwd_action which is shared for all tuples). But currently for
+uplink, this is happens in reverse, causing the below trace.
 
-Incorrect CSIZE results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
+CT cleanup is called from:
+mlx5e_cleanup_rep_tx()->mlx5e_cleanup_uplink_rep_tx()->
+mlx5e_rep_tc_cleanup()->mlx5e_tc_esw_cleanup()->
+mlx5_tc_ct_clean()
 
-Fixes: c4b058560762 (serial:st-asc: Add ST ASC driver.)
-Cc: Srinivas Kandagatla <srinivas.kandagatla@st.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-8-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Only afterwards, tc cleanup is called from:
+mlx5e_cleanup_rep_tx()->mlx5e_tc_ht_cleanup()
+which would have deleted all the tc ct rules, and so delete
+all the offloaded tuples.
+
+Fix this reversing the order of init and on cleanup, which
+will result in tc cleanup then ct cleanup.
+
+[ 9443.593347] WARNING: CPU: 2 PID: 206774 at drivers/net/ethernet/mellanox/mlx5/core/steering/dr_action.c:1882 mlx5dr_action_destroy+0x188/0x1a0 [mlx5_core]
+[ 9443.593349] Modules linked in: act_ct nf_flow_table rdma_ucm(O) rdma_cm(O) iw_cm(O) ib_ipoib(O) ib_cm(O) ib_umad(O) mlx5_core(O-) mlxfw(O) mlxdevm(O) auxiliary(O) ib_uverbs(O) psample ib_core(O) mlx_compat(O) ip_gre gre ip_tunnel act_vlan bonding geneve esp6_offload esp6 esp4_offload esp4 act_tunnel_key vxlan ip6_udp_tunnel udp_tunnel act_mirred act_skbedit act_gact cls_flower sch_ingress nfnetlink_cttimeout nfnetlink xfrm_user xfrm_algo 8021q garp stp ipmi_devintf mrp ipmi_msghandler llc openvswitch nsh nf_conncount nf_nat mst_pciconf(O) dm_multipath sbsa_gwdt uio_pdrv_genirq uio mlxbf_pmc mlxbf_pka mlx_trio mlx_bootctl(O) bluefield_edac sch_fq_codel ip_tables ipv6 crc_ccitt btrfs zstd_compress raid10 raid456 async_raid6_recov async_memcpy async_pq async_xor async_tx xor xor_neon raid6_pq raid1 raid0 crct10dif_ce i2c_mlxbf gpio_mlxbf2 mlxbf_gige aes_neon_bs aes_neon_blk [last unloaded: mlx5_ib]
+[ 9443.593419] CPU: 2 PID: 206774 Comm: modprobe Tainted: G           O      5.4.0-1023.24.gc14613d-bluefield #1
+[ 9443.593422] Hardware name: https://www.mellanox.com BlueField SoC/BlueField SoC, BIOS BlueField:143ebaf Jan 11 2022
+[ 9443.593424] pstate: 20000005 (nzCv daif -PAN -UAO)
+[ 9443.593489] pc : mlx5dr_action_destroy+0x188/0x1a0 [mlx5_core]
+[ 9443.593545] lr : mlx5_ct_fs_smfs_destroy+0x24/0x30 [mlx5_core]
+[ 9443.593546] sp : ffff8000135dbab0
+[ 9443.593548] x29: ffff8000135dbab0 x28: ffff0003a6ab8e80
+[ 9443.593550] x27: 0000000000000000 x26: ffff0003e07d7000
+[ 9443.593552] x25: ffff800009609de0 x24: ffff000397fb2120
+[ 9443.593554] x23: ffff0003975c0000 x22: 0000000000000000
+[ 9443.593556] x21: ffff0003975f08c0 x20: ffff800009609de0
+[ 9443.593558] x19: ffff0003c8a13380 x18: 0000000000000014
+[ 9443.593560] x17: 0000000067f5f125 x16: 000000006529c620
+[ 9443.593561] x15: 000000000000000b x14: 0000000000000000
+[ 9443.593563] x13: 0000000000000002 x12: 0000000000000001
+[ 9443.593565] x11: ffff800011108868 x10: 0000000000000000
+[ 9443.593567] x9 : 0000000000000000 x8 : ffff8000117fb270
+[ 9443.593569] x7 : ffff0003ebc01288 x6 : 0000000000000000
+[ 9443.593571] x5 : ffff800009591ab8 x4 : fffffe000f6d9a20
+[ 9443.593572] x3 : 0000000080040001 x2 : fffffe000f6d9a20
+[ 9443.593574] x1 : ffff8000095901d8 x0 : 0000000000000025
+[ 9443.593577] Call trace:
+[ 9443.593634]  mlx5dr_action_destroy+0x188/0x1a0 [mlx5_core]
+[ 9443.593688]  mlx5_ct_fs_smfs_destroy+0x24/0x30 [mlx5_core]
+[ 9443.593743]  mlx5_tc_ct_clean+0x34/0xa8 [mlx5_core]
+[ 9443.593797]  mlx5e_tc_esw_cleanup+0x58/0x88 [mlx5_core]
+[ 9443.593851]  mlx5e_rep_tc_cleanup+0x24/0x30 [mlx5_core]
+[ 9443.593905]  mlx5e_cleanup_rep_tx+0x6c/0x78 [mlx5_core]
+[ 9443.593959]  mlx5e_detach_netdev+0x74/0x98 [mlx5_core]
+[ 9443.594013]  mlx5e_netdev_change_profile+0x70/0x180 [mlx5_core]
+[ 9443.594067]  mlx5e_netdev_attach_nic_profile+0x34/0x40 [mlx5_core]
+[ 9443.594122]  mlx5e_vport_rep_unload+0x15c/0x1a8 [mlx5_core]
+[ 9443.594177]  mlx5_eswitch_unregister_vport_reps+0x228/0x298 [mlx5_core]
+[ 9443.594231]  mlx5e_rep_remove+0x2c/0x38 [mlx5_core]
+[ 9443.594236]  auxiliary_bus_remove+0x30/0x50 [auxiliary]
+[ 9443.594246]  device_release_driver_internal+0x108/0x1d0
+[ 9443.594248]  driver_detach+0x5c/0xe8
+[ 9443.594250]  bus_remove_driver+0x64/0xd8
+[ 9443.594253]  driver_unregister+0x38/0x60
+[ 9443.594255]  auxiliary_driver_unregister+0x24/0x38 [auxiliary]
+[ 9443.594311]  mlx5e_rep_cleanup+0x20/0x38 [mlx5_core]
+[ 9443.594365]  mlx5e_cleanup+0x18/0x30 [mlx5_core]
+[ 9443.594419]  cleanup+0xc/0x20cc [mlx5_core]
+[ 9443.594424]  __arm64_sys_delete_module+0x154/0x2b0
+[ 9443.594429]  el0_svc_common.constprop.0+0xf4/0x200
+[ 9443.594432]  el0_svc_handler+0x38/0xa8
+[ 9443.594435]  el0_svc+0x10/0x26c
+
+Fixes: d1a3138f7913 ("net/mlx5e: TC, Move flow hashtable to be per rep")
+Signed-off-by: Paul Blakey <paulb@nvidia.com>
+Reviewed-by: Oz Shlomo <ozsh@nvidia.com>
+Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/st-asc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ .../net/ethernet/mellanox/mlx5/core/en_rep.c  | 31 ++++++++++---------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
-index 7971997cdead..ce35e3a131b1 100644
---- a/drivers/tty/serial/st-asc.c
-+++ b/drivers/tty/serial/st-asc.c
-@@ -540,10 +540,14 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
- 	/* set character length */
- 	if ((cflag & CSIZE) == CS7) {
- 		ctrl_val |= ASC_CTL_MODE_7BIT_PAR;
-+		cflag |= PARENB;
- 	} else {
- 		ctrl_val |= (cflag & PARENB) ?  ASC_CTL_MODE_8BIT_PAR :
- 						ASC_CTL_MODE_8BIT;
-+		cflag &= ~CSIZE;
-+		cflag |= CS8;
- 	}
-+	termios->c_cflag = cflag;
+diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
+index a464461f1418..52caefdbabb1 100644
+--- a/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
++++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rep.c
+@@ -937,6 +937,13 @@ static int mlx5e_init_uplink_rep_tx(struct mlx5e_rep_priv *rpriv)
+ 	return err;
+ }
  
- 	/* set stop bit */
- 	ctrl_val |= (cflag & CSTOPB) ? ASC_CTL_STOP_2BIT : ASC_CTL_STOP_1BIT;
++static void mlx5e_cleanup_uplink_rep_tx(struct mlx5e_rep_priv *rpriv)
++{
++	mlx5e_rep_tc_netdevice_event_unregister(rpriv);
++	mlx5e_rep_bond_cleanup(rpriv);
++	mlx5e_rep_tc_cleanup(rpriv);
++}
++
+ static int mlx5e_init_rep_tx(struct mlx5e_priv *priv)
+ {
+ 	struct mlx5e_rep_priv *rpriv = priv->ppriv;
+@@ -948,42 +955,36 @@ static int mlx5e_init_rep_tx(struct mlx5e_priv *priv)
+ 		return err;
+ 	}
+ 
+-	err = mlx5e_tc_ht_init(&rpriv->tc_ht);
+-	if (err)
+-		goto err_ht_init;
+-
+ 	if (rpriv->rep->vport == MLX5_VPORT_UPLINK) {
+ 		err = mlx5e_init_uplink_rep_tx(rpriv);
+ 		if (err)
+ 			goto err_init_tx;
+ 	}
+ 
++	err = mlx5e_tc_ht_init(&rpriv->tc_ht);
++	if (err)
++		goto err_ht_init;
++
+ 	return 0;
+ 
+-err_init_tx:
+-	mlx5e_tc_ht_cleanup(&rpriv->tc_ht);
+ err_ht_init:
++	if (rpriv->rep->vport == MLX5_VPORT_UPLINK)
++		mlx5e_cleanup_uplink_rep_tx(rpriv);
++err_init_tx:
+ 	mlx5e_destroy_tises(priv);
+ 	return err;
+ }
+ 
+-static void mlx5e_cleanup_uplink_rep_tx(struct mlx5e_rep_priv *rpriv)
+-{
+-	mlx5e_rep_tc_netdevice_event_unregister(rpriv);
+-	mlx5e_rep_bond_cleanup(rpriv);
+-	mlx5e_rep_tc_cleanup(rpriv);
+-}
+-
+ static void mlx5e_cleanup_rep_tx(struct mlx5e_priv *priv)
+ {
+ 	struct mlx5e_rep_priv *rpriv = priv->ppriv;
+ 
+-	mlx5e_destroy_tises(priv);
++	mlx5e_tc_ht_cleanup(&rpriv->tc_ht);
+ 
+ 	if (rpriv->rep->vport == MLX5_VPORT_UPLINK)
+ 		mlx5e_cleanup_uplink_rep_tx(rpriv);
+ 
+-	mlx5e_tc_ht_cleanup(&rpriv->tc_ht);
++	mlx5e_destroy_tises(priv);
+ }
+ 
+ static void mlx5e_rep_enable(struct mlx5e_priv *priv)
 -- 
 2.35.1
 

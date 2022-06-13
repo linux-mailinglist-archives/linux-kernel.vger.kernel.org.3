@@ -2,51 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18BDD5496DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC7354926F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383902AbiFMO2T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52164 "EHLO
+        id S1380054AbiFMN5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1383780AbiFMOX7 (ORCPT
+        with ESMTP id S1379228AbiFMNwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:23:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FCA52E9D0;
-        Mon, 13 Jun 2022 04:45:17 -0700 (PDT)
+        Mon, 13 Jun 2022 09:52:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E719D2AC48;
+        Mon, 13 Jun 2022 04:33:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BEB33B80D3A;
-        Mon, 13 Jun 2022 11:45:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5C4FC34114;
-        Mon, 13 Jun 2022 11:45:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5361E61037;
+        Mon, 13 Jun 2022 11:33:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CCF7C34114;
+        Mon, 13 Jun 2022 11:33:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120714;
-        bh=pG2ZCI8IMWbULbLnAuhxBBoXLb+Ba5+Jhao+Kviu55E=;
+        s=korg; t=1655120014;
+        bh=MPqngkyWRGF0MKYbHq/zJexVoWbbL6X2z8Cd8fJ9cCE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p9UbHQbTjhNpcxhQoDTAAxvporKVVvjpOtd5zOA2MJ+42uyenuWeX4JZd6EKy+oP9
-         XdCKWCg+jGee9OFIdBJchZ9eczo62Yf7oWYg2l7JkWQqXkxLqrRV0+CVKBgMYzAQyR
-         y05XPakCo96dr4UwDfBpt8CKl6VqDH5YgUiys9aE=
+        b=I5+6pgzQxRRBToInOg9FsvBBdE1RZiiW7pp1py+TzqkZr6fp8iWQmcqDGzahEGYan
+         Y8xumHO8gQzcHSVKtIIQGoip5+XJjIb6pxSapTZN4mDMUxzjutgDTLlXfeom6JQEiK
+         GNW6TGp4cscshGNf/bRLeLMAYhB1dWThpZ7i6sw8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
-        Joe Mario <jmario@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, syzbot <syzkaller@googlegroups.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Song Liu <songliubraving@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 131/298] perf c2c: Fix sorting in percent_rmt_hitm_cmp()
+Subject: [PATCH 5.18 200/339] bpf, arm64: Clear prog->jited_len along prog->jited
 Date:   Mon, 13 Jun 2022 12:10:25 +0200
-Message-Id: <20220613094928.916413459@linuxfoundation.org>
+Message-Id: <20220613094932.731322677@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,47 +58,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leo Yan <leo.yan@linaro.org>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit b24192a17337abbf3f44aaa75e15df14a2d0016e ]
+[ Upstream commit 10f3b29c65bb2fe0d47c2945cd0b4087be1c5218 ]
 
-The function percent_rmt_hitm_cmp() wrongly uses local HITMs for
-sorting remote HITMs.
+syzbot reported an illegal copy_to_user() attempt
+from bpf_prog_get_info_by_fd() [1]
 
-Since this function is to sort cache lines for remote HITMs, this patch
-changes to use 'rmt_hitm' field for correct sorting.
+There was no repro yet on this bug, but I think
+that commit 0aef499f3172 ("mm/usercopy: Detect vmalloc overruns")
+is exposing a prior bug in bpf arm64.
 
-Fixes: 9cb3500afc0980c5 ("perf c2c report: Add hitm/store percent related sort keys")
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Joe Mario <jmario@redhat.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220530084253.750190-1-leo.yan@linaro.org
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+bpf_prog_get_info_by_fd() looks at prog->jited_len
+to determine if the JIT image can be copied out to user space.
+
+My theory is that syzbot managed to get a prog where prog->jited_len
+has been set to 43, while prog->bpf_func has ben cleared.
+
+It is not clear why copy_to_user(uinsns, NULL, ulen) is triggering
+this particular warning.
+
+I thought find_vma_area(NULL) would not find a vm_struct.
+As we do not hold vmap_area_lock spinlock, it might be possible
+that the found vm_struct was garbage.
+
+[1]
+usercopy: Kernel memory exposure attempt detected from vmalloc (offset 792633534417210172, size 43)!
+kernel BUG at mm/usercopy.c:101!
+Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 25002 Comm: syz-executor.1 Not tainted 5.18.0-syzkaller-10139-g8291eaafed36 #0
+Hardware name: linux,dummy-virt (DT)
+pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : usercopy_abort+0x90/0x94 mm/usercopy.c:101
+lr : usercopy_abort+0x90/0x94 mm/usercopy.c:89
+sp : ffff80000b773a20
+x29: ffff80000b773a30 x28: faff80000b745000 x27: ffff80000b773b48
+x26: 0000000000000000 x25: 000000000000002b x24: 0000000000000000
+x23: 00000000000000e0 x22: ffff80000b75db67 x21: 0000000000000001
+x20: 000000000000002b x19: ffff80000b75db3c x18: 00000000fffffffd
+x17: 2820636f6c6c616d x16: 76206d6f72662064 x15: 6574636574656420
+x14: 74706d6574746120 x13: 2129333420657a69 x12: 73202c3237313031
+x11: 3237313434333533 x10: 3336323937207465 x9 : 657275736f707865
+x8 : ffff80000a30c550 x7 : ffff80000b773830 x6 : ffff80000b773830
+x5 : 0000000000000000 x4 : ffff00007fbbaa10 x3 : 0000000000000000
+x2 : 0000000000000000 x1 : f7ff000028fc0000 x0 : 0000000000000064
+Call trace:
+ usercopy_abort+0x90/0x94 mm/usercopy.c:89
+ check_heap_object mm/usercopy.c:186 [inline]
+ __check_object_size mm/usercopy.c:252 [inline]
+ __check_object_size+0x198/0x36c mm/usercopy.c:214
+ check_object_size include/linux/thread_info.h:199 [inline]
+ check_copy_size include/linux/thread_info.h:235 [inline]
+ copy_to_user include/linux/uaccess.h:159 [inline]
+ bpf_prog_get_info_by_fd.isra.0+0xf14/0xfdc kernel/bpf/syscall.c:3993
+ bpf_obj_get_info_by_fd+0x12c/0x510 kernel/bpf/syscall.c:4253
+ __sys_bpf+0x900/0x2150 kernel/bpf/syscall.c:4956
+ __do_sys_bpf kernel/bpf/syscall.c:5021 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:5019 [inline]
+ __arm64_sys_bpf+0x28/0x40 kernel/bpf/syscall.c:5019
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x48/0x114 arch/arm64/kernel/syscall.c:52
+ el0_svc_common.constprop.0+0x44/0xec arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0xa0/0xc0 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x44/0xb0 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x1ac/0x1b0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x198/0x19c arch/arm64/kernel/entry.S:581
+Code: aa0003e3 d00038c0 91248000 97fff65f (d4210000)
+
+Fixes: db496944fdaa ("bpf: arm64: add JIT support for multi-function programs")
+Reported-by: syzbot <syzkaller@googlegroups.com>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Acked-by: Song Liu <songliubraving@fb.com>
+Link: https://lore.kernel.org/bpf/20220531215113.1100754-1-eric.dumazet@gmail.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/builtin-c2c.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm64/net/bpf_jit_comp.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-index d8ec683b06a5..4e0c385427a4 100644
---- a/tools/perf/builtin-c2c.c
-+++ b/tools/perf/builtin-c2c.c
-@@ -924,8 +924,8 @@ percent_rmt_hitm_cmp(struct perf_hpp_fmt *fmt __maybe_unused,
- 	double per_left;
- 	double per_right;
- 
--	per_left  = PERCENT(left, lcl_hitm);
--	per_right = PERCENT(right, lcl_hitm);
-+	per_left  = PERCENT(left, rmt_hitm);
-+	per_right = PERCENT(right, rmt_hitm);
- 
- 	return per_left - per_right;
- }
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index fcc675aa1670..c779e604edac 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -1261,6 +1261,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+ 			bpf_jit_binary_free(header);
+ 			prog->bpf_func = NULL;
+ 			prog->jited = 0;
++			prog->jited_len = 0;
+ 			goto out_off;
+ 		}
+ 		bpf_jit_binary_lock_ro(header);
 -- 
 2.35.1
 

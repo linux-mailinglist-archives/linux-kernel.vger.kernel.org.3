@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C78548ECF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D29025494D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350408AbiFMLBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
+        id S1359345AbiFMNNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350204AbiFMKyp (ORCPT
+        with ESMTP id S1358022AbiFMNGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:54:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F0FF21;
-        Mon, 13 Jun 2022 03:30:16 -0700 (PDT)
+        Mon, 13 Jun 2022 09:06:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12F4636E3B;
+        Mon, 13 Jun 2022 04:18:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A063960F73;
-        Mon, 13 Jun 2022 10:30:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A3AC34114;
-        Mon, 13 Jun 2022 10:30:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB856B80D3A;
+        Mon, 13 Jun 2022 11:18:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12531C3411F;
+        Mon, 13 Jun 2022 11:18:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116215;
-        bh=KbjZcDXRQIGSGQAMd5LBDSS6CzGYX28y9Hf6DUrkxrU=;
+        s=korg; t=1655119086;
+        bh=ureKqdGW3iqrY5AfOYHC15dZadvhauHJulEzJBTd71c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nemE8jSh+w4yg96aLw1edpSxUPMbgOVxurX3vBAXra41qPWvNbuaY/ebz61HIIWWs
-         QM2SaevXJQsl0gTrKrhqO7LXzdYdaGCI/KWxD/aLWDOLBfGE87+m7PJioka8OHKBw7
-         MXcHzhgaLLKmwtZx6vchrrCJHWW3aMWPlkzhhnvU=
+        b=IYD0uQcuEfdFMumdLF/Hd8a621ck7ToIHqIY5ut1lWoxufVYiIK/ZLpbn2JFfiIzZ
+         cVge4xF1+ROzGdS/QOENiXJGe8RFCY3cL8o1w9pDHuE9YSxoUAv3+d9jYufmsQCoOv
+         eWzs4MtzZ5aUNOoAyIDOeiiAub3FtuAR+3l28R9A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        stable@vger.kernel.org, Leo Yan <leo.yan@linaro.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>,
+        Joe Mario <jmario@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 152/218] serial: digicolor-usart: Dont allow CS5-6
-Date:   Mon, 13 Jun 2022 12:10:10 +0200
-Message-Id: <20220613094925.202454445@linuxfoundation.org>
+Subject: [PATCH 5.15 109/247] perf c2c: Fix sorting in percent_rmt_hitm_cmp()
+Date:   Mon, 13 Jun 2022 12:10:11 +0200
+Message-Id: <20220613094926.266762828@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +61,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Leo Yan <leo.yan@linaro.org>
 
-[ Upstream commit fd63031b8c0763addcecdefe0e0c59d49646204e ]
+[ Upstream commit b24192a17337abbf3f44aaa75e15df14a2d0016e ]
 
-Only CS7 and CS8 seem supported but CSIZE is not sanitized to CS8 in
-the default: block.
+The function percent_rmt_hitm_cmp() wrongly uses local HITMs for
+sorting remote HITMs.
 
-Set CSIZE correctly so that userspace knows the effective value.
-Incorrect CSIZE also results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
+Since this function is to sort cache lines for remote HITMs, this patch
+changes to use 'rmt_hitm' field for correct sorting.
 
-Fixes: 5930cb3511df (serial: driver for Conexant Digicolor USART)
-Acked-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-3-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 9cb3500afc0980c5 ("perf c2c report: Add hitm/store percent related sort keys")
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Joe Mario <jmario@redhat.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20220530084253.750190-1-leo.yan@linaro.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/digicolor-usart.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/perf/builtin-c2c.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/digicolor-usart.c b/drivers/tty/serial/digicolor-usart.c
-index 794864fac625..74127813e6db 100644
---- a/drivers/tty/serial/digicolor-usart.c
-+++ b/drivers/tty/serial/digicolor-usart.c
-@@ -313,6 +313,8 @@ static void digicolor_uart_set_termios(struct uart_port *port,
- 	case CS8:
- 	default:
- 		config |= UA_CONFIG_CHAR_LEN;
-+		termios->c_cflag &= ~CSIZE;
-+		termios->c_cflag |= CS8;
- 		break;
- 	}
+diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
+index 1fb0c507a551..e6f900c3accb 100644
+--- a/tools/perf/builtin-c2c.c
++++ b/tools/perf/builtin-c2c.c
+@@ -924,8 +924,8 @@ percent_rmt_hitm_cmp(struct perf_hpp_fmt *fmt __maybe_unused,
+ 	double per_left;
+ 	double per_right;
  
+-	per_left  = PERCENT(left, lcl_hitm);
+-	per_right = PERCENT(right, lcl_hitm);
++	per_left  = PERCENT(left, rmt_hitm);
++	per_right = PERCENT(right, rmt_hitm);
+ 
+ 	return per_left - per_right;
+ }
 -- 
 2.35.1
 

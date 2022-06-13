@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDFC654895C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 736605491C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:29:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358781AbiFMMI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 08:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
+        id S1349649AbiFMMcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359169AbiFMMFY (ORCPT
+        with ESMTP id S1357565AbiFMM3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:05:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6B9186F4;
-        Mon, 13 Jun 2022 03:59:25 -0700 (PDT)
+        Mon, 13 Jun 2022 08:29:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBDB5A0AE;
+        Mon, 13 Jun 2022 04:06:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 49519611B3;
-        Mon, 13 Jun 2022 10:59:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B813C34114;
-        Mon, 13 Jun 2022 10:59:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB4B6B80D3A;
+        Mon, 13 Jun 2022 11:06:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 451D5C34114;
+        Mon, 13 Jun 2022 11:06:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117964;
-        bh=a/YkUWLxarjO73nmXr57Q4nifqFIyaO7maslcmeyWEw=;
+        s=korg; t=1655118388;
+        bh=hRtCWbJIiky/IJSgSMEZ2RkjSFGQID5cKf6r0rRfTxA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YRwZYLOPDli3xzI6gbqWmv8r5Hwaz/9HpQ/5J3vMLerhGcqf0qDaDI6VFkPdDKwUe
-         Rbwzn5ksduC89DRGzw6YK3IajhOXOV84aFn4PILyp5l5VqVPXRqj5LiP0fE6wHkh0e
-         zBM2sfEFIH2UwKQzOZ4KGAZEKrN2NhQ4C78+mRgw=
+        b=QZa7ZAouaoyzIqk3N8C0YOtLUtB4lmJ0gBqQzdsivolF2mJDcTVV2TPBDA1w5qbj6
+         /UQDRJQaRLfodMXJMIkW1VBNxmsk0ZR4b0jeTTLnS3mlaq2kN9Lq9Lg9/yO+yOVLXE
+         7xFX8duHlqaGabIG9vbzMNObC5GDJgbaBAvzQQSc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Lin Ma <linma@zju.edu.cn>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 194/287] USB: storage: karma: fix rio_karma_init return
+        stable@vger.kernel.org, Menglong Dong <imagedong@tencent.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jiang Biao <benbjiang@tencent.com>,
+        Hao Peng <flyingpeng@tencent.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 058/172] bpf: Fix probe read error in ___bpf_prog_run()
 Date:   Mon, 13 Jun 2022 12:10:18 +0200
-Message-Id: <20220613094929.748553541@linuxfoundation.org>
+Message-Id: <20220613094904.276782386@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094850.166931805@linuxfoundation.org>
+References: <20220613094850.166931805@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,61 +58,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lin Ma <linma@zju.edu.cn>
+From: Menglong Dong <imagedong@tencent.com>
 
-[ Upstream commit b92ffb1eddd9a66a90defc556dcbf65a43c196c7 ]
+[ Upstream commit caff1fa4118cec4dfd4336521ebd22a6408a1e3e ]
 
-The function rio_karam_init() should return -ENOMEM instead of
-value 0 (USB_STOR_TRANSPORT_GOOD) when allocation fails.
+I think there is something wrong with BPF_PROBE_MEM in ___bpf_prog_run()
+in big-endian machine. Let's make a test and see what will happen if we
+want to load a 'u16' with BPF_PROBE_MEM.
 
-Similarly, it should return -EIO when rio_karma_send_command() fails.
+Let's make the src value '0x0001', the value of dest register will become
+0x0001000000000000, as the value will be loaded to the first 2 byte of
+DST with following code:
 
-Fixes: dfe0d3ba20e8 ("USB Storage: add rio karma eject support")
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
-Link: https://lore.kernel.org/r/20220412144359.28447-1-linma@zju.edu.cn
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) (SRC + insn->off));
+
+Obviously, the value in DST is not correct. In fact, we can compare
+BPF_PROBE_MEM with LDX_MEM_H:
+
+  DST = *(SIZE *)(unsigned long) (SRC + insn->off);
+
+If the memory load is done by LDX_MEM_H, the value in DST will be 0x1 now.
+
+And I think this error results in the test case 'test_bpf_sk_storage_map'
+failing:
+
+  test_bpf_sk_storage_map:PASS:bpf_iter_bpf_sk_storage_map__open_and_load 0 nsec
+  test_bpf_sk_storage_map:PASS:socket 0 nsec
+  test_bpf_sk_storage_map:PASS:map_update 0 nsec
+  test_bpf_sk_storage_map:PASS:socket 0 nsec
+  test_bpf_sk_storage_map:PASS:map_update 0 nsec
+  test_bpf_sk_storage_map:PASS:socket 0 nsec
+  test_bpf_sk_storage_map:PASS:map_update 0 nsec
+  test_bpf_sk_storage_map:PASS:attach_iter 0 nsec
+  test_bpf_sk_storage_map:PASS:create_iter 0 nsec
+  test_bpf_sk_storage_map:PASS:read 0 nsec
+  test_bpf_sk_storage_map:FAIL:ipv6_sk_count got 0 expected 3
+  $10/26 bpf_iter/bpf_sk_storage_map:FAIL
+
+The code of the test case is simply, it will load sk->sk_family to the
+register with BPF_PROBE_MEM and check if it is AF_INET6. With this patch,
+now the test case 'bpf_iter' can pass:
+
+  $10  bpf_iter:OK
+
+Fixes: 2a02759ef5f8 ("bpf: Add support for BTF pointers to interpreter")
+Signed-off-by: Menglong Dong <imagedong@tencent.com>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Reviewed-by: Jiang Biao <benbjiang@tencent.com>
+Reviewed-by: Hao Peng <flyingpeng@tencent.com>
+Cc: Ilya Leoshkevich <iii@linux.ibm.com>
+Link: https://lore.kernel.org/bpf/20220524021228.533216-1-imagedong@tencent.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/storage/karma.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ kernel/bpf/core.c | 14 +++++---------
+ 1 file changed, 5 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/usb/storage/karma.c b/drivers/usb/storage/karma.c
-index edcf2be0e0eb..09c8add5108a 100644
---- a/drivers/usb/storage/karma.c
-+++ b/drivers/usb/storage/karma.c
-@@ -172,23 +172,24 @@ static void rio_karma_destructor(void *extra)
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index d3a1f25f8ec2..845a4c052433 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1653,6 +1653,11 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
+ 		CONT;							\
+ 	LDX_MEM_##SIZEOP:						\
+ 		DST = *(SIZE *)(unsigned long) (SRC + insn->off);	\
++		CONT;							\
++	LDX_PROBE_MEM_##SIZEOP:						\
++		bpf_probe_read_kernel(&DST, sizeof(SIZE),		\
++				      (const void *)(long) (SRC + insn->off));	\
++		DST = *((SIZE *)&DST);					\
+ 		CONT;
  
- static int rio_karma_init(struct us_data *us)
- {
--	int ret = 0;
- 	struct karma_data *data = kzalloc(sizeof(struct karma_data), GFP_NOIO);
- 	if (!data)
--		goto out;
-+		return -ENOMEM;
+ 	LDST(B,   u8)
+@@ -1660,15 +1665,6 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn, u64 *stack)
+ 	LDST(W,  u32)
+ 	LDST(DW, u64)
+ #undef LDST
+-#define LDX_PROBE(SIZEOP, SIZE)							\
+-	LDX_PROBE_MEM_##SIZEOP:							\
+-		bpf_probe_read_kernel(&DST, SIZE, (const void *)(long) (SRC + insn->off));	\
+-		CONT;
+-	LDX_PROBE(B,  1)
+-	LDX_PROBE(H,  2)
+-	LDX_PROBE(W,  4)
+-	LDX_PROBE(DW, 8)
+-#undef LDX_PROBE
  
- 	data->recv = kmalloc(RIO_RECV_LEN, GFP_NOIO);
- 	if (!data->recv) {
- 		kfree(data);
--		goto out;
-+		return -ENOMEM;
- 	}
- 
- 	us->extra = data;
- 	us->extra_destructor = rio_karma_destructor;
--	ret = rio_karma_send_command(RIO_ENTER_STORAGE, us);
--	data->in_storage = (ret == 0);
--out:
--	return ret;
-+	if (rio_karma_send_command(RIO_ENTER_STORAGE, us))
-+		return -EIO;
-+
-+	data->in_storage = 1;
-+
-+	return 0;
- }
- 
- static struct scsi_host_template karma_host_template;
+ 	STX_XADD_W: /* lock xadd *(u32 *)(dst_reg + off16) += src_reg */
+ 		atomic_add((u32) SRC, (atomic_t *)(unsigned long)
 -- 
 2.35.1
 

@@ -2,45 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8119554867B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 17:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 927F0548828
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354926AbiFMLht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
+        id S1380010AbiFMNwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354920AbiFMLaS (ORCPT
+        with ESMTP id S1378804AbiFMNm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:30:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244ED403D9;
-        Mon, 13 Jun 2022 03:46:05 -0700 (PDT)
+        Mon, 13 Jun 2022 09:42:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FB72B180;
+        Mon, 13 Jun 2022 04:31:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DD4EEB80D41;
-        Mon, 13 Jun 2022 10:46:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D377C3411C;
-        Mon, 13 Jun 2022 10:46:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80D62B80EAF;
+        Mon, 13 Jun 2022 11:31:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2FBAC385A9;
+        Mon, 13 Jun 2022 11:31:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117162;
-        bh=feGV6UqE0Uz4bq22NKfBxFKgpShCtuwbopW1MYiZROI=;
+        s=korg; t=1655119892;
+        bh=zc0NAQOJ4VUmyx65AvWVvfef76yT3WWwJ9o7ugvthro=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V78pbB+1k6iAjcQL+CjmjG7fWXcOVigufB8tCi0kXMcZ0x05Fv6j37AwJx9/7HKYA
-         l4qjz2tDYFaxaE0YY9mke+1PtU+olBlIWTlHHyCG5lWZsIvNNzylcjPstt9O4Ng4ai
-         fUr4Qxgn3+v98VmPTZOaExt4x/ReSdJ3SNWEDXf4=
+        b=jGyToYn2f2X12/yOzH4ZJUXq8PW4lXt0VQSUEdpaGuwlhsrqHmi6KJ5UarTtD5Tox
+         o0YRfvgRLi9CfcMWm2yV/WkuRR8m+jXThB4DxdpxWsSKmt4sAaegjUxRbd2bPveCPE
+         oECVzB7vk4Pr5G6cAfQL4GOd8yNxliAnrhAbGFu0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Baruch Siach <baruch@tkos.co.il>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        stable@vger.kernel.org,
+        Padmanabha Srinivasaiah <treasure4paddy@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 308/411] serial: digicolor-usart: Dont allow CS5-6
+Subject: [PATCH 5.18 156/339] bootconfig: Make the bootconfig.o as a normal object file
 Date:   Mon, 13 Jun 2022 12:09:41 +0200
-Message-Id: <20220613094937.986016491@linuxfoundation.org>
+Message-Id: <20220613094931.416793403@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
-References: <20220613094928.482772422@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +64,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+From: Masami Hiramatsu <mhiramat@kernel.org>
 
-[ Upstream commit fd63031b8c0763addcecdefe0e0c59d49646204e ]
+[ Upstream commit 6014a23638cdee63a71ef13c51d7c563eb5829ee ]
 
-Only CS7 and CS8 seem supported but CSIZE is not sanitized to CS8 in
-the default: block.
+Since the APIs defined in the bootconfig.o are not individually used,
+it is meaningless to build it as library by lib-y. Use obj-y for that.
 
-Set CSIZE correctly so that userspace knows the effective value.
-Incorrect CSIZE also results in miscalculation of the frame bits in
-tty_get_char_size() or in its predecessor where the roughly the same
-code is directly within uart_update_timeout().
+Link: https://lkml.kernel.org/r/164921225875.1090670.15565363126983098971.stgit@devnote2
 
-Fixes: 5930cb3511df (serial: driver for Conexant Digicolor USART)
-Acked-by: Baruch Siach <baruch@tkos.co.il>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Link: https://lore.kernel.org/r/20220519081808.3776-3-ilpo.jarvinen@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Padmanabha Srinivasaiah <treasure4paddy@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Reported-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/digicolor-usart.c | 2 ++
- 1 file changed, 2 insertions(+)
+ lib/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/digicolor-usart.c b/drivers/tty/serial/digicolor-usart.c
-index 4446c13629b1..e06967ca62fa 100644
---- a/drivers/tty/serial/digicolor-usart.c
-+++ b/drivers/tty/serial/digicolor-usart.c
-@@ -309,6 +309,8 @@ static void digicolor_uart_set_termios(struct uart_port *port,
- 	case CS8:
- 	default:
- 		config |= UA_CONFIG_CHAR_LEN;
-+		termios->c_cflag &= ~CSIZE;
-+		termios->c_cflag |= CS8;
- 		break;
- 	}
+diff --git a/lib/Makefile b/lib/Makefile
+index 6b9ffc1bd1ee..08053df16c7c 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -279,7 +279,7 @@ $(foreach file, $(libfdt_files), \
+ 	$(eval CFLAGS_$(file) = -I $(srctree)/scripts/dtc/libfdt))
+ lib-$(CONFIG_LIBFDT) += $(libfdt_files)
  
+-lib-$(CONFIG_BOOT_CONFIG) += bootconfig.o
++obj-$(CONFIG_BOOT_CONFIG) += bootconfig.o
+ 
+ obj-$(CONFIG_RBTREE_TEST) += rbtree_test.o
+ obj-$(CONFIG_INTERVAL_TREE_TEST) += interval_tree_test.o
 -- 
 2.35.1
 

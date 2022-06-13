@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF5FA548E30
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B489E54984F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356346AbiFMLoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43604 "EHLO
+        id S1377473AbiFMNgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 09:36:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355662AbiFMLjW (ORCPT
+        with ESMTP id S1378129AbiFMNay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:39:22 -0400
+        Mon, 13 Jun 2022 09:30:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB942C659;
-        Mon, 13 Jun 2022 03:49:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C1CEBA;
+        Mon, 13 Jun 2022 04:25:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3EC7161260;
-        Mon, 13 Jun 2022 10:49:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5036DC34114;
-        Mon, 13 Jun 2022 10:49:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A091560F18;
+        Mon, 13 Jun 2022 11:25:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE387C36B08;
+        Mon, 13 Jun 2022 11:25:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117377;
-        bh=w9LKfzLwAKYB46T3ecIm/GsN+H5j9J7Oa1HOgAq0IV0=;
+        s=korg; t=1655119540;
+        bh=IVjXOW8RIGiL5phsUl4Pc2qplnLo+TV0JfVmuDGxz8s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AVGVFJgNag1MeBt2qQLp8RESYe+g84uSznuk3STrq3GFRMX1Z3fz+zhb5+GZf9pxm
-         BN+5QkbRyq2f/LBUnKaVOXWitT23Y7HO3YsteZ8K+3MBvSY5p+AdW1hVokgv5Npp/y
-         XefiqvOCqEDOPLBaBh6OgfbsuosWZ2K7yLNDcwHk=
+        b=Q0Z7AZWIdHFJICfDKuNl+ikDdZdLQ/3WKPS10T/X+xrD3xdLZ74cu9Ii19lduY4lB
+         55OZbLqCpC+SH/COGTqTCTSqdZ9po99qSCP5qYWl4fYx5gZ6zueHSCkHx64iHiO5xQ
+         v4l6pvhZUoAfh7MkJ0+7z2S1L3/wypjHRGC7S7Qo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zheyu Ma <zheyuma97@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 021/287] media: pci: cx23885: Fix the error handling in cx23885_initdev()
+Subject: [PATCH 5.18 020/339] usb: musb: Fix missing of_node_put() in omap2430_probe
 Date:   Mon, 13 Jun 2022 12:07:25 +0200
-Message-Id: <20220613094924.503589168@linuxfoundation.org>
+Message-Id: <20220613094927.121085023@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,64 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zheyu Ma <zheyuma97@gmail.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit e8123311cf06d7dae71e8c5fe78e0510d20cd30b ]
+[ Upstream commit 424bef51fa530389b0b9008c9e144e40c10e8458 ]
 
-When the driver fails to call the dma_set_mask(), the driver will get
-the following splat:
+The device_node pointer is returned by of_parse_phandle() with refcount
+incremented. We should use of_node_put() on it when done.
 
-[   55.853884] BUG: KASAN: use-after-free in __process_removed_driver+0x3c/0x240
-[   55.854486] Read of size 8 at addr ffff88810de60408 by task modprobe/590
-[   55.856822] Call Trace:
-[   55.860327]  __process_removed_driver+0x3c/0x240
-[   55.861347]  bus_for_each_dev+0x102/0x160
-[   55.861681]  i2c_del_driver+0x2f/0x50
-
-This is because the driver has initialized the i2c related resources
-in cx23885_dev_setup() but not released them in error handling, fix this
-bug by modifying the error path that jumps after failing to call the
-dma_set_mask().
-
-Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Fixes: 8934d3e4d0e7 ("usb: musb: omap2430: Don't use omap_get_control_dev()")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Link: https://lore.kernel.org/r/20220309111033.24487-1-linmq006@gmail.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx23885/cx23885-core.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/usb/musb/omap2430.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/pci/cx23885/cx23885-core.c b/drivers/media/pci/cx23885/cx23885-core.c
-index a1d738969d7b..06e4e1df125c 100644
---- a/drivers/media/pci/cx23885/cx23885-core.c
-+++ b/drivers/media/pci/cx23885/cx23885-core.c
-@@ -2164,7 +2164,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
- 	err = pci_set_dma_mask(pci_dev, 0xffffffff);
- 	if (err) {
- 		pr_err("%s/0: Oops: no 32bit PCI DMA ???\n", dev->name);
--		goto fail_ctrl;
-+		goto fail_dma_set_mask;
- 	}
- 
- 	err = request_irq(pci_dev->irq, cx23885_irq,
-@@ -2172,7 +2172,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
- 	if (err < 0) {
- 		pr_err("%s: can't get IRQ %d\n",
- 		       dev->name, pci_dev->irq);
--		goto fail_irq;
-+		goto fail_dma_set_mask;
- 	}
- 
- 	switch (dev->board) {
-@@ -2194,7 +2194,7 @@ static int cx23885_initdev(struct pci_dev *pci_dev,
- 
- 	return 0;
- 
--fail_irq:
-+fail_dma_set_mask:
- 	cx23885_dev_unregister(dev);
- fail_ctrl:
- 	v4l2_ctrl_handler_free(hdl);
+diff --git a/drivers/usb/musb/omap2430.c b/drivers/usb/musb/omap2430.c
+index d2b7e613eb34..f571a65ae6ee 100644
+--- a/drivers/usb/musb/omap2430.c
++++ b/drivers/usb/musb/omap2430.c
+@@ -362,6 +362,7 @@ static int omap2430_probe(struct platform_device *pdev)
+ 	control_node = of_parse_phandle(np, "ctrl-module", 0);
+ 	if (control_node) {
+ 		control_pdev = of_find_device_by_node(control_node);
++		of_node_put(control_node);
+ 		if (!control_pdev) {
+ 			dev_err(&pdev->dev, "Failed to get control device\n");
+ 			ret = -EINVAL;
 -- 
 2.35.1
 

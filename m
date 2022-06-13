@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F2B549078
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5ED0548C87
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377793AbiFMNgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45394 "EHLO
+        id S1356590AbiFMLup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377862AbiFMNaV (ORCPT
+        with ESMTP id S1356848AbiFMLpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:30:21 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F196E8C8;
-        Mon, 13 Jun 2022 04:25:10 -0700 (PDT)
+        Mon, 13 Jun 2022 07:45:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9FC48E5A;
+        Mon, 13 Jun 2022 03:51:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DD1C9CE110D;
-        Mon, 13 Jun 2022 11:25:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFEA2C3411E;
-        Mon, 13 Jun 2022 11:25:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 464AA612DF;
+        Mon, 13 Jun 2022 10:51:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27792C34114;
+        Mon, 13 Jun 2022 10:51:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119504;
-        bh=u3g6ye2lF1PUMaUH3OK098oauGnVr/Y/SqRnFmjCthM=;
+        s=korg; t=1655117479;
+        bh=zZ8Ny6isuJgovwiWB2jimRYvq29LtKT6NbIjjiWAd9U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P1+bBFlKjO0ob4Dn1ZmUccCVO/lZpPhj7yvTApMcIdMEjXYG0gvFBWzOOsLo4G11Z
-         0qHPSxUZT6yADIuMtt5hobed5QIPG6r/6mbyOzMa68JxQD5DNRzG+qvPvwIKycxILm
-         cS78wJd1lsUjpce5XrOhv1CLOsr0tqgqqIuEpqUw=
+        b=X78HyHPhYC2D5mF54uyRd32dxOAhzp/vaewTk08NNgtto4b5SN06hj+UsMPT27Dus
+         KwNumKeWEwWg5EMtvXRT8O7cUY9GV8Bdmmpjw0k99oybvQznVndxmpd1n/y/El1nLT
+         43SEDzLJ+GN0KmClOXFauwhfA5MBxAydmr1PDhog=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Cixi Geng <cixi.geng1@unisoc.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 037/339] iio: adc: sc27xx: Fine tune the scale calibration values
+Subject: [PATCH 4.19 038/287] ASoC: rt5645: Fix errorenous cleanup order
 Date:   Mon, 13 Jun 2022 12:07:42 +0200
-Message-Id: <20220613094927.644650258@linuxfoundation.org>
+Message-Id: <20220613094925.020640095@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,62 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cixi Geng <cixi.geng1@unisoc.com>
+From: Lin Ma <linma@zju.edu.cn>
 
-[ Upstream commit 5a7a184b11c6910f47600ff5cbbee34168f701a8 ]
+[ Upstream commit 2def44d3aec59e38d2701c568d65540783f90f2f ]
 
-Small adjustment the scale calibration value for the sc2731,
-use new name sc2731_[big|small]_scale_graph_calib, and remove
-the origin [big|small]_scale_graph_calib struct for unused.
+There is a logic error when removing rt5645 device as the function
+rt5645_i2c_remove() first cancel the &rt5645->jack_detect_work and
+delete the &rt5645->btn_check_timer latter. However, since the timer
+handler rt5645_btn_check_callback() will re-queue the jack_detect_work,
+this cleanup order is buggy.
 
-Fixes: 8ba0dbfd07a35 (iio: adc: sc27xx: Add ADC scale calibration)
-Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
-Link: https://lore.kernel.org/r/20220419142458.884933-4-gengcixi@gmail.com
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+That is, once the del_timer_sync in rt5645_i2c_remove is concurrently
+run with the rt5645_btn_check_callback, the canceled jack_detect_work
+will be rescheduled again, leading to possible use-after-free.
+
+This patch fix the issue by placing the del_timer_sync function before
+the cancel_delayed_work_sync.
+
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+Link: https://lore.kernel.org/r/20220516092035.28283-1-linma@zju.edu.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/adc/sc27xx_adc.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ sound/soc/codecs/rt5645.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
-index aee076c8e2b1..cfe003cc4f0b 100644
---- a/drivers/iio/adc/sc27xx_adc.c
-+++ b/drivers/iio/adc/sc27xx_adc.c
-@@ -103,14 +103,14 @@ static struct sc27xx_adc_linear_graph small_scale_graph = {
- 	100, 341,
- };
+diff --git a/sound/soc/codecs/rt5645.c b/sound/soc/codecs/rt5645.c
+index 9185bd7c5a6d..d34000182f67 100644
+--- a/sound/soc/codecs/rt5645.c
++++ b/sound/soc/codecs/rt5645.c
+@@ -4105,9 +4105,14 @@ static int rt5645_i2c_remove(struct i2c_client *i2c)
+ 	if (i2c->irq)
+ 		free_irq(i2c->irq, rt5645);
  
--static const struct sc27xx_adc_linear_graph big_scale_graph_calib = {
--	4200, 856,
--	3600, 733,
-+static const struct sc27xx_adc_linear_graph sc2731_big_scale_graph_calib = {
-+	4200, 850,
-+	3600, 728,
- };
++	/*
++	 * Since the rt5645_btn_check_callback() can queue jack_detect_work,
++	 * the timer need to be delted first
++	 */
++	del_timer_sync(&rt5645->btn_check_timer);
++
+ 	cancel_delayed_work_sync(&rt5645->jack_detect_work);
+ 	cancel_delayed_work_sync(&rt5645->rcclock_work);
+-	del_timer_sync(&rt5645->btn_check_timer);
  
--static const struct sc27xx_adc_linear_graph small_scale_graph_calib = {
--	1000, 833,
--	100, 80,
-+static const struct sc27xx_adc_linear_graph sc2731_small_scale_graph_calib = {
-+	1000, 838,
-+	100, 84,
- };
+ 	regulator_bulk_disable(ARRAY_SIZE(rt5645->supplies), rt5645->supplies);
  
- static int sc27xx_adc_get_calib_data(u32 calib_data, int calib_adc)
-@@ -130,11 +130,11 @@ static int sc27xx_adc_scale_calibration(struct sc27xx_adc_data *data,
- 	size_t len;
- 
- 	if (big_scale) {
--		calib_graph = &big_scale_graph_calib;
-+		calib_graph = &sc2731_big_scale_graph_calib;
- 		graph = &big_scale_graph;
- 		cell_name = "big_scale_calib";
- 	} else {
--		calib_graph = &small_scale_graph_calib;
-+		calib_graph = &sc2731_small_scale_graph_calib;
- 		graph = &small_scale_graph;
- 		cell_name = "small_scale_calib";
- 	}
 -- 
 2.35.1
 

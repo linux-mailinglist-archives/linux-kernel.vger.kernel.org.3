@@ -2,117 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A44D7549195
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476E4548BE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242444AbiFMPrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 11:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59964 "EHLO
+        id S237215AbiFMPtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 11:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240157AbiFMPrS (ORCPT
+        with ESMTP id S239161AbiFMPsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 11:47:18 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316896B0B1;
-        Mon, 13 Jun 2022 06:24:24 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id u2so5760588pfc.2;
-        Mon, 13 Jun 2022 06:24:24 -0700 (PDT)
+        Mon, 13 Jun 2022 11:48:09 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBDE179947
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:25:21 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id j20so6171392ljg.8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 06:25:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=1V6C8NyTzHg/Om906gtppGn2lvsjTetCEF70z2En2t4=;
-        b=aGSgX4MUnUkGcnR+MN+tj4yKBOqTcPiw0EG8TvDp2yozH0hiNa36XXmRY4rC/7NwJO
-         w1FNvG0XjeVAMSKpk/zAj0fKXQdL85WOOmd2yQGPClm3Eb83QtXtVhbtDYjas7FFXKTg
-         Wt7CzZvwM+ILwsG+MBzE0Z6R8pD5nAMKjBhj2ubeeQwGYvG/fL5oPwiCcEiWuGjlxqqM
-         jda2PLslabSaLCuycTs3Io9F/rvugmpO+kICxq9irqiu9DM7FRZEIHB4oTji8W9Q4HRl
-         Gi8Ye4ptsFF7g8gVjq8jNhXK8y1LctgC3dO94p4V7Vf193gAKwsFhM6nuS42sdUO8RcE
-         7Ang==
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=zXYzaYM+MH6bQYEtMJikPf8JokCGUGXGDdjWTBEEWDQ=;
+        b=dgK3ftwBWoh2255c8PIURNKpgXKChTnlKkjWgEuBdG9//gqdDQL8ol3ateTZTeeaxX
+         kSgZiPw2BcFAtYLAqRwewoopZnE9rmjU8OnuaHp8Ois9ym7w1m1PSbwfkZFjknXjRuoE
+         CWLyC/DqQA1CprvXN5XXQBhSvQKaqKdAuWrg5pqjX72OUS8A+hQ2bO+3kChs/ujSLmBh
+         gRLw6uiTm5Kewng/SqqZJmQGEkvRvSsaMzUGL/2JaNXqGepoFeJ0n/xvFSRnfnNCqB68
+         Or2PDsvFDtdRZph9gbC+j44SPr0rGp1RAFOOzti/NtVzIAl4uw4r/RuNBJ8/B9cgpH4v
+         qlzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=1V6C8NyTzHg/Om906gtppGn2lvsjTetCEF70z2En2t4=;
-        b=yOEWoZSK6E9lZgvHICxIlaMWCmzNEre9sClBve1VIqkhgJVzwW4KJ540ZSLR8I2UjX
-         hnHuvAKTd7aFcHQsT3CZr9YBd1+27f4U5N+pHkFve6AwmBK2Nbq15wyiIlW7HP7ea/Rb
-         BdBP2aGT0XsDFyazndTpLS/jiQs5z09hvf19Aw2T+4dYvXgDteSepv3h7P2b04BlUENT
-         Lmmcajpf5KxPwjpS6E8xhYXMZ7I3tz1pWsGU3z+Kz4zFHyksKP2szSH2i2KvtFWWUSWb
-         ugFpNLk7YrOSqG+zcVpyY5AzqULA9TS1LPUpOQjNXbpeyqRKorg37q4vKIqy/erC4ZQw
-         hShA==
-X-Gm-Message-State: AOAM531RQ+qzvrP92YB2CP85PK261uBHZ7Amfqq+cIvne3SZMsqYvv+q
-        7KJ2vioxeDQUgyFdgUYStUY=
-X-Google-Smtp-Source: ABdhPJxBnf2CeWe+21KSDh0KTQcm1R/GP2/VmC9WQYLr27twxW3i4YwuWRqFxbCfC5AHsRzRGiHlYQ==
-X-Received: by 2002:a63:80c8:0:b0:405:186f:fa39 with SMTP id j191-20020a6380c8000000b00405186ffa39mr10245958pgd.84.1655126663619;
-        Mon, 13 Jun 2022 06:24:23 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f20-20020a17090a639400b001ea75a02805sm7389065pjj.52.2022.06.13.06.24.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 06:24:23 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 13 Jun 2022 06:24:22 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     pali@kernel.org, jdelvare@suse.com, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (dell-smm) Add Dell G5 5590 to DMI table
-Message-ID: <20220613132422.GA3805541@roeck-us.net>
-References: <20220612232208.27901-1-W_Armin@gmx.de>
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=zXYzaYM+MH6bQYEtMJikPf8JokCGUGXGDdjWTBEEWDQ=;
+        b=27rJwZN/qiyBGBlfupnK2bH1UHtq2XmmT9nDETaZTo7qGNciIY6SCmaNeE5sKWgKrD
+         /ptuoXXgqdUjrW1Lcj4go3Sfdl4sU2GJqJmecdOfg7jh0nM32wAojf9olhJK8DfiJIs7
+         Tlbt+rm1/QPuo6ad2Py90QzM+1I6y1dbLOTffuMYHbkhtsZvCct7JohS0pTt+uCWQaW/
+         2zuOTzkbyiXdzAiQw86FtvtidS2cBqliLcIbX/q3Gyrsv3MTn8Fh5ZBMqUgK64FCxo9b
+         BzpQLBebNkwu/HMnXbLhwoFAHZmYHwsXkvGDycYMLLTY91/82J0dcrn/X66DQtQSUdOU
+         E6Bw==
+X-Gm-Message-State: AOAM531r1eik0w75j78GqPF0QTcIMdxdj5JQX+oKBsI5ZpZm8uZeaKMr
+        9E90KOn4U3T9YVDI0dyUS0CBM4GRfl8Rh9/QGP4=
+X-Google-Smtp-Source: ABdhPJwUs2NIu7N/KkUEMmOlkf3FuWOlW2LvnHcTJ1I+lMILeD5lT8v+WxKL51G3XWcsSTjFah0NywVVBIESoCPwZk0=
+X-Received: by 2002:a2e:bd15:0:b0:255:3768:9999 with SMTP id
+ n21-20020a2ebd15000000b0025537689999mr45730036ljq.20.1655126718954; Mon, 13
+ Jun 2022 06:25:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220612232208.27901-1-W_Armin@gmx.de>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:6500:21a2:b0:142:5559:4fec with HTTP; Mon, 13 Jun 2022
+ 06:25:18 -0700 (PDT)
+Reply-To: marija.sterbenc@aol.com
+From:   Marija Sterbenc <marijasterbenc21@gmail.com>
+Date:   Mon, 13 Jun 2022 14:25:18 +0100
+Message-ID: <CALEkHnNpX9E4-PD2OucwJgOBx0-qxEjcQ_jku-iPMrn26AtLHg@mail.gmail.com>
+Subject: Pani Marija Sterbenc
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 01:22:08AM +0200, Armin Wolf wrote:
-> According to Bug 215983 at bugzilla.kernel.org,
-> the Dell G5 5590 supports the SMM interface and
-> can thus be loaded with ignore_dmi being set.
-> Add the model the DMI table to allow for
-> automatic loadig on this model.
-> 
-> Compile-tested only.
-> 
-> Signed-off-by: Armin Wolf <W_Armin@gmx.de>
-> Acked-by: Pali Rohár <pali@kernel.org>
+drah=C3=A1 milovan=C3=A1,
 
-Applied to hwmon-next.
+Pozdravujem =C5=A5a v mene Bo=C5=BEom; je pravda, =C5=BEe tento list v=C3=
+=A1s mo=C5=BEno
+prekvap=C3=AD, ale napriek tomu v=C3=A1s pokorne =C5=BEiadam, aby ste mi ve=
+novali
+pozornos=C5=A5 a dobre ma po=C4=8Duli. Vol=C3=A1m sa pani Marija Sterbenc .=
+ M=C3=A1m 63
+rokov a som vydat=C3=A1 za p=C3=A1na Rodrigueza Sterbenca a pred jeho smr=
+=C5=A5ou v
+roku 2012 sme boli man=C5=BEelmi 32 rokov.
 
-Thanks,
-Guenter
+Boli sme man=C5=BEelmi 32 rokov bez die=C5=A5a=C5=A5a a on zomrel po kr=C3=
+=A1tkej chorobe
+a po jeho smrti som sa rozhodol, =C5=BEe sa kv=C3=B4li svojmu n=C3=A1bo=C5=
+=BEensk=C3=A9mu
+presved=C4=8Deniu a vysok=C3=A9mu veku znova neo=C5=BEen=C3=ADm. Ke=C4=8F b=
+ol m=C3=B4j zosnul=C3=BD
+man=C5=BEel na=C5=BEive, ulo=C5=BEil tu v banke sumu 4 500 000,00 (=C5=A1ty=
+ri mili=C3=B3ny,
+p=C3=A4=C5=A5stotis=C3=ADc eur). V s=C3=BA=C4=8Dasnosti s=C3=BA tieto penia=
+ze st=C3=A1le v =C3=BAschove banky.
+Ned=C3=A1vno mi m=C3=B4j doktor povedal, =C5=BEe nasleduj=C3=BAce =C5=A1tyr=
+i mesiace nevydr=C5=BE=C3=ADm
+kv=C3=B4li rakovine.
 
-> ---
->  drivers/hwmon/dell-smm-hwmon.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> --
-> 2.30.2
-> 
-> diff --git a/drivers/hwmon/dell-smm-hwmon.c b/drivers/hwmon/dell-smm-hwmon.c
-> index 16c10ac84a91..d419885dd771 100644
-> --- a/drivers/hwmon/dell-smm-hwmon.c
-> +++ b/drivers/hwmon/dell-smm-hwmon.c
-> @@ -1131,6 +1131,13 @@ static const struct i8k_config_data i8k_config_data[] __initconst = {
->  };
-> 
->  static const struct dmi_system_id i8k_dmi_table[] __initconst = {
-> +	{
-> +		.ident = "Dell G5 5590",
-> +		.matches = {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc."),
-> +			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "G5 5590"),
-> +		},
-> +	},
->  	{
->  		.ident = "Dell Inspiron",
->  		.matches = {
+Ke=C4=8F=C5=BEe som poznal svoj stav, rozhodol som sa tieto peniaze darova=
+=C5=A5
+cirkv=C3=A1m, organiz=C3=A1ci=C3=A1m alebo dobr=C3=BDm =C4=BEu=C4=8Fom, kto=
+r=C3=AD bud=C3=BA tento fond
+vyu=C5=BE=C3=ADva=C5=A5 tak, ako v=C3=A1m d=C3=A1m n=C3=A1vod na spr=C3=A1v=
+nu predstavu o vyu=C5=BEit=C3=AD tohto
+fondu.
+
+Chcem, aby ste tieto peniaze pou=C5=BEili pre charitat=C3=ADvne organiz=C3=
+=A1cie,
+sirotince, vdovy a in=C3=BDch =C4=BEud=C3=AD, ktor=C3=AD s=C3=BA v n=C3=BAd=
+zi. Rozhodol som sa tak,
+preto=C5=BEe nem=C3=A1m =C5=BEiadne die=C5=A5a, ktor=C3=A9 by tieto peniaze=
+ zdedilo. Navy=C5=A1e,
+pr=C3=ADbuzn=C3=AD m=C3=B4jho man=C5=BEela mi nie s=C3=BA bl=C3=ADzki, ke=
+=C4=8F=C5=BEe som ochorela na
+rakovinu a chceli ma vidie=C5=A5 m=C5=95tvu, aby mohli zdedi=C5=A5 jeho boh=
+atstvo, a
+preto nem=C3=A1me =C5=BEiadne die=C5=A5a. T=C3=ADto =C4=BEudia nie s=C3=BA =
+hodn=C3=AD tohto dedi=C4=8Dstva. To
+je d=C3=B4vod, pre=C4=8Do som sa rozhodol kontaktova=C5=A5 v=C3=A1s a darov=
+a=C5=A5 v=C3=A1m tento
+fond na charitat=C3=ADvne pr=C3=A1ce.
+
+Hne=C4=8F ako dostanem va=C5=A1u odpove=C4=8F, d=C3=A1m v=C3=A1m kontakt na=
+ banku, kde je tento
+fond ulo=C5=BEen=C3=BD moj=C3=ADm zosnul=C3=BDm man=C5=BEelom pred jeho n=
+=C3=A1hlou smr=C5=A5ou, a tie=C5=BE
+pover=C3=ADm n=C3=A1=C5=A1ho rodinn=C3=A9ho pr=C3=A1vnika, aby banke vydal =
+splnomocnenie, ktor=C3=A9
+predlo=C5=BE=C3=AD ste pr=C3=ADjemcom tohto fondu a tie=C5=BE chcem, aby st=
+e ma v=C5=BEdy
+zap=C3=A1jali do svojej ka=C5=BEdodennej modlitby.
+
+Ak=C3=A9ko=C4=BEvek oneskorenie vo va=C5=A1ej odpovedi mi m=C3=B4=C5=BEe po=
+skytn=C3=BA=C5=A5 priestor na
+h=C4=BEadanie in=C3=A9ho dobr=C3=A9ho =C4=8Dloveka na rovnak=C3=BD =C3=BA=
+=C4=8Del.
+
+=C4=8Eakujem a zosta=C5=88 po=C5=BEehnan=C3=BD.
+
+va=C5=A1a sestra
+Pani Marija Sterbenc

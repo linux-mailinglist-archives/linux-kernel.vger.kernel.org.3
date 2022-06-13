@@ -2,129 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BCD549DA1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B2E1549D9E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348563AbiFMTZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 15:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S1350453AbiFMTZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:25:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350339AbiFMTZH (ORCPT
+        with ESMTP id S1350474AbiFMTZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Jun 2022 15:25:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D58337A8F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:41:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655142090;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q9imHR0PldrK/4QqffqMQG4YlpeKi0rN5tf1tCAqvxI=;
-        b=OfLxLKMmXh1S0JEAwuW9kESxX/WmvV01sGlNpabaDxngbFrcIEHSG/5Fkm581Wd2AvJodx
-        IQVrUHuwGIKNdBkaL7D8xdVWIAU2Hq3X5lUoWk55A2iwasA5NQz3M4jTNc1hKEoqJopw8A
-        xF1Ia0qB9fKRr0O0qyctqVGEdnh8MNc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-147-svcekgaQPHeiJsmuhlRCIQ-1; Mon, 13 Jun 2022 13:41:29 -0400
-X-MC-Unique: svcekgaQPHeiJsmuhlRCIQ-1
-Received: by mail-wm1-f69.google.com with SMTP id p22-20020a05600c359600b0039c7b23a1c7so5105094wmq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:41:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=q9imHR0PldrK/4QqffqMQG4YlpeKi0rN5tf1tCAqvxI=;
-        b=G5uWEb/gzV++ixXQs2lv0P/9A+/IoHLGcnKUN//1JDpFQpNKFMX9HN2sNkrU4TXPD3
-         MZdRfiuiNlUCD1jonBbJ4Iva8mRWLkiHVLxXraXG9hbagAWcG9QIUb/tDMy+hCSMwzd/
-         o6B+h6hQ6Yyqub/sN8k3z+vgVLA3SJBUFwTMiJVpaGtuuuOuYD5S+FWrfrvQd6oM/r0/
-         FzCMaGuyu2n9MmPXTsrSTw5it9YzB6C71Xsgybikoa7UwzELXqO/uUM2vBp6P08umtbs
-         QXqbLrZVWHvyhKTkKlmZ1Ee+q+SxeAyjjv0ZuUAcAhH6iVwgZ10cQIMKZNV0cmMKv4CZ
-         pnnw==
-X-Gm-Message-State: AOAM533rO3naUobj2KNqcNzx/McbVF47w9di87eYjY4f9MLVY8L+uZXe
-        L9gIURnYaDgYQZxGI5cppJ6T3zuoN4iXWvgH41mGKJ8d2ka+1egSPSUYvvsUgO5g+VJx3PTyasR
-        9ZgoafuPkTAm25q/o+TFYaQ0U
-X-Received: by 2002:a7b:c389:0:b0:39c:49fe:25df with SMTP id s9-20020a7bc389000000b0039c49fe25dfmr648449wmj.164.1655142087966;
-        Mon, 13 Jun 2022 10:41:27 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzOHYbSdU3QvmmoWgh9ozEuOjCqKEtc/UugRXjsMVcbeHCAdcofLjg4QDbLTxfNrnseTW/13Q==
-X-Received: by 2002:a7b:c389:0:b0:39c:49fe:25df with SMTP id s9-20020a7bc389000000b0039c49fe25dfmr648438wmj.164.1655142087759;
-        Mon, 13 Jun 2022 10:41:27 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id b12-20020a05600010cc00b0020c5253d90asm9201616wrx.86.2022.06.13.10.41.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 10:41:27 -0700 (PDT)
-Message-ID: <8cbfcc29-bc31-9bc8-2eaa-d873f7cf2d5f@redhat.com>
-Date:   Mon, 13 Jun 2022 19:41:25 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v6 3/6] drm: Add driver for Solomon SSD130x OLED displays
-Content-Language: en-US
-To:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        Dominik Kierner <dkierner@dh-electronics.com>
-Cc:     "airlied@linux.ie" <airlied@linux.ie>,
-        "daniel.vetter@ffwll.ch" <daniel.vetter@ffwll.ch>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        "maxime@cerno.tech" <maxime@cerno.tech>,
-        "noralf@tronnes.org" <noralf@tronnes.org>,
-        "sam@ravnborg.org" <sam@ravnborg.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "tzimmermann@suse.de" <tzimmermann@suse.de>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>
-References: <7a78d57342754a5d9bd3ce7c7bf3fa47@dh-electronics.com>
- <YqdZN6mtEDF2CRtS@smile.fi.intel.com>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <YqdZN6mtEDF2CRtS@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78AA83614E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 10:41:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E84F860F71
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:41:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F7E0C34114;
+        Mon, 13 Jun 2022 17:41:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1655142089;
+        bh=EhXZ8nwjvG7Is/AQKsJc4Np8BsZB+E9sA9nAWAwc81g=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Vata14MZ1y1CEXhew/wz5vQ6tAhOTuM64dK67d4bxfkvLS7WXKFiOWhJUJ3nnL/Os
+         lCOX3h53QRC79qTwRYrQyAHN9Th4W/4FOexMwfTn0EncBhpztxgOfNbkwH9uK0DcuV
+         BgZj/uf/b834Jijd46OZQNHRkP+xTQnbvjaxlSg0=
+Date:   Mon, 13 Jun 2022 10:41:28 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     syzbot <syzbot+3f1e5c1dea3a2e66ea9a@syzkaller.appspotmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        syzkaller-bugs@googlegroups.com,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>
+Subject: Re: [syzbot] kernel BUG in mcopy_continue
+Message-Id: <20220613104128.fc55ed6ab63c428e502bc483@linux-foundation.org>
+In-Reply-To: <00000000000039bfb905e14ea9d0@google.com>
+References: <00000000000039bfb905e14ea9d0@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/13/22 17:35, andriy.shevchenko@linux.intel.com wrote:
-> On Mon, Jun 13, 2022 at 11:39:30AM +0000, Dominik Kierner wrote:
->> On 5/25/2022 21:46, Javier Martinez Canillas wrote:
-> 
-> ...
-> 
->>> Thanks, I looked at the code briefly and think that there are things there that we
->>> could use. I.e the 3-wire SPI support that's in panel-solomon-ssd130x-spi-3wire.c.
->>
->> When writing my driver code, I wasn't even considering using regmaps,
->> like You did in Your I2C-Code. If that's applicable for 3-wire-SPI,
->> it would likely be the better, more generic option. Your SPI-code
->> reuses these parts to some extent. For that case,
->> ssd130x_spi_regmap_config.reg_bits would need be changed to 1,
->> as the "register address" has a length of 1 bit and we are sending
->> 9 bits over the line and not 16.
->> Since we still have 2 bytes of host memory,
->> it should still be compatible with the 4-wire write, right?
->> Or would 3-wire SPI require a second regmap?
-> 
-> I believe the cleanest solution is to have different regmap configurations.
-> 
+On Sun, 12 Jun 2022 23:47:26 -0700 syzbot <syzbot+3f1e5c1dea3a2e66ea9a@syzkaller.appspotmail.com> wrote:
 
-I agree with this.
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    6d0c80680317 Add linux-next specific files for 20220610
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13a777f7f00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a30d6e3e814e5931
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3f1e5c1dea3a2e66ea9a
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+3f1e5c1dea3a2e66ea9a@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> kernel BUG at mm/userfaultfd.c:642!
 
--- 
-Best regards,
+Thanks.  I'm looking suspiciously at "mm: userfaultfd: fix
+UFFDIO_CONTINUE on fallocated shmem pages"?
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
-
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 14685 Comm: syz-executor.4 Not tainted 5.19.0-rc1-next-20220610-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> RIP: 0010:__mcopy_atomic mm/userfaultfd.c:642 [inline]
+> RIP: 0010:mcopy_continue+0x80f/0x1360 mm/userfaultfd.c:699
+> Code: a8 ff 49 83 fd fe 0f 85 bd fd ff ff e8 ba ca a8 ff 0f 1f 44 00 00 e8 b0 ca a8 ff e8 ab ca a8 ff 48 8b 7c 24 20 e8 51 76 8b ff <0f> 0b e8 9a ca a8 ff 0f 0b e8 93 ca a8 ff 4d 89 ee 31 ff 41 81 e6
+> RSP: 0018:ffffc900058f7b70 EFLAGS: 00010282
+> RAX: 0000000000000000 RBX: ffff8880226dee58 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff88801a0b4228
+> RBP: 0000000020531000 R08: 0000000000000001 R09: ffff88801a0b422f
+> R10: ffffed1003416845 R11: 0000000000000001 R12: 0000000000000000
+> R13: fffffffffffffffe R14: 00000000fffffffe R15: ffff88801a0b4140
+> FS:  00007f91409ee700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000001b2c522000 CR3: 000000001d578000 CR4: 00000000003526f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  userfaultfd_continue fs/userfaultfd.c:1893 [inline]
+>  userfaultfd_ioctl+0x1818/0x41f0 fs/userfaultfd.c:2017
+>  vfs_ioctl fs/ioctl.c:51 [inline]
+>  __do_sys_ioctl fs/ioctl.c:870 [inline]
+>  __se_sys_ioctl fs/ioctl.c:856 [inline]
+>  __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> RIP: 0033:0x7f913f889109
+> Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007f91409ee168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+> RAX: ffffffffffffffda RBX: 00007f913f99c030 RCX: 00007f913f889109
+> RDX: 0000000020000040 RSI: 00000000c020aa07 RDI: 0000000000000004
+> RBP: 00007f913f8e30ad R08: 0000000000000000 R09: 0000000000000000
+> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> R13: 00007ffcb29c401f R14: 00007f91409ee300 R15: 0000000000022000
+>  </TASK>
+> Modules linked in:
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:__mcopy_atomic mm/userfaultfd.c:642 [inline]
+> RIP: 0010:mcopy_continue+0x80f/0x1360 mm/userfaultfd.c:699
+> Code: a8 ff 49 83 fd fe 0f 85 bd fd ff ff e8 ba ca a8 ff 0f 1f 44 00 00 e8 b0 ca a8 ff e8 ab ca a8 ff 48 8b 7c 24 20 e8 51 76 8b ff <0f> 0b e8 9a ca a8 ff 0f 0b e8 93 ca a8 ff 4d 89 ee 31 ff 41 81 e6
+> RSP: 0018:ffffc900058f7b70 EFLAGS: 00010282
+> RAX: 0000000000000000 RBX: ffff8880226dee58 RCX: 0000000000000000
+> RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffff88801a0b4228
+> RBP: 0000000020531000 R08: 0000000000000001 R09: ffff88801a0b422f
+> R10: ffffed1003416845 R11: 0000000000000001 R12: 0000000000000000
+> R13: fffffffffffffffe R14: 00000000fffffffe R15: ffff88801a0b4140
+> FS:  00007f91409ee700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007f91409cd718 CR3: 000000001d578000 CR4: 00000000003526f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

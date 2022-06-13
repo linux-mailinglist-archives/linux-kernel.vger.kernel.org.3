@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB92549227
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 746E9548A0F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353763AbiFMLT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
+        id S1352326AbiFMLVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353452AbiFMLPn (ORCPT
+        with ESMTP id S1353280AbiFMLPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:15:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC0D38182;
-        Mon, 13 Jun 2022 03:38:06 -0700 (PDT)
+        Mon, 13 Jun 2022 07:15:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BBF3703A;
+        Mon, 13 Jun 2022 03:37:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 748EB610A0;
-        Mon, 13 Jun 2022 10:38:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C5FC34114;
-        Mon, 13 Jun 2022 10:38:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 722E0B80E5C;
+        Mon, 13 Jun 2022 10:37:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD313C34114;
+        Mon, 13 Jun 2022 10:37:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116685;
-        bh=tbtcsQGUGyHo1TtcIeqqsRZNhmca5h/b9G5p+CEPjQw=;
+        s=korg; t=1655116669;
+        bh=CR0lwMZLemY1W6sEBkqnBPV6dOdLJ0RE9AjjI/9sP1g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Q55f4/vF0KsIHmkaLz05MmZ0Zdb2zHeClDFIsiP9xO8XrKV+6K9V7zzXfJ424bS76
-         dQaqsPu5Ce5uRBsBKfhmP/+kVvyJhXXO861UP31Xa+mvBM4xgKtJIIPVmilgCrlPdm
-         Bt91JnDkht3gOlSSsjJu2Tloyppa5kwP2GxUIsfA=
+        b=xgR+7KxKCsz0mH0ULMVnOnPCTHc2y5icl2h5LQf/qfIvV6yTv1ED5+VkCnBUptnuv
+         hWfxaUkjdqicyMOgClKBdcM95L2iJFNydrI6dE0TiavaGonA3ls/Who2Vk3GkJ07pK
+         5RXOWkZZPKnHxpzvRpBkAbuXOvBY5HpWr1MWscfA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        stable@vger.kernel.org,
+        Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 126/411] drm/msm: return an error pointer in msm_gem_prime_get_sg_table()
-Date:   Mon, 13 Jun 2022 12:06:39 +0200
-Message-Id: <20220613094932.451903869@linuxfoundation.org>
+Subject: [PATCH 5.4 130/411] perf/amd/ibs: Use interrupt regs ip for stack unwinding
+Date:   Mon, 13 Jun 2022 12:06:43 +0200
+Message-Id: <20220613094932.570497390@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
 References: <20220613094928.482772422@linuxfoundation.org>
@@ -55,38 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Ravi Bangoria <ravi.bangoria@amd.com>
 
-[ Upstream commit cf575e31611eb6dccf08fad02e57e35b2187704d ]
+[ Upstream commit 3d47083b9ff46863e8374ad3bb5edb5e464c75f8 ]
 
-The msm_gem_prime_get_sg_table() needs to return error pointers on
-error.  This is called from drm_gem_map_dma_buf() and returning a
-NULL will lead to a crash in that function.
+IbsOpRip is recorded when IBS interrupt is triggered. But there is
+a skid from the time IBS interrupt gets triggered to the time the
+interrupt is presented to the core. Meanwhile processor would have
+moved ahead and thus IbsOpRip will be inconsistent with rsp and rbp
+recorded as part of the interrupt regs. This causes issues while
+unwinding stack using the ORC unwinder as it needs consistent rip,
+rsp and rbp. Fix this by using rip from interrupt regs instead of
+IbsOpRip for stack unwinding.
 
-Fixes: ac45146733b0 ("drm/msm: fix msm_gem_prime_get_sg_table()")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/485023/
-Link: https://lore.kernel.org/r/YnOmtS5tfENywR9m@kili
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Fixes: ee9f8fce99640 ("x86/unwind: Add the ORC unwinder")
+Reported-by: Dmitry Monakhov <dmtrmonakhov@yandex-team.ru>
+Suggested-by: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20220429051441.14251-1-ravi.bangoria@amd.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/msm_gem_prime.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/events/amd/ibs.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/msm_gem_prime.c b/drivers/gpu/drm/msm/msm_gem_prime.c
-index d7c8948427fe..705a834ba1e6 100644
---- a/drivers/gpu/drm/msm/msm_gem_prime.c
-+++ b/drivers/gpu/drm/msm/msm_gem_prime.c
-@@ -17,7 +17,7 @@ struct sg_table *msm_gem_prime_get_sg_table(struct drm_gem_object *obj)
- 	int npages = obj->size >> PAGE_SHIFT;
+diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+index b7baaa973317..2e930d8c04d9 100644
+--- a/arch/x86/events/amd/ibs.c
++++ b/arch/x86/events/amd/ibs.c
+@@ -312,6 +312,16 @@ static int perf_ibs_init(struct perf_event *event)
+ 	hwc->config_base = perf_ibs->msr;
+ 	hwc->config = config;
  
- 	if (WARN_ON(!msm_obj->pages))  /* should have already pinned! */
--		return NULL;
-+		return ERR_PTR(-ENOMEM);
- 
- 	return drm_prime_pages_to_sg(msm_obj->pages, npages);
++	/*
++	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
++	 * recorded as part of interrupt regs. Thus we need to use rip from
++	 * interrupt regs while unwinding call stack. Setting _EARLY flag
++	 * makes sure we unwind call-stack before perf sample rip is set to
++	 * IbsOpRip.
++	 */
++	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
++		event->attr.sample_type |= __PERF_SAMPLE_CALLCHAIN_EARLY;
++
+ 	return 0;
  }
+ 
+@@ -683,6 +693,14 @@ static int perf_ibs_handle_irq(struct perf_ibs *perf_ibs, struct pt_regs *iregs)
+ 		data.raw = &raw;
+ 	}
+ 
++	/*
++	 * rip recorded by IbsOpRip will not be consistent with rsp and rbp
++	 * recorded as part of interrupt regs. Thus we need to use rip from
++	 * interrupt regs while unwinding call stack.
++	 */
++	if (event->attr.sample_type & PERF_SAMPLE_CALLCHAIN)
++		data.callchain = perf_callchain(event, iregs);
++
+ 	throttle = perf_event_overflow(event, &data, &regs);
+ out:
+ 	if (throttle) {
 -- 
 2.35.1
 

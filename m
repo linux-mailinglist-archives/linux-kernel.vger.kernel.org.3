@@ -2,72 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E0E547DBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:52:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4BFC547DBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 04:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238215AbiFMCwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Jun 2022 22:52:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47536 "EHLO
+        id S238229AbiFMCyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Jun 2022 22:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232367AbiFMCwH (ORCPT
+        with ESMTP id S235700AbiFMCx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Jun 2022 22:52:07 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F0D387A0;
-        Sun, 12 Jun 2022 19:52:06 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso4723062pjk.0;
-        Sun, 12 Jun 2022 19:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=+syu8zXTLNzuwkgu0YpXNp+GQJj3tWOie/YgNIKS4U0=;
-        b=M0eUrqzokBUgw6kx+SeIUwac//UqJb78eJPvjl4zcc7ye76BPFJyAFRItO4se0MfNB
-         baIgwLhM25mHwtekNXBMrtvYAjO4pGOFwzPjWjpioSf89+x0Cd1eJbR4lYcZLUkXiRDu
-         87TOZ6RXlLmR9uebqGC2BzZZwnlNrHO1qCPWtxkSvwa9eubRgcSwJYK94w2h7lPk0/mq
-         oLhlyFXohWdlZt+OmlaHfOsbz0Pyw14uhedYzP8zWmCQNJSJIEf9dKfF5SccD7kyOt5p
-         6ouMbiKRBT04OHIfOvNub3sIEcZ04uRA/pKQO/09k/lUrHvVtdzTexTf5WdAK/4gflB4
-         NwSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+syu8zXTLNzuwkgu0YpXNp+GQJj3tWOie/YgNIKS4U0=;
-        b=2/zvAtLBJhqtY49qZpivhl1ibHQjWhtY6KSvjy7mROjhx5lBbuR989Xqdh4UDRKtZz
-         MMSAj+B9yycNHXuGY82KmAAGCIoSguf1KkqqDzxlXR1xB91dcTFbPrnGtGf+pRy5vTr5
-         va7easW1G/2jztVC2j4RP3yJ8JERpFGirCkHlAEQZGFQtaSwD1SREffeuRNsgJPXHd5P
-         csvR3rvtBmYt8GaISyBvyqce9BnVOeGGk5Pdk37Dm/HHwhV9Q0ApwVoAxY1iT8cjaWtH
-         x3EQdFjnWIFmRfCVBmq/9CNefWj8+1Ndzo/lk6j1EWEmQT/aoU+AHMeycAlsxGjtYN4o
-         MUVg==
-X-Gm-Message-State: AOAM530oTf0cRljvl1ciSleLBdrqOYef89ehmryNov1vvMFE3r4i6R5B
-        bn93df3tTK+xpYKjXqHf+B8=
-X-Google-Smtp-Source: ABdhPJx1eYlhYQSPfX7umirYAVUsnMFMYLEGdt9XIy8VcLdLixPOVw8G2uR3P6K9i4Hs+h6lxCZoJw==
-X-Received: by 2002:a17:90b:1c82:b0:1dd:1b46:5aa9 with SMTP id oo2-20020a17090b1c8200b001dd1b465aa9mr13354049pjb.158.1655088726257;
-        Sun, 12 Jun 2022 19:52:06 -0700 (PDT)
-Received: from localhost ([2405:6580:97e0:3100:ae94:2ee7:59a:4846])
-        by smtp.gmail.com with ESMTPSA id x16-20020a1709027c1000b0015e8d4eb276sm3732099pll.192.2022.06.12.19.52.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jun 2022 19:52:04 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 11:52:01 +0900
-From:   Benjamin Poirier <benjamin.poirier@gmail.com>
-To:     Srivathsan Sivakumar <sri.skumar05@gmail.com>
-Cc:     Manish Chopra <manishc@marvell.com>, GR-Linux-NIC-Dev@marvell.com,
-        Coiby Xu <coiby.xu@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        netdev@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: qlge: qlge_main.c: rewrite do-while loops
- into more compact for loops
-Message-ID: <YqamUSc3Y9TBwAEH@d3>
-References: <YqJcLwUQorZQOrkd@Sassy>
+        Sun, 12 Jun 2022 22:53:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1B1C35872
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Jun 2022 19:53:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655088836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=awNyHYB+B6d++/GUSUOZEZMC4V4Il/2xgLKKTfctnKo=;
+        b=YXutdmp3VsWJmqQG7NIetHnTqzAXVxUtsCqEKlIsPTXg5D9waxHITTn5KiJGTY0FBL7fOO
+        C13N8Ba7OT2090emTJSIgqIVGoZ1UpjuCsc5KrlObXOQMoqvOgZugOtzuQ0lgdZ1BmF9IN
+        4Xb9XkGNjMUoiKN7DQVY1DJoHmEFFKQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-31--GkFDRtPOaCAeJe8ZsfFcA-1; Sun, 12 Jun 2022 22:53:54 -0400
+X-MC-Unique: -GkFDRtPOaCAeJe8ZsfFcA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2EF482407B;
+        Mon, 13 Jun 2022 02:53:53 +0000 (UTC)
+Received: from [10.22.16.100] (unknown [10.22.16.100])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B5FC492C3B;
+        Mon, 13 Jun 2022 02:53:53 +0000 (UTC)
+Message-ID: <ce3106c1-a3c4-b449-bafc-6940d672bd94@redhat.com>
+Date:   Sun, 12 Jun 2022 22:53:53 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqJcLwUQorZQOrkd@Sassy>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v11 3/8] cgroup/cpuset: Allow no-task partition to have
+ empty cpuset.cpus.effective
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+References: <20220510153413.400020-1-longman@redhat.com>
+ <20220510153413.400020-4-longman@redhat.com>
+ <YqYlCRywdgSYtwKk@slm.duckdns.org> <YqYlOQjKtQCBsQuT@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YqYlOQjKtQCBsQuT@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,18 +78,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-09 16:46 -0400, Srivathsan Sivakumar wrote:
-> simplify do-while loops into for loops
-> 
-> Signed-off-by: Srivathsan Sivakumar <sri.skumar05@gmail.com>
-> ---
-> Changes in v2:
->  - Rewrite for loops more compactly
-> 
->  drivers/staging/qlge/qlge_main.c | 24 ++++++++++--------------
->  1 file changed, 10 insertions(+), 14 deletions(-)
 
-Please also update the TODO file to remove the respective entry. The
-other referenced problem instance was already fixed in commit
-41e1bf811ace ("Staging: qlge: Rewrite two while loops as simple for
-loops")
+On 6/12/22 13:41, Tejun Heo wrote:
+> On Sun, Jun 12, 2022 at 07:40:25AM -1000, Tejun Heo wrote:
+>> Hello,
+>>
+>> Sorry about the long delay.
+>>
+>> On Tue, May 10, 2022 at 11:34:08AM -0400, Waiman Long wrote:
+>>> Once a partition with empty "cpuset.cpus.effective" is formed, no
+>>> new task can be moved into it until "cpuset.cpus.effective" becomes
+>>> non-empty.
+>> This is always true due to no-tasks-in-intermediate-cgroups requirement,
+>> right?
+> or rather, I should have asked, why does this need an explicit check?
+
+Without this patch, cpus.effective will never be empty. It just falls 
+back to its parent if it becomes empty. Now with an empty 
+cpus.effective, I am afraid that if a task is somehow moved to such a 
+cpuset, something bad may happen. So I add this check as a safeguard.
+
+Cheers,
+Longman
+

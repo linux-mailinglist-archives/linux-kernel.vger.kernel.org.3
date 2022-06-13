@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63182549288
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5865E549022
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379140AbiFMNrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S242828AbiFMKVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379188AbiFMNkA (ORCPT
+        with ESMTP id S242002AbiFMKTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:40:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67409D11A;
-        Mon, 13 Jun 2022 04:29:37 -0700 (PDT)
+        Mon, 13 Jun 2022 06:19:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5AAE03B;
+        Mon, 13 Jun 2022 03:17:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FBD1B80D3A;
-        Mon, 13 Jun 2022 11:29:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51CBEC34114;
-        Mon, 13 Jun 2022 11:29:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6375160908;
+        Mon, 13 Jun 2022 10:17:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73AF1C34114;
+        Mon, 13 Jun 2022 10:17:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119774;
-        bh=Oft2PCz9ZpwDHqNmmhzMYwQzs95U4ue05pIQQSuNDrQ=;
+        s=korg; t=1655115420;
+        bh=T9fQ3laOjEamCAdyhrPo6R05lQbGXsxvCUAeBvJOetM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KV+SR9kc2fWLOVEKqDgcJmpmEn1z7MpFobBT9YJN4lVkyOmD3E9CzidxoUiZpa3wn
-         +D5ROMh+tKcMPYXI1JTpEshLElKfBcSDRa7VklPihUgK+Tv3A/tS9QbTSyyOIS4thJ
-         0uoKATHBdlnKZIC4ZjpMdgwvP34i9UGlntMzU7fg=
+        b=TTkU9WAB/4TwxHSQK6dbBMRbnrM6Dj5GbLbGwaF3Tn7rezqbnBTizFDOtvsgrD4lq
+         viLz1cPEZFDd0+2+FZKHPLXD18eZLhv04Srl6A8PgW9e4Np5Dq/tqW9o5KpNbdO7dY
+         pjduE/yh0wEZLEJ6ndpVOD3KyDaYU7kS+NPQG+9g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tianhao Zhao <tizhao@redhat.com>,
-        =?UTF-8?q?=C3=8D=C3=B1igo=20Huguet?= <ihuguet@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 115/339] sfc: fix wrong tx channel offset with efx_separate_tx_channels
+Subject: [PATCH 4.9 066/167] scsi: fcoe: Fix Wstringop-overflow warnings in fcoe_wwn_from_mac()
 Date:   Mon, 13 Jun 2022 12:09:00 +0200
-Message-Id: <20220613094929.997480380@linuxfoundation.org>
+Message-Id: <20220613094856.411301642@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,65 +55,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Íñigo Huguet <ihuguet@redhat.com>
+From: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-[ Upstream commit c308dfd1b43ef0d4c3e57b741bb3462eb7a7f4a2 ]
+[ Upstream commit 54db804d5d7d36709d1ce70bde3b9a6c61b290b6 ]
 
-tx_channel_offset is calculated in efx_allocate_msix_channels, but it is
-also calculated again in efx_set_channels because it was originally done
-there, and when efx_allocate_msix_channels was introduced it was
-forgotten to be removed from efx_set_channels.
+Fix the following Wstringop-overflow warnings when building with GCC-11:
 
-Moreover, the old calculation is wrong when using
-efx_separate_tx_channels because now we can have XDP channels after the
-TX channels, so n_channels - n_tx_channels doesn't point to the first TX
-channel.
+drivers/scsi/fcoe/fcoe.c: In function ‘fcoe_netdev_config’:
+drivers/scsi/fcoe/fcoe.c:744:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+  744 |                         wwnn = fcoe_wwn_from_mac(ctlr->ctl_src_addr, 1, 0);
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/fcoe/fcoe.c:744:32: note: referencing argument 1 of type ‘unsigned char *’
+In file included from drivers/scsi/fcoe/fcoe.c:36:
+./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+      |     ^~~~~~~~~~~~~~~~~
+drivers/scsi/fcoe/fcoe.c:747:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+  747 |                         wwpn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  748 |                                                  2, 0);
+      |                                                  ~~~~~
+drivers/scsi/fcoe/fcoe.c:747:32: note: referencing argument 1 of type ‘unsigned char *’
+In file included from drivers/scsi/fcoe/fcoe.c:36:
+./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+      |     ^~~~~~~~~~~~~~~~~
+  CC      drivers/scsi/bnx2fc/bnx2fc_io.o
+In function ‘bnx2fc_net_config’,
+    inlined from ‘bnx2fc_if_create’ at drivers/scsi/bnx2fc/bnx2fc_fcoe.c:1543:7:
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c:833:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+  833 |                         wwnn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  834 |                                                  1, 0);
+      |                                                  ~~~~~
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c: In function ‘bnx2fc_if_create’:
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c:833:32: note: referencing argument 1 of type ‘unsigned char *’
+In file included from drivers/scsi/bnx2fc/bnx2fc.h:53,
+                 from drivers/scsi/bnx2fc/bnx2fc_fcoe.c:17:
+./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+      |     ^~~~~~~~~~~~~~~~~
+In function ‘bnx2fc_net_config’,
+    inlined from ‘bnx2fc_if_create’ at drivers/scsi/bnx2fc/bnx2fc_fcoe.c:1543:7:
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c:839:32: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+  839 |                         wwpn = fcoe_wwn_from_mac(ctlr->ctl_src_addr,
+      |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  840 |                                                  2, 0);
+      |                                                  ~~~~~
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c: In function ‘bnx2fc_if_create’:
+drivers/scsi/bnx2fc/bnx2fc_fcoe.c:839:32: note: referencing argument 1 of type ‘unsigned char *’
+In file included from drivers/scsi/bnx2fc/bnx2fc.h:53,
+                 from drivers/scsi/bnx2fc/bnx2fc_fcoe.c:17:
+./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+      |     ^~~~~~~~~~~~~~~~~
+drivers/scsi/qedf/qedf_main.c: In function ‘__qedf_probe’:
+drivers/scsi/qedf/qedf_main.c:3520:30: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+ 3520 |                 qedf->wwnn = fcoe_wwn_from_mac(qedf->mac, 1, 0);
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/qedf/qedf_main.c:3520:30: note: referencing argument 1 of type ‘unsigned char *’
+In file included from drivers/scsi/qedf/qedf.h:9,
+                 from drivers/scsi/qedf/qedf_main.c:23:
+./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+      |     ^~~~~~~~~~~~~~~~~
+drivers/scsi/qedf/qedf_main.c:3521:30: warning: ‘fcoe_wwn_from_mac’ accessing 32 bytes in a region of size 6 [-Wstringop-overflow=]
+ 3521 |                 qedf->wwpn = fcoe_wwn_from_mac(qedf->mac, 2, 0);
+      |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/scsi/qedf/qedf_main.c:3521:30: note: referencing argument 1 of type ‘unsigned char *’
+In file included from drivers/scsi/qedf/qedf.h:9,
+                 from drivers/scsi/qedf/qedf_main.c:23:
+./include/scsi/libfcoe.h:252:5: note: in a call to function ‘fcoe_wwn_from_mac’
+  252 | u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
+      |     ^~~~~~~~~~~~~~~~~
 
-Remove the old calculation from efx_set_channels, and add the
-initialization of this variable if MSI or legacy interrupts are used,
-next to the initialization of the rest of the related variables, where
-it was missing.
+by changing the array size to the correct value of ETH_ALEN in the
+argument declaration.
 
-Fixes: 3990a8fffbda ("sfc: allocate channels for XDP tx queues")
-Reported-by: Tianhao Zhao <tizhao@redhat.com>
-Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Also, fix a couple of checkpatch warnings:
+WARNING: function definition argument 'unsigned int' should also have an identifier name
+
+This helps with the ongoing efforts to globally enable
+-Wstringop-overflow.
+
+Link: https://github.com/KSPP/linux/issues/181
+Fixes: 85b4aa4926a5 ("[SCSI] fcoe: Fibre Channel over Ethernet")
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/sfc/efx_channels.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/scsi/fcoe/fcoe_ctlr.c | 2 +-
+ include/scsi/libfcoe.h        | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/sfc/efx_channels.c b/drivers/net/ethernet/sfc/efx_channels.c
-index 40df910aa140..b9cf873e1e42 100644
---- a/drivers/net/ethernet/sfc/efx_channels.c
-+++ b/drivers/net/ethernet/sfc/efx_channels.c
-@@ -324,6 +324,7 @@ int efx_probe_interrupts(struct efx_nic *efx)
- 		efx->n_channels = 1;
- 		efx->n_rx_channels = 1;
- 		efx->n_tx_channels = 1;
-+		efx->tx_channel_offset = 0;
- 		efx->n_xdp_channels = 0;
- 		efx->xdp_channel_offset = efx->n_channels;
- 		rc = pci_enable_msi(efx->pci_dev);
-@@ -344,6 +345,7 @@ int efx_probe_interrupts(struct efx_nic *efx)
- 		efx->n_channels = 1 + (efx_separate_tx_channels ? 1 : 0);
- 		efx->n_rx_channels = 1;
- 		efx->n_tx_channels = 1;
-+		efx->tx_channel_offset = 1;
- 		efx->n_xdp_channels = 0;
- 		efx->xdp_channel_offset = efx->n_channels;
- 		efx->legacy_irq = efx->pci_dev->irq;
-@@ -979,10 +981,6 @@ int efx_set_channels(struct efx_nic *efx)
- 	struct efx_channel *channel;
- 	int rc;
+diff --git a/drivers/scsi/fcoe/fcoe_ctlr.c b/drivers/scsi/fcoe/fcoe_ctlr.c
+index f5f3a8113bc5..5bb85b424eba 100644
+--- a/drivers/scsi/fcoe/fcoe_ctlr.c
++++ b/drivers/scsi/fcoe/fcoe_ctlr.c
+@@ -1945,7 +1945,7 @@ EXPORT_SYMBOL(fcoe_ctlr_recv_flogi);
+  *
+  * Returns: u64 fc world wide name
+  */
+-u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN],
++u64 fcoe_wwn_from_mac(unsigned char mac[ETH_ALEN],
+ 		      unsigned int scheme, unsigned int port)
+ {
+ 	u64 wwn;
+diff --git a/include/scsi/libfcoe.h b/include/scsi/libfcoe.h
+index a911f993219d..ac14f3798e84 100644
+--- a/include/scsi/libfcoe.h
++++ b/include/scsi/libfcoe.h
+@@ -261,7 +261,8 @@ int fcoe_ctlr_recv_flogi(struct fcoe_ctlr *, struct fc_lport *,
+ 			 struct fc_frame *);
  
--	efx->tx_channel_offset =
--		efx_separate_tx_channels ?
--		efx->n_channels - efx->n_tx_channels : 0;
--
- 	if (efx->xdp_tx_queue_count) {
- 		EFX_WARN_ON_PARANOID(efx->xdp_tx_queues);
- 
+ /* libfcoe funcs */
+-u64 fcoe_wwn_from_mac(unsigned char mac[MAX_ADDR_LEN], unsigned int, unsigned int);
++u64 fcoe_wwn_from_mac(unsigned char mac[ETH_ALEN], unsigned int scheme,
++		      unsigned int port);
+ int fcoe_libfc_config(struct fc_lport *, struct fcoe_ctlr *,
+ 		      const struct libfc_function_template *, int init_fcp);
+ u32 fcoe_fc_crc(struct fc_frame *fp);
 -- 
 2.35.1
 

@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F0A2548B1F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EAA3549621
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345193AbiFMKfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42474 "EHLO
+        id S1353733AbiFMLYo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 07:24:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345053AbiFMKdz (ORCPT
+        with ESMTP id S1352406AbiFMLQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:33:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA0727FD5;
-        Mon, 13 Jun 2022 03:21:59 -0700 (PDT)
+        Mon, 13 Jun 2022 07:16:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5133513FB2;
+        Mon, 13 Jun 2022 03:40:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B053E60AEA;
-        Mon, 13 Jun 2022 10:21:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B964DC34114;
-        Mon, 13 Jun 2022 10:21:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3EDE611AD;
+        Mon, 13 Jun 2022 10:40:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0E51C36B00;
+        Mon, 13 Jun 2022 10:40:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655115718;
-        bh=brhw5xYnVa2tXsvuUIt7E9SYRYpa+zTktYSX5ZoQUT4=;
+        s=korg; t=1655116802;
+        bh=/KA418GLVD+9TzUQqWQ1Xutqsaeu0rJn2Am7XBzKav8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YPPHYSlQs3TRpWigj3ziGEa+blKAo1RB8YBNS7+FzXjRCmqdXHLSRE5qXGvv4NH3A
-         SswzaBabBgmVO0G8enk3sG9lfcdtOQw4p1mssH3RKija6iCxQuvm9SNKtsFLyhZQXJ
-         YP2vIlds89AgSAkKfgDnWMBToHGZqQWLEioXQ/CQ=
+        b=sstcZuv/exFYagTJyQKo4drym8HjpQhl3kBG+m8tpQdkiHnX5/ZotYtfGr4HEAD2e
+         Qc33j0kwrwlZqyAD9mQOwOchqjUItQ0kguZ8cE5grPrUJ1qD4fzGIpTibOtqbFWmwR
+         iXR76d9RhAjYzFrsKzXzDllGtCxaj4KdRr7zeoYI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Max Filippov <jcmvbkbc@gmail.com>,
-        Kees Cook <keescook@chromium.org>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 4.14 004/218] ptrace/xtensa: Replace PT_SINGLESTEP with TIF_SINGLESTEP
-Date:   Mon, 13 Jun 2022 12:07:42 +0200
-Message-Id: <20220613094909.333855456@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 190/411] macintosh: via-pmu and via-cuda need RTC_LIB
+Date:   Mon, 13 Jun 2022 12:07:43 +0200
+Message-Id: <20220613094934.358068710@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094928.482772422@linuxfoundation.org>
+References: <20220613094928.482772422@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,83 +58,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eric W. Biederman <ebiederm@xmission.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 4a3d2717d140401df7501a95e454180831a0c5af upstream.
+[ Upstream commit 9a9c5ff5fff87eb1a43db0d899473554e408fd7b ]
 
-xtensa is the last user of the PT_SINGLESTEP flag.  Changing tsk->ptrace in
-user_enable_single_step and user_disable_single_step without locking could
-potentiallly cause problems.
+Fix build when RTC_LIB is not set/enabled.
+Eliminates these build errors:
 
-So use a thread info flag instead of a flag in tsk->ptrace.  Use TIF_SINGLESTEP
-that xtensa already had defined but unused.
+m68k-linux-ld: drivers/macintosh/via-pmu.o: in function `pmu_set_rtc_time':
+drivers/macintosh/via-pmu.c:1769: undefined reference to `rtc_tm_to_time64'
+m68k-linux-ld: drivers/macintosh/via-cuda.o: in function `cuda_set_rtc_time':
+drivers/macintosh/via-cuda.c:797: undefined reference to `rtc_tm_to_time64'
 
-Remove the definitions of PT_SINGLESTEP and PT_BLOCKSTEP as they have no more users.
-
-Cc: stable@vger.kernel.org
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
-Tested-by: Kees Cook <keescook@chromium.org>
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
-Link: https://lkml.kernel.org/r/20220505182645.497868-4-ebiederm@xmission.com
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 0792a2c8e0bb ("macintosh: Use common code to access RTC")
+Reported-by: kernel test robot <lkp@intel.com>
+Suggested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220410161035.592-1-rdunlap@infradead.org
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/xtensa/kernel/ptrace.c |    4 ++--
- arch/xtensa/kernel/signal.c |    4 ++--
- include/linux/ptrace.h      |    6 ------
- 3 files changed, 4 insertions(+), 10 deletions(-)
+ drivers/macintosh/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/arch/xtensa/kernel/ptrace.c
-+++ b/arch/xtensa/kernel/ptrace.c
-@@ -35,12 +35,12 @@
- 
- void user_enable_single_step(struct task_struct *child)
- {
--	child->ptrace |= PT_SINGLESTEP;
-+	set_tsk_thread_flag(child, TIF_SINGLESTEP);
- }
- 
- void user_disable_single_step(struct task_struct *child)
- {
--	child->ptrace &= ~PT_SINGLESTEP;
-+	clear_tsk_thread_flag(child, TIF_SINGLESTEP);
- }
- 
- /*
---- a/arch/xtensa/kernel/signal.c
-+++ b/arch/xtensa/kernel/signal.c
-@@ -459,7 +459,7 @@ static void do_signal(struct pt_regs *re
- 		/* Set up the stack frame */
- 		ret = setup_frame(&ksig, sigmask_to_save(), regs);
- 		signal_setup_done(ret, &ksig, 0);
--		if (current->ptrace & PT_SINGLESTEP)
-+		if (test_thread_flag(TIF_SINGLESTEP))
- 			task_pt_regs(current)->icountlevel = 1;
- 
- 		return;
-@@ -485,7 +485,7 @@ static void do_signal(struct pt_regs *re
- 	/* If there's no signal to deliver, we just restore the saved mask.  */
- 	restore_saved_sigmask();
- 
--	if (current->ptrace & PT_SINGLESTEP)
-+	if (test_thread_flag(TIF_SINGLESTEP))
- 		task_pt_regs(current)->icountlevel = 1;
- 	return;
- }
---- a/include/linux/ptrace.h
-+++ b/include/linux/ptrace.h
-@@ -40,12 +40,6 @@ extern int ptrace_access_vm(struct task_
- #define PT_EXITKILL		(PTRACE_O_EXITKILL << PT_OPT_FLAG_SHIFT)
- #define PT_SUSPEND_SECCOMP	(PTRACE_O_SUSPEND_SECCOMP << PT_OPT_FLAG_SHIFT)
- 
--/* single stepping state bits (used on ARM and PA-RISC) */
--#define PT_SINGLESTEP_BIT	31
--#define PT_SINGLESTEP		(1<<PT_SINGLESTEP_BIT)
--#define PT_BLOCKSTEP_BIT	30
--#define PT_BLOCKSTEP		(1<<PT_BLOCKSTEP_BIT)
--
- extern long arch_ptrace(struct task_struct *child, long request,
- 			unsigned long addr, unsigned long data);
- extern int ptrace_readdata(struct task_struct *tsk, unsigned long src, char __user *dst, int len);
+diff --git a/drivers/macintosh/Kconfig b/drivers/macintosh/Kconfig
+index abaf1401cca6..b5a534206edd 100644
+--- a/drivers/macintosh/Kconfig
++++ b/drivers/macintosh/Kconfig
+@@ -44,6 +44,7 @@ config ADB_IOP
+ config ADB_CUDA
+ 	bool "Support for Cuda/Egret based Macs and PowerMacs"
+ 	depends on (ADB || PPC_PMAC) && !PPC_PMAC64
++	select RTC_LIB
+ 	help
+ 	  This provides support for Cuda/Egret based Macintosh and
+ 	  Power Macintosh systems. This includes most m68k based Macs,
+@@ -57,6 +58,7 @@ config ADB_CUDA
+ config ADB_PMU
+ 	bool "Support for PMU based PowerMacs and PowerBooks"
+ 	depends on PPC_PMAC || MAC
++	select RTC_LIB
+ 	help
+ 	  On PowerBooks, iBooks, and recent iMacs and Power Macintoshes, the
+ 	  PMU is an embedded microprocessor whose primary function is to
+-- 
+2.35.1
+
 
 

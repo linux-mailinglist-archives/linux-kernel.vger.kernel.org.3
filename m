@@ -2,79 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87EA2549F25
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A663C549F22
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:31:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbiFMUbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60362 "EHLO
+        id S233557AbiFMUbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351265AbiFMU34 (ORCPT
+        with ESMTP id S231575AbiFMUaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:29:56 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBD031906
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:20:05 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id p18so10443585lfr.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:20:05 -0700 (PDT)
+        Mon, 13 Jun 2022 16:30:17 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1347251327
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:20:38 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id i186so6825540vsc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 12:20:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=N0O/0DmbRs+7MXOg+g7dkZYD+/tIewscyvV6ESK7mhQ=;
-        b=HOdkBVIWNqU056KIzOpAxtJ+hARPtbhKZh0UFqk2E42MCGc4NI0bbNvqot9YBdek/u
-         Aw3Ph3Cy725yYM58fI5EBjLaXvJ3IZA7sMs4+BRmmqE0M72v9SbnlbC8Djtl9NZNb8CU
-         H7xn5l0SUfo734b7nIBfFERs63lfF0xmfxBcgkMDR5XHhk1OpUfJdlbEbqovlOtM5bwf
-         703+UIJV5z9RrG9/Bi4GYdrekq9nxUWi4WJ77/+tLe180iF3OiNNIn/RGyj+dRjI2oiz
-         zU6XL7qBEOCef7JP8Y46wJZV9HCALTmVCCDqgkpsePw0O7mAQ4gHyYbPjTspGXPI7MHe
-         T/FA==
+        bh=KNf+Ql/j9M3Vn23KbuohSdFzXJiSMm4FbEkJFMkKX04=;
+        b=LFD5f5sGzeRtIHpKCfZF5wyqKqG9bfNsj60uXrN7M1R800Eu/YEdpUvb+X/6ArMBxW
+         Ku4q3Q8JCrCQTy/4/lL8iTtejcGpM5xZGS70hxdwKfJB6rQX+4h7sqMk3+/tsxmo3ex4
+         jN3O0CzCqLLdmbxGM8dWsgJ6CiqkB0/A2dzGZKxHwqBMWYQr8XoVivSwoQCVU6bty/k5
+         679ip2+IHOsWfc6TYV6iCERLi8u72VacjBPrVSyd3r3lDt1u9NeDyC7/WNWLI5Wvv4Yd
+         yK4tIN45bP9H8vdItANiRJ0UFtTyToSY2dWApATFmfNgJ5lLKhn0OgPh3QXOihRozuvQ
+         IGGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=N0O/0DmbRs+7MXOg+g7dkZYD+/tIewscyvV6ESK7mhQ=;
-        b=jVl46d1RiX1b2AGiECUQm6OiDVtNAqduhtMfZcoWbuRCGA4NrphXgl8mhH4662Im21
-         dTbTpSKpPaL+uHrD5+EKkjCNx8Ysm8pNDHKe0RXUQbEVk040VUmJyK7Q94fQRhyzp8LM
-         H6lpy5h1I1oET9ljn0FwAm7WKfCB2Rv+m8h31nVfLFgM6OkOrCBHj+LZqZG2BRUp7pku
-         6ZfrssSK1I4Aha0P6ctbWF4+fhyrKRc2yl3Rbw5Lr/xM3z8wcTw9eQdl51cjbP1z6tB7
-         mG90zfWR0My6Vklo/pq80ukbBsCYPKl3CvN6kZuBVNG7Fnu6+Kn35G/dXCZCzkfTHsXR
-         M4nA==
-X-Gm-Message-State: AJIora+3yTJrm6DpEnC/ff3HdmuQ8tMXMeuFN0K8ghHqfcSD9H+bv1dS
-        QCyell+wR0mTaG0z5EIkveu0S8WdfBSpBYIid26GUydGc67x
-X-Google-Smtp-Source: AGRyM1slaJnALPt1IdrnDQHmZ2dLpXWUN5aXU49HeMYiktjUgFM+PsAcD+NIJ/T25pitBW8x0Gqc0SCI0hzcZ0fBI0A=
-X-Received: by 2002:a05:6512:524:b0:479:898:fd3c with SMTP id
- o4-20020a056512052400b004790898fd3cmr773787lfc.252.1655148003935; Mon, 13 Jun
- 2022 12:20:03 -0700 (PDT)
+        bh=KNf+Ql/j9M3Vn23KbuohSdFzXJiSMm4FbEkJFMkKX04=;
+        b=RLhCF6QD/m5M8cFdyepfDqZYAA1xXAkI1FMX4ZEySGBIVru2BX9LKKTW6/X71vmH8J
+         XhQm1extSU2qXkAVuk/AHt7X2S8poYkCN2HmERc7sWJas7cjMtUW76fDyzWrMquHj3YL
+         q6utpC0HEubkkLx7oTqbM+ArNEFJy0WFkzyjdWsUsxvDK4S7cbP+Vyw9QDAQQQPLKl9v
+         Vyfr3K9CB1Qk+L96+H6j1IjGMR6WYRiODJ3fEYomdzm8mXjKLq1dOD1ri4mYab02/fe+
+         VtXj2HMgGxsOVbubpX1MzoSNqhyyvDP3wykRxOrrZ23Uui/H8ck78OhKse6EILTWZZ3n
+         4VWQ==
+X-Gm-Message-State: AJIora9mLZCT+vwn9JDe1MBHFWsUbIAHAHLAroGIUvQsCbxcS7jJsA1j
+        cYgGPLIa1sFV7lPqMRe+SmGWaM0PPhrYKScGmG6ou/bM6Sw=
+X-Google-Smtp-Source: AGRyM1sna9Eq4Osr5KmST24hrtbVcR20wkRP0EMEDMdi9yusF90SuIPxvSPYkdr5Ll1OxtmtIw4/8zG9xxDp0VS2veo=
+X-Received: by 2002:a05:6102:2328:b0:349:ed98:2b96 with SMTP id
+ b8-20020a056102232800b00349ed982b96mr525017vsa.57.1655148037073; Mon, 13 Jun
+ 2022 12:20:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220610233513.1798771-1-samitolvanen@google.com>
- <20220610233513.1798771-17-samitolvanen@google.com> <CAKwvOdm1Abmu+NQ82ZLgX3O5g4vYPni23A9c4FJ+xeSYVwPtJw@mail.gmail.com>
-In-Reply-To: <CAKwvOdm1Abmu+NQ82ZLgX3O5g4vYPni23A9c4FJ+xeSYVwPtJw@mail.gmail.com>
-From:   Bill Wendling <morbo@google.com>
-Date:   Mon, 13 Jun 2022 12:19:52 -0700
-Message-ID: <CAGG=3QUt0mCA_Db93kuNkEMFGvO9AJUA4h9wxnVxvUn2Q1Mvqw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 16/20] kallsyms: Drop CONFIG_CFI_CLANG workarounds
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Sami Tolvanen <samitolvanen@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        clang-built-linux <llvm@lists.linux.dev>
+References: <20220613112937.65428-1-wang.yi59@zte.com.cn>
+In-Reply-To: <20220613112937.65428-1-wang.yi59@zte.com.cn>
+From:   Yury Norov <yury.norov@gmail.com>
+Date:   Mon, 13 Jun 2022 12:20:26 -0700
+Message-ID: <CAAH8bW8wD_hsOqtWa-g_1SNWNi7GHzsu9RvL8feY069JPKFWBA@mail.gmail.com>
+Subject: Re: [PATCH] bitmap: fix a unproper remap when mpol_rebind_nodemask()
+To:     Yi Wang <wang.yi59@zte.com.cn>
+Cc:     andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        linux-kernel@vger.kernel.org, xue.zhihong@zte.com.cn,
+        wang.liang82@zte.com.cn
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,68 +67,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 4:40 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Mon, Jun 13, 2022 at 4:31 AM Yi Wang <wang.yi59@zte.com.cn> wrote:
 >
-> On Fri, Jun 10, 2022 at 4:35 PM Sami Tolvanen <samitolvanen@google.com> wrote:
-> >
-> > With -fsanitize=kcfi, the compiler no longer renames static
-> > functions with CONFIG_CFI_CLANG + ThinLTO. Drop the code that cleans
-> > up the ThinLTO hash from the function names.
+> Consider one situation:
 >
-> Good riddance!
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> The app have two vmas which mbind() to node 1 and node3 respectively,
+> and its cpuset.mems is 0-3, now set its cpuset.mems to 1,3, according
+> to current bitmap_remap(), we got:
 >
-Much clapping!
-
--bw
-
-> >
-> > Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
-> > ---
-> >  kernel/kallsyms.c | 17 -----------------
-> >  1 file changed, 17 deletions(-)
-> >
-> > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> > index fbdf8d3279ac..2fbb94817e02 100644
-> > --- a/kernel/kallsyms.c
-> > +++ b/kernel/kallsyms.c
-> > @@ -179,7 +179,6 @@ static bool cleanup_symbol_name(char *s)
-> >          * character in an identifier in C. Suffixes observed:
-> >          * - foo.llvm.[0-9a-f]+
-> >          * - foo.[0-9a-f]+
-> > -        * - foo.[0-9a-f]+.cfi_jt
-> >          */
-> >         res = strchr(s, '.');
-> >         if (res) {
-> > @@ -187,22 +186,6 @@ static bool cleanup_symbol_name(char *s)
-> >                 return true;
-> >         }
-> >
-> > -       if (!IS_ENABLED(CONFIG_CFI_CLANG) ||
-> > -           !IS_ENABLED(CONFIG_LTO_CLANG_THIN) ||
-> > -           CONFIG_CLANG_VERSION >= 130000)
-> > -               return false;
-> > -
-> > -       /*
-> > -        * Prior to LLVM 13, the following suffixes were observed when thinLTO
-> > -        * and CFI are both enabled:
-> > -        * - foo$[0-9]+
-> > -        */
-> > -       res = strrchr(s, '$');
-> > -       if (res) {
-> > -               *res = '\0';
-> > -               return true;
-> > -       }
-> > -
-> >         return false;
-> >  }
-> >
-> > --
-> > 2.36.1.476.g0c4daa206d-goog
-> >
+>     1 => 3
+>     3 => 3
 >
+> This maybe confused because node 1,3 have already in the new settiing
+> region but both nodes are binded to the same node 3 now.
 >
+> Actually we found the situation on a very old libvirt and qemu, but
+> this can be easily reproduced in the current kernel, so we try to fix
+> it.
+>
+> A possible fix way is to ignore the bits in @src have already existed
+> in @new.
+>
+> Signed-off-by: Yi Wang <wang.yi59@zte.com.cn>
+> ---
+>  lib/bitmap.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/lib/bitmap.c b/lib/bitmap.c
+> index b18e31ea6e66..b77bf1b3852e 100644
+> --- a/lib/bitmap.c
+> +++ b/lib/bitmap.c
+> @@ -1006,8 +1006,8 @@ unsigned int bitmap_ord_to_pos(const unsigned long *buf, unsigned int ord, unsig
+>   * @dst point to the same location, then this routine copies @src
+>   * to @dst.
+>   *
+> - * The positions of unset bits in @old are mapped to themselves
+> - * (the identify map).
+> + * The positions of unset bits in @old or bits in @src have already
+> + * existed in @new are mapped to themselves (the identify map).
+>   *
+>   * Apply the above specified mapping to @src, placing the result in
+>   * @dst, clearing any bits previously set in @dst.
+> @@ -1033,7 +1033,7 @@ void bitmap_remap(unsigned long *dst, const unsigned long *src,
+>         for_each_set_bit(oldbit, src, nbits) {
+>                 int n = bitmap_pos_to_ord(old, oldbit, nbits);
+>
+> -               if (n < 0 || w == 0)
+> +               if (n < 0 || w == 0 || test_bit(oldbit, new))
+>                         set_bit(oldbit, dst);   /* identity map */
+>                 else
+>                         set_bit(bitmap_ord_to_pos(new, n % w, nbits), dst);
 > --
-> Thanks,
-> ~Nick Desaulniers
+> 2.33.0.rc0.dirty
+
+Regarding the original problem - can you please confirm that
+it's reproduced on current kernels, show the execution path etc.
+From what I see on modern kernel, the only user of nodes_remap()
+is mpol_rebind_nodemask(). Is that the correct path?
+
+Anyways, as per name, bitmap_remap() is intended to change bit
+positions, and it doesn't look wrong if it does so.
+
+This is not how the function is supposed to work. For example,
+        old: 00111000
+        new: 00011100
+
+means:
+        old: 00111 000
+             || \\\|||
+        new: 000 11100
+
+And after this patch it would be:
+        old: 001 11000
+             || \|||||
+        new: 000 11100
+
+Which is not the same, right?
+
+If mpol_rebind() wants to keep previous relations, then according to
+the comment:
+ * The positions of unset bits in @old are mapped to themselves
+ * (the identify map).
+
+, you can just clear @old bits that already have good relations
+you'd like to preserve.
+
+Thanks,
+Yury

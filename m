@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5A254969A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4D0548AA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:08:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351508AbiFMLMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
+        id S1354646AbiFMMQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352143AbiFMLKv (ORCPT
+        with ESMTP id S1357499AbiFMMOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:10:51 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB3B34B90;
-        Mon, 13 Jun 2022 03:35:52 -0700 (PDT)
+        Mon, 13 Jun 2022 08:14:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62B554194;
+        Mon, 13 Jun 2022 04:01:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAE1FB80EAD;
-        Mon, 13 Jun 2022 10:35:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BC58C34114;
-        Mon, 13 Jun 2022 10:35:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0994061445;
+        Mon, 13 Jun 2022 11:01:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136D3C34114;
+        Mon, 13 Jun 2022 11:01:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116549;
-        bh=Fm5ip5XaZMQiIi50JcrcZSJbITqDXjz2ZLoUeo4+HTc=;
+        s=korg; t=1655118093;
+        bh=wBTgbzAlBHnpwemiBc67jc18++WoUd+7ldSlE8d/NmQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fs97dnK7P7WdJuW2rqtfF/m8BdbUgH58fNXt5DkenNZQFjeuEHnZxEz448I6MogbU
-         c4CoEL/qzD3vP3Io2tPl1Jelpn0U4snVmpqRJP8BnKyd3vnr8Wcqko5mRfv1yg69zP
-         BnKaL34gZM2uwRHPKmtRAIeG+QLysFzOEG1f8XgE=
+        b=j6l4LxzHbJDqiPUXDj6QAaEoTCQLijK644BEBLtq50UUeBYCBEL30fDrar/vcxHIk
+         6dTCVem3n7sguKBk7fyXBx1EBb4T/HeM7jewQbmSTnqkMS1UWBBlgmZxNdRws66B2j
+         NXenA92eu0UV/vI8qHiwm6OtFllMYaxsWd4b4quk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
-        Enzo Matsumiya <ematsumiya@suse.de>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 4.14 207/218] cifs: return errors during session setup during reconnects
+        stable@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 241/287] net: mdio: unexport __init-annotated mdio_bus_init()
 Date:   Mon, 13 Jun 2022 12:11:05 +0200
-Message-Id: <20220613094926.901857239@linuxfoundation.org>
+Message-Id: <20220613094931.323838550@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +58,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shyam Prasad N <sprasad@microsoft.com>
+From: Masahiro Yamada <masahiroy@kernel.org>
 
-commit 8ea21823aa584b55ba4b861307093b78054b0c1b upstream.
+[ Upstream commit 35b42dce619701f1300fb8498dae82c9bb1f0263 ]
 
-During reconnects, we check the return value from
-cifs_negotiate_protocol, and have handlers for both success
-and failures. But if that passes, and cifs_setup_session
-returns any errors other than -EACCES, we do not handle
-that. This fix adds a handler for that, so that we don't
-go ahead and try a tree_connect on a failed session.
+EXPORT_SYMBOL and __init is a bad combination because the .init.text
+section is freed up after the initialization. Hence, modules cannot
+use symbols annotated __init. The access to a freed symbol may end up
+with kernel panic.
 
-Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
-Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
-Cc: stable@vger.kernel.org
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+modpost used to detect it, but it has been broken for a decade.
+
+Recently, I fixed modpost so it started to warn it again, then this
+showed up in linux-next builds.
+
+There are two ways to fix it:
+
+  - Remove __init
+  - Remove EXPORT_SYMBOL
+
+I chose the latter for this case because the only in-tree call-site,
+drivers/net/phy/phy_device.c is never compiled as modular.
+(CONFIG_PHYLIB is boolean)
+
+Fixes: 90eff9096c01 ("net: phy: Allow splitting MDIO bus/device support from PHYs")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/smb2pdu.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/phy/mdio_bus.c | 1 -
+ 1 file changed, 1 deletion(-)
 
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -263,6 +263,9 @@ smb2_reconnect(__le16 smb2_command, stru
- 			rc = -EHOSTDOWN;
- 			mutex_unlock(&tcon->ses->session_mutex);
- 			goto failed;
-+		} else if (rc) {
-+			mutex_unlock(&ses->session_mutex);
-+			goto out;
- 		}
- 	}
- 	if (rc || !tcon->need_reconnect) {
+diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
+index eaa890a6a5d2..efdac68da7f4 100644
+--- a/drivers/net/phy/mdio_bus.c
++++ b/drivers/net/phy/mdio_bus.c
+@@ -746,7 +746,6 @@ int __init mdio_bus_init(void)
+ 
+ 	return ret;
+ }
+-EXPORT_SYMBOL_GPL(mdio_bus_init);
+ 
+ #if IS_ENABLED(CONFIG_PHYLIB)
+ void mdio_bus_exit(void)
+-- 
+2.35.1
+
 
 

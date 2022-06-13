@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D96F548FC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C91FB5488AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1383114AbiFMOPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51914 "EHLO
+        id S241790AbiFMKRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1382247AbiFMOFg (ORCPT
+        with ESMTP id S241989AbiFMKQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:05:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99B4939EE;
-        Mon, 13 Jun 2022 04:40:32 -0700 (PDT)
+        Mon, 13 Jun 2022 06:16:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463C41E3D2;
+        Mon, 13 Jun 2022 03:15:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16941612D0;
-        Mon, 13 Jun 2022 11:40:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 253F0C3411B;
-        Mon, 13 Jun 2022 11:40:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A0A2C61496;
+        Mon, 13 Jun 2022 10:15:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B609FC3411C;
+        Mon, 13 Jun 2022 10:15:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655120426;
-        bh=jdGwrjvobpzMm2qGCl2OlF4BwcuG1X9pQUn5LjqBk/o=;
+        s=korg; t=1655115319;
+        bh=iNRTv3V1n5vawC3RzjcsyvC+LuU/L1y+CoqXz/YjaU0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MkMcmDFYxKh8GeNySsrx+Dfbijl6/ix21SA2qiFYLs326X3MHSRIYY2bhzdZAoeSV
-         vLRp7WyqQ9gARzAhNZSvgHqkWKudQl2iV65u3Ua3vuCpRvi4PLEqYSsGnBZSkeWtdX
-         MTrLWXIg80Fa5nAkcwHmusEbzowBtqoNAt3hToQU=
+        b=klWMMV7itQVeE0Ija/PmWCgEGhvxJWDhmCZYIxCEKh2g08oEP8TcyZY9xho3upjIF
+         9uRHJ+RoMCvG4EWZ+Lhl8YKLzfWjyp9jElPasl83cRSXSqeKloB9qUeApzWg/aIrJN
+         GmoUIGuJwduz7I2xbKLlx1EWs0DBuwRDs8DzPmFY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        stable@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 011/298] remoteproc: imx_rproc: Ignore create mem entry for resource table
+Subject: [PATCH 4.9 031/167] ARM: dts: exynos: add atmel,24c128 fallback to Samsung EEPROM
 Date:   Mon, 13 Jun 2022 12:08:25 +0200
-Message-Id: <20220613094925.266760276@linuxfoundation.org>
+Message-Id: <20220613094848.067101496@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Fan <peng.fan@nxp.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit 58b7c856519fe946620ee68dd0c37bd3c695484a ]
+[ Upstream commit f038e8186fbc5723d7d38c6fa1d342945107347e ]
 
-Resource table is used by Linux to get information published by
-remote processor. It should be not be used for memory allocation, so
-not create rproc mem entry.
+The Samsung s524ad0xd1 EEPROM should use atmel,24c128 fallback,
+according to the AT24 EEPROM bindings.
 
-Fixes: b29b4249f8f0 ("remoteproc: imx_rproc: add i.MX specific parse fw hook")
-Signed-off-by: Peng Fan <peng.fan@nxp.com>
-Link: https://lore.kernel.org/r/20220415025737.1561976-1-peng.fan@oss.nxp.com
-Signed-off-by: Mathieu Poirier <mathieu.poirier@linaro.org>
+Reported-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20220426183443.243113-1-krzysztof.kozlowski@linaro.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/remoteproc/imx_rproc.c | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm/boot/dts/exynos5250-smdk5250.dts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
-index 7a096f1891e6..91eb037089ef 100644
---- a/drivers/remoteproc/imx_rproc.c
-+++ b/drivers/remoteproc/imx_rproc.c
-@@ -423,6 +423,9 @@ static int imx_rproc_prepare(struct rproc *rproc)
- 		if (!strcmp(it.node->name, "vdev0buffer"))
- 			continue;
+diff --git a/arch/arm/boot/dts/exynos5250-smdk5250.dts b/arch/arm/boot/dts/exynos5250-smdk5250.dts
+index 54e79f6887ff..3dda0569f86a 100644
+--- a/arch/arm/boot/dts/exynos5250-smdk5250.dts
++++ b/arch/arm/boot/dts/exynos5250-smdk5250.dts
+@@ -129,7 +129,7 @@
+ 	samsung,i2c-max-bus-freq = <20000>;
  
-+		if (!strcmp(it.node->name, "rsc-table"))
-+			continue;
-+
- 		rmem = of_reserved_mem_lookup(it.node);
- 		if (!rmem) {
- 			dev_err(priv->dev, "unable to acquire memory-region\n");
+ 	eeprom@50 {
+-		compatible = "samsung,s524ad0xd1";
++		compatible = "samsung,s524ad0xd1", "atmel,24c128";
+ 		reg = <0x50>;
+ 	};
+ 
+@@ -288,7 +288,7 @@
+ 	samsung,i2c-max-bus-freq = <20000>;
+ 
+ 	eeprom@51 {
+-		compatible = "samsung,s524ad0xd1";
++		compatible = "samsung,s524ad0xd1", "atmel,24c128";
+ 		reg = <0x51>;
+ 	};
+ 
 -- 
 2.35.1
 

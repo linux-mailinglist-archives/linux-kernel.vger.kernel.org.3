@@ -2,112 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E72E54A23D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 00:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E3B54A245
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 00:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244919AbiFMWpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 18:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
+        id S233171AbiFMWtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 18:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiFMWo6 (ORCPT
+        with ESMTP id S229671AbiFMWtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 18:44:58 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F201C31377;
-        Mon, 13 Jun 2022 15:44:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655160298; x=1686696298;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Jnn+jXJ31MGDLO6HdQ23ZKYS4Lu1ffv8Vgu9+kjL8aI=;
-  b=Lsfd4hpCgKmyE/Ya0rcg/Uf3PNm7atVvbCRJ498CPI9Y10uNcEuBvUi7
-   0PoKZlD698jsDr5gkzdVVUAWBo87IEWUeMUdcHm88mU7JEVM1++pb4p4F
-   whTkLn7nyDbPOE/86zmrI3FX9q669r608sVfP3dEHKALQAVeI//7s38dg
-   Y=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 13 Jun 2022 15:44:57 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 15:44:57 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 13 Jun 2022 15:44:56 -0700
-Received: from [10.111.164.34] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 13 Jun
- 2022 15:44:54 -0700
-Message-ID: <d6668a3f-d977-53e3-966c-ed4e7fd603e1@quicinc.com>
-Date:   Mon, 13 Jun 2022 15:44:52 -0700
+        Mon, 13 Jun 2022 18:49:10 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8823121B;
+        Mon, 13 Jun 2022 15:49:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=vivHcuWEO7dFMdfWmFo2zz7FZRzU0nU+SpS3rXiOnKw=; b=iW5b1d09EFoLvsVlISsRSBUFm+
+        i0yU6R1qoudm0DVptYWGiDb4K1rbX9NCW4n7gRx/qPIs+Qx7llAtxEorPQO0y20O7/Me9iOqwEepZ
+        rIR06xpcRk8Ci66ZeGy0dEfELDTD7bZBT9hR52YNbNZWtqVHPqvHQrNxyxS4b1813A3n/IPHqJvZz
+        yaLZyzSJNnrTSlqHEDf2NgHEuFoJutfmcNCQlttqe34fVD+PQkKsZZDtpuWl9Lrj6LeI+2wexcy6x
+        sjVOGsUf9kmyLA3RlmwcEJVDoyoIyefkiGVbQRB6J7rhnWifAKdnLYlQsp3lS6Xc3w6RJ1gyrMUQ2
+        JlDWpDDQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o0srU-00HF9w-Vs; Mon, 13 Jun 2022 22:48:45 +0000
+Date:   Mon, 13 Jun 2022 23:48:44 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     John Johansen <john.johansen@canonical.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        James Morris <jmorris@namei.org>,
+        LSM List <linux-security-module@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        linux-fsdevel@vger.kernel.org, Linux-MM <linux-mm@kvack.org>,
+        gwml@vger.gnuweeb.org
+Subject: Re: Linux 5.18-rc4
+Message-ID: <Yqe+zE4f7uo8YdBE@casper.infradead.org>
+References: <CAHk-=whmtHMzjaVUF9bS+7vE_rrRctcCTvsAeB8fuLYcyYLN-g@mail.gmail.com>
+ <226cee6a-6ca1-b603-db08-8500cd8f77b7@gnuweeb.org>
+ <CAHk-=whayT+o58FrPCXVVJ3Bn-3SeoDkMA77TOd9jg4yMGNExw@mail.gmail.com>
+ <87r1414y5v.fsf@email.froward.int.ebiederm.org>
+ <CAHk-=wijAnOcC2qQEAvFtRD_xpPbG+aSUXkfM-nFTHuMmPbZGA@mail.gmail.com>
+ <266e648a-c537-66bc-455b-37105567c942@canonical.com>
+ <Yp5iOlrgELc9SkSI@casper.infradead.org>
+ <dd654ee2-ae10-e247-f98b-f5057dbb380b@canonical.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [Freedreno] [PATCH] drm/msm: Make msm_gem_free_object() static
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, <dri-devel@lists.freedesktop.org>
-CC:     Rob Clark <robdclark@chromium.org>,
-        David Airlie <airlied@linux.ie>,
-        <linux-arm-msm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Sean Paul <sean@poorly.run>, Daniel Vetter <daniel@ffwll.ch>,
-        "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        <freedreno@lists.freedesktop.org>
-References: <20220613204910.2651747-1-robdclark@gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20220613204910.2651747-1-robdclark@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <dd654ee2-ae10-e247-f98b-f5057dbb380b@canonical.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 06, 2022 at 02:00:33PM -0700, John Johansen wrote:
+> On 6/6/22 13:23, Matthew Wilcox wrote:
+> > On Mon, Jun 06, 2022 at 12:19:36PM -0700, John Johansen wrote:
+> >>> I suspect that part is that both Apparmor and IPC use the idr local lock.
+> >>>
+> >> bingo,
+> >>
+> >> apparmor moved its secids allocation from a custom radix tree to idr in
+> >>
+> >>   99cc45e48678 apparmor: Use an IDR to allocate apparmor secids
+> >>
+> >> and ipc is using the idr for its id allocation as well
+> >>
+> >> I can easily lift the secid() allocation out of the ctx->lock but that
+> >> would still leave it happening under the file_lock and not fix the problem.
+> >> I think the quick solution would be for apparmor to stop using idr, reverting
+> >> back at least temporarily to the custom radix tree.
+> > 
+> > How about moving forward to the XArray that doesn't use that horrid
+> > prealloc gunk?  Compile tested only.
+> > 
+> 
+> I'm not very familiar with XArray but it does seem like a good fit. We do try
+> to keep the secid allocation dense, ideally no holes. Wrt the current locking
+> issue I want to hear what Thomas has to say. Regardless I am looking into
+> whether we should just switch to XArrays going forward.
 
-
-On 6/13/2022 1:49 PM, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
-> 
-> Misc small cleanup I noticed.  Not called from another object file since
-> 3c9edd9c85f5 ("drm/msm: Introduce GEM object funcs")
-> 
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/msm_gem.c | 2 +-
->   drivers/gpu/drm/msm/msm_gem.h | 1 -
->   2 files changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-> index 35845e273d81..3ef7ada59392 100644
-> --- a/drivers/gpu/drm/msm/msm_gem.c
-> +++ b/drivers/gpu/drm/msm/msm_gem.c
-> @@ -1004,7 +1004,7 @@ void msm_gem_describe_objects(struct list_head *list, struct seq_file *m)
->   #endif
->   
->   /* don't call directly!  Use drm_gem_object_put() */
-> -void msm_gem_free_object(struct drm_gem_object *obj)
-> +static void msm_gem_free_object(struct drm_gem_object *obj)
->   {
->   	struct msm_gem_object *msm_obj = to_msm_bo(obj);
->   	struct drm_device *dev = obj->dev;
-> diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_gem.h
-> index 6b7d5bb3b575..d608339c1643 100644
-> --- a/drivers/gpu/drm/msm/msm_gem.h
-> +++ b/drivers/gpu/drm/msm/msm_gem.h
-> @@ -175,7 +175,6 @@ void msm_gem_active_get(struct drm_gem_object *obj, struct msm_gpu *gpu);
->   void msm_gem_active_put(struct drm_gem_object *obj);
->   int msm_gem_cpu_prep(struct drm_gem_object *obj, uint32_t op, ktime_t *timeout);
->   int msm_gem_cpu_fini(struct drm_gem_object *obj);
-> -void msm_gem_free_object(struct drm_gem_object *obj);
->   int msm_gem_new_handle(struct drm_device *dev, struct drm_file *file,
->   		uint32_t size, uint32_t flags, uint32_t *handle, char *name);
->   struct drm_gem_object *msm_gem_new(struct drm_device *dev,
+Nothing from Thomas ... shall we just go with this?  Do you want a
+commit message, etc for the patch?

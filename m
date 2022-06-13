@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D98549600
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FBC2548BE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347614AbiFMKzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 06:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
+        id S244241AbiFMK0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346651AbiFMKvL (ORCPT
+        with ESMTP id S245249AbiFMKY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 06:51:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E377D11448;
-        Mon, 13 Jun 2022 03:27:25 -0700 (PDT)
+        Mon, 13 Jun 2022 06:24:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E49123BCA;
+        Mon, 13 Jun 2022 03:18:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CDF97B80E95;
-        Mon, 13 Jun 2022 10:27:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 416E0C34114;
-        Mon, 13 Jun 2022 10:27:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 442D4CE0EEB;
+        Mon, 13 Jun 2022 10:18:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32396C34114;
+        Mon, 13 Jun 2022 10:18:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655116042;
-        bh=YyyKSCE/z4DN7afLGPXBmdG056sAxbf9rYSROttyKCk=;
+        s=korg; t=1655115519;
+        bh=96ceQgJASxyzZfSQvr0juwSMRmN1lL3Esf2pvX28VOk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W2Cp1m9R+AeLhoZ8RenhktdNWJbpmTdEINGz5D3u43kiwhtW8Z/dYf9YyFdP4SfEw
-         YKKNxjbJbUGhKRKqukpDAW/qOb1/8Cy+NMbqwLixQr70ZE2+z99kSpuHayNmfFe138
-         pbvN6YRBrjP6kbKkPSx+EFU7//fHd0YC2iSoBBEM=
+        b=NfPsVR/eXfzQd9CrKpPik8BhSVdmtZcMwuNhQqI6nYomP0psTCyTDcgWvhsAYcg9e
+         gfMW/HRhOxC73SWlssvkdDEF8YaZ7CYmcY1IgUCpRvcuCzT7lXBGrTJ2tl6ZYdtuvk
+         zz7Zre98i42sPRhtWbluacjj4jdfiRyZqmgLfYY8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Catrinel Catrinescu <cc@80211.de>,
-        Felix Fietkau <nbd@nbd.name>,
-        Johannes Berg <johannes.berg@intel.com>
-Subject: [PATCH 4.14 122/218] mac80211: upgrade passive scan to active scan on DFS channels after beacon rx
+        stable@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Stephen Zhang <starzhangzsd@gmail.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: [PATCH 4.9 106/167] MIPS: IP27: Remove incorrect `cpu_has_fpu override
 Date:   Mon, 13 Jun 2022 12:09:40 +0200
-Message-Id: <20220613094924.271799424@linuxfoundation.org>
+Message-Id: <20220613094905.610346751@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
-References: <20220613094908.257446132@linuxfoundation.org>
+In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
+References: <20220613094840.720778945@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,103 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Felix Fietkau <nbd@nbd.name>
+From: Maciej W. Rozycki <macro@orcam.me.uk>
 
-commit b041b7b9de6e1d4362de855ab90f9d03ef323edd upstream.
+commit 424c3781dd1cb401857585331eaaa425a13f2429 upstream.
 
-In client mode, we can't connect to hidden SSID APs or SSIDs not advertised
-in beacons on DFS channels, since we're forced to passive scan. Fix this by
-sending out a probe request immediately after the first beacon, if active
-scan was requested by the user.
+Remove unsupported forcing of `cpu_has_fpu' to 1, which makes the `nofpu'
+kernel parameter non-functional, and also causes a link error:
 
-Cc: stable@vger.kernel.org
-Reported-by: Catrinel Catrinescu <cc@80211.de>
-Signed-off-by: Felix Fietkau <nbd@nbd.name>
-Link: https://lore.kernel.org/r/20220420104907.36275-1-nbd@nbd.name
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+ld: arch/mips/kernel/traps.o: in function `trap_init':
+./arch/mips/include/asm/msa.h:(.init.text+0x348): undefined reference to `handle_fpe'
+ld: ./arch/mips/include/asm/msa.h:(.init.text+0x354): undefined reference to `handle_fpe'
+ld: ./arch/mips/include/asm/msa.h:(.init.text+0x360): undefined reference to `handle_fpe'
+
+where the CONFIG_MIPS_FP_SUPPORT configuration option has been disabled.
+
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Reported-by: Stephen Zhang <starzhangzsd@gmail.com>
+Fixes: 0ebb2f4159af ("MIPS: IP27: Update/restructure CPU overrides")
+Cc: stable@vger.kernel.org # v4.2+
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/mac80211/ieee80211_i.h |    5 +++++
- net/mac80211/scan.c        |   20 ++++++++++++++++++++
- 2 files changed, 25 insertions(+)
+ arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/net/mac80211/ieee80211_i.h
-+++ b/net/mac80211/ieee80211_i.h
-@@ -1067,6 +1067,9 @@ struct tpt_led_trigger {
-  *	a scan complete for an aborted scan.
-  * @SCAN_HW_CANCELLED: Set for our scan work function when the scan is being
-  *	cancelled.
-+ * @SCAN_BEACON_WAIT: Set whenever we're passive scanning because of radar/no-IR
-+ *	and could send a probe request after receiving a beacon.
-+ * @SCAN_BEACON_DONE: Beacon received, we can now send a probe request
-  */
- enum {
- 	SCAN_SW_SCANNING,
-@@ -1075,6 +1078,8 @@ enum {
- 	SCAN_COMPLETED,
- 	SCAN_ABORTED,
- 	SCAN_HW_CANCELLED,
-+	SCAN_BEACON_WAIT,
-+	SCAN_BEACON_DONE,
- };
- 
- /**
---- a/net/mac80211/scan.c
-+++ b/net/mac80211/scan.c
-@@ -205,6 +205,16 @@ void ieee80211_scan_rx(struct ieee80211_
- 	if (likely(!sdata1 && !sdata2))
- 		return;
- 
-+	if (test_and_clear_bit(SCAN_BEACON_WAIT, &local->scanning)) {
-+		/*
-+		 * we were passive scanning because of radar/no-IR, but
-+		 * the beacon/proberesp rx gives us an opportunity to upgrade
-+		 * to active scan
-+		 */
-+		 set_bit(SCAN_BEACON_DONE, &local->scanning);
-+		 ieee80211_queue_delayed_work(&local->hw, &local->scan_work, 0);
-+	}
-+
- 	if (ieee80211_is_probe_resp(mgmt->frame_control)) {
- 		struct cfg80211_scan_request *scan_req;
- 		struct cfg80211_sched_scan_request *sched_scan_req;
-@@ -646,6 +656,8 @@ static int __ieee80211_start_scan(struct
- 						IEEE80211_CHAN_RADAR)) ||
- 		    !req->n_ssids) {
- 			next_delay = IEEE80211_PASSIVE_CHANNEL_TIME;
-+			if (req->n_ssids)
-+				set_bit(SCAN_BEACON_WAIT, &local->scanning);
- 		} else {
- 			ieee80211_scan_state_send_probe(local, &next_delay);
- 			next_delay = IEEE80211_CHANNEL_TIME;
-@@ -826,6 +838,8 @@ static void ieee80211_scan_state_set_cha
- 	    !scan_req->n_ssids) {
- 		*next_delay = IEEE80211_PASSIVE_CHANNEL_TIME;
- 		local->next_scan_state = SCAN_DECISION;
-+		if (scan_req->n_ssids)
-+			set_bit(SCAN_BEACON_WAIT, &local->scanning);
- 		return;
- 	}
- 
-@@ -918,6 +932,8 @@ void ieee80211_scan_work(struct work_str
- 			goto out;
- 	}
- 
-+	clear_bit(SCAN_BEACON_WAIT, &local->scanning);
-+
- 	/*
- 	 * as long as no delay is required advance immediately
- 	 * without scheduling a new work
-@@ -928,6 +944,10 @@ void ieee80211_scan_work(struct work_str
- 			goto out_complete;
- 		}
- 
-+		if (test_and_clear_bit(SCAN_BEACON_DONE, &local->scanning) &&
-+		    local->next_scan_state == SCAN_DECISION)
-+			local->next_scan_state = SCAN_SEND_PROBE;
-+
- 		switch (local->next_scan_state) {
- 		case SCAN_DECISION:
- 			/* if no more bands/channels left, complete scan */
+--- a/arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h
++++ b/arch/mips/include/asm/mach-ip27/cpu-feature-overrides.h
+@@ -28,7 +28,6 @@
+ #define cpu_has_6k_cache		0
+ #define cpu_has_8k_cache		0
+ #define cpu_has_tx39_cache		0
+-#define cpu_has_fpu			1
+ #define cpu_has_nofpuex			0
+ #define cpu_has_32fpr			1
+ #define cpu_has_counter			1
 
 

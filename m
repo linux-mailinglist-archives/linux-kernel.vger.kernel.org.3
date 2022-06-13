@@ -2,93 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C975499E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1635C5499F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 19:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239538AbiFMRYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 13:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33350 "EHLO
+        id S241700AbiFMR00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 13:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242480AbiFMRXd (ORCPT
+        with ESMTP id S238038AbiFMRZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 13:23:33 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B509D4F9E3;
-        Mon, 13 Jun 2022 05:39:07 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id AC04B82CC;
-        Mon, 13 Jun 2022 12:34:24 +0000 (UTC)
-Date:   Mon, 13 Jun 2022 15:39:05 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
-        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
-        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: [PATCH 34.5/36] cpuidle,omap4: Push RCU-idle into
- omap4_enter_lowpower()
-Message-ID: <Yqcv6crSNKuSWoTu@atomide.com>
-References: <20220608142723.103523089@infradead.org>
- <20220608144518.073801916@infradead.org>
+        Mon, 13 Jun 2022 13:25:58 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E43F5D5D7;
+        Mon, 13 Jun 2022 05:41:23 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1D13166015B3;
+        Mon, 13 Jun 2022 13:41:21 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655124081;
+        bh=Dssxu5juHxniKEwBlOPdCopiQRHAuksbl/SlhCHu2R0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cj1Y7XKnAUxZ9AFEebBoxYSFqi2LXEuJRLBk7CcG9RY6lLsqhlFzV+oxNSnRAq35d
+         OCOiKUkuwtSR+9XSJ6bQgiY2tR+/pCYoiPZ2BMm35mXHvziQjWV0gOEj0U9S4GhMOz
+         EYidKT4SRSawFGHUZuKV15dCQfIEuYSlhQyeLmS/mnBTddIv9RX26o1Tj0LdumsVOw
+         ofcXrD15RlCDQA/aerb01D36rVGPuAyr6vv5yADcS/k8QTz+HSblMJutsBpu4fTyhT
+         QDBqCG3Iyw1M52WLJNimNCjmcCzyMeLKnme5b0GdVG3XihAtSttrusNmTabOCzrmOU
+         tJ78YAHvoCNMw==
+Message-ID: <30fcd090-0f31-5a7a-ec14-11098aac8e5c@collabora.com>
+Date:   Mon, 13 Jun 2022 14:41:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608144518.073801916@infradead.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 1/3] dt-bindings: dsp: mediatek: Use meaningful names
+ for mbox
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        YC Hung <yc.hung@mediatek.com>,
+        Curtis Malainey <cujomalainey@chromium.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220609083101.24195-1-tinghan.shen@mediatek.com>
+ <20220609083101.24195-2-tinghan.shen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220609083101.24195-2-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,131 +68,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-OMAP4 uses full SoC suspend modes as idle states, as such it needs the
-whole power-domain and clock-domain code from the idle path.
+Il 09/06/22 10:30, Tinghan Shen ha scritto:
+> Rename mbox according to action instead of 'mbox0' and 'mbox1'.
+> 
+> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+> ---
+>   .../devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml        | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml b/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> index b7e68b0dfa13..6cedd6868cc5 100644
+> --- a/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> +++ b/Documentation/devicetree/bindings/dsp/mediatek,mt8195-dsp.yaml
+> @@ -55,8 +55,8 @@ properties:
+>   
+>     mbox-names:
+>       items:
+> -      - const: mbox0
+> -      - const: mbox1
+> +      - const: rep
+> +      - const: req
 
-All that code is not suitable to run with RCU disabled, as such push
-RCU-idle deeper still.
+"reply", "request" - as said on patch [2/3]....
 
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
+P.S.: Adding context for anyone else reading this patch, mt8195 devicetrees didn't
+       get any dsp node yet.
 
-Peter here's one more for your series, looks like this is needed to avoid
-warnings similar to what you did for omap3.
+>   
+>     memory-region:
+>       items:
+> @@ -100,6 +100,6 @@ examples:
+>          memory-region = <&adsp_dma_mem_reserved>,
+>                          <&adsp_mem_reserved>;
+>          power-domains = <&spm 6>; //MT8195_POWER_DOMAIN_ADSP
+> -       mbox-names = "mbox0", "mbox1";
+> +       mbox-names = "rep", "req";
+>          mboxes = <&adsp_mailbox0>, <&adsp_mailbox1>;
+>       };
 
----
- arch/arm/mach-omap2/common.h              |  6 ++++--
- arch/arm/mach-omap2/cpuidle44xx.c         |  8 ++------
- arch/arm/mach-omap2/omap-mpuss-lowpower.c | 12 +++++++++++-
- arch/arm/mach-omap2/pm44xx.c              |  2 +-
- 4 files changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm/mach-omap2/common.h b/arch/arm/mach-omap2/common.h
---- a/arch/arm/mach-omap2/common.h
-+++ b/arch/arm/mach-omap2/common.h
-@@ -284,11 +284,13 @@ extern u32 omap4_get_cpu1_ns_pa_addr(void);
- 
- #if defined(CONFIG_SMP) && defined(CONFIG_PM)
- extern int omap4_mpuss_init(void);
--extern int omap4_enter_lowpower(unsigned int cpu, unsigned int power_state);
-+extern int omap4_enter_lowpower(unsigned int cpu, unsigned int power_state,
-+				bool rcuidle);
- extern int omap4_hotplug_cpu(unsigned int cpu, unsigned int power_state);
- #else
- static inline int omap4_enter_lowpower(unsigned int cpu,
--					unsigned int power_state)
-+					unsigned int power_state,
-+					bool rcuidle)
- {
- 	cpu_do_idle();
- 	return 0;
-diff --git a/arch/arm/mach-omap2/cpuidle44xx.c b/arch/arm/mach-omap2/cpuidle44xx.c
---- a/arch/arm/mach-omap2/cpuidle44xx.c
-+++ b/arch/arm/mach-omap2/cpuidle44xx.c
-@@ -105,9 +105,7 @@ static int omap_enter_idle_smp(struct cpuidle_device *dev,
- 	}
- 	raw_spin_unlock_irqrestore(&mpu_lock, flag);
- 
--	cpuidle_rcu_enter();
--	omap4_enter_lowpower(dev->cpu, cx->cpu_state);
--	cpuidle_rcu_exit();
-+	omap4_enter_lowpower(dev->cpu, cx->cpu_state, true);
- 
- 	raw_spin_lock_irqsave(&mpu_lock, flag);
- 	if (cx->mpu_state_vote == num_online_cpus())
-@@ -186,10 +184,8 @@ static int omap_enter_idle_coupled(struct cpuidle_device *dev,
- 		}
- 	}
- 
--	cpuidle_rcu_enter();
--	omap4_enter_lowpower(dev->cpu, cx->cpu_state);
-+	omap4_enter_lowpower(dev->cpu, cx->cpu_state, true);
- 	cpu_done[dev->cpu] = true;
--	cpuidle_rcu_exit();
- 
- 	/* Wakeup CPU1 only if it is not offlined */
- 	if (dev->cpu == 0 && cpumask_test_cpu(1, cpu_online_mask)) {
-diff --git a/arch/arm/mach-omap2/omap-mpuss-lowpower.c b/arch/arm/mach-omap2/omap-mpuss-lowpower.c
---- a/arch/arm/mach-omap2/omap-mpuss-lowpower.c
-+++ b/arch/arm/mach-omap2/omap-mpuss-lowpower.c
-@@ -33,6 +33,7 @@
-  * and first to wake-up when MPUSS low power states are excercised
-  */
- 
-+#include <linux/cpuidle.h>
- #include <linux/kernel.h>
- #include <linux/io.h>
- #include <linux/errno.h>
-@@ -214,6 +215,7 @@ static void __init save_l2x0_context(void)
-  * of OMAP4 MPUSS subsystem
-  * @cpu : CPU ID
-  * @power_state: Low power state.
-+ * @rcuidle: RCU needs to be idled
-  *
-  * MPUSS states for the context save:
-  * save_state =
-@@ -222,7 +224,8 @@ static void __init save_l2x0_context(void)
-  *	2 - CPUx L1 and logic lost + GIC lost: MPUSS OSWR
-  *	3 - CPUx L1 and logic lost + GIC + L2 lost: DEVICE OFF
-  */
--int omap4_enter_lowpower(unsigned int cpu, unsigned int power_state)
-+int omap4_enter_lowpower(unsigned int cpu, unsigned int power_state,
-+			 bool rcuidle)
- {
- 	struct omap4_cpu_pm_info *pm_info = &per_cpu(omap4_pm_info, cpu);
- 	unsigned int save_state = 0, cpu_logic_state = PWRDM_POWER_RET;
-@@ -268,6 +271,10 @@ int omap4_enter_lowpower(unsigned int cpu, unsigned int power_state)
- 	cpu_clear_prev_logic_pwrst(cpu);
- 	pwrdm_set_next_pwrst(pm_info->pwrdm, power_state);
- 	pwrdm_set_logic_retst(pm_info->pwrdm, cpu_logic_state);
-+
-+	if (rcuidle)
-+		cpuidle_rcu_enter();
-+
- 	set_cpu_wakeup_addr(cpu, __pa_symbol(omap_pm_ops.resume));
- 	omap_pm_ops.scu_prepare(cpu, power_state);
- 	l2x0_pwrst_prepare(cpu, save_state);
-@@ -283,6 +290,9 @@ int omap4_enter_lowpower(unsigned int cpu, unsigned int power_state)
- 	if (IS_PM44XX_ERRATUM(PM_OMAP4_ROM_SMP_BOOT_ERRATUM_GICD) && cpu)
- 		gic_dist_enable();
- 
-+	if (rcuidle)
-+		cpuidle_rcu_exit();
-+
- 	/*
- 	 * Restore the CPUx power state to ON otherwise CPUx
- 	 * power domain can transitions to programmed low power
-diff --git a/arch/arm/mach-omap2/pm44xx.c b/arch/arm/mach-omap2/pm44xx.c
---- a/arch/arm/mach-omap2/pm44xx.c
-+++ b/arch/arm/mach-omap2/pm44xx.c
-@@ -76,7 +76,7 @@ static int omap4_pm_suspend(void)
- 	 * domain CSWR is not supported by hardware.
- 	 * More details can be found in OMAP4430 TRM section 4.3.4.2.
- 	 */
--	omap4_enter_lowpower(cpu_id, cpu_suspend_state);
-+	omap4_enter_lowpower(cpu_id, cpu_suspend_state, false);
- 
- 	/* Restore next powerdomain state */
- 	list_for_each_entry(pwrst, &pwrst_list, node) {
--- 
-2.36.1

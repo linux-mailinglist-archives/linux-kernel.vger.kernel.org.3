@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8836154988F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:37:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A01EE549324
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:31:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357578AbiFMND1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45730 "EHLO
+        id S1358239AbiFMMDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 08:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358348AbiFMMzL (ORCPT
+        with ESMTP id S1358206AbiFMMCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 08:55:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E5B10C0;
-        Mon, 13 Jun 2022 04:15:07 -0700 (PDT)
+        Mon, 13 Jun 2022 08:02:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4607525281;
+        Mon, 13 Jun 2022 03:57:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BACA5B80E93;
-        Mon, 13 Jun 2022 11:15:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29DC1C3411C;
-        Mon, 13 Jun 2022 11:15:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7067960F9A;
+        Mon, 13 Jun 2022 10:57:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82416C34114;
+        Mon, 13 Jun 2022 10:57:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655118904;
-        bh=SIvLBB5lxHFwZ0jFOttC09QtSlwA9NwUs4mm9w2NQSU=;
+        s=korg; t=1655117829;
+        bh=WyNvYaeIaFn1e3T9TbMqhmV83evlF4BHXtllGDXuot8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ymXxief2zUl1csk9gEOmILKMzWKlq87IMJEPCwvH3+o9qLikZFIrziQTkabgmsi1m
-         hEfVQq3MGULUlr/E0YFidEQJd+QbpWcKhpSnf1/GLNvoBBpWM54tYw7i7acDxi/M9i
-         kC+2iAIabBXge42EufrwPd/NvzAtSP+MdouNo9aY=
+        b=lYi85ezFOQMPEgMrJUdzPfst5Qu+Da2ddHL23rLHhrc9D3SjC4YaXgLxtHikO3FZY
+         Z6F1/iHBtbgWWeLqKm43e92Py0L24mHOZ3o84HFzVbYIByzxpYFYtN84br4KSd4atq
+         I2+O38X3Ylw9FnoNUiJxC/Wqy3tV92nkyFADRSx8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 069/247] ASoC: fsl_sai: Fix FSL_SAI_xDR/xFR definition
+        stable@vger.kernel.org, Ye Bin <yebin10@huawei.com>,
+        Jan Kara <jack@suse.cz>, Theodore Tso <tytso@mit.edu>,
+        stable@kernel.org
+Subject: [PATCH 4.19 147/287] ext4: fix use-after-free in ext4_rename_dir_prepare
 Date:   Mon, 13 Jun 2022 12:09:31 +0200
-Message-Id: <20220613094925.051688489@linuxfoundation.org>
+Message-Id: <20220613094928.333857721@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-References: <20220613094922.843438024@linuxfoundation.org>
+In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
+References: <20220613094923.832156175@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +55,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shengjiu Wang <shengjiu.wang@nxp.com>
+From: Ye Bin <yebin10@huawei.com>
 
-[ Upstream commit e4dd748dc87cf431af7b3954963be0d9f6150217 ]
+commit 0be698ecbe4471fcad80e81ec6a05001421041b3 upstream.
 
-There are multiple xDR and xFR registers, the index is
-from 0 to 7. FSL_SAI_xDR and FSL_SAI_xFR is abandoned,
-replace them with FSL_SAI_xDR0 and FSL_SAI_xFR0.
+We got issue as follows:
+EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
+ext4_get_first_dir_block: bh->b_data=0xffff88810bee6000 len=34478
+ext4_get_first_dir_block: *parent_de=0xffff88810beee6ae bh->b_data=0xffff88810bee6000
+ext4_rename_dir_prepare: [1] parent_de=0xffff88810beee6ae
+==================================================================
+BUG: KASAN: use-after-free in ext4_rename_dir_prepare+0x152/0x220
+Read of size 4 at addr ffff88810beee6ae by task rep/1895
 
-Fixes: 4f7a0728b530 ("ASoC: fsl_sai: Add support for SAI new version")
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Link: https://lore.kernel.org/r/1653284661-18964-1-git-send-email-shengjiu.wang@nxp.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+CPU: 13 PID: 1895 Comm: rep Not tainted 5.10.0+ #241
+Call Trace:
+ dump_stack+0xbe/0xf9
+ print_address_description.constprop.0+0x1e/0x220
+ kasan_report.cold+0x37/0x7f
+ ext4_rename_dir_prepare+0x152/0x220
+ ext4_rename+0xf44/0x1ad0
+ ext4_rename2+0x11c/0x170
+ vfs_rename+0xa84/0x1440
+ do_renameat2+0x683/0x8f0
+ __x64_sys_renameat+0x53/0x60
+ do_syscall_64+0x33/0x40
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7f45a6fc41c9
+RSP: 002b:00007ffc5a470218 EFLAGS: 00000246 ORIG_RAX: 0000000000000108
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f45a6fc41c9
+RDX: 0000000000000005 RSI: 0000000020000180 RDI: 0000000000000005
+RBP: 00007ffc5a470240 R08: 00007ffc5a470160 R09: 0000000020000080
+R10: 00000000200001c0 R11: 0000000000000246 R12: 0000000000400bb0
+R13: 00007ffc5a470320 R14: 0000000000000000 R15: 0000000000000000
+
+The buggy address belongs to the page:
+page:00000000440015ce refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x10beee
+flags: 0x200000000000000()
+raw: 0200000000000000 ffffea00043ff4c8 ffffea0004325608 0000000000000000
+raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff88810beee580: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88810beee600: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff88810beee680: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                                  ^
+ ffff88810beee700: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff88810beee780: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+Disabling lock debugging due to kernel taint
+ext4_rename_dir_prepare: [2] parent_de->inode=3537895424
+ext4_rename_dir_prepare: [3] dir=0xffff888124170140
+ext4_rename_dir_prepare: [4] ino=2
+ext4_rename_dir_prepare: ent->dir->i_ino=2 parent=-757071872
+
+Reason is first directory entry which 'rec_len' is 34478, then will get illegal
+parent entry. Now, we do not check directory entry after read directory block
+in 'ext4_get_first_dir_block'.
+To solve this issue, check directory entry in 'ext4_get_first_dir_block'.
+
+[ Trigger an ext4_error() instead of just warning if the directory is
+  missing a '.' or '..' entry.   Also make sure we return an error code
+  if the file system is corrupted.  -TYT ]
+
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+Reviewed-by: Jan Kara <jack@suse.cz>
+Link: https://lore.kernel.org/r/20220414025223.4113128-1-yebin10@huawei.com
+Signed-off-by: Theodore Ts'o <tytso@mit.edu>
+Cc: stable@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/fsl/fsl_sai.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/ext4/namei.c |   30 +++++++++++++++++++++++++++---
+ 1 file changed, 27 insertions(+), 3 deletions(-)
 
-diff --git a/sound/soc/fsl/fsl_sai.h b/sound/soc/fsl/fsl_sai.h
-index bc60030967dd..f471467dfb3e 100644
---- a/sound/soc/fsl/fsl_sai.h
-+++ b/sound/soc/fsl/fsl_sai.h
-@@ -80,8 +80,8 @@
- #define FSL_SAI_xCR3(tx, ofs)	(tx ? FSL_SAI_TCR3(ofs) : FSL_SAI_RCR3(ofs))
- #define FSL_SAI_xCR4(tx, ofs)	(tx ? FSL_SAI_TCR4(ofs) : FSL_SAI_RCR4(ofs))
- #define FSL_SAI_xCR5(tx, ofs)	(tx ? FSL_SAI_TCR5(ofs) : FSL_SAI_RCR5(ofs))
--#define FSL_SAI_xDR(tx, ofs)	(tx ? FSL_SAI_TDR(ofs) : FSL_SAI_RDR(ofs))
--#define FSL_SAI_xFR(tx, ofs)	(tx ? FSL_SAI_TFR(ofs) : FSL_SAI_RFR(ofs))
-+#define FSL_SAI_xDR0(tx)	(tx ? FSL_SAI_TDR0 : FSL_SAI_RDR0)
-+#define FSL_SAI_xFR0(tx)	(tx ? FSL_SAI_TFR0 : FSL_SAI_RFR0)
- #define FSL_SAI_xMR(tx)		(tx ? FSL_SAI_TMR : FSL_SAI_RMR)
+--- a/fs/ext4/namei.c
++++ b/fs/ext4/namei.c
+@@ -3333,6 +3333,9 @@ static struct buffer_head *ext4_get_firs
+ 	struct buffer_head *bh;
  
- /* SAI Transmit/Receive Control Register */
--- 
-2.35.1
-
+ 	if (!ext4_has_inline_data(inode)) {
++		struct ext4_dir_entry_2 *de;
++		unsigned int offset;
++
+ 		/* The first directory block must not be a hole, so
+ 		 * treat it as DIRENT_HTREE
+ 		 */
+@@ -3341,9 +3344,30 @@ static struct buffer_head *ext4_get_firs
+ 			*retval = PTR_ERR(bh);
+ 			return NULL;
+ 		}
+-		*parent_de = ext4_next_entry(
+-					(struct ext4_dir_entry_2 *)bh->b_data,
+-					inode->i_sb->s_blocksize);
++
++		de = (struct ext4_dir_entry_2 *) bh->b_data;
++		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
++					 bh->b_size, 0) ||
++		    le32_to_cpu(de->inode) != inode->i_ino ||
++		    strcmp(".", de->name)) {
++			EXT4_ERROR_INODE(inode, "directory missing '.'");
++			brelse(bh);
++			*retval = -EFSCORRUPTED;
++			return NULL;
++		}
++		offset = ext4_rec_len_from_disk(de->rec_len,
++						inode->i_sb->s_blocksize);
++		de = ext4_next_entry(de, inode->i_sb->s_blocksize);
++		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
++					 bh->b_size, offset) ||
++		    le32_to_cpu(de->inode) == 0 || strcmp("..", de->name)) {
++			EXT4_ERROR_INODE(inode, "directory missing '..'");
++			brelse(bh);
++			*retval = -EFSCORRUPTED;
++			return NULL;
++		}
++		*parent_de = de;
++
+ 		return bh;
+ 	}
+ 
 
 

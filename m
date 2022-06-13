@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 327C55494ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 207C35497FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356742AbiFMLvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 07:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40974 "EHLO
+        id S1345385AbiFMKf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 06:35:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357018AbiFMLpU (ORCPT
+        with ESMTP id S1345491AbiFMKeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 07:45:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AFB49930;
-        Mon, 13 Jun 2022 03:51:36 -0700 (PDT)
+        Mon, 13 Jun 2022 06:34:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A19286CC;
+        Mon, 13 Jun 2022 03:22:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4675CB80E56;
-        Mon, 13 Jun 2022 10:51:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B19A8C34114;
-        Mon, 13 Jun 2022 10:51:33 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 36C75CE1161;
+        Mon, 13 Jun 2022 10:22:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49CEEC34114;
+        Mon, 13 Jun 2022 10:22:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655117494;
-        bh=RuUJURyxugcuc59iK03LZ8W2uZus1jLgTQH7goDPaHQ=;
+        s=korg; t=1655115723;
+        bh=zCjQg/w9ISq4tLVJDF3MgHP2clD1HOeBK4aMcMnB4vI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wxSrqyOjOCyEgZ8Q1XBLN0F5P7ab5/8je9JlSklq06fp2NcffnydfRFe/cTLE8LDG
-         /U8lI7XCVdzXd6WJvEnBKUlJbgN0+OJRDKj83EhSqILoLh6vEuAwaXoleVik8w4nZd
-         DMmguS5SV8lJchJwIzVT7we2/GZNIZHaAqvRre8s=
+        b=rUWM99UL8EoqSe6DGhOPP3ZCmGzxb8ke0cWGbycxnhLlDRA9oMbjIJGm89RS/5pUq
+         9CcpikhINMXoLXqULpp0QRWPbjFHwyK5gL/SlXeDW3uajNFmpSW7juUzIsuozS1zPr
+         pLFq3s8dcXcA4T4+kSrHalFlI5TeHE0g+8v4Apdc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Kwanghoon Son <k.son@samsung.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 040/287] media: exynos4-is: Fix compile warning
+        stable@vger.kernel.org, Nikolay Borisov <nborisov@suse.com>,
+        Qu Wenruo <wqu@suse.com>, David Sterba <dsterba@suse.com>
+Subject: [PATCH 4.14 006/218] btrfs: add "0x" prefix for unsupported optional features
 Date:   Mon, 13 Jun 2022 12:07:44 +0200
-Message-Id: <20220613094925.081748741@linuxfoundation.org>
+Message-Id: <20220613094909.790165611@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-References: <20220613094923.832156175@linuxfoundation.org>
+In-Reply-To: <20220613094908.257446132@linuxfoundation.org>
+References: <20220613094908.257446132@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,39 +54,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kwanghoon Son <k.son@samsung.com>
+From: Qu Wenruo <wqu@suse.com>
 
-[ Upstream commit e080f5c1f2b6d02c02ee5d674e0e392ccf63bbaf ]
+commit d5321a0fa8bc49f11bea0b470800962c17d92d8f upstream.
 
-Declare static on function 'fimc_isp_video_device_unregister'.
+The following error message lack the "0x" obviously:
 
-When VIDEO_EXYNOS4_ISP_DMA_CAPTURE=n, compiler warns about
-warning: no previous prototype for function [-Wmissing-prototypes]
+  cannot mount because of unsupported optional features (4000)
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Kwanghoon Son <k.son@samsung.com>
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Add the prefix to make it less confusing. This can happen on older
+kernels that try to mount a filesystem with newer features so it makes
+sense to backport to older trees.
+
+CC: stable@vger.kernel.org # 4.14+
+Reviewed-by: Nikolay Borisov <nborisov@suse.com>
+Signed-off-by: Qu Wenruo <wqu@suse.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/platform/exynos4-is/fimc-isp-video.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/disk-io.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/platform/exynos4-is/fimc-isp-video.h b/drivers/media/platform/exynos4-is/fimc-isp-video.h
-index f79a1b348aa6..67ef85249912 100644
---- a/drivers/media/platform/exynos4-is/fimc-isp-video.h
-+++ b/drivers/media/platform/exynos4-is/fimc-isp-video.h
-@@ -35,7 +35,7 @@ static inline int fimc_isp_video_device_register(struct fimc_isp *isp,
- 	return 0;
- }
- 
--void fimc_isp_video_device_unregister(struct fimc_isp *isp,
-+static inline void fimc_isp_video_device_unregister(struct fimc_isp *isp,
- 				enum v4l2_buf_type type)
- {
- }
--- 
-2.35.1
-
+--- a/fs/btrfs/disk-io.c
++++ b/fs/btrfs/disk-io.c
+@@ -2653,7 +2653,7 @@ int open_ctree(struct super_block *sb,
+ 		~BTRFS_FEATURE_INCOMPAT_SUPP;
+ 	if (features) {
+ 		btrfs_err(fs_info,
+-		    "cannot mount because of unsupported optional features (%llx)",
++		    "cannot mount because of unsupported optional features (0x%llx)",
+ 		    features);
+ 		err = -EINVAL;
+ 		goto fail_alloc;
+@@ -2713,7 +2713,7 @@ int open_ctree(struct super_block *sb,
+ 		~BTRFS_FEATURE_COMPAT_RO_SUPP;
+ 	if (!sb_rdonly(sb) && features) {
+ 		btrfs_err(fs_info,
+-	"cannot mount read-write because of unsupported optional features (%llx)",
++	"cannot mount read-write because of unsupported optional features (0x%llx)",
+ 		       features);
+ 		err = -EINVAL;
+ 		goto fail_alloc;
 
 

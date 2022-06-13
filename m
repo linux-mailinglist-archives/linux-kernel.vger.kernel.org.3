@@ -2,147 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12EC9549BD6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E49549BCF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 20:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343747AbiFMSkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 14:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
+        id S1344053AbiFMSkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 14:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343707AbiFMSkU (ORCPT
+        with ESMTP id S1343893AbiFMSkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 14:40:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA18E50070;
-        Mon, 13 Jun 2022 08:28:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E915B81022;
-        Mon, 13 Jun 2022 15:28:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32C6CC34114;
-        Mon, 13 Jun 2022 15:28:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655134119;
-        bh=Dya8+t1QAtJ3oxTE/w7JBXY3Zy4dSxKdD4rHdX/ukpU=;
+        Mon, 13 Jun 2022 14:40:04 -0400
+Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA40D35DFC;
+        Mon, 13 Jun 2022 08:29:29 -0700 (PDT)
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id 25DFTBPr014866;
+        Tue, 14 Jun 2022 00:29:12 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 25DFTBPr014866
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1655134152;
+        bh=U8e6xBBpGNq52HU5UCv+aLe6rXlJafZA9BHju3EnG0w=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=W+9bwBPVa6gi1WBdJnbOZQ9otuTgRa+uQlfgJjus5ISO4CQoKszfbzn/2ujRSDS9w
-         YU5R9bYYkgqU5tFuUOWjLWOVA5BmosI9eYXKhxos+SrBcSuHyxQ0CFNGAcSW5YkEKZ
-         CKnrAWrLDnLKjoEPb6e+1TWmduzAzsSgmyUHhBjr9+hps+tSaZQXWk8EVyZ06PCU2z
-         kdb1Ht0264pqgRRMsIQi/OGqeG+CdxpiKjLHUrwNXX0HGDqzsyf588udukbhcTCNwX
-         QlQJPHq3iyBQMnESw/1crRKvxxikenY0sgNBGrHHXH003Fsbx+4bV88jEQ5qcTpUHK
-         Sp1Xoinc1NUUA==
-Received: by mail-vs1-f54.google.com with SMTP id x187so6274652vsb.0;
-        Mon, 13 Jun 2022 08:28:39 -0700 (PDT)
-X-Gm-Message-State: AJIora8AiJUlxK+NHA6QtueF+s4KwJGW8g+J9i53p2uTiMAYjwVmA87Z
-        H49E5TNT+64q8bkwAZY03+7PSkv5l0yKOvQqtg==
-X-Google-Smtp-Source: AGRyM1umgaHpMsDuaM9Lw94TfUrdKW7JXHhr0M5N07BAWPFzL5Dd/52HH45wQ0ShL4JTzWTYPX1477u063LUFx5tJoE=
-X-Received: by 2002:a67:d38c:0:b0:349:d028:c8ea with SMTP id
- b12-20020a67d38c000000b00349d028c8eamr133392vsj.6.1655134118163; Mon, 13 Jun
- 2022 08:28:38 -0700 (PDT)
+        b=S099LBHFLevAqisrzBFoHtirHccwg1PjI1CDo6+ebI9+hqvyVkQdpDEim/VpdRi2z
+         /bpPNrKWLL5+W8C1eavYKq9eDQdCdFr2vwdV5bEFtJHCARyz9WyO326GUe2fNCeeaE
+         we88Hp79ThHEvpIl4yarZqY/swmq5SWtP53KlL6i7PuwLz08jx81k/deX/SXYPUILb
+         i1Enx3VcaCc4teHtGpMyo8P48fInZnEMs0X1ZUn5PGRgMEQw5bQr/Il/SXSkP8QV+o
+         5mDsmIZMcKbObVVT3rm1KY0xGuCovMfTDBAL98hXVXEeHv03HVhutOrJZihrUzBF8C
+         WdXIe07T+A5Qw==
+X-Nifty-SrcIP: [209.85.128.53]
+Received: by mail-wm1-f53.google.com with SMTP id m16-20020a7bca50000000b0039c8a224c95so2416891wml.2;
+        Mon, 13 Jun 2022 08:29:12 -0700 (PDT)
+X-Gm-Message-State: AOAM533AF09pieQk0lgAlDSNH6GjYyiiXwQYsL9kZqCDlLsbXPnL/fns
+        mU1HNDqCKY0qGUhc6nLRoI0l2Lf6tqLSXzNxK2I=
+X-Google-Smtp-Source: ABdhPJwR2BO70ewcMkpasiG+oq3cRiDpOY3zt44AL5wd2UEyJV0VTm5/CIVcKEFhTBdJDJCNhGeMLpZK8RPebsKjGaE=
+X-Received: by 2002:a7b:c346:0:b0:397:626d:d2c4 with SMTP id
+ l6-20020a7bc346000000b00397626dd2c4mr15731645wmj.172.1655134150862; Mon, 13
+ Jun 2022 08:29:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220610165940.2326777-1-jiaqing.zhao@linux.intel.com>
- <20220610165940.2326777-6-jiaqing.zhao@linux.intel.com> <1654903146.313095.2450355.nullmailer@robh.at.kernel.org>
- <21c9ba6b-e84e-4545-44d2-5ffe5fea9581@linux.intel.com>
-In-Reply-To: <21c9ba6b-e84e-4545-44d2-5ffe5fea9581@linux.intel.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Mon, 13 Jun 2022 09:28:26 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+y3tkfLV8UpUe6jw7Fq7YDrzwoq3FKK4jeeZEBOxhM4g@mail.gmail.com>
-Message-ID: <CAL_Jsq+y3tkfLV8UpUe6jw7Fq7YDrzwoq3FKK4jeeZEBOxhM4g@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] dt-bindings: net: Add NCSI bindings
-To:     Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-Cc:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        netdev <netdev@vger.kernel.org>, devicetree@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220611172233.1494073-1-masahiroy@kernel.org>
+ <20220611172233.1494073-3-masahiroy@kernel.org> <e7850717-dad6-daef-c96c-2a74248e98f6@digikod.net>
+In-Reply-To: <e7850717-dad6-daef-c96c-2a74248e98f6@digikod.net>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 14 Jun 2022 00:28:34 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASR6Hwj-Q+z6GCGTOz0gXv5XXTV8phqe7duGm+uuo3eDQ@mail.gmail.com>
+Message-ID: <CAK7LNASR6Hwj-Q+z6GCGTOz0gXv5XXTV8phqe7duGm+uuo3eDQ@mail.gmail.com>
+Subject: Re: [PATCH 3/4] certs: move scripts/check-blacklist-hashes.awk to certs/
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        keyrings@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Eric Snowberg <eric.snowberg@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Tyler Hicks <tyhicks@linux.microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 9:09 PM Jiaqing Zhao
-<jiaqing.zhao@linux.intel.com> wrote:
+On Mon, Jun 13, 2022 at 9:36 PM Micka=C3=ABl Sala=C3=BCn <mic@digikod.net> =
+wrote:
 >
-> On 2022-06-11 07:19, Rob Herring wrote:
-> > On Sat, 11 Jun 2022 00:59:39 +0800, Jiaqing Zhao wrote:
-> >> Add devicetree bindings for NCSI VLAN modes. This allows VLAN mode to
-> >> be configured in devicetree.
-> >>
-> >> Signed-off-by: Jiaqing Zhao <jiaqing.zhao@linux.intel.com>
-> >> ---
-> >>  .../devicetree/bindings/net/ncsi.yaml         | 34 ++++++++++++++++++=
-+
-> >>  MAINTAINERS                                   |  2 ++
-> >>  include/dt-bindings/net/ncsi.h                | 15 ++++++++
-> >>  3 files changed, 51 insertions(+)
-> >>  create mode 100644 Documentation/devicetree/bindings/net/ncsi.yaml
-> >>  create mode 100644 include/dt-bindings/net/ncsi.h
-> >>
+>
+>
+> On 11/06/2022 19:22, Masahiro Yamada wrote:
+> > This script is only used in certs/Makefile, so certs/ is a better
+> > home for it.
 > >
-> > My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_chec=
-k'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
 > >
-> > yamllint warnings/errors:
+> >   MAINTAINERS                                   | 1 -
+> >   certs/Makefile                                | 2 +-
+> >   {scripts =3D> certs}/check-blacklist-hashes.awk | 0
+> >   3 files changed, 1 insertion(+), 2 deletions(-)
+> >   rename {scripts =3D> certs}/check-blacklist-hashes.awk (100%)
 > >
-> > dtschema/dtc warnings/errors:
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/ne=
-t/ncsi.yaml: 'oneOf' conditional failed, one must be fixed:
-> >       'unevaluatedProperties' is a required property
-> >       'additionalProperties' is a required property
-> >       hint: Either unevaluatedProperties or additionalProperties must b=
-e present
-> >       from schema $id: http://devicetree.org/meta-schemas/core.yaml#
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/ne=
-t/ncsi.yaml: ignoring, error in schema:
-> > /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/ne=
-t/ncsi.example.dtb: ethernet@1e660000: 'ncsi,vlan-mode' does not match any =
-of the regexes
-> >       From schema: /builds/robherring/linux-dt-review/Documentation/dev=
-icetree/bindings/vendor-prefixes.yaml
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 1fc9ead83d2a..7c2a7c304824 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -4627,7 +4627,6 @@ L:      keyrings@vger.kernel.org
+> >   S:  Maintained
+> >   F:  Documentation/admin-guide/module-signing.rst
+> >   F:  certs/
+> > -F:   scripts/check-blacklist-hashes.awk >   F:       scripts/sign-file=
+.c
+> >   F:  tools/certs/
+> >
+> > diff --git a/certs/Makefile b/certs/Makefile
+> > index a8d628fd5f7b..df7aaeafd19c 100644
+> > --- a/certs/Makefile
+> > +++ b/certs/Makefile
+> > @@ -13,7 +13,7 @@ CFLAGS_blacklist_hashes.o :=3D -I $(obj)
+> >
+> >   quiet_cmd_check_and_copy_blacklist_hash_list =3D GEN     $@
+> >         cmd_check_and_copy_blacklist_hash_list =3D \
+> > -     $(AWK) -f $(srctree)/scripts/check-blacklist-hashes.awk $(CONFIG_=
+SYSTEM_BLACKLIST_HASH_LIST) >&2; \
+> > +     $(AWK) -f $(srctree)/$(src)/check-blacklist-hashes.awk $(CONFIG_S=
+YSTEM_BLACKLIST_HASH_LIST) >&2; \
+> >       cat $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) > $@
+> >
+> >   $(obj)/blacklist_hash_list: $(CONFIG_SYSTEM_BLACKLIST_HASH_LIST) FORC=
+E
+> > diff --git a/scripts/check-blacklist-hashes.awk b/certs/check-blacklist=
+-hashes.awk
+> > similarity index 100%
+> > rename from scripts/check-blacklist-hashes.awk
+> > rename to certs/check-blacklist-hashes.awk
 >
-> I saw vendor-prefix.yaml says do not add non-vendor prefixes to the list.=
- Since "ncsi" is not a vendor, may I ask what is the suggested replacement =
-for 'ncsi,vlan-mode'? Will 'ncsi-vlan-mode' be fine?
+> It looks more appropriate and consistent to me to keep it in scripts/,
+> close to other cert scripts. Is there some precedent to move such script?
 
-I don't know. What is NCSI? Is it specific to certain MACs? Why do you
-need to set this up in DT? Network configuration is typically done in
-userspace, so putting VLAN config in DT doesn't seem right. All
-questions your commit message should answer.
 
->
-> > Documentation/devicetree/bindings/net/ncsi.example.dtb:0:0: /example-0/=
-ethernet@1e660000: failed to match any schema with compatible: ['aspeed,ast=
-2600-mac', 'faraday,ftgmac100']
-> > Documentation/devicetree/bindings/net/ncsi.example.dtb:0:0: /example-0/=
-ethernet@1e660000: failed to match any schema with compatible: ['aspeed,ast=
-2600-mac', 'faraday,ftgmac100']
->
-> The ftgmac100 it depends on uses a txt document instead of an yaml schema=
-. And I see there is other schemas having the same error, can this be ignor=
-ed?
+I always did that.   For example,
 
-No. Don't add to the list. Once all the existing warnings (~40) are
-fixed, then this will be turned on by default.
+  f6f57a46435d7253a52a1a07a58183678ad266a0
+  78a20a012ecea857e438b1f9e8091acb290bd0f5
+  28ba53c07638f31b153e3a32672a6124d0ff2a97
+  4484aa800ac588a1fe2175cd53076c21067f44b4
+  340a02535ee785c64c62a9c45706597a0139e972
 
->
-> And I've got one more question. The ncsi driver does not has its own comp=
-atible field, instead, it is enabled by setting the "use-ncsi" property of =
-some specific mac drivers. Though currently only ftgmac100 supports ncsi in=
- upstream kernel, it may be used by other mac drivers in the future. What d=
-o you think is a proper way for defining the ncsi schema? Having it in a se=
-parate yaml like this patch or add the properties to all the mac yamls that=
- supports yaml? If the former way is preferred, how should the schema be de=
-fined without "compatible"?
 
-If it is a function of driver support or not, then it doesn't belong in DT.
+Tools can stay in scripts/ if and only if:
 
-Rob
+  - it is used globally during kernel builds
+
+  - it is still needed after the kernel builds.
+     "make clean" removes most of the build artifacts
+      but keeps ones under scripts/.
+
+
+
+
+scripts/insert-sys-cert is apparently unneeded for building the kernel.
+If the intended use is to manipulate vmlinux later,
+that is the legitimate reason to stay in scripts/.
+(but even better place might be tools/)
+
+
+certs/signing_key.pem is needed even after kernel builds.
+So, it should have been kept under scripts/ instead of certs/.
+
+
+
+
+
+--
+Best Regards
+Masahiro Yamada

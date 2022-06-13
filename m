@@ -2,205 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0045B54A09C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C966E54A0BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 23:01:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351525AbiFMU6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35244 "EHLO
+        id S234012AbiFMU7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352307AbiFMUyY (ORCPT
+        with ESMTP id S1352282AbiFMUyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:54:24 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14AF2AE27
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:23:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655151781; x=1686687781;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=N038XF4yXax+ax5Xz1/KbtiavNJ/kZQoXcCHh/Meig8=;
-  b=PWzfZulGB07/wsdJKQtRLtJxJQYzKGqYSibX9cMwLc/qoRTAqnd+paNY
-   8He8clQMcrUmFLMtKz3rzFFVwNn9XWHQwWiEzzp8pWLiIRqNPz9HZzC/G
-   0WuH0YzNueFvjEEYJNJIcWmPCcN4Rs22EaWCl4MsBSYK7227bjXjmqzb/
-   5q8bp7FC9YubwRPpmuYcUHgHrYwuPdfA0GfxVg7fZd7I2eZ51zBY+rrxr
-   +cEJlt8kAa26KI5389g+kgHqj7thv81LewDSOfP83SSudTqfYeoE/Rip4
-   Z6qBBXWukTbFeDV0+jABStq19YW9K6cayPZPsRt4VF1QpxjfGgXIZfqgw
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="261438422"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="261438422"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 13:23:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="617659921"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 13 Jun 2022 13:22:59 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0qaR-000L6i-1j;
-        Mon, 13 Jun 2022 20:22:59 +0000
-Date:   Tue, 14 Jun 2022 04:22:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>
-Subject: [alobakin:bitops 3/6] include/linux/bitops.h:42:1: error: use of
- undeclared identifier 'arch___set_bit'
-Message-ID: <202206140447.OqHwRDRY-lkp@intel.com>
+        Mon, 13 Jun 2022 16:54:20 -0400
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4D52AC7E;
+        Mon, 13 Jun 2022 13:22:49 -0700 (PDT)
+Received: by mail-oi1-f179.google.com with SMTP id k24so9117843oij.2;
+        Mon, 13 Jun 2022 13:22:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=csq1Brwm85wDHHJ8F9+1jbltwVssfeqZqd990Q48SpU=;
+        b=qaNg2S95U51E0CwSLWpzmwS/Uv5mpx9Ih6OsImtj7uriLIQKoxlA2qU87E2q6MKf0z
+         mfxum0188Ec8lVdeLj1G/GoNG4wDIft9VsGKZzqZ7qHIlFAaIl9GCJQZL+pJYE6NoMgY
+         d1mFRtH3Fzvua24fqY7YPa3o1Dto00qh2pwZ9uDYR+/bl5wb+oXXrUZWd3Pf0+GR/fIH
+         vk5HPW14wpH9R0T4gfwrcciFC+Bd4EJE530DzAFeCPv3NRIt8zqjOCh74kPw5DP2czRm
+         PhuZCEFkB0Ga07ISvZvcr6t2LB2AkqiokQ5+j2iiBMesVYHaJ1WTHtIzqUEiHRAKDNfH
+         g4ZA==
+X-Gm-Message-State: AOAM530RfvEhJvSbVVw3c5gjrzyMcpnCgkZNuY1B7QutHaoJB5Xe46gd
+        dLjgEMOxJQwahlb4/8ZvFw==
+X-Google-Smtp-Source: ABdhPJwqh+0nizUXE7cZXmebZZSj3Swb9VgtxqJ6GMc6OwHtSS1GC+AfPk0mzNzWIHxUe0lk4HuWbg==
+X-Received: by 2002:aca:1709:0:b0:32e:9220:a7f with SMTP id j9-20020aca1709000000b0032e92200a7fmr289077oii.120.1655151769177;
+        Mon, 13 Jun 2022 13:22:49 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:20d2:bb97:4381:7341:60ed:a4a1])
+        by smtp.gmail.com with ESMTPSA id b14-20020a4a9bce000000b0041bdf09d95dsm4202116ook.3.2022.06.13.13.22.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 13:22:48 -0700 (PDT)
+Received: (nullmailer pid 19943 invoked by uid 1000);
+        Mon, 13 Jun 2022 20:22:23 -0000
+Date:   Mon, 13 Jun 2022 14:22:23 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 10/18] PCI: dwc: Convert Link-up status method to
+ using dw_pcie_readl_dbi()
+Message-ID: <20220613202223.GF4188875-robh@kernel.org>
+References: <20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610082535.12802-11-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220610082535.12802-11-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/alobakin/linux bitops
-head:   d8371d0e4328c4cb6fa25350bd5132f25b386672
-commit: 4f9a98e0945a7cb9130bb04be4b3ecec35e16a81 [3/6] bitops: unify non-atomic bitops prototypes across architectures
-config: hexagon-buildonly-randconfig-r001-20220613 (https://download.01.org/0day-ci/archive/20220614/202206140447.OqHwRDRY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project d378268ead93c85803c270277f0243737b536ae7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/alobakin/linux/commit/4f9a98e0945a7cb9130bb04be4b3ecec35e16a81
-        git remote add alobakin https://github.com/alobakin/linux
-        git fetch --no-tags alobakin bitops
-        git checkout 4f9a98e0945a7cb9130bb04be4b3ecec35e16a81
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
+On Fri, Jun 10, 2022 at 11:25:26AM +0300, Serge Semin wrote:
+> While the rest of the generic DWC PCIe code is using the dedicated IO-mem
+> accessors, the dw_pcie_link_up() method for some unobvious reason directly
+> calls readl() to get PortLogic.DEBUG1 register content. Since the way the
+> dbi-bus is accessed can be platform-specific let's replace the direct dbi
+> memory space read procedure with the readl-wrapper invocation. Thus we'll
+> have a slightly more generic dw_pcie_link_up() method.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>  drivers/pci/controller/dwc/pcie-designware.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from kernel/bounds.c:13:
-   In file included from include/linux/log2.h:12:
->> include/linux/bitops.h:42:1: error: use of undeclared identifier 'arch___set_bit'
-   __check_bitop_pr(__set_bit);
-   ^
-   include/linux/bitops.h:39:28: note: expanded from macro '__check_bitop_pr'
-           static_assert(__same_type(arch_##name, generic_##name) &&       \
-                                     ^
-   <scratch space>:111:1: note: expanded from here
-   arch___set_bit
-   ^
-   In file included from kernel/bounds.c:13:
-   In file included from include/linux/log2.h:12:
->> include/linux/bitops.h:43:1: error: use of undeclared identifier 'arch___clear_bit'; did you mean '__clear_bit'?
-   __check_bitop_pr(__clear_bit);
-   ^
-   include/linux/bitops.h:39:28: note: expanded from macro '__check_bitop_pr'
-           static_assert(__same_type(arch_##name, generic_##name) &&       \
-                                     ^
-   <scratch space>:115:1: note: expanded from here
-   arch___clear_bit
-   ^
-   arch/hexagon/include/asm/bitops.h:131:1: note: '__clear_bit' declared here
-   __clear_bit(unsigned long nr, volatile unsigned long *addr)
-   ^
-   In file included from kernel/bounds.c:13:
-   In file included from include/linux/log2.h:12:
->> include/linux/bitops.h:44:1: error: use of undeclared identifier 'arch___change_bit'; did you mean '__change_bit'?
-   __check_bitop_pr(__change_bit);
-   ^
-   include/linux/bitops.h:39:28: note: expanded from macro '__check_bitop_pr'
-           static_assert(__same_type(arch_##name, generic_##name) &&       \
-                                     ^
-   <scratch space>:119:1: note: expanded from here
-   arch___change_bit
-   ^
-   arch/hexagon/include/asm/bitops.h:143:1: note: '__change_bit' declared here
-   __change_bit(unsigned long nr, volatile unsigned long *addr)
-   ^
-   In file included from kernel/bounds.c:13:
-   In file included from include/linux/log2.h:12:
->> include/linux/bitops.h:45:1: error: use of undeclared identifier 'arch___test_and_set_bit'; did you mean '__test_and_set_bit'?
-   __check_bitop_pr(__test_and_set_bit);
-   ^
-   include/linux/bitops.h:39:28: note: expanded from macro '__check_bitop_pr'
-           static_assert(__same_type(arch_##name, generic_##name) &&       \
-                                     ^
-   <scratch space>:123:1: note: expanded from here
-   arch___test_and_set_bit
-   ^
-   arch/hexagon/include/asm/bitops.h:156:1: note: '__test_and_set_bit' declared here
-   __test_and_set_bit(unsigned long nr, volatile unsigned long *addr)
-   ^
-   In file included from kernel/bounds.c:13:
-   In file included from include/linux/log2.h:12:
->> include/linux/bitops.h:46:1: error: use of undeclared identifier 'arch___test_and_clear_bit'; did you mean '__test_and_clear_bit'?
-   __check_bitop_pr(__test_and_clear_bit);
-   ^
-   include/linux/bitops.h:39:28: note: expanded from macro '__check_bitop_pr'
-           static_assert(__same_type(arch_##name, generic_##name) &&       \
-                                     ^
-   <scratch space>:127:1: note: expanded from here
-   arch___test_and_clear_bit
-   ^
-   arch/hexagon/include/asm/bitops.h:150:1: note: '__test_and_clear_bit' declared here
-   __test_and_clear_bit(unsigned long nr, volatile unsigned long *addr)
-   ^
-   In file included from kernel/bounds.c:13:
-   In file included from include/linux/log2.h:12:
->> include/linux/bitops.h:47:1: error: use of undeclared identifier 'arch___test_and_change_bit'; did you mean '__test_and_change_bit'?
-   __check_bitop_pr(__test_and_change_bit);
-   ^
-   include/linux/bitops.h:39:28: note: expanded from macro '__check_bitop_pr'
-           static_assert(__same_type(arch_##name, generic_##name) &&       \
-                                     ^
-   <scratch space>:131:1: note: expanded from here
-   arch___test_and_change_bit
-   ^
-   arch/hexagon/include/asm/bitops.h:162:1: note: '__test_and_change_bit' declared here
-   __test_and_change_bit(unsigned long nr, volatile unsigned long *addr)
-   ^
-   In file included from kernel/bounds.c:13:
-   In file included from include/linux/log2.h:12:
->> include/linux/bitops.h:48:1: error: use of undeclared identifier 'arch_test_bit'
-   __check_bitop_pr(test_bit);
-   ^
-   include/linux/bitops.h:39:28: note: expanded from macro '__check_bitop_pr'
-           static_assert(__same_type(arch_##name, generic_##name) &&       \
-                                     ^
-   <scratch space>:135:1: note: expanded from here
-   arch_test_bit
-   ^
-   7 errors generated.
-   make[2]: *** [scripts/Makefile.build:117: kernel/bounds.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1200: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/arch___set_bit +42 include/linux/bitops.h
-
-    36	
-    37	/* Check that the bitops prototypes are sane */
-    38	#define __check_bitop_pr(name)						\
-    39		static_assert(__same_type(arch_##name, generic_##name) &&	\
-    40			      __same_type(name, generic_##name))
-    41	
-  > 42	__check_bitop_pr(__set_bit);
-  > 43	__check_bitop_pr(__clear_bit);
-  > 44	__check_bitop_pr(__change_bit);
-  > 45	__check_bitop_pr(__test_and_set_bit);
-  > 46	__check_bitop_pr(__test_and_clear_bit);
-  > 47	__check_bitop_pr(__test_and_change_bit);
-  > 48	__check_bitop_pr(test_bit);
-    49	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DB454921B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABBB2548E45
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379304AbiFMNoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 09:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35896 "EHLO
+        id S1381966AbiFMORt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379168AbiFMNj5 (ORCPT
+        with ESMTP id S1382195AbiFMOKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 09:39:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104E03DDCD;
-        Mon, 13 Jun 2022 04:29:12 -0700 (PDT)
+        Mon, 13 Jun 2022 10:10:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A82996BE;
+        Mon, 13 Jun 2022 04:42:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2C51B80E59;
-        Mon, 13 Jun 2022 11:29:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21CAFC34114;
-        Mon, 13 Jun 2022 11:29:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8F808B80EA7;
+        Mon, 13 Jun 2022 11:41:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE049C34114;
+        Mon, 13 Jun 2022 11:41:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655119749;
-        bh=nv0D8rN2bgCyxG7rkiqi0EAeO1ejq2lTO03o1B3qvd8=;
+        s=korg; t=1655120507;
+        bh=7h4rZyqwtDdmYLoZ2kB4nYcPAMuofr5Hp9IrMWAmCj4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C37OSLsbh2ZYTtmIIOcwioZKTV0uIu1rQSb3ReP6WsiM3iYxtJJpptsAI0yhN80f0
-         RUj8QjPtVTadK7qcdJGDJANU+krnW8wd7n29F4TdHag/zCv5KyhlYfo1PgmtlsI7Mt
-         TMybON1EeYYa5HijR6Hfrp/S+bLpA/7og+FJfxy0=
+        b=J75EvQSe/HrJJ7GFM8iH3kC+pK8tYEpNu7eJXOK6VGqWgthxxR4PueEVR0CsnDt33
+         NlC2Kgu9rpmCHUbXa3yYpjdYRFLq2Wr4xbFKSj8Fs+gYJ/8svZ7q5vF33Vr2R4ocU5
+         1tzJT0OMxfZQbE4sEhJqOuGya7xgxLn1iJotAas4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Paul Blakey <paulb@nvidia.com>,
-        Ariel Levkovich <lariel@nvidia.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
+        stable@vger.kernel.org,
+        Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.18 126/339] net/mlx5: CT: Fix header-rewrite re-use for tupels
+Subject: [PATCH 5.17 057/298] serial: 8250_fintek: Check SER_RS485_RTS_* only with RS485
 Date:   Mon, 13 Jun 2022 12:09:11 +0200
-Message-Id: <20220613094930.331085779@linuxfoundation.org>
+Message-Id: <20220613094926.679653949@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-References: <20220613094926.497929857@linuxfoundation.org>
+In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
+References: <20220613094924.913340374@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,79 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Blakey <paulb@nvidia.com>
+From: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
-[ Upstream commit 1f2856cde64baa78475e6d3c601fb7b7f693a161 ]
+[ Upstream commit af0179270977508df6986b51242825d7edd59caf ]
 
-Tuple entries that don't have nat configured for them
-which are added to the ct nat table will always create
-a new modify header, as we don't check for possible
-re-use on them. The same for tuples that have nat configured
-for them but are added to ct table.
+SER_RS485_RTS_ON_SEND and SER_RS485_RTS_AFTER_SEND relate to behavior
+within RS485 operation. The driver checks if they have the same value
+which is not possible to realize with the hardware. The check is taken
+regardless of SER_RS485_ENABLED flag and -EINVAL is returned when the
+check fails, which creates problems.
 
-Fix the above by only avoiding wasteful re-use lookup
-for actually natted entries in ct nat table.
+This check makes it unnecessarily complicated to turn RS485 mode off as
+simple zeroed serial_rs485 struct will trigger that equal values check.
+In addition, the driver itself memsets its rs485 structure to zero when
+RS485 is disabled but if userspace would try to make an TIOCSRS485
+ioctl() call with the very same struct, it would end up failing with
+-EINVAL which doesn't make much sense.
 
-Fixes: 7fac5c2eced3 ("net/mlx5: CT: Avoid reusing modify header context for natted entries")
-Signed-off-by: Paul Blakey <paulb@nvidia.com>
-Reviewed-by: Ariel Levkovich <lariel@nvidia.com>
-Signed-off-by: Saeed Mahameed <saeedm@nvidia.com>
+Resolve the problem by moving the check inside SER_RS485_ENABLED block.
+
+Fixes: 7ecc77011c6f ("serial: 8250_fintek: Return -EINVAL on invalid configuration")
+Cc: Ricardo Ribalda Delgado <ricardo.ribalda@gmail.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Link: https://lore.kernel.org/r/035c738-8ea5-8b17-b1d7-84a7b3aeaa51@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../ethernet/mellanox/mlx5/core/en/tc_ct.c    | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ drivers/tty/serial/8250/8250_fintek.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c
-index ab4b0f3ee2a0..1ff7a07bcd06 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en/tc_ct.c
-@@ -701,7 +701,7 @@ mlx5_tc_ct_entry_create_mod_hdr(struct mlx5_tc_ct_priv *ct_priv,
- 				struct mlx5_flow_attr *attr,
- 				struct flow_rule *flow_rule,
- 				struct mlx5e_mod_hdr_handle **mh,
--				u8 zone_restore_id, bool nat)
-+				u8 zone_restore_id, bool nat_table, bool has_nat)
- {
- 	DECLARE_MOD_HDR_ACTS_ACTIONS(actions_arr, MLX5_CT_MIN_MOD_ACTS);
- 	DECLARE_MOD_HDR_ACTS(mod_acts, actions_arr);
-@@ -717,11 +717,12 @@ mlx5_tc_ct_entry_create_mod_hdr(struct mlx5_tc_ct_priv *ct_priv,
- 				     &attr->ct_attr.ct_labels_id);
- 	if (err)
- 		return -EOPNOTSUPP;
--	if (nat) {
--		err = mlx5_tc_ct_entry_create_nat(ct_priv, flow_rule,
--						  &mod_acts);
--		if (err)
--			goto err_mapping;
-+	if (nat_table) {
-+		if (has_nat) {
-+			err = mlx5_tc_ct_entry_create_nat(ct_priv, flow_rule, &mod_acts);
-+			if (err)
-+				goto err_mapping;
-+		}
+diff --git a/drivers/tty/serial/8250/8250_fintek.c b/drivers/tty/serial/8250/8250_fintek.c
+index 251f0018ae8c..dba5950b8d0e 100644
+--- a/drivers/tty/serial/8250/8250_fintek.c
++++ b/drivers/tty/serial/8250/8250_fintek.c
+@@ -200,12 +200,12 @@ static int fintek_8250_rs485_config(struct uart_port *port,
+ 	if (!pdata)
+ 		return -EINVAL;
  
- 		ct_state |= MLX5_CT_STATE_NAT_BIT;
- 	}
-@@ -736,7 +737,7 @@ mlx5_tc_ct_entry_create_mod_hdr(struct mlx5_tc_ct_priv *ct_priv,
- 	if (err)
- 		goto err_mapping;
+-	/* Hardware do not support same RTS level on send and receive */
+-	if (!(rs485->flags & SER_RS485_RTS_ON_SEND) ==
+-			!(rs485->flags & SER_RS485_RTS_AFTER_SEND))
+-		return -EINVAL;
  
--	if (nat) {
-+	if (nat_table && has_nat) {
- 		attr->modify_hdr = mlx5_modify_header_alloc(ct_priv->dev, ct_priv->ns_type,
- 							    mod_acts.num_actions,
- 							    mod_acts.actions);
-@@ -804,7 +805,9 @@ mlx5_tc_ct_entry_add_rule(struct mlx5_tc_ct_priv *ct_priv,
- 
- 	err = mlx5_tc_ct_entry_create_mod_hdr(ct_priv, attr, flow_rule,
- 					      &zone_rule->mh,
--					      zone_restore_id, nat);
-+					      zone_restore_id,
-+					      nat,
-+					      mlx5_tc_ct_entry_has_nat(entry));
- 	if (err) {
- 		ct_dbg("Failed to create ct entry mod hdr");
- 		goto err_mod_hdr;
+ 	if (rs485->flags & SER_RS485_ENABLED) {
++		/* Hardware do not support same RTS level on send and receive */
++		if (!(rs485->flags & SER_RS485_RTS_ON_SEND) ==
++		    !(rs485->flags & SER_RS485_RTS_AFTER_SEND))
++			return -EINVAL;
+ 		memset(rs485->padding, 0, sizeof(rs485->padding));
+ 		config |= RS485_URA;
+ 	} else {
 -- 
 2.35.1
 

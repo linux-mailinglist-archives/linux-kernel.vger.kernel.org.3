@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7805491A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:28:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCF65495E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 18:34:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1385547AbiFMOr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 10:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58964 "EHLO
+        id S1382824AbiFMOOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 10:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1386311AbiFMOpC (ORCPT
+        with ESMTP id S1381414AbiFMOEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 10:45:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DD7B82D1;
-        Mon, 13 Jun 2022 04:51:40 -0700 (PDT)
+        Mon, 13 Jun 2022 10:04:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B192924082;
+        Mon, 13 Jun 2022 04:39:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5275614A0;
-        Mon, 13 Jun 2022 11:51:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B661CC34114;
-        Mon, 13 Jun 2022 11:51:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2A32B80EA7;
+        Mon, 13 Jun 2022 11:39:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D761C34114;
+        Mon, 13 Jun 2022 11:39:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655121075;
-        bh=2Bnq75o17SAeC1aGnsuLEf+b1BM26FPk/fvf4u8So08=;
+        s=korg; t=1655120360;
+        bh=zLwGP0JHz18RrqK8aoEs9PBVqjjKIkNSSPITEh8DSxo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DhtjVElskGIhsDchLE5cOWgiB6/6rLzFqSUGahrXMfFw/1+1IUWs9UUAvSZw36IZu
-         Hzz5ULZT0dfAOIpVHCRcuhmC1IsBiwN1Hm0DoF9PNbZFSOPYrEpfGqub0413Im4l3d
-         +LKR+EqYTX/+sfPvi20gLZnjlK45GAVslbHVxXko=
+        b=wigwsN/OVEm5brTY/ypz3RBts1BATusPNBMSxEMxkVBk0/drWKFrkGedWvOqeSId5
+         T9RI/Zy/dQJmAK5CNbmjrjNYW6v0tQEKbzrrUkxL3ld2aOdRFhQIOhsJj2FXsYgBFe
+         Ca9MSc5mGbBkt5UZUe4Afa642wg7RZ3G75tSdGps=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
-        Enzo Matsumiya <ematsumiya@suse.de>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.17 262/298] cifs: return errors during session setup during reconnects
-Date:   Mon, 13 Jun 2022 12:12:36 +0200
-Message-Id: <20220613094933.020476728@linuxfoundation.org>
+        stable@vger.kernel.org, Leo Liu <leo.liu@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.18 332/339] drm/amdgpu: update VCN codec support for Yellow Carp
+Date:   Mon, 13 Jun 2022 12:12:37 +0200
+Message-Id: <20220613094936.809726262@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220613094924.913340374@linuxfoundation.org>
-References: <20220613094924.913340374@linuxfoundation.org>
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+References: <20220613094926.497929857@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shyam Prasad N <sprasad@microsoft.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-commit 8ea21823aa584b55ba4b861307093b78054b0c1b upstream.
+commit 97e50305542f384741a5b45699aba349fe9fca73 upstream.
 
-During reconnects, we check the return value from
-cifs_negotiate_protocol, and have handlers for both success
-and failures. But if that passes, and cifs_setup_session
-returns any errors other than -EACCES, we do not handle
-that. This fix adds a handler for that, so that we don't
-go ahead and try a tree_connect on a failed session.
+Supports AV1.  Mesa already has support for this and
+doesn't rely on the kernel caps for yellow carp, so
+this was already working from an application perspective.
 
-Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
-Reviewed-by: Enzo Matsumiya <ematsumiya@suse.de>
+Fixes: 554398174d98 ("amdgpu/nv.c - Added video codec support for Yellow Carp")
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/2002
+Reviewed-by: Leo Liu <leo.liu@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Cc: stable@vger.kernel.org
-Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/cifs/smb2pdu.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/nv.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -288,6 +288,9 @@ smb2_reconnect(__le16 smb2_command, stru
- 			mutex_unlock(&ses->session_mutex);
- 			rc = -EHOSTDOWN;
- 			goto failed;
-+		} else if (rc) {
-+			mutex_unlock(&ses->session_mutex);
-+			goto out;
- 		}
- 	} else {
- 		mutex_unlock(&ses->session_mutex);
+--- a/drivers/gpu/drm/amd/amdgpu/nv.c
++++ b/drivers/gpu/drm/amd/amdgpu/nv.c
+@@ -170,6 +170,7 @@ static const struct amdgpu_video_codec_i
+ 	{codec_info_build(AMDGPU_INFO_VIDEO_CAPS_CODEC_IDX_HEVC, 8192, 4352, 186)},
+ 	{codec_info_build(AMDGPU_INFO_VIDEO_CAPS_CODEC_IDX_VP9, 8192, 4352, 0)},
+ 	{codec_info_build(AMDGPU_INFO_VIDEO_CAPS_CODEC_IDX_JPEG, 4096, 4096, 0)},
++	{codec_info_build(AMDGPU_INFO_VIDEO_CAPS_CODEC_IDX_AV1, 8192, 4352, 0)},
+ };
+ 
+ static const struct amdgpu_video_codecs yc_video_codecs_decode = {
 
 

@@ -2,53 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C2A54A021
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:49:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A56454A022
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349775AbiFMUtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
+        id S1351124AbiFMUtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 16:49:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244927AbiFMUrl (ORCPT
+        with ESMTP id S1348989AbiFMUsV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:47:41 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F8112C
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 13:05:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=1wRsT0Tmd+oAhhjtNXgHdngUWT+v
-        HobjCLA2n+Eu8jE=; b=nNEycXghB1tHVghNXVU8zGRnwhQu3LFM4yI/OhJFipsr
-        RNkTyPvAProZEYMeV93oNQ7vSjBSVZs4lgaPKoW3pZarZjtU2xH86diNB/QHeIFD
-        T48mce3RNUN0K0I+bi7QOMCy8pkX1EfFZWkJEaPmPo+IK6spVLB0VYLK9Zs6eoM=
-Received: (qmail 1425404 invoked from network); 13 Jun 2022 22:04:57 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Jun 2022 22:04:57 +0200
-X-UD-Smtp-Session: l3s3148p1@1TUqzVnhx1dZD+/B
-Date:   Mon, 13 Jun 2022 22:04:53 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: renesas: r8a779f0: Add HSCIF0+1 clocks
-Message-ID: <YqeYZXTDmW7rfgCP@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220613130949.10001-1-wsa+renesas@sang-engineering.com>
+        Mon, 13 Jun 2022 16:48:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD921038;
+        Mon, 13 Jun 2022 13:06:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 142FC61571;
+        Mon, 13 Jun 2022 20:06:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4B61C34114;
+        Mon, 13 Jun 2022 20:06:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655150772;
+        bh=shKSr/RiV2YcabImw7K3ffFlzf7xs/cPOaAF6/t5ZCY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H6L7u8jMeuHogNoG/VW04jHZnGwXKCZBPaTJGxSSqpB0MMqThvHKRUfAgUAse7XMi
+         Fq9RKmJsGedh9kVH4+rJBcqEKiGRR+Fe/JTZIWXbpG8slKGaFz4kPODA8XySEx/67p
+         n+0uVqzRAMWG9d4fFJqZA4fGynEycyzh2VFZBrkYZvWf4BgPHVCxm0NKCmOvEXMOlt
+         YcWcJZDR21nkVN1hJdZHNDAUXXpx4sUkMRraL62CEKWXw7PIoK7BL9bxlwjO1/QwN4
+         EkynUGfbS3HuQDo8J0t9AE175CXIA13cUq3ChEUnymiyQDH96C3SjpWgo+FlzTJ+P3
+         o/XGffJtFCgXA==
+Date:   Mon, 13 Jun 2022 22:06:07 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Peter Rosin <peda@axentia.se>
+Cc:     Codrin.Ciubotariu@microchip.com, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Ludovic.Desroches@microchip.com,
+        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
+        robh+dt@kernel.org, kamel.bouhara@bootlin.com
+Subject: Re: Regression: at24 eeprom writing times out on sama5d3
+Message-ID: <YqeYr6b2k0rXsvIv@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Peter Rosin <peda@axentia.se>, Codrin.Ciubotariu@microchip.com,
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Ludovic.Desroches@microchip.com, Nicolas.Ferre@microchip.com,
+        alexandre.belloni@bootlin.com, robh+dt@kernel.org,
+        kamel.bouhara@bootlin.com
+References: <074b39c5-55fc-2bc1-072d-aef1070e284d@axentia.se>
+ <2bb4868b-90ab-887e-bf13-9de8b79231bd@microchip.com>
+ <YqdQoJbsgwjQ9PYh@shikoro>
+ <0ce8b9d7-8a9e-cded-1762-71e230f4246c@axentia.se>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pSAZrI7vICVqWXoz"
+        protocol="application/pgp-signature"; boundary="ogV34CoYxK6HOSzb"
 Content-Disposition: inline
-In-Reply-To: <20220613130949.10001-1-wsa+renesas@sang-engineering.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <0ce8b9d7-8a9e-cded-1762-71e230f4246c@axentia.se>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -56,35 +69,36 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---pSAZrI7vICVqWXoz
+--ogV34CoYxK6HOSzb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Mon, Jun 13, 2022 at 03:09:49PM +0200, Wolfram Sang wrote:
-> Those have been successfully tested. HSCIF2+3 still need verification.
 
-I managed to test all other HSCIFs and SCIFs now. I'll resend the
-updated patches tomorrow.
+> I replied to patch 1/3 and 2/3 but have not seen them on the lists and
+> patchwork also appears to be in the dark.
+> Did the replies make it anywhere? Should I resend?
+
+I didn't get them. Yeah, maybe a resend will help?
 
 
---pSAZrI7vICVqWXoz
+--ogV34CoYxK6HOSzb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKnmGEACgkQFA3kzBSg
-KbaUABAAqDFLBfhHhNSGTuYDvGIIagahcjf7xC404xBrgEiz+2M8H6LDZFMm6nM3
-BjkXPYJlX8w+0rIOgatsET4QLVw8Q1fip/ubea36tBG6wD2JJU7+yjXFWbhxlrM6
-If+MMOMOhj7FSDfM1KHGHpLRPULGT0Nun36738rh6ggs8/xid79LAPXIhUa5oOBH
-mpN9zHO3/EFgzWDVzTr06rX7ASXNsvrSs5Z+Aa3EsqNM4Fvk7Vod9H8RsmuHvqgF
-UuHHu0YIibyB+1bon/ypb9VIX6s5t8h0lyiTM6rdAtEjjQIjc72PPLrv6pCGL3h9
-EW1WUAeVDy2KltQ0ueH5X9c4Ajgsew+40YeGizsBhRzNqRPLWETGj6UibNp/5oUo
-2emjQ/+dg/5//uKnUMTWJw+68opzYSzeQEDr3Lx19d2KbVoJfqgpKgIJslNoJsAH
-ESFoaJoC3+tIaf2Oba63DaH9Y0tHJRX+3JLhQaZarWWZuMlcPRX7snNvM0Qr9bJJ
-yTq+druC3EIm9PUh19FOB+QehUCvoCD+X6zgtvrG7DVQImiOyLuhILbwEBI61IYI
-TbfDlTZMStnTwsGlhHqWpN0mz1zfMmS6g6QpF0clQla3FrRA2jcs+w3NxO+9eAm4
-mWGsK87DPUA/AbHwKs5Mvvr4+g27znN/RDORZYUbGltysqCVmCQ=
-=9YHp
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKnmK8ACgkQFA3kzBSg
+KbbJWBAAlS8SaQDw0SsR0R3wckRC2LN0TZ1ehFWsm9akX38NgWXfprCt5Y1HcKsu
+DcyHwWdwVKoT6lCPkAKeZsfF+3ipoKBf4CedKk5zYwL/3o/I80S3+sYSw+akUV05
+X3HWMjpCRlWAqGRod4TWafawWqEA1U4GlDmApYl3TB7PWEk27lJp+3BgwBgnSs0l
+9dT7CnfeqkeIVZ8LapGQksqwC/fKMsa4dVNyluCDHHm9DlsDHFgW4fYzWJgg8WlS
+rhTC2QnXYmcRS0uWQR7W+FNnHjRK2ARyP+So2rzbes7/tqBBMAMWlvMzpNHd3ucb
+ZkQWVxRs4cXcpprtyuhA0axvAGfYCc4lvGr8IdRoFyPnDSv8U3hUZ4ZU2bH8C//2
+CbyRTFGBu7C1UV5YwjswBkAmvUeFrnM6gSH+/ZcZcOQlQ23RHG4TFMCe93MPJPv4
+RbKLzX/WhBnzY+b7Vk0Y+lGgM1QX5CsEiL8S82dpxhylypGXv9GX8d0F2sXP/lXT
+hNJ0BqA1Tp7umUUom7ZTM0h8IZnEWn8k0RRr7XMTvKQOA4cIhVccBHRCJHIrfMm0
+qsJp7dJpm6nuCfipS3yW1UXZjhq1NRKRNLQrt+aQPwYZVHvdPBq9di6uqmQdOnHg
+7gB1dExjEtarnUpcMfsABDJ/jz1nL0fZRZLKPoM6HGiisxfQKD8=
+=Rl7P
 -----END PGP SIGNATURE-----
 
---pSAZrI7vICVqWXoz--
+--ogV34CoYxK6HOSzb--

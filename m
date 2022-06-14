@@ -2,159 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21C3554AEC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 342C854AECF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354047AbiFNKtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 06:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
+        id S1355920AbiFNKu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 06:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240905AbiFNKtl (ORCPT
+        with ESMTP id S1355571AbiFNKuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 06:49:41 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E3A48E60
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 03:49:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 321F821A4A;
-        Tue, 14 Jun 2022 10:49:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655203779; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Tue, 14 Jun 2022 06:50:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFCBA48E6C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 03:50:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655203821;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=BRrQFXdCbyVpl82DrmdE8Gz3NAbhN9s8qRhd/Zc1x14=;
-        b=wikKS2WhWNH+VhmBbMHeWIzW+yoxaLMy0arjW2uaxUr7m6mQ5oIJwSxO1oNnktJQKweC0p
-        X5ylPzAwvO3l81eNIAoJ9TtjqIJBDSYObiFapp6k+DUBMW0kuvu0GJOPF0Q5zkRF2qFw+N
-        xjxeEVGKG6g+k+zZO6sybp5/yslZPTs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655203779;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BRrQFXdCbyVpl82DrmdE8Gz3NAbhN9s8qRhd/Zc1x14=;
-        b=9ohBsH8uzbnz/w94dMmwRbPZKJfCUXyTdAVHntYO+Ega88dqMIEIAW+sNqGz9l+/wIPN7M
-        jmjtml0FK2oOMiDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        bh=IiQIaQMhxL76RBZHsmcLreZUSDHLka20T5mMLLN/xgk=;
+        b=NPjGZ/rYFVRofTShHHLAscsjL2Vsp1A1NKAsGgsgdPUCbzzcNopBwan7psR3ITsABlg4vo
+        Gal6fo4tOp4/n7tMbH/hbTrxJ1s1T3zXrAPoXuHEaxvlU/TwuLxtN95V1wrDJbbhOVor2t
+        hnSpQOFdOIS9d4JPHu+p6jGcW8BPYU8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-352-DhirNWZtMFiMrb8YeOnp2g-1; Tue, 14 Jun 2022 06:50:15 -0400
+X-MC-Unique: DhirNWZtMFiMrb8YeOnp2g-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1782B1361C;
-        Tue, 14 Jun 2022 10:49:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 18lkBcNnqGLuXwAAMHmgww
-        (envelope-from <tiwai@suse.de>); Tue, 14 Jun 2022 10:49:39 +0000
-Date:   Tue, 14 Jun 2022 12:49:38 +0200
-Message-ID: <87y1xzplj1.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Mark Brown <broonie@kernel.org>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        syzbot+205eb15961852c2c5974@syzkaller.appspotmail.com,
-        naveenkumar.sunkari@in.bosch.com,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH] ALSA: pcm: Test for "silence" field in struct "pcm_format_data"
-In-Reply-To: <2245197.ElGaqSPkdT@opensuse>
-References: <20220409012655.9399-1-fmdefrancesco@gmail.com>
-        <20220614095851.GA4199@lxhi-065>
-        <2245197.ElGaqSPkdT@opensuse>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 78950299E755;
+        Tue, 14 Jun 2022 10:50:14 +0000 (UTC)
+Received: from localhost (ovpn-12-211.pek2.redhat.com [10.72.12.211])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id BE2A5416164;
+        Tue, 14 Jun 2022 10:50:12 +0000 (UTC)
+Date:   Tue, 14 Jun 2022 18:50:09 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Wupeng Ma <mawupeng1@huawei.com>, Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>, songmuchun@bytedance.com,
+        Randy Dunlap <rdunlap@infradead.org>,
+        damien.lemoal@opensource.wdc.com,
+        Stephen Boyd <swboyd@chromium.org>,
+        Wei Liu <wei.liu@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>, gpiccoli@igalia.com,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        vijayb@linux.microsoft.com,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v5 5/5] memblock: Disable mirror feature if kernelcore is
+ not specified
+Message-ID: <Yqhn4Qs1bzPY9J4s@MiWiFi-R3L-srv>
+References: <20220614092156.1972846-1-mawupeng1@huawei.com>
+ <20220614092156.1972846-6-mawupeng1@huawei.com>
+ <Yqhg6abZDGZSpJ7+@MiWiFi-R3L-srv>
+ <CAMj1kXGXvjrnY=Hzd4c3CYZsNT6OiqTcMmKT0tdnk=jFOiVpWA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGXvjrnY=Hzd4c3CYZsNT6OiqTcMmKT0tdnk=jFOiVpWA@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Jun 2022 12:43:16 +0200,
-Fabio M. De Francesco wrote:
-> 
-> On martedì 14 giugno 2022 11:58:51 CEST Eugeniu Rosca wrote:
-> > Hello Fabio, hello All,
-> > 
-> > On Sa, Apr 09, 2022 at 03:26:55 +0200, Fabio M. De Francesco wrote:
-> > > Syzbot reports "KASAN: null-ptr-deref Write in
-> > > snd_pcm_format_set_silence".[1]
-> > > 
-> > > It is due to missing validation of the "silence" field of struct
-> > > "pcm_format_data" in "pcm_formats" array.
-> > > 
-> > > Add a test for valid "pat" and, if it is not so, return -EINVAL.
-> > > 
-> > > [1] https://lore.kernel.org/lkml/
-> 000000000000d188ef05dc2c7279@google.com/
-> > > 
-> > > Reported-and-tested-by: 
-> syzbot+205eb15961852c2c5974@syzkaller.appspotmail.com
-> > > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+On 06/14/22 at 12:27pm, Ard Biesheuvel wrote:
+> On Tue, 14 Jun 2022 at 12:20, Baoquan He <bhe@redhat.com> wrote:
+> >
+> > On 06/14/22 at 05:21pm, Wupeng Ma wrote:
+> > > From: Ma Wupeng <mawupeng1@huawei.com>
+> > >
+> > > If system have some mirrored memory and mirrored feature is not specified
+> > > in boot parameter, the basic mirrored feature will be enabled and this will
+> > > lead to the following situations:
+> > >
+> > > - memblock memory allocation prefers mirrored region. This may have some
+> > >   unexpected influence on numa affinity.
+> > >
+> > > - contiguous memory will be split into several parts if parts of them
+> > >   is mirrored memory via memblock_mark_mirror().
+> > >
+> > > To fix this, variable mirrored_kernelcore will be checked in
+> > > memblock_mark_mirror(). Mark mirrored memory with flag MEMBLOCK_MIRROR iff
+> > > kernelcore=mirror is added in the kernel parameters.
+> > >
+> > > Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+> > > Acked-by: Ard Biesheuvel <ardb@kernel.org>
 > > > ---
-> > > 
-> > > I wasn't able to figure out the commit for the "Fixes:" tag. If this 
-> patch
-> > > is good, can someone please help with providing this missing 
-> information?
-> > > 
-> > >  sound/core/pcm_misc.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/sound/core/pcm_misc.c b/sound/core/pcm_misc.c
-> > > index 4866aed97aac..5588b6a1ee8b 100644
-> > > --- a/sound/core/pcm_misc.c
-> > > +++ b/sound/core/pcm_misc.c
-> > > @@ -433,7 +433,7 @@ int snd_pcm_format_set_silence(snd_pcm_format_t 
-> format, void *data, unsigned int
-> > >  		return 0;
-> > >  	width = pcm_formats[(INT)format].phys; /* physical width */
-> > >  	pat = pcm_formats[(INT)format].silence;
-> > > -	if (! width)
-> > > +	if (!width || !pat)
-> > >  		return -EINVAL;
-> > >  	/* signed or 1 byte data */
-> > >  	if (pcm_formats[(INT)format].signd == 1 || width <= 8) {
-> > 
-> > JFYI, PVS-Studio 7.19 reports:
-> > 
-> > sound/core/pcm_misc.c	409	warn	V560 A part of 
-> conditional expression is always false: !pat.
+> > >  mm/internal.h   | 2 ++
+> > >  mm/memblock.c   | 3 +++
+> > >  mm/page_alloc.c | 2 +-
+> > >  3 files changed, 6 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/mm/internal.h b/mm/internal.h
+> > > index c0f8fbe0445b..ddd2d6a46f1b 100644
+> > > --- a/mm/internal.h
+> > > +++ b/mm/internal.h
+> > > @@ -861,4 +861,6 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags);
+> > >
+> > >  DECLARE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
+> > >
+> > > +extern bool mirrored_kernelcore;
+> > > +
+> > >  #endif       /* __MM_INTERNAL_H */
+> > > diff --git a/mm/memblock.c b/mm/memblock.c
+> > > index b1d2a0009733..a9f18b988b7f 100644
+> > > --- a/mm/memblock.c
+> > > +++ b/mm/memblock.c
+> > > @@ -924,6 +924,9 @@ int __init_memblock memblock_clear_hotplug(phys_addr_t base, phys_addr_t size)
+> > >   */
+> > >  int __init_memblock memblock_mark_mirror(phys_addr_t base, phys_addr_t size)
+> > >  {
+> > > +     if (!mirrored_kernelcore)
+> > > +             return 0;
+> >
+> > memblock_mark_mirror() is just a wrapper, maybe we should check this in
+> > efi_find_mirror(). Otherwise, how do we explain the message printed out
+> > at below in boot log if we don't mark mirror memory at all?
+> >
+> > void __init efi_find_mirror(void)
+> > {
+> > ......
+> >         if (mirror_size)
+> >                 pr_info("Memory: %lldM/%lldM mirrored memory\n",
+> >                         mirror_size>>20, total_size>>20);
+> > }
+> >
 > 
-> Sorry, I assumed (wrongly!) that when we have
+> EFI does not care about *how* mirrored memory is being used or not, it
+> just reports what the firmware provided. So EFI is not the appropriate
+> level to take kernelcore=mirror into account.
 > 
-> static const struct pcm_format_data 
-> pcm_formats[(INT)SNDRV_PCM_FORMAT_LAST+1] = {
-> 	[SNDRV_PCM_FORMAT_S8] = {
-> 		.width = 8, .phys = 8, .le = -1, .signd = 1,
-> 		.silence = {},
-> 	},
-> 	[snip]
-> 	/* FIXME: the following two formats are not defined properly yet 
-> */
-> 	[SNDRV_PCM_FORMAT_MPEG] = {
-> 		.le = -1, .signd = -1,
-> 	},
-> 	[SNDRV_PCM_FORMAT_GSM] = {
-> 		.le = -1, .signd = -1,
-> 	},
+> I already mentioned that memblock_mark_mirror() is also the wrong
+> place IMO, but Kefeng explained that doing it elsewhere is
+> problematic.
+
+OK, seems we have no better choice other than these two. 
+
 > 
-> pointer "silence", and then "pat", must be NULL.
 
-Oh right, those are missing ones.  I haven't realized that those
-formats are allowed by PCM OSS layer.
-
-Practically seen, those formats have never been used in reality, and
-we may consider dropping them completely to plug such holes...
-
-
-Takashi

@@ -2,181 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA4C54AE91
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2CA54AE95
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354158AbiFNKi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 06:38:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
+        id S242974AbiFNKkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 06:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230157AbiFNKi4 (ORCPT
+        with ESMTP id S230157AbiFNKkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 06:38:56 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A468C35252;
-        Tue, 14 Jun 2022 03:38:55 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25E96fHg024970;
-        Tue, 14 Jun 2022 10:38:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=fenuCRyA2MbBa5B5nqlyL4fDAInAfNqYcCHTaK+ep6c=;
- b=suhlY2Ae8Zzv/ThqTEhWxC4kz+32aBI0a+u/g52ayzRnRcUgwGfYjNdfsv+GQ3knLuCf
- Su/MUA+K5IhD1SE1uhVqy9jrejPhLgHYMETkUib1AmrTcQMTEUzehdJca3g6KGzOYRGD
- wzOBTNc9EtDUrERKvAqu0+/gP0GaroH730HLiWUWzJ196+WIPUe7ALzwLqiJ4CZL8hiL
- nnnphSTtdiL/23YMg4dGIJ2ls56Dlp+pr1G9qVqthSZoUdSl8eMiGo0WapwpcPRdDGTG
- etsJ7AaW4r5CinIuz7BsbOdfACS2MvjWA5npXbv+OmUeb19ZAKf16IaG7eTfXoRPHTk3 JA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gpp6hc952-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jun 2022 10:38:47 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25E96uKM025759;
-        Tue, 14 Jun 2022 10:38:47 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gpp6hc94e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jun 2022 10:38:47 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25EAaom7021792;
-        Tue, 14 Jun 2022 10:38:44 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06ams.nl.ibm.com with ESMTP id 3gmjajc787-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jun 2022 10:38:44 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25EAcfks8716654
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Jun 2022 10:38:41 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8B9DB42042;
-        Tue, 14 Jun 2022 10:38:41 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2DA8342041;
-        Tue, 14 Jun 2022 10:38:39 +0000 (GMT)
-Received: from [9.171.29.58] (unknown [9.171.29.58])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Jun 2022 10:38:37 +0000 (GMT)
-Message-ID: <07576ae9-9798-316f-d33e-10c91faeebfb@linux.ibm.com>
-Date:   Tue, 14 Jun 2022 12:38:37 +0200
+        Tue, 14 Jun 2022 06:40:39 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1426B396A0;
+        Tue, 14 Jun 2022 03:40:39 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id h5so10729734wrb.0;
+        Tue, 14 Jun 2022 03:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BJB3Jj+W5NRHZEZPtOT6087E76LkDf+KkklgOlWVWzg=;
+        b=Vx9jgtkwFhdUaWrGkqkzajXjR7Jmjk7cSeF52w5i5LknZZbrFOqcOkF7qZRpf/ga3x
+         d4GtXKlDEaZ6mXMxClErNdgkth+XYPu0uG4P+rJYx9ylxK0o7iQLa8gOlrfTHjmi98j4
+         Wh3H5GjFpxFsh9e16Xkmk89ceigDXefdv+XRR5mutiF6b4UrUZRWW2zO+CT9U2c24EoI
+         Vj0q8tsyTfqWc6bBlRA8OXESzZXZR9iOzujRPJeEmNxr9w8h3N1uQh/li+mOiQ52xxAb
+         A9rzOsVoaRmihLMnVqP4J5eu+vcoqxX9S6jVuIU8jRwG6CQ4TC1M5mJuwHKBkQHjVQzm
+         A97g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BJB3Jj+W5NRHZEZPtOT6087E76LkDf+KkklgOlWVWzg=;
+        b=vDPHNDMu9lkJvaOlRYufa9vyp6n6uVl1r79v8yFXLQBbkFxaQCNfB5iZzOjhK5JkhT
+         lmZgpGaDJhQ3Vlh3NLCIGrZCm19DZ2ZrhMLs6CyucK6zdmaOVb0XXQorUdIYiQ8+Jemm
+         7nWBSxHRAsbumeAtf9U3uhpNCizwQqksIYXH2TQx5XA4UGnAVsZh4lHU/SqvHNUZFqzA
+         TmBu/Xdm3b4Pi+YJGEitDU8egLcHeQ36ZGpfQu4gj0lbjuV3YIS1ahc5EUsoK71WIAlu
+         t42/ZJmihqA3/hW8T2J0DGAgqS+oEIa4Tb6y6faNjBrxvrFXYp5I5YOXw7a9gBoZpnXb
+         I3Wg==
+X-Gm-Message-State: AJIora/0V4YS/eaZKGhfk5DXUxqfGdxT2Sa6iDDZg7ReXntkTW8n2tte
+        83b09rq73g7rKrKqwDsdBXQ=
+X-Google-Smtp-Source: AGRyM1uoZWrC1W/k512tGAzARKScdtlh9G+N0yFoFFFZiLcqKJi4jpBJsGpSKHqWRKl+/5ViIFOUHg==
+X-Received: by 2002:a05:6000:1866:b0:218:40cc:a26e with SMTP id d6-20020a056000186600b0021840cca26emr4270476wri.678.1655203237290;
+        Tue, 14 Jun 2022 03:40:37 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id f6-20020a05600c154600b0039c5ab7167dsm18006041wmg.48.2022.06.14.03.40.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 03:40:36 -0700 (PDT)
+Message-ID: <62a865a4.1c69fb81.81506.21c5@mx.google.com>
+X-Google-Original-Message-ID: <Yqhlo8WayYq+68ex@Ansuel-xps.>
+Date:   Tue, 14 Jun 2022 12:40:35 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Mark Mentovai <mark@moxienet.com>
+Subject: Re: [net-next PATCH 2/2] net: ethernet: stmmac: reset force speed
+ bit for ipq806x
+References: <20220609002831.24236-1-ansuelsmth@gmail.com>
+ <20220609002831.24236-2-ansuelsmth@gmail.com>
+ <20220613224917.325aca0a@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v4 1/4] KVM: s390: selftests: Use TAP interface in the
- memop test
-Content-Language: en-US
-To:     Thomas Huth <thuth@redhat.com>, kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-s390@vger.kernel.org
-References: <20220531101554.36844-1-thuth@redhat.com>
- <20220531101554.36844-2-thuth@redhat.com>
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-In-Reply-To: <20220531101554.36844-2-thuth@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nKt6VK9FhXp14FtCBnSww5of7OpRYt0T
-X-Proofpoint-ORIG-GUID: citumcxVuJL2MZYB4n2rHeF_iUEaQ4ZW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-14_03,2022-06-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- lowpriorityscore=0 priorityscore=1501 clxscore=1011 adultscore=0
- mlxlogscore=999 malwarescore=0 spamscore=0 phishscore=0 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206140041
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220613224917.325aca0a@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/22 12:15, Thomas Huth wrote:
-> The memop test currently does not have any output (unless one of the
-> TEST_ASSERT statement fails), so it's hard to say for a user whether
-> a certain new sub-test has been included in the binary or not. Let's
-> make this a little bit more user-friendly and include some TAP output
-> via the kselftests.h interface.
+On Mon, Jun 13, 2022 at 10:49:17PM -0700, Jakub Kicinski wrote:
+> On Thu,  9 Jun 2022 02:28:31 +0200 Christian 'Ansuel' Marangi wrote:
+> > +	dn = of_get_child_by_name(pdev->dev.of_node, "fixed-link");
+> > +	ret = of_property_read_u32(dn, "speed", &link_speed);
+> > +	if (ret) {
+> > +		dev_err(dev, "found fixed-link node with no speed");
+> > +		return ret;
 > 
-> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->  tools/testing/selftests/kvm/s390x/memop.c | 95 ++++++++++++++++++-----
->  1 file changed, 77 insertions(+), 18 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-> index 49f26f544127..e704c6fa5758 100644
-> --- a/tools/testing/selftests/kvm/s390x/memop.c
-> +++ b/tools/testing/selftests/kvm/s390x/memop.c
-> @@ -14,6 +14,7 @@
->  
+> Doesn't this return potentially leak the reference on dn?
+> You move the of_node_put() right before the if (ret) {
+>
 
-[...]
+Totally right. Will fix in v2.
 
->  int main(int argc, char *argv[])
->  {
-> -	int memop_cap, extension_cap;
-> +	int memop_cap, extension_cap, idx;
->  
->  	setbuf(stdout, NULL);	/* Tell stdout not to buffer its content */
->  
-> +	ksft_print_header();
-> +
->  	memop_cap = kvm_check_cap(KVM_CAP_S390_MEM_OP);
->  	extension_cap = kvm_check_cap(KVM_CAP_S390_MEM_OP_EXTENSION);
->  	if (!memop_cap) {
-> -		print_skip("CAP_S390_MEM_OP not supported");
-> -		exit(KSFT_SKIP);
-> +		ksft_exit_skip("CAP_S390_MEM_OP not supported.\n");
->  	}
->  
-> -	test_copy();
-> -	if (extension_cap > 0) {
-> -		test_copy_key();
-> -		test_copy_key_storage_prot_override();
-> -		test_copy_key_fetch_prot();
-> -		test_copy_key_fetch_prot_override();
-> -		test_errors_key();
-> -		test_termination();
-> -		test_errors_key_storage_prot_override();
-> -		test_errors_key_fetch_prot_override_not_enabled();
-> -		test_errors_key_fetch_prot_override_enabled();
-> -	} else {
-> -		print_skip("storage key memop extension not supported");
-> +	ksft_set_plan(ARRAY_SIZE(testlist));
-> +
-> +	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
-> +		if (testlist[idx].extension >= extension_cap) {
+> > +	}
+> > +
+> > +	of_node_put(dn);
 
-This is reversed, should be
-
-   		if (testlist[idx].extension <= extension_cap) {
-or
-		if (extension_cap >= testlist[idx].extension) {
-
-I'd prefer the latter.
-
-> +			testlist[idx].test();
-> +			ksft_test_result_pass("%s\n", testlist[idx].name);
-> +		} else {
-> +			ksft_test_result_skip("%s - extension level %d not supported\n",
-> +					      testlist[idx].name,
-> +					      testlist[idx].extension);
-> +		}
->  	}
-> -	test_errors();
->  
-> -	return 0;
-> +	ksft_finished();	/* Print results and exit() accordingly */
->  }
-
+-- 
+	Ansuel

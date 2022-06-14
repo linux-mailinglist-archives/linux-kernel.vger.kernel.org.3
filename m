@@ -2,165 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09BE254B85C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5418F54B85E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235239AbiFNSOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S241549AbiFNSOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:14:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiFNSN6 (ORCPT
+        with ESMTP id S229902AbiFNSOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 14:13:58 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4002919C32
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:13:57 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-30c143c41e5so38456087b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:13:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ZsjTA9iJIzTxX4ygR8FdKM9wnHJIUgreAx1BZ2osk+k=;
-        b=elkEMMAy3wPQwGf1ROmnn/4Isu60xOrk5kwhUf9POtxNbXra9m+VOIyaYdDcP+3CU3
-         2JT5ARrP4xwLtPX0Ds74mSJUDU0WpEwRhBDquEnA4hNv+/G/6Q6UFzYcWShmefjq8AjX
-         gz+FlbByjs1p+vyfBLAp58Tc0jFjVzOn1TINg=
+        Tue, 14 Jun 2022 14:14:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B48619C3B
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:14:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655230478;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z38eWk0EdKiLopacPGDLeh8O//PFeccl+Ys1Xs8mu/E=;
+        b=SiQQm2HhXZibyE2HpU2wsYOsjtYBRI96nEy+NmfvYtVZ5AzFAXfuHPo5cRm6mjySVzAJd8
+        ZPRuBLGPGkLFqGMomvlns6nISIW2er1vakxvNw/jyJ1KX+30zBb69Zp3XsH2cNvpY31Jk+
+        5K3q3ol9oFq6GLpmosMdCmMZUSnvcdI=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-402-O_kVEsaUPdWkZslWIsYVhQ-1; Tue, 14 Jun 2022 14:14:37 -0400
+X-MC-Unique: O_kVEsaUPdWkZslWIsYVhQ-1
+Received: by mail-wm1-f70.google.com with SMTP id c185-20020a1c35c2000000b0039db3e56c39so940313wma.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:14:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ZsjTA9iJIzTxX4ygR8FdKM9wnHJIUgreAx1BZ2osk+k=;
-        b=QmT8jfjpuPvBWVyocAyt4RBgizWIHIs9QJvIg3NjHya9ZVtN2IMKaSzdRpTbgKKLUQ
-         Ur1Lbxuc+s4M3WmTxwNBReNwWdPozWzgWtSeMYgYTVnerWGzOL8q1CPrjkXN5WeriZH9
-         9pRcGlyEfZVJp2Y4B5LsfezSjg+Y/a1vV57eL8hHrklPS2FGOMwXUvLBAOZs6IE3kAZp
-         YCKyqfU1ycCzI7HrC/u7wPHyYx4KgHCYk7zIx8vIx9U+LLE6XrtoH0WD0yQ+wAD8osN/
-         KtpUgN4E0lGov8VjokWJo/t9o8/F45SPqpBFF8ap9hAFw0RO10FI1NaSrUMJV8heHbL5
-         k0tg==
-X-Gm-Message-State: AJIora9d/1Ef1i+tLWDOAMpSw3tVkFCkSlPg/pRYmjkrwmTVix+/V9+t
-        8Fkf7O4JmI8Ev5jM+sd1ztw+X8wRG24u4yHPh7G68w==
-X-Google-Smtp-Source: AGRyM1uE67Atomlar3nLQdgT+jy4zLDSFTPt4ERa1X/kLBHMBihOauBraRP729dfHSV8ag/nSgM1IEdsAe/aMtNwTF8=
-X-Received: by 2002:a81:fd1:0:b0:30f:f98b:4957 with SMTP id
- 200-20020a810fd1000000b0030ff98b4957mr7329858ywp.350.1655230436484; Tue, 14
- Jun 2022 11:13:56 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=z38eWk0EdKiLopacPGDLeh8O//PFeccl+Ys1Xs8mu/E=;
+        b=gjDcoUruPK5U56+X2D3g9h4a5sp+kH3gMXYYEGbFokGkG8Wg1Ym557q6ROM8Hb4D80
+         NuGEtodKYj7nyJwBTQAF4b4/pOd+goZ5HwQp61E+G9py6mOPNLn5FSMxb908cP4ByFSg
+         WWKlneIbPTDI3vr3KTA1/q3dgFphTBWJnLtKbNJfLkS6BeeLhWKq0j65cFOUMVRPluWZ
+         sSH/LHcFHbPMXxg2t/B9P3Jf2I3d38s/AIVtY2FwnqjoUqnwoWaCk3ILKb5YUkEv1uzu
+         8/SVS62kyUXlTjDeMUs1jkf2adbHfmAHZqbPSR1pUlEtg0tNhHaKXY7Ek+ThkCixlygM
+         CqMQ==
+X-Gm-Message-State: AOAM532FaLT+Ps3dogta7iiPjN/bajPYHWr12radlYev5qwNsRfDdosm
+        nQYYFoyfwxNBUhsOoN4cIwAcTXOIhL7ocLLSUrmXnItDi8rgWWs3Ihb2vtuu/Vk02YhYUFObZmc
+        85Y1LKiT1iKlzTuou8i8X4T1y
+X-Received: by 2002:a05:600c:acf:b0:39c:56ea:2121 with SMTP id c15-20020a05600c0acf00b0039c56ea2121mr5491662wmr.39.1655230476030;
+        Tue, 14 Jun 2022 11:14:36 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxUSNelTlYVsxZl9ZbhRG+3geBek6mUVRzhGcy32mjelmqTYqVLjGacyunS9NvosRL5TS9Xvg==
+X-Received: by 2002:a05:600c:acf:b0:39c:56ea:2121 with SMTP id c15-20020a05600c0acf00b0039c56ea2121mr5491643wmr.39.1655230475793;
+        Tue, 14 Jun 2022 11:14:35 -0700 (PDT)
+Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id 63-20020a1c1942000000b0039c84c05d88sm13454562wmz.23.2022.06.14.11.14.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 11:14:35 -0700 (PDT)
+Message-ID: <9159c90b-d772-9f13-474f-e9d50c104f25@redhat.com>
+Date:   Tue, 14 Jun 2022 20:14:33 +0200
 MIME-Version: 1.0
-References: <20220609181106.3695103-1-pmalani@chromium.org>
- <20220609181106.3695103-6-pmalani@chromium.org> <ef3933a8-88c2-f19f-97df-3498f54b9a4f@collabora.com>
-In-Reply-To: <ef3933a8-88c2-f19f-97df-3498f54b9a4f@collabora.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 14 Jun 2022 11:13:45 -0700
-Message-ID: <CACeCKaegCzKZdnbZFkE0WWb=99jCfQDA60kTVhOS1TGvdHgpDg@mail.gmail.com>
-Subject: Re: [PATCH v2 5/7] drm/bridge: anx7625: Register number of Type C switches
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        heikki.krogerus@linux.intel.com,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        David Airlie <airlied@linux.ie>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Jonas Karlman <jonas@kwiboo.se>,
-        swboyd@chromium.org, Pin-Yen Lin <treapking@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Xin Ji <xji@analogixsemi.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 3/3] drm/doc: Add KUnit documentation
+Content-Language: en-US
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@linux.ie, daniel@ffwll.ch, jani.nikula@linux.intel.com,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>
+References: <20220613171738.111013-1-jose.exposito89@gmail.com>
+ <20220613171738.111013-4-jose.exposito89@gmail.com>
+ <c50e5c87-3198-08b7-1e32-d0959af1f296@redhat.com>
+ <20220614180952.GA7067@elementary>
+From:   Javier Martinez Canillas <javierm@redhat.com>
+In-Reply-To: <20220614180952.GA7067@elementary>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 1:22 AM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 09/06/22 20:09, Prashant Malani ha scritto:
-> > Parse the "switches" node, if available, and count and store the number
-> > of Type-C switches within it. Since we currently don't do anything with
-> > this info, no functional changes are expected from this change.
-> >
-> > This patch sets a foundation for the actual registering of Type-C
-> > switches with the Type-C connector class framework.
-> >
-> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> > ---
-> >
-> > Changes since v1:
-> > - No changes.
-> >
-> >   drivers/gpu/drm/bridge/analogix/anx7625.c | 20 ++++++++++++++++++++
-> >   drivers/gpu/drm/bridge/analogix/anx7625.h |  1 +
-> >   2 files changed, 21 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > index 53a5da6c49dd..07ed44c6b839 100644
-> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-> > @@ -2581,6 +2581,22 @@ static void anx7625_runtime_disable(void *data)
-> >       pm_runtime_disable(data);
-> >   }
-> >
-> > +static int anx7625_register_typec_switches(struct device *device, struct anx7625_data *ctx)
-> > +{
-> > +     struct device_node *of = NULL;
-> > +     int ret = 0;
-> > +
-> > +     of = of_get_child_by_name(device->of_node, "switches");
-> > +     if (!of)
-> > +             return -ENODEV;
-> > +
-> > +     ctx->num_typec_switches = of_get_child_count(of);
-> > +     if (ctx->num_typec_switches <= 0)
-> > +             return -ENODEV;
-> > +
-> > +     return ret;
->
-> You aren't using the `ret` variable for anything other than returning zero:
-> remove it and simply return 0 here.
-The very next patch does use it, but sure I'll remove it from here and
-introduce it in v6.
->
-> > +}
-> > +
-> >   static int anx7625_i2c_probe(struct i2c_client *client,
-> >                            const struct i2c_device_id *id)
-> >   {
-> > @@ -2686,6 +2702,10 @@ static int anx7625_i2c_probe(struct i2c_client *client,
-> >       if (platform->pdata.intp_irq)
-> >               queue_work(platform->workqueue, &platform->work);
-> >
-> > +     ret = anx7625_register_typec_switches(dev, platform);
-> > +     if (ret)
-> > +             dev_info(dev, "Didn't register Type C switches, err: %d\n", ret);
->
-> Type-C switches are optional for this driver and this will print a sort of error
-> on boards that are *not* declaring any switches on purpose (because perhaps they
-> don't have any, or for any other reason).
->
-> Even though this is a dev_info and not a dev_err, it's still printing an alarming
-> (and useless, in the aforementioned case) message.
-I'll go ahead and convert this to dev_warn, but only trigger if there
-is an error other than ENODEV.
+On 6/14/22 20:09, José Expósito wrote:
+> Hi Javier,
+> 
+> On Tue, Jun 14, 2022 at 02:58:29PM +0200, Javier Martinez Canillas wrote:
+>> Hello José,
+>>
+>> On 6/13/22 19:17, José Expósito wrote:
+>>
+>> [snip]
+>>
+>>> +KUnit (Kernel unit testing framework) provides a common framework for unit tests
+>>> +within the Linux kernel.
+>>> +
+>>
+>> I think that it will be useful to have a reference to the KUnit kernel doc here,
+>> something like the following:
+>>
+>> `KUnit <https://docs.kernel.org/dev-tools/kunit/index.html>`_ (Kernel Unit...
+> 
+> There is a link in the next paragraph. Once the documentation is
+> generated the path "Documentation/dev-tools/kunit/start.rst" is
+> transformed into a link.
+>  
+Ah, I wasn't aware of that. Thanks!
 
->
-> Please fix this.
->
-> Regards,
-> Angelo
->
+-- 
+Best regards,
+
+Javier Martinez Canillas
+Linux Engineering
+Red Hat
+

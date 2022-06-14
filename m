@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A19054AB58
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BDC54AB54
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:00:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355465AbiFNH5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
+        id S1355502AbiFNH5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355412AbiFNH5T (ORCPT
+        with ESMTP id S1355427AbiFNH50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:57:19 -0400
+        Tue, 14 Jun 2022 03:57:26 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5CD3F899;
-        Tue, 14 Jun 2022 00:57:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76493FBC8;
+        Tue, 14 Jun 2022 00:57:19 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 213E221B7B;
+        by smtp-out1.suse.de (Postfix) with ESMTP id 581A121B80;
         Tue, 14 Jun 2022 07:57:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
         t=1655193436; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=U5UaznpdnqSlYETc0UdYpUt/g2bAW887BpWUWrCkmi0=;
-        b=UICxGEllDSPEvcmP6U01JanM+ZVzOqcZnGHf1T+Tj0iQ6rhEVIOe7oS83m2WT3HcJsq95+
-        O7lE746SlECIfUnDVR8e+wz5JP7lAWLxU6Kjl7kbvEgx3xoK6O3n1tCQGYQfmbOIRKr7MQ
-        L6LDTT1Pj2BSLzAjCEP+KIJkZBVaqyU=
+        bh=5qoKbvJC0REg3jVh12YPL0trFwv8mfDnBd9bswtjvBs=;
+        b=bl38xbcpyZBj4wetIAx46gc7MZt5NIJSYLg6eZsmI5o+0Ny58c2R9q9duldysWZshd2eW/
+        dAFiDKIUPtlG+TRcs9T+zEYXu7IvhhdT80NKG6jndLOGIlyfHIDEAyZuDxfwCMbByPU9ih
+        HFGLejjwPeUDcUfqEasb9pHYcsfyCgE=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
         s=susede2_ed25519; t=1655193436;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=U5UaznpdnqSlYETc0UdYpUt/g2bAW887BpWUWrCkmi0=;
-        b=jSWmZHpst5JXjrUuGoKjEMOPP7haFTG3ifEGBary46m0UDcwOjqAIPQKlR02CKntZwlNos
-        Iwku3Z3/LYoOTlCA==
+        bh=5qoKbvJC0REg3jVh12YPL0trFwv8mfDnBd9bswtjvBs=;
+        b=34srPxoO6kuKMBDVksSdwFOO+XMwbuUiEEw5Hd9LZq1FQELOoVKG1p/I2IRXFickiGdVc3
+        qczpZqnBhpbDVNAg==
 Received: from localhost.localdomain (unknown [10.100.201.122])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E73212C143;
-        Tue, 14 Jun 2022 07:57:15 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTPS id 2BED42C141;
+        Tue, 14 Jun 2022 07:57:16 +0000 (UTC)
 From:   Jiri Slaby <jslaby@suse.cz>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jiri Slaby <jslaby@suse.cz>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 6/7] tty/vt: consolemap: improve UNI_*() macros definitions
-Date:   Tue, 14 Jun 2022 09:57:12 +0200
-Message-Id: <20220614075713.32767-6-jslaby@suse.cz>
+Subject: [PATCH 7/7] tty/vt: consolemap: remove dflt reset from con_do_clear_unimap()
+Date:   Tue, 14 Jun 2022 09:57:13 +0200
+Message-Id: <20220614075713.32767-7-jslaby@suse.cz>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220614075713.32767-1-jslaby@suse.cz>
 References: <20220614075713.32767-1-jslaby@suse.cz>
@@ -65,51 +65,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use FIELD_GET() and GENMASK() helpers instead of direct shifts and ANDs.
-This makes the code even more obvious. I didn't know about the helpers
-at the time of writing the macros.
+con_do_clear_unimap() sets dflt to NULL and then calls
+con_release_unimap() which does the very same as the first thing. So
+remove the former as it is apparently superfluous.
 
 Suggested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 ---
- drivers/tty/vt/consolemap.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ drivers/tty/vt/consolemap.c | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/drivers/tty/vt/consolemap.c b/drivers/tty/vt/consolemap.c
-index 16d0d8f04f0e..9e94ec0e0f83 100644
+index 9e94ec0e0f83..5f3e58165b98 100644
 --- a/drivers/tty/vt/consolemap.c
 +++ b/drivers/tty/vt/consolemap.c
-@@ -23,6 +23,8 @@
-  * stack overflow.
-  */
+@@ -563,8 +563,6 @@ static int con_do_clear_unimap(struct vc_data *vc)
+ 	if (!old || old->refcount > 1)
+ 		return con_allocate_new(vc);
  
-+#include <linux/bitfield.h>
-+#include <linux/bits.h>
- #include <linux/module.h>
- #include <linux/kd.h>
- #include <linux/errno.h>
-@@ -190,10 +192,17 @@ static enum translation_map inv_translate[MAX_NR_CONSOLES];
- #define UNI_DIR_ROWS	32U
- #define UNI_ROW_GLYPHS	64U
+-	if (old == dflt)
+-		dflt = NULL;
+ 	old->sum = 0;
+ 	con_release_unimap(old);
  
--#define UNI_DIR(uni)		( (uni)                   >> 11)
--#define UNI_ROW(uni)		(((uni) & GENMASK(10, 6)) >>  6)
--#define UNI_GLYPH(uni)		( (uni) & GENMASK( 5, 0))
--#define UNI(dir, row, glyph)	(((dir) << 11) | ((row) << 6) | (glyph))
-+#define UNI_DIR_BITS		GENMASK(15, 11)
-+#define UNI_ROW_BITS		GENMASK(10,  6)
-+#define UNI_GLYPH_BITS		GENMASK( 5,  0)
-+
-+#define UNI_DIR(uni)		FIELD_GET(UNI_DIR_BITS, (uni))
-+#define UNI_ROW(uni)		FIELD_GET(UNI_ROW_BITS, (uni))
-+#define UNI_GLYPH(uni)		FIELD_GET(UNI_GLYPH_BITS, (uni))
-+
-+#define UNI(dir, row, glyph)	(FIELD_PREP(UNI_DIR_BITS, (dir)) | \
-+				 FIELD_PREP(UNI_ROW_BITS, (row)) | \
-+				 FIELD_PREP(UNI_GLYPH_BITS, (glyph)))
- 
- /**
-  * struct uni_pagedict -- unicode directory
 -- 
 2.36.1
 

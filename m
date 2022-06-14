@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8B054AF74
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58A654AF7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242495AbiFNLrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 07:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
+        id S242714AbiFNLr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 07:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241815AbiFNLrK (ORCPT
+        with ESMTP id S242755AbiFNLr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 07:47:10 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4316D47382
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:47:09 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id l2-20020a05600c4f0200b0039c55c50482so6097819wmq.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:47:09 -0700 (PDT)
+        Tue, 14 Jun 2022 07:47:26 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699B425D7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:47:25 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id w21so8404633pfc.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:47:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=heitbaum.com; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=3BSdbQCfhq3qMpg3tNRIpccBP+VUxkUwhFP4/COR+gA=;
-        b=YPmEbj1hQj2q2+SCJW3rwxYPCsipN+NTZB/zsp/IxPNep6Cq5r2+OqE6pgwen6R1cA
-         xy/G932h4njkEh3+rI0Gb/zZdTwcGYkoJ+5sRwGQL+XGCNjDcmRAT5uoaFHrt/GuSw9I
-         4OzojOZUDvHJhLyxGvb2wiVHUlzw8Pv0PN5uxFlVIjtZ3row5QhaNFvOIG2uJ/D0e8GT
-         Vag0PcvzQDkaN8rqVu8GxuAXZCc209RixVdfdMq8pvwHHleZM2QpYTbIW/9/+y1jrFZB
-         0khO9IIwnJzjltc6N5MJTo7ktr1Aug58RdPKo5j1Y9O36mbyhnkPt8LxMXrvEMFeohvz
-         CbCg==
+        bh=9yjCf6oY3gJS5YNfh+t2xkU3PyOSCOkeJrjT3Jr85cM=;
+        b=CsOKP9DatAjY5ULn1fGBTaFBmXY9q1bDyoUJkLdt8pcLNG+jg8zcWSdECEqagQgv9f
+         9NUv02jJYfl30AI+RjDo+TVdnSTbeN6eyjchgdnP2U4r+epXoaE049dEaQBjBMNEaT9k
+         VSWjg0OznvQcuuCo6Uk/o/3VT9XnbQjHbmVEg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=3BSdbQCfhq3qMpg3tNRIpccBP+VUxkUwhFP4/COR+gA=;
-        b=ZYnLTOcLhXs3sMoClJOQnxdzgWwnjK1EyfsXajnXBXaftdkm1DSI1DXF0V0NaiI8OV
-         fccxiNUDjKX8R66bEMe/MW6bRVbSK7G56dlw8RNW7QZ2949ligIZUlFG2LNJiyzp2eF5
-         i8QER+DI2J3s6QN3nugGZ+IqNfI8VbO7oA+54JIjAZNhYTDtdOebXSKgwnnIV2pEbggF
-         qQGUxOq2pA37l/e8XLb+pCqsPwflw70IBt3Gc7JqS34JIJ7uZo+KCa50EF8GDv0rzVU/
-         pIaFip68cBXIbpbE1j8Ix4PaeevdJGbh3NbkZ1AlmVmSxoHxOEK01LjQQcj17BWQ7KN7
-         eW0g==
-X-Gm-Message-State: AOAM533HfgsBNhCK/OVNlz3UsqA2pLnZk683uCacm0wVXu75HSnLLH4k
-        M81cM0gSX3KpS9mJWeBNnpP0lA==
-X-Google-Smtp-Source: ABdhPJwmwwcUFoO8Oobw7S1TBe1toT8ja1RjXq6trW9kIsAjSWTGWuLu1KTkfs0c62EbCOfJKsIrgQ==
-X-Received: by 2002:a05:600c:4f47:b0:39c:62cc:75da with SMTP id m7-20020a05600c4f4700b0039c62cc75damr3698202wmq.114.1655207227741;
-        Tue, 14 Jun 2022 04:47:07 -0700 (PDT)
-Received: from google.com (109.36.187.35.bc.googleusercontent.com. [35.187.36.109])
-        by smtp.gmail.com with ESMTPSA id m16-20020a05600c3b1000b0039c673952bfsm17156749wms.6.2022.06.14.04.47.07
+        bh=9yjCf6oY3gJS5YNfh+t2xkU3PyOSCOkeJrjT3Jr85cM=;
+        b=heqDYmxcr9dWU7jEvhv8x03F18ybm+1pAxo/7XSWuzjghjKl/auv92Mt0lIxRiAUyV
+         ASr6rl/4KdV1DQJlcdTy+g2bzP/9MNE5L8V3UhxSzIsPfoXOqGK1Q63VrMnAOFDfwEus
+         SPF0JJrEbl+WMKQvUTpyDCYpzHGxHiJmJyxipusfh6GlNs/EFfBgzaz8RKCoa4L4hcvW
+         3Hdht5mAEVw71Li2AyT3fwVGL1v4X5qkRli+XzHBpI1ir5m+X+HpK0Bx2aQvvWFGH5ZD
+         uckSppeVUteDOH7Pbc4IfsxeQYVzS9v14kCfihLornz1Cv3vYLloNX9fTAIk10ljACua
+         mRpQ==
+X-Gm-Message-State: AOAM532nQlUZQdezOepDSmYgVEtq8idOuZGfvPPzFp7OP393D1YgFQke
+        YvXLCF02qbhHDuzDzLdpkxulcQ==
+X-Google-Smtp-Source: ABdhPJyS2jpnvZtL2c84oCGG7GjdOJvENERd3a1AmtOYUUk7rt0xRQr3M6SYy0NcwUttJzfbYRg4RQ==
+X-Received: by 2002:a63:864a:0:b0:3fd:97a1:79f with SMTP id x71-20020a63864a000000b003fd97a1079fmr4237636pgd.51.1655207244652;
+        Tue, 14 Jun 2022 04:47:24 -0700 (PDT)
+Received: from 4207e2866154 (194-193-162-175.tpgi.com.au. [194.193.162.175])
+        by smtp.gmail.com with ESMTPSA id m5-20020a170902bb8500b0015e8d4eb2d8sm6992433pls.290.2022.06.14.04.47.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 04:47:07 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 12:47:03 +0100
-From:   Vincent Donnefort <vdonnefort@google.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
-        morten.rasmussen@arm.com, chris.redpath@arm.com,
-        qperret@google.com, tao.zhou@linux.dev, kernel-team@android.com,
-        peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
-Subject: Re: [PATCH v10 0/7] feec() energy margin removal
-Message-ID: <Yqh1N1lhw+hukHD9@google.com>
-References: <20220607123254.565579-1-vdonnefort@google.com>
- <6099583c-c986-e1f3-1eee-33b504286757@arm.com>
+        Tue, 14 Jun 2022 04:47:24 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 11:47:15 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 000/343] 5.18.4-rc2 review
+Message-ID: <20220614114715.GA31790@4207e2866154>
+References: <20220613181233.078148768@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6099583c-c986-e1f3-1eee-33b504286757@arm.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220613181233.078148768@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 01:53:22PM +0100, Lukasz Luba wrote:
-> Hi Vincent,
+On Mon, Jun 13, 2022 at 08:18:34PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.4 release.
+> There are 343 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> On 6/7/22 13:32, Vincent Donnefort wrote:
-> > Hi,
-> > 
-> > Here's a new version of the patch-set to get rid of the energy margin in
-> > feec(). Many thanks to all for the insightful comments I got.
-> > 
-> > find_energy_efficient() (feec()) will migrate a task to save energy only if
-> > it saves at least 6% of the total energy consumed by the system. This
-> > conservative approach is a problem on a system where a lot of small tasks
-> > create a huge load on the overall: very few of them will be allowed to
-> > migrate to a smaller CPU, wasting a lot of energy. Instead of trying to
-> > determine yet another margin, let's try to remove it.
-> > 
-> > The first elements of this patch-set are various fixes and improvement that
-> > stabilizes task_util and ensures energy comparison fairness across all CPUs
-> > of the topology. Only once those fixed, we can completely remove the margin
-> > and let feec() aggressively place task and save energy.
-> > 
-> 
-> I've run this patch set on pixel6 (android-mainline) and gathered energy
-> values from the meter during the PCmark 3.0.
-> 
-> It looks good, with these patches we have ~10% lower energy usage and
-> only ~3% lower score.
-> 
-> There are no other issues, everything works fine. Feel free to add:
-> 
-> Tested-by: Lukasz Luba <lukasz.luba@arm.com>
-> 
-> to the whole patch set.
-> 
-> Regards,
-> Lukasz
+> Responses should be made by Wed, 15 Jun 2022 18:11:39 +0000.
+> Anything received after that time might be too late.
 
-Thanks a lot Lukasz!
+Hi Greg,
+
+5.18.4-rc2 tested.
+
+Run tested on:
+- Allwinner H6 (Tanix TX6)
+- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
+
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
+
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi

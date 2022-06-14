@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C94054A6F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F0454A706
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:47:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354859AbiFNCoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 22:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
+        id S1353373AbiFNCrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 22:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354811AbiFNCoF (ORCPT
+        with ESMTP id S1351913AbiFNCqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 22:44:05 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B955C532F3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 19:21:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655173309; x=1686709309;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IztUUoy8U8XG/s2pBKQMDOQCni2K/ES1DelQBEeR07o=;
-  b=gJHqJ29GTve0Y43Nwk+ZTkMn/1Fh0GXV4UKrGQ9QwevJ7VMD7SZPd3hQ
-   AyGt+A8WDBPVHIRDazzRNJqswigLC3WPqQ8wImiCyhXTn+7Elp1KdxRO3
-   obsUt3MYVb8phfuplS1GK+KQTokNuySZ41DvJk+keypSBen/ZHCfLnRxM
-   +yq7OAVeXvF2HRqVlSOD/EtDrCip6AqF4YAsjwNq+Cu9ePJurAefOFAWi
-   iHBn33aReg7VFhoX7ys5qaF2CLvqSgfLUols8W09FW1eBuoruTrpQOX0/
-   yyRmikHQHP/8OgXz4O+9Zr5jU1sksHAV1xGjGbG/JJm53ZDtaIZZB7tSA
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="276008911"
-X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="276008911"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 19:21:34 -0700
-X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="910710180"
-Received: from gren5-mobl1.ccr.corp.intel.com (HELO [10.255.29.39]) ([10.255.29.39])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 19:21:31 -0700
-Message-ID: <616dc81c-dfc6-d6c6-1eab-de0e9ba4411f@linux.intel.com>
-Date:   Tue, 14 Jun 2022 10:21:29 +0800
+        Mon, 13 Jun 2022 22:46:50 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7061F40A2F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 19:24:52 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id o6so6629943plg.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 19:24:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5f3zUmJ+WT5EgbY0xLlYWEtVw9I8E9st0he4AyjXGGg=;
+        b=h7EWLwuLsPiCj+hvM2v0Q84XzKt0v34vLKvDyMwttHfhSMLfaml+w2iX06xhffZvcP
+         qujvCPdU6uS5Rc3fqc5wtW3Ij3mugyNiZZswz6tTpAjpi8LaceQxpAMefpDpV8bny9kY
+         HW0qjvIrLOmlrxUWDsfKUaP4DGdWzURsMgelvBkE/0ELMFqfep/XNxyMKy0a7Un5634e
+         5E39hEvfF94t0UpYsa/RKFDA7LL2JyrDvhe/xvUgfYQMXzRSTeca0Q9cFqjmlSoDE8MC
+         f2R+pOyx+9y+rbkOQqYqZm8pYo6Oi7K2r4jkEHyUwAi0CTl1UnEYrCjPGQo8Yqss6h03
+         gh5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5f3zUmJ+WT5EgbY0xLlYWEtVw9I8E9st0he4AyjXGGg=;
+        b=T1QBqhF8rxKS3SFaf9zd8jpCqdm/wFoiKuvVEx4icKXYXHIEQMUE1BETFcrCLiRkdd
+         5bcdtNL49MvcH3Dt/UbHXm0pZmVRW9XTp/pVWdGlKfQR/pSCtEv3fmOwN+NF3cbSZzf2
+         l1P55HOc0tx/IAsHY5nuc0eMRuCKl7uyCf/lH7anlJeqE9GE3G2NgZwNQexOqZ0aOi+n
+         IsjsTSxe7+c62NC+egO8PpLqQQZq4dRoxxnBTj41oe9ynx22jBxhzAv2iELWGYPk8s4u
+         l8rsv25gPau2k1IdHe1GJ1NCDI/EuqEnsM4JgHSS86TwK9KXXFDf8SLLjU3R8nmtNvkE
+         phZw==
+X-Gm-Message-State: AJIora9n5BYVkYQFpq3NxvGxLr+Cv7qhpQ4yIjgzU/zY4G1zHXA65LlG
+        o9SXb5TeFZnr6lcaKm7UFD9emw==
+X-Google-Smtp-Source: ABdhPJzDnEQ46KP/Q51N5hL71Vk3s/mkd7cqv5z/3XRMcbkyMJramr0/YI/DPJ5vBQoskfWGtsgOgQ==
+X-Received: by 2002:a17:902:7084:b0:167:95e2:f810 with SMTP id z4-20020a170902708400b0016795e2f810mr2152757plk.34.1655173491463;
+        Mon, 13 Jun 2022 19:24:51 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id y2-20020a170902d64200b00168bee13e8fsm5833603plh.64.2022.06.13.19.24.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 19:24:51 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 07:54:48 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        rafael@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
+        mingo@redhat.com
+Subject: Re: [PATCH v2 1/4] thermal: cpufreq_cooling: Use private callback
+ ops for each cooling device
+Message-ID: <20220614022448.pqld3zhqucsfofss@vireshk-i7>
+References: <20220613124327.30766-1-lukasz.luba@arm.com>
+ <20220613124327.30766-2-lukasz.luba@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Steve Wahl <steve.wahl@hpe.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Kyung Min Park <kyung.min.park@intel.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
-Content-Language: en-US
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-References: <20220505194658.246121-1-steve.wahl@hpe.com>
- <20220512151309.330068-1-steve.wahl@hpe.com>
- <20220613205734.3x7i46bnsofzerr4@cantor>
- <673eb011-94f4-46b0-f1b4-24a02a269f4e@linux.intel.com>
- <CALzcddsXciFgKOLSkXxx4Rv_rwh21qe8hkyiEET280D8orP6Vw@mail.gmail.com>
- <9c943703-0c2f-b654-a28b-f594bf90bec9@linux.intel.com>
- <CALzcdduU-baVF9VV-NnYD2rKn0YC5hzS_F9udExRE7guvMqXWg@mail.gmail.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <CALzcdduU-baVF9VV-NnYD2rKn0YC5hzS_F9udExRE7guvMqXWg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220613124327.30766-2-lukasz.luba@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,76 +74,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/14 09:54, Jerry Snitselaar wrote:
-> On Mon, Jun 13, 2022 at 6:51 PM Baolu Lu <baolu.lu@linux.intel.com> wrote:
->>
->> On 2022/6/14 09:44, Jerry Snitselaar wrote:
->>> On Mon, Jun 13, 2022 at 6:36 PM Baolu Lu<baolu.lu@linux.intel.com>  wrote:
->>>> On 2022/6/14 04:57, Jerry Snitselaar wrote:
->>>>> On Thu, May 12, 2022 at 10:13:09AM -0500, Steve Wahl wrote:
->>>>>> To support up to 64 sockets with 10 DMAR units each (640), make the
->>>>>> value of DMAR_UNITS_SUPPORTED adjustable by a config variable,
->>>>>> CONFIG_DMAR_UNITS_SUPPORTED, and make it's default 1024 when MAXSMP is
->>>>>> set.
->>>>>>
->>>>>> If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
->>>>>> to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
->>>>>> allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
->>>>>> remapping doesn't support X2APIC mode x2apic disabled"; and the system
->>>>>> fails to boot properly.
->>>>>>
->>>>>> Signed-off-by: Steve Wahl<steve.wahl@hpe.com>
->>>>>> ---
->>>>>>
->>>>>> Note that we could not find a reason for connecting
->>>>>> DMAR_UNITS_SUPPORTED to MAX_IO_APICS as was done previously.  Perhaps
->>>>>> it seemed like the two would continue to match on earlier processors.
->>>>>> There doesn't appear to be kernel code that assumes that the value of
->>>>>> one is related to the other.
->>>>>>
->>>>>> v2: Make this value a config option, rather than a fixed constant.  The default
->>>>>> values should match previous configuration except in the MAXSMP case.  Keeping the
->>>>>> value at a power of two was requested by Kevin Tian.
->>>>>>
->>>>>>     drivers/iommu/intel/Kconfig | 6 ++++++
->>>>>>     include/linux/dmar.h        | 6 +-----
->>>>>>     2 files changed, 7 insertions(+), 5 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/iommu/intel/Kconfig b/drivers/iommu/intel/Kconfig
->>>>>> index 247d0f2d5fdf..fdbda77ac21e 100644
->>>>>> --- a/drivers/iommu/intel/Kconfig
->>>>>> +++ b/drivers/iommu/intel/Kconfig
->>>>>> @@ -9,6 +9,12 @@ config DMAR_PERF
->>>>>>     config DMAR_DEBUG
->>>>>>        bool
->>>>>>
->>>>>> +config DMAR_UNITS_SUPPORTED
->>>>>> +    int "Number of DMA Remapping Units supported"
->>>>> Also, should there be a "depends on (X86 || IA64)" here?
->>>> Do you have any compilation errors or warnings?
->>>>
->>>> Best regards,
->>>> baolu
->>>>
->>> I think it is probably harmless since it doesn't get used elsewhere,
->>> but our tooling was complaining to me because DMAR_UNITS_SUPPORTED was
->>> being autogenerated into the configs for the non-x86 architectures we
->>> build (aarch64, s390x, ppcle64).
->>> We have files corresponding to the config options that it looks at,
->>> and I had one for x86 and not the others so it noticed the
->>> discrepancy.
->>
->> So with "depends on (X86 || IA64)", that tool doesn't complain anymore,
->> right?
->>
->> Best regards,
->> baolu
->>
+On 13-06-22, 13:43, Lukasz Luba wrote:
+> It is very unlikely that one CPU cluster would have the EM and some other
+> won't have it (because EM registration failed or DT lacks needed entry).
+> Although, we should avoid modifying global variable with callbacks anyway.
+> Redesign this and add safety for such situation.
 > 
-> Yes, with the depends it no longer happens.
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  drivers/thermal/cpufreq_cooling.c | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+> index b8151d95a806..ad8b86f5281b 100644
+> --- a/drivers/thermal/cpufreq_cooling.c
+> +++ b/drivers/thermal/cpufreq_cooling.c
+> @@ -59,6 +59,7 @@ struct time_in_idle {
+>   * @cdev: thermal_cooling_device pointer to keep track of the
+>   *	registered cooling device.
+>   * @policy: cpufreq policy.
+> + * @cooling_ops: cpufreq callbacks to thermal cooling device ops
+>   * @idle_time: idle time stats
+>   * @qos_req: PM QoS contraint to apply
+>   *
+> @@ -71,6 +72,7 @@ struct cpufreq_cooling_device {
+>  	unsigned int max_level;
+>  	struct em_perf_domain *em;
+>  	struct cpufreq_policy *policy;
+> +	struct thermal_cooling_device_ops cooling_ops;
+>  #ifndef CONFIG_SMP
+>  	struct time_in_idle *idle_time;
+>  #endif
+> @@ -485,14 +487,6 @@ static int cpufreq_set_cur_state(struct thermal_cooling_device *cdev,
+>  	return ret;
+>  }
+>  
+> -/* Bind cpufreq callbacks to thermal cooling device ops */
+> -
+> -static struct thermal_cooling_device_ops cpufreq_cooling_ops = {
+> -	.get_max_state		= cpufreq_get_max_state,
+> -	.get_cur_state		= cpufreq_get_cur_state,
+> -	.set_cur_state		= cpufreq_set_cur_state,
+> -};
+> -
+>  /**
+>   * __cpufreq_cooling_register - helper function to create cpufreq cooling device
+>   * @np: a valid struct device_node to the cooling device device tree node
+> @@ -554,7 +548,10 @@ __cpufreq_cooling_register(struct device_node *np,
+>  	/* max_level is an index, not a counter */
+>  	cpufreq_cdev->max_level = i - 1;
+>  
+> -	cooling_ops = &cpufreq_cooling_ops;
+> +	cooling_ops = &cpufreq_cdev->cooling_ops;
+> +	cooling_ops->get_max_state = cpufreq_get_max_state;
+> +	cooling_ops->get_cur_state = cpufreq_get_cur_state;
+> +	cooling_ops->set_cur_state = cpufreq_set_cur_state;
+>  
+>  #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
+>  	if (em_is_sane(cpufreq_cdev, em)) {
 
-The dmar code only exists on X86 and IA64 arch's. Adding this depending
-makes sense to me. I will add it if no objections.
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Best regards,
-baolu
+-- 
+viresh

@@ -2,79 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47F754A7C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 06:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCBF454A80A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 06:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243293AbiFNEMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 00:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34722 "EHLO
+        id S1351060AbiFNEZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 00:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiFNEMV (ORCPT
+        with ESMTP id S1349618AbiFNEZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 00:12:21 -0400
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE56E1D0CE;
-        Mon, 13 Jun 2022 21:12:17 -0700 (PDT)
-Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 25E4B3db031731;
-        Tue, 14 Jun 2022 13:11:04 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 25E4B3db031731
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1655179864;
-        bh=ZVkd16ycWmSMCRLUde5kxZbFgxzvusFJRN7ajd3LiMQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=OPpVQed8JKe0hkzF/YiUh/SWpvY8rpP7CmGWe9DtzH/pJasnYMujxWP7Mbys7zlTN
-         IYz39aUQPBA9lymkUDuKTtfwgQenv19WBRfc4JTO/m/Hv1de034mGhrSnp/d9TZGiB
-         PtkTPLLNTykSpa+/hv5edFVLhs/FDDyyfwGGCRwOJcKLvrBo9IkxJZ7XEoY7LD+xTX
-         GEho+fPApDh/6eYrdMoAJwG0lXU16gpbs1oa1ghy/g7KAD0V61gUIBUqCziRIA1lMW
-         tZURsbyeefk8GJcaMjZ8wC3soKylIMAWltt4+jx3DyTG/CMrjAWtq9wNb02idvl8NA
-         +opb79PPutPpg==
-X-Nifty-SrcIP: [133.32.177.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kbuild: remove sed command from cmd_ar_builtin
-Date:   Tue, 14 Jun 2022 13:11:00 +0900
-Message-Id: <20220614041100.1860067-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 14 Jun 2022 00:25:35 -0400
+Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0962AC51;
+        Mon, 13 Jun 2022 21:25:30 -0700 (PDT)
+Received: from inva020.nxp.com (localhost [127.0.0.1])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 107AD1A126F;
+        Tue, 14 Jun 2022 06:25:29 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id BB2011A2664;
+        Tue, 14 Jun 2022 06:25:28 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id CAEAA180222A;
+        Tue, 14 Jun 2022 12:25:26 +0800 (+08)
+From:   Shengjiu Wang <shengjiu.wang@nxp.com>
+To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
+        shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/7] Add PDM/DSD/dataline configuration support
+Date:   Tue, 14 Jun 2022 12:11:17 +0800
+Message-Id: <1655179884-12278-1-git-send-email-shengjiu.wang@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace a pipeline of echo and sed with printf to decrease process forks.
+Support PDM format and DSD format.
+Add new dts property to configure dataline. The SAI has multiple
+successive FIFO registers, but in some use
+case the required dataline/FIFOs are not successive.
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+Shengjiu Wang (7):
+  ASoC: fsl_sai: Add PDM daifmt support
+  ASoC: fsl_sai: Add DSD bit format support
+  ASoC: fsl_sai: Add support for more sample rates
+  ASoc: fsl_sai: Add pinctrl operation for PDM and DSD
+  ASoC: fsl_sai: Move res variable to be global
+  ASoC: dt-bindings: fsl-sai: Add new property to configure dataline
+  ASoC: fsl_sai: Configure dataline/FIFO information from dts property
 
- scripts/Makefile.build | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ .../devicetree/bindings/sound/fsl-sai.txt     |   8 +
+ sound/soc/fsl/fsl_sai.c                       | 260 ++++++++++++++++--
+ sound/soc/fsl/fsl_sai.h                       |  26 +-
+ 3 files changed, 272 insertions(+), 22 deletions(-)
 
-diff --git a/scripts/Makefile.build b/scripts/Makefile.build
-index cac070aee791..d69849133dad 100644
---- a/scripts/Makefile.build
-+++ b/scripts/Makefile.build
-@@ -358,9 +358,8 @@ $(subdir-modorder): $(obj)/%/modules.order: $(obj)/% ;
- 
- quiet_cmd_ar_builtin = AR      $@
-       cmd_ar_builtin = rm -f $@; \
--		echo $(patsubst $(obj)/%,%,$(real-prereqs)) | \
--		sed -E 's:([^ ]+):$(obj)/\1:g' | \
--		xargs $(AR) cDPrST $@
-+	$(if $(real-prereqs), printf "$(obj)/%s " $(patsubst $(obj)/%,%,$(real-prereqs)), :) | \
-+	xargs $(AR) cDPrST $@
- 
- $(obj)/built-in.a: $(real-obj-y) FORCE
- 	$(call if_changed,ar_builtin)
 -- 
-2.32.0
+2.17.1
 

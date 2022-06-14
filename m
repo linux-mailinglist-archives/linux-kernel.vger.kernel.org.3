@@ -2,172 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2A954AFED
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83CB54AFF6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356338AbiFNMIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36182 "EHLO
+        id S1356430AbiFNMKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240427AbiFNMIs (ORCPT
+        with ESMTP id S240427AbiFNMKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:08:48 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D505647AEE;
-        Tue, 14 Jun 2022 05:08:47 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25EBYGWS013796;
-        Tue, 14 Jun 2022 12:08:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
- bh=aC2bHVsRuM+ZmtzC/LN5sv4UG/z9gIyYYDE0P0oZNZk=;
- b=w6jysFgzQe5uoa0ALHvEzViyb1O6e3vrQWqPbbAAnc/+lJr4QQbjhpSD23OzyyVXWMu4
- X/PRGXgC8qHXCcous4y4Kc/SBlx0Wl8IzxbJSjEv8H/TqnC8XP0NCdr8eNq1IifQwKxZ
- Ci1DriEQrB8Y8N1izQiDo/loy5EvXNQwVOiOcl9ANAgDmQqD4PZXmMklF3MwXIEYz+nB
- c1fVYq5xZc0QMDVHf2+3sGlmN7J7k7rYpbAOLUHfoyA4ZRnm5Kcib+2xuWG5x3nPRJ4F
- 2M1Bwv72n/IcR9WqJvu8TofOwu/SyAfmlxgUpwC4ohR4VhUhLqvgQCI8A4pDtH/HMY/M Hg== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gmhfcnmwc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Jun 2022 12:08:39 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25EC5rt6037886;
-        Tue, 14 Jun 2022 12:08:38 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2040.outbound.protection.outlook.com [104.47.66.40])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gpr24k1xg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Jun 2022 12:08:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a2DUg7AsLDHt7pL0R5WUhLLoblQYpLWHSfWFlj/IyS8MC5ABBqtaea/h9eqD0PyV9Hm6o1t9I5y1z/yAgqk3ota7sa0cc6iO3J1rtHtAIN17bnIAqYqQCKXZtk6a6GFZG2W+d6vudnfNeksgFVAeKa2oe0aJuWaNgaa/mjv6yEHk+33x/nZ8fcmG8o6P9g5ZKnfgGWudgPvmUcDNJwPRJSpszvhCe5aI8mp1vBRrNXA0YjVz85GTp7SaJ5B7fAttjmLyzjwL/wUfn8rz2Jyfnf7kCbJopD8/ABAQyRq8F9A4IXMIatkz5hRaxqLAcOwroX3Wy6ITq4rSwz5EzRLwoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aC2bHVsRuM+ZmtzC/LN5sv4UG/z9gIyYYDE0P0oZNZk=;
- b=b59evJfzkXePI5/yDAsHO/d+GRuLKJdCUnWlYCAAIoZr0It1WhmKNMpiO3UkUpVRdvbA+5Ejadlm2SSIYsoUMefHYfbFxMic9iaC5kU0ORDe8py7k2F/YR9LLqfGMMBAqr83t3hojoLXIusgMJkMwLCSPvmtqs8j5duMQeC1u6gImbQ1x2GTwWER0xw5ZdEIukCCJ5CT9kuk7iuE+g1KfT5ZOrSYrhgpKBdiVm02FNbTbanHRxTXwAAXN3YNyYbJdzaObzoUrZAoAzKEzXg1IEFsqtcMOvPenio1zGRWrxYPafjVA5r1CWwyv9UMu8pJgJlhZ2dZecXp6Ha8jMS7VQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aC2bHVsRuM+ZmtzC/LN5sv4UG/z9gIyYYDE0P0oZNZk=;
- b=xk5DC+utKUmc6VPKx8aw5aG5w57uOxDjWwyltjT46OsbBLSpt+Sf6XR2oNigCm8jABXs7ZcZu5jayNuxvPCiJV2zOHXuhX8m8/wpwdQRzeZghmZ3xL5b6np7FMTZ0U0e8kREWC47h+JjyYxW7ESJFfDO9lw02g3S8cJoJWfZAZQ=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by DM5PR10MB1482.namprd10.prod.outlook.com
- (2603:10b6:3:c::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.15; Tue, 14 Jun
- 2022 12:08:36 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5332.020; Tue, 14 Jun 2022
- 12:08:36 +0000
-Date:   Tue, 14 Jun 2022 15:08:25 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: [PATCH] drm: logicvc: Fix uninitialized variable in probe
-Message-ID: <Yqh6OfSiPFuVrGo4@kili>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
-X-ClientProxiedBy: ZR0P278CA0144.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:40::23) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+        Tue, 14 Jun 2022 08:10:15 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A496A48E43;
+        Tue, 14 Jun 2022 05:10:13 -0700 (PDT)
+X-UUID: 89a4918570e74d6a903bcf0be49d9be4-20220614
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:8d4e4064-e8d5-4d36-97dc-a815c0db8110,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:b14ad71,CLOUDID:01059207-b57a-4a25-a071-bc7b4972bc68,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 89a4918570e74d6a903bcf0be49d9be4-20220614
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 542925867; Tue, 14 Jun 2022 20:10:08 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 14 Jun 2022 20:10:06 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 14 Jun 2022 20:10:05 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <nicolas.dufresne@collabora.com>, <wenst@chromium.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
+        <maoguang.meng@mediatek.com>, kyrie wu <kyrie.wu@mediatek.com>,
+        <srv_heupstream@mediatek.com>
+Subject: [RESEND V3,0/8] Support multi-hardware jpeg decoder for MT8195
+Date:   Tue, 14 Jun 2022 20:09:56 +0800
+Message-ID: <20220614121004.31616-1-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a97ef641-808f-43f9-4948-08da4dfe9c17
-X-MS-TrafficTypeDiagnostic: DM5PR10MB1482:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR10MB1482CCEDB6FA06AAF09E4B8A8EAA9@DM5PR10MB1482.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 1EQiz1wHGNMODIFvxn5GRKkftDV9Gh8aPY5N8rG9frGt8spBkCGeEfVoLDBwbXPmcp+lVZPvWYoSet9evIFo4Tr14wXNTUEA0ji2TZvaO0FpgBhwZWW5javIfyrHuC8Nq3c96KomNDn3g2JTtef0N69uT+NQWRsKANOz/IxQBDcuUl3a8KV/PG7KTon75GOCsqrKK8THLD02tdWsh6Hvz174HQrtmDtzXXGGRhgTzz6+YiW+Y6+BBF9Bzhy9y9XKOV6G+NUAoUPdN+rQCqwj8Q/Rgn4K6XMUYJt8mU1CHc18Y36BX5kHAh4rYmsEHWGD0tAu4oXtS0vDPgcq2pHnfZcFl73lRUutMTly21pPw64zhy/A+Yoi/DfhiBFWimRdKCGOf48j5Z/FbI17hbyeoFym1j0TvsDgRqy5L3OQvlo71BXV/O1wEAgiiVUzbTIt2t6DIVhOl9xx20KztpRMBD9qejd98GUviWfIBREPuugOVsIQlt3ta8+qjveXbzbceCU0ie4ZhxwfKVWWSwb22Naj4ycXeOZACGyDw2wRA09hJ8DqE2DLtUXrhIXKqm6s3/jY3KzeWH/sgFNf74NfBWmuWkDjZfSjXsApoAUgXI80Xs+hnYGDFB2+Puba/dWl8inueiSOP8u3e+OT9Tn3pUv2lf+saP8PvzzHcIOFVRXV3vyWvDY596OuMMb9Q/r8/6wGIfdMnu+7b+7ZKR/EQQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(9686003)(6512007)(52116002)(6486002)(26005)(6506007)(54906003)(6666004)(508600001)(33716001)(38350700002)(38100700002)(186003)(86362001)(83380400001)(5660300002)(4744005)(2906002)(66946007)(66556008)(8936002)(66476007)(316002)(8676002)(44832011)(6916009)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+l0sBFhf6ZmbFs+O33zZqvvoWkoNxyAerS8YWUabM2F2AKU400RffZg3Fm7T?=
- =?us-ascii?Q?YZFnRXtbJVpYYvb2diq1jlnBKERvWemRESCMS8yQmCdFwpd6dBDt8Lc4a4dR?=
- =?us-ascii?Q?PQol8a2SZbsu1iPl9vWEBmVnOeDpyyVj85oJio+LhkjiSBBCnrunwrL+ebKV?=
- =?us-ascii?Q?9MdsQ1L/lLPYNhOZ41J2qIF7bT3RfQNbHP2rZ9O5A3vp7HYZPpYcqb1orYvG?=
- =?us-ascii?Q?j+/4Q0f/t6qFq/NEmJvz3Ko9mkcbMB7BYZExZzjtPqrUkUt2XlkiuMjf3rSw?=
- =?us-ascii?Q?0uOqbLWKS8mNc5Jb2sOl+6nj2eThrXvSLU2LQo8+Q8af4HNqD7G7anhZWrli?=
- =?us-ascii?Q?ocfkDb7WgEBhqPE7R5CDWNtJShLyN2ft2xndpp/+XSVep9iPU9Rfjs3J+7ht?=
- =?us-ascii?Q?CzlnAcB7VwORwfkKe/opc+MaiGNkpwncmRshw0yQ/oQzTlkCKh9gsY0Dq2Wa?=
- =?us-ascii?Q?amzSPXYmvBjQHiCbbf5G3kQi3fB2lZ0xSSJABLnTkjvA8MttT4Wjx0RlVwAP?=
- =?us-ascii?Q?+bamMyuH1RW2KvUx6QPaEh6zZO2ByMMBXp2fX2PFEMcElfLzKE08H4I/dTSL?=
- =?us-ascii?Q?wJAuPgeHpltC/KirLoCyv4DJ1GeF1P3PjDRcQIRLnt5xcrFZ1Soak+xkwHeY?=
- =?us-ascii?Q?GTdBMz2kRzuxrwSZqf9i8L8X6HTAg+PcS5mUXy7lJZOqK9iOFyhI1ZyclAG8?=
- =?us-ascii?Q?Ummyg9ovLYt5kWWd3qZjvagAZcbOWKbRouuUacOe77IjVSPa3WfN0HnTv17G?=
- =?us-ascii?Q?gPn0QNojQD7kvleu0JJUD237mVDGDwN4gguMBupLo3uKNYOoN7Gm8R2BW0fb?=
- =?us-ascii?Q?KT7SmRO4OO2G1LS4SR7Kp/fgVpgp975Pqm2wC0iplA6zyDvAre7aRcUdwYgf?=
- =?us-ascii?Q?iPxZuCIdytE1ZRHQeK+5FSzGLx8Ieya7zSI2cn+/DcIm+tDwLtJP60Ekdpvv?=
- =?us-ascii?Q?yoANSAVWS0yT7G10dyds277QMFyZJssdfdDZ0oBLWqoLXJlMu892ozC1LZeQ?=
- =?us-ascii?Q?dNST8dIdCR9FXwkeEnLaeiKpYRUxqvId3QZ4xd8WzFShe78232zPJcBhWG9t?=
- =?us-ascii?Q?gI2zLXMsHUH1g/KMUI7Ix4ENMX4cmgXFVl5Z14ZfHiOKBegyW/ARF2zc8kdZ?=
- =?us-ascii?Q?DDbUGmhW/fCXSFk8oVCVbHVrgpUFMwlyEwEaAkZZQacL40K7BrUKEiX5KUrQ?=
- =?us-ascii?Q?vNICRUZwY2IaCKzbH24vv+Kxk9WzYIrxeU67/Tay4C78UtRexz65wX5UnyIj?=
- =?us-ascii?Q?tv0YA3cMFgitB8M9ePtRLmv4jRkNN8oCD1OOQGP1wBKEOJnA7JRfWB9Cw0M4?=
- =?us-ascii?Q?C4dmYClL6q1oKVKafg61GNdW8gKddTCG0/8DTBuKpM1flhQ9ZKcbEiIjxAKG?=
- =?us-ascii?Q?P6KU9P4rnitDFzvKtHlgRxNopq34myqod4Rwt2QzcdzasFPSomBzGER+0mHw?=
- =?us-ascii?Q?Y0NLVt3IaPsrT4vgHtUuFj5lo6rnDO/sOlcmy64y0iPsNe1nH890smuUTFmw?=
- =?us-ascii?Q?bcjsRNLV9RE6v/oWCWlAb7OM7vfd8m4WV+QMFTvBakaNyGZncOGvvIR+tnA8?=
- =?us-ascii?Q?3KNumefrkXuRxWK39Cwr3o+6hWOMKK6vP9ffi70yW3UOMRu2QSiBzV3y1NrI?=
- =?us-ascii?Q?VFPlZkQnrGf7dio2m0GLfd9HKPvRrwZManyWS5Qap8DBk6Dvai9Nh3M2xUzq?=
- =?us-ascii?Q?7Ejm1xW2TfhNB6MX10KQs7p8tyEjNvg8qPg42z5OBGSBauGquP0TJYtxCgD4?=
- =?us-ascii?Q?pxR1M7EaYiFlRPRxED90QD9nbNHWNE4=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a97ef641-808f-43f9-4948-08da4dfe9c17
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2022 12:08:36.3243
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9zI+AEbGzFigJEkGZYtNEiqJQfrzNQQHXvm6OPZtvCXNznfSratscsX+molSSp3TMyQ91d11Lh707leCiPrnB6ncMA0NuvFrkMbNJ4o2b8Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR10MB1482
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
- definitions=2022-06-14_03:2022-06-13,2022-06-14 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 malwarescore=0
- suspectscore=0 spamscore=0 mlxscore=0 phishscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206140049
-X-Proofpoint-ORIG-GUID: Mm5AAlG265Y5dDELt3hPUyVQFNy-MGIf
-X-Proofpoint-GUID: Mm5AAlG265Y5dDELt3hPUyVQFNy-MGIf
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "regmap" is supposed to be initialized to NULL but it's used
-without being initialized.
+From: kyrie wu <kyrie.wu@mediatek.com>
 
-Fixes: efeeaefe9be5 ("drm: Add support for the LogiCVC display controller")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+This series adds support for multi hardware jpeg decoding,
+by first adding use of_platform_populate to manage each hardware
+information: interrupt, clock, register bases and power.
+Secondly add decoding work queue to deal with the decoding requests
+of multi-hardware at the same time. Lastly, add output picture
+reorder function interface to eliminate the out of order images.
+
+This series has been tested with both MT8195.
+Decoding worked for this chip.
+
+Patch 1 Adds jpeg decoder dt-bindings for mt8195
+
+Patches 2 jpeg decoder builds three module for using Multi-HW,
+export some functions to make them visible by other modules.
+
+Patch 3 use of_platform_populate to manage multi-hardware.
+
+Patch 4 add jpeg decoding timeout function to judge hardware timeout.
+
+Patch 5 add decoding work queue to deal with multi-hardware decoding
+at the same time.
+
+Patch 6 add output picture reorder function to order images.
+
+Patch 7 refactor jpegdec func interface for HW working.
+
+Patch 8 add stop cmd function to deal with EOS operation.
+
 ---
- drivers/gpu/drm/logicvc/logicvc_drm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This series patches dependent on:
+media_stage tree:
+[1]
+https://git.linuxtv.org/media_stage.git/commit/?id=b3627647f9ea7473d10fb08a95fd7c4133a17ca4
 
-diff --git a/drivers/gpu/drm/logicvc/logicvc_drm.c b/drivers/gpu/drm/logicvc/logicvc_drm.c
-index df1805cf0f95..0b983a33f9ff 100644
---- a/drivers/gpu/drm/logicvc/logicvc_drm.c
-+++ b/drivers/gpu/drm/logicvc/logicvc_drm.c
-@@ -298,7 +298,7 @@ static int logicvc_drm_probe(struct platform_device *pdev)
- 	struct logicvc_drm *logicvc;
- 	struct device *dev = &pdev->dev;
- 	struct drm_device *drm_dev;
--	struct regmap *regmap;
-+	struct regmap *regmap = NULL;
- 	struct resource res;
- 	void __iomem *base;
- 	int irq;
+patch1 new jpegdec dt-bindings included files
+[2] MM IOMMU binding:
+https://patchwork.kernel.org/project/linux-mediatek/patch/20220217113453.13658-2-yong.wu@mediatek.com/
+
+[3] MT8195 power domain:
+https://patchwork.kernel.org/project/linux-mediatek/list/?series=580579
+
+Changes compared with v2:
+- add stop cmd function.
+- some modifications for patch v1's review comments.
+
+Changes compared with v1:
+- new yaml file for mt8195 jpeg decoder.
+- some modifications for patch v1's review comments.
+
+kyrie wu (8):
+  dt-bindings: mediatek: Add mediatek,mt8195-jpgdec compatible
+  media: mtk-jpegdec: export jpeg decoder functions
+  media: mtk-jpegdec: manage jpegdec multi-hardware
+  media: mtk-jpegdec: add jpegdec timeout func interface
+  media: mtk-jpegdec: add jpeg decode worker interface
+  media: mtk-jpegdec: add output pic reorder interface
+  media: mtk-jpegdec: refactor jpegdec func interface
+  mtk-jpegdec: add stop cmd interface for jpgdec
+
+ .../media/mediatek,mt8195-jpegdec.yaml        | 175 ++++++++++
+ drivers/media/platform/mediatek/jpeg/Makefile |   5 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 244 +++++++++++++-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.h    |  46 +++
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 309 ++++++++++++++++--
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.h  |   3 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_reg.h |   1 +
+ 7 files changed, 751 insertions(+), 32 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
+
 -- 
-2.35.1
+2.18.0
 

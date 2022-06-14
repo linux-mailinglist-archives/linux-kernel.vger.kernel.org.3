@@ -2,351 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5054154AE80
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18E154AEAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238840AbiFNKf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 06:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
+        id S242794AbiFNKph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 06:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355785AbiFNKfr (ORCPT
+        with ESMTP id S235561AbiFNKpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 06:35:47 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D292748E68;
-        Tue, 14 Jun 2022 03:35:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Jun 2022 06:45:36 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8234E46649
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 03:45:34 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EAEE3CE1A4C;
-        Tue, 14 Jun 2022 10:35:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C336C3411B;
-        Tue, 14 Jun 2022 10:35:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655202915;
-        bh=x89Ir7pNjjQqfkhagFzJ4hIEuidI2t2sasOOdLNzw3w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NIVpPqVvh2kRX3GPU/uGMH8q5MLayWF6vmkogRlb1OCnBztTKUXwlttnAF+DUkfWJ
-         EyqhQODm5Sp8aAcDh0Ne3NKoMF24PzqxWX4zx8+12lYg0v3Xfgx8qiIJxPk4n3BQv/
-         SREpSAOzCuwq70Y8BJMqw8Xc0zc0xH3CTurd8d0K6B0MTtQ1q4CxKV05FMmgnMOlE9
-         9Hwb2CQwxuKmTz68URmOHaP6SF0dn5EctVQ8ouzbk6Z+E/4998PoURWX6fogO+tGvm
-         LbxGCN2eKuoLjJV6O9TXHFgMP4Oj/dP0SA1ILbBuilRY6Y0LhIle2au8iyQ2iJ6K+j
-         KnQHmcOCJ7/Ng==
-Date:   Tue, 14 Jun 2022 11:44:23 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Subject: Re: [PATCH v14 05/10] iio: adc: qcom-spmi-rradc: introduce round
- robin adc
-Message-ID: <20220614114423.357106f8@jic23-huawei>
-In-Reply-To: <b148d9a1-9c3b-9e6f-1419-7a644bcd43b5@linaro.org>
-References: <20220429220904.137297-1-caleb.connolly@linaro.org>
-        <20220429220904.137297-6-caleb.connolly@linaro.org>
-        <20220501183850.5bbbcbab@jic23-huawei>
-        <b148d9a1-9c3b-9e6f-1419-7a644bcd43b5@linaro.org>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMlT5550Dz4xYC;
+        Tue, 14 Jun 2022 20:45:29 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1655203529;
+        bh=RBj66p9m4fPiE+NiL5b1xNhjr+ADnO+uqrgDmOY6ZfU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=KJBgz7Bti+zcSg0e6LuxnE3Y5fRvZA76Y4/AtP0VgEmK7oAUFmGkI6+3GGZPGNy9f
+         YPxzzLCr5nBrazEUeqTH2NDUL2+blZa+/+pis7e4Ai9fFUnn663h3hTCMlqt0+JWka
+         1Ti6vNKngXZVyDw+ZPoC+aXcs4UnmEuHXI5SvDcr+DgHINxJpi83CKXyLp8Ztvt+lW
+         TgtIhkmNKOc3pSTdt8ah4pBRRV5caZb1ROCRuR1fbdCfY7EamMhY11TXyyFmG5FpJR
+         fsuwA0f3mlWzMjBQjhgtwZMxaV6h8QfXv0st6Q6sK5+pap3mPTLIOvZlj3vWsofwX/
+         h59qHks79R3fw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Wang Wenhu <wenhu.wang@hotmail.com>, gregkh@linuxfoundation.org,
+        christophe.leroy@csgroup.eu
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Wang Wenhu <wenhu.wang@hotmail.com>
+Subject: Re: [PATCH 1/2] powerpc:mm: export symbol ioremap_coherent
+In-Reply-To: <SG2PR01MB2951EBFD4C4EB2A2519FF4199FA79@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
+References: <20220609102855.272270-1-wenhu.wang@hotmail.com>
+ <SG2PR01MB2951EBFD4C4EB2A2519FF4199FA79@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
+Date:   Tue, 14 Jun 2022 20:45:25 +1000
+Message-ID: <8735g7cym2.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 9 May 2022 12:53:12 +0100
-Caleb Connolly <caleb.connolly@linaro.org> wrote:
+Wang Wenhu <wenhu.wang@hotmail.com> writes:
+> The function ioremap_coherent may be called by modules such as
+> fsl_85xx_cache_sram. So export it for access in other modules.
 
-> On 01/05/2022 18:38, Jonathan Cameron wrote:
-> > On Fri, 29 Apr 2022 23:09:00 +0100
-> > Caleb Connolly <caleb.connolly@linaro.org> wrote:
-> >   
-> >> The Round Robin ADC is responsible for reading data about the rate of
-> >> charge from the USB or DC input ports, it can also read the battery
-> >> ID (resistence), skin temperature and the die temperature of the pmic.
-> >> It is found on the PMI8998 and PM660 Qualcomm PMICs.
-> >>
-> >> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>  
-> > Hi Caleb,  
-> Hi Jonathan,
-> 
-> Thanks for spotting this, I completely missed it... Yeah this should be 
-> IIO_INFO_PROCESSED, the battery ID calculation doesn't fit in the 
-> raw/offset/scale format.
-> > 
-> > I took another quick read through of this and noticed that the battery channel
-> > is providing on IIO_INFO_RAW but there is code for IIO_INFO_PROCESSED.
-> > 
-> > Something gone wrong along the way?  If all we need is to change it to
-> > BIT(IIO_INFO_PROCESSED) I can do that whilst applying or you can do a v15 if
-> > you prefer.  
-> That would be hugely appreciated, thanks a lot.
-> > 
-Given other reply I just sent suggesting you do a v15 and Lee might
-want to just pick up the series, with above fixed.
+ioremap_coherent() is powerpc specific, and only has one other caller,
+I'd like to remove it.
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Does ioremap_cache() work for you?
 
-Either way works as long as there is an immutable branch somewhere.
+cheers
 
-Thanks,
-
-Jonathan
-
-> > Thanks,
-> > 
-> > Jonathan
-> >   
-> >> ---  
-> >   
-> >> diff --git a/drivers/iio/adc/qcom-spmi-rradc.c b/drivers/iio/adc/qcom-spmi-rradc.c
-> >> new file mode 100644
-> >> index 000000000000..c437546d8a4c
-> >> --- /dev/null
-> >> +++ b/drivers/iio/adc/qcom-spmi-rradc.c  
-> > 
-> > 
-> > ..
-> >   
-> >> +
-> >> +/*
-> >> + * These functions explicitly cast int64_t to int.
-> >> + * They will never overflow, as the values are small enough.  
-> > 
-> > See below. I don't think this gets used...
-> >   
-> >> + */
-> >> +static int rradc_post_process_batt_id(struct rradc_chip *chip, u16 adc_code,
-> >> +				      int *result_ohms)
-> >> +{
-> >> +	uint32_t current_value;
-> >> +	int64_t r_id;
-> >> +
-> >> +	current_value = chip->batt_id_data;
-> >> +	r_id = ((int64_t)adc_code * RR_ADC_FS_VOLTAGE_MV);
-> >> +	r_id = div64_s64(r_id, (RR_ADC_CHAN_MSB * current_value));
-> >> +	*result_ohms = (int)(r_id * MILLI);
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +  
-> > 
-> >   
-> >> +
-> >> +static int rradc_read_raw(struct iio_dev *indio_dev,
-> >> +			  struct iio_chan_spec const *chan_spec, int *val,
-> >> +			  int *val2, long mask)
-> >> +{
-> >> +	struct rradc_chip *chip = iio_priv(indio_dev);
-> >> +	const struct rradc_channel *chan;
-> >> +	int ret;
-> >> +	u16 adc_code;
-> >> +
-> >> +	if (chan_spec->address >= RR_ADC_CHAN_MAX) {
-> >> +		dev_err(chip->dev, "Invalid channel index:%lu\n",
-> >> +			chan_spec->address);
-> >> +		return -EINVAL;
-> >> +	}
-> >> +
-> >> +	switch (mask) {
-> >> +	case IIO_CHAN_INFO_SCALE:
-> >> +		return rradc_read_scale(chip, chan_spec->address, val, val2);
-> >> +	case IIO_CHAN_INFO_OFFSET:
-> >> +		return rradc_read_offset(chip, chan_spec->address, val);
-> >> +	case IIO_CHAN_INFO_RAW:
-> >> +		ret = rradc_do_conversion(chip, chan_spec->address, &adc_code);
-> >> +		if (ret < 0)
-> >> +			return ret;
-> >> +
-> >> +		*val = adc_code;
-> >> +		return IIO_VAL_INT;
-> >> +	case IIO_CHAN_INFO_PROCESSED:  
-> > 
-> > This doesn't seem to apply to any channels....
-> >   
-> >> +		chan = &rradc_chans[chan_spec->address];
-> >> +		if (!chan->scale_fn)
-> >> +			return -EINVAL;
-> >> +		ret = rradc_do_conversion(chip, chan_spec->address, &adc_code);
-> >> +		if (ret < 0)
-> >> +			return ret;
-> >> +
-> >> +		*val = chan->scale_fn(chip, adc_code, val);
-> >> +		return IIO_VAL_INT;
-> >> +	default:
-> >> +		return -EINVAL;
-> >> +	}
-> >> +}
-> >> +
-> >> +static int rradc_read_label(struct iio_dev *indio_dev,
-> >> +			    struct iio_chan_spec const *chan, char *label)
-> >> +{
-> >> +	return snprintf(label, PAGE_SIZE, "%s\n",
-> >> +			rradc_chans[chan->address].label);
-> >> +}
-> >> +
-> >> +static const struct iio_info rradc_info = {
-> >> +	.read_raw = rradc_read_raw,
-> >> +	.read_label = rradc_read_label,
-> >> +};
-> >> +
-> >> +static const struct rradc_channel rradc_chans[RR_ADC_CHAN_MAX] = {
-> >> +	{
-> >> +		.label = "batt_id",
-> >> +		.scale_fn = rradc_post_process_batt_id,
-> >> +		.lsb = RR_ADC_BATT_ID_5_LSB,
-> >> +		.status = RR_ADC_BATT_ID_STS,
-> >> +		.size = 6,
-> >> +		.trigger_addr = RR_ADC_BATT_ID_TRIGGER,
-> >> +		.trigger_mask = BIT(0),
-> >> +	}, {
-> >> +		.label = "batt",
-> >> +		.lsb = RR_ADC_BATT_THERM_LSB,
-> >> +		.status = RR_ADC_BATT_THERM_STS,
-> >> +		.size = 2,
-> >> +		.trigger_addr = RR_ADC_BATT_THERM_TRIGGER,
-> >> +	}, {
-> >> +		.label = "pmi8998_skin",
-> >> +		.lsb = RR_ADC_SKIN_TEMP_LSB,
-> >> +		.status = RR_ADC_AUX_THERM_STS,
-> >> +		.size = 2,
-> >> +		.trigger_addr = RR_ADC_AUX_THERM_TRIGGER,
-> >> +	}, {
-> >> +		.label = "usbin_i",
-> >> +		.lsb = RR_ADC_USB_IN_I_LSB,
-> >> +		.status = RR_ADC_USB_IN_I_STS,
-> >> +		.size = 2,
-> >> +		.trigger_addr = RR_ADC_USB_IN_I_TRIGGER,
-> >> +	}, {
-> >> +		.label = "usbin_v",
-> >> +		.lsb = RR_ADC_USB_IN_V_LSB,
-> >> +		.status = RR_ADC_USB_IN_V_STS,
-> >> +		.size = 2,
-> >> +		.trigger_addr = RR_ADC_USB_IN_V_TRIGGER,
-> >> +		.trigger_mask = BIT(7),
-> >> +	}, {
-> >> +		.label = "dcin_i",
-> >> +		.lsb = RR_ADC_DC_IN_I_LSB,
-> >> +		.status = RR_ADC_DC_IN_I_STS,
-> >> +		.size = 2,
-> >> +		.trigger_addr = RR_ADC_DC_IN_I_TRIGGER,
-> >> +	}, {
-> >> +		.label = "dcin_v",
-> >> +		.lsb = RR_ADC_DC_IN_V_LSB,
-> >> +		.status = RR_ADC_DC_IN_V_STS,
-> >> +		.size = 2,
-> >> +		.trigger_addr = RR_ADC_DC_IN_V_TRIGGER,
-> >> +	}, {
-> >> +		.label = "pmi8998_die",
-> >> +		.lsb = RR_ADC_PMI_DIE_TEMP_LSB,
-> >> +		.status = RR_ADC_PMI_DIE_TEMP_STS,
-> >> +		.size = 2,
-> >> +		.trigger_addr = RR_ADC_PMI_DIE_TEMP_TRIGGER,
-> >> +		.trigger_mask = RR_ADC_TRIGGER_EVERY_CYCLE,
-> >> +	}, {
-> >> +		.label = "chg",
-> >> +		.lsb = RR_ADC_CHARGER_TEMP_LSB,
-> >> +		.status = RR_ADC_CHARGER_TEMP_STS,
-> >> +		.size = 2,
-> >> +		.trigger_addr = RR_ADC_CHARGER_TEMP_TRIGGER,
-> >> +	}, {
-> >> +		.label = "gpio",
-> >> +		.lsb = RR_ADC_GPIO_LSB,
-> >> +		.status = RR_ADC_GPIO_STS,
-> >> +		.size = 2,
-> >> +		.trigger_addr = RR_ADC_GPIO_TRIGGER,
-> >> +	},
-> >> +};
-> >> +
-> >> +static const struct iio_chan_spec rradc_iio_chans[RR_ADC_CHAN_MAX] = {
-> >> +	{
-> >> +		.type = IIO_RESISTANCE,
-> >> +		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),
-> >> +		.address = RR_ADC_BATT_ID,
-> >> +		.channel = 0,
-> >> +		.indexed = 1,
-> >> +	}, {
-> >> +		.type = IIO_TEMP,
-> >> +		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW),
-> >> +		.address = RR_ADC_BATT_THERM,
-> >> +		.channel = 0,
-> >> +		.indexed = 1,
-> >> +	}, {
-> >> +		.type = IIO_TEMP,
-> >> +		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-> >> +				      BIT(IIO_CHAN_INFO_SCALE) |
-> >> +				      BIT(IIO_CHAN_INFO_OFFSET),
-> >> +		.address = RR_ADC_SKIN_TEMP,
-> >> +		.channel = 1,
-> >> +		.indexed = 1,
-> >> +	}, {
-> >> +		.type = IIO_CURRENT,
-> >> +		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-> >> +				      BIT(IIO_CHAN_INFO_SCALE),
-> >> +		.address = RR_ADC_USBIN_I,
-> >> +		.channel = 0,
-> >> +		.indexed = 1,
-> >> +	}, {
-> >> +		.type = IIO_VOLTAGE,
-> >> +		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-> >> +				      BIT(IIO_CHAN_INFO_SCALE),
-> >> +		.address = RR_ADC_USBIN_V,
-> >> +		.channel = 0,
-> >> +		.indexed = 1,
-> >> +	}, {
-> >> +		.type = IIO_CURRENT,
-> >> +		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-> >> +				      BIT(IIO_CHAN_INFO_SCALE),
-> >> +		.address = RR_ADC_DCIN_I,
-> >> +		.channel = 1,
-> >> +		.indexed = 1,
-> >> +	}, {
-> >> +		.type = IIO_VOLTAGE,
-> >> +		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-> >> +				      BIT(IIO_CHAN_INFO_SCALE),
-> >> +		.address = RR_ADC_DCIN_V,
-> >> +		.channel = 1,
-> >> +		.indexed = 1,
-> >> +	}, {
-> >> +		.type = IIO_TEMP,
-> >> +		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-> >> +				      BIT(IIO_CHAN_INFO_SCALE) |
-> >> +				      BIT(IIO_CHAN_INFO_OFFSET),
-> >> +		.address = RR_ADC_DIE_TEMP,
-> >> +		.channel = 2,
-> >> +		.indexed = 1,
-> >> +	}, {
-> >> +		.type = IIO_TEMP,
-> >> +		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-> >> +				      BIT(IIO_CHAN_INFO_OFFSET) |
-> >> +				      BIT(IIO_CHAN_INFO_SCALE),
-> >> +		.address = RR_ADC_CHG_TEMP,
-> >> +		.channel = 3,
-> >> +		.indexed = 1,
-> >> +	}, {
-> >> +		.type = IIO_VOLTAGE,
-> >> +		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-> >> +				      BIT(IIO_CHAN_INFO_SCALE),
-> >> +		.address = RR_ADC_GPIO,
-> >> +		.channel = 2,
-> >> +		.indexed = 1,
-> >> +	},
-> >> +};
-> >> +  
-> >   
-> 
-
+> diff --git a/arch/powerpc/mm/ioremap.c b/arch/powerpc/mm/ioremap.c
+> index 4f12504fb405..08a00dacef0b 100644
+> --- a/arch/powerpc/mm/ioremap.c
+> +++ b/arch/powerpc/mm/ioremap.c
+> @@ -40,6 +40,7 @@ void __iomem *ioremap_coherent(phys_addr_t addr, unsigned long size)
+>  		return iowa_ioremap(addr, size, prot, caller);
+>  	return __ioremap_caller(addr, size, prot, caller);
+>  }
+> +EXPORT_SYMBOL(ioremap_coherent);
+>  
+>  void __iomem *ioremap_prot(phys_addr_t addr, unsigned long size, unsigned long flags)
+>  {
+> -- 
+> 2.25.1

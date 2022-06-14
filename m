@@ -2,168 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6801E54B225
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77ED254B019
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:12:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244641AbiFNNRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 09:17:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
+        id S1356509AbiFNMKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:10:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231859AbiFNNRQ (ORCPT
+        with ESMTP id S1356422AbiFNMKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 09:17:16 -0400
-X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Jun 2022 06:17:14 PDT
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A539369FA;
-        Tue, 14 Jun 2022 06:17:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=JAv4LCz3gTxKSnfh4LIXx7N89/orNIUqz4pbzgwAvLc=; b=KmsKEA5hRPt0/BP4UopWUQqD+5
-        rLLETgl2Q0pg+Xn/V5a0IeRYq+A+oYqKM91rAyj7h2Bp8nAb+dTu12NTrdQK+wBWR6To12H7KRRId
-        f4cgiw98gA6dvNtCur0CGgdhUsXgbBUHix6Tclb00sJFqL54OJmspQ6tL0S02d8gKxdO06Ij37MdA
-        sdIgnbs9MvjU/xNUb8jDnp0gfX29L/ZALkeOFIpNX3Utl8UQXPICcSiD2XSV4eidajMEGegrvma5Z
-        +kV4eVasKkXmtR8slsBzLvfe61BZi850HLm8ektrc6UVXt147XexmDbI++GTaIWnMtYLyrzQ0Y8sC
-        nckC5mxjk0uLCWE28zdRmoJNFa60ZiqVhiADeTD+s1XKkoYw7y3NT7ij1wfY8YEw5Q3tYqkr+rsDd
-        L1NYrsk2aULFPxvREhFiIkiVdAObB1uBEmj4ANx2TFZ4BZQqRVo634an2GxKeUwW0Qp7ugwIOR/Os
-        0yVXKJDCCb1y6WXDy8RDu/PdCNaUZxmKYlLMm9YFfpErtAHCNbAVR+jqOpwoByhZSl/wzuhS1EMjf
-        WmB9r8o/0LabK66WbR0WYKsM/ouVcUyMuV9o/SCsXnPBOX2q0bAEpUBL5LTHl76r6JU+nqPo2OOIc
-        UkPTNjyX05lMvy5w3pBG538R0kmK7oTQDiL8yGI8M=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        David Howells <dhowells@redhat.com>,
-        Dominique Martinet <asmadeus@codewreck.org>
-Cc:     linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] 9p: fix EBADF errors in cached mode
-Date:   Tue, 14 Jun 2022 14:10:01 +0200
-Message-ID: <19026878.01OTk6HtWb@silver>
-In-Reply-To: <YqgDdNUxC0hV6KR9@codewreck.org>
-References: <YqW5s+GQZwZ/DP5q@codewreck.org>
- <20220614033802.1606738-1-asmadeus@codewreck.org>
- <YqgDdNUxC0hV6KR9@codewreck.org>
+        Tue, 14 Jun 2022 08:10:23 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAB84993E;
+        Tue, 14 Jun 2022 05:10:20 -0700 (PDT)
+X-UUID: 9bfb50cd79af4c9c8d62b1cf51bc4b35-20220614
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:d33f2d0d-89d6-41ff-b3c1-5ed15699150c,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:c6059207-b57a-4a25-a071-bc7b4972bc68,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 9bfb50cd79af4c9c8d62b1cf51bc4b35-20220614
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <irui.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1306160205; Tue, 14 Jun 2022 20:10:13 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 14 Jun 2022 20:10:12 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 14 Jun 2022 20:10:11 +0800
+From:   Irui Wang <irui.wang@mediatek.com>
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <nicolas.dufresne@collabora.com>, <wenst@chromium.org>
+CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
+        <maoguang.meng@mediatek.com>, kyrie wu <kyrie.wu@mediatek.com>,
+        <srv_heupstream@mediatek.com>
+Subject: [RESEND V3,5/8] media: mtk-jpegdec: add jpeg decode worker interface
+Date:   Tue, 14 Jun 2022 20:10:01 +0800
+Message-ID: <20220614121004.31616-6-irui.wang@mediatek.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220614121004.31616-1-irui.wang@mediatek.com>
+References: <20220614121004.31616-1-irui.wang@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Dienstag, 14. Juni 2022 05:41:40 CEST Dominique Martinet wrote:
-> Dominique Martinet wrote on Tue, Jun 14, 2022 at 12:38:02PM +0900:
-> > cached operations sometimes need to do invalid operations (e.g. read
-> > on a write only file)
-> > Historic fscache had added a "writeback fid" for this, but the conversion
-> > to new fscache somehow lost usage of it: use the writeback fid instead
-> > of normal one.
-> > 
-> > Note that the way this works (writeback fid being linked to inode) means
-> > we might use overprivileged fid for some operations, e.g. write as root
-> > when we shouldn't.
-> > Ideally we should keep both fids handy, and only use the writeback fid
-> > when really required e.g. reads to a write-only file to fill in the page
-> > cache (read-modify-write); but this is the situation we've always had
-> > and this commit only fixes an issue we've had for too long.
-> > 
-> > Fixes: eb497943fa21 ("9p: Convert to using the netfs helper lib to do
-> > reads and caching") Cc: stable@vger.kernel.org
-> > Cc: David Howells <dhowells@redhat.com>
-> > Reported-By: Christian Schoenebeck <linux_oss@crudebyte.com>
-> > Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
-> > ---
-> > Ok so finally had time to look at this, and it's not a lot so this is
-> > the most straight forward way to do: just reverting to how the old
-> > fscache worked.
-> > 
-> > This appears to work from quick testing, Chiristian could you test it?
-> > 
-> > I think the warnings you added in p9_client_read/write that check
-> > fid->mode might a lot of sense, if you care to resend it as
-> > WARN_ON((fid->mode & ACCMODE) == O_xyz);
-> > instead I'll queue that for 5.20
-> > 
-> > 
-> > @Stable people, I've checked it applies to 5.17 and 5.18 so should be
-> > good to grab once I submit it for inclusion (that commit was included in
-> > 5.16, which is no longer stable)
-> > 
-> >  fs/9p/vfs_addr.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
-> > index 7382c5227e94..262968d02f55 100644
-> > --- a/fs/9p/vfs_addr.c
-> > +++ b/fs/9p/vfs_addr.c
-> > @@ -58,7 +58,11 @@ static void v9fs_issue_read(struct netfs_io_subrequest
-> > *subreq)> 
-> >   */
-> >  
-> >  static int v9fs_init_request(struct netfs_io_request *rreq, struct file
-> >  *file) {
-> > 
-> > -	struct p9_fid *fid = file->private_data;
-> > +	struct inode *inode = file_inode(file);
-> > +	struct v9fs_inode *v9inode = V9FS_I(inode);
-> > +	struct p9_fid *fid = v9inode->writeback_fid;
-> > +
-> 
-> Sorry for mails back-to-back (grmbl I hate git commit --amend not
-> warning I only have unstaged changes), this is missing the following
-> here:
+From: kyrie wu <kyrie.wu@mediatek.com>
 
-I think git does actually. It shows you staged and unstaged changes as comment 
-below the commit log text inside the editor. Not as a big fat warning, but the 
-info is there.
+Add jpeg decoding worker to ensure that three HWs
+run in parallel in MT8195.
 
-> +    /* If there is no writeback fid this file only ever has had
-> +     * read-only opens, so we can use file's fid which should
-> +     * always be set instead */
-> +    if (!fid)
-> +        fid = file->private_data;
-> 
-> Christian, you can find it here to test:
-> https://github.com/martinetd/linux/commit/a6e033c41cc9f0ec105f5d208b0a820118
-> e2bda8
-> > +	BUG_ON(!fid);
-> > 
-> >  	p9_fid_get(fid);
-> >  	rreq->netfs_priv = fid;
+Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+---
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    | 191 ++++++++++++++++++
+ .../platform/mediatek/jpeg/mtk_jpeg_core.h    |   6 +
+ .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  |  35 ++--
+ 3 files changed, 220 insertions(+), 12 deletions(-)
 
-It definitely goes into the right direction, but I think it's going a bit too 
-far by using writeback_fid also in cases where it is not necessary and wasn't 
-used before in the past.
-
-What about something like this in v9fs_init_request() (yet untested):
-
-    /* writeback_fid is always opened O_RDWR (instead of just O_WRONLY) 
-     * explicitly for this case: partial write backs that require a read
-     * prior to actual write and therefore requires a fid with read
-     * capability.
-     */
-    if (rreq->origin == NETFS_READ_FOR_WRITE)
-        fid = v9inode->writeback_fid;
-
-If desired, this could be further constrained later on like:
-
-    if (rreq->origin == NETFS_READ_FOR_WRITE &&
-        (fid->mode & O_ACCMODE) == O_WRONLY)
-    {
-        fid = v9inode->writeback_fid;
-    }
-
-I will definitely give these options some test spins here, a short feedback 
-ahead would be appreciated though.
-
-Thanks Dominique!
-
-Best regards,
-Christian Schoenebeck
-
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+index 6afed679f37b..25fa3ad8de3d 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+@@ -1100,6 +1100,176 @@ static void mtk_jpeg_enc_device_run(void *priv)
+ 	}
+ }
+ 
++static int mtk_jpegdec_select_hw(struct mtk_jpeg_ctx *ctx)
++{
++	struct mtk_jpegdec_comp_dev *comp_jpeg;
++	struct mtk_jpeg_dev *jpeg = ctx->jpeg;
++	unsigned long flags;
++	int hw_id = -1;
++	int i;
++
++	spin_lock_irqsave(&jpeg->hw_lock, flags);
++	for (i = 0; i < MTK_JPEGDEC_HW_MAX; i++) {
++		comp_jpeg = jpeg->dec_hw_dev[i];
++		if (comp_jpeg->hw_state == MTK_JPEG_HW_IDLE) {
++			hw_id = i;
++			comp_jpeg->hw_state = MTK_JPEG_HW_BUSY;
++			break;
++		}
++	}
++	spin_unlock_irqrestore(&jpeg->hw_lock, flags);
++
++	return hw_id;
++}
++
++static int mtk_jpegdec_deselect_hw(struct mtk_jpeg_dev *jpeg, int hw_id)
++{
++	unsigned long flags;
++
++	spin_lock_irqsave(&jpeg->hw_lock, flags);
++	jpeg->dec_hw_dev[hw_id]->hw_state =
++		MTK_JPEG_HW_IDLE;
++	spin_unlock_irqrestore(&jpeg->hw_lock, flags);
++
++	return 0;
++}
++
++static int mtk_jpegdec_set_hw_param(struct mtk_jpeg_ctx *ctx,
++				    int hw_id,
++				    struct vb2_v4l2_buffer *src_buf,
++				    struct vb2_v4l2_buffer *dst_buf)
++{
++	struct mtk_jpegdec_comp_dev *jpeg =
++		ctx->jpeg->dec_hw_dev[hw_id];
++
++	jpeg->hw_param.curr_ctx = ctx;
++	jpeg->hw_param.src_buffer = src_buf;
++	jpeg->hw_param.dst_buffer = dst_buf;
++
++	return 0;
++}
++
++static void mtk_jpegdec_worker(struct work_struct *work)
++{
++	struct mtk_jpeg_ctx *ctx = container_of(work, struct mtk_jpeg_ctx,
++		jpeg_work);
++	struct mtk_jpegdec_comp_dev *comp_jpeg[MTK_JPEGDEC_HW_MAX];
++	enum vb2_buffer_state buf_state = VB2_BUF_STATE_ERROR;
++	struct mtk_jpeg_src_buf *jpeg_src_buf, *jpeg_dst_buf;
++	struct vb2_v4l2_buffer *src_buf, *dst_buf;
++	struct mtk_jpeg_dev *jpeg = ctx->jpeg;
++	atomic_t *hw_rdy[MTK_JPEGDEC_HW_MAX];
++	int ret, i, hw_id = 0;
++	struct mtk_jpeg_bs bs;
++	struct mtk_jpeg_fb fb;
++	unsigned long flags;
++
++	for (i = 0; i < MTK_JPEGDEC_HW_MAX; i++) {
++		comp_jpeg[i] = jpeg->dec_hw_dev[i];
++		hw_rdy[i] = &comp_jpeg[i]->hw_rdy;
++	}
++
++retry_select:
++	hw_id = mtk_jpegdec_select_hw(ctx);
++	if (hw_id < 0) {
++		ret = wait_event_interruptible_timeout(jpeg->dec_hw_wq,
++						       (atomic_read(hw_rdy[0]) ||
++							atomic_read(hw_rdy[1]) ||
++							atomic_read(hw_rdy[2])) > 0,
++						       MTK_JPEG_HW_TIMEOUT_MSEC);
++		if (ret != 0) {
++			dev_err(jpeg->dev, "%s : %d, all HW are busy\n",
++				__func__, __LINE__);
++			v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
++			return;
++		}
++
++		goto retry_select;
++	}
++
++	atomic_dec(&comp_jpeg[hw_id]->hw_rdy);
++	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
++	if (!src_buf)
++		goto getbuf_fail;
++
++	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
++	if (!dst_buf)
++		goto getbuf_fail;
++
++	v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
++	v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
++
++	v4l2_m2m_buf_copy_metadata(src_buf, dst_buf, true);
++	jpeg_src_buf = mtk_jpeg_vb2_to_srcbuf(&src_buf->vb2_buf);
++	jpeg_dst_buf = mtk_jpeg_vb2_to_srcbuf(&dst_buf->vb2_buf);
++
++	if (mtk_jpeg_check_resolution_change(ctx,
++					     &jpeg_src_buf->dec_param)) {
++		mtk_jpeg_queue_src_chg_event(ctx);
++		ctx->state = MTK_JPEG_SOURCE_CHANGE;
++		goto dec_end;
++	}
++
++	jpeg_src_buf->curr_ctx = ctx;
++	jpeg_src_buf->frame_num = ctx->total_frame_num;
++	jpeg_dst_buf->curr_ctx = ctx;
++	jpeg_dst_buf->frame_num = ctx->total_frame_num;
++	ctx->total_frame_num++;
++
++	mtk_jpegdec_set_hw_param(ctx, hw_id, src_buf, dst_buf);
++	ret = pm_runtime_get_sync(comp_jpeg[hw_id]->dev);
++	if (ret < 0) {
++		dev_err(jpeg->dev, "%s : %d, pm_runtime_get_sync fail !!!\n",
++			__func__, __LINE__);
++		goto dec_end;
++	}
++
++	ret = clk_prepare_enable(comp_jpeg[hw_id]->jdec_clk.clks->clk);
++	if (ret) {
++		dev_err(jpeg->dev, "%s : %d, jpegdec clk_prepare_enable fail\n",
++			__func__, __LINE__);
++		goto clk_end;
++	}
++
++	schedule_delayed_work(&comp_jpeg[hw_id]->job_timeout_work,
++			      msecs_to_jiffies(MTK_JPEG_HW_TIMEOUT_MSEC));
++
++	mtk_jpeg_set_dec_src(ctx, &src_buf->vb2_buf, &bs);
++	if (mtk_jpeg_set_dec_dst(ctx,
++				 &jpeg_src_buf->dec_param,
++				 &dst_buf->vb2_buf, &fb)) {
++		dev_err(jpeg->dev, "%s : %d, mtk_jpeg_set_dec_dst fail\n",
++			__func__, __LINE__);
++		goto setdst_end;
++	}
++
++	spin_lock_irqsave(&comp_jpeg[hw_id]->hw_lock, flags);
++	mtk_jpeg_dec_reset(comp_jpeg[hw_id]->reg_base);
++	mtk_jpeg_dec_set_config(jpeg->reg_base,
++				&jpeg_src_buf->dec_param,
++				&bs,
++				&fb);
++	mtk_jpeg_dec_start(comp_jpeg[hw_id]->reg_base);
++	v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
++	spin_unlock_irqrestore(&comp_jpeg[hw_id]->hw_lock, flags);
++
++	return;
++
++setdst_end:
++	clk_disable_unprepare(comp_jpeg[hw_id]->jdec_clk.clks->clk);
++clk_end:
++	pm_runtime_put(comp_jpeg[hw_id]->dev);
++dec_end:
++	v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
++	v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
++	v4l2_m2m_buf_done(src_buf, buf_state);
++	v4l2_m2m_buf_done(dst_buf, buf_state);
++getbuf_fail:
++	atomic_inc(&comp_jpeg[hw_id]->hw_rdy);
++	mtk_jpegdec_deselect_hw(jpeg, hw_id);
++	v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
++}
++
+ static void mtk_jpeg_dec_device_run(void *priv)
+ {
+ 	struct mtk_jpeg_ctx *ctx = priv;
+@@ -1112,6 +1282,7 @@ static void mtk_jpeg_dec_device_run(void *priv)
+ 	struct mtk_jpeg_fb fb;
+ 	int ret;
+ 
++if (!jpeg->variant->is_multihw) {
+ 	src_buf = v4l2_m2m_next_src_buf(ctx->fh.m2m_ctx);
+ 	dst_buf = v4l2_m2m_next_dst_buf(ctx->fh.m2m_ctx);
+ 	jpeg_src_buf = mtk_jpeg_vb2_to_srcbuf(&src_buf->vb2_buf);
+@@ -1149,6 +1320,9 @@ static void mtk_jpeg_dec_device_run(void *priv)
+ 	v4l2_m2m_buf_done(src_buf, buf_state);
+ 	v4l2_m2m_buf_done(dst_buf, buf_state);
+ 	v4l2_m2m_job_finish(jpeg->m2m_dev, ctx->fh.m2m_ctx);
++} else {
++	queue_work(jpeg->workqueue, &ctx->jpeg_work);
++}
+ }
+ 
+ static int mtk_jpeg_dec_job_ready(void *priv)
+@@ -1367,6 +1541,11 @@ static int mtk_jpeg_open(struct file *file)
+ 					  "mediatek,jpegenc-multi-core")) {
+ 			INIT_WORK(&ctx->jpeg_work, mtk_jpegenc_worker);
+ 		}
++
++		if (of_property_read_bool(jpeg->dev->of_node,
++					  "mediatek,jpegdec-multi-core")) {
++			INIT_WORK(&ctx->jpeg_work, mtk_jpegdec_worker);
++		}
+ 	}
+ 
+ 	INIT_LIST_HEAD(&ctx->dst_done_queue);
+@@ -1518,6 +1697,18 @@ static int mtk_jpeg_probe(struct platform_device *pdev)
+ 				goto err_alloc_workqueue;
+ 			}
+ 		}
++
++		if (of_property_read_bool(pdev->dev.of_node,
++					  "mediatek,jpegdec-multi-core")) {
++			init_waitqueue_head(&jpeg->dec_hw_wq);
++			jpeg->workqueue = alloc_ordered_workqueue(MTK_JPEG_NAME,
++								  WQ_MEM_RECLAIM
++								  | WQ_FREEZABLE);
++			if (!jpeg->workqueue) {
++				ret = -EINVAL;
++				goto err_alloc_workqueue;
++			}
++		}
+ 	}
+ 
+ 	ret = v4l2_device_register(&pdev->dev, &jpeg->v4l2_dev);
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+index 4709e5b8adbe..4da6d0621981 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
+@@ -175,6 +175,10 @@ struct mtk_jpegdec_comp_dev {
+ 	int hw_id;
+ 	struct delayed_work job_timeout_work;
+ 	struct mtk_jpeg_hw_param hw_param;
++	atomic_t hw_rdy;
++	enum mtk_jpeg_hw_state hw_state;
++	//spinlock protecting the hw device resource
++	spinlock_t hw_lock;
+ };
+ 
+ /**
+@@ -210,6 +214,8 @@ struct mtk_jpeg_dev {
+ 
+ 	void __iomem *reg_decbase[MTK_JPEGDEC_HW_MAX];
+ 	struct mtk_jpegdec_comp_dev *dec_hw_dev[MTK_JPEGDEC_HW_MAX];
++	wait_queue_head_t dec_hw_wq;
++	struct workqueue_struct	*dec_workqueue;
+ };
+ 
+ /**
+diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
+index 0bc1c781938c..29f26ee6c705 100644
+--- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
++++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
+@@ -446,14 +446,19 @@ static void mtk_jpegdec_timeout_work(struct work_struct *work)
+ 	struct mtk_jpegdec_comp_dev *cjpeg =
+ 		container_of(work, struct mtk_jpegdec_comp_dev,
+ 			     job_timeout_work.work);
++	struct mtk_jpeg_dev *master_jpeg = cjpeg->master_dev;
+ 	struct vb2_v4l2_buffer *src_buf, *dst_buf;
+ 
+ 	src_buf = cjpeg->hw_param.src_buffer;
+ 	dst_buf = cjpeg->hw_param.dst_buffer;
++	dst_buf->vb2_buf.timestamp = src_buf->vb2_buf.timestamp;
+ 
+ 	mtk_jpeg_dec_reset(cjpeg->reg_base);
+ 	clk_disable_unprepare(cjpeg->jdec_clk.clks->clk);
+ 	pm_runtime_put(cjpeg->dev);
++	cjpeg->hw_state = MTK_JPEG_HW_IDLE;
++	atomic_inc(&cjpeg->hw_rdy);
++	wake_up(&master_jpeg->dec_hw_wq);
+ 	v4l2_m2m_buf_done(src_buf, buf_state);
+ 	v4l2_m2m_buf_done(dst_buf, buf_state);
+ }
+@@ -473,22 +478,20 @@ static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
+ 
+ 	cancel_delayed_work(&jpeg->job_timeout_work);
+ 
++	ctx = jpeg->hw_param.curr_ctx;
++	src_buf = jpeg->hw_param.src_buffer;
++	dst_buf = jpeg->hw_param.dst_buffer;
++	dst_buf->vb2_buf.timestamp = src_buf->vb2_buf.timestamp;
++
+ 	irq_status = mtk_jpeg_dec_get_int_status(jpeg->reg_base);
+ 	dec_irq_ret = mtk_jpeg_dec_enum_result(irq_status);
+ 	if (dec_irq_ret >= MTK_JPEG_DEC_RESULT_UNDERFLOW)
+ 		mtk_jpeg_dec_reset(jpeg->reg_base);
+-	if (dec_irq_ret != MTK_JPEG_DEC_RESULT_EOF_DONE)
+-		return IRQ_NONE;
+-
+-	ctx = v4l2_m2m_get_curr_priv(master_jpeg->m2m_dev);
+-	if (!ctx) {
+-		dev_err(jpeg->dev, "Context is NULL\n");
+-		return IRQ_HANDLED;
++	if (dec_irq_ret != MTK_JPEG_DEC_RESULT_EOF_DONE) {
++		dev_err(jpeg->dev, " Not MTK_JPEG_DEC_RESULT_EOF_DONE\n");
++		goto irq_handled;
+ 	}
+ 
+-	src_buf = v4l2_m2m_src_buf_remove(ctx->fh.m2m_ctx);
+-	dst_buf = v4l2_m2m_dst_buf_remove(ctx->fh.m2m_ctx);
+-	dst_buf->vb2_buf.timestamp = src_buf->vb2_buf.timestamp;
+ 	jpeg_src_buf =
+ 		container_of(src_buf, struct mtk_jpeg_src_buf, b);
+ 
+@@ -496,12 +499,16 @@ static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
+ 		vb2_set_plane_payload(&dst_buf->vb2_buf, i,
+ 				      jpeg_src_buf->dec_param.comp_size[i]);
+ 
++irq_handled:
+ 	buf_state = VB2_BUF_STATE_DONE;
+-
+ 	v4l2_m2m_buf_done(src_buf, buf_state);
+ 	v4l2_m2m_buf_done(dst_buf, buf_state);
+-	v4l2_m2m_job_finish(master_jpeg->m2m_dev, ctx->fh.m2m_ctx);
+ 	pm_runtime_put(ctx->jpeg->dev);
++	clk_disable_unprepare(jpeg->jdec_clk.clks->clk);
++
++	jpeg->hw_state = MTK_JPEG_HW_IDLE;
++	wake_up(&master_jpeg->dec_hw_wq);
++	atomic_inc(&jpeg->hw_rdy);
+ 
+ 	return IRQ_HANDLED;
+ }
+@@ -554,6 +561,10 @@ static int mtk_jpegdec_hw_probe(struct platform_device *pdev)
+ 	dev->plat_dev = pdev;
+ 	dev->dev = &pdev->dev;
+ 
++	atomic_set(&dev->hw_rdy, 1U);
++	spin_lock_init(&dev->hw_lock);
++	dev->hw_state = MTK_JPEG_HW_IDLE;
++
+ 	INIT_DELAYED_WORK(&dev->job_timeout_work,
+ 			  mtk_jpegdec_timeout_work);
+ 
+-- 
+2.18.0
 

@@ -2,118 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5298A54B05A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:18:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96A554B06C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245160AbiFNMNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
+        id S229851AbiFNMPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356831AbiFNMMw (ORCPT
+        with ESMTP id S1357344AbiFNMOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:12:52 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8042949FA0;
-        Tue, 14 Jun 2022 05:12:39 -0700 (PDT)
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LMnMs47CPzjXcV;
-        Tue, 14 Jun 2022 20:11:05 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.58) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 20:12:34 +0800
-From:   Xiu Jianfeng <xiujianfeng@huawei.com>
-To:     <jmorris@namei.org>, <serge@hallyn.com>
-CC:     <linux-security-module@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next] lsm_audit: Clean up redundant NULL pointer check
-Date:   Tue, 14 Jun 2022 20:10:30 +0800
-Message-ID: <20220614121030.115491-1-xiujianfeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 14 Jun 2022 08:14:03 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BD6645D;
+        Tue, 14 Jun 2022 05:13:59 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id c4so13558812lfj.12;
+        Tue, 14 Jun 2022 05:13:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nKnYN08Rvu+sGq1kjp6kIVR2Yb7qukUUQYO6d9aq840=;
+        b=UVwRVot3MFBq+hv/KyFkRHUAclCqFG7m8zNbldLx5L74fAdbiRBja5B/SqzL2U2Fj1
+         TXkily+0cEdsd3X/rxouV7qXh5kkamBenh5nvRcBm2Tkz7hrlKxD927RkHXO8G2fb8ie
+         sgWp0d5GDJZSiQHzACFlTp2qxS9StkCGfiofMKFAeL++TVdgK5tLGgwVpxTYWGMLmdqu
+         9ZHkRtd8NKpByTZjhI6APV0WCPZ6P7XmVOLhbJPY/N9uIUwQhU2+h5H6YyY+ZoSCwv8L
+         1cHgs8ScimkDbQMaxVCQYdS6iLyfAPz7LZr9ApPbD3bp+DJFOjYZ03r2DVP1FmYIhEtt
+         9jqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=nKnYN08Rvu+sGq1kjp6kIVR2Yb7qukUUQYO6d9aq840=;
+        b=H/Om1rIkDsBHAB5eCCp5MeyUu0S97ZituVBoPaCoQQ/SQMurqkXb/WwDpWPx50cPqq
+         0LHVMe0hQ57CPw8NWtMqYp8l8ogalLLShlQG5yJPYtuY7eE/w85tqWqB4L19cEdZqZVX
+         tYWturRL9867rhVKYnl/Vpo53Ty0xpBl/JcvGAIgyhKGjdpN0K//zhivr2M/S6mto0aQ
+         mWiLN3mBRHS+KAYFlO2qte8y7RHhQjXIZi1YQNkrtZ1VMraozMzeB/lkaDzXcLfHEmg3
+         tjntP9RhX5Y5YodddtOSvVkA8Y2YjsvT6tsHX5vySSdmeaONNO2BJVUdWb6eZDQFyZQ7
+         MFeQ==
+X-Gm-Message-State: AOAM530qByMdDCOZuskdy57PQMdA6vLxOMcoXvNNtypzfYo/GDL8AKVx
+        IWcqhENm0Thlxfyvw9aULYFGp7hE1mFj5Q==
+X-Google-Smtp-Source: ABdhPJzvhoikkeI4AYAF87Ur8EBNChUytYJ6RX2xRy9QqGSs2limrTNWZEcuAkHDrJY286cDy6ABkA==
+X-Received: by 2002:a19:8c11:0:b0:478:f5e1:e799 with SMTP id o17-20020a198c11000000b00478f5e1e799mr2869688lfd.548.1655208837738;
+        Tue, 14 Jun 2022 05:13:57 -0700 (PDT)
+Received: from fedora.. ([93.100.99.176])
+        by smtp.gmail.com with ESMTPSA id d2-20020a056512368200b004790c425b35sm1373727lfs.291.2022.06.14.05.13.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 05:13:57 -0700 (PDT)
+From:   Dmitry Klochkov <kdmitry556@gmail.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Raspl <raspl@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dmitry Klochkov <kdmitry556@gmail.com>
+Subject: [PATCH RESEND] tools/kvm_stat: fix display of error when multiple processes are found
+Date:   Tue, 14 Jun 2022 15:11:41 +0300
+Message-Id: <20220614121141.160689-1-kdmitry556@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.58]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500023.china.huawei.com (7.185.36.114)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The implements of {ip,tcp,udp,dccp,sctp,ipv6}_hdr(skb) guarantee that
-they will never return NULL, and elsewhere user don't do the check
-as well, so remove the check here.
+Instead of printing an error message, kvm_stat script fails when we
+restrict statistics to a guest by its name and there are multiple guests
+with such name:
 
-Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+  # kvm_stat -g my_vm
+  Traceback (most recent call last):
+    File "/usr/bin/kvm_stat", line 1819, in <module>
+      main()
+    File "/usr/bin/kvm_stat", line 1779, in main
+      options = get_options()
+    File "/usr/bin/kvm_stat", line 1718, in get_options
+      options = argparser.parse_args()
+    File "/usr/lib64/python3.10/argparse.py", line 1825, in parse_args
+      args, argv = self.parse_known_args(args, namespace)
+    File "/usr/lib64/python3.10/argparse.py", line 1858, in parse_known_args
+      namespace, args = self._parse_known_args(args, namespace)
+    File "/usr/lib64/python3.10/argparse.py", line 2067, in _parse_known_args
+      start_index = consume_optional(start_index)
+    File "/usr/lib64/python3.10/argparse.py", line 2007, in consume_optional
+      take_action(action, args, option_string)
+    File "/usr/lib64/python3.10/argparse.py", line 1935, in take_action
+      action(self, namespace, argument_values, option_string)
+    File "/usr/bin/kvm_stat", line 1649, in __call__
+      ' to specify the desired pid'.format(" ".join(pids)))
+  TypeError: sequence item 0: expected str instance, int found
+
+To avoid this, it's needed to convert pids int values to strings before
+pass them to join().
+
+Signed-off-by: Dmitry Klochkov <kdmitry556@gmail.com>
 ---
- security/lsm_audit.c | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+ tools/kvm/kvm_stat/kvm_stat | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/security/lsm_audit.c b/security/lsm_audit.c
-index 78a278f28e49..75cc3f8d2a42 100644
---- a/security/lsm_audit.c
-+++ b/security/lsm_audit.c
-@@ -44,9 +44,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	struct iphdr *ih;
+diff --git a/tools/kvm/kvm_stat/kvm_stat b/tools/kvm/kvm_stat/kvm_stat
+index 5a5bd74f55bd..9c366b3a676d 100755
+--- a/tools/kvm/kvm_stat/kvm_stat
++++ b/tools/kvm/kvm_stat/kvm_stat
+@@ -1646,7 +1646,8 @@ Press any other key to refresh statistics immediately.
+                          .format(values))
+             if len(pids) > 1:
+                 sys.exit('Error: Multiple processes found (pids: {}). Use "-p"'
+-                         ' to specify the desired pid'.format(" ".join(pids)))
++                         ' to specify the desired pid'
++                         .format(" ".join(map(str, pids))))
+             namespace.pid = pids[0]
  
- 	ih = ip_hdr(skb);
--	if (ih == NULL)
--		return -EINVAL;
--
- 	ad->u.net->v4info.saddr = ih->saddr;
- 	ad->u.net->v4info.daddr = ih->daddr;
- 
-@@ -59,8 +56,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	switch (ih->protocol) {
- 	case IPPROTO_TCP: {
- 		struct tcphdr *th = tcp_hdr(skb);
--		if (th == NULL)
--			break;
- 
- 		ad->u.net->sport = th->source;
- 		ad->u.net->dport = th->dest;
-@@ -68,8 +63,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	}
- 	case IPPROTO_UDP: {
- 		struct udphdr *uh = udp_hdr(skb);
--		if (uh == NULL)
--			break;
- 
- 		ad->u.net->sport = uh->source;
- 		ad->u.net->dport = uh->dest;
-@@ -77,8 +70,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	}
- 	case IPPROTO_DCCP: {
- 		struct dccp_hdr *dh = dccp_hdr(skb);
--		if (dh == NULL)
--			break;
- 
- 		ad->u.net->sport = dh->dccph_sport;
- 		ad->u.net->dport = dh->dccph_dport;
-@@ -86,8 +77,7 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
- 	}
- 	case IPPROTO_SCTP: {
- 		struct sctphdr *sh = sctp_hdr(skb);
--		if (sh == NULL)
--			break;
-+
- 		ad->u.net->sport = sh->source;
- 		ad->u.net->dport = sh->dest;
- 		break;
-@@ -115,8 +105,6 @@ int ipv6_skb_to_auditdata(struct sk_buff *skb,
- 	__be16 frag_off;
- 
- 	ip6 = ipv6_hdr(skb);
--	if (ip6 == NULL)
--		return -EINVAL;
- 	ad->u.net->v6info.saddr = ip6->saddr;
- 	ad->u.net->v6info.daddr = ip6->daddr;
- 	/* IPv6 can have several extension header before the Transport header
+     argparser = argparse.ArgumentParser(description=description_text,
+
+base-commit: 6cd88243c7e03845a450795e134b488fc2afb736
 -- 
-2.17.1
+2.35.3
 

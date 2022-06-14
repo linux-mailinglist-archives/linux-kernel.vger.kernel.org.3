@@ -2,90 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A01854ACEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CB554ACF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353808AbiFNJHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 05:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
+        id S1354502AbiFNJH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 05:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353568AbiFNJGg (ORCPT
+        with ESMTP id S1354344AbiFNJH2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 05:06:36 -0400
-Received: from comms.puri.sm (comms.puri.sm [159.203.221.185])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40DFE419A8;
-        Tue, 14 Jun 2022 02:06:13 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id D96C9E001A;
-        Tue, 14 Jun 2022 02:06:12 -0700 (PDT)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id voKW3dmm8_ZE; Tue, 14 Jun 2022 02:06:12 -0700 (PDT)
-Message-ID: <573166b75e524517782471c2b7f96e03fd93d175.camel@puri.sm>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=puri.sm; s=comms;
-        t=1655197572; bh=DRsSqt8gISIlXBvUsIdzvECBw1H0LbI7MkrMo87xlig=;
-        h=Subject:From:To:Cc:Date:From;
-        b=FN5oqRGvf4gwSqMKw7kQ2uElmFZVNm9+1W2u3luQWBublPhloBzglnhN78w2XWtJI
-         yPgVbq4XeIyMAC2iYcKizwDcPiNXQbo2ZCo6MrQ0MjVQuUoc1v7MZQFTY/3ITsjhJN
-         ffpoBiDwGCzm+ydufvo02gbOH8MbezzIMnGkeEeoZ9haTyrActyN8rO2kYJh3UH3PE
-         pUO4e7iS0GASg6eZn26vjw5pvlSPyD9U3g69Wv3kkK4vY9svcrIhEspjEsiC/SCnh1
-         I57qmuziGXIULD3DjOeB45txHRWXvFKykkZ2l86knc377kdymbLGFGzOM6v8vN2zan
-         4041KSKo+85iQ==
-Subject: regulator: BD71837 PMIC resume during noirq phase?
-From:   Martin Kepplinger <martin.kepplinger@puri.sm>
-To:     matti.vaittinen@fi.rohmeurope.com, lgirdwood@gmail.com,
-        broonie@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-Date:   Tue, 14 Jun 2022 11:06:06 +0200
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Tue, 14 Jun 2022 05:07:28 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7329541F93;
+        Tue, 14 Jun 2022 02:06:52 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id gd1so7954807pjb.2;
+        Tue, 14 Jun 2022 02:06:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=urc88U4jINF/LMrnPPXmV/iTF0lewPTLBo6jj1gLwoE=;
+        b=qU8snO6p1TpZvRrgGAyRUd+2iHHC7PMghN1ZNjsWqP5h3jEII4PWknvk2nJZjuhICp
+         1sR4lbq3/kyC4AJNGzc0K5Q5D3w/OYVJ1HELZQ6/CFi2u6B7eMQ43N4pS4fZN0zrq1gI
+         +NvaO4ltMiiQngypVhJcuL23aJRuIxHpCKQ762+QzxGyXe3Ta3UFQdrcFDSkADyxn4Gu
+         4RC3Rh+NVIGcKGBwoqyzlL6KVK0Uy7RtRHEtQFsY8xJp6lcwSPABsXiEnZASDeCH9ar2
+         OJWHlKfyKu5TL0ZcAiqJWhTqfpQMwjW18/17DoTNKbIVV1Ye/nksOP5I3VIrrz3Tw0C0
+         39NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=urc88U4jINF/LMrnPPXmV/iTF0lewPTLBo6jj1gLwoE=;
+        b=FfRkWY385DpPL0VaDhVFFNklLOdkN02auxHiSPRXKipxvo+EC1GUlqgxoU4O3LJ/FC
+         80777TgcqFkq4uT7gqsb9G/HNIK1ZzNra9TymyB3ihvuyi2TZoV/6Jy5ABH31jXO9ABT
+         3FsXZ7F5hYLdMditZ6wOn18IyJXLxiTZjagQorstARB0Byf68yqdDgHrkoDV/kjBMIlj
+         g4bBzYOvUu7OUiEDGHZJXdcAjQ583iWP/u+YuR1fsQyZ1geM7XFl/ITSJLHNjHfRpdF4
+         /KrYCtv3ZbBiyYsg6L5jg63yw3zfbqftArGF2E8QToTNXbhK0PDzIKFRf6cawdNRxcVb
+         vejg==
+X-Gm-Message-State: AJIora/MgKJDg2eroTicsoqJtRUjvFizMFJzH4diCqqx5RBd0HDQ+WN2
+        HW2O+0PcuZamgU3GNR09gH8=
+X-Google-Smtp-Source: AGRyM1vmXjjmsk9QBzZxDERFGj6j8VFL1i4u5KBc6KrSgaV8/ZOIAvXPBwSDsXd3turNJh7DY0QTVw==
+X-Received: by 2002:a17:90a:3182:b0:1e3:530d:6994 with SMTP id j2-20020a17090a318200b001e3530d6994mr3483998pjb.69.1655197611813;
+        Tue, 14 Jun 2022 02:06:51 -0700 (PDT)
+Received: from localhost.localdomain ([47.242.114.172])
+        by smtp.gmail.com with ESMTPSA id z5-20020a170902ccc500b0015e8d4eb2aesm6621153ple.248.2022.06.14.02.06.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 02:06:51 -0700 (PDT)
+From:   Chuang W <nashuiliang@gmail.com>
+Cc:     Chuang W <nashuiliang@gmail.com>, stable@vger.kernel.org,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kprobes: Rollback post_handler on failed arm_kprobe()
+Date:   Tue, 14 Jun 2022 17:06:33 +0800
+Message-Id: <20220614090633.43832-1-nashuiliang@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Matti,
+In a scenario where livepatch and aggrprobe coexist, if arm_kprobe()
+returns an error, ap.post_handler, while has been modified to
+p.post_handler, is not rolled back.
 
-I heard you've been helpful in the past - thank for that! Here's a
-question I'm currently stuck at: In short, imx8mq can't yet resume from
-suspend when using the bd71839 pmic via i2c. The original report here,
-just for the background:
+When ap.post_handler is not NULL (not rolled back), the caller (e.g.
+register_kprobe/enable_kprobe) of arm_kprobe_ftrace() will always fail.
 
-https://lore.kernel.org/linux-arm-kernel/2d5d3bbec443742506e39488dbfbf724bb4ca93f.camel@puri.sm/T/#u
+Fixes: 12310e343755 ("kprobes: Propagate error from arm_kprobe_ftrace()")
+Signed-off-by: Chuang W <nashuiliang@gmail.com>
+Cc: <stable@vger.kernel.org>
+---
+ kernel/kprobes.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-But here's what I *think* is going on: When the (buck3) regulator from
-bd71839 is the power-supply for a power domain (gpu), the power domain
-driver can't resume because buck3 can't be enabled when the pmic isn't
-running yet. I'm still a bit uncertain, but here's the logs when simply
-printing in the respective suspend/resume callbacks:
-
-[  452.199600] bd718xx-pmic bd71837-pmic.2.auto: bd718xx_resume_noirq
-[  452.301450] imx-pgc imx-pgc-domain.5: failed to enable regulator: -
-ETIMEDOUT
-[  452.320593] imx-i2c 30a20000.i2c: i2c_imx_resume
-[  452.322152] bd718xx-pmic bd71837-pmic.2.auto: bd718xx_resume
-[  452.323853] imx-i2c 30a30000.i2c: i2c_imx_resume
-[  452.324778] imx-i2c 30a40000.i2c: i2c_imx_resume
-[  452.325017] imx-i2c 30a50000.i2c: i2c_imx_resume
-
-and regulator_enable() in imx-pgc is called from genpd_resume_noirq().
-
-At this point, does any workaround or fix come to your mind I could
-test? I guess i2c needs to be resumed too...
-
-Why does power domain only implement resume_noirq? How could I untangle
-this?
-
-thank you very much,
-
-                            martin
-
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index f214f8c088ed..0610b02a3a05 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1300,6 +1300,7 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+ {
+ 	int ret = 0;
+ 	struct kprobe *ap = orig_p;
++	kprobe_post_handler_t old_post_handler = NULL;
+ 
+ 	cpus_read_lock();
+ 
+@@ -1351,6 +1352,9 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+ 
+ 	/* Copy the insn slot of 'p' to 'ap'. */
+ 	copy_kprobe(ap, p);
++
++	/* save the old post_handler */
++	old_post_handler = ap->post_handler;
+ 	ret = add_new_kprobe(ap, p);
+ 
+ out:
+@@ -1365,6 +1369,7 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+ 			ret = arm_kprobe(ap);
+ 			if (ret) {
+ 				ap->flags |= KPROBE_FLAG_DISABLED;
++				ap->post_handler = old_post_handler;
+ 				list_del_rcu(&p->list);
+ 				synchronize_rcu();
+ 			}
+-- 
+2.34.1
 

@@ -2,147 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F18C54AA0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE7C54AA11
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352954AbiFNHIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:08:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
+        id S1353069AbiFNHIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353257AbiFNHIf (ORCPT
+        with ESMTP id S1353059AbiFNHIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:08:35 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00A232073
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655190514; x=1686726514;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=89fJyn3HdQE4qrmLLsHd0B83txiGpBAciNGBYfvWWjY=;
-  b=VWavr5eQB2nc9fyoZV9CLEbY8dgwIbonwy1j+u7Qgdem7IEIV3H72Rw8
-   AQEiYzWZUpJps6dIVfnqd4R+J1Psv9++c5r79rCrULSD5+5A1kV5Cmxq3
-   bTObfy/XpR7458sgR4XyQtZ5/QBB3GmWvhFyO0zuUYyJA35YIaXx7lOOj
-   b5s80rI+f7GSgXpfZjT5WCRCOALRS/d16ovo60T9lcGzddEmMR1gOiwuI
-   FdyDkIDOWsbLzDTmSp5ryioaoLw2kzGjXMrh7NCfHHCaPA/N/0PDy/yCs
-   LHjvdbQ0N0atEIoN1+8ojhfUwWKpOv3N6lSn8a5Bbr0BxmIJ6mOCh/dBr
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258363560"
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="258363560"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:08:34 -0700
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="640185952"
-Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:08:32 -0700
-From:   Bard Liao <yung-chuan.liao@linux.intel.com>
-To:     alsa-devel@alsa-project.org, vkoul@kernel.org
-Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
-        broonie@kernel.org, gregkh@linuxfoundation.org,
-        srinivas.kandagatla@linaro.org,
-        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
-        bard.liao@intel.com
-Subject: [PATCH 2/2] ASoC: SOF: Intel: add trigger callback into sdw_callback
-Date:   Tue, 14 Jun 2022 15:08:17 +0800
-Message-Id: <20220614070817.2508-3-yung-chuan.liao@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220614070817.2508-1-yung-chuan.liao@linux.intel.com>
-References: <20220614070817.2508-1-yung-chuan.liao@linux.intel.com>
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 14 Jun 2022 03:08:45 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DFE340E6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:08:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7DAB61F383;
+        Tue, 14 Jun 2022 07:08:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1655190522; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CsU3F1FV0VK5yNn5xxw+vgNY6PidYLtiVeQQK0Ca7R0=;
+        b=pOMaj+Kw5A51nP5+FiPtqTyIWXOa/mAwgtCYBFTM1piG3/gZwhEBVsmULNVJ57IxRuvLTy
+        nhwY8/aWWDWrhOQbwIGIm9Pzqehufjt2BBwAXz31OfPRIYL3e5k8advGzedsbYHkqngie4
+        NJw0TwES3G553lcJSPrp5XfWQOdanpc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1655190522;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CsU3F1FV0VK5yNn5xxw+vgNY6PidYLtiVeQQK0Ca7R0=;
+        b=0J8LYTLJnQm4epZv9zFdjTfj6SjCvVpI61QbWAi9fVixEqEIuaogdgf5fTkbqC8mm4XJCW
+        rgEw27LKFGZqiFBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 48863139EC;
+        Tue, 14 Jun 2022 07:08:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id gyuiEPozqGIFeAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 14 Jun 2022 07:08:42 +0000
+Message-ID: <6b5172b5-ad81-36f9-9288-fd1db2fe0e17@suse.de>
+Date:   Tue, 14 Jun 2022 09:08:41 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 0/3] KUnit tests for drm_format_helper
+Content-Language: en-US
+To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        javierm@redhat.com
+Cc:     davidgow@google.com, dlatypov@google.com,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        airlied@linux.ie, daniel@ffwll.ch, jani.nikula@linux.intel.com,
+        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+References: <20220613171738.111013-1-jose.exposito89@gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20220613171738.111013-1-jose.exposito89@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------2tAANik0McvXpimbejM7IiTc"
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For IPC4, we need to set pipeline state in BE DAI trigger.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------2tAANik0McvXpimbejM7IiTc
+Content-Type: multipart/mixed; boundary="------------779Lw54ur8NxClLw2PlvBHfC";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+ javierm@redhat.com
+Cc: davidgow@google.com, dlatypov@google.com,
+ maarten.lankhorst@linux.intel.com, mripard@kernel.org, airlied@linux.ie,
+ daniel@ffwll.ch, jani.nikula@linux.intel.com,
+ dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org
+Message-ID: <6b5172b5-ad81-36f9-9288-fd1db2fe0e17@suse.de>
+Subject: Re: [PATCH v3 0/3] KUnit tests for drm_format_helper
+References: <20220613171738.111013-1-jose.exposito89@gmail.com>
+In-Reply-To: <20220613171738.111013-1-jose.exposito89@gmail.com>
 
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Reviewed-by: Rander Wang <rander.wang@intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
----
- sound/soc/sof/intel/hda-dai.c | 15 ++++++++++++---
- sound/soc/sof/intel/hda.c     |  2 +-
- sound/soc/sof/intel/hda.h     |  1 +
- 3 files changed, 14 insertions(+), 4 deletions(-)
+--------------779Lw54ur8NxClLw2PlvBHfC
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-diff --git a/sound/soc/sof/intel/hda-dai.c b/sound/soc/sof/intel/hda-dai.c
-index 228079a52c3d..6ed99fdc5793 100644
---- a/sound/soc/sof/intel/hda-dai.c
-+++ b/sound/soc/sof/intel/hda-dai.c
-@@ -713,8 +713,7 @@ static const struct snd_soc_dai_ops ipc3_ssp_dai_ops = {
- 	.shutdown = ssp_dai_shutdown,
- };
- 
--static int ipc4_be_dai_trigger(struct snd_pcm_substream *substream,
--			       int cmd, struct snd_soc_dai *dai)
-+static int ipc4_be_dai_common_trigger(struct snd_soc_dai *dai, int cmd, int stream)
- {
- 	struct snd_sof_widget *pipe_widget;
- 	struct sof_ipc4_pipeline *pipeline;
-@@ -723,7 +722,7 @@ static int ipc4_be_dai_trigger(struct snd_pcm_substream *substream,
- 	struct snd_sof_dev *sdev;
- 	int ret;
- 
--	w = snd_soc_dai_get_widget(dai, substream->stream);
-+	w = snd_soc_dai_get_widget(dai, stream);
- 	swidget = w->dobj.private;
- 	pipe_widget = swidget->pipe_widget;
- 	pipeline = pipe_widget->private;
-@@ -758,6 +757,12 @@ static int ipc4_be_dai_trigger(struct snd_pcm_substream *substream,
- 	return 0;
- }
- 
-+static int ipc4_be_dai_trigger(struct snd_pcm_substream *substream,
-+			       int cmd, struct snd_soc_dai *dai)
-+{
-+	return ipc4_be_dai_common_trigger(dai, cmd, substream->stream);
-+}
-+
- static const struct snd_soc_dai_ops ipc4_dmic_dai_ops = {
- 	.trigger = ipc4_be_dai_trigger,
- };
-@@ -809,6 +814,10 @@ void hda_set_dai_drv_ops(struct snd_sof_dev *sdev, struct snd_sof_dsp_ops *ops)
- 		if (!hda_use_tplg_nhlt)
- 			ipc4_data->nhlt = intel_nhlt_init(sdev->dev);
- 
-+#if IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE)
-+		sdw_callback.trigger = ipc4_be_dai_common_trigger;
-+#endif
-+
- 		break;
- 	}
- 	default:
-diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
-index bc07df1fc39f..cdd3601e84f5 100644
---- a/sound/soc/sof/intel/hda.c
-+++ b/sound/soc/sof/intel/hda.c
-@@ -147,7 +147,7 @@ static int sdw_free_stream(struct device *dev,
- 	return hda_ctrl_dai_widget_free(w, SOF_DAI_CONFIG_FLAGS_NONE, &data);
- }
- 
--static const struct sdw_intel_ops sdw_callback = {
-+struct sdw_intel_ops sdw_callback = {
- 	.params_stream = sdw_params_stream,
- 	.free_stream = sdw_free_stream,
- };
-diff --git a/sound/soc/sof/intel/hda.h b/sound/soc/sof/intel/hda.h
-index f4e4cd7d7406..ec7a2d947eb6 100644
---- a/sound/soc/sof/intel/hda.h
-+++ b/sound/soc/sof/intel/hda.h
-@@ -771,5 +771,6 @@ irqreturn_t cnl_ipc4_irq_thread(int irq, void *context);
- int cnl_ipc4_send_msg(struct snd_sof_dev *sdev, struct snd_sof_ipc_msg *msg);
- irqreturn_t hda_dsp_ipc4_irq_thread(int irq, void *context);
- int hda_dsp_ipc4_send_msg(struct snd_sof_dev *sdev, struct snd_sof_ipc_msg *msg);
-+extern struct sdw_intel_ops sdw_callback;
- 
- #endif
--- 
-2.17.1
+SGkgSm9zZSwNCg0KZm9yIHRoZSB3aG9sZSBwYXRjaHNldDoNCg0KQWNrZWQtYnk6IFRob21h
+cyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQpPbmUgc21hbGwgZGV0YWls
+IG9uIGxpY2Vuc2luZzogZHJtX2Zvcm1hdF9oZWxwZXIuYyBpcyBsaWNlbnNlZCB1bmRlciAN
+CkdQTDIgb3IgTUlULiBNYXliZSBjb25zaWRlciBhZGRpbmcgJ29yIE1JVCcgdG8gZHJtX2Zv
+cm1hdF9oZWxwZXJfdGVzdC5jIA0KYXMgd2VsbC4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMN
+Cg0KQW0gMTMuMDYuMjIgdW0gMTk6MTcgc2NocmllYiBKb3PDqSBFeHDDs3NpdG86DQo+IEhl
+bGxvIGV2ZXJ5b25lLA0KPiANCj4gSGVyZSBpcyB0aGUgdjMgb2YgdGhlIHNlcmllcywgaW5j
+bHVkaW5nIHRoZSBkb2N1bWVudGF0aW9uLCBwcmV2aW91c2x5DQo+IHNlbnQgYXMgYSBzdGFu
+ZGFsb25lIHBhdGNoIFsxXSwgYW5kIGNoYW5nZXMgc3VnZ2VzdGVkIGR1cmluZyByZXZpZXcu
+DQo+IA0KPiBUaGFua3MgYSBsb3QsDQo+IEpvc8OpIEV4cMOzc2l0bw0KPiANCj4gUkZDIC0+
+IHYxOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9kcmktZGV2ZWwvMjAyMjA1MzAxMDIwMTcu
+NDcxODY1LTEtam9zZS5leHBvc2l0bzg5QGdtYWlsLmNvbS9ULw0KPiANCj4gICAtIEFkZCAu
+a3VuaXRjb25maWcgKE1heGltZSBSaXBhcmQpDQo+ICAgLSBGaXggbWVtb3J5IGxlYWsgKERh
+bmllbCBMYXR5cG92KQ0KPiAgIC0gTWFrZSBjb25maWcgb3B0aW9uIGdlbmVyaWMgKEphdmll
+ciBNYXJ0aW5leiBDYW5pbGxhcyk6DQo+ICAgICBEUk1fRk9STUFSX0hFTFBFUl9URVNUIC0+
+IERSTV9LVU5JVF9URVNUDQo+ICAgLSBSZW1vdmUgRElTQUJMRV9TVFJVQ1RMRUFLX1BMVUdJ
+TiAoRGFuaWVsIExhdHlwb3YpDQo+IA0KPiB2MSAtPiB2MjogaHR0cHM6Ly9sb3JlLmtlcm5l
+bC5vcmcvZHJpLWRldmVsLzIwMjIwNjA2MDk1NTE2LjkzODkzNC0xLWpvc2UuZXhwb3NpdG84
+OUBnbWFpbC5jb20vVC8NCj4gDQo+ICAgVGhvbWFzIFppbW1lcm1hbm46DQo+ICAgLSBBZGQg
+RFJNX1JFQ1RfSU5JVCgpIG1hY3JvDQo+ICAgLSBNb3ZlIHRlc3RzIHRvIGRyaXZlcnMvZ3B1
+L2RybS9rdW5pdA0KPiAgIC0gSW1wcm92ZSB0ZXN0IGRvY3VtZW50YXRpb24NCj4gDQo+IHYy
+IC0+IHYzOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9kcmktZGV2ZWwvMjAyMjA2MTIxNjEy
+NDguMjcxNTkwLTEtam9zZS5leHBvc2l0bzg5QGdtYWlsLmNvbS9ULw0KPiANCj4gICAtIFVz
+ZSBkZXNpZ25hdGVkIGluaXRpYWxpemVyIGluIERSTV9SRUNUX0lOSVQgKEphbmkgTmlrdWxh
+KQ0KPiAgIC0gU2ltcGxpZnkgdGhlICJjb252ZXJzaW9uX2J1Zl9zaXplIiBoZWxwZXINCj4g
+DQo+IFsxXSBodHRwczovL2xvcmUua2VybmVsLm9yZy9kcmktZGV2ZWwvMjAyMjA2MDYxODA5
+NDAuNDMzNzEtMS1qb3NlLmV4cG9zaXRvODlAZ21haWwuY29tL1QvDQo+IA0KPiBKb3PDqSBF
+eHDDs3NpdG8gKDMpOg0KPiAgICBkcm0vcmVjdDogQWRkIERSTV9SRUNUX0lOSVQoKSBtYWNy
+bw0KPiAgICBkcm0vZm9ybWF0LWhlbHBlcjogQWRkIEtVbml0IHRlc3RzIGZvciBkcm1fZmJf
+eHJnYjg4ODhfdG9fcmdiMzMyKCkNCj4gICAgZHJtL2RvYzogQWRkIEtVbml0IGRvY3VtZW50
+YXRpb24NCj4gDQo+ICAgRG9jdW1lbnRhdGlvbi9ncHUvZHJtLWludGVybmFscy5yc3QgICAg
+ICAgICAgIHwgIDMyICsrKysNCj4gICBkcml2ZXJzL2dwdS9kcm0vS2NvbmZpZyAgICAgICAg
+ICAgICAgICAgICAgICAgfCAgMTYgKysNCj4gICBkcml2ZXJzL2dwdS9kcm0vTWFrZWZpbGUg
+ICAgICAgICAgICAgICAgICAgICAgfCAgIDEgKw0KPiAgIGRyaXZlcnMvZ3B1L2RybS9rdW5p
+dC8ua3VuaXRjb25maWcgICAgICAgICAgICB8ICAgMyArDQo+ICAgZHJpdmVycy9ncHUvZHJt
+L2t1bml0L01ha2VmaWxlICAgICAgICAgICAgICAgIHwgICAzICsNCj4gICAuLi4vZ3B1L2Ry
+bS9rdW5pdC9kcm1fZm9ybWF0X2hlbHBlcl90ZXN0LmMgICAgfCAxNjAgKysrKysrKysrKysr
+KysrKysrDQo+ICAgaW5jbHVkZS9kcm0vZHJtX3JlY3QuaCAgICAgICAgICAgICAgICAgICAg
+ICAgIHwgIDE2ICsrDQo+ICAgNyBmaWxlcyBjaGFuZ2VkLCAyMzEgaW5zZXJ0aW9ucygrKQ0K
+PiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dwdS9kcm0va3VuaXQvLmt1bml0Y29u
+ZmlnDQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9rdW5pdC9NYWtl
+ZmlsZQ0KPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dwdS9kcm0va3VuaXQvZHJt
+X2Zvcm1hdF9oZWxwZXJfdGVzdC5jDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpH
+cmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJt
+YW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhS
+QiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
 
+
+--------------779Lw54ur8NxClLw2PlvBHfC--
+
+--------------2tAANik0McvXpimbejM7IiTc
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmKoM/kFAwAAAAAACgkQlh/E3EQov+De
+nA/+I5D0b3wcrfcCumVecCs+PyKrEjHypaGBWAsUqtYfkD7wqBrPF+CRd2lbc/8hW+OUiypBDMYF
+3melrKUQYvRO2GXc4zbNhbBblJDkuJIoSDtyOhqd8l1HO2W6RmaZXHczsacYxJAaoTjYk+ucUflD
+IMdXaiiSSmkWjhpxl5xt9zwvcDLNZmaBhYDYcoDpsRjgb+tUDb096KbhLvvJ1texF3VNFWW3iJFI
+jzOlBea1kYXpCRCuH3IE/MR1JSIqgLzXpvavGZYlsFvvXSCxCPkUUZV7mvJcJX/Ed6VKpPNzENFh
+4xU+yzlxi2FjVSQ/pUyH7iODyCEzeAs2VWtiou0hfyHaEjC+iAq91b0avls3Y5sV4e5RG5Kfg/sk
+N5arCYe4FZFWqazpH8Aq+nF81/5hcbFDGkV7Bn2qhLAyO2RNMGCEjUjcgYBWycmek6xXgOGmVh6b
+JlHExM13/zxIzIZTsa/4/7wOwCcuxNm+cjvAF8ahz+bPRYBHTxAfsYmjmt2dVIS0jvrQdz/485WW
+JzPtiDFMyh6ErJusvXWQ/w4YSTE4Qq7d32ellRjTLh0qQeJWauMDF6JZccJ4NH7trpUNcoTH+0uW
+St48KEaMbob1u7uruBjJAp9oGhC+S6QqRephsrrajSlQM2FPhznGBxYGReOfL23CH60X5k0JpYWh
+mL4=
+=TR4G
+-----END PGP SIGNATURE-----
+
+--------------2tAANik0McvXpimbejM7IiTc--

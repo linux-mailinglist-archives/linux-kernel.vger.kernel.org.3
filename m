@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2E154A3B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EFA54A3B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343543AbiFNBgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 21:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45452 "EHLO
+        id S243254AbiFNBg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 21:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234639AbiFNBgV (ORCPT
+        with ESMTP id S236615AbiFNBgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 21:36:21 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1298033A06
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 18:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655170581; x=1686706581;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ewivjPZum4J8cY2UdxwQKYE+RjVPBMMFr8E5bpfsPXc=;
-  b=UGc3du+UML2M5P7EUB703gu8lwBWOEz8sOahnKttvSdXgw/18DsMxr8+
-   7mTuAHiOX3B+3lYJ/ob/+ookqR/tXMfGCwxflVlk+FVH1yO8u8PCbID1a
-   /SIovODCI+NtaB69brlXlibidb7icUMVT5dnaLkXzzqwldziCO3sRCPF2
-   TEz2IL6jzUU2DzHnq5RqFMZGrIqwQDgUBA7kBRuZvHuk/UsXsubP74dcc
-   url2w9H5ejB8TPjoTDnZm+9v9V5T4uSlew6KpN/HgEZl/MQfpos4I2YeD
-   28ZD9AmTiYC28On1m0JEpvJ56rQhdECr61uf7wd5fBaMWv9KpeOSioxfC
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="342434172"
-X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="342434172"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 18:36:20 -0700
-X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="910696441"
-Received: from gren5-mobl1.ccr.corp.intel.com (HELO [10.255.29.39]) ([10.255.29.39])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 18:36:17 -0700
-Message-ID: <673eb011-94f4-46b0-f1b4-24a02a269f4e@linux.intel.com>
-Date:   Tue, 14 Jun 2022 09:36:16 +0800
+        Mon, 13 Jun 2022 21:36:23 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007FD3388B
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 18:36:22 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id s37so4599591pfg.11
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 18:36:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vr3fX45ywehvFPMvVsgjiEhDYk6zSPz1Xs7VmBa3RB0=;
+        b=LGa6nEeSyttuoLknR2c4ecMPP3TPyj6tCthui57qYgw/9fGxHzpcnjdS273kViIUw/
+         JMXLrGiNmzTblwp1WrKeNUlFe89PfzQVWDK1QGw1SlbAnRNMAoxdAepoKzXKGYxX7QOh
+         MphoTdoxRuC+0D+5YiEJ2JUgELuChbgGPcMw4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=vr3fX45ywehvFPMvVsgjiEhDYk6zSPz1Xs7VmBa3RB0=;
+        b=jJFlYYHqv3EcMVsizgDhHFUDSLQdfRk8a93skONiyve18H9aJouPUm2A9veWsuZeRD
+         OIYxc66XB3F2lvqT1TYLZV9cYt8R/N/ifZF1adk89rCc73NXY4Ab+7kpZ9JmCR+aPVTA
+         l1YLMADe7o7VN+OH7xJQYJCmdog32geisRS1+h/hFxJRbuEOlCDCr+7DECrkq9fK3Rcd
+         zihzzk7hqnX7p6ge8b8tJbCAp/j2QLBXKczOCCdDn1+BBHGUwgR17qv7MllRSj7zhwoq
+         L7+xGdLEK3Tm883+8tcomOQkQRcti80nvHKSvr9xPoP9/mw5u1GiAZ0dLQuJeWhSbWqt
+         7Zjg==
+X-Gm-Message-State: AOAM531N04KyWfoiluyx0TR4YYl1ihJzKt9YIdXpiqo02ZqOrOC9xcBD
+        AdscDBR23ZKGZqwNZNAgHN68Rg==
+X-Google-Smtp-Source: ABdhPJzfoL5dT43VZDaBfP2Fy3VDED2naoP7v9bNzu2D2llcrm9KDkbvSNS3WSdcYmyGG8N1LyIebQ==
+X-Received: by 2002:a63:1c2:0:b0:3fd:3458:5dd4 with SMTP id 185-20020a6301c2000000b003fd34585dd4mr2236115pgb.87.1655170582435;
+        Mon, 13 Jun 2022 18:36:22 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:ceef:e68b:2670:64f3])
+        by smtp.gmail.com with UTF8SMTPSA id o12-20020a63a80c000000b00407e25d4527sm3487782pgf.22.2022.06.13.18.36.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 18:36:21 -0700 (PDT)
+From:   Brian Norris <briannorris@chromium.org>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        Caesar Wang <wxt@rock-chips.com>, linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: [RFC PATCH] Revert "arm64: dts: rockchip: add SdioAudio pd control for rk3399"
+Date:   Mon, 13 Jun 2022 18:36:17 -0700
+Message-Id: <20220613183556.RFC.1.I9ca71105e505f024d53b7e0ba4462230813ebb8d@changeid>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <jroedel@suse.de>,
-        Kyung Min Park <kyung.min.park@intel.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        iommu@lists.linux-foundation.org,
-        Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
-Content-Language: en-US
-To:     Jerry Snitselaar <jsnitsel@redhat.com>,
-        Steve Wahl <steve.wahl@hpe.com>
-References: <20220505194658.246121-1-steve.wahl@hpe.com>
- <20220512151309.330068-1-steve.wahl@hpe.com>
- <20220613205734.3x7i46bnsofzerr4@cantor>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220613205734.3x7i46bnsofzerr4@cantor>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,81 +66,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/14 04:57, Jerry Snitselaar wrote:
-> On Thu, May 12, 2022 at 10:13:09AM -0500, Steve Wahl wrote:
->> To support up to 64 sockets with 10 DMAR units each (640), make the
->> value of DMAR_UNITS_SUPPORTED adjustable by a config variable,
->> CONFIG_DMAR_UNITS_SUPPORTED, and make it's default 1024 when MAXSMP is
->> set.
->>
->> If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
->> to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
->> allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
->> remapping doesn't support X2APIC mode x2apic disabled"; and the system
->> fails to boot properly.
->>
->> Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
->> ---
->>
->> Note that we could not find a reason for connecting
->> DMAR_UNITS_SUPPORTED to MAX_IO_APICS as was done previously.  Perhaps
->> it seemed like the two would continue to match on earlier processors.
->> There doesn't appear to be kernel code that assumes that the value of
->> one is related to the other.
->>
->> v2: Make this value a config option, rather than a fixed constant.  The default
->> values should match previous configuration except in the MAXSMP case.  Keeping the
->> value at a power of two was requested by Kevin Tian.
->>
->>   drivers/iommu/intel/Kconfig | 6 ++++++
->>   include/linux/dmar.h        | 6 +-----
->>   2 files changed, 7 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/iommu/intel/Kconfig b/drivers/iommu/intel/Kconfig
->> index 247d0f2d5fdf..fdbda77ac21e 100644
->> --- a/drivers/iommu/intel/Kconfig
->> +++ b/drivers/iommu/intel/Kconfig
->> @@ -9,6 +9,12 @@ config DMAR_PERF
->>   config DMAR_DEBUG
->>   	bool
->>   
->> +config DMAR_UNITS_SUPPORTED
->> +	int "Number of DMA Remapping Units supported"
-> 
-> Also, should there be a "depends on (X86 || IA64)" here?
+This reverts commit b0f2110af8475bc6812287b6598161a2c1a34c61.
 
-Do you have any compilation errors or warnings?
+(With some minor changes for context that have changed since then.)
 
-Best regards,
-baolu
+I've found that speaker and headphone audio have issues on RK3399 Gru
+Scarlet devices after commit: b0f2110af847 ("arm64: dts: rockchip: add
+SdioAudio pd control for rk3399"). It's likely somehow related to the
+fact that we completely reset VD_LOGIC in S3 suspend, which includes the
+SDIOAUDIO domain.
 
-> 
->> +	default 1024 if MAXSMP
->> +	default 128  if X86_64
->> +	default 64
->> +
->>   config INTEL_IOMMU
->>   	bool "Support for Intel IOMMU using DMA Remapping Devices"
->>   	depends on PCI_MSI && ACPI && (X86 || IA64)
->> diff --git a/include/linux/dmar.h b/include/linux/dmar.h
->> index 45e903d84733..0c03c1845c23 100644
->> --- a/include/linux/dmar.h
->> +++ b/include/linux/dmar.h
->> @@ -18,11 +18,7 @@
->>   
->>   struct acpi_dmar_header;
->>   
->> -#ifdef	CONFIG_X86
->> -# define	DMAR_UNITS_SUPPORTED	MAX_IO_APICS
->> -#else
->> -# define	DMAR_UNITS_SUPPORTED	64
->> -#endif
->> +#define	DMAR_UNITS_SUPPORTED	CONFIG_DMAR_UNITS_SUPPORTED
->>   
->>   /* DMAR Flags */
->>   #define DMAR_INTR_REMAP		0x1
->> -- 
->> 2.26.2
->>
-> 
+Problematic test case:
+
+1. play audio (e.g., youtube) through speakers
+2. plug in headphones to 3.5mm jack (youtube remains playing)
+3. suspend/resume the system (S3)
+4. resume audio
+5. unplug headphones (and resume audio)
+6. plug headphones (youtube remains playing)
+
+At step 4, the audio sounds like garbage through the headphones (like
+every other sample is missing or stretched out, so it sounds like a
+screechy version on the original track?). At step 5, the speakers are
+silent. At step 6, the audio is garbage again.
+
+These problems go away if we stop managing this power domain and instead
+leave it on all the time.
+
+Power impact should be minimal.
+
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+---
+I don't really expect this patch to be merged as-is, but I want to put
+it up as a form of bug report and place to point people if they somehow
+have the same issue.
+
+I've poked around at the rockchip-i2s and codec drivers in use and have
+come up dry, to explain why audio breaks like this for me on kernels
+with commit b0f2110af847 involved. I don't plan on spending a lot more
+time on debugging this but instead am simply going to run with this
+patch in my kernels. If anyone has hot tips, I may be willing to spend a
+few cycles looking at alternatives though...
+
+ arch/arm64/boot/dts/rockchip/rk3399.dtsi | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399.dtsi b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+index fbd0346624e6..1563e8d503f5 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399.dtsi
+@@ -296,7 +296,6 @@ sdio0: mmc@fe310000 {
+ 			 <&cru SCLK_SDIO_DRV>, <&cru SCLK_SDIO_SAMPLE>;
+ 		clock-names = "biu", "ciu", "ciu-drive", "ciu-sample";
+ 		fifo-depth = <0x100>;
+-		power-domains = <&power RK3399_PD_SDIOAUDIO>;
+ 		resets = <&cru SRST_SDIO0>;
+ 		reset-names = "reset";
+ 		status = "disabled";
+@@ -794,7 +793,6 @@ spi5: spi@ff200000 {
+ 		dma-names = "tx", "rx";
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&spi5_clk &spi5_tx &spi5_rx &spi5_cs0>;
+-		power-domains = <&power RK3399_PD_SDIOAUDIO>;
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 		status = "disabled";
+@@ -1102,12 +1100,6 @@ power-domain@RK3399_PD_SD {
+ 				pm_qos = <&qos_sd>;
+ 				#power-domain-cells = <0>;
+ 			};
+-			power-domain@RK3399_PD_SDIOAUDIO {
+-				reg = <RK3399_PD_SDIOAUDIO>;
+-				clocks = <&cru HCLK_SDIO>;
+-				pm_qos = <&qos_sdioaudio>;
+-				#power-domain-cells = <0>;
+-			};
+ 			power-domain@RK3399_PD_TCPD0 {
+ 				reg = <RK3399_PD_TCPD0>;
+ 				clocks = <&cru SCLK_UPHY0_TCPDCORE>,
+@@ -1648,7 +1640,6 @@ spdif: spdif@ff870000 {
+ 		clocks = <&cru SCLK_SPDIF_8CH>, <&cru HCLK_SPDIF>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&spdif_bus>;
+-		power-domains = <&power RK3399_PD_SDIOAUDIO>;
+ 		#sound-dai-cells = <0>;
+ 		status = "disabled";
+ 	};
+@@ -1664,7 +1655,6 @@ i2s0: i2s@ff880000 {
+ 		clocks = <&cru SCLK_I2S0_8CH>, <&cru HCLK_I2S0_8CH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&i2s0_8ch_bus>;
+-		power-domains = <&power RK3399_PD_SDIOAUDIO>;
+ 		#sound-dai-cells = <0>;
+ 		status = "disabled";
+ 	};
+@@ -1679,7 +1669,6 @@ i2s1: i2s@ff890000 {
+ 		clocks = <&cru SCLK_I2S1_8CH>, <&cru HCLK_I2S1_8CH>;
+ 		pinctrl-names = "default";
+ 		pinctrl-0 = <&i2s1_2ch_bus>;
+-		power-domains = <&power RK3399_PD_SDIOAUDIO>;
+ 		#sound-dai-cells = <0>;
+ 		status = "disabled";
+ 	};
+@@ -1692,7 +1681,6 @@ i2s2: i2s@ff8a0000 {
+ 		dma-names = "tx", "rx";
+ 		clock-names = "i2s_clk", "i2s_hclk";
+ 		clocks = <&cru SCLK_I2S2_8CH>, <&cru HCLK_I2S2_8CH>;
+-		power-domains = <&power RK3399_PD_SDIOAUDIO>;
+ 		#sound-dai-cells = <0>;
+ 		status = "disabled";
+ 	};
+-- 
+2.36.1.476.g0c4daa206d-goog
 

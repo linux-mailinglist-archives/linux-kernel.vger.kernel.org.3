@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECFC54B1D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:59:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C12D854B1CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243635AbiFNM4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
+        id S244129AbiFNM5r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:57:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240381AbiFNM4k (ORCPT
+        with ESMTP id S244201AbiFNM5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:56:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF4A3EF09
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:56:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AB9B61630
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:56:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2E45C3411B;
-        Tue, 14 Jun 2022 12:56:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655211398;
-        bh=iHxMC4bK6vMql08nJAlYbsQGBq196kEhV81vmOYVdZU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OL3u7YQsW8BKxJr9mZnLJZ54ASq/5yWpIgMB7+NQ6dB47B8QBKOaj3DWsXG4WZZWo
-         94+tTl3/bXtEEsJx+YhNGunEoioNhiWTqPKGWeeKsojraklxMaeLknfvE2/anjJpna
-         hjjHfvga0anMPUX6M1dFbEOtF7CDq/yBGhc1mpZh8GKa5mjPAxnmqb5wkG65Hm+PHv
-         rFFGKJzhIdhSdsC6yPyNoChrzdooUpJoUST+3Egcf+R/MKhqoYqj7k2xQ4b3iJnsh4
-         d5sszGowTb0c2X8W5g6+E0ZVt8LIqpmaFEjys0R8Z5wy6skpmm6Wy194g+erJCvXrU
-         5Qqc5Xa7jGttQ==
-Date:   Tue, 14 Jun 2022 13:56:31 +0100
-From:   Will Deacon <will@kernel.org>
-To:     yf.wang@mediatek.com
-Cc:     Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
-        Georgi Djakov <quic_c_gdjako@quicinc.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        "moderated list:ARM SMMU DRIVERS" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>, wsd_upstream@mediatek.com,
-        Libo Kang <Libo.Kang@mediatek.com>,
-        Yong Wu <Yong.Wu@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Ning Li <ning.li@mediatek.com>
-Subject: Re: [PATCH v8 1/3] iommu/io-pgtable-arm-v7s: Add a quirk to allow
- pgtable PA up to 35bit
-Message-ID: <20220614125630.GA8159@willie-the-truck>
-References: <20220611102656.10954-1-yf.wang@mediatek.com>
- <20220611102656.10954-2-yf.wang@mediatek.com>
+        Tue, 14 Jun 2022 08:57:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 29D35CE2F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:57:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655211462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RIwWxn9c1j1uI+Rss/iv6mmeQ1IDi7gRZIWjSpwU2dc=;
+        b=eIF1n0E6B4Od0C7OvYDn8AIzCOToRmBHQ9Ks56WplFuAh8NFxY5j/7c2G6KG8dMSOtNKXm
+        Y2PV57Eff5m16P3WJA2YU8dof6BABZK89c9UTF6cGyKDZbP9flt73tU9xEZokdM+5rCgF0
+        PLv38B2XrIB5g5IYvktqHDEoXCVIVFc=
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com
+ [209.85.128.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-588-7-PfkY2bMo-X7OKKQ5ZKvw-1; Tue, 14 Jun 2022 08:57:41 -0400
+X-MC-Unique: 7-PfkY2bMo-X7OKKQ5ZKvw-1
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-30cb80ee75cso24483877b3.15
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:57:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RIwWxn9c1j1uI+Rss/iv6mmeQ1IDi7gRZIWjSpwU2dc=;
+        b=2CBsERQD2FdP7ShLw4jYopT+YInrYgu8Z49nx6pKzK4filrhXr9FNrJzM5rz5VL6N/
+         sD4wiIMMBlO+QmwacCTfv5VWw4d20RDoqANhlzJUlY7DL70ORN01LczZEcHiQgkkqku8
+         543yxwNKKT9QUtbExdFsT/XVZuY/rpNv/WmgcadvOa3bKQPxzdF8hAmxIRLB9kXdCQgz
+         ei3HZSgnqqmOgTkHcKOMXkj7xRFTE2Rr8gmW4Zx6PX7+AGj+Sg12bRSeahPB/YbjUTPS
+         LrgtxMuBMK7SnRmh2LIojf2bqah5vqGwRBWZxf3bZbz9qTjN7n8Pjg5TOsyWV8bUx8nq
+         f7dQ==
+X-Gm-Message-State: AJIora8u9OqtTkbB9/e/18xYOvsimnmAKgkuz5jO+VBlmfL9HjiXj3h0
+        jAqctXDFTuffdCtLkJb7xUpCANiWIwp2A3GnUB5quokWHxEEwItQFdDdkjusBUGecx/PTFaHKTJ
+        gz+3AJnyVuxrQ7ELOCojBbHR57HhYVwCGDs9miUch
+X-Received: by 2002:a25:3810:0:b0:664:4424:e9f9 with SMTP id f16-20020a253810000000b006644424e9f9mr4804919yba.21.1655211460488;
+        Tue, 14 Jun 2022 05:57:40 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vPvLbRTYXWqgIa2Tz6k6x8jx9ptBnvxvFdsvNaAGrQ4/l9gFj0PDk+q10gx8UiE4uxh3jOdI5zZNxrbl3vt84=
+X-Received: by 2002:a25:3810:0:b0:664:4424:e9f9 with SMTP id
+ f16-20020a253810000000b006644424e9f9mr4804897yba.21.1655211460246; Tue, 14
+ Jun 2022 05:57:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220611102656.10954-2-yf.wang@mediatek.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220613135953.135998-1-xiujianfeng@huawei.com>
+In-Reply-To: <20220613135953.135998-1-xiujianfeng@huawei.com>
+From:   Ondrej Mosnacek <omosnace@redhat.com>
+Date:   Tue, 14 Jun 2022 14:57:29 +0200
+Message-ID: <CAFqZXNvHB0cftgbK+mScbZbcO71OLpXrBMxWAx1z1eB27mm8Cw@mail.gmail.com>
+Subject: Re: [PATCH -next] selinux: Fix memleak in security_read_state_kernel
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        michalorzel.eng@gmail.com, Austin Kim <austin.kim@lge.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,204 +77,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-For some reason, this series has landed in my spam folder so apologies
-for the delay :/
-
-On Sat, Jun 11, 2022 at 06:26:53PM +0800, yf.wang@mediatek.com wrote:
-> From: Yunfei Wang <yf.wang@mediatek.com>
-> 
-> Single memory zone feature will remove ZONE_DMA32 and ZONE_DMA and
-> cause pgtable PA size larger than 32bit.
-> 
-> Since Mediatek IOMMU hardware support at most 35bit PA in pgtable,
-> so add a quirk to allow the PA of pgtables support up to bit35.
-> 
-> Signed-off-by: Ning Li <ning.li@mediatek.com>
-> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+On Mon, Jun 13, 2022 at 4:02 PM Xiu Jianfeng <xiujianfeng@huawei.com> wrote:
+> In this function, it directly returns the result of __security_read_policy
+> without freeing the allocated memory in *data, cause memory leak issue,
+> so free the memory if __security_read_policy failed.
+>
+> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 > ---
->  drivers/iommu/io-pgtable-arm-v7s.c | 48 ++++++++++++++++++++++--------
->  include/linux/io-pgtable.h         | 17 +++++++----
->  2 files changed, 46 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/iommu/io-pgtable-arm-v7s.c b/drivers/iommu/io-pgtable-arm-v7s.c
-> index be066c1503d3..d4702d8d825a 100644
-> --- a/drivers/iommu/io-pgtable-arm-v7s.c
-> +++ b/drivers/iommu/io-pgtable-arm-v7s.c
-> @@ -182,14 +182,8 @@ static bool arm_v7s_is_mtk_enabled(struct io_pgtable_cfg *cfg)
->  		(cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_EXT);
+>  security/selinux/ss/services.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+>
+> diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
+> index 69b2734311a6..fe5fcf571c56 100644
+> --- a/security/selinux/ss/services.c
+> +++ b/security/selinux/ss/services.c
+> @@ -4048,6 +4048,7 @@ int security_read_policy(struct selinux_state *state,
+>  int security_read_state_kernel(struct selinux_state *state,
+>                                void **data, size_t *len)
+>  {
+> +       int err;
+>         struct selinux_policy *policy;
+>
+>         policy = rcu_dereference_protected(
+> @@ -4060,5 +4061,11 @@ int security_read_state_kernel(struct selinux_state *state,
+>         if (!*data)
+>                 return -ENOMEM;
+>
+> -       return __security_read_policy(policy, *data, len);
+> +       err = __security_read_policy(policy, *data, len);
+> +       if (err) {
+> +               vfree(*data);
+> +               *data = NULL;
+> +               *len = 0;
+> +       }
+> +       return err;
 >  }
->  
-> -static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
-> -				    struct io_pgtable_cfg *cfg)
-> +static arm_v7s_iopte to_iopte_mtk(phys_addr_t paddr, arm_v7s_iopte pte)
->  {
-> -	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
-> -
-> -	if (!arm_v7s_is_mtk_enabled(cfg))
-> -		return pte;
-> -
->  	if (paddr & BIT_ULL(32))
->  		pte |= ARM_V7S_ATTR_MTK_PA_BIT32;
->  	if (paddr & BIT_ULL(33))
-> @@ -199,6 +193,17 @@ static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
->  	return pte;
->  }
->  
-> +static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
-> +				    struct io_pgtable_cfg *cfg)
-> +{
-> +	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
-> +
-> +	if (!arm_v7s_is_mtk_enabled(cfg))
-> +		return pte;
-> +
-> +	return to_iopte_mtk(paddr, pte);
+> --
+> 2.17.1
+>
 
-nit, but can we rename and rework this so it reads a bit better, please?
-Something like:
+security_read_policy() defined a few lines above has the same pattern
+(just with vmalloc_user() in place of vmalloc()). Would you like to
+send another patch to fix that function as well?
 
+-- 
+Ondrej Mosnacek
+Software Engineer, Linux Security - SELinux kernel
+Red Hat, Inc.
 
-	if (arm_v7s_is_mtk_enabled(cfg))
-		return to_mtk_iopte(paddr, pte);
-
-	return pte;
-
-
->  static phys_addr_t iopte_to_paddr(arm_v7s_iopte pte, int lvl,
->  				  struct io_pgtable_cfg *cfg)
->  {
-> @@ -234,6 +239,7 @@ static arm_v7s_iopte *iopte_deref(arm_v7s_iopte pte, int lvl,
->  static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
->  				   struct arm_v7s_io_pgtable *data)
->  {
-> +	gfp_t gfp_l1 = __GFP_ZERO | ARM_V7S_TABLE_GFP_DMA;
->  	struct io_pgtable_cfg *cfg = &data->iop.cfg;
->  	struct device *dev = cfg->iommu_dev;
->  	phys_addr_t phys;
-> @@ -241,9 +247,11 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
->  	size_t size = ARM_V7S_TABLE_SIZE(lvl, cfg);
->  	void *table = NULL;
->  
-> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
-> +		gfp_l1 = GFP_KERNEL | __GFP_ZERO;
-
-I think it's a bit grotty to override the flags inline like this (same for
-the slab flag later on). Something like this is a bit cleaner:
-
-
-	/*
-	 * Comment explaining why GFP_KERNEL is desirable here.
-	 * I'm assuming it's because the walker can address all of memory.
-	 */
-	gfp_l1 = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
-		 GFP_KERNEL : ARM_V7S_TABLE_GFP_DMA;
-
-	...
-
-	__get_free_pages(gfp_l1 | __GFP_ZERO, ...);
-
-
-and similar for the slab flag.
-
->  	if (lvl == 1)
-> -		table = (void *)__get_free_pages(
-> -			__GFP_ZERO | ARM_V7S_TABLE_GFP_DMA, get_order(size));
-> +		table = (void *)__get_free_pages(gfp_l1, get_order(size));
->  	else if (lvl == 2)
->  		table = kmem_cache_zalloc(data->l2_tables, gfp);
->  
-> @@ -251,7 +259,8 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
->  		return NULL;
->  
->  	phys = virt_to_phys(table);
-> -	if (phys != (arm_v7s_iopte)phys) {
-> +	if (phys != (arm_v7s_iopte)phys &&
-> +	    !(cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)) {
->  		/* Doesn't fit in PTE */
-
-Shouldn't we be checking that the address is within 35 bits here? Perhaps we
-should generate a mask from the oas instead of just using the cast.
-
->  		dev_err(dev, "Page table does not fit in PTE: %pa", &phys);
->  		goto out_free;
-> @@ -457,9 +466,14 @@ static arm_v7s_iopte arm_v7s_install_table(arm_v7s_iopte *table,
->  					   arm_v7s_iopte curr,
->  					   struct io_pgtable_cfg *cfg)
->  {
-> +	phys_addr_t phys = virt_to_phys(table);
->  	arm_v7s_iopte old, new;
->  
-> -	new = virt_to_phys(table) | ARM_V7S_PTE_TYPE_TABLE;
-> +	new = phys | ARM_V7S_PTE_TYPE_TABLE;
-> +
-> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
-> +		new = to_iopte_mtk(phys, new);
-> +
->  	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_NS)
->  		new |= ARM_V7S_ATTR_NS_TABLE;
->  
-> @@ -778,6 +792,7 @@ static phys_addr_t arm_v7s_iova_to_phys(struct io_pgtable_ops *ops,
->  static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
->  						void *cookie)
->  {
-> +	slab_flags_t slab_flag = ARM_V7S_TABLE_SLAB_FLAGS;
->  	struct arm_v7s_io_pgtable *data;
->  
->  	if (cfg->ias > (arm_v7s_is_mtk_enabled(cfg) ? 34 : ARM_V7S_ADDR_BITS))
-> @@ -788,7 +803,8 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
->  
->  	if (cfg->quirks & ~(IO_PGTABLE_QUIRK_ARM_NS |
->  			    IO_PGTABLE_QUIRK_NO_PERMS |
-> -			    IO_PGTABLE_QUIRK_ARM_MTK_EXT))
-> +			    IO_PGTABLE_QUIRK_ARM_MTK_EXT |
-> +			    IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT))
->  		return NULL;
->  
->  	/* If ARM_MTK_4GB is enabled, the NO_PERMS is also expected. */
-> @@ -796,15 +812,21 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
->  	    !(cfg->quirks & IO_PGTABLE_QUIRK_NO_PERMS))
->  			return NULL;
->  
-> +	if ((cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT) &&
-> +	    !arm_v7s_is_mtk_enabled(cfg))
-> +		return NULL;
-> +
->  	data = kmalloc(sizeof(*data), GFP_KERNEL);
->  	if (!data)
->  		return NULL;
->  
->  	spin_lock_init(&data->split_lock);
-> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
-> +		slab_flag = 0;
->  	data->l2_tables = kmem_cache_create("io-pgtable_armv7s_l2",
->  					    ARM_V7S_TABLE_SIZE(2, cfg),
->  					    ARM_V7S_TABLE_SIZE(2, cfg),
-> -					    ARM_V7S_TABLE_SLAB_FLAGS, NULL);
-> +					    slab_flag, NULL);
->  	if (!data->l2_tables)
->  		goto out_free_data;
->  
-> diff --git a/include/linux/io-pgtable.h b/include/linux/io-pgtable.h
-> index 86af6f0a00a2..c9189716f6bd 100644
-> --- a/include/linux/io-pgtable.h
-> +++ b/include/linux/io-pgtable.h
-> @@ -74,17 +74,22 @@ struct io_pgtable_cfg {
->  	 *	to support up to 35 bits PA where the bit32, bit33 and bit34 are
->  	 *	encoded in the bit9, bit4 and bit5 of the PTE respectively.
->  	 *
-> +	 * IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT: (ARM v7s format) MediaTek IOMMUs
-> +	 *	extend the translation table base support up to 35 bits PA, the
-> +	 *	encoding format is same with IO_PGTABLE_QUIRK_ARM_MTK_EXT.
-> +	 *
-
-One thing I don't get is how the existing driver handles this. It seems
-as though if the HAS_4GB_MODE flag is not set, then we set oas to 35 but
-without any pgtable changes. How does this work?
-
-If it turns out that the existing devices can't handle 35-bit PAs, then
-could we use an oas of 35 to indicate that this new format is in use
-instead of introducing another quirk?
-
-Will

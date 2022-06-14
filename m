@@ -2,174 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B32354B55E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C3A354B570
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:09:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356817AbiFNQGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
+        id S245246AbiFNQHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356374AbiFNQGa (ORCPT
+        with ESMTP id S231948AbiFNQHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:06:30 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76A83CFC1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:06:27 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id h187so12164014oif.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=X4xRWyF9vr8qnasqfhsd+VAGIzL+N4al4cfXIWCdc0g=;
-        b=NLNTK/3yOlui/8PDUrYDNIdgpprrS90aWM+WjqJ+L2bMU+1Ozbmg2rD4fkMgfuWnpm
-         aMGJEYfd5nogbWyMEV3d9AdrsFTbd/ai3JvhNvWmxQgkmSCNpEsOoNznE37pK/knJYQu
-         8Aw2b9wKcBroceGAhUyVkpxk3cOL+KGNAnLUM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=X4xRWyF9vr8qnasqfhsd+VAGIzL+N4al4cfXIWCdc0g=;
-        b=WLfwWfw4DAQgE+7Vv2v1XAU+g9YDRr+Bthl4nrpVOeu4Bu+NnB3xLHayB8ZADvSF28
-         b2gwFW41JM4/ilRha4Wej/cT6VTZtWQBXEI4ViNgH90uwG8VMcHHVpUBaoDoE21zFeGN
-         1/h+61rBc3Vx/f1t2O+yYG92WzliL2Jud/CWcTUVCeqlP2/PoMtJLpec28C8KtYa8ji2
-         Lcgr5RKdHn+D2xsIpjZYWFGcBC68ZivsPow4PEkv7+Fq+PSHm41QGtFy070CAhhrOEOJ
-         E0cGRqoToEf0Cudc7/iPFa0jkDCYxW1KsxCjWcJIWHPfWAsowKqHDA/K8VaBKJhT+dfs
-         IkGA==
-X-Gm-Message-State: AOAM5313amNtyG4IzQrHHQn4rYm4VVTt6lMTNi3QIJderfACNE6/4L8+
-        9JpGEhuvd8iT/yrnr1R1Ap3YMw==
-X-Google-Smtp-Source: ABdhPJz9B/kSdK+3GB7ULQc4BQgTDB3yrng0XI1+iE7DuZFwNplTTKpOWFeQG4wG0wSczvdmVlxS5A==
-X-Received: by 2002:aca:3945:0:b0:32b:3a61:35d6 with SMTP id g66-20020aca3945000000b0032b3a6135d6mr2484880oia.293.1655222787108;
-        Tue, 14 Jun 2022 09:06:27 -0700 (PDT)
-Received: from [192.168.0.41] ([184.4.90.121])
-        by smtp.gmail.com with ESMTPSA id d1-20020a0568301b6100b0060bec21ffcdsm4939272ote.22.2022.06.14.09.06.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 09:06:26 -0700 (PDT)
-Message-ID: <859cb593-9e96-5846-2191-6613677b07c5@cloudflare.com>
-Date:   Tue, 14 Jun 2022 11:06:24 -0500
+        Tue, 14 Jun 2022 12:07:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C412E686
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:07:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B659B8198C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:07:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77FD2C3411B;
+        Tue, 14 Jun 2022 16:07:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655222861;
+        bh=5gCD2JV3ZWghhc9U/yO/bwiUMMhro8fX8j1C1mvpog4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=psYJcwvzb2tgDUrgQ6HL5O5fXbV8qrcIzokWzqxkSSHRXCwTk9y2nR0kQhzRBFOeI
+         6p9SUqrwwvyIJMzTK69iVbveHGJ/UmB6vK9kSmGo6XIGeaZoJCQAE7mnEi8X4J+PR5
+         Tjs6LwWKjg/DU/mh66zg9esOwro5OodpgIJFR6RU=
+Date:   Tue, 14 Jun 2022 18:07:39 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Zhi Song <zhi.song@bytedance.com>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] node: put_device after failing to device_register
+Message-ID: <YqiyS0iYOCw0gycN@kroah.com>
+References: <20220614160059.1739862-1-zhi.song@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3] cred: Propagate security_prepare_creds() error code
-Content-Language: en-US
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        keyrings@vger.kernel.org, selinux@vger.kernel.org,
-        serge@hallyn.com, amir73il@gmail.com, kernel-team@cloudflare.com,
-        Jeff Moyer <jmoyer@redhat.com>,
-        Paul Moore <paul@paul-moore.com>
-References: <20220608150942.776446-1-fred@cloudflare.com>
- <87tu8oze94.fsf@email.froward.int.ebiederm.org>
- <e1b62234-9b8a-e7c2-2946-5ef9f6f23a08@cloudflare.com>
- <87y1xzyhub.fsf@email.froward.int.ebiederm.org>
-From:   Frederick Lawler <fred@cloudflare.com>
-In-Reply-To: <87y1xzyhub.fsf@email.froward.int.ebiederm.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614160059.1739862-1-zhi.song@bytedance.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/13/22 11:44 PM, Eric W. Biederman wrote:
-> Frederick Lawler <fred@cloudflare.com> writes:
+On Wed, Jun 15, 2022 at 12:00:59AM +0800, Zhi Song wrote:
+> device_register() is used to register a device with the system.
+> We need to call put_device() to give up the reference initialized
+> in device_register() when it returns an error and this will clean
+> up correctly.
 > 
->> Hi Eric,
->>
->> On 6/13/22 12:04 PM, Eric W. Biederman wrote:
->>> Frederick Lawler <fred@cloudflare.com> writes:
->>>
->>>> While experimenting with the security_prepare_creds() LSM hook, we
->>>> noticed that our EPERM error code was not propagated up the callstack.
->>>> Instead ENOMEM is always returned.  As a result, some tools may send a
->>>> confusing error message to the user:
->>>>
->>>> $ unshare -rU
->>>> unshare: unshare failed: Cannot allocate memory
->>>>
->>>> A user would think that the system didn't have enough memory, when
->>>> instead the action was denied.
->>>>
->>>> This problem occurs because prepare_creds() and prepare_kernel_cred()
->>>> return NULL when security_prepare_creds() returns an error code. Later,
->>>> functions calling prepare_creds() and prepare_kernel_cred() return
->>>> ENOMEM because they assume that a NULL meant there was no memory
->>>> allocated.
->>>>
->>>> Fix this by propagating an error code from security_prepare_creds() up
->>>> the callstack.
->>> Why would it make sense for security_prepare_creds to return an error
->>> code other than ENOMEM?
->>>   > That seems a bit of a violation of what that function is supposed to do
->>>
->>
->> The API allows LSM authors to decide what error code is returned from the
->> cred_prepare hook. security_task_alloc() is a similar hook, and has its return
->> code propagated.
+> Signed-off-by: Zhi Song <zhi.song@bytedance.com>
+> ---
+>  drivers/base/node.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> It is not an api.  It is an implementation detail of the linux kernel.
-> It is a set of convenient functions that do a job.
-> 
-> The general rule is we don't support cases without an in-tree user.  I
-> don't see an in-tree user.
-> 
->> I'm proposing we follow security_task_allocs() pattern, and add visibility for
->> failure cases in prepare_creds().
-> 
-> I am asking why we would want to.  Especially as it is not an API, and I
-> don't see any good reason for anything but an -ENOMEM failure to be
-> supported.
->
-We're writing a LSM BPF policy, and not a new LSM. Our policy aims to 
-solve unprivileged unshare, similar to Debian's patch [1]. We're in a 
-position such that we can't use that patch because we can't block _all_ 
-of our applications from performing an unshare. We prefer a granular 
-approach. LSM BPF seems like a good choice.
-
-Because LSM BPF exposes these hooks, we should probably treat them as an 
-API. From that perspective, userspace expects unshare to return a EPERM 
-when the call is denied permissions.
-
-> Without an in-tree user that cares it is probably better to go the
-> opposite direction and remove the possibility of return anything but
-> memory allocation failure.  That will make it clearer to implementors
-> that a general error code is not supported and this is not a location
-> to implement policy, this is only a hook to allocate state for the LSM.
+> diff --git a/drivers/base/node.c b/drivers/base/node.c
+> index 0ac6376ef7a1..88a3337c546e 100644
+> --- a/drivers/base/node.c
+> +++ b/drivers/base/node.c
+> @@ -154,6 +154,7 @@ static struct node_access_nodes *node_init_node_access(struct node *node,
+>  	list_add_tail(&access_node->list_node, &node->access_list);
+>  	return access_node;
+>  free_name:
+> +	put_device(dev);
+>  	kfree_const(dev->kobj.name);
+>  free:
+>  	kfree(access_node);
+> -- 
+> 2.30.2
 > 
 
-That's a good point, and it's possible we're using the wrong hook for 
-the policy. Do you know of other hooks we can look into?
+Hi,
 
->>> I have probably missed a very interesting discussion where that was
->>> mentioned but I don't see link to the discussion or anything explaining
->>> why we want to do that in this change.
->>>
->>
->> AFAIK, this is the start of the discussion.
-> 
-> You were on v3 and had an out of tree piece of code so I assumed someone
-> had at least thought about why you want to implement policy in a piece
-> of code whose only purpose is to allocate memory to store state.
-> 
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-No worries.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-> Eric
-> 
-> 
-> 
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
 
-Links:
-1: 
-https://sources.debian.org/patches/linux/3.16.56-1+deb8u1/debian/add-sysctl-to-disallow-unprivileged-CLONE_NEWUSER-by-default.patch/
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot

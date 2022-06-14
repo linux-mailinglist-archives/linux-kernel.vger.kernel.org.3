@@ -2,102 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2401B54A84F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 06:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA1FB54A854
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 06:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238375AbiFNEsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 00:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
+        id S231444AbiFNEvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 00:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235722AbiFNEsL (ORCPT
+        with ESMTP id S229611AbiFNEvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 00:48:11 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66D831534
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 21:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655182090; x=1686718090;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=WNnlhhRpKdqwqyAN58id52IIA5QPWLuUwmueWv7fjlE=;
-  b=lgMWPtyZKLhRwsEPlgzgbimrlL/lFXA52aJveyWkYTnFrgCjYhd4DDDQ
-   dbWIpZVSo8FWG1IxDA1kQKXnSrtMQ0c+9oG55SFJAWBCWEsX8ykQFG3TV
-   H8NVyMF2wfEvR4amEqyGjwokAy1NKkpYqcePEofSj84LSNuIfrTROMvji
-   0497HBLnqD15do7EFzq9Ws8i+SLZ7lTYdCO3KJZjmSdAZMdlfiTWv/9mm
-   4C97/VG6Kr17+WMpf5FjjxCxArso5DoVi7zR1IDh1bvACgD3ULls/Z+Vh
-   fc+rL5sZkBuJfbdy7Q72FLtnv7DqjF7ddpoLe+RcT9kVC551J6vNGSCRV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="261537115"
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="261537115"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 21:48:10 -0700
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="910765884"
-Received: from gren5-mobl1.ccr.corp.intel.com (HELO [10.255.29.39]) ([10.255.29.39])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 21:48:08 -0700
-Message-ID: <2d2a52db-70a8-788e-fedc-197789caa145@linux.intel.com>
-Date:   Tue, 14 Jun 2022 12:48:06 +0800
+        Tue, 14 Jun 2022 00:51:18 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B742F35DD5;
+        Mon, 13 Jun 2022 21:51:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMbcL33Pzz4xXF;
+        Tue, 14 Jun 2022 14:51:14 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655182274;
+        bh=bbqzE0vIYjq//yReX+mVaqBWAYkBlexkhu66g69a/ps=;
+        h=Date:From:To:Cc:Subject:From;
+        b=h7D8ZJzaH0HAeX1BXSJPODcWzrGNoHj/s72oV5I/Zx2deOaoLDpReC9D5YOK0erys
+         pFCfD09rSotdW/HhEBqmi9lt32IOiuOHHP3ZteGo0kcnsKhqowK3nSas1nPvdOR3vz
+         kWGHNlTVHZTKpTHxFvbsRgCUKMHUo5eGd7RXDP0rM0CQC8jJO3O58cmRY199bUL12O
+         LSIF7CiKuIlztg66MakXVlyGRrlNspTG/ECrJmaXMDV53/IFJ3gtT0ppusWAG+Iug/
+         s4SVGc9SQQnwStr4gCfBC9euxBz8+PENyvN3L+ypikszelCDjN5uluBqbNAa0vGjVY
+         w0rSPpnrs45EQ==
+Date:   Tue, 14 Jun 2022 14:51:12 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220614145112.4c3d1f52@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] iommu/vt-d: Add set_dev_pasid callbacks for default
- domain
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <20220614034411.1634238-1-baolu.lu@linux.intel.com>
- <DM4PR11MB5278EBE8FA26185D91ACCD118CAA9@DM4PR11MB5278.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <DM4PR11MB5278EBE8FA26185D91ACCD118CAA9@DM4PR11MB5278.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/YRepzUz5CcHMbFU6pm9rwbI";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/14 12:02, Tian, Kevin wrote:
->> From: Lu Baolu <baolu.lu@linux.intel.com>
->> Sent: Tuesday, June 14, 2022 11:44 AM
->>
->> This allows the upper layers to set a domain to a PASID of a device
->> if the PASID feature is supported by the IOMMU hardware. The typical
->> use cases are, for example, kernel DMA with PASID and hardware
->> assisted mediated device drivers.
->>
-> 
-> why is it not part of the series for those use cases? There is no consumer
-> of added callbacks in this patch...
+--Sig_/YRepzUz5CcHMbFU6pm9rwbI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It could be. I just wanted to maintain the integrity of Intel IOMMU
-driver implementation.
+Hi all,
 
-> 
->> +/* PCI domain-subdevice relationship */
->> +struct subdev_domain_info {
->> +	struct list_head link_domain;	/* link to domain siblings */
->> +	struct device *dev;		/* physical device derived from */
->> +	ioasid_t pasid;			/* PASID on physical device */
->> +};
->> +
-> 
-> It's not subdev. Just dev+pasid in iommu's context.
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-How about struct device_pasid_info?
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'd=
+m_plane_format_mod_supported':
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:4941:13: error:=
+ unused variable 'i' [-Werror=3Dunused-variable]
+ 4941 |         int i;
+      |             ^
+cc1: all warnings being treated as errors
 
-Best regards,
-baolu
+Caused by commit
 
+  d2d5adc87f69 ("drm/amd/display: ignore modifiers when checking for format=
+ support")
+
+I have revertd that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/YRepzUz5CcHMbFU6pm9rwbI
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKoE8EACgkQAVBC80lX
+0Gyingf9FyxWZDdL5WZkkxQsQTUTLsiRomBKCroOaKcIGOtbn3tqTSrwHwK5/ckv
+et82uX897Al7708t1+lh5M02ILvDgPpLEEfCr6qUyn/onXyPu8CfxXmyPAXvO3P4
+27h/rQYnaRFDczoVZujuQjLu0+bzufIKASry7TLoofxiWU+T3IDvzb5q8AG9sfhR
+McIPdHD/p7w1bVNHITpa+2hDVFL9UpiU7ZRy2Lig56CDwYjYKPsAk/OqMDP9s0HS
+npuAEnYMJGz05Iq6+x1e4R1eSFDo2yvtJXuZ9qTHY9bMOtaPHvyXNYfCKqmNPiXM
+bhku9CruwHUtZYZ/S1s4zTkQBEXs5A==
+=Q5f9
+-----END PGP SIGNATURE-----
+
+--Sig_/YRepzUz5CcHMbFU6pm9rwbI--

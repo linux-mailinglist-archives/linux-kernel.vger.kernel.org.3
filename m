@@ -2,103 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0098154A76D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:09:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BD654A771
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354677AbiFNDJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 23:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43084 "EHLO
+        id S1354295AbiFNDMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 23:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354279AbiFNDJU (ORCPT
+        with ESMTP id S231810AbiFNDMq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 23:09:20 -0400
-Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205AF2AE33
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:09:19 -0700 (PDT)
-Received: by mail-il1-x130.google.com with SMTP id a15so5658190ilq.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:09:19 -0700 (PDT)
+        Mon, 13 Jun 2022 23:12:46 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED50212AA5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:12:43 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id s124so10157367oia.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:12:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+u7tit5dePdeszJPzkquI25j79UMUL4eAqYRMdwtm/w=;
-        b=iew+ylXoZaNuQ03Yo9D3Y4ZJEYt5IK+hyeSA2sGBuHLt6ZFMpUQ1tSBDCemwcZLKnh
-         lHDNqASha9GhazSl14oqrQmFwan1ZBiPqatvErQEmhytQF/4c0q9jESGbyh8ugFrGUAE
-         9I7ymPk4ZoUXLtOEmGoJjq8yEJoQcTFDus+BI=
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=fE13mG9CKvIUbMO9JtlL0pZ2ijxEEYtHb1Jlhe49Vto=;
+        b=Hp+/odbQeiVIRvfi/vmvwGEy77BA70iPNlTKF5sKCZJOzzcI/rLvW4b3Mxb6KQw17y
+         KMmcTOCdrgYCduo9p4zBglf6lqUn/6IT683KXeejf4bOltqaV7ppUzvcMKGrPFC0m84Q
+         PDaXWvL/hXKsCCxG2rpIoXwiUu4lvMcR14xIa344P34DDjDonLoK9OoBas0+h5PXFJOg
+         OtR8T5E1kdbMEfOw2QpN5cs7GsZNJA77klMyMZuUPe2zBdRGPicWwxIx1JGbqkbaXuwo
+         FRGUu3wJlJtV/s3G/ZYfuDGVki/wlrWxRnp77bPmn46NhERjLPt+TYAWLhd0Hxgn8Zwu
+         G3Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+u7tit5dePdeszJPzkquI25j79UMUL4eAqYRMdwtm/w=;
-        b=HE3IC8cdFRJfGiuu4GE7ropTZwsUnSOFXJh/l1XugrSPEO6JHq4+TJzPk/Y6+oTn6j
-         qms7jjL9JeS3xEspsbuJurUgJMT0sAj4746vnNlRMH3tch8rJOTsoTCFWEkMVyOWVoGu
-         G64tcNKfDnOmnxqSY2Q4QQw8GSJAoJ8G1CmTmZoB6akZzsOkiBsIYsVK3NL2VBvNYIdl
-         wjxPiihc1U1+qpC1tG3UMv33qe5J0U75eHN7B1MoDWIowG3jMwEb+z4t/N3bunDFNiWm
-         +w0xiauJg2F4tnzDWgL2VMa4e/n2rbGhhqSBcnAo/pwZUm5D0kCbCKCwjUdOeXmNRFxN
-         1PjA==
-X-Gm-Message-State: AJIora9dfc/jVOqrC/PsC7s7m3Daf3TUxBrid1M8qQZHjCAZsBmnuPE0
-        aj9DLW191PB4YVHG4fThLIFjwf7lvOwtww==
-X-Google-Smtp-Source: AGRyM1tLHonWKVKVXSQRiyduuEprErsDZUIKBJTsc/UeWqdrsoxZVYGhcuuuFJFJ0svn/lnohFP8tQ==
-X-Received: by 2002:a05:6e02:1b8f:b0:2d1:b707:3022 with SMTP id h15-20020a056e021b8f00b002d1b7073022mr1753978ili.71.1655176158496;
-        Mon, 13 Jun 2022 20:09:18 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id z13-20020a92d6cd000000b002d7903d71ebsm4748355ilp.78.2022.06.13.20.09.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jun 2022 20:09:18 -0700 (PDT)
-Subject: Re: [PATCH 4.9 000/167] 4.9.318-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220613094840.720778945@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <22e01c53-ef18-9bd7-1a9f-30ab710c7025@linuxfoundation.org>
-Date:   Mon, 13 Jun 2022 21:09:17 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=fE13mG9CKvIUbMO9JtlL0pZ2ijxEEYtHb1Jlhe49Vto=;
+        b=QV1u82ESlmN+0F0wnvhN1AW7O9AzzaTwZrMk4eU8jii0kD95bbNE/ev6ETBKiINQwC
+         KMiOuwH2F5tyT2Ac3N6vBIBACHJu/Jp4jeWUpisevy6N2Ebq0Ieqo8IPdbjDeN3oky7r
+         uefxalu/uiEIQm9DXlolnoKoJzZphU1t1DAGCfVV+sI5eA8EylpOwGv2gyQIswQHQeBA
+         t4e2N0jS+paIc06UsEzOz0qNOuUwzpCoH3vf4kJl2KZM67CPJjO1OIIJVNS+viIG4GIu
+         NvkZjCroF8iNSw9O7YGy2zew/z7gPI8C+gHr2yAYAHR8ArIW/JpXGozia4VFbCgXTZ87
+         cBCw==
+X-Gm-Message-State: AOAM5319fmcDnKm6joaYeCyetuukC5II4EDdG/PpKLEetgte7fRoEKrp
+        R83MHkH9tclwNiBCFfKSkf2gFI8c7cW0fcJo8Yk=
+X-Google-Smtp-Source: ABdhPJz4sfzjoxDn45RuRiSG9fF7ZAykCIzcL66xTq3buml1YD1fg1XeARDZYR2gUABqi1kGL+u5Bdwi8zdhPcTuQQA=
+X-Received: by 2002:a05:6808:2225:b0:32e:e61c:ffb3 with SMTP id
+ bd37-20020a056808222500b0032ee61cffb3mr994053oib.293.1655176363394; Mon, 13
+ Jun 2022 20:12:43 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220613094840.720778945@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:6358:8781:b0:a5:60e4:b396 with HTTP; Mon, 13 Jun 2022
+ 20:12:43 -0700 (PDT)
+Reply-To: schlumbergerrecruitmentteam@gmail.com
+From:   INFO CENTER <centerinformation6@gmail.com>
+Date:   Mon, 13 Jun 2022 15:12:43 -1200
+Message-ID: <CAHahC1MK4TNNJBNvYz8POYO8MDZMS6-WOxYTWxH4Mrb3QBvPog@mail.gmail.com>
+Subject: VACANCY FOR JOB IN UK
+To:     centerinformation6@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/13/22 4:07 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.318 release.
-> There are 167 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 15 Jun 2022 09:47:08 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.318-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+--=20
+The Schlumberger United Kingdom, We are recruiting all professionals for
+our ongoing project . Salary Rate from =C2=A3 2,000 British pounds to =C2=
+=A3
+65,000 British pounds depending on working experience and
+qualification, you are hereby advised to send us your recently updated
+CV/Resume with the below information if you are ready to relocate to
+the United Kingdom.
 
-Compiled and booted on my test system. No dmesg regressions.
+1) Your present monthly salary in the US .....?
+2) Expected monthly Salary....?
+3) Are you willing to relocate now.....?
+4) Your present Position....?
+5)  WhatsApp Number for interview
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+Thanks,
 
-thanks,
--- Shuah
+HR MANAGER
+The Schlumberger Recruitment team

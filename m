@@ -2,59 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED8454BE6A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 01:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C8154BE6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 01:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237512AbiFNXnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 19:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
+        id S1344811AbiFNXoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 19:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiFNXm7 (ORCPT
+        with ESMTP id S1345892AbiFNXnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 19:42:59 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92A91A83D
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:42:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655250177; x=1686786177;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AzMjodAxqu1zxZ6O9GwBL8stvOI7YSuvOydidLljVtg=;
-  b=nNalkV2ew/MhysmZMMhv3kJwzfTSVGWtVDBImHuv4r91I7z6FCxe20Hc
-   4PnOkWHmt4WY/MfzL9LEshI2hzL1d6DFi8R6MVdd9o25wvPDc3il8zgvv
-   gCkA46kcv1gSlguXidoHxY9MqZ9xeVQ9+4jMP+LmGh2o++n6QGofogZf6
-   78RQ+u8a91rZ3jXzL/DbHrjdsrLnFiJ5QoamqlKXQqRIxn+tDXivrsd3+
-   l4dMmVxaoQTRIZW3P2MOwU5Yx6M7Syd9zPpggINuV/uI1Bg27f9Nlx5aw
-   M/DSmns9qFF60LhaYHNtVVPV0r6Uysi05EH5DEnlWvdXrIswXJoOehnfS
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="340437820"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="340437820"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 16:42:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="558632225"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 14 Jun 2022 16:42:54 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1GBS-000MOx-8k;
-        Tue, 14 Jun 2022 23:42:54 +0000
-Date:   Wed, 15 Jun 2022 07:42:51 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Shyam Prasad N <sprasad@microsoft.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [samba-ksmbd:for-next 5/5] include/linux/kern_levels.h:5:25:
- warning: format '%x' expects argument of type 'unsigned int', but argument 3
- has type '__u64' {aka 'long long unsigned int'}
-Message-ID: <202206150736.n4DaXscy-lkp@intel.com>
+        Tue, 14 Jun 2022 19:43:47 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21654B1C5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:43:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655250225; x=1686786225;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=BGwa4gt3lsrX6CmPrlwJtniUfIkDciPU/F/Ed6lDhtM=;
+  b=Bw5FNIZ2EqMJNjteZo3wEFw4smB4cljwktix2n1H0fE+PAdHEXBmKDnI
+   pRSZBD56YXhJ6EWjEpNwkouxrVlpWLprzHvz7n3hFks1Ta+wFYynrm4ul
+   jTbHSSYUT9UyIcpIIgAZ+M7GkoGHoyoXo8Pk/JiAR3Nei+/m15HobRjH1
+   P3AEA3GdPjf2BaHiq0N9QZ/WklGDsa7y7fGnklC+0XLWvW3TS6nWHp9ac
+   EW/ndKGJms51AatCafgLFaQ3fwtRohzdEa8xaUyUBZbfjUuBrOTZlEkc1
+   Zhi5l7dRPL06Txy3/k40jChjU70sDoBFrEPBM3lnqmG+IqvUaByU+wpaY
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,300,1647273600"; 
+   d="scan'208";a="203166660"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Jun 2022 07:43:43 +0800
+IronPort-SDR: P2WDHJL+4V/ql7z246Pd5WpjIwiObQgoMoa8wuqzKlP8lJ73uip6vOp5sDIbILr5qGzRdjWGBd
+ 39MjWkfXV/Od0J2g1XZau5v/m3u3MFxmL9E9fGkVFiC9EbzKujIFCJ+vmBJ9da9c8k/I8+AK4U
+ 0ul3qfFO2C7+lwv86IaHaGEZyqwIDHdGQOQsSvohQsoC0GBMIYhaCv9YwPoWeEyyYmAtYkmGCB
+ BB8oJBKXiuVHfaJEFRHE6K4dqEgPcjiRDUTZ0KCSrzCxQfa+oP5AU+kUKAAGb3mB4sCCm0rEC9
+ 3PO7LVAAP2hmkUQutjej0BZQ
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Jun 2022 16:02:19 -0700
+IronPort-SDR: 8uDc2INJSTCKe/qvBFBl/nD7CEoVwqXT9UJsYEXPOHowSHobe5Drg6nowJ4WV+ITzKg4llEzer
+ ggHiRGWFSBM8W7QoVRQSNYvki9ckObUuvyByCeOhhw4amiEUkSEg6mzYTwk9wyTdgIfaNrODZT
+ wscGJ20h7rOZpKKtUd86xFahQYgVHWhN+y2TbDUjHb8wlVVoiWL7xZnkMaXaWrzmjIPZhcBCjS
+ kZx96GBArNfE72n+kunNgppuRqFu9eRpJUkKy/PbxcAvK0DSo7wTHHbr3L426rpdipOpXVJfjf
+ 9zg=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Jun 2022 16:43:44 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LN4l35qYkz1SVp8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:43:43 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655250223; x=1657842224; bh=BGwa4gt3lsrX6CmPrlwJtniUfIkDciPU/F/
+        Ed6lDhtM=; b=OkGVH4FCLA92mLoNpUkCBUX+TI5SgnG6FXXGNhqotYEwl8NGoVA
+        WbeUTp37w0LuwxBWJx4HUiloGLisn4DroOSw/dufIv4nLykk6F3nvwLYA3qWMnnK
+        G2GwviFTrTjGmDIQyPMktq2iypx4DXa95BpFdchan611KQSDTdE7UBbAJdlxBcsD
+        Kdh7ZHr7vZpAsGgt3n8q/LUEX6L68oWslEDnMSPeugC2BtyHu79NqQtRqG13e91m
+        Uuidp+27MZ5mArLeIMyeQjvSWZMhAjVRYzxyF/pqhIF4iDsbhrjWE7GW6s0Vm6GY
+        MBWaniTTQzZLlaF+a9IKVMRq5I1MmGZAcgg==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id oYYLHfBr74ly for <linux-kernel@vger.kernel.org>;
+        Tue, 14 Jun 2022 16:43:43 -0700 (PDT)
+Received: from [10.225.163.81] (unknown [10.225.163.81])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LN4l057nKz1Rvlc;
+        Tue, 14 Jun 2022 16:43:40 -0700 (PDT)
+Message-ID: <e36bba7e-d78d-27b4-a0e2-9d921bc82f5d@opensource.wdc.com>
+Date:   Wed, 15 Jun 2022 08:43:39 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH RFC v2 03/18] scsi: core: Implement reserved command
+ handling
+Content-Language: en-US
+To:     Bart Van Assche <bvanassche@acm.org>,
+        John Garry <john.garry@huawei.com>, axboe@kernel.dk,
+        jejb@linux.ibm.com, martin.petersen@oracle.com, brking@us.ibm.com,
+        hare@suse.de, hch@lst.de
+Cc:     linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        chenxiang66@hisilicon.com
+References: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
+ <1654770559-101375-4-git-send-email-john.garry@huawei.com>
+ <b4a0ede5-95a3-4388-e808-7627b5484d01@opensource.wdc.com>
+ <9e89360d-3325-92af-0436-b34df748f3e2@acm.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <9e89360d-3325-92af-0436-b34df748f3e2@acm.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,218 +106,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.samba.org/ksmbd.git for-next
-head:   43c233283f928be86531f030c8a3faa497a30e15
-commit: 43c233283f928be86531f030c8a3faa497a30e15 [5/5] cifs: when a channel is not found for server, log its connection id
-config: i386-randconfig-a001 (https://download.01.org/0day-ci/archive/20220615/202206150736.n4DaXscy-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        git remote add samba-ksmbd git://git.samba.org/ksmbd.git
-        git fetch --no-tags samba-ksmbd for-next
-        git checkout 43c233283f928be86531f030c8a3faa497a30e15
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/cifs/
+On 6/15/22 03:20, Bart Van Assche wrote:
+> On 6/13/22 00:01, Damien Le Moal wrote:
+>> On 6/9/22 19:29, John Garry wrote:
+>>> +	/*
+>>> +	 * This determines how many commands the HBA will set aside
+>>> +	 * for internal commands. This number will be added to
+>>> +	 * @can_queue to calcumate the maximum number of simultaneous
+>>
+>> s/calcumate/calculate
+>>
+>> But this is weird. For SATA, can_queue is 32. Having reserved commands,
+>> that number needs to stay the same. We cannot have more than 32 tags.
+>> I think keeping can_queue as the max queue depth with at most
+>> nr_reserved_cmds tags reserved is better.
+>>
+>>> +	 * commands sent to the host.
+>>> +	 */
+>>> +	int nr_reserved_cmds;
+> 
+> +1 for Damien's request. I also prefer to keep can_queue as the maximum
+> queue depth, whether or not nr_reserved_cmds has been set.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+For non SATA drives, I still think that is a good idea. However, for SATA,
+we always have the internal tag command that is special. With John's
+change, it would have to be reserved but that means we are down to 31 max
+QD, so going backward several years... That internal tag for ATA does not
+need to be reserved since this command is always used when the drive is
+idle and no other NCQ commands are on-going.
 
-All warnings (new ones prefixed by >>):
+So the solution to all this is a likely a little more complicated if we
+want to keep ATA max QD to 32.
 
-   In file included from include/asm-generic/bug.h:22,
-                    from arch/x86/include/asm/bug.h:87,
-                    from include/linux/bug.h:5,
-                    from include/linux/mmdebug.h:5,
-                    from include/linux/percpu.h:5,
-                    from include/linux/context_tracking_state.h:5,
-                    from include/linux/hardirq.h:5,
-                    from include/net/sock.h:38,
-                    from fs/cifs/cifspdu.h:12,
-                    from fs/cifs/sess.c:11:
-   fs/cifs/sess.c: In function 'cifs_ses_get_chan_index':
->> include/linux/kern_levels.h:5:25: warning: format '%x' expects argument of type 'unsigned int', but argument 3 has type '__u64' {aka 'long long unsigned int'} [-Wformat=]
-       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-         |                         ^~~~~~
-   include/linux/printk.h:447:25: note: in definition of macro 'printk_index_wrap'
-     447 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/linux/printk.h:131:17: note: in expansion of macro 'printk'
-     131 |                 printk(fmt, ##__VA_ARGS__);             \
-         |                 ^~~~~~
-   include/linux/printk.h:654:9: note: in expansion of macro 'no_printk'
-     654 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~
-   include/linux/kern_levels.h:15:25: note: in expansion of macro 'KERN_SOH'
-      15 | #define KERN_DEBUG      KERN_SOH "7"    /* debug-level messages */
-         |                         ^~~~~~~~
-   include/linux/printk.h:654:19: note: in expansion of macro 'KERN_DEBUG'
-     654 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |                   ^~~~~~~~~~
-   fs/cifs/cifs_debug.h:65:17: note: in expansion of macro 'pr_debug_once'
-      65 |                 pr_debug_ ## ratefunc("%s: " fmt,                       \
-         |                 ^~~~~~~~~
-   fs/cifs/cifs_debug.h:77:17: note: in expansion of macro 'cifs_dbg_func'
-      77 |                 cifs_dbg_func(once, type, fmt, ##__VA_ARGS__);          \
-         |                 ^~~~~~~~~~~~~
-   fs/cifs/sess.c:85:17: note: in expansion of macro 'cifs_dbg'
-      85 |                 cifs_dbg(VFS, "unable to get chan index for server: 0x%x",
-         |                 ^~~~~~~~
-   include/linux/kern_levels.h:5:25: warning: format '%x' expects argument of type 'unsigned int', but argument 2 has type '__u64' {aka 'long long unsigned int'} [-Wformat=]
-       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-         |                         ^~~~~~
-   include/linux/printk.h:447:25: note: in definition of macro 'printk_index_wrap'
-     447 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/linux/once_lite.h:19:25: note: in expansion of macro 'printk'
-      19 |                         func(__VA_ARGS__);                              \
-         |                         ^~~~
-   include/linux/once_lite.h:11:9: note: in expansion of macro 'DO_ONCE_LITE_IF'
-      11 |         DO_ONCE_LITE_IF(true, func, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~
-   include/linux/printk.h:614:9: note: in expansion of macro 'DO_ONCE_LITE'
-     614 |         DO_ONCE_LITE(printk, fmt, ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~
-   include/linux/printk.h:631:9: note: in expansion of macro 'printk_once'
-     631 |         printk_once(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~~~
-   include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
-      11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
-         |                         ^~~~~~~~
-   include/linux/printk.h:631:21: note: in expansion of macro 'KERN_ERR'
-     631 |         printk_once(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                     ^~~~~~~~
-   fs/cifs/cifs_debug.h:68:17: note: in expansion of macro 'pr_err_once'
-      68 |                 pr_err_ ## ratefunc("VFS: " fmt, ##__VA_ARGS__);        \
-         |                 ^~~~~~~
-   fs/cifs/cifs_debug.h:77:17: note: in expansion of macro 'cifs_dbg_func'
-      77 |                 cifs_dbg_func(once, type, fmt, ##__VA_ARGS__);          \
-         |                 ^~~~~~~~~~~~~
-   fs/cifs/sess.c:85:17: note: in expansion of macro 'cifs_dbg'
-      85 |                 cifs_dbg(VFS, "unable to get chan index for server: 0x%x",
-         |                 ^~~~~~~~
-   include/linux/kern_levels.h:5:25: warning: format '%x' expects argument of type 'unsigned int', but argument 2 has type '__u64' {aka 'long long unsigned int'} [-Wformat=]
-       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-         |                         ^~~~~~
-   include/linux/printk.h:447:25: note: in definition of macro 'printk_index_wrap'
-     447 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/linux/printk.h:131:17: note: in expansion of macro 'printk'
-     131 |                 printk(fmt, ##__VA_ARGS__);             \
-         |                 ^~~~~~
-   include/linux/printk.h:654:9: note: in expansion of macro 'no_printk'
-     654 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~
-   include/linux/kern_levels.h:15:25: note: in expansion of macro 'KERN_SOH'
-      15 | #define KERN_DEBUG      KERN_SOH "7"    /* debug-level messages */
-         |                         ^~~~~~~~
-   include/linux/printk.h:654:19: note: in expansion of macro 'KERN_DEBUG'
-     654 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |                   ^~~~~~~~~~
-   fs/cifs/cifs_debug.h:70:17: note: in expansion of macro 'pr_debug_once'
-      70 |                 pr_debug_ ## ratefunc(fmt, ##__VA_ARGS__);              \
-         |                 ^~~~~~~~~
-   fs/cifs/cifs_debug.h:77:17: note: in expansion of macro 'cifs_dbg_func'
-      77 |                 cifs_dbg_func(once, type, fmt, ##__VA_ARGS__);          \
-         |                 ^~~~~~~~~~~~~
-   fs/cifs/sess.c:85:17: note: in expansion of macro 'cifs_dbg'
-      85 |                 cifs_dbg(VFS, "unable to get chan index for server: 0x%x",
-         |                 ^~~~~~~~
->> include/linux/kern_levels.h:5:25: warning: format '%x' expects argument of type 'unsigned int', but argument 3 has type '__u64' {aka 'long long unsigned int'} [-Wformat=]
-       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-         |                         ^~~~~~
-   include/linux/printk.h:447:25: note: in definition of macro 'printk_index_wrap'
-     447 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/linux/printk.h:131:17: note: in expansion of macro 'printk'
-     131 |                 printk(fmt, ##__VA_ARGS__);             \
-         |                 ^~~~~~
-   include/linux/printk.h:719:9: note: in expansion of macro 'no_printk'
-     719 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~
-   include/linux/kern_levels.h:15:25: note: in expansion of macro 'KERN_SOH'
-      15 | #define KERN_DEBUG      KERN_SOH "7"    /* debug-level messages */
-         |                         ^~~~~~~~
-   include/linux/printk.h:719:19: note: in expansion of macro 'KERN_DEBUG'
-     719 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |                   ^~~~~~~~~~
-   fs/cifs/cifs_debug.h:65:17: note: in expansion of macro 'pr_debug_ratelimited'
-      65 |                 pr_debug_ ## ratefunc("%s: " fmt,                       \
-         |                 ^~~~~~~~~
-   fs/cifs/cifs_debug.h:79:17: note: in expansion of macro 'cifs_dbg_func'
-      79 |                 cifs_dbg_func(ratelimited, type, fmt, ##__VA_ARGS__);   \
-         |                 ^~~~~~~~~~~~~
-   fs/cifs/sess.c:85:17: note: in expansion of macro 'cifs_dbg'
-      85 |                 cifs_dbg(VFS, "unable to get chan index for server: 0x%x",
-         |                 ^~~~~~~~
-   include/linux/kern_levels.h:5:25: warning: format '%x' expects argument of type 'unsigned int', but argument 2 has type '__u64' {aka 'long long unsigned int'} [-Wformat=]
-       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-         |                         ^~~~~~
-   include/linux/printk.h:447:25: note: in definition of macro 'printk_index_wrap'
-     447 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/linux/printk.h:669:17: note: in expansion of macro 'printk'
-     669 |                 printk(fmt, ##__VA_ARGS__);                             \
-         |                 ^~~~~~
-   include/linux/printk.h:683:9: note: in expansion of macro 'printk_ratelimited'
-     683 |         printk_ratelimited(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~
-   include/linux/kern_levels.h:11:25: note: in expansion of macro 'KERN_SOH'
-      11 | #define KERN_ERR        KERN_SOH "3"    /* error conditions */
-         |                         ^~~~~~~~
-   include/linux/printk.h:683:28: note: in expansion of macro 'KERN_ERR'
-     683 |         printk_ratelimited(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-         |                            ^~~~~~~~
-   fs/cifs/cifs_debug.h:68:17: note: in expansion of macro 'pr_err_ratelimited'
-      68 |                 pr_err_ ## ratefunc("VFS: " fmt, ##__VA_ARGS__);        \
-         |                 ^~~~~~~
-   fs/cifs/cifs_debug.h:79:17: note: in expansion of macro 'cifs_dbg_func'
-      79 |                 cifs_dbg_func(ratelimited, type, fmt, ##__VA_ARGS__);   \
-         |                 ^~~~~~~~~~~~~
-   fs/cifs/sess.c:85:17: note: in expansion of macro 'cifs_dbg'
-      85 |                 cifs_dbg(VFS, "unable to get chan index for server: 0x%x",
-         |                 ^~~~~~~~
-   include/linux/kern_levels.h:5:25: warning: format '%x' expects argument of type 'unsigned int', but argument 2 has type '__u64' {aka 'long long unsigned int'} [-Wformat=]
-       5 | #define KERN_SOH        "\001"          /* ASCII Start Of Header */
-         |                         ^~~~~~
-   include/linux/printk.h:447:25: note: in definition of macro 'printk_index_wrap'
-     447 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   include/linux/printk.h:131:17: note: in expansion of macro 'printk'
-     131 |                 printk(fmt, ##__VA_ARGS__);             \
-         |                 ^~~~~~
-   include/linux/printk.h:719:9: note: in expansion of macro 'no_printk'
-     719 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |         ^~~~~~~~~
-   include/linux/kern_levels.h:15:25: note: in expansion of macro 'KERN_SOH'
-      15 | #define KERN_DEBUG      KERN_SOH "7"    /* debug-level messages */
-         |                         ^~~~~~~~
-   include/linux/printk.h:719:19: note: in expansion of macro 'KERN_DEBUG'
-     719 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-         |                   ^~~~~~~~~~
-   fs/cifs/cifs_debug.h:70:17: note: in expansion of macro 'pr_debug_ratelimited'
-      70 |                 pr_debug_ ## ratefunc(fmt, ##__VA_ARGS__);              \
-         |                 ^~~~~~~~~
-   fs/cifs/cifs_debug.h:79:17: note: in expansion of macro 'cifs_dbg_func'
-      79 |                 cifs_dbg_func(ratelimited, type, fmt, ##__VA_ARGS__);   \
-         |                 ^~~~~~~~~~~~~
-   fs/cifs/sess.c:85:17: note: in expansion of macro 'cifs_dbg'
-      85 |                 cifs_dbg(VFS, "unable to get chan index for server: 0x%x",
-         |                 ^~~~~~~~
+> 
+> Thanks,
+> 
+> Bart.
 
-
-vim +5 include/linux/kern_levels.h
-
-314ba3520e513a7 Joe Perches 2012-07-30  4  
-04d2c8c83d0e3ac Joe Perches 2012-07-30 @5  #define KERN_SOH	"\001"		/* ASCII Start Of Header */
-04d2c8c83d0e3ac Joe Perches 2012-07-30  6  #define KERN_SOH_ASCII	'\001'
-04d2c8c83d0e3ac Joe Perches 2012-07-30  7  
-
-:::::: The code at line 5 was first introduced by commit
-:::::: 04d2c8c83d0e3ac5f78aeede51babb3236200112 printk: convert the format for KERN_<LEVEL> to a 2 byte pattern
-
-:::::: TO: Joe Perches <joe@perches.com>
-:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Damien Le Moal
+Western Digital Research

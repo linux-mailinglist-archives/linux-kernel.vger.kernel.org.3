@@ -2,216 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AFB954A987
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369FB54A98F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351316AbiFNGeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 02:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
+        id S232013AbiFNGfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 02:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232013AbiFNGeV (ORCPT
+        with ESMTP id S238289AbiFNGfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 02:34:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B3F26127
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 23:34:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9CE9EB8169F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 06:34:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE730C3411B;
-        Tue, 14 Jun 2022 06:34:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655188457;
-        bh=Yt7B6XU8vtMdfA51/vbEyvmR+klBCsIE6DU6scdx+Og=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JfXOcRKG6gytRIWoUWF+HR/e3gHAYGqUiRg3WCPJyW5WVCpp/iMdhVBmnNztuboW4
-         0+ZS3UT8Ivf8sGSPfxp2Nt0NkbktTzfOZ0eRB3ltI2NtTQPR55cq+UUKTMUUJrAPNU
-         vvZil3YCJ4cjkodWsLgagixCDy1i0EczEJVpuSiY=
-Date:   Tue, 14 Jun 2022 08:34:14 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wenhu Wang <wenhu.wang@hotmail.com>
-Cc:     "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQ0ggMi8yXSB1?=
- =?utf-8?Q?io=3Apowerpc=3Ampc85xx?= =?utf-8?Q?=3A?= l2-cache-sram uio driver
- implementation
-Message-ID: <Yqgr5jKEypU83yBF@kroah.com>
-References: <20220609102855.272270-1-wenhu.wang@hotmail.com>
- <SG2PR01MB295139AA7360917B2C4846E19FA79@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
- <YqHy1uXwCLlJmftr@kroah.com>
- <SG2PR01MB2951EA9ED70E5F766DD26A069FAA9@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
+        Tue, 14 Jun 2022 02:35:11 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FD637A25;
+        Mon, 13 Jun 2022 23:35:10 -0700 (PDT)
+Received: from [192.168.1.107] ([37.4.249.155]) by mrelayeu.kundenserver.de
+ (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MMWgb-1oKap12dmR-00JeZt; Tue, 14 Jun 2022 08:34:52 +0200
+Message-ID: <ed07ffc9-a6a9-7f7e-a34a-51c1a94ffe88@i2se.com>
+Date:   Tue, 14 Jun 2022 08:34:51 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] ARM: dts: bcm2711-rpi-4-b: Use aliases to set custom MMC
+ device index
+Content-Language: en-US
+To:     Ariel D'Alessandro <ariel.dalessandro@collabora.com>,
+        Peter Robinson <pbrobinson@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-rpi-kernel@lists.infradead.org,
+        gkrzysztof.kozlowski+dt@linaro.org, gnsaenz@kernel.org,
+        grobh+dt@kernel.org, nsaenz@kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>
+References: <20220608123233.13439-1-ariel.dalessandro@collabora.com>
+ <CALeDE9PR80qS63wwAKB-hENWbEj1xNHj+k81tyWkPPfZ0TS8Pw@mail.gmail.com>
+ <f83690bb-5513-db87-2d97-7cbd981aa0f7@collabora.com>
+ <d18e93a0-f2d7-81c6-56e8-9dfbc6f14383@gmail.com>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <d18e93a0-f2d7-81c6-56e8-9dfbc6f14383@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <SG2PR01MB2951EA9ED70E5F766DD26A069FAA9@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:UbHWjvDAnm4TlXK+jOtZlK+fEY96IEagfLHq8aiDgCaKUUnrdsG
+ ruElF8BE8itRPHeu8eERO/tRmj+/moSlFcH0/35aqVgxV4lm0mjUqK+YMO16q2K1UHxGr2M
+ EO4MrDkMSI4yXLX3EQLns1cQpqqjxJ/9laiws/SA5IjcDQ9bvYqHCuHVlFj0/p7mSo+m0JS
+ XZDzcLoR38ruvYmStsn/g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:UlzaYFfiUz8=:UJS1QEZbIzY5mFOaoNaB2C
+ Wo0Cmr9BNrT//vROqS86bhD9rFHA72tUEzXLLDgX3LjEx9nRX3VOQjNOpyO7om/DPDW66VQ9s
+ T3LARFxFQP4Q9bI+zH8U+ywHHOf6QVCPqFv1oHnFe42VBAp0c7PzH6EPcVins72gepA2PtSs1
+ 4YOcw2iPrK2gotQVX0doxE/3my3AIkP2nhzmefIN65C3rylFKdkaUf/oEQDMIgUfHHC4BromX
+ Hv9IIG2tmLAMrbAx298oy2BhLLCchPw32S/LjRKXw+t/d8xjz0MyCHxOozNF1rVZvwxHsAisW
+ G311OHfEQJAn3qKdxV7SWVqoP6f0jU4icOhdRg96IpJIGnph+lhwTM4ylMmqjvMG0Vp+W++AB
+ JTyMvXhWy9vS6t92L9usls5X2iBol0LqOuQpwEL6vMIxEL2TY9qGwLxAPTs/zWPzTr2miF8KT
+ 6mwHPsqT9N3+wnfgl6o0pmKiBVpqg+22DOSj9Zcl63tat910v3MN170EVay/wKQyDMu9jcqxl
+ 5RKKl8Ifd94Mycb0GLfh3VGQUYEMTewjvFE/Ah+D7HoGTwb/HPH67UQPCfSyFmJLjSzLnyKil
+ G90tlCm6+2i51XdNj8fpzbu2z9aTo5zEUh802QEb+Z3SYXFZmUzLjE5GQ6IQU2IS9+q71ffwX
+ 7aDlxN+Yd4qPhcEBX1Cq3shxJjaf6W9yFYLRpO9P88Z3b8VtU7EUlT0vACpvkrx08ByURgZ2b
+ +RADuItKzWlgo0NVkSs9nsPS5PQHnGdJRtgLlWbFN0co8te38QomTbe/OI0=
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 06:09:35AM +0000, Wenhu Wang wrote:
-> Hi Greg, thanks for the comments.
-> The questions are replied specifically below.
-> I have figured out and tested the patch v2, which is to be posted later.
-> >发件人: Greg KH <gregkh@linuxfoundation.org>
-> >发送时间: 2022年6月9日 21:17
-> >收件人: Wang Wenhu <wenhu.wang@hotmail.com>
-> >抄送: christophe.leroy@csgroup.eu <christophe.leroy@csgroup.eu>; mpe@ellerman.id.au <mpe@ellerman.id.au>; linuxppc-dev@lists.ozlabs.org <linuxppc-dev@lists.ozlabs.org>; linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>
-> >主题: Re: [PATCH 2/2] uio:powerpc:mpc85xx: l2-cache-sram uio driver implementation 
-> > 
-> >On Thu, Jun 09, 2022 at 03:28:55AM -0700, Wang Wenhu wrote:
-> >> The l2-cache could be optionally configured as SRAM partly or fully.
-> >> Users can make use of it as a block of independent memory that offers
-> >> special usage, such as for debuging or other cratical status info
-> >> storage which keeps consistently even when the whole system crashed.
-> >> 
-> >> The hardware related configuration process utilized the work of the
-> >> earlier implementation, which has been removed now.
-> >> See: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=dc21ed2aef4150fc2fcf58227a4ff24502015c03
-> >> 
-> >> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> >> Signed-off-by: Wang Wenhu <wenhu.wang@hotmail.com>
-> >> ---
-> >>  drivers/uio/Kconfig                   |  10 +
-> >>  drivers/uio/Makefile                  |   1 +
-> >>  drivers/uio/uio_fsl_85xx_cache_sram.c | 286 ++++++++++++++++++++++++++
-> >>  3 files changed, 297 insertions(+)
-> >>  create mode 100644 drivers/uio/uio_fsl_85xx_cache_sram.c
-> >> 
-> >> diff --git a/drivers/uio/Kconfig b/drivers/uio/Kconfig
-> >> index 2e16c5338e5b..9199ced03880 100644
-> >> --- a/drivers/uio/Kconfig
-> >> +++ b/drivers/uio/Kconfig
-> >> @@ -105,6 +105,16 @@ config UIO_NETX
-> >>          To compile this driver as a module, choose M here; the module
-> >>          will be called uio_netx.
-> >>  
-> >> +config UIO_FSL_85XX_CACHE_SRAM
-> >> +     tristate "Freescale 85xx Cache-Sram driver"
-> >> +     depends on FSL_SOC_BOOKE && PPC32
-> >> +     help
-> >> +       Generic driver for accessing the Cache-Sram form user level. This
-> >> +       is extremely helpful for some user-space applications that require
-> >> +       high performance memory accesses.
-> >> +
-> >> +       If you don't know what to do here, say N.
-> >
-> >Module name information?
-> >
->  
-> More detailed and clearer info in v2
-> 
-> >> +
-> >>  config UIO_FSL_ELBC_GPCM
-> >>        tristate "eLBC/GPCM driver"
-> >>        depends on FSL_LBC
-> >> diff --git a/drivers/uio/Makefile b/drivers/uio/Makefile
-> >> index f2f416a14228..1ba07d92a1b1 100644
-> >> --- a/drivers/uio/Makefile
-> >> +++ b/drivers/uio/Makefile
-> >> @@ -12,3 +12,4 @@ obj-$(CONFIG_UIO_MF624)         += uio_mf624.o
-> >>  obj-$(CONFIG_UIO_FSL_ELBC_GPCM)      += uio_fsl_elbc_gpcm.o
-> >>  obj-$(CONFIG_UIO_HV_GENERIC) += uio_hv_generic.o
-> >>  obj-$(CONFIG_UIO_DFL)        += uio_dfl.o
-> >> +obj-$(CONFIG_UIO_FSL_85XX_CACHE_SRAM)        += uio_fsl_85xx_cache_sram.o
-> >> diff --git a/drivers/uio/uio_fsl_85xx_cache_sram.c b/drivers/uio/uio_fsl_85xx_cache_sram.c
-> >> new file mode 100644
-> >> index 000000000000..d363f9d2b179
-> >> --- /dev/null
-> >> +++ b/drivers/uio/uio_fsl_85xx_cache_sram.c
-> >> @@ -0,0 +1,286 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/*
-> >> + * Copyright (C) 2022 Wang Wenhu <wenhu.wang@hotmail.com>
-> >> + * All rights reserved.
-> >> + */
-> >> +
-> >> +#include <linux/platform_device.h>
-> >> +#include <linux/uio_driver.h>
-> >> +#include <linux/stringify.h>
-> >> +#include <linux/module.h>
-> >> +#include <linux/kernel.h>
-> >> +#include <linux/of_address.h>
-> >> +#include <linux/io.h>
-> >> +
-> >> +#define DRIVER_NAME          "uio_mpc85xx_cache_sram"
-> >> +#define UIO_INFO_VER "0.0.1"
-> >> +#define UIO_NAME             "uio_cache_sram"
-> >> +
-> >> +#define L2CR_L2FI                            0x40000000      /* L2 flash invalidate */
-> >> +#define L2CR_L2IO                            0x00200000      /* L2 instruction only */
-> >> +#define L2CR_SRAM_ZERO                       0x00000000      /* L2SRAM zero size */
-> >> +#define L2CR_SRAM_FULL                       0x00010000      /* L2SRAM full size */
-> >> +#define L2CR_SRAM_HALF                       0x00020000      /* L2SRAM half size */
-> >> +#define L2CR_SRAM_TWO_HALFS          0x00030000      /* L2SRAM two half sizes */
-> >> +#define L2CR_SRAM_QUART                      0x00040000      /* L2SRAM one quarter size */
-> >> +#define L2CR_SRAM_TWO_QUARTS 0x00050000      /* L2SRAM two quarter size */
-> >> +#define L2CR_SRAM_EIGHTH             0x00060000      /* L2SRAM one eighth size */
-> >> +#define L2CR_SRAM_TWO_EIGHTH 0x00070000      /* L2SRAM two eighth size */
-> >> +
-> >> +#define L2SRAM_OPTIMAL_SZ_SHIFT      0x00000003      /* Optimum size for L2SRAM */
-> >> +
-> >> +#define L2SRAM_BAR_MSK_LO18          0xFFFFC000      /* Lower 18 bits */
-> >> +#define L2SRAM_BARE_MSK_HI4          0x0000000F      /* Upper 4 bits */
-> >> +
-> >> +enum cache_sram_lock_ways {
-> >> +     LOCK_WAYS_ZERO,
-> >> +     LOCK_WAYS_EIGHTH,
-> >> +     LOCK_WAYS_TWO_EIGHTH,
-> >
-> >Why not have values for these?
-> >
-> 
-> full values given in v2
-> 
-> >> +     LOCK_WAYS_HALF = 4,
-> >> +     LOCK_WAYS_FULL = 8,
-> >> +};
-> >> +
-> >> +struct mpc85xx_l2ctlr {
-> >> +     u32     ctl;            /* 0x000 - L2 control */
-> >
-> >What is the endian of these u32 values?  You map them directly to
-> >memory, so they must be specified some way, right?  Please make it
-> >obvious what they are.
-> >
-> 
-> Surely, the values should be u32 here, modified in v2
-> The controller info could be found in
-> "QorIQ™ P2020 Integrated Processor Reference Manual"
-> "Chapter 6 L2 Look-Aside Cache/SRAM"
-> See: http://m4udit.dinauz.org/P2020RM_rev0.pdf
-
-That's not the answer to my question :)
-
-These are big-endian, right?  Please mark them as such and access them
-properly with the correct functions.
-
-> >> +     return remap_pfn_range(vma,
-> >> +                                                vma->vm_start,
-> >> +                                                mem->addr >> PAGE_SHIFT,
-> >> +                                                vma->vm_end - vma->vm_start,
-> >> +                                                vma->vm_page_prot);
-> >
-> >Odd indentation, did you use checkpatch.pl on your patch?
-> >
-> 
-> Actually, I checked with the scripts, and there was no warning here.
-> I also checked in text editors and vim, if I translate tab with 4 spaces,
-> the "vma/mem" areas in the 5 lines were aligned.
-
-Tabs in Linux are always 8 spaces wide.
-
-thanks,
-
-greg k-h
+Am 14.06.22 um 01:34 schrieb Florian Fainelli:
+> On 6/13/22 05:46, Ariel D'Alessandro wrote:
+>> Hi Peter,
+>>
+>> On 6/12/22 17:38, Peter Robinson wrote:
+>>> On Wed, Jun 8, 2022 at 1:35 PM Ariel D'Alessandro
+>>> <ariel.dalessandro@collabora.com> wrote:
+>>>>
+>>>> Add MMC aliases to ensure that the /dev/mmcblk ID for SD card won't
+>>>> change depending on the probe order of the MMC drivers.
+>>>
+>>> Is  the bcm2711-rpi.dtsi a better place for it given there's other
+>>> aliases there and it will be consistent across variations?
+>>
+>> Yes, indeed, it makes sense moving it to bcm2711-rpi.dtsi
+>>
+>> The other board what will be affected by this alias is the Raspberry Pi
+>> Compute Module 4 IO Board, on which emmc2 is the eMMC. However, the
+>> alias makes sense, to have that as the first mmc device.
+>>
+>> Maybe we can add the alias as follows?
+>>
+>>      mmc0 = &emmc2;  /* mmcblk0 for eMMC/SD */
+>
+> You have made a typo on the bcm-kernel-feedback-list meaning that this 
+> won't reach the patchwork instance I use to manage and apply patches, 
+> can you please fix that up for your v2? Thanks!
+Not just the bcm-kernel-feedback-list is affected, also the address of 
+Krzysztof, Rob and Nicolas has a g prepended.

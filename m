@@ -2,69 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BF754A8D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 07:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6769B54A8D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 07:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240432AbiFNFiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 01:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
+        id S240551AbiFNFk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 01:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238226AbiFNFir (ORCPT
+        with ESMTP id S233996AbiFNFk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 01:38:47 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B0C3818A;
-        Mon, 13 Jun 2022 22:38:45 -0700 (PDT)
-X-UUID: d241220955ca479da4a5111005c1727c-20220614
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:08a58a04-d0d6-4a6e-988e-404764a934cf,OB:10,L
-        OB:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:50
-X-CID-INFO: VERSION:1.1.6,REQID:08a58a04-d0d6-4a6e-988e-404764a934cf,OB:10,LOB
-        :0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:50
-X-CID-META: VersionHash:b14ad71,CLOUDID:c0aa8207-b57a-4a25-a071-bc7b4972bc68,C
-        OID:034fae7212de,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: d241220955ca479da4a5111005c1727c-20220614
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 959328732; Tue, 14 Jun 2022 13:38:41 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 14 Jun 2022 13:38:39 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 14 Jun 2022 13:38:39 +0800
-Message-ID: <acaf3f8a2cfa14cb050be1550c917ba84c0d81dd.camel@mediatek.com>
-Subject: Re: [PATCH v11 07/12] drm/mediatek: dpi: move swap_shift to SoC
- config
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 14 Jun 2022 13:38:39 +0800
-In-Reply-To: <20220613064841.10481-8-rex-bc.chen@mediatek.com>
-References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
-         <20220613064841.10481-8-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 14 Jun 2022 01:40:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B1A3818A;
+        Mon, 13 Jun 2022 22:40:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E789761656;
+        Tue, 14 Jun 2022 05:40:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF593C3411D;
+        Tue, 14 Jun 2022 05:40:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655185255;
+        bh=8+SZwi6ZZQOdOLhjzNsGV38OcJEcLt3L/iI4gfDuoy0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=vCXSnJ9YgN0pYz/fA6s3HEkpkE0UVedd9pCcfJ7jd5bPmTsvzqBtyD5OD/cjyvhZM
+         wDtzGITCZJG/EHC2S/LmYOvCL1QxkFEzbyLBUzidronfSdUO3kAGMs+VnCGDcE1KIX
+         dtQQjPo8FH9B9F1eUHZ4XnxyRTs+qWBbSKnGISs6DaimaaJzA0juSfJZl+aqEJpqMc
+         PYsSkwRDiahPdlH7rCRJxHu3et+Bnhras5HAcdeeuJkqF8yBIi5j8xEX/Vf42pUTEZ
+         6aki+hsu0dcoxRcS3SloMRvjrrR9OBGJXZzJ5j+qFNqenOMg+UwWitwyLdmeZZHrwz
+         G4wU3g5np/q6Q==
+Date:   Mon, 13 Jun 2022 22:40:53 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dan Murphy <dmurphy@ti.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next 1/3] dt-bindings: dp83867: add binding for
+ io_impedance_ctrl nvmem cell
+Message-ID: <20220613224053.078f573c@kernel.org>
+In-Reply-To: <29ddcecb-18d3-b92e-10fb-d5ea278886d6@rasmusvillemoes.dk>
+References: <20220606202220.1670714-1-linux@rasmusvillemoes.dk>
+        <20220606202220.1670714-2-linux@rasmusvillemoes.dk>
+        <Yp54aOPqd5weWnFt@lunn.ch>
+        <29ddcecb-18d3-b92e-10fb-d5ea278886d6@rasmusvillemoes.dk>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,83 +62,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
-
-On Mon, 2022-06-13 at 14:48 +0800, Bo-Chen Chen wrote:
-> From: Guillaume Ranquet <granquet@baylibre.com>
+On Tue, 7 Jun 2022 13:54:30 +0200 Rasmus Villemoes wrote:
+> On 06/06/2022 23.58, Andrew Lunn wrote:
+> >> There is no documented mapping from the 32 possible values of the
+> >> IO_IMPEDANCE_CTRL field to values in the range 35-70 ohms  
+> > 
+> > There have been a few active TI engineers submitting patches to TI PHY
+> > drivers. Please could you reach out to them and ask if they can
+> > provide documentation.
+> >
+> > Having magic values in DT is not the preferred why to use it. Ideally
+> > you should store Ohms in the cell and convert to the register value.  
 > 
-> Add flexibility by moving the swap shift value to SoC specific
-> config.
-
-Reviewed-by: CK Hu <ck.hu@mediatek.com>
-
+> We've already asked TI for more detailed information, but apparently the
+> data sheet already says all there is to know. I should have worded the
+> commit message differently. Something like
 > 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dpi.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index afd81ae307da..2c0e9670c209 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -131,6 +131,7 @@ struct mtk_dpi_conf {
->  	u32 dimension_mask;
->  	/* HSIZE and VSIZE mask (no shift) */
->  	u32 hvsize_mask;
-> +	u32 channel_swap_shift;
->  	const struct mtk_dpi_yc_limit *limit;
->  };
->  
-> @@ -349,7 +350,9 @@ static void mtk_dpi_config_channel_swap(struct
-> mtk_dpi *dpi,
->  		break;
->  	}
->  
-> -	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, val << CH_SWAP,
-> CH_SWAP_MASK);
-> +	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING,
-> +		     val << dpi->conf->channel_swap_shift,
-> +		     CH_SWAP_MASK << dpi->conf->channel_swap_shift);
->  }
->  
->  static void mtk_dpi_config_yuv422_enable(struct mtk_dpi *dpi, bool
-> enable)
-> @@ -821,6 +824,7 @@ static const struct mtk_dpi_conf mt8173_conf = {
->  	.swap_input_support = true,
->  	.dimension_mask = HPW_MASK,
->  	.hvsize_mask = HSIZE_MASK,
-> +	.channel_swap_shift = CH_SWAP,
->  	.limit = &mtk_dpi_limit,
->  };
->  
-> @@ -835,6 +839,7 @@ static const struct mtk_dpi_conf mt2701_conf = {
->  	.swap_input_support = true,
->  	.dimension_mask = HPW_MASK,
->  	.hvsize_mask = HSIZE_MASK,
-> +	.channel_swap_shift = CH_SWAP,
->  	.limit = &mtk_dpi_limit,
->  };
->  
-> @@ -848,6 +853,7 @@ static const struct mtk_dpi_conf mt8183_conf = {
->  	.swap_input_support = true,
->  	.dimension_mask = HPW_MASK,
->  	.hvsize_mask = HSIZE_MASK,
-> +	.channel_swap_shift = CH_SWAP,
->  	.limit = &mtk_dpi_limit,
->  };
->  
-> @@ -861,6 +867,7 @@ static const struct mtk_dpi_conf mt8192_conf = {
->  	.swap_input_support = true,
->  	.dimension_mask = HPW_MASK,
->  	.hvsize_mask = HSIZE_MASK,
-> +	.channel_swap_shift = CH_SWAP,
->  	.limit = &mtk_dpi_limit,
->  };
->  
+>   There is no fixed mapping from register values to values in the range
+>   35-70 ohms; it varies from chip to chip, and even that target range is
+>   approximate.
 
+The series was waiting for Andrew to come back but it ended up getting
+marked as Changes Requested in PW. Would you mind reposting with the
+modification to the commit message?

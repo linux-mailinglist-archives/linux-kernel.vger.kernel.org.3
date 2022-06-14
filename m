@@ -2,171 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74D3854BB64
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60AC654BB61
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357755AbiFNUUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:20:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        id S1357334AbiFNUUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358051AbiFNUUc (ORCPT
+        with ESMTP id S1350580AbiFNUUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:20:32 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 188C924974
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:20:30 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id t32so16982202ybt.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:20:30 -0700 (PDT)
+        Tue, 14 Jun 2022 16:20:16 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193E038B7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:20:15 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id t1so17076065ybd.2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:20:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=atishpatra.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ARM5wUedhzNDGSfluB0ZEvytB7HNG0S9RsFwKj8ik/4=;
-        b=R0EOyLJjH9igU47Vcr2w25NtncFWmtmJHAXhnb5b0Fl8hPd064VuqpVAczfMhuNqaU
-         Re1TGwI2OGmuIpYS/O/Qj4ddBfbadAS/NkEvQBJvI1LKzItc1eLemkbgk3m4l+BR1KDF
-         cqK7St+LU8i7RLui1/2WC59UMtuIr/0Up/E8LchN8px21vEHGAQTnvHFEIRh8OTnKdhg
-         mmepj+YRt2MfvCFpforx3aOdUH8EacRUZZOgXZqcYmljKy83TQdqTyT42RFUKppV97m9
-         QFcXzSGKLevq7cZzFakwOxQhB9gJRfQb6u41dE9WccfptM9KTmlfmXaGika2/4QFEM5I
-         RfQA==
+         :cc;
+        bh=W3fZj/NWjDDDv+AZ8HKgB98ricBLfjxyJuqsjq8uYSg=;
+        b=kl0G0cbFopr/Yw+ysfaKHrSTaHYHQMeZSA9tgsHIRwddENxPl2Iwp3izOgKP9Or7ya
+         kut8hya66qLSAlT019ROGX7HApuQRFtXcKtIikEU2AkfFqq6wmc0GgquQ06RtZRFw07v
+         X/jvkpTTqwjU7ejqlTkjl2jFK9qAM6/ssABIA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ARM5wUedhzNDGSfluB0ZEvytB7HNG0S9RsFwKj8ik/4=;
-        b=yTOp5ENgE62+evPTjyj6Ntx2OL/rShifWd4P1HAETH3Muf0vihbSGWqBUqvnsIrzX2
-         NlcPZiOCsUIS5qC2Bl4EPey3G/3zhjvSK97dquFwm0yby0B6w1n0oYVev7QhN/fw1QmH
-         SzSfiDeJlAzlWvYMlX6z1tPNImcXT7yjxFehVLPeJP7XBS2xErHIQJ2KYer1eWIslZes
-         ml1ebtKWsQY9vxdncqSjiKkxLRBx4T8Atv0MRW25pp6JiM/VZ6UVyt/wBw8pXL10k1Dl
-         6BNY9tmxRfhcqxdeCkb/hNHCl64rheDJ5t1XqukY4oULLQbMW1tfrPdd9g/2iinxCBQW
-         s61Q==
-X-Gm-Message-State: AJIora/lqyiandHoBrp86rUBO+Uj6szOkmtAyFayoEVnC3jvsYwGciVG
-        Oibwce1GSWygx2tXxpeoCKYldlLipl+keSOi/yLzig==
-X-Google-Smtp-Source: AGRyM1uoRQJDRQly7W6sdIqsVN8kRskDMxbuFyQoYccjKNgjAA0Y9fNvYeFUOy8a41hiwm4lqNGH4ZV2ktE4XENG+Ic=
-X-Received: by 2002:a05:6902:1007:b0:665:197a:a3a8 with SMTP id
- w7-20020a056902100700b00665197aa3a8mr6177688ybt.274.1655238028988; Tue, 14
- Jun 2022 13:20:28 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=W3fZj/NWjDDDv+AZ8HKgB98ricBLfjxyJuqsjq8uYSg=;
+        b=YdyBgWp5fbnTFua0+76hgK7/RREPpkI+XUOogT4YpeFALtKErXrgWF71K0LSmm9f2K
+         g9CbE8nn6ixq2WMN95qds7itbvtIDPhEL/HhBoXatYXRg8D/JNnOwajjU29uF/xfpZ0h
+         UO4h2An4Jy0IAE/D6yedpV6JrD+OTNVzIerIWc5ffBpLykwQDEcE6OCIVIEbIARkmHyB
+         ag2UvlecWtyXFxQ9Sw36hEoDdPp9g8+u0N0Mu1VKZoccBf/UsN/aYv7icFAaObHjei6G
+         00As1CT18JuY6B89G1fZARR02E5q5yTcnVGNuXFAY5CZvfjWacIz+k8zFMYd7VZMAIMQ
+         wNXA==
+X-Gm-Message-State: AJIora8NJeUbmhScnDzmNx+W9dEUWBXLdAcpyabrkNF/7GgzkEkMKlJ2
+        Jib2UxYNOV3zpIiCeeKhlqVno2d8YOy9MmtxLapOCAiu9Q==
+X-Google-Smtp-Source: AGRyM1v3TfdqMJAe0D16h8xZW51sthHbhKKM4VFPMUVdjlyBpMZEFYzvZDViy0Yv7E7UXlT4WN7BzcIIEvZwbnkx2D8=
+X-Received: by 2002:a25:58f:0:b0:664:628a:374b with SMTP id
+ 137-20020a25058f000000b00664628a374bmr6735810ybf.329.1655238014203; Tue, 14
+ Jun 2022 13:20:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220614144853.3693273-1-glider@google.com> <CAHk-=whaWnwB8guceg8V=bA1adv74GNaMk2FEu+YQkBKUqxVoA@mail.gmail.com>
- <CAG_fn=WEed5NJ8hdrrP_N8aQ_1Ad11VoJgdVxQheo3VfT_xyXQ@mail.gmail.com> <CAHk-=whjz3wO8zD+itoerphWem+JZz4uS3myf6u1Wd6epGRgmQ@mail.gmail.com>
-In-Reply-To: <CAHk-=whjz3wO8zD+itoerphWem+JZz4uS3myf6u1Wd6epGRgmQ@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 14 Jun 2022 22:19:53 +0200
-Message-ID: <CAG_fn=UPoM3bafwu6inGPMjg1bPw3HSFM_KrE_hen_MN3fu2vA@mail.gmail.com>
-Subject: Re: [PATCH] [RFC] Initialization of unused function parameters
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Evgenii Stepanov <eugenis@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Buka <vitalybuka@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
+References: <20220527042937.1124009-1-atishp@rivosinc.com> <CAAhSdy3jpXO_a+ZWNCW_n28GQd9JGJdCsNruL7spC_aork6iqA@mail.gmail.com>
+In-Reply-To: <CAAhSdy3jpXO_a+ZWNCW_n28GQd9JGJdCsNruL7spC_aork6iqA@mail.gmail.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 14 Jun 2022 13:20:03 -0700
+Message-ID: <CAOnJCUKY2hVygfPw0ZO-1j+L-zaoHk_HT=2FDsfoo6r6q77LNg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Add Sstc extension support
+To:     Anup Patel <anup@brainfault.org>
+Cc:     Atish Patra <atishp@rivosinc.com>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 8:31 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Thu, Jun 9, 2022 at 9:53 PM Anup Patel <anup@brainfault.org> wrote:
 >
-> On Tue, Jun 14, 2022 at 11:08 AM Alexander Potapenko <glider@google.com> =
-wrote:
+> On Fri, May 27, 2022 at 9:59 AM Atish Patra <atishp@rivosinc.com> wrote:
 > >
-> > On Tue, Jun 14, 2022 at 6:48 PM Linus Torvalds
-> > >
-> > > I'm assuming you mean pass by reference.
+> > This series implements Sstc extension support which was ratified recently.
+> > Before the Sstc extension, an SBI call is necessary to generate timer
+> > interrupts as only M-mode have access to the timecompare registers. Thus,
+> > there is significant latency to generate timer interrupts at kernel.
+> > For virtualized enviornments, its even worse as the KVM handles the SBI call
+> > and uses a software timer to emulate the timecomapre register.
 > >
-> > No, sorry for being unclear. I mean passing by value.
->
-> Pass-by-value most definitely should warn about uninitialized variables.
->
-> > In the given example the prototype of step_into looks as follows (see
-> > https://elixir.bootlin.com/linux/latest/source/fs/namei.c#L1846):
+> > Sstc extension solves both these problems by defining a stimecmp/vstimecmp
+> > at supervisor (host/guest) level. It allows kernel to program a timer and
+> > recieve interrupt without supervisor execution enviornment (M-mode/HS mode)
+> > intervention.
 > >
-> >   static const char *step_into(struct nameidata *nd, int flags, struct
-> > dentry *dentry, struct inode *inode, unsigned seq);
+> > KVM directly updates the vstimecmp as well if the guest kernel invokes the SBI
+> > call instead of updating stimecmp directly. This is required because KVM will
+> > enable sstc extension if the hardware supports it unless the VMM explicitly
+> > disables it for that guest. The hardware is expected to compare the
+> > vstimecmp at every cycle if sstc is enabled and any stale value in vstimecmp
+> > will lead to spurious timer interrupts. This also helps maintaining the
+> > backward compatibility with older kernels.
 > >
-> > , and the local variables `struct inode *inode` and `unsigned seq` are
-> > being passed to it by value, i.e. in certain cases the struct inode
-> > pointer and the unsigned seq are uninitialized.
+> > Similary, the M-mode firmware(OpenSBI) uses stimecmp for older kernel
+> > without sstc support as STIP bit in mip is read only for hardware with sstc.
+> >
+> > The PATCH 1 & 2 enables the basic infrastructure around Sstc extension while
+> > PATCH 3 lets kernel use the Sstc extension if it is available in hardware.
+> > PATCH 4 implements the Sstc extension in KVM.
+> >
+> > This series has been tested on Qemu(RV32 & RV64) with additional patches in
+> > Qemu[2]. This series can also be found at [3].
+> >
+> > Changes from v3->v4:
+> > 1. Rebased on 5.18-rc6
+> > 2. Unified vstimemp & next_cycles.
+> > 3. Addressed comments in PATCH 3 & 4.
+> >
+> > Changes from v2->v3:
+> > 1. Dropped unrelated KVM fixes from this series.
+> > 2. Rebased on 5.18-rc3.
+> >
+> > Changes from v1->v2:
+> > 1. Separate the static key from kvm usage
+> > 2. Makde the sstc specific static key local to the driver/clocksource
+> > 3. Moved the vstimecmp update code to the vcpu_timer
+> > 4. Used function pointers instead of static key to invoke vstimecmp vs
+> >    hrtimer at the run time. This will help in future for migration of vms
+> >    from/to sstc enabled hardware to non-sstc enabled hardware.
+> > 5. Unified the vstimer & timer to 1 timer as only one of them will be used
+> >    at runtime.
+> >
+> > [1] https://drive.google.com/file/d/1m84Re2yK8m_vbW7TspvevCDR82MOBaSX/view
+> > [2] https://github.com/atishp04/qemu/tree/sstc_v3
+> > [3] https://github.com/atishp04/linux/tree/sstc_v4
+> >
+> > Atish Patra (4):
+> > RISC-V: Add SSTC extension CSR details
+> > RISC-V: Enable sstc extension parsing from DT
+> > RISC-V: Prefer sstc extension if available
+> > RISC-V: KVM: Support sstc extension
 >
-> Then those cases should warn. No question about it.
-
-What about the cases where these uninitialized values are never used
-in the callee?
-step_into() is one of the instances from the kernel, but here is a
-distilled example from https://godbolt.org/z/s1oPve6d4:
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-char *kmalloc(int size);
-
-char *kmalloc_or_not(int flag, int size, char *p) {
-  if (flag)
-    return kmalloc(size);
-  else
-    return p;
-}
-
-char global[16];
-
-char *p(int flag) {
-  char *c;
-  int size;
-  if (flag)
-    return kmalloc_or_not(1, 4, c);
-  else
-    return kmalloc_or_not(0, size, global);
-}
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-In this example `size` is passed into kmalloc_or_not() initialized,
-however it is never used, so the code probably has defined behavior.
-In this particular case Clang's -Winitialized is able to notice that
-`size` is uninitialized, but in more complex cases it cannot.
-
-> I assume the only reason they don't warn right now is that the
-> compiler doesn't see that they are uninitialized, possibly due to some
-> earlier pass-by-reference use.
-
-That's right, and here is where dynamic analysis comes to the rescue.
-So should we let KMSAN catch such cases and consider them bugs^W
-smelly code patterns that need to be fixed?
-
+> Please don't forget to CC kvm-riscv mailing list for KVM RISC-V patches.
 >
->              Linus
+
+Sorry. My scripts did not pick up kvm-riscv for some reason.
+Fixed it.
+
+> We have a patchwork setup for KVM RISC-V will also miss a series if
+> patches are not CCed.
+>
+> Regards,
+> Anup
+>
+> >
+> > arch/riscv/include/asm/csr.h            |  11 ++
+> > arch/riscv/include/asm/hwcap.h          |   1 +
+> > arch/riscv/include/asm/kvm_vcpu_timer.h |   8 +-
+> > arch/riscv/include/uapi/asm/kvm.h       |   1 +
+> > arch/riscv/kernel/cpu.c                 |   1 +
+> > arch/riscv/kernel/cpufeature.c          |   1 +
+> > arch/riscv/kvm/main.c                   |  12 +-
+> > arch/riscv/kvm/vcpu.c                   |   5 +-
+> > arch/riscv/kvm/vcpu_timer.c             | 144 +++++++++++++++++++++++-
+> > drivers/clocksource/timer-riscv.c       |  24 +++-
+> > 10 files changed, 198 insertions(+), 10 deletions(-)
+> >
+> > --
+> > 2.25.1
+> >
 
 
 
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
-
-Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
-erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
-weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
-mich
-bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
-
-
-This e-mail is confidential. If you received this communication by
-mistake, please don't forward it to anyone else, please erase all
-copies and attachments, and please let me know that it has gone to the
-wrong person.
+--
+Regards,
+Atish

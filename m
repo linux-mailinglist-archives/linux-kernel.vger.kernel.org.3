@@ -2,174 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83C454B5FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DC754B623
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343871AbiFNQ3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S1343944AbiFNQ3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244053AbiFNQ2x (ORCPT
+        with ESMTP id S241036AbiFNQ32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:28:53 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166BF3B55C;
-        Tue, 14 Jun 2022 09:28:52 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id fu3so18211174ejc.7;
-        Tue, 14 Jun 2022 09:28:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding;
-        bh=6qfDtSXs9OqxRo/jCj6xMRG73jakKwzYEZi/1ZOdNaM=;
-        b=HPTld2LBY55iN7ZFL7mgFi2MYdG2sue6TaTU/2ruqz9ikJLTY4ai/BVufuM2kOgu10
-         74la0chLxmh+gtPG9NtBV/EIC6X9vJbDDmon1vsyrsT7pl/3c/BbeWWxD/BxM77Bh9eR
-         2HY4elXMNVGfEPr94ovNVfXUxKr+tN1OHabzeZ7SfbpJfs2rybQnGoltoP9o6BREGnfk
-         Wk2QmPG0+bSswko1aZGnhGtQ/EkJUDTtRNqbJDL8jcfIqasBDuPC27tyTflMsgTx8hL8
-         uim2nK2gCdHdfMc7TnMo7DFtIw9IN0MXqkketeACq7+Y2hhePesNXCGulzqAN+6R/usU
-         z1tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6qfDtSXs9OqxRo/jCj6xMRG73jakKwzYEZi/1ZOdNaM=;
-        b=stdi3IRqMyijrAZ+nAh1Qr/hPsZ0iS4IN2v0gwmQCMkaPmLRWIrMMFYp8R97f5sgMS
-         2v9689VJTffQSWMhwGfWdLkKHk2CVoynRa47daIfTGSpmzWttN0IdBS0x7KMzO7JdCj+
-         aAr+YpdfKRGw4G0W/lr83vKL0wBHdFf/Pzll/mkWJdlBxNBSwrTqbQHM347nEWM3IBzR
-         qQGQDWkCgkIhiXf8ZBEq+rR5Xn/5AkxBboIIHWpuapacVKB0vio7pFUY9kwyaoBkpDRM
-         EMP01qotl/uqIg6Iq2PVha+/9J/nWa0TWqyK+TPoBOvdGNOfIpXNso/NpYmZY0KTv8sE
-         R5FQ==
-X-Gm-Message-State: AOAM533DTnmDU6Eyrrzd3jnfAHLHPa4W77cA8fTZ1VWDVAMI9Wa3zrWs
-        IZU7A3tNnkU5iRTJ9/pTj+g=
-X-Google-Smtp-Source: ABdhPJwUzFFqBeRn7wsp/CnmC2zU43ZmExw7tMrSdKGZIdD1pdjQK+36NRg0VZQLQkHrNuNVf4o4MA==
-X-Received: by 2002:a17:906:99ce:b0:711:c6b6:1d95 with SMTP id s14-20020a17090699ce00b00711c6b61d95mr4890265ejn.339.1655224130517;
-        Tue, 14 Jun 2022 09:28:50 -0700 (PDT)
-Received: from opensuse.localnet (host-87-16-96-199.retail.telecomitalia.it. [87.16.96.199])
-        by smtp.gmail.com with ESMTPSA id fs36-20020a170907602400b00705f6dab05bsm5192721ejc.183.2022.06.14.09.28.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 09:28:49 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     dsterba@suse.cz, "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Filipe Manana <fdmanana@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] btrfs: Replace kmap() with kmap_local_page() in zstd.c
-Date:   Tue, 14 Jun 2022 18:28:48 +0200
-Message-ID: <8952566.CDJkKcVGEf@opensuse>
-In-Reply-To: <20220614142521.GN20633@twin.jikos.cz>
-References: <20220611135203.27992-1-fmdefrancesco@gmail.com> <1936552.usQuhbGJ8B@opensuse> <20220614142521.GN20633@twin.jikos.cz>
+        Tue, 14 Jun 2022 12:29:28 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20472427F2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:29:25 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o19Pt-000107-9V; Tue, 14 Jun 2022 18:29:21 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Christoph Muellner <christoph.muellner@vrull.eu>,
+        Atish Patra <atishp@atishpatra.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christoph Muellner <christoph.muellner@vrull.io>,
+        Philipp Tomsich <philipp.tomsich@vrull.eu>,
+        Aaron Durbin <adurbin@rivosinc.com>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH] riscv: Add Zawrs support for spinlocks
+Date:   Tue, 14 Jun 2022 18:29:20 +0200
+Message-ID: <1733696.VLH7GnMWUR@diego>
+In-Reply-To: <CAOnJCULLTSVYX90yenWVDAtsq8XiZyA5bfKC94M9vC6Mina+Tg@mail.gmail.com>
+References: <20220602141032.169907-1-christoph.muellner@vrull.io> <CAOnJCULLTSVYX90yenWVDAtsq8XiZyA5bfKC94M9vC6Mina+Tg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=C3=AC 14 giugno 2022 16:25:21 CEST David Sterba wrote:
-> On Tue, Jun 14, 2022 at 01:22:50AM +0200, Fabio M. De Francesco wrote:
-> > On luned=C3=AC 13 giugno 2022 20:39:13 CEST David Sterba wrote:
-> > > On Sat, Jun 11, 2022 at 03:52:03PM +0200, Fabio M. De Francesco=20
-wrote:
-> > > > The use of kmap() is being deprecated in favor of=20
-kmap_local_page().=20
-> > With
-> > > > kmap_local_page(), the mapping is per thread, CPU local and not=20
-> > globally
-> > > > visible.
-> > > >=20
-> > > > Therefore, use kmap_local_page() / kunmap_local() in zstd.c because=
-=20
-in
-> > > > this file the mappings are per thread and are not visible in other
-> > > > contexts; meanwhile refactor zstd_compress_pages() to comply with=20
-> > nested
-> > > > local mapping / unmapping ordering rules.
-> > > >=20
-> > > > Tested with xfstests on a QEMU + KVM 32 bits VM with 4GB of RAM and
-> > > > HIGHMEM64G enabled.
-> > > >=20
-> > > > Cc: Filipe Manana <fdmanana@kernel.org>
-> > > > Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> > > > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > > > ---
-> > > >=20
-> > > > @@ -477,15 +479,16 @@ int zstd_compress_pages(struct list_head *ws,=
-=20
-> > struct address_space *mapping,
-> > > >  		/* Check if we need more input */
-> > > >  		if (workspace->in_buf.pos =3D=3D workspace->in_buf.size) {
-> > > >  			tot_in +=3D PAGE_SIZE;
-> > > > -			kunmap(in_page);
-> > > > +			kunmap_local(workspace->out_buf.dst);
-> > > > +			kunmap_local((void *)workspace->in_buf.src);
-> > >=20
-> > > Why is the cast needed?
-> >=20
-> > As I wrote in an email I sent some days ago ("[RFC PATCH] btrfs:=20
-Replace=20
-> > kmap() with kmap_local_page() in zstd.c")[1] I get a series of errors=20
-like=20
-> > the following:
-> >=20
-> > /usr/src/git/kernels/linux/fs/btrfs/zstd.c:547:33: warning: passing=20
-> > argument 1 of '__kunmap_local' discards 'const' qualifier from pointer=
-=20
-> > target type [-Wdiscarded-qualifiers]
-> >   547 |   kunmap_local(workspace->in_buf.src);
-> >       |                ~~~~~~~~~~~~~~~~~^~~~
-> > /usr/src/git/kernels/linux/include/linux/highmem-internal.h:284:17:=20
-note:=20
-> > in definition of macro 'kunmap_local'
-> >   284 |  __kunmap_local(__addr);     \
-> >       |                 ^~~~~~
-> > /usr/src/git/kernels/linux/include/linux/highmem-internal.h:92:41:=20
-note:=20
-> > expected 'void *' but argument is of type 'const void *'
-> >    92 | static inline void __kunmap_local(void *vaddr)
-> >       |                                   ~~~~~~^~~~~
-> >=20
-> > Therefore, this is a (bad?) hack to make these changes compile.
->=20
-> I think it's a bad practice and that API that does not modify parameters
-> should declare the pointers const. Type casts should be used in
-> justified cases and not to paper over fixable issues.
->=20
-> > A better solution is changing the prototype of __kunmap_local(); I
-> > suppose that Andrew won't object, but who knows?
-> >=20
-> > (+Cc Andrew Morton).
-> >=20
-> > I was waiting for your comments. At now I've done about 15 conversions=
-=20
-> > across the kernel but it's the first time I had to pass a pointer to=20
-const=20
-> > void to kunmap_local(). Therefore, I was not sure if changing the API=20
-were=20
-> > better suited (however I have already discussed this with Ira).
->=20
-> IMHO it should be fixed in the API.
->=20
-I agree with you in full.
+Am Dienstag, 14. Juni 2022, 17:34:48 CEST schrieb Atish Patra:
+> On Thu, Jun 2, 2022 at 7:11 AM Christoph Muellner
+> <christoph.muellner@vrull.eu> wrote:
+> >
+> > The current RISC-V code uses the generic ticket lock implementation,
+> > that calls the macros smp_cond_load_relaxed() and smp_cond_load_acquire().
+> > Currently, RISC-V uses the generic implementation of these macros.
+> > This patch introduces a RISC-V specific implementation, of these
+> > macros, that peels off the first loop iteration and modifies the waiting
+> > loop such, that it is possible to use the WRS instruction of the Zawrs
+> > ISA extension to stall the CPU.
+> >
+> > The resulting implementation of smp_cond_load_*() will only work for
+> > 32-bit or 64-bit types for RV64 and 32-bit types for RV32.
+> > This is caused by the restrictions of the LR instruction (RISC-V only
+> > has LR.W and LR.D). Compiler assertions guard this new restriction.
+> >
+> > This patch uses the existing RISC-V ISA extension framework
+> > to detect the presents of Zawrs at run-time.
+> > If available a NOP instruction will be replaced by WRS.
+> > A similar patch could add support for the PAUSE instruction of
+> > the Zihintpause ISA extension.
+> >
+> 
+> FYI..The initial Zihintpause support patch
+> https://www.spinics.net/lists/kernel/msg4380326.html
 
-At the same time when you sent this email I submitted a patch to change=20
-kunmap_local() and kunmap_atomic().
+Out of curiosity, is this functionally equivalent to WRS,
+So can you just replace WRS with Pause?
 
-After Andrew takes them I'll send v2 of this patch to zstd.c without those=
-=20
-unnecessary casts.
+If so, ALTERNATIVE_2 would make that pretty easy.
 
-Thanks for your review,
+Are there performance differences between them?
 
-=46abio
+Heiko
+
+> 
+> > The whole mechanism is gated by Kconfig setting, which defaults to Y.
+> >
+> > The Zawrs specification can be found here:
+> > https://github.com/riscv/riscv-zawrs/blob/main/zawrs.adoc
+> >
+> > Note, that the Zawrs extension is not frozen or ratified yet.
+> > Therefore this patch is an RFC and not intended to get merged.
+> >
+> > Signed-off-by: Christoph Muellner <christoph.muellner@vrull.io>
+> > ---
+> >  arch/riscv/Kconfig                   | 10 +++
+> >  arch/riscv/include/asm/barrier.h     | 97 ++++++++++++++++++++++++++++
+> >  arch/riscv/include/asm/errata_list.h | 12 +++-
+> >  arch/riscv/include/asm/hwcap.h       |  3 +-
+> >  arch/riscv/kernel/cpu.c              |  1 +
+> >  arch/riscv/kernel/cpufeature.c       | 13 ++++
+> >  6 files changed, 133 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 905e550e0fd3..054872317d4a 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -358,6 +358,16 @@ config RISCV_ISA_C
+> >
+> >            If you don't know what to do here, say Y.
+> >
+> > +config RISCV_ISA_ZAWRS
+> > +       bool "Zawrs extension support"
+> > +       select RISCV_ALTERNATIVE
+> > +       default y
+> > +       help
+> > +          Adds support to dynamically detect the presence of the Zawrs extension
+> > +          (wait for reservation set) and enable its usage.
+> > +
+> > +          If you don't know what to do here, say Y.
+> > +
+> >  config RISCV_ISA_SVPBMT
+> >         bool "SVPBMT extension support"
+> >         depends on 64BIT && MMU
+> > diff --git a/arch/riscv/include/asm/barrier.h b/arch/riscv/include/asm/barrier.h
+> > index d0e24aaa2aa0..69b8f1f4b80c 100644
+> > --- a/arch/riscv/include/asm/barrier.h
+> > +++ b/arch/riscv/include/asm/barrier.h
+> > @@ -12,6 +12,8 @@
+> >
+> >  #ifndef __ASSEMBLY__
+> >
+> > +#include <asm/errata_list.h>
+> > +
+> >  #define nop()          __asm__ __volatile__ ("nop")
+> >
+> >  #define RISCV_FENCE(p, s) \
+> > @@ -42,6 +44,69 @@ do {                                                                 \
+> >         ___p1;                                                          \
+> >  })
+> >
+> > +#if __riscv_xlen == 64
+> > +
+> > +#define __riscv_lrsc_word(t)                                           \
+> > +       (sizeof(t) == sizeof(int) ||                                    \
+> > +        sizeof(t) == sizeof(long))
+> > +
+> > +#define __riscv_lr(ptr)                                                        \
+> > +       sizeof(*ptr) == sizeof(int) ? "lr.w" : "lr.d"
+> > +
+> > +#elif __riscv_xlen == 32
+> > +
+> > +#define __riscv_lrsc_word(ptr)                                         \
+> > +       (sizeof(*ptr) == sizeof(int))
+> > +
+> > +#define __riscv_lr(t) "lr.w"
+> > +
+> > +#else
+> > +#error "Unexpected __riscv_xlen"
+> > +#endif /* __riscv_xlen */
+> > +
+> > +#define compiletime_assert_atomic_lrsc_type(t)                         \
+> > +       compiletime_assert(__riscv_lrsc_word(t),                        \
+> > +               "Need type compatible with LR/SC instructions.")
+> > +
+> > +#define ___smp_load_reservedN(pfx, ptr)                                        \
+> > +({                                                                     \
+> > +       typeof(*ptr) ___p1;                                             \
+> > +       __asm__ __volatile__ ("lr." pfx "       %[p], %[c]\n"           \
+> > +                             : [p]"=&r" (___p1), [c]"+A"(*ptr));       \
+> > +       ___p1;                                                          \
+> > +})
+> > +
+> > +#define ___smp_load_reserved32(ptr)                                    \
+> > +       ___smp_load_reservedN("w", ptr)
+> > +
+> > +#define ___smp_load_reserved64(ptr)                                    \
+> > +       ___smp_load_reservedN("d", ptr)
+> > +
+> > +#define __smp_load_reserved_relaxed(ptr)                               \
+> > +({                                                                     \
+> > +       typeof(*ptr) ___p1;                                             \
+> > +       compiletime_assert_atomic_lrsc_type(*ptr);                      \
+> > +       if (sizeof(*ptr) == 32) {                                       \
+> > +               ___p1 = ___smp_load_reserved32(ptr);                    \
+> > +       } else {                                                        \
+> > +               ___p1 = ___smp_load_reserved64(ptr);                    \
+> > +       }                                                               \
+> > +       ___p1;                                                          \
+> > +})
+> > +
+> > +#define __smp_load_reserved_acquire(ptr)                               \
+> > +({                                                                     \
+> > +       typeof(*ptr) ___p1;                                             \
+> > +       compiletime_assert_atomic_lrsc_type(*ptr);                      \
+> > +       if (sizeof(*ptr) == 32) {                                       \
+> > +               ___p1 = ___smp_load_reserved32(ptr);                    \
+> > +       } else {                                                        \
+> > +               ___p1 = ___smp_load_reserved64(ptr);                    \
+> > +       }                                                               \
+> > +       RISCV_FENCE(r,rw);                                              \
+> > +       ___p1;                                                          \
+> > +})
+> > +
+> >  /*
+> >   * This is a very specific barrier: it's currently only used in two places in
+> >   * the kernel, both in the scheduler.  See include/linux/spinlock.h for the two
+> > @@ -69,6 +134,38 @@ do {                                                                        \
+> >   */
+> >  #define smp_mb__after_spinlock()       RISCV_FENCE(iorw,iorw)
+> >
+> > +#define smp_cond_load_relaxed(ptr, cond_expr)                          \
+> > +({                                                                     \
+> > +       typeof(ptr) __PTR = (ptr);                                      \
+> > +       __unqual_scalar_typeof(*ptr) VAL;                               \
+> > +       VAL = READ_ONCE(*__PTR);                                        \
+> > +       if (!cond_expr) {                                               \
+> > +               for (;;) {                                              \
+> > +                       VAL = __smp_load_reserved_relaxed(__PTR);       \
+> > +                       if (cond_expr)                                  \
+> > +                               break;                                  \
+> > +                       ALT_WRS();                                      \
+> > +               }                                                       \
+> > +       }                                                               \
+> > +       (typeof(*ptr))VAL;                                              \
+> > +})
+> > +
+> > +#define smp_cond_load_acquire(ptr, cond_expr)                          \
+> > +({                                                                     \
+> > +       typeof(ptr) __PTR = (ptr);                                      \
+> > +       __unqual_scalar_typeof(*ptr) VAL;                               \
+> > +       VAL = smp_load_acquire(__PTR);                                  \
+> > +       if (!cond_expr) {                                               \
+> > +               for (;;) {                                              \
+> > +                       VAL = __smp_load_reserved_acquire(__PTR);       \
+> > +                       if (cond_expr)                                  \
+> > +                               break;                                  \
+> > +                       ALT_WRS();                                      \
+> > +               }                                                       \
+> > +       }                                                               \
+> > +       (typeof(*ptr))VAL;                                              \
+> > +})
+> > +
+> >  #include <asm-generic/barrier.h>
+> >
+> >  #endif /* __ASSEMBLY__ */
+> > diff --git a/arch/riscv/include/asm/errata_list.h b/arch/riscv/include/asm/errata_list.h
+> > index 9e2888dbb5b1..b9aa0b346493 100644
+> > --- a/arch/riscv/include/asm/errata_list.h
+> > +++ b/arch/riscv/include/asm/errata_list.h
+> > @@ -19,8 +19,9 @@
+> >  #define        ERRATA_THEAD_NUMBER 1
+> >  #endif
+> >
+> > -#define        CPUFEATURE_SVPBMT 0
+> > -#define        CPUFEATURE_NUMBER 1
+> > +#define        CPUFEATURE_ZAWRS 0
+> > +#define        CPUFEATURE_SVPBMT 1
+> > +#define        CPUFEATURE_NUMBER 2
+> >
+> >  #ifdef __ASSEMBLY__
+> >
+> > @@ -42,6 +43,13 @@ asm(ALTERNATIVE("sfence.vma %0", "sfence.vma", SIFIVE_VENDOR_ID,     \
+> >                 ERRATA_SIFIVE_CIP_1200, CONFIG_ERRATA_SIFIVE_CIP_1200)  \
+> >                 : : "r" (addr) : "memory")
+> >
+> > +#define ZAWRS_WRS      ".long 0x1000073"
+> > +#define ALT_WRS()                                                      \
+> > +asm volatile(ALTERNATIVE(                                              \
+> > +       "nop\n\t",                                                      \
+> > +       ZAWRS_WRS "\n\t",                                               \
+> > +       0, CPUFEATURE_ZAWRS, CONFIG_RISCV_ISA_ZAWRS))
+> > +
+> >  /*
+> >   * _val is marked as "will be overwritten", so need to set it to 0
+> >   * in the default case.
+> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> > index 4e2486881840..c7dd8cc38bec 100644
+> > --- a/arch/riscv/include/asm/hwcap.h
+> > +++ b/arch/riscv/include/asm/hwcap.h
+> > @@ -51,7 +51,8 @@ extern unsigned long elf_hwcap;
+> >   * available logical extension id.
+> >   */
+> >  enum riscv_isa_ext_id {
+> > -       RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
+> > +       RISCV_ISA_EXT_ZAWRS = RISCV_ISA_EXT_BASE,
+> > +       RISCV_ISA_EXT_SSCOFPMF,
+> >         RISCV_ISA_EXT_SVPBMT,
+> >         RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
+> >  };
+> > diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> > index fba9e9f46a8c..6c3a10ff5358 100644
+> > --- a/arch/riscv/kernel/cpu.c
+> > +++ b/arch/riscv/kernel/cpu.c
+> > @@ -87,6 +87,7 @@ int riscv_of_parent_hartid(struct device_node *node)
+> >   *    extensions by an underscore.
+> >   */
+> >  static struct riscv_isa_ext_data isa_ext_arr[] = {
+> > +       __RISCV_ISA_EXT_DATA(zawrs, RISCV_ISA_EXT_ZAWRS),
+> >         __RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+> >         __RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
+> >         __RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > index dea3ea19deee..fc2c47a1784b 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -199,6 +199,7 @@ void __init riscv_fill_hwcap(void)
+> >                         } else {
+> >                                 SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
+> >                                 SET_ISA_EXT_MAP("svpbmt", RISCV_ISA_EXT_SVPBMT);
+> > +                               SET_ISA_EXT_MAP("zawrs", RISCV_ISA_EXT_ZAWRS);
+> >                         }
+> >  #undef SET_ISA_EXT_MAP
+> >                 }
+> > @@ -251,6 +252,14 @@ struct cpufeature_info {
+> >         bool (*check_func)(unsigned int stage);
+> >  };
+> >
+> > +static bool __init_or_module cpufeature_zawrs_check_func(unsigned int stage)
+> > +{
+> > +       if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+> > +               return false;
+> > +
+> > +       return riscv_isa_extension_available(NULL, ZAWRS);
+> > +}
+> > +
+> >  static bool __init_or_module cpufeature_svpbmt_check_func(unsigned int stage)
+> >  {
+> >  #ifdef CONFIG_RISCV_ISA_SVPBMT
+> > @@ -267,6 +276,10 @@ static bool __init_or_module cpufeature_svpbmt_check_func(unsigned int stage)
+> >
+> >  static const struct cpufeature_info __initdata_or_module
+> >  cpufeature_list[CPUFEATURE_NUMBER] = {
+> > +       {
+> > +               .name = "zawrs",
+> > +               .check_func = cpufeature_zawrs_check_func
+> > +       },
+> >         {
+> >                 .name = "svpbmt",
+> >                 .check_func = cpufeature_svpbmt_check_func
+> > --
+> > 2.35.3
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> 
+> 
+> 
+> 
+
 
 
 

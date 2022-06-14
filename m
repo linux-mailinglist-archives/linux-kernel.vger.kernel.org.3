@@ -2,68 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612D454B848
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0EF54B845
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344526AbiFNSIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S1343670AbiFNSIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243228AbiFNSIa (ORCPT
+        with ESMTP id S234330AbiFNSI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 14:08:30 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA0835862
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:08:30 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id l204so16449984ybf.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:08:30 -0700 (PDT)
+        Tue, 14 Jun 2022 14:08:29 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5EB34B93
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:08:28 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id e184so16473550ybf.8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:08:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=I7mIzgHlKoo48q72bBYb3vEBCu9Nvd6MDnUH2Y99HDs=;
-        b=rueFW7Hw9BW5aiacWVNeDteqBIXmxnNHCNKISJs/aDl7jnTwrNcJrqHjAEU+ozjnbR
-         8uNLg/U3OLLjTUWHjjkfGiKsRwqdtpppCZ6Ygx7DdKK2WqDZNolZOI4s+G40ALixMZaF
-         LlpPBxi0MX4Nl1LpyZ0wpOAfq71h8fVtHmNRzdbya/rJX38r4NnJQAtI0rI4086LpAKL
-         IlRa0CBNAbJIdlI5v8kIQbF2C5qsJoakcX7uFN3I7SkWdExdKM5jqv2bSwjDB94yoVhG
-         QYEBI26fURbxppMXaezdRzq3ocqQJqs7yAlgNYIQKiCTI+O8pKsk848mFEgrQQ2NDvx1
-         qYiQ==
+         :cc;
+        bh=C78v/CAN8C2z22MVaDl0QxTyyJoCfPguMq8MOK3tOJc=;
+        b=KPQRP+y1/9biwSKOdmOrA7l+Ng8mYs2ZKqEsk1EcYmkGcOWMD3eVJOVUvBbrZYLqLa
+         XxmEyIa3+nMLYvLo8wsYQD6u2h6vJ69PlvvEWBU4hwT/ftXEt28sTdms2tNq2oqAwkJ2
+         xCAMYyeEgKvWmnPoO7td7+2N+gClf9AyQwwCLajgaaQu89TWxl4Z3nrdDmLCzj2nvrDt
+         iEDgjcTO60gIUOVeCKdV4ZZl/HvoU7NaI0kNlP+lV1x3XSzN1cMxBhRoG5rEWorAbSrH
+         Bc+DXxtEPmMLZj2PPf9qEivHmu0mikMk2gU1zLrWRRh2zuFLQceSL6wcyYVB3HSoZP1/
+         nNTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=I7mIzgHlKoo48q72bBYb3vEBCu9Nvd6MDnUH2Y99HDs=;
-        b=sTCFmkEM5aiY0ZKnArOivxtHUAQdv6qVoa1K0clFzI9cZJR6YeNbQSR3osuuKSMEQJ
-         LkY7PIQ9mmkhyWNbqqi8WdSihCLqezVegq7N/dKxJYRGWDfdcFJ6tB02iVQyyp/71PFL
-         UqZg7el4Pk0NpZSrgj4rflk2lTFQtsSpsgrwHhfEEl43L+XjFAo7RHKgNdN6q4nKsceH
-         +1c5X3+G6JKzs2o6IMbK7WRKDNEs2ykw/27Q0bcHG0JqUwi/SIeD0CDRZ6HRU487dpeg
-         VPGf/nm1kPlltop4m8d8Qgb9I1p23N44L3T7WNiOX66Bpw1rYA+YEd+wnq4JXNLimrrV
-         3kYA==
-X-Gm-Message-State: AJIora8hdJcNw4pPMuslMv2y3gkaY3Fo4PYSqnR+6LQYypSUnrwp9/Ed
-        Yrdb489+fhibfmSJ8uw9Sl3/M7Yibdz8lYk3WwKxKg==
-X-Google-Smtp-Source: AGRyM1v4Pm0uKutjGFFGG8hxEK6A2MV95t6qGASMp568gSd6ZZcLQLhn3uiQz7zYDJnZy348rz4aUrhLiQObaBcCuI4=
-X-Received: by 2002:a25:e68b:0:b0:65c:7aa5:f901 with SMTP id
- d133-20020a25e68b000000b0065c7aa5f901mr6203492ybh.147.1655230108954; Tue, 14
- Jun 2022 11:08:28 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=C78v/CAN8C2z22MVaDl0QxTyyJoCfPguMq8MOK3tOJc=;
+        b=pCq4qGIJPl5+RSRUvt2p/o3e0z2Y0KIBSCyZEMUIB2elLt5x/4JQzXs5+1CrVxl0e2
+         2l2gFwmlou8X0u2W6oieqHwRQLOw5EEkhZqvkHcTorpVe5HrgElv6zeidwfxgOtriHeR
+         6Q2tfGs4w+A07lK3mz+p63gUmN/reURCrvC1iYrVYWkW+ofFcuYWkdMjqfFjtdiCDt2K
+         /xM7wuFqMZ0OwF/KBfRHJT8T7/PIc+NmspMcub4bnmQCY+dcKWK5NQEOuUVeROQh4ZrJ
+         TTSK25De071ShT9T/BW/bCwm12z7T88pq+XHAKkc7oBB1muFWb89TXqbeTNbcfoyd8Yg
+         dXuQ==
+X-Gm-Message-State: AJIora8QvKqbpusARNcdGWTp5NHaBZGMXx0WL/bSPA2KzR4XJZFbRLWf
+        B+Shpw/g33k5T0cqZuc4ZFMOYQc+jcUw/bs7n+03Fw==
+X-Google-Smtp-Source: AGRyM1srZeha6aWpFJbD1p8y4wYjg8EMJ2RoztXJmVyLYONCPC4TSE6IGnH1wzu0dpdgL/3uTx0GgDipYFQRNz1mLZs=
+X-Received: by 2002:a25:5d0d:0:b0:633:25c8:380 with SMTP id
+ r13-20020a255d0d000000b0063325c80380mr5966062ybb.167.1655230107606; Tue, 14
+ Jun 2022 11:08:27 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220614144853.3693273-1-glider@google.com> <CAHk-=whaWnwB8guceg8V=bA1adv74GNaMk2FEu+YQkBKUqxVoA@mail.gmail.com>
-In-Reply-To: <CAHk-=whaWnwB8guceg8V=bA1adv74GNaMk2FEu+YQkBKUqxVoA@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 14 Jun 2022 20:07:52 +0200
-Message-ID: <CAG_fn=WEed5NJ8hdrrP_N8aQ_1Ad11VoJgdVxQheo3VfT_xyXQ@mail.gmail.com>
-Subject: Re: [PATCH] [RFC] Initialization of unused function parameters
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Evgenii Stepanov <eugenis@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Buka <vitalybuka@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
+References: <cover.1651774250.git.isaku.yamahata@intel.com> <ea5e6a1fc740cfe69167c8713b63fdb952a98e8b.1651774251.git.isaku.yamahata@intel.com>
+In-Reply-To: <ea5e6a1fc740cfe69167c8713b63fdb952a98e8b.1651774251.git.isaku.yamahata@intel.com>
+From:   Sagi Shahar <sagis@google.com>
+Date:   Tue, 14 Jun 2022 11:08:16 -0700
+Message-ID: <CAAhR5DGHhPagnaiC=Bn9v0qhNQ5N9HjsrDyQkv4dtui7dfMAbA@mail.gmail.com>
+Subject: Re: [RFC PATCH v6 093/104] KVM: TDX: Handle TDX PV MMIO hypercall
+To:     "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Sean Christopherson <seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -75,68 +69,197 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 6:48 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Thu, May 5, 2022 at 11:16 AM <isaku.yamahata@intel.com> wrote:
 >
-> On Tue, Jun 14, 2022 at 7:49 AM Alexander Potapenko <glider@google.com> w=
-rote:
-> >
-> > The bigger question I want to raise here is whether we want to
-> > discourage passing uninitialized variables to functions in the kernel
-> > altogether.
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 >
-> I'm assuming you mean pass by reference.
+> Export kvm_io_bus_read and kvm_mmio tracepoint and wire up TDX PV MMIO
+> hypercall to the KVM backend functions.
+>
+> kvm_io_bus_read/write() searches KVM device emulated in kernel of the given
+> MMIO address and emulates the MMIO.  As TDX PV MMIO also needs it, export
+> kvm_io_bus_read().  kvm_io_bus_write() is already exported.  TDX PV MMIO
+> emulates some of MMIO itself.  To add trace point consistently with x86
+> kvm, export kvm_mmio tracepoint.
+>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/vmx/tdx.c | 114 +++++++++++++++++++++++++++++++++++++++++
+>  arch/x86/kvm/x86.c     |   1 +
+>  virt/kvm/kvm_main.c    |   2 +
+>  3 files changed, 117 insertions(+)
+>
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index ee0cf5336ade..6ab4a52fc9e9 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -1057,6 +1057,118 @@ static int tdx_emulate_io(struct kvm_vcpu *vcpu)
+>         return ret;
+>  }
+>
+> +static int tdx_complete_mmio(struct kvm_vcpu *vcpu)
+> +{
+> +       unsigned long val = 0;
+> +       gpa_t gpa;
+> +       int size;
+> +
+> +       WARN_ON(vcpu->mmio_needed != 1);
+> +       vcpu->mmio_needed = 0;
+> +
+> +       if (!vcpu->mmio_is_write) {
+> +               gpa = vcpu->mmio_fragments[0].gpa;
+> +               size = vcpu->mmio_fragments[0].len;
+> +
+> +               memcpy(&val, vcpu->run->mmio.data, size);
+> +               tdvmcall_set_return_val(vcpu, val);
+> +               trace_kvm_mmio(KVM_TRACE_MMIO_READ, size, gpa, &val);
+> +       }
+> +       return 1;
+> +}
+> +
+> +static inline int tdx_mmio_write(struct kvm_vcpu *vcpu, gpa_t gpa, int size,
+> +                                unsigned long val)
+> +{
+> +       if (kvm_iodevice_write(vcpu, &vcpu->arch.apic->dev, gpa, size, &val) &&
+> +           kvm_io_bus_write(vcpu, KVM_MMIO_BUS, gpa, size, &val))
+> +               return -EOPNOTSUPP;
+> +
+> +       trace_kvm_mmio(KVM_TRACE_MMIO_WRITE, size, gpa, &val);
+> +       return 0;
+> +}
+> +
+> +static inline int tdx_mmio_read(struct kvm_vcpu *vcpu, gpa_t gpa, int size)
+> +{
+> +       unsigned long val;
+> +
+> +       if (kvm_iodevice_read(vcpu, &vcpu->arch.apic->dev, gpa, size, &val) &&
+> +           kvm_io_bus_read(vcpu, KVM_MMIO_BUS, gpa, size, &val))
+> +               return -EOPNOTSUPP;
+> +
+> +       tdvmcall_set_return_val(vcpu, val);
+> +       trace_kvm_mmio(KVM_TRACE_MMIO_READ, size, gpa, &val);
+> +       return 0;
+> +}
+> +
+> +static int tdx_emulate_mmio(struct kvm_vcpu *vcpu)
+> +{
+> +       struct kvm_memory_slot *slot;
+> +       int size, write, r;
+> +       unsigned long val;
+> +       gpa_t gpa;
+> +
+> +       WARN_ON(vcpu->mmio_needed);
+> +
+> +       size = tdvmcall_a0_read(vcpu);
+> +       write = tdvmcall_a1_read(vcpu);
+> +       gpa = tdvmcall_a2_read(vcpu);
+> +       val = write ? tdvmcall_a3_read(vcpu) : 0;
+> +
+> +       if (size != 1 && size != 2 && size != 4 && size != 8)
+> +               goto error;
+> +       if (write != 0 && write != 1)
+> +               goto error;
+> +
+> +       /* Strip the shared bit, allow MMIO with and without it set. */
+> +       gpa = gpa & ~gfn_to_gpa(kvm_gfn_shared_mask(vcpu->kvm));
+> +
+> +       if (size > 8u || ((gpa + size - 1) ^ gpa) & PAGE_MASK)
+> +               goto error;
+> +
+> +       slot = kvm_vcpu_gfn_to_memslot(vcpu, gpa_to_gfn(gpa));
+> +       if (slot && !(slot->flags & KVM_MEMSLOT_INVALID))
+> +               goto error;
+> +
+> +       if (!kvm_io_bus_write(vcpu, KVM_FAST_MMIO_BUS, gpa, 0, NULL)) {
+> +               trace_kvm_fast_mmio(gpa);
+> +               return 1;
+> +       }
+> +
+> +       if (write)
+> +               r = tdx_mmio_write(vcpu, gpa, size, val);
+> +       else
+> +               r = tdx_mmio_read(vcpu, gpa, size);
+> +       if (!r) {
+> +               /* Kernel completed device emulation. */
+> +               tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
+> +               return 1;
+> +       }
+> +
+> +       /* Request the device emulation to userspace device model. */
+> +       vcpu->mmio_needed = 1;
+> +       vcpu->mmio_is_write = write;
+> +       vcpu->arch.complete_userspace_io = tdx_complete_mmio;
+> +
+> +       vcpu->run->mmio.phys_addr = gpa;
+> +       vcpu->run->mmio.len = size;
+> +       vcpu->run->mmio.is_write = write;
+> +       vcpu->run->exit_reason = KVM_EXIT_MMIO;
+> +
+> +       if (write) {
+> +               memcpy(vcpu->run->mmio.data, &val, size);
+> +       } else {
+> +               vcpu->mmio_fragments[0].gpa = gpa;
+> +               vcpu->mmio_fragments[0].len = size;
+> +               trace_kvm_mmio(KVM_TRACE_MMIO_READ_UNSATISFIED, size, gpa, NULL);
+> +       }
+> +       return 0;
+> +
+> +error:
+> +       tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
 
-No, sorry for being unclear. I mean passing by value.
-In the given example the prototype of step_into looks as follows (see
-https://elixir.bootlin.com/linux/latest/source/fs/namei.c#L1846):
+We should return an error code here.
 
-  static const char *step_into(struct nameidata *nd, int flags, struct
-dentry *dentry, struct inode *inode, unsigned seq);
+> +       return 1;
+> +}
+> +
+>  static int handle_tdvmcall(struct kvm_vcpu *vcpu)
+>  {
+>         if (tdvmcall_exit_type(vcpu))
+> @@ -1069,6 +1181,8 @@ static int handle_tdvmcall(struct kvm_vcpu *vcpu)
+>                 return tdx_emulate_hlt(vcpu);
+>         case EXIT_REASON_IO_INSTRUCTION:
+>                 return tdx_emulate_io(vcpu);
+> +       case EXIT_REASON_EPT_VIOLATION:
+> +               return tdx_emulate_mmio(vcpu);
+>         default:
+>                 break;
+>         }
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 5f291470a6f6..f367d0dcef97 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -13166,6 +13166,7 @@ bool kvm_arch_dirty_log_supported(struct kvm *kvm)
+>
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_entry);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_exit);
+> +EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_mmio);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_fast_mmio);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_inj_virq);
+>  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_page_fault);
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 4bf7178e42bd..7f01131666de 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -2294,6 +2294,7 @@ struct kvm_memory_slot *kvm_vcpu_gfn_to_memslot(struct kvm_vcpu *vcpu, gfn_t gfn
+>
+>         return NULL;
+>  }
+> +EXPORT_SYMBOL_GPL(kvm_vcpu_gfn_to_memslot);
+>
+>  bool kvm_is_visible_gfn(struct kvm *kvm, gfn_t gfn)
+>  {
+> @@ -5169,6 +5170,7 @@ int kvm_io_bus_read(struct kvm_vcpu *vcpu, enum kvm_bus bus_idx, gpa_t addr,
+>         r = __kvm_io_bus_read(vcpu, bus, &range, val);
+>         return r < 0 ? r : 0;
+>  }
+> +EXPORT_SYMBOL_GPL(kvm_io_bus_read);
+>
+>  /* Caller must hold slots_lock. */
+>  int kvm_io_bus_register_dev(struct kvm *kvm, enum kvm_bus bus_idx, gpa_t addr,
+> --
+> 2.25.1
+>
 
-, and the local variables `struct inode *inode` and `unsigned seq` are
-being passed to it by value, i.e. in certain cases the struct inode
-pointer and the unsigned seq are uninitialized.
-
-Does that change anything?
-
-> Some functions are really fundamentally about initializing things, and
-> expect uninitialized allocations.
-
-Agreed, there are a lot of functions around that initialize one struct
-or another, they are out of the scope.
-
-
-> What I think might be a good model is to be able to mark such
-> arguments as "must be initialized by callee".
-
-This sounds interesting. In the given example I would suggest that the
-call to lookup_fast()
-(https://elixir.bootlin.com/linux/latest/source/fs/namei.c#L2016)
-should be initializing &inode and &seq, so that it is guaranteed that
-they are passed initialized into step_into().
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
-
-Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
-erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
-weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
-mich
-bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
-
-
-This e-mail is confidential. If you received this communication by
-mistake, please don't forward it to anyone else, please erase all
-copies and attachments, and please let me know that it has gone to the
-wrong person.
+Sagi

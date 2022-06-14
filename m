@@ -2,95 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2888A54ACFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D547954ACFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353224AbiFNJKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 05:10:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50380 "EHLO
+        id S1353668AbiFNJKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 05:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351197AbiFNJK3 (ORCPT
+        with ESMTP id S1353832AbiFNJKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 05:10:29 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525414160C;
-        Tue, 14 Jun 2022 02:10:28 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7202B66016A0;
-        Tue, 14 Jun 2022 10:10:26 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655197827;
-        bh=4DR1T/pSi8XL/XvHbqB/gYOloys10AlaIbBw9rkIUmI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JxXL3GzuRTvVROXKxCVs2uXc9PpuLPmai+GyPpWhUg7yd2Vv9PNvNbLICJwW7me6C
-         puoUZVtkcM/QSM9zL7OP0x7a4gs2x9ju2Rdxgb36F+Nup5ZH7nlanD23aVGCF+b0bE
-         nIDoJE3ta7oWtNlabW0J3t1HhTM7FZ0F2nf9JYOkwXynAranTaAkxRrNoiV6E3wR4k
-         rRAoWkGDrwAEjFfATAXq/B5kAEtIK4iQjRlvE0mpJ3lQ7MWzGj2i9+GvcjopHCAs5w
-         INO7wPuVMSiDuM7criM9rrS17TWN8ZJhJqhlM1kC5+tHB7pSCiofbs68I+JPbczPDI
-         DKGTvxFXe3TBw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, matthias.bgg@gmail.com, wenst@chromium.org,
-        angelogioacchino.delregno@collabora.com, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        rex-bc.chen@mediatek.com
-Subject: [PATCH] clk: mediatek: clk-mt8195-vdo0: Set rate on vdo0_dp_intf0_dp_intf's parent
-Date:   Tue, 14 Jun 2022 11:10:20 +0200
-Message-Id: <20220614091020.21472-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 14 Jun 2022 05:10:49 -0400
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E659942A38;
+        Tue, 14 Jun 2022 02:10:45 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id c21so10364250wrb.1;
+        Tue, 14 Jun 2022 02:10:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=oqq//sNQTRKFksgXq8/+ru1bUeOh2rtemmad4D/w0ow=;
+        b=A3OvpXPt47T3UXdjehTEAqNaT/jsOgFwnaS+OBlPB0BqxaUJkr0GmuiBDRvGoJhDK1
+         UtKbYMmpHspmOz6pS1L+sExzkygQgQPnRji0moPyJMjNI/hZQg0yLEFQWIJ+h9pw7Xmc
+         x6behffJ0qRF/V0p2fBIHjQ7ChIgJTTsm55FQpE1iXTydN5RRQh7CjBOGyXzz7wsycLk
+         lJ9yZOXYo7YjlQGXODO1/n6/QYATP2/mnHWOePlCiH7P/ahwjSYTm6RucYRifiHG5XJk
+         XzUptef4SdSNMNEPwFRwAJglp3/9of/c7AvgRUVmMoVpebeCG1KuJFlTR7mO5MdOAGh7
+         D7Kg==
+X-Gm-Message-State: AJIora8wvvGtd+9U1ZXXGeHS3YSszy+xDXlmHkWDpm1hEBDyBeshl1+/
+        qlBEOxd3JEbG2TTl06itSo4=
+X-Google-Smtp-Source: AGRyM1vosJxqNeMBdLNP5fYIzkmDB3QHTeVR30D+2ItJMhmRH1aJiWiu/eC15R49D38cStWlTE8Mrg==
+X-Received: by 2002:a5d:6daf:0:b0:218:4f53:5810 with SMTP id u15-20020a5d6daf000000b002184f535810mr3875109wrs.43.1655197844334;
+        Tue, 14 Jun 2022 02:10:44 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id g7-20020a5d4887000000b002184a3a3641sm11042522wrq.100.2022.06.14.02.10.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 02:10:43 -0700 (PDT)
+Message-ID: <db8b5375-1f09-2000-cb83-d939e2018d0f@kernel.org>
+Date:   Tue, 14 Jun 2022 11:10:42 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 5.18 000/343] 5.18.4-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220613181233.078148768@linuxfoundation.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220613181233.078148768@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the CLK_SET_RATE_PARENT flag to the CLK_VDO0_DP_INTF0_DP_INTF
-clock: this is required to trigger clock source selection on
-CLK_TOP_EDP, while avoiding to manage the enablement of the former
-separately from the latter in the displayport driver.
+On 13. 06. 22, 20:18, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.4 release.
+> There are 343 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 15 Jun 2022 18:11:39 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.4-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/clk/mediatek/clk-mt8195-vdo0.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+openSUSE configs¹⁾ all green.
 
-diff --git a/drivers/clk/mediatek/clk-mt8195-vdo0.c b/drivers/clk/mediatek/clk-mt8195-vdo0.c
-index 261a7f76dd3c..07b46bfd5040 100644
---- a/drivers/clk/mediatek/clk-mt8195-vdo0.c
-+++ b/drivers/clk/mediatek/clk-mt8195-vdo0.c
-@@ -37,6 +37,10 @@ static const struct mtk_gate_regs vdo0_2_cg_regs = {
- #define GATE_VDO0_2(_id, _name, _parent, _shift)			\
- 	GATE_MTK(_id, _name, _parent, &vdo0_2_cg_regs, _shift, &mtk_clk_gate_ops_setclr)
- 
-+#define GATE_VDO0_2_FLAGS(_id, _name, _parent, _shift, _flags)		\
-+	GATE_MTK_FLAGS(_id, _name, _parent, &vdo0_2_cg_regs, _shift,	\
-+		       &mtk_clk_gate_ops_setclr, _flags)
-+
- static const struct mtk_gate vdo0_clks[] = {
- 	/* VDO0_0 */
- 	GATE_VDO0_0(CLK_VDO0_DISP_OVL0, "vdo0_disp_ovl0", "top_vpp", 0),
-@@ -85,7 +89,8 @@ static const struct mtk_gate vdo0_clks[] = {
- 	/* VDO0_2 */
- 	GATE_VDO0_2(CLK_VDO0_DSI0_DSI, "vdo0_dsi0_dsi", "top_dsi_occ", 0),
- 	GATE_VDO0_2(CLK_VDO0_DSI1_DSI, "vdo0_dsi1_dsi", "top_dsi_occ", 8),
--	GATE_VDO0_2(CLK_VDO0_DP_INTF0_DP_INTF, "vdo0_dp_intf0_dp_intf", "top_edp", 16),
-+	GATE_VDO0_2_FLAGS(CLK_VDO0_DP_INTF0_DP_INTF, "vdo0_dp_intf0_dp_intf",
-+			  "top_edp", 16, CLK_SET_RATE_PARENT),
- };
- 
- static int clk_mt8195_vdo0_probe(struct platform_device *pdev)
+Tested-by: Jiri Slaby <jirislaby@kernel.org>
+
+¹⁾ armv6hl armv7hl arm64 i386 ppc64 ppc64le riscv64 s390x x86_64
+
 -- 
-2.35.1
-
+js
+suse labs

@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE7E54B429
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F68C54B42B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346244AbiFNPEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:04:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36290 "EHLO
+        id S1349458AbiFNPEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343942AbiFNPE2 (ORCPT
+        with ESMTP id S1345495AbiFNPEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:04:28 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914D241314
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:04:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655219067; x=1686755067;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZbtSecF7AFAR9pnM3UZmnuxGPmxJcY7k5Hwk4CsZ3Kw=;
-  b=NPZElZKOyME+QQi6XYWQrPTDVjaj/y3D4LC6d9F10IU/1GZCCT+rDZTS
-   0Vvwzk2GQ04IReGjzWD3PYVMI+ds1egh7VaSmhuJgYWCneZ5s5Orn5Fzs
-   PRCwvjGTUoMK8EbLpFgL/nrKKjWzQSHr5QU18Cu3qRfLMyfRFvouhdJEH
-   ORk7rRhL0/+Hv/QGC2BwkGmKLY4YG/Mw1eHIPs3ZiEbLNDSZV2DCN6q38
-   UD8JMZdFuxltl0tnRmft05Vp1gMvC2eUH7/zNMmI7maXR+UvZYhWlvDgJ
-   ocI/OQnmpzc0OJNVI3z4n6LpXvHYE9isq/GtggZqj9iM5/zmO/umNqCWD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="279359596"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="279359596"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 08:03:37 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="558379340"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 14 Jun 2022 08:03:35 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o184t-000M17-8R;
-        Tue, 14 Jun 2022 15:03:35 +0000
-Date:   Tue, 14 Jun 2022 23:03:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hari Bathini <hbathini@linux.ibm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: arch/powerpc/platforms/powernv/opal-fadump.h:138:25: sparse: sparse:
- cast from restricted __be64
-Message-ID: <202206142217.Y5HsfbXB-lkp@intel.com>
+        Tue, 14 Jun 2022 11:04:35 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C88E201B6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:04:34 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-313a8a8b95aso32764847b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:04:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XIBvhcDPAImiME+crbgSzqcAVyK5RrJiycpGa3Gh/l4=;
+        b=0PnOrGgpJ2T40WIGeWlqfe/7/P0mm2HsYZ5fk4ogSdBAK1xTGuH753i05BrzCE+UCI
+         dmA7HA/rlLTTv9Qgr4XQRKnG1Vx8W0THFIv8ZKSoijZickuOFVqAuWWFe2AcF084THZk
+         dL+oE7eq7OLxr1fKys961spGM2elS000lmIpnBOsq63uIRU3m+xgtj9XVgucb+z82JDe
+         7z+OOp5gWEJrkIutCK2+EXuw3UH4MK1m0QCzPTuobIno+7nI/HY9OuBqdG8AB3YRML3+
+         y/E1f4+21TXJpA1l1AuHaZ0u7WyUmL/t4xgbWfeJSzTRruxBdsYLz2mPXofihh6mOPUO
+         f2ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XIBvhcDPAImiME+crbgSzqcAVyK5RrJiycpGa3Gh/l4=;
+        b=TRqxYK7yqD1No6IUre6a/DIMj/38kGZHWYE58bBYMI1pR++FvhY/j4SJVhnfk+vcw6
+         Fgo60mbv3sAb2Wr+sN11HbOvc1lbSjSIbFl1ijBnKBQ+0kx7VTBcFwmH2E14ekIzXCkB
+         33Mn79sr43E+Dg28gu0Z2T8m+Ym0Qpp8244OLnYUH9VEq4HU1Y0k7xCUWn+CYrLbuF9A
+         uSb2QVGGWHCZ974lIF5Lbxzy75RNK4fcxGKqF4AGmJP8azuWPNyBVGLMwI3yotzq/asM
+         ysUeTnV+L7Zgix379oYwtdzeqcM4KW4QdiA+jc4/YYq7NkMTq+vKGNAbBUGXhmLpq2nB
+         aJfA==
+X-Gm-Message-State: AJIora9OGLTYBTNMHKAAZgxhWCHBITcCdvniUzcLxhjdzBLvE72eezOf
+        goaQWYgoUktbnVSx+OlWFSM7DMEXp6uYhnibsvUhkA==
+X-Google-Smtp-Source: AGRyM1upO05v6xN4nB/RVN7MAJIXzcxBfDFQGXwdBAgFIaK6CPOHJDOhBFd8M+IxGlaJo5VwjhwxHgMK2SaPtM0MgcU=
+X-Received: by 2002:a05:690c:297:b0:30f:b472:5ff1 with SMTP id
+ bf23-20020a05690c029700b0030fb4725ff1mr6322963ywb.31.1655219073117; Tue, 14
+ Jun 2022 08:04:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+References: <20220613180858.15933-1-mike.kravetz@oracle.com> <YqeiMlZDKI1Kabfe@monkey>
+In-Reply-To: <YqeiMlZDKI1Kabfe@monkey>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Tue, 14 Jun 2022 23:03:55 +0800
+Message-ID: <CAMZfGtWUheQWeFNF0jgpttbMV9gBjFtZzaOar2gGvUTRx5h8bQ@mail.gmail.com>
+Subject: Re: [PATCH] hugetlbfs: zero partial pages during fallocate hole punch
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        David Hildenbrand <david@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,59 +71,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-commit: b74196af372f7cb4902179009265fe63ac81824f powerpc/fadump: Fix fadump to work with a different endian capture kernel
-date:   7 weeks ago
-config: powerpc64-randconfig-s032-20220613 (https://download.01.org/0day-ci/archive/20220614/202206142217.Y5HsfbXB-lkp@intel.com/config)
-compiler: powerpc64le-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-30-g92122700-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b74196af372f7cb4902179009265fe63ac81824f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b74196af372f7cb4902179009265fe63ac81824f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kvm/ arch/powerpc/platforms/powernv/
+On Tue, Jun 14, 2022 at 4:46 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+>
+> Below is v2 of the patch.  I was just going to change the type of start/end
+> hugetlbfs_zero_partial_page arguments.  However, Matthew also convinced me
+> to do the simple folio conversion.  Tested with new libhugetlbfs code.
+>
+>
+> From 36a18e0b07c2e189092cc2d516e8cfedcb57d191 Mon Sep 17 00:00:00 2001
+> From: Mike Kravetz <mike.kravetz@oracle.com>
+> Date: Mon, 13 Jun 2022 13:36:48 -0700
+> Subject: [Patch v2] hugetlbfs: zero partial pages during fallocate hole punch
+>
+> hugetlbfs fallocate support was originally added with commit 70c3547e36f5
+> ("hugetlbfs: add hugetlbfs_fallocate()").  Initial support only operated
+> on whole hugetlb pages.  This makes sense for populating files as other
+> interfaces such as mmap and truncate require hugetlb page size alignment.
+> Only operating on whole hugetlb pages for the hole punch case was a
+> simplification and there was no compelling use case to zero partial pages.
+>
+> In a recent discussion[1] it was assumed that hugetlbfs hole punch would
+> zero partial hugetlb pages as that is in line with the man page
+> description saying 'partial filesystem  blocks  are  zeroed'.  However,
+> the hugetlbfs hole punch code actually does this:
+>
+>         hole_start = round_up(offset, hpage_size);
+>         hole_end = round_down(offset + len, hpage_size);
+>
+> Modify code to zero partial hugetlb pages in hole punch range.  It is
+> possible that application code could note a change in behavior.  However,
+> that would imply the code is passing in an unaligned range and expecting
+> only whole pages be removed.  This is unlikely as the fallocate
+> documentation states the opposite.
+>
+> The current hugetlbfs fallocate hole punch behavior is tested with the
+> libhugetlbfs test fallocate_align[2].  This test will be updated to
+> validate partial page zeroing.
+>
+> [1] https://lore.kernel.org/linux-mm/20571829-9d3d-0b48-817c-b6b15565f651@redhat.com/
+> [2] https://github.com/libhugetlbfs/libhugetlbfs/blob/master/tests/fallocate_align.c
+>
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+LGTM.
 
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
-sparse warnings: (new ones prefixed by >>)
-   arch/powerpc/platforms/powernv/opal-fadump.c: note: in included file:
->> arch/powerpc/platforms/powernv/opal-fadump.h:138:25: sparse: sparse: cast from restricted __be64
-
-vim +138 arch/powerpc/platforms/powernv/opal-fadump.h
-
-   123	
-   124	static inline void opal_fadump_read_regs(char *bufp, unsigned int regs_cnt,
-   125						 unsigned int reg_entry_size,
-   126						 bool cpu_endian,
-   127						 struct pt_regs *regs)
-   128	{
-   129		struct hdat_fadump_reg_entry *reg_entry;
-   130		u64 val;
-   131		int i;
-   132	
-   133		memset(regs, 0, sizeof(struct pt_regs));
-   134	
-   135		for (i = 0; i < regs_cnt; i++, bufp += reg_entry_size) {
-   136			reg_entry = (struct hdat_fadump_reg_entry *)bufp;
-   137			val = (cpu_endian ? be64_to_cpu(reg_entry->reg_val) :
- > 138			       (u64)(reg_entry->reg_val));
-   139			opal_fadump_set_regval_regnum(regs,
-   140						      be32_to_cpu(reg_entry->reg_type),
-   141						      be32_to_cpu(reg_entry->reg_num),
-   142						      val);
-   143		}
-   144	}
-   145	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks.

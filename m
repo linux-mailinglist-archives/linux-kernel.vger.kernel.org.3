@@ -2,161 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A1854B803
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A2E54B804
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345002AbiFNRtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 13:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40826 "EHLO
+        id S1345051AbiFNRtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 13:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344959AbiFNRtO (ORCPT
+        with ESMTP id S1345029AbiFNRtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 13:49:14 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537B933E33
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:49:12 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-30ec2aa3b6cso37312787b3.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:49:12 -0700 (PDT)
+        Tue, 14 Jun 2022 13:49:50 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19D44132F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:49:49 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id u99so16382870ybi.11
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:49:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=b6GogiLvLlJyAw9fEai9KHL7CPWrIDSYkmrligLXeM0=;
-        b=B+GgFxGSs58Fp+QAQlXmzpKdMTZABypU787d0qHLoDzxlJqoJ1k4nsrK+GLVFQ+4yb
-         VOslI8mnRQ0TpcM6WUwdqCuagPSOtMOkoZw+N9XdOxR5RdGpaoCySoJRza5pOrlznLf8
-         Qf8S94NeqjsFaIMJTAYxJ8xwx83GP+BwppPgY=
+        bh=9HssQcvv+z8PMOk3w7trm8lob60ctWFcsyzhbTHkSh0=;
+        b=nn/vJ8LnxV4y5b2PuVbbt1J/VBwpoZbFlgmg33sw6MgHr50fS2e9v94ZHMC1UNjj0u
+         YtAChRXlf1KXvkPNjhD5qeqFzNyF397fzsPmUWDCf/0kwSE3ukH3IM43fPPl9s/c8v4V
+         XA7C4RnbnkTWRE94yaKshUFkUGxdfPzmMgCu5RIyxOfuYPjx0Q6x5gMmiFHGYEQeD5pc
+         54GjSM6KorNdJGP5kLwmI+a0TWdkJMuhsEQ70TNlP70ZMi3d9igKsZL53kcbr5jyNiKQ
+         FG1pKyROK2VDZ7nn7vTocHpthJjf/Y7RM8ER/EViKQ7+tc77I/nSYW3YHKH73SLTtH1I
+         U+xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=b6GogiLvLlJyAw9fEai9KHL7CPWrIDSYkmrligLXeM0=;
-        b=P2Tx6v0c/bhH2L7++zui4JaB3/Nez8eSiWT0tOrBW+5CXIcL1MNvhuoatWMlxluq78
-         UsRvxqc55K7R9qi6GYO6NQ5TnboLk4iFdYxp5AW7gV5wTXwaiDEosvFXiOV8/dMKsk+p
-         +q+4LbQeKKjmkYBBYLqedGg9VVGlc9nKhRY+XZr+LAImMkOSRFZFV7Ueat5S7ygmI8wG
-         97Lnkqtlkj6qU3A2CrtzQ6Ruijrt8dlrnoyMVjsL6Wmcspuj3vxCL0WQaL9MldpBfqKS
-         2PWseCXui2wk5dpewz45ZscxqCR7ntnTHLvfNeDFQXSJIZAE8qyJG0Ut4fQbhvbMjnHK
-         z1EQ==
-X-Gm-Message-State: AJIora+SGAFGkZ9pKjzY+RvE8jCpIr0v6Bs8yJq30WixLnSsMhPdLZ02
-        FveGuxkgUGZ804EaYN+ER/4cQrM37vsuuvPy+zQg
-X-Google-Smtp-Source: AGRyM1sDcCfjFf4ocWAHLB7HhdEhMNAAc6F+Hg5b93YIV7qtybRZKmiB4D49bQzzzntxupZcf8hBdRtdbAb6gItu9r0=
-X-Received: by 2002:a81:1c08:0:b0:30c:cb78:8ae2 with SMTP id
- c8-20020a811c08000000b0030ccb788ae2mr7150978ywc.194.1655228951516; Tue, 14
- Jun 2022 10:49:11 -0700 (PDT)
+        bh=9HssQcvv+z8PMOk3w7trm8lob60ctWFcsyzhbTHkSh0=;
+        b=iyEVv4F9MiWrigrLzu/HeRC8e+q+ILpC8ktxqVyQN2oUlvoNoZAfMKIi0BsPCBAhJK
+         IdDHeDk4/fJVnj8dkUtnF4KLJorciEzFQic+09bIl52cZF4gDF5K72IbhzP+JsTZ+eTh
+         /Bj1sm0aC7LlA4gn3ONiDgVlxkO3oym5/zAwC6v+hZeV/6rAzfV0U/lafHEHEt+v5pdk
+         8eGPZVgFSHC7YIHW+/AQJl0+HYnCIon+EzXX5fmYnD0g1KKQzhLqMUirTE2p4TT3kXcu
+         0cbOLMJ/IguO+u7KOMdZDIFR7BxhLGOJ1QX5Ih9TK/eQYCXJ65ODsgJwU/ySOIhaSQfF
+         5peg==
+X-Gm-Message-State: AJIora8raBIGAXOeZOELy1FFUyckdU/PYBp7f7BXYoyd+r2qtu+0hToq
+        /hxmxaoDUfiDkbHzTdXimJLy2Vlfij94hfI15Js=
+X-Google-Smtp-Source: AGRyM1t7eamBoCcTiRk0CAMvHWvlPV/gdt1veg9RZAslhtt8XbZtdUgVF9TI8KMPBJToajZs+i2yQNWe0Eu+3JRYZsI=
+X-Received: by 2002:a25:7209:0:b0:663:f48e:83d6 with SMTP id
+ n9-20020a257209000000b00663f48e83d6mr6158586ybc.76.1655228988939; Tue, 14 Jun
+ 2022 10:49:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220527042937.1124009-1-atishp@rivosinc.com> <20220527042937.1124009-4-atishp@rivosinc.com>
- <CAAhSdy3DXobZK-QSJ9tvG+hLEOD_dz4eqD7yO=Pna1ghhMghKQ@mail.gmail.com>
-In-Reply-To: <CAAhSdy3DXobZK-QSJ9tvG+hLEOD_dz4eqD7yO=Pna1ghhMghKQ@mail.gmail.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Tue, 14 Jun 2022 10:49:00 -0700
-Message-ID: <CAOnJCUJgV8zBca+m8q2CrCLdkp3ycwVSn6bOUYyCodh1MUKVGA@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] RISC-V: Prefer sstc extension if available
-To:     Anup Patel <anup@brainfault.org>
-Cc:     Atish Patra <atishp@rivosinc.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>
+References: <20220613155612.402297-1-daeho43@gmail.com> <Yqge0XS7jbSnNWvq@sol.localdomain>
+ <YqhRBZMYPp/kyxoe@B-P7TQMD6M-0146.local> <CACOAw_wjCyTmwusY6S4+NgMuLOZm9fwGfrvCT272GJ01-RP6PQ@mail.gmail.com>
+ <Yqi+vyY4K0mzEdeP@B-P7TQMD6M-0146.local>
+In-Reply-To: <Yqi+vyY4K0mzEdeP@B-P7TQMD6M-0146.local>
+From:   Daeho Jeong <daeho43@gmail.com>
+Date:   Tue, 14 Jun 2022 10:49:37 -0700
+Message-ID: <CACOAw_xw3jN2KQaiG7AgCttaQr+uqJme=rsj8AT9wdsGWj3iVQ@mail.gmail.com>
+Subject: Re: [f2fs-dev] [PATCH] f2fs: handle decompress only post processing
+ in softirq
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Daeho Jeong <daehojeong@google.com>,
+        Nathan Huckleberry <nhuck@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 9, 2022 at 9:41 PM Anup Patel <anup@brainfault.org> wrote:
+> Yeah, I heard that you folks are really suffered from the scheduling
+> issues. But for my own previous experience, extra memory footprints are
+> really critical in Android low memory scenarios (no matter low-ended
+> devices or artificial workloads), it tossed me a lot. So I finally
+> ntroduced many inplace I/O to handle/minimize that, including inplace
+> I/O for compressed pages and temporary pages.
 >
-> On Fri, May 27, 2022 at 9:59 AM Atish Patra <atishp@rivosinc.com> wrote:
-> >
-> > RISC-V ISA has sstc extension which allows updating the next clock event
-> > via a CSR (stimecmp) instead of an SBI call. This should happen dynamically
-> > if sstc extension is available. Otherwise, it will fallback to SBI call
-> > to maintain backward compatibility.
-> >
-> > Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> > ---
-> >  drivers/clocksource/timer-riscv.c | 24 +++++++++++++++++++++++-
-> >  1 file changed, 23 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/clocksource/timer-riscv.c b/drivers/clocksource/timer-riscv.c
-> > index 1767f8bf2013..881d9335c92d 100644
-> > --- a/drivers/clocksource/timer-riscv.c
-> > +++ b/drivers/clocksource/timer-riscv.c
-> > @@ -7,6 +7,9 @@
-> >   * either be read from the "time" and "timeh" CSRs, and can use the SBI to
-> >   * setup events, or directly accessed using MMIO registers.
-> >   */
-> > +
-> > +#define pr_fmt(fmt) "timer: " fmt
+> But I'm not quite sure what's currently happening now, since we once
+> didn't have such non-deterministic workqueues, and I don't hear from
+> other landed vendors.  I think it'd be better to analyse what's going
+> on for these kworkers from scheduling POV and why they don't schedule
+> in time.
 >
-> The "timer: " prefix is too generic. I suggest to use "riscv-timer: "
-> as a prefix.
+> I also have an idea is much like what I'm doing now for sync
+> decompression, is that just before lock page and ->read_folio, we can
+> trigger some decompression in addition to kworker decompression, but it
+> needs some MM modification, as below:
 >
+>    !PageUptodate(page)
+>
+>    some callback to decompress in addition to kworker
+>
+>    lock_page()
+>    ->read_folio()
+>
+> If mm folks don't like it, I think RT thread is also fine after we
+> analysed the root cause of the kworker delay I think.
+>
+> Thanks,
+> Gao Xiang
+>
+> >
+> > Thanks,
 
-Sured. Fixed in the next version.
+I don't think this is not a problem with most devices, since the
+allocated memory is not too big and it'll be kept just as long as I/O
+processing is on. However, I still understand what you're worried
+about, so I think I can make a new mount option like "memory=low",
+which can be used to give a hint to F2FS to have a priority on as
+little memory as possible. In this mode, we will try to keep minimal
+memory and we can use the previous implementation for decompression.
 
-> > +
-> >  #include <linux/clocksource.h>
-> >  #include <linux/clockchips.h>
-> >  #include <linux/cpu.h>
-> > @@ -23,11 +26,24 @@
-> >  #include <asm/sbi.h>
-> >  #include <asm/timex.h>
-> >
-> > +static DEFINE_STATIC_KEY_FALSE(riscv_sstc_available);
-> > +
-> >  static int riscv_clock_next_event(unsigned long delta,
-> >                 struct clock_event_device *ce)
-> >  {
-> > +       u64 next_tval = get_cycles64() + delta;
-> > +
-> >         csr_set(CSR_IE, IE_TIE);
-> > -       sbi_set_timer(get_cycles64() + delta);
-> > +       if (static_branch_likely(&riscv_sstc_available)) {
-> > +#if defined(CONFIG_32BIT)
-> > +               csr_write(CSR_STIMECMP, next_tval & 0xFFFFFFFF);
-> > +               csr_write(CSR_STIMECMPH, next_tval >> 32);
-> > +#else
-> > +               csr_write(CSR_STIMECMP, next_tval);
-> > +#endif
-> > +       } else
-> > +               sbi_set_timer(next_tval);
-> > +
-> >         return 0;
-> >  }
-> >
-> > @@ -165,6 +181,12 @@ static int __init riscv_timer_init_dt(struct device_node *n)
-> >         if (error)
-> >                 pr_err("cpu hp setup state failed for RISCV timer [%d]\n",
-> >                        error);
-> > +
-> > +       if (riscv_isa_extension_available(NULL, SSTC)) {
-> > +               pr_info("Timer interrupt in S-mode is available via sstc extension\n");
-> > +               static_branch_enable(&riscv_sstc_available);
-> > +       }
-> > +
-> >         return error;
-> >  }
-> >
-> > --
-> > 2.25.1
-> >
->
-> Apart from the minor comment above, this looks good to me.
->
-> Reviewed-by: Anup Patel <anup@brainfault.org>
->
-> Regards,
-> Anup
-
-
-
--- 
-Regards,
-Atish
+Thanks,

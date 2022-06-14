@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA95B54A761
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:09:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB1C54A76A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353824AbiFNDGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 23:06:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S1354491AbiFNDHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 23:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349712AbiFNDF6 (ORCPT
+        with ESMTP id S1355020AbiFNDGz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 23:05:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA92529826
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:05:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B6ED23A;
-        Mon, 13 Jun 2022 20:05:56 -0700 (PDT)
-Received: from [10.162.40.17] (unknown [10.162.40.17])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 965623F792;
-        Mon, 13 Jun 2022 20:05:54 -0700 (PDT)
-Message-ID: <94c9de11-8838-53db-5c1b-2e059d11282e@arm.com>
-Date:   Tue, 14 Jun 2022 08:35:51 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH V2 2/2] mm/mmap: Drop generic protection_map[] array
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, linux-mm@kvack.org
-Cc:     kbuild-all@lists.01.org, Andrew Morton <akpm@linux-foundation.org>,
+        Mon, 13 Jun 2022 23:06:55 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8707E2CCAC
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:06:54 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id y16-20020a9d5190000000b0060c1292a5b9so5710196otg.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:06:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=1WBoyMKdJK/DjIuY3tLTL+8oqQnOCNy38h5HKNxDm0U=;
+        b=b1W0BR9JVTB00K5DVW07P2QpAQORYpxGHahkC1B/hpGq8Qmgzs803dXNI/moxxkLpN
+         EZpmaDREDZynnCEhx9Y6N+Lud5YE9o11z5tK9tCmxu6ghUITc59NwOZquRBPS4VEe0Qc
+         rtfLVAPjBqrNcyyWsHZ89i8fGaHwnnFJfThYY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=1WBoyMKdJK/DjIuY3tLTL+8oqQnOCNy38h5HKNxDm0U=;
+        b=Gc7Gkj7rYNUvN3Li/5iVR2bpp4xvqerkT7rrnOxuiKwW1abigGq8xy6IsaK9JnuwQN
+         BY7YskFWJ3U7ANKsyRunTxV2pBcDQQ1AcceY+dhOgJyu+wVHVPNbl3J+fCHBIGdpLfmi
+         RBli6lkEi7gQ9c85VJ+8lHcv+BsqHuDxOYdDqJGh8OC/l7SGqDuuc2MAibLASvh70kDv
+         zJPZLHNMwZxeS72XpeTgWn2xMnNlznT9WqkRZ1XCb+fcX352VtH4IHjeFmyOCXp77sZ0
+         5qWDTPoyW68DN6wW5gjtroSo6lHRlA0gR6NduiiqS7JUpxHOpdI0+/Dt5z7H7j2ju+oV
+         yUwA==
+X-Gm-Message-State: AOAM5319BdgTGLlSJfXmCNDcW2fEXWXdYY0pvQnBKlySR4M7tlVrAFOv
+        qFfUHGTQPAyWzs/jOqvHjuefKw==
+X-Google-Smtp-Source: ABdhPJwg/XEIBfwb/VGufwY+jCoa8y3R4TrgQN8xmJQT5dfxrA23mwoahpKKWJ/i6A9nPzgHo/uyGw==
+X-Received: by 2002:a05:6830:200e:b0:60c:2cbb:2fb5 with SMTP id e14-20020a056830200e00b0060c2cbb2fb5mr1212361otp.377.1655176013720;
+        Mon, 13 Jun 2022 20:06:53 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id fz14-20020a056870ed8e00b000e90544b79fsm4747625oab.41.2022.06.13.20.06.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 20:06:53 -0700 (PDT)
+Subject: Re: [PATCH 5.15 000/251] 5.15.47-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
-References: <20220613053354.553579-3-anshuman.khandual@arm.com>
- <202206131931.ZJuanaBo-lkp@intel.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <202206131931.ZJuanaBo-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220613181847.216528857@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <606682e9-0fdf-0eab-4a14-2331bee211e1@linuxfoundation.org>
+Date:   Mon, 13 Jun 2022 21:06:52 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
+MIME-Version: 1.0
+In-Reply-To: <20220613181847.216528857@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/13/22 12:19 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.47 release.
+> There are 251 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 15 Jun 2022 18:18:03 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.47-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
+Compiled and booted on my test system. No dmesg regressions.
 
-On 6/13/22 16:43, kernel test robot wrote:
-> Hi Anshuman,
-> 
-> Thank you for the patch! Yet something to improve:
-> 
-> [auto build test ERROR on akpm-mm/mm-everything]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/mm-mmap-Drop-__SXXX-__PXXX-macros-from-across-platforms/20220613-133456
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> config: powerpc64-randconfig-r016-20220613 (https://download.01.org/0day-ci/archive/20220613/202206131931.ZJuanaBo-lkp@intel.com/config)
-> compiler: powerpc64le-linux-gcc (GCC) 11.3.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://github.com/intel-lab-lkp/linux/commit/696f81b49f7b6316f652d795da4c0008efef4487
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Anshuman-Khandual/mm-mmap-Drop-__SXXX-__PXXX-macros-from-across-platforms/20220613-133456
->         git checkout 696f81b49f7b6316f652d795da4c0008efef4487
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/mm/book3s64/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
->    In file included from arch/powerpc/include/asm/page.h:306,
->                     from arch/powerpc/include/asm/mmu.h:149,
->                     from arch/powerpc/include/asm/lppaca.h:46,
->                     from arch/powerpc/include/asm/paca.h:18,
->                     from arch/powerpc/include/asm/current.h:13,
->                     from include/linux/sched.h:12,
->                     from arch/powerpc/mm/book3s64/pgtable.c:6:
->    arch/powerpc/mm/book3s64/pgtable.c: In function 'vm_get_page_prot':
->>> arch/powerpc/mm/book3s64/pgtable.c:557:41: error: 'protection_map' undeclared (first use in this function)
->      557 |         unsigned long prot = pgprot_val(protection_map[vm_flags &
->          |                                         ^~~~~~~~~~~~~~
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Adding an extern declaration fixes the problem. The problem is generic declaration
-in include/linux/mm.h is not available for platforms with ARCH_HAS_VM_GET_PAGE_PROT.
-protection_map[] has to be moved into arch/powerpc/mm/pgtable.c to be used by both
-32 bit and 64 bit platforms.
-
-diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3s64/pgtable.c                                                                                                                                                                                              
-index 260b0cc6d3a1..99c794ab253d 100644
---- a/arch/powerpc/mm/book3s64/pgtable.c                        
-+++ b/arch/powerpc/mm/book3s64/pgtable.c
-@@ -551,6 +551,8 @@ unsigned long memremap_compat_align(void)
- EXPORT_SYMBOL_GPL(memremap_compat_align);
- #endif
-                                                                
-+extern pgprot_t protection_map[16];
-+                 
- /* Note due to the way vm flags are laid out, the bits are XWR */
- pgprot_t vm_get_page_prot(unsigned long vm_flags)
- {                                
-
+thanks,
+-- Shuah

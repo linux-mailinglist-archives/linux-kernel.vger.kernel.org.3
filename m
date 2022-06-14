@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BE354BB25
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E3254BB46
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356567AbiFNUIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42306 "EHLO
+        id S1353252AbiFNUIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352366AbiFNUHg (ORCPT
+        with ESMTP id S1355079AbiFNUHk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:07:36 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A22DBC8C
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:07:29 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id b9-20020a656689000000b003f672946300so5427916pgw.16
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:07:29 -0700 (PDT)
+        Tue, 14 Jun 2022 16:07:40 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E865E028
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:07:31 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id j10-20020aa783ca000000b00518265c7cacso4241251pfn.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:07:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=Ix8LxbFMyT0f0KurACg7xFUB0b+m8p+ZiAchdE34/lk=;
-        b=SOLoRrkUYs63+1Nm8A8481yZmKUKX/unwtnE3WCdTt//i6TjDOEdiHAFp1tydZQyHE
-         BqCYWKW9pzqhMc+A9V1cLaGM6smcnmrs55VoVJpSsnPJGLnEMX8sKdhqGSfTNMZXw2F4
-         PVx/upckfItAzOLe/70klXtzXWmhMDz1HLwvZsM553CH7aVnDrNrSvDm1Tuggv3bPabc
-         ZDy70wx/nGvVz4bUZQPdL7K/A1uhDlmje6umIU3FhlLpildyMFzri/BvP+YvQXiJH5tP
-         nhE9xJ0xPJxj4b9Qss5F+Y70QaOsgviTFOl5vQAIAWOlinTY9AMe2fmlVPc5DKVSfNAb
-         lpoQ==
+        bh=MksWVyw3GKJunqV2uq+ZgTGX3Mhc72udxz4fsPG/7ic=;
+        b=ceLFX3rSwoTFNDpb3FVJtM503EwtikfUe8vquzqeFYvH7dUWn3SMnUwtzoAySZAVRd
+         uW5iVLgtlWlREv4+00HxU/k+HFQZvCaJzoehxjcqWIKsKfgjrgJBYpN7SmfCxPjz+jr2
+         fx5bggpJDLP9LaDp1qC2khQEu/G6LW9s+2fiuTcMoH/YUucVH6RTjAfEgxxBKRJGaa7z
+         /qfy3Birz4V8YgtYnGSqFpel7oa4sINTQf3W4s3dDLkZiwh3mWd3ZKYKpjRBalecTF6a
+         DZ8rSMXr8gE4hVIeRN4Yel8fFLAC5s0lqCOtqX1+6Ee/O83rcCfh46uQOhrb7xPXjmng
+         OyJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=Ix8LxbFMyT0f0KurACg7xFUB0b+m8p+ZiAchdE34/lk=;
-        b=IfCZLqolwtX2VUQLdRLJ4kVf7ZYgGl/3xWMrJveNCoQNJdtElx+HVN4qE6/zvcCp5M
-         lzRXF0Phs9CIqy+3itWkyCRaF1HsCw8RvSQE6GngiYfrDQPaUcCOiCqr0AO2udnRf8bF
-         5eBpB/L71wk9GZD35TQvpLGCJLFqf93/dzIoAVb6MeocUb5ORGoMfRECyyVclFsSXjkf
-         ecNuncoiLAhLN8o5W7dpJ6VgwfJ9CqPDmEPNeKekWf5aTW8RLAB/l8Qnnr+CtvgeSiU9
-         NpMg6lDZkLKpwVVNAdHBqwm03iCOEW7oDb3T2IF7QZAp1Nj/yVkd3R6n6y4/Eb4P2c8a
-         jbqw==
-X-Gm-Message-State: AJIora9T6teKmyxc+HUT8MejQ8hLH0VMmg6akYOa1oMWRG9HnDYyzM7n
-        6a6maHA+0wqlrGK1OoVm0VMerznG5CI=
-X-Google-Smtp-Source: AGRyM1uo0B5/l7IOGbrwE1pyFaa/TwYOxA8i4cDON+VwOIKn2m2Z1KgTc4TWuHq0YSIwD9XFnz1Yho+Dmgs=
+        bh=MksWVyw3GKJunqV2uq+ZgTGX3Mhc72udxz4fsPG/7ic=;
+        b=v5s5n9XiKWQiqcrSCX/NZ+6lL7t+qsmvKvYxSiAdCDSKArYtfgVvIOvV56BPlhZ1hE
+         7reWtrbM25k6uATiayk1rz0A7AHZUGMewcx1TQYjB+BI0fyjvx0x5kvN2FH1IEUEi7FQ
+         pr/qo/w9mYuFPjPk+yhaV3ECHS41Bi2QRwCEqwfC6yjJIyhir5/ocoCaVarxkpw+tep0
+         ZQDpjmqPiNGbxpuhbRjnX8dHExIi03Y9sM4wpFHDQ8z4Q3RPyrLiyz0STrRZo99xxsVT
+         6mqp1Wki3q3XQuPXPH11JDPeFDmpKbfftNpjQzYX+qgYu8Y3L34flP8KUxArzG6ZvpqN
+         vMjg==
+X-Gm-Message-State: AJIora9qu0ikfEvk5LoRtYHeBXobSdABAbml1y1XrliLg7qUEQVsn/zq
+        ni0GnV8/x8ld9e84HAx9TVId1zyc0Lk=
+X-Google-Smtp-Source: AGRyM1vJ5pqrJFJ3WlsZ7s7Lfko+SH25Pjb4oKs8fqrZCzpCgEirCRElDq4vbaWazbcAhcKkU0N6zUtxlF8=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:4503:b0:51b:de97:7f2c with SMTP id
- cw3-20020a056a00450300b0051bde977f2cmr5990382pfb.12.1655237249548; Tue, 14
- Jun 2022 13:07:29 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a62:544:0:b0:51b:a90d:64d3 with SMTP id
+ 65-20020a620544000000b0051ba90d64d3mr5966933pff.40.1655237251012; Tue, 14 Jun
+ 2022 13:07:31 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 20:06:34 +0000
+Date:   Tue, 14 Jun 2022 20:06:35 +0000
 In-Reply-To: <20220614200707.3315957-1-seanjc@google.com>
-Message-Id: <20220614200707.3315957-10-seanjc@google.com>
+Message-Id: <20220614200707.3315957-11-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220614200707.3315957-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH v2 09/42] KVM: selftests: Use kvm_cpu_has() for XSAVES in XSS
- MSR test
+Subject: [PATCH v2 10/42] KVM: selftests: Check for _both_ XTILE data and cfg
+ in AMX test
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -71,57 +71,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use kvm_cpu_has() in the XSS MSR test instead of open coding equivalent
-functionality using kvm_get_supported_cpuid_index().
-
-No functional change intended.
+Check for _both_ XTILE data and cfg support in the AMX test instead of
+checking for _either_ feature.  Practically speaking, no sane CPU or vCPU
+will support one but not the other, but the effective "or" behavior is
+subtle and technically incorrect.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/include/x86_64/processor.h | 1 +
- tools/testing/selftests/kvm/x86_64/xss_msr_test.c      | 8 +-------
- 2 files changed, 2 insertions(+), 7 deletions(-)
+ tools/testing/selftests/kvm/x86_64/amx_test.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 9fe2a9534686..2100eb08916a 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -110,6 +110,7 @@ struct kvm_x86_cpu_feature {
- #define	X86_FEATURE_SPEC_CTRL		KVM_X86_CPU_FEATURE(0x7, 0, EDX, 26)
- #define	X86_FEATURE_ARCH_CAPABILITIES	KVM_X86_CPU_FEATURE(0x7, 0, EDX, 29)
- #define	X86_FEATURE_PKS			KVM_X86_CPU_FEATURE(0x7, 0, ECX, 31)
-+#define	X86_FEATURE_XSAVES		KVM_X86_CPU_FEATURE(0xD, 1, EAX, 3)
+diff --git a/tools/testing/selftests/kvm/x86_64/amx_test.c b/tools/testing/selftests/kvm/x86_64/amx_test.c
+index 7127873bb0cb..dcad838953d0 100644
+--- a/tools/testing/selftests/kvm/x86_64/amx_test.c
++++ b/tools/testing/selftests/kvm/x86_64/amx_test.c
+@@ -335,7 +335,8 @@ int main(int argc, char *argv[])
+ 	TEST_REQUIRE(kvm_get_cpuid_max_basic() >= 0xd);
  
- /*
-  * Extended Leafs, a.k.a. AMD defined
-diff --git a/tools/testing/selftests/kvm/x86_64/xss_msr_test.c b/tools/testing/selftests/kvm/x86_64/xss_msr_test.c
-index 4e2e08059b95..e0ddf47362e7 100644
---- a/tools/testing/selftests/kvm/x86_64/xss_msr_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/xss_msr_test.c
-@@ -14,11 +14,8 @@
+ 	entry = kvm_get_supported_cpuid_index(0xd, 0);
+-	TEST_REQUIRE(entry->eax & XFEATURE_MASK_XTILE);
++	TEST_REQUIRE(entry->eax & XFEATURE_MASK_XTILECFG);
++	TEST_REQUIRE(entry->eax & XFEATURE_MASK_XTILEDATA);
  
- #define MSR_BITS      64
- 
--#define X86_FEATURE_XSAVES	(1<<3)
--
- int main(int argc, char *argv[])
- {
--	struct kvm_cpuid_entry2 *entry;
- 	bool xss_in_msr_list;
- 	struct kvm_vm *vm;
- 	struct kvm_vcpu *vcpu;
-@@ -28,10 +25,7 @@ int main(int argc, char *argv[])
- 	/* Create VM */
- 	vm = vm_create_with_one_vcpu(&vcpu, NULL);
- 
--	TEST_REQUIRE(kvm_get_cpuid_max_basic() >= 0xd);
--
--	entry = kvm_get_supported_cpuid_index(0xd, 1);
--	TEST_REQUIRE(entry->eax & X86_FEATURE_XSAVES);
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_XSAVES));
- 
- 	xss_val = vcpu_get_msr(vcpu, MSR_IA32_XSS);
- 	TEST_ASSERT(xss_val == 0,
+ 	/* Get xsave/restore max size */
+ 	xsave_restore_size = entry->ecx;
 -- 
 2.36.1.476.g0c4daa206d-goog
 

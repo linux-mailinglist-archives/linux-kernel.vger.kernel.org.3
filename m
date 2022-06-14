@@ -2,74 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE1054B2DF
+	by mail.lfdr.de (Postfix) with ESMTP id CD02F54B2E1
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243700AbiFNOOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:14:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
+        id S243101AbiFNOPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:15:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240419AbiFNOOo (ORCPT
+        with ESMTP id S242805AbiFNOPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:14:44 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A892C106
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:14:43 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id i64so8676855pfc.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=EEofKDw4c+3KYJpmhYr5DO8YGIRsl7tk3TGnQLh0NKs=;
-        b=Rbtb/30uLf9QMQYK/Iy4cOLR0SKmlvSaSP8h94/Lv78jLnHt2sYxIoMFVbqtuLibAK
-         UdHOZNkOHdZJ2aopKY0PpPbARcsJJHZ3NBYT5b0vgb0VlFo4cAA9mUxabTFh+CmiU0Mp
-         2tlYm9LL0COJt9Wi7LNBxwnigBKCLbEII1OhBGvFtfC4uHIJRpxqtz16keqiBVCBKlXf
-         QQuA+Rv+T8MpFeLCKVRcVb0dV9Ai48LthU3FVGgNPi4ViS7Ee9JMAkBbTPW4Dk4yKdT5
-         GYPaZn9rEULOgHkbFrh7eUxzfARv+0rYVM1925TIlzhDVYwXOfSoAV2gq2TfvA/QRJOi
-         xIQA==
+        Tue, 14 Jun 2022 10:15:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54E8B33891
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655216135;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JctC2m2+QZN18u2MNb2HvFmHLpXv366LEOSyUu6TasQ=;
+        b=iDnpfzdKKza6TuZmcvl+vbofoPO7jDrSkkz7OdC8+TPKF9DR8BL3KseY8nqTMPGuFn9O2h
+        6DZ9KPeUG5NQWnBHQaCI+YJ7puia/mzwaJRfCSIrT+Xwyh4VTvPZOSGQJARQRJ5CM5TkWk
+        c9SHn7ojEpCT2axlHqkg6JSovCbIegs=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-564-jTzZCP9PPUawlDPopva-5Q-1; Tue, 14 Jun 2022 10:15:34 -0400
+X-MC-Unique: jTzZCP9PPUawlDPopva-5Q-1
+Received: by mail-qk1-f199.google.com with SMTP id s11-20020a05620a254b00b006a6a23ff939so7522687qko.17
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:15:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=EEofKDw4c+3KYJpmhYr5DO8YGIRsl7tk3TGnQLh0NKs=;
-        b=4HSpq4rxlnzNecb1YvdrgMm3+89AIaEW+mVDCuL4kIIqhv7JPPn0aPrAM2mY9SSMHi
-         BPwVTZJ24YqR0viklx8So1us9DT2gUhylUFToHtEJLfI3oTcr6xFDEZ5UdB+0mm+jecf
-         C9u1SM6Biw9Rk49HatFJpjDvhgBXvsCWSZkkJ4LtWbVm9E38fQmm+G+7LcrFLEN4QikU
-         hxxLPCXmMfPYuaP3kFwMlMW49dwZ3tNCoBfouf6ic5umU69jv676JV1xd6r4OXRHkGaW
-         nzmwxKey32doAWSaQiebIjY9Lruic1K8IaWAND7b1BAg5zxc++AeKIOCM20YpPnpZqIh
-         sfyA==
-X-Gm-Message-State: AOAM5333FqgbVwk3E1shNQRwybf3RSbaZrEj9y6juCkVU3oSL3Mmwhhi
-        7tPaTHUjyEEq7QTsNPr0Tq2PzA==
-X-Google-Smtp-Source: ABdhPJzIgnJpMgvFzFqlwq/947R6ZtySbDRGFzkyrCmQlC3cKHBBt/qYiLpD6IicLJGhVcrSnmCMOg==
-X-Received: by 2002:aa7:83d0:0:b0:50c:eb2b:8e8a with SMTP id j16-20020aa783d0000000b0050ceb2b8e8amr4992915pfn.31.1655216083155;
-        Tue, 14 Jun 2022 07:14:43 -0700 (PDT)
-Received: from [10.20.0.186] ([199.101.192.9])
-        by smtp.gmail.com with ESMTPSA id jj10-20020a170903048a00b00167804a044fsm7299458plb.56.2022.06.14.07.14.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 07:14:42 -0700 (PDT)
-Subject: Re: [PATCH 1/3] uacce: supports device isolation feature
-To:     Kai Ye <yekai13@huawei.com>, gregkh@linuxfoundation.org,
-        herbert@gondor.apana.org.au
-Cc:     linux-crypto@vger.kernel.org, linux-accelerators@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-        wangzhou1@hisilicon.com
-References: <20220614122943.1406-1-yekai13@huawei.com>
- <20220614122943.1406-5-yekai13@huawei.com>
-From:   Zhangfei Gao <zhangfei.gao@linaro.org>
-Message-ID: <452a54f0-27ce-6c0d-da56-883b0204f57c@linaro.org>
-Date:   Tue, 14 Jun 2022 22:14:38 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:content-transfer-encoding:user-agent
+         :mime-version;
+        bh=JctC2m2+QZN18u2MNb2HvFmHLpXv366LEOSyUu6TasQ=;
+        b=F8AitUP8PxLCdzvdabSA7LnNGODyeVgNjp+fZvA/MMkbBs0Y1Lk8N+hY9y+TSgHfl+
+         ZOM7zwUCUJi0tHwGhGm7cQQtPwAoQpHSv6xj3UzyAcVScr76Krs49hebFoxpjJFtF/JN
+         3jAcET3CL1Mq6qQylhow3MJp3UZ/dMlxAh/n8/LibS/OKCQvm1DmYoKc5ZWhgIcJtyP0
+         hOpr3MCzUo2EUs74awHuRmjcksCuuqYm5Lro/qwD5345yuK+8euSdLDegV/APuo4L5cb
+         lY9ir7Fw+x1R+vd37aZ0iP8WmPc+/G0Hd6rX4QkbXtEIrq+MJnbZ09k7MPPF3vVWFaiN
+         EpNw==
+X-Gm-Message-State: AJIora+8b9DXMP/IGfghxRM1vCdBHJK86VvjlM/ry0ZkIVvu6fq0zq1j
+        1pkZ26MzYKX7e2kB9/Uf5iyQSTh4pR3ly79C6uTZnDxsjFRnqkcAgsCwp8aq+MDVGltM9Z5zo5u
+        WVzGHDbOGcHfKHJZ5verVaXms
+X-Received: by 2002:ad4:5c4a:0:b0:464:5920:7c1a with SMTP id a10-20020ad45c4a000000b0046459207c1amr3579678qva.58.1655216133915;
+        Tue, 14 Jun 2022 07:15:33 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sUmVYfieNEUEGblxVDH6VoXBlZfAPSf7IbUAfA0HBAtNoDeIhDejnqioeqYTK2ssE5LXtTUg==
+X-Received: by 2002:ad4:5c4a:0:b0:464:5920:7c1a with SMTP id a10-20020ad45c4a000000b0046459207c1amr3579632qva.58.1655216133401;
+        Tue, 14 Jun 2022 07:15:33 -0700 (PDT)
+Received: from m8.users.ipa.redhat.com ([93.56.163.49])
+        by smtp.gmail.com with ESMTPSA id h20-20020a05620a245400b006a32bf19502sm9394754qkn.60.2022.06.14.07.15.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 07:15:32 -0700 (PDT)
+Message-ID: <831c7380f7d89fd8fb3a3043cf3b3d01001ae0be.camel@redhat.com>
+Subject: Re: [PATCH 0/2] certs: Add FIPS self-test for signature verification
+From:   Simo Sorce <simo@redhat.com>
+To:     David Howells <dhowells@redhat.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 14 Jun 2022 10:15:24 -0400
+In-Reply-To: <165515741424.1554877.9363755381201121213.stgit@warthog.procyon.org.uk>
+References: <165515741424.1554877.9363755381201121213.stgit@warthog.procyon.org.uk>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
 MIME-Version: 1.0
-In-Reply-To: <20220614122943.1406-5-yekai13@huawei.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,60 +81,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/6/14 下午8:29, Kai Ye wrote:
-> UACCE add the hardware error isolation API. Users can configure
-> the error frequency threshold by this vfs node. This API interface
-> certainly supports the configuration of user protocol strategy. Then
-> parse it inside the device driver. UACCE only reports the device
-> isolate state. When the error frequency is exceeded, the device
-> will be isolated. The isolation strategy should be defined in each
-> driver module.
->
-> Signed-off-by: Kai Ye <yekai13@huawei.com>
-> Reviewed-by: Zhou Wang <wangzhou1@hisilicon.com>
+On Mon, 2022-06-13 at 22:56 +0100, David Howells wrote:
+> Hi Herbert,
+>=20
+> If you could look over this pair of patches?  The second patch adds a sim=
+ple
+> selftest to allow the signature verification code so that it can be FIPS
+> compliant.  The first moves load_certificate_list() to the asymmetric key=
+ code
+> to make this easier and renames it.
+>=20
+> I generated the test data myself, but I'm open to using some standard tes=
+t
+> data if you know of some; we don't want too much, however, as it's
+> incompressible.  Also, it has avoid blacklist checks on the keys it is us=
+ing,
+> lest the UEFI blacklist cause the selftest to fail.
+>=20
+> The patches can be found on the following branch:
+>=20
+> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/lo=
+g/?h=3Dkeys-fixes
+>=20
+> David
 > ---
->   drivers/misc/uacce/uacce.c | 51 ++++++++++++++++++++++++++++++++++++++
->   include/linux/uacce.h      | 15 ++++++++++-
->   2 files changed, 65 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
-> index b6219c6bfb48..4d9d9aeb145a 100644
-> --- a/drivers/misc/uacce/uacce.c
-> +++ b/drivers/misc/uacce/uacce.c
-> @@ -12,6 +12,20 @@ static dev_t uacce_devt;
->   static DEFINE_MUTEX(uacce_mutex);
->   static DEFINE_XARRAY_ALLOC(uacce_xa);
->   
-> +static int cdev_get(struct device *dev, void *data)
-> +{
-> +	struct uacce_device *uacce;
-> +	struct device **t_dev = data;
-> +
-> +	uacce = container_of(dev, struct uacce_device, dev);
-> +	if (uacce->parent == *t_dev) {
-> +		*t_dev = dev;
-> +		return 1;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   static int uacce_start_queue(struct uacce_queue *q)
->   {
->   	int ret = 0;
-> @@ -346,12 +360,47 @@ static ssize_t region_dus_size_show(struct device *dev,
->   		       uacce->qf_pg_num[UACCE_QFRT_DUS] << PAGE_SHIFT);
->   }
->   
-> +static ssize_t isolate_show(struct device *dev,
-> +			    struct device_attribute *attr, char *buf)
-> +{
-> +	struct uacce_device *uacce = to_uacce_device(dev);
-> +
-> +	return sysfs_emit(buf, "%d\n", uacce->ops->get_isolate_state(uacce));
-Are these two isolate ops  required or optional?
-Do we need consider NULL pointer?
+> David Howells (2):
+>       certs: Move load_certificate_list() to be with the asymmetric keys =
+code
+>       certs: Add FIPS selftests
+>=20
+>=20
+>  certs/Makefile                           |   4 +-
+>  certs/blacklist.c                        |   8 +-
+>  certs/common.c                           |  57 ------
+>  certs/common.h                           |   9 -
+>  certs/system_keyring.c                   |   6 +-
+>  crypto/asymmetric_keys/Kconfig           |  10 +
+>  crypto/asymmetric_keys/Makefile          |   2 +
+>  crypto/asymmetric_keys/selftest.c        | 224 +++++++++++++++++++++++
+>  crypto/asymmetric_keys/x509_loader.c     |  57 ++++++
+>  crypto/asymmetric_keys/x509_parser.h     |   9 +
+>  crypto/asymmetric_keys/x509_public_key.c |   8 +-
+>  include/keys/asymmetric-type.h           |   3 +
+>  12 files changed, 321 insertions(+), 76 deletions(-)
+>  delete mode 100644 certs/common.c
+>  delete mode 100644 certs/common.h
+>  create mode 100644 crypto/asymmetric_keys/selftest.c
+>  create mode 100644 crypto/asymmetric_keys/x509_loader.c
+>=20
+>=20
 
-Thanks
+Reviewed-by: Simo Sorce <simo@redhat.com>
+
+--=20
+Simo Sorce
+RHEL Crypto Team
+Red Hat, Inc
+
+
+

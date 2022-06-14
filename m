@@ -2,426 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88D2D54B3C3
+	by mail.lfdr.de (Postfix) with ESMTP id 095D554B3C2
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:47:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240167AbiFNOpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
+        id S243425AbiFNOqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238801AbiFNOp3 (ORCPT
+        with ESMTP id S233966AbiFNOqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:45:29 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407EB2CDED
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:45:28 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id kq6so17612709ejb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:45:28 -0700 (PDT)
+        Tue, 14 Jun 2022 10:46:48 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45A962E684;
+        Tue, 14 Jun 2022 07:46:48 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25EEjHtg028231;
+        Tue, 14 Jun 2022 14:46:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=1Z3u5aBfK+eyAYz+x977l6SESiK+lwpY05ehV9powGQ=;
+ b=WlkjLp8yzdqjymLaIJrgUaLaP2g780YN5hrSYKqyejbNi+hBOTYipjlGDov8tyihbbze
+ rtRfHbi4O2ln96qckKQX0OPucTKPKWjLo4Mu/qTt09JGpdWprNeq4bvr7HpcXowUu2La
+ nffs2blMw4BkyNssjLBxEorRy2E1PbMJ+K1aheT8O94cEjk9e/4q6sdW+ZnjmZ3MXF85
+ x/zKLhYIAFgTp/Jb8UxUlpJIsYw+dkO7Xk3XpsWxmVXwDNxbazTDrVTABIyw4JBXKErz
+ kK7F1lNGgQdXflT6n9eWIOmRds/CV8C3kiRoAGmSQTwpX469NaQ9Iun7Ol4RGbt4ECsx jA== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gmjns61b4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jun 2022 14:46:30 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25EEjegh017074;
+        Tue, 14 Jun 2022 14:46:29 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2173.outbound.protection.outlook.com [104.47.55.173])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gpr7my04x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jun 2022 14:46:29 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AFcglJa4+CkOFIBEhZ8snwlGSqx6BnBlOe1qRJs62FglZ7BBfnmQ074sLThKPacLoHnAHiQfu12sTfZzK216MBR4TLhi3EVBoaPT+D4bdisXf8rkk2FrG3u6ML7EE49sRfTChN9vf0jPpZ9kvluiNlLGv9T5eKq5OEHlS9VTUd1he3SrQQYDBfbuq25or/4HvAyXnrz3yJMYpGloOSi8pEtLJjX+Eo0W/ffzTlkz+rmGHPMsSmpbrPDYn0w/8qjc+Ia6IdsCH5r8UoZH/uRYdnJJZ6vEfxAOnNqs/x4Nm/Agb80sIPAXyzp+bw9g/uguJGhydiDcmSfJxjWrUbjcNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1Z3u5aBfK+eyAYz+x977l6SESiK+lwpY05ehV9powGQ=;
+ b=NQUayyaIAs/RXsnI3M/vMjc+kzAxiMWU+4e8RfseYW++DlZY5TesddphX+qIi75ZdSwdzGx1vTBXm4t4HOoaiWfpOncQHLCAC8z6UO5przY3EJXO2PCXsHh0R+8yuJrvLCDXSMKQj3MzEcs+crikhOMjYQJH0r0lgqJzZ8dJ5oyinyl286qLEJfxnaW0iIeqE3xefQvY4NjGQhRSVo4Ah/2YqxD9mfJyYI/F+tAf/NGwR9S6e5WRrF/3oPea3KgL3V4/YVBnHyBi/ICiODPmDyaHREb/uLAIIPvnBLq6Oqlhy7xGa8f87dpP4kNt1Plk2b0VVosrULdiTVyQa91/pA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+D/vqYB8YvehXc7GqzBQjiiL9nC2qcfB3y+YKYyVmYU=;
-        b=F0EExpl6jLducS55fUN/79dBHu1WLDM1aOqdFAqCbqoSuqRMOj7nuU0vfmQRDSMYyX
-         9weOu3ZY2rwab4lJhNwnDPJDYJCJRHvfIihuAv2icLQ491l3NNIyZKkTa/kgCwjPyT5I
-         tn65/DKWaAdrF/isE2+eEXmC4l83RQnX1Xwdc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+D/vqYB8YvehXc7GqzBQjiiL9nC2qcfB3y+YKYyVmYU=;
-        b=LbeTL9lnBR5MbBS4PEalXX+Cb8oqvfTnsHrYtWMAi3yWF5jCMCJ1VyluZ6JVgIE/no
-         tPppJk496OhEMhYluA5RAiUdymZZ8nAuKawDUwG/eS4jBhctCw3miFMKobXsX+BKFknI
-         MU75o3E+5k+0ycig3AEUaqAy2u+xK7+Uh6lhL1a8V44J/Tt6h6eL61bmELkPvx9qp70Q
-         CdF3WndZ/O5jdT0KbIf+/cltgsDqrKBOA3RxEa4EQS2ZnVeAlX9Rp6QjhEzYbzfPm/Bb
-         klsaRvPVJQqd0ikcGYdmM4f9tn+pmrakkdrvIlFInADTc+KfF2qIKF6VUK5kPbV6iGK4
-         peDg==
-X-Gm-Message-State: AOAM531RVAG/MQBO+pni11ODrcJrNGDht9ZPUk5hhxlyeLobbr6yTxWz
-        1wqdHRLWyMMa+udsqxDDWsznHRVDXW6YH8Hp
-X-Google-Smtp-Source: ABdhPJwWF9NTi11WwpY3YQlZ7P/h9OoSCNrk0JuUUS7TLoQMlBbiXYUyKyiqO/POfh04WopSm+P4Ug==
-X-Received: by 2002:a17:907:c24:b0:711:d4c6:9161 with SMTP id ga36-20020a1709070c2400b00711d4c69161mr4757699ejc.760.1655217926450;
-        Tue, 14 Jun 2022 07:45:26 -0700 (PDT)
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com. [209.85.128.50])
-        by smtp.gmail.com with ESMTPSA id dz12-20020a0564021d4c00b0042aa153e73esm7381974edb.12.2022.06.14.07.45.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 07:45:25 -0700 (PDT)
-Received: by mail-wm1-f50.google.com with SMTP id e5so4811793wma.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:45:25 -0700 (PDT)
-X-Received: by 2002:a05:600c:4f13:b0:39d:b6c5:ce4e with SMTP id
- l19-20020a05600c4f1300b0039db6c5ce4emr410318wmq.34.1655217924701; Tue, 14 Jun
- 2022 07:45:24 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1Z3u5aBfK+eyAYz+x977l6SESiK+lwpY05ehV9powGQ=;
+ b=phaLWY4GeVopa68gVWRP0+0OFSlduOrraa1f63b57pg+16vb25weXDb3+GtnGrn2SSgUNu985mJgF22+0rQl60HH1nVTtmsfyrNe97pUZnkbid9/tZ08JcIOfkQw+pRF9E2t6yxh9+txRp0uAnqdeES6XLak3gioOXkIJ9aj8NQ=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MW4PR10MB5701.namprd10.prod.outlook.com
+ (2603:10b6:303:18b::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.16; Tue, 14 Jun
+ 2022 14:46:27 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5332.020; Tue, 14 Jun 2022
+ 14:46:27 +0000
+Date:   Tue, 14 Jun 2022 17:46:02 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Zhen Chen <chenzhen126@huawei.com>
+Cc:     syzbot <syzbot+2e3efb5eb71cb5075ba7@syzkaller.appspotmail.com>,
+        davem@davemloft.net, jhs@mojatatu.com, jiri@resnulli.us,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        xiyou.wangcong@gmail.com
+Subject: Re: [syzbot] WARNING: ODEBUG bug in route4_destroy
+Message-ID: <20220614144602.GJ2146@kadam>
+References: <000000000000a81af205cb2e2878@google.com>
+ <0c0468ae-5fe3-a71f-c987-18475756caca@huawei.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0c0468ae-5fe3-a71f-c987-18475756caca@huawei.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JN2P275CA0005.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:3::17)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-References: <20220609170859.v3.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid>
- <0a4de64d-aed7-f1cf-584a-bd8616a69ca3@quicinc.com>
-In-Reply-To: <0a4de64d-aed7-f1cf-584a-bd8616a69ca3@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 14 Jun 2022 07:45:12 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W3nGQBNJXWw82HFDosAFKRDbt85afUbdEaOjOc3gWA_A@mail.gmail.com>
-Message-ID: <CAD=FV=W3nGQBNJXWw82HFDosAFKRDbt85afUbdEaOjOc3gWA_A@mail.gmail.com>
-Subject: Re: [PATCH v3] drm/msm: Avoid unclocked GMU register access in 6xx gpu_busy
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Jordan Crouse <jordan@cosmicpenguin.net>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Eric Anholt <eric@anholt.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Sean Paul <sean@poorly.run>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: faa1f2ee-aa3b-49b1-c4fa-08da4e14a911
+X-MS-TrafficTypeDiagnostic: MW4PR10MB5701:EE_
+X-Microsoft-Antispam-PRVS: <MW4PR10MB57015E4D7C687D454E2C8C928EAA9@MW4PR10MB5701.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2zWIki+rwrUAWlfGa4foQDVGCFWiJng21SC85Bwbd5I/JYxSWibrxvizxKdtQFWOs9/LEGhIeOeYRPxKlXrqp2KWsXmZtB0KAp7xC822W9Wa2e4kP1kvxeRowz118kwaCPo57kd/tVkgXozSUyPVy9rm/dzwGdaZJcGUnf84TD3ogQSKMNUkyVVAmQZsCn9ainivSZwzcSirE+xvFe2XshTlamunFiGZOfY2vRap0paRnL1eUuU9IAxkVpvkmyqhEMvPRZBdDMcm0USBLzVe4s/qvz8u1/rmBc2b8Mfr3vMzzqx+i1iOZMFwjAYYR4xR408LkMu25poGeoImTWyolO4WcaDndKmceUyVcBZVraCMNYNc0azm1AcAEExkv0vZVFl7JZVXtj1FPu0ZKES/w2435Lxq30CRgRaccVzvBxWDrLoH2uSYoBYUqzTLPn/gQtH56yN/zbt9rnNEmfsz2/dOLm4zjbA3LdrpABHxnlQpId8s45AMqFFQyZQWPoLeR/16ZjJYrrZhGz0szVIYacXtCXr+QBrHIKvjn4jApbxq5liZEJaDtdqMNjIWPqZQTnH49S+PH8KkDzm01y11m7CaA6s445XlmL3lvxu5rIYmiLjDIerJfS+bDuwSQb3JOFAp1SWcl+khIf71PZNrdY3bVS4TIt+JASVSqRrl72QV7megylkrFfFAUxJ/z8Ya7gk7Hq7fL6pA8MG0mT5rqU29EU7tUwnRPNVHfTws1+vmoNaV0SkvePgIbv9o1EBMcM9vpRCMnNZpan9ZRm8T5BDEKZwoUUukIFxuyjc4tzc=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(966005)(2906002)(38350700002)(38100700002)(4326008)(66476007)(5660300002)(83380400001)(6666004)(508600001)(66946007)(66556008)(44832011)(33716001)(6916009)(9686003)(316002)(8676002)(86362001)(6512007)(6486002)(6506007)(33656002)(52116002)(26005)(1076003)(186003)(8936002)(7416002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zABqUpgDa7FleZhOo20/F0hADVuVXhE6xp96gGFN7ZBDM/d93XJWNKfE48Tj?=
+ =?us-ascii?Q?q5dvHB5E/GIEnuRqtIoqggfL1czZpwBlB+5FqymLSpjJULeyf4eJndjtf3I1?=
+ =?us-ascii?Q?RSXdIR6JXx5ZBJdj1+qe7n/pTaBcjCjsNQ317u6sTM9wRqfiet5ZG/7RfCSC?=
+ =?us-ascii?Q?6l+vvMty1KaPBoMUERqaAMbHKzhCzu99+2yZBo7BZEJrljOxlazlliihFiF+?=
+ =?us-ascii?Q?kYnKw3l+unreRGzfofr4aOJfu5UajgPeJxUZXNH1l1ReHiIM9syx2RC6NpiM?=
+ =?us-ascii?Q?v+bU1S8XaHvFBkFYA/dA3ISjbobs5koKhmnVYn1rxg/wgyFMGb8OE4SGlPHe?=
+ =?us-ascii?Q?XLbZfP69W0SXq/ji0tKpFABYa0KDZtuavw7zX3SdbeQ+uliUr2aGQabHkvcV?=
+ =?us-ascii?Q?N5qtxK+yhDqqklNWLFj9dZ6z5La0CngNZ0t6Mra5bnrTV2KP9Ikgzi+oBLJx?=
+ =?us-ascii?Q?4ToVcg6WvJTKqU2TYWOZ9thrYbMOeiqomPDurYQyyTv0Y7LIY1nPsmn96Dxw?=
+ =?us-ascii?Q?1DaxuGKR40vG0Kf9dqRP6bVA4rb2yT7zcf23jyLcAKn/z8VqdfC8S5vERSR4?=
+ =?us-ascii?Q?ViFvyREVSLnybRgriost/jtqIqtE95ch8nqkvkkoZfDG25rNkdNYiQUzfe7I?=
+ =?us-ascii?Q?8qF+6gqO8xcrcHYVazwxIrG0f0WDRF5Fjllf9cVTHxlpTON4ISaUS74/Afb1?=
+ =?us-ascii?Q?hEKE45Nb/GRgB2s3U8vcbenk8GizllcRlR/3NDlu4wvcr8gUjzo2zS5FmB6t?=
+ =?us-ascii?Q?uFtKu0ycFS9EFQoXSxUsMyuKjWdVJ5hRmoCBRPNoclS9tPl3JZGTof40a1GX?=
+ =?us-ascii?Q?lf9Pf+DlJ34XBIswlZmeABcDdHCdmaowT+0oFR7biIRTFoIo0e16RpUzH8Zl?=
+ =?us-ascii?Q?DoU15mkiUtK+c2l2cvHVWvIzmwr0Q9Lr6cGbh3beLu5dRKcHb70TPS32JmTG?=
+ =?us-ascii?Q?+mE6GZeWVMNeS+WAq//gwz5UkgQQeLwqGCGtGpV2WBP612xKVKpSJSDhtbne?=
+ =?us-ascii?Q?1InJO8aImGKT7SPkQ9TARy4lTyMmM8r9TlhhdLupbJOF5P/cEPIZEUpA9o0W?=
+ =?us-ascii?Q?1r1zluhiabYa1D5WjUfYFxnd1fCBwsowiDEINe+oX2qwOnmcfKMvdya86fNT?=
+ =?us-ascii?Q?cjw6DWmyAbuLSxmGY6+tMHwOnubtrYMOsxgF9UPtbhPvsXZ2dol35YIw2aaK?=
+ =?us-ascii?Q?Lw6+zuyTu9K8zp6NqnMNpDyRiqGw2Iw89BLwppqKodwtYrzw/c53OgsicNQU?=
+ =?us-ascii?Q?zeSgVzAchuVzozyW9H1I9QOu+h59xuoWRK71k2uWzo2G8kQ7s5LMrUn4CTRQ?=
+ =?us-ascii?Q?exb/KZJjFAwDCzOvHKRJB0IFY8wqjhJQZVPottHxy9buflIQuHKbnFgV4f07?=
+ =?us-ascii?Q?9Les2T/VeY/iGVtqwLOMTeaxufzygtq+zkL6m7YOBh53/7Z99rOTW4OnAypL?=
+ =?us-ascii?Q?HArbBBmH3YMiV25tpSMg2TPygAqw6kR/M7HArItcGhl5XTlApGLLqINAgaFJ?=
+ =?us-ascii?Q?/yLFRSJ6Jgi48+zqwlHRe//CQeFpTX0B9o06gOpyjAcYQo1ePsRAN1u9CLrz?=
+ =?us-ascii?Q?/ab30bKjsvcmVmMXgmjzlNCWJxX4Tk4tZ3kz1e5eJPCRz84BgvsRyRKVhFvY?=
+ =?us-ascii?Q?ODFtnmndmSUItkudEVKpdlRlki0bfdWEfzkVwmp+wF6FDFHmiTj/Z/pQGc7f?=
+ =?us-ascii?Q?FI51s5g7fT4sEinPk+nTq/9QRxlA+ocaTA1woeEqtbxuucsxe159u7OEh/o8?=
+ =?us-ascii?Q?mAPYf0Vp9JS7pU4nEBOg7DxsFMXaQ4A=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: faa1f2ee-aa3b-49b1-c4fa-08da4e14a911
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2022 14:46:27.1516
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 60q2Fwr5EqrmS/B5quBFrUpBRXzHIfk5xGa0H3qeuwiRvdai5EjkOy/QS8IaqlAv3TCXGwaSfovZvhXePqEnNUsvYvn3/ZlP4zb/lDfeZiI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB5701
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
+ definitions=2022-06-14_05:2022-06-13,2022-06-14 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 suspectscore=0 mlxlogscore=999 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206140058
+X-Proofpoint-GUID: OdAU3QbrJdaDWmvtZ6s2rHLnt3eTvJ2U
+X-Proofpoint-ORIG-GUID: OdAU3QbrJdaDWmvtZ6s2rHLnt3eTvJ2U
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jun 14, 2022 at 10:35:44PM +0800, 'Zhen Chen' via syzkaller-bugs wrote:
+> 
+> This looks like  route4_destroy is deleting the 'fold' which has been
+> freed by tcf_queue_work in route4_change. It means 'fold' is still in
+> the table.
+> I have tested this patch on syzbot and it works well, but I am not
+> sure whether it will introduce other issues...
+> 
+> diff --git a/net/sched/cls_route.c b/net/sched/cls_route.c
+> index a35ab8c27866..758c21f9d628 100644
+> --- a/net/sched/cls_route.c
+> +++ b/net/sched/cls_route.c
+> @@ -526,7 +526,7 @@ static int route4_change(struct net *net, struct sk_buff *in_skb,
+>  	rcu_assign_pointer(f->next, f1);
+>  	rcu_assign_pointer(*fp, f);
+>  
+> -	if (fold && fold->handle && f->handle != fold->handle) {
+> +	if (fold && f->handle != fold->handle) {
+                                 ^^^^^^^^^^^^
+There is still a dereference here so your patch doesn't make sense. :/
 
-On Tue, Jun 14, 2022 at 7:42 AM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
->
-> On 6/10/2022 5:39 AM, Douglas Anderson wrote:
-> > >From testing on sc7180-trogdor devices, reading the GMU registers
-> > needs the GMU clocks to be enabled. Those clocks get turned on in
-> > a6xx_gmu_resume(). Confusingly enough, that function is called as a
-> > result of the runtime_pm of the GPU "struct device", not the GMU
-> > "struct device". Unfortunately the current a6xx_gpu_busy() grabs a
-> > reference to the GMU's "struct device".
-> >
-> > The fact that we were grabbing the wrong reference was easily seen to
-> > cause crashes that happen if we change the GPU's pm_runtime usage to
-> > not use autosuspend. It's also believed to cause some long tail GPU
-> > crashes even with autosuspend.
-> >
-> > We could look at changing it so that we do pm_runtime_get_if_in_use()
-> > on the GPU's "struct device", but then we run into a different
-> > problem. pm_runtime_get_if_in_use() will return 0 for the GPU's
-> > "struct device" the whole time when we're in the "autosuspend
-> > delay". That is, when we drop the last reference to the GPU but we're
-> > waiting a period before actually suspending then we'll think the GPU
-> > is off. One reason that's bad is that if the GPU didn't actually turn
-> > off then the cycle counter doesn't lose state and that throws off all
-> > of our calculations.
-> >
-> > Let's change the code to keep track of the suspend state of
-> > devfreq. msm_devfreq_suspend() is always called before we actually
-> > suspend the GPU and msm_devfreq_resume() after we resume it. This
-> > means we can use the suspended state to know if we're powered or not.
-> >
-> > NOTE: one might wonder when exactly our status function is called when
-> > devfreq is supposed to be disabled. The stack crawl I captured was:
-> >    msm_devfreq_get_dev_status
-> >    devfreq_simple_ondemand_func
-> >    devfreq_update_target
-> >    qos_notifier_call
-> >    qos_max_notifier_call
-> >    blocking_notifier_call_chain
-> >    pm_qos_update_target
-> >    freq_qos_apply
-> >    apply_constraint
-> >    __dev_pm_qos_update_request
-> >    dev_pm_qos_update_request
-> >    msm_devfreq_idle_work
-> >
-> > Fixes: eadf79286a4b ("drm/msm: Check for powered down HW in the devfreq callbacks")
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> >
-> > Changes in v3:
-> > - Totally rewrote to not use the pm_runtime functions.
-> > - Moved the code to be common for all adreno GPUs.
-> >
-> > Changes in v2:
-> > - Move the set_freq runtime pm grab to the GPU file.
-> > - Use <= for the pm_runtime test, not ==.
-> >
-> >   drivers/gpu/drm/msm/adreno/a5xx_gpu.c |  8 ------
-> >   drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 13 ++++-----
-> >   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 12 +++------
-> >   drivers/gpu/drm/msm/adreno/a6xx_gpu.h |  3 ++-
-> >   drivers/gpu/drm/msm/msm_gpu.h         |  9 ++++++-
-> >   drivers/gpu/drm/msm/msm_gpu_devfreq.c | 39 +++++++++++++++++++++------
-> >   6 files changed, 51 insertions(+), 33 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-> > index c424e9a37669..3dcec7acb384 100644
-> > --- a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-> > +++ b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-> > @@ -1666,18 +1666,10 @@ static u64 a5xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
-> >   {
-> >       u64 busy_cycles;
-> >
-> > -     /* Only read the gpu busy if the hardware is already active */
-> > -     if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0) {
-> > -             *out_sample_rate = 1;
-> > -             return 0;
-> > -     }
-> > -
-> >       busy_cycles = gpu_read64(gpu, REG_A5XX_RBBM_PERFCTR_RBBM_0_LO,
-> >                       REG_A5XX_RBBM_PERFCTR_RBBM_0_HI);
-> >       *out_sample_rate = clk_get_rate(gpu->core_clk);
-> >
-> > -     pm_runtime_put(&gpu->pdev->dev);
-> > -
-> >       return busy_cycles;
-> >   }
-> >
-> > diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> > index 9f76f5b15759..dc715d88ff21 100644
-> > --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> > +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> > @@ -102,7 +102,8 @@ bool a6xx_gmu_gx_is_on(struct a6xx_gmu *gmu)
-> >               A6XX_GMU_SPTPRAC_PWR_CLK_STATUS_GX_HM_CLK_OFF));
-> >   }
-> >
-> > -void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
-> > +void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-> > +                    bool suspended)
-> >   {
-> >       struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
-> >       struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
-> > @@ -127,15 +128,16 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
-> >
-> >       /*
-> >        * This can get called from devfreq while the hardware is idle. Don't
-> > -      * bring up the power if it isn't already active
-> > +      * bring up the power if it isn't already active. All we're doing here
-> > +      * is updating the frequency so that when we come back online we're at
-> > +      * the right rate.
-> >        */
-> > -     if (pm_runtime_get_if_in_use(gmu->dev) == 0)
-> > +     if (suspended)
-> >               return;
-> >
-> >       if (!gmu->legacy) {
-> >               a6xx_hfi_set_freq(gmu, perf_index);
-> >               dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
-> > -             pm_runtime_put(gmu->dev);
-> >               return;
-> >       }
-> >
-> > @@ -159,7 +161,6 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
-> >               dev_err(gmu->dev, "GMU set GPU frequency error: %d\n", ret);
-> >
-> >       dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
-> > -     pm_runtime_put(gmu->dev);
-> >   }
-> >
-> >   unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu)
-> > @@ -895,7 +896,7 @@ static void a6xx_gmu_set_initial_freq(struct msm_gpu *gpu, struct a6xx_gmu *gmu)
-> >               return;
-> >
-> >       gmu->freq = 0; /* so a6xx_gmu_set_freq() doesn't exit early */
-> > -     a6xx_gmu_set_freq(gpu, gpu_opp);
-> > +     a6xx_gmu_set_freq(gpu, gpu_opp, false);
-> >       dev_pm_opp_put(gpu_opp);
-> >   }
-> >
-> > diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> > index 42ed9a3c4905..8c02a67f29f2 100644
-> > --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> > +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> > @@ -1658,27 +1658,21 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
-> >       /* 19.2MHz */
-> >       *out_sample_rate = 19200000;
-> >
-> > -     /* Only read the gpu busy if the hardware is already active */
-> > -     if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) == 0)
-> > -             return 0;
-> > -
-> >       busy_cycles = gmu_read64(&a6xx_gpu->gmu,
-> >                       REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_L,
-> >                       REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_H);
-> >
-> > -
-> > -     pm_runtime_put(a6xx_gpu->gmu.dev);
-> > -
-> >       return busy_cycles;
-> >   }
-> >
-> > -static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
-> > +static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-> > +                           bool suspended)
-> >   {
-> >       struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
-> >       struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
-> >
-> >       mutex_lock(&a6xx_gpu->gmu.lock);
-> > -     a6xx_gmu_set_freq(gpu, opp);
-> > +     a6xx_gmu_set_freq(gpu, opp, suspended);
-> >       mutex_unlock(&a6xx_gpu->gmu.lock);
-> >   }
-> >
-> > diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
-> > index 86e0a7c3fe6d..ab853f61db63 100644
-> > --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
-> > +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
-> > @@ -77,7 +77,8 @@ void a6xx_gmu_clear_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state);
-> >   int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node);
-> >   void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu);
-> >
-> > -void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp);
-> > +void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-> > +                    bool suspended);
-> >   unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu);
-> >
-> >   void a6xx_show(struct msm_gpu *gpu, struct msm_gpu_state *state,
-> > diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-> > index 6def00883046..7ced1a30d4e8 100644
-> > --- a/drivers/gpu/drm/msm/msm_gpu.h
-> > +++ b/drivers/gpu/drm/msm/msm_gpu.h
-> > @@ -68,7 +68,8 @@ struct msm_gpu_funcs {
-> >       struct msm_gpu_state *(*gpu_state_get)(struct msm_gpu *gpu);
-> >       int (*gpu_state_put)(struct msm_gpu_state *state);
-> >       unsigned long (*gpu_get_freq)(struct msm_gpu *gpu);
-> > -     void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp);
-> > +     void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-> > +                          bool suspended);
-> >       struct msm_gem_address_space *(*create_address_space)
-> >               (struct msm_gpu *gpu, struct platform_device *pdev);
-> >       struct msm_gem_address_space *(*create_private_address_space)
-> > @@ -92,6 +93,9 @@ struct msm_gpu_devfreq {
-> >       /** devfreq: devfreq instance */
-> >       struct devfreq *devfreq;
-> >
-> > +     /** lock: lock for "suspended", "busy_cycles", and "time" */
-> > +     struct mutex lock;
-> > +
-> >       /**
-> >        * idle_constraint:
-> >        *
-> > @@ -135,6 +139,9 @@ struct msm_gpu_devfreq {
-> >        * elapsed
-> >        */
-> >       struct msm_hrtimer_work boost_work;
-> > +
-> > +     /** suspended: tracks if we're suspended */
-> > +     bool suspended;
-> >   };
-> >
-> >   struct msm_gpu {
-> > diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-> > index d2539ca78c29..ea94bc18e72e 100644
-> > --- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-> > +++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-> > @@ -20,6 +20,7 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
-> >               u32 flags)
-> >   {
-> >       struct msm_gpu *gpu = dev_to_gpu(dev);
-> > +     struct msm_gpu_devfreq *df = &gpu->devfreq;
-> >       struct dev_pm_opp *opp;
-> >
-> >       /*
-> > @@ -32,10 +33,13 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
-> >
-> >       trace_msm_gpu_freq_change(dev_pm_opp_get_freq(opp));
-> >
-> > -     if (gpu->funcs->gpu_set_freq)
-> > -             gpu->funcs->gpu_set_freq(gpu, opp);
-> > -     else
-> > +     if (gpu->funcs->gpu_set_freq) {
-> > +             mutex_lock(&df->lock);
-> > +             gpu->funcs->gpu_set_freq(gpu, opp, df->suspended);
-> > +             mutex_unlock(&df->lock);
-> > +     } else {
-> >               clk_set_rate(gpu->core_clk, *freq);
-> > +     }
-> >
-> >       dev_pm_opp_put(opp);
-> >
-> > @@ -58,15 +62,24 @@ static void get_raw_dev_status(struct msm_gpu *gpu,
-> >       unsigned long sample_rate;
-> >       ktime_t time;
-> >
-> > +     mutex_lock(&df->lock);
-> > +
-> >       status->current_frequency = get_freq(gpu);
-> > -     busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
-> >       time = ktime_get();
-> > -
-> > -     busy_time = busy_cycles - df->busy_cycles;
-> >       status->total_time = ktime_us_delta(time, df->time);
-> > +     df->time = time;
-> >
-> > +     if (df->suspended) {
-> > +             mutex_unlock(&df->lock);
-> > +             status->busy_time = 0;
-> > +             return;
-> > +     }
-> > +
-> > +     busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
-> > +     busy_time = busy_cycles - df->busy_cycles;
-> >       df->busy_cycles = busy_cycles;
-> > -     df->time = time;
-> > +
-> > +     mutex_unlock(&df->lock);
-> >
-> >       busy_time *= USEC_PER_SEC;
-> >       do_div(busy_time, sample_rate);
-> > @@ -175,6 +188,8 @@ void msm_devfreq_init(struct msm_gpu *gpu)
-> >       if (!gpu->funcs->gpu_busy)
-> >               return;
-> >
-> > +     mutex_init(&df->lock);
-> > +
-> >       dev_pm_qos_add_request(&gpu->pdev->dev, &df->idle_freq,
-> >                              DEV_PM_QOS_MAX_FREQUENCY,
-> >                              PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-> > @@ -244,12 +259,16 @@ void msm_devfreq_cleanup(struct msm_gpu *gpu)
-> >   void msm_devfreq_resume(struct msm_gpu *gpu)
-> >   {
-> >       struct msm_gpu_devfreq *df = &gpu->devfreq;
-> > +     unsigned long sample_rate;
-> >
-> >       if (!has_devfreq(gpu))
-> >               return;
-> >
-> > -     df->busy_cycles = 0;
-> > +     mutex_lock(&df->lock);
-> > +     df->busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
-> >       df->time = ktime_get();
-> > +     df->suspended = false;
-> > +     mutex_unlock(&df->lock);
-> >
-> >       devfreq_resume_device(df->devfreq);
-> >   }
-> > @@ -261,6 +280,10 @@ void msm_devfreq_suspend(struct msm_gpu *gpu)
-> >       if (!has_devfreq(gpu))
-> >               return;
-> >
-> > +     mutex_lock(&df->lock);
-> > +     df->suspended = true;
-> > +     mutex_unlock(&df->lock);
-> > +
-> >       devfreq_suspend_device(df->devfreq);
-> >
-> >       cancel_idle_work(df);
->
-> nit: in the commit subject: 6xx -> a6xx
->
-> Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+regards,
+dan carpenter
 
-Thanks!
-
-There's actually a v4 of this:
-
-https://lore.kernel.org/r/20220610124639.v4.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid
-
-I'll send a v5 that adds your Reviewed-by tag and fixes the subject.
-
--Doug
+>  		th = to_hash(fold->handle);
+>  		h = from_hash(fold->handle >> 16);
+>  		b = rtnl_dereference(head->table[th]);
+> 
+> -- 
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0c0468ae-5fe3-a71f-c987-18475756caca%40huawei.com.

@@ -2,35 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8AA754B2EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FC354B2E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:17:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245026AbiFNOR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
+        id S243205AbiFNORM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242805AbiFNORJ (ORCPT
+        with ESMTP id S231754AbiFNORJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Jun 2022 10:17:09 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 698D333369;
-        Tue, 14 Jun 2022 07:17:04 -0700 (PDT)
-X-UUID: 9bdeb8cf82224fa88ebdc55213eae61c-20220614
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFBCD2F64C;
+        Tue, 14 Jun 2022 07:17:03 -0700 (PDT)
+X-UUID: 88a5eb4b15c34fbeb695ec36baa68e62-20220614
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:ef9afaee-d021-4391-9e66-faa2c14dfb84,OB:30,L
-        OB:30,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,
-        ACTION:release,TS:90
-X-CID-INFO: VERSION:1.1.6,REQID:ef9afaee-d021-4391-9e66-faa2c14dfb84,OB:30,LOB
-        :30,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,
-        ACTION:quarantine,TS:90
-X-CID-META: VersionHash:b14ad71,CLOUDID:47766cc5-c67b-4a73-9b18-726dd8f2eb58,C
-        OID:2e28f976cb89,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 9bdeb8cf82224fa88ebdc55213eae61c-20220614
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+X-CID-O-INFO: VERSION:1.1.6,REQID:67faa858-a90a-4b47-bb77-45caa2ffff71,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:2c766cc5-c67b-4a73-9b18-726dd8f2eb58,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 88a5eb4b15c34fbeb695ec36baa68e62-20220614
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 36876832; Tue, 14 Jun 2022 22:16:57 +0800
+        with ESMTP id 521178095; Tue, 14 Jun 2022 22:16:58 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
  mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
@@ -50,9 +47,9 @@ CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
         <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
         <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
         <stanley.chu@mediatek.com>
-Subject: [PATCH v3 04/10] scsi: ufs-mediatek: Fix the timing of configuring device regulators
-Date:   Tue, 14 Jun 2022 22:16:49 +0800
-Message-ID: <20220614141655.14409-5-stanley.chu@mediatek.com>
+Subject: [PATCH v3 05/10] scsi: ufs-mediatek: Prevent device regulators setting as LPM incorrectly
+Date:   Tue, 14 Jun 2022 22:16:50 +0800
+Message-ID: <20220614141655.14409-6-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220614141655.14409-1-stanley.chu@mediatek.com>
 References: <20220614141655.14409-1-stanley.chu@mediatek.com>
@@ -70,110 +67,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Po-Wen Kao <powen.kao@mediatek.com>
 
-Currently the LPM configurations of device regulators
-may not work since VCC is not disabled yet while
-ufs_mtk_vreg_set_lpm() is executed.
+Device regulatrs are allowed to enter low-power mode
+if neither device is not in active mode, nor VCC does not
+keep on.
 
-Fix it by changing the timing of invoking
-ufs_mtk_vreg_set_lpm().
+Simply fix this by adding conditions before LPM decision.
 
 Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-Signed-off-by: Po-Wen Kao <powen.kao@mediatek.com>
+Signed-off-by: Powen Kao <powen.kao@mediatek.com>
 Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- drivers/ufs/host/ufs-mediatek.c | 60 ++++++++++++++++++++++++++++++---
- 1 file changed, 55 insertions(+), 5 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 21d591925dc4..3b3fe5470b71 100755
+index 3b3fe5470b71..c9afe373437c 100755
 --- a/drivers/ufs/host/ufs-mediatek.c
 +++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1082,7 +1082,6 @@ static int ufs_mtk_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op,
- 		 * ufshcd_suspend() re-enabling regulators while vreg is still
- 		 * in low-power mode.
- 		 */
--		ufs_mtk_vreg_set_lpm(hba, true);
- 		err = ufs_mtk_mphy_power_on(hba, false);
- 		if (err)
- 			goto fail;
-@@ -1106,12 +1105,13 @@ static int ufs_mtk_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- {
- 	int err;
+@@ -1034,10 +1034,18 @@ static void ufs_mtk_vreg_set_lpm(struct ufs_hba *hba, bool lpm)
+ 	if (!hba->vreg_info.vccq2 || !hba->vreg_info.vcc)
+ 		return;
  
-+	if (hba->ufshcd_state != UFSHCD_STATE_OPERATIONAL)
-+		ufs_mtk_vreg_set_lpm(hba, false);
+-	if (lpm && !hba->vreg_info.vcc->enabled)
++	/* Bypass LPM when device is still active */
++	if (lpm && ufshcd_is_ufs_dev_active(hba))
++		return;
 +
- 	err = ufs_mtk_mphy_power_on(hba, true);
- 	if (err)
- 		goto fail;
- 
--	ufs_mtk_vreg_set_lpm(hba, false);
--
- 	if (ufshcd_is_link_hibern8(hba)) {
- 		err = ufs_mtk_link_set_hpm(hba);
- 		if (err)
-@@ -1276,9 +1276,59 @@ static int ufs_mtk_remove(struct platform_device *pdev)
- 	return 0;
++	/* Bypass LPM if VCC is enabled */
++	if (lpm && hba->vreg_info.vcc->enabled)
++		return;
++
++	if (lpm)
+ 		regulator_set_mode(hba->vreg_info.vccq2->reg,
+ 				   REGULATOR_MODE_IDLE);
+-	else if (!lpm)
++	else
+ 		regulator_set_mode(hba->vreg_info.vccq2->reg,
+ 				   REGULATOR_MODE_NORMAL);
  }
- 
-+int ufs_mtk_system_suspend(struct device *dev)
-+{
-+	int ret = 0;
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+
-+	ret = ufshcd_system_suspend(dev);
-+
-+	if (!ret)
-+		ufs_mtk_vreg_set_lpm(hba, true);
-+
-+	return ret;
-+}
-+
-+int ufs_mtk_system_resume(struct device *dev)
-+{
-+	int ret = 0;
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+
-+	ufs_mtk_vreg_set_lpm(hba, false);
-+
-+	ret = ufshcd_system_resume(dev);
-+
-+	return ret;
-+}
-+
-+int ufs_mtk_runtime_suspend(struct device *dev)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+	int ret = 0;
-+
-+	ret = ufshcd_runtime_suspend(dev);
-+
-+	if (!ret)
-+		ufs_mtk_vreg_set_lpm(hba, true);
-+
-+	return ret;
-+}
-+
-+int ufs_mtk_runtime_resume(struct device *dev)
-+{
-+	struct ufs_hba *hba = dev_get_drvdata(dev);
-+	int ret = 0;
-+
-+	ufs_mtk_vreg_set_lpm(hba, false);
-+
-+	ret = ufshcd_runtime_resume(dev);
-+
-+	return ret;
-+}
-+
- static const struct dev_pm_ops ufs_mtk_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(ufshcd_system_suspend, ufshcd_system_resume)
--	SET_RUNTIME_PM_OPS(ufshcd_runtime_suspend, ufshcd_runtime_resume, NULL)
-+	SET_SYSTEM_SLEEP_PM_OPS(ufs_mtk_system_suspend, ufs_mtk_system_resume)
-+	SET_RUNTIME_PM_OPS(ufs_mtk_runtime_suspend, ufs_mtk_runtime_resume, NULL)
- 	.prepare	 = ufshcd_suspend_prepare,
- 	.complete	 = ufshcd_resume_complete,
- };
 -- 
 2.18.0
 

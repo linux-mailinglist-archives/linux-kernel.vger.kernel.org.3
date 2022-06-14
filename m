@@ -2,53 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF6854A8CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 07:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13BF754A8D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 07:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240104AbiFNFif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 01:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46614 "EHLO
+        id S240432AbiFNFiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 01:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346516AbiFNFia (ORCPT
+        with ESMTP id S238226AbiFNFir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 01:38:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA0D2B26C
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 22:38:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8750BB81649
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:38:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09168C3411B;
-        Tue, 14 Jun 2022 05:38:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655185107;
-        bh=TUhaPG/zxoBGFQdav+4Zj5v/KaSlZdbKvwElcae+ekM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PRRynFCKlFafYnFV+FXpS5mPmjmy9RbNBZIUudNs33AxblZJIL3y/AITp9ILp48mS
-         h+gQHIe1pnbh6so8jxUOGl+g2NLM32vBs8Abet1BoL/7FebxtRtxs31XcYKznjzbUn
-         MVC/LOgyDSEKZXlSvDySRxmj58gTLtMWugNCXjEcoDTl6+zxwyWbWiZc7PUJjNHysi
-         ZNXPAcJPUIjO3vANraA3A4bExaGTvuUXDbjOXeXBI7Yv3v2NVRJ9LTJyV/8jLxgkBh
-         14UjGCW8T5dGbC/czXUGtUV9ygaqQ4sm9a0w7/97E9FQT6R68r1ybSrSavHuRB23L1
-         8FlXJP2qnIr8Q==
-Date:   Mon, 13 Jun 2022 22:38:25 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Daeho Jeong <daeho43@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
-        Daeho Jeong <daehojeong@google.com>,
-        Nathan Huckleberry <nhuck@google.com>
-Subject: Re: [PATCH] f2fs: handle decompress only post processing in softirq
-Message-ID: <Yqge0XS7jbSnNWvq@sol.localdomain>
-References: <20220613155612.402297-1-daeho43@gmail.com>
+        Tue, 14 Jun 2022 01:38:47 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B0C3818A;
+        Mon, 13 Jun 2022 22:38:45 -0700 (PDT)
+X-UUID: d241220955ca479da4a5111005c1727c-20220614
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:08a58a04-d0d6-4a6e-988e-404764a934cf,OB:10,L
+        OB:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:50
+X-CID-INFO: VERSION:1.1.6,REQID:08a58a04-d0d6-4a6e-988e-404764a934cf,OB:10,LOB
+        :0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:50
+X-CID-META: VersionHash:b14ad71,CLOUDID:c0aa8207-b57a-4a25-a071-bc7b4972bc68,C
+        OID:034fae7212de,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: d241220955ca479da4a5111005c1727c-20220614
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 959328732; Tue, 14 Jun 2022 13:38:41 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 14 Jun 2022 13:38:39 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 14 Jun 2022 13:38:39 +0800
+Message-ID: <acaf3f8a2cfa14cb050be1550c917ba84c0d81dd.camel@mediatek.com>
+Subject: Re: [PATCH v11 07/12] drm/mediatek: dpi: move swap_shift to SoC
+ config
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 14 Jun 2022 13:38:39 +0800
+In-Reply-To: <20220613064841.10481-8-rex-bc.chen@mediatek.com>
+References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
+         <20220613064841.10481-8-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613155612.402297-1-daeho43@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,52 +72,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+Cc Nathan Huckleberry who is looking into a similar problem in dm-verity]
+Hi, Bo-Chen:
 
-On Mon, Jun 13, 2022 at 08:56:12AM -0700, Daeho Jeong wrote:
-> From: Daeho Jeong <daehojeong@google.com>
+On Mon, 2022-06-13 at 14:48 +0800, Bo-Chen Chen wrote:
+> From: Guillaume Ranquet <granquet@baylibre.com>
 > 
-> Now decompression is being handled in workqueue and it makes read I/O
-> latency non-deterministic, because of the non-deterministic scheduling
-> nature of workqueues. So, I made it handled in softirq context only if
-> possible.
+> Add flexibility by moving the swap shift value to SoC specific
+> config.
+
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
+
 > 
-> Signed-off-by: Daeho Jeong <daehojeong@google.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
 > ---
->  fs/f2fs/compress.c | 145 +++++++++++++++++++++++++--------------------
->  fs/f2fs/data.c     |  50 ++++++++++------
->  fs/f2fs/f2fs.h     |  10 ++--
->  3 files changed, 119 insertions(+), 86 deletions(-)
-[...]
->  static void f2fs_read_end_io(struct bio *bio)
-> @@ -281,16 +283,28 @@ static void f2fs_read_end_io(struct bio *bio)
+>  drivers/gpu/drm/mediatek/mtk_dpi.c | 9 ++++++++-
+>  1 file changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index afd81ae307da..2c0e9670c209 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -131,6 +131,7 @@ struct mtk_dpi_conf {
+>  	u32 dimension_mask;
+>  	/* HSIZE and VSIZE mask (no shift) */
+>  	u32 hvsize_mask;
+> +	u32 channel_swap_shift;
+>  	const struct mtk_dpi_yc_limit *limit;
+>  };
+>  
+> @@ -349,7 +350,9 @@ static void mtk_dpi_config_channel_swap(struct
+> mtk_dpi *dpi,
+>  		break;
 >  	}
 >  
->  	if (bio->bi_status) {
-> -		f2fs_finish_read_bio(bio);
-> +		f2fs_finish_read_bio(bio, true);
->  		return;
->  	}
+> -	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, val << CH_SWAP,
+> CH_SWAP_MASK);
+> +	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING,
+> +		     val << dpi->conf->channel_swap_shift,
+> +		     CH_SWAP_MASK << dpi->conf->channel_swap_shift);
+>  }
 >  
-> -	if (ctx && (ctx->enabled_steps & (STEP_DECRYPT | STEP_DECOMPRESS))) {
-> -		INIT_WORK(&ctx->work, f2fs_post_read_work);
-> -		queue_work(ctx->sbi->post_read_wq, &ctx->work);
-> -	} else {
-> -		f2fs_verify_and_finish_bio(bio);
-> +	if (ctx) {
-> +		unsigned int enabled_steps = ctx->enabled_steps &
-> +					(STEP_DECRYPT | STEP_DECOMPRESS);
-> +
-> +		/*
-> +		 * If we have only decompression step between decompression and
-> +		 * decrypt, we don't need post processing for this.
-> +		 */
-> +		if (enabled_steps == STEP_DECOMPRESS) {
-> +			f2fs_handle_step_decompress(ctx, true);
+>  static void mtk_dpi_config_yuv422_enable(struct mtk_dpi *dpi, bool
+> enable)
+> @@ -821,6 +824,7 @@ static const struct mtk_dpi_conf mt8173_conf = {
+>  	.swap_input_support = true,
+>  	.dimension_mask = HPW_MASK,
+>  	.hvsize_mask = HSIZE_MASK,
+> +	.channel_swap_shift = CH_SWAP,
+>  	.limit = &mtk_dpi_limit,
+>  };
+>  
+> @@ -835,6 +839,7 @@ static const struct mtk_dpi_conf mt2701_conf = {
+>  	.swap_input_support = true,
+>  	.dimension_mask = HPW_MASK,
+>  	.hvsize_mask = HSIZE_MASK,
+> +	.channel_swap_shift = CH_SWAP,
+>  	.limit = &mtk_dpi_limit,
+>  };
+>  
+> @@ -848,6 +853,7 @@ static const struct mtk_dpi_conf mt8183_conf = {
+>  	.swap_input_support = true,
+>  	.dimension_mask = HPW_MASK,
+>  	.hvsize_mask = HSIZE_MASK,
+> +	.channel_swap_shift = CH_SWAP,
+>  	.limit = &mtk_dpi_limit,
+>  };
+>  
+> @@ -861,6 +867,7 @@ static const struct mtk_dpi_conf mt8192_conf = {
+>  	.swap_input_support = true,
+>  	.dimension_mask = HPW_MASK,
+>  	.hvsize_mask = HSIZE_MASK,
+> +	.channel_swap_shift = CH_SWAP,
+>  	.limit = &mtk_dpi_limit,
+>  };
+>  
 
-One question: is this (the bio endio callback) actually guaranteed to be
-executed from a softirq?  If you look at dm-crypt's support for workqueue-less
-decryption, for example, it explicitly checks 'in_hardirq() || irqs_disabled()'
-and schedules a tasklet if either of those is the case.
-
-- Eric

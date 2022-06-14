@@ -2,109 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AC0354AA63
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C26E54AA7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354172AbiFNHVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
+        id S1354213AbiFNHX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354086AbiFNHVD (ORCPT
+        with ESMTP id S1354644AbiFNHXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:21:03 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F9F31DF9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:20:52 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id g10-20020a17090a708a00b001ea8aadd42bso8310903pjk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:20:51 -0700 (PDT)
+        Tue, 14 Jun 2022 03:23:37 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B1A3CA56;
+        Tue, 14 Jun 2022 00:23:34 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id o17so7070263pla.6;
+        Tue, 14 Jun 2022 00:23:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=x3VzGr/fSHQypY+i+ztObznAHCuT0co5thLO7MdpFL0=;
-        b=zzQhFHJOXlSKySb9yp1KQ1ub6zLwe6JGFCECrYPIUu1EJieVGCVAnZqJJ8aqUBwTMK
-         WwiuS+k6jzu2XtIPtpM5WDZ/oKx7GWoEAVYHv3emsjnt+5071h4zc5znKs7MFr6wDE2b
-         TYyH+tQcrA3/9VIkrQVhK3WVpdAP4q5tGyPZ0H08doT/RAbCrurW25CDX9dFydpMxB+y
-         SUtNvsDCaf5HBgLl6pZsR+frFFzH8C51yXJo2ogUwpT43PTNU8kMtKDmCoKixBxxdIHO
-         9aWtob3CUmV40bFtrxj2m9m930RV6lTcD2n2Hq9CF4f+WhYukD+LFj2tS8C8rcPqIjCc
-         le0g==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uXSamoUp6MeZ/46qZXQdg656MMVfUNs/18XCR1U3fiw=;
+        b=EKQjsmVZozA/XvJq1p2xbZEJN0A0H5Q7RkhuSZl0UuYnPOidEvO4nk+Bdudkwz3DnL
+         YDM8qbjd0TCrqYKlVeQvodxgeXHXsW4fdnxss1pIPgvh538ECSxHcEpcesRZdVeYwvie
+         5hgjrPWHRBoOtok+VY2Bu4X3LXpAA27/oRuhi3tpZMUGMrbwX2Elcal3h7X9iJCDWmuz
+         Kwafy9hK5BLoYhE1C8AcNgeUiGlccVIUFG8cXxgKWVOOpAq0DjkD3kp4FJ5WxWkQyuY4
+         JTmLikgP7zx7JNUPo+xYvx/jf6UJSFba2KEHNMhzz6ySe+PiY+ij/3PEAve3BqLrjePy
+         AYAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=x3VzGr/fSHQypY+i+ztObznAHCuT0co5thLO7MdpFL0=;
-        b=anD55c1z77EXKcVkPu9rATr6pSJvRU0uuY0wecI7+0ZoiJQGZJd1GvJMW/aXG0Fcpz
-         NIEkKo3GKyr39Hkn9sDw4NeAtSi9IomZK//kun9Dx9FQKOMK/rq1ABLZsiqr0oiPqvcx
-         r0N8RwcO5l7HtzPEIQlHiulPB8ZM9la5lISkrUy5gA5X0QnAej52VHd1vnCLeZnBvSFH
-         d/2vr1FCsPLA6xafeI0GD+yYsx0PfwK35afYY3meoPXD1/DBGXMN0/FVJJBCTaJErT9j
-         4rrKt2aIZ/IaGmp2GGXTmf9i4gzLif8FFWZO4ErKfCWH7LKgRPG4Ff+Ssvs5tzWnibGG
-         FSuA==
-X-Gm-Message-State: AJIora9UD99R0LQDb7RP52tbT2KjFHx/xotg73ol6N970agR/zMrWdC7
-        ZI+3vc6Hw0P+Y3iy9VINjBTpdTs/49BGOgsc
-X-Google-Smtp-Source: AGRyM1tupFfevnhvE3qrqzeChNwFv1DJYZzyH0DgykcokUf98ZLv9a17HvvfC58GfIOeq4lT/zsgaw==
-X-Received: by 2002:a17:90a:d104:b0:1ea:b84b:a084 with SMTP id l4-20020a17090ad10400b001eab84ba084mr3068817pju.95.1655191251044;
-        Tue, 14 Jun 2022 00:20:51 -0700 (PDT)
-Received: from [10.4.36.16] ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id jj18-20020a170903049200b00163f36005e1sm6383907plb.42.2022.06.14.00.20.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 00:20:50 -0700 (PDT)
-Message-ID: <13002894-edde-3163-f56b-d344147293d7@bytedance.com>
-Date:   Tue, 14 Jun 2022 15:23:12 +0800
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uXSamoUp6MeZ/46qZXQdg656MMVfUNs/18XCR1U3fiw=;
+        b=CL2atQWPHlV6C4V+FCXC1HNKRhvycm5qm+BkrZxd/qgKxTtFBSTcXho1Iz8b7foAqF
+         wlrI8lGvH5+nNOmFr75wSQaeHv5DkcfLqGlcXfpPCGubIld+O0JBSVmf/x1ofCZnsZJ0
+         jzD4HL2mRoOPIE6BWjEwbzOq8IZBzkYMkukbnqIBsUTFoFJz5I7pkR6seGPIM/aarN2Z
+         Wt0iwN2yFkuAQk9d2lSkGrAstBk+DG7Bs4futFTJpBBEG3cUN2S8IkQVu9Q4Ct58csw6
+         NFTYY5//lxhneNABKut0Bqwb2N/D7bDVsTosNl7gjcpelbBzYoclhiFLAuh7tiHglen5
+         Qq/w==
+X-Gm-Message-State: AJIora+P3W5mkMG8uBRwlS5wE/XRi1ugOKx+F5t/OMNSWVUpiqj9A5HL
+        wRuYAjaF7BbvT5LxIoiXxb4=
+X-Google-Smtp-Source: AGRyM1t4U0AtFhCET949Kol0aCHYqnQE/e0mHhbltZ+mlhDE+zKbIpvtwtedoqZ5IQS7PUZPtucmTQ==
+X-Received: by 2002:a17:902:76c1:b0:167:6ef7:dab4 with SMTP id j1-20020a17090276c100b001676ef7dab4mr3240028plt.146.1655191413875;
+        Tue, 14 Jun 2022 00:23:33 -0700 (PDT)
+Received: from localhost (subs32-116-206-28-37.three.co.id. [116.206.28.37])
+        by smtp.gmail.com with ESMTPSA id ja21-20020a170902efd500b0016632179ecfsm6365167plb.264.2022.06.14.00.23.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 00:23:33 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 14:23:30 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 000/339] 5.18.4-rc1 review
+Message-ID: <Yqg3cnnE70gS6cI2@debian.me>
+References: <20220613094926.497929857@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [External] Re: [PATCH v4 1/2] mm/memory-failure: introduce
- "hwpoisoned-pages" entry
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
-        <naoya.horiguchi@nec.com>
-Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linmiaohe@huawei.com" <linmiaohe@huawei.com>
-References: <20220614043830.99607-1-pizhenwei@bytedance.com>
- <20220614043830.99607-2-pizhenwei@bytedance.com>
- <20220614070934.GA1627546@hori.linux.bs1.fc.nec.co.jp>
- <66c43dac-32ac-5801-c76c-01607d68e38b@redhat.com>
-From:   zhenwei pi <pizhenwei@bytedance.com>
-In-Reply-To: <66c43dac-32ac-5801-c76c-01607d68e38b@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/14/22 15:13, David Hildenbrand wrote:
-> 	   &hwpoisoned_pages);
->>
->> I'm not sure how useful this interface from userspace (controlling test process
->> with this?).  Do we really need to expose this to userspace?
->>
->>
->> TBH I feel that another approach like below is more desirable:
->>
->>    - define a new flag in "enum mf_flags" (for example named MF_SW_SIMULATED),
->>    - set the flag when calling memory_failure() from the three callers
->>      mentioned above,
->>    - define a global variable (typed bool) in mm/memory_failure.c_to show that
->>      the system has experienced a real hardware memory error events.
->>    - once memory_failure() is called without MF_SW_SIMULATED, the new global
->>      bool variable is set, and afterward unpoison_memory always fails with
->>      -EOPNOTSUPP.
-> 
-> Exactly what I had in mind.
+On Mon, Jun 13, 2022 at 12:07:05PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.4 release.
+> There are 339 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
 
-Sure, I'll send a new version later! Thanks!
+Successfully cross-compiled for arm (multi_v7_defconfig, GCC 12.1.0,
+ARMv7 with neon FPU) and arm64 (bcm2711_defconfig, GCC 12.1.0).
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
 -- 
-zhenwei pi
+An old man doll... just what I always wanted! - Clara

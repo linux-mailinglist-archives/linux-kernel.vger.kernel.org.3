@@ -2,46 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96DD554B372
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:42:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF57854B39E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244207AbiFNOiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:38:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
+        id S1343669AbiFNOj2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:39:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240402AbiFNOiC (ORCPT
+        with ESMTP id S235519AbiFNOjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:38:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2F2219C
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:38:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0925A617B4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:38:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15F83C341C5;
-        Tue, 14 Jun 2022 14:37:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655217479;
-        bh=O2hbvfNL0U6Gmj0eop3EmGulD+25t5gAdtIX+9CBfQQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fFnZLvAlOH/yTshr/sU1racHeo+FJeOgTGdUeJHAXuDdDBirIOe7KNfsgE54UM7sK
-         UL6jLQFZkepRwDKZz80O+jKU8EaELoF8aNIYq5XvgUMvgJ/R+5NGk9kpOyO9wMQNLT
-         Gl6MJavgc6rY5sYVd3mVpBm7s0X4GjAq5L9fX0ZU=
-Date:   Tue, 14 Jun 2022 16:37:56 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Zhi Song <zhi.song@bytedance.com>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] node: put_device after failing to device_register
-Message-ID: <YqidROu44rHFaI6w@kroah.com>
-References: <20220614143007.1730171-1-zhi.song@bytedance.com>
+        Tue, 14 Jun 2022 10:39:21 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18E2220C8;
+        Tue, 14 Jun 2022 07:39:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655217560; x=1686753560;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yH+tzf1aySvEFk9FYhJWBPUJm41J5mLUUCXkxP0y2x8=;
+  b=dK7BBxo1vhPl0BAJn7sKLYLftlyJ30u7cSxmepq/okFpDuWw6nAyjLDW
+   O9xifAMtRSG4xeW4mT3udsLTIGCZ9hDeumzIMgiyycoJjavOlp5IsXAIe
+   hx606qOoFAzhxB0mBiWD7XEfHXd+80B9zZ0o1vfZNbIsGqVTc2MRjYFyu
+   M=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Jun 2022 07:39:20 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 07:39:20 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 14 Jun 2022 07:39:19 -0700
+Received: from [10.50.24.70] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 14 Jun
+ 2022 07:39:15 -0700
+Message-ID: <e9472213-7127-9265-88d2-6f58a97c76d2@quicinc.com>
+Date:   Tue, 14 Jun 2022 20:09:12 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614143007.1730171-1-zhi.song@bytedance.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCHv15 5/9] lib: Add register read/write tracing support
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>, Arnd Bergmann <arnd@arndb.de>
+CC:     <catalin.marinas@arm.com>, <gregkh@linuxfoundation.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <suzuki.poulose@arm.com>, <maz@kernel.org>,
+        <quic_psodagud@quicinc.com>, <quic_tsoni@quicinc.com>,
+        <will@kernel.org>
+References: <cover.1652891705.git.quic_saipraka@quicinc.com>
+ <f6d1b9e9d70968b506bdfd1b77129cb751b9df9d.1652891705.git.quic_saipraka@quicinc.com>
+ <20220614103205.2d134546@gandalf.local.home>
+From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+In-Reply-To: <20220614103205.2d134546@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -50,23 +72,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 10:30:07PM +0800, Zhi Song wrote:
-> device_register() is used to register a device with the system.
-> 
-> We cannot directly free dev after calling this function,
-> even if it returns an error.
+On 6/14/2022 8:02 PM, Steven Rostedt wrote:
+> On Wed, 18 May 2022 22:14:14 +0530
+> Sai Prakash Ranjan <quic_saipraka@quicinc.com> wrote:
+>
+>> From: Prasad Sodagudi <psodagud@codeaurora.org>
+>>
+>> Generic MMIO read/write i.e., __raw_{read,write}{b,l,w,q} accessors
+>> are typically used to read/write from/to memory mapped registers
+>> and can cause hangs or some undefined behaviour in following few
+>> cases,
+>>
+>> * If the access to the register space is unclocked, for example: if
+>>    there is an access to multimedia(MM) block registers without MM
+>>    clocks.
+>>
+>> * If the register space is protected and not set to be accessible from
+>>    non-secure world, for example: only EL3 (EL: Exception level) access
+>>    is allowed and any EL2/EL1 access is forbidden.
+>>
+>> * If xPU(memory/register protection units) is controlling access to
+>>    certain memory/register space for specific clients.
+>>
+>> and more...
+>>
+>> Such cases usually results in instant reboot/SErrors/NOC or interconnect
+>> hangs and tracing these register accesses can be very helpful to debug
+>> such issues during initial development stages and also in later stages.
+>>
+>> So use ftrace trace events to log such MMIO register accesses which
+>> provides rich feature set such as early enablement of trace events,
+>> filtering capability, dumping ftrace logs on console and many more.
+>>
+>> Sample output:
+>>
+>> rwmmio_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+>> rwmmio_post_write: __qcom_geni_serial_console_write+0x160/0x1e0 width=32 val=0xa0d5d addr=0xfffffbfffdbff700
+>> rwmmio_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 addr=0xfffffbfffdbff610
+>> rwmmio_post_read: qcom_geni_serial_poll_bit+0x94/0x138 width=32 val=0x0 addr=0xfffffbfffdbff610
+>>
+>> Signed-off-by: Prasad Sodagudi <psodagud@codeaurora.org>
+>> Co-developed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+>> Signed-off-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+>> ---
+>  From a tracing point of view, I do not see anything wrong with this patch.
+>
+> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+>
+> -- Steve
 
-the device is not being freed, why say this?
+Thanks Steve.
 
-And you do have a full 72 columns to use :)
+Hi Arnd, I hope we can take this series in your tree or let me know if anything else is pending?
 
-> 
-> We should use put_device() to give up the reference
-> initialized in this function instead.
-
-There is no "instead" happening here.  The patch looks correct, but this
-changelog text does not.  Please fix up.
-
-thanks,
-
-greg k-h
+Thanks,
+Sai

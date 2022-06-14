@@ -2,128 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C23254B64B
+	by mail.lfdr.de (Postfix) with ESMTP id 02D0954B649
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:35:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244892AbiFNQbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
+        id S1344380AbiFNQeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245157AbiFNQbo (ORCPT
+        with ESMTP id S239599AbiFNQd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:31:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42EE54477A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:31:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655224300;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=oavP8gsV6cJWMEx/ty3RSD/S2p03O0ZnolvRU2i8U0U=;
-        b=AXaSp1R5dTOazmBr/xwLsKeIcCQEs8omJNxnUKnr5gFRtHZFo9ymOUIiLNTWDUSmzOXP1e
-        82JqXBY+dYVZ1Zn/YHuF32yjoaD4mpYLDL0yijDLvHhVOCBJjIKCj1/8+sjtnZjIAa7BMa
-        TzgtVf9U3h/Uy6M5f6ssgdz1i5FqWMU=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-324-moV3zpJ0OUOLDLd4kuu_Fg-1; Tue, 14 Jun 2022 12:31:39 -0400
-X-MC-Unique: moV3zpJ0OUOLDLd4kuu_Fg-1
-Received: by mail-wm1-f69.google.com with SMTP id k32-20020a05600c1ca000b0039c4cf75023so7810550wms.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:31:38 -0700 (PDT)
+        Tue, 14 Jun 2022 12:33:58 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8088D27CD3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:33:57 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-30ec2aa3b6cso35210397b3.11
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:33:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M/kEUFAftetAf2N7yHDHF4JNTzfknxIkkNoqCJfpWV0=;
+        b=bQFtbs9YcHpIat+VNMaXN8GfVHbAWCDLkV7fg62QD0yIWV+0uP3jDb6bxCYuRrqEKT
+         khJU61Bk1hb9Uq80iBtZyGFkblrK2wmswiU0/MbDSWcgffqTKuIHptrGMxqOTMIqbcC5
+         sHDPSHsiLF/+5qg30zLjsDKcgknLfGgW1u29wprNjV5IKExT0DSPvuMIv9W8cvVBEDsm
+         5HJuDD1ugXa43hE611TnQppED/4xi7YH9Yfla859aTKuPPndKZGqDFWWurUyMgqK4jRr
+         xL31Z0Afw/Y6Rb16m9Il0Mtp3STHc2r+MPEzB3OgRTSAFGzSzZ3IIs/HR0OlrSmV8qTK
+         UyLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oavP8gsV6cJWMEx/ty3RSD/S2p03O0ZnolvRU2i8U0U=;
-        b=NVfApTfAZCLacdPPIYjEkdLw5kQdTXeMNdkvJXg67L0eg9ia0MSfHQFDdVvl0lz1I9
-         qoCIpIE98oOg20g+sNQgunzZa4aai3z1CPo3BoYznn3HXYtN6lc6qLUU0fYXhApXS1eC
-         6L0fwwylcSKLBMK1JVYPi3SC7QHKFRHj/mJMoDiy8FL0ctxw5wkQv8I3hFSJc14wpiXQ
-         0QFbInTeNvTiGgsUt/MBOpotyvOUTbam/hpOxBW16eBvAvO9+OIBWjZyWsCbpwrlYEdD
-         NftEn9aA65k2UH8/aAS+gMV7RYOM/FRpfYm14odKvYHZ55YKH7IUY146Zo0T/tf3SHio
-         NmxQ==
-X-Gm-Message-State: AJIora8O+i5r19I32XnzsCNz/8rp++03ZV/xtR0TMcf+UZlK+QU3EPYE
-        YhfF6VM2GbPD183e2EsWhmj810iU1ceYWJiY0K1jz/oaYUCoVkpH9/gyYZqckQ9DHridGZLHqcf
-        /bh6m3eRzWCNZtI4qAFkl5A5n
-X-Received: by 2002:a5d:6da3:0:b0:219:bcdd:97cd with SMTP id u3-20020a5d6da3000000b00219bcdd97cdmr5702991wrs.274.1655224297799;
-        Tue, 14 Jun 2022 09:31:37 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1svQzIL6zLCvemWeG8M2S6FR8uXiEVS4pzOzqfRybaUZfeRrJrTeJlYzJRR2cIqLDUDDp3ugw==
-X-Received: by 2002:a5d:6da3:0:b0:219:bcdd:97cd with SMTP id u3-20020a5d6da3000000b00219bcdd97cdmr5702966wrs.274.1655224297599;
-        Tue, 14 Jun 2022 09:31:37 -0700 (PDT)
-Received: from [192.168.0.3] (ip-109-42-114-75.web.vodafone.de. [109.42.114.75])
-        by smtp.gmail.com with ESMTPSA id m17-20020adfc591000000b0020fff0ea0a3sm12632199wrg.116.2022.06.14.09.31.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 09:31:37 -0700 (PDT)
-Message-ID: <047aa23e-7926-6f8f-eadd-122dc81a3159@redhat.com>
-Date:   Tue, 14 Jun 2022 18:31:35 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M/kEUFAftetAf2N7yHDHF4JNTzfknxIkkNoqCJfpWV0=;
+        b=T8mUwYP6NstXsW7hiFPbX2hPrJTdcydDU1+kyxa79qPP6NvqzXf++RPJclTiqavBRb
+         RdSxBq5hYoheDf4YMvVBTyeZQO1EFQURHX2fAIK5rlSMgE44MRUVJOOHmn3rhBy80Y6W
+         eXAB2a+Uu1Eljh9hn8yuPW+OeH192iuUlViTQWwa5fC4MJ0WGXc5/eHxtHVuuImC8on4
+         Ga10vT4D9H9Z6L9BbP0I432D6jeSwMDwY47gVttVh8oyMdKqWdovjWcpW3EUPL/TMxox
+         uEf3zv29VO5IdxL3tqb70NTWFaf7CKFZxw8g47ISB1TcGoJ6zHOI7Lo/sOhFmNJBsTqJ
+         zZJQ==
+X-Gm-Message-State: AJIora/1lFcwXuIucoOR0hkDRzV7Phme6hF34DDjQJleKAUfS9d+t4AY
+        TMuJjDGPa1G/chNdSEHmiTadCna7L4rQv1hJybfON40CPnx3TQ==
+X-Google-Smtp-Source: AGRyM1stOhRVUmqx6x88uP8qyvJLoxv+aOJ0qkV9zyqBCmiYqcqZF7JCtPygwqiVsQXO2FQ8S8R0hej7Hl8B6obkwRk=
+X-Received: by 2002:a81:78d:0:b0:2e5:d440:d921 with SMTP id
+ 135-20020a81078d000000b002e5d440d921mr6236243ywh.251.1655224436611; Tue, 14
+ Jun 2022 09:33:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] KVM: s390: selftests: Fix memop extension capability
- check
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        borntraeger@linux.ibm.com, frankja@linux.ibm.com,
-        imbrenda@linux.ibm.com, pbonzini@redhat.com
-Cc:     david@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-s390@vger.kernel.org, shuah@kernel.org
-References: <36d83871-343d-e8a0-1aed-05bf386f9b1b@redhat.com>
- <20220614162635.3445019-1-scgl@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <20220614162635.3445019-1-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220613155612.402297-1-daeho43@gmail.com> <Yqge0XS7jbSnNWvq@sol.localdomain>
+In-Reply-To: <Yqge0XS7jbSnNWvq@sol.localdomain>
+From:   Daeho Jeong <daeho43@gmail.com>
+Date:   Tue, 14 Jun 2022 09:33:45 -0700
+Message-ID: <CACOAw_xZvvJFC8OwDQibtXqyYS7bMRe8CVkkktT_Nd1_EtFw+g@mail.gmail.com>
+Subject: Re: [PATCH] f2fs: handle decompress only post processing in softirq
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
+        Daeho Jeong <daehojeong@google.com>,
+        Nathan Huckleberry <nhuck@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2022 18.26, Janis Schoetterl-Glausch wrote:
-> Fix the inverted logic of the memop extension capability check.
-> 
-> Fixes: 97da92c0ff92 ("KVM: s390: selftests: Use TAP interface in the memop test")
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> ---
-> 
-> 
-> Here you go.
-> Hope it doesn't get lost as a reply, but I can always resend
-> and it's not super critical after all.
-> 
-> 
->   tools/testing/selftests/kvm/s390x/memop.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-> index e704c6fa5758..e1056f20dfa1 100644
-> --- a/tools/testing/selftests/kvm/s390x/memop.c
-> +++ b/tools/testing/selftests/kvm/s390x/memop.c
-> @@ -769,7 +769,7 @@ int main(int argc, char *argv[])
->   	ksft_set_plan(ARRAY_SIZE(testlist));
->   
->   	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
-> -		if (testlist[idx].extension >= extension_cap) {
-> +		if (extension_cap >= testlist[idx].extension) {
->   			testlist[idx].test();
->   			ksft_test_result_pass("%s\n", testlist[idx].name);
->   		} else {
+> One question: is this (the bio endio callback) actually guaranteed to be
+> executed from a softirq?  If you look at dm-crypt's support for workqueue-less
+> decryption, for example, it explicitly checks 'in_hardirq() || irqs_disabled()'
+> and schedules a tasklet if either of those is the case.
+>
+> - Eric
 
-Thanks!
+Oh, you're right. Even though it's safe to defer all the release
+process as a work in end_io function, it's better to check the
+condition and process the release process right away if possible.
 
-Reviewed-by: Thomas Huth <thuth@redhat.com>
-
-Paolo, could you please queue this directly as a fix for the "Use TAP 
-interface in the memop test" patch that is currently already in your "next" 
-branch? (or in case you rebase that branch, squash it directly into that patch?)
-
-  Thanks,
-   Thomas
-
+Thanks,

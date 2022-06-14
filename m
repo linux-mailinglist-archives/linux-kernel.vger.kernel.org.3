@@ -2,63 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE64549E3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 22:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE38B549D37
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Jun 2022 21:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347457AbiFMUAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 16:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
+        id S245367AbiFMTQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 15:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240533AbiFMUAA (ORCPT
+        with ESMTP id S244651AbiFMTPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 16:00:00 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5CA4A91A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 11:31:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655145090; x=1686681090;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=PA+RJfWey2I595Esrv3rrJOEx2AlZ/fX4Ur/wV2CUNU=;
-  b=lEcahN0NJVkan/AVzP3uM7ASNV7XX4bOBgXu+u6j1pBZvkIQNNKjAete
-   Izx2IE+OPQv/aFbca9YoO6fzt0+rD1+IrAwrDIsOVv68+X4Oj3BDpK50I
-   zX1IiPkEKOgPqcHZ+KbID70XElMqa56dyQz7vuEFI7gStFY6nsTX3wSJA
-   VYVSlyiMx2LOhmbIM5qWXD7s637uX0+C8MCE9z/SrzWwDHD3m9MdPl/oq
-   xU88HAIr0UUSfvRRBSf7EjHTMhs8OZwSDAkMX/4stqEBqbXDdsmSq6HSp
-   w99l9qudjcsJp4jP1ysu7BZNcwDovY4CsK3WZSSW/Nh2d7nqI4lVjY84H
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258204200"
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="258204200"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 11:31:30 -0700
-X-IronPort-AV: E=Sophos;i="5.91,297,1647327600"; 
-   d="scan'208";a="639878137"
-Received: from njascanu-mobl.ger.corp.intel.com (HELO localhost) ([10.252.47.149])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 11:31:26 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     =?utf-8?Q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        javierm@redhat.com
-Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        =?utf-8?Q?Jos?= =?utf-8?Q?=C3=A9_Exp=C3=B3sito?= 
-        <jose.exposito89@gmail.com>
-Subject: Re: [PATCH v3 1/3] drm/rect: Add DRM_RECT_INIT() macro
-In-Reply-To: <20220613171738.111013-2-jose.exposito89@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20220613171738.111013-1-jose.exposito89@gmail.com>
- <20220613171738.111013-2-jose.exposito89@gmail.com>
-Date:   Mon, 13 Jun 2022 21:31:24 +0300
-Message-ID: <87bkuwza83.fsf@intel.com>
+        Mon, 13 Jun 2022 15:15:18 -0400
+Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C963656767;
+        Mon, 13 Jun 2022 10:30:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=2BFH8
+        xHI7ebD5lwTJTG4kC1CqPWyQ4gZ47rEICObrZE=; b=c6/geMZUjBmKXnXEdNLsb
+        KRu/emB4CbScTTY73LlAQOAxXVT7NPuzkINQ2GtJ/9Y1jKemlgdMsxI3x8O5HJwH
+        KIOwycUJztR8x3N6nsNC0rSjS7/TrmnH0iuFjnZ8ypXl4JNpL4BwMm+irxQAwsN4
+        qGjXTsXdK6VonJJxfapULY=
+Received: from localhost.localdomain (unknown [113.200.174.72])
+        by smtp10 (Coremail) with SMTP id DsCowADH2z3jc6diHIt+Hg--.56491S4;
+        Tue, 14 Jun 2022 01:29:38 +0800 (CST)
+From:   Wentao_Liang <Wentao_Liang_g@163.com>
+To:     jdmason@kudzu.us, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wentao_Liang <Wentao_Liang_g@163.com>
+Subject: [PATCH] Fix a use-after-free bug
+Date:   Tue, 14 Jun 2022 09:28:53 +0800
+Message-Id: <20220614012853.10560-1-Wentao_Liang_g@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DsCowADH2z3jc6diHIt+Hg--.56491S4
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJF13ZFy5Gw43JF1xKFy5XFb_yoWrJr1Up3
+        s5AFyfGryUtryDXw18Jr1DZF98J3yUG345CrykGr1rKF13A34Utr1UJryqqry5CrWjyF45
+        tr15J3WrZr1UJw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zKsjbhUUUUU=
+X-Originating-IP: [113.200.174.72]
+X-CM-SenderInfo: xzhq3t5rboxtpqjbwqqrwthudrp/xtbB0QIfL1zIBWPGVgAAsB
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,46 +54,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Jun 2022, Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com> wr=
-ote:
-> Add a helper macro to initialize a rectangle from x, y, width and
-> height information.
->
-> Signed-off-by: Jos=C3=A9 Exp=C3=B3sito <jose.exposito89@gmail.com>
+The pointer vdev points to a memory region adjacent to a net_device
+structure ndev, which is a field of hldev. At line 4740, the invocation
+to vxge_device_unregister unregisters device hldev, and it also releases
+the memory region pointed by vdev->bar0. At line 4743, the freed memory
+region is referenced (i.e., iounmap(vdev->bar0)), resulting in a
+use-after-free vulnerability. We can fix the bug by calling iounmap
+before vxge_device_unregister.
 
-Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+4721.      static void vxge_remove(struct pci_dev *pdev)
+4722.      {
+4723.             struct __vxge_hw_device *hldev;
+4724.             struct vxgedev *vdev;
+…
+4731.             vdev = netdev_priv(hldev->ndev);
+…
+4740.             vxge_device_unregister(hldev);
+4741.             /* Do not call pci_disable_sriov here, as it
+						will break child devices */
+4742.             vxge_hw_device_terminate(hldev);
+4743.             iounmap(vdev->bar0);
+…
+4749              vxge_debug_init(vdev->level_trace, "%s:%d
+								Device unregistered",
+4750                            __func__, __LINE__);
+4751              vxge_debug_entryexit(vdev->level_trace, "%s:%d
+								Exiting...", __func__,
+4752                          __LINE__);
+4753.      }
 
-> ---
->  include/drm/drm_rect.h | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
->
-> diff --git a/include/drm/drm_rect.h b/include/drm/drm_rect.h
-> index 6f6e19bd4dac..e8d94fca2703 100644
-> --- a/include/drm/drm_rect.h
-> +++ b/include/drm/drm_rect.h
-> @@ -47,6 +47,22 @@ struct drm_rect {
->  	int x1, y1, x2, y2;
->  };
->=20=20
-> +/**
-> + * DRM_RECT_INIT - initialize a rectangle from x/y/w/h
-> + * @x: x coordinate
-> + * @y: y coordinate
-> + * @w: width
-> + * @h: height
-> + *
-> + * RETURNS:
-> + * A new rectangle of the specified size.
-> + */
-> +#define DRM_RECT_INIT(x, y, w, h) ((struct drm_rect){ \
-> +		.x1 =3D (x), \
-> +		.y1 =3D (y), \
-> +		.x2 =3D (x) + (w), \
-> +		.y2 =3D (y) + (h) })
-> +
->  /**
->   * DRM_RECT_FMT - printf string for &struct drm_rect
->   */
+This is the screenshot when the vulnerability is triggered by using
+KASAN. We can see that there is a use-after-free reported by KASAN.
 
---=20
-Jani Nikula, Intel Open Source Graphics Center
+/***********************report begin***************************/
+
+root@kernel:~# echo 1 > /sys/bus/pci/devices/0000:00:03.0/remove
+[  178.296316] vxge_remove
+[  182.057081]
+ ==================================================================
+[  182.057548] BUG: KASAN: use-after-free in vxge_remove+0xe0/0x15c
+[  182.057760] Read of size 8 at addr ffff888006c76598 by task bash/119
+[  182.057983]
+[  182.058747] CPU: 0 PID: 119 Comm: bash Not tainted 5.18.0 #5
+[  182.058919] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+BIOS rel-1.13.0-0-gf21b5a4aeb02-prebuilt.qemu.org 04/01/2014
+[  182.059463] Call Trace:
+[  182.059726]  <TASK>
+[  182.060017]  dump_stack_lvl+0x34/0x44
+[  182.060316]  print_report.cold+0xb2/0x6b7
+[  182.060401]  ? kfree+0x89/0x290
+[  182.060478]  ? vxge_remove+0xe0/0x15c
+[  182.060545]  kasan_report+0xa9/0x120
+...
+[  182.070606]
+ ==================================================================
+[  182.071374] Disabling lock debugging due to kernel taint
+
+/************************report end***************************/
+
+After fixing the bug as done in the patch, we can find KASAN do not report
+ the bug and the device(00:03.0) has been successfully removed.
+
+/************************report begin*************************/
+
+root@kernel:~# echo 1 > /sys/bus/pci/devices/0000:00:03.0/remove
+root@kernel:~#
+
+/************************report end***************************/
+
+Signed-off-by: Wentao_Liang <Wentao_Liang_g@163.com>
+---
+ drivers/net/ethernet/neterion/vxge/vxge-main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/neterion/vxge/vxge-main.c b/drivers/net/ethernet/neterion/vxge/vxge-main.c
+index fa5d4ddf429b..092fd0ae5831 100644
+--- a/drivers/net/ethernet/neterion/vxge/vxge-main.c
++++ b/drivers/net/ethernet/neterion/vxge/vxge-main.c
+@@ -4736,10 +4736,10 @@ static void vxge_remove(struct pci_dev *pdev)
+ 	for (i = 0; i < vdev->no_of_vpath; i++)
+ 		vxge_free_mac_add_list(&vdev->vpaths[i]);
+ 
++	iounmap(vdev->bar0);
+ 	vxge_device_unregister(hldev);
+ 	/* Do not call pci_disable_sriov here, as it will break child devices */
+ 	vxge_hw_device_terminate(hldev);
+-	iounmap(vdev->bar0);
+ 	pci_release_region(pdev, 0);
+ 	pci_disable_device(pdev);
+ 	driver_config->config_dev_cnt--;
+-- 
+2.25.1
+

@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 772B854B8FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5116B54B909
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357164AbiFNSoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
+        id S1357693AbiFNSoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiFNSn2 (ORCPT
+        with ESMTP id S1357308AbiFNSn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Jun 2022 14:43:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140954AE05;
-        Tue, 14 Jun 2022 11:42:19 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190174BFC6;
+        Tue, 14 Jun 2022 11:42:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8342B81AF7;
-        Tue, 14 Jun 2022 18:42:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE40C3411B;
-        Tue, 14 Jun 2022 18:42:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7F81617C0;
+        Tue, 14 Jun 2022 18:42:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DA66C3411B;
+        Tue, 14 Jun 2022 18:42:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655232136;
-        bh=f2EN4zGPjIX84IShYB7M8WTY5Mvki/OjMF8qulP8Pqc=;
+        s=korg; t=1655232139;
+        bh=Y3rD/lbIKwVJ592ZEjrFig/429jBDUnciTwOvvj3Cy8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=t8VXD542TsKCmqIsw3ZBBYpQiaHIn4PJ8uN8fPjjZ2ataalUhhMyXNyDFK/rKL/aj
-         +DSj2IMs6a7NkeF9nBOC2pWfZ7VpJNY/HO4Vmm4eEerBOvIRy6JnEmRgiD3mmQHr3J
-         jcgbXPDYy7S2hrT4AyzSVJIWIipAOrAOMAscHXYU=
+        b=dSGhorW44yChRuMexhaUdApKYFuTlEeD5G2hfqIqMYjtg6jdM1/fqshmPE9Ee2aHm
+         6Dpufnjy8HctdIg9AbvZDRSu1NKGienxglLuclnruXC+hKsqVvd5W6sWv7dlmyg2hc
+         ymMb/HvvN4+l2f98FFNbBQQiejtFcvsSLd6A7iJw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Kan Liang <kan.liang@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>, "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@suse.de>, Tony Luck <tony.luck@intel.com>,
+        ak@linux.intel.com, "H. Peter Anvin" <hpa@zytor.com>,
+        Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>,
-        rui.zhang@intel.com, Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>, x86-ml <x86@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86-ml <x86@kernel.org>,
         Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 4.14 06/20] x86/CPU: Add more Icelake model numbers
-Date:   Tue, 14 Jun 2022 20:39:57 +0200
-Message-Id: <20220614183724.852600509@linuxfoundation.org>
+Subject: [PATCH 4.14 07/20] x86/cpu: Add Comet Lake to the Intel CPU models header
+Date:   Tue, 14 Jun 2022 20:39:58 +0200
+Message-Id: <20220614183725.083916399@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220614183723.328825625@linuxfoundation.org>
 References: <20220614183723.328825625@linuxfoundation.org>
@@ -64,26 +61,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kan Liang <kan.liang@linux.intel.com>
 
-commit e35faeb64146f2015f2aec14b358ae508e4066db upstream.
+commit 8d7c6ac3b2371eb1cbc9925a88f4d10efff374de upstream.
 
-Add the CPUID model numbers of Icelake (ICL) desktop and server
-processors to the Intel family list.
+Comet Lake is the new 10th Gen Intel processor. Add two new CPU model
+numbers to the Intel family list.
 
- [ Qiuxu: Sort the macros by model number. ]
+The CPU model numbers are not published in the SDM yet but they come
+from an authoritative internal source.
+
+ [ bp: Touch up commit message. ]
 
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Cc: ak@linux.intel.com
 Cc: "H. Peter Anvin" <hpa@zytor.com>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Ingo Molnar <mingo@kernel.org>
 Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Cc: Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
-Cc: rui.zhang@intel.com
 Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Tony Luck <tony.luck@intel.com>
 Cc: x86-ml <x86@kernel.org>
-Link: https://lkml.kernel.org/r/20190603134122.13853-1-kan.liang@linux.intel.com
+Link: https://lkml.kernel.org/r/1570549810-25049-2-git-send-email-kan.liang@linux.intel.com
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
@@ -92,15 +89,15 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/arch/x86/include/asm/intel-family.h
 +++ b/arch/x86/include/asm/intel-family.h
-@@ -55,6 +55,9 @@
- 
- #define INTEL_FAM6_CANNONLAKE_MOBILE	0x66
- 
-+#define INTEL_FAM6_ICELAKE_X		0x6A
-+#define INTEL_FAM6_ICELAKE_XEON_D	0x6C
-+#define INTEL_FAM6_ICELAKE_DESKTOP	0x7D
+@@ -60,6 +60,9 @@
+ #define INTEL_FAM6_ICELAKE_DESKTOP	0x7D
  #define INTEL_FAM6_ICELAKE_MOBILE	0x7E
  
++#define INTEL_FAM6_COMETLAKE		0xA5
++#define INTEL_FAM6_COMETLAKE_L		0xA6
++
  /* "Small Core" Processors (Atom) */
+ 
+ #define INTEL_FAM6_ATOM_BONNELL		0x1C /* Diamondville, Pineview */
 
 

@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E363C54BDAC
+	by mail.lfdr.de (Postfix) with ESMTP id 171E854BDAA
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345475AbiFNWbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 18:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
+        id S1345290AbiFNW3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 18:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352978AbiFNW2o (ORCPT
+        with ESMTP id S1345198AbiFNW3A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 18:28:44 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D677E4D9DF;
-        Tue, 14 Jun 2022 15:28:37 -0700 (PDT)
+        Tue, 14 Jun 2022 18:29:00 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 761A652526
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:28:59 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id mh16-20020a17090b4ad000b001e8313301f1so2094346pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:28:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655245721; x=1686781721;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TXsGVyUodPcbLb1MebJjc7VpvV7kUIfbb97MlIz1RY0=;
-  b=Fse21qLtixeT0LXxOOFwVxUaWPcowaUPqxUs0bODWpcOOb+uRK43GA6b
-   ST1P2HCbJYhwBH3p5O/siq8dw+a05l6gPoI13/sQXwaZWFL1XerXtWSBV
-   zANLYwnHoDnZMP3XrjnznKxXcWgfCakEnngJaPPRopSC/lG7TwixoBjSk
-   w=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Jun 2022 15:28:37 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 15:28:36 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 14 Jun 2022 15:28:36 -0700
-Received: from [10.110.74.141] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 14 Jun
- 2022 15:28:35 -0700
-Message-ID: <5afe209a-31d8-25d3-d087-2ff85eace182@quicinc.com>
-Date:   Tue, 14 Jun 2022 15:28:34 -0700
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KRnsDnmzLVNJLD4XQT4OOkfWd3Wv3kaVliobD56LDKY=;
+        b=eeK29CNLmpmnGvffPElFI3R5kizjdYTm2bmjh3/DAtzRv4bxOEbQtqE0k+ChAX8hPf
+         BdhRkSeyr0admaHZEvD8srfe/iRbFt2VSGfoVBL/CepvGCqAde+/m2WJSuQTyzMSSKWI
+         bm2R37DaoGnSuaDulrkvjmT4YcyK9tZN5f+4xihtv73rOLWxgheTePZyjXVafO3kRfDx
+         KbIgjzGONeT6zfgdCRJoamh5GQ1+eM6MgqzhoQK2nLq/QIG3PY6DCHU/3Av+ZHxHHPo+
+         9wiIlwS1ynUbq7L9V2zB9dD37ek9s2NoG5NgEbUPyqqctLiGbCiHE5EctHu9GckDdfH+
+         v5hQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KRnsDnmzLVNJLD4XQT4OOkfWd3Wv3kaVliobD56LDKY=;
+        b=I2dHyfoBgK1r25xGmdItU6YSPd1GUSO0YBPAdkkPFjlzmSqzsSp6KMgP19a1FOQWM2
+         tn9IQtl705fT61LLbT81ZoQGNgD+2H4tg5ZqrdDVbCYpZRPTrYApV1883ijOY5w82r3q
+         zv70u010Eq01YUQgofs8wL+YZ74PlfULGsiNRGOmTUIAV2tVO6G4Cdl0QgkCCfNBkc56
+         aEGqwT5umXa2lklUsx+22kIjvgIwnJ6SxbBWLW71nrjhRXp1Jyq/YnS3gvZvtJFrdki0
+         OBh68qZ65j1AA1sLci+bOVjllz16ONhT8KobbwpEk0/gp3CHOSSVWtUHz6rGXWQ9uu2z
+         RuXw==
+X-Gm-Message-State: AJIora8mya4rehJ8zW+d8m96LSVZsW30lYTJ+geYtJob1KNP6qU4dSgG
+        VcFaqP7O43ukVe9A6Dy2z40pyg==
+X-Google-Smtp-Source: AGRyM1v+i/wHlb7BJZUwkeZoDYuk2cZeUxb+qwT1JnX5NVO7/5IejyC4N3W0/iW3bCy4FUzjTlNAtQ==
+X-Received: by 2002:a17:90b:4c0c:b0:1ea:87ef:546a with SMTP id na12-20020a17090b4c0c00b001ea87ef546amr6724342pjb.209.1655245738693;
+        Tue, 14 Jun 2022 15:28:58 -0700 (PDT)
+Received: from p14s ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id c3-20020a170902d90300b00163c0a1f718sm7746920plz.303.2022.06.14.15.28.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 15:28:57 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 16:28:54 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>
+Cc:     bjorn.andersson@linaro.org, arnaud.pouliquen@foss.st.com,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shengjiu.wang@gmail.com
+Subject: Re: [RESEND PATCH] rpmsg: char: Add mutex protection for
+ rpmsg_eptdev_open()
+Message-ID: <20220614222854.GA1236509@p14s>
+References: <1653104105-16779-1-git-send-email-shengjiu.wang@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v6] drm/msm/dp: force link training for display resolution
- change
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
-        <daniel@ffwll.ch>, <dianders@chromium.org>,
-        <dmitry.baryshkov@linaro.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1655240702-12230-1-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n52EAyTcQd6CiwXT1T658C-b+2r14BK_3-tf-ZiJdzqaAw@mail.gmail.com>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <CAE-0n52EAyTcQd6CiwXT1T658C-b+2r14BK_3-tf-ZiJdzqaAw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1653104105-16779-1-git-send-email-shengjiu.wang@nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,132 +72,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, May 21, 2022 at 11:35:05AM +0800, Shengjiu Wang wrote:
+> There is no mutex protection for rpmsg_eptdev_open(),
+> especially for eptdev->ept read and write operation.
+> It may cause issues when multiple instances call
+> rpmsg_eptdev_open() in parallel,the return state
+> may be success or EBUGY.
+> 
+> Fixes: 964e8bedd5a1 ("rpmsg: char: Return an error if device already open")
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> ---
+> changes in resend:
+> - add fixes tag
+> 
+>  drivers/rpmsg/rpmsg_char.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 
-On 6/14/2022 2:59 PM, Stephen Boyd wrote:
-> Quoting Kuogee Hsieh (2022-06-14 14:05:02)
->> Display resolution change is implemented through drm modeset. Older
->> modeset (resolution) has to be disabled first before newer modeset
->> (resolution) can be enabled. Display disable will turn off both
->> pixel clock and main link clock so that main link have to be
->> re-trained during display enable to have new video stream flow
->> again. At current implementation, display enable function manually
->> kicks up irq_hpd_handle which will read panel link status and start
->> link training if link status is not in sync state.
->>
->> However, there is rare case that a particular panel links status keep
->> staying in sync for some period of time after main link had been shut
->> down previously at display disabled. In this case, main link retraining
->> will not be executed by irq_hdp_handle(). Hence video stream of newer
->> display resolution will fail to be transmitted to panel due to main
->> link is not in sync between host and panel.
->>
->> This patch will bypass irq_hpd_hanle() in favor of directly call
-> s/hanle/handle/
->
->> dp_ctrl_on_stream() to always perform link training in regardless of
->> main link status. So that no unexpected exception resolution change
->> failure cases will happen. Also this implementation are more efficient
->> than manual kicking off irq_hpd_handle function.
->>
->> Changes in v2:
->> -- set force_link_train flag on DP only (is_edp == false)
->>
->> Changes in v3:
->> -- revise commit  text
->> -- add Fixes tag
->>
->> Changes in v4:
->> -- revise commit  text
->>
->> Changes in v5:
->> -- fix spelling at commit text
->>
->> Changes in v6:
->> -- split dp_ctrl_on_stream() for phy test case
->> -- revise commit text for modeset
->>
->> Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/dp/dp_ctrl.c    | 31 +++++++++++++++++++++++--------
->>   drivers/gpu/drm/msm/dp/dp_ctrl.h    |  3 ++-
->>   drivers/gpu/drm/msm/dp/dp_display.c | 13 ++++++-------
->>   3 files changed, 31 insertions(+), 16 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> index af7a80c..cb9c7af 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> @@ -1807,7 +1807,27 @@ static int dp_ctrl_link_retrain(struct dp_ctrl_private *ctrl)
->>          return dp_ctrl_setup_main_link(ctrl, &training_step);
->>   }
->>
->> -int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
->> +int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
->> +{
->> +       int ret = 0;
-> Drop assignment please.
->
->> +       struct dp_ctrl_private *ctrl;
->> +
->> +       ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
->> +
->> +       ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
->> +
->> +       ret = dp_ctrl_enable_stream_clocks(ctrl);
->> +       if (ret) {
->> +               DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
->> +               return ret;
->> +       }
->> +
->> +       dp_ctrl_send_phy_test_pattern(ctrl);
-> None of this code needs to be run in the normal display on case?
->
->> +
->> +       return 0;
->> +}
->> +
->> +int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
->>   {
->>          int ret = 0;
->>          bool mainlink_ready = false;
->> @@ -1843,12 +1863,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
->>                  goto end;
->>          }
->>
->> -       if (ctrl->link->sink_request & DP_TEST_LINK_PHY_TEST_PATTERN) {
->> -               dp_ctrl_send_phy_test_pattern(ctrl);
->> -               return 0;
->> -       }
->> -
->> -       if (!dp_ctrl_channel_eq_ok(ctrl))
->> +       if (force_link_train || !dp_ctrl_channel_eq_ok(ctrl))
->>                  dp_ctrl_link_retrain(ctrl);
->>
->>          /* stop txing train pattern to end link training */
->> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
->> index c388323..b6d25ab 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_display.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
->> @@ -1688,10 +1689,12 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
->>
->>          state =  dp_display->hpd_state;
->>
->> -       if (state == ST_DISPLAY_OFF)
->> +       if (state == ST_DISPLAY_OFF) {
->>                  dp_display_host_phy_init(dp_display);
->> +               force_link_train = true;
->> +       }
->>
->> -       dp_display_enable(dp_display, 0);
->> +       dp_display_enable(dp_display, force_link_train);
-> Do we need to pass it from here? Why can't dp_display_enable() simply
-> check for 'state == ST_DISPLAY_OFF' and then force retrain the link?
+I have applied your patch.
 
-can we keep this as it is?
+Thanks,
+Mathieu
 
-it is more readable that we do need force link re-training due to 
-ST_DISPLAY_OFF at top level.
-
-Also we only need to do (state == ST_DISPLAY_OFF) checking one time.
-
+> 
+> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> index b6183d4f62a2..4f2189111494 100644
+> --- a/drivers/rpmsg/rpmsg_char.c
+> +++ b/drivers/rpmsg/rpmsg_char.c
+> @@ -120,8 +120,11 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
+>  	struct rpmsg_device *rpdev = eptdev->rpdev;
+>  	struct device *dev = &eptdev->dev;
+>  
+> -	if (eptdev->ept)
+> +	mutex_lock(&eptdev->ept_lock);
+> +	if (eptdev->ept) {
+> +		mutex_unlock(&eptdev->ept_lock);
+>  		return -EBUSY;
+> +	}
+>  
+>  	get_device(dev);
+>  
+> @@ -137,11 +140,13 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
+>  	if (!ept) {
+>  		dev_err(dev, "failed to open %s\n", eptdev->chinfo.name);
+>  		put_device(dev);
+> +		mutex_unlock(&eptdev->ept_lock);
+>  		return -EINVAL;
+>  	}
+>  
+>  	eptdev->ept = ept;
+>  	filp->private_data = eptdev;
+> +	mutex_unlock(&eptdev->ept_lock);
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.17.1
+> 

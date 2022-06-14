@@ -2,82 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F5854ABCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 871E654AC5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355673AbiFNI24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 04:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
+        id S1355868AbiFNIpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 04:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355601AbiFNI2q (ORCPT
+        with ESMTP id S1354934AbiFNIoU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 04:28:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66291344C0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655195324;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KByEBSgeM4obm3XP5zIe1UTexQSKb/lcAH9UJiuFrIw=;
-        b=VJx5DdY1w5aImPc2rtTc8czfc8DRw5rnYeEm856KnSfrJpqD2HfMVwOj3+90ACWnu6nwZl
-        Cgf0u2jEnyDxLilYYA4ojAno4Qz2TAUgoRT2cRSkbeAOdV9/MwB1WxAgQw6OVqXeWLunXQ
-        Y58j5UUKamcgxe33a14yGErlugNulwg=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-437-cSHe-3wHP46gnnd_ylspSg-1; Tue, 14 Jun 2022 04:28:43 -0400
-X-MC-Unique: cSHe-3wHP46gnnd_ylspSg-1
-Received: by mail-ej1-f69.google.com with SMTP id a9-20020a17090682c900b0070b513b9dc4so2570560ejy.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:28:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KByEBSgeM4obm3XP5zIe1UTexQSKb/lcAH9UJiuFrIw=;
-        b=rrXgmZ8uUtQ7IclBvnYoMV1ueUs/Spwt5d0/AEZCw++p0liQXEbtKavMcw21rN1ujm
-         WJDRruxOJT/tCoswKmUGUHshpuete/DvtJRY+V9IHP9rdfdJiGY2E1f1L5rTR/uVbWlJ
-         HA7LJhiZcmeis+oPwLEJXNf1aO7eI4vnjys7UaJFMmSlH4Nw5wOJ51iNbyryslOqoV88
-         x+yCZn5mDsFV2t021PaKvsijcpFnUZaJAvzOdHVV7CmPLBxGyWH5Z8VMXb7xdJPU1tnn
-         cEzIncHQgn+p59ICAB/lBIqG2Bd5nsKHKX6s+CjoLXe79/ujRKYLiFiLOFWlHPyVLvQC
-         2aCQ==
-X-Gm-Message-State: AOAM532vcH77ifELkFAyR94GEUdmD/cxJpM4bCgmR+NvPz2dFiXVO0Gd
-        TVFKX/C7FW6xfXVK1i6xjj4rzmdBCV0VwNvRgnkXxdMhOYXNzq67l+ausrvm12ar0RWLogGcDZ7
-        lfLv14g2aztHqr2FWCqZ+t5iJ
-X-Received: by 2002:a17:906:51d6:b0:712:c9:8a1b with SMTP id v22-20020a17090651d600b0071200c98a1bmr3307711ejk.656.1655195322084;
-        Tue, 14 Jun 2022 01:28:42 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwDLxiVy9ewakvDf7UcsKF/XgtCeL1lKugQaZWmd6BWzHidp+NQWZiN7h5adae5T4y9GLP1Mw==
-X-Received: by 2002:a17:906:51d6:b0:712:c9:8a1b with SMTP id v22-20020a17090651d600b0071200c98a1bmr3307700ejk.656.1655195321888;
-        Tue, 14 Jun 2022 01:28:41 -0700 (PDT)
-Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
-        by smtp.gmail.com with ESMTPSA id zj11-20020a170907338b00b006ff0fe78cb7sm4751566ejb.133.2022.06.14.01.28.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 01:28:41 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 10:28:39 +0200
-From:   Andrew Jones <drjones@redhat.com>
-To:     shaoqin.huang@intel.com
-Cc:     pbonzini@redhat.com, Shuah Khan <shuah@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oupton@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Peter Gonda <pgonda@google.com>,
-        David Dunn <daviddunn@google.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: selftests: Remove the mismatched parameter comments
-Message-ID: <20220614082839.a5iqpk4td2allbwu@gator>
-References: <20220614224126.211054-1-shaoqin.huang@intel.com>
- <20220614074835.qto55feu74ionlh5@gator>
+        Tue, 14 Jun 2022 04:44:20 -0400
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EFC2B75
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:44:10 -0700 (PDT)
+X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
+        LIVER,40,3)
+Received: from 172.28.114.216
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(29251:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Tue, 14 Jun 2022 16:31:19 +0800 (CST)
+From:   Qin Jian <qinjian@cqplus1.com>
+To:     sboyd@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        mturquette@baylibre.com, linux@armlinux.org.uk, arnd@arndb.de,
+        olof@lixom.net, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        Qin Jian <qinjian@cqplus1.com>
+Subject: [PATCH v18 00/10] Add Sunplus SP7021 SoC Support
+Date:   Tue, 14 Jun 2022 16:30:59 +0800
+Message-Id: <cover.1655194858.git.qinjian@cqplus1.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614074835.qto55feu74ionlh5@gator>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,52 +43,178 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 09:48:35AM +0200, Andrew Jones wrote:
-> On Tue, Jun 14, 2022 at 04:41:19PM -0600, shaoqin.huang@intel.com wrote:
-> > From: Shaoqin Huang <shaoqin.huang@intel.com>
-> > 
-> > There are some parameter being removed in function but the parameter
-> > comments still exist, so remove them.
-> > 
-> > Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
-> > ---
-> >  tools/testing/selftests/kvm/lib/kvm_util.c | 3 ---
-> >  1 file changed, 3 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > index 1665a220abcb..58fdc82b20f4 100644
-> > --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> > +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> > @@ -1336,8 +1336,6 @@ static vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz,
-> >   *   vm - Virtual Machine
-> >   *   sz - Size in bytes
-> >   *   vaddr_min - Minimum starting virtual address
-> > - *   data_memslot - Memory region slot for data pages
-> > - *   pgd_memslot - Memory region slot for new virtual translation tables
-> >   *
-> >   * Output Args: None
-> >   *
-> > @@ -1423,7 +1421,6 @@ vm_vaddr_t vm_vaddr_alloc_page(struct kvm_vm *vm)
-> >   *   vaddr - Virtuall address to map
-> >   *   paddr - VM Physical Address
-> >   *   npages - The number of pages to map
-> > - *   pgd_memslot - Memory region slot for new virtual translation tables
-> >   *
-> >   * Output Args: None
-> >   *
-> > -- 
-> > 2.30.2
-> >
-> 
-> Hi Shaoqin,
-> 
-> Please check kvm/queue, the extra parameter comments have already been
-> removed.
->
+This patch series add Sunplus SP7021 SoC support.
 
-Eh, never mind, I looked at the wrong functions. Your patch does indeed
-apply to kvm/queue and is indeed necessary. Sorry for the noise.
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates many
+peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and etc.) into a
+single chip. It is designed for industrial control.
 
-Thanks,
-drew 
+SP7021 consists of two chips (dies) in a package. One is called C-chip
+(computing chip). It is a 4-core ARM Cortex A7 CPU. It adopts high-level
+process (22 nm) for high performance computing. The other is called P-
+chip (peripheral chip). It has many peripherals and an ARM A926 added
+especially for real-time control. P-chip is made for customers. It adopts
+low-level process (ex: 0.11 um) to reduce cost.
+
+Refer to (for documentations):
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+
+Refer to (applications):
+https://tibbo.com/store/plus1.html
+
+Refer to (applications):
+http://www.sinovoip.com.cn/ecp_view.asp?id=586
+
+Changes in v18:
+- Fixed the tags
+- board dts: Fix the comments from Krzysztof
+
+Changes in v17:
+- Based on 5.18.1 & resend
+
+Changes in v16:
+- clk-sp7021.c: Fix the comments from Stephen Boyd
+- board dts: Fix the comments from Krzysztof
+
+Changes in v15:
+- Add Sunplus SP7021-demo-v3 board dts
+- Refine yaml title
+- Rename dt-binding header filename to match compatible string
+
+Changes in v14:
+- clock/sp-sp7021.h: Fix the comments from Krzysztof
+- sunplus,sp7021-clkc.yaml: Fix the comments from Rob
+
+Changes in v13:
+- reset/sp-sp7021.h: Move HW mapping from dt-binding header to driver
+- reset-sunplus.c: Move HW mapping from dt-binding header to driver
+- clock/sp-sp7021.h: Move HW mapping from dt-binding header to driver
+- clk-sp7021.c: Fix the comments from Arnd
+- irq-sp7021-intc.c: Remove empty set_affinity callback function
+- sp7021_defconfig: Fix the comments from Arnd
+
+Changes in v12:
+- sunplus,sp7021-clkc.yaml: Move 'reg' after 'compatible'
+- sunplus,sp7021-intc.yaml: Move 'reg' after 'compatible'
+- sunplus,reset.yaml: Move 'reg' after 'compatible'
+- Remove wrong reviewed-tags
+
+Changes in v11:
+- clk-sp7021.c: Remove the dead code
+
+Changes in v10:
+- arm/sunplus,sp7021.yaml: Add SoC compatible: "sunplus,sp7021"
+- clock/sunplus,sp7021-clkc.yaml: Remove the internal clock parent from DTS
+- clk-sp7021.c: Refine the macro DBG_CLK
+- clk-sp7021.c: Refine the clock_parent_data
+
+Changes in v9:
+- clk/Kconfig: fix the comments form Stephen Boyd
+- clk-sp7021.c: fix the comments form Stephen Boyd
+
+Changes in v8:
+- clk-sp7021.c: fix the comments form Stephen Boyd
+
+Changes in v7:
+- sunplus,sp7021-clkc.yaml: Add clocks & clock-names
+- clk-sp7021.c: fix the comments form Stephen Boyd
+- irq-sp7021-intc.c: fix the comments from Marc
+
+Changes in v6:
+- reset-sunplus.c: fix the comments from Philipp
+- irq-sp7021-intc.c: fix the comments from Marc
+- mach-sunplus: fix the comments from Arnd
+
+Changes in v5:
+- reset-sunplus.c: fix strict checks
+- clk/Kconfig: fix spell
+- clk-sp7021.c: using bitfield ops, fix strict checks
+- irqchip/Kconfig: fix spell
+- irq-sp7021-intc.c: cleanup error path in probe, fix strict checks
+- arm/Kconfig: fix spell & typo, remove CONFIG_SERIAL_SUNPLUS
+- mach-sunplus/Kconfig: fix typo
+- sp7021_defconfig: add CONFIG_SERIAL_SUNPLUS
+
+Changes in v4:
+- mach-sunplus: add initial support for SP7021
+- sp7021_defconfig: add generic SP7021 defconfig
+- reset-sunplus: remove Q645 support
+- reset-sunplus.c: refine code based on Philipp's review
+- clk-sp7021: clock defines add prefix, more clean up
+
+Changes in v3:
+- sp7021-intc: remove primary controller mode due to P-chip running Linux
+  not supported any more.
+- sp7021-intc.h: removed, not set ext through the DT but sp_intc_set_ext()
+- sunplus,sp7021-intc.yaml: update descriptions for above changes
+- irq-sp7021-intc.c: more cleanup based on Marc's review
+- all driver's Kconfig removed default, it's selected by platform config
+
+Changes in v2:
+- sunplus,sp7021-intc.yaml: add descrption for "#interrupt-cells", interrupts
+- sunplus,sp7021-intc.yaml: drop "ext0-mask"/"ext1-mask" from DT
+- sunplus,sp7021-intc.yaml: fix example.dt too long error
+- irq-sp7021-intc.c: major rewrite
+- all files with dual license
+
+Qin Jian (10):
+  dt-bindings: arm: sunplus: Add bindings for Sunplus SP7021 SoC boards
+  dt-bindings: reset: Add bindings for SP7021 reset driver
+  reset: Add Sunplus SP7021 reset driver
+  dt-bindings: clock: Add bindings for SP7021 clock driver
+  clk: Add Sunplus SP7021 clock driver
+  dt-bindings: interrupt-controller: Add bindings for SP7021 interrupt
+    controller
+  irqchip: Add Sunplus SP7021 interrupt controller driver
+  ARM: sunplus: Add initial support for Sunplus SP7021 SoC
+  ARM: sp7021_defconfig: Add Sunplus SP7021 defconfig
+  ARM: dts: Add Sunplus SP7021-Demo-V3 board device tree
+
+ .../bindings/arm/sunplus,sp7021.yaml          |  29 +
+ .../bindings/clock/sunplus,sp7021-clkc.yaml   |  52 ++
+ .../sunplus,sp7021-intc.yaml                  |  62 ++
+ .../bindings/reset/sunplus,reset.yaml         |  38 +
+ MAINTAINERS                                   |  18 +
+ arch/arm/Kconfig                              |   2 +
+ arch/arm/Makefile                             |   1 +
+ arch/arm/boot/dts/Makefile                    |   2 +
+ arch/arm/boot/dts/sunplus-sp7021-achip.dtsi   |  84 ++
+ arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts  |  26 +
+ arch/arm/boot/dts/sunplus-sp7021.dtsi         | 318 ++++++++
+ arch/arm/configs/multi_v7_defconfig           |   1 +
+ arch/arm/configs/sp7021_defconfig             |  59 ++
+ arch/arm/mach-sunplus/Kconfig                 |  27 +
+ arch/arm/mach-sunplus/Makefile                |   8 +
+ arch/arm/mach-sunplus/sp7021.c                |  16 +
+ drivers/clk/Kconfig                           |  10 +
+ drivers/clk/Makefile                          |   1 +
+ drivers/clk/clk-sp7021.c                      | 725 ++++++++++++++++++
+ drivers/irqchip/Kconfig                       |   9 +
+ drivers/irqchip/Makefile                      |   1 +
+ drivers/irqchip/irq-sp7021-intc.c             | 278 +++++++
+ drivers/reset/Kconfig                         |   9 +
+ drivers/reset/Makefile                        |   1 +
+ drivers/reset/reset-sunplus.c                 | 212 +++++
+ .../dt-bindings/clock/sunplus,sp7021-clkc.h   |  88 +++
+ .../dt-bindings/reset/sunplus,sp7021-reset.h  |  87 +++
+ 27 files changed, 2164 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/sunplus,sp7021.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/sunplus,sp7021-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/sunplus,sp7021-intc.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/sunplus,reset.yaml
+ create mode 100644 arch/arm/boot/dts/sunplus-sp7021-achip.dtsi
+ create mode 100644 arch/arm/boot/dts/sunplus-sp7021-demo-v3.dts
+ create mode 100644 arch/arm/boot/dts/sunplus-sp7021.dtsi
+ create mode 100644 arch/arm/configs/sp7021_defconfig
+ create mode 100644 arch/arm/mach-sunplus/Kconfig
+ create mode 100644 arch/arm/mach-sunplus/Makefile
+ create mode 100644 arch/arm/mach-sunplus/sp7021.c
+ create mode 100644 drivers/clk/clk-sp7021.c
+ create mode 100644 drivers/irqchip/irq-sp7021-intc.c
+ create mode 100644 drivers/reset/reset-sunplus.c
+ create mode 100644 include/dt-bindings/clock/sunplus,sp7021-clkc.h
+ create mode 100644 include/dt-bindings/reset/sunplus,sp7021-reset.h
+
+-- 
+2.33.1
 

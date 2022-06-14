@@ -2,102 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C5DB54AF0F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E95B754AF0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356165AbiFNLHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 07:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
+        id S1356316AbiFNLIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 07:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356147AbiFNLHa (ORCPT
+        with ESMTP id S1356247AbiFNLIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 07:07:30 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6DBEB7;
-        Tue, 14 Jun 2022 04:07:27 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id m20so16400893ejj.10;
-        Tue, 14 Jun 2022 04:07:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=wyraSSKv1jqCeF4xZjEyVevZ1Z/RuxxufoUeosKgARw=;
-        b=B02DeuPO+BZECqpvp/HqctH5+yuZhfdhDrn4GY1DbZ1slBnwpFZFJI7APngu8tHNIm
-         IKOiauuMDwdK69gedR8dslBR/BKsp0swY2J45WBTHgyHy+PcBlb3+GetSipQBZldnru/
-         N1PxRO3KhPGcDJGv2fTqrlKnyQ5N3JkltnBARkms4JjPrkHZx7aQ7BUAksbPTssIhFsQ
-         o45dJqMUI2KjWNriW47ltltFr8lAYgpX8Ws6AiqXgoCMnUpddzc1ugJx6pDgJQsL6E44
-         dUiNfkyWXv2m+TjNOazTDH4sWLAlG6+Pes4n7gy9YjEEdg22AojGOhG/A3OhtF+fK4J+
-         Kf0A==
+        Tue, 14 Jun 2022 07:08:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18974BF6A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:07:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655204870;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=S+jzz+wDeocZkdWT7tXReyRdid3XzqDtpe0QKslAzBY=;
+        b=KGK1afYYnCC1w7uhGmyn1G9A/7UZX7MYwHlO7q0MlLwnWsInMoZl01v5vYPJyHK1TYygGz
+        AI8xQkcCRXA+qnUH3jGKqQk7LJSU+Pon0tp6d9sTXCxxjpiS5StEBunyvS7FuJi/oT17Ow
+        nPqFUVPns1UBlYBoTEH0ka1vKuEDCOU=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-450-rcgcsVfJPGakS04zscnwWg-1; Tue, 14 Jun 2022 07:07:48 -0400
+X-MC-Unique: rcgcsVfJPGakS04zscnwWg-1
+Received: by mail-qt1-f200.google.com with SMTP id 9-20020ac85749000000b00304ee787b02so6320467qtx.11
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:07:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=wyraSSKv1jqCeF4xZjEyVevZ1Z/RuxxufoUeosKgARw=;
-        b=efzsyZ9j33r42vtStk5oFm28GsIniLT8EJzvEnkvXIVsdsbt/tekYxbUKN6SsZEiYZ
-         kNfOYF/IC3sGLeR3awfpn9M1qIxzI+fI2kWE1N+j6Z01VEUb3zI+GpywxAugtZ1nkqUQ
-         i74XLBBiSMHrP/TSGxhmPnbTY95ODTFiYj7QSg3netTF3NJ6jOOZNShrgbtKHtXyF6O3
-         ANRxBTjc3pRG2shhjBLTqeeXPZmSU3QrwxucAEgRmRuamnGXN44KGlwByb9yIToDJ2vY
-         ujZPdj8a9qurEZsShgGE6uFUYqiNUWL5gUW/lQiXvyX78z08/3I9RXgz8tgcf81vG7kG
-         uDJQ==
-X-Gm-Message-State: AOAM532sUo9uzFiOTCQBlppgEICwdUj8qzYu1PGw3atKypYerFg/W/sz
-        4IkfVMvtlYTTGVhr7zGvhEM=
-X-Google-Smtp-Source: AGRyM1ugMGU1GzBQZaCq6t82MbN9CwgPTCVr+506Anu6EgxBOpCVd7X6Nc3zIURwowiLXvicDNoUyQ==
-X-Received: by 2002:a17:906:8416:b0:705:6a1b:e8ef with SMTP id n22-20020a170906841600b007056a1be8efmr3648558ejx.614.1655204846265;
-        Tue, 14 Jun 2022 04:07:26 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id cb2-20020a0564020b6200b00433b5f22864sm6867456edb.20.2022.06.14.04.07.24
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=S+jzz+wDeocZkdWT7tXReyRdid3XzqDtpe0QKslAzBY=;
+        b=D8eSKMJ93t0gpMiqg1+1Wubs1oMchtFZSu5Q2YP5YLfWZf+Ft73VtzEIqm0Ou+Bq7f
+         OSY1zWGC8jJwZ3RTB4Mj+SI/QLn1ZMZvn4fxhH/TyHhsfL5GL5JHr5yvZOpxTdRhUhAc
+         xD+6/OKozEvTO9vx3yaAQM7iPgJLyKwEm1YUH4MhCcx5LpKodB/C4Ceb/OE34O4wOJo6
+         Vvz7jAz958nHcibelsWb7iPG+m+oHebfz0yCqvJKlVs+TZAuZsj/g+MU6iRA8ZWPhvxU
+         TdB/bWnGIyokNIKfceOKDmRkVTgzm1FDNLh7LwKkYqGVbSEXiuNq9kkH3mjtlD05Ht1H
+         M0QQ==
+X-Gm-Message-State: AOAM5326Sb7ytIEz33KwV9EIBRooUcjzbeuRg4cI2oHHo2uyJmqvhsGr
+        bafjRuQZ5r3x9fl2YEQZVHxWG7F8W1v0F1tFqN9fK5EwTXa0hQOlPmr1tL4EnYwX9nmPhvAgU8l
+        7yXuWmOJVbcy5aB65ZVuB8m/4
+X-Received: by 2002:a37:a9c4:0:b0:6a6:8992:e400 with SMTP id s187-20020a37a9c4000000b006a68992e400mr3353382qke.494.1655204868309;
+        Tue, 14 Jun 2022 04:07:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJybo4MZubVl4gIOyMPX9EdVJzxfjaFoJX+cr5NP+5WGtVTivuArBD9Imz+ZJP+u54u31vpiqQ==
+X-Received: by 2002:a37:a9c4:0:b0:6a6:8992:e400 with SMTP id s187-20020a37a9c4000000b006a68992e400mr3353365qke.494.1655204867985;
+        Tue, 14 Jun 2022 04:07:47 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-113-202.dyn.eolo.it. [146.241.113.202])
+        by smtp.gmail.com with ESMTPSA id t4-20020a05622a01c400b00304ef50af9fsm7313181qtw.2.2022.06.14.04.07.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 04:07:25 -0700 (PDT)
-From:   Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-To:     MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Saravana Kannan <skannan@codeaurora.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH v3 5/5] PM / devfreq: Mute warning on governor PROBE_DEFER
-Date:   Tue, 14 Jun 2022 13:07:01 +0200
-Message-Id: <20220614110701.31240-6-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220614110701.31240-1-ansuelsmth@gmail.com>
-References: <20220614110701.31240-1-ansuelsmth@gmail.com>
+        Tue, 14 Jun 2022 04:07:47 -0700 (PDT)
+Message-ID: <62319ec578f469ff2c39aa6559fd945ba937726c.camel@redhat.com>
+Subject: Re: [PATCH] hamradio: 6pack: fix array-index-out-of-bounds in
+ decode_std_command()
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Xu Jia <xujia39@huawei.com>, linux-hams@vger.kernel.org
+Cc:     ajk@comnets.uni-bremen.de, davem@davemloft.net, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 14 Jun 2022 13:07:44 +0200
+In-Reply-To: <1655112337-48005-1-git-send-email-xujia39@huawei.com>
+References: <1655112337-48005-1-git-send-email-xujia39@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't print warning when a governor PROBE_DEFER as it's not a real
-GOV_START fail.
+On Mon, 2022-06-13 at 17:25 +0800, Xu Jia wrote:
+> Hulk Robot reports incorrect sp->rx_count_cooked value in decode_std_command().
+> This should be caused by the subtracting from sp->rx_count_cooked before.
+> It seems that sp->rx_count_cooked value is changed to 0, which bypassed the
+> previous judgment.
+> sp->rx_count_cooked is a shared variable but is not protected by a lock.
 
-Fixes: a03dacb0316f ("PM / devfreq: Add cpu based scaling support to passive governor")
-Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
----
- drivers/devfreq/devfreq.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+It's not clear to me how multiple process could access it concurrently,
+could you please elaborate more?
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 2e2b3b414d67..df6972bb0ce8 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -931,8 +931,8 @@ struct devfreq *devfreq_add_device(struct device *dev,
- 	err = devfreq->governor->event_handler(devfreq, DEVFREQ_GOV_START,
- 						NULL);
- 	if (err) {
--		dev_err(dev, "%s: Unable to start governor for the device\n",
--			__func__);
-+		dev_err_probe(dev, -EPROBE_DEFER, "%s: Unable to start governor for the device\n",
-+			      __func__);
- 		goto err_init;
- 	}
- 	create_sysfs_files(devfreq, devfreq->governor);
--- 
-2.36.1
+> The same applies to sp->rx_count. This patch adds a lock to fix the bug.
+> 
+> The fail log is shown below:
+> =======================================================================
+> UBSAN: array-index-out-of-bounds in drivers/net/hamradio/6pack.c:925:31
+> index 400 is out of range for type 'unsigned char [400]'
+> CPU: 3 PID: 7433 Comm: kworker/u10:1 Not tainted 5.18.0-rc5-00163-g4b97bac0756a #2
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+> Workqueue: events_unbound flush_to_ldisc
+> Call Trace:
+>  <TASK>
+>  dump_stack_lvl+0xcd/0x134
+>  ubsan_epilogue+0xb/0x50
+>  __ubsan_handle_out_of_bounds.cold+0x62/0x6c
+>  sixpack_receive_buf+0xfda/0x1330
+>  tty_ldisc_receive_buf+0x13e/0x180
+>  tty_port_default_receive_buf+0x6d/0xa0
+>  flush_to_ldisc+0x213/0x3f0
+>  process_one_work+0x98f/0x1620
+>  worker_thread+0x665/0x1080
+>  kthread+0x2e9/0x3a0
+>  ret_from_fork+0x1f/0x30
+>  ...
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Xu Jia <xujia39@huawei.com>
+> ---
+>  drivers/net/hamradio/6pack.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/net/hamradio/6pack.c b/drivers/net/hamradio/6pack.c
+> index 45c3c4a..194f22f 100644
+> --- a/drivers/net/hamradio/6pack.c
+> +++ b/drivers/net/hamradio/6pack.c
+> @@ -100,6 +100,8 @@ struct sixpack {
+>  	unsigned int		rx_count;
+>  	unsigned int		rx_count_cooked;
+>  
+> +	spinlock_t		rxlock;
+> +
+>  	int			mtu;		/* Our mtu (to spot changes!) */
+>  	int			buffsize;       /* Max buffers sizes */
+>  
+> @@ -565,6 +567,7 @@ static int sixpack_open(struct tty_struct *tty)
+>  	sp->dev = dev;
+>  
+>  	spin_lock_init(&sp->lock);
+> +	spin_lock_init(&sp->rxlock);
+>  	refcount_set(&sp->refcnt, 1);
+>  	init_completion(&sp->dead);
+>  
+> @@ -913,6 +916,7 @@ static void decode_std_command(struct sixpack *sp, unsigned char cmd)
+>  			sp->led_state = 0x60;
+>  			/* fill trailing bytes with zeroes */
+>  			sp->tty->ops->write(sp->tty, &sp->led_state, 1);
+> +			spin_lock(&sp->rxlock);
+>  			rest = sp->rx_count;
+>  			if (rest != 0)
+>  				 for (i = rest; i <= 3; i++)
+> @@ -930,6 +934,7 @@ static void decode_std_command(struct sixpack *sp, unsigned char cmd)
+>  				sp_bump(sp, 0);
+>  			}
+>  			sp->rx_count_cooked = 0;
+> +			spin_unlock(&sp->rxlock);
+
+It looks like 'sp->rx_count' and 'sp->rx_count_cooked' are touched also
+in decode_data(). Do we need to protect such accesses, too?
+
+Thanks!
+
+Paolo
 

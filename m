@@ -2,127 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A045954B511
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BBB54B51C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232474AbiFNPtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
+        id S1343806AbiFNPth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237623AbiFNPtK (ORCPT
+        with ESMTP id S1344407AbiFNPt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:49:10 -0400
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F512E08F;
-        Tue, 14 Jun 2022 08:49:09 -0700 (PDT)
-Received: by mail-qt1-f170.google.com with SMTP id hf10so6371872qtb.7;
-        Tue, 14 Jun 2022 08:49:09 -0700 (PDT)
+        Tue, 14 Jun 2022 11:49:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B918C42ECC
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:49:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655221766;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=H0LqbJsXhqPV5D+p7TkqXnodF2x40k1XJHNKS73Qf8s=;
+        b=Hca6aUUqLrf+V3nXra6rBlxwPgyBgYta9SsleRH4rQZDEgw4LPDkMASPputH9eriFw+hvD
+        vl4NAZwPZWMFrMgm8Z2mtTRUPVCdFTtW0P5d8tc5vhbbi4LsXeOjZu7YIh3GOiD2k0wZ8x
+        K35oBAozEaRwrf3DuzVatsSIUyuZC6w=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-388-tasogiT2NiK2Ub0xgkuXNQ-1; Tue, 14 Jun 2022 11:49:25 -0400
+X-MC-Unique: tasogiT2NiK2Ub0xgkuXNQ-1
+Received: by mail-ej1-f72.google.com with SMTP id t15-20020a1709066bcf00b0070dedeacb2cso3038483ejs.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:49:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2Lz2xm2OeZO7pMrkyEsrx4M6KP6BHP9ACsFmmAuNdJE=;
-        b=xVvu73MHUUEUj5+r+6n9WWuTseX4F2sccRHYu+YldWfqvA8mMn6/pXcQtD+jFJL1ui
-         6cPQSeHEl9HSuqZq42zDFsnQI9Fwk4sM6/S6FIRj8sR1P/WwcRMXUN0V4jRNaJUYi/2k
-         A0V2YLT7kEyM4jyCyIWI0PzCi6MHaxRRbDH2jcnpnMJwLL1JGsKI3S9fxcKqh1Q8F0Sq
-         HsbmwP6eChRfVZgjXn9nKC0WYd+p2mhZAiPLnp2YjaMJ/urXbxbHNxA5vgDXSMrQCo37
-         eaQj492q3ujuUSq3CKiWp0gZ00FDdIWQsFtcBI1KRuJ/+2+c4TRvBihUaeH6oM5U9AsM
-         29dg==
-X-Gm-Message-State: AOAM530gjNvijQSxjvAoVgb/zu0JptURiE9v2CWanc7F5vasq+S72d4C
-        P7g2VIbRKacHhU75/GDpKHi6zv/JC9kF8A==
-X-Google-Smtp-Source: ABdhPJyjZcL86ZtgiGvwCCHzMJs3/IaCrGdoWU8qbUZEZINAZox7I51VQVdQ2FJypRfyrO20F7QkBQ==
-X-Received: by 2002:a05:622a:1393:b0:304:b6c8:bca2 with SMTP id o19-20020a05622a139300b00304b6c8bca2mr4637798qtk.642.1655221748403;
-        Tue, 14 Jun 2022 08:49:08 -0700 (PDT)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id j9-20020ae9c209000000b006a377a015d4sm9466708qkg.39.2022.06.14.08.49.08
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=H0LqbJsXhqPV5D+p7TkqXnodF2x40k1XJHNKS73Qf8s=;
+        b=IhyXY4+zP7IboVeDIV4LU9huGVRbtaQLgegUtudzgG+pffYMjStDTze44kKYYs6YEU
+         3/dNwTn00Ev9+EIpVeSW2nzOgyhsJDThbqaeUfravdI5Mhm/2JN6ekgiNcOYlkFU3GmX
+         mJdvHKkI450ZqKaGuvK/qY1Ewh1vCG3YytodvwiygcWagRaw2GHOQF8pbZtxlxWFKew8
+         g4+5fjTuZDTaP0sId/QSFGtHERLFGgX+ysBWjaphqs2W5AJ64I9xlSR2t1l2nkp4LlOW
+         493b8sesFLgysMUkIYBD5NtAPDP3ZBjg7UC3/tWUBF5DyWP4DH0Kbp9o0vIXvMQYKzDP
+         wZPQ==
+X-Gm-Message-State: AOAM531+itfMDo6m7E5D9n5t/0NXoqnBJi4KVdwpgtjiS8STS6scik/q
+        1EIDle1usHLCp9br1ynma3fiQ1BA6BTVlgDI/BZWqtZEpPV+VyB5Eg8JaeGqXorLSUp+FmGt4kc
+        Gwu0xWCT1ZeuL7PMbiG9zCK9O
+X-Received: by 2002:a17:907:7245:b0:711:d1ff:2ca4 with SMTP id ds5-20020a170907724500b00711d1ff2ca4mr4977410ejc.753.1655221763968;
+        Tue, 14 Jun 2022 08:49:23 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vPyve1+0RUr74qY0pNAm4r3dLI3EHLVJQ2aR4cVSenNQC/56jmGFGGus4kQCdlAK0D9v8mXw==
+X-Received: by 2002:a17:907:7245:b0:711:d1ff:2ca4 with SMTP id ds5-20020a170907724500b00711d1ff2ca4mr4977383ejc.753.1655221763715;
+        Tue, 14 Jun 2022 08:49:23 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id d9-20020a1709063ec900b006feb6dee4absm5211929ejj.137.2022.06.14.08.49.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 08:49:08 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id v81so15942249ybe.0;
-        Tue, 14 Jun 2022 08:49:08 -0700 (PDT)
-X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
- bu5-20020a056902090500b0064a2089f487mr5874556ybb.202.1655221747725; Tue, 14
- Jun 2022 08:49:07 -0700 (PDT)
+        Tue, 14 Jun 2022 08:49:23 -0700 (PDT)
+Message-ID: <390cf16c-f07c-ebfc-08ad-25b242548953@redhat.com>
+Date:   Tue, 14 Jun 2022 17:49:22 +0200
 MIME-Version: 1.0
-References: <20220613134914.18655-1-wsa+renesas@sang-engineering.com> <20220613134914.18655-3-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220613134914.18655-3-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Jun 2022 17:48:56 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWJ9N1=X0O0LtpPrjH-uSbupKAVr+J3KwStL7xYgMxfWw@mail.gmail.com>
-Message-ID: <CAMuHMdWJ9N1=X0O0LtpPrjH-uSbupKAVr+J3KwStL7xYgMxfWw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] arm64: dts: renesas: spider-cpu: Enable SCIF0 on
- second connector
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1 1/1] phy: ti: tusb1210: Don't check for write errors
+ when powering on
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Ferry Toth <ftoth@exalondelft.nl>
+References: <20220613160848.82746-1-andriy.shevchenko@linux.intel.com>
+ <bd21d5c6-ed5f-dd8c-f0bf-73f54ca8ee58@redhat.com>
+ <YqiGocQ+vr9KjUHK@smile.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YqiGocQ+vr9KjUHK@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+Hi,
 
-On Mon, Jun 13, 2022 at 3:49 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> The schematics label it as SCIF0 debug port.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+On 6/14/22 15:01, Andy Shevchenko wrote:
+> On Tue, Jun 14, 2022 at 01:23:21PM +0200, Hans de Goede wrote:
+>> On 6/13/22 18:08, Andy Shevchenko wrote:
+>>> On some platforms, like Intel Merrifield, the writing values during power on
+>>> may timeout:
+>>>
+>>>    tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41 to reg 0x80
+>>>    phy phy-dwc3.0.auto.ulpi.0: phy poweron failed --> -110
+>>>    dwc3 dwc3.0.auto: error -ETIMEDOUT: failed to initialize core
+>>>    dwc3: probe of dwc3.0.auto failed with error -110
+>>>
+>>> which effectively fails the probe of the USB controller.
+>>> Drop the check as it was before the culprit commit (see Fixes tag).
+>>>
+>>> Fixes: 09a3512681b3 ("phy: ti: tusb1210: Improve ulpi_read()/_write() error checking")
+>>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>>
+>> Copy and pasting my reply about this in another thread to keep everyone up2date:
+> 
+> Thanks! My replies below.
+> 
+>> """
+>> In my experience with using the phy for charger-type detection on some
+>> x86 android tablets which don't have any other way to do charger detection,
+>> these errors indicate a real communication issue for reading/writing
+>> phy registers. At the same time this usually does not seem to be a big
+>> problem since the phy seems to work fine with its power-on defaults.
+>>
+>> In case of Bay Trail these errors were related to 2 things:
+>>
+>> 1. Autosuspend of the phy-interface block in the dwc3, fixed by:
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d7c93a903f33ff35aa0e6b5a8032eb9755b00826
+>>
+>> But dwc3_pci_mrfld_properties[] already sets "snps,dis_u2_susphy_quirk",
+>> so I guess it is not this.
+>>
+>> 2. There being no delay in tusb1210_power_on() between toggling the
+>> reset IO and then trying to communicate with the phy, fixed in:
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=df37c99815d9e0775e67276d70c93cbc25f31c70
+>>
+>> Maybe the:
+>>
+>> #define TUSB1210_RESET_TIME_MS				30
+> 
+> Actually it's 50.
+> 
+>> Added by that commit needs to be a bit bigger for the possibly
+>> older phy revision used on the merifield boards?
+>>
+>> (note it is fine to just increase it a bit everywhere).
+>> """
+>>
+>> IMHO it would be good to try and increase TUSB1210_RESET_TIME_MS (start with say 100
+>> and then see if e.g. 50 also works). If increasing that does not work
+> 
+> No help
+> 
+> [   35.126397] tusb1210 dwc3.0.auto.ulpi: GPIO lookup for consumer reset
+> [   35.126418] tusb1210 dwc3.0.auto.ulpi: using ACPI for GPIO lookup
+> [   35.126455] tusb1210 dwc3.0.auto.ulpi: using lookup tables for GPIO lookup
+> [   35.126465] tusb1210 dwc3.0.auto.ulpi: No GPIO consumer reset found
+> [   35.126476] tusb1210 dwc3.0.auto.ulpi: GPIO lookup for consumer cs
+> [   35.126485] tusb1210 dwc3.0.auto.ulpi: using ACPI for GPIO lookup
+> [   35.126538] tusb1210 dwc3.0.auto.ulpi: using lookup tables for GPIO lookup
+> [   35.126548] tusb1210 dwc3.0.auto.ulpi: No GPIO consumer cs found
+> [   40.534107] tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41 to reg 0x80
+> 
+> (I put 5000 ms there to be sure)
+> 
+>> I'm fine with going with this workaround patch to fix things.
 
-Thanks for your patch!
+Ok, so I guess we should just apply this workaround patch to make
+the error non fatal. Still would be good to dig a little deeper one
+of these days and see what is going on here...
 
-> --- a/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
-> +++ b/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
-> @@ -68,6 +68,11 @@ i2c4_pins: i2c4 {
->                 function = "i2c4";
->         };
->
-> +       scif0_pins: scif0 {
-> +               groups = "scif0_data", "scif0_ctrl";
-> +               function = "scif0";
-> +       };
-> +
->         scif_clk_pins: scif_clk {
->                 groups = "scif_clk";
->                 function = "scif_clk";
-> @@ -79,6 +84,14 @@ &rwdt {
->         status = "okay";
->  };
->
-> +&scif0 {
-> +       pinctrl-0 = <&scif0_pins>;
-> +       pinctrl-names = "default";
-> +
-> +       uart-has-rtscts;
-> +       status = "okay";
-> +};
-> +
->  &scif_clk {
->         clock-frequency = <24000000>;
->  };
+Regards,
 
-This needs a new serial alias under /aliases.
-Mixing dynamic and static serial IDs may cause conflicts, cfr. commit
-7678f4c20fa7670f ("serial: sh-sci: Add support for dynamic instances").
+Hans
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

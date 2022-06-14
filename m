@@ -2,146 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2259D54A845
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 06:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B74B54A84E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 06:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237205AbiFNEok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 00:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57280 "EHLO
+        id S237741AbiFNErb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 00:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiFNEoi (ORCPT
+        with ESMTP id S237137AbiFNErZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 00:44:38 -0400
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 032D52E9E4;
-        Mon, 13 Jun 2022 21:44:37 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:60056)
-        by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o0yPs-002t3o-D4; Mon, 13 Jun 2022 22:44:36 -0600
-Received: from ip68-227-174-4.om.om.cox.net ([68.227.174.4]:40374 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1o0yPr-008Y07-9H; Mon, 13 Jun 2022 22:44:36 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Frederick Lawler <fred@cloudflare.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        keyrings@vger.kernel.org, selinux@vger.kernel.org,
-        serge@hallyn.com, amir73il@gmail.com, kernel-team@cloudflare.com,
-        Jeff Moyer <jmoyer@redhat.com>,
-        Paul Moore <paul@paul-moore.com>
-References: <20220608150942.776446-1-fred@cloudflare.com>
-        <87tu8oze94.fsf@email.froward.int.ebiederm.org>
-        <e1b62234-9b8a-e7c2-2946-5ef9f6f23a08@cloudflare.com>
-Date:   Mon, 13 Jun 2022 23:44:28 -0500
-In-Reply-To: <e1b62234-9b8a-e7c2-2946-5ef9f6f23a08@cloudflare.com> (Frederick
-        Lawler's message of "Mon, 13 Jun 2022 15:52:38 -0500")
-Message-ID: <87y1xzyhub.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 14 Jun 2022 00:47:25 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490F825D2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 21:47:23 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id r1so6791435plo.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 21:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5x24wcoZLy60C4V6qqBlV8yjrlN4lvCBwUUm7SMMskg=;
+        b=S+kBJOM5he9vqHt4nGu5s3ieVT63/VfE3eDWB+riit4ao7KJ8K5/8h/MVmbsTlqUj/
+         WAi2EathAkRGzkUjYjUYTEm8s0nZD7B9pQGk6uirSUoyalVq2+Ig8Y8IE6Q8/+3bpmTm
+         mBnEYC37/PPXGwRVKNFlSHeJVEX95yQk8VVV0LQ7wolTW62LSKYuAnoniKXQ7VeS2TkL
+         Py2Z8rBGttnxvesyGysFJHSIQ6AcPCUHBmftBxyQRtC4tgAg4OOYfq8vl43zxIQk8gVK
+         Xt83xGGdkSKPmdz3zoKqUahAO+HZNqAsPk0SWWrIlsrTvwe7NmJ9SQAvPaeI4fNT5tPt
+         SUQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5x24wcoZLy60C4V6qqBlV8yjrlN4lvCBwUUm7SMMskg=;
+        b=jsJOwR+d13CTngJ47Iw8OL0FQXjZqMFs1Gtz6+z++aGkc8fQsdSsAZfVWnfcmPy2FQ
+         iqEMKxTuWgapPOTxrexLQjFDCyuVun2u5mx73EJfvy5OudjnGETw/SqO6OZpeIoavRwL
+         lkZg9B1Fjj8jB5wh11Tw5WipgrsILpRHGikHJrwm5+Ip2yAtEaLadnVc27hho+9RVJKP
+         kBiumN+/zY0Mf/cP6LGDro/T8q2Chj9RgfCIsjJJWIp40uZ2DxvelssmW4oZzmhh2vZd
+         Lg/qU/6GcQ3g0+WASJdFaswc+B1Np3F9u+2w5oRklFuCKPIJoZZJRM8paKjs4zA3rLZf
+         JLIg==
+X-Gm-Message-State: AOAM533mBKY/9/jGkP/TbCi6BEHeBc0W2BMJ4m38+njMDekS+PxrkJuB
+        NbtJrD9uWtHJC4CS9Sqn5iGMeg==
+X-Google-Smtp-Source: ABdhPJzmOo7I9AwFFk5wSFL3fr25zTCJ91yKbcbcQxih7dUz8lgAf6OyEUoocpDXLgGzZyN9t4U4Ag==
+X-Received: by 2002:a17:902:ec83:b0:168:e5ad:8071 with SMTP id x3-20020a170902ec8300b00168e5ad8071mr2587430plg.102.1655182042780;
+        Mon, 13 Jun 2022 21:47:22 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.228])
+        by smtp.gmail.com with ESMTPSA id u20-20020a62d454000000b00518285976cdsm6312948pfl.9.2022.06.13.21.47.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 21:47:22 -0700 (PDT)
+From:   Jinke Han <hanjinke.666@bytedance.com>
+X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hanjinke.666@bytedance.com
+Subject: [PATCH] ext4: fix trim range leak
+Date:   Tue, 14 Jun 2022 12:46:47 +0800
+Message-Id: <20220614044647.21846-1-hanjinke.666@bytedance.com>
+X-Mailer: git-send-email 2.32.0 (Apple Git-132)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1o0yPr-008Y07-9H;;;mid=<87y1xzyhub.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.174.4;;;frm=ebiederm@xmission.com;;;spf=softfail
-X-XM-AID: U2FsdGVkX1+prA+7T4gv0KWu4+rCykKSU9Ye39R87hA=
-X-SA-Exim-Connect-IP: 68.227.174.4
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ***;Frederick Lawler <fred@cloudflare.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 540 ms - load_scoreonly_sql: 0.07 (0.0%),
-        signal_user_changed: 12 (2.2%), b_tie_ro: 10 (1.9%), parse: 1.30
-        (0.2%), extract_message_metadata: 15 (2.8%), get_uri_detail_list: 2.4
-        (0.5%), tests_pri_-1000: 23 (4.2%), tests_pri_-950: 1.22 (0.2%),
-        tests_pri_-900: 1.01 (0.2%), tests_pri_-90: 123 (22.8%), check_bayes:
-        121 (22.4%), b_tokenize: 12 (2.2%), b_tok_get_all: 10 (1.8%),
-        b_comp_prob: 3.8 (0.7%), b_tok_touch_all: 92 (17.0%), b_finish: 0.89
-        (0.2%), tests_pri_0: 337 (62.4%), check_dkim_signature: 0.53 (0.1%),
-        check_dkim_adsp: 5 (0.9%), poll_dns_idle: 2.8 (0.5%), tests_pri_10:
-        3.5 (0.6%), tests_pri_500: 19 (3.5%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH v3] cred: Propagate security_prepare_creds() error code
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Frederick Lawler <fred@cloudflare.com> writes:
+From: hanjinke <hanjinke.666@bytedance.com>
 
-> Hi Eric,
->
-> On 6/13/22 12:04 PM, Eric W. Biederman wrote:
->> Frederick Lawler <fred@cloudflare.com> writes:
->> 
->>> While experimenting with the security_prepare_creds() LSM hook, we
->>> noticed that our EPERM error code was not propagated up the callstack.
->>> Instead ENOMEM is always returned.  As a result, some tools may send a
->>> confusing error message to the user:
->>>
->>> $ unshare -rU
->>> unshare: unshare failed: Cannot allocate memory
->>>
->>> A user would think that the system didn't have enough memory, when
->>> instead the action was denied.
->>>
->>> This problem occurs because prepare_creds() and prepare_kernel_cred()
->>> return NULL when security_prepare_creds() returns an error code. Later,
->>> functions calling prepare_creds() and prepare_kernel_cred() return
->>> ENOMEM because they assume that a NULL meant there was no memory
->>> allocated.
->>>
->>> Fix this by propagating an error code from security_prepare_creds() up
->>> the callstack.
->> Why would it make sense for security_prepare_creds to return an error
->> code other than ENOMEM?
->>  > That seems a bit of a violation of what that function is supposed to do
->>
->
-> The API allows LSM authors to decide what error code is returned from the
-> cred_prepare hook. security_task_alloc() is a similar hook, and has its return
-> code propagated.
+When release group lock, a large number of blocks may be alloc from
+the group(e.g. not from the rest of target trim range). This may
+lead end of the loop and leave the rest of trim range unprocessed.
 
-It is not an api.  It is an implementation detail of the linux kernel.
-It is a set of convenient functions that do a job.
+Signed-off-by: hanjinke <hanjinke.666@bytedance.com>
+---
+ fs/ext4/mballoc.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-The general rule is we don't support cases without an in-tree user.  I
-don't see an in-tree user.
-
-> I'm proposing we follow security_task_allocs() pattern, and add visibility for
-> failure cases in prepare_creds().
-
-I am asking why we would want to.  Especially as it is not an API, and I
-don't see any good reason for anything but an -ENOMEM failure to be
-supported.
-
-Without an in-tree user that cares it is probably better to go the
-opposite direction and remove the possibility of return anything but
-memory allocation failure.  That will make it clearer to implementors
-that a general error code is not supported and this is not a location
-to implement policy, this is only a hook to allocate state for the LSM.
-
->> I have probably missed a very interesting discussion where that was
->> mentioned but I don't see link to the discussion or anything explaining
->> why we want to do that in this change.
->> 
->
-> AFAIK, this is the start of the discussion.
-
-You were on v3 and had an out of tree piece of code so I assumed someone
-had at least thought about why you want to implement policy in a piece
-of code whose only purpose is to allocate memory to store state.
-
-Eric
-
-
+diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+index 9f12f29bc346..45eb9ee20947 100644
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -6345,14 +6345,13 @@ static int ext4_try_to_trim_range(struct super_block *sb,
+ __acquires(ext4_group_lock_ptr(sb, e4b->bd_group))
+ __releases(ext4_group_lock_ptr(sb, e4b->bd_group))
+ {
+-	ext4_grpblk_t next, count, free_count;
++	ext4_grpblk_t next, count;
+ 	void *bitmap;
+ 
+ 	bitmap = e4b->bd_bitmap;
+ 	start = (e4b->bd_info->bb_first_free > start) ?
+ 		e4b->bd_info->bb_first_free : start;
+ 	count = 0;
+-	free_count = 0;
+ 
+ 	while (start <= max) {
+ 		start = mb_find_next_zero_bit(bitmap, max + 1, start);
+@@ -6367,7 +6366,6 @@ __releases(ext4_group_lock_ptr(sb, e4b->bd_group))
+ 				break;
+ 			count += next - start;
+ 		}
+-		free_count += next - start;
+ 		start = next + 1;
+ 
+ 		if (fatal_signal_pending(current)) {
+@@ -6381,8 +6379,6 @@ __releases(ext4_group_lock_ptr(sb, e4b->bd_group))
+ 			ext4_lock_group(sb, e4b->bd_group);
+ 		}
+ 
+-		if ((e4b->bd_info->bb_free - free_count) < minblocks)
+-			break;
+ 	}
+ 
+ 	return count;
+-- 
+2.20.1
 

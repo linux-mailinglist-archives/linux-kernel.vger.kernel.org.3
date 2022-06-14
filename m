@@ -2,137 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6929254ADBA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D81E54ADCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238064AbiFNJwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 05:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
+        id S241087AbiFNJyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 05:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238541AbiFNJwv (ORCPT
+        with ESMTP id S229477AbiFNJyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 05:52:51 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CC542ED2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 02:52:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding; s=k1; bh=Zua+hVq6A147kxWQc6xwYdWO5u2
-        LpwDIn3Cdp+cdV64=; b=AtbzRnbzEMMJdhn3zyxmhg5EvicYG3KqmGVzDo5BsDc
-        nBALNSG2ZyEabbQua8e1sCpkoMLGlV30ugSaLjgLjUjxs/7Ya0yil04oPniFOAkp
-        EvcCUpZfxNEJN5Yps4bOS1LFHwTyyUvv75cdAr4fzWeAG7dUs24M5jx0VDe9b/u4
-        =
-Received: (qmail 1659849 invoked from network); 14 Jun 2022 11:52:44 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jun 2022 11:52:44 +0200
-X-UD-Smtp-Session: l3s3148p1@jzy4XWXh/DxZD+ws
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     linux-renesas-soc@vger.kernel.org
-Cc:     Linh Phung <linh.phung.jy@renesas.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] arm64: dts: renesas: r8a779f0: Add SCIF nodes
-Date:   Tue, 14 Jun 2022 11:52:42 +0200
-Message-Id: <20220614095242.8264-1-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 14 Jun 2022 05:54:33 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E772E0B3;
+        Tue, 14 Jun 2022 02:54:31 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 9AAC41F8F1;
+        Tue, 14 Jun 2022 09:54:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655200470; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PXJlNicdTHDqjkWrqjs9aazyAwSjEHqlsCBY8HfQXs0=;
+        b=eponUetfvdxojoyT66HJb3cQ+/0hmhmHtjqcCLeHskds3HZNRGiyRckJ1K+FFILaQajV7I
+        Q4LMdjsBvcKefcWSStVhneJZ8FgudvsG5BAoeXi+wsJOranyv5GNh9c9u9ix639OjHrKLg
+        LbmwqCxn51cFyRsef5G3dIOYYFipslE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655200470;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PXJlNicdTHDqjkWrqjs9aazyAwSjEHqlsCBY8HfQXs0=;
+        b=zdHhQVl0mYmgTwR+K4W1hm5YmtsWhY50ytNASXmCfLiVhMxuzuoZ0s2bmZjyknnmYnOOLq
+        pLVObE7ziWgSQcCQ==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 805CC2C141;
+        Tue, 14 Jun 2022 09:54:30 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id BB7FDA062E; Tue, 14 Jun 2022 11:54:24 +0200 (CEST)
+Date:   Tue, 14 Jun 2022 11:54:24 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, tytso@mit.edu,
+        adilger.kernel@dilger.ca, jack@suse.cz, ritesh.list@gmail.com,
+        lczerner@redhat.com, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yebin10@huawei.com, yukuai3@huawei.com,
+        Hulk Robot <hulkci@huawei.com>
+Subject: Re: [PATCH] ext4: fix use-after-free in ext4_xattr_set_entry
+Message-ID: <20220614095424.djuxzoy5zcoc64y2@quack3.lan>
+References: <20220602114651.3244889-1-libaokun1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220602114651.3244889-1-libaokun1@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Linh Phung <linh.phung.jy@renesas.com>
+On Thu 02-06-22 19:46:51, Baokun Li wrote:
+> Hulk Robot reported a issue:
+> ==================================================================
+> BUG: KASAN: use-after-free in ext4_xattr_set_entry+0x18ab/0x3500
+> Write of size 4105 at addr ffff8881675ef5f4 by task syz-executor.0/7092
+> 
+> CPU: 1 PID: 7092 Comm: syz-executor.0 Not tainted 4.19.90-dirty #17
+> Call Trace:
+> [...]
+>  memcpy+0x34/0x50 mm/kasan/kasan.c:303
+>  ext4_xattr_set_entry+0x18ab/0x3500 fs/ext4/xattr.c:1747
+>  ext4_xattr_ibody_inline_set+0x86/0x2a0 fs/ext4/xattr.c:2205
+>  ext4_xattr_set_handle+0x940/0x1300 fs/ext4/xattr.c:2386
+>  ext4_xattr_set+0x1da/0x300 fs/ext4/xattr.c:2498
+>  __vfs_setxattr+0x112/0x170 fs/xattr.c:149
+>  __vfs_setxattr_noperm+0x11b/0x2a0 fs/xattr.c:180
+>  __vfs_setxattr_locked+0x17b/0x250 fs/xattr.c:238
+>  vfs_setxattr+0xed/0x270 fs/xattr.c:255
+>  setxattr+0x235/0x330 fs/xattr.c:520
+>  path_setxattr+0x176/0x190 fs/xattr.c:539
+>  __do_sys_lsetxattr fs/xattr.c:561 [inline]
+>  __se_sys_lsetxattr fs/xattr.c:557 [inline]
+>  __x64_sys_lsetxattr+0xc2/0x160 fs/xattr.c:557
+>  do_syscall_64+0xdf/0x530 arch/x86/entry/common.c:298
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> RIP: 0033:0x459fe9
+> RSP: 002b:00007fa5e54b4c08 EFLAGS: 00000246 ORIG_RAX: 00000000000000bd
+> RAX: ffffffffffffffda RBX: 000000000051bf60 RCX: 0000000000459fe9
+> RDX: 00000000200003c0 RSI: 0000000020000180 RDI: 0000000020000140
+> RBP: 000000000051bf60 R08: 0000000000000001 R09: 0000000000000000
+> R10: 0000000000001009 R11: 0000000000000246 R12: 0000000000000000
+> R13: 00007ffc73c93fc0 R14: 000000000051bf60 R15: 00007fa5e54b4d80
+> [...]
+> ==================================================================
+> 
+> Above issue may happen as follows:
+> -------------------------------------
+> ext4_xattr_set
+>   ext4_xattr_set_handle
+>     ext4_xattr_ibody_find
+>       >> s->end < s->base
+>       >> no EXT4_STATE_XATTR
+>       >> xattr_check_inode is not executed
+>     ext4_xattr_ibody_set
+>       ext4_xattr_set_entry
+>        >> size_t min_offs = s->end - s->base
+>        >> UAF in memcpy
+> 
+> we can easily reproduce this problem with the following commands:
+>     mkfs.ext4 -F /dev/sda
+>     mount -o debug_want_extra_isize=128 /dev/sda /mnt
+>     touch /mnt/file
+>     setfattr -n user.cat -v `seq -s z 4096|tr -d '[:digit:]'` /mnt/file
+> 
+> In ext4_xattr_ibody_find, we have the following assignment logic:
+>   header = IHDR(inode, raw_inode)
+>          = raw_inode + EXT4_GOOD_OLD_INODE_SIZE + i_extra_isize
+>   is->s.base = IFIRST(header)
+>              = header + sizeof(struct ext4_xattr_ibody_header)
+>   is->s.end = raw_inode + s_inode_size
+> 
+> Obviously, when the inode does not have EXT4_status_XATTR and its
+> i_extra_isize is large, is->s.end may be larger than is->s.base.
+> In this case, the above issue may be triggered.
+> 
+>    EXT4_GOOD_OLD_INODE_SIZE  extra_isize  header   entry   pad   data
+> |---------------------------|------------|------|---------|---|--------|
+> 
+> As shown above, when adding an xattr to an inode, we must ensure that the
+> inode_size is not less than EXT4_GOOD_OLD_INODE_SIZE + extra_isize + pad.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Signed-off-by: Baokun Li <libaokun1@huawei.com>
 
-Extracted from a bigger patch in the BSP, rebased, reg length corrected,
-and DMA properties added.
+Thanks for the fix! It looks good to me. Just one small nit:
 
-Signed-off-by: Linh Phung <linh.phung.jy@renesas.com>
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+> +#define INODE_HAVE_XATTR_SPACE(inode)					\
+> +	((EXT4_I(inode)->i_extra_isize != 0) &&				\
+> +	 (EXT4_GOOD_OLD_INODE_SIZE + EXT4_I(inode)->i_extra_isize +	\
+> +	  sizeof(struct ext4_xattr_ibody_header) + EXT4_XATTR_PAD <=	\
+> +	  EXT4_INODE_SIZE((inode)->i_sb)))
+> +
 
-Change since v1: include all SCIF
+We should have ext4 in the name of the above macro so something like:
 
- arch/arm64/boot/dts/renesas/r8a779f0.dtsi | 51 +++++++++++++++++++++++
- 1 file changed, 51 insertions(+)
+EXT4_INODE_HAS_XATTR_SPACE()
 
-diff --git a/arch/arm64/boot/dts/renesas/r8a779f0.dtsi b/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
-index 7b27260c0fd7..5460c85a2f0a 100644
---- a/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r8a779f0.dtsi
-@@ -339,6 +339,40 @@ hscif3: serial@e66a0000 {
- 			status = "disabled";
- 		};
- 
-+		scif0: serial@e6e60000 {
-+			compatible = "renesas,scif-r8a779f0",
-+				     "renesas,rcar-gen4-scif", "renesas,scif";
-+			reg = <0 0xe6e60000 0 64>;
-+			interrupts = <GIC_SPI 249 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 702>,
-+				 <&cpg CPG_CORE R8A779F0_CLK_S0D3_PER>,
-+				 <&scif_clk>;
-+			clock-names = "fck", "brg_int", "scif_clk";
-+			dmas = <&dmac0 0x51>, <&dmac0 0x50>,
-+			       <&dmac1 0x51>, <&dmac1 0x50>;
-+			dma-names = "tx", "rx", "tx", "rx";
-+			power-domains = <&sysc R8A779F0_PD_ALWAYS_ON>;
-+			resets = <&cpg 702>;
-+			status = "disabled";
-+		};
-+
-+		scif1: serial@e6e68000 {
-+			compatible = "renesas,scif-r8a779f0",
-+				     "renesas,rcar-gen4-scif", "renesas,scif";
-+			reg = <0 0xe6e68000 0 64>;
-+			interrupts = <GIC_SPI 250 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 703>,
-+				 <&cpg CPG_CORE R8A779F0_CLK_S0D3_PER>,
-+				 <&scif_clk>;
-+			clock-names = "fck", "brg_int", "scif_clk";
-+			dmas = <&dmac0 0x53>, <&dmac0 0x52>,
-+			       <&dmac1 0x53>, <&dmac1 0x52>;
-+			dma-names = "tx", "rx", "tx", "rx";
-+			power-domains = <&sysc R8A779F0_PD_ALWAYS_ON>;
-+			resets = <&cpg 703>;
-+			status = "disabled";
-+		};
-+
- 		scif3: serial@e6c50000 {
- 			compatible = "renesas,scif-r8a779f0",
- 				     "renesas,rcar-gen4-scif", "renesas,scif";
-@@ -356,6 +390,23 @@ scif3: serial@e6c50000 {
- 			status = "disabled";
- 		};
- 
-+		scif4: serial@e6c40000 {
-+			compatible = "renesas,scif-r8a779f0",
-+				     "renesas,rcar-gen4-scif", "renesas,scif";
-+			reg = <0 0xe6c40000 0 64>;
-+			interrupts = <GIC_SPI 253 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&cpg CPG_MOD 705>,
-+				 <&cpg CPG_CORE R8A779F0_CLK_S0D3_PER>,
-+				 <&scif_clk>;
-+			clock-names = "fck", "brg_int", "scif_clk";
-+			dmas = <&dmac0 0x59>, <&dmac0 0x58>,
-+			       <&dmac1 0x59>, <&dmac1 0x58>;
-+			dma-names = "tx", "rx", "tx", "rx";
-+			power-domains = <&sysc R8A779F0_PD_ALWAYS_ON>;
-+			resets = <&cpg 705>;
-+			status = "disabled";
-+		};
-+
- 		dmac0: dma-controller@e7350000 {
- 			compatible = "renesas,dmac-r8a779f0",
- 				     "renesas,rcar-gen4-dmac";
+With that fixed feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
 -- 
-2.35.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

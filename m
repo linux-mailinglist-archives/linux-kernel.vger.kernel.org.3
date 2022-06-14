@@ -2,120 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B74B54A84E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 06:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2401B54A84F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 06:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237741AbiFNErb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 00:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58526 "EHLO
+        id S238375AbiFNEsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 00:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237137AbiFNErZ (ORCPT
+        with ESMTP id S235722AbiFNEsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 00:47:25 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490F825D2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 21:47:23 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id r1so6791435plo.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 21:47:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5x24wcoZLy60C4V6qqBlV8yjrlN4lvCBwUUm7SMMskg=;
-        b=S+kBJOM5he9vqHt4nGu5s3ieVT63/VfE3eDWB+riit4ao7KJ8K5/8h/MVmbsTlqUj/
-         WAi2EathAkRGzkUjYjUYTEm8s0nZD7B9pQGk6uirSUoyalVq2+Ig8Y8IE6Q8/+3bpmTm
-         mBnEYC37/PPXGwRVKNFlSHeJVEX95yQk8VVV0LQ7wolTW62LSKYuAnoniKXQ7VeS2TkL
-         Py2Z8rBGttnxvesyGysFJHSIQ6AcPCUHBmftBxyQRtC4tgAg4OOYfq8vl43zxIQk8gVK
-         Xt83xGGdkSKPmdz3zoKqUahAO+HZNqAsPk0SWWrIlsrTvwe7NmJ9SQAvPaeI4fNT5tPt
-         SUQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=5x24wcoZLy60C4V6qqBlV8yjrlN4lvCBwUUm7SMMskg=;
-        b=jsJOwR+d13CTngJ47Iw8OL0FQXjZqMFs1Gtz6+z++aGkc8fQsdSsAZfVWnfcmPy2FQ
-         iqEMKxTuWgapPOTxrexLQjFDCyuVun2u5mx73EJfvy5OudjnGETw/SqO6OZpeIoavRwL
-         lkZg9B1Fjj8jB5wh11Tw5WipgrsILpRHGikHJrwm5+Ip2yAtEaLadnVc27hho+9RVJKP
-         kBiumN+/zY0Mf/cP6LGDro/T8q2Chj9RgfCIsjJJWIp40uZ2DxvelssmW4oZzmhh2vZd
-         Lg/qU/6GcQ3g0+WASJdFaswc+B1Np3F9u+2w5oRklFuCKPIJoZZJRM8paKjs4zA3rLZf
-         JLIg==
-X-Gm-Message-State: AOAM533mBKY/9/jGkP/TbCi6BEHeBc0W2BMJ4m38+njMDekS+PxrkJuB
-        NbtJrD9uWtHJC4CS9Sqn5iGMeg==
-X-Google-Smtp-Source: ABdhPJzmOo7I9AwFFk5wSFL3fr25zTCJ91yKbcbcQxih7dUz8lgAf6OyEUoocpDXLgGzZyN9t4U4Ag==
-X-Received: by 2002:a17:902:ec83:b0:168:e5ad:8071 with SMTP id x3-20020a170902ec8300b00168e5ad8071mr2587430plg.102.1655182042780;
-        Mon, 13 Jun 2022 21:47:22 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.228])
-        by smtp.gmail.com with ESMTPSA id u20-20020a62d454000000b00518285976cdsm6312948pfl.9.2022.06.13.21.47.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 21:47:22 -0700 (PDT)
-From:   Jinke Han <hanjinke.666@bytedance.com>
-X-Google-Original-From: Jinke Han <hnajinke.666@bytedance>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca
-Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hanjinke.666@bytedance.com
-Subject: [PATCH] ext4: fix trim range leak
-Date:   Tue, 14 Jun 2022 12:46:47 +0800
-Message-Id: <20220614044647.21846-1-hanjinke.666@bytedance.com>
-X-Mailer: git-send-email 2.32.0 (Apple Git-132)
+        Tue, 14 Jun 2022 00:48:11 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66D831534
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 21:48:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655182090; x=1686718090;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WNnlhhRpKdqwqyAN58id52IIA5QPWLuUwmueWv7fjlE=;
+  b=lgMWPtyZKLhRwsEPlgzgbimrlL/lFXA52aJveyWkYTnFrgCjYhd4DDDQ
+   dbWIpZVSo8FWG1IxDA1kQKXnSrtMQ0c+9oG55SFJAWBCWEsX8ykQFG3TV
+   H8NVyMF2wfEvR4amEqyGjwokAy1NKkpYqcePEofSj84LSNuIfrTROMvji
+   0497HBLnqD15do7EFzq9Ws8i+SLZ7lTYdCO3KJZjmSdAZMdlfiTWv/9mm
+   4C97/VG6Kr17+WMpf5FjjxCxArso5DoVi7zR1IDh1bvACgD3ULls/Z+Vh
+   fc+rL5sZkBuJfbdy7Q72FLtnv7DqjF7ddpoLe+RcT9kVC551J6vNGSCRV
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="261537115"
+X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
+   d="scan'208";a="261537115"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 21:48:10 -0700
+X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
+   d="scan'208";a="910765884"
+Received: from gren5-mobl1.ccr.corp.intel.com (HELO [10.255.29.39]) ([10.255.29.39])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 21:48:08 -0700
+Message-ID: <2d2a52db-70a8-788e-fedc-197789caa145@linux.intel.com>
+Date:   Tue, 14 Jun 2022 12:48:06 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com, "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] iommu/vt-d: Add set_dev_pasid callbacks for default
+ domain
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20220614034411.1634238-1-baolu.lu@linux.intel.com>
+ <DM4PR11MB5278EBE8FA26185D91ACCD118CAA9@DM4PR11MB5278.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <DM4PR11MB5278EBE8FA26185D91ACCD118CAA9@DM4PR11MB5278.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: hanjinke <hanjinke.666@bytedance.com>
+On 2022/6/14 12:02, Tian, Kevin wrote:
+>> From: Lu Baolu <baolu.lu@linux.intel.com>
+>> Sent: Tuesday, June 14, 2022 11:44 AM
+>>
+>> This allows the upper layers to set a domain to a PASID of a device
+>> if the PASID feature is supported by the IOMMU hardware. The typical
+>> use cases are, for example, kernel DMA with PASID and hardware
+>> assisted mediated device drivers.
+>>
+> 
+> why is it not part of the series for those use cases? There is no consumer
+> of added callbacks in this patch...
 
-When release group lock, a large number of blocks may be alloc from
-the group(e.g. not from the rest of target trim range). This may
-lead end of the loop and leave the rest of trim range unprocessed.
+It could be. I just wanted to maintain the integrity of Intel IOMMU
+driver implementation.
 
-Signed-off-by: hanjinke <hanjinke.666@bytedance.com>
----
- fs/ext4/mballoc.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+> 
+>> +/* PCI domain-subdevice relationship */
+>> +struct subdev_domain_info {
+>> +	struct list_head link_domain;	/* link to domain siblings */
+>> +	struct device *dev;		/* physical device derived from */
+>> +	ioasid_t pasid;			/* PASID on physical device */
+>> +};
+>> +
+> 
+> It's not subdev. Just dev+pasid in iommu's context.
 
-diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-index 9f12f29bc346..45eb9ee20947 100644
---- a/fs/ext4/mballoc.c
-+++ b/fs/ext4/mballoc.c
-@@ -6345,14 +6345,13 @@ static int ext4_try_to_trim_range(struct super_block *sb,
- __acquires(ext4_group_lock_ptr(sb, e4b->bd_group))
- __releases(ext4_group_lock_ptr(sb, e4b->bd_group))
- {
--	ext4_grpblk_t next, count, free_count;
-+	ext4_grpblk_t next, count;
- 	void *bitmap;
- 
- 	bitmap = e4b->bd_bitmap;
- 	start = (e4b->bd_info->bb_first_free > start) ?
- 		e4b->bd_info->bb_first_free : start;
- 	count = 0;
--	free_count = 0;
- 
- 	while (start <= max) {
- 		start = mb_find_next_zero_bit(bitmap, max + 1, start);
-@@ -6367,7 +6366,6 @@ __releases(ext4_group_lock_ptr(sb, e4b->bd_group))
- 				break;
- 			count += next - start;
- 		}
--		free_count += next - start;
- 		start = next + 1;
- 
- 		if (fatal_signal_pending(current)) {
-@@ -6381,8 +6379,6 @@ __releases(ext4_group_lock_ptr(sb, e4b->bd_group))
- 			ext4_lock_group(sb, e4b->bd_group);
- 		}
- 
--		if ((e4b->bd_info->bb_free - free_count) < minblocks)
--			break;
- 	}
- 
- 	return count;
--- 
-2.20.1
+How about struct device_pasid_info?
+
+Best regards,
+baolu
 

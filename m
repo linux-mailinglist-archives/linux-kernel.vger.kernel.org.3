@@ -2,193 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF4854BBB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB9054BBAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351433AbiFNU1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45910 "EHLO
+        id S1357867AbiFNU3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231262AbiFNU1Q (ORCPT
+        with ESMTP id S1352859AbiFNU3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:27:16 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBEF42EDB;
-        Tue, 14 Jun 2022 13:27:15 -0700 (PDT)
+        Tue, 14 Jun 2022 16:29:16 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB2129828
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:29:15 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id d19so11014901lji.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:29:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655238435; x=1686774435;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=UDEEJc0PO0iqKNgH4GebjAuPilFKCZUwgVS2lV5h30E=;
-  b=uqGqLw+iSnvsflygGp21GJUfwZG8jSoEsrqrOK8TnGbdEfA3k0xW3qgz
-   5WEdUIH5CvwYURJJd6iv/i0ChaxUiNfCynLb5/C03TkhHindQF5fschgg
-   Lqo2T7w6eMsglNTUKyu1A5gv9pNB0Z7wEY3JQhAYgs8UI3oKOv6wmxPyG
-   I=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Jun 2022 13:27:15 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 13:27:14 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 14 Jun 2022 13:27:14 -0700
-Received: from [10.110.74.141] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 14 Jun
- 2022 13:27:13 -0700
-Message-ID: <19c6362a-6481-4d09-2d03-030084d27665@quicinc.com>
-Date:   Tue, 14 Jun 2022 13:27:12 -0700
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=JelMl5DE/hcbFl5tXcWcJ+M0I+5jYzJldxTFoClo8B8=;
+        b=Xo+FI0P1jCUF7cy7Lv1fCtt7r5lBUn6zSriIjnvp0F1pfVRH+Vuuxu8H9IcHCzIxY4
+         mc4GecxJHZ/9YFJkOHxQseHs7FM94FItM+1n7gX95nIBxc3IShK5NzppIwxn9rBOQV0Y
+         R5CRzw+Ed2uWpwpBK4/iyuvp+BjWFGfA0FLvKR2FVY32qxgJU6l458tSkSvTQWDBSq5H
+         XQdDoEZF2flZtIENnDFp4aPDR5WMXQqiO12CFaS3NAHEI8tRw5bMd2Ot4IDRjOHsY/bS
+         fl1XlW/x8iUSN4uKcWBketxI+QmhJOYT8YgWCvDmEmTQoFPr1ObugpnpaYTQTzptS+qD
+         z5Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=JelMl5DE/hcbFl5tXcWcJ+M0I+5jYzJldxTFoClo8B8=;
+        b=bajH5WAWR12gyISdODHR+q5P0cHfPnEZvGkkmMlB4eurvVWuna0keLdujMGlA5SHTc
+         CQcD3/VLjs8v/DS+NoVXHMnVJLJB5fGLoHnIa64DJ8UYC9PMW4s6JxQw0CrFewcaoBOJ
+         BhRYM3MhAsRBQDhjaJDbqtguWYOFWT6AbPLg6D0Ba/xa31omwTGDg4k0Z2EtaMDTkZoK
+         ZFG4YRtHujAvvfaBwAvlxSQ43KKZ4pTmfNBWbHNBF4rm4PZyraYqYXboYGAqnnu9pbec
+         uarxaI0C+/Utxr/HYN+Cx3IDVdrRXr8wWxsx9h9Dt51z2A0G24p6vZ6hiUSWCjhV2rnH
+         auiQ==
+X-Gm-Message-State: AJIora9eBCC/d020EvDP6OPQiwmkL+bYEAUoInZQVd29cqxOpfvzlS+z
+        e6EgKohZxPHzwBozdeqYk+E5VfLNHXckdIT5wTDuPQ==
+X-Google-Smtp-Source: AGRyM1uqTOBp6a2xrVdhdGv7VkBK65jaqX8HjIXLaJChc8NThMPOjHL62L7SARvKS0b0k54p0tLUcBB00SsNkoe4hbs=
+X-Received: by 2002:a2e:6e06:0:b0:255:753d:f119 with SMTP id
+ j6-20020a2e6e06000000b00255753df119mr3576613ljc.93.1655238552862; Tue, 14 Jun
+ 2022 13:29:12 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5] drm/msm/dp: force link training for display resolution
- change
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
-        <daniel@ffwll.ch>, <dianders@chromium.org>,
-        <dmitry.baryshkov@linaro.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1655156917-21726-1-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n50Z92PM+j7S_wmTeLcmu5cVO3YBT+viLeoLs5QhgXZMoA@mail.gmail.com>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <CAE-0n50Z92PM+j7S_wmTeLcmu5cVO3YBT+viLeoLs5QhgXZMoA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAMZm_C=o-rc4a+u_8-pFJtmL_2drwczASMRTqszamrks5Zm_OA@mail.gmail.com>
+In-Reply-To: <CAMZm_C=o-rc4a+u_8-pFJtmL_2drwczASMRTqszamrks5Zm_OA@mail.gmail.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 14 Jun 2022 22:28:36 +0200
+Message-ID: <CAG48ez2PVMs-CeLoZtvPq2EeQqOg05mm3AuvEE_pr9Sog0O5og@mail.gmail.com>
+Subject: Re: pgprot_encrypted macro is broken
+To:     Federico Di Pierro <nierro92@gmail.com>
+Cc:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 6/14/2022 1:38 AM, Stephen Boyd wrote:
-> Quoting Kuogee Hsieh (2022-06-13 14:48:37)
->> During display resolution changes display have to be disabled first
->> followed by display enabling with new resolution. Display disable
->> will turn off both pixel clock and main link clock so that main link
->> have to be re-trained during display enable to have new video stream
->> flow again. At current implementation, display enable function manually
->> kicks up irq_hpd_handle which will read panel link status and start link
->> training if link status is not in sync state. However, there is rare
->> case that a particular panel links status keep staying in sync for
->> some period of time after main link had been shut down previously at
->> display disabled. Main link retraining will not be executed by
->> irq_hdp_handle() if the link status read from panel shows it is in
->> sync state. If this was happen, then video stream of newer display
->> resolution will fail to be transmitted to panel due to main link is
->> not in sync between host and panel. This patch force main link always
->> be retrained during display enable procedure to prevent this rare
->> failed case from happening. Also this implementation are more
->> efficient than manual kicking off irq_hpd_handle function.
-> How is resolution change different from disabling and enabling the
-> display? The commit text talks about resolution changes, but the code
-> doesn't compare resolutions from before and after to know when to
-> retrain the link. Can the code be made to actually do what the commit
-> text says? It would be clearer if the code looked for actual resolution
-> changes instead of hooking the dp_bridge_enable() function.
+On Tue, Jun 14, 2022 at 3:15 PM Federico Di Pierro <nierro92@gmail.com> wrote:
+> In our kmod we use the `pgprot_encrypted` macro.
+> It seems like the macro cannot be used on 5.18+ kernels because commit
+> b577f542f93cbba57f8d6185ef1fb13a41ddf162 broke it.
 >
->> Changes in v2:
->> -- set force_link_train flag on DP only (is_edp == false)
->>
->> Changes in v3:
->> -- revise commit  text
->> -- add Fixes tag
->>
->> Changes in v4:
->> -- revise commit  text
->>
->> Changes in v5:
->> -- fix spelling at commit text
->>
->> Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/dp/dp_ctrl.c    |  6 +++---
->>   drivers/gpu/drm/msm/dp/dp_ctrl.h    |  2 +-
->>   drivers/gpu/drm/msm/dp/dp_display.c | 15 ++++++++-------
->>   3 files changed, 12 insertions(+), 11 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> index af7a80c..bea93eb 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
->> @@ -1551,7 +1551,7 @@ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
->>
->>          ret = dp_ctrl_on_link(&ctrl->dp_ctrl);
->>          if (!ret)
->> -               ret = dp_ctrl_on_stream(&ctrl->dp_ctrl);
->> +               ret = dp_ctrl_on_stream(&ctrl->dp_ctrl, false);
-> Does this even matter if it's true or false? The 'sink_request' has
-> DP_TEST_LINK_PHY_TEST_PATTERN set from what I can tell, and then
-> dp_ctrl_on_stream() bails out before calling dp_ctrl_link_retrain()
-> anyway. It would be nice if we could split dp_ctrl_on_stream() so that
-> the part after the check for the sink request is a different function
-> that is called by dp_display.c and then this code can call the 'prepare'
-> function that does the first part. Then we can ignore the testing path
-> in the code, and possibly remove the conditional in dp_ctrl_on_stream()?
+> Basically, the macro definition was:
+> `__pgprot(__sme_set(pgprot_val(prot)))`
 >
->>          else
->>                  DRM_ERROR("failed to enable DP link controller\n");
->>
->> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
->> index c388323..370348d 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_display.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
->> @@ -872,7 +872,7 @@ static int dp_display_enable(struct dp_display_private *dp, u32 data)
->>                  return 0;
->>          }
->>
->> -       rc = dp_ctrl_on_stream(dp->ctrl);
->> +       rc = dp_ctrl_on_stream(dp->ctrl, data);
->>          if (!rc)
->>                  dp_display->power_on = true;
->>
->> @@ -1654,6 +1654,7 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
->>          int rc = 0;
->>          struct dp_display_private *dp_display;
->>          u32 state;
->> +       bool force_link_train = false;
->>
->>          dp_display = container_of(dp, struct dp_display_private, dp_display);
->>          if (!dp_display->dp_mode.drm_mode.clock) {
->> @@ -1688,10 +1689,14 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
->>
->>          state =  dp_display->hpd_state;
->>
->> -       if (state == ST_DISPLAY_OFF)
->> +       if (state == ST_DISPLAY_OFF) {
->>                  dp_display_host_phy_init(dp_display);
->>
->> -       dp_display_enable(dp_display, 0);
->> +               if (!dp->is_edp)
-> I didn't see any answer to my question about why edp is special on v4.
-> Can you at least add a comment to the code about why edp doesn't need to
-> unconditionally retrain, but DP does?
-
-Sorry, missed this one.
-
-This is my mistake, both DP and eDP are same. will remove is_edp flag 
-checking.
-
+> but after the commit, it was changed to:
+> `__pgprot(cc_mkenc(pgprot_val(prot)))`.
 >
->> +                       force_link_train = true;
->> +       }
->> +
->> +       dp_display_enable(dp_display, force_link_train);
->>
->>          rc = dp_display_post_enable(dp);
->>          if (rc) {
+> But `cc_mkenc` symbol is not exported!
+>
+> This leads to build issues:
+> > ERROR: modpost: "cc_mkenc" undefined!
+>
+> Is this a bug?
+> Is there any workaround?
+
+Why does your driver need to use that macro? pgprot_encrypted() is
+mostly only directly used by core kernel code, not by drivers... and
+if memory encryption is enabled, almost all memory mappings created by
+the kernel should be marked as encrypted automatically.

@@ -2,206 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79B6454B5BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:17:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C8754B5DD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236439AbiFNQQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
+        id S236387AbiFNQU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:20:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243150AbiFNQP6 (ORCPT
+        with ESMTP id S230121AbiFNQU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:15:58 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18095443FD
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:15:44 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id b3so1016650qtp.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:15:43 -0700 (PDT)
+        Tue, 14 Jun 2022 12:20:27 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 994AC1107
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:20:24 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id t2so8161768pld.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:20:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=HugF3kVZQV7tRWlbsi9AfRP8AXxUXr/ecMMBI60Ommg=;
-        b=aP8eJtZG8tX82Qcc+gRKt0ht+U2+a1jDaWf2J/lStM2+QcR3HRqjrGHCe0CIua2aP4
-         rlXPJkAUjgkE3udu3n9eLgXCIkyIHFiRrSMUgM32h9ysFvkfmNIZGQ1SS3z0tg7KdPlX
-         htJhJFdeXYimZoUifB6n4TD2DIJZJMK3TlyzR4mS3cF1yGtlAgzFzm9fIi+rUF0UWzF8
-         vFht7MrUkWAzP9v3xfNaaPPTE50D/kTCbHOp8Fm6XckzMVqy5fUM+GcAWLQpRFxqiA03
-         WrMZgSf0kwwtV2ZhVJTURUKRBgsmqx22fYNXs4xLij+yg4jPmHVltXJe6aMPbc/wTx2s
-         Qvkg==
+        bh=UpDwJu4XSxI1BTGBncX03HHpQ6xslCySXDaRwYDm1sQ=;
+        b=BnrxdQm8pIEnz64r6UjdrZZ3SyKW1IBbadkFm0L1eEDRA+BhFPYSneCfwb6P4N7O4K
+         zHYJz1W2Y+a7uc/6WoGq/H1tJdUCJQ7I3SnVTmTGGdH/6uWrwPT8haJ9gqVa3NMShHHR
+         N+KvJQ7EPlMQXnTJzKgdux0y1HVpRMhEB2jqg1oZQYn53J6w1Z+zMXz5bq1p36znXCM5
+         FtmT4Lu47OpxPOU7B+Rq/nKgrE/nesiFzb9n1horoVZqQT8WuBWOUKf3bOzaNW0Qt2V/
+         /WedXwwcFgrRqt8SW9iPpQ/boDlMr7qgBsHqNIAAJ6ehw8xWwReHvcbkm4oZwwoP4qkd
+         bTtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HugF3kVZQV7tRWlbsi9AfRP8AXxUXr/ecMMBI60Ommg=;
-        b=gVNZRxnXYAFuu+A1l97D51ZpJiAfO5tPK0bPYGpiE6SGi5RaHc29yVje+EpYIOLlf1
-         4IfnlNoun8hVmP8DmuW+fl/L8tM8FdQgI4etmMykQDO5xvLTEcDdi2f9pklh3gCclMiN
-         fRuY/1Ef03l/1o09IPW/KWw4o3bOrI3X84WQI3aSTXspfsEKjwrPpJ2o2SuJf0tj2UcX
-         wmvVj1UOCJGD8xXCHDWIr7Xgb5sdUW6c75UCNqntSuSBHWE7k5EG4pDf7oiD5IRTbFCp
-         bvMZU7jALlD45zTkXFSMQFB8WbE+eOTT6D4ko1jqlhFgF0RSfoGaImyQHDYoRSMo1u2o
-         zVNg==
-X-Gm-Message-State: AOAM533AUJtef1ZjS6Ky0PpZ+X5UcysTXlzxbtLXcVHWBWIbk1mKYh3+
-        V+eefcl8LyzCKyKttxqBIY2Q3g==
-X-Google-Smtp-Source: ABdhPJxMUEksBnAPeMx4IH1vi+69QnqxoNTWSDXP8lLm42vGB69JoW9G6iWS+IRyaTMcUQy0y3NynA==
-X-Received: by 2002:ac8:5c16:0:b0:305:34a0:f538 with SMTP id i22-20020ac85c16000000b0030534a0f538mr4701831qti.653.1655223342723;
-        Tue, 14 Jun 2022 09:15:42 -0700 (PDT)
-Received: from fedora ([23.82.142.207])
-        by smtp.gmail.com with ESMTPSA id c7-20020a05620a268700b006a6f57fe2e1sm9905165qkp.98.2022.06.14.09.15.41
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=UpDwJu4XSxI1BTGBncX03HHpQ6xslCySXDaRwYDm1sQ=;
+        b=M+phqMsWHUKPGj0dEJF8qL1lnG6keJHQH4wxVO6VyFORL7Zu8Ha/JWEFjBnlMFQ8mf
+         cu2ATAg5FXqJyLzbUDAD20C8J8+1bw/5yDsyV+uDPM8aacKkPAGClTs8ksCxgT1vRNsa
+         bYe7IHEfab76Gb8WDgkWGluRQuKq90o6IoBKFMLlo4s3I6Yl1ijR9MVfK0hujRE8XsOA
+         xsCQOoDXan7osTtILjNoK8RUcaadsSCWfKoG4tF/UDhFFlnlrraEp4LlAZTnOnw9vCnO
+         Za5u/sMflFxgb2HTAqqVF9uJSsfZAjbXVdVFoPTyBR8ltiw9mt7m6lS6H7khHZ5RgwyJ
+         kjBA==
+X-Gm-Message-State: AJIora94X9nSnz+4u/G5TQ3sUA4JqmubwGFuPJFSwyic0SdwXXPcO6qU
+        YHsnahZMY03p/kqwoROUHSg=
+X-Google-Smtp-Source: AGRyM1vhnd/FHCGfQ3R9YsXFWPUWnsumZGJVTp+B+8TD8lT2ZsRbI0BTt46FBAeCBLGTlrypwht9yQ==
+X-Received: by 2002:a17:903:32d2:b0:166:3747:8461 with SMTP id i18-20020a17090332d200b0016637478461mr4999019plr.30.1655223623903;
+        Tue, 14 Jun 2022 09:20:23 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:d337])
+        by smtp.gmail.com with ESMTPSA id w9-20020a637b09000000b004085adf1372sm5059694pgc.77.2022.06.14.09.20.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 09:15:42 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 12:15:40 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        Tue, 14 Jun 2022 09:20:22 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 14 Jun 2022 06:20:21 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] iio: dac: cio-dac: Implement and utilize register
- structures
-Message-ID: <Yqi0LEbqiSCNxWS3@fedora>
-References: <cover.1654118389.git.william.gray@linaro.org>
- <44aec703753f930cceff448babd1c8e2959eebb0.1654118389.git.william.gray@linaro.org>
- <20220614122618.68e2e9d1@jic23-huawei>
+Subject: Re: [PATCH v6 1/4] kernfs: make ->attr.open RCU protected.
+Message-ID: <Yqi1RVRK2XahPWlg@slm.duckdns.org>
+References: <20220614070346.810168-1-imran.f.khan@oracle.com>
+ <20220614070346.810168-2-imran.f.khan@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="M7k0kYrMKQquTa5e"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220614122618.68e2e9d1@jic23-huawei>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220614070346.810168-2-imran.f.khan@oracle.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 14, 2022 at 05:03:43PM +1000, Imran Khan wrote:
+> +/**
+> + * kernfs_deref_open_node_protected - Get kernfs_open_node corresponding to @kn
+> + *
+> + * @kn: target kernfs_node.
+> + *
+> + * Fetch and return ->attr.open of @kn when caller holds the
+> + * kernfs_open_file_mutex.
+> + *
+> + * Update of ->attr.open happens under kernfs_open_file_mutex. So when
+> + * the caller guarantees that this mutex is being held, other updaters can't
+> + * change ->attr.open and this means that we can safely deref ->attr.open
+> + * outside RCU read-side critical section.
+> + *
+> + * The caller needs to make sure that kernfs_open_file_mutex is held.
+> + */
+> +static struct kernfs_open_node *
+> +kernfs_deref_open_node_protected(struct kernfs_node *kn)
+> +{
+> +	return rcu_dereference_check(kn->attr.open,
+> +				lockdep_is_held(&kernfs_open_file_mutex));
 
---M7k0kYrMKQquTa5e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hey, so, the difference between rcu_dereference_check() and
+rcu_dereference_protected() is that the former can be called either with rcu
+read locked or under the extra condition (here, open_file_mutex held) while
+the latter can't be used under rcu read lock. The two can generate different
+codes too - the former enforces dependency ordering which makes accesses
+under rcu read lock safe, while the latter doesn't.
 
-On Tue, Jun 14, 2022 at 12:26:18PM +0100, Jonathan Cameron wrote:
-> On Mon,  6 Jun 2022 10:15:18 -0400
-> William Breathitt Gray <william.gray@linaro.org> wrote:
->=20
-> > Reduce magic numbers and improve code readability by implementing and
-> > utilizing named register data structures.
-> >=20
-> > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
->=20
-> I'm unconvinced this one really helps readability seeing
-> as you are only indexing a straight forward array.
->=20
-> Simply using u16 __iomem *
-> would provide the main cleanup which is avoiding the indexing
-> via * 2.
->=20
-> Thanks,
->=20
-> Jonathan
+In the above, you're saying that the accessor is only to be used while
+holding kernfs_open_file_mutex but then using rcu_dereference_check() which
+is odd. There are two ways you can go 1. ensure that the accessor is always
+used under the mutex and use rcu_dereference_protected() or 2. if the
+function can be used under rcu read lock, rename so that the differentiation
+between the two accessors is based on the parameter type, not whether
+they're protected or not.
 
-I agree, that is a much simpler approach and reduces the changes we need
-to make to this file. I'll adjust this to u16 __iomem * in v2.
+Can you please post the updated patch as a reply to this one? No need to
+post the whole thing over and over again.
 
-William Breathitt Gray
+Thanks.
 
->=20
->=20
-> > ---
-> >  drivers/iio/dac/cio-dac.c | 24 ++++++++++++++++--------
-> >  1 file changed, 16 insertions(+), 8 deletions(-)
-> >=20
-> > diff --git a/drivers/iio/dac/cio-dac.c b/drivers/iio/dac/cio-dac.c
-> > index 8080984dcb03..7860450ceaf3 100644
-> > --- a/drivers/iio/dac/cio-dac.c
-> > +++ b/drivers/iio/dac/cio-dac.c
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/isa.h>
-> >  #include <linux/module.h>
-> >  #include <linux/moduleparam.h>
-> > +#include <linux/types.h>
-> > =20
-> >  #define CIO_DAC_NUM_CHAN 16
-> > =20
-> > @@ -34,14 +35,22 @@ static unsigned int num_cio_dac;
-> >  module_param_hw_array(base, uint, ioport, &num_cio_dac, 0);
-> >  MODULE_PARM_DESC(base, "Measurement Computing CIO-DAC base addresses");
-> > =20
-> > +/**
-> > + * struct cio_dac_reg - device register structure
-> > + * @da:	D/A data
-> > + */
-> > +struct cio_dac_reg {
-> > +	u16 da[CIO_DAC_NUM_CHAN];
-> > +};
-> > +
-> >  /**
-> >   * struct cio_dac_iio - IIO device private data structure
-> >   * @chan_out_states:	channels' output states
-> > - * @base:		base port address of the IIO device
-> > + * @reg:		I/O address offset for the device registers
-> >   */
-> >  struct cio_dac_iio {
-> >  	int chan_out_states[CIO_DAC_NUM_CHAN];
-> > -	void __iomem *base;
-> > +	struct cio_dac_reg __iomem *reg;
-> >  };
-> > =20
-> >  static int cio_dac_read_raw(struct iio_dev *indio_dev,
-> > @@ -61,7 +70,6 @@ static int cio_dac_write_raw(struct iio_dev *indio_de=
-v,
-> >  	struct iio_chan_spec const *chan, int val, int val2, long mask)
-> >  {
-> >  	struct cio_dac_iio *const priv =3D iio_priv(indio_dev);
-> > -	const unsigned int chan_addr_offset =3D 2 * chan->channel;
-> > =20
-> >  	if (mask !=3D IIO_CHAN_INFO_RAW)
-> >  		return -EINVAL;
-> > @@ -71,7 +79,7 @@ static int cio_dac_write_raw(struct iio_dev *indio_de=
-v,
-> >  		return -EINVAL;
-> > =20
-> >  	priv->chan_out_states[chan->channel] =3D val;
-> > -	iowrite16(val, priv->base + chan_addr_offset);
-> > +	iowrite16(val, priv->reg->da + chan->channel);
-> > =20
-> >  	return 0;
-> >  }
-> > @@ -106,8 +114,8 @@ static int cio_dac_probe(struct device *dev, unsign=
-ed int id)
-> >  	}
-> > =20
-> >  	priv =3D iio_priv(indio_dev);
-> > -	priv->base =3D devm_ioport_map(dev, base[id], CIO_DAC_EXTENT);
-> > -	if (!priv->base)
-> > +	priv->reg =3D devm_ioport_map(dev, base[id], CIO_DAC_EXTENT);
-> > +	if (!priv->reg)
-> >  		return -ENOMEM;
-> > =20
-> >  	indio_dev->info =3D &cio_dac_info;
-> > @@ -117,8 +125,8 @@ static int cio_dac_probe(struct device *dev, unsign=
-ed int id)
-> >  	indio_dev->name =3D dev_name(dev);
-> > =20
-> >  	/* initialize DAC outputs to 0V */
-> > -	for (i =3D 0; i < 32; i +=3D 2)
-> > -		iowrite16(0, priv->base + i);
-> > +	for (i =3D 0; i < CIO_DAC_NUM_CHAN; i++)
-> > +		iowrite16(0, priv->reg->da + i);
-> > =20
-> >  	return devm_iio_device_register(dev, indio_dev);
-> >  }
->=20
-
---M7k0kYrMKQquTa5e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYqi0LAAKCRC1SFbKvhIj
-KwubAQDCBfPf574F1urURdZ+BjUNIUM0lqyWwuNm1L4ezTWehQD/S/iJ3N3FK1LU
-pWU+3u6BD2L1q0oiTQmKa+HFQ5+YLwE=
-=Nm6o
------END PGP SIGNATURE-----
-
---M7k0kYrMKQquTa5e--
+-- 
+tejun

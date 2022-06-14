@@ -2,177 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B7154A763
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA95B54A761
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355286AbiFNDGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 23:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
+        id S1353824AbiFNDGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 23:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354502AbiFNDF4 (ORCPT
+        with ESMTP id S1349712AbiFNDF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 23:05:56 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98DBB289B8;
-        Mon, 13 Jun 2022 20:05:53 -0700 (PDT)
-X-UUID: 56bc72131ed3433b91a1721f007a7a54-20220614
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:bf3b2a39-4b69-473a-a54e-20ea40242a66,OB:0,LO
-        B:0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:70
-X-CID-INFO: VERSION:1.1.6,REQID:bf3b2a39-4b69-473a-a54e-20ea40242a66,OB:0,LOB:
-        0,IP:0,URL:25,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Spam_GS981B3D,AC
-        TION:quarantine,TS:70
-X-CID-META: VersionHash:b14ad71,CLOUDID:bbbb54c5-c67b-4a73-9b18-726dd8f2eb58,C
-        OID:473988d49414,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 56bc72131ed3433b91a1721f007a7a54-20220614
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 711735860; Tue, 14 Jun 2022 11:05:48 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 14 Jun 2022 11:05:47 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 14 Jun 2022 11:05:47 +0800
-Message-ID: <197b586898cad244037cf404cdff2846f5c0e10a.camel@mediatek.com>
-Subject: Re: [PATCH v11 01/12] dt-bindings: mediatek,dpi: Add DP_INTF
- compatible
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 14 Jun 2022 11:05:47 +0800
-In-Reply-To: <20220613064841.10481-2-rex-bc.chen@mediatek.com>
-References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
-         <20220613064841.10481-2-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 13 Jun 2022 23:05:58 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA92529826
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:05:56 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8B6ED23A;
+        Mon, 13 Jun 2022 20:05:56 -0700 (PDT)
+Received: from [10.162.40.17] (unknown [10.162.40.17])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 965623F792;
+        Mon, 13 Jun 2022 20:05:54 -0700 (PDT)
+Message-ID: <94c9de11-8838-53db-5c1b-2e059d11282e@arm.com>
+Date:   Tue, 14 Jun 2022 08:35:51 +0530
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V2 2/2] mm/mmap: Drop generic protection_map[] array
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>, linux-mm@kvack.org
+Cc:     kbuild-all@lists.01.org, Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20220613053354.553579-3-anshuman.khandual@arm.com>
+ <202206131931.ZJuanaBo-lkp@intel.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <202206131931.ZJuanaBo-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
 
-On Mon, 2022-06-13 at 14:48 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> DP_INTF is similar to DPI but does not have the exact same feature
-> set
-> or register layouts.
-> 
-> DP_INTF is the sink of the display pipeline that is connected to the
-> DisplayPort controller and encoder unit. It takes the same clocks as
-> DPI.
-> 
-> In this patch, we also do these string replacement:
-> - s/mediatek/MediaTek/ in title.
-> - s/Mediatek/MediaTek/ in description.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
->  .../bindings/display/mediatek/mediatek,dpi.yaml     | 13 ++++++++---
-> --
->  1 file changed, 8 insertions(+), 5 deletions(-)
-> 
-> diff --git
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> index 77ee1b923991..ca1b48e78581 100644
-> ---
-> a/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> +++
-> b/Documentation/devicetree/bindings/display/mediatek/mediatek,dpi.yam
-> l
-> @@ -4,16 +4,16 @@
->  $id: 
-> http://devicetree.org/schemas/display/mediatek/mediatek,dpi.yaml#
->  $schema: http://devicetree.org/meta-schemas/core.yaml#
->  
-> -title: mediatek DPI Controller Device Tree Bindings
-> +title: MediaTek DPI and DP_INTF Controller
->  
->  maintainers:
->    - CK Hu <ck.hu@mediatek.com>
->    - Jitao shi <jitao.shi@mediatek.com>
->  
->  description: |
-> -  The Mediatek DPI function block is a sink of the display subsystem
-> and
-> -  provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422 pixel data on a
-> parallel
-> -  output bus.
-> +  The MediaTek DPI and DP_INTF function blocks are a sink of the
-> display
-> +  subsystem and provides 8-bit RGB/YUV444 or 8/10/10-bit YUV422
-> pixel data on a
-> +  parallel output bus.
->  
->  properties:
->    compatible:
-> @@ -24,6 +24,7 @@ properties:
->        - mediatek,mt8183-dpi
->        - mediatek,mt8186-dpi
->        - mediatek,mt8192-dpi
-> +      - mediatek,mt8195-dp_intf
->  
->    reg:
->      maxItems: 1
-> @@ -36,12 +37,14 @@ properties:
->        - description: Pixel Clock
->        - description: Engine Clock
->        - description: DPI PLL
-> +      - description: Clock gate for PLL
 
-Why DP_INTF has this additional clock? What is the new hardware block
-(compared with DPI) need this clock? Why this is different than DPI?
+On 6/13/22 16:43, kernel test robot wrote:
+> Hi Anshuman,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on akpm-mm/mm-everything]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/mm-mmap-Drop-__SXXX-__PXXX-macros-from-across-platforms/20220613-133456
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> config: powerpc64-randconfig-r016-20220613 (https://download.01.org/0day-ci/archive/20220613/202206131931.ZJuanaBo-lkp@intel.com/config)
+> compiler: powerpc64le-linux-gcc (GCC) 11.3.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/696f81b49f7b6316f652d795da4c0008efef4487
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Anshuman-Khandual/mm-mmap-Drop-__SXXX-__PXXX-macros-from-across-platforms/20220613-133456
+>         git checkout 696f81b49f7b6316f652d795da4c0008efef4487
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/mm/book3s64/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from arch/powerpc/include/asm/page.h:306,
+>                     from arch/powerpc/include/asm/mmu.h:149,
+>                     from arch/powerpc/include/asm/lppaca.h:46,
+>                     from arch/powerpc/include/asm/paca.h:18,
+>                     from arch/powerpc/include/asm/current.h:13,
+>                     from include/linux/sched.h:12,
+>                     from arch/powerpc/mm/book3s64/pgtable.c:6:
+>    arch/powerpc/mm/book3s64/pgtable.c: In function 'vm_get_page_prot':
+>>> arch/powerpc/mm/book3s64/pgtable.c:557:41: error: 'protection_map' undeclared (first use in this function)
+>      557 |         unsigned long prot = pgprot_val(protection_map[vm_flags &
+>          |                                         ^~~~~~~~~~~~~~
 
-Regards,
-CK
+Adding an extern declaration fixes the problem. The problem is generic declaration
+in include/linux/mm.h is not available for platforms with ARCH_HAS_VM_GET_PAGE_PROT.
+protection_map[] has to be moved into arch/powerpc/mm/pgtable.c to be used by both
+32 bit and 64 bit platforms.
 
->  
->    clock-names:
->      items:
->        - const: pixel
->        - const: engine
->        - const: pll
-> +      - const: pll_gate
->  
->    pinctrl-0: true
->    pinctrl-1: true
-> @@ -55,7 +58,7 @@ properties:
->      $ref: /schemas/graph.yaml#/properties/port
->      description:
->        Output port node. This port should be connected to the input
-> port of an
-> -      attached HDMI or LVDS encoder chip.
-> +      attached HDMI, LVDS or DisplayPort encoder chip.
->  
->  required:
->    - compatible
+diff --git a/arch/powerpc/mm/book3s64/pgtable.c b/arch/powerpc/mm/book3s64/pgtable.c                                                                                                                                                                                              
+index 260b0cc6d3a1..99c794ab253d 100644
+--- a/arch/powerpc/mm/book3s64/pgtable.c                        
++++ b/arch/powerpc/mm/book3s64/pgtable.c
+@@ -551,6 +551,8 @@ unsigned long memremap_compat_align(void)
+ EXPORT_SYMBOL_GPL(memremap_compat_align);
+ #endif
+                                                                
++extern pgprot_t protection_map[16];
++                 
+ /* Note due to the way vm flags are laid out, the bits are XWR */
+ pgprot_t vm_get_page_prot(unsigned long vm_flags)
+ {                                
 

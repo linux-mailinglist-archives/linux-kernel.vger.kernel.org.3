@@ -2,65 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6C9054B3F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE5354B401
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:58:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343664AbiFNOzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52754 "EHLO
+        id S235120AbiFNO4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343588AbiFNOzt (ORCPT
+        with ESMTP id S1344015AbiFNO4g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:55:49 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCFB396A6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:55:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655218548; x=1686754548;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=xHTGtaLw2DcnGzwyP7TMGez2Dljy9WLjCHMsdYusOy4=;
-  b=RLh+JC4GJRixbkY+M13mT7h8dZTr105V4coLjFLlYeUvihq/NvEARmSO
-   215wFxAiXWpO05knyCTtlnaJIzoJgu1XxPQ4twGeVrjbEb+/qTOZoKo0n
-   2ho/VlMhC3gIF6fNMRqOaDMHTCqKungI6O0UIEuegV3wJUIjLQrywAyq4
-   bszRhgPq9uxumy+tBDzdoUSJlr3tF/OpaSOoPC25upEs5PcAYVLojsMRu
-   Y2LEs5FOOp+HOZyBgRh+O4scHWxwcNMvp+PhUVGhozv5cqJJy1P6pqb1g
-   bu8bVCFqI609NwAg8flDALBbwPw1+HovZes8pjJXD2i3g0N3+Onks4wmg
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="364979886"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="364979886"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 07:55:48 -0700
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="652081167"
-Received: from mburny-mobl1.amr.corp.intel.com (HELO [10.213.163.91]) ([10.213.163.91])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 07:55:43 -0700
-Message-ID: <3fd14acb-1de9-3fd8-81ab-27fee4a42b84@linux.intel.com>
-Date:   Tue, 14 Jun 2022 09:55:41 -0500
+        Tue, 14 Jun 2022 10:56:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276233DDCC;
+        Tue, 14 Jun 2022 07:56:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1308B818E5;
+        Tue, 14 Jun 2022 14:56:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC67AC3411B;
+        Tue, 14 Jun 2022 14:56:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655218592;
+        bh=TRpy2LPBk6Ws5BcIlnifdZmMbbfi6y75yfHCg/p5oXw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YhP6L28kWAWq1wka+gGHgznGlETe5QGP2Hk8N/Rk3sv+2yiun6b2FT86xT1lV3uKk
+         b+oxIW26Fe4SooXXF6UHqMSCi56tY+dJMPJZZAY/VYwpTPWJK0zMjtDSOw1n46rEH5
+         D5RIMVmJgkfRJ5a0yW0sD0HO9UWte/PkmD+JzrTg=
+Date:   Tue, 14 Jun 2022 16:56:29 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 000/343] 5.18.4-rc2 review
+Message-ID: <YqihnavPcyzMMw8l@kroah.com>
+References: <20220613181233.078148768@linuxfoundation.org>
+ <CAK8fFZ68+xZ2Z0vDWnihF8PeJKEmEwCyyF-8W9PCZJTd8zfp-A@mail.gmail.com>
+ <YqgsDXdY3OttH8Mc@kroah.com>
+ <CAK8fFZ5SP4zAra2X8B3Q9zkhQGMfif+y-oEvkpR4fDpL8_upKg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.9.1
-Subject: Re: [PATCH 2/2] ASoC: SOF: Intel: add trigger callback into
- sdw_callback
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org, vkoul@kernel.org,
-        vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
-        broonie@kernel.org, srinivas.kandagatla@linaro.org,
-        sanyog.r.kale@intel.com, bard.liao@intel.com
-References: <20220614070817.2508-1-yung-chuan.liao@linux.intel.com>
- <20220614070817.2508-3-yung-chuan.liao@linux.intel.com>
- <Yqg01aSixhBq9d4+@kroah.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <Yqg01aSixhBq9d4+@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK8fFZ5SP4zAra2X8B3Q9zkhQGMfif+y-oEvkpR4fDpL8_upKg@mail.gmail.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,25 +59,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
->> @@ -809,6 +814,10 @@ void hda_set_dai_drv_ops(struct snd_sof_dev *sdev, struct snd_sof_dsp_ops *ops)
->>  		if (!hda_use_tplg_nhlt)
->>  			ipc4_data->nhlt = intel_nhlt_init(sdev->dev);
->>  
->> +#if IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE)
->> +		sdw_callback.trigger = ipc4_be_dai_common_trigger;
->> +#endif
+On Tue, Jun 14, 2022 at 04:41:31PM +0200, Jaroslav Pulchart wrote:
+> út 14. 6. 2022 v 8:34 odesílatel Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> napsal:
+> >
+> > On Tue, Jun 14, 2022 at 07:56:36AM +0200, Jaroslav Pulchart wrote:
+> > > Hello,
+> > >
+> > > I would like to report that the ethernet ice driver is not capable of
+> > > setting promisc mode on at E810-XXV physical interface in the whole
+> > > 5.18.y kernel line.
+> > >
+> > > Reproducer:
+> > >    $ ip link set promisc on dev em1
+> > > Dmesg error message:
+> > >    Error setting promisc mode on VSI 6 (rc=-17)
+> > >
+> > > the problem was not observed with 5.17.y
+> >
+> > Any chance you can use 'git bisect' to track down the problem commit and
+> > let the developers of it know?
+> >
+> > thanks,
 > 
-> #if should not be in .c files if at all possible.  Surely there's a
-> better way here...
+> I tried it, but it makes the system unbootable. I expect the reason is
+> that it happened somewhere between 5.17->5.18 so I'm using an
+> "unstable" kernel.
+> 
+> Is there some way I could bisect just one driver, not a full kernel
+> between 5.17->5.18?
 
-we could use
+How do you know it is just "one driver"?
 
-if (IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE))
-    sdw_callback.trigger = ipc4_be_dai_common_trigger;
+Anyway, yes, I think there are options to give to git bisect, you can
+feed it just the path to the driver as part of 'git bisect start' and I
+think that should work.  The man page for 'git bisect' shows this with
+the following example:
+	 git bisect start -- arch/i386 include/asm-i386
+to just test changes for those directories.
 
-would that work?
+thanks,
 
-We try to keep this driver configurable, not all platforms require
-SoundWire or HDaudio, and that 'sdw_callback' ops structure is
-conditionally declared.
+greg k-h

@@ -2,143 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5570D54B665
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:41:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18B754B6C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344160AbiFNQlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:41:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
+        id S1344744AbiFNQvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:51:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234800AbiFNQlQ (ORCPT
+        with ESMTP id S1344778AbiFNQuw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:41:16 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B6735AAC;
-        Tue, 14 Jun 2022 09:41:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rwYFO4jRp4ZmBbbpQ/dlmC/s4443nixCio2KC7D4yLw=; b=Q/p58+5AIll1J3wwj9duE6joP8
-        2YjrLVWMBq/QDljzX938yomfdduTqhCTkLr7QoXKmJFKAVbw2OLh/qX3V6ZNdS+JPLmmgpJf1SfIY
-        tJDWeVO6lvj7Ll0I23GpN1mvudDqdBS+nOPCE6kzpamjlU8zsA7zAdCExPbyRNAwL9zRELe2Eod9B
-        GsF54S7BNycteMhqcDH7uc17WfMBGrjomDM83+6j/N+qQaPKefG7lDtrncP7zKN2vwDN1lxYGVcwQ
-        0DSt0M2Odg2SUPt6G1Y8DzuprGzjrzsjLdPuI+zknxqWuHe2d455VvYZ3hfJQNbQUfXwrEV7IoHb3
-        UL519GRg==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o19b9-007uOk-Oq; Tue, 14 Jun 2022 16:41:00 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D05F5300459;
-        Tue, 14 Jun 2022 18:40:53 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A4FD82868A9BF; Tue, 14 Jun 2022 18:40:53 +0200 (CEST)
-Date:   Tue, 14 Jun 2022 18:40:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
-        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
-        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 14/36] cpuidle: Fix rcu_idle_*() usage
-Message-ID: <Yqi6Fd38ZCsDUnQG@hirez.programming.kicks-ass.net>
-References: <20220608142723.103523089@infradead.org>
- <20220608144516.808451191@infradead.org>
- <YqiB6YpVqq4wuDtO@FVFF77S0Q05N>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqiB6YpVqq4wuDtO@FVFF77S0Q05N>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 14 Jun 2022 12:50:52 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6BF44764;
+        Tue, 14 Jun 2022 09:50:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655225418; x=1686761418;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=9PMxZIsT0cwZQ/H2eT8C0EMoqkPBO0Qg03oGDWCPYos=;
+  b=Xuk9j4zrBxbbFqauqK1mBqpckaLJ78mhO2FI4hzcHC9xdqe9lYXkfqYo
+   CO4dSzxtFjFEoVm4jPkggSbmw+uFjpkkBEcxWOctccEKmi6g+44Wxg7x7
+   v0JuUNr5QL1tFyueDhOu1Gm3MNCV7Av8aEcOKNMwXCMQnU5tBtbcB1Ma9
+   Lo/mDaxN2RBbLH8ulxIZnlZ3n/oL4m1ueVLuvkFUR2mBuXlhHsVjUhTx8
+   L4xPFlyb/iJAlV51qJnKAQmxzHoL0dU4rxtbUHdthd2dgjYdCSzK46D7P
+   VEDBLlmR47ZeEkDDg75nXHeVW6fVCHvOuUywGY4FxdcwAdX3S3s3qqolf
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="279391617"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="279391617"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 09:50:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="830509198"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Jun 2022 09:50:18 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     peterz@infradead.org, linux-kernel@vger.kernel.org,
+        dave.hansen@linux.intel.com
+Cc:     linux-tip-commits@vger.kernel.org, rui.zhang@intel.com,
+        rafael.j.wysocki@intel.com, x86@kernel.org,
+        "Chang S. Bae" <chang.seok.bae@intel.com>
+Subject: [PATCH][Rebased] intel_idle: Add a new flag to initialize the AMX state
+Date:   Tue, 14 Jun 2022 09:41:16 -0700
+Message-Id: <20220614164116.5196-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <YqHKKa/yamRS06tC@worktop.programming.kicks-ass.net>
+References: <YqHKKa/yamRS06tC@worktop.programming.kicks-ass.net>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 01:41:13PM +0100, Mark Rutland wrote:
-> On Wed, Jun 08, 2022 at 04:27:37PM +0200, Peter Zijlstra wrote:
-> > --- a/kernel/time/tick-broadcast.c
-> > +++ b/kernel/time/tick-broadcast.c
-> > @@ -622,9 +622,13 @@ struct cpumask *tick_get_broadcast_onesh
-> >   * to avoid a deep idle transition as we are about to get the
-> >   * broadcast IPI right away.
-> >   */
-> > -int tick_check_broadcast_expired(void)
-> > +noinstr int tick_check_broadcast_expired(void)
-> >  {
-> > +#ifdef _ASM_GENERIC_BITOPS_INSTRUMENTED_NON_ATOMIC_H
-> > +	return arch_test_bit(smp_processor_id(), cpumask_bits(tick_broadcast_force_mask));
-> > +#else
-> >  	return cpumask_test_cpu(smp_processor_id(), tick_broadcast_force_mask);
-> > +#endif
-> >  }
-> 
-> This is somewhat not-ideal. :/
+The non-initialized AMX state can be the cause of C-state demotion from C6
+to C1E. This low-power idle state may improve power savings and thus result
+in a higher available turbo frequency budget.
 
-I'll say.
+This behavior is implementation-specific. Initialize the state for the C6
+entrance of Sapphire Rapids as needed.
 
-> Could we unconditionally do the arch_test_bit() variant, with a comment, or
-> does that not exist in some cases?
+Tested-by: Zhang Rui <rui.zhang@intel.com>
+Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Link: https://lkml.kernel.org/r/20220608164748.11864-3-chang.seok.bae@intel.com
+[changb: Rebase to the upstream with peterz's help]
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+---
+The patch merged in the tip's x86/fpu branch [1] has conflict with the
+upstream -- commit 32d4fd5751ea ("cpuidle,intel_idle: Fix
+CPUIDLE_FLAG_IRQ_ENABLE") as of v5.19-rc2.
 
-Loads of build errors ensued, which is how I ended up with this mess ...
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=x86/fpu
+---
+ drivers/idle/intel_idle.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 424ef470223d..8a19ba1c2c1b 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -54,6 +54,7 @@
+ #include <asm/intel-family.h>
+ #include <asm/mwait.h>
+ #include <asm/msr.h>
++#include <asm/fpu/api.h>
+ 
+ #define INTEL_IDLE_VERSION "0.5.1"
+ 
+@@ -105,6 +106,11 @@ static unsigned int mwait_substates __initdata;
+  */
+ #define CPUIDLE_FLAG_ALWAYS_ENABLE	BIT(15)
+ 
++/*
++ * Initialize large xstate for the C6-state entrance.
++ */
++#define CPUIDLE_FLAG_INIT_XSTATE	BIT(16)
++
+ /*
+  * MWAIT takes an 8-bit "hint" in EAX "suggesting"
+  * the C-state (top nibble) and sub-state (bottom nibble)
+@@ -159,6 +165,13 @@ static __cpuidle int intel_idle_irq(struct cpuidle_device *dev,
+ 	return ret;
+ }
+ 
++static __cpuidle int intel_idle_xstate(struct cpuidle_device *dev,
++				       struct cpuidle_driver *drv, int index)
++{
++	fpu_idle_fpregs();
++	return __intel_idle(dev, drv, index);
++}
++
+ /**
+  * intel_idle_s2idle - Ask the processor to enter the given idle state.
+  * @dev: cpuidle device of the target CPU.
+@@ -174,8 +187,12 @@ static __cpuidle int intel_idle_irq(struct cpuidle_device *dev,
+ static __cpuidle int intel_idle_s2idle(struct cpuidle_device *dev,
+ 				       struct cpuidle_driver *drv, int index)
+ {
+-	unsigned long eax = flg2MWAIT(drv->states[index].flags);
+ 	unsigned long ecx = 1; /* break on interrupt flag */
++	struct cpuidle_state *state = &drv->states[index];
++	unsigned long eax = flg2MWAIT(state->flags);
++
++	if (state->flags & CPUIDLE_FLAG_INIT_XSTATE)
++		fpu_idle_fpregs();
+ 
+ 	mwait_idle_with_hints(eax, ecx);
+ 
+@@ -910,7 +927,8 @@ static struct cpuidle_state spr_cstates[] __initdata = {
+ 	{
+ 		.name = "C6",
+ 		.desc = "MWAIT 0x20",
+-		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED,
++		.flags = MWAIT2flg(0x20) | CPUIDLE_FLAG_TLB_FLUSHED |
++					   CPUIDLE_FLAG_INIT_XSTATE,
+ 		.exit_latency = 290,
+ 		.target_residency = 800,
+ 		.enter = &intel_idle,
+@@ -1819,6 +1837,9 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
+ 		if (cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_IRQ_ENABLE)
+ 			drv->states[drv->state_count].enter = intel_idle_irq;
+ 
++		if (cpuidle_state_table[cstate].flags & CPUIDLE_FLAG_INIT_XSTATE)
++			drv->states[drv->state_count].enter = intel_idle_xstate;
++
+ 		if ((disabled_states_mask & BIT(drv->state_count)) ||
+ 		    ((icpu->use_acpi || force_use_acpi) &&
+ 		     intel_idle_off_by_default(mwait_hint) &&
+-- 
+2.17.1
+

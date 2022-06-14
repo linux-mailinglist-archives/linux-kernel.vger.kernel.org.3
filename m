@@ -2,158 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9EB54AF85
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9B254AF87
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243480AbiFNLuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 07:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38894 "EHLO
+        id S243229AbiFNLvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 07:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243260AbiFNLuU (ORCPT
+        with ESMTP id S242907AbiFNLvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 07:50:20 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF94F344E3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:50:18 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id y13-20020a17090a154d00b001eaaa3b9b8dso5948553pja.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:50:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=A0t+59JTGCJhzXFr0zxUoQWdhw1kozX+twzUZvLphEI=;
-        b=F3dA6Eu5MXASMIfexqV07GCk3QkS5c8VuNH6YdrBBkCX8OS6cYMYpuxBWYZpQy9GY2
-         Hyj5aQZelm82gUh3a5iqvyGqHzz31LvMjiN58PiDsfnZOpUD0Y4uIfbYSU/Oj6HS+dz/
-         3+ynscwaddW/3z8crG2VjTLFSMxpcSAP4FzPMkEkg5kXrrsGPXiFBHgpJl22bc6Pe23U
-         XmI9aWoR+VWXIxye8yexVTe4UKFLSDeLoXMQ2imYdb+gLyf3rUaZUxW84rlNww2HfU2T
-         2tiTaGpRRXzflSECub9VdAzHXVRpWm7oCAtb6IFOYB/CTPsF/sDL5KTCdY6hrSRQLCME
-         rEWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=A0t+59JTGCJhzXFr0zxUoQWdhw1kozX+twzUZvLphEI=;
-        b=hKaCNJeaVT/MXuYqmUGfVE6J3MruHzqcnC0u8hruL5elPzMrvJRqTlzpfGjCdapYP9
-         TRGWMJ6VHOR9uVZGF8Z22Q8aDyxk87kBp1pBjqy1mn5BbXifY71gNyNhaUnH9g2Gt3Wt
-         nUFjS+x27SrbR+GYWoktVebAjsKECpKACX8nS3r/d3ElMX6Lyq7L8WVK0JIM1aQJiglJ
-         ujYJUp8UUETipnB1id/ghE9oKfFYEPHrZ6DhA2wqqJKW96pa7vUChhwn+JkHnxUfMHqK
-         0AxaHY0Lu+1h2xtKI+//AWcmIA4jw2bkXwKMMP6S75JWORPP5e/v8A/gOejOCoXFbdR/
-         Ga1g==
-X-Gm-Message-State: AJIora/mP+uT+Nq46M78u5eL41EILK+eagEGfi9Q7Qwzvn/Ivad2MOND
-        /D/EpdaQtGPSfsa2Tz2i7Do=
-X-Google-Smtp-Source: AGRyM1uvH8uvscKQstVODrvJnevEYuArUZv/5c6h2w0iTRtaH4LPDFGbyxXjDueXCmhu0Sjxlm5uig==
-X-Received: by 2002:a17:902:a704:b0:168:f037:98cd with SMTP id w4-20020a170902a70400b00168f03798cdmr1623074plq.87.1655207418352;
-        Tue, 14 Jun 2022 04:50:18 -0700 (PDT)
-Received: from mi-HP-ProDesk-680-G4-MT.mioffice.cn ([43.224.245.250])
-        by smtp.gmail.com with ESMTPSA id ay21-20020a056a00301500b0051bc3a2355csm7291268pfb.64.2022.06.14.04.50.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 14 Jun 2022 04:50:17 -0700 (PDT)
-From:   qixiaoyu1 <qxy65535@gmail.com>
-X-Google-Original-From: qixiaoyu1 <qixiaoyu1@xiaomi.com>
-To:     jaegeuk@kernel.org
-Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, qixiaoyu1 <qixiaoyu1@xiaomi.com>
-Subject: [PATCH 2/2] f2fs-tools: fix to check free space before grow
-Date:   Tue, 14 Jun 2022 19:49:29 +0800
-Message-Id: <20220614114929.6897-2-qixiaoyu1@xiaomi.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220614114929.6897-1-qixiaoyu1@xiaomi.com>
-References: <20220614114929.6897-1-qixiaoyu1@xiaomi.com>
+        Tue, 14 Jun 2022 07:51:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B12344F0;
+        Tue, 14 Jun 2022 04:51:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E36AD61323;
+        Tue, 14 Jun 2022 11:51:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D40B0C3411B;
+        Tue, 14 Jun 2022 11:51:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655207464;
+        bh=U5tf7D/ZsG6cScTwHNdYzzDqh2YZNCvrjVSqDQlRGv4=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=B9nd1YaSd62i8nYu83WdU1JHozmtnHj35NbOYpqs+LaozTlC5VnXK/GREic93wtfp
+         IFgcnvVytFZr07lcANaS9UC8MloAczK50s7iTMf0ac+S0iNMvliHGI3nZK0wgYfhze
+         wwZDGlGff4aC5de8g+CHu+TliN7F/TCqR2HUZg5Z+X4sy70qO7SaG/Ay+M0kQyjPuN
+         QYGrttG2pRisArkFZcRoy/+y6/ZTzb+3/f6XKUewPKrTAMgVVusuRvPULOLJ19/RF7
+         WIJnJVzoKbcWbEJ8lzz7m7v7Qlzqvj989TOGuBmdRLT0YHrtIi/HVruiNr9aFS9Cw7
+         Ti2zstXVbM9dA==
+From:   Mark Brown <broonie@kernel.org>
+To:     conor.dooley@microchip.com
+Cc:     linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
+        lewis.hanly@microchip.com, daire.mcnamara@microchip.com,
+        linux-kernel@vger.kernel.org, yang.lee@linux.alibaba.com
+In-Reply-To: <20220614065809.1969177-1-conor.dooley@microchip.com>
+References: <20220614065809.1969177-1-conor.dooley@microchip.com>
+Subject: Re: [PATCH] spi: microchip-core: fix potentially incorrect return from probe
+Message-Id: <165520746259.620958.8052145626827236977.b4-ty@kernel.org>
+Date:   Tue, 14 Jun 2022 12:51:02 +0100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Otherwise, after grow, kernel may report below error message
-when we mount the image if -o parameter is specified during resize:
+On Tue, 14 Jun 2022 07:58:10 +0100, Conor Dooley wrote:
+> If platform_get_irqi() returns 0, the error case will be triggered but
+> probe() will return 0 rather than an error. Ape the other drivers using
+> this pattern and return -ENXIO.
+> 
+> 
 
-F2FS-fs (loop0): invalid crc_offset: 0
-F2FS-fs (loop0): Wrong valid_user_blocks: 16404, user_block_count: 13312
-F2FS-fs (loop0): Failed to get valid F2FS checkpoint
-mount(2) system call failed: Structure needs cleaning.
+Applied to
 
-Signed-off-by: qixiaoyu1 <qixiaoyu1@xiaomi.com>
----
- fsck/resize.c | 36 ++++++++++++++++++++++++------------
- 1 file changed, 24 insertions(+), 12 deletions(-)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
-diff --git a/fsck/resize.c b/fsck/resize.c
-index d19c6fa..e135b66 100644
---- a/fsck/resize.c
-+++ b/fsck/resize.c
-@@ -599,6 +599,26 @@ static void rebuild_checkpoint(struct f2fs_sb_info *sbi,
- 	DBG(0, "Info: Done to rebuild checkpoint blocks\n");
- }
- 
-+static int f2fs_resize_check(struct f2fs_sb_info *sbi, struct f2fs_super_block *new_sb)
-+{
-+	struct f2fs_checkpoint *cp = F2FS_CKPT(sbi);
-+	block_t user_block_count;
-+	unsigned int overprov_segment_count;
-+
-+	overprov_segment_count = (get_newsb(segment_count_main) -
-+			c.new_reserved_segments) *
-+			c.new_overprovision / 100;
-+	overprov_segment_count += c.new_reserved_segments;
-+
-+	user_block_count = (get_newsb(segment_count_main) -
-+			overprov_segment_count) * c.blks_per_seg;
-+
-+	if (get_cp(valid_block_count) > user_block_count)
-+		return -1;
-+
-+	return 0;
-+}
-+
- static int f2fs_resize_grow(struct f2fs_sb_info *sbi)
- {
- 	struct f2fs_super_block *sb = F2FS_RAW_SUPER(sbi);
-@@ -616,6 +636,9 @@ static int f2fs_resize_grow(struct f2fs_sb_info *sbi)
- 	if (get_new_sb(new_sb))
- 		return -1;
- 
-+	if (f2fs_resize_check(sbi, new_sb) < 0)
-+		return -1;
-+
- 	/* check nat availability */
- 	if (get_sb(segment_count_nat) > get_newsb(segment_count_nat)) {
- 		err = shrink_nats(sbi, new_sb);
-@@ -659,11 +682,8 @@ static int f2fs_resize_shrink(struct f2fs_sb_info *sbi)
- 	struct f2fs_super_block *sb = F2FS_RAW_SUPER(sbi);
- 	struct f2fs_super_block new_sb_raw;
- 	struct f2fs_super_block *new_sb = &new_sb_raw;
--	struct f2fs_checkpoint *cp = F2FS_CKPT(sbi);
- 	block_t old_end_blkaddr, old_main_blkaddr;
- 	block_t new_end_blkaddr, new_main_blkaddr, tmp_end_blkaddr;
--	block_t user_block_count;
--	unsigned int overprov_segment_count;
- 	unsigned int offset;
- 	int err = -1;
- 
-@@ -674,15 +694,7 @@ static int f2fs_resize_shrink(struct f2fs_sb_info *sbi)
- 	if (get_new_sb(new_sb))
- 		return -1;
- 
--	overprov_segment_count = (get_newsb(segment_count_main) -
--			c.new_reserved_segments) *
--			c.new_overprovision / 100;
--	overprov_segment_count += c.new_reserved_segments;
--
--	user_block_count = (get_newsb(segment_count_main) -
--			overprov_segment_count) * c.blks_per_seg;
--
--	if (get_cp(valid_block_count) > user_block_count)
-+	if (f2fs_resize_check(sbi, new_sb) < 0)
- 		return -1;
- 
- 	/* check nat availability */
--- 
-2.36.1
+Thanks!
 
+[1/1] spi: microchip-core: fix potentially incorrect return from probe
+      commit: d38dc01a4e68133e11ae74af7585d2c4bbd5803d
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

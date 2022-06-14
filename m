@@ -2,96 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA2A54B5C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B6454B5BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235502AbiFNQPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
+        id S236439AbiFNQQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351492AbiFNQPV (ORCPT
+        with ESMTP id S243150AbiFNQP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:15:21 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E53C737BDF;
-        Tue, 14 Jun 2022 09:15:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A006C169C;
-        Tue, 14 Jun 2022 09:15:19 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.41.154])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D37FC3F66F;
-        Tue, 14 Jun 2022 09:15:01 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 17:14:57 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
-        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
-        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 16/36] rcu: Fix rcu_idle_exit()
-Message-ID: <Yqi0AVZmI5GyVpNa@FVFF77S0Q05N>
-References: <20220608142723.103523089@infradead.org>
- <20220608144516.935970247@infradead.org>
+        Tue, 14 Jun 2022 12:15:58 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18095443FD
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:15:44 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id b3so1016650qtp.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:15:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HugF3kVZQV7tRWlbsi9AfRP8AXxUXr/ecMMBI60Ommg=;
+        b=aP8eJtZG8tX82Qcc+gRKt0ht+U2+a1jDaWf2J/lStM2+QcR3HRqjrGHCe0CIua2aP4
+         rlXPJkAUjgkE3udu3n9eLgXCIkyIHFiRrSMUgM32h9ysFvkfmNIZGQ1SS3z0tg7KdPlX
+         htJhJFdeXYimZoUifB6n4TD2DIJZJMK3TlyzR4mS3cF1yGtlAgzFzm9fIi+rUF0UWzF8
+         vFht7MrUkWAzP9v3xfNaaPPTE50D/kTCbHOp8Fm6XckzMVqy5fUM+GcAWLQpRFxqiA03
+         WrMZgSf0kwwtV2ZhVJTURUKRBgsmqx22fYNXs4xLij+yg4jPmHVltXJe6aMPbc/wTx2s
+         Qvkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HugF3kVZQV7tRWlbsi9AfRP8AXxUXr/ecMMBI60Ommg=;
+        b=gVNZRxnXYAFuu+A1l97D51ZpJiAfO5tPK0bPYGpiE6SGi5RaHc29yVje+EpYIOLlf1
+         4IfnlNoun8hVmP8DmuW+fl/L8tM8FdQgI4etmMykQDO5xvLTEcDdi2f9pklh3gCclMiN
+         fRuY/1Ef03l/1o09IPW/KWw4o3bOrI3X84WQI3aSTXspfsEKjwrPpJ2o2SuJf0tj2UcX
+         wmvVj1UOCJGD8xXCHDWIr7Xgb5sdUW6c75UCNqntSuSBHWE7k5EG4pDf7oiD5IRTbFCp
+         bvMZU7jALlD45zTkXFSMQFB8WbE+eOTT6D4ko1jqlhFgF0RSfoGaImyQHDYoRSMo1u2o
+         zVNg==
+X-Gm-Message-State: AOAM533AUJtef1ZjS6Ky0PpZ+X5UcysTXlzxbtLXcVHWBWIbk1mKYh3+
+        V+eefcl8LyzCKyKttxqBIY2Q3g==
+X-Google-Smtp-Source: ABdhPJxMUEksBnAPeMx4IH1vi+69QnqxoNTWSDXP8lLm42vGB69JoW9G6iWS+IRyaTMcUQy0y3NynA==
+X-Received: by 2002:ac8:5c16:0:b0:305:34a0:f538 with SMTP id i22-20020ac85c16000000b0030534a0f538mr4701831qti.653.1655223342723;
+        Tue, 14 Jun 2022 09:15:42 -0700 (PDT)
+Received: from fedora ([23.82.142.207])
+        by smtp.gmail.com with ESMTPSA id c7-20020a05620a268700b006a6f57fe2e1sm9905165qkp.98.2022.06.14.09.15.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 09:15:42 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 12:15:40 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] iio: dac: cio-dac: Implement and utilize register
+ structures
+Message-ID: <Yqi0LEbqiSCNxWS3@fedora>
+References: <cover.1654118389.git.william.gray@linaro.org>
+ <44aec703753f930cceff448babd1c8e2959eebb0.1654118389.git.william.gray@linaro.org>
+ <20220614122618.68e2e9d1@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="M7k0kYrMKQquTa5e"
 Content-Disposition: inline
-In-Reply-To: <20220608144516.935970247@infradead.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220614122618.68e2e9d1@jic23-huawei>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,50 +74,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 04:27:39PM +0200, Peter Zijlstra wrote:
-> Current rcu_idle_exit() is terminally broken because it uses
-> local_irq_{save,restore}(), which are traced which uses RCU.
-> 
-> However, now that all the callers are sure to have IRQs disabled, we
-> can remove these calls.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Acked-by: Paul E. McKenney <paulmck@kernel.org>
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+--M7k0kYrMKQquTa5e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Mark.
+On Tue, Jun 14, 2022 at 12:26:18PM +0100, Jonathan Cameron wrote:
+> On Mon,  6 Jun 2022 10:15:18 -0400
+> William Breathitt Gray <william.gray@linaro.org> wrote:
+>=20
+> > Reduce magic numbers and improve code readability by implementing and
+> > utilizing named register data structures.
+> >=20
+> > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+>=20
+> I'm unconvinced this one really helps readability seeing
+> as you are only indexing a straight forward array.
+>=20
+> Simply using u16 __iomem *
+> would provide the main cleanup which is avoiding the indexing
+> via * 2.
+>=20
+> Thanks,
+>=20
+> Jonathan
 
-> ---
->  kernel/rcu/tree.c |    9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
-> 
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -659,7 +659,7 @@ static noinstr void rcu_eqs_enter(bool u
->   * If you add or remove a call to rcu_idle_enter(), be sure to test with
->   * CONFIG_RCU_EQS_DEBUG=y.
->   */
-> -void rcu_idle_enter(void)
-> +void noinstr rcu_idle_enter(void)
->  {
->  	lockdep_assert_irqs_disabled();
->  	rcu_eqs_enter(false);
-> @@ -896,13 +896,10 @@ static void noinstr rcu_eqs_exit(bool us
->   * If you add or remove a call to rcu_idle_exit(), be sure to test with
->   * CONFIG_RCU_EQS_DEBUG=y.
->   */
-> -void rcu_idle_exit(void)
-> +void noinstr rcu_idle_exit(void)
->  {
-> -	unsigned long flags;
-> -
-> -	local_irq_save(flags);
-> +	lockdep_assert_irqs_disabled();
->  	rcu_eqs_exit(false);
-> -	local_irq_restore(flags);
->  }
->  EXPORT_SYMBOL_GPL(rcu_idle_exit);
->  
-> 
-> 
+I agree, that is a much simpler approach and reduces the changes we need
+to make to this file. I'll adjust this to u16 __iomem * in v2.
+
+William Breathitt Gray
+
+>=20
+>=20
+> > ---
+> >  drivers/iio/dac/cio-dac.c | 24 ++++++++++++++++--------
+> >  1 file changed, 16 insertions(+), 8 deletions(-)
+> >=20
+> > diff --git a/drivers/iio/dac/cio-dac.c b/drivers/iio/dac/cio-dac.c
+> > index 8080984dcb03..7860450ceaf3 100644
+> > --- a/drivers/iio/dac/cio-dac.c
+> > +++ b/drivers/iio/dac/cio-dac.c
+> > @@ -16,6 +16,7 @@
+> >  #include <linux/isa.h>
+> >  #include <linux/module.h>
+> >  #include <linux/moduleparam.h>
+> > +#include <linux/types.h>
+> > =20
+> >  #define CIO_DAC_NUM_CHAN 16
+> > =20
+> > @@ -34,14 +35,22 @@ static unsigned int num_cio_dac;
+> >  module_param_hw_array(base, uint, ioport, &num_cio_dac, 0);
+> >  MODULE_PARM_DESC(base, "Measurement Computing CIO-DAC base addresses");
+> > =20
+> > +/**
+> > + * struct cio_dac_reg - device register structure
+> > + * @da:	D/A data
+> > + */
+> > +struct cio_dac_reg {
+> > +	u16 da[CIO_DAC_NUM_CHAN];
+> > +};
+> > +
+> >  /**
+> >   * struct cio_dac_iio - IIO device private data structure
+> >   * @chan_out_states:	channels' output states
+> > - * @base:		base port address of the IIO device
+> > + * @reg:		I/O address offset for the device registers
+> >   */
+> >  struct cio_dac_iio {
+> >  	int chan_out_states[CIO_DAC_NUM_CHAN];
+> > -	void __iomem *base;
+> > +	struct cio_dac_reg __iomem *reg;
+> >  };
+> > =20
+> >  static int cio_dac_read_raw(struct iio_dev *indio_dev,
+> > @@ -61,7 +70,6 @@ static int cio_dac_write_raw(struct iio_dev *indio_de=
+v,
+> >  	struct iio_chan_spec const *chan, int val, int val2, long mask)
+> >  {
+> >  	struct cio_dac_iio *const priv =3D iio_priv(indio_dev);
+> > -	const unsigned int chan_addr_offset =3D 2 * chan->channel;
+> > =20
+> >  	if (mask !=3D IIO_CHAN_INFO_RAW)
+> >  		return -EINVAL;
+> > @@ -71,7 +79,7 @@ static int cio_dac_write_raw(struct iio_dev *indio_de=
+v,
+> >  		return -EINVAL;
+> > =20
+> >  	priv->chan_out_states[chan->channel] =3D val;
+> > -	iowrite16(val, priv->base + chan_addr_offset);
+> > +	iowrite16(val, priv->reg->da + chan->channel);
+> > =20
+> >  	return 0;
+> >  }
+> > @@ -106,8 +114,8 @@ static int cio_dac_probe(struct device *dev, unsign=
+ed int id)
+> >  	}
+> > =20
+> >  	priv =3D iio_priv(indio_dev);
+> > -	priv->base =3D devm_ioport_map(dev, base[id], CIO_DAC_EXTENT);
+> > -	if (!priv->base)
+> > +	priv->reg =3D devm_ioport_map(dev, base[id], CIO_DAC_EXTENT);
+> > +	if (!priv->reg)
+> >  		return -ENOMEM;
+> > =20
+> >  	indio_dev->info =3D &cio_dac_info;
+> > @@ -117,8 +125,8 @@ static int cio_dac_probe(struct device *dev, unsign=
+ed int id)
+> >  	indio_dev->name =3D dev_name(dev);
+> > =20
+> >  	/* initialize DAC outputs to 0V */
+> > -	for (i =3D 0; i < 32; i +=3D 2)
+> > -		iowrite16(0, priv->base + i);
+> > +	for (i =3D 0; i < CIO_DAC_NUM_CHAN; i++)
+> > +		iowrite16(0, priv->reg->da + i);
+> > =20
+> >  	return devm_iio_device_register(dev, indio_dev);
+> >  }
+>=20
+
+--M7k0kYrMKQquTa5e
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYqi0LAAKCRC1SFbKvhIj
+KwubAQDCBfPf574F1urURdZ+BjUNIUM0lqyWwuNm1L4ezTWehQD/S/iJ3N3FK1LU
+pWU+3u6BD2L1q0oiTQmKa+HFQ5+YLwE=
+=Nm6o
+-----END PGP SIGNATURE-----
+
+--M7k0kYrMKQquTa5e--

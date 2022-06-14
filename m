@@ -2,151 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F08354AA9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C312154AAA9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238733AbiFNH3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S1353996AbiFNHbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiFNH3v (ORCPT
+        with ESMTP id S229904AbiFNHbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:29:51 -0400
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3823DDF4;
-        Tue, 14 Jun 2022 00:29:46 -0700 (PDT)
-Received: by mail-qk1-f180.google.com with SMTP id a184so5784631qkg.5;
-        Tue, 14 Jun 2022 00:29:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MvW5zYgeysNwbbiYui7u/VFeyen3fLSMqOoOSFvD7qE=;
-        b=p/NmW/KUxEn/9IyPlauN4nJ74m8YgE7F55HNN0YdeQjyqFG1jCWySyBukZPVgjFA02
-         lIXbCvW7igDGW6c/ODagf3jRxcDENNztJzK+FgSlm3+N76+AfbGGa4Vv4jp/IoEg9dzo
-         IoeetpL7eI90mIX3irENQj7PfzAtMAOjztSyRw5elpkwhY9WksVK8gmkDZPLfvNfp9QX
-         MeUuH7OM4lT9tJhEvyPZYzVTo2Gx8u0N/xz49IHGlIKtPwh7lCt+8zq61Z3gQKhEHBYJ
-         pD7ul8Bb4S3UzY8moEiXj5zQeRgLadX2xX5ZjTXDsB204YspzNYh0S3K+4xwqOmKKvs3
-         g9Gw==
-X-Gm-Message-State: AOAM533syv9ET2RYrtKM1rlReWZESO9vJN83vcoj15UPJxeAJzp8tr8Y
-        L0Af9q5nW+naxRLDPZGwVAK0fNpaWhHrqQ==
-X-Google-Smtp-Source: ABdhPJwRn7o3U2yNsa5XhXzCXRo4NcYzcye0arUTc2gDDtiq4izGD20gUcJgtMQnRnfLX9yDGXO5pA==
-X-Received: by 2002:a05:620a:2621:b0:6a7:1dc:175b with SMTP id z33-20020a05620a262100b006a701dc175bmr2807004qko.683.1655191785519;
-        Tue, 14 Jun 2022 00:29:45 -0700 (PDT)
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
-        by smtp.gmail.com with ESMTPSA id i1-20020a05620a27c100b006a691904891sm8083144qkp.16.2022.06.14.00.29.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 00:29:45 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id l204so13707751ybf.10;
-        Tue, 14 Jun 2022 00:29:45 -0700 (PDT)
-X-Received: by 2002:a25:cc53:0:b0:65c:b19c:fac1 with SMTP id
- l80-20020a25cc53000000b0065cb19cfac1mr3399500ybf.89.1655191784829; Tue, 14
- Jun 2022 00:29:44 -0700 (PDT)
+        Tue, 14 Jun 2022 03:31:04 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B073E0F5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:31:03 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id CF6FA5C00DE;
+        Tue, 14 Jun 2022 03:31:02 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 14 Jun 2022 03:31:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1655191862; x=1655278262; bh=Dbk8kA3/CUb/CaOmXekOBIJYO
+        kqO37bfGP3D3h82pdI=; b=GjScZWiLfZQp+GRfzqrZkrlx8z0eymYKG26evbTcZ
+        +xaJFYiHwkMa1WqUbD5Z5TVH3CsaX9i4BFzYvtTx1+Uk2pQ97xEg7PyX8BQJ51qG
+        NmlRgX3lpLgV6iVpDbESPHnPYh3ut0lXwQPQtOAeLNk8M+AYL+P8SiCaPBDky7y8
+        E0sw+Mu7K6+tEMPnhElJOMiGIlc3S6yElK7p/srJ/G9OqKkvSwarBlXq1hpJSNKp
+        n90aQXXG4vSxG3rsuZNMl/+s0tHLkMrnYBlW5/we3fUQGzIvCh8S1MHh+oOzYI4g
+        cwj4Du//PB1VKYI0BzrsHvUaUxEHMuDK7TbC+0HcS1NTA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1655191862; x=1655278262; bh=Dbk8kA3/CUb/CaOmXekOBIJYOkqO37bfGP3
+        D3h82pdI=; b=RRx+YASnTQKS74TUfNjQxCEegiO474fxANvHlE2etkWoZOomiML
+        J8WOEcjX3OlTw65GLjoTp/hyh/2vDcKPqGXo8TzPT2RAWhxYoT4Rv1jHxBG+bsdA
+        VY2ef8nQCzQppCdzGD0eFBoT9V8fIqr3T3nphGTzvWuTBs4VqKxGWAg5PBdnUg5+
+        PuoWYIebct4Src3LYLip+66Q9ZPMBUJzH43NM7wKIgkKXkU0XzlVHIDFKlV4pS/d
+        CG2Afs7zqkPnGR57OaHXCzW+vBqzP0cxX2jKPLUBG4mxp+bzIIpDQXQwJ0d/JV2K
+        rw7H1B1J87jW1YHcUe++T/RCAxhJkZVBNWg==
+X-ME-Sender: <xms:NjmoYjK6eDDoUIVQihZuQoHhq4K5AC2hcz7QUD3ho1Sd5Zkw4WAuhA>
+    <xme:NjmoYnJPvmSGJfBVwvNhZ4nnYLRDpTkPpTCyff38kKRKOD_GR2Gp8IlPxrF7r8t63
+    HbAZ5SfPmC_C650rQ>
+X-ME-Received: <xmr:NjmoYruX4PBmhgPBU9HliJ9tOECioYeac_cSZ6PjH7URGzN6rT6cl7wwpKR-XwVtbAaTz3xo685LYKelLt4-lF5cxmMFGwHEcvy-svsbQrJqydsmNXDuPZBh2kV_96eATrKfiQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddukedguddukecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpeekveelhfejueelleetvdejvdeffeetgeelheeujeffhefgffefkeeh
+    hffhkeekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:NjmoYsYIOqf-XLTYTfxq-IUOf7FECYtefDg3Ng70sZsS2zGK_GWX8g>
+    <xmx:NjmoYqZkY16jvUk8Uqfsmx1MFx-cJ4dLbwZF1PdqgBwgu4aReC6rUg>
+    <xmx:NjmoYgCbrbqXd0t3PiNvDqFlpQrwp-kgzqjWqlMD_QU_UKfna1yPsQ>
+    <xmx:NjmoYmS-87aCNzBeVwL2beT_wtRysCRqSbeTfy3VdR2NEe1GxYQzWQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 14 Jun 2022 03:31:01 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH] drm/sun4i: dw-hdmi: Fix ddc-en GPIO consumer conflict
+Date:   Tue, 14 Jun 2022 02:31:00 -0500
+Message-Id: <20220614073100.11550-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220609150851.23084-1-max.oss.09@gmail.com> <20220609150851.23084-6-max.oss.09@gmail.com>
-In-Reply-To: <20220609150851.23084-6-max.oss.09@gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Jun 2022 09:29:33 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUf=VnqePKB=0eJC4GxZipQLD8BKMiv5PBW8Fz+zUv6-Q@mail.gmail.com>
-Message-ID: <CAMuHMdUf=VnqePKB=0eJC4GxZipQLD8BKMiv5PBW8Fz+zUv6-Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 5/5] ARM64: verdin-imx8mm: use regulator power
- domain to model sleep-moci
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+commit 6de79dd3a920 ("drm/bridge: display-connector: add ddc-en gpio
+support") added a consumer for this GPIO in the HDMI connector device.
+This new consumer conflicts with the pre-existing GPIO consumer in the
+sun8i HDMI controller driver, which prevents the driver from probing:
 
-On Thu, Jun 9, 2022 at 5:16 PM Max Krummenacher <max.oss.09@gmail.com> wrote:
-> From: Max Krummenacher <max.krummenacher@toradex.com>
->
-> The Verdin CTRL_SLEEP_MOCI# pin signals the carrier board that the module
-> is in sleep and it may switch off unneeded power.
->
-> Control this pin with a regulator power domain controller which uses a
-> fixed regulator with a gpio enable.
->
-> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+  [    4.983358] display-connector connector: GPIO lookup for consumer ddc-en
+  [    4.983364] display-connector connector: using device tree for GPIO lookup
+  [    4.983392] gpio-226 (ddc-en): gpiod_request: status -16
+  [    4.983399] sun8i-dw-hdmi 6000000.hdmi: Couldn't get ddc-en gpio
+  [    4.983618] sun4i-drm display-engine: failed to bind 6000000.hdmi (ops sun8i_dw_hdmi_ops [sun8i_drm_hdmi]): -16
+  [    4.984082] sun4i-drm display-engine: Couldn't bind all pipelines components
+  [    4.984171] sun4i-drm display-engine: adev bind failed: -16
+  [    4.984179] sun8i-dw-hdmi: probe of 6000000.hdmi failed with error -16
 
-Thanks for your patch!
+Both drivers have the same behavior: they leave the GPIO active for the
+life of the device. Let's take advantage of the new implementation, and
+drop the now-obsolete code from the HDMI controller driver.
 
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi
-> @@ -92,6 +92,7 @@
->
->  /* Verdin PCIE_1 */
->  &pcie0 {
-> +       power-domains = <&pd_sleep_moci>;
+Fixes: 6de79dd3a920 ("drm/bridge: display-connector: add ddc-en gpio support")
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-This overrides "power-domains = <&pgc_pcie>;" from imx8mm.dtsi...
+ drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c | 54 ++-------------------------
+ drivers/gpu/drm/sun4i/sun8i_dw_hdmi.h |  2 -
+ 2 files changed, 4 insertions(+), 52 deletions(-)
 
->         status = "okay";
->  };
+diff --git a/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c b/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c
+index a8d75fd7e9f4..477cb6985b4d 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c
++++ b/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c
+@@ -93,34 +93,10 @@ static u32 sun8i_dw_hdmi_find_possible_crtcs(struct drm_device *drm,
+ 	return crtcs;
+ }
+ 
+-static int sun8i_dw_hdmi_find_connector_pdev(struct device *dev,
+-					     struct platform_device **pdev_out)
+-{
+-	struct platform_device *pdev;
+-	struct device_node *remote;
+-
+-	remote = of_graph_get_remote_node(dev->of_node, 1, -1);
+-	if (!remote)
+-		return -ENODEV;
+-
+-	if (!of_device_is_compatible(remote, "hdmi-connector")) {
+-		of_node_put(remote);
+-		return -ENODEV;
+-	}
+-
+-	pdev = of_find_device_by_node(remote);
+-	of_node_put(remote);
+-	if (!pdev)
+-		return -ENODEV;
+-
+-	*pdev_out = pdev;
+-	return 0;
+-}
+-
+ static int sun8i_dw_hdmi_bind(struct device *dev, struct device *master,
+ 			      void *data)
+ {
+-	struct platform_device *pdev = to_platform_device(dev), *connector_pdev;
++	struct platform_device *pdev = to_platform_device(dev);
+ 	struct dw_hdmi_plat_data *plat_data;
+ 	struct drm_device *drm = data;
+ 	struct device_node *phy_node;
+@@ -167,30 +143,16 @@ static int sun8i_dw_hdmi_bind(struct device *dev, struct device *master,
+ 		return dev_err_probe(dev, PTR_ERR(hdmi->regulator),
+ 				     "Couldn't get regulator\n");
+ 
+-	ret = sun8i_dw_hdmi_find_connector_pdev(dev, &connector_pdev);
+-	if (!ret) {
+-		hdmi->ddc_en = gpiod_get_optional(&connector_pdev->dev,
+-						  "ddc-en", GPIOD_OUT_HIGH);
+-		platform_device_put(connector_pdev);
+-
+-		if (IS_ERR(hdmi->ddc_en)) {
+-			dev_err(dev, "Couldn't get ddc-en gpio\n");
+-			return PTR_ERR(hdmi->ddc_en);
+-		}
+-	}
+-
+ 	ret = regulator_enable(hdmi->regulator);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to enable regulator\n");
+-		goto err_unref_ddc_en;
++		return ret;
+ 	}
+ 
+-	gpiod_set_value(hdmi->ddc_en, 1);
+-
+ 	ret = reset_control_deassert(hdmi->rst_ctrl);
+ 	if (ret) {
+ 		dev_err(dev, "Could not deassert ctrl reset control\n");
+-		goto err_disable_ddc_en;
++		goto err_disable_regulator;
+ 	}
+ 
+ 	ret = clk_prepare_enable(hdmi->clk_tmds);
+@@ -245,12 +207,8 @@ static int sun8i_dw_hdmi_bind(struct device *dev, struct device *master,
+ 	clk_disable_unprepare(hdmi->clk_tmds);
+ err_assert_ctrl_reset:
+ 	reset_control_assert(hdmi->rst_ctrl);
+-err_disable_ddc_en:
+-	gpiod_set_value(hdmi->ddc_en, 0);
++err_disable_regulator:
+ 	regulator_disable(hdmi->regulator);
+-err_unref_ddc_en:
+-	if (hdmi->ddc_en)
+-		gpiod_put(hdmi->ddc_en);
+ 
+ 	return ret;
+ }
+@@ -264,11 +222,7 @@ static void sun8i_dw_hdmi_unbind(struct device *dev, struct device *master,
+ 	sun8i_hdmi_phy_deinit(hdmi->phy);
+ 	clk_disable_unprepare(hdmi->clk_tmds);
+ 	reset_control_assert(hdmi->rst_ctrl);
+-	gpiod_set_value(hdmi->ddc_en, 0);
+ 	regulator_disable(hdmi->regulator);
+-
+-	if (hdmi->ddc_en)
+-		gpiod_put(hdmi->ddc_en);
+ }
+ 
+ static const struct component_ops sun8i_dw_hdmi_ops = {
+diff --git a/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.h b/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.h
+index bffe1b9cd3dc..9ad09522947a 100644
+--- a/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.h
++++ b/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.h
+@@ -9,7 +9,6 @@
+ #include <drm/bridge/dw_hdmi.h>
+ #include <drm/drm_encoder.h>
+ #include <linux/clk.h>
+-#include <linux/gpio/consumer.h>
+ #include <linux/regmap.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/reset.h>
+@@ -193,7 +192,6 @@ struct sun8i_dw_hdmi {
+ 	struct regulator		*regulator;
+ 	const struct sun8i_dw_hdmi_quirks *quirks;
+ 	struct reset_control		*rst_ctrl;
+-	struct gpio_desc		*ddc_en;
+ };
+ 
+ extern struct platform_driver sun8i_hdmi_phy_driver;
+-- 
+2.35.1
 
-> --- a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-> @@ -53,6 +53,14 @@
->                 };
->         };
->
-> +       pd_sleep_moci: power-domain-sleep-moci {
-> +               compatible = "regulator-pm-pd";
-> +               label = "pd_sleep_moci";
-> +               power-domains = <&pgc_pcie>;
-
-... and here you work around that by re-binding <&pgc_pcie>.
-
-I think you:
-  1. must not override the power-domains property for pcie0, as
-     conceptually, the PCIe bus is still in the on-SoC power
-     domain. What if some lanes are connected to devices in
-     pd_sleep_moci, but other lanes are not?
-  2. should only use pd_sleep_moci for the off-chip devices that
-      are actually controlled by the corresponding regulator.
-
-> +               power-supply = <&reg_sleep_moci>;
-> +               #power-domain-cells = <0>;
-> +       };
-> +
->         /* Carrier Board Supplies */
->         reg_1p8v: regulator-1p8v {
->                 compatible = "regulator-fixed";
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

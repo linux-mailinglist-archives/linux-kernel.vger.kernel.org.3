@@ -2,235 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 567E054A375
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3231254A37B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235655AbiFNBLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 21:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48812 "EHLO
+        id S234612AbiFNBPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 21:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiFNBLA (ORCPT
+        with ESMTP id S229853AbiFNBO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 21:11:00 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D861B5FE0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 18:10:57 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LMVjg3Yy8zDrCm;
-        Tue, 14 Jun 2022 09:10:31 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 09:10:55 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 09:10:55 +0800
-Subject: Re: [PATCH v2] ARM: Mark the FDT_FIXED sections as shareable
-To:     Ard Biesheuvel <ardb@kernel.org>
-CC:     Russell King <linux@armlinux.org.uk>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Nicolas Pitre <nico@fluxnic.net>
-References: <20220613091901.730-1-thunder.leizhen@huawei.com>
- <CAMj1kXGgH2DpvQ_jRfMG5hSOxiqOqYHqThp_eqk-Yuhe=2dAjA@mail.gmail.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <fdadc093-3347-f919-1dc8-67dff3d4dded@huawei.com>
-Date:   Tue, 14 Jun 2022 09:10:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mon, 13 Jun 2022 21:14:59 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 690E820F73
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 18:14:58 -0700 (PDT)
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B923520C29A6;
+        Mon, 13 Jun 2022 18:14:57 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B923520C29A6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1655169298;
+        bh=jv9RhEpcUlvGbL9sQ7elV4SIcD7tvGoqa9vr/gW0wBY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IuMF/Gj6OCjwCm1oyiAXJeUN4MMtG+TIxmT7cyh6m1sPL8INXRIPEPydjL6j+B1pw
+         4QF2jdYTH2aulyWdGA+3BUKkgiHnZHmhs8/OvXzhWc51r/1iKxB3IowBg5zxs8uTy8
+         zt6HbBnQwYRrJvOaUnkM70BzBWr5DjxViV8L9IOo=
+Date:   Mon, 13 Jun 2022 20:14:55 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/06] fid refcounting improvements and fixes
+Message-ID: <20220614011455.GJ7401@sequoia>
+References: <20220612085330.1451496-1-asmadeus@codewreck.org>
+ <20220613202053.GI7401@sequoia>
+ <YqelZWe4BJfDkYEd@codewreck.org>
 MIME-Version: 1.0
-In-Reply-To: <CAMj1kXGgH2DpvQ_jRfMG5hSOxiqOqYHqThp_eqk-Yuhe=2dAjA@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqelZWe4BJfDkYEd@codewreck.org>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-06-14 06:00:21, Dominique Martinet wrote:
+> Tyler Hicks wrote on Mon, Jun 13, 2022 at 03:20:53PM -0500:
+> > On 2022-06-12 17:53:23, Dominique Martinet wrote:
+> > > @@ -222,7 +221,8 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
+> > >                  * We need to hold rename lock when doing a multipath
+> > >                  * walk to ensure none of the patch component change
+> > >                  */
+> > > -               fid = p9_client_walk(old_fid, l, &wnames[i], clone);
+> > > +               fid = p9_client_walk(old_fid, l, &wnames[i],
+> > > +                                    old_fid == root_fid /* clone */);
+> > 
+> > This is no problem at all. The rebased patches look good to me. Squash
+> > your fix to my fix and it should be ready to go.
+> 
+> Thanks for all your reviews :)
+> I've rebased my branch if you want to check:
+> https://github.com/martinetd/linux/commits/9p-next
 
+I've diffed the individual patches from before and after the rebase. It
+all looks great to me.
 
-On 2022/6/13 17:38, Ard Biesheuvel wrote:
-> On Mon, 13 Jun 2022 at 11:19, Zhen Lei <thunder.leizhen@huawei.com> wrote:
->>
->> commit 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear
->> region") use FDT_FIXED_BASE to map the whole FDT_FIXED_SIZE memory area
->> which contains fdt. But it only reserves the exact physical memory that
->> fdt occupied. Unfortunately, this mapping is non-shareable. An illegal or
->> speculative read access can bring the RAM content from non-fdt zone into
->> cache, PIPT makes it to be hit by subsequently read access through
->> shareable mapping(such as linear mapping), and the cache consistency
->> between cores is lost due to non-shareable property.
->>
->> |<---------FDT_FIXED_SIZE------>|
->> |                               |
->>  -------------------------------
->> | <non-fdt> | <fdt> | <non-fdt> |
->>  -------------------------------
->>
->> 1. CoreA read <non-fdt> through MT_ROM mapping, the old data is loaded
->>    into the cache.
->> 2. CoreB write <non-fdt> to update data through linear mapping. CoreA
->>    received the notification to invalid the corresponding cachelines, but
->>    the property non-shareable makes it to be ignored.
->> 3. CoreA read <non-fdt> through linear mapping, cache hit, the old data
->>    is read.
->>
->> To eliminate this risk, add a new memory type MT_MEMORY_RO. Compared to
->> MT_ROM, it is shareable and non-executable.
->>
->> Here's an example:
->>   list_del corruption. prev->next should be c0ecbf74, but was c08410dc
->>   kernel BUG at lib/list_debug.c:53!
->>   ... ...
->>   PC is at __list_del_entry_valid+0x58/0x98
->>   LR is at __list_del_entry_valid+0x58/0x98
->>   psr: 60000093
->>   sp : c0ecbf30  ip : 00000000  fp : 00000001
->>   r10: c08410d0  r9 : 00000001  r8 : c0825e0c
->>   r7 : 20000013  r6 : c08410d0  r5 : c0ecbf74  r4 : c0ecbf74
->>   r3 : c0825d08  r2 : 00000000  r1 : df7ce6f4  r0 : 00000044
->>   ... ...
->>   Stack: (0xc0ecbf30 to 0xc0ecc000)
->>   bf20:                                     c0ecbf74 c0164fd0 c0ecbf70 c0165170
->>   bf40: c0eca000 c0840c00 c0840c00 c0824500 c0825e0c c0189bbc c088f404 60000013
->>   bf60: 60000013 c0e85100 000004ec 00000000 c0ebcdc0 c0ecbf74 c0ecbf74 c0825d08
->>   ... ...                                           <  next     prev  >
->>   (__list_del_entry_valid) from (__list_del_entry+0xc/0x20)
->>   (__list_del_entry) from (finish_swait+0x60/0x7c)
->>   (finish_swait) from (rcu_gp_kthread+0x560/0xa20)
->>   (rcu_gp_kthread) from (kthread+0x14c/0x15c)
->>   (kthread) from (ret_from_fork+0x14/0x24)
->>
->> The faulty list node to be deleted is a local variable, its address is
->> c0ecbf74. The dumped stack shows that 'prev' = c0ecbf74, but its value
->> before lib/list_debug.c:53 is c08410dc. A large amount of printing results
->> in swapping out the cacheline containing the old data(MT_ROM mapping is
->> read only, so the cacheline cannot be dirty), and the subsequent dump
->> operation obtains new data from the DDR.
->>
->> Fixes: 7a1be318f579 ("ARM: 9012/1: move device tree mapping out of linear region")
->> Suggested-by: Ard Biesheuvel <ardb@kernel.org>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> 
-> Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
-> 
-> Please put this in Russell's patch tracker
-> 
-> As I indicated in my reply to v1, we still need to reduce the the size
-> of the mapping as well: the non-fdt surplus might cover physical pages
-> that are NOMAP or mapped with different attributes, and so having a
-> cacheable, shareable alias could potentially be problematic as well.
-> 
-> I'll propose a patch for that once this lands.
+> We've just started a cycle so I'll submit the first three patches (fixes
+> to stable) next week, and the rest for when 5.20 cycle starts.
 
-All right, make sure cc me. I can test it.
+That sounds like the right plan to me.
 
-I see that this patch was accepted yesterday.
+> Feel free to remind me if it looks like I forgot.
 
-> 
-> Thanks,
-> 
-> 
->> ---
->>  arch/arm/include/asm/mach/map.h |  1 +
->>  arch/arm/mm/mmu.c               | 15 ++++++++++++++-
->>  2 files changed, 15 insertions(+), 1 deletion(-)
->>
->> v1 --> v2:
->> As Ard Biesheuvel's suggestion, add a new memory type MT_MEMORY_RO instead of
->> add a new memory type MT_ROM_XIP.
->>
->> diff --git a/arch/arm/include/asm/mach/map.h b/arch/arm/include/asm/mach/map.h
->> index 92282558caf7cdb..2b8970d8e5a2ff8 100644
->> --- a/arch/arm/include/asm/mach/map.h
->> +++ b/arch/arm/include/asm/mach/map.h
->> @@ -27,6 +27,7 @@ enum {
->>         MT_HIGH_VECTORS,
->>         MT_MEMORY_RWX,
->>         MT_MEMORY_RW,
->> +       MT_MEMORY_RO,
->>         MT_ROM,
->>         MT_MEMORY_RWX_NONCACHED,
->>         MT_MEMORY_RW_DTCM,
->> diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
->> index 5e2be37a198e29e..cd17e324aa51ea6 100644
->> --- a/arch/arm/mm/mmu.c
->> +++ b/arch/arm/mm/mmu.c
->> @@ -296,6 +296,13 @@ static struct mem_type mem_types[] __ro_after_init = {
->>                 .prot_sect = PMD_TYPE_SECT | PMD_SECT_AP_WRITE,
->>                 .domain    = DOMAIN_KERNEL,
->>         },
->> +       [MT_MEMORY_RO] = {
->> +               .prot_pte  = L_PTE_PRESENT | L_PTE_YOUNG | L_PTE_DIRTY |
->> +                            L_PTE_XN | L_PTE_RDONLY,
->> +               .prot_l1   = PMD_TYPE_TABLE,
->> +               .prot_sect = PMD_TYPE_SECT,
->> +               .domain    = DOMAIN_KERNEL,
->> +       },
->>         [MT_ROM] = {
->>                 .prot_sect = PMD_TYPE_SECT,
->>                 .domain    = DOMAIN_KERNEL,
->> @@ -489,6 +496,7 @@ static void __init build_mem_type_table(void)
->>
->>                         /* Also setup NX memory mapping */
->>                         mem_types[MT_MEMORY_RW].prot_sect |= PMD_SECT_XN;
->> +                       mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_XN;
->>                 }
->>                 if (cpu_arch >= CPU_ARCH_ARMv7 && (cr & CR_TRE)) {
->>                         /*
->> @@ -568,6 +576,7 @@ static void __init build_mem_type_table(void)
->>                 mem_types[MT_ROM].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
->>                 mem_types[MT_MINICLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
->>                 mem_types[MT_CACHECLEAN].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
->> +               mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_APX|PMD_SECT_AP_WRITE;
->>  #endif
->>
->>                 /*
->> @@ -587,6 +596,8 @@ static void __init build_mem_type_table(void)
->>                         mem_types[MT_MEMORY_RWX].prot_pte |= L_PTE_SHARED;
->>                         mem_types[MT_MEMORY_RW].prot_sect |= PMD_SECT_S;
->>                         mem_types[MT_MEMORY_RW].prot_pte |= L_PTE_SHARED;
->> +                       mem_types[MT_MEMORY_RO].prot_sect |= PMD_SECT_S;
->> +                       mem_types[MT_MEMORY_RO].prot_pte |= L_PTE_SHARED;
->>                         mem_types[MT_MEMORY_DMA_READY].prot_pte |= L_PTE_SHARED;
->>                         mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= PMD_SECT_S;
->>                         mem_types[MT_MEMORY_RWX_NONCACHED].prot_pte |= L_PTE_SHARED;
->> @@ -647,6 +658,8 @@ static void __init build_mem_type_table(void)
->>         mem_types[MT_MEMORY_RWX].prot_pte |= kern_pgprot;
->>         mem_types[MT_MEMORY_RW].prot_sect |= ecc_mask | cp->pmd;
->>         mem_types[MT_MEMORY_RW].prot_pte |= kern_pgprot;
->> +       mem_types[MT_MEMORY_RO].prot_sect |= ecc_mask | cp->pmd;
->> +       mem_types[MT_MEMORY_RO].prot_pte |= kern_pgprot;
->>         mem_types[MT_MEMORY_DMA_READY].prot_pte |= kern_pgprot;
->>         mem_types[MT_MEMORY_RWX_NONCACHED].prot_sect |= ecc_mask;
->>         mem_types[MT_ROM].prot_sect |= cp->pmd;
->> @@ -1360,7 +1373,7 @@ static void __init devicemaps_init(const struct machine_desc *mdesc)
->>                 map.pfn = __phys_to_pfn(__atags_pointer & SECTION_MASK);
->>                 map.virtual = FDT_FIXED_BASE;
->>                 map.length = FDT_FIXED_SIZE;
->> -               map.type = MT_ROM;
->> +               map.type = MT_MEMORY_RO;
->>                 create_mapping(&map);
->>         }
->>
->> --
->> 2.25.1
->>
-> .
-> 
+Will do!
 
--- 
-Regards,
-  Zhen Lei
+Tyler
+
+> -- 
+> Dominique
+> 

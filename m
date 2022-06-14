@@ -2,94 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6838554AB36
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A36D54AB38
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353151AbiFNHxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:53:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
+        id S1354893AbiFNHxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355539AbiFNHxV (ORCPT
+        with ESMTP id S1355810AbiFNHxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:53:21 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C619640E76
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:52:16 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F2C4766016A5;
-        Tue, 14 Jun 2022 08:52:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655193134;
-        bh=YiYxfz9UJYMv0Yzl92YcMKOgxfk4MMa4/uB2sRksOJM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=UUod8iVfxYNNRG93+40eRBJxUTQ3ZMgriSgsL2pjQ7TOiQCiDUa9nUiDsYxWRkP1I
-         J5w3HAl/BXe/Q6B6GwMcl3f9CawLTS2jXqIIot2MCzgKx1VFkVC0GNtMAC6dwA2sDu
-         sEDwNJugHElihkizTLODY+vFVbqAyo2Nc0A+SANM34T/+FBJEumOXIHLvqCqkGORER
-         1n53h10MPyNSaoBd/YmIETwznwOUFBZEAvHx3Flg9n9RcaFEA42l6jXeKo+8jwHlhJ
-         md6WWZoS6XWPCD3fJHg9pceZe1BIdNxOqZ1IZUCGa5AbcJ7mX8a4xoOH/xSH5aIdN5
-         E7/yJ3pSnhAkQ==
-Message-ID: <9c8c712c-75d1-bd0f-0205-be769ce5e83d@collabora.com>
-Date:   Tue, 14 Jun 2022 09:52:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] drm/bridge: anx7625: Zero error variable when panel
- bridge not present
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Robert Foss <robert.foss@linaro.org>
-Cc:     kernel@collabora.com, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Xin Ji <xji@analogixsemi.com>, dri-devel@lists.freedesktop.org,
+        Tue, 14 Jun 2022 03:53:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 388C841984
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:52:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655193169;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=bnHP5HpQogaWTOAPZ0p9wI4hJWfzi2FApEgb9iVePvA=;
+        b=DvDcAhHEiPwHRy9iYFciuyPitKtAQ+Y1WWfnSzIV0nqtIdeHxGX1zz13aCs6mqBWl9WsPy
+        pR0ul57NrNPVi/ND1ghN6W1cdfVJSRWZ5Pf8SfTB1q1dDwI8AWYEWUoNAMM2W5F05oDGM0
+        Blw3wuOhG0JA3sDUM/yNLQOSjWEnulU=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-602-ZbBZRNsCPDGh8U-5ck_jGg-1; Tue, 14 Jun 2022 03:52:47 -0400
+X-MC-Unique: ZbBZRNsCPDGh8U-5ck_jGg-1
+Received: by mail-ej1-f69.google.com with SMTP id q5-20020a17090676c500b00704ffb95131so2543726ejn.8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:52:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bnHP5HpQogaWTOAPZ0p9wI4hJWfzi2FApEgb9iVePvA=;
+        b=umzXVveYEYeHGWbcF+HrEFGrqThmsqsQpKClga77MYBMSjs6ErPitCIangl0bF+dYs
+         DeROM/HsfoSthutx0wqjjJN3guX5D9nThn0bcvbcX1Hb/vQAtLu10CjHQV32+KdP+7Iq
+         BkAhCmc0/ZyycLGDKZZBXDdBHDogZ0Suvfw4+SFbPdJB8hs8MzvM35XiFHKrDQe72yyX
+         v03yusYINnLgEcpLJcJvA6HMLisbFrCHIqBUwXxOnVx8ZDqqoYI+g7iorgYTE/EHRs94
+         EislKpjLutSmda7WD5ScgcjwrNYtoTZxYaaY8wN8bzF2ebcEVL5nvrFkJqxv6F0GoV0S
+         AHAw==
+X-Gm-Message-State: AOAM532CQMDgqE1HvOJemf8LmSqBxex/U+Hilsb6KakeMK66HaIpG2Jz
+        AeHpOdKbkPYIRpZqVTPR91P4xi4+ArQPWKcv1JFzcw+Mu490yGZWyxSDb7wh6HRkda4WLpr2hC/
+        QBHHHdiw5mPiHgwKPxycRctH3
+X-Received: by 2002:a50:c407:0:b0:431:39ed:1c5e with SMTP id v7-20020a50c407000000b0043139ed1c5emr4325804edf.402.1655193166823;
+        Tue, 14 Jun 2022 00:52:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyqsqRtQjOIkakSdUAAA8ijFKx/TiXJdlhre2jr0Rlz8xFe54ywLyWRD87oXQ0HPlxqDvfsnQ==
+X-Received: by 2002:a50:c407:0:b0:431:39ed:1c5e with SMTP id v7-20020a50c407000000b0043139ed1c5emr4325794edf.402.1655193166678;
+        Tue, 14 Jun 2022 00:52:46 -0700 (PDT)
+Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id pv17-20020a170907209100b00704757b1debsm4734510ejb.9.2022.06.14.00.52.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 00:52:46 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 09:52:44 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20220613163705.1531721-1-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220613163705.1531721-1-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH 0/4] KVM: selftests: Fixups for overhaul
+Message-ID: <20220614075244.yux5owiik2tmdgkj@gator>
+References: <20220613161942.1586791-1-seanjc@google.com>
+ <20220614075106.463oqkerlaximxfl@gator>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614075106.463oqkerlaximxfl@gator>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 13/06/22 18:37, Nícolas F. R. A. Prado ha scritto:
-> While parsing the DT, the anx7625 driver checks for the presence of a
-> panel bridge on endpoint 1. If it is missing, pdata->panel_bridge stores
-> the error pointer and the function returns successfully without first
-> cleaning that variable. This is an issue since other functions later
-> check for the presence of a panel bridge by testing the trueness of that
-> variable.
+On Tue, Jun 14, 2022 at 09:51:06AM +0200, Andrew Jones wrote:
+> On Mon, Jun 13, 2022 at 04:19:38PM +0000, Sean Christopherson wrote:
+> > Fixups for the overhaul, all of which come from Drew's code review.  The
+> > first three should all squash cleanly, but the kvm_check_cap() patch will
+> > not due to crossing the TEST_REQUIRE() boundary.
+> > 
+> > Sean Christopherson (4):
+> >   KVM: selftests: Add a missing apostrophe in comment to show ownership
+> >   KVM: selftests: Call a dummy helper in VM/vCPU ioctls() to enforce
+> >     type
+> >   KVM: selftests: Drop a duplicate TEST_ASSERT() in
+> >     vm_nr_pages_required()
+> >   KVM: selftests: Use kvm_has_cap(), not kvm_check_cap(), where possible
+> > 
+> >  .../testing/selftests/kvm/aarch64/psci_test.c |  2 +-
+> >  .../selftests/kvm/include/kvm_util_base.h     | 57 ++++++++++---------
+> >  tools/testing/selftests/kvm/lib/kvm_util.c    |  6 +-
+> >  .../selftests/kvm/lib/x86_64/processor.c      |  4 +-
+> >  .../selftests/kvm/s390x/sync_regs_test.c      |  2 +-
+> >  .../kvm/x86_64/pmu_event_filter_test.c        |  2 +-
+> >  .../selftests/kvm/x86_64/sev_migrate_tests.c  |  6 +-
+> >  tools/testing/selftests/kvm/x86_64/smm_test.c |  2 +-
+> >  .../testing/selftests/kvm/x86_64/state_test.c |  2 +-
+> >  9 files changed, 42 insertions(+), 41 deletions(-)
+> > 
+> > 
+> > base-commit: 8baacf67c76c560fed954ac972b63e6e59a6fba0
+> > -- 
+> > 2.36.1.476.g0c4daa206d-goog
+> >
 > 
-> In order to ensure proper behavior, zero out pdata->panel_bridge before
-> returning when no panel bridge is found.
+> All these patches look good to me. For the series
 > 
-> Fixes: 9e82ea0fb1df ("drm/bridge: anx7625: switch to devm_drm_of_get_bridge")
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Reviewed-by: Andrew Jones <drjones@redhat.com>
 > 
+> There's still one more comment I made on the overhaul though, which
+> is that the expressions using i and j in kvm_binary_stats_test.c
+> for the vcpus and vcpu_stat_test indices have i and j swapped.
+>
 
-I would've preferred s/zero out/cleanup/g but it's also fine as you wrote it.
-Besides, good catch!
+I'll just go ahead and send that i,j patch myself now.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Thanks,
+drew 
 

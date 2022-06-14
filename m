@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B0054B6B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E29054B6BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343510AbiFNQsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34644 "EHLO
+        id S1344261AbiFNQsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349778AbiFNQr2 (ORCPT
+        with ESMTP id S1344578AbiFNQrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:47:28 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0A72A272
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:47:16 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id u18so8230300plb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:47:16 -0700 (PDT)
+        Tue, 14 Jun 2022 12:47:32 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E838328E2E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:47:27 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id o33-20020a17090a0a2400b001ea806e48c6so9598203pjo.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:47:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=129WjS6ew4f6MdB7b/M4kO0Bha3LRuES78hDcODKT8U=;
-        b=c5/7Vx7Zmv5TO553+3uBN1i423Qic2cHJdBpOuoB0r7RBPwUmcxWNtZiKtCDJkGFyv
-         KnjXYDP/WMxlX2gwdg0PAivfT+WdD18P6o36oJId2cLsMcp2F1VT/b7utfqE9+OhZtVR
-         1vpAcXxFQd2UwypV8n0svpJcupPMrpb5QQzjj8lNfx3ZHTp29VqiijEQDkI8m4dKe1qk
-         O0ZEEgOhE/N3XJJJSHREgF5jE2g24ZKX265CCkMuMGdfKhmRpZJf1mTGgMlGlsdYmp73
-         TpyPFRsEgCmCdM1/Mm+wpiJgZWnCPI0YGfY4WeRNt21B0/9SXYaIb1jQoXjhOwX+briD
-         Bl3A==
+        bh=Rja/xqJpInMBVEwkvWVoS3z/NTqM46xGTOY1nGLtTP4=;
+        b=c0/2Jg0T7L+z1nbcSGzT2UA5kcQKZYD2/jDTCOgaTbGoDRZMSWTqXG7Y47maGOIgtP
+         XdFtiQPBaFYhT283cnF6YU7i96s6njpSgxspC2dx/iVPibsnr7C0lo2ctutphs4gj0Fa
+         Yu6LY5uPpV5+YYLsU7G1+f3c914iaoKuH/dFNCtB/wwteR5X8t48ye3/8/CD17OSnmrR
+         2BQUKkVvIBhRtE0nKZy7+wx+fxG0nCaynZ4CToyJybcAodbjl8qxbxnjv4EyIg8Nf4zs
+         NEEsyq5WtCrfGZJKud45ptKXboR9Ula1dAXPhD17ObIp6AZcUIhEPu03VngXJ7faP/U6
+         AFbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=129WjS6ew4f6MdB7b/M4kO0Bha3LRuES78hDcODKT8U=;
-        b=s5kGw9DogFT2XdtAEjTnQIW6IJirlS5C10LnbCplnvpxncrnX3rMH3OBAUbvsgioVo
-         A9DoE5wyZaDuARzrySPREmL1KTN+LKnrFDnAnDhtzqbA9nCzj/Xc1joh6Oh4eQW2J19q
-         iYTOO9SZp90v4HII1OnNIPQQBsAdwWwULAnPvI0SMFIxnQ3CAamRz/Ajo7YHlZ9IKYgU
-         nMnVt2OnP+lA1GJaXUoL3hu6ulq13Bvic5tXkJyU7nEswgnShCw3jm89M5TRLtMop2vM
-         lqEtcXef460+J8fEpOTh7Hr8zJDPvvsb11chqBSAc40REG7Fx43iC/PAdrQDa2z/EHGO
-         8hDA==
-X-Gm-Message-State: AJIora+Mqfm2wgd111u9IvWrtSrCjxQ2bBNg/2ztcnyOw6Ps2mUcFQdD
-        gahrHr6QUGOH46rVjR2pd+gtQQ==
-X-Google-Smtp-Source: AGRyM1vvSQOe5i+3ufNEJnLp5MEKfiubz7ftYT3g6jz4wGpbmgd/mmzXoM36pQ+iGatO88cU7fSPIA==
-X-Received: by 2002:a17:90b:48cf:b0:1e8:9438:ce13 with SMTP id li15-20020a17090b48cf00b001e89438ce13mr5452042pjb.235.1655225236072;
-        Tue, 14 Jun 2022 09:47:16 -0700 (PDT)
-Received: from n131-251-240.byted.org ([121.30.179.216])
-        by smtp.gmail.com with ESMTPSA id iy13-20020a170903130d00b0015e8d4eb243sm7505266plb.141.2022.06.14.09.47.14
+        bh=Rja/xqJpInMBVEwkvWVoS3z/NTqM46xGTOY1nGLtTP4=;
+        b=iF7pB5q7sVuSybibtByXyaGO002cULwLqjmL+gKAcDwKm8/65x+mIUW2zOd5K4ceSz
+         xwVpt+qTW1iTebD2x7FV/j41J6R2mV6CyhWkrM9nq3qhXDJcC/ccwyeJRAbMovpunBJl
+         Ruav5qs9V1KcDJmRuozWjpXVUySLwUlA8DP0u0H96Sm/NmBJ1SlYq8DfXNrQbu06OXLv
+         Kb+peQXQ86icpGwRxZ+46V9x6vE7YTSYL//bvpSTcWi+0sx2eNETrwvucdYiGTZoe4+5
+         5/sn6KfwIhof3ET0TfsI0ZG/4JKNc0gyLeHK+nl379b0hxoF7RNt7NGA0P9wagEO0G2c
+         hgEQ==
+X-Gm-Message-State: AJIora+eg2/E+nJyTwJozjYwrcogSVreIh8w5ZiS+piosezc7jA/Z3SF
+        xR56JKrpbozpZDgP+yNpDixzNg==
+X-Google-Smtp-Source: AGRyM1txgGrdwH6AfNhk8sm7ibTTgS/8GprMFi/Je9F9NsO9TFEvhYmngMyYULKpZjYKm19/D098cw==
+X-Received: by 2002:a17:902:e80b:b0:168:b645:849e with SMTP id u11-20020a170902e80b00b00168b645849emr5195520plg.26.1655225247407;
+        Tue, 14 Jun 2022 09:47:27 -0700 (PDT)
+Received: from n131-251-240.byted.org ([121.30.179.156])
+        by smtp.gmail.com with ESMTPSA id g23-20020aa78197000000b0051bd9981ccbsm7761557pfi.39.2022.06.14.09.47.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 09:47:15 -0700 (PDT)
+        Tue, 14 Jun 2022 09:47:27 -0700 (PDT)
 From:   Zhi Song <zhi.song@bytedance.com>
-To:     vilhelm.gray@gmail.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org
+To:     gregkh@linuxfoundation.org, rafael@kernel.org
 Cc:     linux-kernel@vger.kernel.org, Zhi Song <zhi.song@bytedance.com>
-Subject: [PATCH v2] isa: put_device after failing to device_register
-Date:   Wed, 15 Jun 2022 00:47:10 +0800
-Message-Id: <20220614164710.1744680-1-zhi.song@bytedance.com>
+Subject: [PATCH v2] node: put_device after failing to device_register
+Date:   Wed, 15 Jun 2022 00:47:22 +0800
+Message-Id: <20220614164722.1744799-1-zhi.song@bytedance.com>
 X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -74,27 +73,23 @@ up correctly.
 
 Signed-off-by: Zhi Song <zhi.song@bytedance.com>
 ---
-V1 -> V2: Fix up the changelog text correct.
+Fix the changelog text correct.
 ---
- drivers/base/isa.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/base/node.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/base/isa.c b/drivers/base/isa.c
-index 55e3ee2da98f..cf88f3d77b7d 100644
---- a/drivers/base/isa.c
-+++ b/drivers/base/isa.c
-@@ -173,8 +173,10 @@ static int __init isa_bus_init(void)
- 	error = bus_register(&isa_bus_type);
- 	if (!error) {
- 		error = device_register(&isa_bus);
--		if (error)
-+		if (error) {
-+			put_device(&isa_bus);
- 			bus_unregister(&isa_bus_type);
-+		}
- 	}
- 	return error;
- }
+diff --git a/drivers/base/node.c b/drivers/base/node.c
+index 0ac6376ef7a1..88a3337c546e 100644
+--- a/drivers/base/node.c
++++ b/drivers/base/node.c
+@@ -154,6 +154,7 @@ static struct node_access_nodes *node_init_node_access(struct node *node,
+ 	list_add_tail(&access_node->list_node, &node->access_list);
+ 	return access_node;
+ free_name:
++	put_device(dev);
+ 	kfree_const(dev->kobj.name);
+ free:
+ 	kfree(access_node);
 -- 
 2.30.2
 

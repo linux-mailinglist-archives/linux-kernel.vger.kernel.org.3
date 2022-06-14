@@ -2,81 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 944BB54BB51
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F7254BB86
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358217AbiFNUPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
+        id S1358114AbiFNUQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358639AbiFNUOp (ORCPT
+        with ESMTP id S1357901AbiFNUQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:14:45 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E1826ACF
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:12:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655237528; x=1686773528;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=H39qclFsqZbsKF4/6iQ+SjBBp3vw55ZbnY4RJ7gbLBE=;
-  b=hwbvR6YkgaZ7MHDplQxEddgb8cLPfgHpQVKZ2PKWgLDLDkVknIe0bjRT
-   Tgl0LYGD8z+0heoBeQzNsDJmrLLQBo24426A0l6s0rf/gEArEqaXb/F4S
-   aECEJZNWM/Hh886D5nXh6BCX8ZWNsNNUl5vWisRLLQiSRmcW7raykeF1U
-   TlY6GiS/4gbC+F3fAbFDKZ4VWq/ZUq3aJ/SGKqvRfN+Lu0UCZ+KRwEhVX
-   JxA35XCQ0OSzhGcGCabN7XVTx6FGPc5mY1DXOnbdYjENLGs8j+wJKfvh2
-   ZpPmz1dtXG5o1CDUPXUyZFTo1j04faz7P5H+SdjX26SqKTsCu/cn4Gk86
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="342692970"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="342692970"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 13:09:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="582851874"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 14 Jun 2022 13:09:50 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1CrF-000MGT-Cq;
-        Tue, 14 Jun 2022 20:09:49 +0000
-Date:   Wed, 15 Jun 2022 04:09:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kalesh Singh <kaleshsingh@google.com>, mark.rutland@arm.com,
-        broonie@kernel.org, maz@kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, will@kernel.org,
-        qperret@google.com, tabba@google.com, surenb@google.com,
-        tjmercier@google.com, kernel-team@android.com,
-        Kalesh Singh <kaleshsingh@google.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Jones <drjones@redhat.com>,
-        Keir Fraser <keirf@google.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Oliver Upton <oupton@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] KVM: arm64: Unwind and dump nVHE hypervisor
- stacktrace
-Message-ID: <202206150420.KMU4kXzZ-lkp@intel.com>
-References: <20220607165105.639716-6-kaleshsingh@google.com>
+        Tue, 14 Jun 2022 16:16:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012234EF6E;
+        Tue, 14 Jun 2022 13:15:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D88061162;
+        Tue, 14 Jun 2022 20:10:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BEA23C341C4;
+        Tue, 14 Jun 2022 20:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655237412;
+        bh=Jb3q6Ri4PxJrE88gxL0hxbYuEi3OuaYtKPa9Rq/8gOE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=DWwro7EDxLHgWJMZLfeb84JIVxDz43S7Wxjb1WLYyco7kwpTC2hwNtaKVT4HVfNvw
+         JoPDwNxEbwS9IHShsWT8AwAylE6Xp6ZKNiGCjkFNVpREywkdRM/tzkKZycVdYDUT3q
+         khWd9MWJnrnhoYDbtV4TNlSBinkGwtmhzKkhyXV6j0ZwjzXcUeJ1zjqozDEC1Ur9Jn
+         HrUOdGCeDjPJ823R2SIj0AYSH0ayRkzYIe0j9VjUV8OwtI2XNc44RwGNo0+gLG9BFw
+         58ZJFa4I2gVChSpvjdxPHw8tCqcC4PAZ6KDCzi+otykGf8YwB5qxXDZPvnB8SQUCm0
+         j4UddroRsye1w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A4AF3FD99FF;
+        Tue, 14 Jun 2022 20:10:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220607165105.639716-6-kaleshsingh@google.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH -next] bpf, arm: Remove unused function emit_a32_alu_r()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165523741267.23128.7750820754124347008.git-patchwork-notify@kernel.org>
+Date:   Tue, 14 Jun 2022 20:10:12 +0000
+References: <20220611040904.8976-1-yuehaibing@huawei.com>
+In-Reply-To: <20220611040904.8976-1-yuehaibing@huawei.com>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     illusionist.neo@gmail.com, linux@armlinux.org.uk, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, johan.almbladh@anyfinetworks.com,
+        netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,40 +61,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kalesh,
+Hello:
 
-Thank you for the patch! Yet something to improve:
+This patch was applied to bpf/bpf-next.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-[auto build test ERROR on f2906aa863381afb0015a9eb7fefad885d4e5a56]
+On Sat, 11 Jun 2022 12:09:04 +0800 you wrote:
+> Since commit b18bea2a45b1 ("ARM: net: bpf: improve 64-bit ALU implementation")
+> this is unused anymore, so can remove it.
+> 
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  arch/arm/net/bpf_jit_32.c | 16 ----------------
+>  1 file changed, 16 deletions(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kalesh-Singh/KVM-nVHE-Hypervisor-stack-unwinder/20220608-011351
-base:   f2906aa863381afb0015a9eb7fefad885d4e5a56
-config: arm64-buildonly-randconfig-r003-20220613 (https://download.01.org/0day-ci/archive/20220615/202206150420.KMU4kXzZ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c97436f8b6e2718286e8496faf53a2c800e281cf)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/ac1ce397ffe5b05df06cdb56a30db4099c7428ec
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kalesh-Singh/KVM-nVHE-Hypervisor-stack-unwinder/20220608-011351
-        git checkout ac1ce397ffe5b05df06cdb56a30db4099c7428ec
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+Here is the summary with links:
+  - [-next] bpf, arm: Remove unused function emit_a32_alu_r()
+    https://git.kernel.org/bpf/bpf-next/c/fc386ba7211d
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: kvm_arm_hyp_stacktrace_page
-   >>> referenced by stacktrace.c:254 (arch/arm64/kernel/stacktrace.c:254)
-   >>>               kernel/stacktrace.o:(hyp_dump_backtrace) in archive arch/arm64/built-in.a
-   >>> referenced by stacktrace.c:254 (arch/arm64/kernel/stacktrace.c:254)
-   >>>               kernel/stacktrace.o:(hyp_dump_backtrace) in archive arch/arm64/built-in.a
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

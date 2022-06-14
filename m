@@ -2,136 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 560E154AB30
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FC354AB27
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353391AbiFNHxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
+        id S1355433AbiFNHw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355423AbiFNHwh (ORCPT
+        with ESMTP id S1355458AbiFNHwe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:52:37 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE66B41F9E;
-        Tue, 14 Jun 2022 00:51:28 -0700 (PDT)
+        Tue, 14 Jun 2022 03:52:34 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3915419AB
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:51:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655193089; x=1686729089;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SJhpZ3HQ+EYM455wRZmEEJVkLQgK5F2p4nazZFlQj4I=;
-  b=TLcfRD2gfrVOyq5yBbZoJW6fJ4nuRA8Cab4GAOqil1cCwn6EzfIeAe9W
-   Mp6CQN57s88QTZ9Vj5tr8+dADF802/j+KS8PlIe0INuk/XOQPYw5M9bfZ
-   55jB7X7WURHPubK16BNnWMXARQaFm4p7UZqZTNAOztD7RwpESx/u2L1HP
-   //DxgFk3W6CbuVSDiXYP1DYSzsd3P3HWDg9oOaTPUQiMukoQO/hfRVaDj
-   zLnJjVeBT9VLZTzxnjcneBqnMbXpmCwy/SyBSF0epvCYS1D6MG2HuMG67
-   1wTwU+rOqSEI6YlPswSkGqIfZQjXDcSi1eMxFkSBg8edEEdUJszpbp2/F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="267229655"
+  t=1655193086; x=1686729086;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JuRGlnFAMaRI/86OvaXlr4MZXzY9T+9mHzNKqZPIxnU=;
+  b=kksPXzAMU/X63RJANWxMz8QfP/rtdmIvGy47t5EeRnmT6xHm6mC2lXIt
+   PoOWNqlYHjpemC0Cly6L8ga5D99XfO3zaIFfGDtsJGjI3G2uyMgXzcn1c
+   eyW22DEyz78dLyQENIkXb7Ez7aoNvsLpqKOKW3KmZi5Q4s0m3rdtb8meH
+   xWAlnfvVbQGVVzGx8oNqyEQmo+yeFZx3tGbBa9sx2f7s8BKoPbC7nvFnK
+   nn/Ma2+nPPF4e5xW3s/lO2C7dy2GgBhpy2IZvriFI0A/3OvIDSpC1bgSJ
+   r6boHDzCZs0L2jWzP1OO5T90MqBrniEph9W0c3PaQR+/ikaZBVBWvr3YG
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="340208439"
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="267229655"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:51:22 -0700
+   d="scan'208";a="340208439"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:51:21 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="673745017"
+   d="scan'208";a="617880161"
 Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 14 Jun 2022 00:51:20 -0700
+  by orsmga001.jf.intel.com with ESMTP; 14 Jun 2022 00:51:20 -0700
 Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1o11KZ-000LdF-Kk;
+        id 1o11KZ-000LdH-Oe;
         Tue, 14 Jun 2022 07:51:19 +0000
-Date:   Tue, 14 Jun 2022 15:50:21 +0800
+Date:   Tue, 14 Jun 2022 15:50:52 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Micah Morton <mortonm@chromium.org>,
-        linux-security-module@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        keescook@chromium.org, jmorris@namei.org, serge@hallyn.com,
-        linux-kernel@vger.kernel.org, Micah Morton <mortonm@chromium.org>
-Subject: Re: [PATCH 2/2] LSM: SafeSetID: Add setgroups() security policy
- handling
-Message-ID: <202206141555.zswTLROZ-lkp@intel.com>
-References: <20220613202852.447738-1-mortonm@chromium.org>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:irq/urgent] BUILD SUCCESS
+ 6872fcac7158c3b3728a2ec1ea771ade0e61ddd5
+Message-ID: <62a83ddc.slVL+t+3yhe5wsze%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613202852.447738-1-mortonm@chromium.org>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Micah,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/urgent
+branch HEAD: 6872fcac7158c3b3728a2ec1ea771ade0e61ddd5  Merge tag 'irqchip-fixes-5.19-1' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent
 
-I love your patch! Yet something to improve:
+elapsed time: 1472m
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on jmorris-security/next-testing kees/for-next/pstore v5.19-rc2 next-20220610]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+configs tested: 84
+configs skipped: 3
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Micah-Morton/security-Add-LSM-hook-to-setgroups-syscall/20220614-050341
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-config: x86_64-randconfig-a001-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141555.zswTLROZ-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c97436f8b6e2718286e8496faf53a2c800e281cf)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/248aa1aeef5c49d4af78b9c3d09e896413258c76
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Micah-Morton/security-Add-LSM-hook-to-setgroups-syscall/20220614-050341
-        git checkout 248aa1aeef5c49d4af78b9c3d09e896413258c76
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                                defconfig
+m68k                             allmodconfig
+nios2                               defconfig
+arc                              allyesconfig
+alpha                               defconfig
+csky                                defconfig
+alpha                            allyesconfig
+nios2                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+parisc64                            defconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+x86_64               randconfig-a012-20220613
+x86_64               randconfig-a011-20220613
+x86_64               randconfig-a013-20220613
+x86_64               randconfig-a014-20220613
+x86_64               randconfig-a015-20220613
+x86_64               randconfig-a016-20220613
+i386                 randconfig-a012-20220613
+i386                 randconfig-a011-20220613
+i386                 randconfig-a013-20220613
+i386                 randconfig-a014-20220613
+i386                 randconfig-a016-20220613
+i386                 randconfig-a015-20220613
+riscv                randconfig-r042-20220613
+arc                  randconfig-r043-20220613
+s390                 randconfig-r044-20220613
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                    nommu_k210_defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+x86_64                           allyesconfig
 
-All errors (new ones prefixed by >>):
-
->> security/safesetid/lsm.c:248:50: error: use of undeclared identifier 'group_info'
-                   if (!id_permitted_for_cred(old, (kid_t){.gid = group_info->gid[i]}, GID)) {
-                                                                  ^
-   1 error generated.
-
-
-vim +/group_info +248 security/safesetid/lsm.c
-
-   237	
-   238	static int safesetid_task_fix_setgroups(struct cred *new, const struct cred *old)
-   239	{
-   240		int i;
-   241	
-   242		/* Do nothing if there are no setgid restrictions for our old RGID. */
-   243		if (setid_policy_lookup((kid_t){.gid = old->gid}, INVALID_ID, GID) == SIDPOL_DEFAULT)
-   244			return 0;
-   245	
-   246		get_group_info(new->group_info);
-   247		for (i = 0; i < new->group_info->ngroups; i++) {
- > 248			if (!id_permitted_for_cred(old, (kid_t){.gid = group_info->gid[i]}, GID)) {
-   249				put_group_info(new->group_info);
-   250				/*
-   251				 * Kill this process to avoid potential security vulnerabilities
-   252				 * that could arise from a missing allowlist entry preventing a
-   253				 * privileged process from dropping to a lesser-privileged one.
-   254				 */
-   255				force_sig(SIGKILL);
-   256				return -EACCES;
-   257			}
-   258		}
-   259	
-   260		put_group_info(new->group_info);
-   261		return 0;
-   262	}
-   263	
+clang tested configs:
+x86_64               randconfig-a003-20220613
+x86_64               randconfig-a006-20220613
+x86_64               randconfig-a001-20220613
+x86_64               randconfig-a005-20220613
+x86_64               randconfig-a002-20220613
+x86_64               randconfig-a004-20220613
+i386                 randconfig-a001-20220613
+i386                 randconfig-a004-20220613
+i386                 randconfig-a002-20220613
+i386                 randconfig-a003-20220613
+i386                 randconfig-a006-20220613
+i386                 randconfig-a005-20220613
+hexagon              randconfig-r041-20220613
+hexagon              randconfig-r045-20220613
 
 -- 
 0-DAY CI Kernel Test Service

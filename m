@@ -2,114 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D9354B442
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D8A54B43B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:11:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355556AbiFNPKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41380 "EHLO
+        id S1356178AbiFNPLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241398AbiFNPKp (ORCPT
+        with ESMTP id S229460AbiFNPLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:10:45 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0EA3E5C3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:10:44 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id u18so8005484plb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=A6sdBtIDczcYVQC2OZNEb2EKTKTkY5JHvHWUoBduirY=;
-        b=Td5sxgkLsXBAHh5s6ax6Kar0E7KRoXD108icx3KWoRpz3iFrYWHdR/BGDh7SluJttP
-         u4SXknGrF06j3WaYk1Y4ZKcpP/V7Fuip216dIvKU7Sq8WVPbXiYIkKq660K1m2A0JhM3
-         pqMeQw8fU2+4erXrD51hwh1J1GeLe8Ef94alaZ8gcKVaP35kcPpG4stDEDmPDER0Kn71
-         8ZsnTRbd8lQJGkliggy2bIuZu7TpGq9lq89rF/OxqWpL+DwcjcaFkQCwImvXboYPwG0T
-         UdBz2hj7WtdiZvRFD+LT/P5/JGzoF1Do9fWo+7pXJyauHcGbpx1xQEqtyc761wLaUUcR
-         yfJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=A6sdBtIDczcYVQC2OZNEb2EKTKTkY5JHvHWUoBduirY=;
-        b=0RI9FgrkvB8ZAP/N/4OB348MrqTlGjc9nA3hY7j8dGXA3OQL9ttFzSIKPVQ/A41bYf
-         lZID9t6/JmvPD60Ab8onsijl2FQFUVmIoxinfxe8ltfAyhDz8Gtq7H3xybldbFBxR1eh
-         AV+6aGGfd9Gc3VdHwsAld7zIhFrpXSuYZLe0vv5N560U3ey2I1HdiQAZyJPjYVyplYEs
-         ed4LQlLVwXZFmPEXUIUI27A1F8tKLETZrVWENOy/0p1vOmrc8QSqi1j2bVBSSejjeYhc
-         8bvJ+rAvwy26SrXpZdMyYTIj+XdIUdnnlBqmN1+TjEpwA3dzdppCZiQwKsH6ZVjDtZM+
-         iOig==
-X-Gm-Message-State: AJIora9VwHWqwniKeabXHo8oxXDRgrQx67A0vV26Lsux2551nmZwmzuq
-        QgpgUsYIyrDDGRROBhAWpnzZm5p+ebrXxFBySvk=
-X-Google-Smtp-Source: AGRyM1uegsP/kss1whRDU7hTRLcrrWnlFz79XXd5CUoJ+vWuso8MEaQSSD1z9mHzYDXfAtnJIymB8RRC7DnG9sXPiSc=
-X-Received: by 2002:a17:903:11cc:b0:168:eae:da4a with SMTP id
- q12-20020a17090311cc00b001680eaeda4amr4764988plh.21.1655219444271; Tue, 14
- Jun 2022 08:10:44 -0700 (PDT)
+        Tue, 14 Jun 2022 11:11:49 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFC72FE57;
+        Tue, 14 Jun 2022 08:11:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655219508; x=1686755508;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ThbrdSl7ac2Xg3NVTJbJs4XQZ17kBipcdz3o+Cig7TI=;
+  b=IL9AhoEytErn/UBeyvLXy50qWAXoIE09n2/fjUtQcufZS+nwLb+wz2pq
+   sfdZqFu8RTEDlztUdFnpAVegvdwkECF1UsV/lxEDTrLOZV24q3VHTvQfP
+   abPtTMWbpdQ1pGZNX1rE3PueifaVI0HpvjA02/KMnZJWPJuSaNgM4rJ1P
+   7XUTdc7DkozAUUzulqVYhG2WE4wRXgvLwtJAGhn98uIHzUa83lcH2i4gB
+   jR05G7rNjSQ7ZfFVT5c5m47kdCKg6XUgRqLwVTuaHNirs5Dml5Luch5xi
+   Th8/OayAyEwhRQUR7wnFQg5p5OeD2J17i6xkNzLZx4zt5rOcD0CRFo3ND
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="261673574"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="261673574"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 08:11:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="673941747"
+Received: from xpf.sh.intel.com ([10.239.182.112])
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Jun 2022 08:11:44 -0700
+From:   Pengfei Xu <pengfei.xu@intel.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     Pengfei Xu <pengfei.xu@intel.com>, Heng Su <heng.su@intel.com>,
+        Hansen Dave <dave.hansen@intel.com>,
+        Luck Tony <tony.luck@intel.com>,
+        Mehta Sohil <sohil.mehta@intel.com>,
+        Chen Yu C <yu.c.chen@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bae Chang Seok <chang.seok.bae@intel.com>
+Subject: [PATCH v9 0/2] Introduce XSAVE feature self-test
+Date:   Tue, 14 Jun 2022 23:11:04 +0800
+Message-Id: <cover.1655218544.git.pengfei.xu@intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Received: by 2002:a05:6a11:4517:0:0:0:0 with HTTP; Tue, 14 Jun 2022 08:10:43
- -0700 (PDT)
-Reply-To: orlandomoris56@gmail.com
-From:   Orlando Moris <ouroakononassoumanou@gmail.com>
-Date:   Tue, 14 Jun 2022 15:10:43 +0000
-Message-ID: <CA+X4su0i-aovJs6O5Mukdy_TyZKquARQj8m0a2-ZFgMnHHJNPg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=6.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,LOTS_OF_MONEY,MONEY_FREEMAIL_REPTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM,UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:62d listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [ouroakononassoumanou[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [orlandomoris56[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.3 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  2.0 MONEY_FREEMAIL_REPTO Lots of money from someone using free
-        *      email?
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.6 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: ******
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ol=C3=A1, Informamos que este e-mail que chegou =C3=A0 sua caixa de correio=
- n=C3=A3o
-=C3=A9 um erro, mas foi especificamente endere=C3=A7ado a voc=C3=AA para su=
-a
-considera=C3=A7=C3=A3o. Tenho uma proposta de ($ 7.500.000,00) deixada pelo=
- meu
-falecido cliente Engenheiro Carlos, que viveu e trabalhou aqui em
-(Lom=C3=A9 Togo) antes de sua infeliz morte em um acidente de carro com sua
-fam=C3=ADlia, estou entrando em contato com voc=C3=AA como parente mais pr=
-=C3=B3ximo
-de ele para que voc=C3=AA possa receber os fundos mediante reclama=C3=A7=C3=
-=B5es. em
-sua resposta r=C3=A1pida, vou inform=C3=A1-lo sobre os modos de
-execu=C3=A7=C3=A3o deste conv=C3=AAnio., entre em contato comigo neste e-ma=
-il
-(orlandomoris56@gmail.com)
+The XSAVE feature set supports the saving and restoring of xstate components.
+XSAVE feature has been used for process context switching. XSAVE components
+include x87 state for FP execution environment, SSE state, AVX state and so on.
+
+In order to ensure that XSAVE works correctly, add XSAVE most basic test for
+XSAVE architecture functionality.
+
+This patch tests "FP, SSE(XMM), AVX2(YMM), AVX512_OPMASK/AVX512_ZMM_Hi256/
+AVX512_Hi16_ZMM and PKRU parts" xstates with following cases:
+1. The contents of these xstates in the process should not change after the
+   signal handling.
+2. The contents of these xstates in the child process should be the same as
+   the contents of the xstate in the parent process after the fork syscall.
+3. The contents of xstates in the parent process should not change after
+   the context switch.
+
+Because xstate like XMM will not be preserved across function calls, fork() and
+raise() are implemented and inlined.
+To prevent GCC from generating any FP/SSE(XMM)/AVX/PKRU code, add
+"-mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku" compiler arguments. stdlib.h
+can not be used because of the "-mno-sse" option.
+Thanks Dave, Hansen for the above suggestion!
+Thanks Chen Yu; Shuah Khan; Chatre Reinette and Tony Luck's comments!
+Thanks to Bae, Chang Seok for a bunch of comments!
+
+========
+- Change from v8 to v9
+  - Use function pointers to make it more structured. (Hansen, Dave)
+  - Improve the function name: xstate_tested -> xstate_in_test. (Chang S. Bae)
+  - Break this test up into two pieces: keep the xstate key test steps with
+    "-mno-sse" and no stdlib.h, keep others in xstate.c file. (Hansen, Dave)
+  - Use kselftest infrastructure for xstate.c file. (Hansen, Dave)
+  - Use instruction back to populate fp xstate buffer. (Hansen, Dave)
+  - Will skip the test if cpu could not support xsave. (Chang S. Bae)
+  - Use __cpuid_count() helper in kselftest.h. (Reinette, Chatre)
+
+- Change from v7 to v8
+  Many thanks to Bae, Chang Seok for a bunch of comments as follow:
+  - Use the filling buffer way to prepare the xstate buffer, and use xrstor
+    instruction way to load the tested xstates.
+  - Remove useless dump_buffer, compare_buffer functions.
+  - Improve the struct of xstate_info.
+  - Added AVX512_ZMM_Hi256 and AVX512_Hi16_ZMM components in xstate test.
+  - Remove redundant xstate_info.xstate_mask, xstate_flag[], and
+    xfeature_test_mask, use xstate_info.mask instead.
+  - Check if xfeature is supported outside of fill_xstate_buf() , this change
+    is easier to read and understand.
+  - Remove useless wrpkru, only use filling all tested xstate buffer in
+    fill_xstates_buf().
+  - Improve a bunch of function names and variable names.
+  - Improve test steps flow for readability.
+
+- Change from v6 to v7:
+  - Added the error number and error description of the reason for the
+    failure, thanks Shuah Khan's suggestion.
+  - Added a description of what these tests are doing in the head comments.
+  - Added changes update in the head comments.
+  - Added description of the purpose of the function. thanks Shuah Khan.
+
+- Change from v5 to v6:
+  - In order to prevent GCC from generating any FP code by mistake,
+    "-mno-sse -mno-mmx -mno-sse2 -mno-avx -mno-pku" compiler parameter was
+    added, it's referred to the parameters for compiling the x86 kernel. Thanks
+    Dave Hansen's suggestion.
+  - Removed the use of "kselftest.h", because kselftest.h included <stdlib.h>,
+    and "stdlib.h" would use sse instructions in it's libc, and this *XSAVE*
+    test needed to be compiled without libc sse instructions(-mno-sse).
+  - Improved the description in commit header, thanks Chen Yu's suggestion.
+  - Becasue test code could not use buildin xsave64 in libc without sse, added
+    xsave function by instruction way.
+  - Every key test action would not use libc(like printf) except syscall until
+    it's failed or done. If it's failed, then it would print the failed reason.
+  - Used __cpuid_count() instead of native_cpuid(), becasue __cpuid_count()
+    was a macro definition function with one instruction in libc and did not
+    change xstate. Thanks Chatre Reinette, Shuah Khan.
+    https://lore.kernel.org/linux-sgx/8b7c98f4-f050-bc1c-5699-fa598ecc66a2@linuxfoundation.org/
+
+- Change from v4 to v5:
+  - Moved code files into tools/testing/selftests/x86.
+  - Delete xsave instruction test, becaue it's not related to kernel.
+  - Improved case description.
+  - Added AVX512 opmask change and related XSAVE content verification.
+  - Added PKRU part xstate test into instruction and signal handling test.
+  - Added XSAVE process swich test for FPU, AVX2, AVX512 opmask and PKRU part.
+
+- Change from v3 to v4:
+  - Improve the comment in patch 1.
+
+- Change from v2 to v3:
+  - Improve the description of patch 2 git log.
+
+- Change from v1 to v2:
+  - Improve the cover-letter. Thanks Dave Hansen's suggestion.
+
+Pengfei Xu (2):
+  selftests/x86/xstate: Add xstate signal handling test for XSAVE
+    feature
+  selftests/x86/xstate: Add xstate fork test for XSAVE feature
+
+ tools/testing/selftests/x86/.gitignore       |   1 +
+ tools/testing/selftests/x86/Makefile         |  11 +-
+ tools/testing/selftests/x86/xstate.c         | 235 ++++++++++++++++
+ tools/testing/selftests/x86/xstate.h         | 267 +++++++++++++++++++
+ tools/testing/selftests/x86/xstate_helpers.c | 211 +++++++++++++++
+ tools/testing/selftests/x86/xstate_helpers.h |  10 +
+ 6 files changed, 733 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/x86/xstate.c
+ create mode 100644 tools/testing/selftests/x86/xstate.h
+ create mode 100644 tools/testing/selftests/x86/xstate_helpers.c
+ create mode 100644 tools/testing/selftests/x86/xstate_helpers.h
+
+-- 
+2.31.1
+

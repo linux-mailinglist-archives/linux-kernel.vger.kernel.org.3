@@ -2,170 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA1C454B764
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC0D54B769
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344012AbiFNRMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 13:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
+        id S241074AbiFNRMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 13:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244672AbiFNRMi (ORCPT
+        with ESMTP id S244479AbiFNRMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Jun 2022 13:12:38 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5938A11160;
-        Tue, 14 Jun 2022 10:12:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UnkcKB4NsDJ0e+mJiYWNx+eCTEwD4IDtNjFvnXDcokg=; b=JXA09RScBAaWksG9w8f1eTRDx4
-        jPYffuxU/Oy99uzq/dqd//WYwokS38bI/QGvYknm8zFgS3vrQtkcoOX6qIO7tKKQRLFroHKgAkjSb
-        /tvxwZw2q5CrF7NG3K0+O5rp7pIMysDT64NN6/ccTPvjXzCgRYF4ZXZWRGSgm/GTaAwh3ankYtsj2
-        i1oLpSEKv0CjPVVjmPZkIIBFcgaJA+8/C78nDnACERWnKrtVFsFAjbuPdTHnA3fHbQqUY3QahA2TN
-        IYY426fKPxYxFAz+mA4FdDG8SpuVxjKd2wLkgh7y/iu+e9O/fTibDiIVfWIcDfvjF3seVpliF0mH6
-        h7djO54g==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1o1A5W-000L3R-Dg;
-        Tue, 14 Jun 2022 17:12:22 +0000
-Date:   Tue, 14 Jun 2022 18:12:22 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        nvdimm@lists.linux.dev, David Howells <dhowells@redhat.com>
-Subject: Re: [RFC][PATCH] fix short copy handling in copy_mc_pipe_to_iter()
-Message-ID: <YqjBdtzXSKgwUi8f@ZenIV>
-References: <YqaAcKsd6uGfIQzM@zeniv-ca.linux.org.uk>
- <CAHk-=wjmCzdNDCt6L8-N33WSRaYjnj0=yTc_JG8A_Pd7ZEtEJw@mail.gmail.com>
- <Yqe6EjGTpkvJUU28@ZenIV>
- <YqfcHiBldIqgbu7e@ZenIV>
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7912B13DD9;
+        Tue, 14 Jun 2022 10:12:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A61B6166C;
+        Tue, 14 Jun 2022 17:12:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6439BC3411D;
+        Tue, 14 Jun 2022 17:12:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655226752;
+        bh=peyZwVSOaogAFeJxpKowfzymLa/etOhDZTzm9M6ehBs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KlUt4+38+8rfoiPeMI4kOjUhIbqNkw4vYxBFtxau4KQN3BdHGtYJ4ubre7hOUkjpl
+         ri35qfOSdhVv5Z6LvLEjKJAzS13WXlFhs+yWHgG7a4dXVm3a1Ye1mSLSEp2AdkPihR
+         Uq9Wc00DGpYaoOF2Whsywp669sjcQzB+616MlJhw=
+Date:   Tue, 14 Jun 2022 19:12:30 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/251] 5.15.47-rc2 review
+Message-ID: <YqjBfjUYVRE1k9iM@kroah.com>
+References: <20220613181847.216528857@linuxfoundation.org>
+ <20220614153607.GB3088490@roeck-us.net>
+ <20220614170827.GB3690098@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqfcHiBldIqgbu7e@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220614170827.GB3690098@roeck-us.net>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 01:53:50AM +0100, Al Viro wrote:
-
-> FWIW, I've got quite a bit of cleanups in the local tree; reordering and
-> cleaning that queue up at the moment, will post tonight or tomorrow.
+On Tue, Jun 14, 2022 at 10:08:27AM -0700, Guenter Roeck wrote:
+> On Tue, Jun 14, 2022 at 08:36:08AM -0700, Guenter Roeck wrote:
+> > On Mon, Jun 13, 2022 at 08:19:49PM +0200, Greg Kroah-Hartman wrote:
+> > > This is the start of the stable review cycle for the 5.15.47 release.
+> > > There are 251 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > > 
+> > > Responses should be made by Wed, 15 Jun 2022 18:18:03 +0000.
+> > > Anything received after that time might be too late.
+> > > 
+> > 
+> > Build results:
+> > 	total: 159 pass: 159 fail: 0
+> > Qemu test results:
+> > 	total: 488 pass: 488 fail: 0
+> > 
 > 
-> I've looked into doing allocations page-by-page (instead of single
-> push_pipe(), followed by copying into those).  Doable, but it ends
-> up being much messier.
+> I spoke a bit too early. I see the following backtrace in some qemu arm
+> boot tests.
+> 
+> BUG: spinlock bad magic on CPU#0, kdevtmpfs/15
+>  lock: noop_backing_dev_info+0x6c/0x3b0, .magic: 00000000, .owner: <none>/-1, .owner_cpu: 0
+> CPU: 0 PID: 15 Comm: kdevtmpfs Not tainted 5.15.47-rc2-00252-g677f0128d0ed #1
+> Hardware name: ARM RealView Machine (Device Tree Support)
+> [<c01101d0>] (unwind_backtrace) from [<c010bc0c>] (show_stack+0x10/0x14)
+> [<c010bc0c>] (show_stack) from [<c0a10ae4>] (dump_stack_lvl+0x68/0x90)
+> [<c0a10ae4>] (dump_stack_lvl) from [<c0191250>] (do_raw_spin_lock+0xbc/0x124)
+> [<c0191250>] (do_raw_spin_lock) from [<c02eb578>] (__mark_inode_dirty+0x1cc/0x704)
+> [<c02eb578>] (__mark_inode_dirty) from [<c02e6a74>] (simple_setattr+0x44/0x5c)
+> [<c02e6a74>] (simple_setattr) from [<c02d7a18>] (notify_change+0x400/0x45c)
+> [<c02d7a18>] (notify_change) from [<c0a19ef8>] (devtmpfsd+0x1f8/0x2b8)
+> [<c0a19ef8>] (devtmpfsd) from [<c014cf3c>] (kthread+0x150/0x17c)
+> [<c014cf3c>] (kthread) from [<c0100120>] (ret_from_fork+0x14/0x34)
+> Exception stack(0xd00dbfb0 to 0xd00dbff8)
+> bfa0:                                     00000000 00000000 00000000 00000000
+> bfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+> bfe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> 
+> This bisects to commit bc5d960d4e58 ("writeback: Fix inode->i_io_list not
+> be protected by inode->i_lock error"). The problem is also seen in the
+> mainline kernel. v5.15.y.queue and later are affected. Reverting the patch
+> here and in mainline fixes the problem.
 
-Hmm...  Maybe not - a possible interface would be
-	append_pipe(iter, size, &off)
-
-that would either do kmap_local_page() on the last buffer (if it's
-anonymous and has space in it) or allocated and mapped a page and
-added a new buffer.  Returning the mapped address and offset from it.
-Then these loops would looks like this:
-
-	while (left) {
-		p = append_pipe(iter, left, &off);
-		if (!p)
-			break;
-		chunk = min(left, PAGE_SIZE - off);
-		rem = copy(p + off, whatever, chunk);
-		chunk -= rem;
-		kunmap_local(p);
-
-		copied += chunk;
-		left -= chunk;
-
-		if (unlikely(rem)) {
-			pipe_revert(i, rem);
-			break;
-		}
-	}
-	return copied;
-
-with no push_pipe() used at all.  For operations that can't fail,
-the things are simplified in an obvious way (rem is always 0).
-
-Or we could have append_pipe() return a struct page * and leave
-kmap_local_page() to the caller...
-
-struct page *append_pipe(struct iov_iter *i, size_t size, unsigned *off)
-{
-	struct pipe_inode_info *pipe = i->pipe;
-	unsigned offset = i->iov_offset;
-	struct page_buffer *buf;
-	struct page *page;
-
-	if (offset && offset < PAGE_SIZE) {
-		// some space in the last buffer; can we add to it?
-		buf = pipe_buf(pipe, pipe->head - 1);
-		if (allocated(buf)) {
-			size = min(size, PAGE_SIZE - offset);
-			buf->len += size;
-			i->iov_offset += size;
-			i->count -= size;
-			*off = offset;
-			return buf->page;	// or kmap_local_page(...)
-		}
-	}
-	// OK, we need a new buffer
-	size = min(size, PAGE_SIZE);
-	if (pipe_full(.....))
-		return NULL;
-	page = alloc_page(GFP_USER);
-	if (!page)
-		return NULL;
-	// got it...
-	buf = pipe_buf(pipe, pipe->head++);
-	*buf = (struct pipe_buffer){.ops = &default_pipe_buf_ops,
-				    .page = page, .len = size };
-	i->head = pipe->head - 1;
-	i->iov_offset = size;
-	i->count -= size;
-	*off = 0;
-	return page;	 // or kmap_local_page(...)
-}
-
-(matter of fact, the last part could use another helper in my tree - there
-the tail would be
-	// OK, we need a new buffer
-	size = min(size, PAGE_SIZE);
-	page = push_anon(pipe, size);
-	if (!page)
-		return NULL;
-	i->head = pipe->head - 1;
-	i->iov_offset = size;
-	i->count -= size;
-	*off = 0;
-	return page;
-)
-
-Would that be readable enough from your POV?  That way push_pipe()
-loses almost all callers and after the "make iov_iter_get_pages()
-advancing" part of the series it simply goes away...
-
-It's obviously too intrusive for backports, though - there I'd very much
-prefer the variant I posted.
-
-Comments?
-
-PS: re local helpers:
-
-static inline struct pipe_buffer *pipe_buf(const struct pipe_inode_info *pipe,
-                                           unsigned int slot)
-{
-	return &pipe->bufs[slot & (pipe->ring_size - 1)];
-}
-
-pretty much all places where we cache pipe->ring_size - 1 had been
-absolutely pointless; there are several exceptions, but back in 2019
-"pipe: Use head and tail pointers for the ring, not cursor and length"
-went overboard with microoptimizations...
+Thanks for letting me know.  Hopefully it gets fixed in upstream...

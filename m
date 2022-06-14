@@ -2,158 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E953B54B273
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:44:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D773754B27A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239428AbiFNNoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 09:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
+        id S239259AbiFNNq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 09:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238780AbiFNNoZ (ORCPT
+        with ESMTP id S230077AbiFNNq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 09:44:25 -0400
-Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936BE22B07;
-        Tue, 14 Jun 2022 06:44:21 -0700 (PDT)
-Received: from pro2.mail.ovh.net (unknown [10.109.156.149])
-        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id 544B810C08DE9;
-        Tue, 14 Jun 2022 15:44:16 +0200 (CEST)
-Received: from [192.168.1.41] (88.161.25.233) by DAG1EX2.emp2.local
- (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Tue, 14 Jun
- 2022 15:44:14 +0200
-Message-ID: <84da79a6-9515-2b42-b34a-0c089d7a41b7@traphandler.com>
-Date:   Tue, 14 Jun 2022 15:44:14 +0200
+        Tue, 14 Jun 2022 09:46:57 -0400
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D020421E21;
+        Tue, 14 Jun 2022 06:46:53 -0700 (PDT)
+Received: by mail-qk1-f173.google.com with SMTP id d128so6375953qkg.8;
+        Tue, 14 Jun 2022 06:46:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4e9YVI1qcHuboFx6XM8DW9ECXNo0yy6Zy9E+en0JNY4=;
+        b=b0rHqZgh1nq2RMwd56UMKbapYHUzhjN8Qaw5xblMTgeUmQrMRUGArdwu2JL/Wbh3Wt
+         cel7QO76YS4FuujNxizkZlffQtg73h5YdETVcqcNe5HMNJ7Yiob6zi+8Glwj0NYNbLP1
+         5x5BT5BpjJfps5rrUHBLgdC3Ev5Vm+GD7/4xDqTnw/StO9le+jCVdtE2DciBHs0r7km1
+         x2FYFsIVd6H8gk3sa7UTctHXQEfuhBRzIgqiOYIiexBnwknqmao7b33y/lsm3+Liersi
+         UZq4GmPPXIO/OUkMZICFirMqmI5zHcW+nP8k5RZppOU7cNtF2uMOfmpMr/oxHdCkP+BN
+         E2Ng==
+X-Gm-Message-State: AOAM530zpaOdX2GaVcGa2E/BpJ+Ka3zJGzY/JEuXH/6TIm0gs+PomaVd
+        h1CiQbvvW305UJAJWUOmP94rjMlSl1iRow==
+X-Google-Smtp-Source: ABdhPJxwvRN9T5goLP0u05qzkiD1NCmBL3Xzr8N/NHL2Qh+ouxw+QmS5pC1FDDanU93lHDuKjZ3YiA==
+X-Received: by 2002:a05:620a:1a0c:b0:6a6:d021:7be3 with SMTP id bk12-20020a05620a1a0c00b006a6d0217be3mr3817680qkb.667.1655214412740;
+        Tue, 14 Jun 2022 06:46:52 -0700 (PDT)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id ff24-20020a05622a4d9800b003051190886dsm6978489qtb.75.2022.06.14.06.46.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 06:46:52 -0700 (PDT)
+Received: by mail-yb1-f172.google.com with SMTP id t32so15177387ybt.12;
+        Tue, 14 Jun 2022 06:46:52 -0700 (PDT)
+X-Received: by 2002:a25:818c:0:b0:664:a584:fafd with SMTP id
+ p12-20020a25818c000000b00664a584fafdmr5077802ybk.543.1655214412054; Tue, 14
+ Jun 2022 06:46:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 3/3] leds: tlc5925: Add support for non blocking
- operations
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Pavel Machek <pavel@ucw.cz>, <krzk+dt@kernel.org>,
+References: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Jun 2022 15:46:40 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdW-UybcPx-XexQZvDGQopPYa2POYaxrS-ey+QWu3GBs_w@mail.gmail.com>
+Message-ID: <CAMuHMdW-UybcPx-XexQZvDGQopPYa2POYaxrS-ey+QWu3GBs_w@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: thermal: rcar-gen3-thermal: use
+ positive logic
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220609162734.1462625-1-jjhiblot@traphandler.com>
- <20220609162734.1462625-4-jjhiblot@traphandler.com>
- <CAHp75VftbVOwPFra83T-k5d1qu3NnD_sDHYxiiSEDDrW3NObNQ@mail.gmail.com>
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-In-Reply-To: <CAHp75VftbVOwPFra83T-k5d1qu3NnD_sDHYxiiSEDDrW3NObNQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [88.161.25.233]
-X-ClientProxiedBy: DAG2EX1.emp2.local (172.16.2.11) To DAG1EX2.emp2.local
- (172.16.2.2)
-X-Ovh-Tracer-Id: 10425833138685622747
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudduledgieejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthejredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepieejfedukeevudfghfetudevhffhhfekjeeiudegtdehueevgfdvgeeivdeifedvnecukfhppedtrddtrddtrddtpdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhohedvke
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 10, 2022 at 10:18 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> When handling the V3U/r8a779a0 exception, avoid using 'not:' because
+> then its subschemas are far away in the 'else:' branch. Keep them
+> together using positive logic.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>
+> Changes since v2:
+> * new patch
 
-On 09/06/2022 18:43, Andy Shevchenko wrote:
-> On Thu, Jun 9, 2022 at 6:29 PM Jean-Jacques Hiblot
-> <jjhiblot@traphandler.com> wrote:
->> Settings multiple LEDs in a row can be a slow operation because of the
->> time required to acquire the bus and prepare the transfer.
->> And, in most cases, it is not required that the operation is synchronous.
->>
->> Implementing the non-blocking brightness_set() for such cases.
->> A work queue is used to perform the actual SPI transfer.
->>
->> The blocking method is still available in case someone needs to perform
->> this operation synchronously (ie by calling led_set_brightness_sync()).
-> i.e.
->
->> +#define BITS_PER_ATOMIC (sizeof(atomic_t) * 8)
-> We have BITS_PER_TYPE(). Use it directly in the code, no need for a
-> whole new macro.
->
-> ...
->
->> +static int xmit(struct tlc5925_leds_priv *priv)
->> +{
->> +       int i;
->> +
->> +       spin_lock(&priv->lock);
-> This can't be called during IRQ?
->
->> +       for (i = 0; i < priv->max_state / (sizeof(atomic_t) * 8) ; i++)
-> BITS_PER_TYPE() ?
->
->> +               priv->spi_buffer[i] = atomic_read(&priv->state[i]);
->> +       spin_unlock(&priv->lock);
->> +
->> +       return spi_write(priv->spi, priv->spi_buffer, priv->max_num_leds / 8);
->> +}
-> ...
->
->> +static void xmit_work(struct work_struct *ws)
->> +{
->> +       struct tlc5925_leds_priv *priv =
->> +               container_of(ws, struct tlc5925_leds_priv, xmit_work);
-> One line?
->
-> Missed blank line here.
->
->> +       xmit(priv);
->> +};
-> ...
->
->>          if (brightness)
->> -               priv->state[index / 8] |= (1 << (index % 8));
->> +               atomic_or(1 << (index % BITS_PER_ATOMIC),
->> +                         &priv->state[index / BITS_PER_ATOMIC]);
->>          else
->> -               priv->state[index / 8] &= ~(1 << (index % 8));
->> -       spin_unlock(&priv->lock);
->> +               atomic_and(~(1 << (index % BITS_PER_ATOMIC)),
->> +                          &priv->state[index / BITS_PER_ATOMIC]);
-> The whole bunch looks like reinventing the bitmap / bitops.
-> Use unsigned long (or DECLARE_BITMAP() if it can be higher than 32)
-> for state and set_bit() / clear_bit() / assign_bit() that are atomic.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Thanks for pointing this out.
+> Tested with:
+> make dtbs_check DT_SCHEMA_FILES=thermal/rcar-gen3-thermal.yaml
 
-It will drastically simplify the code.
+And dt_binding_check? Yep, it succeeds ;-)
 
->
-> ...
->
->> +       if (brightness)
->> +               atomic_or(1 << (index % BITS_PER_ATOMIC),
->> +                         &priv->state[index / BITS_PER_ATOMIC]);
->> +       else
->> +               atomic_and(~(1 << (index % BITS_PER_ATOMIC)),
->> +                          &priv->state[index / BITS_PER_ATOMIC]);
-> assign_bit()
->
-> ...
->
->> +       // Allocate the buffer used to hold the state of each LED
->> +       priv->max_state = round_up(max_num_leds, BITS_PER_ATOMIC);
->> +       priv->state = devm_kzalloc(dev,
->> +                                  priv->max_state / 8,
->> +                                  GFP_KERNEL);
->>          if (!priv->state)
->>                  return -ENOMEM;
-> devm_bitmap_zalloc() ?
->
-> ...
->
->> +       // Allocate a second buffer for the communication on the SPI bus
->> +       priv->spi_buffer = devm_kzalloc(dev,
->> +                                  priv->max_state / 8,
->> +                                  GFP_KERNEL);
-> Not sure I understand the output, but perhaps here the BITS_TO_BYTES()
-> should be used.
->
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

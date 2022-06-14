@@ -2,81 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D0954B649
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:35:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC6554B63F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:35:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344380AbiFNQeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
+        id S1344512AbiFNQeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239599AbiFNQd6 (ORCPT
+        with ESMTP id S1344454AbiFNQeB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:33:58 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8088D27CD3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:33:57 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-30ec2aa3b6cso35210397b3.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:33:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M/kEUFAftetAf2N7yHDHF4JNTzfknxIkkNoqCJfpWV0=;
-        b=bQFtbs9YcHpIat+VNMaXN8GfVHbAWCDLkV7fg62QD0yIWV+0uP3jDb6bxCYuRrqEKT
-         khJU61Bk1hb9Uq80iBtZyGFkblrK2wmswiU0/MbDSWcgffqTKuIHptrGMxqOTMIqbcC5
-         sHDPSHsiLF/+5qg30zLjsDKcgknLfGgW1u29wprNjV5IKExT0DSPvuMIv9W8cvVBEDsm
-         5HJuDD1ugXa43hE611TnQppED/4xi7YH9Yfla859aTKuPPndKZGqDFWWurUyMgqK4jRr
-         xL31Z0Afw/Y6Rb16m9Il0Mtp3STHc2r+MPEzB3OgRTSAFGzSzZ3IIs/HR0OlrSmV8qTK
-         UyLg==
+        Tue, 14 Jun 2022 12:34:01 -0400
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E86A28721;
+        Tue, 14 Jun 2022 09:34:00 -0700 (PDT)
+Received: by mail-pg1-f175.google.com with SMTP id f65so8970438pgc.7;
+        Tue, 14 Jun 2022 09:34:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M/kEUFAftetAf2N7yHDHF4JNTzfknxIkkNoqCJfpWV0=;
-        b=T8mUwYP6NstXsW7hiFPbX2hPrJTdcydDU1+kyxa79qPP6NvqzXf++RPJclTiqavBRb
-         RdSxBq5hYoheDf4YMvVBTyeZQO1EFQURHX2fAIK5rlSMgE44MRUVJOOHmn3rhBy80Y6W
-         eXAB2a+Uu1Eljh9hn8yuPW+OeH192iuUlViTQWwa5fC4MJ0WGXc5/eHxtHVuuImC8on4
-         Ga10vT4D9H9Z6L9BbP0I432D6jeSwMDwY47gVttVh8oyMdKqWdovjWcpW3EUPL/TMxox
-         uEf3zv29VO5IdxL3tqb70NTWFaf7CKFZxw8g47ISB1TcGoJ6zHOI7Lo/sOhFmNJBsTqJ
-         zZJQ==
-X-Gm-Message-State: AJIora/1lFcwXuIucoOR0hkDRzV7Phme6hF34DDjQJleKAUfS9d+t4AY
-        TMuJjDGPa1G/chNdSEHmiTadCna7L4rQv1hJybfON40CPnx3TQ==
-X-Google-Smtp-Source: AGRyM1stOhRVUmqx6x88uP8qyvJLoxv+aOJ0qkV9zyqBCmiYqcqZF7JCtPygwqiVsQXO2FQ8S8R0hej7Hl8B6obkwRk=
-X-Received: by 2002:a81:78d:0:b0:2e5:d440:d921 with SMTP id
- 135-20020a81078d000000b002e5d440d921mr6236243ywh.251.1655224436611; Tue, 14
- Jun 2022 09:33:56 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=RkwSMFs5tV7VRaLG//B6sO9EUx3D3MkuAWUqMRTF7Bw=;
+        b=S2tbwgjlC9kYxBqLNUaYAAsFooH6E3Yk7DrlWyQdctY0m7nSNGQWCHkRlo6oxqP7uD
+         2kYN0nhbHzEelyVmuZzMr76VK/jVMJenQAEu+cBKowF/RjR/S3pk4wYogyXNcPWE/qB9
+         FgnSo9aafkH04AqW9yo8RWMtvZjAb56wAISpOls6MHszLc5U8W6E28amJLIMytb6XDrA
+         yfblMyYLx3QbwWkNhKAfb0KlUNgnDDNpbcM8PrArxwBJPv0SWO5HEzMg7hfpaudoKey6
+         cVt05FQJl6a6T0QvCWwQ/PHaW40PUslEKFtc+JTRbnZFUt0Yo016owqQFcyTvrHmeK5q
+         ZJWw==
+X-Gm-Message-State: AOAM532zLWAHtdp+o5AHhBWCFVQ3ges0kuhzR/TWokQDu3zjyE9E7bTb
+        3irJXOkafSOTUPpUWBynbcw=
+X-Google-Smtp-Source: ABdhPJy5NVyNVmXrQ2mhwwjtyvfa7FqOz7rXp4n5RH3UDJtiasbysyiTqC2zGhgyiaffvYGRWKJR0Q==
+X-Received: by 2002:a05:6a00:2cc:b0:51b:f1d3:e5f with SMTP id b12-20020a056a0002cc00b0051bf1d30e5fmr5300707pft.52.1655224440026;
+        Tue, 14 Jun 2022 09:34:00 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:ab60:e1ea:e2eb:c1b6? ([2620:15c:211:201:ab60:e1ea:e2eb:c1b6])
+        by smtp.gmail.com with ESMTPSA id m25-20020a637119000000b003f6ba49bc57sm7983217pgc.71.2022.06.14.09.33.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 09:33:59 -0700 (PDT)
+Message-ID: <bc6fc2fa-df9a-60cb-3929-9dd5808eced2@acm.org>
+Date:   Tue, 14 Jun 2022 09:33:57 -0700
 MIME-Version: 1.0
-References: <20220613155612.402297-1-daeho43@gmail.com> <Yqge0XS7jbSnNWvq@sol.localdomain>
-In-Reply-To: <Yqge0XS7jbSnNWvq@sol.localdomain>
-From:   Daeho Jeong <daeho43@gmail.com>
-Date:   Tue, 14 Jun 2022 09:33:45 -0700
-Message-ID: <CACOAw_xZvvJFC8OwDQibtXqyYS7bMRe8CVkkktT_Nd1_EtFw+g@mail.gmail.com>
-Subject: Re: [PATCH] f2fs: handle decompress only post processing in softirq
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com,
-        Daeho Jeong <daehojeong@google.com>,
-        Nathan Huckleberry <nhuck@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 04/10] scsi: ufs-mediatek: Fix the timing of
+ configuring device regulators
+Content-Language: en-US
+To:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        avri.altman@wdc.com, alim.akhtar@samsung.com, jejb@linux.ibm.com
+Cc:     peter.wang@mediatek.com, chun-hung.wu@mediatek.com,
+        alice.chao@mediatek.com, powen.kao@mediatek.com,
+        mason.zhang@mediatek.com, qilin.tan@mediatek.com,
+        lin.gui@mediatek.com, eddie.huang@mediatek.com,
+        tun-yu.yu@mediatek.com, cc.chou@mediatek.com,
+        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com
+References: <20220614141655.14409-1-stanley.chu@mediatek.com>
+ <20220614141655.14409-5-stanley.chu@mediatek.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220614141655.14409-5-stanley.chu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> One question: is this (the bio endio callback) actually guaranteed to be
-> executed from a softirq?  If you look at dm-crypt's support for workqueue-less
-> decryption, for example, it explicitly checks 'in_hardirq() || irqs_disabled()'
-> and schedules a tasklet if either of those is the case.
->
-> - Eric
+On 6/14/22 07:16, Stanley Chu wrote:
+> +int ufs_mtk_system_suspend(struct device *dev)
+> +{
+> +	int ret = 0;
+> +	struct ufs_hba *hba = dev_get_drvdata(dev);
+> +
+> +	ret = ufshcd_system_suspend(dev);
+> +
+> +	if (!ret)
+> +		ufs_mtk_vreg_set_lpm(hba, true);
+> +
+> +	return ret;
+> +}
 
-Oh, you're right. Even though it's safe to defer all the release
-process as a work in end_io function, it's better to check the
-condition and process the release process right away if possible.
+
+Please use the traditional kernel coding style and return early in case 
+of an error. For the above code, that means to rewrite it as follows:
+
+	struct ufs_hba *hba = dev_get_drvdata(dev);
+	int ret;
+
+	ret = ufshcd_system_suspend(dev);
+	if (ret)
+		return ret;
+
+	ufs_mtk_vreg_set_lpm(hba, true);
+
+	return 0;
+
+> +int ufs_mtk_system_resume(struct device *dev)
+> +{
+> +	int ret = 0;
+> +	struct ufs_hba *hba = dev_get_drvdata(dev);
+> +
+> +	ufs_mtk_vreg_set_lpm(hba, false);
+> +
+> +	ret = ufshcd_system_resume(dev);
+> +
+> +	return ret;
+> +}
+
+Please remove the variable 'ret' from the above function.
+
+> +int ufs_mtk_runtime_suspend(struct device *dev)
+> +{
+> +	struct ufs_hba *hba = dev_get_drvdata(dev);
+> +	int ret = 0;
+> +
+> +	ret = ufshcd_runtime_suspend(dev);
+> +
+> +	if (!ret)
+> +		ufs_mtk_vreg_set_lpm(hba, true);
+> +
+> +	return ret;
+> +}
+
+Please use the "early return" style.
+
+> +int ufs_mtk_runtime_resume(struct device *dev)
+> +{
+> +	struct ufs_hba *hba = dev_get_drvdata(dev);
+> +	int ret = 0;
+> +
+> +	ufs_mtk_vreg_set_lpm(hba, false);
+> +
+> +	ret = ufshcd_runtime_resume(dev);
+> +
+> +	return ret;
+> +}
+
+Please remove the variable 'ret' from the above function.
 
 Thanks,
+
+Bart.

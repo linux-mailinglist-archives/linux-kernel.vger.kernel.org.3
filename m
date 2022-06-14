@@ -2,153 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B460154A729
+	by mail.lfdr.de (Postfix) with ESMTP id 6A41154A728
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354821AbiFNC43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 22:56:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52142 "EHLO
+        id S239989AbiFNC4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 22:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354829AbiFNC4M (ORCPT
+        with ESMTP id S1345546AbiFNC4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 22:56:12 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2131.outbound.protection.outlook.com [40.107.215.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2DD3C480;
-        Mon, 13 Jun 2022 19:41:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lHmwkWBsSrOos2e4golH4gRWvxZOCyv5xhrrfL3tk+ZZArEmcWNgGJoFGt6DK3yCp512Mpzvl8n+8A9qWrMfIZkalaLhel7oBn6wItfBnJLMoak+0E8H94zl5BYqapSzHym0LlUb1CENa6LZzCNsr0gtMcEggiy8eIM74mQlRBd3hcu55TbwgvCanY4V7YoxbqZHRxl+c7p1qz7/6FVjDwWKY4s7+aKWYEWgd8h2vguz5WVcrHOgx3QmA3hm3ZDCJLa/xUn7QET1Nq5fE545Ekr0gzHPk7EI9DeSrV2+wqxAme+2hUn/LJ5YBGWImYgwJPmVmCZgVLngyTEZu1yWzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Gc0WUx3PFo7iJr3k4RrFyRrYvvLDpEMJWbs2hNngPiM=;
- b=RIj7/ax1NyfV/ApCvwL3cIcO4GHrokoaI8yW6pg40vrD3DzL3ugzcYJBOtrb0L/GKXVIruev2nK7YwzwnjGNztLZ/g0PTmunA+emnCRCJm4UrE22UEefFqfvkJe0E7DPt7fTJGiDP2ancnFXoj1Cx7jB7xaW7ki/YJeBHYnoL0Hrcsy6c3N9QKlQp3LmnC2Xc+M8+KMtzRGeMM6tOC5AFoEPPVBT9CoRSRVFb6toxficMMK8pr9rccoqA/aqh5udBvZOwvXL8TID8Fouxzrqo3OFOsNsd78+daOaYeOa9GKfQL56PnurTFE0NdbnWpYfKP9T2c0BiwbUhSyvsoJSfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
- header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Gc0WUx3PFo7iJr3k4RrFyRrYvvLDpEMJWbs2hNngPiM=;
- b=YDHhzp+OUCEc6JPpb1A9ck2/PNYaD4H+nWgtBJLfBFdENWoxV/Z/KOcfERq6HA9T4Z7HjBVPTD3CR0v96w6waM3AXFBSE/Tct99b0A+zh4dPfGR/D4Ix3XcUrZ/UM8eqokXEjplMGTI4huMy9UThy2Zo6VbzpkWrdoB3PLcV2hE5SQDliaCWemaYVPSGZ6asAkMs5oFe4adtWgzbJb6g0oHTDd7zLtYuqTQ9o/TSgmlfmRUSNYerLw7vNLA4iKMQoFRyRve2AN/c4tULDQqQOVGTuyOOLym6flDu6bnzOdnWYd3T1AyZLe75QQW8ZQoLe2pbRIpqqIieywcv/6Oc+A==
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
- by SG2PR06MB2313.apcprd06.prod.outlook.com (2603:1096:4:12::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Tue, 14 Jun
- 2022 02:41:42 +0000
-Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::7c42:9783:92c9:f237]) by HK0PR06MB3202.apcprd06.prod.outlook.com
- ([fe80::7c42:9783:92c9:f237%7]) with mapi id 15.20.5332.022; Tue, 14 Jun 2022
- 02:41:42 +0000
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>,
-        Joel Stanley <joel@jms.id.au>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: RE: linux-next: build failure after merge of the usb tree
-Thread-Topic: linux-next: build failure after merge of the usb tree
-Thread-Index: AQHYf5Ot1DkwIX5VjEOvDWkjD02LNq1OMLww
-Date:   Tue, 14 Jun 2022 02:41:41 +0000
-Message-ID: <HK0PR06MB32025AFD8869F26343CE22AB80AA9@HK0PR06MB3202.apcprd06.prod.outlook.com>
-References: <20220614120833.06cec8e7@canb.auug.org.au>
-In-Reply-To: <20220614120833.06cec8e7@canb.auug.org.au>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=aspeedtech.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9b920375-fea8-4384-55d8-08da4daf6a08
-x-ms-traffictypediagnostic: SG2PR06MB2313:EE_
-x-microsoft-antispam-prvs: <SG2PR06MB2313C1A1111138A248C1222280AA9@SG2PR06MB2313.apcprd06.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GFHD+yhhWKPYya4YEEgP5ou+F7ObmGrnQ4t1xnjLEit2SrcaULXtXWRATi52jeRxjwjeEMag/NiRj8ip2FdIFcuDuDhjCPZM/zDldjsH7gOWB+TtbkOu+cWSNafqXhsD20NR3l6fRa08rMO8Vjgdt851LNI+tIhasJwjj22PcV1xMxVxFlzw39tmjjbTPrAvt3Zoc0WJCZYLeIVcYYd+lUa0dVrRV/apfpZqhsnE+h8rUjooJX+cbIKu8JJrFsylNdLAdNR9bhoyB9f2hXXg3DwhXit/zkgPrrD4LzSCbachI0H/8ClqtCviQg549PsB0/z3Ukrh190aH+1Afvm1Tv4j4ynG8IzVJF9kmV0sN0oAGLU+y+eZgPcdenFKK/g7Lv1ZpoAEj8HkqiNF1+znVvNjOsoGHtGIDfcuZdWGSjAbwzrDCZkBtq6/IMKVWYxCL9Sr3uOvOLWFrkZMzBPGpj+7zi5TSo2HSFmrhuJZyfla2p8Fxoj4lneR5KMP2vIWN8GQB8ukn4hh+yfFY81ja+VpLEri7N8bTwCY/r8NMZ4/K9gggQ0K/A76xRcgv7OXFYCTCnmML4SN5mk6fb4jJhdhTILeiEXZMGwii4tscGxBQQq3jxE2SRX23FZlp7BO4iYhL5znOKXAMiH9VTfHunNJPdADH2vEC1DfVwopdXg0Hljy70mAMty2eC08iEFGsffaYcLAYGu0NkO5HZ5rWQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(136003)(39850400004)(396003)(366004)(38070700005)(110136005)(316002)(55016003)(2906002)(54906003)(7696005)(6506007)(53546011)(38100700002)(41300700001)(86362001)(4326008)(76116006)(9686003)(8676002)(66476007)(66446008)(66946007)(66556008)(64756008)(186003)(52536014)(26005)(4744005)(8936002)(122000001)(83380400001)(508600001)(33656002)(71200400001)(5660300002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Jk0tpNpBVyXsRgJk4h2jlrA13X03Z71u26APXvtZ1iSZAdxSdSNHGL3hCjze?=
- =?us-ascii?Q?G3FAAw+3cgbHYgy2V40W+NSb+Aza+81r2iq2DEzCoz9juWOsVORiBP9j64Fd?=
- =?us-ascii?Q?myxs3TGTqhC8xDN2h+ocA3O36AHrYaVGzSEc+f1eGw2P9OssO9inLcdEkS+a?=
- =?us-ascii?Q?bG+Pu4zLETJV8FhWT4T58E9WQpc8Ux7GAhNRpVBqWcT1erGgitXNWzYElrTF?=
- =?us-ascii?Q?WzGRJOOmJnC2jvKEhrEPv6anqmRQdVhRY0rGQ3DFN4kHbfIa89bA7m/nQ3cy?=
- =?us-ascii?Q?OVCCU7rsnNGajnPh2VrOiL964CwqxyQjmk6M1H7Q1dDQcrbweI7WrfIsNr/I?=
- =?us-ascii?Q?T6olven3hZ4o52iz+qGEliKoXyFlTBGydoAeJ4nesyXEB6g4/T+aoto4j/oN?=
- =?us-ascii?Q?A5Fc1C0phrm/AmYTBOtSIh8p4VGeT2hOAQebJ6ZRDL9bmYONbijRfcunDWUV?=
- =?us-ascii?Q?W9dF637DoD2jWZ7jmFDa1zk33Z93PQtxBMJaBBNJkSVSi26WlQQNaQhD416d?=
- =?us-ascii?Q?UVBNH9CS3msgdkotu/2zsTqQ3fivCE5YTK8CXr8cWUKJQ/KzDMoMX44uQ4Zx?=
- =?us-ascii?Q?iKIIM1PAgJj8BLtsmBqo+H4GvXWfVKG9HrlgJNcH5dAULE9G8EDFVlTNzocG?=
- =?us-ascii?Q?NQyuNhD+3VTOq7Kwq4DD7tWmejsYZkbHguKdyrAiYhKXga6p9DKQ+mGnzqCB?=
- =?us-ascii?Q?CDUieDsEL3Enlqj0T27fXUjgcQlertkCDh1hXZ/Gdldpi+Om5U5d2dP0WvgV?=
- =?us-ascii?Q?Mm/z4ujd6/MItisIHccmIJ/t5h6hu9CbG7wPJxzBvMYW5FsjzyPzyALr16ep?=
- =?us-ascii?Q?wC1JfAVKKJj8HDS+iDTGFXJxMPror8z+mZNPvPyXscblphp5aHLq4vBLJVTZ?=
- =?us-ascii?Q?0cM7cA/i4DcmdQUdOeDgvTjP3011jtl9GX0In/CUmYUuGIre9YfY0ezPD7F8?=
- =?us-ascii?Q?c/763ol1Ml9a6PfesNshmGFXJBihfmdSN6tW83BLBEcfQfQP/zh9fQ2/4eUp?=
- =?us-ascii?Q?H6IFY3FvaWaGV4yLI9Ktz9mpdxQyISy28fUolr4Uj4oDcoRN7LmQT7Zb7Qa4?=
- =?us-ascii?Q?dbvRFn6rY8gQVcyeM+Sd3TRX77c/Jag8VtLIlqmMzKuK6Jrx/jLxkDidCBUu?=
- =?us-ascii?Q?vV4g1N0mon8zW2cLoMbWo6Iit3GEv6ih9I9fCpJHAJu0sVvLznD5ftJVCXgf?=
- =?us-ascii?Q?iIsAXYvv3AkeJR5uzTWOZTMf/jIcsMjH1dDZ2wlJ9iQvInAv/kYEEywI7bE6?=
- =?us-ascii?Q?0jINE/OKD2MlIXXpCe1ZTdyldpUookilKzqW0MH1LGl66QJfUH3iARziF4go?=
- =?us-ascii?Q?7725WTaw6lQDdlt783Y7utp08nleiaka+Cei+CoyG3kpLO201/oHevgqh0tu?=
- =?us-ascii?Q?SJlUy4UT8gttkOHlqtv2N/ZaAgMuTdsK8pbL8pJWV7KfNbyHR1Emwa48BI65?=
- =?us-ascii?Q?crFVrvo8/V3KpE7pvc51qs3DcL0C6GpnWwNwTBb6Q59myr9IkTVLCwYCK6rG?=
- =?us-ascii?Q?2GG19WHa08vbiOfYOU5S3T+RGygJziQXcFmp8ZCX6nA93/3fZEfcYEK2N9hQ?=
- =?us-ascii?Q?JxiCr6t4OkEDWUynBbV8Z3jecvRLftfD45yAaRoebHZzw6AfdYD82nEOPG9z?=
- =?us-ascii?Q?yr92T1CPr80EOWU7LISzHP0xqfSoIm/dezC26nFtN2M1OKMjMA+Upo93rpiE?=
- =?us-ascii?Q?93VwPFB9CweVmxWbvKHG+O9YT/4xNqHh5Maqmv72BO2Kjp0HQfAWQMBpsoEd?=
- =?us-ascii?Q?ImPlINiHVg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 13 Jun 2022 22:56:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC38B36681
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 19:42:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C2D7B816E4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 02:42:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 200BDC3411B;
+        Tue, 14 Jun 2022 02:41:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655174519;
+        bh=gWe+KkJwuLLPm5nqlarCynBBxq9KjWwVfU86evVXDXo=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=gWehKC4lyTVWGSKwresgCKUT9QBxroyStB17pZV6pEl8YgLUIapSjxxg5tFIF3w79
+         VUFj2QJxLVRDdJ5sLCIquS+qoXb/bBzkSnivNCPEigJzYqDPiUA/q2zN93qPPMyRWR
+         96XMhtRLLkZy2HE/JpC21v4Bia54Pz6Nk505oLuqrtMf6ly+pI9r0IOoxqiVsU2zol
+         D7fwV91pI8YqTERX517lynL0vzzJ/Ak/nGbpdqZ+UpvkldMrg7WxDNjFt9WxU1KlW+
+         3xZh+WkE0FhJN71ma607eB2n2xIisLLbacJpOlfdmcEvo5WZN9QpFZMejtuTsgdmNr
+         Wi+b4hpbUAaRg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BB6D85C02F9; Mon, 13 Jun 2022 19:41:58 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 19:41:58 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhang, Qiang1" <qiang1.zhang@intel.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        syzbot <syzbot+9bb26e7c5e8e4fa7e641@syzkaller.appspotmail.com>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>
+Subject: Re: [syzbot] WARNING in exit_tasks_rcu_finish
+Message-ID: <20220614024158.GQ1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220613233753.GK1790663@paulmck-ThinkPad-P17-Gen-1>
+ <202206131639.DBA0A8D@keescook>
+ <20220614000329.GO1790663@paulmck-ThinkPad-P17-Gen-1>
+ <PH0PR11MB5880C6814BA88CD660610344DAAA9@PH0PR11MB5880.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-X-OriginatorOrg: aspeedtech.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b920375-fea8-4384-55d8-08da4daf6a08
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2022 02:41:41.9580
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zUPtpCzbnFoM5ZT3d27QomYviOgBkSEnxzdSnyJ14z5LcLOGcVB+4iyxQfIRkrJ28J3ieG/G4oA+0dV36I8IEA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB2313
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PH0PR11MB5880C6814BA88CD660610344DAAA9@PH0PR11MB5880.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -----Original Message-----
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Sent: Tuesday, June 14, 2022 10:09 AM
-> To: Greg KH <greg@kroah.com>
-> Cc: Neal Liu <neal_liu@aspeedtech.com>; Linux Kernel Mailing List
-> <linux-kernel@vger.kernel.org>; Linux Next Mailing List
-> <linux-next@vger.kernel.org>
-> Subject: linux-next: build failure after merge of the usb tree
->=20
-> Hi all,
->=20
-> After merging the usb tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->=20
->=20
-> Caused by commit
->=20
->   2cee50bf4590 ("ARM: dts: aspeed: Add USB2.0 device controller node")
->=20
-> I have used the usb tree from next-20220610 for today.
->=20
-> --
-> Cheers,
-> Stephen Rothwell
+On Tue, Jun 14, 2022 at 12:52:23AM +0000, Zhang, Qiang1 wrote:
+> On Mon, Jun 13, 2022 at 04:42:07PM -0700, Kees Cook wrote:
+> > On Mon, Jun 13, 2022 at 10:36:07AM -0700, syzbot wrote:
+> > > Hello,
+> > > 
+> > > syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+> > > 
+> > > Reported-and-tested-by: 
+> > > syzbot+9bb26e7c5e8e4fa7e641@syzkaller.appspotmail.com
+> > 
+> > Looks like the patch solved the reproducer. :)
+> 
+> >For one of the two possible ways to make the bug happen.  ;-)
+> >
+> >Still, good on Qiang for identifying one of the paths!  Not just anyone can do that.
+> 
+> Thanks Paul, yes this patch can solved the reproducer and I also test it.
+> 
+> I compiled "bpf_test" according to the c file in the following link
+> 
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=148207bff00000
+> 
+> Not apply this patch, this calltrace reproduce
+> 
+> root@qemux86-64:/# ./bpf_test
+> ^C
+> root@qemux86-64:/# dmesg
+> [  147.017232] ------------[ cut here ]------------
+> [  147.017234] WARNING: CPU: 3 PID: 21586 at kernel/rcu/tasks.h:1664 exit_tasks_rcu_finish+0xbf/0x100
+> [  147.017245] Modules linked in:
+> [  147.017249] CPU: 3 PID: 21586 Comm: bpf_test Not tainted 5.19.0-rc1-next-20220610-yoctodev-standard #204
+> [  147.017253] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+> [  147.017256] RIP: 0010:exit_tasks_rcu_finish+0xbf/0x100
+> [  147.017261] Code: 03 00 00 85 c0 75 59 f0 83 44 24 fc 00 49 8d bc 24 41 03 00 00 e8 21 09 2b 00 41 0f b6 84 24 41 03 00 00 83 e0 01 08 d8 74 11 <0f> 8
+> [  147.017264] RSP: 0018:ffff88810ccd7af0 EFLAGS: 00010202
+> [  147.017268] RAX: 0000000000000001 RBX: 0000000000000201 RCX: ffffffff897ab52f
+> [  147.017271] RDX: 1ffff1102181d7c8 RSI: 0000000000000000 RDI: ffff88810c0ebe41
+> [  147.017274] RBP: ffff88810ccd7b08 R08: ffffffff897ab510 R09: 0000000000000000
+> [  147.017277] R10: ffffffff8c407bbf R11: 0000000000000000 R12: ffff88810c0ebb00
+> [  147.017279] R13: ffff88810c0ebe38 R14: ffff88810ccd7b78 R15: ffff88810ccd76b0
+> [  147.017282] FS:  0000000000000000(0000) GS:ffff88815a000000(0000) knlGS:0000000000000000
+> [  147.017287] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  147.017289] CR2: 0000000000000000 CR3: 000000011ac16000 CR4: 00000000001506e0
+> [  147.017292] Call Trace:
+> [  147.017294]  <TASK>
+> [  147.017297]  do_exit+0xe9a/0x13a0
+> [  147.017305]  ? mm_update_next_owner+0x450/0x450
+> [  147.017309]  ? lock_downgrade+0x410/0x410
+> [  147.017313]  ? lock_contended+0x790/0x790
+> [  147.017317]  ? rcu_read_lock_held_common+0x1e/0x60
+> [  147.017324]  do_group_exit+0x71/0x150
+> [  147.017329]  get_signal+0x1319/0x1340
+> [  147.017334]  ? futex_wait_setup+0x180/0x180
+> [  147.017341]  ? exit_signals+0x4c0/0x4c0
+> [  147.017345]  ? futex_wake+0x29e/0x2e0
+> [  147.017351]  arch_do_signal_or_restart+0x9c/0xc60
+> [  147.017357]  ? rcu_read_lock_sched_held+0x60/0xd0
+> [  147.017361]  ? rcu_read_lock_bh_held+0xb0/0xb0
+> [  147.017367]  ? get_sigframe_size+0x20/0x20
+> [  147.017371]  ? do_futex+0x1a2/0x240
+> [  147.017375]  ? __ia32_sys_get_robust_list+0x240/0x240
+> [  147.017378]  ? __context_tracking_exit+0x91/0xa0
+> [  147.017385]  ? lock_downgrade+0x410/0x410
+> [  147.017390]  ? __x64_sys_futex+0x125/0x2b0
+> [  147.017393]  ? rcu_read_lock_held_common+0x1e/0x60
+> [  147.017399]  ? lockdep_hardirqs_on_prepare+0x13/0x230
+> [  147.017403]  ? exit_to_user_mode_prepare+0x151/0x240
+> [  147.017409]  exit_to_user_mode_prepare+0x16c/0x240
+> [  147.017415]  syscall_exit_to_user_mode+0x1e/0x70
+> [  147.017419]  do_syscall_64+0x50/0x90
+> [  147.017423]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> [  147.017427] RIP: 0033:0x7f780e668fbd
+> [  147.017431] Code: Unable to access opcode bytes at RIP 0x7f780e668f93.
+> [  147.017433] RSP: 002b:00007f780e55bd48 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+> [  147.017437] RAX: fffffffffffffe00 RBX: 00007f780e55c640 RCX: 00007f780e668fbd
+> [  147.017440] RDX: 0000000000000000 RSI: 0000000000000080 RDI: 000055ed9f3a8088
+> [  147.017442] RBP: 00007f780e55bd60 R08: 0000000100000001 R09: 0000000100000001
+> [  147.017445] R10: 0000000000000000 R11: 0000000000000246 R12: fffffffffffffeb0
+> [  147.017447] R13: 0000000000000000 R14: 00007ffe5dcf20a0 R15: 00007f780e53c000
+> [  147.017455]  </TASK>
+> [  147.017458] irq event stamp: 0
+> [  147.017460] hardirqs last  enabled at (0): [<0000000000000000>] 0x0
+> [  147.017463] hardirqs last disabled at (0): [<ffffffff896b5990>] copy_process+0xe30/0x35f0
+> [  147.017467] softirqs last  enabled at (0): [<ffffffff896b5990>] copy_process+0xe30/0x35f0
+> [  147.017470] softirqs last disabled at (0): [<0000000000000000>] 0x0
+> [  147.017473] ---[ end trace 0000000000000000 ]---
+> 
+> Apply this patch , this problem not reproduce.
 
-Looks like the same patch is already merged by Joe, how's that coming from?
+Thank you very much!  May I apply your Tested-by?
 
-commit c9cb67c3a650 ("ARM: dts: aspeed: Add USB2.0 device controller node")
+							Thanx, Paul
 
--Neal
+> Thanks
+> Zqiang
+> 
+> >
+> >							Thanx, Paul
+> >
+> > > Tested on:
+> > > 
+> > > commit:         6d0c8068 Add linux-next specific files for 20220610
+> > > git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git next-20220610
+> > > console output: 
+> > > https://syzkaller.appspot.com/x/log.txt?x=12d068eff00000
+> > > kernel config:  
+> > > https://syzkaller.appspot.com/x/.config?x=a30d6e3e814e5931
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=9bb26e7c5e8e4fa7e641
+> > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > patch:          https://syzkaller.appspot.com/x/patch.diff?x=147f47c8080000
+> > > 
+> > > Note: testing is done by a robot and is best-effort only.
+> > 
+> > You can see the dashboard link above for testing details...
+> > 
+> > --
+> > Kees Cook

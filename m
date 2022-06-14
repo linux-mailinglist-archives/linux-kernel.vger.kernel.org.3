@@ -2,38 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBF454A80A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 06:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BA554A811
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 06:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351060AbiFNEZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 00:25:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44432 "EHLO
+        id S1351258AbiFNEZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 00:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349618AbiFNEZf (ORCPT
+        with ESMTP id S1349068AbiFNEZf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Jun 2022 00:25:35 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0962AC51;
-        Mon, 13 Jun 2022 21:25:30 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 107AD1A126F;
-        Tue, 14 Jun 2022 06:25:29 +0200 (CEST)
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48CF2AC76;
+        Mon, 13 Jun 2022 21:25:31 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 3DB13202719;
+        Tue, 14 Jun 2022 06:25:30 +0200 (CEST)
 Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id BB2011A2664;
-        Tue, 14 Jun 2022 06:25:28 +0200 (CEST)
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id E85B8202718;
+        Tue, 14 Jun 2022 06:25:29 +0200 (CEST)
 Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id CAEAA180222A;
-        Tue, 14 Jun 2022 12:25:26 +0800 (+08)
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 0E88B180219B;
+        Tue, 14 Jun 2022 12:25:27 +0800 (+08)
 From:   Shengjiu Wang <shengjiu.wang@nxp.com>
 To:     nicoleotsuka@gmail.com, Xiubo.Lee@gmail.com, festevam@gmail.com,
         shengjiu.wang@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
         perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
         robh+dt@kernel.org, krzk+dt@kernel.org, devicetree@vger.kernel.org
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/7] Add PDM/DSD/dataline configuration support
-Date:   Tue, 14 Jun 2022 12:11:17 +0800
-Message-Id: <1655179884-12278-1-git-send-email-shengjiu.wang@nxp.com>
+Subject: [PATCH 1/7] ASoC: fsl_sai: Add PDM daifmt support
+Date:   Tue, 14 Jun 2022 12:11:18 +0800
+Message-Id: <1655179884-12278-2-git-send-email-shengjiu.wang@nxp.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1655179884-12278-1-git-send-email-shengjiu.wang@nxp.com>
+References: <1655179884-12278-1-git-send-email-shengjiu.wang@nxp.com>
 X-Virus-Scanned: ClamAV using ClamSMTP
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -44,25 +46,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support PDM format and DSD format.
-Add new dts property to configure dataline. The SAI has multiple
-successive FIFO registers, but in some use
-case the required dataline/FIFOs are not successive.
+PDM format is used for 1-bit stream, so clear the FBT and SYWD,
+and the each dataline only has one channel data.
 
-Shengjiu Wang (7):
-  ASoC: fsl_sai: Add PDM daifmt support
-  ASoC: fsl_sai: Add DSD bit format support
-  ASoC: fsl_sai: Add support for more sample rates
-  ASoc: fsl_sai: Add pinctrl operation for PDM and DSD
-  ASoC: fsl_sai: Move res variable to be global
-  ASoC: dt-bindings: fsl-sai: Add new property to configure dataline
-  ASoC: fsl_sai: Configure dataline/FIFO information from dts property
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+---
+ sound/soc/fsl/fsl_sai.c | 17 +++++++++++++++--
+ sound/soc/fsl/fsl_sai.h |  1 +
+ 2 files changed, 16 insertions(+), 2 deletions(-)
 
- .../devicetree/bindings/sound/fsl-sai.txt     |   8 +
- sound/soc/fsl/fsl_sai.c                       | 260 ++++++++++++++++--
- sound/soc/fsl/fsl_sai.h                       |  26 +-
- 3 files changed, 272 insertions(+), 22 deletions(-)
-
+diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
+index 4f5bd9597c74..d11ee3b6f163 100644
+--- a/sound/soc/fsl/fsl_sai.c
++++ b/sound/soc/fsl/fsl_sai.c
+@@ -224,6 +224,7 @@ static int fsl_sai_set_dai_fmt_tr(struct snd_soc_dai *cpu_dai,
+ 	if (!sai->is_lsb_first)
+ 		val_cr4 |= FSL_SAI_CR4_MF;
+ 
++	sai->is_pdm_mode = false;
+ 	/* DAI mode */
+ 	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
+ 	case SND_SOC_DAIFMT_I2S:
+@@ -262,6 +263,11 @@ static int fsl_sai_set_dai_fmt_tr(struct snd_soc_dai *cpu_dai,
+ 		val_cr2 |= FSL_SAI_CR2_BCP;
+ 		sai->is_dsp_mode = true;
+ 		break;
++	case SND_SOC_DAIFMT_PDM:
++		val_cr2 |= FSL_SAI_CR2_BCP;
++		val_cr4 &= ~FSL_SAI_CR4_MF;
++		sai->is_pdm_mode = true;
++		break;
+ 	case SND_SOC_DAIFMT_RIGHT_J:
+ 		/* To be done */
+ 	default:
+@@ -470,6 +476,13 @@ static int fsl_sai_hw_params(struct snd_pcm_substream *substream,
+ 
+ 	pins = DIV_ROUND_UP(channels, slots);
+ 
++	/*
++	 * PDM mode, channels are independent
++	 * each channels are on one dataline/FIFO.
++	 */
++	if (sai->is_pdm_mode)
++		pins = channels;
++
+ 	if (!sai->is_consumer_mode) {
+ 		if (sai->bclk_ratio)
+ 			ret = fsl_sai_set_bclk(cpu_dai, tx,
+@@ -492,13 +505,13 @@ static int fsl_sai_hw_params(struct snd_pcm_substream *substream,
+ 		}
+ 	}
+ 
+-	if (!sai->is_dsp_mode)
++	if (!sai->is_dsp_mode && !sai->is_pdm_mode)
+ 		val_cr4 |= FSL_SAI_CR4_SYWD(slot_width);
+ 
+ 	val_cr5 |= FSL_SAI_CR5_WNW(slot_width);
+ 	val_cr5 |= FSL_SAI_CR5_W0W(slot_width);
+ 
+-	if (sai->is_lsb_first)
++	if (sai->is_lsb_first || sai->is_pdm_mode)
+ 		val_cr5 |= FSL_SAI_CR5_FBT(0);
+ 	else
+ 		val_cr5 |= FSL_SAI_CR5_FBT(word_width - 1);
+diff --git a/sound/soc/fsl/fsl_sai.h b/sound/soc/fsl/fsl_sai.h
+index 1c8f5ca07f9d..bc2a86a413e1 100644
+--- a/sound/soc/fsl/fsl_sai.h
++++ b/sound/soc/fsl/fsl_sai.h
+@@ -259,6 +259,7 @@ struct fsl_sai {
+ 	bool is_consumer_mode;
+ 	bool is_lsb_first;
+ 	bool is_dsp_mode;
++	bool is_pdm_mode;
+ 	bool synchronous[2];
+ 
+ 	unsigned int mclk_id[2];
 -- 
 2.17.1
 

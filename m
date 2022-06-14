@@ -2,86 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7149654AC37
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D60E754AC35
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355861AbiFNImh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 04:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
+        id S1354840AbiFNIm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 04:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353729AbiFNImI (ORCPT
+        with ESMTP id S1355816AbiFNImM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 04:42:08 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE9442ECD;
-        Tue, 14 Jun 2022 01:41:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655196111; x=1686732111;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=sTFaVrkqoKJ+RPXYHxWrHGVjnxcIndtOcGxPl0yyczw=;
-  b=lKtbDuvGYd5JXcBnLMpgWmRHG8rK6FOV1YiWr4YiCEzDSvdLQcp8hxW8
-   dtuzf6tbiM5AXcMy4ZWcke41Q5sPEPZoSkq8cZRnErPTUXobpHs/0tj3b
-   G9jSms7xme40dl2BcDY92D9sR+Xjw9IlX7xR67BVNXBxIkDHwkxWtGO1U
-   F0CL18j9Yc7ApooYXD8+PbeLzaATd1VS2Vmp+LGNPzgVuNwPSlr5KVprU
-   3v/RLDCEQjDElynm7rIrBnB9Aq7PzbbYp3Yavl7PJXWGckkWHkYWlcMC1
-   mV0L60rAFpuzGt0A+54Q09DNuETAQ7pr0ZAH6jGNqYpvxkZ3GaTU+Nr1u
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="364889284"
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="364889284"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 01:41:46 -0700
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="910883959"
-Received: from jlaghzal-mobl1.ger.corp.intel.com ([10.252.32.175])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 01:41:45 -0700
-Date:   Tue, 14 Jun 2022 11:41:43 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jiri Slaby <jslaby@suse.cz>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 7/7] tty/vt: consolemap: remove dflt reset from
- con_do_clear_unimap()
-In-Reply-To: <20220614075713.32767-7-jslaby@suse.cz>
-Message-ID: <baaff049-cb36-9468-3b53-2b7d14441d@linux.intel.com>
-References: <20220614075713.32767-1-jslaby@suse.cz> <20220614075713.32767-7-jslaby@suse.cz>
+        Tue, 14 Jun 2022 04:42:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18E224338E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:42:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F411515DB
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:42:01 -0700 (PDT)
+Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A36A53F66F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:42:01 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 09:41:49 +0100
+From:   Liviu Dudau <liviu.dudau@arm.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        arm@kernel.org, soc@kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: arm: adjust whitespace around '='
+Message-ID: <YqhJzRYdgwn0i/wc@e110455-lin.cambridge.arm.com>
+References: <20220526204350.832361-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-49823128-1655196080=:1605"
-Content-ID: <77e94118-9dfb-c78e-4492-c4d9fa02cfd@linux.intel.com>
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220526204350.832361-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-49823128-1655196080=:1605
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <b7fe41f8-bfb-d422-6c6d-769d52f9eec9@linux.intel.com>
-
-On Tue, 14 Jun 2022, Jiri Slaby wrote:
-
-> con_do_clear_unimap() sets dflt to NULL and then calls
-> con_release_unimap() which does the very same as the first thing. So
-> remove the former as it is apparently superfluous.
+On Thu, May 26, 2022 at 10:43:50PM +0200, Krzysztof Kozlowski wrote:
+> Fix whitespace coding style: use single space instead of tabs or
+> multiple spaces around '=' sign in property assignment.  No functional
+> changes (same DTB).
 > 
-> Suggested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Acked-by: Liviu Dudau <liviu.dudau@arm.com>
 
-...to all patches in this series that weren't individually replied to.
+Thanks for the cleanup!
+
+Sudeep, can you pick this one up in your tree?
+
+Best regards,
+Liviu
+
+> 
+> ---
+> 
+> Output compared with dtx_diff and fdtdump.
+> ---
+>  arch/arm64/boot/dts/arm/juno-base.dtsi    | 44 +++++++++++------------
+>  arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi | 16 ++++-----
+>  2 files changed, 30 insertions(+), 30 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/arm/juno-base.dtsi b/arch/arm64/boot/dts/arm/juno-base.dtsi
+> index 065381c1cbf5..8d0d45d168d1 100644
+> --- a/arch/arm64/boot/dts/arm/juno-base.dtsi
+> +++ b/arch/arm64/boot/dts/arm/juno-base.dtsi
+> @@ -581,36 +581,36 @@ cti_sys0: cti@20020000 { /* sys_cti_0 */
+>  
+>  		trig-conns@0 {
+>  			reg = <0>;
+> -			arm,trig-in-sigs=<2 3>;
+> -			arm,trig-in-types=<SNK_FULL SNK_ACQCOMP>;
+> -			arm,trig-out-sigs=<0 1>;
+> -			arm,trig-out-types=<SNK_FLUSHIN SNK_TRIGIN>;
+> +			arm,trig-in-sigs = <2 3>;
+> +			arm,trig-in-types = <SNK_FULL SNK_ACQCOMP>;
+> +			arm,trig-out-sigs = <0 1>;
+> +			arm,trig-out-types = <SNK_FLUSHIN SNK_TRIGIN>;
+>  			arm,cs-dev-assoc = <&etr_sys>;
+>  		};
+>  
+>  		trig-conns@1 {
+>  			reg = <1>;
+> -			arm,trig-in-sigs=<0 1>;
+> -			arm,trig-in-types=<SNK_FULL SNK_ACQCOMP>;
+> -			arm,trig-out-sigs=<7 6>;
+> -			arm,trig-out-types=<SNK_FLUSHIN SNK_TRIGIN>;
+> +			arm,trig-in-sigs = <0 1>;
+> +			arm,trig-in-types = <SNK_FULL SNK_ACQCOMP>;
+> +			arm,trig-out-sigs = <7 6>;
+> +			arm,trig-out-types = <SNK_FLUSHIN SNK_TRIGIN>;
+>  			arm,cs-dev-assoc = <&etf_sys0>;
+>  		};
+>  
+>  		trig-conns@2 {
+>  			reg = <2>;
+> -			arm,trig-in-sigs=<4 5 6 7>;
+> -			arm,trig-in-types=<STM_TOUT_SPTE STM_TOUT_SW
+> +			arm,trig-in-sigs = <4 5 6 7>;
+> +			arm,trig-in-types = <STM_TOUT_SPTE STM_TOUT_SW
+>  					   STM_TOUT_HETE STM_ASYNCOUT>;
+> -			arm,trig-out-sigs=<4 5>;
+> -			arm,trig-out-types=<STM_HWEVENT STM_HWEVENT>;
+> +			arm,trig-out-sigs = <4 5>;
+> +			arm,trig-out-types = <STM_HWEVENT STM_HWEVENT>;
+>  			arm,cs-dev-assoc = <&stm_sys>;
+>  		};
+>  
+>  		trig-conns@3 {
+>  			reg = <3>;
+> -			arm,trig-out-sigs=<2 3>;
+> -			arm,trig-out-types=<SNK_FLUSHIN SNK_TRIGIN>;
+> +			arm,trig-out-sigs = <2 3>;
+> +			arm,trig-out-types = <SNK_FLUSHIN SNK_TRIGIN>;
+>  			arm,cs-dev-assoc = <&tpiu_sys>;
+>  		};
+>  	};
+> @@ -628,24 +628,24 @@ cti_sys1: cti@20110000 { /* sys_cti_1 */
+>  
+>  		trig-conns@0 {
+>  			reg = <0>;
+> -			arm,trig-in-sigs=<0>;
+> -			arm,trig-in-types=<GEN_INTREQ>;
+> -			arm,trig-out-sigs=<0>;
+> -			arm,trig-out-types=<GEN_HALTREQ>;
+> +			arm,trig-in-sigs = <0>;
+> +			arm,trig-in-types = <GEN_INTREQ>;
+> +			arm,trig-out-sigs = <0>;
+> +			arm,trig-out-types = <GEN_HALTREQ>;
+>  			arm,trig-conn-name = "sys_profiler";
+>  		};
+>  
+>  		trig-conns@1 {
+>  			reg = <1>;
+> -			arm,trig-out-sigs=<2 3>;
+> -			arm,trig-out-types=<GEN_HALTREQ GEN_RESTARTREQ>;
+> +			arm,trig-out-sigs = <2 3>;
+> +			arm,trig-out-types = <GEN_HALTREQ GEN_RESTARTREQ>;
+>  			arm,trig-conn-name = "watchdog";
+>  		};
+>  
+>  		trig-conns@2 {
+>  			reg = <2>;
+> -			arm,trig-out-sigs=<1 6>;
+> -			arm,trig-out-types=<GEN_HALTREQ GEN_RESTARTREQ>;
+> +			arm,trig-out-sigs = <1 6>;
+> +			arm,trig-out-types = <GEN_HALTREQ GEN_RESTARTREQ>;
+>  			arm,trig-conn-name = "g_counter";
+>  		};
+>  	};
+> diff --git a/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi b/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi
+> index 2e43f4531308..ba88d1596f6f 100644
+> --- a/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi
+> +++ b/arch/arm64/boot/dts/arm/juno-cs-r1r2.dtsi
+> @@ -96,24 +96,24 @@ cti_sys2: cti@20160000 { /* sys_cti_2 */
+>  
+>  		trig-conns@0 {
+>  			reg = <0>;
+> -			arm,trig-in-sigs=<0 1>;
+> -			arm,trig-in-types=<SNK_FULL SNK_ACQCOMP>;
+> -			arm,trig-out-sigs=<0 1>;
+> -			arm,trig-out-types=<SNK_FLUSHIN SNK_TRIGIN>;
+> +			arm,trig-in-sigs = <0 1>;
+> +			arm,trig-in-types = <SNK_FULL SNK_ACQCOMP>;
+> +			arm,trig-out-sigs = <0 1>;
+> +			arm,trig-out-types = <SNK_FLUSHIN SNK_TRIGIN>;
+>  			arm,cs-dev-assoc = <&etf_sys1>;
+>  		};
+>  
+>  		trig-conns@1 {
+>  			reg = <1>;
+> -			arm,trig-in-sigs=<2 3 4>;
+> -			arm,trig-in-types=<ELA_DBGREQ ELA_TSTART ELA_TSTOP>;
+> +			arm,trig-in-sigs = <2 3 4>;
+> +			arm,trig-in-types = <ELA_DBGREQ ELA_TSTART ELA_TSTOP>;
+>  			arm,trig-conn-name = "ela_clus_0";
+>  		};
+>  
+>  		trig-conns@2 {
+>  			reg = <2>;
+> -			arm,trig-in-sigs=<5 6 7>;
+> -			arm,trig-in-types=<ELA_DBGREQ ELA_TSTART ELA_TSTOP>;
+> +			arm,trig-in-sigs = <5 6 7>;
+> +			arm,trig-in-types = <ELA_DBGREQ ELA_TSTART ELA_TSTOP>;
+>  			arm,trig-conn-name = "ela_clus_1";
+>  		};
+>  	};
+> -- 
+> 2.34.1
+> 
 
 -- 
- i.
---8323329-49823128-1655196080=:1605--
+====================
+| I would like to |
+| fix the world,  |
+| but they're not |
+| giving me the   |
+ \ source code!  /
+  ---------------
+    Â¯\_(ãƒ„)_/Â¯

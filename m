@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1857D54B95C
+	by mail.lfdr.de (Postfix) with ESMTP id 61B6254B95D
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357518AbiFNSqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59286 "EHLO
+        id S1357541AbiFNSqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357602AbiFNSns (ORCPT
+        with ESMTP id S1357611AbiFNSns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Jun 2022 14:43:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F734C7A3;
-        Tue, 14 Jun 2022 11:42:43 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177114C7B3;
+        Tue, 14 Jun 2022 11:42:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20B3AB81AF7;
-        Tue, 14 Jun 2022 18:42:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73654C3411D;
-        Tue, 14 Jun 2022 18:42:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23F82617C4;
+        Tue, 14 Jun 2022 18:42:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 313D3C3411B;
+        Tue, 14 Jun 2022 18:42:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655232160;
-        bh=3dsMAznn1B6DoeOIvyo2p957q7i+qY4LOqwKuKo6vpY=;
+        s=korg; t=1655232163;
+        bh=Br2wCjlgDjpX3s57Ji9NzrpEWbPb2g8jFBtsagWwyO4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zVkfRh/CTpv9BHx9lnlh2fYPhJAQdbLpSZSZo+oxQiNF56wdESSOFZY0lcs6sCCiL
-         i+k05tMcmnnyMuJ8U7UfcPAdU225lhse/W6lBmyb2tB5TBQVLRIVk0APOXqF8tvczn
-         sv6TRMHM1KeVtSUPoO49fbVgGggrq3CDewdQMeSc=
+        b=zoRhvYLMnVr6uU2/VwvW+WGteNbA3Nyi3TlDJnbXyeTibzeChbao69UKk6ji5sgOW
+         cFoxhW/bPvGmJv19Lqp0Y3nmlTpxXcjuaW6+GoABFDjKbGCeym6KOiXJCeuACEgBEa
+         CzrA/c4iMOkufYiypwfkQyJw4vEr3vO3OqWN98hs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Borislav Petkov <bp@suse.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 4.14 17/20] x86/speculation/srbds: Update SRBDS mitigation selection
-Date:   Tue, 14 Jun 2022 20:40:08 +0200
-Message-Id: <20220614183727.515024248@linuxfoundation.org>
+Subject: [PATCH 4.14 18/20] x86/speculation/mmio: Reuse SRBDS mitigation for SBDS
+Date:   Tue, 14 Jun 2022 20:40:09 +0200
+Message-Id: <20220614183727.731711129@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220614183723.328825625@linuxfoundation.org>
 References: <20220614183723.328825625@linuxfoundation.org>
@@ -59,44 +59,81 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-commit 22cac9c677c95f3ac5c9244f8ca0afdc7c8afb19 upstream
+commit a992b8a4682f119ae035a01b40d4d0665c4a2875 upstream
 
-Currently, Linux disables SRBDS mitigation on CPUs not affected by
-MDS and have the TSX feature disabled. On such CPUs, secrets cannot
-be extracted from CPU fill buffers using MDS or TAA. Without SRBDS
-mitigation, Processor MMIO Stale Data vulnerabilities can be used to
-extract RDRAND, RDSEED, and EGETKEY data.
+The Shared Buffers Data Sampling (SBDS) variant of Processor MMIO Stale
+Data vulnerabilities may expose RDRAND, RDSEED and SGX EGETKEY data.
+Mitigation for this is added by a microcode update.
 
-Do not disable SRBDS mitigation by default when CPU is also affected by
-Processor MMIO Stale Data vulnerabilities.
+As some of the implications of SBDS are similar to SRBDS, SRBDS mitigation
+infrastructure can be leveraged by SBDS. Set X86_BUG_SRBDS and use SRBDS
+mitigation.
+
+Mitigation is enabled by default; use srbds=off to opt-out. Mitigation
+status can be checked from below file:
+
+  /sys/devices/system/cpu/vulnerabilities/srbds
 
 Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+[cascardo: adjust for processor model names]
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/cpu/bugs.c |    8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ arch/x86/kernel/cpu/common.c |   21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -578,11 +578,13 @@ static void __init srbds_select_mitigati
- 		return;
+--- a/arch/x86/kernel/cpu/common.c
++++ b/arch/x86/kernel/cpu/common.c
+@@ -972,6 +972,8 @@ static const __initconst struct x86_cpu_
+ #define SRBDS		BIT(0)
+ /* CPU is affected by X86_BUG_MMIO_STALE_DATA */
+ #define MMIO		BIT(1)
++/* CPU is affected by Shared Buffers Data Sampling (SBDS), a variant of X86_BUG_MMIO_STALE_DATA */
++#define MMIO_SBDS	BIT(2)
+ 
+ static const struct x86_cpu_id cpu_vuln_blacklist[] __initconst = {
+ 	VULNBL_INTEL_STEPPINGS(IVYBRIDGE,	X86_STEPPING_ANY,		SRBDS),
+@@ -993,16 +995,17 @@ static const struct x86_cpu_id cpu_vuln_
+ 	VULNBL_INTEL_STEPPINGS(KABYLAKE_MOBILE,	X86_STEPPINGS(0x0, 0x8),	SRBDS),
+ 	VULNBL_INTEL_STEPPINGS(KABYLAKE_DESKTOP,X86_STEPPINGS(0x9, 0xD),	SRBDS | MMIO),
+ 	VULNBL_INTEL_STEPPINGS(KABYLAKE_DESKTOP,X86_STEPPINGS(0x0, 0x8),	SRBDS),
+-	VULNBL_INTEL_STEPPINGS(ICELAKE_MOBILE,	X86_STEPPINGS(0x5, 0x5),	MMIO),
++	VULNBL_INTEL_STEPPINGS(ICELAKE_MOBILE,	X86_STEPPINGS(0x5, 0x5),	MMIO | MMIO_SBDS),
+ 	VULNBL_INTEL_STEPPINGS(ICELAKE_XEON_D,	X86_STEPPINGS(0x1, 0x1),	MMIO),
+ 	VULNBL_INTEL_STEPPINGS(ICELAKE_X,	X86_STEPPINGS(0x4, 0x6),	MMIO),
+-	VULNBL_INTEL_STEPPINGS(COMETLAKE,	BIT(2) | BIT(3) | BIT(5),	MMIO),
+-	VULNBL_INTEL_STEPPINGS(COMETLAKE_L,	X86_STEPPINGS(0x0, 0x1),	MMIO),
+-	VULNBL_INTEL_STEPPINGS(LAKEFIELD,	X86_STEPPINGS(0x1, 0x1),	MMIO),
++	VULNBL_INTEL_STEPPINGS(COMETLAKE,	BIT(2) | BIT(3) | BIT(5),	MMIO | MMIO_SBDS),
++	VULNBL_INTEL_STEPPINGS(COMETLAKE_L,	X86_STEPPINGS(0x1, 0x1),	MMIO | MMIO_SBDS),
++	VULNBL_INTEL_STEPPINGS(COMETLAKE_L,	X86_STEPPINGS(0x0, 0x0),	MMIO),
++	VULNBL_INTEL_STEPPINGS(LAKEFIELD,	X86_STEPPINGS(0x1, 0x1),	MMIO | MMIO_SBDS),
+ 	VULNBL_INTEL_STEPPINGS(ROCKETLAKE,	X86_STEPPINGS(0x1, 0x1),	MMIO),
+-	VULNBL_INTEL_STEPPINGS(ATOM_TREMONT,	X86_STEPPINGS(0x1, 0x1),	MMIO),
++	VULNBL_INTEL_STEPPINGS(ATOM_TREMONT,	X86_STEPPINGS(0x1, 0x1),	MMIO | MMIO_SBDS),
+ 	VULNBL_INTEL_STEPPINGS(ATOM_TREMONT_X,	X86_STEPPING_ANY,		MMIO),
+-	VULNBL_INTEL_STEPPINGS(ATOM_TREMONT_L,	X86_STEPPINGS(0x0, 0x0),	MMIO),
++	VULNBL_INTEL_STEPPINGS(ATOM_TREMONT_L,	X86_STEPPINGS(0x0, 0x0),	MMIO | MMIO_SBDS),
+ 	{}
+ };
+ 
+@@ -1081,10 +1084,14 @@ static void __init cpu_set_bug_bits(stru
+ 	/*
+ 	 * SRBDS affects CPUs which support RDRAND or RDSEED and are listed
+ 	 * in the vulnerability blacklist.
++	 *
++	 * Some of the implications and mitigation of Shared Buffers Data
++	 * Sampling (SBDS) are similar to SRBDS. Give SBDS same treatment as
++	 * SRBDS.
+ 	 */
+ 	if ((cpu_has(c, X86_FEATURE_RDRAND) ||
+ 	     cpu_has(c, X86_FEATURE_RDSEED)) &&
+-	    cpu_matches(cpu_vuln_blacklist, SRBDS))
++	    cpu_matches(cpu_vuln_blacklist, SRBDS | MMIO_SBDS))
+ 		    setup_force_cpu_bug(X86_BUG_SRBDS);
  
  	/*
--	 * Check to see if this is one of the MDS_NO systems supporting
--	 * TSX that are only exposed to SRBDS when TSX is enabled.
-+	 * Check to see if this is one of the MDS_NO systems supporting TSX that
-+	 * are only exposed to SRBDS when TSX is enabled or when CPU is affected
-+	 * by Processor MMIO Stale Data vulnerability.
- 	 */
- 	ia32_cap = x86_read_arch_cap_msr();
--	if ((ia32_cap & ARCH_CAP_MDS_NO) && !boot_cpu_has(X86_FEATURE_RTM))
-+	if ((ia32_cap & ARCH_CAP_MDS_NO) && !boot_cpu_has(X86_FEATURE_RTM) &&
-+	    !boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA))
- 		srbds_mitigation = SRBDS_MITIGATION_TSX_OFF;
- 	else if (boot_cpu_has(X86_FEATURE_HYPERVISOR))
- 		srbds_mitigation = SRBDS_MITIGATION_HYPERVISOR;
 
 

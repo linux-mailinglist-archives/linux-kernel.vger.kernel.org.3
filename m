@@ -2,239 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C312154AAA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A2054AAB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353996AbiFNHbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46942 "EHLO
+        id S1354523AbiFNHbi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:31:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiFNHbE (ORCPT
+        with ESMTP id S1348432AbiFNHbf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:31:04 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B073E0F5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:31:03 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id CF6FA5C00DE;
-        Tue, 14 Jun 2022 03:31:02 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 14 Jun 2022 03:31:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1655191862; x=1655278262; bh=Dbk8kA3/CUb/CaOmXekOBIJYO
-        kqO37bfGP3D3h82pdI=; b=GjScZWiLfZQp+GRfzqrZkrlx8z0eymYKG26evbTcZ
-        +xaJFYiHwkMa1WqUbD5Z5TVH3CsaX9i4BFzYvtTx1+Uk2pQ97xEg7PyX8BQJ51qG
-        NmlRgX3lpLgV6iVpDbESPHnPYh3ut0lXwQPQtOAeLNk8M+AYL+P8SiCaPBDky7y8
-        E0sw+Mu7K6+tEMPnhElJOMiGIlc3S6yElK7p/srJ/G9OqKkvSwarBlXq1hpJSNKp
-        n90aQXXG4vSxG3rsuZNMl/+s0tHLkMrnYBlW5/we3fUQGzIvCh8S1MHh+oOzYI4g
-        cwj4Du//PB1VKYI0BzrsHvUaUxEHMuDK7TbC+0HcS1NTA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1655191862; x=1655278262; bh=Dbk8kA3/CUb/CaOmXekOBIJYOkqO37bfGP3
-        D3h82pdI=; b=RRx+YASnTQKS74TUfNjQxCEegiO474fxANvHlE2etkWoZOomiML
-        J8WOEcjX3OlTw65GLjoTp/hyh/2vDcKPqGXo8TzPT2RAWhxYoT4Rv1jHxBG+bsdA
-        VY2ef8nQCzQppCdzGD0eFBoT9V8fIqr3T3nphGTzvWuTBs4VqKxGWAg5PBdnUg5+
-        PuoWYIebct4Src3LYLip+66Q9ZPMBUJzH43NM7wKIgkKXkU0XzlVHIDFKlV4pS/d
-        CG2Afs7zqkPnGR57OaHXCzW+vBqzP0cxX2jKPLUBG4mxp+bzIIpDQXQwJ0d/JV2K
-        rw7H1B1J87jW1YHcUe++T/RCAxhJkZVBNWg==
-X-ME-Sender: <xms:NjmoYjK6eDDoUIVQihZuQoHhq4K5AC2hcz7QUD3ho1Sd5Zkw4WAuhA>
-    <xme:NjmoYnJPvmSGJfBVwvNhZ4nnYLRDpTkPpTCyff38kKRKOD_GR2Gp8IlPxrF7r8t63
-    HbAZ5SfPmC_C650rQ>
-X-ME-Received: <xmr:NjmoYruX4PBmhgPBU9HliJ9tOECioYeac_cSZ6PjH7URGzN6rT6cl7wwpKR-XwVtbAaTz3xo685LYKelLt4-lF5cxmMFGwHEcvy-svsbQrJqydsmNXDuPZBh2kV_96eATrKfiQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddukedguddukecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpeekveelhfejueelleetvdejvdeffeetgeelheeujeffhefgffefkeeh
-    hffhkeekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:NjmoYsYIOqf-XLTYTfxq-IUOf7FECYtefDg3Ng70sZsS2zGK_GWX8g>
-    <xmx:NjmoYqZkY16jvUk8Uqfsmx1MFx-cJ4dLbwZF1PdqgBwgu4aReC6rUg>
-    <xmx:NjmoYgCbrbqXd0t3PiNvDqFlpQrwp-kgzqjWqlMD_QU_UKfna1yPsQ>
-    <xmx:NjmoYmS-87aCNzBeVwL2beT_wtRysCRqSbeTfy3VdR2NEe1GxYQzWQ>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 14 Jun 2022 03:31:01 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH] drm/sun4i: dw-hdmi: Fix ddc-en GPIO consumer conflict
-Date:   Tue, 14 Jun 2022 02:31:00 -0500
-Message-Id: <20220614073100.11550-1-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
+        Tue, 14 Jun 2022 03:31:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A97B43E0F0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655191891;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2u1UJeCG+WneWifdMmrdhoGBRpopTVWJT/OvMvoPDO4=;
+        b=OxsNwEpQMg4rmbYxtiFLgaj75lcu9bASiLGCx1TrU0RMfK0njgcmovH1QsJXaWAi1uMFWb
+        HG4eWlsL0t+DJjhsnbe5bpxC8HnPYyVL3aVO0dzpidjlV7gzhg76wFWQITW9r9Jx3aHNAm
+        EE5VwFuD7xzKP35c0fzQuDV1U2sh93k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-290-4ZXueI-ENXCFF3VJOXoeCA-1; Tue, 14 Jun 2022 03:31:27 -0400
+X-MC-Unique: 4ZXueI-ENXCFF3VJOXoeCA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E9828101A54E;
+        Tue, 14 Jun 2022 07:31:26 +0000 (UTC)
+Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A581E40EC003;
+        Tue, 14 Jun 2022 07:31:20 +0000 (UTC)
+Date:   Tue, 14 Jun 2022 15:31:15 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     axboe@kernel.dk, djeffery@redhat.com, bvanassche@acm.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, ming.lei@redhat.com
+Subject: Re: [PATCH -next] blk-mq: fix boot time regression for scsi drives
+ with multiple hctx
+Message-ID: <Yqg5QxSM+lub8DY0@T590>
+References: <20220614071410.3571204-1-yukuai3@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614071410.3571204-1-yukuai3@huawei.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 6de79dd3a920 ("drm/bridge: display-connector: add ddc-en gpio
-support") added a consumer for this GPIO in the HDMI connector device.
-This new consumer conflicts with the pre-existing GPIO consumer in the
-sun8i HDMI controller driver, which prevents the driver from probing:
+On Tue, Jun 14, 2022 at 03:14:10PM +0800, Yu Kuai wrote:
+> We found that boot time is increased for about 8s after upgrading kernel
+> from v4.19 to v5.10(megaraid-sas is used in the environment).
 
-  [    4.983358] display-connector connector: GPIO lookup for consumer ddc-en
-  [    4.983364] display-connector connector: using device tree for GPIO lookup
-  [    4.983392] gpio-226 (ddc-en): gpiod_request: status -16
-  [    4.983399] sun8i-dw-hdmi 6000000.hdmi: Couldn't get ddc-en gpio
-  [    4.983618] sun4i-drm display-engine: failed to bind 6000000.hdmi (ops sun8i_dw_hdmi_ops [sun8i_drm_hdmi]): -16
-  [    4.984082] sun4i-drm display-engine: Couldn't bind all pipelines components
-  [    4.984171] sun4i-drm display-engine: adev bind failed: -16
-  [    4.984179] sun8i-dw-hdmi: probe of 6000000.hdmi failed with error -16
+But 'blk-mq: clearing flush request reference in tags->rqs[]' was merged
+to v5.14, :-)
 
-Both drivers have the same behavior: they leave the GPIO active for the
-life of the device. Let's take advantage of the new implementation, and
-drop the now-obsolete code from the HDMI controller driver.
+> 
+> Following is where the extra time is spent:
+> 
+> scsi_probe_and_add_lun
+>  __scsi_remove_device
+>   blk_cleanup_queue
+>    blk_mq_exit_queue
+>     blk_mq_exit_hw_queues
+>      blk_mq_exit_hctx
+>       blk_mq_clear_flush_rq_mapping -> function latency is 0.1ms
 
-Fixes: 6de79dd3a920 ("drm/bridge: display-connector: add ddc-en gpio support")
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+So queue_depth looks pretty long, is it 4k?
 
- drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c | 54 ++-------------------------
- drivers/gpu/drm/sun4i/sun8i_dw_hdmi.h |  2 -
- 2 files changed, 4 insertions(+), 52 deletions(-)
+But if it is 0.1ms, how can the 8sec delay be caused? That requires 80K hw queues
+for making so long, so I guess there must be other delay added by the feature
+of BLK_MQ_F_TAG_HCTX_SHARED.
 
-diff --git a/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c b/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c
-index a8d75fd7e9f4..477cb6985b4d 100644
---- a/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c
-+++ b/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.c
-@@ -93,34 +93,10 @@ static u32 sun8i_dw_hdmi_find_possible_crtcs(struct drm_device *drm,
- 	return crtcs;
- }
+>        cmpxchg
+> 
+> There are three reasons:
+> 1) megaraid-sas is using multiple hctxs in v5.10, thus blk_mq_exit_hctx()
+> will be called much more times in v5.10 compared to v4.19.
+> 2) scsi will scan for each target thus __scsi_remove_device() will be
+> called for many times.
+> 3) blk_mq_clear_flush_rq_mapping() is introduced after v4.19, it will
+> call cmpxchg() for each request, and function latency is abount 0.1ms.
+> 
+> Since that blk_mq_clear_flush_rq_mapping() will only be called while the
+> queue is freezed already, which means there is no inflight request,
+> it's safe to set NULL for 'tags->rqs[]' directly instead of using
+> cmpxchg(). Tests show that with this change, function latency of
+> blk_mq_clear_flush_rq_mapping() is about 1us, and boot time is not
+> increased.
+
+tags is shared among all LUNs attached to the host, so freezing single
+request queue here means nothing, so your patch doesn't work.
+
+Please test the following patch, and see if it can improve boot delay for
+your case.
+
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index e9bf950983c7..1463076a527c 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -3443,8 +3443,9 @@ static void blk_mq_exit_hctx(struct request_queue *q,
+ 	if (blk_mq_hw_queue_mapped(hctx))
+ 		blk_mq_tag_idle(hctx);
  
--static int sun8i_dw_hdmi_find_connector_pdev(struct device *dev,
--					     struct platform_device **pdev_out)
--{
--	struct platform_device *pdev;
--	struct device_node *remote;
--
--	remote = of_graph_get_remote_node(dev->of_node, 1, -1);
--	if (!remote)
--		return -ENODEV;
--
--	if (!of_device_is_compatible(remote, "hdmi-connector")) {
--		of_node_put(remote);
--		return -ENODEV;
--	}
--
--	pdev = of_find_device_by_node(remote);
--	of_node_put(remote);
--	if (!pdev)
--		return -ENODEV;
--
--	*pdev_out = pdev;
--	return 0;
--}
--
- static int sun8i_dw_hdmi_bind(struct device *dev, struct device *master,
- 			      void *data)
- {
--	struct platform_device *pdev = to_platform_device(dev), *connector_pdev;
-+	struct platform_device *pdev = to_platform_device(dev);
- 	struct dw_hdmi_plat_data *plat_data;
- 	struct drm_device *drm = data;
- 	struct device_node *phy_node;
-@@ -167,30 +143,16 @@ static int sun8i_dw_hdmi_bind(struct device *dev, struct device *master,
- 		return dev_err_probe(dev, PTR_ERR(hdmi->regulator),
- 				     "Couldn't get regulator\n");
+-	blk_mq_clear_flush_rq_mapping(set->tags[hctx_idx],
+-			set->queue_depth, flush_rq);
++	if (blk_queue_init_done(q))
++		blk_mq_clear_flush_rq_mapping(set->tags[hctx_idx],
++				set->queue_depth, flush_rq);
+ 	if (set->ops->exit_request)
+ 		set->ops->exit_request(set, flush_rq, hctx_idx);
  
--	ret = sun8i_dw_hdmi_find_connector_pdev(dev, &connector_pdev);
--	if (!ret) {
--		hdmi->ddc_en = gpiod_get_optional(&connector_pdev->dev,
--						  "ddc-en", GPIOD_OUT_HIGH);
--		platform_device_put(connector_pdev);
--
--		if (IS_ERR(hdmi->ddc_en)) {
--			dev_err(dev, "Couldn't get ddc-en gpio\n");
--			return PTR_ERR(hdmi->ddc_en);
--		}
--	}
--
- 	ret = regulator_enable(hdmi->regulator);
- 	if (ret) {
- 		dev_err(dev, "Failed to enable regulator\n");
--		goto err_unref_ddc_en;
-+		return ret;
- 	}
- 
--	gpiod_set_value(hdmi->ddc_en, 1);
--
- 	ret = reset_control_deassert(hdmi->rst_ctrl);
- 	if (ret) {
- 		dev_err(dev, "Could not deassert ctrl reset control\n");
--		goto err_disable_ddc_en;
-+		goto err_disable_regulator;
- 	}
- 
- 	ret = clk_prepare_enable(hdmi->clk_tmds);
-@@ -245,12 +207,8 @@ static int sun8i_dw_hdmi_bind(struct device *dev, struct device *master,
- 	clk_disable_unprepare(hdmi->clk_tmds);
- err_assert_ctrl_reset:
- 	reset_control_assert(hdmi->rst_ctrl);
--err_disable_ddc_en:
--	gpiod_set_value(hdmi->ddc_en, 0);
-+err_disable_regulator:
- 	regulator_disable(hdmi->regulator);
--err_unref_ddc_en:
--	if (hdmi->ddc_en)
--		gpiod_put(hdmi->ddc_en);
- 
- 	return ret;
- }
-@@ -264,11 +222,7 @@ static void sun8i_dw_hdmi_unbind(struct device *dev, struct device *master,
- 	sun8i_hdmi_phy_deinit(hdmi->phy);
- 	clk_disable_unprepare(hdmi->clk_tmds);
- 	reset_control_assert(hdmi->rst_ctrl);
--	gpiod_set_value(hdmi->ddc_en, 0);
- 	regulator_disable(hdmi->regulator);
--
--	if (hdmi->ddc_en)
--		gpiod_put(hdmi->ddc_en);
- }
- 
- static const struct component_ops sun8i_dw_hdmi_ops = {
-diff --git a/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.h b/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.h
-index bffe1b9cd3dc..9ad09522947a 100644
---- a/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.h
-+++ b/drivers/gpu/drm/sun4i/sun8i_dw_hdmi.h
-@@ -9,7 +9,6 @@
- #include <drm/bridge/dw_hdmi.h>
- #include <drm/drm_encoder.h>
- #include <linux/clk.h>
--#include <linux/gpio/consumer.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- #include <linux/reset.h>
-@@ -193,7 +192,6 @@ struct sun8i_dw_hdmi {
- 	struct regulator		*regulator;
- 	const struct sun8i_dw_hdmi_quirks *quirks;
- 	struct reset_control		*rst_ctrl;
--	struct gpio_desc		*ddc_en;
- };
- 
- extern struct platform_driver sun8i_hdmi_phy_driver;
--- 
-2.35.1
+
+
+Thanks,
+Ming
 

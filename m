@@ -2,67 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C77454A982
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFB954A987
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351957AbiFNGci (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 02:32:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
+        id S1351316AbiFNGeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 02:34:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234595AbiFNGcd (ORCPT
+        with ESMTP id S232013AbiFNGeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 02:32:33 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E61B7C
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 23:32:31 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id w2so13546277ybi.7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 23:32:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=VpIsHuvsmQ6fO9MzFRQrmmqqCoASEACic+aRWm6wYvA=;
-        b=OECluj3zxeX6oajrLL++42vwI4zYGr5Uum0wXAqN3qMIOrKF5mINl03zN4JZVkAklJ
-         OCfTdMjW2Fl8Jm0NTSrzJRq3n12qIe6TLIzLSZhQjSrT/gSOR5HpwurEmnUsBaitT6fk
-         sPJMhEy8nEg2NN0/EqQyhkIxHNJBQmYgsNuneS2itVrs2wGaqi6WVgHldHBZLsEaVW78
-         HqZfFKjfOZaXqhoD7FRdXVsEIGMS8F34SSBWpf2s1tVxTo+jsIbFPg2dB45bRr0c1EtW
-         PqWHX4GvMUst4xa+XTpnTdUtRKQ+UVxxJmdP7ASkL/0IIoMoXxlRC4VjTCZeQTK9pU3f
-         GAfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=VpIsHuvsmQ6fO9MzFRQrmmqqCoASEACic+aRWm6wYvA=;
-        b=KYDzXp6BBmqH3148r0kYnN+z2/4V2l2BHNxGc744QXd9xX57sN9Q7mEJMedt+X1oMS
-         Cj5VR5Cf2ns8v4LYcN0CBOri/UY5AloqgxeNwAePN7eeZLMIPAgc7h4H/BHdqmU3Vyei
-         JErCD50KIyo12DlsjsTx28jPcKCYIUj0duouyAIIxHLQnt2rrGD+zh9GvxkV8QKOuRvU
-         1P/kE/c5yQROKhHZ+HpgBtXqAqXridFxRZ60TfeyA9h+odUYssVedzqA9gu80wzz1ITT
-         d5uKnNOVZK8ewRIK+VGKw1Effix2u8v1zJJS3W9vZ8eiH3prJen97rQn374gUe/jCk+F
-         3EZQ==
-X-Gm-Message-State: AJIora9hyZXs9e44i+E+rJfomn8+6ffvgyrtuuHDA0rYRKKJMowktf/i
-        dhmlv6RTJXm+qWefEyfAq4UzazhIFm2YjpDmdP1wjMLstVyjHAqX
-X-Google-Smtp-Source: AGRyM1vJ2yJSLlODQRKX6yHJm/FaORat+4fJUwWJtLPmaFpg3zWUTHhiol7P/dLsdoS3gAkITyyrnTDOf7rXfQ2lbEM=
-X-Received: by 2002:a25:7645:0:b0:664:70b9:b093 with SMTP id
- r66-20020a257645000000b0066470b9b093mr3280532ybc.480.1655188350638; Mon, 13
- Jun 2022 23:32:30 -0700 (PDT)
+        Tue, 14 Jun 2022 02:34:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B3F26127
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 23:34:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9CE9EB8169F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 06:34:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE730C3411B;
+        Tue, 14 Jun 2022 06:34:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655188457;
+        bh=Yt7B6XU8vtMdfA51/vbEyvmR+klBCsIE6DU6scdx+Og=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JfXOcRKG6gytRIWoUWF+HR/e3gHAYGqUiRg3WCPJyW5WVCpp/iMdhVBmnNztuboW4
+         0+ZS3UT8Ivf8sGSPfxp2Nt0NkbktTzfOZ0eRB3ltI2NtTQPR55cq+UUKTMUUJrAPNU
+         vvZil3YCJ4cjkodWsLgagixCDy1i0EczEJVpuSiY=
+Date:   Tue, 14 Jun 2022 08:34:14 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Wenhu Wang <wenhu.wang@hotmail.com>
+Cc:     "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQ0ggMi8yXSB1?=
+ =?utf-8?Q?io=3Apowerpc=3Ampc85xx?= =?utf-8?Q?=3A?= l2-cache-sram uio driver
+ implementation
+Message-ID: <Yqgr5jKEypU83yBF@kroah.com>
+References: <20220609102855.272270-1-wenhu.wang@hotmail.com>
+ <SG2PR01MB295139AA7360917B2C4846E19FA79@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
+ <YqHy1uXwCLlJmftr@kroah.com>
+ <SG2PR01MB2951EA9ED70E5F766DD26A069FAA9@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
-References: <20220613094923.832156175@linuxfoundation.org>
-In-Reply-To: <20220613094923.832156175@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 14 Jun 2022 12:02:19 +0530
-Message-ID: <CA+G9fYvQY-bxTL9LHD8nD8c1Xrhyyb6TvWX5HHWddhCSSHkCLQ@mail.gmail.com>
-Subject: Re: [PATCH 4.19 000/287] 4.19.247-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SG2PR01MB2951EA9ED70E5F766DD26A069FAA9@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,132 +59,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Jun 2022 at 16:17, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.247 release.
-> There are 287 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 15 Jun 2022 09:47:08 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.247-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, Jun 14, 2022 at 06:09:35AM +0000, Wenhu Wang wrote:
+> Hi Greg, thanks for the comments.
+> The questions are replied specifically below.
+> I have figured out and tested the patch v2, which is to be posted later.
+> >发件人: Greg KH <gregkh@linuxfoundation.org>
+> >发送时间: 2022年6月9日 21:17
+> >收件人: Wang Wenhu <wenhu.wang@hotmail.com>
+> >抄送: christophe.leroy@csgroup.eu <christophe.leroy@csgroup.eu>; mpe@ellerman.id.au <mpe@ellerman.id.au>; linuxppc-dev@lists.ozlabs.org <linuxppc-dev@lists.ozlabs.org>; linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>
+> >主题: Re: [PATCH 2/2] uio:powerpc:mpc85xx: l2-cache-sram uio driver implementation 
+> > 
+> >On Thu, Jun 09, 2022 at 03:28:55AM -0700, Wang Wenhu wrote:
+> >> The l2-cache could be optionally configured as SRAM partly or fully.
+> >> Users can make use of it as a block of independent memory that offers
+> >> special usage, such as for debuging or other cratical status info
+> >> storage which keeps consistently even when the whole system crashed.
+> >> 
+> >> The hardware related configuration process utilized the work of the
+> >> earlier implementation, which has been removed now.
+> >> See: https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/commit/?id=dc21ed2aef4150fc2fcf58227a4ff24502015c03
+> >> 
+> >> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+> >> Signed-off-by: Wang Wenhu <wenhu.wang@hotmail.com>
+> >> ---
+> >>  drivers/uio/Kconfig                   |  10 +
+> >>  drivers/uio/Makefile                  |   1 +
+> >>  drivers/uio/uio_fsl_85xx_cache_sram.c | 286 ++++++++++++++++++++++++++
+> >>  3 files changed, 297 insertions(+)
+> >>  create mode 100644 drivers/uio/uio_fsl_85xx_cache_sram.c
+> >> 
+> >> diff --git a/drivers/uio/Kconfig b/drivers/uio/Kconfig
+> >> index 2e16c5338e5b..9199ced03880 100644
+> >> --- a/drivers/uio/Kconfig
+> >> +++ b/drivers/uio/Kconfig
+> >> @@ -105,6 +105,16 @@ config UIO_NETX
+> >>          To compile this driver as a module, choose M here; the module
+> >>          will be called uio_netx.
+> >>  
+> >> +config UIO_FSL_85XX_CACHE_SRAM
+> >> +     tristate "Freescale 85xx Cache-Sram driver"
+> >> +     depends on FSL_SOC_BOOKE && PPC32
+> >> +     help
+> >> +       Generic driver for accessing the Cache-Sram form user level. This
+> >> +       is extremely helpful for some user-space applications that require
+> >> +       high performance memory accesses.
+> >> +
+> >> +       If you don't know what to do here, say N.
+> >
+> >Module name information?
+> >
+>  
+> More detailed and clearer info in v2
+> 
+> >> +
+> >>  config UIO_FSL_ELBC_GPCM
+> >>        tristate "eLBC/GPCM driver"
+> >>        depends on FSL_LBC
+> >> diff --git a/drivers/uio/Makefile b/drivers/uio/Makefile
+> >> index f2f416a14228..1ba07d92a1b1 100644
+> >> --- a/drivers/uio/Makefile
+> >> +++ b/drivers/uio/Makefile
+> >> @@ -12,3 +12,4 @@ obj-$(CONFIG_UIO_MF624)         += uio_mf624.o
+> >>  obj-$(CONFIG_UIO_FSL_ELBC_GPCM)      += uio_fsl_elbc_gpcm.o
+> >>  obj-$(CONFIG_UIO_HV_GENERIC) += uio_hv_generic.o
+> >>  obj-$(CONFIG_UIO_DFL)        += uio_dfl.o
+> >> +obj-$(CONFIG_UIO_FSL_85XX_CACHE_SRAM)        += uio_fsl_85xx_cache_sram.o
+> >> diff --git a/drivers/uio/uio_fsl_85xx_cache_sram.c b/drivers/uio/uio_fsl_85xx_cache_sram.c
+> >> new file mode 100644
+> >> index 000000000000..d363f9d2b179
+> >> --- /dev/null
+> >> +++ b/drivers/uio/uio_fsl_85xx_cache_sram.c
+> >> @@ -0,0 +1,286 @@
+> >> +// SPDX-License-Identifier: GPL-2.0
+> >> +/*
+> >> + * Copyright (C) 2022 Wang Wenhu <wenhu.wang@hotmail.com>
+> >> + * All rights reserved.
+> >> + */
+> >> +
+> >> +#include <linux/platform_device.h>
+> >> +#include <linux/uio_driver.h>
+> >> +#include <linux/stringify.h>
+> >> +#include <linux/module.h>
+> >> +#include <linux/kernel.h>
+> >> +#include <linux/of_address.h>
+> >> +#include <linux/io.h>
+> >> +
+> >> +#define DRIVER_NAME          "uio_mpc85xx_cache_sram"
+> >> +#define UIO_INFO_VER "0.0.1"
+> >> +#define UIO_NAME             "uio_cache_sram"
+> >> +
+> >> +#define L2CR_L2FI                            0x40000000      /* L2 flash invalidate */
+> >> +#define L2CR_L2IO                            0x00200000      /* L2 instruction only */
+> >> +#define L2CR_SRAM_ZERO                       0x00000000      /* L2SRAM zero size */
+> >> +#define L2CR_SRAM_FULL                       0x00010000      /* L2SRAM full size */
+> >> +#define L2CR_SRAM_HALF                       0x00020000      /* L2SRAM half size */
+> >> +#define L2CR_SRAM_TWO_HALFS          0x00030000      /* L2SRAM two half sizes */
+> >> +#define L2CR_SRAM_QUART                      0x00040000      /* L2SRAM one quarter size */
+> >> +#define L2CR_SRAM_TWO_QUARTS 0x00050000      /* L2SRAM two quarter size */
+> >> +#define L2CR_SRAM_EIGHTH             0x00060000      /* L2SRAM one eighth size */
+> >> +#define L2CR_SRAM_TWO_EIGHTH 0x00070000      /* L2SRAM two eighth size */
+> >> +
+> >> +#define L2SRAM_OPTIMAL_SZ_SHIFT      0x00000003      /* Optimum size for L2SRAM */
+> >> +
+> >> +#define L2SRAM_BAR_MSK_LO18          0xFFFFC000      /* Lower 18 bits */
+> >> +#define L2SRAM_BARE_MSK_HI4          0x0000000F      /* Upper 4 bits */
+> >> +
+> >> +enum cache_sram_lock_ways {
+> >> +     LOCK_WAYS_ZERO,
+> >> +     LOCK_WAYS_EIGHTH,
+> >> +     LOCK_WAYS_TWO_EIGHTH,
+> >
+> >Why not have values for these?
+> >
+> 
+> full values given in v2
+> 
+> >> +     LOCK_WAYS_HALF = 4,
+> >> +     LOCK_WAYS_FULL = 8,
+> >> +};
+> >> +
+> >> +struct mpc85xx_l2ctlr {
+> >> +     u32     ctl;            /* 0x000 - L2 control */
+> >
+> >What is the endian of these u32 values?  You map them directly to
+> >memory, so they must be specified some way, right?  Please make it
+> >obvious what they are.
+> >
+> 
+> Surely, the values should be u32 here, modified in v2
+> The controller info could be found in
+> "QorIQ™ P2020 Integrated Processor Reference Manual"
+> "Chapter 6 L2 Look-Aside Cache/SRAM"
+> See: http://m4udit.dinauz.org/P2020RM_rev0.pdf
 
+That's not the answer to my question :)
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+These are big-endian, right?  Please mark them as such and access them
+properly with the correct functions.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >> +     return remap_pfn_range(vma,
+> >> +                                                vma->vm_start,
+> >> +                                                mem->addr >> PAGE_SHIFT,
+> >> +                                                vma->vm_end - vma->vm_start,
+> >> +                                                vma->vm_page_prot);
+> >
+> >Odd indentation, did you use checkpatch.pl on your patch?
+> >
+> 
+> Actually, I checked with the scripts, and there was no warning here.
+> I also checked in text editors and vim, if I translate tab with 4 spaces,
+> the "vma/mem" areas in the 5 lines were aligned.
 
-## Build
-* kernel: 4.19.247-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: cbdd85f3a5c93a3948c77f3d3016506b65276ca5
-* git describe: v4.19.246-288-gcbdd85f3a5c9
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.246-288-gcbdd85f3a5c9
+Tabs in Linux are always 8 spaces wide.
 
-## Test Regressions (compared to v4.19.245-31-gfb313cec37d7)
-No test regressions found.
+thanks,
 
-## Metric Regressions (compared to v4.19.245-31-gfb313cec37d7)
-No metric regressions found.
-
-## Test Fixes (compared to v4.19.245-31-gfb313cec37d7)
-No test fixes found.
-
-## Metric Fixes (compared to v4.19.245-31-gfb313cec37d7)
-No metric fixes found.
-
-## Test result summary
-total: 104198, pass: 92268, fail: 261, skip: 10762, xfail: 907
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 298 total, 292 passed, 6 failed
-* arm64: 56 total, 54 passed, 2 failed
-* i386: 27 total, 23 passed, 4 failed
-* mips: 27 total, 27 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 55 total, 54 passed, 1 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 53 total, 51 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-cap_bounds-tests
-* ltp-commands
-* ltp-commands-tests
-* ltp-containers
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps
-* ltp-filecaps-tests
-* ltp-fs
-* ltp-fs-tests
-* ltp-fs_bind
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple
-* ltp-fs_perms_simple-tests
-* ltp-fsx
-* ltp-fsx-tests
-* ltp-hugetlb
-* ltp-hugetlb-tests
-* ltp-io
-* ltp-io-tests
-* ltp-ipc
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-pty-tests
-* ltp-sched
-* ltp-sched-tests
-* ltp-securebits
-* ltp-securebits-tests
-* ltp-smoke
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+greg k-h

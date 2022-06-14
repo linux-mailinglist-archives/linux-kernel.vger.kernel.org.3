@@ -2,207 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC2954B40D
+	by mail.lfdr.de (Postfix) with ESMTP id 8644A54B40C
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245213AbiFNPAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57782 "EHLO
+        id S1352870AbiFNPA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243828AbiFNPAH (ORCPT
+        with ESMTP id S1344219AbiFNPAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:00:07 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 941A834BBE;
-        Tue, 14 Jun 2022 08:00:06 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 45AEA21B4B;
-        Tue, 14 Jun 2022 15:00:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655218805; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WwSuqF6uTnS9sycd/ZJ331jl24Tu4wAfnf0GrdtvgFI=;
-        b=tvnoBCuSzrCFCB353tSo9EkgEeRe5we+JE3IpEBg4bAQRLHOKldQvFY6Pa1uofwv2haix9
-        9bn6RaNQpO2dAGw/Jg/TtUWH4QzS9B2t8hr5YKcTAT6pF2Oz2zMmF/zlkbk/CSp+2tPWq2
-        +fJQuIJW4CCQbEW4R1BBwufeAiPpPms=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D40702C141;
-        Tue, 14 Jun 2022 15:00:04 +0000 (UTC)
-Date:   Tue, 14 Jun 2022 17:00:04 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Alexandru Elisei <alexandru.elisei@arm.com>
-Cc:     jack@suse.cz, sunjunchao2870@gmail.com, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, keescook@chromium.org, anton@enomsg.org,
-        ccross@android.com, tony.luck@intel.com, heiko@sntech.de,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, maco@android.com, hch@lst.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Subject: Re: [BUG] rockpro64 board hangs in console_init() after commit
- 10e14073107d
-Message-ID: <YqiidNPMUZQPRIvy@alley>
-References: <Yqdry+IghSWnJ6pe@monolith.localdoman>
- <Yqh9xIwBVcabpSLe@alley>
- <YqiJH1phG/LWu9bs@monolith.localdoman>
+        Tue, 14 Jun 2022 11:00:23 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037F83DDE7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:00:23 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so12004028pjl.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:00:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uCN2gj0r2ydsfLcZI1sFwWz1Fp2OKP8Km+3JkrgTjRM=;
+        b=Ekx5DQ+HUHoSy6kumqYNnkdP9uUsany7Jp1UDBAeYOqVfAh5D+QvFnZtUvpNNK6A1N
+         SND3VfsbuAxMkLo8Hei66R2cs7TpHH74Ih2idmiqz1PxUV3KeAoc82O8bZ2cEGCKzcBy
+         gZDLvH/YQISqZmOf8yt1U8xR/02ZaXtv0MFfrqoPnjMCYXSllEXEH9yhGqRyPoik8tnY
+         BzEOS4b9X5X+7Sd3xGYDipCLfgciwLZZ09qbPk85kHfGRl3OViI6jgC0k1+WrzVpWZyG
+         PEzzC6WH5rFW6vvAIB/h7mfsCc2Fu+1wkhILcYBAQXYsCNeYnlZMMnQvihOV9H+IU0V6
+         PXxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uCN2gj0r2ydsfLcZI1sFwWz1Fp2OKP8Km+3JkrgTjRM=;
+        b=JG8e7B3GKqAxkfMuRvIXCQV+vtDrnYprot/EZbwYn5BMYKSZe372oOiHUUIxY/9uzw
+         2AbXiuFnMYjIT7FeC2xG/adUgcS//ibr9WU9xPVx2hL0vis8qPe33k2q1S2BPzis0ncx
+         8kYTC7+l+ZlIiBYMEcQ/grynGHZNyTzpuw67w5aUgo45/AdyJI5ilpk6i9quIl+YSy3t
+         kkxBYTfNdJlWkbvXryxOiIHcicoL7MkPVeertkeZPeaWf1GKji8TM+kvXzOpMHkmC7ZF
+         yhFvV5dtyTLupHN9GvJeqDoG1V8S1CEHvfNAQMlKMaq1Bishi9ZwVPHJWN+hA+zb7EVW
+         D0jw==
+X-Gm-Message-State: AJIora+8MxDAsaOdIInH58GIkRSo9xG03WKKaJpazcCoaZ1MU5lXk572
+        W0EQ+UVN39eo44/qAP8xrdyu9g==
+X-Google-Smtp-Source: AGRyM1sg6K75KKCe2UYpLfEA2RfY+M58mNgtnd1Q7oxUIKuVCfFQYlLTL3apk/FXgEg14n5GwismSA==
+X-Received: by 2002:a17:90a:e28e:b0:1ea:c3c5:bc61 with SMTP id d14-20020a17090ae28e00b001eac3c5bc61mr4679621pjz.15.1655218822247;
+        Tue, 14 Jun 2022 08:00:22 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id f13-20020a170902684d00b0015e8d4eb26csm7343256pln.182.2022.06.14.08.00.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 08:00:21 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 15:00:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Bo Liu <liubo03@inspur.com>
+Cc:     pbonzini@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: Use consistent type for return value of
+ kvm_mmu_memory_cache_nr_free_objects()
+Message-ID: <YqiigqccucuU2AQg@google.com>
+References: <20220614093222.25387-1-liubo03@inspur.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqiJH1phG/LWu9bs@monolith.localdoman>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220614093222.25387-1-liubo03@inspur.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-06-14 14:23:42, Alexandru Elisei wrote:
-> With this change:
+On Tue, Jun 14, 2022, Bo Liu wrote:
+> The return value type of the function rmap_can_add() is "bool", and it will
+> returns the result of the function kvm_mmu_memory_cache_nr_free_objects().
+> So we should change the return value type of
+> kvm_mmu_memory_cache_nr_free_objects() to "bool".
 > 
-> diff --git a/init/main.c b/init/main.c
-> index 0ee39cdcfcac..a245982eb8a2 100644
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@ -1057,6 +1057,8 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+> Signed-off-by: Bo Liu <liubo03@inspur.com>
+> ---
+>  include/linux/kvm_host.h | 2 +-
+>  virt/kvm/kvm_main.c      | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
->         kmem_cache_init_late();
-> 
-> +       lockdep_init();
-> +
->         /*
->          * HACK ALERT! This is early. We're enabling the console before
->          * we've done PCI setups etc, and console_init() must be aware of
-> @@ -1067,8 +1069,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
->                 panic("Too many boot %s vars at `%s'", panic_later,
->                       panic_param);
-> 
-> -       lockdep_init();
-> -
->         /*
->          * Need to run this when irqs are enabled, because it wants
->          * to self-test [hard/soft]-irqs on/off lock inversion bugs
-> diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-> index ea3dd55709e7..aa7684c6745d 100644
-> --- a/kernel/printk/printk.c
-> +++ b/kernel/printk/printk.c
-> @@ -2705,7 +2705,10 @@ static int console_cpu_notify(unsigned int cpu)
->   */
->  void console_lock(void)
->  {
-> +       pr_info("before might_sleep()");
->         might_sleep();
-> +       pr_info("before down_console_sem()");
-> +       pr_info("before down_console_sem()");
-> 
->         down_console_sem();
->         if (console_suspended)
-> @@ -3508,12 +3511,18 @@ int unregister_console(struct console *console)
->         if (console->exit)
->                 res = console->exit(console);
-> 
-> +       pr_info("Exiting from unregister_console(), res = %d", res);
-> +       pr_info("Exiting from unregister_console(), res = %d", res);
-> +
->         return res;
-> 
->  out_disable_unlock:
->         console->flags &= ~CON_ENABLED;
->         console_unlock();
-> 
-> +       pr_info("Exiting from unregister_console(), res = %d", res);
-> +       pr_info("Exiting from unregister_console(), res = %d", res);
-> +
->         return res;
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index c20f2d55840c..a399a7485795 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1358,7 +1358,7 @@ void kvm_flush_remote_tlbs(struct kvm *kvm);
+>  
+>  #ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
+>  int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min);
+> -int kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc);
+> +bool kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc);
+>  void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
+>  void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
+>  #endif
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index a67e996cbf7f..2872569e3580 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -394,9 +394,9 @@ int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+>  	return 0;
 >  }
->  EXPORT_SYMBOL(unregister_console);
-> 
-> Some of the pr_info statements are duplicated to see the output just before
-> the console hangs (I assume they're needed to force a buffer flush).
-> 
-> This is what I got:
-> 
-> [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd034]
-> [    0.000000] Linux version 5.19.0-rc2-dirty (alex@monolith) (aarch64-linux-gnu-gcc (GCC) 12.1.0, GNU ld (GNU Binutils) 2.38) #106 SMP PREEMPT Tue Jun 14 14:03:30 BST 2022
-> [    0.000000] Machine model: Pine64 RockPro64 v2.0
-> [    0.000000] efi: UEFI not found.
-> [    0.000000] earlycon: uart0 at MMIO32 0x00000000ff1a0000 (options '1500000n8')
-> [    0.000000] printk: before might_sleep()
-> [    0.000000] printk: before down_console_sem()
-> [    0.000000] printk: before down_console_sem()
-> [    0.000000] printk: bootconsole [uart0] enabled
-> [    0.000000] NUMA: No NUMA configuration found
-> [    0.000000] NUMA: Faking a node at [mem 0x0000000000200000-0x00000000f7ffffff]
-> [    0.000000] NUMA: NODE_DATA [mem 0xf77cef40-0xf77d0fff]
-[...]
-> [    0.000001] sched_clock: 56 bits at 24MHz, resolution 41ns, wraps every 4398046511097ns
-> [    0.005602] Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
-> [    0.006373] ... MAX_LOCKDEP_SUBCLASSES:  8
-> [    0.006789] ... MAX_LOCK_DEPTH:          48
-> [    0.007212] ... MAX_LOCKDEP_KEYS:        8192
-> [    0.007651] ... CLASSHASH_SIZE:          4096
-> [    0.008088] ... MAX_LOCKDEP_ENTRIES:     32768
-> [    0.008535] ... MAX_LOCKDEP_CHAINS:      65536
-> [    0.008981] ... CHAINHASH_SIZE:          32768
-> [    0.009428]  memory used by lock dependency info: 6365 kB
-> [    0.010018]  memory used for stack traces: 4224 kB
-> [    0.010500]  per task-struct memory footprint: 1920 bytes
-> [    0.011059] printk: before might_sleep()
-> [    0.011079] printk: before down_console_sem()
-> [    0.011477] printk: before down_console_sem()
-> [    0.012112] Console: colour dummy device 80x25
-> [    0.012984] printk: before might_sleep()
-> [    0.013003] printk: before down_console_sem()
-> [    0.013399] printk: before down_console_sem()
-> [    0.013860] printk: console [tty0] enabled
-> [    0.014986] printk: bootconsole [uart0] disabled
-> [    0.015564] printk: before might_sleep()
-> [    0.015582] printk: before down_console_sem()
+>  
+> -int kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc)
+> +bool kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc)
 
-I think that it did not print the 2nd "printk: before
-down_console_sem()" because there was missing newline "\n".
+Absolutely not, the name of the function is "nr_free_objects".  Renaming it to
+"has_free_objects" is not a net positive IMO.  If we really care about returning
+a bool then we can tweak rmap_can_add().
 
-printk() keeps such a line open because pr_cont() might append
-to it. The message will get printed to the console only when
-pr_cont("bla bla \n") is called or when another non-continuous
-printk() is called.
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 17252f39bd7c..047855d134da 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -1018,7 +1018,7 @@ static bool rmap_can_add(struct kvm_vcpu *vcpu)
+        struct kvm_mmu_memory_cache *mc;
 
-> > Does the system boot when you avoid "earlycon" parameter?
-> 
-> It doesn't boot, it hangs and I don't get any output.
+        mc = &vcpu->arch.mmu_pte_list_desc_cache;
+-       return kvm_mmu_memory_cache_nr_free_objects(mc);
++       return !!kvm_mmu_memory_cache_nr_free_objects(mc);
+ }
 
-The difference might be that earlycon uses the serial port.
-While the normal console is terminal "tty0".
-
-Does it help to configure also the normal serial console.
-I mean booting with something like:
-
-earlycon console=uart,mmio32,0x00000000ff1a0000,1500000n8 console=tty0
-
-I am not completely sure about the console=uart parameter. It is a
-shame but I have never used it. I took the format from
-Documentation/admin-guide/kernel-parameters.txt and the values
-from your boot log:
-
-[    0.000000] earlycon: uart0 at MMIO32 0x00000000ff1a0000 (options '1500000n8')
-
-> > > I've booted a kernel compiled with CONFIG_PROVE_LOCKING=y, as the offending
-> > > commit fiddles with locks, but no splat was produced that would explain the
-> > > hang. I've also tried to boot a v5,19-rc2 kernel on my odroid-c4, the board
-> > > is booting just fine, so I'm guessing it only affects of subset of arm64
-> > > boards.
-> > 
-> > You might try to switch the order of console_init() and lockdep_init()
-> > in start_kernel() in init/main.c
-> 
-> Did so above.
-
-Unfortunately, it did not print anything :-(
-
-Best Regards,
-Petr
+ static void rmap_remove(struct kvm *kvm, u64 *spte)

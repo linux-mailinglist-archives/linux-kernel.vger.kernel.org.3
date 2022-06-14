@@ -2,89 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F48654BA0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B0B54BA0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358073AbiFNTDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 15:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40836 "EHLO
+        id S238974AbiFNTFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 15:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345245AbiFNTCq (ORCPT
+        with ESMTP id S234072AbiFNTFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 15:02:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6689616596
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655233310;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SAh+GOzRM5ZJKSrACCl7nQjWeiM90GqoVoI/fuo1lHY=;
-        b=a4w/oG3yZrhIYO/Flql3/5EeKOjKFznxdLycpIVP90ijdgy8wWQVUuwnxe3KlM9kiYHWSO
-        Qd77uy/hZ+9ES7Edhy8xBOFv96jXgf7GSvkgGcVwlC0kOqA4hbup1WfSZ0HJZ6ULkJQ/cP
-        JJjmddgX+odD34cyNsAYfHWzjuYLgVI=
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com
- [209.85.216.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-489-INcCPwaDMx-eJAP4NRRzdw-1; Tue, 14 Jun 2022 15:01:49 -0400
-X-MC-Unique: INcCPwaDMx-eJAP4NRRzdw-1
-Received: by mail-pj1-f70.google.com with SMTP id h6-20020a17090a580600b001eab5988770so2790775pji.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:01:49 -0700 (PDT)
+        Tue, 14 Jun 2022 15:05:37 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7800710EF
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:05:36 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id 3-20020a056e0220c300b002d3d7ebdfdeso7086452ilq.16
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:05:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=SAh+GOzRM5ZJKSrACCl7nQjWeiM90GqoVoI/fuo1lHY=;
-        b=KkSpqWNGwLk0Rrl3OfSXYwNE9A4InBVJVtQ2hBME8G4XdE0UBmIkw6zmXQopb3nZvl
-         RAegea7Ns9xlzl3FP6n8uD1rQ147CoOvS0YDQzxFQHIYZwu8eM/lE5CsaH+sUjytcC0Q
-         hRbe6ITaWxO5ucZXzbP8MRGBCI6KY0jdE/dhcbPcstmfCKsmCYn0txwECnqRhkHvAros
-         dZnDTkFFgJIjys/1ezVuqQvpMqAlXgU/NOs2Z12n+URjjeZ2eD9k429YZtNC+IAGBhG2
-         4jIU/UXfCPXINNK3wCBIqckQw5C7DENrRjU0+lB30e57Ad32EZThMTGcherxmi2ftSi4
-         mQ4g==
-X-Gm-Message-State: AOAM532+IV2vfummXJGq8DDOxjxzElrHT6UV0wDgNrsQ9sokgg1zECeY
-        BMkPEHK+U0FVZ4cpm3qEINp62AJSg3kBtTK//DFQTLxHoEWWyj+7NRQEvks6tGa25q/fWz9rLTB
-        zvCZnJL8UqZvRfQX92w3gsVbP
-X-Received: by 2002:a63:ff19:0:b0:403:7c60:ae96 with SMTP id k25-20020a63ff19000000b004037c60ae96mr5581538pgi.466.1655233308296;
-        Tue, 14 Jun 2022 12:01:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx0/yOlBlVpAjgAT0lLPDbPxws5cMgkxTruGHAuqHHujxe+ske9BuknPn+Zqn64BRk4zuXORQ==
-X-Received: by 2002:a63:ff19:0:b0:403:7c60:ae96 with SMTP id k25-20020a63ff19000000b004037c60ae96mr5581514pgi.466.1655233308009;
-        Tue, 14 Jun 2022 12:01:48 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id y5-20020a17090a8b0500b001ead2406552sm221754pjn.46.2022.06.14.12.01.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 12:01:47 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 12:01:45 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Steve Wahl <steve.wahl@hpe.com>
-Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Kyung Min Park <kyung.min.park@intel.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
-Message-ID: <20220614190145.dkdwjnqnd7lv6y4n@cantor>
-References: <20220505194658.246121-1-steve.wahl@hpe.com>
- <20220512151309.330068-1-steve.wahl@hpe.com>
- <20220613205734.3x7i46bnsofzerr4@cantor>
- <673eb011-94f4-46b0-f1b4-24a02a269f4e@linux.intel.com>
- <CALzcddsXciFgKOLSkXxx4Rv_rwh21qe8hkyiEET280D8orP6Vw@mail.gmail.com>
- <9c943703-0c2f-b654-a28b-f594bf90bec9@linux.intel.com>
- <CALzcdduU-baVF9VV-NnYD2rKn0YC5hzS_F9udExRE7guvMqXWg@mail.gmail.com>
- <616dc81c-dfc6-d6c6-1eab-de0e9ba4411f@linux.intel.com>
- <Yqi7L9A/ADXpIvN6@swahl-home.5wahls.com>
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=iPvTtH8+uMsbdQrce2mVnt2NttPZ+//+Jm7WS48w6Ak=;
+        b=ECD9k438RR++jP7SUuA1t0By/F+s+mztiPNCt+J3U/usj8uPSxnsfDCtrE48w/i7Lp
+         GjeQYTw22hvYHPe54xgf5tpcsnJ7X7sm/TOo4/cXHje40Yvub/7Bwx2qCm3S3/eeMdZr
+         PY0Ym4+uv9hYkJVNjIH/TcRZi0cZ7APY/IY2zwxNTVgCl1r9V/N4Jd1scfQCn7LMuVaO
+         R9Wbrwoqn7JYXw3DalaUoTImq5tkImD5QMu5afe4Xkw+3xVDtNUWot4lk9ajS4FjocVF
+         YNjrsZuhdNjn4fXEpimUfJoYMojcUqTGSD5QJ1e+dwUzv2iYtXskDl/T8WA7mQhEPxwQ
+         Nh/w==
+X-Gm-Message-State: AJIora9lxtcffIvbJMqEHpQ8lis4IMnAfTFJiNJNA29Vsx8xjiUxMIdK
+        4ph5gPECZIFd5w1FlQIUjfflJ5OWzYlSrS3tCWKWxleJBusa
+X-Google-Smtp-Source: AGRyM1vH3NBceHOP89M5WUfzRy6OKpPuD+kczaCt9QvQEMIz2nE/aioWFNh3a8mgs1QxX8PLvFmaqmb9OWFjF9kfG/g+h1d2yrLa
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqi7L9A/ADXpIvN6@swahl-home.5wahls.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:ca0e:0:b0:2d3:dc52:35e9 with SMTP id
+ j14-20020a92ca0e000000b002d3dc5235e9mr3831025ils.44.1655233535782; Tue, 14
+ Jun 2022 12:05:35 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 12:05:35 -0700
+In-Reply-To: <000000000000cb8e3a05c4ed84bb@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ebb59305e16d1627@google.com>
+Subject: Re: [syzbot] KASAN: stack-out-of-bounds Read in __show_regs
+From:   syzbot <syzbot+b17d3e853d5dce65f981@syzkaller.appspotmail.com>
+To:     0x7f454c46@gmail.com, bp@alien8.de, chang.seok.bae@intel.com,
+        dave.hansen@linux.intel.com, glider@google.com, hpa@zytor.com,
+        krisman@collabora.com, linux-kernel@vger.kernel.org,
+        luto@kernel.org, masahiroy@kernel.org, mingo@redhat.com,
+        rajatasthana4@gmail.com, sashal@kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,103 +59,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 11:45:35AM -0500, Steve Wahl wrote:
-> On Tue, Jun 14, 2022 at 10:21:29AM +0800, Baolu Lu wrote:
-> > On 2022/6/14 09:54, Jerry Snitselaar wrote:
-> > > On Mon, Jun 13, 2022 at 6:51 PM Baolu Lu <baolu.lu@linux.intel.com> wrote:
-> > > > 
-> > > > On 2022/6/14 09:44, Jerry Snitselaar wrote:
-> > > > > On Mon, Jun 13, 2022 at 6:36 PM Baolu Lu<baolu.lu@linux.intel.com>  wrote:
-> > > > > > On 2022/6/14 04:57, Jerry Snitselaar wrote:
-> > > > > > > On Thu, May 12, 2022 at 10:13:09AM -0500, Steve Wahl wrote:
-> > > > > > > > To support up to 64 sockets with 10 DMAR units each (640), make the
-> > > > > > > > value of DMAR_UNITS_SUPPORTED adjustable by a config variable,
-> > > > > > > > CONFIG_DMAR_UNITS_SUPPORTED, and make it's default 1024 when MAXSMP is
-> > > > > > > > set.
-> > > > > > > > 
-> > > > > > > > If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
-> > > > > > > > to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
-> > > > > > > > allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
-> > > > > > > > remapping doesn't support X2APIC mode x2apic disabled"; and the system
-> > > > > > > > fails to boot properly.
-> > > > > > > > 
-> > > > > > > > Signed-off-by: Steve Wahl<steve.wahl@hpe.com>
-> > > > > > > > ---
-> > > > > > > > 
-> > > > > > > > Note that we could not find a reason for connecting
-> > > > > > > > DMAR_UNITS_SUPPORTED to MAX_IO_APICS as was done previously.  Perhaps
-> > > > > > > > it seemed like the two would continue to match on earlier processors.
-> > > > > > > > There doesn't appear to be kernel code that assumes that the value of
-> > > > > > > > one is related to the other.
-> > > > > > > > 
-> > > > > > > > v2: Make this value a config option, rather than a fixed constant.  The default
-> > > > > > > > values should match previous configuration except in the MAXSMP case.  Keeping the
-> > > > > > > > value at a power of two was requested by Kevin Tian.
-> > > > > > > > 
-> > > > > > > >     drivers/iommu/intel/Kconfig | 6 ++++++
-> > > > > > > >     include/linux/dmar.h        | 6 +-----
-> > > > > > > >     2 files changed, 7 insertions(+), 5 deletions(-)
-> > > > > > > > 
-> > > > > > > > diff --git a/drivers/iommu/intel/Kconfig b/drivers/iommu/intel/Kconfig
-> > > > > > > > index 247d0f2d5fdf..fdbda77ac21e 100644
-> > > > > > > > --- a/drivers/iommu/intel/Kconfig
-> > > > > > > > +++ b/drivers/iommu/intel/Kconfig
-> > > > > > > > @@ -9,6 +9,12 @@ config DMAR_PERF
-> > > > > > > >     config DMAR_DEBUG
-> > > > > > > >        bool
-> > > > > > > > 
-> > > > > > > > +config DMAR_UNITS_SUPPORTED
-> > > > > > > > +    int "Number of DMA Remapping Units supported"
-> > > > > > > Also, should there be a "depends on (X86 || IA64)" here?
-> > > > > > Do you have any compilation errors or warnings?
-> > > > > > 
-> > > > > > Best regards,
-> > > > > > baolu
-> > > > > > 
-> > > > > I think it is probably harmless since it doesn't get used elsewhere,
-> > > > > but our tooling was complaining to me because DMAR_UNITS_SUPPORTED was
-> > > > > being autogenerated into the configs for the non-x86 architectures we
-> > > > > build (aarch64, s390x, ppcle64).
-> > > > > We have files corresponding to the config options that it looks at,
-> > > > > and I had one for x86 and not the others so it noticed the
-> > > > > discrepancy.
-> > > > 
-> > > > So with "depends on (X86 || IA64)", that tool doesn't complain anymore,
-> > > > right?
-> > > > 
-> > > > Best regards,
-> > > > baolu
-> > > > 
-> > > 
-> > > Yes, with the depends it no longer happens.
-> > 
-> > The dmar code only exists on X86 and IA64 arch's. Adding this depending
-> > makes sense to me. I will add it if no objections.
-> 
-> I think that works after Baolu's patchset that makes intel-iommu.h
-> private.  I'm pretty sure it wouldn't have worked before that.
-> 
-> No objections.
-> 
+syzbot has found a reproducer for the following issue on:
 
-Yes, I think applying it with the depends prior to Baolu's change would
-still run into the issue from the KTR report if someone compiled without
-INTEL_IOMMU enabled.
+HEAD commit:    2f3064574275 README.md: ORC is no more a problem
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=169a2310080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8e6293529531e9ca
+dashboard link: https://syzkaller.appspot.com/bug?extid=b17d3e853d5dce65f981
+compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 9ffb5944a699b6a0d69c169ceff97636395ee30f), GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14917c2ff00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1303752ff00000
 
-This was dealing with being able to do something like:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+b17d3e853d5dce65f981@syzkaller.appspotmail.com
 
-make allmodconfig ARCH=arm64 ; grep DMAR_UNITS .config
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:j1939_session_deactivate net/can/j1939/transport.c:1090 [inline]
+RIP: 0010:j1939_session_deactivate_activate_next+0x271/0x480 net/can/j1939/transport.c:1100
+Code: f4 e9 ed fd ff ff 8b 7d d4 e8 fb 31 13 f4 e9 24 fe ff ff 44 89 ff e8 ee 31 13 f4 41 83 fc 02 0f 83 68 fe ff ff e8 df 70 82 f3 <0f> 0b e9 61 fe ff ff 8b 7d d4 e8 d0 31 13 f4 e9 68 fe ff ff 44 89
+RSP: 0018:ffff888102e3f5c8 EFLAGS: 00010246
+=====================================================
+BUG: KMSAN: uninit-value in __show_regs+0xe6/0x1040 arch/x86/kernel/process_64.c:76
+ __show_regs+0xe6/0x1040 arch/x86/kernel/process_64.c:76
+ show_regs+0xc0/0x160 arch/x86/kernel/dumpstack.c:463
+ __warn+0x3c2/0x730 kernel/panic.c:596
+ report_bug+0x8eb/0xae0 lib/bug.c:199
+ handle_bug+0x41/0x70 arch/x86/kernel/traps.c:315
+ exc_invalid_op+0x1b/0x50 arch/x86/kernel/traps.c:335
+ asm_exc_invalid_op+0x12/0x20
+ j1939_session_deactivate_activate_next+0x271/0x480 net/can/j1939/transport.c:1100
+ j1939_xtp_rx_abort_one+0x861/0x900 net/can/j1939/transport.c:1340
+ j1939_xtp_rx_abort net/can/j1939/transport.c:1351 [inline]
+ j1939_tp_cmd_recv net/can/j1939/transport.c:2100 [inline]
+ j1939_tp_recv+0x1534/0x1cd0 net/can/j1939/transport.c:2133
+ j1939_can_recv+0xed0/0x1070 net/can/j1939/main.c:108
+ deliver net/can/af_can.c:574 [inline]
+ can_rcv_filter+0x74b/0x1110 net/can/af_can.c:608
+ can_receive+0x4fb/0x6d0 net/can/af_can.c:665
+ can_rcv+0x1f0/0x490 net/can/af_can.c:696
+ __netif_receive_skb_one_core net/core/dev.c:5405 [inline]
+ __netif_receive_skb+0x1f1/0x640 net/core/dev.c:5519
+ process_backlog+0x4e7/0xb50 net/core/dev.c:5847
+ __napi_poll+0x14e/0xb80 net/core/dev.c:6413
+ napi_poll net/core/dev.c:6480 [inline]
+ net_rx_action+0x7e8/0x1830 net/core/dev.c:6567
+ __do_softirq+0x206/0x809 kernel/softirq.c:558
+ run_ksoftirqd+0x37/0x50 kernel/softirq.c:921
+ smpboot_thread_fn+0x626/0xbf0 kernel/smpboot.c:164
+ kthread+0x3c7/0x500 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30
 
-and finding CONFIG_DMAR_UNITS_SUPPORTED=64.
+Local variable mic created at:
+ ieee80211_rx_h_michael_mic_verify+0x54/0x10f0 net/mac80211/wpa.c:100
+ ieee80211_rx_handlers+0x2d31/0xf170 net/mac80211/rx.c:3929
 
-Thinking some more though, instead of the depends being on the arch
-would depending on DMAR_TABLE or INTEL_IOMMU be more appropriate?
-
-Regards,
-Jerry
-
-> --> Steve
-> 
-> -- 
-> Steve Wahl, Hewlett Packard Enterprise
+CPU: 0 PID: 13 Comm: ksoftirqd/0 Not tainted 5.18.0-syzkaller-16253-g2f3064574275 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+=====================================================
 

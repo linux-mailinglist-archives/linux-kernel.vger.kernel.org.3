@@ -2,359 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3AF754AFD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4406D54AFE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356294AbiFNMEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53654 "EHLO
+        id S1356317AbiFNMGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:06:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244018AbiFNMCs (ORCPT
+        with ESMTP id S239833AbiFNMGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:02:48 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F0C1C132;
-        Tue, 14 Jun 2022 05:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655208167; x=1686744167;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7oQeAKlAd2ATqVqYodMfjK9yYRqZpDnGTOvOo+Mth6U=;
-  b=JI3RPK2CGISy7qAsjWiZmYrOGMmaCilDkFOKuOnPhNPk4BX15MYZ8xnl
-   dfMNfxz6tpiBhMiaT/IJzMyleTT3Y7NhyiSXWKaaPeAbSLlh205kdPKga
-   udEjnZaQY7oP7+OwdwH5X6mnjfS6Ben+RELL8ysfR8qr+9XA8gJXLHM38
-   go6dhJesjL6tnLVPS8AP+69ejcv76JRhiHjkzLJlBdkrM4Ayt3G0qr2E3
-   tSCes9uKPR3JQNOb1g+RKBiv98Ku4eNYtWuIjH/GrIOJJzS1LU9LShO5I
-   rVHDTAehf1gQmrsMyscBVkPM/156v5cgF+u2O54KUTJIjIaw1RyTvOD/v
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258432288"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="258432288"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 05:02:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="640332833"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 14 Jun 2022 05:02:36 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 0FCEDA3F; Tue, 14 Jun 2022 15:02:33 +0300 (EEST)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv7 14/14] x86/tdx: Add unaccepted memory support
-Date:   Tue, 14 Jun 2022 15:02:31 +0300
-Message-Id: <20220614120231.48165-15-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+        Tue, 14 Jun 2022 08:06:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77F2F49917
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:06:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655208401;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dHLuawh8kg+YdtEzlsZqTBbBt0oMgGN79bcCX6rKiAc=;
+        b=GIkyrYn8F8ldPn38+aW4jZD5XbIhZXgnRiRO374FjyyNm/jNTxZLlaDnNNTFwGtR3+Ta1U
+        pldjkKuuvyoWTOKmt6SMeLYTVrzBapjroUeO4QN3R0OZGKpHI4E4byZL1JljQc3uFTDHOv
+        w1/Bvh7QoV7TEc39GsQJXUfL+qTNofA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-574-pZqMxAf_NYO9zd7ysHN97A-1; Tue, 14 Jun 2022 08:06:39 -0400
+X-MC-Unique: pZqMxAf_NYO9zd7ysHN97A-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F12A485A588;
+        Tue, 14 Jun 2022 12:06:37 +0000 (UTC)
+Received: from llong.com (unknown [10.22.32.186])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C65CB10725;
+        Tue, 14 Jun 2022 12:06:36 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     "Paul E. McKenney" <paulmck@linux.ibm.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH-rcu] rcu-tasks: Use delayed_work to delay rcu_tasks_verify_self_tests()
+Date:   Tue, 14 Jun 2022 08:06:20 -0400
+Message-Id: <20220614120620.1202389-1-longman@redhat.com>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hookup TDX-specific code to accept memory.
+Commit 2585014188d5 ("rcu-tasks: Be more patient for RCU Tasks
+boot-time testing") fixes false positive rcu_tasks verification check
+failure by repeating the test once every second until timeout using
+schedule_timeout_uninterruptible().
 
-Accepting the memory is the same process as converting memory from
-shared to private: kernel notifies VMM with MAP_GPA hypercall and then
-accept pages with ACCEPT_PAGE module call.
+Since rcu_tasks_verify_selft_tests() is called from do_initcalls()
+as a late_initcall, this has the undesirable side effect of perhaps
+delaying other late_initcall's queued after it by a second or more.
+Fix this by using delayed_work to repeat the verification check instead.
 
-The implementation in core kernel uses tdx_enc_status_changed(). It
-already used for converting memory to shared and back for I/O
-transactions.
-
-Boot stub provides own implementation of tdx_accept_memory(). It is
-similar in structure to tdx_enc_status_changed(), but only cares about
-converting memory to private.
-
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Fixes: 2585014188d5 ("rcu-tasks: Be more patient for RCU Tasks boot-time testing")
+Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- arch/x86/Kconfig                  |  1 +
- arch/x86/boot/compressed/mem.c    | 27 ++++++++++-
- arch/x86/boot/compressed/tdx.c    | 78 +++++++++++++++++++++++++++++++
- arch/x86/coco/tdx/tdx.c           | 30 ++++++++----
- arch/x86/include/asm/shared/tdx.h |  2 +
- arch/x86/mm/unaccepted_memory.c   |  9 +++-
- 6 files changed, 136 insertions(+), 11 deletions(-)
+ kernel/rcu/tasks.h | 35 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 32 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 9783ebc4e021..80683afa5749 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -892,6 +892,7 @@ config INTEL_TDX_GUEST
- 	select ARCH_HAS_CC_PLATFORM
- 	select X86_MEM_ENCRYPT
- 	select X86_MCE
-+	select UNACCEPTED_MEMORY
- 	help
- 	  Support running as a guest under Intel TDX.  Without this support,
- 	  the guest kernel can not boot or run under TDX.
-diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
-index b45458af00ca..48e36e640da1 100644
---- a/arch/x86/boot/compressed/mem.c
-+++ b/arch/x86/boot/compressed/mem.c
-@@ -5,6 +5,8 @@
- #include "error.h"
- #include "find.h"
- #include "math.h"
-+#include "tdx.h"
-+#include <asm/shared/tdx.h>
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index fcbd0ec33c86..e151cd5ae2bc 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -1832,6 +1832,11 @@ static void rcu_tasks_initiate_self_tests(void)
+ #endif
+ }
  
- #define PMD_SHIFT	21
- #define PMD_SIZE	(_AC(1, UL) << PMD_SHIFT)
-@@ -12,10 +14,33 @@
- 
- extern struct boot_params *boot_params;
- 
-+static bool is_tdx_guest(void)
-+{
-+	static bool once;
-+	static bool is_tdx;
-+
-+	if (!IS_ENABLED(CONFIG_INTEL_TDX_GUEST))
-+		return false;
-+
-+	if (!once) {
-+		u32 eax, sig[3];
-+
-+		cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax,
-+			    &sig[0], &sig[2],  &sig[1]);
-+		is_tdx = !memcmp(TDX_IDENT, sig, sizeof(sig));
-+		once = true;
-+	}
-+
-+	return is_tdx;
-+}
-+
- static inline void __accept_memory(phys_addr_t start, phys_addr_t end)
++/*
++ * Return:  0 - test passed
++ *	    1 - test failed, but have not timed out yet
++ *	   -1 - test failed and timed out
++ */
+ static int rcu_tasks_verify_self_tests(void)
  {
- 	/* Platform-specific memory-acceptance call goes here */
--	error("Cannot accept memory");
-+	if (is_tdx_guest())
-+		tdx_accept_memory(start, end);
-+	else
-+		error("Cannot accept memory: unknown platform\n");
+ 	int ret = 0;
+@@ -1847,16 +1852,40 @@ static int rcu_tasks_verify_self_tests(void)
+ 				ret = -1;
+ 				break;
+ 			}
+-			schedule_timeout_uninterruptible(1);
++			ret = 1;
++			break;
+ 		}
+ 	}
+ 
+-	if (ret)
++	if (ret < 0)
+ 		WARN_ON(1);
+ 
+ 	return ret;
  }
- 
- /*
-diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
-index 918a7606f53c..8518a75e5dd5 100644
---- a/arch/x86/boot/compressed/tdx.c
-+++ b/arch/x86/boot/compressed/tdx.c
-@@ -3,12 +3,15 @@
- #include "../cpuflags.h"
- #include "../string.h"
- #include "../io.h"
-+#include "align.h"
- #include "error.h"
-+#include "pgtable_types.h"
- 
- #include <vdso/limits.h>
- #include <uapi/asm/vmx.h>
- 
- #include <asm/shared/tdx.h>
-+#include <asm/page_types.h>
- 
- /* Called from __tdx_hypercall() for unrecoverable failure */
- void __tdx_hypercall_failed(void)
-@@ -75,3 +78,78 @@ void early_tdx_detect(void)
- 	pio_ops.f_outb = tdx_outb;
- 	pio_ops.f_outw = tdx_outw;
- }
-+
-+static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
-+				    enum pg_level level)
-+{
-+	unsigned long accept_size = PAGE_SIZE << ((level - 1) * PTE_SHIFT);
-+	u64 tdcall_rcx;
-+	u8 page_size;
-+
-+	if (!IS_ALIGNED(start, accept_size))
-+		return 0;
-+
-+	if (len < accept_size)
-+		return 0;
-+
-+	/*
-+	 * Pass the page physical address to the TDX module to accept the
-+	 * pending, private page.
-+	 *
-+	 * Bits 2:0 of RCX encode page size: 0 - 4K, 1 - 2M, 2 - 1G.
-+	 */
-+	switch (level) {
-+	case PG_LEVEL_4K:
-+		page_size = 0;
-+		break;
-+	case PG_LEVEL_2M:
-+		page_size = 1;
-+		break;
-+	case PG_LEVEL_1G:
-+		page_size = 2;
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	tdcall_rcx = start | page_size;
-+	if (__tdx_module_call(TDX_ACCEPT_PAGE, tdcall_rcx, 0, 0, 0, NULL))
-+		return 0;
-+
-+	return accept_size;
-+}
-+
-+void tdx_accept_memory(phys_addr_t start, phys_addr_t end)
-+{
-+	/*
-+	 * Notify the VMM about page mapping conversion. More info about ABI
-+	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
-+	 * section "TDG.VP.VMCALL<MapGPA>"
-+	 */
-+	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
-+		error("Accepting memory failed\n");
-+
-+	/*
-+	 * For shared->private conversion, accept the page using
-+	 * TDX_ACCEPT_PAGE TDX module call.
-+	 */
-+	while (start < end) {
-+		unsigned long len = end - start;
-+		unsigned long accept_size;
-+
-+		/*
-+		 * Try larger accepts first. It gives chance to VMM to keep
-+		 * 1G/2M Secure EPT entries where possible and speeds up
-+		 * process by cutting number of hypercalls (if successful).
-+		 */
-+
-+		accept_size = try_accept_one(start, len, PG_LEVEL_1G);
-+		if (!accept_size)
-+			accept_size = try_accept_one(start, len, PG_LEVEL_2M);
-+		if (!accept_size)
-+			accept_size = try_accept_one(start, len, PG_LEVEL_4K);
-+		if (!accept_size)
-+			error("Accepting memory failed\n");
-+		start += accept_size;
-+	}
-+}
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index b10c95307f6e..8240f04d3646 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -664,16 +664,9 @@ static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
- 	return accept_size;
- }
- 
--/*
-- * Inform the VMM of the guest's intent for this physical page: shared with
-- * the VMM or private to the guest.  The VMM is expected to change its mapping
-- * of the page in response.
-- */
--static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
-+static bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end,
-+					bool enc)
- {
--	phys_addr_t start = __pa(vaddr);
--	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
--
- 	if (!enc) {
- 		/* Set the shared (decrypted) bits: */
- 		start |= cc_mkdec(0);
-@@ -719,6 +712,25 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
- 	return true;
- }
- 
-+void tdx_accept_memory(phys_addr_t start, phys_addr_t end)
-+{
-+	if (!tdx_enc_status_changed_phys(start, end, true))
-+		panic("Accepting memory failed: %#llx-%#llx\n",  start, end);
-+}
+-late_initcall(rcu_tasks_verify_self_tests);
 +
 +/*
-+ * Inform the VMM of the guest's intent for this physical page: shared with
-+ * the VMM or private to the guest.  The VMM is expected to change its mapping
-+ * of the page in response.
++ * Repeat the rcu_tasks_verify_self_tests() call once every second until the
++ * test passes or has timed out.
 + */
-+static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
++static struct delayed_work rcu_tasks_verify_work;
++static void rcu_tasks_verify_work_fn(struct work_struct *work __maybe_unused)
 +{
-+	phys_addr_t start = __pa(vaddr);
-+	phys_addr_t end = __pa(vaddr + numpages * PAGE_SIZE);
++	int ret = rcu_tasks_verify_self_tests();
 +
-+	return tdx_enc_status_changed_phys(start, end, enc);
++	if (ret <= 0)
++		return;
++
++	/* Test fails but not timed out yet, reschedule another check */
++	schedule_delayed_work(&rcu_tasks_verify_work, HZ);
 +}
 +
- void __init tdx_early_init(void)
- {
- 	u64 cc_mask;
-diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-index 956ced04c3be..97534c334473 100644
---- a/arch/x86/include/asm/shared/tdx.h
-+++ b/arch/x86/include/asm/shared/tdx.h
-@@ -81,5 +81,7 @@ struct tdx_module_output {
- u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
- 		      struct tdx_module_output *out);
- 
-+void tdx_accept_memory(phys_addr_t start, phys_addr_t end);
-+
- #endif /* !__ASSEMBLY__ */
- #endif /* _ASM_X86_SHARED_TDX_H */
-diff --git a/arch/x86/mm/unaccepted_memory.c b/arch/x86/mm/unaccepted_memory.c
-index 05e216716690..9ec2304272dc 100644
---- a/arch/x86/mm/unaccepted_memory.c
-+++ b/arch/x86/mm/unaccepted_memory.c
-@@ -7,6 +7,7 @@
- 
- #include <asm/io.h>
- #include <asm/setup.h>
-+#include <asm/shared/tdx.h>
- #include <asm/unaccepted_memory.h>
- 
- /* Protects unaccepted memory bitmap */
-@@ -62,7 +63,13 @@ void accept_memory(phys_addr_t start, phys_addr_t end)
- 		unsigned long len = range_end - range_start;
- 
- 		/* Platform-specific memory-acceptance call goes here */
--		panic("Cannot accept memory: unknown platform\n");
-+		if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
-+			tdx_accept_memory(range_start * PMD_SIZE,
-+					  range_end * PMD_SIZE);
-+		} else {
-+			panic("Cannot accept memory: unknown platform\n");
-+		}
-+
- 		bitmap_clear(bitmap, range_start, len);
- 	}
- 	spin_unlock_irqrestore(&unaccepted_memory_lock, flags);
++static int rcu_tasks_verify_schedule_work(void)
++{
++	INIT_DELAYED_WORK(&rcu_tasks_verify_work, rcu_tasks_verify_work_fn);
++	rcu_tasks_verify_work_fn(NULL);
++	return 0;
++}
++late_initcall(rcu_tasks_verify_schedule_work);
+ #else /* #ifdef CONFIG_PROVE_RCU */
+ static void rcu_tasks_initiate_self_tests(void) { }
+ #endif /* #else #ifdef CONFIG_PROVE_RCU */
 -- 
-2.35.1
+2.31.1
 

@@ -2,116 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D4854BA14
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F4C54BA1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245128AbiFNTIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 15:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49572 "EHLO
+        id S234385AbiFNTJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 15:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244451AbiFNTIU (ORCPT
+        with ESMTP id S1345245AbiFNTJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 15:08:20 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593FC1CFCB
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:08:19 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id r1so8498090plo.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:08:19 -0700 (PDT)
+        Tue, 14 Jun 2022 15:09:01 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2677F1E3E8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:09:00 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id e11so9390191pfj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:09:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=rwKowjuTVcnkQ0zNow1etxFYmYYBvxe8n4i2xDBmbJQ=;
-        b=QggtuUGrCeivzhE8aaZ963PX5Ve1TW4VB1j6niBk8VsIjEk44dO63FbhCfFl+wIbyY
-         +gaBBa8XFIyVRbVcZekOEPCxehabh4Mo9tALpQciQ28eOtBJHmxX2RyQXsAneNFeCroB
-         vkbT7XaNKZ+wTRa3gv5815m/cUnhL/ZlYTpqwxrp18KL0tb8EF2lxfyHOhf6psP38e3m
-         OigwVD0DMShst04/aF9vSBLy5Pcq1ibhyMbFJWQbRKePY2qVGVO5Q0zEcPXZq6UV40dw
-         l8l82CUsgMhSF/feeU3s0Mgi0R7jBL5ZBokbowwaYQTuBy0bDp3fethiApt+nUGMRBdE
-         kLzg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WxVFX8SQoTkO2asaGhNARNyU0t4WV/p9VWUwvDYpcsM=;
+        b=Xh80bV+FmkQM9epsA7aMCOshN8wzgXzzNfcH1Mc5l2PMPe+NVyrmidG+ZAIomvJRtU
+         RwgYBZBLNjvMpgnLGqwffyVKFtkt95EvQJE7V+yhNJd4WI+Y0tU/+mvZfD/c+ZQ5IwjW
+         awNyTzTiwwpe/fFELOsgLdQ+96PwyMOQ36VM5zE678kFN78bKFVWurGuCW2jPter6rTJ
+         UnK3MeTmvxnDOMbC1zWiS64QnXHMoJpqeZXS0bwZBWQpiEshgMr7JbhokFHwuNAu5XM4
+         XGvYYWMpjtxj1AxQuoVI4g6+R6kOiDBnYQeRcjBoiYkH2ZASJ7TlFQcVFSnBSo6YMR1V
+         KAAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=rwKowjuTVcnkQ0zNow1etxFYmYYBvxe8n4i2xDBmbJQ=;
-        b=GmIKq/Rc5z/cdZPkOtOlBJHBLx8Y50+kzE1csMgjorS2aTnMZ003mnhBzev/JD3/zW
-         MFgkngOcXqb9Rwo5nMBaNAzNAl1Dr0iKABCL0b2ojdJTVEgSvVtQAqJu7s5pR6Y5+Vb3
-         YbXs6bdvEAZKU+Odipa5wS0wWMUt+vKVMfTfaGRk1qOW1g2KGnY2PeEdnY0CDbP9XP/9
-         VpgudwFnOO1BJZElF6dDnybST9DQ1oqs40M5iH0rI/DPh1TyCsiNxvVe0WhPLpza6D4C
-         OBBW6wHQyGeWtFs4hweXUlC1KbjwHxb2T830jM2Dbb+rbUNFyzk9mwX/2/0TkHsV10BX
-         REVg==
-X-Gm-Message-State: AJIora8Gsi5jy3J9bgnkD6xhe5lKSEzWeK17d7MqL3fE3VndCa+jSyiS
-        kRgIB7dz16/HFl2DcJpcq2aS1w==
-X-Google-Smtp-Source: AGRyM1suB0/K0qNd0nkbQNLJx89S7M7fvLeQ1U4xpYZDzrJO1XhQ+wYxohvjaLRbwrkO2FDRkkljOA==
-X-Received: by 2002:a17:902:f54e:b0:166:3b30:457c with SMTP id h14-20020a170902f54e00b001663b30457cmr5671398plf.1.1655233698755;
-        Tue, 14 Jun 2022 12:08:18 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id b8-20020a17090a010800b001e292e30129sm7726866pjb.22.2022.06.14.12.08.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 12:08:16 -0700 (PDT)
-Message-ID: <43d2cb67-5086-4d27-390a-c6a22b10bc9d@linaro.org>
-Date:   Tue, 14 Jun 2022 21:08:09 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WxVFX8SQoTkO2asaGhNARNyU0t4WV/p9VWUwvDYpcsM=;
+        b=kBQEylu35YW96q7cuzW8XjSdC2AkqU8jxACkr2FfKImWbZ3SZGoic2Sjwe0hd0s2pE
+         xLGOTsGiTbY02pwlXwUaZGfBBqR0D4smMc4aV96oUJ1u1R7toPTcIOFbdxCIO48GjmpO
+         SeOk+UVhfuY6c/JRoKLYjHtFHA1r3oikG/l06vL0s8PWGuc5RsTmen9LTuwUkaOf3vko
+         K0xpDzk2lep/KW+qDmwwZqRuRqKnGkYC+zc7DXEnhFzGaxBu5l555KUNVZw5T05ltL0s
+         utw5fwSNECmgmEnHg+tmQQleJoSA/Gt6TCeP+ByFqTzkYA6Oj7AhVqDTaSE9C7e22Fon
+         cbzw==
+X-Gm-Message-State: AOAM530m9UAYLsssj9vjyYmVtvsYBQzS9zVH8BzWkH1t8UAUOdVGydl3
+        SVOvFXXYHQX1udJoWNO5EZBjnw==
+X-Google-Smtp-Source: ABdhPJzHn2Ye3YjC05M4BzToAcQNR5uLK5arwJemtulnC/fJwq6gRuGbN+I9cWXJrKe2+YDZm5QL5w==
+X-Received: by 2002:a05:6a00:1744:b0:51b:d4d5:f34 with SMTP id j4-20020a056a00174400b0051bd4d50f34mr6274754pfc.0.1655233739275;
+        Tue, 14 Jun 2022 12:08:59 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id s8-20020a170902a50800b00161ac982b9esm7590467plq.185.2022.06.14.12.08.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 12:08:58 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 19:08:55 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Marc Orr <marcorr@google.com>, kvm list <kvm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Jun Nakajima <jun.nakajima@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
+Subject: Re: [PATCH v6 0/8] KVM: mm: fd-based approach for supporting KVM
+ guest private memory
+Message-ID: <Yqjcx6u0KJcJuZfI@google.com>
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <CAGtprH_83CEC0U-cBR2FzHsxbwbGn0QJ87WFNOEet8sineOcbQ@mail.gmail.com>
+ <20220607065749.GA1513445@chaop.bj.intel.com>
+ <CAA03e5H_vOQS-qdZgacnmqP5T5jJLnEfm44yfRzJQ2KVu0Br+Q@mail.gmail.com>
+ <20220608021820.GA1548172@chaop.bj.intel.com>
+ <CAGtprH8xyf07jMN7ubTC__BvDj+z41uVGRiCJ7Rc5cv3KWg03w@mail.gmail.com>
+ <YqJYEheLiGI4KqXF@google.com>
+ <20220614072800.GB1783435@chaop.bj.intel.com>
+ <CALCETrWw=Q=1AKW0Jcj3ZGscjyjDJXAjuxOnQx_sabQ6ZtS-wg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 1/2] dt-bindings: thermal: rcar-gen3-thermal: use
- positive logic
-Content-Language: en-US
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        linux-renesas-soc@vger.kernel.org
-Cc:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALCETrWw=Q=1AKW0Jcj3ZGscjyjDJXAjuxOnQx_sabQ6ZtS-wg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/06/2022 22:17, Wolfram Sang wrote:
-> When handling the V3U/r8a779a0 exception, avoid using 'not:' because
-> then its subschemas are far away in the 'else:' branch. Keep them
-> together using positive logic.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
-> 
-> Changes since v2:
-> * new patch
-> 
-> Tested with:
-> make dtbs_check DT_SCHEMA_FILES=thermal/rcar-gen3-thermal.yaml
-> 
->   .../bindings/thermal/rcar-gen3-thermal.yaml   | 21 +++++++++----------
->   1 file changed, 10 insertions(+), 11 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-> index 1368d90da0e8..72dc7eb27f8d 100644
-> --- a/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/rcar-gen3-thermal.yaml
-> @@ -57,31 +57,30 @@ required:
->     - "#thermal-sensor-cells"
+On Tue, Jun 14, 2022, Andy Lutomirski wrote:
+> On Tue, Jun 14, 2022 at 12:32 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> >
+> > On Thu, Jun 09, 2022 at 08:29:06PM +0000, Sean Christopherson wrote:
+> > > On Wed, Jun 08, 2022, Vishal Annapurve wrote:
+> > >
+> > > One argument is that userspace can simply rely on cgroups to detect misbehaving
+> > > guests, but (a) those types of OOMs will be a nightmare to debug and (b) an OOM
+> > > kill from the host is typically considered a _host_ issue and will be treated as
+> > > a missed SLO.
+> > >
+> > > An idea for handling this in the kernel without too much complexity would be to
+> > > add F_SEAL_FAULT_ALLOCATIONS (terrible name) that would prevent page faults from
+> > > allocating pages, i.e. holes can only be filled by an explicit fallocate().  Minor
+> > > faults, e.g. due to NUMA balancing stupidity, and major faults due to swap would
+> > > still work, but writes to previously unreserved/unallocated memory would get a
+> > > SIGSEGV on something it has mapped.  That would allow the userspace VMM to prevent
+> > > unintentional allocations without having to coordinate unmapping/remapping across
+> > > multiple processes.
+> >
+> > Since this is mainly for shared memory and the motivation is catching
+> > misbehaved access, can we use mprotect(PROT_NONE) for this? We can mark
+> > those range backed by private fd as PROT_NONE during the conversion so
+> > subsequence misbehaved accesses will be blocked instead of causing double
+> > allocation silently.
 
-Applied, thanks
+PROT_NONE, a.k.a. mprotect(), has the same vma downsides as munmap().
+ 
+> This patch series is fairly close to implementing a rather more
+> efficient solution.  I'm not familiar enough with hypervisor userspace
+> to really know if this would work, but:
+> 
+> What if shared guest memory could also be file-backed, either in the
+> same fd or with a second fd covering the shared portion of a memslot?
+> This would allow changes to the backing store (punching holes, etc) to
+> be some without mmap_lock or host-userspace TLB flushes?  Depending on
+> what the guest is doing with its shared memory, userspace might need
+> the memory mapped or it might not.
 
+That's what I'm angling for with the F_SEAL_FAULT_ALLOCATIONS idea.  The issue,
+unless I'm misreading code, is that punching a hole in the shared memory backing
+store doesn't prevent reallocating that hole on fault, i.e. a helper process that
+keeps a valid mapping of guest shared memory can silently fill the hole.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+What we're hoping to achieve is a way to prevent allocating memory without a very
+explicit action from userspace, e.g. fallocate().

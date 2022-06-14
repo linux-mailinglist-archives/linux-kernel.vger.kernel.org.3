@@ -2,201 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A6C254A6E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:38:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81C454A6B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356121AbiFNCga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 22:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S1354095AbiFNChc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 22:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355966AbiFNCgI (ORCPT
+        with ESMTP id S1355943AbiFNChR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 22:36:08 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3E1340C0;
-        Mon, 13 Jun 2022 19:15:12 -0700 (PDT)
-X-UUID: 0b33db81944c4a7e930f51d58ecd3e44-20220614
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:f02b50cf-029f-4c0f-bdec-3799a2d958c6,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:93287a07-b57a-4a25-a071-bc7b4972bc68,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 0b33db81944c4a7e930f51d58ecd3e44-20220614
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <jianjun.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2083284706; Tue, 14 Jun 2022 10:15:06 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 14 Jun 2022 10:15:04 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 14 Jun 2022 10:15:04 +0800
-Message-ID: <758e23499dd440f480d90c4417625a538521917a.camel@mediatek.com>
-Subject: Re: [PATCH v2] PCI: mediatek-gen3: Print LTSSM state when PCIe link
- down
-From:   Jianjun Wang <jianjun.wang@mediatek.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-CC:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-pci@vger.kernel.org>, <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <jieyy.yang@mediatek.com>,
-        <chuanjia.liu@mediatek.com>, <qizhong.cheng@mediatek.com>,
-        <jian.yang@mediatek.com>
-Date:   Tue, 14 Jun 2022 10:15:03 +0800
-In-Reply-To: <f95d10d69758014c9b1631718afa7dc72a68aa79.camel@mediatek.com>
-References: <20220329030715.7975-1-jianjun.wang@mediatek.com>
-         <32f5308e629cef3692c57c4c55442b0f2f25634f.camel@mediatek.com>
-         <7a10b1d7fc294093f26555a8b5a8748a3c0e1c9f.camel@mediatek.com>
-         <f95d10d69758014c9b1631718afa7dc72a68aa79.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 13 Jun 2022 22:37:17 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90F03CA50
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 19:16:19 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LMX8K6JFqzjY0X;
+        Tue, 14 Jun 2022 10:15:13 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 10:16:17 +0800
+Subject: Re: [PATCH v3 1/1] mm/memory-failure: don't allow to unpoison hw
+ corrupted page
+To:     David Hildenbrand <david@redhat.com>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        zhenwei pi <pizhenwei@bytedance.com>,
+        <naoya.horiguchi@nec.com>, <akpm@linux-foundation.org>
+References: <20220610114646.162764-1-pizhenwei@bytedance.com>
+ <20220610114646.162764-2-pizhenwei@bytedance.com>
+ <0fedf6f3-3ab3-e1d2-fd6e-3dbe8e92f06d@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <844edb08-e145-0209-bf7a-60fb38503705@huawei.com>
+Date:   Tue, 14 Jun 2022 10:16:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
+In-Reply-To: <0fedf6f3-3ab3-e1d2-fd6e-3dbe8e92f06d@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maintainers,
+On 2022/6/10 20:12, David Hildenbrand wrote:
+> 
+> I really prefer just disabling the unpoisioning mechanism in case there
+> is a real hw injected error.
 
-Just gentle ping for this patch, is there anything I can to do to get
-this patch merged?
+IMHO, this would be a simple solution that also works on the arches that does not unmap
+the kernel mapping when a page is hardware corrupted.
 
-Thanks.
+Thanks!
 
-On Wed, 2022-06-01 at 10:24 +0800, Jianjun Wang wrote:
-> Hello Maintainers,
-> 
-> Is there anything I can do to get this patch merged?
-> 
-> Thanks.
-> 
-> On Wed, 2022-05-18 at 09:55 +0800, Jianjun Wang wrote:
-> > Hi Maintainers,
-> > 
-> > Gentle ping for this patch, if there is anything I can do to get
-> > this
-> > patch merged, please let me know.
-> > 
-> > Thanks.
-> > 
-> > On Fri, 2022-04-22 at 14:33 +0800, Jianjun Wang wrote:
-> > > Hi Maintainers,
-> > > 
-> > > Just gentle ping for this patch, if there is anything I can do to
-> > > get
-> > > this patch merged, please let me know.
-> > > 
-> > > Thanks.
-> > > 
-> > > On Tue, 2022-03-29 at 11:07 +0800, Jianjun Wang wrote:
-> > > > Print current LTSSM state when PCIe link down instead of the
-> > > > register
-> > > > value, make it easier to get the link status.
-> > > > 
-> > > > Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> > > > Reviewed-by: AngeloGioacchino Del Regno <
-> > > > angelogioacchino.delregno@collabora.com>
-> > > > ---
-> > > > Changes in v2:
-> > > > Print both of the register value and the LTSSM state.
-> > > > ---
-> > > >  drivers/pci/controller/pcie-mediatek-gen3.c | 41
-> > > > ++++++++++++++++++++-
-> > > >  1 file changed, 40 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/drivers/pci/controller/pcie-mediatek-gen3.c
-> > > > b/drivers/pci/controller/pcie-mediatek-gen3.c
-> > > > index 6745076a02b9..c24e03c198b7 100644
-> > > > --- a/drivers/pci/controller/pcie-mediatek-gen3.c
-> > > > +++ b/drivers/pci/controller/pcie-mediatek-gen3.c
-> > > > @@ -153,6 +153,37 @@ struct mtk_gen3_pcie {
-> > > >  	DECLARE_BITMAP(msi_irq_in_use, PCIE_MSI_IRQS_NUM);
-> > > >  };
-> > > >  
-> > > > +/* LTSSM state in PCIE_LTSSM_STATUS_REG bit[28:24] */
-> > > > +static const char *const ltssm_str[] = {
-> > > > +	"detect.quiet",			/* 0x00 */
-> > > > +	"detect.active",		/* 0x01 */
-> > > > +	"polling.active",		/* 0x02 */
-> > > > +	"polling.compliance",		/* 0x03 */
-> > > > +	"polling.configuration",	/* 0x04 */
-> > > > +	"config.linkwidthstart",	/* 0x05 */
-> > > > +	"config.linkwidthaccept",	/* 0x06 */
-> > > > +	"config.lanenumwait",		/* 0x07 */
-> > > > +	"config.lanenumaccept",		/* 0x08 */
-> > > > +	"config.complete",		/* 0x09 */
-> > > > +	"config.idle",			/* 0x0A */
-> > > > +	"recovery.receiverlock",	/* 0x0B */
-> > > > +	"recovery.equalization",	/* 0x0C */
-> > > > +	"recovery.speed",		/* 0x0D */
-> > > > +	"recovery.receiverconfig",	/* 0x0E */
-> > > > +	"recovery.idle",		/* 0x0F */
-> > > > +	"L0",				/* 0x10 */
-> > > > +	"L0s",				/* 0x11 */
-> > > > +	"L1.entry",			/* 0x12 */
-> > > > +	"L1.idle",			/* 0x13 */
-> > > > +	"L2.idle",			/* 0x14 */
-> > > > +	"L2.transmitwake",		/* 0x15 */
-> > > > +	"disable",			/* 0x16 */
-> > > > +	"loopback.entry",		/* 0x17 */
-> > > > +	"loopback.active",		/* 0x18 */
-> > > > +	"loopback.exit",		/* 0x19 */
-> > > > +	"hotreset",			/* 0x1A */
-> > > > +};
-> > > > +
-> > > >  /**
-> > > >   * mtk_pcie_config_tlp_header() - Configure a configuration
-> > > > TLP
-> > > > header
-> > > >   * @bus: PCI bus to query
-> > > > @@ -327,8 +358,16 @@ static int mtk_pcie_startup_port(struct
-> > > > mtk_gen3_pcie *pcie)
-> > > >  				 !!(val & PCIE_PORT_LINKUP),
-> > > > 20,
-> > > >  				 PCI_PM_D3COLD_WAIT *
-> > > > USEC_PER_MSEC);
-> > > >  	if (err) {
-> > > > +		const char *ltssm_state;
-> > > > +		int ltssm_index;
-> > > > +
-> > > >  		val = readl_relaxed(pcie->base +
-> > > > PCIE_LTSSM_STATUS_REG);
-> > > > -		dev_err(pcie->dev, "PCIe link down, ltssm reg
-> > > > val:
-> > > > %#x\n", val);
-> > > > +		ltssm_index = PCIE_LTSSM_STATE(val);
-> > > > +		ltssm_state = ltssm_index >=
-> > > > ARRAY_SIZE(ltssm_str) ?
-> > > > +			      "Unknown state" :
-> > > > ltssm_str[ltssm_index];
-> > > > +		dev_err(pcie->dev,
-> > > > +			"PCIe link down, current ltssm state:
-> > > > %s
-> > > > (%#x)\n",
-> > > > +			ltssm_state, val);
-> > > >  		return err;
-> > > >  	}
-> > > >  
-> > > 
-> > > 
-> > 
-> > 
-> 
 > 
 

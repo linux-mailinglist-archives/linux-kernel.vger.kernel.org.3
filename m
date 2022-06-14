@@ -2,155 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B587954BDD8
+	by mail.lfdr.de (Postfix) with ESMTP id 1E3A954BDD6
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:45:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345646AbiFNWo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 18:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42320 "EHLO
+        id S1354348AbiFNWoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 18:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231621AbiFNWoZ (ORCPT
+        with ESMTP id S231621AbiFNWon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 18:44:25 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28BC51592
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:44:23 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id s135so9764469pgs.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:44:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tEKPEohOKii6C8FoFw3OQBM5b+J4Se99Td+zgDjIemk=;
-        b=ZTuKG2Fcgea7PbObrnWQU9iarLLlAl0A3+317ktLgMDaPR83JypuyFNwk5IEhWeF5z
-         aUbwZKdEEhBtB/+uY9xN1DmpESlWOKMXVSi6GXFb0QE24SH+uGoGCTLELNITuEURJ+Je
-         GYUglFfOuvGTeVuO12m05G195vaE9hRJdxedwMVzmySSryorit3Re0wFMKzdyV08DHGC
-         n+LfhDjZatZjN10J7znq6vtnMUsrTyfRYPFZnXAKN+5FZ397/PAPu5MPSCaJ4zmtfpXg
-         WLEDiEpiSAKgZJxjDOig8wqWmgw3QL4wbxJ17NWXeuNKDT/GDMD9FLXYlx0rz/MnAOO9
-         PU/g==
+        Tue, 14 Jun 2022 18:44:43 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CEA527FF;
+        Tue, 14 Jun 2022 15:44:43 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-f2a4c51c45so14373551fac.9;
+        Tue, 14 Jun 2022 15:44:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tEKPEohOKii6C8FoFw3OQBM5b+J4Se99Td+zgDjIemk=;
-        b=mgttyeJaGI8aiXQeLhu3FHPB2lEBucOyd4COKDlvDy0PVgQdIMBQCI8IT4Vr9yJE7i
-         Zu20nZB5RzeTjsq9/YPOyouzIOabbylG/mwkaaIPbbDLVmAGxQCX7syhKqPt/YksA4Cz
-         DZiuf6a4tQBGo86c+6/VCmbrQ02Hg0shTg4spzXx+MDTZbJY49PZAt5FkHTQ89H1DaEg
-         vz776tZic33wtyFes27+qD6H4kgip9ooy60ZDxCW9HzTFpFzUDdEcgHgQgwrx9fzV4AA
-         OIjyo2qQ/85EkWNFZybsswAcMkNkL8JP/VVQgAE9MphbCzMED59/PgIW9jlfYv/jRp2R
-         jbXg==
-X-Gm-Message-State: AOAM530vvAkaW4g2TmuO+KPxbyP0bdXf5rTAMql9eYFY3/GG3noDe5+d
-        YS5j12jsi9XxoAnarL5quLpiXA==
-X-Google-Smtp-Source: ABdhPJxXRVyhCovuWMWCtUI4jcVJQFhXzB9PpxsEI2Vao7fIUhQ51iYgdX/g9ne2SL7h97qTH3E1Jw==
-X-Received: by 2002:a63:90c8:0:b0:3fd:157f:3f6f with SMTP id a191-20020a6390c8000000b003fd157f3f6fmr6365006pge.316.1655246663184;
-        Tue, 14 Jun 2022 15:44:23 -0700 (PDT)
-Received: from [172.22.33.138] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id bg11-20020a1709028e8b00b0016782c55790sm7734784plb.232.2022.06.14.15.44.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 15:44:22 -0700 (PDT)
-Message-ID: <c9d90fdf-41fa-a363-fdc0-097c3d0dd547@linaro.org>
-Date:   Tue, 14 Jun 2022 15:44:20 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+BlywHEHWwAikA1BIx+1HObwxJemRBodVSJxjZAvyH0=;
+        b=oek8ORgLW920YK+aBF4RjJQ+66CJReyk51tWXZ0Ss6MAV8UmvfIr1Z1bfH9yMZZUIb
+         xXqir0BHTbtml6r1JXLJoKEEPncPnua6TOz9xPj9fIz2dBkbqeaNz9K6HiSFc3xVys9v
+         hPDsWraLEzExfKyuS/wxWDhXM3qx+/Rku+Fwk6yLfpoGjqMhTHYzeWiP+GhLxwEt1Rj6
+         nBZeO5P4FBhZ82cGae8pqT/UDqbItDTvXqWnL+kLePURN07liQQ/EBDru7Kzr2HyKid4
+         EdIR3My73lezA7lBQE9sJoF/cmuzaKVBvvG64btEpDRSrg0a3an63HRCtGSoXERTBxJP
+         dkiQ==
+X-Gm-Message-State: AJIora801HdU2doKnRFQJKBykyf/SbOCFHCBjIRcMW7iUWV6le5Lz6BT
+        7ScTeaCMhjZu8TJz9YYnWVymWkp0Sq/eJC69TRc=
+X-Google-Smtp-Source: AGRyM1tcQBnXP8BMOB9ZaS0TqFq8eO1YxGVAJA2mKzlS2ot5h4iNba25hnvfsR2rhL53UesyRj/glx3opr1n84ZngL4=
+X-Received: by 2002:a05:6870:4585:b0:fb:5105:76b8 with SMTP id
+ y5-20020a056870458500b000fb510576b8mr3627210oao.92.1655246682311; Tue, 14 Jun
+ 2022 15:44:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v5 10/15] arm64: dts: Add AMD Pensando Elba SoC support
-Content-Language: en-US
-To:     Brad Larson <brad@pensando.io>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        adrian.hunter@intel.com, alcooperx@gmail.com,
-        andy.shevchenko@gmail.com, arnd@arndb.de, blarson@amd.com,
-        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
-        gsomlo@gmail.com, gerg@linux-m68k.org, krzk@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, lee.jones@linaro.org,
-        broonie@kernel.org, yamada.masahiro@socionext.com,
-        p.zabel@pengutronix.de, piotrs@cadence.com, p.yadav@ti.com,
-        rdunlap@infradead.org, robh+dt@kernel.org, samuel@sholland.org,
-        fancer.lancer@gmail.com, suravee.suthikulpanit@amd.com,
-        thomas.lendacky@amd.com, ulf.hansson@linaro.org, will@kernel.org,
-        devicetree@vger.kernel.org
-References: <20220613195658.5607-1-brad@pensando.io>
- <20220613195658.5607-11-brad@pensando.io>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220613195658.5607-11-brad@pensando.io>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220614143353.1559597-1-irogers@google.com> <20220614143353.1559597-5-irogers@google.com>
+In-Reply-To: <20220614143353.1559597-5-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 14 Jun 2022 15:44:31 -0700
+Message-ID: <CAM9d7chXE5rvSMfRBzy1TBZ_VNMW2Tn=bD4pkOZ9=e1gdxCKTw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/6] perf cpumap: Fix alignment for masks in event encoding
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        German Gomez <german.gomez@arm.com>,
+        Colin Ian King <colin.king@intel.com>,
+        Song Liu <songliubraving@fb.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/06/2022 12:56, Brad Larson wrote:
-> From: Brad Larson <blarson@amd.com>
-> 
-> Add AMD Pensando common and Elba SoC specific device nodes
-> 
-> Signed-off-by: Brad Larson <blarson@amd.com>
+Hi Ian,
 
-Thank you for your patch. There is something to discuss/improve.
-
+On Tue, Jun 14, 2022 at 7:34 AM Ian Rogers <irogers@google.com> wrote:
+>
+> A mask encoding of a cpu map is laid out as:
+>   u16 nr
+>   u16 long_size
+>   unsigned long mask[];
+> However, the mask may be 8-byte aligned meaning there is a 4-byte pad
+> after long_size. This means 32-bit and 64-bit builds see the mask as
+> being at different offsets. On top of this the structure is in the byte
+> data[] encoded as:
+>   u16 type
+>   char data[]
+> This means the mask's struct isn't the required 4 or 8 byte aligned, but
+> is offset by 2. Consequently the long reads and writes are causing
+> undefined behavior as the alignment is broken.
+>
+> Fix the mask struct by creating explicit 32 and 64-bit variants, use a
+> union to avoid data[] and casts; the struct must be packed so the
+> layout matches the existing perf.data layout. Taking an address of a
+> member of a packed struct breaks alignment so pass the packed
+> perf_record_cpu_map_data to functions, so they can access variables with
+> the right alignment.
+>
+> As the 64-bit version has 4 bytes of padding, optimizing writing to only
+> write the 32-bit version.
+>
+> Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  arch/arm64/boot/dts/amd/Makefile              |   1 +
->  arch/arm64/boot/dts/amd/elba-16core.dtsi      | 189 +++++++++++++++++
->  arch/arm64/boot/dts/amd/elba-asic-common.dtsi | 103 ++++++++++
->  arch/arm64/boot/dts/amd/elba-asic.dts         |  28 +++
->  arch/arm64/boot/dts/amd/elba-flash-parts.dtsi | 106 ++++++++++
->  arch/arm64/boot/dts/amd/elba.dtsi             | 191 ++++++++++++++++++
->  6 files changed, 618 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/amd/elba-16core.dtsi
->  create mode 100644 arch/arm64/boot/dts/amd/elba-asic-common.dtsi
->  create mode 100644 arch/arm64/boot/dts/amd/elba-asic.dts
->  create mode 100644 arch/arm64/boot/dts/amd/elba-flash-parts.dtsi
->  create mode 100644 arch/arm64/boot/dts/amd/elba.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/amd/Makefile b/arch/arm64/boot/dts/amd/Makefile
-> index 68103a8b0ef5..9bba020fa880 100644
-> --- a/arch/arm64/boot/dts/amd/Makefile
-> +++ b/arch/arm64/boot/dts/amd/Makefile
-> @@ -1,2 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0
->  dtb-$(CONFIG_ARCH_SEATTLE) += amd-overdrive-rev-b0.dtb amd-overdrive-rev-b1.dtb
-> +dtb-$(CONFIG_ARCH_PENSANDO) += elba-asic.dtb
-
-Put it in alphabetical order, so not at the end of file.
-
-(...)
-
-> +
-> +&i2c0 {
-> +	clock-frequency = <100000>;
-> +	status = "okay";
-> +	rtc@51 {
-> +		compatible = "nxp,pcf85263";
-> +		reg = <0x51>;
-> +	};
+>  tools/lib/perf/include/perf/event.h | 36 +++++++++++--
+>  tools/perf/tests/cpumap.c           | 19 ++++---
+>  tools/perf/util/cpumap.c            | 80 +++++++++++++++++++++++------
+>  tools/perf/util/cpumap.h            |  4 +-
+>  tools/perf/util/session.c           | 30 +++++------
+>  tools/perf/util/synthetic-events.c  | 34 +++++++-----
+>  6 files changed, 143 insertions(+), 60 deletions(-)
+>
+> diff --git a/tools/lib/perf/include/perf/event.h b/tools/lib/perf/include/perf/event.h
+> index e7758707cadd..d2d32589758a 100644
+> --- a/tools/lib/perf/include/perf/event.h
+> +++ b/tools/lib/perf/include/perf/event.h
+> @@ -6,6 +6,7 @@
+>  #include <linux/types.h>
+>  #include <linux/limits.h>
+>  #include <linux/bpf.h>
+> +#include <linux/compiler.h>
+>  #include <sys/types.h> /* pid_t */
+>
+>  #define event_contains(obj, mem) ((obj).header.size > offsetof(typeof(obj), mem))
+> @@ -153,20 +154,47 @@ enum {
+>         PERF_CPU_MAP__MASK = 1,
+>  };
+>
+> +/*
+> + * Array encoding of a perf_cpu_map where nr is the number of entries in cpu[]
+> + * and each entry is a value for a CPU in the map.
+> + */
+>  struct cpu_map_entries {
+>         __u16                    nr;
+>         __u16                    cpu[];
+>  };
+>
+> -struct perf_record_record_cpu_map {
+> +/* Bitmap encoding of a perf_cpu_map where bitmap entries are 32-bit. */
+> +struct perf_record_mask_cpu_map32 {
+> +       /* Number of mask values. */
+>         __u16                    nr;
+> +       /* Constant 4. */
+>         __u16                    long_size;
+> -       unsigned long            mask[];
+> +       /* Bitmap data. */
+> +       __u32                    mask[];
+>  };
+>
+> -struct perf_record_cpu_map_data {
+> +/* Bitmap encoding of a perf_cpu_map where bitmap entries are 64-bit. */
+> +struct perf_record_mask_cpu_map64 {
+> +       /* Number of mask values. */
+> +       __u16                    nr;
+> +       /* Constant 8. */
+> +       __u16                    long_size;
+> +       /* Legacy padding. */
+> +       char                     __pad[4];
+> +       /* Bitmap data. */
+> +       __u64                    mask[];
 > +};
 > +
-> +&spi0 {
-> +	num-cs = <4>;
-> +	cs-gpios = <0>, <0>, <&porta 1 GPIO_ACTIVE_LOW>,
-> +		   <&porta 7 GPIO_ACTIVE_LOW>;
-> +	status = "okay";
-> +	spi@0 {
+> +struct __packed perf_record_cpu_map_data {
+>         __u16                    type;
+> -       char                     data[];
+> +       union {
+> +               /* Used when type == PERF_CPU_MAP__CPUS. */
+> +               struct cpu_map_entries cpus_data;
+> +               /* Used when type == PERF_CPU_MAP__MASK and long_size == 4. */
+> +               struct perf_record_mask_cpu_map32 mask32_data;
+> +               /* Used when type == PERF_CPU_MAP__MASK and long_size == 8. */
+> +               struct perf_record_mask_cpu_map64 mask64_data;
+> +       };
+>  };
 
-Rob's  comment about bindings applies here as well, so please fix both.
-This has to be sorted out - either it is SPI controller or MFD.
+How about moving the 'type' to the union as well?
+This way we don't need to pack the entire struct
+and can have a common struct for 32 and 64 bit..
 
-Rest looks okay for me.
+struct cpu_map_entries {
+    __u16 type;
+    __u16 nr;
+    __u16 cpu[];
+};
 
-> +		compatible = "amd,pensando-elbasr", "simple-mfd";
-> +		reg = <0>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		spi-max-frequency = <12000000>;
-> +
+struct perf_record_mask_cpu_map {
+    __u16 type;
+    __u16 nr;
+    __u16 long_size;  // still needed?
+    __u16 pad;
+    unsigned long mask[];
+};
 
+// changed it to union
+union perf_record_cpu_map_data {
+    __u16  type;
+    struct cpu_map_entries cpus_data;
+    struct perf_record_mask_cpu_map mask_data;
+};
 
-Best regards,
-Krzysztof
+Thanks,
+Namhyung

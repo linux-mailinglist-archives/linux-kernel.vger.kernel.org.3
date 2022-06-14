@@ -2,175 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7912B54B248
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:29:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E832354B246
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:29:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243806AbiFNN3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 09:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
+        id S241873AbiFNN3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 09:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235715AbiFNN3h (ORCPT
+        with ESMTP id S231493AbiFNN3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 09:29:37 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D092AE39;
-        Tue, 14 Jun 2022 06:29:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655213376; x=1686749376;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N09Lo78A/vN3Z9Ilmb4LDXjX/Vl0OGOLeOGeV0vZZ5Y=;
-  b=QX6I1bMlQatqcdfRT6CaDpkwrh+MN5dQKb44Yr58zv/mZATp9aCS9+52
-   EixQEHtD1aEm8MWRc02+QZegstzA9qOTa8ktDXgvrcBGDQFzeV7rZd/Qy
-   6XYBShYpvy8p2fbtxnzlYMHKD8kA9lWb1thofkxlB7OsZUnioiwCqKM+C
-   7G5lBUCD/gJcERrTAvsjjhZ9tKo5O6yKZF5NC3aJb1pfOvDhRRjzTypxh
-   2masPah03TtMYl3f62RXM9Hgp9jGr/Fldm+O42Omo+gbLDVfXZvEf1slX
-   fG7KpEWTCxUewl2Iva1VLhdFM6mT329gFVWUsQwXkjnEHZ4HenQcd+/gR
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="267301739"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="267301739"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 06:29:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="726820139"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Jun 2022 06:29:32 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o16br-000Lvx-PJ;
-        Tue, 14 Jun 2022 13:29:31 +0000
-Date:   Tue, 14 Jun 2022 21:28:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     NeilBrown <neilb@suse.de>, Al Viro <viro@zeniv.linux.org.uk>,
-        Daire Byrne <daire@dneg.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Chuck Lever <chuck.lever@oracle.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 06/12] VFS: support concurrent renames.
-Message-ID: <202206142141.w8ni6M0m-lkp@intel.com>
-References: <165516230199.21248.18142980966152036732.stgit@noble.brown>
+        Tue, 14 Jun 2022 09:29:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2567312742;
+        Tue, 14 Jun 2022 06:29:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D0174B81879;
+        Tue, 14 Jun 2022 13:29:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331AEC3411B;
+        Tue, 14 Jun 2022 13:29:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655213343;
+        bh=YEx73vfnRAnHRBrz3PVeIi0/8rfDtL+oBfNabAeQlks=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=1j05TVhIBjoG+yVNALTqiebQc3iaVllOkF3KyI17HMtZRW0vM9CIkJAEPJqrW/sq1
+         cIxXPaCYiJAElrrjwQyZfvFY7df7t/LnOG72Jx/8daQ5CLtNoqKv0RcXWms+WI5zmC
+         azueH7QKGohSeoaA1D3eKgzY4b3KtGMGASp8Mj7I=
+Date:   Tue, 14 Jun 2022 15:29:00 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "yekai(A)" <yekai13@huawei.com>
+Cc:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
+        linux-accelerators@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, zhangfei.gao@linaro.org,
+        wangzhou1@hisilicon.com
+Subject: Re: [PATCH v2 3/3] crypto: hisilicon/qm - defining the device
+ isolation strategy
+Message-ID: <YqiNHOfXHRtaQyZV@kroah.com>
+References: <20220614122943.1406-1-yekai13@huawei.com>
+ <20220614122943.1406-4-yekai13@huawei.com>
+ <YqiCaTAaRoq7c0y0@kroah.com>
+ <b597023a-5569-f4be-1e30-78d0d961dfdc@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <165516230199.21248.18142980966152036732.stgit@noble.brown>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b597023a-5569-f4be-1e30-78d0d961dfdc@huawei.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi NeilBrown,
+On Tue, Jun 14, 2022 at 09:24:08PM +0800, yekai(A) wrote:
+> > >  struct hisi_qm {
+> > >  	enum qm_hw_ver ver;
+> > >  	enum qm_fun_type fun_type;
+> > > @@ -335,6 +341,9 @@ struct hisi_qm {
+> > >  	struct qm_shaper_factor *factor;
+> > >  	u32 mb_qos;
+> > >  	u32 type_rate;
+> > > +	struct list_head uacce_hw_errs;
+> > > +	atomic_t uacce_ref; /* reference of the uacce */
+> > 
+> > That is not how reference counts work, sorry.  Please use 'struct kref'
+> > for a real reference count, never roll your own.
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > .
+> > 
+> 
+> this atomic_t reference is lightweight than 'struct kref',
 
-Thank you for the patch! Perhaps something to improve:
+It's the same size, why would it be "lighter"?  Why do you need it to be
+lighter, what performance issue is there with a kref?
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.19-rc2 next-20220614]
-[cannot apply to trondmy-nfs/linux-next viro-vfs/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> this reference
+> means whether the task is running. So would it be better to use atomic_t
+> reference?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/Allow-concurrent-directory-updates/20220614-072355
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-config: i386-buildonly-randconfig-r005-20220613 (https://download.01.org/0day-ci/archive/20220614/202206142141.w8ni6M0m-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c97436f8b6e2718286e8496faf53a2c800e281cf)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/46a2afd9f68f24a42f38f3a8afebafe7e494e9d8
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review NeilBrown/Allow-concurrent-directory-updates/20220614-072355
-        git checkout 46a2afd9f68f24a42f38f3a8afebafe7e494e9d8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+I do not know, as "running or not running" is a state, not a count or a
+reference.  why does this have to be atomic at all?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+thanks,
 
-All warnings (new ones prefixed by >>):
-
->> fs/namei.c:3175:16: warning: no previous prototype for function 'lock_rename_lookup_excl' [-Wmissing-prototypes]
-   struct dentry *lock_rename_lookup_excl(struct dentry *p1, struct dentry *p2,
-                  ^
-   fs/namei.c:3175:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   struct dentry *lock_rename_lookup_excl(struct dentry *p1, struct dentry *p2,
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/lock_rename_lookup_excl +3175 fs/namei.c
-
-  3174	
-> 3175	struct dentry *lock_rename_lookup_excl(struct dentry *p1, struct dentry *p2,
-  3176					       struct dentry **d1p, struct dentry **d2p,
-  3177					       struct qstr *last1, struct qstr *last2,
-  3178					       unsigned int flags1, unsigned int flags2)
-  3179	{
-  3180		struct dentry *p;
-  3181		struct dentry *d1, *d2;
-  3182	
-  3183		if (p1 == p2) {
-  3184			inode_lock_nested(p1->d_inode, I_MUTEX_PARENT);
-  3185			d1 = __lookup_hash(last1, p1, flags1, NULL);
-  3186			if (IS_ERR(d1))
-  3187				goto out_unlock_1;
-  3188			d2 = __lookup_hash(last2, p2, flags2, NULL);
-  3189			if (IS_ERR(d2))
-  3190				goto out_unlock_2;
-  3191			*d1p = d1; *d2p = d2;
-  3192			return NULL;
-  3193		out_unlock_2:
-  3194			dput(d1);
-  3195			d1 = d2;
-  3196		out_unlock_1:
-  3197			inode_unlock(p1->d_inode);
-  3198			return d1;
-  3199		}
-  3200	
-  3201		mutex_lock(&p1->d_sb->s_vfs_rename_mutex);
-  3202	
-  3203		if ((p = d_ancestor(p2, p1)) != NULL) {
-  3204			inode_lock_nested(p2->d_inode, I_MUTEX_PARENT);
-  3205			inode_lock_nested(p1->d_inode, I_MUTEX_CHILD);
-  3206		} else if ((p = d_ancestor(p1, p2)) != NULL) {
-  3207			inode_lock_nested(p1->d_inode, I_MUTEX_PARENT);
-  3208			inode_lock_nested(p2->d_inode, I_MUTEX_CHILD);
-  3209		} else {
-  3210			inode_lock_nested(p1->d_inode, I_MUTEX_PARENT);
-  3211			inode_lock_nested(p2->d_inode, I_MUTEX_PARENT2);
-  3212		}
-  3213		d1 = __lookup_hash(last1, p1, flags1, NULL);
-  3214		if (IS_ERR(d1))
-  3215			goto unlock_out_3;
-  3216		d2 = __lookup_hash(last2, p2, flags2, NULL);
-  3217		if (IS_ERR(d2))
-  3218			goto unlock_out_4;
-  3219	
-  3220		*d1p = d1;
-  3221		*d2p = d2;
-  3222		return p;
-  3223	unlock_out_4:
-  3224		dput(d1);
-  3225		d1 = d2;
-  3226	unlock_out_3:
-  3227		inode_unlock(p1->d_inode);
-  3228		inode_unlock(p2->d_inode);
-  3229		mutex_unlock(&p1->d_sb->s_vfs_rename_mutex);
-  3230		return d1;
-  3231	}
-  3232	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+greg k-h

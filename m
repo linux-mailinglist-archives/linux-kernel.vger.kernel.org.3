@@ -2,72 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C1454AEA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:42:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA0C54AE86
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355948AbiFNKmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 06:42:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
+        id S241776AbiFNKfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 06:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355855AbiFNKm2 (ORCPT
+        with ESMTP id S1355778AbiFNKd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 06:42:28 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B861EAE;
-        Tue, 14 Jun 2022 03:42:20 -0700 (PDT)
-Received: from mail-yb1-f179.google.com ([209.85.219.179]) by
- mrelayeu.kundenserver.de (mreue107 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MuDoR-1niiMo0ijt-00uXdY; Tue, 14 Jun 2022 12:42:19 +0200
-Received: by mail-yb1-f179.google.com with SMTP id x38so14421240ybd.9;
-        Tue, 14 Jun 2022 03:42:18 -0700 (PDT)
-X-Gm-Message-State: AJIora8re/FrlikpDt370Goy4QV8Z7b2DkAY74vkH8CxaNMHl7zapDA0
-        bd7b+l85xDG8FV7Rje/+vOidX3enChRydW9Im28=
-X-Google-Smtp-Source: AGRyM1u6BlNZePQaiEYdbfT4gFiK0Xn992NOenYqFrbDIeUHsQsd0C4/8zDUMmJUO2awoVTP7FmYkvrgx8xfclApE7Q=
-X-Received: by 2002:a25:69c4:0:b0:65c:ed2b:9106 with SMTP id
- e187-20020a2569c4000000b0065ced2b9106mr4223896ybc.394.1655203337779; Tue, 14
- Jun 2022 03:42:17 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1655194858.git.qinjian@cqplus1.com> <0574ed0ad1e9ec4c12645fe2d2dde8f701d285e5.1655194858.git.qinjian@cqplus1.com>
-In-Reply-To: <0574ed0ad1e9ec4c12645fe2d2dde8f701d285e5.1655194858.git.qinjian@cqplus1.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 14 Jun 2022 12:42:01 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a0XgDS-iJEfOrTjTRGODosxj0gc748PAH_hc534DkyswQ@mail.gmail.com>
-Message-ID: <CAK8P3a0XgDS-iJEfOrTjTRGODosxj0gc748PAH_hc534DkyswQ@mail.gmail.com>
-Subject: Re: [PATCH v18 10/10] ARM: dts: Add Sunplus SP7021-Demo-V3 board
- device tree
-To:     Qin Jian <qinjian@cqplus1.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tue, 14 Jun 2022 06:33:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2E247ACC;
+        Tue, 14 Jun 2022 03:33:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B938A60EAA;
+        Tue, 14 Jun 2022 10:33:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC191C3411B;
+        Tue, 14 Jun 2022 10:33:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655202805;
+        bh=ACx3upsZaaL84t/hdNR790ZYbJczEEwd+6WWrOK0Up4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ulIOCLnXY/qzFR/iAkuSG8Rs/itqDHhek3LgPCMHtwEn57aMoZElelMjzqID8LBv7
+         t22yqFN4/yCDG/hzRWC28tu+c2sCdcVM21+BeliXO1dDOAhbV5OLOKP0Y/Vvz0nXxw
+         H1T0TMGWOmLzFCspFfYNIRSy6A7lZ/Qv4rQR8O8vVqfsDQX3VZNn0/w0ACBLccR0bn
+         HawitHBEW0vl4ileoXil8chNZIxn138HOAVFxMMqTiRp5hrWNSNEBWjmDAFf38HZOt
+         dQFOY0eWcSPXLjxnLvRvtnzGJKX9dOshv2qOEjeL6RaSDoXVwVxNHz2jpCXOs3K32z
+         hrkSJFUaumsPQ==
+Date:   Tue, 14 Jun 2022 11:42:34 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Caleb Connolly <caleb.connolly@linaro.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        SoC Team <soc@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:xPtpOpauGmwccM9RruS3e6Fd9pdl+xGLPXirghaSnNcDK5RwwvY
- ag8Xry7Id2nfnu8O6+AzsIlXHfWwe38hdO2eq2l7LTJL1RNQhUfBhIdomYdQqmK3Ppm6vAp
- LtYNeVMCjCnZqTbOmRWIb2+8QR5rfTfihjSfU2Gw8kvWmg1ucK6pi3a6pQpRBhROzKD5Pw0
- zbsvhlPQ6CcfYKlrpneYQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:BVGO3whnGok=:4JXmS7J51MsbvjTA1x/DDX
- wGJ15qMV9EwBZXNsU/ejxe+u27G4x5exYdoSQ/roZ8AiaNXmoy98XNj2TqTEb6+IKN2wLm2ZT
- SsD4eIQUa26cQomzNq5B44IELRsD0fYmWX8/XViqhreE1UIgWkvlxYPa9YcIAwc6ttQMSYgOm
- GzEkiuRsCdca+hfNwhZ4S7tM2a670ZyDseOEoHeWJSqG/9RpHVvqzMx4tYIrgiLrByaUVq+n6
- kGN7DczCLkbDuB/ZbEK2NLFqvITkIg2DcdxDOAhaCYP8PDJa+V145/gDNqnBJ9laOL9/DRXU/
- dl8It1oxxEXAaBxfc71CDlZKdZuTNNmIWR5lKvdZZmeKBHhXPPCoJzIIzGDSmZJZrP2qclOIb
- 2cKY2ah9r9yQKK3FO3Yk0kCogMWUqw56JqtaxvErB8YDLsOOOgMc662abg6wVzZutcUA1mGDL
- LwN45qz/O36DVktIEq2ToOYNijED0Rer5P746N9Mna0kJdzQbXMVfydzOxpxNQB23caBCM64N
- eHst7yaMRT7t4/S9kentb5HP7KRHvqfRmjgUbIJBt90jDiZYhCQsQtIUv4k3YuD7xbQCTxhnN
- Wae4RbY1sJB98XhBYoUz1DrdY73eNFdXZvzGWaXMbPLEKm+Km8FrxQsAJ1sBR4jHKfeISDR+5
- a0qWnEUAaadjziCQsdrpdKFV/4cMG+pxxERlA+8+9zSIc6xG3wH21UtER1gWaNpT02QeH0YXy
- h+Lx0ynQ0J3gGG5nGeiqMp0Ye7vsDa+dbU1CQ7Rms8aVseCFtTbaGjB8zW/hqpTRGkU1RLZX9
- toACVMLXst10FTK6uN8H17U2yyo6Gc4UM1YMbyLzWa4HXf04QI++Z/pCt5LT5uxgHvXIr7fRv
- U0jv7+q6CmrPu4ZRD2lQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v14 02/10] mfd: qcom-spmi-pmic: expose the PMIC revid
+ information to clients
+Message-ID: <20220614114234.7e9dd1ac@jic23-huawei>
+In-Reply-To: <20220501182829.1edc181f@jic23-huawei>
+References: <20220429220904.137297-1-caleb.connolly@linaro.org>
+        <20220429220904.137297-3-caleb.connolly@linaro.org>
+        <20220501182829.1edc181f@jic23-huawei>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,82 +68,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- beOn Tue, Jun 14, 2022 at 10:31 AM Qin Jian <qinjian@cqplus1.com> wrote:
->
-> Add the basic support for Sunplus SP7021-Demo-V3 board.
->
-> Signed-off-by: Qin Jian <qinjian@cqplus1.com>
-> ---
-> Fix the comments from Krzysztof.
+On Sun, 1 May 2022 18:28:29 +0100
+Jonathan Cameron <jic23@kernel.org> wrote:
 
-I'll wait for a final Ack from Krzysztof before applying this.
+> On Fri, 29 Apr 2022 23:08:57 +0100
+> Caleb Connolly <caleb.connolly@linaro.org> wrote:
+> 
+> > Some PMIC functions such as the RRADC need to be aware of the PMIC
+> > chip revision information to implement errata or otherwise adjust
+> > behaviour, export the PMIC information to enable this.
+> > 
+> > This is specifically required to enable the RRADC to adjust
+> > coefficients based on which chip fab the PMIC was produced in,
+> > this can vary per unique device and therefore has to be read at
+> > runtime.
+> > 
+> > Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>  
+> 
+> ...
+> 
+> > +/**
+> > + * qcom_pmic_get() - Get a pointer to the base PMIC device
+> > + *
+> > + * This function takes a struct device for a driver which is a child of a PMIC.
+> > + * And locates the PMIC revision information for it.
+> > + *
+> > + * @dev: the pmic function device
+> > + * @return: the struct qcom_spmi_pmic* pointer associated with the function device
+> > + */
+> > +inline const struct qcom_spmi_pmic *qcom_pmic_get(struct device *dev)
+> > +{
+> > +	struct spmi_device *sdev;
+> > +	struct qcom_spmi_dev *spmi;
+> > +
+> > +	/*
+> > +	 * Make sure the device is actually a child of a PMIC
+> > +	 */
+> > +	if (!of_match_device(pmic_spmi_id_table, dev->parent))
+> > +		return ERR_PTR(-EINVAL);
+> > +
+> > +	sdev = qcom_pmic_get_base_usid(dev->parent);
+> >  
+> > -	if (subtype == PM8110_SUBTYPE)
+> > -		minor = rev2;
+> > +	if (IS_ERR(sdev))
+> > +		return ERR_CAST(sdev);
+> >  
+> > -	dev_dbg(dev, "%x: %s v%d.%d\n", subtype, name, major, minor);
+> > +	spmi = (struct qcom_spmi_dev *)dev_get_drvdata(&sdev->dev);  
+> 
+> Shouldn't need the cast as dev_get_drvdata() returns void * and you can
+> implicitly cast that to any other pointer type.
+> 
+> If this is all that comes up in the series I can fixup whilst applying.
+> 
+> Jonathan
 
+Hi Caleb,
 
-A few more details I noticed:
+Now Stephen has acked the spmi changes, only remaining ack needed
+is Lee for mfd.  Given it's been a while, perhaps best bet is if you
+do a v15 just wrapping up those minor tweaks and ping Lee to take a
+look at it when he has time.  On off chance Lee just want's to pick it
+up and push out an immutable branch (rather than me doing the same,
+I'll give tags for the IIO effecting bits)
 
+Thanks,
 
-> +/ {
-> +       compatible = "sunplus,sp7021";
-> +       model = "Sunplus SP7021";
-> +
-> +       aliases {
-> +               serial0 = &uart0;
-> +               serial1 = &uart1;
-> +               serial2 = &uart2;
-> +               serial3 = &uart3;
-> +               serial4 = &uart4;
-> +       };
+Jonathan
 
-Some of these are disabled, presumably because they are not
-actually connected on all boards. Better move the aliases to the .dts file
-and only list the ports that are in fact used, using the numbering that
-matches the labels on the board, not the numbers inside of the SoC
+> 
+> 
+> > +
+> > +	return &spmi->pmic;
+> >  }
+> > +EXPORT_SYMBOL(qcom_pmic_get);
+> >    
+> 
 
-> +
-> +       soc {
-> +               compatible = "simple-bus";
-> +               #address-cells = <1>;
-> +               #size-cells = <1>;
-> +               ranges;
-> +               interrupt-parent = <&intc>;
-> +
-> +               intc: interrupt-controller@9c000780 {
-> +                       compatible = "sunplus,sp7021-intc";
-> +                       reg = <0x9c000780 0x80>, <0x9c000a80 0x80>;
-> +                       interrupt-controller;
-> +                       #interrupt-cells = <2>;
-> +               };
-
-All child nodes below /soc have registers in the 0x9c000000 range. I would
-suggest you use a matching 'ranges' property to translate these into a
-zero-based
-address like
-
-/soc {
-       ranges = <0 0x9c000000 0x10000>;
-
-      interrupt-controller@780 {
-             reg = <0x780 0x80>, <0xa80 0x80>;
-             ...
-      };
-};
-
-> +               clkc: clock-controller@9c000004 {
-> +                       compatible = "sunplus,sp7021-clkc";
-> +                       reg = <0x9c000004 0x28>,
-> +                             <0x9c000200 0x44>,
-> +                             <0x9c000268 0x04>;
-> +                       clocks = <&extclk>;
-> +                       #clock-cells = <1>;
-> +               };
-> +
-> +               rstc: reset@9c000054 {
-> +                       compatible = "sunplus,sp7021-reset";
-> +                       reg = <0x9c000054 0x28>;
-> +                       #reset-cells = <1>;
-> +               };
-
-
-Maybe sort the nodes by address, or possibly by name.
-
-       Arnd

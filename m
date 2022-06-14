@@ -2,90 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1044E54BA9A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0BD254BAA0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238744AbiFNTgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 15:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
+        id S241267AbiFNThT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 15:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiFNTgq (ORCPT
+        with ESMTP id S234362AbiFNThP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 15:36:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DDFF719F8D
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:36:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655235405;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+ox4dj78XDeONpCY/I2byHRWGGL1bbVgG7Ngg4aNtSc=;
-        b=dFGcqIb3iKywVZUSIPN2Nq3DCG3HcS8L7IpGy/wMrKO1wJ+VvoAvT+ttmZbwBYhjoRUgwG
-        jDK/LEMcFOZKZ/lPxhiALRA+F4O6IEaPxe/0v0JEZCCbaZFpEnTzK9hSWumQLUhkxnJP2O
-        91RH0PAYd31i0rqNXfxImeeHwirDfXg=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-407-q2_MCSC3NimfPYwggmiglw-1; Tue, 14 Jun 2022 15:36:41 -0400
-X-MC-Unique: q2_MCSC3NimfPYwggmiglw-1
-Received: by mail-il1-f197.google.com with SMTP id e4-20020a056e020b2400b002d5509de6f3so7165942ilu.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:36:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=+ox4dj78XDeONpCY/I2byHRWGGL1bbVgG7Ngg4aNtSc=;
-        b=B8gi59Hrhk54kdDaY+Ht1GTkv93fI8cSvEtkUGnipGn3nOmLU7Wq47nQw9VMVGPEm+
-         tSqGM5RKDzHcOGVIizP/pKGtsyyzp4S6ssdPkorMnYgdIspvVg8OZJMcaj3gH79eW+yi
-         uQGKdU4Xm/k2ju0I46BCdIz6T5HV+t4iaM1Pk2xCVCpnIK4/koDWznqm1+qOomU0so1W
-         KjoAOuS+vDcKTnmUME4s9K/FginSgwJKxPdbg4nszFGfpmUGi4WnasWSsQUA+oea0HKV
-         /Jx6wd/n8AWGwBojRqmi2HJ3aBno9f7RaGqaSYd4GGD/W+eQm/cgp/IO+lROy0rzbA0T
-         Z1Uw==
-X-Gm-Message-State: AOAM530gO7qo0L6Yo7xUlLzfd0O9C5KK4kAI7jdx9cNuf2Fu3lLb8yqz
-        HZXr6xbI3pmpZHiHXSjDbzsT/MwWR+uHVn3GNodgkx7twO8NEjs0aek4DE3bKjSGrLQb85fojso
-        n2kdC1kLYcXf9b6yauofzIqgl
-X-Received: by 2002:a05:6638:2722:b0:331:f878:e38b with SMTP id m34-20020a056638272200b00331f878e38bmr3844033jav.272.1655235400378;
-        Tue, 14 Jun 2022 12:36:40 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJy46UsOGrOa9qzN3/0xyOD3Pu8920BAJfUTIRIZ+b23+ZLnb0uaumApmJV1QyQxC2J6j9msQQ==
-X-Received: by 2002:a05:6638:2722:b0:331:f878:e38b with SMTP id m34-20020a056638272200b00331f878e38bmr3844002jav.272.1655235400064;
-        Tue, 14 Jun 2022 12:36:40 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id r2-20020a6bd902000000b00669c107e289sm5783020ioc.29.2022.06.14.12.36.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 12:36:39 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 15:36:36 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 4/6] userfaultfd: update documentation to describe
- /dev/userfaultfd
-Message-ID: <YqjjRKcnrmMGuw5n@xz-m1.local>
-References: <20220601210951.3916598-1-axelrasmussen@google.com>
- <20220601210951.3916598-5-axelrasmussen@google.com>
+        Tue, 14 Jun 2022 15:37:15 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABB01AD9C;
+        Tue, 14 Jun 2022 12:37:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655235435; x=1686771435;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ry/MW3cGwWBXJo5LFJEWkEv0wSGZc+G+X/VY17t5peg=;
+  b=PjVpzy4ii1sO+Qcgo7VS3vnSE6g0z3LunX42RtB6IZPu9VfOFBG1cI5m
+   41dp9diZ36CDK90t54GdF2tx7ubFxYD8gs7eYUekcU9meZYvMYQws7d25
+   mGuwDnIzGOBOdscPmIAxROxyoaVcXi9Ntm11OroU+vFVBotcmnc8iuYlv
+   E=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 14 Jun 2022 12:37:14 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 12:37:13 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 14 Jun 2022 12:37:13 -0700
+Received: from [10.216.52.176] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 14 Jun
+ 2022 12:37:07 -0700
+Message-ID: <4b22f283-0897-6729-e54f-a8bb47b5c368@quicinc.com>
+Date:   Wed, 15 Jun 2022 01:07:01 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220601210951.3916598-5-axelrasmussen@google.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from system
+ suspend
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <quic_pkondeti@quicinc.com>,
+        <quic_ppratap@quicinc.com>, <quic_vpulyala@quicinc.com>
+References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
+ <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
+ <YpkRDi2m7cLaKYEf@google.com> <Yp5nf2w8uVZ38/XZ@google.com>
+ <Yqd9IHQEj3Ex+FcF@google.com> <YqjLHyUVEjf7I3MI@google.com>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <YqjLHyUVEjf7I3MI@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,137 +81,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 02:09:49PM -0700, Axel Rasmussen wrote:
-> Explain the different ways to create a new userfaultfd, and how access
-> control works for each way.
-> 
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
-> ---
->  Documentation/admin-guide/mm/userfaultfd.rst | 40 ++++++++++++++++++--
->  Documentation/admin-guide/sysctl/vm.rst      |  3 ++
->  2 files changed, 40 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-> index 6528036093e1..9bae1acd431f 100644
-> --- a/Documentation/admin-guide/mm/userfaultfd.rst
-> +++ b/Documentation/admin-guide/mm/userfaultfd.rst
-> @@ -17,7 +17,10 @@ of the ``PROT_NONE+SIGSEGV`` trick.
->  Design
->  ======
->  
-> -Userfaults are delivered and resolved through the ``userfaultfd`` syscall.
-> +Userspace creates a new userfaultfd, initializes it, and registers one or more
-> +regions of virtual memory with it. Then, any page faults which occur within the
-> +region(s) result in a message being delivered to the userfaultfd, notifying
-> +userspace of the fault.
->  
->  The ``userfaultfd`` (aside from registering and unregistering virtual
->  memory ranges) provides two primary functionalities:
-> @@ -34,12 +37,11 @@ The real advantage of userfaults if compared to regular virtual memory
->  management of mremap/mprotect is that the userfaults in all their
->  operations never involve heavyweight structures like vmas (in fact the
->  ``userfaultfd`` runtime load never takes the mmap_lock for writing).
-> -
->  Vmas are not suitable for page- (or hugepage) granular fault tracking
->  when dealing with virtual address spaces that could span
->  Terabytes. Too many vmas would be needed for that.
->  
-> -The ``userfaultfd`` once opened by invoking the syscall, can also be
-> +The ``userfaultfd``, once created, can also be
->  passed using unix domain sockets to a manager process, so the same
->  manager process could handle the userfaults of a multitude of
->  different processes without them being aware about what is going on
-> @@ -50,6 +52,38 @@ is a corner case that would currently return ``-EBUSY``).
->  API
->  ===
->  
-> +Creating a userfaultfd
-> +----------------------
-> +
-> +There are two ways to create a new userfaultfd, each of which provide ways to
-> +restrict access to this functionality (since historically userfaultfds which
-> +handle kernel page faults have been a useful tool for exploiting the kernel).
-> +
-> +The first way, supported by older kernels, is the userfaultfd(2) syscall.
 
-How about "supported since userfaultfd was introduced"?  Otherwise the
-reader can get a feeling that the syscall won't work on new kernels but
-it will.
+On 6/14/2022 11:23 PM, Matthias Kaehlcke wrote:
+> On Mon, Jun 13, 2022 at 11:08:32AM -0700, Matthias Kaehlcke wrote:
+>> On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
+>>> On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
+>>>> Hi Krishna,
+>>>>
+>>>> with this version I see xHCI errors on my SC7180 based system, like
+>>>> these:
+>>>>
+>>>> [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
+>>>>
+>>>> [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
+>>>>
+>>>> After resume a downstream hub isn't enumerated again.
+>>>>
+>>>> So far I didn't see those with v13, but I aso saw the first error with
+>>>> v16.
+>>> It also happens with v13, but only when a wakeup capable vUSB <= 2
+>>> device is plugged in. Initially I used a wakeup capable USB3 to
+>>> Ethernet adapter to trigger the wakeup case, however older versions
+>>> of this series that use usb_wakeup_enabled_descendants() to check
+>>> for wakeup capable devices didn't actually check for vUSB > 2
+>>> devices.
+>>>
+>>> So the case were the controller/PHYs is powered down works, but
+>>> the controller is unhappy when the runtime PM path is used during
+>>> system suspend.
+>> The issue isn't seen on all systems using dwc3-qcom and the problem starts
+>> during probe(). The expected probe sequence is something like this:
+>>
+>> dwc3_qcom_probe
+>>    dwc3_qcom_of_register_core
+>>      dwc3_probe
+>>
+>>    if (device_can_wakeup(&qcom->dwc3->dev))
+>>      ...
+>>
+>> The important part is that device_can_wakeup() is called after dwc3_probe()
+>> has completed. That's what I see on a QC SC7280 system, where wakeup is
+>> generally working with these patches.
+>>
+>> However on a QC SC7180 system dwc3_probe() is deferred and only executed after
+>> dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
+>> With that the controller/driver ends up in an unhappy state after system
+>> suspend.
+>>
+>> Probing is deferred on SC7180 because device_links_check_suppliers() finds
+>> that '88e3000.phy' isn't ready yet.
+> It seems device links could be used to make sure the dwc3 core is present:
+>
+>    Another example for an inconsistent state would be a device link that
+>    represents a driver presence dependency, yet is added from the consumer’s
+>    ->probe callback while the supplier hasn’t probed yet: Had the driver core
+>    known about the device link earlier, it wouldn’t have probed the consumer
+>    in the first place. The onus is thus on the consumer to check presence of
+>    the supplier after adding the link, and defer probing on non-presence.
+>
+>    https://www.kernel.org/doc/html/v5.18/driver-api/device_link.html#usage
+>
+>
+> You could add something like this to dwc3_qcom_of_register_core():
+>
+>
+>    device_link_add(dev, &qcom->dwc3->dev,
+>    		  DL_FLAG_AUTOREMOVE_CONSUMER | DL_FLAG_AUTOPROBE_CONSUMER);
+>
+>    if (qcom->dwc3->dev.links.status != DL_DEV_DRIVER_BOUND)
+>        ret = -EPROBE_DEFER;
+>
+>
+>  From the doc it isn't clear how the consumer is supposed to check presence
+> of the supplier, the above check of the link status is also used in
+> drivers/cpufreq/mediatek-cpufreq.c , but not elsewhere outside of the
+> driver framework.
+Hi Mathias,
 
-> +Access to this is controlled in several ways:
-> +
-> +- By default, the userfaultfd will be able to handle kernel page faults. This
+     Thanks for the input. I will try the above snippet and confirm if 
+probe call happens in sync with of_platform_populate in 
+dwc3_qcom_of_register_core
 
-s/kernel/both user and kernel/?
-
-> +  can be disabled by passing in UFFD_USER_MODE_ONLY.
-> +
-> +- If vm.unprivileged_userfaultfd is 0, then the caller must *either* have
-> +  CAP_SYS_PTRACE, or pass in UFFD_USER_MODE_ONLY.
-> +
-> +- If vm.unprivileged_userfaultfd is 1, then no particular privilege is needed to
-> +  use this syscall, even if UFFD_USER_MODE_ONLY is *not* set.
-
-The separation of above three paragraphs do not feel very clear to me to
-understand these flags.. Entry 1) was trying to define UFFD_USER_MODE_ONLY,
-but entry 2) was also referring to it in another context.
-
-How about using two paragraphs to explain these two flags one by one?  My
-try..
-
-  The user can always creates an userfaultfd that only traps userspace page
-  faults only.  To achieve it, one can create the userfaultfd object using
-  the syscall userfaultfd() with flag UFFD_USER_MODE_ONLY passed in.
-
-  If the user would like to also trap kernel page faults for the address
-  space, then either the process needs to have CAP_SYS_PTRACE capability,
-  or the system must have vm.unprivileged_userfaultfd set to 1.  By
-  default, vm.unprivileged_userfaultfd is set to 0.
-
-> +
-> +The second way, added to the kernel more recently, is by opening and issuing a
-> +USERFAULTFD_IOC_NEW ioctl to /dev/userfaultfd. This method yields equivalent
-> +userfaultfds to the userfaultfd(2) syscall; its benefit is in how access to
-> +creating userfaultfds is controlled.
-
-Since the benefit is immediately mentioned next, how about dropping "its
-benefit is in how ... is controlled" and just connect these two paragraphs?
-
-Again, please take it with a grain of salt on my English-related comments
-(it means all comment above :).
-
-Thanks,
-
-> +
-> +Access to /dev/userfaultfd is controlled via normal filesystem permissions
-> +(user/group/mode for example), which gives fine grained access to userfaultfd
-> +specifically, without also granting other unrelated privileges at the same time
-> +(as e.g. granting CAP_SYS_PTRACE would do).
-> +
-> +Initializing up a userfaultfd
-> +-----------------------------
-> +
->  When first opened the ``userfaultfd`` must be enabled invoking the
->  ``UFFDIO_API`` ioctl specifying a ``uffdio_api.api`` value set to ``UFFD_API`` (or
->  a later API version) which will specify the ``read/POLLIN`` protocol
-> diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
-> index d7374a1e8ac9..e3a952d1fd35 100644
-> --- a/Documentation/admin-guide/sysctl/vm.rst
-> +++ b/Documentation/admin-guide/sysctl/vm.rst
-> @@ -927,6 +927,9 @@ calls without any restrictions.
->  
->  The default value is 0.
->  
-> +An alternative to this sysctl / the userfaultfd(2) syscall is to create
-> +userfaultfds via /dev/userfaultfd. See
-> +Documentation/admin-guide/mm/userfaultfd.rst.
->  
->  user_reserve_kbytes
->  ===================
-> -- 
-> 2.36.1.255.ge46751e96f-goog
-> 
-
--- 
-Peter Xu
-
+Regards,
+Krishna,

@@ -2,95 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C623E54B4D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:36:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3E154B4D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356880AbiFNPgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44088 "EHLO
+        id S1344494AbiFNPh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344072AbiFNPgg (ORCPT
+        with ESMTP id S237783AbiFNPhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:36:36 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F973F896;
-        Tue, 14 Jun 2022 08:36:35 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id t2so8058173pld.4;
-        Tue, 14 Jun 2022 08:36:35 -0700 (PDT)
+        Tue, 14 Jun 2022 11:37:54 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CEF42F00F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:37:53 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id m25so10163167lji.11
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:37:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=dv4biwQeh7Ed3LXwlQIVQYCCbthcKgtA5OHubbSXGeU=;
-        b=ZInJR3dzSQJRMo8PajSRPZKT89e2NGw8no052HJf63eOIgbzNiNHshgUwEPfw0un9Q
-         HVUQF+pqw98TTvq16KmKc+aK01OnaE8I4DEq5rg21WXUjcbsQAyC6bgrgC62vpYl1Nm2
-         cyH0tANjk21u/zKhuYZgtLh5Jn6221UNVD5LGkWJatX8H4Cd9K9iZBusqFemqZPpi8O6
-         Qnv1wFxHhGnISeyiDbaYrovAHZds1H0WR18tXGQKv8yRia93Dy127SlWEARCYALSIehE
-         ABZACuneEPt4bgXCdVfdgn2IPuM2CIDP/yJfQgTXdAWk+Vfpr4UuuUX16Vp9D0g4eHgh
-         Zwpg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fn8gtxL6sSNRSsiDRRI9nlOANxjqFwtwIBrOJj9PDX4=;
+        b=LT/lyo0Gkm8vUesqRnJoPnu//GtJ2a4J7xk0YQo1fVzKIPstZDTs4ocVHUhOQzAzDf
+         1mhknKFZFcyuP+FcITbRZ9C3Zb5IygQ+dSD/d5sDSo5jPxZ3Xod61S+96JIZEmvp/ioU
+         ZLBYWsR7cCtO3xXbwzi+P+VOMS8qTkNT6dLd5qwOG4wKAOBEMDsF5IyyBzSoJSpbj7Ps
+         0sLvaRhd6KXmBxBx5Mnte8TQS/1qrwy08MCnMdz9Rwv7O5iKxxqDYqsRoQXOdKe/qqv/
+         D1JOHgxvD7xtNV5gXfizVs33keuKhzIJmtdRXlLVfle9UauwzrlzB+MCJvLuXXUxDdkT
+         328Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=dv4biwQeh7Ed3LXwlQIVQYCCbthcKgtA5OHubbSXGeU=;
-        b=joYO2r9VAtz5x8rURV2kO94kl1rsZfpukFfjgsrfMh1e3z/ViQUIdQ+Si2nStnCzj0
-         Nor1LiLKQa9MGA6eKJ6uRHxnG/ajdVqvGGRekmetyd2pdwPnQPhCeLyoDVIv6deIlXnp
-         xKobATrAT1AoeEHGyOaS4ZQ323UEZkSefWC1CEOIkD1GkjX/+3Jc/GK8gijYCmIzLNmn
-         yEctwfYEitxVcEbrlShzJHK1D0QIMYPpAlG25qH1OqoV3WeqiU7vW80loVeELxuPa/zZ
-         AiiMekIF2fIjYB2cjSjsxbBjrjPTfutTQgbKznNHO9RqVymjmeCu0ouxqdSRaC9baZKR
-         nwsw==
-X-Gm-Message-State: AJIora8/3oVb24JuBiD+D7tPLPzC9WN+q61Zz28shru4KVFqyQzTWvgX
-        qUja15Ys1JUTVM9IQPT3kFwaomOKBx8=
-X-Google-Smtp-Source: AGRyM1tjKN27zpjcpXFw7T+2VANw22STjXKOuFuOomVD8R8yg4C2QgPhm508k1AQ/R+IAQKfwOdNeA==
-X-Received: by 2002:a17:90b:1b07:b0:1e8:41d8:fa2 with SMTP id nu7-20020a17090b1b0700b001e841d80fa2mr5193512pjb.204.1655220995125;
-        Tue, 14 Jun 2022 08:36:35 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v1-20020a62c301000000b0051bc581b62asm7729839pfg.121.2022.06.14.08.36.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 08:36:34 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 14 Jun 2022 08:36:33 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.17 000/303] 5.17.15-rc2 review
-Message-ID: <20220614153633.GC3088490@roeck-us.net>
-References: <20220613181529.324450680@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fn8gtxL6sSNRSsiDRRI9nlOANxjqFwtwIBrOJj9PDX4=;
+        b=GJ6KJ2D5ceWZUq/be1g+8RUDKLDa0dz9rA343lyx8dFlW2IqZAe75G/23HQvVZsVA2
+         KIECRCH81csodmeV4VAnu7EcSq6NjJj3G0LKLdphezUP63AwKhjw9POiHnMsBUuuRORk
+         8iN5hcuo7ky3WmwSS1Pgx8Md68tZf/1vlSwl+sheutY2EKm2TCTJ5GfhQzTkS5D8TP6S
+         1WXev9wNGP8fMgmCJxutnCb20oWJT2GYNDOmiyw79slBmRjqSFGovP6Xr/vp+iWQWIs1
+         6oF3JYoIMHzULCOVWJnaAkjXi09xGvFh0vKIUXPdGkC3J3WqXtKJkLG0Ht/V0pYVle2H
+         SJuQ==
+X-Gm-Message-State: AJIora+L8V6r6Lt3LZzI7Ha6LDvZghj2VFhjqr0LiJ7oArvPNXiyQZSm
+        lp6I5rfL5lpn/8sUXtSLRrxGVTT/SDhsagdmJDMvNg==
+X-Google-Smtp-Source: AGRyM1tVivOgpTFI/b0e/Dm7QRVBpJJPup//gAccjasK6nMQcbpqWB6Xf55xhXL4gRzWthbIWts51F5C1RaIfIMXqkE=
+X-Received: by 2002:a2e:547:0:b0:255:703a:d9ae with SMTP id
+ 68-20020a2e0547000000b00255703ad9aemr2756675ljf.282.1655221071098; Tue, 14
+ Jun 2022 08:37:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613181529.324450680@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20210820155918.7518-1-brijesh.singh@amd.com> <20210820155918.7518-24-brijesh.singh@amd.com>
+ <CABpDEukdrEbXjOF_QuZqUMQndYx=zVM4s2o-oN_wb2L_HCrONg@mail.gmail.com>
+ <1cadca0d-c3dc-68ed-075f-f88ccb0ccc0a@amd.com> <CABpDEun0rjrNVCGZDXd8SO3tfZi-2ku3mit2XMGLwCsijbF9tg@mail.gmail.com>
+ <ee1a829f-9a89-e447-d182-877d4033c96a@amd.com>
+In-Reply-To: <ee1a829f-9a89-e447-d182-877d4033c96a@amd.com>
+From:   Peter Gonda <pgonda@google.com>
+Date:   Tue, 14 Jun 2022 09:37:39 -0600
+Message-ID: <CAMkAt6q3otA3n-daFfEBP7kzD+ucMQjP=3bX1PkuAUFrH9epUQ@mail.gmail.com>
+Subject: Re: [PATCH Part2 v5 23/45] KVM: SVM: Add KVM_SNP_INIT command
+To:     Ashish Kalra <ashkalra@amd.com>
+Cc:     Alper Gun <alpergun@google.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Ashish Kalra <Ashish.Kalra@amd.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Pavan Kumar Paluri <papaluri@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 08:18:43PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.15 release.
-> There are 303 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 15 Jun 2022 18:14:43 +0000.
-> Anything received after that time might be too late.
-> 
+On Mon, Jun 13, 2022 at 6:21 PM Ashish Kalra <ashkalra@amd.com> wrote:
+>
+>
+> On 6/13/22 23:33, Alper Gun wrote:
+> > On Mon, Jun 13, 2022 at 4:15 PM Ashish Kalra <ashkalra@amd.com> wrote:
+> >> Hello Alper,
+> >>
+> >> On 6/13/22 20:58, Alper Gun wrote:
+> >>> static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+> >>>>    {
+> >>>> +       bool es_active = (argp->id == KVM_SEV_ES_INIT || argp->id == KVM_SEV_SNP_INIT);
+> >>>>           struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+> >>>> -       bool es_active = argp->id == KVM_SEV_ES_INIT;
+> >>>> +       bool snp_active = argp->id == KVM_SEV_SNP_INIT;
+> >>>>           int asid, ret;
+> >>>>
+> >>>>           if (kvm->created_vcpus)
+> >>>> @@ -249,12 +269,22 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+> >>>>                   return ret;
+> >>>>
+> >>>>           sev->es_active = es_active;
+> >>>> +       sev->snp_active = snp_active;
+> >>>>           asid = sev_asid_new(sev);
+> >>>>           if (asid < 0)
+> >>>>                   goto e_no_asid;
+> >>>>           sev->asid = asid;
+> >>>>
+> >>>> -       ret = sev_platform_init(&argp->error);
+> >>>> +       if (snp_active) {
+> >>>> +               ret = verify_snp_init_flags(kvm, argp);
+> >>>> +               if (ret)
+> >>>> +                       goto e_free;
+> >>>> +
+> >>>> +               ret = sev_snp_init(&argp->error);
+> >>>> +       } else {
+> >>>> +               ret = sev_platform_init(&argp->error);
+> >>> After SEV INIT_EX support patches, SEV may be initialized in the platform late.
+> >>> In my tests, if SEV has not been initialized in the platform yet, SNP
+> >>> VMs fail with SEV_DF_FLUSH required error. I tried calling
+> >>> SEV_DF_FLUSH right after the SNP platform init but this time it failed
+> >>> later on the SNP launch update command with SEV_RET_INVALID_PARAM
+> >>> error. Looks like there is another dependency on SEV platform
+> >>> initialization.
+> >>>
+> >>> Calling sev_platform_init for SNP VMs fixes the problem in our tests.
+> >> Trying to get some more context for this issue.
+> >>
+> >> When you say after SEV_INIT_EX support patches, SEV may be initialized
+> >> in the platform late, do you mean sev_pci_init()->sev_snp_init() ...
+> >> sev_platform_init() code path has still not executed on the host BSP ?
+> >>
+> > Correct, INIT_EX requires the file system to be ready and there is a
+> > ccp module param to call it only when needed.
+> >
+> > MODULE_PARM_DESC(psp_init_on_probe, " if true, the PSP will be
+> > initialized on module init. Else the PSP will be initialized on the
+> > first command requiring it");
+> >
+> > If this module param is false, it won't initialize SEV on the platform
+> > until the first SEV VM.
+> >
+> Ok, that makes sense.
+>
+> So the fix will be to call sev_platform_init() unconditionally here in
+> sev_guest_init(), and both sev_snp_init() and sev_platform_init() are
+> protected from being called again, so there won't be any issues if these
+> functions are invoked again at SNP/SEV VM launch if they have been
+> invoked earlier during module init.
 
-Build results:
-	total: 158 pass: 158 fail: 0
-Qemu test results:
-	total: 489 pass: 489 fail: 0
+That's one solution. I don't know if there is a downside to the system
+for enabling SEV if SNP is being enabled but another solution could be
+to just directly place a DF_FLUSH command instead of calling
+sev_platform_init().
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+>
+> Thanks, Ashish
+>

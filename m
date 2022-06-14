@@ -2,204 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD2854ABDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942EC54AC18
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239451AbiFNIf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 04:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
+        id S239270AbiFNIgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 04:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235876AbiFNIf4 (ORCPT
+        with ESMTP id S240381AbiFNIgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 04:35:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A63B3DA55
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:35:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655195754;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UXZdGN4B5WR+HokB4bvG7NAu5UijaXumZB4FPqVWwNc=;
-        b=Copo7BvXqJkcUqVyhL2LxzQtxI6KmQT4cz9VnADcySMK6NazPVR534bR9xvd5qhkVfvLTd
-        wkjPQ3Cjk8Ola5S9LifC2EdcRZpALIAB60h/w0JbS0xhJ0ET1VtEV9/dDL9PIXMypDDsDg
-        hQlF8u0uyVNOA+ADGwWx/RwuTdLRS+U=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-220-pqy-A3KoPRuemZ1Sg9ABjw-1; Tue, 14 Jun 2022 04:35:52 -0400
-X-MC-Unique: pqy-A3KoPRuemZ1Sg9ABjw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 14 Jun 2022 04:36:35 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641E842482;
+        Tue, 14 Jun 2022 01:36:33 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:4a7b:8d3a:acaa:ec46])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D396185A7BA;
-        Tue, 14 Jun 2022 08:35:52 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F063400DF1D;
-        Tue, 14 Jun 2022 08:35:52 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] More KVM changes for Linux 5.19-rc3
-Date:   Tue, 14 Jun 2022 04:35:52 -0400
-Message-Id: <20220614083552.1559600-1-pbonzini@redhat.com>
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A7A1366016A3;
+        Tue, 14 Jun 2022 09:36:30 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655195791;
+        bh=o7G3UNNEF55JMPyngDh/YKMSOYX2F+jQsqn49OmFSac=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QKqC/Jt215PjuNhmS9ZxNYuTgwbuPERLXzcSzCJnt3mUQsCM6v7/QB5Yxg2MsYF3m
+         9tE8MhbvIkG/uyEGBrlNWulW57FZcatC8TieZYttiGw8yhP6+6MAtQF+UtvdqZ+L4w
+         Ow4d+m+SZh3KG0CFORfqG2ZsCARy/k3kcQrilFwEbGOXEKpQRfpgN0WwjO3qyPxo+f
+         E19RY8Qb21+w8OPkJeMfiySUW4MKmifcRj85BPWOBARByIVt6XveSkO525A284rblO
+         QXdDiuTBl2OB/92NpsOtFnE6+US1dsSHTdEyv9NMbL/a8Xsq+dM7eFZeSYKh+BpNxO
+         mNuJedxJrTpCA==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, hverkuil@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v8 00/17] Move HEVC stateless controls out of staging
+Date:   Tue, 14 Jun 2022 10:35:57 +0200
+Message-Id: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+This series aims to make HEVC uapi stable and usable for hardware
+decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
+and 2 out of the tree drivers (rkvdec and RPI).
 
-The following changes since commit 6cd88243c7e03845a450795e134b488fc2afb736:
+version 8:
+- Same than v7 but rebased on media_stage/master
 
-  KVM: x86: do not report a vCPU as preempted outside instruction boundaries (2022-06-08 04:21:07 -0400)
+This version has been tested with these branches:
+- GStreamer: https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_aligned_with_kernel_5.15
+- Linux: https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/HEVC_UAPI_V8
 
-are available in the Git repository at:
+version 7:
+- Apply Jernej patches for Cedrus about bit offset definition and
+  V4L2_CID_STATELESS_HEVC_SLICE_PARAMS being a dynamic array control.
+- Based on media_tree/master
 
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+version 6:
+- Add short_term_ref_pic_set_size and long_term_ref_pic_set_size
+  in v4l2_ctrl_hevc_decode_params structure.
+- Change slice_pic_order_cnt type to s32 to match with PoC type.
+- Set V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag automatically when using
+  V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control.
+- Add a define for max slices count
+- Stop using Hantro dedicated control.
 
-for you to fetch changes up to e0f3f46e42064a51573914766897b4ab95d943e3:
+With patches to decode 10-bits bitstream and produce P010 frames the Fluster score 
+which was 77/147 before, is now 141/147.
+The 10-bits series will comes after this because of it dependency to
+uAPI change. If you are curious you can find the WIP branch here:
+https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/WIP_HEVC_UAPI_V7
 
-  KVM: selftests: Restrict test region to 48-bit physical addresses when using nested (2022-06-09 10:52:27 -0400)
+The 6 failing tests are:
+- PICSIZE_{A,B,C,D}_Bossen_1 where resolutions are to big for Hantro hardware.
+- WPP_D_ericsson_MAIN_2 and WPP_D_ericsson_MAIN10_2 are visually ok but some 
+  difference exist on 5 decoded frames. Some pixels values are no the same 
+  the very end of few lines.
 
-While last week's pull request contained miscellaneous fixes for x86, this
-one covers other architectures, selftests changes, and a bigger series
-for APIC virtualization bugs that were discovered during 5.20 development.
-The idea is to base 5.20 development for KVM on top of this tag.
+version 6:
+- Stop using Hantro dedicated control and compute the number
+  of bytes to skip inside the driver.
+- Rebased on media_tree/master
 
-Paolo
+version 5:
+- Change __u16 pic_order_cnt[2] into __s32 pic_order_cnt_val in
+  hevc_dpb_entry structure
+- Add defines for SEI pic_struct values (patch 4)
+- Fix numbers of bits computation in cedrus_h265_skip_bits() parameters
+- Fix num_short_term_ref_pic_sets and num_long_term_ref_pics_sps
+  documentation (patch 8)
+- Rebased on v5-18-rc1
 
-----------------------------------------------------------------
-ARM64:
+GStreamer H265 decoder plugin aligned with HEVC uAPI v5:
+https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_aligned_with_kernel_5.15
 
-* Properly reset the SVE/SME flags on vcpu load
+Version 4:
+- Add num_entry_point_offsets field in  struct v4l2_ctrl_hevc_slice_params
+- Fix V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS name
+- Initialize control V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
+- Fix space/tab issue in kernel-doc
+- Add patch to change data_bit_offset definition
+- Fix hantro-media SPDX license
+- put controls under stateless section in v4l2-ctrls-defs.c
 
-* Fix a vgic-v2 regression regarding accessing the pending
-state of a HW interrupt from userspace (and make the code
-common with vgic-v3)
+At the end fluster tests results on IMX8MQ is 77/147 for HEVC codec.
 
-* Fix access to the idreg range for protected guests
+Benjamin Gaignard (14):
+  media: uapi: HEVC: Add missing fields in HEVC controls
+  media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
+    prefix
+  media: uapi: HEVC: Change pic_order_cnt definition in
+    v4l2_hevc_dpb_entry
+  media: uapi: HEVC: Add SEI pic struct flags
+  media: uapi: HEVC: Add documentation to uAPI structure
+  media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a
+    dynamic array
+  media: uapi: Move parsed HEVC pixel format out of staging
+  media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
+  media: uapi: Move the HEVC stateless control type out of staging
+  media: controls: Log HEVC stateless control in .std_log
+  media: hantro: Stop using Hantro dedicated control
+  media: uapi: HEVC: fix padding in v4l2 control structures
+  media: uapi: Change data_bit_offset definition
+  media: uapi: move HEVC stateless controls out of staging
 
-* Ignore 'kvm-arm.mode=protected' when using VHE
+Hans Verkuil (3):
+  videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+  v4l2-ctrls: add support for dynamically allocated arrays.
+  vivid: add dynamic array test control
 
-* Return an error from kvm_arch_init_vm() on allocation failure
+ .../media/v4l/ext-ctrls-codec-stateless.rst   | 897 ++++++++++++++++++
+ .../media/v4l/ext-ctrls-codec.rst             | 780 ---------------
+ .../media/v4l/pixfmt-compressed.rst           |   7 +-
+ .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
+ .../media/v4l/vidioc-queryctrl.rst            |   8 +
+ .../media/videodev2.h.rst.exceptions          |   5 +
+ .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
+ drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 +-
+ drivers/media/v4l2-core/v4l2-ctrls-core.c     | 206 +++-
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  38 +-
+ drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
+ drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
+ drivers/staging/media/hantro/hantro_drv.c     |  62 +-
+ .../staging/media/hantro/hantro_g2_hevc_dec.c |  69 +-
+ drivers/staging/media/hantro/hantro_hevc.c    |  10 +-
+ drivers/staging/media/hantro/hantro_hw.h      |   4 +-
+ drivers/staging/media/sunxi/cedrus/cedrus.c   |  25 +-
+ .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+ .../staging/media/sunxi/cedrus/cedrus_h265.c  |  23 +-
+ .../staging/media/sunxi/cedrus/cedrus_video.c |   1 -
+ include/media/hevc-ctrls.h                    | 250 -----
+ include/media/v4l2-ctrls.h                    |  48 +-
+ include/uapi/linux/v4l2-controls.h            | 458 +++++++++
+ include/uapi/linux/videodev2.h                |  13 +
+ 24 files changed, 1848 insertions(+), 1220 deletions(-)
+ delete mode 100644 include/media/hevc-ctrls.h
 
-* A bunch of small cleanups (comments, annotations, indentation)
-
-RISC-V:
-
-* Typo fix in arch/riscv/kvm/vmid.c
-
-* Remove broken reference pattern from MAINTAINERS entry
-
-x86-64:
-
-* Fix error in page tables with MKTME enabled
-
-* Dirty page tracking performance test extended to running a nested
-  guest
-
-* Disable APICv/AVIC in cases that it cannot implement correctly
-
-----------------------------------------------------------------
-David Matlack (11):
-      KVM: selftests: Replace x86_page_size with PG_LEVEL_XX
-      KVM: selftests: Add option to create 2M and 1G EPT mappings
-      KVM: selftests: Drop stale function parameter comment for nested_map()
-      KVM: selftests: Refactor nested_map() to specify target level
-      KVM: selftests: Move VMX_EPT_VPID_CAP_AD_BITS to vmx.h
-      KVM: selftests: Add a helper to check EPT/VPID capabilities
-      KVM: selftests: Drop unnecessary rule for STATIC_LIBS
-      KVM: selftests: Link selftests directly with lib object files
-      KVM: selftests: Clean up LIBKVM files in Makefile
-      KVM: selftests: Add option to run dirty_log_perf_test vCPUs in L2
-      KVM: selftests: Restrict test region to 48-bit physical addresses when using nested
-
-Julia Lawall (1):
-      RISC-V: KVM: fix typos in comments
-
-Lukas Bulwahn (1):
-      MAINTAINERS: Limit KVM RISC-V entry to existing selftests
-
-Marc Zyngier (7):
-      KVM: arm64: Always start with clearing SVE flag on load
-      KVM: arm64: Always start with clearing SME flag on load
-      KVM: arm64: Don't read a HW interrupt pending state in user context
-      KVM: arm64: Replace vgic_v3_uaccess_read_pending with vgic_uaccess_read_pending
-      KVM: arm64: Warn if accessing timer pending state outside of vcpu context
-      KVM: arm64: Handle all ID registers trapped for a protected VM
-      KVM: arm64: Drop stale comment
-
-Maxim Levitsky (7):
-      KVM: x86: document AVIC/APICv inhibit reasons
-      KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base
-      KVM: x86: SVM: remove avic's broken code that updated APIC ID
-      KVM: x86: SVM: fix avic_kick_target_vcpus_fast
-      KVM: x86: disable preemption while updating apicv inhibition
-      KVM: x86: disable preemption around the call to kvm_arch_vcpu_{un|}blocking
-      KVM: x86: SVM: drop preempt-safe wrappers for avic_vcpu_load/put
-
-Paolo Bonzini (3):
-      Merge tag 'kvm-riscv-fixes-5.19-1' of https://github.com/kvm-riscv/linux into HEAD
-      Merge tag 'kvmarm-fixes-5.19-1' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
-      KVM: x86: SVM: fix nested PAUSE filtering when L0 intercepts PAUSE
-
-Will Deacon (4):
-      KVM: arm64: Return error from kvm_arch_init_vm() on allocation failure
-      KVM: arm64: Ignore 'kvm-arm.mode=protected' when using VHE
-      KVM: arm64: Extend comment in has_vhe()
-      KVM: arm64: Remove redundant hyp_assert_lock_held() assertions
-
-Yuan Yao (1):
-      KVM: x86/mmu: Set memory encryption "value", not "mask", in shadow PDPTRs
-
-sunliming (1):
-      KVM: arm64: Fix inconsistent indenting
-
- Documentation/admin-guide/kernel-parameters.txt    |   1 -
- MAINTAINERS                                        |   1 -
- arch/arm64/include/asm/kvm_host.h                  |   5 -
- arch/arm64/include/asm/virt.h                      |   3 +
- arch/arm64/kernel/cpufeature.c                     |  10 +-
- arch/arm64/kvm/arch_timer.c                        |   3 +
- arch/arm64/kvm/arm.c                               |  10 +-
- arch/arm64/kvm/fpsimd.c                            |   2 +
- arch/arm64/kvm/hyp/nvhe/mem_protect.c              |   4 -
- arch/arm64/kvm/hyp/nvhe/sys_regs.c                 |  42 ++++-
- arch/arm64/kvm/vgic/vgic-mmio-v2.c                 |   4 +-
- arch/arm64/kvm/vgic/vgic-mmio-v3.c                 |  40 +----
- arch/arm64/kvm/vgic/vgic-mmio.c                    |  40 ++++-
- arch/arm64/kvm/vgic/vgic-mmio.h                    |   3 +
- arch/arm64/kvm/vmid.c                              |   2 +-
- arch/riscv/kvm/vmid.c                              |   2 +-
- arch/x86/include/asm/kvm_host.h                    |  67 +++++++-
- arch/x86/kvm/lapic.c                               |  27 +++-
- arch/x86/kvm/mmu/mmu.c                             |   2 +-
- arch/x86/kvm/svm/avic.c                            | 171 +++++++++------------
- arch/x86/kvm/svm/nested.c                          |  39 ++---
- arch/x86/kvm/svm/svm.c                             |   8 +-
- arch/x86/kvm/svm/svm.h                             |   4 +-
- arch/x86/kvm/vmx/vmx.c                             |   4 +-
- arch/x86/kvm/x86.c                                 |   2 +
- tools/testing/selftests/kvm/Makefile               |  49 ++++--
- tools/testing/selftests/kvm/dirty_log_perf_test.c  |  10 +-
- .../testing/selftests/kvm/include/perf_test_util.h |   9 ++
- .../selftests/kvm/include/x86_64/processor.h       |  25 +--
- tools/testing/selftests/kvm/include/x86_64/vmx.h   |   6 +
- tools/testing/selftests/kvm/lib/perf_test_util.c   |  53 ++++++-
- .../selftests/kvm/lib/x86_64/perf_test_util.c      | 112 ++++++++++++++
- tools/testing/selftests/kvm/lib/x86_64/processor.c |  31 ++--
- tools/testing/selftests/kvm/lib/x86_64/vmx.c       | 149 +++++++++++-------
- .../testing/selftests/kvm/max_guest_memory_test.c  |   2 +-
- tools/testing/selftests/kvm/x86_64/mmu_role_test.c |   2 +-
- virt/kvm/kvm_main.c                                |   8 +-
- 37 files changed, 640 insertions(+), 312 deletions(-)
+-- 
+2.32.0
 

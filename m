@@ -2,190 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1EE654AF46
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D625E54AF1F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354889AbiFNLWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 07:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
+        id S1356191AbiFNLOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 07:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354764AbiFNLWr (ORCPT
+        with ESMTP id S1356294AbiFNLNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 07:22:47 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16A1622528;
-        Tue, 14 Jun 2022 04:22:47 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id n185so4456576wmn.4;
-        Tue, 14 Jun 2022 04:22:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=XAi7yYw1KbeaAyG4ORCQsljXN7rpKYz0Lgy/6AMChJQ=;
-        b=lUPqteObQGzNdhBASmGAVQhbq/1XEP2Lgp5ACwtc4/b4EseGatsEeRcX8qyteDH4JS
-         6X5v60mLdnJtv+/AL1muJL+qbU66mhcG8567Sjo3K2W+iPJXcBEsrR5SUn2Z4cFrKXID
-         NJ6wTbdGksyQz+uh7JcF9ckSL8wwhqHhIyO0jCxFOUJPq8oWy2u0OBYUpNItg56iDvDA
-         wEoCY0NE8jkl/HB3Ga81kjJ2tzdzZHQIbKRF1Ni4DCS9QFsvsx1N9OxosJn10TG/LHl3
-         cjpzmhfMOPgsHyr57ckAijWy0sOTcORIV4OlKPACSQ6jdYNir1ZVZ9mqW6/RPh1rbAm/
-         76Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XAi7yYw1KbeaAyG4ORCQsljXN7rpKYz0Lgy/6AMChJQ=;
-        b=i6lwOihr6gDlbV5Pn57wZtEKxnerP68Ae4KPnnkMEna3CYijWi3PurwayezydaoMWx
-         Ts2xXBZcYeedDbGvRO3PHDJVXRGmeIqNFze8myfcH82caW2HNAlbSGbNYjqPM5fG4EJy
-         +Gxt0ZzSY62bYm2YcMoVF65DIlY8LcQ2HehtLgpPn0XrwvfrC/iZ9A+pLQZehsazfqA2
-         oJ6ZhahiDanc4q0+D+4oJyfUPd36H6bhocKBIUS/OsmZiGKUHXWYTEFFTt8bU21MSNyZ
-         L2c2vjmH02Yuaj1jp+YTJ6igejD16gPLft1t+cfqkOXQyiDrmMtEk61ey2V6ADzvMrOi
-         VzpQ==
-X-Gm-Message-State: AOAM531IQKW89KlgQgsT0NpGxiMPgX5D64ZWA7RcNvAudHPaz19g92e5
-        8ysVxJcW3U6J/3zBwld0Udw=
-X-Google-Smtp-Source: ABdhPJyPIX1VeSzfEnAnyUHfwwBxOlzTXFdDjygeX1gNCUoQDW/NrvecGfaXgomSrSNZoXGvW+e/fA==
-X-Received: by 2002:a7b:c110:0:b0:39c:8270:7b95 with SMTP id w16-20020a7bc110000000b0039c82707b95mr3601441wmi.41.1655205765413;
-        Tue, 14 Jun 2022 04:22:45 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id o19-20020a1c4d13000000b0039c60e33702sm12497390wmh.16.2022.06.14.04.22.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 04:22:44 -0700 (PDT)
-From:   Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>,
-        Mark Mentovai <mark@moxienet.com>
-Subject: [net-next PATCH v2 2/2] net: ethernet: stmmac: reset force speed bit for ipq806x
-Date:   Tue, 14 Jun 2022 13:22:28 +0200
-Message-Id: <20220614112228.1998-2-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220614112228.1998-1-ansuelsmth@gmail.com>
-References: <20220614112228.1998-1-ansuelsmth@gmail.com>
+        Tue, 14 Jun 2022 07:13:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB9720BDA;
+        Tue, 14 Jun 2022 04:13:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA1D8B817DD;
+        Tue, 14 Jun 2022 11:13:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87FAEC3411B;
+        Tue, 14 Jun 2022 11:13:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655205218;
+        bh=ENxCaP9Rk2nwCR/0WD0QuKmb7cfrw4GmQwwV0iSrjDU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hh/l9xxP/UpxZHcucnAZAY/2RPjW7ZhykKXFR6o3nwKC/acvwOOH4YnGjj4s73SNd
+         wUSW17MZVdj57vBp2pyVAGWMxf+qqdnBXm9a0WRI8wvxclb8y5xTasUfiNLsgoe1LL
+         7W58vY00SoFalY3Jut9SMdvcEkwp8zTLXgohjLIuHTH9UNwoUs0E4z4z9jMc6lvZXl
+         ZZSXFa8KUxzcY5AEN4764+vN/Nt/L784GhIgknu/WlMqKpNSxYPdZEIxgQnpL/aqxK
+         rF5lb+Vql3JtQTeQBGrALUAHnn2im5cZfX8Ge/1t6HpSaGRzmWt2hZX202OXaDsR/J
+         uCh1vslFlNAiw==
+Date:   Tue, 14 Jun 2022 12:22:48 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] iio: adc: stx104: Implement and utilize register
+ structures
+Message-ID: <20220614122248.7f257556@jic23-huawei>
+In-Reply-To: <a2dca9435f7f1f727c696a1faa0ab9e27927f9f3.1654118389.git.william.gray@linaro.org>
+References: <cover.1654118389.git.william.gray@linaro.org>
+        <a2dca9435f7f1f727c696a1faa0ab9e27927f9f3.1654118389.git.william.gray@linaro.org>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some bootloader may set the force speed regs even if the actual
-interface should use autonegotiation between PCS and PHY.
-This cause the complete malfuction of the interface.
+On Mon,  6 Jun 2022 10:15:17 -0400
+William Breathitt Gray <william.gray@linaro.org> wrote:
 
-To fix this correctly reset the force speed regs if a fixed-link is not
-defined in the DTS. With a fixed-link node correctly configure the
-forced speed regs to handle any misconfiguration by the bootloader.
+> Reduce magic numbers and improve code readability by implementing and
+> utilizing named register data structures.
+> 
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 
-Reported-by: Mark Mentovai <mark@moxienet.com>
-Co-developed-by: Mark Mentovai <mark@moxienet.com>
-Signed-off-by: Mark Mentovai <mark@moxienet.com>
-Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
----
-v2:
-- Fix reference leak for 'fixed-link' node
+A few comments inline, but looks fine to me otherwise.
 
- .../ethernet/stmicro/stmmac/dwmac-ipq806x.c   | 64 +++++++++++++++++++
- 1 file changed, 64 insertions(+)
+Jonathan
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-ipq806x.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-ipq806x.c
-index 832f442254d8..e888c8a9c830 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-ipq806x.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-ipq806x.c
-@@ -66,6 +66,17 @@
- #define NSS_COMMON_CLK_DIV_SGMII_100		4
- #define NSS_COMMON_CLK_DIV_SGMII_10		49
- 
-+#define QSGMII_PCS_ALL_CH_CTL			0x80
-+#define QSGMII_PCS_CH_SPEED_FORCE		BIT(1)
-+#define QSGMII_PCS_CH_SPEED_10			0x0
-+#define QSGMII_PCS_CH_SPEED_100			BIT(2)
-+#define QSGMII_PCS_CH_SPEED_1000		BIT(3)
-+#define QSGMII_PCS_CH_SPEED_MASK		(QSGMII_PCS_CH_SPEED_FORCE | \
-+						 QSGMII_PCS_CH_SPEED_10 | \
-+						 QSGMII_PCS_CH_SPEED_100 | \
-+						 QSGMII_PCS_CH_SPEED_1000)
-+#define QSGMII_PCS_CH_SPEED_SHIFT(x)		((x) * 4)
-+
- #define QSGMII_PCS_CAL_LCKDT_CTL		0x120
- #define QSGMII_PCS_CAL_LCKDT_CTL_RST		BIT(19)
- 
-@@ -253,6 +264,55 @@ static void ipq806x_gmac_fix_mac_speed(void *priv, unsigned int speed)
- 	ipq806x_gmac_set_speed(gmac, speed);
- }
- 
-+static int
-+ipq806x_gmac_configure_qsgmii_pcs_speed(struct ipq806x_gmac *gmac)
-+{
-+	struct platform_device *pdev = gmac->pdev;
-+	struct device *dev = &pdev->dev;
-+	struct device_node *dn;
-+	int link_speed;
-+	int val = 0;
-+	int ret;
-+
-+	/* Some bootloader may apply wrong configuration and cause
-+	 * not functioning port. If fixed link is not set,
-+	 * reset the force speed bit.
-+	 */
-+	if (!of_phy_is_fixed_link(pdev->dev.of_node))
-+		goto write;
-+
-+	dn = of_get_child_by_name(pdev->dev.of_node, "fixed-link");
-+	ret = of_property_read_u32(dn, "speed", &link_speed);
-+	of_node_put(dn);
-+	if (ret) {
-+		dev_err(dev, "found fixed-link node with no speed");
-+		return ret;
-+	}
-+
-+	val = QSGMII_PCS_CH_SPEED_FORCE;
-+
-+	switch (link_speed) {
-+	case SPEED_1000:
-+		val |= QSGMII_PCS_CH_SPEED_1000;
-+		break;
-+	case SPEED_100:
-+		val |= QSGMII_PCS_CH_SPEED_100;
-+		break;
-+	case SPEED_10:
-+		val |= QSGMII_PCS_CH_SPEED_10;
-+		break;
-+	}
-+
-+write:
-+	regmap_update_bits(gmac->qsgmii_csr, QSGMII_PCS_ALL_CH_CTL,
-+			   QSGMII_PCS_CH_SPEED_MASK <<
-+			   QSGMII_PCS_CH_SPEED_SHIFT(gmac->id),
-+			   val <<
-+			   QSGMII_PCS_CH_SPEED_SHIFT(gmac->id));
-+
-+	return 0;
-+}
-+
- static const struct soc_device_attribute ipq806x_gmac_soc_v1[] = {
- 	{
- 		.revision = "1.*",
-@@ -400,6 +460,10 @@ static int ipq806x_gmac_probe(struct platform_device *pdev)
- 		err = ipq806x_gmac_configure_qsgmii_params(gmac);
- 		if (err)
- 			goto err_remove_config_dt;
-+
-+		err = ipq806x_gmac_configure_qsgmii_pcs_speed(gmac);
-+		if (err)
-+			goto err_remove_config_dt;
- 	}
- 
- 	plat_dat->has_gmac = true;
--- 
-2.36.1
+> ---
+>  drivers/iio/adc/stx104.c | 70 +++++++++++++++++++++++++++-------------
+>  1 file changed, 47 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/stx104.c b/drivers/iio/adc/stx104.c
+> index 7552351bfed9..7656b363e281 100644
+> --- a/drivers/iio/adc/stx104.c
+> +++ b/drivers/iio/adc/stx104.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/module.h>
+>  #include <linux/moduleparam.h>
+>  #include <linux/spinlock.h>
+> +#include <linux/types.h>
+>  
+>  #define STX104_OUT_CHAN(chan) {				\
+>  	.type = IIO_VOLTAGE,				\
+> @@ -44,14 +45,36 @@ static unsigned int num_stx104;
+>  module_param_hw_array(base, uint, ioport, &num_stx104, 0);
+>  MODULE_PARM_DESC(base, "Apex Embedded Systems STX104 base addresses");
+>  
+> +/**
+> + * struct stx104_reg - device register structure
+> + * @ad:		ADC Data
+> + * @achan:	ADC Channel
+> + * @dio:	Digital I/O
+> + * @dac:	DAC Channels
+> + * @cir_asr:	Clear Interrupts and ADC Status
+> + * @acr:	ADC Control
+> + * @pccr_fsh:	Pacer Clock Control and FIFO Status MSB
+> + * @acfg:	ADC Configuration
+> + */
+> +struct stx104_reg {
+> +	u16 ad;
+> +	u8 achan;
+> +	u8 dio;
+> +	u16 dac[2];
+> +	u8 cir_asr;
+> +	u8 acr;
+> +	u8 pccr_fsh;
+> +	u8 acfg;
+> +};
+> +
+>  /**
+>   * struct stx104_iio - IIO device private data structure
+>   * @chan_out_states:	channels' output states
+> - * @base:		base port address of the IIO device
+> + * @reg:		I/O address offset for the device registers
+>   */
+>  struct stx104_iio {
+>  	unsigned int chan_out_states[STX104_NUM_OUT_CHAN];
+> -	void __iomem *base;
+> +	struct stx104_reg __iomem *reg;
+>  };
+>  
+>  /**
+> @@ -64,7 +87,7 @@ struct stx104_iio {
+>  struct stx104_gpio {
+>  	struct gpio_chip chip;
+>  	spinlock_t lock;
+> -	void __iomem *base;
+> +	u8 __iomem *base;
+>  	unsigned int out_state;
+>  };
+>  
+> @@ -72,6 +95,7 @@ static int stx104_read_raw(struct iio_dev *indio_dev,
+>  	struct iio_chan_spec const *chan, int *val, int *val2, long mask)
+>  {
+>  	struct stx104_iio *const priv = iio_priv(indio_dev);
+> +	struct stx104_reg __iomem *const reg = priv->reg;
+>  	unsigned int adc_config;
+>  	int adbu;
+>  	int gain;
+> @@ -79,7 +103,7 @@ static int stx104_read_raw(struct iio_dev *indio_dev,
+>  	switch (mask) {
+>  	case IIO_CHAN_INFO_HARDWAREGAIN:
+>  		/* get gain configuration */
+> -		adc_config = ioread8(priv->base + 11);
+> +		adc_config = ioread8(&reg->acfg);
+>  		gain = adc_config & 0x3;
+>  
+>  		*val = 1 << gain;
+> @@ -91,24 +115,24 @@ static int stx104_read_raw(struct iio_dev *indio_dev,
+>  		}
+>  
+>  		/* select ADC channel */
+> -		iowrite8(chan->channel | (chan->channel << 4), priv->base + 2);
+> +		iowrite8(chan->channel | (chan->channel << 4), &reg->achan);
+>  
+>  		/* trigger ADC sample capture and wait for completion */
+> -		iowrite8(0, priv->base);
+> -		while (ioread8(priv->base + 8) & BIT(7));
+> +		iowrite8(0, &reg->ad);
+
+Curious - 8 bit write to a 16 bit address?  Maybe worth a comment
+on why.
+
+> +		while (ioread8(&reg->cir_asr) & BIT(7));
+>  
+> -		*val = ioread16(priv->base);
+> +		*val = ioread16(&reg->ad);
+>  		return IIO_VAL_INT;
+>  	case IIO_CHAN_INFO_OFFSET:
+>  		/* get ADC bipolar/unipolar configuration */
+> -		adc_config = ioread8(priv->base + 11);
+> +		adc_config = ioread8(&reg->acfg);
+>  		adbu = !(adc_config & BIT(2));
+>  
+>  		*val = -32768 * adbu;
+>  		return IIO_VAL_INT;
+>  	case IIO_CHAN_INFO_SCALE:
+>  		/* get ADC bipolar/unipolar and gain configuration */
+> -		adc_config = ioread8(priv->base + 11);
+> +		adc_config = ioread8(&reg->acfg);
+>  		adbu = !(adc_config & BIT(2));
+>  		gain = adc_config & 0x3;
+>  
+> @@ -130,16 +154,16 @@ static int stx104_write_raw(struct iio_dev *indio_dev,
+>  		/* Only four gain states (x1, x2, x4, x8) */
+>  		switch (val) {
+>  		case 1:
+> -			iowrite8(0, priv->base + 11);
+> +			iowrite8(0, &priv->reg->acfg);
+>  			break;
+>  		case 2:
+> -			iowrite8(1, priv->base + 11);
+> +			iowrite8(1, &priv->reg->acfg);
+>  			break;
+>  		case 4:
+> -			iowrite8(2, priv->base + 11);
+> +			iowrite8(2, &priv->reg->acfg);
+>  			break;
+>  		case 8:
+> -			iowrite8(3, priv->base + 11);
+> +			iowrite8(3, &priv->reg->acfg);
+>  			break;
+>  		default:
+>  			return -EINVAL;
+> @@ -153,7 +177,7 @@ static int stx104_write_raw(struct iio_dev *indio_dev,
+>  				return -EINVAL;
+>  
+>  			priv->chan_out_states[chan->channel] = val;
+> -			iowrite16(val, priv->base + 4 + 2 * chan->channel);
+> +			iowrite16(val, priv->reg->dac + chan->channel);
+Perhaps for consistency with below go with
+&priv->reg->dac[chan->channels];
+
+>  
+>  			return 0;
+>  		}
+> @@ -307,15 +331,15 @@ static int stx104_probe(struct device *dev, unsigned int id)
+>  	}
+>  
+>  	priv = iio_priv(indio_dev);
+> -	priv->base = devm_ioport_map(dev, base[id], STX104_EXTENT);
+> -	if (!priv->base)
+> +	priv->reg = devm_ioport_map(dev, base[id], STX104_EXTENT);
+> +	if (!priv->reg)
+>  		return -ENOMEM;
+>  
+>  	indio_dev->info = &stx104_info;
+>  	indio_dev->modes = INDIO_DIRECT_MODE;
+>  
+>  	/* determine if differential inputs */
+> -	if (ioread8(priv->base + 8) & BIT(5)) {
+> +	if (ioread8(&priv->reg->cir_asr) & BIT(5)) {
+>  		indio_dev->num_channels = ARRAY_SIZE(stx104_channels_diff);
+>  		indio_dev->channels = stx104_channels_diff;
+>  	} else {
+> @@ -326,14 +350,14 @@ static int stx104_probe(struct device *dev, unsigned int id)
+>  	indio_dev->name = dev_name(dev);
+>  
+>  	/* configure device for software trigger operation */
+> -	iowrite8(0, priv->base + 9);
+> +	iowrite8(0, &priv->reg->acr);
+>  
+>  	/* initialize gain setting to x1 */
+> -	iowrite8(0, priv->base + 11);
+> +	iowrite8(0, &priv->reg->acfg);
+>  
+>  	/* initialize DAC output to 0V */
+> -	iowrite16(0, priv->base + 4);
+> -	iowrite16(0, priv->base + 6);
+> +	iowrite16(0, &priv->reg->dac[0]);
+> +	iowrite16(0, &priv->reg->dac[1]);
+>  
+>  	stx104gpio->chip.label = dev_name(dev);
+>  	stx104gpio->chip.parent = dev;
+> @@ -348,7 +372,7 @@ static int stx104_probe(struct device *dev, unsigned int id)
+>  	stx104gpio->chip.get_multiple = stx104_gpio_get_multiple;
+>  	stx104gpio->chip.set = stx104_gpio_set;
+>  	stx104gpio->chip.set_multiple = stx104_gpio_set_multiple;
+> -	stx104gpio->base = priv->base + 3;
+> +	stx104gpio->base = &priv->reg->dio;
+>  	stx104gpio->out_state = 0x0;
+>  
+>  	spin_lock_init(&stx104gpio->lock);
 

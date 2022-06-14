@@ -2,161 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E66F54A9C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:50:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B010154A9C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352578AbiFNGtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 02:49:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
+        id S1352637AbiFNGtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 02:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352435AbiFNGtE (ORCPT
+        with ESMTP id S1352520AbiFNGtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 02:49:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23435393E0;
-        Mon, 13 Jun 2022 23:49:04 -0700 (PDT)
-Received: from beast.luon.net (unknown [IPv6:2a10:3781:2531::8])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sjoerd)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D33A866016AA;
-        Tue, 14 Jun 2022 07:49:02 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655189342;
-        bh=HEY57/+pQCdqZeUqLYJAbru4ZTJec0xYbZTMVXt16Ag=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cByx7Kv+Nf87SMgS2jkmXOjVVEQa88yPCjeTDa2PD53e4clOraP6sQykPydDm7lMH
-         nAaXYjBHe7Tr+L55Fhe2KammIahnevC35qY+CE8lyY3qBREhQHqvs4/S1u7i0aQIHv
-         6DNBzZI9JLZptUlOWy/3yqWR+RDbmqfV44ABqW8qG7yBI1qo5ctFx6l8rHPZxnXqjm
-         +Bb7Ee8WCEn6Hd3L47Oo8iAn0HRl5IwZJjw9sgMEvnOFNXA760MxojE7vK7a9Ryjt9
-         D2quFLXZeB4OqVsXJfLpRU2YisGtN9fJBzj4JpMPwVcipuBnizCNQ68BomwrAY0Mv0
-         tHj53OTP4AgKg==
-Received: by beast.luon.net (Postfix, from userid 1000)
-        id 1E97D4179E46; Tue, 14 Jun 2022 08:49:00 +0200 (CEST)
-From:   Sjoerd Simons <sjoerd@collabora.com>
-To:     linux-rockchip@lists.infradead.org
-Cc:     kernel@collabora.com, Akash Gajjar <akash@openedev.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] arm64: dts: rockchip: rock-pi-s add more peripherals
-Date:   Tue, 14 Jun 2022 08:48:57 +0200
-Message-Id: <20220614064858.1445817-4-sjoerd@collabora.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220614064858.1445817-1-sjoerd@collabora.com>
-References: <20220614064858.1445817-1-sjoerd@collabora.com>
+        Tue, 14 Jun 2022 02:49:13 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DAC396AE;
+        Mon, 13 Jun 2022 23:49:12 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id m16-20020a7bca50000000b0039c8a224c95so3334912wml.2;
+        Mon, 13 Jun 2022 23:49:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rK2JBezORIHT404/AnKcTtSy2/jIHZfS+t0GGJ0+ABY=;
+        b=WcIWyHKlRAS26Z8EoLw6XLKzEPXqlPumRldCWWOKPHE60ySBl3cfry6pTEZK8vrxSX
+         KEq8iqRSaZUDNgr0sf6uYKhyNaMpdp1d1ALsC2BHLxW+R/p1sLkmlZiG2jTgKWnC6r6M
+         wm2CAj+7ewzCvE8yvadPNbiyAYROdGt8+Ccw4jXeewwH2rAdRtbOZ8+l/ryvDupbkgq+
+         C0dFBq+ehpIgGJgrf8sAAmy0CLNnoFphd+vN4PKFJsStzMdThDPse7VRf7I036178AIn
+         6lby+hWvwbDnQA+hoUlmYub2T329n1TcmdFDFnRJs+V2oSFLDJZxtT/2CK4Dwb+T/8tC
+         9tMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rK2JBezORIHT404/AnKcTtSy2/jIHZfS+t0GGJ0+ABY=;
+        b=FPQLHzF5QK5ZrRuW9FfOG3HVyH8RzlxAcWK5fGf7K60w+AJS3ydokhsmZp0dxBVsgp
+         f/v+j9plAiTIwsgZQVpcmfiPo15E63b1cKvAmuPjKv/K/HGcNNAk8oMZwXtZS2JFi8ps
+         swsplDbrFpV6Ps7sez0UuUP++54Ske1eslwzWHmWAB1XS1uFpAzQqRfiNt+2SJpvADnA
+         /d6Nm48W16osD3z/Oi0+3zHT7B9bH00jZUMjYnTJriTZWlFzXkhwUNpvCc41uJ+/ZuZz
+         quBqZr7mF679otjbF7u+eoaGrTLMefhCtXftSady0sNHjzRAAhQilT3DHERthLl/Y8wu
+         n1yw==
+X-Gm-Message-State: AOAM532dE808gcG3j133q/sJvPWmtSz0Ss0NCWqAntt7d/i2lRaOzSN6
+        vFrx0sR3yoaA4/aOL3Ny3B4=
+X-Google-Smtp-Source: ABdhPJxKDEf3IT/FOvko39kZHApTNB9iNglrdPDScj/yimRsC18KrDoK3lWb1n7NeK9351mDqeOwVg==
+X-Received: by 2002:a05:600c:6020:b0:39c:96ec:5014 with SMTP id az32-20020a05600c602000b0039c96ec5014mr2426943wmb.57.1655189351116;
+        Mon, 13 Jun 2022 23:49:11 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id bg23-20020a05600c3c9700b0039c15861001sm18549655wmb.21.2022.06.13.23.49.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 23:49:10 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] platform/chrome: Fix spelling mistake "unknwon" -> "unknown"
+Date:   Tue, 14 Jun 2022 07:49:09 +0100
+Message-Id: <20220614064909.47804-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This enables the following peripherals:
-* Onboard ethernet support
-* Bluetooth
-* USB 2 port
-* OTG port via type-c connector
-* Hardware watchog
+There is a spelling mistake in a dev_dbg message. Fix it.
 
-Also add aliases for the mmc devices and the ethernet interface
-
-Signed-off-by: Sjoerd Simons <sjoerd@collabora.com>
-
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
+ drivers/platform/chrome/cros_ec_proto.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-(no changes since v1)
-
- .../boot/dts/rockchip/rk3308-rock-pi-s.dts    | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/rockchip/rk3308-rock-pi-s.dts b/arch/arm64/boot/dts/rockchip/rk3308-rock-pi-s.dts
-index 9095efe25ccd..46ba48b843c5 100644
---- a/arch/arm64/boot/dts/rockchip/rk3308-rock-pi-s.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3308-rock-pi-s.dts
-@@ -11,6 +11,12 @@ / {
- 	model = "Radxa ROCK Pi S";
- 	compatible = "radxa,rockpis", "rockchip,rk3308";
+diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
+index 1bd567244f8e..6923ea4401e5 100644
+--- a/drivers/platform/chrome/cros_ec_proto.c
++++ b/drivers/platform/chrome/cros_ec_proto.c
+@@ -346,7 +346,7 @@ static int cros_ec_get_proto_info(struct cros_ec_device *ec_dev, int devidx)
+ 		dev_dbg(ec_dev->dev, "found PD chip\n");
+ 		break;
+ 	default:
+-		dev_dbg(ec_dev->dev, "unknwon passthru index: %d\n", devidx);
++		dev_dbg(ec_dev->dev, "unknown passthru index: %d\n", devidx);
+ 		break;
+ 	}
  
-+	aliases {
-+		ethernet0 = &gmac;
-+		mmc0 = &emmc;
-+		mmc1 = &sdmmc;
-+	};
-+
- 	chosen {
- 		stdout-path = "serial0:1500000n8";
- 	};
-@@ -132,6 +138,15 @@ &emmc {
- 	status = "okay";
- };
- 
-+&gmac {
-+	clock_in_out = "output";
-+	phy-supply = <&vcc_io>;
-+	snps,reset-gpio = <&gpio0 RK_PA7 GPIO_ACTIVE_LOW>;
-+	snps,reset-active-low;
-+	snps,reset-delays-us = <0 50000 50000>;
-+	status = "okay";
-+};
-+
- &i2c1 {
- 	status = "okay";
- };
-@@ -195,10 +210,47 @@ &sdmmc {
- 	status = "okay";
- };
- 
-+&u2phy {
-+	status = "okay";
-+
-+	u2phy_host: host-port {
-+		phy-supply = <&vcc5v0_otg>;
-+		status = "okay";
-+	};
-+
-+	u2phy_otg: otg-port {
-+		phy-supply = <&vcc5v0_otg>;
-+		status = "okay";
-+	};
-+};
-+
- &uart0 {
- 	status = "okay";
- };
- 
- &uart4 {
- 	status = "okay";
-+
-+	bluetooth {
-+		compatible = "realtek,rtl8723bs-bt";
-+		device-wake-gpios = <&gpio4 RK_PB3 GPIO_ACTIVE_HIGH>;
-+		host-wake-gpios = <&gpio4 RK_PB4 GPIO_ACTIVE_HIGH>;
-+	};
-+};
-+
-+&usb_host_ehci {
-+	status = "okay";
-+};
-+
-+&usb_host_ohci {
-+	status = "okay";
-+};
-+
-+&usb20_otg {
-+	dr_mode = "peripheral";
-+	status = "okay";
-+};
-+
-+&wdt {
-+	status = "okay";
- };
 -- 
-2.36.1
+2.35.3
 

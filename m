@@ -2,311 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC67454AB84
+	by mail.lfdr.de (Postfix) with ESMTP id 72F6A54AB83
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232192AbiFNIPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 04:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
+        id S232919AbiFNIPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 04:15:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231989AbiFNIPh (ORCPT
+        with ESMTP id S232296AbiFNIPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 04:15:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F78F3FBDC
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:15:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655194535;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l9Zc9wCIpLbAd4jBfyMUl844wfhz2xkE3MXngp1dQqs=;
-        b=MURtaOM4P+6Ls877N4EobIIV3NTY0t+EXhhNYlC1w90EnSIXbGObk1CIHmGA+MoV3oHrAz
-        1X3Yw15M356+10vxhe7EHvrDNdefkOmc6a5OZJn6r16MeoYS33vRSoJbXSzbSxNZKhlnCb
-        W30uNA76OHIFgI0NfARSyi4yfehY3Wc=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-374-mOI9KqZVN1COzfs68YTaLA-1; Tue, 14 Jun 2022 04:15:32 -0400
-X-MC-Unique: mOI9KqZVN1COzfs68YTaLA-1
-Received: by mail-ed1-f71.google.com with SMTP id x15-20020a05640226cf00b004318eab9feaso5689991edd.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:15:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=l9Zc9wCIpLbAd4jBfyMUl844wfhz2xkE3MXngp1dQqs=;
-        b=q6e5n9azVlx7BdtsVmSTmHoLJCfZm5Wx4zAuov5x4G4qJw2flgoMSccImHik2pcPv4
-         Rq1BvfqqsVpaiRJJlZHRf8wzHBuylELFch/4NveekjL8wCfNcnM0mojr/W+DqIaBr2kE
-         Q28bHmrZaRS2+xDMOW06U9TwBXlmvA47jYIeJgtDgOpAHoiS6awdAjddKNvvh9i71qfk
-         9WNi+bW2LNTQhECFiTdriii0j4ZJ8+rjGu6jgGlN3rE3nOx/ekV0i5nsg5v6tfSbgZNO
-         cVO0fdcojThb0xy2Au9bgNdhcGbSD5Ll7k4Azz5FLbswh/k8BG/5HF0v50GseJWadATP
-         t0Vw==
-X-Gm-Message-State: AJIora8vPYlP+uStijC8+mT90bSyDbE4x4GiqF3vvdw79X468SeCGMNO
-        JYreinE0IRbzYJF1ZY0heJX54C3Cg0gS1yoEMwBEFDPE2wTCS6KTrm71A/nS4lqurlLdwzioY0+
-        o1c0FPD8YQ/T6BUPonARm3Oof
-X-Received: by 2002:a17:906:7295:b0:712:2241:2c3f with SMTP id b21-20020a170906729500b0071222412c3fmr3225325ejl.523.1655194530767;
-        Tue, 14 Jun 2022 01:15:30 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwfw5fLxxDEGhZzCdJd093Ss0BooyMXikguimh5E7whRCP9wkHVKSAv5g9muKWd8yhROhhnoA==
-X-Received: by 2002:a17:906:7295:b0:712:2241:2c3f with SMTP id b21-20020a170906729500b0071222412c3fmr3225303ejl.523.1655194530530;
-        Tue, 14 Jun 2022 01:15:30 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id qh21-20020a170906ecb500b006feaa22e367sm4707525ejb.165.2022.06.14.01.15.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 01:15:29 -0700 (PDT)
-Message-ID: <5b1753ef-0bfb-f937-cab1-ad960bdf6772@redhat.com>
-Date:   Tue, 14 Jun 2022 10:15:29 +0200
+        Tue, 14 Jun 2022 04:15:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388213FBE5;
+        Tue, 14 Jun 2022 01:15:37 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7F33666016A4;
+        Tue, 14 Jun 2022 09:15:34 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655194535;
+        bh=el24miD5lwwOATGWHD3rV8fyca3eG98hrFENKZ7mlY0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ciPMnJ8XNdVWU5xIJefRS2XXhVRBG/qnycnajGeCUzrPNj3L1Owe/Xt3SmebiPVRH
+         2QFfzza5FhyDE/+oEI1M07DJyWFrqoc+ujzQrJpphsIbr2Wp7Z/15TIlTq9i7iBH1i
+         lXYYCwJWeDkheZnSGxTu8FCfoXY5FEdYXhbdjHgHDZtko2QwcmLpPk3HGTD3VlQvRa
+         meSMnmGA34QMX8zcvwO2rifFvqWNC1/dfj8VC6GA2+GZGaUMaROgj6mSL7HLmu9BtK
+         mF6X+sFL5iiV/oR5KhHRM3f6Usw0WyCE/t6rpmD8kkfPLpcfykT4SOhhsUetYtBOcd
+         NTn8OTgf0KIug==
+Message-ID: <1191703c-efa5-7fe6-7dd0-e3e786b58411@collabora.com>
+Date:   Tue, 14 Jun 2022 10:15:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] x86/PCI: Revert: "Clip only host bridge windows for E820
- regions"
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 7/7] drm/bridge: anx7625: Add typec_mux_set callback
+ function
 Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
-References: <20220613231539.GA722481@bhelgaas>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220613231539.GA722481@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
+To:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     heikki.krogerus@linux.intel.com,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Jonas Karlman <jonas@kwiboo.se>,
+        swboyd@chromium.org, Pin-Yen Lin <treapking@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+References: <20220609181106.3695103-1-pmalani@chromium.org>
+ <20220609181106.3695103-8-pmalani@chromium.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220609181106.3695103-8-pmalani@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Il 09/06/22 20:09, Prashant Malani ha scritto:
+> From: Pin-Yen Lin <treapking@chromium.org>
+> 
+> Add the callback function when the driver receives state
+> changes of the Type-C port. The callback function configures the
+> crosspoint switch of the anx7625 bridge chip, which can change the
+> output pins of the signals according to the port state.
+> 
+> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> ---
+> 
+> Changes since v2:
+> - No changes.
+> 
+>   drivers/gpu/drm/bridge/analogix/anx7625.c | 58 +++++++++++++++++++++++
+>   drivers/gpu/drm/bridge/analogix/anx7625.h | 13 +++++
+>   2 files changed, 71 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> index d41a21103bd3..2c308d12fab2 100644
+> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> @@ -15,6 +15,7 @@
+>   #include <linux/regulator/consumer.h>
+>   #include <linux/slab.h>
+>   #include <linux/types.h>
+> +#include <linux/usb/typec_dp.h>
+>   #include <linux/usb/typec_mux.h>
+>   #include <linux/workqueue.h>
+>   
+> @@ -2582,9 +2583,66 @@ static void anx7625_runtime_disable(void *data)
+>   	pm_runtime_disable(data);
+>   }
+>   
+> +static void anx7625_set_crosspoint_switch(struct anx7625_data *ctx,
+> +					  enum typec_orientation orientation)
+> +{
+> +	if (orientation == TYPEC_ORIENTATION_NORMAL) {
+> +		anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_0,
+> +				  SW_SEL1_SSRX_RX1 | SW_SEL1_DPTX0_RX2);
+> +		anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_1,
+> +				  SW_SEL2_SSTX_TX1 | SW_SEL2_DPTX1_TX2);
+> +	} else if (orientation == TYPEC_ORIENTATION_REVERSE) {
+> +		anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_0,
+> +				  SW_SEL1_SSRX_RX2 | SW_SEL1_DPTX0_RX1);
+> +		anx7625_reg_write(ctx, ctx->i2c.tcpc_client, TCPC_SWITCH_1,
+> +				  SW_SEL2_SSTX_TX2 | SW_SEL2_DPTX1_TX1);
+> +	}
+> +}
+> +
+> +static void anx7625_typec_two_ports_update(struct anx7625_data *ctx)
+> +{
+> +	if (ctx->typec_ports[0].dp_connected && ctx->typec_ports[1].dp_connected)
+> +		/* Both ports available, do nothing to retain the current one. */
+> +		return;
+> +	else if (ctx->typec_ports[0].dp_connected)
+> +		anx7625_set_crosspoint_switch(ctx, TYPEC_ORIENTATION_NORMAL);
+> +	else if (ctx->typec_ports[1].dp_connected)
+> +		anx7625_set_crosspoint_switch(ctx, TYPEC_ORIENTATION_REVERSE);
+> +}
+> +
+>   static int anx7625_typec_mux_set(struct typec_mux_dev *mux,
+>   				 struct typec_mux_state *state)
+>   {
+> +	struct anx7625_port_data *data = typec_mux_get_drvdata(mux);
+> +	struct anx7625_data *ctx = data->ctx;
+> +	struct device *dev = &ctx->client->dev;
+> +
+> +	bool old_dp_connected = (ctx->typec_ports[0].dp_connected ||
+> +				 ctx->typec_ports[1].dp_connected);
 
-On 6/14/22 01:15, Bjorn Helgaas wrote:
-> On Sun, Jun 12, 2022 at 04:43:25PM +0200, Hans de Goede wrote:
->> Clipping the bridge windows directly from pci_acpi_root_prepare_resources()
->> instead of clipping from arch_remove_reservations(), has a number of
->> unforseen consequences.
->>
->> If there is an e820 reservation in the middle of a bridge window, then
->> the smallest of the 2 remaining parts of the window will be also clipped
->> off. Where as the previous code would clip regions requested by devices,
->> rather then the entire window, leaving regions which were either entirely
->> above or below a reservation in the middle of the window alone.
->>
->> E.g. on the Steam Deck this leads to this log message:
->>
->> acpi PNP0A08:00: clipped [mem 0x80000000-0xf7ffffff window] to [mem 0xa0100000-0xf7ffffff window]
->>
->> which then gets followed by these log messages:
->>
->> pci 0000:00:01.2: can't claim BAR 14 [mem 0x80600000-0x806fffff]: no compatible bridge window
->> pci 0000:00:01.3: can't claim BAR 14 [mem 0x80500000-0x805fffff]: no compatible bridge window
->>
->> and many more of these. Ultimately this leads to the Steam Deck
->> no longer booting properly, so revert the change.
->>
->> Note this is not a clean revert, this revert keeps the later change
->> to make the clipping dependent on a new pci_use_e820 bool, moving
->> the checking of this bool to arch_remove_reservations().
-> 
-> 4c5e242d3e93 was definitely a mistake (my fault).  My intent was to
-> mainly to improve logging of the clipping, but I didn't implement it
-> well.
-> 
-> That said, I'd like to understand the connection between the messages
-> you mention and the failure.  There are four bridges whose MMIO
-> windows were in the [mem 0x80000000-0x9fffffff] area that we clipped
-> out.  The log shows that we moved all those windows and the devices in
-> them to the [mem 0xa0100000-0xf7ffffff] area that remained after
-> clipping.
-> 
-> So I think this *should* have worked even though we moved things
-> around unnecessarily.  What am I missing?
+So the old connection state is "either port0 or port1 are currently connected"...
 
-I don't know? My guess is that maybe the ACPI table do MMIO accesses
-somewhere to hardcoded addresses and moving things breaks the ACPI
-tables.
+> +	bool new_dp_connected;
+> +
+> +	if (ctx->num_typec_switches == 1)
+> +		return 0;
+> +
+> +	dev_dbg(dev, "mux_set dp_connected: c0=%d, c1=%d\n",
+> +		ctx->typec_ports[0].dp_connected, ctx->typec_ports[1].dp_connected);
+> +
+> +	data->dp_connected = (state->alt && state->alt->svid == USB_TYPEC_DP_SID &&
+> +			      state->alt->mode == USB_TYPEC_DP_MODE);
+> + > +	new_dp_connected = (ctx->typec_ports[0].dp_connected ||
+> +			    ctx->typec_ports[1].dp_connected);
 
-> 
-> The E820 map reports [mem 0xa0000000-0xa00fffff] in the middle of the
-> _CRS, and we currently trim that out.  We think this is a firmware
-> defect, so it's likely to break in 2023 if we stop clipping by
-> default.  I'm concerned that there may be other things in _CRS that we
-> need to avoid, but firmware isn't telling us about them.
-> 
-> Or there's some dependency in the devices that we moved on their
-> original addresses, e.g., firmware on the device latched the address
-> and didn't notice the reassignment.
+...and the new connection state is the same as the old one, because I don't see
+anything that could ever modify it in this function's flow, until reaching this
+assignment.
 
-Right this is the most likely cause I believe.
+> +
+> +	/* dp on, power on first */
+> +	if (!old_dp_connected && new_dp_connected)
+> +		pm_runtime_get_sync(dev);
+
+...so that will never happen...
+
+> +
+> +	anx7625_typec_two_ports_update(ctx);
+> +
+> +	/* dp off, power off last */
+> +	if (old_dp_connected && !new_dp_connected)
+> +		pm_runtime_put_sync(dev);
+
+...and same here.
 
 Regards,
-
-Hans
-
-
-
-> 
-> [1] https://bugzilla.kernel.org/attachment.cgi?id=301154
-> 
->> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216109
->> Fixes: 4c5e242d3e93 ("x86/PCI: Clip only host bridge windows for E820 regions")
->> Reported-and-tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->> ---
->>  arch/x86/include/asm/e820/api.h |  5 -----
->>  arch/x86/include/asm/pci_x86.h  |  8 ++++++++
->>  arch/x86/kernel/resource.c      | 14 +++++++++-----
->>  arch/x86/pci/acpi.c             |  8 +-------
->>  4 files changed, 18 insertions(+), 17 deletions(-)
->>
->> diff --git a/arch/x86/include/asm/e820/api.h b/arch/x86/include/asm/e820/api.h
->> index 5a39ed59b6db..e8f58ddd06d9 100644
->> --- a/arch/x86/include/asm/e820/api.h
->> +++ b/arch/x86/include/asm/e820/api.h
->> @@ -4,9 +4,6 @@
->>  
->>  #include <asm/e820/types.h>
->>  
->> -struct device;
->> -struct resource;
->> -
->>  extern struct e820_table *e820_table;
->>  extern struct e820_table *e820_table_kexec;
->>  extern struct e820_table *e820_table_firmware;
->> @@ -46,8 +43,6 @@ extern void e820__register_nosave_regions(unsigned long limit_pfn);
->>  
->>  extern int  e820__get_entry_type(u64 start, u64 end);
->>  
->> -extern void remove_e820_regions(struct device *dev, struct resource *avail);
->> -
->>  /*
->>   * Returns true iff the specified range [start,end) is completely contained inside
->>   * the ISA region.
->> diff --git a/arch/x86/include/asm/pci_x86.h b/arch/x86/include/asm/pci_x86.h
->> index f52a886d35cf..70533fdcbf02 100644
->> --- a/arch/x86/include/asm/pci_x86.h
->> +++ b/arch/x86/include/asm/pci_x86.h
->> @@ -69,6 +69,8 @@ void pcibios_scan_specific_bus(int busn);
->>  
->>  /* pci-irq.c */
->>  
->> +struct pci_dev;
->> +
->>  struct irq_info {
->>  	u8 bus, devfn;			/* Bus, device and function */
->>  	struct {
->> @@ -246,3 +248,9 @@ static inline void mmio_config_writel(void __iomem *pos, u32 val)
->>  # define x86_default_pci_init_irq	NULL
->>  # define x86_default_pci_fixup_irqs	NULL
->>  #endif
->> +
->> +#if defined(CONFIG_PCI) && defined(CONFIG_ACPI)
->> +extern bool pci_use_e820;
->> +#else
->> +#define pci_use_e820 false
->> +#endif
->> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
->> index db2b350a37b7..bba1abd05bfe 100644
->> --- a/arch/x86/kernel/resource.c
->> +++ b/arch/x86/kernel/resource.c
->> @@ -1,7 +1,8 @@
->>  // SPDX-License-Identifier: GPL-2.0
->> -#include <linux/dev_printk.h>
->>  #include <linux/ioport.h>
->> +#include <linux/printk.h>
->>  #include <asm/e820/api.h>
->> +#include <asm/pci_x86.h>
->>  
->>  static void resource_clip(struct resource *res, resource_size_t start,
->>  			  resource_size_t end)
->> @@ -24,14 +25,14 @@ static void resource_clip(struct resource *res, resource_size_t start,
->>  		res->start = end + 1;
->>  }
->>  
->> -void remove_e820_regions(struct device *dev, struct resource *avail)
->> +static void remove_e820_regions(struct resource *avail)
->>  {
->>  	int i;
->>  	struct e820_entry *entry;
->>  	u64 e820_start, e820_end;
->>  	struct resource orig = *avail;
->>  
->> -	if (!(avail->flags & IORESOURCE_MEM))
->> +	if (!pci_use_e820)
->>  		return;
->>  
->>  	for (i = 0; i < e820_table->nr_entries; i++) {
->> @@ -41,7 +42,7 @@ void remove_e820_regions(struct device *dev, struct resource *avail)
->>  
->>  		resource_clip(avail, e820_start, e820_end);
->>  		if (orig.start != avail->start || orig.end != avail->end) {
->> -			dev_info(dev, "clipped %pR to %pR for e820 entry [mem %#010Lx-%#010Lx]\n",
->> +			pr_info("clipped %pR to %pR for e820 entry [mem %#010Lx-%#010Lx]\n",
->>  				 &orig, avail, e820_start, e820_end);
->>  			orig = *avail;
->>  		}
->> @@ -55,6 +56,9 @@ void arch_remove_reservations(struct resource *avail)
->>  	 * the low 1MB unconditionally, as this area is needed for some ISA
->>  	 * cards requiring a memory range, e.g. the i82365 PCMCIA controller.
->>  	 */
->> -	if (avail->flags & IORESOURCE_MEM)
->> +	if (avail->flags & IORESOURCE_MEM) {
->>  		resource_clip(avail, BIOS_ROM_BASE, BIOS_ROM_END);
->> +
->> +		remove_e820_regions(avail);
->> +	}
->>  }
->> diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
->> index a4f43054bc79..2f82480fd430 100644
->> --- a/arch/x86/pci/acpi.c
->> +++ b/arch/x86/pci/acpi.c
->> @@ -8,7 +8,6 @@
->>  #include <linux/pci-acpi.h>
->>  #include <asm/numa.h>
->>  #include <asm/pci_x86.h>
->> -#include <asm/e820/api.h>
->>  
->>  struct pci_root_info {
->>  	struct acpi_pci_root_info common;
->> @@ -20,7 +19,7 @@ struct pci_root_info {
->>  #endif
->>  };
->>  
->> -static bool pci_use_e820 = true;
->> +bool pci_use_e820 = true;
->>  static bool pci_use_crs = true;
->>  static bool pci_ignore_seg;
->>  
->> @@ -387,11 +386,6 @@ static int pci_acpi_root_prepare_resources(struct acpi_pci_root_info *ci)
->>  
->>  	status = acpi_pci_probe_root_resources(ci);
->>  
->> -	if (pci_use_e820) {
->> -		resource_list_for_each_entry(entry, &ci->resources)
->> -			remove_e820_regions(&device->dev, entry->res);
->> -	}
->> -
->>  	if (pci_use_crs) {
->>  		resource_list_for_each_entry_safe(entry, tmp, &ci->resources)
->>  			if (resource_is_pcicfg_ioport(entry->res))
->> -- 
->> 2.36.0
->>
-> 
-
+Angelo

@@ -2,143 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F7B54AB3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6139854AB3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355287AbiFNH5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48852 "EHLO
+        id S1355307AbiFNH5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352727AbiFNH46 (ORCPT
+        with ESMTP id S1355259AbiFNH5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:56:58 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4243EF09;
-        Tue, 14 Jun 2022 00:56:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655193418; x=1686729418;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zIQrQlUmKwb8YHvLHxjwbgT1lAItadg+f+xEfpBQyQ8=;
-  b=CUT2BPuVn/SFo1xi+iCOzpJ8Arm916yQHG23AXXxRthdGJAjlq7ui08K
-   agqX8Qm5RfJUOhDEvx5L0cofIZdWAB/16LKNkSzOM8sWq/XQb3t+fu4ha
-   gYAOn4ur+2qGDhS0VeBRzb5tTQqkpP+QTF/3zQwy05q5PkTmoN9mdYhdC
-   lNStcHNXdVBTVtcAsyoCTX+dez10/2tYrKmqe9XSgZ/V48GSq/ItMy8fP
-   szdJT0NJT904PFRPmNseIXSSGkF6cQn4bfsw9vllg+71NJ+508ckyeovM
-   Ug5oSHTJZ6r/IwWIim6v4nwjgwFCcE0AV+hoo6wfvOVsTC9eitEkUtkVt
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="267230704"
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="267230704"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:56:52 -0700
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="588307701"
-Received: from jlaghzal-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.32.175])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:56:49 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Lukas Wunner <lukas@wunner.de>, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        =?UTF-8?q?Nuno=20Gon=C3=A7alves?= <nunojpg@gmail.com>
-Subject: [PATCH v4] serial: pl011: UPSTAT_AUTORTS requires .throttle/unthrottle
-Date:   Tue, 14 Jun 2022 10:56:37 +0300
-Message-Id: <20220614075637.8558-1-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 14 Jun 2022 03:57:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D94E3F320;
+        Tue, 14 Jun 2022 00:57:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8841B817AD;
+        Tue, 14 Jun 2022 07:57:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58487C3411B;
+        Tue, 14 Jun 2022 07:57:05 +0000 (UTC)
+Message-ID: <434a4936-1374-a1d9-4204-2538f802267f@xs4all.nl>
+Date:   Tue, 14 Jun 2022 09:57:04 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v7 00/17] Move HEVC stateless controls out of staging
+Content-Language: en-US
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+References: <20220614074947.160316-1-benjamin.gaignard@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <20220614074947.160316-1-benjamin.gaignard@collabora.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver must provide throttle and unthrottle in uart_ops when it
-sets UPSTAT_AUTORTS. Add them using existing stop_rx &
-enable_interrupts functions.
+Hi Benjamin,
 
-Reported-by: Nuno Gonçalves <nunojpg@gmail.com>
-Tested-by: Nuno Gonçalves <nunojpg@gmail.com>
-Fixes: 2a76fa283098 (serial: pl011: Adopt generic flag to store auto RTS status)
-Cc: Lukas Wunner <lukas@wunner.de>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+I tried to apply this patch series to the latest git://linuxtv.org/media_stage.git
+and it failed to apply. Can you rebase this series?
 
----
-v4:
-- Added Nuno's Tested-by
+Regards,
 
-v3:
-- Add hooks to correct ops
+	Hans
 
- drivers/tty/serial/amba-pl011.c | 23 +++++++++++++++++++++--
- 1 file changed, 21 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index 97ef41cb2721..16a21422ddce 100644
---- a/drivers/tty/serial/amba-pl011.c
-+++ b/drivers/tty/serial/amba-pl011.c
-@@ -1367,6 +1367,15 @@ static void pl011_stop_rx(struct uart_port *port)
- 	pl011_dma_rx_stop(uap);
- }
- 
-+static void pl011_throttle_rx(struct uart_port *port)
-+{
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&port->lock, flags);
-+	pl011_stop_rx(port);
-+	spin_unlock_irqrestore(&port->lock, flags);
-+}
-+
- static void pl011_enable_ms(struct uart_port *port)
- {
- 	struct uart_amba_port *uap =
-@@ -1788,9 +1797,10 @@ static int pl011_allocate_irq(struct uart_amba_port *uap)
-  */
- static void pl011_enable_interrupts(struct uart_amba_port *uap)
- {
-+	unsigned long flags;
- 	unsigned int i;
- 
--	spin_lock_irq(&uap->port.lock);
-+	spin_lock_irqsave(&uap->port.lock, flags);
- 
- 	/* Clear out any spuriously appearing RX interrupts */
- 	pl011_write(UART011_RTIS | UART011_RXIS, uap, REG_ICR);
-@@ -1812,7 +1822,14 @@ static void pl011_enable_interrupts(struct uart_amba_port *uap)
- 	if (!pl011_dma_rx_running(uap))
- 		uap->im |= UART011_RXIM;
- 	pl011_write(uap->im, uap, REG_IMSC);
--	spin_unlock_irq(&uap->port.lock);
-+	spin_unlock_irqrestore(&uap->port.lock, flags);
-+}
-+
-+static void pl011_unthrottle_rx(struct uart_port *port)
-+{
-+	struct uart_amba_port *uap = container_of(port, struct uart_amba_port, port);
-+
-+	pl011_enable_interrupts(uap);
- }
- 
- static int pl011_startup(struct uart_port *port)
-@@ -2225,6 +2242,8 @@ static const struct uart_ops amba_pl011_pops = {
- 	.stop_tx	= pl011_stop_tx,
- 	.start_tx	= pl011_start_tx,
- 	.stop_rx	= pl011_stop_rx,
-+	.throttle	= pl011_throttle_rx,
-+	.unthrottle	= pl011_unthrottle_rx,
- 	.enable_ms	= pl011_enable_ms,
- 	.break_ctl	= pl011_break_ctl,
- 	.startup	= pl011_startup,
-
--- 
-tg: (f2906aa86338..) pl011/add-throttle (depends on: tty-next)
+On 6/14/22 09:49, Benjamin Gaignard wrote:
+> This series aims to make HEVC uapi stable and usable for hardware
+> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
+> and 2 out of the tree drivers (rkvdec and RPI).
+> 
+> version 7:
+> - Apply Jernej patches for Cedrus about bit offset definition and
+>   V4L2_CID_STATELESS_HEVC_SLICE_PARAMS being a dynamic array control.
+> 
+> version 6:
+> - Add short_term_ref_pic_set_size and long_term_ref_pic_set_size
+>   in v4l2_ctrl_hevc_decode_params structure.
+> - Change slice_pic_order_cnt type to s32 to match with PoC type.
+> - Set V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag automatically when using
+>   V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control.
+> - Add a define for max slices count
+> - Stop using Hantro dedicated control.
+> 
+> This version has been tested with these branches:
+> - GStreamer: https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_aligned_with_kernel_5.15
+> - Linux: https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/HEVC_UAPI_V6
+> 
+> With patches to decode 10-bits bitstream and produce P010 frames the Fluster score 
+> which was 77/147 before, is now 138/147.
+> The 10-bits series will comes after this because of it dependency to
+> uAPI change. If you are curious you can find the WIP branch here:
+> https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/WIP_HEVC_UAPI_V6
+> 
+> The 9 failing tests are:
+> - CONFWIN_A_Sony_1 which contains conformance_window_flag that isn't supported 
+>   by the hardware (but visually ok aside a pixel shift).
+> - PICSIZE_{A,B,C,D}_Bossen_1 where resolutions are to big for Hantro hardware.
+> - TSKIP_A_MS_3 is ok when testing alone but fail (corrupted lines on the
+>   first frame) when running it after a couple of other tests.
+> - VPSSPSPPS_A_MainConcept_1 where there is an issue on gst parser side 
+>   because of VPS/SPS/PPS ordering
+> - WPP_D_ericsson_MAIN_2 and WPP_D_ericsson_MAIN10_2 are visually ok but some 
+>   difference exist on 5 decoded frames. Some pixels values are no the same 
+>   the very end of few lines.
+> 
+> version 6:
+> - Stop using Hantro dedicated control and compute the number
+>   of bytes to skip inside the driver.
+> - Rebased on media_tree/master
+> 
+> version 5:
+> - Change __u16 pic_order_cnt[2] into __s32 pic_order_cnt_val in
+>   hevc_dpb_entry structure
+> - Add defines for SEI pic_struct values (patch 4)
+> - Fix numbers of bits computation in cedrus_h265_skip_bits() parameters
+> - Fix num_short_term_ref_pic_sets and num_long_term_ref_pics_sps
+>   documentation (patch 8)
+> - Rebased on v5-18-rc1
+> 
+> GStreamer H265 decoder plugin aligned with HEVC uAPI v5:
+> https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_aligned_with_kernel_5.15
+> 
+> Version 4:
+> - Add num_entry_point_offsets field in  struct v4l2_ctrl_hevc_slice_params
+> - Fix V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS name
+> - Initialize control V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
+> - Fix space/tab issue in kernel-doc
+> - Add patch to change data_bit_offset definition
+> - Fix hantro-media SPDX license
+> - put controls under stateless section in v4l2-ctrls-defs.c
+> 
+> At the end fluster tests results on IMX8MQ is 77/147 for HEVC codec.
+> 
+> Benjamin Gaignard (14):
+>   media: uapi: HEVC: Add missing fields in HEVC controls
+>   media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
+>     prefix
+>   media: uapi: HEVC: Change pic_order_cnt definition in
+>     v4l2_hevc_dpb_entry
+>   media: uapi: HEVC: Add SEI pic struct flags
+>   media: uapi: HEVC: Add documentation to uAPI structure
+>   media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a
+>     dynamic array
+>   media: uapi: Move parsed HEVC pixel format out of staging
+>   media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
+>   media: uapi: Move the HEVC stateless control type out of staging
+>   media: controls: Log HEVC stateless control in .std_log
+>   media: hantro: Stop using Hantro dedicated control
+>   media: uapi: HEVC: fix padding in v4l2 control structures
+>   media: uapi: Change data_bit_offset definition
+>   media: uapi: move HEVC stateless controls out of staging
+> 
+> Hans Verkuil (3):
+>   videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
+>   v4l2-ctrls: add support for dynamically allocated arrays.
+>   vivid: add dynamic array test control
+> 
+>  .../media/v4l/ext-ctrls-codec-stateless.rst   | 897 ++++++++++++++++++
+>  .../media/v4l/ext-ctrls-codec.rst             | 780 ---------------
+>  .../media/v4l/pixfmt-compressed.rst           |   7 +-
+>  .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
+>  .../media/v4l/vidioc-queryctrl.rst            |   8 +
+>  .../media/videodev2.h.rst.exceptions          |   5 +
+>  .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
+>  drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 +-
+>  drivers/media/v4l2-core/v4l2-ctrls-core.c     | 206 +++-
+>  drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  38 +-
+>  drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
+>  drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
+>  drivers/staging/media/hantro/hantro_drv.c     |  62 +-
+>  .../staging/media/hantro/hantro_g2_hevc_dec.c |  69 +-
+>  drivers/staging/media/hantro/hantro_hevc.c    |  10 +-
+>  drivers/staging/media/hantro/hantro_hw.h      |   4 +-
+>  drivers/staging/media/sunxi/cedrus/cedrus.c   |  25 +-
+>  .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
+>  .../staging/media/sunxi/cedrus/cedrus_h265.c  |  23 +-
+>  .../staging/media/sunxi/cedrus/cedrus_video.c |   1 -
+>  include/media/hevc-ctrls.h                    | 250 -----
+>  include/media/v4l2-ctrls.h                    |  48 +-
+>  include/uapi/linux/v4l2-controls.h            | 458 +++++++++
+>  include/uapi/linux/videodev2.h                |  13 +
+>  24 files changed, 1848 insertions(+), 1220 deletions(-)
+>  delete mode 100644 include/media/hevc-ctrls.h
+> 

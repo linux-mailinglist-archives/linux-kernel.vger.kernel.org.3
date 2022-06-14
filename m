@@ -2,120 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAAA54BD34
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2575354BD2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357076AbiFNV7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 17:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
+        id S1358534AbiFNV7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 17:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358384AbiFNV6o (ORCPT
+        with ESMTP id S1358527AbiFNV7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 17:58:44 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7772A2182C
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:58:43 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id cd16-20020a056a00421000b00520785db095so4273578pfb.15
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:58:43 -0700 (PDT)
+        Tue, 14 Jun 2022 17:59:19 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511D4527E0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:59:08 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id bd16so5233564oib.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:59:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=VkciRITE8MX2e/fBaXePCOT9PxykPyFPZjCAcpl0DRs=;
-        b=Dgvl2DqkyuRiJ9H+pEZA8XMbJtPmxfmzXbRsqrSCNYHx54Pm7s/Vq1hUlhJqqu/dcM
-         jim3cYglLC/fKlXqtfKtBBjDCxl+VBMJP4q3HqNDGwfrRigBv7wpt0/9KYBxICR36Ms3
-         i82ojnxgaG8DCPcNyQTURnzVOuGWARafqEVFK621s05dCBUzjTZIUt8CoALAe3jxmrGX
-         iSf0FzP07cg60UHhsMfQqDtJG8vVzsnLlBKWaweawjeNybcoeoaRkC5QdXeKrkhBjtCE
-         Vo/P1veqNhnomHe55Dx+/cc+kvoJ3N1/frBOaNedTGyFguaxFoi+Yo6FCqUU2bXcb06h
-         0ddQ==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=5yJj86hSPwBzwhbQhqdV1Hn3ZaFbVir/hOB/SXTT3bI=;
+        b=ZdGEZsOt+TRm+aYxq42AYd4MLTcEpKed0OVtU15Eb9mKcEjoxGxefcc8Hou/DOFmCp
+         ki0mc220xUAOCHMnS/OCVj7tuFFIQ/OhnyOzgqy38WOee9k8w1eGsxVOtxPZOic5yyPU
+         8l81rocDbnMve9NNM0Jcnj6qmGymABDBeO0dk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=VkciRITE8MX2e/fBaXePCOT9PxykPyFPZjCAcpl0DRs=;
-        b=47i4eEctODx8MdhBo6Qx557uVe0Czrku2NmOD64aoGSAs2WO0MScVC5WH2lSNcoqUo
-         N8Z7yFuwcT4M94hPoP+PFpUwE6GL5MCrdxn0YWUhokBN5/Ka3KVpnONGfoRiEuujd2kN
-         ++v3F1I83bhQ4Fh8J3frWrSjS5VqUOEjd4kvVJfxGWE7uwXz9y9pHcfHQPcR577aEWtR
-         oBvvRGPfL7vZ1iZVG38DUBv0gr3H5lVddbkR7o/SMWpVtQW+WJwwuVxbFZdd+cLBNUUf
-         5EhYwnz2GdDMEStVguFQkphtPcYTDLLeSQlivoBN1KCIWP91OS0eyaPB3DDkg865MIdX
-         PjAQ==
-X-Gm-Message-State: AOAM533ZcBaX6XSbX1FfKXbN4xtTAEEvNrraXy5IXHUpvEN5P+4sBPls
-        TY90S0zniDLNTUy8z5sliRV2qVFax7E=
-X-Google-Smtp-Source: ABdhPJwtYfSgBHJzdAZ9JEnVys0qD/gftvIVUq7SlQzKbZlVNnru294GpsA3hurbIhuRRDdC2aCPnYUMcTU=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:a03:b0:522:990c:c795 with SMTP id
- p3-20020a056a000a0300b00522990cc795mr6481704pfh.15.1655243922923; Tue, 14 Jun
- 2022 14:58:42 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 21:58:31 +0000
-In-Reply-To: <20220614215831.3762138-1-seanjc@google.com>
-Message-Id: <20220614215831.3762138-6-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220614215831.3762138-1-seanjc@google.com>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 5/5] KVM: nVMX: Update vmcs12 on BNDCFGS write, not at
- vmcs02=>vmcs12 sync
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lei Wang <lei4.wang@intel.com>
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=5yJj86hSPwBzwhbQhqdV1Hn3ZaFbVir/hOB/SXTT3bI=;
+        b=ILOpbbApBom9RP60SaqlhGhsoMbJNFQSoUp9yTAuGYWc5McIF+F2Oia7Qdq32lBo+K
+         A86urXW5doX3DrRZrP0sFUTmTRQcewiCdM9gWdNSFu54xccChmOvVyGj+mhRYWTucNHs
+         LxArIIgtcUdDDC82U3apxcDtydbatTkxaaCqX830qzFsoNbIWwXc1R07hj2AdOt/ibd3
+         4RhlIiAzlYY0ozNNPfMNdNS3jnRU+FdT7drXdqv3/7Mv8ExBM4L9Cbd7ncf51qmIbf95
+         z2U7TYnwff7mkGQld3qPsSm1ve5UFfTjaCcYCMk81KIYSSSclvjeUtWrYwHZo1eP+lXB
+         I+Ng==
+X-Gm-Message-State: AOAM532o01dROqfgqg4wc+EV5JiHOqswDw48g0nAk0b/bkViZIWLUx+T
+        ZoVVxiWoat+/xXW4ysrj943U3w/4c22ecKWPn/dJxg==
+X-Google-Smtp-Source: ABdhPJxDYah7bUTWBiwxr/l4NWNy6VphDHyLT3XGi+NAYbfMAhtii820vbsYtQ0n/RqMQE67M2fjkNbG1wG1z9Wq3cE=
+X-Received: by 2002:a05:6808:1703:b0:32e:851e:7f81 with SMTP id
+ bc3-20020a056808170300b0032e851e7f81mr3333511oib.63.1655243947436; Tue, 14
+ Jun 2022 14:59:07 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 14 Jun 2022 14:59:06 -0700
+MIME-Version: 1.0
+In-Reply-To: <1655240702-12230-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1655240702-12230-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 14 Jun 2022 14:59:06 -0700
+Message-ID: <CAE-0n52EAyTcQd6CiwXT1T658C-b+2r14BK_3-tf-ZiJdzqaAw@mail.gmail.com>
+Subject: Re: [PATCH v6] drm/msm/dp: force link training for display resolution change
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update vmcs12->guest_bndcfgs on intercepted writes to BNDCFGS from L2
-instead of waiting until vmcs02 is synchronized to vmcs12.  KVM always
-intercepts BNDCFGS accesses, so the only way the value in vmcs02 can
-change is via KVM's explicit VMWRITE during emulation.
+Quoting Kuogee Hsieh (2022-06-14 14:05:02)
+> Display resolution change is implemented through drm modeset. Older
+> modeset (resolution) has to be disabled first before newer modeset
+> (resolution) can be enabled. Display disable will turn off both
+> pixel clock and main link clock so that main link have to be
+> re-trained during display enable to have new video stream flow
+> again. At current implementation, display enable function manually
+> kicks up irq_hpd_handle which will read panel link status and start
+> link training if link status is not in sync state.
+>
+> However, there is rare case that a particular panel links status keep
+> staying in sync for some period of time after main link had been shut
+> down previously at display disabled. In this case, main link retraining
+> will not be executed by irq_hdp_handle(). Hence video stream of newer
+> display resolution will fail to be transmitted to panel due to main
+> link is not in sync between host and panel.
+>
+> This patch will bypass irq_hpd_hanle() in favor of directly call
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/nested.c | 3 ---
- arch/x86/kvm/vmx/vmx.c    | 6 ++++++
- 2 files changed, 6 insertions(+), 3 deletions(-)
+s/hanle/handle/
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 496981b86f94..aad938e1e51d 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -4104,9 +4104,6 @@ static void sync_vmcs02_to_vmcs12_rare(struct kvm_vcpu *vcpu,
- 	vmcs12->guest_idtr_base = vmcs_readl(GUEST_IDTR_BASE);
- 	vmcs12->guest_pending_dbg_exceptions =
- 		vmcs_readl(GUEST_PENDING_DBG_EXCEPTIONS);
--	if ((vmx->nested.msrs.entry_ctls_high & VM_ENTRY_LOAD_BNDCFGS) ||
--	    (vmx->nested.msrs.exit_ctls_high & VM_EXIT_CLEAR_BNDCFGS))
--		vmcs12->guest_bndcfgs = vmcs_read64(GUEST_BNDCFGS);
- 
- 	vmx->nested.need_sync_vmcs02_to_vmcs12_rare = false;
- }
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index b3f9b8bb1fa8..1463669f7a99 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -2044,6 +2044,12 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		if (is_noncanonical_address(data & PAGE_MASK, vcpu) ||
- 		    (data & MSR_IA32_BNDCFGS_RSVD))
- 			return 1;
-+
-+		if (is_guest_mode(vcpu) &&
-+		    ((vmx->nested.msrs.entry_ctls_high & VM_ENTRY_LOAD_BNDCFGS) ||
-+		     (vmx->nested.msrs.exit_ctls_high & VM_EXIT_CLEAR_BNDCFGS)))
-+			get_vmcs12(vcpu)->guest_bndcfgs = data;
-+
- 		vmcs_write64(GUEST_BNDCFGS, data);
- 		break;
- 	case MSR_IA32_UMWAIT_CONTROL:
--- 
-2.36.1.476.g0c4daa206d-goog
+> dp_ctrl_on_stream() to always perform link training in regardless of
+> main link status. So that no unexpected exception resolution change
+> failure cases will happen. Also this implementation are more efficient
+> than manual kicking off irq_hpd_handle function.
+>
+> Changes in v2:
+> -- set force_link_train flag on DP only (is_edp == false)
+>
+> Changes in v3:
+> -- revise commit  text
+> -- add Fixes tag
+>
+> Changes in v4:
+> -- revise commit  text
+>
+> Changes in v5:
+> -- fix spelling at commit text
+>
+> Changes in v6:
+> -- split dp_ctrl_on_stream() for phy test case
+> -- revise commit text for modeset
+>
+> Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/dp/dp_ctrl.c    | 31 +++++++++++++++++++++++--------
+>  drivers/gpu/drm/msm/dp/dp_ctrl.h    |  3 ++-
+>  drivers/gpu/drm/msm/dp/dp_display.c | 13 ++++++-------
+>  3 files changed, 31 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> index af7a80c..cb9c7af 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+> @@ -1807,7 +1807,27 @@ static int dp_ctrl_link_retrain(struct dp_ctrl_private *ctrl)
+>         return dp_ctrl_setup_main_link(ctrl, &training_step);
+>  }
+>
+> -int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+> +int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
+> +{
+> +       int ret = 0;
 
+Drop assignment please.
+
+> +       struct dp_ctrl_private *ctrl;
+> +
+> +       ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
+> +
+> +       ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
+> +
+> +       ret = dp_ctrl_enable_stream_clocks(ctrl);
+> +       if (ret) {
+> +               DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
+> +               return ret;
+> +       }
+> +
+> +       dp_ctrl_send_phy_test_pattern(ctrl);
+
+None of this code needs to be run in the normal display on case?
+
+> +
+> +       return 0;
+> +}
+> +
+> +int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
+>  {
+>         int ret = 0;
+>         bool mainlink_ready = false;
+> @@ -1843,12 +1863,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>                 goto end;
+>         }
+>
+> -       if (ctrl->link->sink_request & DP_TEST_LINK_PHY_TEST_PATTERN) {
+> -               dp_ctrl_send_phy_test_pattern(ctrl);
+> -               return 0;
+> -       }
+> -
+> -       if (!dp_ctrl_channel_eq_ok(ctrl))
+> +       if (force_link_train || !dp_ctrl_channel_eq_ok(ctrl))
+>                 dp_ctrl_link_retrain(ctrl);
+>
+>         /* stop txing train pattern to end link training */
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index c388323..b6d25ab 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1688,10 +1689,12 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+>
+>         state =  dp_display->hpd_state;
+>
+> -       if (state == ST_DISPLAY_OFF)
+> +       if (state == ST_DISPLAY_OFF) {
+>                 dp_display_host_phy_init(dp_display);
+> +               force_link_train = true;
+> +       }
+>
+> -       dp_display_enable(dp_display, 0);
+> +       dp_display_enable(dp_display, force_link_train);
+
+Do we need to pass it from here? Why can't dp_display_enable() simply
+check for 'state == ST_DISPLAY_OFF' and then force retrain the link?

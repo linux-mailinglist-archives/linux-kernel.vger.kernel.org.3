@@ -2,157 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2AF54B4FE
+	by mail.lfdr.de (Postfix) with ESMTP id DCD6C54B500
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244857AbiFNPn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
+        id S1344390AbiFNPoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237232AbiFNPny (ORCPT
+        with ESMTP id S243940AbiFNPoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:43:54 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8522C366B7
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:43:53 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id o17so8072084pla.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:43:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=v7R3AU8eay3jFLbgOIExfUOsI5EdQhSbQRsdrHwotJw=;
-        b=ehHmS6K8XnQ2SrjXe0GbtBVb7v2r/7AcW7sIGGWUjjSMTDgZG99AgHzHG+emgMuy78
-         oJg0pzPpvCtiu3YGgen4uTSgcaIQrSr23K6ULxNbRwaPO6Yv/2KLZXVbn7tBDmMEA+JB
-         /OEgfzksSH1MA4vy1vX+tyavgxHUWffoUJgQft6aRg+kifewPpPNV53IAZXgkNQBHTWY
-         Ql4t/SIvDY0bHTODMSic0GJaxZI6gfqzTzQMvW4xvnj/rmFRw+k9nbzv081yS6sEUTLa
-         VSazk4yWTKuGPfHB+dJmXxfbDPgU54AVHMrrKLFMMzFiEc/Rb9mMF6g9UULaB5YLhewT
-         nzjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=v7R3AU8eay3jFLbgOIExfUOsI5EdQhSbQRsdrHwotJw=;
-        b=zS9N7qHT+ZiFm4vpmVhcJOamp7avwOQJ/Ablsb+5nUJrpASawO2fKzDonAgSgEbeZN
-         fBSoKL3TxR0sW9jbHARUrcMuBd6FFgFwoRzzjcJiDGqdchGSqV4vDr+F4IQD8JmocnrD
-         hKaqddxscvdgoLjx9wWHgsAcO2Yfe29TQ4svPK/oKKM9lW17cFFAjkbxTR2fz316XY9G
-         XTLsbktnN/yJpIZSRGctNbE1BMBCI0O9iU62bNnSRzDaRZ/RNxje8Tgpbbgu9VHBtCjH
-         MDUsCUIwL2UlVAP4XxTfiNyuhRrS1zr3HmBzm1WbuYWcv2/quLbFRaiUA5C/DQldhbfB
-         GFNQ==
-X-Gm-Message-State: AJIora+OrfJU6xtq5yU8ToQCB4XFkQN07GML58NpGIdDpZQ9UGVzLxVj
-        ni4PtjLzcHCdyJUoI1X81EN3Yw==
-X-Google-Smtp-Source: AGRyM1sSpS8ksQoeFsAiBuqnaVFCfTWw36cqGK81vkz64eI2RfYURAd4rfysk6IagqiDsDg27788vA==
-X-Received: by 2002:a17:90a:fd0d:b0:1ea:b661:4fa1 with SMTP id cv13-20020a17090afd0d00b001eab6614fa1mr5238743pjb.46.1655221432801;
-        Tue, 14 Jun 2022 08:43:52 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id v11-20020a1709028d8b00b00165105518f6sm7390006plo.287.2022.06.14.08.43.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 08:43:52 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 15:43:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v12 19/46] x86/kernel: Make the .bss..decrypted section
- shared in RMP table
-Message-ID: <YqistMvngNKEJu2o@google.com>
-References: <20220307213356.2797205-1-brijesh.singh@amd.com>
- <20220307213356.2797205-20-brijesh.singh@amd.com>
- <YqfabnTRxFSM+LoX@google.com>
+        Tue, 14 Jun 2022 11:44:08 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E604092D;
+        Tue, 14 Jun 2022 08:44:06 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8F6946601657;
+        Tue, 14 Jun 2022 16:44:03 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655221445;
+        bh=cd0P/gWG7CcRBJFoMG/n68S7b9z3ygl1jWiCWja+9eQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=UT+OQ+lRbt6Sug2lOMBT71NnVAZhJwJtE1hsk40iXeAs31eIqwqiUuGbnHIKw5vsE
+         6h1yYiCiFREYlaVfSTN+H6uqTiW9OF8Wd1KQ2kJMadiSDsRSHJ/WQT5nBnpVrZ8bl0
+         UihAlmplblU02uuSvNI2UImSHFlfnQ1ss32thKXGCe36wRIeXVgpgUWPF0yQp1VZuM
+         TcyENZG3MtydbsklkIoM/ntPrjngNzhPghiqJ8R73oXL/ISASFTM+lbicncy+B86Hv
+         mFmMjml8Nxau++xzoFad8+65edvjHm2qL+14tcbQ9JAmbFUzbGar0eit70x/ww/Khh
+         FN5ol4l6kKq8g==
+Message-ID: <958ab30f9cfbb14e4a7ea55826064e6a20d5ffd2.camel@collabora.com>
+Subject: Re: [PATCH v8 14/17] media: hantro: Stop using Hantro dedicated
+ control
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+Date:   Tue, 14 Jun 2022 11:43:54 -0400
+In-Reply-To: <b244e86d-06de-7423-d0df-e77485ce4c87@xs4all.nl>
+References: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
+         <20220614083614.240641-15-benjamin.gaignard@collabora.com>
+         <b244e86d-06de-7423-d0df-e77485ce4c87@xs4all.nl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqfabnTRxFSM+LoX@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022, Sean Christopherson wrote:
-> s/Brijesh/Michael
-> 
-> On Mon, Mar 07, 2022, Brijesh Singh wrote:
-> > The encryption attribute for the .bss..decrypted section is cleared in the
-> > initial page table build. This is because the section contains the data
-> > that need to be shared between the guest and the hypervisor.
-> > 
-> > When SEV-SNP is active, just clearing the encryption attribute in the
-> > page table is not enough. The page state need to be updated in the RMP
-> > table.
-> > 
-> > Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+Le mardi 14 juin 2022 =C3=A0 15:58 +0200, Hans Verkuil a =C3=A9crit=C2=A0:
+> On 6/14/22 10:36, Benjamin Gaignard wrote:
+> > The number of bits to skip in the slice header can be computed
+> > in the driver by using sps, pps and decode_params information.
+> > This allow to remove Hantro dedicated control.
+>=20
+> allow -> makes it possible
+>=20
+> >=20
+> > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 > > ---
-> >  arch/x86/kernel/head64.c | 13 +++++++++++++
-> >  1 file changed, 13 insertions(+)
-> > 
-> > diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-> > index 83514b9827e6..656d2f3e2cf0 100644
-> > --- a/arch/x86/kernel/head64.c
-> > +++ b/arch/x86/kernel/head64.c
-> > @@ -143,7 +143,20 @@ static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdv
-> >  	if (sme_get_me_mask()) {
-> >  		vaddr = (unsigned long)__start_bss_decrypted;
-> >  		vaddr_end = (unsigned long)__end_bss_decrypted;
+> >  drivers/staging/media/hantro/hantro_drv.c     | 36 -----------
+> >  .../staging/media/hantro/hantro_g2_hevc_dec.c | 62 ++++++++++++++++++-
+> >  include/media/hevc-ctrls.h                    | 13 ----
+> >  3 files changed, 61 insertions(+), 50 deletions(-)
+> >=20
+> > diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/stagin=
+g/media/hantro/hantro_drv.c
+> > index 536c8c374952..5aac3a090480 100644
+> > --- a/drivers/staging/media/hantro/hantro_drv.c
+> > +++ b/drivers/staging/media/hantro/hantro_drv.c
+> > @@ -304,26 +304,6 @@ static int hantro_jpeg_s_ctrl(struct v4l2_ctrl *ct=
+rl)
+> >  	return 0;
+> >  }
+> > =20
+> > -static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
+> > -{
+> > -	struct hantro_ctx *ctx;
+> > -
+> > -	ctx =3D container_of(ctrl->handler,
+> > -			   struct hantro_ctx, ctrl_handler);
+> > -
+> > -	vpu_debug(1, "s_ctrl: id =3D %d, val =3D %d\n", ctrl->id, ctrl->val);
+> > -
+> > -	switch (ctrl->id) {
+> > -	case V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP:
+> > -		ctx->hevc_dec.ctrls.hevc_hdr_skip_length =3D ctrl->val;
+> > -		break;
+> > -	default:
+> > -		return -EINVAL;
+> > -	}
+> > -
+> > -	return 0;
+> > -}
+> > -
+> >  static const struct v4l2_ctrl_ops hantro_ctrl_ops =3D {
+> >  	.try_ctrl =3D hantro_try_ctrl,
+> >  };
+> > @@ -332,10 +312,6 @@ static const struct v4l2_ctrl_ops hantro_jpeg_ctrl=
+_ops =3D {
+> >  	.s_ctrl =3D hantro_jpeg_s_ctrl,
+> >  };
+> > =20
+> > -static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops =3D {
+> > -	.s_ctrl =3D hantro_hevc_s_ctrl,
+> > -};
+> > -
+> >  #define HANTRO_JPEG_ACTIVE_MARKERS	(V4L2_JPEG_ACTIVE_MARKER_APP0 | \
+> >  					 V4L2_JPEG_ACTIVE_MARKER_COM | \
+> >  					 V4L2_JPEG_ACTIVE_MARKER_DQT | \
+> > @@ -487,18 +463,6 @@ static const struct hantro_ctrl controls[] =3D {
+> >  		.cfg =3D {
+> >  			.id =3D V4L2_CID_STATELESS_HEVC_SCALING_MATRIX,
+> >  		},
+> > -	}, {
+> > -		.codec =3D HANTRO_HEVC_DECODER,
+> > -		.cfg =3D {
+> > -			.id =3D V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP,
+> > -			.name =3D "Hantro HEVC slice header skip bytes",
+> > -			.type =3D V4L2_CTRL_TYPE_INTEGER,
+> > -			.min =3D 0,
+> > -			.def =3D 0,
+> > -			.max =3D 0x100,
+> > -			.step =3D 1,
+> > -			.ops =3D &hantro_hevc_ctrl_ops,
+> > -		},
+> >  	}, {
+> >  		.codec =3D HANTRO_VP9_DECODER,
+> >  		.cfg =3D {
+> > diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/driver=
+s/staging/media/hantro/hantro_g2_hevc_dec.c
+> > index d28653d04d20..3be8d6e60bf0 100644
+> > --- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> > +++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+> > @@ -117,6 +117,66 @@ static void prepare_tile_info_buffer(struct hantro=
+_ctx *ctx)
+> >  		vpu_debug(1, "%s: no chroma!\n", __func__);
+> >  }
+> > =20
+> > +static unsigned int ceil_log2(unsigned int v)
+> > +{
+> > +	/* Compute Ceil(Log2(v))
+> > +	 * Derived from branchless code for integer log2(v) from:
+> > +	 * <http://graphics.stanford.edu/~seander/bithacks.html#IntegerLog>
+> > +	 */
+> > +	unsigned int r, shift;
 > > +
-> >  		for (; vaddr < vaddr_end; vaddr += PMD_SIZE) {
-> > +			/*
-> > +			 * On SNP, transition the page to shared in the RMP table so that
-> > +			 * it is consistent with the page table attribute change.
-> > +			 *
-> > +			 * __start_bss_decrypted has a virtual address in the high range
-> > +			 * mapping (kernel .text). PVALIDATE, by way of
-> > +			 * early_snp_set_memory_shared(), requires a valid virtual
-> > +			 * address but the kernel is currently running off of the identity
-> > +			 * mapping so use __pa() to get a *currently* valid virtual address.
-> > +			 */
-> > +			early_snp_set_memory_shared(__pa(vaddr), __pa(vaddr), PTRS_PER_PMD);
-> 
-> This breaks SME on Rome and Milan when compiling with clang-13.  I haven't been
-> able to figure out exactly what goes wrong.  printk isn't functional at this point,
-> and interactive debug during boot on our test systems is beyond me.  I can't even
-> verify that the bug is specific to clang because the draconian build system for our
-> test systems apparently is stuck pointing at gcc-4.9.
-> 
-> I suspect the issue is related to relocation and/or encrypting memory, as skipping
-> the call to early_snp_set_memory_shared() if SNP isn't active masks the issue.
-> I've dug through the assembly and haven't spotted a smoking gun, e.g. no obvious
-> use of absolute addresses.
-> 
-> Forcing a VM through the same path doesn't fail.  I can't test an SEV guest at the
-> moment because INIT_EX is also broken.
+> > +	v--;
+> > +	r =3D (v > 0xFFFF) << 4;
+> > +	v >>=3D r;
+> > +	shift =3D (v > 0xFF) << 3;
+> > +	v >>=3D shift;
+> > +	r |=3D shift;
+> > +	shift =3D (v > 0xF) << 2;
+> > +	v >>=3D shift;
+> > +	r |=3D shift;
+> > +	shift =3D (v > 0x3) << 1;
+> > +	v >>=3D shift;
+> > +	r |=3D shift;
+> > +	r |=3D (v >> 1);
+> > +
+> > +	return r + 1;
+> > +}
+>=20
+> Isn't this identical to fls(v - 1)? See also lib/math/reciprocal_div.c
+> where this is used.
 
-The SEV INIT_EX was a PEBKAC issue.  An SEV guest boots just fine with a clang-built
-kernel, so either it's a finnicky relocation issue or something specific to SME.
+Thanks for pointing this out, I was wondering if there was an equivalent, a=
+nd
+never knew there was a relation between log2() and the "last set bit". Not =
+sure
+about the -1 here though, can you extend ?
 
-> The crash incurs a very, very slow reboot, and I was out of cycles to work on this
-> about three hours ago.  If someone on the AMD side can repro, it would be much
-> appreciated.
+>=20
+> Regards,
+>=20
+> 	Hans
+>=20
+> > +
+> > +static int compute_header_skip_lenght(struct hantro_ctx *ctx)
+> > +{
+> > +	const struct hantro_hevc_dec_ctrls *ctrls =3D &ctx->hevc_dec.ctrls;
+> > +	const struct v4l2_ctrl_hevc_decode_params *decode_params =3D ctrls->d=
+ecode_params;
+> > +	const struct v4l2_ctrl_hevc_sps *sps =3D ctrls->sps;
+> > +	const struct v4l2_ctrl_hevc_pps *pps =3D ctrls->pps;
+> > +	int skip =3D 0;
+> > +
+> > +	if (pps->flags & V4L2_HEVC_PPS_FLAG_OUTPUT_FLAG_PRESENT)
+> > +		/* size of pic_output_flag */
+> > +		skip++;
+> > +
+> > +	if (sps->flags & V4L2_HEVC_SPS_FLAG_SEPARATE_COLOUR_PLANE)
+> > +		/* size of pic_order_cnt_lsb */
+> > +		skip +=3D 2;
+> > +
+> > +	if (!(decode_params->flags & V4L2_HEVC_DECODE_PARAM_FLAG_IDR_PIC)) {
+> > +		/* size of pic_order_cnt_lsb */
+> > +		skip +=3D sps->log2_max_pic_order_cnt_lsb_minus4 + 4;
+> > +
+> > +		/* size of short_term_ref_pic_set_sps_flag */
+> > +		skip++;
+> > +
+> > +		if (decode_params->short_term_ref_pic_set_size)
+> > +			/* size of st_ref_pic_set( num_short_term_ref_pic_sets ) */
+> > +			skip +=3D decode_params->short_term_ref_pic_set_size;
+> > +		else if (sps->num_short_term_ref_pic_sets > 1)
+> > +			skip +=3D ceil_log2(sps->num_short_term_ref_pic_sets);
+> > +
+> > +		skip +=3D decode_params->long_term_ref_pic_set_size;
+> > +	}
+> > +
+> > +	return skip;
+> > +}
+> > +
+> >  static void set_params(struct hantro_ctx *ctx)
+> >  {
+> >  	const struct hantro_hevc_dec_ctrls *ctrls =3D &ctx->hevc_dec.ctrls;
+> > @@ -134,7 +194,7 @@ static void set_params(struct hantro_ctx *ctx)
+> > =20
+> >  	hantro_reg_write(vpu, &g2_output_8_bits, 0);
+> > =20
+> > -	hantro_reg_write(vpu, &g2_hdr_skip_length, ctrls->hevc_hdr_skip_lengt=
+h);
+> > +	hantro_reg_write(vpu, &g2_hdr_skip_length, compute_header_skip_lenght=
+(ctx));
+> > =20
+> >  	min_log2_cb_size =3D sps->log2_min_luma_coding_block_size_minus3 + 3;
+> >  	max_log2_ctb_size =3D min_log2_cb_size + sps->log2_diff_max_min_luma_=
+coding_block_size;
+> > diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+> > index d6cb3779d190..efc0412ac41e 100644
+> > --- a/include/media/hevc-ctrls.h
+> > +++ b/include/media/hevc-ctrls.h
+> > @@ -467,17 +467,4 @@ struct v4l2_ctrl_hevc_scaling_matrix {
+> >  	__u8	scaling_list_dc_coef_32x32[2];
+> >  };
+> > =20
+> > -/*  MPEG-class control IDs specific to the Hantro driver as defined by=
+ V4L2 */
+> > -#define V4L2_CID_CODEC_HANTRO_BASE				(V4L2_CTRL_CLASS_CODEC | 0x1200)
+> > -/*
+> > - * V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP -
+> > - * the number of data (in bits) to skip in the
+> > - * slice segment header.
+> > - * If non-IDR, the bits to be skipped go from syntax element "pic_outp=
+ut_flag"
+> > - * to before syntax element "slice_temporal_mvp_enabled_flag".
+> > - * If IDR, the skipped bits are just "pic_output_flag"
+> > - * (separate_colour_plane_flag is not supported).
+> > - */
+> > -#define V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP	(V4L2_CID_CODEC_HANTRO_=
+BASE + 0)
+> > -
+> >  #endif
+>=20
+

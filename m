@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E6754AC11
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:41:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A685B54AC13
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:41:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355567AbiFNIhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 04:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32842 "EHLO
+        id S1353847AbiFNIhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 04:37:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242151AbiFNIgj (ORCPT
+        with ESMTP id S1353638AbiFNIgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 04:36:39 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11F423DA55;
+        Tue, 14 Jun 2022 04:36:40 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB50841FB1;
         Tue, 14 Jun 2022 01:36:39 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:4a7b:8d3a:acaa:ec46])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5BD1366016C9;
-        Tue, 14 Jun 2022 09:36:37 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1101666016B5;
+        Tue, 14 Jun 2022 09:36:38 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655195797;
-        bh=SzxOOtr+7skGYpIQjWGLYLdEvChiAFV4FuuYZNx0NRw=;
+        s=mail; t=1655195798;
+        bh=ftNAvCRvK+AQGEske0ptTAtK3LtSx8QeJyl1icndO24=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Qmnjo9KhuIMxIET8YMG00t4pCgDssxBjSjgKAL9bvTgU5Ohb9zGyhpjQRNYKUUucc
-         mwUr7pH7W71/YoBh396pCsBgilgsDXz8iw28vULp+AWSWtkuSqFs+l3LpTNNc8H89K
-         TLLgYnEuSFwxX19HmmftYNGqmEePRGVh+9yhnvWp0LNcpPT1kEWzawSb7LB98zL2pt
-         u8vuti2OzgVOVpL56WfibFNk65Zoe9q0292kDgjVLrio99Ytajv811WPLNTT22ZGPu
-         UmZEF+j99Tk4Joz2+/2CbdlK8U19A16IvRJqXWyJxEVrhwdqo2TRCpDEhvCLJOMxSq
-         DN6ycOgRXvHEQ==
+        b=EhoGMe2lMlqm8n9eLZNxJPN9r86romj1Hq9p173dA+4ZSth3hIqrQ65JQYkueSiXn
+         apq/Xx5ZMTs1e3fof2evlRYFQRpmURem2Ra41Nry9NyPpra1h/T6/zEXXgu55wtGBs
+         O+yysZvoms3oEGM/c2giAg6A9waUskB8UzHIXOTiFj4S1nI19r/oRvTlwnFyhlbtNy
+         iG0bPgGTcreAdI8Nxc96opddeMqbqdpi4U3ii39ZPGfDaot1OcxWB0flY7ryr1iNic
+         GeeZ5E0DUs3GYOdOMoiEaiqqH2IP9Lak7qo5IOVNyc1YmMNIOvVQqQF+Cx/xP8JK/7
+         Deg9CmwN8KyNQ==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, hverkuil@xs4all.nl,
         ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
@@ -44,9 +44,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v8 10/17] media: uapi: Move parsed HEVC pixel format out of staging
-Date:   Tue, 14 Jun 2022 10:36:07 +0200
-Message-Id: <20220614083614.240641-11-benjamin.gaignard@collabora.com>
+Subject: [PATCH v8 11/17] media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
+Date:   Tue, 14 Jun 2022 10:36:08 +0200
+Message-Id: <20220614083614.240641-12-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
 References: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
@@ -61,57 +61,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move HEVC pixel format since we are ready to stabilize the uAPI
+The number of 'entry point offset' can be very variable.
+Instead of using a large static array define a v4l2 dynamic array
+of U32 (V4L2_CTRL_TYPE_U32).
+The number of entry point offsets is reported by the elems field
+and in struct v4l2_ctrl_hevc_slice_params.num_entry_point_offsets
+field.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- Documentation/userspace-api/media/v4l/pixfmt-compressed.rst | 5 -----
- include/media/hevc-ctrls.h                                  | 3 ---
- include/uapi/linux/videodev2.h                              | 1 +
- 3 files changed, 1 insertion(+), 8 deletions(-)
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst       | 11 +++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c             |  5 +++++
+ include/media/hevc-ctrls.h                            |  5 ++++-
+ 3 files changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-index 967fc803ef94..c352d91a73d8 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-compressed.rst
-@@ -215,11 +215,6 @@ Compressed Formats
- 	See the :ref:`associated Codec Control IDs <v4l2-mpeg-hevc>`.
- 	Buffers associated with this pixel format must contain the appropriate
- 	number of macroblocks to decode a full corresponding frame.
--
--	.. note::
--
--	   This format is not yet part of the public kernel API and it
--	   is expected to change.
-     * .. _V4L2-PIX-FMT-FWHT:
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+index 0796b1563daa..05228e280f66 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+@@ -3010,6 +3010,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+     * - __u32
+       - ``data_bit_offset``
+       - Offset (in bits) to the video data in the current slice data.
++    * - __u32
++      - ``num_entry_point_offsets``
++      - Specifies the number of entry point offset syntax elements in the slice header.
+     * - __u8
+       - ``nal_unit_type``
+       - Specifies the coding type of the slice (B, P or I).
+@@ -3150,6 +3153,14 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
  
-       - ``V4L2_PIX_FMT_FWHT``
+     \normalsize
+ 
++``V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (integer)``
++    Specifies entry point offsets in bytes.
++    This control is a dynamically sized array. The number of entry point
++    offsets is reported by the ``elems`` field.
++    This bitstream parameter is defined according to :ref:`hevc`.
++    They are described in section 7.4.7.1 "General slice segment header
++    semantics" of the specification.
++
+ ``V4L2_CID_STATELESS_HEVC_SCALING_MATRIX (struct)``
+     Specifies the HEVC scaling matrix parameters used for the scaling process
+     for transform coefficients.
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index d594efbcbb93..e22921e7ea61 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1188,6 +1188,7 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:		return "HEVC Decode Parameters";
+ 	case V4L2_CID_STATELESS_HEVC_DECODE_MODE:		return "HEVC Decode Mode";
+ 	case V4L2_CID_STATELESS_HEVC_START_CODE:		return "HEVC Start Code";
++	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:	return "HEVC Entry Point Offsets";
+ 
+ 	/* Colorimetry controls */
+ 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+@@ -1518,6 +1519,10 @@ void v4l2_ctrl_fill(u32 id, const char **name, enum v4l2_ctrl_type *type,
+ 	case V4L2_CID_STATELESS_HEVC_DECODE_PARAMS:
+ 		*type = V4L2_CTRL_TYPE_HEVC_DECODE_PARAMS;
+ 		break;
++	case V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS:
++		*type = V4L2_CTRL_TYPE_U32;
++		*flags |= V4L2_CTRL_FLAG_DYNAMIC_ARRAY;
++		break;
+ 	case V4L2_CID_STATELESS_VP9_COMPRESSED_HDR:
+ 		*type = V4L2_CTRL_TYPE_VP9_COMPRESSED_HDR;
+ 		break;
 diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-index 140151609c96..a3c829ef531a 100644
+index a3c829ef531a..1319cb99ae3f 100644
 --- a/include/media/hevc-ctrls.h
 +++ b/include/media/hevc-ctrls.h
-@@ -13,9 +13,6 @@
+@@ -20,6 +20,7 @@
+ #define V4L2_CID_STATELESS_HEVC_DECODE_PARAMS	(V4L2_CID_CODEC_BASE + 1012)
+ #define V4L2_CID_STATELESS_HEVC_DECODE_MODE	(V4L2_CID_CODEC_BASE + 1015)
+ #define V4L2_CID_STATELESS_HEVC_START_CODE	(V4L2_CID_CODEC_BASE + 1016)
++#define V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS (V4L2_CID_CODEC_BASE + 1017)
  
- #include <linux/videodev2.h>
- 
--/* The pixel format isn't stable at the moment and will likely be renamed. */
--#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
+ /* enum v4l2_ctrl_type type values */
+ #define V4L2_CTRL_TYPE_HEVC_SPS 0x0120
+@@ -318,6 +319,8 @@ struct v4l2_hevc_pred_weight_table {
+  *
+  * @bit_size: size (in bits) of the current slice data
+  * @data_bit_offset: offset (in bits) to the video data in the current slice data
++ * @num_entry_point_offsets: specifies the number of entry point offset syntax
++ *			     elements in the slice header.
+  * @nal_unit_type: specifies the coding type of the slice (B, P or I)
+  * @nuh_temporal_id_plus1: minus 1 specifies a temporal identifier for the NAL unit
+  * @slice_type: see V4L2_HEVC_SLICE_TYPE_{}
+@@ -360,7 +363,7 @@ struct v4l2_hevc_pred_weight_table {
+ struct v4l2_ctrl_hevc_slice_params {
+ 	__u32	bit_size;
+ 	__u32	data_bit_offset;
 -
- #define V4L2_CID_STATELESS_HEVC_SPS		(V4L2_CID_CODEC_BASE + 1008)
- #define V4L2_CID_STATELESS_HEVC_PPS		(V4L2_CID_CODEC_BASE + 1009)
- #define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS	(V4L2_CID_CODEC_BASE + 1010)
-diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-index 9018aa984db3..37f9f23a67fe 100644
---- a/include/uapi/linux/videodev2.h
-+++ b/include/uapi/linux/videodev2.h
-@@ -712,6 +712,7 @@ struct v4l2_pix_format {
- #define V4L2_PIX_FMT_FWHT     v4l2_fourcc('F', 'W', 'H', 'T') /* Fast Walsh Hadamard Transform (vicodec) */
- #define V4L2_PIX_FMT_FWHT_STATELESS     v4l2_fourcc('S', 'F', 'W', 'H') /* Stateless FWHT (vicodec) */
- #define V4L2_PIX_FMT_H264_SLICE v4l2_fourcc('S', '2', '6', '4') /* H264 parsed slices */
-+#define V4L2_PIX_FMT_HEVC_SLICE v4l2_fourcc('S', '2', '6', '5') /* HEVC parsed slices */
- 
- /*  Vendor-specific formats   */
- #define V4L2_PIX_FMT_CPIA1    v4l2_fourcc('C', 'P', 'I', 'A') /* cpia1 YUV */
++	__u32	num_entry_point_offsets;
+ 	/* ISO/IEC 23008-2, ITU-T Rec. H.265: NAL unit header */
+ 	__u8	nal_unit_type;
+ 	__u8	nuh_temporal_id_plus1;
 -- 
 2.32.0
 

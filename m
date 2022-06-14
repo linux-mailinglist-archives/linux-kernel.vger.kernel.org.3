@@ -2,163 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC63D54B762
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:12:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1C454B764
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245018AbiFNRL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 13:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
+        id S1344012AbiFNRMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 13:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344371AbiFNRLv (ORCPT
+        with ESMTP id S244672AbiFNRMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 13:11:51 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FE221265
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:11:50 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id j20so10479275ljg.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hyAFd7sRCaU+w7b+0hvxe+0ICDGoRhy4smmcnlfnVf8=;
-        b=VVS3gab1omADGHC2/BM3jOV1A6eY4GdNrthiz8+wp8S5cMIFr2uLLkmB9rWypRLBGh
-         CRxK1pt/YGuuK56vtZsvD/CNMXbTrPe44abbnBJSPlaV01HMvRdyVC7/7MaSsSEpfN7s
-         VDYCYJeggFAC7pCVElIRie85ffAJzopAS55ANKLnocre+BCSHOgwqfWQCRJcTPWE4Isn
-         EMA4XWOG5gWQCH1wII6Qhfdp2vMCpX6b1JJNwkUqT158J1cG33IKcVtKEJAS5U2wsbnf
-         ewajr7lOHPJhZ8+i/OX/prvULKZVaxQeqwV/q5JhEUl6DvRw7s02/8LnPBl0C23kEfKq
-         mpiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hyAFd7sRCaU+w7b+0hvxe+0ICDGoRhy4smmcnlfnVf8=;
-        b=tzv6LRaC/bWBthChqx5hp9NmluWH3UaGhBVxhoHEY2aFA+bW8GNvo4y2IR7nU4w86Q
-         IYXgm8nyuPU5YIbhdDOVocRTfc6ZA5EAWa2nSYG7tOArbnHlflOnw06SzQ3psdf5iLfO
-         nJvYFBNT8eEWjr7+wkxObAJsjJjoMzZiXaGB/uAvnrLebgaqhjaO/lWV+7bn9PQIt/gQ
-         g5pgCeV7W1tRhfzi5yE1/IyvGiCe6cu009q3KpU0vP0+5Pu7pZEJp5BxrZSG6ytJjsMg
-         9tRvXL1OEIhfRyCTCPSt9XO06Vd6tMOORNd51d924YeXlLjb6PY2ZRpg0+orDxPJ2X+L
-         1KWQ==
-X-Gm-Message-State: AJIora9m5NpTil5D33Bof4yvPh18srSs7xPjFna3nzJGYotC4+exj4dX
-        QSlFY0REP+2MR88sdZzHnG5l+2HfQ3jWgSbQtsD2wA==
-X-Google-Smtp-Source: AGRyM1t/zo81ZsO+O0ZI1OPCqjgaCdubDxR4EFdi0YVKZ7767whrD8qazGD2NsdH5B4zjqm8DDOFG4TjN6wHpKoUiwY=
-X-Received: by 2002:a2e:8e98:0:b0:255:9d3d:bac3 with SMTP id
- z24-20020a2e8e98000000b002559d3dbac3mr3037050ljk.103.1655226708884; Tue, 14
- Jun 2022 10:11:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220614144853.3693273-1-glider@google.com> <CAHk-=whaWnwB8guceg8V=bA1adv74GNaMk2FEu+YQkBKUqxVoA@mail.gmail.com>
-In-Reply-To: <CAHk-=whaWnwB8guceg8V=bA1adv74GNaMk2FEu+YQkBKUqxVoA@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 14 Jun 2022 10:11:37 -0700
-Message-ID: <CAKwvOd=SotrVcZshzGzsMprkORkVXFwYc-3mREkJSDCQ1nvbFw@mail.gmail.com>
-Subject: Re: [PATCH] [RFC] Initialization of unused function parameters
+        Tue, 14 Jun 2022 13:12:38 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5938A11160;
+        Tue, 14 Jun 2022 10:12:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UnkcKB4NsDJ0e+mJiYWNx+eCTEwD4IDtNjFvnXDcokg=; b=JXA09RScBAaWksG9w8f1eTRDx4
+        jPYffuxU/Oy99uzq/dqd//WYwokS38bI/QGvYknm8zFgS3vrQtkcoOX6qIO7tKKQRLFroHKgAkjSb
+        /tvxwZw2q5CrF7NG3K0+O5rp7pIMysDT64NN6/ccTPvjXzCgRYF4ZXZWRGSgm/GTaAwh3ankYtsj2
+        i1oLpSEKv0CjPVVjmPZkIIBFcgaJA+8/C78nDnACERWnKrtVFsFAjbuPdTHnA3fHbQqUY3QahA2TN
+        IYY426fKPxYxFAz+mA4FdDG8SpuVxjKd2wLkgh7y/iu+e9O/fTibDiIVfWIcDfvjF3seVpliF0mH6
+        h7djO54g==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1o1A5W-000L3R-Dg;
+        Tue, 14 Jun 2022 17:12:22 +0000
+Date:   Tue, 14 Jun 2022 18:12:22 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Buka <vitalybuka@google.com>,
+Cc:     Dan Williams <dan.j.williams@intel.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        nvdimm@lists.linux.dev, David Howells <dhowells@redhat.com>
+Subject: Re: [RFC][PATCH] fix short copy handling in copy_mc_pipe_to_iter()
+Message-ID: <YqjBdtzXSKgwUi8f@ZenIV>
+References: <YqaAcKsd6uGfIQzM@zeniv-ca.linux.org.uk>
+ <CAHk-=wjmCzdNDCt6L8-N33WSRaYjnj0=yTc_JG8A_Pd7ZEtEJw@mail.gmail.com>
+ <Yqe6EjGTpkvJUU28@ZenIV>
+ <YqfcHiBldIqgbu7e@ZenIV>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqfcHiBldIqgbu7e@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 9:48 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, Jun 14, 2022 at 7:49 AM Alexander Potapenko <glider@google.com> wrote:
-> >
-> > The bigger question I want to raise here is whether we want to
-> > discourage passing uninitialized variables to functions in the kernel
-> > altogether.
->
-> I'm assuming you mean pass by reference.
->
-> Some functions are really fundamentally about initializing things, and
-> expect uninitialized allocations.
->
-> Obviously the traditional example of this is "memset()", and that one
-> can be special-cased as obvious, but we probably have a ton of wrapper
-> things like that.
->
-> IOW, things like just "snprintf()" etc is fundamentally passed an
-> uninitialized buffer, because the whole point is that it will write to
-> that buffer.
->
-> And no, we don't want to initialize it, since the buffer may be big
-> (on purpose).
->
-> Now, for *small* things (like that "pointer to inode") that aren't
-> some kind of array or big structure, I think it might be good to
-> perhaps be stricter. But even there we do have cases where we pass
-> things by reference because the function is explicitly designed to
-> initialize the value: the argument isn't really "an argument", it's a
-> "second return value".
->
-> But always initializing in the caller sounds stupid and
-> counter-productive, since the point is to initialize by calling the
-> helper function (think things like returning a "cookie" or similar:
-> initializing the cookie to NULL in the caller is just plain _wrong_.
->
-> What I think might be a good model is to be able to mark such
-> arguments as "must be initialized by callee".
+On Tue, Jun 14, 2022 at 01:53:50AM +0100, Al Viro wrote:
 
-Yeah, being able to enforce that would be nice.
+> FWIW, I've got quite a bit of cleanups in the local tree; reordering and
+> cleaning that queue up at the moment, will post tonight or tomorrow.
+> 
+> I've looked into doing allocations page-by-page (instead of single
+> push_pipe(), followed by copying into those).  Doable, but it ends
+> up being much messier.
 
-Now that we have clang's static analyzer wired up (commit 6ad7cbc01527
-("Makefile: Add clang-tidy and static analyzer support to makefile")),
-Intel's 0day bot has been reporting cases it finds for some classes of
-warnings.  There's been a few interesting (to me) cases where these
-"init" routines would conditionally initialize a "second return value"
-but the caller either did not do return value checking or the callee
-was not marked __must_check (or both).
+Hmm...  Maybe not - a possible interface would be
+	append_pipe(iter, size, &off)
 
-As with -Wsometimes-uninitialized, my experience has been that folks
-consistently get error handling/exceptional cases wrong in so far as
-passing unitialized values later.  Clang's -Wsometimes-uninitialized
-is intra-proceedural, so doesn't catch the problems with "init"
-routines. Clang's static analyzer is interproceedural; the trade off
-being the time the analysis takes.
+that would either do kmap_local_page() on the last buffer (if it's
+anonymous and has space in it) or allocated and mapped a page and
+added a new buffer.  Returning the mapped address and offset from it.
+Then these loops would looks like this:
 
-Maybe a new function parameter attribute would be nice?
+	while (left) {
+		p = append_pipe(iter, left, &off);
+		if (!p)
+			break;
+		chunk = min(left, PAGE_SIZE - off);
+		rem = copy(p + off, whatever, chunk);
+		chunk -= rem;
+		kunmap_local(p);
 
-#define __must_init __attribute__((must_init))
-int init (int * __must_init x) {
-// ^ warning: function parameter x marked '__attribute__((must_init))'
-not unconditionally initialized
-  if (stars_dont_align) {
-    return -42;
-  }
-  *x = 42;
-  return 0;
+		copied += chunk;
+		left -= chunk;
+
+		if (unlikely(rem)) {
+			pipe_revert(i, rem);
+			break;
+		}
+	}
+	return copied;
+
+with no push_pipe() used at all.  For operations that can't fail,
+the things are simplified in an obvious way (rem is always 0).
+
+Or we could have append_pipe() return a struct page * and leave
+kmap_local_page() to the caller...
+
+struct page *append_pipe(struct iov_iter *i, size_t size, unsigned *off)
+{
+	struct pipe_inode_info *pipe = i->pipe;
+	unsigned offset = i->iov_offset;
+	struct page_buffer *buf;
+	struct page *page;
+
+	if (offset && offset < PAGE_SIZE) {
+		// some space in the last buffer; can we add to it?
+		buf = pipe_buf(pipe, pipe->head - 1);
+		if (allocated(buf)) {
+			size = min(size, PAGE_SIZE - offset);
+			buf->len += size;
+			i->iov_offset += size;
+			i->count -= size;
+			*off = offset;
+			return buf->page;	// or kmap_local_page(...)
+		}
+	}
+	// OK, we need a new buffer
+	size = min(size, PAGE_SIZE);
+	if (pipe_full(.....))
+		return NULL;
+	page = alloc_page(GFP_USER);
+	if (!page)
+		return NULL;
+	// got it...
+	buf = pipe_buf(pipe, pipe->head++);
+	*buf = (struct pipe_buffer){.ops = &default_pipe_buf_ops,
+				    .page = page, .len = size };
+	i->head = pipe->head - 1;
+	i->iov_offset = size;
+	i->count -= size;
+	*off = 0;
+	return page;	 // or kmap_local_page(...)
 }
-void foo (void) {  int x; init(&x); /* use of x without fear */ }
 
+(matter of fact, the last part could use another helper in my tree - there
+the tail would be
+	// OK, we need a new buffer
+	size = min(size, PAGE_SIZE);
+	page = push_anon(pipe, size);
+	if (!page)
+		return NULL;
+	i->head = pipe->head - 1;
+	i->iov_offset = size;
+	i->count -= size;
+	*off = 0;
+	return page;
+)
 
->
-> So then the rule could be that small arguments passed by reference
-> have to be either initialized by the caller, or the argument must have
-> that "initialized by callee" attribute, and then the initialization
-> would be enforced in the callee instead.
->
-> But making the rule be that the caller *always* has to initialize
-> sounds really wrong to me.
->
->              Linus
+Would that be readable enough from your POV?  That way push_pipe()
+loses almost all callers and after the "make iov_iter_get_pages()
+advancing" part of the series it simply goes away...
 
+It's obviously too intrusive for backports, though - there I'd very much
+prefer the variant I posted.
 
+Comments?
 
--- 
-Thanks,
-~Nick Desaulniers
+PS: re local helpers:
+
+static inline struct pipe_buffer *pipe_buf(const struct pipe_inode_info *pipe,
+                                           unsigned int slot)
+{
+	return &pipe->bufs[slot & (pipe->ring_size - 1)];
+}
+
+pretty much all places where we cache pipe->ring_size - 1 had been
+absolutely pointless; there are several exceptions, but back in 2019
+"pipe: Use head and tail pointers for the ring, not cursor and length"
+went overboard with microoptimizations...

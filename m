@@ -2,67 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D773754B27A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E7754B27C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239259AbiFNNq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 09:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60804 "EHLO
+        id S240787AbiFNNsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 09:48:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiFNNq5 (ORCPT
+        with ESMTP id S230077AbiFNNsd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 09:46:57 -0400
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D020421E21;
-        Tue, 14 Jun 2022 06:46:53 -0700 (PDT)
-Received: by mail-qk1-f173.google.com with SMTP id d128so6375953qkg.8;
-        Tue, 14 Jun 2022 06:46:53 -0700 (PDT)
+        Tue, 14 Jun 2022 09:48:33 -0400
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AA73631F;
+        Tue, 14 Jun 2022 06:48:32 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-3137eb64b67so29775247b3.12;
+        Tue, 14 Jun 2022 06:48:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4e9YVI1qcHuboFx6XM8DW9ECXNo0yy6Zy9E+en0JNY4=;
-        b=b0rHqZgh1nq2RMwd56UMKbapYHUzhjN8Qaw5xblMTgeUmQrMRUGArdwu2JL/Wbh3Wt
-         cel7QO76YS4FuujNxizkZlffQtg73h5YdETVcqcNe5HMNJ7Yiob6zi+8Glwj0NYNbLP1
-         5x5BT5BpjJfps5rrUHBLgdC3Ev5Vm+GD7/4xDqTnw/StO9le+jCVdtE2DciBHs0r7km1
-         x2FYFsIVd6H8gk3sa7UTctHXQEfuhBRzIgqiOYIiexBnwknqmao7b33y/lsm3+Liersi
-         UZq4GmPPXIO/OUkMZICFirMqmI5zHcW+nP8k5RZppOU7cNtF2uMOfmpMr/oxHdCkP+BN
-         E2Ng==
-X-Gm-Message-State: AOAM530zpaOdX2GaVcGa2E/BpJ+Ka3zJGzY/JEuXH/6TIm0gs+PomaVd
-        h1CiQbvvW305UJAJWUOmP94rjMlSl1iRow==
-X-Google-Smtp-Source: ABdhPJxwvRN9T5goLP0u05qzkiD1NCmBL3Xzr8N/NHL2Qh+ouxw+QmS5pC1FDDanU93lHDuKjZ3YiA==
-X-Received: by 2002:a05:620a:1a0c:b0:6a6:d021:7be3 with SMTP id bk12-20020a05620a1a0c00b006a6d0217be3mr3817680qkb.667.1655214412740;
-        Tue, 14 Jun 2022 06:46:52 -0700 (PDT)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id ff24-20020a05622a4d9800b003051190886dsm6978489qtb.75.2022.06.14.06.46.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 06:46:52 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id t32so15177387ybt.12;
-        Tue, 14 Jun 2022 06:46:52 -0700 (PDT)
-X-Received: by 2002:a25:818c:0:b0:664:a584:fafd with SMTP id
- p12-20020a25818c000000b00664a584fafdmr5077802ybk.543.1655214412054; Tue, 14
- Jun 2022 06:46:52 -0700 (PDT)
+        bh=P4wtwPGdIM+P1rhGIHteBYdQYP+P9hfjr/NYNmIuZpc=;
+        b=QB0zVauU2WW8dej5g3l7mRT3cKx07SL9Vcp6XzxLFixpacQ5kxViO3/c2j7l3MpXMr
+         egJexA8GKv6XNHSwm2lGQIBn62QD3jRNDM8HVYink9jgpvSbeOc5ZZudmL2WXqbS1xeb
+         kZr9C9dE3PTIxrNFcUQ9VB0UN5DKQbOswPMnfdi7zOcCEQDRlPqU5tqk0s4uPmzt9tkJ
+         LelQa4fZ1jfYp0DNJdy0/I2bNuhoV6bCVAed59HsJlfqDOWqjCuim85bfl8/HH3/ZBjf
+         tLspuJLMv4kaYWVj8sSmTv6jBeeSfjGbPAfszNuORslMAslThM8xR1m8ypeuwBSaKCgc
+         b1VA==
+X-Gm-Message-State: AJIora+EM/AKT+c1YIwfRXbZVL1bY/WpAVapsx7/SzbUcWBu/tb6Pe+/
+        IadmIOVYATWOhdoeclh9hD22sjirL31yb1sHOSsZydEnNpY=
+X-Google-Smtp-Source: AGRyM1tHTVAzMA5tdZ41ucoCFVMSECmhAE6hxkkAqmkIljdU9N0NkHEtkb0HGrsatq7sLa8zReUoEAXc1ZVPcrJpLSY=
+X-Received: by 2002:a81:1512:0:b0:314:1e60:880a with SMTP id
+ 18-20020a811512000000b003141e60880amr5719151ywv.515.1655214511577; Tue, 14
+ Jun 2022 06:48:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Jun 2022 15:46:40 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdW-UybcPx-XexQZvDGQopPYa2POYaxrS-ey+QWu3GBs_w@mail.gmail.com>
-Message-ID: <CAMuHMdW-UybcPx-XexQZvDGQopPYa2POYaxrS-ey+QWu3GBs_w@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: thermal: rcar-gen3-thermal: use
- positive logic
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
+References: <20220521063534.138930-1-yiyang13@huawei.com> <20220524071041.4aw3cfo3x5wphziy@vireshk-i7>
+ <CAJZ5v0jCx0v-Q2=aW4nSSAHHajUnLdVtQMe3w1cX1w-o=mSesg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jCx0v-Q2=aW4nSSAHHajUnLdVtQMe3w1cX1w-o=mSesg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 14 Jun 2022 15:48:20 +0200
+Message-ID: <CAJZ5v0g-rCSd+S4YPBR8Jv2PqePhjQd0K97Rj2+TX3OrWAP0NA@mail.gmail.com>
+Subject: Re: [PATCH -next] cpufreq: Fix reserved space in cpufreq_show_cpus()
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Yi Yang <yiyang13@huawei.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -75,32 +58,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 10:18 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> When handling the V3U/r8a779a0 exception, avoid using 'not:' because
-> then its subschemas are far away in the 'else:' branch. Keep them
-> together using positive logic.
+On Tue, Jun 14, 2022 at 3:37 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
+> On Tue, May 24, 2022 at 9:10 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 21-05-22, 14:35, Yi Yang wrote:
+> > > Function scnprintf() would reserve space for the trailing '\0' and return
+> > > value is the number of characters written into buf not including the
+> > > trailing '\0'. internally meaning the next scnprintf() would write begin
+> > > the trailing '\0'. The code specifying "PAGE_SIZE - i - 2" here is trying
+> > > to reserve space for "\n\0" which would cause scnprintf() to reserve an
+> > > additional byte making the tail of the buf looks like this: "\n\0\0".
+> > > Thus. we should reserve only the space for one '\0'. passing in
+> > > "PAGE_SIZE - i - 1".
+> > >
+> > > Additionally, each iteration would replace the trailing '\0' from the last
+> > > iteration with a space, and append 4 additional bytes to the string making
+> > > it a total of 5 additional bytes. That means we should stop printing into
+> > > the buffer if the remaining size is less than 7 bytes(1 for the ' ', 4 for
+> > > the %u and 2 for the tailing "\n\0")
+> > >
+> > > Signed-off-by: Yi Yang <yiyang13@huawei.com>
+> > > ---
+> > >  drivers/cpufreq/cpufreq.c | 6 +++---
+> > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > > index 1f6667ce43bd..60c005c9961e 100644
+> > > --- a/drivers/cpufreq/cpufreq.c
+> > > +++ b/drivers/cpufreq/cpufreq.c
+> > > @@ -844,9 +844,9 @@ ssize_t cpufreq_show_cpus(const struct cpumask *mask, char *buf)
+> > >
+> > >       for_each_cpu(cpu, mask) {
+> > >               if (i)
+> > > -                     i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), " ");
+> > > -             i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), "%u", cpu);
+> > > -             if (i >= (PAGE_SIZE - 5))
+> > > +                     i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), " ");
+> > > +             i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), "%u", cpu);
+> > > +             if (i >= (PAGE_SIZE - 6))
+> > >                       break;
+> > >       }
+> > >       i += sprintf(&buf[i], "\n");
+> >
+> > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 >
-> Changes since v2:
-> * new patch
+> Applied as 5.20 material, thanks!
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+And dropped, because it has been superseded by this one:
 
-> Tested with:
-> make dtbs_check DT_SCHEMA_FILES=thermal/rcar-gen3-thermal.yaml
-
-And dt_binding_check? Yep, it succeeds ;-)
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+https://patchwork.kernel.org/project/linux-pm/patch/b9fa08171c09343ace94a7343553a4bee4695c90.1653565641.git.viresh.kumar@linaro.org/

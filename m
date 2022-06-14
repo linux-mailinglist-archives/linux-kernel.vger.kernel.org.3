@@ -2,68 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 703F354A34D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:55:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7812C54A350
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:55:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240328AbiFNAxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 20:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
+        id S234424AbiFNAx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 20:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238974AbiFNAxL (ORCPT
+        with ESMTP id S229892AbiFNAx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 20:53:11 -0400
-Received: from mail-yb1-xb41.google.com (mail-yb1-xb41.google.com [IPv6:2607:f8b0:4864:20::b41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9070A47D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:53:10 -0700 (PDT)
-Received: by mail-yb1-xb41.google.com with SMTP id r82so12574844ybc.13
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:53:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=xpKoRC+jwQM/TE7zoR6njYywYa0xdPUzl/QI3qKrqR4=;
-        b=R9e+8ya7HmN+rSK/ExFtG8j5LSj7tmxjhoikGEBFDMzGFjz4HHmN+lc/JXDQdtgsE8
-         4CgP/+V0eae4QsTDjnJit2BIfy+1grFEdcuOyxFSdkOnzW5TzdXF7IZ2GX9tdzG5mRGe
-         V5SNZ8qE3BYwg17E9LIy90dbd4WoZlI5N8EIXpLYcdsE+4Dd/K4O9YqdX1plLtW3/MWa
-         38ApCY0VpdMV5syiO4QHnTzNtg+8inSLhnm4p2g2O9GKGe5jfGqKwdduwp0juTmHHKzN
-         LPT+5HkrStorGLxT8J2ZHKpLZiGk3vXpS7RwMkwUvjhSyg6hBs8gXN4nxNJXB2ZTn9lm
-         /Zlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xpKoRC+jwQM/TE7zoR6njYywYa0xdPUzl/QI3qKrqR4=;
-        b=PeADrSr/q5Hv22Dud/NF1Tq+4wRIDP2DmWYkgbh7NLy+pgLzovY97n93TqYJ5xB+J0
-         UhxRmAYOl2o2tK4XWb6ViBMnFS+CExeOfuJlOSYQWoMEidtIxm16ESuhoNXzwo+ukxIq
-         UKi8KYgVj539QKat2kiDsAOrk8kYiEpWMsJLOukNr5o/IbwShRAhzc1+/zMb1Mgzgvi1
-         gH9DlIvlNaXxlgKVdGTIbJKVseV/8yeVVbuulpEZYhOhKkk6BkOtyGMEY95CRnccP8Xn
-         vR9GQjTjPqQrhot4+yxty3f80FqosF5QO1HF2htAZIRZKuCoaQ9g6d2tYZ+9mhNDrg3x
-         frjQ==
-X-Gm-Message-State: AJIora8Jb9B6c7WedioOGa6tWRICcObSaTeB/kKgRFXjU1ssxO+QEk2i
-        A7pq4me8VW900OkzgDV0FNEblSmfP65yGfgzkw==
-X-Google-Smtp-Source: AGRyM1sZAzxnmRwBl9jUt+2fb5jBD734EHnA2rxZ7epu8PcJ3lz+e4v+FGbpHvfJRLUM4E4SOWk6f2zRspIGVgzB6gc=
-X-Received: by 2002:a5b:c51:0:b0:65c:af16:d7cf with SMTP id
- d17-20020a5b0c51000000b0065caf16d7cfmr2320624ybr.397.1655167990261; Mon, 13
- Jun 2022 17:53:10 -0700 (PDT)
+        Mon, 13 Jun 2022 20:53:56 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CBFC2FFF5;
+        Mon, 13 Jun 2022 17:53:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gb5E1ldq5OJFZfWUbl/fw8bH7nSwLZwzG19ZDpeNBtQ=; b=KvBo6xh0HK0GydjEAQjoC1HVyL
+        AV1IOkIMCtraKad7QJkyct7tjm3FtoFtF2qsWzNdFshheB1Dk7YxDdq1JR4bHoJP8J5ZliaDkZ3GM
+        ZY3NtJq9VqYTIY2fgfAyniULF7Id+UNImGHTGgZKl1dcX0j3keZqdlOqs4RZad+O1PQwYjgJ9v62X
+        UTMn1R72uDrIhvpdOSP7Oiuaz6mfSpYlRQyelvj64pvv0LK3Rn1ZQDmUCvejv4CAGbOwpk4Z6rJN+
+        tVE3g7LWbJFVwGmfy8H1X5iJUYWi7SiUzaVLrof+c1oHLKlVOKZbTG7iABZjNXqQNab5x4UxluGCX
+        GCizf9Fw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1o0uoY-0006Pc-QR;
+        Tue, 14 Jun 2022 00:53:50 +0000
+Date:   Tue, 14 Jun 2022 01:53:50 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Dan Williams <dan.j.williams@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        nvdimm@lists.linux.dev, David Howells <dhowells@redhat.com>
+Subject: Re: [RFC][PATCH] fix short copy handling in copy_mc_pipe_to_iter()
+Message-ID: <YqfcHiBldIqgbu7e@ZenIV>
+References: <YqaAcKsd6uGfIQzM@zeniv-ca.linux.org.uk>
+ <CAHk-=wjmCzdNDCt6L8-N33WSRaYjnj0=yTc_JG8A_Pd7ZEtEJw@mail.gmail.com>
+ <Yqe6EjGTpkvJUU28@ZenIV>
 MIME-Version: 1.0
-References: <20220612071535.1179039-1-sunliming@kylinos.cn> <Yqb9VoYe+D69KYTY@noodles-fedora.dhcp.thefacebook.com>
-In-Reply-To: <Yqb9VoYe+D69KYTY@noodles-fedora.dhcp.thefacebook.com>
-From:   sunliming <kelulanainsley@gmail.com>
-Date:   Tue, 14 Jun 2022 08:52:59 +0800
-Message-ID: <CAJncD7ToFdEWW70Suf1=STwOK8vzTgkgF1tQMu3GL-n=ffoRPw@mail.gmail.com>
-Subject: Re: [PATCH RESEND] of: Add missing function declarations
-To:     Jonathan McDowell <noodles@fb.com>
-Cc:     "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "bhe@redhat.com" <bhe@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "frowand.list@gmail.com" <frowand.list@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yqe6EjGTpkvJUU28@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,53 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-OK=EF=BC=8Cthanks
+On Mon, Jun 13, 2022 at 11:28:34PM +0100, Al Viro wrote:
+> On Mon, Jun 13, 2022 at 10:54:36AM -0700, Linus Torvalds wrote:
+> > On Sun, Jun 12, 2022 at 5:10 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> > >
+> > > Unlike other copying operations on ITER_PIPE, copy_mc_to_iter() can
+> > > result in a short copy.  In that case we need to trim the unused
+> > > buffers, as well as the length of partially filled one - it's not
+> > > enough to set ->head, ->iov_offset and ->count to reflect how
+> > > much had we copied.  Not hard to fix, fortunately...
+> > >
+> > > I'd put a helper (pipe_discard_from(pipe, head)) into pipe_fs_i.h,
+> > > rather than iov_iter.c -
+> > 
+> > Actually, since this "copy_mc_xyz()" stuff is going to be entirely
+> > impossible to debug and replicate for any normal situation, I would
+> > suggest we take the approach that we (long ago) used to take with
+> > copy_from_user(): zero out the destination buffer, so that developers
+> > that can't test the faulting behavior don't have to worry about it.
+> > 
+> > And then the existing code is fine: it will break out of the loop, but
+> > it won't do the odd revert games and the "randomnoise.len -= rem"
+> > thing that I can't wrap my head around.
+> > 
+> > Hmm?
+> 
+> Not really - we would need to zero the rest of those pages somehow.
+> They are already allocated and linked into pipe; leaving them
+> there (and subsequent ones hadn't seen any stores whatsoever - they
+> are fresh out of alloc_page(GFP_USER)) is a non-starter.
+> 
+> We could do allocation as we go, but that's a much more intrusive
+> change...
 
-Jonathan McDowell <noodles@fb.com> =E4=BA=8E2022=E5=B9=B46=E6=9C=8813=E6=97=
-=A5=E5=91=A8=E4=B8=80 17:03=E5=86=99=E9=81=93=EF=BC=9A
->
-> NAK. This is for a patch of mine that I don't believe has hit mainline
-> yet - I've only seen it in daveh's test tree. The prototypes for these
-> functions are now guarded by CONFIG_HAVE_IMA_KEXEC but all OF platforms
-> build them even when the platform doesn't actually support IMA over
-> kexec. I'll update my patch to avoid that.
->
-> On Sun, Jun 12, 2022 at 03:15:35PM +0800, sunliming wrote:
-> > Fixes the following w1 warning:
-> >
-> > drivers/of/kexec.c:126:5: warning: no previous prototype for 'ima_get_k=
-exec_buffer' [-Wmissing-prototypes]
-> > drivers/of/kexec.c:153:5: warning: no previous prototype for 'ima_free_=
-kexec_buffer' [-Wmissing-prototypes
-> >
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: sunliming <sunliming@kylinos.cn>
-> > ---
-> >  include/linux/of.h | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > diff --git a/include/linux/of.h b/include/linux/of.h
-> > index f0a5d6b10c5a..3a166a1c4ef6 100644
-> > --- a/include/linux/of.h
-> > +++ b/include/linux/of.h
-> > @@ -844,6 +844,16 @@ static inline phys_addr_t of_dma_get_max_cpu_addre=
-ss(struct device_node *np)
-> >       return PHYS_ADDR_MAX;
-> >  }
-> >
-> > +static inline int ima_get_kexec_buffer(void **addr, size_t *size)
-> > +{
-> > +        return -ENOSYS;
-> > +}
-> > +
-> > +static inline int ima_free_kexec_buffer(void **addr, size_t *size)
-> > +{
-> > +        return -ENOSYS;
-> > +}
-> > +
-> >  #define of_match_ptr(_ptr)   NULL
-> >  #define of_match_node(_matches, _node)       NULL
-> >  #endif /* CONFIG_OF */
-> > --
-> > 2.25.1
-> >
+FWIW, I've got quite a bit of cleanups in the local tree; reordering and
+cleaning that queue up at the moment, will post tonight or tomorrow.
+
+I've looked into doing allocations page-by-page (instead of single
+push_pipe(), followed by copying into those).  Doable, but it ends
+up being much messier.
+
+IMO this "truncate on failure" approach is saner.

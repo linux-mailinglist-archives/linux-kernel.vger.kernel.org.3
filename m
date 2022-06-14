@@ -2,89 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B215354A734
+	by mail.lfdr.de (Postfix) with ESMTP id 21EB554A732
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354813AbiFNC5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 22:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51882 "EHLO
+        id S231770AbiFNC5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 22:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354891AbiFNC5L (ORCPT
+        with ESMTP id S1354906AbiFNC5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 22:57:11 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BBD3F30B;
-        Mon, 13 Jun 2022 19:48:05 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id e9so7293020pju.5;
-        Mon, 13 Jun 2022 19:48:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=CRbO+eOwNrtEzNm1umOFthQyHIYadiriLN7qcDzqwQY=;
-        b=hndWB0ZVsytJPGL77dROqa0dY0aM6xZ0Zu0KpRT0y6hZwkv4MVy6MkKhYxBLwDMkPD
-         lR8jPr6ku83xuSAT+r1OigTO/ZFQ7ebTTzbZ42yEHAo9NYaVwkJ2VwKY/kz7ySbffhu+
-         ol8A6aixLGr/KivfGZvHXwSCUB1ieRKf5aDS364efkqPyImEoiLieU9a6bcVUVhRCQxy
-         0M/D4qzZi9pFn8PiROuRGlE25P6oQXLyrFWLOzV6Q+mb+Trfz+Pe1T5hEp84BWhj75E7
-         pZcW5txnCnxw3uer76w+H9UZKDjs3GM6U2uQfQ5zG60lmYjx4/imPi/Bn1rP5B9AK5zf
-         4IAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=CRbO+eOwNrtEzNm1umOFthQyHIYadiriLN7qcDzqwQY=;
-        b=BVqf8wKAfxrdJQXr4hh6ZRVgHQq/15pr6ZgngaKJTMKc8qnLBKyec1Lb2CDmnmzoJN
-         Nih7k5XXpNwhj6Zoum5jgq8YptANEGvAMOTiaXQSXgJ0G66CqUFVie+aeB3lsJwNU+yj
-         kqDVk7cVyNDZSfa0GvJ6LuvkyxLth+huboeDmp7rrTMaewLIy/ebOab7wShA1/juYC+Q
-         fxzaOXfRPgeqXwhYNeKO3JOkKRpIibcMrRIDbLd0llUSyXk+bT1TOp6faj1wLEB6Mgoq
-         PPaVvf4Nd6bEsqzoLI8QRwipFdn9a0LCrjRmiShN1gLCZtNEZqi975exQpeTMu3EYCv/
-         zwWQ==
-X-Gm-Message-State: AJIora8wMHqpCrsjkFV8SOYRXBd7LEAkv/gBcXcUOHypC+cCIF8o39ve
-        ar+dEg0GpthltpGEUqBnCZE=
-X-Google-Smtp-Source: AGRyM1sd/kSRsmMZUEUoLZYojSUyh9KAplJSDdIxU5qJRr/ruGh31o9aCZm+4+Yr09KT0QCC4bJAcA==
-X-Received: by 2002:a17:903:187:b0:166:4360:a4fa with SMTP id z7-20020a170903018700b001664360a4famr1995749plg.87.1655174884778;
-        Mon, 13 Jun 2022 19:48:04 -0700 (PDT)
-Received: from localhost (subs02-180-214-232-19.three.co.id. [180.214.232.19])
-        by smtp.gmail.com with ESMTPSA id oe14-20020a17090b394e00b001d95c09f877sm5948737pjb.35.2022.06.13.19.48.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 19:48:04 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 09:48:01 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/247] 5.15.47-rc1 review
-Message-ID: <Yqf24Y5Fz+LOrVX9@debian.me>
-References: <20220613094922.843438024@linuxfoundation.org>
+        Mon, 13 Jun 2022 22:57:12 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A2F3F30F;
+        Mon, 13 Jun 2022 19:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655174892; x=1686710892;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=M+StXMWyCAAfWauzjypvDNrcBxLtK9qkd7YfDFZsNWE=;
+  b=Yf7u7lUlKYwFqfXWS8xWFHP//kh9jd0wRw+tO4IueSpzLIKJOaXgr5Mc
+   VBI+9Ek873tHQ+sT9mKYKH+VXvhM7FZ7bN/3CYankQUxqZpb36G4G34cS
+   kQ3iMhlOZkXx9kYuVOABAByXMXBB/RMMDFusJfRpD/bw1x5CCFPhADFwP
+   qG47ZIlU8VowSZ6h9yNxLTmJUK6fRTMO0VfdbKcgSad1fbdAe9AfHPncE
+   7C9RCjXy1VQbdpoNc5lQJCnmL/CYOAE0BcdwYC6x+mOmTTUMekJ/g57af
+   OeDuFpjnyDxe3z201rC9FNHTV9FpYuZSXRnCIc3IiRnibfeC3aIoNF6My
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="340151200"
+X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
+   d="scan'208";a="340151200"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 19:48:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
+   d="scan'208";a="673618649"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 Jun 2022 19:48:10 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o0wbB-000LNr-JZ;
+        Tue, 14 Jun 2022 02:48:09 +0000
+Date:   Tue, 14 Jun 2022 10:48:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Micah Morton <mortonm@chromium.org>,
+        linux-security-module@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, keescook@chromium.org, jmorris@namei.org,
+        serge@hallyn.com, linux-kernel@vger.kernel.org,
+        Micah Morton <mortonm@chromium.org>
+Subject: Re: [PATCH 1/2] security: Add LSM hook to setgroups() syscall
+Message-ID: <202206141053.xW4ze6oP-lkp@intel.com>
+References: <20220613202807.447694-1-mortonm@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220613094922.843438024@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220613202807.447694-1-mortonm@chromium.org>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 12:08:22PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.47 release.
-> There are 247 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+Hi Micah,
 
-Successfully cross-compiled for arm (multi_v7_defconfig, GCC 12.1.0,
-ARMv7 with neon FPU) and arm64 (bcm2711_defconfig, GCC 12.1.0).
+I love your patch! Yet something to improve:
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+[auto build test ERROR on linus/master]
+[also build test ERROR on jmorris-security/next-testing kees/for-next/pstore v5.19-rc2 next-20220610]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Micah-Morton/security-Add-LSM-hook-to-setgroups-syscall/20220614-050341
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220614/202206141053.xW4ze6oP-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/b21cba6f759a2a60439de4d0f85323ed745b3ade
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Micah-Morton/security-Add-LSM-hook-to-setgroups-syscall/20220614-050341
+        git checkout b21cba6f759a2a60439de4d0f85323ed745b3ade
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All error/warnings (new ones prefixed by >>):
+
+   kernel/groups.c: In function 'set_current_groups':
+>> kernel/groups.c:143:13: warning: assignment discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+     143 |         old = current_cred();
+         |             ^
+>> kernel/groups.c:147:9: error: 'retval' undeclared (first use in this function)
+     147 |         retval = security_task_fix_setgroups(new, old);
+         |         ^~~~~~
+   kernel/groups.c:147:9: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +/retval +147 kernel/groups.c
+
+   126	
+   127	/**
+   128	 * set_current_groups - Change current's group subscription
+   129	 * @group_info: The group list to impose
+   130	 *
+   131	 * Validate a group subscription and, if valid, impose it upon current's task
+   132	 * security record.
+   133	 */
+   134	int set_current_groups(struct group_info *group_info)
+   135	{
+   136		struct cred *new;
+   137		struct cred *old;
+   138	
+   139		new = prepare_creds();
+   140		if (!new)
+   141			return -ENOMEM;
+   142	
+ > 143		old = current_cred();
+   144	
+   145		set_groups(new, group_info);
+   146	
+ > 147		retval = security_task_fix_setgroups(new, old);
+   148		if (retval < 0)
+   149			goto error;
+   150	
+   151		return commit_creds(new);
+   152	
+   153	error:
+   154		abort_creds(new);
+   155		return retval;
+   156	}
+   157	
 
 -- 
-An old man doll... just what I always wanted! - Clara
+0-DAY CI Kernel Test Service
+https://01.org/lkp

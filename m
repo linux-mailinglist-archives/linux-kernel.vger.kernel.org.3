@@ -2,154 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4D154B32A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE61C54B335
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343960AbiFNO1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46154 "EHLO
+        id S243479AbiFNO31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:29:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343755AbiFNO1d (ORCPT
+        with ESMTP id S1349328AbiFNO2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:27:33 -0400
-Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7548327FC7;
-        Tue, 14 Jun 2022 07:27:23 -0700 (PDT)
-Received: from pro2.mail.ovh.net (unknown [10.108.20.7])
-        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id 8076E245708;
-        Tue, 14 Jun 2022 14:27:22 +0000 (UTC)
-Received: from localhost.localdomain (88.161.25.233) by DAG1EX2.emp2.local
- (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Tue, 14 Jun
- 2022 16:27:21 +0200
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-To:     <pavel@ucw.cz>, <krzk+dt@kernel.org>, <andy.shevchenko@gmail.com>
-CC:     <robh+dt@kernel.org>, <linux-leds@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Subject: [PATCH v4 3/3] leds: tlc5925: Add support for non blocking operations
-Date:   Tue, 14 Jun 2022 16:27:04 +0200
-Message-ID: <20220614142704.155496-4-jjhiblot@traphandler.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220614142704.155496-1-jjhiblot@traphandler.com>
-References: <20220614142704.155496-1-jjhiblot@traphandler.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [88.161.25.233]
-X-ClientProxiedBy: CAS2.emp2.local (172.16.1.2) To DAG1EX2.emp2.local
- (172.16.2.2)
-X-Ovh-Tracer-Id: 11153727430547618267
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudduledgjeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeduteevleevvefggfdvueffffejhfehheeuiedtgedtjeeghfehueduudegfeefueenucfkpheptddrtddrtddrtddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmoheftddtge
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 14 Jun 2022 10:28:24 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D3AF34BBE;
+        Tue, 14 Jun 2022 07:28:22 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id 99921C009; Tue, 14 Jun 2022 16:28:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1655216900; bh=yAoaM3WVMZZxJ+LV3cWyu5SL2IaFaK4FrSuNs/YyNhQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Fe26ntZMxrht4o7gA1fYpW51vtB2R+rnoapoPPwL38kNO4flg2zegOLVRaZCPncjp
+         R+1hKVow633DVXnW2rqqRk5wKLslIrGjXpPDWCNB2VwwyZrwxzrhpXHUnS/rV7r44O
+         tHUDUX+oVCSGSkEPbcRTXS/hKhGJLbNkSHuTym1UUXXwiwdaYk7DVrcAcOFuUhzqbl
+         B+h9PPWJ+RljxRRXmTvhX3f6sxwgrIEPQD/b/rnzi4Gjm2Ly6zuvw9YaE+ZjVW31i0
+         TGJx0NTeswofPTruqC6D9+kvhN33QzRIYdmi2riPikVigkQ7Ae/qliOYJ7952R7GYz
+         I5KF96AdkBKCQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 50271C009;
+        Tue, 14 Jun 2022 16:28:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1655216899; bh=yAoaM3WVMZZxJ+LV3cWyu5SL2IaFaK4FrSuNs/YyNhQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=4DP1tVmKf3k7VrOCUmSKlygxvN8WdSF+OPArFv5SIbtqUq8qT8OS/78jU+cc1PKLo
+         4p7cmLbE+0Ewwb2jmiLTA98Mh+4EeIMdvhrp2e+kKwcBTTSS8Ndi6ayIspJV/sRHVc
+         hI4LE+jPn9hYngfnkmohMMNku0G9LfpeMe0y62bAiaFZcHg54LUPV1v7alG8wZe60p
+         r5wcJKnrUi+V8QMdX6RTn9mggIbTIIjwDydMsJoHPdNIJIbBleobXuSXh67OO9ULC8
+         cQK49TUYg5vcmELBWRK3GzvVzmdYjpkpsvvqKyGabd97GLYviNOhMXCFz3TahHt8me
+         METx1cr+9RrmQ==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 76306788;
+        Tue, 14 Jun 2022 14:28:12 +0000 (UTC)
+Date:   Tue, 14 Jun 2022 23:27:57 +0900
+From:   Dominique Martinet <asmadeus@codewreck.org>
+To:     Christian Schoenebeck <linux_oss@crudebyte.com>
+Cc:     Tyler Hicks <tyhicks@linux.microsoft.com>,
+        Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH v2 04/06] 9p fid refcount: add p9_fid_get/put wrappers
+Message-ID: <Yqia7Xr9WAgtZ6zr@codewreck.org>
+References: <20220612085330.1451496-5-asmadeus@codewreck.org>
+ <20220612234557.1559736-1-asmadeus@codewreck.org>
+ <7044959.MN0D2SvuAq@silver>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7044959.MN0D2SvuAq@silver>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Settings multiple LEDs in a row can be a slow operation because of the
-time required to acquire the bus and prepare the transfer.
-And, in most cases, it is not required that the operation is synchronous.
 
-Implementing the non-blocking brightness_set() for such cases.
-A work queue is used to perform the actual SPI transfer.
+Thanks for the reviews :)
 
-The blocking method is still available in case someone needs to perform
-this operation synchronously (ie by calling led_set_brightness_sync()).
+Christian Schoenebeck wrote on Tue, Jun 14, 2022 at 03:55:39PM +0200:
+> On Montag, 13. Juni 2022 01:45:54 CEST Dominique Martinet wrote:
+> > I was recently reminded that it is not clear that p9_client_clunk()
+> > was actually just decrementing refcount and clunking only when that
+> > reaches zero: make it clear through a set of helpers.
+> > 
+> > This will also allow instrumenting refcounting better for debugging
+> > next patch, which is the reason these are not defined as static inline:
+> > we won't be able to add trace events there...
+> 
+> Looks like you forgot to adjust the commit log sentence here, ...
+> 
+> > Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+> > ---
+> > v1 -> v2: p9_fid_get/put are now static inline in .h
+> 
+> ... as the two functions are in fact static inlined in this v2 now.
 
-Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
----
- drivers/leds/leds-tlc5925.c | 39 +++++++++++++++++++++++++++++++++++--
- 1 file changed, 37 insertions(+), 2 deletions(-)
+Good point, will fix!
 
-diff --git a/drivers/leds/leds-tlc5925.c b/drivers/leds/leds-tlc5925.c
-index eeab1138ba2c..2c083b04d7f6 100644
---- a/drivers/leds/leds-tlc5925.c
-+++ b/drivers/leds/leds-tlc5925.c
-@@ -14,6 +14,7 @@
- #include <linux/leds.h>
- #include <linux/module.h>
- #include <linux/property.h>
-+#include <linux/workqueue.h>
- #include <linux/spi/spi.h>
- 
- struct single_led_priv {
-@@ -24,10 +25,24 @@ struct single_led_priv {
- struct tlc5925_leds_priv {
- 	int max_num_leds;
- 	unsigned long *state;
-+	struct spi_device *spi;
-+	struct work_struct xmit_work;
- 	struct single_led_priv leds[];
- };
- 
--static int tlc5925_brightness_set_blocking(struct led_classdev *cdev,
-+static int xmit(struct tlc5925_leds_priv *priv)
-+{
-+	return spi_write(priv->spi, priv->state, BITS_TO_BYTES(priv->max_num_leds));
-+}
-+
-+static void xmit_work(struct work_struct *ws)
-+{
-+	struct tlc5925_leds_priv *priv =
-+		container_of(ws, struct tlc5925_leds_priv, xmit_work);
-+	xmit(priv);
-+};
-+
-+static void tlc5925_brightness_set(struct led_classdev *cdev,
- 					    enum led_brightness brightness)
- {
- 	struct spi_device *spi = to_spi_device(cdev->dev->parent);
-@@ -40,9 +55,25 @@ static int tlc5925_brightness_set_blocking(struct led_classdev *cdev,
- 	// assign_bit() is atomic, no need for lock
- 	assign_bit(index, priv->state, !!brightness);
- 
--	return spi_write(spi, priv->state, BITS_TO_BYTES(priv->max_num_leds));
-+	schedule_work(&priv->xmit_work);
- }
- 
-+static int tlc5925_brightness_set_blocking(struct led_classdev *cdev,
-+					    enum led_brightness brightness)
-+{
-+	struct spi_device *spi = to_spi_device(cdev->dev->parent);
-+	struct tlc5925_leds_priv *priv = spi_get_drvdata(spi);
-+	struct single_led_priv *led = container_of(cdev,
-+						   struct single_led_priv,
-+						   cdev);
-+	int index = led->idx;
-+
-+	// assign_bit() is atomic, no need for lock
-+	assign_bit(index, priv->state, !!brightness);
-+
-+	cancel_work_sync(&priv->xmit_work);
-+	return xmit(priv);
-+}
- 
- static int tlc5925_probe(struct spi_device *spi)
- {
-@@ -92,6 +123,9 @@ static int tlc5925_probe(struct spi_device *spi)
- 	if (!priv->state)
- 		return -ENOMEM;
- 
-+	priv->spi = spi;
-+	INIT_WORK(&priv->xmit_work, xmit_work);
-+
- 	priv->max_num_leds = max_num_leds;
- 
- 	device_for_each_child_node(dev, child) {
-@@ -112,6 +146,7 @@ static int tlc5925_probe(struct spi_device *spi)
- 		cdev = &(priv->leds[count].cdev);
- 		cdev->brightness = LED_OFF;
- 		cdev->max_brightness = 1;
-+		cdev->brightness_set = tlc5925_brightness_set;
- 		cdev->brightness_set_blocking = tlc5925_brightness_set_blocking;
- 
- 		ret = devm_led_classdev_register_ext(dev, cdev, &init_data);
+
+> > diff --git a/include/net/9p/client.h b/include/net/9p/client.h
+> > index ec1d1706f43c..9fd38d674057 100644
+> > --- a/include/net/9p/client.h
+> > +++ b/include/net/9p/client.h
+> > @@ -237,6 +237,24 @@ static inline int p9_req_try_get(struct p9_req_t *r)
+> > 
+> >  int p9_req_put(struct p9_req_t *r);
+> > 
+> > +static inline struct p9_fid *p9_fid_get(struct p9_fid *fid)
+> > +{
+> 
+> Isn't this missing a check here?
+> 
+>     if (!fid)
+>         return NULL;
+
+It doesn't really make sense to get a null or error fid: whatever wants
+to take a ref will error out first, so this didn't get a check unlike
+put, which is nice to use without `if (fid && !IS_ERR(fid)) put(fid)`
+all the time.
+
+
+> 
+> > +	refcount_inc(&fid->count);
+> > +
+> > +	return fid;
+> > +}
+> > +
+> > +static inline int p9_fid_put(struct p9_fid *fid)
+> > +{
+> > +	if (!fid || IS_ERR(fid))
+> > +		return 0;
+> > +
+> > +	if (!refcount_dec_and_test(&fid->count))
+> > +		return 0;
+> > +
+> > +	return p9_client_clunk(fid);
+> > +}
+> > +
+> 
+> I don't know the common symbol name patterns in the Linux kernel for acquiring
+> and releasing counted references are (if there is a common one at all), but I
+> think those two functions deserve a short API comment to make it clear they
+> belong together, i.e. that a p9_fid_get() call should be paired with
+> subsequent p9_fid_put(). It's maybe just nitpicking, as the code is quite
+> short and probably already speaks for itself.
+
+I guess "but none of the other 50 functions do!" isn't a good reason not
+to start, but it sure was enough to make me think it'd be silly to
+document p9_fid_get/put right next to p9_req_get/put that don't have
+their comment...
+Better late than never though, I'll add something in v3.
+
+As for common names you can see get/put in various places (kref_get/put,
+of_node_get/put, pm_runime*_get/put) so I guess it's common enough.
+
+> On the long-term I could imagine using automated, destructor based
+> p9_fid_put() calls when leaving a block/function scope. That would simplify
+> code a load and avoid leaks in future.
+
+__attribute__(__cleanup__()) is nice but I've not seen any in linux
+(looking again kcsan and locking selftests seem to be using it, I didn't
+think it was allowed)...
+Just making it clear goes a long way though, my last patch is a good
+first step (inconditionally put'ing all fids at the end of functions and
+NULLing fid pointers when stashing it in inode is pretty much what we'd
+be doing if there were destructors), but I feel it's still not clear
+which functions give a new ref or not cf. walk that can reuse the same
+fid depending on its parameters.
+
+I think making that clear would be a good next step for cleanup next
+time there are problems and/or someone has time for it...
+(But there are plenty of interesting things to check first, like the
+performance regression with recent fscache perhaps...)
+
 -- 
-2.25.1
-
+Dominique

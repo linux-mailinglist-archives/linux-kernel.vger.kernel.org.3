@@ -2,71 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC0D54B585
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A20054B5A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357029AbiFNQMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
+        id S1357065AbiFNQO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356991AbiFNQMX (ORCPT
+        with ESMTP id S1357083AbiFNQNm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:12:23 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B571178
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:12:21 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id w13so5578347qts.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:12:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3jBqBxMB7fqDN551D5iAxDom4QaYI7W0sqRlfDkpCc8=;
-        b=kmuz4JLangHbni60CUWT2xTGrO5G1qMmeyyTNxwO2GAUS9Zo/A9AGz+Js0L0ZpUj5S
-         0dymZ5D4Abl1SKY7smIhJSGpq812JzZyGyg6gnJM1hsTARM41oQjGdw7JCuhIVYJLdIu
-         v8njo7+6ylA1Lg21LW6b4mxnwduGTlBjtKTpMvSTMEd7wp2iesqCVWtJqcyN5sgVS1yh
-         gnkly6txocbpDtWykSVEi0Qwc4YRgXPc1zweFl+WDIw3wIiY2UHjCNIvyXQmpCgd6/cq
-         P2Iyg0v1FvnNz18zXmByvrNB6z5nC3aSUlRofDZHgpUR3e2ovDY2nezeSOgVN0vQ1lcO
-         bm+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3jBqBxMB7fqDN551D5iAxDom4QaYI7W0sqRlfDkpCc8=;
-        b=bMXofIR+1y98eCIBThCEyl4f4YNfFxkxay17qdQC48vmAizzLFLzDimFEIUhCAGZ/a
-         O0NCPyHGTV5yLOCNHIcZylqLVPlL5Ub5zp1K7W+8gm76Y//LtyWSay3ig35Xxf+uIgfj
-         0WTkNvdUlbcOaEzV68UOxr/Ts/SdsKmbvB8tEPi3gzWZ8wPfa9zopB/jAnCY9FTWwZo/
-         HKeorEMo1KAFjH3udLRqcxx5s83yuTHExDk+OOB6elY5hG/cBlOR8VS85ORIRR3kYvhH
-         8MKU2J/7BWerPcSxvgeuMy0RNU6+rvDdDpdDKJkU4PLpsGyFNUH6Sxm1QxxhT16pbok/
-         qPrg==
-X-Gm-Message-State: AOAM533iorIVHUqsYI5Jy3ofiy759iram7zGANe05DWfQMsxW+WdYRfA
-        8ew5uRJn2ARNrHjCqybYCvDw+A==
-X-Google-Smtp-Source: ABdhPJzCveOrz66ys+OxsOHkdqq6dB46agmi3j4eoqqBAXFFpNzvKeU1zTejfZB/KOvowZ4r4C33og==
-X-Received: by 2002:a05:622a:54a:b0:305:3186:1fe9 with SMTP id m10-20020a05622a054a00b0030531861fe9mr4804128qtx.60.1655223140435;
-        Tue, 14 Jun 2022 09:12:20 -0700 (PDT)
-Received: from fedora ([23.82.142.207])
-        by smtp.gmail.com with ESMTPSA id cj19-20020a05622a259300b00304f6f4199dsm7237283qtb.65.2022.06.14.09.12.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 09:12:20 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 12:12:18 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] iio: adc: stx104: Implement and utilize register
- structures
-Message-ID: <YqizYqqu3tyzRUJ3@fedora>
-References: <cover.1654118389.git.william.gray@linaro.org>
- <a2dca9435f7f1f727c696a1faa0ab9e27927f9f3.1654118389.git.william.gray@linaro.org>
- <20220614122248.7f257556@jic23-huawei>
+        Tue, 14 Jun 2022 12:13:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1CEC37A0E;
+        Tue, 14 Jun 2022 09:13:38 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0EB231691;
+        Tue, 14 Jun 2022 09:13:38 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.41.154])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4946B3F66F;
+        Tue, 14 Jun 2022 09:13:20 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 17:13:16 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
+        srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
+        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
+        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH 15/36] cpuidle,cpu_pm: Remove RCU fiddling from
+ cpu_pm_{enter,exit}()
+Message-ID: <YqiznJL7qB9uSQ9c@FVFF77S0Q05N>
+References: <20220608142723.103523089@infradead.org>
+ <20220608144516.871305980@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zKhNy45o+JagUNi2"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220614122248.7f257556@jic23-huawei>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220608144516.871305980@infradead.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,248 +100,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 08, 2022 at 04:27:38PM +0200, Peter Zijlstra wrote:
+> All callers should still have RCU enabled.
 
---zKhNy45o+JagUNi2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+IIUC with that true we should be able to drop the RCU_NONIDLE() from
+drivers/perf/arm_pmu.c, as we only needed that for an invocation via a pm
+notifier.
 
-On Tue, Jun 14, 2022 at 12:22:48PM +0100, Jonathan Cameron wrote:
-> On Mon,  6 Jun 2022 10:15:17 -0400
-> William Breathitt Gray <william.gray@linaro.org> wrote:
->=20
-> > Reduce magic numbers and improve code readability by implementing and
-> > utilizing named register data structures.
-> >=20
-> > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
->=20
-> A few comments inline, but looks fine to me otherwise.
->=20
-> Jonathan
->=20
-> > ---
-> >  drivers/iio/adc/stx104.c | 70 +++++++++++++++++++++++++++-------------
-> >  1 file changed, 47 insertions(+), 23 deletions(-)
-> >=20
-> > diff --git a/drivers/iio/adc/stx104.c b/drivers/iio/adc/stx104.c
-> > index 7552351bfed9..7656b363e281 100644
-> > --- a/drivers/iio/adc/stx104.c
-> > +++ b/drivers/iio/adc/stx104.c
-> > @@ -16,6 +16,7 @@
-> >  #include <linux/module.h>
-> >  #include <linux/moduleparam.h>
-> >  #include <linux/spinlock.h>
-> > +#include <linux/types.h>
-> > =20
-> >  #define STX104_OUT_CHAN(chan) {				\
-> >  	.type =3D IIO_VOLTAGE,				\
-> > @@ -44,14 +45,36 @@ static unsigned int num_stx104;
-> >  module_param_hw_array(base, uint, ioport, &num_stx104, 0);
-> >  MODULE_PARM_DESC(base, "Apex Embedded Systems STX104 base addresses");
-> > =20
-> > +/**
-> > + * struct stx104_reg - device register structure
-> > + * @ad:		ADC Data
-> > + * @achan:	ADC Channel
-> > + * @dio:	Digital I/O
-> > + * @dac:	DAC Channels
-> > + * @cir_asr:	Clear Interrupts and ADC Status
-> > + * @acr:	ADC Control
-> > + * @pccr_fsh:	Pacer Clock Control and FIFO Status MSB
-> > + * @acfg:	ADC Configuration
-> > + */
-> > +struct stx104_reg {
-> > +	u16 ad;
-> > +	u8 achan;
-> > +	u8 dio;
-> > +	u16 dac[2];
-> > +	u8 cir_asr;
-> > +	u8 acr;
-> > +	u8 pccr_fsh;
-> > +	u8 acfg;
-> > +};
-> > +
-> >  /**
-> >   * struct stx104_iio - IIO device private data structure
-> >   * @chan_out_states:	channels' output states
-> > - * @base:		base port address of the IIO device
-> > + * @reg:		I/O address offset for the device registers
-> >   */
-> >  struct stx104_iio {
-> >  	unsigned int chan_out_states[STX104_NUM_OUT_CHAN];
-> > -	void __iomem *base;
-> > +	struct stx104_reg __iomem *reg;
-> >  };
-> > =20
-> >  /**
-> > @@ -64,7 +87,7 @@ struct stx104_iio {
-> >  struct stx104_gpio {
-> >  	struct gpio_chip chip;
-> >  	spinlock_t lock;
-> > -	void __iomem *base;
-> > +	u8 __iomem *base;
-> >  	unsigned int out_state;
-> >  };
-> > =20
-> > @@ -72,6 +95,7 @@ static int stx104_read_raw(struct iio_dev *indio_dev,
-> >  	struct iio_chan_spec const *chan, int *val, int *val2, long mask)
-> >  {
-> >  	struct stx104_iio *const priv =3D iio_priv(indio_dev);
-> > +	struct stx104_reg __iomem *const reg =3D priv->reg;
-> >  	unsigned int adc_config;
-> >  	int adbu;
-> >  	int gain;
-> > @@ -79,7 +103,7 @@ static int stx104_read_raw(struct iio_dev *indio_dev,
-> >  	switch (mask) {
-> >  	case IIO_CHAN_INFO_HARDWAREGAIN:
-> >  		/* get gain configuration */
-> > -		adc_config =3D ioread8(priv->base + 11);
-> > +		adc_config =3D ioread8(&reg->acfg);
-> >  		gain =3D adc_config & 0x3;
-> > =20
-> >  		*val =3D 1 << gain;
-> > @@ -91,24 +115,24 @@ static int stx104_read_raw(struct iio_dev *indio_d=
-ev,
-> >  		}
-> > =20
-> >  		/* select ADC channel */
-> > -		iowrite8(chan->channel | (chan->channel << 4), priv->base + 2);
-> > +		iowrite8(chan->channel | (chan->channel << 4), &reg->achan);
-> > =20
-> >  		/* trigger ADC sample capture and wait for completion */
-> > -		iowrite8(0, priv->base);
-> > -		while (ioread8(priv->base + 8) & BIT(7));
-> > +		iowrite8(0, &reg->ad);
->=20
-> Curious - 8 bit write to a 16 bit address?  Maybe worth a comment
-> on why.
+I should be able to give that a spin on some hardware.
 
-This address doubles as the 8-bit Software Strobe Register; writing an
-8-bit value to this address will initiate an ADC sample capture. I'll
-rename this member to ssr_ad and add some comments to make this more
-explicit.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  kernel/cpu_pm.c |    9 ---------
+>  1 file changed, 9 deletions(-)
+> 
+> --- a/kernel/cpu_pm.c
+> +++ b/kernel/cpu_pm.c
+> @@ -30,16 +30,9 @@ static int cpu_pm_notify(enum cpu_pm_eve
+>  {
+>  	int ret;
+>  
+> -	/*
+> -	 * This introduces a RCU read critical section, which could be
+> -	 * disfunctional in cpu idle. Copy RCU_NONIDLE code to let RCU know
+> -	 * this.
+> -	 */
+> -	rcu_irq_enter_irqson();
+>  	rcu_read_lock();
+>  	ret = raw_notifier_call_chain(&cpu_pm_notifier.chain, event, NULL);
+>  	rcu_read_unlock();
+> -	rcu_irq_exit_irqson();
 
->=20
-> > +		while (ioread8(&reg->cir_asr) & BIT(7));
-> > =20
-> > -		*val =3D ioread16(priv->base);
-> > +		*val =3D ioread16(&reg->ad);
-> >  		return IIO_VAL_INT;
-> >  	case IIO_CHAN_INFO_OFFSET:
-> >  		/* get ADC bipolar/unipolar configuration */
-> > -		adc_config =3D ioread8(priv->base + 11);
-> > +		adc_config =3D ioread8(&reg->acfg);
-> >  		adbu =3D !(adc_config & BIT(2));
-> > =20
-> >  		*val =3D -32768 * adbu;
-> >  		return IIO_VAL_INT;
-> >  	case IIO_CHAN_INFO_SCALE:
-> >  		/* get ADC bipolar/unipolar and gain configuration */
-> > -		adc_config =3D ioread8(priv->base + 11);
-> > +		adc_config =3D ioread8(&reg->acfg);
-> >  		adbu =3D !(adc_config & BIT(2));
-> >  		gain =3D adc_config & 0x3;
-> > =20
-> > @@ -130,16 +154,16 @@ static int stx104_write_raw(struct iio_dev *indio=
-_dev,
-> >  		/* Only four gain states (x1, x2, x4, x8) */
-> >  		switch (val) {
-> >  		case 1:
-> > -			iowrite8(0, priv->base + 11);
-> > +			iowrite8(0, &priv->reg->acfg);
-> >  			break;
-> >  		case 2:
-> > -			iowrite8(1, priv->base + 11);
-> > +			iowrite8(1, &priv->reg->acfg);
-> >  			break;
-> >  		case 4:
-> > -			iowrite8(2, priv->base + 11);
-> > +			iowrite8(2, &priv->reg->acfg);
-> >  			break;
-> >  		case 8:
-> > -			iowrite8(3, priv->base + 11);
-> > +			iowrite8(3, &priv->reg->acfg);
-> >  			break;
-> >  		default:
-> >  			return -EINVAL;
-> > @@ -153,7 +177,7 @@ static int stx104_write_raw(struct iio_dev *indio_d=
-ev,
-> >  				return -EINVAL;
-> > =20
-> >  			priv->chan_out_states[chan->channel] =3D val;
-> > -			iowrite16(val, priv->base + 4 + 2 * chan->channel);
-> > +			iowrite16(val, priv->reg->dac + chan->channel);
-> Perhaps for consistency with below go with
-> &priv->reg->dac[chan->channels];
+To make this easier to debug, is it worth adding an assertion that RCU is
+watching here? e.g.
 
-Ack.
+	RCU_LOCKDEP_WARN(!rcu_is_watching(),
+			 "cpu_pm_notify() used illegally from EQS");
 
-William Breathitt Gray
+>  
+>  	return notifier_to_errno(ret);
+>  }
+> @@ -49,11 +42,9 @@ static int cpu_pm_notify_robust(enum cpu
+>  	unsigned long flags;
+>  	int ret;
+>  
+> -	rcu_irq_enter_irqson();
+>  	raw_spin_lock_irqsave(&cpu_pm_notifier.lock, flags);
+>  	ret = raw_notifier_call_chain_robust(&cpu_pm_notifier.chain, event_up, event_down, NULL);
+>  	raw_spin_unlock_irqrestore(&cpu_pm_notifier.lock, flags);
+> -	rcu_irq_exit_irqson();
 
-> > =20
-> >  			return 0;
-> >  		}
-> > @@ -307,15 +331,15 @@ static int stx104_probe(struct device *dev, unsig=
-ned int id)
-> >  	}
-> > =20
-> >  	priv =3D iio_priv(indio_dev);
-> > -	priv->base =3D devm_ioport_map(dev, base[id], STX104_EXTENT);
-> > -	if (!priv->base)
-> > +	priv->reg =3D devm_ioport_map(dev, base[id], STX104_EXTENT);
-> > +	if (!priv->reg)
-> >  		return -ENOMEM;
-> > =20
-> >  	indio_dev->info =3D &stx104_info;
-> >  	indio_dev->modes =3D INDIO_DIRECT_MODE;
-> > =20
-> >  	/* determine if differential inputs */
-> > -	if (ioread8(priv->base + 8) & BIT(5)) {
-> > +	if (ioread8(&priv->reg->cir_asr) & BIT(5)) {
-> >  		indio_dev->num_channels =3D ARRAY_SIZE(stx104_channels_diff);
-> >  		indio_dev->channels =3D stx104_channels_diff;
-> >  	} else {
-> > @@ -326,14 +350,14 @@ static int stx104_probe(struct device *dev, unsig=
-ned int id)
-> >  	indio_dev->name =3D dev_name(dev);
-> > =20
-> >  	/* configure device for software trigger operation */
-> > -	iowrite8(0, priv->base + 9);
-> > +	iowrite8(0, &priv->reg->acr);
-> > =20
-> >  	/* initialize gain setting to x1 */
-> > -	iowrite8(0, priv->base + 11);
-> > +	iowrite8(0, &priv->reg->acfg);
-> > =20
-> >  	/* initialize DAC output to 0V */
-> > -	iowrite16(0, priv->base + 4);
-> > -	iowrite16(0, priv->base + 6);
-> > +	iowrite16(0, &priv->reg->dac[0]);
-> > +	iowrite16(0, &priv->reg->dac[1]);
-> > =20
-> >  	stx104gpio->chip.label =3D dev_name(dev);
-> >  	stx104gpio->chip.parent =3D dev;
-> > @@ -348,7 +372,7 @@ static int stx104_probe(struct device *dev, unsigne=
-d int id)
-> >  	stx104gpio->chip.get_multiple =3D stx104_gpio_get_multiple;
-> >  	stx104gpio->chip.set =3D stx104_gpio_set;
-> >  	stx104gpio->chip.set_multiple =3D stx104_gpio_set_multiple;
-> > -	stx104gpio->base =3D priv->base + 3;
-> > +	stx104gpio->base =3D &priv->reg->dio;
-> >  	stx104gpio->out_state =3D 0x0;
-> > =20
-> >  	spin_lock_init(&stx104gpio->lock);
->=20
 
---zKhNy45o+JagUNi2
-Content-Type: application/pgp-signature; name="signature.asc"
+... and likewise here?
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Mark.
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYqizYgAKCRC1SFbKvhIj
-K5vmAQChcLKhfi0sWCfjC9SAoN/3WVMynSdCNnQvj9Mwk3HMlAEA5Y93Y4cM7zff
-eNDbkKot5hO57G8W/Qr5pQKQbQ81uQk=
-=1gzP
------END PGP SIGNATURE-----
-
---zKhNy45o+JagUNi2--
+>  
+>  	return notifier_to_errno(ret);
+>  }
+> 
+> 

@@ -2,66 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0304354BA93
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:33:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF8B654BAA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238211AbiFNTdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 15:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43196 "EHLO
+        id S235275AbiFNTh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 15:37:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiFNTdN (ORCPT
+        with ESMTP id S242518AbiFNTh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 15:33:13 -0400
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B9819F8D;
-        Tue, 14 Jun 2022 12:33:11 -0700 (PDT)
-Received: by mail-pj1-f51.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso12745973pjl.3;
-        Tue, 14 Jun 2022 12:33:11 -0700 (PDT)
+        Tue, 14 Jun 2022 15:37:26 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0C7DDB3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:37:24 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so8127184pjl.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=erLQaoKxuSkbFQJCjbArAz2RxzePc18ZCmvI1Acodfc=;
+        b=gwIcxv2ZkrWiyyqqxUQ7BYU2iMzh2Uu7SS53hpOqXO+sktoOoE+UkDlBhB8ZJwsSUB
+         mkBhtWeYa2JVH/gboOnzRM4Q0vII1mtJB4WecYIkN2OiabC2GFxNm4XwnizW10A/7z5i
+         jKgh688hQYwK43Eqf4vfvqcdJ74D4OUggEpk8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=0yuY33WdxMB76iynhvTSZPcdcuymbepOOB6v4k/PQOY=;
-        b=jbB+qjSucecXj/HEgCIw1t9EsXmppQ+DavJNYSpUNrariNuH3b/MN6vnNGUdupzrv7
-         Ts0oisAV493ABkX7o5r7XccRpuoTotG9aYWaLeuZGI5NEEZXg5xfH8Etn/oGwBlELKIw
-         TwFDZQIkZR1UsNS3pH4oJd13pgkrt18JLVnTkjk4bOcTyHifJQa2WUIi1z0Kl8sYWRpJ
-         MgV5Npe92Yhbs0SFQkMYx1XllUWHvxta87xXoEo8DX4zVvAgCFprz/61JCFbRLimYkZm
-         0TJQNlQbQOd+0rkt+/RR5M9wFXZg/BRG7CbluA+SR9ofD3E8XaLaWoUvQr6afvSgr/zb
-         jlJw==
-X-Gm-Message-State: AJIora8eDAXkXliL2whctKXAYlQ8Lf1nlHvLBa3mSBrA2fNN3yX/Z7Wy
-        N/cfMLZaKfOSc3sJ38NCO019JbLPqIk=
-X-Google-Smtp-Source: AGRyM1s5w76ZfqYj/+26pMyhfynVA754uE8tmVNVmVHD3j64emOukGeeDvplcoiOLZ4wwUSbu4tMLA==
-X-Received: by 2002:a17:90a:e50c:b0:1ea:14c1:2236 with SMTP id t12-20020a17090ae50c00b001ea14c12236mr6274836pjy.2.1655235190627;
-        Tue, 14 Jun 2022 12:33:10 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:ab60:e1ea:e2eb:c1b6? ([2620:15c:211:201:ab60:e1ea:e2eb:c1b6])
-        by smtp.gmail.com with ESMTPSA id kv18-20020a17090b169200b001ea629a431bsm7969640pjb.8.2022.06.14.12.33.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 12:33:09 -0700 (PDT)
-Message-ID: <b61d3687-70ea-1ab7-63e1-44e381d36012@acm.org>
-Date:   Tue, 14 Jun 2022 12:33:07 -0700
+        bh=erLQaoKxuSkbFQJCjbArAz2RxzePc18ZCmvI1Acodfc=;
+        b=5WS5MZaH1NImkeqtWvkch/Oxj9yV5UPRbL11hDTVmIQVrUkBpJ5iF9yo/1bv2jqihJ
+         T8rrhX23Xv8/cKl5K5VTeHbTjua5yk+aEJVmP1HJCZ0gA0FCGFrpfPWKN/4byUXFB0Ny
+         DfvyyhzuQhXcNiM/74QZyWYHiGC4eoB9q5gCZ3MePnwZvq4M5YOLnVgFcTYW9BBXyKxm
+         8j4GwNZAK6dBx0ptMTmvfdps/OMMp4J2tp68EOsjTtyZ1Fbym5F/ZOKaDhYqt4thL2na
+         PAMXnJL2nSb19xmV3p78biYVb2kHbbvj5u1OofFHM2IS4mcw2Fr2fFFGeeyAeEp8jVnz
+         gMsA==
+X-Gm-Message-State: AJIora8vOs9O8WGUWIUgH/m5hTbrL91UW+rUQznIN2MxVTVsPZViaO3y
+        9mSJZ8ujn0GK2cOuIyUWDOyf0ZkJrwv1Ow==
+X-Google-Smtp-Source: AGRyM1ukACZsX6LKO6byQRo8pQtL1aqEYoysh1VxyBeJSKBmpasYdaf/LeSYWsTIrWoKhqaEP7m2Mw==
+X-Received: by 2002:a17:902:ef8f:b0:163:d61b:ec98 with SMTP id iz15-20020a170902ef8f00b00163d61bec98mr5759584plb.111.1655235444069;
+        Tue, 14 Jun 2022 12:37:24 -0700 (PDT)
+Received: from pmalani.c.googlers.com.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l21-20020a17090a409500b001df3a251cc2sm10014426pjg.4.2022.06.14.12.37.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 12:37:23 -0700 (PDT)
+From:   Prashant Malani <pmalani@chromium.org>
+To:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        Prashant Malani <pmalani@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS),
+        dri-devel@lists.freedesktop.org (open list:DRM DRIVERS),
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+Subject: [PATCH v3 0/7] usb: typec: Introduce typec-switch binding
+Date:   Tue, 14 Jun 2022 19:34:34 +0000
+Message-Id: <20220614193558.1163205-1-pmalani@chromium.org>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH RFC v2 02/18] scsi: core: Resurrect
- scsi_{get,free}_host_dev()
-Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>, axboe@kernel.dk,
-        damien.lemoal@opensource.wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, brking@us.ibm.com, hare@suse.de,
-        hch@lst.de
-Cc:     linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        chenxiang66@hisilicon.com
-References: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
- <1654770559-101375-3-git-send-email-john.garry@huawei.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <1654770559-101375-3-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,80 +88,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/9/22 03:29, John Garry wrote:
-> +/**
-> + * scsi_get_host_dev - Create a scsi_device that points to the host adapter itself
-                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-What does this mean? That part of the function description is not
-clear to me.
+This series introduces a binding for Type-C data lane switches. These
+control the routing and operating modes of USB Type-C data lanes based
+on the PD messaging from the Type-C port driver regarding connected
+peripherals.
 
-> + * @shost: Host that needs a scsi_device
-                               ^^^^^^^^^^^^^
-This is not detailed enough. Consider changing "a scsi_device" into
-"a scsi device for allocating reserved commands from".
+The first patch introduces a change to the Type-C mux class mode-switch
+matching code, while the second adds a config guard to a Type-C header.
+The next couple of patches introduce the new "typec-switch" binding as
+well as one user of it (the ANX7625 drm bridge).
 
-> + *
-> + * Lock status: None assumed.
-> + *
-> + * Returns:     The scsi_device or NULL
-> + *
-> + * Notes:
-> + *	Attach a single scsi_device to the Scsi_Host - this should
-> + *	be made to look like a "pseudo-device" that points to the
-> + *	HA itself.
-> + *
-> + *	Note - this device is not accessible from any high-level
-> + *	drivers (including generics), which is probably not
-> + *	optimal.  We can add hooks later to attach.
+The remaining patches add functionality to the anx7625 driver to
+register the mode-switches, as well as program its crosspoint
+switch depending on which Type-C port has a DisplayPort (DP) peripheral
+connected to it.
 
-The "which is probably not optimal. We can add hooks later to attach."
-part probably should be moved to the patch description.
+v2: https://lore.kernel.org/linux-usb/20220609181106.3695103-1-pmalani@chromium.org/
 
-> + */
-> +struct scsi_device *scsi_get_host_dev(struct Scsi_Host *shost)
-> +{
-> +	struct scsi_device *sdev = NULL;
-> +	struct scsi_target *starget;
-> +
-> +	mutex_lock(&shost->scan_mutex);
-> +	if (!scsi_host_scan_allowed(shost))
-> +		goto out;
-> +	starget = scsi_alloc_target(&shost->shost_gendev, 0, shost->this_id);
-                                                           ^^^^^^^^^^^^^^^^^^
-Is it guaranteed that this channel / id combination will not be used for
-any other SCSI device?
+Changes since v2:
+- Addressed review comments in typec_mux.h
+- Changed error print to only print when a device is actually listed in
+  DT.
+- Moved num_typec_switches check to beginning of function.
+- Picked up Reviewed-by and Tested-by tags from v2.
 
-What if shost->this_id == -1?
+Pin-Yen Lin (1):
+  drm/bridge: anx7625: Add typec_mux_set callback function
 
-> +	if (!starget)
-> +		goto out;
-> +
-> +	sdev = scsi_alloc_sdev(starget, 0, NULL);
-> +	if (sdev)
-> +		sdev->borken = 0;
-> +	else
-> +		scsi_target_reap(starget);
-> +	put_device(&starget->dev);
-> + out:
-> +	mutex_unlock(&shost->scan_mutex);
-> +	return sdev;
-> +}
-> +EXPORT_SYMBOL(scsi_get_host_dev);
+Prashant Malani (6):
+  usb: typec: mux: Allow muxes to specify mode-switch
+  usb: typec: mux: Add CONFIG guards for functions
+  dt-bindings: usb: Add Type-C switch binding
+  dt-bindings: drm/bridge: anx7625: Add mode-switch support
+  drm/bridge: anx7625: Register number of Type C switches
+  drm/bridge: anx7625: Register Type-C mode switches
 
-Elsewhere in the SCSI core "get..dev" means increment the reference count of
-a SCSI device. Maybe scsi_alloc_host_dev() is a better name?
+ .../display/bridge/analogix,anx7625.yaml      |  63 ++++++++
+ .../devicetree/bindings/usb/typec-switch.yaml |  74 +++++++++
+ drivers/gpu/drm/bridge/analogix/anx7625.c     | 148 ++++++++++++++++++
+ drivers/gpu/drm/bridge/analogix/anx7625.h     |  20 +++
+ drivers/usb/typec/mux.c                       |   8 +-
+ include/linux/usb/typec_mux.h                 |  44 +++++-
+ 6 files changed, 349 insertions(+), 8 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/usb/typec-switch.yaml
 
-> +/*
-> + * These two functions are used to allocate and free a pseudo device
-> + * which will connect to the host adapter itself rather than any
-> + * physical device.  You must deallocate when you are done with the
-> + * thing.  This physical pseudo-device isn't real and won't be available
-> + * from any high-level drivers.
-> + */
+-- 
+2.36.1.476.g0c4daa206d-goog
 
-Please keep function comments in .c files because that makes it more likely
-that the comment and the implementation will remain in sync.
-
-Thanks,
-
-Bart.

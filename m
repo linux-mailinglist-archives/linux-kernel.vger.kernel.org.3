@@ -2,142 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D7754BCB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E26354BCB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345383AbiFNVVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 17:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45386 "EHLO
+        id S1351271AbiFNVWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 17:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiFNVVQ (ORCPT
+        with ESMTP id S230094AbiFNVWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 17:21:16 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC824ECCB;
-        Tue, 14 Jun 2022 14:21:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=pp5a5lxR6zzh2GCJwG1wPnehpOB5z2vyG9Yk+Kny7KA=; b=Bvncu1AqVSD0fJrBqIsEAxMnNR
-        d+lkU6/8PicuXQBD8lQNDnAEkDvJTwckRKfUEM4fCh+tSk4dz9xSzXzQtm2wHb+llciXLD8UbGCjX
-        4bLx4AbDPrasUwxlm7P5srbQI/CTW9SBjLNjNVws2Y5txYUnrRAokKTChBVWkx2T1IPM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1o1DyJ-006vmP-Tu; Tue, 14 Jun 2022 23:21:11 +0200
-Date:   Tue, 14 Jun 2022 23:21:11 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, bryan.whitehead@microchip.com,
-        lxu@maxlinear.com, richardcochran@gmail.com,
-        UNGLinuxDriver@microchip.com, Ian.Saturley@microchip.com
-Subject: Re: [PATCH net-next 5/5] net: phy: add support to get Master-Slave
- configuration
-Message-ID: <Yqj7x3b8nfG4GvIS@lunn.ch>
-References: <20220614103424.58971-1-Raju.Lakkaraju@microchip.com>
- <20220614103424.58971-6-Raju.Lakkaraju@microchip.com>
+        Tue, 14 Jun 2022 17:22:19 -0400
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED8E4ECE9;
+        Tue, 14 Jun 2022 14:22:19 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id r3so7513580ilt.8;
+        Tue, 14 Jun 2022 14:22:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LJ7oqbtybKBkB0Ag7vT1yQWpqQMSkI/6sxH61W3XByo=;
+        b=qWAh3oZL6fO23HzULFZxzWv98Bs0NNUk0P6AlKHPd1E5Nf9Ct9H38i4zGuOL4JHemo
+         SzA83+v1NM+3cy1snexaUEu7kzuYEx+pktpEWrhyghv6LE7/LMUZQ9vI9EY79vwa24l9
+         B//xzlPERYH36dXLkyM3GeDB7+6XU3xW+upwACyrG2WHDWRNJwCJI/C8768/xHmxBSCM
+         AOUEQ7oxo8s57+Reie/F5oZqnMYNxAiKomQAqKoLJOnhGT1WSKm6w4avmhQDr6l6UbdR
+         adXVSTG0kn1XlXaLr0zXMd41+sMuoUEnAq0+7g5rTl4x8MvJaI9r/Yk2M4M/mKGRk5uc
+         1D0Q==
+X-Gm-Message-State: AJIora8wy2hRb6O6cLuTzUk85wAGJEZeLle6L5J5fRL6NR2YjMw4R2LK
+        2g3r7bIADgba/ooru9HGNA==
+X-Google-Smtp-Source: AGRyM1tUB8HljEWpwIqWOb25UGejqXfhJnyZMVhHQl4YipIIOeQY0g4ivzM9vJEOIjZeesIVSR7o7g==
+X-Received: by 2002:a05:6e02:1607:b0:2d1:e622:3f0a with SMTP id t7-20020a056e02160700b002d1e6223f0amr4184323ilu.287.1655241738198;
+        Tue, 14 Jun 2022 14:22:18 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id y5-20020a92d0c5000000b002d5c572f410sm5906255ila.63.2022.06.14.14.22.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 14:22:17 -0700 (PDT)
+Received: (nullmailer pid 2648115 invoked by uid 1000);
+        Tue, 14 Jun 2022 21:22:15 -0000
+Date:   Tue, 14 Jun 2022 15:22:15 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Brad Larson <brad@pensando.io>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, adrian.hunter@intel.com,
+        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
+        blarson@amd.com, brijeshkumar.singh@amd.com,
+        catalin.marinas@arm.com, gsomlo@gmail.com, gerg@linux-m68k.org,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee.jones@linaro.org, broonie@kernel.org,
+        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
+        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
+        samuel@sholland.org, fancer.lancer@gmail.com,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        ulf.hansson@linaro.org, will@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 02/15] dt-bindings: mmc: cdns: Add AMD Pensando Elba
+ SoC binding
+Message-ID: <20220614212215.GA2627610-robh@kernel.org>
+References: <20220613195658.5607-1-brad@pensando.io>
+ <20220613195658.5607-3-brad@pensando.io>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220614103424.58971-6-Raju.Lakkaraju@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220613195658.5607-3-brad@pensando.io>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 04:04:24PM +0530, Raju Lakkaraju wrote:
-> Implement reporting the Master-Slave configuration and state
+On Mon, Jun 13, 2022 at 12:56:45PM -0700, Brad Larson wrote:
+> From: Brad Larson <blarson@amd.com>
 > 
-> Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+> AMD Pensando Elba ARM 64-bit SoC is integrated with this IP and
+> explicitly controls byte-lane enables.
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
 > ---
->  drivers/net/phy/mxl-gpy.c | 55 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 55 insertions(+)
+>  .../devicetree/bindings/mmc/cdns,sdhci.yaml        | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
-> diff --git a/drivers/net/phy/mxl-gpy.c b/drivers/net/phy/mxl-gpy.c
-> index 5ce1bf03bbd7..cf625ced4ec1 100644
-> --- a/drivers/net/phy/mxl-gpy.c
-> +++ b/drivers/net/phy/mxl-gpy.c
-> @@ -27,11 +27,19 @@
->  #define PHY_ID_GPY241BM		0x67C9DE80
->  #define PHY_ID_GPY245B		0x67C9DEC0
+> diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> index 4207fed62dfe..35bc4cf6f214 100644
+> --- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> @@ -13,10 +13,24 @@ maintainers:
+>  allOf:
+>    - $ref: mmc-controller.yaml
 >  
-> +#define PHY_STD_GCTRL		0x09	/* Gbit ctrl */
-> +#define PHY_STD_GSTAT		0x0A	/* Gbit status */
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          enum:
+> +            - amd,pensando-elba-sd4hc
+> +    then:
+> +      properties:
+> +        reg:
+> +          items:
+> +            - description: Cadence host controller registers
+> +            - description: Byte-lane control register
+> +          minItems: 2
 
-#define MII_CTRL1000		0x09	/* 1000BASE-T control          */
-#define MII_STAT1000		0x0a	/* 1000BASE-T status           */
+This doesn't work. The if/then is additional constraints on the main 
+section which says there is only 1 register region. The main section 
+needs the above, but with 'minItems: 1'. Then the if/then should be:
 
-from mii.h
+if:
+  properties:
+    compatible:
+      const: amd,pensando-elba-sd4hc
+then:
+  properties:
+    reg:
+      minItems: 2
+else:
+  properties:
+    reg:
+      maxItems: 1
 
->  #define PHY_MIISTAT		0x18	/* MII state */
->  #define PHY_IMASK		0x19	/* interrupt mask */
->  #define PHY_ISTAT		0x1A	/* interrupt status */
->  #define PHY_FWV			0x1E	/* firmware version */
->  
-> +#define PHY_STD_GCTRL_MS	BIT(11)
-> +#define PHY_STD_GCTRL_MSEN	BIT(12)
-> +
-> +#define PHY_STD_GSTAT_MSRES	BIT(14)
-> +#define PHY_STD_GSTAT_MSFAULT	BIT(15)
 
-If the device is just following the standard, there should not be any
-need to add defines, they should already exist. And if it does follow
-the standard there are probably helpers you can use.
-
->  #define PHY_MIISTAT_SPD_MASK	GENMASK(2, 0)
->  #define PHY_MIISTAT_DPX		BIT(3)
->  #define PHY_MIISTAT_LS		BIT(10)
-> @@ -160,6 +168,48 @@ static bool gpy_2500basex_chk(struct phy_device *phydev)
->  	return true;
->  }
->  
-> +static int gpy_master_slave_cfg_get(struct phy_device *phydev)
-> +{
-> +	int state;
-> +	int cfg;
-> +	int ret;
 > +
-> +	ret = phy_read(phydev, PHY_STD_GCTRL);
-> +	if (ret < 0) {
-> +		phydev_err(phydev, "Error: MDIO register access failed: %d\n",
-> +			   ret);
-> +		return ret;
-> +	}
-> +
-> +	if (ret & PHY_STD_GCTRL_MSEN)
-> +		if (ret & PHY_STD_GCTRL_MS)
-> +			cfg = MASTER_SLAVE_CFG_MASTER_FORCE;
-> +		else
-> +			cfg = MASTER_SLAVE_CFG_SLAVE_FORCE;
-> +	else
-> +		cfg = MASTER_SLAVE_CFG_MASTER_PREFERRED;
-> +
-> +	ret = phy_read(phydev, PHY_STD_GSTAT);
-> +	if (ret < 0) {
-> +		phydev_err(phydev, "Error: MDIO register access failed: %d\n",
-> +			   ret);
-> +		return ret;
-> +	}
-> +
-> +	if (ret & PHY_STD_GSTAT_MSFAULT)
-> +		state = MASTER_SLAVE_STATE_ERR;
-> +	else
-> +		if (ret & PHY_STD_GSTAT_MSRES)
-> +			state = MASTER_SLAVE_STATE_MASTER;
-> +		else
-> +			state = MASTER_SLAVE_STATE_SLAVE;
-> +
-> +	phydev->master_slave_get = cfg;
-> +	phydev->master_slave_state = state;
-> +
-> +	return 0;
-
-Would genphy_read_master_slave() work?
-
-      Andrew
+>  properties:
+>    compatible:
+>      items:
+>        - enum:
+> +          - amd,pensando-elba-sd4hc
+>            - microchip,mpfs-sd4hc
+>            - socionext,uniphier-sd4hc
+>        - const: cdns,sd4hc
+> -- 
+> 2.17.1
+> 
+> 

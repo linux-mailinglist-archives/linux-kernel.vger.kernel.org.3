@@ -2,144 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D98FD54ABDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD2854ABDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235104AbiFNIfZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 04:35:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
+        id S239451AbiFNIf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 04:35:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbiFNIfW (ORCPT
+        with ESMTP id S235876AbiFNIf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 04:35:22 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428803CA52;
-        Tue, 14 Jun 2022 01:35:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655195722; x=1686731722;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=u3sRGLAkfFL/sgBy0Sm3AS3ifOZuCvaq5rzaaEC09fk=;
-  b=hgw8ruxFotowZLI4pSWH/GU2qdQI36j7brMb2DQIfnrJfGXl+LslhJD9
-   tzpj9xTlk6BbF8YwopgS+pbyuE2pH/cMjWFwhATcueRUHf1xBypmgYjrj
-   EfyR32TBVO6SrkhzZuxmCqFMqd1KErJafWHyUQ6Jfai3L7vupEt1oXum8
-   iBOwHMbKRY3Zt5xUU1IUn0K+yFpDTrjhGQr5QzDOx6v3PY+WrRGzutPQh
-   w+rmrMbKYqYFL064/uAVgj1XABlC2NdP6/5OQGVeEjjhKpNcuAzm5G+JG
-   YdKcPKaXhNGHyNXdgeEMr9lirqdIftFejEMUisBrkjWyS6lNSP5bdZM4u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="278589233"
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="278589233"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 01:35:21 -0700
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="640219457"
-Received: from jlaghzal-mobl1.ger.corp.intel.com ([10.252.32.175])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 01:35:20 -0700
-Date:   Tue, 14 Jun 2022 11:35:18 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jiri Slaby <jslaby@suse.cz>
-cc:     gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/7] tty/vt: consolemap: saner variable names in
- set_inverse_transl()
-In-Reply-To: <20220614075713.32767-4-jslaby@suse.cz>
-Message-ID: <74fc76bf-a7f-be34-10cd-412234990f1@linux.intel.com>
-References: <20220614075713.32767-1-jslaby@suse.cz> <20220614075713.32767-4-jslaby@suse.cz>
+        Tue, 14 Jun 2022 04:35:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A63B3DA55
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:35:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655195754;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=UXZdGN4B5WR+HokB4bvG7NAu5UijaXumZB4FPqVWwNc=;
+        b=Copo7BvXqJkcUqVyhL2LxzQtxI6KmQT4cz9VnADcySMK6NazPVR534bR9xvd5qhkVfvLTd
+        wkjPQ3Cjk8Ola5S9LifC2EdcRZpALIAB60h/w0JbS0xhJ0ET1VtEV9/dDL9PIXMypDDsDg
+        hQlF8u0uyVNOA+ADGwWx/RwuTdLRS+U=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-220-pqy-A3KoPRuemZ1Sg9ABjw-1; Tue, 14 Jun 2022 04:35:52 -0400
+X-MC-Unique: pqy-A3KoPRuemZ1Sg9ABjw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7D396185A7BA;
+        Tue, 14 Jun 2022 08:35:52 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F063400DF1D;
+        Tue, 14 Jun 2022 08:35:52 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] More KVM changes for Linux 5.19-rc3
+Date:   Tue, 14 Jun 2022 04:35:52 -0400
+Message-Id: <20220614083552.1559600-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1912782543-1655195721=:1605"
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Linus,
 
---8323329-1912782543-1655195721=:1605
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
+The following changes since commit 6cd88243c7e03845a450795e134b488fc2afb736:
 
-On Tue, 14 Jun 2022, Jiri Slaby wrote:
+  KVM: x86: do not report a vCPU as preempted outside instruction boundaries (2022-06-08 04:21:07 -0400)
 
-> The function uses too vague variable names like i, j, k for iterators, p,
-> q, p1, p2 for pointers etc.
-> 
-> Rename all these, so that it is clear what is going on:
-> - dict: for dictionaries.
-> - d, r, g: for dir, row, glyph iterators -- these are unsigned now.
-> - dir, row: for directory and row pointers.
-> - glyph: for the glyph.
-> - and so on...
-> 
-> This is a lot of shuffling, but the result pays off, IMO.
-> 
-> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> ---
->  drivers/tty/vt/consolemap.c | 26 +++++++++++++-------------
->  1 file changed, 13 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/tty/vt/consolemap.c b/drivers/tty/vt/consolemap.c
-> index a69dfda8e3d0..3d0e10dac6d9 100644
-> --- a/drivers/tty/vt/consolemap.c
-> +++ b/drivers/tty/vt/consolemap.c
-> @@ -214,29 +214,29 @@ struct uni_pagedict {
->  
->  static struct uni_pagedict *dflt;
->  
-> -static void set_inverse_transl(struct vc_data *conp, struct uni_pagedict *p,
-> +static void set_inverse_transl(struct vc_data *conp, struct uni_pagedict *dict,
->  	       enum translation_map m)
->  {
-> -	int j, glyph;
->  	unsigned short *t = translations[m];
-> -	unsigned char *q;
-> +	unsigned char *inv;
->  
-> -	if (!p)
-> +	if (!dict)
->  		return;
-> -	q = p->inverse_translations[m];
-> +	inv = dict->inverse_translations[m];
->  
-> -	if (!q) {
-> -		q = p->inverse_translations[m] = kmalloc(MAX_GLYPH, GFP_KERNEL);
-> -		if (!q)
-> +	if (!inv) {
-> +		inv = dict->inverse_translations[m] = kmalloc(MAX_GLYPH,
-> +				GFP_KERNEL);
-> +		if (!inv)
->  			return;
->  	}
-> -	memset(q, 0, MAX_GLYPH);
-> +	memset(inv, 0, MAX_GLYPH);
->  
-> -	for (j = 0; j < ARRAY_SIZE(translations[i]); j++) {
-> -		glyph = conv_uni_to_pc(conp, t[j]);
-> -		if (glyph >= 0 && glyph < MAX_GLYPH && q[glyph] < 32) {
-> +	for (unsigned int ch = 0; ch < ARRAY_SIZE(translations[m]); ch++) {
+are available in the Git repository at:
 
-This removes the compile error you introduced earlier. Other than that:
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+for you to fetch changes up to e0f3f46e42064a51573914766897b4ab95d943e3:
 
-> +		int glyph = conv_uni_to_pc(conp, t[ch]);
-> +		if (glyph >= 0 && glyph < MAX_GLYPH && inv[glyph] < 32) {
->  			/* prefer '-' above SHY etc. */
-> -			q[glyph] = j;
-> +			inv[glyph] = ch;
->  		}
->  	}
->  }
-> 
+  KVM: selftests: Restrict test region to 48-bit physical addresses when using nested (2022-06-09 10:52:27 -0400)
 
--- 
- i.
+While last week's pull request contained miscellaneous fixes for x86, this
+one covers other architectures, selftests changes, and a bigger series
+for APIC virtualization bugs that were discovered during 5.20 development.
+The idea is to base 5.20 development for KVM on top of this tag.
 
---8323329-1912782543-1655195721=:1605--
+Paolo
+
+----------------------------------------------------------------
+ARM64:
+
+* Properly reset the SVE/SME flags on vcpu load
+
+* Fix a vgic-v2 regression regarding accessing the pending
+state of a HW interrupt from userspace (and make the code
+common with vgic-v3)
+
+* Fix access to the idreg range for protected guests
+
+* Ignore 'kvm-arm.mode=protected' when using VHE
+
+* Return an error from kvm_arch_init_vm() on allocation failure
+
+* A bunch of small cleanups (comments, annotations, indentation)
+
+RISC-V:
+
+* Typo fix in arch/riscv/kvm/vmid.c
+
+* Remove broken reference pattern from MAINTAINERS entry
+
+x86-64:
+
+* Fix error in page tables with MKTME enabled
+
+* Dirty page tracking performance test extended to running a nested
+  guest
+
+* Disable APICv/AVIC in cases that it cannot implement correctly
+
+----------------------------------------------------------------
+David Matlack (11):
+      KVM: selftests: Replace x86_page_size with PG_LEVEL_XX
+      KVM: selftests: Add option to create 2M and 1G EPT mappings
+      KVM: selftests: Drop stale function parameter comment for nested_map()
+      KVM: selftests: Refactor nested_map() to specify target level
+      KVM: selftests: Move VMX_EPT_VPID_CAP_AD_BITS to vmx.h
+      KVM: selftests: Add a helper to check EPT/VPID capabilities
+      KVM: selftests: Drop unnecessary rule for STATIC_LIBS
+      KVM: selftests: Link selftests directly with lib object files
+      KVM: selftests: Clean up LIBKVM files in Makefile
+      KVM: selftests: Add option to run dirty_log_perf_test vCPUs in L2
+      KVM: selftests: Restrict test region to 48-bit physical addresses when using nested
+
+Julia Lawall (1):
+      RISC-V: KVM: fix typos in comments
+
+Lukas Bulwahn (1):
+      MAINTAINERS: Limit KVM RISC-V entry to existing selftests
+
+Marc Zyngier (7):
+      KVM: arm64: Always start with clearing SVE flag on load
+      KVM: arm64: Always start with clearing SME flag on load
+      KVM: arm64: Don't read a HW interrupt pending state in user context
+      KVM: arm64: Replace vgic_v3_uaccess_read_pending with vgic_uaccess_read_pending
+      KVM: arm64: Warn if accessing timer pending state outside of vcpu context
+      KVM: arm64: Handle all ID registers trapped for a protected VM
+      KVM: arm64: Drop stale comment
+
+Maxim Levitsky (7):
+      KVM: x86: document AVIC/APICv inhibit reasons
+      KVM: x86: inhibit APICv/AVIC on changes to APIC ID or APIC base
+      KVM: x86: SVM: remove avic's broken code that updated APIC ID
+      KVM: x86: SVM: fix avic_kick_target_vcpus_fast
+      KVM: x86: disable preemption while updating apicv inhibition
+      KVM: x86: disable preemption around the call to kvm_arch_vcpu_{un|}blocking
+      KVM: x86: SVM: drop preempt-safe wrappers for avic_vcpu_load/put
+
+Paolo Bonzini (3):
+      Merge tag 'kvm-riscv-fixes-5.19-1' of https://github.com/kvm-riscv/linux into HEAD
+      Merge tag 'kvmarm-fixes-5.19-1' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+      KVM: x86: SVM: fix nested PAUSE filtering when L0 intercepts PAUSE
+
+Will Deacon (4):
+      KVM: arm64: Return error from kvm_arch_init_vm() on allocation failure
+      KVM: arm64: Ignore 'kvm-arm.mode=protected' when using VHE
+      KVM: arm64: Extend comment in has_vhe()
+      KVM: arm64: Remove redundant hyp_assert_lock_held() assertions
+
+Yuan Yao (1):
+      KVM: x86/mmu: Set memory encryption "value", not "mask", in shadow PDPTRs
+
+sunliming (1):
+      KVM: arm64: Fix inconsistent indenting
+
+ Documentation/admin-guide/kernel-parameters.txt    |   1 -
+ MAINTAINERS                                        |   1 -
+ arch/arm64/include/asm/kvm_host.h                  |   5 -
+ arch/arm64/include/asm/virt.h                      |   3 +
+ arch/arm64/kernel/cpufeature.c                     |  10 +-
+ arch/arm64/kvm/arch_timer.c                        |   3 +
+ arch/arm64/kvm/arm.c                               |  10 +-
+ arch/arm64/kvm/fpsimd.c                            |   2 +
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c              |   4 -
+ arch/arm64/kvm/hyp/nvhe/sys_regs.c                 |  42 ++++-
+ arch/arm64/kvm/vgic/vgic-mmio-v2.c                 |   4 +-
+ arch/arm64/kvm/vgic/vgic-mmio-v3.c                 |  40 +----
+ arch/arm64/kvm/vgic/vgic-mmio.c                    |  40 ++++-
+ arch/arm64/kvm/vgic/vgic-mmio.h                    |   3 +
+ arch/arm64/kvm/vmid.c                              |   2 +-
+ arch/riscv/kvm/vmid.c                              |   2 +-
+ arch/x86/include/asm/kvm_host.h                    |  67 +++++++-
+ arch/x86/kvm/lapic.c                               |  27 +++-
+ arch/x86/kvm/mmu/mmu.c                             |   2 +-
+ arch/x86/kvm/svm/avic.c                            | 171 +++++++++------------
+ arch/x86/kvm/svm/nested.c                          |  39 ++---
+ arch/x86/kvm/svm/svm.c                             |   8 +-
+ arch/x86/kvm/svm/svm.h                             |   4 +-
+ arch/x86/kvm/vmx/vmx.c                             |   4 +-
+ arch/x86/kvm/x86.c                                 |   2 +
+ tools/testing/selftests/kvm/Makefile               |  49 ++++--
+ tools/testing/selftests/kvm/dirty_log_perf_test.c  |  10 +-
+ .../testing/selftests/kvm/include/perf_test_util.h |   9 ++
+ .../selftests/kvm/include/x86_64/processor.h       |  25 +--
+ tools/testing/selftests/kvm/include/x86_64/vmx.h   |   6 +
+ tools/testing/selftests/kvm/lib/perf_test_util.c   |  53 ++++++-
+ .../selftests/kvm/lib/x86_64/perf_test_util.c      | 112 ++++++++++++++
+ tools/testing/selftests/kvm/lib/x86_64/processor.c |  31 ++--
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c       | 149 +++++++++++-------
+ .../testing/selftests/kvm/max_guest_memory_test.c  |   2 +-
+ tools/testing/selftests/kvm/x86_64/mmu_role_test.c |   2 +-
+ virt/kvm/kvm_main.c                                |   8 +-
+ 37 files changed, 640 insertions(+), 312 deletions(-)
+

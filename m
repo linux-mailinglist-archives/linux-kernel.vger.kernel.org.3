@@ -2,90 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EA7254ACC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A5954ACD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242491AbiFNJCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 05:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
+        id S242713AbiFNJCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 05:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242176AbiFNJC1 (ORCPT
+        with ESMTP id S242692AbiFNJCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 05:02:27 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903C728D;
-        Tue, 14 Jun 2022 02:02:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655197345; x=1686733345;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w0Lwj0WHXq5DvIM05cukc4RzsTQJxK8reJqxBhNXM9w=;
-  b=GvrtWt1yhC2i2dsNiiMx2ryyFzY+Ev/2ekv2P/jI/26ty3TKRSksrZ9I
-   BupC6ypmX4CspMo8PZwNchQeFKMr1JDmynFWqu++ElNYg/vNfHQj0+czm
-   TdUoHdnSUdZexxV119fp7T9YjUlqqjk/S7x9glsPTNNWcV+jKLcLzALXk
-   K4pYHFmgZuVqdFZ63GZnudGkbQNUFOtQlgkt1KHshx7pRz7aWBdh8zrBe
-   tAa3Fta53/Lnn2AECyHUIqbX2t/HB8rwz06JMt0m+N2+O7O5wdGEvi9Ts
-   SkKAyUPoUGi0/FK4Se2oWXryzIdHfcX8NaZwpe9Ex0/GeVx2iMHDeJaYq
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="364894313"
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="364894313"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 02:02:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="761887848"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 14 Jun 2022 02:02:23 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o12RK-000Lha-9y;
-        Tue, 14 Jun 2022 09:02:22 +0000
-Date:   Tue, 14 Jun 2022 17:01:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sergei Shtepa <sergei.shtepa@veeam.com>, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Sergei Shtepa <sergei.shtepa@veeam.com>
-Subject: Re: [PATCH 01/20] block, blk_filter: enable block device filters
-Message-ID: <202206141610.QsI0Qgur-lkp@intel.com>
-References: <1655135593-1900-2-git-send-email-sergei.shtepa@veeam.com>
+        Tue, 14 Jun 2022 05:02:40 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9BA2717F;
+        Tue, 14 Jun 2022 02:02:36 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C03BCE001B;
+        Tue, 14 Jun 2022 09:02:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1655197355;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=0VkpGiXPoXaWOWQvypa0vCIM+uO/ijHmOl4KXjKbX0k=;
+        b=ZYsOgvJ4SheAj9johdMIEhkWhCZFkH3Rp+m6pvTevjhTrUmiZ/5WPeF0H+1A91/xUTGqIl
+        06rgGRGplqFKBI9bxayGayLsIE4YQ8468mhQ6tDsD94gcKo2kppaa8wqQH8hqgK96AGfAi
+        72esq1VG+/pvs2iYl2IsqWmTeh9UDHAPLO7ItL7Rr6BuyNeIq8D2wsbxCQldaHDkUzbVdU
+        TMtI2jTGzKy8vmG7FVh+ONC3wMto4Qi0dcIHP7NKfuGgwoRMWIyaqAZ0Ee+rrV2ltoSUmB
+        sIL3iI7WgyJ81OI/RWvsKU00LdLmV19EHAq3R01/xFLk1gmxcXMU5UdMsd9Phg==
+Date:   Tue, 14 Jun 2022 11:02:30 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Sascha Hauer <sha@pengutronix.de>
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tom Rini <trini@konsulko.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Subject: Re: [PATCH V3 2/2] nvmem: add driver handling U-Boot environment
+ variables
+Message-ID: <20220614110230.46fab506@xps-13>
+In-Reply-To: <20220614074657.GQ2387@pengutronix.de>
+References: <20220611204651.19947-1-zajec5@gmail.com>
+        <20220611204651.19947-2-zajec5@gmail.com>
+        <20220614074657.GQ2387@pengutronix.de>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1655135593-1900-2-git-send-email-sergei.shtepa@veeam.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergei,
+Hello,
 
-Thank you for the patch! Perhaps something to improve:
+> > +static int u_boot_env_probe(struct platform_device *pdev)
+> > +{
+> > +	struct nvmem_config config =3D {
+> > +		.name =3D "u-boot-env",
+> > +		.reg_read =3D u_boot_env_read,
+> > +	};
+> > +	struct device *dev =3D &pdev->dev;
+> > +	struct device_node *np =3D dev->of_node;
+> > +	const struct of_device_id *of_id;
+> > +	struct u_boot_env *priv;
+> > +	int err;
+> > +
+> > +	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> > +	if (!priv)
+> > +		return -ENOMEM;
+> > +	priv->dev =3D dev;
+> > +
+> > +	of_id =3D of_match_device(u_boot_env_of_match_table, dev);
+> > +	if (!of_id)
+> > +		return -EINVAL;
+> > +	priv->format =3D (uintptr_t)of_id->data;
+> > +
+> > +	if (of_property_read_u32(np, "reg", (u32 *)&priv->offset) ||
+> > +	    of_property_read_u32_index(np, "reg", 1, (u32 *)&priv->size)) {
+> > +		dev_err(dev, "Failed to read \"reg\" property\n");
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	priv->mtd =3D of_get_mtd_device_by_node(np->parent);
+> > +	if (IS_ERR(priv->mtd)) {
+> > +		dev_err(dev, "Failed to get %pOF MTD: %ld\n", np->parent, PTR_ERR(pr=
+iv->mtd));
+> > +		return PTR_ERR(priv->mtd);
+> > +	} =20
+>=20
+> Partitions are mtd devices themselves and the mtd layer directly
+> associates these devices to their OF node, so it should be possible
+> to do a of_get_mtd_device_by_node(np) which gets you the partition.
+> You can use the whole mtd device then and do not have to fiddle with
+> reg properties, offsets and sizes in your driver yourself.
 
-[auto build test WARNING on axboe-block/for-next]
-[also build test WARNING on v5.19-rc2 next-20220614]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Just for the record, there will be one mtd device per partition, but
+the "full" mtd device will only exist if the configuration contains
+CONFIG_MTD_PARTITIONED_MASTER.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sergei-Shtepa/blksnap-creating-non-persistent-snapshots-for-backup/20220614-025950
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-config: openrisc-randconfig-c023-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141610.QsI0Qgur-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 11.3.0
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-
-cocci warnings: (new ones prefixed by >>)
->> block/blk-core.c:792:3-4: Unneeded semicolon
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Miqu=C3=A8l

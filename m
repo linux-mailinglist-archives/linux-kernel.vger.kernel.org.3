@@ -2,176 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A1A54A395
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2523054A38F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347719AbiFNBTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 21:19:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59502 "EHLO
+        id S1348019AbiFNBUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 21:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347396AbiFNBTd (ORCPT
+        with ESMTP id S232952AbiFNBUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 21:19:33 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2064.outbound.protection.outlook.com [40.107.237.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B401CBE0B;
-        Mon, 13 Jun 2022 18:19:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OzUQ6N9di6W1JKmOdaYbX08vvPAn+stPLVu57lHXGgFPVNKwiuq+zjjEZ2ArYlGa0NghVnxbULH37i51QlZTIYx1ekBYSiKrWgIuPZjPCMLXwoLsxfoK7t9nfMj3G4xurEofUGIWmtPGcJdvp+1EBGiXKJ6H878bop+2eXXVvIMoImgE5dBaV4w4N/o+gmdKVSvnXgHOX9IvCytDRsuF9Gb0aY0o+exbKE8Jtw4ldOX2zbeK6yExjiqB6Q3jMpD+L805qtTOFquXi407dSsxl6tWSr2Eq9QCkR4kP3VaROKq2KziyjSYRKWkurfcUiM1CSR21Q2wbpCi3gRp6WCFlw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QLTppljV1U+xDvvGKiGI0OF1yZwJltMDxdD2orSDhcE=;
- b=NB+iNyXbkP5pfDm6iSSsHtMEAnb9zxSxkHTCGCEjNUcwwZwI1v//TUVJIia/VTG6Ws9mE4GpNVDiM63ICmX1V2j/uuUK9cNV4SLMYPFvZb67f3XLlD92wgdO0f8lX1Ho2/J32/tB4ZHLcTsFE3ko+LSKfn3hKskxiyJGSE0txbdeKzOzrPeerWhtvbxnsTu99Ji9JAZxQazqBfbdNkWqPOvdB0VzR+aiyDSds5M0kkEbHpHkT06L8V6ZtKYJEU6Z3STryMtdl6sFNqJX6E6KxFMMVN80UWQtCAm++BZoEFmcmOK5ud2udectCp2w/1tuSgw738CwN+41RjaOez/1Kw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QLTppljV1U+xDvvGKiGI0OF1yZwJltMDxdD2orSDhcE=;
- b=JwPkZ0N94FXckog5AP600y0+18YAnVAsmOgHVi0mcxGwszTWlrYkIFe3Bis3FJ/Ph/j5Ab6ASJFyQp1xPzju+SSbozqptpbAIT86GFun8HjdiIAYsFPoa3ob5Gj8jzgIcII45ngz5z0PiGG19jWs8f33HjWDHVUNowFw13OEGyLQCfPQtKPNQqoy78MOm5786II8p7NXm0/WU4DP49jfmIdg5Bp5vmc539KM3fTjkmdCBb+ToFWgtVYhHlBx3FuTEvijhYVmufgn8PUAhvrg54qJe0Sb0i5fYK0Jva8mFIqxkoadq9vIeFL0ejhfAKkZZL4FHPHjEktaJvxTnx3AqA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY4PR12MB1366.namprd12.prod.outlook.com (2603:10b6:903:40::13)
- by DM5PR12MB2456.namprd12.prod.outlook.com (2603:10b6:4:b4::37) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Tue, 14 Jun
- 2022 01:19:24 +0000
-Received: from CY4PR12MB1366.namprd12.prod.outlook.com
- ([fe80::dd48:8d3b:7eac:ea85]) by CY4PR12MB1366.namprd12.prod.outlook.com
- ([fe80::dd48:8d3b:7eac:ea85%10]) with mapi id 15.20.5332.020; Tue, 14 Jun
- 2022 01:19:24 +0000
-Message-ID: <e187af34-d0a8-55ed-cc21-d88845ec1eb5@nvidia.com>
-Date:   Tue, 14 Jun 2022 09:19:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] RDMA/cm: fix cond_no_effect.cocci warnings
-Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, jgg@ziepe.ca
-Cc:     leon@kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-References: <20220610094530.28950-1-jiapeng.chong@linux.alibaba.com>
-From:   Mark Zhang <markzhang@nvidia.com>
-In-Reply-To: <20220610094530.28950-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR06CA0204.apcprd06.prod.outlook.com (2603:1096:4:1::36)
- To CY4PR12MB1366.namprd12.prod.outlook.com (2603:10b6:903:40::13)
+        Mon, 13 Jun 2022 21:20:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547F6CE20;
+        Mon, 13 Jun 2022 18:20:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC12AB81257;
+        Tue, 14 Jun 2022 01:20:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91D2AC3411E;
+        Tue, 14 Jun 2022 01:20:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655169610;
+        bh=nGsmIf2iGVXn6D2m1rZYEXj47zvQzyVE69iE45fMe/o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mpVdK4c0hOts7bV+2S41q01wHwHkJlGq1oSBQddy+6mvXEPr91rusCNIxdxfaO+5M
+         +LdMUfWe32LBisU5+Xcu7WsSIJBiR8DZ33af5lIzq1vDwMBYPysx1kE64OJHN5ss89
+         v8fdV0xN3P4YBWexTyTrR37G1sggjCnsaPCGJXjYpgqEZt6LDbCoKQLZu5SowhvNNc
+         UY9+MlLHWBpwnldXnbqHyMRPI+PumFurThfYukG2ews0ZACTrIVNdKz/JOSpsjpAJX
+         knqySK8mQu6DRYjnNX5VpiByi/EMNNAkuGjQ/UdX9cCjOHR3uGSNA31GJp09A4YL1Z
+         r9yXBsIwwqhUA==
+Received: by mail-vs1-f52.google.com with SMTP id q14so7530119vsr.12;
+        Mon, 13 Jun 2022 18:20:10 -0700 (PDT)
+X-Gm-Message-State: AJIora+7egNNkg8DTuGNDE6x+3Zj/P98mzg0Y8h1nxqC69xrHw9++N2a
+        Qs45Gamgi1/Mfy6d8mSNkF6nOO4HcgeodfVEIxg=
+X-Google-Smtp-Source: AGRyM1uQ4wwywJYKaCZxAb6HN5cXESM/yD5C08gLF7kys0e3nnaI6ql0eLDDQE06IDC5MZjeBGtoWi8ArdbngUhV/0I=
+X-Received: by 2002:a05:6102:22c2:b0:34b:9163:c6ab with SMTP id
+ a2-20020a05610222c200b0034b9163c6abmr1097894vsh.8.1655169609506; Mon, 13 Jun
+ 2022 18:20:09 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: c165f0e2-d531-4157-12e9-08da4da3eab2
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2456:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB245663BF39255F12CD1074D6C7AA9@DM5PR12MB2456.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aNRnFcweeTCJcz02yiaBGyoi6PdZe7PR+JTYMPN0pHeb4qHThNXH3nsSoneTQA3b6frI33qp35bSYVMJIibCxml5L/eOdC78KUiwgfvDJHH2u060RrGmY+QUSL70nJ6t6vyx3awx3ER+PRmbnLurqzD7lFCnZePGjWGxXbgMZDJwHcTwrOVpKtHzh4Be/PMRq96dW7UvgCc7sVaCm4QnjiTreQfmEfDedAXXJdDsNQBzOfUPNJycfecht2mtRA7om9c/I/DbbwM1FeT8iLBFmyLbwa7SlTTg7PleWEtV4N8LMo/zpWlFsBUZu6Qge4NjtnsuW2B8gje6qa/cqPTshRXz2aNlYwjWsYZXz3rVBNC8LwqWwuASwpTU7KbovJwYrQtnTn5/nd3tw3LGj1FJ6FLDFoULOH7SQTRC1pIrtymYoMxw91rUHEmwPGZHkzDo555DkHLmxYbL84g18rLH8duZvqNx1dnap6/DX2OScw1tkfkOCCW6OsYUxLjkQ9fLfk4XBTqljVOLyQGs9WAVkmZeCZvvK0f0FNvAvR7DsU5UkCXWHilI5hrAv2ch85yJ7U33n2d86tSQ59Elo7RdbWzdbZZwJIXLF1fdL1oY+9dgeIyNdBM0k36TOdLzCg4dI7U2Kjxj5J/EWKVLprT7tdWBd7LtvaMSqKWdncqAmdsy7J9f1P6Z44/lvFKGy2UzXiGKu/I0tsXjPLx1UMs0bdyor8R+bDZKRyfm1Hc3brgn1ltfeW9xyHZ95Ti9Y7yk
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR12MB1366.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(2906002)(26005)(38100700002)(53546011)(6666004)(6506007)(2616005)(186003)(6512007)(83380400001)(5660300002)(4326008)(8676002)(36756003)(316002)(31696002)(66946007)(86362001)(508600001)(66556008)(8936002)(66476007)(6486002)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MDRPM3hCNFNxWnBTeVp1UW1LTWpLVERvVldoazFLZExIT3VnVDBmVmdVdDlt?=
- =?utf-8?B?N29YSUVueTNjTnR1dFByN0Z5K0tXSEptS1h6eUFTeWlnd2poWURMZmZtYnhi?=
- =?utf-8?B?dyt2SW9saHdFbENWVC90VThmV29IUk54c2k5MnVSR2F5VWR3RS96MWZrTzlQ?=
- =?utf-8?B?VUVNN3gvQ2ZMWmZjSkUrT1FsWnBQSnYvbDRWZStxREFUZFlFN1hjZFFHY29v?=
- =?utf-8?B?M0dtSHBubmtST1NVSnRuQXpPamhwVWxmRzNoWHNZNWRDVzVhdDhuMGVNMFlo?=
- =?utf-8?B?YjZFM3VZT0ZRdlhYcEkzaDhxeHRFMjdjSDgzKzN6akxGZ29XWk9YWkxsVWlZ?=
- =?utf-8?B?S2xwckdKWExVSmN2T1hkTXhRL21uT00zSEgzT1Z3aVE2QlB5cDF1aEpsS1Q2?=
- =?utf-8?B?UFpNbEpuakF4VTFwMjVQUDdRcHUyUi9QbGVXZmE0RFdMYyszYVlRTVlzUENv?=
- =?utf-8?B?K2lNUVc3emFzS2tYd3RGRDZtNXNHVmRQSWZsdjh1am9hb3RBY2toVWhNNU5Y?=
- =?utf-8?B?V0hHVUpraWdIQ3pCMk4weEVBZWkvUTFkOWpoY1Fqa05SSUpFSTNyR2JjMlRu?=
- =?utf-8?B?MEM5c0wrRmNnOW9QeDVqYU1leXpqSHZONmMvRm9kRFMvRXBpdTlZTWl3L3ph?=
- =?utf-8?B?cXdwdTNWelB3ZzdZbkFtV1cyQmF2ekVickhNalFFN1BGbWZRblMrRXVEeXoy?=
- =?utf-8?B?SE5MaWh2VG1JNFh2ZkltNEtGb3JEWUloYktUano4RUluYUs1ZFYwM29zK2dj?=
- =?utf-8?B?eXZ1anF0eEJXRGZUaG53Sno0T1M3ZFk3RkV1cC9sQ2Q3bG5qRTBOS2M2ODM3?=
- =?utf-8?B?T0NqYkltbzdtTllMcHFzZ3h0MU9OWUhDdXRqZklvSk1kRFkvS3pKTUE2blRM?=
- =?utf-8?B?NUJmbFh3ckJCZmh0empzRE9LbXVXMnV1dUJHWnpuTDAxYzI4MVBDNUpEMnpL?=
- =?utf-8?B?eGNJVm5PQVJCR0wzdzZ6R2VzNFNrWS9uMVBSc1RPZTBxK2hJbXhKWGRqSmo0?=
- =?utf-8?B?VTJOZ2JKbEppeHA5UEg5Z2dhcnZ6YWhNZG8zYmp5VFZkZkdaQnlvVndiR1dQ?=
- =?utf-8?B?OU5PT3VFUFFzV084NjYxMGVQOHhRNFU3L0NKRkdoR1l0WnkyS3RUOU44Nzda?=
- =?utf-8?B?Y3owc1dJV01aZVp3UjVtL05FSktzL3c0c0lKSXVINkRJWnFLa3Y3T3BNS0Qv?=
- =?utf-8?B?WUpxdWh3QmpESFpTTDlKVUxoS2cyQW5WbmlFMVJqN254UDEvOHBiM0VyVUs1?=
- =?utf-8?B?RmZkWHFKV1huWDhnOWFLdERrVlVmSGZyUlo0QWkzYzVaNmRzNjJySGV1RVZ1?=
- =?utf-8?B?c3JWa3VxSVBES2xJQnZXQkxjeUlhVzl0a051eFpXTDlCUXRhaUYrOGxrSS9I?=
- =?utf-8?B?VEpzcVNKYi9WbEc0VGVIcFcrMVlvV2FndURYRkNxTFppVHBxQ2RnNSszejls?=
- =?utf-8?B?ams2WXlmZExsdDBHSEtUSHJSK1JnWFRHaUtNbi9XR0U1ZlF0djlYVEdrMU5T?=
- =?utf-8?B?dTd6RWNFUDA0VEtZSkVBUWMzWlhEcDBwRU9KV29RWnlLNFVIR1YxOXpTU1hY?=
- =?utf-8?B?YjB3b09hOGl6YXBuMkNOdWk5VEZkRUlWTHJxU21iZ0h6VjcyN25MMVNrbGEr?=
- =?utf-8?B?dUl6VXNLQzU0bXdYa3doUWVmOUQ1eTJBQWlvK3RUV1VpclZuTmRQRGpDUDZB?=
- =?utf-8?B?YStNcmFhenBhR0xkM0dOd3BYZmJ0dDVtWllwYWNRWk5HS2hCcXpUWVV0Vm9W?=
- =?utf-8?B?clNNT011TWh0RTlIUVQwWUordFN1RmE3MlNGeW5lay9kdzhDSUo1T3ZwSW5p?=
- =?utf-8?B?c2ZSeVhyc3JTUXhiRjNiVlFvZy9ab1Jlb3oyeDhuSWV4V2pvT1hVSmJrcklu?=
- =?utf-8?B?WlgwUGMxV094MWdGSE9LaGZEdmxYSkVtN1FNdnZEV2NuNGZMS0grVVplYjV2?=
- =?utf-8?B?WjhSK0NiK2JmV1Q3L2pDZjNyazJOSFVFclphNU4yaXdZYXJFUndWdTZ1VElI?=
- =?utf-8?B?eVFKNGRVMWlaMUZzYUJvNzQwdlJ0OStGbnN4bnk1bk0xYnZNMitYWWdObG9W?=
- =?utf-8?B?ZEcwS0FXcXFnaXpOODBrK1JjNlVrOEpVNmpyUGpPQnFMZkl3YTM0eTIyaVVQ?=
- =?utf-8?B?c0V6ZkMydWxweS9wRmFma1dibHNHbGtlNDlOODE0WGZLOThLM2Q5aXB3NmEr?=
- =?utf-8?B?ZjQyZExrRldndVFvRjQ0YmNMSVB5QThTT245MWxDZW5aSEZNRlBRdlluWXV4?=
- =?utf-8?B?OEl5RXl2ZTMwNDFDMjVETlFFTzNaTy9EMHkvU0h5RjRYOWVRRmR2SytGdStU?=
- =?utf-8?B?S0lGaHlLQnRWN0FYczM5WmF0bU53TEJDaGkyZ3AzQjdheW1pcnAyUT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c165f0e2-d531-4157-12e9-08da4da3eab2
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR12MB1366.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2022 01:19:24.2330
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aMJuFqWAXMHsr6rrLmlwnNZIbcUSOD92wbEM2W0QwEuOnbOwJuhhi5ukg69AChuyGvnK94WSM1Mr7oVvyXervA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB2456
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220613131046.3009889-1-xianting.tian@linux.alibaba.com>
+ <0262A4FB-5A9B-47D3-8F1A-995509F56279@nvidia.com> <CAJF2gTQGXAubtas4wAzrg298dGQJntu38X48V2OzcK8xZ_vPJg@mail.gmail.com>
+ <D667F530-E286-4E75-B7CE-63E120E440C8@nvidia.com> <CAJF2gTSsaaseds=T_y-Ddt5Np2rYhk3ENumzSZDZUSXFwT3u-g@mail.gmail.com>
+ <435B45C3-E6A5-43B2-A5A2-318C748691FC@nvidia.com>
+In-Reply-To: <435B45C3-E6A5-43B2-A5A2-318C748691FC@nvidia.com>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 14 Jun 2022 09:19:58 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTT7=WOtp6z5TtmFk79ipeWd2KpPB4aGkqh=vhM=L6SXmQ@mail.gmail.com>
+Message-ID: <CAJF2gTT7=WOtp6z5TtmFk79ipeWd2KpPB4aGkqh=vhM=L6SXmQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH] mm: page_alloc: validate buddy before check the migratetype
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org, huanyi.xj@alibaba-inc.com,
+        zjb194813@alibaba-inc.com, tianhu.hh@alibaba-inc.com,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Laura Abbott <labbott@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/2022 5:45 PM, Jiapeng Chong wrote:
-> This was found by coccicheck:
-> 
-> ./drivers/infiniband/core/cm.c:685:7-9: WARNING: possible condition with no effect (if == else).
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->   drivers/infiniband/core/cm.c | 9 ++-------
->   1 file changed, 2 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/infiniband/core/cm.c b/drivers/infiniband/core/cm.c
-> index 1c107d6d03b9..bb6a2b6b9657 100644
-> --- a/drivers/infiniband/core/cm.c
-> +++ b/drivers/infiniband/core/cm.c
-> @@ -676,14 +676,9 @@ static struct cm_id_private *cm_find_listen(struct ib_device *device,
->   			refcount_inc(&cm_id_priv->refcount);
->   			return cm_id_priv;
->   		}
-> -		if (device < cm_id_priv->id.device)
-> +		if (device < cm_id_priv->id.device ||
-> +		    be64_lt(service_id, cm_id_priv->id.service_id))
->   			node = node->rb_left;
-> -		else if (device > cm_id_priv->id.device)
-> -			node = node->rb_right;
-> -		else if (be64_lt(service_id, cm_id_priv->id.service_id))
-> -			node = node->rb_left;
-> -		else if (be64_gt(service_id, cm_id_priv->id.service_id))
-> -			node = node->rb_right;
->   		else
->   			node = node->rb_right;
->   	}
+On Tue, Jun 14, 2022 at 8:14 AM Zi Yan <ziy@nvidia.com> wrote:
+>
+> On 13 Jun 2022, at 19:47, Guo Ren wrote:
+>
+> > On Tue, Jun 14, 2022 at 3:49 AM Zi Yan <ziy@nvidia.com> wrote:
+> >>
+> >> On 13 Jun 2022, at 12:32, Guo Ren wrote:
+> >>
+> >>> On Mon, Jun 13, 2022 at 11:23 PM Zi Yan <ziy@nvidia.com> wrote:
+> >>>>
+> >>>> Hi Xianting,
+> >>>>
+> >>>> Thanks for your patch.
+> >>>>
+> >>>> On 13 Jun 2022, at 9:10, Xianting Tian wrote:
+> >>>>
+> >>>>> Commit 787af64d05cd ("mm: page_alloc: validate buddy before check i=
+ts migratetype.")
+> >>>>> added buddy check code. But unfortunately, this fix isn't backporte=
+d to
+> >>>>> linux-5.17.y and the former stable branches. The reason is it added=
+ wrong
+> >>>>> fixes message:
+> >>>>>      Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallba=
+ckable
+> >>>>>                          pageblocks with others")
+> >>>>
+> >>>> No, the Fixes tag is right. The commit above does need to validate b=
+uddy.
+> >>> I think Xianting is right. The =E2=80=9CFixes:" tag is not accurate a=
+nd the
+> >>> page_is_buddy() is necessary here.
+> >>>
+> >>> This patch could be applied to the early version of the stable tree
+> >>> (eg: Linux-5.10.y, not the master tree)
+> >>
+> >> This is quite misleading. Commit 787af64d05cd applies does not mean it=
+ is
+> >> intended to fix the preexisting bug. Also it does not apply cleanly
+> >> to commit d9dddbf55667, there is a clear indentation mismatch. At best=
+,
+> >> you can say the way of 787af64d05cd fixing 1dd214b8f21c also fixes d9d=
+ddbf55667.
+> >> There is no way you can apply 787af64d05cd to earlier trees and call i=
+t a day.
+> >>
+> >> You can mention 787af64d05cd that it fixes a bug in 1dd214b8f21c and t=
+here is
+> >> a similar bug in d9dddbf55667 that can be fixed in a similar way too. =
+Saying
+> >> the fixes message is wrong just misleads people, making them think the=
+re is
+> >> no bug in 1dd214b8f21c. We need to be clear about this.
+> > First, d9dddbf55667 is earlier than 1dd214b8f21c in Linus tree. The
+> > origin fixes could cover the Linux-5.0.y tree if they give the
+> > accurate commit number and that is the cause we want to point out.
+>
+> Yes, I got that d9dddbf55667 is earlier and commit 787af64d05cd fixes
+> the issue introduced by d9dddbf55667. But my point is that 787af64d05cd
+> is not intended to fix d9dddbf55667 and saying it has a wrong fixes
+> message is misleading. This is the point I want to make.
+>
+> >
+> > Second, if the patch is for d9dddbf55667 then it could cover any tree
+> > in the stable repo. Actually, we only know Linux-5.10.y has the
+> > problem.
+>
+> But it is not and does not apply to d9dddbf55667 cleanly.
+>
+> >
+> > Maybe, Gregkh could help to direct us on how to deal with the issue:
+> > (Fixup a bug which only belongs to the former stable branch.)
+> >
+>
+> I think you just need to send this patch without saying =E2=80=9Ccommit
+> 787af64d05cd fixes message is wrong=E2=80=9D would be a good start. You a=
+lso
+> need extra fix to mm/page_isolation.c for kernels between 5.15 and 5.17
+> (inclusive). So there will need to be two patches:
+>
+> 1) your patch to stable tree prior to 5.15 and
+>
+> 2) your patch with an additional mm/page_isolation.c fix to stable tree
+> between 5.15 and 5.17.
+>
+> >>
+> >> Also, you will need to fix the mm/page_isolation.c code too to make th=
+is patch
+> >> complete, unless you can show that PFN=3D0x1000 is never going to be e=
+ncountered
+> >> in the mm/page_isolation.c code I mentioned below.
+> > No, we needn't fix mm/page_isolation.c in linux-5.10.y, because it had
+> > pfn_valid_within(buddy_pfn) check after __find_buddy_pfn() to prevent
+> > buddy_pfn=3D0.
+> > The root cause comes from __find_buddy_pfn():
+> > return page_pfn ^ (1 << order);
+>
+> Right. But pfn_valid_within() was removed since 5.15. So your fix is
+> required for kernels between 5.15 and 5.17 (inclusive).
+>
+> >
+> > When page_pfn is the same as the order size, it will return the
+> > previous buddy not the next. That is the only exception for this
+> > algorithm, right?
+> >
+> >
+> >
+> >
+> > In fact, the bug is a very long time to reproduce and is not easy to
+> > debug, so we want to contribute it to the community to prevent other
+> > guys from wasting time. Although there is no new patch at all.
+>
+> Thanks for your reporting and sending out the patch. I really
+> appreciate it. We definitely need your inputs. Throughout the email
+> thread, I am trying to help you clarify the bug and how to fix it
+> properly:
+>
+> 1. The commit 787af64d05cd does not apply cleanly to commits
+> d9dddbf55667, meaning you cannot just cherry-pick that commit to
+> fix the issue. That is why we need your patch to fix the issue.
+> And saying it has a wrong fixes message in this patch=E2=80=99s git log i=
+s
+> misleading.
+Okay, seems we need to send some patches for the different stable
+branches separately.
 
-Not sure if the fix is correct, e.g. with this condition:
-   device > cm_id_priv->id.device &&
-   be64_lt(service_id, cm_id_priv->id.service_id)
+>
+> 2. For kernels between 5.15 and 5.17 (inclusive), an additional fix
+> to mm/page_isolation.c is also needed, since pfn_valid_within() was
+> removed since 5.15 and the issue can appear during page isolation.
+Good point and we would take care of that.
 
-The original code gets rb_right but this fix gets rb_left. Maybe the 
-warning is complain about this:
-	...
-	else if (be64_gt(service_id, cm_id_priv->id.service_id))
-		node = node->rb_right;
-	else
-		node = node->rb_right;
+>
+> 3. For kernels before 5.15, this patch will apply.
+Thx
 
-Besides cm_insert_listen() has same logic.
+>
+> >
+> >>
+> >>>
+> >>>>
+> >>>>> Actually, this issue is involved by commit:
+> >>>>>      commit d9dddbf55667 ("mm/page_alloc: prevent merging between i=
+solated and other pageblocks")
+> >>>>>
+> >>>>> For RISC-V arch, the first 2M is reserved for sbi, so the start PFN=
+ is 512,
+> >>>>> but it got buddy PFN 0 for PFN 0x2000:
+> >>>>>      0 =3D 0x2000 ^ (1 << 12)
+> >>>>> With the illegal buddy PFN 0, it got an illegal buddy page, which c=
+aused
+> >>>>> crash in __get_pfnblock_flags_mask().
+> >>>>
+> >>>> It seems that the RISC-V arch reveals a similar bug from d9dddbf5566=
+7.
+> >>>> Basically, this bug will only happen when PFN=3D0x2000 is merging up=
+ and
+> >>>> there are some isolated pageblocks.
+> >>> Not PFN=3D0x2000, it's PFN=3D0x1000, I guess.
+> >>>
+> >>> RISC-V's first 2MB RAM could reserve for opensbi, so it would have
+> >>> riscv_pfn_base=3D512 and mem_map began with 512th PFN when
+> >>> CONFIG_FLATMEM=3Dy.
+> >>> (Also, csky has the same issue: a non-zero pfn_base in some scenarios=
+.)
+> >>>
+> >>> But __find_buddy_pfn algorithm thinks the start address is 0, it coul=
+d
+> >>> get 0 pfn or less than the pfn_base value. We need another check to
+> >>> prevent that.
+> >>>
+> >>>>
+> >>>> BTW, what does first reserved 2MB imply? All 4KB pages from first 2M=
+B are
+> >>>> set to PageReserved?
+> >>>>
+> >>>>>
+> >>>>> With the patch, it can avoid the calling of get_pageblock_migratety=
+pe() if
+> >>>>> it isn't buddy page.
+> >>>>
+> >>>> You might miss the __find_buddy_pfn() caller in unset_migratetype_is=
+olate()
+> >>>> from mm/page_isolation.c, if you are talking about linux-5.17.y and =
+former
+> >>>> version. There, page_is_buddy() is also not called and is_migrate_is=
+olate_page()
+> >>>> is called, which calls get_pageblock_migratetype() too.
+> >>>>
+> >>>>>
+> >>>>> Fixes: d9dddbf55667 ("mm/page_alloc: prevent merging between isolat=
+ed and other pageblocks")
+> >>>>> Cc: stable@vger.kernel.org
+> >>>>> Reported-by: zjb194813@alibaba-inc.com
+> >>>>> Reported-by: tianhu.hh@alibaba-inc.com
+> >>>>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+> >>>>> ---
+> >>>>>  mm/page_alloc.c | 3 +++
+> >>>>>  1 file changed, 3 insertions(+)
+> >>>>>
+> >>>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> >>>>> index b1caa1c6c887..5b423caa68fd 100644
+> >>>>> --- a/mm/page_alloc.c
+> >>>>> +++ b/mm/page_alloc.c
+> >>>>> @@ -1129,6 +1129,9 @@ static inline void __free_one_page(struct pag=
+e *page,
+> >>>>>
+> >>>>>                       buddy_pfn =3D __find_buddy_pfn(pfn, order);
+> >>>>>                       buddy =3D page + (buddy_pfn - pfn);
+> >>>>> +
+> >>>>> +                     if (!page_is_buddy(page, buddy, order))
+> >>>>> +                             goto done_merging;
+> >>>>>                       buddy_mt =3D get_pageblock_migratetype(buddy)=
+;
+> >>>>>
+> >>>>>                       if (migratetype !=3D buddy_mt
+> >>>>> --
+> >>>>> 2.17.1
+> >>>>
+> >>>> --
+> >>>> Best Regards,
+> >>>> Yan, Zi
+> >>>
+> >>>
+> >>>
+> >>> --
+> >>> Best Regards
+> >>>  Guo Ren
+> >>>
+> >>> ML: https://lore.kernel.org/linux-csky/
+> >>
+> >> --
+> >> Best Regards,
+> >> Yan, Zi
+> >
+> >
+> >
+> > --
+> > Best Regards
+> >  Guo Ren
+> >
+> > ML: https://lore.kernel.org/linux-csky/
+>
+> --
+> Best Regards,
+> Yan, Zi
+
+
+
+--=20
+Best Regards
+ Guo Ren
+
+ML: https://lore.kernel.org/linux-csky/

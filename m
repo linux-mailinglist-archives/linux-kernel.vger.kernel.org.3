@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CAB854B915
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 237E054B962
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357320AbiFNSoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
+        id S1357466AbiFNSqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357290AbiFNSoK (ORCPT
+        with ESMTP id S1357208AbiFNSoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 14:44:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4F04B1F1;
-        Tue, 14 Jun 2022 11:42:58 -0700 (PDT)
+        Tue, 14 Jun 2022 14:44:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6119D4D246;
+        Tue, 14 Jun 2022 11:42:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB6CB6123C;
-        Tue, 14 Jun 2022 18:42:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E122AC3411B;
-        Tue, 14 Jun 2022 18:42:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 066FDB81A3D;
+        Tue, 14 Jun 2022 18:42:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58E88C3411D;
+        Tue, 14 Jun 2022 18:42:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655232177;
-        bh=RnmCG4OsvJt2eoM8PLaM8TYlAXhqkJ+2MBbSQA+5vK8=;
+        s=korg; t=1655232171;
+        bh=C7lALrYP9wfEJi5gfhTfDi0lCmICa7srDQaw+nEf9Rc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OA+nMiwsVZ3qWHOB0SIEpXL2SLVemVF7e2QLcIIcX8MCUxwwf91ekmySyaVshGhCW
-         9kj8H5agT3udmpdRV+53NPzo8KI5Hhoxdrh9Sdhdv+nIHT/8FzyVABbCCGXCeE+uhL
-         Etr4eSPNlM2qphMr7/Hwy8b0ZZk1b8pvcFTcc/Ds=
+        b=LrbrZs210N1bVBcw/NMut6svHiFzejBZVJsjJevwN+B+QeVbbZWHWpcy5XMUljp9i
+         SJhL9c7uST9Jk21GrbEPzOw0vxrP7TLl3n0Q7nkfVXtYsohWT5dVNfjBRu5lKXCurQ
+         R/o78fQ2/a5NW9M1yE2Gey7OF/PaiQrDlEwmRvLg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        stable@vger.kernel.org,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
         Borislav Petkov <bp@suse.de>,
         Thomas Gleixner <tglx@linutronix.de>,
         Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 4.19 02/16] cpu/speculation: Add prototype for cpu_show_srbds()
+Subject: [PATCH 4.14 12/20] x86/speculation: Add a common function for MD_CLEAR mitigation update
 Date:   Tue, 14 Jun 2022 20:40:03 +0200
-Message-Id: <20220614183721.488403634@linuxfoundation.org>
+Message-Id: <20220614183726.271800911@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220614183720.928818645@linuxfoundation.org>
-References: <20220614183720.928818645@linuxfoundation.org>
+In-Reply-To: <20220614183723.328825625@linuxfoundation.org>
+References: <20220614183723.328825625@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,35 +57,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guenter Roeck <linux@roeck-us.net>
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-commit 2accfa69050c2a0d6fc6106f609208b3e9622b26 upstream.
+commit f52ea6c26953fed339aa4eae717ee5c2133c7ff2 upstream
 
-0-day is not happy that there is no prototype for cpu_show_srbds():
+Processor MMIO Stale Data mitigation uses similar mitigation as MDS and
+TAA. In preparation for adding its mitigation, add a common function to
+update all mitigations that depend on MD_CLEAR.
 
-drivers/base/cpu.c:565:16: error: no previous prototype for 'cpu_show_srbds'
+  [ bp: Add a newline in md_clear_update_mitigation() to separate
+    statements better. ]
 
-Fixes: 7e5b3c267d25 ("x86/speculation: Add Special Register Buffer Data Sampling (SRBDS) mitigation")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lkml.kernel.org/r/20200617141410.93338-1-linux@roeck-us.net
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/cpu.h |    1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kernel/cpu/bugs.c |   59 +++++++++++++++++++++++++--------------------
+ 1 file changed, 33 insertions(+), 26 deletions(-)
 
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -64,6 +64,7 @@ extern ssize_t cpu_show_tsx_async_abort(
- 					char *buf);
- extern ssize_t cpu_show_itlb_multihit(struct device *dev,
- 				      struct device_attribute *attr, char *buf);
-+extern ssize_t cpu_show_srbds(struct device *dev, struct device_attribute *attr, char *buf);
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -40,7 +40,7 @@ static void __init spectre_v2_select_mit
+ static void __init ssb_select_mitigation(void);
+ static void __init l1tf_select_mitigation(void);
+ static void __init mds_select_mitigation(void);
+-static void __init mds_print_mitigation(void);
++static void __init md_clear_update_mitigation(void);
+ static void __init taa_select_mitigation(void);
+ static void __init srbds_select_mitigation(void);
  
- extern __printf(4, 5)
- struct device *cpu_device_create(struct device *parent, void *drvdata,
+@@ -113,10 +113,10 @@ void __init check_bugs(void)
+ 	srbds_select_mitigation();
+ 
+ 	/*
+-	 * As MDS and TAA mitigations are inter-related, print MDS
+-	 * mitigation until after TAA mitigation selection is done.
++	 * As MDS and TAA mitigations are inter-related, update and print their
++	 * mitigation after TAA mitigation selection is done.
+ 	 */
+-	mds_print_mitigation();
++	md_clear_update_mitigation();
+ 
+ 	arch_smt_update();
+ 
+@@ -257,14 +257,6 @@ static void __init mds_select_mitigation
+ 	}
+ }
+ 
+-static void __init mds_print_mitigation(void)
+-{
+-	if (!boot_cpu_has_bug(X86_BUG_MDS) || cpu_mitigations_off())
+-		return;
+-
+-	pr_info("%s\n", mds_strings[mds_mitigation]);
+-}
+-
+ static int __init mds_cmdline(char *str)
+ {
+ 	if (!boot_cpu_has_bug(X86_BUG_MDS))
+@@ -312,7 +304,7 @@ static void __init taa_select_mitigation
+ 	/* TSX previously disabled by tsx=off */
+ 	if (!boot_cpu_has(X86_FEATURE_RTM)) {
+ 		taa_mitigation = TAA_MITIGATION_TSX_DISABLED;
+-		goto out;
++		return;
+ 	}
+ 
+ 	if (cpu_mitigations_off()) {
+@@ -326,7 +318,7 @@ static void __init taa_select_mitigation
+ 	 */
+ 	if (taa_mitigation == TAA_MITIGATION_OFF &&
+ 	    mds_mitigation == MDS_MITIGATION_OFF)
+-		goto out;
++		return;
+ 
+ 	if (boot_cpu_has(X86_FEATURE_MD_CLEAR))
+ 		taa_mitigation = TAA_MITIGATION_VERW;
+@@ -358,18 +350,6 @@ static void __init taa_select_mitigation
+ 
+ 	if (taa_nosmt || cpu_mitigations_auto_nosmt())
+ 		cpu_smt_disable(false);
+-
+-	/*
+-	 * Update MDS mitigation, if necessary, as the mds_user_clear is
+-	 * now enabled for TAA mitigation.
+-	 */
+-	if (mds_mitigation == MDS_MITIGATION_OFF &&
+-	    boot_cpu_has_bug(X86_BUG_MDS)) {
+-		mds_mitigation = MDS_MITIGATION_FULL;
+-		mds_select_mitigation();
+-	}
+-out:
+-	pr_info("%s\n", taa_strings[taa_mitigation]);
+ }
+ 
+ static int __init tsx_async_abort_parse_cmdline(char *str)
+@@ -394,6 +374,33 @@ static int __init tsx_async_abort_parse_
+ early_param("tsx_async_abort", tsx_async_abort_parse_cmdline);
+ 
+ #undef pr_fmt
++#define pr_fmt(fmt)     "" fmt
++
++static void __init md_clear_update_mitigation(void)
++{
++	if (cpu_mitigations_off())
++		return;
++
++	if (!static_key_enabled(&mds_user_clear))
++		goto out;
++
++	/*
++	 * mds_user_clear is now enabled. Update MDS mitigation, if
++	 * necessary.
++	 */
++	if (mds_mitigation == MDS_MITIGATION_OFF &&
++	    boot_cpu_has_bug(X86_BUG_MDS)) {
++		mds_mitigation = MDS_MITIGATION_FULL;
++		mds_select_mitigation();
++	}
++out:
++	if (boot_cpu_has_bug(X86_BUG_MDS))
++		pr_info("MDS: %s\n", mds_strings[mds_mitigation]);
++	if (boot_cpu_has_bug(X86_BUG_TAA))
++		pr_info("TAA: %s\n", taa_strings[taa_mitigation]);
++}
++
++#undef pr_fmt
+ #define pr_fmt(fmt)	"SRBDS: " fmt
+ 
+ enum srbds_mitigations {
 
 

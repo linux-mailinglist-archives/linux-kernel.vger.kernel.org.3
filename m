@@ -2,50 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC1D54ADE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:02:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D253E54ADE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238924AbiFNKB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 06:01:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47374 "EHLO
+        id S240696AbiFNKES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 06:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiFNKBv (ORCPT
+        with ESMTP id S229583AbiFNKEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 06:01:51 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9244615E;
-        Tue, 14 Jun 2022 03:01:49 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LMkSQ5lWCz1K9V1;
-        Tue, 14 Jun 2022 17:59:50 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 18:01:46 +0800
-Message-ID: <a1bf63f9-beb2-5f96-f20e-d0a557179b9e@huawei.com>
-Date:   Tue, 14 Jun 2022 18:01:46 +0800
+        Tue, 14 Jun 2022 06:04:15 -0400
+Received: from mail-ua1-x934.google.com (mail-ua1-x934.google.com [IPv6:2607:f8b0:4864:20::934])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6183124F1D;
+        Tue, 14 Jun 2022 03:04:14 -0700 (PDT)
+Received: by mail-ua1-x934.google.com with SMTP id a28so1360581uaj.10;
+        Tue, 14 Jun 2022 03:04:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NUcA5veSvIKp9efGYaSuiwEPBAGLkgGB6k/vshTldpY=;
+        b=Ow4jD17EtDtXtVVIuidII2cS96qWGVvJ+yE+rHXtaAD8sOPcq2wlB11vzXf5lI6kSQ
+         fx6FeDAbXEbPlIwcG50VJmjIRsWklRlB1ROWabcb754n32jfxZisgZcFEm3WRxCnl7tZ
+         xsHVcf78F9f36XZlWQoVxeUGmFDR3Sls2HUj5GiTRdhwixQus+rSz+p7Muf6BPpHVe9q
+         WSnMCaVtYTIFI0Yq2nIdlJKswIr3tFHWh/mMKDXKV0nqQonNa3gaV+e7aO5RAG7sXSj/
+         l1qaTeIOrkBcZ6VCp9GrxGika7uuXZ8NoPIeF8beogXYYZZVs2/5+C0B0rm8h/ycrpL6
+         KieA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NUcA5veSvIKp9efGYaSuiwEPBAGLkgGB6k/vshTldpY=;
+        b=DuA9UqwXsMHWzC8rqm8DWL0kqeLnA13Jsq2Hi6gJXY3nm6Ythww/il7eH237p7VrCm
+         Bogt8vUoYqNaECaowSRdEUPzudEBahkvDbW3EhQZRX5pjfDs5HPRwWq3LGsrIoE1DPGs
+         y73+Rlbl288IHO7ABFZU+uSwSgnkZXUlpS+xWB640Tnck8Ula76JlzdtMSrCtsVLZnE0
+         a69lw8eL2p5vFaGZvSiYUGDKnIW7LJEK/cyo0gcYQJ1sfVQ9TaZtq8IUvSWXLEz61O0R
+         sNp3+W+KZ7bkE2v5XnMZ5EEfCdogFiBg5ezoZq3OuyftHbRYptkn2zJ3XiO5SmAGr2fy
+         ZJeg==
+X-Gm-Message-State: AJIora+NkOd019gDmXAGUr6ABzY3GYeOOeXo9+SgJ+vainj/GtKSq/U+
+        wgtjZ1Z/4We0odBhlHfgQXOCJ1UX2kLqgZrqLQooHOc1bXs=
+X-Google-Smtp-Source: AGRyM1v2Yi2H90p8cw7CGAp0Um+hE8UMBQoM8l+Pz+i3FA88fIHdwGzIpPTvtAckFXEXG2EZHdDkw42ADqdWqd6PkNc=
+X-Received: by 2002:ab0:6d9a:0:b0:36e:5a86:92fb with SMTP id
+ m26-20020ab06d9a000000b0036e5a8692fbmr1724054uah.38.1655201053486; Tue, 14
+ Jun 2022 03:04:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.1
-Subject: Re: [PATCH] ext4: fix use-after-free in ext4_xattr_set_entry
-To:     Jan Kara <jack@suse.cz>
-CC:     <linux-ext4@vger.kernel.org>, <tytso@mit.edu>,
-        <adilger.kernel@dilger.ca>, <ritesh.list@gmail.com>,
-        <lczerner@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>, <yebin10@huawei.com>, <yukuai3@huawei.com>,
-        Hulk Robot <hulkci@huawei.com>
-References: <20220602114651.3244889-1-libaokun1@huawei.com>
- <20220614095424.djuxzoy5zcoc64y2@quack3.lan>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20220614095424.djuxzoy5zcoc64y2@quack3.lan>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220614071059.23696-1-liqiong@nfschina.com>
+In-Reply-To: <20220614071059.23696-1-liqiong@nfschina.com>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Tue, 14 Jun 2022 12:03:56 +0200
+Message-ID: <CAOi1vP-xXk7SSkaQJziv-9j=WfpXYdVieaBmfsJXTnPTYDTOjQ@mail.gmail.com>
+Subject: Re: [PATCH] libceph: check pointer before assigned to "c->rules[]"
+To:     Li Qiong <liqiong@nfschina.com>
+Cc:     Xiubo Li <xiubli@redhat.com>, Jeff Layton <jlayton@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ceph Development <ceph-devel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, yuzhe@nfschina.com,
+        renyu@nfschina.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,105 +72,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/6/14 17:54, Jan Kara 写道:
-> On Thu 02-06-22 19:46:51, Baokun Li wrote:
->> Hulk Robot reported a issue:
->> ==================================================================
->> BUG: KASAN: use-after-free in ext4_xattr_set_entry+0x18ab/0x3500
->> Write of size 4105 at addr ffff8881675ef5f4 by task syz-executor.0/7092
->>
->> CPU: 1 PID: 7092 Comm: syz-executor.0 Not tainted 4.19.90-dirty #17
->> Call Trace:
->> [...]
->>   memcpy+0x34/0x50 mm/kasan/kasan.c:303
->>   ext4_xattr_set_entry+0x18ab/0x3500 fs/ext4/xattr.c:1747
->>   ext4_xattr_ibody_inline_set+0x86/0x2a0 fs/ext4/xattr.c:2205
->>   ext4_xattr_set_handle+0x940/0x1300 fs/ext4/xattr.c:2386
->>   ext4_xattr_set+0x1da/0x300 fs/ext4/xattr.c:2498
->>   __vfs_setxattr+0x112/0x170 fs/xattr.c:149
->>   __vfs_setxattr_noperm+0x11b/0x2a0 fs/xattr.c:180
->>   __vfs_setxattr_locked+0x17b/0x250 fs/xattr.c:238
->>   vfs_setxattr+0xed/0x270 fs/xattr.c:255
->>   setxattr+0x235/0x330 fs/xattr.c:520
->>   path_setxattr+0x176/0x190 fs/xattr.c:539
->>   __do_sys_lsetxattr fs/xattr.c:561 [inline]
->>   __se_sys_lsetxattr fs/xattr.c:557 [inline]
->>   __x64_sys_lsetxattr+0xc2/0x160 fs/xattr.c:557
->>   do_syscall_64+0xdf/0x530 arch/x86/entry/common.c:298
->>   entry_SYSCALL_64_after_hwframe+0x44/0xa9
->> RIP: 0033:0x459fe9
->> RSP: 002b:00007fa5e54b4c08 EFLAGS: 00000246 ORIG_RAX: 00000000000000bd
->> RAX: ffffffffffffffda RBX: 000000000051bf60 RCX: 0000000000459fe9
->> RDX: 00000000200003c0 RSI: 0000000020000180 RDI: 0000000020000140
->> RBP: 000000000051bf60 R08: 0000000000000001 R09: 0000000000000000
->> R10: 0000000000001009 R11: 0000000000000246 R12: 0000000000000000
->> R13: 00007ffc73c93fc0 R14: 000000000051bf60 R15: 00007fa5e54b4d80
->> [...]
->> ==================================================================
->>
->> Above issue may happen as follows:
->> -------------------------------------
->> ext4_xattr_set
->>    ext4_xattr_set_handle
->>      ext4_xattr_ibody_find
->>        >> s->end < s->base
->>        >> no EXT4_STATE_XATTR
->>        >> xattr_check_inode is not executed
->>      ext4_xattr_ibody_set
->>        ext4_xattr_set_entry
->>         >> size_t min_offs = s->end - s->base
->>         >> UAF in memcpy
->>
->> we can easily reproduce this problem with the following commands:
->>      mkfs.ext4 -F /dev/sda
->>      mount -o debug_want_extra_isize=128 /dev/sda /mnt
->>      touch /mnt/file
->>      setfattr -n user.cat -v `seq -s z 4096|tr -d '[:digit:]'` /mnt/file
->>
->> In ext4_xattr_ibody_find, we have the following assignment logic:
->>    header = IHDR(inode, raw_inode)
->>           = raw_inode + EXT4_GOOD_OLD_INODE_SIZE + i_extra_isize
->>    is->s.base = IFIRST(header)
->>               = header + sizeof(struct ext4_xattr_ibody_header)
->>    is->s.end = raw_inode + s_inode_size
->>
->> Obviously, when the inode does not have EXT4_status_XATTR and its
->> i_extra_isize is large, is->s.end may be larger than is->s.base.
->> In this case, the above issue may be triggered.
->>
->>     EXT4_GOOD_OLD_INODE_SIZE  extra_isize  header   entry   pad   data
->> |---------------------------|------------|------|---------|---|--------|
->>
->> As shown above, when adding an xattr to an inode, we must ensure that the
->> inode_size is not less than EXT4_GOOD_OLD_INODE_SIZE + extra_isize + pad.
->>
->> Reported-by: Hulk Robot <hulkci@huawei.com>
->> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> Thanks for the fix! It looks good to me. Just one small nit:
+On Tue, Jun 14, 2022 at 9:12 AM Li Qiong <liqiong@nfschina.com> wrote:
 >
->> +#define INODE_HAVE_XATTR_SPACE(inode)					\
->> +	((EXT4_I(inode)->i_extra_isize != 0) &&				\
->> +	 (EXT4_GOOD_OLD_INODE_SIZE + EXT4_I(inode)->i_extra_isize +	\
->> +	  sizeof(struct ext4_xattr_ibody_header) + EXT4_XATTR_PAD <=	\
->> +	  EXT4_INODE_SIZE((inode)->i_sb)))
->> +
-> We should have ext4 in the name of the above macro so something like:
+> It should be better to check pointer firstly, then assign it
+> to c->rules[]. Refine code a little bit.
 >
-> EXT4_INODE_HAS_XATTR_SPACE()
+> Signed-off-by: Li Qiong <liqiong@nfschina.com>
+> ---
+>  net/ceph/osdmap.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> With that fixed feel free to add:
+> diff --git a/net/ceph/osdmap.c b/net/ceph/osdmap.c
+> index 2823bb3cff55..6ec5007f96dc 100644
+> --- a/net/ceph/osdmap.c
+> +++ b/net/ceph/osdmap.c
+> @@ -571,9 +571,9 @@ static struct crush_map *crush_decode(void *pbyval, void *end)
+>                         goto bad;
+>  #endif
+>                 r = kmalloc(struct_size(r, steps, yes), GFP_NOFS);
+> -               c->rules[i] = r;
+>                 if (r == NULL)
+>                         goto badmem;
+> +               c->rules[i] = r;
+>                 dout(" rule %d is at %p\n", i, r);
+>                 r->len = yes;
+>                 ceph_decode_copy_safe(p, end, &r->mask, 4, bad); /* 4 u8's */
+> --
+> 2.11.0
 >
-> Reviewed-by: Jan Kara <jack@suse.cz>
->
-> 								Honza
 
-Thank you for your review!
+This doesn't change anything as c->rules pointer array is zeroed out.
+Anyway, applied.
 
-I will send a patch V2 with the changes suggested by you. Thanks again!
+Thanks,
 
--- 
-With Best Regards,
-Baokun Li
-
-.
-
+                Ilya

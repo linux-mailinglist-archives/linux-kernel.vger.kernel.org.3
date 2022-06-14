@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E314654ADB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CE054ADB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233602AbiFNJt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 05:49:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
+        id S1352828AbiFNJuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 05:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242541AbiFNJto (ORCPT
+        with ESMTP id S242773AbiFNJtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 05:49:44 -0400
+        Tue, 14 Jun 2022 05:49:50 -0400
 Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD655434B5;
-        Tue, 14 Jun 2022 02:49:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8CF4349B;
+        Tue, 14 Jun 2022 02:49:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655200183; x=1686736183;
+  t=1655200190; x=1686736190;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=YCR295Yw2oMjSg7OW7athq4DigmdIWHGl8CQCqzIyOk=;
-  b=ihembLyEuALCSdO6nPTvP3UChGKpAe0D5uJ/mWxbweGpeE5m1SkznAsw
-   qZ7QfShYEYp/s8K7oPprRhWCreLWEaU0KT4Yb3TdoeEwjYjch0Hspq8so
-   83jGFtXkcn7bQy1IYmOu0Dl0sxeJ1VoaLUxJGA1ZZuuSIGPOBq8vx/uVn
-   I=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Jun 2022 02:49:43 -0700
+  bh=u7Gb3/PapHRjVi0VXOJ9dJrekYnxwtz7LKxoyvJP9W0=;
+  b=TS5aQ5qzjv/nKCTJGjzsAIUFFcszd7Vt7Xatp0kAVruLT8taC4G7znA4
+   Y+jz584k838cH/vZjZKzr8GQ/KnQnocrAFfB5/ssqL2BwN8Iz/uwbBnH8
+   nc8sZ7Va5JmE6lkkltvDTAxal5Bh2TQxx3Am7MaqSbP0ULj1yocDytGG4
+   A=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 14 Jun 2022 02:49:49 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 02:49:43 -0700
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 02:49:48 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 14 Jun 2022 02:49:43 -0700
+ 15.2.986.22; Tue, 14 Jun 2022 02:49:47 -0700
 Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 14 Jun 2022 02:49:38 -0700
+ 15.2.986.22; Tue, 14 Jun 2022 02:49:43 -0700
 From:   Satya Priya <quic_c_skakit@quicinc.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -49,9 +49,9 @@ CC:     Lee Jones <lee.jones@linaro.org>,
         <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
         <quic_jprakash@quicinc.com>,
         Satya Priya <quic_c_skakit@quicinc.com>
-Subject: [PATCH V15 8/9] arm64: dts: qcom: pm8008: Add base dts file
-Date:   Tue, 14 Jun 2022 15:18:30 +0530
-Message-ID: <1655200111-18357-9-git-send-email-quic_c_skakit@quicinc.com>
+Subject: [PATCH V15 9/9] arm64: dts: qcom: sc7280: Add pm8008 support for sc7280-idp
+Date:   Tue, 14 Jun 2022 15:18:31 +0530
+Message-ID: <1655200111-18357-10-git-send-email-quic_c_skakit@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1655200111-18357-1-git-send-email-quic_c_skakit@quicinc.com>
 References: <1655200111-18357-1-git-send-email-quic_c_skakit@quicinc.com>
@@ -70,84 +70,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add base DTS file for pm8008.
+Add pm8008 infra and regulators support for sc7280 idp.
 
 Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
 Reviewed-by: Stephen Boyd <swboyd@chromium.org>
 ---
 Changes in V15:
- - Changed copyright from GPL to BSD.
+ - None.
 
 Changes in V14:
- - Changed copyright from BSD to GPL.
+ - None.
 
 Changes in V13:
  - None.
 
- arch/arm64/boot/dts/qcom/pm8008.dtsi | 54 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/pm8008.dtsi
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 66 ++++++++++++++++++++++++++++++++
+ 1 file changed, 66 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/pm8008.dtsi b/arch/arm64/boot/dts/qcom/pm8008.dtsi
-new file mode 100644
-index 0000000..0ffef2f
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/pm8008.dtsi
-@@ -0,0 +1,54 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+// Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+index 5eb6689..166812e 100644
+--- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
+@@ -271,6 +271,63 @@
+ 	};
+ };
+ 
++pm8008_bus: &i2c1 {
++	status = "okay";
++};
 +
-+&pm8008_bus {
-+	pm8008: pmic@8 {
-+		compatible = "qcom,pm8008";
-+		reg = <0x8>;
-+		#address-cells = <2>;
-+		#size-cells = <0>;
-+		#interrupt-cells = <2>;
++#include "pm8008.dtsi"
 +
-+		pm8008_l1: ldo1@1,4000 {
-+			compatible = "qcom,pm8008-regulator";
-+			reg = <0x1 0x4000>;
-+			regulator-name = "pm8008_ldo1";
-+		};
++&pm8008 {
++	interrupt-parent = <&tlmm>;
++	interrupts = <24 IRQ_TYPE_EDGE_RISING>;
 +
-+		pm8008_l2: ldo2@1,4100 {
-+			compatible = "qcom,pm8008-regulator";
-+			reg = <0x1 0x4100>;
-+			regulator-name = "pm8008_ldo2";
-+		};
++	pinctrl-names = "default";
++	pinctrl-0 = <&pm8008_active>;
 +
-+		pm8008_l3: ldo3@1,4200 {
-+			compatible = "qcom,pm8008-regulator";
-+			reg = <0x1 0x4200>;
-+			regulator-name = "pm8008_ldo3";
-+		};
++	reset-gpios = <&pm8350c_gpios 4 GPIO_ACTIVE_LOW>;
 +
-+		pm8008_l4: ldo4@1,4300 {
-+			compatible = "qcom,pm8008-regulator";
-+			reg = <0x1 0x4300>;
-+			regulator-name = "pm8008_ldo4";
-+		};
++	vdd_l1_l2-supply = <&vreg_s8b_1p2>;
++	vdd_l3_l4-supply = <&vreg_s1b_1p8>;
++	vdd_l5-supply = <&vreg_bob>;
++	vdd_l6-supply = <&vreg_bob>;
++	vdd_l7-supply = <&vreg_bob>;
++};
 +
-+		pm8008_l5: ldo5@1,4400 {
-+			compatible = "qcom,pm8008-regulator";
-+			reg = <0x1 0x4400>;
-+			regulator-name = "pm8008_ldo5";
-+		};
++&pm8008_l1 {
++	regulator-min-microvolt = <950000>;
++	regulator-max-microvolt = <1300000>;
++};
 +
-+		pm8008_l6: ldo6@1,4500 {
-+			compatible = "qcom,pm8008-regulator";
-+			reg = <0x1 0x4500>;
-+			regulator-name = "pm8008_ldo6";
-+		};
++&pm8008_l2 {
++	regulator-min-microvolt = <950000>;
++	regulator-max-microvolt = <1250000>;
++};
 +
-+		pm8008_l7: ldo7@1,4600 {
-+			compatible = "qcom,pm8008-regulator";
-+			reg = <0x1 0x4600>;
-+			regulator-name = "pm8008_ldo7";
-+		};
++&pm8008_l3 {
++	regulator-min-microvolt = <1650000>;
++	regulator-max-microvolt = <3000000>;
++};
++
++&pm8008_l4 {
++	regulator-min-microvolt = <1504000>;
++	regulator-max-microvolt = <1600000>;
++};
++
++&pm8008_l5 {
++	regulator-min-microvolt = <2600000>;
++	regulator-max-microvolt = <3000000>;
++};
++
++&pm8008_l6 {
++	regulator-min-microvolt = <2600000>;
++	regulator-max-microvolt = <3000000>;
++};
++
++&pm8008_l7 {
++	regulator-min-microvolt = <3000000>;
++	regulator-max-microvolt = <3544000>;
++};
++
+ &qfprom {
+ 	vcc-supply = <&vreg_l1c_1p8>;
+ };
+@@ -383,6 +440,15 @@
+ 	drive-strength = <2>;
+ };
+ 
++&pm8350c_gpios {
++	pm8008_active: pm8008-active {
++		pins = "gpio4";
++		function = "normal";
++		bias-disable;
++		power-source = <0>;
 +	};
 +};
++
+ &qspi_cs0 {
+ 	bias-disable;
+ };
 -- 
 2.7.4
 

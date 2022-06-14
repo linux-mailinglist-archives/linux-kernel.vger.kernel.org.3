@@ -2,121 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA0554BA84
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:29:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E52254BA87
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242030AbiFNT3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 15:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S236660AbiFNTaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 15:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235275AbiFNT3G (ORCPT
+        with ESMTP id S233944AbiFNTaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 15:29:06 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFC7140AE
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:29:05 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id h192so9392578pgc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=m8sRbdjaWLngut7z7gVlgUwSBUU63aye8jnOzp6qH2M=;
-        b=XgMzpWyS3GjTNjevMNPR6KHcV1KnEtzYTsTPCzt2HHnoRzI5Gxvo6rArgXxftkImB8
-         5+XgxUWNBlFrNVbfPzyO/XWLXROuSLIJ8MpRYoUffONgcpPtsJpL6BYXq6k2BXbBeZ+7
-         YX7RfGu5IgOZRN9mhVB1XXhgx9+i0tKZ0PENvVSKUhGhFYUiVqnCJBszGSWmd+vZ8Iq5
-         0xFRwFZdxTgIEAaotIQftpbtFAWZNXK8v8aX/ix2/WEYrYV+biOz3rEn1++aebyy85EC
-         PvpqUHPVXwLRjvkwttP/kfbSwEpfscSpDTvtvmhLMz3OkFH1JLLLgxsyxo2+0NK5SYk9
-         DW9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=m8sRbdjaWLngut7z7gVlgUwSBUU63aye8jnOzp6qH2M=;
-        b=0M82e2Sk41wz3SKj12CHoXhlH+boEWewaOjeOAS+6VALExgE3ctmH13CekwpYF6eFo
-         ZX8tAy1V0iVR2a7+lbTEVLVsF/Um4PP+MnsGhvvKFMuoNqs1o495GQD0Xd52I0fqvZiS
-         0IuIkRYUBgKIVPnQAsya4oR0H3J8VFoSG4efcT/M417Jt64jtp0lXa0nXnr7WCrIYMb5
-         omq+cbNw7ck6z1y4zzTGylsP69XxbH4sp3i/JumqxrjGvRnR+M9xBTvJyZwLI3sCGrqy
-         i4gqV+4nVRDXn7SZ/6FcJMQZhHaNPzOwx9IU4GwyyNw13fCSnkUXPIlONTOaM8WzSF6+
-         2n3g==
-X-Gm-Message-State: AOAM532Nomrzzj0UEGh0MQ1Q205i1ezYIGNoe6NdmYPSHxqrAFooShgX
-        el3BpUdzpWbFQYjYFQ0J87KrLQ==
-X-Google-Smtp-Source: ABdhPJzixjJR7IV+cO3qB/NPWSKaVfHJnhwUbB+QxeJXWqo4cRUqxA3i998JbaHyIfQwna+qI6BoyA==
-X-Received: by 2002:a63:6a06:0:b0:3fd:5a1d:85c5 with SMTP id f6-20020a636a06000000b003fd5a1d85c5mr5876118pgc.130.1655234945184;
-        Tue, 14 Jun 2022 12:29:05 -0700 (PDT)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id w14-20020a1709029a8e00b001676f87473fsm7590691plp.302.2022.06.14.12.29.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 12:29:04 -0700 (PDT)
-Message-ID: <475873e3-4166-4e34-7ccc-363dd8963cce@linaro.org>
-Date:   Tue, 14 Jun 2022 21:28:57 +0200
+        Tue, 14 Jun 2022 15:30:11 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1FD92A40E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:30:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=k1; bh=JYA73JAUbaXV/TVudQauMuQD88C
+        teYoD72mnTRjwInY=; b=GME3YTHxGg9bGDeFoa3lM+IYcom/QK/HaEGLg+IvbXb
+        UNrFU9G3+OFXiG+788L13MC/nnm+JNecYgBsKKIaIuO4vA9KzW6y7IZ1ZWJ6pBjH
+        a2/sCCKKeK4RYSZgjq+vOiOmlM5gR1VjqJ3ry5t7S//sjHm9ocCbiNqOGbEC+oCM
+        =
+Received: (qmail 1834197 invoked from network); 14 Jun 2022 21:30:07 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Jun 2022 21:30:07 +0200
+X-UD-Smtp-Session: l3s3148p1@Xouhbm3h9JsgAwDtxwyXAGMY7IbT6g6m
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] arm64: dts: renesas: spider-cpu: Enable SCIF0 on second connector
+Date:   Tue, 14 Jun 2022 21:30:05 +0200
+Message-Id: <20220614193005.2652-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] MAINTAINERS: adjust ARM/INTEL IXP4XX ARM ARCHITECTURE to
- ixp4xx clean-up
-Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Imre Kaloz <kaloz@openwrt.org>, Krzysztof Halasa <khalasa@piap.pl>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220601050200.22213-1-lukas.bulwahn@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220601050200.22213-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/06/2022 07:02, Lukas Bulwahn wrote:
-> Commit c83227a5d05e ("irq/gpio: ixp4xx: Drop boardfile probe path") and
-> commit 155e4306107f ("clocksource/drivers/ixp4xx: Drop boardfile probe
-> path") remove files include/linux/irqchip/irq-ixp4xx.h and
-> include/linux/platform_data/timer-ixp4xx.h, but miss to adjust MAINTAINERS.
-> 
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about
-> broken references.
-> 
-> Remove file entries for those files in ARM/INTEL IXP4XX ARM ARCHITECTURE.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+The schematics label it as SCIF0 debug port.
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+---
 
-> ---
-> Linus, please pick this minor non-urgent clean-up patch for ixp4xx arm.
-> 
->   MAINTAINERS | 2 --
->   1 file changed, 2 deletions(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 58e751b9346e..e0f5895feb6b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2196,8 +2196,6 @@ F:	drivers/clocksource/timer-ixp4xx.c
->   F:	drivers/crypto/ixp4xx_crypto.c
->   F:	drivers/gpio/gpio-ixp4xx.c
->   F:	drivers/irqchip/irq-ixp4xx.c
-> -F:	include/linux/irqchip/irq-ixp4xx.h
-> -F:	include/linux/platform_data/timer-ixp4xx.h
->   
->   ARM/INTEL KEEMBAY ARCHITECTURE
->   M:	Paul J. Murphy <paul.j.murphy@intel.com>
+Change since v1: added alias
 
+ .../arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi | 13 +++++++++++++
+ arch/arm64/boot/dts/renesas/r8a779f0-spider.dts     |  1 +
+ 2 files changed, 14 insertions(+)
 
+diff --git a/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi b/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
+index 3208d2148768..7a62afb64204 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
+@@ -68,6 +68,11 @@ i2c4_pins: i2c4 {
+ 		function = "i2c4";
+ 	};
+ 
++	scif0_pins: scif0 {
++		groups = "scif0_data", "scif0_ctrl";
++		function = "scif0";
++	};
++
+ 	scif_clk_pins: scif_clk {
+ 		groups = "scif_clk";
+ 		function = "scif_clk";
+@@ -79,6 +84,14 @@ &rwdt {
+ 	status = "okay";
+ };
+ 
++&scif0 {
++	pinctrl-0 = <&scif0_pins>;
++	pinctrl-names = "default";
++
++	uart-has-rtscts;
++	status = "okay";
++};
++
+ &scif_clk {
+ 	clock-frequency = <24000000>;
+ };
+diff --git a/arch/arm64/boot/dts/renesas/r8a779f0-spider.dts b/arch/arm64/boot/dts/renesas/r8a779f0-spider.dts
+index 954ba227bfa7..2c1fe4330c2b 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779f0-spider.dts
++++ b/arch/arm64/boot/dts/renesas/r8a779f0-spider.dts
+@@ -15,6 +15,7 @@ / {
+ 
+ 	aliases {
+ 		serial0 = &hscif0;
++		serial1 = &scif0;
+ 	};
+ 
+ 	chosen {
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.35.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

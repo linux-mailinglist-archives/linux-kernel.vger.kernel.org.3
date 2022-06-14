@@ -2,224 +2,393 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4B254AA4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54C3654AA48
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353610AbiFNHQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55202 "EHLO
+        id S1353819AbiFNHRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:17:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238026AbiFNHQs (ORCPT
+        with ESMTP id S1353698AbiFNHRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:16:48 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832603C4A9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:16:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655191005; x=1686727005;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=uOMJ9wLfoNqGl4MRL0O2orAa+q01k5q9ZMDa6qayy94=;
-  b=igNMwrf202lSiNzO/Lu6muP59gfYiBcH9Ske2zGwlB4zKqv75KUedb9w
-   stQdme2Z5lajybBzc/Vu1LfVFDSzOUszn6MaV8W4shc1nTt9WueEzknfK
-   ywZZ0vYPTrw2UAcnyr0yQrYuP0RCkI9G2/3PKRTUP3hmk79dh+WtGnzkf
-   WYWA2o8HBFzfQQNOQ1cY7XSxvz+Sl1xE9GWRT5gfYSHP0/gPBwyQ1FTg7
-   /lIqeoDlk72GpA+QhphvHdr20fulD6pFmuoAHtZutg+mgd6nSpz8ihKk6
-   Cdu7HwNqQ+jDG3hqaHY2TxSVq2CXN0c0dCrxP99GSc5zbJhCzw9nHgNGr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258365905"
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="258365905"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:16:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="910834497"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Jun 2022 00:16:45 -0700
-Received: from fmsmsx604.amr.corp.intel.com (10.18.126.84) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 14 Jun 2022 00:16:44 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 14 Jun 2022 00:16:44 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Tue, 14 Jun 2022 00:16:19 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D+pMMIaLMzOzAA09hX175divLGnZyTpY9QJl6cofSTUa5HVpN2v8FePyD12zY7TSmLE9LFm9V3CEnZGvp1KuGnz4rYOYdz+zcB1MKzkIVQGVQqVrp/TaaIHp2n3ri5byl9wkBf+r8yQT1xh1fbTIkzzJvaEYDB4GxHbALTV4e/Kqv8YkXupKn6n10GvmvfXvOX8fpUz88IrASDaITc2ylJM1NFuDJcDA2kXf8qnpvFu7bCUDxsnRIGd7RO0a1CqyHSIIpi3vrgLBHSriViarCGMUffXRmGE1+7OrI/WQ5F3UvJklmzOjo9Rl36f7VmCVsKBlCcOGgg9kQNLRR/qiXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3Q7YozYfz/rY7O6R0nRnWG9GUOd8ikWsSf7yZE8l96M=;
- b=FYtl4Q5O4n/0JmFmvuC4k7raP+jmESQJO28r7lAgncpW6p5OeLp5WoxTYaivACBx6rxlME8uqd3u3YGGjXRg8kXz4VbvVeSxNrKs/78VEYLPyTgCqEpSj8HsNR9VYDQpx9pro01Wf0lhu9xmwB7+fSNHBGK9HvW6tp+b4qSmvLH/wGHKujISaVFj54VW4uB0wJWPlKNW9vkEW5nW6Bslm6To6+xo5ntOiEpjyHEMm2X8Ztvzt3y66DxSCQI+lpUoFu5qGfABb4tEYdG5UzmqCei30l6sU/pRapM1Zf6181piN4XDuj3E35+aAY2iY01+ra9dP8ihLWA/YeQ3rQNQlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by CO6PR11MB5649.namprd11.prod.outlook.com (2603:10b6:5:35b::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5314.13; Tue, 14 Jun
- 2022 07:16:18 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::3583:afc6:2732:74b8]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::3583:afc6:2732:74b8%4]) with mapi id 15.20.5332.022; Tue, 14 Jun 2022
- 07:16:18 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Jason Gunthorpe" <jgg@nvidia.com>
-CC:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 11/12] iommu/vt-d: Use device_domain_lock accurately
-Thread-Topic: [PATCH v2 11/12] iommu/vt-d: Use device_domain_lock accurately
-Thread-Index: AQHYf5pR36hR4UdJTk+LBkAKKigPdK1OfMnQ
-Date:   Tue, 14 Jun 2022 07:16:17 +0000
-Message-ID: <BN9PR11MB52764D7CD86448C5E4EB46668CAA9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220614025137.1632762-1-baolu.lu@linux.intel.com>
- <20220614025137.1632762-12-baolu.lu@linux.intel.com>
-In-Reply-To: <20220614025137.1632762-12-baolu.lu@linux.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1936ab95-be1e-4c75-770a-08da4dd5c684
-x-ms-traffictypediagnostic: CO6PR11MB5649:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <CO6PR11MB5649EFC6265D8AA07032369F8CAA9@CO6PR11MB5649.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JI09Y05h/rasCA63WI3o7uyLNF/fZCe3izum430ONpoF4ywtmBfAPAMa8b0xeuj23sIl0tqgSiyFKww+lO5hKvrzJeeWsQtbrS2P0zWLvtrqZZV8iL9c+eJDAUyAYXFj9FQ2ZYu+7/gxWvBa4b3maVXUZVbJfgAVBADR8K4tlRqAlCeCztjM0tkjZyYr90of0Y/Hzs+TKCjEv7hVONVvkERbi06zHuWx11i3IOwLPE8IO53RjMmD1mvBo68KJHw+gDc49EFVUxopK+0iGjofLjYLbhhRsgAYDyFeLpRlWbBDH0HdYxewtK1G56FPlhW4Yo+l94EOhlfF9j4v2hsAgaB+yHNvOjTOva7Jr0HvXkPs2QXg7DATw7vXldWKAD8IZSPOjwhAj7Urvl1TYZj2RVB0OR5mYkaxEs7+Sz9MwFtLZdR/qqivUPw0GoH0yEvcS0yICn+JZZPdf4MKunAMX52OdMWZOCz21OtSUp5P7IaMnF/QIZzG+SvG6panGSlYXKY+ZUsLkEeZcFNDdPKtoQCfb7Uhm5e+uBHM1bo9ybpHb/+ShhH4ma4Oa9RbdANWxauvPd5fj30vbg2fnoEq7JfZ95PODyif94S74xsrBiZcJMYRjBkhk/KN1B29m5zOUU2X/dvKoLTAUMmZKrTKajhSXqK9HnCLcdoHiypUFdqCKGjUYAC6qlfZThyVccrSRcMBWRmZW5z7ynwbvM9nSQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(54906003)(71200400001)(38100700002)(8936002)(2906002)(38070700005)(9686003)(508600001)(52536014)(66556008)(66946007)(4326008)(64756008)(66446008)(8676002)(110136005)(66476007)(76116006)(5660300002)(7696005)(82960400001)(55016003)(186003)(26005)(6506007)(122000001)(316002)(86362001)(33656002)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?guBEFf9BUTTyuMUuDq3Lb6Sv1zpgCNu9yxoraZCznjLL99+cTYwOeZqZLGJg?=
- =?us-ascii?Q?h7ESV+/IbPwjfw6ui3zVj/QUXyHc1HoKI77wX9fHnjQjN2CcJCf+XHRSL5vv?=
- =?us-ascii?Q?25g3PG3F7OLNwqGiAR1GOENoUJbX+qQEGyjul+X57WmbW8UCyPcis2B17Ro/?=
- =?us-ascii?Q?Au6ilBTeYk0jeM2C4xtrEFkzQSAkiAIrZ3JksamGSEEgkT6+hBRRBgbvz5XW?=
- =?us-ascii?Q?GoXLCU5Qaym2VykiVVXdFTedgM1xS10aMKBo5R70kMYOea/CFQ2R3OQp6ZeW?=
- =?us-ascii?Q?uu0v5zLUB1qTuzSw89rvwE/hLyN61+4HiqCa4iWxGWekciayOm6k7j6cvl5+?=
- =?us-ascii?Q?bi0E4wX0xWwA21YOxvdn+zi9TjZhfx5YFukNSjHjfxfDqLahIkW+vgChIPRc?=
- =?us-ascii?Q?HOkSzXJhbOkQF5UZSuUc2Q3Xef9vI1NTkL255hE3vwGPVX+Jh+ODH0lNGmTZ?=
- =?us-ascii?Q?2DMLoKGoBSsooUjSXYH+kF+zUBEFZtENGwWEsJ+FTwvsFRIbFLknF54O9j9k?=
- =?us-ascii?Q?On+rmGsmJ3Fpx2809SZ4uznQp+RNHFp55g1vw/eH4erj5FaxmoQaXo2YOVmB?=
- =?us-ascii?Q?zB/+9GUuozMwX8+VMJt4rDSaEQsw+hEMIWZzROrtMsAo47IYWv/oxZBd7oLR?=
- =?us-ascii?Q?8vdSlxBwcmsiD75aMy7m8vDhhRh/q8VL+EZRygcqE4DSJLwRDQmaMM/EZHCP?=
- =?us-ascii?Q?gyHNwHtLo32Bu2M5ZwQKVc0H9q/LFI/ZgryRZN0M0E4hG5FSvEnChcTzMrsa?=
- =?us-ascii?Q?tfLc2tnjsJ26CmstV7Xm1XGCjj3VLTB5HQxs8bqi3/UVf8cquBboOKlkSUcO?=
- =?us-ascii?Q?12d4EQOJ1Psug1Vo5HT2N+zL9kdRU7SgYYFfeVWJ7bePZt4C6gXgS24UemuX?=
- =?us-ascii?Q?5zNwfHuJAGLk0Dq0rVDVOjvK6r0nueODbiZ90uV6f+jIoSqtqZbT8oDQegu0?=
- =?us-ascii?Q?DIt/HyktQ541dsV1bZhlUEmNaT8uRFaF0t7GumYQ4CKPFTX5IA7z9wm2kyKI?=
- =?us-ascii?Q?3hgdMedkqedhKbfVr1V+Sou95GU5GYZh7pzdg6eRQF2wAACiOEWKsiPiqWch?=
- =?us-ascii?Q?xTaztCUkOR6eS15SvOpX2c1/mNhlBV/M2i/JrsI0i1/6llR1+Or1g1/XMOOH?=
- =?us-ascii?Q?N6OtwfXk1tv2OFXHP6ljIEZjuA9HdcxAjKzWi6COPeOQW+UJhbHgWznoMzKO?=
- =?us-ascii?Q?9rYTUspJAqFLfWj6hysMSlXw55Y9boFNpvSKd26z2R3wg7Y61DvDN8JZ9Pw1?=
- =?us-ascii?Q?xwnJXuIhgnbk4azVDLP6plpWz6ymK+QL5sDcxMau88W3SFQEIvDr/S2F8O8r?=
- =?us-ascii?Q?ACnlssX0qI4ugW5btVVvjIIAjm8OLgACIuhg+8GtbnvOK80xwsjvEqNWRvjg?=
- =?us-ascii?Q?FfCIOrPjGr6m28XgwLpurqUjF3famssgio7KSeSXuu+2lJcsm2jH6zU6XgOD?=
- =?us-ascii?Q?g/+oMziUOzaqpEi9JHlvRxU1Vs5Xz18wiBbk6yHjcIvp8R00puzccyODdW1Z?=
- =?us-ascii?Q?nqMVjqFoZhib020SHMfRMahrDea2hS9AWu1XdTlAQbmSSW5os1cGIK93LVrx?=
- =?us-ascii?Q?+OG4e57AS2PfY3fdYX4/kPse8pzzAIOOBwPgT0EJTgr2h/osGuZQokii04G2?=
- =?us-ascii?Q?yQfJCmUhGX8G7knSk+2RDrx6CrrNlapJtE6QGHD2zznzS1qjbHFEGNfjlRzf?=
- =?us-ascii?Q?2ZWozo2JsmUBRPDqDAwob0g6bZYvMeJ0rX9io6kJOtn4+gHW8v3Awul3JfZl?=
- =?us-ascii?Q?oacPRqHWCg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1936ab95-be1e-4c75-770a-08da4dd5c684
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2022 07:16:17.9975
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: BUCOmUlP32LEvkkoSmgZrRi7RAUc2HT4DlGmTI9iN6CqvRR8E/yiAhCtvECwlufZGpFp2OO00ci7jloRgsGbzw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5649
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 14 Jun 2022 03:17:31 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F261181C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:17:26 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-30c87716af6so18021367b3.22
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:17:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=eyc2HIUIAW+fFgc7USTkXlvplvJ/CRXAKVMAalV7uCU=;
+        b=rmkIIiToELq+10uPa4BGjw9hR0SUgdH2Hh7jLZ79OHduE9FPjpWoGKNDVS8bT5WeEB
+         Z1Beg9UDM4Te7xko6sPPrklHejWvkApwFVmEXBMhtMPNC718K/ArCMEUIaCSGux54dqM
+         Na9HxKs1NGcUFt8yuGO1mxr4EopYacsaH8FKEJ6fLrs4U2oPGvbrJuRGRAVJBbIq6MeJ
+         6GH2hNDtUpONfyqPEmkQY3bMiBq1841vP2F1rwdS3pr6f2R8Tgs01Vla+nzw8U05YbVh
+         RJsZ7nLnQWXRlqCjyzZfoar16Fqz6kj1GNYkxYa896GTcyRp6dyJnQpDXEf4wnSkCGo9
+         cZyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=eyc2HIUIAW+fFgc7USTkXlvplvJ/CRXAKVMAalV7uCU=;
+        b=jyf/QTMYPaTSt0qIUVGFvyoWnadz1mTJ90PHCTko2DhMaYO1L4BApOMFQIMhQhiexH
+         tOXOc2pg8bTFjnz5y3gcpkpK2G0kj8H3F5Kq1bZtS3YVVRcsSGOm5AYvxhDmJtSjhfw+
+         V4yvg68yORArGX9wMdQ3Wnx7AMj5q3hNVIKyO4HkOkjN7H9xLvbk0kp8ind3PUbM3HkO
+         nc9TF/Dsq3HNKKfxlloYf6S3CKn7TIsoWzPd51i5WKwheGv46wjYm98w7OQnivYDewvx
+         A88LPuv4H3uajRBZHBqM1V/Kr6GbG5qhYSSXOxZ6rEqNstjvpdbQlTOXKDi/W/TLV4l/
+         I0bw==
+X-Gm-Message-State: AJIora/n8cXlXA29QuaWIliL5xZ2bag1DrzWsp5DZEW8TCVc9+hq0MWq
+        oaxH31xtzO1HN0wB4HIxQQX98DawCKw=
+X-Google-Smtp-Source: AGRyM1v632j9u2TsPN9AlVW6tzxCRZBhKp9ize/OoT12yDYfUAiDs3AHJZ9d5BIm1nEc93YFfvzkAtEgZYY=
+X-Received: from yuzhao.bld.corp.google.com ([2620:15c:183:200:eaa7:1f3f:e74a:2a26])
+ (user=yuzhao job=sendgmr) by 2002:a81:6f41:0:b0:30c:22ac:23b2 with SMTP id
+ k62-20020a816f41000000b0030c22ac23b2mr4072060ywc.168.1655191045206; Tue, 14
+ Jun 2022 00:17:25 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 01:16:37 -0600
+Message-Id: <20220614071650.206064-1-yuzhao@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+Subject: [PATCH v12 00/14] Multi-Gen LRU Framework
+From:   Yu Zhao <yuzhao@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org,
+        page-reclaim@google.com, Yu Zhao <yuzhao@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Lu Baolu <baolu.lu@linux.intel.com>
-> Sent: Tuesday, June 14, 2022 10:52 AM
->=20
-> The device_domain_lock is used to protect the device tracking list of
-> a domain. Remove unnecessary spin_lock/unlock()'s and move the necessary
-> ones around the list access.
->=20
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> ---
->  drivers/iommu/intel/iommu.c | 68 +++++++++++++++----------------------
->  1 file changed, 27 insertions(+), 41 deletions(-)
->=20
-[...]
-> +iommu_support_dev_iotlb(struct dmar_domain *domain, struct
-> intel_iommu *iommu,
-> +			u8 bus, u8 devfn)
->  {
-> -	struct device_domain_info *info;
-> -
-> -	assert_spin_locked(&device_domain_lock);
-> +	struct device_domain_info *info =3D NULL, *tmp;
-> +	unsigned long flags;
->=20
->  	if (!iommu->qi)
->  		return NULL;
->=20
-> -	list_for_each_entry(info, &domain->devices, link)
-> -		if (info->iommu =3D=3D iommu && info->bus =3D=3D bus &&
-> -		    info->devfn =3D=3D devfn) {
-> -			if (info->ats_supported && info->dev)
-> -				return info;
-> +	spin_lock_irqsave(&device_domain_lock, flags);
-> +	list_for_each_entry(tmp, &domain->devices, link) {
-> +		if (tmp->iommu =3D=3D iommu && tmp->bus =3D=3D bus &&
-> +		    tmp->devfn =3D=3D devfn) {
-> +			if (tmp->ats_supported)
-> +				info =3D tmp;
+What's new
+==========
+1. Fixed a bug (using pmd_addr_end() when __PAGETABLE_PMD_FOLDED)
+   reported by:
+   Thomas Graichen <thomas.graichen@googlemail.com>
+   https://forum.armbian.com/topic/20018-mglru-patches-to-bring-down-kswapd-cpu-usage/
+2. Retested on v5.19-rc1 and rebased to v5.19-rc2.
+3. Nits.
 
-Directly returning with unlock here is clearer than adding
-another tmp variable...
+TLDR
+====
+The current page reclaim is too expensive in terms of CPU usage and it
+often makes poor choices about what to evict. This patchset offers an
+alternative solution that is performant, versatile and
+straightforward.
 
-> @@ -2460,15 +2450,14 @@ static int domain_add_dev_info(struct
-> dmar_domain *domain, struct device *dev)
->  	if (!iommu)
->  		return -ENODEV;
->=20
-> -	spin_lock_irqsave(&device_domain_lock, flags);
-> -	info->domain =3D domain;
->  	ret =3D domain_attach_iommu(domain, iommu);
-> -	if (ret) {
-> -		spin_unlock_irqrestore(&device_domain_lock, flags);
-> +	if (ret)
->  		return ret;
-> -	}
-> +
-> +	spin_lock_irqsave(&device_domain_lock, flags);
->  	list_add(&info->link, &domain->devices);
->  	spin_unlock_irqrestore(&device_domain_lock, flags);
-> +	info->domain =3D domain;
->=20
+Patchset overview
+=================
+The design and implementation overview is in patch 14:
+https://lore.kernel.org/r/20220614071650.206064-15-yuzhao@google.com/
 
-This is incorrect. You need fully initialize the object before adding
-it to the list. Otherwise a search right after above unlock and
-before assigning info->domain will get a wrong data
+01. mm: x86, arm64: add arch_has_hw_pte_young()
+02. mm: x86: add CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG
+Take advantage of hardware features when trying to clear the accessed
+bit in many PTEs.
+
+03. mm/vmscan.c: refactor shrink_node()
+04. Revert "include/linux/mm_inline.h: fold __update_lru_size() into
+    its sole caller"
+Minor refactors to improve readability for the following patches.
+
+05. mm: multi-gen LRU: groundwork
+Adds the basic data structure and the functions that insert pages to
+and remove pages from the multi-gen LRU (MGLRU) lists.
+
+06. mm: multi-gen LRU: minimal implementation
+A minimal implementation without optimizations.
+
+07. mm: multi-gen LRU: exploit locality in rmap
+Exploits spatial locality to improve efficiency when using the rmap.
+
+08. mm: multi-gen LRU: support page table walks
+Further exploits spatial locality by optionally scanning page tables.
+
+09. mm: multi-gen LRU: optimize multiple memcgs
+Optimizes the overall performance for multiple memcgs running mixed
+types of workloads.
+
+10. mm: multi-gen LRU: kill switch
+Adds a kill switch to enable or disable MGLRU at runtime.
+
+11. mm: multi-gen LRU: thrashing prevention
+12. mm: multi-gen LRU: debugfs interface
+Provide userspace with features like thrashing prevention, working set
+estimation and proactive reclaim.
+
+13. mm: multi-gen LRU: admin guide
+14. mm: multi-gen LRU: design doc
+Add an admin guide and a design doc.
+
+Benchmark results
+=================
+Independent lab results
+-----------------------
+Based on the popularity of searches [01] and the memory usage in
+Google's public cloud, the most popular open-source memory-hungry
+applications, in alphabetical order, are:
+      Apache Cassandra      Memcached
+      Apache Hadoop         MongoDB
+      Apache Spark          PostgreSQL
+      MariaDB (MySQL)       Redis
+
+An independent lab evaluated MGLRU with the most widely used benchmark
+suites for the above applications. They posted 960 data points along
+with kernel metrics and perf profiles collected over more than 500
+hours of total benchmark time. Their final reports show that, with 95%
+confidence intervals (CIs), the above applications all performed
+significantly better for at least part of their benchmark matrices.
+
+On 5.14:
+1. Apache Spark [02] took 95% CIs [9.28, 11.19]% and [12.20, 14.93]%
+   less wall time to sort three billion random integers, respectively,
+   under the medium- and the high-concurrency conditions, when
+   overcommitting memory. There were no statistically significant
+   changes in wall time for the rest of the benchmark matrix.
+2. MariaDB [03] achieved 95% CIs [5.24, 10.71]% and [20.22, 25.97]%
+   more transactions per minute (TPM), respectively, under the medium-
+   and the high-concurrency conditions, when overcommitting memory.
+   There were no statistically significant changes in TPM for the rest
+   of the benchmark matrix.
+3. Memcached [04] achieved 95% CIs [23.54, 32.25]%, [20.76, 41.61]%
+   and [21.59, 30.02]% more operations per second (OPS), respectively,
+   for sequential access, random access and Gaussian (distribution)
+   access, when THP=always; 95% CIs [13.85, 15.97]% and
+   [23.94, 29.92]% more OPS, respectively, for random access and
+   Gaussian access, when THP=never. There were no statistically
+   significant changes in OPS for the rest of the benchmark matrix.
+4. MongoDB [05] achieved 95% CIs [2.23, 3.44]%, [6.97, 9.73]% and
+   [2.16, 3.55]% more operations per second (OPS), respectively, for
+   exponential (distribution) access, random access and Zipfian
+   (distribution) access, when underutilizing memory; 95% CIs
+   [8.83, 10.03]%, [21.12, 23.14]% and [5.53, 6.46]% more OPS,
+   respectively, for exponential access, random access and Zipfian
+   access, when overcommitting memory.
+
+On 5.15:
+5. Apache Cassandra [06] achieved 95% CIs [1.06, 4.10]%, [1.94, 5.43]%
+   and [4.11, 7.50]% more operations per second (OPS), respectively,
+   for exponential (distribution) access, random access and Zipfian
+   (distribution) access, when swap was off; 95% CIs [0.50, 2.60]%,
+   [6.51, 8.77]% and [3.29, 6.75]% more OPS, respectively, for
+   exponential access, random access and Zipfian access, when swap was
+   on.
+6. Apache Hadoop [07] took 95% CIs [5.31, 9.69]% and [2.02, 7.86]%
+   less average wall time to finish twelve parallel TeraSort jobs,
+   respectively, under the medium- and the high-concurrency
+   conditions, when swap was on. There were no statistically
+   significant changes in average wall time for the rest of the
+   benchmark matrix.
+7. PostgreSQL [08] achieved 95% CI [1.75, 6.42]% more transactions per
+   minute (TPM) under the high-concurrency condition, when swap was
+   off; 95% CIs [12.82, 18.69]% and [22.70, 46.86]% more TPM,
+   respectively, under the medium- and the high-concurrency
+   conditions, when swap was on. There were no statistically
+   significant changes in TPM for the rest of the benchmark matrix.
+8. Redis [09] achieved 95% CIs [0.58, 5.94]%, [6.55, 14.58]% and
+   [11.47, 19.36]% more total operations per second (OPS),
+   respectively, for sequential access, random access and Gaussian
+   (distribution) access, when THP=always; 95% CIs [1.27, 3.54]%,
+   [10.11, 14.81]% and [8.75, 13.64]% more total OPS, respectively,
+   for sequential access, random access and Gaussian access, when
+   THP=never.
+
+Our lab results
+---------------
+To supplement the above results, we ran the following benchmark suites
+on 5.16-rc7 and found no regressions [10].
+      fs_fio_bench_hdd_mq      pft
+      fs_lmbench               pgsql-hammerdb
+      fs_parallelio            redis
+      fs_postmark              stream
+      hackbench                sysbenchthread
+      kernbench                tpcc_spark
+      memcached                unixbench
+      multichase               vm-scalability
+      mutilate                 will-it-scale
+      nginx
+
+[01] https://trends.google.com
+[02] https://lore.kernel.org/r/20211102002002.92051-1-bot@edi.works/
+[03] https://lore.kernel.org/r/20211009054315.47073-1-bot@edi.works/
+[04] https://lore.kernel.org/r/20211021194103.65648-1-bot@edi.works/
+[05] https://lore.kernel.org/r/20211109021346.50266-1-bot@edi.works/
+[06] https://lore.kernel.org/r/20211202062806.80365-1-bot@edi.works/
+[07] https://lore.kernel.org/r/20211209072416.33606-1-bot@edi.works/
+[08] https://lore.kernel.org/r/20211218071041.24077-1-bot@edi.works/
+[09] https://lore.kernel.org/r/20211122053248.57311-1-bot@edi.works/
+[10] https://lore.kernel.org/r/20220104202247.2903702-1-yuzhao@google.com/
+
+Read-world applications
+=======================
+Third-party testimonials
+------------------------
+Konstantin reported [11]:
+   I have Archlinux with 8G RAM + zswap + swap. While developing, I
+   have lots of apps opened such as multiple LSP-servers for different
+   langs, chats, two browsers, etc... Usually, my system gets quickly
+   to a point of SWAP-storms, where I have to kill LSP-servers,
+   restart browsers to free memory, etc, otherwise the system lags
+   heavily and is barely usable.
+   
+   1.5 day ago I migrated from 5.11.15 kernel to 5.12 + the LRU
+   patchset, and I started up by opening lots of apps to create memory
+   pressure, and worked for a day like this. Till now I had not a
+   single SWAP-storm, and mind you I got 3.4G in SWAP. I was never
+   getting to the point of 3G in SWAP before without a single
+   SWAP-storm.
+
+Vaibhav from IBM reported [12]:
+   In a synthetic MongoDB Benchmark, seeing an average of ~19%
+   throughput improvement on POWER10(Radix MMU + 64K Page Size) with
+   MGLRU patches on top of v5.16 kernel for MongoDB + YCSB across
+   three different request distributions, namely, Exponential, Uniform
+   and Zipfan.
+
+Shuang from U of Rochester reported [13]:
+   With the MGLRU, fio achieved 95% CIs [38.95, 40.26]%, [4.12, 6.64]%
+   and [9.26, 10.36]% higher throughput, respectively, for random
+   access, Zipfian (distribution) access and Gaussian (distribution)
+   access, when the average number of jobs per CPU is 1; 95% CIs
+   [42.32, 49.15]%, [9.44, 9.89]% and [20.99, 22.86]% higher
+   throughput, respectively, for random access, Zipfian access and
+   Gaussian access, when the average number of jobs per CPU is 2.
+
+Daniel from Michigan Tech reported [14]:
+   With Memcached allocating ~100GB of byte-addressable Optante,
+   performance improvement in terms of throughput (measured as queries
+   per second) was about 10% for a series of workloads.
+
+Large-scale deployments
+-----------------------
+The downstream kernels that have been using MGLRU include:
+1. Android [15]
+2. Arch Linux Zen [16]
+3. Chrome OS [17]
+4. Liquorix [18]
+5. post-factum [19]
+6. XanMod [20]
+
+We've rolled out MGLRU to tens of millions of Chrome OS users and
+about a million Android users. Google's fleetwide profiling [21] shows
+an overall 40% decrease in kswapd CPU usage, in addition to
+improvements in other UX metrics, e.g., an 85% decrease in the number
+of low-memory kills at the 75th percentile and an 18% decrease in
+app launch time at the 50th percentile.
+
+[11] https://lore.kernel.org/r/140226722f2032c86301fbd326d91baefe3d7d23.camel@yandex.ru/
+[12] https://lore.kernel.org/r/87czj3mux0.fsf@vajain21.in.ibm.com/
+[13] https://lore.kernel.org/r/20220105024423.26409-1-szhai2@cs.rochester.edu/
+[14] https://lore.kernel.org/r/CA+4-3vksGvKd18FgRinxhqHetBS1hQekJE2gwco8Ja-bJWKtFw@mail.gmail.com/
+[15] https://android.com
+[16] https://archlinux.org
+[17] https://chromium.org
+[18] https://liquorix.net
+[19] https://gitlab.com/post-factum/pf-kernel/
+[20] https://xanmod.org
+[21] https://research.google/pubs/pub44271/
+
+Summery
+=======
+The facts are:
+1. The independent lab results and the real-world applications
+   indicate substantial improvements; there are no known regressions.
+2. Thrashing prevention, working set estimation and proactive reclaim
+   work out of the box; there are no equivalent solutions.
+3. There is a lot of new code; no smaller changes have been
+   demonstrated similar effects.
+
+Our options, accordingly, are:
+1. Given the amount of evidence, the reported improvements will likely
+   materialize for a wide range of workloads.
+2. Gauging the interest from the past discussions, the new features
+   will likely be put to use for both personal computers and data
+   centers.
+3. Based on Google's track record, the new code will likely be well
+   maintained in the long term. It'd be more difficult if not
+   impossible to achieve similar effects with other approaches.
+
+Yu Zhao (14):
+  mm: x86, arm64: add arch_has_hw_pte_young()
+  mm: x86: add CONFIG_ARCH_HAS_NONLEAF_PMD_YOUNG
+  mm/vmscan.c: refactor shrink_node()
+  Revert "include/linux/mm_inline.h: fold __update_lru_size() into its
+    sole caller"
+  mm: multi-gen LRU: groundwork
+  mm: multi-gen LRU: minimal implementation
+  mm: multi-gen LRU: exploit locality in rmap
+  mm: multi-gen LRU: support page table walks
+  mm: multi-gen LRU: optimize multiple memcgs
+  mm: multi-gen LRU: kill switch
+  mm: multi-gen LRU: thrashing prevention
+  mm: multi-gen LRU: debugfs interface
+  mm: multi-gen LRU: admin guide
+  mm: multi-gen LRU: design doc
+
+ Documentation/admin-guide/mm/index.rst        |    1 +
+ Documentation/admin-guide/mm/multigen_lru.rst |  156 +
+ Documentation/vm/index.rst                    |    1 +
+ Documentation/vm/multigen_lru.rst             |  159 +
+ arch/Kconfig                                  |    8 +
+ arch/arm64/include/asm/pgtable.h              |   15 +-
+ arch/x86/Kconfig                              |    1 +
+ arch/x86/include/asm/pgtable.h                |    9 +-
+ arch/x86/mm/pgtable.c                         |    5 +-
+ fs/exec.c                                     |    2 +
+ fs/fuse/dev.c                                 |    3 +-
+ include/linux/cgroup.h                        |   15 +-
+ include/linux/memcontrol.h                    |   36 +
+ include/linux/mm.h                            |    7 +
+ include/linux/mm_inline.h                     |  231 +-
+ include/linux/mm_types.h                      |   77 +
+ include/linux/mmzone.h                        |  212 ++
+ include/linux/nodemask.h                      |    1 +
+ include/linux/page-flags-layout.h             |   16 +-
+ include/linux/page-flags.h                    |    4 +-
+ include/linux/pgtable.h                       |   17 +-
+ include/linux/sched.h                         |    4 +
+ include/linux/swap.h                          |    4 +
+ kernel/bounds.c                               |    7 +
+ kernel/cgroup/cgroup-internal.h               |    1 -
+ kernel/exit.c                                 |    1 +
+ kernel/fork.c                                 |    9 +
+ kernel/sched/core.c                           |    1 +
+ mm/Kconfig                                    |   26 +
+ mm/huge_memory.c                              |    3 +-
+ mm/internal.h                                 |    1 +
+ mm/memcontrol.c                               |   28 +
+ mm/memory.c                                   |   39 +-
+ mm/mm_init.c                                  |    6 +-
+ mm/mmzone.c                                   |    2 +
+ mm/rmap.c                                     |    6 +
+ mm/swap.c                                     |   52 +-
+ mm/vmscan.c                                   | 2945 ++++++++++++++++-
+ mm/workingset.c                               |  110 +-
+ 39 files changed, 4067 insertions(+), 154 deletions(-)
+ create mode 100644 Documentation/admin-guide/mm/multigen_lru.rst
+ create mode 100644 Documentation/vm/multigen_lru.rst
+
+-- 
+2.36.1.476.g0c4daa206d-goog
+

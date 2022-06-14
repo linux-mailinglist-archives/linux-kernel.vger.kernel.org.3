@@ -2,153 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474C354A336
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D2F54A343
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235552AbiFNAqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 20:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
+        id S236280AbiFNAsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 20:48:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231726AbiFNAqs (ORCPT
+        with ESMTP id S230099AbiFNAss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 20:46:48 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B782FFED
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:46:43 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id s135so7062433pgs.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:46:43 -0700 (PDT)
+        Mon, 13 Jun 2022 20:48:48 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9F22B254
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:48:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=s2FWD/PtgY9oueUwTZqKdyU1Zetmw+d/ZG43eXlDlcM=;
-        b=YgSLK9gviQctEV72wBcPKr3rDhijCNprOQ+gp2fOSYMwl+z8m/ywJFJNdRTPfdRN6x
-         iDRg42v/QZUmhq4AMxM+546r3kFUi55RAc+j47EeF+C6skbeoGymucTmWpWLGBIjymwN
-         uCP4s+WQkriW77kbjxxgNIF7QaYBwwsZzcUDKSti8Czi1gIsPCEV4pAVmZvrc7Ueaqhw
-         lOHhx1muh9QhVGl7UTGDpBBFbxdvLgwbahBIYa67KFXU4u9bWvK0IQr6jEiB+VXErtmh
-         6ToX5gd8nYLLeOC0TQ5G60KE/adZglCpxc3QxuFm4VL16SHCtIdEzNaKBM/HaQhyF4O5
-         +Rww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=s2FWD/PtgY9oueUwTZqKdyU1Zetmw+d/ZG43eXlDlcM=;
-        b=37uaQz3Yqz+omsx84fW3+Qi/F/SfNeM77GNyUSqnkfsvHbIP8Abte+9iskWykiOz4o
-         nOnsiCVQuyqataAEiZHLEx/CkTsjlao18CZRZnj2uYXkzNJDIdC1zabMOUCfRDTJiLlU
-         pVFD9fUqqBs9DPPdWlT0v9piPv2EMroHlQNbWWuKpjnJmJyXX5FZRYyPb/IKeTv3979/
-         33ZuL3x4y/qhOIZxK6AiLzyr1Uux9r1ZcSnX9CBuxne/ljseQ6TX2d+qUO+7scEL5hCn
-         JMrkK9z5kFwf4XAzmc9ODKduCJ6ETUvEHBNAcD/MnxriObNllojal+p6jJiBtKJY0SX8
-         6GWQ==
-X-Gm-Message-State: AOAM533yezGJNYPPvBgzdC/4CEiV6jG7OIQ94FxLSlhwBf98gmE3wnyC
-        VSc5Sdqsxj0/rXUrObRLN4Ptew==
-X-Google-Smtp-Source: ABdhPJyqpKu6p1u5KzVVLMZAfN9ra4WcAcLZdMNT/RwAJ4w3TWcPwfXbJl2ut/OvLAU1lo600eJCYA==
-X-Received: by 2002:a05:6a00:179b:b0:51b:f51f:992e with SMTP id s27-20020a056a00179b00b0051bf51f992emr2018667pfg.60.1655167602802;
-        Mon, 13 Jun 2022 17:46:42 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id u4-20020a17090a2b8400b001e31fea8c85sm8035481pjd.14.2022.06.13.17.46.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 17:46:42 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 00:46:38 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v12 19/46] x86/kernel: Make the .bss..decrypted section
- shared in RMP table
-Message-ID: <YqfabnTRxFSM+LoX@google.com>
-References: <20220307213356.2797205-1-brijesh.singh@amd.com>
- <20220307213356.2797205-20-brijesh.singh@amd.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655167726; x=1686703726;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=zMvaLG5fr7e0A8364yt7KMOJ+b17CQQted93WjMHcX4=;
+  b=I7c73gIo2N7XEcZW8rWvF+9ArJyyoaICrsIlxQ3TvZ3UlL/s8Xl58f3M
+   6j51RiSwCwArl+KSA7hLQYh/ACrSdUXwrbyAWPemZFW7zEXQvkzA9794R
+   8TA7dD5+7s9jVE75y0xnmAPlbS44zr3Ev+ydenk7xxKjWQj+LtGFZkQ24
+   A=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 13 Jun 2022 17:48:46 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 17:48:46 -0700
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 13 Jun 2022 17:48:32 -0700
+Received: from [10.253.77.15] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 13 Jun
+ 2022 17:48:30 -0700
+Message-ID: <d14f0409-351f-873e-b7ca-82ff444bf809@quicinc.com>
+Date:   Tue, 14 Jun 2022 08:48:28 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220307213356.2797205-20-brijesh.singh@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 1/3] tracing: eprobe: remove duplicate is_good_name()
+ operation
+Content-Language: en-US
+To:     Tom Zanussi <zanussi@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>
+References: <1654171861-24014-1-git-send-email-quic_linyyuan@quicinc.com>
+ <1654171861-24014-2-git-send-email-quic_linyyuan@quicinc.com>
+ <9a7e0b6087540c9f868d60cbfc88ccefa8070a1b.camel@kernel.org>
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+In-Reply-To: <9a7e0b6087540c9f868d60cbfc88ccefa8070a1b.camel@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-s/Brijesh/Michael
+hi Tom,
 
-On Mon, Mar 07, 2022, Brijesh Singh wrote:
-> The encryption attribute for the .bss..decrypted section is cleared in the
-> initial page table build. This is because the section contains the data
-> that need to be shared between the guest and the hypervisor.
-> 
-> When SEV-SNP is active, just clearing the encryption attribute in the
-> page table is not enough. The page state need to be updated in the RMP
-> table.
-> 
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  arch/x86/kernel/head64.c | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-> index 83514b9827e6..656d2f3e2cf0 100644
-> --- a/arch/x86/kernel/head64.c
-> +++ b/arch/x86/kernel/head64.c
-> @@ -143,7 +143,20 @@ static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdv
->  	if (sme_get_me_mask()) {
->  		vaddr = (unsigned long)__start_bss_decrypted;
->  		vaddr_end = (unsigned long)__end_bss_decrypted;
-> +
->  		for (; vaddr < vaddr_end; vaddr += PMD_SIZE) {
-> +			/*
-> +			 * On SNP, transition the page to shared in the RMP table so that
-> +			 * it is consistent with the page table attribute change.
-> +			 *
-> +			 * __start_bss_decrypted has a virtual address in the high range
-> +			 * mapping (kernel .text). PVALIDATE, by way of
-> +			 * early_snp_set_memory_shared(), requires a valid virtual
-> +			 * address but the kernel is currently running off of the identity
-> +			 * mapping so use __pa() to get a *currently* valid virtual address.
-> +			 */
-> +			early_snp_set_memory_shared(__pa(vaddr), __pa(vaddr), PTRS_PER_PMD);
+On 6/14/2022 5:01 AM, Tom Zanussi wrote:
+> Hi Linhu,
+>
+> On Thu, 2022-06-02 at 20:10 +0800, Linyu Yuan wrote:
+>> traceprobe_parse_event_name() already validate group and event name,
+>> there is no need to call is_good_name() after it.
+>>
+>> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+>> ---
+>> v2: drop v1 change as it is NACK.
+>>      add it to remove duplicate is_good_name().
+>> v3: move it as first patch.
+>> v4: no change
+>>
+>>   kernel/trace/trace_eprobe.c | 4 ----
+>>   1 file changed, 4 deletions(-)
+>>
+>> diff --git a/kernel/trace/trace_eprobe.c
+>> b/kernel/trace/trace_eprobe.c
+>> index 7d44785..17d64e3 100644
+>> --- a/kernel/trace/trace_eprobe.c
+>> +++ b/kernel/trace/trace_eprobe.c
+>> @@ -878,16 +878,12 @@ static int __trace_eprobe_create(int argc,
+>> const char *argv[])
+>>                  sanitize_event_name(buf1);
+>>                  event = buf1;
+>>          }
+>> -       if (!is_good_name(event) || !is_good_name(group))
+>> -               goto parse_error;
+> traceprobe_parse_event_name() is only called if (event).  In the
+> !event case, wouldn't the is_good_name() checks still be needed (since
+> in that case buf1 is assigned to event)?
 
-This breaks SME on Rome and Milan when compiling with clang-13.  I haven't been
-able to figure out exactly what goes wrong.  printk isn't functional at this point,
-and interactive debug during boot on our test systems is beyond me.  I can't even
-verify that the bug is specific to clang because the draconian build system for our
-test systems apparently is stuck pointing at gcc-4.9.
+when user input no  event name, it will generate event name from second  
+SYSTEM.EVENT,
 
-I suspect the issue is related to relocation and/or encrypting memory, as skipping
-the call to early_snp_set_memory_shared() if SNP isn't active masks the issue.
-I've dug through the assembly and haven't spotted a smoking gun, e.g. no obvious
-use of absolute addresses.
+and it will validate with following traceprobe_parse_event_name().
 
-Forcing a VM through the same path doesn't fail.  I can't test an SEV guest at the
-moment because INIT_EX is also broken.
 
-The crash incurs a very, very slow reboot, and I was out of cycles to work on this
-about three hours ago.  If someone on the AMD side can repro, it would be much
-appreciated.
+(
+
+if you agree, i will send a new version to update a minor issue in 
+second patch,
+
+
+         sys_event = argv[1];
+-       ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2,
+-                                         sys_event - argv[1]);
+-       if (ret || !sys_name)
++       ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2, 0);
++       if (!sys_event || !sys_name)
+                 goto parse_error;
+
+)
+
+>
+>>   
+>>          sys_event = argv[1];
+>>          ret = traceprobe_parse_event_name(&sys_event, &sys_name,
+>> buf2,
+>>                                            sys_event - argv[1]);
+>>          if (ret || !sys_name)
+>>                  goto parse_error;
+>> -       if (!is_good_name(sys_event) || !is_good_name(sys_name))
+>> -               goto parse_error;
+> I agree this one isn't needed.
+>
+> Thanks,
+>
+> Tom
+>
+>>   
+>>          mutex_lock(&event_mutex);
+>>          event_call = find_and_get_event(sys_name, sys_event);

@@ -2,102 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CCE954A78F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8952254A792
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237369AbiFNDeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 23:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59358 "EHLO
+        id S237605AbiFNDgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 23:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiFNDeY (ORCPT
+        with ESMTP id S230431AbiFNDgs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 23:34:24 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB89D2F3AB;
-        Mon, 13 Jun 2022 20:34:23 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMYvd400Fz4xYC;
-        Tue, 14 Jun 2022 13:34:20 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655177662;
-        bh=aVBDcex9xuVU47iI1YrP1wnTDjoykVLXNbXEs85vAzI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iuH8mfb92AxAZnH/ZoPgDfXuLlbAIER8Ekd1Y40VPhZWDujYrrzVZgfGNmwDUuOck
-         ik8sdmAAy6c+zRwgjjKmgbfuZ0T3II/aapdYlDOFw4aL8LMlG0j3VSAGLEbPJavvI6
-         5LxLDKix9mxUnlz0yUyk/R3MBwgS5LGON54cHClEnhZ5Q2+4D7IMdrA1NSvxOPaA7g
-         GBzUhGoYw3CwMbhOamDvS43blLDkKKISSvEaTwvBfjZVbSl0XqYc9k/KqaWMun9/dz
-         qVVuQEMqSrIHIt50WWgAiCHAJgZ8+BxYEEAUxJOVCE1UF8PDTYa43LonKAlO4aZXGS
-         PXRp/epF7fUKQ==
-Date:   Tue, 14 Jun 2022 13:34:19 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>,
-        David Sterba <dsterba@suse.cz>
-Cc:     David Sterba <dsterba@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the folio tree with the btrfs tree
-Message-ID: <20220614133419.5e10ba00@canb.auug.org.au>
+        Mon, 13 Jun 2022 23:36:48 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723892F3B7;
+        Mon, 13 Jun 2022 20:36:45 -0700 (PDT)
+X-UUID: 9641f831290e412d88bcf70ded63c16c-20220614
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:08f4366a-c047-4c48-b5e1-3c7fb7ec91e3,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:5
+X-CID-META: VersionHash:b14ad71,CLOUDID:544456c5-c67b-4a73-9b18-726dd8f2eb58,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 9641f831290e412d88bcf70ded63c16c-20220614
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1687265981; Tue, 14 Jun 2022 11:36:38 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
+ Tue, 14 Jun 2022 11:36:37 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
+ Transport; Tue, 14 Jun 2022 11:36:37 +0800
+Message-ID: <f0746d3e0f1c998872840b63e94cd767061e77e7.camel@mediatek.com>
+Subject: Re: [PATCH v11 03/12] drm/mediatek: dpi: implement a CK/DE pol
+ toggle in SoC config
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 14 Jun 2022 11:36:36 +0800
+In-Reply-To: <20220613064841.10481-4-rex-bc.chen@mediatek.com>
+References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
+         <20220613064841.10481-4-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KkjETaiVYXQffIj1+s/J1yg";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/KkjETaiVYXQffIj1+s/J1yg
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi, Bo-Chen:
 
-Hi all,
+On Mon, 2022-06-13 at 14:48 +0800, Bo-Chen Chen wrote:
+> From: Guillaume Ranquet <granquet@baylibre.com>
+> 
+> Dp_intf does not support CK/DE polarity because the polarity
+> information
+> is not used for eDP and DP while dp_intf is only for eDP and DP.
+> Therefore, we add a bit of flexibility to support SoCs without CK/DE
+> pol
+> support.
 
-Today's linux-next merge of the folio tree got a conflict in:
+Reviewed-by: CK Hu <ck.hu@mediatek.com>
 
-  fs/btrfs/disk-io.c
+> 
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> [Bo-Chen: Add modification reason in commit message.]
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dpi.c | 22 +++++++++++++++++-----
+>  1 file changed, 17 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index ce8c5eefe5f1..15218c1e8c11 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -125,6 +125,7 @@ struct mtk_dpi_conf {
+>  	bool edge_sel_en;
+>  	const u32 *output_fmts;
+>  	u32 num_output_fmts;
+> +	bool is_ck_de_pol;
+>  	const struct mtk_dpi_yc_limit *limit;
+>  };
+>  
+> @@ -211,13 +212,20 @@ static void mtk_dpi_config_pol(struct mtk_dpi
+> *dpi,
+>  			       struct mtk_dpi_polarities *dpi_pol)
+>  {
+>  	unsigned int pol;
+> +	unsigned int mask;
+>  
+> -	pol = (dpi_pol->ck_pol == MTK_DPI_POLARITY_RISING ? 0 : CK_POL)
+> |
+> -	      (dpi_pol->de_pol == MTK_DPI_POLARITY_RISING ? 0 : DE_POL)
+> |
+> -	      (dpi_pol->hsync_pol == MTK_DPI_POLARITY_RISING ? 0 :
+> HSYNC_POL) |
+> +	mask = HSYNC_POL | VSYNC_POL;
+> +	pol = (dpi_pol->hsync_pol == MTK_DPI_POLARITY_RISING ? 0 :
+> HSYNC_POL) |
+>  	      (dpi_pol->vsync_pol == MTK_DPI_POLARITY_RISING ? 0 :
+> VSYNC_POL);
+> -	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, pol,
+> -		     CK_POL | DE_POL | HSYNC_POL | VSYNC_POL);
+> +	if (dpi->conf->is_ck_de_pol) {
+> +		mask |= CK_POL | DE_POL;
+> +		pol |= (dpi_pol->ck_pol == MTK_DPI_POLARITY_RISING ?
+> +			0 : CK_POL) |
+> +		       (dpi_pol->de_pol == MTK_DPI_POLARITY_RISING ?
+> +			0 : DE_POL);
+> +	}
+> +
+> +	mtk_dpi_mask(dpi, DPI_OUTPUT_SETTING, pol, mask);
+>  }
+>  
+>  static void mtk_dpi_config_3d(struct mtk_dpi *dpi, bool en_3d)
+> @@ -799,6 +807,7 @@ static const struct mtk_dpi_conf mt8173_conf = {
+>  	.max_clock_khz = 300000,
+>  	.output_fmts = mt8173_output_fmts,
+>  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
+> +	.is_ck_de_pol = true,
+>  	.limit = &mtk_dpi_limit,
+>  };
+>  
+> @@ -809,6 +818,7 @@ static const struct mtk_dpi_conf mt2701_conf = {
+>  	.max_clock_khz = 150000,
+>  	.output_fmts = mt8173_output_fmts,
+>  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
+> +	.is_ck_de_pol = true,
+>  	.limit = &mtk_dpi_limit,
+>  };
+>  
+> @@ -818,6 +828,7 @@ static const struct mtk_dpi_conf mt8183_conf = {
+>  	.max_clock_khz = 100000,
+>  	.output_fmts = mt8183_output_fmts,
+>  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
+> +	.is_ck_de_pol = true,
+>  	.limit = &mtk_dpi_limit,
+>  };
+>  
+> @@ -827,6 +838,7 @@ static const struct mtk_dpi_conf mt8192_conf = {
+>  	.max_clock_khz = 150000,
+>  	.output_fmts = mt8183_output_fmts,
+>  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
+> +	.is_ck_de_pol = true,
+>  	.limit = &mtk_dpi_limit,
+>  };
+>  
 
-between commit:
-
-  fe9b88cb7288 ("btrfs: use preallocated page for super block write")
-
-from the btrfs tree and commit:
-
-  020ae1ea6060 ("btrfs: Use a folio in wait_dev_supers()")
-
-from the folio tree.
-
-I fixed it up (I did not know how to fix this up, so I used the former -
-effectively reverting the latter) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/KkjETaiVYXQffIj1+s/J1yg
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKoAbsACgkQAVBC80lX
-0GwLIggAosxPOEsmzhOKQD4JnaidypIVfg2pj/O20eeZaJ6QVh3Ho1jwD7LKv70u
-6MyUEuFgzINKHZOL8qlSZMl6IgwF5azHKz++6xDic8fodQh7RDfvk3IefsXHxzKy
-9WhI6JiwIrhOrXshNTtR2an7HUn9VkPe/17FsnE0zZT7yb65Kt0HWnbPVF5tnHtW
-Gkz4NUBxTebgIHRCzHdk/klUvZt1JXn+PJnJGTCyA4zIbT8QZkNBWp/EsB3CpFUQ
-KStwYkwRdZujsVrbpdis7wNb/Zll3oVoypNmFyv/qjspixRtBbp0blCraYnP/occ
-wWF8vsNDuD6hnoKA74XJCcQ/LJ7dbQ==
-=uPzH
------END PGP SIGNATURE-----
-
---Sig_/KkjETaiVYXQffIj1+s/J1yg--

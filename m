@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC45254BB4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D9954BB42
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357520AbiFNUJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
+        id S1357617AbiFNUJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357794AbiFNUIj (ORCPT
+        with ESMTP id S1357153AbiFNUIm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:08:39 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B234EF6E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:09 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id x1-20020a170902ec8100b0016634ff72a4so5340468plg.15
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:09 -0700 (PDT)
+        Tue, 14 Jun 2022 16:08:42 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F4F4EF7F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:11 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id n65-20020a25da44000000b0066508f279e4so3876083ybf.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=xo1qDgQfLuXoeUJsd2fB/DhbQ6NUNvOIxbn7J+1FRkI=;
-        b=YAFZFhP4ujJ+4Z4z2Wzs5pJblK6AlYCVkpLyv4/Ji/q6/TLZKupD0qmSlBWboQLswM
-         xQMp4YENRSgn7lLS90Q0x7/2FmGOgk96VUCA+KEEp6GMAk6ag6chPKsaDncgt4j3bva+
-         KTyvAQmMI3fbEpZNolhUH2iTNhxvz4UGBLcOkNCpIdVihOPeWF6XkoA27rSKadSa8aJ2
-         XYvKNAxIi2uanQyfP3jTNIWIzTfW+fJlm7mPAOITbk9DelYy0K8sZUeMKvEX5ghVByF5
-         OnStN04CJjgjqX7mGbvQ+k5HX5dO5f5eMF9qrbd2ppu5n5UqEqYdxjGrk9bF3MFaiIFc
-         TI1Q==
+        bh=XhdgywsCTVr4zamq9DydAKZeu7w865wFF1QrREP6uEA=;
+        b=XnMj9gGl/lKHOJ5mLjDMnRzDzsH54eEMvL+WKVfFoCu9AKiSMjvd/qLzQGeIWQjOmZ
+         hi77l4USVL2B8BGMgKvtVSyjl/lsH0KzTmXG/WzXiV67+yYb970Mat9oqNgIsgczcmrS
+         hQFfHGbc3tTEUmp/UjqmbIjfEqxXtN7noB5Q80nv1JpwGosVBph5iP0HYGO1T2oK4XL+
+         C2J/kz7mXhHG7uaTiuv1vJl/q9wG32J1uY7S8LmbjVRnL//RMPovtpSK+WU9w9om+F8G
+         RvrDVrDdbo0qn7lKvCQSmV2p/qCZM/YnrwcZ5mJdN8NTAou/GOoUGbtKetJ3lkr2ltV1
+         NA2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=xo1qDgQfLuXoeUJsd2fB/DhbQ6NUNvOIxbn7J+1FRkI=;
-        b=TLaV7HLS7SJT1syo6BI+AwfqPaWohSi2Ik7UNaS98W4VdB7GgvSRLv1YbeV/VH04aI
-         soNFocaQVmzjBZwI5qFRD6HE5elOukrsH5JQMULhcV2ldOs1u2PTYk/HIxDUJSzwHQ0k
-         nU1hhh3F37/K3HAWFEM7ctkebz3Kn0NrPRp8x+44g9VARZLWM5dy4VeVz/uXODduOwhJ
-         CHuSEG5eVGRfcKT91Egh3IreOShAdoZ61D7WgOeCXQ42nxpA90KvTtIaI0L8wprGoUL2
-         C72wiR46EibJH6ikDtY8/8bbxFlvkoZULe/BMTc2pa8Ou06AIJ5d+O0MvHXnG88C7g8w
-         DY0g==
-X-Gm-Message-State: AJIora+NzfrpuhuOEaeDmHFYlbpc8VYJQNpFsDkHqjXKlL1N6ZuIBrA5
-        hPkG5Bxh16rhFhXU2L0jG+43OX2frh8=
-X-Google-Smtp-Source: AGRyM1tO2CBJtsKmDlSqCBIPkUlrozcg78gkzMsXmJdD2PKSXmOVgsKKc0huRWug6941nM+zyJ+YTU3SdIk=
+        bh=XhdgywsCTVr4zamq9DydAKZeu7w865wFF1QrREP6uEA=;
+        b=IuLRcMJR3cxskJ3LOO+anEKfVI2JYx3GXIOE2FJe31mK1RzdTYZuURTUmS673GFArv
+         e2qudA7YtOPuxF++ZfiA0I99HNzh4vPWGu2XmVR6Z7QvBQ4OHcvtkOmKddo+YaG2xMBs
+         Lw6gc6N1begIQvEFAzKX17+mvX23Tif/XnDIeRI/WXbVWuSj9i8ce4cHbioubTcPXf9P
+         kFdx3n9mrnk4oXhTpFLG/zQlAFt9WWZmFmdo9M4uwdAxHCgK8wDeQWWaw3QTyTYjNHGM
+         OYnB1OHdtLMSH0PzzZi2sjghxofu3eTOqj7zx1hOxEKyoHDalZPl3/HAOl593/cMjzSB
+         Aeeg==
+X-Gm-Message-State: AJIora+uAikYPPAC/xOCshJLmK4Hsk9igiyFwMRxmsy0HWxPqYMR1QjY
+        ApXnyoELnH8joObQtmTxtER32m/s1b8=
+X-Google-Smtp-Source: AGRyM1vx5xJkm24U7PQboLNiezldUvmh9cSFVVSP1ea5iZIYyuZUVr/+NsX8hk36be26wtzmexXJ6A3SR7Y=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:903:32c4:b0:163:e765:5071 with SMTP id
- i4-20020a17090332c400b00163e7655071mr5876009plr.153.1655237280764; Tue, 14
- Jun 2022 13:08:00 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a25:7209:0:b0:663:f48e:83d6 with SMTP id
+ n9-20020a257209000000b00663f48e83d6mr6716225ybc.76.1655237282704; Tue, 14 Jun
+ 2022 13:08:02 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 20:06:52 +0000
+Date:   Tue, 14 Jun 2022 20:06:53 +0000
 In-Reply-To: <20220614200707.3315957-1-seanjc@google.com>
-Message-Id: <20220614200707.3315957-28-seanjc@google.com>
+Message-Id: <20220614200707.3315957-29-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220614200707.3315957-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH v2 27/42] KVM: selftests: Use vcpu_get_cpuid_entry() in CPUID test
+Subject: [PATCH v2 28/42] KVM: selftests: Use vcpu_{set,clear}_cpuid_feature()
+ in nVMX state test
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -63,53 +64,80 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use vcpu_get_cpuid_entry() instead of an open coded equivalent in the
-CPUID test.
-
-No functional change intended.
+Use vcpu_{set,clear}_cpuid_feature() to toggle nested VMX support in the
+vCPU CPUID module in the nVMX state test.  Drop CPUID_VMX as there are
+no longer any users.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/x86_64/cpuid_test.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ .../selftests/kvm/include/x86_64/processor.h  |  1 -
+ .../kvm/x86_64/vmx_set_nested_state_test.c    | 20 ++-----------------
+ 2 files changed, 2 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/x86_64/cpuid_test.c b/tools/testing/selftests/kvm/x86_64/cpuid_test.c
-index 8723d73dcdbd..694583803468 100644
---- a/tools/testing/selftests/kvm/x86_64/cpuid_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/cpuid_test.c
-@@ -147,7 +147,6 @@ struct kvm_cpuid2 *vcpu_alloc_cpuid(struct kvm_vm *vm, vm_vaddr_t *p_gva, struct
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index fb8f98faa58b..0633196e7b79 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -158,7 +158,6 @@ struct kvm_x86_cpu_feature {
+ #define X86_FEATURE_KVM_MIGRATION_CONTROL	KVM_X86_CPU_FEATURE(0x40000001, 0, EAX, 17)
  
- static void set_cpuid_after_run(struct kvm_vcpu *vcpu)
- {
+ /* CPUID.1.ECX */
+-#define CPUID_VMX		(1ul << 5)
+ #define CPUID_XSAVE		(1ul << 26)
+ #define CPUID_OSXSAVE		(1ul << 27)
+ 
+diff --git a/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
+index 1cf78ec007f2..41ea7028a1f8 100644
+--- a/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
++++ b/tools/testing/selftests/kvm/x86_64/vmx_set_nested_state_test.c
+@@ -121,7 +121,7 @@ void test_vmx_nested_state(struct kvm_vcpu *vcpu)
+ 	test_nested_state(vcpu, state);
+ 
+ 	/* Enable VMX in the guest CPUID. */
+-	vcpu_set_cpuid(vcpu);
++	vcpu_set_cpuid_feature(vcpu, X86_FEATURE_VMX);
+ 
+ 	/*
+ 	 * Setting vmxon_pa == -1ull and vmcs_pa == -1ull exits early without
+@@ -243,22 +243,6 @@ void test_vmx_nested_state(struct kvm_vcpu *vcpu)
+ 	free(state);
+ }
+ 
+-void disable_vmx(struct kvm_vcpu *vcpu)
+-{
 -	struct kvm_cpuid2 *cpuid = vcpu->cpuid;
- 	struct kvm_cpuid_entry2 *ent;
- 	int rc;
- 	u32 eax, ebx, x;
-@@ -157,7 +156,7 @@ static void set_cpuid_after_run(struct kvm_vcpu *vcpu)
- 	TEST_ASSERT(!rc, "Setting unmodified CPUID after KVM_RUN failed: %d", rc);
+-	int i;
+-
+-	for (i = 0; i < cpuid->nent; ++i)
+-		if (cpuid->entries[i].function == 1 &&
+-		    cpuid->entries[i].index == 0)
+-			break;
+-	TEST_ASSERT(i != cpuid->nent, "CPUID function 1 not found");
+-
+-	cpuid->entries[i].ecx &= ~CPUID_VMX;
+-	vcpu_set_cpuid(vcpu);
+-	cpuid->entries[i].ecx |= CPUID_VMX;
+-}
+-
+ int main(int argc, char *argv[])
+ {
+ 	struct kvm_vm *vm;
+@@ -280,7 +264,7 @@ int main(int argc, char *argv[])
+ 	/*
+ 	 * First run tests with VMX disabled to check error handling.
+ 	 */
+-	disable_vmx(vcpu);
++	vcpu_clear_cpuid_feature(vcpu, X86_FEATURE_VMX);
  
- 	/* Changing CPU features is forbidden */
--	ent = get_cpuid_entry(cpuid, 0x7, 0);
-+	ent = vcpu_get_cpuid_entry(vcpu, 0x7);
- 	ebx = ent->ebx;
- 	ent->ebx--;
- 	rc = __vcpu_set_cpuid(vcpu);
-@@ -165,7 +164,7 @@ static void set_cpuid_after_run(struct kvm_vcpu *vcpu)
- 	ent->ebx = ebx;
- 
- 	/* Changing MAXPHYADDR is forbidden */
--	ent = get_cpuid_entry(cpuid, 0x80000008, 0);
-+	ent = vcpu_get_cpuid_entry(vcpu, 0x80000008);
- 	eax = ent->eax;
- 	x = eax & 0xff;
- 	ent->eax = (eax & ~0xffu) | (x - 1);
+ 	/* Passing a NULL kvm_nested_state causes a EFAULT. */
+ 	test_nested_state_expect_efault(vcpu, NULL);
 -- 
 2.36.1.476.g0c4daa206d-goog
 

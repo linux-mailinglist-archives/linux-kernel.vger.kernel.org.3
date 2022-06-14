@@ -2,85 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D471054B41D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:03:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E5DE54B419
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:03:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237168AbiFNPBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59696 "EHLO
+        id S1355288AbiFNPCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350701AbiFNPBn (ORCPT
+        with ESMTP id S1344219AbiFNPB6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:01:43 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A3C41989
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:01:41 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id v19so12062606edd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:01:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ODxKv9DXEzyXisW4L2tDdOPQuT/fUgqqrwiPKscw3fY=;
-        b=dkRLuS0K2v319PcXm79Yz14PlggFsMt6Q4N5YFB5jl+SHs7stUFsx+coHokzgJJH3h
-         299y17G/0dbEqff95oaV0FYeWPzppSBxZuXGaB+HZwvVQ6d2j7M+J8kroFyNVqQW0P7K
-         AZy2aV48j43OARlj0tuXcNA05O42ayDB13CF4=
+        Tue, 14 Jun 2022 11:01:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 827E9403C9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:01:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655218915;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=J0TyJoYQ26JBnYmZYgj7lHRpHCJIU5GdHdyAKYNVq4s=;
+        b=RWd82fQBHsaxkHSImGMtbPqSKXAMktSBdwjofvHbAXvkeVoFCuFKGt5TOzvuWdh6Na5Mm8
+        fJ2IRElV6Woxyrk5JC23sh0eBU6xw01fxbm9HpP8jAxTFSgY85TFtnKE0KlTthAu6wVOAg
+        HLKNG0tGqSNJXdoSyE9kKZAFG9lZAQk=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-317-smumNDXjMgynpZJ-VwbOQw-1; Tue, 14 Jun 2022 11:01:53 -0400
+X-MC-Unique: smumNDXjMgynpZJ-VwbOQw-1
+Received: by mail-wm1-f69.google.com with SMTP id v184-20020a1cacc1000000b0039c7efa3e95so3905977wme.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:01:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ODxKv9DXEzyXisW4L2tDdOPQuT/fUgqqrwiPKscw3fY=;
-        b=R/FBO4IA6Jh/V56WbfbKt4xxJ3zp3ynw0qwaG3N0pnsw/vFWbLxkp8+njItBTDkzOb
-         7o/ZuajQO+OyQzrPKdEd1Hcmtn4QMzbAjKBoom9haTPl8eTz/rq/BtaWou8fC72jhRzs
-         sMbe08+IbfV3zH+2oCvVdVzcCDl0rtYVL0s3w4gmYEbW/HOZ6QgM2286bS+HPgPQU0c/
-         wjC0cwoio84PRd9XUH0KALz2w7l0sRFF1BSplBpIcUzX1kOeTAHvSmhG6SyJOxV17Ul8
-         RYrS6lf3WiQLuN2TsGbxAN8sGJ0Y777QyGAJZiuV+Xh1vdKqwy2CQDGdyVlIiJNoVMx1
-         KJtQ==
-X-Gm-Message-State: AOAM533iU6U67FzbYo47GsPAICCw4Zn0hO4AguaxGAvDJ7HlQa1aedqL
-        s9GSpgoLdG+8iwcLEE+gAnmKn2Mzgmm3sdRH
-X-Google-Smtp-Source: ABdhPJxgC4cV08pDVzTZ3v2MT40BgrH5uFW1hOIEqGIK467RnBdUdVI04Jruf249NMw8cNHO5riESg==
-X-Received: by 2002:a05:6402:2710:b0:42e:28c9:fa7 with SMTP id y16-20020a056402271000b0042e28c90fa7mr6699588edd.2.1655218900022;
-        Tue, 14 Jun 2022 08:01:40 -0700 (PDT)
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
-        by smtp.gmail.com with ESMTPSA id zj11-20020a170907338b00b006ff0fe78cb7sm5123879ejb.133.2022.06.14.08.01.39
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 08:01:39 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id o8so11684626wro.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:01:39 -0700 (PDT)
-X-Received: by 2002:a5d:414d:0:b0:213:be00:a35 with SMTP id
- c13-20020a5d414d000000b00213be000a35mr5170207wrq.97.1655218898671; Tue, 14
- Jun 2022 08:01:38 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version;
+        bh=J0TyJoYQ26JBnYmZYgj7lHRpHCJIU5GdHdyAKYNVq4s=;
+        b=DD+Yu/7lKCv8zqNQSVV2qypl5iWlOMVIE2QfANPqkP/YOsK9xvR7VwJ7hwG0JMTnOA
+         qQOk5tsn94ZG/Q5Y0gl6nDXOfzn11LsaK0M92jmckFr760xEUVKQU4StwwMwa9PIJ2nk
+         tJesit/Fy2lm2HtWbVjStp/GVG6ndOq2IpRB1icQirYfCFcV60nhzxBkrwDxTfi4dwHY
+         YFbOptmv/86gNBCiI8QUG1crTheS9wSYHfFToGKN3k4zIO6hKjFZoAQ30rH4Lb02OtVP
+         H4UTVS3JjC2XhwLV1pT4V4/kvImgKlzAC4UKCf76n/Ghyms0K2+IcqNqR0Rqt74xDUD2
+         Z7mg==
+X-Gm-Message-State: AOAM530JFivgBUn5L5KrM5sc1i8ZE6TPddVcMHP98BaQEMFKa+pGFLQ+
+        QlGBxO5GmV+FjTGaqZ9IGd+m0VDJw8WDC3JRJ4Ek/k199zA7Z6jH4dPDeb8QZKPVTv8nieWNYbd
+        eFkgQYDGpMUBJfHx3npJe3gaY
+X-Received: by 2002:a05:600c:4fd0:b0:39c:6565:31a5 with SMTP id o16-20020a05600c4fd000b0039c656531a5mr4672001wmq.60.1655218906947;
+        Tue, 14 Jun 2022 08:01:46 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxMIhlZbyecRjzqaqLq58DG7gWGNeWqK36G+IRce1uMWn4j2Niel2ejc1+7NC3ArykNox5mJg==
+X-Received: by 2002:a05:600c:4fd0:b0:39c:6565:31a5 with SMTP id o16-20020a05600c4fd000b0039c656531a5mr4671978wmq.60.1655218906712;
+        Tue, 14 Jun 2022 08:01:46 -0700 (PDT)
+Received: from fedora (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id t17-20020a05600c129100b0039754d1d327sm13356207wmd.13.2022.06.14.08.01.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 08:01:46 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     mail@anirudhrb.com, kumarpraveen@linux.microsoft.com,
+        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        wei.liu@kernel.org, robert.bradford@intel.com, liuwe@microsoft.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Ilias Stamatis <ilstam@amazon.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH] KVM: nVMX: Don't expose TSC scaling to L1 when on Hyper-V
+In-Reply-To: <87sfo7igis.fsf@redhat.com>
+References: <20220613161611.3567556-1-anrayabh@linux.microsoft.com>
+ <87sfo7igis.fsf@redhat.com>
+Date:   Tue, 14 Jun 2022 17:01:45 +0200
+Message-ID: <87pmjbi90m.fsf@redhat.com>
 MIME-Version: 1.0
-References: <20220614083552.1559600-1-pbonzini@redhat.com> <YqihVgV1AHGJ1GKw@google.com>
-In-Reply-To: <YqihVgV1AHGJ1GKw@google.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 14 Jun 2022 08:01:22 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whZWxdfY3Ks7E_G0=8TmUyc0nnGGiBij_ARsk4JNZiQeQ@mail.gmail.com>
-Message-ID: <CAHk-=whZWxdfY3Ks7E_G0=8TmUyc0nnGGiBij_ARsk4JNZiQeQ@mail.gmail.com>
-Subject: Re: [GIT PULL] More KVM changes for Linux 5.19-rc3
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 7:55 AM Sean Christopherson <seanjc@google.com> wrote:
+Vitaly Kuznetsov <vkuznets@redhat.com> writes:
+
+> Anirudh Rayabharam <anrayabh@linux.microsoft.com> writes:
 >
-> This patch has a bug that breaks 32-bit builds, and undoubtedly does weird things
-> for 64-bit builds.
+> ...
+>
+>>
+>> As per the comments in arch/x86/kvm/vmx/evmcs.h, TSC multiplier field is
+>> currently not supported in EVMCS.
+>
+> The latest version:
+> https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/datatypes/hv_vmx_enlightened_vmcs
+>
+> has it, actually. It was missing before (compare with e.g. 6.0b version
+> here:
+> https://github.com/MicrosoftDocs/Virtualization-Documentation/raw/live/tlfs/Hypervisor%20Top%20Level%20Functional%20Specification%20v6.0b.pdf)
+>
+> but AFAIR TSC scaling wasn't advertised by genuine Hyper-V either.
+> Interestingly enough, eVMCS version didn't change when these fields were
+> added, it is still '1'.
+>
+> I even have a patch in my stash (attached). I didn't send it out because
+> it wasn't properly tested with different Hyper-V versions.
 
-Thanks, you caught me just as I was merging it.
+And of course I forgot a pre-requisite patch which updates 'struct
+hv_enlightened_vmcs' to the latest:
 
-I fixed it up in the merge itself.
+diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+index 0a9407dc0859..038e5ef9b4a6 100644
+--- a/arch/x86/include/asm/hyperv-tlfs.h
++++ b/arch/x86/include/asm/hyperv-tlfs.h
+@@ -559,9 +559,20 @@ struct hv_enlightened_vmcs {
+        u64 partition_assist_page;
+        u64 padding64_4[4];
+        u64 guest_bndcfgs;
+-       u64 padding64_5[7];
++       u64 guest_ia32_perf_global_ctrl;
++       u64 guest_ia32_s_cet;
++       u64 guest_ssp;
++       u64 guest_ia32_int_ssp_table_addr;
++       u64 guest_ia32_lbr_ctl;
++       u64 padding64_5[2];
+        u64 xss_exit_bitmap;
+-       u64 padding64_6[7];
++       u64 host_ia32_perf_global_ctrl;
++       u64 encls_exiting_bitmap;
++       u64 tsc_multiplier;
++       u64 host_ia32_s_cet;
++       u64 host_ssp;
++       u64 host_ia32_int_ssp_table_addr;
++       u64 padding64_6;
+ } __packed;
+ 
+ #define HV_VMX_ENLIGHTENED_CLEAN_FIELD_NONE                    0
 
-                 Linus
+-- 
+Vitaly
+

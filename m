@@ -2,110 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB0D154AFB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5291554AF8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:52:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352195AbiFNLzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 07:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46450 "EHLO
+        id S243517AbiFNLvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 07:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236054AbiFNLzu (ORCPT
+        with ESMTP id S236054AbiFNLvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 07:55:50 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561C73A5FC;
-        Tue, 14 Jun 2022 04:55:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655207749; x=1686743749;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tflpx2G6+JJ9EPJTD2ED7MQkO0NbCWyhGrJRBvFDO+A=;
-  b=Tvx834izWqSIhjAYuQyyT6qZzbmu42QaumgQIb+0tv/JZV9Fg1KkQi+K
-   tpMK8n7QaYEDgLXlsHjJHfsVE2CLkhHeLgg0DzP2E7Mbp8ZC00475iycC
-   tNlvzAHFJgQ37ZM1A6GlEizae6aUSH8m3FMkLAPHn2CRQoPQBIqqCf2lf
-   eluqMfzS1viMV94Zii1qq0X/XihNVimQCwoD1L79E+BaVu0/opkyRZm/o
-   +XlM7n1EoaRfX67IdiPIxcMfMwZUkzW8ZN3DSV+7QkirrhaB3qzqd40hC
-   5ThZ9BilGo4tV8F6LohMMpa9szmUUIwXnU7LEATo4/520+2rW8LkMozne
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="278634286"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="278634286"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 04:55:49 -0700
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="651998382"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 04:55:46 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o1594-000cIs-Ot;
-        Tue, 14 Jun 2022 14:55:42 +0300
-Date:   Tue, 14 Jun 2022 14:55:42 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Ferry Toth <ftoth@exalondelft.nl>
-Subject: Re: [PATCH v1 1/1] x86/PCI: Disable e820 usage for the resource
- allocation
-Message-ID: <Yqh3PtENhktETx4S@smile.fi.intel.com>
-References: <20220613201641.67640-1-andriy.shevchenko@linux.intel.com>
- <20220613223520.GA721969@bhelgaas>
+        Tue, 14 Jun 2022 07:51:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F8134652;
+        Tue, 14 Jun 2022 04:51:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 958FD61323;
+        Tue, 14 Jun 2022 11:51:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A09FDC3411E;
+        Tue, 14 Jun 2022 11:51:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655207469;
+        bh=UxMFgBxh+tLcHM5HY/sBLNk+B5l+uHI+DjprsoQaKfQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=C+DlCtMINgCiNNF9rNUlecR2G32rSU4NLuvtySoVFh/6oAgnIWe3ZYXBRTrOPeZWJ
+         0Ltef+a3Kq4u2ku9YRwnyGpmNuhUD50TEUw/NyY33zdeUqgDZTlrH6+Ow6YEm+XpDK
+         b0F/19JHx+p1eE9isQGl+y3KO3LQkx2vx06EY5HagcW9lRJEkxvV+KQThvIhdTeeLT
+         e8z1Z7ih0Uq1ljJJsp9nfpk2KisfhzU3HJyRKW19tEsnj52/pTJ3KIyXjE0oLqUqEr
+         EeiFJ/rapseiDbAJgTXGKt5NKQXWQxow+IXjSlsN+TIgVs9CxahEBnE65ff/DA6D5x
+         fEqWQZ0nCadOQ==
+Date:   Tue, 14 Jun 2022 13:00:18 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     <Claudiu.Beznea@microchip.com>
+Cc:     <Eugen.Hristev@microchip.com>, <lars@metafoo.de>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <ludovic.desroches@atmel.com>, <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 07/16] iio: adc: at91-sama5d2_adc: simplify the code in
+ at91_adc_read_info_raw()
+Message-ID: <20220614130018.4b29345d@jic23-huawei>
+In-Reply-To: <14fc4d7c-4ce7-e4ed-3e2e-400cbd16c071@microchip.com>
+References: <20220609083213.1795019-1-claudiu.beznea@microchip.com>
+        <20220609083213.1795019-8-claudiu.beznea@microchip.com>
+        <20220611185403.3eaf9b65@jic23-huawei>
+        <14fc4d7c-4ce7-e4ed-3e2e-400cbd16c071@microchip.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613223520.GA721969@bhelgaas>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 05:35:20PM -0500, Bjorn Helgaas wrote:
-> On Mon, Jun 13, 2022 at 11:16:41PM +0300, Andy Shevchenko wrote:
-> > The resource management improve for PCI on x86 broke booting of Intel MID
-> > platforms. It seems that the current code removes all available resources
-> > from the list and none of the PCI device may be initialized. Restore the
-> > old behaviour by force disabling the e820 usage for the resource allocation.
+On Tue, 14 Jun 2022 08:49:03 +0000
+<Claudiu.Beznea@microchip.com> wrote:
+
+> On 11.06.2022 20:54, Jonathan Cameron wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > > 
-> > Fixes: 4c5e242d3e93 ("x86/PCI: Clip only host bridge windows for E820 regions")
-> > Depends-on: fa6dae5d8208 ("x86/PCI: Add kernel cmdline options to use/ignore E820 reserved regions")
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > On Thu, 9 Jun 2022 11:32:04 +0300
+> > Claudiu Beznea <claudiu.beznea@microchip.com> wrote:
+> >   
+> >> Simplify a bit the code in at91_adc_read_info_raw() by reducing the
+> >> number of lines of code.
+> >>
+> >> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>  
+> > 
+> > I'm not convinced this is worth while, but there are some lesser
+> > steps visible in this patch that probably are.
+> > 
+> > Given your earlier reorg to move at01_adc_adjust_val_osr() under the locks,
+> > you can now move the locks to the caller, thus not needing to handle them
+> > separately in all the exit paths.  
 > 
-> Yeah, I blew it with 4c5e242d3e93.  Can you provide more details on
-> how the MID platforms broke?
+> OK, I'll give it a try. With this, would you prefer to still keep this patch?
+> 
+No. I don't think it will bring enough benefit for the loss of readability.
+Having moved the locking, there will only be a few repeated lines.
 
-It's not so easy. The breakage seems affects the console driver and earlycon
-doesn't work. erlyprintk doesn't support 32-bit MMIO addresses (again,
-addresses, not data size). That said, there is nothing to show at all.
-
-What I did, I have bisected to your patch, commented out the call and instead
-added a printk() to see what it does, and it basically removed all resources
-listed in _CRS.
-
-> Since you set "pci_use_e820 = false" for
-> MID below, I assume MID doesn't depend on the e820 clipping and thus
-> should not break if we turn off clipping by default in 2023 as in
-> 0ae084d5a674 ("x86/PCI: Disable E820 reserved region clipping starting
-> in 2023").
-
-> But it'd be nice to see the dmesg log and make sure.
-
-Nothing to provide (see above why), sorry.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Jonathan

@@ -2,202 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A39E54A787
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:22:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96AEA54A78A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:26:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348184AbiFNDWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 23:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
+        id S235855AbiFND0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 23:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351130AbiFNDWC (ORCPT
+        with ESMTP id S232850AbiFND0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 23:22:02 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9B62E9D9;
-        Mon, 13 Jun 2022 20:22:00 -0700 (PDT)
-X-UUID: 00ae773d371b4c90877fe6ba9b8ad11f-20220614
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:28bf6a16-0c56-4a6e-b709-236cc33a6ce4,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:b14ad71,CLOUDID:0ab17d07-b57a-4a25-a071-bc7b4972bc68,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 00ae773d371b4c90877fe6ba9b8ad11f-20220614
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 466834257; Tue, 14 Jun 2022 11:21:54 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 14 Jun 2022 11:21:53 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 14 Jun 2022 11:21:53 +0800
-Message-ID: <5de2752a1d496290ea5c2c2d7840ba984b2e7e4d.camel@mediatek.com>
-Subject: Re: [PATCH v11 02/12] drm/mediatek: dpi: move dpi limits to SoC
- config
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Tue, 14 Jun 2022 11:21:46 +0800
-In-Reply-To: <20220613064841.10481-3-rex-bc.chen@mediatek.com>
-References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
-         <20220613064841.10481-3-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 13 Jun 2022 23:26:37 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDD82E9EB;
+        Mon, 13 Jun 2022 20:26:35 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0VGLDXru_1655177190;
+Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VGLDXru_1655177190)
+          by smtp.aliyun-inc.com;
+          Tue, 14 Jun 2022 11:26:31 +0800
+Subject: Re: [RESEND PATCH] mm: page_alloc: validate buddy before check the
+ migratetype
+To:     Guo Ren <guoren@kernel.org>, Zi Yan <ziy@nvidia.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org, huanyi.xj@alibaba-inc.com,
+        zjb194813@alibaba-inc.com, tianhu.hh@alibaba-inc.com,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Laura Abbott <labbott@redhat.com>
+References: <20220613131046.3009889-1-xianting.tian@linux.alibaba.com>
+ <0262A4FB-5A9B-47D3-8F1A-995509F56279@nvidia.com>
+ <CAJF2gTQGXAubtas4wAzrg298dGQJntu38X48V2OzcK8xZ_vPJg@mail.gmail.com>
+ <D667F530-E286-4E75-B7CE-63E120E440C8@nvidia.com>
+ <CAJF2gTSsaaseds=T_y-Ddt5Np2rYhk3ENumzSZDZUSXFwT3u-g@mail.gmail.com>
+ <435B45C3-E6A5-43B2-A5A2-318C748691FC@nvidia.com>
+ <CAJF2gTT7=WOtp6z5TtmFk79ipeWd2KpPB4aGkqh=vhM=L6SXmQ@mail.gmail.com>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+Message-ID: <28bae73b-2fa8-c465-2927-629230eec4ea@linux.alibaba.com>
+Date:   Tue, 14 Jun 2022 11:26:29 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJF2gTT7=WOtp6z5TtmFk79ipeWd2KpPB4aGkqh=vhM=L6SXmQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.1 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+Thanks Zi Yan, Guo Ren for the detailed discussion.
 
-On Mon, 2022-06-13 at 14:48 +0800, Bo-Chen Chen wrote:
-> From: Guillaume Ranquet <granquet@baylibre.com>
-> 
-> Add flexibility by moving the dpi limits to the SoC specific config.
+The commit message need to be improved, and I will send the patches soon.
 
-What does this 'limit' mean? Why it's different in DPI vs DP_INTF?
-
-The hardware design is so weird. If the limit is fixed for DPI and
-DP_INTF, why the hardware export register for software to assign any
-value which may be wrong.
-
-Regards,
-CK
-
-> 
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> ---
->  drivers/gpu/drm/mediatek/mtk_dpi.c | 25 ++++++++++++++++---------
->  1 file changed, 16 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> index e61cd67b978f..ce8c5eefe5f1 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
-> @@ -125,6 +125,7 @@ struct mtk_dpi_conf {
->  	bool edge_sel_en;
->  	const u32 *output_fmts;
->  	u32 num_output_fmts;
-> +	const struct mtk_dpi_yc_limit *limit;
->  };
->  
->  static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val,
-> u32 mask)
-> @@ -235,9 +236,10 @@ static void mtk_dpi_config_fb_size(struct
-> mtk_dpi *dpi, u32 width, u32 height)
->  	mtk_dpi_mask(dpi, DPI_SIZE, height << VSIZE, VSIZE_MASK);
->  }
->  
-> -static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi,
-> -					 struct mtk_dpi_yc_limit
-> *limit)
-> +static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi)
->  {
-> +	const struct mtk_dpi_yc_limit *limit = dpi->conf->limit;
-> +
->  	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_bottom << Y_LIMINT_BOT,
->  		     Y_LIMINT_BOT_MASK);
->  	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_top << Y_LIMINT_TOP,
-> @@ -449,7 +451,6 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
->  static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
->  				    struct drm_display_mode *mode)
->  {
-> -	struct mtk_dpi_yc_limit limit;
->  	struct mtk_dpi_polarities dpi_pol;
->  	struct mtk_dpi_sync_param hsync;
->  	struct mtk_dpi_sync_param vsync_lodd = { 0 };
-> @@ -484,11 +485,6 @@ static int mtk_dpi_set_display_mode(struct
-> mtk_dpi *dpi,
->  	dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
->  		pll_rate, vm.pixelclock);
->  
-> -	limit.c_bottom = 0x0010;
-> -	limit.c_top = 0x0FE0;
-> -	limit.y_bottom = 0x0010;
-> -	limit.y_top = 0x0FE0;
-> -
->  	dpi_pol.ck_pol = MTK_DPI_POLARITY_FALLING;
->  	dpi_pol.de_pol = MTK_DPI_POLARITY_RISING;
->  	dpi_pol.hsync_pol = vm.flags & DISPLAY_FLAGS_HSYNC_HIGH ?
-> @@ -536,7 +532,7 @@ static int mtk_dpi_set_display_mode(struct
-> mtk_dpi *dpi,
->  	else
->  		mtk_dpi_config_fb_size(dpi, vm.hactive, vm.vactive);
->  
-> -	mtk_dpi_config_channel_limit(dpi, &limit);
-> +	mtk_dpi_config_channel_limit(dpi);
->  	mtk_dpi_config_bit_num(dpi, dpi->bit_num);
->  	mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
->  	mtk_dpi_config_yc_map(dpi, dpi->yc_map);
-> @@ -790,12 +786,20 @@ static const u32 mt8183_output_fmts[] = {
->  	MEDIA_BUS_FMT_RGB888_2X12_BE,
->  };
->  
-> +static const struct mtk_dpi_yc_limit mtk_dpi_limit = {
-> +	.c_bottom = 0x0010,
-> +	.c_top = 0x0FE0,
-> +	.y_bottom = 0x0010,
-> +	.y_top = 0x0FE0,
-> +};
-> +
->  static const struct mtk_dpi_conf mt8173_conf = {
->  	.cal_factor = mt8173_calculate_factor,
->  	.reg_h_fre_con = 0xe0,
->  	.max_clock_khz = 300000,
->  	.output_fmts = mt8173_output_fmts,
->  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
-> +	.limit = &mtk_dpi_limit,
->  };
->  
->  static const struct mtk_dpi_conf mt2701_conf = {
-> @@ -805,6 +809,7 @@ static const struct mtk_dpi_conf mt2701_conf = {
->  	.max_clock_khz = 150000,
->  	.output_fmts = mt8173_output_fmts,
->  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
-> +	.limit = &mtk_dpi_limit,
->  };
->  
->  static const struct mtk_dpi_conf mt8183_conf = {
-> @@ -813,6 +818,7 @@ static const struct mtk_dpi_conf mt8183_conf = {
->  	.max_clock_khz = 100000,
->  	.output_fmts = mt8183_output_fmts,
->  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
-> +	.limit = &mtk_dpi_limit,
->  };
->  
->  static const struct mtk_dpi_conf mt8192_conf = {
-> @@ -821,6 +827,7 @@ static const struct mtk_dpi_conf mt8192_conf = {
->  	.max_clock_khz = 150000,
->  	.output_fmts = mt8183_output_fmts,
->  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
-> +	.limit = &mtk_dpi_limit,
->  };
->  
->  static int mtk_dpi_probe(struct platform_device *pdev)
-
+在 2022/6/14 上午9:19, Guo Ren 写道:
+> On Tue, Jun 14, 2022 at 8:14 AM Zi Yan <ziy@nvidia.com> wrote:
+>> On 13 Jun 2022, at 19:47, Guo Ren wrote:
+>>
+>>> On Tue, Jun 14, 2022 at 3:49 AM Zi Yan <ziy@nvidia.com> wrote:
+>>>> On 13 Jun 2022, at 12:32, Guo Ren wrote:
+>>>>
+>>>>> On Mon, Jun 13, 2022 at 11:23 PM Zi Yan <ziy@nvidia.com> wrote:
+>>>>>> Hi Xianting,
+>>>>>>
+>>>>>> Thanks for your patch.
+>>>>>>
+>>>>>> On 13 Jun 2022, at 9:10, Xianting Tian wrote:
+>>>>>>
+>>>>>>> Commit 787af64d05cd ("mm: page_alloc: validate buddy before check its migratetype.")
+>>>>>>> added buddy check code. But unfortunately, this fix isn't backported to
+>>>>>>> linux-5.17.y and the former stable branches. The reason is it added wrong
+>>>>>>> fixes message:
+>>>>>>>       Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallbackable
+>>>>>>>                           pageblocks with others")
+>>>>>> No, the Fixes tag is right. The commit above does need to validate buddy.
+>>>>> I think Xianting is right. The “Fixes:" tag is not accurate and the
+>>>>> page_is_buddy() is necessary here.
+>>>>>
+>>>>> This patch could be applied to the early version of the stable tree
+>>>>> (eg: Linux-5.10.y, not the master tree)
+>>>> This is quite misleading. Commit 787af64d05cd applies does not mean it is
+>>>> intended to fix the preexisting bug. Also it does not apply cleanly
+>>>> to commit d9dddbf55667, there is a clear indentation mismatch. At best,
+>>>> you can say the way of 787af64d05cd fixing 1dd214b8f21c also fixes d9dddbf55667.
+>>>> There is no way you can apply 787af64d05cd to earlier trees and call it a day.
+>>>>
+>>>> You can mention 787af64d05cd that it fixes a bug in 1dd214b8f21c and there is
+>>>> a similar bug in d9dddbf55667 that can be fixed in a similar way too. Saying
+>>>> the fixes message is wrong just misleads people, making them think there is
+>>>> no bug in 1dd214b8f21c. We need to be clear about this.
+>>> First, d9dddbf55667 is earlier than 1dd214b8f21c in Linus tree. The
+>>> origin fixes could cover the Linux-5.0.y tree if they give the
+>>> accurate commit number and that is the cause we want to point out.
+>> Yes, I got that d9dddbf55667 is earlier and commit 787af64d05cd fixes
+>> the issue introduced by d9dddbf55667. But my point is that 787af64d05cd
+>> is not intended to fix d9dddbf55667 and saying it has a wrong fixes
+>> message is misleading. This is the point I want to make.
+>>
+>>> Second, if the patch is for d9dddbf55667 then it could cover any tree
+>>> in the stable repo. Actually, we only know Linux-5.10.y has the
+>>> problem.
+>> But it is not and does not apply to d9dddbf55667 cleanly.
+>>
+>>> Maybe, Gregkh could help to direct us on how to deal with the issue:
+>>> (Fixup a bug which only belongs to the former stable branch.)
+>>>
+>> I think you just need to send this patch without saying “commit
+>> 787af64d05cd fixes message is wrong” would be a good start. You also
+>> need extra fix to mm/page_isolation.c for kernels between 5.15 and 5.17
+>> (inclusive). So there will need to be two patches:
+>>
+>> 1) your patch to stable tree prior to 5.15 and
+>>
+>> 2) your patch with an additional mm/page_isolation.c fix to stable tree
+>> between 5.15 and 5.17.
+>>
+>>>> Also, you will need to fix the mm/page_isolation.c code too to make this patch
+>>>> complete, unless you can show that PFN=0x1000 is never going to be encountered
+>>>> in the mm/page_isolation.c code I mentioned below.
+>>> No, we needn't fix mm/page_isolation.c in linux-5.10.y, because it had
+>>> pfn_valid_within(buddy_pfn) check after __find_buddy_pfn() to prevent
+>>> buddy_pfn=0.
+>>> The root cause comes from __find_buddy_pfn():
+>>> return page_pfn ^ (1 << order);
+>> Right. But pfn_valid_within() was removed since 5.15. So your fix is
+>> required for kernels between 5.15 and 5.17 (inclusive).
+>>
+>>> When page_pfn is the same as the order size, it will return the
+>>> previous buddy not the next. That is the only exception for this
+>>> algorithm, right?
+>>>
+>>>
+>>>
+>>>
+>>> In fact, the bug is a very long time to reproduce and is not easy to
+>>> debug, so we want to contribute it to the community to prevent other
+>>> guys from wasting time. Although there is no new patch at all.
+>> Thanks for your reporting and sending out the patch. I really
+>> appreciate it. We definitely need your inputs. Throughout the email
+>> thread, I am trying to help you clarify the bug and how to fix it
+>> properly:
+>>
+>> 1. The commit 787af64d05cd does not apply cleanly to commits
+>> d9dddbf55667, meaning you cannot just cherry-pick that commit to
+>> fix the issue. That is why we need your patch to fix the issue.
+>> And saying it has a wrong fixes message in this patch’s git log is
+>> misleading.
+> Okay, seems we need to send some patches for the different stable
+> branches separately.
+>
+>> 2. For kernels between 5.15 and 5.17 (inclusive), an additional fix
+>> to mm/page_isolation.c is also needed, since pfn_valid_within() was
+>> removed since 5.15 and the issue can appear during page isolation.
+> Good point and we would take care of that.
+>
+>> 3. For kernels before 5.15, this patch will apply.
+> Thx
+>
+>>>>>>> Actually, this issue is involved by commit:
+>>>>>>>       commit d9dddbf55667 ("mm/page_alloc: prevent merging between isolated and other pageblocks")
+>>>>>>>
+>>>>>>> For RISC-V arch, the first 2M is reserved for sbi, so the start PFN is 512,
+>>>>>>> but it got buddy PFN 0 for PFN 0x2000:
+>>>>>>>       0 = 0x2000 ^ (1 << 12)
+>>>>>>> With the illegal buddy PFN 0, it got an illegal buddy page, which caused
+>>>>>>> crash in __get_pfnblock_flags_mask().
+>>>>>> It seems that the RISC-V arch reveals a similar bug from d9dddbf55667.
+>>>>>> Basically, this bug will only happen when PFN=0x2000 is merging up and
+>>>>>> there are some isolated pageblocks.
+>>>>> Not PFN=0x2000, it's PFN=0x1000, I guess.
+>>>>>
+>>>>> RISC-V's first 2MB RAM could reserve for opensbi, so it would have
+>>>>> riscv_pfn_base=512 and mem_map began with 512th PFN when
+>>>>> CONFIG_FLATMEM=y.
+>>>>> (Also, csky has the same issue: a non-zero pfn_base in some scenarios.)
+>>>>>
+>>>>> But __find_buddy_pfn algorithm thinks the start address is 0, it could
+>>>>> get 0 pfn or less than the pfn_base value. We need another check to
+>>>>> prevent that.
+>>>>>
+>>>>>> BTW, what does first reserved 2MB imply? All 4KB pages from first 2MB are
+>>>>>> set to PageReserved?
+>>>>>>
+>>>>>>> With the patch, it can avoid the calling of get_pageblock_migratetype() if
+>>>>>>> it isn't buddy page.
+>>>>>> You might miss the __find_buddy_pfn() caller in unset_migratetype_isolate()
+>>>>>> from mm/page_isolation.c, if you are talking about linux-5.17.y and former
+>>>>>> version. There, page_is_buddy() is also not called and is_migrate_isolate_page()
+>>>>>> is called, which calls get_pageblock_migratetype() too.
+>>>>>>
+>>>>>>> Fixes: d9dddbf55667 ("mm/page_alloc: prevent merging between isolated and other pageblocks")
+>>>>>>> Cc: stable@vger.kernel.org
+>>>>>>> Reported-by: zjb194813@alibaba-inc.com
+>>>>>>> Reported-by: tianhu.hh@alibaba-inc.com
+>>>>>>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>>>>>>> ---
+>>>>>>>   mm/page_alloc.c | 3 +++
+>>>>>>>   1 file changed, 3 insertions(+)
+>>>>>>>
+>>>>>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>>>>>>> index b1caa1c6c887..5b423caa68fd 100644
+>>>>>>> --- a/mm/page_alloc.c
+>>>>>>> +++ b/mm/page_alloc.c
+>>>>>>> @@ -1129,6 +1129,9 @@ static inline void __free_one_page(struct page *page,
+>>>>>>>
+>>>>>>>                        buddy_pfn = __find_buddy_pfn(pfn, order);
+>>>>>>>                        buddy = page + (buddy_pfn - pfn);
+>>>>>>> +
+>>>>>>> +                     if (!page_is_buddy(page, buddy, order))
+>>>>>>> +                             goto done_merging;
+>>>>>>>                        buddy_mt = get_pageblock_migratetype(buddy);
+>>>>>>>
+>>>>>>>                        if (migratetype != buddy_mt
+>>>>>>> --
+>>>>>>> 2.17.1
+>>>>>> --
+>>>>>> Best Regards,
+>>>>>> Yan, Zi
+>>>>>
+>>>>>
+>>>>> --
+>>>>> Best Regards
+>>>>>   Guo Ren
+>>>>>
+>>>>> ML: https://lore.kernel.org/linux-csky/
+>>>> --
+>>>> Best Regards,
+>>>> Yan, Zi
+>>>
+>>>
+>>> --
+>>> Best Regards
+>>>   Guo Ren
+>>>
+>>> ML: https://lore.kernel.org/linux-csky/
+>> --
+>> Best Regards,
+>> Yan, Zi
+>
+>

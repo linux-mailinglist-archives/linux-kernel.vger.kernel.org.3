@@ -2,112 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBB4254BB69
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A998354BB62
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237089AbiFNUQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
+        id S1357972AbiFNUQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359115AbiFNUPl (ORCPT
+        with ESMTP id S1352180AbiFNUQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:15:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7164722B0B;
-        Tue, 14 Jun 2022 13:12:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54237B81882;
-        Tue, 14 Jun 2022 20:12:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E3FCC3411F;
-        Tue, 14 Jun 2022 20:12:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655237556;
-        bh=K5sMYcQa8KcOJXSCKfv+sFO+l852HartgdnTcv4p7so=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f3BmAGBn6NGciCmPlQayj2yDq9jL2NaTEe/GRV2ekXUGGZAM/MJsq7FdEVj+21EgB
-         k2abiF7N9LvGSWcmr3Ymx/F1yo5VTktL44TSyZVG/QCjvdi1vecgXCRaCYrOsOSSrc
-         RXwyoSHObgEPZTTSFHabkqMuFsHfYvj3DET5kw9QKSmuzOlRKsMOgeUJWsdo5InnUV
-         N6rERiBymHuvCZp3UA3q6ZiFkyjqEf+p0Aevb85pNWXgUeqGGJwNNynQ9eQL52yuKl
-         nADPCjAz9GdoAyEkMXS6x6FLslDQ4WiqVEOAlc9PeeasgwqVocSmBTYnap0uk2Fchk
-         D6jfQaRBg695w==
-Date:   Tue, 14 Jun 2022 22:12:32 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     dan.carpenter@oracle.com, Qii Wang <qii.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] i2c: mediatek: Fix an error handling path in
- mtk_i2c_probe()
-Message-ID: <YqjrsJLXEyAJU40B@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        dan.carpenter@oracle.com, Qii Wang <qii.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <8001bcdbee9f8afc85118c99b8166eb6473dcba5.1653222111.git.christophe.jaillet@wanadoo.fr>
+        Tue, 14 Jun 2022 16:16:23 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1459F4E3BF;
+        Tue, 14 Jun 2022 13:14:12 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id l18so10960160lje.13;
+        Tue, 14 Jun 2022 13:14:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=DbgTeZvKMZMkY2xBEwLn16RCp1UraZZjgWIgM7gcxt4=;
+        b=YpTXdOu04Da4bwX2u1aw6QWfROLDiCc/wAhdO4Irw19oQUV3cMVWMyMzeTALrzrIDr
+         ItY22qgrrWwNqIYGFrvai1emx8Qa60T90/ti35dYXFQM1mrAmY9Gp2OEFWe0Yu/u/E/V
+         FWwQL872OG6n7SjeX7aAT6GrRnQsSGmYO02+zou7EKuHGS6KzqSorGlt8l3zyaAzDwbx
+         fc0r6US8E4gqZWR9Gfs5qKf8ixDOjqwO2xbG6vVVVHAZChReaZ9sbaUdEVsmMFBawbbZ
+         zzeaICxiolClh/Tm7CEbfyCUNsWQ/w2CXR0qnpSHoUBMFhleNBLAXrkElqleRunX+R5m
+         HrwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DbgTeZvKMZMkY2xBEwLn16RCp1UraZZjgWIgM7gcxt4=;
+        b=xI/s+z9RgNvdbCfFh3ONzoYLhl8Hu3Odm52EHmTv/cOoVMLeoFNM/XtfhLSR2zJFd4
+         8KRwkDTplss8jcR8m3YAOlhknbmB82UswyNssOxgCwT3fhR37zFFjZPdr5Ph2Yd6GeDu
+         kgTZsoIjDoXtcULGbqJi+iNr4ihergpiI2c5uGD7TZbupb1SZTk2P6ujbid6WMo8dy1w
+         AZybGYeipfsJ6Nhk4RYUv4/A/XhrLPPI5KhXG3rugTFwxl8M+03GPImMv9LGYKy0zm8A
+         X1nK3Ighc1JQW8FDY5aBfbdoIOAKFcpZElRZ4BlMAWADRWMBGb3BPPfOm41qhBWHE1VV
+         5NqQ==
+X-Gm-Message-State: AJIora8aiyYyLorRGVru6SFjhGPmMeOBNndGmgYNtVCOnNrnthJmDQnd
+        iM8L/ScGnFJFjOKUD73QhF4=
+X-Google-Smtp-Source: AGRyM1vDFpPpioirOpV5lQxK+3AXGHnhFvea+VKCIscwedqxPoieVDlvdcRJsnCaHfgkxr2sdSdhtQ==
+X-Received: by 2002:a2e:8805:0:b0:255:6e73:9a67 with SMTP id x5-20020a2e8805000000b002556e739a67mr3510918ljh.426.1655237650240;
+        Tue, 14 Jun 2022 13:14:10 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id l18-20020a2e9092000000b002558b05c5f9sm1421196ljg.105.2022.06.14.13.14.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 13:14:09 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 23:14:07 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 09/18] PCI: dwc: Discard IP-core version checking on
+ unrolled iATU detection
+Message-ID: <20220614201407.exci2xtdcd742kjk@mobilestation>
+References: <20220610082535.12802-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610082535.12802-10-Sergey.Semin@baikalelectronics.ru>
+ <20220613202047.GE4188875-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LPJ/UywH79b/GoGa"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8001bcdbee9f8afc85118c99b8166eb6473dcba5.1653222111.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220613202047.GE4188875-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 13, 2022 at 02:20:47PM -0600, Rob Herring wrote:
+> On Fri, Jun 10, 2022 at 11:25:25AM +0300, Serge Semin wrote:
+> > It's pretty much pointless. Even though unrolled version of the internal
+> > ATU has been indeed available since DWC PCIe v4.80a IP-core, there is no
+> > guarantee it was enabled during the IP-core configuration (Synopsys
+> > suggests to contact the Solvnet support for guidance of how to do that for
+> > the newer IP-cores). So the only reliable way to find out the unrolled
+> > iATU feature availability is indeed to check the iATU viewport register
+> > content. In accordance with the reference manual [1] if the register
+> > doesn't exist (unrolled iATU is enabled) it's content is fixed with
+> > 0xff-s, otherwise it will contain some zeros. So we can freely drop the
+> > IP-core version checking in this matter then and use the
+> > dw_pcie_iatu_unroll_enabled() method only to detect whether iATU/eDMA
+> > space is unrolled.
+> 
 
---LPJ/UywH79b/GoGa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Are you sure that pre v4.80a, it is safe to read the register address? 
 
-On Sun, May 22, 2022 at 02:22:07PM +0200, Christophe JAILLET wrote:
-> The clsk are prepared, enabled, then disabled. So if an error occurs after
-> the disable step, they are still prepared.
->=20
-> Add an error handling path to unprepare the clks in such a case, as alrea=
-dy
-> done in the .remove function.
->=20
-> Fixes: 8b4fc246c3ff ("i2c: mediatek: Optimize master_xfer() and avoid cir=
-cular locking")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+v4.60a ref manual says that the register exists in case if
+(!CX_PL_REG_DISABLE && CX_INTERNAL_ATU_ENABLE)
+and no word regarding all 1s. Most likely it shall have all zeros by
+default and if there is no iATU available.
 
-Applied to for-current, thanks!
+> Seems unlikely that the all 1s guarantee would be valid before the 
+> feature ever existed. 
 
+Right, all 1s is the marker of the unrolled iATU mapping, which has
+been available since v4.80a. So before that version we were never
+supposed to meet all 1s in that registers.
 
---LPJ/UywH79b/GoGa
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> 
+> > [1] DesignWare Cores, PCI Express Controller, Register Desciptions,
+> > v.4.90a, December 2016, p.855
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/pci/controller/dwc/pcie-designware.c | 11 +++++------
+> >  1 file changed, 5 insertions(+), 6 deletions(-)
+> 
+> Assuming this works,
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
 
------BEGIN PGP SIGNATURE-----
+Thanks.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKo67AACgkQFA3kzBSg
-KbYsUQ//RC/VArnR3VlNNgSKRNoCEEel97zMSxrWxq65CjNsnO8W3zD/9DyqzyQS
-cJyDJkxEdKcDK8EQSF+iW0qLRPg4HLCs6WBoOsdgcSCmxv5YiTOmluHkO+kGP7ne
-tYYUuvhihoHqLAOtYXYYWi9kNH0cFOvIur0h2J/EHno/2LA+6fJEGMSI942PNbV8
-o6vTD9i7xhMIa8wpGE/Bwg0vMB7aBzuR2MfHoMmRTVJd/EsSNOLY+Eb6si+1mQLt
-3g8JsGEKiU7yRPcQBUl6aWQjT6OrHRHI0z6JCcFsDibkVn0W8FyKw6HG+xQo9ZZy
-lgfNdquCbZcs2fVnCTgXTtj4S/NRxYrDqN1KC3H76EmwouJ5ha7C0R+Yh+6Se8/f
-V463JjPsZWzQhIHTYcZ87bfte3w5/4iTgGhGMkddmKTRFv4WYkJZxDbX84f15ktB
-HTngGpZqNx/25++2fiZ+32V3NlPL9tRf/h2CXw9rFATe+72SbXKvNGVLgKvC0EfM
-nSdZJg9lXsD49Ds2/UtYnBXtCQ0yYiGsSbvAzP/CC6tHn/vwGcVVqJixGAE7bUUu
-M/S60KHdu3GP6m400nWh4r+C2TWzL9QFZML2X+gYuWxWD9Xubx72EqdzXoGKwDZU
-NZjihxOZB2V5KDIJ7unDrC/octpmuAMLGE+ZMxFgJL9hadYZGrA=
-=SD9T
------END PGP SIGNATURE-----
+-Sergey
 
---LPJ/UywH79b/GoGa--

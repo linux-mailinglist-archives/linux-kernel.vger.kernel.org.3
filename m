@@ -2,241 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C2954B2C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:09:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0010254B2CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:12:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237699AbiFNOJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
+        id S240246AbiFNOLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237068AbiFNOJe (ORCPT
+        with ESMTP id S236262AbiFNOLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:09:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B5731936;
-        Tue, 14 Jun 2022 07:09:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8D6CB818E3;
-        Tue, 14 Jun 2022 14:09:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A27EC3411B;
-        Tue, 14 Jun 2022 14:09:26 +0000 (UTC)
-Message-ID: <0c656c92-f029-bc02-6026-23649836d080@xs4all.nl>
-Date:   Tue, 14 Jun 2022 16:09:24 +0200
+        Tue, 14 Jun 2022 10:11:46 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC6F344C8;
+        Tue, 14 Jun 2022 07:11:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=0up0HQhrsxc90C88YMmJQmlVHMrBI86sKQklFU28KR8=; b=Hp1+8w4PUY58i0Tlkd3yeyLr1t
+        d+416tMt71AkGKbx1PRjrgGubVu2CXrnBDpBbOFaBdEqpkvYB8C6w0aNophxcs4gWQR/KIi23kUYS
+        eqjPJOORRCQ6F8TvdPT1A4BrmbM94f4UU15NqaO8OhfRs9kLxSkms6mHkPz0uGdIBaAkgiPHvSLs4
+        ODNsEb4eEx0Z5cMEzrgDmqfDAA9slhFg/jpbigImbW9YKf+EKQHLrU961QQpO96oP5oz4GgzE9G0Y
+        rSE0lUykUF5rhIZ/Mtf2q8mCxqjJO5cfB2r/YAeutwggT/qTVApUrNSQtSyZk1V0iOte8BdAD1PQc
+        yvesVwal19dT9zYIdQ56uNLn9Kurfr7tiBLrfQC1upVxd/OkXfVJJ3OMskAf8O61wVRlGWUwH8exR
+        MUge0IC5VloTMaquBTx2Ar46bMg1RyoRrYfyeLUj+MwtwbvwN3SdgGRXwbjS6nQ6/DnS9cC8RuCeT
+        NuSia+FFUU/KTMyKGeQQ4t1ufx4/736ogVnN3cIkPnDkm+jnMVMpdElh9vrOQeOw1DrUxSs81vwyJ
+        h4PRMK2TxpwLa+4YAkGqSNjsSr5tmjpddr7jWVsakCBVVZcaVjRpq/shELYc6KDRLkvWr1jRQds5L
+        VzX8eOOz15rMBARpKWHy3gPVUNq1YCLWDmZv6YE9c=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        David Howells <dhowells@redhat.com>,
+        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] 9p: fix EBADF errors in cached mode
+Date:   Tue, 14 Jun 2022 16:11:35 +0200
+Message-ID: <1796737.mFSqR1lx0c@silver>
+In-Reply-To: <YqiC8luskkxUftQl@codewreck.org>
+References: <YqW5s+GQZwZ/DP5q@codewreck.org> <19026878.01OTk6HtWb@silver>
+ <YqiC8luskkxUftQl@codewreck.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v8 15/17] media: uapi: HEVC: fix padding in v4l2 control
- structures
-Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com
-References: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
- <20220614083614.240641-16-benjamin.gaignard@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220614083614.240641-16-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/22 10:36, Benjamin Gaignard wrote:
-> Fix padding where needed to remove holes and stay align on cache boundaries
-
-align -> aligned
-
+On Dienstag, 14. Juni 2022 14:45:38 CEST Dominique Martinet wrote:
+> Christian Schoenebeck wrote on Tue, Jun 14, 2022 at 02:10:01PM +0200:
+> > It definitely goes into the right direction, but I think it's going a bit
+> > too far by using writeback_fid also in cases where it is not necessary
+> > and wasn't used before in the past.
 > 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
->  .../media/v4l/ext-ctrls-codec.rst             |  6 +++---
->  drivers/media/v4l2-core/v4l2-ctrls-core.c     |  9 ---------
->  include/media/hevc-ctrls.h                    | 19 ++++++++++++-------
->  3 files changed, 15 insertions(+), 19 deletions(-)
+> Would help if I had an idea of what was used where in the past.. :)
 > 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index 05228e280f66..48a8825a001b 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -3509,9 +3509,6 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->      * - __u8
->        - ``num_active_dpb_entries``
->        - The number of entries in ``dpb``.
-> -    * - struct :c:type:`v4l2_hevc_dpb_entry`
-> -      - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-> -      - The decoded picture buffer, for meta-data about reference frames.
->      * - __u8
->        - ``num_poc_st_curr_before``
->        - The number of reference pictures in the short-term set that come before
-> @@ -3535,6 +3532,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->        - ``poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
->        - PocLtCurr as described in section 8.3.2 "Decoding process for reference
->          picture set": provides the index of the long term references in DPB array.
-> +    * - struct :c:type:`v4l2_hevc_dpb_entry`
-> +      - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
-> +      - The decoded picture buffer, for meta-data about reference frames.
->      * - __u64
->        - ``flags``
->        - See :ref:`Decode Parameters Flags <hevc_decode_params_flags>`
-> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> index c5c5407584ff..fb68786c498b 100644
-> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
-> @@ -824,20 +824,11 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
->  		if (p_hevc_decode_params->num_active_dpb_entries >
->  		    V4L2_HEVC_DPB_ENTRIES_NUM_MAX)
->  			return -EINVAL;
-> -
-> -		for (i = 0; i < p_hevc_decode_params->num_active_dpb_entries;
-> -		     i++) {
-> -			struct v4l2_hevc_dpb_entry *dpb_entry =
-> -				&p_hevc_decode_params->dpb[i];
-> -
-> -			zero_padding(*dpb_entry);
-> -		}
->  		break;
->  
->  	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
->  		p_hevc_slice_params = p;
->  
-> -		zero_padding(p_hevc_slice_params->pred_weight_table);
->  		zero_padding(*p_hevc_slice_params);
->  		break;
->  
-> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-> index efc0412ac41e..9abca1a75bd4 100644
-> --- a/include/media/hevc-ctrls.h
-> +++ b/include/media/hevc-ctrls.h
-> @@ -133,7 +133,9 @@ struct v4l2_ctrl_hevc_sps {
->  	__u8	chroma_format_idc;
->  	__u8	sps_max_sub_layers_minus1;
->  
-> +	__u8	reserved[6];
->  	__u64	flags;
-> +	__u8	padding[24];
+> From a quick look at the code, checking out v5.10,
+> v9fs_vfs_writepage_locked() used the writeback fid always for all writes
+> v9fs_vfs_readpages is a bit more complex but only seems to be using the
+> "direct" private_data fid for reads...
+> It took me a bit of time but I think the reads you were seeing on
+> writeback fid come from v9fs_write_begin that does some readpage on the
+> writeback fid to populate the page before a non-filling write happens.
 
-Why are there 24 padding bytes at the end? For future use? If so, what is
-the rationale for '24'? Is it likely that new fields will be added in future
-HEVC revisions? Or is it in case we forget something?
+Yes, the overall picture in the past was not clear to me either.
 
-It's missing kerneldoc comments as well: it should state that the application
-must zero this.
+To be more specific, I was reading your patch as if it would e.g. also use the 
+writeback_fid if somebody explicitly called read() (i.e. not an implied read 
+caused by a partial write back), and was concerned about a potential privilege 
+escalation. Maybe it's just a theoretical issue, as this case is probably 
+already catched on a higher, general fs handling level, but worth 
+consideration.
 
-Why mix 'reserved' with 'padding'? It's odd to see both names in a single
-struct.
+> > What about something like this in v9fs_init_request() (yet untested):
+> >     /* writeback_fid is always opened O_RDWR (instead of just O_WRONLY)
+> >     
+> >      * explicitly for this case: partial write backs that require a read
+> >      * prior to actual write and therefore requires a fid with read
+> >      * capability.
+> >      */
+> >     
+> >     if (rreq->origin == NETFS_READ_FOR_WRITE)
+> >     
+> >         fid = v9inode->writeback_fid;
+> 
+> ... Which seems to be exactly what this origin is about, so if that
+> works I'm all for it.
+> 
+> > If desired, this could be further constrained later on like:
+> >     if (rreq->origin == NETFS_READ_FOR_WRITE &&
+> >     
+> >         (fid->mode & O_ACCMODE) == O_WRONLY)
+> >     
+> >     {
+> >     
+> >         fid = v9inode->writeback_fid;
+> >     
+> >     }
+> 
+> That also makes sense, if the fid mode has read permissions we might as
+> well use these as the writeback fid would needlessly be doing root IOs.
+> 
+> > I will definitely give these options some test spins here, a short
+> > feedback
+> > ahead would be appreciated though.
+> 
+> Please let me know how that works out, I'd be happy to use either of
+> your versions instead of mine.
+> If I can be greedy though I'd like to post it together with the other
+> couple of fixes next week, so having something before the end of the
+> week would be great -- I think even my first overkill version early and
+> building on it would make sense at this point.
+> 
+> But I think you've got the right end, so hopefully won't be needing to
+> delay
 
-In any case, this patch goes beyond 'fixing padding', it is doing more.
+I need a day or two for testing, then I will report back for sure. So it 
+should perfectly fit into your intended schedule.
 
-If you really want to add space for future use at the end of structs,
-then do that in a separate patch together with a rationale for it.
+Thanks!
 
-Regards,
+Best regards,
+Christian Schoenebeck
 
-	Hans
-
->  };
->  
->  #define V4L2_HEVC_PPS_FLAG_DEPENDENT_SLICE_SEGMENT_ENABLED	(1ULL << 0)
-> @@ -210,9 +212,10 @@ struct v4l2_ctrl_hevc_pps {
->  	__s8	pps_beta_offset_div2;
->  	__s8	pps_tc_offset_div2;
->  	__u8	log2_parallel_merge_level_minus2;
-> +	__u8	reserved[9];
->  
-> -	__u8	padding[4];
->  	__u64	flags;
-> +	__u8	padding[56];
->  };
->  
->  #define V4L2_HEVC_DPB_ENTRY_LONG_TERM_REFERENCE	0x01
-> @@ -245,8 +248,8 @@ struct v4l2_hevc_dpb_entry {
->  	__u64	timestamp;
->  	__u8	flags;
->  	__u8	field_pic;
-> +	__u16	reserved;
->  	__s32	pic_order_cnt_val;
-> -	__u8	padding[2];
->  };
->  
->  /**
-> @@ -285,8 +288,6 @@ struct v4l2_hevc_pred_weight_table {
->  	__s8	delta_chroma_weight_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX][2];
->  	__s8	chroma_offset_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX][2];
->  
-> -	__u8	padding[6];
-> -
->  	__u8	luma_log2_weight_denom;
->  	__s8	delta_chroma_log2_weight_denom;
->  };
-> @@ -381,18 +382,20 @@ struct v4l2_ctrl_hevc_slice_params {
->  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture timing SEI message */
->  	__u8	pic_struct;
->  
-> +	__u8	reserved0[3];
->  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment header */
->  	__u32	slice_segment_addr;
->  	__u8	ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u16	short_term_ref_pic_set_size;
->  	__u16	long_term_ref_pic_set_size;
-> -	__u8	padding;
->  
->  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction parameter */
->  	struct v4l2_hevc_pred_weight_table pred_weight_table;
->  
-> +	__u8	reserved1[2];
->  	__u64	flags;
-> +	__u8	padding[40];
->  };
->  
->  #define V4L2_HEVC_DECODE_PARAM_FLAG_IRAP_PIC		0x1
-> @@ -408,7 +411,6 @@ struct v4l2_ctrl_hevc_slice_params {
->   * @long_term_ref_pic_set_size: specifies the size of long-term reference
->   *				pictures set include in the SPS of the first slice
->   * @num_active_dpb_entries: the number of entries in dpb
-> - * @dpb: the decoded picture buffer, for meta-data about reference frames
->   * @num_poc_st_curr_before: the number of reference pictures in the short-term
->   *			    set that come before the current frame
->   * @num_poc_st_curr_after: the number of reference pictures in the short-term
-> @@ -419,6 +421,7 @@ struct v4l2_ctrl_hevc_slice_params {
->   * @poc_st_curr_after: provides the index of the short term after references
->   *		       in DPB array
->   * @poc_lt_curr: provides the index of the long term references in DPB array
-> + * @dpb: the decoded picture buffer, for meta-data about reference frames
->   * @flags: see V4L2_HEVC_DECODE_PARAM_FLAG_{}
->   */
->  struct v4l2_ctrl_hevc_decode_params {
-> @@ -426,14 +429,16 @@ struct v4l2_ctrl_hevc_decode_params {
->  	__u16	short_term_ref_pic_set_size;
->  	__u16	long_term_ref_pic_set_size;
->  	__u8	num_active_dpb_entries;
-> -	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	num_poc_st_curr_before;
->  	__u8	num_poc_st_curr_after;
->  	__u8	num_poc_lt_curr;
->  	__u8	poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
-> +	__u8	reserved[4];
-> +	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u64	flags;
-> +	__u8	padding[56];
->  };
->  
->  /**
 

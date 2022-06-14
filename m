@@ -2,171 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE7C54AA11
+	by mail.lfdr.de (Postfix) with ESMTP id 61CDC54AA12
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353069AbiFNHIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        id S1353072AbiFNHJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353059AbiFNHIp (ORCPT
+        with ESMTP id S231504AbiFNHJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:08:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DFE340E6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:08:43 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 7DAB61F383;
-        Tue, 14 Jun 2022 07:08:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1655190522; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CsU3F1FV0VK5yNn5xxw+vgNY6PidYLtiVeQQK0Ca7R0=;
-        b=pOMaj+Kw5A51nP5+FiPtqTyIWXOa/mAwgtCYBFTM1piG3/gZwhEBVsmULNVJ57IxRuvLTy
-        nhwY8/aWWDWrhOQbwIGIm9Pzqehufjt2BBwAXz31OfPRIYL3e5k8advGzedsbYHkqngie4
-        NJw0TwES3G553lcJSPrp5XfWQOdanpc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1655190522;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CsU3F1FV0VK5yNn5xxw+vgNY6PidYLtiVeQQK0Ca7R0=;
-        b=0J8LYTLJnQm4epZv9zFdjTfj6SjCvVpI61QbWAi9fVixEqEIuaogdgf5fTkbqC8mm4XJCW
-        rgEw27LKFGZqiFBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 48863139EC;
-        Tue, 14 Jun 2022 07:08:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id gyuiEPozqGIFeAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 14 Jun 2022 07:08:42 +0000
-Message-ID: <6b5172b5-ad81-36f9-9288-fd1db2fe0e17@suse.de>
-Date:   Tue, 14 Jun 2022 09:08:41 +0200
+        Tue, 14 Jun 2022 03:09:22 -0400
+Received: from mail.nearlyone.de (mail.nearlyone.de [46.163.114.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282F9BC87;
+        Tue, 14 Jun 2022 00:09:18 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7B4795DC28;
+        Tue, 14 Jun 2022 09:09:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monom.org; s=dkim;
+        t=1655190556; h=from:subject:date:message-id:to:mime-version:content-type:
+         content-transfer-encoding; bh=LU61zZsyQLzfqDARFpVtSGO6woiBxm/1cd4AGHZ5z6c=;
+        b=xcc7xWqopZAk/8SULj76e8cs/Yzz7prN2CRT2TVvmUNHKh2BjjFuo+j1PiDP+FT7PwQIPK
+        X+98uDcco/8GrM124oQe/G76EZz8RlfbUHZZs4IqXdc5BGgZJjjQur+6/vf7Rb85U2ov6p
+        MKRv/Eh6PMwBHDd9VJeJ1HZSmac+jbrio2HsyoySg55UvRHNzF8n1QvokIQvt2B6G9JL2q
+        EdCRABDIHWYNEhsfeC0ILs7pA6dhRRMPdSjLd74udk5n83gHCmNwiHt72FNtDeVNjHUtk5
+        w7HCXKLB9DZYwCn2mMQ1lwBYyRP0VvxMduKKgkY0F/1astl1wJlq4TK0jPyGbQ==
+Date:   Tue, 14 Jun 2022 09:08:48 +0200
+From:   Daniel Wagner <wagi@monom.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
+Subject: [ANNOUNCE] 4.19.246-rt110
+Message-ID: <165519045271.4481.16802639048289042479@beryllium.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 0/3] KUnit tests for drm_format_helper
-Content-Language: en-US
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        javierm@redhat.com
-Cc:     davidgow@google.com, dlatypov@google.com,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, jani.nikula@linux.intel.com,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-References: <20220613171738.111013-1-jose.exposito89@gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20220613171738.111013-1-jose.exposito89@gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------2tAANik0McvXpimbejM7IiTc"
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------2tAANik0McvXpimbejM7IiTc
-Content-Type: multipart/mixed; boundary="------------779Lw54ur8NxClLw2PlvBHfC";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
- javierm@redhat.com
-Cc: davidgow@google.com, dlatypov@google.com,
- maarten.lankhorst@linux.intel.com, mripard@kernel.org, airlied@linux.ie,
- daniel@ffwll.ch, jani.nikula@linux.intel.com,
- dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org
-Message-ID: <6b5172b5-ad81-36f9-9288-fd1db2fe0e17@suse.de>
-Subject: Re: [PATCH v3 0/3] KUnit tests for drm_format_helper
-References: <20220613171738.111013-1-jose.exposito89@gmail.com>
-In-Reply-To: <20220613171738.111013-1-jose.exposito89@gmail.com>
+Hello RT-list!
 
---------------779Lw54ur8NxClLw2PlvBHfC
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I'm pleased to announce the 4.19.246-rt110 stable release.  This is just
+an update to the latest stable release. No RT specific changes.
 
-SGkgSm9zZSwNCg0KZm9yIHRoZSB3aG9sZSBwYXRjaHNldDoNCg0KQWNrZWQtYnk6IFRob21h
-cyBaaW1tZXJtYW5uIDx0emltbWVybWFubkBzdXNlLmRlPg0KDQpPbmUgc21hbGwgZGV0YWls
-IG9uIGxpY2Vuc2luZzogZHJtX2Zvcm1hdF9oZWxwZXIuYyBpcyBsaWNlbnNlZCB1bmRlciAN
-CkdQTDIgb3IgTUlULiBNYXliZSBjb25zaWRlciBhZGRpbmcgJ29yIE1JVCcgdG8gZHJtX2Zv
-cm1hdF9oZWxwZXJfdGVzdC5jIA0KYXMgd2VsbC4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMN
-Cg0KQW0gMTMuMDYuMjIgdW0gMTk6MTcgc2NocmllYiBKb3PDqSBFeHDDs3NpdG86DQo+IEhl
-bGxvIGV2ZXJ5b25lLA0KPiANCj4gSGVyZSBpcyB0aGUgdjMgb2YgdGhlIHNlcmllcywgaW5j
-bHVkaW5nIHRoZSBkb2N1bWVudGF0aW9uLCBwcmV2aW91c2x5DQo+IHNlbnQgYXMgYSBzdGFu
-ZGFsb25lIHBhdGNoIFsxXSwgYW5kIGNoYW5nZXMgc3VnZ2VzdGVkIGR1cmluZyByZXZpZXcu
-DQo+IA0KPiBUaGFua3MgYSBsb3QsDQo+IEpvc8OpIEV4cMOzc2l0bw0KPiANCj4gUkZDIC0+
-IHYxOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9kcmktZGV2ZWwvMjAyMjA1MzAxMDIwMTcu
-NDcxODY1LTEtam9zZS5leHBvc2l0bzg5QGdtYWlsLmNvbS9ULw0KPiANCj4gICAtIEFkZCAu
-a3VuaXRjb25maWcgKE1heGltZSBSaXBhcmQpDQo+ICAgLSBGaXggbWVtb3J5IGxlYWsgKERh
-bmllbCBMYXR5cG92KQ0KPiAgIC0gTWFrZSBjb25maWcgb3B0aW9uIGdlbmVyaWMgKEphdmll
-ciBNYXJ0aW5leiBDYW5pbGxhcyk6DQo+ICAgICBEUk1fRk9STUFSX0hFTFBFUl9URVNUIC0+
-IERSTV9LVU5JVF9URVNUDQo+ICAgLSBSZW1vdmUgRElTQUJMRV9TVFJVQ1RMRUFLX1BMVUdJ
-TiAoRGFuaWVsIExhdHlwb3YpDQo+IA0KPiB2MSAtPiB2MjogaHR0cHM6Ly9sb3JlLmtlcm5l
-bC5vcmcvZHJpLWRldmVsLzIwMjIwNjA2MDk1NTE2LjkzODkzNC0xLWpvc2UuZXhwb3NpdG84
-OUBnbWFpbC5jb20vVC8NCj4gDQo+ICAgVGhvbWFzIFppbW1lcm1hbm46DQo+ICAgLSBBZGQg
-RFJNX1JFQ1RfSU5JVCgpIG1hY3JvDQo+ICAgLSBNb3ZlIHRlc3RzIHRvIGRyaXZlcnMvZ3B1
-L2RybS9rdW5pdA0KPiAgIC0gSW1wcm92ZSB0ZXN0IGRvY3VtZW50YXRpb24NCj4gDQo+IHYy
-IC0+IHYzOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9kcmktZGV2ZWwvMjAyMjA2MTIxNjEy
-NDguMjcxNTkwLTEtam9zZS5leHBvc2l0bzg5QGdtYWlsLmNvbS9ULw0KPiANCj4gICAtIFVz
-ZSBkZXNpZ25hdGVkIGluaXRpYWxpemVyIGluIERSTV9SRUNUX0lOSVQgKEphbmkgTmlrdWxh
-KQ0KPiAgIC0gU2ltcGxpZnkgdGhlICJjb252ZXJzaW9uX2J1Zl9zaXplIiBoZWxwZXINCj4g
-DQo+IFsxXSBodHRwczovL2xvcmUua2VybmVsLm9yZy9kcmktZGV2ZWwvMjAyMjA2MDYxODA5
-NDAuNDMzNzEtMS1qb3NlLmV4cG9zaXRvODlAZ21haWwuY29tL1QvDQo+IA0KPiBKb3PDqSBF
-eHDDs3NpdG8gKDMpOg0KPiAgICBkcm0vcmVjdDogQWRkIERSTV9SRUNUX0lOSVQoKSBtYWNy
-bw0KPiAgICBkcm0vZm9ybWF0LWhlbHBlcjogQWRkIEtVbml0IHRlc3RzIGZvciBkcm1fZmJf
-eHJnYjg4ODhfdG9fcmdiMzMyKCkNCj4gICAgZHJtL2RvYzogQWRkIEtVbml0IGRvY3VtZW50
-YXRpb24NCj4gDQo+ICAgRG9jdW1lbnRhdGlvbi9ncHUvZHJtLWludGVybmFscy5yc3QgICAg
-ICAgICAgIHwgIDMyICsrKysNCj4gICBkcml2ZXJzL2dwdS9kcm0vS2NvbmZpZyAgICAgICAg
-ICAgICAgICAgICAgICAgfCAgMTYgKysNCj4gICBkcml2ZXJzL2dwdS9kcm0vTWFrZWZpbGUg
-ICAgICAgICAgICAgICAgICAgICAgfCAgIDEgKw0KPiAgIGRyaXZlcnMvZ3B1L2RybS9rdW5p
-dC8ua3VuaXRjb25maWcgICAgICAgICAgICB8ICAgMyArDQo+ICAgZHJpdmVycy9ncHUvZHJt
-L2t1bml0L01ha2VmaWxlICAgICAgICAgICAgICAgIHwgICAzICsNCj4gICAuLi4vZ3B1L2Ry
-bS9rdW5pdC9kcm1fZm9ybWF0X2hlbHBlcl90ZXN0LmMgICAgfCAxNjAgKysrKysrKysrKysr
-KysrKysrDQo+ICAgaW5jbHVkZS9kcm0vZHJtX3JlY3QuaCAgICAgICAgICAgICAgICAgICAg
-ICAgIHwgIDE2ICsrDQo+ICAgNyBmaWxlcyBjaGFuZ2VkLCAyMzEgaW5zZXJ0aW9ucygrKQ0K
-PiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dwdS9kcm0va3VuaXQvLmt1bml0Y29u
-ZmlnDQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvZ3B1L2RybS9rdW5pdC9NYWtl
-ZmlsZQ0KPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJzL2dwdS9kcm0va3VuaXQvZHJt
-X2Zvcm1hdF9oZWxwZXJfdGVzdC5jDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJtYW5uDQpH
-cmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJt
-YW55IEdtYkgNCk1heGZlbGRzdHIuIDUsIDkwNDA5IE7DvHJuYmVyZywgR2VybWFueQ0KKEhS
-QiAzNjgwOSwgQUcgTsO8cm5iZXJnKQ0KR2VzY2jDpGZ0c2bDvGhyZXI6IEl2byBUb3Rldg0K
+You can get this release via the git tree at:
 
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
---------------779Lw54ur8NxClLw2PlvBHfC--
+  branch: v4.19-rt
+  Head SHA1: 60a663a02ac911cb70dc964321b3c596e5b4c3ca
 
---------------2tAANik0McvXpimbejM7IiTc
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Or to build 4.19.246-rt110 directly, the following patches should be applied:
 
------BEGIN PGP SIGNATURE-----
+  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.xz
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmKoM/kFAwAAAAAACgkQlh/E3EQov+De
-nA/+I5D0b3wcrfcCumVecCs+PyKrEjHypaGBWAsUqtYfkD7wqBrPF+CRd2lbc/8hW+OUiypBDMYF
-3melrKUQYvRO2GXc4zbNhbBblJDkuJIoSDtyOhqd8l1HO2W6RmaZXHczsacYxJAaoTjYk+ucUflD
-IMdXaiiSSmkWjhpxl5xt9zwvcDLNZmaBhYDYcoDpsRjgb+tUDb096KbhLvvJ1texF3VNFWW3iJFI
-jzOlBea1kYXpCRCuH3IE/MR1JSIqgLzXpvavGZYlsFvvXSCxCPkUUZV7mvJcJX/Ed6VKpPNzENFh
-4xU+yzlxi2FjVSQ/pUyH7iODyCEzeAs2VWtiou0hfyHaEjC+iAq91b0avls3Y5sV4e5RG5Kfg/sk
-N5arCYe4FZFWqazpH8Aq+nF81/5hcbFDGkV7Bn2qhLAyO2RNMGCEjUjcgYBWycmek6xXgOGmVh6b
-JlHExM13/zxIzIZTsa/4/7wOwCcuxNm+cjvAF8ahz+bPRYBHTxAfsYmjmt2dVIS0jvrQdz/485WW
-JzPtiDFMyh6ErJusvXWQ/w4YSTE4Qq7d32ellRjTLh0qQeJWauMDF6JZccJ4NH7trpUNcoTH+0uW
-St48KEaMbob1u7uruBjJAp9oGhC+S6QqRephsrrajSlQM2FPhznGBxYGReOfL23CH60X5k0JpYWh
-mL4=
-=TR4G
------END PGP SIGNATURE-----
+  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.19.246.xz
 
---------------2tAANik0McvXpimbejM7IiTc--
+  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/older/patch-4.19.246-rt110.patch.xz
+
+Signing key fingerprint:
+
+  5BF6 7BC5 0826 72CA BB45  ACAE 587C 5ECA 5D0A 306C
+
+All keys used for the above files and repositories can be found on the
+following git repository:
+
+   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
+
+Enjoy!
+Daniel
+
+Changes from v4.19.245-rt109:
+---
+
+Akira Yokosawa (1):
+      docs: submitting-patches: Fix crossref to 'The canonical patch format'
+
+Andy Shevchenko (1):
+      ACPI: sysfs: Make sparse happy about address space in use
+
+Arnaldo Carvalho de Melo (2):
+      perf bench: Share some global variables to fix build with gcc 10
+      perf tests bp_account: Make global variable static
+
+Ben Hutchings (1):
+      libtraceevent: Fix build with binutils 2.35
+
+Chuck Lever (1):
+      NFSD: Fix possible sleep during nfsd4_release_lockowner()
+
+Dan Carpenter (1):
+      dm integrity: fix error code in dm_integrity_ctr()
+
+Daniel Wagner (2):
+      Merge tag 'v4.19.246' into v4.19-rt
+      Linux 4.19.246-rt110
+
+Denis Efremov (Oracle) (1):
+      staging: rtl8723bs: prevent ->Ssid overflow in rtw_wx_set_scan()
+
+Eric Dumazet (1):
+      tcp: change source port randomizarion at connect() time
+
+Florian Westphal (1):
+      netfilter: conntrack: re-fetch conntrack after insertion
+
+Greg Kroah-Hartman (1):
+      Linux 4.19.246
+
+Gustavo A. R. Silva (1):
+      drm/i915: Fix -Wstringop-overflow warning in call to intel_read_wm_latency()
+
+Haimin Zhang (1):
+      block-map: add __GFP_ZERO flag for alloc_page in function bio_copy_kern
+
+Joel Stanley (1):
+      net: ftgmac100: Disable hardware checksum on AST2600
+
+Kees Cook (1):
+      exec: Force single empty string when argv is empty
+
+Liu Jian (1):
+      bpf: Enlarge offset check value to INT_MAX in bpf_skb_{load,store}_bytes
+
+Lorenzo Pieralisi (1):
+      ACPI: sysfs: Fix BERT error region memory mapping
+
+Marek Maślanka (1):
+      HID: multitouch: Add support for Google Whiskers Touchpad
+
+Mika Westerberg (1):
+      i2c: ismt: Provide a DMA buffer for Interrupt Cause Logging
+
+Mikulas Patocka (2):
+      dm crypt: make printing of the key constant-time
+      dm stats: add cond_resched when looping over entries
+
+Miri Korenblit (1):
+      cfg80211: set custom regdomain after wiphy registration
+
+Piyush Malgujar (1):
+      drivers: i2c: thunderx: Allow driver to work with ACPI defined TWSI controllers
+
+Sarthak Kukreti (1):
+      dm verity: set DM_TARGET_IMMUTABLE feature flag
+
+Stefan Mahnke-Hartmann (1):
+      tpm: Fix buffer access in tpm2_get_tpm_pt()
+
+Stephen Brennan (1):
+      assoc_array: Fix BUG_ON during garbage collect
+
+Sultan Alsawaf (1):
+      zsmalloc: fix races between asynchronous zspage free and page migration
+
+Thomas Bartschies (1):
+      net: af_key: check encryption module availability consistency
+
+Thomas Gleixner (1):
+      x86/pci/xen: Disable PCI/MSI[-X] masking for XEN_HVM guests
+
+Willy Tarreau (1):
+      secure_seq: use the 64 bits of the siphash for port offset calculation
+
+Xiu Jianfeng (1):
+      tpm: ibmvtpm: Correct the return value in tpm_ibmvtpm_probe()

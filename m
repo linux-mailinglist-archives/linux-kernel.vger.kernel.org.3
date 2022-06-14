@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3A354B570
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F1A54B575
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245246AbiFNQHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48878 "EHLO
+        id S1356593AbiFNQH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbiFNQHp (ORCPT
+        with ESMTP id S1356436AbiFNQHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:07:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C412E686
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:07:44 -0700 (PDT)
+        Tue, 14 Jun 2022 12:07:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105C531355
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:07:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B659B8198C
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:07:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77FD2C3411B;
-        Tue, 14 Jun 2022 16:07:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F4C3B818E9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:07:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0695C3411C;
+        Tue, 14 Jun 2022 16:07:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655222861;
-        bh=5gCD2JV3ZWghhc9U/yO/bwiUMMhro8fX8j1C1mvpog4=;
+        s=korg; t=1655222869;
+        bh=CvK4H2JhfLSeydKjsOxaZRUzbWFeeDXWVJ8g0pCp1mo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=psYJcwvzb2tgDUrgQ6HL5O5fXbV8qrcIzokWzqxkSSHRXCwTk9y2nR0kQhzRBFOeI
-         6p9SUqrwwvyIJMzTK69iVbveHGJ/UmB6vK9kSmGo6XIGeaZoJCQAE7mnEi8X4J+PR5
-         Tjs6LwWKjg/DU/mh66zg9esOwro5OodpgIJFR6RU=
-Date:   Tue, 14 Jun 2022 18:07:39 +0200
+        b=jsO0T9u9fPzltYlTEu0r7c7N3/VPq4dG88/SmhunFsor3fP0hOrv6mfOnKJoOwta6
+         xW5SADrFFOEdfuY5HbNmvC2CQypvWz6RI6IdBS8N0acreRzDj94/Y2Wk0mxECtE+nN
+         nUvXS/WO/Pfx0wNuXd3+3e0zNBuNx5e+M7qsOEPg=
+Date:   Tue, 14 Jun 2022 18:07:46 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     Zhi Song <zhi.song@bytedance.com>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] node: put_device after failing to device_register
-Message-ID: <YqiyS0iYOCw0gycN@kroah.com>
-References: <20220614160059.1739862-1-zhi.song@bytedance.com>
+Cc:     vilhelm.gray@gmail.com, rafael@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] isa: put_device after failing to device_register
+Message-ID: <YqiyUjCahmYG7bIa@kroah.com>
+References: <20220614160126.1739982-1-zhi.song@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220614160059.1739862-1-zhi.song@bytedance.com>
+In-Reply-To: <20220614160126.1739982-1-zhi.song@bytedance.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -50,7 +51,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 12:00:59AM +0800, Zhi Song wrote:
+On Wed, Jun 15, 2022 at 12:01:26AM +0800, Zhi Song wrote:
 > device_register() is used to register a device with the system.
 > We need to call put_device() to give up the reference initialized
 > in device_register() when it returns an error and this will clean
@@ -58,21 +59,25 @@ On Wed, Jun 15, 2022 at 12:00:59AM +0800, Zhi Song wrote:
 > 
 > Signed-off-by: Zhi Song <zhi.song@bytedance.com>
 > ---
->  drivers/base/node.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/base/isa.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/base/node.c b/drivers/base/node.c
-> index 0ac6376ef7a1..88a3337c546e 100644
-> --- a/drivers/base/node.c
-> +++ b/drivers/base/node.c
-> @@ -154,6 +154,7 @@ static struct node_access_nodes *node_init_node_access(struct node *node,
->  	list_add_tail(&access_node->list_node, &node->access_list);
->  	return access_node;
->  free_name:
-> +	put_device(dev);
->  	kfree_const(dev->kobj.name);
->  free:
->  	kfree(access_node);
+> diff --git a/drivers/base/isa.c b/drivers/base/isa.c
+> index 55e3ee2da98f..cf88f3d77b7d 100644
+> --- a/drivers/base/isa.c
+> +++ b/drivers/base/isa.c
+> @@ -173,8 +173,10 @@ static int __init isa_bus_init(void)
+>  	error = bus_register(&isa_bus_type);
+>  	if (!error) {
+>  		error = device_register(&isa_bus);
+> -		if (error)
+> +		if (error) {
+> +			put_device(&isa_bus);
+>  			bus_unregister(&isa_bus_type);
+> +		}
+>  	}
+>  	return error;
+>  }
 > -- 
 > 2.30.2
 > 

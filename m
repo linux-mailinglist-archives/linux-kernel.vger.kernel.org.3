@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6422054BC25
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1E454BC34
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:50:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358379AbiFNUtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38816 "EHLO
+        id S1358457AbiFNUtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:49:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354740AbiFNUsT (ORCPT
+        with ESMTP id S1358451AbiFNUs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:48:19 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23614DF63
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:48:04 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id m11-20020a25710b000000b0065d4a4abca1so8570543ybc.18
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:48:04 -0700 (PDT)
+        Tue, 14 Jun 2022 16:48:28 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171832C65D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:48:16 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id bo24-20020a17090b091800b001ea9a916bb7so3934132pjb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:48:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=iqv4+Lwd07qSh4P8HKRWQr9blRzWX3z9Tw+H35YUqtM=;
-        b=JfYP9tgmlXPT+59MiTL2dMou5OicLp9Bb0k7qtwKpQF1T4ekEBeazR8kh2efSeUgMl
-         jKbAP5kQTaNZAMprtkK0dSVfnzJeURvvviTX1vqS0aG4ngW/J5rFxzHhADpUkHeNgKPg
-         BJ2uPMxurwVGDRv6+wkoLOyrneQhjgDiafPVh1BsXWxmlM6tE9QxT3ZOgWxVr0HmAjoY
-         EMV5cWaxi/WdByzOvK8b0wWuJ4hvB6PagaKhR0l0QcutL7OeH6s2Jz+NYt0GMXSFukma
-         YAeOfv6hVmiVBdlKeNSPzMifeBeEQvDuWdZHRssEbStrKKVrAlNKKR9rVyPQUWSM+YUF
-         5DpA==
+        bh=8iOtL/ALJpVJGZjBfeAifxrTvYQ7W61ugeG5Yw7Lub8=;
+        b=SePQneirNrbsP48vTbR0RhtjVKyiW8nlVs9B0RTo0fzqdpXKcpFAqkVd6pt7Q6KCvx
+         gSlLp7i6ynya4yMF+SSXjoXY8yMqfcAYqcKkawYgrQGfZks5kkoGqP4iq0KeYmrXd/FZ
+         k2i8vQmrFNTgfg+Y6rVqYDAL9JV9ByXrq4y9qmPxZVG14I8A8xRW53IwNAiiRnM7Im+D
+         Z/rHxU2RmIHpzsRVsMTzT5astVdafanLbDxWFn5k3ptduj9DDNYVx5TPfbf5MsY3KZ5m
+         78LM3RuRcShfCxqnCJIEvOG/iCs9a/xT8HMk5CgAtxjPY60DwckbRBqubCTKonkARXDN
+         9LDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=iqv4+Lwd07qSh4P8HKRWQr9blRzWX3z9Tw+H35YUqtM=;
-        b=bx8LtwcixP8fbbh1rR/WfslLcYIkbbRqbQXeaua+pVLr+yYS3oqeoJqK2j0Z9qdZ0j
-         P5ndviiZVKxbhIfhcUOmmrGaH7i40mcE9OqTHDj3CCwBC5EMCTnugLK/ZmXiv6AvEPRR
-         UcUnPB1+B3cAk6sEiVQ42XjuW5chGB0393qNlrEsWhQfVBn+ShU193EzttoY/HGVU309
-         aOs13WbyZ4ob9GxvYxY0+QBR93/GQ+NNAzPF5cOz6xPu0/VWUpVBxFORh5XgfGQRC2Fu
-         6k6tlTCDpwLO94NHGrQU6ij2Oeu69KhpFjCQom7Qlxow0A8DCh3/hLv6uZ2Q4kvu7C39
-         OMhw==
-X-Gm-Message-State: AJIora/d+3kWIkwkSibEw7rJpqOE/44XekC7v9q/d6EA34f1r/CE/a1e
-        +UjX1c8IaJwgLS+tx4gujDGVNkEHlYw=
-X-Google-Smtp-Source: AGRyM1ug7KMkcC/J7mqr+mnxuOoM2UziB6qTreQGsxxfAyflk5d7t7TRAanHTTeNtMxZf4N1BGHvT4qmERA=
+        bh=8iOtL/ALJpVJGZjBfeAifxrTvYQ7W61ugeG5Yw7Lub8=;
+        b=Xi/5xkf2dW3OzgrEPJ/XjteuNzETPkSxcxChUJghTnxxALJz2bqtlQCtOOTmUrpqEz
+         +TIh9S8FxWgXgK7UW2HZro0XW05juLPs8P9FGa/B1aTUzoa/ubsqR7dXxfSjn0XNxLG3
+         hlW+b1H0CIxR8yGqPmir92slJRqxntsCbqIbIt3HAz5G35Mp2segjdRe7Zyj09jeEEWe
+         d95q5NZ2ww9nluukKOZ2UWzO/42iL7PEX7ksspxzlQSvwSUNxFPlN/38dj7n59RZ0d3Y
+         l1pn32xWwSocntgG1w89xq0m+KpZJLU5L4o/IIVUT+i2VSuS9oL1xH/xNdpvrsiU6vbW
+         kl/g==
+X-Gm-Message-State: AJIora/0fPux7ROw5gTiPfVkFpNkqHDwWWyygynZYmsetA7aL2MSiOy5
+        lXBX9MlxnH/v+Gd4K5lFmAS/VAL8sPw=
+X-Google-Smtp-Source: AGRyM1tHQSYc1ANFNGx+tE/faCX/axU2h/Q4o3YGeJAU7mNFZ+FCpPs974QbabJOO0RC/mDM2sLgcTXhLNI=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a25:9b48:0:b0:664:b4d0:83ca with SMTP id
- u8-20020a259b48000000b00664b4d083camr7210021ybo.277.1655239683573; Tue, 14
- Jun 2022 13:48:03 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP id
+ t9-20020a17090a024900b001e0a8a33c6cmr194574pje.0.1655239685437; Tue, 14 Jun
+ 2022 13:48:05 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 20:47:24 +0000
+Date:   Tue, 14 Jun 2022 20:47:25 +0000
 In-Reply-To: <20220614204730.3359543-1-seanjc@google.com>
-Message-Id: <20220614204730.3359543-16-seanjc@google.com>
+Message-Id: <20220614204730.3359543-17-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220614204730.3359543-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH v2 15/21] KVM: x86: Hoist nested event checks above event
- injection logic
+Subject: [PATCH v2 16/21] KVM: x86: Evaluate ability to inject SMI/NMI/IRQ
+ after potential VM-Exit
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -68,145 +68,52 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Perform nested event checks before re-injecting exceptions/events into
-L2.  If a pending exception causes VM-Exit to L1, re-injecting events
-into vmcs02 is premature and wasted effort.  Take care to ensure events
-that need to be re-injected are still re-injected if checking for nested
-events "fails", i.e. if KVM needs to force an immediate entry+exit to
-complete the to-be-re-injecteed event.
-
-Keep the "can_inject" logic the same for now; it too can be pushed below
-the nested checks, but is a slightly riskier change (see past bugs about
-events not being properly purged on nested VM-Exit).
-
-Add and/or modify comments to better document the various interactions.
-Of note is the comment regarding "blocking" previously injected NMIs and
-IRQs if an exception is pending.  The old comment isn't wrong strictly
-speaking, but it failed to capture the reason why the logic even exists.
+Determine whether or not new events can be injected after checking nested
+events.  If a VM-Exit occurred during nested event handling, any previous
+event that needed re-injection is gone from's KVM perspective; the event
+is captured in the vmc*12 VM-Exit information, but doesn't exist in terms
+of what needs to be done for entry to L1.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/x86.c | 89 +++++++++++++++++++++++++++-------------------
- 1 file changed, 53 insertions(+), 36 deletions(-)
+ arch/x86/kvm/x86.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index e45465075005..930de833aa2b 100644
+index 930de833aa2b..1a301a1730a5 100644
 --- a/arch/x86/kvm/x86.c
 +++ b/arch/x86/kvm/x86.c
-@@ -9502,53 +9502,70 @@ static void kvm_inject_exception(struct kvm_vcpu *vcpu)
+@@ -9502,7 +9502,7 @@ static void kvm_inject_exception(struct kvm_vcpu *vcpu)
  
  static int inject_pending_event(struct kvm_vcpu *vcpu, bool *req_immediate_exit)
  {
-+	bool can_inject = !kvm_event_needs_reinjection(vcpu);
+-	bool can_inject = !kvm_event_needs_reinjection(vcpu);
++	bool can_inject;
  	int r;
--	bool can_inject = true;
  
--	/* try to reinject previous events if any */
-+	/*
-+	 * Process nested events first, as nested VM-Exit supercedes event
-+	 * re-injection.  If there's an event queued for re-injection, it will
-+	 * be saved into the appropriate vmc{b,s}12 fields on nested VM-Exit.
-+	 */
-+	if (is_guest_mode(vcpu))
-+		r = kvm_check_nested_events(vcpu);
-+	else
-+		r = 0;
+ 	/*
+@@ -9567,7 +9567,13 @@ static int inject_pending_event(struct kvm_vcpu *vcpu, bool *req_immediate_exit)
+ 	if (r < 0)
+ 		goto out;
  
--	if (vcpu->arch.exception.injected) {
+-	/* try to inject new event if pending */
 +	/*
-+	 * Re-inject exceptions and events *especially* if immediate entry+exit
-+	 * to/from L2 is needed, as any event that has already been injected
-+	 * into L2 needs to complete its lifecycle before injecting a new event.
-+	 *
-+	 * Don't re-inject an NMI or interrupt if there is a pending exception.
-+	 * This collision arises if an exception occurred while vectoring the
-+	 * injected event, KVM intercepted said exception, and KVM ultimately
-+	 * determined the fault belongs to the guest and queues the exception
-+	 * for injection back into the guest.
-+	 *
-+	 * "Injected" interrupts can also collide with pending exceptions if
-+	 * userspace ignores the "ready for injection" flag and blindly queues
-+	 * an interrupt.  In that case, prioritizing the exception is correct,
-+	 * as the exception "occurred" before the exit to userspace.  Trap-like
-+	 * exceptions, e.g. most #DBs, have higher priority than interrupts.
-+	 * And while fault-like exceptions, e.g. #GP and #PF, are the lowest
-+	 * priority, they're only generated (pended) during instruction
-+	 * execution, and interrupts are recognized at instruction boundaries.
-+	 * Thus a pending fault-like exception means the fault occurred on the
-+	 * *previous* instruction and must be serviced prior to recognizing any
-+	 * new events in order to fully complete the previous instruction.
++	 * New events, other than exceptions, cannot be injected if KVM needs
++	 * to re-inject a previous event.  See above comments on re-injecting
++	 * for why pending exceptions get priority.
 +	 */
-+	if (vcpu->arch.exception.injected)
- 		kvm_inject_exception(vcpu);
--		can_inject = false;
--	}
-+	else if (vcpu->arch.exception.pending)
-+		; /* see above */
-+	else if (vcpu->arch.nmi_injected)
-+		static_call(kvm_x86_inject_nmi)(vcpu);
-+	else if (vcpu->arch.interrupt.injected)
-+		static_call(kvm_x86_inject_irq)(vcpu, true);
++	can_inject = !kvm_event_needs_reinjection(vcpu);
 +
- 	/*
--	 * Do not inject an NMI or interrupt if there is a pending
--	 * exception.  Exceptions and interrupts are recognized at
--	 * instruction boundaries, i.e. the start of an instruction.
--	 * Trap-like exceptions, e.g. #DB, have higher priority than
--	 * NMIs and interrupts, i.e. traps are recognized before an
--	 * NMI/interrupt that's pending on the same instruction.
--	 * Fault-like exceptions, e.g. #GP and #PF, are the lowest
--	 * priority, but are only generated (pended) during instruction
--	 * execution, i.e. a pending fault-like exception means the
--	 * fault occurred on the *previous* instruction and must be
--	 * serviced prior to recognizing any new events in order to
--	 * fully complete the previous instruction.
-+	 * Exceptions that morph to VM-Exits are handled above, and pending
-+	 * exceptions on top of injected exceptions that do not VM-Exit should
-+	 * either morph to #DF or, sadly, override the injected exception.
- 	 */
--	else if (!vcpu->arch.exception.pending) {
--		if (vcpu->arch.nmi_injected) {
--			static_call(kvm_x86_inject_nmi)(vcpu);
--			can_inject = false;
--		} else if (vcpu->arch.interrupt.injected) {
--			static_call(kvm_x86_inject_irq)(vcpu, true);
--			can_inject = false;
--		}
--	}
--
- 	WARN_ON_ONCE(vcpu->arch.exception.injected &&
- 		     vcpu->arch.exception.pending);
- 
- 	/*
--	 * Call check_nested_events() even if we reinjected a previous event
--	 * in order for caller to determine if it should require immediate-exit
--	 * from L2 to L1 due to pending L1 events which require exit
--	 * from L2 to L1.
-+	 * Bail if immediate entry+exit to/from the guest is needed to complete
-+	 * nested VM-Enter or event re-injection so that a different pending
-+	 * event can be serviced (or if KVM needs to exit to userspace).
-+	 *
-+	 * Otherwise, continue processing events even if VM-Exit occurred.  The
-+	 * VM-Exit will have cleared exceptions that were meant for L2, but
-+	 * there may now be events that can be injected into L1.
- 	 */
--	if (is_guest_mode(vcpu)) {
--		r = kvm_check_nested_events(vcpu);
--		if (r < 0)
--			goto out;
--	}
-+	if (r < 0)
-+		goto out;
- 
- 	/* try to inject new event if pending */
  	if (vcpu->arch.exception.pending) {
+ 		/*
+ 		 * Fault-class exceptions, except #DBs, set RF=1 in the RFLAGS
 -- 
 2.36.1.476.g0c4daa206d-goog
 

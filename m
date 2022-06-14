@@ -2,126 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0140A54B65A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:40:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5570D54B665
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343514AbiFNQkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
+        id S1344160AbiFNQlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244022AbiFNQkn (ORCPT
+        with ESMTP id S234800AbiFNQlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:40:43 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B54835AAC;
-        Tue, 14 Jun 2022 09:40:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D9BF716F3;
-        Tue, 14 Jun 2022 09:40:41 -0700 (PDT)
-Received: from [10.57.84.132] (unknown [10.57.84.132])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9F61E3F66F;
-        Tue, 14 Jun 2022 09:40:40 -0700 (PDT)
-Message-ID: <65477f82-cb48-7f4c-db2f-d7e359fe2144@arm.com>
-Date:   Tue, 14 Jun 2022 17:40:39 +0100
+        Tue, 14 Jun 2022 12:41:16 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75B6735AAC;
+        Tue, 14 Jun 2022 09:41:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rwYFO4jRp4ZmBbbpQ/dlmC/s4443nixCio2KC7D4yLw=; b=Q/p58+5AIll1J3wwj9duE6joP8
+        2YjrLVWMBq/QDljzX938yomfdduTqhCTkLr7QoXKmJFKAVbw2OLh/qX3V6ZNdS+JPLmmgpJf1SfIY
+        tJDWeVO6lvj7Ll0I23GpN1mvudDqdBS+nOPCE6kzpamjlU8zsA7zAdCExPbyRNAwL9zRELe2Eod9B
+        GsF54S7BNycteMhqcDH7uc17WfMBGrjomDM83+6j/N+qQaPKefG7lDtrncP7zKN2vwDN1lxYGVcwQ
+        0DSt0M2Odg2SUPt6G1Y8DzuprGzjrzsjLdPuI+zknxqWuHe2d455VvYZ3hfJQNbQUfXwrEV7IoHb3
+        UL519GRg==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o19b9-007uOk-Oq; Tue, 14 Jun 2022 16:41:00 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D05F5300459;
+        Tue, 14 Jun 2022 18:40:53 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A4FD82868A9BF; Tue, 14 Jun 2022 18:40:53 +0200 (CEST)
+Date:   Tue, 14 Jun 2022 18:40:53 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
+        srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
+        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
+        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH 14/36] cpuidle: Fix rcu_idle_*() usage
+Message-ID: <Yqi6Fd38ZCsDUnQG@hirez.programming.kicks-ass.net>
+References: <20220608142723.103523089@infradead.org>
+ <20220608144516.808451191@infradead.org>
+ <YqiB6YpVqq4wuDtO@FVFF77S0Q05N>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH] writeback: Avoid grabbing the wb if the we don't add it
- to dirty list
-To:     Jan Kara <jack@suse.cz>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org,
-        Jchao Sun <sunjunchao2870@gmail.com>
-References: <20220614124618.2830569-1-suzuki.poulose@arm.com>
- <20220614142955.7wvv5dfqdcwp5ftw@quack3.lan>
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20220614142955.7wvv5dfqdcwp5ftw@quack3.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqiB6YpVqq4wuDtO@FVFF77S0Q05N>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2022 15:29, Jan Kara wrote:
-> On Tue 14-06-22 13:46:18, Suzuki K Poulose wrote:
->> Commit 10e14073107d moved grabbing the wb for an inode early enough,
->> skipping the checks whether if this inode needs to be really added
->> to the dirty list (backed by blockdev or unhashed inode). This causes
->> a crash with kdevtmpfs as below, on an arm64 Juno board, as below:
->>
->> [    1.446493] printk: console [ttyAMA0] printing thread started
->> [    1.447195] printk: bootconsole [pl11] printing thread stopped
->> [    1.467193] Unable to handle kernel paging request at virtual address ffff800871242000
->> [    1.467793] Mem abort info:
->> [    1.468093]   ESR = 0x0000000096000005
->> [    1.468413]   EC = 0x25: DABT (current EL), IL = 32 bits
->> [    1.468741]   SET = 0, FnV = 0
->> [    1.469093]   EA = 0, S1PTW = 0
->> [    1.469396]   FSC = 0x05: level 1 translation fault
->> [    1.470493] Data abort info:
->> [    1.470793]   ISV = 0, ISS = 0x00000005
->> [    1.471093]   CM = 0, WnR = 0
->> [    1.471444] swapper pgtable: 4k pages, 48-bit VAs, 	pgdp=0000000081c10000
->> [    1.471798] [ffff800871242000] pgd=10000008fffff003,
->> p4d=10000008fffff003, pud=0000000000000000
->> [    1.472836] Internal error: Oops: 96000005 [#1] PREEMPT SMP
->> [    1.472918] Modules linked in:
->> [    1.473085] CPU: 1 PID: 35 Comm: kdevtmpfs Tainted: G T 5.19.0-rc1+ #49
->> [    1.473246] Hardware name: Foundation-v8A (DT)
->> [    1.473345] pstate: 40400009 (nZcv daif +PAN -UAO -TCO -DIT 	-SSBS BTYPE=--)
->> [    1.473493] pc : locked_inode_to_wb_and_lock_list+0xbc/0x2a4
->> [    1.473656] lr : locked_inode_to_wb_and_lock_list+0x8c/0x2a4
->> [    1.473820] sp : ffff80000b77bc10
->> [    1.473901] x29: ffff80000b77bc10 x28: 0000000000000001 x27: 0000000000000004
->> [    1.474193] x26: 0000000000000000 x25: ffff000800888600 x24: ffff0008008885e8
->> [    1.474393] x23: ffff80000848ddd4 x22: ffff80000a754f30 x21: ffff80000a7eaaf0
->> [    1.474693] x20: ffff000800888150 x19: ffff80000b6a4150 x18: ffff80000ac3ac00
->> [    1.474917] x17: 0000000070526bee x16: 000000003ac581ee x15: ffff80000ac42660
->> [    1.475195] x14: 0000000000000000 x13: 0000000000007a60 x12: 0000000000000002
->> [    1.475428] x11: ffff80000a7eaaf0 x10: 0000000000000004 x9 : 000000008845fe88
->> [    1.475622] x8 : ffff000800868000 x7 : ffff80000ab98000 x6 : 00000000114514e2
->> [    1.475893] x5 : 0000000000000000 x4 : 0000000000020019 x3 : 0000000000000001
->> [    1.476113] x2 : ffff800871242000 x1 : ffff800871242000 x0 : ffff000800868000
->> [    1.476393] Call trace:
->> [    1.476493]  locked_inode_to_wb_and_lock_list+0xbc/0x2a4
->> [    1.476605]  __mark_inode_dirty+0x3d8/0x6e0
->> [    1.476793]  simple_setattr+0x5c/0x84
->> [    1.476933]  notify_change+0x3ec/0x470
->> [    1.477096]  handle_create+0x1b8/0x224
->> [    1.477193]  devtmpfsd+0x98/0xf8
->> [    1.477342]  kthread+0x124/0x130
->> [    1.477512]  ret_from_fork+0x10/0x20
->> [    1.477670] Code: b9000802 d2800023 d53cd042 8b020021 (f823003f)
->> [    1.477793] ---[ end trace 0000000000000000 ]---
->> [    1.478093] note: kdevtmpfs[35] exited with preempt_count 2
->>
->> The problem was bisected to the above commit and moving the bail check
->> early solves the problem for me.
->>
->> Fixes: 10e14073107d ("writeback: Fix inode->i_io_list not be protected by inode->i_lock error")
->> CC: stable@vger.kernel.org
->> Cc: Jchao Sun <sunjunchao2870@gmail.com>
->> Cc: Jan Kara <jack@suse.cz>
->> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+On Tue, Jun 14, 2022 at 01:41:13PM +0100, Mark Rutland wrote:
+> On Wed, Jun 08, 2022 at 04:27:37PM +0200, Peter Zijlstra wrote:
+> > --- a/kernel/time/tick-broadcast.c
+> > +++ b/kernel/time/tick-broadcast.c
+> > @@ -622,9 +622,13 @@ struct cpumask *tick_get_broadcast_onesh
+> >   * to avoid a deep idle transition as we are about to get the
+> >   * broadcast IPI right away.
+> >   */
+> > -int tick_check_broadcast_expired(void)
+> > +noinstr int tick_check_broadcast_expired(void)
+> >  {
+> > +#ifdef _ASM_GENERIC_BITOPS_INSTRUMENTED_NON_ATOMIC_H
+> > +	return arch_test_bit(smp_processor_id(), cpumask_bits(tick_broadcast_force_mask));
+> > +#else
+> >  	return cpumask_test_cpu(smp_processor_id(), tick_broadcast_force_mask);
+> > +#endif
+> >  }
 > 
-> Thanks for debugging this! The problem actually is not that we cannot call
-> locked_inode_to_wb_and_lock_list() for devtmpfs inode. The problem is that
-> we get called so early during boot that noop_backing_dev_info is not
-> initialized yet and that breaks the code. But I agree the quick fix for
-> this breakage is to exclude unhashed inodes early in __mark_inode_dirty().
-> I'll update the changelog and code comment (and cleanup the condition when
-> moving it) and push the result to my tree.
+> This is somewhat not-ideal. :/
 
-Thanks for the clarification. Btw, here is another report, that is fixed 
-with the same patch [0].
+I'll say.
 
-[0] 
-https://lore.kernel.org/linux-arm-kernel/YqiJH1phG%2FLWu9bs@monolith.localdoman/
+> Could we unconditionally do the arch_test_bit() variant, with a comment, or
+> does that not exist in some cases?
 
-Suzuki
+Loads of build errors ensued, which is how I ended up with this mess ...

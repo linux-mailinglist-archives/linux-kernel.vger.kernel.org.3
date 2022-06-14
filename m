@@ -2,82 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144CD54B825
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:55:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BA054B82A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:56:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353841AbiFNRxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 13:53:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
+        id S1350666AbiFNR4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 13:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356942AbiFNRxj (ORCPT
+        with ESMTP id S233032AbiFNR4D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 13:53:39 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8589286FA
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:53:37 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id u18so8374767plb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:53:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=HYjK3rxh/o4Ln2PasJCrv5tlXw/BblIG4nmWymg4CTU=;
-        b=Dmcl6h6O2UsD1cniilERBIHpLI5g0P/K6YyIIZFmCTiO3zfiNP7vsFGI5yW/YR2P0e
-         PHMFqa5OgjTuzo535YbgmMqa3WUOyvshljH6QUOuRceA/vRqu3tHJjXAifNq2QD6lIPT
-         aH2jUZ1mLLUT+psDLg/ujPik8r4QJQ6H8Rc2w=
+        Tue, 14 Jun 2022 13:56:03 -0400
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4B6286FA;
+        Tue, 14 Jun 2022 10:56:02 -0700 (PDT)
+Received: by mail-il1-f180.google.com with SMTP id s1so7168576ilj.0;
+        Tue, 14 Jun 2022 10:56:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=HYjK3rxh/o4Ln2PasJCrv5tlXw/BblIG4nmWymg4CTU=;
-        b=tV30XNgLKwzfF6q7f2B461930tdlqBxff4fGjYojgBKymwy2WqDXHVHDubX2RaPxXd
-         2nj/XkY1+y/WDknLOMUppdXCp6JFfHbSAf9aHnbTuuvC1Xv9Ba1VWORFA8eNN5oBGo94
-         WpBNuT40iJf/+WJaBpF/3cC9J9wm2JNLY6GJVLqw8lciGc/L4qUm5flMsDf+Ww3sCZgQ
-         ZwuY+VCeRDth/fZ6n0T+9xJRMAGSU9sGi/wJbnL0d3+bloaXsn3+CO58jO8cT3205k3A
-         o4VtH/OL/bZzrk58GRK4zqCeAPMzp99KJ3tqR/xpghZVV//TBCqblt5IUMvTi9Z+5hOR
-         JNdg==
-X-Gm-Message-State: AJIora/QWHlsVz58lLZSsTHkd9TogMcWiKKQOqSr6RPqMiDvhQDST0ck
-        uKf4W6mJNuSpHq0BC7IA5Moatw==
-X-Google-Smtp-Source: AGRyM1tN4d34RCS0aereeUwhiOz9w4OfY8jYpf4mv8FMaFXrXs9yJ1MCFf+jjpM9PjH3Age+3pITZA==
-X-Received: by 2002:a17:902:eb92:b0:168:911c:5946 with SMTP id q18-20020a170902eb9200b00168911c5946mr5497583plg.167.1655229217250;
-        Tue, 14 Jun 2022 10:53:37 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:e2d5:2b03:9fb1:ce40])
-        by smtp.gmail.com with UTF8SMTPSA id r29-20020aa7963d000000b0051bc4ed56bcsm7855498pfg.204.2022.06.14.10.53.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 10:53:36 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 10:53:35 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com
-Subject: Re: [PATCH v20 2/5] usb: dwc3: core: Host wake up support from
- system suspend
-Message-ID: <YqjLHyUVEjf7I3MI@google.com>
-References: <1654158277-12921-1-git-send-email-quic_kriskura@quicinc.com>
- <1654158277-12921-3-git-send-email-quic_kriskura@quicinc.com>
- <YpkRDi2m7cLaKYEf@google.com>
- <Yp5nf2w8uVZ38/XZ@google.com>
- <Yqd9IHQEj3Ex+FcF@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yqd9IHQEj3Ex+FcF@google.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=SwWDE6cwQQmygMiXif7g/HNKoV630590Lu3na+H4tf8=;
+        b=tOOrTUdfr/CyK2K1jLtyIM8+9borwZqL7JBbvd9z4DKFtEct0MXlFsMThuOZhJVZuZ
+         74XyfS9KJpOy5B63BOowtsPYm0SwmdOjmvDxhlCrTnHMYNPL5x5RB0w4r2Hs0D6H1F+3
+         2xbsjjG0Ug7sBJpTNaNN1+PSlhIXdENyRDQ2yd7wgTEHuD1cX6J7MKszX9VeSjQs9Lg9
+         KykXj/MOxSiuRTZg+COuIaGKX84x3FjHEnV44cyv0rMmKaL9sZnmBO7hBCJUyYNQxtHL
+         PAG/rspUqDbe0Rk1QBWo1Hgc82I2yFZ3Ro7XLEZ86oZm4Gf6EwnDNrhGyzbNGXmdximY
+         gNDQ==
+X-Gm-Message-State: AJIora8ogGpNyV8OvXIbLrX9AHd1ymUPXbLT/yRl/L2OG0ljb8GbPpPx
+        pQTOI+VW1bT5+EbizV2SsA==
+X-Google-Smtp-Source: AGRyM1s4AjNweeXDZMr26t3YCh80q9RGi6qfBYIzE3LD4gndL8OM1f++ViNKTeqwVNIKU6HjXmnQ/A==
+X-Received: by 2002:a05:6e02:f44:b0:2d3:b54f:d83e with SMTP id y4-20020a056e020f4400b002d3b54fd83emr3699031ilj.9.1655229361518;
+        Tue, 14 Jun 2022 10:56:01 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id g18-20020a02c552000000b00332122c106dsm5150944jaj.152.2022.06.14.10.56.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 10:56:01 -0700 (PDT)
+Received: (nullmailer pid 1889801 invoked by uid 1000);
+        Tue, 14 Jun 2022 17:55:59 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Piyush Mehta <piyush.mehta@xilinx.com>
+Cc:     devicetree@vger.kernel.org, git@xilinx.com,
+        linux-kernel@vger.kernel.org, michal.simek@xilinx.com,
+        sivadur@xilinx.com, damien.lemoal@opensource.wdc.com,
+        linux-ide@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org
+In-Reply-To: <20220613144651.7300-1-piyush.mehta@xilinx.com>
+References: <20220613144651.7300-1-piyush.mehta@xilinx.com>
+Subject: Re: [PATCH V2] dt-bindings: ata: ahci-ceva: convert to yaml
+Date:   Tue, 14 Jun 2022 11:55:59 -0600
+Message-Id: <1655229359.837256.1889800.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,79 +62,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 11:08:32AM -0700, Matthias Kaehlcke wrote:
-> On Mon, Jun 06, 2022 at 01:45:51PM -0700, Matthias Kaehlcke wrote:
-> > On Thu, Jun 02, 2022 at 12:35:42PM -0700, Matthias Kaehlcke wrote:
-> > > Hi Krishna,
-> > > 
-> > > with this version I see xHCI errors on my SC7180 based system, like
-> > > these:
-> > > 
-> > > [   65.352605] xhci-hcd xhci-hcd.13.auto: xHC error in resume, USBSTS 0x401, Reinit
-> > > 
-> > > [  101.307155] xhci-hcd xhci-hcd.13.auto: WARN: xHC CMD_RUN timeout
-> > > 
-> > > After resume a downstream hub isn't enumerated again.
-> > > 
-> > > So far I didn't see those with v13, but I aso saw the first error with
-> > > v16.
-> > 
-> > It also happens with v13, but only when a wakeup capable vUSB <= 2
-> > device is plugged in. Initially I used a wakeup capable USB3 to
-> > Ethernet adapter to trigger the wakeup case, however older versions
-> > of this series that use usb_wakeup_enabled_descendants() to check
-> > for wakeup capable devices didn't actually check for vUSB > 2
-> > devices.
-> > 
-> > So the case were the controller/PHYs is powered down works, but
-> > the controller is unhappy when the runtime PM path is used during
-> > system suspend.
+On Mon, 13 Jun 2022 20:16:51 +0530, Piyush Mehta wrote:
+> Convert the ahci-ceva doc to yaml.
 > 
-> The issue isn't seen on all systems using dwc3-qcom and the problem starts
-> during probe(). The expected probe sequence is something like this:
+> Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
+> ---
+> Changes for V2:
+> - Corrected the patch --prefix V3 to V2.
+> - Added Required properties.
+> ---
+>  .../devicetree/bindings/ata/ahci-ceva.txt     |  63 ------
+>  .../devicetree/bindings/ata/ahci-ceva.yaml    | 197 ++++++++++++++++++
+>  2 files changed, 197 insertions(+), 63 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/ata/ahci-ceva.txt
+>  create mode 100644 Documentation/devicetree/bindings/ata/ahci-ceva.yaml
 > 
-> dwc3_qcom_probe
->   dwc3_qcom_of_register_core
->     dwc3_probe
-> 
->   if (device_can_wakeup(&qcom->dwc3->dev))
->     ...
-> 
-> The important part is that device_can_wakeup() is called after dwc3_probe()
-> has completed. That's what I see on a QC SC7280 system, where wakeup is
-> generally working with these patches.
-> 
-> However on a QC SC7180 system dwc3_probe() is deferred and only executed after
-> dwc3_qcom_probe(). As a result the device_can_wakeup() call returns false.
-> With that the controller/driver ends up in an unhappy state after system
-> suspend.
-> 
-> Probing is deferred on SC7180 because device_links_check_suppliers() finds
-> that '88e3000.phy' isn't ready yet.
 
-It seems device links could be used to make sure the dwc3 core is present:
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-  Another example for an inconsistent state would be a device link that
-  represents a driver presence dependency, yet is added from the consumer’s
-  ->probe callback while the supplier hasn’t probed yet: Had the driver core
-  known about the device link earlier, it wouldn’t have probed the consumer
-  in the first place. The onus is thus on the consumer to check presence of
-  the supplier after adding the link, and defer probing on non-presence.
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-  https://www.kernel.org/doc/html/v5.18/driver-api/device_link.html#usage
+Full log is available here: https://patchwork.ozlabs.org/patch/
 
 
-You could add something like this to dwc3_qcom_of_register_core():
+ahci@fd0c0000: 'iommus' does not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dtb
 
+ahci@fd0c0000: 'iommus', 'phy-names' do not match any of the regexes: 'pinctrl-[0-9]+'
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dtb
+	arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dtb
 
-  device_link_add(dev, &qcom->dwc3->dev,
-  		  DL_FLAG_AUTOREMOVE_CONSUMER | DL_FLAG_AUTOPROBE_CONSUMER);
-
-  if (qcom->dwc3->dev.links.status != DL_DEV_DRIVER_BOUND)
-      ret = -EPROBE_DEFER;
-
-
-From the doc it isn't clear how the consumer is supposed to check presence
-of the supplier, the above check of the link status is also used in
-drivers/cpufreq/mediatek-cpufreq.c , but not elsewhere outside of the
-driver framework.

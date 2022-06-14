@@ -2,53 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1AAE54B161
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6A4A54B1A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244200AbiFNMji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
+        id S244834AbiFNMjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356775AbiFNMid (ORCPT
+        with ESMTP id S234794AbiFNMiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:38:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B63465F5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:35:41 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o15kk-000059-HM; Tue, 14 Jun 2022 14:34:38 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o15ki-000UYD-0u; Tue, 14 Jun 2022 14:34:37 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1o15ki-00GFFx-Ld; Tue, 14 Jun 2022 14:34:36 +0200
-Date:   Tue, 14 Jun 2022 14:34:36 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 1/2] pwm: add microchip soft ip corePWM driver
-Message-ID: <20220614123436.ahimxsfkwmfdjqdw@pengutronix.de>
-References: <20220613111759.1550578-1-conor.dooley@microchip.com>
- <20220613111759.1550578-2-conor.dooley@microchip.com>
+        Tue, 14 Jun 2022 08:38:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D6E49F96;
+        Tue, 14 Jun 2022 05:35:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E15BB8186C;
+        Tue, 14 Jun 2022 12:34:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C6FC3411E;
+        Tue, 14 Jun 2022 12:34:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655210086;
+        bh=RxBJ6JD8Wf8ojeDpP8PuOnhZqWUwzlveE7eOehiepUk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tccE29lgTynPfIHS7yqWNwxaJZYOzV0VVqp/4uXMujX03Ple5ePWeqyTHOJ5ZhAYj
+         XMwyzSmBg7Uv+qO+GNLZXusyJPAnxyTaj4FtGrMt5xKAiPeMNutq+Fm368HCJM177K
+         p3TqHFeMnXWnxHyCSaVqHfoZitET90MUOQLzYppk=
+Date:   Tue, 14 Jun 2022 14:34:43 +0200
+From:   'Greg KH' <gregkh@linuxfoundation.org>
+To:     "tarumizu.kohei@fujitsu.com" <tarumizu.kohei@fujitsu.com>
+Cc:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "eugenis@google.com" <eugenis@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "pcc@google.com" <pcc@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "marcos@orca.pet" <marcos@orca.pet>,
+        "marcan@marcan.st" <marcan@marcan.st>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "ast@kernel.org" <ast@kernel.org>,
+        "peter.chen@kernel.org" <peter.chen@kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH v5 0/6] Add hardware prefetch control driver for A64FX
+ and x86
+Message-ID: <YqiAY689pOJbHKUd@kroah.com>
+References: <20220607120530.2447112-1-tarumizu.kohei@fujitsu.com>
+ <YqNCDrqcp9t8HlUJ@kroah.com>
+ <OSBPR01MB203749DA00C7BEE5741AFEB980AA9@OSBPR01MB2037.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gs7enp76v6o65krd"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220613111759.1550578-2-conor.dooley@microchip.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <OSBPR01MB203749DA00C7BEE5741AFEB980AA9@OSBPR01MB2037.jpnprd01.prod.outlook.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,252 +78,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 14, 2022 at 11:55:39AM +0000, tarumizu.kohei@fujitsu.com wrote:
+> Thanks for the comment.
+> 
+> > Why does userspace want to even do this?
+> 
+> This is because the optimal settings may differ from application to
+> application.
 
---gs7enp76v6o65krd
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+That's not ok.  Linux is a "general purpose" operating system and needs
+to work well for all applications.  Doing application-specific-tuning
+based on the specific hardware like this is a nightmare for users, and
+will be for you as you will now have to support this specific model to
+work correctly on all future kernel releases for the next 20+ years.
+Are you willing to do that?
 
-Hello,
+> Examples of performance improvements for applications with simple
+> memory access characteristics are described in [merit] section.
+> However, some applications have complex characteristics, so it is
+> difficult to predict if an application will improve without actually
+> trying it out.
 
-On Mon, Jun 13, 2022 at 12:17:59PM +0100, Conor Dooley wrote:
-> Add a driver that supports the Microchip FPGA "soft" PWM IP core.
->=20
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  drivers/pwm/Kconfig              |  10 +
->  drivers/pwm/Makefile             |   1 +
->  drivers/pwm/pwm-microchip-core.c | 310 +++++++++++++++++++++++++++++++
->  3 files changed, 321 insertions(+)
->  create mode 100644 drivers/pwm/pwm-microchip-core.c
->=20
-> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
-> index 21e3b05a5153..a651848e444b 100644
-> --- a/drivers/pwm/Kconfig
-> +++ b/drivers/pwm/Kconfig
-> @@ -383,6 +383,16 @@ config PWM_MEDIATEK
->  	  To compile this driver as a module, choose M here: the module
->  	  will be called pwm-mediatek.
-> =20
-> +config PWM_MICROCHIP_CORE
-> +	tristate "Microchip corePWM PWM support"
-> +	depends on SOC_MICROCHIP_POLARFIRE || COMPILE_TEST
-> +	depends on HAS_IOMEM && OF
-> +	help
-> +	  PWM driver for Microchip FPGA soft IP core.
-> +
-> +	  To compile this driver as a module, choose M here: the module
-> +	  will be called pwm-microchip-core.
-> +
->  config PWM_MXS
->  	tristate "Freescale MXS PWM support"
->  	depends on ARCH_MXS || COMPILE_TEST
-> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
-> index 708840b7fba8..d29754c20f91 100644
-> --- a/drivers/pwm/Makefile
-> +++ b/drivers/pwm/Makefile
-> @@ -33,6 +33,7 @@ obj-$(CONFIG_PWM_LPSS_PCI)	+=3D pwm-lpss-pci.o
->  obj-$(CONFIG_PWM_LPSS_PLATFORM)	+=3D pwm-lpss-platform.o
->  obj-$(CONFIG_PWM_MESON)		+=3D pwm-meson.o
->  obj-$(CONFIG_PWM_MEDIATEK)	+=3D pwm-mediatek.o
-> +obj-$(CONFIG_PWM_MICROCHIP_CORE)	+=3D pwm-microchip-core.o
->  obj-$(CONFIG_PWM_MTK_DISP)	+=3D pwm-mtk-disp.o
->  obj-$(CONFIG_PWM_MXS)		+=3D pwm-mxs.o
->  obj-$(CONFIG_PWM_NTXEC)		+=3D pwm-ntxec.o
-> diff --git a/drivers/pwm/pwm-microchip-core.c b/drivers/pwm/pwm-microchip=
--core.c
-> new file mode 100644
-> index 000000000000..d2abc46deec4
-> --- /dev/null
-> +++ b/drivers/pwm/pwm-microchip-core.c
-> @@ -0,0 +1,310 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * corePWM driver for Microchip "soft" FPGA IP cores.
-> + *
-> + * Copyright (c) 2021-2022 Microchip Corporation. All rights reserved.
-> + * Author: Conor Dooley <conor.dooley@microchip.com>
-> + * Documentation:
-> + * https://www.microsemi.com/document-portal/doc_download/1245275-corepw=
-m-hb
-> + *
-> + * Limitations:
-> + * - If the IP block is configured without "shadow registers", all regis=
-ter
-> + *   writes will take effect immediately, causing glitches on the output.
-> + *   If shadow registers *are* enabled, a write to the "SYNC_UPDATE" reg=
-ister
-> + *   notifies the core that it needs to update the registers defining the
-> + *   waveform from the contents of the "shadow registers".
-> + * - The IP block has no concept of a duty cycle, only rising/falling ed=
-ges of
-> + *   the waveform. Unfortunately, if the rising & falling edges register=
-s have
-> + *   the same value written to them the IP block will do whichever of a =
-rising
-> + *   or a falling edge is possible. I.E. a 50% waveform at twice the req=
-uested
-> + *   period. Therefore to get a 0% waveform, the output is set the max h=
-igh/low
-> + *   time depending on polarity.
-> + * - The PWM period is set for the whole IP block not per channel. The d=
-river
-> + *   will only change the period if no other PWM output is enabled.
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
-> +#include <linux/err.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pwm.h>
-> +#include <linux/math.h>
-> +
-> +#define PREG_TO_VAL(PREG) ((PREG) + 1)
-> +
-> +#define COREPWM_PRESCALE_REG	0x00u
-> +#define COREPWM_PERIOD_REG	0x04u
-> +#define COREPWM_EN_LOW_REG	0x08u
-> +#define COREPWM_EN_HIGH_REG	0x0Cu
-> +#define COREPWM_SYNC_UPD_REG	0xE4u
-> +#define COREPWM_POSEDGE_OFFSET	0x10u
-> +#define COREPWM_NEGEDGE_OFFSET	0x14u
-> +#define COREPWM_CHANNEL_OFFSET	0x08u
-> +
-> +struct mchp_core_pwm_chip {
-> +	struct pwm_chip chip;
-> +	struct clk *clk;
-> +	void __iomem *base;
-> +};
-> +
-> +static inline struct mchp_core_pwm_chip *to_mchp_core_pwm(struct pwm_chi=
-p *chip)
-> +{
-> +	return container_of(chip, struct mchp_core_pwm_chip, chip);
-> +}
-> +
-> +static void mchp_core_pwm_enable(struct pwm_chip *chip, struct pwm_devic=
-e *pwm, bool enable)
-> +{
-> +	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core_pwm(chip);
-> +	u8 channel_enable, reg_offset, shift;
-> +
-> +	/*
-> +	 * There are two adjacent 8 bit control regs, the lower reg controls
-> +	 * 0-7 and the upper reg 8-15. Check if the pwm is in the upper reg
-> +	 * and if so, offset by the bus width.
-> +	 */
-> +	reg_offset =3D COREPWM_EN_LOW_REG + (pwm->hwpwm >> 3) * sizeof(u32);
-> +	shift =3D pwm->hwpwm > 7 ? pwm->hwpwm - 8 : pwm->hwpwm;
-> +
-> +	channel_enable =3D readb_relaxed(mchp_core_pwm->base + reg_offset);
-> +	channel_enable &=3D ~(1 << shift);
-> +	channel_enable |=3D (enable << shift);
-> +
-> +	writel_relaxed(channel_enable, mchp_core_pwm->base + reg_offset);
-> +}
-> +
-> +static void mchp_core_pwm_apply_duty(struct pwm_chip *chip,  struct pwm_=
-device *pwm,
-> +				     const struct pwm_state *state)
-> +{
-> +	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core_pwm(chip);
-> +	void __iomem *channel_base =3D mchp_core_pwm->base + pwm->hwpwm * COREP=
-WM_CHANNEL_OFFSET;
-> +	u64 duty_steps, period, tmp;
-> +	u8 prescale, period_steps, posedge, negedge;
-> +
-> +	prescale =3D PREG_TO_VAL(readb_relaxed(mchp_core_pwm->base + COREPWM_PR=
-ESCALE_REG));
-> +	period_steps =3D PREG_TO_VAL(readb_relaxed(mchp_core_pwm->base + COREPW=
-M_PERIOD_REG));
-> +	period =3D period_steps * prescale * NSEC_PER_SEC;
-> +	period =3D div64_u64(period, clk_get_rate(mchp_core_pwm->clk));
-> +
-> +	/*
-> +	 * Calculate the duty cycle in multiples of the prescaled period:
-> +	 * duty_steps =3D duty_in_ns / step_in_ns
-> +	 * step_in_ns =3D (prescale * NSEC_PER_SEC) / clk_rate
-> +	 * The code below is rearranged slightly to only divide once.
-> +	 *
-> +	 * Because the period is per channel, it is possible that the requested
-> +	 * duty cycle is longer than the period, in which case cap it to the
-> +	 * period.
-> +	 */
-> +	if (state->duty_cycle > period) {
-> +		duty_steps =3D period_steps;
-> +	} else {
-> +		duty_steps =3D state->duty_cycle * clk_get_rate(mchp_core_pwm->clk);
-> +		tmp =3D prescale * NSEC_PER_SEC;
-> +		duty_steps =3D div64_u64(duty_steps, tmp);
-> +	}
-> +
-> +	/*
-> +	 * Turn the output on unless posedge =3D=3D negedge, in which case the
-> +	 * duty is intended to be 0, but limitations of the IP block don't
-> +	 * allow a zero length duty cycle - so just set the max high/low time
-> +	 * respectively.
-> +	 */
-> +	if (state->polarity =3D=3D PWM_POLARITY_INVERSED) {
-> +		negedge =3D !duty_steps ? period_steps : 0u;
-> +		posedge =3D duty_steps;
-> +	} else {
-> +		posedge =3D !duty_steps ? period_steps : 0u;
-> +		negedge =3D duty_steps;
-> +	}
-> +
-> +	writel_relaxed(posedge, channel_base + COREPWM_POSEDGE_OFFSET);
-> +	writel_relaxed(negedge, channel_base + COREPWM_NEGEDGE_OFFSET);
-> +}
-> +
-> +static void mchp_core_pwm_apply_period(struct pwm_chip *chip, const stru=
-ct pwm_state *state)
-> +{
-> +	struct mchp_core_pwm_chip *mchp_core_pwm =3D to_mchp_core_pwm(chip);
-> +	u64 tmp =3D state->period;
-> +	u8 prescale, period_steps;
-> +
-> +	/*
-> +	 * Calculate the period cycles and prescale values.
-> +	 * The registers are each 8 bits wide & multiplied to compute the period
-> +	 * so the maximum period that can be generated is 0xFFFF times the peri=
-od
-> +	 * of the input clock.
-> +	 */
-> +	tmp *=3D clk_get_rate(mchp_core_pwm->clk);
-> +	do_div(tmp, NSEC_PER_SEC);
-> +
-> +	if (tmp > 0xFFFFu) {
-> +		prescale =3D 0xFFu;
-> +		period_steps =3D 0xFFu;
-> +	} else {
-> +		prescale =3D tmp >> 8;
-> +		period_steps =3D tmp / PREG_TO_VAL(prescale) - 1;
+Then perhaps it isn't anything that they should try out :)
 
-Here is the 64bit division.
+Shouldn't the kernel know how the application works (based on the
+resources it asks for) and tune itself based on that automatically?
 
-Best regards
-Uwe
+If not, how is a user supposed to know how to do this?
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+> This is not necessary for all applications. However, I want to provide
+> as a minimal interface that can be used by those who want to improve
+> their application even a little.
+> 
+> > How will they do this?
+> 
+> I assume to be used to tune a specific core and execute an application
+> on that core. The execution example is as follows.
+> 
+> 1) The user tunes the parameters of a specific core before executing
+>    the program.
+> 
+> ```
+> # echo 1024 > /sys/devices/system/cpu/cpu12/cache/index0/prefetch_control/stream_detect_prefetcher_dist
+> # echo 1024 > /sys/devices/system/cpu/cpu12/cache/index2/prefetch_control/stream_detect_prefetcher_dist
+> # echo 1024 > /sys/devices/system/cpu/cpu13/cache/index0/prefetch_control/stream_detect_prefetcher_dist
+> # echo 1024 > /sys/devices/system/cpu/cpu13/cache/index2/prefetch_control/stream_detect_prefetcher_dist
+> ```
 
---gs7enp76v6o65krd
-Content-Type: application/pgp-signature; name="signature.asc"
+What is "1024" here?  Where is any of this documented?  And why these
+specific sysfs files and not others?
 
------BEGIN PGP SIGNATURE-----
+> 2) Execute the program bound to the target core.
+> 
+> ```
+> # taskset -c 12-13 a.out
+> ```
+> 
+> If the interface is exposed, the user can develop a library to execute
+> 1) and 2) operation instead.
 
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmKogFkACgkQwfwUeK3K
-7AkIJgf/T69DInAPl8mPJHsehA8CjpDHNPdV+J+xoo7wQ6sZlHc7ixkpIoLgyTxA
-1+IjBmKpWY4vERoAHPHdG1lorTyHQ3iyj8YQn2LDOt04tJjm8PFEPrJ6cRXwvABP
-VZX0RtABTKM6Vz8c77cRnk26kmYOqNeLkHMs5PQb+IlvNdJQdMyYd2fpn3NItPkk
-ApBIL0t+3+x0EU1qyHnYGjKpDF4rwAKc6N7JJnzpzt77P3W9OGiFhKVAnsnPEAU5
-d67iL0y8/si3DpJe9Cf8fQzud2d6XOvdmE3ApnRiWpRdPKCN9N9EleoBvw7cqzky
-B68Inwo0uDIP5HoyB3cjJY5hpMNo9A==
-=moey
------END PGP SIGNATURE-----
+If you have no such user today, nor a library, how do you know any of
+this works well?  And again, how will you support this going forward?
+Or is this specific api only going to be for one specific piece of
+hardware and never any future ones?
 
---gs7enp76v6o65krd--
+> > What programs will do this?
+> 
+> It is assumed to be used by programs that execute many continuous
+> memory access. It may be useful for other applications, but I can't
+> explain them in detail right away.
+
+So you haven't tested this on any real applications?  We need real users
+before being able to add new apis.  Otherwise we can just remove the
+apis :)
+
+> > And why isn't just automatic and why does this hardware require manual
+> > intervention to work properly?
+> 
+> It is difficult for the hardware to determine the optimal parameters
+> in advance. Therefore, I think that the register is provided to change
+> the behavior of the hardware.
+
+Kernel programming for a general purpose operating system is hard, but
+it is possible :)
+
+good luck!
+
+greg k-h

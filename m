@@ -2,51 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81C454A6B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9395D54A6F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354095AbiFNChc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 22:37:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
+        id S1354671AbiFNCmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 22:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355943AbiFNChR (ORCPT
+        with ESMTP id S1352649AbiFNCl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 22:37:17 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D90F03CA50
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 19:16:19 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LMX8K6JFqzjY0X;
-        Tue, 14 Jun 2022 10:15:13 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 10:16:17 +0800
-Subject: Re: [PATCH v3 1/1] mm/memory-failure: don't allow to unpoison hw
- corrupted page
-To:     David Hildenbrand <david@redhat.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        zhenwei pi <pizhenwei@bytedance.com>,
-        <naoya.horiguchi@nec.com>, <akpm@linux-foundation.org>
-References: <20220610114646.162764-1-pizhenwei@bytedance.com>
- <20220610114646.162764-2-pizhenwei@bytedance.com>
- <0fedf6f3-3ab3-e1d2-fd6e-3dbe8e92f06d@redhat.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <844edb08-e145-0209-bf7a-60fb38503705@huawei.com>
-Date:   Tue, 14 Jun 2022 10:16:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 13 Jun 2022 22:41:58 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607045005F;
+        Mon, 13 Jun 2022 19:20:35 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id k19so9246392wrd.8;
+        Mon, 13 Jun 2022 19:20:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rUo3H58Xo6jRmNEwjhL/eFhQ7obXUHzajy+AECzxVt4=;
+        b=EJgw/8kmPw3eQcaDqa7qbY1kJIy78gC/KghBVXCdqDMgTzYadRYzJ3sGCCnVrA2kse
+         rywQ+E5TqEPUmp+Jfy7MidbwAdeiDVmzwHPIbfak9JqyDLf+7sxrt9KNhMTxCNLL+6ND
+         HscvHsh1J5UBnvE7uLlaa5Ngbhx9QyyOQsHZehUHmpyy/OkgYsyJGKO6FrZkHqBDN4p6
+         /WYFyoo9Xe6hy2xVV+B4Hb8qQ0nePuiwOQUWwaClsDK7hRXClprraG6bk3ysPp+MNGWw
+         ACvnWlC6LxUakujWE+2Xj7XXWbBX8/JWOr5xHE7q/IhBMW0HZt5XydwoKwdCv3agLIyb
+         zMbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rUo3H58Xo6jRmNEwjhL/eFhQ7obXUHzajy+AECzxVt4=;
+        b=Vegelk6lIPFzUzsGGUK4mnB8b14nUwuTzkJ+tgXJx3hoOnKVjxkM5NaCA2v4vMWV2T
+         +o1zU/LJlpfBg6mtE6wfuR4x7P07m2Jv+5qul0a7w+jfa9sCKoZWi4Y4vvj/Puj1YdiD
+         3V7aFw3UJDzxtb5r/+fAqvoh2U/z85KMOjJrfvPX1bEF57IQSvHR/RYDdiklPIxYe3Xu
+         0qk53BCkEOFzBgNR6kWkX64k3vuiUc7FP+30IrLr0ncpVN+3IA6qJmg7dpgLhkIuQs2I
+         5/0e4+RoyBwIkhh9XkKtyyjbAfxzr3c3Rjk5UGPC9FYNX3oH56ywJaECvYZUbz4Pnx0n
+         qRMg==
+X-Gm-Message-State: AJIora9Fw+Xk3ohsuhT9o0+CtdTh4YAPMKq0IzNRqRRdYXMmQXW7Jy1B
+        PlfEAvOdLrUS6AkQGFzWr5DLLxkiJkXeaPYhfUOHqghDry0SPA==
+X-Google-Smtp-Source: AGRyM1vubLAYvzxsNOBMNnDLnOtApG/1brEj+260Ctcbqrc8JeVzrcSUop4bg/ADhdmxahpfwOZjnagUGwbHugPCQqg=
+X-Received: by 2002:a5d:5c07:0:b0:218:544d:4347 with SMTP id
+ cc7-20020a5d5c07000000b00218544d4347mr2291230wrb.107.1655173228921; Mon, 13
+ Jun 2022 19:20:28 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <0fedf6f3-3ab3-e1d2-fd6e-3dbe8e92f06d@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220613225723.2734132-1-seanjc@google.com> <20220613225723.2734132-4-seanjc@google.com>
+In-Reply-To: <20220613225723.2734132-4-seanjc@google.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Tue, 14 Jun 2022 10:20:17 +0800
+Message-ID: <CAJhGHyCMsc4g7rdW8td5vOA5iAZBu7+hewUJW8tUXX=_-UBVOA@mail.gmail.com>
+Subject: Re: [PATCH 3/8] KVM: x86/mmu: Bury 32-bit PSE paging helpers in paging_tmpl.h
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
+        <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,15 +71,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/10 20:12, David Hildenbrand wrote:
-> 
-> I really prefer just disabling the unpoisioning mechanism in case there
-> is a real hw injected error.
+On Tue, Jun 14, 2022 at 6:59 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> Move a handful of one-off macros and helpers for 32-bit PSE paging into
+> paging_tmpl.h and hide them behind "PTTYPE == 32".  Under no circumstance
+> should anything but 32-bit shadow paging care about PSE paging.
+>
 
-IMHO, this would be a simple solution that also works on the arches that does not unmap
-the kernel mapping when a page is hardware corrupted.
+Moving code from paging_tmp.h is on my to-do list.
+I don't think the opposite direction is preferred.
 
-Thanks!
-
-> 
-
+And is_cpuid_PSE36() is also used in mmu.c, is it a good idea to move
+it into paging_tmp.h?

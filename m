@@ -2,101 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 568FF54B218
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0408554B21C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243965AbiFNNNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 09:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
+        id S242133AbiFNNPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 09:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243507AbiFNNN2 (ORCPT
+        with ESMTP id S233395AbiFNNPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 09:13:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3F93668B
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 06:13:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=BtkNA8bnFXUJxG1GIdprNfyVDGg3vDC4/9ZoY+WLPSM=; b=Z2ye09vqFR1lmMOiossGHXii+D
-        1wF8QAsAmmHJj97pPcgWinAavHDonjKZM6REYxB3Fe2if2x9jCl0cbMyAPGBYqfkQdhOlutpC4EPT
-        WEqg+GhmvFzyu+30/QaPmJaNJtPBFG5EzWD9U4QNP2LnnnsHhWyP0wrX4axmyrpPhMpMcQfUTJXJ+
-        g6SHnuQTwJ/3xY7ux3tdAvN4Do2w/i7fj/me18UCKVYbYwSU4s5uSb2YOwhQOFDzLmYOEgAB7we3G
-        fI9tpreRaRNLkklkScS2+JOmvG1hcfm7nr64LdAbhh7BZLLoncG6LGypsiNLogMp1cj1+2+PCHib4
-        ZiajdU0g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o16M4-000BS0-J6; Tue, 14 Jun 2022 13:13:12 +0000
-Date:   Tue, 14 Jun 2022 14:13:12 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Joao Martins <joao.m.martins@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Dan Williams <dan.j.williams@intel.com>
-Subject: Re: [PATCH] mm/page_alloc: make calling prep_compound_head more
- reliable
-Message-ID: <YqiJaOiGnUzzB1+W@casper.infradead.org>
-References: <20220607144157.36411-1-linmiaohe@huawei.com>
- <20220607113257.84b1bdd993f19be26b8c4944@linux-foundation.org>
- <65e5da9c-32d1-17d7-d8c6-96cbfac23fec@oracle.com>
- <4a30f026-789a-9235-2fbd-f553e4d7b45d@huawei.com>
+        Tue, 14 Jun 2022 09:15:43 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F24369FA;
+        Tue, 14 Jun 2022 06:15:40 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LMpn60vbzzjY3r;
+        Tue, 14 Jun 2022 21:14:34 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 21:15:38 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 21:15:37 +0800
+Subject: Re: [PATCH -next] blk-mq: fix boot time regression for scsi drives
+ with multiple hctx
+To:     Ming Lei <ming.lei@redhat.com>
+CC:     <axboe@kernel.dk>, <djeffery@redhat.com>, <bvanassche@acm.org>,
+        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yi.zhang@huawei.com>
+References: <20220614071410.3571204-1-yukuai3@huawei.com>
+ <Yqg5QxSM+lub8DY0@T590>
+From:   Yu Kuai <yukuai3@huawei.com>
+Message-ID: <01cb0e49-1154-33db-f572-3960c972fe08@huawei.com>
+Date:   Tue, 14 Jun 2022 21:15:36 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4a30f026-789a-9235-2fbd-f553e4d7b45d@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yqg5QxSM+lub8DY0@T590>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 08:17:35PM +0800, Miaohe Lin wrote:
-> +++ b/mm/page_alloc.c
-> @@ -6771,13 +6771,18 @@ static void __ref memmap_init_compound(struct page *head,
->                 set_page_count(page, 0);
+ÔÚ 2022/06/14 15:31, Ming Lei Ð´µÀ:
+> On Tue, Jun 14, 2022 at 03:14:10PM +0800, Yu Kuai wrote:
+>> We found that boot time is increased for about 8s after upgrading kernel
+>> from v4.19 to v5.10(megaraid-sas is used in the environment).
 > 
->                 /*
-> -                * The first tail page stores compound_mapcount_ptr() and
-> -                * compound_order() and the second tail page stores
-> -                * compound_pincount_ptr(). Call prep_compound_head() after
-> -                * the first and second tail pages have been initialized to
-> -                * not have the data overwritten.
-> +                * The first tail page stores compound_mapcount_ptr(),
-> +                * compound_order() and compound_pincount_ptr(). Call
-> +                * prep_compound_head() after the first tail page have
-> +                * been initialized to not have the data overwritten.
-> +                *
-> +                * Note the idea to make this right after we initialize
-> +                * the offending tail pages is trying to take advantage
-> +                * of the likelihood of those tail struct pages being
-> +                * cached given that we will read them right after in
-> +                * prep_compound_head().
+> But 'blk-mq: clearing flush request reference in tags->rqs[]' was merged
+> to v5.14, :-)
+Hi,
 
-It's not that we'll read them again, it's that the cacheline will still
-be in cache, and therefore dirty.
+Yes, but this patch is applied to 5.10 stable, thus we backport in our
+v5.10. Sorry that I didn't mention that.
 
-Honestly, I don't think we need this extra explanation in a comment.
-Just change the first paragraph to reflect reality and leave it at that.
-
->                  */
-> -               if (pfn == head_pfn + 2)
-> +               if (unlikely(pfn == head_pfn + 1))
-
-We definitely don't need the unlikely here.
-
->                         prep_compound_head(head, order);
->         }
->  }
 > 
-> Or am I miss something?
+>>
+>> Following is where the extra time is spent:
+>>
+>> 
+>>   __scsi_remove_device
+>>    blk_cleanup_queue
+>>     blk_mq_exit_queue
+>>      blk_mq_exit_hw_queues
+>>       blk_mq_exit_hctx
+>>        blk_mq_clear_flush_rq_mapping -> function latency is 0.1ms
 > 
-> Thanks!
+> So queue_depth looks pretty long, is it 4k?
+No, in the environment, it's just 32, and nr_hw_queues is 128, which
+means each blk_cleanup_queue() will cost about 10-20 ms.
+
 > 
-> > .
-> > 
+> But if it is 0.1ms, how can the 8sec delay be caused? That requires 80K hw queues
+> for making so long, so I guess there must be other delay added by the feature
+> of BLK_MQ_F_TAG_HCTX_SHARED.
+
+Please see details in the reasons 2), scsi scan will call
+__scsi_remove_device() a lot of times(each host, each channel, each
+target).
+> 
+>>         cmpxchg
+>>
+>> There are three reasons:
+>> 1) megaraid-sas is using multiple hctxs in v5.10, thus blk_mq_exit_hctx()
+>> will be called much more times in v5.10 compared to v4.19.
+>> 2) scsi will scan for each target thus __scsi_remove_device() will be
+>> called for many times.
+>> 3) blk_mq_clear_flush_rq_mapping() is introduced after v4.19, it will
+>> call cmpxchg() for each request, and function latency is abount 0.1ms.
+>>
+>> Since that blk_mq_clear_flush_rq_mapping() will only be called while the
+>> queue is freezed already, which means there is no inflight request,
+>> it's safe to set NULL for 'tags->rqs[]' directly instead of using
+>> cmpxchg(). Tests show that with this change, function latency of
+>> blk_mq_clear_flush_rq_mapping() is about 1us, and boot time is not
+>> increased.
+> 
+> tags is shared among all LUNs attached to the host, so freezing single
+> request queue here means nothing, so your patch doesn't work.
+
+You'are right, I forgot about that tags can be shared.
+
+> 
+> Please test the following patch, and see if it can improve boot delay for
+> your case.
+> 
+> diff --git a/block/blk-mq.c b/block/blk-mq.c
+> index e9bf950983c7..1463076a527c 100644
+> --- a/block/blk-mq.c
+> +++ b/block/blk-mq.c
+> @@ -3443,8 +3443,9 @@ static void blk_mq_exit_hctx(struct request_queue *q,
+>   	if (blk_mq_hw_queue_mapped(hctx))
+>   		blk_mq_tag_idle(hctx);
+>   
+> -	blk_mq_clear_flush_rq_mapping(set->tags[hctx_idx],
+> -			set->queue_depth, flush_rq);
+> +	if (blk_queue_init_done(q))
+> +		blk_mq_clear_flush_rq_mapping(set->tags[hctx_idx],
+> +				set->queue_depth, flush_rq);
+>   	if (set->ops->exit_request)
+>   		set->ops->exit_request(set, flush_rq, hctx_idx);
+>   
+
+Thanks for the patch, I test it and boot delay is fixed.
+
+Kuai
+> 
+> 
+> Thanks,
+> Ming
+> 
+> .
 > 

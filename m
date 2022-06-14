@@ -2,115 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BF054B101
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BCB54B131
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356844AbiFNM3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
+        id S244739AbiFNMaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244165AbiFNM2p (ORCPT
+        with ESMTP id S1356594AbiFNM3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:28:45 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41AEB22B02;
-        Tue, 14 Jun 2022 05:28:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655209725; x=1686745725;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=G/BX8Uxdz+yrMTFWd+nOOlTWRC0rRAkVHt5072WNsL8=;
-  b=WytpUNbvjE1IvZE7C8TDPCkkamy+L5n0cTedZ4BxzHgXUpFxbeEr7y+X
-   80Y4EK0gbV1pOJq8o7H4Bpq7EOGTNCwe4x3jBx8qp6KUgAUusg+VJGzKV
-   SvQ/rISa9oq1vWsOlhaokZ6xJ22ou2x7qdFtT2JW4x4aMDS7BnMb5J1XT
-   q2uDt2Yio4wwacE+vuu6qAortVlXgIa2lqkm4gE5JZ3Nxelx46y3qNo9g
-   Z5E0mLejcRhIZDEx+RA6VvIMqYy1WMP3x962aipCNWr7T4Dh9TvxF5OnK
-   yF+gt6MP1m+MN+5SVMF4D4N4wPUyVeShMwM3p+fYVrzsARk3GbgY23zxH
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="279639124"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="279639124"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 05:28:44 -0700
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="582677693"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 05:28:40 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1o15eu-000cKr-Bp;
-        Tue, 14 Jun 2022 15:28:36 +0300
-Date:   Tue, 14 Jun 2022 15:28:36 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
-Subject: Re: [PATCH] x86/PCI: Revert: "Clip only host bridge windows for E820
- regions"
-Message-ID: <Yqh+9Ei5BLhKB/da@smile.fi.intel.com>
-References: <20220612144325.85366-1-hdegoede@redhat.com>
+        Tue, 14 Jun 2022 08:29:13 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B0A23BDD;
+        Tue, 14 Jun 2022 05:29:10 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id o7so16871760eja.1;
+        Tue, 14 Jun 2022 05:29:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=axAoTgW4f9hEkpnjg5fk+kCuJUrcn/1GVTmzDalaTpE=;
+        b=TC2i7XA7+9Xlrhf2dw40ePmPdZiuddA5zyiu0EL3XudVgt7iMQ76XXD090WPUwKYo2
+         9Nynx4bkyvSKns2UbUrHBv83yWFIT6kEG5MsIa4E+VrqDkFyl5hIZ+VgoIkETMBGe3fr
+         Nh1NH3Auzr8xBCYZo8Ms7ZoV8Q78axRaf6/zQRn4WQVypJ7x/KG/7+pZwuCdi6jGx9TH
+         Y4Dc1xYnzdLx73qEjyzX6MwktZGp7uUy97J0M1P6csFAsVkuAhfl1qnKnwkIndBmmS8x
+         TartraPrDPxftKMy0WCDH9SAqEvIRe2ZOktv9Pm/S5wMGjcTjug8uEzcNjdsjXJuegXw
+         SkCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=axAoTgW4f9hEkpnjg5fk+kCuJUrcn/1GVTmzDalaTpE=;
+        b=2LxkQ/Me/QE6d449KCic8JPHrfv3nkBzZwXYNsymSmQF+tCEYFMLrdW7LoN9nHpA9p
+         T1JwurqX1TKiXs4vqB1p26xLemyOF0HFMMs6cEXBwt5Wq2rwbDx/QM32u4y0XDKzeRAM
+         UJo6h03Zs0slHbMtiYmCClQVdRAYPvhL9BZAy/iX2fv/jPaLRDyFwHplcVVOaN3jIHW8
+         LZ6NAFUPkBe3k9R6TZyH8m4j/Hw5q++NPyw3bD3/d/wFoiZkVs3lA515jEqvyQsWW3bs
+         80OgjKqUxcDgB9Cxv0r/XOllTHVpwZzyS1IlS6tGH2Bx61uBS59gKDE6OkPKL3lo3qnJ
+         lR/Q==
+X-Gm-Message-State: AOAM530bWCJvGoJc57dK70tSFCHJXb4M79ZB3JWA/gMyBq/OXeyLOVAX
+        AMY0PIJfdf9M61OKlVKK318=
+X-Google-Smtp-Source: ABdhPJyywCmnpHZqwVSmt50ed8p/dYmi/CUTgqEnog5vo72tdHnTWhxx4t9rRMHalfnoYRdREvIu2Q==
+X-Received: by 2002:a17:906:51c6:b0:712:2a1a:afc8 with SMTP id v6-20020a17090651c600b007122a1aafc8mr4298295ejk.649.1655209749213;
+        Tue, 14 Jun 2022 05:29:09 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id i9-20020a05640242c900b0042dce73168csm7170844edc.13.2022.06.14.05.29.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 05:29:08 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 14 Jun 2022 14:29:06 +0200
+To:     Blake Jones <blakejones@google.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] Add a "-m" option to "perf buildid-list".
+Message-ID: <Yqh/EkVy99Bej46S@krava>
+References: <20220607191550.4141024-1-blakejones@google.com>
+ <YqZmSRS8UPQJzWFE@krava>
+ <CAP_z_CgkJ8RgWevJnDiq-+JjB=ni0OzJ3npwW+S9RZ66i0Y3Kg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220612144325.85366-1-hdegoede@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAP_z_CgkJ8RgWevJnDiq-+JjB=ni0OzJ3npwW+S9RZ66i0Y3Kg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 12, 2022 at 04:43:25PM +0200, Hans de Goede wrote:
-> Clipping the bridge windows directly from pci_acpi_root_prepare_resources()
-> instead of clipping from arch_remove_reservations(), has a number of
-> unforseen consequences.
+On Mon, Jun 13, 2022 at 03:02:39PM -0700, Blake Jones wrote:
+> Thanks for taking a look at this!
 > 
-> If there is an e820 reservation in the middle of a bridge window, then
-> the smallest of the 2 remaining parts of the window will be also clipped
-> off. Where as the previous code would clip regions requested by devices,
-> rather then the entire window, leaving regions which were either entirely
-> above or below a reservation in the middle of the window alone.
+> On Sun, Jun 12, 2022 at 3:18 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > why 'modules' ? it shows all maps (including kernel)
+> > so perhaps -m/--maps would be better?
 > 
-> E.g. on the Steam Deck this leads to this log message:
-> 
-> acpi PNP0A08:00: clipped [mem 0x80000000-0xf7ffffff window] to [mem 0xa0100000-0xf7ffffff window]
-> 
-> which then gets followed by these log messages:
-> 
-> pci 0000:00:01.2: can't claim BAR 14 [mem 0x80600000-0x806fffff]: no compatible bridge window
-> pci 0000:00:01.3: can't claim BAR 14 [mem 0x80500000-0x805fffff]: no compatible bridge window
-> 
-> and many more of these. Ultimately this leads to the Steam Deck
-> no longer booting properly, so revert the change.
-> 
-> Note this is not a clean revert, this revert keeps the later change
-> to make the clipping dependent on a new pci_use_e820 bool, moving
-> the checking of this bool to arch_remove_reservations().
+>  I called it "modules" because it only operates on the kernel. Calling it
+> "maps" would suggest to me that it might also be able to show
+> information about the maps in perf.data files, which it can't (just as the
+> "-k" option only operates on the kernel). Given that, does it still seem
+> like "maps" would be more appropriate?
 
-It does _not_ fix the Intel MID case. It requires to have my patch applied as well.
-So the difference as I see is the flags checking. I believe that you still need to
-have it in case pci_use_e820 == true. But it might be that I missed an importan
-detail.
+still there's kernel map included, so it's strange to me call it modules
 
--- 
-With Best Regards,
-Andy Shevchenko
+  --m/--kernel-maps ?
 
+> 
+> > also please state that it's from running kernel
+> 
+> Happy to make this change.
+> 
+> > any reason why not use the dso fields directly?
+> 
+> I was just following my general software engineering instincts to
+> encapsulate implementation details, so that e.g. the caller doesn't need to
+> know about details such as the "has_build_id" boolean. I haven't made
+> changes to perf before, so if that's not the preferred style, I can do it
+> a different way.
 
+we have some helpers for dso fields, but AFAICS long_name and has_build_id
+are used directly all over the place
+
+jirka

@@ -2,194 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1155E54BC94
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C804D54BCA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344142AbiFNVMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 17:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37592 "EHLO
+        id S1358283AbiFNVNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 17:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239660AbiFNVMk (ORCPT
+        with ESMTP id S1344134AbiFNVNY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 17:12:40 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F92CE06
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:12:36 -0700 (PDT)
-Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25EKoaEq011668;
-        Tue, 14 Jun 2022 21:12:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pps0720; bh=307+b1B2qwfBP1XlGYITI8Ob0AdtpNa8Ne9nozWQOoU=;
- b=I97GeF/R9X42OCIkE9sNkRJNTFo34d7/5j0yxEG9jRPsNt0WfsR9VdFdHuUga9+4M46I
- +nTrXVRtZO7DGKwuSfjJRb1IcB/JUPLChpVRCbQ5ZWt1jbS8VfWzsa/dffsobYEwuT3L
- EtFyIV3gGayd+qWHdxtxM2IhllWC5f4YaOWgezWB0oflt/wxDIvQ+yecgp1G6u9e06J9
- Ddo6CxgH2ljUhVOEvTf8t9nC2122SqhSq/MTK5jirs4nyjjfNgRvH/jL+nWOGAnzMCB1
- JN13AaGMtwmwEvml1U87+ipk4LRSfKnGefBn5Sprj1bbpGpJRFZt2+qRPQ0rdNn9uHMc QQ== 
-Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3gpfr3hydp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jun 2022 21:12:16 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id E589A8058D4;
-        Tue, 14 Jun 2022 21:12:14 +0000 (UTC)
-Received: from swahl-home.5wahls.com (unknown [16.231.227.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTPS id 6A4B2806B6D;
-        Tue, 14 Jun 2022 21:12:13 +0000 (UTC)
-Date:   Tue, 14 Jun 2022 16:12:11 -0500
-From:   Steve Wahl <steve.wahl@hpe.com>
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-Cc:     Steve Wahl <steve.wahl@hpe.com>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Kyung Min Park <kyung.min.park@intel.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] iommu/vt-d: Make DMAR_UNITS_SUPPORTED a config setting
-Message-ID: <Yqj5q1Yps9JVlyyH@swahl-home.5wahls.com>
-References: <20220505194658.246121-1-steve.wahl@hpe.com>
- <20220512151309.330068-1-steve.wahl@hpe.com>
- <20220613205734.3x7i46bnsofzerr4@cantor>
- <673eb011-94f4-46b0-f1b4-24a02a269f4e@linux.intel.com>
- <CALzcddsXciFgKOLSkXxx4Rv_rwh21qe8hkyiEET280D8orP6Vw@mail.gmail.com>
- <9c943703-0c2f-b654-a28b-f594bf90bec9@linux.intel.com>
- <CALzcdduU-baVF9VV-NnYD2rKn0YC5hzS_F9udExRE7guvMqXWg@mail.gmail.com>
- <616dc81c-dfc6-d6c6-1eab-de0e9ba4411f@linux.intel.com>
- <Yqi7L9A/ADXpIvN6@swahl-home.5wahls.com>
- <20220614190145.dkdwjnqnd7lv6y4n@cantor>
+        Tue, 14 Jun 2022 17:13:24 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD6B4F9C7;
+        Tue, 14 Jun 2022 14:13:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=8HSyIfVTT1zYlvK02xC9mRk+gd/87N3apl+idAVh+1o=; b=vbbdR/lPasINng/RkQ1kPsbUox
+        IMQ5LdA2hXTvTmlhHYmj1kz/EzPFPmHHbfpGaxrYmq7UViHDZhQcJWKsSO76D72nOKqM2wvgUpWq7
+        3p0Fl/dETEM+uwyG0tFVhIaovjc5xl4+1myBXfM46Rk+C1EFAZX+OjyLvdqpdDzkfMj0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1o1Dqh-006vkm-2A; Tue, 14 Jun 2022 23:13:19 +0200
+Date:   Tue, 14 Jun 2022 23:13:19 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, bryan.whitehead@microchip.com,
+        lxu@maxlinear.com, richardcochran@gmail.com,
+        UNGLinuxDriver@microchip.com, Ian.Saturley@microchip.com
+Subject: Re: [PATCH net-next 4/5] net: lan743x: Add support to SGMII 1G and
+ 2.5G
+Message-ID: <Yqj575Z/tYXsRHHK@lunn.ch>
+References: <20220614103424.58971-1-Raju.Lakkaraju@microchip.com>
+ <20220614103424.58971-5-Raju.Lakkaraju@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220614190145.dkdwjnqnd7lv6y4n@cantor>
-X-Proofpoint-GUID: FWWMZb5F_VRFarx0XBZ0RaoMpe0k1YHQ
-X-Proofpoint-ORIG-GUID: FWWMZb5F_VRFarx0XBZ0RaoMpe0k1YHQ
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-14_09,2022-06-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 mlxlogscore=999 clxscore=1015 spamscore=0 adultscore=0
- suspectscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0
- malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206140075
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220614103424.58971-5-Raju.Lakkaraju@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 12:01:45PM -0700, Jerry Snitselaar wrote:
-> On Tue, Jun 14, 2022 at 11:45:35AM -0500, Steve Wahl wrote:
-> > On Tue, Jun 14, 2022 at 10:21:29AM +0800, Baolu Lu wrote:
-> > > On 2022/6/14 09:54, Jerry Snitselaar wrote:
-> > > > On Mon, Jun 13, 2022 at 6:51 PM Baolu Lu <baolu.lu@linux.intel.com> wrote:
-> > > > > 
-> > > > > On 2022/6/14 09:44, Jerry Snitselaar wrote:
-> > > > > > On Mon, Jun 13, 2022 at 6:36 PM Baolu Lu<baolu.lu@linux.intel.com>  wrote:
-> > > > > > > On 2022/6/14 04:57, Jerry Snitselaar wrote:
-> > > > > > > > On Thu, May 12, 2022 at 10:13:09AM -0500, Steve Wahl wrote:
-> > > > > > > > > To support up to 64 sockets with 10 DMAR units each (640), make the
-> > > > > > > > > value of DMAR_UNITS_SUPPORTED adjustable by a config variable,
-> > > > > > > > > CONFIG_DMAR_UNITS_SUPPORTED, and make it's default 1024 when MAXSMP is
-> > > > > > > > > set.
-> > > > > > > > > 
-> > > > > > > > > If the available hardware exceeds DMAR_UNITS_SUPPORTED (previously set
-> > > > > > > > > to MAX_IO_APICS, or 128), it causes these messages: "DMAR: Failed to
-> > > > > > > > > allocate seq_id", "DMAR: Parse DMAR table failure.", and "x2apic: IRQ
-> > > > > > > > > remapping doesn't support X2APIC mode x2apic disabled"; and the system
-> > > > > > > > > fails to boot properly.
-> > > > > > > > > 
-> > > > > > > > > Signed-off-by: Steve Wahl<steve.wahl@hpe.com>
-> > > > > > > > > ---
-> > > > > > > > > 
-> > > > > > > > > Note that we could not find a reason for connecting
-> > > > > > > > > DMAR_UNITS_SUPPORTED to MAX_IO_APICS as was done previously.  Perhaps
-> > > > > > > > > it seemed like the two would continue to match on earlier processors.
-> > > > > > > > > There doesn't appear to be kernel code that assumes that the value of
-> > > > > > > > > one is related to the other.
-> > > > > > > > > 
-> > > > > > > > > v2: Make this value a config option, rather than a fixed constant.  The default
-> > > > > > > > > values should match previous configuration except in the MAXSMP case.  Keeping the
-> > > > > > > > > value at a power of two was requested by Kevin Tian.
-> > > > > > > > > 
-> > > > > > > > >     drivers/iommu/intel/Kconfig | 6 ++++++
-> > > > > > > > >     include/linux/dmar.h        | 6 +-----
-> > > > > > > > >     2 files changed, 7 insertions(+), 5 deletions(-)
-> > > > > > > > > 
-> > > > > > > > > diff --git a/drivers/iommu/intel/Kconfig b/drivers/iommu/intel/Kconfig
-> > > > > > > > > index 247d0f2d5fdf..fdbda77ac21e 100644
-> > > > > > > > > --- a/drivers/iommu/intel/Kconfig
-> > > > > > > > > +++ b/drivers/iommu/intel/Kconfig
-> > > > > > > > > @@ -9,6 +9,12 @@ config DMAR_PERF
-> > > > > > > > >     config DMAR_DEBUG
-> > > > > > > > >        bool
-> > > > > > > > > 
-> > > > > > > > > +config DMAR_UNITS_SUPPORTED
-> > > > > > > > > +    int "Number of DMA Remapping Units supported"
-> > > > > > > > Also, should there be a "depends on (X86 || IA64)" here?
-> > > > > > > Do you have any compilation errors or warnings?
-> > > > > > > 
-> > > > > > > Best regards,
-> > > > > > > baolu
-> > > > > > > 
-> > > > > > I think it is probably harmless since it doesn't get used elsewhere,
-> > > > > > but our tooling was complaining to me because DMAR_UNITS_SUPPORTED was
-> > > > > > being autogenerated into the configs for the non-x86 architectures we
-> > > > > > build (aarch64, s390x, ppcle64).
-> > > > > > We have files corresponding to the config options that it looks at,
-> > > > > > and I had one for x86 and not the others so it noticed the
-> > > > > > discrepancy.
-> > > > > 
-> > > > > So with "depends on (X86 || IA64)", that tool doesn't complain anymore,
-> > > > > right?
-> > > > > 
-> > > > > Best regards,
-> > > > > baolu
-> > > > > 
-> > > > 
-> > > > Yes, with the depends it no longer happens.
-> > > 
-> > > The dmar code only exists on X86 and IA64 arch's. Adding this depending
-> > > makes sense to me. I will add it if no objections.
-> > 
-> > I think that works after Baolu's patchset that makes intel-iommu.h
-> > private.  I'm pretty sure it wouldn't have worked before that.
-> > 
-> > No objections.
-> > 
-> 
-> Yes, I think applying it with the depends prior to Baolu's change would
-> still run into the issue from the KTR report if someone compiled without
-> INTEL_IOMMU enabled.
-> 
-> This was dealing with being able to do something like:
-> 
-> make allmodconfig ARCH=arm64 ; grep DMAR_UNITS .config
-> 
-> and finding CONFIG_DMAR_UNITS_SUPPORTED=64.
-> 
-> Thinking some more though, instead of the depends being on the arch
-> would depending on DMAR_TABLE or INTEL_IOMMU be more appropriate?
+> +/* MMD Device IDs */
+> +#define STD_DEVID			(0x0)
+> +#define MMD_PMAPMD			(0x1)
+> +#define MMD_PCS				(0x3)
+> +#define MMD_ANEG			(0x7)
+> +#define MMD_VSPEC1			(0x1E)
+> +#define MMD_VSPEC2			(0x1F)
 
-At least in my limited exploration, depending on INTEL_IOMMU yields
-compile errors, but depending upon DMAR_TABLE appears to work fine.
+Please use the values from include/uapi/mdio.h
 
---> Steve
+> +
+> +/* Vendor Specific SGMII MMD details */
+> +#define SR_MII_DEV_ID1			0x0002
+> +#define SR_MII_DEV_ID2			0x0003
 
--- 
-Steve Wahl, Hewlett Packard Enterprise
+MDIO_DEVID1 & MDIO_DEVID2
+
+> +#define SR_VSMMD_PCS_ID1		0x0004
+> +#define SR_VSMMD_PCS_ID2		0x0005
+> +#define SR_VSMMD_STS			0x0008
+> +#define SR_VSMMD_CTRL			0x0009
+> +
+> +#define SR_MII_CTRL			0x0000
+> +#define SR_MII_CTRL_RST_		BIT(15)
+> +#define SR_MII_CTRL_LBE_		BIT(14)
+> +#define SR_MII_CTRL_SS13_		BIT(13)
+> +#define SR_MII_CTRL_AN_ENABLE_		BIT(12)
+> +#define SR_MII_CTRL_LPM_		BIT(11)
+> +#define SR_MII_CTRL_RESTART_AN_		BIT(9)
+> +#define SR_MII_CTRL_DUPLEX_MODE_	BIT(8)
+> +#define SR_MII_CTRL_SS6_		BIT(6)
+
+These look like standard BMCR registers. Please use the values from
+mii.h
+
+> +#define SR_MII_STS			0x0001
+> +#define SR_MII_STS_ABL100T4_		BIT(15)
+> +#define SR_MII_STS_FD100ABL_		BIT(14)
+> +#define SR_MII_STS_HD100ABL_		BIT(13)
+> +#define SR_MII_STS_FD10ABL_		BIT(12)
+> +#define SR_MII_STS_HD10ABL_		BIT(11)
+> +#define SR_MII_STS_FD100T_		BIT(10)
+> +#define SR_MII_STS_HD100T_		BIT(9)
+> +#define SR_MII_STS_EXT_STS_ABL_		BIT(8)
+> +#define SR_MII_STS_UN_DIR_ABL_		BIT(7)
+> +#define SR_MII_STS_MF_PRE_SUP_		BIT(6)
+> +#define SR_MII_STS_AN_CMPL_		BIT(5)
+> +#define SR_MII_STS_RF_			BIT(4)
+> +#define SR_MII_STS_AN_ABL_		BIT(3)
+> +#define SR_MII_STS_LINK_STS_		BIT(2)
+> +#define SR_MII_STS_EXT_REG_CAP_		BIT(0)
+
+These look like BMSR.
+
+It could even be, you can just use generic code for these.
+
+   Andrew

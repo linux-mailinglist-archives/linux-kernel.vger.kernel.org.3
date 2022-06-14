@@ -2,142 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A2E54A7A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCF754A7AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348593AbiFNDvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 23:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
+        id S1349498AbiFNDzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 23:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbiFNDvQ (ORCPT
+        with ESMTP id S232233AbiFNDzN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 23:51:16 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9081BEB3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:51:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655178675; x=1686714675;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kEg7uOhfXo9ddWlHnx0SZS9c0JPMDXJoPAXbcxDBfT4=;
-  b=iOMdbSpiPMMh9wl5vluHHSmiDS7kvwHjxFka5R3VyINO9lFkGp5NPRG7
-   cb1YxKntpBYrVRm/QM4eXjK5ZXV2hCMwLGZwk6otoHSuzxb7n6YYwczKe
-   qi2a/9dTZ5KTLHQsW/MYJ8XfljHC5ruGCTYQufmd/oCQuVZqllkjZR/jD
-   fqjxAnPdMLLqTPPu3vRhqTRDqOzMCapZBD9tLbVtIq0KRlE/9OuMS3HTi
-   O5Jt75xc2n8vq+SdJXUEpcK7sogYRxxnZAtjPV+6Wc3VES7FnlwfX66e1
-   cZgr3nU1jq+yTnWTjsZj37Jx19czh0SHORzt18mp6Acn9ohY1N04KHxsh
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258323556"
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="258323556"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 20:51:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="558137413"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 13 Jun 2022 20:51:13 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0xaC-000LRr-BF;
-        Tue, 14 Jun 2022 03:51:12 +0000
-Date:   Tue, 14 Jun 2022 11:50:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nicholas Piggin <npiggin@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        =?iso-8859-1?Q?C=E9dric?= Le Goater <clg@kaod.org>,
-        Alexey Kardashevskiy <aik@ozlabs.ru>
-Subject: arch/powerpc/kvm/book3s_xive.c:151:41: sparse: sparse: incorrect
- type in assignment (different base types)
-Message-ID: <202206141155.emjWGbvB-lkp@intel.com>
+        Mon, 13 Jun 2022 23:55:13 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2057.outbound.protection.outlook.com [40.107.223.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AB93A726;
+        Mon, 13 Jun 2022 20:55:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CuAiKrUnvbmm92kj1+LxvywUY8FNcHClNlWE2Zi0eWLQ9KLoFQFvksijvdd1Od5DkdJiS1Nvcrw9YdmezmEpA06XULV2EtrWUYC9P1+Mqx3M7M4n8D/+r/kqUnOzu+MbufzeFLi1nnolj8MNvGfOEb5AbHzJZERjPPtLpNQLOOyx8gGnPbxUFHdCVVnwjvlMfDOMgNqZ1OPg7/jKQumwuY+/wvRs4IvU0eVa6lG6DAd+eBay2JMGs1ACIPiw+6h2RHsyS4U03ZmNfn231haCG7jC4WQiinCuI2lKRe4fqjlDHrsn/xDsVvXJlTsiraL6aWkpQq7ETVqDgBxwSl4Qyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LFsjPLY4Nl/VFLYmW2280pzWnb16HckmQFyBH4BtRsA=;
+ b=UbeEbk/P2bTG+d1XYaCS6JkAK5tpu4tkQCiNAFYREsXKopdpa3VPaUTNqDzcgRaR1tHGAbu7QmVRzqStHeMF84lrmLJJbpGvcMZ202nKOdprLCIwxeHqi7WOuaPTy2JX3vOvNmQNw2C6f0uvraYbfPhntPZR4R2KZ8oWHcDhCdhiDv2D+Qf/Se56m1ntC8xpZreJq1VrsF9mlfc5iluNYLLHGtOs2TxDzwTkyG+qytxUeU+Ktiq8gaTCFNmDANEMiQ7cBTca4fhc31T0CMnuD0ooRvjfTPcasFQPas7MQk4YI5a4UoA/AopAyaU9DfsZtO9KYHI212um8+X1VSdzyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linutronix.de smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LFsjPLY4Nl/VFLYmW2280pzWnb16HckmQFyBH4BtRsA=;
+ b=PtJBbsVbTrtnptuFsiLC85m2RTUYtKE6EkbBbsAYaRSAeAOml6UMx4Ry9yfllW3wLCRg3ObkIfaGlW93YCq+ks4OCe5B4UnUKPjsdAiWdN8geb9gZxcmdeS4sQiKx0qE23VC6/lNNQsdceVPhq0ieQo8IW4IRUhUxqoAf+XO/Bg=
+Received: from BN9PR03CA0649.namprd03.prod.outlook.com (2603:10b6:408:13b::24)
+ by CY4PR1201MB2517.namprd12.prod.outlook.com (2603:10b6:903:da::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.16; Tue, 14 Jun
+ 2022 03:55:07 +0000
+Received: from BN8NAM11FT027.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13b:cafe::f5) by BN9PR03CA0649.outlook.office365.com
+ (2603:10b6:408:13b::24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.16 via Frontend
+ Transport; Tue, 14 Jun 2022 03:55:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT027.mail.protection.outlook.com (10.13.177.96) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5332.12 via Frontend Transport; Tue, 14 Jun 2022 03:55:07 +0000
+Received: from pyuan-desktop.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 13 Jun
+ 2022 22:54:28 -0500
+From:   Perry Yuan <Perry.Yuan@amd.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Jane Malalane <jane.malalane@citrix.com>,
+        "Kim Phillips" <kim.phillips@amd.com>,
+        Tony Luck <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>
+CC:     <Ray.Huang@amd.com>, <Jinzhou.Su@amd.com>, <Li.Meng@amd.com>,
+        <linux-pm@vger.kernel.org>
+Subject: [PATCH] cpufreq: amd_pstate: fix the highest perf query for new AMD processors
+Date:   Mon, 13 Jun 2022 23:52:28 -0400
+Message-ID: <20220614035229.170852-1-Perry.Yuan@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 15331d75-0b86-473f-b1cb-08da4db9abce
+X-MS-TrafficTypeDiagnostic: CY4PR1201MB2517:EE_
+X-Microsoft-Antispam-PRVS: <CY4PR1201MB25174E3C15B9E21A54235A2A9CAA9@CY4PR1201MB2517.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: D9IWbzFMw2bc3tKchxwLPXRFsnvlOLJ03O0sxao0CCKDPK5sM+AA9weYcDtuU3GutiL3sotswKza6I3U/gaaP8aObl5nqufAIn+H/E8/IcZyZWSoAhX4aDaO592kkWyTWXJOoaYJHxItUd36xxiL+agqu3TSg2knCA+JXv6Q6pdgTU3jRH495fNNGygz1zMHIv9aRM5bPO2ySQyA195Nv4FZ4VQXyRVevd56qLyROBk9xD9fU7wsnad3YA34ZtXF7UkGklRySyTfl9cmmBjTlEzLMoqYw6TldiB7+7kZ4FqTaEMwn2AsmevbIPdgh4JCe6nNDhRkCVttQj30lF9BI2tuAmyfCrs9lt6f1cbfmllx5EXpWvBjfYMxbDCVif1/VKU9h9StrpQ4IWzv6aTku2/ySkcGoNLJbURDP5ix2xNsc9ESN7t1+P67KxbYLxEXcc8rcz61dT3Gyh7kCXUzBUHcv7Ea1y6z6oNeqhOm5qgng3yTsh/l5kqjiKpT+sh28YvJJ2whek63nHq2GBeWxXTCs9tUKIdIIKvzo3BZDp4rxMP/qq0BQ3J3b8oGZoPmJM0OsVCY/TXQIUIc4/0p0H2jkHudn4F6moIYeKDJTCcopb9w1+O8uOhB+BnaGeuObOBwLCyqMC+LSmjjTPJfbXBEdo5K+2crjjI5To/YHEKu9qVM+2IDc+icl7kOdC7b28ut5QEbfAG4/jSuotNttyeCIzCP3ECMZnIOAvgDfNg=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(40470700004)(46966006)(36840700001)(86362001)(36756003)(8676002)(4326008)(82310400005)(5660300002)(8936002)(356005)(7416002)(110136005)(70206006)(81166007)(4744005)(508600001)(70586007)(316002)(2906002)(40460700003)(36860700001)(186003)(47076005)(54906003)(2616005)(7696005)(1076003)(83380400001)(336012)(16526019)(426003)(26005)(921005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2022 03:55:07.2459
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 15331d75-0b86-473f-b1cb-08da4db9abce
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT027.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB2517
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-commit: 023c3c96ca4d196c09d554d5a98900406e4d7ecb KVM: PPC: Book3S HV P9: implement kvmppc_xive_pull_vcpu in C
-date:   1 year ago
-config: powerpc64-randconfig-s032-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141155.emjWGbvB-lkp@intel.com/config)
-compiler: powerpc64le-linux-gcc (GCC) 11.3.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-30-g92122700-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=023c3c96ca4d196c09d554d5a98900406e4d7ecb
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 023c3c96ca4d196c09d554d5a98900406e4d7ecb
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kvm/ arch/powerpc/platforms/powernv/ kernel/sched/
+In order to get the corrent highest perf for some new AMD processors,
+the amd_get_highest_perf() call will check the CPU model and
+return correct highest perf value.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+---
+ arch/x86/kernel/cpu/amd.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-
-sparse warnings: (new ones prefixed by >>)
-   arch/powerpc/kvm/book3s_xive.c: note: in included file:
-   arch/powerpc/kvm/book3s_xive_template.c:26:15: sparse: sparse: cast to restricted __be16
-   arch/powerpc/kvm/book3s_xive_template.c:339:39: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __be64 [usertype] qw1 @@     got unsigned long @@
-   arch/powerpc/kvm/book3s_xive_template.c:339:39: sparse:     expected restricted __be64 [usertype] qw1
-   arch/powerpc/kvm/book3s_xive_template.c:339:39: sparse:     got unsigned long
-   arch/powerpc/kvm/book3s_xive.c:79:49: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned long v @@     got restricted __be64 [usertype] w01 @@
-   arch/powerpc/kvm/book3s_xive.c:79:49: sparse:     expected unsigned long v
-   arch/powerpc/kvm/book3s_xive.c:79:49: sparse:     got restricted __be64 [usertype] w01
-   arch/powerpc/kvm/book3s_xive.c:80:32: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int v @@     got restricted __be32 [usertype] xive_cam_word @@
-   arch/powerpc/kvm/book3s_xive.c:80:32: sparse:     expected unsigned int v
-   arch/powerpc/kvm/book3s_xive.c:80:32: sparse:     got restricted __be32 [usertype] xive_cam_word
->> arch/powerpc/kvm/book3s_xive.c:151:41: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __be64 [usertype] w01 @@     got unsigned long @@
-   arch/powerpc/kvm/book3s_xive.c:151:41: sparse:     expected restricted __be64 [usertype] w01
-   arch/powerpc/kvm/book3s_xive.c:151:41: sparse:     got unsigned long
-
-vim +151 arch/powerpc/kvm/book3s_xive.c
-
-   129	
-   130	/*
-   131	 * Pull a vcpu's context from the XIVE on guest exit.
-   132	 * This assumes we are in virtual mode (MMU on)
-   133	 */
-   134	void kvmppc_xive_pull_vcpu(struct kvm_vcpu *vcpu)
-   135	{
-   136		void __iomem *tima = local_paca->kvm_hstate.xive_tima_virt;
-   137	
-   138		if (!vcpu->arch.xive_pushed)
-   139			return;
-   140	
-   141		/*
-   142		 * Should not have been pushed if there is no tima
-   143		 */
-   144		if (WARN_ON(!tima))
-   145			return;
-   146	
-   147		eieio();
-   148		/* First load to pull the context, we ignore the value */
-   149		__raw_readl(tima + TM_SPC_PULL_OS_CTX);
-   150		/* Second load to recover the context state (Words 0 and 1) */
- > 151		vcpu->arch.xive_saved_state.w01 = __raw_readq(tima + TM_QW1_OS);
-   152	
-   153		/* Fixup some of the state for the next load */
-   154		vcpu->arch.xive_saved_state.lsmfb = 0;
-   155		vcpu->arch.xive_saved_state.ack = 0xff;
-   156		vcpu->arch.xive_pushed = 0;
-   157		eieio();
-   158	}
-   159	EXPORT_SYMBOL_GPL(kvmppc_xive_pull_vcpu);
-   160	
-
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index 0c0b09796ced..ff2075f26ef4 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -1152,7 +1152,8 @@ u32 amd_get_highest_perf(void)
+ 	struct cpuinfo_x86 *c = &boot_cpu_data;
+ 
+ 	if (c->x86 == 0x17 && ((c->x86_model >= 0x30 && c->x86_model < 0x40) ||
+-			       (c->x86_model >= 0x70 && c->x86_model < 0x80)))
++			       (c->x86_model >= 0x70 && c->x86_model < 0x80) ||
++			       (c->x86_model >= 0xa0 && c->x86_model < 0xb0)))
+ 		return 166;
+ 
+ 	if (c->x86 == 0x19 && ((c->x86_model >= 0x20 && c->x86_model < 0x30) ||
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

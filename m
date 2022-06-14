@@ -2,37 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DEC54B252
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F101554B25C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236098AbiFNNd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 09:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48956 "EHLO
+        id S242223AbiFNNet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 09:34:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245704AbiFNNc0 (ORCPT
+        with ESMTP id S243308AbiFNNeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 09:32:26 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489962F1;
-        Tue, 14 Jun 2022 06:32:24 -0700 (PDT)
+        Tue, 14 Jun 2022 09:34:44 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5C41C11F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 06:34:43 -0700 (PDT)
 Received: from localhost.localdomain ([172.16.0.254])
         (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
-        by mx1.hust.edu.cn  with ESMTP id 25EDUYte030219-25EDUYth030219
+        by mx1.hust.edu.cn  with ESMTP id 25EDWoU6010890-25EDWoU9010890
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 14 Jun 2022 21:30:38 +0800
+        Tue, 14 Jun 2022 21:32:54 +0800
 From:   Dongliang Mu <dzm91@hust.edu.cn>
-To:     Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Eddie James <eajames@linux.ibm.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>
-Cc:     Pekka Enberg <penberg@kernel.org>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] hwmon: (occ) remove NULL check before kvfree
-Date:   Tue, 14 Jun 2022 21:30:22 +0800
-Message-Id: <20220614133025.146745-1-dzm91@hust.edu.cn>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Martin Kaiser <martin@kaiser.cx>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] driver: r8188eu: remove NULL check before vfree
+Date:   Tue, 14 Jun 2022 21:32:29 +0800
+Message-Id: <20220614133239.147076-1-dzm91@hust.edu.cn>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,40 +47,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-kvfree can handle NULL pointer as its argument.
+vfree can handle NULL pointer as its argument.
 According to coccinelle isnullfree check, remove NULL check
-before kvfree operation.
+before vfree operation.
 
 Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 ---
-v1->v2: modify the commit title and signature
- drivers/hwmon/occ/p9_sbe.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+v1->v2: fix the logic change in the patch v1
+ drivers/staging/r8188eu/os_dep/usb_intf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwmon/occ/p9_sbe.c b/drivers/hwmon/occ/p9_sbe.c
-index 42fc7b97bb34..01405ae2f9bd 100644
---- a/drivers/hwmon/occ/p9_sbe.c
-+++ b/drivers/hwmon/occ/p9_sbe.c
-@@ -55,8 +55,7 @@ static bool p9_sbe_occ_save_ffdc(struct p9_sbe_occ *ctx, const void *resp,
- 	mutex_lock(&ctx->sbe_error_lock);
- 	if (!ctx->sbe_error) {
- 		if (resp_len > ctx->ffdc_size) {
--			if (ctx->ffdc)
--				kvfree(ctx->ffdc);
-+			kvfree(ctx->ffdc);
- 			ctx->ffdc = kvmalloc(resp_len, GFP_KERNEL);
- 			if (!ctx->ffdc) {
- 				ctx->ffdc_len = 0;
-@@ -171,8 +170,7 @@ static int p9_sbe_occ_remove(struct platform_device *pdev)
- 	ctx->sbe = NULL;
- 	occ_shutdown(occ);
+diff --git a/drivers/staging/r8188eu/os_dep/usb_intf.c b/drivers/staging/r8188eu/os_dep/usb_intf.c
+index 68869c5daeff..cc2b44f60c46 100644
+--- a/drivers/staging/r8188eu/os_dep/usb_intf.c
++++ b/drivers/staging/r8188eu/os_dep/usb_intf.c
+@@ -372,7 +372,7 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
+ free_adapter:
+ 	if (pnetdev)
+ 		rtw_free_netdev(pnetdev);
+-	else if (padapter)
++	else
+ 		vfree(padapter);
  
--	if (ctx->ffdc)
--		kvfree(ctx->ffdc);
-+	kvfree(ctx->ffdc);
- 
- 	return 0;
- }
+ 	return NULL;
 -- 
 2.35.1
 

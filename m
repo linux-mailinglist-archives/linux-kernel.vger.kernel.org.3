@@ -2,140 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0101154AA2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD42A54A9E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353525AbiFNHNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
+        id S237671AbiFNG7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 02:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353462AbiFNHM6 (ORCPT
+        with ESMTP id S230329AbiFNG7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:12:58 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324E918353;
-        Tue, 14 Jun 2022 00:12:52 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 691FA20004F;
-        Tue, 14 Jun 2022 09:12:51 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 06DAE2000C2;
-        Tue, 14 Jun 2022 09:12:51 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 67BCC1802205;
-        Tue, 14 Jun 2022 15:12:49 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     l.stach@pengutronix.de, bhelgaas@google.com, robh+dt@kernel.org,
-        broonie@kernel.org, lorenzo.pieralisi@arm.com, festevam@gmail.com,
-        francesco.dolcini@toradex.com
-Cc:     hongxing.zhu@nxp.com, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@pengutronix.de, linux-imx@nxp.com
-Subject: [PATCH v11 0/8] PCI: imx6: refine codes and add the error propagation
-Date:   Tue, 14 Jun 2022 14:58:54 +0800
-Message-Id: <1655189942-12678-1-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 14 Jun 2022 02:59:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A52843AA79
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 23:59:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655189939;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=165bFaZlwfKqEUi4HtU3Zw6CrU4RiJY/1bnRkwVsKqg=;
+        b=cPFcvqv53LD4OaiHOZ7VjRqlyDs5vjAxc1Iu/5PUQKKJfWHEAY8R7oY2ARJUryIWUgAX3S
+        p8C6mB/l3pFglTQEtWkPA0wJC3zwAdPCYRdOguM6D2Fwivb3xgJpDStLu35HLxo/x8RP7Y
+        7IQLkSZd1Ny280ILtNAN+MrRaMJM7/o=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-348-ox3dwkx9PQe3fFExGo3z_g-1; Tue, 14 Jun 2022 02:58:58 -0400
+X-MC-Unique: ox3dwkx9PQe3fFExGo3z_g-1
+Received: by mail-wm1-f69.google.com with SMTP id v184-20020a1cacc1000000b0039c7efa3e95so3470042wme.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 23:58:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=165bFaZlwfKqEUi4HtU3Zw6CrU4RiJY/1bnRkwVsKqg=;
+        b=v8XRh558k3/zOg5KFted6gss+p/7CbdF2s/mtxyCysLLIf9edCHrU8/3AsE9Kh9Y33
+         zZIWDGUh/jy7b9nn873ksuwqch6HN18K2RlZFbqIK9TIqsEb7UktiCwszYcoN/rVm0pQ
+         T3yFdZu/ZbUey9GvUFJ9OJNda2K7k1Ukj9deCdBh/E4UZHeC9Y2cg3Z67YzJ46O/75by
+         CwGwmLZElMCbZDo23XKuiEEExzVjj+lGHESaBu+KUGs+4eq4VLq6dp6KjX2+gfDFpyMt
+         og7GEUAi0W62/TvJ0egCS/Ct9V2GIXb0qbZuOKuRALk23tHWX/ubYYW7fdSWNpg0X3/e
+         lIXg==
+X-Gm-Message-State: AJIora8n1PBfrsSefLVRwzNk6ucZcxG4k+bS0fu//0Qvgl0eOvWQXrwL
+        fIuwL+fCIdL/gePZgr1YRRR0Cdx0A4SCMu/8NEmyhA6VlIl9tzQsZ3lphOV35EZyjSMiO2ZY+SK
+        fMP8aFannFDYvZMXutIbInr2TJhCA19U4lPDTQqjgKaE/5kDtN/f9vvpvaIRqwM5miZEWPKTe
+X-Received: by 2002:a05:6000:18a9:b0:218:7791:a9ad with SMTP id b9-20020a05600018a900b002187791a9admr3355803wri.116.1655189937376;
+        Mon, 13 Jun 2022 23:58:57 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1ssHMKYH4k8kw7gv+GTlRPt8sCrt8JRY/ON2cjIiR3mrj3iL38gK+9L6AhGJt18kf80tVLISg==
+X-Received: by 2002:a05:6000:18a9:b0:218:7791:a9ad with SMTP id b9-20020a05600018a900b002187791a9admr3355771wri.116.1655189937051;
+        Mon, 13 Jun 2022 23:58:57 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70b:cf00:aace:de16:d459:d411? (p200300cbc70bcf00aacede16d459d411.dip0.t-ipconnect.de. [2003:cb:c70b:cf00:aace:de16:d459:d411])
+        by smtp.gmail.com with ESMTPSA id m10-20020a5d56ca000000b0020c5253d8f7sm10737307wrw.67.2022.06.13.23.58.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 23:58:56 -0700 (PDT)
+Message-ID: <72194595-a177-088d-28a9-0a24d4192777@redhat.com>
+Date:   Tue, 14 Jun 2022 08:58:55 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Oscar Salvador <osalvador@suse.de>
+References: <20220610101258.75738-1-david@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1] MAINTAINERS: add MEMORY HOT(UN)PLUG section and add
+ myself as reviewer
+In-Reply-To: <20220610101258.75738-1-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series patches refine pci-imx6 driver and do the following main changes.
-- Encapsulate the clock enable into one standalone function
-- Add the error propagation from host_init and resume
-- Turn off regulator when the system is in suspend mode
-- Let the probe successfully when link never comes up
-- Do not hide the phy driver callbacks in core reset and clk_enable.
-BTW, this series are verified on i.MX8MM EVK board when one NVME is used.
+On 10.06.22 12:12, David Hildenbrand wrote:
+> There are certainly a lot more files that partially fall into the memory
+> hot(un)plug category, including parts of mm/sparse.c, mm/page_isolation.c
+> and mm/page_alloc.c. Let's only add what's almost completely memory
+> hot(un)plug related.
+> 
+> Add myself as reviewer so it's easier for contributors to figure out
+> whom to CC.
+> 
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>  MAINTAINERS | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a6d3bd9d2a8d..77aebce76288 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12848,6 +12848,18 @@ F:	include/linux/vmalloc.h
+>  F:	mm/
+>  F:	tools/testing/selftests/vm/
+>  
+> +MEMORY HOT(UN)PLUG
+> +M:	Andrew Morton <akpm@linux-foundation.org>
+> +R:	David Hildenbrand <david@redhat.com>
+> +L:	linux-mm@kvack.org
+> +S:	Maintained
+> +F:	Documentation/admin-guide/mm/memory-hotplug.rst
+> +F:	Documentation/core-api/memory-hotplug.rst
+> +F:	drivers/base/memory.c
+> +F:	include/linux/memory_hotplug.h
+> +F:	mm/memory_hotplug.c
+> +F:	tools/testing/selftests/memory-hotplug/
 
-Main changes from v10 to v11:
-No code changes, just do the following operations refer to Bjorn's comments.
-  - Split #6 patch into two patches.
-  - Rebase to v5.19-rc1 based on for-next branch of Shawn's git.
+(thanks for the kind words from reviewers :) )
 
-Main changes from v9 to v10:
-- Add the "Reviewed-by: Lucas Stach <l.stach@pengutronix.de>" tag into #3
-  and #4 patches.
-- Refer to Bjorn's comments:
-  - refine the commit of the first patch
-  - keep alignment of the message format in the second patch
-  - More specific commit and subject of the #5 and #7 patches.
-- Move the regualtor_disable into suspend, turn off the regulator when bus
-  is powered off and system in suspend mode.
-- Let the driver probe successfully, return zero in imx6_pcie_start_link()
-  when PCIe link is down. 
-  In this link down scenario, only start the PCIe link training in resume
-  when the link is up before system suspend to avoid the long latency in
-  the link training period.
-- Don't hide phy driver callbacks in core reset and clk_enable, and refine
-  the error handling accordingly.
-- Drop the #8 patch of v9 series, since the clocks and powers are not gated
-  off anymore when link is down.
+Thinking about it (and remembering having a discussion about
+submaintainers for MM in general at LSF/MM):
 
-Main changes from v8 to v9:
-- Don't change pcie-designware codes, and do the error exit process only in
-  pci-imx6 driver internally.
-- Move the phy driver callbacks to the proper places
+@Andrew, do we want "official" submaintainers for that section? If so,
+we could turn my R into an M. Further, Oscar did a lot of work in the
+memory hot(un)plug world as well -- so if we want submaintainers, Oscar
+might be a very good fit as well.
 
-Main changes from v7 to v8:
-Regarding Bjorn's review comments.
-- Align the format of the dev_info message and refine commit log of
-  #6/7/8 patches.
-- Rename the err_reset_phy label, since there is no PHY reset in the out
+... I guess, that would mostly reflect reality :)
 
-Main changes from v6 to v7:
-- Keep the regulator usage counter balance in the #5 patch of v6 series.
+-- 
+Thanks,
 
-Main changes from v5 to v6:
-- Refer to the following discussion with Fabio, fix the dump by his patch.
-  https://patchwork.kernel.org/project/linux-pci/patch/1641368602-20401-6-git-send-email-hongxing.zhu@nxp.com/
-  Refine and rebase this patch-set after Fabio' dump fix patch is merged.
-- Add one new #4 patch to disable i.MX6QDL REF clock too when disable clocks
-- Split the regulator refine codes into one standalone patch #5 in this version.
+David / dhildenb
 
-Main changes from v4 to v5:
-- Since i.MX8MM PCIe support had been merged. Based on Lorenzo's git repos,
-  resend the patch-set after rebase.
-
-Main changes from v3 to v4:
-- Regarding Mark's comments, delete the regulator_is_enabled() check.
-- Squash #3 and #6 of v3 patch into #5 patch of v4 set.
-
-Main changes from v2 to v3:
-- Add "Reviewed-by: Lucas Stach <l.stach@pengutronix.de>" tag into
-  first two patches.
-- Add a Fixes tag into #3 patch.
-- Split the #4 of v2 to two patches, one is clock disable codes move,
-  the other one is the acutal clock unbalance fix.
-- Add a new host_exit() callback into dw_pcie_host_ops, then it could be
-  invoked to handle the unbalance issue in the error handling after
-  host_init() function when link is down.
-- Add a new host_exit() callback for i.MX PCIe driver to handle this case
-  in the error handling after host_init.
-
-Main changes from v1 to v2:
-Regarding Lucas' comments.
-  - Move the placement of the new imx6_pcie_clk_enable() to avoid the
-    forward declarition.
-  - Seperate the second patch of v1 patch-set to three patches.
-  - Use the module_param to replace the kernel command line.
-Regarding Bjorn's comments:
-  - Use the cover-letter for a multi-patch series.
-  - Correct the subject line, and refine the commit logs. For example,
-    remove the timestamp of the logs.
-
-drivers/pci/controller/dwc/pci-imx6.c | 241 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------------------
-1 file changed, 157 insertions(+), 84 deletions(-)
-[PATCH v11 1/8] PCI: imx6: Encapsulate the clock enable into one
-[PATCH v11 2/8] PCI: imx6: Add the error propagation from host_init
-[PATCH v11 3/8] PCI: imx6: Move imx6_pcie_clk_disable() earlier
-[PATCH v11 4/8] PCI: imx6: Disable iMX6QDL PCIe REF clock when
-[PATCH v11 5/8] PCI: imx6: Turn off regulator when the system is in
-[PATCH v11 6/8] PCI: imx6: Mark the link down as none fatal error
-[PATCH v11 7/8] PCI: imx6: Reduce resume time by only starting link
-[PATCH v11 8/8] PCI: imx6: Do not hide phy driver callbacks and

@@ -2,165 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5062254B30C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122DD54B336
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343740AbiFNOYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:24:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43112 "EHLO
+        id S243902AbiFNO37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343525AbiFNOYn (ORCPT
+        with ESMTP id S244639AbiFNO35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:24:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B15AA2BB21
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:24:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655216680;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Tue, 14 Jun 2022 10:29:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5523615E;
+        Tue, 14 Jun 2022 07:29:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BEC371F930;
+        Tue, 14 Jun 2022 14:29:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655216994;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=c/W8jZgUnGZP6Qe9nuklShonDb+6U/u9I9QZozewk0A=;
-        b=gfXM9rzGWyPv7NpVIPsGIvGoDzThINLzEKPqbmVrYYbQFnE/DtzrBv96jzbslfaingvewC
-        TNW2J/58HZGG8hceTKdIPZwLfCvpeODmcTzyJWXxOPoE+JD47yh1oabQc6zkc9L5T3dCmw
-        5n2gmZBf52xbggu1GN4I7DsxHpc95VI=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-230-z5vT9Y9LMn6AOrh3-CEMEw-1; Tue, 14 Jun 2022 10:24:39 -0400
-X-MC-Unique: z5vT9Y9LMn6AOrh3-CEMEw-1
-Received: by mail-wr1-f72.google.com with SMTP id v4-20020adfebc4000000b002102c69be5eso1343956wrn.13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:24:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=c/W8jZgUnGZP6Qe9nuklShonDb+6U/u9I9QZozewk0A=;
-        b=NVAe2MnPjtGf96eF9muXEQTPem9etbwNtU90XMu1aVRdtODIG7s2JnoNx3tuUHX0wg
-         teCHeB00f67/8/o7knU1JFYWe8lEjF+2Q8yzQz/ZEa3WUxsI+CDPV/Aql3a4IoJrUkxm
-         EtFNVXkETaV6GjLslnth8qGmR3W+C3kZ2L6neFrdLrHbF95qlhk7LZkSpvw4fDGZwjuy
-         MjxifrMEQnqrRcYhKQ26AhuzUgNzWzUu5D1eJOO84N3zWwErQ/zj+JPAgKSfrKjhC0YX
-         FScPxskta1w0eN+SPqP77V6hfrF3h5cvV5A7+H/YCoVW4HtrWm+3TBYHtTeJXvqVVfPW
-         UOew==
-X-Gm-Message-State: AJIora9aIHZxaLaDCcxxn4vdLHV7+VogoC7wquyiC6Ux4syaMNLLNX38
-        gU0wquCxZbUgtFW+hm9+bkLkW5unRQw4glOuNWPzKwajLxAQrDDj5uWytvzRvwy0HxkItMYOgTX
-        l+5r0K56HCXBYgUPLQ6WB+Liv
-X-Received: by 2002:adf:a55a:0:b0:219:e574:2ae9 with SMTP id j26-20020adfa55a000000b00219e5742ae9mr5364265wrb.158.1655216678287;
-        Tue, 14 Jun 2022 07:24:38 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uCDAmT9GjGpaTwIkrS4ralu3DyoBR1ymKq0LMgiqhfqUcmwAISgLlJrM1+isW+D7YDEmGJOw==
-X-Received: by 2002:adf:a55a:0:b0:219:e574:2ae9 with SMTP id j26-20020adfa55a000000b00219e5742ae9mr5364228wrb.158.1655216677887;
-        Tue, 14 Jun 2022 07:24:37 -0700 (PDT)
-Received: from [192.168.0.3] (ip-109-42-114-75.web.vodafone.de. [109.42.114.75])
-        by smtp.gmail.com with ESMTPSA id h206-20020a1c21d7000000b0039746638d6esm13583229wmh.33.2022.06.14.07.24.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 07:24:37 -0700 (PDT)
-Message-ID: <36d83871-343d-e8a0-1aed-05bf386f9b1b@redhat.com>
-Date:   Tue, 14 Jun 2022 16:24:35 +0200
+        bh=9sUM5JezTgOeH5YJB4qMver/nDgsiIG+jHJ6CxJ8KWo=;
+        b=AHIc1T+T63d/dp4JPI0aPXI1J/Ffvkhgx7JM2UYhD8elN+0r+3Ifs6Zwg+7ULyghHhiiUh
+        YibkkXoirEqLwGb6CsleFLJh0ahhdn+M8hJP8upt3BMf2Gf3HpuUDfgxsASJFHkjVJTCAV
+        kz3izirGp2dwYelsC7ghMHp4B0Fr1VI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655216994;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9sUM5JezTgOeH5YJB4qMver/nDgsiIG+jHJ6CxJ8KWo=;
+        b=lX0I1sytpWX/NIHU0zaVY6xhxK9HYG/KBdugW8wblolTfSY7A1Tzt4qT/olWouWPCNuvr+
+        EHSGJU2RJ+IvSmCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 69A61139EC;
+        Tue, 14 Jun 2022 14:29:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HbrBGGKbqGJDRQAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Tue, 14 Jun 2022 14:29:54 +0000
+Date:   Tue, 14 Jun 2022 16:25:21 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     dsterba@suse.cz, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Filipe Manana <fdmanana@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] btrfs: Replace kmap() with kmap_local_page() in zstd.c
+Message-ID: <20220614142521.GN20633@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, Nick Terrell <terrelln@fb.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Filipe Manana <fdmanana@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220611135203.27992-1-fmdefrancesco@gmail.com>
+ <20220613183913.GD20633@twin.jikos.cz>
+ <1936552.usQuhbGJ8B@opensuse>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v4 1/4] KVM: s390: selftests: Use TAP interface in the
- memop test
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>, kvm@vger.kernel.org,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-s390@vger.kernel.org
-References: <20220531101554.36844-1-thuth@redhat.com>
- <20220531101554.36844-2-thuth@redhat.com>
- <07576ae9-9798-316f-d33e-10c91faeebfb@linux.ibm.com>
-From:   Thomas Huth <thuth@redhat.com>
-In-Reply-To: <07576ae9-9798-316f-d33e-10c91faeebfb@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1936552.usQuhbGJ8B@opensuse>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2022 12.38, Janis Schoetterl-Glausch wrote:
-> On 5/31/22 12:15, Thomas Huth wrote:
->> The memop test currently does not have any output (unless one of the
->> TEST_ASSERT statement fails), so it's hard to say for a user whether
->> a certain new sub-test has been included in the binary or not. Let's
->> make this a little bit more user-friendly and include some TAP output
->> via the kselftests.h interface.
->>
->> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
->> Signed-off-by: Thomas Huth <thuth@redhat.com>
->> ---
->>   tools/testing/selftests/kvm/s390x/memop.c | 95 ++++++++++++++++++-----
->>   1 file changed, 77 insertions(+), 18 deletions(-)
->>
->> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
->> index 49f26f544127..e704c6fa5758 100644
->> --- a/tools/testing/selftests/kvm/s390x/memop.c
->> +++ b/tools/testing/selftests/kvm/s390x/memop.c
->> @@ -14,6 +14,7 @@
->>   
+On Tue, Jun 14, 2022 at 01:22:50AM +0200, Fabio M. De Francesco wrote:
+> On lunedì 13 giugno 2022 20:39:13 CEST David Sterba wrote:
+> > On Sat, Jun 11, 2022 at 03:52:03PM +0200, Fabio M. De Francesco wrote:
+> > > The use of kmap() is being deprecated in favor of kmap_local_page(). 
+> With
+> > > kmap_local_page(), the mapping is per thread, CPU local and not 
+> globally
+> > > visible.
+> > > 
+> > > Therefore, use kmap_local_page() / kunmap_local() in zstd.c because in
+> > > this file the mappings are per thread and are not visible in other
+> > > contexts; meanwhile refactor zstd_compress_pages() to comply with 
+> nested
+> > > local mapping / unmapping ordering rules.
+> > > 
+> > > Tested with xfstests on a QEMU + KVM 32 bits VM with 4GB of RAM and
+> > > HIGHMEM64G enabled.
+> > > 
+> > > Cc: Filipe Manana <fdmanana@kernel.org>
+> > > Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> > > Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > > ---
+> > > 
+> > > @@ -477,15 +479,16 @@ int zstd_compress_pages(struct list_head *ws, 
+> struct address_space *mapping,
+> > >  		/* Check if we need more input */
+> > >  		if (workspace->in_buf.pos == workspace->in_buf.size) {
+> > >  			tot_in += PAGE_SIZE;
+> > > -			kunmap(in_page);
+> > > +			kunmap_local(workspace->out_buf.dst);
+> > > +			kunmap_local((void *)workspace->in_buf.src);
+> > 
+> > Why is the cast needed?
 > 
-> [...]
+> As I wrote in an email I sent some days ago ("[RFC PATCH] btrfs: Replace 
+> kmap() with kmap_local_page() in zstd.c")[1] I get a series of errors like 
+> the following:
 > 
->>   int main(int argc, char *argv[])
->>   {
->> -	int memop_cap, extension_cap;
->> +	int memop_cap, extension_cap, idx;
->>   
->>   	setbuf(stdout, NULL);	/* Tell stdout not to buffer its content */
->>   
->> +	ksft_print_header();
->> +
->>   	memop_cap = kvm_check_cap(KVM_CAP_S390_MEM_OP);
->>   	extension_cap = kvm_check_cap(KVM_CAP_S390_MEM_OP_EXTENSION);
->>   	if (!memop_cap) {
->> -		print_skip("CAP_S390_MEM_OP not supported");
->> -		exit(KSFT_SKIP);
->> +		ksft_exit_skip("CAP_S390_MEM_OP not supported.\n");
->>   	}
->>   
->> -	test_copy();
->> -	if (extension_cap > 0) {
->> -		test_copy_key();
->> -		test_copy_key_storage_prot_override();
->> -		test_copy_key_fetch_prot();
->> -		test_copy_key_fetch_prot_override();
->> -		test_errors_key();
->> -		test_termination();
->> -		test_errors_key_storage_prot_override();
->> -		test_errors_key_fetch_prot_override_not_enabled();
->> -		test_errors_key_fetch_prot_override_enabled();
->> -	} else {
->> -		print_skip("storage key memop extension not supported");
->> +	ksft_set_plan(ARRAY_SIZE(testlist));
->> +
->> +	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
->> +		if (testlist[idx].extension >= extension_cap) {
+> /usr/src/git/kernels/linux/fs/btrfs/zstd.c:547:33: warning: passing 
+> argument 1 of '__kunmap_local' discards 'const' qualifier from pointer 
+> target type [-Wdiscarded-qualifiers]
+>   547 |   kunmap_local(workspace->in_buf.src);
+>       |                ~~~~~~~~~~~~~~~~~^~~~
+> /usr/src/git/kernels/linux/include/linux/highmem-internal.h:284:17: note: 
+> in definition of macro 'kunmap_local'
+>   284 |  __kunmap_local(__addr);     \
+>       |                 ^~~~~~
+> /usr/src/git/kernels/linux/include/linux/highmem-internal.h:92:41: note: 
+> expected 'void *' but argument is of type 'const void *'
+>    92 | static inline void __kunmap_local(void *vaddr)
+>       |                                   ~~~~~~^~~~~
 > 
-> This is reversed, should be
+> Therefore, this is a (bad?) hack to make these changes compile.
+
+I think it's a bad practice and that API that does not modify parameters
+should declare the pointers const. Type casts should be used in
+justified cases and not to paper over fixable issues.
+
+> A better solution is changing the prototype of __kunmap_local(); I
+> suppose that Andrew won't object, but who knows?
 > 
->     		if (testlist[idx].extension <= extension_cap) {
-> or
-> 		if (extension_cap >= testlist[idx].extension) {
+> (+Cc Andrew Morton).
+> 
+> I was waiting for your comments. At now I've done about 15 conversions 
+> across the kernel but it's the first time I had to pass a pointer to const 
+> void to kunmap_local(). Therefore, I was not sure if changing the API were 
+> better suited (however I have already discussed this with Ira).
 
-Drat! The patch is already in Paolo's queue ... could you please send a 
-patch to fix this, so that Paolo can either squash it (not sure whether 
-that's still feasible) or queue it, too?
-
-> I'd prefer the latter.
-
-Me too.
-
-  Thanks,
-   Thomas
-
+IMHO it should be fixed in the API.

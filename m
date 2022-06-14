@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8FF54B3D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A203F54B3D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243719AbiFNOtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45020 "EHLO
+        id S245037AbiFNOt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353779AbiFNOtK (ORCPT
+        with ESMTP id S235039AbiFNOt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:49:10 -0400
-Received: from mail-ej1-x649.google.com (mail-ej1-x649.google.com [IPv6:2a00:1450:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9DE622B16
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:49:07 -0700 (PDT)
-Received: by mail-ej1-x649.google.com with SMTP id l2-20020a170906078200b006fed42bfeacso2969384ejc.16
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:49:07 -0700 (PDT)
+        Tue, 14 Jun 2022 10:49:57 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BEF91EEDB;
+        Tue, 14 Jun 2022 07:49:56 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id u12so17637492eja.8;
+        Tue, 14 Jun 2022 07:49:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=f1NsV1WL/3Cu5HsrxjnodRBUD3ku1jNNTcExFOPtw8Q=;
-        b=al9FrbtHB6hB3HQYB0ocqE+/toR3+Zyie77HTHacz6lBVeiSjBBpqTYTMHDrDg4YqU
-         UlHQEBf9E9/D9nTkh9GUZhIldKcB7UOhIH90qqF6Nhfjn4Bq9Vj79utZbWD84hqcUECy
-         3TVyyarRsH6Y/xaTYSx2hiaMeaQsnzy1oNgcqtnwCywR+hIBjNrD+46yDdUmYkyw+RBb
-         RelxSqDfj/8CwgQZhoQsABEbZWwYfSxDPcgxYJNytaeWQqr1gJRPUwmUsP7UyeWeGiu2
-         h69JLLvWiBQVbGLN4CHMeR+cVPgPIFnIeRhpCwQusREfkd7m7lhDPMZAe8y4VTJnUIiO
-         90qQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9qHhTGxxY9/waiBpfU6mqYtlay9MtThobDAeZOTJkHQ=;
+        b=fiNUu/SiNf33k6dJaZ95un7DWP2Yv+shAdb6ZksmWhtZDwHnC1BMu7T0xWkn4OuqOQ
+         X8vMKc7WNB9H83uqjV2aYPfLzniZmqsHRgljLiyxXBgOVblJUN9EOlIZJLes941Jh1+I
+         7qdhMuxy4eRi1VAj2ttGP3MatHBgada6EUAhrycVnCJSxHu/wIV/iUdvQlglzhLIoVpX
+         N02iJ4d85ICFofTyXu3SKW0M/jixATZbrzpdwh/QcdrN2OoXD97YAamPIE2pT+ANVCib
+         RzZdCGdvoCQb1NLCuU0ftoW8xMaMaDmf+/0+4MW6k0ImoMOgBg/wp8CGFGnyXZ+PI9JS
+         EHTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=f1NsV1WL/3Cu5HsrxjnodRBUD3ku1jNNTcExFOPtw8Q=;
-        b=p2g+6Jq9Mo9tAbPf23DaiWx0ENUQWIyJ7b52jKOxD6C4ua0viu4XLHK4U9H1tYHFaN
-         Nx2CKvDasKG3jiK4au3bzzGeVoCMx0D6zIz86Hzg6C9Xj3/pgC7De6pxJuKvVRez25I2
-         Q++iT7JWKUflvZjZKERJ/bFemiM0g/Lshj5xuedypeDVXbyPfr4oeUlac2RMQWGWhaJQ
-         aDZBCu3KlFc7GUnX6JGdZ3UqOCLPwLvovy1zeZ0kGRKrNEKopS6jkKD0wwZYazc9kf61
-         lVkZQhABHsZdw2OPLLg4yPYA/oG96O+eEOx7rKKHJn1KtsoouHpS5K8zxN4cNK3mQwAJ
-         koVg==
-X-Gm-Message-State: AOAM532cdgyt2cX7oJUKXV7g5xndRcALgjmetP8TKGQaPk8fz0/xs/qv
-        8OpX5bqWGnrpD6TGmFihUJhiZQblHec=
-X-Google-Smtp-Source: ABdhPJwiyOTbJy7/Z19IQ0EL5TB6fB6fce6EnvsVdpqxlH/pXLatowNyuBMnTH7ww5XL7NmjFtiQoYXCqyo=
-X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:3c7f:9830:1892:19a7])
- (user=glider job=sendgmr) by 2002:a05:6402:1f0e:b0:42d:e38a:51f7 with SMTP id
- b14-20020a0564021f0e00b0042de38a51f7mr6773121edb.68.1655218146192; Tue, 14
- Jun 2022 07:49:06 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 16:48:53 +0200
-Message-Id: <20220614144853.3693273-1-glider@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH] [RFC] Initialization of unused function parameters
-From:   Alexander Potapenko <glider@google.com>
-To:     glider@google.com
-Cc:     Evgenii Stepanov <eugenis@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Marco Elver <elver@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Buka <vitalybuka@google.com>,
-        linux-kernel@vger.kernel.org, linux-toolchains@vger.kernel.org
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9qHhTGxxY9/waiBpfU6mqYtlay9MtThobDAeZOTJkHQ=;
+        b=Dt4ybsnn2cfzbGqFcrmvATMWx824DSpR4LJvG+nNehsMoXx94CHKnhLJaj7RSXfUL5
+         CN9FHd6iNOvEjlVBxQ9xSjSRTSZCyyuQBwy+M1ZDqWXHEPb5vaJd0id7vdSGiweAPlbo
+         inEHnJxnliBRTDw0agI22S1Kjn3WNFqEFVyNqrDolxirRt9VeQsRWQdZ7Z8/vbUhmWhx
+         JFDp0bU+GhqyxivYCJ3WrAOk+CBw+sYEB60CQaijtb9tdSeFXpcipfPKp2MOdGXi3Jg5
+         hEuW7+RVx3i8OlenCGhDNlBeClWUulWGb6LiM5RVhKznyv1Tczn1mgkYfsNghljGkyV+
+         J7pw==
+X-Gm-Message-State: AOAM533DBUHfsKswlUH1AX98sD+YVGirrs/DeBB4kSlj80+IMz3ilw02
+        c1RJqOGIMz7A7fbEYYPHQdAlwq6PTEcq95bmgMTcg00XtH3phA==
+X-Google-Smtp-Source: ABdhPJykAc4fFrO2Ai+35/pU6BtImZMf+AWI71ybB0/OdOr3BkqeJxAkOP/SXOpcaHNU5Q0y3C5hAET/hbdgSlfXFsQ=
+X-Received: by 2002:a17:906:c7c1:b0:711:d2e9:99d0 with SMTP id
+ dc1-20020a170906c7c100b00711d2e999d0mr4636129ejb.639.1655218195050; Tue, 14
+ Jun 2022 07:49:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220614142704.155496-1-jjhiblot@traphandler.com> <20220614142704.155496-3-jjhiblot@traphandler.com>
+In-Reply-To: <20220614142704.155496-3-jjhiblot@traphandler.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 14 Jun 2022 16:49:13 +0200
+Message-ID: <CAHp75Vc1=hNzrVeA9J_TbVEWFO4b-8+VjdsyJVMRTRkX5yhNhQ@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] leds: Add driver for the TLC5925 LED controller
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, krzk+dt@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,72 +69,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Consider the patch below, where under certain circumstances
-initialization of `unsigned seq` and `struct inode *inode` passed into
-step_into() may be skipped.  In particular, if the call to lookup_fast()
-in walk_component() returns NULL, and lookup_slow() returns a valid
-dentry, then the `seq` and `inode` will remain uninitialized until the
-call to step_into() (see [1] for more info).
+On Tue, Jun 14, 2022 at 4:27 PM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
+>
+> The TLC5925 is a 16-channels constant-current LED sink driver.
+> It is controlled via SPI but doesn't offer a register-based interface.
+> Instead it contains a shift register and latches that convert the
+> serial input into a parallel output.
+>
+> Datasheet: https://www.ti.com/lit/ds/symlink/tlc5925.pdf
 
-Right now step_into() correctly handles this and does not use the
-uninitialized values, but explicitly initializing them will guarantee
-their sanity in the case of future changes to step_into().
+>
 
-The bigger question I want to raise here is whether we want to
-discourage passing uninitialized variables to functions in the kernel
-altogether. While this is not required by the C standard (see the whole
-discussion at [2]), KMSAN can help with detecting cases where uninits
-are passed to functions (there is a more aggressive
--fsanitize-memory-param-retval compiler option for that). This is
-somewhat similar to -Wmaybe-uninitialized, but works dynamically and has
-no false positives.
+No blank lines are allowed in the tag block.
 
-Would initializing function parameters be a net benefit to the kernel?
+> Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
 
-[1] https://github.com/ClangBuiltLinux/linux/issues/1648#issuecomment-1146608063
-[2] https://github.com/ClangBuiltLinux/linux/issues/1648
+...
 
-Cc: Evgenii Stepanov <eugenis@google.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Marco Elver <elver@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Vitaly Buka <vitalybuka@google.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-toolchains@vger.kernel.org
-Signed-off-by: Alexander Potapenko <glider@google.com>
----
- fs/namei.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> +#include <linux/err.h>
+> +#include <linux/leds.h>
+> +#include <linux/module.h>
+> +#include <linux/property.h>
+> +#include <linux/spi/spi.h>
 
-diff --git a/fs/namei.c b/fs/namei.c
-index 509657fdf4f56..dde370338f5d6 100644
---- a/fs/namei.c
-+++ b/fs/namei.c
-@@ -2001,8 +2001,8 @@ static const char *handle_dots(struct nameidata *nd, int type)
- static const char *walk_component(struct nameidata *nd, int flags)
- {
- 	struct dentry *dentry;
--	struct inode *inode;
--	unsigned seq;
-+	struct inode *inode = NULL;
-+	unsigned seq = 0;
- 	/*
- 	 * "." and ".." are special - ".." especially so because it has
- 	 * to be able to know about the current root directory and
-@@ -3349,8 +3349,8 @@ static const char *open_last_lookups(struct nameidata *nd,
- 	struct dentry *dir = nd->path.dentry;
- 	int open_flag = op->open_flag;
- 	bool got_write = false;
--	unsigned seq;
--	struct inode *inode;
-+	unsigned seq = 0;
-+	struct inode *inode = NULL;
- 	struct dentry *dentry;
- 	const char *res;
- 
+This misses a few headers that this code is direct user of:
+container_of.h
+gpio/consumer.h
+types.h
+
+...
+
+> +       // assign_bit() is atomic, no need for lock
+
+Comment is useless, since it's a pattern that is used in the kernel:
+__op is non-atomic, op is atomic.
+
+...
+
+> +
+> +
+
+One blank line is enough
+
+...
+
+> +
+> +
+
+Ditto.
+
+...
+
+> +       gpios = devm_gpiod_get_array(dev, "output-enable-b", GPIOD_OUT_LOW);
+> +       if (IS_ERR(gpios)) {
+> +               return dev_err_probe(dev, PTR_ERR(gpios),
+> +                             "Unable to get the 'output-enable-b' gpios\n");
+> +       }
+
+{} are not needed, and you may put the return on one line.
+
+...
+
+> +       count = device_get_child_node_count(dev);
+> +       if (!count) {
+> +               dev_err(dev, "no led defined.\n");
+> +               return -ENODEV;
+> +       }
+
+It's fine to use return dev_err_probe() in such cases like above, it's
+written in the documentation.
+
+...
+
+> +               ret = fwnode_property_read_u32(child, "reg", &idx);
+> +               if (ret || idx >= max_num_leds) {
+> +                       dev_warn(dev, "%s: invalid reg value. Ignoring.\n",
+> +                               fwnode_get_name(child));
+
+%pfw / %pfwP ?
+
+> +                       fwnode_handle_put(child);
+> +                       continue;
+> +               }
+
+...
+
+> +               ret = devm_led_classdev_register_ext(dev, cdev, &init_data);
+> +               if (ret) {
+> +                       dev_warn(dev, "%s: cannot create LED device.\n",
+> +                               fwnode_get_name(child));
+
+Ditto.
+
+> +                       fwnode_handle_put(child);
+> +                       continue;
+> +               }
+
 -- 
-2.36.1.476.g0c4daa206d-goog
-
+With Best Regards,
+Andy Shevchenko

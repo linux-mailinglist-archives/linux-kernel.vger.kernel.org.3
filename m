@@ -2,60 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5892454AF61
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:38:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3209F54AF7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234631AbiFNLik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 07:38:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56362 "EHLO
+        id S242957AbiFNLrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 07:47:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241547AbiFNLi1 (ORCPT
+        with ESMTP id S241585AbiFNLrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 07:38:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF1841610;
-        Tue, 14 Jun 2022 04:38:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Jun 2022 07:47:37 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19859DFEA
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:47:37 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3805A611E8;
-        Tue, 14 Jun 2022 11:38:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE281C3411E;
-        Tue, 14 Jun 2022 11:38:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655206705;
-        bh=dt/7IRihakfa0z3FSC6b8H9fkTidVQtEjvRx/bxxSvU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NBdiwjjoUG/a0z6QSAhuQ5VH2blwUuiBYDJ+/PBalF5wXzvY5CFYKt2DY0A/GesNa
-         KKz0FfRDorBtNoLNLvyeFQ1i9JmUU3rh5NismpJLJ7peSIbQeZ3/cFxOyP43DGB2Iu
-         qnavlnXX/y7ZrsWM4qgSWJgEplb1xn78yWHqVltC69a1CWNhREf5wVU5imBVLHAzId
-         rFABMWlHhPVKndbMjHHdN1+rGLMwp8V9ZHSJnA8wPLtiHj+m6H8bJYIMarciFZODk1
-         adhF5SBM7gX4QVBR/D3VYdKueJrSItwtMSIVEj+S/tkccVBYMZMlNIt/SlFdprZs7+
-         h62aeEQm8RWVQ==
-Date:   Tue, 14 Jun 2022 12:47:35 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: Re: [PATCH v4 2/2] iio: adc: ad4130: add AD4130 driver
-Message-ID: <20220614124735.1d712a4a@jic23-huawei>
-In-Reply-To: <37ac71be-78d6-a266-045b-18164d715e57@gmail.com>
-References: <20220608091238.403897-1-cosmin.tanislav@analog.com>
-        <20220608091238.403897-3-cosmin.tanislav@analog.com>
-        <CAHp75Vdvng-fxt-p2bHJiF8i967eh1o_MUgDFN_odhW0sLu69A@mail.gmail.com>
-        <37ac71be-78d6-a266-045b-18164d715e57@gmail.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C9BDA21B23;
+        Tue, 14 Jun 2022 11:47:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655207255; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=te73DX5kggSfnajOVBmsnuuS8V2hl4yR3sgi0lsOK+M=;
+        b=0aA9MJYYVykJJ7t/bYkVScInYHsGVQV/AdPzpotM/Cim+yIvxT4YZoEudKNODz/67pM4F7
+        pKgrlpT4FcoVNWxC1WVZLUNTNmMHNe6cwhVAn1cNb1duuQTenoeT3VbhJk0eaX8zFaC41U
+        cr9huxnBP8vIgF3zQliFznSAXbmH0pg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655207255;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=te73DX5kggSfnajOVBmsnuuS8V2hl4yR3sgi0lsOK+M=;
+        b=nW75kCYZDixcMtaGdtpfvRxu+/Rr9nI5dsYWSjemPlrB58A1PkhobH2OUYgU5+no/OJntU
+        GJ/f7dQb1TZY8VDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9A963139EC;
+        Tue, 14 Jun 2022 11:47:35 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6GYoJVd1qGLLeQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 14 Jun 2022 11:47:35 +0000
+Message-ID: <ab6880b2-54c2-7fad-3cc6-33d9cdafe5f0@suse.cz>
+Date:   Tue, 14 Jun 2022 13:47:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH] mm: check the function kmalloc_slab return value
+Content-Language: en-US
+To:     tury <renyu@nfschina.com>, cl@linux.com
+Cc:     penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        akpm@linux-foundation.org, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
+        qixu@nfschina.com, hukun@nfschina.com, yuzhe@nfschina.com
+References: <20220613102438.27723-1-renyu@nfschina.com>
+ <20220614083939.13508-1-renyu@nfschina.com>
+ <bb8d41fc-bd13-9563-7c54-2850f131e835@suse.cz>
+ <be9a1d54-0558-dbee-fcac-0f357ea32db9@nfschina.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <be9a1d54-0558-dbee-fcac-0f357ea32db9@nfschina.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,79 +80,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Jun 2022 23:11:51 +0300
-Cosmin Tanislav <demonsingur@gmail.com> wrote:
-
-> On 6/8/22 18:59, Andy Shevchenko wrote:
-> > On Wed, Jun 8, 2022 at 12:19 PM Cosmin Tanislav <demonsingur@gmail.com> wrote:  
-> >>
-> >> AD4130-8 is an ultra-low power, high precision, measurement solution for
-> >> low bandwidth battery operated applications.
-> >>
-> >> The fully integrated AFE (Analog Front-End) includes a multiplexer for up
-> >> to 16 single-ended or 8 differential inputs, PGA (Programmable Gain
-> >> Amplifier), 24-bit Sigma-Delta ADC, on-chip reference and oscillator,
-> >> selectable filter options, smart sequencer, sensor biasing and excitation
-> >> options, diagnostics, and a FIFO buffer.  
-> > 
-> > I believe we may gain a few LoCs by slightly bending the rule of 80.
-> > Also see below.
-> >   
+On 6/14/22 11:26, tury wrote:
 > 
-> I'll only go over the 80 columns limit if Jonathan agrees to it.
-
-
-Where it helps readability I fine with us going past 80.
-I'm not convinced by every case Andy highlights, but many do
-make things easier to read.
-
-
 > 
-> >> +       *size = ad4130_reg_size[reg];
-> >> +       if (!*size)
-> >> +               return -EINVAL;  
-> > 
-> > Is this check necessary?
-> >   
+> 在 2022年06月14日 16:48, Vlastimil Babka 写道:
+>> On 6/14/22 10:39, Ren Yu wrote:
+>>> As the possible failure of the kmalloc_slab,
+>>> it should be better to check it.
+>> AFAIK failure is not possible, kmalloc_slab() is not an allocation function,
+>> it just returns a member of kmalloc_caches array, which is initialized
+>> elsewhere and shouldn't contain NULLs. So the patch seems unnecessary to me.
+>>
+>>> Signed-off-by: Ren Yu <renyu@nfschina.com>
+>>> Reported-by: kernel test robot <lkp@intel.com>
+>>> ---
+>>> v2:
+>>> - fix build waring integer from pointer without a cast
+>>> ---
+>>> ---
+>>>   mm/slab.c | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/mm/slab.c b/mm/slab.c
+>>> index f8cd00f4ba13..72135e555827 100644
+>>> --- a/mm/slab.c
+>>> +++ b/mm/slab.c
+>>> @@ -2064,6 +2064,8 @@ int __kmem_cache_create(struct kmem_cache *cachep,
+>>> slab_flags_t flags)
+>>>       if (OFF_SLAB(cachep)) {
+>>>           cachep->freelist_cache =
+>>>               kmalloc_slab(cachep->freelist_size, 0u);
+>>> +        if (unlikely(ZERO_OR_NULL_PTR(cachep->freelist_cache)))
+>> The usual way is "if (!cachep->freelist_cache)". Not sure why check for ZERO.
+>>
+>>> +            return cachep->freelist_cache;
+>> So in case of NULL this would return NULL, thus 0, but __kmem_cache_create()
+>> return 0 on success, so it's wrong. You would have to return e.g. -ENOMEM.
+> Thanks for the advice ,I'll be re-patching
+
+However that was meant just for your information/learning, the patch is
+still unecessary as I wrote above, so I will not merge it so we don't
+complicate the code needlessly.
+
+>>
+>>>       }
+>>>         err = setup_cpu_cache(cachep, gfp);
+>>
 > 
-> Yes. I haven't described all registers in the table, and the registers
-> can be accessed by the user via the debugfs_reg_access() method.
-
-For that one, probably worth a comment as not immediately obvious.
-
-> 
-
-...
-
-> 
-> >> +       switch (ref_sel) {
-> >> +       case AD4130_REF_REFIN1:
-> >> +               ret = regulator_get_voltage(st->regulators[2].consumer);
-> >> +               break;
-> >> +       case AD4130_REF_REFIN2:
-> >> +               ret = regulator_get_voltage(st->regulators[3].consumer);
-> >> +               break;
-> >> +       case AD4130_REF_AVDD_AVSS:
-> >> +               ret = regulator_get_voltage(st->regulators[0].consumer);
-> >> +               break;
-> >> +       case AD4130_REF_REFOUT_AVSS:
-> >> +               ret = st->int_ref_uv;
-> >> +               break;
-> >> +       default:
-> >> +               ret = -EINVAL;
-> >> +               break;
-> >> +       }  
-> >   
-> >> +       if (ret < 0)
-> >> +               return dev_err_probe(dev, ret, "Cannot use reference %u\n",
-> >> +                                    ref_sel);  
-> > 
-> > Can it be moved to the caller where it would cleaner to use, I think?
-> > As a good side effect the all above will be shortened to just return directly.
-> >   
-> 
-> I'm pretty sure I remember Jonathan suggested moving it inside the
-> function.
-
-It's possible, though I don't know what my reasoning would have been...
 

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E40054A369
+	by mail.lfdr.de (Postfix) with ESMTP id 959CD54A36A
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244190AbiFNBGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 21:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45556 "EHLO
+        id S244730AbiFNBGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 21:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238764AbiFNBGI (ORCPT
+        with ESMTP id S244185AbiFNBGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 21:06:08 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D2130559
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 18:06:08 -0700 (PDT)
+        Mon, 13 Jun 2022 21:06:11 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F68A30559
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 18:06:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655168768; x=1686704768;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=nFj8bXgWVxJlwDb4sRNbxPWX4Xmvz6Nu7gmzngFJL3U=;
-  b=gvGBR6+UmquziCGh+HVlvF4bIkima24XWC9RUFpUvVm4ivWK/l+DqYh3
-   F+oNr6dxzfqadtVp3JJJMjNUUxGg8qUdutSx+i+EJ7EhBt3Ye+KGVukx2
-   9PrWIAIQYWuF3GfGY1QlzxViMyVNnRy96EYRSPfyctzeK8NRBuyieXaKP
-   U=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 13 Jun 2022 18:06:08 -0700
+  t=1655168770; x=1686704770;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4RDNeE2rQVGVT6YiB5giqhdc4FbcjhagG1hZTnuanCo=;
+  b=a88fy5gcUq0WMbxswLzN8TUjlFLrvLp51DG8gaEw4L+KQ6YYoJM0NbB6
+   sZ/y8t3hDnAFrMMfbQFaZg8AZFvgfQ2QEdVg5pM04HlJ/gc5cUzDMuMkd
+   05F8KYAQQbIrmCUxvI5osfe6tRh9IX7nhhMrQGmgfqAmNrCk2iuybACxX
+   M=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 13 Jun 2022 18:06:09 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 18:06:07 -0700
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 18:06:09 -0700
 Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 13 Jun 2022 18:06:07 -0700
+ 15.2.986.22; Mon, 13 Jun 2022 18:06:08 -0700
 Received: from linyyuan-gv.qualcomm.com (10.80.80.8) by
  nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 13 Jun 2022 18:06:05 -0700
+ 15.2.986.22; Mon, 13 Jun 2022 18:06:07 -0700
 From:   Linyu Yuan <quic_linyyuan@quicinc.com>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
@@ -45,10 +45,12 @@ To:     Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>
 CC:     <linux-kernel@vger.kernel.org>,
         Linyu Yuan <quic_linyyuan@quicinc.com>
-Subject: [PATCH v5 0/3] tracing/probes: allow no event name input when create group
-Date:   Tue, 14 Jun 2022 09:04:55 +0800
-Message-ID: <1655168698-19898-1-git-send-email-quic_linyyuan@quicinc.com>
+Subject: [PATCH v5 1/3] tracing: eprobe: remove duplicate is_good_name() operation
+Date:   Tue, 14 Jun 2022 09:04:56 +0800
+Message-ID: <1655168698-19898-2-git-send-email-quic_linyyuan@quicinc.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1655168698-19898-1-git-send-email-quic_linyyuan@quicinc.com>
+References: <1655168698-19898-1-git-send-email-quic_linyyuan@quicinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Content-Type: text/plain
@@ -65,49 +67,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-take kprobe event as example, when create a group of events,
-p[:[GRP/]EVENT] [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS],
-according to this format, we must input EVENT name,
+traceprobe_parse_event_name() already validate group and event name,
+there is no need to call is_good_name() after it.
 
-this change allow only GRP/ input, EVENT name auto generate from KSYM,
-p[:[GRP/][EVENT]] [MOD:]KSYM[+OFFS]|KADDR [FETCHARGS]
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
+---
+v2: drop v1 change as it is NACK.
+    add it to remove duplicate is_good_name().
+v3: move it as first patch.
+v4: no change
+v5: add Acked-by tag
 
-siliar change apply to eprobe and uprobe.
+ kernel/trace/trace_eprobe.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-V1: https://lore.kernel.org/lkml/1651397651-30454-1-git-send-email-quic_linyyuan@quicinc.com/
-
-V2: fix remove comment in V1 patch1,
-    remove v1 patch2 as it is NACK.
-
-v3: (v2 link: https://lore.kernel.org/lkml/1653795294-19764-1-git-send-email-quic_linyyuan@quicinc.com/)
-    add selftest cases for kprobe and eprobe event,
-    remove macro used in v1,v2,
-    change location to generate eprobe event name.
-
-v4: (v3 link: https://lore.kernel.org/lkml/1653978552-18637-1-git-send-email-quic_linyyuan@quicinc.com/)
-    fix comment of kprobe/eprobe test case.
-
-v5: (v4: https://lore.kernel.org/lkml/1654171861-24014-1-git-send-email-quic_linyyuan@quicinc.com/)
-    for eprobe, when only input a "SYSTEM.", it is invalid.
-    add Acked-by from Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Linyu Yuan (3):
-  tracing: eprobe: remove duplicate is_good_name() operation
-  tracing: auto generate event name when create a group of events
-  selftests/ftrace: add test case for GRP/ only input
-
- Documentation/trace/kprobetrace.rst                |  8 +++----
- Documentation/trace/uprobetracer.rst               |  8 +++----
- kernel/trace/trace.c                               |  8 +++----
- kernel/trace/trace_dynevent.c                      |  2 +-
- kernel/trace/trace_eprobe.c                        | 27 +++++++++++-----------
- kernel/trace/trace_kprobe.c                        | 16 ++++++++-----
- kernel/trace/trace_probe.c                         |  6 +++++
- kernel/trace/trace_uprobe.c                        | 12 ++++++----
- .../ftrace/test.d/dynevent/add_remove_eprobe.tc    |  9 +++++++-
- .../ftrace/test.d/dynevent/add_remove_kprobe.tc    |  7 ++++++
- 10 files changed, 65 insertions(+), 38 deletions(-)
-
+diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+index 7d44785..17d64e3 100644
+--- a/kernel/trace/trace_eprobe.c
++++ b/kernel/trace/trace_eprobe.c
+@@ -878,16 +878,12 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+ 		sanitize_event_name(buf1);
+ 		event = buf1;
+ 	}
+-	if (!is_good_name(event) || !is_good_name(group))
+-		goto parse_error;
+ 
+ 	sys_event = argv[1];
+ 	ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2,
+ 					  sys_event - argv[1]);
+ 	if (ret || !sys_name)
+ 		goto parse_error;
+-	if (!is_good_name(sys_event) || !is_good_name(sys_name))
+-		goto parse_error;
+ 
+ 	mutex_lock(&event_mutex);
+ 	event_call = find_and_get_event(sys_name, sys_event);
 -- 
 2.7.4
 

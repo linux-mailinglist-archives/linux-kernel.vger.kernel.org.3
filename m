@@ -2,78 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60F254A3C6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A29A54A3C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347395AbiFNBrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 21:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54976 "EHLO
+        id S1348779AbiFNBsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 21:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241377AbiFNBre (ORCPT
+        with ESMTP id S234470AbiFNBs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 21:47:34 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4236EF70
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 18:47:28 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id a68-20020a25ca47000000b006605f788ff1so6378769ybg.16
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 18:47:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=l4PjIvONm1IQKFepEMuDqPyve0EvuaStAKHleWOI5U4=;
-        b=keMrD0lK99MmEmZqNHED9SqQIvx29ap+MgANfW658dwlfZvJrsoNWlI9FXDBxqa+za
-         VARGdXXoJmn5KryQWZj+8ScXKK6VXqNwAmxBq3WrvJtTYqyF49pPQeabsvoQ33dd7Zm9
-         GUdC5cio7eBOfzPKl6VgquXY1jLeMHFBa0mblXnksXxjh9ZBheHBbS2YBLkmyB2cnv0z
-         RODtwrbl065MJcM4aR2i0vB2oIgwB4RMKqps974SsAItXpR+hUM9whwp/5wZxzkdRDOz
-         ZEJKu26kcTh5Mj7t2oGlCPJPuLSeewLtsuZoU0kfm6Fy8cQ92KsRwUtE31ZwuEw4o661
-         pfTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=l4PjIvONm1IQKFepEMuDqPyve0EvuaStAKHleWOI5U4=;
-        b=JFOiZTMYRytOVrT7ANR0h0HlFzP0Y1OZjzoPSNFthlYWxO1zYhDCX5pMxZl9fQ84uf
-         qdXbBJhwLxfbMPSY527dsFJLwi12UvrqVCAid849KbLar9KXNQwwYtN1x9DEtFwMsxuQ
-         7C0ChSx2M2nkICcWKz2wRBgrNEFyu8wgq97n/k+9477lHXfGjcKkqdTKFY4MzMiMkB6g
-         WMfogIIHdi/xlCJQtzqbTF1K64ECM9L3+hQqNHn43rMrGitckLvrtsADPkidLvKQ7J/t
-         PiQ8tCzB1JDIHnaP8215/HqLKDI5SJ4vWqIAVaTCoxYzxzc7UybOrbMcTZFXwGD5q3j/
-         7VIw==
-X-Gm-Message-State: AJIora+TMiXBH6nUIdGznKhL7x66xdEkMILmljj5e35lbqGpv+DCN9JD
-        RDQ6uTWSxuY09w36I8Afs+zQ1CP3nUnQ
-X-Google-Smtp-Source: AGRyM1subzJdwRtf+vAOstyD6tqNevSviIR17aL9d/daU5mnA6A1DY7dA9Gj0iqv9t7BAYwDQeVntF57tsLy
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2cd:202:e4b4:1d0c:1c56:a7ed])
- (user=irogers job=sendgmr) by 2002:a25:3c45:0:b0:664:cf75:c2d6 with SMTP id
- j66-20020a253c45000000b00664cf75c2d6mr2520288yba.446.1655171248020; Mon, 13
- Jun 2022 18:47:28 -0700 (PDT)
-Date:   Mon, 13 Jun 2022 18:47:14 -0700
-Message-Id: <20220614014714.1407239-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH] perf bpf: 8 byte align bpil data
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Mon, 13 Jun 2022 21:48:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD63C2AE33;
+        Mon, 13 Jun 2022 18:48:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1C809CE1763;
+        Tue, 14 Jun 2022 01:48:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C7EC3411E;
+        Tue, 14 Jun 2022 01:48:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655171303;
+        bh=kHVpMpq++uoILG8nEpsnJIRDObfNN0ura8aEr/40J5g=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PHLniVGe96eCVgQd6i8SCb2VQ8SV2TbyBAvvsjPqz+jBf0JxbnHKYBXaBJgAin57x
+         l23HXLkgQiLI1XRR9uTlcpitTheTlSWA01VSo/6F8MU/7SbitF6DvTOJW16KsjlUZr
+         L2SATQZ6jbpEzm53tWAXBk48vhfthzhWfSfQiubKyxynPTycF5CwGEZyuQYSHlh+dY
+         dpfuZXLECuvU6XTTZPJvUW/SZxr96ZaNDzeDzRdEB/iANHSDdEnoj8RljdoauDMEe6
+         Vxzdc+FvG3dCMN9lcfhmc5tXsxxJzw++7El1+Vbm4pv3JmQKOAg/Y5xkMOzskV7SuF
+         yaZRfrhieTW3Q==
+Message-ID: <1544ed72-0865-6cff-e9fa-02a1eb1ed50d@kernel.org>
+Date:   Tue, 14 Jun 2022 09:48:17 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] docs: filesystems: f2fs: fix description about
+ compress ioctl
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>, Chao Liu <chaoliu719@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
+        Wayne Zhang <zhangwen@coolpad.com>,
+        Chao Liu <liuchao@coolpad.com>
+References: <20220613020800.3379482-1-chaoliu719@gmail.com>
+ <Yqaw3VTD46PAMN8O@casper.infradead.org> <Yqbu+BArbUNGvft9@liuchao-VM>
+ <87czfc1nr8.fsf@meer.lwn.net>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <87czfc1nr8.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,56 +64,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bpil data is accessed assuming 64-bit alignment resulting in undefined
-behavior as the data is just byte aligned. With an -fsanitize=undefined
-build the following errors are observed:
+On 2022/6/14 1:23, Jonathan Corbet wrote:
+> Chao Liu <chaoliu719@gmail.com> writes:
+> 
+>> On Mon, Jun 13, 2022 at 04:37:01AM +0100, Matthew Wilcox wrote:
+>>> On Mon, Jun 13, 2022 at 10:08:00AM +0800, Chao Liu wrote:
+>>>> v2:
+>>>> - s/file size/filesize/
+>>>
+>>> Why would you change it to be wrong?
+>>>
+>>
+>> This is a suggestion from Chao Yu. Maybe he has some other considerations.
+> 
+> Sorry, I should have replied to that.  I disagree with that suggestion.
+> "Filesize" is not an English word, and there doesn't seem to be any
+> reason to use it in our docs.
 
-$ sudo perf record -a sleep 1
-util/bpf-event.c:310:22: runtime error: load of misaligned address 0x55f61084520f for type '__u64', which requires 8 byte alignment
-0x55f61084520f: note: pointer points here
- a8 fe ff ff 3c  51 d3 c0 ff ff ff ff 04  84 d3 c0 ff ff ff ff d8  aa d3 c0 ff ff ff ff a4  c0 d3 c0
-             ^
-util/bpf-event.c:311:20: runtime error: load of misaligned address 0x55f61084522f for type '__u32', which requires 4 byte alignment
-0x55f61084522f: note: pointer points here
- ff ff ff ff c7  17 00 00 f1 02 00 00 1f  04 00 00 58 04 00 00 00  00 00 00 0f 00 00 00 63  02 00 00
-             ^
-util/bpf-event.c:198:33: runtime error: member access within misaligned address 0x55f61084523f for type 'const struct bpf_func_info', which requires 4 byte alignment
-0x55f61084523f: note: pointer points here
- 58 04 00 00 00  00 00 00 0f 00 00 00 63  02 00 00 3b 00 00 00 ab  02 00 00 44 00 00 00 14  03 00 00
+My bad, out of mind at that time, sorry for my wrong suggestion...
 
-Correct this by rouding up the data sizes and aligning the pointers.
+> 
+> <checks>
+> 
+> We have to occurrences now - one already in the f2fs docs.  I think we
+> shouldn't add more.  So my plan is to apply the first version of this
+> patch.  Chao Liu: is there a reason why you didn't add the Reviewed-by
+> from Chao Yu in the second version?  Chao Yu: is that tag still
+> applicable even without the "filesize" change?
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/bpf-utils.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Yes.
 
-diff --git a/tools/perf/util/bpf-utils.c b/tools/perf/util/bpf-utils.c
-index e271e05e51bc..80b1d2b3729b 100644
---- a/tools/perf/util/bpf-utils.c
-+++ b/tools/perf/util/bpf-utils.c
-@@ -149,11 +149,10 @@ get_bpf_prog_info_linear(int fd, __u64 arrays)
- 		count = bpf_prog_info_read_offset_u32(&info, desc->count_offset);
- 		size  = bpf_prog_info_read_offset_u32(&info, desc->size_offset);
- 
--		data_len += count * size;
-+		data_len += roundup(count * size, sizeof(__u64));
- 	}
- 
- 	/* step 3: allocate continuous memory */
--	data_len = roundup(data_len, sizeof(__u64));
- 	info_linear = malloc(sizeof(struct perf_bpil) + data_len);
- 	if (!info_linear)
- 		return ERR_PTR(-ENOMEM);
-@@ -180,7 +179,7 @@ get_bpf_prog_info_linear(int fd, __u64 arrays)
- 		bpf_prog_info_set_offset_u64(&info_linear->info,
- 					     desc->array_offset,
- 					     ptr_to_u64(ptr));
--		ptr += count * size;
-+		ptr += roundup(count * size, sizeof(__u64));
- 	}
- 
- 	/* step 5: call syscall again to get required arrays */
--- 
-2.36.1.476.g0c4daa206d-goog
+Thanks,
 
+> 
+> Thanks,
+> 
+> jon

@@ -2,93 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3C454B332
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED43354B339
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:30:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245650AbiFNO3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:29:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49878 "EHLO
+        id S1343928AbiFNOaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244280AbiFNO3b (ORCPT
+        with ESMTP id S1343777AbiFNOaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:29:31 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062D335DC2;
-        Tue, 14 Jun 2022 07:29:27 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25EDBleG007050;
-        Tue, 14 Jun 2022 14:29:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=MPDs1tDwI/bhZ/jxH5CxJw/uj6DNiMlaJ1nN858Rm10=;
- b=LHfeN4ZxoRRNJ2ouIdbb63VsOXpjr3p+yZoDZu4Ob8rhVS8XG114Et0d0GLcG50+VXQg
- oqZmK0pLXIuCmRV6i4EWq3bg11IaKLTiInYQuvAw4TsfbTtUMdvjmp9eI+/PR6wExqcC
- CHhKiCZIzKnIrhekLtdGPm3mupRXcExfj8r9m/1w7W4RpW8Vm6+TP2klSzf7a4t3WCdY
- qTj4jQvsM8Djf+Q3vjiUypUa4oeKN21clZGMBB2fnrOdYR2f61xZ7krOtKITSpUIc8Wk
- vexwdi7UshwZQNFdoSLTCEGGfdOl0cGfSKHndZ56T/GBFvVlYiIJxVV8z8SWWdIzfhiY lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gppbr3jhu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jun 2022 14:29:26 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25EDEf7T013656;
-        Tue, 14 Jun 2022 14:29:26 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gppbr3jh5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jun 2022 14:29:26 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25EEKZ6A003299;
-        Tue, 14 Jun 2022 14:29:24 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma03ams.nl.ibm.com with ESMTP id 3gmjp9cgdg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jun 2022 14:29:24 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25EETLg320644344
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Jun 2022 14:29:21 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 59AD5A404D;
-        Tue, 14 Jun 2022 14:29:21 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DEA0DA4040;
-        Tue, 14 Jun 2022 14:29:20 +0000 (GMT)
-Received: from [9.145.182.137] (unknown [9.145.182.137])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Jun 2022 14:29:20 +0000 (GMT)
-Message-ID: <80d26ca8-6617-c86b-f92c-5df720966ebf@linux.ibm.com>
-Date:   Tue, 14 Jun 2022 16:29:20 +0200
+        Tue, 14 Jun 2022 10:30:01 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A539ADEFC;
+        Tue, 14 Jun 2022 07:29:58 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 4FEB01F9A9;
+        Tue, 14 Jun 2022 14:29:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655216997; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iGoaGjGP6j/udP5ooaRRpjCZ4pfh/sVO4ewkgPS8RJ0=;
+        b=FaGGYI2cAI6HiApREyD21snUqkJFheeNopmLSWacycbmwcmjsm2GsWL9/2W0oO39khzIS6
+        6wMJcRuDJy0f+Nux70OX2DehF/oGD3uzpCFFHEf+1iPE86RmgaTO2tJx//27rzYnDbyTp7
+        46vHe/bFhK2ZO4qonhGhLxEtPyLIkoM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655216997;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=iGoaGjGP6j/udP5ooaRRpjCZ4pfh/sVO4ewkgPS8RJ0=;
+        b=cwUGXG7IP061V1p/bwmD6vTjS9UnnD599g/2i+GRLU7cYZ9o56dt+WeaOTmfOKGPEEkqYd
+        WmoWUhmqPtNrV+Aw==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 11C3F2C141;
+        Tue, 14 Jun 2022 14:29:56 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 03D76A062E; Tue, 14 Jun 2022 16:29:55 +0200 (CEST)
+Date:   Tue, 14 Jun 2022 16:29:55 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, stable@vger.kernel.org,
+        Jchao Sun <sunjunchao2870@gmail.com>, Jan Kara <jack@suse.cz>
+Subject: Re: [PATCH] writeback: Avoid grabbing the wb if the we don't add it
+ to dirty list
+Message-ID: <20220614142955.7wvv5dfqdcwp5ftw@quack3.lan>
+References: <20220614124618.2830569-1-suzuki.poulose@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
-        david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        mimu@linux.ibm.com, nrb@linux.ibm.com
-References: <20220603065645.10019-1-imbrenda@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH v11 00/19] KVM: s390: pv: implement lazy destroy for
- reboot
-In-Reply-To: <20220603065645.10019-1-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nwcCTi7XUGJYEZ6cBH4Yse1cuNw65_d2
-X-Proofpoint-ORIG-GUID: CZS39u7CxiW7QMi-0pcubsD_djkoeZkq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-14_04,2022-06-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=912
- priorityscore=1501 suspectscore=0 impostorscore=0 adultscore=0
- phishscore=0 bulkscore=0 mlxscore=0 malwarescore=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2204290000 definitions=main-2206140054
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614124618.2830569-1-suzuki.poulose@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -97,23 +66,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/22 08:56, Claudio Imbrenda wrote:
-> Previously, when a protected VM was rebooted or when it was shut down,
-> its memory was made unprotected, and then the protected VM itself was
-> destroyed. Looping over the whole address space can take some time,
-> considering the overhead of the various Ultravisor Calls (UVCs). This
-> means that a reboot or a shutdown would take a potentially long amount
-> of time, depending on the amount of used memory.
+On Tue 14-06-22 13:46:18, Suzuki K Poulose wrote:
+> Commit 10e14073107d moved grabbing the wb for an inode early enough,
+> skipping the checks whether if this inode needs to be really added
+> to the dirty list (backed by blockdev or unhashed inode). This causes
+> a crash with kdevtmpfs as below, on an arm64 Juno board, as below:
 > 
-> This patchseries implements a deferred destroy mechanism for protected
-> guests. When a protected guest is destroyed, its memory can be cleared
-> in background, allowing the guest to restart or terminate significantly
-> faster than before.
+> [    1.446493] printk: console [ttyAMA0] printing thread started
+> [    1.447195] printk: bootconsole [pl11] printing thread stopped
+> [    1.467193] Unable to handle kernel paging request at virtual address ffff800871242000
+> [    1.467793] Mem abort info:
+> [    1.468093]   ESR = 0x0000000096000005
+> [    1.468413]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    1.468741]   SET = 0, FnV = 0
+> [    1.469093]   EA = 0, S1PTW = 0
+> [    1.469396]   FSC = 0x05: level 1 translation fault
+> [    1.470493] Data abort info:
+> [    1.470793]   ISV = 0, ISS = 0x00000005
+> [    1.471093]   CM = 0, WnR = 0
+> [    1.471444] swapper pgtable: 4k pages, 48-bit VAs, 	pgdp=0000000081c10000
+> [    1.471798] [ffff800871242000] pgd=10000008fffff003,
+> p4d=10000008fffff003, pud=0000000000000000
+> [    1.472836] Internal error: Oops: 96000005 [#1] PREEMPT SMP
+> [    1.472918] Modules linked in:
+> [    1.473085] CPU: 1 PID: 35 Comm: kdevtmpfs Tainted: G T 5.19.0-rc1+ #49
+> [    1.473246] Hardware name: Foundation-v8A (DT)
+> [    1.473345] pstate: 40400009 (nZcv daif +PAN -UAO -TCO -DIT 	-SSBS BTYPE=--)
+> [    1.473493] pc : locked_inode_to_wb_and_lock_list+0xbc/0x2a4
+> [    1.473656] lr : locked_inode_to_wb_and_lock_list+0x8c/0x2a4
+> [    1.473820] sp : ffff80000b77bc10
+> [    1.473901] x29: ffff80000b77bc10 x28: 0000000000000001 x27: 0000000000000004
+> [    1.474193] x26: 0000000000000000 x25: ffff000800888600 x24: ffff0008008885e8
+> [    1.474393] x23: ffff80000848ddd4 x22: ffff80000a754f30 x21: ffff80000a7eaaf0
+> [    1.474693] x20: ffff000800888150 x19: ffff80000b6a4150 x18: ffff80000ac3ac00
+> [    1.474917] x17: 0000000070526bee x16: 000000003ac581ee x15: ffff80000ac42660
+> [    1.475195] x14: 0000000000000000 x13: 0000000000007a60 x12: 0000000000000002
+> [    1.475428] x11: ffff80000a7eaaf0 x10: 0000000000000004 x9 : 000000008845fe88
+> [    1.475622] x8 : ffff000800868000 x7 : ffff80000ab98000 x6 : 00000000114514e2
+> [    1.475893] x5 : 0000000000000000 x4 : 0000000000020019 x3 : 0000000000000001
+> [    1.476113] x2 : ffff800871242000 x1 : ffff800871242000 x0 : ffff000800868000
+> [    1.476393] Call trace:
+> [    1.476493]  locked_inode_to_wb_and_lock_list+0xbc/0x2a4
+> [    1.476605]  __mark_inode_dirty+0x3d8/0x6e0
+> [    1.476793]  simple_setattr+0x5c/0x84
+> [    1.476933]  notify_change+0x3ec/0x470
+> [    1.477096]  handle_create+0x1b8/0x224
+> [    1.477193]  devtmpfsd+0x98/0xf8
+> [    1.477342]  kthread+0x124/0x130
+> [    1.477512]  ret_from_fork+0x10/0x20
+> [    1.477670] Code: b9000802 d2800023 d53cd042 8b020021 (f823003f)
+> [    1.477793] ---[ end trace 0000000000000000 ]---
+> [    1.478093] note: kdevtmpfs[35] exited with preempt_count 2
 > 
-> There are 2 possibilities when a protected VM is torn down:
-> * it still has an address space associated (reboot case)
-> * it does not have an address space anymore (shutdown case)
+> The problem was bisected to the above commit and moving the bail check
+> early solves the problem for me.
 > 
+> Fixes: 10e14073107d ("writeback: Fix inode->i_io_list not be protected by inode->i_lock error")
+> CC: stable@vger.kernel.org
+> Cc: Jchao Sun <sunjunchao2870@gmail.com>
+> Cc: Jan Kara <jack@suse.cz>
+> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 
-Please add patches 1-13 to devel for some CI coverage.
-I'll try reviewing the remaining patches this week.
+Thanks for debugging this! The problem actually is not that we cannot call 
+locked_inode_to_wb_and_lock_list() for devtmpfs inode. The problem is that
+we get called so early during boot that noop_backing_dev_info is not
+initialized yet and that breaks the code. But I agree the quick fix for
+this breakage is to exclude unhashed inodes early in __mark_inode_dirty().
+I'll update the changelog and code comment (and cleanup the condition when
+moving it) and push the result to my tree.
+
+								Honza
+
+> ---
+>  fs/fs-writeback.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+> index 05221366a16d..cf68114af68b 100644
+> --- a/fs/fs-writeback.c
+> +++ b/fs/fs-writeback.c
+> @@ -2416,6 +2416,14 @@ void __mark_inode_dirty(struct inode *inode, int flags)
+>  			inode->i_state &= ~I_DIRTY_TIME;
+>  		inode->i_state |= flags;
+>  
+> +		/*
+> +		 * Only add valid (hashed) inodes to the superblock's
+> +		 * dirty list.  Add blockdev inodes as well.
+> +		 */
+> +		if (!S_ISBLK(inode->i_mode)) {
+> +			if (inode_unhashed(inode))
+> +				goto out_unlock_inode;
+> +		}
+>  		/*
+>  		 * Grab inode's wb early because it requires dropping i_lock and we
+>  		 * need to make sure following checks happen atomically with dirty
+> @@ -2436,14 +2444,6 @@ void __mark_inode_dirty(struct inode *inode, int flags)
+>  		if (inode->i_state & I_SYNC_QUEUED)
+>  			goto out_unlock;
+>  
+> -		/*
+> -		 * Only add valid (hashed) inodes to the superblock's
+> -		 * dirty list.  Add blockdev inodes as well.
+> -		 */
+> -		if (!S_ISBLK(inode->i_mode)) {
+> -			if (inode_unhashed(inode))
+> -				goto out_unlock;
+> -		}
+>  		if (inode->i_state & I_FREEING)
+>  			goto out_unlock;
+>  
+> -- 
+> 2.35.3
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

@@ -2,62 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D95154B20E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F46354B206
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242657AbiFNNKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 09:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
+        id S244384AbiFNNJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 09:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239183AbiFNNKj (ORCPT
+        with ESMTP id S234149AbiFNNJQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 09:10:39 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC3D36698
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 06:10:35 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25E7D18Y023629;
-        Tue, 14 Jun 2022 08:10:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=YcUpMK2AczftXCxzQom7s5cbS6jwX5ZCnN31VDB+YXM=;
- b=OM+u0In+DWSJNpSoAeCGjcBQM2oyBYb1RpCvka5UL+zWpyCSr2bdJLyrt3L5JY+Bbpom
- KDVh06+qEyKceN5O5pQfTnL97gd41swPIys5yjgfadGZLu7IKslMKXE07i0m0VmBAvE1
- Qj7sNOqmQERXv+/Krt61UQ2Fu8KWIDJI/Sp/GTfOptUKHfcAusC2txe/jqMpvM6Zb4rD
- KWueGH6k7p3087TFleh0VkOUNLKtAKkoXQNJiq4s5S3VdiJ4U5jNiyX4DGvtXL2MTKlB
- BaUQULHZK6lAiBsjbeR4/Ys36VOCb8meU5RIXVKHWEIMMkPZJTAyTPt0tZVwOShT5dC3 gw== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3gmqfq357n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 14 Jun 2022 08:10:24 -0500
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Tue, 14 Jun
- 2022 14:10:22 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.28 via Frontend
- Transport; Tue, 14 Jun 2022 14:10:22 +0100
-Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id A1A09458;
-        Tue, 14 Jun 2022 13:10:22 +0000 (UTC)
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <broonie@kernel.org>
-CC:     <james.schulman@cirrus.com>, <david.rhodes@cirrus.com>,
-        <lgirdwood@gmail.com>, <alsa-devel@alsa-project.org>,
-        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] ASoC: cs35l45: Add endianness flag in snd_soc_component_driver
-Date:   Tue, 14 Jun 2022 14:10:22 +0100
-Message-ID: <20220614131022.778057-1-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+        Tue, 14 Jun 2022 09:09:16 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AC321E11;
+        Tue, 14 Jun 2022 06:09:14 -0700 (PDT)
+Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LMpd70JCTz6F90V;
+        Tue, 14 Jun 2022 21:07:39 +0800 (CST)
+Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
+ fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 15:09:12 +0200
+Received: from [10.195.33.253] (10.195.33.253) by
+ lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 14:09:10 +0100
+Message-ID: <4a3ab043-f609-22cb-895f-e67c8dd8f6ab@huawei.com>
+Date:   Tue, 14 Jun 2022 14:12:18 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: aitggsH-mFGMuIZWhiIx_LPwba7ZFrJ5
-X-Proofpoint-GUID: aitggsH-mFGMuIZWhiIx_LPwba7ZFrJ5
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH v3 2/4] dma-iommu: Add iommu_dma_opt_mapping_size()
+To:     <damien.lemoal@opensource.wdc.com>, <joro@8bytes.org>,
+        <will@kernel.org>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <hch@lst.de>,
+        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-ide@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
+        <linux-scsi@vger.kernel.org>, <liyihang6@hisilicon.com>,
+        <chenxiang66@hisilicon.com>, <thunder.leizhen@huawei.com>
+References: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
+ <1654507822-168026-3-git-send-email-john.garry@huawei.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <1654507822-168026-3-git-send-email-john.garry@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.33.253]
+X-ClientProxiedBy: lhreml746-chm.china.huawei.com (10.201.108.196) To
+ lhreml724-chm.china.huawei.com (10.201.108.75)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,30 +59,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The endianness flag is used on the CODEC side to specify an
-ambivalence to endian, typically because it is lost over the hardware
-link. This device receives audio over an I2S DAI and as such should
-have endianness applied.
+On 06/06/2022 10:30, John Garry wrote:
+> Add the IOMMU callback for DMA mapping API dma_opt_mapping_size(), which
+> allows the drivers to know the optimal mapping limit and thus limit the
+> requested IOVA lengths.
+> 
+> This value is based on the IOVA rcache range limit, as IOVAs allocated
+> above this limit must always be newly allocated, which may be quite slow.
+> 
 
-Fixes: 0d463d016000 ("ASoC: cs35l45: Add driver for Cirrus Logic CS35L45 Smart Amp")
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
----
- sound/soc/codecs/cs35l45.c | 2 ++
- 1 file changed, 2 insertions(+)
+Can I please get some sort of ack from the IOMMU people on this one?
 
-diff --git a/sound/soc/codecs/cs35l45.c b/sound/soc/codecs/cs35l45.c
-index c94edfce4b720..d15b3b77c7eb0 100644
---- a/sound/soc/codecs/cs35l45.c
-+++ b/sound/soc/codecs/cs35l45.c
-@@ -500,6 +500,8 @@ static const struct snd_soc_component_driver cs35l45_component = {
- 	.num_controls = ARRAY_SIZE(cs35l45_controls),
- 
- 	.name = "cs35l45",
-+
-+	.endianness = 1,
- };
- 
- static int __maybe_unused cs35l45_runtime_suspend(struct device *dev)
--- 
-2.30.2
+Thanks,
+John
+
+EOM
+
+> Signed-off-by: John Garry <john.garry@huawei.com>
+> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> ---
+>   drivers/iommu/dma-iommu.c | 6 ++++++
+>   drivers/iommu/iova.c      | 5 +++++
+>   include/linux/iova.h      | 2 ++
+>   3 files changed, 13 insertions(+)
+> 
+> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+> index f90251572a5d..9e1586447ee8 100644
+> --- a/drivers/iommu/dma-iommu.c
+> +++ b/drivers/iommu/dma-iommu.c
+> @@ -1459,6 +1459,11 @@ static unsigned long iommu_dma_get_merge_boundary(struct device *dev)
+>   	return (1UL << __ffs(domain->pgsize_bitmap)) - 1;
+>   }
+>   
+> +static size_t iommu_dma_opt_mapping_size(void)
+> +{
+> +	return iova_rcache_range();
+> +}
+> +
+>   static const struct dma_map_ops iommu_dma_ops = {
+>   	.alloc			= iommu_dma_alloc,
+>   	.free			= iommu_dma_free,
+> @@ -1479,6 +1484,7 @@ static const struct dma_map_ops iommu_dma_ops = {
+>   	.map_resource		= iommu_dma_map_resource,
+>   	.unmap_resource		= iommu_dma_unmap_resource,
+>   	.get_merge_boundary	= iommu_dma_get_merge_boundary,
+> +	.opt_mapping_size	= iommu_dma_opt_mapping_size,
+>   };
+>   
+>   /*
+> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
+> index db77aa675145..9f00b58d546e 100644
+> --- a/drivers/iommu/iova.c
+> +++ b/drivers/iommu/iova.c
+> @@ -26,6 +26,11 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
+>   static void free_cpu_cached_iovas(unsigned int cpu, struct iova_domain *iovad);
+>   static void free_iova_rcaches(struct iova_domain *iovad);
+>   
+> +unsigned long iova_rcache_range(void)
+> +{
+> +	return PAGE_SIZE << (IOVA_RANGE_CACHE_MAX_SIZE - 1);
+> +}
+> +
+>   static int iova_cpuhp_dead(unsigned int cpu, struct hlist_node *node)
+>   {
+>   	struct iova_domain *iovad;
+> diff --git a/include/linux/iova.h b/include/linux/iova.h
+> index 320a70e40233..c6ba6d95d79c 100644
+> --- a/include/linux/iova.h
+> +++ b/include/linux/iova.h
+> @@ -79,6 +79,8 @@ static inline unsigned long iova_pfn(struct iova_domain *iovad, dma_addr_t iova)
+>   int iova_cache_get(void);
+>   void iova_cache_put(void);
+>   
+> +unsigned long iova_rcache_range(void);
+> +
+>   void free_iova(struct iova_domain *iovad, unsigned long pfn);
+>   void __free_iova(struct iova_domain *iovad, struct iova *iova);
+>   struct iova *alloc_iova(struct iova_domain *iovad, unsigned long size,
 

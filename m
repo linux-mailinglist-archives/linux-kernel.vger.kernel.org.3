@@ -2,115 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1F654BDF4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C540354BDF3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:59:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355285AbiFNW4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 18:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51726 "EHLO
+        id S1356060AbiFNW4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 18:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240786AbiFNW4C (ORCPT
+        with ESMTP id S1355489AbiFNW4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 18:56:02 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F66D1BE94
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:56:01 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id x4so9826336pfj.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:56:01 -0700 (PDT)
+        Tue, 14 Jun 2022 18:56:21 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866884BFEE
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:56:19 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id q62-20020a17090a17c400b001e31a482241so142138pja.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:56:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3IusMXHsX8HYuqKFhVAp//8FffUIb5+m4kqYcQhh3jg=;
-        b=RxGqPWG4PLu3NM7G1OGJljdNFzCExbfYbHK0F3QfUj1AlqNl14KHAaObsvlHet4+oS
-         x9VmUWFGotqq93PIhB4uIrDavQHnyGEIlTtHGhytL5VGpCcPwi6nQrHMU3+APZLTwZRq
-         89V3DSJMPpkL6yCJT27icAhF2DbnOLs2ezpp4telLSVl3K6+TzV6Uo8LBHL6A3EyQPOY
-         5AxYEpzRYPWkw/lPYe22uziM1qC8SG9TIXICerSzuFToms2h+Cmc2A90ofILLIBKPoR1
-         WbmNzt29EC3IoKHi3Dc9MPCLP63kvHZeG9uqbxpptSfbkOXScISb7NriHvfMCuEFdVXo
-         KCjQ==
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=4uqQQ6qeopHxiKXYe8TwBEAoHxCFaxNJ6CSjV0zGEsY=;
+        b=flswYiWQxE4WTApN5/DEWkYG2KWcokKtn2lPaQH7Xyye98omQl8xdRUhTnqHhop7v9
+         Vyaktsw/qBrV4quVMg/lcLT/2XDMjUKYMhZ/mko53KpXD0TMapqY0T7L5FYjuluXzcMj
+         Hi2/JYBIi0YFH0LsPxv51wWeuuA9WlDwAjLN70/SltZfCpcAkEK2vBTxqZpWwoxvQX1j
+         BCP1ZrkaN/k5pienYL6Fqm33rCT4tJx0nDMuFLfxGObtYiFv606hN9sRJqxXyKXoGx/g
+         o8GA5Lj5mn5mcARKRCuWeQhclasEATRz4sMHUlfYYQvsTbLX3yylsJrH+zpCx1HWdfPQ
+         s35g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3IusMXHsX8HYuqKFhVAp//8FffUIb5+m4kqYcQhh3jg=;
-        b=r7rGZ2W4NO3W75Z7HGD3Uzk0GsdI5/5pUqEJrHGF5vKrgpAsnw1A+dZZ+AYYznlrIV
-         nyPku0RSvBxH/4HKQhmvmuZqGp0HhebuHh6aymi9NYKPUpwwMH4wBGIO/ZuY+DC56noG
-         kcBtihbM8s74ZJKkqaAi0pmcyyYjgTw0FuY7nU1/wDRVAisdB++G8sN2A+QstkJyUdsz
-         YkhQtF8t1Efdqi9M2CijpSYLnasrrpIyeqBrAnFsMpJskxiAmsOFsCf0G3Du9XtCA3ex
-         dO416jQD5diL7CkO3mZ77b6xf4f0rsrz7DV98dJQZR1gFkSwg8qwnYRy7NpIwPoekOyT
-         YFUw==
-X-Gm-Message-State: AOAM531TO1NJltZhqhSTWWLkxqzy45YheMqrlhIHPCdIHI0LVEegpdnz
-        DKzOUtIBNzZCC9DV2IBm5HlKjg==
-X-Google-Smtp-Source: ABdhPJzQWALnoEZmwEIMpTXToHtePoOxJuJdOybO+zv45861A0QgmqxZOSNHez+b33q+mm6rS+sBAA==
-X-Received: by 2002:a63:4387:0:b0:3c6:9490:4e4b with SMTP id q129-20020a634387000000b003c694904e4bmr6264286pga.438.1655247360793;
-        Tue, 14 Jun 2022 15:56:00 -0700 (PDT)
-Received: from p14s ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id z1-20020a626501000000b0050dc7628183sm8366937pfb.93.2022.06.14.15.55.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 15:55:59 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 16:55:57 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Suman Anna <s-anna@ti.com>, linux-remoteproc@vger.kernel.org,
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=4uqQQ6qeopHxiKXYe8TwBEAoHxCFaxNJ6CSjV0zGEsY=;
+        b=hicqFweZta9TRlkTcb+hqgZhFYvagFP6Rv+ckeylTCD2o8UZwIsDqtzzMyHyBBA08v
+         +KIAww1MlrfEkAYfac4M2UgvU+RQ6lzhhRzTWHHZzoMGubJziyHPxEoqWlrapKMVjaUd
+         u/OodtPBLfFD0yQ3Kf8e/lMYhgqzbTWf3TshGBKCTSWy5j2To+9Q4//agO4qK2G6X/Sc
+         UmRlR+HN8yvhqXyp/URP4VyNc1ImCBe/eNV0RpWc0DGNHyIqHPtcZnhZ+fPoUklX1N+I
+         Ahur/G3dhGzxA3BfrwcDl7p0e3QdO3o/AdHyf5VXAG3rVTmaPEC7mHjtuV6rzrSQPQh7
+         jlIw==
+X-Gm-Message-State: AJIora/5xqNRZ/r371633Wxg+z8Bo/Ico1J2W09j+3EmLK6NAaqECwy4
+        FfsCendZaStfTxpzMQcP9RquMhRmWx8=
+X-Google-Smtp-Source: AGRyM1tdPEjnCayzw9nFRZR/AD46ULgBXNEk4IhMT+cphQI/79J1vk0BNSU03l7/llYgi05a65NiFZJPM6Y=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP id
+ t9-20020a17090a024900b001e0a8a33c6cmr202967pje.0.1655247377887; Tue, 14 Jun
+ 2022 15:56:17 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 14 Jun 2022 22:56:15 +0000
+Message-Id: <20220614225615.3843835-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+Subject: [PATCH] KVM: x86: Query vcpu->vcpu_idx directly and drop its
+ accessor, again
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] remoteproc: k3-r5: Fix refcount leak in
- k3_r5_cluster_of_init
-Message-ID: <20220614225557.GB1236509@p14s>
-References: <20220605083334.23942-1-linmq006@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220605083334.23942-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 05, 2022 at 12:33:34PM +0400, Miaoqian Lin wrote:
-> Every iteration of for_each_available_child_of_node() decrements
-> the reference count of the previous node.
-> When breaking early from a for_each_available_child_of_node() loop,
-> we need to explicitly call of_node_put() on the child node.
-> Add missing of_node_put() to avoid refcount leak.
-> 
-> Fixes: 6dedbd1d5443 ("remoteproc: k3-r5: Add a remoteproc driver for R5F subsystem")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/remoteproc/ti_k3_r5_remoteproc.c | 2 ++
->  1 file changed, 2 insertions(+)
+Read vcpu->vcpu_idx directly instead of bouncing through the one-line
+wrapper, kvm_vcpu_get_idx(), and drop the wrapper.  The wrapper is a
+remnant of the original implementation and serves no purpose; remove it
+(again) before it gains more users.
 
-I have applied this patch.
+kvm_vcpu_get_idx() was removed in the not-too-distant past by commit
+4eeef2424153 ("KVM: x86: Query vcpu->vcpu_idx directly and drop its
+accessor"), but was unintentionally re-introduced by commit a54d806688fe
+("KVM: Keep memslots in tree-based structures instead of array-based ones"),
+likely due to a rebase goof.  The wrapper then managed to gain users in
+KVM's Xen code.
 
-Thanks,
-Mathieu
+No functional change intended.
 
-> 
-> diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-> index 4840ad906018..0481926c6975 100644
-> --- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
-> +++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
-> @@ -1655,6 +1655,7 @@ static int k3_r5_cluster_of_init(struct platform_device *pdev)
->  		if (!cpdev) {
->  			ret = -ENODEV;
->  			dev_err(dev, "could not get R5 core platform device\n");
-> +			of_node_put(child);
->  			goto fail;
->  		}
->  
-> @@ -1663,6 +1664,7 @@ static int k3_r5_cluster_of_init(struct platform_device *pdev)
->  			dev_err(dev, "k3_r5_core_of_init failed, ret = %d\n",
->  				ret);
->  			put_device(&cpdev->dev);
-> +			of_node_put(child);
->  			goto fail;
->  		}
->  
-> -- 
-> 2.25.1
-> 
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/xen.c       | 10 +++++-----
+ include/linux/kvm_host.h |  5 -----
+ 2 files changed, 5 insertions(+), 10 deletions(-)
+
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index 610beba35907..a0c05ccbf4b1 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -1049,7 +1049,7 @@ static bool kvm_xen_schedop_poll(struct kvm_vcpu *vcpu, bool longmode,
+ 	else
+ 		vcpu->arch.xen.poll_evtchn = -1;
+ 
+-	set_bit(kvm_vcpu_get_idx(vcpu), vcpu->kvm->arch.xen.poll_mask);
++	set_bit(vcpu->vcpu_idx, vcpu->kvm->arch.xen.poll_mask);
+ 
+ 	if (!wait_pending_event(vcpu, sched_poll.nr_ports, ports)) {
+ 		vcpu->arch.mp_state = KVM_MP_STATE_HALTED;
+@@ -1071,7 +1071,7 @@ static bool kvm_xen_schedop_poll(struct kvm_vcpu *vcpu, bool longmode,
+ 	*r = 0;
+ out:
+ 	/* Really, this is only needed in case of timeout */
+-	clear_bit(kvm_vcpu_get_idx(vcpu), vcpu->kvm->arch.xen.poll_mask);
++	clear_bit(vcpu->vcpu_idx, vcpu->kvm->arch.xen.poll_mask);
+ 
+ 	if (unlikely(sched_poll.nr_ports > 1))
+ 		kfree(ports);
+@@ -1311,7 +1311,7 @@ static void kvm_xen_check_poller(struct kvm_vcpu *vcpu, int port)
+ 	int poll_evtchn = vcpu->arch.xen.poll_evtchn;
+ 
+ 	if ((poll_evtchn == port || poll_evtchn == -1) &&
+-	    test_and_clear_bit(kvm_vcpu_get_idx(vcpu), vcpu->kvm->arch.xen.poll_mask)) {
++	    test_and_clear_bit(vcpu->vcpu_idx, vcpu->kvm->arch.xen.poll_mask)) {
+ 		kvm_make_request(KVM_REQ_UNBLOCK, vcpu);
+ 		kvm_vcpu_kick(vcpu);
+ 	}
+@@ -1344,7 +1344,7 @@ int kvm_xen_set_evtchn_fast(struct kvm_xen_evtchn *xe, struct kvm *kvm)
+ 		vcpu = kvm_get_vcpu_by_id(kvm, xe->vcpu_id);
+ 		if (!vcpu)
+ 			return -EINVAL;
+-		WRITE_ONCE(xe->vcpu_idx, kvm_vcpu_get_idx(vcpu));
++		WRITE_ONCE(xe->vcpu_idx, vcpu->vcpu_idx);
+ 	}
+ 
+ 	if (!vcpu->arch.xen.vcpu_info_cache.active)
+@@ -1540,7 +1540,7 @@ int kvm_xen_setup_evtchn(struct kvm *kvm,
+ 	 */
+ 	vcpu = kvm_get_vcpu_by_id(kvm, ue->u.xen_evtchn.vcpu);
+ 	if (vcpu)
+-		e->xen_evtchn.vcpu_idx = kvm_vcpu_get_idx(vcpu);
++		e->xen_evtchn.vcpu_idx = vcpu->vcpu_idx;
+ 	else
+ 		e->xen_evtchn.vcpu_idx = -1;
+ 
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index c20f2d55840c..ef9ab2cfe66a 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -907,11 +907,6 @@ static inline struct kvm_vcpu *kvm_get_vcpu_by_id(struct kvm *kvm, int id)
+ 	return NULL;
+ }
+ 
+-static inline int kvm_vcpu_get_idx(struct kvm_vcpu *vcpu)
+-{
+-	return vcpu->vcpu_idx;
+-}
+-
+ void kvm_destroy_vcpus(struct kvm *kvm);
+ 
+ void vcpu_load(struct kvm_vcpu *vcpu);
+
+base-commit: 8baacf67c76c560fed954ac972b63e6e59a6fba0
+-- 
+2.36.1.476.g0c4daa206d-goog
+

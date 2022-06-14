@@ -2,381 +2,410 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A43454A316
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:11:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFF754A319
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242243AbiFNALR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 20:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S235703AbiFNAOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 20:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235709AbiFNALO (ORCPT
+        with ESMTP id S229892AbiFNAOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 20:11:14 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CE213DD2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:11:12 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id l14so1518176ilq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:11:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YnMbZcTpvqgPLdBSjHRJuKCSk759c13xui6B7R1t1uQ=;
-        b=UWHIwl07hGDvI0wfcK3zDLePqB084XvOAEXZtG9YLs7Qamrq8qBh/97Rs7I8Cpc6Ky
-         vQgi1KwGM1tjod5so3pAToAuYd5zAYthYQXWsok7uctu87wFLHq13M7UvoL5nShoA9Bm
-         bUbNKL0dnUsLf2GOoerH9ILMtqhbH0CsPPJwK5xrk3EJO5EFoDQiIxEK4nucWJkXnZQg
-         inUnSfdvuk0EYJ+0dUgFndr1/5B2aMu8LQIwGRFKLF5ZmkAI14sj8bF+hPUlDoU44DMJ
-         gve7YjirSW6+HkmN7TJQ4guEwIYIa2uwuzDe5Us9Ymi41zRtq/9G5/8yEFC1+zaEdAOS
-         rdfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YnMbZcTpvqgPLdBSjHRJuKCSk759c13xui6B7R1t1uQ=;
-        b=1ZZAzrNa5jv5da2ndJjv1XPYoiaLO8AFlk6yM4rJfOFa4aqEQzXvt6DmUhoH9AuRU5
-         rNsXEkBsSpo3j0aqf+AETxjeF2tezcYp77e4eBfOSezYCyPGfnNTScXbblpS9iJeWGbb
-         AMj+30xgfl2WV1lF5oC/5w5dqomlaGcF1ycE+780a+tCp87B77hM4+Y12HPj18gkJwVM
-         pVloYkN/BDI36LsEzyeWuai8DsV934GB5Xuf8vwo7WVSbMqzVD/or+2PuVjXjpXzSc0a
-         aoAil0omb6+quTKYwX/sTo08xVwVJIX7i1RZbCXkTOaT95yHK0k8AsqeSyLdfRkZ4uk7
-         0wDg==
-X-Gm-Message-State: AJIora9g2UZVFW6V8WVKzQCTiapGTl6D8PjWqjP1No8BZ4Hjj6eJLegE
-        tkBtJHTVzG2NliCMW24X2ScicvIek5E4JlX78jHFZw==
-X-Google-Smtp-Source: AGRyM1vvmWcS6Uk3XLwlWmm2TBNmlDnvXez0ftCObxk7xELuMfQjgAyThxD2SMRX8sV2ytdMhECXy+3RnrepRJd58Ec=
-X-Received: by 2002:a05:6e02:1a23:b0:2d3:82bb:4dae with SMTP id
- g3-20020a056e021a2300b002d382bb4daemr1432588ile.62.1655165471758; Mon, 13 Jun
- 2022 17:11:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20210820155918.7518-1-brijesh.singh@amd.com> <20210820155918.7518-15-brijesh.singh@amd.com>
-In-Reply-To: <20210820155918.7518-15-brijesh.singh@amd.com>
-From:   Alper Gun <alpergun@google.com>
-Date:   Mon, 13 Jun 2022 17:10:58 -0700
-Message-ID: <CABpDEumcC9dx-5i-1UN=Umg1WU-8=HoTWLBLd-VbKjXCrKd6oA@mail.gmail.com>
-Subject: Re: [PATCH Part2 v5 14/45] crypto: ccp: Handle the legacy TMR
- allocation when SNP is enabled
-To:     Ashish.Kalra@amd.com
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
+        Mon, 13 Jun 2022 20:14:44 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2076.outbound.protection.outlook.com [40.107.220.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE9531916;
+        Mon, 13 Jun 2022 17:14:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GE4+pJz0iV0OgftYuR8oB+YGvHhz4OiCAUUGGm6f3hT8N7CysaVwekOK1rq4QhQWmVrZbyuMWg4y01SDe6nZfvsVE1Bnfn2HUbcq5t85e1GqRRoSOMEMFDb+HKcmNkRTmtLUVojChW0ymkGBeohL20AS9V9avOxbpyXH3Ggf8XVkJC7tTf20gia9Pwx0EMg3UZk+awFjaGtbPkICqT2K71fE1fVeEFgVnoRe+N+xnNMulPK/WW0AR/1blxIcGsuFQ6kU+Twy2KwcoHy9ZZo3hgUwz3M7rPgriObQMlKWrRZNtLGh1kXLduYWRHadABk2lD2canidP9sIulqStUtFaw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=NSeDNKRGGMHl7uHaPIzHvAHYCAcwJm2KVE6grmKU8VE=;
+ b=WJ03VBHDKKnnAOzYT4pCfQjovEapj+okXo4ubx9/6FMrCic90RtYwpLl+1N2gCtgEN6EoauUROM2UTgOcB5PnPLG/4S657iFI90I3EctsVaOWGC4h5B/q8wn8aVeI7A6Tgf47j4NSg4yvED5FNBFSqkaqQv2a74aLctSmhkWRvQVKwe4zGODmnFVDTHuDFFiTn1W2qM9XRvFP3aWakHLR3Tq8ghW1vIRJTtiwn9pJMmRoiZmMXIw80VGFeu7FIeVeD4zjAd7o+mB2udUOoHWtyccQQoopYAghs3n2k8gZVQprkerRAUrAhWj2j0xV1rU5GMSsPsYK9RcxLMpQmcpFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=NSeDNKRGGMHl7uHaPIzHvAHYCAcwJm2KVE6grmKU8VE=;
+ b=ULU729JO8arsAlyMiN/f9xSrLFZlpf81jMzXHGOhT9dT6pkU/qOCqQdy2tBUjPBSRwNgSdnVDhjzE+ikBxYESfy6mJlwaXq4yTD8RX2qWzCZ8tDS1XW29KMgExJOkV0CabrDRFfSmiEHVm6cKfYrOYwxWP0GOUmoPd7Rz59H17xOy5broxkxuf+lXRwUDOVgjeqtRWRFK+o2KJzfAIRe963lY9FfLS1g30rLfi0w65OiEnGa9vUPlFJEn9NAS8TzLK8675fK43lIiFaAoqHOG7WZRiC0KVmIH7puQ8yGmyRMFQa4j+L4FxLI7jx/GtiROtWRbakPnIJ8ISvrUaubPA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
+ SJ1PR12MB6338.namprd12.prod.outlook.com (2603:10b6:a03:455::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.20; Tue, 14 Jun
+ 2022 00:14:40 +0000
+Received: from DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::2030:d898:6e2f:3471]) by DS7PR12MB5744.namprd12.prod.outlook.com
+ ([fe80::2030:d898:6e2f:3471%7]) with mapi id 15.20.5332.017; Tue, 14 Jun 2022
+ 00:14:39 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>, tony.luck@intel.com,
-        Marc Orr <marcorr@google.com>,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        Brijesh Singh <brijesh.singh@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Linux-MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable@vger.kernel.org, huanyi.xj@alibaba-inc.com,
+        zjb194813@alibaba-inc.com, tianhu.hh@alibaba-inc.com,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Laura Abbott <labbott@redhat.com>
+Subject: Re: [RESEND PATCH] mm: page_alloc: validate buddy before check the
+ migratetype
+Date:   Mon, 13 Jun 2022 20:14:36 -0400
+X-Mailer: MailMate (1.14r5883)
+Message-ID: <435B45C3-E6A5-43B2-A5A2-318C748691FC@nvidia.com>
+In-Reply-To: <CAJF2gTSsaaseds=T_y-Ddt5Np2rYhk3ENumzSZDZUSXFwT3u-g@mail.gmail.com>
+References: <20220613131046.3009889-1-xianting.tian@linux.alibaba.com>
+ <0262A4FB-5A9B-47D3-8F1A-995509F56279@nvidia.com>
+ <CAJF2gTQGXAubtas4wAzrg298dGQJntu38X48V2OzcK8xZ_vPJg@mail.gmail.com>
+ <D667F530-E286-4E75-B7CE-63E120E440C8@nvidia.com>
+ <CAJF2gTSsaaseds=T_y-Ddt5Np2rYhk3ENumzSZDZUSXFwT3u-g@mail.gmail.com>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_E133FCE1-A8E8-45AB-BB0D-17B9488A3C6D_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: BL1PR13CA0145.namprd13.prod.outlook.com
+ (2603:10b6:208:2bb::30) To DS7PR12MB5744.namprd12.prod.outlook.com
+ (2603:10b6:8:73::18)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4a34709a-ba82-4663-7b28-08da4d9adf70
+X-MS-TrafficTypeDiagnostic: SJ1PR12MB6338:EE_
+X-Microsoft-Antispam-PRVS: <SJ1PR12MB63387D4177D3BC3EB1B0A1A3C2AA9@SJ1PR12MB6338.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X5dPkwetwLNei7n044Mk5iIamBoGC0UlsA46FFqGPpaLpax7ucOwZPrdk8bNecxWZm45pPLD0Y5ZJXJBF35mCZSuyplOCv0o7km2FGCKrQiJBwJpRzunyjrEBHCAqyqV/awlLHk/h3d4EWVnv7rPF51zC3MWwcDWm7u6Nz6UX93se1jwapwvj5iQpVMsEpeBWY++Pdw2GDE5sSNGr4dp/ZuUtz/a3mh5k4YSEIKF/lQ0TdvEM3nZbSLANzcgVCG3yOTZD6qLchcsniHkPRlNoNIpzBRdgRpSfo5y/r2tfqYRnBpX0CWL+OuE6vdFzk9VXI7gvAiMBg9Txp0Zo6fFP4/Nrmcia1HJV+OwXJeNkWxhpvSq4boH4l9EmCZ6l3vKTN9ZXNwDdWplOAO8ckUbwexmeEa8tb+oyTkKZy/0HNiWck+E3ghuWFzj3ELkc2cimT7Hqf04K3prZxrt05TJpQQfLNgPKB81dkN8aKKfdnmd1+yySaubvexuSSSEz4m9GE6KWhr6gYCcsXsnTcwWzWi7NdTW/CioKe0IrGsoDW6BK7OPJpGAcGjTS061vI25sxFg0e5oPj20zFLvz996959hsoCjoVAMwjIA5Bk5Z1y68dcGh2umUo57dcHM6YXSkz+LFEKv4rQlW+Kx8L23E0vsgk6vZh0r6qOy41TMOM1Oi1JIiNsmmoPZxqMsR0pzjjgt2JE5uCV9cyjxPF83xUHzqWAXJ4YG2awNuKjsKR4I0MZzwqPKIYp4bxgvcPtalERkzNAw+PW9RljyRppgKcUi/ElMSS2Oyj/sC57JRRYUsqZ800qWB8oAZve433MX
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(316002)(54906003)(6916009)(21480400003)(36756003)(53546011)(66946007)(66476007)(4326008)(15650500001)(33656002)(38100700002)(2906002)(66556008)(86362001)(6666004)(8676002)(8936002)(966005)(6486002)(6512007)(2616005)(83380400001)(26005)(508600001)(33964004)(235185007)(7416002)(5660300002)(6506007)(186003)(72826004)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TUg0VjQwVkRPL0tkS05YR3BGUkNpMFZqMzV1UkJ6am1HUHpMOTdSWmUvZkln?=
+ =?utf-8?B?SE9XZzJMZnA4cmNkU0gwRVpYVjVTbUYxWUJMRzhhZWlVUkZqdThMSzFpbEVx?=
+ =?utf-8?B?VEd1ZC90cVgwNy8za1daWko0em5NeWsyQStNSDlnRHFaK016TzlMblVVM0pR?=
+ =?utf-8?B?TWo1S0IxYmV1RTZCTmR5ZFk3Wk9FZkhuTFpoWk1NeEZmdmNPbXR6NnVYN3Rp?=
+ =?utf-8?B?WkNZcHRyeFVsazBhOExZdHA4WmVDbjU3bytEMmIxYkRZc3I0cU0zMDFwT0Jj?=
+ =?utf-8?B?Z24wZVFzcm40RkNKNWJPaXZPMG9KZ2dWTVN2QmVHMW9Ga2VHSndRamhIY1pz?=
+ =?utf-8?B?bVNTLzlNWEt6S2Z3UE5rbzRwbjJ2UVZBVCtXQmVhZ21DNVNxdE9nYkFDVHVy?=
+ =?utf-8?B?RkdGWHNHLzVjZnVJSlhpcUptR0pKais5QzI4bGN6akNSa2NvK3B3TmNySDRF?=
+ =?utf-8?B?QzkrNkVqUVRxakZRMnprOUh6eUczZ05DTEFaUTMwZXFuVHlzemVMUWRPSUgr?=
+ =?utf-8?B?NGN6NlRSeGlBZy9JQ0Z1dFNDT2Mwakd0VEZwWjd3ajFTVkZJT0JSa1dXS002?=
+ =?utf-8?B?ZHJZaVJLMmVUOWRXUG1uK3lOZkZiOWtqZ2g4aG4ySXBtSU9JVG5lTHpaWXlx?=
+ =?utf-8?B?akN0ekNNaFBGaU44dXBjaXVMd043cjR6cjJUWm1nWmhUVURNS2x0a2pIN3h5?=
+ =?utf-8?B?V01tUE84TUxqZHRpVUtkWTd4L0NZWHBrQ3ZuMUZWTnJCdzYxdnJFL3hFdkpw?=
+ =?utf-8?B?ZVN2aHRTRnd2RnIvbXdvWmdmU3d2RFhOd1RnWWhienF0ZTNLbWxqTTkzd0R6?=
+ =?utf-8?B?TW0rZmtJOFZZS0ZyS0hSN3FjNVp1Tnh6L2RoWm0wV0dCMFFaeVVTVm5KK2Uz?=
+ =?utf-8?B?MitKZTZ6aEFLc2ZCQzR5T01lVHlGTFNFZ0ZlV0VadWdmNVVNMVY2ZTU5a0J6?=
+ =?utf-8?B?RW5wMm44bTZxbDlLKzFmL0hiWXNtNEVCYVExTW1ERkZkYlkyeVpFYTNYSDFY?=
+ =?utf-8?B?amVORXcrUllHa0NNeEZIM3JvamJyUFhmTGV4RDB2TXpzd2pSeVlqcDFhTUFa?=
+ =?utf-8?B?SFp5QzNBbHFNVmVqc3NWUUZzc0ZLSnJ6YjJqUGNSNkVqV0RoSVd5aGhwank4?=
+ =?utf-8?B?eW1UQWdoQlJHZzBad2IwZmVFbzFNbDhHeFFjVXM0Y1RJcUVoTllyRTBUMGJt?=
+ =?utf-8?B?dVdRbWZjWndiZFd2c3hKSEw0SUxDejRRdjRtNzZLNkZiWGVQMk5pcVFlbTQ0?=
+ =?utf-8?B?ZkltR2dXc3VXSlBtREZ4b283Ukc5N1U2L2dxVkNuL3RMYmI3aGxMWFBadTdl?=
+ =?utf-8?B?SmtsQWEvclF4T3pXaFo5L0llNkxhVTNpTkh3VWhlSXduQW1CVHBKbDVWZWZJ?=
+ =?utf-8?B?T1VsN2tmNVcrRDhRb3FWelVXYmV6Z3NsOWNwVHhtSVdFSDZUaHFXdktJK25Y?=
+ =?utf-8?B?MkxON3p5cTU3NE1mVU8wWTZMb2l0ZmRKMVVKN0djQkt6c09IWExUbkJZMW50?=
+ =?utf-8?B?TjhQdVJXbUhSZTQ4NkVwUS9sV29wY2NSQXRUaWlUNXpvUFYvN2FHN2Uya1Nk?=
+ =?utf-8?B?OTRZOUZnS0tpem1vaGZsY1F2b0dza25uZXMxK3g5YTJrVEx0bmc2YnhObEU4?=
+ =?utf-8?B?UzdZemVGd2VQMHBqaDh5YjhHN1FxTjBNaXRJdE1xY25WUFFFSEpPbHQxeUpO?=
+ =?utf-8?B?VGMzaU15MGdmdXFJcGp5ZjJtYndjVlVNdG4xaWlSU1NMcXdjYjlxdnFQYW5j?=
+ =?utf-8?B?SGIvQ2JrL1Z0Vmk1b1VTMTdVd2dBRlQ2VnU2STdOR2F4NitrNkRaWDVGYTFO?=
+ =?utf-8?B?RkJjVCtodE1FdE0zeS9Rc3NGcjZqa1JXK05qT3JBZUtLMVVVbENRK1RtVDQv?=
+ =?utf-8?B?bmRORUI1T3VCVW9zcElHWXM4OFFyN0NzTHRvN0ZXaGxVaksrODd6aDBNN0Jy?=
+ =?utf-8?B?SjdmRmVnWE5TNWcxeDFKUUdJMjdrR1pxZENGQW5zOWk2Sk91Q2d0M25wRU41?=
+ =?utf-8?B?UmJtY1hHc01lMlVwR1FqY1NFS2JuOXlvWmtwKzZSYlB4dzVZblAybFNnWUsr?=
+ =?utf-8?B?NnRwK3RlN0lkeXQ5a0t6LzV6azAzOFowSGczck5BU0phZ0hKZVNBVXNTSkNv?=
+ =?utf-8?B?bk1HQzg3RUFLS09obFdEcjh1dzFmVnoxckZ1cVNKQlNmOXRpenBxRVo1Z2tT?=
+ =?utf-8?B?SlN3N1FMempIbktPaGlwdHRqS0sxMkNzbVJIQ0lFUDk1djBiVzRwWTZYYkFC?=
+ =?utf-8?B?L2sxKy9HbmJGSGVVWVFCVWlaQ1hqbUNZanB5cXJNekErdVdHL2JseENkYUJQ?=
+ =?utf-8?B?L1FSUy93NFJJU3NvMkk1a2l1a3lEc1hqb1h1MHFpSUdyTWlQWEpZdz09?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4a34709a-ba82-4663-7b28-08da4d9adf70
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2022 00:14:39.7526
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rlj3pKRGNd3G1pmucLi5/5413BBdmUXz+cW1QmCww4EgULfQmN4ch5qMnQAfkVyk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6338
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to the TMR page, sev_init_ex_buffer should be owned by
-firmware. Otherwise INIT_EX won't work with the SNP.  Since v5 patches
-are prepared before INIT_EX work, I wanted to bring this to your
-attention.
-One difference from the TMR page, sev_init_ex_buffer has to be in the
-direct map. Firmware pages are removed from directmap in v5 patches.
-But the kernel reads sev_init_ex_buffer later to write into a
-persistent file. I have a version to make it work, if you're
-interested I can share.
+--=_MailMate_E133FCE1-A8E8-45AB-BB0D-17B9488A3C6D_=
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 20, 2021 at 9:00 AM Brijesh Singh <brijesh.singh@amd.com> wrote:
+On 13 Jun 2022, at 19:47, Guo Ren wrote:
+
+> On Tue, Jun 14, 2022 at 3:49 AM Zi Yan <ziy@nvidia.com> wrote:
+>>
+>> On 13 Jun 2022, at 12:32, Guo Ren wrote:
+>>
+>>> On Mon, Jun 13, 2022 at 11:23 PM Zi Yan <ziy@nvidia.com> wrote:
+>>>>
+>>>> Hi Xianting,
+>>>>
+>>>> Thanks for your patch.
+>>>>
+>>>> On 13 Jun 2022, at 9:10, Xianting Tian wrote:
+>>>>
+>>>>> Commit 787af64d05cd ("mm: page_alloc: validate buddy before check i=
+ts migratetype.")
+>>>>> added buddy check code. But unfortunately, this fix isn't backporte=
+d to
+>>>>> linux-5.17.y and the former stable branches. The reason is it added=
+ wrong
+>>>>> fixes message:
+>>>>>      Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallba=
+ckable
+>>>>>                          pageblocks with others")
+>>>>
+>>>> No, the Fixes tag is right. The commit above does need to validate b=
+uddy.
+>>> I think Xianting is right. The =E2=80=9CFixes:" tag is not accurate a=
+nd the
+>>> page_is_buddy() is necessary here.
+>>>
+>>> This patch could be applied to the early version of the stable tree
+>>> (eg: Linux-5.10.y, not the master tree)
+>>
+>> This is quite misleading. Commit 787af64d05cd applies does not mean it=
+ is
+>> intended to fix the preexisting bug. Also it does not apply cleanly
+>> to commit d9dddbf55667, there is a clear indentation mismatch. At best=
+,
+>> you can say the way of 787af64d05cd fixing 1dd214b8f21c also fixes d9d=
+ddbf55667.
+>> There is no way you can apply 787af64d05cd to earlier trees and call i=
+t a day.
+>>
+>> You can mention 787af64d05cd that it fixes a bug in 1dd214b8f21c and t=
+here is
+>> a similar bug in d9dddbf55667 that can be fixed in a similar way too. =
+Saying
+>> the fixes message is wrong just misleads people, making them think the=
+re is
+>> no bug in 1dd214b8f21c. We need to be clear about this.
+> First, d9dddbf55667 is earlier than 1dd214b8f21c in Linus tree. The
+> origin fixes could cover the Linux-5.0.y tree if they give the
+> accurate commit number and that is the cause we want to point out.
+
+Yes, I got that d9dddbf55667 is earlier and commit 787af64d05cd fixes
+the issue introduced by d9dddbf55667. But my point is that 787af64d05cd
+is not intended to fix d9dddbf55667 and saying it has a wrong fixes
+message is misleading. This is the point I want to make.
+
 >
-> The behavior and requirement for the SEV-legacy command is altered when
-> the SNP firmware is in the INIT state. See SEV-SNP firmware specification
-> for more details.
+> Second, if the patch is for d9dddbf55667 then it could cover any tree
+> in the stable repo. Actually, we only know Linux-5.10.y has the
+> problem.
+
+But it is not and does not apply to d9dddbf55667 cleanly.
+
 >
-> Allocate the Trusted Memory Region (TMR) as a 2mb sized/aligned region
-> when SNP is enabled to satify new requirements for the SNP. Continue
-> allocating a 1mb region for !SNP configuration.
+> Maybe, Gregkh could help to direct us on how to deal with the issue:
+> (Fixup a bug which only belongs to the former stable branch.)
 >
-> While at it, provide API that can be used by others to allocate a page
-> that can be used by the firmware. The immediate user for this API will
-> be the KVM driver. The KVM driver to need to allocate a firmware context
-> page during the guest creation. The context page need to be updated
-> by the firmware. See the SEV-SNP specification for further details.
+
+I think you just need to send this patch without saying =E2=80=9Ccommit
+787af64d05cd fixes message is wrong=E2=80=9D would be a good start. You a=
+lso
+need extra fix to mm/page_isolation.c for kernels between 5.15 and 5.17
+(inclusive). So there will need to be two patches:
+
+1) your patch to stable tree prior to 5.15 and
+
+2) your patch with an additional mm/page_isolation.c fix to stable tree
+between 5.15 and 5.17.
+
+>>
+>> Also, you will need to fix the mm/page_isolation.c code too to make th=
+is patch
+>> complete, unless you can show that PFN=3D0x1000 is never going to be e=
+ncountered
+>> in the mm/page_isolation.c code I mentioned below.
+> No, we needn't fix mm/page_isolation.c in linux-5.10.y, because it had
+> pfn_valid_within(buddy_pfn) check after __find_buddy_pfn() to prevent
+> buddy_pfn=3D0.
+> The root cause comes from __find_buddy_pfn():
+> return page_pfn ^ (1 << order);
+
+Right. But pfn_valid_within() was removed since 5.15. So your fix is
+required for kernels between 5.15 and 5.17 (inclusive).
+
 >
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> ---
->  drivers/crypto/ccp/sev-dev.c | 169 ++++++++++++++++++++++++++++++++++-
->  include/linux/psp-sev.h      |  11 +++
->  2 files changed, 176 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
-> index 01edad9116f2..34dc358b13b9 100644
-> --- a/drivers/crypto/ccp/sev-dev.c
-> +++ b/drivers/crypto/ccp/sev-dev.c
-> @@ -62,6 +62,14 @@ static int psp_timeout;
->  #define SEV_ES_TMR_SIZE                (1024 * 1024)
->  static void *sev_es_tmr;
->
-> +/* When SEV-SNP is enabled the TMR needs to be 2MB aligned and 2MB size. */
-> +#define SEV_SNP_ES_TMR_SIZE    (2 * 1024 * 1024)
-> +
-> +static size_t sev_es_tmr_size = SEV_ES_TMR_SIZE;
-> +
-> +static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret);
-> +static int sev_do_cmd(int cmd, void *data, int *psp_ret);
-> +
->  static inline bool sev_version_greater_or_equal(u8 maj, u8 min)
->  {
->         struct sev_device *sev = psp_master->sev_data;
-> @@ -159,6 +167,156 @@ static int sev_cmd_buffer_len(int cmd)
->         return 0;
->  }
->
-> +static void snp_leak_pages(unsigned long pfn, unsigned int npages)
-> +{
-> +       WARN(1, "psc failed, pfn 0x%lx pages %d (leaking)\n", pfn, npages);
-> +       while (npages--) {
-> +               memory_failure(pfn, 0);
-> +               dump_rmpentry(pfn);
-> +               pfn++;
-> +       }
-> +}
-> +
-> +static int snp_reclaim_pages(unsigned long pfn, unsigned int npages, bool locked)
-> +{
-> +       struct sev_data_snp_page_reclaim data;
-> +       int ret, err, i, n = 0;
-> +
-> +       for (i = 0; i < npages; i++) {
-> +               memset(&data, 0, sizeof(data));
-> +               data.paddr = pfn << PAGE_SHIFT;
-> +
-> +               if (locked)
-> +                       ret = __sev_do_cmd_locked(SEV_CMD_SNP_PAGE_RECLAIM, &data, &err);
-> +               else
-> +                       ret = sev_do_cmd(SEV_CMD_SNP_PAGE_RECLAIM, &data, &err);
-> +               if (ret)
-> +                       goto cleanup;
-> +
-> +               ret = rmp_make_shared(pfn, PG_LEVEL_4K);
-> +               if (ret)
-> +                       goto cleanup;
-> +
-> +               pfn++;
-> +               n++;
-> +       }
-> +
-> +       return 0;
-> +
-> +cleanup:
-> +       /*
-> +        * If failed to reclaim the page then page is no longer safe to
-> +        * be released, leak it.
-> +        */
-> +       snp_leak_pages(pfn, npages - n);
-> +       return ret;
-> +}
-> +
-> +static inline int rmp_make_firmware(unsigned long pfn, int level)
-> +{
-> +       return rmp_make_private(pfn, 0, level, 0, true);
-> +}
-> +
-> +static int snp_set_rmp_state(unsigned long paddr, unsigned int npages, bool to_fw, bool locked,
-> +                            bool need_reclaim)
-> +{
-> +       unsigned long pfn = __sme_clr(paddr) >> PAGE_SHIFT; /* Cbit maybe set in the paddr */
-> +       int rc, n = 0, i;
-> +
-> +       for (i = 0; i < npages; i++) {
-> +               if (to_fw)
-> +                       rc = rmp_make_firmware(pfn, PG_LEVEL_4K);
-> +               else
-> +                       rc = need_reclaim ? snp_reclaim_pages(pfn, 1, locked) :
-> +                                           rmp_make_shared(pfn, PG_LEVEL_4K);
-> +               if (rc)
-> +                       goto cleanup;
-> +
-> +               pfn++;
-> +               n++;
-> +       }
-> +
-> +       return 0;
-> +
-> +cleanup:
-> +       /* Try unrolling the firmware state changes */
-> +       if (to_fw) {
-> +               /*
-> +                * Reclaim the pages which were already changed to the
-> +                * firmware state.
-> +                */
-> +               snp_reclaim_pages(paddr >> PAGE_SHIFT, n, locked);
-> +
-> +               return rc;
-> +       }
-> +
-> +       /*
-> +        * If failed to change the page state to shared, then its not safe
-> +        * to release the page back to the system, leak it.
-> +        */
-> +       snp_leak_pages(pfn, npages - n);
-> +
-> +       return rc;
-> +}
-> +
-> +static struct page *__snp_alloc_firmware_pages(gfp_t gfp_mask, int order, bool locked)
-> +{
-> +       unsigned long npages = 1ul << order, paddr;
-> +       struct sev_device *sev;
-> +       struct page *page;
-> +
-> +       if (!psp_master || !psp_master->sev_data)
-> +               return ERR_PTR(-EINVAL);
-> +
-> +       page = alloc_pages(gfp_mask, order);
-> +       if (!page)
-> +               return NULL;
-> +
-> +       /* If SEV-SNP is initialized then add the page in RMP table. */
-> +       sev = psp_master->sev_data;
-> +       if (!sev->snp_inited)
-> +               return page;
-> +
-> +       paddr = __pa((unsigned long)page_address(page));
-> +       if (snp_set_rmp_state(paddr, npages, true, locked, false))
-> +               return NULL;
-> +
-> +       return page;
-> +}
-> +
-> +void *snp_alloc_firmware_page(gfp_t gfp_mask)
-> +{
-> +       struct page *page;
-> +
-> +       page = __snp_alloc_firmware_pages(gfp_mask, 0, false);
-> +
-> +       return page ? page_address(page) : NULL;
-> +}
-> +EXPORT_SYMBOL_GPL(snp_alloc_firmware_page);
-> +
-> +static void __snp_free_firmware_pages(struct page *page, int order, bool locked)
-> +{
-> +       unsigned long paddr, npages = 1ul << order;
-> +
-> +       if (!page)
-> +               return;
-> +
-> +       paddr = __pa((unsigned long)page_address(page));
-> +       if (snp_set_rmp_state(paddr, npages, false, locked, true))
-> +               return;
-> +
-> +       __free_pages(page, order);
-> +}
-> +
-> +void snp_free_firmware_page(void *addr)
-> +{
-> +       if (!addr)
-> +               return;
-> +
-> +       __snp_free_firmware_pages(virt_to_page(addr), 0, false);
-> +}
-> +EXPORT_SYMBOL(snp_free_firmware_page);
-> +
->  static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret)
->  {
->         struct psp_device *psp = psp_master;
-> @@ -281,7 +439,7 @@ static int __sev_platform_init_locked(int *error)
->
->                 data.flags |= SEV_INIT_FLAGS_SEV_ES;
->                 data.tmr_address = tmr_pa;
-> -               data.tmr_len = SEV_ES_TMR_SIZE;
-> +               data.tmr_len = sev_es_tmr_size;
->         }
->
->         rc = __sev_do_cmd_locked(SEV_CMD_INIT, &data, error);
-> @@ -638,6 +796,8 @@ static int __sev_snp_init_locked(int *error)
->         sev->snp_inited = true;
->         dev_dbg(sev->dev, "SEV-SNP firmware initialized\n");
->
-> +       sev_es_tmr_size = SEV_SNP_ES_TMR_SIZE;
-> +
->         return rc;
->  }
->
-> @@ -1161,8 +1321,9 @@ static void sev_firmware_shutdown(struct sev_device *sev)
->                 /* The TMR area was encrypted, flush it from the cache */
->                 wbinvd_on_all_cpus();
->
-> -               free_pages((unsigned long)sev_es_tmr,
-> -                          get_order(SEV_ES_TMR_SIZE));
-> +               __snp_free_firmware_pages(virt_to_page(sev_es_tmr),
-> +                                         get_order(sev_es_tmr_size),
-> +                                         false);
->                 sev_es_tmr = NULL;
->         }
->
-> @@ -1233,7 +1394,7 @@ void sev_pci_init(void)
->         }
->
->         /* Obtain the TMR memory area for SEV-ES use */
-> -       tmr_page = alloc_pages(GFP_KERNEL, get_order(SEV_ES_TMR_SIZE));
-> +       tmr_page = __snp_alloc_firmware_pages(GFP_KERNEL, get_order(sev_es_tmr_size), false);
->         if (tmr_page) {
->                 sev_es_tmr = page_address(tmr_page);
->         } else {
-> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
-> index f2105a8755f9..00bd684dc094 100644
-> --- a/include/linux/psp-sev.h
-> +++ b/include/linux/psp-sev.h
-> @@ -12,6 +12,8 @@
->  #ifndef __PSP_SEV_H__
->  #define __PSP_SEV_H__
->
-> +#include <linux/sev.h>
-> +
->  #include <uapi/linux/psp-sev.h>
->
->  #ifdef CONFIG_X86
-> @@ -919,6 +921,8 @@ int snp_guest_page_reclaim(struct sev_data_snp_page_reclaim *data, int *error);
->  int snp_guest_dbg_decrypt(struct sev_data_snp_dbg *data, int *error);
->
->  void *psp_copy_user_blob(u64 uaddr, u32 len);
-> +void *snp_alloc_firmware_page(gfp_t mask);
-> +void snp_free_firmware_page(void *addr);
->
->  #else  /* !CONFIG_CRYPTO_DEV_SP_PSP */
->
-> @@ -960,6 +964,13 @@ static inline int snp_guest_dbg_decrypt(struct sev_data_snp_dbg *data, int *erro
->         return -ENODEV;
->  }
->
-> +static inline void *snp_alloc_firmware_page(gfp_t mask)
-> +{
-> +       return NULL;
-> +}
-> +
-> +static inline void snp_free_firmware_page(void *addr) { }
-> +
->  #endif /* CONFIG_CRYPTO_DEV_SP_PSP */
->
->  #endif /* __PSP_SEV_H__ */
-> --
-> 2.17.1
+> When page_pfn is the same as the order size, it will return the
+> previous buddy not the next. That is the only exception for this
+> algorithm, right?
 >
 >
+>
+>
+> In fact, the bug is a very long time to reproduce and is not easy to
+> debug, so we want to contribute it to the community to prevent other
+> guys from wasting time. Although there is no new patch at all.
+
+Thanks for your reporting and sending out the patch. I really
+appreciate it. We definitely need your inputs. Throughout the email
+thread, I am trying to help you clarify the bug and how to fix it
+properly:
+
+1. The commit 787af64d05cd does not apply cleanly to commits
+d9dddbf55667, meaning you cannot just cherry-pick that commit to
+fix the issue. That is why we need your patch to fix the issue.
+And saying it has a wrong fixes message in this patch=E2=80=99s git log i=
+s
+misleading.
+
+2. For kernels between 5.15 and 5.17 (inclusive), an additional fix
+to mm/page_isolation.c is also needed, since pfn_valid_within() was
+removed since 5.15 and the issue can appear during page isolation.
+
+3. For kernels before 5.15, this patch will apply.
+
+>
+>>
+>>>
+>>>>
+>>>>> Actually, this issue is involved by commit:
+>>>>>      commit d9dddbf55667 ("mm/page_alloc: prevent merging between i=
+solated and other pageblocks")
+>>>>>
+>>>>> For RISC-V arch, the first 2M is reserved for sbi, so the start PFN=
+ is 512,
+>>>>> but it got buddy PFN 0 for PFN 0x2000:
+>>>>>      0 =3D 0x2000 ^ (1 << 12)
+>>>>> With the illegal buddy PFN 0, it got an illegal buddy page, which c=
+aused
+>>>>> crash in __get_pfnblock_flags_mask().
+>>>>
+>>>> It seems that the RISC-V arch reveals a similar bug from d9dddbf5566=
+7.
+>>>> Basically, this bug will only happen when PFN=3D0x2000 is merging up=
+ and
+>>>> there are some isolated pageblocks.
+>>> Not PFN=3D0x2000, it's PFN=3D0x1000, I guess.
+>>>
+>>> RISC-V's first 2MB RAM could reserve for opensbi, so it would have
+>>> riscv_pfn_base=3D512 and mem_map began with 512th PFN when
+>>> CONFIG_FLATMEM=3Dy.
+>>> (Also, csky has the same issue: a non-zero pfn_base in some scenarios=
+=2E)
+>>>
+>>> But __find_buddy_pfn algorithm thinks the start address is 0, it coul=
+d
+>>> get 0 pfn or less than the pfn_base value. We need another check to
+>>> prevent that.
+>>>
+>>>>
+>>>> BTW, what does first reserved 2MB imply? All 4KB pages from first 2M=
+B are
+>>>> set to PageReserved?
+>>>>
+>>>>>
+>>>>> With the patch, it can avoid the calling of get_pageblock_migratety=
+pe() if
+>>>>> it isn't buddy page.
+>>>>
+>>>> You might miss the __find_buddy_pfn() caller in unset_migratetype_is=
+olate()
+>>>> from mm/page_isolation.c, if you are talking about linux-5.17.y and =
+former
+>>>> version. There, page_is_buddy() is also not called and is_migrate_is=
+olate_page()
+>>>> is called, which calls get_pageblock_migratetype() too.
+>>>>
+>>>>>
+>>>>> Fixes: d9dddbf55667 ("mm/page_alloc: prevent merging between isolat=
+ed and other pageblocks")
+>>>>> Cc: stable@vger.kernel.org
+>>>>> Reported-by: zjb194813@alibaba-inc.com
+>>>>> Reported-by: tianhu.hh@alibaba-inc.com
+>>>>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
+>>>>> ---
+>>>>>  mm/page_alloc.c | 3 +++
+>>>>>  1 file changed, 3 insertions(+)
+>>>>>
+>>>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+>>>>> index b1caa1c6c887..5b423caa68fd 100644
+>>>>> --- a/mm/page_alloc.c
+>>>>> +++ b/mm/page_alloc.c
+>>>>> @@ -1129,6 +1129,9 @@ static inline void __free_one_page(struct pag=
+e *page,
+>>>>>
+>>>>>                       buddy_pfn =3D __find_buddy_pfn(pfn, order);
+>>>>>                       buddy =3D page + (buddy_pfn - pfn);
+>>>>> +
+>>>>> +                     if (!page_is_buddy(page, buddy, order))
+>>>>> +                             goto done_merging;
+>>>>>                       buddy_mt =3D get_pageblock_migratetype(buddy)=
+;
+>>>>>
+>>>>>                       if (migratetype !=3D buddy_mt
+>>>>> --
+>>>>> 2.17.1
+>>>>
+>>>> --
+>>>> Best Regards,
+>>>> Yan, Zi
+>>>
+>>>
+>>>
+>>> --
+>>> Best Regards
+>>>  Guo Ren
+>>>
+>>> ML: https://lore.kernel.org/linux-csky/
+>>
+>> --
+>> Best Regards,
+>> Yan, Zi
+>
+>
+>
+> -- =
+
+> Best Regards
+>  Guo Ren
+>
+> ML: https://lore.kernel.org/linux-csky/
+
+--
+Best Regards,
+Yan, Zi
+
+--=_MailMate_E133FCE1-A8E8-45AB-BB0D-17B9488A3C6D_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmKn0u0PHHppeUBudmlk
+aWEuY29tAAoJEJ2yUfNrYfqK8CcQAKE59rmqKVsp44VmXx/OxJPqqqmeIMs9ZRiQ
+Io8qwpb57sh+vwWeHcI3RikWsNvfcECCVQ0dgHwM32NZAdl3XT7f+e1ufaoRRUMZ
+H8roNF06NqWE34+k7TPRvNByRQhRZdu7iuJcCr+xF3a8XNc85A2IxHLlZJGOzDxE
+y7cWrBrrIJs58xP294cRGN9Nc2ZS9UjOTiMpN6PeqfJLfh6ruoAIv8JKDRhf9ckV
+fOaRR+nZQdBa+XBx7mz7uSLU1J3fjdOxCrRsFMKQv5p4PjRAD11JZ9pQ1dRFmqLd
+WPqNWdz37jmQpEATBBBBGlYRazLHAqQ2rUJpOaLy0w3qzsrqeTC846fE6VUkncBY
+pHM8UjPuT6auBGHjp9hI7x92gNA5d9ModqnG4ahS+DBYzI7PqNN24aMHrR8eRJKm
+Uh8vlb+McK0hq9VfKZ6SLQfJQisDPwPdaewezcZSHJb7vWUTZ+f8lPY7x67Nezcv
+FbPlO+Qx04fCYjKlf62Z/JUpq+sy1LbiyZBijF3Y4cERcYR21/05cGnXD+INeBts
++dNLGacYiETYoaft5iVAnXkyYtng4ZBqXzSz/0G2q707kziL8xY6YIn7/a/+UMo1
+smu/yxep/DcLrCulXDyGr0uxDrnZyIo7LkrTywBDDHrHFC94Ul+FLEWZGMwvWLIP
+o29BWob3
+=NSir
+-----END PGP SIGNATURE-----
+
+--=_MailMate_E133FCE1-A8E8-45AB-BB0D-17B9488A3C6D_=--

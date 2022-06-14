@@ -2,189 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A81754BC1E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFCB54BC26
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358388AbiFNUsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
+        id S237537AbiFNUrq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:47:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344430AbiFNUr4 (ORCPT
+        with ESMTP id S229585AbiFNUri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:47:56 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA6D423BC7
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:47:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655239672; x=1686775672;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DQrjeq8ZA4p+GkmHtWKVOu0kb3id5BLlfgX5VBVUSxo=;
-  b=g3WX0BxN6L3Dvduoq4jrFf9imJwRIYTCLnmBBhY8tV5XIvxMyV+hn7vo
-   4/tu1ywZu3cgWZRZKe8s6svn8RMhHbq9KEyOnTWNq/grk6Hzhbi/iUgjG
-   JWu1Z3nmFRVTlJWEM/Gox+B4A4jJAj4abRfTbeE+kC9vTHQNWmYZQx+CM
-   WA45c4WkzskjCWHEsXWxT6621QUZoVPPT7wsC7ngVh1qxHskDFQw+Bib/
-   Kgh1O3t92dYvJ3C6+Vfjp6Wd6rzGsAugh5leXz7X9jgmzijZzl3sC7bmJ
-   I6CoM+hXfkc5lErf1O0Yag7HwxQ7dB8To2T9/mdkYXgBFSy0RYWSEI8eR
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="278784491"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="278784491"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 13:47:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="652254208"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Jun 2022 13:47:50 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1DS2-000MIF-8S;
-        Tue, 14 Jun 2022 20:47:50 +0000
-Date:   Wed, 15 Jun 2022 04:46:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- d97c2338871bee6c4255c5a38f95849c063f8f1f
-Message-ID: <62a8f3bd.1LLIgqtkwRZzabQ7%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 14 Jun 2022 16:47:38 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E818E1D0F3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:47:36 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id a68-20020a25ca47000000b006605f788ff1so8482643ybg.16
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=RNfsBnrb019GwwlDncDGa0smr28pomq7mA55AJKJhHI=;
+        b=R325LsRZneFNEFs8J6A6K9NT69ICE7hR+z6FsW/5Db9t8H6xLdqgyEpeRzkOBdLCO/
+         XQCmFcsCKJt7FSotMJUlI6ZBcOVL9BatykBhuM1yBHYmz3ZilAF4/D4eC2XkhNHdtAkJ
+         scgUUyd4ok2n2uXyg2qcJSVX809jw/dkHJEm8qde54teS95v+M3B8e5rIo/QaVzOtoSv
+         Rcqv2Rgt2kvMXuS1BvxVEvuxOy3DwocOX33yLWhfR3rpGcqZcPjMDZCQlgjJYTKE7W54
+         rCoffxIBjX7bY2L7ZhgeeEBK/6eTvKCUKnqePEQJHcg9mRv9oHzqhWmq9vLROZhuOVCB
+         S3yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=RNfsBnrb019GwwlDncDGa0smr28pomq7mA55AJKJhHI=;
+        b=lGm8gVwrxV43gIxprJOZ564CKrP1jKGr90Mumn5aULH3gr0D0WsN1JPR03iUaIdVvg
+         57Y+1HnvIiYY34b5k/cCXpS+z1jxQqbl4QtVOna4E1qq29XKLdNuZ7rA06W7PgS7QzHR
+         vHXyAlG9CG1kR0lUC/1vsRHaY78PyTODKvfYyCGrnTfALc1ERXRJZ677qefP7GOlMtOb
+         c1C715pJ0N+xBEBd9XAFFpRFJHcMepm+NglBBDXNaAdb4loOLqG+eidtqRFJ+eo1GogR
+         bajs0ZmTlDDRNoqfxxDZuLIqxBAVXkqNS8B8Heohd6cGbzxFSkc45R0hQUJ493bUZt9f
+         SNdw==
+X-Gm-Message-State: AJIora98auvagY0GtHmRmAp78Lz/wzSgPqQ/HwJzIFFcdGfEOiQM1G2y
+        PGMbKVeN3SAj3PY+d86P42PAu8WDVGs=
+X-Google-Smtp-Source: AGRyM1vaT5geIv0+nQuGaH5hx7l6hUj5FbIN6ax9c/UTf8qAI7MTavn23/SMXsJJTDkFsNPPjKgejO8Ibpo=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a81:260a:0:b0:300:1729:7654 with SMTP id
+ m10-20020a81260a000000b0030017297654mr7643645ywm.125.1655239656113; Tue, 14
+ Jun 2022 13:47:36 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Tue, 14 Jun 2022 20:47:09 +0000
+Message-Id: <20220614204730.3359543-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+Subject: [PATCH v2 00/21] KVM: x86: Event/exception fixes and cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Oliver Upton <oupton@google.com>,
+        Peter Shier <pshier@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: d97c2338871bee6c4255c5a38f95849c063f8f1f  rcu-tasks: Be more patient for RCU Tasks boot-time testing
+The main goal of this series is to fix KVM's longstanding bug of not
+honoring L1's exception intercepts wants when handling an exception that
+occurs during delivery of a different exception.  E.g. if L0 and L1 are
+using shadow paging, and L2 hits a #PF, and then hits another #PF while
+vectoring the first #PF due to _L1_ not having a shadow page for the IDT,
+KVM needs to check L1's intercepts before morphing the #PF => #PF => #DF
+so that the #PF is routed to L1, not injected into L2 as a #DF.
 
-elapsed time: 1152m
+nVMX has hacked around the bug for years by overriding the #PF injector
+for shadow paging to go straight to VM-Exit, and nSVM has started doing
+the same.  The hacks mostly work, but they're incomplete, confusing, and
+lead to other hacky code, e.g. bailing from the emulator because #PF
+injection forced a VM-Exit and suddenly KVM is back in L1.
 
-configs tested: 107
-configs skipped: 3
+Everything leading up to that are related fixes and cleanups I encountered
+along the way; some through code inspection, some through tests.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+v2:
+  - Rebased to kvm/queue (commit 8baacf67c76c) + selftests CPUID
+    overhaul.
+    https://lore.kernel.org/all/20220614200707.3315957-1-seanjc@google.com
+  - Treat KVM_REQ_TRIPLE_FAULT as a pending exception.
 
-gcc tested configs:
-arm                              allmodconfig
-arm                              allyesconfig
-arm                                 defconfig
-arm64                               defconfig
-arm64                            allyesconfig
-i386                 randconfig-c001-20220613
-sh                         apsh4a3a_defconfig
-arm                           h3600_defconfig
-powerpc                     mpc83xx_defconfig
-mips                          rb532_defconfig
-sh                          r7780mp_defconfig
-arm                             ezx_defconfig
-powerpc                   motionpro_defconfig
-csky                             alldefconfig
-arm                         axm55xx_defconfig
-sh                         microdev_defconfig
-arm                      jornada720_defconfig
-powerpc                      chrp32_defconfig
-arm                          exynos_defconfig
-alpha                            alldefconfig
-powerpc                    klondike_defconfig
-ia64                                defconfig
-x86_64               randconfig-k001-20220613
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                            allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                             allyesconfig
-sparc                               defconfig
-i386                                defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64               randconfig-a015-20220613
-x86_64               randconfig-a014-20220613
-x86_64               randconfig-a011-20220613
-x86_64               randconfig-a016-20220613
-x86_64               randconfig-a012-20220613
-x86_64               randconfig-a013-20220613
-i386                 randconfig-a012-20220613
-i386                 randconfig-a011-20220613
-i386                 randconfig-a013-20220613
-i386                 randconfig-a014-20220613
-i386                 randconfig-a016-20220613
-i386                 randconfig-a015-20220613
-riscv                randconfig-r042-20220613
-arc                  randconfig-r043-20220613
-s390                 randconfig-r044-20220613
-riscv                             allnoconfig
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                                  kexec
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
+v1: https://lore.kernel.org/all/20220311032801.3467418-1-seanjc@google.com
 
-clang tested configs:
-mips                      malta_kvm_defconfig
-mips                           mtx1_defconfig
-x86_64               randconfig-a003-20220613
-x86_64               randconfig-a006-20220613
-x86_64               randconfig-a001-20220613
-x86_64               randconfig-a005-20220613
-x86_64               randconfig-a002-20220613
-x86_64               randconfig-a004-20220613
-i386                 randconfig-a002-20220613
-i386                 randconfig-a003-20220613
-i386                 randconfig-a004-20220613
-i386                 randconfig-a005-20220613
-i386                 randconfig-a006-20220613
-i386                 randconfig-a001-20220613
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-hexagon              randconfig-r041-20220613
-hexagon              randconfig-r045-20220613
+Sean Christopherson (21):
+  KVM: nVMX: Unconditionally purge queued/injected events on nested
+    "exit"
+  KVM: VMX: Drop bits 31:16 when shoving exception error code into VMCS
+  KVM: x86: Don't check for code breakpoints when emulating on exception
+  KVM: nVMX: Treat General Detect #DB (DR7.GD=1) as fault-like
+  KVM: nVMX: Prioritize TSS T-flag #DBs over Monitor Trap Flag
+  KVM: x86: Treat #DBs from the emulator as fault-like (code and
+    DR7.GD=1)
+  KVM: x86: Use DR7_GD macro instead of open coding check in emulator
+  KVM: nVMX: Ignore SIPI that arrives in L2 when vCPU is not in WFS
+  KVM: nVMX: Unconditionally clear mtf_pending on nested VM-Exit
+  KVM: VMX: Inject #PF on ENCLS as "emulated" #PF
+  KVM: x86: Rename kvm_x86_ops.queue_exception to inject_exception
+  KVM: x86: Make kvm_queued_exception a properly named, visible struct
+  KVM: x86: Formalize blocking of nested pending exceptions
+  KVM: x86: Use kvm_queue_exception_e() to queue #DF
+  KVM: x86: Hoist nested event checks above event injection logic
+  KVM: x86: Evaluate ability to inject SMI/NMI/IRQ after potential
+    VM-Exit
+  KVM: x86: Morph pending exceptions to pending VM-Exits at queue time
+  KVM: x86: Treat pending TRIPLE_FAULT requests as pending exceptions
+  KVM: VMX: Update MTF and ICEBP comments to document KVM's subtle
+    behavior
+  KVM: selftests: Use uapi header to get VMX and SVM exit reasons/codes
+  KVM: selftests: Add an x86-only test to verify nested exception
+    queueing
 
+ arch/x86/include/asm/kvm-x86-ops.h            |   2 +-
+ arch/x86/include/asm/kvm_host.h               |  35 +-
+ arch/x86/kvm/emulate.c                        |   3 +-
+ arch/x86/kvm/svm/nested.c                     | 102 ++---
+ arch/x86/kvm/svm/svm.c                        |  18 +-
+ arch/x86/kvm/vmx/nested.c                     | 319 +++++++++-----
+ arch/x86/kvm/vmx/sgx.c                        |   2 +-
+ arch/x86/kvm/vmx/vmx.c                        |  53 ++-
+ arch/x86/kvm/x86.c                            | 404 +++++++++++-------
+ arch/x86/kvm/x86.h                            |  11 +-
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/include/x86_64/svm_util.h   |   7 +-
+ .../selftests/kvm/include/x86_64/vmx.h        |  51 +--
+ .../kvm/x86_64/nested_exceptions_test.c       | 295 +++++++++++++
+ 15 files changed, 886 insertions(+), 418 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/nested_exceptions_test.c
+
+
+base-commit: 816967202161955f398ce379f9cbbedcb1eb03cb
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1.476.g0c4daa206d-goog
+

@@ -2,96 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01ECF54B62E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A63054B613
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:31:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235161AbiFNQ3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43042 "EHLO
+        id S1344373AbiFNQ2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343903AbiFNQ2Z (ORCPT
+        with ESMTP id S1344012AbiFNQ22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:28:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46ABB193EB;
-        Tue, 14 Jun 2022 09:28:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D999D16F8;
-        Tue, 14 Jun 2022 09:28:23 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.41.154])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EEF753F66F;
-        Tue, 14 Jun 2022 09:28:05 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 17:28:02 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
-        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
-        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 25/36] time/tick-broadcast: Remove RCU_NONIDLE usage
-Message-ID: <Yqi3EmHbuvf3ItMI@FVFF77S0Q05N>
-References: <20220608142723.103523089@infradead.org>
- <20220608144517.507286638@infradead.org>
+        Tue, 14 Jun 2022 12:28:28 -0400
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6CC2DD7C;
+        Tue, 14 Jun 2022 09:28:27 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d13so8144427plh.13;
+        Tue, 14 Jun 2022 09:28:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KxyuTywMpO/66pvcVmFIHSuich2DF5impDBsu9BDdd8=;
+        b=61ZNMv/rTLVnHsqHWowA+mTZG+cdmsbg/QDxR4TLlWeWJyn7tVGVqZihmxh3zZpE6T
+         l4rMSsgkdlOhoD9agPiQ0PhKF5ZHYQ2a4NQvOYjAr+lcAH0f7F4L191FRsVaMMKh2+r/
+         8fYgCR9cBqzraA2R9JhvcF03NfNNkGoKag0m+pz8+klA+qEW0xZUJ1CNMq4qtxm16Sy3
+         dEMjMBNR6o53CccKUzUqi3FzLGH9lwnfE61w0aEut/pphp8StnXHVedrhDjY2UB3x5uV
+         p3Okz9Fn4/5M5ATxuXULem7WWni7eBv3VbHS4nJ39CMyvd+C15bhBa/b4Sn6PR6jjU9R
+         9eCg==
+X-Gm-Message-State: AJIora/CKT34GGcDS35gsS6q4tjFpl8ZdwH2WKAFr2JBCb3vTnQOBtDc
+        x872Sd3S7Xlp67qAdY0rXAk=
+X-Google-Smtp-Source: AGRyM1vZ/RlHyRQlMZNO4wF7HIR29wi2QDifMTtA0HlUhfEQhfxU82vH528GxkNdc59d9YZ60aPLZA==
+X-Received: by 2002:a17:903:40ce:b0:164:248:1464 with SMTP id t14-20020a17090340ce00b0016402481464mr5131883pld.16.1655224106461;
+        Tue, 14 Jun 2022 09:28:26 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:ab60:e1ea:e2eb:c1b6? ([2620:15c:211:201:ab60:e1ea:e2eb:c1b6])
+        by smtp.gmail.com with ESMTPSA id r33-20020a17090a43a400b001e305f5cd22sm7521541pjg.47.2022.06.14.09.28.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 09:28:25 -0700 (PDT)
+Message-ID: <fe6ba3bd-81f4-215d-5f1b-0fa05e68a0c5@acm.org>
+Date:   Tue, 14 Jun 2022 09:28:23 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608144517.507286638@infradead.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 07/10] scsi: ufs-mediatek: Support flexible parameters
+ for smc calls
+Content-Language: en-US
+To:     Stanley Chu <stanley.chu@mediatek.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
+        avri.altman@wdc.com, alim.akhtar@samsung.com, jejb@linux.ibm.com
+Cc:     peter.wang@mediatek.com, chun-hung.wu@mediatek.com,
+        alice.chao@mediatek.com, powen.kao@mediatek.com,
+        mason.zhang@mediatek.com, qilin.tan@mediatek.com,
+        lin.gui@mediatek.com, eddie.huang@mediatek.com,
+        tun-yu.yu@mediatek.com, cc.chou@mediatek.com,
+        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com
+References: <20220614141655.14409-1-stanley.chu@mediatek.com>
+ <20220614141655.14409-8-stanley.chu@mediatek.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220614141655.14409-8-stanley.chu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,58 +72,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 04:27:48PM +0200, Peter Zijlstra wrote:
-> No callers left that have already disabled RCU.
+On 6/14/22 07:16, Stanley Chu wrote:
+> From: Alice Chao <alice.chao@mediatek.com>
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Provide flexible number of parameters for UFS SMC calls to be
+> easily used for future SMC usages.
 
-Acked-by: Mark Rutland <mark.rutland@arm.com>
+How far in the future? Please only introduce what is needed for this 
+patch series.
 
-Mark.
+> +/*
+> + * SMC call wapper function
+                ^^^^^^
+typo
 
-> ---
->  kernel/time/tick-broadcast-hrtimer.c |   29 ++++++++++++-----------------
->  1 file changed, 12 insertions(+), 17 deletions(-)
-> 
-> --- a/kernel/time/tick-broadcast-hrtimer.c
-> +++ b/kernel/time/tick-broadcast-hrtimer.c
-> @@ -56,25 +56,20 @@ static int bc_set_next(ktime_t expires,
->  	 * hrtimer callback function is currently running, then
->  	 * hrtimer_start() cannot move it and the timer stays on the CPU on
->  	 * which it is assigned at the moment.
-> +	 */
-> +	hrtimer_start(&bctimer, expires, HRTIMER_MODE_ABS_PINNED_HARD);
-> +	/*
-> +	 * The core tick broadcast mode expects bc->bound_on to be set
-> +	 * correctly to prevent a CPU which has the broadcast hrtimer
-> +	 * armed from going deep idle.
->  	 *
-> -	 * As this can be called from idle code, the hrtimer_start()
-> -	 * invocation has to be wrapped with RCU_NONIDLE() as
-> -	 * hrtimer_start() can call into tracing.
-> +	 * As tick_broadcast_lock is held, nothing can change the cpu
-> +	 * base which was just established in hrtimer_start() above. So
-> +	 * the below access is safe even without holding the hrtimer
-> +	 * base lock.
->  	 */
-> -	RCU_NONIDLE( {
-> -		hrtimer_start(&bctimer, expires, HRTIMER_MODE_ABS_PINNED_HARD);
-> -		/*
-> -		 * The core tick broadcast mode expects bc->bound_on to be set
-> -		 * correctly to prevent a CPU which has the broadcast hrtimer
-> -		 * armed from going deep idle.
-> -		 *
-> -		 * As tick_broadcast_lock is held, nothing can change the cpu
-> -		 * base which was just established in hrtimer_start() above. So
-> -		 * the below access is safe even without holding the hrtimer
-> -		 * base lock.
-> -		 */
-> -		bc->bound_on = bctimer.base->cpu_base->cpu;
-> -	} );
-> +	bc->bound_on = bctimer.base->cpu_base->cpu;
+> + */
+> +#define _ufs_mtk_smc(cmd, res, v1, v2, v3, v4, v5, v6) \
+> +		arm_smccc_smc(MTK_SIP_UFS_CONTROL, \
+> +				  cmd, v1, v2, v3, v4, v5, v6, &(res))
 > +
->  	return 0;
->  }
->  
-> 
-> 
+> +#define _ufs_mtk_smc_0(cmd, res) \
+> +	_ufs_mtk_smc(cmd, res, 0, 0, 0, 0, 0, 0)
+> +
+> +#define _ufs_mtk_smc_1(cmd, res, v1) \
+> +	_ufs_mtk_smc(cmd, res, v1, 0, 0, 0, 0, 0)
+> +
+> +#define _ufs_mtk_smc_2(cmd, res, v1, v2) \
+> +	_ufs_mtk_smc(cmd, res, v1, v2, 0, 0, 0, 0)
+> +
+> +#define _ufs_mtk_smc_3(cmd, res, v1, v2, v3) \
+> +	_ufs_mtk_smc(cmd, res, v1, v2, v3, 0, 0, 0)
+> +
+> +#define _ufs_mtk_smc_4(cmd, res, v1, v2, v3, v4) \
+> +	_ufs_mtk_smc(cmd, res, v1, v2, v3, v4, 0, 0)
+> +
+> +#define _ufs_mtk_smc_5(cmd, res, v1, v2, v3, v4, v5) \
+> +	_ufs_mtk_smc(cmd, res, v1, v2, v3, v4, v5, 0)
+> +
+> +#define _ufs_mtk_smc_6(cmd, res, v1, v2, v3, v4, v5, v6) \
+> +	_ufs_mtk_smc(cmd, res, v1, v2, v3, v4, v5, v6)
+> +
+> +#define _ufs_mtk_smc_selector(cmd, res, v1, v2, v3, v4, v5, v6, FUNC, ...) FUNC
+> +
+> +#define ufs_mtk_smc(...) \
+> +	_ufs_mtk_smc_selector(__VA_ARGS__, \
+> +	_ufs_mtk_smc_6(__VA_ARGS__), \
+> +	_ufs_mtk_smc_5(__VA_ARGS__), \
+> +	_ufs_mtk_smc_4(__VA_ARGS__), \
+> +	_ufs_mtk_smc_3(__VA_ARGS__), \
+> +	_ufs_mtk_smc_2(__VA_ARGS__), \
+> +	_ufs_mtk_smc_1(__VA_ARGS__), \
+> +	_ufs_mtk_smc_0(__VA_ARGS__) \
+> +	)
+
+If _ufs_mtk_smc() would be modified to accept an struct _ufs_mtk_args as 
+its only argument, would that allow to simplify the above into the 
+following?
+
+#define ufs_mtk_smc(...) \
+   _ufs_mtk_smc((struct _ufs_mtk_args){__VA_ARGS__})
+
+> +/*
+> + * Sip kernel interface
+> + */
+
+What is "Sip"? Should it perhaps be spelled as "SIP"?
+
+Thanks,
+
+Bart.

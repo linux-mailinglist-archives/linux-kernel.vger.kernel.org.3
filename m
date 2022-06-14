@@ -2,95 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E2754B507
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:50:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A045954B511
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343685AbiFNPs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58504 "EHLO
+        id S232474AbiFNPtP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244359AbiFNPsw (ORCPT
+        with ESMTP id S237623AbiFNPtK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:48:52 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B882182C;
-        Tue, 14 Jun 2022 08:48:50 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y196so8914310pfb.6;
-        Tue, 14 Jun 2022 08:48:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ReMfmyhV636BKHluPmxrRh/9FnLApqDbgajop+vcehk=;
-        b=OJ7mlWWYdccKNB56VGU9kfXkNVW14GsvyNNva7mbq+/DQMwQ9eoqjO4S6AVdnx8WC7
-         JFACeWxRBbNSWFSObW9Qab7IWB8REeTMdT7O72YNyz7VGtL0e1zLPQaYpfnjjE5bAKn4
-         WCZU1X/qKyz24gc/8VRZcLD0b8rD22TXgJscIwwNG/F92l3+RoDrfWWgehTec6OBTEd/
-         3h5pyRpZzXReAdIYsxR6VsA97gj7KTqXUWhAQZKYZ4gSIkKs5a7UJhvT0+cJAVPpGOCS
-         apo4nJybSzumIeVTATOq6v50WmMQSIpvLv3/fSTVnBJKByu22rAp+l+8qOpIdWfT1fmg
-         wFGw==
+        Tue, 14 Jun 2022 11:49:10 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F512E08F;
+        Tue, 14 Jun 2022 08:49:09 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id hf10so6371872qtb.7;
+        Tue, 14 Jun 2022 08:49:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=ReMfmyhV636BKHluPmxrRh/9FnLApqDbgajop+vcehk=;
-        b=xvMKgsN6ElPCYNiJsjXXaQetODHW2K+WyA9XrnM6bXva2aQ4ewF8OkRFusAZQ2kN1q
-         E/cH6SSRPO+JfamDu0MDai9IpPFS4fgFyFod/X+nPRzwB8C4KigLj9X0mE6K3DnpD1Rp
-         Shrj8inQtkAVyMQlnHe3upaIajlB51n4a+3ES1zAuXgne8l3y2PvfcJ6H5thWFmvoa3e
-         icjKv83gQVVy4/l0UvqLO6wKVs1gX6Ab9cjo989/nnqpUxup1L5HKiXBUf7SvfWCQa6h
-         8wENfr0NgIbYXBpQtfq+Q+xDohVSF21a4C6l5MRdU1iNZFNSK1WSRfrJJdAvQb8lFu1q
-         hfFg==
-X-Gm-Message-State: AJIora9xWpaUH2ngd+xyCxXwZ71PszCbDqygEWrmDkgt+0wt++SSWRCl
-        lWYlw9iLSS994VTaonR6hvs=
-X-Google-Smtp-Source: AGRyM1t3b0rNThIFq8QkHcA0vfRDTDU8VdBfnOZI3WwLFwAdf4Lj3KOo/Hb3IM7PJ6/lp1aicdwezQ==
-X-Received: by 2002:a63:8b42:0:b0:408:a938:289b with SMTP id j63-20020a638b42000000b00408a938289bmr3036453pge.201.1655221730184;
-        Tue, 14 Jun 2022 08:48:50 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x10-20020a627c0a000000b0050e006279bfsm7769401pfc.137.2022.06.14.08.48.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 08:48:49 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 14 Jun 2022 08:48:48 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.18 000/343] 5.18.4-rc2 review
-Message-ID: <20220614154848.GA3192067@roeck-us.net>
-References: <20220613181233.078148768@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2Lz2xm2OeZO7pMrkyEsrx4M6KP6BHP9ACsFmmAuNdJE=;
+        b=xVvu73MHUUEUj5+r+6n9WWuTseX4F2sccRHYu+YldWfqvA8mMn6/pXcQtD+jFJL1ui
+         6cPQSeHEl9HSuqZq42zDFsnQI9Fwk4sM6/S6FIRj8sR1P/WwcRMXUN0V4jRNaJUYi/2k
+         A0V2YLT7kEyM4jyCyIWI0PzCi6MHaxRRbDH2jcnpnMJwLL1JGsKI3S9fxcKqh1Q8F0Sq
+         HsbmwP6eChRfVZgjXn9nKC0WYd+p2mhZAiPLnp2YjaMJ/urXbxbHNxA5vgDXSMrQCo37
+         eaQj492q3ujuUSq3CKiWp0gZ00FDdIWQsFtcBI1KRuJ/+2+c4TRvBihUaeH6oM5U9AsM
+         29dg==
+X-Gm-Message-State: AOAM530gjNvijQSxjvAoVgb/zu0JptURiE9v2CWanc7F5vasq+S72d4C
+        P7g2VIbRKacHhU75/GDpKHi6zv/JC9kF8A==
+X-Google-Smtp-Source: ABdhPJyjZcL86ZtgiGvwCCHzMJs3/IaCrGdoWU8qbUZEZINAZox7I51VQVdQ2FJypRfyrO20F7QkBQ==
+X-Received: by 2002:a05:622a:1393:b0:304:b6c8:bca2 with SMTP id o19-20020a05622a139300b00304b6c8bca2mr4637798qtk.642.1655221748403;
+        Tue, 14 Jun 2022 08:49:08 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id j9-20020ae9c209000000b006a377a015d4sm9466708qkg.39.2022.06.14.08.49.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 08:49:08 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id v81so15942249ybe.0;
+        Tue, 14 Jun 2022 08:49:08 -0700 (PDT)
+X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
+ bu5-20020a056902090500b0064a2089f487mr5874556ybb.202.1655221747725; Tue, 14
+ Jun 2022 08:49:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613181233.078148768@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+References: <20220613134914.18655-1-wsa+renesas@sang-engineering.com> <20220613134914.18655-3-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220613134914.18655-3-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Jun 2022 17:48:56 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWJ9N1=X0O0LtpPrjH-uSbupKAVr+J3KwStL7xYgMxfWw@mail.gmail.com>
+Message-ID: <CAMuHMdWJ9N1=X0O0LtpPrjH-uSbupKAVr+J3KwStL7xYgMxfWw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arm64: dts: renesas: spider-cpu: Enable SCIF0 on
+ second connector
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 08:18:34PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.4 release.
-> There are 343 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 15 Jun 2022 18:11:39 +0000.
-> Anything received after that time might be too late.
-> 
+Hi Wolfram,
 
-Build results:
-	total: 154 pass: 154 fail: 0
-Qemu test results:
-	total: 489 pass: 489 fail: 0
+On Mon, Jun 13, 2022 at 3:49 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> The schematics label it as SCIF0 debug port.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Thanks for your patch!
 
-Guenter
+> --- a/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
+> +++ b/arch/arm64/boot/dts/renesas/r8a779f0-spider-cpu.dtsi
+> @@ -68,6 +68,11 @@ i2c4_pins: i2c4 {
+>                 function = "i2c4";
+>         };
+>
+> +       scif0_pins: scif0 {
+> +               groups = "scif0_data", "scif0_ctrl";
+> +               function = "scif0";
+> +       };
+> +
+>         scif_clk_pins: scif_clk {
+>                 groups = "scif_clk";
+>                 function = "scif_clk";
+> @@ -79,6 +84,14 @@ &rwdt {
+>         status = "okay";
+>  };
+>
+> +&scif0 {
+> +       pinctrl-0 = <&scif0_pins>;
+> +       pinctrl-names = "default";
+> +
+> +       uart-has-rtscts;
+> +       status = "okay";
+> +};
+> +
+>  &scif_clk {
+>         clock-frequency = <24000000>;
+>  };
+
+This needs a new serial alias under /aliases.
+Mixing dynamic and static serial IDs may cause conflicts, cfr. commit
+7678f4c20fa7670f ("serial: sh-sci: Add support for dynamic instances").
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

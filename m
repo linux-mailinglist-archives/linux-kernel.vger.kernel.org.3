@@ -2,47 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C192A54BD99
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FEEE54BD94
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242087AbiFNWX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 18:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
+        id S235677AbiFNWYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 18:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiFNWX4 (ORCPT
+        with ESMTP id S242406AbiFNWX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 18:23:56 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02F24D604;
-        Tue, 14 Jun 2022 15:23:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LN2ys6y6Gz4xXF;
-        Wed, 15 Jun 2022 08:23:49 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655245430;
-        bh=cijYic4Yqf393NE68L/sY4Cjec66pbDgVeVxDejtf7Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GlZoe9kh2EForDHqWY5MVHEejvw3LAQktNn62muv51sD0r9H+3XF+9Udh0v80kSjK
-         k/FsubCOcnG7282G9ar4K8c8r74tnEWSGjp3eN9cwrqd6fRtnYohSicnUkq4eGLRn+
-         7D6FkdBOcIAkr7mP6ZFkhsqKYeJvpe0T7S+mF8pPa3SIIIwwPWUmK4U08Y4Jp03cq5
-         KYyXhA5uYKOF95uO3O8gYd0r6UzwMZqc48ZXMsYZr8lp7QsgXsR9lHkMoEbUeNCq4v
-         2vtOH+vez2RyFnSjWi4gM31hZoKtltWGGE7nkWbrWRnjddTFYW+lLju6qVcDB6in7v
-         EUOz6WnwIOTSw==
-Date:   Wed, 15 Jun 2022 08:23:48 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jeff Layton <jlayton@kernel.org>, Ilya Dryomov <idryomov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the ceph tree
-Message-ID: <20220615082348.3e55ec40@canb.auug.org.au>
+        Tue, 14 Jun 2022 18:23:58 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72A34D607;
+        Tue, 14 Jun 2022 15:23:57 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d5so6287555plo.12;
+        Tue, 14 Jun 2022 15:23:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=HeXZ13GHuZAsU9fsNJvqXv4g/jBPWfplGywa/jhxuTI=;
+        b=o2ue+YzgKM4bUAY8JOZNrYh823YWVTilZM0rpjm6ClgI1+sWhL6cadfwb0XwY67FiM
+         PFHGU/FugpYrrZdXZd7oigrgqm+kDXpbCD4UA/h1O+Hb2Ql96xIXX3mP5hEguoIbAnbg
+         DK1oLnnyrYrHQH4+VvufqQayCC8+4LgZploYTGE3MlIMqISQzjiPcvMzfI1As/RQzpyc
+         aBTQdNNTFBvzBadduo5wjWvO2ePnGmlFvLlN6kMSWPMaE8o8qO65rgvsAdtj7ky3BSYv
+         4313a68XGAO0IDEwJL7teD6KXpLahjDaDeyOKE0cFWQ0kHvaWAAa9EPurz5VH/r9Ly1b
+         CN2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=HeXZ13GHuZAsU9fsNJvqXv4g/jBPWfplGywa/jhxuTI=;
+        b=eUqbLju//qceYS7oflNMND6N9RU9jH9VWPzeeKpEUB/50zfbbw3/zCiXSUEeVGJKKT
+         jz2LYWyLE/iTgNU6puKqSYImYmwu01Q8p+W8JHjVN3nP38LyheiEGS9FZKeyunUQVykT
+         Bfzt4t/xXIYGmDaFySP0Cf0YO3Qq15P42A0KRhiutZPOgVwSGP+x42Fr+ijFEVyNMPdE
+         iP98ig7fdHIujopyi0SKSiDryUa0L3bRE+HuubmctOS8kmMYy30IqmVCia5yZZS9Oos+
+         K5P0gRegeTLe79cyY9Nr2vgQ13fDodrFfB8LojR48xQnBOSwkMOJVfu8NpPTKxOX2tPv
+         56Qw==
+X-Gm-Message-State: AJIora8hWx3JELHoZm6jYuuThczICBOK1VJ7alJi6HpZukaPG8W86ux5
+        CcZ1OQU85kiH7UT61BB0tJe5SWrb6NA=
+X-Google-Smtp-Source: ABdhPJyfpbXPRxfN+lPKFOZGceKmNmcnrOD5rKJ2WS8Qbxq9ZREYOf3jx4fUQ+AOQrZBsHdKwqTbSA==
+X-Received: by 2002:a17:903:1248:b0:168:d2ba:ee71 with SMTP id u8-20020a170903124800b00168d2baee71mr6592785plh.150.1655245437074;
+        Tue, 14 Jun 2022 15:23:57 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id c137-20020a63358f000000b00408c56d3379sm145585pga.74.2022.06.14.15.23.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 15:23:56 -0700 (PDT)
+Message-ID: <50336991-c4ae-8edc-8ce7-929d0f48062d@gmail.com>
+Date:   Tue, 14 Jun 2022 15:23:55 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NW+AP.cIWz1E2BU5hGDoeCZ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 5.18 00/11] 5.18.5-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220614183720.861582392@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220614183720.861582392@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,40 +78,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/NW+AP.cIWz1E2BU5hGDoeCZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 6/14/22 11:40, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.5 release.
+> There are 11 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.5-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Hi all,
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-Commits
-
-  39be3f3c2896 ("fscrypt: add fscrypt_context_for_new_inode")
-  93d0d0af009d ("fscrypt: export fscrypt_fname_encrypt and fscrypt_fname_en=
-crypted_size")
-
-are missing a Signed-off-by from their committer.
-
-One of the downsides of rebasing.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/NW+AP.cIWz1E2BU5hGDoeCZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKpCnQACgkQAVBC80lX
-0GzwbQf9FUabwiX5dUlrHTWzDY0TVzmHO/sMIipl9cTXyto8uGXSws3iHyTLPNQ6
-uJsaWCL2c7QHIfUlxa1qS9twdJde8z2Xt7M5h2OEY+60OPi7IPswtHr8yUVZ1QTv
-Tu8q4dW/zF8Y5LtMTkdmW/dMr3SWA91pFUiPe9QfX/iXq7hHurG6mNKGSMRTFpNN
-0orrmPqSSfygBKQcxyTodqDI5nqVt7cyZcE/m6L42nGxu/xybRBOUkTXT4QHrJT1
-yrEBNzjjtyW6Y0/Nlfm/pJHlmSeRBa2qUW5z2/QPf+vPoFH5RuZTIV8HqOYiJyVZ
-Mr9dvNF0P46v8eugwm7+ke9MJ+OY2Q==
-=ZUKc
------END PGP SIGNATURE-----
-
---Sig_/NW+AP.cIWz1E2BU5hGDoeCZ--
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

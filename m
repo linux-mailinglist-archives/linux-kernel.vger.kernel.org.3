@@ -2,159 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B0C54B073
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB9F54B06F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236926AbiFNMTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
+        id S235539AbiFNMTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242758AbiFNMRE (ORCPT
+        with ESMTP id S231493AbiFNMTP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:17:04 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5301A058;
-        Tue, 14 Jun 2022 05:17:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1655209020; x=1686745020;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=gH+fHnfUdFk7cBn1iiWeL9FdTR89BmpsTbFf887In9I=;
-  b=fdrkwfwbjMVZLcyIC2rGMdWaw3JGX2RduXzYVmwZpU17YQ95P3eGfz3S
-   NAn9maNOhe40NlbxtNDgdOW9Zp8UjbVuKKjGNiSE392c7on9WaC7NWL2Q
-   N/QR+HHJhWszpn2RWPaas2uun2kjVFukl28itrn/7/ZphrGNM6cD3nCdq
-   YlILNLRMXE+uVrCJdohyaRxseCOCaaHtRmEaAVvM3WjEzBXW15NZChn8C
-   HWXMncdjYzd8be5HLj5PjJf/ogtOFxG3Z7I80l/IdsVDLFSRXmvyR7OcF
-   kaISsIKqc+hFyKed51oYbYlzUGWaHcoSCkpWdEV5nP6b4vLCR0pR3exiP
-   g==;
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="163268273"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jun 2022 05:16:59 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 14 Jun 2022 05:16:59 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17 via Frontend Transport; Tue, 14 Jun 2022 05:16:59 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A2fC76bSUxh/VddrSWr6Mp+PfeHUp262HZYb3PlsXD8022l/vmv/jMk1GbHfRI/VwXnQMtrckqTcmV+Yx6MFXvzZS7b9+hFLZ2yNv0WYBtAAdzuEqppOaRqO/WY/xqmd2rwUqvMJT3LJ7ncEfUw/QinD5hFGHuCzixo5V2UKEvTSFI0Ym6i6Kx7vfjLnMX8vnRfbjFXYbifqRdFAlXNLQnueNclraOHPoDfvUc+CtHBUDeQ1RAIbKs2mzeRbzcpzioZ7Nsn16jOEdRYqv1rI2a8cYHmmIgeESBKcBIqSOcZZV2PoEdhC6Y/Rf9HROZF8h+5OgzJdLu8yvrFINR1bnw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gH+fHnfUdFk7cBn1iiWeL9FdTR89BmpsTbFf887In9I=;
- b=Ut0kQI/1BT8vFXFtNVrjR9dNv3hR/82nSUMgRN8P8frQDfFcYf+QKQe074JY9W+0McpjWkweko0vhDioxRpRoSlTYcZaM0is5IfCqxEMKTkEKoj+YeJa3+qwJknN/m2cCcWbmZJ+5buOL3A09PX1L7hcIBU0u8AgSJlhlCGJBZP8cQBE5uEKO6gLPIhe6pxQx2SP9Dr5QVDyXC3h2/6CAOLRAbSkRFm9wQPCWIfKsnahFviWKMWXrRW8wlyIIW8F9h4YJxSwQ4mR/xI7tPHZvszIiJrTAoNtxfOYXZNmsMnswwuUESW/OuCv1qS6pkSXIztKLoJEpanS5oFJ3/VfEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Tue, 14 Jun 2022 08:19:15 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D70122296;
+        Tue, 14 Jun 2022 05:19:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gH+fHnfUdFk7cBn1iiWeL9FdTR89BmpsTbFf887In9I=;
- b=Lpa4H3JlmYj+W00yJI3z5JhRYqSNokCI2LX8cZUlA9Qodj99T4d1vSI4uIQ6wWcS2BDEhOvHly4WOKgWsdgQTvuAEnNXaGGST5nCUwTc2sfzA7trkxNlpSgJV6b0WhCx7ubeldj8v75fpxPqRvvjxpKufo1hQGT1Mr+zboI4rKs=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by DM5PR11MB1308.namprd11.prod.outlook.com (2603:10b6:3:e::17) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5332.13; Tue, 14 Jun 2022 12:16:48 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::699b:5c23:de4f:2bfa%4]) with mapi id 15.20.5332.022; Tue, 14 Jun 2022
- 12:16:48 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <u.kleine-koenig@pengutronix.de>
-CC:     <lkp@intel.com>, <thierry.reding@gmail.com>,
-        <lee.jones@linaro.org>, <kbuild-all@lists.01.org>,
-        <Daire.McNamara@microchip.com>, <linux-kernel@vger.kernel.org>,
-        <linux-pwm@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v2 1/2] pwm: add microchip soft ip corePWM driver
-Thread-Topic: [PATCH v2 1/2] pwm: add microchip soft ip corePWM driver
-Thread-Index: AQHYfxeRlKP8nH9DZkyscP+LOLkrSK1Os++AgAAB+oCAABwjAIAAAJQA
-Date:   Tue, 14 Jun 2022 12:16:48 +0000
-Message-ID: <d0214a9b-a810-963a-3a37-a222f59b5551@microchip.com>
-References: <20220613111759.1550578-2-conor.dooley@microchip.com>
- <202206141813.qgogbMAN-lkp@intel.com>
- <63334bed-17ba-fed5-9463-9fd52fd57351@microchip.com>
- <20220614121312.hfotzvx76i4fda6e@pengutronix.de>
-In-Reply-To: <20220614121312.hfotzvx76i4fda6e@pengutronix.de>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: c4f8dde3-ff9c-46ba-450f-08da4dffc18f
-x-ms-traffictypediagnostic: DM5PR11MB1308:EE_
-x-microsoft-antispam-prvs: <DM5PR11MB1308B80527341DCC07A18B8098AA9@DM5PR11MB1308.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xaaz/ZH99MpwI9ORMScvMZkedmqMaRpM1PYgys/uaDCao6ecy7e1P1NYliAoRz9M2FBSO/ReZ4wcJP/ppKSWSWtD70sJHgOtNXjTRX7/TimGXTvlnM1RmgGTKESCgZR/DoetHvlxgg0rYYN3oiEGmY6XtDxzf0GWIKDx6iXWQccDrDFNSMcjelbHF1mTFlnFbdSgoW3rNPJWOBWzPbdoLAaiofAgz9sn1/gGz6RttodTV+vOnasnAwG2EizOUsKKe4s6m0T4VklpohgeUKxMz/aBju3IvX3tcsEilD0Q/bqGmUTfDx8hhAxibDoIlIVqDTX7g82Ms667NyfN3xyLMBnsrCUNk3CvDvKTefbaG/1pMXXRTfpSYMUSdORcL0dCsmmHZUJSK8zPHwuiXyPVW9XRxIQbHwioTsOWZfWblmpFZ5F9X8JBvHifAEqgTOLhMfoktJdEf9k2/l0YzseDTEFVgHEeZtRuqa+z4a08bm94CEecI09iu2FgzC/PSo1X5TA4CMJlQP3NVYH7WXdKrcX5uFiR9YRYqAEEIpA7OD7SMFF8QPCAr8K1aGfHARG2xfZRCz6BL1I7bwsF3TSkqhdRzndgKdx5eBVZ5v0KhKWwL4GmO0qgKDEGmgmeJP42anl9EARIvxiHLFxxHH6Mx4Myb5QHnWi9xfrn9fM4KIKftMEU9Vx12qsDDvBQRoIv7FKjoH/lv6dIytX/BCEIYYUUJ3z5TgURlaRYXjNc1NPD37BdurWD602QrxXA66iDX6gBqrQU3YD+wjZOJ3JScg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(66946007)(66476007)(66556008)(31686004)(76116006)(6506007)(53546011)(86362001)(8936002)(6916009)(54906003)(36756003)(66574015)(71200400001)(4326008)(508600001)(64756008)(91956017)(66446008)(8676002)(186003)(38070700005)(316002)(122000001)(4744005)(5660300002)(2906002)(6512007)(31696002)(26005)(6486002)(38100700002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WmNPeFhqU0VnWFR4TFd6RmIrVERJdjVFM1BaQkVKQ0kxRGF6K0lmM3NBQ3JH?=
- =?utf-8?B?ZGRoQTVXMEI3SkhaejFzLzRlL2RHRmNleGlVZXFJN3d1cjhIaGxDSUpseHpU?=
- =?utf-8?B?aXd1WWpPWW5wVCtBYzBVSWZ3VFdVYW80UGo3SjVzWFFuTDEvNjFLQ1VHVEFY?=
- =?utf-8?B?TnhqRng2ZEtuMWs3K2ZrU3U2dEFzQU94YXZWZ1pzcUhRdVZpQlhBd2lzZlZx?=
- =?utf-8?B?ckpSZExCUkFjbkZtMmsxdERnSVRzdVk5SkdMaFplN1dqeTFpVHNCbWx1c0Zp?=
- =?utf-8?B?dDRJZ2Z6VklHVjViQjhSSzRHNkYrZGcrOXVzZ09HQXFPdzJXeXMxblBKbVYv?=
- =?utf-8?B?dksvbUF3TnRaTHBGQ2Q4M29TeFR6NE1JbjNRSXVVVGQvOWxac1h6K084b01u?=
- =?utf-8?B?L0Fxd2dyTDBlOHFJUlNVQ0VWMmpaUW5pZTR4RnpSSG04bnVjRjlGOURJN3Rn?=
- =?utf-8?B?VXhVMk4wRGt5YkRiN3U0b0hjMWpOSTV2dFJsOThscGk1eTIyd2tESGp6QzIx?=
- =?utf-8?B?MmpHZTRtU2RheG5PekJWMUlmMVJLVTF2aC8yMW9BTDhlUW0yVExnd1hHeXdt?=
- =?utf-8?B?QnZnQlQ3UllPa0hROGo0NmhJRlY2eGhuZUtxSkNoQWlxZTh2MTROOCtldDR1?=
- =?utf-8?B?Y2dDMDhTS1JRaEVvNE94bXFML2NocXp5dHkzUGljZDNNTWpYallKdFk2MFIr?=
- =?utf-8?B?VEdsTU9UWXI2elQwU0liL1Q0am1HeWt0aXlOM09PMGNyYWdGS3NJa0lMbzJh?=
- =?utf-8?B?TjdrelRpb3RZTFFuWDBlejRpMy9MOUxuaDArSURNQjF6ZXdFdWV4SXpFVUli?=
- =?utf-8?B?L21RUmVKT3hsY2dRWSs0Zno1c3AvK2FJeDZubkVoZ0lSM0FhRUpaRWFlZTIr?=
- =?utf-8?B?eWptQzNtcFZwdHFra01oYjYxeGUrUUdZK2hlRVAweXJTNXRyMms4N0o1MXZn?=
- =?utf-8?B?U0pBb2k1K3Z3bkJqdmxDYTdldmVnWmMwMm5oNkRucE9rYy8rQ0x1aWo2Zytq?=
- =?utf-8?B?MkJpNkQ5bXZqMGtWWkRIcUl4TVo4ZCtHU2J1TGRGRWFYanNCOUxzS0pNNlJ3?=
- =?utf-8?B?eER0VTdtcFk0NXpUcUs1Q2toOTZuMWd0UnBTNmtyMzVlYVpsbXVxbnJwYW1P?=
- =?utf-8?B?Q3JDeVlsbmhHZFFZOHBqVU5PdE5DRmp0UG0vT21HK0N0V0ZQdjF5VmZUbkRX?=
- =?utf-8?B?TUN6dVQ0aHluS0d4ZUJTSngvOTdGSVpiK2N2WDBOa2JDUTgveFRmUktxV0ds?=
- =?utf-8?B?SkpkNURqYi9iVHArUEo0NThyRklBbjVyQTlzK2NNaTVmWkxhRytkcmczUG9G?=
- =?utf-8?B?WjRUVUV2aUhpWTlUSmNsd1NJVHY2Rk52TGVjeFFJdVRud2hhelBnaDZnUWNy?=
- =?utf-8?B?UnBXV29TYzdaRVJBZ2tpTE1XVEJJZGZuVkt5UkVhN3hjMUxxMDVsb2tHT2lH?=
- =?utf-8?B?UEJwZThxbVNiZmljTU1saU1PalovcXUyRlhzaVVIbjJ6VEpCVHY0OTQ5RzdO?=
- =?utf-8?B?V3NpMUhCM2lCZXE4RU94Wld3elliSm1Fb05wQ3lkZXFRYU0wWW5hbk5CQzJk?=
- =?utf-8?B?REVjcmZtVC9qWThHanNyeUhLY1JlZk8xeXBCRE5LMy93OVZ1ekQ3VDFCU080?=
- =?utf-8?B?MU5tVUYwcmNPRjYyRTlRSExVUjJtZS9kQ1FqZVFkeWNJVUxvSG9Oay9JV2w4?=
- =?utf-8?B?WDc3clFhOUxxcDdTcFhjY0lITGI1OU9QNitPMThIMUhUZ2RqZjk2Tk5pYmtD?=
- =?utf-8?B?S0YzSXV0em1saFBTYVVRazR1bUJQRDBybFVoQ0k5aUZMYXlqTksyYTJFUlZn?=
- =?utf-8?B?Zmx6NmN3UWxNK0ZwQU1IWlhqOG9oRnJ2Y1VmcFB0WTdmSmZpb3I3KzYwekhJ?=
- =?utf-8?B?VC9KbVI1NW4yWExwN01RbDY3Q0RBN0ljZThFN2ZPTzZZaWZKa1ozT0NscERa?=
- =?utf-8?B?Si9KYWFIK1U0MlVGV09yemVKVmg5azJmRS9GSXF0RXpxQ05wUVJzYXlHcjNO?=
- =?utf-8?B?UVZTWFFyaTFkM0Z1VTZTR1RtMTVuZHBRUmthbU1veUE1UjVuRk93YittdUJZ?=
- =?utf-8?B?VzVOM1laZFNYTHc0R1ZtR1lYYWZXZStCVjNvenhjWE54YTl5aG5nVmJKNzZa?=
- =?utf-8?B?OTViSGRLRE9pb0ZLZE91T25IekVEMFN2Vng0ajJpeWJOdnBoQUZRcm9jYlEz?=
- =?utf-8?B?UzFBdnh2cHAxUCtTVG1xT3R2eWplNW9WcTVjUUdsckdIbmpVQnNrTUVoR2M3?=
- =?utf-8?B?VVRxYW1VNURvczFWb2EvZ2VnMk9IY0VQUDBGWG9RTnJKeGdoZE5MUmtaSDFV?=
- =?utf-8?B?ZkRiOHkvTWJqdFZTWG14NllWc1R1MENhWkQ5eGwydVk5TXRFTFgrQT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <22A21BB08C1A0143A5BCEC45F52B7F2D@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655209154; x=1686745154;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=X4+bHdGz3bcexdIQaARzWmVWlKdI1Vt0zd5jt5hVles=;
+  b=ckc8M7Yrw26Xh0FKgy/DlParnmRv0yHjys4UX5GRuD9IUxMBFdRvMIg4
+   7xDuZA4xODwMmupcxiPTGt94uwdEMKSjUfzy/EUIEqeoHO8VjmJy1LUmy
+   ybMTKo2nSZ0qJK7+1XX3vximOvgzOcJ5RWf9VsUbyOqwPArH408XRjZw5
+   s=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Jun 2022 05:19:13 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 05:19:13 -0700
+Received: from [10.50.56.0] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 14 Jun
+ 2022 05:19:08 -0700
+Message-ID: <f9684a69-5467-a440-abd1-7cf5ad3a81f7@quicinc.com>
+Date:   Tue, 14 Jun 2022 17:49:05 +0530
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c4f8dde3-ff9c-46ba-450f-08da4dffc18f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2022 12:16:48.5581
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6yf+k+bXarmRisuzBd5++ta0iLgKbSLKaB+dSpny6LqpEci0ZP4eL6fwl1nN4AShPb7T3XLyRtWJUhKj1jknF4JjWqlIRALigCJykihRdAA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR11MB1308
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: Commit 282d8998e997 (srcu: Prevent expedited GPs and blocking
+ readers from consuming CPU) cause qemu boot slow
+Content-Language: en-US
+To:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
+CC:     Paolo Bonzini <pbonzini@redhat.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "mtosatti@redhat.com" <mtosatti@redhat.com>,
+        Auger Eric <eric.auger@redhat.com>,
+        "chenxiang (M)" <chenxiang66@hisilicon.com>
+References: <20220612162029.GR1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220612164002.GA1242564@paulmck-ThinkPad-P17-Gen-1>
+ <560f7d27-fe38-0db9-834a-50dda5fa6157@redhat.com>
+ <20220612184944.GU1790663@paulmck-ThinkPad-P17-Gen-1>
+ <tencent_E306F58EAEC1D188ED6D5F358A269F34C707@qq.com>
+ <20220613035711.GY1790663@paulmck-ThinkPad-P17-Gen-1>
+ <20220613041652.GA3976000@paulmck-ThinkPad-P17-Gen-1>
+ <tencent_F82250B6E3D51A9AC0D2BE1AE43A4E060909@qq.com>
+ <20220613121831.GA1790663@paulmck-ThinkPad-P17-Gen-1>
+ <tencent_65C7D0A04984EDB6A79A5E5379DA7E835206@qq.com>
+ <20220613145900.GC1790663@paulmck-ThinkPad-P17-Gen-1>
+ <7b6c983b21d44119b61716a66de397ed@huawei.com>
+From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
+In-Reply-To: <7b6c983b21d44119b61716a66de397ed@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -162,16 +85,519 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMTQvMDYvMjAyMiAxMzoxMywgVXdlIEtsZWluZS1Lw7ZuaWcgd3JvdGU6DQo+IE9uIFR1ZSwg
-SnVuIDE0LCAyMDIyIGF0IDEwOjM0OjAwQU0gKzAwMDAsIENvbm9yLkRvb2xleUBtaWNyb2NoaXAu
-Y29tIHdyb3RlOg0KPj4+ICAgICAgeHRlbnNhLWxpbnV4LWxkOiBkcml2ZXJzL3B3bS9wd20tbWlj
-cm9jaGlwLWNvcmUubzogaW4gZnVuY3Rpb24gYG1jaHBfY29yZV9wd21fZW5hYmxlLmlzcmEuMCc6
-DQo+Pj4+PiBwd20tbWljcm9jaGlwLWNvcmUuYzooLnRleHQrMHgzODApOiB1bmRlZmluZWQgcmVm
-ZXJlbmNlIHRvIGBfX3VkaXZkaTMnDQo+Pj4gICAgICB4dGVuc2EtbGludXgtbGQ6IGRyaXZlcnMv
-cHdtL3B3bS1taWNyb2NoaXAtY29yZS5vOiBpbiBmdW5jdGlvbiBgbWNocF9jb3JlX3B3bV9hcHBs
-eSc6DQo+Pj4gICAgICBwd20tbWljcm9jaGlwLWNvcmUuYzooLnRleHQrMHg1ODYpOiB1bmRlZmlu
-ZWQgcmVmZXJlbmNlIHRvIGBfX3VkaXZkaTMnDQo+Pg0KPj4gSSBhc3N1bWUgdGhpcyBpcyBtZSB1
-c2luZyBmdW5jdGlvbnMgdGhhdCBhcmUgb25seSBkZWZpbmVkIGZvciA2NCBiaXQuLi4NCj4gDQo+
-IFRoaXMgaXMgdXN1YWxseSBhIGRpdmlzaW9uIHdpdGggdmFyaWFibGVzID4gaW50Lg0KDQpBeWUs
-IHdoaWNoIEkgbm93IGhhdmUgLSBoZW5jZSB0aGUgZGl2NjRfdTY0KCkuDQpUaGFua3MsIEknbGwg
-Z28gZGlnZ2luZyBmb3IgYSBmaXggOikNCkNvbm9yLg0KDQo=
+Hi,
+
+
+On 6/14/2022 2:25 AM, Shameerali Kolothum Thodi wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Paul E. McKenney [mailto:paulmck@kernel.org]
+>> Sent: 13 June 2022 15:59
+>> To: zhangfei.gao@foxmail.com
+>> Cc: Paolo Bonzini <pbonzini@redhat.com>; Zhangfei Gao
+>> <zhangfei.gao@linaro.org>; linux-kernel@vger.kernel.org;
+>> rcu@vger.kernel.org; Lai Jiangshan <jiangshanlai@gmail.com>; Josh Triplett
+>> <josh@joshtriplett.org>; Mathieu Desnoyers
+>> <mathieu.desnoyers@efficios.com>; Matthew Wilcox <willy@infradead.org>;
+>> Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>;
+>> mtosatti@redhat.com; Auger Eric <eric.auger@redhat.com>
+>> Subject: Re: Commit 282d8998e997 (srcu: Prevent expedited GPs and
+>> blocking readers from consuming CPU) cause qemu boot slow
+>>
+>> On Mon, Jun 13, 2022 at 09:23:50PM +0800, zhangfei.gao@foxmail.com
+>> wrote:
+>>>
+>>>
+>>> On 2022/6/13 下午8:18, Paul E. McKenney wrote:
+>>>> On Mon, Jun 13, 2022 at 02:55:47PM +0800, zhangfei.gao@foxmail.com
+>> wrote:
+>>>>> Hi, Paul
+>>>>>
+>>>>> On 2022/6/13 下午12:16, Paul E. McKenney wrote:
+>>>>>> On Sun, Jun 12, 2022 at 08:57:11PM -0700, Paul E. McKenney wrote:
+>>>>>>> On Mon, Jun 13, 2022 at 11:04:39AM +0800,
+>> zhangfei.gao@foxmail.com wrote:
+>>>>>>>> Hi, Paul
+>>>>>>>>
+>>>>>>>> On 2022/6/13 上午2:49, Paul E. McKenney wrote:
+>>>>>>>>> On Sun, Jun 12, 2022 at 07:29:30PM +0200, Paolo Bonzini
+>> wrote:
+>>>>>>>>>> On 6/12/22 18:40, Paul E. McKenney wrote:
+>>>>>>>>>>>> Do these reserved memory regions really need to be
+>> allocated separately?
+>>>>>>>>>>>> (For example, are they really all non-contiguous?  If not,
+>> that is, if
+>>>>>>>>>>>> there are a lot of contiguous memory regions, could you
+>> sort the IORT
+>>>>>>>>>>>> by address and do one ioctl() for each set of contiguous
+>> memory regions?)
+>>>>>>>>>>>>
+>>>>>>>>>>>> Are all of these reserved memory regions set up before init
+>> is spawned?
+>>>>>>>>>>>>
+>>>>>>>>>>>> Are all of these reserved memory regions set up while
+>> there is only a
+>>>>>>>>>>>> single vCPU up and running?
+>>>>>>>>>>>>
+>>>>>>>>>>>> Is the SRCU grace period really needed in this case?  (I
+>> freely confess
+>>>>>>>>>>>> to not being all that familiar with KVM.)
+>>>>>>>>>>> Oh, and there was a similar many-requests problem with
+>> networking many
+>>>>>>>>>>> years ago.  This was solved by adding a new
+>> syscall/ioctl()/whatever
+>>>>>>>>>>> that permitted many requests to be presented to the kernel
+>> with a single
+>>>>>>>>>>> system call.
+>>>>>>>>>>>
+>>>>>>>>>>> Could a new ioctl() be introduced that requested a large
+>> number
+>>>>>>>>>>> of these memory regions in one go so as to make each call to
+>>>>>>>>>>> synchronize_rcu_expedited() cover a useful fraction of your
+>> 9000+
+>>>>>>>>>>> requests?  Adding a few of the KVM guys on CC for their
+>> thoughts.
+>>>>>>>>>> Unfortunately not.  Apart from this specific case, in general
+>> the calls to
+>>>>>>>>>> KVM_SET_USER_MEMORY_REGION are triggered by writes to
+>> I/O registers in the
+>>>>>>>>>> guest, and those writes then map to a ioctl.  Typically the
+>> guest sets up a
+>>>>>>>>>> device at a time, and each setup step causes a
+>> synchronize_srcu()---and
+>>>>>>>>>> expedited at that.
+>>>>>>>>> I was afraid of something like that...
+>>>>>>>>>
+>>>>>>>>>> KVM has two SRCUs:
+>>>>>>>>>>
+>>>>>>>>>> 1) kvm->irq_srcu is hardly relying on the "sleepable" part; it
+>> has readers
+>>>>>>>>>> that are very very small, but it needs extremely fast detection
+>> of grace
+>>>>>>>>>> periods; see commit 719d93cd5f5c ("kvm/irqchip: Speed up
+>>>>>>>>>> KVM_SET_GSI_ROUTING", 2014-05-05) which split it off
+>> kvm->srcu.  Readers are
+>>>>>>>>>> not so frequent.
+>>>>>>>>>>
+>>>>>>>>>> 2) kvm->srcu is nastier because there are readers all the time.
+>> The
+>>>>>>>>>> read-side critical section are still short-ish, but they need the
+>> sleepable
+>>>>>>>>>> part because they access user memory.
+>>>>>>>>> Which one of these two is in play in this case?
+>>>>>>>>>
+>>>>>>>>>> Writers are not frequent per se; the problem is they come in
+>> very large
+>>>>>>>>>> bursts when a guest boots.  And while the whole boot path
+>> overall can be
+>>>>>>>>>> quadratic, O(n) expensive calls to synchronize_srcu() can have
+>> a larger
+>>>>>>>>>> impact on runtime than the O(n^2) parts, as demonstrated
+>> here.
+>>>>>>>>>>
+>>>>>>>>>> Therefore, we operated on the assumption that the callers of
+>>>>>>>>>> synchronized_srcu_expedited were _anyway_ busy running
+>> CPU-bound guest code
+>>>>>>>>>> and the desire was to get past the booting phase as fast as
+>> possible.  If
+>>>>>>>>>> the guest wants to eat host CPU it can "for(;;)" as much as it
+>> wants;
+>>>>>>>>>> therefore, as long as expedited GPs didn't eat CPU
+>> *throughout the whole
+>>>>>>>>>> system*, a preemptable busy wait in
+>> synchronize_srcu_expedited() were not
+>>>>>>>>>> problematic.
+>>>>>>>>>>
+>>>>>>>>>> This assumptions did match the SRCU code when kvm->srcu
+>> and kvm->irq_srcu
+>>>>>>>>>> were was introduced (respectively in 2009 and 2014).  But
+>> perhaps they do
+>>>>>>>>>> not hold anymore now that each SRCU is not as independent
+>> as it used to be
+>>>>>>>>>> in those years, and instead they use workqueues instead?
+>>>>>>>>> The problem was not internal to SRCU, but rather due to the fact
+>>>>>>>>> that kernel live patching (KLP) had problems with the
+>> CPU-bound tasks
+>>>>>>>>> resulting from repeated synchronize_rcu_expedited()
+>> invocations.  So I
+>>>>>>>>> added heuristics to get the occasional sleep in there for KLP's
+>> benefit.
+>>>>>>>>> Perhaps these heuristics need to be less aggressive about adding
+>> sleep.
+>>>>>>>>>
+>>>>>>>>> These heuristics have these aspects:
+>>>>>>>>>
+>>>>>>>>> 1.	The longer readers persist in an expedited SRCU grace period,
+>>>>>>>>> 	the longer the wait between successive checks of the reader
+>>>>>>>>> 	state.  Roughly speaking, we wait as long as the grace period
+>>>>>>>>> 	has currently been in effect, capped at ten jiffies.
+>>>>>>>>>
+>>>>>>>>> 2.	SRCU grace periods have several phases.  We reset so that
+>> each
+>>>>>>>>> 	phase starts by not waiting (new phase, new set of readers,
+>>>>>>>>> 	so don't penalize this set for the sins of the previous set).
+>>>>>>>>> 	But once we get to the point of adding delay, we add the
+>>>>>>>>> 	delay based on the beginning of the full grace period.
+>>>>>>>>>
+>>>>>>>>> Right now, the checking for grace-period length does not allow
+>> for the
+>>>>>>>>> possibility that a grace period might start just before the jiffies
+>>>>>>>>> counter gets incremented (because I didn't realize that anyone
+>> cared),
+>>>>>>>>> so that is one possible thing to change.  I can also allow more
+>> no-delay
+>>>>>>>>> checks per SRCU grace-period phase.
+>>>>>>>>>
+>>>>>>>>> Zhangfei, does something like the patch shown below help?
+>>>>>>>>>
+>>>>>>>>> Additional adjustments are likely needed to avoid re-breaking
+>> KLP,
+>>>>>>>>> but we have to start somewhere...
+>>>>>>>>>
+>>>>>>>>> 							Thanx, Paul
+>>>>>>>>>
+>>>>>>>>> ------------------------------------------------------------------------
+>>>>>>>>>
+>>>>>>>>> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+>>>>>>>>> index 50ba70f019dea..6a354368ac1d1 100644
+>>>>>>>>> --- a/kernel/rcu/srcutree.c
+>>>>>>>>> +++ b/kernel/rcu/srcutree.c
+>>>>>>>>> @@ -513,7 +513,7 @@ static bool srcu_readers_active(struct
+>> srcu_struct *ssp)
+>>>>>>>>>      #define SRCU_INTERVAL		1	// Base delay if no
+>> expedited GPs pending.
+>>>>>>>>>      #define SRCU_MAX_INTERVAL	10	// Maximum
+>> incremental delay from slow readers.
+>>>>>>>>> -#define SRCU_MAX_NODELAY_PHASE	1	// Maximum
+>> per-GP-phase consecutive no-delay instances.
+>>>>>>>>> +#define SRCU_MAX_NODELAY_PHASE	3	// Maximum
+>> per-GP-phase consecutive no-delay instances.
+>>>>>>>>>      #define SRCU_MAX_NODELAY	100	// Maximum
+>> consecutive no-delay instances.
+>>>>>>>>>      /*
+>>>>>>>>> @@ -522,12 +522,18 @@ static bool srcu_readers_active(struct
+>> srcu_struct *ssp)
+>>>>>>>>>       */
+>>>>>>>>>      static unsigned long srcu_get_delay(struct srcu_struct
+>> *ssp)
+>>>>>>>>>      {
+>>>>>>>>> +	unsigned long gpstart;
+>>>>>>>>> +	unsigned long j;
+>>>>>>>>>      	unsigned long jbase = SRCU_INTERVAL;
+>>>>>>>>>      	if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq),
+>> READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
+>>>>>>>>>      		jbase = 0;
+>>>>>>>>> -	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)))
+>>>>>>>>> -		jbase += jiffies - READ_ONCE(ssp->srcu_gp_start);
+>>>>>>>>> +	if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq))) {
+>>>>>>>>> +		j = jiffies - 1;
+>>>>>>>>> +		gpstart = READ_ONCE(ssp->srcu_gp_start);
+>>>>>>>>> +		if (time_after(j, gpstart))
+>>>>>>>>> +			jbase += j - gpstart;
+>>>>>>>>> +	}
+>>>>>>>>>      	if (!jbase) {
+>>>>>>>>>      		WRITE_ONCE(ssp->srcu_n_exp_nodelay,
+>> READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
+>>>>>>>>>      		if (READ_ONCE(ssp->srcu_n_exp_nodelay) >
+>> SRCU_MAX_NODELAY_PHASE)
+>>>>>>>> Unfortunately, this patch does not helpful.
+>>>>>>>>
+>>>>>>>> Then re-add the debug info.
+>>>>>>>>
+>>>>>>>> During the qemu boot
+>>>>>>>> [  232.997667]  __synchronize_srcu loop=1000
+>>>>>>>>
+>>>>>>>> [  361.094493]  __synchronize_srcu loop=9000
+>>>>>>>> [  361.094501] Call trace:
+>>>>>>>> [  361.094502]  dump_backtrace+0xe4/0xf0
+>>>>>>>> [  361.094505]  show_stack+0x20/0x70
+>>>>>>>> [  361.094507]  dump_stack_lvl+0x8c/0xb8
+>>>>>>>> [  361.094509]  dump_stack+0x18/0x34
+>>>>>>>> [  361.094511]  __synchronize_srcu+0x120/0x128
+>>>>>>>> [  361.094514]  synchronize_srcu_expedited+0x2c/0x40
+>>>>>>>> [  361.094515]  kvm_swap_active_memslots+0x130/0x198
+>>>>>>>> [  361.094519]  kvm_activate_memslot+0x40/0x68
+>>>>>>>> [  361.094520]  kvm_set_memslot+0x2f8/0x3b0
+>>>>>>>> [  361.094523]  __kvm_set_memory_region+0x2e4/0x438
+>>>>>>>> [  361.094524]  kvm_set_memory_region+0x78/0xb8
+>>>>>>>> [  361.094526]  kvm_vm_ioctl+0x5a0/0x13e0
+>>>>>>>> [  361.094528]  __arm64_sys_ioctl+0xb0/0xf8
+>>>>>>>> [  361.094530]  invoke_syscall+0x4c/0x110
+>>>>>>>> [  361.094533]  el0_svc_common.constprop.0+0x68/0x128
+>>>>>>>> [  361.094536]  do_el0_svc+0x34/0xc0
+>>>>>>>> [  361.094538]  el0_svc+0x30/0x98
+>>>>>>>> [  361.094541]  el0t_64_sync_handler+0xb8/0xc0
+>>>>>>>> [  361.094544]  el0t_64_sync+0x18c/0x190
+>>>>>>>> [  363.942817]  kvm_set_memory_region loop=6000
+>>>>>>> Huh.
+>>>>>>>
+>>>>>>> One possibility is that the "if (!jbase)" block needs to be nested
+>>>>>>> within the "if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq))) {"
+>> block.
+>>>>> I test this diff and NO helpful
+>>>>>
+>>>>> diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+>>>>> index 50ba70f019de..36286a4b74e6 100644
+>>>>> --- a/kernel/rcu/srcutree.c
+>>>>> +++ b/kernel/rcu/srcutree.c
+>>>>> @@ -513,7 +513,7 @@ static bool srcu_readers_active(struct
+>> srcu_struct *ssp)
+>>>>>
+>>>>>    #define SRCU_INTERVAL          1       // Base delay if no
+>> expedited GPs
+>>>>> pending.
+>>>>>    #define SRCU_MAX_INTERVAL      10      // Maximum
+>> incremental delay from
+>>>>> slow readers.
+>>>>> -#define SRCU_MAX_NODELAY_PHASE 1       // Maximum
+>> per-GP-phase consecutive
+>>>>> no-delay instances.
+>>>>> +#define SRCU_MAX_NODELAY_PHASE 3       // Maximum
+>> per-GP-phase consecutive
+>>>>> no-delay instances.
+>>>>>    #define SRCU_MAX_NODELAY       100     // Maximum
+>> consecutive no-delay
+>>>>> instances.
+>>>>>
+>>>>>    /*
+>>>>> @@ -522,16 +522,23 @@ static bool srcu_readers_active(struct
+>> srcu_struct
+>>>>> *ssp)
+>>>>>     */
+>>>>>    static unsigned long srcu_get_delay(struct srcu_struct *ssp)
+>>>>>    {
+>>>>> +       unsigned long gpstart;
+>>>>> +       unsigned long j;
+>>>>>           unsigned long jbase = SRCU_INTERVAL;
+>>>>>
+>>>>>           if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq),
+>>>>> READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
+>>>>>                   jbase = 0;
+>>>>> -       if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq)))
+>>>>> -               jbase += jiffies -
+>> READ_ONCE(ssp->srcu_gp_start);
+>>>>> -       if (!jbase) {
+>>>>> -               WRITE_ONCE(ssp->srcu_n_exp_nodelay,
+>>>>> READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
+>>>>> -               if (READ_ONCE(ssp->srcu_n_exp_nodelay) >
+>>>>> SRCU_MAX_NODELAY_PHASE)
+>>>>> -                       jbase = 1;
+>>>>> +       if (rcu_seq_state(READ_ONCE(ssp->srcu_gp_seq))) {
+>>>>> +               j = jiffies - 1;
+>>>>> +               gpstart = READ_ONCE(ssp->srcu_gp_start);
+>>>>> +               if (time_after(j, gpstart))
+>>>>> +                       jbase += j - gpstart;
+>>>>> +
+>>>>> +               if (!jbase) {
+>>>>>
+>> +                       WRITE_ONCE(ssp->srcu_n_exp_nodelay,
+>>>>> READ_ONCE(ssp->srcu_n_exp_nodelay) + 1);
+>>>>> +                       if
+>> (READ_ONCE(ssp->srcu_n_exp_nodelay) >
+>>>>> SRCU_MAX_NODELAY_PHASE)
+>>>>> +                               jbase = 1;
+>>>>> +               }
+>>>>>           }
+>>>> That is in fact what I was intending you to test, thank you.  As you
+>>>> say, unfortunately it did not help.
+>>>>
+>>>> Could you please test removing the "if (!jbase)" block entirely?
+>>> Remove "if (!jbase)" block is much faster,
+>>> not measure clearly, qemu (with debug version efi) boot seems normally.
+>>>
+>>>  From log timestamp:
+>>> [  114.624713] __synchronize_srcu loop=1000
+>>> [  124.157011]  __synchronize_srcu loop=9000
+>>>
+>>> Several method: timestamps are different.
+>>>
+>>> 5.19-rc1
+>>> [   94.271350]  __synchronize_srcu loop=1001
+>>> [  222.621659]  __synchronize_srcu loop=9001
+>>>
+>>>
+>>> With your first diff:
+>>> [  232.997667]  __synchronize_srcu loop=1000
+>>> [  361.094493]  __synchronize_srcu loop=9000
+>>>
+>>> Remove "if (!jbase)" block
+>>> [  114.624713] __synchronize_srcu loop=1000
+>>> [  124.157011]  __synchronize_srcu loop=9000
+>>>
+>>>
+>>> 5.18 method
+>>> +       if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq),
+>> READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
+>>> +               return 0;
+>>> +       return SRCU_INTERVAL;
+>>>
+>>> [   74.598480] __synchronize_srcu loop=9000
+>>> [   68.938297] __synchronize_srcu loop=1000
+>>
+>> Thank you for the information!
+>>
+>> What happens if you keep the that "if (!jbase)" block", but set the
+>> value of the SRCU_MAX_NODELAY_PHASE macro very large, say 1000000?
+> 
+>  From the setup I have, this is almost similar to that of the previous logic(without
+> the "if(!jbase)"). In both cases, I think we are not close to 5.18, but definitely much
+> better compared to 5.19-rc1.
+> 
+> The numbers from my test setup(CONFIG_HZ_250, CONFIG_PREEMPTION=y),
+> 
+>                         Guest boot time(using 'time'):
+> 
+> 5.18-rc4 based               ~8sec
+> 
+> 5.19-rc1                     ~2m43sec
+> 
+> 5.19-rc1+fix1                 ~19sec
+> 
+> 5.19-rc1-fix2                 ~19sec
+> 
+
+If you try below diff on top of either 5.19-rc1+fix1 or 5.19-rc1-fix2 ; 
+does it show any difference in boot time?
+
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -706,7 +706,7 @@ static void srcu_schedule_cbs_snp(struct srcu_struct 
+*ssp, struct srcu_node *snp
+   */
+  static void srcu_gp_end(struct srcu_struct *ssp)
+  {
+-       unsigned long cbdelay;
++       unsigned long cbdelay = 1;
+         bool cbs;
+         bool last_lvl;
+         int cpu;
+@@ -726,7 +726,9 @@ static void srcu_gp_end(struct srcu_struct *ssp)
+         spin_lock_irq_rcu_node(ssp);
+         idx = rcu_seq_state(ssp->srcu_gp_seq);
+         WARN_ON_ONCE(idx != SRCU_STATE_SCAN2);
+-       cbdelay = !!srcu_get_delay(ssp);
++       if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), 
+READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
++               cbdelay = 0;
++
+         WRITE_ONCE(ssp->srcu_last_gp_end, ktime_get_mono_fast_ns());
+
+
+
+Thanks
+Neeraj
+
+
+> I will wait for Zhangfei to confirm this on his setup, especially the difference
+> compared to 5.18.
+> 
+> Thanks,
+> Shameer
+>   
+>> This would be too large for KLP, but my hope is that there is a value
+>> of SRCU_MAX_NODELAY_PHASE that works for everyone.  But first, does
+>> this help at all?  ;-)
+>>
+>>>>>> And when I run 10,000 consecutive synchronize_rcu_expedited() calls,
+>> the
+>>>>>> above change reduces the overhead by more than an order of
+>> magnitude.
+>>>>>> Except that the overhead of the series is far less than one second,
+>>>>>> not the several minutes that you are seeing.  So the per-call
+>> overhead
+>>>>>> decreases from about 17 microseconds to a bit more than one
+>> microsecond.
+>>>>>>
+>>>>>> I could imagine an extra order of magnitude if you are running
+>> HZ=100
+>>>>>> instead of the HZ=1000 that I am running.  But that only gets up to a
+>>>>>> few seconds.
+>>>> One possible reason for the difference would be if your code has
+>>>> SRCU readers.
+>>>>
+>>>> Could you please tell me the value of CONFIG_HZ on your system?
+>>>> Also the value of CONFIG_PREEMPTION?
+>>> I am using arch/arm64/configs/defconfig
+>>> make defconfig
+>>> CONFIG_PREEMPTION=y
+>>> CONFIG_HZ_250=y
+>>
+>> Thank you again!
+>>
+>> And if there is a good value of SRCU_MAX_NODELAY_PHASE, it might
+>> depend
+>> on HZ.  And who knows what all else...
+>>
+>> 							Thanx, Paul
+>>
+>>> Thanks
+>>>
+>>>>
+>>>>>>> One additional debug is to apply the patch below on top of the one
+>> you
+>>>>> apply the patch below?
+>>>>>>> just now kindly tested, then use whatever debug technique you wish
+>> to
+>>>>>>> work out what fraction of the time during that critical interval that
+>>>>>>> srcu_get_delay() returns non-zero.
+>>>>> Sorry, I am confused, no patch right?
+>>>> Apologies, my omission.
+>>>>
+>>>>> Just measure srcu_get_delay return to non-zero?
+>>>> Exactly, please!
+>>>>
+>>>>> By the way, the issue should be only related with qemu apci. not related
+>>>>> with rmr feature
+>>>>> Test with: https://github.com/qemu/qemu/tree/stable-6.1
+>>>>>
+>>>>> Looks it caused by too many kvm_region_add & kvm_region_del if
+>> acpi=force,
+>>>>> If no acpi, no print kvm_region_add/del (1000 times print once)
+>>>>>
+>>>>> If with acpi=force,
+>>>>> During qemu boot
+>>>>> kvm_region_add region_add = 1000
+>>>>> kvm_region_del region_del = 1000
+>>>>> kvm_region_add region_add = 2000
+>>>>> kvm_region_del region_del = 2000
+>>>>> kvm_region_add region_add = 3000
+>>>>> kvm_region_del region_del = 3000
+>>>>> kvm_region_add region_add = 4000
+>>>>> kvm_region_del region_del = 4000
+>>>>> kvm_region_add region_add = 5000
+>>>>> kvm_region_del region_del = 5000
+>>>>> kvm_region_add region_add = 6000
+>>>>> kvm_region_del region_del = 6000
+>>>>>
+>>>>> kvm_region_add/kvm_region_del ->
+>>>>> kvm_set_phys_mem->
+>>>>> kvm_set_user_memory_region->
+>>>>> kvm_vm_ioctl(s, KVM_SET_USER_MEMORY_REGION, &mem)
+>>>>>
+>>>>> [  361.094493]  __synchronize_srcu loop=9000
+>>>>> [  361.094501] Call trace:
+>>>>> [  361.094502]  dump_backtrace+0xe4/0xf0
+>>>>> [  361.094505]  show_stack+0x20/0x70
+>>>>> [  361.094507]  dump_stack_lvl+0x8c/0xb8
+>>>>> [  361.094509]  dump_stack+0x18/0x34
+>>>>> [  361.094511]  __synchronize_srcu+0x120/0x128
+>>>>> [  361.094514]  synchronize_srcu_expedited+0x2c/0x40
+>>>>> [  361.094515]  kvm_swap_active_memslots+0x130/0x198
+>>>>> [  361.094519]  kvm_activate_memslot+0x40/0x68
+>>>>> [  361.094520]  kvm_set_memslot+0x2f8/0x3b0
+>>>>> [  361.094523]  __kvm_set_memory_region+0x2e4/0x438
+>>>>> [  361.094524]  kvm_set_memory_region+0x78/0xb8
+>>>>> [  361.094526]  kvm_vm_ioctl+0x5a0/0x13e0
+>>>>> [  361.094528]  __arm64_sys_ioctl+0xb0/0xf8
+>>>>> [  361.094530]  invoke_syscall+0x4c/0x110
+>>>>> [  361.094533]  el0_svc_common.constprop.0+0x68/0x128
+>>>>> [  361.094536]  do_el0_svc+0x34/0xc0
+>>>>> [  361.094538]  el0_svc+0x30/0x98
+>>>>> [  361.094541]  el0t_64_sync_handler+0xb8/0xc0
+>>>>> [  361.094544]  el0t_64_sync+0x18c/0x190
+>>>>> [  363.942817]  kvm_set_memory_region loop=6000
+>>>> Good to know, thank you!
+>>>>
+>>>> 							Thanx, Paul
+>>>

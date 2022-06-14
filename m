@@ -2,120 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5418F54B85E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BCD54B85F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241549AbiFNSOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:14:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
+        id S242307AbiFNSPQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbiFNSOk (ORCPT
+        with ESMTP id S242964AbiFNSPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 14:14:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B48619C3B
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:14:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655230478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=z38eWk0EdKiLopacPGDLeh8O//PFeccl+Ys1Xs8mu/E=;
-        b=SiQQm2HhXZibyE2HpU2wsYOsjtYBRI96nEy+NmfvYtVZ5AzFAXfuHPo5cRm6mjySVzAJd8
-        ZPRuBLGPGkLFqGMomvlns6nISIW2er1vakxvNw/jyJ1KX+30zBb69Zp3XsH2cNvpY31Jk+
-        5K3q3ol9oFq6GLpmosMdCmMZUSnvcdI=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-402-O_kVEsaUPdWkZslWIsYVhQ-1; Tue, 14 Jun 2022 14:14:37 -0400
-X-MC-Unique: O_kVEsaUPdWkZslWIsYVhQ-1
-Received: by mail-wm1-f70.google.com with SMTP id c185-20020a1c35c2000000b0039db3e56c39so940313wma.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:14:37 -0700 (PDT)
+        Tue, 14 Jun 2022 14:15:12 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C0A1A040
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:15:11 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3137316bb69so38041347b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:15:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X8/2+wu+PsORoT0rrjFQwUQli114atWqejDxqt8afco=;
+        b=BFx2nJFuweeoIaiSk88tCK+Zvw/48JIpbtu0DqX6f/hV+jNuutdiHEAglJEN3NBoDU
+         t1VXH8kqiON/rit1qB1/lZ/zauzkEapcDmpRo6A/gozVX61yAIfYE8N7WeRDRT1ZTYEL
+         LM7k4VXG88rZ21uChYEzNZphXMtmzUGZ/nMgAr+lvM00cgknWByKrHMEGd6QBptun3YW
+         qmRPuBmHQqJW8ZARpdFifG4e2nEkENmFsELeBnylz/XzT+jkn+BZFNh+ujTONbSQI5pV
+         xxP7nK7Fw3aZYfrdt2qEaQY3TRXip1WYtiYQKe3Qdo9qNBliA1j8ZaDPB1JgGfbA4GRD
+         UOrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=z38eWk0EdKiLopacPGDLeh8O//PFeccl+Ys1Xs8mu/E=;
-        b=gjDcoUruPK5U56+X2D3g9h4a5sp+kH3gMXYYEGbFokGkG8Wg1Ym557q6ROM8Hb4D80
-         NuGEtodKYj7nyJwBTQAF4b4/pOd+goZ5HwQp61E+G9py6mOPNLn5FSMxb908cP4ByFSg
-         WWKlneIbPTDI3vr3KTA1/q3dgFphTBWJnLtKbNJfLkS6BeeLhWKq0j65cFOUMVRPluWZ
-         sSH/LHcFHbPMXxg2t/B9P3Jf2I3d38s/AIVtY2FwnqjoUqnwoWaCk3ILKb5YUkEv1uzu
-         8/SVS62kyUXlTjDeMUs1jkf2adbHfmAHZqbPSR1pUlEtg0tNhHaKXY7Ek+ThkCixlygM
-         CqMQ==
-X-Gm-Message-State: AOAM532FaLT+Ps3dogta7iiPjN/bajPYHWr12radlYev5qwNsRfDdosm
-        nQYYFoyfwxNBUhsOoN4cIwAcTXOIhL7ocLLSUrmXnItDi8rgWWs3Ihb2vtuu/Vk02YhYUFObZmc
-        85Y1LKiT1iKlzTuou8i8X4T1y
-X-Received: by 2002:a05:600c:acf:b0:39c:56ea:2121 with SMTP id c15-20020a05600c0acf00b0039c56ea2121mr5491662wmr.39.1655230476030;
-        Tue, 14 Jun 2022 11:14:36 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxUSNelTlYVsxZl9ZbhRG+3geBek6mUVRzhGcy32mjelmqTYqVLjGacyunS9NvosRL5TS9Xvg==
-X-Received: by 2002:a05:600c:acf:b0:39c:56ea:2121 with SMTP id c15-20020a05600c0acf00b0039c56ea2121mr5491643wmr.39.1655230475793;
-        Tue, 14 Jun 2022 11:14:35 -0700 (PDT)
-Received: from [192.168.1.129] (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id 63-20020a1c1942000000b0039c84c05d88sm13454562wmz.23.2022.06.14.11.14.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 11:14:35 -0700 (PDT)
-Message-ID: <9159c90b-d772-9f13-474f-e9d50c104f25@redhat.com>
-Date:   Tue, 14 Jun 2022 20:14:33 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X8/2+wu+PsORoT0rrjFQwUQli114atWqejDxqt8afco=;
+        b=MWxxFx9SV7J389lKsI3jfFVOQrsysbHe7luTkoDOKqh4r1L3ro+mLlsCJwoajdip8m
+         TIlB5QG2MW4Ftr9GIJ+FM6ffb+0w9Hnn36cxkPVVbi1vVIqSNdAKEXmmEkiQPKF1ctWU
+         FcVibO14iw1TUOe+vXWNA59FD/okHP9/6jMKbgIE2QzbPjq6sk4XoRxE2ds8KjHmoZkZ
+         dtpWOYmp/+Mnk4tLhcm4bDB6PM2MuXmcpVRjbc7AKwNbUTYm0C5uiyB1enYbUybiLmzC
+         ldh/PiWuUnNiT9CeqAnZpDXn7nWPWQGfYc1/aNmw/ADpQT44c6XXOHAUciDKtB51TEgU
+         +AhA==
+X-Gm-Message-State: AJIora9c4lH3E5EUfxi/U8KiWUohNwOkUW9aQDmRojp8x3vs0JhqjtJ1
+        /v4HYcVT7dh7leU66kbQh9i3H9FMlPuvVkUkvmT2MA==
+X-Google-Smtp-Source: AGRyM1tCLsG24HvArA2qQ8N8ID4VHNuExsG9weA5PfeXAdVigd9V2muc6YeDqSqskiWnDsCe6UppeJ+sTve5pmlxZQw=
+X-Received: by 2002:a81:1294:0:b0:313:f850:53b1 with SMTP id
+ 142-20020a811294000000b00313f85053b1mr6960671yws.181.1655230510732; Tue, 14
+ Jun 2022 11:15:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 3/3] drm/doc: Add KUnit documentation
-Content-Language: en-US
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     davidgow@google.com, dlatypov@google.com, tzimmermann@suse.de,
-        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, jani.nikula@linux.intel.com,
-        dri-devel@lists.freedesktop.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>
-References: <20220613171738.111013-1-jose.exposito89@gmail.com>
- <20220613171738.111013-4-jose.exposito89@gmail.com>
- <c50e5c87-3198-08b7-1e32-d0959af1f296@redhat.com>
- <20220614180952.GA7067@elementary>
-From:   Javier Martinez Canillas <javierm@redhat.com>
-In-Reply-To: <20220614180952.GA7067@elementary>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1651774250.git.isaku.yamahata@intel.com> <98939c0ec83a109c8f49045e82096d6cdd5dafa3.1651774251.git.isaku.yamahata@intel.com>
+In-Reply-To: <98939c0ec83a109c8f49045e82096d6cdd5dafa3.1651774251.git.isaku.yamahata@intel.com>
+From:   Sagi Shahar <sagis@google.com>
+Date:   Tue, 14 Jun 2022 11:15:00 -0700
+Message-ID: <CAAhR5DHPk2no0PVFX6P1NnZdwtVccjmdn4RLg4wKSmfpjD6Qkg@mail.gmail.com>
+Subject: Re: [RFC PATCH v6 090/104] KVM: TDX: Handle TDX PV CPUID hypercall
+To:     "Yamahata, Isaku" <isaku.yamahata@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/22 20:09, José Expósito wrote:
-> Hi Javier,
-> 
-> On Tue, Jun 14, 2022 at 02:58:29PM +0200, Javier Martinez Canillas wrote:
->> Hello José,
->>
->> On 6/13/22 19:17, José Expósito wrote:
->>
->> [snip]
->>
->>> +KUnit (Kernel unit testing framework) provides a common framework for unit tests
->>> +within the Linux kernel.
->>> +
->>
->> I think that it will be useful to have a reference to the KUnit kernel doc here,
->> something like the following:
->>
->> `KUnit <https://docs.kernel.org/dev-tools/kunit/index.html>`_ (Kernel Unit...
-> 
-> There is a link in the next paragraph. Once the documentation is
-> generated the path "Documentation/dev-tools/kunit/start.rst" is
-> transformed into a link.
->  
-Ah, I wasn't aware of that. Thanks!
+On Thu, May 5, 2022 at 11:16 AM <isaku.yamahata@intel.com> wrote:
+>
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> Wire up TDX PV CPUID hypercall to the KVM backend function.
+>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>  arch/x86/kvm/vmx/tdx.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index 9c712f661a7c..c7cdfee397ec 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -946,12 +946,34 @@ static int tdx_emulate_vmcall(struct kvm_vcpu *vcpu)
+>         return 1;
+>  }
+>
+> +static int tdx_emulate_cpuid(struct kvm_vcpu *vcpu)
+> +{
+> +       u32 eax, ebx, ecx, edx;
+> +
+> +       /* EAX and ECX for cpuid is stored in R12 and R13. */
+> +       eax = tdvmcall_a0_read(vcpu);
+> +       ecx = tdvmcall_a1_read(vcpu);
+> +
+> +       kvm_cpuid(vcpu, &eax, &ebx, &ecx, &edx, true);
 
--- 
-Best regards,
+According to the GHCI spec section 3.6
+(TDG.VP.VMCALL<Instruction.CPUID>) we should return
+VMCALL_INVALID_OPERAND if an invalid CPUID is requested.
 
-Javier Martinez Canillas
-Linux Engineering
-Red Hat
+kvm_cpuid already returns false in this case so we should use that
+return value to set the tdvmcall return code in case of invalid leaf.
+> +
+> +       tdvmcall_a0_write(vcpu, eax);
+> +       tdvmcall_a1_write(vcpu, ebx);
+> +       tdvmcall_a2_write(vcpu, ecx);
+> +       tdvmcall_a3_write(vcpu, edx);
+> +
+> +       tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
+> +
+> +       return 1;
+> +}
+> +
+>  static int handle_tdvmcall(struct kvm_vcpu *vcpu)
+>  {
+>         if (tdvmcall_exit_type(vcpu))
+>                 return tdx_emulate_vmcall(vcpu);
+>
+>         switch (tdvmcall_leaf(vcpu)) {
+> +       case EXIT_REASON_CPUID:
+> +               return tdx_emulate_cpuid(vcpu);
+>         default:
+>                 break;
+>         }
+> --
+> 2.25.1
+>
 
+Sagi

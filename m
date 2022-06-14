@@ -2,84 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5581054AF1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:12:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D451454AF19
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:12:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356198AbiFNLLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 07:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34972 "EHLO
+        id S1356227AbiFNLL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 07:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356191AbiFNLLA (ORCPT
+        with ESMTP id S1356191AbiFNLLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 07:11:00 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E606B495;
-        Tue, 14 Jun 2022 04:10:59 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id x5so11123881edi.2;
-        Tue, 14 Jun 2022 04:10:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WPBHsuQCw6LHS2plx2otL7HeQmFNkV5hfWoP76A3RuI=;
-        b=bvmy9uC7Y91x36UUcnI0dZgqvcN99LsDklIpRbe5mWByroOMEilZmL+nJzuVg5/sJX
-         JazMirUEJOH4L96Dl3WY3QNnsYlfu4T8BEab/1Zd+Gw+2yRjnYTYk1s/8YqerBT8zbYe
-         eCvguRBgN4hFzezCezUmHnAy1U9b3EE4weE/tp6VFkgMpEv9A3jFvf3Mw7I3R8Z19wjE
-         mgN51FDicCJmF8p15FjF3yx7eoh2vSuldLwgYr/ODIW950PHqSqZMyIQ3FDXDrWExKFY
-         y3DHKdFyKt2GVLpd1OX2Ed+X35v0UZEpYH0xuAA7xK+aMY3b4456xxkUmBLijOIg0R2o
-         7qOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WPBHsuQCw6LHS2plx2otL7HeQmFNkV5hfWoP76A3RuI=;
-        b=Z8zDoJ1ATbUIlwXU46LQ5WY3pBOXE96RipeWz7pO39tnm/RmQHLHQoftFEzXhT3LDI
-         kV8mujlmH2Sv4Hsl9PuSfWxJ4ntXObnOSXwIhL/AEqBlZVj1rZ52ymnoQ07KdJ7Oy66A
-         T6fCVgXuPnuBxwxi+KttVMm1E4ikBCser3Liq3F/lCT3fjdgNhJPPBPFYsyKaDgocbEk
-         Cqec9CceiqVgNcXA4lIzN9d++EUkW+42osjmtElk0ReB6h/Hs7S3gCf9NklAXQQagsGW
-         pT4KUx53zCtqBYQJeBIf60PhBWjOf6SWzfCb4hAMcPmEaz7ZxJ1i0IXgVJWcKXWaqbHo
-         /IRA==
-X-Gm-Message-State: AOAM5337Rd9KjPfWqU0Yn35rxNODkBb+YnvP6fUuS4GwrBtx0lkUmoEk
-        c55Q66odvaJ5PxaTeYN5StxPPwxrYFh9Vtue0Us=
-X-Google-Smtp-Source: ABdhPJzHfPxRHZKBWrh40KmGWV2VLw5jrvhjQmxMw037SGLU2BvNTqYyA1QtJNjaT+QFj6WCBwxH0pY5xCbA8t5p3wk=
-X-Received: by 2002:aa7:d989:0:b0:431:75d5:f204 with SMTP id
- u9-20020aa7d989000000b0043175d5f204mr5422612eds.230.1655205057577; Tue, 14
- Jun 2022 04:10:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220613195658.5607-1-brad@pensando.io> <20220613195658.5607-13-brad@pensando.io>
-In-Reply-To: <20220613195658.5607-13-brad@pensando.io>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 14 Jun 2022 13:10:20 +0200
-Message-ID: <CAHp75Vex0VkECYd=kY0m6=jXBYSXg2UFu7vn271+Q49WZn22GA@mail.gmail.com>
-Subject: Re: [PATCH v5 12/15] spi: dw: Add support for AMD Pensando Elba SoC
-To:     Brad Larson <brad@pensando.io>
-Cc:     linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Tue, 14 Jun 2022 07:11:23 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B51DEAF;
+        Tue, 14 Jun 2022 04:11:19 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMm2s318dz4xZC;
+        Tue, 14 Jun 2022 21:11:17 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655205078;
+        bh=iZi7VXD/BQU3IcvSqC2JWvaTS297BwmoOBbqIwBTF5Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=G+uEXtJB77egfNtm4fRMXhvXGQj53V1OC1m633XgfopNtTUkNgWG3QvuiPlA3wCDb
+         YB/8NalgxaV1PEjORlBwfy1evl2GzBuu0hRtKx5rHG76CI0sSh9yhIU+92F2kenmdI
+         4iYQS/8D7B4ikof2rmlbwR9x18Gtk8GkDaNxFsAfb7I1UUQvEclGu4nspZ6KQnsfOr
+         DCimXJCEvP83znV2RzXTfgUC7LoULrIlbYqLyN5lo4C9Gx9y43F7HLZmYeCnxfiOLz
+         LQfrIA2WY8bTCJyLjLlKMCmglm2zUCUAnUrH08Ab/++2PoMWu7ClG7pCMWI7XQJZM7
+         CcnEX/A9CBtqw==
+Date:   Tue, 14 Jun 2022 21:11:16 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Greg KH <greg@kroah.com>, Neal Liu <neal_liu@aspeedtech.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Al Cooper <alcooperx@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        blarson@amd.com, brijeshkumar.singh@amd.com,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Gabriel Somlo <gsomlo@gmail.com>, gerg@linux-m68k.org,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>, piotrs@cadence.com,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>, samuel@sholland.org,
-        Serge Semin <fancer.lancer@gmail.com>,
-        suravee.suthikulpanit@amd.com,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the usb tree
+Message-ID: <20220614211116.1557b95e@canb.auug.org.au>
+In-Reply-To: <YqhCZoA4SukXq9lf@debian.me>
+References: <20220614120833.06cec8e7@canb.auug.org.au>
+        <YqgtsXSNZKds2bDl@kroah.com>
+        <20220614175247.30b02dc2@canb.auug.org.au>
+        <YqhCZoA4SukXq9lf@debian.me>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/pVG0HKi1sIFI_zgWgSr3WdT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,45 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 9:57 PM Brad Larson <brad@pensando.io> wrote:
+--Sig_/pVG0HKi1sIFI_zgWgSr3WdT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Bagas,
+
+On Tue, 14 Jun 2022 15:10:14 +0700 Bagas Sanjaya <bagasdotme@gmail.com> wro=
+te:
 >
-> From: Brad Larson <blarson@amd.com>
->
-> The AMD Pensando Elba SoC includes a DW apb_ssi v4 controller
-> with device specific chip-select control.  The Elba SoC
-> provides four chip-selects where the native DW IP supports
-> two chip-selects.  The Elba DW_SPI instance has two native
-> CS signals that are always overridden.
+> I mean the missing error you reported was:
+>=20
+>   DTC     arch/arm/boot/dts/aspeed-ast2500-evb.dtb
+>   DTC     arch/arm/boot/dts/aspeed-ast2600-evb-a1.dtb
+> arch/arm/boot/dts/aspeed-g6.dtsi:320.21-328.5: ERROR (duplicate_node_name=
+s): /ahb/usb@1e6a2000: Duplicate node name
+> ERROR: Input tree has errors, aborting (use -f to force output)
 
-...
+Right, thanks.
 
-> +/*
-> + * Elba SoC does not use ssi, pin override is used for cs 0,1 and
-> + * gpios for cs 2,3 as defined in the device tree.
-> + *
-> + * cs:  |       1               0
-> + * bit: |---3-------2-------1-------0
-> + *      |  cs1   cs1_ovr   cs0   cs0_ovr
-> + */
+--=20
+Cheers,
+Stephen Rothwell
 
-> +#define ELBA_SPICS_SHIFT(cs)           (2 * (cs))
+--Sig_/pVG0HKi1sIFI_zgWgSr3WdT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Useless.It takes much more than simply multiplying each time in two
-macros. Also see below.
+-----BEGIN PGP SIGNATURE-----
 
-> +#define ELBA_SPICS_MASK(cs)            (0x3 << ELBA_SPICS_SHIFT(cs))
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKobNQACgkQAVBC80lX
+0Gy9gQf/bEUThYasyZV9JYaf2h9nHhtDMtE70J+1hq1BuJNs3ItJ2GSs67XI++jt
+RcMS2x8AjhckJN+9nit53BzO54yygiJqsMUmoBuljqkJSAYR+HE9+V9/JWB+xrwT
+fOefpgTBQV8msSQwdojymuocvx3kD+AT7vk31JLMZK8pPfy4IP+XpO68PfhomNYD
+aQ3QXO1qS39tFJ2d6C3oQb4fevlCKhP/B6VwJV96OMiww3XZFhazFM61JhwjUp3v
+AlJ+vOlc0HIvlhT1aUpDo15jodIkhNQrb4e6WSEToP/FVgcP3aJvQOUbJQZb/fy2
+rmA1IT+Y/HDU3UGJltvCW1ZOpwYQMQ==
+=tl4v
+-----END PGP SIGNATURE-----
 
-(GENMASK(1, 0) << ((cs) << 1))
-
-Or ((cs) * 2) to show that it takes 2 bits and not two times of CS',
-
-> +#define ELBA_SPICS_SET(cs, val)        \
-> +                       ((((val) << 1) | 0x1) << ELBA_SPICS_SHIFT(cs))
-
-BIT(0)
-
-So the main point is to use GENMASK() and BIT() the rest is up to you.
-
--- 
-With Best Regards,
-Andy Shevchenko
+--Sig_/pVG0HKi1sIFI_zgWgSr3WdT--

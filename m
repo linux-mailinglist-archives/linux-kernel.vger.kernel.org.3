@@ -2,195 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E9254A784
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A39E54A787
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351054AbiFNDV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 23:21:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
+        id S1348184AbiFNDWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 23:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234653AbiFNDVx (ORCPT
+        with ESMTP id S1351130AbiFNDWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 23:21:53 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F012E6BB;
-        Mon, 13 Jun 2022 20:21:52 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMYd31mvlz4xXD;
-        Tue, 14 Jun 2022 13:21:43 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655176907;
-        bh=U1fiJE5uYUJHX5vWt77/jkly7Dzg8cdL+qVh4DmoqX0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=F2gmenyvpyPjtl5BYJDSPp07d113YEtls4S9SPpof1gStCmsPjurcvQ6FUXjCSTqS
-         PyhXaxHpUDqup+A09wWHsir72mCp6C5046UM0A1dJcPaGg4TbWYSTPJV0cwwRFt0f6
-         9l1WhjLunQPwP8DoQD45Rakvt6C7WLTeHIMEmMllQg6d7IAof9/bllbLmDk9OvHiHj
-         /sz/JxNsCMqPdt4yUYvVEM+NjWaJrZcgZe6skdPbOKDd4t1Bxa6m9iAbUeNl5Ln1/4
-         3PeojNXrp2Fzzmu10Q9ywL/rAD73hbfoddE2UeMkyLu1gQw+7lpAPWDqiOt61aZZQc
-         NKxaAN1w1NnxQ==
-Date:   Tue, 14 Jun 2022 13:21:41 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Antonio Terceiro <antonio.terceiro@linaro.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Boris-Chengbiao Zhou <bobo1239@web.de>,
-        Daniel Xu <dxu@dxuuu.xyz>,
-        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
-        David Gow <davidgow@google.com>,
-        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
-        Gary Guo <gary@garyguo.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Miguel Cano <macanroj@gmail.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sven Van Asbroeck <thesven73@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>
-Subject: linux-next: manual merge of the rust tree with the block tree
-Message-ID: <20220614132141.2422079e@canb.auug.org.au>
+        Mon, 13 Jun 2022 23:22:02 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A9B62E9D9;
+        Mon, 13 Jun 2022 20:22:00 -0700 (PDT)
+X-UUID: 00ae773d371b4c90877fe6ba9b8ad11f-20220614
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:28bf6a16-0c56-4a6e-b709-236cc33a6ce4,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:-5
+X-CID-META: VersionHash:b14ad71,CLOUDID:0ab17d07-b57a-4a25-a071-bc7b4972bc68,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: 00ae773d371b4c90877fe6ba9b8ad11f-20220614
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 466834257; Tue, 14 Jun 2022 11:21:54 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 14 Jun 2022 11:21:53 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 14 Jun 2022 11:21:53 +0800
+Message-ID: <5de2752a1d496290ea5c2c2d7840ba984b2e7e4d.camel@mediatek.com>
+Subject: Re: [PATCH v11 02/12] drm/mediatek: dpi: move dpi limits to SoC
+ config
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <matthias.bgg@gmail.com>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Tue, 14 Jun 2022 11:21:46 +0800
+In-Reply-To: <20220613064841.10481-3-rex-bc.chen@mediatek.com>
+References: <20220613064841.10481-1-rex-bc.chen@mediatek.com>
+         <20220613064841.10481-3-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9VMqfqiVIsv_3E_iNTMUkHA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/9VMqfqiVIsv_3E_iNTMUkHA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi, Bo-Chen:
 
-Hi all,
+On Mon, 2022-06-13 at 14:48 +0800, Bo-Chen Chen wrote:
+> From: Guillaume Ranquet <granquet@baylibre.com>
+> 
+> Add flexibility by moving the dpi limits to the SoC specific config.
 
-Today's linux-next merge of the rust tree got a conflict in:
+What does this 'limit' mean? Why it's different in DPI vs DP_INTF?
 
-  Makefile
+The hardware design is so weird. If the limit is fixed for DPI and
+DP_INTF, why the hardware export register for software to assign any
+value which may be wrong.
 
-between commit:
+Regards,
+CK
 
-  197c5e8c9541 ("io_uring: move to separate directory")
+> 
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <
+> angelogioacchino.delregno@collabora.com>
+> Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> ---
+>  drivers/gpu/drm/mediatek/mtk_dpi.c | 25 ++++++++++++++++---------
+>  1 file changed, 16 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index e61cd67b978f..ce8c5eefe5f1 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -125,6 +125,7 @@ struct mtk_dpi_conf {
+>  	bool edge_sel_en;
+>  	const u32 *output_fmts;
+>  	u32 num_output_fmts;
+> +	const struct mtk_dpi_yc_limit *limit;
+>  };
+>  
+>  static void mtk_dpi_mask(struct mtk_dpi *dpi, u32 offset, u32 val,
+> u32 mask)
+> @@ -235,9 +236,10 @@ static void mtk_dpi_config_fb_size(struct
+> mtk_dpi *dpi, u32 width, u32 height)
+>  	mtk_dpi_mask(dpi, DPI_SIZE, height << VSIZE, VSIZE_MASK);
+>  }
+>  
+> -static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi,
+> -					 struct mtk_dpi_yc_limit
+> *limit)
+> +static void mtk_dpi_config_channel_limit(struct mtk_dpi *dpi)
+>  {
+> +	const struct mtk_dpi_yc_limit *limit = dpi->conf->limit;
+> +
+>  	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_bottom << Y_LIMINT_BOT,
+>  		     Y_LIMINT_BOT_MASK);
+>  	mtk_dpi_mask(dpi, DPI_Y_LIMIT, limit->y_top << Y_LIMINT_TOP,
+> @@ -449,7 +451,6 @@ static int mtk_dpi_power_on(struct mtk_dpi *dpi)
+>  static int mtk_dpi_set_display_mode(struct mtk_dpi *dpi,
+>  				    struct drm_display_mode *mode)
+>  {
+> -	struct mtk_dpi_yc_limit limit;
+>  	struct mtk_dpi_polarities dpi_pol;
+>  	struct mtk_dpi_sync_param hsync;
+>  	struct mtk_dpi_sync_param vsync_lodd = { 0 };
+> @@ -484,11 +485,6 @@ static int mtk_dpi_set_display_mode(struct
+> mtk_dpi *dpi,
+>  	dev_dbg(dpi->dev, "Got  PLL %lu Hz, pixel clock %lu Hz\n",
+>  		pll_rate, vm.pixelclock);
+>  
+> -	limit.c_bottom = 0x0010;
+> -	limit.c_top = 0x0FE0;
+> -	limit.y_bottom = 0x0010;
+> -	limit.y_top = 0x0FE0;
+> -
+>  	dpi_pol.ck_pol = MTK_DPI_POLARITY_FALLING;
+>  	dpi_pol.de_pol = MTK_DPI_POLARITY_RISING;
+>  	dpi_pol.hsync_pol = vm.flags & DISPLAY_FLAGS_HSYNC_HIGH ?
+> @@ -536,7 +532,7 @@ static int mtk_dpi_set_display_mode(struct
+> mtk_dpi *dpi,
+>  	else
+>  		mtk_dpi_config_fb_size(dpi, vm.hactive, vm.vactive);
+>  
+> -	mtk_dpi_config_channel_limit(dpi, &limit);
+> +	mtk_dpi_config_channel_limit(dpi);
+>  	mtk_dpi_config_bit_num(dpi, dpi->bit_num);
+>  	mtk_dpi_config_channel_swap(dpi, dpi->channel_swap);
+>  	mtk_dpi_config_yc_map(dpi, dpi->yc_map);
+> @@ -790,12 +786,20 @@ static const u32 mt8183_output_fmts[] = {
+>  	MEDIA_BUS_FMT_RGB888_2X12_BE,
+>  };
+>  
+> +static const struct mtk_dpi_yc_limit mtk_dpi_limit = {
+> +	.c_bottom = 0x0010,
+> +	.c_top = 0x0FE0,
+> +	.y_bottom = 0x0010,
+> +	.y_top = 0x0FE0,
+> +};
+> +
+>  static const struct mtk_dpi_conf mt8173_conf = {
+>  	.cal_factor = mt8173_calculate_factor,
+>  	.reg_h_fre_con = 0xe0,
+>  	.max_clock_khz = 300000,
+>  	.output_fmts = mt8173_output_fmts,
+>  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
+> +	.limit = &mtk_dpi_limit,
+>  };
+>  
+>  static const struct mtk_dpi_conf mt2701_conf = {
+> @@ -805,6 +809,7 @@ static const struct mtk_dpi_conf mt2701_conf = {
+>  	.max_clock_khz = 150000,
+>  	.output_fmts = mt8173_output_fmts,
+>  	.num_output_fmts = ARRAY_SIZE(mt8173_output_fmts),
+> +	.limit = &mtk_dpi_limit,
+>  };
+>  
+>  static const struct mtk_dpi_conf mt8183_conf = {
+> @@ -813,6 +818,7 @@ static const struct mtk_dpi_conf mt8183_conf = {
+>  	.max_clock_khz = 100000,
+>  	.output_fmts = mt8183_output_fmts,
+>  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
+> +	.limit = &mtk_dpi_limit,
+>  };
+>  
+>  static const struct mtk_dpi_conf mt8192_conf = {
+> @@ -821,6 +827,7 @@ static const struct mtk_dpi_conf mt8192_conf = {
+>  	.max_clock_khz = 150000,
+>  	.output_fmts = mt8183_output_fmts,
+>  	.num_output_fmts = ARRAY_SIZE(mt8183_output_fmts),
+> +	.limit = &mtk_dpi_limit,
+>  };
+>  
+>  static int mtk_dpi_probe(struct platform_device *pdev)
 
-from the block tree and commit:
-
-  0ea4b9a1bece ("Kbuild: add Rust support")
-
-from the rust tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Makefile
-index f4c1c37c0be6,ce17ec71f89b..000000000000
---- a/Makefile
-+++ b/Makefile
-@@@ -436,7 -445,7 +445,8 @@@ els
-  HOSTCC	=3D gcc
-  HOSTCXX	=3D g++
-  endif
- +HOSTPKG_CONFIG	=3D pkg-config
-+ HOSTRUSTC =3D rustc
- =20
-  KBUILD_USERHOSTCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-prototypes=
- \
-  			 -O2 -fomit-frame-pointer -std=3Dgnu11 \
-@@@ -534,7 -580,23 +581,23 @@@ KBUILD_LDFLAGS_MODULE :
-  KBUILD_LDFLAGS :=3D
-  CLANG_FLAGS :=3D
- =20
-+ ifeq ($(KBUILD_CLIPPY),1)
-+ 	RUSTC_OR_CLIPPY_QUIET :=3D CLIPPY
-+ 	RUSTC_OR_CLIPPY =3D $(CLIPPY_DRIVER)
-+ else
-+ 	RUSTC_OR_CLIPPY_QUIET :=3D RUSTC
-+ 	RUSTC_OR_CLIPPY =3D $(RUSTC)
-+ endif
-+=20
-+ ifdef RUST_LIB_SRC
-+ 	export RUST_LIB_SRC
-+ endif
-+=20
-+ export RUSTC_BOOTSTRAP :=3D 1
-+=20
- -export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMP=
-ILE LD CC
- +export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMP=
-ILE LD CC HOSTPKG_CONFIG
-+ export RUSTC RUSTDOC RUSTFMT RUSTC_OR_CLIPPY_QUIET RUSTC_OR_CLIPPY BINDGE=
-N CARGO
-+ export HOSTRUSTC KBUILD_HOSTRUSTFLAGS
-  export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX =
-YACC AWK INSTALLKERNEL
-  export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
-  export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
-@@@ -788,9 -867,11 +868,12 @@@ stackp-flags-$(CONFIG_STACKPROTECTOR_ST
-  KBUILD_CFLAGS +=3D $(stackp-flags-y)
- =20
-  KBUILD_CFLAGS-$(CONFIG_WERROR) +=3D -Werror
- +KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) +=3D -Wno-array-bounds
-  KBUILD_CFLAGS +=3D $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
- =20
-+ KBUILD_RUSTFLAGS-$(CONFIG_WERROR) +=3D -Dwarnings
-+ KBUILD_RUSTFLAGS +=3D $(KBUILD_RUSTFLAGS-y)
-+=20
-  ifdef CONFIG_CC_IS_CLANG
-  KBUILD_CPPFLAGS +=3D -Qunused-arguments
-  # The kernel builds with '-std=3Dgnu11' so use of GNU extensions is accep=
-table.
-@@@ -806,11 -887,9 +889,12 @@@ endi
-  KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-but-set-variable)
-  KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-const-variable)
- =20
- +# These result in bogus false positives
- +KBUILD_CFLAGS +=3D $(call cc-disable-warning, dangling-pointer)
- +
-  ifdef CONFIG_FRAME_POINTER
-  KBUILD_CFLAGS	+=3D -fno-omit-frame-pointer -fno-optimize-sibling-calls
-+ KBUILD_RUSTFLAGS +=3D -Cforce-frame-pointers=3Dy
-  else
-  # Some targets (ARM with Thumb2, for example), can't be built with frame
-  # pointers.  For those, we don't have FUNCTION_TRACER automatically
-@@@ -1097,7 -1180,7 +1186,8 @@@ export MODULES_NSDEPS :=3D $(extmod_prefi
-  ifeq ($(KBUILD_EXTMOD),)
-  core-y			+=3D kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
-  core-$(CONFIG_BLOCK)	+=3D block/
- +core-$(CONFIG_IO_URING)	+=3D io_uring/
-+ core-$(CONFIG_RUST)	+=3D rust/
- =20
-  vmlinux-dirs	:=3D $(patsubst %/,%,$(filter %/, \
-  		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
-
---Sig_/9VMqfqiVIsv_3E_iNTMUkHA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKn/sYACgkQAVBC80lX
-0Gz98Qf/Ywf1rQrouxv2rNNgNm6/vB8o4VLn2ej7EKW/giTJv6noydpoHXE58SJk
-0wXzMNFmbe8/TBEUYdVlPQnW84vuciVfh+It3oj7L41+adyE5RSmwd8ioUb8QlS/
-lSoES8u8RjVgMqxGr96YQWlvd6UUQL+4+5MJLU9SrLO8CRJIJpKkhACsqyeBHqcx
-7UmghIx+bSSwlZ5gcU7A85NNmcnx7/1ihMtqtl7Xc91HWXdWjwVRmpikVSQmGHeK
-RntZ6ro7F2v1tsLpv0hnYXqSfIzFxWRGH9cS9SzTqIDjq9+dqb8kHUK8jmsD5I3j
-pXh1azc1vCPKCYjDKLBxLEgE+Iwekg==
-=wjd7
------END PGP SIGNATURE-----
-
---Sig_/9VMqfqiVIsv_3E_iNTMUkHA--

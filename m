@@ -2,220 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EF354AE53
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A5B54AE6E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:34:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241286AbiFNK30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 06:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44324 "EHLO
+        id S244126AbiFNKdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 06:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355830AbiFNK2i (ORCPT
+        with ESMTP id S242837AbiFNKdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 06:28:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B62447549;
-        Tue, 14 Jun 2022 03:28:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9A76B81808;
-        Tue, 14 Jun 2022 10:28:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9200CC3411B;
-        Tue, 14 Jun 2022 10:28:28 +0000 (UTC)
-Message-ID: <3a886196-5f35-8b59-cfc5-f99b92ea85e0@xs4all.nl>
-Date:   Tue, 14 Jun 2022 12:28:26 +0200
+        Tue, 14 Jun 2022 06:33:03 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217644476F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 03:33:00 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LMlBY4xxqz9tNV;
+        Tue, 14 Jun 2022 12:32:53 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 739G6TW791JM; Tue, 14 Jun 2022 12:32:53 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LMlBW0LqHz9tNb;
+        Tue, 14 Jun 2022 12:32:51 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id ECB258B766;
+        Tue, 14 Jun 2022 12:32:50 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id kBMfXW1hW2PA; Tue, 14 Jun 2022 12:32:50 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.204.246])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 8901D8B763;
+        Tue, 14 Jun 2022 12:32:50 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25EAWadQ197829
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 14 Jun 2022 12:32:36 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25EAWXIO197826;
+        Tue, 14 Jun 2022 12:32:33 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH 1/3] powerpc/32: Remove the 'nobats' kernel parameter
+Date:   Tue, 14 Jun 2022 12:32:23 +0200
+Message-Id: <6977314c823cfb728bc0273cea634b41807bfb64.1655202721.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v8 00/17] Move HEVC stateless controls out of staging
-Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com
-References: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1655202743; l=3841; s=20211009; h=from:subject:message-id; bh=IiaF52/FDSDDBtd97L//SRzTyeW6WkyJUVTUP66wmv0=; b=/ykhu+crlrXjZrZ3viYs2Rbz6JWrH9qomYmJt7dM6AaRcP4jDWyUo7GRZoqQRNRwL74IWPkFFcuL Ny2WqnexBIZ1paRBSuXmTMi3U42pNBZCKMvufm6FpacgjSGujI40
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+Mapping without BATs doesn't bring any added value to the user.
 
-On 6/14/22 10:35, Benjamin Gaignard wrote:
-> This series aims to make HEVC uapi stable and usable for hardware
-> decoder. HEVC uapi is used by 2 mainlined drivers (Cedrus and Hantro)
-> and 2 out of the tree drivers (rkvdec and RPI).
-> 
-> version 8:
-> - Same than v7 but rebased on media_stage/master
+Remove that option.
 
-I get the following documentation warning:
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ Documentation/admin-guide/kernel-parameters.txt |  3 ---
+ arch/powerpc/mm/book3s32/mmu.c                  |  2 +-
+ arch/powerpc/mm/init_32.c                       | 11 -----------
+ arch/powerpc/mm/mmu_decl.h                      |  1 -
+ arch/powerpc/platforms/83xx/misc.c              | 14 ++++++--------
+ 5 files changed, 7 insertions(+), 24 deletions(-)
 
-Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-ctrl-flag-dynamic-array
-
-The new flag needs to be added to Documentation/userspace-api/media/videodev2.h.rst.exceptions.
-
-I also get these kerneldoc warnings:
-
-kerneldoc: WARNINGS
-include/uapi/linux/v4l2-controls.h:2123: warning: Function parameter or member 'reserved' not described in 'v4l2_ctrl_hevc_sps'
-include/uapi/linux/v4l2-controls.h:2123: warning: Function parameter or member 'padding' not described in 'v4l2_ctrl_hevc_sps'
-include/uapi/linux/v4l2-controls.h:2203: warning: Function parameter or member 'reserved' not described in 'v4l2_ctrl_hevc_pps'
-include/uapi/linux/v4l2-controls.h:2203: warning: Function parameter or member 'padding' not described in 'v4l2_ctrl_hevc_pps'
-include/uapi/linux/v4l2-controls.h:2237: warning: Function parameter or member 'reserved' not described in 'v4l2_hevc_dpb_entry'
-include/uapi/linux/v4l2-controls.h:2339: warning: cannot understand function prototype: 'struct v4l2_ctrl_hevc_slice_params '
-include/uapi/linux/v4l2-controls.h:2425: warning: Function parameter or member 'reserved' not described in 'v4l2_ctrl_hevc_decode_params'
-include/uapi/linux/v4l2-controls.h:2425: warning: Function parameter or member 'padding' not described in 'v4l2_ctrl_hevc_decode_params'
-
-Run 'scripts/kernel-doc -none include/uapi/linux/v4l2-controls.h' to get these warnings.
-
-The "cannot understand function prototype" warning is because
-
-/**
- * v4l2_ctrl_hevc_slice_params - HEVC slice parameters
-
-is missing 'struct' before 'v4l2_ctrl_hevc_slice_params'.
-
-After adding that I get these warnings:
-
-include/uapi/linux/v4l2-controls.h:2123: warning: Function parameter or member 'reserved' not described in 'v4l2_ctrl_hevc_sps'
-include/uapi/linux/v4l2-controls.h:2123: warning: Function parameter or member 'padding' not described in 'v4l2_ctrl_hevc_sps'
-include/uapi/linux/v4l2-controls.h:2203: warning: Function parameter or member 'reserved' not described in 'v4l2_ctrl_hevc_pps'
-include/uapi/linux/v4l2-controls.h:2203: warning: Function parameter or member 'padding' not described in 'v4l2_ctrl_hevc_pps'
-include/uapi/linux/v4l2-controls.h:2237: warning: Function parameter or member 'reserved' not described in 'v4l2_hevc_dpb_entry'
-include/uapi/linux/v4l2-controls.h:2382: warning: Function parameter or member 'reserved0' not described in 'v4l2_ctrl_hevc_slice_params'
-include/uapi/linux/v4l2-controls.h:2382: warning: Function parameter or member 'reserved1' not described in 'v4l2_ctrl_hevc_slice_params'
-include/uapi/linux/v4l2-controls.h:2382: warning: Function parameter or member 'padding' not described in 'v4l2_ctrl_hevc_slice_params'
-include/uapi/linux/v4l2-controls.h:2425: warning: Function parameter or member 'reserved' not described in 'v4l2_ctrl_hevc_decode_params'
-include/uapi/linux/v4l2-controls.h:2425: warning: Function parameter or member 'padding' not described in 'v4l2_ctrl_hevc_decode_params'
-
-Regards,
-
-	Hans
-
-> 
-> This version has been tested with these branches:
-> - GStreamer: https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_aligned_with_kernel_5.15
-> - Linux: https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/tree/HEVC_UAPI_V8
-> 
-> version 7:
-> - Apply Jernej patches for Cedrus about bit offset definition and
->   V4L2_CID_STATELESS_HEVC_SLICE_PARAMS being a dynamic array control.
-> - Based on media_tree/master
-> 
-> version 6:
-> - Add short_term_ref_pic_set_size and long_term_ref_pic_set_size
->   in v4l2_ctrl_hevc_decode_params structure.
-> - Change slice_pic_order_cnt type to s32 to match with PoC type.
-> - Set V4L2_CTRL_FLAG_DYNAMIC_ARRAY flag automatically when using
->   V4L2_CID_STATELESS_HEVC_SLICE_PARAMS control.
-> - Add a define for max slices count
-> - Stop using Hantro dedicated control.
-> 
-> With patches to decode 10-bits bitstream and produce P010 frames the Fluster score 
-> which was 77/147 before, is now 141/147.
-> The 10-bits series will comes after this because of it dependency to
-> uAPI change. If you are curious you can find the WIP branch here:
-> https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/WIP_HEVC_UAPI_V7
-> 
-> The 6 failing tests are:
-> - PICSIZE_{A,B,C,D}_Bossen_1 where resolutions are to big for Hantro hardware.
-> - WPP_D_ericsson_MAIN_2 and WPP_D_ericsson_MAIN10_2 are visually ok but some 
->   difference exist on 5 decoded frames. Some pixels values are no the same 
->   the very end of few lines.
-> 
-> version 6:
-> - Stop using Hantro dedicated control and compute the number
->   of bytes to skip inside the driver.
-> - Rebased on media_tree/master
-> 
-> version 5:
-> - Change __u16 pic_order_cnt[2] into __s32 pic_order_cnt_val in
->   hevc_dpb_entry structure
-> - Add defines for SEI pic_struct values (patch 4)
-> - Fix numbers of bits computation in cedrus_h265_skip_bits() parameters
-> - Fix num_short_term_ref_pic_sets and num_long_term_ref_pics_sps
->   documentation (patch 8)
-> - Rebased on v5-18-rc1
-> 
-> GStreamer H265 decoder plugin aligned with HEVC uAPI v5:
-> https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/tree/HEVC_aligned_with_kernel_5.15
-> 
-> Version 4:
-> - Add num_entry_point_offsets field in  struct v4l2_ctrl_hevc_slice_params
-> - Fix V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS name
-> - Initialize control V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
-> - Fix space/tab issue in kernel-doc
-> - Add patch to change data_bit_offset definition
-> - Fix hantro-media SPDX license
-> - put controls under stateless section in v4l2-ctrls-defs.c
-> 
-> At the end fluster tests results on IMX8MQ is 77/147 for HEVC codec.
-> 
-> Benjamin Gaignard (14):
->   media: uapi: HEVC: Add missing fields in HEVC controls
->   media: uapi: HEVC: Rename HEVC stateless controls with STATELESS
->     prefix
->   media: uapi: HEVC: Change pic_order_cnt definition in
->     v4l2_hevc_dpb_entry
->   media: uapi: HEVC: Add SEI pic struct flags
->   media: uapi: HEVC: Add documentation to uAPI structure
->   media: uapi: HEVC: Define V4L2_CID_STATELESS_HEVC_SLICE_PARAMS as a
->     dynamic array
->   media: uapi: Move parsed HEVC pixel format out of staging
->   media: uapi: Add V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS control
->   media: uapi: Move the HEVC stateless control type out of staging
->   media: controls: Log HEVC stateless control in .std_log
->   media: hantro: Stop using Hantro dedicated control
->   media: uapi: HEVC: fix padding in v4l2 control structures
->   media: uapi: Change data_bit_offset definition
->   media: uapi: move HEVC stateless controls out of staging
-> 
-> Hans Verkuil (3):
->   videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
->   v4l2-ctrls: add support for dynamically allocated arrays.
->   vivid: add dynamic array test control
-> 
->  .../media/v4l/ext-ctrls-codec-stateless.rst   | 897 ++++++++++++++++++
->  .../media/v4l/ext-ctrls-codec.rst             | 780 ---------------
->  .../media/v4l/pixfmt-compressed.rst           |   7 +-
->  .../media/v4l/vidioc-g-ext-ctrls.rst          |  20 +
->  .../media/v4l/vidioc-queryctrl.rst            |   8 +
->  .../media/videodev2.h.rst.exceptions          |   5 +
->  .../media/test-drivers/vivid/vivid-ctrls.c    |  15 +
->  drivers/media/v4l2-core/v4l2-ctrls-api.c      | 103 +-
->  drivers/media/v4l2-core/v4l2-ctrls-core.c     | 206 +++-
->  drivers/media/v4l2-core/v4l2-ctrls-defs.c     |  38 +-
->  drivers/media/v4l2-core/v4l2-ctrls-priv.h     |   3 +-
->  drivers/media/v4l2-core/v4l2-ctrls-request.c  |  13 +-
->  drivers/staging/media/hantro/hantro_drv.c     |  62 +-
->  .../staging/media/hantro/hantro_g2_hevc_dec.c |  69 +-
->  drivers/staging/media/hantro/hantro_hevc.c    |  10 +-
->  drivers/staging/media/hantro/hantro_hw.h      |   4 +-
->  drivers/staging/media/sunxi/cedrus/cedrus.c   |  25 +-
->  .../staging/media/sunxi/cedrus/cedrus_dec.c   |  10 +-
->  .../staging/media/sunxi/cedrus/cedrus_h265.c  |  23 +-
->  .../staging/media/sunxi/cedrus/cedrus_video.c |   1 -
->  include/media/hevc-ctrls.h                    | 250 -----
->  include/media/v4l2-ctrls.h                    |  48 +-
->  include/uapi/linux/v4l2-controls.h            | 458 +++++++++
->  include/uapi/linux/videodev2.h                |  13 +
->  24 files changed, 1848 insertions(+), 1220 deletions(-)
->  delete mode 100644 include/media/hevc-ctrls.h
-> 
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 8090130b544b..96de3f1ece00 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3495,9 +3495,6 @@
+ 
+ 	noautogroup	Disable scheduler automatic task group creation.
+ 
+-	nobats		[PPC] Do not use BATs for mapping kernel lowmem
+-			on "Classic" PPC cores.
+-
+ 	nocache		[ARM]
+ 
+ 	nodsp		[SH] Disable hardware DSP at boot time.
+diff --git a/arch/powerpc/mm/book3s32/mmu.c b/arch/powerpc/mm/book3s32/mmu.c
+index 49a737fbbd18..1794132db31e 100644
+--- a/arch/powerpc/mm/book3s32/mmu.c
++++ b/arch/powerpc/mm/book3s32/mmu.c
+@@ -161,7 +161,7 @@ unsigned long __init mmu_mapin_ram(unsigned long base, unsigned long top)
+ 	unsigned long border = (unsigned long)__init_begin - PAGE_OFFSET;
+ 
+ 
+-	if (debug_pagealloc_enabled_or_kfence() || __map_without_bats) {
++	if (debug_pagealloc_enabled_or_kfence()) {
+ 		pr_debug_once("Read-Write memory mapped without BATs\n");
+ 		if (base >= border)
+ 			return base;
+diff --git a/arch/powerpc/mm/init_32.c b/arch/powerpc/mm/init_32.c
+index 693a3a7a9463..321794747ea1 100644
+--- a/arch/powerpc/mm/init_32.c
++++ b/arch/powerpc/mm/init_32.c
+@@ -69,12 +69,6 @@ EXPORT_SYMBOL(agp_special_page);
+ 
+ void MMU_init(void);
+ 
+-/*
+- * this tells the system to map all of ram with the segregs
+- * (i.e. page tables) instead of the bats.
+- * -- Cort
+- */
+-int __map_without_bats;
+ int __map_without_ltlbs;
+ 
+ /* max amount of low RAM to map in */
+@@ -85,11 +79,6 @@ unsigned long __max_low_memory = MAX_LOW_MEM;
+  */
+ static void __init MMU_setup(void)
+ {
+-	/* Check for nobats option (used in mapin_ram). */
+-	if (strstr(boot_command_line, "nobats")) {
+-		__map_without_bats = 1;
+-	}
+-
+ 	if (strstr(boot_command_line, "noltlbs")) {
+ 		__map_without_ltlbs = 1;
+ 	}
+diff --git a/arch/powerpc/mm/mmu_decl.h b/arch/powerpc/mm/mmu_decl.h
+index 63c4b1a4d435..229c72e49198 100644
+--- a/arch/powerpc/mm/mmu_decl.h
++++ b/arch/powerpc/mm/mmu_decl.h
+@@ -92,7 +92,6 @@ extern void mapin_ram(void);
+ extern void setbat(int index, unsigned long virt, phys_addr_t phys,
+ 		   unsigned int size, pgprot_t prot);
+ 
+-extern int __map_without_bats;
+ extern unsigned int rtas_data, rtas_size;
+ 
+ struct hash_pte;
+diff --git a/arch/powerpc/platforms/83xx/misc.c b/arch/powerpc/platforms/83xx/misc.c
+index 3285dabcf923..2fb2a85d131f 100644
+--- a/arch/powerpc/platforms/83xx/misc.c
++++ b/arch/powerpc/platforms/83xx/misc.c
+@@ -121,17 +121,15 @@ void __init mpc83xx_setup_pci(void)
+ 
+ void __init mpc83xx_setup_arch(void)
+ {
++	phys_addr_t immrbase = get_immrbase();
++	int immrsize = IS_ALIGNED(immrbase, SZ_2M) ? SZ_2M : SZ_1M;
++	unsigned long va = fix_to_virt(FIX_IMMR_BASE);
++
+ 	if (ppc_md.progress)
+ 		ppc_md.progress("mpc83xx_setup_arch()", 0);
+ 
+-	if (!__map_without_bats) {
+-		phys_addr_t immrbase = get_immrbase();
+-		int immrsize = IS_ALIGNED(immrbase, SZ_2M) ? SZ_2M : SZ_1M;
+-		unsigned long va = fix_to_virt(FIX_IMMR_BASE);
+-
+-		setbat(-1, va, immrbase, immrsize, PAGE_KERNEL_NCG);
+-		update_bats();
+-	}
++	setbat(-1, va, immrbase, immrsize, PAGE_KERNEL_NCG);
++	update_bats();
+ }
+ 
+ int machine_check_83xx(struct pt_regs *regs)
+-- 
+2.36.1
 

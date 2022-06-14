@@ -2,96 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E11954B617
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC2D554B608
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245281AbiFNQZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39412 "EHLO
+        id S241095AbiFNQ0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241888AbiFNQZN (ORCPT
+        with ESMTP id S235828AbiFNQ0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:25:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12A342716F;
-        Tue, 14 Jun 2022 09:25:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 993C416F2;
-        Tue, 14 Jun 2022 09:25:10 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.41.154])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A00683F66F;
-        Tue, 14 Jun 2022 09:24:52 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 17:24:48 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        vgupta@kernel.org, linux@armlinux.org.uk,
-        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
-        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
-        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
-        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
-        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
-        dinguyen@kernel.org, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
-        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
-        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org, maz@kernel.org
-Subject: Re: [PATCH 23/36] arm64,smp: Remove trace_.*_rcuidle() usage
-Message-ID: <Yqi2UGb4alCAR5s4@FVFF77S0Q05N>
-References: <20220608142723.103523089@infradead.org>
- <20220608144517.380962958@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608144517.380962958@infradead.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 14 Jun 2022 12:26:08 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AA22B27F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:26:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B309ECE1B5C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:26:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5D6C3411B;
+        Tue, 14 Jun 2022 16:26:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655223963;
+        bh=HOicUsevWa57cmZWfuaRUBxsrlLl7f7D9yCGBxN0d8c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=K8dtTvRI9dIhDia93Mzrr2J16KPDFxrlquUU5JOP6B4kSx1YBQPvBPSUrUDSQ9H4O
+         vGnxWQ0aQ01DWGRPN7RiytUH/gxc2yKhBUpqB09Qxa/p3jsmy+A0aScLxdB7xLz6qz
+         MtrB3JOq8QUflkXR6XMwdva940hoOCNWTcgX9eAitBBBOJunZGoQgG6F/p8DuVxMIf
+         fAs0mdwq/n9N+Qt2d9iL7pNAua+WkVG07y/EE6qRwsJ7HZNR9MwykluL2T/RoVDnYS
+         +q+yvNsgVGnWyTAS13a6o79CFlQsMwCQbXSr2zQdLADlaIPkIadCyaJpR21NTJTJ1H
+         ZhapgU6zexzIg==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1o19Mf-000ZAJ-HR;
+        Tue, 14 Jun 2022 17:26:01 +0100
+Date:   Tue, 14 Jun 2022 17:25:58 +0100
+Message-ID: <87pmjbp5yh.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+        Hanjun Guo <guohanjun@huawei.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>
+Subject: Re: [PATCH RFC V3 00/11] irqchip: Add LoongArch-related irqchip drivers
+In-Reply-To: <1654956155-936-1-git-send-email-lvjianmin@loongson.cn>
+References: <1654956155-936-1-git-send-email-lvjianmin@loongson.cn>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: lvjianmin@loongson.cn, tglx@linutronix.de, linux-kernel@vger.kernel.org, guohanjun@huawei.com, lorenzo.pieralisi@arm.com, lixuefeng@loongson.cn, chenhuacai@gmail.com, jiaxun.yang@flygoat.com, chenhuacai@loongson.cn
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,43 +71,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 04:27:46PM +0200, Peter Zijlstra wrote:
-> Ever since commit d3afc7f12987 ("arm64: Allow IPIs to be handled as
-> normal interrupts") this function is called in regular IRQ context.
+On Sat, 11 Jun 2022 15:02:35 +0100,
+Jianmin Lv <lvjianmin@loongson.cn> wrote:
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
+> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
+> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
+> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
+> are already added in the ACPI Specification 6.5(which may be published in
+> early June this year and the board is reviewing the draft).
 
-[adding Marc since he authored that commit]
+Can you please make an effort to send patches in coherent way? Here's
+what I see in my email reader:
 
-Makes sense to me:
+[PATCH RFC V2 00/10] irqchip: Add LoongArch-related irqchip drivers
++[PATCH RFC V3 01/11] APCI: irq: Add support for multiple GSI domains
++[PATCH RFC V3 02/11] genirq/generic_chip: export irq_unmap_generic_chip
++[PATCH RFC V3 03/11] irqchip: Adjust Kconfig for Loongson
++[PATCH RFC V3 04/11] irqchip: Add LoongArch CPU interrupt controller support
+\[PATCH RFC V3 05/11] irqchip: create library file for LoongArch irqchip driver
+[PATCH RFC V3 06/11] irqchip/loongson-pch-pic: Add ACPI init support
++[PATCH RFC V3 07/11] irqchip/loongson-pch-msi: Add ACPI init support
++[PATCH RFC V3 08/11] irqchip/loongson-htvec: Add ACPI init support
++[PATCH RFC V3 09/11] irqchip/loongson-liointc: Add ACPI init support
++[PATCH RFC V3 10/11] irqchip: Add Loongson Extended I/O interrupt controller support
+\[PATCH RFC V3 11/11] irqchip: Add Loongson PCH LPC controller support
+[PATCH RFC V3 00/11] irqchip: Add LoongArch-related irqchip drivers
 
-  Acked-by: Mark Rutland <mark.rutland@arm.com>
+Three threads, with inconsistent version numbers, inconsistent patch
+numbering, with a split in the middle, and this final cover letter
+that isn't followed by anything.  If you make a mistake, that's
+fine. Fix it, and resend the series properly, possibly with a new
+version number. Pro tip: you should only use 'git send-email', and
+only once to send all your patches after having written the cover
+letter. If you have to do anything else, you're doing something
+wrong.
 
-Mark.
+Also, please drop this 'RFC', as we're way past the RFC stage (to me,
+RFC means "I don't know what I'm doing yet, this is not ready to be
+merged").
 
-> ---
->  arch/arm64/kernel/smp.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> --- a/arch/arm64/kernel/smp.c
-> +++ b/arch/arm64/kernel/smp.c
-> @@ -865,7 +865,7 @@ static void do_handle_IPI(int ipinr)
->  	unsigned int cpu = smp_processor_id();
->  
->  	if ((unsigned)ipinr < NR_IPI)
-> -		trace_ipi_entry_rcuidle(ipi_types[ipinr]);
-> +		trace_ipi_entry(ipi_types[ipinr]);
->  
->  	switch (ipinr) {
->  	case IPI_RESCHEDULE:
-> @@ -914,7 +914,7 @@ static void do_handle_IPI(int ipinr)
->  	}
->  
->  	if ((unsigned)ipinr < NR_IPI)
-> -		trace_ipi_exit_rcuidle(ipi_types[ipinr]);
-> +		trace_ipi_exit(ipi_types[ipinr]);
->  }
->  
->  static irqreturn_t ipi_handler(int irq, void *data)
-> 
-> 
+[...]
+
+> Jianmin Lv (10):
+>   APCI: irq: Add support for multiple GSI domains
+
+I'm usually not too attached to authorship, but I definitely wrote
+that one, and that casts some doubt on the authorship of all the
+patches. For example, patch #4 has:
+
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+
+but doesn't list Huacai Chen as the author. Either they are, and the
+patch needs a From: line like in patch #3, or this is co-developed,
+and you need the Co-Developed: tag ([1] has all the details).
+
+I'll go and review the actual patches before the end of the week, but
+you definitely need to address the patch attributions in this series.
+
+Thanks,
+
+	M.
+
+[1] Documentation/process/submitting-patches.rst
+
+-- 
+Without deviation from the norm, progress is not possible.

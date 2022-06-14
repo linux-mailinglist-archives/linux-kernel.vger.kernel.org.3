@@ -2,242 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAFD554A32A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4912754A32C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235522AbiFNAli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 20:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58098 "EHLO
+        id S231213AbiFNAmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 20:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbiFNAlg (ORCPT
+        with ESMTP id S232340AbiFNAmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 20:41:36 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01on2043.outbound.protection.outlook.com [40.107.114.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5E62CDD4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:41:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=M1NgMdxlsMXZI5U/vcFfHmgHcktQJYxm4NpVWg7z+n5QZeuf9vyG6ZLIyKfK8mPyJ4cWMJFILkXBuLfM9rzddfGUh3AmE26/pTnIWpEOgdXT+9gd8N7YWVETiQaVv9a+xChrfkSwb0dptNUQ2hsYgCQ2WrbnJ8+fuRxcY1OJLS6889oaf67jLeFERU9yFIHxtxWGgO5eHT8lbOORBrDmvopTbC0ZyJs09FZfqG5luM/zUX41xxbwPF8E1Z34Yh0tUW8S6+FuYE+WvSjlMz30XeGw1vcZIK2HtR0CvOKmwo9GstoAIafs+UP06aZMov27MaJdg8/gxsEF5I5c/bjrLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=03OvTggCwJ/3wL1cPyWoHL4mUj+3eRam/SfhDy8y9p0=;
- b=AcgimG0vFgTeoeRU87wUwCTfLe4zl2ShGzPMRi2WyqGvjGTpq1LXh4r5BORZlWlb/x35WFJgS2oHC5i8AMMhbjc0xMpDOnExyTSCvjoUVE3NzHLAz7J6l+RR9/3ABpOwbtEcDP8TqyCU6IErMC4vcKPdeOhftdA6JYiPKwtSxUzswyIB6fBaFaBeQyUWH65cOsU57U4MyHxw5i3VdiwmamNx67N5YpLbwr+8BvbNFNDnE5WYHjDQA0FLw2Z8hQme3xsbOLNn8rX4XQcZxY3Rh0JwhRlAv2lJzRdDxTQpZvIMvBJKw6Qe2Ci0BYtRQ0L3a6T171ky1C7KJDAjs1yNlg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
- header.d=nec.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=03OvTggCwJ/3wL1cPyWoHL4mUj+3eRam/SfhDy8y9p0=;
- b=Z8i8VRO2bdCNkQux11gflQJaCqaQyyy+o9FUbsvG4NSovVNSRKRuYD86Wzzu16AnhNu0AeqypkKuCLLwmtYBERvveV9bn9uBc7fzFz3TkaRpbdmz5VOhSZTyk5NEyGHEmRxsFrZLV/Pl1moAHaxlLu4GjOjdG7I7DKa6dZ6WhX4=
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
- by OSZPR01MB8912.jpnprd01.prod.outlook.com (2603:1096:604:159::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Tue, 14 Jun
- 2022 00:41:32 +0000
-Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::b00f:b11:37c6:29d0]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
- ([fe80::b00f:b11:37c6:29d0%4]) with mapi id 15.20.5332.022; Tue, 14 Jun 2022
- 00:41:31 +0000
-From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
-        <naoya.horiguchi@nec.com>
-To:     zhenwei pi <pizhenwei@bytedance.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: Re: [PATCH v3 1/1] mm/memory-failure: don't allow to unpoison hw
- corrupted page
-Thread-Topic: Re: [PATCH v3 1/1] mm/memory-failure: don't allow to unpoison hw
- corrupted page
-Thread-Index: AQHYfMCAXhNKJr8GCUG0JE/tIyl9C61IjREAgAWDAACAAAVdgA==
-Date:   Tue, 14 Jun 2022 00:41:31 +0000
-Message-ID: <20220614004121.GA1618227@hori.linux.bs1.fc.nec.co.jp>
-References: <20220610114646.162764-1-pizhenwei@bytedance.com>
- <20220610114646.162764-2-pizhenwei@bytedance.com>
- <0fedf6f3-3ab3-e1d2-fd6e-3dbe8e92f06d@redhat.com>
- <d9bd9d4d-ec4e-1528-4348-800a8c6dc1b6@bytedance.com>
-In-Reply-To: <d9bd9d4d-ec4e-1528-4348-800a8c6dc1b6@bytedance.com>
-Accept-Language: ja-JP, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nec.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bae959d6-b00d-4a7b-4e40-08da4d9ea07f
-x-ms-traffictypediagnostic: OSZPR01MB8912:EE_
-x-microsoft-antispam-prvs: <OSZPR01MB89127FC3CC4517E8567DD316E7AA9@OSZPR01MB8912.jpnprd01.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: O9SzBTnsjpS911lvEdg4+HRjbDN41RVnkEBcIcNVtldko/LBfyOhTG1LVl37uL7qZeTM8FV3ydv1+cM9nZZTvOLMYDph+XFAqUWDCI3//+WNCE5Oki30MyNrdy8YLuIMrXkf/XIrjFtu2aQQNBn3o5/XHSpGzQXEPTI+yESY/ahBRdo6XGTXa7UsaN1RdfRwqIKSPEaEJNQUDN3+I9wwztPg6oCmDDpohS4Xy4rcP++jGHfmoOyaH2gw5VqMYMcldhIvOPU5Gbob4vJIhebIfXnPg7bnM9m6Z2fCMS4rYZURHCCbQlkwC1K/kNBXtwpa+gfsQiHMZeKRP1bLEh9XefDWz+5L8Hx4YmHOAa2C906PXoIUrOM+ZrmIRS8fP+bizNGjfnRfkoEPSa4MInoEN9Ge7ZSvX9k1cTm63f5KKNyRYHS58iN/GnWTeaNxJ5RS42KdAOPyv7tAwqfG6S9lDkD26F9fuDAXM8Na5nS9g9er7DJiTF1CFoAPJEiqcLsNm0EnFaznVwgx1Ld7D2G6VY2N111+9g19qLSI4hD1h3JAfWiUMftdHMYZ0/apM2Gv+X6+9TizDYp7SqKSQ7XE6xo57ZDflhLtfH9mn9gK5L7qbbH8RySWYz89VQJ454IPb0hcSJlZsvkD2TO6bo4FD/q6kIq5z+ejwT4WnvMWhxqa9P4RHhHW9e5AOzJL1QWUajeS+X0CIIj5A8LI6lA07w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(6486002)(5660300002)(508600001)(8936002)(71200400001)(122000001)(83380400001)(53546011)(6506007)(2906002)(86362001)(55236004)(9686003)(6512007)(38100700002)(26005)(33656002)(1076003)(186003)(82960400001)(316002)(6916009)(76116006)(66556008)(4326008)(66946007)(38070700005)(66446008)(8676002)(66476007)(64756008)(54906003)(85182001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NW5KNVJpNURwMVFZSlVRRzBPSUlad0llV255eUVvTnN4THF3V3hpKzBvSWVy?=
- =?utf-8?B?OGpRTUsxb28za1VrOFkxRmQzNzM0bGJESVNkSzkzL3FhODh6SUkvdDV6Q1do?=
- =?utf-8?B?VVcxd09SUXhtMy9KUVl5bGVjTUxMQzB2UkE3MmpuOUtzekJxcFpqTTlFQlRn?=
- =?utf-8?B?ekc5d3RONmNwUG1GZ0hORERHWmN2V1hnN2R4QTBVNW4wMGw5SUhHOU5qQ1VZ?=
- =?utf-8?B?YmkxV1FueEYrWHZtYWg5MDhDaW4xOVBKSU0yeXVEODB5aFFBMHNEVTB0WlFw?=
- =?utf-8?B?amVrZ2wveXRQNi92Nmo4WmQyTmxjcGIxVUF4NWVwRXR6TCtOOVhQNEtyU0cz?=
- =?utf-8?B?bmY2MWFPUmhzckdXbC95UHRkWW50N29Ya3l5clhrUFFsNGFpVTJyZWIrbFFB?=
- =?utf-8?B?d3VMZkpxZnpSd3JaMVUwZFB4Rmx1UlBHZjlQQnNoSGg3WnhudnRDNXNjZkdO?=
- =?utf-8?B?SzlkdXB1WEVuSlA1Z1grT3NmMXhDWnRESWkxS0tGZWNmLzBTekVLT3Z3OTQx?=
- =?utf-8?B?eVljTEVQWTJOUXVRZkMzc3g4bHJOcTdPd2Y4NFc3VnUwTSs3ejNkd0VVTlBO?=
- =?utf-8?B?dzBxbXA5bXZ6c0UzbFMwOTg5czNQTmExUzhvYW16OUpadFI0c3hMRTRRMHF2?=
- =?utf-8?B?ZG1Yb0kzUFJmeEkwWFBiaGhsS2dGZmFvcWlYUkVZdXN2M29hSWZiUFBLNEJF?=
- =?utf-8?B?bkJrWmcwTjZESWxzRkovWDF2NEtCZ0lmRVo2TkZwT1V2dGZRa0l4Myt2VTFS?=
- =?utf-8?B?ZDNGODlWK1c1TmVDdCswZlNsd3pWNUFtZmdtK01ML25QUERPbGdOR0RGY2tI?=
- =?utf-8?B?UWgyOXVhcEFaTEdGUE5IaHE1UkQ3d2ZQRUsxd0FZVkpFTkVtY3U3Qm8yUXl1?=
- =?utf-8?B?VTFzblZCQmNJc3lJRHVZTUNDbUhTR3cxTEgwalppNEw0SW9scWQzYU5Rd2U1?=
- =?utf-8?B?d21mbTBTYzF1c0o3cUpma2hSSU94Z3AxZzNES2JIS0tjUkw3bm9LUC9zbjRG?=
- =?utf-8?B?c0ZHUHVxRUxnWnBIM1VCNUVTWmUxNHdKcjdBblZ1eVZZbXdQaUFiTzBIRTZ4?=
- =?utf-8?B?RHI2TVVOZGVycDMrSFlFOVRqUXdINUV3UUFkUHNoeFIvWFNjbnhGRk0rK05L?=
- =?utf-8?B?S3c1WGtKeVVFKzBZaCtpZEVaamhxdzcxQTZQWUhZTnM5bnJ2RFQwNmp5cEZO?=
- =?utf-8?B?QWhFSWZGMEVHYnJROWNjT2NYVmFRNXZDb09QaDd5VlA5SkdQS0FTZW5HMXM4?=
- =?utf-8?B?MjRhTHZrMmFyaE8vQXdhQzJTZTNoMi9YK3VjNWcrWW1FSE5OQ0UyM2I1eEVw?=
- =?utf-8?B?WjlCUit5ZGZyZlBkSTNVSzJGMHk5RUhrR2I0ZHpRSEFNWDV1V24rYjJKQVZR?=
- =?utf-8?B?SVVEdXBvQTFiaGNtdUM3NzB0RUdKSEVJalpoVVFnSys3dWpDS21rQ3EvUDlN?=
- =?utf-8?B?VEpERzlnK0w4cG1QRFAxMk41U2tRM1JMS1pZZFVCOFVuL0lpc1MxV3BNMlBz?=
- =?utf-8?B?eUxBazF6d0M2VlF0SVpFSmNrR2IzU3g5Z1lYU2J1ZDhZWFhxOGRBVDV3UHZY?=
- =?utf-8?B?aFRVSC9jaGVtZ2VROGw2enllc2Z0YUViWlFTcHNXODJOdHNZdEVpSElrZUti?=
- =?utf-8?B?UDdsNmZReTRHVG0xSU1nK3dOU0xGeEc3WHFBemFJVHRtNUoyTGkvRzJGUG41?=
- =?utf-8?B?dGI5K3I2NWd6eHREUlFlQklWVnpIdDAyRTB3YUxRa1FGSzE2cDVzYU1Jc2k2?=
- =?utf-8?B?dEt3RGdPbUVXbmJGM1huUkV6NSs0N09PRmJFTUJicThlbXNDaWxodFhHYmdG?=
- =?utf-8?B?UFdwa0p1Sm95RWpYUGx0UXU0Y2tNbDNUdVU4NFBhMnBuVVI0QzNIbmduM0s0?=
- =?utf-8?B?VEJnMU9yUmFJcVcyY2dEV09EUEJIeW5HS3FMK2FLN3F2RDMvMDArY0RrMzRV?=
- =?utf-8?B?b3dkd0diRWZsYzRqc0VpQjNzUXpLTHNJL0pxeE13VHhMTWNDRmJPRzJKU0lQ?=
- =?utf-8?B?NHp6S291N3hTQ25vUEFCTkx6alhoMDhIWVVYYjczSDl5akZ4VVAzRWRGQlIz?=
- =?utf-8?B?TG4rNXBxM3BQUlBlcERiT3lFUEgrNGFXTDJYTmVSZXgxWEk1a1Y0YitBTVM1?=
- =?utf-8?B?NUxFUURCZXJrUWhrM3llby9DZXg2SWNubnFYQnZPU1dQcGtIb1hSdldnYm1M?=
- =?utf-8?B?UW1UWksvZzcxZFpwMmlVZUtBTUVpeittYWRaT0pIdGxDUk90dGc5dDBvdkJt?=
- =?utf-8?B?SzN4MXNSejNxYVdCSEhsTFdZREhTdWQ2UFA5TXltdTdZM0laNHk4NitsUVlD?=
- =?utf-8?B?TnpOOGl4dkpKbjRCTFhoMDMxN2ZFU3NDejhsSVppandJS2ZUVjBZWUx5Yk1i?=
- =?utf-8?Q?Ga9maN2CGgjKiyeY=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1A2DA8CC1B8E58438A16C6D078D52CA3@jpnprd01.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 13 Jun 2022 20:42:39 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63B92AC8;
+        Mon, 13 Jun 2022 17:42:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655167358; x=1686703358;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=MVvW267+1CxI3DhRHiOaVGAbL4b2sj8gVPrDDaf1aCo=;
+  b=l67e/hQ6aOQVEtcWCRAY5BPnYAwFLLCurulHnkMMkXkEbKP8wfDzq8Uz
+   jE5IWk0YPXfT89XY51cy2P2GsPfh2FbpViGDEkDqa8lu2yOc3dAbbfkcu
+   CzPx9bVtoJOv64jdDGybifZH4Fes5zATL1iai4/JTJUxf94jCFgZaOB8M
+   qwVeLIBh3E4j6cpwwekOBhBJHn08wDmQeqPgsAfs4fePa3gosCNgy2h1r
+   Was8IEglT4l2EpvjyaGN8ykFOBBcy9z17w04y67Ds5YSiF15XM/BY8Jdg
+   jJslHxeQlWURauIoCNNOb8Y6OE93CW+IrkkEWWrIawh9CtHxNixixv1VS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258288039"
+X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
+   d="scan'208";a="258288039"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 17:42:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
+   d="scan'208";a="588110886"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Jun 2022 17:42:35 -0700
+Date:   Tue, 14 Jun 2022 08:42:34 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Willy Tarreau <w@1wt.eu>, Moshe Kol <moshe.kol@mail.huji.ac.il>,
+        fengwei.yin@intel.com, kernel test robot <oliver.sang@intel.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
+        Amit Klein <aksecurity@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, lkp@lists.01.org,
+        kbuild test robot <lkp@intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>, zhengjun.xing@linux.intel.com
+Subject: Re: [tcp] e926147618: stress-ng.icmp-flood.ops_per_sec -8.7%
+ regression
+Message-ID: <20220614004234.GA51079@shbuild999.sh.intel.com>
+References: <20220608060802.GA22428@xsang-OptiPlex-9020>
+ <20220608064822.GC7547@1wt.eu>
+ <CACi_AuAr70bDB79zg9aAF1rD7e1qGgFwCGCAPYtS-zCp_zA0iw@mail.gmail.com>
+ <20220608073441.GE7547@1wt.eu>
+ <20220613020943.GD75244@shbuild999.sh.intel.com>
+ <CANn89i+9Vq7Kiusp1jJBLgGMprb=psrVaWwz5u4F3dunw2vR3Q@mail.gmail.com>
 MIME-Version: 1.0
-X-OriginatorOrg: nec.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bae959d6-b00d-4a7b-4e40-08da4d9ea07f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2022 00:41:31.8903
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: C28R9pbRFg979MC5XuI2QitK6Nchj6ne5ZtwU9KjhUIWdGg8Mo4gkgBwaeB0cboG1CvEPmPuEsgHZraNaCso3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSZPR01MB8912
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANn89i+9Vq7Kiusp1jJBLgGMprb=psrVaWwz5u4F3dunw2vR3Q@mail.gmail.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCBKdW4gMTQsIDIwMjIgYXQgMDg6MjI6MTBBTSArMDgwMCwgemhlbndlaSBwaSB3cm90
-ZToNCj4gDQo+IA0KPiBPbiA2LzEwLzIyIDIwOjEyLCBEYXZpZCBIaWxkZW5icmFuZCB3cm90ZToN
-Cj4gPiBPbiAxMC4wNi4yMiAxMzo0NiwgemhlbndlaSBwaSB3cm90ZToNCj4gPiA+IEN1cnJlbnRs
-eSB1bnBvaXNvbl9tZW1vcnkodW5zaWduZWQgbG9uZyBwZm4pIGlzIGRlc2lnbmVkIGZvciBzb2Z0
-DQo+ID4gPiBwb2lzb24oaHdwb2lzb24taW5qZWN0KSBvbmx5LiBTaW5jZSAxN2ZhZTEyOTRhZDlk
-LCB0aGUgS1BURSBnZXRzDQo+ID4gPiBjbGVhcmVkIG9uIGEgeDg2IHBsYXRmb3JtIG9uY2UgaGFy
-ZHdhcmUgbWVtb3J5IGNvcnJ1cHRzLg0KPiA+ID4gDQo+ID4gPiBVbnBvaXNvbmluZyBhIGhhcmR3
-YXJlIGNvcnJ1cHRlZCBwYWdlIHB1dHMgcGFnZSBiYWNrIGJ1ZGR5IG9ubHksDQo+ID4gPiB0aGUg
-a2VybmVsIGhhcyBhIGNoYW5jZSB0byBhY2Nlc3MgdGhlIHBhZ2Ugd2l0aCAqTk9UIFBSRVNFTlQq
-IEtQVEUuDQo+ID4gPiBUaGlzIGxlYWRzIEJVRyBkdXJpbmcgYWNjZXNzaW5nIG9uIHRoZSBjb3Jy
-dXB0ZWQgS1BURS4NCj4gPiA+IA0KPiA+ID4gRG8gbm90IGFsbG93IHRvIHVucG9pc29uIGhhcmR3
-YXJlIGNvcnJ1cHRlZCBwYWdlIGluIHVucG9pc29uX21lbW9yeSgpIHRvDQo+ID4gPiBhdm9pZCBC
-VUcgbGlrZSB0aGlzOg0KPiA+ID4gDQo+ID4gPiAgIFVucG9pc29uOiBTb2Z0d2FyZS11bnBvaXNv
-bmVkIHBhZ2UgMHg2MTIzNA0KPiA+ID4gICBCVUc6IHVuYWJsZSB0byBoYW5kbGUgcGFnZSBmYXVs
-dCBmb3IgYWRkcmVzczogZmZmZjg4ODA2MTIzNDAwMA0KPiA+ID4gICAjUEY6IHN1cGVydmlzb3Ig
-d3JpdGUgYWNjZXNzIGluIGtlcm5lbCBtb2RlDQo+ID4gPiAgICNQRjogZXJyb3JfY29kZSgweDAw
-MDIpIC0gbm90LXByZXNlbnQgcGFnZQ0KPiA+ID4gICBQR0QgMmMwMTA2NyBQNEQgMmMwMTA2NyBQ
-VUQgMTA3MjY3MDYzIFBNRCAxMDM4MmIwNjMgUFRFIDgwMGZmZmZmOWVkY2IwNjINCj4gPiA+ICAg
-T29wczogMDAwMiBbIzFdIFBSRUVNUFQgU01QIE5PUFRJDQo+ID4gPiAgIENQVTogNCBQSUQ6IDI2
-NTUxIENvbW06IHN0cmVzcyBLZHVtcDogbG9hZGVkIFRhaW50ZWQ6IEcgICBNICAgICAgIE9FICAg
-ICA1LjE4LjAuYm0uMS1hbWQ2NCAjNw0KPiA+ID4gICBIYXJkd2FyZSBuYW1lOiBRRU1VIFN0YW5k
-YXJkIFBDIChpNDQwRlggKyBQSUlYLCAxOTk2KSAuLi4NCj4gPiA+ICAgUklQOiAwMDEwOmNsZWFy
-X3BhZ2VfZXJtcysweDcvMHgxMA0KPiA+ID4gICBDb2RlOiAuLi4NCj4gPiA+ICAgUlNQOiAwMDAw
-OmZmZmZjOTAwMDExMDdiYzggRUZMQUdTOiAwMDAxMDI0Ng0KPiA+ID4gICBSQVg6IDAwMDAwMDAw
-MDAwMDAwMDAgUkJYOiAwMDAwMDAwMDAwMDAwOTAxIFJDWDogMDAwMDAwMDAwMDAwMTAwMA0KPiA+
-ID4gICBSRFg6IGZmZmZlYTAwMDE4NDhkMDAgUlNJOiBmZmZmZWEwMDAxODQ4ZDQwIFJESTogZmZm
-Zjg4ODA2MTIzNDAwMA0KPiA+ID4gICBSQlA6IGZmZmZlYTAwMDE4NDhkMDAgUjA4OiAwMDAwMDAw
-MDAwMDAwOTAxIFIwOTogMDAwMDAwMDAwMDAwMTI3Ng0KPiA+ID4gICBSMTA6IDAwMDAwMDAwMDAw
-MDAwMDMgUjExOiAwMDAwMDAwMDAwMDAwMDAwIFIxMjogMDAwMDAwMDAwMDAwMDAwMQ0KPiA+ID4g
-ICBSMTM6IDAwMDAwMDAwMDAwMDAwMDAgUjE0OiAwMDAwMDAwMDAwMTQwZGNhIFIxNTogMDAwMDAw
-MDAwMDAwMDAwMQ0KPiA+ID4gICBGUzogIDAwMDA3ZmQ4YjIzMzM3NDAoMDAwMCkgR1M6ZmZmZjg4
-ODEzZmQwMDAwMCgwMDAwKSBrbmxHUzowMDAwMDAwMDAwMDAwMDAwDQo+ID4gPiAgIENTOiAgMDAx
-MCBEUzogMDAwMCBFUzogMDAwMCBDUjA6IDAwMDAwMDAwODAwNTAwMzMNCj4gPiA+ICAgQ1IyOiBm
-ZmZmODg4MDYxMjM0MDAwIENSMzogMDAwMDAwMDEwMjNkMjAwNSBDUjQ6IDAwMDAwMDAwMDA3NzBl
-ZTANCj4gPiA+ICAgRFIwOiAwMDAwMDAwMDAwMDAwMDAwIERSMTogMDAwMDAwMDAwMDAwMDAwMCBE
-UjI6IDAwMDAwMDAwMDAwMDAwMDANCj4gPiA+ICAgRFIzOiAwMDAwMDAwMDAwMDAwMDAwIERSNjog
-MDAwMDAwMDBmZmZlMGZmMCBEUjc6IDAwMDAwMDAwMDAwMDA0MDANCj4gPiA+ICAgUEtSVTogNTU1
-NTU1NTQNCj4gPiA+ICAgQ2FsbCBUcmFjZToNCj4gPiA+ICAgIDxUQVNLPg0KPiA+ID4gICAgcHJl
-cF9uZXdfcGFnZSsweDE1MS8weDE3MA0KPiA+ID4gICAgZ2V0X3BhZ2VfZnJvbV9mcmVlbGlzdCsw
-eGNhMC8weGUyMA0KPiA+ID4gICAgPyBzeXN2ZWNfYXBpY190aW1lcl9pbnRlcnJ1cHQrMHhhYi8w
-eGMwDQo+ID4gPiAgICA/IGFzbV9zeXN2ZWNfYXBpY190aW1lcl9pbnRlcnJ1cHQrMHgxYi8weDIw
-DQo+ID4gPiAgICBfX2FsbG9jX3BhZ2VzKzB4MTdlLzB4MzQwDQo+ID4gPiAgICBfX2ZvbGlvX2Fs
-bG9jKzB4MTcvMHg0MA0KPiA+ID4gICAgdm1hX2FsbG9jX2ZvbGlvKzB4ODQvMHgyODANCj4gPiA+
-ICAgIF9faGFuZGxlX21tX2ZhdWx0KzB4OGQ0LzB4ZWIwDQo+ID4gPiAgICBoYW5kbGVfbW1fZmF1
-bHQrMHhkNS8weDJhMA0KPiA+ID4gICAgZG9fdXNlcl9hZGRyX2ZhdWx0KzB4MWQwLzB4NjgwDQo+
-ID4gPiAgICA/IGt2bV9yZWFkX2FuZF9yZXNldF9hcGZfZmxhZ3MrMHgzYi8weDUwDQo+ID4gPiAg
-ICBleGNfcGFnZV9mYXVsdCsweDc4LzB4MTcwDQo+ID4gPiAgICBhc21fZXhjX3BhZ2VfZmF1bHQr
-MHgyNy8weDMwDQo+ID4gPiANCj4gPiA+IEZpeGVzOiA4NDdjZTQwMWRmMzkyICgiSFdQT0lTT046
-IEFkZCB1bnBvaXNvbmluZyBzdXBwb3J0IikNCj4gPiA+IEZpeGVzOiAxN2ZhZTEyOTRhZDlkICgi
-eDg2L3ttY2UsbW19OiBVbm1hcCB0aGUgZW50aXJlIHBhZ2UgaWYgdGhlIHdob2xlIHBhZ2UgaXMg
-YWZmZWN0ZWQgYW5kIHBvaXNvbmVkIikNCj4gPiA+IENjOiBOYW95YSBIb3JpZ3VjaGkgPG5hb3lh
-LmhvcmlndWNoaUBuZWMuY29tPg0KPiA+ID4gQ2M6IERhdmlkIEhpbGRlbmJyYW5kIDxkYXZpZEBy
-ZWRoYXQuY29tPg0KPiA+ID4gU2lnbmVkLW9mZi1ieTogemhlbndlaSBwaSA8cGl6aGVud2VpQGJ5
-dGVkYW5jZS5jb20+DQo+ID4gPiAtLS0NCj4gPiA+ICAgbW0vbWVtb3J5LWZhaWx1cmUuYyB8IDU5
-ICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKw0KPiA+ID4gICAx
-IGZpbGUgY2hhbmdlZCwgNTkgaW5zZXJ0aW9ucygrKQ0KPiA+ID4gDQo+ID4gPiBkaWZmIC0tZ2l0
-IGEvbW0vbWVtb3J5LWZhaWx1cmUuYyBiL21tL21lbW9yeS1mYWlsdXJlLmMNCj4gPiA+IGluZGV4
-IGI4NTY2MWNiZGM0YS4uMzEyNGY0MjgzMDJjIDEwMDY0NA0KPiA+ID4gLS0tIGEvbW0vbWVtb3J5
-LWZhaWx1cmUuYw0KPiA+ID4gKysrIGIvbW0vbWVtb3J5LWZhaWx1cmUuYw0KPiA+ID4gQEAgLTIw
-NjgsNiArMjA2OCw1OCBAQCBzdGF0aWMgaW50IF9faW5pdCBtZW1vcnlfZmFpbHVyZV9pbml0KHZv
-aWQpDQo+ID4gPiAgIH0NCj4gPiA+ICAgY29yZV9pbml0Y2FsbChtZW1vcnlfZmFpbHVyZV9pbml0
-KTsNCj4gPiA+ICsvKg0KPiA+ID4gKyAqIFVucG9pc29uaW5nIGEgaGFyZHdhcmUgY29ycnVwdGVk
-IHBhZ2Ugd2l0aCAqTk9UIFBSRVNFTlQqIEtQVEUgbGVhZHMgcGFuaWMuDQo+ID4gPiArICogVGVz
-dCBhIHBhZ2UgaXMgdmFsaWQgaW4gdGhlIGtlcm5lbCBtYXBwaW5nLg0KPiA+ID4gKyAqLw0KPiA+
-ID4gK3N0YXRpYyBib29sIGttYXBfdmFsaWQoc3RydWN0IHBhZ2UgKnBhZ2UpDQo+ID4gPiArew0K
-PiA+ID4gKwl1bnNpZ25lZCBsb25nIGFkZHIgPSAodW5zaWduZWQgbG9uZylwYWdlX3RvX3ZpcnQo
-cGFnZSk7DQo+ID4gPiArCXBnZF90ICpwZ2Q7DQo+ID4gPiArCXA0ZF90ICpwNGQ7DQo+ID4gPiAr
-CXB1ZF90ICpwdWQ7DQo+ID4gPiArCXBtZF90ICpwbWQ7DQo+ID4gPiArCXB0ZV90ICpwdGU7DQo+
-ID4gPiArDQo+ID4gPiArCXBnZCA9IHBnZF9vZmZzZXRfayhhZGRyKTsNCj4gPiA+ICsJaWYgKHBn
-ZF9ub25lKCpwZ2QpKQ0KPiA+ID4gKwkJcmV0dXJuIGZhbHNlOw0KPiA+ID4gKwlpZiAocGdkX2xl
-YWYoKnBnZCkpDQo+ID4gPiArCQlyZXR1cm4gdHJ1ZTsNCj4gPiA+ICsJaWYgKHBnZF9iYWQoKnBn
-ZCkpDQo+ID4gPiArCQlyZXR1cm4gZmFsc2U7DQo+ID4gPiArDQo+ID4gPiArCXA0ZCA9IHA0ZF9v
-ZmZzZXQocGdkLCBhZGRyKTsNCj4gPiA+ICsJaWYgKHA0ZF9ub25lKCpwNGQpKQ0KPiA+ID4gKwkJ
-cmV0dXJuIGZhbHNlOw0KPiA+ID4gKwlpZiAocDRkX2xlYWYoKnA0ZCkpDQo+ID4gPiArCQlyZXR1
-cm4gdHJ1ZTsNCj4gPiA+ICsJaWYgKHA0ZF9iYWQoKnA0ZCkpDQo+ID4gPiArCQlyZXR1cm4gZmFs
-c2U7DQo+ID4gPiArDQo+ID4gPiArCXB1ZCA9IHB1ZF9vZmZzZXQocDRkLCBhZGRyKTsNCj4gPiA+
-ICsJaWYgKHB1ZF9ub25lKCpwdWQpKQ0KPiA+ID4gKwkJcmV0dXJuIGZhbHNlOw0KPiA+ID4gKwlp
-ZiAocHVkX2xlYWYoKnB1ZCkpDQo+ID4gPiArCQlyZXR1cm4gdHJ1ZTsNCj4gPiA+ICsJaWYgKHB1
-ZF9iYWQoKnB1ZCkpDQo+ID4gPiArCQlyZXR1cm4gZmFsc2U7DQo+ID4gPiArDQo+ID4gPiArCXBt
-ZCA9IHBtZF9vZmZzZXQocHVkLCBhZGRyKTsNCj4gPiA+ICsJaWYgKHBtZF9ub25lKCpwbWQpKQ0K
-PiA+ID4gKwkJcmV0dXJuIGZhbHNlOw0KPiA+ID4gKwlpZiAocG1kX2xlYWYoKnBtZCkpDQo+ID4g
-PiArCQlyZXR1cm4gdHJ1ZTsNCj4gPiA+ICsJaWYgKHBtZF9iYWQoKnBtZCkpDQo+ID4gPiArCQly
-ZXR1cm4gZmFsc2U7DQo+ID4gPiArDQo+ID4gPiArCXB0ZSA9IHB0ZV9vZmZzZXRfbWFwKHBtZCwg
-YWRkcik7DQo+ID4gPiArCWlmIChwdGVfbm9uZSgqcHRlKSB8fCAhcHRlX3ByZXNlbnQoKnB0ZSkp
-DQo+ID4gPiArCQlyZXR1cm4gZmFsc2U7DQo+ID4gPiArDQo+ID4gPiArCXJldHVybiB0cnVlOw0K
-PiA+ID4gK30NCj4gPiA+ICsNCj4gPiA+ICAgI2RlZmluZSB1bnBvaXNvbl9wcl9pbmZvKGZtdCwg
-cGZuLCBycykJCQlcDQo+ID4gPiAgICh7CQkJCQkJCVwNCj4gPiA+ICAgCWlmIChfX3JhdGVsaW1p
-dChycykpCQkJCVwNCj4gPiA+IEBAIC0yMTA5LDYgKzIxNjEsMTMgQEAgaW50IHVucG9pc29uX21l
-bW9yeSh1bnNpZ25lZCBsb25nIHBmbikNCj4gPiA+ICAgCQlnb3RvIHVubG9ja19tdXRleDsNCj4g
-PiA+ICAgCX0NCj4gPiA+ICsJaWYgKCFrbWFwX3ZhbGlkKHBhZ2UpKSB7DQo+ID4gPiArCQl1bnBv
-aXNvbl9wcl9pbmZvKCJVbnBvaXNvbjogUGFnZSB3YXMgaGFyZHdhcmUgcG9pc29uZWQgJSNseFxu
-IiwNCj4gPiA+ICsJCQkJIHBmbiwgJnVucG9pc29uX3JzKTsNCj4gPiA+ICsJCXJldCA9IC1FT1BO
-T1RTVVBQOw0KPiA+ID4gKwkJZ290byB1bmxvY2tfbXV0ZXg7DQo+ID4gPiArCX0NCj4gPiA+ICsN
-Cj4gPiA+ICAgCWlmIChwYWdlX2NvdW50KHBhZ2UpID4gMSkgew0KPiA+ID4gICAJCXVucG9pc29u
-X3ByX2luZm8oIlVucG9pc29uOiBTb21lb25lIGdyYWJzIHRoZSBod3BvaXNvbiBwYWdlICUjbHhc
-biIsDQo+ID4gPiAgIAkJCQkgcGZuLCAmdW5wb2lzb25fcnMpOw0KPiA+IA0KPiA+IEkgcmVhbGx5
-IHByZWZlciBqdXN0IGRpc2FibGluZyB0aGUgdW5wb2lzaW9uaW5nIG1lY2hhbmlzbSBpbiBjYXNl
-IHRoZXJlDQo+ID4gaXMgYSByZWFsIGh3IGluamVjdGVkIGVycm9yLg0KPiA+IA0KPiANCj4gSGks
-IE5hb3lhICYgQW5kcmV3DQo+IA0KPiBXaGF0IGlzIHlvdXIgb3Bpbmlvbj8NCg0KRGlzYWJsaW5n
-IHVucG9pc29uIHdoZW4gYSByZWFsIEhXIGVycm9yIGhhcHBlbnMgaXMgZmluZSB0byBtZS4gIFdo
-ZW4geW91DQp3cml0ZSB0aGUgcGF0Y2gsIGNvdWxkIHlvdSBhZGQgYSBmZXcgc2VudGVuY2VzIGFi
-b3V0IHRoZSBuZXcgYmVoYXZpb3IgdG8NCnRoZSB1bnBvaXNvbi1wZm4gc2VjdGlvbiBpbiBEb2N1
-bWVudGF0aW9uL3ZtL2h3cG9pc29uLnJzdD8NCg0KVGhhbmtzLA0KTmFveWEgSG9yaWd1Y2hp
+On Mon, Jun 13, 2022 at 10:10:57AM -0700, Eric Dumazet wrote:
+> On Sun, Jun 12, 2022 at 7:09 PM Feng Tang <feng.tang@intel.com> wrote:
+> >
+> > Hi,
+> >
+> > On Wed, Jun 08, 2022 at 09:34:41AM +0200, Willy Tarreau wrote:
+> > > On Wed, Jun 08, 2022 at 10:26:12AM +0300, Moshe Kol wrote:
+> > > > Hmm, How is the ICMP flood stress test related to TCP connections?
+> > >
+> > > To me it's not directly related, unless the test pre-establishes many
+> > > connections, or is affected in a way or another by a larger memory
+> > > allocation of this part.
+> >
+> > Fengwei and I discussed and thought this could be a data alignment
+> > related case, that one module's data alignment change affects other
+> > modules' alignment, and we had a patch for detecting similar cases [1]
+> >
+> > After some debugging, this could be related with the bss section
+> > alignment changes, that if we forced all module's bss section to be
+> > 4KB aligned, then the stress-ng icmp-flood case will have almost no
+> > performance difference for the 2 commits:
+> >
+> > 10025135            +0.8%   10105711 ±  2%  stress-ng.icmp-flood.ops_per_sec
+> >
+> > The debug patch is:
+> >
+> > diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+> > index 7fda7f27e7620..7eb626b98620c 100644
+> > --- a/arch/x86/kernel/vmlinux.lds.S
+> > +++ b/arch/x86/kernel/vmlinux.lds.S
+> > @@ -378,7 +378,9 @@ SECTIONS
+> >
+> >         /* BSS */
+> >         . = ALIGN(PAGE_SIZE);
+> > -       .bss : AT(ADDR(.bss) - LOAD_OFFSET) {
+> > +       .bss : AT(ADDR(.bss) - LOAD_OFFSET)
+> > +       SUBALIGN(PAGE_SIZE)
+> > +       {
+> >                 __bss_start = .;
+> >                 *(.bss..page_aligned)
+> >                 . = ALIGN(PAGE_SIZE);
+> >
+> > The 'table_perturb[]' used to be in bss section, and with the commit
+> > of moving it to runtime allocation, other data structures following it
+> > in the .bss section will get affected accordingly.
+> >
+> 
+> As the 'regression' is seen with ICMP workload, can you please share with us
+> the symbols close to icmp_global (without your align patch)
+
+Here are the info for the 2 commits (kernels for the original reprot):
+
+$ egrep -8 "icmp_global$" System.map-5.18.0-rc4-00242-gca7af0402550
+ffffffff837adc00 b tcp_cong_list_lock
+ffffffff837adc08 b tcpmhash_entries
+ffffffff837adc10 b fastopen_seqlock
+ffffffff837adc18 b tcp_metrics_lock
+ffffffff837adc1c b tcp_ulp_list_lock
+ffffffff837adc20 B raw_v4_hashinfo
+ffffffff837ae440 B udp_encap_needed_key
+ffffffff837ae480 B udp_memory_allocated
+ffffffff837ae488 b icmp_global
+ffffffff837ae4a0 b inet_addr_lst
+ffffffff837aeca0 b inetsw_lock
+ffffffff837aecc0 b inetsw
+ffffffff837aed80 b fib_info_devhash
+ffffffff837af580 b fib_info_cnt
+ffffffff837af584 b fib_info_hash_bits
+ffffffff837af588 b fib_info_hash_size
+ffffffff837af590 b fib_info_laddrhash
+
+$ egrep -8 "icmp_global$" System.map-5.18.0-rc4-00243-ge9261476184b
+ffffffff837ad800 b tcp_cong_list_lock
+ffffffff837ad808 b tcpmhash_entries
+ffffffff837ad810 b fastopen_seqlock
+ffffffff837ad818 b tcp_metrics_lock
+ffffffff837ad81c b tcp_ulp_list_lock
+ffffffff837ad820 B raw_v4_hashinfo
+ffffffff837ae040 B udp_encap_needed_key
+ffffffff837ae080 B udp_memory_allocated
+ffffffff837ae088 b icmp_global
+ffffffff837ae0a0 b inet_addr_lst
+ffffffff837ae8a0 b inetsw_lock
+ffffffff837ae8c0 b inetsw
+ffffffff837ae980 b fib_info_devhash
+ffffffff837af180 b fib_info_cnt
+ffffffff837af184 b fib_info_hash_bits
+ffffffff837af188 b fib_info_hash_size
+ffffffff837af190 b fib_info_laddrhash
+
+From above we can see some symbols are offseted of 0x400 (1KB),
+like icmp_global or fib_xxx, as the 'table_perturb' used to be
+1KB long in bss section.
+
+> I suspect we should move icmp_global to a dedicated cache line.
+> 
+> $ nm -v vmlinux|egrep -8 "icmp_global$"
+> ffffffff835bc490 b tcp_cong_list_lock
+> ffffffff835bc494 b fastopen_seqlock
+> ffffffff835bc49c b tcp_metrics_lock
+> ffffffff835bc4a0 b tcpmhash_entries
+> ffffffff835bc4a4 b tcp_ulp_list_lock
+> ffffffff835bc4a8 B raw_v4_hashinfo
+> ffffffff835bccc0 B udp_memory_allocated      << Note sure why it is
+> not already in a dedicated cache line>>
+
+IIUC, 0x....C0 means it is already cacheline aligned?
+
+
+> ffffffff835bccc8 B udp_encap_needed_key
+> ffffffff835bccd8 b icmp_global                               <<<HERE>>
+> ffffffff835bccf0 b inet_addr_lst
+> ffffffff835bd4f0 b inetsw_lock
+> ffffffff835bd500 b inetsw
+> ffffffff835bd5b0 b fib_info_lock
+> ffffffff835bd5b4 b fib_info_cnt
+> ffffffff835bd5b8 b fib_info_hash_size
+> ffffffff835bd5c0 b fib_info_hash
+> ffffffff835bd5c8 b fib_info_laddrhash
+
+Fengwei found that from the perf-profile info of report, there are
+quite difference around ping table handling.
+
+     43.72            +4.1       47.81 ±  2% icmp_rcv.ip_protocol_deliver_rcu.ip_local_deliver_finish.__netif_receive_skb_one_core.process_backlog
+     17.10 ±  7%      +6.0       23.10 ±  6%ping_rcv.icmp_rcv.ip_protocol_deliver_rcu.ip_local_deliver_finish.__netif_receive_skb_one_core
+     17.05 ±  7%      +6.0       23.06 ±  6%ping_lookup.ping_rcv.icmp_rcv.ip_protocol_deliver_rcu.ip_local_deliver_finish
+
+And the "ping_table[]" also sits in bss section and got affected:
+
+  Before: 
+  ffffffff837af600 b ping_table
+
+  After:
+  ffffffff837af200 b ping_table
+
+The cacheline alignment is not changed, and I suspect it cause some
+TLB changes.
+
+Thanks,
+Feng

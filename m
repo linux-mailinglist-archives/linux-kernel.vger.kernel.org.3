@@ -2,92 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F172054A9EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:02:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C9F54A9E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352799AbiFNG5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 02:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
+        id S238899AbiFNHAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237926AbiFNG5l (ORCPT
+        with ESMTP id S230329AbiFNHAP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 02:57:41 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E1A2ED4C;
-        Mon, 13 Jun 2022 23:57:40 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMfQC0jYvz4xZ0;
-        Tue, 14 Jun 2022 16:57:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655189859;
-        bh=2zwfr6L2/DazjFrIS0k6vEjrnwebcsif0EZPmsedaY4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lNau3KfMwraf1JKCFyNueNKFQVJJadM87oCIZ4yAXtKiOUSG0iyvhFTdwzXA4TdW9
-         rPk2JPFj1fRp/hUbqLvXrTTaLOF6YLI1/yww0jF+98FhjXmscRpYgvVpQy7AYv+6nl
-         vRM14/xEQiKwxNSwmnac4XJTlmsdDX8Yo2jgTCZJgmE2v7qOVAwgK4RzdAlM4M87Jw
-         Gj5mnv45T28w3+hmfhYwFryUraslZu7DXXo8IhTFGRKaywqAbz9312kriwp1Zqb92a
-         CX2lLdU24qZCwnI98pJBH+caLJK4+UgoF4HD5v3izt0eiYtgb3nDKdvryvTUuoORvh
-         xaKy9QTeMeCSA==
-Date:   Tue, 14 Jun 2022 16:57:38 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warnings in Linus' tree
-Message-ID: <20220614165738.715686f8@canb.auug.org.au>
+        Tue, 14 Jun 2022 03:00:15 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04C63B00F;
+        Tue, 14 Jun 2022 00:00:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1655190013; x=1686726013;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=T4nzZezDWWWUTOy8OMeuQhCOxOSUCA20xYUUYSUJEJ4=;
+  b=xtGnTo4nJB5KINBX3erdkGK3vH9x+W3apBUbeoRsGzce1uvlNToY6ohF
+   MPIa5qdprHE48Izp8LoF8CBi6+KxC2AHYChxRer8eXCl6n8YPP1YqKfwj
+   KPTiTfn5Z3Y71SrljSHoa7jFtThP1RYI6vFyS+nWpPG+B7J/xblkZeQX/
+   J9f4y1+EZqxmK9xsC7QdAzyysis7dnVpp3IV6YRIsT8h8GpH0hmIYV9N3
+   BhipSxorQNpL6a3KSJu7uEhyN3z7tb+p7ex1naFxby3N3A0F9QVgP57UK
+   SfTCt76CvMlLDwnSwxMfrwGuzL9ytfKVJXfwdf1fG6rr1+y2moVOhPw5/
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
+   d="scan'208";a="99902883"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jun 2022 00:00:12 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Tue, 14 Jun 2022 00:00:12 -0700
+Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Tue, 14 Jun 2022 00:00:10 -0700
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Lewis Hanly <lewis.hanly@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        <linux-riscv@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH] spi: microchip-core: fix potentially incorrect return from probe
+Date:   Tue, 14 Jun 2022 07:58:10 +0100
+Message-ID: <20220614065809.1969177-1-conor.dooley@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BaMS1miKY7y=KzDC7lqKZKo";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/BaMS1miKY7y=KzDC7lqKZKo
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+If platform_get_irqi() returns 0, the error case will be triggered but
+probe() will return 0 rather than an error. Ape the other drivers using
+this pattern and return -ENXIO.
 
-Hi all,
+Reported-by: Yang Li <yang.lee@linux.alibaba.com>
+Link: https://lore.kernel.org/linux-spi/20220609055533.95866-2-yang.lee@linux.alibaba.com/
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ drivers/spi/spi-microchip-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Building Linus' tree, today's linux-next build (htmldocs) produced
-these warnings:
+diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
+index 5b22a1395554..856a68fd8e9f 100644
+--- a/drivers/spi/spi-microchip-core.c
++++ b/drivers/spi/spi-microchip-core.c
+@@ -541,7 +541,7 @@ static int mchp_corespi_probe(struct platform_device *pdev)
+ 	spi->irq = platform_get_irq(pdev, 0);
+ 	if (spi->irq <= 0) {
+ 		dev_err(&pdev->dev, "invalid IRQ %d for SPI controller\n", spi->irq);
+-		ret = spi->irq;
++		ret = -ENXIO;
+ 		goto error_release_master;
+ 	}
+ 
+-- 
+2.36.1
 
-include/linux/netfs.h:314: warning: Function parameter or member 'ctx' not =
-described in 'netfs_inode_init'
-include/linux/netfs.h:314: warning: Excess function parameter 'inode' descr=
-iption in 'netfs_inode_init'
-
-Introduced by commit
-
-  e81fb4198e27 ("netfs: Further cleanups after struct netfs_inode wrapper i=
-ntroduced")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/BaMS1miKY7y=KzDC7lqKZKo
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKoMWIACgkQAVBC80lX
-0GyOpwf+KaBOpCT47awst7A2fQd7E14dtzAP4um5+sKfiUFRfUct9uvBWtICUt2I
-1Jo1UwYinrl06jfKeuxIPdLUtWr2jpCUW1ubqmQaVQaZ+QiW7C1cmXSf80CtRb7O
-oOIjtrAMqVHwGM7VlJJfRL+AqrCt1l3Ks9pF/qAFLoTvnFR2XY79t5YFGHXODknn
-Y0ZIXPJLGLaHDOVQvvciGGQJmlOzHLkPXnQzcvhv0E71efn5q8rNemfC+xkPURHo
-1dwG7JBLQJw6Hc1OW2mZcpidpMRhmBXwwOZG2SqbDZ5Y3+Ifuuzw+DlCCGN/SR+3
-YlrAJCWnuqw6IJIAmWVHKrb+xkjK1w==
-=eHpj
------END PGP SIGNATURE-----
-
---Sig_/BaMS1miKY7y=KzDC7lqKZKo--

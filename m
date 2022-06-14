@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3808654BC33
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6095F54BC2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358124AbiFNUsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        id S1358392AbiFNUtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345122AbiFNUr5 (ORCPT
+        with ESMTP id S1356579AbiFNUsA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:47:57 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D96245B4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:47:53 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id z186-20020a6233c3000000b00510a6bc2864so4249534pfz.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:47:53 -0700 (PDT)
+        Tue, 14 Jun 2022 16:48:00 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B2F26AD4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:47:55 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id lw3-20020a17090b180300b001e31fad7d5aso50791pjb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:47:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=/TuCx+mMC/wWO+wCOMNM3bKKbwcesvJBIffjbKO56Bw=;
-        b=EXnkADu6RTXV+ib1jbxWSMLKVki7PKLtpXvmbrKGr1wxeZWUrsr61IsHWiwHEf0pfg
-         qQZ3wjYx3pdYZQgdg3r+72YXMx7RcUwoMH3KcXd6ehSu5fKAu8tA8PfYyqlRowpbk0gg
-         cWQ6geMtAhCjmdrTsw1XkaTXddSWFsOhm7BBj0Q6afoWf9dfCVGVrn9bUYCljrZLbMZt
-         0QzEhPK0g13S4RBTn3zN1PoijTNol+n0QJmJKuE/qhvi41OZ7AUZuaj6TQZF8ggwlGPO
-         6hOIufOCh/p2Vzffj9QPxCzA+r2W5rLEb63J7eMK39NUsXaL+PQJsIdItwEyz/zg04mN
-         BF1w==
+        bh=NuhBWXqmLuVOf2m1Sf51S9jTSqkqKCsQtTnFDyuk7Aw=;
+        b=AAxqgJ02kZTKFqX0fncJZKFgSJ2T0aA1M4w3CKtg5ghAgxQBqiDR/VJB2qtuKBXK0Y
+         2aF2sDvCot1MSZR+2cf+/hdm82ueKwEx2lrUYeouQ+ECCyoxiAcyWRiYUyAf2K/5uWW0
+         MkKQbbnd30ju+o9ghshN4pPD8kBxXkIiOHxRXbSKHg7D/A0JJLRcUaXNmfMEqxiWJD5X
+         RSlhwPogjoo2Twvp62FoU3WmNujiDrXwCoEJBJJGG4DaSkdlc75jDYUW+BNkvLQO3BvB
+         9i2n3fjxiSCCaty3hj2XDmS2Nwgf/M31VCHXBwM1tcp0Gklu8/KRTJiF+gidwqhVSPYw
+         vrTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=/TuCx+mMC/wWO+wCOMNM3bKKbwcesvJBIffjbKO56Bw=;
-        b=6K/iNQXSLMF1pUkyfHUU5aMmOz4V1GqSaUsBVg8+h7plnG8Du9c5LJGt0QAIEEhVRe
-         neq4sehKZxseymEkGQG3ViQKd5J9yhhlHulfNUfF6JWW6biRo+owtekzfVURdS7O34ub
-         hPT0xoqKRBBryjNyra/949oWM7qM8Yk4q7KZUf57uZi4gRuKy3m132DM6BVpaIMT5biz
-         jxJ1vpicYN5Yp4oN4//C+49JAsYEE+PpOriXb4c3vJZ+w/S7xUQFpuznQlsYel2gUukw
-         T2jrXwixW7cH1zMyJ5Z/MESMkNSHydFz++TEIt0hHSliIMDhCLJUYvsNsIkbFySjoLGb
-         M9Kg==
-X-Gm-Message-State: AOAM531wWuSiDqaPvaFXztYt6zKG3VN6SUQFZBcFpJEQJmeiDLUV1q7L
-        OcqZO7TGWxH+VC4vvcvA6EiBYY6ANwk=
-X-Google-Smtp-Source: ABdhPJz4TFfgEbPvptgdgeqmoRmXfp4kjzJF01Rq80AvhdYmZSiQbcvuoZiSx2RF+fw1ABPTREqfL1KbBAU=
+        bh=NuhBWXqmLuVOf2m1Sf51S9jTSqkqKCsQtTnFDyuk7Aw=;
+        b=N0dHqKTUTwT3dqXkK4ssstllrDQRvldegU5da7Nn8rwBvR+I+yAwugFmtL8HyHFHtS
+         ngnoN81M9UQVu6z12PR2PMxDblF6irVYeExVBQqhXOs+9GFnWR5UCrnLbEQCQMwKWT88
+         TAm2mkjpKDCHkZmmmboW9nIAWDmddo9ylb29qtvTDuMJtjDWdYluIM7BAiF0M6E2T8W4
+         I6QWTMhCITFVwitlJAZNccMPeD3Ccsg2F1Lu3/lRhciSKG2Vp29ZV7sbPh9LaLZ0/utK
+         L+5JJI2glPoCP0pcTtpMdXuytlFseGW4lrq8QiceTrJw46LcgJd6f4DYPsGJ7F/1aE1M
+         qszA==
+X-Gm-Message-State: AOAM531QoOC3A2IZT/p8vcj17il+G/g0LefOkjderQjd7AQC86/XiKE7
+        AjU88j28OXDZw2nSU0UwRg7MJZypXQM=
+X-Google-Smtp-Source: ABdhPJxhuOZirzBb6ajrKE0F+5qY70HzLyfqMtZYi5fqIRkVW4Lk3gV+5JSEMCrA+DGmDVzjoE8ZrfiPeDQ=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:aa7:9f84:0:b0:51b:b64d:fc69 with SMTP id
- z4-20020aa79f84000000b0051bb64dfc69mr6543168pfr.7.1655239672654; Tue, 14 Jun
- 2022 13:47:52 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:1306:b0:512:ca3d:392f with SMTP id
+ j6-20020a056a00130600b00512ca3d392fmr6513669pfu.79.1655239674490; Tue, 14 Jun
+ 2022 13:47:54 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 20:47:18 +0000
+Date:   Tue, 14 Jun 2022 20:47:19 +0000
 In-Reply-To: <20220614204730.3359543-1-seanjc@google.com>
-Message-Id: <20220614204730.3359543-10-seanjc@google.com>
+Message-Id: <20220614204730.3359543-11-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220614204730.3359543-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH v2 09/21] KVM: nVMX: Unconditionally clear mtf_pending on
- nested VM-Exit
+Subject: [PATCH v2 10/21] KVM: VMX: Inject #PF on ENCLS as "emulated" #PF
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -68,79 +67,38 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clear mtf_pending on nested VM-Exit instead of handling the clear on a
-case-by-case basis in vmx_check_nested_events().  The pending MTF should
-rever survive nested VM-Exit, as it is a property of KVM's run of the
-current L2, i.e. should never affect the next L2 run by L1.  In practice,
-this is likely a nop as getting to L1 with nested_run_pending is
-impossible, and KVM doesn't correctly handle morphing a pending exception
-that occurs on a prior injected exception (need for re-injected exception
-being the other case where MTF isn't cleared).  However, KVM will
-hopefully soon correctly deal with a pending exception on top of an
-injected exception.
+Treat #PFs that occur during emulation of ENCLS as, wait for it, emulated
+page faults.  Practically speaking, this is a glorified nop as the
+exception is never of the nested flavor, and it's extremely unlikely the
+guest is relying on the side effect of an implicit INVLPG on the faulting
+address.
 
+Fixes: 70210c044b4e ("KVM: VMX: Add SGX ENCLS[ECREATE] handler to enforce CPUID restrictions")
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/nested.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+ arch/x86/kvm/vmx/sgx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index d080bfca16ef..7b644513c82b 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -3909,16 +3909,8 @@ static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
- 	unsigned long exit_qual;
- 	bool block_nested_events =
- 	    vmx->nested.nested_run_pending || kvm_event_needs_reinjection(vcpu);
--	bool mtf_pending = vmx->nested.mtf_pending;
- 	struct kvm_lapic *apic = vcpu->arch.apic;
- 
--	/*
--	 * Clear the MTF state. If a higher priority VM-exit is delivered first,
--	 * this state is discarded.
--	 */
--	if (!block_nested_events)
--		vmx->nested.mtf_pending = false;
--
- 	if (lapic_in_kernel(vcpu) &&
- 		test_bit(KVM_APIC_INIT, &apic->pending_events)) {
- 		if (block_nested_events)
-@@ -3927,6 +3919,9 @@ static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
- 		clear_bit(KVM_APIC_INIT, &apic->pending_events);
- 		if (vcpu->arch.mp_state != KVM_MP_STATE_INIT_RECEIVED)
- 			nested_vmx_vmexit(vcpu, EXIT_REASON_INIT_SIGNAL, 0, 0);
-+
-+		/* MTF is discarded if the vCPU is in WFS. */
-+		vmx->nested.mtf_pending = false;
- 		return 0;
+diff --git a/arch/x86/kvm/vmx/sgx.c b/arch/x86/kvm/vmx/sgx.c
+index 35e7ec91ae86..966cfa228f2a 100644
+--- a/arch/x86/kvm/vmx/sgx.c
++++ b/arch/x86/kvm/vmx/sgx.c
+@@ -129,7 +129,7 @@ static int sgx_inject_fault(struct kvm_vcpu *vcpu, gva_t gva, int trapnr)
+ 		ex.address = gva;
+ 		ex.error_code_valid = true;
+ 		ex.nested_page_fault = false;
+-		kvm_inject_page_fault(vcpu, &ex);
++		kvm_inject_emulated_page_fault(vcpu, &ex);
+ 	} else {
+ 		kvm_inject_gp(vcpu, 0);
  	}
- 
-@@ -3964,7 +3959,7 @@ static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
- 		return 0;
- 	}
- 
--	if (mtf_pending) {
-+	if (vmx->nested.mtf_pending) {
- 		if (block_nested_events)
- 			return -EBUSY;
- 		nested_vmx_update_pending_dbg(vcpu);
-@@ -4562,6 +4557,9 @@ void nested_vmx_vmexit(struct kvm_vcpu *vcpu, u32 vm_exit_reason,
- 	struct vcpu_vmx *vmx = to_vmx(vcpu);
- 	struct vmcs12 *vmcs12 = get_vmcs12(vcpu);
- 
-+	/* Pending MTF traps are discarded on VM-Exit. */
-+	vmx->nested.mtf_pending = false;
-+
- 	/* trying to cancel vmlaunch/vmresume is a bug */
- 	WARN_ON_ONCE(vmx->nested.nested_run_pending);
- 
 -- 
 2.36.1.476.g0c4daa206d-goog
 

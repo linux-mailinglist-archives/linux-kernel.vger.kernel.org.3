@@ -2,87 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF6A54BC59
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6BC354BC56
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:59:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245757AbiFNUxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
+        id S235351AbiFNUxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245178AbiFNUwq (ORCPT
+        with ESMTP id S1358451AbiFNUxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:52:46 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB9E1F2F0;
-        Tue, 14 Jun 2022 13:52:46 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id i16so10696295ioa.6;
-        Tue, 14 Jun 2022 13:52:46 -0700 (PDT)
+        Tue, 14 Jun 2022 16:53:24 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE0D2F64F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:53:22 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d13so8707096plh.13
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:53:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AR6pI4Dz4SnbCroeylFx6ClK0LALzjTLZM8tr+b1Qio=;
+        b=rlANcywAf4bR7fadVFA2+G43rRwb6bnCOg+XpmZaE08Y1ATmf4iXfkpOG29AXJ27fu
+         nBPgAan/++luP9MBfjVPAOtUAnUddFJWgFTpt8KC3RYS6VGpCD6sbGm13MaOL9Z44jGD
+         4fFF01bfFROZXzw7HdaT2etm+xFtUlvK5HkkHAmN83wi0aZnVzmCVnSiJsVkMQK4SMai
+         HUNWTGtntrPCxetOSOJqi/coDpghVaIdNMMDH5QrLKyN7jfKz3CoBwz29149riGdWEdQ
+         O+GwP/qqzi5qErljLWsZ13oFVlZdEnn/YqvCC8+n2DYlnwaN/fpW2/wLi0q6xxs0bF6l
+         drEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=AQU7G9dtg8Y8H+vQgrYNezCoo/xULoFEsuyaQ6U59LU=;
-        b=bL7dVC1vvzBFpadcU8JdyjynPGHSgvN4wcw+BpystNkBjUFBYlBP+HaUDtCglYOHKM
-         vKlKpQEuRd9iaVlKMVPO29IXqkiG6xzZhF1NxVLOXXlrgUdN3RSDPZyIKoSNos/4DVbP
-         CpHrFNZtl+AzlKsIADu5Qxs7sp4scFux2a10TU4EDwDiwSNf9Y0lf1m5tM55suK1t4hd
-         QVZPF0L+z9y+mqW6ge4rWlYIQYSRpV3iAbGwZQeRaSprHgntP/XdHkkDzCZ6zuojJAg9
-         l+g6NPcNbU2Nd2JFm4XhQTAhb83PwDf6VPAZQI9eFUplw+truG1q5xJP5RU/eaRazV6x
-         51Ug==
-X-Gm-Message-State: AOAM530JYbjUHk/cg89Mg9/i+b5qpBqMXOokbqVLuIHcvGSiXXvUCzr/
-        tNaijBRaMmBiIvk57YUqrQ==
-X-Google-Smtp-Source: ABdhPJy4OZTKgkm9bsNozXxDdwuI56FSZM66Se3QH8NuIoteF12/9pfiXl/uOuGuu0rZ7hwu/sJUxA==
-X-Received: by 2002:a05:6638:1346:b0:331:b571:9fd6 with SMTP id u6-20020a056638134600b00331b5719fd6mr4027605jad.266.1655239965312;
-        Tue, 14 Jun 2022 13:52:45 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id p136-20020a6b8d8e000000b00669a3314870sm5691555iod.9.2022.06.14.13.52.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 13:52:44 -0700 (PDT)
-Received: (nullmailer pid 2528143 invoked by uid 1000);
-        Tue, 14 Jun 2022 20:52:42 -0000
-Date:   Tue, 14 Jun 2022 14:52:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Jimmy Lalande <jimmy.lalande@se.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        linux-renesas-soc@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>, devicetree@vger.kernel.org,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH RESEND net-next v7 11/16] dt-bindings: net: snps,dwmac:
- add "renesas,rzn1" compatible
-Message-ID: <20220614205242.GA2527905-robh@kernel.org>
-References: <20220610103712.550644-1-clement.leger@bootlin.com>
- <20220610103712.550644-12-clement.leger@bootlin.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AR6pI4Dz4SnbCroeylFx6ClK0LALzjTLZM8tr+b1Qio=;
+        b=C2TVdtntmm4Hv2oa4aL5aK50yeeWQW/6j/RzhW2illylBeZXy8lZ3eskozH5IxXDrn
+         LW7zHGZOFZwpOyVeh3EZba5K6CHkGK53k+uQ85poV0E0MAES9lgLKCXnyLTSeeZhRtWY
+         PmxixYLHsaMqC7rNiKPLXaf/QLK1Vqv/7wzr0GglJnMdJuGbeZnNkgxK9ZTxfnI2/Vts
+         9C4TEOYG8rDUpqA+mtysla54W4iUUmi+UgThRHCQSCFg3ytPPMXJlZPf3FLip2TwOw/0
+         kqnPVk9Ldc8q7dMn/d3Ry91TOZLghK0qE6nx0fzbI+SUNcpIp92TWNhxZouAwh0par89
+         jlTw==
+X-Gm-Message-State: AJIora/KbfTcDA5VxWZ5Xij4yeWR2OXvDhebN/pI26TxTrqOXyP1hRQe
+        WB1cchOY0j0kwibpbDW8Gpa9ug==
+X-Google-Smtp-Source: AGRyM1sGORuHOsrudJ2NzMuucMCoEUS7FrDUAZJlvhB95QU1/ijkVKGqDtIwU3c/jV+ULDfXuIS/fA==
+X-Received: by 2002:a17:903:248:b0:168:cf03:eefe with SMTP id j8-20020a170903024800b00168cf03eefemr6038425plh.124.1655240002425;
+        Tue, 14 Jun 2022 13:53:22 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id m12-20020a1709026bcc00b00162037fbacdsm7638321plt.187.2022.06.14.13.53.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 13:53:21 -0700 (PDT)
+Message-ID: <3dbb38af-4813-3c5d-8a12-cdd63bdbe3c2@linaro.org>
+Date:   Tue, 14 Jun 2022 13:53:19 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch
+ support
+Content-Language: en-US
+To:     Prashant Malani <pmalani@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     bleung@chromium.org, swboyd@chromium.org,
+        heikki.krogerus@linux.intel.com,
+        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
+        <nfraprado@collabora.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Pin-Yen Lin <treapking@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Xin Ji <xji@analogixsemi.com>
+References: <20220614193558.1163205-1-pmalani@chromium.org>
+ <20220614193558.1163205-5-pmalani@chromium.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220614193558.1163205-5-pmalani@chromium.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220610103712.550644-12-clement.leger@bootlin.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,13 +99,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Jun 2022 12:37:07 +0200, Clément Léger wrote:
-> Add "renesas,rzn1-gmac" and "renesas,r9a06g032-gmac" compatible strings.
+On 14/06/2022 12:34, Prashant Malani wrote:
+> Analogix 7625 can be used in systems to switch USB Type-C DisplayPort
+> alternate mode lane traffic between 2 Type-C ports.
 > 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> Update the binding to accommodate this usage by introducing a switch
+> property.
+> 
+> Reviewed-by: NÃ­colas F. R. A. Prado <nfraprado@collabora.com>
+> Tested-by: NÃ­colas F. R. A. Prado <nfraprado@collabora.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 > ---
->  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 2 ++
->  1 file changed, 2 insertions(+)
 > 
+> Changes since v2:
+> - Added Reviewed-by and Tested-by tags.
+> 
+> Changes since v1:
+> - Introduced patternProperties for "switch" children (suggested by Krzysztof Kozlowski).
+> - Added unevaluatedProperties descriptor (suggested by Krzysztof Kozlowski).
+> - Added "address-cells" and "size-cells" properties to "switches".
+> 
+>  .../display/bridge/analogix,anx7625.yaml      | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> index 35a48515836e..cb4a23391244 100644
+> --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
+> @@ -105,6 +105,33 @@ properties:
+>        - port@0
+>        - port@1
+>  
+> +  switches:
+> +    type: object
+> +    description: Set of switches controlling DisplayPort traffic on
+> +      outgoing RX/TX lanes to Type C ports.
+> +    unevaluatedProperties: false
 
-Acked-by: Rob Herring <robh@kernel.org>
+This should be additionalProperties:false.
+
+> +
+> +    properties:
+> +      "#address-cells":
+> +        const: 1
+> +
+> +      "#size-cells":
+> +        const: 0
+> +
+> +    patternProperties:
+> +      'switch@[01]':
+
+You also need ^ and $. Please use the same quotes as in other places
+(here is ' but few lines above ")
+
+> +        $ref: /schemas/usb/typec-switch.yaml#
+
+You need unevaluatedProperties:false on this level.
+
+> +
+> +        properties:
+> +          reg:
+> +            maxItems: 1
+> +
+> +        required:
+> +          - reg
+> +
+> +    required:
+> +      - switch@0
+> +
+
+
+Best regards,
+Krzysztof

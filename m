@@ -2,129 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3209F54AF7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C44D754AF82
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242957AbiFNLrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 07:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35108 "EHLO
+        id S243103AbiFNLuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 07:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241585AbiFNLrh (ORCPT
+        with ESMTP id S242400AbiFNLuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 07:47:37 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19859DFEA
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:47:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C9BDA21B23;
-        Tue, 14 Jun 2022 11:47:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655207255; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=te73DX5kggSfnajOVBmsnuuS8V2hl4yR3sgi0lsOK+M=;
-        b=0aA9MJYYVykJJ7t/bYkVScInYHsGVQV/AdPzpotM/Cim+yIvxT4YZoEudKNODz/67pM4F7
-        pKgrlpT4FcoVNWxC1WVZLUNTNmMHNe6cwhVAn1cNb1duuQTenoeT3VbhJk0eaX8zFaC41U
-        cr9huxnBP8vIgF3zQliFznSAXbmH0pg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655207255;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=te73DX5kggSfnajOVBmsnuuS8V2hl4yR3sgi0lsOK+M=;
-        b=nW75kCYZDixcMtaGdtpfvRxu+/Rr9nI5dsYWSjemPlrB58A1PkhobH2OUYgU5+no/OJntU
-        GJ/f7dQb1TZY8VDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9A963139EC;
-        Tue, 14 Jun 2022 11:47:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6GYoJVd1qGLLeQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Tue, 14 Jun 2022 11:47:35 +0000
-Message-ID: <ab6880b2-54c2-7fad-3cc6-33d9cdafe5f0@suse.cz>
-Date:   Tue, 14 Jun 2022 13:47:35 +0200
+        Tue, 14 Jun 2022 07:50:11 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638E0344C7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:50:10 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id bo5so8368685pfb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:50:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7USdEj51HE+B1W75ZrU25EJ9oEbMG9WGuwAFaI6L8WI=;
+        b=SHDYoBfQEbpxLJf9QLOz5WYVuhOqKagBsWr2lKNJC5ivL+lqvNOb5rhAaCrOMyQie9
+         kzJJercKHSZodWdYSA3z1AmTaPCjl935BN8b9HeN3XvZ9pCTi8UnF+5mq1wlzS+6S/b0
+         tnEbqlJjK8YPELkWyofXdseg7vYRSL3y+/PPErFJ2eIOl4A+sYIuqp/MSOB53IoMC73N
+         iHUeSEA+gxgWixbbPOvivMy8r920+AhT83Ps2WUdikycbYR6J+jlB81CBTep4auVyyyn
+         5fwWBsK10wJPlWpoRlN6YtKRylNBWsWYG34P9gj56q3pVdRYg8lzH93zR79NydS3jjdi
+         FTBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=7USdEj51HE+B1W75ZrU25EJ9oEbMG9WGuwAFaI6L8WI=;
+        b=k/blprSERNQ69q3SQXH418SVqK6ixoaCU3K+rLcjzowL58fHi6vSkerpV5gj32hgiM
+         oIpKN6/NJZxnbEPlFDtu3Lr64YcWYMBIzzwoD/HS9TkAzEx3aWkgOiL8v13nluzeNmHJ
+         lyuz8F99dIYRgmSpYSv3UsxmOzpniojy8qwue1NjquSPlfv6Vcw3Pnebfs0REBownVgS
+         bRh6/2v1ov2x5P9Ak2TuZsZS6ahAzYB7Wedd6f+EwwlfAlaqmKI9BVU4Iwr2omUIeDvD
+         dTkGIfD+TMBzR8Su+3fvKid1va4iFIC49axqAyof4df6VtSH/lk8Y5zyr4V16/dheQRu
+         KutQ==
+X-Gm-Message-State: AOAM530m6UgvPAQULJtQPRp1CgpKqCphIYjgPsaXdNPoIkNbpskzrAhR
+        5mc/ZA1zje12r7mP/pYiEMk=
+X-Google-Smtp-Source: ABdhPJz2uVsUMAAG8G/cswub01WoridQVs3LbPbqALCem8eTfK5OBpikxbeU18hETFsqc+A7X5jnPA==
+X-Received: by 2002:a05:6a00:1145:b0:4f6:3ebc:a79b with SMTP id b5-20020a056a00114500b004f63ebca79bmr4419369pfm.41.1655207409855;
+        Tue, 14 Jun 2022 04:50:09 -0700 (PDT)
+Received: from mi-HP-ProDesk-680-G4-MT.mioffice.cn ([43.224.245.250])
+        by smtp.gmail.com with ESMTPSA id ay21-20020a056a00301500b0051bc3a2355csm7291268pfb.64.2022.06.14.04.50.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 14 Jun 2022 04:50:08 -0700 (PDT)
+From:   qixiaoyu1 <qxy65535@gmail.com>
+X-Google-Original-From: qixiaoyu1 <qixiaoyu1@xiaomi.com>
+To:     jaegeuk@kernel.org
+Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, liuchao12 <liuchao12@xiaomi.com>
+Subject: [PATCH 1/2] resize.f2fs: add option to manually specify new overprovision
+Date:   Tue, 14 Jun 2022 19:49:28 +0800
+Message-Id: <20220614114929.6897-1-qixiaoyu1@xiaomi.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] mm: check the function kmalloc_slab return value
-Content-Language: en-US
-To:     tury <renyu@nfschina.com>, cl@linux.com
-Cc:     penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        akpm@linux-foundation.org, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
-        qixu@nfschina.com, hukun@nfschina.com, yuzhe@nfschina.com
-References: <20220613102438.27723-1-renyu@nfschina.com>
- <20220614083939.13508-1-renyu@nfschina.com>
- <bb8d41fc-bd13-9563-7c54-2850f131e835@suse.cz>
- <be9a1d54-0558-dbee-fcac-0f357ea32db9@nfschina.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <be9a1d54-0558-dbee-fcac-0f357ea32db9@nfschina.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/22 11:26, tury wrote:
-> 
-> 
-> 在 2022年06月14日 16:48, Vlastimil Babka 写道:
->> On 6/14/22 10:39, Ren Yu wrote:
->>> As the possible failure of the kmalloc_slab,
->>> it should be better to check it.
->> AFAIK failure is not possible, kmalloc_slab() is not an allocation function,
->> it just returns a member of kmalloc_caches array, which is initialized
->> elsewhere and shouldn't contain NULLs. So the patch seems unnecessary to me.
->>
->>> Signed-off-by: Ren Yu <renyu@nfschina.com>
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> ---
->>> v2:
->>> - fix build waring integer from pointer without a cast
->>> ---
->>> ---
->>>   mm/slab.c | 2 ++
->>>   1 file changed, 2 insertions(+)
->>>
->>> diff --git a/mm/slab.c b/mm/slab.c
->>> index f8cd00f4ba13..72135e555827 100644
->>> --- a/mm/slab.c
->>> +++ b/mm/slab.c
->>> @@ -2064,6 +2064,8 @@ int __kmem_cache_create(struct kmem_cache *cachep,
->>> slab_flags_t flags)
->>>       if (OFF_SLAB(cachep)) {
->>>           cachep->freelist_cache =
->>>               kmalloc_slab(cachep->freelist_size, 0u);
->>> +        if (unlikely(ZERO_OR_NULL_PTR(cachep->freelist_cache)))
->> The usual way is "if (!cachep->freelist_cache)". Not sure why check for ZERO.
->>
->>> +            return cachep->freelist_cache;
->> So in case of NULL this would return NULL, thus 0, but __kmem_cache_create()
->> return 0 on success, so it's wrong. You would have to return e.g. -ENOMEM.
-> Thanks for the advice ,I'll be re-patching
+From: liuchao12 <liuchao12@xiaomi.com>
 
-However that was meant just for your information/learning, the patch is
-still unecessary as I wrote above, so I will not merge it so we don't
-complicate the code needlessly.
+Make.f2fs supports manually specifying overprovision, and we expect
+resize.f2fs to support it as well.
 
->>
->>>       }
->>>         err = setup_cpu_cache(cachep, gfp);
->>
-> 
+This change add a new '-o' option to manually specify overprovision.
+
+Signed-off-by: liuchao12 <liuchao12@xiaomi.com>
+---
+ fsck/main.c   |  8 ++++++--
+ fsck/resize.c | 12 ++++++++++--
+ 2 files changed, 16 insertions(+), 4 deletions(-)
+
+diff --git a/fsck/main.c b/fsck/main.c
+index aef797e..3b4da0f 100644
+--- a/fsck/main.c
++++ b/fsck/main.c
+@@ -121,7 +121,8 @@ void resize_usage()
+ 	MSG(0, "[options]:\n");
+ 	MSG(0, "  -d debug level [default:0]\n");
+ 	MSG(0, "  -i extended node bitmap, node ratio is 20%% by default\n");
+-	MSG(0, "  -s safe resize (Does not resize metadata)");
++	MSG(0, "  -o overprovision percentage [default:auto]\n");
++	MSG(0, "  -s safe resize (Does not resize metadata)\n");
+ 	MSG(0, "  -t target sectors [default: device size]\n");
+ 	MSG(0, "  -V print the version number and exit\n");
+ 	exit(1);
+@@ -527,7 +528,7 @@ void f2fs_parse_options(int argc, char *argv[])
+ #endif
+ 	} else if (!strcmp("resize.f2fs", prog)) {
+ #ifdef WITH_RESIZE
+-		const char *option_string = "d:fst:iV";
++		const char *option_string = "d:fst:io:V";
+ 
+ 		c.func = RESIZE;
+ 		while ((option = getopt(argc, argv, option_string)) != EOF) {
+@@ -561,6 +562,9 @@ void f2fs_parse_options(int argc, char *argv[])
+ 			case 'i':
+ 				c.large_nat_bitmap = 1;
+ 				break;
++			case 'o':
++				c.new_overprovision = atof(optarg);
++				break;
+ 			case 'V':
+ 				show_version(prog);
+ 				exit(0);
+diff --git a/fsck/resize.c b/fsck/resize.c
+index f1b7701..d19c6fa 100644
+--- a/fsck/resize.c
++++ b/fsck/resize.c
+@@ -146,12 +146,15 @@ safe_resize:
+ 						get_sb(segs_per_sec));
+ 
+ 	/* Let's determine the best reserved and overprovisioned space */
+-	c.new_overprovision = get_best_overprovision(sb);
++	if (c.new_overprovision == 0)
++		c.new_overprovision = get_best_overprovision(sb);
++
+ 	c.new_reserved_segments =
+ 		(2 * (100 / c.new_overprovision + 1) + 6) *
+ 						get_sb(segs_per_sec);
+ 
+-	if ((get_sb(segment_count_main) - 2) < c.new_reserved_segments ||
++	if (c.new_overprovision == 0 ||
++		(get_sb(segment_count_main) - 2) < c.new_reserved_segments ||
+ 		get_sb(segment_count_main) * blks_per_seg >
+ 						get_sb(block_count)) {
+ 		MSG(0, "\tError: Device size is not sufficient for F2FS volume, "
+@@ -476,6 +479,11 @@ static void rebuild_checkpoint(struct f2fs_sb_info *sbi,
+ 	set_cp(overprov_segment_count, get_cp(overprov_segment_count) +
+ 						get_cp(rsvd_segment_count));
+ 
++	DBG(0, "Info: Overprovision ratio = %.3lf%%\n", c.new_overprovision);
++	DBG(0, "Info: Overprovision segments = %u (GC reserved = %u)\n",
++					get_cp(overprov_segment_count),
++					c.new_reserved_segments);
++
+ 	free_segment_count = get_free_segments(sbi);
+ 	new_segment_count = get_newsb(segment_count_main) -
+ 					get_sb(segment_count_main);
+-- 
+2.36.1
 

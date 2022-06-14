@@ -2,106 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84F9354AB41
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC79454AB48
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355273AbiFNHyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
+        id S1355325AbiFNHyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355871AbiFNHxk (ORCPT
+        with ESMTP id S1355884AbiFNHxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:53:40 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B2641F93;
-        Tue, 14 Jun 2022 00:52:57 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMgds07Klz4xXj;
-        Tue, 14 Jun 2022 17:52:48 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655193172;
-        bh=PQo1e3aGs8YwrKBvyYc2tmj05hjtfb3An/WWvqqIFYc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OW3geck3s55yL/YFvcXNUyEhAIiJw2KCSbDRc/gaSd8/8+ybHDLkloTkb7EQkkRfo
-         n92Vy8ddXVF5GAkCKJSoJTTirZXaorEwqV0IffeiAwzFZ+nCod+jeuPSqxtELK4fTC
-         hPSgND5Tr+WwnJ7gJchSfIS7XdC9pChhqkap+0HJE5tY05TFOjzDrz/TnOmDfNmAP5
-         hRNIpEGVmdU5JWsgxT7u5k0hXsoZJIjDGJsXXMUjQc86L6rDgkrtdn0o73Q+z6j6qZ
-         18jVUy+VQYWwiKEM6e9V31kQmP2ZwH0ZbIIKffNARF4zLfWMyaXduPqRAlzmIpeffB
-         RwIKIGGR+oRUw==
-Date:   Tue, 14 Jun 2022 17:52:47 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Neal Liu <neal_liu@aspeedtech.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the usb tree
-Message-ID: <20220614175247.30b02dc2@canb.auug.org.au>
-In-Reply-To: <YqgtsXSNZKds2bDl@kroah.com>
-References: <20220614120833.06cec8e7@canb.auug.org.au>
-        <YqgtsXSNZKds2bDl@kroah.com>
+        Tue, 14 Jun 2022 03:53:41 -0400
+Received: from smtp.gentoo.org (smtp.gentoo.org [IPv6:2001:470:ea4a:1:5054:ff:fec7:86e4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF2641F9D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:53:02 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 15:52:48 +0800
+From:   Yixun Lan <dlan@gentoo.org>
+To:     tjytimi <tjytimi@163.com>
+Cc:     rppt@kernel.org, akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] memblock: avoid some repeat when add new range
+Message-ID: <Yqg+UKAB6iiHd9N4@ofant>
+References: <20220609024122.6679-1-tjytimi@163.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Pf=S.ZBc5Gp8VAEJGCjogbb";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220609024122.6679-1-tjytimi@163.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Pf=S.ZBc5Gp8VAEJGCjogbb
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi Greg,
+On 10:41 Thu 09 Jun     , tjytimi wrote:
+> The worst case is that the new memory range overlaps all existing
+> regions,which need type->cnt + 1 free area of struct memblock_region.
+> So if type->cnt + 1 + type->cnt is less than type->max,we can insert
+> regions directly.And becase of merge operation in the end of function,
+> tpye->cnt increase slowly for many cases.So this patch can avoid
+> unnecessary repeat for many cases when add new memory range.
+> 
+> Signed-off-by: tjytimi <tjytimi@163.com>
+Can you fix the author/signed-off tag with your real legal name?
 
-On Tue, 14 Jun 2022 08:41:53 +0200 Greg KH <greg@kroah.com> wrote:
->
-> On Tue, Jun 14, 2022 at 12:08:33PM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > After merging the usb tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
->=20
-> Failed like what?
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/submitting-patches.rst?h=v4.18#n460
 
-Sorry about that.  I no longer have the actual error message, but it
-was complaining about a duplicate DT node "ahb usb@1e6a2000".  The
-patch managed to be applied twice.
+> ---
+>  mm/memblock.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/mm/memblock.c b/mm/memblock.c
+> index e4f03a6e8..243cd7de5 100644
+> --- a/mm/memblock.c
+> +++ b/mm/memblock.c
+> @@ -602,6 +602,9 @@ static int __init_memblock memblock_add_range(struct memblock_type *type,
+>  	base = obase;
+>  	nr_new = 0;
+>  
+> +	if (type->cnt<<1 < type->max - 1)
+> +		insert = true;
+> +
+>  	for_each_memblock_type(idx, type, rgn) {
+>  		phys_addr_t rbase = rgn->base;
+>  		phys_addr_t rend = rbase + rgn->size;
+> -- 
+> 2.32.0
+> 
 
-> > Caused by commit
-> >=20
-> >   2cee50bf4590 ("ARM: dts: aspeed: Add USB2.0 device controller node")
-> >=20
-> > I have used the usb tree from next-20220610 for today. =20
->=20
-> Odd, ok, I'll try to revert the offending dts change from my tree.  If I
-> can get a hint as to what went wrong with the build, that would also be
-> great :)
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Pf=S.ZBc5Gp8VAEJGCjogbb
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKoPk8ACgkQAVBC80lX
-0GwdDwf/XdxU6Fyo6YXnYAME/7DHdN5Tq+pRgfrBAPdipl4MqZAJNCVqkfJr7TRE
-OjuGr0u5VOwytxLu8WXLgZZkom4smcMLRn2ZE5OEKhSgE7/VoR40xJaGnfz4OusN
-89zdD/4H87Xjm11legV6I3LlNzahi91YTGO2c16VC5Y/revS9GkZos+5hcGovrGX
-ND/6HDsn3YF5T2PAkklzj+Qg9qcfKyAx2+8KK00NTcYSYNaSAjsHrmhH66LsHEKK
-2ZGtGGj8jaPCw3eYmz8TIhRzdgf5SsRpasnN+FP3wPYsTpCAw8TcLuhBuwm1R2vw
-TFnmQiY6P76xNsvyNMWSC0WVbVDNWg==
-=bky4
------END PGP SIGNATURE-----
-
---Sig_/Pf=S.ZBc5Gp8VAEJGCjogbb--
+-- 
+Yixun Lan (dlan)
+Gentoo Linux Developer
+GPG Key ID AABEFD55

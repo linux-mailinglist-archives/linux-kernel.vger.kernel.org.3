@@ -2,71 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E2D954A953
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:20:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF4E54A959
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350062AbiFNGUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 02:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53000 "EHLO
+        id S1350978AbiFNGUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 02:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347783AbiFNGUI (ORCPT
+        with ESMTP id S1350462AbiFNGUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 02:20:08 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB2437A34
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 23:20:06 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id o6so6971126plg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 23:20:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=pPW2A2+FecqYzTNxHFw+Bd5A/ry9FUiCsCVN9fu3/R8=;
-        b=FbOTsp65wpIFPM+f/TC7ij0u8gt6p+ds5rUbQMG2n53sAhdZ19c1vLL264pDl2AwDY
-         57LBg1auQbdhRMYBKw7cb4CeNzYIhwH/+JBLv0AAjDl9jKU37E/JOt3CCANFNqnZHGfJ
-         9u6NJYCNB3H1Iad+hZ+hCTclOAoK5fe4vr5P0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=pPW2A2+FecqYzTNxHFw+Bd5A/ry9FUiCsCVN9fu3/R8=;
-        b=UwHdTKOOjDmsg10cViwQO19dY5iNHid8A+VTnOQz6luoTvGY0ZTJW9d4nY/cNHqAf3
-         jBy2kt6CvCg0A7xjYulysJC6eFt8YB8DyhJSvD92FtUWYF8eFRSAEcH+s46sirFYt+VW
-         V/mO8/Gdtw9b2eX8c+yIdkAjLbBiaOtFH1Jj27ZrVYKHAthE+TBhh7Cqb4MVVw0o4i/w
-         kagX+C0OefdipOZfGPzUOYqd+FeVpiVe1vutS7EHhV4Jk9VK7igzc4opqMf5S5+xfGT6
-         oarvd8OuNhVKhmPVyMatOg4G3QYSSMEa/nbSuR3GhFnP22/G7bRKrx26VSldUPK4bbyr
-         dXCA==
-X-Gm-Message-State: AJIora/NMfFmy/6HTL3Z8f4msO8rsecxu+0a3r+lv6rlD6hSiXL/cQsi
-        tQsDDQcUUHXDU29AUM06yyZLMoAhGquQ4A1V
-X-Google-Smtp-Source: AGRyM1tLGDcRvgLXKrK8g1+Gi22Egly2Q95+bKbpI6vSAAYC4395lKlEnzsUatHxgegTi+5DsfiOlA==
-X-Received: by 2002:a17:902:d4ca:b0:164:1971:1504 with SMTP id o10-20020a170902d4ca00b0016419711504mr2806792plg.138.1655187606377;
-        Mon, 13 Jun 2022 23:20:06 -0700 (PDT)
-Received: from localhost.localdomain ([124.123.175.49])
-        by smtp.gmail.com with ESMTPSA id x67-20020a623146000000b0051be16492basm6531216pfx.195.2022.06.13.23.20.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 23:20:05 -0700 (PDT)
-From:   Suniel Mahesh <sunil@amarulasolutions.com>
-To:     Mark Brown <broonie@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime.ripard@free-electrons.com>,
-        Christopher Vollo <chris@renewoutreach.org>,
-        Michael Trimarchi <michael@amarulasolutions.com>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@free-electrons.com>,
-        linux-amarula@amarulasolutions.com
-Subject: [PATCH 2/2] ARM: dts: sun8i: Add R16 Vista E board from RenewWorldOutreach
-Date:   Tue, 14 Jun 2022 11:49:46 +0530
-Message-Id: <20220614061946.276898-2-sunil@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220614061946.276898-1-sunil@amarulasolutions.com>
-References: <20220614061946.276898-1-sunil@amarulasolutions.com>
+        Tue, 14 Jun 2022 02:20:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9787D37A84;
+        Mon, 13 Jun 2022 23:20:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 35D5C60B6A;
+        Tue, 14 Jun 2022 06:20:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8C884C36B09;
+        Tue, 14 Jun 2022 06:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655187613;
+        bh=OH604z9q8hs1FJx9AZ0a8xeYy+Ho3/Eyv1sdOh/pIgs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=USVibk77FxLf57AJ44EBVYk09eG3MnCS4JlzpptKKzAnX5alS8abFHrI89Mx56TfS
+         5OtppB6MFmoqu61R05mdhr4ffr7ZjBsqAFa3eGtHC2K1YhYkPYBq1zsNdkSdiMW0s/
+         7bwYTst3jkyI4vP1Mo0XPMXdrHblRbaQLRze6XLtDCKdxxHs/xJDzs8R5PCFow4a6S
+         iZCLMaLaP5rCUxqFPqygLZJ2Z6LgKDysV0outGVHz1OHo52ao5T4wSqxm2tFQX6Q+P
+         hmAvurKHKwVC0rpyHp1Zpzg3cdDDNYzF0t5SqHmAMzsDnxhaJSY9d56IgC2E+AC74+
+         BuM8AueNrd9pw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6F9F3E6D482;
+        Tue, 14 Jun 2022 06:20:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH] docs: networking: phy: Fix a typo
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165518761345.22663.1630253826572230261.git-patchwork-notify@kernel.org>
+Date:   Tue, 14 Jun 2022 06:20:13 +0000
+References: <20220610072809.352962-1-j.neuschaefer@gmx.net>
+In-Reply-To: <20220610072809.352962-1-j.neuschaefer@gmx.net>
+To:     =?utf-8?q?Jonathan_Neusch=C3=A4fer_=3Cj=2Eneuschaefer=40gmx=2Enet=3E?=@ci.codeaurora.org
+Cc:     netdev@vger.kernel.org, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,408 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The R16-Vista-E board from RenewWorldOutreach based on allwinner
-R16(A33).
+Hello:
 
-General features:
-- 1GB RAM
-- microSD slot
-- Realtek Wifi
-- 1 x USB 2.0
-- HDMI IN
-- HDMI OUT
-- Audio out
-- MIPI DSI
-- TI DLPC3433
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-It has also connectors to connect an external mini keypad.
+On Fri, 10 Jun 2022 09:28:08 +0200 you wrote:
+> Write "to be operated" instead of "to be operate".
+> 
+> Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+> ---
+>  Documentation/networking/phy.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> [...]
 
-Signed-off-by: Suniel Mahesh <sunil@amarulasolutions.com>
----
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts | 361 ++++++++++++++++++
- 2 files changed, 362 insertions(+)
- create mode 100644 arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts
+Here is the summary with links:
+  - docs: networking: phy: Fix a typo
+    https://git.kernel.org/netdev/net/c/9cc8ea99bf7a
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 184899808ee7..b5966c0742e1 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1353,6 +1353,7 @@ dtb-$(CONFIG_MACH_SUN8I) += \
- 	sun8i-r16-nintendo-nes-classic.dtb \
- 	sun8i-r16-nintendo-super-nes-classic.dtb \
- 	sun8i-r16-parrot.dtb \
-+	sun8i-r16-renew-vista-e.dtb \
- 	sun8i-r40-bananapi-m2-ultra.dtb \
- 	sun8i-r40-oka40i-c.dtb \
- 	sun8i-s3-elimo-initium.dtb \
-diff --git a/arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts b/arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts
-new file mode 100644
-index 000000000000..a762fbd69773
---- /dev/null
-+++ b/arch/arm/boot/dts/sun8i-r16-renew-vista-e.dts
-@@ -0,0 +1,361 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (C) 2022 RenewWorldOutreach
-+ * Copyright (C) 2022 Amarula Solutions(India)
-+ */
-+
-+/dts-v1/;
-+#include "sun8i-a33.dtsi"
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+
-+/ {
-+	model = "RenewWorldOutreach R16-Vista-E";
-+	compatible = "renewworldoutreach,r16-vista-e", "allwinner,sun8i-a33";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	gpio-keys-polled {
-+		compatible = "gpio-keys-polled";
-+		poll-interval = <100>;
-+
-+		ok {
-+			label = "ok";
-+			linux,code = <KEY_OK>;
-+			gpios = <&pio 4 0 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		left {
-+			label = "left";
-+			linux,code = <KEY_LEFT>;
-+			gpios = <&pio 4 1 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		right {
-+			label = "right";
-+			linux,code = <KEY_RIGHT>;
-+			gpios = <&pio 4 2 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		up {
-+			label = "up";
-+			linux,code = <KEY_UP>;
-+			gpios = <&pio 4 3 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		down {
-+			label = "down";
-+			linux,code = <KEY_DOWN>;
-+			gpios = <&pio 4 4 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		back {
-+			label = "back";
-+			linux,code = <KEY_BACK>;
-+			gpios = <&pio 4 5 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		power {
-+			label = "power";
-+			linux,code = <KEY_POWER>;
-+			gpios = <&pio 4 6 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		vol-down {
-+			label = "vol-down";
-+			linux,code = <KEY_VOLUMEDOWN>;
-+			gpios = <&pio 7 3 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		vol-up {
-+			label = "vol-up";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&pio 7 9 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		battery-led0 {
-+			label = "renew-e:battery-led0";
-+			gpios = <&r_pio 0 2 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		battery-led1 {
-+			label = "renew-e:battery-led1";
-+			gpios = <&r_pio 0 3 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		battery-led2 {
-+			label = "renew-e:battery-led2";
-+			gpios = <&r_pio 0 4 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		battery-led3 {
-+			label = "renew-e:battery-led3";
-+			gpios = <&r_pio 0 5 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		pad-intz {
-+			label = "renew-e:pad-intz";
-+			gpios = <&pio 4 16 GPIO_ACTIVE_HIGH>;
-+			default-state = "on";
-+		};
-+
-+		battery-led4 {
-+			label = "renew-e:battery-led4";
-+			gpios = <&r_pio 0 6 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		volume-led0 {
-+                        label = "renew-e:volume-led0";
-+                        gpios = <&pio 7 2 GPIO_ACTIVE_HIGH>;
-+                };
-+
-+		volume-led1 {
-+			label = "renew-e:volume-led1";
-+			gpios = <&pio 6 13 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		volume-led2 {
-+			label = "renew-e:volume-led2";
-+			gpios = <&pio 6 12 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		volume-led3 {
-+			label = "renew-e:volume-led3";
-+			gpios = <&pio 6 11 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		volume-led4 {
-+			label = "renew-e:volume-led4";
-+			gpios = <&pio 6 10 GPIO_ACTIVE_HIGH>;
-+		};
-+
-+		fans-on {
-+			label = "renew-e:fans-on";
-+			gpios = <&pio 4 14 GPIO_ACTIVE_HIGH>; /* FAN_ON/OFF: PE14 */
-+			default-state = "on";
-+		};
-+	};
-+
-+	reg_vcc5v0: vcc5v0 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vcc5v0";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+	};
-+};
-+
-+&codec {
-+	status = "okay";
-+};
-+
-+&cpu0 {
-+	cpu-supply = <&reg_dcdc3>;
-+};
-+
-+&cpu0_opp_table {
-+	opp-1104000000 {
-+		opp-hz = /bits/ 64 <1104000000>;
-+		opp-microvolt = <1320000>;
-+		clock-latency-ns = <244144>; /* 8 32k periods */
-+	};
-+
-+	opp-1200000000 {
-+		opp-hz = /bits/ 64 <1200000000>;
-+		opp-microvolt = <1320000>;
-+		clock-latency-ns = <244144>; /* 8 32k periods */
-+	};
-+};
-+
-+&dai {
-+	status = "okay";
-+};
-+
-+&de {
-+	status = "okay";
-+};
-+
-+&dphy {
-+	status = "okay";
-+};
-+
-+&ehci0 {
-+	status = "okay";
-+};
-+
-+&mmc0 {
-+	vmmc-supply = <&reg_dcdc1>;
-+	bus-width = <4>;
-+	non-removable;
-+	status = "okay";
-+};
-+
-+&mmc1 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&mmc1_pg_pins>;
-+	vmmc-supply = <&reg_dcdc1>;
-+	bus-width = <4>;
-+	broken-cd;
-+	status = "okay";
-+};
-+
-+&ohci0 {
-+	status = "okay";
-+};
-+
-+&r_rsb {
-+	status = "okay";
-+
-+	axp22x: pmic@3a3 {
-+		compatible = "x-powers,axp223";
-+		reg = <0x3a3>;
-+		interrupt-parent = <&r_intc>;
-+		interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_LOW>;
-+		eldoin-supply = <&reg_dcdc1>;
-+		x-powers,drive-vbus-en;
-+	};
-+};
-+
-+#include "axp223.dtsi"
-+
-+&ac_power_supply {
-+	status = "okay";
-+};
-+
-+&reg_aldo1 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3000000>;
-+	regulator-max-microvolt = <3000000>;
-+	regulator-name = "vcc-io";
-+};
-+
-+&reg_aldo2 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <2500000>;
-+	regulator-max-microvolt = <2500000>;
-+	regulator-name = "vdd-dll";
-+};
-+
-+&reg_aldo3 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3000000>;
-+	regulator-max-microvolt = <3000000>;
-+	regulator-name = "avcc";
-+};
-+
-+&reg_dc1sw {
-+	regulator-name = "vcc-lcd";
-+};
-+
-+&reg_dc5ldo {
-+	regulator-always-on;
-+	regulator-min-microvolt = <900000>;
-+	regulator-max-microvolt = <1400000>;
-+	regulator-name = "vdd-cpus";
-+};
-+
-+&reg_dcdc1 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3000000>;
-+	regulator-max-microvolt = <3000000>;
-+	regulator-name = "vcc-3v0";
-+};
-+
-+&reg_dcdc2 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <900000>;
-+	regulator-max-microvolt = <1400000>;
-+	regulator-name = "vdd-sys";
-+};
-+
-+&reg_dcdc3 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <900000>;
-+	regulator-max-microvolt = <1400000>;
-+	regulator-name = "vdd-cpu";
-+};
-+
-+&reg_dcdc5 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <1500000>;
-+	regulator-max-microvolt = <1500000>;
-+	regulator-name = "vcc-dram";
-+};
-+
-+&reg_dldo1 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3300000>;
-+	regulator-max-microvolt = <3300000>;
-+	regulator-name = "vcc-3v3-main1";
-+};
-+
-+&reg_dldo2 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3300000>;
-+	regulator-max-microvolt = <3300000>;
-+	regulator-name = "vcc-3v3-main2";
-+};
-+
-+&reg_dldo3 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3300000>;
-+	regulator-max-microvolt = <3300000>;
-+	regulator-name = "vcc-3v3-main3";
-+};
-+
-+&reg_dldo4 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <3300000>;
-+	regulator-max-microvolt = <3300000>;
-+	regulator-name = "vcc-3v3-main4";
-+};
-+
-+&reg_eldo1 {
-+	regulator-always-on;
-+	regulator-min-microvolt = <1200000>;
-+	regulator-max-microvolt = <1200000>;
-+	regulator-name = "vcc-1v2-hdmi";
-+};
-+
-+&reg_drivevbus {
-+	regulator-name = "usb0-vbus";
-+	status = "okay";
-+};
-+
-+&reg_rtc_ldo {
-+	regulator-name = "vcc-rtc";
-+};
-+
-+&sound {
-+	status = "okay";
-+	simple-audio-card,routing =
-+		"Left DAC", "AIF1 Slot 0 Left",
-+		"Right DAC", "AIF1 Slot 0 Right";
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_pb_pins>;
-+	status = "okay";
-+};
-+
-+&usb_otg {
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
-+&usbphy {
-+	usb0_vbus-supply = <&reg_vcc5v0>;
-+	status = "okay";
-+};
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

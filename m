@@ -2,149 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C22FB54B846
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F5A54B84B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:10:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344315AbiFNSIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
+        id S1345116AbiFNSJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343909AbiFNSIt (ORCPT
+        with ESMTP id S239612AbiFNSJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 14:08:49 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8443C714
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:08:47 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id g2so10653818ljk.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:08:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=R1HT10eh1GO5bHFhhzFg6L2ZKS3F6a/ZKqNJB8u6nSo=;
-        b=d+G50quMVzD8X1zWpNXl70m2dG0hT+RVXZR68ghr81UzXBAZxdEj8QLUJC/usbxSJb
-         4sCg875GjsPzfBwk2k5nqnq2PpdMtARImdhKXIDS3vQNgWc/cEC5bhz7y4rWHllTmFMk
-         i5oUYQvRcu0pQgagLIyWvfUSXjghs9/O4s8LE2VOkCiiRJf8SVL7EbxGROvhQLOYS1PM
-         Db1fvMlydmzpmdSD689iyQJigiVU+sfOyDaWbHhjSSnXi4/XmSVE6Ym0hxTaIo4sMJiu
-         WH+YN6YnAZ+cTQCwReRezO5uACl9RF9zltggTFtcdLBaCGSINqKfs5x0+acWu21NoZz4
-         HwSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=R1HT10eh1GO5bHFhhzFg6L2ZKS3F6a/ZKqNJB8u6nSo=;
-        b=traPS+BEYKNnOaYWPL0L2RCZbf3TFy44fHi4DFSg57Q0w3jo4kGeu5DTGbO3ZCXt7z
-         rM/iQkZhqXVexymbklxfZ1SeIhPK6SqOYKOZGCjkaq8VLGK8iLDNlA34A4RmkXGG1Bs0
-         yCIJsp+oSUACUjselsO+2QHQBrzCJ3CNAMagGP8AE+LeE4CgOWzp2ryIdOhrQFh6KbW8
-         JCIUwYvZVBLR/b5NUG2qMm0meYzmQpsFUzBYnd/VLlTCoupiuSbtHtBZA5Dv71DXUnqC
-         jScYvjJhKBWkhh41UgkYf2T+LxQkXUTPeW+4texcKIlRzyEeZgSvSkDmefG8BWgCG45l
-         Ea1w==
-X-Gm-Message-State: AJIora/H2jMJYksgADwHh+gknhwTzPY5qx/gxUpDkUcnJ6Uv7g2393+f
-        f/IuRd/J8g1CTeslqBDm2HAtsZAu9hk6JQAZE9+hhw==
-X-Google-Smtp-Source: AGRyM1vlpU+YYoVx423VwrpRCMxHTBgsHKGjOk7TAYtjS0pSAZgttUkcGWdalwmXngjLB35ExMkH4cPI1eCs/qGCrbc=
-X-Received: by 2002:a2e:2ac1:0:b0:255:7677:97f3 with SMTP id
- q184-20020a2e2ac1000000b00255767797f3mr3227264ljq.513.1655230125976; Tue, 14
- Jun 2022 11:08:45 -0700 (PDT)
+        Tue, 14 Jun 2022 14:09:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C50036326
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655230191;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=p7xA8r1OE0G47J5o0Tq7Av5J26mdzQALVWbKTBBj4T4=;
+        b=iP4zW9JY8sHrMr6ekLX+3KZnoXxnHGJ5S3Pdegnnus7/Wl+L/wlEGUMIAlLfRHaKqXHVmF
+        eTttfNISaz5JRFaleHD1tHPPbC6CYz2IqytHIYhaE/XaacFnOzrRUF0k+xUFJ5GgEgZESz
+        RrvxmV7RMFXx0FzZ908Mfymyz2rqA04=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-588-rLl3PBpiOtCHmPMRsW5s2g-1; Tue, 14 Jun 2022 14:09:50 -0400
+X-MC-Unique: rLl3PBpiOtCHmPMRsW5s2g-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C492D3817A65;
+        Tue, 14 Jun 2022 18:09:49 +0000 (UTC)
+Received: from bfoster.redhat.com (unknown [10.22.16.60])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 945BB492C3B;
+        Tue, 14 Jun 2022 18:09:49 +0000 (UTC)
+From:   Brian Foster <bfoster@redhat.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     ikent@redhat.com, onestero@redhat.com
+Subject: [PATCH 0/3] proc: improve root readdir latency with many threads
+Date:   Tue, 14 Jun 2022 14:09:46 -0400
+Message-Id: <20220614180949.102914-1-bfoster@redhat.com>
 MIME-Version: 1.0
-References: <20220614144853.3693273-1-glider@google.com> <CAHk-=whaWnwB8guceg8V=bA1adv74GNaMk2FEu+YQkBKUqxVoA@mail.gmail.com>
- <CAKwvOd=SotrVcZshzGzsMprkORkVXFwYc-3mREkJSDCQ1nvbFw@mail.gmail.com> <CAHk-=wgmezfDP_b93_Hw090vUd-TKb-odZNPhB9L_2vL5pn6kQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wgmezfDP_b93_Hw090vUd-TKb-odZNPhB9L_2vL5pn6kQ@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 14 Jun 2022 11:08:33 -0700
-Message-ID: <CAKwvOd=C1GC09zobqLK0higE3xPpghWBbB4xujyC8-QDyd_DTQ@mail.gmail.com>
-Subject: Re: [PATCH] [RFC] Initialization of unused function parameters
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Evgenii Stepanov <eugenis@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Buka <vitalybuka@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 10:24 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, Jun 14, 2022 at 10:11 AM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > Maybe a new function parameter attribute would be nice?
->
-> Right, exactly something like this seems reasonable.
->
-> > #define __must_init __attribute__((must_init))
-> > int init (int * __must_init x) {
-> > // ^ warning: function parameter x marked '__attribute__((must_init))'
-> > not unconditionally initialized
-> >   if (stars_dont_align) {
-> >     return -42;
-> >   }
-> >   *x = 42;
-> >   return 0;
-> > }
-> > void foo (void) {  int x; init(&x); /* use of x without fear */ }
+Hi all,
 
-Thinking more about your snprintf example which is potentially more
-costly than initializing just one value...here's another case for us
-to consider.
+We have a user who has reported performance problems related to
+(presumably) custom task monitoring on Linux systems when running
+processes with large numbers of threads. Unfortunately I don't have much
+information around the practical workload and observations, but only
+that the problem had been narrowed down to excessive readdir latency of
+the /proc root dir in the presence of large numbers of threads in the
+associated pid namespace.
 
-int maybe_init (char* buf) {
-  if (stars_align)
-    return -42;
-  buf[42] = 0;
-  return 0;
-}
+This latency boils down to the inefficient pid_namespace walk down in
+the proc_pid_readdir() path. More specifically, every thread/task
+allocates an associated struct pid, and the procfs next_tgid()
+implementation walks every pid in the namespace looking for those with
+an associated PIDTYPE_TGID task to fill into the directory listing.
 
-char foo (void) {
-  char buf [PATH_MAX];
-  maybe_init(buf);
-  return char[42];
-}
+Given that ids are part of the idr radix-tree, it seemed fairly logical
+that this could be improved using an internal tree tag. I started
+playing around with an approach that tagged and untagged ids based on
+actual task association (i.e., attach_pid() and friends), but after some
+thought and feedback came to the realization that this could probably be
+simplified to just tag the pid once on allocation and allow procfs to
+use it as a hint for root dir population. This works because post-fork
+tgid task disassociation (without an exit() and freeing the pid) seems
+to be uncommon. The only tool I've seen in my testing so far that leaves
+around a tagged, non-TGID pid is chronyd, which appears to do a fork()
+-> setsid() -> fork() pattern where the intermediate task exits but the
+associated pid hangs around for the lifetime of the process due to the
+PIDTYPE_SID association.
 
-I'm thinking the attribute would have to go on the pointed to type not
-the pointer, i.e. `__must_init char *` not `char * __must_init`.
-Similarly, you'd need to unconditionally initialize all of buf which
-might be painful.  __must_init would not give you the specificity to
-differentiate between "this whole buffer must be initialized" vs "only
-index 42 need be initialized."  I _think_ that's fine, perhaps "only
-index 42 need be initialized" is YAGNI and you could just _not_ use
-__must_init for such a case.
+Therefore, this series implements this tgid tag hinting approach. Patch
+1 includes a couple tweaks to the idr tree to support traditional
+radix-tree tag propagation. Patch 2 defines the new tag and sets it on
+pid allocation. Patch 3 updates procfs to use the tag for the readdir
+pid_namespace traversal.
 
-One thing I'm curious about; if you have an aggregate in C (struct or
-array) and don't fully initialize the whole object, just
-members/sub-objects, but only use those I assume that's not UB? (Which
-is what my maybe_init example does).  I think that's fine.
+As far as testing goes, I've thrown this at fstests (not for filesystem
+testing purposes, but moreso just because I had the test env handy and
+it's a longish running task creation workload), LTP and some of the
+kernel internal tests in tools/testing/selftests (clone, proc,
+pid_namespace) without any obvious regressions. From the performance
+angle, the user who reported this problem has provided some synthetic
+tools to create dummy tasks/threads and run repeated readdir iterations
+of /proc, which is what they've been using to compare results on Linux
+kernels with some $other OS. These tools show a notable improvement in
+terms of the number of /proc readdir iterations possible per-second. For
+example, on 5.19.0-rc2 running on a mostly idle system with an active
+100k thread process, readdirs-per-second improves from a baseline of
+~285 to ~7.3k with the series applied. More detailed getdents() latency
+numbers are included in the commit log of patch 3.
 
-Another thing that makes me uncertain about my maybe_init example
-above is decay-to-pointer, and the compiler's ability to track things
-like __builtin_object_size precisely (or across translation units);
-Kees is having a dog of a time with __builtin_object_size of structs
-that contain flexible array members for example.  If a function
-accepts a `__must_init struct foo*`, can we know if we were passed an
-array of struct foo* vs just one? What if `struct foo` is an opaque
-type; then the callee can't verify that all members of the struct have
-been initialized (at least designated initialized wouldn't work;
-memcpy should though...can you get the sizeof an opaque type though?)
+Thoughts, reviews, flames appreciated.
 
-But maybe I'm getting ahead of myself and am just describing good unit
-tests when building such a feature.  Probably worth prototyping to get
-a sense of the ergonomics and limitations.  But it doesn't sound too
-controversial, which is probably good enough to get started. I'm sure
-Alexander and team will have additional ideas or proposals for
-achieving the same outcome.
+Brian
+
+Brian Foster (3):
+  radix-tree: propagate all tags in idr tree
+  pid: use idr tag to hint pids associated with group leader tasks
+  proc: use idr tgid tag hint to iterate pids in readdir
+
+ fs/proc/base.c      |  2 +-
+ include/linux/idr.h | 25 +++++++++++++++++++++++++
+ include/linux/pid.h |  2 +-
+ kernel/fork.c       |  2 +-
+ kernel/pid.c        |  9 ++++++++-
+ lib/radix-tree.c    | 26 +++++++++++++++-----------
+ 6 files changed, 51 insertions(+), 15 deletions(-)
+
 -- 
-Thanks,
-~Nick Desaulniers
+2.34.1
+

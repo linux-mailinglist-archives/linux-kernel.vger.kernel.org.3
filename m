@@ -2,64 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36FA154AE0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AC5C54AE08
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352602AbiFNKOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 06:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58772 "EHLO
+        id S242524AbiFNKN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 06:13:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245741AbiFNKOW (ORCPT
+        with ESMTP id S230313AbiFNKN4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 06:14:22 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3D746B0C;
-        Tue, 14 Jun 2022 03:14:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1655201659; x=1686737659;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=6W4JCf3REfCgtU1YeTx5Cs8TR95mjpKwa6re06enmmY=;
-  b=fwSS4OxUB28pbrbq+gViamSlX7lfMYRva/qhUsrjkGntM/QTKjbD4uTI
-   X4LRJoPTVra1dlSWK6GiEYWjJsOJ9iZo6nYVuCCviLeeIhyPLVNDA3oBv
-   GCdXe1G7uzpK2pBM491DxyN47XtrvsSi72D2Fg4edMYQ1vqczrzAyrSh8
-   BBQtba/SUyKfNbxpwc0U7D61sdO+HCMPzCO3T7gqDnnVkq2DqmmSiiyEq
-   ISfx3772pF7b1C2EYWSktlKfkxQo+mTmrOmwOpB9jNxSMR3pCi07ZA3A3
-   C1BAcUROUVQlDdJlqeGNtPxMM5u/gkkMHqmmd78ev99VRKJb9rqKA2hFW
-   w==;
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="168028816"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jun 2022 03:14:19 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 14 Jun 2022 03:14:18 -0700
-Received: from rob-ult-m19940.microchip.com (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2375.17 via Frontend Transport; Tue, 14 Jun 2022 03:14:14 -0700
-From:   Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-To:     <linux-i2c@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <ludovic.desroches@microchip.com>, <andrew@sanpeople.com>,
-        <mhoffman@lightlink.com>, <khali@linux-fr.org>, <wsa@kernel.org>,
-        <peda@axentia.se>,
-        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
-Subject: [RESEND 3/3] i2c: at91: add advanced digital filtering support for SAMA5D4
-Date:   Tue, 14 Jun 2022 13:13:47 +0300
-Message-ID: <20220614101347.16910-4-codrin.ciubotariu@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220614101347.16910-1-codrin.ciubotariu@microchip.com>
-References: <20220614101347.16910-1-codrin.ciubotariu@microchip.com>
+        Tue, 14 Jun 2022 06:13:56 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 366754616B;
+        Tue, 14 Jun 2022 03:13:55 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1AA7323A;
+        Tue, 14 Jun 2022 03:13:55 -0700 (PDT)
+Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D24723F792;
+        Tue, 14 Jun 2022 03:13:53 -0700 (PDT)
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Liviu Dudau <liviu.dudau@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: arm/juno: Drop erroneous 'mbox-name' property
+Date:   Tue, 14 Jun 2022 11:13:49 +0100
+Message-Id: <165520087950.1030128.14018048495402718658.b4-ty@arm.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220610213308.2288094-1-robh@kernel.org>
+References: <20220610213308.2288094-1-robh@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,26 +46,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I2C/TWI IP variant found in SAMA5D4 supports advanced digital filtering,
-even though, at the time of this patch, it is not present in Datasheet.
+On Fri, 10 Jun 2022 15:33:07 -0600, Rob Herring wrote:
+> The 'mbox-name' property in the Juno mailbox node is undocumented and
+> unused. It's the consumer side of the mailbox binding that have
+> 'mbox-names' properties.
+>
 
-Signed-off-by: Codrin Ciubotariu <codrin.ciubotariu@microchip.com>
----
- drivers/i2c/busses/i2c-at91-core.c | 1 +
- 1 file changed, 1 insertion(+)
+Applied to sudeep.holla/linux (for-next/juno), thanks!
 
-diff --git a/drivers/i2c/busses/i2c-at91-core.c b/drivers/i2c/busses/i2c-at91-core.c
-index 2df9df585131..7549a75a98ef 100644
---- a/drivers/i2c/busses/i2c-at91-core.c
-+++ b/drivers/i2c/busses/i2c-at91-core.c
-@@ -120,6 +120,7 @@ static struct at91_twi_pdata sama5d4_config = {
- 	.clk_offset = 4,
- 	.has_hold_field = true,
- 	.has_dig_filtr = true,
-+	.has_adv_dig_filtr = true,
- };
- 
- static struct at91_twi_pdata sama5d2_config = {
--- 
-2.34.1
+[1/1] arm64: dts: arm/juno: Drop erroneous 'mbox-name' property
+      https://git.kernel.org/sudeep.holla/c/c7df8791cd
+
+--
+Regards,
+Sudeep
 

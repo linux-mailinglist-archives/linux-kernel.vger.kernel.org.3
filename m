@@ -2,89 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A3C54B108
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3E154B0BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiFNMel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
+        id S244139AbiFNMfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244392AbiFNMe0 (ORCPT
+        with ESMTP id S243825AbiFNMfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:34:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABD9F4616D
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:31:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655209863;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CINhQ0TufHi3amSiVTGnrn1sbNNueagVao77jHCIJos=;
-        b=W3asntOM2qXCasOtmIcUv/Y46/mRpfgPiBhSfvL+SLHuBh0/OBgERY9gXkElPI2fyvx6VH
-        3lg/bFNHMmjyVcpoErAEHGpsRoRQRadGuLoiXHccvJHtp09Y0S/5Md+GlwTEKURHkZL1Hx
-        2GXUU1ckUco2/r8cvOhkS0ax2sDP6zY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-601-K4OhpCdxNkGGb0KdB6SrDw-1; Tue, 14 Jun 2022 08:30:59 -0400
-X-MC-Unique: K4OhpCdxNkGGb0KdB6SrDw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3F50F811E81;
-        Tue, 14 Jun 2022 12:30:58 +0000 (UTC)
-Received: from fedora (unknown [10.22.9.132])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 0070B2166B26;
-        Tue, 14 Jun 2022 12:30:54 +0000 (UTC)
-Date:   Tue, 14 Jun 2022 09:30:52 -0300
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 5/5] x86/tdx: Add Quote generation support
-Message-ID: <Yqh/fCamrCoujZU5@fedora>
-References: <20220609025220.2615197-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
+        Tue, 14 Jun 2022 08:35:09 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8264D27B;
+        Tue, 14 Jun 2022 05:32:06 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id e11so8446699pfj.5;
+        Tue, 14 Jun 2022 05:32:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6bWhyj9+Innd6VBvVBk86q4KgboPFIEsoGvupeRdYFM=;
+        b=eFPzFERHaQ3hu76kP/FeGfFvMx+Y+9glglTmjGMriMFNUtCL4MVyyRte8/oPlwTSXV
+         Vm/OXIfmlv4N0Z1qxMO7KsBEeKabN4R/myJwFyfy7uSec2t7LjQ5qskH5kpfQx6DzV6K
+         s1pmDp3DZLm1Y6/gI4XcvuYfUy7z0+KD51B/oYJANJ4wXbmvN4v9bKxOnID8hYKAK7xZ
+         sI61N7VRGcrnpJ44/imB5hFUezPjRMZ1TEJHRxwS20qdTuPWGgxe2Z0+WSFb4YFN12wp
+         OfAna8fs140EQK6qn0ve8ps/Wna5SmhMzUeprtMC8CU4QqhuA18Y4mcly46iviHuBgGp
+         GkGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6bWhyj9+Innd6VBvVBk86q4KgboPFIEsoGvupeRdYFM=;
+        b=IM+piKZDMKp21eLgFUtmolW8/4bBBF1FuVEDWP4LA938lOzGcUxfDnpdCdlYNLsv9z
+         WomRFF9osmaBNlxgp9tFO3iaCVM2EMB6xLzK2n+Xlkhot7ssppRgCrFCENS0Rs2Pftv5
+         ORwgxws5K4kOma7MkZGP0YrMuVNkOKcaj3SRvP44S0FFjZTWa/nH2VkCeB0Sl2Vjob+s
+         8cgkslWUd1Z5ImfO7CVFZfIq+CqPDCv9yOCbT/cHh24eRhHnW9SrLx/WJlaq5rNWqV9G
+         EeA3HV1RYHRdDzBYo2P6/6/c0UGHSD57Aql9KZb93fr+zxDGCnsAk3JEJeLEGaWOdsJw
+         1Dfw==
+X-Gm-Message-State: AOAM532HTkMu//9TcXl2Xos6EPaJoWv5yYevtEJIfI4CkSM/cY9/FMj6
+        wQu4Q8t3sP2BrhA1vIIOw1L6xXzl+Qs=
+X-Google-Smtp-Source: ABdhPJwrYy7YJmSFGc1DKopsg3STNIPBTHxc3xMt6QTBGTSlvr94Yd5EHAOEGrP8+RLUeRp1W4J5Ag==
+X-Received: by 2002:a63:894a:0:b0:3fc:a724:578c with SMTP id v71-20020a63894a000000b003fca724578cmr4402325pgd.499.1655209925358;
+        Tue, 14 Jun 2022 05:32:05 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-21.three.co.id. [180.214.232.21])
+        by smtp.gmail.com with ESMTPSA id w1-20020a62c701000000b0050dc7628148sm7403979pfg.34.2022.06.14.05.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 05:32:04 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Documentation: highmem: Use literal block for *kmap_local_folio() example
+Date:   Tue, 14 Jun 2022 19:31:16 +0700
+Message-Id: <20220614123115.522131-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220609025220.2615197-6-sathyanarayanan.kuppuswamy@linux.intel.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 07:52:20PM -0700, Kuppuswamy Sathyanarayanan wrote:
+When building htmldocs on Linus' tree, there are inline emphasis warnings
+on include/linux/highmem.h:
 
-[snip]
+Documentation/vm/highmem:166: ./include/linux/highmem.h:154: WARNING: Inline emphasis start-string without end-string.
+Documentation/vm/highmem:166: ./include/linux/highmem.h:157: WARNING: Inline emphasis start-string without end-string.
 
-> +}
-> +
-> +/* Remove the shared mapping and free the memory */
-> +static void deinit_quote_buf(struct quote_buf *buf)
-> +{
-> +	if (!buf)
-> +		return;
+These warnings above are due to comments in code example of
+*kmap_local_folio() are enclosed by double dash (--) instead of prefixed
+with comment symbol (#).
 
-nit: the null check isn't necessary anymore, is it?
+Fix these warnings by indenting the code example with literal block
+indentation and prefixing comments inside the example with #.
 
-[snip]
+Fixes: 85a85e7601263f ("Documentation/vm: move "Using kmap-atomic" to highmem.h")
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Ira Weiny <ira.weiny@intel.com>
+Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: linux-mm@kvack.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+---
+ include/linux/highmem.h | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/include/linux/highmem.h b/include/linux/highmem.h
+index 3af34de54330cb..a244e0345c87ca 100644
+--- a/include/linux/highmem.h
++++ b/include/linux/highmem.h
+@@ -149,19 +149,19 @@ static inline void *kmap_local_folio(struct folio *folio, size_t offset);
+  * It is used in atomic context when code wants to access the contents of a
+  * page that might be allocated from high memory (see __GFP_HIGHMEM), for
+  * example a page in the pagecache.  The API has two functions, and they
+- * can be used in a manner similar to the following:
++ * can be used in a manner similar to the following::
+  *
+- * -- Find the page of interest. --
+- * struct page *page = find_get_page(mapping, offset);
++ *   # Find the page of interest.
++ *   struct page *page = find_get_page(mapping, offset);
+  *
+- * -- Gain access to the contents of that page. --
+- * void *vaddr = kmap_atomic(page);
++ *   # Gain access to the contents of that page.
++ *   void *vaddr = kmap_atomic(page);
+  *
+- * -- Do something to the contents of that page. --
+- * memset(vaddr, 0, PAGE_SIZE);
++ *   # Do something to the contents of that page.
++ *   memset(vaddr, 0, PAGE_SIZE);
+  *
+- * -- Unmap that page. --
+- * kunmap_atomic(vaddr);
++ *   # Unmap that page.
++ *   kunmap_atomic(vaddr);
+  *
+  * Note that the kunmap_atomic() call takes the result of the kmap_atomic()
+  * call, not the argument.
+
+base-commit: b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+-- 
+An old man doll... just what I always wanted! - Clara
 

@@ -2,156 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEFC54B274
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E953B54B273
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238822AbiFNNnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 09:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
+        id S239428AbiFNNoa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 09:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237813AbiFNNnC (ORCPT
+        with ESMTP id S238780AbiFNNoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 09:43:02 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E33F321E21
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 06:43:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C18D21650;
-        Tue, 14 Jun 2022 06:43:00 -0700 (PDT)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4C2543F73B;
-        Tue, 14 Jun 2022 06:43:00 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 14:42:58 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, James Morse <james.morse@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] arm64: errata: add detection for AMEVCNTR01 incrementing
- incorrectly
-Message-ID: <YqiQYikYTFVPE8GG@arm.com>
-References: <20220607125340.13635-1-ionela.voinescu@arm.com>
- <YqN1kJlIkhNAEl/K@arm.com>
+        Tue, 14 Jun 2022 09:44:25 -0400
+Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 936BE22B07;
+        Tue, 14 Jun 2022 06:44:21 -0700 (PDT)
+Received: from pro2.mail.ovh.net (unknown [10.109.156.149])
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id 544B810C08DE9;
+        Tue, 14 Jun 2022 15:44:16 +0200 (CEST)
+Received: from [192.168.1.41] (88.161.25.233) by DAG1EX2.emp2.local
+ (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Tue, 14 Jun
+ 2022 15:44:14 +0200
+Message-ID: <84da79a6-9515-2b42-b34a-0c089d7a41b7@traphandler.com>
+Date:   Tue, 14 Jun 2022 15:44:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqN1kJlIkhNAEl/K@arm.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 3/3] leds: tlc5925: Add support for non blocking
+ operations
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Pavel Machek <pavel@ucw.cz>, <krzk+dt@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220609162734.1462625-1-jjhiblot@traphandler.com>
+ <20220609162734.1462625-4-jjhiblot@traphandler.com>
+ <CAHp75VftbVOwPFra83T-k5d1qu3NnD_sDHYxiiSEDDrW3NObNQ@mail.gmail.com>
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+In-Reply-To: <CAHp75VftbVOwPFra83T-k5d1qu3NnD_sDHYxiiSEDDrW3NObNQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: DAG2EX1.emp2.local (172.16.2.11) To DAG1EX2.emp2.local
+ (172.16.2.2)
+X-Ovh-Tracer-Id: 10425833138685622747
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudduledgieejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthejredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepieejfedukeevudfghfetudevhffhhfekjeeiudegtdehueevgfdvgeeivdeifedvnecukfhppedtrddtrddtrddtpdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhohedvke
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Catalin,
 
-Thank you for the review!
+On 09/06/2022 18:43, Andy Shevchenko wrote:
+> On Thu, Jun 9, 2022 at 6:29 PM Jean-Jacques Hiblot
+> <jjhiblot@traphandler.com> wrote:
+>> Settings multiple LEDs in a row can be a slow operation because of the
+>> time required to acquire the bus and prepare the transfer.
+>> And, in most cases, it is not required that the operation is synchronous.
+>>
+>> Implementing the non-blocking brightness_set() for such cases.
+>> A work queue is used to perform the actual SPI transfer.
+>>
+>> The blocking method is still available in case someone needs to perform
+>> this operation synchronously (ie by calling led_set_brightness_sync()).
+> i.e.
+>
+>> +#define BITS_PER_ATOMIC (sizeof(atomic_t) * 8)
+> We have BITS_PER_TYPE(). Use it directly in the code, no need for a
+> whole new macro.
+>
+> ...
+>
+>> +static int xmit(struct tlc5925_leds_priv *priv)
+>> +{
+>> +       int i;
+>> +
+>> +       spin_lock(&priv->lock);
+> This can't be called during IRQ?
+>
+>> +       for (i = 0; i < priv->max_state / (sizeof(atomic_t) * 8) ; i++)
+> BITS_PER_TYPE() ?
+>
+>> +               priv->spi_buffer[i] = atomic_read(&priv->state[i]);
+>> +       spin_unlock(&priv->lock);
+>> +
+>> +       return spi_write(priv->spi, priv->spi_buffer, priv->max_num_leds / 8);
+>> +}
+> ...
+>
+>> +static void xmit_work(struct work_struct *ws)
+>> +{
+>> +       struct tlc5925_leds_priv *priv =
+>> +               container_of(ws, struct tlc5925_leds_priv, xmit_work);
+> One line?
+>
+> Missed blank line here.
+>
+>> +       xmit(priv);
+>> +};
+> ...
+>
+>>          if (brightness)
+>> -               priv->state[index / 8] |= (1 << (index % 8));
+>> +               atomic_or(1 << (index % BITS_PER_ATOMIC),
+>> +                         &priv->state[index / BITS_PER_ATOMIC]);
+>>          else
+>> -               priv->state[index / 8] &= ~(1 << (index % 8));
+>> -       spin_unlock(&priv->lock);
+>> +               atomic_and(~(1 << (index % BITS_PER_ATOMIC)),
+>> +                          &priv->state[index / BITS_PER_ATOMIC]);
+> The whole bunch looks like reinventing the bitmap / bitops.
+> Use unsigned long (or DECLARE_BITMAP() if it can be higher than 32)
+> for state and set_bit() / clear_bit() / assign_bit() that are atomic.
 
-On Friday 10 Jun 2022 at 17:47:12 (+0100), Catalin Marinas wrote:
-> On Tue, Jun 07, 2022 at 01:53:40PM +0100, Ionela Voinescu wrote:
-> > diff --git a/arch/arm64/include/asm/cpufeature.h b/arch/arm64/include/asm/cpufeature.h
-> > index 14a8f3d93add..80e0c700cecf 100644
-> > --- a/arch/arm64/include/asm/cpufeature.h
-> > +++ b/arch/arm64/include/asm/cpufeature.h
-> > @@ -881,11 +881,16 @@ static inline bool cpu_has_pan(void)
-> >  #ifdef CONFIG_ARM64_AMU_EXTN
-> >  /* Check whether the cpu supports the Activity Monitors Unit (AMU) */
-> >  extern bool cpu_has_amu_feat(int cpu);
-> > +extern bool cpu_has_broken_amu_constcnt(void);
-> >  #else
-> >  static inline bool cpu_has_amu_feat(int cpu)
-> >  {
-> >  	return false;
-> >  }
-> > +static inline bool cpu_has_broken_amu_constcnt(void)
-> > +{
-> > +	return false;
-> > +}
-> >  #endif
-> >  
-> >  /* Get a cpu that supports the Activity Monitors Unit (AMU) */
-> > diff --git a/arch/arm64/kernel/cpufeature.c b/arch/arm64/kernel/cpufeature.c
-> > index 42ea2bd856c6..b9e4b2bd2c63 100644
-> > --- a/arch/arm64/kernel/cpufeature.c
-> > +++ b/arch/arm64/kernel/cpufeature.c
-> > @@ -1791,6 +1791,19 @@ int get_cpu_with_amu_feat(void)
-> >  	return cpumask_any(&amu_cpus);
-> >  }
-> >  
-> > +bool cpu_has_broken_amu_constcnt(void)
-> > +{
-> > +	/* List of CPUs which have broken AMEVCNTR01 (constant counter) */
-> > +	static const struct midr_range cpus[] = {
-> > +#ifdef CONFIG_ARM64_ERRATUM_2457168
-> > +		MIDR_RANGE(MIDR_CORTEX_A510, 0, 0, 1, 1),
-> > +#endif
-> > +		{},
-> > +	};
-> > +
-> > +	return is_midr_in_range(read_cpuid_id(), cpus);
-> > +}
-> 
-> I'd rather not have this in cpufeature.c as it's not really a feature.
-> We have some precedent with checking errata in cpufeature.c but IIRC we
-> did that only to check whether to enable a feature or not in that file
-> (DBM).
-> 
+Thanks for pointing this out.
 
-If it's okay with you I can move this to cpu_errata.c:arm64_errata[], but
-the type of the capability would have to be
-ARM64_CPUCAP_WEAK_LOCAL_CPU_FEATURE. I see there are other workarounds
-like this so I hope it's not a problem.
+It will drastically simplify the code.
 
-> > +
-> >  static void cpu_amu_enable(struct arm64_cpu_capabilities const *cap)
-> >  {
-> >  	if (has_cpuid_feature(cap, SCOPE_LOCAL_CPU)) {
-> > diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-> > index 9ab78ad826e2..d4b0b0a40515 100644
-> > --- a/arch/arm64/kernel/topology.c
-> > +++ b/arch/arm64/kernel/topology.c
-> > @@ -127,7 +127,8 @@ int __init parse_acpi_topology(void)
-> >  
-> >  #ifdef CONFIG_ARM64_AMU_EXTN
-> >  #define read_corecnt()	read_sysreg_s(SYS_AMEVCNTR0_CORE_EL0)
-> > -#define read_constcnt()	read_sysreg_s(SYS_AMEVCNTR0_CONST_EL0)
-> > +#define read_constcnt()	(cpu_has_broken_amu_constcnt() ? 0UL : \
-> > +			read_sysreg_s(SYS_AMEVCNTR0_CONST_EL0))
-> 
-> How often is this called? You end up reading the cpuid, comparing the
-> range on each call. I guess you can't use a cpucap in the arm64_errata[]
-> array as you want a check per-CPU? Does it matter if we return 0UL on
-> for all CPUs if one is affected?
-> 
-
-Yes, ideally we only want to disable the use of the constant counter for
-the affected CPUs. In that case some alternative method can be used for
-FIE for the affected CPUs (usually cpufreq) while the other CPUs can still
-use AMUs. Given that the bigger CPUs usually end up throttled, it would be
-useful to maintain the use of AMUs for them even if we have affected
-A510s in the system.
-
-Also, I wanted to avoid disabling the feature altogether by not setting
-amu_cpus as only one counter is affected, not all. But this would be the
-simpler option as it will also remove the need for changes for FFH, we
-would end up calling this only once for each CPU in cpu_amu_enable() -
-so no additional function would be needed, and functionality will be
-unchanged as all usecases for AMUs so far are tied to the use of the
-constant counter. But we'd need to change how we handle this erratum in
-the future when we add usescases for other counters.
-
-So we do end up calling this function on the tick for CPUs that are not
-affected, which is not ideal.
-
-But I have a few ideas about how to make it nicer - clearing
-arch_const_cycles_prev before freq_counters_valid() so we disable use of
-counters for FIE by checking for affected CPUs only once. Handling FFH
-will be more tricky but nonetheless let me see if I can do a better job
-in v2.
-
-Thanks,
-Ionela.
-
-> -- 
-> Catalin
+>
+> ...
+>
+>> +       if (brightness)
+>> +               atomic_or(1 << (index % BITS_PER_ATOMIC),
+>> +                         &priv->state[index / BITS_PER_ATOMIC]);
+>> +       else
+>> +               atomic_and(~(1 << (index % BITS_PER_ATOMIC)),
+>> +                          &priv->state[index / BITS_PER_ATOMIC]);
+> assign_bit()
+>
+> ...
+>
+>> +       // Allocate the buffer used to hold the state of each LED
+>> +       priv->max_state = round_up(max_num_leds, BITS_PER_ATOMIC);
+>> +       priv->state = devm_kzalloc(dev,
+>> +                                  priv->max_state / 8,
+>> +                                  GFP_KERNEL);
+>>          if (!priv->state)
+>>                  return -ENOMEM;
+> devm_bitmap_zalloc() ?
+>
+> ...
+>
+>> +       // Allocate a second buffer for the communication on the SPI bus
+>> +       priv->spi_buffer = devm_kzalloc(dev,
+>> +                                  priv->max_state / 8,
+>> +                                  GFP_KERNEL);
+> Not sure I understand the output, but perhaps here the BITS_TO_BYTES()
+> should be used.
+>

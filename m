@@ -2,75 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C649954BD61
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17DCF54BD7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:15:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356087AbiFNWMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 18:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36716 "EHLO
+        id S1351044AbiFNWNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 18:13:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233456AbiFNWMQ (ORCPT
+        with ESMTP id S238934AbiFNWNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 18:12:16 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBBB4EDF4;
-        Tue, 14 Jun 2022 15:12:16 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id mh16-20020a17090b4ad000b001e8313301f1so2072970pjb.1;
-        Tue, 14 Jun 2022 15:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=h7bXHj/PM2CUZ3XoNksJ4Hdtwz7ORUrDKBYGQb+dhAg=;
-        b=TUMcMrO7JiWxZtESdzYr4V6hGGrwwu+0ck/dqjV+nd+m0zHTIaSCvw+oBC8VLN5SDU
-         t/rQPzlrLShN6UYMV/dClB+hkwsrUNrfWckcbzLMckosArtIDAd0nvvaGa3BfaDDbhn6
-         ltosBigSMAnpbYvSzDAk86LMA8ivKSxufXEjdqw5FDSDDbpkuoKsji6a6mFGysTUTIeK
-         Z3mfxtxk/O33bSyFdvoEr8D3IfpDRly7QFS8K8ByXJ3SPDbGddj9nC5be45I2ADjHAuU
-         zjEgH1J/RadfNca6BJs7NQFckRfVA2D+ZIWQU71s+zQbIxKx5sxVIy5BoWp6edPfFxZR
-         aPNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=h7bXHj/PM2CUZ3XoNksJ4Hdtwz7ORUrDKBYGQb+dhAg=;
-        b=euKEEJ/2QqhRUnb8coiA2CXAu9xVTpTxOIwZ4+7YeQhvLr5UDwx6ZU6DHZawaZ3n6I
-         73ewO9LEC5nhG/o2MX2AkBpAwQ3DzUMx6XtfPFHK65sMQlAEyZTK2+xl5AJ2voYYMbsi
-         lwYmn3ry/Pz+rvY+30G5ijOvGJ5IBfcnjAhwls9SlxN/6JklFGIhcnX0nL8GFOcpGrVv
-         qCxpLnbu+qCHqoyLtNJvH3zv3cZA7GyjaiHvqQktHAmupUaYcX84YoN2b2BDNistdGyt
-         sP41mF8b9RK745clE5IvkOxER4X85AVJfZNHTcp+0b73cDyhZ4OMrhn5ZSOb4krhQbZp
-         03VQ==
-X-Gm-Message-State: AJIora9Kbamk+jz1iZom1IfGImve9GgTM3ZmgZan1B7mTynSmfAWnKn9
-        /mvOA+1tv+z2chLNYj27LWY=
-X-Google-Smtp-Source: AGRyM1vse/tpkg/4SA5FfXWHkvZFzQZTsLLeE5mEigVhCrDsP05/9rds3ZYlkxkaNgvns4VWSUbuWg==
-X-Received: by 2002:a17:903:1210:b0:168:dc70:e9d8 with SMTP id l16-20020a170903121000b00168dc70e9d8mr6561184plh.92.1655244735619;
-        Tue, 14 Jun 2022 15:12:15 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id u5-20020a17090add4500b001df264610c4sm4473585pjv.0.2022.06.14.15.12.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 15:12:15 -0700 (PDT)
-Message-ID: <a3c74f50-8e51-1652-ea70-36daaaa5aa9a@gmail.com>
-Date:   Tue, 14 Jun 2022 15:12:13 -0700
+        Tue, 14 Jun 2022 18:13:12 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D86C243EEB;
+        Tue, 14 Jun 2022 15:13:10 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AC0701763;
+        Tue, 14 Jun 2022 15:13:10 -0700 (PDT)
+Received: from [10.57.84.206] (unknown [10.57.84.206])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1C5993F73B;
+        Tue, 14 Jun 2022 15:13:07 -0700 (PDT)
+Message-ID: <05636dcb-91bd-a1a4-911b-6cdc7e359a5c@arm.com>
+Date:   Tue, 14 Jun 2022 23:13:06 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.15 00/11] 5.15.48-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220614183720.512073672@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220614183720.512073672@linuxfoundation.org>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.10.0
+Subject: Re: [PATCH v10 06/10] docs: sysfs: coresight: Add sysfs ABI
+ documentation for TPDM
+To:     Mao Jinlong <quic_jinlmao@quicinc.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Konrad Dybcio <konradybcio@gmail.com>,
+        Mike Leach <mike.leach@linaro.org>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+References: <20220611004331.7343-1-quic_jinlmao@quicinc.com>
+ <20220611004331.7343-7-quic_jinlmao@quicinc.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20220611004331.7343-7-quic_jinlmao@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,27 +59,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/22 11:40, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.48 release.
-> There are 11 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 11/06/2022 01:43, Mao Jinlong wrote:
+> Add API usage document for sysfs API in TPDM driver.
 > 
-> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> Anything received after that time might be too late.
+> Reviewed-by: Mike Leach <mike.leach@linaro.org>
+> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+> ---
+>   .../ABI/testing/sysfs-bus-coresight-devices-tpdm    | 13 +++++++++++++
+>   1 file changed, 13 insertions(+)
+>   create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.48-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> diff --git a/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> new file mode 100644
+> index 000000000000..92bc09fbb69b
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-bus-coresight-devices-tpdm
+> @@ -0,0 +1,13 @@
+> +What:		/sys/bus/coresight/devices/<tpdm-name>/integration_test
+> +Date:		June 2022
+> +KernelVersion	5.18
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+We have gone past this release. Please make this 5.20. Also, please 
+merge this patch with the previous patch.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+> +Contact:	Jinlong Mao (QUIC) <quic_jinlmao@quicinc.com>, Tao Zhang (QUIC) <quic_taozha@quicinc.com>
+> +Description:
+> +		(Write) Run integration test for tpdm. Integration test
+> +		will generate test data for tpdm. It can help to make
+> +		sure that the trace path is enabled and the link configurations
+> +		are fine.
+> +
+> +		value to this sysfs node:
+
+This is not entirely clear to me/reader. Could we say :
+
+		Accepts only one of the 2 values -  1 or 2.
+	
+> +		1 : Generate 64 bits data
+> +		2 : Generate 32 bits data
+
+
+Suzuki

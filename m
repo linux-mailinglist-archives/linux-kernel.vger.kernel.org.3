@@ -2,267 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFCC654B6A3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12F5C54B6AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344068AbiFNQqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
+        id S1351635AbiFNQrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244321AbiFNQqU (ORCPT
+        with ESMTP id S1344352AbiFNQrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:46:20 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 544F228981;
-        Tue, 14 Jun 2022 09:46:19 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2783016F3;
-        Tue, 14 Jun 2022 09:46:19 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 256253F66F;
-        Tue, 14 Jun 2022 09:46:16 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 17:46:10 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        linux-s390@vger.kernel.org, conghui.chen@intel.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        netdev <netdev@vger.kernel.org>, pankaj.gupta.linux@gmail.com,
-        sudeep.holla@arm.com, Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: Re: [PATCH V6 8/9] virtio: harden vring IRQ
-Message-ID: <Yqi7UhasBDPKCpuV@e120937-lin>
-References: <CACGkMEtRP+0Xy63g0SF_y1avv=3rFv6P9+Z7kp9XBS5d+_py8w@mail.gmail.com>
- <20220613023337-mutt-send-email-mst@kernel.org>
- <CACGkMEs05ZisiPW+7H6Omp80MzmZWZCpc1mf5Vd99C3H-KUtgA@mail.gmail.com>
- <20220613041416-mutt-send-email-mst@kernel.org>
- <CACGkMEsT_fWdPxN1cTWOX=vu-ntp3Xo4j46-ZKALeSXr7DmJFQ@mail.gmail.com>
- <20220613045606-mutt-send-email-mst@kernel.org>
- <CACGkMEtAQck7Nr6SP_pD0MGT3njnwZSyT=xPyYzUU3c5GNNM_w@mail.gmail.com>
- <CACGkMEvUFJkC=mnvL2PSH6-3RMcJUk84f-9X46JVcj2vTAr4SQ@mail.gmail.com>
- <20220613052644-mutt-send-email-mst@kernel.org>
- <CACGkMEstGvhETXThuwO+tLVBuRgQb8uC_6DdAM8ZxOi5UKBRbg@mail.gmail.com>
+        Tue, 14 Jun 2022 12:47:19 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF21E29341
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:47:02 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id l204so16085550ybf.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:47:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XDk/gviZ4PTB0F4aeM/SYkP/gckoTZKcQotKkjmgkbU=;
+        b=UVo7z7mq83OdvUMfv2zalYzpjivYTuojc8nrC14VtzHQxfO8kkrbOasAwYDGrmh0Kr
+         TPWc0pt/+WTr1mK679VBnfsxfJSlmVDdvJ3irqhAxmkoAx4FZyftOa92c55uGWg46fGk
+         TdeH+DwIPD6MdYHH/1Jk2bwZMF8Li/tN3dYF48d71K87UHk4aSTUsKGoVJ/WFX7QGdRI
+         WUP6m+iWKKgwgI4iEZMZPYuix0X3vA0PE9jMY5DudkbQGiz+Y33Dbzk6rPJIk+Wro6vk
+         D8eKjKUczvkIQmPIhuCy3K231YVzvYQ5+wSL6oRpyTUF/8ZI14KP36My6ida7g7SkjWH
+         t5iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XDk/gviZ4PTB0F4aeM/SYkP/gckoTZKcQotKkjmgkbU=;
+        b=7BdfRMisppXJb2/AL2KplEzV+cKzToeHC+Z6a/eYlyDJd0TvEfwQtpgPrVFctCCght
+         yTXb0lrmC/8jDBPAsnaUJyCEaVGFohl7xSrSNNGaEiWHPxR0DAwlljJxCHqEdYtSESx5
+         QM30HCOnbwAwNyXXjwmz/WYOpdovLM3+LfsviY2cR5LUR5hcFbkAPwUgaJd/4bWp3ZRS
+         1k+pbNOpG1yfBJWhmkNmA++nP0IBm41DYckD6389H1iqMp/EfvDy4J5tz5Zn/SKuh3hB
+         PbjE7M0P+FvdJSqwlEURuU7wIvl7XD27B/rcXq/x1JgYGNLk8RIv1TofHbFsrC6HMeVC
+         UvoA==
+X-Gm-Message-State: AJIora9jArbTmpu9hkB66cv7qVjFspw5G3ghFlKmXHVrPs0FxB4o+rwT
+        PmZLj2yjNwiXCRmYloTCDsp9NRS+pL9YkZHCx0s=
+X-Google-Smtp-Source: AGRyM1v5cuCGYw9RPYwQDmZWRztbN8i22S3AMOZQ1Zdps8kxiWn7B6Dux4ERGYj+6pPK+GABe7xiCvTpqdRn6UHJIaE=
+X-Received: by 2002:a25:4688:0:b0:664:68b5:e283 with SMTP id
+ t130-20020a254688000000b0066468b5e283mr6098349yba.546.1655225221744; Tue, 14
+ Jun 2022 09:47:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACGkMEstGvhETXThuwO+tLVBuRgQb8uC_6DdAM8ZxOi5UKBRbg@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220613155612.402297-1-daeho43@gmail.com> <Yqge0XS7jbSnNWvq@sol.localdomain>
+ <YqhRBZMYPp/kyxoe@B-P7TQMD6M-0146.local>
+In-Reply-To: <YqhRBZMYPp/kyxoe@B-P7TQMD6M-0146.local>
+From:   Daeho Jeong <daeho43@gmail.com>
+Date:   Tue, 14 Jun 2022 09:46:50 -0700
+Message-ID: <CACOAw_wjCyTmwusY6S4+NgMuLOZm9fwGfrvCT272GJ01-RP6PQ@mail.gmail.com>
+Subject: Re: [f2fs-dev] [PATCH] f2fs: handle decompress only post processing
+ in softirq
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Daeho Jeong <daehojeong@google.com>,
+        Nathan Huckleberry <nhuck@google.com>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 03:40:21PM +0800, Jason Wang wrote:
-> On Mon, Jun 13, 2022 at 5:28 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> >
+>
+> Some my own previous thoughts about this strategy:
+>
+>  - If we allocate all memory and map these before I/Os, all inflight I/Os
+>    will keep such temporary pages all the time until decompression is
+>    finished. In contrast, if we allocate or reuse such pages just before
+>    decompression, it would minimize the memory footprints.
+>
+>    I think it will impact the memory numbers at least on the very
+>    low-ended devices with bslow storage. (I've seen f2fs has some big
+>    mempool already)
+>
+>  - Many compression algorithms are not suitable in the softirq contexts,
+>    also I vaguely remembered if softirq context lasts for > 2ms, it will
+>    push into ksoftirqd instead so it's actually another process context.
+>    And it may delay other important interrupt handling.
+>
+>  - Go back to the non-deterministic scheduling of workqueues. I guess it
+>    may be just due to scheduling punishment due to a lot of CPU consuming
+>    due to decompression before so the priority becomes low, but that is
+>    just a pure guess. May be we need to use RT scheduling policy instead.
+>
+>    At least with WQ_HIGHPRI for dm-verity at least, but I don't find
+>    WQ_HIGHPRI mark for dm-verity.
+>
+> Thanks,
+> Gao Xiang
 
-Hi Jason,
+I totally understand what you are worried about. However, in the real
+world, non-determinism from workqueues is more harsh than we expected.
+As you know, reading I/Os in the system are critical paths most of the
+time and now I/O variations with workqueue are too bad.
 
-> > On Mon, Jun 13, 2022 at 05:14:59PM +0800, Jason Wang wrote:
-> > > On Mon, Jun 13, 2022 at 5:08 PM Jason Wang <jasowang@redhat.com> wrote:
-> > > >
-> > > > On Mon, Jun 13, 2022 at 4:59 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > >
-> > > > > On Mon, Jun 13, 2022 at 04:51:08PM +0800, Jason Wang wrote:
-> > > > > > On Mon, Jun 13, 2022 at 4:19 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > >
-> > > > > > > On Mon, Jun 13, 2022 at 04:07:09PM +0800, Jason Wang wrote:
-> > > > > > > > On Mon, Jun 13, 2022 at 3:23 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > > > >
-> > > > > > > > > On Mon, Jun 13, 2022 at 01:26:59PM +0800, Jason Wang wrote:
-> > > > > > > > > > On Sat, Jun 11, 2022 at 1:12 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > > > > > > > > >
-> > > > > > > > > > > On Fri, May 27, 2022 at 02:01:19PM +0800, Jason Wang wrote:
-> > > > > > > > > > > > This is a rework on the previous IRQ hardening that is done for
-> > > > > > > > > > > > virtio-pci where several drawbacks were found and were reverted:
-> > > > > > > > > > > >
-> > > > > > > > > > > > 1) try to use IRQF_NO_AUTOEN which is not friendly to affinity managed IRQ
-> > > > > > > > > > > >    that is used by some device such as virtio-blk
-> > > > > > > > > > > > 2) done only for PCI transport
-> > > > > > > > > > > >
-> > > > > > > > > > > > The vq->broken is re-used in this patch for implementing the IRQ
-> > > > > > > > > > > > hardening. The vq->broken is set to true during both initialization
-> > > > > > > > > > > > and reset. And the vq->broken is set to false in
-> > > > > > > > > > > > virtio_device_ready(). Then vring_interrupt() can check and return
-> > > > > > > > > > > > when vq->broken is true. And in this case, switch to return IRQ_NONE
-> > > > > > > > > > > > to let the interrupt core aware of such invalid interrupt to prevent
-> > > > > > > > > > > > IRQ storm.
-> > > > > > > > > > > >
-> > > > > > > > > > > > The reason of using a per queue variable instead of a per device one
-> > > > > > > > > > > > is that we may need it for per queue reset hardening in the future.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Note that the hardening is only done for vring interrupt since the
-> > > > > > > > > > > > config interrupt hardening is already done in commit 22b7050a024d7
-> > > > > > > > > > > > ("virtio: defer config changed notifications"). But the method that is
-> > > > > > > > > > > > used by config interrupt can't be reused by the vring interrupt
-> > > > > > > > > > > > handler because it uses spinlock to do the synchronization which is
-> > > > > > > > > > > > expensive.
-> > > > > > > > > > > >
-> > > > > > > > > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
-> > > > > > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
-> > > > > > > > > > > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> > > > > > > > > > > > Cc: Marc Zyngier <maz@kernel.org>
-> > > > > > > > > > > > Cc: Halil Pasic <pasic@linux.ibm.com>
-> > > > > > > > > > > > Cc: Cornelia Huck <cohuck@redhat.com>
-> > > > > > > > > > > > Cc: Vineeth Vijayan <vneethv@linux.ibm.com>
-> > > > > > > > > > > > Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
-> > > > > > > > > > > > Cc: linux-s390@vger.kernel.org
-> > > > > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
-> > > > > > > > > > >
-> > > > > > > > > > >
-> > > > > > > > > > > Jason, I am really concerned by all the fallout.
-> > > > > > > > > > > I propose adding a flag to suppress the hardening -
-> > > > > > > > > > > this will be a debugging aid and a work around for
-> > > > > > > > > > > users if we find more buggy drivers.
-> > > > > > > > > > >
-> > > > > > > > > > > suppress_interrupt_hardening ?
-> > > > > > > > > >
-> > > > > > > > > > I can post a patch but I'm afraid if we disable it by default, it
-> > > > > > > > > > won't be used by the users so there's no way for us to receive the bug
-> > > > > > > > > > report. Or we need a plan to enable it by default.
-> > > > > > > > > >
-> > > > > > > > > > It's rc2, how about waiting for 1 and 2 rc? Or it looks better if we
-> > > > > > > > > > simply warn instead of disable it by default.
-> > > > > > > > > >
-> > > > > > > > > > Thanks
-> > > > > > > > >
-> > > > > > > > > I meant more like a flag in struct virtio_driver.
-> > > > > > > > > For now, could you audit all drivers which don't call _ready?
-> > > > > > > > > I found 5 of these:
-> > > > > > > > >
-> > > > > > > > > drivers/bluetooth/virtio_bt.c
-> > > > > > > >
-> > > > > > > > This driver seems to be fine, it doesn't use the device/vq in its probe().
-> > > > > > >
-> > > > > > >
-> > > > > > > But it calls hci_register_dev and that in turn queues all kind of
-> > > > > > > work. Also, can linux start using the device immediately after
-> > > > > > > it's registered?
-> > > > > >
-> > > > > > So I think the driver is allowed to queue before DRIVER_OK.
-> > > > >
-> > > > > it's not allowed to kick
-> > > >
-> > > > Yes.
-> > > >
-> > > > >
-> > > > > > If yes,
-> > > > > > the only side effect is the delay of the tx interrupt after DRIVER_OK
-> > > > > > for a well behaved device.
-> > > > >
-> > > > > your patches drop the interrupt though, it won't be just delayed.
-> > > >
-> > > > For a well behaved device, it can only trigger the interrupt after DRIVER_OK.
-> > > >
-> > > > So for virtio bt, it works like:
-> > > >
-> > > > 1) driver queue buffer and kick
-> > > > 2) driver set DRIVER_OK
-> > > > 3) device start to process the buffer
-> > > > 4) device send an notification
-> > > >
-> > > > The only risk is that the virtqueue could be filled before DRIVER_OK,
-> > > > or anything I missed?
-> > >
-> > > btw, hci has an open and close method and we do rx refill in
-> > > hdev->open, so we're probably fine here.
-> > >
-> > > Thanks
-> >
-> >
-> > Sounds good. Now to audit the rest of them from this POV ;)
-> 
-> Adding maintainers.
-> 
-> >
-> >  drivers/i2c/busses/i2c-virtio.c
-> 
-> It looks to me the device could be used immediately after
-> i2c_add_adapter() return. So we probably need to add
-> virtio_device_ready() before that. Fortunately, there's no rx vq in
-> i2c and the callback looks safe if the callback is called before the
-> i2c registration and after virtio_device_ready().
-> 
-> >  drivers/net/caif/caif_virtio.c
-> 
-> A networking device, RX is backed by vringh so we don't need to
-> refill. TX is backed by virtio and is available until ndo_open. So
-> it's fine to let the core to set DRIVER_OK after probe().
-> 
-> >  drivers/nvdimm/virtio_pmem.c
-> 
-> It doesn't use interrupt so far, so it has nothing to do with the IRQ hardening.
-> 
-> But the device could be used by the subsystem immediately after
-> nvdimm_pmem_region_create(), this means the flush could be issued
-> before DRIVER_OK. We need virtio_device_ready() before. We don't have
-> a RX virtqueue and the callback looks safe if the callback is called
-> after virtio_device_ready() but before the nvdimm region creating.
-> 
-> And it looks to me there's a race between the assignment of
-> provider_data and virtio_pmem_flush(). If the flush was issued before
-> the assignment we will end up with a NULL pointer dereference. This is
-> something we need to fix.
-> 
-> >  arm_scmi
-> 
-> It looks to me the singleton device could be used by SCMI immediately after
-> 
->         /* Ensure initialized scmi_vdev is visible */
->         smp_store_mb(scmi_vdev, vdev);
-> 
-> So we probably need to do virtio_device_ready() before that. It has an
-> optional rx queue but the filling is done after the above assignment,
-> so it's safe. And the callback looks safe is a callback is triggered
-> after virtio_device_ready() buy before the above assignment.
-> 
-
-I wanted to give it a go at this series testing it on the context of
-SCMI but it does not apply
-
-- not on a v5.18:
-
-17:33 $ git rebase -i v5.18
-17:33 $ git am ./v6_20220527_jasowang_rework_on_the_irq_hardening_of_virtio.mbx
-Applying: virtio: use virtio_device_ready() in virtio_device_restore()
-Applying: virtio: use virtio_reset_device() when possible
-Applying: virtio: introduce config op to synchronize vring callbacks
-Applying: virtio-pci: implement synchronize_cbs()
-Applying: virtio-mmio: implement synchronize_cbs()
-error: patch failed: drivers/virtio/virtio_mmio.c:345
-error: drivers/virtio/virtio_mmio.c: patch does not apply
-Patch failed at 0005 virtio-mmio: implement synchronize_cbs()
-
-- neither on a v5.19-rc2:
-
-17:33 $ git rebase -i v5.19-rc2 
-17:35 $ git am ./v6_20220527_jasowang_rework_on_the_irq_hardening_of_virtio.mbx
-Applying: virtio: use virtio_device_ready() in virtio_device_restore()
-error: patch failed: drivers/virtio/virtio.c:526
-error: drivers/virtio/virtio.c: patch does not apply
-Patch failed at 0001 virtio: use virtio_device_ready() in
-virtio_device_restore()
-hint: Use 'git am --show-current-patch=diff' to see the failed patch
-When you have resolved this problem, run "git am --continue".
-
-... what I should take as base ?
+I also think it's better that we have RT scheduling like things here.
+We could think about it more.
 
 Thanks,
-Cristian
-

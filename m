@@ -2,94 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B010154A9C8
+	by mail.lfdr.de (Postfix) with ESMTP id 67C9E54A9C7
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352637AbiFNGtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 02:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
+        id S1352563AbiFNGtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 02:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352520AbiFNGtN (ORCPT
+        with ESMTP id S1352539AbiFNGtU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 02:49:13 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DAC396AE;
-        Mon, 13 Jun 2022 23:49:12 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id m16-20020a7bca50000000b0039c8a224c95so3334912wml.2;
-        Mon, 13 Jun 2022 23:49:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rK2JBezORIHT404/AnKcTtSy2/jIHZfS+t0GGJ0+ABY=;
-        b=WcIWyHKlRAS26Z8EoLw6XLKzEPXqlPumRldCWWOKPHE60ySBl3cfry6pTEZK8vrxSX
-         KEq8iqRSaZUDNgr0sf6uYKhyNaMpdp1d1ALsC2BHLxW+R/p1sLkmlZiG2jTgKWnC6r6M
-         wm2CAj+7ewzCvE8yvadPNbiyAYROdGt8+Ccw4jXeewwH2rAdRtbOZ8+l/ryvDupbkgq+
-         C0dFBq+ehpIgGJgrf8sAAmy0CLNnoFphd+vN4PKFJsStzMdThDPse7VRf7I036178AIn
-         6lby+hWvwbDnQA+hoUlmYub2T329n1TcmdFDFnRJs+V2oSFLDJZxtT/2CK4Dwb+T/8tC
-         9tMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=rK2JBezORIHT404/AnKcTtSy2/jIHZfS+t0GGJ0+ABY=;
-        b=FPQLHzF5QK5ZrRuW9FfOG3HVyH8RzlxAcWK5fGf7K60w+AJS3ydokhsmZp0dxBVsgp
-         f/v+j9plAiTIwsgZQVpcmfiPo15E63b1cKvAmuPjKv/K/HGcNNAk8oMZwXtZS2JFi8ps
-         swsplDbrFpV6Ps7sez0UuUP++54Ske1eslwzWHmWAB1XS1uFpAzQqRfiNt+2SJpvADnA
-         /d6Nm48W16osD3z/Oi0+3zHT7B9bH00jZUMjYnTJriTZWlFzXkhwUNpvCc41uJ+/ZuZz
-         quBqZr7mF679otjbF7u+eoaGrTLMefhCtXftSady0sNHjzRAAhQilT3DHERthLl/Y8wu
-         n1yw==
-X-Gm-Message-State: AOAM532dE808gcG3j133q/sJvPWmtSz0Ss0NCWqAntt7d/i2lRaOzSN6
-        vFrx0sR3yoaA4/aOL3Ny3B4=
-X-Google-Smtp-Source: ABdhPJxKDEf3IT/FOvko39kZHApTNB9iNglrdPDScj/yimRsC18KrDoK3lWb1n7NeK9351mDqeOwVg==
-X-Received: by 2002:a05:600c:6020:b0:39c:96ec:5014 with SMTP id az32-20020a05600c602000b0039c96ec5014mr2426943wmb.57.1655189351116;
-        Mon, 13 Jun 2022 23:49:11 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id bg23-20020a05600c3c9700b0039c15861001sm18549655wmb.21.2022.06.13.23.49.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 23:49:10 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] platform/chrome: Fix spelling mistake "unknwon" -> "unknown"
-Date:   Tue, 14 Jun 2022 07:49:09 +0100
-Message-Id: <20220614064909.47804-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 14 Jun 2022 02:49:20 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DD539B87
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 23:49:19 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1o10MR-00064H-N2; Tue, 14 Jun 2022 08:49:11 +0200
+Message-ID: <22ce9497-563f-0855-bec2-c56d4ddcfffa@pengutronix.de>
+Date:   Tue, 14 Jun 2022 08:49:09 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH V3 1/2] mtd: allow getting MTD device associated with a
+ specific DT node
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Tom Rini <trini@konsulko.com>,
+        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>
+References: <20220611204651.19947-1-zajec5@gmail.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <20220611204651.19947-1-zajec5@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a dev_dbg message. Fix it.
+Hello Rafał,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/platform/chrome/cros_ec_proto.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 11.06.22 22:46, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> MTD subsystem API allows interacting with MTD devices (e.g. reading,
+> writing, handling bad blocks). So far a random driver could get MTD
+> device only by its name (get_mtd_device_nm()). This change allows
+> getting them also by a DT node.
+> 
+> This API is required for drivers handling DT defined MTD partitions in a
+> specific way (e.g. U-Boot (sub)partition with environment variables).
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+> V3: First introduction of of_get_mtd_device_by_node()
+> 
+> mtd maintainers: please let know how would you like this patch
+> processed. Would that be OK for you to Review/Ack it and let it go
+> through NVMEM tree?
+> ---
+>  drivers/mtd/mtdcore.c   | 28 ++++++++++++++++++++++++++++
+>  include/linux/mtd/mtd.h |  1 +
+>  2 files changed, 29 insertions(+)
+> 
+> diff --git a/drivers/mtd/mtdcore.c b/drivers/mtd/mtdcore.c
+> index 9eb0680db312..7dc214271c85 100644
+> --- a/drivers/mtd/mtdcore.c
+> +++ b/drivers/mtd/mtdcore.c
+> @@ -1154,6 +1154,34 @@ int __get_mtd_device(struct mtd_info *mtd)
+>  }
+>  EXPORT_SYMBOL_GPL(__get_mtd_device);
+>  
+> +/**
+> + * of_get_mtd_device_by_node - obtain an MTD device associated with a given node
+> + *
+> + * @np: device tree node
+> + */
+> +struct mtd_info *of_get_mtd_device_by_node(struct device_node *np)
+> +{
+> +	struct mtd_info *mtd = NULL;
+> +	struct mtd_info *tmp;
+> +	int err;
+> +
+> +	mutex_lock(&mtd_table_mutex);
+> +
+> +	err = -ENODEV;
 
-diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-index 1bd567244f8e..6923ea4401e5 100644
---- a/drivers/platform/chrome/cros_ec_proto.c
-+++ b/drivers/platform/chrome/cros_ec_proto.c
-@@ -346,7 +346,7 @@ static int cros_ec_get_proto_info(struct cros_ec_device *ec_dev, int devidx)
- 		dev_dbg(ec_dev->dev, "found PD chip\n");
- 		break;
- 	default:
--		dev_dbg(ec_dev->dev, "unknwon passthru index: %d\n", devidx);
-+		dev_dbg(ec_dev->dev, "unknown passthru index: %d\n", devidx);
- 		break;
- 	}
- 
+Shouldn't this be -EPROBE_DEFER? That way drivers making
+use of this function can defer probe until the device
+is probed.
+
+> +	mtd_for_each_device(tmp) {
+> +		if (mtd_get_of_node(tmp) == np) {
+> +			mtd = tmp;
+> +			err = __get_mtd_device(mtd);
+> +			break;
+> +		}
+> +	}
+> +
+> +	mutex_unlock(&mtd_table_mutex);
+> +
+> +	return err ? ERR_PTR(err) : mtd;
+> +}
+> +EXPORT_SYMBOL_GPL(of_get_mtd_device_by_node);
+> +
+>  /**
+>   *	get_mtd_device_nm - obtain a validated handle for an MTD device by
+>   *	device name
+> diff --git a/include/linux/mtd/mtd.h b/include/linux/mtd/mtd.h
+> index 955aee14b0f7..6fc841ceef31 100644
+> --- a/include/linux/mtd/mtd.h
+> +++ b/include/linux/mtd/mtd.h
+> @@ -677,6 +677,7 @@ extern int mtd_device_unregister(struct mtd_info *master);
+>  extern struct mtd_info *get_mtd_device(struct mtd_info *mtd, int num);
+>  extern int __get_mtd_device(struct mtd_info *mtd);
+>  extern void __put_mtd_device(struct mtd_info *mtd);
+> +extern struct mtd_info *of_get_mtd_device_by_node(struct device_node *np);
+>  extern struct mtd_info *get_mtd_device_nm(const char *name);
+>  extern void put_mtd_device(struct mtd_info *mtd);
+>  
+
+
 -- 
-2.35.3
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

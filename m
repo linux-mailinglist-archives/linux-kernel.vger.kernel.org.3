@@ -2,95 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9AC054BB3E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88CF954BB20
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357619AbiFNULT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:11:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
+        id S1351010AbiFNUHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357334AbiFNUKj (ORCPT
+        with ESMTP id S231928AbiFNUHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:10:39 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242194D9E4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:37 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id o16-20020a170902d4d000b00166d7813226so5345261plg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=PJnlmNpDUw7STxIFmSjFwcfSAZgkd9fbeUjZMsv1LHA=;
-        b=TkCuCdr3DpRCtXXD9LiJCJrqfX+6Ep+D8GsO66RIYfJwCWm5tsN2UpsnNeUbqoDgzc
-         IOC34y1OqtMQEGzm7jZUBS49jRI2mCT/eS4ICJHTlXx6UHxeecv8ypgle+JVcW8+7H/t
-         NYL1JDtBBSVyMWUVbXUAbkWSzYM1xSsCYxlmXykCMMPnFnc5IpE5jlkRIZNmh/kODxNv
-         VIWAL0KiWsooPZ9RuMDQodhhq81fekiwE5qBgGNm5bK2tflgpkaKkrt/b66Z45SMkJ63
-         LGEzJitMPuLtHyIC73JET0BVf94Ip3e6rBKAcBMVfVJ/iDGgxqeD8DqSA2p/WFsdr29v
-         /4cw==
+        Tue, 14 Jun 2022 16:07:17 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D774D694;
+        Tue, 14 Jun 2022 13:07:16 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id a10so10565783ioe.9;
+        Tue, 14 Jun 2022 13:07:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=PJnlmNpDUw7STxIFmSjFwcfSAZgkd9fbeUjZMsv1LHA=;
-        b=YZnzvZl4qhcOECZr2U3qrj0hbSK9XpkYCB93kL2EppXOplEK0mXszCEdZa18t3meV8
-         7Wa6Ki9EAOvL2DODPUs9Bkm3m2eS4oCmfS4GcNzi8KiSfTO9ATpacLRAUzQJRlPAGGeo
-         +oc89DAZ2Xz0M4OwdhWIdjlB3p0P9ecsSUpAU+uzhsScyaIwfFhiefHaAAPDK3P0jBRV
-         Q2D6mlpdG7Z8H/90z2VMtUSxDdIGKN1+lngOS41jhxz09coxurHaO9YNCCQTMkYyodHZ
-         bD8hj4kkV+ISXmwHz/eQRbFmXjQ8AgCGdmdbWPgcBtpwat2EDEHRyXK3Jja0WRYs5jwg
-         5c2A==
-X-Gm-Message-State: AOAM532Qsji5BXDWs4ech4klYeEL303qx1fxmONDFE67aR+Y73D/veFU
-        hzlrN5fmIUqHmhpACrcjpyzru9Wh7bM=
-X-Google-Smtp-Source: ABdhPJzcaivXKiKvWFdb2C7A5+oPu4QwxuurTm707cyW1Zg6UjB+HkY6ZL43Uxh2Enfsj4DSX85UowNeAMk=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a62:d10e:0:b0:51b:d711:b189 with SMTP id
- z14-20020a62d10e000000b0051bd711b189mr6449271pfg.40.1655237307579; Tue, 14
- Jun 2022 13:08:27 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 20:07:07 +0000
-In-Reply-To: <20220614200707.3315957-1-seanjc@google.com>
-Message-Id: <20220614200707.3315957-43-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220614200707.3315957-1-seanjc@google.com>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH v2 42/42] KVM: selftests: Drop unused SVM_CPUID_FUNC macro
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=DayktJij2+5kjiAGYQ2iZp1ZSn1xYucSLsZcXjx5rXE=;
+        b=t7QhGpG4fKkINRguUCzyGThR6dSHhQP1aKKJEJPbXWlOqV+cPWI56B66O2tQJr8cCp
+         8g1wIsCdf1FqIFloHD+AZQAifoaBw1MnJZ6XNfIZHaKVFJPKr4d8zK1R38y0TwqPhXLk
+         /0vIE4FyJ1B1iqNI/9rKjdmPS5nBePE0MIGKKlLef5R2BB7UCUOmkJCWPAGMvCJ31TAV
+         v4FpeMKCj1d/sB7AM6Fp3TyY4lVLkBC3C0phlQbNnoQe9gVckbj6fRkKtP91+1UA+39q
+         6otjl3CMXS7Rjx7bTshZzhgfXiZMN2lLuloxHJGsLqTLxrJYxrVnsCUBKNhKORogA1cn
+         YFsg==
+X-Gm-Message-State: AOAM533dypzvANwW8WIDYLuimQKbGTAH36xvxR+GrpTY46Sqq0YtaeR5
+        F76tJJeX0Eh0kiZnKEgnIg==
+X-Google-Smtp-Source: ABdhPJx/r6P3yUtTLVxe2uQT2YXDBHqId0p5ehJT+scfOkZS/eZdB6z/mAVJWOKpuAAjI1lF6Q4x5w==
+X-Received: by 2002:a05:6638:430e:b0:332:586:5182 with SMTP id bt14-20020a056638430e00b0033205865182mr3830617jab.225.1655237235350;
+        Tue, 14 Jun 2022 13:07:15 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id v2-20020a056602014200b0066a0c0beee7sm1803048iot.44.2022.06.14.13.07.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 13:07:14 -0700 (PDT)
+Received: (nullmailer pid 2343178 invoked by uid 1000);
+        Tue, 14 Jun 2022 20:07:12 -0000
+Date:   Tue, 14 Jun 2022 14:07:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund@ragnatech.se>
+Subject: Re: [PATCH v3 2/2] dt-bindings: thermal: rcar-gen3-thermal: Add
+ r8a779f0 support
+Message-ID: <20220614200712.GA2342886-robh@kernel.org>
+References: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
+ <20220610201701.7946-2-wsa+renesas@sang-engineering.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610201701.7946-2-wsa+renesas@sang-engineering.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop SVM_CPUID_FUNC to reduce the probability of tests open coding CPUID
-checks instead of using kvm_cpu_has() or this_cpu_has().
+On Fri, 10 Jun 2022 22:17:01 +0200, Wolfram Sang wrote:
+> Add support for R-Car S4. The S4 IP differs a bit from its siblings in
+> such way that it has 3 out of 4 TSC nodes for Linux and the interrupts
+> are not routed to the INTC-AP but to the ECM.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+> 
+> Change since V2:
+> * make interrupts not required for this SoC
+> 
+> Tested with:
+> make dtbs_check DT_SCHEMA_FILES=thermal/rcar-gen3-thermal.yaml
+> 
+>  .../bindings/thermal/rcar-gen3-thermal.yaml   | 19 ++++++++++++++-----
+>  1 file changed, 14 insertions(+), 5 deletions(-)
+> 
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/testing/selftests/kvm/include/x86_64/svm.h | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/include/x86_64/svm.h b/tools/testing/selftests/kvm/include/x86_64/svm.h
-index 2225e5077350..c8343ff84f7f 100644
---- a/tools/testing/selftests/kvm/include/x86_64/svm.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/svm.h
-@@ -218,8 +218,6 @@ struct __attribute__ ((__packed__)) vmcb {
- 	struct vmcb_save_area save;
- };
- 
--#define SVM_CPUID_FUNC 0x8000000a
--
- #define SVM_VM_CR_SVM_DISABLE 4
- 
- #define SVM_SELECTOR_S_SHIFT 4
--- 
-2.36.1.476.g0c4daa206d-goog
-
+Reviewed-by: Rob Herring <robh@kernel.org>

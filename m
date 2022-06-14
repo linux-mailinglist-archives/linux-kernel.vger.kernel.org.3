@@ -2,442 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13F954A9AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 007EE54A9B4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352176AbiFNGqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 02:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
+        id S1352264AbiFNGqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 02:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238042AbiFNGqD (ORCPT
+        with ESMTP id S232702AbiFNGqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 02:46:03 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC6C38D95
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 23:46:02 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1o10J9-0005ai-W0; Tue, 14 Jun 2022 08:45:48 +0200
-Message-ID: <1ecbb1af-53d6-1ac1-fd9f-b780a7c50fd9@pengutronix.de>
-Date:   Tue, 14 Jun 2022 08:45:46 +0200
+        Tue, 14 Jun 2022 02:46:51 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189E53914B;
+        Mon, 13 Jun 2022 23:46:51 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id j5-20020a05600c1c0500b0039c5dbbfa48so5662818wms.5;
+        Mon, 13 Jun 2022 23:46:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6tcu5eAwoOyzRfW5zLo655OGJsCRzmBD09HjOYtJ02Y=;
+        b=Zsdkp8SftJ+6ZISPstVg6W7XbMt8pikCWv9ykdo7e3/UbvdjegvnDe21C13EiuATqv
+         Kj1SvendYDpzEsm3lVmeWeSqSmV+nSWTzppZZDp+jpx9sDuVvzswkLa1zaBoOyWKg8+S
+         RZ5KUpGtSfaZWeC1ZtXGAaCwlhD4AHz8QzYZ1ugZWvkTAQTLNZWl0SBlgGF9o2ugbdky
+         tXyY+de0MojejV9P6lhQC9x7GFkAyUYfyyBae6JBFJyj1Bzu7G32pFg8sCAdxLv3ljip
+         LMeEwbYUjeGd5RP7qNK0Vw90gHteA3B3Pz9nN0wgyeROQcuAynQSQRLPVGyrcLXUW0AZ
+         yWMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6tcu5eAwoOyzRfW5zLo655OGJsCRzmBD09HjOYtJ02Y=;
+        b=QHzW69jCWAJXdq0+YEP745jXqzkPAyyGcfAkVarhGPyjMmTqEcMV3yoFAeUtMz4aWC
+         OFICdTWfuVEwee16zf8BnPcGWEcfh+UB/a6MfVF6hh4bjLBK5GRfsR2TGunnerJD5I6w
+         EIzVZNVkyIY9wqiYos2aSVLw+CiSw+iORgcpx+pkfioLR5HjRcRmtAcsPyqHRqZOWR2I
+         OdxXVCiLXKare8KWVzXlg4J8IAKEF5cz8o8tDZAj0FusZG3xbtAgU81TB+Eoezg03q/W
+         9jizm0u3VZeswYEfyjRt0uaBK7bP1CJnRHEXtaC/EFsd3fsdSp1p3Qi7G8GaFYSXzChH
+         hRRw==
+X-Gm-Message-State: AOAM533AIxdq3/VQYYIkGm0tlB19ayhzCScZnHWKqt9pvPuDWUfeunKQ
+        iDdeqgsd+tmXG+mXP8d35nc=
+X-Google-Smtp-Source: ABdhPJyK9ueeuJL7iGVp7NyZ3QeK/ETBQMghVR/ae3lle2IFQ35LU6YzakGR1belXE94IhM7t5WNVg==
+X-Received: by 2002:a05:600c:4e51:b0:39c:4f18:4c29 with SMTP id e17-20020a05600c4e5100b0039c4f184c29mr2499224wmq.101.1655189209490;
+        Mon, 13 Jun 2022 23:46:49 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id e16-20020adffd10000000b00210396b2eaesm12865044wrr.45.2022.06.13.23.46.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 23:46:48 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michal Simek <michal.simek@xilinx.com>, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] net: axienet: Fix spelling mistake "archecture" -> "architecture"
+Date:   Tue, 14 Jun 2022 07:46:47 +0100
+Message-Id: <20220614064647.47598-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V3 2/2] nvmem: add driver handling U-Boot environment
- variables
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Tom Rini <trini@konsulko.com>,
-        linux-arm-kernel@lists.infradead.org, u-boot@lists.denx.de,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>
-References: <20220611204651.19947-1-zajec5@gmail.com>
- <20220611204651.19947-2-zajec5@gmail.com>
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20220611204651.19947-2-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Rafał,
+There is a spelling mistake in a dev_err message. Fix it.
 
-On 11.06.22 22:46, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> U-Boot stores its setup as environment variables. It's a list of
-> key-value pairs stored on flash device with a custom header.
-> 
-> This commit adds an NVMEM driver that:
-> 1. Provides NVMEM access to environment vars binary data
-> 2. Extracts variables as NVMEM cells
-> 
-> Current Linux's NVMEM sysfs API allows reading whole NVMEM data block.
-> It can be used by user-space tools for reading U-Boot env vars block
-> without the hassle of finding its location. Parsing will still need to
-> be re-done there.
-> 
-> Kernel-parsed NVMEM cells can be read however by Linux drivers. This may
-> be uesful for Ethernet drivers for reading device MAC address which is
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-useful.
-
-> often stored as U-Boot env variable.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> ---
-> V3: Use of_get_mtd_device_by_node() (thanks Ahmad) & update description
-
-Looks better now!
-
-> V2: Drop ARCH_BCM4908 dependency as there are plenty architectures using
->     U-Boot bootloader. Thanks Srinivas.
-> 
-> As noticed by Ahmad a missing NVMEM subsystem feature is user-space
-> access to parsed NVMEM cells. That is something I started working on
-> some time ago and I'm planning to get back to at some point, please
-> check:
-> [PATCH 2/2] nvmem: expose NVMEM cells in sysfs
-> https://lore.kernel.org/lkml/20211220064730.28806-2-zajec5@gmail.com/
-
-Thanks for the link.
-
-> ---
->  MAINTAINERS                |   1 +
->  drivers/nvmem/Kconfig      |  11 ++
->  drivers/nvmem/Makefile     |   2 +
->  drivers/nvmem/u-boot-env.c | 231 +++++++++++++++++++++++++++++++++++++
->  4 files changed, 245 insertions(+)
->  create mode 100644 drivers/nvmem/u-boot-env.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 475e28365385..43b427fa76b0 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -20411,6 +20411,7 @@ U-BOOT ENVIRONMENT VARIABLES
->  M:	Rafał Miłecki <rafal@milecki.pl>
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/nvmem/u-boot,env.yaml
-> +F:	drivers/nvmem/u-boot-env.c
->  
->  UACCE ACCELERATOR FRAMEWORK
->  M:	Zhangfei Gao <zhangfei.gao@linaro.org>
-> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-> index d72d879a6d34..5f1b32b953b9 100644
-> --- a/drivers/nvmem/Kconfig
-> +++ b/drivers/nvmem/Kconfig
-> @@ -344,4 +344,15 @@ config NVMEM_APPLE_EFUSES
->  	  This driver can also be built as a module. If so, the module will
->  	  be called nvmem-apple-efuses.
->  
-> +config NVMEM_U_BOOT_ENV
-> +	tristate "U-Boot environment variables support"
-> +	depends on OF && MTD
-> +	select CRC32
-> +	help
-> +	  U-Boot stores its setup as environment variables. This driver adds
-> +	  support for verifying & exporting such data. It also exposes variables
-> +	  as NVMEM cells so they can be referenced by other drivers.
-> +
-> +	  If compiled as module it will be called nvmem_u-boot-env.
-
-You should probably mention that this is tied to MTD somewhere
-in the help text as u-boot env on EEPROM/raw eMMC is not covered by this.
-
-> +
->  endif
-> diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-> index c710b64f9fe4..399f9972d45b 100644
-> --- a/drivers/nvmem/Makefile
-> +++ b/drivers/nvmem/Makefile
-> @@ -69,3 +69,5 @@ obj-$(CONFIG_NVMEM_APPLE_EFUSES)	+= nvmem-apple-efuses.o
->  nvmem-apple-efuses-y 		:= apple-efuses.o
->  obj-$(CONFIG_MICROCHIP_OTPC)	+= nvmem-microchip-otpc.o
->  nvmem-microchip-otpc-y		:= microchip-otpc.o
-> +obj-$(CONFIG_NVMEM_U_BOOT_ENV)	+= nvmem_u-boot-env.o
-> +nvmem_u-boot-env-y		:= u-boot-env.o
-> diff --git a/drivers/nvmem/u-boot-env.c b/drivers/nvmem/u-boot-env.c
-> new file mode 100644
-> index 000000000000..92c2dd11d99f
-> --- /dev/null
-> +++ b/drivers/nvmem/u-boot-env.c
-> @@ -0,0 +1,231 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2022 Rafał Miłecki <rafal@milecki.pl>
-> + */
-> +
-> +#include <linux/crc32.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/mtd/mtd.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/nvmem-provider.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +
-> +enum u_boot_env_format {
-> +	U_BOOT_FORMAT_SINGLE,
-> +	U_BOOT_FORMAT_REDUNDANT,
-> +};
-> +
-> +struct u_boot_env {
-> +	struct device *dev;
-> +	enum u_boot_env_format format;
-> +
-> +	/* Parent device */
-> +	struct mtd_info *mtd;
-> +	size_t offset;
-> +	size_t size;
-> +
-> +	/* Cells */
-> +	struct nvmem_cell_info *cells;
-> +	int ncells;
-> +};
-> +
-> +struct u_boot_env_image_single {
-> +	__le32 crc32;
-> +	uint8_t data[0];
-
-GCC zero-length arrays are being phased out in favor
-of flexible array members. Just replace the [0] with [].
-See Documentation/process/deprecated.rst for more information.
-
-
-> +} __packed;
-> +
-> +struct u_boot_env_image_redundant {
-> +	__le32 crc32;
-> +	u8 mark;
-> +	uint8_t data[0];
-
-Same here
-
-> +} __packed;
-> +
-> +static int u_boot_env_read(void *context, unsigned int offset, void *val,
-> +			   size_t bytes)
-> +{
-> +	struct u_boot_env *priv = context;
-> +	struct device *dev = priv->dev;
-> +	size_t bytes_read;
-> +	int err;
-> +
-> +	err = mtd_read(priv->mtd, priv->offset + offset, bytes, &bytes_read, val);
-
-Nitpick: if you called u_boot_env::offset u_boot_env::start instead,
-code would be more readable IMO.
-
-> +	if (err && !mtd_is_bitflip(err)) {
-> +		dev_err(dev, "Failed to read from mtd: %d\n", err);
-
-Nitpick: %pe
-
-> +		return err;
-> +	}
-> +
-> +	if (bytes_read != bytes) {
-> +		dev_err(dev, "Failed to read %zd bytes\n", bytes);
-
-%zu
-
-> +		return -EIO;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int u_boot_env_add_cells(struct u_boot_env *priv, uint8_t *buf,
-> +				size_t data_offset, size_t data_len)
-> +{
-> +	struct device *dev = priv->dev;
-> +	char *data = buf + data_offset;
-> +	char *var, *value, *eq;
-> +	int idx;
-> +
-> +	priv->ncells = 0;
-> +	for (var = data; var < data + data_len && *var; var += strlen(var) + 1)
-> +		priv->ncells++;
-> +
-> +	priv->cells = devm_kcalloc(dev, priv->ncells, sizeof(*priv->cells), GFP_KERNEL);
-> +	if (!priv->cells)
-> +		return -ENOMEM;
-> +
-> +	for (var = data, idx = 0;
-> +	     var < data + data_len && *var;
-> +	     var = value + strlen(value) + 1, idx++) {
-> +		eq = strchr(var, '=');
-> +		if (!eq)
-> +			break;
-> +		*eq = '\0';
-> +		value = eq + 1;
-> +
-> +		priv->cells[idx].name = devm_kstrdup(dev, var, GFP_KERNEL);
-> +		if (!priv->cells[idx].name)
-> +			return -ENOMEM;
-> +		priv->cells[idx].offset = data_offset + value - data;
-> +		priv->cells[idx].bytes = strlen(value);
-
-U-Boot environment can't hold binary values?
-
-> +	}
-> +
-> +	if (WARN_ON(idx != priv->ncells))
-> +		priv->ncells = idx;
-> +
-> +	return 0;
-> +}
-> +
-> +static int u_boot_env_parse(struct u_boot_env *priv)
-> +{
-> +	struct device *dev = priv->dev;
-> +	size_t crc32_data_offset;
-> +	size_t crc32_data_len;
-> +	size_t crc32_offset;
-> +	size_t data_offset;
-> +	size_t data_len;
-> +	uint32_t crc32;
-> +	uint32_t calc;
-> +	size_t bytes;
-> +	uint8_t *buf;
-> +	int err;
-> +
-> +	buf = kcalloc(1, priv->size, GFP_KERNEL);
-> +	if (!buf) {
-> +		err = -ENOMEM;
-> +		goto err_out;
-> +	}
-> +
-> +	err = mtd_read(priv->mtd, priv->offset, priv->size, &bytes, buf);
-> +	if ((err && !mtd_is_bitflip(err)) || bytes != priv->size) {
-> +		dev_err(dev, "Failed to read from mtd: %d\n", err);
-> +		goto err_kfree;
-> +	}
-> +
-> +	switch (priv->format) {
-> +	case U_BOOT_FORMAT_SINGLE:
-> +		crc32_offset = offsetof(struct u_boot_env_image_single, crc32);
-> +		crc32_data_offset = offsetof(struct u_boot_env_image_single, data);
-> +		data_offset = offsetof(struct u_boot_env_image_single, data);
-> +		break;
-> +	case U_BOOT_FORMAT_REDUNDANT:
-> +		crc32_offset = offsetof(struct u_boot_env_image_redundant, crc32);
-> +		crc32_data_offset = offsetof(struct u_boot_env_image_redundant, mark);
-> +		data_offset = offsetof(struct u_boot_env_image_redundant, data);
-> +		break;
-> +	}
-> +	crc32 = le32_to_cpu(*(uint32_t *)(buf + crc32_offset));
-> +	crc32_data_len = priv->size - crc32_data_offset;
-> +	data_len = priv->size - data_offset;
-> +
-> +	calc = crc32(~0, buf + crc32_data_offset, crc32_data_len) ^ ~0L;
-> +	if (calc != crc32) {
-> +		dev_err(dev, "Invalid calculated CRC32: 0x%08x (expected: 0x%08x)\n", calc, crc32);
-> +		err = -EINVAL;
-> +		goto err_kfree;
-> +	}
-> +
-> +	buf[priv->size - 1] = '\0';
-> +	err = u_boot_env_add_cells(priv, buf, data_offset, data_len);
-> +	if (err)
-> +		dev_err(dev, "Failed to add cells: %d\n", err);
-> +
-> +err_kfree:
-> +	kfree(buf);
-> +err_out:
-> +	return err;
-> +}
-> +
-> +static const struct of_device_id u_boot_env_of_match_table[] = {
-> +	{ .compatible = "u-boot,env", .data = (void *)U_BOOT_FORMAT_SINGLE, },
-> +	{ .compatible = "u-boot,env-redundant-bool", .data = (void *)U_BOOT_FORMAT_REDUNDANT, },
-> +	{ .compatible = "u-boot,env-redundant-count", .data = (void *)U_BOOT_FORMAT_REDUNDANT, },
-> +	{},
-> +};
-> +
-> +static int u_boot_env_probe(struct platform_device *pdev)
-> +{
-> +	struct nvmem_config config = {
-> +		.name = "u-boot-env",
-> +		.reg_read = u_boot_env_read,
-> +	};
-> +	struct device *dev = &pdev->dev;
-> +	struct device_node *np = dev->of_node;
-> +	const struct of_device_id *of_id;
-> +	struct u_boot_env *priv;
-> +	int err;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +	priv->dev = dev;
-> +
-> +	of_id = of_match_device(u_boot_env_of_match_table, dev);
-> +	if (!of_id)
-> +		return -EINVAL;
-
-No need for the check.
-
-> +	priv->format = (uintptr_t)of_id->data;
-
-of_device_get_match_data() can be used instead and compatible list moved
-to the bottom.
-
-> +
-> +	if (of_property_read_u32(np, "reg", (u32 *)&priv->offset) ||
-
-bad idea. Not 64-bit safe.
-
-> +	    of_property_read_u32_index(np, "reg", 1, (u32 *)&priv->size)) {
-
-Likewise.
-
-Also you don't take #address-cells, #size-cells into account.
-There's of_translate_address() for that, not sure if there's
-something more specific. But parsing reg like this is not the right way.
-
-> +		dev_err(dev, "Failed to read \"reg\" property\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	priv->mtd = of_get_mtd_device_by_node(np->parent);
-> +	if (IS_ERR(priv->mtd)) {
-> +		dev_err(dev, "Failed to get %pOF MTD: %ld\n", np->parent, PTR_ERR(priv->mtd));
-
-dev_err -> dev_err_probe. To take care of EPROBE_DEFER.
-
-> +		return PTR_ERR(priv->mtd);
-> +	}
-> +
-> +	err = u_boot_env_parse(priv);
-> +	if (err)
-> +		return err;
-> +
-> +	config.dev = dev;
-> +	config.cells = priv->cells;
-> +	config.ncells = priv->ncells;
-> +	config.priv = priv;
-> +	config.size = priv->size;
-> +
-> +	return PTR_ERR_OR_ZERO(devm_nvmem_register(dev, &config));
-> +}
-> +
-> +static struct platform_driver u_boot_env_driver = {
-> +	.probe = u_boot_env_probe,
-> +	.driver = {
-> +		.name = "u_boot_env",
-> +		.of_match_table = u_boot_env_of_match_table,
-> +	},
-> +};
-> +module_platform_driver(u_boot_env_driver);
-> +
-> +MODULE_AUTHOR("Rafał Miłecki");
-> +MODULE_LICENSE("GPL");
-> +MODULE_DEVICE_TABLE(of, u_boot_env_of_match_table);
-
-Cheers,
-Ahmad
-
+diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+index fa7bcd2c1892..87a620073031 100644
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -2038,7 +2038,7 @@ static int axienet_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 	if (!IS_ENABLED(CONFIG_64BIT) && lp->features & XAE_FEATURE_DMA_64BIT) {
+-		dev_err(&pdev->dev, "64-bit addressable DMA is not compatible with 32-bit archecture\n");
++		dev_err(&pdev->dev, "64-bit addressable DMA is not compatible with 32-bit architecture\n");
+ 		goto cleanup_clk;
+ 	}
+ 
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.35.3
+

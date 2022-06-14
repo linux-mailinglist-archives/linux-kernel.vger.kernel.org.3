@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8446254BB77
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC43F54BB3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358033AbiFNUR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58268 "EHLO
+        id S1353022AbiFNUP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358490AbiFNUPN (ORCPT
+        with ESMTP id S1359112AbiFNUPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:15:13 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21F0DF25;
-        Tue, 14 Jun 2022 13:12:31 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id y12so10575700ior.7;
-        Tue, 14 Jun 2022 13:12:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9/XBqejShhBsGHynRMK/NnFFuohdRCp1F64DE0/PIZM=;
-        b=g0wjeEYFgrdg4ah2PwnDSjzM/P+rChDShrAzrFqUP9elFjOqK1vtPSU2zYTC9gYh9s
-         DwFGCcOGdH1giFfQ5UibRDAg6N4miu1rAaKh/17bJa74gXY4CXzEC1FFqyxElPm2RCwz
-         4zP/VI5GVPDBmRXjOB0DwhbwbvyqjMgiu8NtIt+UeVoJ6mWjasIdWJR5cWm5uz1uCzUp
-         LpKs6UEsal5TUiu4wpHimMfMGgLQ+Scta6aD6o2Wlz6XAOM00PFwNfOlVnQkyrt/mCDr
-         4nDFSmVzczOa3xoEKg+o7YjybwjwKTiHrzOoP/PuQLkYv6Mc74ThNId1RpiKdPsBxlON
-         Mecg==
-X-Gm-Message-State: AOAM53154dDEVHfR7KMsgEo22nlT1hWwLAR8LUj8Xgk3wT4oYbPi1J+N
-        CeGnQuDgy+vj3kU8OgdYuA==
-X-Google-Smtp-Source: ABdhPJxWEsmo+mG/x3kXLODUtDKPZ8ETebE3K2+pKnnHvBgtT4SiuVSTIClpZz5EwzbOKjOIAfOuqA==
-X-Received: by 2002:a6b:6a07:0:b0:66a:2e5f:2058 with SMTP id x7-20020a6b6a07000000b0066a2e5f2058mr929393iog.72.1655237509097;
-        Tue, 14 Jun 2022 13:11:49 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id t6-20020a025406000000b00331c8618d2esm5249796jaa.143.2022.06.14.13.11.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 13:11:48 -0700 (PDT)
-Received: (nullmailer pid 2359572 invoked by uid 1000);
-        Tue, 14 Jun 2022 20:11:46 -0000
-Date:   Tue, 14 Jun 2022 14:11:46 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, andrzej.hajda@intel.com,
-        narmstrong@baylibre.com, robert.foss@linaro.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@linux.ie, daniel@ffwll.ch,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, lee.jones@linaro.org, mchehab@kernel.org,
-        marcel.ziswiler@toradex.com
-Subject: Re: [PATCH v9 05/14] dt-bindings: display: bridge: Add i.MX8qm/qxp
- display pixel link binding
-Message-ID: <20220614201146.GA2344044-robh@kernel.org>
-References: <20220611141421.718743-1-victor.liu@nxp.com>
- <20220611141421.718743-6-victor.liu@nxp.com>
+        Tue, 14 Jun 2022 16:15:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7564E20BC7;
+        Tue, 14 Jun 2022 13:12:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38836B81B3D;
+        Tue, 14 Jun 2022 20:11:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD0BDC3411B;
+        Tue, 14 Jun 2022 20:11:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655237516;
+        bh=eqag6uuSHc8NZizUmIJ0eO9wLfheHHjsA7++w7jzMgQ=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=SY4qRctUBfITLHd4kc65jOj2XIujNztHSm3L9C547knPmAH9acA0zHM0AxWR7gd7O
+         Ml49R/brz3iSMYvksxsjBOqCWPnyaIRpgwTIx+EKLIh47bhh8O1gYbOMzDfBysX69H
+         V/cS4mdk4taOCPcgbPfX3KUNjwHe8ypTC+vJBgcRw+4flgDB0xWBUrkYaWzd27xTjx
+         z6AsHKzcdhMyEwTbTevRPM/gE5SWTB+AJRAiU8D/yGAT0jj3/XCckXUeCO42JtNq/e
+         jdd6u0IxNIS8Nbg7wUB+9EnxRUQlFWXLJnDUaq0qkgz2KJbygVletMd5BC4WVwm9CS
+         BfOK8FOHHd7PA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 5A9B55C0BCC; Tue, 14 Jun 2022 13:11:56 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 13:11:56 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Zqiang <qiang1.zhang@intel.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] rcu/nocb: Avoid polling when myrdp->nocb_head_rdp
+ list is empty
+Message-ID: <20220614201156.GX1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220611110044.2999157-1-qiang1.zhang@intel.com>
+ <20220614114219.GB1892551@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220611141421.718743-6-victor.liu@nxp.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220614114219.GB1892551@lothringen>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,162 +59,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 10:14:12PM +0800, Liu Ying wrote:
-> This patch adds bindings for i.MX8qm/qxp display pixel link.
+On Tue, Jun 14, 2022 at 01:42:19PM +0200, Frederic Weisbecker wrote:
+> On Sat, Jun 11, 2022 at 07:00:44PM +0800, Zqiang wrote:
+> > Currently, If the 'rcu_nocb_poll' bootargs is enable, all rcuog kthreads
+> > enter polling mode. however, due to only insert CPU's rdp which belong to
+> > rcu_nocb_mask to 'nocb_head_rdp' list or all CPU's rdp served by rcuog
+> > kthread have been de-offloaded, these cause the 'nocb_head_rdp' list
+> > served by rcuog kthread is empty, when the 'nocb_head_rdp' is empty,
+> > the rcuog kthread in polling mode not actually do anything. fix it by
+> > exiting polling mode when the 'nocb_head_rdp'list is empty, otherwise
+> > entering polling mode.
+> > 
+> > Co-developed-by: Frederic Weisbecker <frederic@kernel.org>
 > 
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> ---
-> v8->v9:
-> * Add 'fsl,dc-id' and 'fsl,dc-stream-id' properties. (Laurent)
+> Acked-by: Frederic Weisbecker <frederic@kernel.org>
+> 
+> Thanks!
+> 
+> (might be worth testing with TREE01 and --bootargs "rcu_gp_poll" )
 
-Why? Isn't the graph sufficient for determining the connections? That's 
-what it is for.
+A short run passes, so I am queuing this for further review and
+testing, thank you both!
 
-> * Drop Rob's R-b tag.
-> 
-> v7->v8:
-> * No change.
-> 
-> v6->v7:
-> * No change.
-> 
-> v5->v6:
-> * No change.
-> 
-> v4->v5:
-> * No change.
-> 
-> v3->v4:
-> * No change.
-> 
-> v2->v3:
-> * Add Rob's R-b tag.
-> 
-> v1->v2:
-> * Use graph schema. (Laurent)
-> * Require all four pixel link output ports. (Laurent)
-> * Mention pixel link is accessed via SCU firmware. (Rob)
-> 
->  .../bridge/fsl,imx8qxp-pixel-link.yaml        | 144 ++++++++++++++++++
->  1 file changed, 144 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pixel-link.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pixel-link.yaml b/Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pixel-link.yaml
-> new file mode 100644
-> index 000000000000..38ecc7926fad
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/display/bridge/fsl,imx8qxp-pixel-link.yaml
-> @@ -0,0 +1,144 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/display/bridge/fsl,imx8qxp-pixel-link.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Freescale i.MX8qm/qxp Display Pixel Link
-> +
-> +maintainers:
-> +  - Liu Ying <victor.liu@nxp.com>
-> +
-> +description: |
-> +  The Freescale i.MX8qm/qxp Display Pixel Link(DPL) forms a standard
-> +  asynchronous linkage between pixel sources(display controller or
-> +  camera module) and pixel consumers(imaging or displays).
-> +  It consists of two distinct functions, a pixel transfer function and a
-> +  control interface.  Multiple pixel channels can exist per one control channel.
-> +  This binding documentation is only for pixel links whose pixel sources are
-> +  display controllers.
-> +
-> +  The i.MX8qm/qxp Display Pixel Link is accessed via System Controller Unit(SCU)
-> +  firmware.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - fsl,imx8qm-dc-pixel-link
-> +      - fsl,imx8qxp-dc-pixel-link
-> +
-> +  fsl,dc-id:
-> +    $ref: /schemas/types.yaml#/definitions/uint8
-> +    description: |
-> +      u8 value representing the display controller index that the pixel link
-> +      connects to.
-> +
-> +  fsl,dc-stream-id:
-> +    $ref: /schemas/types.yaml#/definitions/uint8
-> +    description: |
-> +      u8 value representing the display controller stream index that the pixel
-> +      link connects to.
-> +    enum: [0, 1]
-> +
-> +  ports:
-> +    $ref: /schemas/graph.yaml#/properties/ports
-> +
-> +    properties:
-> +      port@0:
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: The pixel link input port node from upstream video source.
-> +
-> +    patternProperties:
-> +      "^port@[1-4]$":
-> +        $ref: /schemas/graph.yaml#/properties/port
-> +        description: The pixel link output port node to downstream bridge.
-> +
-> +    required:
-> +      - port@0
-> +      - port@1
-> +      - port@2
-> +      - port@3
-> +      - port@4
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: fsl,imx8qxp-dc-pixel-link
-> +    then:
-> +      properties:
-> +        fsl,dc-id:
-> +          const: 0
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: fsl,imx8qm-dc-pixel-link
-> +    then:
-> +      properties:
-> +        fsl,dc-id:
-> +          enum: [0, 1]
-> +
-> +required:
-> +  - compatible
-> +  - fsl,dc-id
-> +  - fsl,dc-stream-id
-> +  - ports
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    dc0-pixel-link0 {
-> +        compatible = "fsl,imx8qxp-dc-pixel-link";
-> +        fsl,dc-id = /bits/ 8 <0>;
-> +        fsl,dc-stream-id = /bits/ 8 <0>;
-> +
-> +        ports {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            /* from dc0 pixel combiner channel0 */
-> +            port@0 {
-> +                reg = <0>;
-> +
-> +                dc0_pixel_link0_dc0_pixel_combiner_ch0: endpoint {
-> +                    remote-endpoint = <&dc0_pixel_combiner_ch0_dc0_pixel_link0>;
+With the usual wordsmithing, so please check.
 
-Isn't dc0 and link0 here the same information (if you get the port 
-number from the remote end).
+							Thanx, Paul
 
-Rob
+------------------------------------------------------------------------
+
+commit 5d3a7cbf3bc24dd5540ecf5be7a3e0e94b9a15d8
+Author: Zqiang <qiang1.zhang@intel.com>
+Date:   Sat Jun 11 19:00:44 2022 +0800
+
+    rcu/nocb: Avoid polling when myrdp->nocb_head_rdp list is empty
+    
+    Currently, If the 'rcu_nocb_poll' kernel boot parameter is enabled, all
+    rcuog kthreads enter polling mode.  However, if all of a given group
+    of rcuo kthreads correspond to CPUs that have been de-offloaded, the
+    corresponding rcuog kthread will nonetheless still wake up periodically,
+    unnecessarily consuming power and perturbing workloads.  Fortunately,
+    this situation is easily detected by the fact that the rcuog kthread's
+    CPU's rcu_data structure's ->nocb_head_rdp list is empty.
+    
+    This commit saves power and avoids unnecessarily perturbing workloads
+    by putting an rcuog kthread to sleep during any time period when all of
+    its rcuo kthreads' CPUs are de-offloaded.
+    
+    Co-developed-by: Frederic Weisbecker <frederic@kernel.org>
+    Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+    Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index fa8e4f82e60c0..a8f574d8850d2 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -584,6 +584,14 @@ static int nocb_gp_toggle_rdp(struct rcu_data *rdp,
+ 	return ret;
+ }
+ 
++static void nocb_gp_sleep(struct rcu_data *my_rdp, int cpu)
++{
++	trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Sleep"));
++	swait_event_interruptible_exclusive(my_rdp->nocb_gp_wq,
++					!READ_ONCE(my_rdp->nocb_gp_sleep));
++	trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("EndSleep"));
++}
++
+ /*
+  * No-CBs GP kthreads come here to wait for additional callbacks to show up
+  * or for grace periods to end.
+@@ -701,13 +709,19 @@ static void nocb_gp_wait(struct rcu_data *my_rdp)
+ 		/* Polling, so trace if first poll in the series. */
+ 		if (gotcbs)
+ 			trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Poll"));
+-		schedule_timeout_idle(1);
++		if (list_empty(&my_rdp->nocb_head_rdp)) {
++			raw_spin_lock_irqsave(&my_rdp->nocb_gp_lock, flags);
++			if (!my_rdp->nocb_toggling_rdp)
++				WRITE_ONCE(my_rdp->nocb_gp_sleep, true);
++			raw_spin_unlock_irqrestore(&my_rdp->nocb_gp_lock, flags);
++			/* Wait for any offloading rdp */
++			nocb_gp_sleep(my_rdp, cpu);
++		} else {
++			schedule_timeout_idle(1);
++		}
+ 	} else if (!needwait_gp) {
+ 		/* Wait for callbacks to appear. */
+-		trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("Sleep"));
+-		swait_event_interruptible_exclusive(my_rdp->nocb_gp_wq,
+-				!READ_ONCE(my_rdp->nocb_gp_sleep));
+-		trace_rcu_nocb_wake(rcu_state.name, cpu, TPS("EndSleep"));
++		nocb_gp_sleep(my_rdp, cpu);
+ 	} else {
+ 		rnp = my_rdp->mynode;
+ 		trace_rcu_this_gp(rnp, my_rdp, wait_gp_seq, TPS("StartWait"));

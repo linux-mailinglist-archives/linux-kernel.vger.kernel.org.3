@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B53554B4F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319BA54B501
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350701AbiFNPnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:43:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
+        id S1356962AbiFNPnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344317AbiFNPnA (ORCPT
+        with ESMTP id S1345160AbiFNPnA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Jun 2022 11:43:00 -0400
-Received: from smtpout1.mo3004.mail-out.ovh.net (smtpout1.mo3004.mail-out.ovh.net [79.137.123.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C6F39167;
+Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79EA02AFE;
         Tue, 14 Jun 2022 08:42:58 -0700 (PDT)
-Received: from pro2.mail.ovh.net (unknown [10.109.146.37])
-        by mo3004.mail-out.ovh.net (Postfix) with ESMTPS id ADE75245752;
-        Tue, 14 Jun 2022 15:42:56 +0000 (UTC)
+Received: from pro2.mail.ovh.net (unknown [10.108.16.169])
+        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id ED22710C19231;
+        Tue, 14 Jun 2022 17:42:56 +0200 (CEST)
 Received: from localhost.localdomain (88.161.25.233) by DAG1EX2.emp2.local
  (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Tue, 14 Jun
@@ -27,9 +27,9 @@ To:     <pavel@ucw.cz>, <krzk+dt@kernel.org>, <andy.shevchenko@gmail.com>
 CC:     <robh+dt@kernel.org>, <linux-leds@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Subject: [PATCH v5 1/3] dt-bindings: leds: Add bindings for the TLC5925 controller
-Date:   Tue, 14 Jun 2022 17:42:43 +0200
-Message-ID: <20220614154245.354167-2-jjhiblot@traphandler.com>
+Subject: [PATCH v5 2/3] leds: Add driver for the TLC5925 LED controller
+Date:   Tue, 14 Jun 2022 17:42:44 +0200
+Message-ID: <20220614154245.354167-3-jjhiblot@traphandler.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220614154245.354167-1-jjhiblot@traphandler.com>
 References: <20220614154245.354167-1-jjhiblot@traphandler.com>
@@ -39,10 +39,10 @@ Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [88.161.25.233]
 X-ClientProxiedBy: DAG1EX2.emp2.local (172.16.2.2) To DAG1EX2.emp2.local
  (172.16.2.2)
-X-Ovh-Tracer-Id: 12429934975236913627
+X-Ovh-Tracer-Id: 12429934974464768475
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudduledgledtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpedttdffveeljeetleeijefhffevtdffleejheejiefgjeeludefvdevjedutdejhfenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecukfhppedtrddtrddtrddtpdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhofedttdeg
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudduledgledtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeejveevffefudeutddukeekueeifeeuhfetfefgfedulefhhffgvddvvdevieekveenucffohhmrghinhepthhirdgtohhmnecukfhppedtrddtrddtrddtpdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehprhhovddrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhohedvke
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -52,127 +52,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings documentation for the TLC5925 LED controller.
+The TLC5925 is a 16-channels constant-current LED sink driver.
+It is controlled via SPI but doesn't offer a register-based interface.
+Instead it contains a shift register and latches that convert the
+serial input into a parallel output.
 
+Datasheet: https://www.ti.com/lit/ds/symlink/tlc5925.pdf
 Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
 ---
- .../devicetree/bindings/leds/ti,tlc5925.yaml  | 107 ++++++++++++++++++
- 1 file changed, 107 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/leds/ti,tlc5925.yaml
+ drivers/leds/Kconfig        |   6 ++
+ drivers/leds/Makefile       |   1 +
+ drivers/leds/leds-tlc5925.c | 147 ++++++++++++++++++++++++++++++++++++
+ 3 files changed, 154 insertions(+)
+ create mode 100644 drivers/leds/leds-tlc5925.c
 
-diff --git a/Documentation/devicetree/bindings/leds/ti,tlc5925.yaml b/Documentation/devicetree/bindings/leds/ti,tlc5925.yaml
+diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+index a49979f41eee..b17eb01210ba 100644
+--- a/drivers/leds/Kconfig
++++ b/drivers/leds/Kconfig
+@@ -658,6 +658,12 @@ config LEDS_TLC591XX
+ 	  This option enables support for Texas Instruments TLC59108
+ 	  and TLC59116 LED controllers.
+ 
++config LEDS_TLC5925
++	tristate "LED driver for TLC5925 controller"
++	depends on LEDS_CLASS && SPI
++	help
++	  This option enables support for Texas Instruments TLC5925.
++
+ config LEDS_MAX77650
+ 	tristate "LED support for Maxim MAX77650 PMIC"
+ 	depends on LEDS_CLASS && MFD_MAX77650
+diff --git a/drivers/leds/Makefile b/drivers/leds/Makefile
+index 4fd2f92cd198..9d15b88d482f 100644
+--- a/drivers/leds/Makefile
++++ b/drivers/leds/Makefile
+@@ -81,6 +81,7 @@ obj-$(CONFIG_LEDS_SYSCON)		+= leds-syscon.o
+ obj-$(CONFIG_LEDS_TCA6507)		+= leds-tca6507.o
+ obj-$(CONFIG_LEDS_TI_LMU_COMMON)	+= leds-ti-lmu-common.o
+ obj-$(CONFIG_LEDS_TLC591XX)		+= leds-tlc591xx.o
++obj-$(CONFIG_LEDS_TLC5925)		+= leds-tlc5925.o
+ obj-$(CONFIG_LEDS_TPS6105X)		+= leds-tps6105x.o
+ obj-$(CONFIG_LEDS_TURRIS_OMNIA)		+= leds-turris-omnia.o
+ obj-$(CONFIG_LEDS_WM831X_STATUS)	+= leds-wm831x-status.o
+diff --git a/drivers/leds/leds-tlc5925.c b/drivers/leds/leds-tlc5925.c
 new file mode 100644
-index 000000000000..12a71e48f854
+index 000000000000..2fb91d9767aa
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/leds/ti,tlc5925.yaml
-@@ -0,0 +1,107 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/leds/ti,tlc5925.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/leds/leds-tlc5925.c
+@@ -0,0 +1,147 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * The driver supports controllers with a very simple SPI protocol:
++ * - the data is deserialized in a shift-register when CS is asserted
++ * - the data is latched when CS is de-asserted
++ * - the LED are either on or off (no control of the brightness)
++ *
++ * Supported devices:
++ * - "ti,tlc5925":  Low-Power 16-Channel Constant-Current LED Sink Driver
++ *                  https://www.ti.com/lit/ds/symlink/tlc5925.pdf
++ */
 +
-+title: LEDs connected to TI TLC5925 controller
++#include <linux/container_of.h>
++#include <linux/err.h>
++#include <linux/leds.h>
++#include <linux/module.h>
++#include <linux/property.h>
++#include <linux/types.h>
++#include <linux/spi/spi.h>
++#include <linux/gpio/consumer.h>
 +
-+maintainers:
-+  - Jean-Jacques Hiblot <jjhiblot@traphandler.com>
++struct single_led_priv {
++	struct led_classdev cdev;
++	int idx;
++};
 +
-+description: |
-+  The TLC5925 is a low-power 16-channel constant-current LED sink driver.
-+  It is controlled through a SPI interface.
-+  It is built around a shift register and latches which convert serial
-+  input data into a parallel output. Several TLC5925 can be chained to
-+  control more than 16 LEDs with a single chip-select.
-+  The brightness level cannot be controlled, each LED is either on or off.
++struct tlc5925_leds_priv {
++	int max_num_leds;
++	unsigned long *state;
++	struct single_led_priv leds[];
++};
 +
-+  Each LED is represented as a sub-node of the ti,tlc5925 device.
++static int tlc5925_brightness_set_blocking(struct led_classdev *cdev,
++					    enum led_brightness brightness)
++{
++	struct spi_device *spi = to_spi_device(cdev->dev->parent);
++	struct tlc5925_leds_priv *priv = spi_get_drvdata(spi);
++	struct single_led_priv *led =
++		container_of(cdev, struct single_led_priv, cdev);
++	int index = led->idx;
 +
-+$ref: /schemas/spi/spi-peripheral-props.yaml#
++	assign_bit(index, priv->state, !!brightness);
 +
-+properties:
-+  compatible:
-+    const: ti,tlc5925
++	return spi_write(spi, priv->state, BITS_TO_BYTES(priv->max_num_leds));
++}
 +
-+  ti,shift-register-length:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    minimum: 8
-+    description: |
-+      The length of the shift register. If several TLC5925 are chained,
-+      shift_register_length should be set to 16 times the number of TLC5925.
-+      The value must be a multiple of 8.
++static int tlc5925_probe(struct spi_device *spi)
++{
++	struct device *dev = &spi->dev;
++	struct fwnode_handle *child;
++	struct tlc5925_leds_priv *priv;
++	int ret;
++	int max_num_leds, count;
++	struct gpio_descs *gpios;
 +
-+  "#address-cells":
-+    const: 1
++	/* Assert all the OE/ lines */
++	gpios = devm_gpiod_get_array(dev, "output-enable-b", GPIOD_OUT_LOW);
++	if (IS_ERR(gpios))
++		return dev_err_probe(dev, PTR_ERR(gpios),
++			      "Unable to get the 'output-enable-b' gpios\n");
 +
-+  "#size-cells":
-+    const: 0
++	count = device_get_child_node_count(dev);
++	if (!count)
++		return dev_err_probe(dev, -ENODEV, "no led defined.\n");
 +
-+  output-enable-b-gpios:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    description: |
-+      Optional GPIO pins to enable/disable the parallel output. They describe
-+      the GPIOs connected to the OE/ pin of the TLC5925s.
++	ret = device_property_read_u32(dev, "ti,shift-register-length",
++					     &max_num_leds);
++	if (ret)
++		return dev_err_probe(dev, -EINVAL,
++				     "'ti,shift-register-length' property is required.\n");
++	if (max_num_leds % 8)
++		return dev_err_probe(dev, -EINVAL,
++				     "'ti,shift-register-length' must be a multiple of 8\n");
++	if (max_num_leds == 0)
++		return dev_err_probe(dev, -EINVAL,
++				     "'ti,shift-register-length' must be greater than 0\n");
 +
-+patternProperties:
-+  "@[0-9a-f]+$":
-+    type: object
-+    $ref: common.yaml#
++	priv = devm_kzalloc(dev, struct_size(priv, leds, count), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
 +
-+    properties:
-+      reg:
-+        $ref: /schemas/types.yaml#/definitions/uint32
-+        description: |
-+          LED pin number (must be lower than ti,shift-register-length).
-+          The furthest LED down the chain has the pin number 0.
++	priv->state = devm_bitmap_zalloc(dev, max_num_leds, GFP_KERNEL);
++	if (!priv->state)
++		return -ENOMEM;
 +
-+    required:
-+      - reg
++	priv->max_num_leds = max_num_leds;
 +
-+required:
-+  - "#address-cells"
-+  - "#size-cells"
-+  - ti,shift-register-length
++	device_for_each_child_node(dev, child) {
++		struct led_init_data init_data = { .fwnode = child };
++		struct led_classdev *cdev;
++		u32 idx;
 +
-+unevaluatedProperties: false
++		ret = fwnode_property_read_u32(child, "reg", &idx);
++		if (ret || idx >= max_num_leds) {
++			dev_warn(dev, "%pfwP: invalid reg value. Ignoring.\n",
++				 child);
++			fwnode_handle_put(child);
++			continue;
++		}
 +
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/leds/common.h>
++		count--;
++		priv->leds[count].idx = idx;
++		cdev = &(priv->leds[count].cdev);
++		cdev->brightness = LED_OFF;
++		cdev->max_brightness = 1;
++		cdev->brightness_set_blocking = tlc5925_brightness_set_blocking;
 +
-+    spi0 {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
++		ret = devm_led_classdev_register_ext(dev, cdev, &init_data);
++		if (ret) {
++			dev_warn(dev, "%pfwP: cannot create LED device.\n",
++				child);
++			fwnode_handle_put(child);
++			continue;
++		}
++	}
 +
-+        leds@2 {
-+            compatible = "ti,tlc5925";
-+            reg = <0x02>;
-+            spi-max-frequency = <30000000>;
-+            ti,shift-register-length = <32>;
-+            output-enable-b-gpios = <&gpio0b 9 GPIO_ACTIVE_HIGH>, <&gpio0b 7 GPIO_ACTIVE_HIGH>;
-+            #address-cells = <1>;
-+            #size-cells = <0>;
++	spi_set_drvdata(spi, priv);
 +
-+            led@0 {
-+                reg = <0>;
-+                function = LED_FUNCTION_STATUS;
-+                color = <LED_COLOR_ID_GREEN>;
-+            };
++	return 0;
++}
 +
-+            led@4 {
-+                reg = <4>;
-+                function = LED_FUNCTION_STATUS;
-+                color = <LED_COLOR_ID_RED>;
-+            };
++static const struct of_device_id tlc5925_dt_ids[] = {
++	{ .compatible = "ti,tlc5925", },
++	{}
++};
++MODULE_DEVICE_TABLE(of, tlc5925_dt_ids);
 +
-+            led@1f {
-+                reg = <31>;
-+                function = LED_FUNCTION_PANIC;
-+                color = <LED_COLOR_ID_RED>;
-+            };
-+        };
++static const struct spi_device_id tlc5925_id[] = {
++	{"tlc5925", 0},
++	{}
++};
++MODULE_DEVICE_TABLE(spi, tlc5925_id);
 +
-+    };
++static struct spi_driver tlc5925_driver = {
++	.driver = {
++		.name		= KBUILD_MODNAME,
++		.of_match_table	= tlc5925_dt_ids,
++	},
++	.id_table = tlc5925_id,
++	.probe = tlc5925_probe,
++};
++module_spi_driver(tlc5925_driver);
++
++MODULE_AUTHOR("Jean-Jacques Hiblot <jjhiblot@traphandler.com>");
++MODULE_DESCRIPTION("TLC5925 LED driver");
++MODULE_LICENSE("GPL");
++MODULE_ALIAS("spi:tlc5925");
 -- 
 2.25.1
 

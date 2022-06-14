@@ -2,166 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A4A54B1A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B28E54B192
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244834AbiFNMjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        id S245101AbiFNMmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234794AbiFNMiQ (ORCPT
+        with ESMTP id S1356244AbiFNMln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:38:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2D6E49F96;
-        Tue, 14 Jun 2022 05:35:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E15BB8186C;
-        Tue, 14 Jun 2022 12:34:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C6FC3411E;
-        Tue, 14 Jun 2022 12:34:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655210086;
-        bh=RxBJ6JD8Wf8ojeDpP8PuOnhZqWUwzlveE7eOehiepUk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tccE29lgTynPfIHS7yqWNwxaJZYOzV0VVqp/4uXMujX03Ple5ePWeqyTHOJ5ZhAYj
-         XMwyzSmBg7Uv+qO+GNLZXusyJPAnxyTaj4FtGrMt5xKAiPeMNutq+Fm368HCJM177K
-         p3TqHFeMnXWnxHyCSaVqHfoZitET90MUOQLzYppk=
-Date:   Tue, 14 Jun 2022 14:34:43 +0200
-From:   'Greg KH' <gregkh@linuxfoundation.org>
-To:     "tarumizu.kohei@fujitsu.com" <tarumizu.kohei@fujitsu.com>
-Cc:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "eugenis@google.com" <eugenis@google.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "pcc@google.com" <pcc@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "marcos@orca.pet" <marcos@orca.pet>,
-        "marcan@marcan.st" <marcan@marcan.st>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
-        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
-        "arnd@arndb.de" <arnd@arndb.de>, "ast@kernel.org" <ast@kernel.org>,
-        "peter.chen@kernel.org" <peter.chen@kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Subject: Re: [PATCH v5 0/6] Add hardware prefetch control driver for A64FX
- and x86
-Message-ID: <YqiAY689pOJbHKUd@kroah.com>
-References: <20220607120530.2447112-1-tarumizu.kohei@fujitsu.com>
- <YqNCDrqcp9t8HlUJ@kroah.com>
- <OSBPR01MB203749DA00C7BEE5741AFEB980AA9@OSBPR01MB2037.jpnprd01.prod.outlook.com>
+        Tue, 14 Jun 2022 08:41:43 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1E33457B9;
+        Tue, 14 Jun 2022 05:38:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655210312; x=1686746312;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JZpQvDvEIGZaQUq59bSiwPNjvfk7SP1Lb3vRsb+B8Io=;
+  b=Lk/jEIiYK7feeM2vPVRCWln2ntqpFXNwxNbBG1rDLvduvnt5qrpZ73fi
+   HGR/w2kr3RZPMY7Kefk5UL34VTO4qigHDtVoxPM9V0odiaNnopgy/FxvH
+   8u9rRClS7ATnQjYnW1yU56CSO4M3qniSMRPWMgLyh3SkuZe3qiAWQzvNF
+   Db6YvBuZiSGYWQz8JPiw0qX+EdfnOVUAjaEPJ20bbJlr39yFJDPFe+pXh
+   bBzkSqkZuOdPgMUjziztRWxxmkJrhSSSpiwciWeKwqvlmULEbMOmbS1K4
+   HkCB8AA4bXrIERLvyLiy3tx03VOJPo3ekL/UMc0AtvrPD4E1ojZIUxhru
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="304016026"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="304016026"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 05:38:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="617980489"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 14 Jun 2022 05:38:30 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o15oT-000LsV-D8;
+        Tue, 14 Jun 2022 12:38:29 +0000
+Date:   Tue, 14 Jun 2022 20:37:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     NeilBrown <neilb@suse.de>, Al Viro <viro@zeniv.linux.org.uk>,
+        Daire Byrne <daire@dneg.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Chuck Lever <chuck.lever@oracle.com>
+Cc:     kbuild-all@lists.01.org,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 06/12] VFS: support concurrent renames.
+Message-ID: <202206142059.8hhAq16w-lkp@intel.com>
+References: <165516230199.21248.18142980966152036732.stgit@noble.brown>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <OSBPR01MB203749DA00C7BEE5741AFEB980AA9@OSBPR01MB2037.jpnprd01.prod.outlook.com>
+In-Reply-To: <165516230199.21248.18142980966152036732.stgit@noble.brown>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 11:55:39AM +0000, tarumizu.kohei@fujitsu.com wrote:
-> Thanks for the comment.
-> 
-> > Why does userspace want to even do this?
-> 
-> This is because the optimal settings may differ from application to
-> application.
+Hi NeilBrown,
 
-That's not ok.  Linux is a "general purpose" operating system and needs
-to work well for all applications.  Doing application-specific-tuning
-based on the specific hardware like this is a nightmare for users, and
-will be for you as you will now have to support this specific model to
-work correctly on all future kernel releases for the next 20+ years.
-Are you willing to do that?
+Thank you for the patch! Perhaps something to improve:
 
-> Examples of performance improvements for applications with simple
-> memory access characteristics are described in [merit] section.
-> However, some applications have complex characteristics, so it is
-> difficult to predict if an application will improve without actually
-> trying it out.
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.19-rc2 next-20220614]
+[cannot apply to trondmy-nfs/linux-next viro-vfs/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Then perhaps it isn't anything that they should try out :)
+url:    https://github.com/intel-lab-lkp/linux/commits/NeilBrown/Allow-concurrent-directory-updates/20220614-072355
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
+config: i386-randconfig-s001-20220613 (https://download.01.org/0day-ci/archive/20220614/202206142059.8hhAq16w-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-30-g92122700-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/46a2afd9f68f24a42f38f3a8afebafe7e494e9d8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review NeilBrown/Allow-concurrent-directory-updates/20220614-072355
+        git checkout 46a2afd9f68f24a42f38f3a8afebafe7e494e9d8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash
 
-Shouldn't the kernel know how the application works (based on the
-resources it asks for) and tune itself based on that automatically?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-If not, how is a user supposed to know how to do this?
 
-> This is not necessary for all applications. However, I want to provide
-> as a minimal interface that can be used by those who want to improve
-> their application even a little.
-> 
-> > How will they do this?
-> 
-> I assume to be used to tune a specific core and execute an application
-> on that core. The execution example is as follows.
-> 
-> 1) The user tunes the parameters of a specific core before executing
->    the program.
-> 
-> ```
-> # echo 1024 > /sys/devices/system/cpu/cpu12/cache/index0/prefetch_control/stream_detect_prefetcher_dist
-> # echo 1024 > /sys/devices/system/cpu/cpu12/cache/index2/prefetch_control/stream_detect_prefetcher_dist
-> # echo 1024 > /sys/devices/system/cpu/cpu13/cache/index0/prefetch_control/stream_detect_prefetcher_dist
-> # echo 1024 > /sys/devices/system/cpu/cpu13/cache/index2/prefetch_control/stream_detect_prefetcher_dist
-> ```
+sparse warnings: (new ones prefixed by >>)
+>> fs/namei.c:3175:15: sparse: sparse: symbol 'lock_rename_lookup_excl' was not declared. Should it be static?
+   fs/namei.c: note: in included file (through include/linux/rbtree.h, include/linux/mm_types.h, include/linux/mmzone.h, ...):
+   include/linux/rcupdate.h:726:9: sparse: sparse: context imbalance in 'terminate_walk' - unexpected unlock
+   include/linux/rcupdate.h:726:9: sparse: sparse: context imbalance in 'try_to_unlazy' - unexpected unlock
+   include/linux/rcupdate.h:726:9: sparse: sparse: context imbalance in 'try_to_unlazy_next' - unexpected unlock
+   fs/namei.c:2492:19: sparse: sparse: context imbalance in 'path_init' - different lock contexts for basic block
 
-What is "1024" here?  Where is any of this documented?  And why these
-specific sysfs files and not others?
-
-> 2) Execute the program bound to the target core.
-> 
-> ```
-> # taskset -c 12-13 a.out
-> ```
-> 
-> If the interface is exposed, the user can develop a library to execute
-> 1) and 2) operation instead.
-
-If you have no such user today, nor a library, how do you know any of
-this works well?  And again, how will you support this going forward?
-Or is this specific api only going to be for one specific piece of
-hardware and never any future ones?
-
-> > What programs will do this?
-> 
-> It is assumed to be used by programs that execute many continuous
-> memory access. It may be useful for other applications, but I can't
-> explain them in detail right away.
-
-So you haven't tested this on any real applications?  We need real users
-before being able to add new apis.  Otherwise we can just remove the
-apis :)
-
-> > And why isn't just automatic and why does this hardware require manual
-> > intervention to work properly?
-> 
-> It is difficult for the hardware to determine the optimal parameters
-> in advance. Therefore, I think that the register is provided to change
-> the behavior of the hardware.
-
-Kernel programming for a general purpose operating system is hard, but
-it is possible :)
-
-good luck!
-
-greg k-h
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

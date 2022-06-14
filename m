@@ -2,109 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF73154B240
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60DAC54B24B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245542AbiFNN0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 09:26:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43690 "EHLO
+        id S243865AbiFNN3g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 09:29:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232896AbiFNN0m (ORCPT
+        with ESMTP id S239764AbiFNN3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 09:26:42 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFE83D1D0;
-        Tue, 14 Jun 2022 06:26:41 -0700 (PDT)
+        Tue, 14 Jun 2022 09:29:34 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55FE2AE39
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 06:29:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655213201; x=1686749201;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JF8LZq8ZciI01zA/+wKZIM97ei6FRLP9TQo1UIhxw9U=;
-  b=f8X3KVjA3/7H9hAw/LFI6De6YLBzJZprX5xnnWPpKwFAXRMddHmhWQK8
-   +KikZA88cFR+RWz4tVsYm2oZKITez3QWDM6WVBnOady3BMlPn20NgGZvZ
-   qnRty7zFQNykqRpMLY4UYnLU3p16XvJw1AtcYfYQQOFGRY5ZADy1B68BX
-   WpqQ4KtfDa7DWwImGRhmuxX+tTAiaRPzr/8N++IEBF8BjPUfzN83gVzOb
-   71NJp6f7HpAR4JF/Yq7PJ8PBxZYp/AI5/ZFnWwvSnIRQXyI9M8V+vGCcz
-   q8eiDgMhdq5/oNo8VJTbdWY+2bO8Mlt0NU6ROritdtJf/ls2p2NsBQUov
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="342579798"
+  t=1655213373; x=1686749373;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jTqFsXRfitKtKnuAkwXzxEPVoLVF4jMu1V8Kw1EFBbI=;
+  b=LCPIifIX5o5JVyra5sSZTi4cpkSuON+eMGcGK2dkGTaK/tkKjpXruLHC
+   EKoRvmuA6NcrPrydHUKOVbeki+6amqkfcUUv7hhZmanpcSLfjOsKiL6GY
+   tStDqJ1MkB8TK1TpK8reg6VsvWYb1ynpeyV9dzulGnRpjCf7TNNoE8tan
+   C4oIS+JuB7ezsSvtkqUg6RG369+g3QHuxDn+nXr5CDnfN9oitsGmm0hrT
+   b3znQ0VUHBLKmfceDpphaq3gEmjGjmubRToVDHF8bvfGGZ95kG6jVgjBJ
+   Mf6SNUfgsJMF5tuSoKwKsM/VqCkXvo3KP7mVZC+55cMMc0fcDyTj48/rV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="277400922"
 X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="342579798"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 06:26:41 -0700
+   d="scan'208";a="277400922"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 06:29:33 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="588468908"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 06:26:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o16Z0-000cPE-UM;
-        Tue, 14 Jun 2022 16:26:34 +0300
-Date:   Tue, 14 Jun 2022 16:26:34 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Ferry Toth <ftoth@exalondelft.nl>
-Subject: Re: [PATCH v1 1/1] x86/PCI: Disable e820 usage for the resource
- allocation
-Message-ID: <YqiMil2uTT1yDZ8d@smile.fi.intel.com>
-References: <20220613201641.67640-1-andriy.shevchenko@linux.intel.com>
- <45d458f5-4f4e-9ebd-cb51-1a7b784248ec@redhat.com>
- <Yqh/UJQphSFvxX74@smile.fi.intel.com>
- <YqiEAN68MP0l4Mw6@smile.fi.intel.com>
+   d="scan'208";a="830420337"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Jun 2022 06:29:32 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o16br-000Lvp-Lw;
+        Tue, 14 Jun 2022 13:29:31 +0000
+Date:   Tue, 14 Jun 2022 21:28:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Trond Myklebust <trond.myklebust@hammerspace.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:linux-5.17.y 1421/3797] net/sunrpc/clnt.o: warning:
+ objtool: call_status()+0xb4: unreachable instruction
+Message-ID: <202206142140.F2fOdQ8W-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqiEAN68MP0l4Mw6@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 03:50:09PM +0300, Andy Shevchenko wrote:
-> On Tue, Jun 14, 2022 at 03:30:08PM +0300, Andy Shevchenko wrote:
-> > On Mon, Jun 13, 2022 at 10:31:39PM +0200, Hans de Goede wrote:
-> > > On 6/13/22 22:16, Andy Shevchenko wrote:
-> > > > The resource management improve for PCI on x86 broke booting of Intel MID
-> > > > platforms. It seems that the current code removes all available resources
-> > > > from the list and none of the PCI device may be initialized. Restore the
-> > > > old behaviour by force disabling the e820 usage for the resource allocation.
-> > > > 
-> > > > Fixes: 4c5e242d3e93 ("x86/PCI: Clip only host bridge windows for E820 regions")
-> > > > Depends-on: fa6dae5d8208 ("x86/PCI: Add kernel cmdline options to use/ignore E820 reserved regions")
-> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > 
-> > > Andy, thank you for the patch. Commit 4c5e242d3e93 has also been causing
-> > > issues for other platforms, so I've submitted a revert of it here:
-> > > 
-> > > https://lore.kernel.org/linux-pci/20220612144325.85366-1-hdegoede@redhat.com/T/#u
-> > > 
-> > > can you please give the revert a try, and confirm that that fixes
-> > > the Intel MID platform issue too ?
-> > 
-> > Nope, it doesn't fix. The problem is in flags checking as far as I can see.
-> > My patch is needed either we have yours or not.
-> 
-> Hold on, it seems I have tried to build something that is not what I develop.
-> Lemme retest.
+Hi Trond,
 
-Yes, I have tested something weird. Now it works, but I will triple check and
-give my tag to your patch later on.
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+head:   a554a1e2ef7fa48cebd9cc2349804974247c0958
+commit: 474acfab325817d190709a03db7df6abfe7972f8 [1421/3797] SUNRPC: Handle ENOMEM in call_transmit_status()
+config: x86_64-randconfig-r026-20220613 (https://download.01.org/0day-ci/archive/20220614/202206142140.F2fOdQ8W-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=474acfab325817d190709a03db7df6abfe7972f8
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.17.y
+        git checkout 474acfab325817d190709a03db7df6abfe7972f8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/ net/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/sunrpc/clnt.o: warning: objtool: call_status()+0xb4: unreachable instruction
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

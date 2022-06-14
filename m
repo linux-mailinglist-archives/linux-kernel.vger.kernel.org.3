@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAFCB54BB88
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB8C54BB24
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357921AbiFNUJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:09:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42988 "EHLO
+        id S1357254AbiFNUJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357294AbiFNUIC (ORCPT
+        with ESMTP id S1357403AbiFNUIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:08:02 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE7611A30
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:07:55 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id mh12-20020a17090b4acc00b001e32eb45751so8639929pjb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:07:55 -0700 (PDT)
+        Tue, 14 Jun 2022 16:08:04 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F6604E397
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:07:58 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id z5-20020aa79f85000000b0051baa4e9fb8so4240852pfr.7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:07:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=oGoInidDHUgzKInjiMzYTC4+hLGUBWpt78EcTlPSheA=;
-        b=IWSBcmGtUu2yFATqX0U7jHGVdD1p/n2dDsQ+yvmCv87YVaEbIN1OuFmeSSu0oFY7LS
-         L+cQ6/1STlUQl10EFzKOd5O7CoN3OVe9JBnr0Pzz2DAE73V4Z80kSpHagbaQL7ZTQMEy
-         MIvw8zJXcCBeSIan6JK14ITPVFuTkcUkDKjhF8yXGAjYNEq6tCTDBt4lRH4C/Q48WchQ
-         sVGGoBb2SltoUrDSLm+aSrC0q4K30KCX4X1sbLkTCsHuD7p1Gje+XjcF91sRm86FG25B
-         yzbMF1w/HV69cl5+PBBWnheKL5t2aKRpUmFqMu2/CE2QJlMXNr8W/5Ep2tiYQjcHVwlu
-         kHZQ==
+        bh=23Eq/JZXCr5ZESFLdA8mGk7iqKBFVcqZyF81SwbEVZM=;
+        b=RZjhh4TeZyIoaM2EyrlYwJRdn0z7RGpPjZ1d48u6k5pF+BR8SW75Ymt/vhe5vcJS0d
+         FwITp1anv20mqLl9pwoNzTm6zLuq+1UjDOAV9MYSl9VPtXZjdIE8mnQv/F0bSLN6Xl+P
+         xUJcin4+BxjllggdfSEbMpBGvfLchuLG+3BrumI23xrenipl88VhEdnGM1RfUmYeO/Yh
+         Qu7MEl45nl6XTY/Ge+3hlyzpPKL9PbET8UOIXVJz/f9a20OljWw+/6zu9OCn/xEd9hmh
+         ORq9OEUdpCZOEqAm7w9U9EGCTkHFLuFyTnVtiUxPxczY9DDeZWcVdhOCI2/ieTcXEf85
+         pH7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=oGoInidDHUgzKInjiMzYTC4+hLGUBWpt78EcTlPSheA=;
-        b=UJGOL2NP4Qt03K66utOGuKy8oJu1IOzgw6dc5XA7yX+eIcXmlL4gVzxBjrFURFh0em
-         Xe18MQldgudbytNpVobU4OZpLxnRgeM0jPDgFF3gHNq6dj/cv/o6JEkHIVbBUjm2LCQ+
-         5+eCgjeJpnQsv9mX8rkzLJSB7wM0gf3JRmwrAjCJEt6bKw5vFwtX37EKZVrAT2KFmezv
-         4rRf4qxEd4WraA6u5Cor1E8iR2svntYEhd+VoIhXuUGDUuwg0QdHnjW9AEVatCnqUbTE
-         YND96LiJFNBV/LgnDAYReIC+xORvKWL1vPKM7GsONj31QJSMGCv+FzIccrdwlHcFQSib
-         8hEg==
-X-Gm-Message-State: AOAM532OlMFCssWYKeZma29xE5C4+ZU+kqSOQC+e9kdB2wXJs3A/em8+
-        F07Ge5rWmVWJPf45dCpbjq2ihg6cpHs=
-X-Google-Smtp-Source: AGRyM1v1PPmjWq4SV8HLSELMJXXYJac3kl+1yrRZDnFUB/3o7xEpKnF+O4UkofHRAhv1VUtRac09srOrZT0=
+        bh=23Eq/JZXCr5ZESFLdA8mGk7iqKBFVcqZyF81SwbEVZM=;
+        b=AR/Iac34YkAtE1ISxJxPJBx7/U+Q4h/dM1+if0iKqv+Tc3e+kvZppVXKEi0Jk6bPzM
+         Meg3FL7Hbp1u4fkhH6JuBmofV2lX1jYm6L2MH0tBy+tydpOi0ysOlStPNL5pzg4cuPjy
+         lJrdkfGfkk+ZOsITmt7xQCx3+NzsEcTa9Mdx3SmE2fC2f1TZmLwjDJ9+klqVibhkFWg7
+         31Ssk36VLKtpiZ741x0XETMiJRV1wKSMl4OyWjeblaygREefuwjL6/KXKqVaFcxomXFN
+         6f1YDvu0XX1MHlwD0ZL0gtygPRzW7Zvy5BYcG0to+kOkeccPuI2JtMet5o7IqVPugDcr
+         37fA==
+X-Gm-Message-State: AJIora/17XOvps+P6WVHRgDevT+oXAYlln2+IRbZpvt1E0Pq7loC/HMz
+        l7RQTTWlOVSoTvUVoGbKBgIPDxvmeP0=
+X-Google-Smtp-Source: AGRyM1tYZu8naFBrPOdwNY8kQHUsmExve1u10RgmcgbOUsZASefh0dCXTNMyGlGcwSOHtj8di5Fm+kDBgc0=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:efc6:b0:167:8177:60a7 with SMTP id
- ja6-20020a170902efc600b00167817760a7mr5914061plb.110.1655237275404; Tue, 14
- Jun 2022 13:07:55 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:178f:b0:1e3:3ba:c185 with SMTP id
+ q15-20020a17090a178f00b001e303bac185mr192391pja.1.1655237277256; Tue, 14 Jun
+ 2022 13:07:57 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 20:06:49 +0000
+Date:   Tue, 14 Jun 2022 20:06:50 +0000
 In-Reply-To: <20220614200707.3315957-1-seanjc@google.com>
-Message-Id: <20220614200707.3315957-25-seanjc@google.com>
+Message-Id: <20220614200707.3315957-26-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220614200707.3315957-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH v2 24/42] KVM: selftests: Add and use helper to set vCPU's
- CPUID maxphyaddr
+Subject: [PATCH v2 25/42] KVM: selftests: Use vcpu_get_cpuid_entry() in PV
+ features test (sort of)
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -64,92 +64,90 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a helper to set a vCPU's guest.MAXPHYADDR, and use it in the test
-that verifies the emulator returns an error on an unknown instruction
-when KVM emulates in response to an EPT violation with a GPA that is
-legal in hardware but illegal with respect to the guest's MAXPHYADDR.
-
-Add a helper even though there's only a single user at this time.  Before
-its removal, mmu_role_test also stuffed guest.MAXPHYADDR, and the helper
-provides a small amount of clarity.
-
-More importantly, this eliminates a set_cpuid() user and an instance of
-modifying kvm_get_supported_cpuid()'s static "cpuid".
+Add a new helper, vcpu_clear_cpuid_entry(), to do a RMW operation on the
+vCPU's CPUID model to clear a given CPUID entry, and use it to clear
+KVM's paravirt feature instead of operating on kvm_get_supported_cpuid()'s
+static "cpuid" variable.  This also eliminates a user of
+the soon-be-defunct set_cpuid() helper.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/include/x86_64/processor.h |  2 ++
- tools/testing/selftests/kvm/lib/x86_64/processor.c     |  8 ++++++++
- .../testing/selftests/kvm/x86_64/emulator_error_test.c | 10 +---------
- 3 files changed, 11 insertions(+), 9 deletions(-)
+ .../testing/selftests/kvm/include/x86_64/processor.h |  1 +
+ tools/testing/selftests/kvm/lib/x86_64/processor.c   | 11 +++++++++++
+ tools/testing/selftests/kvm/x86_64/kvm_pv_test.c     | 12 +-----------
+ 3 files changed, 13 insertions(+), 11 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 555e73f96982..2097822b4b98 100644
+index 2097822b4b98..65f3a828c903 100644
 --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
 +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -656,6 +656,8 @@ static inline void vcpu_set_cpuid(struct kvm_vcpu *vcpu)
- 	vcpu_ioctl(vcpu, KVM_GET_CPUID2, vcpu->cpuid);
- }
+@@ -658,6 +658,7 @@ static inline void vcpu_set_cpuid(struct kvm_vcpu *vcpu)
  
-+void vcpu_set_cpuid_maxphyaddr(struct kvm_vcpu *vcpu, uint8_t maxphyaddr);
-+
+ void vcpu_set_cpuid_maxphyaddr(struct kvm_vcpu *vcpu, uint8_t maxphyaddr);
+ 
++void vcpu_clear_cpuid_entry(struct kvm_vcpu *vcpu, uint32_t function);
  void vcpu_set_or_clear_cpuid_feature(struct kvm_vcpu *vcpu,
  				     struct kvm_x86_cpu_feature feature,
  				     bool set);
 diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 5fd6563f23d1..cdc35dd765e7 100644
+index cdc35dd765e7..99f72f3b4382 100644
 --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
 +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -762,6 +762,14 @@ void vcpu_init_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid)
+@@ -770,6 +770,17 @@ void vcpu_set_cpuid_maxphyaddr(struct kvm_vcpu *vcpu, uint8_t maxphyaddr)
  	vcpu_set_cpuid(vcpu);
  }
  
-+void vcpu_set_cpuid_maxphyaddr(struct kvm_vcpu *vcpu, uint8_t maxphyaddr)
++void vcpu_clear_cpuid_entry(struct kvm_vcpu *vcpu, uint32_t function)
 +{
-+	struct kvm_cpuid_entry2 *entry = vcpu_get_cpuid_entry(vcpu, 0x80000008);
++	struct kvm_cpuid_entry2 *entry = vcpu_get_cpuid_entry(vcpu, function);
 +
-+	entry->eax = (entry->eax & ~0xff) | maxphyaddr;
++	entry->eax = 0;
++	entry->ebx = 0;
++	entry->ecx = 0;
++	entry->edx = 0;
 +	vcpu_set_cpuid(vcpu);
 +}
 +
  void vcpu_set_or_clear_cpuid_feature(struct kvm_vcpu *vcpu,
  				     struct kvm_x86_cpu_feature feature,
  				     bool set)
-diff --git a/tools/testing/selftests/kvm/x86_64/emulator_error_test.c b/tools/testing/selftests/kvm/x86_64/emulator_error_test.c
-index bb410c359599..9d08ccdf6604 100644
---- a/tools/testing/selftests/kvm/x86_64/emulator_error_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/emulator_error_test.c
-@@ -151,8 +151,6 @@ static uint64_t process_ucall(struct kvm_vcpu *vcpu)
+diff --git a/tools/testing/selftests/kvm/x86_64/kvm_pv_test.c b/tools/testing/selftests/kvm/x86_64/kvm_pv_test.c
+index e3bb9b803944..7ab61f3f2a20 100644
+--- a/tools/testing/selftests/kvm/x86_64/kvm_pv_test.c
++++ b/tools/testing/selftests/kvm/x86_64/kvm_pv_test.c
+@@ -142,15 +142,6 @@ static void guest_main(void)
+ 	GUEST_DONE();
+ }
  
- int main(int argc, char *argv[])
+-static void clear_kvm_cpuid_features(struct kvm_cpuid2 *cpuid)
+-{
+-	struct kvm_cpuid_entry2 ent = {0};
+-
+-	ent.function = KVM_CPUID_FEATURES;
+-	TEST_ASSERT(set_cpuid(cpuid, &ent),
+-		    "failed to clear KVM_CPUID_FEATURES leaf");
+-}
+-
+ static void pr_msr(struct ucall *uc)
  {
--	struct kvm_cpuid_entry2 *entry;
--	struct kvm_cpuid2 *cpuid;
- 	struct kvm_vcpu *vcpu;
- 	struct kvm_vm *vm;
- 	uint64_t gpa, pte;
-@@ -166,13 +164,7 @@ int main(int argc, char *argv[])
+ 	struct msr_data *msr = (struct msr_data *)uc->args[0];
+@@ -209,8 +200,7 @@ int main(void)
  
- 	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
+ 	vcpu_enable_cap(vcpu, KVM_CAP_ENFORCE_PV_FEATURE_CPUID, 1);
  
--	cpuid = kvm_get_supported_cpuid();
--
--	entry = kvm_get_supported_cpuid_index(0x80000008, 0);
--	entry->eax = (entry->eax & 0xffffff00) | MAXPHYADDR;
--	set_cpuid(cpuid, entry);
--
--	vcpu_init_cpuid(vcpu, cpuid);
-+	vcpu_set_cpuid_maxphyaddr(vcpu, MAXPHYADDR);
+-	clear_kvm_cpuid_features(vcpu->cpuid);
+-	vcpu_set_cpuid(vcpu);
++	vcpu_clear_cpuid_entry(vcpu, KVM_CPUID_FEATURES);
  
- 	rc = kvm_check_cap(KVM_CAP_EXIT_ON_EMULATION_FAILURE);
- 	TEST_ASSERT(rc, "KVM_CAP_EXIT_ON_EMULATION_FAILURE is unavailable");
+ 	vm_init_descriptor_tables(vm);
+ 	vcpu_init_descriptor_tables(vcpu);
 -- 
 2.36.1.476.g0c4daa206d-goog
 

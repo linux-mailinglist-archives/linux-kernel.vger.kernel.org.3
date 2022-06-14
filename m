@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5554954BC72
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D83454BC7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357206AbiFNVAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 17:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54568 "EHLO
+        id S1357370AbiFNVCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 17:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245736AbiFNVAx (ORCPT
+        with ESMTP id S239539AbiFNVB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 17:00:53 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E0250076;
-        Tue, 14 Jun 2022 14:00:53 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id i16so10717787ioa.6;
-        Tue, 14 Jun 2022 14:00:53 -0700 (PDT)
+        Tue, 14 Jun 2022 17:01:59 -0400
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D667B50440;
+        Tue, 14 Jun 2022 14:01:58 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id r5so10744606iod.5;
+        Tue, 14 Jun 2022 14:01:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=6wiAEAPY25hq39gjHNba18GOciZXRMGE+/vSibk2A0Y=;
-        b=pzKp/jCj0hGhQhT1oPjAQR/DQOF4LYGMx/Z69dnZw4Aw4X8PMrT+BUVjMlOWfDgCii
-         5EryCoSdyeC5dmAQ/PMmp+gr3UaAKLA1uxicimv9Ua5fY3XObX7yPQNkGTmp0+Z3qsJR
-         mOqZBWWk/U82hMofQENt/cTqVNBdfRtGCc6w1Z6Cf744y6AoBu0GsgrmPemuJd2kDhcJ
-         aKjO7Bq9ROMQfWRb91fSbKxc7Npd1MXRJaGKCyRYt8ogWmKHn8/aWk1tP7Gn2KPbZElK
-         bGPWZQwrDNKcSWzmjbYDn0IJ3Xr0dlNmR9rlC+UzlT2vFaWiZb2DKFlNzO+ClgzDVG2N
-         vYyw==
-X-Gm-Message-State: AOAM532e2A48yNjE839oK4utBZK0MHtmVisDGe2uhGx178OiI6aAWqGf
-        ILDtMy1xNYlMdbZGd4htoQ==
-X-Google-Smtp-Source: ABdhPJzIytzKnEVgu1QnavMIZw8F2v0fC5i8fFAEMNNu8RKGv/X2WWcvM5eIkW4e+95ltwCWuCHhLA==
-X-Received: by 2002:a05:6638:1342:b0:331:e382:b0af with SMTP id u2-20020a056638134200b00331e382b0afmr4132233jad.32.1655240452595;
-        Tue, 14 Jun 2022 14:00:52 -0700 (PDT)
+        bh=TL1WTuBKTa7cKzECeYRrXncjAWiPzLakQFszrf4wMsQ=;
+        b=sF3qEfIPj/cU5Uyl4lSEVWoH7hI1MeO8ozYDAHNMn2ybJZJ9K0KuxukTQv3/70AO+1
+         6RFP1IXtdnP+1R6Y54DmFVzZ7IApCddKe3caPvkhmHSh/hhRlaym6BKaEUteix+pX5rk
+         xd2F+LHEt7+Zd5Ejug0GkSA5SzeLNuOy7b61UAMVKMQoe/VjKdI8hd4lk/SAE9Vu86Bd
+         hyTqQBLVeVauZeaFGuNA80oq0vfNdi3ihMZb/NM/+CxDp2LBUMlRadR0TWuQwOBv5bnR
+         1jpkciBGxuJX7dJfF0ybRl0FmAGY5BruVC1E8qM67z56OKw16G2aDPsevetm/vofV5N1
+         iCXQ==
+X-Gm-Message-State: AOAM533QZWu9e7WaMig0IerfWwILiGAUNAm/oBe/tCEuHjGbnNRboz9k
+        U3J7S88m5qhWKzQwcLz8ZEUcSG0/aw==
+X-Google-Smtp-Source: ABdhPJz3ckJeS9cJKzeQ/ZlqP/pJ3ZtN4q5nNLKM8HZwAHwD3kcckohHKsoPRuyQF8ZBO/8ggipJeQ==
+X-Received: by 2002:a05:6638:240a:b0:332:783:156b with SMTP id z10-20020a056638240a00b003320783156bmr3706950jat.306.1655240517981;
+        Tue, 14 Jun 2022 14:01:57 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id u12-20020a92d1cc000000b002d77ea49cd7sm5954020ilg.28.2022.06.14.14.00.51
+        by smtp.gmail.com with ESMTPSA id cb12-20020a0566381b0c00b00331cf064215sm5271294jab.65.2022.06.14.14.01.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 14:00:52 -0700 (PDT)
-Received: (nullmailer pid 2556989 invoked by uid 1000);
-        Tue, 14 Jun 2022 21:00:50 -0000
-Date:   Tue, 14 Jun 2022 15:00:50 -0600
+        Tue, 14 Jun 2022 14:01:57 -0700 (PDT)
+Received: (nullmailer pid 2562716 invoked by uid 1000);
+        Tue, 14 Jun 2022 21:01:56 -0000
+Date:   Tue, 14 Jun 2022 15:01:56 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Andy Gross <agross@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v6 3/3] dt-bindings: mtd: qcom_nandc: document
- qcom,boot-partitions binding
-Message-ID: <20220614210050.GA2556790-robh@kernel.org>
-References: <20220609132344.17548-1-ansuelsmth@gmail.com>
- <20220609132344.17548-4-ansuelsmth@gmail.com>
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, agross@kernel.org, sboyd@kernel.org,
+        robh+dt@kernel.org, jonathan@marek.ca,
+        Dmitry Baryshkov <dmityr.baryshkov@linaro.org>,
+        devicetree@vger.kernel.org, bjorn.andersson@linaro.org,
+        linux-arm-msm@vger.kernel.org, krzk+dt@kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        mturquette@baylibre.com,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v5 3/6] dt-bindings: clock: Add Qcom SM8350 GPUCC bindings
+Message-ID: <20220614210156.GA2562380-robh@kernel.org>
+References: <20220609092940.304740-1-robert.foss@linaro.org>
+ <20220609092940.304740-4-robert.foss@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220609132344.17548-4-ansuelsmth@gmail.com>
+In-Reply-To: <20220609092940.304740-4-robert.foss@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -72,19 +70,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Jun 2022 15:23:44 +0200, Ansuel Smith wrote:
-> Document new qcom,boot-partition binding used to apply special
-> read/write layout to boot partitions.
+On Thu, 09 Jun 2022 11:29:37 +0200, Robert Foss wrote:
+> Add device tree bindings for graphics clock controller for
+> Qualcomm Technology Inc's SM8350 SoCs.
 > 
-> QCOM apply a special layout where spare data is not protected
-> by ECC for some special pages (used for boot partition). Add
-> Documentation on how to declare these special pages.
-> 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> Reviewed-by: Dmitry Baryshkov <dmityr.baryshkov@linaro.org>
 > ---
->  .../devicetree/bindings/mtd/qcom,nandc.yaml   | 27 +++++++++++++++++++
->  1 file changed, 27 insertions(+)
+> 
+> Changes since v3
+>  - Separate from qcom,gpucc
+>  - Remove clock-names
+>  - Make example sm8350 based
+>  - Changed author to me due to size of changes
+> 
+> 
+> 
+>  .../bindings/clock/qcom,gpucc-sm8350.yaml     | 72 +++++++++++++++++++
+>  include/dt-bindings/clock/qcom,gpucc-sm8350.h | 52 ++++++++++++++
+>  2 files changed, 124 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,gpucc-sm8350.h
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>

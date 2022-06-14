@@ -2,61 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A29A54A3C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:48:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 452D954A3CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:50:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348779AbiFNBsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 21:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
+        id S1349139AbiFNBuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 21:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234470AbiFNBs2 (ORCPT
+        with ESMTP id S236353AbiFNBuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 21:48:28 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD63C2AE33;
-        Mon, 13 Jun 2022 18:48:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1C809CE1763;
-        Tue, 14 Jun 2022 01:48:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C7EC3411E;
-        Tue, 14 Jun 2022 01:48:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655171303;
-        bh=kHVpMpq++uoILG8nEpsnJIRDObfNN0ura8aEr/40J5g=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PHLniVGe96eCVgQd6i8SCb2VQ8SV2TbyBAvvsjPqz+jBf0JxbnHKYBXaBJgAin57x
-         l23HXLkgQiLI1XRR9uTlcpitTheTlSWA01VSo/6F8MU/7SbitF6DvTOJW16KsjlUZr
-         L2SATQZ6jbpEzm53tWAXBk48vhfthzhWfSfQiubKyxynPTycF5CwGEZyuQYSHlh+dY
-         dpfuZXLECuvU6XTTZPJvUW/SZxr96ZaNDzeDzRdEB/iANHSDdEnoj8RljdoauDMEe6
-         Vxzdc+FvG3dCMN9lcfhmc5tXsxxJzw++7El1+Vbm4pv3JmQKOAg/Y5xkMOzskV7SuF
-         yaZRfrhieTW3Q==
-Message-ID: <1544ed72-0865-6cff-e9fa-02a1eb1ed50d@kernel.org>
-Date:   Tue, 14 Jun 2022 09:48:17 +0800
+        Mon, 13 Jun 2022 21:50:10 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B4F2C10A;
+        Mon, 13 Jun 2022 18:50:06 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 25so9549814edw.8;
+        Mon, 13 Jun 2022 18:50:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GC4cC6xqLpNjJcTRVc9cbkZ2veanyHZIOpz/10KHRlE=;
+        b=SylH0oLhpiSNSMQ24eXb2MxaYkBgTx3hdy3OloWuxF7tYYVBMSbP5jX6Ug6AFkCwkH
+         TCJYe5Cj8MOkhwk7mQCXwMK+/57yzF6puQAJGzz1VaEn7JAZrtThZJ9Fa93puXpEmugT
+         OEHbE1yvtIgLWKc1yeI+7T3TbRxRWpY6BCKGFbSeYHyd5qcIiPGsVR+oCUpRb9HfWCzl
+         PpIGBpmjN6epxVKue9GJzjze86HTIAbW1iRJqA7tWN/874C56e4Lac80MEURqohZoo31
+         tHCgmuRDQ1XRNOUu5wmACYTWUqjSOn5o9XsJHM4dPJ+wOkwydFJjSWdYeJ97QSUHQbZX
+         Kmuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GC4cC6xqLpNjJcTRVc9cbkZ2veanyHZIOpz/10KHRlE=;
+        b=ICxccc9LRdcN2HRhv3473dvxtyXU1UIxMU4iXMPAtL+GDrM0cG42wTnXDR3TPjBoUL
+         actjHGJP7Fw7Pnvs5ewF/jWjc5X9T3MshAtN55Ql+yHK4sMWmyYJ1MPLjPJr213CTQbM
+         DCKNK+WYOyJnS3iLrOc97zYnVTzDHQGyJKLasXAev9gZwgJjNP5awT6Ck3BjCwxsvFBK
+         Xeg/fl6cUHHLnBx8ZKAflfBHwG0q/zStpzVL5UAMlWsZ75ivMW6ouQLp+fuh8Rv/DpAP
+         pA6/34CjAJ6N8guhmwzWk/HEZLRVLWnhG5xdkCCf0bTp0OY3js+IseS3yjcQy2UvZHzS
+         rPqg==
+X-Gm-Message-State: AJIora8VEngQ3nbVui6+5sBMbetuoevd5UATSiW9acw8ywYWYnE5u/Su
+        QhkRj8Bs/TvawWYOUoo7Z1uBaSWKM7+Six92CpQ=
+X-Google-Smtp-Source: ABdhPJwnROWsbMWlDeqxyGahZkqEhUbMS48bk+kBqxa4mCeEmj/YxhYUX7snuSgtPgK3zSD2HRg/Po/pa2lotiC/bIY=
+X-Received: by 2002:a05:6402:3681:b0:433:2b63:4866 with SMTP id
+ ej1-20020a056402368100b004332b634866mr3065276edb.295.1655171405197; Mon, 13
+ Jun 2022 18:50:05 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2] docs: filesystems: f2fs: fix description about
- compress ioctl
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>, Chao Liu <chaoliu719@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yue Hu <huyue2@coolpad.com>,
-        Wayne Zhang <zhangwen@coolpad.com>,
-        Chao Liu <liuchao@coolpad.com>
-References: <20220613020800.3379482-1-chaoliu719@gmail.com>
- <Yqaw3VTD46PAMN8O@casper.infradead.org> <Yqbu+BArbUNGvft9@liuchao-VM>
- <87czfc1nr8.fsf@meer.lwn.net>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <87czfc1nr8.fsf@meer.lwn.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220613071243.12961-1-dzm91@hust.edu.cn> <Yqbu8TwmaXdBiIBs@debian.me>
+ <alpine.DEB.2.22.394.2206131212160.2812@hadrien>
+In-Reply-To: <alpine.DEB.2.22.394.2206131212160.2812@hadrien>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Tue, 14 Jun 2022 09:49:30 +0800
+Message-ID: <CAD-N9QUOk938-+1CtGfWNKUvWowknKScLuFXXkFAv59M=-F84g@mail.gmail.com>
+Subject: Re: [PATCH] dev-tools: fix one invalid url
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Nicolas Palix <nicolas.palix@imag.fr>,
+        Jonathan Corbet <corbet@lwn.net>, cocci@inria.fr,
+        linux-doc@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,39 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/14 1:23, Jonathan Corbet wrote:
-> Chao Liu <chaoliu719@gmail.com> writes:
-> 
->> On Mon, Jun 13, 2022 at 04:37:01AM +0100, Matthew Wilcox wrote:
->>> On Mon, Jun 13, 2022 at 10:08:00AM +0800, Chao Liu wrote:
->>>> v2:
->>>> - s/file size/filesize/
->>>
->>> Why would you change it to be wrong?
->>>
->>
->> This is a suggestion from Chao Yu. Maybe he has some other considerations.
-> 
-> Sorry, I should have replied to that.  I disagree with that suggestion.
-> "Filesize" is not an English word, and there doesn't seem to be any
-> reason to use it in our docs.
+On Mon, Jun 13, 2022 at 6:12 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+>
+>
+>
+> On Mon, 13 Jun 2022, Bagas Sanjaya wrote:
+>
+> > On Mon, Jun 13, 2022 at 03:12:42PM +0800, Dongliang Mu wrote:
+> > > From: Dongliang Mu <mudongliangabcd@gmail.com>
+> > >
+> > > Fix the invalid url about Semantic Patch Language
+> > >
+> >
+> > I think what this patch doing is to point SPL reference URL from old
+> > Coccinelle documentation (doc root) to actual SPL doc entry on new
+> > Coccinelle page, right? If so, "fix invalid URL" may not be right patch
+> > description and title.
+>
+> Agreed, thanks for the suggestion.
 
-My bad, out of mind at that time, sorry for my wrong suggestion...
+Okay. Let's modify the title to "modify SPL reference URL to actual
+SPL doc entry".
 
-> 
-> <checks>
-> 
-> We have to occurrences now - one already in the f2fs docs.  I think we
-> shouldn't add more.  So my plan is to apply the first version of this
-> patch.  Chao Liu: is there a reason why you didn't add the Reviewed-by
-> from Chao Yu in the second version?  Chao Yu: is that tag still
-> applicable even without the "filesize" change?
+BTW, I modify this URL because the previous URL cannot be accessed.
 
-Yes.
-
-Thanks,
-
-> 
-> Thanks,
-> 
-> jon
+>
+> julia

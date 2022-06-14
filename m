@@ -2,132 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0010254B2CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:12:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EEF54B2D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240246AbiFNOLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54282 "EHLO
+        id S240816AbiFNOMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236262AbiFNOLq (ORCPT
+        with ESMTP id S234671AbiFNOMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:11:46 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC6F344C8;
-        Tue, 14 Jun 2022 07:11:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=0up0HQhrsxc90C88YMmJQmlVHMrBI86sKQklFU28KR8=; b=Hp1+8w4PUY58i0Tlkd3yeyLr1t
-        d+416tMt71AkGKbx1PRjrgGubVu2CXrnBDpBbOFaBdEqpkvYB8C6w0aNophxcs4gWQR/KIi23kUYS
-        eqjPJOORRCQ6F8TvdPT1A4BrmbM94f4UU15NqaO8OhfRs9kLxSkms6mHkPz0uGdIBaAkgiPHvSLs4
-        ODNsEb4eEx0Z5cMEzrgDmqfDAA9slhFg/jpbigImbW9YKf+EKQHLrU961QQpO96oP5oz4GgzE9G0Y
-        rSE0lUykUF5rhIZ/Mtf2q8mCxqjJO5cfB2r/YAeutwggT/qTVApUrNSQtSyZk1V0iOte8BdAD1PQc
-        yvesVwal19dT9zYIdQ56uNLn9Kurfr7tiBLrfQC1upVxd/OkXfVJJ3OMskAf8O61wVRlGWUwH8exR
-        MUge0IC5VloTMaquBTx2Ar46bMg1RyoRrYfyeLUj+MwtwbvwN3SdgGRXwbjS6nQ6/DnS9cC8RuCeT
-        NuSia+FFUU/KTMyKGeQQ4t1ufx4/736ogVnN3cIkPnDkm+jnMVMpdElh9vrOQeOw1DrUxSs81vwyJ
-        h4PRMK2TxpwLa+4YAkGqSNjsSr5tmjpddr7jWVsakCBVVZcaVjRpq/shELYc6KDRLkvWr1jRQds5L
-        VzX8eOOz15rMBARpKWHy3gPVUNq1YCLWDmZv6YE9c=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        David Howells <dhowells@redhat.com>,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] 9p: fix EBADF errors in cached mode
-Date:   Tue, 14 Jun 2022 16:11:35 +0200
-Message-ID: <1796737.mFSqR1lx0c@silver>
-In-Reply-To: <YqiC8luskkxUftQl@codewreck.org>
-References: <YqW5s+GQZwZ/DP5q@codewreck.org> <19026878.01OTk6HtWb@silver>
- <YqiC8luskkxUftQl@codewreck.org>
+        Tue, 14 Jun 2022 10:12:15 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFDF32EF0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:12:14 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id e24so8625170pjt.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:12:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=wt50VBwjqpTS+/G8tO4GidOfAF7iUzFpw0Pr+oMctoQ=;
+        b=w17NCk5v7hTrKT98JalJHGiwkZUnysDrIOt0xIL+ZfgmulN2Pe7Y44CgfGG9uiWDQf
+         t4E+EOVCM04+uOCFXCRa7SS1ehi2ga6R8OqpTHT45228US8eYJ4w+wIIbwc9UIdi2Lf6
+         q7iU/oCE7khTKZk0S9NTDBXTOQcrOPEflJqIEmIaB0o+J8JOGvp//Wv9utdmXloEgDkY
+         0UEXuitlJReGMKuUpICVPV/DgSXwnVwIHtKQ3xm8ffsyJIQYFRDqQRRHooKvg80U4fdG
+         G+eMNmTEaXA85UFcw6A1FGTbgP2hIKYKLBFTwzyopOTYKUAKWW/TzSVtM0VIU3CoNGAw
+         L1/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=wt50VBwjqpTS+/G8tO4GidOfAF7iUzFpw0Pr+oMctoQ=;
+        b=K/O0lIGQ1gP88Sn/c2p9b01rxyPaQ1okbh5oxhZ6PVFPpmbUalAldbXQXgly8TAV+Q
+         EuynfvhmaQ5hO+psD8laaweE9kP7qudX6LYF/WvvLc9jPykHi7/XunhboCIvZMEAiW9k
+         c6CwZdDVhGRYpWMqfmA3XmVfsBXLEQuRHQYgs3DuEwDQImpMgal+emQdUbKctWPU7i3M
+         +uXmt/88RcIv2G/CiPqnHqCvzL9+2kgxmmW5wL1Lh3pDQerVh6138FbmxA0fnulB7HkX
+         PZ2eWSOlxBE7uD7e1skdTsWBasQEik1AfopTgubVubMRePGUC2e++BA+594CK+cGiUYo
+         7PgA==
+X-Gm-Message-State: AJIora/XTAZ4LULEoIje2MbgV9Do1DAGn8HmgfFkRNW9Qt5KhECtmrQq
+        SI11G3LmEJLY0TolCNkaFUSOkQ==
+X-Google-Smtp-Source: AGRyM1vSg+8mvYVjkbD5Gsw8tnb163S1V8imKaSefeB3v7oLpzERW0jK7HH6HZfBDLZE1BSvuu2sJw==
+X-Received: by 2002:a17:902:eccd:b0:166:3e34:4d05 with SMTP id a13-20020a170902eccd00b001663e344d05mr4493060plh.75.1655215933716;
+        Tue, 14 Jun 2022 07:12:13 -0700 (PDT)
+Received: from [10.20.0.186] ([199.101.192.9])
+        by smtp.gmail.com with ESMTPSA id v13-20020a637a0d000000b003fad46ceb85sm7920085pgc.7.2022.06.14.07.12.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 07:12:13 -0700 (PDT)
+Subject: Re: [PATCH v2 3/3] crypto: hisilicon/qm - defining the device
+ isolation strategy
+To:     Kai Ye <yekai13@huawei.com>, gregkh@linuxfoundation.org,
+        herbert@gondor.apana.org.au
+Cc:     linuxarm@huawei.com, linux-kernel@vger.kernel.org,
+        wangzhou1@hisilicon.com, linux-crypto@vger.kernel.org,
+        linux-accelerators@lists.ozlabs.org
+References: <20220614122943.1406-1-yekai13@huawei.com>
+ <20220614122943.1406-4-yekai13@huawei.com>
+From:   Zhangfei Gao <zhangfei.gao@linaro.org>
+Message-ID: <82ce379f-73f4-0e57-ec32-e1ab1d3ef04d@linaro.org>
+Date:   Tue, 14 Jun 2022 22:12:07 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220614122943.1406-4-yekai13@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Dienstag, 14. Juni 2022 14:45:38 CEST Dominique Martinet wrote:
-> Christian Schoenebeck wrote on Tue, Jun 14, 2022 at 02:10:01PM +0200:
-> > It definitely goes into the right direction, but I think it's going a bit
-> > too far by using writeback_fid also in cases where it is not necessary
-> > and wasn't used before in the past.
-> 
-> Would help if I had an idea of what was used where in the past.. :)
-> 
-> From a quick look at the code, checking out v5.10,
-> v9fs_vfs_writepage_locked() used the writeback fid always for all writes
-> v9fs_vfs_readpages is a bit more complex but only seems to be using the
-> "direct" private_data fid for reads...
-> It took me a bit of time but I think the reads you were seeing on
-> writeback fid come from v9fs_write_begin that does some readpage on the
-> writeback fid to populate the page before a non-filling write happens.
 
-Yes, the overall picture in the past was not clear to me either.
 
-To be more specific, I was reading your patch as if it would e.g. also use the 
-writeback_fid if somebody explicitly called read() (i.e. not an implied read 
-caused by a partial write back), and was concerned about a potential privilege 
-escalation. Maybe it's just a theoretical issue, as this case is probably 
-already catched on a higher, general fs handling level, but worth 
-consideration.
+On 2022/6/14 下午8:29, Kai Ye via Linux-accelerators wrote:
+> Define the device isolation strategy by the device driver. if the
+> AER error frequency exceeds the value of setting for a certain
+> period of time, The device will not be available in user space. The VF
+> device use the PF device isolation strategy. All the hardware errors
+> are processed by PF driver.
+>
+> Signed-off-by: Kai Ye <yekai13@huawei.com>
+> ---
+>   drivers/crypto/hisilicon/qm.c | 157 +++++++++++++++++++++++++++++++---
+>   include/linux/hisi_acc_qm.h   |   9 ++
+>   2 files changed, 152 insertions(+), 14 deletions(-)
+>
+> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+> index ad83c194d664..47c41fa52693 100644
+> --- a/drivers/crypto/hisilicon/qm.c
+> +++ b/drivers/crypto/hisilicon/qm.c
+> @@ -12,7 +12,6 @@
+>   #include <linux/pm_runtime.h>
+>   #include <linux/seq_file.h>
+>   #include <linux/slab.h>
+> -#include <linux/uacce.h>
+>   #include <linux/uaccess.h>
+>   #include <uapi/misc/uacce/hisi_qm.h>
+>   #include <linux/hisi_acc_qm.h>
+> @@ -417,6 +416,16 @@ struct hisi_qm_resource {
+>   	struct list_head list;
+>   };
+>   
+> +/**
+> + * struct qm_hw_err - structure of describes the device err
+> + * @list: hardware error list
+> + * @tick_stamp: timestamp when the error occurred
+> + */
+> +struct qm_hw_err {
+> +	struct list_head list;
+> +	unsigned long long tick_stamp;
+> +};
+> +
+>   struct hisi_qm_hw_ops {
+>   	int (*get_vft)(struct hisi_qm *qm, u32 *base, u32 *number);
+>   	void (*qm_db)(struct hisi_qm *qm, u16 qn,
+> @@ -3278,6 +3287,7 @@ static int hisi_qm_uacce_get_queue(struct uacce_device *uacce,
+>   	qp->event_cb = qm_qp_event_notifier;
+>   	qp->pasid = arg;
+>   	qp->is_in_kernel = false;
+> +	atomic_inc(&qm->uacce_ref);
+>   
+>   	return 0;
+>   }
+> @@ -3285,7 +3295,9 @@ static int hisi_qm_uacce_get_queue(struct uacce_device *uacce,
+>   static void hisi_qm_uacce_put_queue(struct uacce_queue *q)
+>   {
+>   	struct hisi_qp *qp = q->priv;
+> +	struct hisi_qm *qm = qp->qm;
+>   
+> +	atomic_dec(&qm->uacce_ref);
 
-> > What about something like this in v9fs_init_request() (yet untested):
-> >     /* writeback_fid is always opened O_RDWR (instead of just O_WRONLY)
-> >     
-> >      * explicitly for this case: partial write backs that require a read
-> >      * prior to actual write and therefore requires a fid with read
-> >      * capability.
-> >      */
-> >     
-> >     if (rreq->origin == NETFS_READ_FOR_WRITE)
-> >     
-> >         fid = v9inode->writeback_fid;
-> 
-> ... Which seems to be exactly what this origin is about, so if that
-> works I'm all for it.
-> 
-> > If desired, this could be further constrained later on like:
-> >     if (rreq->origin == NETFS_READ_FOR_WRITE &&
-> >     
-> >         (fid->mode & O_ACCMODE) == O_WRONLY)
-> >     
-> >     {
-> >     
-> >         fid = v9inode->writeback_fid;
-> >     
-> >     }
-> 
-> That also makes sense, if the fid mode has read permissions we might as
-> well use these as the writeback fid would needlessly be doing root IOs.
-> 
-> > I will definitely give these options some test spins here, a short
-> > feedback
-> > ahead would be appreciated though.
-> 
-> Please let me know how that works out, I'd be happy to use either of
-> your versions instead of mine.
-> If I can be greedy though I'd like to post it together with the other
-> couple of fixes next week, so having something before the end of the
-> week would be great -- I think even my first overkill version early and
-> building on it would make sense at this point.
-> 
-> But I think you've got the right end, so hopefully won't be needing to
-> delay
+Can we use qm state or qp state instead?
 
-I need a day or two for testing, then I will report back for sure. So it 
-should perfectly fit into your intended schedule.
+enum qm_state {
+         QM_INIT = 0,
+         QM_START,
+         QM_CLOSE,
+         QM_STOP,
+};
 
-Thanks!
+enum qp_state {
+         QP_INIT = 1,
+         QP_START,
+         QP_STOP,
+         QP_CLOSE,
+};
 
-Best regards,
-Christian Schoenebeck
-
+Thanks
 

@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C521054AE31
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D431654AE02
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353888AbiFNKUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 06:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        id S242379AbiFNKMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 06:12:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353743AbiFNKUl (ORCPT
+        with ESMTP id S230313AbiFNKMg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 06:20:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7D7947549
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 03:20:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655202036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=94Tijhs2krNsUh5sgMXTyng6F8TEy2CILJiweYDy2xE=;
-        b=DaM0mpWSW8cFVRTPcYZPMX2mt1JVh8rpYB5pZo4/GBxAZUJheRqGmXiltQ5WF8k8X1L33B
-        2dcSDX4M2W1ubKxEKFYsoO/oza1mvsY6g9unCTS9tZBE6hg95AdUZRFSrK8UjQ2Q+bXHDY
-        iATVjlpPvcp1sKWsr+WB+kK1K4/kFAE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-575-oZmcGoKQNE-UgM_JJWpd_A-1; Tue, 14 Jun 2022 06:20:33 -0400
-X-MC-Unique: oZmcGoKQNE-UgM_JJWpd_A-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 14 Jun 2022 06:12:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2717A22BC9;
+        Tue, 14 Jun 2022 03:12:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 50276811E76;
-        Tue, 14 Jun 2022 10:20:31 +0000 (UTC)
-Received: from localhost (ovpn-12-211.pek2.redhat.com [10.72.12.211])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3A42CC52D63;
-        Tue, 14 Jun 2022 10:20:29 +0000 (UTC)
-Date:   Tue, 14 Jun 2022 18:20:25 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Wupeng Ma <mawupeng1@huawei.com>
-Cc:     corbet@lwn.net, will@kernel.org, ardb@kernel.org,
-        catalin.marinas@arm.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, dvhart@infradead.org, andy@infradead.org,
-        rppt@kernel.org, akpm@linux-foundation.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, paulmck@kernel.org, keescook@chromium.org,
-        songmuchun@bytedance.com, rdunlap@infradead.org,
-        damien.lemoal@opensource.wdc.com, swboyd@chromium.org,
-        wei.liu@kernel.org, robin.murphy@arm.com, david@redhat.com,
-        anshuman.khandual@arm.com, thunder.leizhen@huawei.com,
-        wangkefeng.wang@huawei.com, gpiccoli@igalia.com,
-        chenhuacai@kernel.org, geert@linux-m68k.org,
-        vijayb@linux.microsoft.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-mm@kvack.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 5/5] memblock: Disable mirror feature if kernelcore is
- not specified
-Message-ID: <Yqhg6abZDGZSpJ7+@MiWiFi-R3L-srv>
-References: <20220614092156.1972846-1-mawupeng1@huawei.com>
- <20220614092156.1972846-6-mawupeng1@huawei.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C3D9860AEA;
+        Tue, 14 Jun 2022 10:12:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C89FC3411B;
+        Tue, 14 Jun 2022 10:12:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655201553;
+        bh=OU/NN+viO7AEHR96HAV2XGs7BeFoWc8CIQP0hQgj6vU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=N0h9lZRJmQuixNqG6kalxSCRX53PXSuiPfVYsOlhI8XrzjFCEBMrsy427hsL/bzUa
+         nM/e5pkmu6fOdd7zZJTwHbjipGLTPtj191vmJi/3aFaGrbPAzTwxyKm2iRCLcIU4P5
+         0W1UPsirm5b3jLJLQB5nO2oAe2mFBBx/Uxy+Ut72hOrEDS0zluBfBV10ussQJFdX5k
+         YC3oJC7l13zFtvUvhHcc7y9kQbsx+etzhD9zmWelnUdASAmKnOL5nRgoZOVWi7V8El
+         Oa7P6VbFTmnCbRdpuHJEMoV3JbqmnxOFqlImK18KaWBdDghwG+7RM7Azl4aKS0gGky
+         1GJdoKQuuR7Rw==
+Date:   Tue, 14 Jun 2022 11:21:42 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Subject: Re: [PATCH v3 1/6] iio: adc: meson_saradc: Don't attach managed
+ resource to IIO device object
+Message-ID: <20220614112142.3eb70a8d@jic23-huawei>
+In-Reply-To: <Ypo80/NpWLLP43jm@smile.fi.intel.com>
+References: <20220603100004.70336-1-andriy.shevchenko@linux.intel.com>
+        <20220603170612.561edfbf@jic23-huawei>
+        <20220603172307.5d2f3c52@jic23-huawei>
+        <20220603172920.3239bbd6@jic23-huawei>
+        <Ypo80/NpWLLP43jm@smile.fi.intel.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614092156.1972846-6-mawupeng1@huawei.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,84 +65,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/14/22 at 05:21pm, Wupeng Ma wrote:
-> From: Ma Wupeng <mawupeng1@huawei.com>
-> 
-> If system have some mirrored memory and mirrored feature is not specified
-> in boot parameter, the basic mirrored feature will be enabled and this will
-> lead to the following situations:
-> 
-> - memblock memory allocation prefers mirrored region. This may have some
->   unexpected influence on numa affinity.
-> 
-> - contiguous memory will be split into several parts if parts of them
->   is mirrored memory via memblock_mark_mirror().
-> 
-> To fix this, variable mirrored_kernelcore will be checked in
-> memblock_mark_mirror(). Mark mirrored memory with flag MEMBLOCK_MIRROR iff
-> kernelcore=mirror is added in the kernel parameters.
-> 
-> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
-> Acked-by: Ard Biesheuvel <ardb@kernel.org>
-> ---
->  mm/internal.h   | 2 ++
->  mm/memblock.c   | 3 +++
->  mm/page_alloc.c | 2 +-
->  3 files changed, 6 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/internal.h b/mm/internal.h
-> index c0f8fbe0445b..ddd2d6a46f1b 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -861,4 +861,6 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags);
->  
->  DECLARE_PER_CPU(struct per_cpu_nodestat, boot_nodestats);
->  
-> +extern bool mirrored_kernelcore;
-> +
->  #endif	/* __MM_INTERNAL_H */
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index b1d2a0009733..a9f18b988b7f 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -924,6 +924,9 @@ int __init_memblock memblock_clear_hotplug(phys_addr_t base, phys_addr_t size)
->   */
->  int __init_memblock memblock_mark_mirror(phys_addr_t base, phys_addr_t size)
->  {
-> +	if (!mirrored_kernelcore)
-> +		return 0;
+On Fri, 3 Jun 2022 19:54:43 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-memblock_mark_mirror() is just a wrapper, maybe we should check this in
-efi_find_mirror(). Otherwise, how do we explain the message printed out
-at below in boot log if we don't mark mirror memory at all?
-
-void __init efi_find_mirror(void)
-{
-......
-	if (mirror_size)
-                pr_info("Memory: %lldM/%lldM mirrored memory\n",
-                        mirror_size>>20, total_size>>20);
-}
-
-> +
->  	system_has_some_mirror = true;
->  
->  	return memblock_setclr_flag(base, size, 1, MEMBLOCK_MIRROR);
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index e008a3df0485..10dc35ec7479 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -356,7 +356,7 @@ static unsigned long required_kernelcore_percent __initdata;
->  static unsigned long required_movablecore __initdata;
->  static unsigned long required_movablecore_percent __initdata;
->  static unsigned long zone_movable_pfn[MAX_NUMNODES] __initdata;
-> -static bool mirrored_kernelcore __meminitdata;
-> +bool mirrored_kernelcore __initdata_memblock;
->  
->  /* movable_zone is the "real" zone pages in ZONE_MOVABLE are taken from */
->  int movable_zone;
-> -- 
-> 2.25.1
+> On Fri, Jun 03, 2022 at 05:29:20PM +0100, Jonathan Cameron wrote:
+> > On Fri, 3 Jun 2022 17:23:07 +0100
+> > Jonathan Cameron <jic23@kernel.org> wrote:  
 > 
+> ...
 > 
+> > Andy, put a cover letter on these larger series - if nothing else it gives
+> > somewhere convenient for people to give tags for the whole series, or 
+> > maintainer to say what they are doing with it.  
+> 
+> I'll try to remember this. The series was started from only a couple of patches
+> and grew to this big, and I forgot to add a cover letter when it seems not
+> anymore obvious what has been done.
+> 
+> > Anyhow, I'm fine with the series, but will leave it on list for a while
+> > longer, particularly to get patch 6 some eyes + testing.
+> > 
+> > Currently I plan to drop the fixes tag from this first patch, but I'm prepared
+> > to be convinced it's a bug fix rather than a consistency cleanup.  
+> 
+> Fine with me, thanks!
+> 
+Applied to the togreg branch of iio.git and pushed out as testing for all the normal
+reasons.
+
+Thanks,
+
+Jonathan
 

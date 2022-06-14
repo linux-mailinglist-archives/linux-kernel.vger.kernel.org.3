@@ -2,55 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 687D754A783
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E9254A784
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350958AbiFNDVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 23:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
+        id S1351054AbiFNDV5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 23:21:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239630AbiFNDVL (ORCPT
+        with ESMTP id S234653AbiFNDVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 23:21:11 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3942E69F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:21:10 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LMYbw2jZQzDrDr;
-        Tue, 14 Jun 2022 11:20:44 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 11:21:08 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 11:21:08 +0800
-Message-ID: <9a6e61da-0a5c-02bb-d769-98cf1f602de8@huawei.com>
-Date:   Tue, 14 Jun 2022 11:21:07 +0800
+        Mon, 13 Jun 2022 23:21:53 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F012E6BB;
+        Mon, 13 Jun 2022 20:21:52 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMYd31mvlz4xXD;
+        Tue, 14 Jun 2022 13:21:43 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655176907;
+        bh=U1fiJE5uYUJHX5vWt77/jkly7Dzg8cdL+qVh4DmoqX0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=F2gmenyvpyPjtl5BYJDSPp07d113YEtls4S9SPpof1gStCmsPjurcvQ6FUXjCSTqS
+         PyhXaxHpUDqup+A09wWHsir72mCp6C5046UM0A1dJcPaGg4TbWYSTPJV0cwwRFt0f6
+         9l1WhjLunQPwP8DoQD45Rakvt6C7WLTeHIMEmMllQg6d7IAof9/bllbLmDk9OvHiHj
+         /sz/JxNsCMqPdt4yUYvVEM+NjWaJrZcgZe6skdPbOKDd4t1Bxa6m9iAbUeNl5Ln1/4
+         3PeojNXrp2Fzzmu10Q9ywL/rAD73hbfoddE2UeMkyLu1gQw+7lpAPWDqiOt61aZZQc
+         NKxaAN1w1NnxQ==
+Date:   Tue, 14 Jun 2022 13:21:41 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Adam Bratschi-Kaye <ark.email@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Antonio Terceiro <antonio.terceiro@linaro.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Boris-Chengbiao Zhou <bobo1239@web.de>,
+        Daniel Xu <dxu@dxuuu.xyz>,
+        Dariusz Sosnowski <dsosnowski@dsosnowski.pl>,
+        David Gow <davidgow@google.com>,
+        Douglas Su <d0u9.su@outlook.com>, Finn Behrens <me@kloenk.de>,
+        Gary Guo <gary@garyguo.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Cano <macanroj@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sven Van Asbroeck <thesven73@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>
+Subject: linux-next: manual merge of the rust tree with the block tree
+Message-ID: <20220614132141.2422079e@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v5 0/6] arm64: Cleanup ioremap() and support
- ioremap_prot()
-Content-Language: en-US
-To:     <catalin.marinas@arm.com>, <will@kernel.org>,
-        <akpm@linux-foundation.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linux-mm@kvack.org>, <hch@infradead.org>, <arnd@arndb.de>,
-        <anshuman.khandual@arm.com>
-References: <20220607125027.44946-1-wangkefeng.wang@huawei.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20220607125027.44946-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/9VMqfqiVIsv_3E_iNTMUkHA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,72 +66,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Catalin, could you help to pick up it, thanks.
+--Sig_/9VMqfqiVIsv_3E_iNTMUkHA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 2022/6/7 20:50, Kefeng Wang wrote:
-> 1. Enhance generic ioremap to make it more useful.
-> 2. Let's arm64 use GENERIC_IOREMAP to cleanup code.
-> 3. Support HAVE_IOREMAP_PROT on arm64, which enable generic_access_phys(),
->     it is useful when debug(eg, gdb) via access_process_vm device memory
->     infrastructure.
->
-> v5:
-> - break long lines(> 80 cols), per Christoph Hellwig
-> - move is_vmalloc_addr() check from arm64 into generic ioremap, per
->    Christoph Hellwig
-> - make arm64's ioremap_cache as an inline function, per Christoph
-> - keep changes simple, make ioremap/iounmap_allowed return bool, per
->    Baoquan He
-> - simplify use 'void *' instead of 'void __iomem *' in iounmap, then
->    drop __force annotation
->
-> v4:
-> - update based on v5.19-rc1
-> - add generic arch_ioremap/arch_iounmap define, per Andrew Monrton
-> - simply return an int for arch_ioremap and rename arch_ioremap/arch_iounmap
->    to a better name, ioremap_allowed/iounmap_allowed, per Arnd Bergmann
-> - add __force annotation to slince sparse warning in vunmap()
->
-> Note,
-> 1) after the renaming, the arm's change(patch1) is not the necessary
->     dependence for the following changes, but as a cleanup, still post
->     it here, hope it go in via the arm64 tree with reset of the series
->     directly if no object.
-> 2) the changes in this version only influence on patch4/5, so retain
->     the ack/review.
->
-> v3:
-> - add cleanup patch to kill ARM's unused arch_iounmap(the naming will be
->    used in GENERIC_IOREMAP) and add comments for arch_ioremap/arch_iounmap
->    hooks, per Anshuman Khandual
-> - collect ack/review
->
-> v2:
-> - s/addr/phys_addr in ioremap_prot, suggested by Andrew Morton
-> - rename arch_ioremap/iounmap_check to arch_ioremap/iounmap
->    and change return value, per Christoph Hellwig and Andrew Morton
-> - and use 'ifndef arch_ioremap' instead of weak function, per Arnd Bergmann
-> - collect ack/review
->
-> Kefeng Wang (6):
->    ARM: mm: kill unused runtime hook arch_iounmap()
->    mm: ioremap: Use more sensibly name in ioremap_prot()
->    mm: ioremap: Setup phys_addr of struct vm_struct
->    mm: ioremap: Add ioremap/iounmap_allowed()
->    arm64: mm: Convert to GENERIC_IOREMAP
->    arm64: Add HAVE_IOREMAP_PROT support
->
->   .../features/vm/ioremap_prot/arch-support.txt |  2 +-
->   arch/arm/include/asm/io.h                     |  4 +-
->   arch/arm/mm/ioremap.c                         |  9 +-
->   arch/arm/mm/nommu.c                           |  9 +-
->   arch/arm64/Kconfig                            |  2 +
->   arch/arm64/include/asm/io.h                   | 24 +++--
->   arch/arm64/include/asm/pgtable.h              | 10 +++
->   arch/arm64/kernel/acpi.c                      |  2 +-
->   arch/arm64/mm/hugetlbpage.c                   | 10 ---
->   arch/arm64/mm/ioremap.c                       | 90 ++-----------------
->   include/asm-generic/io.h                      | 29 +++++-
->   mm/ioremap.c                                  | 26 ++++--
->   12 files changed, 90 insertions(+), 127 deletions(-)
->
+Hi all,
+
+Today's linux-next merge of the rust tree got a conflict in:
+
+  Makefile
+
+between commit:
+
+  197c5e8c9541 ("io_uring: move to separate directory")
+
+from the block tree and commit:
+
+  0ea4b9a1bece ("Kbuild: add Rust support")
+
+from the rust tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Makefile
+index f4c1c37c0be6,ce17ec71f89b..000000000000
+--- a/Makefile
++++ b/Makefile
+@@@ -436,7 -445,7 +445,8 @@@ els
+  HOSTCC	=3D gcc
+  HOSTCXX	=3D g++
+  endif
+ +HOSTPKG_CONFIG	=3D pkg-config
++ HOSTRUSTC =3D rustc
+ =20
+  KBUILD_USERHOSTCFLAGS :=3D -Wall -Wmissing-prototypes -Wstrict-prototypes=
+ \
+  			 -O2 -fomit-frame-pointer -std=3Dgnu11 \
+@@@ -534,7 -580,23 +581,23 @@@ KBUILD_LDFLAGS_MODULE :
+  KBUILD_LDFLAGS :=3D
+  CLANG_FLAGS :=3D
+ =20
++ ifeq ($(KBUILD_CLIPPY),1)
++ 	RUSTC_OR_CLIPPY_QUIET :=3D CLIPPY
++ 	RUSTC_OR_CLIPPY =3D $(CLIPPY_DRIVER)
++ else
++ 	RUSTC_OR_CLIPPY_QUIET :=3D RUSTC
++ 	RUSTC_OR_CLIPPY =3D $(RUSTC)
++ endif
++=20
++ ifdef RUST_LIB_SRC
++ 	export RUST_LIB_SRC
++ endif
++=20
++ export RUSTC_BOOTSTRAP :=3D 1
++=20
+ -export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMP=
+ILE LD CC
+ +export ARCH SRCARCH CONFIG_SHELL BASH HOSTCC KBUILD_HOSTCFLAGS CROSS_COMP=
+ILE LD CC HOSTPKG_CONFIG
++ export RUSTC RUSTDOC RUSTFMT RUSTC_OR_CLIPPY_QUIET RUSTC_OR_CLIPPY BINDGE=
+N CARGO
++ export HOSTRUSTC KBUILD_HOSTRUSTFLAGS
+  export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX =
+YACC AWK INSTALLKERNEL
+  export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
+  export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD
+@@@ -788,9 -867,11 +868,12 @@@ stackp-flags-$(CONFIG_STACKPROTECTOR_ST
+  KBUILD_CFLAGS +=3D $(stackp-flags-y)
+ =20
+  KBUILD_CFLAGS-$(CONFIG_WERROR) +=3D -Werror
+ +KBUILD_CFLAGS-$(CONFIG_CC_NO_ARRAY_BOUNDS) +=3D -Wno-array-bounds
+  KBUILD_CFLAGS +=3D $(KBUILD_CFLAGS-y) $(CONFIG_CC_IMPLICIT_FALLTHROUGH)
+ =20
++ KBUILD_RUSTFLAGS-$(CONFIG_WERROR) +=3D -Dwarnings
++ KBUILD_RUSTFLAGS +=3D $(KBUILD_RUSTFLAGS-y)
++=20
+  ifdef CONFIG_CC_IS_CLANG
+  KBUILD_CPPFLAGS +=3D -Qunused-arguments
+  # The kernel builds with '-std=3Dgnu11' so use of GNU extensions is accep=
+table.
+@@@ -806,11 -887,9 +889,12 @@@ endi
+  KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-but-set-variable)
+  KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-const-variable)
+ =20
+ +# These result in bogus false positives
+ +KBUILD_CFLAGS +=3D $(call cc-disable-warning, dangling-pointer)
+ +
+  ifdef CONFIG_FRAME_POINTER
+  KBUILD_CFLAGS	+=3D -fno-omit-frame-pointer -fno-optimize-sibling-calls
++ KBUILD_RUSTFLAGS +=3D -Cforce-frame-pointers=3Dy
+  else
+  # Some targets (ARM with Thumb2, for example), can't be built with frame
+  # pointers.  For those, we don't have FUNCTION_TRACER automatically
+@@@ -1097,7 -1180,7 +1186,8 @@@ export MODULES_NSDEPS :=3D $(extmod_prefi
+  ifeq ($(KBUILD_EXTMOD),)
+  core-y			+=3D kernel/ certs/ mm/ fs/ ipc/ security/ crypto/
+  core-$(CONFIG_BLOCK)	+=3D block/
+ +core-$(CONFIG_IO_URING)	+=3D io_uring/
++ core-$(CONFIG_RUST)	+=3D rust/
+ =20
+  vmlinux-dirs	:=3D $(patsubst %/,%,$(filter %/, \
+  		     $(core-y) $(core-m) $(drivers-y) $(drivers-m) \
+
+--Sig_/9VMqfqiVIsv_3E_iNTMUkHA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKn/sYACgkQAVBC80lX
+0Gz98Qf/Ywf1rQrouxv2rNNgNm6/vB8o4VLn2ej7EKW/giTJv6noydpoHXE58SJk
+0wXzMNFmbe8/TBEUYdVlPQnW84vuciVfh+It3oj7L41+adyE5RSmwd8ioUb8QlS/
+lSoES8u8RjVgMqxGr96YQWlvd6UUQL+4+5MJLU9SrLO8CRJIJpKkhACsqyeBHqcx
+7UmghIx+bSSwlZ5gcU7A85NNmcnx7/1ihMtqtl7Xc91HWXdWjwVRmpikVSQmGHeK
+RntZ6ro7F2v1tsLpv0hnYXqSfIzFxWRGH9cS9SzTqIDjq9+dqb8kHUK8jmsD5I3j
+pXh1azc1vCPKCYjDKLBxLEgE+Iwekg==
+=wjd7
+-----END PGP SIGNATURE-----
+
+--Sig_/9VMqfqiVIsv_3E_iNTMUkHA--

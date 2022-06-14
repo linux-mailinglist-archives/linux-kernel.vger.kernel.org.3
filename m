@@ -2,53 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC96854B129
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69B754B0D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245161AbiFNM25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58064 "EHLO
+        id S236748AbiFNM3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237837AbiFNM2S (ORCPT
+        with ESMTP id S243131AbiFNM2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:28:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE23377EA;
-        Tue, 14 Jun 2022 05:28:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA60EB81874;
-        Tue, 14 Jun 2022 12:28:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62D73C3411B;
-        Tue, 14 Jun 2022 12:28:03 +0000 (UTC)
-Message-ID: <366fca22-e22d-9963-423b-252274fa9d9e@xs4all.nl>
-Date:   Tue, 14 Jun 2022 14:28:01 +0200
+        Tue, 14 Jun 2022 08:28:36 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F5C240B2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:28:27 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id n10so16848118ejk.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bhHRX/oRi5clzdn2dE/EY8/wgTCSEE9g8vSH+WhoX2I=;
+        b=fXAyHR6wYOrAjEoa121kXDAMBiQuKOeHTZzLKSajLlgrarAw/anKuBKZGX+sWqZhKc
+         u0w23AieZe9pPny/F0Sg5T27H2I61hCiOjE4KfV1SHvON11Iirp/kVren2/7s6BTdpDX
+         s0GckUugcWpBj6AlHsAHWQpbmQ9EPo0wjK7+o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bhHRX/oRi5clzdn2dE/EY8/wgTCSEE9g8vSH+WhoX2I=;
+        b=YtIVWzqZ1l1mtsoD+ASvzI8KasNM4YLUTuBFrCmUC3reDUz00M7wiDx9p6eUOc8C5S
+         I5MoiCW1Vzs62E9caVc82l5Z1bY+ewi9zF/B+c1jNjD19HoCKekIKqgCeXH/PaiDeZpG
+         Dhov6rMLbLvz+K8BQA29gbIb0huYK31c6Ww0C7Gr68xNnt7BtDNVDml+wTQRSC9+QmAU
+         R1piDNidj3BdECOp1xoEbA0M0h4sbKiLJeuFFeZJTyy5Upsxg+FzScHxG0kf+1XyeaRr
+         z0e4MhPFPjE5qflePeBg4NB5+SRPE/0q6X3a+Uc5ygobldZehgsKlfLzViMrkhH5hzLx
+         Uicg==
+X-Gm-Message-State: AOAM533fJ+jleebVen6QnuhdYQZHnq4pl7uxFEEcjzzSZLHz/P6XhVFP
+        vwQYAxKQsmlpgbUf/BOzuyIxo50NieByqQeq
+X-Google-Smtp-Source: ABdhPJy4pF7H8NgtPphY1WJTnN9t4SyQU2HyYAAQHT08cCgUQ2lc4xy7jniRTEaogLds279Um4nTuQ==
+X-Received: by 2002:a17:906:6a27:b0:708:1282:cbe9 with SMTP id qw39-20020a1709066a2700b007081282cbe9mr4290023ejc.186.1655209705333;
+        Tue, 14 Jun 2022 05:28:25 -0700 (PDT)
+Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com (host-80-116-90-174.pool80116.interbusiness.it. [80.116.90.174])
+        by smtp.gmail.com with ESMTPSA id z22-20020a17090655d600b006f3ef214e2csm5087043ejp.146.2022.06.14.05.28.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 05:28:24 -0700 (PDT)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        michael@amarulasolutions.com,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v4 00/12] can: slcan: extend supported features
+Date:   Tue, 14 Jun 2022 14:28:09 +0200
+Message-Id: <20220614122821.3646071-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v8 04/17] media: uapi: HEVC: Add missing fields in HEVC
- controls
-Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com
-References: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
- <20220614083614.240641-5-benjamin.gaignard@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220614083614.240641-5-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,132 +78,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/22 10:36, Benjamin Gaignard wrote:
-> Complete the HEVC controls with missing fields from H.265 specifications.
-> Even if these fields aren't used by the current mainlined drivers
-> they will be required for (at least) the rkvdec driver.
-> 
-> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> ---
-> version 6:
-> - Add short_term_ref_pic_set_size and long_term_ref_pic_set_size
->   in v4l2_ctrl_hevc_decode_params structure.
-> 
->  .../media/v4l/ext-ctrls-codec.rst             | 32 +++++++++++++++++++
->  include/media/hevc-ctrls.h                    |  8 ++++-
->  2 files changed, 39 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> index 6183f43f4d73..aa7556e200c9 100644
-> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
-> @@ -2683,6 +2683,16 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->      :stub-columns: 0
->      :widths:       1 1 2
->  
-> +    * - __u8
-> +      - ``video_parameter_set_id``
-> +      - Specifies the value of the vps_video_parameter_set_id of the active VPS
-> +        as descibed in section "7.4.3.2.1 General sequence parameter set RBSP semantics"
+This series originated as a result of CAN communication tests for an
+application using the USBtin adapter (https://www.fischl.de/usbtin/).
+The tests showed some errors but for the driver everything was ok.
+Also, being the first time I used the slcan driver, I was amazed that
+it was not possible to configure the bitrate via the ip tool.
+For these two reasons, I started looking at the driver code and realized
+that it didn't use the CAN network device driver interface.
 
-descibed -> described
+Starting from these assumptions, I tried to:
+- Use the CAN network device driver interface.
+- Set the bitrate via the ip tool.
+- Send the open/close command to the adapter from the driver.
+- Add ethtool support to reset the adapter errors.
+- Extend the protocol to forward the adapter CAN communication
+  errors and the CAN state changes to the netdev upper layers.
 
-This same typo occurs several times in this patch and in patch 17/17.
+Except for the protocol extension patches (i. e. forward the adapter CAN
+communication errors and the CAN state changes to the netdev upper
+layers), the whole series has been tested under QEMU with Linux 4.19.208
+using the USBtin adapter.
+Testing the extension protocol patches requires updating the adapter
+firmware. Before modifying the firmware I think it makes sense to know if
+these extensions can be considered useful.
 
-Regards,
+Before applying the series I used these commands:
 
-	Hans
+slcan_attach -f -s6 -o /dev/ttyACM0
+slcand ttyACM0 can0
+ip link set can0 up
 
-> +        of H.265 specifications.
-> +    * - __u8
-> +      - ``seq_parameter_set_id``
-> +      - Provides an identifier for the SPS for reference by other syntax elements
-> +        as descibed in section "7.4.3.2.1 General sequence parameter set RBSP semantics"
-> +        of H.265 specifications.
->      * - __u16
->        - ``pic_width_in_luma_samples``
->        -
-> @@ -2822,6 +2832,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->      :stub-columns: 0
->      :widths:       1 1 2
->  
-> +    * - __u8
-> +      - ``pic_parameter_set_id``
-> +      - Identifies the PPS for reference by other syntax elements.
->      * - __u8
->        - ``num_extra_slice_header_bits``
->        -
-> @@ -3048,6 +3061,15 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->      * - __u8
->        - ``ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
->        - The list of L1 reference elements as indices in the DPB.
-> +    * - __u16
-> +      - ``short_term_ref_pic_set_size``
-> +      - Specifies the size, in bits, of the short-term reference picture set, described as st_ref_pic_set()
-> +        in the specification, included in the slice header or SPS (section 7.3.6.1).
-> +    * - __u16
-> +      - ``long_term_ref_pic_set_size``
-> +      - Specifies the size, in bits, of the long-term reference picture set include in the slice header
-> +        or SPS. It is the number of bits in the conditional block if(long_term_ref_pics_present_flag)
-> +        in section 7.3.6.1 of the specification.
->      * - __u8
->        - ``padding``
->        - Applications and drivers must set this to zero.
-> @@ -3385,6 +3407,16 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
->        - ``pic_order_cnt_val``
->        - PicOrderCntVal as described in section 8.3.1 "Decoding process
->          for picture order count" of the specification.
-> +    * - __u16
-> +      - ``short_term_ref_pic_set_size``
-> +      - Specifies the size, in bits, of the short-term reference picture set, of the first slice
-> +        described as st_ref_pic_set() in the specification, included in the slice header
-> +        or SPS (section 7.3.6.1).
-> +    * - __u16
-> +      - ``long_term_ref_pic_set_size``
-> +      - Specifies the size, in bits, of the long-term reference picture set, of the first slice
-> +        included in the slice header or SPS. It is the number of bits in the conditional block
-> +        if(long_term_ref_pics_present_flag) in section 7.3.6.1 of the specification.
->      * - __u8
->        - ``num_active_dpb_entries``
->        - The number of entries in ``dpb``.
-> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
-> index 01ccda48d8c5..752a8d10782c 100644
-> --- a/include/media/hevc-ctrls.h
-> +++ b/include/media/hevc-ctrls.h
-> @@ -58,6 +58,8 @@ enum v4l2_mpeg_video_hevc_start_code {
->  /* The controls are not stable at the moment and will likely be reworked. */
->  struct v4l2_ctrl_hevc_sps {
->  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Sequence parameter set */
-> +	__u8	video_parameter_set_id;
-> +	__u8	seq_parameter_set_id;
->  	__u16	pic_width_in_luma_samples;
->  	__u16	pic_height_in_luma_samples;
->  	__u8	bit_depth_luma_minus8;
-> @@ -108,6 +110,7 @@ struct v4l2_ctrl_hevc_sps {
->  
->  struct v4l2_ctrl_hevc_pps {
->  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture parameter set */
-> +	__u8	pic_parameter_set_id;
->  	__u8	num_extra_slice_header_bits;
->  	__u8	num_ref_idx_l0_default_active_minus1;
->  	__u8	num_ref_idx_l1_default_active_minus1;
-> @@ -199,7 +202,8 @@ struct v4l2_ctrl_hevc_slice_params {
->  	__u32	slice_segment_addr;
->  	__u8	ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
-> -
-> +	__u16	short_term_ref_pic_set_size;
-> +	__u16	long_term_ref_pic_set_size;
->  	__u8	padding;
->  
->  	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction parameter */
-> @@ -214,6 +218,8 @@ struct v4l2_ctrl_hevc_slice_params {
->  
->  struct v4l2_ctrl_hevc_decode_params {
->  	__s32	pic_order_cnt_val;
-> +	__u16	short_term_ref_pic_set_size;
-> +	__u16	long_term_ref_pic_set_size;
->  	__u8	num_active_dpb_entries;
->  	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
->  	__u8	num_poc_st_curr_before;
+After applying the series I am using these commands:
+
+slcan_attach /dev/ttyACM0
+slcand ttyACM0 can0
+ip link set dev can0 down
+ip link set can0 type can bitrate 500000
+ethtool --set-priv-flags can0 err-rst-on-open on
+ip link set dev can0 up
+
+Now there is a clearer separation between serial line and CAN,
+but above all, it is possible to use the ip and ethtool commands
+as it happens for any CAN device driver. The changes are backward
+compatible, you can continue to use the slcand and slcan_attach
+command options.
+
+
+Changes in v4:
+- Move the patch in front of the patch "[v3,04/13] can: slcan: use CAN network device driver API".
+- Add the CAN_BITRATE_UNSET (0) and CAN_BITRATE_UNKNOWN (-1U) macros.
+- Simplify the bitrate check to dump it.
+- Update the commit description.
+- Update the commit description.
+- Use the CAN_BITRATE_UNKNOWN macro.
+- Use kfree_skb() instead of can_put_echo_skb() in the slc_xmit().
+- Remove the `if (slcan_devs)' check in the slc_dealloc().
+- Replace `sl->tty == NULL' with `!sl->tty'.
+- Use CAN_BITRATE_UNSET (0) and CAN_BITRATE_UNKNOWN (-1U) macros.
+- Don't reset the bitrate in ndo_stop() if it has been configured.
+- Squashed to the patch [v3,09/13] can: slcan: send the close command to the adapter.
+- Use the CAN_BITRATE_UNKNOWN macro.
+- Add description of slc_bump_err() function.
+- Remove check for the 'e' character at the beggining of the function.
+  It was already checked by the caller function.
+- Protect decoding against the case the len value is longer than the
+  received data.
+- Some small changes to make the decoding more readable.
+- Increment all the error counters at the end of the function.
+- Add description of slc_bump_state() function.
+- Remove check for the 's' character at the beggining of the function.
+  It was already checked by the caller function.
+- Protect decoding against the case the frame len is longer than the
+  received data (add SLC_STATE_FRAME_LEN macro).
+- Set cf to NULL in case of alloc_can_err_skb() failure.
+- Some small changes to make the decoding more readable.
+- Use the character 'b' instead of 'f' for bus-off state.
+
+Changes in v3:
+- Increment the error counter in case of decoding failure.
+- Replace (-1) with (-1U) in the commit description.
+- Update the commit description.
+- Remove the slc_do_set_bittiming().
+- Set the bitrate in the ndo_open().
+- Replace -1UL with -1U in setting a fake value for the bitrate.
+- Drop the patch "can: slcan: simplify the device de-allocation".
+- Add the patch "can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U".
+
+Changes in v2:
+- Put the data into the allocated skb directly instead of first
+  filling the "cf" on the stack and then doing a memcpy().
+- Move CAN_SLCAN Kconfig option inside CAN_DEV scope.
+- Improve the commit message.
+- Use the CAN framework support for setting fixed bit rates.
+- Improve the commit message.
+- Protect decoding against the case the len value is longer than the
+  received data.
+- Continue error handling even if no skb can be allocated.
+- Continue error handling even if no skb can be allocated.
+
+Dario Binacchi (12):
+  can: slcan: use the BIT() helper
+  can: slcan: use netdev helpers to print out messages
+  can: slcan: use the alloc_can_skb() helper
+  can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U
+  can: slcan: use CAN network device driver API
+  can: slcan: allow to send commands to the adapter
+  can: slcan: set bitrate by CAN device driver API
+  can: slcan: send the open/close commands to the adapter
+  can: slcan: move driver into separate sub directory
+  can: slcan: add ethtool support to reset adapter errors
+  can: slcan: extend the protocol with error info
+  can: slcan: extend the protocol with CAN state info
+
+ drivers/net/can/Kconfig                       |  40 +-
+ drivers/net/can/Makefile                      |   2 +-
+ drivers/net/can/dev/netlink.c                 |   3 +-
+ drivers/net/can/slcan/Makefile                |   7 +
+ .../net/can/{slcan.c => slcan/slcan-core.c}   | 527 ++++++++++++++----
+ drivers/net/can/slcan/slcan-ethtool.c         |  65 +++
+ drivers/net/can/slcan/slcan.h                 |  18 +
+ include/linux/can/bittiming.h                 |   2 +
+ 8 files changed, 549 insertions(+), 115 deletions(-)
+ create mode 100644 drivers/net/can/slcan/Makefile
+ rename drivers/net/can/{slcan.c => slcan/slcan-core.c} (64%)
+ create mode 100644 drivers/net/can/slcan/slcan-ethtool.c
+ create mode 100644 drivers/net/can/slcan/slcan.h
+
+-- 
+2.32.0
 

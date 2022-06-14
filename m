@@ -2,67 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC04854B00F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5298A54B05A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356734AbiFNMLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
+        id S245160AbiFNMNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356706AbiFNMK5 (ORCPT
+        with ESMTP id S1356831AbiFNMMw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:10:57 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D8649CB7;
-        Tue, 14 Jun 2022 05:10:39 -0700 (PDT)
-X-UUID: 8cf1907767624a5fab18204b12bd68c3-20220614
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:00703cfd-eb26-4d6c-8f59-2a87b949f005,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:b14ad71,CLOUDID:c7ef69c5-c67b-4a73-9b18-726dd8f2eb58,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 8cf1907767624a5fab18204b12bd68c3-20220614
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 694724917; Tue, 14 Jun 2022 20:10:37 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 14 Jun 2022 20:10:35 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 14 Jun 2022 20:10:34 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>, <wenst@chromium.org>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
-        <maoguang.meng@mediatek.com>, kyrie wu <kyrie.wu@mediatek.com>,
-        <srv_heupstream@mediatek.com>
-Subject: [RESEND V9,7/7] mtk-jpegenc: add stop cmd interface for jpgenc
-Date:   Tue, 14 Jun 2022 20:10:24 +0800
-Message-ID: <20220614121024.31667-8-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220614121024.31667-1-irui.wang@mediatek.com>
-References: <20220614121024.31667-1-irui.wang@mediatek.com>
+        Tue, 14 Jun 2022 08:12:52 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8042949FA0;
+        Tue, 14 Jun 2022 05:12:39 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LMnMs47CPzjXcV;
+        Tue, 14 Jun 2022 20:11:05 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.174.58) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 20:12:34 +0800
+From:   Xiu Jianfeng <xiujianfeng@huawei.com>
+To:     <jmorris@namei.org>, <serge@hallyn.com>
+CC:     <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] lsm_audit: Clean up redundant NULL pointer check
+Date:   Tue, 14 Jun 2022 20:10:30 +0800
+Message-ID: <20220614121030.115491-1-xiujianfeng@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.58]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,37 +45,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kyrie wu <kyrie.wu@mediatek.com>
+The implements of {ip,tcp,udp,dccp,sctp,ipv6}_hdr(skb) guarantee that
+they will never return NULL, and elsewhere user don't do the check
+as well, so remove the check here.
 
-Add stop cmd interface for jpgenc to stop stream
-
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
+Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 ---
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ security/lsm_audit.c | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 43a0008939b4..028e89dba546 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -612,6 +612,9 @@ static const struct v4l2_ioctl_ops mtk_jpeg_enc_ioctl_ops = {
- 	.vidioc_streamoff               = v4l2_m2m_ioctl_streamoff,
+diff --git a/security/lsm_audit.c b/security/lsm_audit.c
+index 78a278f28e49..75cc3f8d2a42 100644
+--- a/security/lsm_audit.c
++++ b/security/lsm_audit.c
+@@ -44,9 +44,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
+ 	struct iphdr *ih;
  
- 	.vidioc_unsubscribe_event	= v4l2_event_unsubscribe,
-+
-+	.vidioc_encoder_cmd		= v4l2_m2m_ioctl_encoder_cmd,
-+	.vidioc_try_encoder_cmd		= v4l2_m2m_ioctl_try_encoder_cmd,
- };
+ 	ih = ip_hdr(skb);
+-	if (ih == NULL)
+-		return -EINVAL;
+-
+ 	ad->u.net->v4info.saddr = ih->saddr;
+ 	ad->u.net->v4info.daddr = ih->daddr;
  
- static const struct v4l2_ioctl_ops mtk_jpeg_dec_ioctl_ops = {
-@@ -1389,6 +1392,7 @@ static int mtk_jpeg_open(struct file *file)
- 	} else {
- 		v4l2_ctrl_handler_init(&ctx->ctrl_hdl, 0);
+@@ -59,8 +56,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
+ 	switch (ih->protocol) {
+ 	case IPPROTO_TCP: {
+ 		struct tcphdr *th = tcp_hdr(skb);
+-		if (th == NULL)
+-			break;
+ 
+ 		ad->u.net->sport = th->source;
+ 		ad->u.net->dport = th->dest;
+@@ -68,8 +63,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
  	}
+ 	case IPPROTO_UDP: {
+ 		struct udphdr *uh = udp_hdr(skb);
+-		if (uh == NULL)
+-			break;
+ 
+ 		ad->u.net->sport = uh->source;
+ 		ad->u.net->dport = uh->dest;
+@@ -77,8 +70,6 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
+ 	}
+ 	case IPPROTO_DCCP: {
+ 		struct dccp_hdr *dh = dccp_hdr(skb);
+-		if (dh == NULL)
+-			break;
+ 
+ 		ad->u.net->sport = dh->dccph_sport;
+ 		ad->u.net->dport = dh->dccph_dport;
+@@ -86,8 +77,7 @@ int ipv4_skb_to_auditdata(struct sk_buff *skb,
+ 	}
+ 	case IPPROTO_SCTP: {
+ 		struct sctphdr *sh = sctp_hdr(skb);
+-		if (sh == NULL)
+-			break;
 +
- 	mtk_jpeg_set_default_params(ctx);
- 	mutex_unlock(&jpeg->lock);
- 	return 0;
+ 		ad->u.net->sport = sh->source;
+ 		ad->u.net->dport = sh->dest;
+ 		break;
+@@ -115,8 +105,6 @@ int ipv6_skb_to_auditdata(struct sk_buff *skb,
+ 	__be16 frag_off;
+ 
+ 	ip6 = ipv6_hdr(skb);
+-	if (ip6 == NULL)
+-		return -EINVAL;
+ 	ad->u.net->v6info.saddr = ip6->saddr;
+ 	ad->u.net->v6info.daddr = ip6->daddr;
+ 	/* IPv6 can have several extension header before the Transport header
 -- 
-2.18.0
+2.17.1
 

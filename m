@@ -2,128 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 781B954A797
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A17C54A799
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237339AbiFNDif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 23:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35436 "EHLO
+        id S239592AbiFNDjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 23:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiFNDic (ORCPT
+        with ESMTP id S231129AbiFNDjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 23:38:32 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA3633A26;
-        Mon, 13 Jun 2022 20:38:30 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id 3AC0AC01E; Tue, 14 Jun 2022 05:38:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655177908; bh=SKBy3DKVfNlrFaCP/8Dtym1Pjl7YP37RHZXiwxzpYsE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ap0gj6B48RZcKFFmxmYZC0AquDtakpRgEkSaw8sKkeMA3q5n6pMpG8ahdr2+jzl05
-         UJi5LgcfpbwVnjDlIJgwkcpdidczMBWgQnavTF1U3PU+7zqC4PHgY1MdSqtTu+c/mI
-         8Qx5GyYnRKFXdWIfPjSlk/osSNQw6L4kIyy8lXCTd73dAVUwCqJEfd2aWbShrOeVOl
-         tZ9hFnPwydpwi1ihNLQd+oOjJVRgR27NEtZ+fCVkAJuySJ+L4vZcrswQovm1pGv5BE
-         EBfwiN4XuY05cEdQ/NhT/Rhww/pbAND0kO1YUJeFKH3EnVnIqbHrTLwy/4gn1rk59r
-         SDt5O0vV+JKjQ==
+        Mon, 13 Jun 2022 23:39:45 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A941336142;
+        Mon, 13 Jun 2022 20:39:43 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMZ1p0hzZz4xXD;
+        Tue, 14 Jun 2022 13:39:42 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655177982;
+        bh=Hh+ePkStsIe1gE+KS8pLxfwNpOq01BuDHt5bQtIqf1I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VBmVLOmgXl15fg+eNw1kt/K9JjK8Ie4gNUILK8ZFTJK8KTECZUPfZLv/1MxQn+jez
+         kjSah5G1iwQjVolO6koYlZdO01CNsevbC7ZY6RTPNEoChDigO2yi5Ald/1uL4GD6kw
+         5+lGOr4qswxLr/mfsF9PZmZbSBRQu+r7Donw87Lyv6lVw709rwc6FawlsTMfsCDd7T
+         ePJY5ebhGV0YiHI+zX7Og8NDJkFUN2t6k7pfLLGwbSMCNtGRk8tr1BDtoJ9fDMDoC5
+         Ck9Z/ruMy/K5lTtqp66f0oXIvKded8O4VFXa5UWpI8r0E0vgQFWdr51WAPL8O11/qr
+         dgGGDAcxm/N4w==
+Date:   Tue, 14 Jun 2022 13:39:37 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the folio tree with Linus' tree
+Message-ID: <20220614133937.35e152fe@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/ARCMLk2Uxbi2M_JJOicfXYh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 7CF18C009;
-        Tue, 14 Jun 2022 05:38:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1655177907; bh=SKBy3DKVfNlrFaCP/8Dtym1Pjl7YP37RHZXiwxzpYsE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=28IXVq3l+ga1y/wE2URuxUhvPUE05ceTmaL7GDy231Ox0OX29px9rKrgeAi0HEJrz
-         LQf4YfbacEydU9Ehx5Zq/FxHBNJb2zzS4f/7MyDDDhw0W+Geo3xygAuYnq36sy6lyE
-         xZYwhxZXL/0sflI9HyADExseimgbP3zLrkNZls2HWSSSPbxnOQJo5Cwfgr+DymwmCw
-         WVltr+R41SQlJlT8RmZXVrzexkVV/eM5ogjCjEesIXrhnzav9x3G3TjzH4WwUloyL2
-         hwc9F6HWr64h1I+HtktO5RfygwDanmOZZ0UTff4T8G3+iq8TJ3kTI/e7fFWV+AsHkZ
-         okHgqLmj0YE2A==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id a34bb87f;
-        Tue, 14 Jun 2022 03:38:18 +0000 (UTC)
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Eric Van Hensbergen <ericvh@gmail.com>,
-        Latchesar Ionkov <lucho@ionkov.net>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Christian Schoenebeck <linux_oss@crudebyte.com>,
-        David Howells <dhowells@redhat.com>
-Cc:     linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: [PATCH] 9p: fix EBADF errors in cached mode
-Date:   Tue, 14 Jun 2022 12:38:02 +0900
-Message-Id: <20220614033802.1606738-1-asmadeus@codewreck.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <YqW5s+GQZwZ/DP5q@codewreck.org>
-References: <YqW5s+GQZwZ/DP5q@codewreck.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cached operations sometimes need to do invalid operations (e.g. read
-on a write only file)
-Historic fscache had added a "writeback fid" for this, but the conversion
-to new fscache somehow lost usage of it: use the writeback fid instead
-of normal one.
+--Sig_/ARCMLk2Uxbi2M_JJOicfXYh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Note that the way this works (writeback fid being linked to inode) means
-we might use overprivileged fid for some operations, e.g. write as root
-when we shouldn't.
-Ideally we should keep both fids handy, and only use the writeback fid
-when really required e.g. reads to a write-only file to fill in the page
-cache (read-modify-write); but this is the situation we've always had
-and this commit only fixes an issue we've had for too long.
+Hi all,
 
-Fixes: eb497943fa21 ("9p: Convert to using the netfs helper lib to do reads and caching")
-Cc: stable@vger.kernel.org
-Cc: David Howells <dhowells@redhat.com>
-Reported-By: Christian Schoenebeck <linux_oss@crudebyte.com>
-Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
----
-Ok so finally had time to look at this, and it's not a lot so this is
-the most straight forward way to do: just reverting to how the old
-fscache worked.
+Today's linux-next merge of the folio tree got a conflict in:
 
-This appears to work from quick testing, Chiristian could you test it?
+  include/linux/netfs.h
 
-I think the warnings you added in p9_client_read/write that check
-fid->mode might a lot of sense, if you care to resend it as
-WARN_ON((fid->mode & ACCMODE) == O_xyz);
-instead I'll queue that for 5.20
+between commit:
 
+  e81fb4198e27 ("netfs: Further cleanups after struct netfs_inode wrapper i=
+ntroduced")
 
-@Stable people, I've checked it applies to 5.17 and 5.18 so should be
-good to grab once I submit it for inclusion (that commit was included in
-5.16, which is no longer stable)
+from Linus' tree and commit:
 
+  0463e729a56d ("netfs: Remove extern from function prototypes")
 
- fs/9p/vfs_addr.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+from the folio tree.
 
-diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
-index 7382c5227e94..262968d02f55 100644
---- a/fs/9p/vfs_addr.c
-+++ b/fs/9p/vfs_addr.c
-@@ -58,7 +58,11 @@ static void v9fs_issue_read(struct netfs_io_subrequest *subreq)
-  */
- static int v9fs_init_request(struct netfs_io_request *rreq, struct file *file)
- {
--	struct p9_fid *fid = file->private_data;
-+	struct inode *inode = file_inode(file);
-+	struct v9fs_inode *v9inode = V9FS_I(inode);
-+	struct p9_fid *fid = v9inode->writeback_fid;
-+
-+	BUG_ON(!fid);
- 
- 	p9_fid_get(fid);
- 	rreq->netfs_priv = fid;
--- 
-2.35.1
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/netfs.h
+index 097cdd644665,065163d50688..000000000000
+--- a/include/linux/netfs.h
++++ b/include/linux/netfs.h
+@@@ -276,19 -275,17 +276,18 @@@ struct netfs_cache_ops=20
+  };
+ =20
+  struct readahead_control;
+- extern void netfs_readahead(struct readahead_control *);
++ void netfs_readahead(struct readahead_control *);
+  int netfs_read_folio(struct file *, struct folio *);
+- extern int netfs_write_begin(struct netfs_inode *,
+- 			     struct file *, struct address_space *,
+- 			     loff_t, unsigned int, struct folio **,
+- 			     void **);
+-=20
+- extern void netfs_subreq_terminated(struct netfs_io_subrequest *, ssize_t=
+, bool);
+- extern void netfs_get_subrequest(struct netfs_io_subrequest *subreq,
+- 				 enum netfs_sreq_ref_trace what);
+- extern void netfs_put_subrequest(struct netfs_io_subrequest *subreq,
+- 				 bool was_async, enum netfs_sreq_ref_trace what);
+- extern void netfs_stats_show(struct seq_file *);
+ -int netfs_write_begin(struct file *, struct address_space *, loff_t pos,
+ -		      unsigned int len, struct folio **, void **fsdata);
+++int netfs_write_begin(struct netfs_inode *, struct file *,
+++		      struct address_space *, loff_t pos, unsigned int len,
+++		      struct folio **, void **fsdata);
++=20
++ void netfs_subreq_terminated(struct netfs_io_subrequest *, ssize_t, bool);
++ void netfs_get_subrequest(struct netfs_io_subrequest *subreq,
++ 			  enum netfs_sreq_ref_trace what);
++ void netfs_put_subrequest(struct netfs_io_subrequest *subreq,
++ 			  bool was_async, enum netfs_sreq_ref_trace what);
++ void netfs_stats_show(struct seq_file *);
+ =20
+  /**
+   * netfs_inode - Get the netfs inode context from the inode
+
+--Sig_/ARCMLk2Uxbi2M_JJOicfXYh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKoAvoACgkQAVBC80lX
+0GyLWggAl6qPxkJg+VxlBjcs4yHvMxHv0VYHkY6AaWR2E4wA7ops7wopuDwolpE0
+5e8czu/AjtFjfHju1kXIRwHBXtdc+bx93nLEwrYKBeXEbQe2cWbov8XMh+TSXZxb
+seAQ8cbOCIiP7iQKfgryH33RDuBVP+nGMqhDEcyV5wUSTJkTmwfEUDmt9HyMjoHI
+xHLFFDsnrvq5XDia0HWujGTgJ2INIbnfTmhgEYz3aztCuUbRRw+QQhD6AK1JZ6ln
+2uE63ftdVE0EbC58F2dXuH1NzwFY1YmvCUKKt0OlNNeSfaY8WQlXhblSXoRnUbY6
+XZdIT/8ZdsyUkfnsSfCXc1CNQJUhtA==
+=4OW5
+-----END PGP SIGNATURE-----
+
+--Sig_/ARCMLk2Uxbi2M_JJOicfXYh--

@@ -2,153 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E16F154AD5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:29:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB8754AD60
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241072AbiFNJ0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 05:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
+        id S241957AbiFNJ1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 05:27:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241153AbiFNJ0i (ORCPT
+        with ESMTP id S241029AbiFNJ04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 05:26:38 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E937FDEF8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 02:26:36 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id u99so14127106ybi.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 02:26:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=V/BnXF4Po6lT1XZ2J8UaiK92xTYbPrXaIJWtM2yCsTs=;
-        b=DmEJPrYQ5KRdr/IysRapxIrM6PLZSlQCFCpbJa66mnsMYTCh8iqWd75CUkzo8QomQ8
-         AdGsm/f5u2/noUYgSk7sCqDub+p3NZD8rDm6XjFL8FPXOYnZZZsrd2gjOXnsNZKEdTzn
-         NRJlKSHnKC7wkCTLE2Nb66+t69XLGhqE4LqlYeBk6ozNqwJjyaQG70hKLcuezkp6CT4M
-         snxQAqH4IK3Rj+w5Lh/vsaHZ3pvO2BitKp6YXcqJdU2Ey8/cnTp+ZL6dYQTSs31IOjQ8
-         0xMuZvhxvzYZVsWY/1ugMuiA5lLo33JV0kLwUbNI6Z2YXp0dbVfKbAYjegB9tgqDzvYQ
-         PY/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=V/BnXF4Po6lT1XZ2J8UaiK92xTYbPrXaIJWtM2yCsTs=;
-        b=FTrtnLyEOgbtNmE3CgiQfg75GSiicvGp2OCh2WWTlsrfBytNwL9xgPtiUYSaHx/peT
-         Xb77CJdf9noXc0eXW0FA8fEOZTag7Muyev+PnsP9aKC1/MGolDh71CHlJI0ChXUOARAN
-         HzLCTcSeAudEGCPgRUITyjfBSTtdXQRtAYUPLSecy7TCjfgwp7PChu+UGVrH8WooQk6z
-         HxASChmF5Y1FKZBvJKeGpQm8K1H/sKCixkN26oRL/s9jndxOS/80HldpE/unR9nyNuJg
-         OPBQf1T4foz1Rv0tDvCO7Kdk8rceN6KHbfRZz743CQSrVfAR5mh30XDAPs4TUy04coCo
-         4rSA==
-X-Gm-Message-State: AJIora9+3r1HiZZF2TJ5LGMbUJLVcYPJfXIEDmxW/ojkdk2seQvMhzNy
-        bvRAjYAlyOVkfyn2es1UKq978jP42X4gQDZjia+47g==
-X-Google-Smtp-Source: AGRyM1u3euMHtMvSA3zS5wPrpM58C3v/B1a3dw8lQ53DFIsPSQpTHB/39Y7pVNF6nJbISO77GRAPVIoO5s1To7sUX7M=
-X-Received: by 2002:a25:b218:0:b0:664:6da5:b5c5 with SMTP id
- i24-20020a25b218000000b006646da5b5c5mr4062165ybj.6.1655198796171; Tue, 14 Jun
- 2022 02:26:36 -0700 (PDT)
+        Tue, 14 Jun 2022 05:26:56 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EDC830F44
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 02:26:44 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id 0D6781E80D90;
+        Tue, 14 Jun 2022 17:25:24 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 3IqDa6VMt13U; Tue, 14 Jun 2022 17:25:21 +0800 (CST)
+Received: from [172.30.24.122] (unknown [180.167.10.98])
+        (Authenticated sender: renyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id B331C1E80D5E;
+        Tue, 14 Jun 2022 17:25:20 +0800 (CST)
+Subject: Re: [PATCH] mm: check the function kmalloc_slab return value
+To:     Vlastimil Babka <vbabka@suse.cz>, cl@linux.com
+Cc:     penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        akpm@linux-foundation.org, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, liqiong@nfschina.com,
+        qixu@nfschina.com, hukun@nfschina.com, yuzhe@nfschina.com
+References: <20220613102438.27723-1-renyu@nfschina.com>
+ <20220614083939.13508-1-renyu@nfschina.com>
+ <bb8d41fc-bd13-9563-7c54-2850f131e835@suse.cz>
+From:   tury <renyu@nfschina.com>
+Message-ID: <be9a1d54-0558-dbee-fcac-0f357ea32db9@nfschina.com>
+Date:   Tue, 14 Jun 2022 17:26:40 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-References: <20220614091359.124571-1-dzm91@hust.edu.cn>
-In-Reply-To: <20220614091359.124571-1-dzm91@hust.edu.cn>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 14 Jun 2022 17:26:00 +0800
-Message-ID: <CAMZfGtWswvFRp8UmnETRENsq1WBx9QvG7A_v8Eq62aaNA96wMw@mail.gmail.com>
-Subject: Re: [PATCH] fs: io_uring: remove NULL check before kfree
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        mudongliang <mudongliangabcd@gmail.com>,
-        io-uring@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <bb8d41fc-bd13-9563-7c54-2850f131e835@suse.cz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RDNS_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 5:14 PM Dongliang Mu <dzm91@hust.edu.cn> wrote:
->
-> From: mudongliang <mudongliangabcd@gmail.com>
->
-> kfree can handle NULL pointer as its argument.
-> According to coccinelle isnullfree check, remove NULL check
-> before kfree operation.
->
-> Signed-off-by: mudongliang <mudongliangabcd@gmail.com>
-> ---
->  fs/io_uring.c | 15 +++++----------
->  1 file changed, 5 insertions(+), 10 deletions(-)
->
-> diff --git a/fs/io_uring.c b/fs/io_uring.c
-> index 3aab4182fd89..bec47eae2a9b 100644
-> --- a/fs/io_uring.c
-> +++ b/fs/io_uring.c
-> @@ -3159,8 +3159,7 @@ static void io_free_batch_list(struct io_ring_ctx *ctx,
->                         if ((req->flags & REQ_F_POLLED) && req->apoll) {
->                                 struct async_poll *apoll = req->apoll;
->
-> -                               if (apoll->double_poll)
-> -                                       kfree(apoll->double_poll);
-> +                               kfree(apoll->double_poll);
->                                 list_add(&apoll->poll.wait.entry,
->                                                 &ctx->apoll_cache);
->                                 req->flags &= ~REQ_F_POLLED;
-> @@ -4499,8 +4498,7 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
->         kiocb_done(req, ret, issue_flags);
->  out_free:
->         /* it's faster to check here then delegate to kfree */
 
-I am feeling you are not on the right way. See the comment
-here.
 
-Thanks.
-
-> -       if (iovec)
-> -               kfree(iovec);
-> +       kfree(iovec);
->         return 0;
->  }
+在 2022年06月14日 16:48, Vlastimil Babka 写道:
+> On 6/14/22 10:39, Ren Yu wrote:
+>> As the possible failure of the kmalloc_slab,
+>> it should be better to check it.
+> AFAIK failure is not possible, kmalloc_slab() is not an allocation function,
+> it just returns a member of kmalloc_caches array, which is initialized
+> elsewhere and shouldn't contain NULLs. So the patch seems unnecessary to me.
 >
-> @@ -4602,8 +4600,7 @@ static int io_write(struct io_kiocb *req, unsigned int issue_flags)
->         }
->  out_free:
->         /* it's reportedly faster than delegating the null check to kfree() */
-
-See here.
-
-> -       if (iovec)
-> -               kfree(iovec);
-> +       kfree(iovec);
->         return ret;
->  }
+>> Signed-off-by: Ren Yu <renyu@nfschina.com>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> ---
+>> v2:
+>> - fix build waring integer from pointer without a cast
+>> ---
+>> ---
+>>   mm/slab.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/mm/slab.c b/mm/slab.c
+>> index f8cd00f4ba13..72135e555827 100644
+>> --- a/mm/slab.c
+>> +++ b/mm/slab.c
+>> @@ -2064,6 +2064,8 @@ int __kmem_cache_create(struct kmem_cache *cachep, slab_flags_t flags)
+>>   	if (OFF_SLAB(cachep)) {
+>>   		cachep->freelist_cache =
+>>   			kmalloc_slab(cachep->freelist_size, 0u);
+>> +		if (unlikely(ZERO_OR_NULL_PTR(cachep->freelist_cache)))
+> The usual way is "if (!cachep->freelist_cache)". Not sure why check for ZERO.
 >
-> @@ -6227,8 +6224,7 @@ static int io_sendmsg(struct io_kiocb *req, unsigned int issue_flags)
->                 req_set_fail(req);
->         }
->         /* fast path, check for non-NULL to avoid function call */
-
-here.
-
-> -       if (kmsg->free_iov)
-> -               kfree(kmsg->free_iov);
-> +       kfree(kmsg->free_iov);
->         req->flags &= ~REQ_F_NEED_CLEANUP;
->         if (ret >= 0)
->                 ret += sr->done_io;
-> @@ -6481,8 +6477,7 @@ static int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
->         }
+>> +			return cachep->freelist_cache;
+> So in case of NULL this would return NULL, thus 0, but __kmem_cache_create()
+> return 0 on success, so it's wrong. You would have to return e.g. -ENOMEM.
+Thanks for the advice ,I'll be re-patching
 >
->         /* fast path, check for non-NULL to avoid function call */
-
-And here.
-
-> -       if (kmsg->free_iov)
-> -               kfree(kmsg->free_iov);
-> +       kfree(kmsg->free_iov);
->         req->flags &= ~REQ_F_NEED_CLEANUP;
->         if (ret >= 0)
->                 ret += sr->done_io;
-> --
-> 2.35.1
+>>   	}
+>>   
+>>   	err = setup_cpu_cache(cachep, gfp);
 >
+

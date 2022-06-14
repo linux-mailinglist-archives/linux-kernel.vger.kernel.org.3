@@ -2,110 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C804D54BCA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6747954BCA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358283AbiFNVNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 17:13:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39178 "EHLO
+        id S1345042AbiFNVOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 17:14:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344134AbiFNVNY (ORCPT
+        with ESMTP id S235143AbiFNVOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 17:13:24 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD6B4F9C7;
-        Tue, 14 Jun 2022 14:13:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=8HSyIfVTT1zYlvK02xC9mRk+gd/87N3apl+idAVh+1o=; b=vbbdR/lPasINng/RkQ1kPsbUox
-        IMQ5LdA2hXTvTmlhHYmj1kz/EzPFPmHHbfpGaxrYmq7UViHDZhQcJWKsSO76D72nOKqM2wvgUpWq7
-        3p0Fl/dETEM+uwyG0tFVhIaovjc5xl4+1myBXfM46Rk+C1EFAZX+OjyLvdqpdDzkfMj0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1o1Dqh-006vkm-2A; Tue, 14 Jun 2022 23:13:19 +0200
-Date:   Tue, 14 Jun 2022 23:13:19 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, bryan.whitehead@microchip.com,
-        lxu@maxlinear.com, richardcochran@gmail.com,
-        UNGLinuxDriver@microchip.com, Ian.Saturley@microchip.com
-Subject: Re: [PATCH net-next 4/5] net: lan743x: Add support to SGMII 1G and
- 2.5G
-Message-ID: <Yqj575Z/tYXsRHHK@lunn.ch>
-References: <20220614103424.58971-1-Raju.Lakkaraju@microchip.com>
- <20220614103424.58971-5-Raju.Lakkaraju@microchip.com>
+        Tue, 14 Jun 2022 17:14:40 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF53D50041
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:14:36 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id mh16-20020a17090b4ad000b001e8313301f1so1997333pjb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:14:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HkQPTB8t9EvGTKD58qF0vHfJ68oz3l8jIBkren14MtU=;
+        b=aTkpA5a5N6RUC9vd4bhLfhbhY/dz8q6pNmobzGI2TMh1aU1jDqxRo5Gxd/Zft8SmN6
+         SIhZMRCGAIy+V/TMcqBK7WEhxm0SkwnT2JX22dhc4C/53+O4dm2pbpCriM8kBPoGMJdV
+         GHRSx3d9WBeM29p9VR6/Z2Nas89KWs9bNq5AM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HkQPTB8t9EvGTKD58qF0vHfJ68oz3l8jIBkren14MtU=;
+        b=IozS5oLp+GALU3U6ipc4cS6pcg2aCBPlYEx3+v2Q98IOLh9djM8yE68/iYKggHdH/K
+         fpY88yiIn8gvXY9ilK2PCFVHQQStGDqCInqmgMroO9Wp0etz+wib+eqXYoBNkOg17JMO
+         RkCuavNcfSv5i7Qhg8vTyUODtYeUjwlNsZzdo6WZMKbxoW3IXzRY3mcwPtYo9e01n2G/
+         iCKYePftUPE860Cbw1LRfRzvQzZWqQ9vgwmDdOJDB1g3EMTZWOhKiiVnLxRuOitO08+N
+         cdu11zNo6+cIHqOqK432Ce10OSPZitihSdQiniuEVAX5mHXcz0m82Q10qOyVAMoI5N+n
+         gLWQ==
+X-Gm-Message-State: AJIora/5vkvqndcIOk1nuoVD3iMQkb1zZtpE6w2pL2Zjdy1d10Ypmsb5
+        qMyjEfTf1U1xGVeUuJ7AzYDT5kMMPsG+Ug==
+X-Google-Smtp-Source: AGRyM1uFBH5wfa41P6XfONQLES95sTRwU3lihAbKYJg4LX3fASGK2gpnxJeeDBjDXT40OVpTGzCeNA==
+X-Received: by 2002:a17:90b:1e42:b0:1e8:7669:8a1c with SMTP id pi2-20020a17090b1e4200b001e876698a1cmr6476478pjb.206.1655241276404;
+        Tue, 14 Jun 2022 14:14:36 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b185-20020a621bc2000000b0051bc22c153asm8054589pfb.65.2022.06.14.14.14.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 14:14:36 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 14:14:35 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrei Vagin <avagin@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>, linux-mm@kvack.org,
+        Eric Biederman <ebiederm@xmission.com>
+Subject: Re: [PATCH 1/2] fs/exec: allow to unshare a time namespace on
+ vfork+exec
+Message-ID: <202206141412.2B0732FF6C@keescook>
+References: <20220613060723.197407-1-avagin@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220614103424.58971-5-Raju.Lakkaraju@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220613060723.197407-1-avagin@gmail.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +/* MMD Device IDs */
-> +#define STD_DEVID			(0x0)
-> +#define MMD_PMAPMD			(0x1)
-> +#define MMD_PCS				(0x3)
-> +#define MMD_ANEG			(0x7)
-> +#define MMD_VSPEC1			(0x1E)
-> +#define MMD_VSPEC2			(0x1F)
+On Sun, Jun 12, 2022 at 11:07:22PM -0700, Andrei Vagin wrote:
+> Right now, a new process can't be forked in another time namespace
+> if it shares mm with its parent. It is prohibited, because each time
+> namespace has its own vvar page that is mapped into a process address
+> space.
+> 
+> When a process calls exec, it gets a new mm and so it could be "legal"
+> to switch time namespace in that case. This was not implemented and
+> now if we want to do this, we need to add another clone flag to not
+> break backward compatibility.
+> 
+> We don't have any user requests to switch times on exec except the
+> vfork+exec combination, so there is no reason to add a new clone flag.
+> As for vfork+exec, this should be safe to allow switching timens with
+> the current clone flag. Right now, vfork (CLONE_VFORK | CLONE_VM) fails
+> if a child is forked into another time namespace. With this change,
+> vfork creates a new process in parent's timens, and the following exec
+> does the actual switch to the target time namespace.
 
-Please use the values from include/uapi/mdio.h
+This seems like a very special case. None of the other namespaces do
+this, do they?
 
-> +
-> +/* Vendor Specific SGMII MMD details */
-> +#define SR_MII_DEV_ID1			0x0002
-> +#define SR_MII_DEV_ID2			0x0003
+How is CLONE_NEWTIME supposed to be used today?
 
-MDIO_DEVID1 & MDIO_DEVID2
+-Kees
 
-> +#define SR_VSMMD_PCS_ID1		0x0004
-> +#define SR_VSMMD_PCS_ID2		0x0005
-> +#define SR_VSMMD_STS			0x0008
-> +#define SR_VSMMD_CTRL			0x0009
-> +
-> +#define SR_MII_CTRL			0x0000
-> +#define SR_MII_CTRL_RST_		BIT(15)
-> +#define SR_MII_CTRL_LBE_		BIT(14)
-> +#define SR_MII_CTRL_SS13_		BIT(13)
-> +#define SR_MII_CTRL_AN_ENABLE_		BIT(12)
-> +#define SR_MII_CTRL_LPM_		BIT(11)
-> +#define SR_MII_CTRL_RESTART_AN_		BIT(9)
-> +#define SR_MII_CTRL_DUPLEX_MODE_	BIT(8)
-> +#define SR_MII_CTRL_SS6_		BIT(6)
-
-These look like standard BMCR registers. Please use the values from
-mii.h
-
-> +#define SR_MII_STS			0x0001
-> +#define SR_MII_STS_ABL100T4_		BIT(15)
-> +#define SR_MII_STS_FD100ABL_		BIT(14)
-> +#define SR_MII_STS_HD100ABL_		BIT(13)
-> +#define SR_MII_STS_FD10ABL_		BIT(12)
-> +#define SR_MII_STS_HD10ABL_		BIT(11)
-> +#define SR_MII_STS_FD100T_		BIT(10)
-> +#define SR_MII_STS_HD100T_		BIT(9)
-> +#define SR_MII_STS_EXT_STS_ABL_		BIT(8)
-> +#define SR_MII_STS_UN_DIR_ABL_		BIT(7)
-> +#define SR_MII_STS_MF_PRE_SUP_		BIT(6)
-> +#define SR_MII_STS_AN_CMPL_		BIT(5)
-> +#define SR_MII_STS_RF_			BIT(4)
-> +#define SR_MII_STS_AN_ABL_		BIT(3)
-> +#define SR_MII_STS_LINK_STS_		BIT(2)
-> +#define SR_MII_STS_EXT_REG_CAP_		BIT(0)
-
-These look like BMSR.
-
-It could even be, you can just use generic code for these.
-
-   Andrew
+-- 
+Kees Cook

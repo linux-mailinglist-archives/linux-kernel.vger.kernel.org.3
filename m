@@ -2,61 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C9F54A9E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0101154AA2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238899AbiFNHAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33402 "EHLO
+        id S1353525AbiFNHNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:13:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbiFNHAP (ORCPT
+        with ESMTP id S1353462AbiFNHM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:00:15 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D04C63B00F;
-        Tue, 14 Jun 2022 00:00:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1655190013; x=1686726013;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=T4nzZezDWWWUTOy8OMeuQhCOxOSUCA20xYUUYSUJEJ4=;
-  b=xtGnTo4nJB5KINBX3erdkGK3vH9x+W3apBUbeoRsGzce1uvlNToY6ohF
-   MPIa5qdprHE48Izp8LoF8CBi6+KxC2AHYChxRer8eXCl6n8YPP1YqKfwj
-   KPTiTfn5Z3Y71SrljSHoa7jFtThP1RYI6vFyS+nWpPG+B7J/xblkZeQX/
-   J9f4y1+EZqxmK9xsC7QdAzyysis7dnVpp3IV6YRIsT8h8GpH0hmIYV9N3
-   BhipSxorQNpL6a3KSJu7uEhyN3z7tb+p7ex1naFxby3N3A0F9QVgP57UK
-   SfTCt76CvMlLDwnSwxMfrwGuzL9ytfKVJXfwdf1fG6rr1+y2moVOhPw5/
-   A==;
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="99902883"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Jun 2022 00:00:12 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Tue, 14 Jun 2022 00:00:12 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Tue, 14 Jun 2022 00:00:10 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Mark Brown <broonie@kernel.org>
-CC:     Daire McNamara <daire.mcnamara@microchip.com>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        <linux-riscv@lists.infradead.org>, <linux-spi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH] spi: microchip-core: fix potentially incorrect return from probe
-Date:   Tue, 14 Jun 2022 07:58:10 +0100
-Message-ID: <20220614065809.1969177-1-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Tue, 14 Jun 2022 03:12:58 -0400
+Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324E918353;
+        Tue, 14 Jun 2022 00:12:52 -0700 (PDT)
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 691FA20004F;
+        Tue, 14 Jun 2022 09:12:51 +0200 (CEST)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 06DAE2000C2;
+        Tue, 14 Jun 2022 09:12:51 +0200 (CEST)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 67BCC1802205;
+        Tue, 14 Jun 2022 15:12:49 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     l.stach@pengutronix.de, bhelgaas@google.com, robh+dt@kernel.org,
+        broonie@kernel.org, lorenzo.pieralisi@arm.com, festevam@gmail.com,
+        francesco.dolcini@toradex.com
+Cc:     hongxing.zhu@nxp.com, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Subject: [PATCH v11 0/8] PCI: imx6: refine codes and add the error propagation
+Date:   Tue, 14 Jun 2022 14:58:54 +0800
+Message-Id: <1655189942-12678-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,30 +45,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If platform_get_irqi() returns 0, the error case will be triggered but
-probe() will return 0 rather than an error. Ape the other drivers using
-this pattern and return -ENXIO.
+This series patches refine pci-imx6 driver and do the following main changes.
+- Encapsulate the clock enable into one standalone function
+- Add the error propagation from host_init and resume
+- Turn off regulator when the system is in suspend mode
+- Let the probe successfully when link never comes up
+- Do not hide the phy driver callbacks in core reset and clk_enable.
+BTW, this series are verified on i.MX8MM EVK board when one NVME is used.
 
-Reported-by: Yang Li <yang.lee@linux.alibaba.com>
-Link: https://lore.kernel.org/linux-spi/20220609055533.95866-2-yang.lee@linux.alibaba.com/
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- drivers/spi/spi-microchip-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Main changes from v10 to v11:
+No code changes, just do the following operations refer to Bjorn's comments.
+  - Split #6 patch into two patches.
+  - Rebase to v5.19-rc1 based on for-next branch of Shawn's git.
 
-diff --git a/drivers/spi/spi-microchip-core.c b/drivers/spi/spi-microchip-core.c
-index 5b22a1395554..856a68fd8e9f 100644
---- a/drivers/spi/spi-microchip-core.c
-+++ b/drivers/spi/spi-microchip-core.c
-@@ -541,7 +541,7 @@ static int mchp_corespi_probe(struct platform_device *pdev)
- 	spi->irq = platform_get_irq(pdev, 0);
- 	if (spi->irq <= 0) {
- 		dev_err(&pdev->dev, "invalid IRQ %d for SPI controller\n", spi->irq);
--		ret = spi->irq;
-+		ret = -ENXIO;
- 		goto error_release_master;
- 	}
- 
--- 
-2.36.1
+Main changes from v9 to v10:
+- Add the "Reviewed-by: Lucas Stach <l.stach@pengutronix.de>" tag into #3
+  and #4 patches.
+- Refer to Bjorn's comments:
+  - refine the commit of the first patch
+  - keep alignment of the message format in the second patch
+  - More specific commit and subject of the #5 and #7 patches.
+- Move the regualtor_disable into suspend, turn off the regulator when bus
+  is powered off and system in suspend mode.
+- Let the driver probe successfully, return zero in imx6_pcie_start_link()
+  when PCIe link is down. 
+  In this link down scenario, only start the PCIe link training in resume
+  when the link is up before system suspend to avoid the long latency in
+  the link training period.
+- Don't hide phy driver callbacks in core reset and clk_enable, and refine
+  the error handling accordingly.
+- Drop the #8 patch of v9 series, since the clocks and powers are not gated
+  off anymore when link is down.
 
+Main changes from v8 to v9:
+- Don't change pcie-designware codes, and do the error exit process only in
+  pci-imx6 driver internally.
+- Move the phy driver callbacks to the proper places
+
+Main changes from v7 to v8:
+Regarding Bjorn's review comments.
+- Align the format of the dev_info message and refine commit log of
+  #6/7/8 patches.
+- Rename the err_reset_phy label, since there is no PHY reset in the out
+
+Main changes from v6 to v7:
+- Keep the regulator usage counter balance in the #5 patch of v6 series.
+
+Main changes from v5 to v6:
+- Refer to the following discussion with Fabio, fix the dump by his patch.
+  https://patchwork.kernel.org/project/linux-pci/patch/1641368602-20401-6-git-send-email-hongxing.zhu@nxp.com/
+  Refine and rebase this patch-set after Fabio' dump fix patch is merged.
+- Add one new #4 patch to disable i.MX6QDL REF clock too when disable clocks
+- Split the regulator refine codes into one standalone patch #5 in this version.
+
+Main changes from v4 to v5:
+- Since i.MX8MM PCIe support had been merged. Based on Lorenzo's git repos,
+  resend the patch-set after rebase.
+
+Main changes from v3 to v4:
+- Regarding Mark's comments, delete the regulator_is_enabled() check.
+- Squash #3 and #6 of v3 patch into #5 patch of v4 set.
+
+Main changes from v2 to v3:
+- Add "Reviewed-by: Lucas Stach <l.stach@pengutronix.de>" tag into
+  first two patches.
+- Add a Fixes tag into #3 patch.
+- Split the #4 of v2 to two patches, one is clock disable codes move,
+  the other one is the acutal clock unbalance fix.
+- Add a new host_exit() callback into dw_pcie_host_ops, then it could be
+  invoked to handle the unbalance issue in the error handling after
+  host_init() function when link is down.
+- Add a new host_exit() callback for i.MX PCIe driver to handle this case
+  in the error handling after host_init.
+
+Main changes from v1 to v2:
+Regarding Lucas' comments.
+  - Move the placement of the new imx6_pcie_clk_enable() to avoid the
+    forward declarition.
+  - Seperate the second patch of v1 patch-set to three patches.
+  - Use the module_param to replace the kernel command line.
+Regarding Bjorn's comments:
+  - Use the cover-letter for a multi-patch series.
+  - Correct the subject line, and refine the commit logs. For example,
+    remove the timestamp of the logs.
+
+drivers/pci/controller/dwc/pci-imx6.c | 241 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------------------------------------
+1 file changed, 157 insertions(+), 84 deletions(-)
+[PATCH v11 1/8] PCI: imx6: Encapsulate the clock enable into one
+[PATCH v11 2/8] PCI: imx6: Add the error propagation from host_init
+[PATCH v11 3/8] PCI: imx6: Move imx6_pcie_clk_disable() earlier
+[PATCH v11 4/8] PCI: imx6: Disable iMX6QDL PCIe REF clock when
+[PATCH v11 5/8] PCI: imx6: Turn off regulator when the system is in
+[PATCH v11 6/8] PCI: imx6: Mark the link down as none fatal error
+[PATCH v11 7/8] PCI: imx6: Reduce resume time by only starting link
+[PATCH v11 8/8] PCI: imx6: Do not hide phy driver callbacks and

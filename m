@@ -2,120 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A92954AA37
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0334754AA4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353567AbiFNHM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
+        id S1354169AbiFNHN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:13:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353444AbiFNHMh (ORCPT
+        with ESMTP id S1353748AbiFNHNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:12:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412C05FE7
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:12:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2184B81649
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:12:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9637C3411B;
-        Tue, 14 Jun 2022 07:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655190749;
-        bh=bTzyUDG/xn3eoLovQdEvpgAJqPPl044VpECLbq6qQGY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Xxx6ZhvMaC6FlWB038KmujLKhzXwKGKHraIaNbOkIvInGjh9Ae8qjPomYrw7wmXD2
-         ywL5ALOR1jRvr+PFes7ixbz22d9zfUatGQ/lqOwqZg3Cum0SgM0SCyDnD5ks0+hrkt
-         vKF3L07TmL8RhM6FOuNjjHAUIvPoS6G0dt9AFEw0=
-Date:   Tue, 14 Jun 2022 09:12:21 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Bard Liao <yung-chuan.liao@linux.intel.com>
-Cc:     alsa-devel@alsa-project.org, vkoul@kernel.org,
-        vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
-        broonie@kernel.org, srinivas.kandagatla@linaro.org,
-        pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
-        bard.liao@intel.com
-Subject: Re: [PATCH 2/2] ASoC: SOF: Intel: add trigger callback into
- sdw_callback
-Message-ID: <Yqg01aSixhBq9d4+@kroah.com>
-References: <20220614070817.2508-1-yung-chuan.liao@linux.intel.com>
- <20220614070817.2508-3-yung-chuan.liao@linux.intel.com>
+        Tue, 14 Jun 2022 03:13:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88A8614093
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:13:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655190800;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LKlOpt8qSD0CmMZjWRzdbcAIzpT8dnJiO5KsKOkq/7A=;
+        b=Dsy+hVDt0Q/U7b8EXXyZ0FitvOX6FVjKHUIQb5uWnXxyBNfOLS8Z9G/KJKZ7PmWaIpeRoj
+        RD2qcOZQcJZ1Ob8uvsqU5Sjv69PxN4zfR1hJkendxThkVeYnjBS++kev5A6cPffDy3d9Xt
+        Yzcf3SGZ90dWmaKrRq36+rCFRjsalzE=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-499-MxFFbL5zOnuJZluGKZeZUQ-1; Tue, 14 Jun 2022 03:13:19 -0400
+X-MC-Unique: MxFFbL5zOnuJZluGKZeZUQ-1
+Received: by mail-wr1-f71.google.com with SMTP id q14-20020a5d61ce000000b00210353e32b0so1006481wrv.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:13:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=LKlOpt8qSD0CmMZjWRzdbcAIzpT8dnJiO5KsKOkq/7A=;
+        b=cgXFEyG4biME4VhxWcOqLAUb/ZuVj2RdB0PDU5KACLZLBG4QerEfESVZUFu1gYT+3k
+         4ARBe8FSf4LpUvhMk0Ly5qdBKSNeXvjCTyfKBYRlgIO8byyThB8rZiOudWxgOu+AgYqw
+         wkpYTrgEVtZlkY2DjG5hqn3hMEoDnbNvjhdBDNRhN/ITJn63mlH/lPrAbR9h7E4NPGHO
+         LfvxE8tFc/Q1NnQlo8qXsSQTSohDrPNDcg9j67lYE8n8cYAQ5WIA3yExDt1fvCJ1pYaS
+         szEa+fyuO748dDNX2nYSMbtMHX3oHuUWgKknI8b0Jz5w1U9IUkVnYffj08saHmJ4grGI
+         GPNw==
+X-Gm-Message-State: AJIora8BBzpisiXvs5desh9td0JF+Cd5X4vZ+61yc1xEKGRVOgXB6qND
+        /uvpw+wGjJn4m5AUqyNIF6qatUCZu2sRpw5ah41Pz6NjRcb8zhJXxZW1c6xr50VzS85PMLbmk97
+        9oJWaTXgfZgsacunFK42AIECO
+X-Received: by 2002:adf:e488:0:b0:20f:d981:4b42 with SMTP id i8-20020adfe488000000b0020fd9814b42mr3418607wrm.455.1655190798191;
+        Tue, 14 Jun 2022 00:13:18 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1sgovKaDqFV8QpEkIw4k+j83HoLwRExh4nSqw3y81ZcWHWy4RxHq503W6SY/MetIN7pvGyF+w==
+X-Received: by 2002:adf:e488:0:b0:20f:d981:4b42 with SMTP id i8-20020adfe488000000b0020fd9814b42mr3418591wrm.455.1655190797985;
+        Tue, 14 Jun 2022 00:13:17 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70b:cf00:aace:de16:d459:d411? (p200300cbc70bcf00aacede16d459d411.dip0.t-ipconnect.de. [2003:cb:c70b:cf00:aace:de16:d459:d411])
+        by smtp.gmail.com with ESMTPSA id f6-20020a05600c4e8600b0039c6ce32a2dsm18645125wmq.33.2022.06.14.00.13.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 00:13:17 -0700 (PDT)
+Message-ID: <66c43dac-32ac-5801-c76c-01607d68e38b@redhat.com>
+Date:   Tue, 14 Jun 2022 09:13:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614070817.2508-3-yung-chuan.liao@linux.intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v4 1/2] mm/memory-failure: introduce "hwpoisoned-pages"
+ entry
+Content-Language: en-US
+To:     =?UTF-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPoyDnm7TkuZ8p?= 
+        <naoya.horiguchi@nec.com>, zhenwei pi <pizhenwei@bytedance.com>
+Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linmiaohe@huawei.com" <linmiaohe@huawei.com>
+References: <20220614043830.99607-1-pizhenwei@bytedance.com>
+ <20220614043830.99607-2-pizhenwei@bytedance.com>
+ <20220614070934.GA1627546@hori.linux.bs1.fc.nec.co.jp>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20220614070934.GA1627546@hori.linux.bs1.fc.nec.co.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 03:08:17PM +0800, Bard Liao wrote:
-> For IPC4, we need to set pipeline state in BE DAI trigger.
+	   &hwpoisoned_pages);
 > 
-> Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-> Reviewed-by: Rander Wang <rander.wang@intel.com>
-> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-> ---
->  sound/soc/sof/intel/hda-dai.c | 15 ++++++++++++---
->  sound/soc/sof/intel/hda.c     |  2 +-
->  sound/soc/sof/intel/hda.h     |  1 +
->  3 files changed, 14 insertions(+), 4 deletions(-)
+> I'm not sure how useful this interface from userspace (controlling test process
+> with this?).  Do we really need to expose this to userspace? 
 > 
-> diff --git a/sound/soc/sof/intel/hda-dai.c b/sound/soc/sof/intel/hda-dai.c
-> index 228079a52c3d..6ed99fdc5793 100644
-> --- a/sound/soc/sof/intel/hda-dai.c
-> +++ b/sound/soc/sof/intel/hda-dai.c
-> @@ -713,8 +713,7 @@ static const struct snd_soc_dai_ops ipc3_ssp_dai_ops = {
->  	.shutdown = ssp_dai_shutdown,
->  };
->  
-> -static int ipc4_be_dai_trigger(struct snd_pcm_substream *substream,
-> -			       int cmd, struct snd_soc_dai *dai)
-> +static int ipc4_be_dai_common_trigger(struct snd_soc_dai *dai, int cmd, int stream)
->  {
->  	struct snd_sof_widget *pipe_widget;
->  	struct sof_ipc4_pipeline *pipeline;
-> @@ -723,7 +722,7 @@ static int ipc4_be_dai_trigger(struct snd_pcm_substream *substream,
->  	struct snd_sof_dev *sdev;
->  	int ret;
->  
-> -	w = snd_soc_dai_get_widget(dai, substream->stream);
-> +	w = snd_soc_dai_get_widget(dai, stream);
->  	swidget = w->dobj.private;
->  	pipe_widget = swidget->pipe_widget;
->  	pipeline = pipe_widget->private;
-> @@ -758,6 +757,12 @@ static int ipc4_be_dai_trigger(struct snd_pcm_substream *substream,
->  	return 0;
->  }
->  
-> +static int ipc4_be_dai_trigger(struct snd_pcm_substream *substream,
-> +			       int cmd, struct snd_soc_dai *dai)
-> +{
-> +	return ipc4_be_dai_common_trigger(dai, cmd, substream->stream);
-> +}
-> +
->  static const struct snd_soc_dai_ops ipc4_dmic_dai_ops = {
->  	.trigger = ipc4_be_dai_trigger,
->  };
-> @@ -809,6 +814,10 @@ void hda_set_dai_drv_ops(struct snd_sof_dev *sdev, struct snd_sof_dsp_ops *ops)
->  		if (!hda_use_tplg_nhlt)
->  			ipc4_data->nhlt = intel_nhlt_init(sdev->dev);
->  
-> +#if IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE)
-> +		sdw_callback.trigger = ipc4_be_dai_common_trigger;
-> +#endif
+> 
+> TBH I feel that another approach like below is more desirable:
+> 
+>   - define a new flag in "enum mf_flags" (for example named MF_SW_SIMULATED),
+>   - set the flag when calling memory_failure() from the three callers
+>     mentioned above,
+>   - define a global variable (typed bool) in mm/memory_failure.c_to show that
+>     the system has experienced a real hardware memory error events.
+>   - once memory_failure() is called without MF_SW_SIMULATED, the new global
+>     bool variable is set, and afterward unpoison_memory always fails with
+>     -EOPNOTSUPP.
 
-#if should not be in .c files if at all possible.  Surely there's a
-better way here...
+Exactly what I had in mind.
 
-thanks,
+-- 
+Thanks,
 
-greg k-h
+David / dhildenb
+

@@ -2,267 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D625E54AF1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1D354AF48
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356191AbiFNLOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 07:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38770 "EHLO
+        id S1355765AbiFNLXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 07:23:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356294AbiFNLNn (ORCPT
+        with ESMTP id S1356301AbiFNLX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 07:13:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB9720BDA;
-        Tue, 14 Jun 2022 04:13:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA1D8B817DD;
-        Tue, 14 Jun 2022 11:13:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87FAEC3411B;
-        Tue, 14 Jun 2022 11:13:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655205218;
-        bh=ENxCaP9Rk2nwCR/0WD0QuKmb7cfrw4GmQwwV0iSrjDU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Hh/l9xxP/UpxZHcucnAZAY/2RPjW7ZhykKXFR6o3nwKC/acvwOOH4YnGjj4s73SNd
-         wUSW17MZVdj57vBp2pyVAGWMxf+qqdnBXm9a0WRI8wvxclb8y5xTasUfiNLsgoe1LL
-         7W58vY00SoFalY3Jut9SMdvcEkwp8zTLXgohjLIuHTH9UNwoUs0E4z4z9jMc6lvZXl
-         ZZSXFa8KUxzcY5AEN4764+vN/Nt/L784GhIgknu/WlMqKpNSxYPdZEIxgQnpL/aqxK
-         rF5lb+Vql3JtQTeQBGrALUAHnn2im5cZfX8Ge/1t6HpSaGRzmWt2hZX202OXaDsR/J
-         uCh1vslFlNAiw==
-Date:   Tue, 14 Jun 2022 12:22:48 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] iio: adc: stx104: Implement and utilize register
- structures
-Message-ID: <20220614122248.7f257556@jic23-huawei>
-In-Reply-To: <a2dca9435f7f1f727c696a1faa0ab9e27927f9f3.1654118389.git.william.gray@linaro.org>
-References: <cover.1654118389.git.william.gray@linaro.org>
-        <a2dca9435f7f1f727c696a1faa0ab9e27927f9f3.1654118389.git.william.gray@linaro.org>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Tue, 14 Jun 2022 07:23:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B154825596
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:23:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655205805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DeSyU/TE5RCJvUem9lvGVeASpqzw6FLVpfJvGFrZeZA=;
+        b=RKuP4JRAAaLUlTTz8/JXtzaoCXUSV32e3OwcNJmNAsONar/71gsh9a+7ZaZPQRhwju3VAL
+        QmgywiXnPdngAdN6a+bis0O+o3XG5vONe9guIQ3XV5vwFnEyFkS9i0DOmRdGFv9yC0WvmE
+        JoGhQrpW0ef701J63YR74GC9XtmXN9Y=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-602-jRr0AnV9MzypSXSlXQV3NA-1; Tue, 14 Jun 2022 07:23:24 -0400
+X-MC-Unique: jRr0AnV9MzypSXSlXQV3NA-1
+Received: by mail-ed1-f71.google.com with SMTP id m5-20020a056402430500b004319d8ba8afso6002127edc.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:23:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=DeSyU/TE5RCJvUem9lvGVeASpqzw6FLVpfJvGFrZeZA=;
+        b=cKVpJpDBM0om4sOTnm0Oz7HReWoJ2c+JqGKA1H7lcMvU+0rNogGkBbFMqafvWYajpX
+         j05bjykn+RA/VKuGYEiMKisWTD35KTZhGXJ2xAWAcMlqa/cs4Oo1uODQg85rCPgRzdvr
+         FoygbBi034h5ilWCiGWl758OUpNiX52V6op0vIsifoSAluNVHYPBV91MjBiErmINLB6Z
+         TWoEax4KeP1zRM54chmjWztlzjVZupxxlKlkIIRRz2yClDuUgOATsEiXXRHBsHAv+Ott
+         JE6IOutCWdQeer3N5cN7jk8vWyL2Ra0FQ9V9+gj9bVJY6dAgy6J2M9uv/xozv3l8/A9r
+         EZTA==
+X-Gm-Message-State: AOAM5320jh5MEHzAHC3VV4KPxqWfpeF+/KkzQEf8KP0x2DW6Vb/e3hGb
+        PD36ovC+VvLU2b8pES9lPXXbk/skkbyzxLNVb7xNoe0SVl+IZjeCDKdR12o0xxnlP7Xb7srAj+3
+        LkcL6y7MlakHPEV5e/pnARJrO
+X-Received: by 2002:a17:907:3f97:b0:711:d61d:df9 with SMTP id hr23-20020a1709073f9700b00711d61d0df9mr3913085ejc.644.1655205803107;
+        Tue, 14 Jun 2022 04:23:23 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzQHMluBcpPYWc2yp7uCcemI90Mdk5ZmtpRcGvCZkTZAWWy/1vIWBvgwwPdeOTQ0uucLYHirA==
+X-Received: by 2002:a17:907:3f97:b0:711:d61d:df9 with SMTP id hr23-20020a1709073f9700b00711d61d0df9mr3913061ejc.644.1655205802817;
+        Tue, 14 Jun 2022 04:23:22 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id fs36-20020a170907602400b00705f6dab05bsm4902373ejc.183.2022.06.14.04.23.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 04:23:21 -0700 (PDT)
+Message-ID: <bd21d5c6-ed5f-dd8c-f0bf-73f54ca8ee58@redhat.com>
+Date:   Tue, 14 Jun 2022 13:23:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1 1/1] phy: ti: tusb1210: Don't check for write errors
+ when powering on
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Ferry Toth <ftoth@exalondelft.nl>
+References: <20220613160848.82746-1-andriy.shevchenko@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220613160848.82746-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  6 Jun 2022 10:15:17 -0400
-William Breathitt Gray <william.gray@linaro.org> wrote:
+Hi,
 
-> Reduce magic numbers and improve code readability by implementing and
-> utilizing named register data structures.
+On 6/13/22 18:08, Andy Shevchenko wrote:
+> On some platforms, like Intel Merrifield, the writing values during power on
+> may timeout:
 > 
-> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+>    tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41 to reg 0x80
+>    phy phy-dwc3.0.auto.ulpi.0: phy poweron failed --> -110
+>    dwc3 dwc3.0.auto: error -ETIMEDOUT: failed to initialize core
+>    dwc3: probe of dwc3.0.auto failed with error -110
+> 
+> which effectively fails the probe of the USB controller.
+> Drop the check as it was before the culprit commit (see Fixes tag).
+> 
+> Fixes: 09a3512681b3 ("phy: ti: tusb1210: Improve ulpi_read()/_write() error checking")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-A few comments inline, but looks fine to me otherwise.
+Copy and pasting my reply about this in another thread to keep everyone up2date:
 
-Jonathan
+"""
+In my experience with using the phy for charger-type detection on some
+x86 android tablets which don't have any other way to do charger detection,
+these errors indicate a real communication issue for reading/writing
+phy registers. At the same time this usually does not seem to be a big
+problem since the phy seems to work fine with its power-on defaults.
+
+In case of Bay Trail these errors were related to 2 things:
+
+1. Autosuspend of the phy-interface block in the dwc3, fixed by:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d7c93a903f33ff35aa0e6b5a8032eb9755b00826
+
+But dwc3_pci_mrfld_properties[] already sets "snps,dis_u2_susphy_quirk",
+so I guess it is not this.
+
+2. There being no delay in tusb1210_power_on() between toggling the
+reset IO and then trying to communicate with the phy, fixed in:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=df37c99815d9e0775e67276d70c93cbc25f31c70
+
+Maybe the:
+
+#define TUSB1210_RESET_TIME_MS				30
+
+Added by that commit needs to be a bit bigger for the possibly
+older phy revision used on the merifield boards?
+
+(note it is fine to just increase it a bit everywhere).
+"""
+
+IMHO it would be good to try and increase TUSB1210_RESET_TIME_MS (start with say 100
+and then see if e.g. 50 also works). If increasing that does not work
+
+I'm fine with going with this workaround patch to fix things.
+
+Regards,
+
+Hans
+
+
 
 > ---
->  drivers/iio/adc/stx104.c | 70 +++++++++++++++++++++++++++-------------
->  1 file changed, 47 insertions(+), 23 deletions(-)
+>  drivers/phy/ti/phy-tusb1210.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/iio/adc/stx104.c b/drivers/iio/adc/stx104.c
-> index 7552351bfed9..7656b363e281 100644
-> --- a/drivers/iio/adc/stx104.c
-> +++ b/drivers/iio/adc/stx104.c
-> @@ -16,6 +16,7 @@
->  #include <linux/module.h>
->  #include <linux/moduleparam.h>
->  #include <linux/spinlock.h>
-> +#include <linux/types.h>
+> diff --git a/drivers/phy/ti/phy-tusb1210.c b/drivers/phy/ti/phy-tusb1210.c
+> index c3ab4b69ea68..669c13d6e402 100644
+> --- a/drivers/phy/ti/phy-tusb1210.c
+> +++ b/drivers/phy/ti/phy-tusb1210.c
+> @@ -105,8 +105,9 @@ static int tusb1210_power_on(struct phy *phy)
+>  	msleep(TUSB1210_RESET_TIME_MS);
 >  
->  #define STX104_OUT_CHAN(chan) {				\
->  	.type = IIO_VOLTAGE,				\
-> @@ -44,14 +45,36 @@ static unsigned int num_stx104;
->  module_param_hw_array(base, uint, ioport, &num_stx104, 0);
->  MODULE_PARM_DESC(base, "Apex Embedded Systems STX104 base addresses");
->  
-> +/**
-> + * struct stx104_reg - device register structure
-> + * @ad:		ADC Data
-> + * @achan:	ADC Channel
-> + * @dio:	Digital I/O
-> + * @dac:	DAC Channels
-> + * @cir_asr:	Clear Interrupts and ADC Status
-> + * @acr:	ADC Control
-> + * @pccr_fsh:	Pacer Clock Control and FIFO Status MSB
-> + * @acfg:	ADC Configuration
-> + */
-> +struct stx104_reg {
-> +	u16 ad;
-> +	u8 achan;
-> +	u8 dio;
-> +	u16 dac[2];
-> +	u8 cir_asr;
-> +	u8 acr;
-> +	u8 pccr_fsh;
-> +	u8 acfg;
-> +};
+>  	/* Restore the optional eye diagram optimization value */
+> -	return tusb1210_ulpi_write(tusb, TUSB1210_VENDOR_SPECIFIC2,
+> -				   tusb->vendor_specific2);
+> +	tusb1210_ulpi_write(tusb, TUSB1210_VENDOR_SPECIFIC2, tusb->vendor_specific2);
 > +
->  /**
->   * struct stx104_iio - IIO device private data structure
->   * @chan_out_states:	channels' output states
-> - * @base:		base port address of the IIO device
-> + * @reg:		I/O address offset for the device registers
->   */
->  struct stx104_iio {
->  	unsigned int chan_out_states[STX104_NUM_OUT_CHAN];
-> -	void __iomem *base;
-> +	struct stx104_reg __iomem *reg;
->  };
+> +	return 0;
+>  }
 >  
->  /**
-> @@ -64,7 +87,7 @@ struct stx104_iio {
->  struct stx104_gpio {
->  	struct gpio_chip chip;
->  	spinlock_t lock;
-> -	void __iomem *base;
-> +	u8 __iomem *base;
->  	unsigned int out_state;
->  };
->  
-> @@ -72,6 +95,7 @@ static int stx104_read_raw(struct iio_dev *indio_dev,
->  	struct iio_chan_spec const *chan, int *val, int *val2, long mask)
->  {
->  	struct stx104_iio *const priv = iio_priv(indio_dev);
-> +	struct stx104_reg __iomem *const reg = priv->reg;
->  	unsigned int adc_config;
->  	int adbu;
->  	int gain;
-> @@ -79,7 +103,7 @@ static int stx104_read_raw(struct iio_dev *indio_dev,
->  	switch (mask) {
->  	case IIO_CHAN_INFO_HARDWAREGAIN:
->  		/* get gain configuration */
-> -		adc_config = ioread8(priv->base + 11);
-> +		adc_config = ioread8(&reg->acfg);
->  		gain = adc_config & 0x3;
->  
->  		*val = 1 << gain;
-> @@ -91,24 +115,24 @@ static int stx104_read_raw(struct iio_dev *indio_dev,
->  		}
->  
->  		/* select ADC channel */
-> -		iowrite8(chan->channel | (chan->channel << 4), priv->base + 2);
-> +		iowrite8(chan->channel | (chan->channel << 4), &reg->achan);
->  
->  		/* trigger ADC sample capture and wait for completion */
-> -		iowrite8(0, priv->base);
-> -		while (ioread8(priv->base + 8) & BIT(7));
-> +		iowrite8(0, &reg->ad);
-
-Curious - 8 bit write to a 16 bit address?  Maybe worth a comment
-on why.
-
-> +		while (ioread8(&reg->cir_asr) & BIT(7));
->  
-> -		*val = ioread16(priv->base);
-> +		*val = ioread16(&reg->ad);
->  		return IIO_VAL_INT;
->  	case IIO_CHAN_INFO_OFFSET:
->  		/* get ADC bipolar/unipolar configuration */
-> -		adc_config = ioread8(priv->base + 11);
-> +		adc_config = ioread8(&reg->acfg);
->  		adbu = !(adc_config & BIT(2));
->  
->  		*val = -32768 * adbu;
->  		return IIO_VAL_INT;
->  	case IIO_CHAN_INFO_SCALE:
->  		/* get ADC bipolar/unipolar and gain configuration */
-> -		adc_config = ioread8(priv->base + 11);
-> +		adc_config = ioread8(&reg->acfg);
->  		adbu = !(adc_config & BIT(2));
->  		gain = adc_config & 0x3;
->  
-> @@ -130,16 +154,16 @@ static int stx104_write_raw(struct iio_dev *indio_dev,
->  		/* Only four gain states (x1, x2, x4, x8) */
->  		switch (val) {
->  		case 1:
-> -			iowrite8(0, priv->base + 11);
-> +			iowrite8(0, &priv->reg->acfg);
->  			break;
->  		case 2:
-> -			iowrite8(1, priv->base + 11);
-> +			iowrite8(1, &priv->reg->acfg);
->  			break;
->  		case 4:
-> -			iowrite8(2, priv->base + 11);
-> +			iowrite8(2, &priv->reg->acfg);
->  			break;
->  		case 8:
-> -			iowrite8(3, priv->base + 11);
-> +			iowrite8(3, &priv->reg->acfg);
->  			break;
->  		default:
->  			return -EINVAL;
-> @@ -153,7 +177,7 @@ static int stx104_write_raw(struct iio_dev *indio_dev,
->  				return -EINVAL;
->  
->  			priv->chan_out_states[chan->channel] = val;
-> -			iowrite16(val, priv->base + 4 + 2 * chan->channel);
-> +			iowrite16(val, priv->reg->dac + chan->channel);
-Perhaps for consistency with below go with
-&priv->reg->dac[chan->channels];
-
->  
->  			return 0;
->  		}
-> @@ -307,15 +331,15 @@ static int stx104_probe(struct device *dev, unsigned int id)
->  	}
->  
->  	priv = iio_priv(indio_dev);
-> -	priv->base = devm_ioport_map(dev, base[id], STX104_EXTENT);
-> -	if (!priv->base)
-> +	priv->reg = devm_ioport_map(dev, base[id], STX104_EXTENT);
-> +	if (!priv->reg)
->  		return -ENOMEM;
->  
->  	indio_dev->info = &stx104_info;
->  	indio_dev->modes = INDIO_DIRECT_MODE;
->  
->  	/* determine if differential inputs */
-> -	if (ioread8(priv->base + 8) & BIT(5)) {
-> +	if (ioread8(&priv->reg->cir_asr) & BIT(5)) {
->  		indio_dev->num_channels = ARRAY_SIZE(stx104_channels_diff);
->  		indio_dev->channels = stx104_channels_diff;
->  	} else {
-> @@ -326,14 +350,14 @@ static int stx104_probe(struct device *dev, unsigned int id)
->  	indio_dev->name = dev_name(dev);
->  
->  	/* configure device for software trigger operation */
-> -	iowrite8(0, priv->base + 9);
-> +	iowrite8(0, &priv->reg->acr);
->  
->  	/* initialize gain setting to x1 */
-> -	iowrite8(0, priv->base + 11);
-> +	iowrite8(0, &priv->reg->acfg);
->  
->  	/* initialize DAC output to 0V */
-> -	iowrite16(0, priv->base + 4);
-> -	iowrite16(0, priv->base + 6);
-> +	iowrite16(0, &priv->reg->dac[0]);
-> +	iowrite16(0, &priv->reg->dac[1]);
->  
->  	stx104gpio->chip.label = dev_name(dev);
->  	stx104gpio->chip.parent = dev;
-> @@ -348,7 +372,7 @@ static int stx104_probe(struct device *dev, unsigned int id)
->  	stx104gpio->chip.get_multiple = stx104_gpio_get_multiple;
->  	stx104gpio->chip.set = stx104_gpio_set;
->  	stx104gpio->chip.set_multiple = stx104_gpio_set_multiple;
-> -	stx104gpio->base = priv->base + 3;
-> +	stx104gpio->base = &priv->reg->dio;
->  	stx104gpio->out_state = 0x0;
->  
->  	spin_lock_init(&stx104gpio->lock);
+>  static int tusb1210_power_off(struct phy *phy)
 

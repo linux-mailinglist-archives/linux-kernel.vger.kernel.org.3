@@ -2,46 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5D0054B3EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E8B54B3F4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345043AbiFNOxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50728 "EHLO
+        id S242317AbiFNOyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344821AbiFNOxg (ORCPT
+        with ESMTP id S232474AbiFNOyo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:53:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0D822124B;
-        Tue, 14 Jun 2022 07:53:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94CA71650;
-        Tue, 14 Jun 2022 07:53:34 -0700 (PDT)
-Received: from monolith.localdoman (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2D4D43F66F;
-        Tue, 14 Jun 2022 07:53:31 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 15:53:53 +0100
-From:   Alexandru Elisei <alexandru.elisei@arm.com>
-To:     sunjunchao2870@gmail.com, jack@suse.cz, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pmladek@suse.com, senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, keescook@chromium.org, anton@enomsg.org,
-        ccross@android.com, tony.luck@intel.com, heiko@sntech.de,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, maco@android.com, hch@lst.de,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        suzuki.poulose@arm.com
-Subject: Re: [BUG] rockpro64 board hangs in console_init() after commit
- 10e14073107d
-Message-ID: <Yqigw6vu6RYBIqHK@monolith.localdoman>
-References: <Yqdry+IghSWnJ6pe@monolith.localdoman>
+        Tue, 14 Jun 2022 10:54:44 -0400
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C5D27CE8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:54:43 -0700 (PDT)
+Received: by mail-yb1-xb2d.google.com with SMTP id l204so15543402ybf.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:54:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=BnX2PXmAa5CmcHNKr34lLc/yKhRdA6qLpTj2Oet80hY=;
+        b=VvJdqcL3UKSIR2Q0os5TLMDwm9FDQfrDEFHrc01YDAW2bnYxeXBMEDV65VR407LajM
+         75R0AaJZudMw7eXzkFdXq5MVZsjCK9C7IOrDkdtWxrz0lBRVUrXBPkf/55Xt0ABpOaTC
+         uuyf+JDBDgNp+TmimS/L45rSY2XXqHAio9Bu1j2P+PFqkXV2bBtVfxmjJRaYbazHblG/
+         0ICpOg2/QfIbkzahqM4im6ipZuVNIVCUGbFq9gDuNCzsG+rSkg+x0JZn99tVrwkSwoof
+         ta0PD3jlih49gamqD42U8BBREDm5HrtE0tjQRHrVQd4S1jXIuMl8Ssr/fsjfLmeP53RS
+         HG7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=BnX2PXmAa5CmcHNKr34lLc/yKhRdA6qLpTj2Oet80hY=;
+        b=zeH2+09cuOrwvH4tcW5MM02CWP0oQPB5Sio82vYfAFiAx2k8UnLeJ4xQjYlzhWpvAl
+         HS/aSuH0ju9bXBVAPhxdMAj0DPLin0p52kzJoJufrH9vyyoXoVJIRnnhS9xFwplf6us9
+         H3HS9C8DWA4mXqt43RJELPwFqeXV2ScmcqlUoUA+j+KVVmiWMf21VvzjLFny7hCBXrZE
+         gnc8FWHC4dHb3AhBhtPn3JXlVP5tgtMrtD8POuqzqfdQ9GtDVgAxwXZkeqlHQn5cHXej
+         1IMRpvJiDn1XPPlgzc0W0z40HtfxKE5NgWbA8v/R8RpbBOoWZNOeJAP0bAJdZfNUiomb
+         eyhw==
+X-Gm-Message-State: AJIora91rtk7WY7vNFSJwD481thb9a1X5XpoUCtcijbOqi25EdsY1XFv
+        82VbPanbQ+tTlFJ2/kEO407SX9cR10iKhFfBB2GN3w==
+X-Google-Smtp-Source: AGRyM1uSNXw4y0oDSzJUdYck26DosV0PNnwQTmYSiPmk5a1a/iw/izDPEntZHZ1sfTyU3neALM16sHfP2KEU6d6RlfE=
+X-Received: by 2002:a05:6902:682:b0:664:e437:9b6 with SMTP id
+ i2-20020a056902068200b00664e43709b6mr5624890ybt.490.1655218482907; Tue, 14
+ Jun 2022 07:54:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqdry+IghSWnJ6pe@monolith.localdoman>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220613181850.655683495@linuxfoundation.org>
+In-Reply-To: <20220613181850.655683495@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 14 Jun 2022 20:24:31 +0530
+Message-ID: <CA+G9fYukAcS14PAYz_ae9HhFerz_1QGKP6mwWor_NK3g7Fw5=A@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/173] 5.10.122-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,118 +71,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(+Suzuki)
+On Mon, 13 Jun 2022 at 23:50, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.122 release.
+> There are 173 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 15 Jun 2022 18:18:23 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.122-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Hi,
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-I was able to boot the board after applying this patch from Suzuki [1].
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-[1] https://lore.kernel.org/all/20220614124618.2830569-1-suzuki.poulose@arm.com/
+## Build
+* kernel: 5.10.122-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 355f12b39acea720fa2fe8ce6ef486377e1d0b6a
+* git describe: v5.10.120-624-g355f12b39ace
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.120-624-g355f12b39ace
 
-Thanks,
-Alex
+## Test Regressions (compared to v5.10.118)
+No test regressions found.
 
-On Mon, Jun 13, 2022 at 05:54:35PM +0100, Alexandru Elisei wrote:
-> Hi,
-> 
-> (Apologies for the long To: list, I've added everyone that
-> scripts/get_maintainer.pl listed for fs/{fs-writeback,inode}.c, for the
-> rockchip boards, for printk.c and for the tty layer)
-> 
-> When booting a kernel built from tag v5.19-rc2, my rockpro64-v2 hangs at
-> boot with this log:
-> 
-> [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd034]
-> [    0.000000] Linux version 5.19.0-rc2 (alex@redacted) (aarch64-linux-gnu-gcc (GCC) 12.1.0, GNU ld (GNU Binutils) 2.38) #90 SMP PREEMPT Mon Jun 13 17:13:12 BST 2022
-> [    0.000000] Machine model: Pine64 RockPro64 v2.0
-> [    0.000000] efi: UEFI not found.
-> [    0.000000] earlycon: uart0 at MMIO32 0x00000000ff1a0000 (options '1500000n8')
-> [    0.000000] printk: bootconsole [uart0] enabled
-> [    0.000000] NUMA: No NUMA configuration found
-> [    0.000000] NUMA: Faking a node at [mem 0x0000000000200000-0x00000000f7ffffff]
-> [    0.000000] NUMA: NODE_DATA [mem 0xf77dc140-0xf77ddfff]
-> [    0.000000] Zone ranges:
-> [    0.000000]   DMA      [mem 0x0000000000200000-0x00000000f7ffffff]
-> [    0.000000]   DMA32    empty
-> [    0.000000]   Normal   empty
-> [    0.000000] Movable zone start for each node
-> [    0.000000] Early memory node ranges
-> [    0.000000]   node   0: [mem 0x0000000000200000-0x00000000f7ffffff]
-> [    0.000000] Initmem setup node 0 [mem 0x0000000000200000-0x00000000f7ffffff]
-> [    0.000000] On node 0, zone DMA: 512 pages in unavailable ranges
-> [    0.000000] cma: Reserved 32 MiB at 0x00000000f0000000
-> [    0.000000] psci: probing for conduit method from DT.
-> [    0.000000] psci: PSCIv1.1 detected in firmware.
-> [    0.000000] psci: Using standard PSCI v0.2 function IDs
-> [    0.000000] psci: MIGRATE_INFO_TYPE not supported.
-> [    0.000000] psci: SMC Calling Convention v1.2
-> [    0.000000] percpu: Embedded 20 pages/cpu s41768 r8192 d31960 u81920
-> [    0.000000] Detected VIPT I-cache on CPU0
-> [    0.000000] CPU features: detected: GIC system register CPU interface
-> [    0.000000] CPU features: detected: ARM erratum 845719
-> [    0.000000] Fallback order for Node 0: 0
-> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 999432
-> [    0.000000] Policy zone: DMA
-> [    0.000000] Kernel command line: root=PARTUUID=7f4aab92-69d8-47f3-be10-624da40a71f9 rw earlycon rootwait
-> [    0.000000] Dentry cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
-> [    0.000000] Inode-cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
-> [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
-> [    0.000000] Memory: 3915796K/4061184K available (15552K kernel code, 2758K rwdata, 8668K rodata, 6336K init, 564K bss, 112620K reserved, 32768K cma-reserved)
-> [    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=6, Nodes=1
-> [    0.000000] rcu: Preemptible hierarchical RCU implementation.
-> [    0.000000] rcu: 	RCU event tracing is enabled.
-> [    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=6.
-> [    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
-> [    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=6
-> [    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
-> [    0.000000] GICv3: GIC: Using split EOI/Deactivate mode
-> [    0.000000] GICv3: 256 SPIs implemented
-> [    0.000000] GICv3: 0 Extended SPIs implemented
-> [    0.000000] Root IRQ handler: gic_handle_irq
-> [    0.000000] GICv3: GICv3 features: 16 PPIs
-> [    0.000000] GICv3: CPU0: found redistributor 0 region 0:0x00000000fef00000
-> [    0.000000] ITS [mem 0xfee20000-0xfee3ffff]
-> [    0.000000] ITS@0x00000000fee20000: allocated 65536 Devices @480000 (flat, esz 8, psz 64K, shr 0)
-> [    0.000000] ITS: using cache flushing for cmd queue
-> [    0.000000] GICv3: using LPI property table @0x0000000000440000
-> [    0.000000] GIC: using cache flushing for LPI property table
-> [    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0000000000450000
-> [    0.000000] GICv3: GIC: PPI partition interrupt-partition-0[0] { /cpus/cpu@0[0] /cpus/cpu@1[1] /cpus/cpu@2[2] /cpus/cpu@3[3] }
-> [    0.000000] GICv3: GIC: PPI partition interrupt-partition-1[1] { /cpus/cpu@100[4] /cpus/cpu@101[5] }
-> [    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
-> [    0.000000] arch_timer: cp15 timer(s) running at 24.00MHz (phys).
-> [    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0x588fe9dc0, max_idle_ns: 440795202592 ns
-> [    0.000001] sched_clock: 56 bits at 24MHz, resolution 41ns, wraps every 4398046511097ns
-> [    0.005107] Console: colour dummy device 80x25
-> [    0.005549] printk: console [tty0] enabled
-> [    0.005956] printk: bootconsole [uart0] disabled
-> 
-> Config can be found at [1] (expires after 6 months). I've also built the
-> kernel with gcc 10.3.1 [2] (aarch64-none-linux-gnu), same issue.
-> 
-> I've bisected the build failure to commit 10e14073107d ("writeback: Fix
-> inode->i_io_list not be protected by inode->i_lock error"); I've confirmed
-> that that commit is responsible by successfully booting the board with a
-> kernel built from v5.19-rc2 + the above commit reverted.
-> 
-> I tried to do some investigating, it seems that the kernel is stuck at
-> printk.c::console_init() -> drivers/tty/vt/vt.c::con_init() ->
-> printk.c::register_console() -> unregister_console() -> console_lock().
-> This has been determined by adding pr_info statements.
-> 
-> I've booted a kernel compiled with CONFIG_PROVE_LOCKING=y, as the offending
-> commit fiddles with locks, but no splat was produced that would explain the
-> hang. I've also tried to boot a v5,19-rc2 kernel on my odroid-c4, the board
-> is booting just fine, so I'm guessing it only affects of subset of arm64
-> boards.
-> 
-> [1] https://pastebin.com/MfDrKyKd
-> [2] https://developer.arm.com/downloads/-/gnu-a
-> 
-> Thanks,
-> Alex
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+## Metric Regressions (compared to v5.10.118)
+No metric regressions found.
+
+## Test Fixes (compared to v5.10.118)
+No test fixes found.
+
+## Metric Fixes (compared to v5.10.118)
+No metric fixes found.
+
+## Test result summary
+total: 126949, pass: 113862, fail: 232, skip: 12179, xfail: 676
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 314 total, 314 passed, 0 failed
+* arm64: 58 total, 58 passed, 0 failed
+* i386: 52 total, 49 passed, 3 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 51 total, 51 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 56 total, 55 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-cap_bounds-tests
+* ltp-commands
+* ltp-commands-tests
+* ltp-containers
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps
+* ltp-filecaps-tests
+* ltp-fs
+* ltp-fs-tests
+* ltp-fs_bind
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple
+* ltp-fs_perms_simple-tests
+* ltp-fsx
+* ltp-fsx-tests
+* ltp-hugetlb
+* ltp-hugetlb-tests
+* ltp-io
+* ltp-io-tests
+* ltp-ipc
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits
+* ltp-securebits-tests
+* ltp-smoke
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

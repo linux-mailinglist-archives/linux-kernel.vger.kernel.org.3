@@ -2,67 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0371254B42D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE76054B435
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:09:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350266AbiFNPGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
+        id S243943AbiFNPJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244046AbiFNPGX (ORCPT
+        with ESMTP id S241398AbiFNPJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:06:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78F3B201B6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:06:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655219181;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ggy0gipdvEIiu10PPbGaYgDjXsWZ1TwM2pvn5z8mgqo=;
-        b=QTEQiiib6MYtb3Vke5jGl7nnA2N0zYxBZF/wF2dUOTQkdj79WTuyquYQQLhctCa6eIxhvG
-        NquJvuFJqUI0wgViplrQ34bu9daLgPSSMQuJYmLgn+H/jZQFMQTm9kc9LRMWg51a/JkKns
-        r+qmo9+k28wr+RqSrUtJuQVY1F1mHNg=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-553-zvXx-OpkOJan01NhnI8AVQ-1; Tue, 14 Jun 2022 11:06:18 -0400
-X-MC-Unique: zvXx-OpkOJan01NhnI8AVQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 48FF085A585;
-        Tue, 14 Jun 2022 15:06:18 +0000 (UTC)
-Received: from [10.22.33.116] (unknown [10.22.33.116])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DC64D492C3B;
-        Tue, 14 Jun 2022 15:06:17 +0000 (UTC)
-Message-ID: <34fea084-8136-5489-ef44-c5ecab51a86e@redhat.com>
-Date:   Tue, 14 Jun 2022 11:06:17 -0400
+        Tue, 14 Jun 2022 11:09:15 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA63EEE35;
+        Tue, 14 Jun 2022 08:09:14 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id i81-20020a1c3b54000000b0039c76434147so172686wma.1;
+        Tue, 14 Jun 2022 08:09:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Nl9p8XiHK5AtOeQObHfkqzSF21Df3dWTIZeLDSP3Cys=;
+        b=dHlU4MVJUMyBYrekjMq6Vhyud157on1z+2yR09M4IAhjQ9PvH+Oyazf1HRmDFwP9Px
+         qx793ASDm4UaOMFcmoziBQ2g7bDIt3xm61ZAVAB0QeGlURjEg9vEA4/3585aWLgXgCXi
+         xBotswPEPmHsxDHkZhf1mamS6sSxFBvUXuBF60MBtLdKs5KFiyg08RUI7snMi08keLfp
+         nZLi2TkdvSO2DgkN0yRrnuZGECpZC2dITErT/lxeliM6wjqOEZ2BWErkrBMLkWv9ikFB
+         GFiX1aRcXXwXc73EUpaRGiOAV7BIzD3NzTk5lB+ygJGXDN6l0hVkXpKe2JmRdhP2psXN
+         tOhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Nl9p8XiHK5AtOeQObHfkqzSF21Df3dWTIZeLDSP3Cys=;
+        b=lggMpqjISov9E942KMvWhVKVTJvhQ2h+Q06ccWTPITRLlY5QPRYIvjQNEIJIESb+rI
+         FKlXe6bb1IMb6K3CV4AyUVEI9GuqtK2CDnTKk/9LIxLpcsc1ja+YjSR4Mu2WyxL/Cgre
+         771FBcaykU98Jux8hKWCkOpkmohR+vQOCUGIfKjxv2029gAzT27WNVywCTvxuqGJjcpC
+         z/67dlhL06nHZ7wtLqNp6tXgIQGqpbsnGMVltE0zxO8uzbxdZ42qm3CDY4KfbfeTvlx9
+         bZ1qCwQQL/xYzsjgFA+BNsoK+zNwIyl81H+GWyQEerDv48gTwOOHdKAgBwsCOeRCa+GF
+         YbNA==
+X-Gm-Message-State: AOAM53387XNsNiO5UOncRVHb9dJv5zqOgJCWkTZPlQ0GWODY8s+2pEqB
+        iBzejiJF3kTj20vI0lLC97E=
+X-Google-Smtp-Source: ABdhPJyv0qrF9fYVnHKL6koDutsHT/45fh4dzAhBy8tf9jKdyeD9b1maXdCi+EYvCB28F6WOc6tOTw==
+X-Received: by 2002:a05:600c:1c88:b0:39d:7299:e295 with SMTP id k8-20020a05600c1c8800b0039d7299e295mr4182748wms.155.1655219353085;
+        Tue, 14 Jun 2022 08:09:13 -0700 (PDT)
+Received: from [192.168.0.36] ([37.223.143.134])
+        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b0039c4d022a44sm14763956wmq.1.2022.06.14.08.09.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 08:09:11 -0700 (PDT)
+Message-ID: <86c40dc9-c48a-4f42-88ea-7a91b5bb425a@gmail.com>
+Date:   Tue, 14 Jun 2022 17:09:09 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] locking/rtmutex: Limit # of lock stealing for non-RT
- waiters
+ Thunderbird/91.8.1
+Subject: Re: [PATCH v18 3/4] dts: arm64: mt8183: add Mediatek MDP3 nodes
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Gregory Haskins <ghaskins@novell.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-References: <20220608152254.74591-1-longman@redhat.com>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20220608152254.74591-1-longman@redhat.com>
+To:     Moudy Ho <moudy.ho@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Landley <rob@landley.net>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
+        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        daoyuan huang <daoyuan.huang@mediatek.com>,
+        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
+        allen-kh.cheng@mediatek.com, xiandong.wang@mediatek.com,
+        randy.wu@mediatek.com, jason-jh.lin@mediatek.com,
+        roy-cw.yeh@mediatek.com, river.cheng@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        cellopoint.kai@gmail.com
+References: <20220610064504.8302-1-moudy.ho@mediatek.com>
+ <20220610064504.8302-4-moudy.ho@mediatek.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220610064504.8302-4-moudy.ho@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,91 +95,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/8/22 11:22, Waiman Long wrote:
-> Commit 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock
-> stealing") allows unlimited number of lock stealing's for non-RT
-> tasks. That can lead to lock starvation of non-RT top waiter if there
-> is a constant incoming stream of non-RT lockers. This can cause task
-> lockup in PREEMPT_RT kernel.
->
-> Avoiding this problem and ensuring forward progress by limiting the
-> number of times that a lock can be stolen from each waiter. This patch
-> sets a threshold of 10. That number is arbitrary and can be changed
-> if necessary.
->
-> Fixes: 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock stealing")
-> Signed-off-by: Waiman Long <longman@redhat.com>
 
-Any comment on this patch?
 
-Our QE team had verified that it fixed the lockup problem that they see 
-in our PREEMPT_RT kernel.
+On 10/06/2022 08:45, Moudy Ho wrote:
+> Add device nodes for Media Data Path 3 (MDP3) modules.
+> 
+> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 
-Thanks,
-Longman
+Looks good to me. I'm ready to take this as soon as 1,2 and 4 got merged.
+
+Matthias
 
 > ---
->   kernel/locking/rtmutex.c        | 9 ++++++---
->   kernel/locking/rtmutex_common.h | 8 ++++++++
->   2 files changed, 14 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-> index 7779ee8abc2a..bdddb3dc36c2 100644
-> --- a/kernel/locking/rtmutex.c
-> +++ b/kernel/locking/rtmutex.c
-> @@ -359,10 +359,13 @@ static inline bool rt_mutex_steal(struct rt_mutex_waiter *waiter,
->   	if (rt_prio(waiter->prio) || dl_prio(waiter->prio))
->   		return false;
+>   arch/arm64/boot/dts/mediatek/mt8183.dtsi | 79 +++++++++++++++++++++++-
+>   1 file changed, 78 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> index e74fd253478b..ade5997a9656 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+> @@ -1389,6 +1389,50 @@
+>   			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0 0x1000>;
+>   		};
 >   
-> -	return rt_mutex_waiter_equal(waiter, top_waiter);
-> -#else
-> -	return false;
-> +	if (rt_mutex_waiter_equal(waiter, top_waiter) &&
-> +	   (top_waiter->nr_steals < RT_MUTEX_LOCK_STEAL_MAX)) {
-> +		top_waiter->nr_steals++;
-> +		return true;
-> +	}
->   #endif
-> +	return false;
->   }
->   
->   #define __node_2_waiter(node) \
-> diff --git a/kernel/locking/rtmutex_common.h b/kernel/locking/rtmutex_common.h
-> index c47e8361bfb5..5858efe5cb0e 100644
-> --- a/kernel/locking/rtmutex_common.h
-> +++ b/kernel/locking/rtmutex_common.h
-> @@ -26,6 +26,7 @@
->    * @task:		task reference to the blocked task
->    * @lock:		Pointer to the rt_mutex on which the waiter blocks
->    * @wake_state:		Wakeup state to use (TASK_NORMAL or TASK_RTLOCK_WAIT)
-> + * @nr_steals:		Number of times the lock is stolen
->    * @prio:		Priority of the waiter
->    * @deadline:		Deadline of the waiter if applicable
->    * @ww_ctx:		WW context pointer
-> @@ -36,11 +37,17 @@ struct rt_mutex_waiter {
->   	struct task_struct	*task;
->   	struct rt_mutex_base	*lock;
->   	unsigned int		wake_state;
-> +	unsigned int		nr_steals;
->   	int			prio;
->   	u64			deadline;
->   	struct ww_acquire_ctx	*ww_ctx;
->   };
->   
-> +/*
-> + * The maximum number of times where lock can be stolen per waiter.
-> + */
-> +#define	RT_MUTEX_LOCK_STEAL_MAX	10
+> +		mdp3-rdma0@14001000 {
+> +			compatible = "mediatek,mt8183-mdp3-rdma";
+> +			reg = <0 0x14001000 0 0x1000>;
+> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x1000 0x1000>;
+> +			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+> +			clocks = <&mmsys CLK_MM_MDP_RDMA0>,
+> +				 <&mmsys CLK_MM_MDP_RSZ1>;
+> +			iommus = <&iommu M4U_PORT_MDP_RDMA0>;
+> +			mboxes = <&gce 20 CMDQ_THR_PRIO_LOWEST 0>,
+> +				 <&gce 21 CMDQ_THR_PRIO_LOWEST 0>;
+> +		};
 > +
->   /**
->    * rt_wake_q_head - Wrapper around regular wake_q_head to support
->    *		    "sleeping" spinlocks on RT
-> @@ -194,6 +201,7 @@ static inline void rt_mutex_init_waiter(struct rt_mutex_waiter *waiter)
->   	RB_CLEAR_NODE(&waiter->tree_entry);
->   	waiter->wake_state = TASK_NORMAL;
->   	waiter->task = NULL;
-> +	waiter->nr_steals = 0;
->   }
+> +		mdp3-rsz0@14003000 {
+> +			compatible = "mediatek,mt8183-mdp3-rsz";
+> +			reg = <0 0x14003000 0 0x1000>;
+> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x3000 0x1000>;
+> +			clocks = <&mmsys CLK_MM_MDP_RSZ0>;
+> +		};
+> +
+> +		mdp3-rsz1@14004000 {
+> +			compatible = "mediatek,mt8183-mdp3-rsz";
+> +			reg = <0 0x14004000 0 0x1000>;
+> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x4000 0x1000>;
+> +			clocks = <&mmsys CLK_MM_MDP_RSZ1>;
+> +		};
+> +
+> +		mdp3-wrot0@14005000 {
+> +			compatible = "mediatek,mt8183-mdp3-wrot";
+> +			reg = <0 0x14005000 0 0x1000>;
+> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x5000 0x1000>;
+> +			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+> +			clocks = <&mmsys CLK_MM_MDP_WROT0>;
+> +			iommus = <&iommu M4U_PORT_MDP_WROT0>;
+> +		};
+> +
+> +		mdp3-wdma@14006000 {
+> +			compatible = "mediatek,mt8183-mdp3-wdma";
+> +			reg = <0 0x14006000 0 0x1000>;
+> +			mediatek,gce-client-reg = <&gce SUBSYS_1400XXXX 0x6000 0x1000>;
+> +			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+> +			clocks = <&mmsys CLK_MM_MDP_WDMA0>;
+> +			iommus = <&iommu M4U_PORT_MDP_WDMA0>;
+> +		};
+> +
+>   		ovl0: ovl@14008000 {
+>   			compatible = "mediatek,mt8183-disp-ovl";
+>   			reg = <0 0x14008000 0 0x1000>;
+> @@ -1507,7 +1551,33 @@
+>   			interrupts = <GIC_SPI 217 IRQ_TYPE_LEVEL_LOW>;
+>   			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+>   			mediatek,gce-events = <CMDQ_EVENT_MUTEX_STREAM_DONE0>,
+> -					      <CMDQ_EVENT_MUTEX_STREAM_DONE1>;
+> +					      <CMDQ_EVENT_MUTEX_STREAM_DONE1>,
+> +					      <CMDQ_EVENT_MDP_RDMA0_SOF>,
+> +					      <CMDQ_EVENT_MDP_RDMA0_EOF>,
+> +					      <CMDQ_EVENT_MDP_RSZ0_SOF>,
+> +					      <CMDQ_EVENT_MDP_RSZ1_SOF>,
+> +					      <CMDQ_EVENT_MDP_TDSHP_SOF>,
+> +					      <CMDQ_EVENT_MDP_WROT0_SOF>,
+> +					      <CMDQ_EVENT_MDP_WROT0_EOF>,
+> +					      <CMDQ_EVENT_MDP_WDMA0_SOF>,
+> +					      <CMDQ_EVENT_MDP_WDMA0_EOF>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_0>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_1>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_2>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_3>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_4>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_5>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_6>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_7>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_8>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_9>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_10>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_11>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_12>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_13>,
+> +					      <CMDQ_EVENT_ISP_FRAME_DONE_P2_14>,
+> +					      <CMDQ_EVENT_WPE_A_DONE>,
+> +					      <CMDQ_EVENT_SPE_B_DONE>;
+>   			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0x6000 0x1000>;
+>   		};
 >   
->   static inline void rt_mutex_init_rtlock_waiter(struct rt_mutex_waiter *waiter)
-
+> @@ -1532,6 +1602,13 @@
+>   			power-domains = <&spm MT8183_POWER_DOMAIN_DISP>;
+>   		};
+>   
+> +		mdp3-ccorr@1401c000 {
+> +			compatible = "mediatek,mt8183-mdp3-ccorr";
+> +			reg = <0 0x1401c000 0 0x1000>;
+> +			mediatek,gce-client-reg = <&gce SUBSYS_1401XXXX 0xc000 0x1000>;
+> +			clocks = <&mmsys CLK_MM_MDP_CCORR>;
+> +		};
+> +
+>   		imgsys: syscon@15020000 {
+>   			compatible = "mediatek,mt8183-imgsys", "syscon";
+>   			reg = <0 0x15020000 0 0x1000>;

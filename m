@@ -2,85 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8094854B072
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001DB54B11D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234844AbiFNMTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:19:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
+        id S1356730AbiFNMa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbiFNMTq (ORCPT
+        with ESMTP id S1356837AbiFNM3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:19:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4A0243EC2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:19:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655209184;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/0MEntxUovDItabxyHgNH3zdYnTQeXrI0UtQH5CAKdw=;
-        b=SfoCEDAc/MG9XmwEsrMxtdHT9VApGG6qa5C5UMq7jf+Qxh7GtPxT7AAZZJl9OPMXBGlhgr
-        0D+hG3luzWAT7N4/48XwVDxoSMr6nSGCJj1rm/HBHGKvicVmoDWraaytwWp1rkg6+vOg2H
-        sPBvzlmoSCI6xFD/qbRV5lPbJcZmXs4=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-643-tpds_mVFMnuLcYXLbPKseQ-1; Tue, 14 Jun 2022 08:19:42 -0400
-X-MC-Unique: tpds_mVFMnuLcYXLbPKseQ-1
-Received: by mail-ed1-f70.google.com with SMTP id ee46-20020a056402292e00b0042dd4d6054dso6045673edb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:19:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=/0MEntxUovDItabxyHgNH3zdYnTQeXrI0UtQH5CAKdw=;
-        b=tUVdss+XttmonhVcEumjZomhWBYPBUgSwwpFlyfPFI8XpsMGWaV2sQUenUwkzr/tXN
-         luV3RI48jlQ/TKYIEeQzp69QXB2XutwR3P6f09bCwSD1/LE7flGddYtNe02pq8hBiPw4
-         SVaH9KVzXScpPeIcAENRleEEYVQThvGCeUATsQPC31Z6//A7aU/IJj8NkVjxwZ5pD3fc
-         rDsaQEdIb+j52dVsCZF30bLJ1zfuXmM0RVgdIXY0A90JThDQsXCbMpqTqKNXthzdR5Hu
-         nrV2TpKO7Y6XC//uIz1LOtSxUVNbvl3nNNC5dl04sd/OCYXf2mCtqFw6tIAghPoMFMzZ
-         3Yrw==
-X-Gm-Message-State: AOAM532NzQoPpcBxlLk3Y/890tJWObIcpT3BSXsO3PLcvptQnD3kcytZ
-        H1Ar0lMBI7vIU8mXKDIVexKg94LVeO/+46LJYEv0+LRQOosnwsNIS84PJNvE5DyGFIxhIJkawi3
-        h7HLVF5NnFiMtZY+8qRME1+UF
-X-Received: by 2002:a17:906:d1cc:b0:709:567f:3506 with SMTP id bs12-20020a170906d1cc00b00709567f3506mr4002514ejb.363.1655209181684;
-        Tue, 14 Jun 2022 05:19:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx42IQqlmtovWoVmOE8npAYyCPPyPz8pF5loAAbHWO1Ljfj8+6v+pKyQ4/JLNByqV5MYBl3oQ==
-X-Received: by 2002:a17:906:d1cc:b0:709:567f:3506 with SMTP id bs12-20020a170906d1cc00b00709567f3506mr4002492ejb.363.1655209181482;
-        Tue, 14 Jun 2022 05:19:41 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id x24-20020aa7dad8000000b0042dd482d0c4sm6966110eds.80.2022.06.14.05.19.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 05:19:40 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     mail@anirudhrb.com, kumarpraveen@linux.microsoft.com,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        wei.liu@kernel.org, robert.bradford@intel.com, liuwe@microsoft.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Ilias Stamatis <ilstam@amazon.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH] KVM: nVMX: Don't expose TSC scaling to L1 when on Hyper-V
-In-Reply-To: <20220613161611.3567556-1-anrayabh@linux.microsoft.com>
-References: <20220613161611.3567556-1-anrayabh@linux.microsoft.com>
-Date:   Tue, 14 Jun 2022 14:19:39 +0200
-Message-ID: <87sfo7igis.fsf@redhat.com>
+        Tue, 14 Jun 2022 08:29:37 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAE0237DB;
+        Tue, 14 Jun 2022 05:29:35 -0700 (PDT)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4LMnkw1yWczgYqs;
+        Tue, 14 Jun 2022 20:27:36 +0800 (CST)
+Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 20:29:33 +0800
+Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
+ (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 14 Jun
+ 2022 20:29:33 +0800
+From:   Kai Ye <yekai13@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <herbert@gondor.apana.org.au>
+CC:     <linux-crypto@vger.kernel.org>,
+        <linux-accelerators@lists.ozlabs.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+        <zhangfei.gao@linaro.org>, <wangzhou1@hisilicon.com>,
+        <yekai13@huawei.com>
+Subject: [PATCH v2 0/3] crypto: hisilicon - supports device isolation feature
+Date:   Tue, 14 Jun 2022 20:23:05 +0800
+Message-ID: <20220614122311.824-1-yekai13@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="=-=-="
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,165 +53,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
+Add the hardware error isolation feature for ACC. Defines a driver debugfs
+node that used to configures the hardware error frequency. When the error
+frequency is exceeded, the device will be isolated. The isolation strategy 
+can be defined in each driver module. e.g. Defining the isolation strategy
+for ACC, if the AER error frequency exceeds the value of setting for a 
+certain period of time, The device will not be available in user space. The
+VF device use the PF device isolation strategy. as well as the isolation 
+strategy should not be set during device use.
 
-Anirudh Rayabharam <anrayabh@linux.microsoft.com> writes:
+changes v1->v2:
+	1、deleted dev_to_uacce api.
+	2、add vfs node doc. 
+	3、move uacce->ref to driver.
 
-...
+Kai Ye (3):
+  uacce: supports device isolation feature
+  Documentation: add a isolation strategy vfs node for uacce
+  crypto: hisilicon/qm - defining the device isolation strategy
 
->
-> As per the comments in arch/x86/kvm/vmx/evmcs.h, TSC multiplier field is
-> currently not supported in EVMCS.
-
-The latest version:
-https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/tlfs/datatypes/hv_vmx_enlightened_vmcs
-
-has it, actually. It was missing before (compare with e.g. 6.0b version
-here:
-https://github.com/MicrosoftDocs/Virtualization-Documentation/raw/live/tlfs/Hypervisor%20Top%20Level%20Functional%20Specification%20v6.0b.pdf)
-
-but AFAIR TSC scaling wasn't advertised by genuine Hyper-V either.
-Interestingly enough, eVMCS version didn't change when these fields were
-added, it is still '1'.
-
-I even have a patch in my stash (attached). I didn't send it out because
-it wasn't properly tested with different Hyper-V versions.
+ Documentation/ABI/testing/sysfs-driver-uacce |  17 ++
+ drivers/crypto/hisilicon/qm.c                | 157 +++++++++++++++++--
+ drivers/misc/uacce/uacce.c                   |  37 +++++
+ include/linux/hisi_acc_qm.h                  |   9 ++
+ include/linux/uacce.h                        |  16 +-
+ 5 files changed, 219 insertions(+), 17 deletions(-)
 
 -- 
-Vitaly
-
-
---=-=-=
-Content-Type: text/x-patch
-Content-Disposition: inline;
- filename=0001-KVM-x86-Allow-some-previously-forbidden-controls-whe.patch
-
-From cb7c34d0c98691cf02a3198ee05cc913300e909b Mon Sep 17 00:00:00 2001
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
-Date: Wed, 20 Apr 2022 15:43:37 +0200
-Subject: [PATCH RFC] KVM: x86: Allow some previously forbidden controls when
- eVMCS is in use
-Content-Type: text/plain
-
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- arch/x86/kvm/vmx/evmcs.h  | 11 ++++-------
- arch/x86/kvm/vmx/nested.c | 31 +++++++++++++++++++++++++++++++
- 2 files changed, 35 insertions(+), 7 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/evmcs.h b/arch/x86/kvm/vmx/evmcs.h
-index ddbdb557cc53..5963c6374db2 100644
---- a/arch/x86/kvm/vmx/evmcs.h
-+++ b/arch/x86/kvm/vmx/evmcs.h
-@@ -37,16 +37,14 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
-  *	EPTP_LIST_ADDRESS               = 0x00002024,
-  *	VMREAD_BITMAP                   = 0x00002026,
-  *	VMWRITE_BITMAP                  = 0x00002028,
-- *
-- *	TSC_MULTIPLIER                  = 0x00002032,
-  *	PLE_GAP                         = 0x00004020,
-  *	PLE_WINDOW                      = 0x00004022,
-  *	VMX_PREEMPTION_TIMER_VALUE      = 0x0000482E,
-- *      GUEST_IA32_PERF_GLOBAL_CTRL     = 0x00002808,
-- *      HOST_IA32_PERF_GLOBAL_CTRL      = 0x00002c04,
-  *
-- * Currently unsupported in KVM:
-- *	GUEST_IA32_RTIT_CTL		= 0x00002814,
-+ *	While GUEST_IA32_PERF_GLOBAL_CTRL and HOST_IA32_PERF_GLOBAL_CTRL
-+ *	are present in eVMCSv1, Windows 11 still has issues booting when
-+ *	VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL/VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL
-+ *	are exposed to it, keep them filtered out.
-  */
- #define EVMCS1_UNSUPPORTED_PINCTRL (PIN_BASED_POSTED_INTR | \
- 				    PIN_BASED_VMX_PREEMPTION_TIMER)
-@@ -57,7 +55,6 @@ DECLARE_STATIC_KEY_FALSE(enable_evmcs);
- 	 SECONDARY_EXEC_ENABLE_PML |					\
- 	 SECONDARY_EXEC_ENABLE_VMFUNC |					\
- 	 SECONDARY_EXEC_SHADOW_VMCS |					\
--	 SECONDARY_EXEC_TSC_SCALING |					\
- 	 SECONDARY_EXEC_PAUSE_LOOP_EXITING)
- #define EVMCS1_UNSUPPORTED_VMEXIT_CTRL					\
- 	(VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL |				\
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 3e2ef5edad4a..4a596973e505 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -1628,6 +1628,10 @@ static void copy_enlightened_to_vmcs12(struct vcpu_vmx *vmx, u32 hv_clean_fields
- 		vmcs12->guest_rflags = evmcs->guest_rflags;
- 		vmcs12->guest_interruptibility_info =
- 			evmcs->guest_interruptibility_info;
-+		/*
-+		 * Not present in struct vmcs12:
-+		 * vmcs12->guest_ssp = evmcs->guest_ssp;
-+		 */
- 	}
- 
- 	if (unlikely(!(hv_clean_fields &
-@@ -1674,6 +1678,13 @@ static void copy_enlightened_to_vmcs12(struct vcpu_vmx *vmx, u32 hv_clean_fields
- 		vmcs12->host_fs_selector = evmcs->host_fs_selector;
- 		vmcs12->host_gs_selector = evmcs->host_gs_selector;
- 		vmcs12->host_tr_selector = evmcs->host_tr_selector;
-+		vmcs12->host_ia32_perf_global_ctrl = evmcs->host_ia32_perf_global_ctrl;
-+		/*
-+		 * Not present in struct vmcs12:
-+		 * vmcs12->host_ia32_s_cet = evmcs->host_ia32_s_cet;
-+		 * vmcs12->host_ssp = evmcs->host_ssp;
-+		 * vmcs12->host_ia32_int_ssp_table_addr = evmcs->host_ia32_int_ssp_table_addr;
-+		 */
- 	}
- 
- 	if (unlikely(!(hv_clean_fields &
-@@ -1741,6 +1752,8 @@ static void copy_enlightened_to_vmcs12(struct vcpu_vmx *vmx, u32 hv_clean_fields
- 		vmcs12->tsc_offset = evmcs->tsc_offset;
- 		vmcs12->virtual_apic_page_addr = evmcs->virtual_apic_page_addr;
- 		vmcs12->xss_exit_bitmap = evmcs->xss_exit_bitmap;
-+		vmcs12->encls_exiting_bitmap = evmcs->encls_exiting_bitmap;
-+		vmcs12->tsc_multiplier = evmcs->tsc_multiplier;
- 	}
- 
- 	if (unlikely(!(hv_clean_fields &
-@@ -1788,6 +1801,13 @@ static void copy_enlightened_to_vmcs12(struct vcpu_vmx *vmx, u32 hv_clean_fields
- 		vmcs12->guest_bndcfgs = evmcs->guest_bndcfgs;
- 		vmcs12->guest_activity_state = evmcs->guest_activity_state;
- 		vmcs12->guest_sysenter_cs = evmcs->guest_sysenter_cs;
-+		vmcs12->guest_ia32_perf_global_ctrl = evmcs->guest_ia32_perf_global_ctrl;
-+		/*
-+		 * Not present in struct vmcs12:
-+		 * vmcs12->guest_ia32_s_cet = evmcs->guest_ia32_s_cet;
-+		 * vmcs12->guest_ia32_lbr_ctl = evmcs->guest_ia32_lbr_ctl;
-+		 * vmcs12->guest_ia32_int_ssp_table_addr = evmcs->guest_ia32_int_ssp_table_addr;
-+		 */
- 	}
- 
- 	/*
-@@ -1890,12 +1910,23 @@ static void copy_vmcs12_to_enlightened(struct vcpu_vmx *vmx)
- 	 * evmcs->vm_exit_msr_store_count = vmcs12->vm_exit_msr_store_count;
- 	 * evmcs->vm_exit_msr_load_count = vmcs12->vm_exit_msr_load_count;
- 	 * evmcs->vm_entry_msr_load_count = vmcs12->vm_entry_msr_load_count;
-+	 * evmcs->guest_ia32_perf_global_ctrl = vmcs12->guest_ia32_perf_global_ctrl;
-+	 * evmcs->host_ia32_perf_global_ctrl = vmcs12->host_ia32_perf_global_ctrl;
-+	 * evmcs->encls_exiting_bitmap = vmcs12->encls_exiting_bitmap;
-+	 * evmcs->tsc_multiplier = vmcs12->tsc_multiplier;
- 	 *
- 	 * Not present in struct vmcs12:
- 	 * evmcs->exit_io_instruction_ecx = vmcs12->exit_io_instruction_ecx;
- 	 * evmcs->exit_io_instruction_esi = vmcs12->exit_io_instruction_esi;
- 	 * evmcs->exit_io_instruction_edi = vmcs12->exit_io_instruction_edi;
- 	 * evmcs->exit_io_instruction_eip = vmcs12->exit_io_instruction_eip;
-+	 * evmcs->host_ia32_s_cet = vmcs12->host_ia32_s_cet;
-+	 * evmcs->host_ssp = vmcs12->host_ssp;
-+	 * evmcs->host_ia32_int_ssp_table_addr = vmcs12->host_ia32_int_ssp_table_addr;
-+	 * evmcs->guest_ia32_s_cet = vmcs12->guest_ia32_s_cet;
-+	 * evmcs->guest_ia32_lbr_ctl = vmcs12->guest_ia32_lbr_ctl;
-+	 * evmcs->guest_ia32_int_ssp_table_addr = vmcs12->guest_ia32_int_ssp_table_addr;
-+	 * evmcs->guest_ssp = vmcs12->guest_ssp;
- 	 */
- 
- 	evmcs->guest_es_selector = vmcs12->guest_es_selector;
--- 
-2.35.3
-
-
---=-=-=--
+2.33.0
 

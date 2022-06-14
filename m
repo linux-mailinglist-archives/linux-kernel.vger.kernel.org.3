@@ -2,144 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5886D54B174
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D52854B190
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243802AbiFNMqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
+        id S235874AbiFNMuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243000AbiFNMqd (ORCPT
+        with ESMTP id S230490AbiFNMuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:46:33 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9E2511461;
-        Tue, 14 Jun 2022 05:46:32 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A47261650;
-        Tue, 14 Jun 2022 05:46:32 -0700 (PDT)
-Received: from ewhatever.cambridge.arm.com (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 70F723F73B;
-        Tue, 14 Jun 2022 05:46:31 -0700 (PDT)
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        stable@vger.kernel.org, Jchao Sun <sunjunchao2870@gmail.com>,
-        Jan Kara <jack@suse.cz>
-Subject: [PATCH] writeback: Avoid grabbing the wb if the we don't add it to dirty list
-Date:   Tue, 14 Jun 2022 13:46:18 +0100
-Message-Id: <20220614124618.2830569-1-suzuki.poulose@arm.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 14 Jun 2022 08:50:16 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62B1FE4;
+        Tue, 14 Jun 2022 05:50:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655211015; x=1686747015;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0sR2aaiB57VBS6yP/4uYGc/RGXat3SP2yOhau17DVZ0=;
+  b=ChwOytZo5Eog5WrBdVaYwZSHHCu/3wpy+kS3HlerFUakp4SG3ZEy81WG
+   RW2R+FjAYu9+pzsyErcPqVDGAb8Ahe/dWANnO2yRmVnzZ0blh0RiXbqay
+   srJq3ZBWZ9pI49TXP82cKZ8shNLCI4ZorGva7ohnL4w5NCQQO1tHBa+h5
+   rSgdHVfggX2Zv7+dWii6KSbCVvdMuhESys0/C9ilgGm4pM1vWPYPNnWOS
+   A9K+wK4T2puFdraMZm4XWLs2Mj+VBStQj557FEY9AdAl8O2hqdLxMePl7
+   o6WPy9ypYMmSweEyRVIjheEKZ9AyBN9VF78vGXlCg1NxsSQ1KCiA+fGF9
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="267291524"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="267291524"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 05:50:15 -0700
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="652018782"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 05:50:12 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o15zl-000cMV-0w;
+        Tue, 14 Jun 2022 15:50:09 +0300
+Date:   Tue, 14 Jun 2022 15:50:08 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Ferry Toth <ftoth@exalondelft.nl>
+Subject: Re: [PATCH v1 1/1] x86/PCI: Disable e820 usage for the resource
+ allocation
+Message-ID: <YqiEAN68MP0l4Mw6@smile.fi.intel.com>
+References: <20220613201641.67640-1-andriy.shevchenko@linux.intel.com>
+ <45d458f5-4f4e-9ebd-cb51-1a7b784248ec@redhat.com>
+ <Yqh/UJQphSFvxX74@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yqh/UJQphSFvxX74@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 10e14073107d moved grabbing the wb for an inode early enough,
-skipping the checks whether if this inode needs to be really added
-to the dirty list (backed by blockdev or unhashed inode). This causes
-a crash with kdevtmpfs as below, on an arm64 Juno board, as below:
+On Tue, Jun 14, 2022 at 03:30:08PM +0300, Andy Shevchenko wrote:
+> On Mon, Jun 13, 2022 at 10:31:39PM +0200, Hans de Goede wrote:
+> > On 6/13/22 22:16, Andy Shevchenko wrote:
+> > > The resource management improve for PCI on x86 broke booting of Intel MID
+> > > platforms. It seems that the current code removes all available resources
+> > > from the list and none of the PCI device may be initialized. Restore the
+> > > old behaviour by force disabling the e820 usage for the resource allocation.
+> > > 
+> > > Fixes: 4c5e242d3e93 ("x86/PCI: Clip only host bridge windows for E820 regions")
+> > > Depends-on: fa6dae5d8208 ("x86/PCI: Add kernel cmdline options to use/ignore E820 reserved regions")
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > 
+> > Andy, thank you for the patch. Commit 4c5e242d3e93 has also been causing
+> > issues for other platforms, so I've submitted a revert of it here:
+> > 
+> > https://lore.kernel.org/linux-pci/20220612144325.85366-1-hdegoede@redhat.com/T/#u
+> > 
+> > can you please give the revert a try, and confirm that that fixes
+> > the Intel MID platform issue too ?
+> 
+> Nope, it doesn't fix. The problem is in flags checking as far as I can see.
+> My patch is needed either we have yours or not.
 
-[    1.446493] printk: console [ttyAMA0] printing thread started
-[    1.447195] printk: bootconsole [pl11] printing thread stopped
-[    1.467193] Unable to handle kernel paging request at virtual address ffff800871242000
-[    1.467793] Mem abort info:
-[    1.468093]   ESR = 0x0000000096000005
-[    1.468413]   EC = 0x25: DABT (current EL), IL = 32 bits
-[    1.468741]   SET = 0, FnV = 0
-[    1.469093]   EA = 0, S1PTW = 0
-[    1.469396]   FSC = 0x05: level 1 translation fault
-[    1.470493] Data abort info:
-[    1.470793]   ISV = 0, ISS = 0x00000005
-[    1.471093]   CM = 0, WnR = 0
-[    1.471444] swapper pgtable: 4k pages, 48-bit VAs, 	pgdp=0000000081c10000
-[    1.471798] [ffff800871242000] pgd=10000008fffff003,
-p4d=10000008fffff003, pud=0000000000000000
-[    1.472836] Internal error: Oops: 96000005 [#1] PREEMPT SMP
-[    1.472918] Modules linked in:
-[    1.473085] CPU: 1 PID: 35 Comm: kdevtmpfs Tainted: G T 5.19.0-rc1+ #49
-[    1.473246] Hardware name: Foundation-v8A (DT)
-[    1.473345] pstate: 40400009 (nZcv daif +PAN -UAO -TCO -DIT 	-SSBS BTYPE=--)
-[    1.473493] pc : locked_inode_to_wb_and_lock_list+0xbc/0x2a4
-[    1.473656] lr : locked_inode_to_wb_and_lock_list+0x8c/0x2a4
-[    1.473820] sp : ffff80000b77bc10
-[    1.473901] x29: ffff80000b77bc10 x28: 0000000000000001 x27: 0000000000000004
-[    1.474193] x26: 0000000000000000 x25: ffff000800888600 x24: ffff0008008885e8
-[    1.474393] x23: ffff80000848ddd4 x22: ffff80000a754f30 x21: ffff80000a7eaaf0
-[    1.474693] x20: ffff000800888150 x19: ffff80000b6a4150 x18: ffff80000ac3ac00
-[    1.474917] x17: 0000000070526bee x16: 000000003ac581ee x15: ffff80000ac42660
-[    1.475195] x14: 0000000000000000 x13: 0000000000007a60 x12: 0000000000000002
-[    1.475428] x11: ffff80000a7eaaf0 x10: 0000000000000004 x9 : 000000008845fe88
-[    1.475622] x8 : ffff000800868000 x7 : ffff80000ab98000 x6 : 00000000114514e2
-[    1.475893] x5 : 0000000000000000 x4 : 0000000000020019 x3 : 0000000000000001
-[    1.476113] x2 : ffff800871242000 x1 : ffff800871242000 x0 : ffff000800868000
-[    1.476393] Call trace:
-[    1.476493]  locked_inode_to_wb_and_lock_list+0xbc/0x2a4
-[    1.476605]  __mark_inode_dirty+0x3d8/0x6e0
-[    1.476793]  simple_setattr+0x5c/0x84
-[    1.476933]  notify_change+0x3ec/0x470
-[    1.477096]  handle_create+0x1b8/0x224
-[    1.477193]  devtmpfsd+0x98/0xf8
-[    1.477342]  kthread+0x124/0x130
-[    1.477512]  ret_from_fork+0x10/0x20
-[    1.477670] Code: b9000802 d2800023 d53cd042 8b020021 (f823003f)
-[    1.477793] ---[ end trace 0000000000000000 ]---
-[    1.478093] note: kdevtmpfs[35] exited with preempt_count 2
+Hold on, it seems I have tried to build something that is not what I develop.
+Lemme retest.
 
-The problem was bisected to the above commit and moving the bail check
-early solves the problem for me.
-
-Fixes: 10e14073107d ("writeback: Fix inode->i_io_list not be protected by inode->i_lock error")
-CC: stable@vger.kernel.org
-Cc: Jchao Sun <sunjunchao2870@gmail.com>
-Cc: Jan Kara <jack@suse.cz>
-Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
----
- fs/fs-writeback.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-index 05221366a16d..cf68114af68b 100644
---- a/fs/fs-writeback.c
-+++ b/fs/fs-writeback.c
-@@ -2416,6 +2416,14 @@ void __mark_inode_dirty(struct inode *inode, int flags)
- 			inode->i_state &= ~I_DIRTY_TIME;
- 		inode->i_state |= flags;
- 
-+		/*
-+		 * Only add valid (hashed) inodes to the superblock's
-+		 * dirty list.  Add blockdev inodes as well.
-+		 */
-+		if (!S_ISBLK(inode->i_mode)) {
-+			if (inode_unhashed(inode))
-+				goto out_unlock_inode;
-+		}
- 		/*
- 		 * Grab inode's wb early because it requires dropping i_lock and we
- 		 * need to make sure following checks happen atomically with dirty
-@@ -2436,14 +2444,6 @@ void __mark_inode_dirty(struct inode *inode, int flags)
- 		if (inode->i_state & I_SYNC_QUEUED)
- 			goto out_unlock;
- 
--		/*
--		 * Only add valid (hashed) inodes to the superblock's
--		 * dirty list.  Add blockdev inodes as well.
--		 */
--		if (!S_ISBLK(inode->i_mode)) {
--			if (inode_unhashed(inode))
--				goto out_unlock;
--		}
- 		if (inode->i_state & I_FREEING)
- 			goto out_unlock;
- 
 -- 
-2.35.3
+With Best Regards,
+Andy Shevchenko
+
 

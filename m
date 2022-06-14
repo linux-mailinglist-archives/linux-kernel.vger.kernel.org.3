@@ -2,151 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7796354BDE8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1F654BDF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355275AbiFNWyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 18:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
+        id S1355285AbiFNW4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 18:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354229AbiFNWyE (ORCPT
+        with ESMTP id S240786AbiFNW4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 18:54:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B4252B02;
-        Tue, 14 Jun 2022 15:54:03 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 22:53:59 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1655247241;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IFIif++WYe6R40cPTD/3X0hAdNJcAH56e2ZH3rTEZAw=;
-        b=CPRlOYTMauKq/4y6HQRlN+8eS8PtACSBGAO6ap3M61PwBDb14e0vqdgS1st5zVMtuXf08e
-        5j+n7Ts7Gtl2w9H9iQtxDuZZCNzs2q6gBzgoN8RYC1D46+rc3jMmfG6r6ycnCbvSgW2kyq
-        I52eBYWbPtv5HMoewJBB1en+46Kh8JI3MZT/UUwRxDzxUikVeYnXrmeaOFzDHl6PPntKa+
-        UCkKOqYtwKpoeLRP4uz9foEz+J16FHiMS00Erh8YC+sd3QMVcHivw9rt7HU02ZVSbfxMxS
-        rQVteq7Q89tgTI9V9f6iGTBBOodBBT7LGOVXyrc7OTRP7dKrFVzOl8SMQXSpDA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1655247241;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IFIif++WYe6R40cPTD/3X0hAdNJcAH56e2ZH3rTEZAw=;
-        b=YWyrBgmSIx++8xQR65NrjuDOzChP4MJoTEr6dI+E5MB9j2odEwaEul2asstrIJOtzZEyWE
-        HDfMZzvapMobi5AQ==
-From:   "tip-bot2 for Chang S. Bae" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/fpu] x86/fpu: Add a helper to prepare AMX state for
- low-power CPU idle
-Cc:     "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Tue, 14 Jun 2022 18:56:02 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F66D1BE94
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:56:01 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id x4so9826336pfj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:56:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=3IusMXHsX8HYuqKFhVAp//8FffUIb5+m4kqYcQhh3jg=;
+        b=RxGqPWG4PLu3NM7G1OGJljdNFzCExbfYbHK0F3QfUj1AlqNl14KHAaObsvlHet4+oS
+         x9VmUWFGotqq93PIhB4uIrDavQHnyGEIlTtHGhytL5VGpCcPwi6nQrHMU3+APZLTwZRq
+         89V3DSJMPpkL6yCJT27icAhF2DbnOLs2ezpp4telLSVl3K6+TzV6Uo8LBHL6A3EyQPOY
+         5AxYEpzRYPWkw/lPYe22uziM1qC8SG9TIXICerSzuFToms2h+Cmc2A90ofILLIBKPoR1
+         WbmNzt29EC3IoKHi3Dc9MPCLP63kvHZeG9uqbxpptSfbkOXScISb7NriHvfMCuEFdVXo
+         KCjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=3IusMXHsX8HYuqKFhVAp//8FffUIb5+m4kqYcQhh3jg=;
+        b=r7rGZ2W4NO3W75Z7HGD3Uzk0GsdI5/5pUqEJrHGF5vKrgpAsnw1A+dZZ+AYYznlrIV
+         nyPku0RSvBxH/4HKQhmvmuZqGp0HhebuHh6aymi9NYKPUpwwMH4wBGIO/ZuY+DC56noG
+         kcBtihbM8s74ZJKkqaAi0pmcyyYjgTw0FuY7nU1/wDRVAisdB++G8sN2A+QstkJyUdsz
+         YkhQtF8t1Efdqi9M2CijpSYLnasrrpIyeqBrAnFsMpJskxiAmsOFsCf0G3Du9XtCA3ex
+         dO416jQD5diL7CkO3mZ77b6xf4f0rsrz7DV98dJQZR1gFkSwg8qwnYRy7NpIwPoekOyT
+         YFUw==
+X-Gm-Message-State: AOAM531TO1NJltZhqhSTWWLkxqzy45YheMqrlhIHPCdIHI0LVEegpdnz
+        DKzOUtIBNzZCC9DV2IBm5HlKjg==
+X-Google-Smtp-Source: ABdhPJzQWALnoEZmwEIMpTXToHtePoOxJuJdOybO+zv45861A0QgmqxZOSNHez+b33q+mm6rS+sBAA==
+X-Received: by 2002:a63:4387:0:b0:3c6:9490:4e4b with SMTP id q129-20020a634387000000b003c694904e4bmr6264286pga.438.1655247360793;
+        Tue, 14 Jun 2022 15:56:00 -0700 (PDT)
+Received: from p14s ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id z1-20020a626501000000b0050dc7628183sm8366937pfb.93.2022.06.14.15.55.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 15:55:59 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 16:55:57 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Suman Anna <s-anna@ti.com>, linux-remoteproc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220608164748.11864-2-chang.seok.bae@intel.com>
-References: <20220608164748.11864-2-chang.seok.bae@intel.com>
+Subject: Re: [PATCH] remoteproc: k3-r5: Fix refcount leak in
+ k3_r5_cluster_of_init
+Message-ID: <20220614225557.GB1236509@p14s>
+References: <20220605083334.23942-1-linmq006@gmail.com>
 MIME-Version: 1.0
-Message-ID: <165524723963.4207.9260777437314481526.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220605083334.23942-1-linmq006@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/fpu branch of tip:
+On Sun, Jun 05, 2022 at 12:33:34PM +0400, Miaoqian Lin wrote:
+> Every iteration of for_each_available_child_of_node() decrements
+> the reference count of the previous node.
+> When breaking early from a for_each_available_child_of_node() loop,
+> we need to explicitly call of_node_put() on the child node.
+> Add missing of_node_put() to avoid refcount leak.
+> 
+> Fixes: 6dedbd1d5443 ("remoteproc: k3-r5: Add a remoteproc driver for R5F subsystem")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> ---
+>  drivers/remoteproc/ti_k3_r5_remoteproc.c | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Commit-ID:     418bf5f906c33e83e76239748982dc3d2330cf30
-Gitweb:        https://git.kernel.org/tip/418bf5f906c33e83e76239748982dc3d2330cf30
-Author:        Chang S. Bae <chang.seok.bae@intel.com>
-AuthorDate:    Wed, 08 Jun 2022 09:47:47 -07:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Tue, 14 Jun 2022 15:48:44 -07:00
+I have applied this patch.
 
-x86/fpu: Add a helper to prepare AMX state for low-power CPU idle
+Thanks,
+Mathieu
 
-When a CPU enters an idle state, a non-initialized AMX register state may
-be the cause of preventing a deeper low-power state. Other extended
-register states whether initialized or not do not impact the CPU idle
-state.
-
-The new helper can ensure the AMX state is initialized before the CPU is
-idle, and it will be used by the intel idle driver.
-
-Check the AMX_TILE feature bit before using XGETBV1 as a chain of
-dependencies was established via cpuid_deps[]: AMX->XFD->XGETBV1.
-
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lkml.kernel.org/r/20220608164748.11864-2-chang.seok.bae@intel.com
----
- arch/x86/include/asm/fpu/api.h       |  2 ++
- arch/x86/include/asm/special_insns.h |  9 +++++++++
- arch/x86/kernel/fpu/core.c           | 14 ++++++++++++++
- 3 files changed, 25 insertions(+)
-
-diff --git a/arch/x86/include/asm/fpu/api.h b/arch/x86/include/asm/fpu/api.h
-index 6b0f31f..503a577 100644
---- a/arch/x86/include/asm/fpu/api.h
-+++ b/arch/x86/include/asm/fpu/api.h
-@@ -164,4 +164,6 @@ static inline bool fpstate_is_confidential(struct fpu_guest *gfpu)
- /* prctl */
- extern long fpu_xstate_prctl(int option, unsigned long arg2);
- 
-+extern void fpu_idle_fpregs(void);
-+
- #endif /* _ASM_X86_FPU_API_H */
-diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
-index 45b18eb..35f709f 100644
---- a/arch/x86/include/asm/special_insns.h
-+++ b/arch/x86/include/asm/special_insns.h
-@@ -295,6 +295,15 @@ static inline int enqcmds(void __iomem *dst, const void *src)
- 	return 0;
- }
- 
-+static inline void tile_release(void)
-+{
-+	/*
-+	 * Instruction opcode for TILERELEASE; supported in binutils
-+	 * version >= 2.36.
-+	 */
-+	asm volatile(".byte 0xc4, 0xe2, 0x78, 0x49, 0xc0");
-+}
-+
- #endif /* __KERNEL__ */
- 
- #endif /* _ASM_X86_SPECIAL_INSNS_H */
-diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
-index 0531d6a..3b28c5b 100644
---- a/arch/x86/kernel/fpu/core.c
-+++ b/arch/x86/kernel/fpu/core.c
-@@ -851,3 +851,17 @@ int fpu__exception_code(struct fpu *fpu, int trap_nr)
- 	 */
- 	return 0;
- }
-+
-+/*
-+ * Initialize register state that may prevent from entering low-power idle.
-+ * This function will be invoked from the cpuidle driver only when needed.
-+ */
-+void fpu_idle_fpregs(void)
-+{
-+	/* Note: AMX_TILE being enabled implies XGETBV1 support */
-+	if (cpu_feature_enabled(X86_FEATURE_AMX_TILE) &&
-+	    (xfeatures_in_use() & XFEATURE_MASK_XTILE)) {
-+		tile_release();
-+		fpregs_deactivate(&current->thread.fpu);
-+	}
-+}
+> 
+> diff --git a/drivers/remoteproc/ti_k3_r5_remoteproc.c b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+> index 4840ad906018..0481926c6975 100644
+> --- a/drivers/remoteproc/ti_k3_r5_remoteproc.c
+> +++ b/drivers/remoteproc/ti_k3_r5_remoteproc.c
+> @@ -1655,6 +1655,7 @@ static int k3_r5_cluster_of_init(struct platform_device *pdev)
+>  		if (!cpdev) {
+>  			ret = -ENODEV;
+>  			dev_err(dev, "could not get R5 core platform device\n");
+> +			of_node_put(child);
+>  			goto fail;
+>  		}
+>  
+> @@ -1663,6 +1664,7 @@ static int k3_r5_cluster_of_init(struct platform_device *pdev)
+>  			dev_err(dev, "k3_r5_core_of_init failed, ret = %d\n",
+>  				ret);
+>  			put_device(&cpdev->dev);
+> +			of_node_put(child);
+>  			goto fail;
+>  		}
+>  
+> -- 
+> 2.25.1
+> 

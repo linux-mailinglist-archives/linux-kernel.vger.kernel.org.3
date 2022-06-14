@@ -2,103 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123EE54BC76
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:05:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5554954BC72
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352420AbiFNVAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 17:00:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
+        id S1357206AbiFNVAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 17:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245736AbiFNVAj (ORCPT
+        with ESMTP id S245736AbiFNVAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 17:00:39 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1A650068;
-        Tue, 14 Jun 2022 14:00:38 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id n18so8752767plg.5;
-        Tue, 14 Jun 2022 14:00:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ABIwjsN01avoXfixhqq/nhjZOdRVdPjlrbZog4E+a0w=;
-        b=SXD+jodpYCjHDny4B7tRwLnzq4pE6143JPpRCp4NCkoL7nzyoQmGQmw7OmUiSiNC6m
-         oCCGfwwNMef3wp7EGzL46Y52yIGsrTz0lJvJGL4Dsh+PXKONnBETq9QoP1miLi/Qs6e9
-         UzDzVtbDFQ2SJJuXFIkexc/7N969vfzXVSMvo0syt5UKGhul3LN1vJb6l0Z8jX/EbjrZ
-         2zFMg1fOeFsX4LKGQ8fG9L2M2CCu1YXjCOtkjMKA8Z87H2FUBVPVv2cAExZmrg4h1pNA
-         hdVzdgnLdKFAYvIARiZ6fJmEYv0GaM6pL2ZjYDHaU/zhWH8bZ4VzXhAEnUI2mjf1+Gya
-         Utdw==
+        Tue, 14 Jun 2022 17:00:53 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E0250076;
+        Tue, 14 Jun 2022 14:00:53 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id i16so10717787ioa.6;
+        Tue, 14 Jun 2022 14:00:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ABIwjsN01avoXfixhqq/nhjZOdRVdPjlrbZog4E+a0w=;
-        b=N+sgkUQHC1HCVfN3oN2hqya4Mr+kQHlx6Uok3uPTyJegB4N77XKS7ZuPahb1PkTFdC
-         K8Y3FG6BRzGfAA5Bj7+BNLnHKVvFT66sdczU8lgsyrxRsGjsxFX6MBb1rP/x5rMblvYc
-         o6e2/HJHo9Am+qdjRHhRJKjaWOmZgnhBP/cy/+oU1kSOdNuX0LnZWt1FRLinUNOB97eA
-         Ea3SnZ2FvLVmJXrIjF4EOk0bqGZXvZQZC4AMlmPz8f2vWz5B/p91yAtq380CZPgyXPhh
-         VkHN2H4sUvF+v0omLPvS3otsh+Efw7yM1HMbzxaMdwGvxz8elOHRrPkNb0yZlNxGFvgL
-         dXpw==
-X-Gm-Message-State: AJIora+OvjNc0gFOKGn5ShQmmY3ELgDSS384WaHvMZKj39BSNp3oOSdY
-        vvSFALMBxTJVi1EqF4Wh+AU=
-X-Google-Smtp-Source: AGRyM1uXICEcEKElb5h6IOEsUSAw3dY1Pt+rc53YxufnNf9GLR0TeRwtnHO5tz/ZtIUz46pEPUoGKw==
-X-Received: by 2002:a17:90b:4c06:b0:1e3:17fa:e387 with SMTP id na6-20020a17090b4c0600b001e317fae387mr6469302pjb.53.1655240437933;
-        Tue, 14 Jun 2022 14:00:37 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id a15-20020a1709027e4f00b00161e50e2245sm7701671pln.178.2022.06.14.14.00.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 14:00:37 -0700 (PDT)
-Message-ID: <8156508f-71d5-3ed5-ccba-bed6062fdbf3@gmail.com>
-Date:   Tue, 14 Jun 2022 14:00:35 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6wiAEAPY25hq39gjHNba18GOciZXRMGE+/vSibk2A0Y=;
+        b=pzKp/jCj0hGhQhT1oPjAQR/DQOF4LYGMx/Z69dnZw4Aw4X8PMrT+BUVjMlOWfDgCii
+         5EryCoSdyeC5dmAQ/PMmp+gr3UaAKLA1uxicimv9Ua5fY3XObX7yPQNkGTmp0+Z3qsJR
+         mOqZBWWk/U82hMofQENt/cTqVNBdfRtGCc6w1Z6Cf744y6AoBu0GsgrmPemuJd2kDhcJ
+         aKjO7Bq9ROMQfWRb91fSbKxc7Npd1MXRJaGKCyRYt8ogWmKHn8/aWk1tP7Gn2KPbZElK
+         bGPWZQwrDNKcSWzmjbYDn0IJ3Xr0dlNmR9rlC+UzlT2vFaWiZb2DKFlNzO+ClgzDVG2N
+         vYyw==
+X-Gm-Message-State: AOAM532e2A48yNjE839oK4utBZK0MHtmVisDGe2uhGx178OiI6aAWqGf
+        ILDtMy1xNYlMdbZGd4htoQ==
+X-Google-Smtp-Source: ABdhPJzIytzKnEVgu1QnavMIZw8F2v0fC5i8fFAEMNNu8RKGv/X2WWcvM5eIkW4e+95ltwCWuCHhLA==
+X-Received: by 2002:a05:6638:1342:b0:331:e382:b0af with SMTP id u2-20020a056638134200b00331e382b0afmr4132233jad.32.1655240452595;
+        Tue, 14 Jun 2022 14:00:52 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id u12-20020a92d1cc000000b002d77ea49cd7sm5954020ilg.28.2022.06.14.14.00.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 14:00:52 -0700 (PDT)
+Received: (nullmailer pid 2556989 invoked by uid 1000);
+        Tue, 14 Jun 2022 21:00:50 -0000
+Date:   Tue, 14 Jun 2022 15:00:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Richard Weinberger <richard@nod.at>,
+        Andy Gross <agross@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v6 3/3] dt-bindings: mtd: qcom_nandc: document
+ qcom,boot-partitions binding
+Message-ID: <20220614210050.GA2556790-robh@kernel.org>
+References: <20220609132344.17548-1-ansuelsmth@gmail.com>
+ <20220609132344.17548-4-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 4.9 00/20] 4.9.319-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220614183722.061550591@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220614183722.061550591@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220609132344.17548-4-ansuelsmth@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/22 11:39, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.9.319 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, 09 Jun 2022 15:23:44 +0200, Ansuel Smith wrote:
+> Document new qcom,boot-partition binding used to apply special
+> read/write layout to boot partitions.
 > 
-> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> Anything received after that time might be too late.
+> QCOM apply a special layout where spare data is not protected
+> by ECC for some special pages (used for boot partition). Add
+> Documentation on how to declare these special pages.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.319-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> and the diffstat can be found below.
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+> ---
+>  .../devicetree/bindings/mtd/qcom,nandc.yaml   | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
 > 
-> thanks,
-> 
-> greg k-h
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,168 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1D354AF48
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A6754AF27
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:17:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355765AbiFNLXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 07:23:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
+        id S243367AbiFNLRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 07:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356301AbiFNLX1 (ORCPT
+        with ESMTP id S231887AbiFNLRM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 07:23:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B154825596
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:23:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655205805;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DeSyU/TE5RCJvUem9lvGVeASpqzw6FLVpfJvGFrZeZA=;
-        b=RKuP4JRAAaLUlTTz8/JXtzaoCXUSV32e3OwcNJmNAsONar/71gsh9a+7ZaZPQRhwju3VAL
-        QmgywiXnPdngAdN6a+bis0O+o3XG5vONe9guIQ3XV5vwFnEyFkS9i0DOmRdGFv9yC0WvmE
-        JoGhQrpW0ef701J63YR74GC9XtmXN9Y=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-602-jRr0AnV9MzypSXSlXQV3NA-1; Tue, 14 Jun 2022 07:23:24 -0400
-X-MC-Unique: jRr0AnV9MzypSXSlXQV3NA-1
-Received: by mail-ed1-f71.google.com with SMTP id m5-20020a056402430500b004319d8ba8afso6002127edc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 04:23:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DeSyU/TE5RCJvUem9lvGVeASpqzw6FLVpfJvGFrZeZA=;
-        b=cKVpJpDBM0om4sOTnm0Oz7HReWoJ2c+JqGKA1H7lcMvU+0rNogGkBbFMqafvWYajpX
-         j05bjykn+RA/VKuGYEiMKisWTD35KTZhGXJ2xAWAcMlqa/cs4Oo1uODQg85rCPgRzdvr
-         FoygbBi034h5ilWCiGWl758OUpNiX52V6op0vIsifoSAluNVHYPBV91MjBiErmINLB6Z
-         TWoEax4KeP1zRM54chmjWztlzjVZupxxlKlkIIRRz2yClDuUgOATsEiXXRHBsHAv+Ott
-         JE6IOutCWdQeer3N5cN7jk8vWyL2Ra0FQ9V9+gj9bVJY6dAgy6J2M9uv/xozv3l8/A9r
-         EZTA==
-X-Gm-Message-State: AOAM5320jh5MEHzAHC3VV4KPxqWfpeF+/KkzQEf8KP0x2DW6Vb/e3hGb
-        PD36ovC+VvLU2b8pES9lPXXbk/skkbyzxLNVb7xNoe0SVl+IZjeCDKdR12o0xxnlP7Xb7srAj+3
-        LkcL6y7MlakHPEV5e/pnARJrO
-X-Received: by 2002:a17:907:3f97:b0:711:d61d:df9 with SMTP id hr23-20020a1709073f9700b00711d61d0df9mr3913085ejc.644.1655205803107;
-        Tue, 14 Jun 2022 04:23:23 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzQHMluBcpPYWc2yp7uCcemI90Mdk5ZmtpRcGvCZkTZAWWy/1vIWBvgwwPdeOTQ0uucLYHirA==
-X-Received: by 2002:a17:907:3f97:b0:711:d61d:df9 with SMTP id hr23-20020a1709073f9700b00711d61d0df9mr3913061ejc.644.1655205802817;
-        Tue, 14 Jun 2022 04:23:22 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id fs36-20020a170907602400b00705f6dab05bsm4902373ejc.183.2022.06.14.04.23.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 04:23:21 -0700 (PDT)
-Message-ID: <bd21d5c6-ed5f-dd8c-f0bf-73f54ca8ee58@redhat.com>
-Date:   Tue, 14 Jun 2022 13:23:21 +0200
+        Tue, 14 Jun 2022 07:17:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D20220F7;
+        Tue, 14 Jun 2022 04:17:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63039B817D7;
+        Tue, 14 Jun 2022 11:17:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F08E6C3411F;
+        Tue, 14 Jun 2022 11:17:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655205429;
+        bh=OLxdqz8v9c0jsmtShQ9ZLaEVr+VzqF9XJMhBZg7aA0s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=XUX9WALMpQht+A2WyY/9Y0FRt3yAGu56w8ac6rFSzGJ85yg8dT6J3K6RDGfIB7XYP
+         5HRj8Zqf13Q+sQpnfcdtNH98UD2JYWmX/Jb8tSk0vKQaMzCAs98x6RJzWCrUiIP1WS
+         5UYokwEoFl4RnGKOl/XYv6G1l5hjU+Jv0ozicDBKLOU/1pRJXBsEcIX9pU6VUDZpmS
+         BPOXW6DMtZ4LTYDZLXKIgeikFskqOIjZi7EJJjJzRbhD06VdjY4hs4B/rJWa7cw0B+
+         j0DppMULkWDGui31JWKazA0hSoFKp7OaVzM6kBPz4vSnKrKqJ3BPNQAkaj/+Cm1K9X
+         asz2bWB0wPX9g==
+Date:   Tue, 14 Jun 2022 12:26:18 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] iio: dac: cio-dac: Implement and utilize register
+ structures
+Message-ID: <20220614122618.68e2e9d1@jic23-huawei>
+In-Reply-To: <44aec703753f930cceff448babd1c8e2959eebb0.1654118389.git.william.gray@linaro.org>
+References: <cover.1654118389.git.william.gray@linaro.org>
+        <44aec703753f930cceff448babd1c8e2959eebb0.1654118389.git.william.gray@linaro.org>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v1 1/1] phy: ti: tusb1210: Don't check for write errors
- when powering on
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Ferry Toth <ftoth@exalondelft.nl>
-References: <20220613160848.82746-1-andriy.shevchenko@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220613160848.82746-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon,  6 Jun 2022 10:15:18 -0400
+William Breathitt Gray <william.gray@linaro.org> wrote:
 
-On 6/13/22 18:08, Andy Shevchenko wrote:
-> On some platforms, like Intel Merrifield, the writing values during power on
-> may timeout:
+> Reduce magic numbers and improve code readability by implementing and
+> utilizing named register data structures.
 > 
->    tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41 to reg 0x80
->    phy phy-dwc3.0.auto.ulpi.0: phy poweron failed --> -110
->    dwc3 dwc3.0.auto: error -ETIMEDOUT: failed to initialize core
->    dwc3: probe of dwc3.0.auto failed with error -110
-> 
-> which effectively fails the probe of the USB controller.
-> Drop the check as it was before the culprit commit (see Fixes tag).
-> 
-> Fixes: 09a3512681b3 ("phy: ti: tusb1210: Improve ulpi_read()/_write() error checking")
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 
-Copy and pasting my reply about this in another thread to keep everyone up2date:
+I'm unconvinced this one really helps readability seeing
+as you are only indexing a straight forward array.
 
-"""
-In my experience with using the phy for charger-type detection on some
-x86 android tablets which don't have any other way to do charger detection,
-these errors indicate a real communication issue for reading/writing
-phy registers. At the same time this usually does not seem to be a big
-problem since the phy seems to work fine with its power-on defaults.
+Simply using u16 __iomem *
+would provide the main cleanup which is avoiding the indexing
+via * 2.
 
-In case of Bay Trail these errors were related to 2 things:
+Thanks,
 
-1. Autosuspend of the phy-interface block in the dwc3, fixed by:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d7c93a903f33ff35aa0e6b5a8032eb9755b00826
-
-But dwc3_pci_mrfld_properties[] already sets "snps,dis_u2_susphy_quirk",
-so I guess it is not this.
-
-2. There being no delay in tusb1210_power_on() between toggling the
-reset IO and then trying to communicate with the phy, fixed in:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=df37c99815d9e0775e67276d70c93cbc25f31c70
-
-Maybe the:
-
-#define TUSB1210_RESET_TIME_MS				30
-
-Added by that commit needs to be a bit bigger for the possibly
-older phy revision used on the merifield boards?
-
-(note it is fine to just increase it a bit everywhere).
-"""
-
-IMHO it would be good to try and increase TUSB1210_RESET_TIME_MS (start with say 100
-and then see if e.g. 50 also works). If increasing that does not work
-
-I'm fine with going with this workaround patch to fix things.
-
-Regards,
-
-Hans
-
+Jonathan
 
 
 > ---
->  drivers/phy/ti/phy-tusb1210.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+>  drivers/iio/dac/cio-dac.c | 24 ++++++++++++++++--------
+>  1 file changed, 16 insertions(+), 8 deletions(-)
 > 
-> diff --git a/drivers/phy/ti/phy-tusb1210.c b/drivers/phy/ti/phy-tusb1210.c
-> index c3ab4b69ea68..669c13d6e402 100644
-> --- a/drivers/phy/ti/phy-tusb1210.c
-> +++ b/drivers/phy/ti/phy-tusb1210.c
-> @@ -105,8 +105,9 @@ static int tusb1210_power_on(struct phy *phy)
->  	msleep(TUSB1210_RESET_TIME_MS);
+> diff --git a/drivers/iio/dac/cio-dac.c b/drivers/iio/dac/cio-dac.c
+> index 8080984dcb03..7860450ceaf3 100644
+> --- a/drivers/iio/dac/cio-dac.c
+> +++ b/drivers/iio/dac/cio-dac.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/isa.h>
+>  #include <linux/module.h>
+>  #include <linux/moduleparam.h>
+> +#include <linux/types.h>
 >  
->  	/* Restore the optional eye diagram optimization value */
-> -	return tusb1210_ulpi_write(tusb, TUSB1210_VENDOR_SPECIFIC2,
-> -				   tusb->vendor_specific2);
-> +	tusb1210_ulpi_write(tusb, TUSB1210_VENDOR_SPECIFIC2, tusb->vendor_specific2);
+>  #define CIO_DAC_NUM_CHAN 16
+>  
+> @@ -34,14 +35,22 @@ static unsigned int num_cio_dac;
+>  module_param_hw_array(base, uint, ioport, &num_cio_dac, 0);
+>  MODULE_PARM_DESC(base, "Measurement Computing CIO-DAC base addresses");
+>  
+> +/**
+> + * struct cio_dac_reg - device register structure
+> + * @da:	D/A data
+> + */
+> +struct cio_dac_reg {
+> +	u16 da[CIO_DAC_NUM_CHAN];
+> +};
 > +
-> +	return 0;
->  }
+>  /**
+>   * struct cio_dac_iio - IIO device private data structure
+>   * @chan_out_states:	channels' output states
+> - * @base:		base port address of the IIO device
+> + * @reg:		I/O address offset for the device registers
+>   */
+>  struct cio_dac_iio {
+>  	int chan_out_states[CIO_DAC_NUM_CHAN];
+> -	void __iomem *base;
+> +	struct cio_dac_reg __iomem *reg;
+>  };
 >  
->  static int tusb1210_power_off(struct phy *phy)
+>  static int cio_dac_read_raw(struct iio_dev *indio_dev,
+> @@ -61,7 +70,6 @@ static int cio_dac_write_raw(struct iio_dev *indio_dev,
+>  	struct iio_chan_spec const *chan, int val, int val2, long mask)
+>  {
+>  	struct cio_dac_iio *const priv = iio_priv(indio_dev);
+> -	const unsigned int chan_addr_offset = 2 * chan->channel;
+>  
+>  	if (mask != IIO_CHAN_INFO_RAW)
+>  		return -EINVAL;
+> @@ -71,7 +79,7 @@ static int cio_dac_write_raw(struct iio_dev *indio_dev,
+>  		return -EINVAL;
+>  
+>  	priv->chan_out_states[chan->channel] = val;
+> -	iowrite16(val, priv->base + chan_addr_offset);
+> +	iowrite16(val, priv->reg->da + chan->channel);
+>  
+>  	return 0;
+>  }
+> @@ -106,8 +114,8 @@ static int cio_dac_probe(struct device *dev, unsigned int id)
+>  	}
+>  
+>  	priv = iio_priv(indio_dev);
+> -	priv->base = devm_ioport_map(dev, base[id], CIO_DAC_EXTENT);
+> -	if (!priv->base)
+> +	priv->reg = devm_ioport_map(dev, base[id], CIO_DAC_EXTENT);
+> +	if (!priv->reg)
+>  		return -ENOMEM;
+>  
+>  	indio_dev->info = &cio_dac_info;
+> @@ -117,8 +125,8 @@ static int cio_dac_probe(struct device *dev, unsigned int id)
+>  	indio_dev->name = dev_name(dev);
+>  
+>  	/* initialize DAC outputs to 0V */
+> -	for (i = 0; i < 32; i += 2)
+> -		iowrite16(0, priv->base + i);
+> +	for (i = 0; i < CIO_DAC_NUM_CHAN; i++)
+> +		iowrite16(0, priv->reg->da + i);
+>  
+>  	return devm_iio_device_register(dev, indio_dev);
+>  }
 

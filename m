@@ -2,638 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D08054AFA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A65A54AFAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 13:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355138AbiFNLy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 07:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44664 "EHLO
+        id S1355478AbiFNLz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 07:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352195AbiFNLyq (ORCPT
+        with ESMTP id S236054AbiFNLzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 07:54:46 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D64396B9;
-        Tue, 14 Jun 2022 04:54:44 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LMn0v349Mz68BVP;
-        Tue, 14 Jun 2022 19:54:39 +0800 (CST)
-Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 13:54:41 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <kpsingh@kernel.org>, <john.fastabend@gmail.com>
-CC:     <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v4 4/4] selftests/bpf: Add test for bpf_verify_pkcs7_signature() helper
-Date:   Tue, 14 Jun 2022 13:54:20 +0200
-Message-ID: <20220614115420.1964686-5-roberto.sassu@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220614115420.1964686-1-roberto.sassu@huawei.com>
-References: <20220614115420.1964686-1-roberto.sassu@huawei.com>
+        Tue, 14 Jun 2022 07:55:52 -0400
+Received: from esa18.fujitsucc.c3s2.iphmx.com (esa18.fujitsucc.c3s2.iphmx.com [216.71.158.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21B6E3A72D;
+        Tue, 14 Jun 2022 04:55:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1655207751; x=1686743751;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=UsQMaWZhEeYxx17NEwy4Z621E5SNxXPJnlF5jUIH3sE=;
+  b=Nu5rw4Ui/wB8aeoYgiX6NmlvNUkKiF1byyINoS8+jo0fFJR6zb1gvEv8
+   NzDjwvhLYFViBS4tbPnIwSWq8cjSMOGnUNMirkwmOEIi15bwsFTq84vtu
+   E9ftG90rqpir0hJ6QQ7KhiFFk8VzseoludPFOhk7eFfVkbpQLWFrTOppu
+   jPHt9G9VeeLbY3b7JJWRN0lco1sNGWOuxuosR56OTA3GqWPtOpmglHg/j
+   b8u4htkHId3LN4WsXlIogw3Kk32ft5JecAX+x2iSyjTfOIv+/blgkACxk
+   8zsXBqnW0bF8Y6DDd46uEvd5n7F0SJXRB98iXn1vxudXDPIfAbir0ok5n
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="59439464"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647270000"; 
+   d="scan'208";a="59439464"
+Received: from mail-os0jpn01lp2111.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.111])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 20:55:42 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=is+f70jey0NK5Rm/Qmq7sM6vQaGWWFJuziX+AcsGs8mMcIKjBNKTwCMTY6UvZf+dzrg+AguNHLN2KfYAEBrnIlxaR8UfQMtkh80DbwdafBOLVH9PCY/++QlxvhJwj1vMU91IGSY69abqycbJIq+PX9VmaA3veNTmIi1br4NBQFEx9HCGS6Dkb0Rc6OIVHOVMOwamZorkdgpZJxFeOh/eDWP4ywuecM2EN79c5VlZ+cN235hu3dC45eExNSf7wXHBwZLsLVDpNxfEJ1w+/uLaLYVOutMZM4Ve+clvhLnt4U6wfP3lCr79XbtLdLfImTzNZzvtAJYGEbDrL1PqVYrZTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZWkRUzHCfO1YWcuZ8izmHdoC7bTIQqUY1hWoCGnV/v4=;
+ b=fzKYj7TmjE5kKluDiXysKGl+9Ww+kTkDvqOE8NZovWXP+gJdSTk69/tc0EgYWV/ttN7YbtFw88QpopWV3LNmaOE160tPORgCQtjROeVicXg4kVcfFNklpFAyB1U5cn9R1Q+w9B/gClZaCsk6Y/o6u899qCHJ2sclXciKn2rxJqETa8Ypm1KSoXPO8tsuFnYxCF1XEGA9a8921JLgWKCXlIdReb1VFFz8FKZvHC0Gyu8bEYhjcdT7nDCHkcxxJClHpuQSEkgfZ/zVC++a+pGBG86xoaA8j7eOX+GgTHpIswuAuq4dwgl9fGYOkHyr69usvZ4xQdDM83NLrY5R2mbmxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=fujitsu.onmicrosoft.com; s=selector2-fujitsu-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZWkRUzHCfO1YWcuZ8izmHdoC7bTIQqUY1hWoCGnV/v4=;
+ b=kXGYpY6kwQfeHs9+Q/Kz/7i7qx+JOhpvqqSTsyRJnHDlNl06CyAUTNdo1IlWi/dcFATdJ9UJjD7S9kw8STK7m03iQEA9OYMY5WAFaXXN4NLb1akPmt1XOn601/aUTh1dIwNE3utdOrRz9O3XB/NJchLgyo82LOsZ1QEFIw9Cy/w=
+Received: from OSBPR01MB2037.jpnprd01.prod.outlook.com (2603:1096:603:25::17)
+ by TYAPR01MB4767.jpnprd01.prod.outlook.com (2603:1096:404:12b::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13; Tue, 14 Jun
+ 2022 11:55:39 +0000
+Received: from OSBPR01MB2037.jpnprd01.prod.outlook.com
+ ([fe80::3151:373d:fb9d:afd1]) by OSBPR01MB2037.jpnprd01.prod.outlook.com
+ ([fe80::3151:373d:fb9d:afd1%7]) with mapi id 15.20.5332.021; Tue, 14 Jun 2022
+ 11:55:39 +0000
+From:   "tarumizu.kohei@fujitsu.com" <tarumizu.kohei@fujitsu.com>
+To:     'Greg KH' <gregkh@linuxfoundation.org>
+CC:     "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "eugenis@google.com" <eugenis@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "pcc@google.com" <pcc@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "marcos@orca.pet" <marcos@orca.pet>,
+        "marcan@marcan.st" <marcan@marcan.st>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "nicolas.ferre@microchip.com" <nicolas.ferre@microchip.com>,
+        "conor.dooley@microchip.com" <conor.dooley@microchip.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "ast@kernel.org" <ast@kernel.org>,
+        "peter.chen@kernel.org" <peter.chen@kernel.org>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: RE: [PATCH v5 0/6] Add hardware prefetch control driver for A64FX and
+ x86
+Thread-Topic: [PATCH v5 0/6] Add hardware prefetch control driver for A64FX
+ and x86
+Thread-Index: AQHYemckLVPNFhFQbU+IAdEo3cwBO61IoUEAgAYyEhA=
+Date:   Tue, 14 Jun 2022 11:55:39 +0000
+Message-ID: <OSBPR01MB203749DA00C7BEE5741AFEB980AA9@OSBPR01MB2037.jpnprd01.prod.outlook.com>
+References: <20220607120530.2447112-1-tarumizu.kohei@fujitsu.com>
+ <YqNCDrqcp9t8HlUJ@kroah.com>
+In-Reply-To: <YqNCDrqcp9t8HlUJ@kroah.com>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: =?iso-2022-jp?B?TVNJUF9MYWJlbF9hNzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZl?=
+ =?iso-2022-jp?B?Y2UwNTBfQWN0aW9uSWQ9YzI2ZjBlMmMtODEzMC00MGM1LWExZDItODlm?=
+ =?iso-2022-jp?B?MWJiM2ViYWI3O01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFi?=
+ =?iso-2022-jp?B?NGQtM2IwZjRmZWNlMDUwX0NvbnRlbnRCaXRzPTA7TVNJUF9MYWJlbF9h?=
+ =?iso-2022-jp?B?NzI5NWNjMS1kMjc5LTQyYWMtYWI0ZC0zYjBmNGZlY2UwNTBfRW5hYmxl?=
+ =?iso-2022-jp?B?ZD10cnVlO01TSVBfTGFiZWxfYTcyOTVjYzEtZDI3OS00MmFjLWFiNGQt?=
+ =?iso-2022-jp?B?M2IwZjRmZWNlMDUwX01ldGhvZD1TdGFuZGFyZDtNU0lQX0xhYmVsX2E3?=
+ =?iso-2022-jp?B?Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0ZmVjZTA1MF9OYW1lPUZV?=
+ =?iso-2022-jp?B?SklUU1UtUkVTVFJJQ1RFRBskQiJMJT8lUhsoQjtNU0lQX0xhYmVsX2E3?=
+ =?iso-2022-jp?B?Mjk1Y2MxLWQyNzktNDJhYy1hYjRkLTNiMGY0ZmVjZTA1MF9TZXREYXRl?=
+ =?iso-2022-jp?B?PTIwMjItMDYtMTRUMTE6NDQ6MTJaO01TSVBfTGFiZWxfYTcyOTVjYzEt?=
+ =?iso-2022-jp?B?ZDI3OS00MmFjLWFiNGQtM2IwZjRmZWNlMDUwX1NpdGVJZD1hMTlmMTIx?=
+ =?iso-2022-jp?B?ZC04MWUxLTQ4NTgtYTlkOC03MzZlMjY3ZmQ0Yzc7?=
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0682a3db-2ba6-4c77-6110-08da4dfccce3
+x-ms-traffictypediagnostic: TYAPR01MB4767:EE_
+x-microsoft-antispam-prvs: <TYAPR01MB4767B134F1D9024D823D3A3380AA9@TYAPR01MB4767.jpnprd01.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 04msqKUdgv2o/XcI/95vRA+PoTQV4eNZyOUfUrgoMJbgS9LfPmIEmqBSbfzvhd7d+wVLOsdkCQ4vhBUoBjHOy5wZ4cD2oIghou7/kWWBXbVqws28oSf1tqBP+hbID9mSXw0P314cMey0NGe/MIijGLwKHu1iluTS8U7JkeBzJ86A5IKkocNb7DOhob8ko4NBT/9lmzy/H2MphbyTevYVBbOu77b0pBAN5mfCnkB4PXVQDzs7OY20vjxgBP0LhBAII1XDBRLDw8XKgYhrL+XcLbd8zgOQfdy+pe0rGebRqO6lQ9ZyT/LXKFtEdGrg1uu69VCOnlwLvMbHlDnSg63gspPzRDTV9LYDyJF/UHLalYwJML16aWtGGMOg/0+o/iZukz9DJDW5WPPhUYLw4FqCcRP7gRGa4tUTZqriC0B4d1IMSx3HtlT4/7f352ORY+suYWmEQ4vKHYD3edNjpZ5YRT8wBWtlMZJt7RkL0Zd0Lfaahe2ptcYkDMKu6IwSeMOLES78qI4Bw3pUACY9cejPY1a34tV/PpeMnfHp8Ar46JH63HCph9hCldkxZKl1Mrhjfo2X+kHC26mRLnCfYvJmhVou9JYiBMpP0rxVS271kdzQuXuKfzYveGu7bYCTwM01J2VRE8B/aiOZMaTIxEjT3NTFUTXD+eDbWp+q7I3hQguha1ol0tCI4j5ZJtbS7xNaEiF7aak2mvxdO52e7ZyuDg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB2037.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(316002)(82960400001)(122000001)(38070700005)(83380400001)(7696005)(33656002)(26005)(54906003)(6506007)(86362001)(52536014)(508600001)(6916009)(9686003)(85182001)(71200400001)(66556008)(66476007)(66446008)(8676002)(4326008)(66946007)(64756008)(38100700002)(76116006)(55016003)(8936002)(186003)(2906002)(5660300002)(7416002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?eWhLanZ6UzNrdUtPS1dVU3pJakozUGp0ZTZ0MHpUMndnMTJiekxTRE5s?=
+ =?iso-2022-jp?B?YWJ0Mk5aQjYvQ0JoSWZ2bWpnbUtkUGVsT1F2cmNNL2NlZElWb3hRK1ps?=
+ =?iso-2022-jp?B?SW9qc3ZId2xmQTdHVFNFd0ZKejlNZUdHV2FpVzN1QjE2NVZnRnFCOEtW?=
+ =?iso-2022-jp?B?QnlTNXBkV0J0cXdTYTJ4SjViL242dmNEZ2ZJRGRSSFRxanVpTzZFU2tC?=
+ =?iso-2022-jp?B?ckZWb0NneG5HaUpDUkFMUVJYUHloVjRVd010TU9wanhXWE1vbnlTQjdH?=
+ =?iso-2022-jp?B?MUp6N2dxQmNTRzZ1YjJDajJ2bklhRUNwU25weHdPNmY2TC95bi9zWlkz?=
+ =?iso-2022-jp?B?a2pqb0tUUHdkNVpLclFGYk5yM0hJSXQwT1hPZnlRMThMN1lPR2dScllR?=
+ =?iso-2022-jp?B?aS9sYnFhdk94L0NVNTFlNUtlaFRhTmZERUpCSUVTNDRzTkR6MGxHdE1N?=
+ =?iso-2022-jp?B?L2tsY0tXMDVucTNwZTdaTEwwb2RlNWFDTkdiR3BTZzdzejlpbDVuZjBJ?=
+ =?iso-2022-jp?B?aXpEQ0w5UFNJb2tCS2xvL1h6b1YyRFlpL0UwM3dXdjhwSnF1NnYyclJP?=
+ =?iso-2022-jp?B?YTNZRUUyMGN6WHNuN3VqdUZkMUhobmo2TjZGUmdPT2w0cHBOZDFUWW9V?=
+ =?iso-2022-jp?B?cGtYOFJiZlNDc21PeU9CbzJYaVdWRHd0SndWMUZBKzFnN3ExK1Z6RGVR?=
+ =?iso-2022-jp?B?UlBwUXlHZVBoMElVYmhPMWpQZzVvRmFFWFBLSS9QaWZqbW5tRHN2c05x?=
+ =?iso-2022-jp?B?OVpVd2I4L04vbzdFLzh3VDVQeVlxMTlIU0pSYXMxRUkyd2hIU2djNEJ4?=
+ =?iso-2022-jp?B?R3Q1NWpyM0YvUFluRlhseFI1b2Y2NDhjajNpVGNCVXJ0alcrZkNBSnly?=
+ =?iso-2022-jp?B?SDYwTnc4NTVHbm15elhQWXFQZllKVlMvODdhSlB3UGFZd3BKYXRISFVs?=
+ =?iso-2022-jp?B?ZjRRYUsvYXJCTkEyVlIyTDZiMDkxVk1IRlFpM1EvZE1pcjV0RkdDejhR?=
+ =?iso-2022-jp?B?K2NaZUVxbGZLaDBRQWpFanNpTjRVRmphdDQ0OTV2OFkvU3NNRVRmMGZs?=
+ =?iso-2022-jp?B?aXNML283RWdCbDU5SWpaQVpMWTJZdG1ncFhsdXA1WjdNQmFMd0ZhL2s5?=
+ =?iso-2022-jp?B?UXVxclAyWms2QUYwajJEQTluTVpZeFp6SGIyME5QOUlVY1Q4MU5ybEdy?=
+ =?iso-2022-jp?B?MCt1TmhVWEM5dC9aRTlNUFZlZzBxOTVEcFNlZTYrbUo0c3FXcE9ES0Ur?=
+ =?iso-2022-jp?B?NkNoamVxWDNEU3pXd09ZRElmVTlnMm85L0VOSldhQlY0RjRlQi9EbzRW?=
+ =?iso-2022-jp?B?Z2wrYmoyOUVzazN6ZngwaVBuK1VlZ25aR09UNkdvbEYxSnl3Wlp0YlJD?=
+ =?iso-2022-jp?B?M0pOb1gweCs3YzNSSDNpeTdVajlGMkpmcno4ckJibEdHOVo5MFoySG9F?=
+ =?iso-2022-jp?B?T05GUENFU0RIQVlYTGhJR05pemJJSlBhV2RVR0I3Yk4zL1JtTEVyck91?=
+ =?iso-2022-jp?B?QVEyR0MrU1FkRHBYaUg2K1A1cERldDJjeEJlRFdRaFEzeWxTZXFUbllj?=
+ =?iso-2022-jp?B?d0JRYmxmZE1kalQxazV0ZXBpd2hxT3ZpYnlsL2xRck93OXFMVWJzL2Rm?=
+ =?iso-2022-jp?B?QjF6WjZKM2luTDdab2F2NHhzdWYzWU9lQmJWS2pjck9NVnhxUlN0Y2U4?=
+ =?iso-2022-jp?B?a20zRHZ0UUdYeDdRQzlxdlU1U2FUT1BBenZuRFM4MVdoS20yT3Y5SU1L?=
+ =?iso-2022-jp?B?eGVHa08vcmV3TDhRcjhPNGtLL093MkFVeVZaYTh0bHZsbnptSXBvRmJl?=
+ =?iso-2022-jp?B?YldlWXAxall4ZWl1eHVoZmNOY0l4cjR2YXlWb241NFhadXpPdnFjOWpT?=
+ =?iso-2022-jp?B?QjFHamYwRXB1UEJ0ODdibGYyaStaRGVyWWd1RVJ3UEx6YUg5ZERPcUxt?=
+ =?iso-2022-jp?B?dlFjanVacUE0eTlwcmRrOW1VcFpTSGNDMGVrNGQrMkJNOHFpNnNlQXFB?=
+ =?iso-2022-jp?B?anlSTXBOSnhIKytvbkpGdW1NS0NrYURjN1IzODZqdEk2ZUYxd0lrTEJR?=
+ =?iso-2022-jp?B?Wm5RTllIK2xtajhCMFFIRjJlSmZuNTFaajRmTXRYTzBSWlBhYnJaaXZr?=
+ =?iso-2022-jp?B?TWphbGJ1TXVtWjdMaWFBU1pnbXZDRjQwMUVrUlpwVXZnUmUvcGkrNGdY?=
+ =?iso-2022-jp?B?UGpFZkkybFdDdm5keVpjQm1JYUtyOElabFQ0UkNHMzZyNUs0cElKaVlK?=
+ =?iso-2022-jp?B?Wjg5aFpzZnI3aURTcWZ0bFphaUttaWxFN0tMSXdDK01iWmUrcytiWFFC?=
+ =?iso-2022-jp?B?bFE1NWZramZiaUhEaEhNSCtPVTI2Y2hsN2VLUGNkNUw2R3BaTGFxaVFB?=
+ =?iso-2022-jp?B?S0t1MVNlSVJuUUJvTndaTGlJK2gza2MwdlF2UlE4ZU9iYkF0TmZ6dFU4?=
+ =?iso-2022-jp?B?cUdZSHRNVVhsTXVZZ1pPc293YTJIdFlTeXA5K2t2alBhNTllVHRQYlBn?=
+ =?iso-2022-jp?B?Y3p5RmF4VWN4RTFrL2x5eEhLMmRPeHZwVVRlS3VPV0VPU3hmbnp2YzNS?=
+ =?iso-2022-jp?B?YTlhRktabz0=?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.204.63.22]
-X-ClientProxiedBy: lhreml754-chm.china.huawei.com (10.201.108.204) To
- fraeml714-chm.china.huawei.com (10.206.15.33)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB2037.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0682a3db-2ba6-4c77-6110-08da4dfccce3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2022 11:55:39.0741
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: P/99KZnX6t+CyzIu7sXMi3fOxkmimNFgDqLhh1iOvJhfF8v8KppUQapqALYZemoVE/7JTzYrJTmdXMbOhLrnVNm92XpkXH4MWqz5shRNJ30=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB4767
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ensure that signature verification is performed successfully from an eBPF
-program, with the new bpf_verify_pkcs7_signature() helper.
+Thanks for the comment.
 
-Generate a testing signature key and compile sign-file from scripts/, so
-that the test is selfcontained.
+> Why does userspace want to even do this?
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- tools/testing/selftests/bpf/Makefile          |  14 +-
- tools/testing/selftests/bpf/config            |   2 +
- .../bpf/prog_tests/verify_pkcs7_sig.c         | 217 ++++++++++++++++++
- .../bpf/progs/test_verify_pkcs7_sig.c         | 168 ++++++++++++++
- .../testing/selftests/bpf/verify_sig_setup.sh | 100 ++++++++
- 5 files changed, 498 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
- create mode 100755 tools/testing/selftests/bpf/verify_sig_setup.sh
+This is because the optimal settings may differ from application to
+application.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 8ad7a733a505..c689b63ecac2 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -14,6 +14,7 @@ BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
- APIDIR := $(TOOLSINCDIR)/uapi
- GENDIR := $(abspath ../../../../include/generated)
- GENHDR := $(GENDIR)/autoconf.h
-+HOSTPKG_CONFIG := pkg-config
- 
- ifneq ($(wildcard $(GENHDR)),)
-   GENFLAGS := -DHAVE_GENHDR
-@@ -75,7 +76,7 @@ TEST_PROGS := test_kmod.sh \
- 	test_xsk.sh
- 
- TEST_PROGS_EXTENDED := with_addr.sh \
--	with_tunnels.sh ima_setup.sh \
-+	with_tunnels.sh ima_setup.sh verify_sig_setup.sh \
- 	test_xdp_vlan.sh test_bpftool.py
- 
- # Compile but not part of 'make run_tests'
-@@ -84,7 +85,7 @@ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
- 	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
- 	xdpxceiver xdp_redirect_multi
- 
--TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read
-+TEST_CUSTOM_PROGS = $(OUTPUT)/urandom_read $(OUTPUT)/sign-file
- 
- # Emit succinct information message describing current building step
- # $1 - generic step name (e.g., CC, LINK, etc);
-@@ -180,6 +181,12 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
- 		  liburandom_read.so $(LDLIBS)	       			       \
- 		  -Wl,-rpath=. -Wl,--build-id=sha1 -o $@
- 
-+$(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
-+	$(call msg,SIGN-FILE,,$@)
-+	$(Q)$(CC) $(shell $(HOSTPKG_CONFIG)--cflags libcrypto 2> /dev/null) \
-+		  $< -o $@ \
-+		  $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
-+
- $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(wildcard bpf_testmod/Makefile bpf_testmod/*.[ch])
- 	$(call msg,MOD,,$@)
- 	$(Q)$(RM) bpf_testmod/bpf_testmod.ko # force re-compilation
-@@ -502,7 +509,8 @@ TRUNNER_EXTRA_SOURCES := test_progs.c cgroup_helpers.c trace_helpers.c	\
- 			 cap_helpers.c
- TRUNNER_EXTRA_FILES := $(OUTPUT)/urandom_read $(OUTPUT)/bpf_testmod.ko	\
- 		       $(OUTPUT)/liburandom_read.so			\
--		       ima_setup.sh					\
-+		       $(OUTPUT)/sign-file				\
-+		       ima_setup.sh verify_sig_setup.sh			\
- 		       $(wildcard progs/btf_dump_test_case_*.c)
- TRUNNER_BPF_BUILD_RULE := CLANG_BPF_BUILD_RULE
- TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS) -DENABLE_ATOMICS_TESTS
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index 3b3edc0fc8a6..e4013c459f15 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -57,3 +57,5 @@ CONFIG_FPROBE=y
- CONFIG_IKCONFIG=y
- CONFIG_IKCONFIG_PROC=y
- CONFIG_MPTCP=y
-+CONFIG_MODULE_SIG=y
-+CONFIG_KEYS=y
-diff --git a/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
-new file mode 100644
-index 000000000000..c88bc563a71b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
-@@ -0,0 +1,217 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include <stdio.h>
-+#include <errno.h>
-+#include <stdlib.h>
-+#include <unistd.h>
-+#include <endian.h>
-+#include <limits.h>
-+#include <sys/stat.h>
-+#include <sys/wait.h>
-+#include <linux/keyctl.h>
-+#include <test_progs.h>
-+
-+#include "test_verify_pkcs7_sig.skel.h"
-+
-+#define MAX_DATA_SIZE 4096
-+#define LOG_BUF_SIZE 16384
-+
-+struct data {
-+	u8 payload[MAX_DATA_SIZE];
-+};
-+
-+static int _run_setup_process(const char *setup_dir, const char *cmd)
-+{
-+	int child_pid, child_status;
-+
-+	child_pid = fork();
-+	if (child_pid == 0) {
-+		execlp("./verify_sig_setup.sh", "./verify_sig_setup.sh", cmd,
-+		       setup_dir, NULL);
-+		exit(errno);
-+
-+	} else if (child_pid > 0) {
-+		waitpid(child_pid, &child_status, 0);
-+		return WEXITSTATUS(child_status);
-+	}
-+
-+	return -EINVAL;
-+}
-+
-+static int populate_data_item(const char *tmp_dir, struct data *data_item)
-+{
-+	struct stat st;
-+	char signed_file_template[] = "/tmp/signed_fileXXXXXX";
-+	char path[PATH_MAX];
-+	int ret, fd, child_status, child_pid;
-+
-+	fd = mkstemp(signed_file_template);
-+	if (fd == -1)
-+		return -errno;
-+
-+	ret = write(fd, "test", 4);
-+
-+	close(fd);
-+
-+	if (ret != 4) {
-+		ret = -EIO;
-+		goto out;
-+	}
-+
-+	child_pid = fork();
-+
-+	if (child_pid == -1) {
-+		ret = -errno;
-+		goto out;
-+	}
-+
-+	if (child_pid == 0) {
-+		snprintf(path, sizeof(path), "%s/signing_key.pem", tmp_dir);
-+
-+		return execlp("./sign-file", "./sign-file", "sha256",
-+			      path, path, signed_file_template, NULL);
-+	}
-+
-+	waitpid(child_pid, &child_status, 0);
-+
-+	ret = WEXITSTATUS(child_status);
-+	if (ret)
-+		goto out;
-+
-+	ret = stat(signed_file_template, &st);
-+	if (ret == -1) {
-+		ret = -errno;
-+		goto out;
-+	}
-+
-+	if (st.st_size > sizeof(data_item->payload) - sizeof(u32)) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	*(u32 *)data_item->payload = __cpu_to_be32(st.st_size);
-+
-+	fd = open(signed_file_template, O_RDONLY);
-+	if (fd == -1) {
-+		ret = -errno;
-+		goto out;
-+	}
-+
-+	ret = read(fd, data_item->payload + sizeof(u32), st.st_size);
-+
-+	close(fd);
-+
-+	if (ret != st.st_size) {
-+		ret = -EIO;
-+		goto out;
-+	}
-+
-+	ret = 0;
-+out:
-+	unlink(signed_file_template);
-+	return ret;
-+}
-+
-+void test_verify_pkcs7_sig(void)
-+{
-+	char tmp_dir_template[] = "/tmp/verify_sigXXXXXX";
-+	char *tmp_dir;
-+	char *buf = NULL;
-+	struct test_verify_pkcs7_sig *skel = NULL;
-+	struct bpf_map *map;
-+	struct data data;
-+	u32 saved_len;
-+	int ret, zero = 0;
-+
-+	LIBBPF_OPTS(bpf_object_open_opts, opts);
-+
-+	/* Trigger creation of session keyring. */
-+	syscall(__NR_request_key, "keyring", "_uid.0", NULL,
-+		KEY_SPEC_SESSION_KEYRING);
-+
-+	tmp_dir = mkdtemp(tmp_dir_template);
-+	if (!ASSERT_OK_PTR(tmp_dir, "mkdtemp"))
-+		return;
-+
-+	ret = _run_setup_process(tmp_dir, "setup");
-+	if (!ASSERT_OK(ret, "_run_setup_process"))
-+		goto close_prog;
-+
-+	buf = malloc(LOG_BUF_SIZE);
-+	if (!ASSERT_OK_PTR(buf, "malloc"))
-+		goto close_prog;
-+
-+	opts.kernel_log_buf = buf;
-+	opts.kernel_log_size = LOG_BUF_SIZE;
-+	opts.kernel_log_level = 1;
-+
-+	skel = test_verify_pkcs7_sig__open_opts(&opts);
-+	if (!ASSERT_OK_PTR(skel, "test_verify_pkcs7_sig__open_opts"))
-+		goto close_prog;
-+
-+	ret = test_verify_pkcs7_sig__load(skel);
-+
-+	if (ret < 0 && strstr(buf, "unknown func bpf_verify_pkcs7_signature")) {
-+		printf(
-+		  "%s:SKIP:bpf_verify_pkcs7_signature() helper not supported\n",
-+		  __func__);
-+		test__skip();
-+		goto close_prog;
-+	}
-+
-+	if (!ASSERT_OK(ret, "test_verify_pkcs7_sig__load\n"))
-+		goto close_prog;
-+
-+	ret = test_verify_pkcs7_sig__attach(skel);
-+	if (!ASSERT_OK(ret, "test_verify_pkcs7_sig__attach\n"))
-+		goto close_prog;
-+
-+	map = bpf_object__find_map_by_name(skel->obj, "data_input");
-+	if (!ASSERT_OK_PTR(map, "data_input not found"))
-+		goto close_prog;
-+
-+	ret = populate_data_item(tmp_dir, &data);
-+	if (!ASSERT_OK(ret, "populate_data_item\n"))
-+		goto close_prog;
-+
-+	skel->bss->monitored_pid = getpid();
-+	skel->bss->keyring_id = ULONG_MAX;
-+
-+	ret = bpf_map_update_elem(bpf_map__fd(map), &zero, &data, BPF_ANY);
-+	if (!ASSERT_OK(ret, "bpf_map_update_elem\n"))
-+		goto close_prog;
-+
-+	skel->bss->monitored_pid = getpid();
-+	/* Search the verification key in the primary keyring (should fail). */
-+	skel->bss->keyring_id = 0;
-+
-+	ret = bpf_map_update_elem(bpf_map__fd(map), &zero, &data, BPF_ANY);
-+	if (!ASSERT_LT(ret, 0, "bpf_map_update_elem data_input\n"))
-+		goto close_prog;
-+
-+	saved_len = *(__u32 *)data.payload;
-+	*(__u32 *)data.payload = sizeof(data.payload);
-+	ret = bpf_map_update_elem(bpf_map__fd(map), &zero, &data, BPF_ANY);
-+	if (!ASSERT_LT(ret, 0, "bpf_map_update_elem data_input\n"))
-+		goto close_prog;
-+
-+	*(__u32 *)data.payload = saved_len;
-+	data.payload[sizeof(__u32)] = 'a';
-+	ret = bpf_map_update_elem(bpf_map__fd(map), &zero, &data, BPF_ANY);
-+	ASSERT_LT(ret, 0, "bpf_map_update_elem data_input\n");
-+close_prog:
-+	_run_setup_process(tmp_dir, "cleanup");
-+	free(buf);
-+
-+	if (!skel)
-+		return;
-+
-+	skel->bss->monitored_pid = 0;
-+	test_verify_pkcs7_sig__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c b/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
-new file mode 100644
-index 000000000000..824379fa4a2c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
-@@ -0,0 +1,168 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ */
-+
-+#include <errno.h>
-+#include <stdlib.h>
-+#include <limits.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_endian.h>
-+
-+#define MAX_DATA_SIZE 4096
-+
-+#ifdef __BIG_ENDIAN__
-+#define be32_to_cpu(x) (x)
-+#else
-+#define be32_to_cpu(x) ___bpf_swab32(x)
-+#endif
-+
-+#define VERIFY_USE_SECONDARY_KEYRING (1UL)
-+
-+/* In stripped ARM and x86-64 modules, ~ is surprisingly rare. */
-+#define MODULE_SIG_STRING "~Module signature appended~\n"
-+
-+typedef __u8 u8;
-+typedef __u16 u16;
-+typedef __u32 u32;
-+typedef __u64 u64;
-+
-+enum pkey_id_type {
-+	PKEY_ID_PGP,		/* OpenPGP generated key ID */
-+	PKEY_ID_X509,		/* X.509 arbitrary subjectKeyIdentifier */
-+	PKEY_ID_PKCS7,		/* Signature in PKCS#7 message */
-+};
-+
-+/*
-+ * Module signature information block.
-+ *
-+ * The constituents of the signature section are, in order:
-+ *
-+ *	- Signer's name
-+ *	- Key identifier
-+ *	- Signature data
-+ *	- Information block
-+ */
-+struct module_signature {
-+	u8	algo;		/* Public-key crypto algorithm [0] */
-+	u8	hash;		/* Digest algorithm [0] */
-+	u8	id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
-+	u8	signer_len;	/* Length of signer's name [0] */
-+	u8	key_id_len;	/* Length of key identifier [0] */
-+	u8	__pad[3];
-+	__be32	sig_len;	/* Length of signature data */
-+};
-+
-+struct key;
-+
-+u32 monitored_pid;
-+unsigned long keyring_id;
-+
-+struct data {
-+	u8 payload[MAX_DATA_SIZE];
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct data);
-+} data_input SEC(".maps");
-+
-+char _license[] SEC("license") = "GPL";
-+
-+static int mod_check_sig(const struct module_signature *ms, size_t file_len)
-+{
-+	if (!ms)
-+		return -ENOENT;
-+
-+	if (be32_to_cpu(ms->sig_len) >= file_len - sizeof(*ms))
-+		return -EBADMSG;
-+
-+	if (ms->id_type != PKEY_ID_PKCS7)
-+		return -ENOPKG;
-+
-+	if (ms->algo != 0 ||
-+	    ms->hash != 0 ||
-+	    ms->signer_len != 0 ||
-+	    ms->key_id_len != 0 ||
-+	    ms->__pad[0] != 0 ||
-+	    ms->__pad[1] != 0 ||
-+	    ms->__pad[2] != 0)
-+		return -EBADMSG;
-+
-+	return 0;
-+}
-+
-+SEC("lsm.s/bpf")
-+int BPF_PROG(bpf, int cmd, union bpf_attr *attr, unsigned int size)
-+{
-+	const size_t marker_len = sizeof(MODULE_SIG_STRING) - 1;
-+	char marker[sizeof(MODULE_SIG_STRING) - 1];
-+	struct bpf_dynptr data_ptr, sig_ptr;
-+	struct module_signature ms;
-+	struct data *data_val;
-+	struct key *trusted_keys;
-+	u32 modlen;
-+	u32 sig_len;
-+	u64 value;
-+	u8 *mod;
-+	u32 pid;
-+	int ret, zero = 0;
-+
-+	pid = bpf_get_current_pid_tgid() >> 32;
-+	if (pid != monitored_pid)
-+		return 0;
-+
-+	data_val = bpf_map_lookup_elem(&data_input, &zero);
-+	if (!data_val)
-+		return 0;
-+
-+	bpf_probe_read(&value, sizeof(value), &attr->value);
-+
-+	bpf_copy_from_user(data_val, sizeof(struct data),
-+			   (void *)(unsigned long)value);
-+
-+	modlen = be32_to_cpu(*(u32 *)data_val->payload);
-+	mod = data_val->payload + sizeof(u32);
-+
-+	if (modlen > sizeof(struct data) - sizeof(u32))
-+		return -EINVAL;
-+
-+	if (modlen <= marker_len)
-+		return -ENOENT;
-+
-+	modlen &= sizeof(struct data) - 1;
-+	bpf_probe_read(marker, marker_len, (char *)mod + modlen - marker_len);
-+
-+	if (bpf_strncmp(marker, marker_len, MODULE_SIG_STRING))
-+		return -ENOENT;
-+
-+	modlen -= marker_len;
-+
-+	if (modlen <= sizeof(ms))
-+		return -EBADMSG;
-+
-+	bpf_probe_read(&ms, sizeof(ms), (char *)mod + (modlen - sizeof(ms)));
-+
-+	ret = mod_check_sig(&ms, modlen);
-+	if (ret)
-+		return ret;
-+
-+	sig_len = be32_to_cpu(ms.sig_len);
-+	modlen -= sig_len + sizeof(ms);
-+
-+	modlen &= 0x3ff;
-+	sig_len &= 0x3ff;
-+
-+	bpf_dynptr_from_mem(mod, modlen, 0, &data_ptr);
-+	bpf_dynptr_from_mem(mod + modlen, sig_len, 0, &sig_ptr);
-+	trusted_keys = bpf_request_key_by_id(keyring_id);
-+
-+	return bpf_verify_pkcs7_signature(&data_ptr, &sig_ptr, trusted_keys);
-+}
-diff --git a/tools/testing/selftests/bpf/verify_sig_setup.sh b/tools/testing/selftests/bpf/verify_sig_setup.sh
-new file mode 100755
-index 000000000000..48cb55abc4a4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/verify_sig_setup.sh
-@@ -0,0 +1,100 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+set -e
-+set -u
-+set -o pipefail
-+
-+VERBOSE="${SELFTESTS_VERBOSE:=0}"
-+LOG_FILE="$(mktemp /tmp/verify_sig_setup.XXXX.log)"
-+
-+x509_genkey_content="\
-+[ req ]
-+default_bits = 2048
-+distinguished_name = req_distinguished_name
-+prompt = no
-+string_mask = utf8only
-+x509_extensions = myexts
-+
-+[ req_distinguished_name ]
-+CN = eBPF Signature Verification Testing Key
-+
-+[ myexts ]
-+basicConstraints=critical,CA:FALSE
-+keyUsage=digitalSignature
-+subjectKeyIdentifier=hash
-+authorityKeyIdentifier=keyid
-+"
-+
-+usage()
-+{
-+	echo "Usage: $0 <setup|cleanup <existing_tmp_dir>"
-+	exit 1
-+}
-+
-+setup()
-+{
-+	local tmp_dir="$1"
-+
-+	echo "${x509_genkey_content}" > ${tmp_dir}/x509.genkey
-+
-+	openssl req -new -nodes -utf8 -sha256 -days 36500 \
-+			-batch -x509 -config ${tmp_dir}/x509.genkey \
-+			-outform PEM -out ${tmp_dir}/signing_key.pem \
-+			-keyout ${tmp_dir}/signing_key.pem 2>&1
-+
-+	openssl x509 -in ${tmp_dir}/signing_key.pem -out \
-+		${tmp_dir}/signing_key.der -outform der
-+
-+	cat ${tmp_dir}/signing_key.der | keyctl padd asymmetric ebpf_testing_key @s
-+}
-+
-+cleanup() {
-+	local tmp_dir="$1"
-+
-+	keyctl unlink $(keyctl search @s asymmetric ebpf_testing_key) @s
-+	rm -rf ${tmp_dir}
-+}
-+
-+catch()
-+{
-+	local exit_code="$1"
-+	local log_file="$2"
-+
-+	if [[ "${exit_code}" -ne 0 ]]; then
-+		cat "${log_file}" >&3
-+	fi
-+
-+	rm -f "${log_file}"
-+	exit ${exit_code}
-+}
-+
-+main()
-+{
-+	[[ $# -ne 2 ]] && usage
-+
-+	local action="$1"
-+	local tmp_dir="$2"
-+
-+	[[ ! -d "${tmp_dir}" ]] && echo "Directory ${tmp_dir} doesn't exist" && exit 1
-+
-+	if [[ "${action}" == "setup" ]]; then
-+		setup "${tmp_dir}"
-+	elif [[ "${action}" == "cleanup" ]]; then
-+		cleanup "${tmp_dir}"
-+	else
-+		echo "Unknown action: ${action}"
-+		exit 1
-+	fi
-+}
-+
-+trap 'catch "$?" "${LOG_FILE}"' EXIT
-+
-+if [[ "${VERBOSE}" -eq 0 ]]; then
-+	# Save the stderr to 3 so that we can output back to
-+	# it incase of an error.
-+	exec 3>&2 1>"${LOG_FILE}" 2>&1
-+fi
-+
-+main "$@"
-+rm -f "${LOG_FILE}"
--- 
-2.25.1
+Examples of performance improvements for applications with simple
+memory access characteristics are described in [merit] section.
+However, some applications have complex characteristics, so it is
+difficult to predict if an application will improve without actually
+trying it out.
 
+This is not necessary for all applications. However, I want to provide
+as a minimal interface that can be used by those who want to improve
+their application even a little.
+
+> How will they do this?
+
+I assume to be used to tune a specific core and execute an application
+on that core. The execution example is as follows.
+
+1) The user tunes the parameters of a specific core before executing
+   the program.
+
+```
+# echo 1024 > /sys/devices/system/cpu/cpu12/cache/index0/prefetch_control/s=
+tream_detect_prefetcher_dist
+# echo 1024 > /sys/devices/system/cpu/cpu12/cache/index2/prefetch_control/s=
+tream_detect_prefetcher_dist
+# echo 1024 > /sys/devices/system/cpu/cpu13/cache/index0/prefetch_control/s=
+tream_detect_prefetcher_dist
+# echo 1024 > /sys/devices/system/cpu/cpu13/cache/index2/prefetch_control/s=
+tream_detect_prefetcher_dist
+```
+
+2) Execute the program bound to the target core.
+
+```
+# taskset -c 12-13 a.out
+```
+
+If the interface is exposed, the user can develop a library to execute
+1) and 2) operation instead.
+
+> What programs will do this?
+
+It is assumed to be used by programs that execute many continuous
+memory access. It may be useful for other applications, but I can't
+explain them in detail right away.
+
+> And why isn't just automatic and why does this hardware require manual
+> intervention to work properly?
+
+It is difficult for the hardware to determine the optimal parameters
+in advance. Therefore, I think that the register is provided to change
+the behavior of the hardware.

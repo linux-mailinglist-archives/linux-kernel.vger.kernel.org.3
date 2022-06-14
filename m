@@ -2,91 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDAD054BAD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C2354BAE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344828AbiFNTnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 15:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52008 "EHLO
+        id S238664AbiFNTpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 15:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347396AbiFNTnl (ORCPT
+        with ESMTP id S232052AbiFNTpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 15:43:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D26342A701
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655235820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0kBJ9jVSmrZsPatTagpukwacW+JAMXi3G+ttyb9CVmA=;
-        b=MyiNEDZYK9V2SLrKcBGEeXweuETpKR2OYWzdBF244P6uyu9N45ibDrgDGqtk3oAXDqp8IE
-        R3SBCVAlcip+SKPCGnuB/04kBQSz3JkINfXwBfeWYpGEYxJ0Lq2lEDDM0XcAPj1Srt4nUG
-        dDzOzlQ8HBP54XvLg/in2splZSVCKF8=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-177-6xBLddBuP9uS3YiJkqjbow-1; Tue, 14 Jun 2022 15:43:38 -0400
-X-MC-Unique: 6xBLddBuP9uS3YiJkqjbow-1
-Received: by mail-io1-f71.google.com with SMTP id z19-20020a05660200d300b0066583f8cf2eso4861409ioe.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:43:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0kBJ9jVSmrZsPatTagpukwacW+JAMXi3G+ttyb9CVmA=;
-        b=JgAXrj2rt5Cu+sfoXNX0SbpoCyG1Cd8ygani4C8MDi5Rpb9y+0KGYi5QfA9cL34lhS
-         0r5YXOtfmmOQkzsO5VoO1VJK6rQC705Rg6eIM5/VguPjyHJ2z32FLUJeJH7hBACZClaz
-         oxDNClbO9qB4NtL3dIvsGY5Ov1Usxn43jf3Zyao5mvswIvOPp3h86cy4+30kNo2Zzmow
-         D7xUmtNbALHUK4xAHbiQW2JtK5D1hoXPjrUfuosX7MDOM9d90Z6Ak6cT8A+YZonazbEt
-         epznLJmbYQuP45iVIznfOqsMUsHPOZ5DmQ50vOkVf7e/55/Rcc1peVDt6xwZIjxBmpUI
-         xgBg==
-X-Gm-Message-State: AOAM5327dSwHT0J8vSBODDnUrzd/xSOARJ1r0QCLOySXd9NHfqS+MOnU
-        +GHcsKQ8UgTF1VXsAfUipT2Mzc+maQUENPOYpmkfwe023wgCa1qyvcbCJ1dIi6Fh2CGRMKDVsyt
-        UHEPJaEcu2+TCaPA39sTC904p
-X-Received: by 2002:a05:6638:2711:b0:332:1030:d6c2 with SMTP id m17-20020a056638271100b003321030d6c2mr3742580jav.263.1655235818126;
-        Tue, 14 Jun 2022 12:43:38 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyka9HjOgMy6b8pnRt/A/embx73zjB9YhZLRYD1IRFIZfVzSN4bJjcwuFQgiPhot6lgYqIMuA==
-X-Received: by 2002:a05:6638:2711:b0:332:1030:d6c2 with SMTP id m17-20020a056638271100b003321030d6c2mr3742560jav.263.1655235817943;
-        Tue, 14 Jun 2022 12:43:37 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id y11-20020a02904b000000b0032e6f0d3796sm5225276jaf.145.2022.06.14.12.43.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 12:43:37 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 15:43:34 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v3 6/6] selftests: vm: add /dev/userfaultfd test cases to
- run_vmtests.sh
-Message-ID: <Yqjk5qEvNk9l72P3@xz-m1.local>
-References: <20220601210951.3916598-1-axelrasmussen@google.com>
- <20220601210951.3916598-7-axelrasmussen@google.com>
+        Tue, 14 Jun 2022 15:45:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85F32F653;
+        Tue, 14 Jun 2022 12:45:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A90B9B81A49;
+        Tue, 14 Jun 2022 19:45:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54EAFC3411B;
+        Tue, 14 Jun 2022 19:45:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655235947;
+        bh=sRj9QqcT3Nw4rNOZc0Sbv8PIRN6PrIu3+9GiIRKgDBY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LSqI/o5pKIw/X4uduqTGfcLjZKmD7BvPMU41XiC72p/1iDKVUiM9OghN+eVGkKFLn
+         FReJ1SokdCrzvacvn5qSDUi63pNYcuWcPcOtgnw6L7Cq+8Er6UtOvSbl2e5QoFhVFU
+         R4m9LRABi0zWh3bDmXE2kjMk7IlZbxIe+e7G7wkvJXzXXAKduWeICDkIN74MZ16OlN
+         ot6tFHcZbdNtdgX6KFhF4r74cjGNy4DN73FJk/bz8oeRCYk/4v3JNaHVNgJFnuYGLX
+         6IZNBHfO2B+4AqxD+tVDjvWjmDcaGYfHFvaK2AuNnunu0gf62/8o6ZBi0TlJX1dwHi
+         oGDFhUMULRKtg==
+Date:   Tue, 14 Jun 2022 21:45:42 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: core: fix potential use-after-free on adapter
+ removal
+Message-ID: <YqjlZuFGl0dAUZyd@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <a9dc272e4e06db661125b7b4c330821b532afc4d.1642209079.git.mirq-linux@rere.qmqm.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UZJMXc0kkQpxFheL"
 Content-Disposition: inline
-In-Reply-To: <20220601210951.3916598-7-axelrasmussen@google.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <a9dc272e4e06db661125b7b4c330821b532afc4d.1642209079.git.mirq-linux@rere.qmqm.pl>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,16 +58,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 01, 2022 at 02:09:51PM -0700, Axel Rasmussen wrote:
-> This new mode was recently added to the userfaultfd selftest. We want to
-> exercise both userfaultfd(2) as well as /dev/userfaultfd, so add both
-> test cases to the script.
-> 
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
 
-Acked-by: Peter Xu <peterx@redhat.com>
+--UZJMXc0kkQpxFheL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-Peter Xu
+Hi Micha=C5=82,
 
+I finally had a look at your patch...
+
+> put_device(&adap->dev) might free the memory pointed to by `adap`,
+> so we shouldn't read adap->owner after that.
+>=20
+> Fix by saving module pointer before calling put_device().
+
+=2E.. and found a different approach for this problem from 2019:
+
+http://patchwork.ozlabs.org/project/linux-i2c/patch/1577439272-10362-1-git-=
+send-email-vulab@iscas.ac.cn/
+
+I think this is also proper. I found other subsystems in the kernel
+first putting the module, then the device. Do you see problems with the
+above patch?
+
+Thanks for looking into the issue!
+
+   Wolfram
+
+>=20
+> Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+> ---
+>  drivers/i2c/i2c-core-base.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
+> index 2c59dd748a49..5d694f8ce9ef 100644
+> --- a/drivers/i2c/i2c-core-base.c
+> +++ b/drivers/i2c/i2c-core-base.c
+> @@ -2464,11 +2464,14 @@ EXPORT_SYMBOL(i2c_get_adapter);
+> =20
+>  void i2c_put_adapter(struct i2c_adapter *adap)
+>  {
+> +	struct module *owner;
+> +
+>  	if (!adap)
+>  		return;
+> =20
+> +	owner =3D adap->owner;
+>  	put_device(&adap->dev);
+> -	module_put(adap->owner);
+> +	module_put(owner);
+>  }
+>  EXPORT_SYMBOL(i2c_put_adapter);
+> =20
+> --=20
+> 2.30.2
+>=20
+
+--UZJMXc0kkQpxFheL
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKo5WEACgkQFA3kzBSg
+KbY6JA//aK2Xf/g0uNzKw+J1YzA4kzVCkNfx/EeJKT8BpsZVb4Vse4EZaaBn4TFi
+jvNLEVsVL4noVL7AlA2nPAspcYy9kPMnf9JHJmNOtdUEL6ZHnBuaHspeIEVHhMVb
+EHp6i6WYLtTmsNjKI6J+d7HAwVLfoIyNqZ7MHlCF0/0+a180qZC6LFdkocMgmCAB
+WAbqb7olP/q6rsUzCgRQ5IMgWwbRSpcw5lKkV4vaEe1RuzhsRjNmrFi8jXan2vOw
++bKSvaA9+nFO8C1MwT3xzhor/e+VlzjmgfwC8L41/t/7UfIdq/GBmIRbyvhztyqc
+0LZtT7gzaN9ACAVBLB51gpUcJ5wSb92Ovq2wYpWXvlYKMKLqXtGw95iszQv58bPn
+JwLNLmaNCvUWKGgOgMk5Sd8JWMugh7CliA6ZolExeXg8q1elC0gonQbeh/qMzGrv
+usaoOAigIqkyct6beot8MCwD900Dg81fqJIkADW8Dk2VV7Fdv+2qh7+XQqGprmAP
+aXZkBvgP1W6bECXRG/MmUi/6J7FREgPhvjXD5Ayq7GYOwaJ8fZQzkxQb2FoIgHlr
+ajMfIaxGGWqtTTa5bdTi8bfooLL5+jiizmL8hhxP52q1uHK5frVNOwZPyFaOk04M
+7DGMmvNnFHqcBdvnTXrhHyAF5WVNilBFBv5UV5NTdcHuCHX4aRo=
+=O5Us
+-----END PGP SIGNATURE-----
+
+--UZJMXc0kkQpxFheL--

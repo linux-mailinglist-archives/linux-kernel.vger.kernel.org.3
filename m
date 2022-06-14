@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD02F54B2E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A629154B2F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243101AbiFNOPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
+        id S245175AbiFNORe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242805AbiFNOPj (ORCPT
+        with ESMTP id S242997AbiFNORK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:15:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 54E8B33891
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:15:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655216135;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JctC2m2+QZN18u2MNb2HvFmHLpXv366LEOSyUu6TasQ=;
-        b=iDnpfzdKKza6TuZmcvl+vbofoPO7jDrSkkz7OdC8+TPKF9DR8BL3KseY8nqTMPGuFn9O2h
-        6DZ9KPeUG5NQWnBHQaCI+YJ7puia/mzwaJRfCSIrT+Xwyh4VTvPZOSGQJARQRJ5CM5TkWk
-        c9SHn7ojEpCT2axlHqkg6JSovCbIegs=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-564-jTzZCP9PPUawlDPopva-5Q-1; Tue, 14 Jun 2022 10:15:34 -0400
-X-MC-Unique: jTzZCP9PPUawlDPopva-5Q-1
-Received: by mail-qk1-f199.google.com with SMTP id s11-20020a05620a254b00b006a6a23ff939so7522687qko.17
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:15:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:content-transfer-encoding:user-agent
-         :mime-version;
-        bh=JctC2m2+QZN18u2MNb2HvFmHLpXv366LEOSyUu6TasQ=;
-        b=F8AitUP8PxLCdzvdabSA7LnNGODyeVgNjp+fZvA/MMkbBs0Y1Lk8N+hY9y+TSgHfl+
-         ZOM7zwUCUJi0tHwGhGm7cQQtPwAoQpHSv6xj3UzyAcVScr76Krs49hebFoxpjJFtF/JN
-         3jAcET3CL1Mq6qQylhow3MJp3UZ/dMlxAh/n8/LibS/OKCQvm1DmYoKc5ZWhgIcJtyP0
-         hOpr3MCzUo2EUs74awHuRmjcksCuuqYm5Lro/qwD5345yuK+8euSdLDegV/APuo4L5cb
-         lY9ir7Fw+x1R+vd37aZ0iP8WmPc+/G0Hd6rX4QkbXtEIrq+MJnbZ09k7MPPF3vVWFaiN
-         EpNw==
-X-Gm-Message-State: AJIora+8b9DXMP/IGfghxRM1vCdBHJK86VvjlM/ry0ZkIVvu6fq0zq1j
-        1pkZ26MzYKX7e2kB9/Uf5iyQSTh4pR3ly79C6uTZnDxsjFRnqkcAgsCwp8aq+MDVGltM9Z5zo5u
-        WVzGHDbOGcHfKHJZ5verVaXms
-X-Received: by 2002:ad4:5c4a:0:b0:464:5920:7c1a with SMTP id a10-20020ad45c4a000000b0046459207c1amr3579678qva.58.1655216133915;
-        Tue, 14 Jun 2022 07:15:33 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1sUmVYfieNEUEGblxVDH6VoXBlZfAPSf7IbUAfA0HBAtNoDeIhDejnqioeqYTK2ssE5LXtTUg==
-X-Received: by 2002:ad4:5c4a:0:b0:464:5920:7c1a with SMTP id a10-20020ad45c4a000000b0046459207c1amr3579632qva.58.1655216133401;
-        Tue, 14 Jun 2022 07:15:33 -0700 (PDT)
-Received: from m8.users.ipa.redhat.com ([93.56.163.49])
-        by smtp.gmail.com with ESMTPSA id h20-20020a05620a245400b006a32bf19502sm9394754qkn.60.2022.06.14.07.15.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 07:15:32 -0700 (PDT)
-Message-ID: <831c7380f7d89fd8fb3a3043cf3b3d01001ae0be.camel@redhat.com>
-Subject: Re: [PATCH 0/2] certs: Add FIPS self-test for signature verification
-From:   Simo Sorce <simo@redhat.com>
-To:     David Howells <dhowells@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 14 Jun 2022 10:15:24 -0400
-In-Reply-To: <165515741424.1554877.9363755381201121213.stgit@warthog.procyon.org.uk>
-References: <165515741424.1554877.9363755381201121213.stgit@warthog.procyon.org.uk>
-Organization: Red Hat
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.2 (3.44.2-1.fc36) 
+        Tue, 14 Jun 2022 10:17:10 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E76B2F3A9;
+        Tue, 14 Jun 2022 07:17:06 -0700 (PDT)
+X-UUID: 1dbe14a68fbf40b59377d840aafa4a37-20220614
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:b61bd225-519f-4293-a73b-f73dd6043595,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:90
+X-CID-INFO: VERSION:1.1.6,REQID:b61bd225-519f-4293-a73b-f73dd6043595,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:90
+X-CID-META: VersionHash:b14ad71,CLOUDID:388d9407-b57a-4a25-a071-bc7b4972bc68,C
+        OID:2e28f976cb89,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 1dbe14a68fbf40b59377d840aafa4a37-20220614
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1958384240; Tue, 14 Jun 2022 22:16:57 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 14 Jun 2022 22:16:56 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Tue, 14 Jun 2022 22:16:56 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
+        <bvanassche@acm.org>
+CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
+        <mason.zhang@mediatek.com>, <qilin.tan@mediatek.com>,
+        <lin.gui@mediatek.com>, <eddie.huang@mediatek.com>,
+        <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <stanley.chu@mediatek.com>
+Subject: [PATCH v3 00/10] scsi: ufs: Fix PMC and low-power mode on MediaTek UFS platforms
+Date:   Tue, 14 Jun 2022 22:16:45 +0800
+Message-ID: <20220614141655.14409-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,62 +66,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-06-13 at 22:56 +0100, David Howells wrote:
-> Hi Herbert,
->=20
-> If you could look over this pair of patches?  The second patch adds a sim=
-ple
-> selftest to allow the signature verification code so that it can be FIPS
-> compliant.  The first moves load_certificate_list() to the asymmetric key=
- code
-> to make this easier and renames it.
->=20
-> I generated the test data myself, but I'm open to using some standard tes=
-t
-> data if you know of some; we don't want too much, however, as it's
-> incompressible.  Also, it has avoid blacklist checks on the keys it is us=
-ing,
-> lest the UEFI blacklist cause the selftest to fail.
->=20
-> The patches can be found on the following branch:
->=20
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/lo=
-g/?h=3Dkeys-fixes
->=20
-> David
-> ---
-> David Howells (2):
->       certs: Move load_certificate_list() to be with the asymmetric keys =
-code
->       certs: Add FIPS selftests
->=20
->=20
->  certs/Makefile                           |   4 +-
->  certs/blacklist.c                        |   8 +-
->  certs/common.c                           |  57 ------
->  certs/common.h                           |   9 -
->  certs/system_keyring.c                   |   6 +-
->  crypto/asymmetric_keys/Kconfig           |  10 +
->  crypto/asymmetric_keys/Makefile          |   2 +
->  crypto/asymmetric_keys/selftest.c        | 224 +++++++++++++++++++++++
->  crypto/asymmetric_keys/x509_loader.c     |  57 ++++++
->  crypto/asymmetric_keys/x509_parser.h     |   9 +
->  crypto/asymmetric_keys/x509_public_key.c |   8 +-
->  include/keys/asymmetric-type.h           |   3 +
->  12 files changed, 321 insertions(+), 76 deletions(-)
->  delete mode 100644 certs/common.c
->  delete mode 100644 certs/common.h
->  create mode 100644 crypto/asymmetric_keys/selftest.c
->  create mode 100644 crypto/asymmetric_keys/x509_loader.c
->=20
->=20
+Hi Martin,
 
-Reviewed-by: Simo Sorce <simo@redhat.com>
+This series provides some fixes on MediaTek UFS platforms, please consider this patch series for kernel v5.20.
 
---=20
-Simo Sorce
-RHEL Crypto Team
-Red Hat, Inc
+Sorry to change this patch series so frequently since we have to post and backport these patches to Android kernel recently.
 
+- Provide workaround for power mode change for HS-G5
+- Fix and provide regulator features
 
+Changes compared to v2:
+- Add patches to support multiple VCC sources
+
+Changes compared to v1:
+- Add patches to fix and provide VCCQx low-power support
+
+Alice Chao (1):
+  scsi: ufs-mediatek: Support flexible parameters for smc calls
+
+CC Chou (1):
+  scsi: ufs-mediatek: Introduce workaround for power mode change
+
+Peter Wang (1):
+  scsi: ufs-mediatek: Support low-power mode for VCCQ
+
+Po-Wen Kao (2):
+  scsi: ufs-mediatek: Fix the timing of configuring device regulators
+  scsi: ufs-mediatek: Prevent device regulators setting as LPM
+    incorrectly
+
+Stanley Chu (5):
+  scsi: ufs: Export ufshcd_uic_change_pwr_mode()
+  scsi: ufs: Fix ADAPT logic for HS-G5
+  scsi: ufs-mediatek: Support low-power mode for parents of VCCQx
+  scsi: ufs: Export regulator functions
+  scsi: ufs-mediatek: Support multiple VCC sources
+
+ drivers/ufs/core/ufshcd.c        |   8 +-
+ drivers/ufs/host/ufs-mediatek.c  | 232 ++++++++++++++++++++++++++-----
+ drivers/ufs/host/ufs-mediatek.h  |  75 ++++++++++
+ drivers/ufs/host/ufshcd-pltfrm.c |   3 +-
+ drivers/ufs/host/ufshcd-pltfrm.h |   2 +
+ include/ufs/ufshcd.h             |   3 +
+ include/ufs/unipro.h             |   1 +
+ 7 files changed, 289 insertions(+), 35 deletions(-)
+
+-- 
+2.18.0
 

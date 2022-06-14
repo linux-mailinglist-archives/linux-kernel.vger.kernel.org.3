@@ -2,119 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F68C54B42B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:05:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0371254B42D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349458AbiFNPEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
+        id S1350266AbiFNPGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345495AbiFNPEf (ORCPT
+        with ESMTP id S244046AbiFNPGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:04:35 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C88E201B6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:04:34 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-313a8a8b95aso32764847b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:04:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XIBvhcDPAImiME+crbgSzqcAVyK5RrJiycpGa3Gh/l4=;
-        b=0PnOrGgpJ2T40WIGeWlqfe/7/P0mm2HsYZ5fk4ogSdBAK1xTGuH753i05BrzCE+UCI
-         dmA7HA/rlLTTv9Qgr4XQRKnG1Vx8W0THFIv8ZKSoijZickuOFVqAuWWFe2AcF084THZk
-         dL+oE7eq7OLxr1fKys961spGM2elS000lmIpnBOsq63uIRU3m+xgtj9XVgucb+z82JDe
-         7z+OOp5gWEJrkIutCK2+EXuw3UH4MK1m0QCzPTuobIno+7nI/HY9OuBqdG8AB3YRML3+
-         y/E1f4+21TXJpA1l1AuHaZ0u7WyUmL/t4xgbWfeJSzTRruxBdsYLz2mPXofihh6mOPUO
-         f2ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XIBvhcDPAImiME+crbgSzqcAVyK5RrJiycpGa3Gh/l4=;
-        b=TRqxYK7yqD1No6IUre6a/DIMj/38kGZHWYE58bBYMI1pR++FvhY/j4SJVhnfk+vcw6
-         Fgo60mbv3sAb2Wr+sN11HbOvc1lbSjSIbFl1ijBnKBQ+0kx7VTBcFwmH2E14ekIzXCkB
-         33Mn79sr43E+Dg28gu0Z2T8m+Ym0Qpp8244OLnYUH9VEq4HU1Y0k7xCUWn+CYrLbuF9A
-         uSb2QVGGWHCZ974lIF5Lbxzy75RNK4fcxGKqF4AGmJP8azuWPNyBVGLMwI3yotzq/asM
-         ysUeTnV+L7Zgix379oYwtdzeqcM4KW4QdiA+jc4/YYq7NkMTq+vKGNAbBUGXhmLpq2nB
-         aJfA==
-X-Gm-Message-State: AJIora9OGLTYBTNMHKAAZgxhWCHBITcCdvniUzcLxhjdzBLvE72eezOf
-        goaQWYgoUktbnVSx+OlWFSM7DMEXp6uYhnibsvUhkA==
-X-Google-Smtp-Source: AGRyM1upO05v6xN4nB/RVN7MAJIXzcxBfDFQGXwdBAgFIaK6CPOHJDOhBFd8M+IxGlaJo5VwjhwxHgMK2SaPtM0MgcU=
-X-Received: by 2002:a05:690c:297:b0:30f:b472:5ff1 with SMTP id
- bf23-20020a05690c029700b0030fb4725ff1mr6322963ywb.31.1655219073117; Tue, 14
- Jun 2022 08:04:33 -0700 (PDT)
+        Tue, 14 Jun 2022 11:06:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78F3B201B6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:06:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655219181;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ggy0gipdvEIiu10PPbGaYgDjXsWZ1TwM2pvn5z8mgqo=;
+        b=QTEQiiib6MYtb3Vke5jGl7nnA2N0zYxBZF/wF2dUOTQkdj79WTuyquYQQLhctCa6eIxhvG
+        NquJvuFJqUI0wgViplrQ34bu9daLgPSSMQuJYmLgn+H/jZQFMQTm9kc9LRMWg51a/JkKns
+        r+qmo9+k28wr+RqSrUtJuQVY1F1mHNg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-553-zvXx-OpkOJan01NhnI8AVQ-1; Tue, 14 Jun 2022 11:06:18 -0400
+X-MC-Unique: zvXx-OpkOJan01NhnI8AVQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 48FF085A585;
+        Tue, 14 Jun 2022 15:06:18 +0000 (UTC)
+Received: from [10.22.33.116] (unknown [10.22.33.116])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DC64D492C3B;
+        Tue, 14 Jun 2022 15:06:17 +0000 (UTC)
+Message-ID: <34fea084-8136-5489-ef44-c5ecab51a86e@redhat.com>
+Date:   Tue, 14 Jun 2022 11:06:17 -0400
 MIME-Version: 1.0
-References: <20220613180858.15933-1-mike.kravetz@oracle.com> <YqeiMlZDKI1Kabfe@monkey>
-In-Reply-To: <YqeiMlZDKI1Kabfe@monkey>
-From:   Muchun Song <songmuchun@bytedance.com>
-Date:   Tue, 14 Jun 2022 23:03:55 +0800
-Message-ID: <CAMZfGtWUheQWeFNF0jgpttbMV9gBjFtZzaOar2gGvUTRx5h8bQ@mail.gmail.com>
-Subject: Re: [PATCH] hugetlbfs: zero partial pages during fallocate hole punch
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        David Hildenbrand <david@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH] locking/rtmutex: Limit # of lock stealing for non-RT
+ waiters
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Gregory Haskins <ghaskins@novell.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+References: <20220608152254.74591-1-longman@redhat.com>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20220608152254.74591-1-longman@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 4:46 AM Mike Kravetz <mike.kravetz@oracle.com> wrote:
+On 6/8/22 11:22, Waiman Long wrote:
+> Commit 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock
+> stealing") allows unlimited number of lock stealing's for non-RT
+> tasks. That can lead to lock starvation of non-RT top waiter if there
+> is a constant incoming stream of non-RT lockers. This can cause task
+> lockup in PREEMPT_RT kernel.
 >
-> Below is v2 of the patch.  I was just going to change the type of start/end
-> hugetlbfs_zero_partial_page arguments.  However, Matthew also convinced me
-> to do the simple folio conversion.  Tested with new libhugetlbfs code.
+> Avoiding this problem and ensuring forward progress by limiting the
+> number of times that a lock can be stolen from each waiter. This patch
+> sets a threshold of 10. That number is arbitrary and can be changed
+> if necessary.
 >
->
-> From 36a18e0b07c2e189092cc2d516e8cfedcb57d191 Mon Sep 17 00:00:00 2001
-> From: Mike Kravetz <mike.kravetz@oracle.com>
-> Date: Mon, 13 Jun 2022 13:36:48 -0700
-> Subject: [Patch v2] hugetlbfs: zero partial pages during fallocate hole punch
->
-> hugetlbfs fallocate support was originally added with commit 70c3547e36f5
-> ("hugetlbfs: add hugetlbfs_fallocate()").  Initial support only operated
-> on whole hugetlb pages.  This makes sense for populating files as other
-> interfaces such as mmap and truncate require hugetlb page size alignment.
-> Only operating on whole hugetlb pages for the hole punch case was a
-> simplification and there was no compelling use case to zero partial pages.
->
-> In a recent discussion[1] it was assumed that hugetlbfs hole punch would
-> zero partial hugetlb pages as that is in line with the man page
-> description saying 'partial filesystem  blocks  are  zeroed'.  However,
-> the hugetlbfs hole punch code actually does this:
->
->         hole_start = round_up(offset, hpage_size);
->         hole_end = round_down(offset + len, hpage_size);
->
-> Modify code to zero partial hugetlb pages in hole punch range.  It is
-> possible that application code could note a change in behavior.  However,
-> that would imply the code is passing in an unaligned range and expecting
-> only whole pages be removed.  This is unlikely as the fallocate
-> documentation states the opposite.
->
-> The current hugetlbfs fallocate hole punch behavior is tested with the
-> libhugetlbfs test fallocate_align[2].  This test will be updated to
-> validate partial page zeroing.
->
-> [1] https://lore.kernel.org/linux-mm/20571829-9d3d-0b48-817c-b6b15565f651@redhat.com/
-> [2] https://github.com/libhugetlbfs/libhugetlbfs/blob/master/tests/fallocate_align.c
->
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Fixes: 48eb3f4fcfd3 ("locking/rtmutex: Implement equal priority lock stealing")
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-LGTM.
+Any comment on this patch?
 
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+Our QE team had verified that it fixed the lockup problem that they see 
+in our PREEMPT_RT kernel.
 
-Thanks.
+Thanks,
+Longman
+
+> ---
+>   kernel/locking/rtmutex.c        | 9 ++++++---
+>   kernel/locking/rtmutex_common.h | 8 ++++++++
+>   2 files changed, 14 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
+> index 7779ee8abc2a..bdddb3dc36c2 100644
+> --- a/kernel/locking/rtmutex.c
+> +++ b/kernel/locking/rtmutex.c
+> @@ -359,10 +359,13 @@ static inline bool rt_mutex_steal(struct rt_mutex_waiter *waiter,
+>   	if (rt_prio(waiter->prio) || dl_prio(waiter->prio))
+>   		return false;
+>   
+> -	return rt_mutex_waiter_equal(waiter, top_waiter);
+> -#else
+> -	return false;
+> +	if (rt_mutex_waiter_equal(waiter, top_waiter) &&
+> +	   (top_waiter->nr_steals < RT_MUTEX_LOCK_STEAL_MAX)) {
+> +		top_waiter->nr_steals++;
+> +		return true;
+> +	}
+>   #endif
+> +	return false;
+>   }
+>   
+>   #define __node_2_waiter(node) \
+> diff --git a/kernel/locking/rtmutex_common.h b/kernel/locking/rtmutex_common.h
+> index c47e8361bfb5..5858efe5cb0e 100644
+> --- a/kernel/locking/rtmutex_common.h
+> +++ b/kernel/locking/rtmutex_common.h
+> @@ -26,6 +26,7 @@
+>    * @task:		task reference to the blocked task
+>    * @lock:		Pointer to the rt_mutex on which the waiter blocks
+>    * @wake_state:		Wakeup state to use (TASK_NORMAL or TASK_RTLOCK_WAIT)
+> + * @nr_steals:		Number of times the lock is stolen
+>    * @prio:		Priority of the waiter
+>    * @deadline:		Deadline of the waiter if applicable
+>    * @ww_ctx:		WW context pointer
+> @@ -36,11 +37,17 @@ struct rt_mutex_waiter {
+>   	struct task_struct	*task;
+>   	struct rt_mutex_base	*lock;
+>   	unsigned int		wake_state;
+> +	unsigned int		nr_steals;
+>   	int			prio;
+>   	u64			deadline;
+>   	struct ww_acquire_ctx	*ww_ctx;
+>   };
+>   
+> +/*
+> + * The maximum number of times where lock can be stolen per waiter.
+> + */
+> +#define	RT_MUTEX_LOCK_STEAL_MAX	10
+> +
+>   /**
+>    * rt_wake_q_head - Wrapper around regular wake_q_head to support
+>    *		    "sleeping" spinlocks on RT
+> @@ -194,6 +201,7 @@ static inline void rt_mutex_init_waiter(struct rt_mutex_waiter *waiter)
+>   	RB_CLEAR_NODE(&waiter->tree_entry);
+>   	waiter->wake_state = TASK_NORMAL;
+>   	waiter->task = NULL;
+> +	waiter->nr_steals = 0;
+>   }
+>   
+>   static inline void rt_mutex_init_rtlock_waiter(struct rt_mutex_waiter *waiter)
+

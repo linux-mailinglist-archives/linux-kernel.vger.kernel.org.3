@@ -2,54 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADA154B9E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:00:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B402954B941
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357239AbiFNSq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59288 "EHLO
+        id S1357157AbiFNSmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357418AbiFNSpQ (ORCPT
+        with ESMTP id S1357039AbiFNSls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 14:45:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466CE13C;
-        Tue, 14 Jun 2022 11:43:40 -0700 (PDT)
+        Tue, 14 Jun 2022 14:41:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F1F24A90D;
+        Tue, 14 Jun 2022 11:41:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D8098617C2;
-        Tue, 14 Jun 2022 18:43:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E568DC3411B;
-        Tue, 14 Jun 2022 18:43:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC6B9B8186A;
+        Tue, 14 Jun 2022 18:41:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE315C3411B;
+        Tue, 14 Jun 2022 18:41:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655232219;
-        bh=cPPNQI8KRpFebR09bSogYnaPNqhEHX374CY0CLZ9oxM=;
+        s=korg; t=1655232089;
+        bh=xwd8s0NcWWmmlf0T2SyWUX1VuDno50o8PJA1UhCikjg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xEmEB4Vje7u94rnDg3LGWfhjzX7HIDd8CUu8Bq6+TOJX6ujyiAEmp88yFEENhiHYP
-         TLhVxF8G1UOydPDAO6dSBlT3OqjUViR0Xnsni9LwfoWHezcR/Toe3zwbZ5ceAjyKdr
-         rcwzp/jFOJ3QJlE5pfYrkUhq4RZy1Nh1ZkdK/J20=
+        b=AzM1SqU4RQvNFLL2ebRzg6mdy2eEcLIDP+3RDcfUVkSxn84U7/ILcruNqtvLX7dtp
+         EGvJdkMKjQrrE7NhSRs7WBcaDJKbsEFrVgeJQuYB18fc6F3ZaW2Cnrtj6rhKf9H0Ke
+         bxVuL68vTyRbbMwwR2epRyCDJqKXB3vHD5Vj2+l8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Gayatri Kammela <gayatri.kammela@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rahul Tanwar <rahul.tanwar@linux.intel.com>,
+        stable@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@kernel.org>,
         Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Subject: [PATCH 4.19 01/16] x86/cpu: Add Elkhart Lake to Intel family
-Date:   Tue, 14 Jun 2022 20:40:02 +0200
-Message-Id: <20220614183721.272431899@linuxfoundation.org>
+Subject: [PATCH 4.9 20/20] x86/speculation/mmio: Print SMT warning
+Date:   Tue, 14 Jun 2022 20:40:03 +0200
+Message-Id: <20220614183726.901907101@linuxfoundation.org>
 X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220614183720.928818645@linuxfoundation.org>
-References: <20220614183720.928818645@linuxfoundation.org>
+In-Reply-To: <20220614183722.061550591@linuxfoundation.org>
+References: <20220614183722.061550591@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -63,38 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gayatri Kammela <gayatri.kammela@intel.com>
+From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-commit 0f65605a8d744b3a205d0a2cd8f20707e31fc023 upstream.
+commit 1dc6ff02c8bf77d71b9b5d11cbc9df77cfb28626 upstream
 
-Add the model number/CPUID of atom based Elkhart Lake to the Intel
-family.
+Similar to MDS and TAA, print a warning if SMT is enabled for the MMIO
+Stale Data vulnerability.
 
-Signed-off-by: Gayatri Kammela <gayatri.kammela@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Rahul Tanwar <rahul.tanwar@linux.intel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lkml.kernel.org/r/20190905193020.14707-3-tony.luck@intel.com
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
+Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/include/asm/intel-family.h |    2 ++
- 1 file changed, 2 insertions(+)
+ arch/x86/kernel/cpu/bugs.c |   11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
---- a/arch/x86/include/asm/intel-family.h
-+++ b/arch/x86/include/asm/intel-family.h
-@@ -83,7 +83,9 @@
- #define INTEL_FAM6_ATOM_GOLDMONT	0x5C /* Apollo Lake */
- #define INTEL_FAM6_ATOM_GOLDMONT_X	0x5F /* Denverton */
- #define INTEL_FAM6_ATOM_GOLDMONT_PLUS	0x7A /* Gemini Lake */
-+
- #define INTEL_FAM6_ATOM_TREMONT_X	0x86 /* Jacobsville */
-+#define INTEL_FAM6_ATOM_TREMONT		0x96 /* Elkhart Lake */
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -1214,6 +1214,7 @@ static void update_mds_branch_idle(void)
  
- /* Xeon Phi */
+ #define MDS_MSG_SMT "MDS CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/mds.html for more details.\n"
+ #define TAA_MSG_SMT "TAA CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/tsx_async_abort.html for more details.\n"
++#define MMIO_MSG_SMT "MMIO Stale Data CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/processor_mmio_stale_data.html for more details.\n"
+ 
+ void arch_smt_update(void)
+ {
+@@ -1258,6 +1259,16 @@ void arch_smt_update(void)
+ 		break;
+ 	}
+ 
++	switch (mmio_mitigation) {
++	case MMIO_MITIGATION_VERW:
++	case MMIO_MITIGATION_UCODE_NEEDED:
++		if (sched_smt_active())
++			pr_warn_once(MMIO_MSG_SMT);
++		break;
++	case MMIO_MITIGATION_OFF:
++		break;
++	}
++
+ 	mutex_unlock(&spec_ctrl_mutex);
+ }
  
 
 

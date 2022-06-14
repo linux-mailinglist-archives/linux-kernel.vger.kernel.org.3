@@ -2,71 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007EE54A9B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:46:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B36E54A9B6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:47:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352264AbiFNGqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 02:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
+        id S1352292AbiFNGrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 02:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232702AbiFNGqv (ORCPT
+        with ESMTP id S232702AbiFNGrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 02:46:51 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189E53914B;
-        Mon, 13 Jun 2022 23:46:51 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id j5-20020a05600c1c0500b0039c5dbbfa48so5662818wms.5;
-        Mon, 13 Jun 2022 23:46:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6tcu5eAwoOyzRfW5zLo655OGJsCRzmBD09HjOYtJ02Y=;
-        b=Zsdkp8SftJ+6ZISPstVg6W7XbMt8pikCWv9ykdo7e3/UbvdjegvnDe21C13EiuATqv
-         Kj1SvendYDpzEsm3lVmeWeSqSmV+nSWTzppZZDp+jpx9sDuVvzswkLa1zaBoOyWKg8+S
-         RZ5KUpGtSfaZWeC1ZtXGAaCwlhD4AHz8QzYZ1ugZWvkTAQTLNZWl0SBlgGF9o2ugbdky
-         tXyY+de0MojejV9P6lhQC9x7GFkAyUYfyyBae6JBFJyj1Bzu7G32pFg8sCAdxLv3ljip
-         LMeEwbYUjeGd5RP7qNK0Vw90gHteA3B3Pz9nN0wgyeROQcuAynQSQRLPVGyrcLXUW0AZ
-         yWMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=6tcu5eAwoOyzRfW5zLo655OGJsCRzmBD09HjOYtJ02Y=;
-        b=QHzW69jCWAJXdq0+YEP745jXqzkPAyyGcfAkVarhGPyjMmTqEcMV3yoFAeUtMz4aWC
-         OFICdTWfuVEwee16zf8BnPcGWEcfh+UB/a6MfVF6hh4bjLBK5GRfsR2TGunnerJD5I6w
-         EIzVZNVkyIY9wqiYos2aSVLw+CiSw+iORgcpx+pkfioLR5HjRcRmtAcsPyqHRqZOWR2I
-         OdxXVCiLXKare8KWVzXlg4J8IAKEF5cz8o8tDZAj0FusZG3xbtAgU81TB+Eoezg03q/W
-         9jizm0u3VZeswYEfyjRt0uaBK7bP1CJnRHEXtaC/EFsd3fsdSp1p3Qi7G8GaFYSXzChH
-         hRRw==
-X-Gm-Message-State: AOAM533AIxdq3/VQYYIkGm0tlB19ayhzCScZnHWKqt9pvPuDWUfeunKQ
-        iDdeqgsd+tmXG+mXP8d35nc=
-X-Google-Smtp-Source: ABdhPJyK9ueeuJL7iGVp7NyZ3QeK/ETBQMghVR/ae3lle2IFQ35LU6YzakGR1belXE94IhM7t5WNVg==
-X-Received: by 2002:a05:600c:4e51:b0:39c:4f18:4c29 with SMTP id e17-20020a05600c4e5100b0039c4f184c29mr2499224wmq.101.1655189209490;
-        Mon, 13 Jun 2022 23:46:49 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id e16-20020adffd10000000b00210396b2eaesm12865044wrr.45.2022.06.13.23.46.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 23:46:48 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michal Simek <michal.simek@xilinx.com>, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] net: axienet: Fix spelling mistake "archecture" -> "architecture"
-Date:   Tue, 14 Jun 2022 07:46:47 +0100
-Message-Id: <20220614064647.47598-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 14 Jun 2022 02:47:52 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB5A42B199;
+        Mon, 13 Jun 2022 23:47:51 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMfBp1YSkz4xXg;
+        Tue, 14 Jun 2022 16:47:46 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655189266;
+        bh=kl6e33z+z2C3uV4sjs4rjBGHqWaNl3gfF13vHXhmPhk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=N+CuOi56FKVIN880LcBgh2t6bCRVCQlorfKp2zBpJgg17+P4WZvjvNWesMTKCz3U8
+         3FncxOCZvn5GDNT8z9Zv2IhLPrJdDLczauNOSOK+58g1OeG5QAy9n6crTFI7ZnHVaM
+         aoqcwpQeAe0vG4/Dp8IUEPDrbX8HX1V8M3GDllfm0o1Q3Rb3hGAmYVlznUg5sUgEfy
+         JLtUwAuAoo+r5e74fk9jQAJRGSYL1KN5rY0NIfRoRs8KGFqIEZ3TYBxlcKnku2kWZL
+         29o+ozIrOvRXN+KnjaUNsGqxidv0dGrqIwdOxVT6Kkuc2rHw4kectlI1/ZHk15AVXb
+         Tp+Cb5Jk/sM5Q==
+Date:   Tue, 14 Jun 2022 16:47:45 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
+Cc:     Ilpo =?UTF-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the tty tree
+Message-ID: <20220614164745.7b746354@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/M52EJeb8BVhq0iQZcFFqiyP";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,26 +51,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a dev_err message. Fix it.
+--Sig_/M52EJeb8BVhq0iQZcFFqiyP
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi all,
 
-diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-index fa7bcd2c1892..87a620073031 100644
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -2038,7 +2038,7 @@ static int axienet_probe(struct platform_device *pdev)
- 		}
- 	}
- 	if (!IS_ENABLED(CONFIG_64BIT) && lp->features & XAE_FEATURE_DMA_64BIT) {
--		dev_err(&pdev->dev, "64-bit addressable DMA is not compatible with 32-bit archecture\n");
-+		dev_err(&pdev->dev, "64-bit addressable DMA is not compatible with 32-bit architecture\n");
- 		goto cleanup_clk;
- 	}
- 
--- 
-2.35.3
+After merging the tty tree, today's linux-next build (htmldocs) produced
+these warnings:
 
+Documentation/driver-api/tty/tty_ldisc:46: include/linux/tty_ldisc.h:190: W=
+ARNING: Inline literal start-string without end-string.
+Documentation/driver-api/tty/tty_ldisc:46: include/linux/tty_ldisc.h:190: W=
+ARNING: Inline emphasis start-string without end-string.
+Documentation/driver-api/tty/tty_ldisc:46: include/linux/tty_ldisc.h:190: W=
+ARNING: Inline emphasis start-string without end-string.
+Documentation/driver-api/tty/tty_ldisc:46: include/linux/tty_ldisc.h:190: W=
+ARNING: Inline emphasis start-string without end-string.
+
+Introduced by commit
+
+  6bb6fa6908eb ("tty: Implement lookahead to process XON/XOFF timely")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/M52EJeb8BVhq0iQZcFFqiyP
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKoLxEACgkQAVBC80lX
+0Gy8hAgAmVEaQEgW16BD6cZwAHyROAvE2OWRVK59FiE0yoTP/9flG+r4UK0PNUlo
+Dvyjzijub/mB3GM9eKReRs/ocLamo44DsZbCYlbmhs4z6R8kBkGBJZrkUw+wQ3eZ
+6DWwi0J3CroUDc+p8StkJbOwI/8OHD/gkuBV3UH4LCrOCdG1/v0c2FONjBQwzKeM
+z5viW/lK8wuZld/24HMiQm6vnvCqXLR0U/oORjQdm98T5HpUW1T6/l5l/v2TqBpW
+BoJlsU6/1lNgdxpSLfWzD1N3i/yaK+mjPASK9WR2TWkDw9czyvuI7lp58vY+ShDc
+ysGrrqhJtyO4mIAMH5ibWQddzM9Irg==
+=7SiC
+-----END PGP SIGNATURE-----
+
+--Sig_/M52EJeb8BVhq0iQZcFFqiyP--

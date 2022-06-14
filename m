@@ -2,195 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2575354BD2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C523654BD3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:03:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358534AbiFNV7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 17:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54184 "EHLO
+        id S1344334AbiFNWCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 18:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358527AbiFNV7T (ORCPT
+        with ESMTP id S1345189AbiFNWCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 17:59:19 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511D4527E0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:59:08 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id bd16so5233564oib.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:59:08 -0700 (PDT)
+        Tue, 14 Jun 2022 18:02:47 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A2613EBA
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:02:44 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id j23-20020a17090a061700b001e89529d397so88463pjj.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:02:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=5yJj86hSPwBzwhbQhqdV1Hn3ZaFbVir/hOB/SXTT3bI=;
-        b=ZdGEZsOt+TRm+aYxq42AYd4MLTcEpKed0OVtU15Eb9mKcEjoxGxefcc8Hou/DOFmCp
-         ki0mc220xUAOCHMnS/OCVj7tuFFIQ/OhnyOzgqy38WOee9k8w1eGsxVOtxPZOic5yyPU
-         8l81rocDbnMve9NNM0Jcnj6qmGymABDBeO0dk=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=lrVW1I5SIqxygGfdn7dE995IrEtCJUN/f9GmeMKUvnc=;
+        b=NKDq6eNl+qXNZHPcakcd4kpblY2meICIUdTI0MJLOZncy/rxmdReGAyUBbpxcEBUTG
+         dxg7nBIv9qlOyrRR1oMtBteaj3Y/JzmRk3V0GJLnRR0E8+B0wXsT6XJG6tWg96u/lhmB
+         etNuH64FsBtyPVgNCTjlZQMgqnSZ7DdXWkzpeO+5Qbnc0z6w2OyaYJAwoxpjMndAXv8b
+         19adCp3BJ90tbexnMFn2o2fBYR3A5kELHROTiIGqGQgJE2VrtwEM05AFvCb44qpg0UWT
+         N2S5ht1TnFZ899se2qxFspcOTQPW70Ej6810+POhqd1O1zLCghA0Jlj1RvW5ARpxJECR
+         BdIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=5yJj86hSPwBzwhbQhqdV1Hn3ZaFbVir/hOB/SXTT3bI=;
-        b=ILOpbbApBom9RP60SaqlhGhsoMbJNFQSoUp9yTAuGYWc5McIF+F2Oia7Qdq32lBo+K
-         A86urXW5doX3DrRZrP0sFUTmTRQcewiCdM9gWdNSFu54xccChmOvVyGj+mhRYWTucNHs
-         LxArIIgtcUdDDC82U3apxcDtydbatTkxaaCqX830qzFsoNbIWwXc1R07hj2AdOt/ibd3
-         4RhlIiAzlYY0ozNNPfMNdNS3jnRU+FdT7drXdqv3/7Mv8ExBM4L9Cbd7ncf51qmIbf95
-         z2U7TYnwff7mkGQld3qPsSm1ve5UFfTjaCcYCMk81KIYSSSclvjeUtWrYwHZo1eP+lXB
-         I+Ng==
-X-Gm-Message-State: AOAM532o01dROqfgqg4wc+EV5JiHOqswDw48g0nAk0b/bkViZIWLUx+T
-        ZoVVxiWoat+/xXW4ysrj943U3w/4c22ecKWPn/dJxg==
-X-Google-Smtp-Source: ABdhPJxDYah7bUTWBiwxr/l4NWNy6VphDHyLT3XGi+NAYbfMAhtii820vbsYtQ0n/RqMQE67M2fjkNbG1wG1z9Wq3cE=
-X-Received: by 2002:a05:6808:1703:b0:32e:851e:7f81 with SMTP id
- bc3-20020a056808170300b0032e851e7f81mr3333511oib.63.1655243947436; Tue, 14
- Jun 2022 14:59:07 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 14 Jun 2022 14:59:06 -0700
-MIME-Version: 1.0
-In-Reply-To: <1655240702-12230-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1655240702-12230-1-git-send-email-quic_khsieh@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Tue, 14 Jun 2022 14:59:06 -0700
-Message-ID: <CAE-0n52EAyTcQd6CiwXT1T658C-b+2r14BK_3-tf-ZiJdzqaAw@mail.gmail.com>
-Subject: Re: [PATCH v6] drm/msm/dp: force link training for display resolution change
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
-        dianders@chromium.org, dmitry.baryshkov@linaro.org,
-        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=lrVW1I5SIqxygGfdn7dE995IrEtCJUN/f9GmeMKUvnc=;
+        b=SSWmlnwL8XfOnLZ8AvzNDY8BfW4taodZrUjqEyPm4qJqbboeFrz+acuFn0Igw5depW
+         Y3TnyyZWq/HpDixFsFVjOIncQnXQnQbe3znaYGh6ywDOBnMWQvUx/sVrLI2ZMletT8+b
+         yrRfHvmHbMAp1yECqiNLJ9OX5Dmxji4ScHIYs9YsoP2WpWFsWBP3f1OD4MYP8iY92BfC
+         Ue4VxKIui3eq8RsZM8SdzZc+fvaoYcfcIl7oUgb41DiIdqfMHVoMc6l3re3VwCOmLCPL
+         1PniNOmgNg76Pz6ala1on23y0fDt2QCy6X1h+doMGVyi7C6dwvcbS72aAjlgq9bKLBIG
+         1KzQ==
+X-Gm-Message-State: AOAM530vuLPdqEgUPs7ghIyRzhQrzWDAbL15NCEypceK0d4MwRrxD2S0
+        yLJFwXXQIYT1d55AUenmiMrL3jBt26HWgJIpge0=
+X-Google-Smtp-Source: ABdhPJzZDqjgOXqNXzNoMxUfjk248v8FEODamZOOBL1QF2Uxm5LjN7pq2lAB0cwZFHuXEYikbeeNHqc8FUldkXGBmuY=
+X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:478c:4e88:59e6:a1c2])
+ (user=ndesaulniers job=sendgmr) by 2002:a63:c5:0:b0:3fe:26a0:7abe with SMTP
+ id 188-20020a6300c5000000b003fe26a07abemr6428939pga.152.1655244164322; Tue,
+ 14 Jun 2022 15:02:44 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 15:02:29 -0700
+Message-Id: <20220614220229.1640085-1-ndesaulniers@google.com>
+Mime-Version: 1.0
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1655244149; l=5539;
+ s=20211004; h=from:subject; bh=f3ZK8/kP38ZW74vacM54ZIsXbSpGEvA5AJcusva2pVE=;
+ b=vaVg/LweBouwrspD+ylGz+5uWCM44wcdFddmcU1TQii3fKuc1B5pjqR3k9rPRf0aXvXIaSV/Cecj
+ J7wiFRtLC1tc5VEkQTu460J1J5lw7ehMFGL75R0shTPRrrGxwl2f
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+Subject: [PATCH v4] coresight: etm4x: avoid build failure with unrolled loops
+From:   Nick Desaulniers <ndesaulniers@google.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Kuogee Hsieh (2022-06-14 14:05:02)
-> Display resolution change is implemented through drm modeset. Older
-> modeset (resolution) has to be disabled first before newer modeset
-> (resolution) can be enabled. Display disable will turn off both
-> pixel clock and main link clock so that main link have to be
-> re-trained during display enable to have new video stream flow
-> again. At current implementation, display enable function manually
-> kicks up irq_hpd_handle which will read panel link status and start
-> link training if link status is not in sync state.
->
-> However, there is rare case that a particular panel links status keep
-> staying in sync for some period of time after main link had been shut
-> down previously at display disabled. In this case, main link retraining
-> will not be executed by irq_hdp_handle(). Hence video stream of newer
-> display resolution will fail to be transmitted to panel due to main
-> link is not in sync between host and panel.
->
-> This patch will bypass irq_hpd_hanle() in favor of directly call
+When the following configs are enabled:
+* CORESIGHT
+* CORESIGHT_SOURCE_ETM4X
+* UBSAN
+* UBSAN_TRAP
 
-s/hanle/handle/
+Clang fails assemble the kernel with the error:
+<instantiation>:1:7: error: expected constant expression in '.inst' directive
+.inst (0xd5200000|((((2) << 19) | ((1) << 16) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 7) & 0x7)) << 12) | ((((((((((0x160 + (i * 4))))) >> 2))) & 0xf)) << 8) | (((((((((((0x160 + (i * 4))))) >> 2))) >> 4) & 0x7)) << 5)))|(.L__reg_num_x8))
+      ^
+drivers/hwtracing/coresight/coresight-etm4x-core.c:702:4: note: while in macro instantiation
+                        etm4x_relaxed_read32(csa, TRCCNTVRn(i));
+                        ^
+drivers/hwtracing/coresight/coresight-etm4x.h:403:4: note: expanded from macro 'etm4x_relaxed_read32'
+                 read_etm4x_sysreg_offset((offset), false)))
+                 ^
+drivers/hwtracing/coresight/coresight-etm4x.h:383:12: note: expanded from macro 'read_etm4x_sysreg_offset'
+                        __val = read_etm4x_sysreg_const_offset((offset));       \
+                                ^
+drivers/hwtracing/coresight/coresight-etm4x.h:149:2: note: expanded from macro 'read_etm4x_sysreg_const_offset'
+        READ_ETM4x_REG(ETM4x_OFFSET_TO_REG(offset))
+        ^
+drivers/hwtracing/coresight/coresight-etm4x.h:144:2: note: expanded from macro 'READ_ETM4x_REG'
+        read_sysreg_s(ETM4x_REG_NUM_TO_SYSREG((reg)))
+        ^
+arch/arm64/include/asm/sysreg.h:1108:15: note: expanded from macro 'read_sysreg_s'
+        asm volatile(__mrs_s("%0", r) : "=r" (__val));                  \
+                     ^
+arch/arm64/include/asm/sysreg.h:1074:2: note: expanded from macro '__mrs_s'
+"       mrs_s " v ", " __stringify(r) "\n"                      \
+ ^
 
-> dp_ctrl_on_stream() to always perform link training in regardless of
-> main link status. So that no unexpected exception resolution change
-> failure cases will happen. Also this implementation are more efficient
-> than manual kicking off irq_hpd_handle function.
->
-> Changes in v2:
-> -- set force_link_train flag on DP only (is_edp == false)
->
-> Changes in v3:
-> -- revise commit  text
-> -- add Fixes tag
->
-> Changes in v4:
-> -- revise commit  text
->
-> Changes in v5:
-> -- fix spelling at commit text
->
-> Changes in v6:
-> -- split dp_ctrl_on_stream() for phy test case
-> -- revise commit text for modeset
->
-> Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/dp/dp_ctrl.c    | 31 +++++++++++++++++++++++--------
->  drivers/gpu/drm/msm/dp/dp_ctrl.h    |  3 ++-
->  drivers/gpu/drm/msm/dp/dp_display.c | 13 ++++++-------
->  3 files changed, 31 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> index af7a80c..cb9c7af 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
-> @@ -1807,7 +1807,27 @@ static int dp_ctrl_link_retrain(struct dp_ctrl_private *ctrl)
->         return dp_ctrl_setup_main_link(ctrl, &training_step);
->  }
->
-> -int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
-> +int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
-> +{
-> +       int ret = 0;
+Consider the definitions of TRCSSCSRn and TRCCNTVRn:
+drivers/hwtracing/coresight/coresight-etm4x.h:56
+ #define TRCCNTVRn(n)      (0x160 + (n * 4))
+drivers/hwtracing/coresight/coresight-etm4x.h:81
+ #define TRCSSCSRn(n)      (0x2A0 + (n * 4))
 
-Drop assignment please.
+Where the macro parameter is expanded to i; a loop induction variable
+from etm4_disable_hw.
 
-> +       struct dp_ctrl_private *ctrl;
-> +
-> +       ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
-> +
-> +       ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
-> +
-> +       ret = dp_ctrl_enable_stream_clocks(ctrl);
-> +       if (ret) {
-> +               DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
-> +               return ret;
-> +       }
-> +
-> +       dp_ctrl_send_phy_test_pattern(ctrl);
+When any compiler can determine that loops may be unrolled, then the
+__builtin_constant_p check in read_etm4x_sysreg_offset() defined in
+drivers/hwtracing/coresight/coresight-etm4x.h may evaluate to true. This
+can lead to the expression `(0x160 + (i * 4))` being passed to
+read_etm4x_sysreg_const_offset. Via the trace above, this is passed
+through READ_ETM4x_REG, read_sysreg_s, and finally to __mrs_s where it
+is string-ified and used directly in inline asm.
 
-None of this code needs to be run in the normal display on case?
+Regardless of compiler or compiler options determine whether a loop can
+or can't be unrolled, which determines whether __builtin_constant_p
+evaluates to true when passed an expression using a loop induction
+variable, it is NEVER safe to allow the preprocessor to construction
+inline asm like:
+  asm volatile (".inst (0x160 + (i * 4))" : "=r"(__val));
+                                 ^ expected constant expression
 
-> +
-> +       return 0;
-> +}
-> +
-> +int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
->  {
->         int ret = 0;
->         bool mainlink_ready = false;
-> @@ -1843,12 +1863,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
->                 goto end;
->         }
->
-> -       if (ctrl->link->sink_request & DP_TEST_LINK_PHY_TEST_PATTERN) {
-> -               dp_ctrl_send_phy_test_pattern(ctrl);
-> -               return 0;
-> -       }
-> -
-> -       if (!dp_ctrl_channel_eq_ok(ctrl))
-> +       if (force_link_train || !dp_ctrl_channel_eq_ok(ctrl))
->                 dp_ctrl_link_retrain(ctrl);
->
->         /* stop txing train pattern to end link training */
-> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> index c388323..b6d25ab 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> @@ -1688,10 +1689,12 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
->
->         state =  dp_display->hpd_state;
->
-> -       if (state == ST_DISPLAY_OFF)
-> +       if (state == ST_DISPLAY_OFF) {
->                 dp_display_host_phy_init(dp_display);
-> +               force_link_train = true;
-> +       }
->
-> -       dp_display_enable(dp_display, 0);
-> +       dp_display_enable(dp_display, force_link_train);
+Replace unsafe uses of calls to etm4x_relaxed_read32 with
+csdev_access_read32 when the parameter is an expression that would be
+invalid inline asm so that it does not depend on the ability of the
+compiler to optimize __builtin_constant_p of the expression to true.
+Only when the second parameter of etm4x_relaxed_read32 expands to an
+expression dependent on a loop induction variable do we need to fix
+this.
 
-Do we need to pass it from here? Why can't dp_display_enable() simply
-check for 'state == ST_DISPLAY_OFF' and then force retrain the link?
+This is not a bug in clang; it's a potentially unsafe use of the macro
+arguments in read_etm4x_sysreg_offset dependent on __builtin_constant_p.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1310
+Suggested-by: Arnd Bergmann <arnd@kernel.org>
+Suggested-by: Tao Zhang <quic_taozha@quicinc.com>
+Suggested-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+V1 (Arnd):
+https://lore.kernel.org/lkml/20210225094324.3542511-1-arnd@kernel.org/
+
+V2 (Arnd):
+https://lore.kernel.org/lkml/20210429145752.3218324-1-arnd@kernel.org/
+
+V3 (Tao):
+https://lore.kernel.org/lkml/1632652550-26048-1-git-send-email-quic_taozha@quicinc.com/
+
+ drivers/hwtracing/coresight/coresight-etm4x-core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+index 87299e99dabb..7c6bd85e36d4 100644
+--- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
++++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+@@ -836,13 +836,13 @@ static void etm4_disable_hw(void *info)
+ 	/* read the status of the single shot comparators */
+ 	for (i = 0; i < drvdata->nr_ss_cmp; i++) {
+ 		config->ss_status[i] =
+-			etm4x_relaxed_read32(csa, TRCSSCSRn(i));
++			csdev_access_read32(csa, TRCSSCSRn(i));
+ 	}
+ 
+ 	/* read back the current counter values */
+ 	for (i = 0; i < drvdata->nr_cntr; i++) {
+ 		config->cntr_val[i] =
+-			etm4x_relaxed_read32(csa, TRCCNTVRn(i));
++			csdev_access_read32(csa, TRCCNTVRn(i));
+ 	}
+ 
+ 	coresight_disclaim_device_unlocked(csdev);
+@@ -1177,7 +1177,7 @@ static void etm4_init_arch_data(void *info)
+ 	drvdata->nr_ss_cmp = FIELD_GET(TRCIDR4_NUMSSCC_MASK, etmidr4);
+ 	for (i = 0; i < drvdata->nr_ss_cmp; i++) {
+ 		drvdata->config.ss_status[i] =
+-			etm4x_relaxed_read32(csa, TRCSSCSRn(i));
++			csdev_access_read32(csa, TRCSSCSRn(i));
+ 	}
+ 	/* NUMCIDC, bits[27:24] number of Context ID comparators for tracing */
+ 	drvdata->numcidc = FIELD_GET(TRCIDR4_NUMCIDC_MASK, etmidr4);
+-- 
+2.36.1.476.g0c4daa206d-goog
+

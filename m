@@ -2,97 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA1FB54A854
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 06:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D8B54A881
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 06:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbiFNEvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 00:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
+        id S239397AbiFNE4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 00:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiFNEvS (ORCPT
+        with ESMTP id S235061AbiFNE4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 00:51:18 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B742F35DD5;
-        Mon, 13 Jun 2022 21:51:16 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMbcL33Pzz4xXF;
-        Tue, 14 Jun 2022 14:51:14 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655182274;
-        bh=bbqzE0vIYjq//yReX+mVaqBWAYkBlexkhu66g69a/ps=;
-        h=Date:From:To:Cc:Subject:From;
-        b=h7D8ZJzaH0HAeX1BXSJPODcWzrGNoHj/s72oV5I/Zx2deOaoLDpReC9D5YOK0erys
-         pFCfD09rSotdW/HhEBqmi9lt32IOiuOHHP3ZteGo0kcnsKhqowK3nSas1nPvdOR3vz
-         kWGHNlTVHZTKpTHxFvbsRgCUKMHUo5eGd7RXDP0rM0CQC8jJO3O58cmRY199bUL12O
-         LSIF7CiKuIlztg66MakXVlyGRrlNspTG/ECrJmaXMDV53/IFJ3gtT0ppusWAG+Iug/
-         s4SVGc9SQQnwStr4gCfBC9euxBz8+PENyvN3L+ypikszelCDjN5uluBqbNAa0vGjVY
-         w0rSPpnrs45EQ==
-Date:   Tue, 14 Jun 2022 14:51:12 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220614145112.4c3d1f52@canb.auug.org.au>
+        Tue, 14 Jun 2022 00:56:05 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5D02D37BD3;
+        Mon, 13 Jun 2022 21:56:04 -0700 (PDT)
+Received: from anrayabh-desk (unknown [167.220.238.193])
+        by linux.microsoft.com (Postfix) with ESMTPSA id E050220C29A6;
+        Mon, 13 Jun 2022 21:55:58 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E050220C29A6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1655182563;
+        bh=li+PNz3Vd3GyStPzFitjj/G0JokV2AZ4Fg5xm9celE8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JUVUxD6k6/ZIF1vOVETFrUQMN+dLMESJqPUUnTazK787X47Vi7B/+JJ/g40qmCEG4
+         xwOeJTn8++aEQXy3VV/um2ElhpGGa356gcKyQ/CgnXpBPruc/qjYOmxnHa8wYw8aw9
+         2NrDzhL11Fkn3UWwCDSeqBQNGBkyYqfGnAUkAE7Q=
+Date:   Tue, 14 Jun 2022 10:25:52 +0530
+From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Ilias Stamatis <ilstam@amazon.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, mail@anirudhrb.com,
+        kumarpraveen@linux.microsoft.com, wei.liu@kernel.org,
+        robert.bradford@intel.com, liuwe@microsoft.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: nVMX: Don't expose TSC scaling to L1 when on Hyper-V
+Message-ID: <YqgU2KfFCqawbTkW@anrayabh-desk>
+References: <20220613161611.3567556-1-anrayabh@linux.microsoft.com>
+ <592ab920-51f3-4794-331f-8737e1f5b20a@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YRepzUz5CcHMbFU6pm9rwbI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <592ab920-51f3-4794-331f-8737e1f5b20a@redhat.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/YRepzUz5CcHMbFU6pm9rwbI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Jun 13, 2022 at 06:49:17PM +0200, Paolo Bonzini wrote:
+> On 6/13/22 18:16, Anirudh Rayabharam wrote:
+> > +	if (!kvm_has_tsc_control)
+> > +		msrs->secondary_ctls_high &= ~SECONDARY_EXEC_TSC_SCALING;
+> > +
+> >   	msrs->secondary_ctls_low = 0;
+> >   	msrs->secondary_ctls_high &=
+> >   		SECONDARY_EXEC_DESC |
+> > @@ -6667,8 +6670,7 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
+> >   		SECONDARY_EXEC_RDRAND_EXITING |
+> >   		SECONDARY_EXEC_ENABLE_INVPCID |
+> >   		SECONDARY_EXEC_RDSEED_EXITING |
+> > -		SECONDARY_EXEC_XSAVES |
+> > -		SECONDARY_EXEC_TSC_SCALING;
+> > +		SECONDARY_EXEC_XSAVES;
+> >   	/*
+> 
+> This is wrong because it _always_ disables SECONDARY_EXEC_TSC_SCALING,
+> even if kvm_has_tsc_control == true.
 
-Hi all,
+The MSR actually allows 1-setting of the "use TSC scaling" control. So this
+line is redundant anyway.
 
-After merging the amdgpu tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+> 
+> That said, I think a better implementation of this patch is to just add
+> a version of evmcs_sanitize_exec_ctrls that takes a struct
+> nested_vmx_msrs *, and call it at the end of nested_vmx_setup_ctl_msrs like
+> 
+> 	evmcs_sanitize_nested_vmx_vsrs(msrs);
 
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function 'd=
-m_plane_format_mod_supported':
-drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:4941:13: error:=
- unused variable 'i' [-Werror=3Dunused-variable]
- 4941 |         int i;
-      |             ^
-cc1: all warnings being treated as errors
+Sanitize at the end might not work because I see some cases in
+nested_vmx_setup_ctls_msrs() where we want to expose some things to L1
+even though the hardware doesn't support it.
 
-Caused by commit
+> 
+> Even better (but I cannot "mentally test it" offhand) would be just
+> 
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index e802f71a9e8d..b3425ce835c5 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -1862,7 +1862,7 @@ int vmx_get_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+>  		 * sanity checking and refuse to boot. Filter all unsupported
+>  		 * features out.
+>  		 */
+> -		if (!msr_info->host_initiated &&
+> +		if (static_branch_unlikely(&enable_evmcs) ||
+>  		    vmx->nested.enlightened_vmcs_enabled)
+>  			nested_evmcs_filter_control_msr(msr_info->index,
+>  							&msr_info->data);
 
-  d2d5adc87f69 ("drm/amd/display: ignore modifiers when checking for format=
- support")
+I will try this.
 
-I have revertd that commit for today.
+Thanks,
 
---=20
-Cheers,
-Stephen Rothwell
+	Anirudh.
 
---Sig_/YRepzUz5CcHMbFU6pm9rwbI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKoE8EACgkQAVBC80lX
-0Gyingf9FyxWZDdL5WZkkxQsQTUTLsiRomBKCroOaKcIGOtbn3tqTSrwHwK5/ckv
-et82uX897Al7708t1+lh5M02ILvDgPpLEEfCr6qUyn/onXyPu8CfxXmyPAXvO3P4
-27h/rQYnaRFDczoVZujuQjLu0+bzufIKASry7TLoofxiWU+T3IDvzb5q8AG9sfhR
-McIPdHD/p7w1bVNHITpa+2hDVFL9UpiU7ZRy2Lig56CDwYjYKPsAk/OqMDP9s0HS
-npuAEnYMJGz05Iq6+x1e4R1eSFDo2yvtJXuZ9qTHY9bMOtaPHvyXNYfCKqmNPiXM
-bhku9CruwHUtZYZ/S1s4zTkQBEXs5A==
-=Q5f9
------END PGP SIGNATURE-----
-
---Sig_/YRepzUz5CcHMbFU6pm9rwbI--
+> 
+> I cannot quite understand the host_initiated check, so I'll defer to
+> Vitaly on why it is needed.  Most likely, removing it would cause some
+> warnings in QEMU with e.g. "-cpu Haswell,+vmx"; but I think it's a
+> userspace bug and we should remove that part of the condition.  You
+> don't need to worry about that part, we'll cross that bridge if the
+> above patch works for your case.
+> 
+> Thanks,
+> 
+> Paolo

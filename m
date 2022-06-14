@@ -2,143 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31F0654B56D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7C154B589
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:13:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356489AbiFNQIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50412 "EHLO
+        id S1356951AbiFNQKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357071AbiFNQId (ORCPT
+        with ESMTP id S238047AbiFNQK3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:08:33 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1483835AA5;
-        Tue, 14 Jun 2022 09:08:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6FD10CE1B25;
-        Tue, 14 Jun 2022 16:08:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA653C3411B;
-        Tue, 14 Jun 2022 16:08:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655222909;
-        bh=f6KuiueIv/s3cr+8vOYyA2WSMzAJ801h4xLsZ5d4vCQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SFsM3wa7t0y5/icGPA1hoiUopkaKXnX+CpJLFWVGwSkPa0Qa+k+fznmt3Y/IRdgAv
-         q8oKIyt45anZyqQnBVyf7ijXJq6aD/afzSsX8o5+rU9gr6xZ5V+HuklQOJGmJ02O0Y
-         cSjmb2RSEqIt4H8hR8+gpp846vKuDcYtjRxkzYo2vSYgygE61zxqjfvae9miPVaIcw
-         R1d5VXeNEg5F5q8bdxp5OCJheNQCGau0jUaC4Rz1bEpFy7OouEAR2F5n96+H9iEttu
-         DA/EbzPQhgJJzRGE5DdsGuQ6ZIq9VB64XOlNMizMza2KLLQQnU/d9z78AFcie0XVMp
-         J5oIbSkIiJoPQ==
-Date:   Tue, 14 Jun 2022 17:08:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     David Owens <dowens@precisionplanting.com>
-Cc:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@bitmer.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: ti: omap-mcbsp: duplicate sysfs failure after
- PROBE_DEFER
-Message-ID: <YqiyeM2JkDxLIKDe@sirena.org.uk>
-References: <20220614155931.2706437-1-dowens@precisionplanting.com>
+        Tue, 14 Jun 2022 12:10:29 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C723A3981C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:10:28 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id r1so8115165plo.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:10:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=mMFB6OVQbCnexTHZBSH2n20Xku7dT+S/35cKvzCOFv4=;
+        b=nB+zb5dfqMDdXPwaH28U5oTKxSMzWhqag2MBRwoBosd1LxiIEL4XcVAH8kQ4F1SWWH
+         AWYAu5vA7xAXklOOoXoPVzBZImlReX3YGnuqSmGgjXC8zPqA3qNKUAbQqp4EBb8SXPk5
+         fJ2lls8M+8KrUnoGv+2akZ71DyzmDMWcjgxbwxqCh9kyfVD05MzDkhrF7EMi4FgaH92b
+         sADrKmv2V61mjo4wiSWcKapWrSXSZOzPzSfhwWPbFsWGLn3ErMIdZdkCRTma4ne0me1A
+         BChz5JBNAooSoT8H82QBBra7RMOPTHLbcrRWO2KZjhDf6gusLCMdpXEBw//IxajSBCZh
+         IF9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=mMFB6OVQbCnexTHZBSH2n20Xku7dT+S/35cKvzCOFv4=;
+        b=c5WlMbgKTpXg6cmdNb8biaX0T7ldZytNrZdTNXzL4J4NaOQBKl7MhkklqyZleBFAol
+         Dbm35hnLFK84UT5gJCsEDaLuLoDtrwusw/Omy1HFEodO3y5lQ+SdNL+KVwSI8040ZN0F
+         TbfskBcsJIgC7wSTkFo9LLV3PMrIxkwEp3eaTulaCuRJINI440pybwEwTX+2asljg0x5
+         Le8lKMyL6V18gWNjISjyyEg7BrrRoOrpxzWo6BoqsLTpM/hKPg5MJpHZY0lmqcmovrT2
+         CZwAxPITtqBMgucyLTfGbcjB+P1/vuDqrhXN8tdjcjMtQPBdKF24FBIW9Rh0bbcBz6rq
+         jzhA==
+X-Gm-Message-State: AJIora90kSj8CR+B8WzzCvGKM9sp7KHvjStu978oXPDbwWvd439ey3G7
+        Q323cLY4TtHU63ybyj46O/kqMRPWEN4=
+X-Google-Smtp-Source: AGRyM1u8o3lGxIAkcc5tHIuSMAVi5iXe+4OewkCWZ6gFhHNN6UJ2mFFEG3t8JLcEEI83KDMaCX46ZA==
+X-Received: by 2002:a17:902:e0d1:b0:168:bedf:7146 with SMTP id e17-20020a170902e0d100b00168bedf7146mr5047391pla.107.1655223028190;
+        Tue, 14 Jun 2022 09:10:28 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id h129-20020a636c87000000b004052d642b6dsm6697784pgc.9.2022.06.14.09.10.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 09:10:27 -0700 (PDT)
+Message-ID: <29fb688b-58a3-be66-3bab-3f8186396c6f@gmail.com>
+Date:   Tue, 14 Jun 2022 09:10:26 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GYvOB+ScB/4Az0wW"
-Content-Disposition: inline
-In-Reply-To: <20220614155931.2706437-1-dowens@precisionplanting.com>
-X-Cookie: DYSLEXICS OF THE WORLD, UNTIE!
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [broadcom-stblinux:devicetree/next 15/23] make[2]: *** No rule to
+ make target 'arch/arm/boot/dts/bcm96855.dtb', needed by '__build'.
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>,
+        William Zhang <william.zhang@broadcom.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+References: <202206141752.IB5xCdXS-lkp@intel.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <202206141752.IB5xCdXS-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/14/22 02:32, kernel test robot wrote:
+> tree:   https://github.com/Broadcom/stblinux devicetree/next
+> head:   edb052f67bb9f245f9717b3c11b21022a02fae87
+> commit: d2d847e696389916239c5521ca533261d0c0026f [15/23] ARM: dts: Add DTS files for bcmbca SoC BCM6855
+> config: arm-randconfig-r035-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141752.IB5xCdXS-lkp@intel.com/config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/Broadcom/stblinux/commit/d2d847e696389916239c5521ca533261d0c0026f
+>          git remote add broadcom-stblinux https://github.com/Broadcom/stblinux
+>          git fetch --no-tags broadcom-stblinux devicetree/next
+>          git checkout d2d847e696389916239c5521ca533261d0c0026f
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> make[2]: *** No rule to make target 'arch/arm/boot/dts/bcm96855.dtb', needed by '__build'.
+>     make[2]: Target '__build' not remade because of errors.
 
---GYvOB+ScB/4Az0wW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Jun 14, 2022 at 10:59:31AM -0500, David Owens wrote:
-
-> The call to sdma_pcm_platform_register() can return PROBE_DEFER, leading
-> to omap_mcbsp_init() being called multiple times.  sysfs node creation
-> fails in subsequent calls to omap_mcbsp_init(), which prevents
-> the driver from ever successfully probing.  The resulting errors can be
-> seen during boot:
->=20
-> [    1.749328] sysfs: cannot create duplicate filename '/devices/platform=
-/68000000.ocp/49022000.mcbsp/max_tx_thres'
-> [    1.759643] CPU: 0 PID: 6 Comm: kworker/u2:0 Not tainted 5.18.0-yocto-=
-standard #1
-> [    1.767181] Hardware name: Generic OMAP36xx (Flattened Device Tree)
-> [    1.773498] Workqueue: events_unbound deferred_probe_work_func
-> [    1.779449]  unwind_backtrace from show_stack+0x10/0x14
-> [    1.784729]  show_stack from sysfs_warn_dup+0x4c/0x60
-
-Please think hard before including complete backtraces in upstream
-reports, they are very large and contain almost no useful information
-relative to their size so often obscure the relevant content in your
-message. If part of the backtrace is usefully illustrative (it often is
-for search engines if nothing else) then it's usually better to pull out
-the relevant sections.
-
-> +++ b/sound/soc/ti/omap-mcbsp.c
-> @@ -1403,6 +1403,10 @@ static int asoc_mcbsp_probe(struct platform_device=
- *pdev)
->         mcbsp->dev =3D &pdev->dev;
->         platform_set_drvdata(pdev, mcbsp);
->=20
-> +       ret =3D sdma_pcm_platform_register(&pdev->dev, "tx", "rx");
-> +       if (ret)
-> +               return ret;
-> +
->         ret =3D omap_mcbsp_init(pdev);
->         if (ret)
->                 return ret;
-> @@ -1412,13 +1416,9 @@ static int asoc_mcbsp_probe(struct platform_device=
- *pdev)
->                 omap_mcbsp_dai.capture.formats =3D SNDRV_PCM_FMTBIT_S16_L=
-E;
->         }
->=20
-> -       ret =3D devm_snd_soc_register_component(&pdev->dev,
-> +       return devm_snd_soc_register_component(&pdev->dev,
->                                               &omap_mcbsp_component,
->                                               &omap_mcbsp_dai, 1);
-> -       if (ret)
-> -               return ret;
-> -
-> -       return sdma_pcm_platform_register(&pdev->dev, "tx", "rx");
->  }
-
-It's not clear to me how this fixes the problem, your commit message
-doesn't mention how?  I was expecting to see more error handling paths
-being added to unwind the sysfs allocation, or a conversion to devm.  As
-things stand it's not clear to me that the error won't persist in the
-case where we defer registering the component.
-
---GYvOB+ScB/4Az0wW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKosngACgkQJNaLcl1U
-h9DjFwf/WQifCpq8XeOlBLOAvgI3uxiABxHsqoRqe0WDdqyfOiIgCszt2Z77mioC
-FkYGfeIhUiG4PeQENR+LDpKgxL501Is0fRu6G9aRbrYvwRTgkrcA4zNp9nCGRvV/
-9KPONBkkWijwTbh63YuEWZphXpj6D0TcLbZumcIDe9eKwTV2+z95rGUckojuiWUD
-o47x/z9S/n93HwTPzCqFdeVwA8gAmzXYijiMfTRVwAE58ou1CHTd8oNiNQ6Rf/9X
-/dRziXIw6B51hzJH+Q1+18lgkaIrXqpldQ4n45xq5vjI5JEes12ZKK3f+Pyol/u9
-wXQfaVFQBQ9WO9pGNO4AEf3gUsAsSA==
-=DruB
------END PGP SIGNATURE-----
-
---GYvOB+ScB/4Az0wW--
+Now fixed in place.
+-- 
+Florian

@@ -2,176 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48AF854B2ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26CC154B2FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245554AbiFNORm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
+        id S241162AbiFNORH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiFNORO (ORCPT
+        with ESMTP id S231754AbiFNORG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:17:14 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5487433891;
-        Tue, 14 Jun 2022 07:17:05 -0700 (PDT)
-X-UUID: d438f5b8042240ccb573bb30aed87803-20220614
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:4bc4e30c-fed4-45e4-9fed-f899ee615b1e,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:b14ad71,CLOUDID:2d766cc5-c67b-4a73-9b18-726dd8f2eb58,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: d438f5b8042240ccb573bb30aed87803-20220614
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1770361377; Tue, 14 Jun 2022 22:16:58 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Tue, 14 Jun 2022 22:16:57 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Tue, 14 Jun 2022 22:16:57 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
-        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
-        <bvanassche@acm.org>
-CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
-        <mason.zhang@mediatek.com>, <qilin.tan@mediatek.com>,
-        <lin.gui@mediatek.com>, <eddie.huang@mediatek.com>,
-        <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
-        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <stanley.chu@mediatek.com>
-Subject: [PATCH v3 07/10] scsi: ufs-mediatek: Support flexible parameters for smc calls
-Date:   Tue, 14 Jun 2022 22:16:52 +0800
-Message-ID: <20220614141655.14409-8-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220614141655.14409-1-stanley.chu@mediatek.com>
-References: <20220614141655.14409-1-stanley.chu@mediatek.com>
+        Tue, 14 Jun 2022 10:17:06 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2D32FE5C;
+        Tue, 14 Jun 2022 07:17:04 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id e184so15372116ybf.8;
+        Tue, 14 Jun 2022 07:17:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YzJm+lc8uG4MWjlJ9/R6vxASJYsJF02HZHOuRM57po8=;
+        b=VpOjaG5ljvpTVOFm7MiB9OeiN6S+DKtUYIKS1xmvndtCySnmrcr05TwLlJR415v2jj
+         gGKmG0fmMF05oUa+WAjlmDTNuErM4WjbbJCktcNb1NVoV7r1bjm1wOXNE0bBhBgasFzY
+         EqIDFkV5b2cO6QiRQkIhaXitHP3496EXw3EaFervg5Yl4JjK83rK65iWiP92K0u2112q
+         ZYSJE627n9jS9IEYBM9TWOno0G0RSXfPoUzJ3osNOTzbaq68lbUnoPikYqgOWMIoiMNP
+         fDcnSeKLZ9zH5YyOOpsRWS74PLipvTCceuuEw8koxDch+lZUiQw3Jl7p/5pCXY4QDZT6
+         YO2w==
+X-Gm-Message-State: AJIora/anQtA4mXKCiw7LWHHOOhh8NnNJQ2U0k8ilUrzqUJF6jZRpodV
+        0eieEi+4+kmlY2znTxr0JyDECQ2Xgebbn35emRYUKzOi
+X-Google-Smtp-Source: AGRyM1szUqy4ac7OLk1kEVW53j2FXYhM2hvZR6OvD0S75oBYbi+k7ZtJoo2eKW4lGbZvVkjwxU8I5kvEZSC+cPvJAys=
+X-Received: by 2002:a25:6b50:0:b0:64f:4b33:664 with SMTP id
+ o16-20020a256b50000000b0064f4b330664mr5417608ybm.153.1655216223200; Tue, 14
+ Jun 2022 07:17:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220527073445.2474380-1-liuke94@huawei.com>
+In-Reply-To: <20220527073445.2474380-1-liuke94@huawei.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 14 Jun 2022 16:16:52 +0200
+Message-ID: <CAJZ5v0hwJAcaggRD9e9+jwn6KtTwsfdutgjSxQz_SMwC-OeSpQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Directly use ida_alloc()/free()
+To:     keliu <liuke94@huawei.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alice Chao <alice.chao@mediatek.com>
+On Fri, May 27, 2022 at 9:13 AM keliu <liuke94@huawei.com> wrote:
+>
+> Use ida_alloc()/ida_free() instead of deprecated
+> ida_simple_get()/ida_simple_remove() .
+>
+> Signed-off-by: keliu <liuke94@huawei.com>
+> ---
+>  drivers/thermal/thermal_core.c | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 82654dc8382b..b36c348a110b 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -667,7 +667,7 @@ int thermal_zone_bind_cooling_device(struct thermal_zone_device *tz,
+>         dev->target = THERMAL_NO_TARGET;
+>         dev->weight = weight;
+>
+> -       result = ida_simple_get(&tz->ida, 0, 0, GFP_KERNEL);
+> +       result = ida_alloc(&tz->ida, GFP_KERNEL);
+>         if (result < 0)
+>                 goto free_mem;
+>
+> @@ -721,7 +721,7 @@ int thermal_zone_bind_cooling_device(struct thermal_zone_device *tz,
+>  remove_symbol_link:
+>         sysfs_remove_link(&tz->device.kobj, dev->name);
+>  release_ida:
+> -       ida_simple_remove(&tz->ida, dev->id);
+> +       ida_free(&tz->ida, dev->id);
+>  free_mem:
+>         kfree(dev);
+>         return result;
+> @@ -768,7 +768,7 @@ int thermal_zone_unbind_cooling_device(struct thermal_zone_device *tz,
+>         device_remove_file(&tz->device, &pos->weight_attr);
+>         device_remove_file(&tz->device, &pos->attr);
+>         sysfs_remove_link(&tz->device.kobj, pos->name);
+> -       ida_simple_remove(&tz->ida, pos->id);
+> +       ida_free(&tz->ida, pos->id);
+>         kfree(pos);
+>         return 0;
+>  }
+> @@ -901,7 +901,7 @@ __thermal_cooling_device_register(struct device_node *np,
+>         if (!cdev)
+>                 return ERR_PTR(-ENOMEM);
+>
+> -       ret = ida_simple_get(&thermal_cdev_ida, 0, 0, GFP_KERNEL);
+> +       ret = ida_alloc(&thermal_cdev_ida, GFP_KERNEL);
+>         if (ret < 0)
+>                 goto out_kfree_cdev;
+>         cdev->id = ret;
+> @@ -951,7 +951,7 @@ __thermal_cooling_device_register(struct device_node *np,
+>         put_device(&cdev->device);
+>         cdev = NULL;
+>  out_ida_remove:
+> -       ida_simple_remove(&thermal_cdev_ida, id);
+> +       ida_free(&thermal_cdev_ida, id);
+>  out_kfree_cdev:
+>         kfree(cdev);
+>         return ERR_PTR(ret);
+> @@ -1110,7 +1110,7 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
+>
+>         mutex_unlock(&thermal_list_lock);
+>
+> -       ida_simple_remove(&thermal_cdev_ida, cdev->id);
+> +       ida_free(&thermal_cdev_ida, cdev->id);
+>         device_del(&cdev->device);
+>         thermal_cooling_device_destroy_sysfs(cdev);
+>         kfree(cdev->type);
+> @@ -1227,7 +1227,7 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+>         INIT_LIST_HEAD(&tz->thermal_instances);
+>         ida_init(&tz->ida);
+>         mutex_init(&tz->lock);
+> -       id = ida_simple_get(&thermal_tz_ida, 0, 0, GFP_KERNEL);
+> +       id = ida_alloc(&thermal_tz_ida, GFP_KERNEL);
+>         if (id < 0) {
+>                 result = id;
+>                 goto free_tz;
+> @@ -1318,7 +1318,7 @@ thermal_zone_device_register(const char *type, int trips, int mask,
+>         put_device(&tz->device);
+>         tz = NULL;
+>  remove_id:
+> -       ida_simple_remove(&thermal_tz_ida, id);
+> +       ida_free(&thermal_tz_ida, id);
+>  free_tz:
+>         kfree(tz);
+>         return ERR_PTR(result);
+> @@ -1378,7 +1378,7 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+>         thermal_set_governor(tz, NULL);
+>
+>         thermal_remove_hwmon_sysfs(tz);
+> -       ida_simple_remove(&thermal_tz_ida, tz->id);
+> +       ida_free(&thermal_tz_ida, tz->id);
+>         ida_destroy(&tz->ida);
+>         mutex_destroy(&tz->lock);
+>         device_unregister(&tz->device);
+> --
 
-Provide flexible number of parameters for UFS SMC calls to be
-easily used for future SMC usages.
-
-This is a preparation patch for the next patch.
-
-Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
-Signed-off-by: Alice Chao <alice.chao@mediatek.com>
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/ufs/host/ufs-mediatek.c | 16 ----------
- drivers/ufs/host/ufs-mediatek.h | 56 +++++++++++++++++++++++++++++++++
- 2 files changed, 56 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 178043ab837c..9337ce27329b 100755
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -30,22 +30,6 @@
- #define CREATE_TRACE_POINTS
- #include "ufs-mediatek-trace.h"
- 
--#define ufs_mtk_smc(cmd, val, res) \
--	arm_smccc_smc(MTK_SIP_UFS_CONTROL, \
--		      cmd, val, 0, 0, 0, 0, 0, &(res))
--
--#define ufs_mtk_va09_pwr_ctrl(res, on) \
--	ufs_mtk_smc(UFS_MTK_SIP_VA09_PWR_CTRL, on, res)
--
--#define ufs_mtk_crypto_ctrl(res, enable) \
--	ufs_mtk_smc(UFS_MTK_SIP_CRYPTO_CTRL, enable, res)
--
--#define ufs_mtk_ref_clk_notify(on, res) \
--	ufs_mtk_smc(UFS_MTK_SIP_REF_CLK_NOTIFICATION, on, res)
--
--#define ufs_mtk_device_reset_ctrl(high, res) \
--	ufs_mtk_smc(UFS_MTK_SIP_DEVICE_RESET, high, res)
--
- static const struct ufs_dev_quirk ufs_mtk_dev_fixups[] = {
- 	{ .wmanufacturerid = UFS_VENDOR_MICRON,
- 	  .model = UFS_ANY_MODEL,
-diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
-index 7e1913769671..9117427ca6c4 100755
---- a/drivers/ufs/host/ufs-mediatek.h
-+++ b/drivers/ufs/host/ufs-mediatek.h
-@@ -143,4 +143,60 @@ struct ufs_mtk_host {
- 	u32 ip_ver;
- };
- 
-+/*
-+ * SMC call wapper function
-+ */
-+#define _ufs_mtk_smc(cmd, res, v1, v2, v3, v4, v5, v6) \
-+		arm_smccc_smc(MTK_SIP_UFS_CONTROL, \
-+				  cmd, v1, v2, v3, v4, v5, v6, &(res))
-+
-+#define _ufs_mtk_smc_0(cmd, res) \
-+	_ufs_mtk_smc(cmd, res, 0, 0, 0, 0, 0, 0)
-+
-+#define _ufs_mtk_smc_1(cmd, res, v1) \
-+	_ufs_mtk_smc(cmd, res, v1, 0, 0, 0, 0, 0)
-+
-+#define _ufs_mtk_smc_2(cmd, res, v1, v2) \
-+	_ufs_mtk_smc(cmd, res, v1, v2, 0, 0, 0, 0)
-+
-+#define _ufs_mtk_smc_3(cmd, res, v1, v2, v3) \
-+	_ufs_mtk_smc(cmd, res, v1, v2, v3, 0, 0, 0)
-+
-+#define _ufs_mtk_smc_4(cmd, res, v1, v2, v3, v4) \
-+	_ufs_mtk_smc(cmd, res, v1, v2, v3, v4, 0, 0)
-+
-+#define _ufs_mtk_smc_5(cmd, res, v1, v2, v3, v4, v5) \
-+	_ufs_mtk_smc(cmd, res, v1, v2, v3, v4, v5, 0)
-+
-+#define _ufs_mtk_smc_6(cmd, res, v1, v2, v3, v4, v5, v6) \
-+	_ufs_mtk_smc(cmd, res, v1, v2, v3, v4, v5, v6)
-+
-+#define _ufs_mtk_smc_selector(cmd, res, v1, v2, v3, v4, v5, v6, FUNC, ...) FUNC
-+
-+#define ufs_mtk_smc(...) \
-+	_ufs_mtk_smc_selector(__VA_ARGS__, \
-+	_ufs_mtk_smc_6(__VA_ARGS__), \
-+	_ufs_mtk_smc_5(__VA_ARGS__), \
-+	_ufs_mtk_smc_4(__VA_ARGS__), \
-+	_ufs_mtk_smc_3(__VA_ARGS__), \
-+	_ufs_mtk_smc_2(__VA_ARGS__), \
-+	_ufs_mtk_smc_1(__VA_ARGS__), \
-+	_ufs_mtk_smc_0(__VA_ARGS__) \
-+	)
-+
-+/*
-+ * Sip kernel interface
-+ */
-+#define ufs_mtk_va09_pwr_ctrl(res, on) \
-+	ufs_mtk_smc(UFS_MTK_SIP_VA09_PWR_CTRL, res, on)
-+
-+#define ufs_mtk_crypto_ctrl(res, enable) \
-+	ufs_mtk_smc(UFS_MTK_SIP_CRYPTO_CTRL, res, enable)
-+
-+#define ufs_mtk_ref_clk_notify(on, res) \
-+	ufs_mtk_smc(UFS_MTK_SIP_REF_CLK_NOTIFICATION, res, on)
-+
-+#define ufs_mtk_device_reset_ctrl(high, res) \
-+	ufs_mtk_smc(UFS_MTK_SIP_DEVICE_RESET, res, high)
-+
- #endif /* !_UFS_MEDIATEK_H */
--- 
-2.18.0
-
+Applied as 5.20 material, thanks!

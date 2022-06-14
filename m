@@ -2,67 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8D2F54A343
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE4D854A346
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236280AbiFNAsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 20:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S238028AbiFNAuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 20:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiFNAss (ORCPT
+        with ESMTP id S231401AbiFNAua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 20:48:48 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9F22B254
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:48:46 -0700 (PDT)
+        Mon, 13 Jun 2022 20:50:30 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 791FB2FFFE
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:50:28 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id x138so7187485pfc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:50:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655167726; x=1686703726;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zMvaLG5fr7e0A8364yt7KMOJ+b17CQQted93WjMHcX4=;
-  b=I7c73gIo2N7XEcZW8rWvF+9ArJyyoaICrsIlxQ3TvZ3UlL/s8Xl58f3M
-   6j51RiSwCwArl+KSA7hLQYh/ACrSdUXwrbyAWPemZFW7zEXQvkzA9794R
-   8TA7dD5+7s9jVE75y0xnmAPlbS44zr3Ev+ydenk7xxKjWQj+LtGFZkQ24
-   A=;
-Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
-  by alexa-out.qualcomm.com with ESMTP; 13 Jun 2022 17:48:46 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 17:48:46 -0700
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 13 Jun 2022 17:48:32 -0700
-Received: from [10.253.77.15] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 13 Jun
- 2022 17:48:30 -0700
-Message-ID: <d14f0409-351f-873e-b7ca-82ff444bf809@quicinc.com>
-Date:   Tue, 14 Jun 2022 08:48:28 +0800
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ACPm1ucMTOfi6ue/vXhWlbqaubMdDkKHxItbdVtdzEE=;
+        b=iYC0JOhxEj9AINp/vrpMdikzU0oJrpyR1YAiazkp6nK8NrpW3f0uAlfOrYHcimtc35
+         jiBw/PzazQUFDPZ32OuGe1CmP66JTJhZtSKcyXfAQfCez7PoDjHOkozPQPpDZH7ip/6A
+         IH4Nh/Ru2fAg85Aan/uHiiT0PwXc1LstPcudo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ACPm1ucMTOfi6ue/vXhWlbqaubMdDkKHxItbdVtdzEE=;
+        b=EaDGO3MiIDpE6kBtjL/n0y5vml/pQDC0aeU9kXJc1ia6fhBuJfJhzLWCkyOYy8kJf9
+         piFqpDqvoeeLcazAxAZRChLzKr0RTvMAKSfqG1OUAjiGv+FID5qohUx8RvLjMTccsgYW
+         sveSkj5VdtP4y4TkYWFAqLqPDZTviw9JYcHC2zD75iOESjcflD9A3FT5SqACQsOP3h7P
+         doSJ+R+dn2/Tr2ukhP6K6ITvlKV8TqZYfOEzAxKafuXvZySXpWRJ8tqfr2pmLAk1AfNQ
+         TnG7dHAbip0I3mVz9+LXHSN83HNXDp9akIodNtHM+VkL8nFL2hPthmtK7IBriWKhUCQV
+         jb7w==
+X-Gm-Message-State: AOAM533AxmwmfRgcdjWY6oXygUcQL3PUSJLbWHZQH/JJQU7Tv2kftlBq
+        qg3P3UIeQXRZMItTTqUJAWpajw==
+X-Google-Smtp-Source: ABdhPJz1vRzxCw2py7mXm3l4Hx3ORSS7vhcYns5Vnoc1vi1vDPLfl40RxweDgBEXhirb4w8MXGVOjA==
+X-Received: by 2002:a63:c046:0:b0:401:abda:a537 with SMTP id z6-20020a63c046000000b00401abdaa537mr2140270pgi.150.1655167827954;
+        Mon, 13 Jun 2022 17:50:27 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:c4fb:a1d8:47ef:f10c])
+        by smtp.gmail.com with UTF8SMTPSA id f4-20020a62db04000000b005184fe6cc99sm6028282pfg.29.2022.06.13.17.50.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 17:50:27 -0700 (PDT)
+Date:   Mon, 13 Jun 2022 17:50:26 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com, quic_vpulyala@quicinc.com,
+        Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Subject: Re: [v21 4/5] usb: dwc3: qcom: Configure wakeup interrupts during
+ suspend
+Message-ID: <YqfbUu/X1joc1rUJ@google.com>
+References: <1655094654-24052-1-git-send-email-quic_kriskura@quicinc.com>
+ <1655094654-24052-5-git-send-email-quic_kriskura@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v4 1/3] tracing: eprobe: remove duplicate is_good_name()
- operation
-Content-Language: en-US
-To:     Tom Zanussi <zanussi@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>
-References: <1654171861-24014-1-git-send-email-quic_linyyuan@quicinc.com>
- <1654171861-24014-2-git-send-email-quic_linyyuan@quicinc.com>
- <9a7e0b6087540c9f868d60cbfc88ccefa8070a1b.camel@kernel.org>
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <9a7e0b6087540c9f868d60cbfc88ccefa8070a1b.camel@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <1655094654-24052-5-git-send-email-quic_kriskura@quicinc.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,79 +81,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi Tom,
+On Mon, Jun 13, 2022 at 10:00:53AM +0530, Krishna Kurapati wrote:
+> From: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> 
+> Configure DP/DM line interrupts based on the USB2 device attached to
+> the root hub port. When HS/FS device is connected, configure the DP line
+> as falling edge to detect both disconnect and remote wakeup scenarios. When
+> LS device is connected, configure DM line as falling edge to detect both
+> disconnect and remote wakeup. When no device is connected, configure both
+> DP and DM lines as rising edge to detect HS/HS/LS device connect scenario.
+> 
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Reviewed-by: Pavankumar Kondeti <quic_pkondeti@quicinc.com>
+> ---
+>  drivers/usb/dwc3/dwc3-qcom.c | 72 ++++++++++++++++++++++++++++++++++++++------
+>  1 file changed, 62 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+> index 7352124..1046ea8 100644
+> --- a/drivers/usb/dwc3/dwc3-qcom.c
+> +++ b/drivers/usb/dwc3/dwc3-qcom.c
+> @@ -20,7 +20,8 @@
+>  #include <linux/usb/of.h>
+>  #include <linux/reset.h>
+>  #include <linux/iopoll.h>
+> -
+> +#include <linux/usb/hcd.h>
+> +#include <linux/usb.h>
+>  #include "core.h"
+>  
+>  /* USB QSCRATCH Hardware registers */
+> @@ -76,6 +77,7 @@ struct dwc3_qcom {
+>  	int			dp_hs_phy_irq;
+>  	int			dm_hs_phy_irq;
+>  	int			ss_phy_irq;
+> +	enum usb_device_speed	usb2_speed;
+>  
+>  	struct extcon_dev	*edev;
+>  	struct extcon_dev	*host_edev;
+> @@ -296,11 +298,34 @@ static void dwc3_qcom_interconnect_exit(struct dwc3_qcom *qcom)
+>  	icc_put(qcom->icc_path_apps);
+>  }
+>  
+> -static void dwc3_qcom_enable_wakeup_irq(int irq)
+> +static enum usb_device_speed dwc3_qcom_read_usb2_speed(struct dwc3_qcom *qcom)
+> +{
+> +	struct dwc3 *dwc = platform_get_drvdata(qcom->dwc3);
+> +	struct usb_hcd *hcd = platform_get_drvdata(dwc->xhci);
+> +	struct usb_device *udev;
+> +
+> +	/*
+> +	 * It is possible to query the speed of all children of
+> +	 * USB2.0 root hub via usb_hub_for_each_child(). DWC3 code
+> +	 * currently supports only 1 port per controller. So
+> +	 * this is sufficient.
+> +	 */
 
-On 6/14/2022 5:01 AM, Tom Zanussi wrote:
-> Hi Linhu,
->
-> On Thu, 2022-06-02 at 20:10 +0800, Linyu Yuan wrote:
->> traceprobe_parse_event_name() already validate group and event name,
->> there is no need to call is_good_name() after it.
->>
->> Signed-off-by: Linyu Yuan <quic_linyyuan@quicinc.com>
->> ---
->> v2: drop v1 change as it is NACK.
->>      add it to remove duplicate is_good_name().
->> v3: move it as first patch.
->> v4: no change
->>
->>   kernel/trace/trace_eprobe.c | 4 ----
->>   1 file changed, 4 deletions(-)
->>
->> diff --git a/kernel/trace/trace_eprobe.c
->> b/kernel/trace/trace_eprobe.c
->> index 7d44785..17d64e3 100644
->> --- a/kernel/trace/trace_eprobe.c
->> +++ b/kernel/trace/trace_eprobe.c
->> @@ -878,16 +878,12 @@ static int __trace_eprobe_create(int argc,
->> const char *argv[])
->>                  sanitize_event_name(buf1);
->>                  event = buf1;
->>          }
->> -       if (!is_good_name(event) || !is_good_name(group))
->> -               goto parse_error;
-> traceprobe_parse_event_name() is only called if (event).  In the
-> !event case, wouldn't the is_good_name() checks still be needed (since
-> in that case buf1 is assigned to event)?
+nit: not sure it's really valuable to mention what could be done
+theoretically. Saying that the dwc3 driver currently only
+supports one port per controller should be enough.
 
-when user input no  event name, it will generate event name from second  
-SYSTEM.EVENT,
+No need to respin for this,
 
-and it will validate with following traceprobe_parse_event_name().
+> +	udev = usb_hub_find_child(hcd->self.root_hub, 1);
+> +
+> +	if (!udev)
+> +		return USB_SPEED_UNKNOWN;
+> +
+> +	return udev->speed;
+> +}
+> +
+> +static void dwc3_qcom_enable_wakeup_irq(int irq, unsigned int polarity)
 
+'polarity' isn't really accurate, the parameter also encodes whether the IRQ
+is edge or level triggered. 'irq_type' would be clearer.
 
-(
+Also no need to respin just for this.
 
-if you agree, i will send a new version to update a minor issue in 
-second patch,
-
-
-         sys_event = argv[1];
--       ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2,
--                                         sys_event - argv[1]);
--       if (ret || !sys_name)
-+       ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2, 0);
-+       if (!sys_event || !sys_name)
-                 goto parse_error;
-
-)
-
->
->>   
->>          sys_event = argv[1];
->>          ret = traceprobe_parse_event_name(&sys_event, &sys_name,
->> buf2,
->>                                            sys_event - argv[1]);
->>          if (ret || !sys_name)
->>                  goto parse_error;
->> -       if (!is_good_name(sys_event) || !is_good_name(sys_name))
->> -               goto parse_error;
-> I agree this one isn't needed.
->
-> Thanks,
->
-> Tom
->
->>   
->>          mutex_lock(&event_mutex);
->>          event_call = find_and_get_event(sys_name, sys_event);
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

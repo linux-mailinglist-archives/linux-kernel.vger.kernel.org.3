@@ -2,337 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9947C54AB7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC67454AB84
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiFNIPd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 04:15:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35528 "EHLO
+        id S232192AbiFNIPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 04:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbiFNIP3 (ORCPT
+        with ESMTP id S231989AbiFNIPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 04:15:29 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACC293F899;
-        Tue, 14 Jun 2022 01:15:27 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id v19so10493202edd.4;
-        Tue, 14 Jun 2022 01:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NJkhEHqFT06HHswMPiYd0nxYY448wV+uSdhje8Y1/Ok=;
-        b=Mg+8SysLtGNO129kkYQ5bUWUJLi2pQEsHLd9GCnmN21aYuWMen+nXjvVMt1xj9Q7ac
-         +t9ciruWjwZ9lxWYUW5YFYUi8oGqx6nrtaTWJQZKWQWOkIwBkaOS/N4k6pX275YGWPaS
-         Ywwy1TAFlnQAD12z42Xvo6mnZvF7gFuIPdwZAm/oKZdGC+9fRDxCr+Ak07esMh7OupXr
-         GnLTKnqa0geEnLmJmvoxsg9M8tuJnG08t+WajefQQ771Q4pQeyQ1qzeFE9D287mnJhM6
-         qeIjTueGVkazdbnKJYhNf93sa+VtG/JD9+Ef6SNVVqi6jL+HR0rdCm+IEG7qvfr08ovd
-         5StQ==
+        Tue, 14 Jun 2022 04:15:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3F78F3FBDC
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655194535;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l9Zc9wCIpLbAd4jBfyMUl844wfhz2xkE3MXngp1dQqs=;
+        b=MURtaOM4P+6Ls877N4EobIIV3NTY0t+EXhhNYlC1w90EnSIXbGObk1CIHmGA+MoV3oHrAz
+        1X3Yw15M356+10vxhe7EHvrDNdefkOmc6a5OZJn6r16MeoYS33vRSoJbXSzbSxNZKhlnCb
+        W30uNA76OHIFgI0NfARSyi4yfehY3Wc=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-374-mOI9KqZVN1COzfs68YTaLA-1; Tue, 14 Jun 2022 04:15:32 -0400
+X-MC-Unique: mOI9KqZVN1COzfs68YTaLA-1
+Received: by mail-ed1-f71.google.com with SMTP id x15-20020a05640226cf00b004318eab9feaso5689991edd.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:15:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NJkhEHqFT06HHswMPiYd0nxYY448wV+uSdhje8Y1/Ok=;
-        b=lGHvcqs+rNfMdxRXgSInsX8BaXtKbrPFOcuKA8Ge0/aFhrcQgakoeE4JWchSGZdAIw
-         OHwdKtjUWcwtpIQU1fp7W4UA0uN9TbAwPAlIlIU2df6QpMKqnORJDSLbOpxMI70HqaOK
-         5qOwXA4N96NzLyYe+EPWHL2DyAbNAzIjWfY7kuHTP2xHDpjXvSJGdnaZsQm0knSj1PK4
-         C/d38cNNP2nYMxUJbJ69PvILWFZRzgPbx0b4VHF+2yO+ogIMZkr9Nd8KEOnW11fKjmLm
-         PHFF3SPyAUtie1pdtqAR0q3j5VUdGOsSS3wlx/V+GL6syWUFrp2l5g7UK1GH44j7LFvJ
-         nMIw==
-X-Gm-Message-State: AOAM530dBFUSz9NlKn3kQ9wLqiyhyrp/QtnyPVaTXlvT5wn59oSwyJ3w
-        /4uW8cL1JEUUw/mMF0t0s3s=
-X-Google-Smtp-Source: AGRyM1ublbbNk+NjfF2PDhw2FRBf63PMhIwPgMjIWP4K+zGw5SLgg3qnAccbBwWdTH2YSXtKUY+6kw==
-X-Received: by 2002:a05:6402:528f:b0:42a:c778:469e with SMTP id en15-20020a056402528f00b0042ac778469emr4274661edb.404.1655194525994;
-        Tue, 14 Jun 2022 01:15:25 -0700 (PDT)
-Received: from skbuf ([188.25.255.186])
-        by smtp.gmail.com with ESMTPSA id p8-20020a056402500800b0042dc0181307sm6485254eda.93.2022.06.14.01.15.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 01:15:25 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 11:15:23 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>
-Subject: Re: [RFC Patch net-next v2 10/15] net: dsa: microchip: move the
- setup, get_phy_flags & mtu to ksz_common
-Message-ID: <20220614081523.wseqxqw576nyzerh@skbuf>
-References: <20220530104257.21485-1-arun.ramadoss@microchip.com>
- <20220530104257.21485-11-arun.ramadoss@microchip.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=l9Zc9wCIpLbAd4jBfyMUl844wfhz2xkE3MXngp1dQqs=;
+        b=q6e5n9azVlx7BdtsVmSTmHoLJCfZm5Wx4zAuov5x4G4qJw2flgoMSccImHik2pcPv4
+         Rq1BvfqqsVpaiRJJlZHRf8wzHBuylELFch/4NveekjL8wCfNcnM0mojr/W+DqIaBr2kE
+         Q28bHmrZaRS2+xDMOW06U9TwBXlmvA47jYIeJgtDgOpAHoiS6awdAjddKNvvh9i71qfk
+         9WNi+bW2LNTQhECFiTdriii0j4ZJ8+rjGu6jgGlN3rE3nOx/ekV0i5nsg5v6tfSbgZNO
+         cVO0fdcojThb0xy2Au9bgNdhcGbSD5Ll7k4Azz5FLbswh/k8BG/5HF0v50GseJWadATP
+         t0Vw==
+X-Gm-Message-State: AJIora8vPYlP+uStijC8+mT90bSyDbE4x4GiqF3vvdw79X468SeCGMNO
+        JYreinE0IRbzYJF1ZY0heJX54C3Cg0gS1yoEMwBEFDPE2wTCS6KTrm71A/nS4lqurlLdwzioY0+
+        o1c0FPD8YQ/T6BUPonARm3Oof
+X-Received: by 2002:a17:906:7295:b0:712:2241:2c3f with SMTP id b21-20020a170906729500b0071222412c3fmr3225325ejl.523.1655194530767;
+        Tue, 14 Jun 2022 01:15:30 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwfw5fLxxDEGhZzCdJd093Ss0BooyMXikguimh5E7whRCP9wkHVKSAv5g9muKWd8yhROhhnoA==
+X-Received: by 2002:a17:906:7295:b0:712:2241:2c3f with SMTP id b21-20020a170906729500b0071222412c3fmr3225303ejl.523.1655194530530;
+        Tue, 14 Jun 2022 01:15:30 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id qh21-20020a170906ecb500b006feaa22e367sm4707525ejb.165.2022.06.14.01.15.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 01:15:29 -0700 (PDT)
+Message-ID: <5b1753ef-0bfb-f937-cab1-ad960bdf6772@redhat.com>
+Date:   Tue, 14 Jun 2022 10:15:29 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220530104257.21485-11-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] x86/PCI: Revert: "Clip only host bridge windows for E820
+ regions"
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
+References: <20220613231539.GA722481@bhelgaas>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220613231539.GA722481@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 30, 2022 at 04:12:52PM +0530, Arun Ramadoss wrote:
-> This patch assigns the .setup, get_phy_flags & mtu  hook of ksz8795 and
-> ksz9477 in dsa_switch_ops to ksz_common. And the individual switches
-> setup implementations are called based on the ksz_dev_ops.  For
-> get_phy_flags hooks,checks whether the chip is ksz8863/kss8793 then it
-> returns error for port1.
-> 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> ---
->  drivers/net/dsa/microchip/ksz8795.c    | 17 ++-------
->  drivers/net/dsa/microchip/ksz9477.c    | 14 ++++----
->  drivers/net/dsa/microchip/ksz_common.c | 50 ++++++++++++++++++++++++++
->  drivers/net/dsa/microchip/ksz_common.h |  7 ++++
->  4 files changed, 68 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
-> index 528de481b319..1058b6883caa 100644
-> --- a/drivers/net/dsa/microchip/ksz8795.c
-> +++ b/drivers/net/dsa/microchip/ksz8795.c
-> @@ -898,18 +898,6 @@ static void ksz8_w_phy(struct ksz_device *dev, u16 phy, u16 reg, u16 val)
->  	}
->  }
->  
-> -static u32 ksz8_sw_get_phy_flags(struct dsa_switch *ds, int port)
-> -{
-> -	/* Silicon Errata Sheet (DS80000830A):
-> -	 * Port 1 does not work with LinkMD Cable-Testing.
-> -	 * Port 1 does not respond to received PAUSE control frames.
-> -	 */
-> -	if (!port)
-> -		return MICREL_KSZ8_P1_ERRATA;
-> -
-> -	return 0;
-> -}
-> -
->  static void ksz8_cfg_port_member(struct ksz_device *dev, int port, u8 member)
->  {
->  	u8 data;
-> @@ -1476,8 +1464,8 @@ static void ksz8_get_caps(struct ksz_device *dev, int port,
->  
->  static const struct dsa_switch_ops ksz8_switch_ops = {
->  	.get_tag_protocol	= ksz_get_tag_protocol,
-> -	.get_phy_flags		= ksz8_sw_get_phy_flags,
-> -	.setup			= ksz8_setup,
-> +	.get_phy_flags		= ksz_get_phy_flags,
-> +	.setup			= ksz_setup,
->  	.phy_read		= ksz_phy_read16,
->  	.phy_write		= ksz_phy_write16,
->  	.phylink_get_caps	= ksz_phylink_get_caps,
-> @@ -1544,6 +1532,7 @@ static void ksz8_switch_exit(struct ksz_device *dev)
->  }
->  
->  static const struct ksz_dev_ops ksz8_dev_ops = {
-> +	.setup = ksz8_setup,
->  	.get_port_addr = ksz8_get_port_addr,
->  	.cfg_port_member = ksz8_cfg_port_member,
->  	.flush_dyn_mac_table = ksz8_flush_dyn_mac_table,
-> diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-> index d70e0c32b309..d7474d9d4384 100644
-> --- a/drivers/net/dsa/microchip/ksz9477.c
-> +++ b/drivers/net/dsa/microchip/ksz9477.c
-> @@ -47,9 +47,8 @@ static void ksz9477_port_cfg32(struct ksz_device *dev, int port, int offset,
->  			   bits, set ? bits : 0);
->  }
->  
-> -static int ksz9477_change_mtu(struct dsa_switch *ds, int port, int mtu)
-> +static int ksz9477_change_mtu(struct ksz_device *dev, int port, int mtu)
->  {
-> -	struct ksz_device *dev = ds->priv;
->  	u16 frame_size, max_frame = 0;
->  	int i;
->  
-> @@ -65,7 +64,7 @@ static int ksz9477_change_mtu(struct dsa_switch *ds, int port, int mtu)
->  				  REG_SW_MTU_MASK, max_frame);
->  }
->  
-> -static int ksz9477_max_mtu(struct dsa_switch *ds, int port)
-> +static int ksz9477_max_mtu(struct ksz_device *dev, int port)
->  {
->  	return KSZ9477_MAX_FRAME_SIZE - VLAN_ETH_HLEN - ETH_FCS_LEN;
->  }
-> @@ -1296,7 +1295,7 @@ static int ksz9477_setup(struct dsa_switch *ds)
->  
->  static const struct dsa_switch_ops ksz9477_switch_ops = {
->  	.get_tag_protocol	= ksz_get_tag_protocol,
-> -	.setup			= ksz9477_setup,
-> +	.setup			= ksz_setup,
->  	.phy_read		= ksz_phy_read16,
->  	.phy_write		= ksz_phy_write16,
->  	.phylink_mac_link_down	= ksz_mac_link_down,
-> @@ -1320,8 +1319,8 @@ static const struct dsa_switch_ops ksz9477_switch_ops = {
->  	.port_mirror_add	= ksz_port_mirror_add,
->  	.port_mirror_del	= ksz_port_mirror_del,
->  	.get_stats64		= ksz_get_stats64,
-> -	.port_change_mtu	= ksz9477_change_mtu,
-> -	.port_max_mtu		= ksz9477_max_mtu,
-> +	.port_change_mtu	= ksz_change_mtu,
-> +	.port_max_mtu		= ksz_max_mtu,
->  };
->  
->  static u32 ksz9477_get_port_addr(int port, int offset)
-> @@ -1382,6 +1381,7 @@ static void ksz9477_switch_exit(struct ksz_device *dev)
->  }
->  
->  static const struct ksz_dev_ops ksz9477_dev_ops = {
-> +	.setup = ksz9477_setup,
->  	.get_port_addr = ksz9477_get_port_addr,
->  	.cfg_port_member = ksz9477_cfg_port_member,
->  	.flush_dyn_mac_table = ksz9477_flush_dyn_mac_table,
-> @@ -1405,6 +1405,8 @@ static const struct ksz_dev_ops ksz9477_dev_ops = {
->  	.fdb_del = ksz9477_fdb_del,
->  	.mdb_add = ksz9477_mdb_add,
->  	.mdb_del = ksz9477_mdb_del,
-> +	.change_mtu = ksz9477_change_mtu,
-> +	.max_mtu = ksz9477_max_mtu,
->  	.shutdown = ksz9477_reset_switch,
->  	.init = ksz9477_switch_init,
->  	.exit = ksz9477_switch_exit,
-> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-> index 8f79ff1ac648..19f8e492d3aa 100644
-> --- a/drivers/net/dsa/microchip/ksz_common.c
-> +++ b/drivers/net/dsa/microchip/ksz_common.c
-> @@ -16,6 +16,7 @@
->  #include <linux/if_bridge.h>
->  #include <linux/of_device.h>
->  #include <linux/of_net.h>
-> +#include <linux/micrel_phy.h>
->  #include <net/dsa.h>
->  #include <net/switchdev.h>
->  
-> @@ -593,6 +594,14 @@ static void ksz_update_port_member(struct ksz_device *dev, int port)
->  	dev->dev_ops->cfg_port_member(dev, port, port_member | cpu_port);
->  }
->  
-> +int ksz_setup(struct dsa_switch *ds)
-> +{
-> +	struct ksz_device *dev = ds->priv;
-> +
-> +	return dev->dev_ops->setup(ds);
-> +}
-> +EXPORT_SYMBOL_GPL(ksz_setup);
+Hi,
 
-I see these changes as being of questionable value if you do not plan to
-actually share some code between ->setup implementations. What would be
-desirable is if ksz_common.c decides what to do, and ksz8795.c /
-ksz9477.c only offer the implementations for fine-grained dev_ops.
-Currently there is code that can be reused between the setup functions
-of the 2 drivers, but also there is some divergence in configuration
-which doesn't have its place (10% rate limit for broadcast storm
-protection in ksz8795?). The goal should be for individual switch
-drivers to not apply configuration behind the curtains as much as possible.
+On 6/14/22 01:15, Bjorn Helgaas wrote:
+> On Sun, Jun 12, 2022 at 04:43:25PM +0200, Hans de Goede wrote:
+>> Clipping the bridge windows directly from pci_acpi_root_prepare_resources()
+>> instead of clipping from arch_remove_reservations(), has a number of
+>> unforseen consequences.
+>>
+>> If there is an e820 reservation in the middle of a bridge window, then
+>> the smallest of the 2 remaining parts of the window will be also clipped
+>> off. Where as the previous code would clip regions requested by devices,
+>> rather then the entire window, leaving regions which were either entirely
+>> above or below a reservation in the middle of the window alone.
+>>
+>> E.g. on the Steam Deck this leads to this log message:
+>>
+>> acpi PNP0A08:00: clipped [mem 0x80000000-0xf7ffffff window] to [mem 0xa0100000-0xf7ffffff window]
+>>
+>> which then gets followed by these log messages:
+>>
+>> pci 0000:00:01.2: can't claim BAR 14 [mem 0x80600000-0x806fffff]: no compatible bridge window
+>> pci 0000:00:01.3: can't claim BAR 14 [mem 0x80500000-0x805fffff]: no compatible bridge window
+>>
+>> and many more of these. Ultimately this leads to the Steam Deck
+>> no longer booting properly, so revert the change.
+>>
+>> Note this is not a clean revert, this revert keeps the later change
+>> to make the clipping dependent on a new pci_use_e820 bool, moving
+>> the checking of this bool to arch_remove_reservations().
+> 
+> 4c5e242d3e93 was definitely a mistake (my fault).  My intent was to
+> mainly to improve logging of the clipping, but I didn't implement it
+> well.
+> 
+> That said, I'd like to understand the connection between the messages
+> you mention and the failure.  There are four bridges whose MMIO
+> windows were in the [mem 0x80000000-0x9fffffff] area that we clipped
+> out.  The log shows that we moved all those windows and the devices in
+> them to the [mem 0xa0100000-0xf7ffffff] area that remained after
+> clipping.
+> 
+> So I think this *should* have worked even though we moved things
+> around unnecessarily.  What am I missing?
 
-> +
->  static void port_r_cnt(struct ksz_device *dev, int port)
->  {
->  	struct ksz_port_mib *mib = &dev->ports[port].mib;
-> @@ -692,6 +701,23 @@ int ksz_phy_write16(struct dsa_switch *ds, int addr, int reg, u16 val)
->  }
->  EXPORT_SYMBOL_GPL(ksz_phy_write16);
->  
-> +u32 ksz_get_phy_flags(struct dsa_switch *ds, int port)
-> +{
-> +	struct ksz_device *dev = ds->priv;
-> +
-> +	if (dev->chip_id == KSZ8830_CHIP_ID) {
-> +		/* Silicon Errata Sheet (DS80000830A):
-> +		 * Port 1 does not work with LinkMD Cable-Testing.
-> +		 * Port 1 does not respond to received PAUSE control frames.
-> +		 */
-> +		if (!port)
-> +			return MICREL_KSZ8_P1_ERRATA;
-> +	}
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(ksz_get_phy_flags);
-> +
->  void ksz_mac_link_down(struct dsa_switch *ds, int port, unsigned int mode,
->  		       phy_interface_t interface)
->  {
-> @@ -981,6 +1007,30 @@ void ksz_port_mirror_del(struct dsa_switch *ds, int port,
->  }
->  EXPORT_SYMBOL_GPL(ksz_port_mirror_del);
->  
-> +int ksz_change_mtu(struct dsa_switch *ds, int port, int mtu)
-> +{
-> +	struct ksz_device *dev = ds->priv;
-> +	int ret = -EOPNOTSUPP;
-> +
-> +	if (dev->dev_ops->change_mtu)
-> +		ret = dev->dev_ops->change_mtu(dev, port, mtu);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(ksz_change_mtu);
-> +
-> +int ksz_max_mtu(struct dsa_switch *ds, int port)
-> +{
-> +	struct ksz_device *dev = ds->priv;
-> +	int ret = -EOPNOTSUPP;
-> +
-> +	if (dev->dev_ops->max_mtu)
-> +		ret = dev->dev_ops->max_mtu(dev, port);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(ksz_max_mtu);
-> +
->  static int ksz_switch_detect(struct ksz_device *dev)
->  {
->  	u8 id1, id2;
-> diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
-> index 133b1a257868..f7275c4f633a 100644
-> --- a/drivers/net/dsa/microchip/ksz_common.h
-> +++ b/drivers/net/dsa/microchip/ksz_common.h
-> @@ -161,6 +161,7 @@ struct alu_struct {
->  };
->  
->  struct ksz_dev_ops {
-> +	int (*setup)(struct dsa_switch *ds);
->  	u32 (*get_port_addr)(int port, int offset);
->  	void (*cfg_port_member)(struct ksz_device *dev, int port, u8 member);
->  	void (*flush_dyn_mac_table)(struct ksz_device *dev, int port);
-> @@ -207,6 +208,8 @@ struct ksz_dev_ops {
->  	int (*get_stp_reg)(void);
->  	void (*get_caps)(struct ksz_device *dev, int port,
->  			 struct phylink_config *config);
-> +	int (*change_mtu)(struct ksz_device *dev, int port, int mtu);
-> +	int (*max_mtu)(struct ksz_device *dev, int port);
->  	void (*freeze_mib)(struct ksz_device *dev, int port, bool freeze);
->  	void (*port_init_cnt)(struct ksz_device *dev, int port);
->  	int (*shutdown)(struct ksz_device *dev);
-> @@ -232,8 +235,10 @@ extern const struct ksz_chip_data ksz_switch_chips[];
->  
->  /* Common DSA access functions */
->  
-> +int ksz_setup(struct dsa_switch *ds);
->  int ksz_phy_read16(struct dsa_switch *ds, int addr, int reg);
->  int ksz_phy_write16(struct dsa_switch *ds, int addr, int reg, u16 val);
-> +u32 ksz_get_phy_flags(struct dsa_switch *ds, int port);
->  void ksz_mac_link_down(struct dsa_switch *ds, int port, unsigned int mode,
->  		       phy_interface_t interface);
->  int ksz_sset_count(struct dsa_switch *ds, int port, int sset);
-> @@ -274,6 +279,8 @@ int ksz_port_mirror_add(struct dsa_switch *ds, int port,
->  			bool ingress, struct netlink_ext_ack *extack);
->  void ksz_port_mirror_del(struct dsa_switch *ds, int port,
->  			 struct dsa_mall_mirror_tc_entry *mirror);
-> +int ksz_change_mtu(struct dsa_switch *ds, int port, int mtu);
-> +int ksz_max_mtu(struct dsa_switch *ds, int port);
->  
->  /* Common register access functions */
->  
-> -- 
-> 2.36.1
+I don't know? My guess is that maybe the ACPI table do MMIO accesses
+somewhere to hardcoded addresses and moving things breaks the ACPI
+tables.
+
+> 
+> The E820 map reports [mem 0xa0000000-0xa00fffff] in the middle of the
+> _CRS, and we currently trim that out.  We think this is a firmware
+> defect, so it's likely to break in 2023 if we stop clipping by
+> default.  I'm concerned that there may be other things in _CRS that we
+> need to avoid, but firmware isn't telling us about them.
+> 
+> Or there's some dependency in the devices that we moved on their
+> original addresses, e.g., firmware on the device latched the address
+> and didn't notice the reassignment.
+
+Right this is the most likely cause I believe.
+
+Regards,
+
+Hans
+
+
+
+> 
+> [1] https://bugzilla.kernel.org/attachment.cgi?id=301154
+> 
+>> BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=216109
+>> Fixes: 4c5e242d3e93 ("x86/PCI: Clip only host bridge windows for E820 regions")
+>> Reported-and-tested-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>> ---
+>>  arch/x86/include/asm/e820/api.h |  5 -----
+>>  arch/x86/include/asm/pci_x86.h  |  8 ++++++++
+>>  arch/x86/kernel/resource.c      | 14 +++++++++-----
+>>  arch/x86/pci/acpi.c             |  8 +-------
+>>  4 files changed, 18 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/arch/x86/include/asm/e820/api.h b/arch/x86/include/asm/e820/api.h
+>> index 5a39ed59b6db..e8f58ddd06d9 100644
+>> --- a/arch/x86/include/asm/e820/api.h
+>> +++ b/arch/x86/include/asm/e820/api.h
+>> @@ -4,9 +4,6 @@
+>>  
+>>  #include <asm/e820/types.h>
+>>  
+>> -struct device;
+>> -struct resource;
+>> -
+>>  extern struct e820_table *e820_table;
+>>  extern struct e820_table *e820_table_kexec;
+>>  extern struct e820_table *e820_table_firmware;
+>> @@ -46,8 +43,6 @@ extern void e820__register_nosave_regions(unsigned long limit_pfn);
+>>  
+>>  extern int  e820__get_entry_type(u64 start, u64 end);
+>>  
+>> -extern void remove_e820_regions(struct device *dev, struct resource *avail);
+>> -
+>>  /*
+>>   * Returns true iff the specified range [start,end) is completely contained inside
+>>   * the ISA region.
+>> diff --git a/arch/x86/include/asm/pci_x86.h b/arch/x86/include/asm/pci_x86.h
+>> index f52a886d35cf..70533fdcbf02 100644
+>> --- a/arch/x86/include/asm/pci_x86.h
+>> +++ b/arch/x86/include/asm/pci_x86.h
+>> @@ -69,6 +69,8 @@ void pcibios_scan_specific_bus(int busn);
+>>  
+>>  /* pci-irq.c */
+>>  
+>> +struct pci_dev;
+>> +
+>>  struct irq_info {
+>>  	u8 bus, devfn;			/* Bus, device and function */
+>>  	struct {
+>> @@ -246,3 +248,9 @@ static inline void mmio_config_writel(void __iomem *pos, u32 val)
+>>  # define x86_default_pci_init_irq	NULL
+>>  # define x86_default_pci_fixup_irqs	NULL
+>>  #endif
+>> +
+>> +#if defined(CONFIG_PCI) && defined(CONFIG_ACPI)
+>> +extern bool pci_use_e820;
+>> +#else
+>> +#define pci_use_e820 false
+>> +#endif
+>> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
+>> index db2b350a37b7..bba1abd05bfe 100644
+>> --- a/arch/x86/kernel/resource.c
+>> +++ b/arch/x86/kernel/resource.c
+>> @@ -1,7 +1,8 @@
+>>  // SPDX-License-Identifier: GPL-2.0
+>> -#include <linux/dev_printk.h>
+>>  #include <linux/ioport.h>
+>> +#include <linux/printk.h>
+>>  #include <asm/e820/api.h>
+>> +#include <asm/pci_x86.h>
+>>  
+>>  static void resource_clip(struct resource *res, resource_size_t start,
+>>  			  resource_size_t end)
+>> @@ -24,14 +25,14 @@ static void resource_clip(struct resource *res, resource_size_t start,
+>>  		res->start = end + 1;
+>>  }
+>>  
+>> -void remove_e820_regions(struct device *dev, struct resource *avail)
+>> +static void remove_e820_regions(struct resource *avail)
+>>  {
+>>  	int i;
+>>  	struct e820_entry *entry;
+>>  	u64 e820_start, e820_end;
+>>  	struct resource orig = *avail;
+>>  
+>> -	if (!(avail->flags & IORESOURCE_MEM))
+>> +	if (!pci_use_e820)
+>>  		return;
+>>  
+>>  	for (i = 0; i < e820_table->nr_entries; i++) {
+>> @@ -41,7 +42,7 @@ void remove_e820_regions(struct device *dev, struct resource *avail)
+>>  
+>>  		resource_clip(avail, e820_start, e820_end);
+>>  		if (orig.start != avail->start || orig.end != avail->end) {
+>> -			dev_info(dev, "clipped %pR to %pR for e820 entry [mem %#010Lx-%#010Lx]\n",
+>> +			pr_info("clipped %pR to %pR for e820 entry [mem %#010Lx-%#010Lx]\n",
+>>  				 &orig, avail, e820_start, e820_end);
+>>  			orig = *avail;
+>>  		}
+>> @@ -55,6 +56,9 @@ void arch_remove_reservations(struct resource *avail)
+>>  	 * the low 1MB unconditionally, as this area is needed for some ISA
+>>  	 * cards requiring a memory range, e.g. the i82365 PCMCIA controller.
+>>  	 */
+>> -	if (avail->flags & IORESOURCE_MEM)
+>> +	if (avail->flags & IORESOURCE_MEM) {
+>>  		resource_clip(avail, BIOS_ROM_BASE, BIOS_ROM_END);
+>> +
+>> +		remove_e820_regions(avail);
+>> +	}
+>>  }
+>> diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
+>> index a4f43054bc79..2f82480fd430 100644
+>> --- a/arch/x86/pci/acpi.c
+>> +++ b/arch/x86/pci/acpi.c
+>> @@ -8,7 +8,6 @@
+>>  #include <linux/pci-acpi.h>
+>>  #include <asm/numa.h>
+>>  #include <asm/pci_x86.h>
+>> -#include <asm/e820/api.h>
+>>  
+>>  struct pci_root_info {
+>>  	struct acpi_pci_root_info common;
+>> @@ -20,7 +19,7 @@ struct pci_root_info {
+>>  #endif
+>>  };
+>>  
+>> -static bool pci_use_e820 = true;
+>> +bool pci_use_e820 = true;
+>>  static bool pci_use_crs = true;
+>>  static bool pci_ignore_seg;
+>>  
+>> @@ -387,11 +386,6 @@ static int pci_acpi_root_prepare_resources(struct acpi_pci_root_info *ci)
+>>  
+>>  	status = acpi_pci_probe_root_resources(ci);
+>>  
+>> -	if (pci_use_e820) {
+>> -		resource_list_for_each_entry(entry, &ci->resources)
+>> -			remove_e820_regions(&device->dev, entry->res);
+>> -	}
+>> -
+>>  	if (pci_use_crs) {
+>>  		resource_list_for_each_entry_safe(entry, tmp, &ci->resources)
+>>  			if (resource_is_pcicfg_ioport(entry->res))
+>> -- 
+>> 2.36.0
+>>
 > 
 

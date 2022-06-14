@@ -2,215 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4912754A32C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 474C354A336
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbiFNAmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 20:42:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59662 "EHLO
+        id S235552AbiFNAqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 20:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232340AbiFNAmj (ORCPT
+        with ESMTP id S231726AbiFNAqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 20:42:39 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63B92AC8;
-        Mon, 13 Jun 2022 17:42:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655167358; x=1686703358;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=MVvW267+1CxI3DhRHiOaVGAbL4b2sj8gVPrDDaf1aCo=;
-  b=l67e/hQ6aOQVEtcWCRAY5BPnYAwFLLCurulHnkMMkXkEbKP8wfDzq8Uz
-   jE5IWk0YPXfT89XY51cy2P2GsPfh2FbpViGDEkDqa8lu2yOc3dAbbfkcu
-   CzPx9bVtoJOv64jdDGybifZH4Fes5zATL1iai4/JTJUxf94jCFgZaOB8M
-   qwVeLIBh3E4j6cpwwekOBhBJHn08wDmQeqPgsAfs4fePa3gosCNgy2h1r
-   Was8IEglT4l2EpvjyaGN8ykFOBBcy9z17w04y67Ds5YSiF15XM/BY8Jdg
-   jJslHxeQlWURauIoCNNOb8Y6OE93CW+IrkkEWWrIawh9CtHxNixixv1VS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258288039"
-X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="258288039"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 17:42:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="588110886"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.138])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Jun 2022 17:42:35 -0700
-Date:   Tue, 14 Jun 2022 08:42:34 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     Willy Tarreau <w@1wt.eu>, Moshe Kol <moshe.kol@mail.huji.ac.il>,
-        fengwei.yin@intel.com, kernel test robot <oliver.sang@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Yossi Gilad <yossi.gilad@mail.huji.ac.il>,
-        Amit Klein <aksecurity@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>, lkp@lists.01.org,
-        kbuild test robot <lkp@intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>, zhengjun.xing@linux.intel.com
-Subject: Re: [tcp] e926147618: stress-ng.icmp-flood.ops_per_sec -8.7%
- regression
-Message-ID: <20220614004234.GA51079@shbuild999.sh.intel.com>
-References: <20220608060802.GA22428@xsang-OptiPlex-9020>
- <20220608064822.GC7547@1wt.eu>
- <CACi_AuAr70bDB79zg9aAF1rD7e1qGgFwCGCAPYtS-zCp_zA0iw@mail.gmail.com>
- <20220608073441.GE7547@1wt.eu>
- <20220613020943.GD75244@shbuild999.sh.intel.com>
- <CANn89i+9Vq7Kiusp1jJBLgGMprb=psrVaWwz5u4F3dunw2vR3Q@mail.gmail.com>
+        Mon, 13 Jun 2022 20:46:48 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B782FFED
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:46:43 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id s135so7062433pgs.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:46:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=s2FWD/PtgY9oueUwTZqKdyU1Zetmw+d/ZG43eXlDlcM=;
+        b=YgSLK9gviQctEV72wBcPKr3rDhijCNprOQ+gp2fOSYMwl+z8m/ywJFJNdRTPfdRN6x
+         iDRg42v/QZUmhq4AMxM+546r3kFUi55RAc+j47EeF+C6skbeoGymucTmWpWLGBIjymwN
+         uCP4s+WQkriW77kbjxxgNIF7QaYBwwsZzcUDKSti8Czi1gIsPCEV4pAVmZvrc7Ueaqhw
+         lOHhx1muh9QhVGl7UTGDpBBFbxdvLgwbahBIYa67KFXU4u9bWvK0IQr6jEiB+VXErtmh
+         6ToX5gd8nYLLeOC0TQ5G60KE/adZglCpxc3QxuFm4VL16SHCtIdEzNaKBM/HaQhyF4O5
+         +Rww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=s2FWD/PtgY9oueUwTZqKdyU1Zetmw+d/ZG43eXlDlcM=;
+        b=37uaQz3Yqz+omsx84fW3+Qi/F/SfNeM77GNyUSqnkfsvHbIP8Abte+9iskWykiOz4o
+         nOnsiCVQuyqataAEiZHLEx/CkTsjlao18CZRZnj2uYXkzNJDIdC1zabMOUCfRDTJiLlU
+         pVFD9fUqqBs9DPPdWlT0v9piPv2EMroHlQNbWWuKpjnJmJyXX5FZRYyPb/IKeTv3979/
+         33ZuL3x4y/qhOIZxK6AiLzyr1Uux9r1ZcSnX9CBuxne/ljseQ6TX2d+qUO+7scEL5hCn
+         JMrkK9z5kFwf4XAzmc9ODKduCJ6ETUvEHBNAcD/MnxriObNllojal+p6jJiBtKJY0SX8
+         6GWQ==
+X-Gm-Message-State: AOAM533yezGJNYPPvBgzdC/4CEiV6jG7OIQ94FxLSlhwBf98gmE3wnyC
+        VSc5Sdqsxj0/rXUrObRLN4Ptew==
+X-Google-Smtp-Source: ABdhPJyqpKu6p1u5KzVVLMZAfN9ra4WcAcLZdMNT/RwAJ4w3TWcPwfXbJl2ut/OvLAU1lo600eJCYA==
+X-Received: by 2002:a05:6a00:179b:b0:51b:f51f:992e with SMTP id s27-20020a056a00179b00b0051bf51f992emr2018667pfg.60.1655167602802;
+        Mon, 13 Jun 2022 17:46:42 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id u4-20020a17090a2b8400b001e31fea8c85sm8035481pjd.14.2022.06.13.17.46.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 17:46:42 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 00:46:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v12 19/46] x86/kernel: Make the .bss..decrypted section
+ shared in RMP table
+Message-ID: <YqfabnTRxFSM+LoX@google.com>
+References: <20220307213356.2797205-1-brijesh.singh@amd.com>
+ <20220307213356.2797205-20-brijesh.singh@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANn89i+9Vq7Kiusp1jJBLgGMprb=psrVaWwz5u4F3dunw2vR3Q@mail.gmail.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220307213356.2797205-20-brijesh.singh@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 10:10:57AM -0700, Eric Dumazet wrote:
-> On Sun, Jun 12, 2022 at 7:09 PM Feng Tang <feng.tang@intel.com> wrote:
-> >
-> > Hi,
-> >
-> > On Wed, Jun 08, 2022 at 09:34:41AM +0200, Willy Tarreau wrote:
-> > > On Wed, Jun 08, 2022 at 10:26:12AM +0300, Moshe Kol wrote:
-> > > > Hmm, How is the ICMP flood stress test related to TCP connections?
-> > >
-> > > To me it's not directly related, unless the test pre-establishes many
-> > > connections, or is affected in a way or another by a larger memory
-> > > allocation of this part.
-> >
-> > Fengwei and I discussed and thought this could be a data alignment
-> > related case, that one module's data alignment change affects other
-> > modules' alignment, and we had a patch for detecting similar cases [1]
-> >
-> > After some debugging, this could be related with the bss section
-> > alignment changes, that if we forced all module's bss section to be
-> > 4KB aligned, then the stress-ng icmp-flood case will have almost no
-> > performance difference for the 2 commits:
-> >
-> > 10025135            +0.8%   10105711 ±  2%  stress-ng.icmp-flood.ops_per_sec
-> >
-> > The debug patch is:
-> >
-> > diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-> > index 7fda7f27e7620..7eb626b98620c 100644
-> > --- a/arch/x86/kernel/vmlinux.lds.S
-> > +++ b/arch/x86/kernel/vmlinux.lds.S
-> > @@ -378,7 +378,9 @@ SECTIONS
-> >
-> >         /* BSS */
-> >         . = ALIGN(PAGE_SIZE);
-> > -       .bss : AT(ADDR(.bss) - LOAD_OFFSET) {
-> > +       .bss : AT(ADDR(.bss) - LOAD_OFFSET)
-> > +       SUBALIGN(PAGE_SIZE)
-> > +       {
-> >                 __bss_start = .;
-> >                 *(.bss..page_aligned)
-> >                 . = ALIGN(PAGE_SIZE);
-> >
-> > The 'table_perturb[]' used to be in bss section, and with the commit
-> > of moving it to runtime allocation, other data structures following it
-> > in the .bss section will get affected accordingly.
-> >
+s/Brijesh/Michael
+
+On Mon, Mar 07, 2022, Brijesh Singh wrote:
+> The encryption attribute for the .bss..decrypted section is cleared in the
+> initial page table build. This is because the section contains the data
+> that need to be shared between the guest and the hypervisor.
 > 
-> As the 'regression' is seen with ICMP workload, can you please share with us
-> the symbols close to icmp_global (without your align patch)
-
-Here are the info for the 2 commits (kernels for the original reprot):
-
-$ egrep -8 "icmp_global$" System.map-5.18.0-rc4-00242-gca7af0402550
-ffffffff837adc00 b tcp_cong_list_lock
-ffffffff837adc08 b tcpmhash_entries
-ffffffff837adc10 b fastopen_seqlock
-ffffffff837adc18 b tcp_metrics_lock
-ffffffff837adc1c b tcp_ulp_list_lock
-ffffffff837adc20 B raw_v4_hashinfo
-ffffffff837ae440 B udp_encap_needed_key
-ffffffff837ae480 B udp_memory_allocated
-ffffffff837ae488 b icmp_global
-ffffffff837ae4a0 b inet_addr_lst
-ffffffff837aeca0 b inetsw_lock
-ffffffff837aecc0 b inetsw
-ffffffff837aed80 b fib_info_devhash
-ffffffff837af580 b fib_info_cnt
-ffffffff837af584 b fib_info_hash_bits
-ffffffff837af588 b fib_info_hash_size
-ffffffff837af590 b fib_info_laddrhash
-
-$ egrep -8 "icmp_global$" System.map-5.18.0-rc4-00243-ge9261476184b
-ffffffff837ad800 b tcp_cong_list_lock
-ffffffff837ad808 b tcpmhash_entries
-ffffffff837ad810 b fastopen_seqlock
-ffffffff837ad818 b tcp_metrics_lock
-ffffffff837ad81c b tcp_ulp_list_lock
-ffffffff837ad820 B raw_v4_hashinfo
-ffffffff837ae040 B udp_encap_needed_key
-ffffffff837ae080 B udp_memory_allocated
-ffffffff837ae088 b icmp_global
-ffffffff837ae0a0 b inet_addr_lst
-ffffffff837ae8a0 b inetsw_lock
-ffffffff837ae8c0 b inetsw
-ffffffff837ae980 b fib_info_devhash
-ffffffff837af180 b fib_info_cnt
-ffffffff837af184 b fib_info_hash_bits
-ffffffff837af188 b fib_info_hash_size
-ffffffff837af190 b fib_info_laddrhash
-
-From above we can see some symbols are offseted of 0x400 (1KB),
-like icmp_global or fib_xxx, as the 'table_perturb' used to be
-1KB long in bss section.
-
-> I suspect we should move icmp_global to a dedicated cache line.
+> When SEV-SNP is active, just clearing the encryption attribute in the
+> page table is not enough. The page state need to be updated in the RMP
+> table.
 > 
-> $ nm -v vmlinux|egrep -8 "icmp_global$"
-> ffffffff835bc490 b tcp_cong_list_lock
-> ffffffff835bc494 b fastopen_seqlock
-> ffffffff835bc49c b tcp_metrics_lock
-> ffffffff835bc4a0 b tcpmhash_entries
-> ffffffff835bc4a4 b tcp_ulp_list_lock
-> ffffffff835bc4a8 B raw_v4_hashinfo
-> ffffffff835bccc0 B udp_memory_allocated      << Note sure why it is
-> not already in a dedicated cache line>>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  arch/x86/kernel/head64.c | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+> index 83514b9827e6..656d2f3e2cf0 100644
+> --- a/arch/x86/kernel/head64.c
+> +++ b/arch/x86/kernel/head64.c
+> @@ -143,7 +143,20 @@ static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdv
+>  	if (sme_get_me_mask()) {
+>  		vaddr = (unsigned long)__start_bss_decrypted;
+>  		vaddr_end = (unsigned long)__end_bss_decrypted;
+> +
+>  		for (; vaddr < vaddr_end; vaddr += PMD_SIZE) {
+> +			/*
+> +			 * On SNP, transition the page to shared in the RMP table so that
+> +			 * it is consistent with the page table attribute change.
+> +			 *
+> +			 * __start_bss_decrypted has a virtual address in the high range
+> +			 * mapping (kernel .text). PVALIDATE, by way of
+> +			 * early_snp_set_memory_shared(), requires a valid virtual
+> +			 * address but the kernel is currently running off of the identity
+> +			 * mapping so use __pa() to get a *currently* valid virtual address.
+> +			 */
+> +			early_snp_set_memory_shared(__pa(vaddr), __pa(vaddr), PTRS_PER_PMD);
 
-IIUC, 0x....C0 means it is already cacheline aligned?
+This breaks SME on Rome and Milan when compiling with clang-13.  I haven't been
+able to figure out exactly what goes wrong.  printk isn't functional at this point,
+and interactive debug during boot on our test systems is beyond me.  I can't even
+verify that the bug is specific to clang because the draconian build system for our
+test systems apparently is stuck pointing at gcc-4.9.
 
+I suspect the issue is related to relocation and/or encrypting memory, as skipping
+the call to early_snp_set_memory_shared() if SNP isn't active masks the issue.
+I've dug through the assembly and haven't spotted a smoking gun, e.g. no obvious
+use of absolute addresses.
 
-> ffffffff835bccc8 B udp_encap_needed_key
-> ffffffff835bccd8 b icmp_global                               <<<HERE>>
-> ffffffff835bccf0 b inet_addr_lst
-> ffffffff835bd4f0 b inetsw_lock
-> ffffffff835bd500 b inetsw
-> ffffffff835bd5b0 b fib_info_lock
-> ffffffff835bd5b4 b fib_info_cnt
-> ffffffff835bd5b8 b fib_info_hash_size
-> ffffffff835bd5c0 b fib_info_hash
-> ffffffff835bd5c8 b fib_info_laddrhash
+Forcing a VM through the same path doesn't fail.  I can't test an SEV guest at the
+moment because INIT_EX is also broken.
 
-Fengwei found that from the perf-profile info of report, there are
-quite difference around ping table handling.
-
-     43.72            +4.1       47.81 ±  2% icmp_rcv.ip_protocol_deliver_rcu.ip_local_deliver_finish.__netif_receive_skb_one_core.process_backlog
-     17.10 ±  7%      +6.0       23.10 ±  6%ping_rcv.icmp_rcv.ip_protocol_deliver_rcu.ip_local_deliver_finish.__netif_receive_skb_one_core
-     17.05 ±  7%      +6.0       23.06 ±  6%ping_lookup.ping_rcv.icmp_rcv.ip_protocol_deliver_rcu.ip_local_deliver_finish
-
-And the "ping_table[]" also sits in bss section and got affected:
-
-  Before: 
-  ffffffff837af600 b ping_table
-
-  After:
-  ffffffff837af200 b ping_table
-
-The cacheline alignment is not changed, and I suspect it cause some
-TLB changes.
-
-Thanks,
-Feng
+The crash incurs a very, very slow reboot, and I was out of cycles to work on this
+about three hours ago.  If someone on the AMD side can repro, it would be much
+appreciated.

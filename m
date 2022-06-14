@@ -2,124 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C27F754BA6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D1354BA71
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:19:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346934AbiFNTSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 15:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
+        id S244708AbiFNTSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 15:18:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345438AbiFNTS3 (ORCPT
+        with ESMTP id S1348588AbiFNTS3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Jun 2022 15:18:29 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF8129C80;
-        Tue, 14 Jun 2022 12:18:24 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id q140so9357540pgq.6;
-        Tue, 14 Jun 2022 12:18:24 -0700 (PDT)
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E8B29C86
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:18:25 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id h1so8516495plf.11
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:18:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=q+NwpM7oTO+xnUjVlqc3L1OHg1oUbX+X1MudKapZCG0=;
-        b=N7w6wGMnSDEBRS4oEaUHnN0mL93zIrrEl64nkWLb8uxxQQHK1zUBWdniPqPyRupaLP
-         kK+dQZ3LDBD6a8rTYRA2mM36EAsuW7inw6DKhY502A2DEG8xtjuCO8BrhWrX/zL5DeRO
-         78MJ+L+YQRk3Dj/6pJcIpYBbLBM+9XpNW3iDVCL32L0lfd0C7KgBTyPDV124EkAT923o
-         3kwJPPj/qxU1IcExAqfMz0j3VxPt71tt6J1G6bgMiLxU8jW+qsevR5VYjt0/jpY/e/Lx
-         exnXHQvOMcb6t1N/OOQDX4AZ4A0aKIh73/FghL/l/SOiumkEIO4dJSPV3SaBSyoNaZnY
-         2Vwg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=3hYo58giO756Nq17jRB4A4D+eaiCFVzK8Vfjbc4Oh+o=;
+        b=C7el04sMSIat6W96z22BeTYVjWwGcAlQULymQ6Y3dqpfyczEYEVavvflfNH8t/Cj99
+         x2g2Xn3hhaZvrwjOPm/lVCRyC0nhA6KlTsgkD9lBtmKe1fEKgWq8xt2B6MDprNs8zNPh
+         SS7Sk1W8ICtEcmA/yOxNr/AfG20Z30Gr3qGiXwSpStXJBNiurFBBeqi8K9j0q6MBDEI2
+         6UJ6gaXUUEO02VAWg03qQD/Moq9i7a/2flalIrEOJfN4OP7zRhRoIlHGUvSTEKaO6oIE
+         uWS3fPEiM42Ug0OS2bhWEMFbvJ3vB84wRO6bUZGfX1uufAUQ2p3jzsn41WqtHIfPpzz1
+         vcgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=q+NwpM7oTO+xnUjVlqc3L1OHg1oUbX+X1MudKapZCG0=;
-        b=07vQiGNQi/bcqZxwTjf1+/2EZ75278JtUUB+omC1okUe8GXQpLlHZAg2nNMyCNZRa8
-         KSAAXw3a9Hm1K6Ckm2zpCLmbMgW45czheZal+wpvwMFlQTtCMkH0lsRAL1Os+1z14Mz9
-         ovNoN+keGs95JmPvPGm3FbgTdD2KtEI7Zi6klm92OsPHDNe2x45na5v0GOyL+GqEBpJN
-         D84qGY+JxFWfjgy+FI1X65L2zCEVTkC6ufX8Xg1yw/hCIkUYX958ETPSlXTGsxf760JM
-         3E5u/88DjXY2SWVN5vNXZVbEf91+1CHqYx9owOHQtbIyPnU28Ncx1RiLhXqw3tj0ofoZ
-         hiGw==
-X-Gm-Message-State: AOAM530qdGDsCxovNVyFjlP5qIenWvns73mF9tsknc4ilhrqT4buRtGE
-        oEXQoGrtxJkGwJXRYnMjkF/v3T6CfAuzFtta6pc=
-X-Google-Smtp-Source: ABdhPJxJVP7kLwEvDb6GM3mzsHla130vZdGI8qm5xFlowjEwjFJxMFOGnV9sLinMO36fAmvUPbzOXuK63hp0s6pNnFI=
-X-Received: by 2002:a05:6a02:19b:b0:3fa:3e63:15fb with SMTP id
- bj27-20020a056a02019b00b003fa3e6315fbmr5790839pgb.129.1655234303519; Tue, 14
- Jun 2022 12:18:23 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3hYo58giO756Nq17jRB4A4D+eaiCFVzK8Vfjbc4Oh+o=;
+        b=PWWGGCbQedoVm+eId99uXqWhQjlmx6yAY35rSrkLVONQyB7x2kH6QC2Ox91qTl8g4F
+         Ma4TjrH53Q0U964ZSS/0VFwRIMIJu5AVw557L3AUjkmSDJHb+fFGkrsYFitPs8C/jj9Y
+         SY3tMOH6qCVlPw9bBAxobURLV9PB7qCqVj3A+vMiada6nr7qQNyX15GSjWyEGrqKiOCq
+         /r/+GElZd+X2b1diYV4U0rCNw+I1/+RZRo9s2auvRJDynkaWCBCQrYvLF4lq9VRQHTms
+         jFoumbZcle0tuhaR+doig+eWZwTUh/b0zazDjk36Y4uEQQbEqCz3YimRUrlRcpZDdQnj
+         sK4Q==
+X-Gm-Message-State: AJIora9jqSFDyihH6oQ9qUbGkmUfpxjmAdUBExeNezaxWCZEMgSdtidy
+        sHlfSpSo/jQXfJ9vhreX1QCHAA==
+X-Google-Smtp-Source: AGRyM1tuHjbaqXs+7aghcEEp8rKNGSZssX8kuM31YU6OetEN14CKRCXjzx0TBQrL8CyxowH1ASWJXg==
+X-Received: by 2002:a17:90b:1808:b0:1e2:a335:ad04 with SMTP id lw8-20020a17090b180800b001e2a335ad04mr6135419pjb.110.1655234304868;
+        Tue, 14 Jun 2022 12:18:24 -0700 (PDT)
+Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 17-20020a17090a005100b001e87ae821f8sm7781425pjb.36.2022.06.14.12.18.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 12:18:23 -0700 (PDT)
+Message-ID: <81493b57-a35e-3082-f5a8-36c8278a8bf3@linaro.org>
+Date:   Tue, 14 Jun 2022 21:18:14 +0200
 MIME-Version: 1.0
-References: <20220613191706.31239-1-jagathjog1996@gmail.com>
- <20220613191706.31239-3-jagathjog1996@gmail.com> <CAHp75VdJ7z+GnEGEe2obd8Df5mJtNGQASf1c7WWXJVQ1Db8U4A@mail.gmail.com>
-In-Reply-To: <CAHp75VdJ7z+GnEGEe2obd8Df5mJtNGQASf1c7WWXJVQ1Db8U4A@mail.gmail.com>
-From:   Jagath Jog J <jagathjog1996@gmail.com>
-Date:   Wed, 15 Jun 2022 00:48:11 +0530
-Message-ID: <CAM+2EuJAyTL=JcESt8fteSy7q09nSShQKF0AMkiwdJOtHe5uPA@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] iio: accel: bma400: Add support for single and
- double tap events
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/2] dt-bindings: thermal: qcom,spmi-temp-alarm: convert
+ to dtschema
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Ivan T. Ivanov" <ivan.ivanov@linaro.org>,
+        Kumar Gala <galak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220608112702.80873-1-krzysztof.kozlowski@linaro.org>
+ <2c778212-1ff6-6afb-aa13-917bbffcfebc@linaro.org>
+ <c317ba82-e77f-147f-6c4e-c975d1d313ea@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <c317ba82-e77f-147f-6c4e-c975d1d313ea@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On 14/06/2022 21:17, Krzysztof Kozlowski wrote:
+> On 14/06/2022 12:01, Daniel Lezcano wrote:
+>> On 08/06/2022 13:27, Krzysztof Kozlowski wrote:
+>>> Convert the Qualcomm QPNP PMIC Temperature Alarm to DT Schema.
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>>    .../thermal/qcom,spmi-temp-alarm.yaml         | 85 +++++++++++++++++++
+>>>    .../bindings/thermal/qcom-spmi-temp-alarm.txt | 51 -----------
+>>>    2 files changed, 85 insertions(+), 51 deletions(-)
+>>>    create mode 100644 Documentation/devicetree/bindings/thermal/qcom,spmi-temp-alarm.yaml
+>>>    delete mode 100644 Documentation/devicetree/bindings/thermal/qcom-spmi-temp-alarm.txt
+>>
+>> Applied this patch.
+>>
+>> I can pick patch 2/2 if needed, just let me know
+> 
+> Thanks Daniel. I guess Bjorn will pick up the DTS patch.
 
-On Tue, Jun 14, 2022 at 2:50 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Mon, Jun 13, 2022 at 9:17 PM Jagath Jog J <jagathjog1996@gmail.com> wrote:
-> >
-> > Add support for single and double tap events based on the tap threshold
-> > value and minimum quiet time value between the taps. The INT1 pin is used
-> > to interrupt and event is pushed to userspace.
->
-> the event
->
-> ...
->
-> >  #include <linux/iio/trigger.h>
-> >  #include <linux/iio/trigger_consumer.h>
-> >  #include <linux/iio/triggered_buffer.h>
-> > +#include <linux/iio/sysfs.h>
->
-> s is before t
-
-Sure I will arrange this in alphabetical order.
-
->
-> ...
->
-> >         bool step_event_en;
-> >         bool activity_event_en;
-> >         unsigned int generic_event_en;
-> > +       unsigned int tap_event_en;
->
-> Should it be boolean? Or i.o.w. why does it need to be an unsigned int?
-
-tap_event_en is used as a bitmask. Bit 2 and 3 of tap_event_en
-are used to tell the state of the single and double tap events.
-For example bit 2 is used to indicate single tap is enabled or not.
-
-set_mask_bits() and FIELD_GET()  is used to set and retrieve the
-required bit value so I used unsigned int.
+Ok, thanks
 
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
->
-> ...
->
-> > +       data->step_event_en = 0;
-> > +       data->activity_event_en = 0;
->
-> These are booleans.
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

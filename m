@@ -2,98 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A04554BAFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:52:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB06B54BAFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:53:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346562AbiFNTwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 15:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
+        id S232199AbiFNTxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 15:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349115AbiFNTwg (ORCPT
+        with ESMTP id S1349829AbiFNTxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 15:52:36 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1717D2657B
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:52:34 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id t3-20020a17090a510300b001ea87ef9a3dso10029218pjh.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:52:34 -0700 (PDT)
+        Tue, 14 Jun 2022 15:53:30 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070A335A9D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:53:29 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id j20so10927148ljg.8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:53:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Jsh+9nIpfSBa1uEbPDqPUdbNg1GFShpfTtOI9ZfqinA=;
-        b=eLG14A21pvHg32PiwjkaP+dh9Qho4ANeFBz02faR0OsqBnkDDbTweNJx25wqnfQzwT
-         LZajfdHpDqoWVoTqlS5amqN02i/CTNrfUTFQxdPrK0wLT0hHu+P2l3WdL7or8ftHI9Zj
-         XI6Sb0fyqhajsZSEvctk10YiHR/27iHNnn/m7fJGCWnpiNwaU0p3zQ+N2If5En6CbSTZ
-         TeARvQ+PHUGw6gNxjtkgCDbMTLgsykaaVNPB7nHEVrJpbGorTL+E+nAzD0nESw9Ctc4T
-         OUGprmoaRamJ5Mbt8Vl7O0v085JO+MNslMMSYl2Ztf9NtnQUjrdbPuMBixF4qeoNNkDU
-         KwBg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to;
+        bh=ZLxgom5g1jrS0n4H42Ud+kQMNKQ+7GbbdBbd6Asgiq8=;
+        b=cIaLsymmckzG/dC0HPTqbRe0GjfjEnoQi8Xc3DdoZhT0ggSpafkdBEgk+IhM074iwD
+         OmGKzwG5OlGFkj3dg9sV2gyDZ1kg9XNjdjGnKnxam8PCNEaeGRL/6lz0JyBSr8QLys2a
+         6suJQEwIab63ruxwTh4Rld5NTW6JwjHpQOIRkvWuSbWwZAmA2dhYgSTZE/jdlqwiFqsA
+         Cv5x4AjYkZRsFcxo5jfB6/gklzYS1RCFImCBdGdglDfp/ytIETqHdpdleP/penueShYG
+         mJA3rDCwQuQ7JUB6pj4YdNqfe6FMNHYJqBVRXTEJx90N0a8vgNQYFH6irh9cqonwKgZm
+         Cvcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Jsh+9nIpfSBa1uEbPDqPUdbNg1GFShpfTtOI9ZfqinA=;
-        b=pbBhpNukBUxnsezXt7U8XrP7WP0tf5N9mj94LS3tR6z/8biP4T2NaZFBQW9sDP/5PD
-         rfBg726MnBl9s42COaecitZK9DBBo+boOsa0dygILe/6Al357cywNQQSfHoPpLLB4swp
-         fBWFgY5bCSP3McwyddOtkHu48TyAtOGBah+VXmhIxLklT2NMCyGVak+uJG+z+9xWr/rw
-         lB2lLNASSWSLAx+1DTMP6Plu88Xrbulno3tyKAKF8mZP0OtJQVyJFKp8fBn3nFelhvel
-         MyyswVoxt0ZJR5y3tKFPoFWCfxkXPJhhC19QQoMrNbr87sMdGXT8w3g6o9in80VWqKr4
-         C1Yg==
-X-Gm-Message-State: AJIora9e7KgC5wPSk+NMgRTOxZ1LNfEgcfLvY/QebfgEu+foney3It5W
-        7uNnVwH9mW0EzkEc7glJyQL7UiRb2yhjFw==
-X-Google-Smtp-Source: AGRyM1vv7m0b7E/234X9osMyE0Ar/aQSj9TrfEOaTO6q4JlGEpk2zdpwTjkcgfSkZj0JFdWamW6DWA==
-X-Received: by 2002:a17:90b:1b0d:b0:1e6:847e:6448 with SMTP id nu13-20020a17090b1b0d00b001e6847e6448mr6122283pjb.125.1655236353306;
-        Tue, 14 Jun 2022 12:52:33 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z11-20020aa7958b000000b0051bdb735647sm8046474pfj.159.2022.06.14.12.52.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 12:52:32 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 19:52:29 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Michael Roth <michael.roth@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com
-Subject: Re: [PATCH v12 19/46] x86/kernel: Make the .bss..decrypted section
- shared in RMP table
-Message-ID: <Yqjm/b3deMlxxePh@google.com>
-References: <20220307213356.2797205-1-brijesh.singh@amd.com>
- <20220307213356.2797205-20-brijesh.singh@amd.com>
- <YqfabnTRxFSM+LoX@google.com>
- <YqistMvngNKEJu2o@google.com>
- <daaf7a84-4204-48ca-e40c-7ba296b4789c@amd.com>
- <YqizrTCk460kov/X@google.com>
- <6db51d45-e17a-38dd-131d-e43132c55dfb@amd.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to;
+        bh=ZLxgom5g1jrS0n4H42Ud+kQMNKQ+7GbbdBbd6Asgiq8=;
+        b=e8I1GEtdFJZyDn4k3C+FUuYQGGI/4jOhgCnwZLxAll+CUhjyaI7b8mrDAPvwQJ7J3f
+         uCloJTt+0U7BOC4F9O4vR26UMC5xf24P6qo6BbDgHieBpHXgUxG5z2uOjASWD9VrOFoZ
+         shly5GUMYu2SBydimiY94vAorPTx/tWJYkWNSbqzy4IIr1MHWnTP71omgsrh0fqPoaKN
+         xDL5Y5f33Q4WfflVhUZtfWYt54QtbPMZKtOiDkDg+QSuf1HNUPtlH4dzYypFan9VCBJR
+         g4RxDWVCWAN1pWBRSzcMLqzJd61ZsFy0zHlRh0S2sxq5RL0zyxSQCGwW8MGFgwzsRzba
+         Ixsg==
+X-Gm-Message-State: AJIora9ekIM9WxV/+6lq1KHz94b/RNqKXt3tI251t9VZEW+X1O5oFGZr
+        2M79mfqzJwodYLEHE+6legXUh6PTeWs=
+X-Google-Smtp-Source: AGRyM1uMXHthEpOq2+sQirHZ4pvj0A3xPPkJRxrygZDKdcug1KCvjdA+R+qq7kt6JjDMk+Cy+E3gog==
+X-Received: by 2002:a2e:954e:0:b0:255:3768:9986 with SMTP id t14-20020a2e954e000000b0025537689986mr3549987ljh.516.1655236407088;
+        Tue, 14 Jun 2022 12:53:27 -0700 (PDT)
+Received: from [192.168.1.11] ([94.103.229.27])
+        by smtp.gmail.com with ESMTPSA id n6-20020a056512388600b0047c8ae642d5sm1505267lft.99.2022.06.14.12.53.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 12:53:26 -0700 (PDT)
+Message-ID: <a47b250f-4008-321d-fca6-73f766115a8b@gmail.com>
+Date:   Tue, 14 Jun 2022 22:53:24 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6db51d45-e17a-38dd-131d-e43132c55dfb@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [syzbot] KASAN: stack-out-of-bounds Read in __show_regs
+Content-Language: en-US
+To:     syzbot <syzbot+b17d3e853d5dce65f981@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000ebb59305e16d1627@google.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <000000000000ebb59305e16d1627@google.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------3DXHU2mT1UMOQMT8VHtRpUuN"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,170 +73,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022, Tom Lendacky wrote:
-> On 6/14/22 11:13, Sean Christopherson wrote:
-> > > > > This breaks SME on Rome and Milan when compiling with clang-13.  I haven't been
-> > > > > able to figure out exactly what goes wrong.  printk isn't functional at this point,
-> > > > > and interactive debug during boot on our test systems is beyond me.  I can't even
-> > > > > verify that the bug is specific to clang because the draconian build system for our
-> > > > > test systems apparently is stuck pointing at gcc-4.9.
-> > > > > 
-> > > > > I suspect the issue is related to relocation and/or encrypting memory, as skipping
-> > > > > the call to early_snp_set_memory_shared() if SNP isn't active masks the issue.
-> > > > > I've dug through the assembly and haven't spotted a smoking gun, e.g. no obvious
-> > > > > use of absolute addresses.
-> > > > > 
-> > > > > Forcing a VM through the same path doesn't fail.  I can't test an SEV guest at the
-> > > > > moment because INIT_EX is also broken.
-> > > > 
-> > > > The SEV INIT_EX was a PEBKAC issue.  An SEV guest boots just fine with a clang-built
-> > > > kernel, so either it's a finnicky relocation issue or something specific to SME.
-> > > 
-> > > I just built and booted 5.19-rc2 with clang-13 and SME enabled without issue:
-> > > 
-> > > [    4.118226] Memory Encryption Features active: AMD SME
-> > 
-> > Phooey.
-> > 
-> > > Maybe something with your kernel config? Can you send me your config?
-> > 
-> > Attached.  If you can't repro, I'll find someone on our end to work on this.
-> 
-> I was able to repro. It dies in the cc_platform_has() code, where it is
-> trying to do an indirect jump based on the attribute (actually in the
-> amd_cc_platform_has() which I think has been optimized in):
-> 
-> bool cc_platform_has(enum cc_attr attr)
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------3DXHU2mT1UMOQMT8VHtRpUuN
+Content-Type: multipart/mixed; boundary="------------gCLNlPWu3jF0gAKKm8gg96TM";
+ protected-headers="v1"
+From: Pavel Skripkin <paskripkin@gmail.com>
+To: syzbot <syzbot+b17d3e853d5dce65f981@syzkaller.appspotmail.com>,
+ linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <a47b250f-4008-321d-fca6-73f766115a8b@gmail.com>
+Subject: Re: [syzbot] KASAN: stack-out-of-bounds Read in __show_regs
+References: <000000000000ebb59305e16d1627@google.com>
+In-Reply-To: <000000000000ebb59305e16d1627@google.com>
 
-...
+--------------gCLNlPWu3jF0gAKKm8gg96TM
+Content-Type: multipart/mixed; boundary="------------jU5FeDM6M2JktTY6AkBKIl8B"
 
-> ffffffff81002160:       ff 24 c5 c0 01 00 82    jmp    *-0x7dfffe40(,%rax,8)
-> 
-> This last line is what causes the reset. I'm guessing that the jump isn't
-> valid at this point because we are running in identity mapped mode and not
-> with a kernel virtual address at this point.
-> 
-> Trying to see what the difference was between your config and mine, the
-> indirect jump lead me to check the setting of CONFIG_RETPOLINE. Your config
-> did not have it enabled, so I set CONFIG_RETPOLINE=y, and with that, the
-> kernel boots successfully.
+--------------jU5FeDM6M2JktTY6AkBKIl8B
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-That would explain why my VMs didn't fail, I build those kernels with CONFIG_RETPOLINE=y.
+SGkgU3l6Ym90LA0KDQpPbiA2LzE0LzIyIDIyOjA1LCBzeXpib3Qgd3JvdGU6DQo+IHN5emJv
+dCBoYXMgZm91bmQgYSByZXByb2R1Y2VyIGZvciB0aGUgZm9sbG93aW5nIGlzc3VlIG9uOg0K
+PiANCj4gSEVBRCBjb21taXQ6ICAgIDJmMzA2NDU3NDI3NSBSRUFETUUubWQ6IE9SQyBpcyBu
+byBtb3JlIGEgcHJvYmxlbQ0KPiBnaXQgdHJlZTogICAgICAgaHR0cHM6Ly9naXRodWIuY29t
+L2dvb2dsZS9rbXNhbi5naXQgbWFzdGVyDQo+IGNvbnNvbGUgb3V0cHV0OiBodHRwczovL3N5
+emthbGxlci5hcHBzcG90LmNvbS94L2xvZy50eHQ/eD0xNjlhMjMxMDA4MDAwMA0KPiBrZXJu
+ZWwgY29uZmlnOiAgaHR0cHM6Ly9zeXprYWxsZXIuYXBwc3BvdC5jb20veC8uY29uZmlnP3g9
+OGU2MjkzNTI5NTMxZTljYQ0KPiBkYXNoYm9hcmQgbGluazogaHR0cHM6Ly9zeXprYWxsZXIu
+YXBwc3BvdC5jb20vYnVnP2V4dGlkPWIxN2QzZTg1M2Q1ZGNlNjVmOTgxDQo+IGNvbXBpbGVy
+OiAgICAgICBjbGFuZyB2ZXJzaW9uIDE1LjAuMCAoaHR0cHM6Ly9naXRodWIuY29tL2xsdm0v
+bGx2bS1wcm9qZWN0LmdpdCA5ZmZiNTk0NGE2OTliNmEwZDY5YzE2OWNlZmY5NzYzNjM5NWVl
+MzBmKSwgR05VIGxkIChHTlUgQmludXRpbHMgZm9yIERlYmlhbikgMi4zNS4yDQo+IHN5eiBy
+ZXBybzogICAgICBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS94L3JlcHJvLnN5ej94
+PTE0OTE3YzJmZjAwMDAwDQo+IEMgcmVwcm9kdWNlcjogICBodHRwczovL3N5emthbGxlci5h
+cHBzcG90LmNvbS94L3JlcHJvLmM/eD0xMzAzNzUyZmYwMDAwMA0KPiANCj4gSU1QT1JUQU5U
+OiBpZiB5b3UgZml4IHRoZSBpc3N1ZSwgcGxlYXNlIGFkZCB0aGUgZm9sbG93aW5nIHRhZyB0
+byB0aGUgY29tbWl0Og0KPiBSZXBvcnRlZC1ieTogc3l6Ym90K2IxN2QzZTg1M2Q1ZGNlNjVm
+OTgxQHN5emthbGxlci5hcHBzcG90bWFpbC5jb20NCj4gDQo+IEhhcmR3YXJlIG5hbWU6IEdv
+b2dsZSBHb29nbGUgQ29tcHV0ZSBFbmdpbmUvR29vZ2xlIENvbXB1dGUgRW5naW5lLCBCSU9T
+IEdvb2dsZSAwMS8wMS8yMDExDQo+IFJJUDogMDAxMDpqMTkzOV9zZXNzaW9uX2RlYWN0aXZh
+dGUgbmV0L2Nhbi9qMTkzOS90cmFuc3BvcnQuYzoxMDkwIFtpbmxpbmVdDQo+IFJJUDogMDAx
+MDpqMTkzOV9zZXNzaW9uX2RlYWN0aXZhdGVfYWN0aXZhdGVfbmV4dCsweDI3MS8weDQ4MCBu
+ZXQvY2FuL2oxOTM5L3RyYW5zcG9ydC5jOjExMDANCj4gQ29kZTogZjQgZTkgZWQgZmQgZmYg
+ZmYgOGIgN2QgZDQgZTggZmIgMzEgMTMgZjQgZTkgMjQgZmUgZmYgZmYgNDQgODkgZmYgZTgg
+ZWUgMzEgMTMgZjQgNDEgODMgZmMgMDIgMGYgODMgNjggZmUgZmYgZmYgZTggZGYgNzAgODIg
+ZjMgPDBmPiAwYiBlOSA2MSBmZSBmZiBmZiA4YiA3ZCBkNCBlOCBkMCAzMSAxMyBmNCBlOSA2
+OCBmZSBmZiBmZiA0NCA4OQ0KPiBSU1A6IDAwMTg6ZmZmZjg4ODEwMmUzZjVjOCBFRkxBR1M6
+IDAwMDEwMjQ2DQo+ID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09DQo+IEJVRzogS01TQU46IHVuaW5pdC12YWx1ZSBpbiBfX3Nob3dfcmVn
+cysweGU2LzB4MTA0MCBhcmNoL3g4Ni9rZXJuZWwvcHJvY2Vzc182NC5jOjc2DQoNClRoaXMg
+YnVnIGxvb2tzIHVucmVsYXRlZCB0byBpbml0aWFsIGBzdGFjay1vdXQtb2YtYm91bmRzIFJl
+YWQgaW4gDQpfX3Nob3dfcmVnc2ANCg0KPiAgIF9fc2hvd19yZWdzKzB4ZTYvMHgxMDQwIGFy
+Y2gveDg2L2tlcm5lbC9wcm9jZXNzXzY0LmM6NzYNCj4gICBzaG93X3JlZ3MrMHhjMC8weDE2
+MCBhcmNoL3g4Ni9rZXJuZWwvZHVtcHN0YWNrLmM6NDYzDQo+ICAgX193YXJuKzB4M2MyLzB4
+NzMwIGtlcm5lbC9wYW5pYy5jOjU5Ng0KPiAgIHJlcG9ydF9idWcrMHg4ZWIvMHhhZTAgbGli
+L2J1Zy5jOjE5OQ0KPiAgIGhhbmRsZV9idWcrMHg0MS8weDcwIGFyY2gveDg2L2tlcm5lbC90
+cmFwcy5jOjMxNQ0KPiAgIGV4Y19pbnZhbGlkX29wKzB4MWIvMHg1MCBhcmNoL3g4Ni9rZXJu
+ZWwvdHJhcHMuYzozMzUNCj4gICBhc21fZXhjX2ludmFsaWRfb3ArMHgxMi8weDIwDQo+ICAg
+ajE5Mzlfc2Vzc2lvbl9kZWFjdGl2YXRlX2FjdGl2YXRlX25leHQrMHgyNzEvMHg0ODAgbmV0
+L2Nhbi9qMTkzOS90cmFuc3BvcnQuYzoxMTAwDQo+ICAgajE5MzlfeHRwX3J4X2Fib3J0X29u
+ZSsweDg2MS8weDkwMCBuZXQvY2FuL2oxOTM5L3RyYW5zcG9ydC5jOjEzNDANCj4gICBqMTkz
+OV94dHBfcnhfYWJvcnQgbmV0L2Nhbi9qMTkzOS90cmFuc3BvcnQuYzoxMzUxIFtpbmxpbmVd
+DQo+ICAgajE5MzlfdHBfY21kX3JlY3YgbmV0L2Nhbi9qMTkzOS90cmFuc3BvcnQuYzoyMTAw
+IFtpbmxpbmVdDQo+ICAgajE5MzlfdHBfcmVjdisweDE1MzQvMHgxY2QwIG5ldC9jYW4vajE5
+MzkvdHJhbnNwb3J0LmM6MjEzMw0KPiAgIGoxOTM5X2Nhbl9yZWN2KzB4ZWQwLzB4MTA3MCBu
+ZXQvY2FuL2oxOTM5L21haW4uYzoxMDgNCj4gICBkZWxpdmVyIG5ldC9jYW4vYWZfY2FuLmM6
+NTc0IFtpbmxpbmVdDQo+ICAgY2FuX3Jjdl9maWx0ZXIrMHg3NGIvMHgxMTEwIG5ldC9jYW4v
+YWZfY2FuLmM6NjA4DQo+ICAgY2FuX3JlY2VpdmUrMHg0ZmIvMHg2ZDAgbmV0L2Nhbi9hZl9j
+YW4uYzo2NjUNCj4gICBjYW5fcmN2KzB4MWYwLzB4NDkwIG5ldC9jYW4vYWZfY2FuLmM6Njk2
+DQo+ICAgX19uZXRpZl9yZWNlaXZlX3NrYl9vbmVfY29yZSBuZXQvY29yZS9kZXYuYzo1NDA1
+IFtpbmxpbmVdDQo+ICAgX19uZXRpZl9yZWNlaXZlX3NrYisweDFmMS8weDY0MCBuZXQvY29y
+ZS9kZXYuYzo1NTE5DQo+ICAgcHJvY2Vzc19iYWNrbG9nKzB4NGU3LzB4YjUwIG5ldC9jb3Jl
+L2Rldi5jOjU4NDcNCj4gICBfX25hcGlfcG9sbCsweDE0ZS8weGI4MCBuZXQvY29yZS9kZXYu
+Yzo2NDEzDQo+ICAgbmFwaV9wb2xsIG5ldC9jb3JlL2Rldi5jOjY0ODAgW2lubGluZV0NCj4g
+ICBuZXRfcnhfYWN0aW9uKzB4N2U4LzB4MTgzMCBuZXQvY29yZS9kZXYuYzo2NTY3DQo+ICAg
+X19kb19zb2Z0aXJxKzB4MjA2LzB4ODA5IGtlcm5lbC9zb2Z0aXJxLmM6NTU4DQo+ICAgcnVu
+X2tzb2Z0aXJxZCsweDM3LzB4NTAga2VybmVsL3NvZnRpcnEuYzo5MjENCj4gICBzbXBib290
+X3RocmVhZF9mbisweDYyNi8weGJmMCBrZXJuZWwvc21wYm9vdC5jOjE2NA0KPiAgIGt0aHJl
+YWQrMHgzYzcvMHg1MDAga2VybmVsL2t0aHJlYWQuYzozNzYNCj4gICByZXRfZnJvbV9mb3Jr
+KzB4MWYvMHgzMA0KPiANCj4gTG9jYWwgdmFyaWFibGUgbWljIGNyZWF0ZWQgYXQ6DQo+ICAg
+aWVlZTgwMjExX3J4X2hfbWljaGFlbF9taWNfdmVyaWZ5KzB4NTQvMHgxMGYwIG5ldC9tYWM4
+MDIxMS93cGEuYzoxMDANCj4gICBpZWVlODAyMTFfcnhfaGFuZGxlcnMrMHgyZDMxLzB4ZjE3
+MCBuZXQvbWFjODAyMTEvcnguYzozOTI5DQo+IA0KDQpBbnl3YXksIGxvb2tzIGxpa2UgbWlz
+c2luZyBlcnJvciBoYW5kbGluZyBvZiBtaWNoYWVsX21pYy4gYG1pY2hhZWxfbWljYCANCm1h
+eSBmYWlsIGluIGEgbG90IG9mIGNhc2VzIGFuZCBtaWMgd2lsbCBiZSB1bmluaXRpYWxpemVk
+IGluIGNhc2Ugb2YgDQptaWNoYWVsX21pYyBmYWlsdXJlLg0KDQoNCiNzeXogdGVzdDogaHR0
+cHM6Ly9naXRodWIuY29tL2dvb2dsZS9rbXNhbi5naXQgbWFzdGVyDQoNCg0KDQoNCldpdGgg
+cmVnYXJkcywNClBhdmVsIFNrcmlwa2luDQo=
+--------------jU5FeDM6M2JktTY6AkBKIl8B
+Content-Type: text/plain; charset=UTF-8; name="ph"
+Content-Disposition: attachment; filename="ph"
+Content-Transfer-Encoding: base64
 
-> With retpolines, the code is completely different around here:
+ZGlmZiAtLWdpdCBhL25ldC9tYWM4MDIxMS93cGEuYyBiL25ldC9tYWM4MDIxMS93cGEuYwpp
+bmRleCA1ZmQ4YTNlOGI1YjQuLjJiYTAwNWRmZDYxNCAxMDA2NDQKLS0tIGEvbmV0L21hYzgw
+MjExL3dwYS5jCisrKyBiL25ldC9tYWM4MDIxMS93cGEuYwpAQCAtMTU5LDcgKzE1OSw4IEBA
+IGllZWU4MDIxMV9yeF9oX21pY2hhZWxfbWljX3ZlcmlmeShzdHJ1Y3QgaWVlZTgwMjExX3J4
+X2RhdGEgKnJ4KQogCWRhdGEgPSBza2ItPmRhdGEgKyBoZHJsZW47CiAJZGF0YV9sZW4gPSBz
+a2ItPmxlbiAtIGhkcmxlbiAtIE1JQ0hBRUxfTUlDX0xFTjsKIAlrZXkgPSAmcngtPmtleS0+
+Y29uZi5rZXlbTkw4MDIxMV9US0lQX0RBVEFfT0ZGU0VUX1JYX01JQ19LRVldOwotCW1pY2hh
+ZWxfbWljKGtleSwgaGRyLCBkYXRhLCBkYXRhX2xlbiwgbWljKTsKKwlpZiAobWljaGFlbF9t
+aWMoa2V5LCBoZHIsIGRhdGEsIGRhdGFfbGVuLCBtaWMpIDwgMCkKKwkJZ290byBtaWNfZmFp
+bDsKIAlpZiAoY3J5cHRvX21lbW5lcShtaWMsIGRhdGEgKyBkYXRhX2xlbiwgTUlDSEFFTF9N
+SUNfTEVOKSkKIAkJZ290byBtaWNfZmFpbDsKIAo=
 
-...
+--------------jU5FeDM6M2JktTY6AkBKIl8B--
 
-> I'm not sure if there's a way to remove the jump table optimization for
-> the arch/x86/coco/core.c file when retpolines aren't configured.
+--------------gCLNlPWu3jF0gAKKm8gg96TM--
 
-And for post-boot I don't think we'd want to disable any such optimizations.
+--------------3DXHU2mT1UMOQMT8VHtRpUuN
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-A possibled "fix" would be to do what sme_encrypt_kernel() does and just query
-sev_status directly.  But even that works, the fragility of the boot code is
-terrifying :-(  I can't think of any clever solutions though.
+-----BEGIN PGP SIGNATURE-----
 
-Many thanks again Tom!
+wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmKo5zQFAwAAAAAACgkQbk1w61LbBA1n
+XRAAo+1ZUwiVI00EHtu0h+U+y5qxG7YVCvFvKyzTo5g2KFCb3eA5fvZFoUoxs4dz/a0wxQAFhlzS
+rG73KspGHWFbPaEpsR2aeh8canmpRWzKSaUL0Xij4l8RXFzHoNo6/dxsMYcD7cF+/6TekdtvYsZz
+1S9JtUYsJ2kw+lWEvPhi+4mP5nXoSS2Y241TmHCRjZ78HNWT6HI0dYmZO5WhmPy0+jtkYl83Ub3P
+k/KIiFeuwRy2zwsU2lK3+nglD9B0wvmnigdQYzEKibZipnhdREZZUlaYI88o2n5pfftJfn4t8N2g
+Kl/SWP05rn5OE0NTR7mCv9bmyoznpE63vvfaocrBueJI0nvzzuKsOfK2YmVEXq9LmlZrkSAOfLCC
+ltzCrJLdf/j5WKI3fEK9yf/2uQH/lxoi6jRpV0NOpYjWckQKWTdbGkTz+o37SL7Ixmzh7fCOHFZ/
+Ipoz0tg6XyB1wgngrWwkudmPosmpLutVeh6mpaAyKzrvBzmy/xIyxGXplno2rL5bZx9goMq1eso5
+KzH66aoeAvhA0A7qoQaaR3n0X4xNkLM2blge9KtfTkYXqfgnTu+GLDGb1W4qwuR74L22bH+I5jB/
+RhtN6Jj0J+ZvbIEdkTJVxnsN4eZMMOnuQwsWeqq0CVkMX0xdh5z1LNTuh4zcaMSccVH9wOqIjXeG
+J+Y=
+=1jcz
+-----END PGP SIGNATURE-----
 
----
- arch/x86/include/asm/sev.h |  4 ++++
- arch/x86/kernel/head64.c   | 10 +++++++---
- arch/x86/kernel/sev.c      | 16 +++++++++++-----
- 3 files changed, 22 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index 19514524f0f8..701c561fdf08 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -193,6 +193,8 @@ static inline int pvalidate(unsigned long vaddr, bool rmp_psize, bool validate)
- void setup_ghcb(void);
- void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long paddr,
- 					 unsigned int npages);
-+void __init __early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
-+					  unsigned int npages);
- void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
- 					unsigned int npages);
- void __init snp_prep_memory(unsigned long paddr, unsigned int sz, enum psc_op op);
-@@ -214,6 +216,8 @@ static inline void setup_ghcb(void) { }
- static inline void __init
- early_snp_set_memory_private(unsigned long vaddr, unsigned long paddr, unsigned int npages) { }
- static inline void __init
-+__early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr, unsigned int npages) { }
-+static inline void __init
- early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr, unsigned int npages) { }
- static inline void __init snp_prep_memory(unsigned long paddr, unsigned int sz, enum psc_op op) { }
- static inline void snp_set_memory_shared(unsigned long vaddr, unsigned int npages) { }
-diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
-index bd4a34100ed0..5efab0d8e49d 100644
---- a/arch/x86/kernel/head64.c
-+++ b/arch/x86/kernel/head64.c
-@@ -127,7 +127,9 @@ static bool __head check_la57_support(unsigned long physaddr)
- }
- #endif
-
--static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdval_t *pmd)
-+static unsigned long __head sme_postprocess_startup(struct boot_params *bp,
-+						    pmdval_t *pmd,
-+						    unsigned long physaddr)
- {
- 	unsigned long vaddr, vaddr_end;
- 	int i;
-@@ -156,7 +158,9 @@ static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdv
- 			 * address but the kernel is currently running off of the identity
- 			 * mapping so use __pa() to get a *currently* valid virtual address.
- 			 */
--			early_snp_set_memory_shared(__pa(vaddr), __pa(vaddr), PTRS_PER_PMD);
-+			if (sev_status & MSR_AMD64_SEV_SNP_ENABLED_BIT)
-+				__early_snp_set_memory_shared(__pa(vaddr), __pa(vaddr),
-+							      PTRS_PER_PMD);
-
- 			i = pmd_index(vaddr);
- 			pmd[i] -= sme_get_me_mask();
-@@ -316,7 +320,7 @@ unsigned long __head __startup_64(unsigned long physaddr,
- 	 */
- 	*fixup_long(&phys_base, physaddr) += load_delta - sme_get_me_mask();
-
--	return sme_postprocess_startup(bp, pmd);
-+	return sme_postprocess_startup(bp, pmd, physaddr);
- }
-
- /* Wipe all early page tables except for the kernel symbol map */
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index c05f0124c410..48966ecc520e 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -714,12 +714,9 @@ void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long padd
- 	pvalidate_pages(vaddr, npages, true);
- }
-
--void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
--					unsigned int npages)
-+void __init __early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
-+					  unsigned int npages)
- {
--	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
--		return;
--
- 	/* Invalidate the memory pages before they are marked shared in the RMP table. */
- 	pvalidate_pages(vaddr, npages, false);
-
-@@ -727,6 +724,15 @@ void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr
- 	early_set_pages_state(paddr, npages, SNP_PAGE_STATE_SHARED);
- }
-
-+void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
-+					unsigned int npages)
-+{
-+	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
-+		return;
-+
-+	__early_snp_set_memory_shared(vaddr, paddr, npages);
-+}
-+
- void __init snp_prep_memory(unsigned long paddr, unsigned int sz, enum psc_op op)
- {
- 	unsigned long vaddr, npages;
-
-base-commit: b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
---
-
+--------------3DXHU2mT1UMOQMT8VHtRpUuN--

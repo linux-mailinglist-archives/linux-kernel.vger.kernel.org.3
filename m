@@ -2,205 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB92754A96B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C37BF54A974
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240220AbiFNG27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 02:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
+        id S1351196AbiFNGaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 02:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351197AbiFNG2y (ORCPT
+        with ESMTP id S234405AbiFNGaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 02:28:54 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21671A388;
-        Mon, 13 Jun 2022 23:28:48 -0700 (PDT)
-X-UUID: c372ec6f4b504a1b8f3e4643c7e597c8-20220614
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:81e1f7f4-be69-4c9d-a3a4-6127b711490c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:b14ad71,CLOUDID:0eb15cc5-c67b-4a73-9b18-726dd8f2eb58,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: c372ec6f4b504a1b8f3e4643c7e597c8-20220614
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <lecopzer.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1844462899; Tue, 14 Jun 2022 14:28:41 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 14 Jun 2022 14:28:39 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 14 Jun 2022 14:28:39 +0800
-From:   Lecopzer Chen <lecopzer.chen@mediatek.com>
-To:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <pmladek@suse.com>, <acme@kernel.org>, <akpm@linux-foundation.org>,
-        <alexander.shishkin@linux.intel.com>, <catalin.marinas@arm.com>,
-        <davem@davemloft.net>, <jolsa@redhat.com>, <jthierry@redhat.com>,
-        <keescook@chromium.org>, <kernelfans@gmail.com>,
-        <lecopzer.chen@mediatek.com>, <linux-mediatek@lists.infradead.org>,
-        <linux-perf-users@vger.kernel.org>, <mark.rutland@arm.com>,
-        <masahiroy@kernel.org>, <matthias.bgg@gmail.com>, <maz@kernel.org>,
-        <mcgrof@kernel.org>, <mingo@redhat.com>, <namhyung@kernel.org>,
-        <nixiaoming@huawei.com>, <peterz@infradead.org>,
-        <sparclinux@vger.kernel.org>, <sumit.garg@linaro.org>,
-        <wangqing@vivo.com>, <will@kernel.org>, <yj.chiang@mediatek.com>
-Subject: [PATCH v6 6/6] arm64: Enable perf events based hard lockup detector
-Date:   Tue, 14 Jun 2022 14:28:35 +0800
-Message-ID: <20220614062835.7196-7-lecopzer.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220614062835.7196-1-lecopzer.chen@mediatek.com>
-References: <20220614062835.7196-1-lecopzer.chen@mediatek.com>
+        Tue, 14 Jun 2022 02:30:12 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71101A053
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 23:30:10 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id e4so8609832ljl.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 23:30:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=amarulasolutions.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=p/NRQuFI8tEQXP2R7fZneo4JlnHTbiMdQlJzFDy5/J8=;
+        b=lrFPz/wx6XrLQGNEu8CKre9K0jQFp+dy8jJWh3TUwhh2UVTs3Vp7U+HSRra96066F5
+         7sp86ZpCsDXLu3zdEVYRFErGjFwESqminOPfQAd7rgdXOEDkwQv+E+gY7/cJQzrvb2/G
+         YMiDBQUrTt6RzIyR5nGUQqa2mxdTBz85+Zgvo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=p/NRQuFI8tEQXP2R7fZneo4JlnHTbiMdQlJzFDy5/J8=;
+        b=5ymEWd345+PxuNw06SNlsw0G1OXZ7DNsj82gFDpXVj8kn0v0nGdB2glYDuaAi4bwma
+         j6AtnPomlRmdxHT3vWv21Emx6V54/a2eG5zrFwrJlFbX02zUqouwnxKVXqQ8Rp/8KYfv
+         Ex9zYHChS7cJ9c/73g0IHp4VY6pO8YhrvgNFv/KKwikMdrNJhV7iBh2xvKCBCT/MiYPv
+         05wQeo/X5LIVQNORv0zslrxMu7cfJzcjNrvbXkYN0ocONGW0Q8vNRd3leAh0IyP+cxFJ
+         coGd7uLvZ1Ce4qT1tSj1dGKcw5MkPXPMwmN4pWiPxid/aLuVBlhAfps/X8y6S9CIftxM
+         Mc9w==
+X-Gm-Message-State: AJIora/AQtstKYJCJswS4R/oVP9lj+4RmfImVfXn1u/R6eTkNnmz36j9
+        f3zMSmtUUPmKTTSNk/pPFi+NTIiQk4tDfu1JIMMX0Q==
+X-Google-Smtp-Source: AGRyM1vki/GDT4R9HSfcOufQmMmcVvrY9hZXpMmPyqajie+XQicj+VJMw0EtntKoXRxEIjIFi4beAZancDZ6mpEZ3BI=
+X-Received: by 2002:a2e:9609:0:b0:255:8364:9fd8 with SMTP id
+ v9-20020a2e9609000000b0025583649fd8mr1611482ljh.132.1655188208918; Mon, 13
+ Jun 2022 23:30:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220612213927.3004444-1-dario.binacchi@amarulasolutions.com>
+ <20220612213927.3004444-14-dario.binacchi@amarulasolutions.com> <20220613073706.rk3bve57zi2p3nnz@pengutronix.de>
+In-Reply-To: <20220613073706.rk3bve57zi2p3nnz@pengutronix.de>
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Date:   Tue, 14 Jun 2022 08:29:57 +0200
+Message-ID: <CABGWkvqb3VHEMUaRsxcdL0+85hOSwJAtYWq+JskQ3KG+Hnca5g@mail.gmail.com>
+Subject: Re: [PATCH v3 13/13] can: slcan: extend the protocol with CAN state info
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     linux-kernel@vger.kernel.org, michael@amarulasolutions.com,
+        Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the recent feature added to enable perf events to use pseudo NMIs
-as interrupts on platforms which support GICv3 or later, its now been
-possible to enable hard lockup detector (or NMI watchdog) on arm64
-platforms. So enable corresponding support.
+On Mon, Jun 13, 2022 at 9:37 AM Marc Kleine-Budde <mkl@pengutronix.de> wrote:
+>
+> On 12.06.2022 23:39:27, Dario Binacchi wrote:
+> > It extends the protocol to receive the adapter CAN state changes
+> > (warning, busoff, etc.) and forward them to the netdev upper levels.
+> >
+> > Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+> >
+> > ---
+> >
+> > Changes in v3:
+> > - Drop the patch "can: slcan: simplify the device de-allocation".
+> > - Add the patch "can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U".
+> >
+> > Changes in v2:
+> > - Continue error handling even if no skb can be allocated.
+> >
+> >  drivers/net/can/slcan/slcan-core.c | 66 ++++++++++++++++++++++++++++++
+> >  1 file changed, 66 insertions(+)
+> >
+> > diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
+> > index 48077edb9497..5ba1c141f942 100644
+> > --- a/drivers/net/can/slcan/slcan-core.c
+> > +++ b/drivers/net/can/slcan/slcan-core.c
+> > @@ -78,6 +78,9 @@ MODULE_PARM_DESC(maxdev, "Maximum number of slcan interfaces");
+> >  #define SLC_CMD_LEN 1
+> >  #define SLC_SFF_ID_LEN 3
+> >  #define SLC_EFF_ID_LEN 8
+> > +#define SLC_STATE_LEN 1
+> > +#define SLC_STATE_BE_RXCNT_LEN 3
+> > +#define SLC_STATE_BE_TXCNT_LEN 3
+> >
+> >  struct slcan {
+> >       struct can_priv         can;
+> > @@ -175,6 +178,67 @@ int slcan_enable_err_rst_on_open(struct net_device *ndev, bool on)
+> >    *                  STANDARD SLCAN DECAPSULATION                     *
+> >    ************************************************************************/
+> >
+> > +static void slc_bump_state(struct slcan *sl)
+> > +{
+> > +     struct net_device *dev = sl->dev;
+> > +     struct sk_buff *skb;
+> > +     struct can_frame *cf;
+> > +     char *cmd = sl->rbuff;
+> > +     u32 rxerr, txerr;
+> > +     enum can_state state, rx_state, tx_state;
+> > +
+> > +     if (*cmd != 's')
+> > +             return;
+>
+> Checked by the caller?
+>
+> > +
+> > +     cmd += SLC_CMD_LEN;
+> > +     switch (*cmd) {
+> > +     case 'a':
+> > +             state = CAN_STATE_ERROR_ACTIVE;
+> > +             break;
+> > +     case 'w':
+> > +             state = CAN_STATE_ERROR_WARNING;
+> > +             break;
+> > +     case 'p':
+> > +             state = CAN_STATE_ERROR_PASSIVE;
+> > +             break;
+> > +     case 'f':
+> > +             state = CAN_STATE_BUS_OFF;
+> > +             break;
+> > +     default:
+> > +             return;
+> > +     }
+> > +
+> > +     if (state == sl->can.state)
+> > +             return;
+> > +
+> > +     cmd += SLC_STATE_BE_RXCNT_LEN + 1;
+>
+> Have you checked that you have received that much data?
+>
+> > +     cmd[SLC_STATE_BE_TXCNT_LEN] = 0;
+> > +     if (kstrtou32(cmd, 10, &txerr))
+> > +             return;
+> > +
+> > +     *cmd = 0;
+> > +     cmd -= SLC_STATE_BE_RXCNT_LEN;
+> > +     if (kstrtou32(cmd, 10, &rxerr))
+> > +             return;
+>
+> Why do you parse TX first and then RX?
 
-One thing to note here is that normally lockup detector is initialized
-just after the early initcalls but PMU on arm64 comes up much later as
-device_initcall(). To cope with that, overriding watchdog_nmi_probe() to
-let the watchdog framework know PMU not ready, and inform the framework
-to re-initialize lockup detection once PMU has been initialized.
+Since adding the end-of-string character to the counter to be decoded
+invalidates the next one.
+If I had started from the rx counter, I would have found the
+transmission counter always at 0.
 
-[1]: http://lore.kernel.org/linux-arm-kernel/1610712101-14929-1-git-send-email-sumit.garg@linaro.org
+Thanks and regards,
+Dario
 
-Co-developed-by: Sumit Garg <sumit.garg@linaro.org>
-Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-Co-developed-by: Pingfan Liu <kernelfans@gmail.com>
-Signed-off-by: Pingfan Liu <kernelfans@gmail.com>
-Signed-off-by: Lecopzer Chen <lecopzer.chen@mediatek.com>
----
- arch/arm64/Kconfig               |  2 ++
- arch/arm64/kernel/perf_event.c   | 12 ++++++++++--
- arch/arm64/kernel/watchdog_hld.c | 14 ++++++++++++++
- drivers/perf/arm_pmu.c           |  5 +++++
- include/linux/perf/arm_pmu.h     |  2 ++
- 5 files changed, 33 insertions(+), 2 deletions(-)
+>
+> > +
+> > +     skb = alloc_can_err_skb(dev, &cf);
+> > +
+> > +     if (skb) {
+> > +             cf->data[6] = txerr;
+> > +             cf->data[7] = rxerr;
+> > +     }
+> > +
+> > +     tx_state = txerr >= rxerr ? state : 0;
+> > +     rx_state = txerr <= rxerr ? state : 0;
+> > +     can_change_state(dev, skb ? cf : NULL, tx_state, rx_state);
+>
+> alloc_can_err_skb() set cf to NULL if no skb can be allocated.
+>
+> > +
+> > +     if (state == CAN_STATE_BUS_OFF)
+> > +             can_bus_off(dev);
+> > +
+> > +     if (skb)
+> > +             netif_rx(skb);
+> > +}
+> > +
+> >  static void slc_bump_err(struct slcan *sl)
+> >  {
+> >       struct net_device *dev = sl->dev;
+> > @@ -378,6 +442,8 @@ static void slc_bump(struct slcan *sl)
+> >               return slc_bump_frame(sl);
+> >       case 'e':
+> >               return slc_bump_err(sl);
+> > +     case 's':
+> > +             return slc_bump_state(sl);
+> >       default:
+> >               return;
+> >       }
+> > --
+> > 2.32.0
+> >
+> >
+>
+> Marc
+>
+> --
+> Pengutronix e.K.                 | Marc Kleine-Budde           |
+> Embedded Linux                   | https://www.pengutronix.de  |
+> Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+> Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 1652a9800ebe..a0dc5097b609 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -187,12 +187,14 @@ config ARM64
- 	select HAVE_FUNCTION_ERROR_INJECTION
- 	select HAVE_FUNCTION_GRAPH_TRACER
- 	select HAVE_GCC_PLUGINS
-+	select HAVE_HARDLOCKUP_DETECTOR_PERF if PERF_EVENTS && HAVE_PERF_EVENTS_NMI
- 	select HAVE_HW_BREAKPOINT if PERF_EVENTS
- 	select HAVE_IRQ_TIME_ACCOUNTING
- 	select HAVE_KVM
- 	select HAVE_NMI
- 	select HAVE_PATA_PLATFORM
- 	select HAVE_PERF_EVENTS
-+	select HAVE_PERF_EVENTS_NMI if ARM64_PSEUDO_NMI
- 	select HAVE_PERF_REGS
- 	select HAVE_PERF_USER_STACK_DUMP
- 	select HAVE_PREEMPT_DYNAMIC_KEY
-diff --git a/arch/arm64/kernel/perf_event.c b/arch/arm64/kernel/perf_event.c
-index cb69ff1e6138..d9eec8911bf0 100644
---- a/arch/arm64/kernel/perf_event.c
-+++ b/arch/arm64/kernel/perf_event.c
-@@ -23,6 +23,7 @@
- #include <linux/platform_device.h>
- #include <linux/sched_clock.h>
- #include <linux/smp.h>
-+#include <linux/nmi.h>
- 
- /* ARMv8 Cortex-A53 specific event types. */
- #define ARMV8_A53_PERFCTR_PREF_LINEFILL				0xC2
-@@ -1390,10 +1391,17 @@ static struct platform_driver armv8_pmu_driver = {
- 
- static int __init armv8_pmu_driver_init(void)
- {
-+	int ret;
-+
- 	if (acpi_disabled)
--		return platform_driver_register(&armv8_pmu_driver);
-+		ret = platform_driver_register(&armv8_pmu_driver);
- 	else
--		return arm_pmu_acpi_probe(armv8_pmuv3_pmu_init);
-+		ret = arm_pmu_acpi_probe(armv8_pmuv3_pmu_init);
-+
-+	if (!ret)
-+		retry_lockup_detector_init();
-+
-+	return ret;
- }
- device_initcall(armv8_pmu_driver_init)
- 
-diff --git a/arch/arm64/kernel/watchdog_hld.c b/arch/arm64/kernel/watchdog_hld.c
-index de43318e4dd6..c9c6ec889c15 100644
---- a/arch/arm64/kernel/watchdog_hld.c
-+++ b/arch/arm64/kernel/watchdog_hld.c
-@@ -1,5 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <linux/nmi.h>
- #include <linux/cpufreq.h>
-+#include <linux/perf/arm_pmu.h>
- 
- /*
-  * Safe maximum CPU frequency in case a particular platform doesn't implement
-@@ -23,3 +25,15 @@ u64 hw_nmi_get_sample_period(int watchdog_thresh)
- 	return (u64)max_cpu_freq * watchdog_thresh;
- }
- 
-+int __init watchdog_nmi_probe(void)
-+{
-+	/*
-+	 * hardlockup_detector_perf_init() will success even if Pseudo-NMI turns off,
-+	 * however, the pmu interrupts will act like a normal interrupt instead of
-+	 * NMI and the hardlockup detector would be broken.
-+	 */
-+	if (!arm_pmu_irq_is_nmi())
-+		return -ENODEV;
-+
-+	return hardlockup_detector_perf_init();
-+}
-diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
-index 59d3980b8ca2..ceee2c55d436 100644
---- a/drivers/perf/arm_pmu.c
-+++ b/drivers/perf/arm_pmu.c
-@@ -697,6 +697,11 @@ static int armpmu_get_cpu_irq(struct arm_pmu *pmu, int cpu)
- 	return per_cpu(hw_events->irq, cpu);
- }
- 
-+bool arm_pmu_irq_is_nmi(void)
-+{
-+	return has_nmi;
-+}
-+
- /*
-  * PMU hardware loses all context when a CPU goes offline.
-  * When a CPU is hotplugged back in, since some hardware registers are
-diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-index 0407a38b470a..29c56c92bab7 100644
---- a/include/linux/perf/arm_pmu.h
-+++ b/include/linux/perf/arm_pmu.h
-@@ -171,6 +171,8 @@ void kvm_host_pmu_init(struct arm_pmu *pmu);
- #define kvm_host_pmu_init(x)	do { } while(0)
- #endif
- 
-+bool arm_pmu_irq_is_nmi(void);
-+
- /* Internal functions only for core arm_pmu code */
- struct arm_pmu *armpmu_alloc(void);
- struct arm_pmu *armpmu_alloc_atomic(void);
+
+
 -- 
-2.25.1
 
+Dario Binacchi
+
+Embedded Linux Developer
+
+dario.binacchi@amarulasolutions.com
+
+__________________________________
+
+
+Amarula Solutions SRL
+
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+
+T. +39 042 243 5310
+info@amarulasolutions.com
+
+www.amarulasolutions.com

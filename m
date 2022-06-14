@@ -2,141 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A17C54A799
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5519154A79B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239592AbiFNDjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 23:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
+        id S240197AbiFNDlV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 23:41:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbiFNDjp (ORCPT
+        with ESMTP id S231129AbiFNDlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 23:39:45 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A941336142;
-        Mon, 13 Jun 2022 20:39:43 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LMZ1p0hzZz4xXD;
-        Tue, 14 Jun 2022 13:39:42 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655177982;
-        bh=Hh+ePkStsIe1gE+KS8pLxfwNpOq01BuDHt5bQtIqf1I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VBmVLOmgXl15fg+eNw1kt/K9JjK8Ie4gNUILK8ZFTJK8KTECZUPfZLv/1MxQn+jez
-         kjSah5G1iwQjVolO6koYlZdO01CNsevbC7ZY6RTPNEoChDigO2yi5Ald/1uL4GD6kw
-         5+lGOr4qswxLr/mfsF9PZmZbSBRQu+r7Donw87Lyv6lVw709rwc6FawlsTMfsCDd7T
-         ePJY5ebhGV0YiHI+zX7Og8NDJkFUN2t6k7pfLLGwbSMCNtGRk8tr1BDtoJ9fDMDoC5
-         Ck9Z/ruMy/K5lTtqp66f0oXIvKded8O4VFXa5UWpI8r0E0vgQFWdr51WAPL8O11/qr
-         dgGGDAcxm/N4w==
-Date:   Tue, 14 Jun 2022 13:39:37 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the folio tree with Linus' tree
-Message-ID: <20220614133937.35e152fe@canb.auug.org.au>
+        Mon, 13 Jun 2022 23:41:18 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C913616D;
+        Mon, 13 Jun 2022 20:41:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=85bqTzuSH04Q0YY9gl8V6Wefv/U4n0XGaL1+C6IxomU=; b=VPnVhyfNLvA7Hz78B28h9aMsfm
+        Zk2TnfPHluiQPiJZDR6+TfVDLxxJ2d1cU1wR2Kt17IVrAqBhGgn7AIuoxjZ2/MtnYiKro+hRYnRm2
+        d8cM2ALgU4lAdtxAr+LtvTwTdKlMfwoAH8ClwWhNmNzrcmMtYrVvEqL8Jff4e5K6P6+D/qasvFOX0
+        WgUNJvmtdV4mR2dfhlH8jiBq07jNJumo6m9oHdqVyTQCLQw+8RVVIAV53tTekzZFJzsrW8yrioLYe
+        UZNruM8zZG1fLlvSkizWK0VN1zYBTkGsCI0UF/Gl5uk5p38AFCBPOeKzYnN7RplGvj3F3Nny083jR
+        zGQPcLFw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o0xQP-007kZz-AB; Tue, 14 Jun 2022 03:41:06 +0000
+Message-ID: <a7adaaab-cbc3-06ce-f3ab-b411598414e8@infradead.org>
+Date:   Mon, 13 Jun 2022 20:41:00 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ARCMLk2Uxbi2M_JJOicfXYh";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: linux-next: Fixes tag needs some work in the selinux tree
+Content-Language: en-US
+To:     Paul Moore <paul@paul-moore.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220614082425.415adffc@canb.auug.org.au>
+ <CAHC9VhT9QUdfu5TCZcAuzcC8wBaA8VR2MKWiQE3RWEv5M65tJA@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAHC9VhT9QUdfu5TCZcAuzcC8wBaA8VR2MKWiQE3RWEv5M65tJA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ARCMLk2Uxbi2M_JJOicfXYh
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the folio tree got a conflict in:
+On 6/13/22 16:33, Paul Moore wrote:
+> On Mon, Jun 13, 2022 at 6:24 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Hi all,
+>>
+>> In commit
+>>
+>>   e81ee824e8a1 ("docs: selinux: add '=' signs to kernel boot options")
+>>
+>> Fixes tag
+>>
+>>   Fixes: ^1da177e4c3f4 ("Linux-2.6.12-rc2")
+>>
+>> has these problem(s):
+>>
+>>   - No SHA1 recognised
+>>
+>> Also, I don't think that is a relevent or useful Fixes tag anyway.
+> 
+> Good point Stephen.  I just dropped the tag in the offending commit
+> and did a force push back to selinux/next; sorry for the noise.
+> 
 
-  include/linux/netfs.h
+Thanks Stephen and Paul.
 
-between commit:
-
-  e81fb4198e27 ("netfs: Further cleanups after struct netfs_inode wrapper i=
-ntroduced")
-
-from Linus' tree and commit:
-
-  0463e729a56d ("netfs: Remove extern from function prototypes")
-
-from the folio tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/netfs.h
-index 097cdd644665,065163d50688..000000000000
---- a/include/linux/netfs.h
-+++ b/include/linux/netfs.h
-@@@ -276,19 -275,17 +276,18 @@@ struct netfs_cache_ops=20
-  };
- =20
-  struct readahead_control;
-- extern void netfs_readahead(struct readahead_control *);
-+ void netfs_readahead(struct readahead_control *);
-  int netfs_read_folio(struct file *, struct folio *);
-- extern int netfs_write_begin(struct netfs_inode *,
-- 			     struct file *, struct address_space *,
-- 			     loff_t, unsigned int, struct folio **,
-- 			     void **);
--=20
-- extern void netfs_subreq_terminated(struct netfs_io_subrequest *, ssize_t=
-, bool);
-- extern void netfs_get_subrequest(struct netfs_io_subrequest *subreq,
-- 				 enum netfs_sreq_ref_trace what);
-- extern void netfs_put_subrequest(struct netfs_io_subrequest *subreq,
-- 				 bool was_async, enum netfs_sreq_ref_trace what);
-- extern void netfs_stats_show(struct seq_file *);
- -int netfs_write_begin(struct file *, struct address_space *, loff_t pos,
- -		      unsigned int len, struct folio **, void **fsdata);
-++int netfs_write_begin(struct netfs_inode *, struct file *,
-++		      struct address_space *, loff_t pos, unsigned int len,
-++		      struct folio **, void **fsdata);
-+=20
-+ void netfs_subreq_terminated(struct netfs_io_subrequest *, ssize_t, bool);
-+ void netfs_get_subrequest(struct netfs_io_subrequest *subreq,
-+ 			  enum netfs_sreq_ref_trace what);
-+ void netfs_put_subrequest(struct netfs_io_subrequest *subreq,
-+ 			  bool was_async, enum netfs_sreq_ref_trace what);
-+ void netfs_stats_show(struct seq_file *);
- =20
-  /**
-   * netfs_inode - Get the netfs inode context from the inode
-
---Sig_/ARCMLk2Uxbi2M_JJOicfXYh
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKoAvoACgkQAVBC80lX
-0GyLWggAl6qPxkJg+VxlBjcs4yHvMxHv0VYHkY6AaWR2E4wA7ops7wopuDwolpE0
-5e8czu/AjtFjfHju1kXIRwHBXtdc+bx93nLEwrYKBeXEbQe2cWbov8XMh+TSXZxb
-seAQ8cbOCIiP7iQKfgryH33RDuBVP+nGMqhDEcyV5wUSTJkTmwfEUDmt9HyMjoHI
-xHLFFDsnrvq5XDia0HWujGTgJ2INIbnfTmhgEYz3aztCuUbRRw+QQhD6AK1JZ6ln
-2uE63ftdVE0EbC58F2dXuH1NzwFY1YmvCUKKt0OlNNeSfaY8WQlXhblSXoRnUbY6
-XZdIT/8ZdsyUkfnsSfCXc1CNQJUhtA==
-=4OW5
------END PGP SIGNATURE-----
-
---Sig_/ARCMLk2Uxbi2M_JJOicfXYh--
+-- 
+~Randy

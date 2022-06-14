@@ -2,146 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 521BC54B001
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:11:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6801E54B225
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356451AbiFNMKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
+        id S244641AbiFNNRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 09:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356435AbiFNMKQ (ORCPT
+        with ESMTP id S231859AbiFNNRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:10:16 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B03548E7B;
-        Tue, 14 Jun 2022 05:10:15 -0700 (PDT)
-X-UUID: 5029c847112e4f82b93712ec49a0a98f-20220614
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:725fedc7-a883-43a0-aaea-adc171cac2e8,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:78ed69c5-c67b-4a73-9b18-726dd8f2eb58,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 5029c847112e4f82b93712ec49a0a98f-20220614
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <irui.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 703699701; Tue, 14 Jun 2022 20:10:12 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 14 Jun 2022 20:10:11 +0800
-Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Tue, 14 Jun 2022 20:10:10 +0800
-From:   Irui Wang <irui.wang@mediatek.com>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <nicolas.dufresne@collabora.com>, <wenst@chromium.org>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Tomasz Figa <tfiga@chromium.org>, <xia.jiang@mediatek.com>,
-        <maoguang.meng@mediatek.com>, kyrie wu <kyrie.wu@mediatek.com>,
-        <srv_heupstream@mediatek.com>
-Subject: [RESEND V3,4/8] media: mtk-jpegdec: add jpegdec timeout func interface
-Date:   Tue, 14 Jun 2022 20:10:00 +0800
-Message-ID: <20220614121004.31616-5-irui.wang@mediatek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220614121004.31616-1-irui.wang@mediatek.com>
-References: <20220614121004.31616-1-irui.wang@mediatek.com>
+        Tue, 14 Jun 2022 09:17:16 -0400
+X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Jun 2022 06:17:14 PDT
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A539369FA;
+        Tue, 14 Jun 2022 06:17:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=JAv4LCz3gTxKSnfh4LIXx7N89/orNIUqz4pbzgwAvLc=; b=KmsKEA5hRPt0/BP4UopWUQqD+5
+        rLLETgl2Q0pg+Xn/V5a0IeRYq+A+oYqKM91rAyj7h2Bp8nAb+dTu12NTrdQK+wBWR6To12H7KRRId
+        f4cgiw98gA6dvNtCur0CGgdhUsXgbBUHix6Tclb00sJFqL54OJmspQ6tL0S02d8gKxdO06Ij37MdA
+        sdIgnbs9MvjU/xNUb8jDnp0gfX29L/ZALkeOFIpNX3Utl8UQXPICcSiD2XSV4eidajMEGegrvma5Z
+        +kV4eVasKkXmtR8slsBzLvfe61BZi850HLm8ektrc6UVXt147XexmDbI++GTaIWnMtYLyrzQ0Y8sC
+        nckC5mxjk0uLCWE28zdRmoJNFa60ZiqVhiADeTD+s1XKkoYw7y3NT7ij1wfY8YEw5Q3tYqkr+rsDd
+        L1NYrsk2aULFPxvREhFiIkiVdAObB1uBEmj4ANx2TFZ4BZQqRVo634an2GxKeUwW0Qp7ugwIOR/Os
+        0yVXKJDCCb1y6WXDy8RDu/PdCNaUZxmKYlLMm9YFfpErtAHCNbAVR+jqOpwoByhZSl/wzuhS1EMjf
+        WmB9r8o/0LabK66WbR0WYKsM/ouVcUyMuV9o/SCsXnPBOX2q0bAEpUBL5LTHl76r6JU+nqPo2OOIc
+        UkPTNjyX05lMvy5w3pBG538R0kmK7oTQDiL8yGI8M=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Eric Van Hensbergen <ericvh@gmail.com>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        David Howells <dhowells@redhat.com>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Cc:     linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] 9p: fix EBADF errors in cached mode
+Date:   Tue, 14 Jun 2022 14:10:01 +0200
+Message-ID: <19026878.01OTk6HtWb@silver>
+In-Reply-To: <YqgDdNUxC0hV6KR9@codewreck.org>
+References: <YqW5s+GQZwZ/DP5q@codewreck.org>
+ <20220614033802.1606738-1-asmadeus@codewreck.org>
+ <YqgDdNUxC0hV6KR9@codewreck.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: kyrie wu <kyrie.wu@mediatek.com>
+On Dienstag, 14. Juni 2022 05:41:40 CEST Dominique Martinet wrote:
+> Dominique Martinet wrote on Tue, Jun 14, 2022 at 12:38:02PM +0900:
+> > cached operations sometimes need to do invalid operations (e.g. read
+> > on a write only file)
+> > Historic fscache had added a "writeback fid" for this, but the conversion
+> > to new fscache somehow lost usage of it: use the writeback fid instead
+> > of normal one.
+> > 
+> > Note that the way this works (writeback fid being linked to inode) means
+> > we might use overprivileged fid for some operations, e.g. write as root
+> > when we shouldn't.
+> > Ideally we should keep both fids handy, and only use the writeback fid
+> > when really required e.g. reads to a write-only file to fill in the page
+> > cache (read-modify-write); but this is the situation we've always had
+> > and this commit only fixes an issue we've had for too long.
+> > 
+> > Fixes: eb497943fa21 ("9p: Convert to using the netfs helper lib to do
+> > reads and caching") Cc: stable@vger.kernel.org
+> > Cc: David Howells <dhowells@redhat.com>
+> > Reported-By: Christian Schoenebeck <linux_oss@crudebyte.com>
+> > Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
+> > ---
+> > Ok so finally had time to look at this, and it's not a lot so this is
+> > the most straight forward way to do: just reverting to how the old
+> > fscache worked.
+> > 
+> > This appears to work from quick testing, Chiristian could you test it?
+> > 
+> > I think the warnings you added in p9_client_read/write that check
+> > fid->mode might a lot of sense, if you care to resend it as
+> > WARN_ON((fid->mode & ACCMODE) == O_xyz);
+> > instead I'll queue that for 5.20
+> > 
+> > 
+> > @Stable people, I've checked it applies to 5.17 and 5.18 so should be
+> > good to grab once I submit it for inclusion (that commit was included in
+> > 5.16, which is no longer stable)
+> > 
+> >  fs/9p/vfs_addr.c | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/fs/9p/vfs_addr.c b/fs/9p/vfs_addr.c
+> > index 7382c5227e94..262968d02f55 100644
+> > --- a/fs/9p/vfs_addr.c
+> > +++ b/fs/9p/vfs_addr.c
+> > @@ -58,7 +58,11 @@ static void v9fs_issue_read(struct netfs_io_subrequest
+> > *subreq)> 
+> >   */
+> >  
+> >  static int v9fs_init_request(struct netfs_io_request *rreq, struct file
+> >  *file) {
+> > 
+> > -	struct p9_fid *fid = file->private_data;
+> > +	struct inode *inode = file_inode(file);
+> > +	struct v9fs_inode *v9inode = V9FS_I(inode);
+> > +	struct p9_fid *fid = v9inode->writeback_fid;
+> > +
+> 
+> Sorry for mails back-to-back (grmbl I hate git commit --amend not
+> warning I only have unstaged changes), this is missing the following
+> here:
 
-Generalizes jpegdec timeout func interfaces to handle HW timeout.
+I think git does actually. It shows you staged and unstaged changes as comment 
+below the commit log text inside the editor. Not as a big fat warning, but the 
+info is there.
 
-Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
----
- .../platform/mediatek/jpeg/mtk_jpeg_core.h    |  2 ++
- .../platform/mediatek/jpeg/mtk_jpeg_dec_hw.c  | 24 +++++++++++++++++++
- 2 files changed, 26 insertions(+)
+> +    /* If there is no writeback fid this file only ever has had
+> +     * read-only opens, so we can use file's fid which should
+> +     * always be set instead */
+> +    if (!fid)
+> +        fid = file->private_data;
+> 
+> Christian, you can find it here to test:
+> https://github.com/martinetd/linux/commit/a6e033c41cc9f0ec105f5d208b0a820118
+> e2bda8
+> > +	BUG_ON(!fid);
+> > 
+> >  	p9_fid_get(fid);
+> >  	rreq->netfs_priv = fid;
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-index 41b6037c58b5..4709e5b8adbe 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-@@ -173,6 +173,8 @@ struct mtk_jpegdec_comp_dev {
- 	struct mtk_jpegdec_clk jdec_clk;
- 	int jpegdec_irq;
- 	int hw_id;
-+	struct delayed_work job_timeout_work;
-+	struct mtk_jpeg_hw_param hw_param;
- };
- 
- /**
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-index ad751762530a..0bc1c781938c 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-@@ -440,6 +440,24 @@ void mtk_jpeg_dec_set_config(void __iomem *base,
- }
- EXPORT_SYMBOL_GPL(mtk_jpeg_dec_set_config);
- 
-+static void mtk_jpegdec_timeout_work(struct work_struct *work)
-+{
-+	enum vb2_buffer_state buf_state = VB2_BUF_STATE_ERROR;
-+	struct mtk_jpegdec_comp_dev *cjpeg =
-+		container_of(work, struct mtk_jpegdec_comp_dev,
-+			     job_timeout_work.work);
-+	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-+
-+	src_buf = cjpeg->hw_param.src_buffer;
-+	dst_buf = cjpeg->hw_param.dst_buffer;
-+
-+	mtk_jpeg_dec_reset(cjpeg->reg_base);
-+	clk_disable_unprepare(cjpeg->jdec_clk.clks->clk);
-+	pm_runtime_put(cjpeg->dev);
-+	v4l2_m2m_buf_done(src_buf, buf_state);
-+	v4l2_m2m_buf_done(dst_buf, buf_state);
-+}
-+
- static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
- {
- 	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-@@ -453,6 +471,8 @@ static irqreturn_t mtk_jpegdec_hw_irq_handler(int irq, void *priv)
- 	struct mtk_jpegdec_comp_dev *jpeg = priv;
- 	struct mtk_jpeg_dev *master_jpeg = jpeg->master_dev;
- 
-+	cancel_delayed_work(&jpeg->job_timeout_work);
-+
- 	irq_status = mtk_jpeg_dec_get_int_status(jpeg->reg_base);
- 	dec_irq_ret = mtk_jpeg_dec_enum_result(irq_status);
- 	if (dec_irq_ret >= MTK_JPEG_DEC_RESULT_UNDERFLOW)
-@@ -533,6 +553,10 @@ static int mtk_jpegdec_hw_probe(struct platform_device *pdev)
- 
- 	dev->plat_dev = pdev;
- 	dev->dev = &pdev->dev;
-+
-+	INIT_DELAYED_WORK(&dev->job_timeout_work,
-+			  mtk_jpegdec_timeout_work);
-+
- 	jpegdec_clk = &dev->jdec_clk;
- 
- 	jpegdec_clk->clk_num = devm_clk_bulk_get_all(&pdev->dev,
--- 
-2.18.0
+It definitely goes into the right direction, but I think it's going a bit too 
+far by using writeback_fid also in cases where it is not necessary and wasn't 
+used before in the past.
+
+What about something like this in v9fs_init_request() (yet untested):
+
+    /* writeback_fid is always opened O_RDWR (instead of just O_WRONLY) 
+     * explicitly for this case: partial write backs that require a read
+     * prior to actual write and therefore requires a fid with read
+     * capability.
+     */
+    if (rreq->origin == NETFS_READ_FOR_WRITE)
+        fid = v9inode->writeback_fid;
+
+If desired, this could be further constrained later on like:
+
+    if (rreq->origin == NETFS_READ_FOR_WRITE &&
+        (fid->mode & O_ACCMODE) == O_WRONLY)
+    {
+        fid = v9inode->writeback_fid;
+    }
+
+I will definitely give these options some test spins here, a short feedback 
+ahead would be appreciated though.
+
+Thanks Dominique!
+
+Best regards,
+Christian Schoenebeck
+
 

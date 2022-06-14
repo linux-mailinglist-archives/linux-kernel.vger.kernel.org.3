@@ -2,96 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F5854AA74
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44D4954AA5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236494AbiFNHVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
+        id S1352624AbiFNHW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352191AbiFNHV3 (ORCPT
+        with ESMTP id S238663AbiFNHWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:21:29 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6007F2C644
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:21:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655191288; x=1686727288;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=aT/jlo7bPBLI1E41rFd9cS9uKHWKQcFzJa6LdgUzabY=;
-  b=SYhDVbbKtNpx+0PSNWFN4PG8s51AKDVMVDTZrdtIgapm8LF6vXlQEvHu
-   R7DDgHtnUhjLrUnk5p9DG3ieOnQH2xxEbtADg5qvfQCU72U7TBfzBSH7+
-   zZNwnBBcK+UpWJrDGBoD3Lp1DDwZggd/sad+J5zvIUV/Y3ZgYiVruQeY/
-   DJ9yztF19hv6ya4FVRsrQTwvdoI6EW6xAO+Hq306hgZTFsIO/ZZMPOLIu
-   o86M10F5VDuMNo5yh3QRHhO4/xq4wacjUuSorMFA8GWZUtDGIr1FbPcuo
-   FPkVeJF4R9ls10q6jQqHCUiVyqiX7YutGnw+ZEJYLbort9gjn663pY7U3
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="278571591"
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="278571591"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:21:28 -0700
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="910836980"
-Received: from gren5-mobl1.ccr.corp.intel.com (HELO [10.255.29.39]) ([10.255.29.39])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:21:25 -0700
-Message-ID: <28161d94-6f2d-700f-853d-53b42f4d00d0@linux.intel.com>
-Date:   Tue, 14 Jun 2022 15:21:23 +0800
+        Tue, 14 Jun 2022 03:22:25 -0400
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D04B2AEC;
+        Tue, 14 Jun 2022 00:22:24 -0700 (PDT)
+Received: by mail-qk1-f176.google.com with SMTP id d128so5778728qkg.8;
+        Tue, 14 Jun 2022 00:22:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lz5y+DuSGcsSnnDOr5IwDKXRxK40o1ln7wWC0XPROlc=;
+        b=WwjDeL74QwwVwhWKrgTGdhjG9DuQ1Dk5Tvm99HMAYFWRlVf46+DWMUFhsNUB+B3+C2
+         GaNtptsyjRyvqUBfBOwXdz/8L68AisaTUDWan6SiOP8jOGTffQM+hCX0mnK9UZfp8qtO
+         5d1MyW/kvqWr7liUKvuXMHryAZOO+Ty5Du15Jxlbi4fte4qrZ/9hWYZtKeNtq1pEsUkN
+         CpxxTSTRbxjpZJ6XScVKqjFwNQoOs30psxdICWZQNjE5I5iTGgh0Tk3/c8YXFZ3Ef6Gr
+         nlD/wX9PdzfyZxywK1l0Mr37cSQUCO1+Yj9Ni1h6gP8n5urderuy5jPrWhPjxFLF102K
+         crSA==
+X-Gm-Message-State: AOAM533aYYjY1QTmgc9YqSmhq7QikzCgxazljUjK0lQ/xdVwczReuR+p
+        zRaGJXAd60T+JhzFMG9zY5aTtSY48RI8lA==
+X-Google-Smtp-Source: ABdhPJygmQ/2Wq7fVBb2ApZdNFsf81yjbpPU4jBrob2NBfSB269ymskQJYJ8cwc0k/v7c/CCC7v09Q==
+X-Received: by 2002:a05:620a:120f:b0:6a6:b30a:efb5 with SMTP id u15-20020a05620a120f00b006a6b30aefb5mr2919414qkj.21.1655191343244;
+        Tue, 14 Jun 2022 00:22:23 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id t15-20020a05620a0b0f00b006a6d7c3a82esm8119423qkg.15.2022.06.14.00.22.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 00:22:22 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id p13so13757373ybm.1;
+        Tue, 14 Jun 2022 00:22:22 -0700 (PDT)
+X-Received: by 2002:a05:6902:905:b0:64a:2089:f487 with SMTP id
+ bu5-20020a056902090500b0064a2089f487mr3641955ybb.202.1655191341994; Tue, 14
+ Jun 2022 00:22:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 03/12] iommu/vt-d: Remove clearing translation data in
- disable_dmar_iommu()
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <20220614025137.1632762-1-baolu.lu@linux.intel.com>
- <20220614025137.1632762-4-baolu.lu@linux.intel.com>
- <BN9PR11MB52762E7602FFF7EE4B52AC888CAA9@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB52762E7602FFF7EE4B52AC888CAA9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <20220613191549.GA4092455-robh@kernel.org>
+In-Reply-To: <20220613191549.GA4092455-robh@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Jun 2022 09:22:10 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
+Message-ID: <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
+To:     Rob Herring <robh@kernel.org>
+Cc:     Max Krummenacher <max.oss.09@gmail.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/14 14:49, Tian, Kevin wrote:
->> From: Lu Baolu<baolu.lu@linux.intel.com>
->> Sent: Tuesday, June 14, 2022 10:51 AM
->>
->> The disable_dmar_iommu() is called when IOMMU initialization fails or
->> the IOMMU is hot-removed from the system. In both cases, there is no
->> need to clear the IOMMU translation data structures for devices.
->>
->> On the initialization path, the device probing only happens after the
->> IOMMU is initialized successfully, hence there're no translation data
->> structures.
-> Out of curiosity. With kexec the IOMMU may contain stale mappings
-> from the old kernel. Then is it meaningful to disable IOMMU after the
-> new kernel fails to initialize it properly?
+Hi Rob,
 
-For kexec kernel, if the IOMMU is detected to be pre-enabled, the IOMMU
-driver will try to copy tables from the old kernel. If copying table
-fails, the IOMMU driver will disable IOMMU and do the normal
-initialization.
+On Mon, Jun 13, 2022 at 9:15 PM Rob Herring <robh@kernel.org> wrote:
+> On Thu, Jun 09, 2022 at 05:08:46PM +0200, Max Krummenacher wrote:
+> > From: Max Krummenacher <max.krummenacher@toradex.com>
+> >
+> > its power enable by using a regulator.
+> >
+> > The currently implemented PM domain providers are all specific to
+> > a particular system on chip.
+>
+> Yes, power domains tend to be specific to an SoC... 'power-domains' is
+> supposed to be power islands in a chip. Linux 'PM domains' can be
+> anything...
 
-Best regards,
-baolu
+> > This allows to use the "regulator-pm-pd" driver with an arbitrary
+> > device just by adding the 'power-domains' property to the devices
+> > device tree node. However the device's dt-bindings schema likely does
+> > not allow the property 'power-domains'.
+> > One way to solve this would be to allow 'power-domains' globally
+> > similarly how 'status' and other common properties are allowed as
+> > implicit properties.
+>
+> No. For 'power-domains' bindings have to define how many there are and
+> what each one is.
+
+IMO "power-domains" are an integration feature, i.e. orthogonal to the
+actual device that is part of the domain.  Hence the "power-domains"
+property may appear everywhere.
+
+It is actually the same for on-chip devices, as an IP core may be
+reused on a new SoC that does have power or clock domains.  For
+these, we managed to handle that fine because most devices do have
+some form of family- or SoC-specific compatible values to control if
+the power-domains property can be present/is required or not.
+
+But for off-chip devices, the integrator (board designed) can do
+whatever he wants.  Off-chip devices do have the advantage that it
+is usually well documented which power supply (if there are multiple)
+serves which purpose, which is not always clear for on-chip devices.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

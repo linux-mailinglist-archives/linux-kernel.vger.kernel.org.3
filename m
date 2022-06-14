@@ -2,184 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0376854B50C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:50:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D074754B515
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244009AbiFNPr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56570 "EHLO
+        id S244795AbiFNPsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239122AbiFNPrx (ORCPT
+        with ESMTP id S244359AbiFNPsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:47:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E59FA13F70
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:47:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655221668;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c3D5rXBFggKZyiDmUUePVR2BksUY/F8xwEAjtaxtYb8=;
-        b=JFR/alDFGAobVuKF9KA6BhZGbY5UdI16iiLy5/FMgORXZpDXqCuZEKBmk6ZBgrmUvOAMZx
-        grxavf+/zkDaVH+30IGV5X8KBwP9JB8E1Z68CNAnb4cPkIMX1o3qNjtqFyT3avA7mmkgVP
-        +h2zZRX+I9Qi5pcAPknd1oFft4SdH1M=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-99-qSNJWmI6M66c87Qbr5I7Lg-1; Tue, 14 Jun 2022 11:47:47 -0400
-X-MC-Unique: qSNJWmI6M66c87Qbr5I7Lg-1
-Received: by mail-ej1-f69.google.com with SMTP id pv1-20020a170907208100b00710f5f8105cso3055402ejb.17
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:47:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=c3D5rXBFggKZyiDmUUePVR2BksUY/F8xwEAjtaxtYb8=;
-        b=en8M4UahXNP83yWPN+CYPTZy3qBldBh+uuknc2TdKB9qKaG6UQE9f0JW3KQoVEcwW0
-         T2f+T4n0dk6z+4E0Wj8GugwdNiM78YLjuBYlxFSjh8fkCPh+Cw8n1UsBNYYHZ4MEPUrm
-         5iAA/Na+GC5wHhtZqkGNp7A/usW3V+tuxgWBdKKW/mgxnlqdJyTqRSjxQO3G7uh47swW
-         CEUn1K0NTRZtEgDgUjCISYuY7sd8DRV7eJRyp/M5lqQjBGpuJpqTZ7SXPNQYqaGiKsN0
-         xVWWGv2gk/kfrleECpcX3iEE/3kCaU68VSC/+74QBJkciTAtmZNyHI0R1dH3ozJeVbrl
-         3Iaw==
-X-Gm-Message-State: AJIora+9MhHEk7Ki78LPWsKvbJwETAEUJ3z/Cyh3E6XE+dFlqmKBJ37C
-        pRd/hRO3cyOgloU80y/RZfeCPXg34eFXJFTJdJCVGZKzHYrfu8Oqt5+8A1GgYiYjfMdVcQJLK13
-        wIxJ9mZYK7kftoXVV4AsU+93v
-X-Received: by 2002:a17:907:9496:b0:711:f459:664 with SMTP id dm22-20020a170907949600b00711f4590664mr4822923ejc.704.1655221665108;
-        Tue, 14 Jun 2022 08:47:45 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uL7b2WJ9GqE48Lc8Oa55SIbLe3r72HnMhv92SlzzeuVVgeUFDg0m6ZrYBmGVWItHxA6UV0/w==
-X-Received: by 2002:a17:907:9496:b0:711:f459:664 with SMTP id dm22-20020a170907949600b00711f4590664mr4822894ejc.704.1655221664848;
-        Tue, 14 Jun 2022 08:47:44 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id u26-20020a170906951a00b00709e786c7b2sm5142116ejx.213.2022.06.14.08.47.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 08:47:44 -0700 (PDT)
-Message-ID: <5c8923df-3d89-c7be-690d-fbef2c53eeb6@redhat.com>
-Date:   Tue, 14 Jun 2022 17:47:43 +0200
+        Tue, 14 Jun 2022 11:48:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3417165A5;
+        Tue, 14 Jun 2022 08:47:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 662DCB8198A;
+        Tue, 14 Jun 2022 15:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFB2C3411C;
+        Tue, 14 Jun 2022 15:47:51 +0000 (UTC)
+Message-ID: <c5c6903d-ec7d-6218-35d3-2ac6caa9d2c5@xs4all.nl>
+Date:   Tue, 14 Jun 2022 17:47:49 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] x86/PCI: Revert: "Clip only host bridge windows for E820
- regions"
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v8 14/17] media: hantro: Stop using Hantro dedicated
+ control
 Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
-References: <20220614151708.GA756100@bhelgaas>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220614151708.GA756100@bhelgaas>
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+References: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
+ <20220614083614.240641-15-benjamin.gaignard@collabora.com>
+ <b244e86d-06de-7423-d0df-e77485ce4c87@xs4all.nl>
+ <958ab30f9cfbb14e4a7ea55826064e6a20d5ffd2.camel@collabora.com>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+In-Reply-To: <958ab30f9cfbb14e4a7ea55826064e6a20d5ffd2.camel@collabora.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 6/14/22 17:17, Bjorn Helgaas wrote:
-> On Tue, Jun 14, 2022 at 10:15:29AM +0200, Hans de Goede wrote:
->> On 6/14/22 01:15, Bjorn Helgaas wrote:
->>> On Sun, Jun 12, 2022 at 04:43:25PM +0200, Hans de Goede wrote:
->>>> Clipping the bridge windows directly from pci_acpi_root_prepare_resources()
->>>> instead of clipping from arch_remove_reservations(), has a number of
->>>> unforseen consequences.
->>>>
->>>> If there is an e820 reservation in the middle of a bridge window, then
->>>> the smallest of the 2 remaining parts of the window will be also clipped
->>>> off. Where as the previous code would clip regions requested by devices,
->>>> rather then the entire window, leaving regions which were either entirely
->>>> above or below a reservation in the middle of the window alone.
->>>>
->>>> E.g. on the Steam Deck this leads to this log message:
->>>>
->>>> acpi PNP0A08:00: clipped [mem 0x80000000-0xf7ffffff window] to [mem 0xa0100000-0xf7ffffff window]
->>>>
->>>> which then gets followed by these log messages:
->>>>
->>>> pci 0000:00:01.2: can't claim BAR 14 [mem 0x80600000-0x806fffff]: no compatible bridge window
->>>> pci 0000:00:01.3: can't claim BAR 14 [mem 0x80500000-0x805fffff]: no compatible bridge window
->>>>
->>>> and many more of these. Ultimately this leads to the Steam Deck
->>>> no longer booting properly, so revert the change.
->>>>
->>>> Note this is not a clean revert, this revert keeps the later change
->>>> to make the clipping dependent on a new pci_use_e820 bool, moving
->>>> the checking of this bool to arch_remove_reservations().
->>>
->>> 4c5e242d3e93 was definitely a mistake (my fault).  My intent was to
->>> mainly to improve logging of the clipping, but I didn't implement it
->>> well.
->>>
->>> That said, I'd like to understand the connection between the messages
->>> you mention and the failure.  There are four bridges whose MMIO
->>> windows were in the [mem 0x80000000-0x9fffffff] area that we clipped
->>> out.  The log shows that we moved all those windows and the devices in
->>> them to the [mem 0xa0100000-0xf7ffffff] area that remained after
->>> clipping.
->>>
->>> So I think this *should* have worked even though we moved things
->>> around unnecessarily.  What am I missing?
+
+On 6/14/22 17:43, Nicolas Dufresne wrote:
+> Le mardi 14 juin 2022 à 15:58 +0200, Hans Verkuil a écrit :
+>> On 6/14/22 10:36, Benjamin Gaignard wrote:
+>>> The number of bits to skip in the slice header can be computed
+>>> in the driver by using sps, pps and decode_params information.
+>>> This allow to remove Hantro dedicated control.
 >>
->> I don't know? My guess is that maybe the ACPI table do MMIO accesses
->> somewhere to hardcoded addresses and moving things breaks the ACPI
->> tables.
-> 
-> This would be a firmware defect, IMHO.  There is a mechanism (_DSM for
-> preserving PCI Boot Configurations) for the firmware to tell us about
-> things that can't be moved.
-> 
->>> The E820 map reports [mem 0xa0000000-0xa00fffff] in the middle of the
->>> _CRS, and we currently trim that out.  We think this is a firmware
->>> defect, so it's likely to break in 2023 if we stop clipping by
->>> default.  I'm concerned that there may be other things in _CRS that we
->>> need to avoid, but firmware isn't telling us about them.
->>>
->>> Or there's some dependency in the devices that we moved on their
->>> original addresses, e.g., firmware on the device latched the address
->>> and didn't notice the reassignment.
+>> allow -> makes it possible
 >>
->> Right this is the most likely cause I believe.
+>>>
+>>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>>> ---
+>>>  drivers/staging/media/hantro/hantro_drv.c     | 36 -----------
+>>>  .../staging/media/hantro/hantro_g2_hevc_dec.c | 62 ++++++++++++++++++-
+>>>  include/media/hevc-ctrls.h                    | 13 ----
+>>>  3 files changed, 61 insertions(+), 50 deletions(-)
+>>>
+>>> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
+>>> index 536c8c374952..5aac3a090480 100644
+>>> --- a/drivers/staging/media/hantro/hantro_drv.c
+>>> +++ b/drivers/staging/media/hantro/hantro_drv.c
+>>> @@ -304,26 +304,6 @@ static int hantro_jpeg_s_ctrl(struct v4l2_ctrl *ctrl)
+>>>  	return 0;
+>>>  }
+>>>  
+>>> -static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
+>>> -{
+>>> -	struct hantro_ctx *ctx;
+>>> -
+>>> -	ctx = container_of(ctrl->handler,
+>>> -			   struct hantro_ctx, ctrl_handler);
+>>> -
+>>> -	vpu_debug(1, "s_ctrl: id = %d, val = %d\n", ctrl->id, ctrl->val);
+>>> -
+>>> -	switch (ctrl->id) {
+>>> -	case V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP:
+>>> -		ctx->hevc_dec.ctrls.hevc_hdr_skip_length = ctrl->val;
+>>> -		break;
+>>> -	default:
+>>> -		return -EINVAL;
+>>> -	}
+>>> -
+>>> -	return 0;
+>>> -}
+>>> -
+>>>  static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
+>>>  	.try_ctrl = hantro_try_ctrl,
+>>>  };
+>>> @@ -332,10 +312,6 @@ static const struct v4l2_ctrl_ops hantro_jpeg_ctrl_ops = {
+>>>  	.s_ctrl = hantro_jpeg_s_ctrl,
+>>>  };
+>>>  
+>>> -static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
+>>> -	.s_ctrl = hantro_hevc_s_ctrl,
+>>> -};
+>>> -
+>>>  #define HANTRO_JPEG_ACTIVE_MARKERS	(V4L2_JPEG_ACTIVE_MARKER_APP0 | \
+>>>  					 V4L2_JPEG_ACTIVE_MARKER_COM | \
+>>>  					 V4L2_JPEG_ACTIVE_MARKER_DQT | \
+>>> @@ -487,18 +463,6 @@ static const struct hantro_ctrl controls[] = {
+>>>  		.cfg = {
+>>>  			.id = V4L2_CID_STATELESS_HEVC_SCALING_MATRIX,
+>>>  		},
+>>> -	}, {
+>>> -		.codec = HANTRO_HEVC_DECODER,
+>>> -		.cfg = {
+>>> -			.id = V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP,
+>>> -			.name = "Hantro HEVC slice header skip bytes",
+>>> -			.type = V4L2_CTRL_TYPE_INTEGER,
+>>> -			.min = 0,
+>>> -			.def = 0,
+>>> -			.max = 0x100,
+>>> -			.step = 1,
+>>> -			.ops = &hantro_hevc_ctrl_ops,
+>>> -		},
+>>>  	}, {
+>>>  		.codec = HANTRO_VP9_DECODER,
+>>>  		.cfg = {
+>>> diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+>>> index d28653d04d20..3be8d6e60bf0 100644
+>>> --- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+>>> +++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+>>> @@ -117,6 +117,66 @@ static void prepare_tile_info_buffer(struct hantro_ctx *ctx)
+>>>  		vpu_debug(1, "%s: no chroma!\n", __func__);
+>>>  }
+>>>  
+>>> +static unsigned int ceil_log2(unsigned int v)
+>>> +{
+>>> +	/* Compute Ceil(Log2(v))
+>>> +	 * Derived from branchless code for integer log2(v) from:
+>>> +	 * <http://graphics.stanford.edu/~seander/bithacks.html#IntegerLog>
+>>> +	 */
+>>> +	unsigned int r, shift;
+>>> +
+>>> +	v--;
+>>> +	r = (v > 0xFFFF) << 4;
+>>> +	v >>= r;
+>>> +	shift = (v > 0xFF) << 3;
+>>> +	v >>= shift;
+>>> +	r |= shift;
+>>> +	shift = (v > 0xF) << 2;
+>>> +	v >>= shift;
+>>> +	r |= shift;
+>>> +	shift = (v > 0x3) << 1;
+>>> +	v >>= shift;
+>>> +	r |= shift;
+>>> +	r |= (v >> 1);
+>>> +
+>>> +	return r + 1;
+>>> +}
+>>
+>> Isn't this identical to fls(v - 1)? See also lib/math/reciprocal_div.c
+>> where this is used.
 > 
-> This would be another defect, in the device this time.  If we can
-> identify the device, possibly we could quirk around it.
-> 
-> Either one will be back to bite us in the future if we support
-> rebalancing resources to make room for hot-added devices.  I *think*
-> Windows already supports this kind of rebalancing.  Anyway, this is
-> why we need to dig a little deeper to figure out exactly what's going
-> wrong here.
+> Thanks for pointing this out, I was wondering if there was an equivalent, and
+> never knew there was a relation between log2() and the "last set bit". Not sure
+> about the -1 here though, can you extend ?
 
-Have you looked at the log of the failed boot in the Steam Deck kernel
-bugzilla? Everything there seems to work just fine and then the system
-just hangs. I think that maybe it cannot find its root disk, so maybe
-an NVME issue ?
-
-I'm afraid that if we cannot figure out the exact root cause from
-the failed boot log there is not much more we can do. Unless you
-have an idea how to debug this further and want to ask the reporter
-for more info?
+Based on how lib/math/reciprocal_div.c did it. Also, the ceil_log2 function
+starts with v--, while fls doesn't. That said, it's wise to verify that that
+is correct.
 
 Regards,
 
-Hans
+	Hans
 
+> 
+>>
+>> Regards,
+>>
+>> 	Hans
+>>
+>>> +
+>>> +static int compute_header_skip_lenght(struct hantro_ctx *ctx)
+>>> +{
+>>> +	const struct hantro_hevc_dec_ctrls *ctrls = &ctx->hevc_dec.ctrls;
+>>> +	const struct v4l2_ctrl_hevc_decode_params *decode_params = ctrls->decode_params;
+>>> +	const struct v4l2_ctrl_hevc_sps *sps = ctrls->sps;
+>>> +	const struct v4l2_ctrl_hevc_pps *pps = ctrls->pps;
+>>> +	int skip = 0;
+>>> +
+>>> +	if (pps->flags & V4L2_HEVC_PPS_FLAG_OUTPUT_FLAG_PRESENT)
+>>> +		/* size of pic_output_flag */
+>>> +		skip++;
+>>> +
+>>> +	if (sps->flags & V4L2_HEVC_SPS_FLAG_SEPARATE_COLOUR_PLANE)
+>>> +		/* size of pic_order_cnt_lsb */
+>>> +		skip += 2;
+>>> +
+>>> +	if (!(decode_params->flags & V4L2_HEVC_DECODE_PARAM_FLAG_IDR_PIC)) {
+>>> +		/* size of pic_order_cnt_lsb */
+>>> +		skip += sps->log2_max_pic_order_cnt_lsb_minus4 + 4;
+>>> +
+>>> +		/* size of short_term_ref_pic_set_sps_flag */
+>>> +		skip++;
+>>> +
+>>> +		if (decode_params->short_term_ref_pic_set_size)
+>>> +			/* size of st_ref_pic_set( num_short_term_ref_pic_sets ) */
+>>> +			skip += decode_params->short_term_ref_pic_set_size;
+>>> +		else if (sps->num_short_term_ref_pic_sets > 1)
+>>> +			skip += ceil_log2(sps->num_short_term_ref_pic_sets);
+>>> +
+>>> +		skip += decode_params->long_term_ref_pic_set_size;
+>>> +	}
+>>> +
+>>> +	return skip;
+>>> +}
+>>> +
+>>>  static void set_params(struct hantro_ctx *ctx)
+>>>  {
+>>>  	const struct hantro_hevc_dec_ctrls *ctrls = &ctx->hevc_dec.ctrls;
+>>> @@ -134,7 +194,7 @@ static void set_params(struct hantro_ctx *ctx)
+>>>  
+>>>  	hantro_reg_write(vpu, &g2_output_8_bits, 0);
+>>>  
+>>> -	hantro_reg_write(vpu, &g2_hdr_skip_length, ctrls->hevc_hdr_skip_length);
+>>> +	hantro_reg_write(vpu, &g2_hdr_skip_length, compute_header_skip_lenght(ctx));
+>>>  
+>>>  	min_log2_cb_size = sps->log2_min_luma_coding_block_size_minus3 + 3;
+>>>  	max_log2_ctb_size = min_log2_cb_size + sps->log2_diff_max_min_luma_coding_block_size;
+>>> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+>>> index d6cb3779d190..efc0412ac41e 100644
+>>> --- a/include/media/hevc-ctrls.h
+>>> +++ b/include/media/hevc-ctrls.h
+>>> @@ -467,17 +467,4 @@ struct v4l2_ctrl_hevc_scaling_matrix {
+>>>  	__u8	scaling_list_dc_coef_32x32[2];
+>>>  };
+>>>  
+>>> -/*  MPEG-class control IDs specific to the Hantro driver as defined by V4L2 */
+>>> -#define V4L2_CID_CODEC_HANTRO_BASE				(V4L2_CTRL_CLASS_CODEC | 0x1200)
+>>> -/*
+>>> - * V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP -
+>>> - * the number of data (in bits) to skip in the
+>>> - * slice segment header.
+>>> - * If non-IDR, the bits to be skipped go from syntax element "pic_output_flag"
+>>> - * to before syntax element "slice_temporal_mvp_enabled_flag".
+>>> - * If IDR, the skipped bits are just "pic_output_flag"
+>>> - * (separate_colour_plane_flag is not supported).
+>>> - */
+>>> -#define V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP	(V4L2_CID_CODEC_HANTRO_BASE + 0)
+>>> -
+>>>  #endif
+>>
+> 

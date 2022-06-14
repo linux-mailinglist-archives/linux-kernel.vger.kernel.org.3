@@ -2,96 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6BC354BC56
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D83EF54BC51
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:59:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235351AbiFNUxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
+        id S232973AbiFNUz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358451AbiFNUxY (ORCPT
+        with ESMTP id S234754AbiFNUz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:53:24 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE0D2F64F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:53:22 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d13so8707096plh.13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:53:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=AR6pI4Dz4SnbCroeylFx6ClK0LALzjTLZM8tr+b1Qio=;
-        b=rlANcywAf4bR7fadVFA2+G43rRwb6bnCOg+XpmZaE08Y1ATmf4iXfkpOG29AXJ27fu
-         nBPgAan/++luP9MBfjVPAOtUAnUddFJWgFTpt8KC3RYS6VGpCD6sbGm13MaOL9Z44jGD
-         4fFF01bfFROZXzw7HdaT2etm+xFtUlvK5HkkHAmN83wi0aZnVzmCVnSiJsVkMQK4SMai
-         HUNWTGtntrPCxetOSOJqi/coDpghVaIdNMMDH5QrLKyN7jfKz3CoBwz29149riGdWEdQ
-         O+GwP/qqzi5qErljLWsZ13oFVlZdEnn/YqvCC8+n2DYlnwaN/fpW2/wLi0q6xxs0bF6l
-         drEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=AR6pI4Dz4SnbCroeylFx6ClK0LALzjTLZM8tr+b1Qio=;
-        b=C2TVdtntmm4Hv2oa4aL5aK50yeeWQW/6j/RzhW2illylBeZXy8lZ3eskozH5IxXDrn
-         LW7zHGZOFZwpOyVeh3EZba5K6CHkGK53k+uQ85poV0E0MAES9lgLKCXnyLTSeeZhRtWY
-         PmxixYLHsaMqC7rNiKPLXaf/QLK1Vqv/7wzr0GglJnMdJuGbeZnNkgxK9ZTxfnI2/Vts
-         9C4TEOYG8rDUpqA+mtysla54W4iUUmi+UgThRHCQSCFg3ytPPMXJlZPf3FLip2TwOw/0
-         kqnPVk9Ldc8q7dMn/d3Ry91TOZLghK0qE6nx0fzbI+SUNcpIp92TWNhxZouAwh0par89
-         jlTw==
-X-Gm-Message-State: AJIora/KbfTcDA5VxWZ5Xij4yeWR2OXvDhebN/pI26TxTrqOXyP1hRQe
-        WB1cchOY0j0kwibpbDW8Gpa9ug==
-X-Google-Smtp-Source: AGRyM1sGORuHOsrudJ2NzMuucMCoEUS7FrDUAZJlvhB95QU1/ijkVKGqDtIwU3c/jV+ULDfXuIS/fA==
-X-Received: by 2002:a17:903:248:b0:168:cf03:eefe with SMTP id j8-20020a170903024800b00168cf03eefemr6038425plh.124.1655240002425;
-        Tue, 14 Jun 2022 13:53:22 -0700 (PDT)
-Received: from [172.22.33.138] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id m12-20020a1709026bcc00b00162037fbacdsm7638321plt.187.2022.06.14.13.53.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 13:53:21 -0700 (PDT)
-Message-ID: <3dbb38af-4813-3c5d-8a12-cdd63bdbe3c2@linaro.org>
-Date:   Tue, 14 Jun 2022 13:53:19 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v3 4/7] dt-bindings: drm/bridge: anx7625: Add mode-switch
- support
-Content-Language: en-US
-To:     Prashant Malani <pmalani@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc:     bleung@chromium.org, swboyd@chromium.org,
-        heikki.krogerus@linux.intel.com,
-        =?UTF-8?Q?N=c3=adcolas_F_=2e_R_=2e_A_=2e_Prado?= 
-        <nfraprado@collabora.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Pin-Yen Lin <treapking@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
+        Tue, 14 Jun 2022 16:55:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C092F64F;
+        Tue, 14 Jun 2022 13:55:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4518CB81B79;
+        Tue, 14 Jun 2022 20:55:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6449AC3411B;
+        Tue, 14 Jun 2022 20:55:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655240151;
+        bh=XzEAK2y5Iei2R8rsITjcjNvlSr4PiUjEUS7DNftkwGA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p+477iWvi8LLsQiEZY2hhhQ40qc7phf5EbKKe1GuDHgRJXxTt+MG2/rD8GTYsOqBl
+         CasgghvFA/MX721GElqHLUbboFEUU0y/kgk6k5wzD7+RD3Tc+rsXH+AocbYtU4BZJG
+         ezxk4R1JY8hSnTtTLoheIaI/EoQvvBLajGpcce/Lzilh+3lnUONfUJRJGjEvqatiqD
+         v8ZAVP2JJ8JiohhAmQo10X1wGXF5UjICvydhJnBg7SJ/U1WwaVUo46gLXOC/qYjDiu
+         oXZ/waiR/Is4B/W7vcOgNNVd5DfMzisbrhLptJpzEZ8nR1vluxOKojCE46Q4dR3grm
+         g/qVgaaQ1ojqw==
+Date:   Wed, 15 Jun 2022 02:25:50 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Xin Ji <xji@analogixsemi.com>
-References: <20220614193558.1163205-1-pmalani@chromium.org>
- <20220614193558.1163205-5-pmalani@chromium.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220614193558.1163205-5-pmalani@chromium.org>
-Content-Type: text/plain; charset=UTF-8
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/3] mtd: nand: raw: qcom_nandc: reorder
+ qcom_nand_host struct
+Message-ID: <20220614205550.GA5596@thinkpad>
+References: <20220609132344.17548-1-ansuelsmth@gmail.com>
+ <20220609132344.17548-2-ansuelsmth@gmail.com>
+ <20220609170722.GA5081@thinkpad>
+ <62a2298c.1c69fb81.bc909.d2d0@mx.google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <62a2298c.1c69fb81.bc909.d2d0@mx.google.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,75 +66,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2022 12:34, Prashant Malani wrote:
-> Analogix 7625 can be used in systems to switch USB Type-C DisplayPort
-> alternate mode lane traffic between 2 Type-C ports.
+On Thu, Jun 09, 2022 at 07:10:33PM +0200, Ansuel Smith wrote:
+> On Thu, Jun 09, 2022 at 10:37:22PM +0530, Manivannan Sadhasivam wrote:
+> > On Thu, Jun 09, 2022 at 03:23:42PM +0200, Ansuel Smith wrote:
+> > > Reorder qcom_nand_host to save holes in the struct.
+> > 
+> > You forgot to reorder other structs also as I requested :/
+> > 
+> > Thanks,
+> > Mani
+> >
 > 
-> Update the binding to accommodate this usage by introducing a switch
-> property.
+> Mhhh I didn't find obvius hole in other struct.
+> Think I will pass this with dwarf to better check them. Sorry!
+> Feel free to point them if you notice obvius hole that I didn't notice.
 > 
-> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> ---
+
+Sorry, I should be explicit. Please rearrange the members in other structs such
+that we could avoid holes (in future also). For instance, in
+"struct bam_transaction" u32's and bool are mixed in the middle. You could
+organize them like,
+
+struct pointer
+struct
+u32
+bool
+
+And this goes same for all other structs as well.
+
+Thanks,
+Mani
+
+> > > 
+> > > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> > > ---
+> > >  drivers/mtd/nand/raw/qcom_nandc.c | 10 ++++++----
+> > >  1 file changed, 6 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
+> > > index 1a77542c6d67..7fbbd3e7784c 100644
+> > > --- a/drivers/mtd/nand/raw/qcom_nandc.c
+> > > +++ b/drivers/mtd/nand/raw/qcom_nandc.c
+> > > @@ -431,11 +431,12 @@ struct qcom_nand_controller {
+> > >   *				and reserved bytes
+> > >   * @cw_data:			the number of bytes within a codeword protected
+> > >   *				by ECC
+> > > + * @ecc_bytes_hw:		ECC bytes used by controller hardware for this
+> > > + *				chip
+> > > + *
+> > >   * @use_ecc:			request the controller to use ECC for the
+> > >   *				upcoming read/write
+> > >   * @bch_enabled:		flag to tell whether BCH ECC mode is used
+> > > - * @ecc_bytes_hw:		ECC bytes used by controller hardware for this
+> > > - *				chip
+> > >   * @status:			value to be returned if NAND_CMD_STATUS command
+> > >   *				is executed
+> > >   * @last_command:		keeps track of last command on this chip. used
+> > > @@ -452,11 +453,12 @@ struct qcom_nand_host {
+> > >  	int cs;
+> > >  	int cw_size;
+> > >  	int cw_data;
+> > > -	bool use_ecc;
+> > > -	bool bch_enabled;
+> > >  	int ecc_bytes_hw;
+> > >  	int spare_bytes;
+> > >  	int bbm_size;
+> > > +
+> > > +	bool use_ecc;
+> > > +	bool bch_enabled;
+> > >  	u8 status;
+> > >  	int last_command;
+> > >  
+> > > -- 
+> > > 2.36.1
+> > > 
+> > 
+> > -- 
+> > மணிவண்ணன் சதாசிவம்
 > 
-> Changes since v2:
-> - Added Reviewed-by and Tested-by tags.
-> 
-> Changes since v1:
-> - Introduced patternProperties for "switch" children (suggested by Krzysztof Kozlowski).
-> - Added unevaluatedProperties descriptor (suggested by Krzysztof Kozlowski).
-> - Added "address-cells" and "size-cells" properties to "switches".
-> 
->  .../display/bridge/analogix,anx7625.yaml      | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> index 35a48515836e..cb4a23391244 100644
-> --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> @@ -105,6 +105,33 @@ properties:
->        - port@0
->        - port@1
->  
-> +  switches:
-> +    type: object
-> +    description: Set of switches controlling DisplayPort traffic on
-> +      outgoing RX/TX lanes to Type C ports.
-> +    unevaluatedProperties: false
+> -- 
+> 	Ansuel
 
-This should be additionalProperties:false.
-
-> +
-> +    properties:
-> +      "#address-cells":
-> +        const: 1
-> +
-> +      "#size-cells":
-> +        const: 0
-> +
-> +    patternProperties:
-> +      'switch@[01]':
-
-You also need ^ and $. Please use the same quotes as in other places
-(here is ' but few lines above ")
-
-> +        $ref: /schemas/usb/typec-switch.yaml#
-
-You need unevaluatedProperties:false on this level.
-
-> +
-> +        properties:
-> +          reg:
-> +            maxItems: 1
-> +
-> +        required:
-> +          - reg
-> +
-> +    required:
-> +      - switch@0
-> +
-
-
-Best regards,
-Krzysztof
+-- 
+மணிவண்ணன் சதாசிவம்

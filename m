@@ -2,93 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D547954ACFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602CA54AD20
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353668AbiFNJKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 05:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50840 "EHLO
+        id S1352616AbiFNJUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 05:20:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353832AbiFNJKt (ORCPT
+        with ESMTP id S1354730AbiFNJUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 05:10:49 -0400
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E659942A38;
-        Tue, 14 Jun 2022 02:10:45 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id c21so10364250wrb.1;
-        Tue, 14 Jun 2022 02:10:45 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oqq//sNQTRKFksgXq8/+ru1bUeOh2rtemmad4D/w0ow=;
-        b=A3OvpXPt47T3UXdjehTEAqNaT/jsOgFwnaS+OBlPB0BqxaUJkr0GmuiBDRvGoJhDK1
-         UtKbYMmpHspmOz6pS1L+sExzkygQgQPnRji0moPyJMjNI/hZQg0yLEFQWIJ+h9pw7Xmc
-         x6behffJ0qRF/V0p2fBIHjQ7ChIgJTTsm55FQpE1iXTydN5RRQh7CjBOGyXzz7wsycLk
-         lJ9yZOXYo7YjlQGXODO1/n6/QYATP2/mnHWOePlCiH7P/ahwjSYTm6RucYRifiHG5XJk
-         XzUptef4SdSNMNEPwFRwAJglp3/9of/c7AvgRUVmMoVpebeCG1KuJFlTR7mO5MdOAGh7
-         D7Kg==
-X-Gm-Message-State: AJIora8wvvGtd+9U1ZXXGeHS3YSszy+xDXlmHkWDpm1hEBDyBeshl1+/
-        qlBEOxd3JEbG2TTl06itSo4=
-X-Google-Smtp-Source: AGRyM1vosJxqNeMBdLNP5fYIzkmDB3QHTeVR30D+2ItJMhmRH1aJiWiu/eC15R49D38cStWlTE8Mrg==
-X-Received: by 2002:a5d:6daf:0:b0:218:4f53:5810 with SMTP id u15-20020a5d6daf000000b002184f535810mr3875109wrs.43.1655197844334;
-        Tue, 14 Jun 2022 02:10:44 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id g7-20020a5d4887000000b002184a3a3641sm11042522wrq.100.2022.06.14.02.10.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 02:10:43 -0700 (PDT)
-Message-ID: <db8b5375-1f09-2000-cb83-d939e2018d0f@kernel.org>
-Date:   Tue, 14 Jun 2022 11:10:42 +0200
+        Tue, 14 Jun 2022 05:20:13 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E501241FBA;
+        Tue, 14 Jun 2022 02:20:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655198413; x=1686734413;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1zqpTqgp59Z99VrOl0GaDy6GAy94VFKx5+2iNEgIphk=;
+  b=EbW7a17Liy96zOPxP2HJThjEkKFwgZTz4nJXD2WqhvRWcOKhmSYGcTM4
+   qfou6GVXbJXomOevFMMu6mreGkgGYS7TmT0aVNivG4FH23FrH0w/Na0vq
+   doUmNEO5q1nZ2VwtLyYqs71wS/c5JyytJg0h0DljoQDwR6YwCgQOYfuOr
+   fRdqbSiXgnaT8YtRRVKOacol1hEGa91BBa/6ySPAz79tUzUzgCIapxBH6
+   z0Momlyhl7AukzuadMYUlP4pUGnwYJjiM/xN23dJU0GCA8lvC8R+wtg1B
+   0dQTduZ6/LzWndS9GbYoACA4Dhi5F7lC0+8fw5SyJHAr1EKeAgNmR34sH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="279601071"
+X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
+   d="scan'208";a="279601071"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 02:20:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
+   d="scan'208";a="673783811"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Jun 2022 02:20:08 -0700
+Date:   Tue, 14 Jun 2022 17:12:07 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com, corbet@lwn.net,
+        Conor.Dooley@microchip.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, system@metrotek.ru
+Subject: Re: [PATCH v18 0/4] Microchip Polarfire FPGA manager
+Message-ID: <20220614091207.GA869905@yilunxu-OptiPlex-7050>
+References: <20220611090531.9663-1-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 5.18 000/343] 5.18.4-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220613181233.078148768@linuxfoundation.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220613181233.078148768@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220611090531.9663-1-i.bornyakov@metrotek.ru>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13. 06. 22, 20:18, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.4 release.
-> There are 343 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sat, Jun 11, 2022 at 12:05:27PM +0300, Ivan Bornyakov wrote:
+> Add support to the FPGA manager for programming Microchip Polarfire
+> FPGAs over slave SPI interface with .dat formatted bitsream image.
+
+Hi Ivan:
+
+I've found some warnings/checks when running "checkpatch --strict",
+please help fix them.
+
+One of them is the krealloc issue. Some reference for you:
+https://lkml.org/lkml/2013/3/14/558
+
+BTW: You could check Documentation/process/submit-checklist.rst for more
+guildlines. I think at least checkpatch, make htmldocs or make pdfdocs,
+sparse is the basic checks for you.
+
+Thanks,
+Yilun
+
 > 
-> Responses should be made by Wed, 15 Jun 2022 18:11:39 +0000.
-> Anything received after that time might be too late.
+> Changelog:
+>   v1 -> v2: fix printk formating
+>   v2 -> v3:
+>    * replace "microsemi" with "microchip"
+>    * replace prefix "microsemi_fpga_" with "mpf_"
+>    * more sensible .compatible and .name strings
+>    * remove unused defines STATUS_SPI_VIOLATION and STATUS_SPI_ERROR
+>   v3 -> v4: fix unused variable warning
+>     Put 'mpf_of_ids' definition under conditional compilation, so it
+>     would not hang unused if CONFIG_OF is not enabled.
+>   v4 -> v5:
+>    * prefix defines with MPF_
+>    * mdelay() -> usleep_range()
+>    * formatting fixes
+>    * add DT bindings doc
+>    * rework fpga_manager_ops.write() to fpga_manager_ops.write_sg()
+>      We can't parse image header in write_init() because image header
+>      size is not known beforehand. Thus parsing need to be done in
+>      fpga_manager_ops.write() callback, but fpga_manager_ops.write()
+>      also need to be reenterable. On the other hand,
+>      fpga_manager_ops.write_sg() is called once. Thus, rework usage of
+>      write() callback to write_sg().
+>   v5 -> v6: fix patch applying
+>      I forgot to clean up unrelated local changes which lead to error on
+>      patch 0001-fpga-microchip-spi-add-Microchip-MPF-FPGA-manager.patch
+>      applying on vanilla kernel.
+>   v6 -> v7: fix binding doc to pass dt_binding_check
+>   v7 -> v8: another fix for dt_binding_check warning
+>   v8 -> v9:
+>    * add another patch to support bitstream offset in FPGA image buffer
+>    * rework fpga_manager_ops.write_sg() back to fpga_manager_ops.write()
+>    * move image header parsing from write() to write_init()
+>   v9 -> v10:
+>    * add parse_header() callback to fpga_manager_ops
+>    * adjust fpga_mgr_write_init[_buf|_sg]() for parse_header() usage
+>    * implement parse_header() in microchip-spi driver
+>   v10 -> v11: include missing unaligned.h to microchip-spi
+>      fix error: implicit declaration of function 'get_unaligned_le[16|32]'
+>   v11 -> v12:
+>    * microchip-spi: double read hw status, ignore first read, because it
+>      can be unreliable.
+>    * microchip-spi: remove sleep between status readings in
+>      poll_status_not_busy() to save a few seconds. Status is polled on
+>      every 16 byte writes - that is quite often, therefore
+>      usleep_range() accumulate to a considerable number of seconds.
+>   v12 -> v13:
+>    * fpga-mgr: separate fpga_mgr_parse_header_buf() from
+>      fpga_mgr_write_init_buf()
+>    * fpga-mgr: introduce FPGA_MGR_STATE_PARSE_HEADER and
+>      FPGA_MGR_STATE_PARSE_HEADER_ERR fpga_mgr_states
+>    * fpga-mgr: rename fpga_mgr_write_init_sg() to fpga_mgr_prepare_sg()
+>      and rework with respect to a new fpga_mgr_parse_header_buf()
+>    * fpga-mgr: rework write accounting in fpga_mgr_buf_load_sg() for
+>      better clarity
+>    * microchip-spi: rename MPF_STATUS_POLL_TIMEOUT to
+>      MPF_STATUS_POLL_RETRIES
+>    * microchip-spi: add comment about status reading quirk to
+>      mpf_read_status()
+>    * microchip-spi: rename poll_status_not_busy() to mpf_poll_status()
+>      and add comment.
+>    * microchip-spi: make if statement in mpf_poll_status() easier to
+>      read.
+>   v13 -> v14:
+>    * fpga-mgr: improvements from Xu Yilun in
+>       - fpga_mgr_parse_header_buf()
+>       - fpga_mgr_write_init_buf()
+>       - fpga_mgr_prepare_sg()
+>       - fpga_mgr_buf_load_sg()
+>    * fpga-mgr: add check for -EAGAIN from fpga_mgr_parse_header_buf()
+>      when called from fpga_mgr_buf_load_mapped()
+>    * microchip-spi: remove excessive cs_change from second spi_transfer
+>      in mpf_read_status()
+>    * microchip-spi: change type of components_size_start,
+>      bitstream_start, i from size_t to u32 in mpf_ops_parse_header()
+>   v14 -> v15: eliminate memcpy() in mpf_ops_write()
+>     Eliminate excessive memcpy() in mpf_ops_write() by using
+>     spi_sync_transfer() instead of spi_write().
+>   v15 -> v16:
+>    * microchip-spi: change back components_size_start and
+>      bitstream_start variables types to size_t, i - to u16 in
+>      mpf_ops_parse_header()
+>    * fpga-mgr: rename fpga_parse_header_buf() to
+>      fpga_parse_header_mapped(). It serves only mapped FPGA image now,
+>      adjust it accordingly.
+>    * fpga-mgr: separate fpga_mgr_parse_header_sg_first() and
+>      fpga_mgr_parse_header_sg() from fpga_mgr_prepare_sg()
+>   v16 -> v17:
+>    * fpga-mgr: return size of allocated header from
+>      fpga_mgr_parse_header_sg(), add `char **ret_buf` to function args
+>      to save pointer to allocated header. This allow us to call
+>      fpga_mgr_write_init_buf() with exact size of allocated header.
+>    * document parse_header() callback in fpga-mgr.rst
+>   v17 -> v18:
+>    * fpga-mgr: change back fpga_mgr_parse_header_sg() to return
+>      allocated buffer but set buffer size into output parameter
+>    * fpga-mgr: check returned pointer from krealloc for ZERO_OR_NULL_PTR
+>      in fpga_mgr_paese_header_sg() as krealloc may return ZERO_SIZE_PTR.
+>    * fpga-mgr: in fpga_mgr_prepare_sg() return fpga_mgr_write_init() on
+>      fast path only when both initial_header_size and parse_header() are
+>      not defined.
+>    * docs: fpga-mgr: a few rewords from Xu Yilun
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.4-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
-
-openSUSE configs¹⁾ all green.
-
-Tested-by: Jiri Slaby <jirislaby@kernel.org>
-
-¹⁾ armv6hl armv7hl arm64 i386 ppc64 ppc64le riscv64 s390x x86_64
-
--- 
-js
-suse labs
+> Ivan Bornyakov (4):
+>   fpga: fpga-mgr: support bitstream offset in image buffer
+>   docs: fpga: mgr: document parse_header() callback
+>   fpga: microchip-spi: add Microchip MPF FPGA manager
+>   dt-bindings: fpga: add binding doc for microchip-spi fpga mgr
+> 
+>  .../fpga/microchip,mpf-spi-fpga-mgr.yaml      |  44 ++
+>  Documentation/driver-api/fpga/fpga-mgr.rst    |  31 +-
+>  drivers/fpga/Kconfig                          |   8 +
+>  drivers/fpga/Makefile                         |   1 +
+>  drivers/fpga/fpga-mgr.c                       | 235 +++++++++--
+>  drivers/fpga/microchip-spi.c                  | 393 ++++++++++++++++++
+>  include/linux/fpga/fpga-mgr.h                 |  17 +-
+>  7 files changed, 693 insertions(+), 36 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+>  create mode 100644 drivers/fpga/microchip-spi.c
+> 
+> -- 
+> 2.35.1
+> 

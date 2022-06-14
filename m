@@ -2,115 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2B354B261
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF1154B262
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:37:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243564AbiFNNhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 09:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
+        id S1343515AbiFNNhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 09:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235958AbiFNNhA (ORCPT
+        with ESMTP id S237918AbiFNNhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 09:37:00 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE021CB11;
-        Tue, 14 Jun 2022 06:36:59 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id m20so17188395ejj.10;
-        Tue, 14 Jun 2022 06:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TBZRXsIUgPrwK41uYl0qFR1bA9XKQJ6Wd9marZHiA5E=;
-        b=By224uq/sOnAN+s/z0vVcdF/6dNVvBSlBCxxMi+6rjH2FYK0e6mYiUsjpegUOxN8jt
-         q7Mps9QkZVv9hRt+INZjJnFH+MNWrT1ztkWnYYl+8NjxrhrXAOklb14sf1yLgSZbREc5
-         cm/DwAA1mqb87u0tpnvtYB/WHO6xStksUnENFVBsEvBJQsvHXpvqZMWSGp/AVETVLWDe
-         Y7WKbzYJcz8ZFFs5zQTanGkX3rXkrBCxGuDNKWYdFk5MMhrlp8PmYj2kuXMhw9IvOwF9
-         CKanayB/4E+Htk9g8QfVIQ5wkbgwrNzF0zz0qjg4Qh4UWFt2Jp9qtOGSDj2of0hBbcnR
-         O8PQ==
+        Tue, 14 Jun 2022 09:37:33 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A4621AC;
+        Tue, 14 Jun 2022 06:37:32 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id t32so15131691ybt.12;
+        Tue, 14 Jun 2022 06:37:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=TBZRXsIUgPrwK41uYl0qFR1bA9XKQJ6Wd9marZHiA5E=;
-        b=Pl5vZsRgDtTslSSW2JBerDEmceUwhuL3nCEDfPdZFutLJAylrbASe57uFx2IuhaH/2
-         jeoKHpboIi/UvLf1NDNIiNFlEZt77nLcdeMACcVHrLupaxCC8Wp7nTWI04zqSg/iUxSw
-         EpSGuKBNotCVOuAuNlMD7eLICOfiV1JzUtJ7zklav7fzcYW/dOtKScvWYI6hTLrIXCjH
-         O1a0bPdwuQkjwoW+dWmEJoIzRdmuCxXVCzAhJLK/TrShFT0aolHluLZAKoQLvc/LaZ9P
-         Shv0xelw6Bsi9goAkqb/WvzeHzqSGgcHmNx7XP2coBaH8c8ANAxoxCWMfXpvhazx2q6j
-         JrvQ==
-X-Gm-Message-State: AOAM530JfaB3uVd8JZ07BMhwFs4Uhjltyh4vKOYjvnWUMbjjEft9XZCd
-        GX8GGsT3UirVE4EdDO78edlD2iKrYQ17FcrBhKk=
-X-Google-Smtp-Source: ABdhPJwwmaea2USqpctBchdlfpCRiDLTSWAqAR0YajpQBCirZQR5RNvshXX1pzGdbCJegLLC+R0wdjwBWQOnsl8VjTA=
-X-Received: by 2002:a17:906:3c07:b0:718:e1a7:b834 with SMTP id
- h7-20020a1709063c0700b00718e1a7b834mr690062ejg.635.1655213817548; Tue, 14 Jun
- 2022 06:36:57 -0700 (PDT)
+        bh=atVUmn8uXOx3ZXsVFS5tdc+EVO/H/mhk/Sw0YtUkpe8=;
+        b=2IbS59IKwK6qND+1CuJYx/PC5YQAvjtQWq8RJ7XZX5glyJZWEKx5tgCi0YTuDkHAWg
+         Epg6CQU3qk04nraDWvb0ineLa2RVnCgEcJkvMfBFtVYGN5VzF8yUiyGpyPdX6NS3wflO
+         RLiyXJIbhBCvonKue7Sml7EvEB4g8IRIgry0Qk7EEldkTUVeY7cSiRBdCzWuf5G50mbR
+         m/HwwSSSSy+BbXWctpevVT6foxWN07bjNWbgipuM5wma8YDnga7WR400zk/BMymAGijx
+         WXk/7/JXdLiRMXoviS0ItHt/5oFHs+K53JlsxHOYXY+wTnFbeuDoDS+SyF2KfkdLmK1G
+         atRw==
+X-Gm-Message-State: AJIora9BMG6ih3kVsmQKCphlbT9idUJUHbWaq2XZxJiGK7mYXNxjJLI9
+        ge3KavJn3alFPjJsTSsVvNO+uSN1ZldrBK9BKk+v5GlQ
+X-Google-Smtp-Source: AGRyM1scEPpgYPOR80Q2IkzxlYtMoCM12zi1+VTuH/wUSwvgxwomSrFAd5/t1JF9fbf7IZDXFPZ0aa1rHLFJB4BHMFk=
+X-Received: by 2002:a25:6b50:0:b0:64f:4b33:664 with SMTP id
+ o16-20020a256b50000000b0064f4b330664mr5217608ybm.153.1655213851134; Tue, 14
+ Jun 2022 06:37:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220614085035.122521-1-dzm91@hust.edu.cn> <87zgifihcd.fsf@redhat.com>
-In-Reply-To: <87zgifihcd.fsf@redhat.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Tue, 14 Jun 2022 21:36:22 +0800
-Message-ID: <CAD-N9QVS_9BjpocLuW9GRKhOo4inP8hqn1mB4h-1mW+J9-zeyA@mail.gmail.com>
-Subject: Re: [PATCH] x86: kvm: remove NULL check before kfree
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220521063534.138930-1-yiyang13@huawei.com> <20220524071041.4aw3cfo3x5wphziy@vireshk-i7>
+In-Reply-To: <20220524071041.4aw3cfo3x5wphziy@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 14 Jun 2022 15:37:20 +0200
+Message-ID: <CAJZ5v0jCx0v-Q2=aW4nSSAHHajUnLdVtQMe3w1cX1w-o=mSesg@mail.gmail.com>
+Subject: Re: [PATCH -next] cpufreq: Fix reserved space in cpufreq_show_cpus()
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Yi Yang <yiyang13@huawei.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 8:01 PM Vitaly Kuznetsov <vkuznets@redhat.com> wrote:
+On Tue, May 24, 2022 at 9:10 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Dongliang Mu <dzm91@hust.edu.cn> writes:
->
-> > From: mudongliang <mudongliangabcd@gmail.com>
+> On 21-05-22, 14:35, Yi Yang wrote:
+> > Function scnprintf() would reserve space for the trailing '\0' and return
+> > value is the number of characters written into buf not including the
+> > trailing '\0'. internally meaning the next scnprintf() would write begin
+> > the trailing '\0'. The code specifying "PAGE_SIZE - i - 2" here is trying
+> > to reserve space for "\n\0" which would cause scnprintf() to reserve an
+> > additional byte making the tail of the buf looks like this: "\n\0\0".
+> > Thus. we should reserve only the space for one '\0'. passing in
+> > "PAGE_SIZE - i - 1".
 > >
-> > kfree can handle NULL pointer as its argument.
-> > According to coccinelle isnullfree check, remove NULL check
-> > before kfree operation.
+> > Additionally, each iteration would replace the trailing '\0' from the last
+> > iteration with a space, and append 4 additional bytes to the string making
+> > it a total of 5 additional bytes. That means we should stop printing into
+> > the buffer if the remaining size is less than 7 bytes(1 for the ' ', 4 for
+> > the %u and 2 for the tailing "\n\0")
 > >
-> > Signed-off-by: mudongliang <mudongliangabcd@gmail.com>
+> > Signed-off-by: Yi Yang <yiyang13@huawei.com>
 > > ---
-> >  arch/x86/kernel/kvm.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> >  drivers/cpufreq/cpufreq.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
 > >
-> > diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
-> > index 1a3658f7e6d9..d4e48b4a438b 100644
-> > --- a/arch/x86/kernel/kvm.c
-> > +++ b/arch/x86/kernel/kvm.c
-> > @@ -236,8 +236,7 @@ void kvm_async_pf_task_wake(u32 token)
-> >       raw_spin_unlock(&b->lock);
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 1f6667ce43bd..60c005c9961e 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -844,9 +844,9 @@ ssize_t cpufreq_show_cpus(const struct cpumask *mask, char *buf)
 > >
-> >       /* A dummy token might be allocated and ultimately not used.  */
-> > -     if (dummy)
-> > -             kfree(dummy);
-> > +     kfree(dummy);
-> >  }
-> >  EXPORT_SYMBOL_GPL(kvm_async_pf_task_wake);
+> >       for_each_cpu(cpu, mask) {
+> >               if (i)
+> > -                     i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), " ");
+> > -             i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), "%u", cpu);
+> > -             if (i >= (PAGE_SIZE - 5))
+> > +                     i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), " ");
+> > +             i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), "%u", cpu);
+> > +             if (i >= (PAGE_SIZE - 6))
+> >                       break;
+> >       }
+> >       i += sprintf(&buf[i], "\n");
 >
-> Reviewed-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Thanks for your review. My signature seems with an incorrect format,
-so I send a v2 patch.
-
-
->
-> --
-> Vitaly
->
+Applied as 5.20 material, thanks!

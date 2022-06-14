@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 172DD54AA14
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F18C54AA0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:08:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353047AbiFNHIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
+        id S1352954AbiFNHIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353222AbiFNHIc (ORCPT
+        with ESMTP id S1353257AbiFNHIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:08:32 -0400
+        Tue, 14 Jun 2022 03:08:35 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B8631901
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:08:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C00A232073
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:08:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655190512; x=1686726512;
+  t=1655190514; x=1686726514;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=GC/A2SjBlztsHvLlZ8tf63JxqBUMLWhTshFRZpzc/hM=;
-  b=krT9bU6rZaQEe7UjTPN4ry/sjLYg98N3V0Kio5P7xw9sWxrGV+ILpT23
-   Wt5KjBa8slYLxf5CwIUED81Cm2Q6dhHXqVAX8TLr/OBp66Ag73gjtn/nw
-   CqFHtyh8JNaJPqIGlQfh/6ppSsaHfapAwMfnKrhjGFUlVHAQWDDk3zx+B
-   xSdFXfC8YaNKy7E1LcGiSpR97mAGP8WWlJq/LajMboR3iLxgdl+rJFvdU
-   vBQvo+0cdMvCt06T3pmDXP+jqTo7ucb3bhOHaKfSgh0S6Jtgadf/DSkTS
-   wPqJ0CdYpzirJ3eDtMA34fRdkiFxWb+1yfHaCsItoDuDExtXFO+KOWJ0g
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258363539"
+  bh=89fJyn3HdQE4qrmLLsHd0B83txiGpBAciNGBYfvWWjY=;
+  b=VWavr5eQB2nc9fyoZV9CLEbY8dgwIbonwy1j+u7Qgdem7IEIV3H72Rw8
+   AQEiYzWZUpJps6dIVfnqd4R+J1Psv9++c5r79rCrULSD5+5A1kV5Cmxq3
+   bTObfy/XpR7458sgR4XyQtZ5/QBB3GmWvhFyO0zuUYyJA35YIaXx7lOOj
+   b5s80rI+f7GSgXpfZjT5WCRCOALRS/d16ovo60T9lcGzddEmMR1gOiwuI
+   FdyDkIDOWsbLzDTmSp5ryioaoLw2kzGjXMrh7NCfHHCaPA/N/0PDy/yCs
+   LHjvdbQ0N0atEIoN1+8ojhfUwWKpOv3N6lSn8a5Bbr0BxmIJ6mOCh/dBr
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258363560"
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="258363539"
+   d="scan'208";a="258363560"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:08:32 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:08:34 -0700
 X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="640185936"
+   d="scan'208";a="640185952"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:08:29 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:08:32 -0700
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org
 Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
@@ -44,9 +44,9 @@ Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org, tiwai@suse.de,
         srinivas.kandagatla@linaro.org,
         pierre-louis.bossart@linux.intel.com, sanyog.r.kale@intel.com,
         bard.liao@intel.com
-Subject: [PATCH 1/2] soundwire: Intel: add trigger callback
-Date:   Tue, 14 Jun 2022 15:08:16 +0800
-Message-Id: <20220614070817.2508-2-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH 2/2] ASoC: SOF: Intel: add trigger callback into sdw_callback
+Date:   Tue, 14 Jun 2022 15:08:17 +0800
+Message-Id: <20220614070817.2508-3-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220614070817.2508-1-yung-chuan.liao@linux.intel.com>
 References: <20220614070817.2508-1-yung-chuan.liao@linux.intel.com>
@@ -60,53 +60,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a pipeline is split into FE and BE parts, the BE pipeline may need to
-be triggered separately in the BE trigger op. So add the trigger callback
-in the link_res ops that will be invoked during BE DAI trigger.
+For IPC4, we need to set pipeline state in BE DAI trigger.
 
 Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
 Reviewed-by: Rander Wang <rander.wang@intel.com>
 Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 ---
- drivers/soundwire/intel.c           | 8 ++++++++
- include/linux/soundwire/sdw_intel.h | 1 +
- 2 files changed, 9 insertions(+)
+ sound/soc/sof/intel/hda-dai.c | 15 ++++++++++++---
+ sound/soc/sof/intel/hda.c     |  2 +-
+ sound/soc/sof/intel/hda.h     |  1 +
+ 3 files changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-index 505c5ef061e3..2e7c27d303b4 100644
---- a/drivers/soundwire/intel.c
-+++ b/drivers/soundwire/intel.c
-@@ -1004,9 +1004,17 @@ static int intel_trigger(struct snd_pcm_substream *substream, int cmd, struct sn
- {
- 	struct sdw_cdns *cdns = snd_soc_dai_get_drvdata(dai);
- 	struct sdw_intel *sdw = cdns_to_intel(cdns);
-+	struct sdw_intel_link_res *res = sdw->link_res;
- 	struct sdw_cdns_dma_data *dma;
- 	int ret = 0;
- 
-+	/* The .trigger callback is used to send required IPC to audio
-+	 * firmware. The .free_stream callback will still be called
-+	 * by intel_free_stream() in the TRIGGER_SUSPEND case.
-+	 */
-+	if (res->ops && res->ops->trigger)
-+		res->ops->trigger(dai, cmd, substream->stream);
-+
- 	dma = snd_soc_dai_get_dma_data(dai, substream);
- 	if (!dma) {
- 		dev_err(dai->dev, "failed to get dma data in %s\n",
-diff --git a/include/linux/soundwire/sdw_intel.h b/include/linux/soundwire/sdw_intel.h
-index 67e0d3e750b5..f638707fd712 100644
---- a/include/linux/soundwire/sdw_intel.h
-+++ b/include/linux/soundwire/sdw_intel.h
-@@ -119,6 +119,7 @@ struct sdw_intel_ops {
- 			     struct sdw_intel_stream_params_data *params_data);
- 	int (*free_stream)(struct device *dev,
- 			   struct sdw_intel_stream_free_data *free_data);
-+	int (*trigger)(struct snd_soc_dai *dai, int cmd, int stream);
+diff --git a/sound/soc/sof/intel/hda-dai.c b/sound/soc/sof/intel/hda-dai.c
+index 228079a52c3d..6ed99fdc5793 100644
+--- a/sound/soc/sof/intel/hda-dai.c
++++ b/sound/soc/sof/intel/hda-dai.c
+@@ -713,8 +713,7 @@ static const struct snd_soc_dai_ops ipc3_ssp_dai_ops = {
+ 	.shutdown = ssp_dai_shutdown,
  };
  
- /**
+-static int ipc4_be_dai_trigger(struct snd_pcm_substream *substream,
+-			       int cmd, struct snd_soc_dai *dai)
++static int ipc4_be_dai_common_trigger(struct snd_soc_dai *dai, int cmd, int stream)
+ {
+ 	struct snd_sof_widget *pipe_widget;
+ 	struct sof_ipc4_pipeline *pipeline;
+@@ -723,7 +722,7 @@ static int ipc4_be_dai_trigger(struct snd_pcm_substream *substream,
+ 	struct snd_sof_dev *sdev;
+ 	int ret;
+ 
+-	w = snd_soc_dai_get_widget(dai, substream->stream);
++	w = snd_soc_dai_get_widget(dai, stream);
+ 	swidget = w->dobj.private;
+ 	pipe_widget = swidget->pipe_widget;
+ 	pipeline = pipe_widget->private;
+@@ -758,6 +757,12 @@ static int ipc4_be_dai_trigger(struct snd_pcm_substream *substream,
+ 	return 0;
+ }
+ 
++static int ipc4_be_dai_trigger(struct snd_pcm_substream *substream,
++			       int cmd, struct snd_soc_dai *dai)
++{
++	return ipc4_be_dai_common_trigger(dai, cmd, substream->stream);
++}
++
+ static const struct snd_soc_dai_ops ipc4_dmic_dai_ops = {
+ 	.trigger = ipc4_be_dai_trigger,
+ };
+@@ -809,6 +814,10 @@ void hda_set_dai_drv_ops(struct snd_sof_dev *sdev, struct snd_sof_dsp_ops *ops)
+ 		if (!hda_use_tplg_nhlt)
+ 			ipc4_data->nhlt = intel_nhlt_init(sdev->dev);
+ 
++#if IS_ENABLED(CONFIG_SND_SOC_SOF_INTEL_SOUNDWIRE)
++		sdw_callback.trigger = ipc4_be_dai_common_trigger;
++#endif
++
+ 		break;
+ 	}
+ 	default:
+diff --git a/sound/soc/sof/intel/hda.c b/sound/soc/sof/intel/hda.c
+index bc07df1fc39f..cdd3601e84f5 100644
+--- a/sound/soc/sof/intel/hda.c
++++ b/sound/soc/sof/intel/hda.c
+@@ -147,7 +147,7 @@ static int sdw_free_stream(struct device *dev,
+ 	return hda_ctrl_dai_widget_free(w, SOF_DAI_CONFIG_FLAGS_NONE, &data);
+ }
+ 
+-static const struct sdw_intel_ops sdw_callback = {
++struct sdw_intel_ops sdw_callback = {
+ 	.params_stream = sdw_params_stream,
+ 	.free_stream = sdw_free_stream,
+ };
+diff --git a/sound/soc/sof/intel/hda.h b/sound/soc/sof/intel/hda.h
+index f4e4cd7d7406..ec7a2d947eb6 100644
+--- a/sound/soc/sof/intel/hda.h
++++ b/sound/soc/sof/intel/hda.h
+@@ -771,5 +771,6 @@ irqreturn_t cnl_ipc4_irq_thread(int irq, void *context);
+ int cnl_ipc4_send_msg(struct snd_sof_dev *sdev, struct snd_sof_ipc_msg *msg);
+ irqreturn_t hda_dsp_ipc4_irq_thread(int irq, void *context);
+ int hda_dsp_ipc4_send_msg(struct snd_sof_dev *sdev, struct snd_sof_ipc_msg *msg);
++extern struct sdw_intel_ops sdw_callback;
+ 
+ #endif
 -- 
 2.17.1
 

@@ -2,133 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4049954BBF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524C254BBFD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357332AbiFNUnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
+        id S231408AbiFNUpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:45:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353110AbiFNUnd (ORCPT
+        with ESMTP id S1357385AbiFNUnu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:43:33 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2E819015
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:43:31 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id v1so19357878ejg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:43:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dhAM/LQikebwPyrwCB/38lxgJLD4HIC2Qhyl28Iz4Bo=;
-        b=F64WuJyflipU8IKSxsvGs9EdDSEd6+FrvI2BKcasSS/0ENM051pT66CjnRViaTl7sw
-         Lwp5sxIwuSmAzzBzwSqg/uYy/OkIfMGeDtO7gOick8FFKeDNMqyzE5X77y+6saloeTcw
-         C2sC9S+KjWM86en5pcv/eMsQB6SPZUaenDdoU=
+        Tue, 14 Jun 2022 16:43:50 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB7519014;
+        Tue, 14 Jun 2022 13:43:49 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id a10so10668605ioe.9;
+        Tue, 14 Jun 2022 13:43:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dhAM/LQikebwPyrwCB/38lxgJLD4HIC2Qhyl28Iz4Bo=;
-        b=3sGGjzari481ke74m1yJV7tk0Cv/mcVG6vWCvBUXRjpbSUO5XMnoQqs35fSCa/LwdP
-         cQu1IcW2UFSS6j1YEcEHW/toMGbWerEhn4l+WAST12tUsS4UPMG0INboPNSQphE3+cQC
-         ghXhmksw0g+6WLBmpzDjc7uqqHI4bE56jkV2/KQRfFrnswPmrJP3c24MoOEKcBGm23sD
-         6I0pA/H/ob8v2Kqa2YeMcZ97imTMtteFewgDzDKSXILnexMDvxTDf+Pa5Vh8/BUsyL4F
-         KFJFzSzpk61s6vnT47C27sORf7OZY1dC1p1ynY8KI9SAzkRuBnO61MOLYhYCRP7JTQvs
-         ZbbQ==
-X-Gm-Message-State: AOAM533qn1emDnkwmYF2dckU/+F0CrPqQZuMI2iV1X9IXGMMsT3o6C3Q
-        bo9/mIg1sCLAewbhM/Ocr5EtnTb/E65XJRnk75k=
-X-Google-Smtp-Source: AGRyM1tiWpdYzIGOYrqHbupSlyg/qLDQih/qjU84BV77pkxKPoyPFGAKjib5UCHvprwS5SFI9+xCBw==
-X-Received: by 2002:a17:907:c22:b0:711:dc95:3996 with SMTP id ga34-20020a1709070c2200b00711dc953996mr5929448ejc.62.1655239409801;
-        Tue, 14 Jun 2022 13:43:29 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id x90-20020a50bae3000000b0042ab87ea713sm7815658ede.22.2022.06.14.13.43.27
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 13:43:28 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id u8so12727663wrm.13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:43:27 -0700 (PDT)
-X-Received: by 2002:a5d:47aa:0:b0:218:5ac8:f3a8 with SMTP id
- 10-20020a5d47aa000000b002185ac8f3a8mr6695741wrb.442.1655239407469; Tue, 14
- Jun 2022 13:43:27 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EWCrP2gVR6iEKu6wld+fLLcPN5tCwcbqGWbRuRjzj3E=;
+        b=OLFMIalh9qPeLI5fmJNnH2JtEGCs+Y8XcCSMNa1jJxJCT1YFNc4MYs7ywx8afdc0ga
+         ihSlAG8d2ljbWRAub3Sk/EOMZ7MBza8X8/grdwshQg+u8PA8O1s31TXno/JhwOyrO3df
+         ANWDynI/mYIN2rcgDkcn41xZkDtjpQfevlTt9SnIKrgnc6fB7t5W3wJGNAOZWe4FPHdT
+         XxZGfEC6mXLsgGU2chCX+AUcD5EAcE9uY3fUXH7YGLgq07v2mjOvXZIKpPavTu3VIc3H
+         yisVFu9KcxHD5qy9bocWx7y/lKRb8XyPTY9NOF+zVbIVitC067mgX9V8fWBV/qURVqPK
+         p+vQ==
+X-Gm-Message-State: AOAM533SykWBwCk1m0Dcx+a+RimGwegO/jqaIPn4GaNvVeHcmKpG2oaG
+        N1quFebJws8E4cDJD1PryQ==
+X-Google-Smtp-Source: ABdhPJyquQnI3HE8yYQ+8Libvzpe4msNa30paW2QwWTY1sk6eZSq9sHUV4oG33HdAbAGa6d2P4Bo5Q==
+X-Received: by 2002:a05:6638:1c19:b0:331:d0b7:4cfe with SMTP id ca25-20020a0566381c1900b00331d0b74cfemr3983850jab.311.1655239428886;
+        Tue, 14 Jun 2022 13:43:48 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id n42-20020a02716a000000b0033197f42be0sm5230647jaf.157.2022.06.14.13.43.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 13:43:48 -0700 (PDT)
+Received: (nullmailer pid 2487460 invoked by uid 1000);
+        Tue, 14 Jun 2022 20:43:45 -0000
+Date:   Tue, 14 Jun 2022 14:43:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-gpio@vger.kernel.org,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Terry Bowman <terry.bowman@amd.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: Re: [PATCH v10 net-next 6/7] dt-bindings: mfd: ocelot: add bindings
+ for VSC7512
+Message-ID: <20220614204345.GA2419690-robh@kernel.org>
+References: <20220610202330.799510-1-colin.foster@in-advantage.com>
+ <20220610202330.799510-7-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-References: <20220614144853.3693273-1-glider@google.com> <CAHk-=whaWnwB8guceg8V=bA1adv74GNaMk2FEu+YQkBKUqxVoA@mail.gmail.com>
- <CAG_fn=WEed5NJ8hdrrP_N8aQ_1Ad11VoJgdVxQheo3VfT_xyXQ@mail.gmail.com>
- <CAHk-=whjz3wO8zD+itoerphWem+JZz4uS3myf6u1Wd6epGRgmQ@mail.gmail.com> <CAG_fn=UPoM3bafwu6inGPMjg1bPw3HSFM_KrE_hen_MN3fu2vA@mail.gmail.com>
-In-Reply-To: <CAG_fn=UPoM3bafwu6inGPMjg1bPw3HSFM_KrE_hen_MN3fu2vA@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 14 Jun 2022 13:43:11 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgG0nzFbGi_HmH9Yxi2KCofG5jPYNZQPA5+GsOfsZjWkw@mail.gmail.com>
-Message-ID: <CAHk-=wgG0nzFbGi_HmH9Yxi2KCofG5jPYNZQPA5+GsOfsZjWkw@mail.gmail.com>
-Subject: Re: [PATCH] [RFC] Initialization of unused function parameters
-To:     Alexander Potapenko <glider@google.com>
-Cc:     Evgenii Stepanov <eugenis@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Marco Elver <elver@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vitaly Buka <vitalybuka@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-toolchains <linux-toolchains@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610202330.799510-7-colin.foster@in-advantage.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 1:20 PM Alexander Potapenko <glider@google.com> wrote:
->
-> What about the cases where these uninitialized values are never used
-> in the callee?
+On Fri, Jun 10, 2022 at 01:23:29PM -0700, Colin Foster wrote:
+> Add devicetree bindings for SPI-controlled Ocelot chips, specifically the
+> VSC7512.
+> 
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> ---
+>  .../devicetree/bindings/mfd/mscc,ocelot.yaml  | 160 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 161 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml b/Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml
+> new file mode 100644
+> index 000000000000..e298ca8d616d
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml
+> @@ -0,0 +1,160 @@
+> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/mscc,ocelot.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Ocelot Externally-Controlled Ethernet Switch
+> +
+> +maintainers:
+> +  - Colin Foster <colin.foster@in-advantage.com>
+> +
+> +description: |
+> +  The Ocelot ethernet switch family contains chips that have an internal CPU
+> +  (VSC7513, VSC7514) and chips that don't (VSC7511, VSC7512). All switches have
+> +  the option to be controlled externally, which is the purpose of this driver.
+> +
+> +  The switch family is a multi-port networking switch that supports many
+> +  interfaces. Additionally, the device can perform pin control, MDIO buses, and
+> +  external GPIO expanders.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mscc,vsc7512-spi
 
-I assume that what happens is that when things are inlined, the
-compiler then sees that there is no actual uninitialized value, and
-that's ok.
+'-spi' is redundant as we know what bus this is on looking at the 
+parent.
 
-But if things aren't inlined, I really hope all compilers already warn
-about "look, I'm calling this function with an uninitialized
-argument".
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
 
-IOW, compilers can - and should - obviously take more information into
-account when they can see it.
+No size? That's odd given the child nodes are the same as memory mapped 
+peripherals which expect a size.
 
-So no, don't warn for things you can actually see are not used.
+> +
+> +  spi-max-frequency:
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  "^pinctrl@[0-9a-f]+$":
+> +    type: object
+> +    $ref: /schemas/pinctrl/mscc,ocelot-pinctrl.yaml
+> +
+> +  "^gpio@[0-9a-f]+$":
+> +    type: object
+> +    $ref: /schemas/pinctrl/microchip,sparx5-sgpio.yaml
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - mscc,ocelot-sgpio
+> +
+> +  "^mdio@[0-9a-f]+$":
+> +    type: object
+> +    $ref: /schemas/net/mscc,miim.yaml
+> +    properties:
+> +      compatible:
+> +        enum:
+> +          - mscc,ocelot-miim
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#address-cells'
+> +  - '#size-cells'
+> +  - spi-max-frequency
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    ocelot_clock: ocelot-clock {
+> +          compatible = "fixed-clock";
+> +          #clock-cells = <0>;
+> +          clock-frequency = <125000000>;
+> +      };
+> +
+> +    spi0 {
 
-IOW, you shouldn't warn because of any _syntactic_ issue of it being
-an argument to a function. We often use inlining as an actually
-semantically meaningful thing, and the compiler should *not* warn for
-some theoretical "if this was not inlined, the argument would be used
-and be uninitialized" case.
+spi {
 
-For an example of this kind of "not really used" thing, I could
-imagine that some configuration might need a "cookie" model to pair up
-actions, and you have a
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        ocelot-chip@0 {
 
-        void *cookie;
+Node names should be generic. I don't think we have a formal definition, 
+but 'switch' seems to be most common.
 
-        start(arg, &cookie);
-        ....
-        end(cookie);
+> +            compatible = "mscc,vsc7512-spi";
+> +            spi-max-frequency = <2500000>;
+> +            reg = <0>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            mdio0: mdio@7107009c {
 
-kind of situation.
+Drop unused labels.
 
-But then I could imagine that other configurations don't actually need
-or use that "end()" thing at all, and would leave "cookie"
-uninitialized, because the only valid use would be an inline function
-that is empty, and purely there for those *other* configurations.
-
-Again, if the compiler inlines 'end()', and sees that 'cookie' is not
-actually used, then no complaint is needed - or valid.
-
-But if 'cookie()' is an actual real function call, and you don't see
-the use of it, then it had better warn.
-
-No?
-
-               Linus
+> +                compatible = "mscc,ocelot-miim";
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                reg = <0x7107009c>;
+> +
+> +                sw_phy0: ethernet-phy@0 {
+> +                    reg = <0x0>;
+> +                };
+> +            };
+> +
+> +            mdio1: mdio@710700c0 {
+> +                compatible = "mscc,ocelot-miim";
+> +                pinctrl-names = "default";
+> +                pinctrl-0 = <&miim1_pins>;
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                reg = <0x710700c0>;
+> +
+> +                sw_phy4: ethernet-phy@4 {
+> +                    reg = <0x4>;
+> +                };
+> +            };
+> +
+> +            gpio: pinctrl@71070034 {
+> +                compatible = "mscc,ocelot-pinctrl";
+> +                gpio-controller;
+> +                #gpio-cells = <2>;
+> +                gpio-ranges = <&gpio 0 0 22>;
+> +                reg = <0x71070034>;
+> +
+> +                sgpio_pins: sgpio-pins {
+> +                    pins = "GPIO_0", "GPIO_1", "GPIO_2", "GPIO_3";
+> +                    function = "sg0";
+> +                };
+> +
+> +                miim1_pins: miim1-pins {
+> +                    pins = "GPIO_14", "GPIO_15";
+> +                    function = "miim";
+> +                };
+> +            };
+> +
+> +            sgpio: gpio@710700f8 {
+> +                compatible = "mscc,ocelot-sgpio";
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +                bus-frequency = <12500000>;
+> +                clocks = <&ocelot_clock>;
+> +                microchip,sgpio-port-ranges = <0 15>;
+> +                pinctrl-names = "default";
+> +                pinctrl-0 = <&sgpio_pins>;
+> +                reg = <0x710700f8>;
+> +
+> +                sgpio_in0: gpio@0 {
+> +                    compatible = "microchip,sparx5-sgpio-bank";
+> +                    reg = <0>;
+> +                    gpio-controller;
+> +                    #gpio-cells = <3>;
+> +                    ngpios = <64>;
+> +                };
+> +
+> +                sgpio_out1: gpio@1 {
+> +                    compatible = "microchip,sparx5-sgpio-bank";
+> +                    reg = <1>;
+> +                    gpio-controller;
+> +                    #gpio-cells = <3>;
+> +                    ngpios = <64>;
+> +                };
+> +            };
+> +        };
+> +    };
+> +
+> +...
+> +
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 91b4151c5ad1..119fb4207ba3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14355,6 +14355,7 @@ F:	tools/testing/selftests/drivers/net/ocelot/*
+>  OCELOT EXTERNAL SWITCH CONTROL
+>  M:	Colin Foster <colin.foster@in-advantage.com>
+>  S:	Supported
+> +F:	Documentation/devicetree/bindings/mfd/mscc,ocelot.yaml
+>  F:	include/linux/mfd/ocelot.h
+>  
+>  OCXL (Open Coherent Accelerator Processor Interface OpenCAPI) DRIVER
+> -- 
+> 2.25.1
+> 
+> 

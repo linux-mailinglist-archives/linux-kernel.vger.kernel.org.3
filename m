@@ -2,54 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF09454B3DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3794C54B3DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:53:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244595AbiFNOwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S241917AbiFNOv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241269AbiFNOwA (ORCPT
+        with ESMTP id S235534AbiFNOvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:52:00 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29CCA3615E;
-        Tue, 14 Jun 2022 07:51:59 -0700 (PDT)
+        Tue, 14 Jun 2022 10:51:53 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD6636E2E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:51:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=D3NOT4tpYtv2HMaFujNLkUDSr1AXyXNIkEbr424oYcs=; b=f51FEOUJbj03rZqo34HGJaUFE7
-        0QcBBHNgi8bfhxJRhiN4R9ozNNFz4oJWSxa9y1aMISaspWK8NjHwf5ncUKnTbWFQvyndRzXGbwuge
-        iYNkyyV4ZIIocTWrbL3AKKx6RltBORGZBdW+tKr3gYnR6k3ITTGV3aO1I0t4a865Frm+gZPLKA13p
-        xhwSQuRRbJj6z2mu3aN7/1vbd6dJwfL0uGhtIjfhuLXU2aaOIn+n6gaAqOdvTo/qD900ShEQh+BAx
-        I7Zfq5ahw2yzbpBBj0yDcAlugZ9E3i3mRe1MtLH8EBgi9OWeDBbH6+ATvlYPm9PbkxYJq+JmHbOB+
-        spa//gIQ==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o17tS-000Fsw-7e; Tue, 14 Jun 2022 14:51:46 +0000
-Message-ID: <09aec36b-f1c2-938d-5e9b-535c5b6315f3@infradead.org>
-Date:   Tue, 14 Jun 2022 07:51:41 -0700
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=0LmPl4GztIpRA6+4CB9Ol9e7Ylz0phFcRmRW6qIz7WQ=; b=SyEpmUH9MrrdwYazFcF80LWkLV
+        OGYG79D94sLe25Isu1o2DZphP7X/pdh1CNcL7rSzMhWNrUcJaVAO8NnKzJxJsKRU0tbzAjdnkLQrs
+        iGqbDgPBHBgukzAErqd3mwcbGR0aIrgQnvjjlxSdtnu+1RRCiAUtMojNkLlYwLXCwiVe14NyK7AfM
+        QI6K/DxDR+rOAg+KVrrIVILvYdaaHZAxO/AgPMUHqXko/L7XIB6AqxJODGG5uYyXQXpTef1kArbK4
+        bsNLFCjN22mRJRagjDnFkFJ2pBkd3CFHZzFNqGubrrPECk4lP3ZEVgscX+XaUs/ixKfJjs2wpJuSM
+        xhOSdfxg==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o17tT-00A2Ca-JS; Tue, 14 Jun 2022 14:51:47 +0000
+Date:   Tue, 14 Jun 2022 07:51:47 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Wang Wenhu <wenhu.wang@hotmail.com>
+Cc:     gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] uio:powerpc:mpc85xx: l2-cache-sram uio driver
+ implementation
+Message-ID: <Yqigg7jMu9kwepyH@infradead.org>
+References: <20220609102855.272270-1-wenhu.wang@hotmail.com>
+ <SG2PR01MB295139AA7360917B2C4846E19FA79@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v18 08/10] ARM: sunplus: Add initial support for Sunplus
- SP7021 SoC
-Content-Language: en-US
-To:     Qin Jian <qinjian@cqplus1.com>, sboyd@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
-        mturquette@baylibre.com, linux@armlinux.org.uk, arnd@arndb.de,
-        olof@lixom.net, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-References: <cover.1655194858.git.qinjian@cqplus1.com>
- <932bd48e7d17748a308ee487785243b141dafda1.1655194858.git.qinjian@cqplus1.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <932bd48e7d17748a308ee487785243b141dafda1.1655194858.git.qinjian@cqplus1.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SG2PR01MB295139AA7360917B2C4846E19FA79@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,48 +52,5 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
-
-On 6/14/22 01:31, Qin Jian wrote:
-> diff --git a/arch/arm/mach-sunplus/Kconfig b/arch/arm/mach-sunplus/Kconfig
-> new file mode 100644
-> index 000000000..be20425c2
-> --- /dev/null
-> +++ b/arch/arm/mach-sunplus/Kconfig
-> @@ -0,0 +1,27 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +
-> +menuconfig ARCH_SUNPLUS
-> +	bool "Sunplus SoCs"
-> +	depends on ARCH_MULTI_V7
-> +	help
-> +	  Support for Sunplus SoC family: SP7021 and succeeding SoC-based systems,
-> +	  such as the Banana Pi BPI-F2S development board (and derivatives).
-> +	  (<http://www.sinovoip.com.cn/ecp_view.asp?id=586>)
-> +	  (<https://tibbo.com/store/plus1.html>)
-> +
-> +config SOC_SP7021
-> +	bool "Sunplus SP7021 SoC support"
-> +	depends on ARCH_SUNPLUS
-> +	default ARCH_SUNPLUS
-> +	select HAVE_ARM_ARCH_TIMER
-> +	select ARM_GIC
-> +	select ARM_PSCI
-> +	select PINCTRL
-> +	select PINCTRL_SPPCTL
-> +	select SERIAL_SUNPLUS
-> +	select SERIAL_SUNPLUS_CONSOLE
-> +	help
-> +	  Support for Sunplus SP7021 SoC. It is based on ARM 4-core
-> +	  Cortex-A7 with various peripherals (ex: I2C, SPI, SDIO,
-
-	                                     (e.g.: I2C, SPI, SDIO,
-
-> +	  Ethernet and etc.), FPGA interface,  chip-to-chip bus.
-
-	  Ethernet, etc.), FPGA interface, chip-to-chip bus.
-
-> +	  It is designed for industrial control.
-
--- 
-~Randy
+UIO seems like the wrong kind of interface for this.  Why isn't this
+a simple character device?

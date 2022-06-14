@@ -2,102 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A3854B9BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB0F54B9A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358347AbiFNSzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
+        id S1358504AbiFNSzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358265AbiFNSyr (ORCPT
+        with ESMTP id S1358398AbiFNSyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 14:54:47 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF1F289A9;
-        Tue, 14 Jun 2022 11:48:03 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id x6-20020a1c7c06000000b003972dfca96cso5279903wmc.4;
-        Tue, 14 Jun 2022 11:48:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZGq6EoefxPbFtF1LY8I5mjem8e38X9O1LMTR9lksIbU=;
-        b=eKBKM9FNockAANSZ38+BfFdCvxvuc7vP7DTowuFFVSb/Z3814bLCJz/mn4QVASzwZE
-         Jofzjg1eglWhZBYCtnQqsI9C8/gI2oFX7sMVNHe2wa6X+9gE+SAINpsJxkE2H4zuuaen
-         Tvc+RhplEeh4mJPviyY9JbbeSixBKrHQQAT0FymDNyo7BcF1rmykEN5OlXyICJFWskWu
-         0aac9qOBqpRru9+AOVaM14bA2Hf1blQfOeWjWyhFrIJf7jPq6Fn+v4XMoSFYp/8c1IdM
-         gx2ytXQZwgaZW2wj2je0uLjBB8gh/vVBl2e0UY7sVdy9x48N72Ndq67t1bassygknDUo
-         r74w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZGq6EoefxPbFtF1LY8I5mjem8e38X9O1LMTR9lksIbU=;
-        b=nXnCjoU0Xl4tnn3vKGjJHQoFDP/UV2iHyuYPlKHKquYlKzNXSGS/b4IZfBfAhPbpH9
-         AGjNvaRk7tIBEmY2dcnhHiV85qFvaSpY4qWgFKeInQ56ozNexfqyWxo6HGqSwbM5TKI1
-         hPF2ZUnWEPXBC3VW9A41SGn4bRP/TOPqfabOgQzRRyZNQcHTZZaFRSMp2opoioUEQChV
-         UQcrILCXXoLRuPBSU6n6i/GmTPk6Sinx4Xf5cCRNPXYzbnnCSaJi7131XKXgO4zBkGVb
-         LY/KSjR1OXU2oq6a8sCCh/hcSqJPBn5JY7vPxSMk4UxnIVUGf4rrZy6V/mHfnownd+BI
-         Op3A==
-X-Gm-Message-State: AOAM531XBnYRnY9UX5IGA3KH1IL3J7FbqMERmcrE60gHphICslU56Fxl
-        LMIn+D8terGAur9ixHy+1Y0=
-X-Google-Smtp-Source: ABdhPJyN/hZcupEtYYhdwsR7sUr2cuKzMaSiadhh38ZplgCRxmrsH6p5MaUDlH8mYoDwJKflzZQVaQ==
-X-Received: by 2002:a05:600c:58a:b0:39c:80ed:68be with SMTP id o10-20020a05600c058a00b0039c80ed68bemr5624291wmd.150.1655232481288;
-        Tue, 14 Jun 2022 11:48:01 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id d34-20020a05600c4c2200b0039c5b4ab1b0sm12960218wmp.48.2022.06.14.11.47.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 11:48:00 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        dmaengine@vger.kernel.org
+        Tue, 14 Jun 2022 14:54:55 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8015735241;
+        Tue, 14 Jun 2022 11:48:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655232491; x=1686768491;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=eOyqDZuqaiOs6xJm5q38O8F9rb//aReCl5ThOZoPPXI=;
+  b=iNtkZF7lswF84ys3SpcvQ0XoQV0FqsMUi+pvWmEvt6S5pBqekNvdHGHN
+   EJs+xV16uX6L0gGcpcyAVhBphbhNf178See2fnn2BKeayEJ9c3OgbOr1K
+   90Om1teRqfIYZGNlja+mRQm/T4gwjo7mfreNC+expi0OWmjPJ//9i0dL+
+   fC3qyz0Oja0LtqWI2cd8H6Xdd0QVjRsPZ2CeXz2CBB7J7lVBNdULttg74
+   rkHBP7vQvS/BXqQwZCf6acuregQfpfpdZuI4Bxe38wPtV7IX7hk1t1I+5
+   IAdOg2mcznxwvRyx1kMR/teqrifDRyGkMR0/cwnW037dD38fH43yzRRlD
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="342673912"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="342673912"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 11:48:10 -0700
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="640525207"
+Received: from ticela-or-153.amr.corp.intel.com ([10.254.6.136])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 11:48:10 -0700
+Message-ID: <606859dd0edcc2330fc353b0cb15395ed883b5bc.camel@linux.intel.com>
+Subject: Re: [PATCH] ASoC: Intel: Skylake: remove redundant re-assignments
+ to pointer array
+From:   Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+To:     Colin Ian King <colin.i.king@gmail.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dmaengine: fsl-edma: remove redundant assignment to pointer last_sg
-Date:   Tue, 14 Jun 2022 19:47:59 +0100
-Message-Id: <20220614184759.164379-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.3
+Date:   Tue, 14 Jun 2022 11:48:10 -0700
+In-Reply-To: <20220614183809.163531-1-colin.i.king@gmail.com>
+References: <20220614183809.163531-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.3-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer last_sg is being assigned a value at the start of a loop
-however it is never read and is being re-assigned later on in both
-brances of an if-statement. The assignment is redundant and can be
-removed.
+On Tue, 2022-06-14 at 19:38 +0100, Colin Ian King wrote:
+> There are two occurrences where the pointer array is being assigned a
+> value
+> that is never read, the pointer gets updated in the next iteration of
+> a
+> loop. These assignments are redundant and can be removed.
+> 
+> Cleans up clang scan-build warnings:
+> sound/soc/intel/skylake/skl-topology.c:2953:3: warning: Value stored
+> to
+> 'array' is never read [deadcode.DeadStores]
+> sound/soc/intel/skylake/skl-topology.c:3602:3: warning: Value stored
+> to
+> 'array' is never read [deadcode.DeadStores]
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Cleans up clang scan-build warning:
-drivers/dma/fsl-edma-common.c:563:3: warning: Value stored to 'last_sg'
-is never read [deadcode.DeadStores]
+LGTM, thanks!
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/dma/fsl-edma-common.c | 3 ---
- 1 file changed, 3 deletions(-)
-
-diff --git a/drivers/dma/fsl-edma-common.c b/drivers/dma/fsl-edma-common.c
-index 3ae05d1446a5..a06a1575a2a5 100644
---- a/drivers/dma/fsl-edma-common.c
-+++ b/drivers/dma/fsl-edma-common.c
-@@ -559,9 +559,6 @@ struct dma_async_tx_descriptor *fsl_edma_prep_slave_sg(
- 	}
- 
- 	for_each_sg(sgl, sg, sg_len, i) {
--		/* get next sg's physical address */
--		last_sg = fsl_desc->tcd[(i + 1) % sg_len].ptcd;
--
- 		if (direction == DMA_MEM_TO_DEV) {
- 			src_addr = sg_dma_address(sg);
- 			dst_addr = fsl_chan->dma_dev_addr;
--- 
-2.35.3
+Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
 

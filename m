@@ -2,134 +2,365 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A0754B1C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4D9054B1B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241791AbiFNM4A convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Jun 2022 08:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37302 "EHLO
+        id S238220AbiFNMzh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:55:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241187AbiFNMz6 (ORCPT
+        with ESMTP id S232585AbiFNMzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:55:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED71D3E0F2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:55:57 -0700 (PDT)
-Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <u.oelmann@pengutronix.de>)
-        id 1o165K-0003Ne-Mz; Tue, 14 Jun 2022 14:55:54 +0200
-Received: from uol by dude.hi.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <u.oelmann@pengutronix.de>)
-        id 1o165J-009mTq-3B; Tue, 14 Jun 2022 14:55:53 +0200
-References: <20220517071814.3626702-1-u.oelmann@pengutronix.de>
- <20220611093103.GI254723@dragon>
-User-agent: mu4e 1.6.9; emacs 29.0.50
-From:   Ulrich =?utf-8?Q?=C3=96lmann?= <u.oelmann@pengutronix.de>
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     devicetree@vger.kernel.org,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Juergen Borleis <jbe@pengutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Oleksij Rempel <o.rempel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?utf-8?Q?S=C3=B8ren?= Andersen <san@skov.dk>,
-        Fabio Estevam <festevam@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>, kernel@pengutronix.de
-Subject: Re: [PATCH] ARM: dts: imx6: skov: add pwm-regulator to control the
- panel's VCOM
-Date:   Tue, 14 Jun 2022 14:53:58 +0200
-In-reply-to: <20220611093103.GI254723@dragon>
-Message-ID: <6r8rpzwgiu.fsf@pengutronix.de>
+        Tue, 14 Jun 2022 08:55:35 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3103BBFD;
+        Tue, 14 Jun 2022 05:55:34 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 129so8451028pgc.2;
+        Tue, 14 Jun 2022 05:55:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:mime-version:content-disposition
+         :user-agent;
+        bh=PXdAipzTvt3rG1BHsoqxaq3VWKbvzJuF2FmNeakRABE=;
+        b=Cf3aKaJSQSmInGCMy07llaiKqiO9WRoLEov1RalN7yhG5GQmzwZvHSuuBZJM6EpYKy
+         PK7bU1bXEScRdz1w/5oIbBvf1ZkSEl4XZJZxuF2aTac1AiQwZX0knQybzzQeO/tng98i
+         hY7N09PSDXC1gmYIImSLR5zl77CDnjM7TTZl/cQcFv9kFd1fsf7quKiyojPO3NotuGZQ
+         ARq8549fUb9G95WUzUlP+wfSfK2rdwPxY3b5vR/54DC2jZZtFBXTPcF1Bvli1xi8t+vB
+         QQRc6Eu6Fg5yNgAoWyfoipDct5CFJYJECjMhsc9Zl5llgfvTZPSVhvyOZBVoloTTTtXF
+         4lAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
+         :content-disposition:user-agent;
+        bh=PXdAipzTvt3rG1BHsoqxaq3VWKbvzJuF2FmNeakRABE=;
+        b=1WTIjJr85jW+PyP7fl3o9PkUDPrDJrFy8rkqP9wBfTQjgfAuqEYWYRDUd0zf7oESU1
+         O0JmrT8k+iSJH2zIYmtsakcIY8inNTSSfD0nlOt8Hi4ouKOQlyrudegPAKKUOyjjde72
+         DFL/qF1SudkhJQzmCfkZ6QdF6jy/6SRUbb7OxlzI6Rsd64jhT3Qg9JmTCJJEPDECH5vM
+         y2ZdnbvHpUKbKFK7kJ0SxrlesRQdfDtWC1oAJEri6PJjPjVGA1hov0L2HU2SCMh+gQ9+
+         PhwDOtgUqXNLazZmfDEbCDyp2OVmYEhgKnt1xGf/o0mcXwFCwcYXtd6N6wv/wjHf6bJi
+         yasg==
+X-Gm-Message-State: AOAM5331mXUSfNrI7COFjOQ6hMRR8YDE0ROGSb74PDkzEuU9L6p11OZ5
+        +k5jmHj0lsv6ZVSZSFkBVU0=
+X-Google-Smtp-Source: AGRyM1vzRQjcyqlWiljfDjQG5K7Cm0ROx2HTjB3YW8jdPh9lXswLfsv2yCAGEFAc+K/N3vZ4NOSZ6w==
+X-Received: by 2002:a05:6a00:2392:b0:51b:fe0e:2b8 with SMTP id f18-20020a056a00239200b0051bfe0e02b8mr4371363pfc.84.1655211333665;
+        Tue, 14 Jun 2022 05:55:33 -0700 (PDT)
+Received: from logan-ThinkPad-T14-Gen-1 ([117.213.143.139])
+        by smtp.gmail.com with ESMTPSA id d190-20020a6368c7000000b003fd4bd3befesm7751167pgc.55.2022.06.14.05.55.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 14 Jun 2022 05:55:32 -0700 (PDT)
+From:   Logananth Sundararaj <logananth13.hcl@gmail.com>
+X-Google-Original-From: Logananth Sundararaj <logananth_s@hcl.com>
+Date:   Tue, 14 Jun 2022 18:25:25 +0530
+To:     Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org
+Cc:     patrick@stwcx.xyz, garnermic@gmail.com, thangavel.k@hcl.com,
+        naveen.mosess@hcl.com
+Subject: [PATCH] ARM: dts: aspeed: Adding Facebook Yosemite V3 BMC
+Message-ID: <20220614125525.GA3629@logan-ThinkPad-T14-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::7
-X-SA-Exim-Mail-From: u.oelmann@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11 2022 at 17:31 +0800, Shawn Guo <shawnguo@kernel.org> wrote:
-> On Tue, May 17, 2022 at 09:18:14AM +0200, Ulrich Ölmann wrote:
->> Skov's i.MX6 based boards come in different flavors which have different panels
->> attached. For optimal contrast experience each panel type needs an individual
->> common voltage (VCOM) to drive its TFT backplane. The latter is generated by an
->> LCD bias supply IC controlled by a pwm as input signal. Introduce a pwm-
->> regulator to describe this hardware property and parameterize it appropriately
->> for the different boards.
->>
->> Signed-off-by: Ulrich Ölmann <u.oelmann@pengutronix.de>
->> ---
->>  arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts |  6 ++++++
->>  arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi              | 10 ++++++++++
->>  2 files changed, 16 insertions(+)
->>
->> diff --git a/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts b/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
->> index 7f1f19b74bfa..a3f247c722b4 100644
->> --- a/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
->> +++ b/arch/arm/boot/dts/imx6q-skov-reve-mi1010ait-1cp1.dts
->> @@ -125,3 +125,9 @@ MX6QDL_PAD_EIM_D23__GPIO3_IO23		0x1b0b0
->>  		>;
->>  	};
->>  };
->> +
->> +&reg_tft_vcom {
->> +	regulator-min-microvolt = <3160000>;
->> +	regulator-max-microvolt = <3160000>;
->> +	voltage-table = <3160000 73>;
->> +};
->> diff --git a/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi b/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
->> index 77a91a97e6cf..3def1b621c8e 100644
->> --- a/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
->> +++ b/arch/arm/boot/dts/imx6qdl-skov-cpu.dtsi
->> @@ -149,6 +149,16 @@ reg_can2_stby: regulator-can2-stby {
->>  		gpio = <&gpio4 11 GPIO_ACTIVE_LOW>;
->>  	};
->>
->> +	reg_tft_vcom: regulator-tft-vcom {
->> +		compatible = "pwm-regulator";
->> +		pwms = <&pwm3 0 20000 0>;
->> +		regulator-name = "tft_vcom";
->> +		regulator-min-microvolt = <3600000>;
->> +		regulator-max-microvolt = <3600000>;
->> +		regulator-always-on;
->
-> You want it to be unmanaged and always-on?
+The Yosemite V3 is a facebook multi-node server
+platform that host four OCP server. The BMC
+in the Yosemite V3 platform based on AST2600 SoC.
 
-Correct, it shall be set up by the kernel statically and is never going
-to be changed while the system is up and running.
+This patch adds linux device tree entry related to
+Yosemite V3 specific devices connected to BMC SoC.
 
-Best regards
-Ulrich
+Signed-off-by: Logananth Sundararaj <logananth_s@hcl.com>
+---
+--- v1 - Initial draft.
+---
+ arch/arm/boot/dts/Makefile                    |   1 +
+ .../boot/dts/aspeed-bmc-facebook-fby35.dts    | 251 ++++++++++++++++++
+ 2 files changed, 252 insertions(+)
+ create mode 100644 arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
 
-
-> Shawn
->
->> +		voltage-table = <3600000 26>;
->> +	};
->> +
->>  	reg_vcc_mmc: regulator-vcc-mmc {
->>  		compatible = "regulator-fixed";
->>  		pinctrl-names = "default";
->> --
->> 2.30.2
->>
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 7e0934180724..58add093e5fb 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1465,6 +1465,7 @@ dtb-$(CONFIG_ARCH_ASPEED) += \
+ 	aspeed-bmc-facebook-cloudripper.dtb \
+ 	aspeed-bmc-facebook-cmm.dtb \
+ 	aspeed-bmc-facebook-elbert.dtb \
++	aspeed-bmc-facebook-fby35.dtb \
+ 	aspeed-bmc-facebook-fuji.dtb \
+ 	aspeed-bmc-facebook-galaxy100.dtb \
+ 	aspeed-bmc-facebook-minipack.dtb \
+diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+new file mode 100644
+index 000000000000..7ddf2d442c22
+--- /dev/null
++++ b/arch/arm/boot/dts/aspeed-bmc-facebook-fby35.dts
+@@ -0,0 +1,251 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++// Copyright (c) 2020 Facebook Inc.
++
++/dts-v1/;
++
++#include "aspeed-g6.dtsi"
++#include <dt-bindings/gpio/aspeed-gpio.h>
++
++/ {
++	model = "Facebook fby35";
++	compatible = "facebook,fby35", "aspeed,ast2600";
++
++	aliases {
++		serial4 = &uart5;
++	};
++
++	chosen {
++		stdout-path = &uart5;
++		bootargs = "console=ttyS4,57600n8 root=/dev/ram rw vmalloc=384M";
++	};
++
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x80000000 0x80000000>;
++	};
++
++	iio-hwmon {
++		compatible = "iio-hwmon";
++		io-channels = <&adc0 0>, <&adc0 1>, <&adc0 2>, <&adc0 3>,
++			<&adc0 4>, <&adc0 5>, <&adc0 6>, <&adc0 7>,
++			<&adc1 0>, <&adc1 1>, <&adc1 2>, <&adc1 3>,
++			<&adc1 4>, <&adc1 5>, <&adc1 6>;
++	};
++	spi_gpio: spi-gpio {
++		status = "okay";
++		compatible = "spi-gpio";
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		gpio-sck = <&gpio0 ASPEED_GPIO(X, 3) GPIO_ACTIVE_HIGH>;
++		gpio-mosi = <&gpio0 ASPEED_GPIO(X, 4) GPIO_ACTIVE_HIGH>;
++		gpio-miso = <&gpio0 ASPEED_GPIO(X, 5) GPIO_ACTIVE_HIGH>;
++		num-chipselects = <1>;
++		cs-gpios = <&gpio0 ASPEED_GPIO(X, 0) GPIO_ACTIVE_LOW>;
++
++		tpmdev@0 {
++			compatible = "tcg,tpm_tis-spi";
++			spi-max-frequency = <33000000>;
++			reg = <0>;
++		};
++	};
++
++};
++
++&mac3 {
++	status = "okay";
++
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_rmii4_default>;
++	no-hw-checksum;
++	use-ncsi;
++	mlx,multi-host;
++	ncsi-ctrl,start-redo-probe;
++	ncsi-ctrl,no-channel-monitor;
++	ncsi-package = <1>;
++	ncsi-channel = <1>;
++	ncsi-rexmit = <1>;
++	ncsi-timeout = <2>;
++};
++
++&uart1 {
++	status = "okay";
++};
++
++&uart2 {
++	status = "okay";
++};
++
++&uart3 {
++	status = "okay";
++};
++
++&uart4 {
++	status = "okay";
++};
++
++&uart5 {
++	status = "okay";
++	/* Workaround for AST2600 A0 */
++	compatible = "snps,dw-apb-uart";
++};
++
++&wdt1 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wdtrst1_default>;
++	aspeed,reset-type = "soc";
++	aspeed,external-signal;
++	aspeed,ext-push-pull;
++	aspeed,ext-active-high;
++	aspeed,ext-pulse-duration = <256>;
++};
++
++&rtc {
++	status = "okay";
++};
++
++&fmc {
++	status = "okay";
++	reg = <0x1e620000 0xc4>, <0x20000000 0x8000000>;
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "spi0.1";
++		spi-max-frequency = <50000000>;
++		spi-tx-bus-width = <2>;
++		spi-rx-bus-width = <2>;
++		#include "openbmc-flash-layout-64.dtsi"
++	};
++};
++
++&spi1 {
++	status = "okay";
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_spi1_default>;
++
++	flash@0 {
++		status = "okay";
++		m25p,fast-read;
++		label = "pnor";
++		spi-rx-bus-width = <4>;
++		spi-max-frequency = <100000000>;
++	};
++};
++
++&i2c0 {
++	multi-master;
++	bus-frequency = <400000>;
++	aspeed,hw-timeout-ms = <1000>;
++	status = "okay";
++};
++
++&i2c1 {
++	multi-master;
++	bus-frequency = <400000>;
++	aspeed,hw-timeout-ms = <1000>;
++	status = "okay";
++};
++
++&i2c2 {
++	multi-master;
++	bus-frequency = <400000>;
++	aspeed,hw-timeout-ms = <1000>;
++	status = "okay";
++};
++
++&i2c3 {
++	multi-master;
++	bus-frequency = <400000>;
++	aspeed,hw-timeout-ms = <1000>;
++	status = "okay";
++};
++
++&i2c4 {
++	status = "okay";
++};
++
++&i2c5 {
++	status = "okay";
++};
++
++&i2c6 {
++	status = "okay";
++};
++
++&i2c7 {
++	status = "okay";
++};
++
++&i2c8 {
++	status = "okay";
++};
++
++&i2c9 {
++	multi-master;
++	bus-frequency = <100000>;
++	aspeed,hw-timeout-ms = <1000>;
++	status = "okay";
++};
++
++&i2c10 {
++	status = "okay";
++};
++
++&i2c11 {
++	status = "okay";
++	//FRU EEPROM
++	eeprom@51 {
++		compatible = "atmel,24c64";
++		reg = <0x51>;
++		pagesize = <32>;
++	};
++};
++
++&i2c12 {
++	status = "okay";
++	//INLET TEMP
++	tmp75@4e {
++		compatible = "ti,tmp75";
++		reg = <0x4e>;
++	};
++	//OUTLET TEMP
++	tmp75@4f {
++		compatible = "ti,tmp75";
++		reg = <0x4f>;
++	};
++};
++
++&i2c13 {
++	status = "okay";
++};
++
++&adc0 {
++	ref_voltage = <2500>;
++	status = "okay";
++
++	pinctrl-0 = <&pinctrl_adc0_default &pinctrl_adc1_default
++		&pinctrl_adc2_default &pinctrl_adc3_default
++		&pinctrl_adc4_default &pinctrl_adc5_default
++		&pinctrl_adc6_default &pinctrl_adc7_default>;
++};
++
++&adc1 {
++	ref_voltage = <2500>;
++	status = "okay";
++
++	pinctrl-0 = <&pinctrl_adc8_default &pinctrl_adc9_default
++		&pinctrl_adc10_default &pinctrl_adc11_default
++		&pinctrl_adc12_default &pinctrl_adc13_default>;
++};
++&ehci0 {
++	status = "okay";
++};
++
++&ehci1 {
++	status = "okay";
++};
++
++&uhci {
++	status = "okay";
++};
 -- 
-Pengutronix e.K.                           | Ulrich Ölmann               |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.17.1
+

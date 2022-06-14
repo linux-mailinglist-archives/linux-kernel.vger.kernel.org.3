@@ -2,210 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1707E54B0C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:37:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AE654B0AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243918AbiFNM3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58802 "EHLO
+        id S1351218AbiFNM27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244154AbiFNM2p (ORCPT
+        with ESMTP id S242763AbiFNM23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:28:45 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7580123BDD
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:28:44 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id d14so11371166eda.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:28:44 -0700 (PDT)
+        Tue, 14 Jun 2022 08:28:29 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCE923BDD
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:28:23 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-fb6b4da1dfso12257870fac.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:28:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=jYzinqDMpP0ikE9sweLWXVziLbiFyEvA5RI0XjmyrwA=;
-        b=Imdk9ZoAO7r/Y6UVbKyaxge6cRhAyLHgqo3qmRoll6SHjI2N9ANOIGfYQIMaeNGSth
-         ra88H+SQDybPy9pjjuWUAgxHAjKq81PjEvGEpTd0lW60HFGyiaiObr2EsRI7CMA0w6v/
-         227Sy3qPSjAcxRr+VJ96cM8sgfSp70zYhzT98=
+        d=gmail.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to;
+        bh=lBFrwc11MgcaK75qf3EwNhKoIfwLYz4Dn7scEjO7Hwc=;
+        b=Y9nru7uKQHP8S8uMgk7AhKq0O397+YpG7ni4AgB69hB4dDtI4PddWIbXWdaCiTVQPB
+         1bHn9yTVV5RA/+VUK5cxfgGjdaSgyMo0C4pSR5oeJvcLuHtnJiBaCTHZngR87ZC5HMKc
+         rZcA7lo7S2q4eOxA3U2T1I18OcXwDtjjmGczVjyE8fFSK5OuK9HZzUbYZ4pWl8zmgLPL
+         NF5VtlhZwmsdTnYx9h9OQWiU6ZaH4AAoEPcdnr9/1AQlDI3jQLBl59Zc1lq33HIkDB9M
+         5mvOfPLeoOzgj6pr8wjNJ3N8Vha9dO8gTkaCtyEYGriE8GrxsgxWUrSv33rsa1ZshNpl
+         uqQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=jYzinqDMpP0ikE9sweLWXVziLbiFyEvA5RI0XjmyrwA=;
-        b=l0WQNJ2icpj8pVNy7SoiGEQ6seukDEaGX0z+aJFU//P20vrTyf4uBFmANyBzyv/vr4
-         k/qqkxjsmSZ8AElMiW/o8J/1WrlhMDBUldm6+uM2u5OwRVAZAUE/G+ztdjaoAfj8V218
-         cg0yYGnAcZ++i2ydbwryJeUbL2WOC6K81vLZ9UC8m6Tly8kaa6pJ4fZkuLfJ3qA99iF4
-         71jnpdpq+iM2yWPVttpPsikBGbrtB68RRT/eEFtW/arUel1NxU4IUlSpMGiTSX2Su0ft
-         TxVBLJxIeNtYm6cDjk+W7dZGzueZeG4wryfVpvHxv90QRdRwlhUwp+e9+ZeIvyXhud19
-         p7/A==
-X-Gm-Message-State: AJIora89gcHTNI9/Sj53RmmqqGXEoaTTzROA0MQBmQpxrm5MZ17wL6/X
-        gV4SxAzJiyw6MCexl5MmDgTtqUaW3teLlw==
-X-Google-Smtp-Source: AGRyM1sdy+mQgJGKcTg6pr0d+IxotebryiK/R/VGzkIZerKFSEHj3SGvS1zYgLu1DOiAntsMFGuuxg==
-X-Received: by 2002:aa7:c604:0:b0:42d:cffb:f4dc with SMTP id h4-20020aa7c604000000b0042dcffbf4dcmr5869600edq.270.1655209722774;
-        Tue, 14 Jun 2022 05:28:42 -0700 (PDT)
-Received: from dario-ThinkPad-T14s-Gen-2i.amarulasolutions.com (host-80-116-90-174.pool80116.interbusiness.it. [80.116.90.174])
-        by smtp.gmail.com with ESMTPSA id z22-20020a17090655d600b006f3ef214e2csm5087043ejp.146.2022.06.14.05.28.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 05:28:42 -0700 (PDT)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        michael@amarulasolutions.com,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v4 12/12] can: slcan: extend the protocol with CAN state info
-Date:   Tue, 14 Jun 2022 14:28:21 +0200
-Message-Id: <20220614122821.3646071-13-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220614122821.3646071-1-dario.binacchi@amarulasolutions.com>
-References: <20220614122821.3646071-1-dario.binacchi@amarulasolutions.com>
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
+        bh=lBFrwc11MgcaK75qf3EwNhKoIfwLYz4Dn7scEjO7Hwc=;
+        b=kwsTYaZm60ltiXw72/KsC13j3h3kgLndUOwDkavgqAVvgKNIxYj/0suZ5zeh2vcsM+
+         tno0TDTDh3LU3UjgnnNzPfN5cq1O9vyWAEnvubYfsYcT23TK7BFFT0/LjnWklJmeoXym
+         6s7kXzwF3G8p5zoOxqecS6gIgFvUIsaNOaG8UO3Rc4rdhzxCHJ/Y+eBoH/ifj6537SSD
+         JpwzglxZfnMOnGRbWaUuuQ5JxH6VSiyNI/hNrglO9NOf/8RbkErgF06jMqmsdgvfNZ3P
+         1t4O/G6tz8mkrmB0Eo8VxTsAr9Q4uw9EScX4zjBqF7DnfY+MLCaVDx+mpb1z0+RUyMFL
+         sIsQ==
+X-Gm-Message-State: AJIora9hhJjaRAvppRcw5Cm5JUb69o94KaXQsIeNkGLLc8i6oMZyYa//
+        v3rKfjnAE9zTUHoaDLQcAjIqmyixUAbSKn9kAac=
+X-Google-Smtp-Source: AGRyM1vsEMgew+gYftu8Ww4LlASRxmMj6056rLqsY3XL/PsVz/o4YvE4qWlutapfa3VyXBxJId1inO4Rji9lyINiosA=
+X-Received: by 2002:a05:6870:d287:b0:f1:c50b:9dd1 with SMTP id
+ d7-20020a056870d28700b000f1c50b9dd1mr2109655oae.45.1655209702540; Tue, 14 Jun
+ 2022 05:28:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Received: by 2002:a8a:c46:0:b0:42d:ab20:ed24 with HTTP; Tue, 14 Jun 2022
+ 05:28:22 -0700 (PDT)
+From:   Daniel Affum <danielaffum05@gmail.com>
+Date:   Tue, 14 Jun 2022 15:28:22 +0300
+Message-ID: <CAPkju_P7cbdBPF5Z70Y93xkQOC7yPjPhbLOmm2208JgB3=QrgQ@mail.gmail.com>
+Subject: Confirm Receipt
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It extends the protocol to receive the adapter CAN state changes
-(warning, busoff, etc.) and forward them to the netdev upper levels.
+Hello Dear,
 
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+I am Daniel Affum a retired civil servant i have a  business to
+discuss with you from the Eastern part of Africa aimed at agreed
+percentage upon your acceptance of my hand in business and friendship.
+Kindly respond to me if you are interested to partner with me for an
+update.Very important.
 
----
-
-Changes in v4:
-- Add description of slc_bump_state() function.
-- Remove check for the 's' character at the beggining of the function.
-  It was already checked by the caller function.
-- Protect decoding against the case the frame len is longer than the
-  received data (add SLC_STATE_FRAME_LEN macro).
-- Set cf to NULL in case of alloc_can_err_skb() failure.
-- Some small changes to make the decoding more readable.
-- Use the character 'b' instead of 'f' for bus-off state.
-
-Changes in v3:
-- Drop the patch "can: slcan: simplify the device de-allocation".
-- Add the patch "can: netlink: dump bitrate 0 if can_priv::bittiming.bitrate is -1U".
-
-Changes in v2:
-- Continue error handling even if no skb can be allocated.
-
- drivers/net/can/slcan/slcan-core.c | 74 +++++++++++++++++++++++++++++-
- 1 file changed, 73 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/can/slcan/slcan-core.c b/drivers/net/can/slcan/slcan-core.c
-index 6c7c815eaf45..e2d7645ff8d2 100644
---- a/drivers/net/can/slcan/slcan-core.c
-+++ b/drivers/net/can/slcan/slcan-core.c
-@@ -78,7 +78,11 @@ MODULE_PARM_DESC(maxdev, "Maximum number of slcan interfaces");
- #define SLC_CMD_LEN 1
- #define SLC_SFF_ID_LEN 3
- #define SLC_EFF_ID_LEN 8
--
-+#define SLC_STATE_LEN 1
-+#define SLC_STATE_BE_RXCNT_LEN 3
-+#define SLC_STATE_BE_TXCNT_LEN 3
-+#define SLC_STATE_FRAME_LEN       (1 + SLC_CMD_LEN + SLC_STATE_BE_RXCNT_LEN + \
-+				   SLC_STATE_BE_TXCNT_LEN)
- struct slcan {
- 	struct can_priv         can;
- 	int			magic;
-@@ -255,6 +259,72 @@ static void slc_bump_frame(struct slcan *sl)
- 	dev_kfree_skb(skb);
- }
- 
-+/* A change state frame must contain state info and receive and transmit
-+ * error counters.
-+ *
-+ * Examples:
-+ *
-+ * sb256256 : state bus-off: rx counter 256, tx counter 256
-+ * sa057033 : state active, rx counter 57, tx counter 33
-+ */
-+static void slc_bump_state(struct slcan *sl)
-+{
-+	struct net_device *dev = sl->dev;
-+	struct sk_buff *skb;
-+	struct can_frame *cf;
-+	char *cmd = sl->rbuff;
-+	u32 rxerr, txerr;
-+	enum can_state state, rx_state, tx_state;
-+
-+	switch (cmd[1]) {
-+	case 'a':
-+		state = CAN_STATE_ERROR_ACTIVE;
-+		break;
-+	case 'w':
-+		state = CAN_STATE_ERROR_WARNING;
-+		break;
-+	case 'p':
-+		state = CAN_STATE_ERROR_PASSIVE;
-+		break;
-+	case 'b':
-+		state = CAN_STATE_BUS_OFF;
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	if (state == sl->can.state || sl->rcount < SLC_STATE_FRAME_LEN)
-+		return;
-+
-+	cmd += SLC_STATE_BE_RXCNT_LEN + SLC_CMD_LEN + 1;
-+	cmd[SLC_STATE_BE_TXCNT_LEN] = 0;
-+	if (kstrtou32(cmd, 10, &txerr))
-+		return;
-+
-+	*cmd = 0;
-+	cmd -= SLC_STATE_BE_RXCNT_LEN;
-+	if (kstrtou32(cmd, 10, &rxerr))
-+		return;
-+
-+	skb = alloc_can_err_skb(dev, &cf);
-+	if (skb) {
-+		cf->data[6] = txerr;
-+		cf->data[7] = rxerr;
-+	} else {
-+		cf = NULL;
-+	}
-+
-+	tx_state = txerr >= rxerr ? state : 0;
-+	rx_state = txerr <= rxerr ? state : 0;
-+	can_change_state(dev, cf, tx_state, rx_state);
-+
-+	if (state == CAN_STATE_BUS_OFF)
-+		can_bus_off(dev);
-+
-+	if (skb)
-+		netif_rx(skb);
-+}
-+
- /* An error frame can contain more than one type of error.
-  *
-  * Examples:
-@@ -388,6 +458,8 @@ static void slc_bump(struct slcan *sl)
- 		return slc_bump_frame(sl);
- 	case 'e':
- 		return slc_bump_err(sl);
-+	case 's':
-+		return slc_bump_state(sl);
- 	default:
- 		return;
- 	}
--- 
-2.32.0
-
+Yours Sincerely,
+Daniel Affum.
+Reply to:danielaffum005@yahoo.com

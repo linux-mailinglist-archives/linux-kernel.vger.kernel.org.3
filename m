@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6095F54BC2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:50:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 670BB54BC0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358392AbiFNUtW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
+        id S1356877AbiFNUsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356579AbiFNUsA (ORCPT
+        with ESMTP id S1357729AbiFNUsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:48:00 -0400
+        Tue, 14 Jun 2022 16:48:09 -0400
 Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B2F26AD4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:47:55 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id lw3-20020a17090b180300b001e31fad7d5aso50791pjb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:47:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A483EAB1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:47:57 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id q62-20020a17090a17c400b001e31a482241so11086pja.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:47:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=NuhBWXqmLuVOf2m1Sf51S9jTSqkqKCsQtTnFDyuk7Aw=;
-        b=AAxqgJ02kZTKFqX0fncJZKFgSJ2T0aA1M4w3CKtg5ghAgxQBqiDR/VJB2qtuKBXK0Y
-         2aF2sDvCot1MSZR+2cf+/hdm82ueKwEx2lrUYeouQ+ECCyoxiAcyWRiYUyAf2K/5uWW0
-         MkKQbbnd30ju+o9ghshN4pPD8kBxXkIiOHxRXbSKHg7D/A0JJLRcUaXNmfMEqxiWJD5X
-         RSlhwPogjoo2Twvp62FoU3WmNujiDrXwCoEJBJJGG4DaSkdlc75jDYUW+BNkvLQO3BvB
-         9i2n3fjxiSCCaty3hj2XDmS2Nwgf/M31VCHXBwM1tcp0Gklu8/KRTJiF+gidwqhVSPYw
-         vrTQ==
+        bh=DvS0MK4rYpRtDe2fvh6ocxKN7mSQ+xkrM2pZGwGEGi0=;
+        b=LJ3wp6JDRHV6sVfW5nAnFe2WOVDe8Ns3OwIoQoyRTK5yehEbrFRdZs26rivPhQZQmz
+         HjW26zNG65VF3UfxnITX6UHlAA8Ft1CViBPyP04rGrZhWk2XPYHmceiYEV6pjJ+lxv7J
+         nMIbdutaWyeQ5Vn5A8q4o6TpoyFLhxhJClmTHg9TcFJQNnkOiWVTqDoJ+DKrCFOZ2s9y
+         2zzdNBHsJ+mbLn5XCilMcCW28Q25oqG2cUt+V7b/Pf06lI47rvPIuOo6y/IncdjAz1oG
+         xVuv4L2EplswOkw1W4Ba9yuet+wfqYb9xVPv2GUNsbPml9pVy0k8hyngMGPL/h7vuPs1
+         uooQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=NuhBWXqmLuVOf2m1Sf51S9jTSqkqKCsQtTnFDyuk7Aw=;
-        b=N0dHqKTUTwT3dqXkK4ssstllrDQRvldegU5da7Nn8rwBvR+I+yAwugFmtL8HyHFHtS
-         ngnoN81M9UQVu6z12PR2PMxDblF6irVYeExVBQqhXOs+9GFnWR5UCrnLbEQCQMwKWT88
-         TAm2mkjpKDCHkZmmmboW9nIAWDmddo9ylb29qtvTDuMJtjDWdYluIM7BAiF0M6E2T8W4
-         I6QWTMhCITFVwitlJAZNccMPeD3Ccsg2F1Lu3/lRhciSKG2Vp29ZV7sbPh9LaLZ0/utK
-         L+5JJI2glPoCP0pcTtpMdXuytlFseGW4lrq8QiceTrJw46LcgJd6f4DYPsGJ7F/1aE1M
-         qszA==
-X-Gm-Message-State: AOAM531QoOC3A2IZT/p8vcj17il+G/g0LefOkjderQjd7AQC86/XiKE7
-        AjU88j28OXDZw2nSU0UwRg7MJZypXQM=
-X-Google-Smtp-Source: ABdhPJxhuOZirzBb6ajrKE0F+5qY70HzLyfqMtZYi5fqIRkVW4Lk3gV+5JSEMCrA+DGmDVzjoE8ZrfiPeDQ=
+        bh=DvS0MK4rYpRtDe2fvh6ocxKN7mSQ+xkrM2pZGwGEGi0=;
+        b=y1nPlg9ZthuSTOYe98s5Zeu0AwsNp0kg5WiBybxcUrKXsb8UosAgAyxaBGOwk5mx7d
+         r/t4hDW+sydu8MIL5MIuDy2aJzsS970y2HSx/YBIR2RmyyaC+oGouuuENw8Licn6ON4x
+         ICclR4hkkLPWVn1OorJbBEc5sqiIaAi+62FYYK5Lpwp7FMzZ2ova2CSWIwRYnT3GXXqa
+         a0gTtWjcL1by0b3uvkdMd/ayEeH/R9/eICgdAgKeU4p52VQrdqdwQBneJqK0AA2VUSbV
+         0mpudER1SkZaTYVm/gocymiovMqy8KsyFMJGzZbipX1tTexUjM7e2poGdgVv8Omx7AbN
+         rM3g==
+X-Gm-Message-State: AOAM530dJDgTnQB1o5MaG7pmyBDbj6x1Oi+5FvhCXVdkWk4N1T1cH4Qx
+        6wxVpye+RaVLe5jKpuJ1lWv30EsR984=
+X-Google-Smtp-Source: ABdhPJz4ke7bLqZx/KSNR4w7UoBgnHY5w/YAjtmqQr7Qf5jooPhCshyLJvD01vl3B4TVrPipJWjHkDsd7G0=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:1306:b0:512:ca3d:392f with SMTP id
- j6-20020a056a00130600b00512ca3d392fmr6513669pfu.79.1655239674490; Tue, 14 Jun
- 2022 13:47:54 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:a03:b0:522:990c:c795 with SMTP id
+ p3-20020a056a000a0300b00522990cc795mr6250999pfh.15.1655239676339; Tue, 14 Jun
+ 2022 13:47:56 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 20:47:19 +0000
+Date:   Tue, 14 Jun 2022 20:47:20 +0000
 In-Reply-To: <20220614204730.3359543-1-seanjc@google.com>
-Message-Id: <20220614204730.3359543-11-seanjc@google.com>
+Message-Id: <20220614204730.3359543-12-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220614204730.3359543-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH v2 10/21] KVM: VMX: Inject #PF on ENCLS as "emulated" #PF
+Subject: [PATCH v2 11/21] KVM: x86: Rename kvm_x86_ops.queue_exception to inject_exception
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -67,38 +67,111 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Treat #PFs that occur during emulation of ENCLS as, wait for it, emulated
-page faults.  Practically speaking, this is a glorified nop as the
-exception is never of the nested flavor, and it's extremely unlikely the
-guest is relying on the side effect of an implicit INVLPG on the faulting
-address.
+Rename the kvm_x86_ops hook for exception injection to better reflect
+reality, and to align with pretty much every other related function name
+in KVM.
 
-Fixes: 70210c044b4e ("KVM: VMX: Add SGX ENCLS[ECREATE] handler to enforce CPUID restrictions")
+No functional change intended.
+
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/sgx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/include/asm/kvm-x86-ops.h | 2 +-
+ arch/x86/include/asm/kvm_host.h    | 2 +-
+ arch/x86/kvm/svm/svm.c             | 4 ++--
+ arch/x86/kvm/vmx/vmx.c             | 4 ++--
+ arch/x86/kvm/x86.c                 | 2 +-
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/sgx.c b/arch/x86/kvm/vmx/sgx.c
-index 35e7ec91ae86..966cfa228f2a 100644
---- a/arch/x86/kvm/vmx/sgx.c
-+++ b/arch/x86/kvm/vmx/sgx.c
-@@ -129,7 +129,7 @@ static int sgx_inject_fault(struct kvm_vcpu *vcpu, gva_t gva, int trapnr)
- 		ex.address = gva;
- 		ex.error_code_valid = true;
- 		ex.nested_page_fault = false;
--		kvm_inject_page_fault(vcpu, &ex);
-+		kvm_inject_emulated_page_fault(vcpu, &ex);
- 	} else {
- 		kvm_inject_gp(vcpu, 0);
- 	}
+diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+index 6f2f1affbb78..a42e2d9b04fe 100644
+--- a/arch/x86/include/asm/kvm-x86-ops.h
++++ b/arch/x86/include/asm/kvm-x86-ops.h
+@@ -67,7 +67,7 @@ KVM_X86_OP(get_interrupt_shadow)
+ KVM_X86_OP(patch_hypercall)
+ KVM_X86_OP(inject_irq)
+ KVM_X86_OP(inject_nmi)
+-KVM_X86_OP(queue_exception)
++KVM_X86_OP(inject_exception)
+ KVM_X86_OP(cancel_injection)
+ KVM_X86_OP(interrupt_allowed)
+ KVM_X86_OP(nmi_allowed)
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 7e98b2876380..16a7f91cdf75 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1505,7 +1505,7 @@ struct kvm_x86_ops {
+ 				unsigned char *hypercall_addr);
+ 	void (*inject_irq)(struct kvm_vcpu *vcpu, bool reinjected);
+ 	void (*inject_nmi)(struct kvm_vcpu *vcpu);
+-	void (*queue_exception)(struct kvm_vcpu *vcpu);
++	void (*inject_exception)(struct kvm_vcpu *vcpu);
+ 	void (*cancel_injection)(struct kvm_vcpu *vcpu);
+ 	int (*interrupt_allowed)(struct kvm_vcpu *vcpu, bool for_injection);
+ 	int (*nmi_allowed)(struct kvm_vcpu *vcpu, bool for_injection);
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index c6cca0ce127b..ca39f76ca44b 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -430,7 +430,7 @@ static int svm_update_soft_interrupt_rip(struct kvm_vcpu *vcpu)
+ 	return 0;
+ }
+ 
+-static void svm_queue_exception(struct kvm_vcpu *vcpu)
++static void svm_inject_exception(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
+ 	unsigned nr = vcpu->arch.exception.nr;
+@@ -4761,7 +4761,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+ 	.patch_hypercall = svm_patch_hypercall,
+ 	.inject_irq = svm_inject_irq,
+ 	.inject_nmi = svm_inject_nmi,
+-	.queue_exception = svm_queue_exception,
++	.inject_exception = svm_inject_exception,
+ 	.cancel_injection = svm_cancel_injection,
+ 	.interrupt_allowed = svm_interrupt_allowed,
+ 	.nmi_allowed = svm_nmi_allowed,
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index ec98992024e2..26b863c78a9f 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -1610,7 +1610,7 @@ static void vmx_clear_hlt(struct kvm_vcpu *vcpu)
+ 		vmcs_write32(GUEST_ACTIVITY_STATE, GUEST_ACTIVITY_ACTIVE);
+ }
+ 
+-static void vmx_queue_exception(struct kvm_vcpu *vcpu)
++static void vmx_inject_exception(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_vmx *vmx = to_vmx(vcpu);
+ 	unsigned nr = vcpu->arch.exception.nr;
+@@ -7993,7 +7993,7 @@ static struct kvm_x86_ops vmx_x86_ops __initdata = {
+ 	.patch_hypercall = vmx_patch_hypercall,
+ 	.inject_irq = vmx_inject_irq,
+ 	.inject_nmi = vmx_inject_nmi,
+-	.queue_exception = vmx_queue_exception,
++	.inject_exception = vmx_inject_exception,
+ 	.cancel_injection = vmx_cancel_injection,
+ 	.interrupt_allowed = vmx_interrupt_allowed,
+ 	.nmi_allowed = vmx_nmi_allowed,
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 7c3ce601bdcc..b63421d511c5 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9504,7 +9504,7 @@ static void kvm_inject_exception(struct kvm_vcpu *vcpu)
+ 
+ 	if (vcpu->arch.exception.error_code && !is_protmode(vcpu))
+ 		vcpu->arch.exception.error_code = false;
+-	static_call(kvm_x86_queue_exception)(vcpu);
++	static_call(kvm_x86_inject_exception)(vcpu);
+ }
+ 
+ static int inject_pending_event(struct kvm_vcpu *vcpu, bool *req_immediate_exit)
 -- 
 2.36.1.476.g0c4daa206d-goog
 

@@ -2,117 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B2954B857
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09BE254B85C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:14:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239734AbiFNSLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:11:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33018 "EHLO
+        id S235239AbiFNSOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352365AbiFNSKr (ORCPT
+        with ESMTP id S229902AbiFNSN6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 14:10:47 -0400
-Received: from out199-8.us.a.mail.aliyun.com (out199-8.us.a.mail.aliyun.com [47.90.199.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A314927E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:10:40 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R741e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VGONEUp_1655230234;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VGONEUp_1655230234)
-          by smtp.aliyun-inc.com;
-          Wed, 15 Jun 2022 02:10:36 +0800
-Date:   Wed, 15 Jun 2022 02:10:34 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     Daeho Jeong <daeho43@gmail.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Daeho Jeong <daehojeong@google.com>,
-        Nathan Huckleberry <nhuck@google.com>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [f2fs-dev] [PATCH] f2fs: handle decompress only post processing
- in softirq
-Message-ID: <YqjPGpZTUjH4IfZT@B-P7TQMD6M-0146.local>
-References: <20220613155612.402297-1-daeho43@gmail.com>
- <Yqge0XS7jbSnNWvq@sol.localdomain>
- <YqhRBZMYPp/kyxoe@B-P7TQMD6M-0146.local>
- <CACOAw_wjCyTmwusY6S4+NgMuLOZm9fwGfrvCT272GJ01-RP6PQ@mail.gmail.com>
- <Yqi+vyY4K0mzEdeP@B-P7TQMD6M-0146.local>
- <CACOAw_xw3jN2KQaiG7AgCttaQr+uqJme=rsj8AT9wdsGWj3iVQ@mail.gmail.com>
+        Tue, 14 Jun 2022 14:13:58 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4002919C32
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:13:57 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-30c143c41e5so38456087b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:13:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZsjTA9iJIzTxX4ygR8FdKM9wnHJIUgreAx1BZ2osk+k=;
+        b=elkEMMAy3wPQwGf1ROmnn/4Isu60xOrk5kwhUf9POtxNbXra9m+VOIyaYdDcP+3CU3
+         2JT5ARrP4xwLtPX0Ds74mSJUDU0WpEwRhBDquEnA4hNv+/G/6Q6UFzYcWShmefjq8AjX
+         gz+FlbByjs1p+vyfBLAp58Tc0jFjVzOn1TINg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZsjTA9iJIzTxX4ygR8FdKM9wnHJIUgreAx1BZ2osk+k=;
+        b=QmT8jfjpuPvBWVyocAyt4RBgizWIHIs9QJvIg3NjHya9ZVtN2IMKaSzdRpTbgKKLUQ
+         Ur1Lbxuc+s4M3WmTxwNBReNwWdPozWzgWtSeMYgYTVnerWGzOL8q1CPrjkXN5WeriZH9
+         9pRcGlyEfZVJp2Y4B5LsfezSjg+Y/a1vV57eL8hHrklPS2FGOMwXUvLBAOZs6IE3kAZp
+         YCKyqfU1ycCzI7HrC/u7wPHyYx4KgHCYk7zIx8vIx9U+LLE6XrtoH0WD0yQ+wAD8osN/
+         KtpUgN4E0lGov8VjokWJo/t9o8/F45SPqpBFF8ap9hAFw0RO10FI1NaSrUMJV8heHbL5
+         k0tg==
+X-Gm-Message-State: AJIora9d/1Ef1i+tLWDOAMpSw3tVkFCkSlPg/pRYmjkrwmTVix+/V9+t
+        8Fkf7O4JmI8Ev5jM+sd1ztw+X8wRG24u4yHPh7G68w==
+X-Google-Smtp-Source: AGRyM1uE67Atomlar3nLQdgT+jy4zLDSFTPt4ERa1X/kLBHMBihOauBraRP729dfHSV8ag/nSgM1IEdsAe/aMtNwTF8=
+X-Received: by 2002:a81:fd1:0:b0:30f:f98b:4957 with SMTP id
+ 200-20020a810fd1000000b0030ff98b4957mr7329858ywp.350.1655230436484; Tue, 14
+ Jun 2022 11:13:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CACOAw_xw3jN2KQaiG7AgCttaQr+uqJme=rsj8AT9wdsGWj3iVQ@mail.gmail.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220609181106.3695103-1-pmalani@chromium.org>
+ <20220609181106.3695103-6-pmalani@chromium.org> <ef3933a8-88c2-f19f-97df-3498f54b9a4f@collabora.com>
+In-Reply-To: <ef3933a8-88c2-f19f-97df-3498f54b9a4f@collabora.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Tue, 14 Jun 2022 11:13:45 -0700
+Message-ID: <CACeCKaegCzKZdnbZFkE0WWb=99jCfQDA60kTVhOS1TGvdHgpDg@mail.gmail.com>
+Subject: Re: [PATCH v2 5/7] drm/bridge: anx7625: Register number of Type C switches
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        heikki.krogerus@linux.intel.com,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Tzung-Bi Shih <tzungbi@google.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Jonas Karlman <jonas@kwiboo.se>,
+        swboyd@chromium.org, Pin-Yen Lin <treapking@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 10:49:37AM -0700, Daeho Jeong wrote:
-> > Yeah, I heard that you folks are really suffered from the scheduling
-> > issues. But for my own previous experience, extra memory footprints are
-> > really critical in Android low memory scenarios (no matter low-ended
-> > devices or artificial workloads), it tossed me a lot. So I finally
-> > ntroduced many inplace I/O to handle/minimize that, including inplace
-> > I/O for compressed pages and temporary pages.
+On Tue, Jun 14, 2022 at 1:22 AM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> Il 09/06/22 20:09, Prashant Malani ha scritto:
+> > Parse the "switches" node, if available, and count and store the number
+> > of Type-C switches within it. Since we currently don't do anything with
+> > this info, no functional changes are expected from this change.
 > >
-> > But I'm not quite sure what's currently happening now, since we once
-> > didn't have such non-deterministic workqueues, and I don't hear from
-> > other landed vendors.  I think it'd be better to analyse what's going
-> > on for these kworkers from scheduling POV and why they don't schedule
-> > in time.
+> > This patch sets a foundation for the actual registering of Type-C
+> > switches with the Type-C connector class framework.
 > >
-> > I also have an idea is much like what I'm doing now for sync
-> > decompression, is that just before lock page and ->read_folio, we can
-> > trigger some decompression in addition to kworker decompression, but it
-> > needs some MM modification, as below:
+> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > ---
 > >
-> >    !PageUptodate(page)
+> > Changes since v1:
+> > - No changes.
 > >
-> >    some callback to decompress in addition to kworker
+> >   drivers/gpu/drm/bridge/analogix/anx7625.c | 20 ++++++++++++++++++++
+> >   drivers/gpu/drm/bridge/analogix/anx7625.h |  1 +
+> >   2 files changed, 21 insertions(+)
 > >
-> >    lock_page()
-> >    ->read_folio()
+> > diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > index 53a5da6c49dd..07ed44c6b839 100644
+> > --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> > @@ -2581,6 +2581,22 @@ static void anx7625_runtime_disable(void *data)
+> >       pm_runtime_disable(data);
+> >   }
 > >
-> > If mm folks don't like it, I think RT thread is also fine after we
-> > analysed the root cause of the kworker delay I think.
+> > +static int anx7625_register_typec_switches(struct device *device, struct anx7625_data *ctx)
+> > +{
+> > +     struct device_node *of = NULL;
+> > +     int ret = 0;
+> > +
+> > +     of = of_get_child_by_name(device->of_node, "switches");
+> > +     if (!of)
+> > +             return -ENODEV;
+> > +
+> > +     ctx->num_typec_switches = of_get_child_count(of);
+> > +     if (ctx->num_typec_switches <= 0)
+> > +             return -ENODEV;
+> > +
+> > +     return ret;
+>
+> You aren't using the `ret` variable for anything other than returning zero:
+> remove it and simply return 0 here.
+The very next patch does use it, but sure I'll remove it from here and
+introduce it in v6.
+>
+> > +}
+> > +
+> >   static int anx7625_i2c_probe(struct i2c_client *client,
+> >                            const struct i2c_device_id *id)
+> >   {
+> > @@ -2686,6 +2702,10 @@ static int anx7625_i2c_probe(struct i2c_client *client,
+> >       if (platform->pdata.intp_irq)
+> >               queue_work(platform->workqueue, &platform->work);
 > >
-> > Thanks,
-> > Gao Xiang
-> >
-> > >
-> > > Thanks,
-> 
-> I don't think this is not a problem with most devices, since the
-> allocated memory is not too big and it'll be kept just as long as I/O
-> processing is on. However, I still understand what you're worried
-> about, so I think I can make a new mount option like "memory=low",
-> which can be used to give a hint to F2FS to have a priority on as
-> little memory as possible. In this mode, we will try to keep minimal
-> memory and we can use the previous implementation for decompression.
+> > +     ret = anx7625_register_typec_switches(dev, platform);
+> > +     if (ret)
+> > +             dev_info(dev, "Didn't register Type C switches, err: %d\n", ret);
+>
+> Type-C switches are optional for this driver and this will print a sort of error
+> on boards that are *not* declaring any switches on purpose (because perhaps they
+> don't have any, or for any other reason).
+>
+> Even though this is a dev_info and not a dev_err, it's still printing an alarming
+> (and useless, in the aforementioned case) message.
+I'll go ahead and convert this to dev_warn, but only trigger if there
+is an error other than ENODEV.
 
-Okay, one of our previous tests was that how many applications are
-still there after many other applications boot. That makes sense since
-most users need to leave as many apps as possible, I know for now we
-have swap-like thing, but once it was done without swap. If you reserve
-too much memory (with page mempool or even for inflight I/O), it will
-impact the alive app numbers compared to uncompressed cases for all
-devices (even high-ended devices).
-
-BTW, most crypto algorithms have hardware instructions to boost up,
-actually we have some in-house neon lz4 assembly as well. but it still
-somewhat slow than crypto algorithms, not to mention some algorithms
-like zstd or lzma. Anyway, I personally prefer RT Thread way since it's
-more flexible, also for dm-verity at least try with WQ_HIGHPRI, and I've
-seen:
-https://android-review.googlesource.com/c/kernel/common/+/204421
-
-But I'm not sure why it wasn't upstreamed though.
-
-Thanks,
-Gao Xiang
-
-> 
-> Thanks,
+>
+> Please fix this.
+>
+> Regards,
+> Angelo
+>

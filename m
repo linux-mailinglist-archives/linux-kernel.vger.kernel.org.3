@@ -2,52 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8524454AD18
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:19:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F6F54AD1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:19:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354927AbiFNJSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 05:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57890 "EHLO
+        id S241517AbiFNJTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 05:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233422AbiFNJSc (ORCPT
+        with ESMTP id S237582AbiFNJTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 05:18:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29D83FBE6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 02:18:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 14 Jun 2022 05:19:39 -0400
+Received: from mx4.veeam.com (mx4.veeam.com [104.41.138.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDC4641FBA;
+        Tue, 14 Jun 2022 02:19:37 -0700 (PDT)
+Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54CD1B817DC
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:18:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A26FC3411E;
-        Tue, 14 Jun 2022 09:18:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655198309;
-        bh=YeE9jrUyw9QrNFv2HwkbJWwjrAFDZqNqb/wb75IXkqQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pjW3FSHUhb7Desv7/QvW2HqgBaKTuiptA1StxId9jiUqorlZ2yiuqvuNWqcECzIr7
-         IFqOi64Dsgj8QKtLHat8oAh6aTXtE9LIuiFmXAd0AmyHLaO9G16knXDb6TXYaHqfo2
-         C+1ar3LKYFtsc6NhGpUsZRQf5RfIkDaQpOoKznUQ=
-Date:   Tue, 14 Jun 2022 11:18:26 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Dongliang Mu <dzm91@hust.edu.cn>
-Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Martin Kaiser <martin@kaiser.cx>,
-        Michael Straube <straube.linux@gmail.com>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        mudongliang <mudongliangabcd@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] driver: r8188eu: remove NULL check before vfree
-Message-ID: <YqhSYtfLJ3h/zFEr@kroah.com>
-References: <20220614090340.123714-1-dzm91@hust.edu.cn>
+        by mx4.veeam.com (Postfix) with ESMTPS id 9BC8CC1A36;
+        Tue, 14 Jun 2022 12:19:35 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
+        s=mx4-2022; t=1655198375;
+        bh=1o9DeVG8YeM34HzPAkbwky9SDW6qSepU54xAMe2uuYw=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To:From;
+        b=IFpLRJb0Cioyj7p1ymgbLIxwGm7gpsmrb2OLEy4adcOYiHj1LwN1ye4fJ5yN20EZ9
+         bJYX2eEMEgUdZ5Wmjui1Y4HLRdKYh6aBsHoLT63f2KDBXgsX8Wr6A3NaTXkPdsV+w+
+         2ks2Q89gi63l6oVsHUhZbPJya8PZT+hpHTZi8qDkWAZyHyQJ9fJbzbBsLNToAwPO5Y
+         fn6SlFdaZy1FV7Hffwf0a9SPuMRdsJETV9O+pK/fq+JvM51Sxl142lvd3f2a2uLU1+
+         sLCZYs9oYjBxrr4c78cMTjutw/uszm0VJFd2S3BLjOiMkO7W7zTFoENm8CIu9Qnc3V
+         vwe7qpPpoEdqg==
+Received: from veeam.com (172.24.14.5) by prgmbx01.amust.local
+ (172.24.128.102) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Tue, 14 Jun
+ 2022 11:19:33 +0200
+Date:   Tue, 14 Jun 2022 12:19:25 +0300
+From:   Sergei Shtepa <sergei.shtepa@veeam.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+CC:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 01/20] block, blk_filter: enable block device filters
+Message-ID: <20220614091925.GA2429@veeam.com>
+References: <1655135593-1900-1-git-send-email-sergei.shtepa@veeam.com>
+ <1655135593-1900-2-git-send-email-sergei.shtepa@veeam.com>
+ <44efdfc2-526f-0ea7-e332-ec29c00ef762@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20220614090340.123714-1-dzm91@hust.edu.cn>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <44efdfc2-526f-0ea7-e332-ec29c00ef762@infradead.org>
+X-Originating-IP: [172.24.14.5]
+X-ClientProxiedBy: prgmbx02.amust.local (172.24.128.103) To
+ prgmbx01.amust.local (172.24.128.102)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29D2A50A536D7662
+X-Veeam-MMEX: True
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,36 +64,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 05:03:30PM +0800, Dongliang Mu wrote:
-> From: mudongliang <mudongliangabcd@gmail.com>
-> 
-> vfree can handle NULL pointer as its argument.
-> According to coccinelle isnullfree check, remove NULL check
-> before vfree operation.
-> 
-> Signed-off-by: mudongliang <mudongliangabcd@gmail.com>
-> ---
->  drivers/staging/r8188eu/os_dep/usb_intf.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/os_dep/usb_intf.c b/drivers/staging/r8188eu/os_dep/usb_intf.c
-> index 68869c5daeff..bd1c8b4b5c4b 100644
-> --- a/drivers/staging/r8188eu/os_dep/usb_intf.c
-> +++ b/drivers/staging/r8188eu/os_dep/usb_intf.c
-> @@ -372,8 +372,7 @@ static struct adapter *rtw_usb_if1_init(struct dvobj_priv *dvobj,
->  free_adapter:
->  	if (pnetdev)
->  		rtw_free_netdev(pnetdev);
-> -	else if (padapter)
-> -		vfree(padapter);
-> +	vfree(padapter);
+Hi Randy.
 
-You changed the logic of this code here, please be more careful in the
-future.
+Thanks for the review.
+I agree with all the comments and will pay more attention to the documentation.
 
-Also, you need to use your real name for the signed-off-by and From:
-line.
-
-thanks,
-
-greg k-h
+-- 
+Sergei Shtepa
+Veeam Software developer.

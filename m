@@ -2,71 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239AE54B9CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A3854B9BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358108AbiFNSyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32962 "EHLO
+        id S1358347AbiFNSzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358659AbiFNSxf (ORCPT
+        with ESMTP id S1358265AbiFNSyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 14:53:35 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4C651E4A;
-        Tue, 14 Jun 2022 11:47:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=nv1zvia7YW/sCDV/c7twLHwtsEJhBvBCb96DvXq4RLs=; b=by2kBTic1HD3b40bFBh0cXwH3g
-        PymT00QkEyb05+61XIky0czYGuWXdgNLSYJwWZ3odJQAHMXI2F7P9Ql/Gjlxhopx2/806IO5wgOck
-        n0VIywCwGmO0GSUgHghXfXx5dVCti4Ss7gjd7SDh0srUjVjTL0T/uFM7Wxfj7WIVoUks=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1o1BYu-006vA7-QV; Tue, 14 Jun 2022 20:46:48 +0200
-Date:   Tue, 14 Jun 2022 20:46:48 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     netdev@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dan Murphy <dmurphy@ti.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 1/3] dt-bindings: dp83867: add binding for
- io_impedance_ctrl nvmem cell
-Message-ID: <YqjXmInBfE/oMc4m@lunn.ch>
-References: <20220606202220.1670714-1-linux@rasmusvillemoes.dk>
- <20220606202220.1670714-2-linux@rasmusvillemoes.dk>
+        Tue, 14 Jun 2022 14:54:47 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF1F289A9;
+        Tue, 14 Jun 2022 11:48:03 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id x6-20020a1c7c06000000b003972dfca96cso5279903wmc.4;
+        Tue, 14 Jun 2022 11:48:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZGq6EoefxPbFtF1LY8I5mjem8e38X9O1LMTR9lksIbU=;
+        b=eKBKM9FNockAANSZ38+BfFdCvxvuc7vP7DTowuFFVSb/Z3814bLCJz/mn4QVASzwZE
+         Jofzjg1eglWhZBYCtnQqsI9C8/gI2oFX7sMVNHe2wa6X+9gE+SAINpsJxkE2H4zuuaen
+         Tvc+RhplEeh4mJPviyY9JbbeSixBKrHQQAT0FymDNyo7BcF1rmykEN5OlXyICJFWskWu
+         0aac9qOBqpRru9+AOVaM14bA2Hf1blQfOeWjWyhFrIJf7jPq6Fn+v4XMoSFYp/8c1IdM
+         gx2ytXQZwgaZW2wj2je0uLjBB8gh/vVBl2e0UY7sVdy9x48N72Ndq67t1bassygknDUo
+         r74w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZGq6EoefxPbFtF1LY8I5mjem8e38X9O1LMTR9lksIbU=;
+        b=nXnCjoU0Xl4tnn3vKGjJHQoFDP/UV2iHyuYPlKHKquYlKzNXSGS/b4IZfBfAhPbpH9
+         AGjNvaRk7tIBEmY2dcnhHiV85qFvaSpY4qWgFKeInQ56ozNexfqyWxo6HGqSwbM5TKI1
+         hPF2ZUnWEPXBC3VW9A41SGn4bRP/TOPqfabOgQzRRyZNQcHTZZaFRSMp2opoioUEQChV
+         UQcrILCXXoLRuPBSU6n6i/GmTPk6Sinx4Xf5cCRNPXYzbnnCSaJi7131XKXgO4zBkGVb
+         LY/KSjR1OXU2oq6a8sCCh/hcSqJPBn5JY7vPxSMk4UxnIVUGf4rrZy6V/mHfnownd+BI
+         Op3A==
+X-Gm-Message-State: AOAM531XBnYRnY9UX5IGA3KH1IL3J7FbqMERmcrE60gHphICslU56Fxl
+        LMIn+D8terGAur9ixHy+1Y0=
+X-Google-Smtp-Source: ABdhPJyN/hZcupEtYYhdwsR7sUr2cuKzMaSiadhh38ZplgCRxmrsH6p5MaUDlH8mYoDwJKflzZQVaQ==
+X-Received: by 2002:a05:600c:58a:b0:39c:80ed:68be with SMTP id o10-20020a05600c058a00b0039c80ed68bemr5624291wmd.150.1655232481288;
+        Tue, 14 Jun 2022 11:48:01 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id d34-20020a05600c4c2200b0039c5b4ab1b0sm12960218wmp.48.2022.06.14.11.47.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 11:48:00 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        dmaengine@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dmaengine: fsl-edma: remove redundant assignment to pointer last_sg
+Date:   Tue, 14 Jun 2022 19:47:59 +0100
+Message-Id: <20220614184759.164379-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220606202220.1670714-2-linux@rasmusvillemoes.dk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 06, 2022 at 10:22:18PM +0200, Rasmus Villemoes wrote:
-> We have a board where measurements indicate that the current three
-> options - leaving IO_IMPEDANCE_CTRL at the (factory calibrated) reset
-> value or using one of the two boolean properties to set it to the
-> min/max value - are too coarse.
-> 
-> There is no documented mapping from the 32 possible values of the
-> IO_IMPEDANCE_CTRL field to values in the range 35-70 ohms, and the
-> exact mapping is likely to vary from chip to chip. So add a DT binding
-> for an nvmem cell which can be populated during production with a
-> value suitable for each specific board.
-> 
-> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+The pointer last_sg is being assigned a value at the start of a loop
+however it is never read and is being re-assigned later on in both
+brances of an if-statement. The assignment is redundant and can be
+removed.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Cleans up clang scan-build warning:
+drivers/dma/fsl-edma-common.c:563:3: warning: Value stored to 'last_sg'
+is never read [deadcode.DeadStores]
 
-    Andrew
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/dma/fsl-edma-common.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/drivers/dma/fsl-edma-common.c b/drivers/dma/fsl-edma-common.c
+index 3ae05d1446a5..a06a1575a2a5 100644
+--- a/drivers/dma/fsl-edma-common.c
++++ b/drivers/dma/fsl-edma-common.c
+@@ -559,9 +559,6 @@ struct dma_async_tx_descriptor *fsl_edma_prep_slave_sg(
+ 	}
+ 
+ 	for_each_sg(sgl, sg, sg_len, i) {
+-		/* get next sg's physical address */
+-		last_sg = fsl_desc->tcd[(i + 1) % sg_len].ptcd;
+-
+ 		if (direction == DMA_MEM_TO_DEV) {
+ 			src_addr = sg_dma_address(sg);
+ 			dst_addr = fsl_chan->dma_dev_addr;
+-- 
+2.35.3
+

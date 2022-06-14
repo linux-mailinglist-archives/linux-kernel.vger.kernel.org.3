@@ -2,84 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE9454B2DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CE1054B2DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242250AbiFNOOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
+        id S243700AbiFNOOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233498AbiFNOOi (ORCPT
+        with ESMTP id S240419AbiFNOOo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:14:38 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18CF28704;
-        Tue, 14 Jun 2022 07:14:36 -0700 (PDT)
+        Tue, 14 Jun 2022 10:14:44 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A892C106
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:14:43 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id i64so8676855pfc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:14:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655216076; x=1686752076;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0uq+vPn9P86+eSA1af5GDSL4gdgJ3UTG153tOxE/IIg=;
-  b=yh7alZGDRwLh+1n+KB2uLlOYjtsfBSD3tE5t5FxhC6NDkr0R65h2LT2S
-   ImKBBlpwYpBi4jXCZhx09sLVzujwYOWpGcZPPn6J3UN22kha7HPmbqK/O
-   kRdZhcetb5sqZIQLQgHGwTA5O9ZfIJqA7XeCqlmeTaaefiO1tfJDY/8TC
-   k=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Jun 2022 07:14:36 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 07:14:34 -0700
-Received: from [10.50.56.0] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 14 Jun
- 2022 07:14:30 -0700
-Message-ID: <88780123-32a3-ab34-cd3d-01e4a3421f03@quicinc.com>
-Date:   Tue, 14 Jun 2022 19:44:27 +0530
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-transfer-encoding:content-language;
+        bh=EEofKDw4c+3KYJpmhYr5DO8YGIRsl7tk3TGnQLh0NKs=;
+        b=Rbtb/30uLf9QMQYK/Iy4cOLR0SKmlvSaSP8h94/Lv78jLnHt2sYxIoMFVbqtuLibAK
+         UdHOZNkOHdZJ2aopKY0PpPbARcsJJHZ3NBYT5b0vgb0VlFo4cAA9mUxabTFh+CmiU0Mp
+         2tlYm9LL0COJt9Wi7LNBxwnigBKCLbEII1OhBGvFtfC4uHIJRpxqtz16keqiBVCBKlXf
+         QQuA+Rv+T8MpFeLCKVRcVb0dV9Ai48LthU3FVGgNPi4ViS7Ee9JMAkBbTPW4Dk4yKdT5
+         GYPaZn9rEULOgHkbFrh7eUxzfARv+0rYVM1925TIlzhDVYwXOfSoAV2gq2TfvA/QRJOi
+         xIQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-transfer-encoding
+         :content-language;
+        bh=EEofKDw4c+3KYJpmhYr5DO8YGIRsl7tk3TGnQLh0NKs=;
+        b=4HSpq4rxlnzNecb1YvdrgMm3+89AIaEW+mVDCuL4kIIqhv7JPPn0aPrAM2mY9SSMHi
+         BPwVTZJ24YqR0viklx8So1us9DT2gUhylUFToHtEJLfI3oTcr6xFDEZ5UdB+0mm+jecf
+         C9u1SM6Biw9Rk49HatFJpjDvhgBXvsCWSZkkJ4LtWbVm9E38fQmm+G+7LcrFLEN4QikU
+         hxxLPCXmMfPYuaP3kFwMlMW49dwZ3tNCoBfouf6ic5umU69jv676JV1xd6r4OXRHkGaW
+         nzmwxKey32doAWSaQiebIjY9Lruic1K8IaWAND7b1BAg5zxc++AeKIOCM20YpPnpZqIh
+         sfyA==
+X-Gm-Message-State: AOAM5333FqgbVwk3E1shNQRwybf3RSbaZrEj9y6juCkVU3oSL3Mmwhhi
+        7tPaTHUjyEEq7QTsNPr0Tq2PzA==
+X-Google-Smtp-Source: ABdhPJzIgnJpMgvFzFqlwq/947R6ZtySbDRGFzkyrCmQlC3cKHBBt/qYiLpD6IicLJGhVcrSnmCMOg==
+X-Received: by 2002:aa7:83d0:0:b0:50c:eb2b:8e8a with SMTP id j16-20020aa783d0000000b0050ceb2b8e8amr4992915pfn.31.1655216083155;
+        Tue, 14 Jun 2022 07:14:43 -0700 (PDT)
+Received: from [10.20.0.186] ([199.101.192.9])
+        by smtp.gmail.com with ESMTPSA id jj10-20020a170903048a00b00167804a044fsm7299458plb.56.2022.06.14.07.14.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 07:14:42 -0700 (PDT)
+Subject: Re: [PATCH 1/3] uacce: supports device isolation feature
+To:     Kai Ye <yekai13@huawei.com>, gregkh@linuxfoundation.org,
+        herbert@gondor.apana.org.au
+Cc:     linux-crypto@vger.kernel.org, linux-accelerators@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linuxarm@huawei.com,
+        wangzhou1@hisilicon.com
+References: <20220614122943.1406-1-yekai13@huawei.com>
+ <20220614122943.1406-5-yekai13@huawei.com>
+From:   Zhangfei Gao <zhangfei.gao@linaro.org>
+Message-ID: <452a54f0-27ce-6c0d-da56-883b0204f57c@linaro.org>
+Date:   Tue, 14 Jun 2022 22:14:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: Commit 282d8998e997 (srcu: Prevent expedited GPs and blocking
- readers from consuming CPU) cause qemu boot slow
-Content-Language: en-US
-To:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>
-CC:     Paolo Bonzini <pbonzini@redhat.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "mtosatti@redhat.com" <mtosatti@redhat.com>,
-        Auger Eric <eric.auger@redhat.com>,
-        "chenxiang (M)" <chenxiang66@hisilicon.com>
-References: <20220612162029.GR1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220612164002.GA1242564@paulmck-ThinkPad-P17-Gen-1>
- <560f7d27-fe38-0db9-834a-50dda5fa6157@redhat.com>
- <20220612184944.GU1790663@paulmck-ThinkPad-P17-Gen-1>
- <tencent_E306F58EAEC1D188ED6D5F358A269F34C707@qq.com>
- <20220613035711.GY1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220613041652.GA3976000@paulmck-ThinkPad-P17-Gen-1>
- <tencent_F82250B6E3D51A9AC0D2BE1AE43A4E060909@qq.com>
- <20220613121831.GA1790663@paulmck-ThinkPad-P17-Gen-1>
- <tencent_65C7D0A04984EDB6A79A5E5379DA7E835206@qq.com>
- <20220613145900.GC1790663@paulmck-ThinkPad-P17-Gen-1>
- <7b6c983b21d44119b61716a66de397ed@huawei.com>
- <f9684a69-5467-a440-abd1-7cf5ad3a81f7@quicinc.com>
- <tencent_8FD344DA7FC376C7D1204604DA7689DA4906@qq.com>
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-In-Reply-To: <tencent_8FD344DA7FC376C7D1204604DA7689DA4906@qq.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <20220614122943.1406-5-yekai13@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Language: en-US
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,100 +79,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 6/14/2022 7:33 PM, zhangfei.gao@foxmail.com wrote:
-> 
-> 
-> On 2022/6/14 下午8:19, Neeraj Upadhyay wrote:
->>
->>>
->>> 5.18-rc4 based               ~8sec
->>>
->>> 5.19-rc1                     ~2m43sec
->>>
->>> 5.19-rc1+fix1                 ~19sec
->>>
->>> 5.19-rc1-fix2                 ~19sec
->>>
->>
->> If you try below diff on top of either 5.19-rc1+fix1 or 5.19-rc1-fix2 
->> ; does it show any difference in boot time?
->>
->> --- a/kernel/rcu/srcutree.c
->> +++ b/kernel/rcu/srcutree.c
->> @@ -706,7 +706,7 @@ static void srcu_schedule_cbs_snp(struct 
->> srcu_struct *ssp, struct srcu_node *snp
->>   */
->>  static void srcu_gp_end(struct srcu_struct *ssp)
->>  {
->> -       unsigned long cbdelay;
->> +       unsigned long cbdelay = 1;
->>         bool cbs;
->>         bool last_lvl;
->>         int cpu;
->> @@ -726,7 +726,9 @@ static void srcu_gp_end(struct srcu_struct *ssp)
->>         spin_lock_irq_rcu_node(ssp);
->>         idx = rcu_seq_state(ssp->srcu_gp_seq);
->>         WARN_ON_ONCE(idx != SRCU_STATE_SCAN2);
->> -       cbdelay = !!srcu_get_delay(ssp);
->> +       if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), 
->> READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
->> +               cbdelay = 0;
->> +
->>         WRITE_ONCE(ssp->srcu_last_gp_end, ktime_get_mono_fast_ns());
->>
-> Test here:
-> qemu: https://github.com/qemu/qemu/tree/stable-6.1
-> kernel: 
-> https://github.com/Linaro/linux-kernel-uadk/tree/uacce-devel-5.19-srcu-test
-> (in case test patch not clear, push in git tree)
-> 
-> Hardware: aarch64
-> 
-> 1. 5.18-rc6
-> real    0m8.402s
-> user    0m3.015s
-> sys     0m1.102s
-> 
-> 2. 5.19-rc1
-> real    2m41.433s
-> user    0m3.097s
-> sys     0m1.177s
-> 
-> 3. 5.19-rc1 + fix1 from Paul
-> real    2m43.404s
-> user    0m2.880s
-> sys     0m1.214s
-> 
-> 4. 5.19-rc1 + fix2: fix1 + Remove "if (!jbase)" block
-> real    0m15.262s
-> user    0m3.003s
-> sys     0m1.033s
-> 
-> When build kernel in the meantime, load time become longer.
-> 
-> 5. 5.19-rc1 + fix3: fix1 + SRCU_MAX_NODELAY_PHASE 1000000
-> real    0m15.215s
-> user    0m2.942s
-> sys    0m1.172s
-> 
-> 6. 5.19-rc1 + fix4: fix1 + Neeraj's change of srcu_gp_end　
-> real    1m23.936s
-> user    0m2.969s
-> sys    0m1.181s
-> 
-
-Thanks for this data. Can you please share below test combo also?
-
-7. 5.19-rc1 + fix5: fix2 + Neeraj's change of srcu_gp_end
-
-
-8. 5.19-rc1 + fix6: fix3 + Neeraj's change of srcu_gp_end
-
+On 2022/6/14 下午8:29, Kai Ye wrote:
+> UACCE add the hardware error isolation API. Users can configure
+> the error frequency threshold by this vfs node. This API interface
+> certainly supports the configuration of user protocol strategy. Then
+> parse it inside the device driver. UACCE only reports the device
+> isolate state. When the error frequency is exceeded, the device
+> will be isolated. The isolation strategy should be defined in each
+> driver module.
+>
+> Signed-off-by: Kai Ye <yekai13@huawei.com>
+> Reviewed-by: Zhou Wang <wangzhou1@hisilicon.com>
+> ---
+>   drivers/misc/uacce/uacce.c | 51 ++++++++++++++++++++++++++++++++++++++
+>   include/linux/uacce.h      | 15 ++++++++++-
+>   2 files changed, 65 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
+> index b6219c6bfb48..4d9d9aeb145a 100644
+> --- a/drivers/misc/uacce/uacce.c
+> +++ b/drivers/misc/uacce/uacce.c
+> @@ -12,6 +12,20 @@ static dev_t uacce_devt;
+>   static DEFINE_MUTEX(uacce_mutex);
+>   static DEFINE_XARRAY_ALLOC(uacce_xa);
+>   
+> +static int cdev_get(struct device *dev, void *data)
+> +{
+> +	struct uacce_device *uacce;
+> +	struct device **t_dev = data;
+> +
+> +	uacce = container_of(dev, struct uacce_device, dev);
+> +	if (uacce->parent == *t_dev) {
+> +		*t_dev = dev;
+> +		return 1;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static int uacce_start_queue(struct uacce_queue *q)
+>   {
+>   	int ret = 0;
+> @@ -346,12 +360,47 @@ static ssize_t region_dus_size_show(struct device *dev,
+>   		       uacce->qf_pg_num[UACCE_QFRT_DUS] << PAGE_SHIFT);
+>   }
+>   
+> +static ssize_t isolate_show(struct device *dev,
+> +			    struct device_attribute *attr, char *buf)
+> +{
+> +	struct uacce_device *uacce = to_uacce_device(dev);
+> +
+> +	return sysfs_emit(buf, "%d\n", uacce->ops->get_isolate_state(uacce));
+Are these two isolate ops  required or optional?
+Do we need consider NULL pointer?
 
 Thanks
-Neeraj
-
-> More test details: https://docs.qq.com/doc/DRXdKalFPTVlUbFN5
-> 
-> Thanks
-> 

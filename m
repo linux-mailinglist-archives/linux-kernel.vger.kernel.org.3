@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0065654BB59
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B57954BB54
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357834AbiFNUKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        id S1358027AbiFNUK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357558AbiFNUJq (ORCPT
+        with ESMTP id S1357694AbiFNUJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:09:46 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17D44FC64
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:29 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id c10-20020a170903234a00b00168b5f7661bso5338691plh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:29 -0700 (PDT)
+        Tue, 14 Jun 2022 16:09:15 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087274F471
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:18 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id p123-20020a625b81000000b0051c31cc75dfso4237606pfb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=8CAKrp2Z8ftc2PspLOtgMbM3jnTmjfGGexJauokjvSQ=;
-        b=LP06UuiX73tTu8Qg7T/691M0mzRF0kjN7OVbuQAf60HJbvRNImjYmbTOvJYQZrPnIR
-         YWchqRCu1wHbGDsqBAj4Nl++xVMEaSQ8CUiV0f+OiEtR/fcUsS0FO4DXM28zelnF0wwF
-         PfmR4ND+Up9ZHuTmUDagxP0ie0CkptdavgZlT2Wd4zNeb8JCAMA9RZzBenxoiQsPPyEW
-         XktGDJd74lyIul3dbDy77GyVJ1ndKWcqKg4VPfmz9Q22YUhJARZ2Bg5zHVnIIxvl4JLi
-         /l34r20C0uZv7sYs6QHEn9eCI5q/RMw3lEQpAaR7RGsmOfd4hq4CDFgPQxuW4hyZtpLx
-         ozOw==
+        bh=o3z+boBvvuABIlKxvViYzVtbgDDM2QmQlL0qvBp6XMI=;
+        b=IzAQAcpsNM1EVPwh75OuwuNE/EuroO7nOIrXJjywOj+SCFXcrreHAx5p2O+bIpTR80
+         cLB5h07YA92d8XsSI63WQMa3fMaUjrPwcz6h8AGS589ZG/ZVusDCDkpHUgFmv3DOsVXU
+         ArEeQDWBXSNufx8+04mkDV0Uf2Z1szeuhWUGnmJsm8TY02BY0A/aUXfMmiksIFnB13uZ
+         y/VvHvNTR4tby1DhQRQQ25HTuezE0zLe8IogrR3V93XM6nLh4IuCU59Rec5pzMjhkuza
+         QRou5yQzqxFuL0lecIDavFmQ6mFujZLcyR9hIKuDtjsgPOvYDY5xnd2Rl5krMCXbQsSy
+         dgJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=8CAKrp2Z8ftc2PspLOtgMbM3jnTmjfGGexJauokjvSQ=;
-        b=zYCz2oXa+He3vb+zjKgYbuZR348nRzWzIVxMrsWTBgwL2O9m+ous241cnWvztzu4y3
-         5nIrCiN2/S4kvzZpoFwbp4RC0N14L35bt/bgQi/wb/842bO/eC3+OmyirPkXxRIB5LIl
-         e0XwkOL+PMncPhCtpeQQLdZ8u18prYMxqlwD9R4I9HCYXq55zimsbKkJg6ai6kSbVoj8
-         4N18SNcdlubYGrE/RWB6eSO6kdtuNjp/HUqi+SwdTrnpaIzxzpmQJqNRj1uHWo/DJDw+
-         yfyg58fLbSj2K+zamPDaMR0kjuRHdRjhUThg4sSpcBbyuU790CI0h27D+Zz99EewiR/j
-         9xKA==
-X-Gm-Message-State: AOAM533o7brYThZh6lMYOiBWQbQErflz2DqBWDY68SBM8cHHCRWq36my
-        UTI1hbBSxCNLpG7MrkseygzgCKWrQVw=
-X-Google-Smtp-Source: ABdhPJyddL2Xxx5Ba016b/xeNk7X22tFDKDeOdgQTAwBpplAF+EoXjNwbLs8Vcen8+EViIVd2cuCdJf/qKI=
+        bh=o3z+boBvvuABIlKxvViYzVtbgDDM2QmQlL0qvBp6XMI=;
+        b=BI3eCnm/9cELUnOIflFf/eA+8S2/pGFqtli2lvaLrXoMBosK46A1IjaNZnPi2RACU7
+         CDVqxjyDyxEvDUCYIhKsfQltZeuZLugiATM7x9TLsoFYpN0Ji7ztarO7fr4avsI9KP4y
+         s++JxEx7EigqH9brWdYYR2LE+/uMrgkRhrgt4fsJUBsRNNzNQNoJiUThSJFlrJV4EmMT
+         swmQvbbrPSRthJ0G1XKnKJTNhnNeRRta2MHFtePZbEdH/4fvQPhsVYZPl+ae2yIj9dIq
+         zpLe4FcYFSdiwVcxofPzBxtG06qwgDZcceRuVxx9PlVqfJKxRnKPSZGGzZ/dLYyIg7Nn
+         z9aw==
+X-Gm-Message-State: AOAM530cG0IM395+dFaRXB4dE4l9Z91NTA8w3zYyMVUkQF0HL6zLJhOZ
+        Z2yEE6DdlOlSWqE1O1GIpboj+ArWIy8=
+X-Google-Smtp-Source: ABdhPJyOHezLBoiZzom/lI2EvhUINKbJYNeT+S59G7Bjs/W8A1gXffmixvdqvPkhIBTuTJWpZxVe6PI2LVQ=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:aa7:990e:0:b0:51f:2b9f:6402 with SMTP id
- z14-20020aa7990e000000b0051f2b9f6402mr6299117pff.9.1655237297066; Tue, 14 Jun
- 2022 13:08:17 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a63:6b02:0:b0:3fb:da5e:42a1 with SMTP id
+ g2-20020a636b02000000b003fbda5e42a1mr5911425pgc.273.1655237298696; Tue, 14
+ Jun 2022 13:08:18 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 20:07:01 +0000
+Date:   Tue, 14 Jun 2022 20:07:02 +0000
 In-Reply-To: <20220614200707.3315957-1-seanjc@google.com>
-Message-Id: <20220614200707.3315957-37-seanjc@google.com>
+Message-Id: <20220614200707.3315957-38-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220614200707.3315957-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH v2 36/42] KVM: selftests: Rename kvm_get_supported_cpuid_index()
- to __..._entry()
+Subject: [PATCH v2 37/42] KVM: selftests: Inline "get max CPUID leaf" helpers
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -64,47 +63,66 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename kvm_get_supported_cpuid_index() to __kvm_get_supported_cpuid_entry()
-to better show its relationship to kvm_get_supported_cpuid_entry(), and
-because the helper returns a CPUID entry, not the index of an entry.
-
-No functional change intended.
+Make the "get max CPUID leaf" helpers static inline, there's no reason to
+bury the one liners in processor.c.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/include/x86_64/processor.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../testing/selftests/kvm/include/x86_64/processor.h  | 11 +++++++++--
+ tools/testing/selftests/kvm/lib/x86_64/processor.c    | 10 ----------
+ 2 files changed, 9 insertions(+), 12 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index f56a3a7a4246..311ddc899322 100644
+index 311ddc899322..fd0da7eb2058 100644
 --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
 +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -697,15 +697,15 @@ static inline void vcpu_clear_cpuid_feature(struct kvm_vcpu *vcpu,
- 	vcpu_set_or_clear_cpuid_feature(vcpu, feature, false);
+@@ -719,9 +719,16 @@ static inline void vcpu_set_msr(struct kvm_vcpu *vcpu, uint64_t msr_index,
+ 	TEST_ASSERT(r == 1, KVM_IOCTL_ERROR(KVM_SET_MSRS, r));
  }
  
--static inline const struct kvm_cpuid_entry2 *kvm_get_supported_cpuid_index(uint32_t function,
--									   uint32_t index)
-+static inline const struct kvm_cpuid_entry2 *__kvm_get_supported_cpuid_entry(uint32_t function,
-+									     uint32_t index)
++static inline uint32_t kvm_get_cpuid_max_basic(void)
++{
++	return kvm_get_supported_cpuid_entry(0)->eax;
++}
++
++static inline uint32_t kvm_get_cpuid_max_extended(void)
++{
++	return kvm_get_supported_cpuid_entry(0x80000000)->eax;
++}
+ 
+-uint32_t kvm_get_cpuid_max_basic(void);
+-uint32_t kvm_get_cpuid_max_extended(void);
+ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits);
+ bool vm_is_unrestricted_guest(struct kvm_vm *vm);
+ 
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index 7bce93760cad..522972e0d42c 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -1056,16 +1056,6 @@ bool is_amd_cpu(void)
+ 	return cpu_vendor_string_is("AuthenticAMD");
+ }
+ 
+-uint32_t kvm_get_cpuid_max_basic(void)
+-{
+-	return kvm_get_supported_cpuid_entry(0)->eax;
+-}
+-
+-uint32_t kvm_get_cpuid_max_extended(void)
+-{
+-	return kvm_get_supported_cpuid_entry(0x80000000)->eax;
+-}
+-
+ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
  {
- 	return get_cpuid_entry(kvm_get_supported_cpuid(), function, index);
- }
- 
- static inline const struct kvm_cpuid_entry2 *kvm_get_supported_cpuid_entry(uint32_t function)
- {
--	return kvm_get_supported_cpuid_index(function, 0);
-+	return __kvm_get_supported_cpuid_entry(function, 0);
- }
- 
- uint64_t vcpu_get_msr(struct kvm_vcpu *vcpu, uint64_t msr_index);
+ 	const struct kvm_cpuid_entry2 *entry;
 -- 
 2.36.1.476.g0c4daa206d-goog
 

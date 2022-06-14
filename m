@@ -2,74 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DBB754ABB2
+	by mail.lfdr.de (Postfix) with ESMTP id A7B2454ABB3
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240069AbiFNIWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 04:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
+        id S240409AbiFNIWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 04:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233655AbiFNIWC (ORCPT
+        with ESMTP id S233655AbiFNIWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 04:22:02 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ED0F41311
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:22:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655194919;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D+meCb2RwyxAcSoXaHQ+sgaf2y6KeN9w0SnOQz2jM90=;
-        b=bEzG7hso0p3t12XIjgqWSY9gXVnAQgwqqeipsXGzC9/wfieIxi21YkrYdg6ORAm31uEcPu
-        cipHVbHles75+oUAvblC1cWoERG3dheRmJXL4ymPEiUE37HHVDa/LSCnHmsZWZEkz/WX5h
-        s4eWLlGUx5i5x0VnusamgtGku/g8oKk=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-608-5ho02XMwMHalLIOQI6RlcQ-1; Tue, 14 Jun 2022 04:21:58 -0400
-X-MC-Unique: 5ho02XMwMHalLIOQI6RlcQ-1
-Received: by mail-lf1-f69.google.com with SMTP id u7-20020a05651206c700b00479723664a9so4211902lff.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:21:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=D+meCb2RwyxAcSoXaHQ+sgaf2y6KeN9w0SnOQz2jM90=;
-        b=pHJ6KeRuh+C22J6mO2dTVcJHMmQM8p0kzxvhHG1bx2DAFSmjcKACIzO/aXqAXhm6N6
-         PcKt+9Ms/0FOv5jTc2ND2MHFkzCgZxw95haOAbnUBxXNCX2HmX6a1r/0EvdUtUxB3d8m
-         i7pynH0bIPbwh4ewQEyNfIURsV1zDS68qpLPxyCOS5INlGSrre9QK2PanSIHLJnXiepU
-         yekzWzf9MG4PnzIl7M60D/mjkTR6BLLYF78cgsvBkwLZZxHT27tI9znrgGIUhphq0J7M
-         i+9Kf5+X5sV33RZkc+xsIhws3RARQ6mvSzv5aod4F5RDBQwFz5owgGiOF+j3QzaJb+tx
-         Gqkw==
-X-Gm-Message-State: AJIora9ccUZErbiCVzEXgKk7xEGy0PUOMuHfXfk5wNAnKVp/0BVc7SWc
-        FlZK1vhEZiFVj+E5yfFmxFYTf+Mv3WNU2/S1bMSZGlC8vtManE+nZDf2wixAixpL7Qn4Borh47q
-        npNjNoq2JqKrarIYH8H4B6f7bonC7RvkYTjUesWXQ
-X-Received: by 2002:a05:651c:88f:b0:253:f747:2fd8 with SMTP id d15-20020a05651c088f00b00253f7472fd8mr1824607ljq.496.1655194916510;
-        Tue, 14 Jun 2022 01:21:56 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vU0LrFvgfdgzGRCC+N9A/nBQcpG6VnTpqEJivB32OBF32FWVK1rd1NnanGuLm+MFa7LwO3FHFfd/lgcG1+hkQ=
-X-Received: by 2002:a05:651c:88f:b0:253:f747:2fd8 with SMTP id
- d15-20020a05651c088f00b00253f7472fd8mr1824600ljq.496.1655194916221; Tue, 14
- Jun 2022 01:21:56 -0700 (PDT)
+        Tue, 14 Jun 2022 04:22:11 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A91419AF
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:22:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655194929; x=1686730929;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AaMT0IGd7k5gzjqCn0qpz01EgHi4ZkJG3tpDWeFzWJk=;
+  b=ChvXO6ResjdCl2YKYN5SIGuA4I0MvHfMbaGkLPlUY8Dy2Do3Nlh+6Yhw
+   P4Bpl9sbmf5Ii3o8WGDrnkp6JiWu/m9rnSHtSOqqu4k/YcaZzvcFC2zKu
+   ogz8jI9BM7PplYeqqGfdDuGmmJFVO9LCuRsnco7qbtA3/lQgeoO7aekqm
+   0zucgjM4Yt7rR/CIYHR4TxdKmrfCpvw4hAPpEh3oIxsZYAiRpd00/ZjI6
+   4oJl0/PbwwEtEHNpbPvMlXPM/FBh6mQMo1/RCB+RhV0TQsbrQ9XX7q3dj
+   sGMMJjD0xJEbxaflkruFfuTmTRvPfSqJNzxNl8ALpWNmq3vzQL0pWSbR9
+   w==;
+X-IronPort-AV: E=Sophos;i="5.91,299,1647273600"; 
+   d="scan'208";a="201810706"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 14 Jun 2022 16:22:08 +0800
+IronPort-SDR: mw39mrGHbDQq05KVrLXzg2zGCURqR73N3dXQMkA5ohqxhi2Oyx1vIc3W73B4WhQq5vueVjvxGT
+ pTzS5tMrfSAaDZEC5ROgrslvQAt7u0H97aAGfuUoUQex/gNdB9RnJwgYAXp+u+H7fN/Nj2KaTn
+ D8hgn59jhNxQ8sa6X6HrrhOHy1EWpngcVRKf+ZBFDYD3jHBu1rzRS/gAdvBdRwIY3dyo1D5Ajw
+ hGnLuanrlYUVZCatpYG7YJssLUQGa6tT7CMTj7oo47MW/SeaXuHCkBkiNGw9ZB93qJNKUbnKKr
+ Ed4PJVDwQsbPEvTJmyBc6yKv
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Jun 2022 00:40:44 -0700
+IronPort-SDR: d/8yRVP+I3Peqhtb9zxg935llFt9jWAel8Bm06F1Gqf+D0+Ys4YiMAUD9fm9gzxaeKBnu3Cl0H
+ fEI9/xTWQq7NjQ5tFij3yPMqbXfaatOtYC9z7TLi7UQpCrcMg3wpSXuCWyNVwud05RWwB9OprI
+ PIWPw5qo3T6b0YjO4fBSy0WJuEuK7cx8wawuipQTqmlrh3skESkcEYgdAtSRtCmUEJ1r8XG/bJ
+ kfolKlgzQ2UixC9NXH8Uwo+1/VqzeodVLEcy1xeK27eKjMaDBTH2ADp7Rfc0MKW/BBYz5qCOhC
+ hbQ=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Jun 2022 01:22:09 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LMhHh2HrVz1Rwrw
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:22:08 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655194926; x=1657786927; bh=AaMT0IGd7k5gzjqCn0qpz01EgHi4ZkJG3tp
+        DWeFzWJk=; b=LoMhA/ga+XExP07R0kpt+GcAYVZb/LT0oQXer45OGt/tMEdOkLU
+        sYwHxf3gcu81RNxlmvgK2EQ40f9iocie2R0eSR3xyrmjg0FJpchadV9jHos8nkuj
+        8rMksvwOsWQqQmdcFvEUNQ2oJUQTOSSSeNoXOnNSvu2YWyczMnFYtJ075aOVd/L+
+        C1GinbGuMqN8Fdfl/zgieNP6r1d9MINaTwLxEdMGruVIzg7lCItHGzD61uvUcCRe
+        bEvxegGhi1ghXaKmN7jIhx2TkSpJxXNvO6rPlXrs/q1EPASPWQLlF1UMyfITyYqm
+        GfVBwCOiP+TRe4J5n+3vbsQfvaTQ6zStocw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id RmVZBgfM2mwo for <linux-kernel@vger.kernel.org>;
+        Tue, 14 Jun 2022 01:22:06 -0700 (PDT)
+Received: from [10.225.163.77] (unknown [10.225.163.77])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LMhHc126Gz1Rvlc;
+        Tue, 14 Jun 2022 01:22:03 -0700 (PDT)
+Message-ID: <3bf20887-6e2f-41f4-e4ec-5c2278f6cb18@opensource.wdc.com>
+Date:   Tue, 14 Jun 2022 17:22:02 +0900
 MIME-Version: 1.0
-References: <20220613100433-mutt-send-email-mst@kernel.org>
- <20220614053737.82453-1-huangjie.albert@bytedance.com> <CACGkMEsnvj3MR8oRu-M2D9gTD2sDUJSWkMdjdm6GPum_KUY47w@mail.gmail.com>
- <CABKxMyMMQhbLCu8QN4ZD42802ZQdbGC+YvkQiWz_voecfM1jqw@mail.gmail.com>
-In-Reply-To: <CABKxMyMMQhbLCu8QN4ZD42802ZQdbGC+YvkQiWz_voecfM1jqw@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 14 Jun 2022 16:21:45 +0800
-Message-ID: <CACGkMEv5=WzgJiO4QdReCLu3xSnV=r+DaL4FZB1aAqT1OmgrWA@mail.gmail.com>
-Subject: Re: [PATCH] virtio_ring : keep used_wrap_counter in vq->last_used_idx
-To:     =?UTF-8?B?6buE5p2w?= <huangjie.albert@bytedance.com>
-Cc:     mst <mst@redhat.com>, yuanzhu@bytedance.com,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v4 07/23] ata: libahci_platform: Convert to using devm
+ bulk clocks API
+Content-Language: en-US
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610081801.11854-8-Sergey.Semin@baikalelectronics.ru>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220610081801.11854-8-Sergey.Semin@baikalelectronics.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,319 +105,240 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 4:17 PM =E9=BB=84=E6=9D=B0 <huangjie.albert@bytedan=
-ce.com> wrote:
->
-> Jason Wang <jasowang@redhat.com> =E4=BA=8E2022=E5=B9=B46=E6=9C=8814=E6=97=
-=A5=E5=91=A8=E4=BA=8C 15:45=E5=86=99=E9=81=93=EF=BC=9A
-> >
-> > On Tue, Jun 14, 2022 at 1:38 PM Albert Huang
-> > <huangjie.albert@bytedance.com> wrote:
-> > >
-> > > From: "huangjie.albert" <huangjie.albert@bytedance.com>
-> > >
-> > > the used_wrap_counter and the vq->last_used_idx may get
-> > > out of sync if they are separate assignment=EF=BC=8Cand interrupt
-> > > might use an incorrect value to check for the used index.
-> > >
-> > > for example:OOB access
-> > > ksoftirqd may consume the packet and it will call:
-> > > virtnet_poll
-> > >         -->virtnet_receive
-> > >                 -->virtqueue_get_buf_ctx
-> > >                         -->virtqueue_get_buf_ctx_packed
-> > > and in virtqueue_get_buf_ctx_packed:
-> > >
-> > > vq->last_used_idx +=3D vq->packed.desc_state[id].num;
-> > > if (unlikely(vq->last_used_idx >=3D vq->packed.vring.num)) {
-> > >          vq->last_used_idx -=3D vq->packed.vring.num;
-> > >          vq->packed.used_wrap_counter ^=3D 1;
-> > > }
-> > >
-> > > if at the same time, there comes a vring interrupt=EF=BC=8Cin vring_i=
-nterrupt:
-> > > we will call:
-> > > vring_interrupt
-> > >         -->more_used
-> > >                 -->more_used_packed
-> > >                         -->is_used_desc_packed
-> > > in is_used_desc_packed, the last_used_idx maybe >=3D vq->packed.vring=
-.num.
-> > > so this could case a memory out of bounds bug.
-> > >
-> > > this patch is to keep the used_wrap_counter in vq->last_used_idx
-> > > so we can get the correct value to check for used index in interrupt.
-> > >
-> > > Signed-off-by: huangjie.albert <huangjie.albert@bytedance.com>
-> > > ---
-> > >  drivers/virtio/virtio_ring.c     | 60 ++++++++++++++++++------------=
---
-> > >  include/uapi/linux/virtio_ring.h |  6 ++++
-> > >  2 files changed, 40 insertions(+), 26 deletions(-)
-> > >
-> > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_rin=
-g.c
-> > > index 13a7348cedff..35c3750e89e1 100644
-> > > --- a/drivers/virtio/virtio_ring.c
-> > > +++ b/drivers/virtio/virtio_ring.c
-> > > @@ -111,7 +111,12 @@ struct vring_virtqueue {
-> > >         /* Number we've added since last sync. */
-> > >         unsigned int num_added;
-> > >
-> > > -       /* Last used index we've seen. */
-> > > +       /* Last used index  we've seen.
-> > > +        * for split ring, it just contains last used index
-> > > +        * for packed ring, it not only contains last used index, but=
- also
-> > > +        * used_wrap_counter, the VRING_PACKED_USED_INDEX_F_WRAP_CTR =
-is
-> > > +        * the bit shift in last_used_idx
-> > > +        */
-> > >         u16 last_used_idx;
-> > >
-> > >         /* Hint for event idx: already triggered no need to disable. =
-*/
-> > > @@ -154,9 +159,6 @@ struct vring_virtqueue {
-> > >                         /* Driver ring wrap counter. */
-> > >                         bool avail_wrap_counter;
-> > >
-> > > -                       /* Device ring wrap counter. */
-> > > -                       bool used_wrap_counter;
-> > > -
-> > >                         /* Avail used flags. */
-> > >                         u16 avail_used_flags;
-> > >
-> > > @@ -1397,6 +1399,9 @@ static inline bool is_used_desc_packed(const st=
-ruct vring_virtqueue *vq,
-> > >         bool avail, used;
-> > >         u16 flags;
-> > >
-> > > +       if (idx >=3D vq->packed.vring.num)
-> > > +               return false;
-> >
-> > I wonder if we can avoid this trick, more below.
->
-> Yes, the idx pass to the is_used_desc_packed can never  >=3D
-> vq->packed.vring.num since we
-> tweak the math here :
-> >+       last_used +=3D vq->packed.desc_state[id].num;
-> >+       if (unlikely(last_used >=3D vq->packed.vring.num)) {
-> >+               last_used -=3D vq->packed.vring.num;
-> >+               used_wrap_counter ^=3D 1;
-> >         }
-> >+       last_used =3D (last_used | (used_wrap_counter << VRING_PACKED_DE=
-SC_F_USED));
-> >+       vq->last_used_idx =3D last_used;
->
-> >
-> > > +
-> > >         flags =3D le16_to_cpu(vq->packed.vring.desc[idx].flags);
-> > >         avail =3D !!(flags & (1 << VRING_PACKED_DESC_F_AVAIL));
-> > >         used =3D !!(flags & (1 << VRING_PACKED_DESC_F_USED));
-> > > @@ -1406,8 +1411,12 @@ static inline bool is_used_desc_packed(const s=
-truct vring_virtqueue *vq,
-> > >
-> > >  static inline bool more_used_packed(const struct vring_virtqueue *vq=
-)
-> > >  {
-> > > -       return is_used_desc_packed(vq, vq->last_used_idx,
-> > > -                       vq->packed.used_wrap_counter);
-> > > +       u16 last_used;
-> > > +       bool used_wrap_counter;
-> > > +
-> > > +       last_used =3D vq->last_used_idx & ~(1 << VRING_PACKED_USED_IN=
-DEX_F_WRAP_CTR);
-> > > +       used_wrap_counter =3D !!((vq->last_used_idx) >> VRING_PACKED_=
-USED_INDEX_F_WRAP_CTR);
-> > > +       return is_used_desc_packed(vq, last_used, used_wrap_counter);
-> > >  }
-> > >
-> > >  static void *virtqueue_get_buf_ctx_packed(struct virtqueue *_vq,
-> > > @@ -1416,6 +1425,7 @@ static void *virtqueue_get_buf_ctx_packed(struc=
-t virtqueue *_vq,
-> > >  {
-> > >         struct vring_virtqueue *vq =3D to_vvq(_vq);
-> > >         u16 last_used, id;
-> > > +       bool used_wrap_counter;
-> > >         void *ret;
-> > >
-> > >         START_USE(vq);
-> > > @@ -1434,7 +1444,8 @@ static void *virtqueue_get_buf_ctx_packed(struc=
-t virtqueue *_vq,
-> > >         /* Only get used elements after they have been exposed by hos=
-t. */
-> > >         virtio_rmb(vq->weak_barriers);
-> > >
-> > > -       last_used =3D vq->last_used_idx;
-> > > +       used_wrap_counter =3D !!((vq->last_used_idx >> VRING_PACKED_U=
-SED_INDEX_F_WRAP_CTR));
-> > > +       last_used =3D (vq->last_used_idx) & (~(1 << VRING_PACKED_USED=
-_INDEX_F_WRAP_CTR));
-> > >         id =3D le16_to_cpu(vq->packed.vring.desc[last_used].id);
-> > >         *len =3D le32_to_cpu(vq->packed.vring.desc[last_used].len);
-> > >
-> > > @@ -1451,12 +1462,15 @@ static void *virtqueue_get_buf_ctx_packed(str=
-uct virtqueue *_vq,
-> > >         ret =3D vq->packed.desc_state[id].data;
-> > >         detach_buf_packed(vq, id, ctx);
-> > >
-> > > -       vq->last_used_idx +=3D vq->packed.desc_state[id].num;
-> > > -       if (unlikely(vq->last_used_idx >=3D vq->packed.vring.num)) {
-> > > -               vq->last_used_idx -=3D vq->packed.vring.num;
-> > > -               vq->packed.used_wrap_counter ^=3D 1;
-> > > +       last_used +=3D vq->packed.desc_state[id].num;
-> > > +       if (unlikely(last_used >=3D vq->packed.vring.num)) {
-> >
-> > Can we tweak the math here to avoid the out of bound result?
->
->    Yes, this can avoid the out of bound result. because of  We just
-> assign last_used_idx in the following code=EF=BC=9A
->   vq->last_used_idx =3D last_used;
->   and it is a 16bit/32bit operations,and are guaranteed to be atomic
->
-> >
-> > > +               last_used -=3D vq->packed.vring.num;
-> > > +               used_wrap_counter ^=3D 1;
-> > >         }
-> > >
-> > > +       last_used =3D (last_used | (used_wrap_counter << VRING_PACKED=
-_DESC_F_USED));
-> > > +       vq->last_used_idx =3D last_used;
-> > > +
-> > >         /*
-> > >          * If we expect an interrupt for the next entry, tell host
-> > >          * by writing event index and flush out the write before
-> > > @@ -1465,9 +1479,7 @@ static void *virtqueue_get_buf_ctx_packed(struc=
-t virtqueue *_vq,
-> > >         if (vq->packed.event_flags_shadow =3D=3D VRING_PACKED_EVENT_F=
-LAG_DESC)
-> > >                 virtio_store_mb(vq->weak_barriers,
-> > >                                 &vq->packed.vring.driver->off_wrap,
-> > > -                               cpu_to_le16(vq->last_used_idx |
-> > > -                                       (vq->packed.used_wrap_counter=
- <<
-> > > -                                        VRING_PACKED_EVENT_F_WRAP_CT=
-R)));
-> > > +                               cpu_to_le16(vq->last_used_idx));
-> > >
-> > >         LAST_ADD_TIME_INVALID(vq);
-> > >
-> > > @@ -1499,9 +1511,7 @@ static unsigned int virtqueue_enable_cb_prepare=
-_packed(struct virtqueue *_vq)
-> > >
-> > >         if (vq->event) {
-> > >                 vq->packed.vring.driver->off_wrap =3D
-> > > -                       cpu_to_le16(vq->last_used_idx |
-> > > -                               (vq->packed.used_wrap_counter <<
-> > > -                                VRING_PACKED_EVENT_F_WRAP_CTR));
-> > > +                       cpu_to_le16(vq->last_used_idx);
-> > >                 /*
-> > >                  * We need to update event offset and event wrap
-> > >                  * counter first before updating event flags.
-> > > @@ -1518,8 +1528,7 @@ static unsigned int virtqueue_enable_cb_prepare=
-_packed(struct virtqueue *_vq)
-> > >         }
-> > >
-> > >         END_USE(vq);
-> > > -       return vq->last_used_idx | ((u16)vq->packed.used_wrap_counter=
- <<
-> > > -                       VRING_PACKED_EVENT_F_WRAP_CTR);
-> > > +       return vq->last_used_idx;
-> > >  }
-> > >
-> > >  static bool virtqueue_poll_packed(struct virtqueue *_vq, u16 off_wra=
-p)
-> > > @@ -1550,9 +1559,9 @@ static bool virtqueue_enable_cb_delayed_packed(=
-struct virtqueue *_vq)
-> > >         if (vq->event) {
-> > >                 /* TODO: tune this threshold */
-> > >                 bufs =3D (vq->packed.vring.num - vq->vq.num_free) * 3=
- / 4;
-> > > -               wrap_counter =3D vq->packed.used_wrap_counter;
-> > > +               wrap_counter =3D !!(vq->last_used_idx >> VRING_PACKED=
-_USED_INDEX_F_WRAP_CTR);
-> > >
-> > > -               used_idx =3D vq->last_used_idx + bufs;
-> > > +               used_idx =3D (vq->last_used_idx & ~(1 << VRING_PACKED=
-_USED_INDEX_F_WRAP_CTR)) + bufs;
-> > >                 if (used_idx >=3D vq->packed.vring.num) {
-> > >                         used_idx -=3D vq->packed.vring.num;
-> > >                         wrap_counter ^=3D 1;
-> > > @@ -1582,9 +1591,9 @@ static bool virtqueue_enable_cb_delayed_packed(=
-struct virtqueue *_vq)
-> > >          */
-> > >         virtio_mb(vq->weak_barriers);
-> > >
-> > > -       if (is_used_desc_packed(vq,
-> > > -                               vq->last_used_idx,
-> > > -                               vq->packed.used_wrap_counter)) {
-> > > +       wrap_counter =3D !!(vq->last_used_idx >> VRING_PACKED_USED_IN=
-DEX_F_WRAP_CTR);
-> > > +       used_idx =3D (vq->last_used_idx & ~(1 << VRING_PACKED_USED_IN=
-DEX_F_WRAP_CTR));
-> > > +       if (is_used_desc_packed(vq, used_idx, wrap_counter)) {
-> > >                 END_USE(vq);
-> > >                 return false;
-> > >         }
-> > > @@ -1689,7 +1698,7 @@ static struct virtqueue *vring_create_virtqueue=
-_packed(
-> > >         vq->notify =3D notify;
-> > >         vq->weak_barriers =3D weak_barriers;
-> > >         vq->broken =3D true;
-> > > -       vq->last_used_idx =3D 0;
-> > > +       vq->last_used_idx =3D 0 | (1 << VRING_PACKED_USED_INDEX_F_WRA=
-P_CTR);
-> > >         vq->event_triggered =3D false;
-> > >         vq->num_added =3D 0;
-> > >         vq->packed_ring =3D true;
-> > > @@ -1720,7 +1729,6 @@ static struct virtqueue *vring_create_virtqueue=
-_packed(
-> > >
-> > >         vq->packed.next_avail_idx =3D 0;
-> > >         vq->packed.avail_wrap_counter =3D 1;
-> > > -       vq->packed.used_wrap_counter =3D 1;
-> > >         vq->packed.event_flags_shadow =3D 0;
-> > >         vq->packed.avail_used_flags =3D 1 << VRING_PACKED_DESC_F_AVAI=
-L;
-> > >
-> > > diff --git a/include/uapi/linux/virtio_ring.h b/include/uapi/linux/vi=
-rtio_ring.h
-> > > index 476d3e5c0fe7..96bcc4d52fce 100644
-> > > --- a/include/uapi/linux/virtio_ring.h
-> > > +++ b/include/uapi/linux/virtio_ring.h
-> > > @@ -77,6 +77,12 @@
-> > >   */
-> > >  #define VRING_PACKED_EVENT_F_WRAP_CTR  15
-> > >
-> > > +
-> > > +/*
-> > > + * used wrap Counter bit shift in vq->last_used_idx for packed ring
-> > > + */
-> > > +#define VRING_PACKED_USED_INDEX_F_WRAP_CTR  15
-> >
-> > Let's simply reuse VRING_PACKED_EVENT_F_WRAP_CTR ?
-> >
-> > Thanks
->
-> Although the two values are the same, I see the meanings are different,
-> so I redefine one. Is it possible to rename
-> VRING_PACKED_EVENT_F_WRAP_CTR to VRING_PACKED_F_WRAP_CTR?
->
-> Jason, what is your take?
+On 6/10/22 17:17, Serge Semin wrote:
+> In order to simplify the clock-related code there is a way to convert the
+> current fixed clocks array into using the common bulk clocks kernel API
+> with dynamic set of the clock handlers and device-managed clock-resource
+> tracking. It's a bit tricky due to the complication coming from the
+> requirement to support the platforms (da850, spear13xx) with the
+> non-OF-based clock source, but still doable.
+> 
+> Before this modification there are two methods have been used to get the
+> clocks connected to an AHCI device: clk_get() - to get the very first
+> clock in the list and of_clk_get() - to get the rest of them. Basically
+> the platforms with non-OF-based clocks definition could specify only a
+> single reference clock source. The platforms with OF-hw clocks have been
+> luckier and could setup up to AHCI_MAX_CLKS clocks. Such semantic can be
+> retained with using devm_clk_bulk_get_all() to retrieve the clocks defined
+> via the DT firmware and devm_clk_get_optional() otherwise. In both cases
+> using the device-managed version of the methods will cause the automatic
+> resources deallocation on the AHCI device removal event. The only
+> complicated part in the suggested approach is the explicit allocation and
+> initialization of the clk_bulk_data structure instance for the non-OF
+> reference clocks. It's required in order to use the Bulk Clocks API for
+> the both denoted cases of the clocks definition.
+> 
+> Note aside with the clock-related code reduction and natural
+> simplification, there are several bonuses the suggested modification
+> provides. First of all the limitation of having no greater than
+> AHCI_MAX_CLKS clocks is now removed, since the devm_clk_bulk_get_all()
+> method will allocate as many reference clocks data descriptors as there
+> are clocks specified for the device. Secondly the clock names are
+> auto-detected. So the LLDD (glue) drivers can make sure that the required
+> clocks are specified just by checking the clock IDs in the clk_bulk_data
+> array.  Thirdly using the handy Bulk Clocks kernel API improves the
+> clocks-handling code readability. And the last but not least this
+> modification implements a true optional clocks support to the
+> ahci_platform_get_resources() method. Indeed the previous clocks getting
+> procedure just stopped getting the clocks on any errors (aside from
+> non-critical -EPROBE_DEFER) in a way so the callee wasn't even informed
+> about abnormal loop termination. The new implementation lacks of such
+> problem. The ahci_platform_get_resources() will return an error code if
+> the corresponding clocks getting method ends execution abnormally.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> Reviewed-by: Hannes Reinecke <hare@suse.de>
+> 
+> ---
+> 
+> Changelog v2:
+> - Convert to checking the error-case first in the devm_clk_bulk_get_all()
+>   method invocation. (@Damien)
+> - Fix some grammar mistakes in the comments.
+> ---
+>  drivers/ata/ahci.h             |  4 +-
+>  drivers/ata/libahci_platform.c | 84 ++++++++++++++++------------------
+>  2 files changed, 41 insertions(+), 47 deletions(-)
+> 
+> diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
+> index ad11a4c52fbe..c3770a19781b 100644
+> --- a/drivers/ata/ahci.h
+> +++ b/drivers/ata/ahci.h
+> @@ -38,7 +38,6 @@
+>  
+>  enum {
+>  	AHCI_MAX_PORTS		= 32,
+> -	AHCI_MAX_CLKS		= 5,
+>  	AHCI_MAX_SG		= 168, /* hardware max is 64K */
+>  	AHCI_DMA_BOUNDARY	= 0xffffffff,
+>  	AHCI_MAX_CMDS		= 32,
+> @@ -339,7 +338,8 @@ struct ahci_host_priv {
+>  	u32			em_msg_type;	/* EM message type */
+>  	u32			remapped_nvme;	/* NVMe remapped device count */
+>  	bool			got_runtime_pm; /* Did we do pm_runtime_get? */
+> -	struct clk		*clks[AHCI_MAX_CLKS]; /* Optional */
+> +	unsigned int		n_clks;
+> +	struct clk_bulk_data	*clks;		/* Optional */
+>  	struct reset_control	*rsts;		/* Optional */
+>  	struct regulator	**target_pwrs;	/* Optional */
+>  	struct regulator	*ahci_regulator;/* Optional */
+> diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
+> index 1e9e825d6cc5..814804582d1d 100644
+> --- a/drivers/ata/libahci_platform.c
+> +++ b/drivers/ata/libahci_platform.c
+> @@ -8,6 +8,7 @@
+>   *   Anton Vorontsov <avorontsov@ru.mvista.com>
+>   */
+>  
+> +#include <linux/clk-provider.h>
+>  #include <linux/clk.h>
+>  #include <linux/kernel.h>
+>  #include <linux/gfp.h>
+> @@ -97,28 +98,14 @@ EXPORT_SYMBOL_GPL(ahci_platform_disable_phys);
+>   * ahci_platform_enable_clks - Enable platform clocks
+>   * @hpriv: host private area to store config values
+>   *
+> - * This function enables all the clks found in hpriv->clks, starting at
+> - * index 0. If any clk fails to enable it disables all the clks already
+> - * enabled in reverse order, and then returns an error.
+> + * This function enables all the clks found for the AHCI device.
+>   *
+>   * RETURNS:
+>   * 0 on success otherwise a negative error code
+>   */
+>  int ahci_platform_enable_clks(struct ahci_host_priv *hpriv)
+>  {
+> -	int c, rc;
+> -
+> -	for (c = 0; c < AHCI_MAX_CLKS && hpriv->clks[c]; c++) {
+> -		rc = clk_prepare_enable(hpriv->clks[c]);
+> -		if (rc)
+> -			goto disable_unprepare_clk;
+> -	}
+> -	return 0;
+> -
+> -disable_unprepare_clk:
+> -	while (--c >= 0)
+> -		clk_disable_unprepare(hpriv->clks[c]);
+> -	return rc;
+> +	return clk_bulk_prepare_enable(hpriv->n_clks, hpriv->clks);
+>  }
+>  EXPORT_SYMBOL_GPL(ahci_platform_enable_clks);
+>  
+> @@ -126,16 +113,13 @@ EXPORT_SYMBOL_GPL(ahci_platform_enable_clks);
+>   * ahci_platform_disable_clks - Disable platform clocks
+>   * @hpriv: host private area to store config values
+>   *
+> - * This function disables all the clks found in hpriv->clks, in reverse
+> - * order of ahci_platform_enable_clks (starting at the end of the array).
+> + * This function disables all the clocks enabled before
+> + * (bulk-clocks-disable function is supposed to do that in reverse
+> + * from the enabling procedure order).
+>   */
+>  void ahci_platform_disable_clks(struct ahci_host_priv *hpriv)
+>  {
+> -	int c;
+> -
+> -	for (c = AHCI_MAX_CLKS - 1; c >= 0; c--)
+> -		if (hpriv->clks[c])
+> -			clk_disable_unprepare(hpriv->clks[c]);
+> +	clk_bulk_disable_unprepare(hpriv->n_clks, hpriv->clks);
+>  }
+>  EXPORT_SYMBOL_GPL(ahci_platform_disable_clks);
+>  
+> @@ -292,8 +276,6 @@ static void ahci_platform_put_resources(struct device *dev, void *res)
+>  		pm_runtime_disable(dev);
+>  	}
+>  
+> -	for (c = 0; c < AHCI_MAX_CLKS && hpriv->clks[c]; c++)
+> -		clk_put(hpriv->clks[c]);
+>  	/*
+>  	 * The regulators are tied to child node device and not to the
+>  	 * SATA device itself. So we can't use devm for automatically
+> @@ -374,8 +356,8 @@ static int ahci_platform_get_regulator(struct ahci_host_priv *hpriv, u32 port,
+>   * 1) mmio registers (IORESOURCE_MEM 0, mandatory)
+>   * 2) regulator for controlling the targets power (optional)
+>   *    regulator for controlling the AHCI controller (optional)
+> - * 3) 0 - AHCI_MAX_CLKS clocks, as specified in the devs devicetree node,
+> - *    or for non devicetree enabled platforms a single clock
+> + * 3) all clocks specified in the devicetree node, or a single
+> + *    clock for non-OF platforms (optional)
+>   * 4) resets, if flags has AHCI_PLATFORM_GET_RESETS (optional)
+>   * 5) phys (optional)
+>   *
+> @@ -385,11 +367,10 @@ static int ahci_platform_get_regulator(struct ahci_host_priv *hpriv, u32 port,
+>  struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
+>  						   unsigned int flags)
+>  {
+> +	int child_nodes, rc = -ENOMEM, enabled_ports = 0;
+>  	struct device *dev = &pdev->dev;
+>  	struct ahci_host_priv *hpriv;
+> -	struct clk *clk;
+>  	struct device_node *child;
+> -	int i, enabled_ports = 0, rc = -ENOMEM, child_nodes;
+>  	u32 mask_port_map = 0;
+>  
+>  	if (!devres_open_group(dev, NULL, GFP_KERNEL))
+> @@ -415,25 +396,38 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
+>  		goto err_out;
+>  	}
+>  
+> -	for (i = 0; i < AHCI_MAX_CLKS; i++) {
+> +	/*
+> +	 * Bulk clocks getting procedure can fail to find any clock due to
+> +	 * running on a non-OF platform or due to the clocks being defined in
+> +	 * bypass of the DT firmware (like da850, spear13xx). In that case we
+> +	 * fallback to getting a single clock source right from the dev clocks
+> +	 * list.
+> +	 */
+> +	rc = devm_clk_bulk_get_all(dev, &hpriv->clks);
+> +	if (rc < 0)
+> +		goto err_out;
+> +
+> +	if (rc > 0) {
+> +		/* Got clocks in bulk */
+> +		hpriv->n_clks = rc;
+> +	} else {
+>  		/*
+> -		 * For now we must use clk_get(dev, NULL) for the first clock,
+> -		 * because some platforms (da850, spear13xx) are not yet
+> -		 * converted to use devicetree for clocks.  For new platforms
+> -		 * this is equivalent to of_clk_get(dev->of_node, 0).
+> +		 * No clock bulk found: fallback to manually getting
+> +		 * the optional clock.
+>  		 */
+> -		if (i == 0)
+> -			clk = clk_get(dev, NULL);
+> -		else
+> -			clk = of_clk_get(dev->of_node, i);
+> -
+> -		if (IS_ERR(clk)) {
+> -			rc = PTR_ERR(clk);
+> -			if (rc == -EPROBE_DEFER)
+> -				goto err_out;
+> -			break;
+> +		hpriv->clks = devm_kzalloc(dev, sizeof(*hpriv->clks), GFP_KERNEL);
+> +		if (!hpriv->clks) {
+> +			rc = -ENOMEM;
+> +			goto err_out;
+> +		}
+> +		hpriv->clks->clk = devm_clk_get_optional(dev, NULL);
+> +		if (IS_ERR(hpriv->clks->clk)) {
+> +			rc = PTR_ERR(hpriv->clks->clk);
+> +			goto err_out;
+> +		} else if (hpriv->clks->clk) {
 
-That looks even worse. So I'm fine to define a new macro as 15.
+Nit: the else is not needed here.
 
-Thanks
+> +			hpriv->clks->id = __clk_get_name(hpriv->clks->clk);
+> +			hpriv->n_clks = 1;
+>  		}
+> -		hpriv->clks[i] = clk;
+>  	}
+>  
+>  	hpriv->ahci_regulator = devm_regulator_get(dev, "ahci");
 
->
-> >
-> > > +
-> > >  /* We support indirect buffer descriptors */
-> > >  #define VIRTIO_RING_F_INDIRECT_DESC    28
-> > >
-> > > --
-> > > 2.31.1
-> > >
-> >
->
 
+-- 
+Damien Le Moal
+Western Digital Research

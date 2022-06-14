@@ -2,127 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A059354BDDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F18754BDE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344304AbiFNWss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 18:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46420 "EHLO
+        id S1354707AbiFNWuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 18:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241105AbiFNWsr (ORCPT
+        with ESMTP id S236507AbiFNWuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 18:48:47 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94B2506D1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:48:45 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id mh16-20020a17090b4ad000b001e8313301f1so2119279pjb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:48:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ckzfOBOXln5+K6e0MajEk9XqA4yt2a92cLnaRv7ENjw=;
-        b=z1jefNplZhosYNG4SZ68VydsElXOi37zu8Ihl++/nBUE1l2tDDWqzQuw4lo2O+hikh
-         B2kUD3bG9KRnx+Lb1d5iWyKPlLwmoWmkBtlEiyPKAEP8lUlM+aC/GuOuK2njL17sYUnq
-         V/7wpWK3I3ZFxVCZx25qwzyJuM/JZ5WMLi1oiMQvw1jyDoUisv/USONLY5OrImJDiXUJ
-         bPkfN7q2+3mpgid4kenCBkLAJuF4XNR2ZBt76v3LTCVEXevPr09DgZh7W4PR5QyUQdNC
-         j70y9l7aj+VtyVXUBukKL2VIDnrmZjXqVXSAQdolJyuwIq6AR2Fjef9jeoVfNz4KdDJX
-         Cq+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ckzfOBOXln5+K6e0MajEk9XqA4yt2a92cLnaRv7ENjw=;
-        b=vulagTnHQCsLU/sFR6cN0mhOxetfNoBTcgDntBEjivzXOrQb6XdnWLvLTIw2N0EXjm
-         E4P7Kry5OBYZ/nyV32Wv2DPBuCvYUmH61WVSqtYKVlgDwCnVss5wj5Eo/Ff7etUB1gAY
-         BY73E6GtDvLIuDgbuSyN9v0pscLaMfDfFuM+7y7cFI+RL8YjAmD8bZbj29BbuwxHYyjx
-         g8vBX++N9iofNdwVLbcvrffJtmV+/CnZhGnvDBNsmfMx7V3BC+N6llisbi+ElErd2woE
-         +2du8HX9bBoY6/O0xkaVDAa7ZQnm33SrB1FLhyUaUxXyag3V1KN41jxdQr5KB1UoUuDI
-         k+YQ==
-X-Gm-Message-State: AJIora+vPWd7uQq9Tpd1M6oUPf+rWFxnuoQ1z3hsp5I3EE8nKhMeaS84
-        FsoC3cxrgvfIgd1nbesAAgE+sQ==
-X-Google-Smtp-Source: AGRyM1tDGiQ8CR79XXDP5s9wDre4u7QgJXi8oJJu8/OFVwtwmRhRjlKAxhwe8ClTZtWJFm0620m9Pg==
-X-Received: by 2002:a17:902:6845:b0:168:b675:39e2 with SMTP id f5-20020a170902684500b00168b67539e2mr6564451pln.33.1655246925309;
-        Tue, 14 Jun 2022 15:48:45 -0700 (PDT)
-Received: from [172.22.33.138] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id x16-20020a17090a165000b001e667f932cdsm106727pje.53.2022.06.14.15.48.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 15:48:45 -0700 (PDT)
-Message-ID: <1ae6dce1-0c5c-64f0-c6a4-b0f11a82f315@linaro.org>
-Date:   Tue, 14 Jun 2022 15:48:43 -0700
+        Tue, 14 Jun 2022 18:50:23 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD7E506F8;
+        Tue, 14 Jun 2022 15:50:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=K06cy4ftvMNN6/+Qjnf/5vgBuTtP0J6DzqdCK9WsUOI=; b=FmyxPYiCy6LPqNgy08F9Vto/fp
+        cp7ggecrBFPsKLFG84e67Key4i7kiU9H4VKcW6HNu3eIeILoR8PIvm2qPbLz9yyCe8rGRrXfDfe5G
+        xXNxpABz1F0eiB3ErdneeBGUAJn7zFSHNUCwVlwQbO6r/nCrJhz6e4qErPYDY5885IUosm3ljI0cq
+        vtQo0PHvkOYqnO4d8A5uko1zTm+GPCeTBq3Rt/DO0Fg5HyDDXgUpw2aTDv29XYdhimVMfLJgj7QB7
+        BYPYlNCyU3ru4KjZAF69ktCGHMzcwLB/dsyFd4ky4LsY1l3MFjgVgCDeu4N3qmAoE2YowegdaMPp6
+        3K6qAALA==;
+Received: from [37.209.163.134] (helo=[172.16.74.119])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1o1FLx-001skf-M0; Wed, 15 Jun 2022 00:49:41 +0200
+Message-ID: <6eae37ce-dd44-9c32-3f68-2b4e102dce8e@igalia.com>
+Date:   Tue, 14 Jun 2022 19:49:27 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v2 net-next] dt-bindings: net: xilinx: document xilinx
- emaclite driver binding
+ Thunderbird/91.9.0
+Subject: Re: [PATCH] x86/PCI: Revert: "Clip only host bridge windows for E820
+ regions"
 Content-Language: en-US
-To:     "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "Katakam, Harini" <harini.katakam@amd.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "git (AMD-Xilinx)" <git@amd.com>
-References: <1654793615-21290-1-git-send-email-radhey.shyam.pandey@amd.com>
- <5e5580c4d3f84b9e9ae43e1e4ae43ac0a2162a75.camel@redhat.com>
- <MN0PR12MB5953590F8098E46C02943AFEB7AA9@MN0PR12MB5953.namprd12.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <MN0PR12MB5953590F8098E46C02943AFEB7AA9@MN0PR12MB5953.namprd12.prod.outlook.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220614151708.GA756100@bhelgaas>
+ <5c8923df-3d89-c7be-690d-fbef2c53eeb6@redhat.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <5c8923df-3d89-c7be-690d-fbef2c53eeb6@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2022 14:09, Pandey, Radhey Shyam wrote:
-> [AMD Official Use Only - General]
+On 14/06/2022 12:47, Hans de Goede wrote:
+> [...]
 > 
->> -----Original Message-----
->> From: Paolo Abeni <pabeni@redhat.com>
->> Sent: Tuesday, June 14, 2022 2:40 PM
->> To: Pandey, Radhey Shyam <radhey.shyam.pandey@amd.com>;
->> davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
->> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; Katakam, Harini
->> <harini.katakam@amd.com>
->> Cc: netdev@vger.kernel.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; git (AMD-Xilinx) <git@amd.com>
->> Subject: Re: [PATCH v2 net-next] dt-bindings: net: xilinx: document xilinx
->> emaclite driver binding
->>
->> On Thu, 2022-06-09 at 22:23 +0530, Radhey Shyam Pandey wrote:
->>> Add basic description for the xilinx emaclite driver DT bindings.
->>>
->>> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
->>
->> Even if marked for 'net-next', my understanding is that should go via the
->> device tree repo. I'm dropping from the netdev patchwork, please correct me if
->> I'm wrong, thanks!
+> Have you looked at the log of the failed boot in the Steam Deck kernel
+> bugzilla? Everything there seems to work just fine and then the system
+> just hangs. I think that maybe it cannot find its root disk, so maybe
+> an NVME issue ?
 > 
-> I have seen a mixed set of the convention for dts patches. They are following
-> both routes i.e device tree or subsystem repos provided acked from device
-> tree maintainer.  If there is preference for device tree repo then I can drop
-> net-next from subject prefix and resend it for the dt repo.
 
-If you got Ack from Devicetree bindings maintainer (Rob Herring or me),
-then feel free to take it via net-next. I think, it is actually
-preferred, unless this is some fix which needs to go via DT (Rob's) tree.
+*Exactly* that - NVMe device is the root disk, it cannot boot since the
+device doesn't work, hence no rootfs =)
 
-If you don't have these acks, then better don't take it :) unless it's
-really waiting too long on the lists. I hope it's not that case.
+Patch looks great from my side, thanks !
+cheers,
 
 
-Best regards,
-Krzysztof
+Guilherme

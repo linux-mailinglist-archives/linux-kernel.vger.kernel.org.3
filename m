@@ -2,100 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D85454B9F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC9454B9EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351238AbiFNTB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 15:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
+        id S1357473AbiFNTBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 15:01:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357939AbiFNTA4 (ORCPT
+        with ESMTP id S1357228AbiFNTBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 15:00:56 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551ACC6E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:58:31 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id 19so10362664iou.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:58:31 -0700 (PDT)
+        Tue, 14 Jun 2022 15:01:12 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74694BE37
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:59:13 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-fb6b4da1dfso13686973fac.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:59:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=UcrIrSk5Swd+nvSBeuVYmeu1PhD4aHQkIlKjjep/U/8=;
-        b=gXwMwJILGwkplNokon5zOdE2RQ1Qwvww6dSg4uCJAviXw5icGHnP09W33KGxS29FEj
-         lQmoqXPAK+SY+SmDsCO/uWap3n/Movp3Wt4rOczfaAgqPoAhpMfjyUVxCTjKBao8mOHb
-         xNde4umF8iDkfU55A43FTeYvB/iSrFz+vmF/5fknkICPrZ4tHShvwl3ctm6Jte1duC9w
-         vGIuBcYhURzJCMJ0clNbF4yJswoL63YXLGidU23WgOeR+iaDgxtj7l+QnDEogu1l+H7l
-         NemjvgzAPpKbQcnFV8aV5xNVWnYnLA+pLXhiZY49PjBL982JWxAL2SISJKdAwponp74I
-         homg==
+        d=cloudflare.com; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=P/zvL47bzMX9zv6R9Iu19Vam9aHyZ/GbOGpqtXAWqMc=;
+        b=YbrS1rTCXkBCIbh142yEwubaBQ2XkSJH/0xKf0lf6tUumEJSdjOkNie1Nx61lojoXo
+         7ghRJ4k9WRR4jECQ0Dr2ZPBq/WU7t6xV2yqW0HATlcT/2Yl8k5zRPz4Fct1kN9ZfM/ig
+         wiY+zF/49Otr9jZ/sUBro5DEDVmoThVwMV6c4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=UcrIrSk5Swd+nvSBeuVYmeu1PhD4aHQkIlKjjep/U/8=;
-        b=mfrJNumJdP4qpoRxbI9MaL/F7H6V2jKbCNtkWihzBCZEw6O9Q/vVoLc9bH0hNS/YQW
-         FG9cj/u2mEQaeTzhtaABBzthNi76vtWTdFBycfazf/YbfWvM1TOkuJTxGwXcJPecS9na
-         HNbFeASv8AfOZX/kh3o3mXqcrwIp2iy9uob7Q/B9y+ori09WKhjpGkVXShAr0ke0K4mz
-         QJBgtjusXae5EJHIhY10/fytDBEOu5WeBrR2H7asbrqqFygcGf2Hv8soTY0c2/TIJlx6
-         AkreCCdnNAkPpWBADk/VYF9ZEhm9twULsgziRFne1kzJO1rYZ3PLx1bQ5quGUXTok9Ur
-         HtgA==
-X-Gm-Message-State: AOAM53116yirZzioYmCdyU5qj4oHp6xWO5vMwyByEa9LpBhbno2il3vR
-        9iH9OoH2S4Rw1sp+VzIyv8X4dVT3sR8uglhBLcxBlQ==
-X-Google-Smtp-Source: ABdhPJxkbeBOlNzS42LkPVnH7oYNg5c6GJRwXSXygjn2ujomA+SXpQWuvJtL4QMILjs/tOS/P8Vv380wMtHehK1DSBU=
-X-Received: by 2002:a05:6638:13d5:b0:331:a6f2:3dbf with SMTP id
- i21-20020a05663813d500b00331a6f23dbfmr3907072jaj.9.1655233110381; Tue, 14 Jun
- 2022 11:58:30 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=P/zvL47bzMX9zv6R9Iu19Vam9aHyZ/GbOGpqtXAWqMc=;
+        b=xkz6qwYPAHf1DteG1T/IrH9lJxWXOWv9dzD8zK242cIFihy7mdn8MlVJnwjnEoN/JS
+         RqmToUEjay1cKAwiaMoUjB+H/s2MX3D33h/Iq+0feL3GHbtd7GHLnmwINbUNnymcsGYg
+         5BbkfeerbpWcsnGCCn3pOO6JbhSwGiJFICQ9fFYg1ijxJJCmsTQbRV/2tJ31Yg32F1cN
+         b/YGflgCfRe/9NTNdUu/kX/6aKAAZMUF3Q9R8jWs8UDuTZ3stb+USphYxDDpRVwEp4W8
+         BvwZLOnkcmWZVJohSZxbCTXq7n/PbXK4R/DJMN9rv88S5ZlpO2AqMaBWmxUI4z6fbRWl
+         cAmg==
+X-Gm-Message-State: AJIora9mbtNZhu+njIHGnR7gYlgcYaznEFjNe5N0r0qtZQlH5JuocoIm
+        qm3hjM/jqC+m7dbV/q70kTuU5w==
+X-Google-Smtp-Source: AGRyM1ufL5MDqjvHIo4wa13zoHeLqce3gwGBqjZkT/cfGeJacNorGFZd87ZD1rOQxbOuCm8UywPhnQ==
+X-Received: by 2002:a05:6870:c151:b0:fe:251b:804c with SMTP id g17-20020a056870c15100b000fe251b804cmr3187763oad.15.1655233152767;
+        Tue, 14 Jun 2022 11:59:12 -0700 (PDT)
+Received: from [192.168.0.41] ([184.4.90.121])
+        by smtp.gmail.com with ESMTPSA id x64-20020acae043000000b0032ecb7370ffsm5017316oig.41.2022.06.14.11.59.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 11:59:10 -0700 (PDT)
+Message-ID: <9ed91f15-420c-3db6-8b3b-85438b02bf97@cloudflare.com>
+Date:   Tue, 14 Jun 2022 13:59:08 -0500
 MIME-Version: 1.0
-References: <20210820155918.7518-1-brijesh.singh@amd.com> <20210820155918.7518-24-brijesh.singh@amd.com>
- <CABpDEukdrEbXjOF_QuZqUMQndYx=zVM4s2o-oN_wb2L_HCrONg@mail.gmail.com>
- <1cadca0d-c3dc-68ed-075f-f88ccb0ccc0a@amd.com> <CABpDEun0rjrNVCGZDXd8SO3tfZi-2ku3mit2XMGLwCsijbF9tg@mail.gmail.com>
- <ee1a829f-9a89-e447-d182-877d4033c96a@amd.com> <CAMkAt6q3otA3n-daFfEBP7kzD+ucMQjP=3bX1PkuAUFrH9epUQ@mail.gmail.com>
- <SN6PR12MB27671CDFDAA1E62AD49EC6C68EAA9@SN6PR12MB2767.namprd12.prod.outlook.com>
- <CAMkAt6r0ZsjS_XtVYnazC8-Z9bHQafLZ7QFq2NqcRQ2gZbUyPg@mail.gmail.com> <SN6PR12MB276764F83F8849603A2F23478EAA9@SN6PR12MB2767.namprd12.prod.outlook.com>
-In-Reply-To: <SN6PR12MB276764F83F8849603A2F23478EAA9@SN6PR12MB2767.namprd12.prod.outlook.com>
-From:   Alper Gun <alpergun@google.com>
-Date:   Tue, 14 Jun 2022 11:58:19 -0700
-Message-ID: <CABpDEum5cmODpA1HQUqG0doKv32AqZ0L9eA88nfg=F=OTMigxA@mail.gmail.com>
-Subject: Re: [PATCH Part2 v5 23/45] KVM: SVM: Add KVM_SNP_INIT command
-To:     "Kalra, Ashish" <Ashish.Kalra@amd.com>
-Cc:     Peter Gonda <pgonda@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>, Marc Orr <marcorr@google.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v3] cred: Propagate security_prepare_creds() error code
+Content-Language: en-US
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
+        samba-technical@lists.samba.org, linux-mm@kvack.org,
+        linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
+        keyrings@vger.kernel.org, selinux@vger.kernel.org,
+        serge@hallyn.com, amir73il@gmail.com, kernel-team@cloudflare.com,
+        Jeff Moyer <jmoyer@redhat.com>,
+        Paul Moore <paul@paul-moore.com>
+References: <20220608150942.776446-1-fred@cloudflare.com>
+ <87tu8oze94.fsf@email.froward.int.ebiederm.org>
+ <e1b62234-9b8a-e7c2-2946-5ef9f6f23a08@cloudflare.com>
+ <87y1xzyhub.fsf@email.froward.int.ebiederm.org>
+ <859cb593-9e96-5846-2191-6613677b07c5@cloudflare.com>
+ <87o7yvxl4x.fsf@email.froward.int.ebiederm.org>
+From:   Frederick Lawler <fred@cloudflare.com>
+In-Reply-To: <87o7yvxl4x.fsf@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,193 +84,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let me summarize what I tried.
+On 6/14/22 11:30 AM, Eric W. Biederman wrote:
+> Frederick Lawler <fred@cloudflare.com> writes:
+> 
+>> On 6/13/22 11:44 PM, Eric W. Biederman wrote:
+>>> Frederick Lawler <fred@cloudflare.com> writes:
+>>>
+>>>> Hi Eric,
+>>>>
+>>>> On 6/13/22 12:04 PM, Eric W. Biederman wrote:
+>>>>> Frederick Lawler <fred@cloudflare.com> writes:
+>>>>>
+>>>>>> While experimenting with the security_prepare_creds() LSM hook, we
+>>>>>> noticed that our EPERM error code was not propagated up the callstack.
+>>>>>> Instead ENOMEM is always returned.  As a result, some tools may send a
+>>>>>> confusing error message to the user:
+>>>>>>
+>>>>>> $ unshare -rU
+>>>>>> unshare: unshare failed: Cannot allocate memory
+>>>>>>
+>>>>>> A user would think that the system didn't have enough memory, when
+>>>>>> instead the action was denied.
+>>>>>>
+>>>>>> This problem occurs because prepare_creds() and prepare_kernel_cred()
+>>>>>> return NULL when security_prepare_creds() returns an error code. Later,
+>>>>>> functions calling prepare_creds() and prepare_kernel_cred() return
+>>>>>> ENOMEM because they assume that a NULL meant there was no memory
+>>>>>> allocated.
+>>>>>>
+>>>>>> Fix this by propagating an error code from security_prepare_creds() up
+>>>>>> the callstack.
+>>>>> Why would it make sense for security_prepare_creds to return an error
+>>>>> code other than ENOMEM?
+>>>>>    > That seems a bit of a violation of what that function is supposed to do
+>>>>>
+>>>>
+>>>> The API allows LSM authors to decide what error code is returned from the
+>>>> cred_prepare hook. security_task_alloc() is a similar hook, and has its return
+>>>> code propagated.
+>>> It is not an api.  It is an implementation detail of the linux kernel.
+>>> It is a set of convenient functions that do a job.
+>>> The general rule is we don't support cases without an in-tree user.  I
+>>> don't see an in-tree user.
+>>>
+>>>> I'm proposing we follow security_task_allocs() pattern, and add visibility for
+>>>> failure cases in prepare_creds().
+>>> I am asking why we would want to.  Especially as it is not an API, and I
+>>> don't see any good reason for anything but an -ENOMEM failure to be
+>>> supported.
+>>>
+>> We're writing a LSM BPF policy, and not a new LSM. Our policy aims to solve
+>> unprivileged unshare, similar to Debian's patch [1]. We're in a position such
+>> that we can't use that patch because we can't block _all_ of our applications
+>> from performing an unshare. We prefer a granular approach. LSM BPF seems like a
+>> good choice.
+> 
+> I am quite puzzled why doesn't /proc/sys/user/max_user_namespaces work
+> for you?
+> 
 
-1- when using psp_init_probe false, the SNP VM fails in
-SNP_LAUNCH_START step with error SEV_RET_DFFLUSH_REQUIRED(15).
-2- added SEV_DF_FLUSH just after SNP platform init and it didn't fail
-in launch start but failed later during SNP_LAUNCH_UPDATE with
-SEV_RET_INVALID_PARAM(22)
-3- added SNP_DF_FLUSH just after SNP platform init and it failed again
-during SNP_LAUNCH_UPDATE with SEV_RET_INVALID_PARAM(22)
-4- added sev_platform_init for SNP VMs and it worked.
+We have the following requirements:
 
-For me DF_FLUSH alone didn' help boot a VM. I don't know yet why sev
-platform status impacts the SNP VM, but sev_platform_init fixes the
-problem.
+1. Allow list criteria
+2. root user must be able to create namespaces whenever
+3. Everything else not in 1 & 2 must be denied
 
+We use per task attributes to determine whether or not we allow/deny the 
+current call to unshare().
 
-On Tue, Jun 14, 2022 at 10:16 AM Kalra, Ashish <Ashish.Kalra@amd.com> wrote=
-:
->
-> [AMD Official Use Only - General]
->
-> Hello Alper, Peter,
->
-> -----Original Message-----
-> From: Peter Gonda <pgonda@google.com>
-> Sent: Tuesday, June 14, 2022 11:30 AM
-> To: Kalra, Ashish <Ashish.Kalra@amd.com>
-> Cc: Alper Gun <alpergun@google.com>; Brijesh Singh <brijesh.singh@amd.com=
->; the arch/x86 maintainers <x86@kernel.org>; LKML <linux-kernel@vger.kerne=
-l.org>; kvm list <kvm@vger.kernel.org>; linux-coco@lists.linux.dev; linux-m=
-m@kvack.org; Linux Crypto Mailing List <linux-crypto@vger.kernel.org>; Thom=
-as Gleixner <tglx@linutronix.de>; Ingo Molnar <mingo@redhat.com>; Joerg Roe=
-del <jroedel@suse.de>; Lendacky, Thomas <Thomas.Lendacky@amd.com>; H. Peter=
- Anvin <hpa@zytor.com>; Ard Biesheuvel <ardb@kernel.org>; Paolo Bonzini <pb=
-onzini@redhat.com>; Sean Christopherson <seanjc@google.com>; Vitaly Kuznets=
-ov <vkuznets@redhat.com>; Wanpeng Li <wanpengli@tencent.com>; Jim Mattson <=
-jmattson@google.com>; Andy Lutomirski <luto@kernel.org>; Dave Hansen <dave.=
-hansen@linux.intel.com>; Sergio Lopez <slp@redhat.com>; Peter Zijlstra <pet=
-erz@infradead.org>; Srinivas Pandruvada <srinivas.pandruvada@linux.intel.co=
-m>; David Rientjes <rientjes@google.com>; Dov Murik <dovmurik@linux.ibm.com=
->; Tobin Feldman-Fitzthum <tobin@ibm.com>; Borislav Petkov <bp@alien8.de>; =
-Roth, Michael <Michael.Roth@amd.com>; Vlastimil Babka <vbabka@suse.cz>; Kir=
-ill A . Shutemov <kirill@shutemov.name>; Andi Kleen <ak@linux.intel.com>; T=
-ony Luck <tony.luck@intel.com>; Marc Orr <marcorr@google.com>; Sathyanaraya=
-nan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com>; Pavan Kumar Pa=
-luri <papaluri@amd.com>
-> Subject: Re: [PATCH Part2 v5 23/45] KVM: SVM: Add KVM_SNP_INIT command
->
-> On Tue, Jun 14, 2022 at 10:11 AM Kalra, Ashish <Ashish.Kalra@amd.com> wro=
-te:
-> >
-> > [AMD Official Use Only - General]
-> >
-> >
-> > -----Original Message-----
-> > From: Peter Gonda <pgonda@google.com>
-> > Sent: Tuesday, June 14, 2022 10:38 AM
-> > To: Kalra, Ashish <Ashish.Kalra@amd.com>
-> > Cc: Alper Gun <alpergun@google.com>; Brijesh Singh
-> > <brijesh.singh@amd.com>; Kalra, Ashish <Ashish.Kalra@amd.com>; the
-> > arch/x86 maintainers <x86@kernel.org>; LKML
-> > <linux-kernel@vger.kernel.org>; kvm list <kvm@vger.kernel.org>;
-> > linux-coco@lists.linux.dev; linux-mm@kvack.org; Linux Crypto Mailing
-> > List <linux-crypto@vger.kernel.org>; Thomas Gleixner
-> > <tglx@linutronix.de>; Ingo Molnar <mingo@redhat.com>; Joerg Roedel
-> > <jroedel@suse.de>; Lendacky, Thomas <Thomas.Lendacky@amd.com>; H.
-> > Peter Anvin <hpa@zytor.com>; Ard Biesheuvel <ardb@kernel.org>; Paolo
-> > Bonzini <pbonzini@redhat.com>; Sean Christopherson
-> > <seanjc@google.com>; Vitaly Kuznetsov <vkuznets@redhat.com>; Wanpeng
-> > Li <wanpengli@tencent.com>; Jim Mattson <jmattson@google.com>; Andy
-> > Lutomirski <luto@kernel.org>; Dave Hansen
-> > <dave.hansen@linux.intel.com>; Sergio Lopez <slp@redhat.com>; Peter
-> > Zijlstra <peterz@infradead.org>; Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com>; David Rientjes
-> > <rientjes@google.com>; Dov Murik <dovmurik@linux.ibm.com>; Tobin
-> > Feldman-Fitzthum <tobin@ibm.com>; Borislav Petkov <bp@alien8.de>;
-> > Roth, Michael <Michael.Roth@amd.com>; Vlastimil Babka
-> > <vbabka@suse.cz>; Kirill A . Shutemov <kirill@shutemov.name>; Andi
-> > Kleen <ak@linux.intel.com>; Tony Luck <tony.luck@intel.com>; Marc Orr
-> > <marcorr@google.com>; Sathyanarayanan Kuppuswamy
-> > <sathyanarayanan.kuppuswamy@linux.intel.com>; Pavan Kumar Paluri
-> > <papaluri@amd.com>
-> > Subject: Re: [PATCH Part2 v5 23/45] KVM: SVM: Add KVM_SNP_INIT command
-> >
-> > On Mon, Jun 13, 2022 at 6:21 PM Ashish Kalra <ashkalra@amd.com> wrote:
-> > >
-> > >
-> > > On 6/13/22 23:33, Alper Gun wrote:
-> > > > On Mon, Jun 13, 2022 at 4:15 PM Ashish Kalra <ashkalra@amd.com> wro=
-te:
-> > > >> Hello Alper,
-> > > >>
-> > > >> On 6/13/22 20:58, Alper Gun wrote:
-> > > >>> static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd
-> > > >>> *argp)
-> > > >>>>    {
-> > > >>>> +       bool es_active =3D (argp->id =3D=3D KVM_SEV_ES_INIT ||
-> > > >>>> + argp->id =3D=3D KVM_SEV_SNP_INIT);
-> > > >>>>           struct kvm_sev_info *sev =3D &to_kvm_svm(kvm)->sev_inf=
-o;
-> > > >>>> -       bool es_active =3D argp->id =3D=3D KVM_SEV_ES_INIT;
-> > > >>>> +       bool snp_active =3D argp->id =3D=3D KVM_SEV_SNP_INIT;
-> > > >>>>           int asid, ret;
-> > > >>>>
-> > > >>>>           if (kvm->created_vcpus) @@ -249,12 +269,22 @@ static
-> > > >>>> int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
-> > > >>>>                   return ret;
-> > > >>>>
-> > > >>>>           sev->es_active =3D es_active;
-> > > >>>> +       sev->snp_active =3D snp_active;
-> > > >>>>           asid =3D sev_asid_new(sev);
-> > > >>>>           if (asid < 0)
-> > > >>>>                   goto e_no_asid;
-> > > >>>>           sev->asid =3D asid;
-> > > >>>>
-> > > >>>> -       ret =3D sev_platform_init(&argp->error);
-> > > >>>> +       if (snp_active) {
-> > > >>>> +               ret =3D verify_snp_init_flags(kvm, argp);
-> > > >>>> +               if (ret)
-> > > >>>> +                       goto e_free;
-> > > >>>> +
-> > > >>>> +               ret =3D sev_snp_init(&argp->error);
-> > > >>>> +       } else {
-> > > >>>> +               ret =3D sev_platform_init(&argp->error);
-> > > >>> After SEV INIT_EX support patches, SEV may be initialized in the =
-platform late.
-> > > >>> In my tests, if SEV has not been initialized in the platform
-> > > >>> yet, SNP VMs fail with SEV_DF_FLUSH required error. I tried
-> > > >>> calling SEV_DF_FLUSH right after the SNP platform init but this
-> > > >>> time it failed later on the SNP launch update command with
-> > > >>> SEV_RET_INVALID_PARAM error. Looks like there is another
-> > > >>> dependency on SEV platform initialization.
-> > > >>>
-> > > >>> Calling sev_platform_init for SNP VMs fixes the problem in our te=
-sts.
-> > > >> Trying to get some more context for this issue.
-> > > >>
-> > > >> When you say after SEV_INIT_EX support patches, SEV may be
-> > > >> initialized in the platform late, do you mean sev_pci_init()->sev_=
-snp_init() ...
-> > > >> sev_platform_init() code path has still not executed on the host B=
-SP ?
-> > > >>
-> > > > Correct, INIT_EX requires the file system to be ready and there is
-> > > > a ccp module param to call it only when needed.
-> > > >
-> > > > MODULE_PARM_DESC(psp_init_on_probe, " if true, the PSP will be
-> > > > initialized on module init. Else the PSP will be initialized on
-> > > > the first command requiring it");
-> > > >
-> > > > If this module param is false, it won't initialize SEV on the
-> > > > platform until the first SEV VM.
-> > > >
-> > > Ok, that makes sense.
-> > >
-> > > So the fix will be to call sev_platform_init() unconditionally here
-> > > in sev_guest_init(), and both sev_snp_init() and sev_platform_init()
-> > > are protected from being called again, so there won't be any issues
-> > > if these functions are invoked again at SNP/SEV VM launch if they
-> > > have been invoked earlier during module init.
-> >
-> > >That's one solution. I don't know if there is a downside to the system=
- for enabling SEV if SNP is being enabled but another solution could be to =
-just directly place a DF_FLUSH command instead of calling sev_platform_init=
-().
-> >
-> > Actually sev_platform_init() is already called on module init if psp_in=
-it_on_probe is not false. Only need to ensure that SNP firmware is initiali=
-zed first with SNP_INIT command.
->
-> > But if psp_init_on_probe is false, sev_platform_init() isn't called dow=
-n this path. Alper has suggested we always call sev_platform_init() but we =
-could just place an SEV_DF_FLUSH command instead. Or am I still missing som=
-ething?
->
-> >After SEV INIT_EX support patches, SEV may be initialized in the platfor=
-m late.
-> > In my tests, if SEV has not been initialized in the platform
-> > yet, SNP VMs fail with SEV_DF_FLUSH required error. I tried
-> > calling SEV_DF_FLUSH right after the SNP platform init.
->
-> Are you getting the DLFLUSH_REQUIRED error after the SNP activate command=
- ?
->
-> Also did you use the SEV_DF_FLUSH command or the SNP_DF_FLUSH command ?
->
-> With SNP you need to use SNP_DF_FLUSH command.
->
-> Thanks,
-> Ashish
+/proc/sys/user/max_user_namespaces limits are a bit broad for this level 
+of detail.
+
+>> Because LSM BPF exposes these hooks, we should probably treat them as an
+>> API. From that perspective, userspace expects unshare to return a EPERM
+>> when the call is denied permissions.
+> 
+> The BPF code gets to be treated as a out of tree kernel module.
+> 
+>>> Without an in-tree user that cares it is probably better to go the
+>>> opposite direction and remove the possibility of return anything but
+>>> memory allocation failure.  That will make it clearer to implementors
+>>> that a general error code is not supported and this is not a location
+>>> to implement policy, this is only a hook to allocate state for the LSM.
+>>>
+>>
+>> That's a good point, and it's possible we're using the wrong hook for the
+>> policy. Do you know of other hooks we can look into?
+> 
+> Not off the top of my head.
+> 
+>>>>> I have probably missed a very interesting discussion where that was
+>>>>> mentioned but I don't see link to the discussion or anything explaining
+>>>>> why we want to do that in this change.
+>>>>>
+>>>>
+>>>> AFAIK, this is the start of the discussion.
+>>> You were on v3 and had an out of tree piece of code so I assumed someone
+>>> had at least thought about why you want to implement policy in a piece
+>>> of code whose only purpose is to allocate memory to store state.
+>>>
+>>
+>> No worries.
+>>
+>>> Eric
+>>>
+>>>
+>>
+>> Links:
+>> 1:
+>> https://sources.debian.org/patches/linux/3.16.56-1+deb8u1/debian/add-sysctl-to-disallow-unprivileged-CLONE_NEWUSER-by-default.patch/
+> 
+> Eric
+

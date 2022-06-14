@@ -2,138 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F46354B206
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 568FF54B218
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244384AbiFNNJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 09:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55420 "EHLO
+        id S243965AbiFNNNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 09:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234149AbiFNNJQ (ORCPT
+        with ESMTP id S243507AbiFNNN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 09:09:16 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AC321E11;
-        Tue, 14 Jun 2022 06:09:14 -0700 (PDT)
-Received: from fraeml736-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LMpd70JCTz6F90V;
-        Tue, 14 Jun 2022 21:07:39 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml736-chm.china.huawei.com (10.206.15.217) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 15:09:12 +0200
-Received: from [10.195.33.253] (10.195.33.253) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 14:09:10 +0100
-Message-ID: <4a3ab043-f609-22cb-895f-e67c8dd8f6ab@huawei.com>
-Date:   Tue, 14 Jun 2022 14:12:18 +0100
+        Tue, 14 Jun 2022 09:13:28 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3F93668B
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 06:13:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BtkNA8bnFXUJxG1GIdprNfyVDGg3vDC4/9ZoY+WLPSM=; b=Z2ye09vqFR1lmMOiossGHXii+D
+        1wF8QAsAmmHJj97pPcgWinAavHDonjKZM6REYxB3Fe2if2x9jCl0cbMyAPGBYqfkQdhOlutpC4EPT
+        WEqg+GhmvFzyu+30/QaPmJaNJtPBFG5EzWD9U4QNP2LnnnsHhWyP0wrX4axmyrpPhMpMcQfUTJXJ+
+        g6SHnuQTwJ/3xY7ux3tdAvN4Do2w/i7fj/me18UCKVYbYwSU4s5uSb2YOwhQOFDzLmYOEgAB7we3G
+        fI9tpreRaRNLkklkScS2+JOmvG1hcfm7nr64LdAbhh7BZLLoncG6LGypsiNLogMp1cj1+2+PCHib4
+        ZiajdU0g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o16M4-000BS0-J6; Tue, 14 Jun 2022 13:13:12 +0000
+Date:   Tue, 14 Jun 2022 14:13:12 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     Joao Martins <joao.m.martins@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Dan Williams <dan.j.williams@intel.com>
+Subject: Re: [PATCH] mm/page_alloc: make calling prep_compound_head more
+ reliable
+Message-ID: <YqiJaOiGnUzzB1+W@casper.infradead.org>
+References: <20220607144157.36411-1-linmiaohe@huawei.com>
+ <20220607113257.84b1bdd993f19be26b8c4944@linux-foundation.org>
+ <65e5da9c-32d1-17d7-d8c6-96cbfac23fec@oracle.com>
+ <4a30f026-789a-9235-2fbd-f553e4d7b45d@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v3 2/4] dma-iommu: Add iommu_dma_opt_mapping_size()
-To:     <damien.lemoal@opensource.wdc.com>, <joro@8bytes.org>,
-        <will@kernel.org>, <jejb@linux.ibm.com>,
-        <martin.petersen@oracle.com>, <hch@lst.de>,
-        <m.szyprowski@samsung.com>, <robin.murphy@arm.com>
-CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <iommu@lists.linux-foundation.org>,
-        <linux-scsi@vger.kernel.org>, <liyihang6@hisilicon.com>,
-        <chenxiang66@hisilicon.com>, <thunder.leizhen@huawei.com>
-References: <1654507822-168026-1-git-send-email-john.garry@huawei.com>
- <1654507822-168026-3-git-send-email-john.garry@huawei.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <1654507822-168026-3-git-send-email-john.garry@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.33.253]
-X-ClientProxiedBy: lhreml746-chm.china.huawei.com (10.201.108.196) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4a30f026-789a-9235-2fbd-f553e4d7b45d@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/06/2022 10:30, John Garry wrote:
-> Add the IOMMU callback for DMA mapping API dma_opt_mapping_size(), which
-> allows the drivers to know the optimal mapping limit and thus limit the
-> requested IOVA lengths.
+On Wed, Jun 08, 2022 at 08:17:35PM +0800, Miaohe Lin wrote:
+> +++ b/mm/page_alloc.c
+> @@ -6771,13 +6771,18 @@ static void __ref memmap_init_compound(struct page *head,
+>                 set_page_count(page, 0);
 > 
-> This value is based on the IOVA rcache range limit, as IOVAs allocated
-> above this limit must always be newly allocated, which may be quite slow.
+>                 /*
+> -                * The first tail page stores compound_mapcount_ptr() and
+> -                * compound_order() and the second tail page stores
+> -                * compound_pincount_ptr(). Call prep_compound_head() after
+> -                * the first and second tail pages have been initialized to
+> -                * not have the data overwritten.
+> +                * The first tail page stores compound_mapcount_ptr(),
+> +                * compound_order() and compound_pincount_ptr(). Call
+> +                * prep_compound_head() after the first tail page have
+> +                * been initialized to not have the data overwritten.
+> +                *
+> +                * Note the idea to make this right after we initialize
+> +                * the offending tail pages is trying to take advantage
+> +                * of the likelihood of those tail struct pages being
+> +                * cached given that we will read them right after in
+> +                * prep_compound_head().
+
+It's not that we'll read them again, it's that the cacheline will still
+be in cache, and therefore dirty.
+
+Honestly, I don't think we need this extra explanation in a comment.
+Just change the first paragraph to reflect reality and leave it at that.
+
+>                  */
+> -               if (pfn == head_pfn + 2)
+> +               if (unlikely(pfn == head_pfn + 1))
+
+We definitely don't need the unlikely here.
+
+>                         prep_compound_head(head, order);
+>         }
+>  }
 > 
-
-Can I please get some sort of ack from the IOMMU people on this one?
-
-Thanks,
-John
-
-EOM
-
-> Signed-off-by: John Garry <john.garry@huawei.com>
-> Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-> ---
->   drivers/iommu/dma-iommu.c | 6 ++++++
->   drivers/iommu/iova.c      | 5 +++++
->   include/linux/iova.h      | 2 ++
->   3 files changed, 13 insertions(+)
+> Or am I miss something?
 > 
-> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-> index f90251572a5d..9e1586447ee8 100644
-> --- a/drivers/iommu/dma-iommu.c
-> +++ b/drivers/iommu/dma-iommu.c
-> @@ -1459,6 +1459,11 @@ static unsigned long iommu_dma_get_merge_boundary(struct device *dev)
->   	return (1UL << __ffs(domain->pgsize_bitmap)) - 1;
->   }
->   
-> +static size_t iommu_dma_opt_mapping_size(void)
-> +{
-> +	return iova_rcache_range();
-> +}
-> +
->   static const struct dma_map_ops iommu_dma_ops = {
->   	.alloc			= iommu_dma_alloc,
->   	.free			= iommu_dma_free,
-> @@ -1479,6 +1484,7 @@ static const struct dma_map_ops iommu_dma_ops = {
->   	.map_resource		= iommu_dma_map_resource,
->   	.unmap_resource		= iommu_dma_unmap_resource,
->   	.get_merge_boundary	= iommu_dma_get_merge_boundary,
-> +	.opt_mapping_size	= iommu_dma_opt_mapping_size,
->   };
->   
->   /*
-> diff --git a/drivers/iommu/iova.c b/drivers/iommu/iova.c
-> index db77aa675145..9f00b58d546e 100644
-> --- a/drivers/iommu/iova.c
-> +++ b/drivers/iommu/iova.c
-> @@ -26,6 +26,11 @@ static unsigned long iova_rcache_get(struct iova_domain *iovad,
->   static void free_cpu_cached_iovas(unsigned int cpu, struct iova_domain *iovad);
->   static void free_iova_rcaches(struct iova_domain *iovad);
->   
-> +unsigned long iova_rcache_range(void)
-> +{
-> +	return PAGE_SIZE << (IOVA_RANGE_CACHE_MAX_SIZE - 1);
-> +}
-> +
->   static int iova_cpuhp_dead(unsigned int cpu, struct hlist_node *node)
->   {
->   	struct iova_domain *iovad;
-> diff --git a/include/linux/iova.h b/include/linux/iova.h
-> index 320a70e40233..c6ba6d95d79c 100644
-> --- a/include/linux/iova.h
-> +++ b/include/linux/iova.h
-> @@ -79,6 +79,8 @@ static inline unsigned long iova_pfn(struct iova_domain *iovad, dma_addr_t iova)
->   int iova_cache_get(void);
->   void iova_cache_put(void);
->   
-> +unsigned long iova_rcache_range(void);
-> +
->   void free_iova(struct iova_domain *iovad, unsigned long pfn);
->   void __free_iova(struct iova_domain *iovad, struct iova *iova);
->   struct iova *alloc_iova(struct iova_domain *iovad, unsigned long size,
-
+> Thanks!
+> 
+> > .
+> > 
+> 

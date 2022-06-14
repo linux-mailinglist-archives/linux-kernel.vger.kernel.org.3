@@ -2,52 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E44754B7D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B55C454B7D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344225AbiFNRis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 13:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58626 "EHLO
+        id S1344782AbiFNRj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 13:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiFNRir (ORCPT
+        with ESMTP id S1344635AbiFNRjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 13:38:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DEF2E9DB
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:38:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99D2CB81A3E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 17:38:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C82EC3411B;
-        Tue, 14 Jun 2022 17:38:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1655228323;
-        bh=nRucdW5dS3GtPYU9/dtMXyj0lNslN55PKAmMDovGIEU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bgIEbR/jcjX+ZxCpytCjshiiwEn6W/JNhLVMh3XyJEmlPO3eBOcC02a3k7paJYBqF
-         yINetEFiw250n4VhSTCADVU4mOuF6Jl4h3uK2uW+RyKYdkllhM4WS9MIBtvYrI/tTI
-         xXj7Imz1v4Y4vjhiq0acYvyi/JmfqR/9SmAYfpb4=
-Date:   Tue, 14 Jun 2022 10:38:42 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Oscar Salvador <osalvador@suse.de>
-Subject: Re: [PATCH v1] MAINTAINERS: add MEMORY HOT(UN)PLUG section and add
- myself as reviewer
-Message-Id: <20220614103842.af0c9a5434e3099cf9060cf5@linux-foundation.org>
-In-Reply-To: <72194595-a177-088d-28a9-0a24d4192777@redhat.com>
-References: <20220610101258.75738-1-david@redhat.com>
-        <72194595-a177-088d-28a9-0a24d4192777@redhat.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Tue, 14 Jun 2022 13:39:55 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE3CF2F64E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:39:53 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1o1AVr-0005KQ-66; Tue, 14 Jun 2022 19:39:35 +0200
+Message-ID: <c2034c030333f89e0ac7d86c906dd222cc151d52.camel@pengutronix.de>
+Subject: Re: [PATCH 0/8] interconnect: support i.MX8MP
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Peng Fan <peng.fan@nxp.com>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "djakov@kernel.org" <djakov@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>, Abel Vesa <abel.vesa@nxp.com>,
+        "abailon@baylibre.com" <abailon@baylibre.com>,
+        "laurent.pinchart@ideasonboard.com" 
+        <laurent.pinchart@ideasonboard.com>,
+        "marex@denx.de" <marex@denx.de>,
+        "paul.elder@ideasonboard.com" <paul.elder@ideasonboard.com>,
+        "Markus.Niebel@ew.tq-group.com" <Markus.Niebel@ew.tq-group.com>,
+        "aford173@gmail.com" <aford173@gmail.com>
+Cc:     "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Date:   Tue, 14 Jun 2022 19:39:33 +0200
+In-Reply-To: <DU0PR04MB941799547BD863444C6F268D88AB9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20220601094156.3388454-1-peng.fan@oss.nxp.com>
+         <DU0PR04MB941799547BD863444C6F268D88AB9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,53 +67,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Jun 2022 08:58:55 +0200 David Hildenbrand <david@redhat.com> wrote:
+Hi Peng,
 
-> On 10.06.22 12:12, David Hildenbrand wrote:
-> > There are certainly a lot more files that partially fall into the memory
-> > hot(un)plug category, including parts of mm/sparse.c, mm/page_isolation.c
-> > and mm/page_alloc.c. Let's only add what's almost completely memory
-> > hot(un)plug related.
-> > 
-> > Add myself as reviewer so it's easier for contributors to figure out
-> > whom to CC.
-> > 
-> > Signed-off-by: David Hildenbrand <david@redhat.com>
-> > ---
-> >  MAINTAINERS | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index a6d3bd9d2a8d..77aebce76288 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -12848,6 +12848,18 @@ F:	include/linux/vmalloc.h
-> >  F:	mm/
-> >  F:	tools/testing/selftests/vm/
-> >  
-> > +MEMORY HOT(UN)PLUG
-> > +M:	Andrew Morton <akpm@linux-foundation.org>
-> > +R:	David Hildenbrand <david@redhat.com>
-> > +L:	linux-mm@kvack.org
-> > +S:	Maintained
-> > +F:	Documentation/admin-guide/mm/memory-hotplug.rst
-> > +F:	Documentation/core-api/memory-hotplug.rst
-> > +F:	drivers/base/memory.c
-> > +F:	include/linux/memory_hotplug.h
-> > +F:	mm/memory_hotplug.c
-> > +F:	tools/testing/selftests/memory-hotplug/
+Am Montag, dem 13.06.2022 um 01:23 +0000 schrieb Peng Fan:
+> All,
 > 
-> (thanks for the kind words from reviewers :) )
+> > Subject: [PATCH 0/8] interconnect: support i.MX8MP
 > 
-> Thinking about it (and remembering having a discussion about
-> submaintainers for MM in general at LSF/MM):
+> I am going to send out V2 this week to address the comments until now.
+> But before that I would like to see if any one has any comments on the
+> design here.
 > 
-> @Andrew, do we want "official" submaintainers for that section? If so,
-> we could turn my R into an M. Further, Oscar did a lot of work in the
-> memory hot(un)plug world as well -- so if we want submaintainers, Oscar
-> might be a very good fit as well.
+> Georgi, do you have comments on Patch 2 " interconnect: add device
+> managed bulk API"
 > 
-> ... I guess, that would mostly reflect reality :)
+> Lucas, since you had comments when I first use syscon to configure NoC,
+> are you ok with the design to use interconnect in this patchset?
+> 
+I'm still not 100% convinced that the blk-ctrl is the right consumer
+for the interconnect, since it doesn't do any busmastering. However,
+the design looks much better than the syscon based one.
 
-um, fine, no opinion really.  I think the main thing is to make
-get_maintainer.pl spit out all the suitable email addresses.
+I mostly worry about being able to extend this to do more than the
+current static configuration if/when NXP decides to release more
+information about the NoC configuration options or someone reverse
+engineers this part of the SoC. I still hope that we could optimize NoC
+usage by setting real bandwidth and latency limits for the devices
+connected to the NoC. As the blk-ctrl doesn't have any clue about this
+right now, we can't really set any more specific requests than the
+current INT_MAX ones.
+I guess we could extend things in this way by making the blk-ctrl not
+only be a simple consumer of the interconnect, but aggregate requests
+from the devices in the blk-ctrl domain and forward them to the NOC
+provider, right?
+
+Regards,
+Lucas
+
+> Thanks,
+> Peng.
+> 
+> > 
+> > From: Peng Fan <peng.fan@nxp.com>
+> > 
+> > This patchset is to support i.MX8MP NoC settings, i.MX8MP NoC initial value
+> > after power up is invalid, need set a valid value after related power domain up.
+> > 
+> > This patchset also includes two patch[1,2] during my development to enable the
+> > ICC feature for i.MX8MP.
+> > 
+> > I not include ddrc DVFS in this patchset, ths patchset is only to support NoC
+> > value mode/priority/ext_control being set to a valid value that suggested by
+> > i.MX Chip Design Team. The value is same as NXP downstream one inside Arm
+> > Trusted Firmware:
+> > https://source.codeaurora.org/external/imx/imx-atf/tree/plat/imx/imx8m/imx
+> > 8mp/gpc.c?h=lf_v2.4#n97
+> > 
+> > A repo created here:
+> > https://github.com/MrVan/linux/tree/imx8mp-interconnect
+> > 
+> > Peng Fan (8):
+> >   dt-bindings: interconnect: imx8m: Add bindings for imx8mp noc
+> >   interconnect: add device managed bulk API
+> >   interconnect: imx: fix max_node_id
+> >   interconnect: imx: set src node
+> >   interconnect: imx: introduce imx_icc_provider
+> >   interconnect: imx: set of_node for interconnect provider
+> >   interconnect: imx: configure NoC mode/prioriry/ext_control
+> >   interconnect: imx: Add platform driver for imx8mp
+> > 
+> >  .../bindings/interconnect/fsl,imx8m-noc.yaml  |   6 +
+> >  drivers/interconnect/bulk.c                   |  34 +++
+> >  drivers/interconnect/imx/Kconfig              |   4 +
+> >  drivers/interconnect/imx/Makefile             |   2 +
+> >  drivers/interconnect/imx/imx.c                |  68 +++--
+> >  drivers/interconnect/imx/imx.h                |  25 +-
+> >  drivers/interconnect/imx/imx8mm.c             |   2 +-
+> >  drivers/interconnect/imx/imx8mn.c             |   2 +-
+> >  drivers/interconnect/imx/imx8mp.c             | 232
+> > ++++++++++++++++++
+> >  drivers/interconnect/imx/imx8mq.c             |   2 +-
+> >  include/dt-bindings/interconnect/fsl,imx8mp.h |  59 +++++
+> >  include/linux/interconnect.h                  |   6 +
+> >  12 files changed, 424 insertions(+), 18 deletions(-)  create mode 100644
+> > drivers/interconnect/imx/imx8mp.c  create mode 100644
+> > include/dt-bindings/interconnect/fsl,imx8mp.h
+> > 
+> > --
+> > 2.25.1
+> 
+
+

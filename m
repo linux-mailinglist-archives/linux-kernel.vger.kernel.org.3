@@ -2,50 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241DD54B60C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01ECF54B62E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:31:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238564AbiFNQ1G convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Jun 2022 12:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
+        id S235161AbiFNQ3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343818AbiFNQ1C (ORCPT
+        with ESMTP id S1343903AbiFNQ2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:27:02 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2391C2EA1E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:26:59 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1o19NU-0000yX-7r; Tue, 14 Jun 2022 18:26:52 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Cc:     Dao Lu <daolu@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Rob Herring <robh@kernel.org>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
-        Tsukasa OI <research_trasio@irq.a4lg.com>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
-        Dao Lu <daolu@rivosinc.com>
-Subject: Re: [PATCH v2] arch/riscv: add Zihintpause support
-Date:   Tue, 14 Jun 2022 18:26:51 +0200
-Message-ID: <3113192.5fSG56mABF@diego>
-In-Reply-To: <20220524211954.1936117-1-daolu@rivosinc.com>
-References: <20220524211954.1936117-1-daolu@rivosinc.com>
+        Tue, 14 Jun 2022 12:28:25 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46ABB193EB;
+        Tue, 14 Jun 2022 09:28:24 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D999D16F8;
+        Tue, 14 Jun 2022 09:28:23 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.41.154])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EEF753F66F;
+        Tue, 14 Jun 2022 09:28:05 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 17:28:02 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rth@twiddle.net, ink@jurassic.park.msu.ru, mattst88@gmail.com,
+        vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
+        srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
+        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
+        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
+        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
+        jiangshanlai@gmail.com, joel@joelfernandes.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
+        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH 25/36] time/tick-broadcast: Remove RCU_NONIDLE usage
+Message-ID: <Yqi3EmHbuvf3ItMI@FVFF77S0Q05N>
+References: <20220608142723.103523089@infradead.org>
+ <20220608144517.507286638@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220608144517.507286638@infradead.org>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,119 +99,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, 24. Mai 2022, 23:19:50 CEST schrieb Dao Lu:
-> Implement support for the ZiHintPause extension.
+On Wed, Jun 08, 2022 at 04:27:48PM +0200, Peter Zijlstra wrote:
+> No callers left that have already disabled RCU.
 > 
-> The PAUSE instruction is a HINT that indicates the current hart’s rate of
-> instruction retirement should be temporarily reduced or paused.
-> 
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> Tested-by: Heiko Stuebner <heiko@sntech.de>
-> Signed-off-by: Dao Lu <daolu@rivosinc.com>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+Mark.
+
 > ---
+>  kernel/time/tick-broadcast-hrtimer.c |   29 ++++++++++++-----------------
+>  1 file changed, 12 insertions(+), 17 deletions(-)
 > 
-> v1 -> v2:
->  Remove the usage of static branch, use PAUSE if toolchain supports it
-> 
->  arch/riscv/Makefile                     | 4 ++++
->  arch/riscv/include/asm/hwcap.h          | 1 +
->  arch/riscv/include/asm/vdso/processor.h | 8 +++++++-
->  arch/riscv/kernel/cpu.c                 | 1 +
->  arch/riscv/kernel/cpufeature.c          | 2 ++
->  5 files changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index 7d81102cffd4..900a8fda1a2d 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -56,6 +56,10 @@ riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
->  toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
->  riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
->  
-> +# Check if the toolchain supports Zihintpause extension
-> +toolchain-supports-zihintpause := $(call cc-option-yn, -march=$(riscv-march-y)_zihintpause)
-> +riscv-march-$(toolchain-supports-zihintpause) := $(riscv-march-y)_zihintpause
-> +
->  KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
->  KBUILD_AFLAGS += -march=$(riscv-march-y)
->  
-> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
-> index 0734e42f74f2..caa9ee5459b4 100644
-> --- a/arch/riscv/include/asm/hwcap.h
-> +++ b/arch/riscv/include/asm/hwcap.h
-> @@ -52,6 +52,7 @@ extern unsigned long elf_hwcap;
->   */
->  enum riscv_isa_ext_id {
->  	RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
-
-svpbmt got merged meanwhile, so this patch needs a rebase
-onto 5.19-rc.
-
-One more nit below
-
-> +	RISCV_ISA_EXT_ZIHINTPAUSE,
->  	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
->  };
->  
-> diff --git a/arch/riscv/include/asm/vdso/processor.h b/arch/riscv/include/asm/vdso/processor.h
-> index 134388cbaaa1..4de911a25051 100644
-> --- a/arch/riscv/include/asm/vdso/processor.h
-> +++ b/arch/riscv/include/asm/vdso/processor.h
-> @@ -8,7 +8,13 @@
->  
->  static inline void cpu_relax(void)
->  {
-> -#ifdef __riscv_muldiv
-> +#ifdef __riscv_zihintpause
-> +	/*
-> +	 * Reduce instruction retirement.
-> +	 * This assumes the PC changes.
+> --- a/kernel/time/tick-broadcast-hrtimer.c
+> +++ b/kernel/time/tick-broadcast-hrtimer.c
+> @@ -56,25 +56,20 @@ static int bc_set_next(ktime_t expires,
+>  	 * hrtimer callback function is currently running, then
+>  	 * hrtimer_start() cannot move it and the timer stays on the CPU on
+>  	 * which it is assigned at the moment.
 > +	 */
-> +	__asm__ __volatile__ ("pause");
-> +#elif __riscv_muldiv
->  	int dummy;
->  	/* In lieu of a halt instruction, induce a long-latency stall. */
->  	__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index ccb617791e56..89e563e9c4cc 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -88,6 +88,7 @@ int riscv_of_parent_hartid(struct device_node *node)
->   */
->  static struct riscv_isa_ext_data isa_ext_arr[] = {
->  	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
-> +	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
->  	__RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
->  };
->  
-> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> index 1b2d42d7f589..37ff06682ae6 100644
-> --- a/arch/riscv/kernel/cpufeature.c
-> +++ b/arch/riscv/kernel/cpufeature.c
-> @@ -25,6 +25,7 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
->  __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
->  #endif
->  
+> +	hrtimer_start(&bctimer, expires, HRTIMER_MODE_ABS_PINNED_HARD);
+> +	/*
+> +	 * The core tick broadcast mode expects bc->bound_on to be set
+> +	 * correctly to prevent a CPU which has the broadcast hrtimer
+> +	 * armed from going deep idle.
+>  	 *
+> -	 * As this can be called from idle code, the hrtimer_start()
+> -	 * invocation has to be wrapped with RCU_NONIDLE() as
+> -	 * hrtimer_start() can call into tracing.
+> +	 * As tick_broadcast_lock is held, nothing can change the cpu
+> +	 * base which was just established in hrtimer_start() above. So
+> +	 * the below access is safe even without holding the hrtimer
+> +	 * base lock.
+>  	 */
+> -	RCU_NONIDLE( {
+> -		hrtimer_start(&bctimer, expires, HRTIMER_MODE_ABS_PINNED_HARD);
+> -		/*
+> -		 * The core tick broadcast mode expects bc->bound_on to be set
+> -		 * correctly to prevent a CPU which has the broadcast hrtimer
+> -		 * armed from going deep idle.
+> -		 *
+> -		 * As tick_broadcast_lock is held, nothing can change the cpu
+> -		 * base which was just established in hrtimer_start() above. So
+> -		 * the below access is safe even without holding the hrtimer
+> -		 * base lock.
+> -		 */
+> -		bc->bound_on = bctimer.base->cpu_base->cpu;
+> -	} );
+> +	bc->bound_on = bctimer.base->cpu_base->cpu;
 > +
-
-this is an unrelated change and also is adding an unneeded extra empty line.
-
-
-Heiko
-
->  /**
->   * riscv_isa_extension_base() - Get base extension word
->   *
-> @@ -192,6 +193,7 @@ void __init riscv_fill_hwcap(void)
->  				set_bit(*ext - 'a', this_isa);
->  			} else {
->  				SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
-> +				SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
->  			}
->  #undef SET_ISA_EXT_MAP
->  		}
+>  	return 0;
+>  }
+>  
 > 
-
-
-
-
+> 

@@ -2,93 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B138354BE0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 01:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77AD454BE06
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 01:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357273AbiFNW7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 18:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
+        id S1357456AbiFNXBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 19:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbiFNW7v (ORCPT
+        with ESMTP id S231812AbiFNXBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 18:59:51 -0400
-Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6B652E59
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:59:50 -0700 (PDT)
-Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-fe51318ccfso14516192fac.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:59:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ai9uz9Kgmbv+1IKOW8tsBXcg4zvXfHiaRlhJIRWIRQE=;
-        b=qQXMdCcpfHeFPj9Pb9fSBN6SYEUOuzVQU1avMKuhlKUQW1uDAmygKuX1jPvGpP8MPN
-         B6suRyJZrlGEVFaU6iAVcAxpJGNzFa51L+1QRc8vxKSWNKfai9k5LqZzpD2YyrnoCq7n
-         3ByhekydRz6JBrNklDUE8i9ySVVu+xgLxusNld2q8ECzSbvRWHDGR7M5vJ4GxtG/hRf7
-         iOPc2tIjGS1+J3xTrZbGDu0RMzoIE0yzTmF2BAK6MdyGrwWfgAHmM/9XYmtxP7iTJFGQ
-         g/YBQMlEXzenqRWvx3UCsZKJt6yRXzE4Lgn2wlxvslnYHA8yVgQaaDX97Yll48hcVXTh
-         65KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ai9uz9Kgmbv+1IKOW8tsBXcg4zvXfHiaRlhJIRWIRQE=;
-        b=aJbR7rrtyKjaM7p3TO4Ji9yLyj/1592Sw2ULJy7Nb2u+KHcHpr8GKVNdqV5ZAJ4m7Y
-         +t9x4w28JiQJbSawRZRqsD9cuEjeQuSIocLWF0IC5Eun7N5y+BOi/XaGTPPuaX+Rlqw0
-         WXk6VeVyj4K9Y81rj+oy9PLVj8tUKNiHzKkSvUgQNU2uEQEf3Mj6I/nSdorsmEBkie8s
-         Pn0EbA/kPV6IvNRSbj6xwOOqkjeZRiQ3s8pgB8KCi4dWJ1EQfDzscKVMXednS2wPS7fl
-         xn0Fd+tN2O2ufDGIpo3HKfw+Av2ko2Z2jbZJxtC/NbvyEyhyfgLbrRbVuuXCaQ7snPD7
-         J4xQ==
-X-Gm-Message-State: AJIora+Yd8YIvBDR08Qm81KBkopvkiNugZl1uua4Q3AmPC9SqTLfHZkk
-        NvsHgCJEh49BUOsu14tn67gLpwKnykSXPcr9Cl0nkQ==
-X-Google-Smtp-Source: AGRyM1v/A3R3ACL9bTJ9F2oyDopfksaBm4buK5bKF4I9WA9CnavOyJWyL6jkFtiVCsLQdE9u6Xn5OXBJ1Rs5gtS6mws=
-X-Received: by 2002:a05:6870:891f:b0:f3:3811:3e30 with SMTP id
- i31-20020a056870891f00b000f338113e30mr3842884oao.269.1655247589406; Tue, 14
- Jun 2022 15:59:49 -0700 (PDT)
+        Tue, 14 Jun 2022 19:01:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6060F52E6F;
+        Tue, 14 Jun 2022 16:01:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEFF66189B;
+        Tue, 14 Jun 2022 23:01:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EEE1C3411B;
+        Tue, 14 Jun 2022 23:01:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655247690;
+        bh=0uCD3AXwENO/Bxz69LYMMOQrPnOqlOLGdU2KJqwaCX4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=eFWD1zQ5yiMvhfQ5Jytt3I/far5PQRv7d1h4eCpI+rsb0iF3OI4f1TnsZY3mvcuk8
+         NP4MpkRZgSswh3eMRZl/fAYke9hBR64YvUCtB4ttC0/xYvOE93t+//LziPpT/WbGQn
+         e7ceGkopIGC3w5P7xIaUKdnRna8u0N5keaXaEgU3eNmS3cNKKNBf5u5WkZMeUxxo0I
+         y5t/V0+/yjyYbOH5WuKBRfdcnfzAlMve9oyied4NAeJVcfEloxxkAYd0k3bpmmdpqE
+         5P4eJbtzARugGiokJYLBlLYJehe/DN4Oc8xiztb5Jk7b5ScUbdmT4iYnsVykjPZP0Z
+         Ld+ipjnaHCoYA==
+Date:   Tue, 14 Jun 2022 18:01:28 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org
+Subject: Re: [PATCH] x86/PCI: Revert: "Clip only host bridge windows for E820
+ regions"
+Message-ID: <20220614230128.GA901712@bhelgaas>
 MIME-Version: 1.0
-References: <20220614225615.3843835-1-seanjc@google.com>
-In-Reply-To: <20220614225615.3843835-1-seanjc@google.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Tue, 14 Jun 2022 15:59:38 -0700
-Message-ID: <CALMp9eSYmxMRAGE3kZvJMsf53F1WJp397eJp3YvqitcsGzVi_Q@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86: Query vcpu->vcpu_idx directly and drop its
- accessor, again
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6eae37ce-dd44-9c32-3f68-2b4e102dce8e@igalia.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 3:56 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> Read vcpu->vcpu_idx directly instead of bouncing through the one-line
-> wrapper, kvm_vcpu_get_idx(), and drop the wrapper.  The wrapper is a
-> remnant of the original implementation and serves no purpose; remove it
-> (again) before it gains more users.
->
-> kvm_vcpu_get_idx() was removed in the not-too-distant past by commit
-> 4eeef2424153 ("KVM: x86: Query vcpu->vcpu_idx directly and drop its
-> accessor"), but was unintentionally re-introduced by commit a54d806688fe
-> ("KVM: Keep memslots in tree-based structures instead of array-based ones"),
-> likely due to a rebase goof.  The wrapper then managed to gain users in
-> KVM's Xen code.
->
-> No functional change intended.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+[+cc NVMe folks]
 
-ROFL
+On Tue, Jun 14, 2022 at 07:49:27PM -0300, Guilherme G. Piccoli wrote:
+> On 14/06/2022 12:47, Hans de Goede wrote:
+> > [...]
+> > 
+> > Have you looked at the log of the failed boot in the Steam Deck kernel
+> > bugzilla? Everything there seems to work just fine and then the system
+> > just hangs. I think that maybe it cannot find its root disk, so maybe
+> > an NVME issue ?
+> 
+> *Exactly* that - NVMe device is the root disk, it cannot boot since the
+> device doesn't work, hence no rootfs =)
 
-Reviewed-by: Jim Mattson <jmattson@google.com>
+Beginning of thread: https://lore.kernel.org/r/20220612144325.85366-1-hdegoede@redhat.com
+
+Steam Deck broke because we erroneously trimmed out the PCI host
+bridge window where BIOS had placed most devices, successfully
+reassigned all the PCI bridge windows and BARs, but some devices,
+apparently including NVMe, didn't work at the new addresses.
+
+Do you NVMe folks know of gotchas in this area?  I want to know
+because we'd like to be able to move devices around someday to make
+room for hot-added devices.
+
+This reassignment happened before drivers claimed the devices, so from
+a PCI point of view, I don't know why the NVMe device wouldn't work at
+the new address.
+
+Bjorn

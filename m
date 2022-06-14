@@ -2,99 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63DF54A591
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:22:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD6E54A5EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353571AbiFNCUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 22:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
+        id S1353145AbiFNCPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 22:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353946AbiFNCOK (ORCPT
+        with ESMTP id S1353444AbiFNCNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 22:14:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2DB3B289;
-        Mon, 13 Jun 2022 19:08:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 20E61B80AC1;
-        Tue, 14 Jun 2022 02:08:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C21C36B00;
-        Tue, 14 Jun 2022 02:08:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655172494;
-        bh=8el3SqLdZcIbqsykJyEZKxNlrqeGOrQgzCDXMo6yEMo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p0j16W7EGkbAEGjvsJHnnmfQp5oB4O4/Nua0rutk5sm0C1yM31wE0ujRloW55sw5u
-         htfz+BnB8fJ4EAnF3u5JAXwm7KPIJPHVAo42mn5m9bs5VPIAcWRnyuy4wMM5fbByxB
-         SaKkq6fia6UcNOWOPAh5ocfqN3pG7Ae/vB2GqTxsdnMxGBlbYiRX3YSAoUcAEkSh+F
-         UOD117EP03A8tVZ9QqDwvg1M6rIbbrxe9ppjYH8UjvWDhqmZMYvuNowbLnh0b+C3o3
-         zJYMOPszoCytu1ndMEG9H8q5E4RT6xFV2TcfM/ZDBukFrePITQGQhHs4GV0U6smGCq
-         XY1QR3DBf+/hA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Duke Lee <krnhotwings@gmail.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, dvhart@infradead.org,
-        platform-driver-x86@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 41/41] platform/x86/intel: hid: Add Surface Go to VGBS allow list
-Date:   Mon, 13 Jun 2022 22:07:06 -0400
-Message-Id: <20220614020707.1099487-41-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220614020707.1099487-1-sashal@kernel.org>
-References: <20220614020707.1099487-1-sashal@kernel.org>
+        Mon, 13 Jun 2022 22:13:46 -0400
+Received: from challenge-bot.com (challenge-bot.com [IPv6:2602:fffa:fff:108a:0:16:3e15:92b8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B343526C
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 19:07:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=challenge-bot.com; s=20180430; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=VGcRSjLbV9ZwhBfGleDibb3DqhkmCY5REWvPttnsKmE=; b=hCDYokHHkYRXevfvOlQR/aKGnF
+        iktpm/cCXqT7ibOI3bCAz2IslF5oS7ilcHx2wkTl5q6IuC5CnDlvmFWjiZEET50oNOGy7HiySvM7Q
+        VColeqOY4csXLccXUvusNODUkjuI94DcT79HaBur/BWY6bjAiPBAEHYv26fBVK2zajLk=;
+Received: from ozzloy by challenge-bot.com with local (Exim 4.92)
+        (envelope-from <ozzloy@challenge-bot.com>)
+        id 1o0vy8-00087N-0a; Mon, 13 Jun 2022 19:07:48 -0700
+From:   daniel watson <ozzloy@challenge-bot.com>
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc:     Daniel Watson <ozzloy@challenge-bot.com>
+Subject: [PATCH 0/4] remove wrappers on _rtw_IOL_append_*_cmd
+Date:   Mon, 13 Jun 2022 19:07:29 -0700
+Message-Id: <cover.1655171591.git.ozzloy@challenge-bot.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duke Lee <krnhotwings@gmail.com>
+From: Daniel Watson <ozzloy@challenge-bot.com>
 
-[ Upstream commit d4fe9cc4ff8656704b58cfd9363d7c3c9d65e519 ]
+This patchset removes the #define wrappers around the
+rtl_IOL_append_*_cmd group of functions.  They are not needed.
 
-The Surface Go reports Chassis Type 9 (Laptop,) so the device needs to be
-added to dmi_vgbs_allow_list to enable tablet mode when an attached Type
-Cover is folded back.
+Daniel Watson (4):
+  staging: r8188eu: remove leading '_' on _rtw_IOL_append_WB_cmd
+  staging: r8188eu: remove leading '_' on _rtw_IOL_append_WW_cmd
+  staging: r8188eu: remove leading '_' on _rtw_IOL_append_WD_cmd
+  staging: r8188eu: remove leading '_' on _rtw_IOL_append_WRF_cmd
 
-BugLink: https://github.com/linux-surface/linux-surface/issues/837
-Signed-off-by: Duke Lee <krnhotwings@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20220607213654.5567-1-krnhotwings@gmail.com
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/platform/x86/intel/hid.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/staging/r8188eu/core/rtw_iol.c    |  8 ++++----
+ drivers/staging/r8188eu/include/rtw_iol.h | 24 ++++++++---------------
+ 2 files changed, 12 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/platform/x86/intel/hid.c b/drivers/platform/x86/intel/hid.c
-index e9e8554147e0..d7d6782c40c2 100644
---- a/drivers/platform/x86/intel/hid.c
-+++ b/drivers/platform/x86/intel/hid.c
-@@ -129,6 +129,12 @@ static const struct dmi_system_id dmi_vgbs_allow_list[] = {
- 			DMI_MATCH(DMI_PRODUCT_NAME, "HP Spectre x360 Convertible 15-df0xxx"),
- 		},
- 	},
-+	{
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Microsoft Corporation"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Surface Go"),
-+		},
-+	},
- 	{ }
- };
- 
 -- 
-2.35.1
+2.34.1
 

@@ -2,98 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D431654AE02
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27EB354AE34
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 12:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242379AbiFNKMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 06:12:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
+        id S1354278AbiFNKWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 06:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbiFNKMg (ORCPT
+        with ESMTP id S241060AbiFNKWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 06:12:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2717A22BC9;
-        Tue, 14 Jun 2022 03:12:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3D9860AEA;
-        Tue, 14 Jun 2022 10:12:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C89FC3411B;
-        Tue, 14 Jun 2022 10:12:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655201553;
-        bh=OU/NN+viO7AEHR96HAV2XGs7BeFoWc8CIQP0hQgj6vU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=N0h9lZRJmQuixNqG6kalxSCRX53PXSuiPfVYsOlhI8XrzjFCEBMrsy427hsL/bzUa
-         nM/e5pkmu6fOdd7zZJTwHbjipGLTPtj191vmJi/3aFaGrbPAzTwxyKm2iRCLcIU4P5
-         0W1UPsirm5b3jLJLQB5nO2oAe2mFBBx/Uxy+Ut72hOrEDS0zluBfBV10ussQJFdX5k
-         YC3oJC7l13zFtvUvhHcc7y9kQbsx+etzhD9zmWelnUdASAmKnOL5nRgoZOVWi7V8El
-         Oa7P6VbFTmnCbRdpuHJEMoV3JbqmnxOFqlImK18KaWBdDghwG+7RM7Azl4aKS0gGky
-         1GJdoKQuuR7Rw==
-Date:   Tue, 14 Jun 2022 11:21:42 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH v3 1/6] iio: adc: meson_saradc: Don't attach managed
- resource to IIO device object
-Message-ID: <20220614112142.3eb70a8d@jic23-huawei>
-In-Reply-To: <Ypo80/NpWLLP43jm@smile.fi.intel.com>
-References: <20220603100004.70336-1-andriy.shevchenko@linux.intel.com>
-        <20220603170612.561edfbf@jic23-huawei>
-        <20220603172307.5d2f3c52@jic23-huawei>
-        <20220603172920.3239bbd6@jic23-huawei>
-        <Ypo80/NpWLLP43jm@smile.fi.intel.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Tue, 14 Jun 2022 06:22:02 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9B74739E;
+        Tue, 14 Jun 2022 03:22:01 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id h23so16186992ejj.12;
+        Tue, 14 Jun 2022 03:22:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=q0443Dndpen/b5Yhv4UENxJ30OUrUnM0Ufs9FbCtRME=;
+        b=l2iOhfYEFerogxSBJEOr3y3bYqaALIYTxIPvczOoNKYset9y3JUXHUOdC/IiXAJpb9
+         t1dqYKzwiYh+K8X0SDEBzrYJUSEpTpnpTM+A43GxDJoncrTihWD/P61Iw1BO30vA/Ato
+         ZSNyeMrLFKF1tds795cURed4gOl6N4Tg/KS+dmhPQpp/kf81NbBRneHopa2Xg4Fg88Re
+         LT4WVQBB1l/kuGMDxmt6M2MY3MmWHy9UIu63LvtPY6P8Wccellg+XcU6OUjocce4+kHR
+         ALdviDvPdq2FyR5stqJoTTZituNX3BzWoGEWYOL61xz4VngI+o94MbWiJjb9BQfWQGDy
+         0PZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=q0443Dndpen/b5Yhv4UENxJ30OUrUnM0Ufs9FbCtRME=;
+        b=mOxQVH1G/T/1ssJBTFHRZgmppMFXcmxLzm+eyKOe/FTXg4e1J2wsJsSjuHlFR8yR+t
+         kdN+rwyosF7304AGAgq23anHY8wF+FNi0dGjIt3Ei/W/D/5gFtzypOwJaFEBNTNf9DN9
+         RI7ir6xiyRRhtUzo4TsXYZV/3DUamPD+twrEhGStWvFIKxEfblAMmMUG0RZ6UfTzmUDs
+         m1xIYXBmKVU+LVbMmrXbhSiOokOhchLGoyDnQkRaCrkdGSB0NXXpcYwTVEAhXkZuCgTJ
+         dwdVSu9ca5bUreFSMYZJJT7dvmu3etrOlH9FPQ1fpOxvJUV1i/vxk6zgntRQgRnWoPnp
+         pxqg==
+X-Gm-Message-State: AOAM531sHVR/CZCdDBD3MUddQaE38jZ3pdefz7jCyOfxuT9nXdw0Bgjz
+        Cu6CKM0/c1O3kMzAcj/MHXk=
+X-Google-Smtp-Source: AGRyM1vQbLQJlmeisYMYUtV1YQfCfUhOGgFN/7RBT28vN1Gwig57+sy5wGm2Bc8wmKs1vDLJAjkAng==
+X-Received: by 2002:a17:907:9606:b0:70a:e140:6329 with SMTP id gb6-20020a170907960600b0070ae1406329mr3585125ejc.471.1655202119941;
+        Tue, 14 Jun 2022 03:21:59 -0700 (PDT)
+Received: from debian (host-78-150-47-22.as13285.net. [78.150.47.22])
+        by smtp.gmail.com with ESMTPSA id v2-20020a170906858200b006fe921fcb2dsm4849610ejx.49.2022.06.14.03.21.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 03:21:59 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 11:21:57 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/251] 5.15.47-rc2 review
+Message-ID: <YqhhRW4NW7R35Hq5@debian>
+References: <20220613181847.216528857@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220613181847.216528857@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 3 Jun 2022 19:54:43 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+Hi Greg,
 
-> On Fri, Jun 03, 2022 at 05:29:20PM +0100, Jonathan Cameron wrote:
-> > On Fri, 3 Jun 2022 17:23:07 +0100
-> > Jonathan Cameron <jic23@kernel.org> wrote:  
+On Mon, Jun 13, 2022 at 08:19:49PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.47 release.
+> There are 251 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> ...
-> 
-> > Andy, put a cover letter on these larger series - if nothing else it gives
-> > somewhere convenient for people to give tags for the whole series, or 
-> > maintainer to say what they are doing with it.  
-> 
-> I'll try to remember this. The series was started from only a couple of patches
-> and grew to this big, and I forgot to add a cover letter when it seems not
-> anymore obvious what has been done.
-> 
-> > Anyhow, I'm fine with the series, but will leave it on list for a while
-> > longer, particularly to get patch 6 some eyes + testing.
-> > 
-> > Currently I plan to drop the fixes tag from this first patch, but I'm prepared
-> > to be convinced it's a bug fix rather than a consistency cleanup.  
-> 
-> Fine with me, thanks!
-> 
-Applied to the togreg branch of iio.git and pushed out as testing for all the normal
-reasons.
+> Responses should be made by Wed, 15 Jun 2022 18:18:03 +0000.
+> Anything received after that time might be too late.
 
-Thanks,
+Build test (gcc version 11.3.1 20220612):
+mips: 62 configs -> no failure
+arm: 99 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
-Jonathan
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/1320
+[2]. https://openqa.qa.codethink.co.uk/tests/1324
+[3]. https://openqa.qa.codethink.co.uk/tests/1326
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip
 

@@ -2,266 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D074754B515
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78FD754B51A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244795AbiFNPsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
+        id S1344297AbiFNPtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244359AbiFNPsB (ORCPT
+        with ESMTP id S1344263AbiFNPt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:48:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3417165A5;
-        Tue, 14 Jun 2022 08:47:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 662DCB8198A;
-        Tue, 14 Jun 2022 15:47:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFB2C3411C;
-        Tue, 14 Jun 2022 15:47:51 +0000 (UTC)
-Message-ID: <c5c6903d-ec7d-6218-35d3-2ac6caa9d2c5@xs4all.nl>
-Date:   Tue, 14 Jun 2022 17:47:49 +0200
+        Tue, 14 Jun 2022 11:49:27 -0400
+Received: from mailout1.rbg.tum.de (mailout1.rbg.tum.de [131.159.0.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0546A2EA14
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:49:25 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [IPv6:2a09:80c0:254::14])
+        by mailout1.rbg.tum.de (Postfix) with ESMTPS id 501D6B1B;
+        Tue, 14 Jun 2022 17:49:14 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1655221754;
+        bh=1YhOTVDbcaz5aNnY1gjxQfdQ/am6Ukomt+EudTq2P2M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=MnPhEdQqyQ1dj/LdIOb1/ik+eBP2cXlELw5VAJ4ZScoIVFbkwpvTRn4lRYr9nd95z
+         bpi6zH4cmJ97p4VIqa5mB0GIttqcjxsuTSiO+aIXn1VSnSIEXP7h3cyFw2XsZAcj+m
+         lTguT6BeX1U1HrhmptlwHBWZFb294oWbroWDzjeHypXsZzZHDFzEZvJYXqWRF/Wktp
+         Sls1uXGCT1+n6uKXHFwOYWNp41+59ziA9diqr+Xolumj0ybiuw47RUBp0qq9Tt7elg
+         LoyBZwSwT5TZQi1GnEiKcTFWcgBrIJZ6i0c5w/Tuao76wl5F5LahW+IjfrJjw7MiQZ
+         Hw02rTSxcCSDQ==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 4C06C28B; Tue, 14 Jun 2022 17:49:14 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 1D39E28A;
+        Tue, 14 Jun 2022 17:49:14 +0200 (CEST)
+Received: from mail.in.tum.de (mailproxy.in.tum.de [IPv6:2a09:80c0::78])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 17A50286;
+        Tue, 14 Jun 2022 17:49:14 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id 13CFB4A01EC; Tue, 14 Jun 2022 17:49:14 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id B21584A013B;
+        Tue, 14 Jun 2022 17:49:13 +0200 (CEST)
+        (Extended-Queue-bit xtech_hi@fff.in.tum.de)
+From:   =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: [PATCH v2] tools/memory-model: Clarify LKMM's limitations in litmus-tests.txt
+Date:   Tue, 14 Jun 2022 15:48:11 +0000
+Message-Id: <20220614154812.1870099-1-paul.heidekrueger@in.tum.de>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <Yqdb3CZ8bKtbWZ+z@rowland.harvard.edu>
+References: <Yqdb3CZ8bKtbWZ+z@rowland.harvard.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v8 14/17] media: hantro: Stop using Hantro dedicated
- control
-Content-Language: en-US
-To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        andrzej.p@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com
-References: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
- <20220614083614.240641-15-benjamin.gaignard@collabora.com>
- <b244e86d-06de-7423-d0df-e77485ce4c87@xs4all.nl>
- <958ab30f9cfbb14e4a7ea55826064e6a20d5ffd2.camel@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <958ab30f9cfbb14e4a7ea55826064e6a20d5ffd2.camel@collabora.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As discussed, clarify LKMM not recognizing certain kinds of orderings.
+In particular, highlight the fact that LKMM might deliberately make
+weaker guarantees than compilers and architectures.
 
+Link: https://lore.kernel.org/all/YpoW1deb%2FQeeszO1@ethstick13.dse.in.tum.de/T/#u
+Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
+Cc: Marco Elver <elver@google.com>
+Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+Cc: Martin Fink <martin.fink@in.tum.de>
+---
 
-On 6/14/22 17:43, Nicolas Dufresne wrote:
-> Le mardi 14 juin 2022 à 15:58 +0200, Hans Verkuil a écrit :
->> On 6/14/22 10:36, Benjamin Gaignard wrote:
->>> The number of bits to skip in the slice header can be computed
->>> in the driver by using sps, pps and decode_params information.
->>> This allow to remove Hantro dedicated control.
->>
->> allow -> makes it possible
->>
->>>
->>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->>> ---
->>>  drivers/staging/media/hantro/hantro_drv.c     | 36 -----------
->>>  .../staging/media/hantro/hantro_g2_hevc_dec.c | 62 ++++++++++++++++++-
->>>  include/media/hevc-ctrls.h                    | 13 ----
->>>  3 files changed, 61 insertions(+), 50 deletions(-)
->>>
->>> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
->>> index 536c8c374952..5aac3a090480 100644
->>> --- a/drivers/staging/media/hantro/hantro_drv.c
->>> +++ b/drivers/staging/media/hantro/hantro_drv.c
->>> @@ -304,26 +304,6 @@ static int hantro_jpeg_s_ctrl(struct v4l2_ctrl *ctrl)
->>>  	return 0;
->>>  }
->>>  
->>> -static int hantro_hevc_s_ctrl(struct v4l2_ctrl *ctrl)
->>> -{
->>> -	struct hantro_ctx *ctx;
->>> -
->>> -	ctx = container_of(ctrl->handler,
->>> -			   struct hantro_ctx, ctrl_handler);
->>> -
->>> -	vpu_debug(1, "s_ctrl: id = %d, val = %d\n", ctrl->id, ctrl->val);
->>> -
->>> -	switch (ctrl->id) {
->>> -	case V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP:
->>> -		ctx->hevc_dec.ctrls.hevc_hdr_skip_length = ctrl->val;
->>> -		break;
->>> -	default:
->>> -		return -EINVAL;
->>> -	}
->>> -
->>> -	return 0;
->>> -}
->>> -
->>>  static const struct v4l2_ctrl_ops hantro_ctrl_ops = {
->>>  	.try_ctrl = hantro_try_ctrl,
->>>  };
->>> @@ -332,10 +312,6 @@ static const struct v4l2_ctrl_ops hantro_jpeg_ctrl_ops = {
->>>  	.s_ctrl = hantro_jpeg_s_ctrl,
->>>  };
->>>  
->>> -static const struct v4l2_ctrl_ops hantro_hevc_ctrl_ops = {
->>> -	.s_ctrl = hantro_hevc_s_ctrl,
->>> -};
->>> -
->>>  #define HANTRO_JPEG_ACTIVE_MARKERS	(V4L2_JPEG_ACTIVE_MARKER_APP0 | \
->>>  					 V4L2_JPEG_ACTIVE_MARKER_COM | \
->>>  					 V4L2_JPEG_ACTIVE_MARKER_DQT | \
->>> @@ -487,18 +463,6 @@ static const struct hantro_ctrl controls[] = {
->>>  		.cfg = {
->>>  			.id = V4L2_CID_STATELESS_HEVC_SCALING_MATRIX,
->>>  		},
->>> -	}, {
->>> -		.codec = HANTRO_HEVC_DECODER,
->>> -		.cfg = {
->>> -			.id = V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP,
->>> -			.name = "Hantro HEVC slice header skip bytes",
->>> -			.type = V4L2_CTRL_TYPE_INTEGER,
->>> -			.min = 0,
->>> -			.def = 0,
->>> -			.max = 0x100,
->>> -			.step = 1,
->>> -			.ops = &hantro_hevc_ctrl_ops,
->>> -		},
->>>  	}, {
->>>  		.codec = HANTRO_VP9_DECODER,
->>>  		.cfg = {
->>> diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
->>> index d28653d04d20..3be8d6e60bf0 100644
->>> --- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
->>> +++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
->>> @@ -117,6 +117,66 @@ static void prepare_tile_info_buffer(struct hantro_ctx *ctx)
->>>  		vpu_debug(1, "%s: no chroma!\n", __func__);
->>>  }
->>>  
->>> +static unsigned int ceil_log2(unsigned int v)
->>> +{
->>> +	/* Compute Ceil(Log2(v))
->>> +	 * Derived from branchless code for integer log2(v) from:
->>> +	 * <http://graphics.stanford.edu/~seander/bithacks.html#IntegerLog>
->>> +	 */
->>> +	unsigned int r, shift;
->>> +
->>> +	v--;
->>> +	r = (v > 0xFFFF) << 4;
->>> +	v >>= r;
->>> +	shift = (v > 0xFF) << 3;
->>> +	v >>= shift;
->>> +	r |= shift;
->>> +	shift = (v > 0xF) << 2;
->>> +	v >>= shift;
->>> +	r |= shift;
->>> +	shift = (v > 0x3) << 1;
->>> +	v >>= shift;
->>> +	r |= shift;
->>> +	r |= (v >> 1);
->>> +
->>> +	return r + 1;
->>> +}
->>
->> Isn't this identical to fls(v - 1)? See also lib/math/reciprocal_div.c
->> where this is used.
-> 
-> Thanks for pointing this out, I was wondering if there was an equivalent, and
-> never knew there was a relation between log2() and the "last set bit". Not sure
-> about the -1 here though, can you extend ?
+v2:
+- Incorporate Alan Stern's feedback.
+- Add suggested text by Alan Stern to clearly state how the branch and the
+  smp_mb() affect ordering.
+- Add "Co-developed-by: Alan Stern <stern@rowland.harvard.edu>" based on the
+  above.
 
-Based on how lib/math/reciprocal_div.c did it. Also, the ceil_log2 function
-starts with v--, while fls doesn't. That said, it's wise to verify that that
-is correct.
+ .../Documentation/litmus-tests.txt            | 37 ++++++++++++++-----
+ 1 file changed, 27 insertions(+), 10 deletions(-)
 
-Regards,
+diff --git a/tools/memory-model/Documentation/litmus-tests.txt b/tools/memory-model/Documentation/litmus-tests.txt
+index 8a9d5d2787f9..cc355999815c 100644
+--- a/tools/memory-model/Documentation/litmus-tests.txt
++++ b/tools/memory-model/Documentation/litmus-tests.txt
+@@ -946,22 +946,39 @@ Limitations of the Linux-kernel memory model (LKMM) include:
+ 	carrying a dependency, then the compiler can break that dependency
+ 	by substituting a constant of that value.
+ 
+-	Conversely, LKMM sometimes doesn't recognize that a particular
+-	optimization is not allowed, and as a result, thinks that a
+-	dependency is not present (because the optimization would break it).
+-	The memory model misses some pretty obvious control dependencies
+-	because of this limitation.  A simple example is:
++	Conversely, LKMM will sometimes overestimate the amount of
++	reordering compilers and CPUs can carry out, leading it to miss
++	some pretty obvious cases of ordering.  A simple example is:
+ 
+ 		r1 = READ_ONCE(x);
+ 		if (r1 == 0)
+ 			smp_mb();
+ 		WRITE_ONCE(y, 1);
+ 
+-	There is a control dependency from the READ_ONCE to the WRITE_ONCE,
+-	even when r1 is nonzero, but LKMM doesn't realize this and thinks
+-	that the write may execute before the read if r1 != 0.  (Yes, that
+-	doesn't make sense if you think about it, but the memory model's
+-	intelligence is limited.)
++	The WRITE_ONCE() does not depend on the READ_ONCE(), and as a
++	result, LKMM does not claim ordering.  However, even though no
++	dependency is present, the WRITE_ONCE() will not be executed before
++	the READ_ONCE().  There are two reasons for this:
++
++                The presence of the smp_mb() in one of the branches
++                prevents the compiler from moving the WRITE_ONCE()
++                up before the "if" statement, since the compiler has
++                to assume that r1 will sometimes be 0 (but see the
++                comment below);
++
++                CPUs do not execute stores before po-earlier conditional
++                branches, even in cases where the store occurs after the
++                two arms of the branch have recombined.
++
++	It is clear that it is not dangerous in the slightest for LKMM to
++	make weaker guarantees than architectures.  In fact, it is
++	desirable, as it gives compilers room for making optimizations.  
++	For instance, suppose that a 0 value in r1 would trigger undefined
++	behavior elsewhere.  Then a clever compiler might deduce that r1
++	can never be 0 in the if condition.  As a result, said clever
++	compiler might deem it safe to optimize away the smp_mb(),
++	eliminating the branch and any ordering an architecture would
++	guarantee otherwise.
+ 
+ 2.	Multiple access sizes for a single variable are not supported,
+ 	and neither are misaligned or partially overlapping accesses.
+-- 
+2.35.1
 
-	Hans
-
-> 
->>
->> Regards,
->>
->> 	Hans
->>
->>> +
->>> +static int compute_header_skip_lenght(struct hantro_ctx *ctx)
->>> +{
->>> +	const struct hantro_hevc_dec_ctrls *ctrls = &ctx->hevc_dec.ctrls;
->>> +	const struct v4l2_ctrl_hevc_decode_params *decode_params = ctrls->decode_params;
->>> +	const struct v4l2_ctrl_hevc_sps *sps = ctrls->sps;
->>> +	const struct v4l2_ctrl_hevc_pps *pps = ctrls->pps;
->>> +	int skip = 0;
->>> +
->>> +	if (pps->flags & V4L2_HEVC_PPS_FLAG_OUTPUT_FLAG_PRESENT)
->>> +		/* size of pic_output_flag */
->>> +		skip++;
->>> +
->>> +	if (sps->flags & V4L2_HEVC_SPS_FLAG_SEPARATE_COLOUR_PLANE)
->>> +		/* size of pic_order_cnt_lsb */
->>> +		skip += 2;
->>> +
->>> +	if (!(decode_params->flags & V4L2_HEVC_DECODE_PARAM_FLAG_IDR_PIC)) {
->>> +		/* size of pic_order_cnt_lsb */
->>> +		skip += sps->log2_max_pic_order_cnt_lsb_minus4 + 4;
->>> +
->>> +		/* size of short_term_ref_pic_set_sps_flag */
->>> +		skip++;
->>> +
->>> +		if (decode_params->short_term_ref_pic_set_size)
->>> +			/* size of st_ref_pic_set( num_short_term_ref_pic_sets ) */
->>> +			skip += decode_params->short_term_ref_pic_set_size;
->>> +		else if (sps->num_short_term_ref_pic_sets > 1)
->>> +			skip += ceil_log2(sps->num_short_term_ref_pic_sets);
->>> +
->>> +		skip += decode_params->long_term_ref_pic_set_size;
->>> +	}
->>> +
->>> +	return skip;
->>> +}
->>> +
->>>  static void set_params(struct hantro_ctx *ctx)
->>>  {
->>>  	const struct hantro_hevc_dec_ctrls *ctrls = &ctx->hevc_dec.ctrls;
->>> @@ -134,7 +194,7 @@ static void set_params(struct hantro_ctx *ctx)
->>>  
->>>  	hantro_reg_write(vpu, &g2_output_8_bits, 0);
->>>  
->>> -	hantro_reg_write(vpu, &g2_hdr_skip_length, ctrls->hevc_hdr_skip_length);
->>> +	hantro_reg_write(vpu, &g2_hdr_skip_length, compute_header_skip_lenght(ctx));
->>>  
->>>  	min_log2_cb_size = sps->log2_min_luma_coding_block_size_minus3 + 3;
->>>  	max_log2_ctb_size = min_log2_cb_size + sps->log2_diff_max_min_luma_coding_block_size;
->>> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
->>> index d6cb3779d190..efc0412ac41e 100644
->>> --- a/include/media/hevc-ctrls.h
->>> +++ b/include/media/hevc-ctrls.h
->>> @@ -467,17 +467,4 @@ struct v4l2_ctrl_hevc_scaling_matrix {
->>>  	__u8	scaling_list_dc_coef_32x32[2];
->>>  };
->>>  
->>> -/*  MPEG-class control IDs specific to the Hantro driver as defined by V4L2 */
->>> -#define V4L2_CID_CODEC_HANTRO_BASE				(V4L2_CTRL_CLASS_CODEC | 0x1200)
->>> -/*
->>> - * V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP -
->>> - * the number of data (in bits) to skip in the
->>> - * slice segment header.
->>> - * If non-IDR, the bits to be skipped go from syntax element "pic_output_flag"
->>> - * to before syntax element "slice_temporal_mvp_enabled_flag".
->>> - * If IDR, the skipped bits are just "pic_output_flag"
->>> - * (separate_colour_plane_flag is not supported).
->>> - */
->>> -#define V4L2_CID_HANTRO_HEVC_SLICE_HEADER_SKIP	(V4L2_CID_CODEC_HANTRO_BASE + 0)
->>> -
->>>  #endif
->>
-> 

@@ -2,68 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9395D54A6F6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:42:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9F554A6F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354671AbiFNCmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 22:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S1353752AbiFNCnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 22:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352649AbiFNCl6 (ORCPT
+        with ESMTP id S1353615AbiFNCm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 22:41:58 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607045005F;
-        Mon, 13 Jun 2022 19:20:35 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id k19so9246392wrd.8;
-        Mon, 13 Jun 2022 19:20:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rUo3H58Xo6jRmNEwjhL/eFhQ7obXUHzajy+AECzxVt4=;
-        b=EJgw/8kmPw3eQcaDqa7qbY1kJIy78gC/KghBVXCdqDMgTzYadRYzJ3sGCCnVrA2kse
-         rywQ+E5TqEPUmp+Jfy7MidbwAdeiDVmzwHPIbfak9JqyDLf+7sxrt9KNhMTxCNLL+6ND
-         HscvHsh1J5UBnvE7uLlaa5Ngbhx9QyyOQsHZehUHmpyy/OkgYsyJGKO6FrZkHqBDN4p6
-         /WYFyoo9Xe6hy2xVV+B4Hb8qQ0nePuiwOQUWwaClsDK7hRXClprraG6bk3ysPp+MNGWw
-         ACvnWlC6LxUakujWE+2Xj7XXWbBX8/JWOr5xHE7q/IhBMW0HZt5XydwoKwdCv3agLIyb
-         zMbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rUo3H58Xo6jRmNEwjhL/eFhQ7obXUHzajy+AECzxVt4=;
-        b=Vegelk6lIPFzUzsGGUK4mnB8b14nUwuTzkJ+tgXJx3hoOnKVjxkM5NaCA2v4vMWV2T
-         +o1zU/LJlpfBg6mtE6wfuR4x7P07m2Jv+5qul0a7w+jfa9sCKoZWi4Y4vvj/Puj1YdiD
-         3V7aFw3UJDzxtb5r/+fAqvoh2U/z85KMOjJrfvPX1bEF57IQSvHR/RYDdiklPIxYe3Xu
-         0qk53BCkEOFzBgNR6kWkX64k3vuiUc7FP+30IrLr0ncpVN+3IA6qJmg7dpgLhkIuQs2I
-         5/0e4+RoyBwIkhh9XkKtyyjbAfxzr3c3Rjk5UGPC9FYNX3oH56ywJaECvYZUbz4Pnx0n
-         qRMg==
-X-Gm-Message-State: AJIora9Fw+Xk3ohsuhT9o0+CtdTh4YAPMKq0IzNRqRRdYXMmQXW7Jy1B
-        PlfEAvOdLrUS6AkQGFzWr5DLLxkiJkXeaPYhfUOHqghDry0SPA==
-X-Google-Smtp-Source: AGRyM1vubLAYvzxsNOBMNnDLnOtApG/1brEj+260Ctcbqrc8JeVzrcSUop4bg/ADhdmxahpfwOZjnagUGwbHugPCQqg=
-X-Received: by 2002:a5d:5c07:0:b0:218:544d:4347 with SMTP id
- cc7-20020a5d5c07000000b00218544d4347mr2291230wrb.107.1655173228921; Mon, 13
- Jun 2022 19:20:28 -0700 (PDT)
+        Mon, 13 Jun 2022 22:42:59 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EABC85159A
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 19:21:11 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 56A9A23A;
+        Mon, 13 Jun 2022 19:20:39 -0700 (PDT)
+Received: from [10.162.40.17] (unknown [10.162.40.17])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5FE6E3F792;
+        Mon, 13 Jun 2022 19:20:37 -0700 (PDT)
+Message-ID: <27f29bb6-f82a-eefe-4774-0d2d1872482a@arm.com>
+Date:   Tue, 14 Jun 2022 07:50:34 +0530
 MIME-Version: 1.0
-References: <20220613225723.2734132-1-seanjc@google.com> <20220613225723.2734132-4-seanjc@google.com>
-In-Reply-To: <20220613225723.2734132-4-seanjc@google.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Tue, 14 Jun 2022 10:20:17 +0800
-Message-ID: <CAJhGHyCMsc4g7rdW8td5vOA5iAZBu7+hewUJW8tUXX=_-UBVOA@mail.gmail.com>
-Subject: Re: [PATCH 3/8] KVM: x86/mmu: Bury 32-bit PSE paging helpers in paging_tmpl.h
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V2 2/2] mm/mmap: Drop generic protection_map[] array
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>, linux-mm@kvack.org
+Cc:     kbuild-all@lists.01.org, Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20220613053354.553579-3-anshuman.khandual@arm.com>
+ <202206131716.tDWk9rLs-lkp@intel.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <202206131716.tDWk9rLs-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,15 +46,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 6:59 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> Move a handful of one-off macros and helpers for 32-bit PSE paging into
-> paging_tmpl.h and hide them behind "PTTYPE == 32".  Under no circumstance
-> should anything but 32-bit shadow paging care about PSE paging.
->
 
-Moving code from paging_tmp.h is on my to-do list.
-I don't think the opposite direction is preferred.
 
-And is_cpuid_PSE36() is also used in mmu.c, is it a good idea to move
-it into paging_tmp.h?
+On 6/13/22 15:01, kernel test robot wrote:
+> Hi Anshuman,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on akpm-mm/mm-everything]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Anshuman-Khandual/mm-mmap-Drop-__SXXX-__PXXX-macros-from-across-platforms/20220613-133456
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> config: riscv-randconfig-r042-20220613 (https://download.01.org/0day-ci/archive/20220613/202206131716.tDWk9rLs-lkp@intel.com/config)
+> compiler: riscv64-linux-gcc (GCC) 11.3.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/696f81b49f7b6316f652d795da4c0008efef4487
+>         git remote add linux-review https://github.com/intel-lab-lkp/linux
+>         git fetch --no-tags linux-review Anshuman-Khandual/mm-mmap-Drop-__SXXX-__PXXX-macros-from-across-platforms/20220613-133456
+>         git checkout 696f81b49f7b6316f652d795da4c0008efef4487
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> arch/riscv/mm/init.c:1224:59: error: 'PAGE_NONE' undeclared here (not in a function); did you mean 'SIGEV_NONE'?
+>     1224 |         [VM_NONE]                                       = PAGE_NONE,
+>          |                                                           ^~~~~~~~~
+>          |                                                           SIGEV_NONE
+>>> arch/riscv/mm/init.c:1225:59: error: 'PAGE_READ' undeclared here (not in a function); did you mean 'MAY_READ'?
+>     1225 |         [VM_READ]                                       = PAGE_READ,
+>          |                                                           ^~~~~~~~~
+>          |                                                           MAY_READ
+>>> arch/riscv/mm/init.c:1226:59: error: 'PAGE_COPY' undeclared here (not in a function)
+>     1226 |         [VM_WRITE]                                      = PAGE_COPY,
+>          |                                                           ^~~~~~~~~
+>>> arch/riscv/mm/init.c:1228:59: error: 'PAGE_EXEC' undeclared here (not in a function); did you mean 'TASK_EXEC'?
+>     1228 |         [VM_EXEC]                                       = PAGE_EXEC,
+>          |                                                           ^~~~~~~~~
+>          |                                                           TASK_EXEC
+>>> arch/riscv/mm/init.c:1229:59: error: 'PAGE_READ_EXEC' undeclared here (not in a function); did you mean 'PAGE_KERNEL_EXEC'?
+>     1229 |         [VM_EXEC | VM_READ]                             = PAGE_READ_EXEC,
+>          |                                                           ^~~~~~~~~~~~~~
+>          |                                                           PAGE_KERNEL_EXEC
+>>> arch/riscv/mm/init.c:1230:59: error: 'PAGE_COPY_EXEC' undeclared here (not in a function); did you mean 'PAGE_KERNEL_EXEC'?
+>     1230 |         [VM_EXEC | VM_WRITE]                            = PAGE_COPY_EXEC,
+>          |                                                           ^~~~~~~~~~~~~~
+>          |                                                           PAGE_KERNEL_EXEC
+>>> arch/riscv/mm/init.c:1231:59: error: 'PAGE_COPY_READ_EXEC' undeclared here (not in a function)
+>     1231 |         [VM_EXEC | VM_WRITE | VM_READ]                  = PAGE_COPY_READ_EXEC,
+>          |                                                           ^~~~~~~~~~~~~~~~~~~
+>>> arch/riscv/mm/init.c:1238:59: error: 'PAGE_SHARED_EXEC' undeclared here (not in a function); did you mean 'PAGE_SHARED'?
+>     1238 |         [VM_SHARED | VM_EXEC | VM_WRITE]                = PAGE_SHARED_EXEC,
+>          |                                                           ^~~~~~~~~~~~~~~~
+>          |                                                           PAGE_SHARED
+> 
+> 
+> vim +1224 arch/riscv/mm/init.c
+> 
+>   1222	
+>   1223	pgprot_t protection_map[16] __ro_after_init = {
+>> 1224		[VM_NONE]					= PAGE_NONE,
+>> 1225		[VM_READ]					= PAGE_READ,
+>> 1226		[VM_WRITE]					= PAGE_COPY,
+>   1227		[VM_WRITE | VM_READ]				= PAGE_COPY,
+>> 1228		[VM_EXEC]					= PAGE_EXEC,
+>> 1229		[VM_EXEC | VM_READ]				= PAGE_READ_EXEC,
+>> 1230		[VM_EXEC | VM_WRITE]				= PAGE_COPY_EXEC,
+>> 1231		[VM_EXEC | VM_WRITE | VM_READ]			= PAGE_COPY_READ_EXEC,
+>   1232		[VM_SHARED]					= PAGE_NONE,
+>   1233		[VM_SHARED | VM_READ]				= PAGE_READ,
+>   1234		[VM_SHARED | VM_WRITE]				= PAGE_SHARED,
+>   1235		[VM_SHARED | VM_WRITE | VM_READ]		= PAGE_SHARED,
+>   1236		[VM_SHARED | VM_EXEC]				= PAGE_EXEC,
+>   1237		[VM_SHARED | VM_EXEC | VM_READ]			= PAGE_READ_EXEC,
+>> 1238		[VM_SHARED | VM_EXEC | VM_WRITE]		= PAGE_SHARED_EXEC,
+> 
+
+PAGE_XXXX[_YYYY] symbols on riscv are wrapped around with CONFIG_MMU, just
+moving protection_map[] to appropriate place with CONFIG_MMU assert solves
+this build problem.
+
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index 5e4ed43f0d79..84ee476ba4a4 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -288,6 +288,25 @@ static pmd_t __maybe_unused early_dtb_pmd[PTRS_PER_PMD] __initdata __aligned(PAG
+ #define early_pg_dir           ((pgd_t *)XIP_FIXUP(early_pg_dir))
+ #endif /* CONFIG_XIP_KERNEL */
+ 
++pgprot_t protection_map[16] __ro_after_init = {
++       [VM_NONE]                                       = PAGE_NONE,
++       [VM_READ]                                       = PAGE_READ,
++       [VM_WRITE]                                      = PAGE_COPY,
++       [VM_WRITE | VM_READ]                            = PAGE_COPY,
++       [VM_EXEC]                                       = PAGE_EXEC,
++       [VM_EXEC | VM_READ]                             = PAGE_READ_EXEC,
++       [VM_EXEC | VM_WRITE]                            = PAGE_COPY_EXEC,
++       [VM_EXEC | VM_WRITE | VM_READ]                  = PAGE_COPY_READ_EXEC,
++       [VM_SHARED]                                     = PAGE_NONE,
++       [VM_SHARED | VM_READ]                           = PAGE_READ,
++       [VM_SHARED | VM_WRITE]                          = PAGE_SHARED,
++       [VM_SHARED | VM_WRITE | VM_READ]                = PAGE_SHARED,
++       [VM_SHARED | VM_EXEC]                           = PAGE_EXEC,
++       [VM_SHARED | VM_EXEC | VM_READ]                 = PAGE_READ_EXEC,
++       [VM_SHARED | VM_EXEC | VM_WRITE]                = PAGE_SHARED_EXEC,
++       [VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]      = PAGE_SHARED_EXEC
++};
++
+ void __set_fixmap(enum fixed_addresses idx, phys_addr_t phys, pgprot_t prot)
+ {
+        unsigned long addr = __fix_to_virt(idx);
+@@ -1219,22 +1238,3 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
+        return vmemmap_populate_basepages(start, end, node, NULL);
+ }
+ #endif
+-
+-pgprot_t protection_map[16] __ro_after_init = {
+-       [VM_NONE]                                       = PAGE_NONE,
+-       [VM_READ]                                       = PAGE_READ,
+-       [VM_WRITE]                                      = PAGE_COPY,
+-       [VM_WRITE | VM_READ]                            = PAGE_COPY,
+-       [VM_EXEC]                                       = PAGE_EXEC,
+-       [VM_EXEC | VM_READ]                             = PAGE_READ_EXEC,
+-       [VM_EXEC | VM_WRITE]                            = PAGE_COPY_EXEC,
+-       [VM_EXEC | VM_WRITE | VM_READ]                  = PAGE_COPY_READ_EXEC,
+-       [VM_SHARED]                                     = PAGE_NONE,
+-       [VM_SHARED | VM_READ]                           = PAGE_READ,
+-       [VM_SHARED | VM_WRITE]                          = PAGE_SHARED,
+-       [VM_SHARED | VM_WRITE | VM_READ]                = PAGE_SHARED,
+-       [VM_SHARED | VM_EXEC]                           = PAGE_EXEC,
+-       [VM_SHARED | VM_EXEC | VM_READ]                 = PAGE_READ_EXEC,
+-       [VM_SHARED | VM_EXEC | VM_WRITE]                = PAGE_SHARED_EXEC,
+-       [VM_SHARED | VM_EXEC | VM_WRITE | VM_READ]      = PAGE_SHARED_EXEC
+-};

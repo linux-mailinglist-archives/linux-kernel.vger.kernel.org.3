@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0EF54B845
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22FB54B846
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343670AbiFNSIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
+        id S1344315AbiFNSIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:08:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234330AbiFNSI3 (ORCPT
+        with ESMTP id S1343909AbiFNSIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 14:08:29 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5EB34B93
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:08:28 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id e184so16473550ybf.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:08:28 -0700 (PDT)
+        Tue, 14 Jun 2022 14:08:49 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA8443C714
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:08:47 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id g2so10653818ljk.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:08:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=C78v/CAN8C2z22MVaDl0QxTyyJoCfPguMq8MOK3tOJc=;
-        b=KPQRP+y1/9biwSKOdmOrA7l+Ng8mYs2ZKqEsk1EcYmkGcOWMD3eVJOVUvBbrZYLqLa
-         XxmEyIa3+nMLYvLo8wsYQD6u2h6vJ69PlvvEWBU4hwT/ftXEt28sTdms2tNq2oqAwkJ2
-         xCAMYyeEgKvWmnPoO7td7+2N+gClf9AyQwwCLajgaaQu89TWxl4Z3nrdDmLCzj2nvrDt
-         iEDgjcTO60gIUOVeCKdV4ZZl/HvoU7NaI0kNlP+lV1x3XSzN1cMxBhRoG5rEWorAbSrH
-         Bc+DXxtEPmMLZj2PPf9qEivHmu0mikMk2gU1zLrWRRh2zuFLQceSL6wcyYVB3HSoZP1/
-         nNTA==
+        bh=R1HT10eh1GO5bHFhhzFg6L2ZKS3F6a/ZKqNJB8u6nSo=;
+        b=d+G50quMVzD8X1zWpNXl70m2dG0hT+RVXZR68ghr81UzXBAZxdEj8QLUJC/usbxSJb
+         4sCg875GjsPzfBwk2k5nqnq2PpdMtARImdhKXIDS3vQNgWc/cEC5bhz7y4rWHllTmFMk
+         i5oUYQvRcu0pQgagLIyWvfUSXjghs9/O4s8LE2VOkCiiRJf8SVL7EbxGROvhQLOYS1PM
+         Db1fvMlydmzpmdSD689iyQJigiVU+sfOyDaWbHhjSSnXi4/XmSVE6Ym0hxTaIo4sMJiu
+         WH+YN6YnAZ+cTQCwReRezO5uACl9RF9zltggTFtcdLBaCGSINqKfs5x0+acWu21NoZz4
+         HwSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=C78v/CAN8C2z22MVaDl0QxTyyJoCfPguMq8MOK3tOJc=;
-        b=pCq4qGIJPl5+RSRUvt2p/o3e0z2Y0KIBSCyZEMUIB2elLt5x/4JQzXs5+1CrVxl0e2
-         2l2gFwmlou8X0u2W6oieqHwRQLOw5EEkhZqvkHcTorpVe5HrgElv6zeidwfxgOtriHeR
-         6Q2tfGs4w+A07lK3mz+p63gUmN/reURCrvC1iYrVYWkW+ofFcuYWkdMjqfFjtdiCDt2K
-         /xM7wuFqMZ0OwF/KBfRHJT8T7/PIc+NmspMcub4bnmQCY+dcKWK5NQEOuUVeROQh4ZrJ
-         TTSK25De071ShT9T/BW/bCwm12z7T88pq+XHAKkc7oBB1muFWb89TXqbeTNbcfoyd8Yg
-         dXuQ==
-X-Gm-Message-State: AJIora8QvKqbpusARNcdGWTp5NHaBZGMXx0WL/bSPA2KzR4XJZFbRLWf
-        B+Shpw/g33k5T0cqZuc4ZFMOYQc+jcUw/bs7n+03Fw==
-X-Google-Smtp-Source: AGRyM1srZeha6aWpFJbD1p8y4wYjg8EMJ2RoztXJmVyLYONCPC4TSE6IGnH1wzu0dpdgL/3uTx0GgDipYFQRNz1mLZs=
-X-Received: by 2002:a25:5d0d:0:b0:633:25c8:380 with SMTP id
- r13-20020a255d0d000000b0063325c80380mr5966062ybb.167.1655230107606; Tue, 14
- Jun 2022 11:08:27 -0700 (PDT)
+        bh=R1HT10eh1GO5bHFhhzFg6L2ZKS3F6a/ZKqNJB8u6nSo=;
+        b=traPS+BEYKNnOaYWPL0L2RCZbf3TFy44fHi4DFSg57Q0w3jo4kGeu5DTGbO3ZCXt7z
+         rM/iQkZhqXVexymbklxfZ1SeIhPK6SqOYKOZGCjkaq8VLGK8iLDNlA34A4RmkXGG1Bs0
+         yCIJsp+oSUACUjselsO+2QHQBrzCJ3CNAMagGP8AE+LeE4CgOWzp2ryIdOhrQFh6KbW8
+         JCIUwYvZVBLR/b5NUG2qMm0meYzmQpsFUzBYnd/VLlTCoupiuSbtHtBZA5Dv71DXUnqC
+         jScYvjJhKBWkhh41UgkYf2T+LxQkXUTPeW+4texcKIlRzyEeZgSvSkDmefG8BWgCG45l
+         Ea1w==
+X-Gm-Message-State: AJIora/H2jMJYksgADwHh+gknhwTzPY5qx/gxUpDkUcnJ6Uv7g2393+f
+        f/IuRd/J8g1CTeslqBDm2HAtsZAu9hk6JQAZE9+hhw==
+X-Google-Smtp-Source: AGRyM1vlpU+YYoVx423VwrpRCMxHTBgsHKGjOk7TAYtjS0pSAZgttUkcGWdalwmXngjLB35ExMkH4cPI1eCs/qGCrbc=
+X-Received: by 2002:a2e:2ac1:0:b0:255:7677:97f3 with SMTP id
+ q184-20020a2e2ac1000000b00255767797f3mr3227264ljq.513.1655230125976; Tue, 14
+ Jun 2022 11:08:45 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1651774250.git.isaku.yamahata@intel.com> <ea5e6a1fc740cfe69167c8713b63fdb952a98e8b.1651774251.git.isaku.yamahata@intel.com>
-In-Reply-To: <ea5e6a1fc740cfe69167c8713b63fdb952a98e8b.1651774251.git.isaku.yamahata@intel.com>
-From:   Sagi Shahar <sagis@google.com>
-Date:   Tue, 14 Jun 2022 11:08:16 -0700
-Message-ID: <CAAhR5DGHhPagnaiC=Bn9v0qhNQ5N9HjsrDyQkv4dtui7dfMAbA@mail.gmail.com>
-Subject: Re: [RFC PATCH v6 093/104] KVM: TDX: Handle TDX PV MMIO hypercall
-To:     "Yamahata, Isaku" <isaku.yamahata@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Sean Christopherson <seanjc@google.com>
+References: <20220614144853.3693273-1-glider@google.com> <CAHk-=whaWnwB8guceg8V=bA1adv74GNaMk2FEu+YQkBKUqxVoA@mail.gmail.com>
+ <CAKwvOd=SotrVcZshzGzsMprkORkVXFwYc-3mREkJSDCQ1nvbFw@mail.gmail.com> <CAHk-=wgmezfDP_b93_Hw090vUd-TKb-odZNPhB9L_2vL5pn6kQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wgmezfDP_b93_Hw090vUd-TKb-odZNPhB9L_2vL5pn6kQ@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 14 Jun 2022 11:08:33 -0700
+Message-ID: <CAKwvOd=C1GC09zobqLK0higE3xPpghWBbB4xujyC8-QDyd_DTQ@mail.gmail.com>
+Subject: Re: [PATCH] [RFC] Initialization of unused function parameters
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Buka <vitalybuka@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -69,197 +75,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 5, 2022 at 11:16 AM <isaku.yamahata@intel.com> wrote:
+On Tue, Jun 14, 2022 at 10:24 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
+> On Tue, Jun 14, 2022 at 10:11 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > Maybe a new function parameter attribute would be nice?
 >
-> Export kvm_io_bus_read and kvm_mmio tracepoint and wire up TDX PV MMIO
-> hypercall to the KVM backend functions.
+> Right, exactly something like this seems reasonable.
 >
-> kvm_io_bus_read/write() searches KVM device emulated in kernel of the given
-> MMIO address and emulates the MMIO.  As TDX PV MMIO also needs it, export
-> kvm_io_bus_read().  kvm_io_bus_write() is already exported.  TDX PV MMIO
-> emulates some of MMIO itself.  To add trace point consistently with x86
-> kvm, export kvm_mmio tracepoint.
->
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/vmx/tdx.c | 114 +++++++++++++++++++++++++++++++++++++++++
->  arch/x86/kvm/x86.c     |   1 +
->  virt/kvm/kvm_main.c    |   2 +
->  3 files changed, 117 insertions(+)
->
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index ee0cf5336ade..6ab4a52fc9e9 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -1057,6 +1057,118 @@ static int tdx_emulate_io(struct kvm_vcpu *vcpu)
->         return ret;
->  }
->
-> +static int tdx_complete_mmio(struct kvm_vcpu *vcpu)
-> +{
-> +       unsigned long val = 0;
-> +       gpa_t gpa;
-> +       int size;
-> +
-> +       WARN_ON(vcpu->mmio_needed != 1);
-> +       vcpu->mmio_needed = 0;
-> +
-> +       if (!vcpu->mmio_is_write) {
-> +               gpa = vcpu->mmio_fragments[0].gpa;
-> +               size = vcpu->mmio_fragments[0].len;
-> +
-> +               memcpy(&val, vcpu->run->mmio.data, size);
-> +               tdvmcall_set_return_val(vcpu, val);
-> +               trace_kvm_mmio(KVM_TRACE_MMIO_READ, size, gpa, &val);
-> +       }
-> +       return 1;
-> +}
-> +
-> +static inline int tdx_mmio_write(struct kvm_vcpu *vcpu, gpa_t gpa, int size,
-> +                                unsigned long val)
-> +{
-> +       if (kvm_iodevice_write(vcpu, &vcpu->arch.apic->dev, gpa, size, &val) &&
-> +           kvm_io_bus_write(vcpu, KVM_MMIO_BUS, gpa, size, &val))
-> +               return -EOPNOTSUPP;
-> +
-> +       trace_kvm_mmio(KVM_TRACE_MMIO_WRITE, size, gpa, &val);
-> +       return 0;
-> +}
-> +
-> +static inline int tdx_mmio_read(struct kvm_vcpu *vcpu, gpa_t gpa, int size)
-> +{
-> +       unsigned long val;
-> +
-> +       if (kvm_iodevice_read(vcpu, &vcpu->arch.apic->dev, gpa, size, &val) &&
-> +           kvm_io_bus_read(vcpu, KVM_MMIO_BUS, gpa, size, &val))
-> +               return -EOPNOTSUPP;
-> +
-> +       tdvmcall_set_return_val(vcpu, val);
-> +       trace_kvm_mmio(KVM_TRACE_MMIO_READ, size, gpa, &val);
-> +       return 0;
-> +}
-> +
-> +static int tdx_emulate_mmio(struct kvm_vcpu *vcpu)
-> +{
-> +       struct kvm_memory_slot *slot;
-> +       int size, write, r;
-> +       unsigned long val;
-> +       gpa_t gpa;
-> +
-> +       WARN_ON(vcpu->mmio_needed);
-> +
-> +       size = tdvmcall_a0_read(vcpu);
-> +       write = tdvmcall_a1_read(vcpu);
-> +       gpa = tdvmcall_a2_read(vcpu);
-> +       val = write ? tdvmcall_a3_read(vcpu) : 0;
-> +
-> +       if (size != 1 && size != 2 && size != 4 && size != 8)
-> +               goto error;
-> +       if (write != 0 && write != 1)
-> +               goto error;
-> +
-> +       /* Strip the shared bit, allow MMIO with and without it set. */
-> +       gpa = gpa & ~gfn_to_gpa(kvm_gfn_shared_mask(vcpu->kvm));
-> +
-> +       if (size > 8u || ((gpa + size - 1) ^ gpa) & PAGE_MASK)
-> +               goto error;
-> +
-> +       slot = kvm_vcpu_gfn_to_memslot(vcpu, gpa_to_gfn(gpa));
-> +       if (slot && !(slot->flags & KVM_MEMSLOT_INVALID))
-> +               goto error;
-> +
-> +       if (!kvm_io_bus_write(vcpu, KVM_FAST_MMIO_BUS, gpa, 0, NULL)) {
-> +               trace_kvm_fast_mmio(gpa);
-> +               return 1;
-> +       }
-> +
-> +       if (write)
-> +               r = tdx_mmio_write(vcpu, gpa, size, val);
-> +       else
-> +               r = tdx_mmio_read(vcpu, gpa, size);
-> +       if (!r) {
-> +               /* Kernel completed device emulation. */
-> +               tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
-> +               return 1;
-> +       }
-> +
-> +       /* Request the device emulation to userspace device model. */
-> +       vcpu->mmio_needed = 1;
-> +       vcpu->mmio_is_write = write;
-> +       vcpu->arch.complete_userspace_io = tdx_complete_mmio;
-> +
-> +       vcpu->run->mmio.phys_addr = gpa;
-> +       vcpu->run->mmio.len = size;
-> +       vcpu->run->mmio.is_write = write;
-> +       vcpu->run->exit_reason = KVM_EXIT_MMIO;
-> +
-> +       if (write) {
-> +               memcpy(vcpu->run->mmio.data, &val, size);
-> +       } else {
-> +               vcpu->mmio_fragments[0].gpa = gpa;
-> +               vcpu->mmio_fragments[0].len = size;
-> +               trace_kvm_mmio(KVM_TRACE_MMIO_READ_UNSATISFIED, size, gpa, NULL);
-> +       }
-> +       return 0;
-> +
-> +error:
-> +       tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
+> > #define __must_init __attribute__((must_init))
+> > int init (int * __must_init x) {
+> > // ^ warning: function parameter x marked '__attribute__((must_init))'
+> > not unconditionally initialized
+> >   if (stars_dont_align) {
+> >     return -42;
+> >   }
+> >   *x = 42;
+> >   return 0;
+> > }
+> > void foo (void) {  int x; init(&x); /* use of x without fear */ }
 
-We should return an error code here.
+Thinking more about your snprintf example which is potentially more
+costly than initializing just one value...here's another case for us
+to consider.
 
-> +       return 1;
-> +}
-> +
->  static int handle_tdvmcall(struct kvm_vcpu *vcpu)
->  {
->         if (tdvmcall_exit_type(vcpu))
-> @@ -1069,6 +1181,8 @@ static int handle_tdvmcall(struct kvm_vcpu *vcpu)
->                 return tdx_emulate_hlt(vcpu);
->         case EXIT_REASON_IO_INSTRUCTION:
->                 return tdx_emulate_io(vcpu);
-> +       case EXIT_REASON_EPT_VIOLATION:
-> +               return tdx_emulate_mmio(vcpu);
->         default:
->                 break;
->         }
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 5f291470a6f6..f367d0dcef97 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -13166,6 +13166,7 @@ bool kvm_arch_dirty_log_supported(struct kvm *kvm)
->
->  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_entry);
->  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_exit);
-> +EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_mmio);
->  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_fast_mmio);
->  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_inj_virq);
->  EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_page_fault);
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 4bf7178e42bd..7f01131666de 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -2294,6 +2294,7 @@ struct kvm_memory_slot *kvm_vcpu_gfn_to_memslot(struct kvm_vcpu *vcpu, gfn_t gfn
->
->         return NULL;
->  }
-> +EXPORT_SYMBOL_GPL(kvm_vcpu_gfn_to_memslot);
->
->  bool kvm_is_visible_gfn(struct kvm *kvm, gfn_t gfn)
->  {
-> @@ -5169,6 +5170,7 @@ int kvm_io_bus_read(struct kvm_vcpu *vcpu, enum kvm_bus bus_idx, gpa_t addr,
->         r = __kvm_io_bus_read(vcpu, bus, &range, val);
->         return r < 0 ? r : 0;
->  }
-> +EXPORT_SYMBOL_GPL(kvm_io_bus_read);
->
->  /* Caller must hold slots_lock. */
->  int kvm_io_bus_register_dev(struct kvm *kvm, enum kvm_bus bus_idx, gpa_t addr,
-> --
-> 2.25.1
->
+int maybe_init (char* buf) {
+  if (stars_align)
+    return -42;
+  buf[42] = 0;
+  return 0;
+}
 
-Sagi
+char foo (void) {
+  char buf [PATH_MAX];
+  maybe_init(buf);
+  return char[42];
+}
+
+I'm thinking the attribute would have to go on the pointed to type not
+the pointer, i.e. `__must_init char *` not `char * __must_init`.
+Similarly, you'd need to unconditionally initialize all of buf which
+might be painful.  __must_init would not give you the specificity to
+differentiate between "this whole buffer must be initialized" vs "only
+index 42 need be initialized."  I _think_ that's fine, perhaps "only
+index 42 need be initialized" is YAGNI and you could just _not_ use
+__must_init for such a case.
+
+One thing I'm curious about; if you have an aggregate in C (struct or
+array) and don't fully initialize the whole object, just
+members/sub-objects, but only use those I assume that's not UB? (Which
+is what my maybe_init example does).  I think that's fine.
+
+Another thing that makes me uncertain about my maybe_init example
+above is decay-to-pointer, and the compiler's ability to track things
+like __builtin_object_size precisely (or across translation units);
+Kees is having a dog of a time with __builtin_object_size of structs
+that contain flexible array members for example.  If a function
+accepts a `__must_init struct foo*`, can we know if we were passed an
+array of struct foo* vs just one? What if `struct foo` is an opaque
+type; then the callee can't verify that all members of the struct have
+been initialized (at least designated initialized wouldn't work;
+memcpy should though...can you get the sizeof an opaque type though?)
+
+But maybe I'm getting ahead of myself and am just describing good unit
+tests when building such a feature.  Probably worth prototyping to get
+a sense of the ergonomics and limitations.  But it doesn't sound too
+controversial, which is probably good enough to get started. I'm sure
+Alexander and team will have additional ideas or proposals for
+achieving the same outcome.
+-- 
+Thanks,
+~Nick Desaulniers

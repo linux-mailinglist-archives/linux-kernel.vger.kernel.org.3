@@ -2,203 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11B754BA6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A6754BA76
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 21:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352461AbiFNTS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 15:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
+        id S242866AbiFNTWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 15:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233902AbiFNTS4 (ORCPT
+        with ESMTP id S229988AbiFNTWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 15:18:56 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E46A29CAF
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:18:55 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id x38so16773011ybd.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 12:18:55 -0700 (PDT)
+        Tue, 14 Jun 2022 15:22:01 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6DE29C83;
+        Tue, 14 Jun 2022 12:21:58 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id d14so12990836eda.12;
+        Tue, 14 Jun 2022 12:21:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=L41K/nUtMkPg9Dl41+V+fctc/ODExmLTkg28LyUd9jg=;
-        b=IJvjWedukeuMVjpF0p63qatrkqjklIBem4zgC9bAO9lDEAHYfvBXBAw9GYnSm1y5U/
-         yUbHJTtezIIE/p3dNBvQPF4KcBvzvUnatd81kvsIQH0sraXbOqvOaD5a4DR4asx0D8oP
-         QPe6MA5ZDobUOB+PiyNwz+AB6gxiZFTVXNWqv6QQf+LrnriaJVagjw0pQk56Rpd+QWlE
-         RzUDyML5p5lfOeGeTVPnOQUJ3vZzPpB6hWTSp+YNye5WL9sO4IxVc05u3NrDmV8obP4n
-         wLEK4DEqyGBeZQY4lhWWMIGMJ2CQllfszNTgQW+OPn4lP66r6WzvbhsG18tXBSfWojvk
-         ysRw==
+        d=gmail.com; s=20210112;
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=LQS7VowSx/S+w+iLmTbGWcWoA0CZ0lVjX4LifZSTEZE=;
+        b=mkwtIuPkjTinjeBHAd5Uk6q8Vvx8bh0z0iEkAXqqNBw0Y2+CaMFvPqlvGLfXZITELb
+         YBuK5VTzTFnmw0pmtEtLqiAnB3BAkGBcOwLfU4IBLEqjdhFAkX4fn1jcqAYCbmpbbe9y
+         qIQB3roKngMuYrqLQt6tHVobbxTPTy9wEl872Z//dlchLBqIvw3Af4yqRLFkleyz4OAS
+         E4Br6e17PtEpu6UWOBiNRWsMVGLCX50rE/iUnrvfXR5ZDZC3g4f6ef5AIWvMgPJwesgh
+         GvBCNQYwantRaRYldKt9Ga3WER1QqMjDTovwiqcGbcXGxrw9I5xBrMSRqI/v8o/HAw0P
+         YBoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=L41K/nUtMkPg9Dl41+V+fctc/ODExmLTkg28LyUd9jg=;
-        b=GKG6T4mYrziNKH00dy/WeW1i7KYLKxEZK0Nh40CZYs8j6PGiD/cAAfmabcy+AAaZyt
-         sG/bW74qiTUiKBLUM2y9DicvXjYvCGlqFnNW7Yj5G6zCNdwvXmB9K3KoOb2fKOrRQTyN
-         NMHdGK5yXjkaHiav20nkDwzHaeb4NR8MoefzWnvBOIyeAnJEfHw+GtFDQFml2CZX3caz
-         u8FNkul/eHpxeG+WidQoo3Eq3yI2psybmAyxJ7upz/6cWhbpCdXLqrmi+PdhY59EwHUZ
-         oCtbN+IhVWBVQD4Hr9EjKAG2iM7IxzM5dxwNgLs3La1uYhNof/djT3zJQdZ9d9/HDvsl
-         FKWg==
-X-Gm-Message-State: AJIora/ygpSitHt0H2Aq66Syv8cNRg0lUR0/D9bT/Y2ZIZVPZoA9aqpl
-        FVGI9OwQ3Q2QCTFu1ukRNiGxhe3abR6s5IARyaAHvu92xr2DSDyl
-X-Google-Smtp-Source: AGRyM1tLmNKUE/nn5Hq+v60Q8Xgwu9+LVEi00wqLdfcprAC0aeIyhG82f15mH2ue0Cxj5pXOJ7FoHyPe0lgFGK/Oqkk=
-X-Received: by 2002:a25:b51:0:b0:663:4ff1:d20d with SMTP id
- 78-20020a250b51000000b006634ff1d20dmr6308855ybl.608.1655234333980; Tue, 14
- Jun 2022 12:18:53 -0700 (PDT)
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=LQS7VowSx/S+w+iLmTbGWcWoA0CZ0lVjX4LifZSTEZE=;
+        b=eZUhVstDdf+00VBiB5nwTa45MyIDg7F+b7qRVF7dixsVu9DOgFzOaTQdeEYJJYzPD1
+         LYxAI7BDl7xyibURp6L9j5HasELCk/nCNIJ2s3ImWiDLLmFwCVCkwTUoxFhE59CYwAb2
+         /Liw79FfKhk/YQG5T3a3FgFFsuH3aGeGJZ0l4FU8mD3WMgh0tGWnhh14uFthPQDhmFfR
+         UhFRSlV1VdOi1UXkUkJcPaoHzS29FMDHqbxF8iwAtN96syNlB1R3o+kZ/NKNomfBttkm
+         peeEtkbQoYD9S6qbl2vk+Wwf2aufecgGsPUbXuJrUNwnzpUBBKbrxTMDZF8m/6eUdsOC
+         7OZg==
+X-Gm-Message-State: AOAM530Pq8eJpZ4v0hMhTZvtfgBSQKL3teW//5JJQQWd+HKJJND9MYSK
+        j12r69j0DDa+Pf0T1SOmFSs=
+X-Google-Smtp-Source: AGRyM1uXyoNKfAQKrnzBo+Kl6QJ1CIMw3KffZh36hLSPIpfuU3sWnM3dANTOgt0/85LMRqh7ljL/yg==
+X-Received: by 2002:a05:6402:2548:b0:42d:dd95:5bfe with SMTP id l8-20020a056402254800b0042ddd955bfemr7928262edb.285.1655234516470;
+        Tue, 14 Jun 2022 12:21:56 -0700 (PDT)
+Received: from krava ([83.240.63.226])
+        by smtp.gmail.com with ESMTPSA id s11-20020aa7d78b000000b0042bca34bd15sm7567589edq.95.2022.06.14.12.21.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 12:21:55 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 14 Jun 2022 21:21:53 +0200
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: Re: [PATCHv2 bpf 3/3] bpf: Force cookies array to follow symbols
+ sorting
+Message-ID: <Yqjf0VWT2k6VizQ3@krava>
+References: <20220606184731.437300-4-jolsa@kernel.org>
+ <CAADnVQJA54Ra8+tV0e0KwSXAg93JRoiefDXWR-Lqatya5YWKpg@mail.gmail.com>
+ <Yp+tTsqPOuVdjpba@krava>
+ <CAADnVQJGoM9eqcODx2LGo-qLo0=O05gSw=iifRsWXgU0XWifAA@mail.gmail.com>
+ <YqBW65t+hlWNok8e@krava>
+ <YqBynO64am32z13X@krava>
+ <20220608084023.4be8ffe2@gandalf.local.home>
+ <CAEf4BzYkHkB60qPxGu0D=x-BidxObX95+1wjEYN8xsK7Dg_4cw@mail.gmail.com>
+ <20220608120830.1ff5c5eb@gandalf.local.home>
+ <CAEf4BzakYUnM3ZNgRbix=Z4bnPpzGiazAffMVh239476qH_c7A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220613181847.216528857@linuxfoundation.org>
-In-Reply-To: <20220613181847.216528857@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 15 Jun 2022 00:48:42 +0530
-Message-ID: <CA+G9fYvcLh55sHHh=_9Or-BQcjOPuNdd9XTwgBuxxT=Esvynqg@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/251] 5.15.47-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzakYUnM3ZNgRbix=Z4bnPpzGiazAffMVh239476qH_c7A@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Jun 2022 at 23:49, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.47 release.
-> There are 251 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 15 Jun 2022 18:18:03 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.47-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Thu, Jun 09, 2022 at 11:32:59AM -0700, Andrii Nakryiko wrote:
+> On Wed, Jun 8, 2022 at 9:08 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+> >
+> > On Wed, 8 Jun 2022 08:59:50 -0700
+> > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> >
+> > > Would it be possible to preprocess ftrace_pages to remove such invalid
+> > > records (so that by the time we have to report
+> > > available_filter_functions there are no invalid records)? Or that data
+> > > is read-only when kernel is running?
+> >
+> > It's possible, but will be time consuming (slow down boot up) and racy. In
+> > other words, I didn't feel it was worth it.
+> >
+> > We can add it. How much of an issue is it to have these place holders for
+> > you? Currently, I only see it causes issues with tests. Is it really an
+> > issue for use cases?
+> 
+> I have the tool (retsnoop) that uses available_filter_functions, I'll
+> have to update it to ignore such entries. It's a small inconvenience,
+> once you know about this change, but multiply that for multiple users
+> that use available_filter_functions for some sort of generic tooling
+> doing kprobes/tracing, and it adds up. So while it's not horrible,
+> ideally user-visible data shouldn't have non-usable placeholders.
+> 
+> How much slowdown would you expect on start up? Not clear what would
+> be racy about this start up preprocessing, but I believe you.
+> 
+> So in summary, it's not the end of the world, but as a user I'd prefer
+> not to know about this quirk, of course :)
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+ok, I'l resend with the test workaround
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.15.47-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 677f0128d0ed8a3d320b74e8e35b214163070d47
-* git describe: v5.15.45-920-g677f0128d0ed
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.45-920-g677f0128d0ed
-
-## Test Regressions (compared to v5.15.45-668-g53f46ca17ebd)
-No test regressions found.
-
-## Metric Regressions (compared to v5.15.45-668-g53f46ca17ebd)
-No metric regressions found.
-
-## Test Fixes (compared to v5.15.45-668-g53f46ca17ebd)
-No test fixes found.
-
-## Metric Fixes (compared to v5.15.45-668-g53f46ca17ebd)
-No metric fixes found.
-
-## Test result summary
-total: 128456, pass: 114638, fail: 265, skip: 12605, xfail: 948
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 314 total, 314 passed, 0 failed
-* arm64: 58 total, 58 passed, 0 failed
-* i386: 52 total, 49 passed, 3 failed
-* mips: 37 total, 37 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 54 passed, 0 failed
-* riscv: 22 total, 22 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 56 total, 55 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-cap_bounds-tests
-* ltp-commands
-* ltp-commands-tests
-* ltp-containers
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps
-* ltp-filecaps-tests
-* ltp-fs
-* ltp-fs-tests
-* ltp-fs_bind
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple
-* ltp-fs_perms_simple-tests
-* ltp-fsx
-* ltp-fsx-tests
-* ltp-hugetlb
-* ltp-hugetlb-tests
-* ltp-io
-* ltp-io-tests
-* ltp-ipc
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits
-* ltp-securebits-tests
-* ltp-smoke
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+jirka

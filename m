@@ -2,147 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6AB54A3A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFF154A3A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244903AbiFNB1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 21:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36468 "EHLO
+        id S243961AbiFNB1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 21:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231810AbiFNB1N (ORCPT
+        with ESMTP id S231810AbiFNB1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 21:27:13 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076F130F5E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 18:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655170031; x=1686706031;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5MJSC94FXE9Q5aSPrzggmB8RiOE58H5/LO4V1zUaLYw=;
-  b=OmjFjpqLpGulxSCZ+XSIGI2zwtu3WlQqHBthnE6QqWGBeKCLr+jf1RR+
-   0arbF1eh6YZMdSSaNWbHdjyiadLVLB/fpQtnL1xgnmj7nmY2XfRxbiULb
-   3vZJEUyEc1fvfHI9y2FI+ZeOPpcBoOkcULCWyCtXXJsvWbvED0s67XIvZ
-   GkwimIllzQqQJZCIl9jLh5LnNmVM1nMNHku5/vkUcxUfitbWLYew6NCUM
-   1Hv7LK8UwyNxhkFxZtulkxABrsxf3VDmw+Jc63Umf70Ve4Q9CuX2mHj9u
-   8Uz76B0cBo7olfKFT39u+ba3caQvXH/C6BwDi8T6wLjlg8tbc3wH8Qj08
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="364794721"
-X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="364794721"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 18:27:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="582471651"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 13 Jun 2022 18:27:07 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o0vKl-000LJu-48;
-        Tue, 14 Jun 2022 01:27:07 +0000
-Date:   Tue, 14 Jun 2022 09:26:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     jingyuwang <jingyuwang_vip@163.com>, akpm@linux-foundation.org,
-        rostedt@goodmis.org, mhiramat@kernel.org, vbabka@suse.cz,
-        ahalaney@redhat.com, Jason@zx2c4.com, mark-pk.tsai@mediatek.com
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        jingyuwang <jingyuwang_vip@163.com>
-Subject: Re: [PATCH] Fix the following checkpatch error:
-Message-ID: <202206140910.24mkxBXB-lkp@intel.com>
-References: <20220613202210.31759-1-jingyuwang_vip@163.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613202210.31759-1-jingyuwang_vip@163.com>
+        Mon, 13 Jun 2022 21:27:24 -0400
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A8D1005
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 18:27:19 -0700 (PDT)
+Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
+        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20220614012716epoutp01f32eb85780abb3c6db88a2e0329f1e5d~4WGDrPSQZ2568025680epoutp01R
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:27:16 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20220614012716epoutp01f32eb85780abb3c6db88a2e0329f1e5d~4WGDrPSQZ2568025680epoutp01R
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1655170036;
+        bh=KzKahmVZYmTvoOtGzCa8vM5WwpxKgfThYlPDOd7HKWE=;
+        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
+        b=PazTpfxTm3c59NB14bwGfe1ZxvOv8/Ga7mdI0he3vis6YGevlvjw3kVh/gh8bJ19t
+         6RuIclFJK/wm55+Wlv7AfdPXMrJ56IWIoE3rzn/w95nBUFJ2Y0c2YnsAnluVBfNIfM
+         R69Out2Vqzqc31dHd2abL7eOQtF1aSAGpsNKm4z0=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p4.samsung.com (KnoxPortal) with ESMTP id
+        20220614012715epcas2p40a79def60ad6ca161c512bb1ade92326~4WGCu75sj1882518825epcas2p4U;
+        Tue, 14 Jun 2022 01:27:15 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.68]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4LMW4y3MVXz4x9Ps; Tue, 14 Jun
+        2022 01:27:14 +0000 (GMT)
+X-AuditID: b6c32a48-ca1c5a80000025de-33-62a7e3f22b69
+Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        A0.BA.09694.2F3E7A26; Tue, 14 Jun 2022 10:27:14 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v3 1/5] dt-bindings: pci: Add ARTPEC-8 PCIe controller
+Reply-To: wangseok.lee@samsung.com
+Sender: Wangseok Lee <wangseok.lee@samsung.com>
+From:   Wangseok Lee <wangseok.lee@samsung.com>
+To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "kishon@ti.com" <kishon@ti.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jesper.nilsson@axis.com" <jesper.nilsson@axis.com>,
+        "lars.persson@axis.com" <lars.persson@axis.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-arm-kernel@axis.com" <linux-arm-kernel@axis.com>,
+        "kernel@axis.com" <kernel@axis.com>
+CC:     Moon-Ki Jun <moonki.jun@samsung.com>,
+        Sang Min Kim <hypmean.kim@samsung.com>,
+        Dongjin Yang <dj76.yang@samsung.com>,
+        Yeeun Kim <yeeun119.kim@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+In-Reply-To: <20220614011616epcms2p7dcaa67c53b7df5802dd7a697e2d472d7@epcms2p7>
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20220614012713epcms2p810386a5137fbcf6aefc41fe086badc0b@epcms2p8>
+Date:   Tue, 14 Jun 2022 10:27:13 +0900
+X-CMS-MailID: 20220614012713epcms2p810386a5137fbcf6aefc41fe086badc0b
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+X-CPGSPASS: Y
+X-CPGSPASS: Y
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMJsWRmVeSWpSXmKPExsWy7bCmhe6nx8uTDFa+ErZY0pRh8fKQpsX8
+        I+dYLXbPWM5kMXPqGWaL54dmMVt8alG1uPC0h83i5ax7bBYNPb9ZLY68+chssf/4SiaLy7vm
+        sFmcnXeczWLCqm8sFm9+v2C3OLc406J17xF2i513TjBb/Nr6h8lBxGPNvDWMHtfXBXgs2FTq
+        sWlVJ5vHkyvTmTw2L6n36NuyitHj+I3tTB6fN8kFcEZl22SkJqakFimk5iXnp2TmpdsqeQfH
+        O8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYAPaWkUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8u
+        sVVKLUjJKTAv0CtOzC0uzUvXy0stsTI0MDAyBSpMyM5Yc+sva8F2+4qLl2azNTB26HUxcnJI
+        CJhIXPq1l7WLkYtDSGAHo0Tn2mdADgcHr4CgxN8dwiA1wgJuEm1txxhBbCEBJYkda+YxQ8T1
+        Ja6v6GYFsdkEdCX+LX7JBmKLCHxmlbi+RxBkJrPAAkaJ/b/3MUIs45WY0f6UBcKWlti+fCtY
+        nFPAT2Lh0UlMEHENiR/LepkhbFGJm6vfssPY74/Nh5ojItF67yxUjaDEg5+7oeJSEgueHGKF
+        sKsl9v/9DTWzgVGi/34qyF8SQEfvuG4MEuYV8JX4+GU+WAmLgKpE07/vUOUuEgvnngL7hVlA
+        XmL72znMIK3MApoS63fpQ0xRljhyiwXmqYaNv9nR2cwCfBIdh//CxXfMewI1XU1i3sqdzBMY
+        lWchwnkWkl2zEHYtYGRexSiWWlCcm55abFRgAo/a5PzcTYzg1K3lsYNx9tsPeocYmTgYDzFK
+        cDArifBOvrgsSYg3JbGyKrUoP76oNCe1+BCjKdCXE5mlRJPzgdkjryTe0MTSwMTMzNDcyNTA
+        XEmc1ytlQ6KQQHpiSWp2ampBahFMHxMHp1QDk4t/N9/GdbU+udZn3O//XDLl9tfCycs25Wb8
+        72cR4DKPy8+W5Vw69UZl2v8CncwFcotmewpezlbMZNnd02j4cs47dZ3d11fWNsce4Diwwp/3
+        q7rGilwHjvdmXlx7LCdxBqi83GvqO6kjJ5RhgtfjBS5/uXcWTP54o3wp150ta5t15h+5tvRk
+        wcaQi4Gv96SY6b5X2HX5y/NnmWF7f8/nvrttmZJngEL29MqVWzV4DRbNeH33p1jO/+mWGi7f
+        rEUzM2a1GHjbv1rcN8lSbpnh7MOPYqbFHwrs4VwZtjna/effi2tvOj/MDjHukOIWmMnUfKRA
+        xvDi9B08ySwv7/Xtkm9dpJJ5cImiPtPBmMZlFUosxRmJhlrMRcWJAKPR1/BmBAAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20220614011616epcms2p7dcaa67c53b7df5802dd7a697e2d472d7
+References: <20220614011616epcms2p7dcaa67c53b7df5802dd7a697e2d472d7@epcms2p7>
+        <CGME20220614011616epcms2p7dcaa67c53b7df5802dd7a697e2d472d7@epcms2p8>
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi jingyuwang,
+Add description to support Axis, ARTPEC-8 SoC.
+ARTPEC-8 is the SoC platform of Axis Communications
+and PCIe controller is designed based on Design-Ware PCIe controller.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Wangseok Lee <wangseok.lee@samsung.com>
+---
+v2->v3 :
+- modify version history to fit the linux commit rule
+- remove 'Device Tree Bindings' on title
+- remove the interrupt-names, phy-names entries
+- remove '_clk' suffix
+- add the compatible entries on required
+- change node name to soc from artpec8 on examples
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v5.19-rc2 next-20220610]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+v1->v2 :
+-'make dt_binding_check' result improvement
+-Add the missing property list
+-Align the indentation of continued lines/entries
+---
+ .../bindings/pci/axis,artpec8-pcie-ep.yaml         | 109 +++++++++++++++++++
+ .../devicetree/bindings/pci/axis,artpec8-pcie.yaml | 120 +++++++++++++++++++++
+ 2 files changed, 229 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+ create mode 100644 Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
 
-url:    https://github.com/intel-lab-lkp/linux/commits/jingyuwang/Fix-the-following-checkpatch-error/20220614-050258
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220614/202206140910.24mkxBXB-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/35742a839670fa8937c7040160e16b7009b2a9ae
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review jingyuwang/Fix-the-following-checkpatch-error/20220614-050258
-        git checkout 35742a839670fa8937c7040160e16b7009b2a9ae
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SUBARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   init/main.c:773:20: warning: no previous prototype for 'arch_post_acpi_subsys_init' [-Wmissing-prototypes]
-     773 | void __init __weak arch_post_acpi_subsys_init(void) { }
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   init/main.c:785:20: warning: no previous prototype for 'mem_encrypt_init' [-Wmissing-prototypes]
-     785 | void __init __weak mem_encrypt_init(void) { }
-         |                    ^~~~~~~~~~~~~~~~
-   init/main.c:787:20: warning: no previous prototype for 'poking_init' [-Wmissing-prototypes]
-     787 | void __init __weak poking_init(void) { }
-         |                    ^~~~~~~~~~~
-   In file included from include/linux/printk.h:6,
-                    from include/linux/kernel.h:29,
-                    from include/linux/cpumask.h:10,
-                    from include/linux/mm_types_task.h:14,
-                    from include/linux/mm_types.h:5,
-                    from include/linux/buildid.h:5,
-                    from include/linux/module.h:14,
-                    from init/main.c:17:
->> include/linux/init.h:316:27: error: '__setup_str_initcall_blacklist' causes a section type conflict with 'initcall_level_names'
-     316 |         static const char __setup_str_##unique_id[] __initconst         \
-         |                           ^~~~~~~~~~~~
-   include/linux/init.h:329:9: note: in expansion of macro '__setup_param'
-     329 |         __setup_param(str, fn, fn, 0)
-         |         ^~~~~~~~~~~~~
-   init/main.c:1239:1: note: in expansion of macro '__setup'
-    1239 | __setup("initcall_blacklist=", initcall_blacklist);
-         | ^~~~~~~
-   init/main.c:1344:20: note: 'initcall_level_names' was declared here
-    1344 | static const char *initcall_level_names[] __initconst = {
-         |                    ^~~~~~~~~~~~~~~~~~~~
-
-
-vim +316 include/linux/init.h
-
-^1da177e4c3f41 Linus Torvalds 2005-04-16  308  
-^1da177e4c3f41 Linus Torvalds 2005-04-16  309  /*
-^1da177e4c3f41 Linus Torvalds 2005-04-16  310   * Only for really core code.  See moduleparam.h for the normal way.
-^1da177e4c3f41 Linus Torvalds 2005-04-16  311   *
-^1da177e4c3f41 Linus Torvalds 2005-04-16  312   * Force the alignment so the compiler doesn't space elements of the
-^1da177e4c3f41 Linus Torvalds 2005-04-16  313   * obs_kernel_param "array" too far apart in .init.setup.
-^1da177e4c3f41 Linus Torvalds 2005-04-16  314   */
-^1da177e4c3f41 Linus Torvalds 2005-04-16  315  #define __setup_param(str, unique_id, fn, early)			\
-fd6c3a8dc44329 Jan Beulich    2009-03-12 @316  	static const char __setup_str_##unique_id[] __initconst		\
-fd6c3a8dc44329 Jan Beulich    2009-03-12  317  		__aligned(1) = str; 					\
-^1da177e4c3f41 Linus Torvalds 2005-04-16  318  	static struct obs_kernel_param __setup_##unique_id		\
-33def8498fdde1 Joe Perches    2020-10-21  319  		__used __section(".init.setup")				\
-147ad605dc12c5 Johan Hovold   2020-11-23  320  		__aligned(__alignof__(struct obs_kernel_param))		\
-^1da177e4c3f41 Linus Torvalds 2005-04-16  321  		= { __setup_str_##unique_id, fn, early }
-^1da177e4c3f41 Linus Torvalds 2005-04-16  322  
-
+diff --git a/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+new file mode 100644
+index 0000000..d802bba
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie-ep.yaml
+@@ -0,0 +1,109 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pci/axis,artpec8-pcie-ep.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: ARTPEC-8 SoC PCIe Controller
++
++maintainers:
++  - Jesper Nilsson <jesper.nilsson@axis.com>
++
++description: |+
++  This PCIe end-point controller is based on the Synopsys DesignWare PCIe IP
++  and thus inherits all the common properties defined in snps,dw-pcie-ep.yaml.
++
++allOf:
++  - $ref: /schemas/pci/snps,dw-pcie-ep.yaml#
++
++properties:
++  compatible:
++    const: axis,artpec8-pcie-ep
++
++  reg:
++    items:
++      - description: Data Bus Interface (DBI) registers.
++      - description: Data Bus Interface (DBI2) registers.
++      - description: PCIe address space region.
++
++  reg-names:
++    items:
++      - const: dbi
++      - const: dbi2
++      - const: addr_space
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: PIPE clock, used by the controller to clock the PIPE
++      - description: PCIe dbi clock, ungated version
++      - description: PCIe master clock, ungated version
++      - description: PCIe slave clock, ungated version
++
++  clock-names:
++    items:
++      - const: pipe
++      - const: dbi
++      - const: mstr
++      - const: slv
++
++  phys:
++    maxItems: 1
++
++  num-lanes:
++    const: 2
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - interrupts
++  - interrupt-names
++  - clocks
++  - clock-names
++  - samsung,fsys-sysreg
++  - samsung,syscon-phandle
++  - samsung,syscon-bus-s-fsys
++  - samsung,syscon-bus-p-fsys
++  - phys
++  - num-lanes
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++        pcie_ep: pcie-ep@17200000 {
++            compatible = "axis,artpec8-pcie-ep";
++            reg = <0x0 0x17200000 0x0 0x1000>,
++                  <0x0 0x17201000 0x0 0x1000>,
++                  <0x2 0x00000000 0x6 0x00000000>;
++            reg-names = "dbi", "dbi2", "addr_space";
++            #interrupt-cells = <1>;
++            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
++            interrupt-names = "intr";
++            clocks = <&clock_cmu_fsys 39>,
++                     <&clock_cmu_fsys 38>,
++                     <&clock_cmu_fsys 37>,
++                     <&clock_cmu_fsys 36>;
++            clock-names = "pipe", "dbi", "mstr", "slv";
++            samsung,fsys-sysreg = <&syscon_fsys>;
++            samsung,syscon-phandle = <&pmu_system_controller>;
++            samsung,syscon-bus-s-fsys = <&syscon_bus_s_fsys>;
++            samsung,syscon-bus-p-fsys = <&syscon_bus_p_fsys>;
++            phys = <&pcie_phy>;
++            phy-names = "pcie_phy";
++            num-lanes = <2>;
++            bus-range = <0x00 0xff>;
++            num-ib-windows = <16>;
++            num-ob-windows = <16>;
++        };
++    };
++...
+diff --git a/Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
+new file mode 100644
+index 0000000..dbbe1fd
+--- /dev/null
++++ b/Documentation/devicetree/bindings/pci/axis,artpec8-pcie.yaml
+@@ -0,0 +1,120 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/pci/axis,artpec8-pcie.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Artpec-8 SoC PCIe Controller
++
++maintainers:
++  - Jesper Nilsson <jesper.nilsson@axis.com>
++
++description: |+
++  This PCIe host controller is based on the Synopsys DesignWare PCIe IP
++  and thus inherits all the common properties defined in snps,dw-pcie.yaml.
++
++allOf:
++  - $ref: /schemas/pci/snps,dw-pcie.yaml#
++
++properties:
++  compatible:
++    const: axis,artpec8-pcie
++
++  reg:
++    items:
++      - description: Data Bus Interface (DBI) registers.
++      - description: External Local Bus interface (ELBI) registers.
++      - description: PCIe configuration space region.
++
++  reg-names:
++    items:
++      - const: dbi
++      - const: elbi
++      - const: config
++
++  ranges:
++    maxItems: 2
++
++  num-lanes:
++    const: 2
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: PIPE clock, used by the controller to clock the PIPE
++      - description: PCIe dbi clock, ungated version
++      - description: PCIe master clock,  ungated version
++      - description: PCIe slave clock, ungated version
++
++  clock-names:
++    items:
++      - const: pipe
++      - const: dbi
++      - const: mstr
++      - const: slv
++
++  phys:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - device_type
++  - ranges
++  - num-lanes
++  - interrupts
++  - interrupt-names
++  - clocks
++  - clock-names
++  - samsung,fsys-sysreg
++  - samsung,syscon-phandle
++  - samsung,syscon-bus-s-fsys
++  - samsung,syscon-bus-p-fsys
++  - phys
++  - phy-names
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++        pcie: pcie@17200000 {
++            compatible = "axis,artpec8-pcie";
++            reg = <0x0 0x17200000 0x0 0x1000>,
++                  <0x0 0x16ca0000 0x0 0x2000>,
++                  <0x7 0x0001e000 0x0 0x2000>;
++            reg-names = "dbi", "elbi", "config";
++            #address-cells = <3>;
++            #size-cells = <2>;
++            device_type = "pci";
++            ranges = </* non-prefetchable memory */
++                      0x83000000 0x0 0x0000000 0x2 0x00000000 0x5 0x00000000
++                      /* downstream I/O */
++                      0x81000000 0x0 0x0000000 0x7 0x00000000 0x0 0x00010000>;
++            num-lanes = <2>;
++            bus-range = <0x00 0xff>;
++            interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
++            interrupt-names = "intr";
++            #interrupt-cells = <1>;
++            clocks = <&cmu_fsys 39>,
++                     <&cmu_fsys 38>,
++                     <&cmu_fsys 37>,
++                     <&cmu_fsys 36>;
++            clock-names = "pipe", "dbi", "mstr", "slv";
++            samsung,fsys-sysreg = <&syscon_fsys>;
++            samsung,syscon-phandle = <&pmu_system_controller>;
++            samsung,syscon-bus-s-fsys = <&syscon_bus_s_fsys>;
++            samsung,syscon-bus-p-fsys = <&syscon_bus_p_fsys>;
++            phys = <&pcie_phy>;
++            phy-names = "pcie_phy";
++        };
++    };
++...
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.9.5

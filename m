@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4990754BB5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACA2154BB31
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358011AbiFNUKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44226 "EHLO
+        id S1357978AbiFNUKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357526AbiFNUJI (ORCPT
+        with ESMTP id S1357577AbiFNUJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:09:08 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8633B26131
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:15 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id cd16-20020a056a00421000b00520785db095so4226465pfb.15
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:15 -0700 (PDT)
+        Tue, 14 Jun 2022 16:09:09 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD7B4F452
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:16 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id c4-20020a170902d48400b001640bfb2b4fso5328237plg.20
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:08:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=fsYs/Bc5rpxse3GLtefGgeT1BXM2hAUZSMcPuFOqZt8=;
-        b=UxPNtGzjOcVb4Ln31qKWgNs8Puid2D2l/L8wZdNe8OuZX3epfyZRFQ+nP0x/VYJvSn
-         /z2L00Lw2JpwQgHOxM98Ki8H52lWGYrKVJFMO/HPXQz1QmrpMCRlFfqT3gZYu7BTcNMk
-         rm+y3KtfVoIdG4NkOgpb4BaZMQJKtiKMERIOryj/lsNUxwvGqBAkb1SNyh18KVpcEqzO
-         AXtmOwDRr4nazbksGrnnTYlirI/AATF0b0U/Jl/cSWPLNbd4w3SnJMDN28lV3+AiTwP+
-         6NU/Zs3lwCma9KuyKhGR0/uniP3lDIkCilShywwvMUwhZQLptXIoSsn7x/FYyeveTVwk
-         GkQg==
+        bh=4mAB76+I05WmZi+6YBbeLTbS4pzwCUEDOF/e/K6fR38=;
+        b=BKqFVQj/ojsssYjh5WI51oMSrT0pRP/P38wzQsQVhxLze0+KuZcL91yBZ/NsVnJIk+
+         67C/OCnj2rZW1JEM2ONXM4Eutq+Tptm/mrF9is+LKeJqpDGZwakgiCSFd+PFDLcx6MqZ
+         2v7qhbTX2XYNm0O4LCJP+UyfMyknn7Tat87VQMi7oVDznpIpTF3TUTMCK9+GiCJStyfO
+         o9BVlcpe3lrcUph8ciwVsmacSiS61h9ZZUaQ0cf4LOIOVqi4f4FRYGjwyrrtrydOwASu
+         L4HTAK+Gusd4Yg59tf5DytWEyX7X4dnTrFtRyMrGCZpXRAbyDQV/kw6KYiYvFGczPaz9
+         orJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=fsYs/Bc5rpxse3GLtefGgeT1BXM2hAUZSMcPuFOqZt8=;
-        b=t4eqexeK10lO6uQbb1p7kjjFles7HzjPklbSa8ujyarLbxWeFU+IOBlviG7tnP3TEf
-         dYeaUUCHh/it8+46kPLMoNX+S8FyFhSOGI+n5tz9X+/3BDroBmYFIBhkpIoEJGG9KWfY
-         tEJ8qrWrx81z+6Tc8obGgFfRDjyJk0q2R1OgYIXyZZbeWfjuhrT/s45of3zKozW3x55S
-         VwiERGIFKtyaEh8KQ5+eOHEIawBNPu82UR4v9pIjXD5t5DvY+xT0cedPfHiAMEQjfozO
-         hVF3/mHce2RF+9GsRGg39LFfuaV9nrlJElZ3PbTdE8Ls+yO9IDbEiDJbVkcPPq+8ATwL
-         DndA==
-X-Gm-Message-State: AJIora907BP9UWO48JtQy2pBYWxKnSelKWK98EEJh/cN/ZCDx/PpFrF+
-        0vSuLhUZLr5RNh90M5SHUwkptCaGKks=
-X-Google-Smtp-Source: AGRyM1t5wcpUgvUC0oVchaUGPZJJDC1R53MEqhqZYm/H7uxKLJ6kCZV9nvkk3k8jPOagL2eHu/iHr5ZS0hQ=
+        bh=4mAB76+I05WmZi+6YBbeLTbS4pzwCUEDOF/e/K6fR38=;
+        b=pNywPH76L7zTHGKCDoiWoE1SToGwFXxIUCcQZ1U4AvesY771hn4jEBC/1O67FALp92
+         JQuw95plm8ojXiA9yDDFQZEXKl00GQhHKQwUasBPJnVapSiHJ2pt61kVnCobdrUKpM2J
+         t8hj3ZIyzoZmH5vLUA8F+xgWtTyYw4dkf6zp/9i5UP+B1z3nSh2vvpksPsfMVuc0iq0c
+         if2QT5+3tbF+uxmcMJDQKsKDmTOzprENKrNPkZQO5mMlbAMm7B209NSFYYfq29o/XZ+q
+         BHe4sdy2uV5Nu5xFR3CZAwV1Xo/nOj4Sdwc8BnVXSyCW2aH3b0SxxEqpOF/CwkkMvueG
+         7Y5w==
+X-Gm-Message-State: AOAM530h9XIf2fuvT4PsJkjsnaLlwraQ4Xu93lwUhpIsOMxI9YpxWx/G
+        7doUlK4xavlVuVCwFsToXKM4f/ahQ+8=
+X-Google-Smtp-Source: ABdhPJwLiFRNhyIb9FkHjj5TKdIOPnnGCc1Ubp8Aaww8I0LviFsV6ZedkJd8Hpv0I0Ijc32w2ZpfL8NQzl8=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP id
- t9-20020a17090a024900b001e0a8a33c6cmr192604pje.0.1655237288184; Tue, 14 Jun
- 2022 13:08:08 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a63:483:0:b0:3fc:9128:60a5 with SMTP id
+ 125-20020a630483000000b003fc912860a5mr6021762pge.606.1655237290104; Tue, 14
+ Jun 2022 13:08:10 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 20:06:56 +0000
+Date:   Tue, 14 Jun 2022 20:06:57 +0000
 In-Reply-To: <20220614200707.3315957-1-seanjc@google.com>
-Message-Id: <20220614200707.3315957-32-seanjc@google.com>
+Message-Id: <20220614200707.3315957-33-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220614200707.3315957-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH v2 31/42] KVM: selftests: Set input function/index in raw
- CPUID helper(s)
+Subject: [PATCH v2 32/42] KVM: selftests: Add this_cpu_has() to query
+ X86_FEATURE_* via cpuid()
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -71,172 +71,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set the function/index for CPUID in the helper instead of relying on the
-caller to do so.  In addition to reducing the risk of consuming an
-uninitialized ECX, having the function/index embedded in the call makes
-it easier to understand what is being checked.
+Add this_cpu_has() to query an X86_FEATURE_* via cpuid(), i.e. to query a
+feature from L1 (or L2) guest code.  Arbitrarily select the AMX test to
+be the first user.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/include/x86_64/processor.h  | 16 +++++++++++++---
- .../selftests/kvm/lib/x86_64/processor.c      | 13 ++++---------
- tools/testing/selftests/kvm/x86_64/amx_test.c | 19 ++++---------------
- .../testing/selftests/kvm/x86_64/cpuid_test.c | 11 +++++------
- 4 files changed, 26 insertions(+), 33 deletions(-)
+ .../testing/selftests/kvm/include/x86_64/processor.h | 12 +++++++++++-
+ tools/testing/selftests/kvm/x86_64/amx_test.c        |  9 ++-------
+ 2 files changed, 13 insertions(+), 8 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 617b437ce0f9..ed148607a813 100644
+index ed148607a813..be2ce21926db 100644
 --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
 +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -402,10 +402,13 @@ static inline void outl(uint16_t port, uint32_t value)
- 	__asm__ __volatile__("outl %%eax, %%dx" : : "d"(port), "a"(value));
+@@ -159,7 +159,6 @@ struct kvm_x86_cpu_feature {
+ #define X86_FEATURE_KVM_MIGRATION_CONTROL	KVM_X86_CPU_FEATURE(0x40000001, 0, EAX, 17)
+ 
+ /* CPUID.1.ECX */
+-#define CPUID_XSAVE		(1ul << 26)
+ #define CPUID_OSXSAVE		(1ul << 27)
+ 
+ /* Page table bitfield declarations */
+@@ -425,6 +424,17 @@ static inline void cpuid(uint32_t function,
+ 	return __cpuid(function, 0, eax, ebx, ecx, edx);
  }
  
--static inline void cpuid(uint32_t *eax, uint32_t *ebx,
--			 uint32_t *ecx, uint32_t *edx)
-+static inline void __cpuid(uint32_t function, uint32_t index,
-+			   uint32_t *eax, uint32_t *ebx,
-+			   uint32_t *ecx, uint32_t *edx)
- {
--	/* ecx is often an input as well as an output. */
-+	*eax = function;
-+	*ecx = index;
-+
- 	asm volatile("cpuid"
- 	    : "=a" (*eax),
- 	      "=b" (*ebx),
-@@ -415,6 +418,13 @@ static inline void cpuid(uint32_t *eax, uint32_t *ebx,
- 	    : "memory");
- }
- 
-+static inline void cpuid(uint32_t function,
-+			 uint32_t *eax, uint32_t *ebx,
-+			 uint32_t *ecx, uint32_t *edx)
++static inline bool this_cpu_has(struct kvm_x86_cpu_feature feature)
 +{
-+	return __cpuid(function, 0, eax, ebx, ecx, edx);
++	uint32_t gprs[4];
++
++	__cpuid(feature.function, feature.index,
++		&gprs[KVM_CPUID_EAX], &gprs[KVM_CPUID_EBX],
++		&gprs[KVM_CPUID_ECX], &gprs[KVM_CPUID_EDX]);
++
++	return gprs[feature.reg] & BIT(feature.bit);
 +}
 +
  #define SET_XMM(__var, __xmm) \
  	asm volatile("movq %0, %%"#__xmm : : "r"(__var) : #__xmm)
  
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index eb73c690edd9..7bce93760cad 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1284,9 +1284,7 @@ unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
- 
- 	/* Before family 17h, the HyperTransport area is just below 1T.  */
- 	ht_gfn = (1 << 28) - num_ht_pages;
--	eax = 1;
--	ecx = 0;
--	cpuid(&eax, &ebx, &ecx, &edx);
-+	cpuid(1, &eax, &ebx, &ecx, &edx);
- 	if (x86_family(eax) < 0x17)
- 		goto done;
- 
-@@ -1295,18 +1293,15 @@ unsigned long vm_compute_max_gfn(struct kvm_vm *vm)
- 	 * reduced due to SME by bits 11:6 of CPUID[0x8000001f].EBX.  Use
- 	 * the old conservative value if MAXPHYADDR is not enumerated.
- 	 */
--	eax = 0x80000000;
--	cpuid(&eax, &ebx, &ecx, &edx);
-+	cpuid(0x80000000, &eax, &ebx, &ecx, &edx);
- 	max_ext_leaf = eax;
- 	if (max_ext_leaf < 0x80000008)
- 		goto done;
- 
--	eax = 0x80000008;
--	cpuid(&eax, &ebx, &ecx, &edx);
-+	cpuid(0x80000008, &eax, &ebx, &ecx, &edx);
- 	max_pfn = (1ULL << ((eax & 0xff) - vm->page_shift)) - 1;
- 	if (max_ext_leaf >= 0x8000001f) {
--		eax = 0x8000001f;
--		cpuid(&eax, &ebx, &ecx, &edx);
-+		cpuid(0x8000001f, &eax, &ebx, &ecx, &edx);
- 		max_pfn >>= (ebx >> 6) & 0x3f;
- 	}
- 
 diff --git a/tools/testing/selftests/kvm/x86_64/amx_test.c b/tools/testing/selftests/kvm/x86_64/amx_test.c
-index bcf535646321..866a42d07d75 100644
+index 866a42d07d75..a886c9e81b87 100644
 --- a/tools/testing/selftests/kvm/x86_64/amx_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/amx_test.c
-@@ -122,9 +122,7 @@ static inline void check_cpuid_xsave(void)
+@@ -120,13 +120,8 @@ static inline void __xsavec(struct xsave_data *data, uint64_t rfbm)
+ 
+ static inline void check_cpuid_xsave(void)
  {
- 	uint32_t eax, ebx, ecx, edx;
- 
--	eax = 1;
--	ecx = 0;
--	cpuid(&eax, &ebx, &ecx, &edx);
-+	cpuid(1, &eax, &ebx, &ecx, &edx);
- 	if (!(ecx & CPUID_XSAVE))
- 		GUEST_ASSERT(!"cpuid: no CPU xsave support!");
- 	if (!(ecx & CPUID_OSXSAVE))
-@@ -140,10 +138,7 @@ static bool enum_xtile_config(void)
- {
- 	u32 eax, ebx, ecx, edx;
- 
--	eax = TILE_CPUID;
--	ecx = TILE_PALETTE_CPUID_SUBLEAVE;
+-	uint32_t eax, ebx, ecx, edx;
 -
--	cpuid(&eax, &ebx, &ecx, &edx);
-+	__cpuid(TILE_CPUID, TILE_PALETTE_CPUID_SUBLEAVE, &eax, &ebx, &ecx, &edx);
- 	if (!eax || !ebx || !ecx)
- 		return false;
- 
-@@ -165,10 +160,7 @@ static bool enum_xsave_tile(void)
- {
- 	u32 eax, ebx, ecx, edx;
- 
--	eax = XSTATE_CPUID;
--	ecx = XFEATURE_XTILEDATA;
--
--	cpuid(&eax, &ebx, &ecx, &edx);
-+	__cpuid(XSTATE_CPUID, XFEATURE_XTILEDATA, &eax, &ebx, &ecx, &edx);
- 	if (!eax || !ebx)
- 		return false;
- 
-@@ -183,10 +175,7 @@ static bool check_xsave_size(void)
- 	u32 eax, ebx, ecx, edx;
- 	bool valid = false;
- 
--	eax = XSTATE_CPUID;
--	ecx = XSTATE_USER_STATE_SUBLEAVE;
--
--	cpuid(&eax, &ebx, &ecx, &edx);
-+	__cpuid(XSTATE_CPUID, XSTATE_USER_STATE_SUBLEAVE, &eax, &ebx, &ecx, &edx);
- 	if (ebx && ebx <= XSAVE_SIZE)
- 		valid = true;
- 
-diff --git a/tools/testing/selftests/kvm/x86_64/cpuid_test.c b/tools/testing/selftests/kvm/x86_64/cpuid_test.c
-index 2b8ac307da64..a4c4a5c5762a 100644
---- a/tools/testing/selftests/kvm/x86_64/cpuid_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/cpuid_test.c
-@@ -31,10 +31,9 @@ static void test_guest_cpuids(struct kvm_cpuid2 *guest_cpuid)
- 	u32 eax, ebx, ecx, edx;
- 
- 	for (i = 0; i < guest_cpuid->nent; i++) {
--		eax = guest_cpuid->entries[i].function;
--		ecx = guest_cpuid->entries[i].index;
--
--		cpuid(&eax, &ebx, &ecx, &edx);
-+		__cpuid(guest_cpuid->entries[i].function,
-+			guest_cpuid->entries[i].index,
-+			&eax, &ebx, &ecx, &edx);
- 
- 		GUEST_ASSERT(eax == guest_cpuid->entries[i].eax &&
- 			     ebx == guest_cpuid->entries[i].ebx &&
-@@ -46,9 +45,9 @@ static void test_guest_cpuids(struct kvm_cpuid2 *guest_cpuid)
- 
- static void test_cpuid_40000000(struct kvm_cpuid2 *guest_cpuid)
- {
--	u32 eax = 0x40000000, ebx, ecx = 0, edx;
-+	u32 eax, ebx, ecx, edx;
- 
--	cpuid(&eax, &ebx, &ecx, &edx);
-+	cpuid(0x40000000, &eax, &ebx, &ecx, &edx);
- 
- 	GUEST_ASSERT(eax == 0x40000001);
+-	cpuid(1, &eax, &ebx, &ecx, &edx);
+-	if (!(ecx & CPUID_XSAVE))
+-		GUEST_ASSERT(!"cpuid: no CPU xsave support!");
+-	if (!(ecx & CPUID_OSXSAVE))
+-		GUEST_ASSERT(!"cpuid: no OS xsave support!");
++	GUEST_ASSERT(this_cpu_has(X86_FEATURE_XSAVE));
++	GUEST_ASSERT(this_cpu_has(X86_FEATURE_OSXSAVE));
  }
+ 
+ static bool check_xsave_supports_xtile(void)
 -- 
 2.36.1.476.g0c4daa206d-goog
 

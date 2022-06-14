@@ -2,124 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D5654B612
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241DD54B60C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343560AbiFNQ05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
+        id S238564AbiFNQ1G convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Jun 2022 12:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235828AbiFNQ0z (ORCPT
+        with ESMTP id S1343818AbiFNQ1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:26:55 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9BC42BB20;
-        Tue, 14 Jun 2022 09:26:54 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25EGQoiA031134;
-        Tue, 14 Jun 2022 16:26:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=6/TalSMpRDCZ4+DG9lsQ67+dg6iiSAzSJZ/PRuZfARA=;
- b=iZgfswXrcDEE0bPKWRRGxQVrFe2bfrtXBxdUpWvdcmzZOVCZXH8z7Cvxp9i/96rAYmm7
- rh1x1cwiQQqLwkI/QhAxZ/okMZf6bZJY5u2JsEFHVBRTBWcQ7/XTz8+KDb2OuG4qu3qq
- RqKbzBv3Nb9SKuv5c4ocN4Rza9Dbjx/8DzJmWcWnDd0+ilmOvyKDDi87U63ffsBptCHD
- vRvgBHIjBBPj71jB4r2upWAUWtVeYheBP2x+WLUZA5PPGljwn7sGd1X9g5x0ktatRnOy
- B8d4oEOF2Bzfk66ZhajsJN8lwgPVnZmMJZjPFThM/Q0Ltu8eDUVqt4PqtCCcYb6rK7Sw dw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gppa6739m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jun 2022 16:26:53 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25EGQqL5031459;
-        Tue, 14 Jun 2022 16:26:52 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gppa67342-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jun 2022 16:26:52 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25EG6v4N031317;
-        Tue, 14 Jun 2022 16:26:41 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3gmjajcms5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Jun 2022 16:26:41 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25EGQcQu14942552
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Jun 2022 16:26:38 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 05AB54C040;
-        Tue, 14 Jun 2022 16:26:38 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 97E684C046;
-        Tue, 14 Jun 2022 16:26:37 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Jun 2022 16:26:37 +0000 (GMT)
-From:   Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-To:     thuth@redhat.com, borntraeger@linux.ibm.com, frankja@linux.ibm.com,
-        imbrenda@linux.ibm.com, pbonzini@redhat.com
-Cc:     david@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-s390@vger.kernel.org, scgl@linux.ibm.com, shuah@kernel.org
-Subject: [PATCH] KVM: s390: selftests: Fix memop extension capability check
-Date:   Tue, 14 Jun 2022 18:26:35 +0200
-Message-Id: <20220614162635.3445019-1-scgl@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <36d83871-343d-e8a0-1aed-05bf386f9b1b@redhat.com>
-References: <36d83871-343d-e8a0-1aed-05bf386f9b1b@redhat.com>
+        Tue, 14 Jun 2022 12:27:02 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2391C2EA1E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:26:59 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1o19NU-0000yX-7r; Tue, 14 Jun 2022 18:26:52 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     Dao Lu <daolu@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Rob Herring <robh@kernel.org>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Qinglin Pan <panqinglin2020@iscas.ac.cn>,
+        Tsukasa OI <research_trasio@irq.a4lg.com>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
+        Dao Lu <daolu@rivosinc.com>
+Subject: Re: [PATCH v2] arch/riscv: add Zihintpause support
+Date:   Tue, 14 Jun 2022 18:26:51 +0200
+Message-ID: <3113192.5fSG56mABF@diego>
+In-Reply-To: <20220524211954.1936117-1-daolu@rivosinc.com>
+References: <20220524211954.1936117-1-daolu@rivosinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: bbCm_KGA5GT1nJ6yz2bkdsVAd0LVogjw
-X-Proofpoint-ORIG-GUID: B8dsVfyF-Pfrxd7CIb6Ie_WRb-G7_jJr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-14_06,2022-06-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- suspectscore=0 impostorscore=0 phishscore=0 malwarescore=0 adultscore=0
- mlxscore=0 spamscore=0 mlxlogscore=863 lowpriorityscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206140062
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the inverted logic of the memop extension capability check.
+Am Dienstag, 24. Mai 2022, 23:19:50 CEST schrieb Dao Lu:
+> Implement support for the ZiHintPause extension.
+> 
+> The PAUSE instruction is a HINT that indicates the current hart’s rate of
+> instruction retirement should be temporarily reduced or paused.
+> 
+> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+> Tested-by: Heiko Stuebner <heiko@sntech.de>
+> Signed-off-by: Dao Lu <daolu@rivosinc.com>
+> ---
+> 
+> v1 -> v2:
+>  Remove the usage of static branch, use PAUSE if toolchain supports it
+> 
+>  arch/riscv/Makefile                     | 4 ++++
+>  arch/riscv/include/asm/hwcap.h          | 1 +
+>  arch/riscv/include/asm/vdso/processor.h | 8 +++++++-
+>  arch/riscv/kernel/cpu.c                 | 1 +
+>  arch/riscv/kernel/cpufeature.c          | 2 ++
+>  5 files changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+> index 7d81102cffd4..900a8fda1a2d 100644
+> --- a/arch/riscv/Makefile
+> +++ b/arch/riscv/Makefile
+> @@ -56,6 +56,10 @@ riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
+>  toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
+>  riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
+>  
+> +# Check if the toolchain supports Zihintpause extension
+> +toolchain-supports-zihintpause := $(call cc-option-yn, -march=$(riscv-march-y)_zihintpause)
+> +riscv-march-$(toolchain-supports-zihintpause) := $(riscv-march-y)_zihintpause
+> +
+>  KBUILD_CFLAGS += -march=$(subst fd,,$(riscv-march-y))
+>  KBUILD_AFLAGS += -march=$(riscv-march-y)
+>  
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> index 0734e42f74f2..caa9ee5459b4 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -52,6 +52,7 @@ extern unsigned long elf_hwcap;
+>   */
+>  enum riscv_isa_ext_id {
+>  	RISCV_ISA_EXT_SSCOFPMF = RISCV_ISA_EXT_BASE,
 
-Fixes: 97da92c0ff92 ("KVM: s390: selftests: Use TAP interface in the memop test")
-Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
----
+svpbmt got merged meanwhile, so this patch needs a rebase
+onto 5.19-rc.
+
+One more nit below
+
+> +	RISCV_ISA_EXT_ZIHINTPAUSE,
+>  	RISCV_ISA_EXT_ID_MAX = RISCV_ISA_EXT_MAX,
+>  };
+>  
+> diff --git a/arch/riscv/include/asm/vdso/processor.h b/arch/riscv/include/asm/vdso/processor.h
+> index 134388cbaaa1..4de911a25051 100644
+> --- a/arch/riscv/include/asm/vdso/processor.h
+> +++ b/arch/riscv/include/asm/vdso/processor.h
+> @@ -8,7 +8,13 @@
+>  
+>  static inline void cpu_relax(void)
+>  {
+> -#ifdef __riscv_muldiv
+> +#ifdef __riscv_zihintpause
+> +	/*
+> +	 * Reduce instruction retirement.
+> +	 * This assumes the PC changes.
+> +	 */
+> +	__asm__ __volatile__ ("pause");
+> +#elif __riscv_muldiv
+>  	int dummy;
+>  	/* In lieu of a halt instruction, induce a long-latency stall. */
+>  	__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
+> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
+> index ccb617791e56..89e563e9c4cc 100644
+> --- a/arch/riscv/kernel/cpu.c
+> +++ b/arch/riscv/kernel/cpu.c
+> @@ -88,6 +88,7 @@ int riscv_of_parent_hartid(struct device_node *node)
+>   */
+>  static struct riscv_isa_ext_data isa_ext_arr[] = {
+>  	__RISCV_ISA_EXT_DATA(sscofpmf, RISCV_ISA_EXT_SSCOFPMF),
+> +	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+>  	__RISCV_ISA_EXT_DATA("", RISCV_ISA_EXT_MAX),
+>  };
+>  
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index 1b2d42d7f589..37ff06682ae6 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -25,6 +25,7 @@ static DECLARE_BITMAP(riscv_isa, RISCV_ISA_EXT_MAX) __read_mostly;
+>  __ro_after_init DEFINE_STATIC_KEY_FALSE(cpu_hwcap_fpu);
+>  #endif
+>  
+> +
+
+this is an unrelated change and also is adding an unneeded extra empty line.
 
 
-Here you go.
-Hope it doesn't get lost as a reply, but I can always resend
-and it's not super critical after all.
+Heiko
+
+>  /**
+>   * riscv_isa_extension_base() - Get base extension word
+>   *
+> @@ -192,6 +193,7 @@ void __init riscv_fill_hwcap(void)
+>  				set_bit(*ext - 'a', this_isa);
+>  			} else {
+>  				SET_ISA_EXT_MAP("sscofpmf", RISCV_ISA_EXT_SSCOFPMF);
+> +				SET_ISA_EXT_MAP("zihintpause", RISCV_ISA_EXT_ZIHINTPAUSE);
+>  			}
+>  #undef SET_ISA_EXT_MAP
+>  		}
+> 
 
 
- tools/testing/selftests/kvm/s390x/memop.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-index e704c6fa5758..e1056f20dfa1 100644
---- a/tools/testing/selftests/kvm/s390x/memop.c
-+++ b/tools/testing/selftests/kvm/s390x/memop.c
-@@ -769,7 +769,7 @@ int main(int argc, char *argv[])
- 	ksft_set_plan(ARRAY_SIZE(testlist));
- 
- 	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
--		if (testlist[idx].extension >= extension_cap) {
-+		if (extension_cap >= testlist[idx].extension) {
- 			testlist[idx].test();
- 			ksft_test_result_pass("%s\n", testlist[idx].name);
- 		} else {
--- 
-2.32.0
 

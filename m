@@ -2,74 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBC654B894
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B76FF54B899
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345174AbiFNS1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46546 "EHLO
+        id S231760AbiFNS3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244479AbiFNS1Q (ORCPT
+        with ESMTP id S1344513AbiFNS27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 14:27:16 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C24146B05
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:27:15 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id s135so9219221pgs.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:27:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hEzvcC++7k61l66axeatSqAP6xU3P4DD1F7VimB/7IY=;
-        b=hLwZ57viqZp4/xIL8iY9+2iLb7KM6Gzt40oYSNwx0vK4ki9FY/WBegDPBrPU2Ak4Mp
-         5NepIPSuF7N8TfmzG+vR+0I4uiQ5KOuMki7Tj+lOOk55mzbu/iRny7ncAeU1yOyD8Ihp
-         8r46sMaV1NZU0Wh9Gcio7p0BlWDeaO5tZ+SOb8OAeEOnbwQEWbMByLW96zJlzDov0POI
-         dV62f3W9/oLK+kG2/P8EvCZNzYtDMzeq+DABeHyNgLmPpWtNw9hXUMMn/twaZBASBsfT
-         wbOVyEJbFoIaULS/6K3m5aLS4axrvhXQzmtzU2RZaGTUjUd6HlPHgaWrBgE2/T/AFQHq
-         AVrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hEzvcC++7k61l66axeatSqAP6xU3P4DD1F7VimB/7IY=;
-        b=KODQjNSE0kkABsLRiNaGZ/fbuxCoKvpigBeDszwsJGvvf7+sLvCfaVKeBQ1hrwv2WM
-         KWBHeQVx8RZLzZxU+9/0ESGwc4Z+izA2PVw84B5yrRzwux0IGdJ5YEfkGaqVG/zzC8Io
-         1YWnZh9UkecPWG0cO8o/Jmiv29f3A4sOhFgJtcNlqC2lsU5WywbipCTuWlRJ5yIXAMuX
-         p0b9kXmynxW+C7SWWnKeP6IrHWLeGxiOTol6dOkmWe0/E+gAXergVSbc8fnzYamgSwbc
-         c1n+KsrTN+JxwViUkc5D1qTzPK3WPkyydo2Y3ep8GLGgof5hMRgsjYFNVKL81ihh/AHO
-         2t1Q==
-X-Gm-Message-State: AOAM532YCJT9rxKB3rPHwEX5jiHhrCulWx0G/jfLGA6U5ps0nn1emzcr
-        k4H8LMwWylPo22qOsjVoDtdmdg==
-X-Google-Smtp-Source: ABdhPJxed6m9qCYHAcWHQVgxUvdQNOgqcemvcPHkZVegIMswmJByvqWxISjjIUJgwcKYg8zqshHcgw==
-X-Received: by 2002:a63:ea09:0:b0:3fd:3c6a:47c2 with SMTP id c9-20020a63ea09000000b003fd3c6a47c2mr5522805pgi.242.1655231234874;
-        Tue, 14 Jun 2022 11:27:14 -0700 (PDT)
-Received: from [172.22.33.33] ([192.77.111.2])
-        by smtp.googlemail.com with ESMTPSA id h20-20020a170902f7d400b0016232dbd01fsm7539440plw.292.2022.06.14.11.27.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 11:27:14 -0700 (PDT)
-Message-ID: <06ae64cc-80e0-9290-5d9f-1a37184ed900@linaro.org>
-Date:   Tue, 14 Jun 2022 11:27:13 -0700
+        Tue, 14 Jun 2022 14:28:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2DBB046152
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:28:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655231338;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jzGDnMjiVMPl8LoDK9/jjZ3s6cfGJvhDYM+qlDxnnck=;
+        b=ft1RO45ZUt+3fqWlo+7qS6Y1G9v+mb7BtqcH4zqz9KusrtnoC3yofSybu5DaTNSCpDVQ3F
+        XlzlAuZOC1crXMm4LKwZ+0TGFXGlMfkOSZpOcPVNVGCOM1OvK6lXCeu4XjxPmw/c+LzbLH
+        +67Aew282Wg7rO0GJPIWO00ayPb2rrU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-1-ZFBhL40jPHCo3tCVEsDiJg-1; Tue, 14 Jun 2022 14:28:54 -0400
+X-MC-Unique: ZFBhL40jPHCo3tCVEsDiJg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6A9E6101AA45;
+        Tue, 14 Jun 2022 18:28:54 +0000 (UTC)
+Received: from [10.22.33.116] (unknown [10.22.33.116])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 330832026D64;
+        Tue, 14 Jun 2022 18:28:54 +0000 (UTC)
+Message-ID: <c20294e1-b926-efa3-95fd-d30601d44a5d@redhat.com>
+Date:   Tue, 14 Jun 2022 14:28:53 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH] MAINTAINERS: rectify file pattern in MICROCHIP OTPC
- DRIVER
+Subject: Re: [PATCH 3/3] mm/kmemleak: Prevent soft lockup in first object
+ iteration loop of kmemleak_scan()
 Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220607064220.9296-1-lukas.bulwahn@gmail.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20220607064220.9296-1-lukas.bulwahn@gmail.com>
+From:   Waiman Long <longman@redhat.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220612183301.981616-1-longman@redhat.com>
+ <20220612183301.981616-4-longman@redhat.com> <YqjCGWmM2cGG1OOF@arm.com>
+ <YqjFHOMT+rDgz3EK@arm.com> <325768cd-19bd-71ae-83d6-1ca5e84f7462@redhat.com>
+In-Reply-To: <325768cd-19bd-71ae-83d6-1ca5e84f7462@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,41 +68,100 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+On 6/14/22 14:22, Waiman Long wrote:
+> On 6/14/22 13:27, Catalin Marinas wrote:
+>
+>>>> raw_spin_unlock_irq(&object->lock);
+>>>> +
+>>>> +        /*
+>>>> +         * With object pinned by a positive reference count, it
+>>>> +         * won't go away and we can safely release the RCU read
+>>>> +         * lock and do a cond_resched() to avoid soft lockup every
+>>>> +         * 64k objects.
+>>>> +         */
+>>>> +        if (object_pinned && !(gray_list_cnt & 0xffff)) {
+>>>> +            rcu_read_unlock();
+>>>> +            cond_resched();
+>>>> +            rcu_read_lock();
+>>>> +        }
+>>> I'm not sure this gains much. There should be very few gray objects
+>>> initially (those passed to kmemleak_not_leak() for example). The
+>>> majority should be white objects.
+>>>
+>>> If we drop the fine-grained object->lock, we could instead take
+>>> kmemleak_lock outside the loop with a cond_resched_lock(&kmemleak_lock)
+>>> within the loop. I think we can get away with not having an
+>>> rcu_read_lock() at all for list traversal with the big lock outside the
+>>> loop.
+>> Actually this doesn't work is the current object in the iteration is
+>> freed. Does list_for_each_rcu_safe() help?
+>
+> list_for_each_rcu_safe() helps if we are worrying about object being 
+> freed. However, it won't help if object->next is freed instead.
+>
+> How about something like:
+>
+> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+> index 7dd64139a7c7..fd836e43cb16 100644
+> --- a/mm/kmemleak.c
+> +++ b/mm/kmemleak.c
+> @@ -1417,12 +1417,16 @@ static void kmemleak_scan(void)
+>         struct zone *zone;
+>         int __maybe_unused i;
+>         int new_leaks = 0;
+> +       int loop1_cnt = 0;
+>
+>         jiffies_last_scan = jiffies;
+>
+>         /* prepare the kmemleak_object's */
+>         rcu_read_lock();
+>         list_for_each_entry_rcu(object, &object_list, object_list) {
+> +               bool obj_pinned = false;
+> +
+> +               loop1_cnt++;
+>                 raw_spin_lock_irq(&object->lock);
+>  #ifdef DEBUG
+>                 /*
+> @@ -1437,10 +1441,32 @@ static void kmemleak_scan(void)
+>  #endif
+>                 /* reset the reference count (whiten the object) */
+>                 object->count = 0;
+> -               if (color_gray(object) && get_object(object))
+> +               if (color_gray(object) && get_object(object)) {
+>                         list_add_tail(&object->gray_list, &gray_list);
+> +                       obj_pinned = true;
+> +               }
+>
+>                 raw_spin_unlock_irq(&object->lock);
+> +
+> +               /*
+> +                * Do a cond_resched() to avoid soft lockup every 64k 
+> objects.
+> +                * Make sure a reference has been taken so that the 
+> object
+> +                * won't go away without RCU read lock.
+> +                */
+> +               if (loop1_cnt & 0xffff) {
 
-On 06/06/2022 23:42, Lukas Bulwahn wrote:
-> Commit 6b291610dd57 ("nvmem: microchip-otpc: add support") adds the
-> Microchip otpc driver and a corresponding MAINTAINERS section, but slips
-> in a slightly wrong file pattern.
-> 
-> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-> broken reference.
-> 
-> Rectify this file pattern in MICROCHIP OTPC DRIVER.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-Applied thanks,
 
---srini
+Sorry, should be "(!(loop1_cnt & 0xffff))".
 
-> Claudiu, please ack.
-> 
-> Srinivas, please pick this minor non-urgent patch in your -next tree on
-> top of the commit above. Thanks.
-> 
->   MAINTAINERS | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 572f50739fb2..288393564abc 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13119,7 +13119,7 @@ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
->   S:	Supported
->   F:	Documentation/devicetree/bindings/nvmem/microchip,sama7g5-otpc.yaml
->   F:	drivers/nvmem/microchip-otpc.c
-> -F:	dt-bindings/nvmem/microchip,sama7g5-otpc.h
-> +F:	include/dt-bindings/nvmem/microchip,sama7g5-otpc.h
->   
->   MICROCHIP PWM DRIVER
->   M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+> + if (!obj_pinned && !get_object(object)) {
+> +                               /* Try the next object instead */
+> +                               loop1_cnt--;
+> +                               continue;
+> +                       }
+> +
+> +                       rcu_read_unlock();
+> +                       cond_resched();
+> +                       rcu_read_lock();
+> +
+> +                       if (!obj_pinned)
+> +                               put_object(object);
+> +               }
+>         }
+>         rcu_read_unlock();
+>
+Cheers,
+Longman
+

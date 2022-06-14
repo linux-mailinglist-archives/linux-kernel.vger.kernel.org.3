@@ -2,200 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2F954A392
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24EF54A384
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:26:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347866AbiFNBRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 21:17:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
+        id S1346879AbiFNBSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 21:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343543AbiFNBQ6 (ORCPT
+        with ESMTP id S1349139AbiFNBSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 21:16:58 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846642D1CC;
-        Mon, 13 Jun 2022 18:16:53 -0700 (PDT)
-X-UUID: 9ba52f8d4b5a425f9fe6655086fd5055-20220614
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:d8fbfaa5-6b9f-407c-a6b2-6aa06f3e7e8f,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:b14ad71,CLOUDID:1f619b37-84c0-4f9a-9fbd-acd4a0e9ad0f,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 9ba52f8d4b5a425f9fe6655086fd5055-20220614
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <stanley.chu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1678278686; Tue, 14 Jun 2022 09:16:46 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Tue, 14 Jun 2022 09:16:42 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.3 via Frontend Transport; Tue, 14 Jun 2022 09:16:42 +0800
-From:   Stanley Chu <stanley.chu@mediatek.com>
-To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
-        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
-        <bvanassche@acm.org>
-CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
-        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
-        <mason.zhang@mediatek.com>, <qilin.tan@mediatek.com>,
-        <lin.gui@mediatek.com>, <eddie.huang@mediatek.com>,
-        <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
-        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <stanley.chu@mediatek.com>
-Subject: [PATCH v2 8/8] scsi: ufs-mediatek: Support low-power mode for parents of VCCQx
-Date:   Tue, 14 Jun 2022 09:16:39 +0800
-Message-ID: <20220614011639.2825-9-stanley.chu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220614011639.2825-1-stanley.chu@mediatek.com>
-References: <20220614011639.2825-1-stanley.chu@mediatek.com>
+        Mon, 13 Jun 2022 21:18:45 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9272A13CD0;
+        Mon, 13 Jun 2022 18:18:41 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LMVq95HPPzRjHT;
+        Tue, 14 Jun 2022 09:15:17 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 09:18:34 +0800
+Subject: Re: [PATCH -next] selinux: Fix potential memory leak in
+ selinux_add_opt
+To:     Paul Moore <paul@paul-moore.com>
+CC:     <stephen.smalley.work@gmail.com>, <eparis@parisplace.org>,
+        <omosnace@redhat.com>, <selinux@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220611090550.135674-1-xiujianfeng@huawei.com>
+ <CAHC9VhSwYdrHw8jNYxWApPYMjnmX-ZDN1=CzmRBeS1HoL-KOOA@mail.gmail.com>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+Message-ID: <c54658e5-f0bd-b3f6-3cf8-d7d0e8b1c4df@huawei.com>
+Date:   Tue, 14 Jun 2022 09:18:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAHC9VhSwYdrHw8jNYxWApPYMjnmX-ZDN1=CzmRBeS1HoL-KOOA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide the facility to configure parents of VCCQx power rails
-as low-power or full-power mode in MediaTek UFS platforms.
+Hi,
 
-Signed-off-by: Alice Chao <alice.chao@mediatek.com>
-Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
----
- drivers/ufs/host/ufs-mediatek.c | 45 +++++++++++++++++++++++----------
- drivers/ufs/host/ufs-mediatek.h |  4 +++
- 2 files changed, 36 insertions(+), 13 deletions(-)
+在 2022/6/14 4:22, Paul Moore 写道:
+> On Sat, Jun 11, 2022 at 5:07 AM Xiu Jianfeng <xiujianfeng@huawei.com> wrote:
+>> In the entry of selinux_add_opt, *mnt_opts may be assigned to new
+>> allocated memory, and also may be freed and reset at the end of the
+>> function. however, if security_context_str_to_sid failed, it returns
+>> directly and skips the procedure for free and reset, even if it may be
+>> handled at the caller of this function, It is better to handle it
+>> inside.
+>>
+>> Fixes: 70f4169ab421 ("selinux: parse contexts for mount options early")
+>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>> ---
+>>   security/selinux/hooks.c | 12 +++++++-----
+>>   1 file changed, 7 insertions(+), 5 deletions(-)
+> Have you actually observed a memory leak from the selinux_mnt_opts
+> allocation in selinux_add_opt()?
+>
+> The selinux_add_opt() function has two callers:
+> selinux_sb_eat_lsm_opts() and selinux_fs_context_parse_param().  The
+> former cleans up the selinux_mnt_opts allocation it its error handler
+> while the latter will end up calling
+> security_free_mnt_opts()/selinux_free_mnt_opts() to free the
+> fs_context:security when the fs_context is destroyed.
+>
+> This patch shouldn't be necessary.
 
-diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
-index 9337ce27329b..2c1e55f8d7c6 100755
---- a/drivers/ufs/host/ufs-mediatek.c
-+++ b/drivers/ufs/host/ufs-mediatek.c
-@@ -1013,10 +1013,29 @@ static int ufs_mtk_link_set_lpm(struct ufs_hba *hba)
- 	return 0;
- }
- 
--static void ufs_mtk_vreg_set_lpm(struct ufs_hba *hba, bool lpm)
-+static void ufs_mtk_vccqx_set_lpm(struct ufs_hba *hba, bool lpm)
- {
- 	struct ufs_vreg *vccqx = NULL;
- 
-+	if (hba->vreg_info.vccq)
-+		vccqx = hba->vreg_info.vccq;
-+	else
-+		vccqx = hba->vreg_info.vccq2;
-+
-+	regulator_set_mode(vccqx->reg,
-+		lpm ? REGULATOR_MODE_IDLE : REGULATOR_MODE_NORMAL);
-+}
-+
-+static void ufs_mtk_vsx_set_lpm(struct ufs_hba *hba, bool lpm)
-+{
-+	struct arm_smccc_res res;
-+
-+	ufs_mtk_device_pwr_ctrl(!lpm,
-+		(unsigned long)hba->dev_info.wspecversion, res);
-+}
-+
-+static void ufs_mtk_dev_vreg_set_lpm(struct ufs_hba *hba, bool lpm)
-+{
- 	if (!hba->vreg_info.vccq && !hba->vreg_info.vccq2)
- 		return;
- 
-@@ -1032,13 +1051,13 @@ static void ufs_mtk_vreg_set_lpm(struct ufs_hba *hba, bool lpm)
- 	if (lpm && hba->vreg_info.vcc->enabled)
- 		return;
- 
--	if (hba->vreg_info.vccq)
--		vccqx = hba->vreg_info.vccq;
--	else
--		vccqx = hba->vreg_info.vccq2;
--
--	regulator_set_mode(vccqx->reg,
--		lpm ? REGULATOR_MODE_IDLE : REGULATOR_MODE_NORMAL);
-+	if (lpm) {
-+		ufs_mtk_vccqx_set_lpm(hba, lpm);
-+		ufs_mtk_vsx_set_lpm(hba, lpm);
-+	} else {
-+		ufs_mtk_vsx_set_lpm(hba, lpm);
-+		ufs_mtk_vccqx_set_lpm(hba, lpm);
-+	}
- }
- 
- static void ufs_mtk_auto_hibern8_disable(struct ufs_hba *hba)
-@@ -1105,7 +1124,7 @@ static int ufs_mtk_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
- 	int err;
- 
- 	if (hba->ufshcd_state != UFSHCD_STATE_OPERATIONAL)
--		ufs_mtk_vreg_set_lpm(hba, false);
-+		ufs_mtk_dev_vreg_set_lpm(hba, false);
- 
- 	err = ufs_mtk_mphy_power_on(hba, true);
- 	if (err)
-@@ -1283,7 +1302,7 @@ int ufs_mtk_system_suspend(struct device *dev)
- 	ret = ufshcd_system_suspend(dev);
- 
- 	if (!ret)
--		ufs_mtk_vreg_set_lpm(hba, true);
-+		ufs_mtk_dev_vreg_set_lpm(hba, true);
- 
- 	return ret;
- }
-@@ -1293,7 +1312,7 @@ int ufs_mtk_system_resume(struct device *dev)
- 	int ret = 0;
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
- 
--	ufs_mtk_vreg_set_lpm(hba, false);
-+	ufs_mtk_dev_vreg_set_lpm(hba, false);
- 
- 	ret = ufshcd_system_resume(dev);
- 
-@@ -1308,7 +1327,7 @@ int ufs_mtk_runtime_suspend(struct device *dev)
- 	ret = ufshcd_runtime_suspend(dev);
- 
- 	if (!ret)
--		ufs_mtk_vreg_set_lpm(hba, true);
-+		ufs_mtk_dev_vreg_set_lpm(hba, true);
- 
- 	return ret;
- }
-@@ -1318,7 +1337,7 @@ int ufs_mtk_runtime_resume(struct device *dev)
- 	struct ufs_hba *hba = dev_get_drvdata(dev);
- 	int ret = 0;
- 
--	ufs_mtk_vreg_set_lpm(hba, false);
-+	ufs_mtk_dev_vreg_set_lpm(hba, false);
- 
- 	ret = ufshcd_runtime_resume(dev);
- 
-diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
-index 9117427ca6c4..eb26306a719f 100755
---- a/drivers/ufs/host/ufs-mediatek.h
-+++ b/drivers/ufs/host/ufs-mediatek.h
-@@ -83,6 +83,7 @@ enum {
- #define UFS_MTK_SIP_DEVICE_RESET          BIT(1)
- #define UFS_MTK_SIP_CRYPTO_CTRL           BIT(2)
- #define UFS_MTK_SIP_REF_CLK_NOTIFICATION  BIT(3)
-+#define UFS_MTK_SIP_DEVICE_PWR_CTRL       BIT(7)
- 
- /*
-  * VS_DEBUGCLOCKENABLE
-@@ -199,4 +200,7 @@ struct ufs_mtk_host {
- #define ufs_mtk_device_reset_ctrl(high, res) \
- 	ufs_mtk_smc(UFS_MTK_SIP_DEVICE_RESET, res, high)
- 
-+#define ufs_mtk_device_pwr_ctrl(on, ufs_ver, res) \
-+	ufs_mtk_smc(UFS_MTK_SIP_DEVICE_PWR_CTRL, res, on, ufs_ver)
-+
- #endif /* !_UFS_MEDIATEK_H */
--- 
-2.18.0
+I may not have made it clear, I said potential means may have a third 
+caller in the future. Anyway,
+
+Yes, you are right,  currently no memleak here, because the two callers 
+will do the cleanup, from this point of view,
+
+I think the error handler as following is not necessary:
+
+err:
+         if (is_alloc_opts) {
+                 kfree(opts);
+                 *mnt_opts = NULL;
+         }
+
+otherwise, some error paths goto err label while others don't, It's 
+confusing.
 

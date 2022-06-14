@@ -2,122 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E593154B393
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96DD554B372
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:42:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234961AbiFNOh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
+        id S244207AbiFNOiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238564AbiFNOht (ORCPT
+        with ESMTP id S240402AbiFNOiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:37:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29696175AA;
-        Tue, 14 Jun 2022 07:37:47 -0700 (PDT)
+        Tue, 14 Jun 2022 10:38:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2F2219C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:38:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7934E617B4;
-        Tue, 14 Jun 2022 14:37:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D478C3411C;
-        Tue, 14 Jun 2022 14:37:34 +0000 (UTC)
-Date:   Tue, 14 Jun 2022 10:37:32 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com, vgupta@kernel.org,
-        linux@armlinux.org.uk, ulli.kroll@googlemail.com,
-        linus.walleij@linaro.org, shawnguo@kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
-        khilman@kernel.org, catalin.marinas@arm.com, will@kernel.org,
-        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
-        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
-        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
-        paulus@samba.org, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
-        davem@davemloft.net, richard@nod.at,
-        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com,
-        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
-        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
-        gregkh@linuxfoundation.org, mturquette@baylibre.com,
-        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        sudeep.holla@arm.com, agross@kernel.org,
-        bjorn.andersson@linaro.org, anup@brainfault.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        jacob.jun.pan@linux.intel.com, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, john.ogness@linutronix.de,
-        paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        xen-devel@lists.xenproject.org, linux-xtensa@linux-xtensa.org,
-        linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-arch@vger.kernel.org,
-        rcu@vger.kernel.org
-Subject: Re: [PATCH 24/36] printk: Remove trace_.*_rcuidle() usage
-Message-ID: <20220614103732.489ba62b@gandalf.local.home>
-In-Reply-To: <YqHvXFdIJfvUDI6e@alley>
-References: <20220608142723.103523089@infradead.org>
-        <20220608144517.444659212@infradead.org>
-        <YqG6URbihTNCk9YR@alley>
-        <YqHFHB6qqv5wiR8t@worktop.programming.kicks-ass.net>
-        <CA+_sPaoJGrXhNPCs2dKf2J7u07y1xYrRFZBUtkKwzK9GqcHSuQ@mail.gmail.com>
-        <YqHvXFdIJfvUDI6e@alley>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0925A617B4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:38:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15F83C341C5;
+        Tue, 14 Jun 2022 14:37:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1655217479;
+        bh=O2hbvfNL0U6Gmj0eop3EmGulD+25t5gAdtIX+9CBfQQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fFnZLvAlOH/yTshr/sU1racHeo+FJeOgTGdUeJHAXuDdDBirIOe7KNfsgE54UM7sK
+         UL6jLQFZkepRwDKZz80O+jKU8EaELoF8aNIYq5XvgUMvgJ/R+5NGk9kpOyO9wMQNLT
+         Gl6MJavgc6rY5sYVd3mVpBm7s0X4GjAq5L9fX0ZU=
+Date:   Tue, 14 Jun 2022 16:37:56 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Zhi Song <zhi.song@bytedance.com>
+Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] node: put_device after failing to device_register
+Message-ID: <YqidROu44rHFaI6w@kroah.com>
+References: <20220614143007.1730171-1-zhi.song@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614143007.1730171-1-zhi.song@bytedance.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Jun 2022 15:02:20 +0200
-Petr Mladek <pmladek@suse.com> wrote:
-
-> > I'm somewhat curious whether we can actually remove that trace event.  
+On Tue, Jun 14, 2022 at 10:30:07PM +0800, Zhi Song wrote:
+> device_register() is used to register a device with the system.
 > 
-> Good question.
+> We cannot directly free dev after calling this function,
+> even if it returns an error.
+
+the device is not being freed, why say this?
+
+And you do have a full 72 columns to use :)
+
 > 
-> Well, I think that it might be useful. It allows to see trace and
-> printk messages together.
+> We should use put_device() to give up the reference
+> initialized in this function instead.
 
-Yes people still use it. I was just asked about it at Kernel Recipes. That
-is, someone wanted printk mixed in with the tracing, and I told them about
-this event (which they didn't know about but was happy to hear that it
-existed).
+There is no "instead" happening here.  The patch looks correct, but this
+changelog text does not.  Please fix up.
 
--- Steve
+thanks,
+
+greg k-h

@@ -2,110 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C87254AC00
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:41:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BDF854AC17
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355716AbiFNIkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 04:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
+        id S1352811AbiFNIlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 04:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355547AbiFNIkZ (ORCPT
+        with ESMTP id S1355548AbiFNIkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 04:40:25 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A179443389
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:38:59 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 5457B1F460;
-        Tue, 14 Jun 2022 08:38:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655195938; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=01j4ea8PbgWlNi5v0zYZJxxY0Tiy59ZXmfVMBYkPEtU=;
-        b=VUNe+c+TOepqw10rHOTKPJ7BdHf+m1yLky4f+vCaUmDWeIb4hsFIZPFbM2U99cHenO6fJO
-        B+2cFUohog6oIR/xeuBjYdYbkFe6jZGjuKHueYqEM0agSTeXRh3yZ2I46DbeTbgP9KGoHG
-        rFigcf8M0EJF4Q7Q4cGdjCZwuflvaoo=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 341182C141;
-        Tue, 14 Jun 2022 08:38:58 +0000 (UTC)
-Date:   Tue, 14 Jun 2022 10:38:57 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>
-Subject: Re: [BUG] Threaded printk breaks early debugging
-Message-ID: <YqhJIac+EGMRIcAA@alley>
-References: <CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com>
- <87y1y48spg.fsf@jogness.linutronix.de>
- <CAMdYzYr-Wo713Y4qjboTpoK6GcrYfKCfRJAEizwXw6-=dymVzg@mail.gmail.com>
- <87zgihlbst.fsf@jogness.linutronix.de>
- <CAMdYzYosXiQc9=t7daPaWWS=rnTVT6nnZvVBXDycBQvfR-1FAA@mail.gmail.com>
- <87sfo9l2rt.fsf@jogness.linutronix.de>
- <YqdTsjRQiJUilSg6@alley>
- <CAMdYzYr-oHp-EgNJxumsR+DrZS=U7dLpvHymkAHPYQO8FsrLrQ@mail.gmail.com>
+        Tue, 14 Jun 2022 04:40:47 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01olkn2086.outbound.protection.outlook.com [40.92.52.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1616567
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:39:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hqFd5mzGc1QrijdGQcRqnepnQFHI4QdGPHXcnubMo6CXJb9qjNE0n3tN9WoU/qPgjfMuUyloQwtIUbBlenOcHPdoT32MLnylQbZ0XSR4xyxtj00QXNEBTp+lO2XtXKk0MXWRAGn7aRNaofS5+yWYeoe9Nu/TL33dRn1+5U6YM7J8DiSeaIOnX5YfdbPitRQVLCr/kMRTFftp5qkb1Gqc/cjN1vH+MeX9M6vLqgLQRk7dQOkisRYoLrz+kSoykXpNjLR5fqeYyKn9VgnL8mGlrD+RGsICKn9GDkA2Ty8C+vMPWjluK24n7bejqYkvJIchPBusM3NdTgOPKAKnhQzVqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GHvF+davT/0BFcV22N66AYhGZEqvyuLNf0kJ1AtZwGA=;
+ b=afDWl5z9FvA7azboQIjGHbxhp4W9L/4RqmZ46hCvedVR0mmq7uR7n13BW1JWUvcLYFWoRFBMLsEIl/BVj5pd8n1KcIu5XqrP7aGsvCt6MjxCE+cWs2QyTFeoyKzAic3Tv4V5AL3sAAnoHrj3ua1lvVOmJs75h+qwwmiyTRPpyN4V4r8rGjScYdoCIDqwAre1kKkI5qSx4T2jkUDkVR07G/VmSfsPkegiaS69Z+/RZzQCRMh8CEZ4Qyl2CWXq+11qzfnl3B+2/Wm/hgel+ktjKauFLmnifU9irYT+j4fqJ7ifsUbz+ITFdnvQdbq8Sr6bdr2IJ3kaTYTAwgjGwhFp5Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GHvF+davT/0BFcV22N66AYhGZEqvyuLNf0kJ1AtZwGA=;
+ b=CBErJmxWQ1AIfkMHiClL6tu39lss20MTnLZQ4KaR1ZLunnNIwgQAWO/kiTxoCxs1k+dr9Fz1AXtY3AK+w4GzDKRAVT4HAaEYBivBtz1nvKuicsjUUseUUGooGZYd65iEET1dunsMiV7T1KEMtan30foXo8JMy7+x6gqvkaazbFh8w2uMV2pn0XScwlPXPxRqt7dSGnG5YgIcJAeQOu6oM7GJ36FVkrNslejU2a69pJ0Jc/5Cb1o/ALrRmwIx1b5TYhQ2yD/E+T0TUr1youlPqHgEvtutXnRpGtMFj+eLM1MKa7pV1Zn0tWDaUIi3a3eXBexwwOWG1+ADnjFh8XhWdQ==
+Received: from SG2PR01MB2951.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:76::15) by SL2PR01MB2683.apcprd01.prod.exchangelabs.com
+ (2603:1096:100:53::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.22; Tue, 14 Jun
+ 2022 08:39:36 +0000
+Received: from SG2PR01MB2951.apcprd01.prod.exchangelabs.com
+ ([fe80::a1f7:b32:baa1:3d12]) by SG2PR01MB2951.apcprd01.prod.exchangelabs.com
+ ([fe80::a1f7:b32:baa1:3d12%7]) with mapi id 15.20.5332.022; Tue, 14 Jun 2022
+ 08:39:36 +0000
+From:   Wenhu Wang <wenhu.wang@hotmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] uio:powerpc:mpc85xx: l2-cache-sram uio driver
+ implementation
+Thread-Topic: [PATCH 2/2] uio:powerpc:mpc85xx: l2-cache-sram uio driver
+ implementation
+Thread-Index: AQHYf8PgfEfUKvdhvUy2TYJx5fnwT61OiuIAgAAH7jk=
+Date:   Tue, 14 Jun 2022 08:39:36 +0000
+Message-ID: <SG2PR01MB295125ACF1B4A7BF7DBB74E49FAA9@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
+References: <20220609102855.272270-1-wenhu.wang@hotmail.com>
+ <SG2PR01MB295139AA7360917B2C4846E19FA79@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
+ <YqHy1uXwCLlJmftr@kroah.com>
+ <SG2PR01MB2951EA9ED70E5F766DD26A069FAA9@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
+ <efebcb50-0481-622a-894c-7000999aacc6@csgroup.eu>
+ <c76598b5-2d60-ea22-d590-4cc6998a8830@csgroup.eu>
+ <SG2PR01MB29516D3BB7525390ADD5B0829FAA9@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
+ <YqhAxj0dLoUkBZfg@kroah.com>
+In-Reply-To: <YqhAxj0dLoUkBZfg@kroah.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: 
+x-tmn:  [eImnR5xyGKxXSxkGO0oQ6q91G0kMUkwZ]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ba02e1e6-f52c-4e5f-b3a0-08da4de169ca
+x-ms-traffictypediagnostic: SL2PR01MB2683:EE_
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qrzLaL1Orx9lAKMFO0DyHZZl+XimJ6r5SEKfCIcd2RzY25GKflyEc4Pa61gFZLXBOvKCVZQp7trIxTZA+yq31E+ulyip2S1N/rhVpNEeuaC9OoBGYLAQau+3QHp/geQmN9p3f/3Z9kUKcadreuuuTJQlHPbiCT7Plz8oFz1etaH6uGboCqek38NaqYzsE3uxpR1mWLsUoZW6gXldSIGEJIu6NLqb4Z9LifW4w5XDXdPbC70aXoeDWvVwXjMkAFBW9A9bfvA603smO6ACp3WQD3B0/lxBgJf0sB/y8Ie88hiLevcu10h/jawcQx/V5H/V16mr3Cz2YQ0mfbAs9Ar6GDhUfP7FSpO6vaiZTbFKcDvYZ90BdJLhukyY6YiV5cq3x93ERPe/NG1vikJX1+MGVmoRSWn+yc+hMnbMK7WDHQ6Sgt+KjYMnwBoOImEVqhIzT6emWIGsFb7na1JWgKdNhjsx5mrOmtOzN00d4Be7ugLIC6EsrLn2VR9VjV4rgK191qg+07xl5LYgqUQFboZqL17CKiFZJl3BhMT9gHpuCyhLvBw0xI7/Al4XyP7fj8Kw6doBXSf2hmyP6ZbL+XdA8qPHCzRPbybuxuxD8aoWRx3lOTJjY9RQzBvPqafwNFZx
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?QkcvekVxVG9sQ01vVXNoNE5ydkNXelZBMEdaUjdpc2w4VDBZazltQXdXWmRE?=
+ =?gb2312?B?VGhBdzArOEJ6UWxVR0hSSVFqZXQrTEtGbHgvWUhRUXFLNHgycW1peXBmWjNi?=
+ =?gb2312?B?b0xHeUlLYjkzeU9QaktLS1pHbnkrMWpKT0VZZmFicVVla2hrSGhDOVY0Wkhi?=
+ =?gb2312?B?SW1WaVlEcmMxQ2JyOWJMbEJ6a2Yva3ROaE5FMzFPaHJBSjhDd3VFN1EwSzFM?=
+ =?gb2312?B?Yk56RG9Vc09jK0UybGNCeVdKV3VMNEVSenpqUmxjOHFnNDJJY25HcUJVZ01M?=
+ =?gb2312?B?ZnNQb20zMWRlNCs0NDRrZWhoaHZHOWI0bmR3SUcySEpjUjNlWm5uMGtLeklV?=
+ =?gb2312?B?aVpVdnFNeFdxMndKeXJNcXplOEwzR3I1cFQxRUhEQXYxcWdvZ0tBalU3TFNG?=
+ =?gb2312?B?YkdkczcxMjVYRmJjUFlFVEdQdVlrbklOUE8rM2pYQkNsR1N6bmdVVTBKendh?=
+ =?gb2312?B?UFdscmhvcWM4QzZXTVpNNTdBMW1GbVp3clRtc0xiSmFVcWtzNGk2bFlqTS8w?=
+ =?gb2312?B?enVwSERsaTA3N0dJdlQrYkdPekJydmNiTFRXT1VCcEZpQW9qTUU3NGIxNVBP?=
+ =?gb2312?B?MG5ZSmhtUWE3NEtFUXlVMkF6dDF2RlByQi9JNXg2dDRSOGMwN01xU0wwVmd4?=
+ =?gb2312?B?a3J6aUN6a0YrMzFPSXVIWU9FbW1CN3ozeW9LQk9UL0RKMHNtcXF0NDNjazlu?=
+ =?gb2312?B?dkwvTTJKYXZSbzZPUlFoc210N0hwQ2hVWWVDNjdFbWZTckpaWjByRzlZam1a?=
+ =?gb2312?B?ZnNEYXZuYitNSkUwUHdZMHJPaDcwYTROVnVEQ21VSHdTUTY5YjJTRDlmN1Jz?=
+ =?gb2312?B?eTV1ZjdZOWh2eWVQQU9QWlY4c0NsY3Qram1KNlNQR0t2MWttU2pDYktkYnF1?=
+ =?gb2312?B?YU9iYng5OHBmWVVDaVpqSDZaa3kwUTBrb3pHQXlkTkR4YkkzNDQ0aXVBQk5V?=
+ =?gb2312?B?OFJnYldXM1E2TUZrY3pGUi9JelNCR1Q1TWRQSDFVUzZlK0plY1JIMDJVSjBX?=
+ =?gb2312?B?ODN5cTVLWGVNV012aWd3UktiODd5V1p1bjVGQmFBMGJpeDhWcW5ZMTBoTlJ6?=
+ =?gb2312?B?VGtJQmowUTN6SjJNUXpRVTFaeDNjTzZsbnZyRGNIZVZONEVteFI2SWl6Nndu?=
+ =?gb2312?B?YWxLK3h0ZWtzTUpCUnNMeG9mQ1JPdWEzL0N0VnNrMm9QTW8rZ05acHVCNnI1?=
+ =?gb2312?B?eFduUUgybmM2NzhKRmxTUGo5cGs5ckdDWlBmd2lOczFGSkNMZ3F5ZFBQRFVz?=
+ =?gb2312?B?NXRuaUIvVkJFWkREVi9aazRWTmhIZU94MnBEcmdFTlkzTmZPU3BkTUxQK2tm?=
+ =?gb2312?B?Sk9OSWR0VThmMVc3V0NnYmRnMnZiSHZ6QUo2UkcrUEhQZGdUQ1VaZGlEc1d5?=
+ =?gb2312?B?WEhURk1EUmxBSTBiQ1ZVVWlvTDQyN3ZTb0Q1eUtZemMyeHNZOExDWCs0ZGZB?=
+ =?gb2312?B?QWtUSXdnZlFacXVVVzFOWEhhSHhmeXJ4dFh2b24rSUR3MXZkNmdocGs4SENW?=
+ =?gb2312?B?cE5JNmh5ZjI2SnJMN1ZpV05TcndiaklWbkhtVGR6cTc0Y2pKMGU5MzVzWW9M?=
+ =?gb2312?B?czF1K0x4cnRFV3pVRC9ROHNKZmtPZlZjZWtwY0VOc25mT0pISGdyZlZ4eGpK?=
+ =?gb2312?B?bDFObWZrdlFWTDNhaGVnWGFPMmRDTjdENElhQjBvODF4alZVN29RRzNFbGkx?=
+ =?gb2312?B?eGdqNGhHaU13OXUyVXF4MzVGYWhjRVFJaHhHMkVKYWdQS1NFbTFhcDlNdHMy?=
+ =?gb2312?B?NUZuUEhFekxpVEs4V0pGWmVTdlp4WEdEd2hpdlRPSUIxTDlDcnZTT3poekdX?=
+ =?gb2312?B?aVp0OTBML0tQeGtmVTAreWowc24zNmN5azE4L3paSlE3cFVqcmsxdDZqMjUy?=
+ =?gb2312?B?d3RkNEllZE5lM1h0U1Y4WU44MFdVZHgySXh0cW1HazhqRHAxSXd2T3dyemlq?=
+ =?gb2312?Q?kMwUCKQoQM4=3D?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMdYzYr-oHp-EgNJxumsR+DrZS=U7dLpvHymkAHPYQO8FsrLrQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-d8e84.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SG2PR01MB2951.apcprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba02e1e6-f52c-4e5f-b3a0-08da4de169ca
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2022 08:39:36.3750
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SL2PR01MB2683
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 2022-06-13 18:20:03, Peter Geis wrote:
-> On Mon, Jun 13, 2022 at 11:11 AM Petr Mladek <pmladek@suse.com> wrote:
-> >
-> > On Mon 2022-06-13 04:29:50, John Ogness wrote:
-> > > On 2022-06-12, Peter Geis <pgwipeout@gmail.com> wrote:
-> > > > The buffer isn't an issue here, everything is available in dmesg when
-> > > > userspace becomes available. Instead some messages bound for the
-> > > > serial console are never output.
-> > >
-> > > OK. Good to know.
-> > >
-> > > > We run a serial console at 1.5m baud which is significantly higher
-> > > > than most SoCs which default to 115200. I have noticed some timing
-> > > > differences since the introduction of the threaded console. A
-> > > > significant amount of information is dumped very early in the boot
-> > > > process (between 0 and 4 seconds into boot), as most drivers are
-> > > > probing during this time. It also happens to be when the earlycon
-> > > > console hands over to the normal console. There is no abnormal
-> > > > debugging enabled, the output is a standard (non-quiet) boot log. The
-> > > > question is why is direct mode not triggering during a panic?
-> > >
-> > > Just to be clear, you are not losing any intermediate messages. Only the
-> > > tail end of the kernel log was never printed. Is this correct?
-> > >
-> > > This may be the same issue being discussed here [0].
-> > >
-> > > John Ogness
-> > >
-> > > [0] https://lore.kernel.org/all/87v8t5l39z.fsf@jogness.linutronix.de
-> >
-> > If the last messages are missing then it is most likely the same
-> > issue.
-> >
-> > Peter, could you please try if the patch at
-> > https://lore.kernel.org/r/YqdSw/fJvnkRbjvc@alley
-> > would make any difference?
-> 
-> This patch permits the panic to come through to the console port. Thank you!
-> Tested-by: Peter Geis <pgwipeout@gmail.com>
-
-Great news. Thanks a lot for feedback.
-
-I guess that the patch is not final. But it seems to be a good
-direction.
-
-Best Regards,
-Petr
+Pk9uIFR1ZSwgSnVuIDE0LCAyMDIyIGF0IDA3OjUzOjQ2QU0gKzAwMDAsIFdlbmh1IFdhbmcgd3Jv
+dGU6Cj4+ID4+ID4+ICsKPj4gPj4gPj4gK3N0cnVjdCBtcGM4NXh4X2wyY3RsciB7Cj4+ID4+ID4+
+ICsgICAgIHUzMiAgICAgY3RsOyAgICAgICAgICAgIC8qIDB4MDAwIC0gTDIgY29udHJvbCAqLwo+
+PiA+PiA+Cj4+ID4+ID5XaGF0IGlzIHRoZSBlbmRpYW4gb2YgdGhlc2UgdTMyIHZhbHVlcz8gIFlv
+dSBtYXAgdGhlbSBkaXJlY3RseSB0bwo+PiA+PiA+bWVtb3J5LCBzbyB0aGV5IG11c3QgYmUgc3Bl
+Y2lmaWVkIHNvbWUgd2F5LCByaWdodD8gIFBsZWFzZSBtYWtlIGl0Cj4+ID4+ID5vYnZpb3VzIHdo
+YXQgdGhleSBhcmUuCj4+ID4+ID4KPj4gPj4KPj4gPj4gU3VyZWx5LCB0aGUgdmFsdWVzIHNob3Vs
+ZCBiZSB1MzIgaGVyZSwgbW9kaWZpZWQgaW4gdjIKPj4gPj4gVGhlIGNvbnRyb2xsZXIgaW5mbyBj
+b3VsZCBiZSBmb3VuZCBpbgo+PiA+PiAiUW9ySVEgUDIwMjAgSW50ZWdyYXRlZCBQcm9jZXNzb3Ig
+UmVmZXJlbmNlIE1hbnVhbCIKPj4gPj4gIkNoYXB0ZXIgNiBMMiBMb29rLUFzaWRlIENhY2hlL1NS
+QU0iCj4+ID4+IFNlZTogaHR0cDovL200dWRpdC5kaW5hdXoub3JnL1AyMDIwUk1fcmV2MC5wZGYK
+Pj4gPgo+PiA+VGhhdCdzIG5vdCB0aGUgYW5zd2VyIHRvIG15IHF1ZXN0aW9uIDopCj4+ID4KPj4g
+PlRoZXNlIGFyZSBiaWctZW5kaWFuLCByaWdodD8gIFBsZWFzZSBtYXJrIHRoZW0gYXMgc3VjaCBh
+bmQgYWNjZXNzIHRoZW0KPj4gPnByb3Blcmx5IHdpdGggdGhlIGNvcnJlY3QgZnVuY3Rpb25zLgo+
+Pgo+PiBZZXMsIHRoZXkgYXJlIGJpZy1lZGlhbi4KPj4gRG9lcyBpdCB3b3JrIHRvIGFkZCBjb21t
+ZW50cyhhYm91dCBvcmRlciBhbmQgYWNjZXNzIGZ1bmN0aW9ucykgZm9yIHRoZSBzdHJ1Y3R1cmUg
+YWhlYWQgb2YgaXQ/Cj4+IEFuZCBhcHBlbmRpbmcgbGlrZSAiX2JlIiwgIl9hY2Nlc3NfYmUiIG9y
+ICJfYmlnX2VuZGlhbiI/IChzdHJ1Y3QgbXBjODV4eF9sMmN0bHJfYmUgey4uLn07Cj4KPk5vLCBu
+b3QgY29tbWVudHMsIHRoZXNlIHNob3VsZCBiZSBvZiB0aGUgdHlwZSBfX2JlMzIsIHJpZ2h0Pwo+
+CgpZZXMsIHVuZGVyc3RhbmQuIEl0J3MgY2xlYXIgc3RyYWlnaHQgZm9yd2FyZC4KSSB3aWxsIHVw
+ZGF0ZSB0aG9zZSBpbiBwYXRjaCB2Mi4KClRoYW5rcywKV2VuaHU=

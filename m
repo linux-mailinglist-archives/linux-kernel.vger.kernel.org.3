@@ -2,187 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D668754A315
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A43454A316
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:11:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiFNAKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 20:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
+        id S242243AbiFNALR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 20:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235709AbiFNAKv (ORCPT
+        with ESMTP id S235709AbiFNALO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 20:10:51 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2065.outbound.protection.outlook.com [40.107.223.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DBBA11149;
-        Mon, 13 Jun 2022 17:10:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IzTQhZQBuwlCcxphWZbiLzzLcD4QcHSJSCvpQEhb2lOys/GJmDxaVAPe+cnSY9kGalZQVMTYax6Iab0zAVvqCen1Q18mbprn5UYGeH9Vigz5oMVklo4AdI93L0san0KcjvElGvQDIUJmqJ3X2SDryA/I1ILcCGElNfOSo8nbcKG+JLwUxbMt2K6fcl8NaLVqfaNmsr6qNoMD+ZvOG2mIemUI5srPNtUZnZ7beuoYFgmPYU/4VLbBZ1Z7QwsjFSQ+jeqnl0fSq3UoYsbmUzrMKTGyajn4Ru8g3f1sQEj+foToKkGYYDKUesaAwji/ERDPPqix2F85NwYYdU2A74fsSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Noc9kvYTgZBMyKl3A+m4N7r6ppPCAYGM7+21QcSNYCQ=;
- b=KFgP4nVuHbuYvBntj9W7ZUwxq5oQzPoG2ZayN8u0z1KY/zXjaP70I14jjYdDnF0EQkDuOqWq+TTcGzIOuOoXFe+CzmGIkp/mC3pPObAWcNgjLrlvCRcugJ54seResuUK4BuVeDRu/zd4Az0DCQrbBwthJPFRS0RwQQeo5DaeB1vIv8VXc4q5gPjpApCPOA7l0A4IyC7/iSGIzJ17TgeA4ADcR8ltK8yoVZylEMe432pbZeujQKyLuoXXwnu9B8FsoRQqhAPWs/TU8i9WFsq25//Z8OUGyXH7q9wquO/Jsnp4R1qLiD46Nn1sgCXROB3NbM/O8GF18ME9txYRvGuwRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Noc9kvYTgZBMyKl3A+m4N7r6ppPCAYGM7+21QcSNYCQ=;
- b=n2GODgY2kls6qZS/vl/Zs45PVy14FsKpSzixoX9+uKEuFXhEbVg+Pxj/mPM1l2AqcM5NZP0ASgtiBfFgOcQbXRBNAQkcJUfm8IXWXsl0EW6wcdKc+WXJ2lfMq4vMoMlN7vpHd3v0lieITDw6Tmoz85OEz6RKIx9Qd3OWf4Zog0s=
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com (2603:10b6:a03:3ce::6)
- by SN6PR05MB4461.namprd05.prod.outlook.com (2603:10b6:805:34::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.6; Tue, 14 Jun
- 2022 00:10:48 +0000
-Received: from BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::a4f8:718a:b2a0:977f]) by BY3PR05MB8531.namprd05.prod.outlook.com
- ([fe80::a4f8:718a:b2a0:977f%5]) with mapi id 15.20.5353.011; Tue, 14 Jun 2022
- 00:10:47 +0000
-From:   Nadav Amit <namit@vmware.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-CC:     Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v3 2/6] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-Thread-Topic: [PATCH v3 2/6] userfaultfd: add /dev/userfaultfd for fine
- grained access control
-Thread-Index: AQHYdfv3YX54vWzxvUGMIUQ+ms6N9q1N9KwAgAAJcICAAAJmAIAAGdqA
-Date:   Tue, 14 Jun 2022 00:10:47 +0000
-Message-ID: <C1C5939A-B7D2-49E7-B18B-EE7FEFE9C924@vmware.com>
-References: <20220601210951.3916598-1-axelrasmussen@google.com>
- <20220601210951.3916598-3-axelrasmussen@google.com>
- <20220613145540.1c9f7750092911bae1332b92@linux-foundation.org>
- <Yqe6R+XSH+nFc8se@xz-m1.local>
- <CAJHvVchdmV42qCgO6j=zGBi0DeVcvW1OC88rHUP6V66Fg3CSww@mail.gmail.com>
-In-Reply-To: <CAJHvVchdmV42qCgO6j=zGBi0DeVcvW1OC88rHUP6V66Fg3CSww@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.100.31)
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 4db6a6e2-0847-4265-d7bb-08da4d9a5559
-x-ms-traffictypediagnostic: SN6PR05MB4461:EE_
-x-microsoft-antispam-prvs: <SN6PR05MB4461FEC8726CF3ACB176679BD0AA9@SN6PR05MB4461.namprd05.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: XnqURZaax2Z8gswo3mr/g1fBLjeLetnCdd0hmEUYA6mmpNGHHiEziCfyZ7ttTZTXevlG1ZhiAo6tojczPA6gQBpzGCICgAvYJK0OaXQrJjZVMJqn3n9nOg63MLYaXNVatqxnQVDtIKiEZYCZXUoOPhrBvqWsQX4HfJVdsF+Xk/WKm9KBR6vcE4eWXq9tHPLLPvPfZaPIiVpY3RuQaeqj23WT/XdgI6BEBEDCOm8HIwHtxBRSB4iSHeABBNZFf4hdCzhcECZagUaiXwslLf967Skxq0dR7iC+/K2XZB334hEizqcBKbnTXdknPqVawTiOebx6dhIyLURsv9yoOezdpcoCuXwFx8j2zwclydmdZwpfG3NbyiWYbXd/NI2NtvqTGsdHeZVk7PN+keRqtvyQnYd1m2QZK5j32QWtH6Lnn+0DnP2S/UwmmXTBtfoxT+Vx1chdsQJbrrYwl77pTT2tXWGtHH3f7jtPBfuE6UunBA4aiXdNBhz85LFjSExAQWG4oTEvcF/s22QcvhAOVANdFqXJz/fRwwQPUrX2EZX8whkkqXWJfgeF+ZzIR1k8bCeWeDlXEcHiZF2AxuV5MxtauDqJ5nZTh/HJ7+L4PRIDiEX0EBTt/Grbn4LDjtOdYwC2Xwednf6i1/Rs/pmN6axxFCrCgL6/Up2ZvAR60qLwimnsOeUtugrai2LE7EZ6nmpahQWJpr4PTQwdHwYz0KUX0Ewls8JfjhZmVaUdgaKhhBqVTZn9pTKGFmag1+2mcWhm
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR05MB8531.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(186003)(38070700005)(66556008)(86362001)(53546011)(26005)(6506007)(6512007)(83380400001)(38100700002)(54906003)(122000001)(66446008)(4326008)(6916009)(76116006)(8676002)(66476007)(64756008)(316002)(36756003)(8936002)(71200400001)(7416002)(66946007)(5660300002)(33656002)(508600001)(2616005)(6486002)(2906002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jOaEi/IC8dag2HzzwJv61zoOQccJpJJmFuPnB7FILa1sJNju4tbYSJBG0yn3?=
- =?us-ascii?Q?0hnZu5XaokvSxv00GJsM2jclN9O8rh5d3kjQ/YrA0mb6XPoFO2to2d63bztn?=
- =?us-ascii?Q?7KxmDWT95zbuguSnS9MZJhyyfLqRlAy930v65dMbeZ1hC90HE9hPILUPi4wQ?=
- =?us-ascii?Q?/jecLW5MNNXofWg2cU1dQnTpezgxg2Qk03Xsq/g6gsZCFmmPrvKYYSEk9mn0?=
- =?us-ascii?Q?x+hO3xZ6JW0MEIuolZ4w5Muby+b0jbDoDV9g1pQgzjnkTZOJj2bQCbfAJOGW?=
- =?us-ascii?Q?5CmSH4k6tJhaYAYShMYhefT3WSW71cTiff9a0VtawIItRYFORboEQghf9m+9?=
- =?us-ascii?Q?iyj//XZaT7Rt98b8HqrXbMsu0xFQ8Jwr6l4g2Egm0SYIdAH146hlWF2+Q4/M?=
- =?us-ascii?Q?jUvITZBj3c/lCrqOBwAXEQdhGZMQ2wb2v2CgdRZDdoKdInQBj0M2h+Chw/t/?=
- =?us-ascii?Q?t9zS7tSRChjv7pAGijsJ5ON6hOm9zKzD+fKTCJnHcmd8eM6YRGoxoVy8Ihnc?=
- =?us-ascii?Q?Bh/5AHSR6jaJab3xTcArl4WBGqg2klSCs2bLlK+DIBonnZo4lDzOcFHohNEW?=
- =?us-ascii?Q?YLnilBCDmpRlNsxmjnznB/vVrmX3r+Dnva12TKQreHuIj8MGkJpRKFvgOlwA?=
- =?us-ascii?Q?3KxNz4BmUc1cAkXgPSTeVKZU42Rn0srcUGA8nGhrh/2kgmCnnP8NhVgCGB4z?=
- =?us-ascii?Q?cy2a9retzctOpFdUThVnM3XUUmsbWDs0vu2YHi4F/UtSTVTb5Os7Sb0Hd8fK?=
- =?us-ascii?Q?9p6mkTqDQb8mauzSDbUrHttuqxtqLwSuYDS+tgZimL0LbiPg45WSUq/FiyMz?=
- =?us-ascii?Q?SkmlHD6AC9fnLc972KdydqMVnWDP855jvClG7o+QemzC4XqIo0ydXkBT/u3I?=
- =?us-ascii?Q?CehnqLrPkfDxvPzsRKBFyVh9Q5Z2OjB6kPWR7UFQL711iFX6SZ0RHdMHYTCS?=
- =?us-ascii?Q?pSZHV8nDfPot6sotR7AygCQU+S7uXaLNY+m6/Av+8/fev9BZt1sIPX1k+tr8?=
- =?us-ascii?Q?rFwAJHFb4xy9qwxmj0IirZsU3yXJ7x3O2vfmK3x7Fwwpp3iiseO1AoH8npHx?=
- =?us-ascii?Q?0gs+T0yxIRXBgaX5ra4uUmGiLf3YsLPIGe/A3vuoRyN/d3MKqdLgkUzSoxw8?=
- =?us-ascii?Q?Wsr5Hiq8dMpNn+Lp/OA1xM9FySbkGQ8f9or02UpYvouGOC9og5HD4WUSGhZL?=
- =?us-ascii?Q?S8w8iFj/YFXlBz7MMCykzTr0x1XbDf8WS+nkC4s9jg4jVlGPNtJpNDNHfrSH?=
- =?us-ascii?Q?8eW9UTEhbnK1cvfOwMyMq4b8NxyfSYzyFVx6RMS/nybDYg1I+F+7lGCiJj9x?=
- =?us-ascii?Q?CrFrH8FGXLk/0Auakgch4Cc4AjaCBbc0zt/y3Gh6+cjPlUpdOxL90tQ4op7n?=
- =?us-ascii?Q?CdojQ5POAKYDnGtp3umVGe7WE+oqoJSzzWdCpMHQMLXFlWpWWGGXbG+cI9Qf?=
- =?us-ascii?Q?fDZ306jwMr64pmmO8yIy/Ph5HNpPjB1w9lyWdc1QXecozkt/HLHPQwY+7B8x?=
- =?us-ascii?Q?Spyijjhkkh3bVHqG0k94R/rpRtiicDDnCR+vTLPHEJZUg2lq3Ms8LDQTBm0C?=
- =?us-ascii?Q?sYNzH0E81ZKAqmaADlOBU647+yLDZJWNlajXNwoluEO7jMsxjSTL666Pr9oj?=
- =?us-ascii?Q?la5cHoshH+K8J0zp9xItE0rq6X3K2l+ASo9nf8omvr6awB0Kwa90CFAztXFJ?=
- =?us-ascii?Q?fa3VLRN9wXrkv3lwrP7vDaSp4t9wIcwpVzUuDwNEfio/TBy6PhWMaIUcMajn?=
- =?us-ascii?Q?S+V1gIp45Q=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <6E9DB0CA7AD5BA459210110F7FA70A93@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Mon, 13 Jun 2022 20:11:14 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95CE213DD2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:11:12 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id l14so1518176ilq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 17:11:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YnMbZcTpvqgPLdBSjHRJuKCSk759c13xui6B7R1t1uQ=;
+        b=UWHIwl07hGDvI0wfcK3zDLePqB084XvOAEXZtG9YLs7Qamrq8qBh/97Rs7I8Cpc6Ky
+         vQgi1KwGM1tjod5so3pAToAuYd5zAYthYQXWsok7uctu87wFLHq13M7UvoL5nShoA9Bm
+         bUbNKL0dnUsLf2GOoerH9ILMtqhbH0CsPPJwK5xrk3EJO5EFoDQiIxEK4nucWJkXnZQg
+         inUnSfdvuk0EYJ+0dUgFndr1/5B2aMu8LQIwGRFKLF5ZmkAI14sj8bF+hPUlDoU44DMJ
+         gve7YjirSW6+HkmN7TJQ4guEwIYIa2uwuzDe5Us9Ymi41zRtq/9G5/8yEFC1+zaEdAOS
+         rdfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YnMbZcTpvqgPLdBSjHRJuKCSk759c13xui6B7R1t1uQ=;
+        b=1ZZAzrNa5jv5da2ndJjv1XPYoiaLO8AFlk6yM4rJfOFa4aqEQzXvt6DmUhoH9AuRU5
+         rNsXEkBsSpo3j0aqf+AETxjeF2tezcYp77e4eBfOSezYCyPGfnNTScXbblpS9iJeWGbb
+         AMj+30xgfl2WV1lF5oC/5w5dqomlaGcF1ycE+780a+tCp87B77hM4+Y12HPj18gkJwVM
+         pVloYkN/BDI36LsEzyeWuai8DsV934GB5Xuf8vwo7WVSbMqzVD/or+2PuVjXjpXzSc0a
+         aoAil0omb6+quTKYwX/sTo08xVwVJIX7i1RZbCXkTOaT95yHK0k8AsqeSyLdfRkZ4uk7
+         0wDg==
+X-Gm-Message-State: AJIora9g2UZVFW6V8WVKzQCTiapGTl6D8PjWqjP1No8BZ4Hjj6eJLegE
+        tkBtJHTVzG2NliCMW24X2ScicvIek5E4JlX78jHFZw==
+X-Google-Smtp-Source: AGRyM1vvmWcS6Uk3XLwlWmm2TBNmlDnvXez0ftCObxk7xELuMfQjgAyThxD2SMRX8sV2ytdMhECXy+3RnrepRJd58Ec=
+X-Received: by 2002:a05:6e02:1a23:b0:2d3:82bb:4dae with SMTP id
+ g3-20020a056e021a2300b002d382bb4daemr1432588ile.62.1655165471758; Mon, 13 Jun
+ 2022 17:11:11 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR05MB8531.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4db6a6e2-0847-4265-d7bb-08da4d9a5559
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jun 2022 00:10:47.8443
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ZwG7iAPSn+3LcELBF5YuwXmjRofnFaZomK7AZ0WQSC4sLNdJKKVVk7wwq4AqrOJSiqWiTUEaNf/jXynhc0fulA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR05MB4461
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20210820155918.7518-1-brijesh.singh@amd.com> <20210820155918.7518-15-brijesh.singh@amd.com>
+In-Reply-To: <20210820155918.7518-15-brijesh.singh@amd.com>
+From:   Alper Gun <alpergun@google.com>
+Date:   Mon, 13 Jun 2022 17:10:58 -0700
+Message-ID: <CABpDEumcC9dx-5i-1UN=Umg1WU-8=HoTWLBLd-VbKjXCrKd6oA@mail.gmail.com>
+Subject: Re: [PATCH Part2 v5 14/45] crypto: ccp: Handle the legacy TMR
+ allocation when SNP is enabled
+To:     Ashish.Kalra@amd.com
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>, tony.luck@intel.com,
+        Marc Orr <marcorr@google.com>,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        Brijesh Singh <brijesh.singh@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Jun 13, 2022, at 3:38 PM, Axel Rasmussen <axelrasmussen@google.com> wrot=
-e:
+Similar to the TMR page, sev_init_ex_buffer should be owned by
+firmware. Otherwise INIT_EX won't work with the SNP.  Since v5 patches
+are prepared before INIT_EX work, I wanted to bring this to your
+attention.
+One difference from the TMR page, sev_init_ex_buffer has to be in the
+direct map. Firmware pages are removed from directmap in v5 patches.
+But the kernel reads sev_init_ex_buffer later to write into a
+persistent file. I have a version to make it work, if you're
+interested I can share.
 
-> On Mon, Jun 13, 2022 at 3:29 PM Peter Xu <peterx@redhat.com> wrote:
->> On Mon, Jun 13, 2022 at 02:55:40PM -0700, Andrew Morton wrote:
->>> On Wed,  1 Jun 2022 14:09:47 -0700 Axel Rasmussen <axelrasmussen@google=
-.com> wrote:
->>>=20
->>>> To achieve this, add a /dev/userfaultfd misc device. This device
->>>> provides an alternative to the userfaultfd(2) syscall for the creation
->>>> of new userfaultfds. The idea is, any userfaultfds created this way wi=
-ll
->>>> be able to handle kernel faults, without the caller having any special
->>>> capabilities. Access to this mechanism is instead restricted using e.g=
-.
->>>> standard filesystem permissions.
->>>=20
->>> The use of a /dev node isn't pretty.  Why can't this be done by
->>> tweaking sys_userfaultfd() or by adding a sys_userfaultfd2()?
->=20
-> I think for any approach involving syscalls, we need to be able to
-> control access to who can call a syscall. Maybe there's another way
-> I'm not aware of, but I think today the only mechanism to do this is
-> capabilities. I proposed adding a CAP_USERFAULTFD for this purpose,
-> but that approach was rejected [1]. So, I'm not sure of another way
-> besides using a device node.
->=20
-> One thing that could potentially make this cleaner is, as one LWN
-> commenter pointed out, we could have open() on /dev/userfaultfd just
-> return a new userfaultfd directly, instead of this multi-step process
-> of open /dev/userfaultfd, NEW ioctl, then you get a userfaultfd. When
-> I wrote this originally it wasn't clear to me how to get that to
-> happen - open() doesn't directly return the result of our custom open
-> function pointer, as far as I can tell - but it could be investigated.
-
-If this direction is pursued, I think that it would be better to set it as
-/proc/[pid]/userfaultfd, which would allow remote monitors (processes) to
-hook into userfaultfd of remote processes. I have a patch for that which
-extends userfaultfd syscall, but /proc/[pid]/userfaultfd may be cleaner.
-
+On Fri, Aug 20, 2021 at 9:00 AM Brijesh Singh <brijesh.singh@amd.com> wrote:
+>
+> The behavior and requirement for the SEV-legacy command is altered when
+> the SNP firmware is in the INIT state. See SEV-SNP firmware specification
+> for more details.
+>
+> Allocate the Trusted Memory Region (TMR) as a 2mb sized/aligned region
+> when SNP is enabled to satify new requirements for the SNP. Continue
+> allocating a 1mb region for !SNP configuration.
+>
+> While at it, provide API that can be used by others to allocate a page
+> that can be used by the firmware. The immediate user for this API will
+> be the KVM driver. The KVM driver to need to allocate a firmware context
+> page during the guest creation. The context page need to be updated
+> by the firmware. See the SEV-SNP specification for further details.
+>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> ---
+>  drivers/crypto/ccp/sev-dev.c | 169 ++++++++++++++++++++++++++++++++++-
+>  include/linux/psp-sev.h      |  11 +++
+>  2 files changed, 176 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/crypto/ccp/sev-dev.c b/drivers/crypto/ccp/sev-dev.c
+> index 01edad9116f2..34dc358b13b9 100644
+> --- a/drivers/crypto/ccp/sev-dev.c
+> +++ b/drivers/crypto/ccp/sev-dev.c
+> @@ -62,6 +62,14 @@ static int psp_timeout;
+>  #define SEV_ES_TMR_SIZE                (1024 * 1024)
+>  static void *sev_es_tmr;
+>
+> +/* When SEV-SNP is enabled the TMR needs to be 2MB aligned and 2MB size. */
+> +#define SEV_SNP_ES_TMR_SIZE    (2 * 1024 * 1024)
+> +
+> +static size_t sev_es_tmr_size = SEV_ES_TMR_SIZE;
+> +
+> +static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret);
+> +static int sev_do_cmd(int cmd, void *data, int *psp_ret);
+> +
+>  static inline bool sev_version_greater_or_equal(u8 maj, u8 min)
+>  {
+>         struct sev_device *sev = psp_master->sev_data;
+> @@ -159,6 +167,156 @@ static int sev_cmd_buffer_len(int cmd)
+>         return 0;
+>  }
+>
+> +static void snp_leak_pages(unsigned long pfn, unsigned int npages)
+> +{
+> +       WARN(1, "psc failed, pfn 0x%lx pages %d (leaking)\n", pfn, npages);
+> +       while (npages--) {
+> +               memory_failure(pfn, 0);
+> +               dump_rmpentry(pfn);
+> +               pfn++;
+> +       }
+> +}
+> +
+> +static int snp_reclaim_pages(unsigned long pfn, unsigned int npages, bool locked)
+> +{
+> +       struct sev_data_snp_page_reclaim data;
+> +       int ret, err, i, n = 0;
+> +
+> +       for (i = 0; i < npages; i++) {
+> +               memset(&data, 0, sizeof(data));
+> +               data.paddr = pfn << PAGE_SHIFT;
+> +
+> +               if (locked)
+> +                       ret = __sev_do_cmd_locked(SEV_CMD_SNP_PAGE_RECLAIM, &data, &err);
+> +               else
+> +                       ret = sev_do_cmd(SEV_CMD_SNP_PAGE_RECLAIM, &data, &err);
+> +               if (ret)
+> +                       goto cleanup;
+> +
+> +               ret = rmp_make_shared(pfn, PG_LEVEL_4K);
+> +               if (ret)
+> +                       goto cleanup;
+> +
+> +               pfn++;
+> +               n++;
+> +       }
+> +
+> +       return 0;
+> +
+> +cleanup:
+> +       /*
+> +        * If failed to reclaim the page then page is no longer safe to
+> +        * be released, leak it.
+> +        */
+> +       snp_leak_pages(pfn, npages - n);
+> +       return ret;
+> +}
+> +
+> +static inline int rmp_make_firmware(unsigned long pfn, int level)
+> +{
+> +       return rmp_make_private(pfn, 0, level, 0, true);
+> +}
+> +
+> +static int snp_set_rmp_state(unsigned long paddr, unsigned int npages, bool to_fw, bool locked,
+> +                            bool need_reclaim)
+> +{
+> +       unsigned long pfn = __sme_clr(paddr) >> PAGE_SHIFT; /* Cbit maybe set in the paddr */
+> +       int rc, n = 0, i;
+> +
+> +       for (i = 0; i < npages; i++) {
+> +               if (to_fw)
+> +                       rc = rmp_make_firmware(pfn, PG_LEVEL_4K);
+> +               else
+> +                       rc = need_reclaim ? snp_reclaim_pages(pfn, 1, locked) :
+> +                                           rmp_make_shared(pfn, PG_LEVEL_4K);
+> +               if (rc)
+> +                       goto cleanup;
+> +
+> +               pfn++;
+> +               n++;
+> +       }
+> +
+> +       return 0;
+> +
+> +cleanup:
+> +       /* Try unrolling the firmware state changes */
+> +       if (to_fw) {
+> +               /*
+> +                * Reclaim the pages which were already changed to the
+> +                * firmware state.
+> +                */
+> +               snp_reclaim_pages(paddr >> PAGE_SHIFT, n, locked);
+> +
+> +               return rc;
+> +       }
+> +
+> +       /*
+> +        * If failed to change the page state to shared, then its not safe
+> +        * to release the page back to the system, leak it.
+> +        */
+> +       snp_leak_pages(pfn, npages - n);
+> +
+> +       return rc;
+> +}
+> +
+> +static struct page *__snp_alloc_firmware_pages(gfp_t gfp_mask, int order, bool locked)
+> +{
+> +       unsigned long npages = 1ul << order, paddr;
+> +       struct sev_device *sev;
+> +       struct page *page;
+> +
+> +       if (!psp_master || !psp_master->sev_data)
+> +               return ERR_PTR(-EINVAL);
+> +
+> +       page = alloc_pages(gfp_mask, order);
+> +       if (!page)
+> +               return NULL;
+> +
+> +       /* If SEV-SNP is initialized then add the page in RMP table. */
+> +       sev = psp_master->sev_data;
+> +       if (!sev->snp_inited)
+> +               return page;
+> +
+> +       paddr = __pa((unsigned long)page_address(page));
+> +       if (snp_set_rmp_state(paddr, npages, true, locked, false))
+> +               return NULL;
+> +
+> +       return page;
+> +}
+> +
+> +void *snp_alloc_firmware_page(gfp_t gfp_mask)
+> +{
+> +       struct page *page;
+> +
+> +       page = __snp_alloc_firmware_pages(gfp_mask, 0, false);
+> +
+> +       return page ? page_address(page) : NULL;
+> +}
+> +EXPORT_SYMBOL_GPL(snp_alloc_firmware_page);
+> +
+> +static void __snp_free_firmware_pages(struct page *page, int order, bool locked)
+> +{
+> +       unsigned long paddr, npages = 1ul << order;
+> +
+> +       if (!page)
+> +               return;
+> +
+> +       paddr = __pa((unsigned long)page_address(page));
+> +       if (snp_set_rmp_state(paddr, npages, false, locked, true))
+> +               return;
+> +
+> +       __free_pages(page, order);
+> +}
+> +
+> +void snp_free_firmware_page(void *addr)
+> +{
+> +       if (!addr)
+> +               return;
+> +
+> +       __snp_free_firmware_pages(virt_to_page(addr), 0, false);
+> +}
+> +EXPORT_SYMBOL(snp_free_firmware_page);
+> +
+>  static int __sev_do_cmd_locked(int cmd, void *data, int *psp_ret)
+>  {
+>         struct psp_device *psp = psp_master;
+> @@ -281,7 +439,7 @@ static int __sev_platform_init_locked(int *error)
+>
+>                 data.flags |= SEV_INIT_FLAGS_SEV_ES;
+>                 data.tmr_address = tmr_pa;
+> -               data.tmr_len = SEV_ES_TMR_SIZE;
+> +               data.tmr_len = sev_es_tmr_size;
+>         }
+>
+>         rc = __sev_do_cmd_locked(SEV_CMD_INIT, &data, error);
+> @@ -638,6 +796,8 @@ static int __sev_snp_init_locked(int *error)
+>         sev->snp_inited = true;
+>         dev_dbg(sev->dev, "SEV-SNP firmware initialized\n");
+>
+> +       sev_es_tmr_size = SEV_SNP_ES_TMR_SIZE;
+> +
+>         return rc;
+>  }
+>
+> @@ -1161,8 +1321,9 @@ static void sev_firmware_shutdown(struct sev_device *sev)
+>                 /* The TMR area was encrypted, flush it from the cache */
+>                 wbinvd_on_all_cpus();
+>
+> -               free_pages((unsigned long)sev_es_tmr,
+> -                          get_order(SEV_ES_TMR_SIZE));
+> +               __snp_free_firmware_pages(virt_to_page(sev_es_tmr),
+> +                                         get_order(sev_es_tmr_size),
+> +                                         false);
+>                 sev_es_tmr = NULL;
+>         }
+>
+> @@ -1233,7 +1394,7 @@ void sev_pci_init(void)
+>         }
+>
+>         /* Obtain the TMR memory area for SEV-ES use */
+> -       tmr_page = alloc_pages(GFP_KERNEL, get_order(SEV_ES_TMR_SIZE));
+> +       tmr_page = __snp_alloc_firmware_pages(GFP_KERNEL, get_order(sev_es_tmr_size), false);
+>         if (tmr_page) {
+>                 sev_es_tmr = page_address(tmr_page);
+>         } else {
+> diff --git a/include/linux/psp-sev.h b/include/linux/psp-sev.h
+> index f2105a8755f9..00bd684dc094 100644
+> --- a/include/linux/psp-sev.h
+> +++ b/include/linux/psp-sev.h
+> @@ -12,6 +12,8 @@
+>  #ifndef __PSP_SEV_H__
+>  #define __PSP_SEV_H__
+>
+> +#include <linux/sev.h>
+> +
+>  #include <uapi/linux/psp-sev.h>
+>
+>  #ifdef CONFIG_X86
+> @@ -919,6 +921,8 @@ int snp_guest_page_reclaim(struct sev_data_snp_page_reclaim *data, int *error);
+>  int snp_guest_dbg_decrypt(struct sev_data_snp_dbg *data, int *error);
+>
+>  void *psp_copy_user_blob(u64 uaddr, u32 len);
+> +void *snp_alloc_firmware_page(gfp_t mask);
+> +void snp_free_firmware_page(void *addr);
+>
+>  #else  /* !CONFIG_CRYPTO_DEV_SP_PSP */
+>
+> @@ -960,6 +964,13 @@ static inline int snp_guest_dbg_decrypt(struct sev_data_snp_dbg *data, int *erro
+>         return -ENODEV;
+>  }
+>
+> +static inline void *snp_alloc_firmware_page(gfp_t mask)
+> +{
+> +       return NULL;
+> +}
+> +
+> +static inline void snp_free_firmware_page(void *addr) { }
+> +
+>  #endif /* CONFIG_CRYPTO_DEV_SP_PSP */
+>
+>  #endif /* __PSP_SEV_H__ */
+> --
+> 2.17.1
+>
+>

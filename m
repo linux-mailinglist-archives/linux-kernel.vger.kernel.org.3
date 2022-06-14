@@ -2,116 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6FB54A77C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F9E54A781
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351523AbiFNDTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 23:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
+        id S1350616AbiFNDUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 23:20:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350441AbiFNDTc (ORCPT
+        with ESMTP id S1351355AbiFNDUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 23:19:32 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C7B2E696
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:19:31 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so10603788pjm.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:19:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=7L8e1Wz/Bd9z7iLzaFmqZHzg9hGkFUKT87XneuMBC4s=;
-        b=UXGxXFisJTDA5eg/7J+MzK1OfxHBFi3fX5Hr9jfiVqSYvKefez4KuMeV9V2EJcHwyS
-         u0p2ak8L1LS9b0xqmMzO4boRwj+o88ckA/SQhGa0etdFy4Sb+OYvBc1GdtRO9SKYMoLV
-         E/bBmZBENCoJN1eexVato9L4Ks2NmoR5u9fRU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7L8e1Wz/Bd9z7iLzaFmqZHzg9hGkFUKT87XneuMBC4s=;
-        b=Y0cIssAgysb9YnBTdxOtspMAFa2+9GHdsu0O+1enlpfFc7MOhuDb9SIJn0sEkWMLDc
-         RruaArJLgA2XUN0efZ4Eu2g/NBa1PA4vS9dpKSem3aYeBiZkEKj3fKT8ILXVF12VaQRY
-         ugk0OLrOIpmw09pAE6SDvyX9eCD1zzFkOM70WZIlJVD+Cb28yW49+n8TUkjvGaJcrL2b
-         zdkbnPz6jvGuZO4ZJRuESoTUke3//d6cOMlCDKcZaCpy3TTNO38UL03gS1OpmTzva2WI
-         QAQtSN62NBt2K7RYkXkbmZye2oq/B4Ve3io96MyGebylEKOHMzNIvvIvFTi2tAAZGzvw
-         HYfw==
-X-Gm-Message-State: AJIora+vBsWiA1ofAm9HsUe/LowsNUcO+6Xm96QWX//YRF8eWD8iHVnn
-        bFwmGHC/mtSjS276xoIxI/HxtTFoSuxamg==
-X-Google-Smtp-Source: AGRyM1vWB6bubOckC1eBAZ912PtyRJ9dDViWlYRgpIAHNDPo8sztccizLgEYqmphzjIE3Rz/945vWA==
-X-Received: by 2002:a17:90a:c7cf:b0:1e8:2b77:7835 with SMTP id gf15-20020a17090ac7cf00b001e82b777835mr2163700pjb.109.1655176770633;
-        Mon, 13 Jun 2022 20:19:30 -0700 (PDT)
-Received: from google.com ([2401:fa00:8f:203:580a:28cf:a82b:5610])
-        by smtp.gmail.com with ESMTPSA id b6-20020a170902650600b0015ee985999dsm5905819plk.97.2022.06.13.20.19.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 20:19:29 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 12:19:24 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        umgwanakikbuti@gmail.com, bigeasy@linutronix.de,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        regressions@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Nitin Gupta <ngupta@vflare.org>
-Subject: Re: qemu-arm: zram: mkfs.ext4 : Unable to handle kernel NULL pointer
- dereference at virtual address 00000140
-Message-ID: <Yqf+PC+cKePAsaNI@google.com>
-References: <Yp47DODPCz0kNgE8@google.com>
- <CA+G9fYsjn0zySHU4YYNJWAgkABuJuKtHty7ELHmN-+30VYgCDA@mail.gmail.com>
- <Yp/kpPA7GdbArXDo@google.com>
- <YqAL+HeZDk5Wug28@google.com>
- <YqAMmTiwcyS3Ttla@google.com>
- <YqANP1K/6oRNCUKZ@google.com>
- <YqBRZcsfrRMZXMCC@google.com>
- <CA+G9fYvjpCOcTVdpnHTOWaf3KcDeTM3Njn_NnXvU37ppoHH5uw@mail.gmail.com>
- <YqbtH9F47dkZghJ7@google.com>
- <Yqdqfz4Ycbg33k1R@google.com>
+        Mon, 13 Jun 2022 23:20:13 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207412E69C;
+        Mon, 13 Jun 2022 20:20:12 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LMYZm4jndzDrD4;
+        Tue, 14 Jun 2022 11:19:44 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 11:20:09 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 11:20:08 +0800
+Message-ID: <2737609c-78d9-b679-f2d6-a681614f68b5@huawei.com>
+Date:   Tue, 14 Jun 2022 11:20:07 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqdqfz4Ycbg33k1R@google.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v4 2/2] arm64: kcsan: Support detecting more missing
+ memory barriers
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>
+CC:     <elver@google.com>, <catalin.marinas@arm.com>, <will@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, <arnd@arndb.de>
+References: <20220523113126.171714-1-wangkefeng.wang@huawei.com>
+ <20220523113126.171714-3-wangkefeng.wang@huawei.com>
+ <YouXQ+XX8CrgM5QX@FVFF77S0Q05N>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <YouXQ+XX8CrgM5QX@FVFF77S0Q05N>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/06/13 09:49), Minchan Kim wrote:
-> > Many thanks for the tests.
-> > 
-> > Quite honestly I was hoping that the patch would not help :) Well, ok,
-> > we now know that it's mapping area lock and the lockdep part of its
-> > memory is zero-ed out. The question is - "why?" It really should not
-> > be zeroed out.
-> 
-> Ccing Mike and Sebastian who are author/expert of the culprit patch
-> 
-> Naresh found zsmalloc crashed on the testing [1] and confirmed
-> that Sergey's patch[2] fixed the problem.
-> However, I don't understand why we need reinit the local_lock
-> on cpu_up handler[3].
-> 
-> Could you guys shed some light?
+Hi Will and Catalin, kindly ping...
 
-My guess is that it's either something very specific to Naresh's arch/config
-or a bug somewhere, which memset() per-CPU memory. Not sure how to track it
-down. KASAN maybe?
-
-We certainly don't expect that
-
-	static DEFINE_PER_CPU(struct mapping_area, zs_map_area) = {
-	        .lock   = INIT_LOCAL_LOCK(lock),
-	};
-
-would produce un-initialized dep_map. So I guess we start off with a
-valid per-CPU lock, but then it somehow gets zeroed-out.
+On 2022/5/23 22:16, Mark Rutland wrote:
+> On Mon, May 23, 2022 at 07:31:26PM +0800, Kefeng Wang wrote:
+>> As "kcsan: Support detecting a subset of missing memory barriers"[1]
+>> introduced KCSAN_STRICT/KCSAN_WEAK_MEMORY which make kcsan detects
+>> more missing memory barrier, but arm64 don't have KCSAN instrumentation
+>> for barriers, so the new selftest test_barrier() and test cases for
+>> memory barrier instrumentation in kcsan_test module will fail, even
+>> panic on selftest.
+>>
+>> Let's prefix all barriers with __ on arm64, as asm-generic/barriers.h
+>> defined the final instrumented version of these barriers, which will
+>> fix the above issues.
+>>
+>> Note, barrier instrumentation that can be disabled via __no_kcsan with
+>> appropriate compiler-support (and not just with objtool help), see
+>> commit bd3d5bd1a0ad ("kcsan: Support WEAK_MEMORY with Clang where no
+>> objtool support exists"), it adds disable_sanitizer_instrumentation to
+>> __no_kcsan attribute which will remove all sanitizer instrumentation fully
+>> (with Clang 14.0). Meanwhile, GCC does the same thing with no_sanitize.
+>>
+>> [1] https://lore.kernel.org/linux-mm/20211130114433.2580590-1-elver@google.com/
+>>
+>> Acked-by: Marco Elver <elver@google.com>
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Having built this with GCC 12.1.0 and LLVM 14.0.0, I think this patch itself
+> doesn't introduce any new problems, and logically makes sense. With that in
+> mind:
+>
+>    Acked-by: Mark Rutland <mark.rutland@arm.com>
+>
+> As an aside, having scanned the resulting vmlinux with objdump, there are
+> plenty of latent issues where we get KCSAN instrumentation where we don't want
+> it (e.g. early/late in arm64's entry-common.o). The bulk of those are due to
+> missing `nonistr` or `__always_inline`, which we'll need to fix up.
+>
+> Thanks,
+> Mark.
+>
+>> ---
+>>   arch/arm64/include/asm/barrier.h | 12 ++++++------
+>>   1 file changed, 6 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/arch/arm64/include/asm/barrier.h b/arch/arm64/include/asm/barrier.h
+>> index 9f3e2c3d2ca0..2cfc4245d2e2 100644
+>> --- a/arch/arm64/include/asm/barrier.h
+>> +++ b/arch/arm64/include/asm/barrier.h
+>> @@ -50,13 +50,13 @@
+>>   #define pmr_sync()	do {} while (0)
+>>   #endif
+>>   
+>> -#define mb()		dsb(sy)
+>> -#define rmb()		dsb(ld)
+>> -#define wmb()		dsb(st)
+>> +#define __mb()		dsb(sy)
+>> +#define __rmb()		dsb(ld)
+>> +#define __wmb()		dsb(st)
+>>   
+>> -#define dma_mb()	dmb(osh)
+>> -#define dma_rmb()	dmb(oshld)
+>> -#define dma_wmb()	dmb(oshst)
+>> +#define __dma_mb()	dmb(osh)
+>> +#define __dma_rmb()	dmb(oshld)
+>> +#define __dma_wmb()	dmb(oshst)
+>>   
+>>   #define io_stop_wc()	dgh()
+>>   
+>> -- 
+>> 2.35.3
+>>
+> .

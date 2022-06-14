@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A07154BD31
+	by mail.lfdr.de (Postfix) with ESMTP id D66FC54BD32
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358191AbiFNV7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 17:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S1358438AbiFNV7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 17:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357803AbiFNV6k (ORCPT
+        with ESMTP id S1358019AbiFNV6m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 17:58:40 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB44D1E3DB
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:58:39 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id ob5-20020a17090b390500b001e2f03294a7so136848pjb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:58:39 -0700 (PDT)
+        Tue, 14 Jun 2022 17:58:42 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F234A1D322
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:58:41 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id b6-20020a252e46000000b0065d5168f3f0so8597770ybn.21
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:58:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=4cmqk23DQrPKWneD8bfnXS0oC9sry0DDafSS8X/CWrY=;
-        b=l7Hyql+C78Kd52RjmTYdrcgLYsY6UXxV7s65+2yyhvoLQjvsARJmTI0lrfWXIJZGou
-         xooLNsnrvS4ofkFC7QyPahtMB1e0c3DxonlLqJ4xSbrZtgmzqqHvduPqwfoYbIMkdyMW
-         SSIWWqyg16Y7cJPZpK7LGta0EC1Kxhe/6uHv1PKhLVhBdUPcWcsyNWzwHtGxnW/Br3pC
-         vw95EhjCh7ZvWRtnQ+7PIe/cW695vLsl/jP0P2UE1QVcoIuSzJ6bWlCPblWqtGIGF0eC
-         gslGW6JDKfEIN8aGlriT/8pHt+3MDWPq7002wmNeWY6Q/fQY6hc5byK0nTTv3ToXXQbS
-         61zw==
+        bh=hM7xMbhXzzpQsznI3mGO8g+Dd+xj8PMNtipqtZvGG6k=;
+        b=GuwmpLX88ftCnnpvqBc0WWzPL0wSNukaXGYAF8kRU3fV4GL4+B9Elr4s4+wWKQ3/Rz
+         xg+LLlOREPuRcRxHZKOFIBVH6tpVgBcu+qg1SyPbYUuTj2LeHp4CzOFvYXE9NL+dQt1o
+         +Vw0KhKxEtxeoXYu9Sj5Zl0XeKb8VflPBYqi0tGcGGuDmaOIEC/hxaGQZMlFoiLPgt48
+         m0Gk4uwi/E2c2iCDlKMiCd0GOlJfPgP6eKlWtS1GaMP4EVNyXrivSMOwwTyNIvKB+PBU
+         uf651/XmhZiMVcMv1l9rlJ/4l5c6D+8s/y89roi6/XOnE9ZysvYaodORfCg8EVWtW3J0
+         zs1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=4cmqk23DQrPKWneD8bfnXS0oC9sry0DDafSS8X/CWrY=;
-        b=RcEODgwJyZjZIG5NZUUNTBqlGdOk1f167vfJU7ldr4l0NguPbVsh7bq/hXjVZkXd/j
-         e1bugM14uKUMrEI94h1B43C45rrDPOUAu0bAy7MaH399i8btkYr9Ad53ohCqCAFxG2XP
-         K4COUcWNwLAMGG9uIbjfvPmTksxtwMSe2dEYrr84W1DyHSMEnlMDQIFuKaLY/0AoYOgS
-         FhvkSPmtPH4XyP8THg5uBUveG/2qnmyKn7xTWVWhZAawSXZYe0GrwzpGiUxFFHUrbf8p
-         WJ5tGGBNX8bM4dcbJL1LlTRfnzvBF6YqQw3kLqVQwk3U/XNd/CAorXENdi9AdEBZWbl9
-         psZA==
-X-Gm-Message-State: AOAM531al0wZvk5xhm2jAdxGjwYV72d3F0ZsmHim5ROo6h0fMdbdas+r
-        /nDfGn8IqULud/p5DwRwY8/NAUy7f/s=
-X-Google-Smtp-Source: AGRyM1tppxzX8x/S4uyoNAr8Mb9Nltty5GKCKylv/JWEvOgXdviTwh9iRY9BihNAmupoKG78fgFqDFdvczE=
+        bh=hM7xMbhXzzpQsznI3mGO8g+Dd+xj8PMNtipqtZvGG6k=;
+        b=k/0phgAMahsIQWJC/tjdHHu+JsSsxQ0SxvfBUemORZnTLyxcjKpQtU1WV+QuojzboU
+         okx+93OYPwkOpWPknU8QP7NAhg2yRVZhzP1rejxwhxjZz8kH3Ac4hxyi+Ur0fVR4AaGB
+         CA24ND8w48fTFEY6f1zMW1a907AfVXAZPWyX3CbNAoSHPhKtlk9auPgTZyllRCZ9l06n
+         iWW0lk528vgRhBydH0hoaLLpeHTQZayltBkq+/4YwEEmZYc38fLroTmHT1J1PQ1XAJVS
+         tMskrA/Gat1iyaUg8JPQTMcglkngNacQbtj7znPS0wGDoMTznppK6TPdE0CN0Xkwy30U
+         iNUQ==
+X-Gm-Message-State: AJIora86JFEPfPYJTd0jPdg+h7oZuguH7AcTfkXjRACLw6Xaf5OADS9L
+        r1601RPPwh3P9tsiTN37qsktHgnkkZ8=
+X-Google-Smtp-Source: AGRyM1tLv+/JKHGTDIKQSxOo/noztvW59rm5koNkZaEIoKlUtzDtwmNubj8LmcaWwHqarnkYTx9vUqSqWNs=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:1688:b0:517:cf7b:9293 with SMTP id
- k8-20020a056a00168800b00517cf7b9293mr6709889pfc.7.1655243919477; Tue, 14 Jun
- 2022 14:58:39 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a25:c544:0:b0:663:896f:2236 with SMTP id
+ v65-20020a25c544000000b00663896f2236mr6636975ybe.234.1655243921135; Tue, 14
+ Jun 2022 14:58:41 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 21:58:29 +0000
+Date:   Tue, 14 Jun 2022 21:58:30 +0000
 In-Reply-To: <20220614215831.3762138-1-seanjc@google.com>
-Message-Id: <20220614215831.3762138-4-seanjc@google.com>
+Message-Id: <20220614215831.3762138-5-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220614215831.3762138-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 3/5] KVM: nVMX: Rename nested.vmcs01_* fields to nested.pre_vmenter_*
+Subject: [PATCH 4/5] KVM: nVMX: Save BNDCFGS to vmcs12 iff relevant controls
+ are exposed to L1
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -66,111 +67,43 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename the fields in struct nested_vmx used to snapshot pre-VM-Enter
-values to reflect that they can hold L2's values when restoring nested
-state, e.g. if userspace restores MSRs before nested state.  As crazy as
-it seems, restoring MSRs before nested state actually works (because KVM
-goes out if it's way to make it work), even though the initial MSR writes
-will hit vmcs01 despite holding L2 values.
+Save BNDCFGS to vmcs12 (from vmcs02) if and only if at least of one of
+the load-on-entry or clear-on-exit fields for BNDCFGS is enumerated as an
+allowed-1 bit in vmcs12.  Skipping the field avoids an unnecessary VMREAD
+when MPX is supported but not exposed to L1.
 
-Add a related comment to vmx_enter_smm() to call out that using the
-common VM-Exit and VM-Enter helpers to emulate SMI and RSM is wrong and
-broken.  The few MSRs that have snapshots _could_ be fixed by taking a
-snapshot prior to the forced VM-Exit instead of at forced VM-Enter, but
-that's just the tip of the iceberg as the rather long list of MSRs that
-aren't snapshotted (hello, VM-Exit MSR load list) can't be handled this
-way.
+Per Intel's SDM:
+
+  If the processor supports either the 1-setting of the "load IA32_BNDCFGS"
+  VM-entry control or that of the "clear IA32_BNDCFGS" VM-exit control, the
+  contents of the IA32_BNDCFGS MSR are saved into the corresponding field.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/nested.c |  8 ++++----
- arch/x86/kvm/vmx/vmx.c    |  7 +++++++
- arch/x86/kvm/vmx/vmx.h    | 15 ++++++++++++---
- 3 files changed, 23 insertions(+), 7 deletions(-)
+ arch/x86/kvm/vmx/nested.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 4a53e0c73445..38015f4ecc54 100644
+index 38015f4ecc54..496981b86f94 100644
 --- a/arch/x86/kvm/vmx/nested.c
 +++ b/arch/x86/kvm/vmx/nested.c
-@@ -2520,11 +2520,11 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
- 		vmcs_write64(GUEST_IA32_DEBUGCTL, vmcs12->guest_ia32_debugctl);
- 	} else {
- 		kvm_set_dr(vcpu, 7, vcpu->arch.dr7);
--		vmcs_write64(GUEST_IA32_DEBUGCTL, vmx->nested.vmcs01_debugctl);
-+		vmcs_write64(GUEST_IA32_DEBUGCTL, vmx->nested.pre_vmenter_debugctl);
- 	}
- 	if (kvm_mpx_supported() && (!vmx->nested.nested_run_pending ||
- 	    !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS)))
--		vmcs_write64(GUEST_BNDCFGS, vmx->nested.vmcs01_guest_bndcfgs);
-+		vmcs_write64(GUEST_BNDCFGS, vmx->nested.pre_vmenter_bndcfgs);
- 	vmx_set_rflags(vcpu, vmcs12->guest_rflags);
+@@ -4104,7 +4104,8 @@ static void sync_vmcs02_to_vmcs12_rare(struct kvm_vcpu *vcpu,
+ 	vmcs12->guest_idtr_base = vmcs_readl(GUEST_IDTR_BASE);
+ 	vmcs12->guest_pending_dbg_exceptions =
+ 		vmcs_readl(GUEST_PENDING_DBG_EXCEPTIONS);
+-	if (kvm_mpx_supported())
++	if ((vmx->nested.msrs.entry_ctls_high & VM_ENTRY_LOAD_BNDCFGS) ||
++	    (vmx->nested.msrs.exit_ctls_high & VM_EXIT_CLEAR_BNDCFGS))
+ 		vmcs12->guest_bndcfgs = vmcs_read64(GUEST_BNDCFGS);
  
- 	/* EXCEPTION_BITMAP and CR0_GUEST_HOST_MASK should basically be the
-@@ -3381,11 +3381,11 @@ enum nvmx_vmentry_status nested_vmx_enter_non_root_mode(struct kvm_vcpu *vcpu,
- 
- 	if (!vmx->nested.nested_run_pending ||
- 	    !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_DEBUG_CONTROLS))
--		vmx->nested.vmcs01_debugctl = vmcs_read64(GUEST_IA32_DEBUGCTL);
-+		vmx->nested.pre_vmenter_debugctl = vmcs_read64(GUEST_IA32_DEBUGCTL);
- 	if (kvm_mpx_supported() &&
- 	    (!vmx->nested.nested_run_pending ||
- 	     !(vmcs12->vm_entry_controls & VM_ENTRY_LOAD_BNDCFGS)))
--		vmx->nested.vmcs01_guest_bndcfgs = vmcs_read64(GUEST_BNDCFGS);
-+		vmx->nested.pre_vmenter_bndcfgs = vmcs_read64(GUEST_BNDCFGS);
- 
- 	/*
- 	 * Overwrite vmcs01.GUEST_CR3 with L1's CR3 if EPT is disabled *and*
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 5e14e4c40007..b3f9b8bb1fa8 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7843,6 +7843,13 @@ static int vmx_enter_smm(struct kvm_vcpu *vcpu, char *smstate)
- {
- 	struct vcpu_vmx *vmx = to_vmx(vcpu);
- 
-+	/*
-+	 * TODO: Implement custom flows for forcing the vCPU out/in of L2 on
-+	 * SMI and RSM.  Using the common VM-Exit + VM-Enter routines is wrong
-+	 * SMI and RSM only modify state that is saved and restored via SMRAM.
-+	 * E.g. most MSRs are left untouched, but many are modified by VM-Exit
-+	 * and VM-Enter, and thus L2's values may be corrupted on SMI+RSM.
-+	 */
- 	vmx->nested.smm.guest_mode = is_guest_mode(vcpu);
- 	if (vmx->nested.smm.guest_mode)
- 		nested_vmx_vmexit(vcpu, -1, 0, 0);
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index 71bcb486e73f..a84c91ee2a48 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -219,9 +219,18 @@ struct nested_vmx {
- 	bool has_preemption_timer_deadline;
- 	bool preemption_timer_expired;
- 
--	/* to migrate it to L2 if VM_ENTRY_LOAD_DEBUG_CONTROLS is off */
--	u64 vmcs01_debugctl;
--	u64 vmcs01_guest_bndcfgs;
-+	/*
-+	 * Used to snapshot MSRs that are conditionally loaded on VM-Enter in
-+	 * order to propagate the guest's pre-VM-Enter value into vmcs02.  For
-+	 * emulation of VMLAUNCH/VMRESUME, the snapshot will be of L1's value.
-+	 * For KVM_SET_NESTED_STATE, the snapshot is of L2's value, _if_
-+	 * userspace restores MSRs before nested state.  If userspace restores
-+	 * MSRs after nested state, the snapshot holds garbage, but KVM can't
-+	 * detect that, and the garbage value in vmcs02 will be overwritten by
-+	 * MSR restoration in any case.
-+	 */
-+	u64 pre_vmenter_debugctl;
-+	u64 pre_vmenter_bndcfgs;
- 
- 	/* to migrate it to L1 if L2 writes to L1's CR8 directly */
- 	int l1_tpr_threshold;
+ 	vmx->nested.need_sync_vmcs02_to_vmcs12_rare = false;
 -- 
 2.36.1.476.g0c4daa206d-goog
 

@@ -2,97 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C992154A77A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:19:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6FB54A77C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343843AbiFNDTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 23:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        id S1351523AbiFNDTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 23:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233298AbiFNDTH (ORCPT
+        with ESMTP id S1350441AbiFNDTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 23:19:07 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5C42E0B8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:19:06 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id 15so7451499pfy.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:19:06 -0700 (PDT)
+        Mon, 13 Jun 2022 23:19:32 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C7B2E696
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:19:31 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so10603788pjm.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:19:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=/e6JAN91T9e89/lPNtlCsxwSmh8l6RVHLbvzMmDBIwc=;
-        b=dq0Y6PayEq+t+JXCl6y6hIB+rMABYHAt1q71bZlxgrvfqjx+UuQKYAv0Iv2bbY0XNn
-         b1IcC9sJd3ZqaB9xTr7Tk05idcEREChlxaVSaXiJsJF8hcsDPgE3b5Hf9cumro46hB9t
-         UU9oBGxMHOhdtStmucng2teG43v2Cx8HVlG4l9+Va+GGVcX8HSXK+iMgUykA0AFo8Hkn
-         aw+2g5UeZQyyW4YGD6xW/tiYuVzuKBKAv9WdmVlGAAQfJafk/l4BtK+zr9UxJ99+5Y3S
-         FJD1QBdV2sU80bHS4ZCaM4rHYLIuPISoaNaa9Rf+DjxmM+DFbxWi5U/TuzL92pjGk4/w
-         b1EA==
+        bh=7L8e1Wz/Bd9z7iLzaFmqZHzg9hGkFUKT87XneuMBC4s=;
+        b=UXGxXFisJTDA5eg/7J+MzK1OfxHBFi3fX5Hr9jfiVqSYvKefez4KuMeV9V2EJcHwyS
+         u0p2ak8L1LS9b0xqmMzO4boRwj+o88ckA/SQhGa0etdFy4Sb+OYvBc1GdtRO9SKYMoLV
+         E/bBmZBENCoJN1eexVato9L4Ks2NmoR5u9fRU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=/e6JAN91T9e89/lPNtlCsxwSmh8l6RVHLbvzMmDBIwc=;
-        b=39YrSWka6FA/USozkJzWpcnErqMi+/tleNDZ9gEeGvdTR0G43T3vBxecfDoHGN3d+6
-         ZiXB/LWeI/UknrsT5vC7htafrMMxUCZvpmyUWr7RGvaVNL5lDkPTbJLlYUqsXvDxiarx
-         pAjEN7tCDwvKrnvvZnu4QwF2MJQ9Pe0ee6rXhoQ6jJNb0GGn1LeWdbGm4HBETTVGIFR6
-         ixHTp/d8/7hG8ot/76I8YoajzcKBxPF2nsduvdCXbbzp84fcbqpuSt/bk6LVY+vaFMgH
-         sdPPNR/i7Dw/LvyNuXZYm9WGAtSYNZtnY11R4wenmjBbi7lv7egpnThpuE7qPzA9g+1m
-         e2KQ==
-X-Gm-Message-State: AOAM531xBtwVpcxcMKskd8p9NM4Pin5ph/6CkKUcyIojxX16iStZj30S
-        j9DyKzSoBvwxNpdhOCn+gMNJwHZR61Q=
-X-Google-Smtp-Source: ABdhPJzDff4vhZ4C5TjzjV0yIVLw0dB2fQEzBghjbmxfv1Y/aC16pd1b9VpKXpCHoUBq2d7/hUn+vw==
-X-Received: by 2002:a63:40c3:0:b0:3fd:12b8:3207 with SMTP id n186-20020a6340c3000000b003fd12b83207mr2579618pga.57.1655176745797;
-        Mon, 13 Jun 2022 20:19:05 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::4:ea37])
-        by smtp.gmail.com with ESMTPSA id jb2-20020a170903258200b0015e8d4eb25asm5883262plb.164.2022.06.13.20.19.04
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=7L8e1Wz/Bd9z7iLzaFmqZHzg9hGkFUKT87XneuMBC4s=;
+        b=Y0cIssAgysb9YnBTdxOtspMAFa2+9GHdsu0O+1enlpfFc7MOhuDb9SIJn0sEkWMLDc
+         RruaArJLgA2XUN0efZ4Eu2g/NBa1PA4vS9dpKSem3aYeBiZkEKj3fKT8ILXVF12VaQRY
+         ugk0OLrOIpmw09pAE6SDvyX9eCD1zzFkOM70WZIlJVD+Cb28yW49+n8TUkjvGaJcrL2b
+         zdkbnPz6jvGuZO4ZJRuESoTUke3//d6cOMlCDKcZaCpy3TTNO38UL03gS1OpmTzva2WI
+         QAQtSN62NBt2K7RYkXkbmZye2oq/B4Ve3io96MyGebylEKOHMzNIvvIvFTi2tAAZGzvw
+         HYfw==
+X-Gm-Message-State: AJIora+vBsWiA1ofAm9HsUe/LowsNUcO+6Xm96QWX//YRF8eWD8iHVnn
+        bFwmGHC/mtSjS276xoIxI/HxtTFoSuxamg==
+X-Google-Smtp-Source: AGRyM1vWB6bubOckC1eBAZ912PtyRJ9dDViWlYRgpIAHNDPo8sztccizLgEYqmphzjIE3Rz/945vWA==
+X-Received: by 2002:a17:90a:c7cf:b0:1e8:2b77:7835 with SMTP id gf15-20020a17090ac7cf00b001e82b777835mr2163700pjb.109.1655176770633;
+        Mon, 13 Jun 2022 20:19:30 -0700 (PDT)
+Received: from google.com ([2401:fa00:8f:203:580a:28cf:a82b:5610])
+        by smtp.gmail.com with ESMTPSA id b6-20020a170902650600b0015ee985999dsm5905819plk.97.2022.06.13.20.19.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jun 2022 20:19:05 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 13 Jun 2022 17:19:03 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Imran Khan <imran.f.khan@oracle.com>
-Cc:     gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/4] kernfs: make ->attr.open RCU protected.
-Message-ID: <Yqf+J/P1/24i6rN9@slm.duckdns.org>
-References: <20220614020840.546013-1-imran.f.khan@oracle.com>
- <20220614020840.546013-2-imran.f.khan@oracle.com>
+        Mon, 13 Jun 2022 20:19:29 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 12:19:24 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        umgwanakikbuti@gmail.com, bigeasy@linutronix.de,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        regressions@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Nitin Gupta <ngupta@vflare.org>
+Subject: Re: qemu-arm: zram: mkfs.ext4 : Unable to handle kernel NULL pointer
+ dereference at virtual address 00000140
+Message-ID: <Yqf+PC+cKePAsaNI@google.com>
+References: <Yp47DODPCz0kNgE8@google.com>
+ <CA+G9fYsjn0zySHU4YYNJWAgkABuJuKtHty7ELHmN-+30VYgCDA@mail.gmail.com>
+ <Yp/kpPA7GdbArXDo@google.com>
+ <YqAL+HeZDk5Wug28@google.com>
+ <YqAMmTiwcyS3Ttla@google.com>
+ <YqANP1K/6oRNCUKZ@google.com>
+ <YqBRZcsfrRMZXMCC@google.com>
+ <CA+G9fYvjpCOcTVdpnHTOWaf3KcDeTM3Njn_NnXvU37ppoHH5uw@mail.gmail.com>
+ <YqbtH9F47dkZghJ7@google.com>
+ <Yqdqfz4Ycbg33k1R@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220614020840.546013-2-imran.f.khan@oracle.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Yqdqfz4Ycbg33k1R@google.com>
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 12:08:37PM +1000, Imran Khan wrote:
-> +static struct kernfs_open_node *
-> +kernfs_deref_open_node(struct kernfs_open_file *of, struct kernfs_node *kn)
-> +{
-> +	struct kernfs_open_node *on;
-> +	bool deref_ok;
-> +
-> +	deref_ok = (of ? !list_empty(&of->list) : false) ||
-> +		   lockdep_is_held(&kernfs_open_file_mutex);
-> +
-> +	on = rcu_dereference_check(kn->attr.open, deref_ok);
-> +
-> +	return on;
-> +}
+On (22/06/13 09:49), Minchan Kim wrote:
+> > Many thanks for the tests.
+> > 
+> > Quite honestly I was hoping that the patch would not help :) Well, ok,
+> > we now know that it's mapping area lock and the lockdep part of its
+> > memory is zero-ed out. The question is - "why?" It really should not
+> > be zeroed out.
+> 
+> Ccing Mike and Sebastian who are author/expert of the culprit patch
+> 
+> Naresh found zsmalloc crashed on the testing [1] and confirmed
+> that Sergey's patch[2] fixed the problem.
+> However, I don't understand why we need reinit the local_lock
+> on cpu_up handler[3].
+> 
+> Could you guys shed some light?
 
-Hahahaha didn't know they'd be taking two different arguments. Sorry about
-the many iterations but it'd probably be better to have two different
-versions for the two argument types. Other than that, looks fine to me.
+My guess is that it's either something very specific to Naresh's arch/config
+or a bug somewhere, which memset() per-CPU memory. Not sure how to track it
+down. KASAN maybe?
 
-Thanks.
+We certainly don't expect that
 
--- 
-tejun
+	static DEFINE_PER_CPU(struct mapping_area, zs_map_area) = {
+	        .lock   = INIT_LOCAL_LOCK(lock),
+	};
+
+would produce un-initialized dep_map. So I guess we start off with a
+valid per-CPU lock, but then it somehow gets zeroed-out.

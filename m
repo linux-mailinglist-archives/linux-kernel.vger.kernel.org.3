@@ -2,71 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B0454BD39
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D42854BD44
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244040AbiFNWCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 18:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
+        id S1354852AbiFNWEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 18:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234714AbiFNWCh (ORCPT
+        with ESMTP id S230024AbiFNWER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 18:02:37 -0400
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FAD5581;
-        Tue, 14 Jun 2022 15:02:34 -0700 (PDT)
-Received: by mail-il1-f182.google.com with SMTP id p1so7569355ilj.9;
-        Tue, 14 Jun 2022 15:02:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=0nxRd9AE8Oe6xN5njg7BT1Z7XjTAG7bzfY/YVaHWxW0=;
-        b=RoUuMFnliUzMEiYKVdMgoyitIDiWLkRlrYluMKR9M8VNsLvstw9m0hA4EsMJTbElb7
-         EAAaZx+1asi1aI5E/pIv7UNlMuLZ2dz/81cW+dskI8x5a2j7lyiB5E+GIq8RH3FJ1YTC
-         pjUHsTxiS8Hdf5ddCFZ/3X6GYjPKA72URnU8DEef3lpF81Gg+eYzi5sfLJMXEjP6Yztn
-         ovLYPNvq3Vyl0mdlXOiUbtgu55J3J1SKeTubyl0DLmS1SMcsHDF7z/gUuYdZog21adSj
-         yrIFXcuFAYUo6fyoAbm2pY/5MGw5V7+H2RSSs/rHBIRZtCNaqeERjd2z3cw28/cxefRY
-         nEvQ==
-X-Gm-Message-State: AJIora8oYwcfRB34mcKuv4hICNvfbSzVMXt0cZ8MDvbbZPvB7sfQ9TWs
-        J/YZ4/8NQDhcxzsAidBInG9D1quCjw==
-X-Google-Smtp-Source: AGRyM1s5JXgBzROW2REr1JyDPeUi7FdtaT5Ia8u5KZ46ee7E98SZvgRNcVp8ywM58DLAA4k2gAbIpw==
-X-Received: by 2002:a92:c567:0:b0:2d1:c3df:eff8 with SMTP id b7-20020a92c567000000b002d1c3dfeff8mr4160022ilj.84.1655244153238;
-        Tue, 14 Jun 2022 15:02:33 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id g17-20020a022711000000b00331fdc68ccesm5320943jaa.140.2022.06.14.15.02.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 15:02:32 -0700 (PDT)
-Received: (nullmailer pid 2793685 invoked by uid 1000);
-        Tue, 14 Jun 2022 22:02:30 -0000
-Date:   Tue, 14 Jun 2022 16:02:30 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        linux-kernel@vger.kernel.org, linux-ide@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v4 01/23] dt-bindings: ata: ahci-platform: Move
- dma-coherent to sata-common.yaml
-Message-ID: <20220614220230.GA2793572-robh@kernel.org>
-References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
- <20220610081801.11854-2-Sergey.Semin@baikalelectronics.ru>
+        Tue, 14 Jun 2022 18:04:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA8C72FE6F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655244255;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=v9dxoAUFdvaKxjatlIHTfIiF/lhvDFU0vdCFYvfgo9U=;
+        b=JbKT3w2NfDupaJito6m7UIsXrjnWTW8x9BqkqDcA5qDzbAc89sBLL/osl71Cjvs3bqQCG1
+        zs9wQxvZ45LMhNLgq7hzFRHyBmgfjaeN+6gUeVadfdtUx6ivj0N9iQEdf6ktrOF7VHPLtT
+        v6cg2Bx6AC2FlRrcSJIfdOvFl4uoBro=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-314-g4PcdfaWOASxu_lcFaIdqw-1; Tue, 14 Jun 2022 18:04:14 -0400
+X-MC-Unique: g4PcdfaWOASxu_lcFaIdqw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 09BFF381079B;
+        Tue, 14 Jun 2022 22:04:14 +0000 (UTC)
+Received: from llong.com (unknown [10.22.33.116])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F0CC5492CA2;
+        Tue, 14 Jun 2022 22:04:12 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v2 0/3] mm/kmemleak: Avoid soft lockup in kmemleak_scan()
+Date:   Tue, 14 Jun 2022 18:03:56 -0400
+Message-Id: <20220614220359.59282-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610081801.11854-2-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,31 +60,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Jun 2022 11:17:39 +0300, Serge Semin wrote:
-> Seeing doubtfully any SATA device working without embedded DMA engine
-> let's permit the device nodes being equipped with the dma-coherent
-> property in case if the platform is capable of cache-coherent DMAs.
-> 
-> As a side-effect we can drop the explicit dma-coherent property definition
-> from the particular device schemas. Currently it concerns the Broadcom
-> SATA AHCI controller only.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v2:
-> - This is a new patch created after rebasing v1 onto the 5.18-rc3 kernel.
-> 
-> Changelog v4:
-> - Move the dma-coherent property to the sata-common.yaml schema instead
->   of removing it.
-> - Remove the Hannes' rb tag.
-> ---
->  Documentation/devicetree/bindings/ata/ahci-platform.yaml  | 2 --
->  Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml | 2 --
->  Documentation/devicetree/bindings/ata/sata-common.yaml    | 2 ++
->  3 files changed, 2 insertions(+), 4 deletions(-)
-> 
+ v2:
+  - Update patch 3 to count the objects checked instead of being
+    gray for determining when to do cond_resched(). This is more
+    reliable.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+There are 3 RCU-based object iteration loops in kmemleak_scan(). Because
+of the need to take RCU read lock, we can't insert cond_resched() into
+the loop like other parts of the function. As there can be millions of
+objects to be scanned, it takes a while to iterate all of them. The
+kmemleak functionality is usually enabled in a debug kernel which is
+much slower than a non-debug kernel. With sufficient number of kmemleak
+objects, the time to iterate them all may exceed 22s causing soft lockup.
+
+  watchdog: BUG: soft lockup - CPU#3 stuck for 22s! [kmemleak:625]
+
+This patch series make changes to the 3 object iteration loops in
+kmemleak_scan() to prevent them from causing soft lockup.
+
+Waiman Long (3):
+  mm/kmemleak: Use _irq lock/unlock variants in kmemleak_scan/_clear()
+  mm/kmemleak: Skip unlikely objects in kmemleak_scan() without taking
+    lock
+  mm/kmemleak: Prevent soft lockup in first object iteration loop of
+    kmemleak_scan()
+
+ mm/kmemleak.c | 60 +++++++++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 49 insertions(+), 11 deletions(-)
+
+-- 
+2.31.1
+

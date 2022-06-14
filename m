@@ -2,128 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1C454BCEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE21354BCF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:46:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240904AbiFNVoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 17:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40530 "EHLO
+        id S1354480AbiFNVqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 17:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbiFNVoI (ORCPT
+        with ESMTP id S231695AbiFNVqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 17:44:08 -0400
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCBD275C7;
-        Tue, 14 Jun 2022 14:44:07 -0700 (PDT)
-Received: by mail-oi1-f178.google.com with SMTP id bf7so12050989oib.11;
-        Tue, 14 Jun 2022 14:44:07 -0700 (PDT)
+        Tue, 14 Jun 2022 17:46:48 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E613F8BF;
+        Tue, 14 Jun 2022 14:46:48 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id u37so1302805pfg.3;
+        Tue, 14 Jun 2022 14:46:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1eNdPfvX38pax2FY+qXXzY6vFul3pxSs3QGey2LtONc=;
+        b=JT8D/VVDh2+09qUONO0frctb5saZdLIvyZ0loPRYkU5lXeIx7e9TxzZWhcB5kW2tJY
+         KFGr15tY4M/N/0XmMH6aDWlbmvi/4CF8OsorSSJjRJMAWTzgXNTdxrWvxLg1yqGNoQ5E
+         0QvLUOdFmsPOdApg+6tj3SLNnvgG6ovzlyG8OgyVsA1eHgEtgHfla4AsVhUGDTu50Ouv
+         iM0rKmS9Czn+2zNqI7pAUVElRalvZf2cWWcSKRrRo1rmMKWr5nKpeeOkCcpxmexePlO+
+         wWRAvbjrFZr1N6JCQ7/mTohD6mePS6eU5nYYFz8YfXVBLK7L1tOPxByvx8IKsSe/mWyy
+         ccMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8QMsUtIyEnI6GxBkF9iHYVsdk25z9ZpByq01YYX9ysg=;
-        b=U+9FTiDgexv7UAmKgVfX/D1ndon1vQ/6UaK4lhGUbH5N+80R5YVsLk6qVNe/YD5ci5
-         hU4o9FU2+bfhKIv3GUGmAhSOQsag25FCGlaLz18Og3d4PMMB0Osx74pXwgm7NBUujcYl
-         wvPYFX0qsSzNfkp/FX/BOhPGVhIkmuHMNVi+I1zsmhkUqdzzFYN7Jm1zFn/uW9qa7rhs
-         vMZO81RyxpaWVv4d7UKkQN9hTblpk2tXaTvAyO4uCkWKzgCA2yhf4kFTEbQqX5z6nQtP
-         7Kd5+PC5QqYVpFdsL0lAtPtU8ZfS3zD9FIsrWgKMxNrxWanVoD1r8256iQVf43NUuGsj
-         A4XQ==
-X-Gm-Message-State: AOAM533V8tcvC77iNlxmAoE/lSnS7zsWz9FyUYzr59FpdUWL3u/kPP78
-        6TF47u/+tz3m8F/V8Q2v3yjL7clBvD/mrnQLG5o=
-X-Google-Smtp-Source: ABdhPJx0GRPfywd6bkowa8JZnSN+9Oe1XgrNO3hMIS2tkcqC7REp+48SEf0mFA5J4AyJ3FXtED8jcNZ+hzsANBKnvzw=
-X-Received: by 2002:aca:bb56:0:b0:32f:2160:bfd8 with SMTP id
- l83-20020acabb56000000b0032f2160bfd8mr3158871oif.92.1655243046655; Tue, 14
- Jun 2022 14:44:06 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1eNdPfvX38pax2FY+qXXzY6vFul3pxSs3QGey2LtONc=;
+        b=sSW2Aa5JfSi36Vm25avYs47z6tExKuHlDWgM2I8wSPuAnCcFnRPvUF6C+j5QH+thgs
+         3/v5ptQ3XKqFW+e0H3gea+W7Xv3LaIarsI7FkImhHNEnCjlF1Dj+Uoqq3BpQl/5Zburj
+         za/Aim5fvAHB0wiAtuYPAGcS10y62tQXAEXYgnQacN+HMa+3vn1rbdkUU7yfurLw6ytS
+         /HF5nQeoFd9vO8ZCQbrR1LVy07DSJsVgChi1fqOnq50s3dMM92/xK5L7L0J1WflMgwYp
+         0Gc76D0fEtAYAalIXaIz5mBuOASby0bjkMsiCXCG2MEve+kX0hcWKJEzRgJA4TqFTgS5
+         h1UQ==
+X-Gm-Message-State: AOAM532VEWtF7v1J3AsRpNB2PiKvz3jG+NdPbSx0M8zP+jgD49rPoBmH
+        YqqNqYGGEG+HuOHG++aElrvC72l/SSI=
+X-Google-Smtp-Source: ABdhPJzNTPFlWQyFD3KD66VHQTaKvSHsM4tuvUqpTAxq/WOSiEPFJRp3ra5YRin6ZS7tXyslsvIgEw==
+X-Received: by 2002:a05:6a00:1513:b0:51c:3ca8:47a4 with SMTP id q19-20020a056a00151300b0051c3ca847a4mr6672048pfu.48.1655243207552;
+        Tue, 14 Jun 2022 14:46:47 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id w76-20020a627b4f000000b0051bc5f4df1csm8106616pfc.154.2022.06.14.14.46.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 14:46:47 -0700 (PDT)
+Message-ID: <8afce56d-6c50-de85-0a98-6a6c46b63270@gmail.com>
+Date:   Tue, 14 Jun 2022 14:46:44 -0700
 MIME-Version: 1.0
-References: <20220613094605.208401-1-yangjihong1@huawei.com> <20220613094605.208401-2-yangjihong1@huawei.com>
-In-Reply-To: <20220613094605.208401-2-yangjihong1@huawei.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 14 Jun 2022 14:43:55 -0700
-Message-ID: <CAM9d7ch-VL6siA7g79pN1OSgus4X2C0D2tptAt5u04KUqxOUTg@mail.gmail.com>
-Subject: Re: [RFC 01/13] perf kwork: New tool
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 5.10 00/11] 5.10.123-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220614183719.878453780@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220614183719.878453780@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 6/14/22 11:40, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.123 release.
+> There are 11 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.123-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-On Mon, Jun 13, 2022 at 2:48 AM Yang Jihong <yangjihong1@huawei.com> wrote:
->
-> The perf-kwork tool is used to trace time properties of kernel work
-> (such as irq, softirq, and workqueue), including runtime, latency,
-> and timehist, using the infrastructure in the perf tools to allow
-> tracing extra targets:
->
->   # perf kwork -h
->
->    Usage: perf kwork [<options>] {record|report|latency|timehist}
->
->       -D, --dump-raw-trace  dump raw trace in ASCII
->       -f, --force           don't complain, do it
->       -k, --kwork <kwork>   list of kwork to profile (irq, softirq, workqueue etc)
->       -v, --verbose         be more verbose (show symbol address, etc)
->
->   # perf kwork record -- sleep 1
->   [ perf record: Woken up 0 times to write data ]
->   [ perf record: Captured and wrote 1.696 MB perf.data ]
->
->   # perf kwork report -h
->
->    Usage: perf kwork report [<options>]
->
->       -C, --cpu <cpu>       list of cpus to profile
->       -i, --input <file>    input file name
->       -n, --name <name>     event name to profile
->       -s, --sort <key[,key2...]>
->                             sort by key(s): runtime, max, freq
->       -S, --with-summary    Show summary with statistics
->           --time <str>      Time span for analysis (start,stop)
->
->   # perf kwork latency -h
->
->    Usage: perf kwork latency [<options>]
->
->       -C, --cpu <cpu>       list of cpus to profile
->       -i, --input <file>    input file name
->       -n, --name <name>     event name to profile
->       -s, --sort <key[,key2...]>
->                             sort by key(s): avg, max, freq
->           --time <str>      Time span for analysis (start,stop)
->
->   # perf kwork timehist -h
->
->    Usage: perf kwork timehist [<options>]
->
->       -C, --cpu <cpu>       list of cpus to profile
->       -g, --call-graph      Display call chains if present
->       -i, --input <file>    input file name
->       -k, --vmlinux <file>  vmlinux pathname
->       -n, --name <name>     event name to profile
->           --kallsyms <file>
->                             kallsyms pathname
->           --max-stack <n>   Maximum number of functions to display backtrace.
->           --symfs <directory>
->                             Look for files with symbols relative to this directory
->           --time <str>      Time span for analysis (start,stop)
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-I think you can add this and the documentation when you
-actually add the functionality later.
-
-Thanks,
-Namhyung
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

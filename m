@@ -2,102 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5147B54BDB3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:34:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DCE854BDBA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345565AbiFNWeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 18:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
+        id S240455AbiFNWej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 18:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236535AbiFNWeB (ORCPT
+        with ESMTP id S236535AbiFNWei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 18:34:01 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F41D25C46;
-        Tue, 14 Jun 2022 15:34:00 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LN3BX6HBvz4xXj;
-        Wed, 15 Jun 2022 08:33:56 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655246037;
-        bh=OWV3XBMgJCK4V+jIDJ5aUoVALutHtEtz+lth47xTA1I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JxEo0MWK5umTb0QaMy9Y54yg300D5V/falPuwoC1vtz32ctMABBcgFivzcabhmKGF
-         e1x7Mite6OppkYsS6+fQaldbrLsYeiUN7ufCmzxlAAqeKT0BD/W9kqX7unAdY7Xjew
-         B49ibg6zlkduWJraZz0ZCANHGbXyF7Xan509UBS56elRJ/XdItOyEIio6hdRskgEoW
-         4L6ud8gbeozrsZ2de2C5O46OoBj2oEM1vD22mQPEX/WClZeWeOMvsybvc3RMXdbWuT
-         fjhvBAAM+utQTVY4FzT0rWJmeydhEYIi3NU4rGQou2APfJ8liCjBgO6UfUa4LKUk62
-         z/1kELcUO+ayw==
-Date:   Wed, 15 Jun 2022 08:33:55 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the amdgpu tree
-Message-ID: <20220615083355.5be9ead7@canb.auug.org.au>
-In-Reply-To: <20220611195513.58207a99@canb.auug.org.au>
-References: <20220611195513.58207a99@canb.auug.org.au>
+        Tue, 14 Jun 2022 18:34:38 -0400
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38ED44D277;
+        Tue, 14 Jun 2022 15:34:37 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id b138so4100507iof.13;
+        Tue, 14 Jun 2022 15:34:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nfvtIdPgiXULHnvZfVP5vqYcUUa4+OVCxD93E+5pMPc=;
+        b=xCQkU0PiBqeHIsmHf2eT6Co6Lym+Uso9g5MbI9LxyXueL3Pcs5eCJVSUKJmDNhRL9m
+         T6d3tyslSlghnbmtETjT8yBKw+/6kum73fQXykuzTlo0PWoerlVDtfhnG+M42N4GIbA9
+         ZHFE6tzI6xjq6yomIvSzJtsde72pT5r7llW/H9YcwtX0w0ANHFK59ZffuXVPtUm2luR8
+         5zoA1aCkNtSLhwclqci/MS77RLnmFbX/bASo6rLatDJLLThdDeSkDZo1AnoMId9IYn3w
+         x9hDn8GtmXSCuudUtGQb8A3OuqSIyuC2J5nhLR17qd8PxRCfuE76TxgVIvhzHJXMvlkH
+         FGww==
+X-Gm-Message-State: AOAM531US2dkqtnUGoWX4jCdY88orGBi2ly1wGy1xjaT61SANUmzqvJN
+        m7oYYkRAAFvUOqR0EIK/sfA0gh57Vg==
+X-Google-Smtp-Source: ABdhPJxE1abxcZlYMoUexYa+t1QhZEgC3GbKhXiUkgv+6tmPmB+hvZlvUSYMxVLNMKQy432HbWyDcg==
+X-Received: by 2002:a6b:6a07:0:b0:66a:2e5f:2058 with SMTP id x7-20020a6b6a07000000b0066a2e5f2058mr1167288iog.72.1655246076467;
+        Tue, 14 Jun 2022 15:34:36 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id n11-20020a02710b000000b003315c00e885sm5402674jac.0.2022.06.14.15.34.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 15:34:36 -0700 (PDT)
+Received: (nullmailer pid 2853736 invoked by uid 1000);
+        Tue, 14 Jun 2022 22:34:33 -0000
+Date:   Tue, 14 Jun 2022 16:34:33 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     Greg Ungerer <gerg@kernel.org>, DENG Qingfang <dqfext@gmail.com>,
+        netdev@vger.kernel.org,
+        =?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        linux-rockchip@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mediatek@lists.infradead.org,
+        Sean Wang <sean.wang@mediatek.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Eric Dumazet <edumazet@google.com>, devicetree@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v4 5/6] dt-bindings: net: dsa: make reset optional and
+ add rgmii-mode to mt7531
+Message-ID: <20220614223433.GA2853676-robh@kernel.org>
+References: <20220610170541.8643-1-linux@fw-web.de>
+ <20220610170541.8643-6-linux@fw-web.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/M5A5HR8UzFSEDdGPf9rDDm6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610170541.8643-6-linux@fw-web.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/M5A5HR8UzFSEDdGPf9rDDm6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, 10 Jun 2022 19:05:40 +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> A board may have no independent reset-line, so reset cannot be used
+> inside switch driver.
+> 
+> E.g. on Bananapi-R2 Pro switch and gmac are connected to same reset-line.
+> 
+> Resets should be acquired only to 1 device/driver. This prevents reset to
+> be bound to switch-driver if reset is already used for gmac. If reset is
+> only used by switch driver it resets the switch *and* the gmac after the
+> mdio bus comes up resulting in mdio bus goes down. It takes some time
+> until all is up again, switch driver tries to read from mdio, will fail
+> and defer the probe. On next try the reset does the same again.
+> 
+> Make reset optional for such boards.
+> 
+> Allow port 5 as cpu-port and phy-mode rgmii for mt7531.
+> 
+> - MT7530 supports RGMII on port 5 and RGMII/TRGMII on port 6.
+> - MT7531 supports on port 5 RGMII and SGMII (dual-sgmii) and
+>   SGMII on port 6.
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+> v4:
+>  - add port 5 as CPU-Port
+>  - change description
+> ---
+>  .../devicetree/bindings/net/dsa/mediatek,mt7530.yaml      | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+> 
 
-Hi all,
-
-On Sat, 11 Jun 2022 19:55:13 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> In commit
->=20
->   4768e2f5653e ("drm/amd/display: dml: move some variables to heap")
-
-This is now commit 9a0efb51178c.
-
-> Fixes tag
->=20
->   Fixes: d03037269bf2 ("drm/amd/display: DML changes for DCN32/321")
->=20
-> has these problem(s):
->=20
->   - Target SHA1 does not exist
->=20
-> Maybe you meant
->=20
-> Fixes: dda4fb85e433 ("drm/amd/display: DML changes for DCN32/321")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/M5A5HR8UzFSEDdGPf9rDDm6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKpDNMACgkQAVBC80lX
-0GzrXgf9Gv3MeSXi7vdtRT2N/yNhiA/P+xv57J4ncikmzh6wGwX6pp9IM4G9P9xJ
-UpzMohsPl/hzcPR5elpil+gCqE3QHwERlF3vc1QCPk+6mcIFhMW4IuSTXcmnS0dZ
-NaKwjuM3vTeKKKNO5NSKI05DKkkLUK3BHywzls6xYLY1eK8AEOS4Mm2s6omvoEGR
-84secJ7GNEwGpwXprrhtIgK41manrzctWnD4z7U0yCpukHH+J2XbZybBXD7qlAKj
-o7Jq1ROU2wNBNOwFRXJ48bb5FKTe4/snX4CUyuqsSp1OScgH6MAfV+YLr5bOri8k
-0PNdNjd18KwT9EifQaTC83PPNb9U4A==
-=A0wQ
------END PGP SIGNATURE-----
-
---Sig_/M5A5HR8UzFSEDdGPf9rDDm6--
+Reviewed-by: Rob Herring <robh@kernel.org>

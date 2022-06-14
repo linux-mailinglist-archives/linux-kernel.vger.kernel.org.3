@@ -2,216 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E026654B53C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F37454B536
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 18:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344641AbiFNQAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 12:00:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
+        id S1355895AbiFNQAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 12:00:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344649AbiFNQAX (ORCPT
+        with ESMTP id S1345157AbiFNQAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 12:00:23 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2070.outbound.protection.outlook.com [40.107.243.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B9173F885;
-        Tue, 14 Jun 2022 09:00:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YgtMQfWs2HUzf38nDijdwAKIw1Iusm19M2r3ERbG+Dqzwvahp+sLnNzxDr/x0EEM7t1ijzApLHH4+WicQNQkuXWAEm8H6rs/pmZh7TuUbn8+EApgME4j+rD3j+9668vXQbPF/6Sh6U2nQmcbGMDGufEQpjGGh59KlB+LpOiu0g2hcqJHF4/rK7LkQGqXxYdFKoxpuqWRHVl7O69KoIr7VDGAs02rLs/PN0KvfGdUb0h3RYvUg0v2UFvLcTVUNuSrRCWvvpj712Mh/g7ujS98mjKQu1tlS3frmhJlnwXxQDNGk6D2I7oUVM44t1jym1r4Zq3X3ZB2AO2UEEN74bN2HA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Kc7xX0x3AGd/UYMeosIy4d+31oCMZJdCgUDR7o4DINs=;
- b=gRHlz7tvM3UXgvmIOL4mhvWik2KjuiWX6EP8shQBY2E6OAvYYQvmVIgFGQTZOxIzHb6y8piLzVMvHXsJiTWWXvUC1CwGo4Cpe5RQikNB8SyV58SZ0LRevVNiwbIAddz+M5xdy9HrqK7XChzguCEezsQpq79BgXCTmUftSybYCr1WVC9gfl6QSyOwUJ1r6hO4hf1H4CuexDXv2adHqJGwTx391mvHJ6TRDJyJy0tZcta9pzdsszOXqG2OPasR2fAEJyrgb05oZIG157/MYpVdaziLNJDRKgmygbNtggMeGhovaHj5Rfiq2T4ULWCG+uYd0lc0W+HcYItUwUQxN/WrCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=precisionplanting.com; dmarc=pass action=none
- header.from=precisionplanting.com; dkim=pass header.d=precisionplanting.com;
- arc=none
+        Tue, 14 Jun 2022 12:00:40 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3AD3BBCC
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:00:37 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id gd1so8863626pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 09:00:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=precisionplanting365.onmicrosoft.com;
- s=selector1-precisionplanting365-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Kc7xX0x3AGd/UYMeosIy4d+31oCMZJdCgUDR7o4DINs=;
- b=OfU+oBs2VhNrhmpylND90NdkjZWSmIfvClT+OTmi2gtfqN2BZJBjlMbpPt9V6fNpOxeiKGe0U0yKxAW5stbgrOoTA62fEWBjhxTjZbjOhEGIuKG3HnQx7X2NpQfc5dujF6aTHszoPJB32xLuXkbRYWkCipgarG4sVZcggvslxzU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=precisionplanting.com;
-Received: from SA1PR22MB3196.namprd22.prod.outlook.com (2603:10b6:806:22b::8)
- by MWHPR22MB0288.namprd22.prod.outlook.com (2603:10b6:300:7d::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.20; Tue, 14 Jun
- 2022 16:00:17 +0000
-Received: from SA1PR22MB3196.namprd22.prod.outlook.com
- ([fe80::24b0:19e9:a42d:60b0]) by SA1PR22MB3196.namprd22.prod.outlook.com
- ([fe80::24b0:19e9:a42d:60b0%5]) with mapi id 15.20.5332.020; Tue, 14 Jun 2022
- 16:00:17 +0000
-From:   David Owens <dowens@precisionplanting.com>
-To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Jarkko Nikula <jarkko.nikula@bitmer.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     David Owens <dowens@precisionplanting.com>,
-        alsa-devel@alsa-project.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ASoC: ti: omap-mcbsp: duplicate sysfs failure after PROBE_DEFER
-Date:   Tue, 14 Jun 2022 10:59:31 -0500
-Message-Id: <20220614155931.2706437-1-dowens@precisionplanting.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-X-ClientProxiedBy: CH2PR11CA0007.namprd11.prod.outlook.com
- (2603:10b6:610:54::17) To SA1PR22MB3196.namprd22.prod.outlook.com
- (2603:10b6:806:22b::8)
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=AjEnIp3i/SaMEtzwhDdPJn8ss5djkc2rozWj+2o5TxI=;
+        b=nBYw+Em2PtAzVr8+taeocf/e1+91IM2pnG7C0wOkrxqNzPnx3YU9Z/gUQiVkiQ+7GK
+         4AWBKVLbuOGUGOrzVqCRIjjhCz0Gc5rstRVsy/peHrmIysPYIvtJpZkwaYXD2WEB86my
+         /mBugJxiP2N05Vqo8YOXIoqrX392+Be60QmcPR9wL93aJaWZNwbSRg5XiwIsKrjRuJ4Z
+         VzUsh+aq/sp3DwSR5OHWfNxuUPqwFBsnLejRJkICXe33oumtCqbomXrJZ5b2fAanX3Gz
+         2tcFPAFgMEwjaxJuJRhhePHIScpAYnOSXlJ8smnazEtKPvRa+ISw42JTppqm94Je+xy4
+         zWAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=AjEnIp3i/SaMEtzwhDdPJn8ss5djkc2rozWj+2o5TxI=;
+        b=esKTEmNoqfJJb9cSxAhFOvuEEZmY4aNQG3LITkt/Ow9pVQvwSuh8mhxtHZvKiw6xpc
+         gDqWECiNZDerThUEUn1TZo69Y+8fzFHBnE+an6O5bXzyRN1olDyQrbT9wzbnEI7UIX2q
+         KN53LNo8OTa95W32p2NXWxlFM7M50s//gUP6lvu82Y5KI2WF9DJeRolFcdUVsvdCFK2q
+         j96MFOGmr63yNwpYfI7CqXdzfrzw6SWkOTqF2b4wGT6wxxXk10GTD71QT3ZfOx4D/zkr
+         TkzTkPuO/gvPboVedrMki9BB9YVevrj4Pup4e2Gn3w8j6FVppVbhzCDQXV6xviCs/XSV
+         Ls5A==
+X-Gm-Message-State: AJIora8m0qxHJCEmsYA/dj37YAoCsn2kOFaDnYZWT34kmswLeqTzSSBW
+        Y/VW16+55PEled0bpl8s8khEQA==
+X-Google-Smtp-Source: AGRyM1vg8+YLClBw8HLKjID9h7c+UP7PRptQfE2z0PMqdLfxw3GM+aA/0/Hg/l7XqKn5h311b60FVg==
+X-Received: by 2002:a17:90b:4a92:b0:1e8:2c09:d008 with SMTP id lp18-20020a17090b4a9200b001e82c09d008mr5366166pjb.169.1655222436939;
+        Tue, 14 Jun 2022 09:00:36 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id ij11-20020a170902ab4b00b0015e8d4eb1f9sm7424820plb.67.2022.06.14.09.00.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 09:00:36 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 16:00:32 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Ilias Stamatis <ilstam@amazon.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>, mail@anirudhrb.com,
+        kumarpraveen@linux.microsoft.com, wei.liu@kernel.org,
+        robert.bradford@intel.com, liuwe@microsoft.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: nVMX: Don't expose TSC scaling to L1 when on Hyper-V
+Message-ID: <YqiwoOP4HX2LniI4@google.com>
+References: <20220613161611.3567556-1-anrayabh@linux.microsoft.com>
+ <592ab920-51f3-4794-331f-8737e1f5b20a@redhat.com>
+ <YqdsjW4/zsYaJahf@google.com>
+ <YqipLpHI24NdhgJO@anrayabh-desk>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 8fa70070-9914-43bf-62a9-08da4e1ef9bf
-X-MS-TrafficTypeDiagnostic: MWHPR22MB0288:EE_
-X-Microsoft-Antispam-PRVS: <MWHPR22MB0288C7046171ABDB046D3139C0AA9@MWHPR22MB0288.namprd22.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BGqETwJfI7UOZoI8OIb89Du8vC+5SYzbHpMDAbBix3Pxt2aJF3rNQBBYMdF3OySXOZQvcc1Se2EViEjlMShNnXA19imyJzlWhPq4hOWJsOi10mCFt7s/nDKzaUFheyNn9GZi2a2NLipA3yNIYQPoogk3i20yAVQQJ5x15I03hMCow/p1iSzW8HR4do4ecVunomYKY951BdbyHx9LlB3hZHAT0Wc7puwtmmcEvmy9nWLRgRLKcM32IRHsB8w7ONr0HCswAIm1/LBBaVssxB29m0IqSWYMPJFxr7rn2L4ih7pXg0UZ5t9V6tjpsoDQO7ftrDnB9UTewd0OuX3yTzaFUuw03mvxZVF8joFbHLu9D71T6PgX0SxD1SKuCP8qVuRjtmstrytcW/Gt0fW++dpbSmSrzPl+VZKvCFNGHAM7F+SIJE5AWS4P4i3p/+QLLCO5rd06OGwxBm6mECoCBKHddnZy55GAWZW0nNW5hbVzBX+yx8XO80pcNskWGSjcXoyRGw0AicimhVVKR+qIuF1NU5Mlckjv+WXtexczGQT381x2DL+FHDFSZ8TzO8lT6+FzM/dpg+FNkBSNA6ZKoHUdpkEAThxzp3B4SK/+ukg/pwWWmxSJ3PjGhdwUFjM4h1g9bFnJH3AdBSyIwjLdIHdmUQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR22MB3196.namprd22.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(366004)(136003)(346002)(39850400004)(36756003)(110136005)(316002)(83380400001)(86362001)(66574015)(508600001)(2616005)(41300700001)(1076003)(186003)(38100700002)(66476007)(8676002)(4326008)(66946007)(66556008)(6666004)(6506007)(52116002)(5660300002)(2906002)(6486002)(6512007)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5PUNwmKAZMcCkLJlZe4TqUoL6tO+6GiM8hKuQ+ET3EJiwnOjs1fS696O9tGq?=
- =?us-ascii?Q?wwZXPnZtgVs2lFOJb2zr095eAVTvgXxibyQLtwiiVjyEFOuL42bA5Y8Xit3w?=
- =?us-ascii?Q?33d5k/DGDpP+iOn17joJPI3WWS5YAKVE2tCMkaZ5B3AX2djbFilk5CjXSc8b?=
- =?us-ascii?Q?yPOu/wKfgCjthVXFUhQeibRR/KSmQF3V3YcOvaYV6xiXZ5LJMYSnKmrK6/Va?=
- =?us-ascii?Q?iVjH4ZbY0C+sq+4B87JRrb/plTD0yD/69z85SNWySWyj5T6+XpwUucFTg3fA?=
- =?us-ascii?Q?NVOvkR/vZViEnmCIMHjvHgYUiMFZvQLkza7yHM/wmoOOi7mBwpEt5ssbteln?=
- =?us-ascii?Q?lVS+SSwRxXpflG8YV9ANpcC6SEszZSat/SyLc+UxTbFQ9/SwAijjD0r6ogyf?=
- =?us-ascii?Q?NJM1CZvkzG4DGzcL7ViHhPdJds1XemHFEC9VOseYzDVy+yrsdUd0NZkVReia?=
- =?us-ascii?Q?FtHoLDMZ7SSbKiHvwTVvKSDoooai4Stx5ZTfDRoPrzG9qae27GPoHmNvw7lo?=
- =?us-ascii?Q?at552JxROqhNa8G2VVarETbapFvY+XK0A+eWZkdGk58Pc0fZKgwLaHqf/gGM?=
- =?us-ascii?Q?7mDsBVrV+4x+SdbEdue6Jij0rgVvU8qZFaJcPhfkKfFPKlYFHA5bkaL5DD74?=
- =?us-ascii?Q?jFWuc7r1m8JetDD52RA/XaGbChJzxxG3J9hHUj7+arhJPBlUdt2dkA2Iv6Gf?=
- =?us-ascii?Q?olKmzhNEmYa4JsZFE2WuRKWIZJBmvtHQ92E7h+WkD9kHP1XBUW7Lf7VNqYJK?=
- =?us-ascii?Q?C7rzlNrOMpcWmn5+hDb3W1KoTEO57/8kyu3yx8yZMyszI3GSuPnAuuJyz8X4?=
- =?us-ascii?Q?bqrTB9dokooOnMt2XL/yOKBna8/vFCNMRb4Rj8N3N+1PfplRyTERrM0IgcKt?=
- =?us-ascii?Q?+dZWHsjYY4WZLG4a2r1sgWf+6uV8KKMeDqLXBKY6kdSumAAk4uiT8U8t/ctp?=
- =?us-ascii?Q?rDG2YVne7Li5XMphlISvngZD2VWk+aExtKWhIwb6W3YCNq7xOsfY6J+7kXUB?=
- =?us-ascii?Q?ZA0INhFYlDe4jEqX0w02RMTUvqQtXcrm0SbhlKGStDTHfSeCRDCUKg/RiToQ?=
- =?us-ascii?Q?HxbooFVV+QA8LQD4OfJ7stUGGAuDT95GHrHVYUZ33/gNcnietzR6WTx6g8s2?=
- =?us-ascii?Q?DkSxTfryOXUn6ps25Ti73Y+11cvnNlW5y5B50pG/iA3/EaWnbG6U9cAioKFg?=
- =?us-ascii?Q?G85wK+dI0MyaFujIzzvWMxLvIV0UREZE9g5D8Q3LFbEqsU5RBvvAIgcnhw5o?=
- =?us-ascii?Q?nhMp0LfGdYcZRaJIwx1j5FhNiXAZ6aKIZSKLbgoP0fE4CTeNeEXSb4EjQjRU?=
- =?us-ascii?Q?RKhyeo70sbl9rkqQE/5/0HX8zN5q/sotXPyLpz1fieHvPWxnPIbAPyGy3nfX?=
- =?us-ascii?Q?HIXPudZpdDEnMEbhFAQQxM2hkOEB2sb3QDZD3D+uBb7LOsJmaj5G4aHEeqTc?=
- =?us-ascii?Q?71zLA8IQPKZa+oTTxo4xsWwZHBPbtwYqa0O6plfrjLG+IepxdqwgRSXjsi1B?=
- =?us-ascii?Q?yR0wL0JXEMUjh6B8DZMkXaTRW1uFUzDvANvkNFuDgAHqYto2xMBKQNwIiTFz?=
- =?us-ascii?Q?pY9BpKAYZCzNxszVowkvz96hgIzbRgVxHcbhTj74HmAuJrxSA+Wo1OzaELQ4?=
- =?us-ascii?Q?HsxAckQpZXW7Rik6qu/JPbFgE7QM/3nlBOy6fOwM4Ih73qjnUQc1T8Zin6J1?=
- =?us-ascii?Q?apM1NzuAfG1QThnKIpOsFfFgl6SBJmXOrfo7BA2OkxTspeo00nSXmocsFIVO?=
- =?us-ascii?Q?uGrSxeBzFM14XkxKZdHuHJKDvXK50VUbk34hFdi8uuYYCK8Z7sI9BAVVh1Hi?=
-X-MS-Exchange-AntiSpam-MessageData-1: U68pQXD3mcoYFx6NXYRcMCABMZKgxK7Sczv2kmewSPFl7+tefKVtQdI+
-X-OriginatorOrg: precisionplanting.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8fa70070-9914-43bf-62a9-08da4e1ef9bf
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR22MB3196.namprd22.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2022 16:00:17.3651
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: aa593af2-61f8-4d4f-988a-e9c4c02b7f57
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4X/F3DFzvOuGFc5jBJwqSkBhc1sZk3w//d5igRn0177LkxRSM+2Yuqd+/zIe3YW3eElsRfEtWMlMqDrBYlbTTMM+lIQ/hwXXNHSrRLqPF+U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR22MB0288
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqipLpHI24NdhgJO@anrayabh-desk>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The call to sdma_pcm_platform_register() can return PROBE_DEFER, leading
-to omap_mcbsp_init() being called multiple times.  sysfs node creation
-fails in subsequent calls to omap_mcbsp_init(), which prevents
-the driver from ever successfully probing.  The resulting errors can be
-seen during boot:
+On Tue, Jun 14, 2022, Anirudh Rayabharam wrote:
+> On Mon, Jun 13, 2022 at 04:57:49PM +0000, Sean Christopherson wrote:
+> > On Mon, Jun 13, 2022, Paolo Bonzini wrote:
+> > > On 6/13/22 18:16, Anirudh Rayabharam wrote:
+> > > > +	if (!kvm_has_tsc_control)
+> > > > +		msrs->secondary_ctls_high &= ~SECONDARY_EXEC_TSC_SCALING;
+> > > > +
+> > > >   	msrs->secondary_ctls_low = 0;
+> > > >   	msrs->secondary_ctls_high &=
+> > > >   		SECONDARY_EXEC_DESC |
+> > > > @@ -6667,8 +6670,7 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
+> > > >   		SECONDARY_EXEC_RDRAND_EXITING |
+> > > >   		SECONDARY_EXEC_ENABLE_INVPCID |
+> > > >   		SECONDARY_EXEC_RDSEED_EXITING |
+> > > > -		SECONDARY_EXEC_XSAVES |
+> > > > -		SECONDARY_EXEC_TSC_SCALING;
+> > > > +		SECONDARY_EXEC_XSAVES;
+> > > >   	/*
+> > > 
+> > > This is wrong because it _always_ disables SECONDARY_EXEC_TSC_SCALING,
+> > > even if kvm_has_tsc_control == true.
+> > > 
+> > > That said, I think a better implementation of this patch is to just add
+> > > a version of evmcs_sanitize_exec_ctrls that takes a struct
+> > > nested_vmx_msrs *, and call it at the end of nested_vmx_setup_ctl_msrs like
+> > > 
+> > > 	evmcs_sanitize_nested_vmx_vsrs(msrs);
+> > 
+> > Any reason not to use the already sanitized vmcs_config?  I can't think of any
+> > reason why the nested path should blindly use the raw MSR values from hardware.
+> 
+> vmcs_config has the sanitized exec controls. But how do we construct MSR
+> values using them?
 
-[    1.749328] sysfs: cannot create duplicate filename '/devices/platform/6=
-8000000.ocp/49022000.mcbsp/max_tx_thres'
-[    1.759643] CPU: 0 PID: 6 Comm: kworker/u2:0 Not tainted 5.18.0-yocto-st=
-andard #1
-[    1.767181] Hardware name: Generic OMAP36xx (Flattened Device Tree)
-[    1.773498] Workqueue: events_unbound deferred_probe_work_func
-[    1.779449]  unwind_backtrace from show_stack+0x10/0x14
-[    1.784729]  show_stack from sysfs_warn_dup+0x4c/0x60
-[    1.789825]  sysfs_warn_dup from sysfs_add_file_mode_ns+0x104/0x150
-[    1.796142]  sysfs_add_file_mode_ns from internal_create_group+0x10c/0x3=
-ac
-[    1.803100]  internal_create_group from asoc_mcbsp_probe+0x270/0x454
-[    1.809539]  asoc_mcbsp_probe from platform_probe+0x58/0xb8
-[    1.815155]  platform_probe from really_probe+0x14c/0x34c
-[    1.820617]  really_probe from __driver_probe_device+0xcc/0x1c0
-[    1.826599]  __driver_probe_device from driver_probe_device+0x30/0xd4
-[    1.833129]  driver_probe_device from __device_attach_driver+0x8c/0xf0
-[    1.839721]  __device_attach_driver from bus_for_each_drv+0x80/0xcc
-[    1.846038]  bus_for_each_drv from __device_attach+0xe4/0x170
-[    1.851837]  __device_attach from bus_probe_device+0x84/0x8c
-[    1.857543]  bus_probe_device from deferred_probe_work_func+0x9c/0xc8
-[    1.864044]  deferred_probe_work_func from process_one_work+0x194/0x3b8
-[    1.870727]  process_one_work from worker_thread+0x200/0x4cc
-[    1.876434]  worker_thread from kthread+0xb8/0xdc
-[    1.881195]  kthread from ret_from_fork+0x14/0x2c
-[    1.885955] Exception stack(0xc1069fb0 to 0xc1069ff8)
-[    1.891052] 9fa0:                                     00000000 00000000 =
-00000000 00000000
-[    1.899291] 9fc0: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    1.907501] 9fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    1.914215] omap-mcbsp 49022000.mcbsp: Unable to create additional contr=
-ols
-[    1.921264] omap-mcbsp: probe of 49022000.mcbsp failed with error -17
-[    1.928405] omap-twl4030 sound: devm_snd_soc_register_card() failed: -51=
-7
+I was thinking we could use the sanitized controls for the allowed-1 bits, and then
+take the required-1 bits from the CPU.  And then if we wanted to avoid the redundant
+RDMSRs in a follow-up patch we could add required-1 fields to vmcs_config.
 
-Signed-off-by: David Owens <dowens@precisionplanting.com>
+Hastily constructed and compile-tested only, proceed with caution :-)
+
 ---
- sound/soc/ti/omap-mcbsp.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ arch/x86/kvm/vmx/nested.c | 35 ++++++++++++++++++++---------------
+ arch/x86/kvm/vmx/nested.h |  2 +-
+ arch/x86/kvm/vmx/vmx.c    |  5 ++---
+ 3 files changed, 23 insertions(+), 19 deletions(-)
 
-diff --git a/sound/soc/ti/omap-mcbsp.c b/sound/soc/ti/omap-mcbsp.c
-index 4479d74f0a45..b7c1fb70cb25 100644
---- a/sound/soc/ti/omap-mcbsp.c
-+++ b/sound/soc/ti/omap-mcbsp.c
-@@ -1403,6 +1403,10 @@ static int asoc_mcbsp_probe(struct platform_device *=
-pdev)
-        mcbsp->dev =3D &pdev->dev;
-        platform_set_drvdata(pdev, mcbsp);
-
-+       ret =3D sdma_pcm_platform_register(&pdev->dev, "tx", "rx");
-+       if (ret)
-+               return ret;
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index f5cb18e00e78..67cbb6643efa 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -6541,8 +6541,13 @@ static u64 nested_vmx_calc_vmcs_enum_msr(void)
+  * bit in the high half is on if the corresponding bit in the control field
+  * may be on. See also vmx_control_verify().
+  */
+-void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
++void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
+ {
++	struct nested_vmx_msrs *msrs = &vmcs_config.nested;
 +
-        ret =3D omap_mcbsp_init(pdev);
-        if (ret)
-                return ret;
-@@ -1412,13 +1416,9 @@ static int asoc_mcbsp_probe(struct platform_device *=
-pdev)
-                omap_mcbsp_dai.capture.formats =3D SNDRV_PCM_FMTBIT_S16_LE;
-        }
++	/* Take the allowed-1 bits from KVM's sanitized VMCS configuration. */
++	u32 ignore_high;
++
+ 	/*
+ 	 * Note that as a general rule, the high half of the MSRs (bits in
+ 	 * the control fields which may be 1) should be initialized by the
+@@ -6559,11 +6564,11 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
+ 	 */
 
--       ret =3D devm_snd_soc_register_component(&pdev->dev,
-+       return devm_snd_soc_register_component(&pdev->dev,
-                                              &omap_mcbsp_component,
-                                              &omap_mcbsp_dai, 1);
--       if (ret)
--               return ret;
--
--       return sdma_pcm_platform_register(&pdev->dev, "tx", "rx");
- }
+ 	/* pin-based controls */
+-	rdmsr(MSR_IA32_VMX_PINBASED_CTLS,
+-		msrs->pinbased_ctls_low,
+-		msrs->pinbased_ctls_high);
++	rdmsr(MSR_IA32_VMX_PINBASED_CTLS, msrs->pinbased_ctls_low, ignore_high);
+ 	msrs->pinbased_ctls_low |=
+ 		PIN_BASED_ALWAYSON_WITHOUT_TRUE_MSR;
++
++	msrs->pinbased_ctls_high = vmcs_conf->pin_based_exec_ctrl;
+ 	msrs->pinbased_ctls_high &=
+ 		PIN_BASED_EXT_INTR_MASK |
+ 		PIN_BASED_NMI_EXITING |
+@@ -6574,12 +6579,11 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
+ 		PIN_BASED_VMX_PREEMPTION_TIMER;
 
- static int asoc_mcbsp_remove(struct platform_device *pdev)
+ 	/* exit controls */
+-	rdmsr(MSR_IA32_VMX_EXIT_CTLS,
+-		msrs->exit_ctls_low,
+-		msrs->exit_ctls_high);
++	rdmsr(MSR_IA32_VMX_EXIT_CTLS, msrs->exit_ctls_low, ignore_high);
+ 	msrs->exit_ctls_low =
+ 		VM_EXIT_ALWAYSON_WITHOUT_TRUE_MSR;
+
++	msrs->exit_ctls_high = vmcs_conf->vmexit_ctrl;
+ 	msrs->exit_ctls_high &=
+ #ifdef CONFIG_X86_64
+ 		VM_EXIT_HOST_ADDR_SPACE_SIZE |
+@@ -6595,11 +6599,11 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
+ 	msrs->exit_ctls_low &= ~VM_EXIT_SAVE_DEBUG_CONTROLS;
+
+ 	/* entry controls */
+-	rdmsr(MSR_IA32_VMX_ENTRY_CTLS,
+-		msrs->entry_ctls_low,
+-		msrs->entry_ctls_high);
++	rdmsr(MSR_IA32_VMX_ENTRY_CTLS, msrs->entry_ctls_low, ignore_high);
+ 	msrs->entry_ctls_low =
+ 		VM_ENTRY_ALWAYSON_WITHOUT_TRUE_MSR;
++
++	msrs->entry_ctls_high = vmcs_conf->vmentry_ctrl;
+ 	msrs->entry_ctls_high &=
+ #ifdef CONFIG_X86_64
+ 		VM_ENTRY_IA32E_MODE |
+@@ -6613,11 +6617,11 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
+ 	msrs->entry_ctls_low &= ~VM_ENTRY_LOAD_DEBUG_CONTROLS;
+
+ 	/* cpu-based controls */
+-	rdmsr(MSR_IA32_VMX_PROCBASED_CTLS,
+-		msrs->procbased_ctls_low,
+-		msrs->procbased_ctls_high);
++	rdmsr(MSR_IA32_VMX_PROCBASED_CTLS, msrs->procbased_ctls_low, ignore_high);
+ 	msrs->procbased_ctls_low =
+ 		CPU_BASED_ALWAYSON_WITHOUT_TRUE_MSR;
++
++	msrs->procbased_ctls_high = vmcs_conf->cpu_based_exec_ctrl;
+ 	msrs->procbased_ctls_high &=
+ 		CPU_BASED_INTR_WINDOW_EXITING |
+ 		CPU_BASED_NMI_WINDOW_EXITING | CPU_BASED_USE_TSC_OFFSETTING |
+@@ -6653,10 +6657,11 @@ void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps)
+ 	 */
+ 	if (msrs->procbased_ctls_high & CPU_BASED_ACTIVATE_SECONDARY_CONTROLS)
+ 		rdmsr(MSR_IA32_VMX_PROCBASED_CTLS2,
+-		      msrs->secondary_ctls_low,
+-		      msrs->secondary_ctls_high);
++		      msrs->secondary_ctls_low, ignore_high);
+
+ 	msrs->secondary_ctls_low = 0;
++
++	msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl;
+ 	msrs->secondary_ctls_high &=
+ 		SECONDARY_EXEC_DESC |
+ 		SECONDARY_EXEC_ENABLE_RDTSCP |
+diff --git a/arch/x86/kvm/vmx/nested.h b/arch/x86/kvm/vmx/nested.h
+index c92cea0b8ccc..fae047c6204b 100644
+--- a/arch/x86/kvm/vmx/nested.h
++++ b/arch/x86/kvm/vmx/nested.h
+@@ -17,7 +17,7 @@ enum nvmx_vmentry_status {
+ };
+
+ void vmx_leave_nested(struct kvm_vcpu *vcpu);
+-void nested_vmx_setup_ctls_msrs(struct nested_vmx_msrs *msrs, u32 ept_caps);
++void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps);
+ void nested_vmx_hardware_unsetup(void);
+ __init int nested_vmx_hardware_setup(int (*exit_handlers[])(struct kvm_vcpu *));
+ void nested_vmx_set_vmcs_shadowing_bitmap(void);
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 9bd86ecccdab..cd0d0ffae0bf 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -7139,7 +7139,7 @@ static int __init vmx_check_processor_compat(void)
+ 	if (setup_vmcs_config(&vmcs_conf, &vmx_cap) < 0)
+ 		return -EIO;
+ 	if (nested)
+-		nested_vmx_setup_ctls_msrs(&vmcs_conf.nested, vmx_cap.ept);
++		nested_vmx_setup_ctls_msrs(&vmcs_conf, vmx_cap.ept);
+ 	if (memcmp(&vmcs_config, &vmcs_conf, sizeof(struct vmcs_config)) != 0) {
+ 		printk(KERN_ERR "kvm: CPU %d feature inconsistency!\n",
+ 				smp_processor_id());
+@@ -8079,8 +8079,7 @@ static __init int hardware_setup(void)
+ 	setup_default_sgx_lepubkeyhash();
+
+ 	if (nested) {
+-		nested_vmx_setup_ctls_msrs(&vmcs_config.nested,
+-					   vmx_capability.ept);
++		nested_vmx_setup_ctls_msrs(&vmcs_config, vmx_capability.ept);
+
+ 		r = nested_vmx_hardware_setup(kvm_vmx_exit_handlers);
+ 		if (r)
+
+base-commit: b821e4ff9e35a8fc999685e8d44c0644cfeaa228
 --
-2.34.1
 
-This email is intended solely for the use of the individual to whom it is a=
-ddressed and may contain confidential and/or privileged material. Any views=
- or opinions presented are solely those of the author and do not necessaril=
-y represent those of Precision Planting. If you are not the intended recipi=
-ent, be advised that you have received this email in error and that any use=
-, dissemination, forwarding, printing, or copying of this email is strictly=
- prohibited. Neither AGCO nor the sender accepts any responsibility for vir=
-uses, and it is your responsibility to scan, and virus check the e-mail and=
- its attachment(s) (if any).

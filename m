@@ -2,89 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C26E54AA7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:26:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1720F54AA80
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354213AbiFNHX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:23:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38996 "EHLO
+        id S1354556AbiFNHYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:24:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354644AbiFNHXh (ORCPT
+        with ESMTP id S1354497AbiFNHYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:23:37 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B1A3CA56;
-        Tue, 14 Jun 2022 00:23:34 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id o17so7070263pla.6;
-        Tue, 14 Jun 2022 00:23:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uXSamoUp6MeZ/46qZXQdg656MMVfUNs/18XCR1U3fiw=;
-        b=EKQjsmVZozA/XvJq1p2xbZEJN0A0H5Q7RkhuSZl0UuYnPOidEvO4nk+Bdudkwz3DnL
-         YDM8qbjd0TCrqYKlVeQvodxgeXHXsW4fdnxss1pIPgvh538ECSxHcEpcesRZdVeYwvie
-         5hgjrPWHRBoOtok+VY2Bu4X3LXpAA27/oRuhi3tpZMUGMrbwX2Elcal3h7X9iJCDWmuz
-         Kwafy9hK5BLoYhE1C8AcNgeUiGlccVIUFG8cXxgKWVOOpAq0DjkD3kp4FJ5WxWkQyuY4
-         JTmLikgP7zx7JNUPo+xYvx/jf6UJSFba2KEHNMhzz6ySe+PiY+ij/3PEAve3BqLrjePy
-         AYAQ==
+        Tue, 14 Jun 2022 03:24:09 -0400
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E0E23CFF8;
+        Tue, 14 Jun 2022 00:24:03 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id k18so5516945qtm.9;
+        Tue, 14 Jun 2022 00:24:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uXSamoUp6MeZ/46qZXQdg656MMVfUNs/18XCR1U3fiw=;
-        b=CL2atQWPHlV6C4V+FCXC1HNKRhvycm5qm+BkrZxd/qgKxTtFBSTcXho1Iz8b7foAqF
-         wlrI8lGvH5+nNOmFr75wSQaeHv5DkcfLqGlcXfpPCGubIld+O0JBSVmf/x1ofCZnsZJ0
-         jzD4HL2mRoOPIE6BWjEwbzOq8IZBzkYMkukbnqIBsUTFoFJz5I7pkR6seGPIM/aarN2Z
-         Wt0iwN2yFkuAQk9d2lSkGrAstBk+DG7Bs4futFTJpBBEG3cUN2S8IkQVu9Q4Ct58csw6
-         NFTYY5//lxhneNABKut0Bqwb2N/D7bDVsTosNl7gjcpelbBzYoclhiFLAuh7tiHglen5
-         Qq/w==
-X-Gm-Message-State: AJIora+P3W5mkMG8uBRwlS5wE/XRi1ugOKx+F5t/OMNSWVUpiqj9A5HL
-        wRuYAjaF7BbvT5LxIoiXxb4=
-X-Google-Smtp-Source: AGRyM1t4U0AtFhCET949Kol0aCHYqnQE/e0mHhbltZ+mlhDE+zKbIpvtwtedoqZ5IQS7PUZPtucmTQ==
-X-Received: by 2002:a17:902:76c1:b0:167:6ef7:dab4 with SMTP id j1-20020a17090276c100b001676ef7dab4mr3240028plt.146.1655191413875;
-        Tue, 14 Jun 2022 00:23:33 -0700 (PDT)
-Received: from localhost (subs32-116-206-28-37.three.co.id. [116.206.28.37])
-        by smtp.gmail.com with ESMTPSA id ja21-20020a170902efd500b0016632179ecfsm6365167plb.264.2022.06.14.00.23.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 00:23:33 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 14:23:30 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.18 000/339] 5.18.4-rc1 review
-Message-ID: <Yqg3cnnE70gS6cI2@debian.me>
-References: <20220613094926.497929857@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aiAvQvUwNZC8349lDrXjWRNqtecYyT5lBSmoXU6X950=;
+        b=W+nw622mbQ+PV9ugfcczqXjFEO19ZF0XPDHLa2tusPuSCzZRhImFAwQiwH5sjsuidK
+         hT7EyfSAYE8gtihwwAqpZJp2drJs1GcFXrRXj+xitEuqPUMeZvQM8WTO83aTiqlZmwlD
+         1dl8+25j2SqHapv7ZVzdKNzpHL2JAtEmnX8W2GP1Rq/pxML3T+Hnlme7B6ptaK2Q1PMo
+         Pou7KUxXeRzRO1FeRoYISppdeA5tjKzRgPuiDcTIEihLA7P+tKIVtpROlpeMt8tccWYJ
+         7EX3mOWTic4h9QolmIiXsLmZmNECTjQ6eeBeF+A6EAMAQibRhT0FSwLBm90QxgrORh17
+         nL7g==
+X-Gm-Message-State: AOAM530m7NL+fuANYG8u0zApUZgDwulCp2j5ahJL0WDvcmnDPcjXpyjS
+        7vCMcQ69ptUjJ0dYhoKT4e3U96CMnIPC+w==
+X-Google-Smtp-Source: ABdhPJzpx3QkJ7zKQfbk0OAzcjnvqNauK0gsSzML3rnackjnVpf702Ju3X4RaZ0YAqWa2YrSd+L8Ow==
+X-Received: by 2002:a05:622a:44c:b0:304:e4a2:3db7 with SMTP id o12-20020a05622a044c00b00304e4a23db7mr2992925qtx.162.1655191442195;
+        Tue, 14 Jun 2022 00:24:02 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id m4-20020a05620a24c400b006a098381abcsm8705486qkn.114.2022.06.14.00.24.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 00:24:01 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-3137eb64b67so20291157b3.12;
+        Tue, 14 Jun 2022 00:24:01 -0700 (PDT)
+X-Received: by 2002:a81:4811:0:b0:30c:8021:4690 with SMTP id
+ v17-20020a814811000000b0030c80214690mr4090852ywa.47.1655191441536; Tue, 14
+ Jun 2022 00:24:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220613094926.497929857@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <20220609150851.23084-2-max.oss.09@gmail.com>
+In-Reply-To: <20220609150851.23084-2-max.oss.09@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Jun 2022 09:23:50 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWm5WV7L=HJnysw76ObG_QPWicSH1kGg4k-GL8nNHd_SQ@mail.gmail.com>
+Message-ID: <CAMuHMdWm5WV7L=HJnysw76ObG_QPWicSH1kGg4k-GL8nNHd_SQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/5] dt-bindings: power: Add bindings for a power
+ domain controlled by a regulator
+To:     Max Krummenacher <max.oss.09@gmail.com>
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 12:07:05PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.4 release.
-> There are 339 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
+Hi Max,
 
-Successfully cross-compiled for arm (multi_v7_defconfig, GCC 12.1.0,
-ARMv7 with neon FPU) and arm64 (bcm2711_defconfig, GCC 12.1.0).
+On Thu, Jun 9, 2022 at 5:16 PM Max Krummenacher <max.oss.09@gmail.com> wrote:
+> From: Max Krummenacher <max.krummenacher@toradex.com>
+>
+> Adds binding for a power domain provider which uses a regulator to control
+> the power domain.
+>
+> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Thanks for your patch!
 
--- 
-An old man doll... just what I always wanted! - Clara
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/regulator-power-domain.yaml
+> @@ -0,0 +1,58 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/regulator-power-domain.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Power domain controlled by a regulator
+> +
+> +maintainers:
+> +  - Max Krummenacher <max.krummenacher@toradex.com>
+> +
+> +description: |+
+> +  Power domain provider which uses a regulator to control
+> +  the power domain.
+> +
+> +allOf:
+> +  - $ref: "power-domain.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - regulator-pm-pd
+> +
+> +  power-supply:
+> +    description: The regulator used to control the power domain.
+
+I guess there can be more than one?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

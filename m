@@ -2,96 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD91C54A6D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:38:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF5854A6AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 04:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354952AbiFNCZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 22:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56108 "EHLO
+        id S1353097AbiFNCbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 22:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354284AbiFNCW2 (ORCPT
+        with ESMTP id S1353760AbiFNCYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 22:22:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99849403E1;
-        Mon, 13 Jun 2022 19:10:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5096B60EFB;
-        Tue, 14 Jun 2022 02:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9A5BC34114;
-        Tue, 14 Jun 2022 02:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655172626;
-        bh=cNZNsd8E2/itYUBVSI9x5Pte5cl0YP2kIwJ9nI7tP9U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=H2WUTflsq1PZuBnuJXEatJXjvh9kS0nCGiPtLdvlRm3I6wL+ppXlNcuOK5qxlACm3
-         gPoNRLOmiIj0F3KUrzGhT+0FAmPU8P9wuSOfBYJuAc7A8zGmevYq4GINvMvHFNF3Y+
-         aFoqzmcxmmh2Pd3k75udknbCWwxkyDjYTL33mrjKF8kX6Z/pXY+O8rcCtb35XFVHLr
-         y0wMOiaTT+/YNwLvzxmNIFWZ3f2/g0uCY49M4xafyr3wJ7wZpt5i7+4G3wrfEGXsog
-         Dehe4uhIcIb6yGMJaxWFNO4mGDqvGJpXPaU3Fud8Z4nxJc1U1Fe2QNb3o2PKqGb6UE
-         6fj1cbRH0pQqQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, brian.austin@cirrus.com,
-        Paul.Handrigan@cirrus.com, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 4.14 04/14] ASoC: cs42l56: Correct typo in minimum level for SX volume controls
-Date:   Mon, 13 Jun 2022 22:10:09 -0400
-Message-Id: <20220614021019.1100929-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220614021019.1100929-1-sashal@kernel.org>
-References: <20220614021019.1100929-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 13 Jun 2022 22:24:49 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13EE424A8;
+        Mon, 13 Jun 2022 19:11:16 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id i1so6596392plg.7;
+        Mon, 13 Jun 2022 19:11:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=FYzXgdthAZD32NzfmkML1dqEbj0WlSr8VfOOFBhh2h4=;
+        b=o+5aALer+JB8O4pzESBBqN0ncmWIYjVBpXSSFwMEZ+VFzArRO2BosS77zMfXKRFh9o
+         3n+xL9UVssxOFdxywa+Uu18gDfSZHJ+St1rsrCCB2k3Jj29Fv/enU65Yms//SHWgvvqJ
+         ogshTTpVuWvveAy7G1IoTOjJUFmCk5fsZV2EDHOOL3FlH2jA1baB58zUWlMwCSCocNOc
+         d1/j7HWU8tv/C91PigB2XMJc6jsTwy4qj6d01NTbJRQ7KYg+mE9YWes1WTedUDzprryT
+         IhPtVl7jVlW7hdlNOyM8KVGXUgwpxhdWLG3ulM7G7wAigx7aNjYGjiXwNu4GatnvrUPL
+         1W2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=FYzXgdthAZD32NzfmkML1dqEbj0WlSr8VfOOFBhh2h4=;
+        b=se/x40kfSbM+aTSLpGGAk+53E7WXETzBJeqowsqomraH2d/jrtUP0IU4ZP5yWb/gPd
+         6OAoz6RINtMYYp7d2u8WF50dTSdyuo3qixhEF3cLJIyXa4zGI70At4u2srSk7SsMHNzV
+         WVhoEeinjIu32/uzRVArj6rZLrABYcXxJsRZSG/fjX2LVcp6TPWcYeEERUdNVWXWimTR
+         T3eVb/O+WS8+FroqhgCkAr4Qsxjnj21I2zIAArOu1hH2zHUe9eDh3gUeWyzEW89Qzff/
+         e/56FHyxyepdTas2lnP+mYtrM5msYqMLSspc383Zin03PRcAAqi8t+flyaEPxozQDugj
+         ccig==
+X-Gm-Message-State: AJIora/2NpjuuBWVa4t+lKCA5gJUQAel65QgzlVm8s4TW3wtAll2II9v
+        uaBub9L9ok3TpT8q4U6rCUA=
+X-Google-Smtp-Source: ABdhPJw8XCUTMeHfehkgeeG+OjcOFxUsFl3t9W9PfSU3TbupRf5AvP5AT06zc0c42bKzGM3CDnMXOQ==
+X-Received: by 2002:a17:902:ca0d:b0:166:44aa:abea with SMTP id w13-20020a170902ca0d00b0016644aaabeamr1916555pld.67.1655172672188;
+        Mon, 13 Jun 2022 19:11:12 -0700 (PDT)
+Received: from DESKTOP-8REGVGF.localdomain (kbu-120-71.tm.net.my. [203.106.120.71])
+        by smtp.gmail.com with ESMTPSA id a13-20020a62e20d000000b0051c2fc79aa8sm6291116pfi.91.2022.06.13.19.10.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jun 2022 19:10:42 -0700 (PDT)
+From:   Sieng Piaw Liew <liew.s.piaw@gmail.com>
+To:     davem@davemloft.com, edumazet@google.com, kuba@kernel.org,
+        f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Sieng Piaw Liew <liew.s.piaw@gmail.com>
+Subject: [PATCH] bcm63xx_enet: reuse skbuff_head
+Date:   Tue, 14 Jun 2022 10:10:09 +0800
+Message-Id: <20220614021009.696-1-liew.s.piaw@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charles Keepax <ckeepax@opensource.cirrus.com>
+napi_build_skb() reuses NAPI skbuff_head cache in order to save some
+cycles on freeing/allocating skbuff_heads on every new Rx or completed
+Tx.
+Use napi_consume_skb() to feed the cache with skbuff_heads of completed
+Tx so it's never empty.
 
-[ Upstream commit a8928ada9b96944cadd8b65d191e33199fd38782 ]
-
-A couple of the SX volume controls specify 0x84 as the lowest volume
-value, however the correct value from the datasheet is 0x44. The
-datasheet don't include spaces in the value it displays as binary so
-this was almost certainly just a typo reading 1000100.
-
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/20220602162119.3393857-6-ckeepax@opensource.cirrus.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Sieng Piaw Liew <liew.s.piaw@gmail.com>
 ---
- sound/soc/codecs/cs42l56.c | 4 ++--
+ drivers/net/ethernet/broadcom/bcm63xx_enet.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/codecs/cs42l56.c b/sound/soc/codecs/cs42l56.c
-index 52858b6c95a6..9274b52edc44 100644
---- a/sound/soc/codecs/cs42l56.c
-+++ b/sound/soc/codecs/cs42l56.c
-@@ -403,9 +403,9 @@ static const struct snd_kcontrol_new cs42l56_snd_controls[] = {
- 	SOC_DOUBLE("ADC Boost Switch", CS42L56_GAIN_BIAS_CTL, 3, 2, 1, 1),
+diff --git a/drivers/net/ethernet/broadcom/bcm63xx_enet.c b/drivers/net/ethernet/broadcom/bcm63xx_enet.c
+index 698438a2ee0f..514d61dd91c7 100644
+--- a/drivers/net/ethernet/broadcom/bcm63xx_enet.c
++++ b/drivers/net/ethernet/broadcom/bcm63xx_enet.c
+@@ -388,7 +388,7 @@ static int bcm_enet_receive_queue(struct net_device *dev, int budget)
+ 					 priv->rx_buf_size, DMA_FROM_DEVICE);
+ 			priv->rx_buf[desc_idx] = NULL;
  
- 	SOC_DOUBLE_R_SX_TLV("Headphone Volume", CS42L56_HPA_VOLUME,
--			      CS42L56_HPB_VOLUME, 0, 0x84, 0x48, hl_tlv),
-+			      CS42L56_HPB_VOLUME, 0, 0x44, 0x48, hl_tlv),
- 	SOC_DOUBLE_R_SX_TLV("LineOut Volume", CS42L56_LOA_VOLUME,
--			      CS42L56_LOB_VOLUME, 0, 0x84, 0x48, hl_tlv),
-+			      CS42L56_LOB_VOLUME, 0, 0x44, 0x48, hl_tlv),
+-			skb = build_skb(buf, priv->rx_frag_size);
++			skb = napi_build_skb(buf, priv->rx_frag_size);
+ 			if (unlikely(!skb)) {
+ 				skb_free_frag(buf);
+ 				dev->stats.rx_dropped++;
+@@ -468,7 +468,7 @@ static int bcm_enet_tx_reclaim(struct net_device *dev, int force)
+ 			dev->stats.tx_errors++;
  
- 	SOC_SINGLE_TLV("Bass Shelving Volume", CS42L56_TONE_CTL,
- 			0, 0x00, 1, tone_tlv),
+ 		bytes += skb->len;
+-		dev_kfree_skb(skb);
++		napi_consume_skb(skb, !force);
+ 		released++;
+ 	}
+ 
 -- 
-2.35.1
+2.17.1
 

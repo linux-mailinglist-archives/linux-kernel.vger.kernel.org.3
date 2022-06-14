@@ -2,53 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CE0C54A98A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3970054A993
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 08:36:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352135AbiFNGe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 02:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41082 "EHLO
+        id S245623AbiFNGgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 02:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232013AbiFNGe6 (ORCPT
+        with ESMTP id S232644AbiFNGgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 02:34:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8904733A01;
-        Mon, 13 Jun 2022 23:34:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Jun 2022 02:36:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1CA9537BE1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 23:36:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655188592;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KQn/p+WJIVQNFwoaQTH0dpkpBNJBvLUauZgDvuzZ+Bc=;
+        b=cB6lCVOm7QKlMKx1PbRPXpnKKohgwdOT5J/Ckq9vxNd5xJz4LjLMvBdYEJVDMhEm3qKqTi
+        trSlms/UoipaD5blJ8l9+Gcj1ujEF8JD9oV9NjlZGESvFfUdcaqfDgQ4z70fYZd/Ew9lAU
+        dGPlY85MKlzk6THVfG/56ZVG7dSWS80=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-520-nmntQT17OOOf6gW6NQ7IYQ-1; Tue, 14 Jun 2022 02:36:21 -0400
+X-MC-Unique: nmntQT17OOOf6gW6NQ7IYQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1998760BC3;
-        Tue, 14 Jun 2022 06:34:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03101C3411C;
-        Tue, 14 Jun 2022 06:34:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655188496;
-        bh=tLkhwbbP24fAPSP0wvidXO3oYvnqe+3wnCwUvm0RvJA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GeGFmUlXmkRtNA6KtrY8dg3GvQcsYXkx+tzeX2G8vtPvuGf8LsJPWbWI+6lAPL3xv
-         Cqb7wMNSlTgRdwA8iCbvkdA4THCTv178VMzIZ//UGD4K+MwLqa3k4DamWCifgHvLtn
-         sh5HQ+lXd24A0NIuu7AwMZutKLzfrOrkX3oZUujo=
-Date:   Tue, 14 Jun 2022 08:34:53 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jaroslav Pulchart <jaroslav.pulchart@gooddata.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.18 000/343] 5.18.4-rc2 review
-Message-ID: <YqgsDXdY3OttH8Mc@kroah.com>
-References: <20220613181233.078148768@linuxfoundation.org>
- <CAK8fFZ68+xZ2Z0vDWnihF8PeJKEmEwCyyF-8W9PCZJTd8zfp-A@mail.gmail.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6B10E811E80;
+        Tue, 14 Jun 2022 06:36:21 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.62])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6889FC28115;
+        Tue, 14 Jun 2022 06:36:20 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <Yqe6EjGTpkvJUU28@ZenIV>
+References: <Yqe6EjGTpkvJUU28@ZenIV> <YqaAcKsd6uGfIQzM@zeniv-ca.linux.org.uk> <CAHk-=wjmCzdNDCt6L8-N33WSRaYjnj0=yTc_JG8A_Pd7ZEtEJw@mail.gmail.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     dhowells@redhat.com,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        nvdimm@lists.linux.dev
+Subject: Re: [RFC][PATCH] fix short copy handling in copy_mc_pipe_to_iter()
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8fFZ68+xZ2Z0vDWnihF8PeJKEmEwCyyF-8W9PCZJTd8zfp-A@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1586152.1655188579.1@warthog.procyon.org.uk>
+Date:   Tue, 14 Jun 2022 07:36:19 +0100
+Message-ID: <1586153.1655188579@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,23 +68,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 07:56:36AM +0200, Jaroslav Pulchart wrote:
-> Hello,
-> 
-> I would like to report that the ethernet ice driver is not capable of
-> setting promisc mode on at E810-XXV physical interface in the whole
-> 5.18.y kernel line.
-> 
-> Reproducer:
->    $ ip link set promisc on dev em1
-> Dmesg error message:
->    Error setting promisc mode on VSI 6 (rc=-17)
-> 
-> the problem was not observed with 5.17.y
+Al Viro <viro@zeniv.linux.org.uk> wrote:
 
-Any chance you can use 'git bisect' to track down the problem commit and
-let the developers of it know?
+> What's wrong with
+>         p_occupancy = pipe_occupancy(head, tail);
+>         if (p_occupancy >= pipe->max_usage)
+>                 return 0;
+> 	else
+> 		return pipe->max_usage - p_occupancy;
 
-thanks,
+Because "pipe->max_usage - p_occupancy" can be negative.
 
-greg k-h
+post_one_notification() is limited by pipe->ring_size, not pipe->max_usage.
+
+The idea is to allow some slack in a watch pipe for the watch_queue code to
+use that userspace can't.
+
+David
+

@@ -2,173 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 739D654AC50
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 470F754AC6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 10:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241624AbiFNIr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 04:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
+        id S241731AbiFNIsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 04:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242359AbiFNIq0 (ORCPT
+        with ESMTP id S1355865AbiFNIrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 04:46:26 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC96B42A01
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:46:21 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id m25so8906153lji.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 01:46:21 -0700 (PDT)
+        Tue, 14 Jun 2022 04:47:09 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 437EE44A20;
+        Tue, 14 Jun 2022 01:47:08 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso11139312pjl.3;
+        Tue, 14 Jun 2022 01:47:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
+        d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=VUSdGLwnJ0Y/lNfZiFkctM/6S+/lIr4cXT4yYV5L0eg=;
-        b=ds3Ls87l3/RTps8cjzbiCoEtfAT/UNTYNbmZ3vxsR0hnyRIM4JISzsT8HkoR+6+4eP
-         3Cqfb+JGxyWAcNqNoxVve8rYObAC8MnNPQ+zdDSbT547/eFDUrPgC4XCC1yhvfm7wVDs
-         gBoQe8fxIVPWmwyvCxK0peaqzLKc2z/XRjO1Y=
+        bh=EntQmblUAdy6HR5OkX3ZttgJaoB68on9RXGKibxpzLU=;
+        b=jfo5hdK/2DWPVT1N+BbJklo1XAaKZTDglASGXP1TElxpubp011j8p2SaBoLRPZd9ly
+         QLuAHv2+ENIkuvIijwt4XLhodqEDC2F2Nd7Bkp0N0xAumQWXXwI5Zxbpx0QHf5MD6nAN
+         fD+4QJFEzr7m6bFmH3NiAiV2I7oVqmQBEO5+MRAa+IY9EogcchjPL1B+nxLAsv7NF526
+         zOwtFqHtyazzOBoUSXm5lm8GLH8Njr1ev7HxjZQqBYaRgAxDnB1xY6ZKyUEPq8oHDwMD
+         BGRXWpc8RrfeuycCnsIAN73HkzDvLbsh5ss/ZYjYLpSOgqNGkcvD3oX3fCo2E8Xm1lIm
+         4JwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=VUSdGLwnJ0Y/lNfZiFkctM/6S+/lIr4cXT4yYV5L0eg=;
-        b=OaCI+tYv+UqNuL+k/tqEOJ8mqFawVXH9mpKTvSfv2skHb5EgngwREPs+/bMWTP9DxV
-         SYE2kxxWj6BBbaZ087gX5RZwlgU+4bOFtmUOVun5AGRgToi2/M+xbTo00JyH8t58zKXW
-         zu/BX+Acvjz1oiR0wKtNJWf6ZzV8O4WIQdp3ct5zjCRdXJtwGY+bUSzxq89uhc3eCoQQ
-         5YTcB9S3AGoT5UawDmV2rvwjEMYnwf5OHHGopr4z4c9At/FGmNw8+lgQWxehO/ESJuhn
-         yJtnwvf0bLvGnAKdy9lT7w22h7aQFSQmlV1zxfYlrXENxEZDri4mGvPrBjVKni9WU/bw
-         x6Iw==
-X-Gm-Message-State: AJIora8ndcdPf89gZw3LNgiTgNbxjd+HF3RmtSToRhOhfEl1O9CR0kh8
-        RT7A+SkYg2RFcAuaZsOYTlPp2g==
-X-Google-Smtp-Source: AGRyM1uPQusPCcTNkLDd/2DQXmi8U8XilZO13Hy3ENCammmq5MEL9OxcbgTxh2SVU/vHcJkV+z5GGA==
-X-Received: by 2002:a2e:3a17:0:b0:255:772a:e9e2 with SMTP id h23-20020a2e3a17000000b00255772ae9e2mr1859147lja.440.1655196380110;
-        Tue, 14 Jun 2022 01:46:20 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id g1-20020ac24d81000000b0047255d2118fsm1306116lfe.190.2022.06.14.01.46.19
+        bh=EntQmblUAdy6HR5OkX3ZttgJaoB68on9RXGKibxpzLU=;
+        b=LkmOuzlSuTzEExx8/HZvoQn/Vy9MapVEbJCGQ5+IDGXv4BCRRAMJ8mR8vdOrSPMfUr
+         hHoilpzkqLeEUlNE4nu9AV50sDu/9+OXMLlw/goIpAe+/B+FoK6c2/mSNHrPHd5LJvwC
+         o6f5cAFkuWKtIc7xYyvq37aI/X6hWZzgu6aR6ogLWVwc0aTJtqfJMAtfTs5ZtVQYUtkK
+         w09tgWEWWQSEBP28Hzups0B3/UhL4nE6KZ+YOWMuVTQW+QZSGVTC33MsfiBoVMPOhNHZ
+         XaVjBIeUPPw/TtHk1ZAXYP+uyYBen7kRVIYjtkZhFSJPzEwKCx4Qe84pP17pLs5oZzIQ
+         vSsA==
+X-Gm-Message-State: AOAM531XYUy5dZ8ClY87c7fUpVhXPZEqT9e8kscQvwq+X7tV8WwwITP/
+        TGduBy6awNi6rJpx/TSP3dCYzT4UxJs=
+X-Google-Smtp-Source: ABdhPJwKmt6r6V9ps0nGuI2DJWluBPG4fDDZW5mVMQExOJ7Sv+tuv4XRvrEVZYanjmWiuXBlFyQ6Kw==
+X-Received: by 2002:a17:903:11c6:b0:167:90e5:59ac with SMTP id q6-20020a17090311c600b0016790e559acmr3193741plh.143.1655196427261;
+        Tue, 14 Jun 2022 01:47:07 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-37.three.co.id. [116.206.28.37])
+        by smtp.gmail.com with ESMTPSA id a5-20020a17090a008500b001e325b9a809sm8828724pja.38.2022.06.14.01.47.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 01:46:19 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Grygorii Strashko <grygorii.strashko@ti.com>,
-        Praneeth Bajjuri <praneeth@ti.com>,
-        linux-kernel@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: [PATCH net-next v2 3/3] net: phy: dp83867: implement support for io_impedance_ctrl nvmem cell
-Date:   Tue, 14 Jun 2022 10:46:12 +0200
-Message-Id: <20220614084612.325229-4-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220614084612.325229-1-linux@rasmusvillemoes.dk>
-References: <20220606202220.1670714-1-linux@rasmusvillemoes.dk>
- <20220614084612.325229-1-linux@rasmusvillemoes.dk>
+        Tue, 14 Jun 2022 01:47:06 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Allison Randal <allison@lohutok.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] Documentation: samsung-s3c24xx: Add blank line after SPDX directive
+Date:   Tue, 14 Jun 2022 15:46:58 +0700
+Message-Id: <20220614084658.509389-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.36.0
+In-Reply-To: <20220614164506.6afd65a6@canb.auug.org.au>
+References: <20220614164506.6afd65a6@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have a board where measurements indicate that the current three
-options - leaving IO_IMPEDANCE_CTRL at the (factory calibrated) reset
-value or using one of the two boolean properties to set it to the
-min/max value - are too coarse.
+After merging spdx tree for linux-next testing, Stephen Rothwell reported
+htmldocs warning:
 
-Implement support for the newly added binding allowing device tree to
-specify an nvmem cell containing an appropriate value for this
-specific board.
+Documentation/arm/samsung-s3c24xx/cpufreq.rst:2: WARNING: Explicit markup ends without a blank line; unexpected unindent.
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+It is due to missing blank line separator between SPDX directive and
+page title.
+
+Add the blank line to fix the warning.
+
+Link: https://lore.kernel.org/linux-next/20220614164506.6afd65a6@canb.auug.org.au/
+Fixes: b7bc1c9e5b04da ("treewide: Replace GPLv2 boilerplate/reference with SPDX - gpl-2.0_147.RULE")
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Allison Randal <allison@lohutok.net>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- drivers/net/phy/dp83867.c | 55 ++++++++++++++++++++++++++++++++++-----
- 1 file changed, 49 insertions(+), 6 deletions(-)
+ Documentation/arm/samsung-s3c24xx/cpufreq.rst | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/phy/dp83867.c b/drivers/net/phy/dp83867.c
-index 8561f2d4443b..45d8a9298251 100644
---- a/drivers/net/phy/dp83867.c
-+++ b/drivers/net/phy/dp83867.c
-@@ -14,6 +14,7 @@
- #include <linux/netdevice.h>
- #include <linux/etherdevice.h>
- #include <linux/bitfield.h>
-+#include <linux/nvmem-consumer.h>
- 
- #include <dt-bindings/net/ti-dp83867.h>
- 
-@@ -521,6 +522,51 @@ static int dp83867_verify_rgmii_cfg(struct phy_device *phydev)
- }
- 
- #if IS_ENABLED(CONFIG_OF_MDIO)
-+static int dp83867_of_init_io_impedance(struct phy_device *phydev)
-+{
-+	struct dp83867_private *dp83867 = phydev->priv;
-+	struct device *dev = &phydev->mdio.dev;
-+	struct device_node *of_node = dev->of_node;
-+	struct nvmem_cell *cell;
-+	u8 *buf, val;
-+	int ret;
+diff --git a/Documentation/arm/samsung-s3c24xx/cpufreq.rst b/Documentation/arm/samsung-s3c24xx/cpufreq.rst
+index ed19ce1a462921..cd22697cf60660 100644
+--- a/Documentation/arm/samsung-s3c24xx/cpufreq.rst
++++ b/Documentation/arm/samsung-s3c24xx/cpufreq.rst
+@@ -1,4 +1,5 @@
+ .. SPDX-License-Identifier: GPL-2.0-only
 +
-+	cell = of_nvmem_cell_get(of_node, "io_impedance_ctrl");
-+	if (IS_ERR(cell)) {
-+		ret = PTR_ERR(cell);
-+		if (ret != -ENOENT)
-+			return phydev_err_probe(phydev, ret,
-+						"failed to get nvmem cell io_impedance_ctrl\n");
-+
-+		/* If no nvmem cell, check for the boolean properties. */
-+		if (of_property_read_bool(of_node, "ti,max-output-impedance"))
-+			dp83867->io_impedance = DP83867_IO_MUX_CFG_IO_IMPEDANCE_MAX;
-+		else if (of_property_read_bool(of_node, "ti,min-output-impedance"))
-+			dp83867->io_impedance = DP83867_IO_MUX_CFG_IO_IMPEDANCE_MIN;
-+		else
-+			dp83867->io_impedance = -1; /* leave at default */
-+
-+		return 0;
-+	}
-+
-+	buf = nvmem_cell_read(cell, NULL);
-+	nvmem_cell_put(cell);
-+
-+	if (IS_ERR(buf))
-+		return PTR_ERR(buf);
-+
-+	val = *buf;
-+	kfree(buf);
-+
-+	if ((val & DP83867_IO_MUX_CFG_IO_IMPEDANCE_MASK) != val) {
-+		phydev_err(phydev, "nvmem cell 'io_impedance_ctrl' contents out of range\n");
-+		return -ERANGE;
-+	}
-+	dp83867->io_impedance = val;
-+
-+	return 0;
-+}
-+
- static int dp83867_of_init(struct phy_device *phydev)
- {
- 	struct dp83867_private *dp83867 = phydev->priv;
-@@ -548,12 +594,9 @@ static int dp83867_of_init(struct phy_device *phydev)
- 		}
- 	}
- 
--	if (of_property_read_bool(of_node, "ti,max-output-impedance"))
--		dp83867->io_impedance = DP83867_IO_MUX_CFG_IO_IMPEDANCE_MAX;
--	else if (of_property_read_bool(of_node, "ti,min-output-impedance"))
--		dp83867->io_impedance = DP83867_IO_MUX_CFG_IO_IMPEDANCE_MIN;
--	else
--		dp83867->io_impedance = -1; /* leave at default */
-+	ret = dp83867_of_init_io_impedance(phydev);
-+	if (ret)
-+		return ret;
- 
- 	dp83867->rxctrl_strap_quirk = of_property_read_bool(of_node,
- 							    "ti,dp83867-rxctrl-strap-quirk");
+ =======================
+ S3C24XX CPUfreq support
+ =======================
+
+base-commit: 35d872b9ea5b3ad784d7479ea728dcb688df2db7
 -- 
-2.31.1
+An old man doll... just what I always wanted! - Clara
 

@@ -2,155 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752C754A75F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:06:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DAEE54A74B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 05:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355215AbiFNDGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 23:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38764 "EHLO
+        id S236530AbiFNDFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 23:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353487AbiFNDFp (ORCPT
+        with ESMTP id S230099AbiFNDFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 23:05:45 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7192A41E;
-        Mon, 13 Jun 2022 20:05:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655175931; x=1686711931;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FJL02eXOJ6PqC8kbf/jCzhaldzTN2TIxSgiMk42PRXA=;
-  b=W5QWNHM3Ey4MmcVh67WGgUqkoiWb/mG7uA7i14wEE3shUG+3ZmRUMGsP
-   QXEPVwpLGW5f/PM4Kk7SDEQa4LnK6GFf3mX4ie3gCGLOH1PISHTTBwKGj
-   4d18bwXnQc+lFNfGximUBPKJ/ruQEeXA6hRPhAmPas5KODgUnLUdGy3yH
-   GyqafUXr61pkGxUMjBeVrIoHRLkEe2X3ausaZAZ6zwFi0eQM6/t0q77E5
-   WsCcglzYpC6h/gwkrZht9+FlYSw6umu1pprHCRaDl/6uTGJJBFNZmcBhm
-   Ejv10gD43nSZZZcv52odq2bq1411HgrNmzOQ43HGlYMIufbo4pJpzB/g5
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="278518803"
-X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="278518803"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2022 20:05:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,298,1647327600"; 
-   d="scan'208";a="761787743"
-Received: from p12hl98bong5.png.intel.com ([10.158.65.178])
-  by orsmga005.jf.intel.com with ESMTP; 13 Jun 2022 20:05:26 -0700
-From:   Ong Boon Leong <boon.leong.ong@intel.com>
-To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Emilio Riva <emilio.riva@ericsson.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>
-Subject: [PATCH net-next v4 5/5] net: stmmac: make mdio register skips PHY scanning for fixed-link
-Date:   Tue, 14 Jun 2022 11:00:30 +0800
-Message-Id: <20220614030030.1249850-6-boon.leong.ong@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220614030030.1249850-1-boon.leong.ong@intel.com>
-References: <20220614030030.1249850-1-boon.leong.ong@intel.com>
+        Mon, 13 Jun 2022 23:05:00 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0459F289B8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:04:59 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1013ecaf7e0so5229574fac.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 20:04:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=GIKXrMJmK00F2CPu/hqVjErFk5SVKd7uP4hFKJeSK5M=;
+        b=AR3QW2VBjJ1hctByyReQYTrPKto4Kki50p5CahepMNg1xyVf3gdjcJy5AYOMbYXJ/R
+         VE98vpMaoXFKdeqZzG0vuy9sycyvsx0KdmgimxHctcDjQfxXriqlXRzyshBlXGVKjfyq
+         esDPDfoiisYhSzGgAoSEEBIbKb7WtCKa/52JM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=GIKXrMJmK00F2CPu/hqVjErFk5SVKd7uP4hFKJeSK5M=;
+        b=y2feRmvaBOURGkloJsnBkJ52/95k6UhgU55zDBMpcPO2KlUJVlneRZ9KbKe0WrpI+c
+         MzOZ4iMitl1k2YCEI14aKQsxQX3iUmlTRCYrwrsM9eLmtdCOF0LJ7fNHu5XyMyjfiGNu
+         oA89qmH5C2YRebFf0KWErOJPxEGKFtVjv+rwt9G6U4d1KqMYtSHdC2AzJXUBxQw23Z/d
+         wz4tA6xuzlwyDM5IzlIFS2N5pvJ8Wuujg5xgXZkkFe/YjaiDFKxjjdChxByhjvWbt2Ss
+         8XeU+usgUUuV/0xAbbuS7Uwp1E8RQPdusivQjHjEQRuLSzRdLKOmIiDsVco0BvMhOBpR
+         2U5w==
+X-Gm-Message-State: AJIora/W3pkbwRjdrEYgxdug5NK1vLQ+fFglmwNihjyK5MsPBy/sweGO
+        oXA+mEQaEMku+25BaITNVocaGA==
+X-Google-Smtp-Source: AGRyM1tSQ5vOq7VAoa9DToonIuS86X5DP0QuTUvLINlwWPLN61oD4Qf8sRP0owt3eyRwU+NwCE6Bdg==
+X-Received: by 2002:a05:6870:961b:b0:e2:ffb9:f526 with SMTP id d27-20020a056870961b00b000e2ffb9f526mr1191635oaq.146.1655175898263;
+        Mon, 13 Jun 2022 20:04:58 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id p7-20020a05683019c700b0060c0c6e9186sm4215355otp.15.2022.06.13.20.04.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jun 2022 20:04:57 -0700 (PDT)
+Subject: Re: [PATCH 5.18 000/343] 5.18.4-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220613181233.078148768@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <0cd002c0-c3a7-7df9-7ccb-e41881ceb94c@linuxfoundation.org>
+Date:   Mon, 13 Jun 2022 21:04:56 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220613181233.078148768@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-stmmac_mdio_register() lacks fixed-link consideration and only skip PHY
-scanning if it has done DT style PHY discovery. So, for DT or ACPI _DSD
-setting of fixed-link, the PHY scanning should not happen.
+On 6/13/22 12:18 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.4 release.
+> There are 343 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 15 Jun 2022 18:11:39 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.4-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Tested-by: Emilio Riva <emilio.riva@ericsson.com>
-Signed-off-by: Ong Boon Leong <boon.leong.ong@intel.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 11 ++++++-----
- drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c | 14 ++++++++++++++
- 2 files changed, 20 insertions(+), 5 deletions(-)
+Compiled and booted on my test system. No dmesg regressions.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 73cae2938f6..bc8edd88175 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1141,19 +1141,20 @@ static void stmmac_check_pcs_mode(struct stmmac_priv *priv)
-  */
- static int stmmac_init_phy(struct net_device *dev)
- {
-+	struct fwnode_handle *fwnode = of_fwnode_handle(priv->plat->phylink_node);
- 	struct stmmac_priv *priv = netdev_priv(dev);
--	struct device_node *node;
- 	int ret;
- 
--	node = priv->plat->phylink_node;
-+	if (!fwnode)
-+		fwnode = dev_fwnode(priv->device);
- 
--	if (node)
--		ret = phylink_of_phy_connect(priv->phylink, node, 0);
-+	if (fwnode)
-+		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
- 
- 	/* Some DT bindings do not set-up the PHY handle. Let's try to
- 	 * manually parse it
- 	 */
--	if (!node || ret) {
-+	if (!fwnode || ret) {
- 		int addr = priv->plat->phy_addr;
- 		struct phy_device *phydev;
- 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-index 03d3d1f7aa4..5f177ea8072 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-@@ -434,9 +434,11 @@ int stmmac_mdio_register(struct net_device *ndev)
- 	int err = 0;
- 	struct mii_bus *new_bus;
- 	struct stmmac_priv *priv = netdev_priv(ndev);
-+	struct fwnode_handle *fwnode = of_fwnode_handle(priv->plat->phylink_node);
- 	struct stmmac_mdio_bus_data *mdio_bus_data = priv->plat->mdio_bus_data;
- 	struct device_node *mdio_node = priv->plat->mdio_node;
- 	struct device *dev = ndev->dev.parent;
-+	struct fwnode_handle *fixed_node;
- 	int addr, found, max_addr;
- 
- 	if (!mdio_bus_data)
-@@ -490,6 +492,18 @@ int stmmac_mdio_register(struct net_device *ndev)
- 	if (priv->plat->has_xgmac)
- 		stmmac_xgmac2_mdio_read(new_bus, 0, MII_ADDR_C45);
- 
-+	/* If fixed-link is set, skip PHY scanning */
-+	if (!fwnode)
-+		fwnode = dev_fwnode(priv->device);
-+
-+	if (fwnode) {
-+		fixed_node = fwnode_get_named_child_node(fwnode, "fixed-link");
-+		if (fixed_node) {
-+			fwnode_handle_put(fixed_node);
-+			goto bus_register_done;
-+		}
-+	}
-+
- 	if (priv->plat->phy_node || mdio_node)
- 		goto bus_register_done;
- 
--- 
-2.25.1
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
+thanks,
+-- Shuah

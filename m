@@ -2,75 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438A354B057
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:18:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4B854AFE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357050AbiFNMPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:15:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44578 "EHLO
+        id S1356286AbiFNMFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357004AbiFNMOV (ORCPT
+        with ESMTP id S241347AbiFNMFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:14:21 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDA12A700
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:14:14 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id a8-20020a05683012c800b0060c027c8afdso6404086otq.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 05:14:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=lBFrwc11MgcaK75qf3EwNhKoIfwLYz4Dn7scEjO7Hwc=;
-        b=UNA00ExpSe/IYk9qRpK3nhNY3MQGhIZVH9b+TBjq+LdlUjXIh78z6gPdY8GF0sQHK1
-         HJ2n3gfPpUPhyyacfGQvRyEpF1QlynrQ30w+G5Aew5oVgyNdOMVYVhySdHNUBZObva2y
-         PuLir0DHRxYshYjhyycNkTLQ7VsAQLmTK6m5EVJfcKtgRbmxa7D08ugJk7y5pLRJ/ze1
-         6cL1+ieOt2sNltOPHDSKZebgxow79UdI2TUNij2cNTn50jsq9VR126vHNmWni88LExVM
-         7xKsxa1nHQ7JrwK4VAXG7j0wCn6FqCQrLI4ANDOm8760jdm8KbeqIvWnFua/uGvpfZQ4
-         nejg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=lBFrwc11MgcaK75qf3EwNhKoIfwLYz4Dn7scEjO7Hwc=;
-        b=7jzalJBauCM0xUHxVb1CdnCBAc5Yk7yd6j019mWlBS0cAgxH+PaTj0qg3I6K9eLZNu
-         MuvrXQGvSEPJLtOh5C+433q8+HgJzME1HHpawP0sFET5h8iiYSB/czpBof6gdYcRV0MF
-         9nclbnB1vA8bd5r80VWOiYqVlC8sLhnSHjAbSzbuMp53b9BYctsh9/e1N7NaUksk+N/A
-         ezY5MuKy1SVDvG+yeJR8JMi2Al7ccAbBRN6eaCuDnlov7xrHFjL5D6ND0oEMr9DIH1rl
-         PpULTpEm5+D+xAgBg7lr+0WlogRIzKNsiThTJ65KuiLg3rFchUoSbAIoGea99KKzWDxX
-         /eoQ==
-X-Gm-Message-State: AOAM531Gyk/hMRroe0ddJy4Obm3smuEC8dEBmTRxuh8QNR4D7z7cOYpD
-        rTmZW/GQhatExccR6pwnvJmmunVko2wI/Y5B5b4=
-X-Google-Smtp-Source: ABdhPJxH036Sb3549Y0f3hc7Zhwns93SCbnuybCuqmcROW8sIBDtc8O0vPfU6QLql+6epoXLTxfkWaoTwfvvDQjMptA=
-X-Received: by 2002:a05:6830:1691:b0:60c:1eb1:6ddf with SMTP id
- k17-20020a056830169100b0060c1eb16ddfmr1906144otr.205.1655208853785; Tue, 14
- Jun 2022 05:14:13 -0700 (PDT)
+        Tue, 14 Jun 2022 08:05:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA7B4927A;
+        Tue, 14 Jun 2022 05:05:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E54BB81863;
+        Tue, 14 Jun 2022 12:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49F45C3411B;
+        Tue, 14 Jun 2022 12:05:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655208344;
+        bh=6EaGbSn4r/TeDu88uoSdZfsO2bREhpvtyTSLFRBBdQQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ViSpuB8+mSVxLXaTeNpdJzPIzQppv/MhO+DHwRJwhJDujYPH3xlV2r6xzIH2+nANM
+         lxM+o/YtxX0/jTFV/9OrXQ27QbPFlAkC2/G9qhMlO2eaF0n/K/HOeHkRaubCNaD7hs
+         dPF0wpoF/+UH0qunJs9aZHm8hB+EaF+RtNvhT6YMY2WW/2AIxyclc77Mqthf3oK1Tp
+         Jk61012dq1vEqmnpW6yBwUVCMq2ELSVEwWLcxR3A9yxQKrt+bWzBkBuMhyvF5nhuRU
+         ENQOKzjpBcN/9quZ/bRC78Z7voa7Q6yrPhoxKnoRW1ZPcVwF5VORv3VrA41GYTW4yv
+         Tzd45VXxE0d1Q==
+Date:   Tue, 14 Jun 2022 13:14:53 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     <Claudiu.Beznea@microchip.com>
+Cc:     <Eugen.Hristev@microchip.com>, <lars@metafoo.de>,
+        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <ludovic.desroches@atmel.com>, <linux-iio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 15/16] iio: adc: at91-sama5d2_adc: add runtime pm
+ support
+Message-ID: <20220614131453.7099c043@jic23-huawei>
+In-Reply-To: <68a099ac-7bf6-aca0-4723-af8e48585abc@microchip.com>
+References: <20220609083213.1795019-1-claudiu.beznea@microchip.com>
+        <20220609083213.1795019-16-claudiu.beznea@microchip.com>
+        <20220611174824.2d696a55@jic23-huawei>
+        <68a099ac-7bf6-aca0-4723-af8e48585abc@microchip.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Received: by 2002:a8a:c46:0:b0:42d:ab20:ed24 with HTTP; Tue, 14 Jun 2022
- 05:14:13 -0700 (PDT)
-From:   Daniel Affum <danielaffum05@gmail.com>
-Date:   Tue, 14 Jun 2022 15:14:13 +0300
-Message-ID: <CAPkju_PQmptLCUNLrFjDqn4sN-xwFQ9XOg5Cv+KN_pd6V1aXpA@mail.gmail.com>
-Subject: Confirm Receipt
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=1.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Dear,
+...
 
-I am Daniel Affum a retired civil servant i have a  business to
-discuss with you from the Eastern part of Africa aimed at agreed
-percentage upon your acceptance of my hand in business and friendship.
-Kindly respond to me if you are interested to partner with me for an
-update.Very important.
 
-Yours Sincerely,
-Daniel Affum.
-Reply to:danielaffum005@yahoo.com
+> >> @@ -1268,11 +1309,15 @@ static int at91_adc_buffer_prepare(struct iio_dev *indio_dev)
+> >>       if (!(iio_device_get_current_mode(indio_dev) & INDIO_ALL_TRIGGERED_MODES))
+> >>               return -EINVAL;
+> >>
+> >> +     ret = pm_runtime_resume_and_get(st->dev);  
+> > 
+> > This seems unusual.  I'd normally expect to see runtime pm left on whenever
+> > a buffer is in use, but in this case you seem to let it autosuspend.
+> > 
+> > That 'might' be fine as you might hit it often enough that it stays up whilst
+> > doing DMA but it certainly seems odd and less than efficient.
+> > Or possibly the use of the trigger is enough to keep it up.  
+> 
+> This is here because at91_adc_buffer_prepare() is called though
+> .hwfifo_set_watermark which is called in iio_enable_buffers() before
+> iio_trigger_attach_poll_func() which calls in turn
+> at91_adc_configure_trigger() that turns on the power for the whole duration
+> the buffers are enabled.
+> 
+> It is necessary to have runtime resume here to be able to do proper
+> register settings.
+
+Runtime pm is reference counted so I'd take the view that either
+* buffer being enabled or
+* trigger being enabled
+
+are reasons to leave the device powered up.  That'll result in
+needing it to be powered down in both buffer and trigger disables
+but that shoudl be fine.
+
+...
+
+Thanks,
+
+Jonathan

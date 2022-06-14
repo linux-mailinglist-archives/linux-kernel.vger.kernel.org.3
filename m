@@ -2,178 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3855654B2B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0506454B2BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235765AbiFNODw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S236775AbiFNOFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:05:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231223AbiFNODu (ORCPT
+        with ESMTP id S235951AbiFNOFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:03:50 -0400
-Received: from out203-205-221-164.mail.qq.com (out203-205-221-164.mail.qq.com [203.205.221.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803E73883;
-        Tue, 14 Jun 2022 07:03:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1655215425;
-        bh=b+j3hfI52SuPbVR8+0Rma0F6k2hM1BhO8T4wYrdBWG4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=lYLuGiA/IGGLaucMp/fFwuc+HQhZKA4CDzpmNbwW1U+IQXVOrY4fc9W0YGzqq89hX
-         6AXqJWSUHK2qdP6fI34EKr65dlNG7NV5IqNuhpWN7ptNw/d4a+bzRn2Itie6Dm7Pjo
-         qeaTxWl3HWprgxBWh9aOhVWCCsfFgNnDiFcy948U=
-Received: from [IPv6:240e:45a:409:26e3:89c6:2747:8c5d:8528] ([240e:45a:409:26e3:89c6:2747:8c5d:8528])
-        by newxmesmtplogicsvrszc9.qq.com (NewEsmtp) with SMTP
-        id E88A091; Tue, 14 Jun 2022 22:03:40 +0800
-X-QQ-mid: xmsmtpt1655215420t2ny1izu9
-Message-ID: <tencent_8FD344DA7FC376C7D1204604DA7689DA4906@qq.com>
-X-QQ-XMAILINFO: M/NR0wiIuy702s701Wg5VwT1mROVrNO7zSBbQM60JMaejeyA4EMHVrtEyQiEhp
-         hZ3rBlbgVlHcdZhKhw0sUoAKKkJ24It+CGPJjV+RHFSdXwJbMRAD53jS2y/loZGOpaqD+kmO9YZB
-         0Fz9pjlFGKg94ojqZnH0fcQGPLnyRpCUsH/4unfLDT/G7tC4fkw29JR39vx6Jyo6/rxQlYyGcm6K
-         evyn/epSRAKDLd+0DPX6U31MTSblE3iffi8VetpwqZArZn0/POGUlQX56re3R7gejBVLOIPrrYhI
-         FLi6ShBJQ6vCNllZKrP1XVNjGkcxcUz4hBAXfc389qOKnYryYgSw4ZjWFhmjjyQGr9bIEIW/FBIU
-         ydn/mDSVT5Fw8y18rCWfGcYzERSVuGPrkOxMPYLVjlJMLpvvwFH1OWppJZ1wMx1gKtDjh0sXIz+i
-         +XKRdNEItsfqs6FskkkZxYTKDxATaUoRE/S0hkFPeHctFFYfmhVsrK7AKZJJ6+CxpyEpEV+6ZwWu
-         imObWSGnjIjulVj8drQc6gE/8DU4KJ2W69RIe0PGG5HflYKwV3jtzwEmlqivN5Gf1YXU1XhORBA+
-         3MyJcWqeN8IiCdwrLU7kHCQMjezSPlTAOfJamiIZ4xfs4EcQS0egayXS4ANyPofDcrM1P0E8Ehnw
-         5xFeIM8PfDl7DIKKCr0Mt/smMt99EppSrVPriF8tcd6/+wOcpbBGlGMoTF9zG1obxNeFq71xfGxD
-         vCGfKxgIIvaEp+3E496PkhwoBdNHzUSMKtOQqrFwYl9nsZvAkZ+sTuMiFP5m67pozNvlekhbslFo
-         jn2ezjuUWKbQtwg9wpRxjJub2pSjxNUBOYmmWigYastaeoa/vGzeZTqxpgXU7R7uIG9j3GRny+hW
-         shfHZwnCjDPoJ1lqeuDlAu7ojShPQ6MDEN3E5em3oRH71o5kVEHWoGSZ/2dSwtPQybK+smJz6LJi
-         XvL3E8r8oONCL3Rp/FhKJXC8uBOGUq1WcAaSPwn1o=
-Subject: Re: Commit 282d8998e997 (srcu: Prevent expedited GPs and blocking
- readers from consuming CPU) cause qemu boot slow
-To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Shameerali Kolothum Thodi 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "mtosatti@redhat.com" <mtosatti@redhat.com>,
-        Auger Eric <eric.auger@redhat.com>,
-        "chenxiang (M)" <chenxiang66@hisilicon.com>
-References: <20220612162029.GR1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220612164002.GA1242564@paulmck-ThinkPad-P17-Gen-1>
- <560f7d27-fe38-0db9-834a-50dda5fa6157@redhat.com>
- <20220612184944.GU1790663@paulmck-ThinkPad-P17-Gen-1>
- <tencent_E306F58EAEC1D188ED6D5F358A269F34C707@qq.com>
- <20220613035711.GY1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220613041652.GA3976000@paulmck-ThinkPad-P17-Gen-1>
- <tencent_F82250B6E3D51A9AC0D2BE1AE43A4E060909@qq.com>
- <20220613121831.GA1790663@paulmck-ThinkPad-P17-Gen-1>
- <tencent_65C7D0A04984EDB6A79A5E5379DA7E835206@qq.com>
- <20220613145900.GC1790663@paulmck-ThinkPad-P17-Gen-1>
- <7b6c983b21d44119b61716a66de397ed@huawei.com>
- <f9684a69-5467-a440-abd1-7cf5ad3a81f7@quicinc.com>
-From:   "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
-X-OQ-MSGID: <f3b9a33f-fcf0-676b-e526-a885a945c414@foxmail.com>
-Date:   Tue, 14 Jun 2022 22:03:35 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Tue, 14 Jun 2022 10:05:36 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D063A724;
+        Tue, 14 Jun 2022 07:05:34 -0700 (PDT)
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LMqt66rQzz67ZGL;
+        Tue, 14 Jun 2022 22:03:58 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 16:05:32 +0200
+Received: from localhost (10.81.210.75) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 14 Jun
+ 2022 15:05:31 +0100
+Date:   Tue, 14 Jun 2022 15:05:29 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Denis Ciocca <denis.ciocca@st.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.15 167/247] iio: st_sensors: Add a local lock for
+ protecting odr
+Message-ID: <20220614150529.00004e13@Huawei.com>
+In-Reply-To: <20220613094928.023172711@linuxfoundation.org>
+References: <20220613094922.843438024@linuxfoundation.org>
+        <20220613094928.023172711@linuxfoundation.org>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-In-Reply-To: <f9684a69-5467-a440-abd1-7cf5ad3a81f7@quicinc.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.81.210.75]
+X-ClientProxiedBy: lhreml740-chm.china.huawei.com (10.201.108.190) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 13 Jun 2022 12:11:09 +0200
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
+> From: Miquel Raynal <miquel.raynal@bootlin.com>
+> 
+> [ Upstream commit 474010127e2505fc463236470908e1ff5ddb3578 ]
+> 
+> Right now the (framework) mlock lock is (ab)used for multiple purposes:
+> 1- protecting concurrent accesses over the odr local cache
+> 2- avoid changing samplig frequency whilst buffer is running
+> 
+> Let's start by handling situation #1 with a local lock.
 
-On 2022/6/14 下午8:19, Neeraj Upadhyay wrote:
->
->>
->> 5.18-rc4 based               ~8sec
->>
->> 5.19-rc1                     ~2m43sec
->>
->> 5.19-rc1+fix1                 ~19sec
->>
->> 5.19-rc1-fix2                 ~19sec
->>
->
-> If you try below diff on top of either 5.19-rc1+fix1 or 5.19-rc1-fix2 
-> ; does it show any difference in boot time?
->
-> --- a/kernel/rcu/srcutree.c
-> +++ b/kernel/rcu/srcutree.c
-> @@ -706,7 +706,7 @@ static void srcu_schedule_cbs_snp(struct 
-> srcu_struct *ssp, struct srcu_node *snp
->   */
->  static void srcu_gp_end(struct srcu_struct *ssp)
->  {
-> -       unsigned long cbdelay;
-> +       unsigned long cbdelay = 1;
->         bool cbs;
->         bool last_lvl;
->         int cpu;
-> @@ -726,7 +726,9 @@ static void srcu_gp_end(struct srcu_struct *ssp)
->         spin_lock_irq_rcu_node(ssp);
->         idx = rcu_seq_state(ssp->srcu_gp_seq);
->         WARN_ON_ONCE(idx != SRCU_STATE_SCAN2);
-> -       cbdelay = !!srcu_get_delay(ssp);
-> +       if (ULONG_CMP_LT(READ_ONCE(ssp->srcu_gp_seq), 
-> READ_ONCE(ssp->srcu_gp_seq_needed_exp)))
-> +               cbdelay = 0;
+This is harmless, but not a fix but rather part of a long running
+effort to abstract away the use of iio_dev->mlock.
+
+What's there before this isn't broken, but rather isn't the way
+we would do it today.
+
+Thanks,
+
+Jonathan
+
+> 
+> Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> Cc: Denis Ciocca <denis.ciocca@st.com>
+> Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
+> Link: https://lore.kernel.org/r/20220207143840.707510-7-miquel.raynal@bootlin.com
+> Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>  .../iio/common/st_sensors/st_sensors_core.c   | 24 ++++++++++++++-----
+>  include/linux/iio/common/st_sensors.h         |  3 +++
+>  2 files changed, 21 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/iio/common/st_sensors/st_sensors_core.c b/drivers/iio/common/st_sensors/st_sensors_core.c
+> index 0bbb090b108c..aff981551617 100644
+> --- a/drivers/iio/common/st_sensors/st_sensors_core.c
+> +++ b/drivers/iio/common/st_sensors/st_sensors_core.c
+> @@ -71,16 +71,18 @@ static int st_sensors_match_odr(struct st_sensor_settings *sensor_settings,
+>  
+>  int st_sensors_set_odr(struct iio_dev *indio_dev, unsigned int odr)
+>  {
+> -	int err;
+> +	int err = 0;
+>  	struct st_sensor_odr_avl odr_out = {0, 0};
+>  	struct st_sensor_data *sdata = iio_priv(indio_dev);
+>  
+> +	mutex_lock(&sdata->odr_lock);
 > +
->         WRITE_ONCE(ssp->srcu_last_gp_end, ktime_get_mono_fast_ns());
->
-Test here:
-qemu: https://github.com/qemu/qemu/tree/stable-6.1
-kernel: 
-https://github.com/Linaro/linux-kernel-uadk/tree/uacce-devel-5.19-srcu-test
-(in case test patch not clear, push in git tree)
-
-Hardware: aarch64
-
-1. 5.18-rc6
-real    0m8.402s
-user    0m3.015s
-sys     0m1.102s
-
-2. 5.19-rc1
-real    2m41.433s
-user    0m3.097s
-sys     0m1.177s
-
-3. 5.19-rc1 + fix1 from Paul
-real    2m43.404s
-user    0m2.880s
-sys     0m1.214s
-
-4. 5.19-rc1 + fix2: fix1 + Remove "if (!jbase)" block
-real    0m15.262s
-user    0m3.003s
-sys     0m1.033s
-
-When build kernel in the meantime, load time become longer.
-
-5. 5.19-rc1 + fix3: fix1 + SRCU_MAX_NODELAY_PHASE 1000000
-real    0m15.215s
-user    0m2.942s
-sys    0m1.172s
-
-6. 5.19-rc1 + fix4: fix1 + Neeraj's change of srcu_gp_end　
-real    1m23.936s
-user    0m2.969s
-sys    0m1.181s
-
-More test details: https://docs.qq.com/doc/DRXdKalFPTVlUbFN5
-
-Thanks
+>  	if (!sdata->sensor_settings->odr.mask)
+> -		return 0;
+> +		goto unlock_mutex;
+>  
+>  	err = st_sensors_match_odr(sdata->sensor_settings, odr, &odr_out);
+>  	if (err < 0)
+> -		goto st_sensors_match_odr_error;
+> +		goto unlock_mutex;
+>  
+>  	if ((sdata->sensor_settings->odr.addr ==
+>  					sdata->sensor_settings->pw.addr) &&
+> @@ -103,7 +105,9 @@ int st_sensors_set_odr(struct iio_dev *indio_dev, unsigned int odr)
+>  	if (err >= 0)
+>  		sdata->odr = odr_out.hz;
+>  
+> -st_sensors_match_odr_error:
+> +unlock_mutex:
+> +	mutex_unlock(&sdata->odr_lock);
+> +
+>  	return err;
+>  }
+>  EXPORT_SYMBOL(st_sensors_set_odr);
+> @@ -365,6 +369,8 @@ int st_sensors_init_sensor(struct iio_dev *indio_dev,
+>  	struct st_sensors_platform_data *of_pdata;
+>  	int err = 0;
+>  
+> +	mutex_init(&sdata->odr_lock);
+> +
+>  	/* If OF/DT pdata exists, it will take precedence of anything else */
+>  	of_pdata = st_sensors_dev_probe(indio_dev->dev.parent, pdata);
+>  	if (IS_ERR(of_pdata))
+> @@ -558,18 +564,24 @@ int st_sensors_read_info_raw(struct iio_dev *indio_dev,
+>  		err = -EBUSY;
+>  		goto out;
+>  	} else {
+> +		mutex_lock(&sdata->odr_lock);
+>  		err = st_sensors_set_enable(indio_dev, true);
+> -		if (err < 0)
+> +		if (err < 0) {
+> +			mutex_unlock(&sdata->odr_lock);
+>  			goto out;
+> +		}
+>  
+>  		msleep((sdata->sensor_settings->bootime * 1000) / sdata->odr);
+>  		err = st_sensors_read_axis_data(indio_dev, ch, val);
+> -		if (err < 0)
+> +		if (err < 0) {
+> +			mutex_unlock(&sdata->odr_lock);
+>  			goto out;
+> +		}
+>  
+>  		*val = *val >> ch->scan_type.shift;
+>  
+>  		err = st_sensors_set_enable(indio_dev, false);
+> +		mutex_unlock(&sdata->odr_lock);
+>  	}
+>  out:
+>  	mutex_unlock(&indio_dev->mlock);
+> diff --git a/include/linux/iio/common/st_sensors.h b/include/linux/iio/common/st_sensors.h
+> index 8bdbaf3f3796..69f4a1f6b536 100644
+> --- a/include/linux/iio/common/st_sensors.h
+> +++ b/include/linux/iio/common/st_sensors.h
+> @@ -238,6 +238,7 @@ struct st_sensor_settings {
+>   * @hw_irq_trigger: if we're using the hardware interrupt on the sensor.
+>   * @hw_timestamp: Latest timestamp from the interrupt handler, when in use.
+>   * @buffer_data: Data used by buffer part.
+> + * @odr_lock: Local lock for preventing concurrent ODR accesses/changes
+>   */
+>  struct st_sensor_data {
+>  	struct device *dev;
+> @@ -263,6 +264,8 @@ struct st_sensor_data {
+>  	s64 hw_timestamp;
+>  
+>  	char buffer_data[ST_SENSORS_MAX_BUFFER_SIZE] ____cacheline_aligned;
+> +
+> +	struct mutex odr_lock;
+>  };
+>  
+>  #ifdef CONFIG_IIO_BUFFER
 

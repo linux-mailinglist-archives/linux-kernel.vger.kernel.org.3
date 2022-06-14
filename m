@@ -2,90 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D645154AD6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:32:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BF854AD70
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238904AbiFNJc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 05:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
+        id S242545AbiFNJei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 05:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiFNJc0 (ORCPT
+        with ESMTP id S230333AbiFNJeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 05:32:26 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B594965A6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 02:32:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655199145; x=1686735145;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=U6mkYQXYPpI8IEu2W57zWGbzpdSdA7n5h8qOkdFmXtc=;
-  b=VJHAeiWpF3UeKffN2xMKRn/804O/ho9X5FYmdDJLRvwykjQEH49x5MsJ
-   pvYm3QTO45F+2/QLTDeBfHdq1dYz6FKoCn//8v1SnTeTcycy1QBTXyTu4
-   lAUk7tbFzqvwmekbJFUZeFABPEeguLamy02Ngovdr6Iyty+GPYGvlhX/q
-   e4NBEzu0ZC7GalqrPZ94nq5R71HOh4zv2fizFRAEGIKHcGb0AqF/xeUlk
-   05ZoMIp6mhdp2tYWUwR4PLDwuaLiqlN+gc279Qc/isw+5DVos7mOSfc9l
-   +is3p+9nVJ42OjOOXa9Dc41EpBSUqTanutOFL8Bj3Rt6R6nZn9m481b0m
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="267251262"
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="267251262"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 02:32:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="588350359"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 14 Jun 2022 02:32:24 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o12uN-000LjN-Bi;
-        Tue, 14 Jun 2022 09:32:23 +0000
-Date:   Tue, 14 Jun 2022 17:32:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     William Zhang <william.zhang@broadcom.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Florian Fainelli <f.fainelli@gmail.com>
-Subject: [broadcom-stblinux:devicetree/next 15/23] make[2]: *** No rule to
- make target 'arch/arm/boot/dts/bcm96855.dtb', needed by '__build'.
-Message-ID: <202206141752.IB5xCdXS-lkp@intel.com>
+        Tue, 14 Jun 2022 05:34:36 -0400
+X-Greylist: delayed 122 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Jun 2022 02:34:32 PDT
+Received: from unicom146.biz-email.net (unicom146.biz-email.net [210.51.26.146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C2D369D8;
+        Tue, 14 Jun 2022 02:34:32 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by unicom146.biz-email.net ((D)) with ASMTP (SSL) id JHV00124;
+        Tue, 14 Jun 2022 17:32:24 +0800
+Received: from localhost.localdomain (10.200.104.97) by
+ jtjnmail201602.home.langchao.com (10.100.2.2) with Microsoft SMTP Server id
+ 15.1.2308.27; Tue, 14 Jun 2022 17:32:25 +0800
+From:   Bo Liu <liubo03@inspur.com>
+To:     <pbonzini@redhat.com>
+CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] KVM: Use consistent type for return value of kvm_mmu_memory_cache_nr_free_objects()
+Date:   Tue, 14 Jun 2022 05:32:22 -0400
+Message-ID: <20220614093222.25387-1-liubo03@inspur.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.200.104.97]
+tUid:   202261417322409c0f72d9200304032c44b936001c900
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/Broadcom/stblinux devicetree/next
-head:   edb052f67bb9f245f9717b3c11b21022a02fae87
-commit: d2d847e696389916239c5521ca533261d0c0026f [15/23] ARM: dts: Add DTS files for bcmbca SoC BCM6855
-config: arm-randconfig-r035-20220613 (https://download.01.org/0day-ci/archive/20220614/202206141752.IB5xCdXS-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/Broadcom/stblinux/commit/d2d847e696389916239c5521ca533261d0c0026f
-        git remote add broadcom-stblinux https://github.com/Broadcom/stblinux
-        git fetch --no-tags broadcom-stblinux devicetree/next
-        git checkout d2d847e696389916239c5521ca533261d0c0026f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+The return value type of the function rmap_can_add() is "bool", and it will
+returns the result of the function kvm_mmu_memory_cache_nr_free_objects().
+So we should change the return value type of
+kvm_mmu_memory_cache_nr_free_objects() to "bool".
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Bo Liu <liubo03@inspur.com>
+---
+ include/linux/kvm_host.h | 2 +-
+ virt/kvm/kvm_main.c      | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-All errors (new ones prefixed by >>):
-
->> make[2]: *** No rule to make target 'arch/arm/boot/dts/bcm96855.dtb', needed by '__build'.
-   make[2]: Target '__build' not remade because of errors.
-
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index c20f2d55840c..a399a7485795 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -1358,7 +1358,7 @@ void kvm_flush_remote_tlbs(struct kvm *kvm);
+ 
+ #ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
+ int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min);
+-int kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc);
++bool kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc);
+ void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
+ void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
+ #endif
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index a67e996cbf7f..2872569e3580 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -394,9 +394,9 @@ int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min)
+ 	return 0;
+ }
+ 
+-int kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc)
++bool kvm_mmu_memory_cache_nr_free_objects(struct kvm_mmu_memory_cache *mc)
+ {
+-	return mc->nobjs;
++	return !!mc->nobjs;
+ }
+ 
+ void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc)
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+

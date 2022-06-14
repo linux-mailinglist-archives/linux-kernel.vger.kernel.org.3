@@ -2,113 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30AE354B840
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612D454B848
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 20:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242563AbiFNSF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 14:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56236 "EHLO
+        id S1344526AbiFNSIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 14:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238035AbiFNSFy (ORCPT
+        with ESMTP id S243228AbiFNSIa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 14:05:54 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8774666C
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:05:53 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 49C601F8D7;
-        Tue, 14 Jun 2022 18:05:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655229952; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GIzC5m4VIawCPqN9AdaqRh8x0GtJQ/9Kc4xrd4raz1Q=;
-        b=oH5k1z4RYZNWwR0xlp0zAraLdDxW7DNqsZ1A175H2B8MV3M0P/VcjaJd3fL/LDNIb21VuT
-        EP3Uq9fLn+ZUBi8SGH6fDvbJ/2aqbdtq+CYczy5Gq6xTdZsHAB0xJDxPduCwX7kG+ulszX
-        ojzRXSqXgFkiWZ9kYvjYIoG7LcUQwVg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655229952;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GIzC5m4VIawCPqN9AdaqRh8x0GtJQ/9Kc4xrd4raz1Q=;
-        b=bwHGEJzpqp6ZmbWScv3JU0i6kulB9ipvoO7GyJaZwStxr4HvxeHSghDE/sXYCji2oBwUoM
-        RsLs3hBZdDqv3BDg==
-Received: from quack3.suse.cz (jack.udp.ovpn1.nue.suse.de [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 06A532C141;
-        Tue, 14 Jun 2022 18:05:52 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 39D3AA062E; Tue, 14 Jun 2022 20:05:49 +0200 (CEST)
-Date:   Tue, 14 Jun 2022 20:05:49 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jchao Sun <sunjunchao2870@gmail.com>, Jan Kara <jack@suse.cz>
-Subject: Re: Linux 5.19-rc2
-Message-ID: <20220614180549.lkcvi2qfnsy7d3gq@quack3.lan>
-References: <CAHk-=wiLDbZ9ch9vSLxrYBdr-bBujr5sehH_HszWzSah54UiQw@mail.gmail.com>
- <20220613154640.GA3881687@roeck-us.net>
- <20220614170316.GA3690098@roeck-us.net>
+        Tue, 14 Jun 2022 14:08:30 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA0835862
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:08:30 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id l204so16449984ybf.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 11:08:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=I7mIzgHlKoo48q72bBYb3vEBCu9Nvd6MDnUH2Y99HDs=;
+        b=rueFW7Hw9BW5aiacWVNeDteqBIXmxnNHCNKISJs/aDl7jnTwrNcJrqHjAEU+ozjnbR
+         8uNLg/U3OLLjTUWHjjkfGiKsRwqdtpppCZ6Ygx7DdKK2WqDZNolZOI4s+G40ALixMZaF
+         LlpPBxi0MX4Nl1LpyZ0wpOAfq71h8fVtHmNRzdbya/rJX38r4NnJQAtI0rI4086LpAKL
+         IlRa0CBNAbJIdlI5v8kIQbF2C5qsJoakcX7uFN3I7SkWdExdKM5jqv2bSwjDB94yoVhG
+         QYEBI26fURbxppMXaezdRzq3ocqQJqs7yAlgNYIQKiCTI+O8pKsk848mFEgrQQ2NDvx1
+         qYiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=I7mIzgHlKoo48q72bBYb3vEBCu9Nvd6MDnUH2Y99HDs=;
+        b=sTCFmkEM5aiY0ZKnArOivxtHUAQdv6qVoa1K0clFzI9cZJR6YeNbQSR3osuuKSMEQJ
+         LkY7PIQ9mmkhyWNbqqi8WdSihCLqezVegq7N/dKxJYRGWDfdcFJ6tB02iVQyyp/71PFL
+         UqZg7el4Pk0NpZSrgj4rflk2lTFQtsSpsgrwHhfEEl43L+XjFAo7RHKgNdN6q4nKsceH
+         +1c5X3+G6JKzs2o6IMbK7WRKDNEs2ykw/27Q0bcHG0JqUwi/SIeD0CDRZ6HRU487dpeg
+         VPGf/nm1kPlltop4m8d8Qgb9I1p23N44L3T7WNiOX66Bpw1rYA+YEd+wnq4JXNLimrrV
+         3kYA==
+X-Gm-Message-State: AJIora8hdJcNw4pPMuslMv2y3gkaY3Fo4PYSqnR+6LQYypSUnrwp9/Ed
+        Yrdb489+fhibfmSJ8uw9Sl3/M7Yibdz8lYk3WwKxKg==
+X-Google-Smtp-Source: AGRyM1v4Pm0uKutjGFFGG8hxEK6A2MV95t6qGASMp568gSd6ZZcLQLhn3uiQz7zYDJnZy348rz4aUrhLiQObaBcCuI4=
+X-Received: by 2002:a25:e68b:0:b0:65c:7aa5:f901 with SMTP id
+ d133-20020a25e68b000000b0065c7aa5f901mr6203492ybh.147.1655230108954; Tue, 14
+ Jun 2022 11:08:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614170316.GA3690098@roeck-us.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220614144853.3693273-1-glider@google.com> <CAHk-=whaWnwB8guceg8V=bA1adv74GNaMk2FEu+YQkBKUqxVoA@mail.gmail.com>
+In-Reply-To: <CAHk-=whaWnwB8guceg8V=bA1adv74GNaMk2FEu+YQkBKUqxVoA@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 14 Jun 2022 20:07:52 +0200
+Message-ID: <CAG_fn=WEed5NJ8hdrrP_N8aQ_1Ad11VoJgdVxQheo3VfT_xyXQ@mail.gmail.com>
+Subject: Re: [PATCH] [RFC] Initialization of unused function parameters
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Evgenii Stepanov <eugenis@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Buka <vitalybuka@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 14-06-22 10:03:16, Guenter Roeck wrote:
-> On Mon, Jun 13, 2022 at 08:46:42AM -0700, Guenter Roeck wrote:
-> > 
-> > There are also various UAF and "spinlock bad magic" BUG/WARNING logs in arm
-> > boot tests. I don't know if those are new or if I just see them now because
-> > I enabled KFENCE. Here is an (incomplete) sample.
-> > 
-> > [    0.430290] printk: console [ramoops-1] printing thread started
-> > [    0.436219] BUG: spinlock bad magic on CPU#0, kdevtmpfs/23
-> > [    0.436250]  lock: noop_backing_dev_info+0x6c/0x3b0, .magic: 00000000, .owner: <none>/-1, .owner_cpu: 0
-> > [    0.436808] CPU: 0 PID: 23 Comm: kdevtmpfs Not tainted 5.19.0-rc2 #1
-> > 
-> 
-> This is caused by commit 10e14073107dd0 ("writeback: Fix inode->i_io_list
-> not be protected by inode->i_lock error"). Reverting this commit fixes
-> the problem. Here is a complete backtrace:
+On Tue, Jun 14, 2022 at 6:48 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Jun 14, 2022 at 7:49 AM Alexander Potapenko <glider@google.com> w=
+rote:
+> >
+> > The bigger question I want to raise here is whether we want to
+> > discourage passing uninitialized variables to functions in the kernel
+> > altogether.
+>
+> I'm assuming you mean pass by reference.
 
-Yeah, I've already queued a fix into my tree, I'll send it to Linus
-tomorrow. With kdevtmpfs inode gets dirtied before noop_backing_dev_info is
-initialized...
+No, sorry for being unclear. I mean passing by value.
+In the given example the prototype of step_into looks as follows (see
+https://elixir.bootlin.com/linux/latest/source/fs/namei.c#L1846):
 
-								Honza
+  static const char *step_into(struct nameidata *nd, int flags, struct
+dentry *dentry, struct inode *inode, unsigned seq);
 
-> 
-> BUG: spinlock bad magic on CPU#0, kdevtmpfs/16
->  lock: noop_backing_dev_info+0x6c/0x3b0, .magic: 00000000, .owner: <none>/-1, .owner_cpu: 0
-> CPU: 0 PID: 16 Comm: kdevtmpfs Not tainted 5.19.0-rc2-00001-g8bd0807eb95c #1
-> Hardware name: ARM RealView Machine (Device Tree Support)
->  unwind_backtrace from show_stack+0x10/0x14
->  show_stack from dump_stack_lvl+0x68/0x90
->  dump_stack_lvl from do_raw_spin_lock+0xa8/0xf4
->  do_raw_spin_lock from __mark_inode_dirty+0x1a4/0x664
->  __mark_inode_dirty from simple_setattr+0x44/0x5c
->  simple_setattr from notify_change+0x404/0x460
->  notify_change from devtmpfsd+0x1ec/0x2b8
->  devtmpfsd from kthread+0xe0/0x104
->  kthread from ret_from_fork+0x14/0x24
-> Exception stack(0xe0851fb0 to 0xe0851ff8)
-> 1fa0:                                     00000000 00000000 00000000 00000000
-> 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> 
-> Guenter
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+, and the local variables `struct inode *inode` and `unsigned seq` are
+being passed to it by value, i.e. in certain cases the struct inode
+pointer and the unsigned seq are uninitialized.
+
+Does that change anything?
+
+> Some functions are really fundamentally about initializing things, and
+> expect uninitialized allocations.
+
+Agreed, there are a lot of functions around that initialize one struct
+or another, they are out of the scope.
+
+
+> What I think might be a good model is to be able to mark such
+> arguments as "must be initialized by callee".
+
+This sounds interesting. In the given example I would suggest that the
+call to lookup_fast()
+(https://elixir.bootlin.com/linux/latest/source/fs/namei.c#L2016)
+should be initializing &inode and &seq, so that it is guaranteed that
+they are passed initialized into step_into().
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
+
+Diese E-Mail ist vertraulich. Falls Sie diese f=C3=A4lschlicherweise
+erhalten haben sollten, leiten Sie diese bitte nicht an jemand anderes
+weiter, l=C3=B6schen Sie alle Kopien und Anh=C3=A4nge davon und lassen Sie =
+mich
+bitte wissen, dass die E-Mail an die falsche Person gesendet wurde.
+
+
+This e-mail is confidential. If you received this communication by
+mistake, please don't forward it to anyone else, please erase all
+copies and attachments, and please let me know that it has gone to the
+wrong person.

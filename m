@@ -2,87 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6DB54AD53
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4DB54AD63
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239459AbiFNJ0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 05:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
+        id S233276AbiFNJaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 05:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbiFNJ0O (ORCPT
+        with ESMTP id S230333AbiFNJ36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 05:26:14 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98A5B7FC;
-        Tue, 14 Jun 2022 02:26:12 -0700 (PDT)
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LMjjW2RRcz67vDG;
-        Tue, 14 Jun 2022 17:26:07 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 11:26:10 +0200
-Received: from [10.195.33.253] (10.195.33.253) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 10:26:09 +0100
-Message-ID: <3aee8ffe-d8c6-71b2-8725-028406efef5c@huawei.com>
-Date:   Tue, 14 Jun 2022 10:29:16 +0100
+        Tue, 14 Jun 2022 05:29:58 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269E440A35;
+        Tue, 14 Jun 2022 02:29:54 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id fu3so15971166ejc.7;
+        Tue, 14 Jun 2022 02:29:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=z9AkUJLjKxpCtPozfky0qDOVE/YUSyibmUCJ911O1ME=;
+        b=ZMT+RmlvqNsh5jo2KFs33OQi/LITKKRcaki81YPfuUOcRZ0qhbI+QLlZNU1zMZNdSn
+         iHEm2nmHA35CFObgLmW7swjICxFUZqHd+rMTKhEBnDuwCo5OB44g7ouql5/0xT4wJbxf
+         AD1Fj0jPiuvutxnLFGwRe3LXAo2OJY3dtt85sVJr28GVSIxFb+pBYeXWoiIQFmDblZTf
+         z7ox5702zzd/OpBQXT1TR94ALd5pFYoFlnGOzecOdxoi/8FpHyIwsm2GcIWjLtV2qjSc
+         G09zZ3nuinLOAYFJyF7B3vHDqyjKD1I0esdK2f0+NOx3b+yBF22usMv3ycn36F3Cw6gw
+         1C1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=z9AkUJLjKxpCtPozfky0qDOVE/YUSyibmUCJ911O1ME=;
+        b=h9+liGcd0L2MB8LrtbK3HDS5PYlphvpLCxPd8deK8K+PLHcIOK18E+IgC7o/PVxkKG
+         t7pqWWT5b/rWPI4R8yHpn0r087k/fYhX6u/NpB8vvaD5vsK6+SE1SpdyqtuiuuCUSr8H
+         vRdckNMakPJvC+uhvzmI5jOKGVs/N5T7eZpcgq6upnwkW3Oi122pd9Bv2fo+EF5frT1e
+         hSp9ORPfENrAqLUl+SSvyaXHWfyA8gm0/QVkPHl4Yyv7qO08KqQyBZk5YXhLXz5X5IUI
+         SV4X0sVZZehkeMoilY5LE7wPTy2RbIui7NXsng82nsBgBdBzV8FqZN2ZXmPp1fc8Gqu2
+         ClLg==
+X-Gm-Message-State: AJIora8VRazfOcxK13uZr7aT3PiPlu4Y2FF12PAh6aPUy0C3En+UU2tO
+        Mq67fKrJlTNhDC6Y/Bp2nE+NpWotlkjwfDNuINg=
+X-Google-Smtp-Source: ABdhPJzGqoIZfdM7ZWlho9Lg9B9tKFsDGmbPE4Hti4p7EBQcgkEIuSmezedLqrFLwwCUgKELKdbjVV03Z77mJfapERA=
+X-Received: by 2002:a17:906:3f02:b0:718:bdf7:790d with SMTP id
+ c2-20020a1709063f0200b00718bdf7790dmr3378536ejj.479.1655198992551; Tue, 14
+ Jun 2022 02:29:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH RFC v2 01/18] blk-mq: Add a flag for reserved requests
-To:     Christoph Hellwig <hch@lst.de>
-CC:     <axboe@kernel.dk>, <damien.lemoal@opensource.wdc.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <brking@us.ibm.com>, <hare@suse.de>, <linux-block@vger.kernel.org>,
-        <linux-ide@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-scsi@vger.kernel.org>, <chenxiang66@hisilicon.com>
-References: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
- <1654770559-101375-2-git-send-email-john.garry@huawei.com>
- <20220614064303.GA31683@lst.de>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <20220614064303.GA31683@lst.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.33.253]
-X-ClientProxiedBy: lhreml746-chm.china.huawei.com (10.201.108.196) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220614091359.124571-1-dzm91@hust.edu.cn> <CAMZfGtWswvFRp8UmnETRENsq1WBx9QvG7A_v8Eq62aaNA96wMw@mail.gmail.com>
+In-Reply-To: <CAMZfGtWswvFRp8UmnETRENsq1WBx9QvG7A_v8Eq62aaNA96wMw@mail.gmail.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Tue, 14 Jun 2022 17:29:18 +0800
+Message-ID: <CAD-N9QViX0sS+w_g4cL1kaZaRduWwY8ZkOhmLzRL83MP0CVqAw@mail.gmail.com>
+Subject: Re: [PATCH] fs: io_uring: remove NULL check before kfree
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2022 07:43, Christoph Hellwig wrote:
-> On Thu, Jun 09, 2022 at 06:29:02PM +0800, John Garry wrote:
->> Add a flag for reserved requests so that drivers may know this for any
->> special handling.
->>
->> The 'reserved' argument in blk_mq_ops.timeout callback could now be
->> replaced by using this flag.
-> And we should probably do that ASAP, independent of the rest of this
-> series. 
+On Tue, Jun 14, 2022 at 5:26 PM Muchun Song <songmuchun@bytedance.com> wrote:
+>
+> On Tue, Jun 14, 2022 at 5:14 PM Dongliang Mu <dzm91@hust.edu.cn> wrote:
+> >
+> > From: mudongliang <mudongliangabcd@gmail.com>
+> >
+> > kfree can handle NULL pointer as its argument.
+> > According to coccinelle isnullfree check, remove NULL check
+> > before kfree operation.
+> >
+> > Signed-off-by: mudongliang <mudongliangabcd@gmail.com>
+> > ---
+> >  fs/io_uring.c | 15 +++++----------
+> >  1 file changed, 5 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/fs/io_uring.c b/fs/io_uring.c
+> > index 3aab4182fd89..bec47eae2a9b 100644
+> > --- a/fs/io_uring.c
+> > +++ b/fs/io_uring.c
+> > @@ -3159,8 +3159,7 @@ static void io_free_batch_list(struct io_ring_ctx *ctx,
+> >                         if ((req->flags & REQ_F_POLLED) && req->apoll) {
+> >                                 struct async_poll *apoll = req->apoll;
+> >
+> > -                               if (apoll->double_poll)
+> > -                                       kfree(apoll->double_poll);
+> > +                               kfree(apoll->double_poll);
+> >                                 list_add(&apoll->poll.wait.entry,
+> >                                                 &ctx->apoll_cache);
+> >                                 req->flags &= ~REQ_F_POLLED;
+> > @@ -4499,8 +4498,7 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
+> >         kiocb_done(req, ret, issue_flags);
+> >  out_free:
+> >         /* it's faster to check here then delegate to kfree */
+>
+> I am feeling you are not on the right way. See the comment
+> here.
 
-We only have 2x users of the 'reserved' arg for 11x implementations of 
-blk_mq_ops.timeout:
-- mtip32xx.c
-- scsi_lib.c
+Thanks for your reply. I ignore them previously. Any method to make
+coccicheck ignore such cases?
 
-scsi_lib.c is dubious as currently scsi does use reserved commands. So 
-we really only have 1x.
-
-I'd be happy to take any spin-off series to make this one more 
-manageable, but is just removing an arg a strong enough reason for that? 
-That reserved arg is passed around a lot in the blk-mq iter functions, 
-so probably yes.
-
-> Otherwise looks good:
-> 
-> Reviewed-by: Christoph Hellwig<hch@lst.de>
-
-Thanks
+>
+> Thanks.
+>
+> > -       if (iovec)
+> > -               kfree(iovec);
+> > +       kfree(iovec);
+> >         return 0;
+> >  }
+> >
+> > @@ -4602,8 +4600,7 @@ static int io_write(struct io_kiocb *req, unsigned int issue_flags)
+> >         }
+> >  out_free:
+> >         /* it's reportedly faster than delegating the null check to kfree() */
+>
+> See here.
+>
+> > -       if (iovec)
+> > -               kfree(iovec);
+> > +       kfree(iovec);
+> >         return ret;
+> >  }
+> >
+> > @@ -6227,8 +6224,7 @@ static int io_sendmsg(struct io_kiocb *req, unsigned int issue_flags)
+> >                 req_set_fail(req);
+> >         }
+> >         /* fast path, check for non-NULL to avoid function call */
+>
+> here.
+>
+> > -       if (kmsg->free_iov)
+> > -               kfree(kmsg->free_iov);
+> > +       kfree(kmsg->free_iov);
+> >         req->flags &= ~REQ_F_NEED_CLEANUP;
+> >         if (ret >= 0)
+> >                 ret += sr->done_io;
+> > @@ -6481,8 +6477,7 @@ static int io_recvmsg(struct io_kiocb *req, unsigned int issue_flags)
+> >         }
+> >
+> >         /* fast path, check for non-NULL to avoid function call */
+>
+> And here.
+>
+> > -       if (kmsg->free_iov)
+> > -               kfree(kmsg->free_iov);
+> > +       kfree(kmsg->free_iov);
+> >         req->flags &= ~REQ_F_NEED_CLEANUP;
+> >         if (ret >= 0)
+> >                 ret += sr->done_io;
+> > --
+> > 2.35.1
+> >

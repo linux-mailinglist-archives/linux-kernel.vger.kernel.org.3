@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9A954BE1C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 01:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E8C54BE1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 01:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357812AbiFNXF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 19:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
+        id S1357931AbiFNXGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 19:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344435AbiFNXFx (ORCPT
+        with ESMTP id S241086AbiFNXF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 19:05:53 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03644C79C
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:05:52 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id y1-20020a17090a390100b001e66bb0fcefso264577pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:05:52 -0700 (PDT)
+        Tue, 14 Jun 2022 19:05:56 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A26850B22
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:05:55 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-313aa142909so37914327b3.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:05:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=3d7tD77H5O2xlb02j7y43iDUfTOkQ/XeZFOmeDGAico=;
-        b=tR5DLGM9/pa1X/VPkRpGjyP5Rnk93Bm7RSfQjLOY2sNbFAo4+DUaz+VhvYZeMv15+l
-         ZMimhzuqcXRgXz1jmiLiyGAPdYLgvUT9AZRNWYSojENt4OH8Ir7O8632yquqN7j5OGpF
-         UVDHGhnmxG69JwO74Q940WYXAHK52i9UA9N4f7CemEYZ2TWpxckxki/9n5NOaOKItMMO
-         Be5B++qiW36YDr3SUpquYrUQwJRG5EUW8QPW/21fca1JPEt2QVlTjuQj8gWTiDoFThPL
-         ConxYO/fY73tlZP6GfjZOM2rczcqOMOENFX5uGvuqoA6PVzMLG/3y1Ni9/q5OOXq4bNj
-         9cpA==
+        bh=Q0TMDImt0VZIwoPHETcXPRYJP1DNJYILBSqC8/vVqok=;
+        b=ta6l7+kTFeFE/qN7zdZPFqpwGtgLYrdwSjJiqgmRnVFGTXIyVpPzxGcSXf253gMO7n
+         4fSoAa8H20nrv07KWry3VP/e9oSBkHFnbT3PyD8Z7VNdux8gstqBWuLrOhnUnvJLNDf4
+         61M1JwCnBvS49Zj2Vy/t/B/uc/DAu/c0ODC/nVk//TseedPRU8rhEf5GAjBhfHYs0Psk
+         1MalQWgrLMaeXWGvM4PWLU8rABpXuZM0O1zOm/X6vNIhE7zrwIwzYL6t9txu+lJJR9x+
+         Ne2s/UebFJLUGrDjnbKniKsBmu6o0CtqRkijJvUQCMcBjtrIpkpNyaejSBC261h7X0WZ
+         GLHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=3d7tD77H5O2xlb02j7y43iDUfTOkQ/XeZFOmeDGAico=;
-        b=C3YiWJLi+S7CoFi1QOHyvHV+4jVJseFw0lKlJHrKpBuJu4WLquupqPD48XO+VDyVUs
-         XK63c7AnPynmMzB3X8HaXK9eaheAsjKfYbGZADYrhSISGn8C7xPiZYxmx6HD4XeLhZ2p
-         yF5lYAQO64MNor8hzKEACxcVM5OBaQbjsJVUOxyyFnJYmC6PRbsRou/VhPuB0z5m1OX1
-         ttlhpGwQy0TaeaH0QtMzj0FAaWIDonnOMdO0tlr8jftIpfmmPkdw7Jf25wlHb6i0yWyQ
-         tsPrgWOLhPDCW4ujDF3NLEoy9KLHoCT1gK/9VUtKTjVw1ImPZTWf5aO3GUT0z9h/GxCb
-         045Q==
-X-Gm-Message-State: AJIora+i0atxpQNlCdEHyh21KXS7T/cL0GFngoGD9PeFBy40bSBiECsK
-        LpEDokNdK8Z/WprnOLa9pY6EXq5bHnA=
-X-Google-Smtp-Source: AGRyM1tnSW/muwqIZhXYnOKJRS3lRWAomzqILjlJIGjgy36gfPaXSzFNyMBMb/S1SX6iVfNJDsd8fuf8hhY=
+        bh=Q0TMDImt0VZIwoPHETcXPRYJP1DNJYILBSqC8/vVqok=;
+        b=IB2D50XWp1OJSKlaLlqnT2DWSbMlVgzf1xBDiF+eET7JnpjhxjVLURVTAPXGQSFlRN
+         fFJO/zVtDT3wSOYGHFj/lwtCmMizKVZ3YBWhQfIPUNSSwRDvTExV6WFlGSvhfGT2LSrU
+         aFm/lh4RdqGSYl2AQLUZ63gEL0zHCzx1jB2kB6yz1BI0TMz50+snO8Re4GugwajvHAK6
+         gLAqqrr61jpR8nvppkaq8czFC4uYHWO9rJ7y15RIxhtTaQ1/hi6kbDLrIoR7jZ5iGR3s
+         JKXBbm+KXwVKg6/8B7QXwF0iP9jbc91f+IL/ZerfR8F1g+Uk/7b4FNu9i+Z3ixssuB/O
+         qHwQ==
+X-Gm-Message-State: AJIora8Aa+R075qi/ff5G1Y7UU05xOn8ssLLespQ179+qvKfo54P+RDY
+        yX+nbeh29t5OwM2g0AC8aPwFsYcvGlE=
+X-Google-Smtp-Source: AGRyM1t82T1S2GRktx74IasIBtL1fM8tTA7F1HMXvd4jCUMFFB76wqNkMJJXE1FLGKmcV6+LqgVfC7FVpi4=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:db0a:b0:165:1299:29ea with SMTP id
- m10-20020a170902db0a00b00165129929eamr6314130plx.15.1655247952491; Tue, 14
- Jun 2022 16:05:52 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a81:10cf:0:b0:313:aa13:ed0a with SMTP id
+ 198-20020a8110cf000000b00313aa13ed0amr8678346ywq.40.1655247954233; Tue, 14
+ Jun 2022 16:05:54 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 23:05:44 +0000
+Date:   Tue, 14 Jun 2022 23:05:45 +0000
 In-Reply-To: <20220614230548.3852141-1-seanjc@google.com>
-Message-Id: <20220614230548.3852141-2-seanjc@google.com>
+Message-Id: <20220614230548.3852141-3-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220614230548.3852141-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH 1/5] KVM: SVM: Drop unused AVIC / kvm_x86_ops declarations
+Subject: [PATCH 2/5] KVM: x86: Drop @vcpu parameter from kvm_x86_ops.hwapic_isr_update()
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -66,41 +66,93 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop a handful of unused AVIC function declarations whose implementations
-were removed during the conversion to optional static calls.
+Drop the unused @vcpu parameter from hwapic_isr_update().  AMD/AVIC is
+unlikely to implement the helper, and VMX/APICv doesn't need the vCPU as
+it operates on the current VMCS.  The result is somewhat odd, but allows
+for a decent amount of (future) cleanup in the APIC code.
 
 No functional change intended.
 
-Fixes: abb6d479e226 ("KVM: x86: make several APIC virtualization callbacks optional")
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/svm/svm.h | 4 ----
- 1 file changed, 4 deletions(-)
+ arch/x86/include/asm/kvm_host.h | 2 +-
+ arch/x86/kvm/lapic.c            | 8 ++++----
+ arch/x86/kvm/vmx/vmx.c          | 2 +-
+ 3 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
-index 128993feb4c6..d51de3c9264a 100644
---- a/arch/x86/kvm/svm/svm.h
-+++ b/arch/x86/kvm/svm/svm.h
-@@ -617,12 +617,8 @@ int avic_init_vcpu(struct vcpu_svm *svm);
- void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu);
- void avic_vcpu_put(struct kvm_vcpu *vcpu);
- void avic_apicv_post_state_restore(struct kvm_vcpu *vcpu);
--void avic_set_virtual_apic_mode(struct kvm_vcpu *vcpu);
- void avic_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu);
- bool avic_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason);
--void avic_hwapic_irr_update(struct kvm_vcpu *vcpu, int max_irr);
--void avic_hwapic_isr_update(struct kvm_vcpu *vcpu, int max_isr);
--bool avic_dy_apicv_has_pending_interrupt(struct kvm_vcpu *vcpu);
- int avic_pi_update_irte(struct kvm *kvm, unsigned int host_irq,
- 			uint32_t guest_irq, bool set);
- void avic_vcpu_blocking(struct kvm_vcpu *vcpu);
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 7e98b2876380..16acc54d49a7 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1517,7 +1517,7 @@ struct kvm_x86_ops {
+ 	bool (*check_apicv_inhibit_reasons)(enum kvm_apicv_inhibit reason);
+ 	void (*refresh_apicv_exec_ctrl)(struct kvm_vcpu *vcpu);
+ 	void (*hwapic_irr_update)(struct kvm_vcpu *vcpu, int max_irr);
+-	void (*hwapic_isr_update)(struct kvm_vcpu *vcpu, int isr);
++	void (*hwapic_isr_update)(int isr);
+ 	bool (*guest_apic_has_interrupt)(struct kvm_vcpu *vcpu);
+ 	void (*load_eoi_exitmap)(struct kvm_vcpu *vcpu, u64 *eoi_exit_bitmap);
+ 	void (*set_virtual_apic_mode)(struct kvm_vcpu *vcpu);
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index a413a1d8df4c..cc0da5671eb9 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -556,7 +556,7 @@ static inline void apic_set_isr(int vec, struct kvm_lapic *apic)
+ 	 * just set SVI.
+ 	 */
+ 	if (unlikely(vcpu->arch.apicv_active))
+-		static_call_cond(kvm_x86_hwapic_isr_update)(vcpu, vec);
++		static_call_cond(kvm_x86_hwapic_isr_update)(vec);
+ 	else {
+ 		++apic->isr_count;
+ 		BUG_ON(apic->isr_count > MAX_APIC_VECTOR);
+@@ -604,7 +604,7 @@ static inline void apic_clear_isr(int vec, struct kvm_lapic *apic)
+ 	 * and must be left alone.
+ 	 */
+ 	if (unlikely(vcpu->arch.apicv_active))
+-		static_call_cond(kvm_x86_hwapic_isr_update)(vcpu, apic_find_highest_isr(apic));
++		static_call_cond(kvm_x86_hwapic_isr_update)(apic_find_highest_isr(apic));
+ 	else {
+ 		--apic->isr_count;
+ 		BUG_ON(apic->isr_count < 0);
+@@ -2457,7 +2457,7 @@ void kvm_lapic_reset(struct kvm_vcpu *vcpu, bool init_event)
+ 	if (vcpu->arch.apicv_active) {
+ 		static_call_cond(kvm_x86_apicv_post_state_restore)(vcpu);
+ 		static_call_cond(kvm_x86_hwapic_irr_update)(vcpu, -1);
+-		static_call_cond(kvm_x86_hwapic_isr_update)(vcpu, -1);
++		static_call_cond(kvm_x86_hwapic_isr_update)(-1);
+ 	}
+ 
+ 	vcpu->arch.apic_arb_prio = 0;
+@@ -2737,7 +2737,7 @@ int kvm_apic_set_state(struct kvm_vcpu *vcpu, struct kvm_lapic_state *s)
+ 	if (vcpu->arch.apicv_active) {
+ 		static_call_cond(kvm_x86_apicv_post_state_restore)(vcpu);
+ 		static_call_cond(kvm_x86_hwapic_irr_update)(vcpu, apic_find_highest_irr(apic));
+-		static_call_cond(kvm_x86_hwapic_isr_update)(vcpu, apic_find_highest_isr(apic));
++		static_call_cond(kvm_x86_hwapic_isr_update)(apic_find_highest_isr(apic));
+ 	}
+ 	kvm_make_request(KVM_REQ_EVENT, vcpu);
+ 	if (ioapic_in_kernel(vcpu->kvm))
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 5e14e4c40007..42f8924a90f4 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -6556,7 +6556,7 @@ static void vmx_set_apic_access_page_addr(struct kvm_vcpu *vcpu)
+ 	put_page(page);
+ }
+ 
+-static void vmx_hwapic_isr_update(struct kvm_vcpu *vcpu, int max_isr)
++static void vmx_hwapic_isr_update(int max_isr)
+ {
+ 	u16 status;
+ 	u8 old;
 -- 
 2.36.1.476.g0c4daa206d-goog
 

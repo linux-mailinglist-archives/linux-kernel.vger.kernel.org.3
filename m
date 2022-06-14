@@ -2,173 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E789254AAAD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F08354AA9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354663AbiFNHbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
+        id S238733AbiFNH3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:29:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354512AbiFNHbf (ORCPT
+        with ESMTP id S229849AbiFNH3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:31:35 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585273E5D7;
-        Tue, 14 Jun 2022 00:31:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655191893; x=1686727893;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=BwfIVHuEaK8z+QZZOZqmlU4SXCS0pKVU8k7FqNhuJ+Y=;
-  b=nPDtOROeeJYCkJ9Gto/aTf7q28luIOhBq7Q4CrikfFK/Gn34lmPmYcuS
-   er00auX4GEcl0W5+k2+1YdQkgK+7qKi08yUskedjoM6L8U1vp+NT1nh1b
-   9oKWF8eZbuIAmEYFRu4O/aJ1/vI+T0KREddvV6B3mhxTX4w00A0reTcPx
-   RL5IrTGErBFWfv45Ftv9w8i2oKJIy7yxZ8y1IgsGx4g6qtf7TsaH2Ae+F
-   kqU0BhxzqWnglMSXz8HGMUqvDE9I5fRIm63x6PTGb80lztLdJ7N3cUSam
-   8/xzXqWh0AOu8uJjlsoaKD08UodYQQVIhcAxCoFzXJcVNxyd6dGOPgBUk
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10377"; a="258370173"
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="258370173"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 00:31:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,299,1647327600"; 
-   d="scan'208";a="582581789"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by orsmga007.jf.intel.com with ESMTP; 14 Jun 2022 00:31:23 -0700
-Date:   Tue, 14 Jun 2022 15:28:00 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vishal Annapurve <vannapurve@google.com>,
-        Marc Orr <marcorr@google.com>, kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jun Nakajima <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
-Subject: Re: [PATCH v6 0/8] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-Message-ID: <20220614072800.GB1783435@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <CAGtprH_83CEC0U-cBR2FzHsxbwbGn0QJ87WFNOEet8sineOcbQ@mail.gmail.com>
- <20220607065749.GA1513445@chaop.bj.intel.com>
- <CAA03e5H_vOQS-qdZgacnmqP5T5jJLnEfm44yfRzJQ2KVu0Br+Q@mail.gmail.com>
- <20220608021820.GA1548172@chaop.bj.intel.com>
- <CAGtprH8xyf07jMN7ubTC__BvDj+z41uVGRiCJ7Rc5cv3KWg03w@mail.gmail.com>
- <YqJYEheLiGI4KqXF@google.com>
+        Tue, 14 Jun 2022 03:29:51 -0400
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3823DDF4;
+        Tue, 14 Jun 2022 00:29:46 -0700 (PDT)
+Received: by mail-qk1-f180.google.com with SMTP id a184so5784631qkg.5;
+        Tue, 14 Jun 2022 00:29:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MvW5zYgeysNwbbiYui7u/VFeyen3fLSMqOoOSFvD7qE=;
+        b=p/NmW/KUxEn/9IyPlauN4nJ74m8YgE7F55HNN0YdeQjyqFG1jCWySyBukZPVgjFA02
+         lIXbCvW7igDGW6c/ODagf3jRxcDENNztJzK+FgSlm3+N76+AfbGGa4Vv4jp/IoEg9dzo
+         IoeetpL7eI90mIX3irENQj7PfzAtMAOjztSyRw5elpkwhY9WksVK8gmkDZPLfvNfp9QX
+         MeUuH7OM4lT9tJhEvyPZYzVTo2Gx8u0N/xz49IHGlIKtPwh7lCt+8zq61Z3gQKhEHBYJ
+         pD7ul8Bb4S3UzY8moEiXj5zQeRgLadX2xX5ZjTXDsB204YspzNYh0S3K+4xwqOmKKvs3
+         g9Gw==
+X-Gm-Message-State: AOAM533syv9ET2RYrtKM1rlReWZESO9vJN83vcoj15UPJxeAJzp8tr8Y
+        L0Af9q5nW+naxRLDPZGwVAK0fNpaWhHrqQ==
+X-Google-Smtp-Source: ABdhPJwRn7o3U2yNsa5XhXzCXRo4NcYzcye0arUTc2gDDtiq4izGD20gUcJgtMQnRnfLX9yDGXO5pA==
+X-Received: by 2002:a05:620a:2621:b0:6a7:1dc:175b with SMTP id z33-20020a05620a262100b006a701dc175bmr2807004qko.683.1655191785519;
+        Tue, 14 Jun 2022 00:29:45 -0700 (PDT)
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com. [209.85.219.179])
+        by smtp.gmail.com with ESMTPSA id i1-20020a05620a27c100b006a691904891sm8083144qkp.16.2022.06.14.00.29.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 00:29:45 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id l204so13707751ybf.10;
+        Tue, 14 Jun 2022 00:29:45 -0700 (PDT)
+X-Received: by 2002:a25:cc53:0:b0:65c:b19c:fac1 with SMTP id
+ l80-20020a25cc53000000b0065cb19cfac1mr3399500ybf.89.1655191784829; Tue, 14
+ Jun 2022 00:29:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqJYEheLiGI4KqXF@google.com>
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <20220609150851.23084-6-max.oss.09@gmail.com>
+In-Reply-To: <20220609150851.23084-6-max.oss.09@gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Jun 2022 09:29:33 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUf=VnqePKB=0eJC4GxZipQLD8BKMiv5PBW8Fz+zUv6-Q@mail.gmail.com>
+Message-ID: <CAMuHMdUf=VnqePKB=0eJC4GxZipQLD8BKMiv5PBW8Fz+zUv6-Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 5/5] ARM64: verdin-imx8mm: use regulator power
+ domain to model sleep-moci
+To:     Max Krummenacher <max.oss.09@gmail.com>
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 08:29:06PM +0000, Sean Christopherson wrote:
-> On Wed, Jun 08, 2022, Vishal Annapurve wrote:
-> > ...
-> > > With this patch series, it's actually even not possible for userspace VMM
-> > > to allocate private page by a direct write, it's basically unmapped from
-> > > there. If it really wants to, it should so something special, by intention,
-> > > that's basically the conversion, which we should allow.
-> > >
-> > 
-> > A VM can pass GPA backed by private pages to userspace VMM and when
-> > Userspace VMM accesses the backing hva there will be pages allocated
-> > to back the shared fd causing 2 sets of pages backing the same guest
-> > memory range.
-> > 
-> > > Thanks for bringing this up. But in my mind I still think userspace VMM
-> > > can do and it's its responsibility to guarantee that, if that is hard
-> > > required.
-> 
-> That was my initial reaction too, but there are unfortunate side effects to punting
-> this to userspace. 
-> 
-> > By design, userspace VMM is the decision-maker for page
-> > > conversion and has all the necessary information to know which page is
-> > > shared/private. It also has the necessary knobs to allocate/free the
-> > > physical pages for guest memory. Definitely, we should make userspace
-> > > VMM more robust.
-> > 
-> > Making Userspace VMM more robust to avoid double allocation can get
-> > complex, it will have to keep track of all in-use (by Userspace VMM)
-> > shared fd memory to disallow conversion from shared to private and
-> > will have to ensure that all guest supplied addresses belong to shared
-> > GPA ranges.
-> 
-> IMO, the complexity argument isn't sufficient justfication for introducing new
-> kernel functionality.  If multiple processes are accessing guest memory then there
-> already needs to be some amount of coordination, i.e. it can't be _that_ complex.
-> 
-> My concern with forcing userspace to fully handle unmapping shared memory is that
-> it may lead to additional performance overhead and/or noisy neighbor issues, even
-> if all guests are well-behaved.
-> 
-> Unnmapping arbitrary ranges will fragment the virtual address space and consume
-> more memory for all the result VMAs.  The extra memory consumption isn't that big
-> of a deal, and it will be self-healing to some extent as VMAs will get merged when
-> the holes are filled back in (if the guest converts back to shared), but it's still
-> less than desirable.
-> 
-> More concerning is having to take mmap_lock for write for every conversion, which
-> is very problematic for configurations where a single userspace process maps memory
-> belong to multiple VMs.  Unmapping and remapping on every conversion will create a
-> bottleneck, especially if a VM has sub-optimal behavior and is converting pages at
-> a high rate.
-> 
-> One argument is that userspace can simply rely on cgroups to detect misbehaving
-> guests, but (a) those types of OOMs will be a nightmare to debug and (b) an OOM
-> kill from the host is typically considered a _host_ issue and will be treated as
-> a missed SLO.
-> 
-> An idea for handling this in the kernel without too much complexity would be to
-> add F_SEAL_FAULT_ALLOCATIONS (terrible name) that would prevent page faults from
-> allocating pages, i.e. holes can only be filled by an explicit fallocate().  Minor
-> faults, e.g. due to NUMA balancing stupidity, and major faults due to swap would
-> still work, but writes to previously unreserved/unallocated memory would get a
-> SIGSEGV on something it has mapped.  That would allow the userspace VMM to prevent
-> unintentional allocations without having to coordinate unmapping/remapping across
-> multiple processes.
+Hi Max,
 
-Since this is mainly for shared memory and the motivation is catching
-misbehaved access, can we use mprotect(PROT_NONE) for this? We can mark
-those range backed by private fd as PROT_NONE during the conversion so
-subsequence misbehaved accesses will be blocked instead of causing double
-allocation silently.
+On Thu, Jun 9, 2022 at 5:16 PM Max Krummenacher <max.oss.09@gmail.com> wrote:
+> From: Max Krummenacher <max.krummenacher@toradex.com>
+>
+> The Verdin CTRL_SLEEP_MOCI# pin signals the carrier board that the module
+> is in sleep and it may switch off unneeded power.
+>
+> Control this pin with a regulator power domain controller which uses a
+> fixed regulator with a gpio enable.
+>
+> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 
-Chao
+Thanks for your patch!
+
+> --- a/arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi
+> @@ -92,6 +92,7 @@
+>
+>  /* Verdin PCIE_1 */
+>  &pcie0 {
+> +       power-domains = <&pd_sleep_moci>;
+
+This overrides "power-domains = <&pgc_pcie>;" from imx8mm.dtsi...
+
+>         status = "okay";
+>  };
+
+> --- a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
+> @@ -53,6 +53,14 @@
+>                 };
+>         };
+>
+> +       pd_sleep_moci: power-domain-sleep-moci {
+> +               compatible = "regulator-pm-pd";
+> +               label = "pd_sleep_moci";
+> +               power-domains = <&pgc_pcie>;
+
+... and here you work around that by re-binding <&pgc_pcie>.
+
+I think you:
+  1. must not override the power-domains property for pcie0, as
+     conceptually, the PCIe bus is still in the on-SoC power
+     domain. What if some lanes are connected to devices in
+     pd_sleep_moci, but other lanes are not?
+  2. should only use pd_sleep_moci for the off-chip devices that
+      are actually controlled by the corresponding regulator.
+
+> +               power-supply = <&reg_sleep_moci>;
+> +               #power-domain-cells = <0>;
+> +       };
+> +
+>         /* Carrier Board Supplies */
+>         reg_1p8v: regulator-1p8v {
+>                 compatible = "regulator-fixed";
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

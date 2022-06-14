@@ -2,102 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4B854AFE4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F0B54B106
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356286AbiFNMFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60542 "EHLO
+        id S233019AbiFNMgB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241347AbiFNMFs (ORCPT
+        with ESMTP id S244165AbiFNMfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:05:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA7B4927A;
-        Tue, 14 Jun 2022 05:05:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E54BB81863;
-        Tue, 14 Jun 2022 12:05:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49F45C3411B;
-        Tue, 14 Jun 2022 12:05:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655208344;
-        bh=6EaGbSn4r/TeDu88uoSdZfsO2bREhpvtyTSLFRBBdQQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ViSpuB8+mSVxLXaTeNpdJzPIzQppv/MhO+DHwRJwhJDujYPH3xlV2r6xzIH2+nANM
-         lxM+o/YtxX0/jTFV/9OrXQ27QbPFlAkC2/G9qhMlO2eaF0n/K/HOeHkRaubCNaD7hs
-         dPF0wpoF/+UH0qunJs9aZHm8hB+EaF+RtNvhT6YMY2WW/2AIxyclc77Mqthf3oK1Tp
-         Jk61012dq1vEqmnpW6yBwUVCMq2ELSVEwWLcxR3A9yxQKrt+bWzBkBuMhyvF5nhuRU
-         ENQOKzjpBcN/9quZ/bRC78Z7voa7Q6yrPhoxKnoRW1ZPcVwF5VORv3VrA41GYTW4yv
-         Tzd45VXxE0d1Q==
-Date:   Tue, 14 Jun 2022 13:14:53 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     <Claudiu.Beznea@microchip.com>
-Cc:     <Eugen.Hristev@microchip.com>, <lars@metafoo.de>,
-        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
-        <ludovic.desroches@atmel.com>, <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 15/16] iio: adc: at91-sama5d2_adc: add runtime pm
- support
-Message-ID: <20220614131453.7099c043@jic23-huawei>
-In-Reply-To: <68a099ac-7bf6-aca0-4723-af8e48585abc@microchip.com>
-References: <20220609083213.1795019-1-claudiu.beznea@microchip.com>
-        <20220609083213.1795019-16-claudiu.beznea@microchip.com>
-        <20220611174824.2d696a55@jic23-huawei>
-        <68a099ac-7bf6-aca0-4723-af8e48585abc@microchip.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Tue, 14 Jun 2022 08:35:13 -0400
+Received: from es400ra01.iit.it (mx.iit.it [90.147.26.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 351D14D61F;
+        Tue, 14 Jun 2022 05:32:08 -0700 (PDT)
+Received: from es400ra01.iit.it (127.0.0.1) id hl1vse0171sj; Tue, 14 Jun 2022 14:15:10 +0200 (envelope-from <prvs=1164ae077f=Andrea.Merello@iit.it>)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iit.it;
+        s=mx; i=@iit.it; h=Received:Received:Received:From:To:CC:Subject:
+        Thread-Topic:Thread-Index:Date:Message-ID:References:In-Reply-To:
+        Accept-Language:Content-Language:Content-Type:
+        Content-Transfer-Encoding:MIME-Version; bh=0EWWMdlNzsJ2xlak3NZEj
+        9Y6KPGOVyOpkKVpSKRJU9Y=; b=AGu5s2UyOQrqtHGA6/cGynNS2PkBXu+HKzC6U
+        L8AOAJfdBllp6tQT4hIIhmQBwXonBEtQ2YYrAy+1MyNBEyVBgiqbHchXlQMhPagb
+        Q/Rg9uQO/Vp749vkg2sgbUYLWShBdAAF4qEShZZejLx93mhypfAl80z1NWtstIxl
+        ifWO3Q=
+Received: from mail.iit.it ([10.255.8.186])
+        by es400ra01.iit.it ([172.31.0.241]) (SonicWall 10.0.16.7295)
+        with ESMTPS (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256/256)
+        id o202206141215100192806-11; Tue, 14 Jun 2022 14:15:10 +0200
+Received: from iitmxwge020.iit.local (10.255.8.186) by iitmxwge020.iit.local
+ (10.255.8.186) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2375.17; Tue, 14 Jun
+ 2022 14:15:10 +0200
+Received: from iitmxwge020.iit.local ([fe80::f175:7e44:343:dc1b]) by
+ iitmxwge020.iit.local ([fe80::f175:7e44:343:dc1b%4]) with mapi id
+ 15.01.2375.017; Tue, 14 Jun 2022 14:15:10 +0200
+From:   Andrea Merello <Andrea.Merello@iit.it>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+CC:     Jonathan Cameron <jic23@kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        Matt Ranostay <matt.ranostay@konsulko.com>,
+        Alexandru Ardelean <ardeleanalex@gmail.com>,
+        jmondi <jacopo@jmondi.org>,
+        "andrea.merello@gmail.com" <andrea.merello@gmail.com>
+Subject: Re: [v6 08/14] iio: imu: add Bosch Sensortec BNO055 core driver
+Thread-Topic: [v6 08/14] iio: imu: add Bosch Sensortec BNO055 core driver
+Thread-Index: AQHYfx3utmV3pJ3K2U+b/YbA0CL4iq1NadiAgAExt3mAAAAAgIAAMcuB
+Date:   Tue, 14 Jun 2022 12:15:09 +0000
+Message-ID: <a41936e4063f4c2c9da7c7e1d915bd62@iit.it>
+References: <20220613120534.36991-1-andrea.merello@iit.it>
+ <20220613120534.36991-9-andrea.merello@iit.it>
+ <CAHp75Vdh8kAH6540xCwzFh5uf=QMVTHC42a8pOgvkpObzjfD+w@mail.gmail.com>
+ <164f663acbba481a8ea8f45f185aaf83@iit.it>,<CAHp75VeYK=oCbbBVp01_b5LK_FqAo4F_bic9Me4Y6PpfFnDU6g@mail.gmail.com>
+In-Reply-To: <CAHp75VeYK=oCbbBVp01_b5LK_FqAo4F_bic9Me4Y6PpfFnDU6g@mail.gmail.com>
+Accept-Language: en-US, it-IT
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [90.147.26.235]
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mlf-DSE-Version: 6874
+X-Mlf-Rules-Version: s20220519150137; ds20200715013501;
+        di20220613172248; ri20160318003319; fs20220613172626
+X-Mlf-Smartnet-Version: 20210917223710
+X-Mlf-Envelope-From: Andrea.Merello@iit.it
+X-Mlf-Version: 10.0.16.7295
+X-Mlf-License: BSV_C_AP_T_R
+X-Mlf-UniqueId: o202206141215100192806
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-...
 
+    >
+> ...
+>
+>> >> +static void bno055_debugfs_init(struct iio_dev *iio_dev)
+>> >> +{
+>> >> +       struct bno055_priv *priv =3D iio_priv(iio_dev);
+>> >> +
+>> >> +       priv->debugfs =3D debugfs_create_file("firmware_version", 040=
+0,
+>> >> +                                           iio_get_debugfs_dentry(ii=
+o_dev),
+>> >> +                                           priv, &bno055_fw_version_=
+ops);
+>> >
+>> >> +       devm_add_action_or_reset(priv->dev, bno055_debugfs_remove, pr=
+iv->debugfs);
+>> >
+>> >Shouldn't we report the potential error here? It's not directly
+>> >related to debugfs, but something which is not directly related.
+>>
+>> The error eventually comes out from something that has nothing to do wit=
+h debugs per se (i.e. the devm stuff), but it will only affect debugfs inde=
+ed.
+>>
+>> Assuming that we don't want to make the whole driver fail in case debugf=
+s stuff fails (see last part of the comment above debugfs_create_file() imp=
+lementation), and given that the devm_add_action_or_reset(), should indeed =
+"reset" in case of failure (i.e.  we should be in a clean situation anyway)=
+, I would say it should be OK not to propagate the error and let things go =
+on.
+>
+>As I said, it's not directly related to debugfs. Here is the resource
+>leak possible or bad things happen if you probe the driver, that fails
+>to add this call for removal, remove it, and try to insert again, in
+>such case the debugfs will be stale.
 
-> >> @@ -1268,11 +1309,15 @@ static int at91_adc_buffer_prepare(struct iio_dev *indio_dev)
-> >>       if (!(iio_device_get_current_mode(indio_dev) & INDIO_ALL_TRIGGERED_MODES))
-> >>               return -EINVAL;
-> >>
-> >> +     ret = pm_runtime_resume_and_get(st->dev);  
-> > 
-> > This seems unusual.  I'd normally expect to see runtime pm left on whenever
-> > a buffer is in use, but in this case you seem to let it autosuspend.
-> > 
-> > That 'might' be fine as you might hit it often enough that it stays up whilst
-> > doing DMA but it certainly seems odd and less than efficient.
-> > Or possibly the use of the trigger is enough to keep it up.  
-> 
-> This is here because at91_adc_buffer_prepare() is called though
-> .hwfifo_set_watermark which is called in iio_enable_buffers() before
-> iio_trigger_attach_poll_func() which calls in turn
-> at91_adc_configure_trigger() that turns on the power for the whole duration
-> the buffers are enabled.
-> 
-> It is necessary to have runtime resume here to be able to do proper
-> register settings.
+Hum, I would say this shouldn't ever happen: AFAICS devm_add_action_or_rese=
+t() is a wrapper around devm_add_action() and it's purpose is exactly to ad=
+d a check for failure; devm_add_action_or_reset() immediately invokes the a=
+ction handler in case devm_add_action() fails. IOW in case of failure to ad=
+d the devm stuff, the debugfs file is removed immediately and it shouldn't =
+cause any mess with next times probe()s; just the driver will go on without=
+ the debugfs file being here.
 
-Runtime pm is reference counted so I'd take the view that either
-* buffer being enabled or
-* trigger being enabled
+I think this is the point of using devm_add_action_or_reset() instead of de=
+v_add_action()  indeed, or am I missing something?
 
-are reasons to leave the device powered up.  That'll result in
-needing it to be powered down in both buffer and trigger disables
-but that shoudl be fine.
-
-...
-
-Thanks,
-
-Jonathan
+>> However we can add a dev_warn() to report what happened.
+>
+>Not sure if it would suffice, I leave it to Jonathan.
+>
+>--=20
+>With Best Regards,
+>Andy Shevchenko=

@@ -2,60 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF4154BC57
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:59:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF6A54BC59
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351313AbiFNUwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        id S245757AbiFNUxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345164AbiFNUwd (ORCPT
+        with ESMTP id S245178AbiFNUwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:52:33 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE674F9E3;
-        Tue, 14 Jun 2022 13:51:59 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id i16so10693782ioa.6;
-        Tue, 14 Jun 2022 13:51:59 -0700 (PDT)
+        Tue, 14 Jun 2022 16:52:46 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB9E1F2F0;
+        Tue, 14 Jun 2022 13:52:46 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id i16so10696295ioa.6;
+        Tue, 14 Jun 2022 13:52:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vEhKyiwSkvMhpQPqz27zvlhasbbXhfYI8itajPq3Tqs=;
-        b=LiQHaisvST7R+JxyL8OHL1jgenDWyBIoiFCF/De60B6dUeQfwdVBKQzmXIVi029w+2
-         gQxE7PZq4PUMagUXR5FmtXXtKKzL/3K5G8Lg62hSKO73xbThzQhMtM4o4KUy07I6Fu8M
-         +wV5EoBqRGjl7d3q3vSbsPmQ+PdkqCnqF5opg9290UcoGeimapzj3mg4n3AwCrxJZUgi
-         sjWCj8k8mAKdrgDVhu6JcMuoSBNJ+qtRdGqmuJcO3Z27ocid3G+jEnY4D49fyMrPSHbY
-         Nhe/A+0NreYeNrh6qoVuOJ4kaw9+JXdY4Xa9d6B3TXB5+f4RoX0z4BwrhPmUuKsrpENH
-         zx3Q==
-X-Gm-Message-State: AOAM533OTPMN2R8Zp3oUmrQ/QaiocSA3iK3W1Vgb0APBJQDBjlgiozuM
-        isssKUBCsqcZPFufqrvqJw==
-X-Google-Smtp-Source: ABdhPJz05+Abh7ww6RIA19LasSuRYcdUbnQljhwuk8+Ahf+tw/53syf0W1+0o5HZdXTaf57au9MTvg==
-X-Received: by 2002:a02:2305:0:b0:331:a026:b650 with SMTP id u5-20020a022305000000b00331a026b650mr3909034jau.314.1655239918349;
-        Tue, 14 Jun 2022 13:51:58 -0700 (PDT)
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=AQU7G9dtg8Y8H+vQgrYNezCoo/xULoFEsuyaQ6U59LU=;
+        b=bL7dVC1vvzBFpadcU8JdyjynPGHSgvN4wcw+BpystNkBjUFBYlBP+HaUDtCglYOHKM
+         vKlKpQEuRd9iaVlKMVPO29IXqkiG6xzZhF1NxVLOXXlrgUdN3RSDPZyIKoSNos/4DVbP
+         CpHrFNZtl+AzlKsIADu5Qxs7sp4scFux2a10TU4EDwDiwSNf9Y0lf1m5tM55suK1t4hd
+         QVZPF0L+z9y+mqW6ge4rWlYIQYSRpV3iAbGwZQeRaSprHgntP/XdHkkDzCZ6zuojJAg9
+         l+g6NPcNbU2Nd2JFm4XhQTAhb83PwDf6VPAZQI9eFUplw+truG1q5xJP5RU/eaRazV6x
+         51Ug==
+X-Gm-Message-State: AOAM530JYbjUHk/cg89Mg9/i+b5qpBqMXOokbqVLuIHcvGSiXXvUCzr/
+        tNaijBRaMmBiIvk57YUqrQ==
+X-Google-Smtp-Source: ABdhPJy4OZTKgkm9bsNozXxDdwuI56FSZM66Se3QH8NuIoteF12/9pfiXl/uOuGuu0rZ7hwu/sJUxA==
+X-Received: by 2002:a05:6638:1346:b0:331:b571:9fd6 with SMTP id u6-20020a056638134600b00331b5719fd6mr4027605jad.266.1655239965312;
+        Tue, 14 Jun 2022 13:52:45 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id f7-20020a022407000000b003319a68d2f5sm5300808jaa.125.2022.06.14.13.51.57
+        by smtp.gmail.com with ESMTPSA id p136-20020a6b8d8e000000b00669a3314870sm5691555iod.9.2022.06.14.13.52.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 13:51:57 -0700 (PDT)
-Received: (nullmailer pid 2525434 invoked by uid 1000);
-        Tue, 14 Jun 2022 20:51:56 -0000
-Date:   Tue, 14 Jun 2022 14:51:56 -0600
+        Tue, 14 Jun 2022 13:52:44 -0700 (PDT)
+Received: (nullmailer pid 2528143 invoked by uid 1000);
+        Tue, 14 Jun 2022 20:52:42 -0000
+Date:   Tue, 14 Jun 2022 14:52:42 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Srinivas Neeli <srinivas.neeli@xilinx.com>
-Cc:     git@xilinx.com, sgoud@xilinx.com, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        robh+dt@kernel.org, srinivas.neeli@amd.com,
-        michal.simek@xilinx.com, neelisrinivas18@gmail.com,
-        shubhraj@xilinx.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, linux-rtc@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH V8 1/3] dt-bindings: rtc: zynqmp: Add clock information
-Message-ID: <20220614205156.GA2525228-robh@kernel.org>
-References: <20220613125836.523449-1-srinivas.neeli@xilinx.com>
+To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
+Cc:     Jimmy Lalande <jimmy.lalande@se.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        linux-renesas-soc@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        =?UTF-8?Q?Miqu=C3=A8l_Raynal?= <miquel.raynal@bootlin.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, devicetree@vger.kernel.org,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH RESEND net-next v7 11/16] dt-bindings: net: snps,dwmac:
+ add "renesas,rzn1" compatible
+Message-ID: <20220614205242.GA2527905-robh@kernel.org>
+References: <20220610103712.550644-1-clement.leger@bootlin.com>
+ <20220610103712.550644-12-clement.leger@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220613125836.523449-1-srinivas.neeli@xilinx.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220610103712.550644-12-clement.leger@bootlin.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -67,26 +90,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Jun 2022 18:28:34 +0530, Srinivas Neeli wrote:
-> Added clock information and deprecated calibration support.
+On Fri, 10 Jun 2022 12:37:07 +0200, Clément Léger wrote:
+> Add "renesas,rzn1-gmac" and "renesas,r9a06g032-gmac" compatible strings.
 > 
-> Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 > ---
-> Changes in V8:
-> -None
-> Changes in V7:
-> -None
-> Changes in V6:
-> -Removed dtc warnings.
-> Changes in V5:
-> -Removed quotes and _clk suffix from clocknames.
-> Changes in V4:
-> - Deprecated calibrtion support
-> Changes in V3:
-> - New patch
-> ---
->  .../devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml     | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/net/snps,dwmac.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBF454BDB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E363C54BDAC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244276AbiFNWb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 18:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
+        id S1345475AbiFNWbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 18:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350908AbiFNW22 (ORCPT
+        with ESMTP id S1352978AbiFNW2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 18:28:28 -0400
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97CF4AE37;
-        Tue, 14 Jun 2022 15:27:57 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id h8so10893707iof.11;
-        Tue, 14 Jun 2022 15:27:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ijnM6qqps/61JEPhDY+exeWmv8F27GG2ZRzYNTTkDdI=;
-        b=YluoaUQFF5biecY8bQJWsyqOTFmtP7gVIV/xDz/hCPB60wg9F4wKIH+Je12VIrsnqr
-         AT/bANsbnkX77La+0zsYP2NVs4LQzE6Ew8gNhUYHByI8vG/uaSUDTb+vy3LNPIPRauNr
-         tavW1Xhwq2wp6r6cTMwipCt53IAm1HQ2Bpip8QJ4SyLJYRFcHSyUPsnJdU4ydAr6UfML
-         BXw5UFfU3HtBDr/HwE3bgd4S23KGPL1SH1ZMhsaVR/mjx5CQl6xZeAYCkNadXz+5xEnn
-         ESsH4TgAW2lGSp42ym4KtPIUmm0NDJpnhwx1AaC6+vR82uJ1iM9vZqzCudXk8UBd0POp
-         sxwQ==
-X-Gm-Message-State: AOAM532YwRGC45fuTX0xpFeF1TAMiO5j7NIGbev3U13cBsTY1der70Tu
-        cpEM6595PuwMAPGpOXZ53Q==
-X-Google-Smtp-Source: ABdhPJzbTj6BQ/OtQQ/H0TzS/7EgQ4bX0DXg7IDkhc9vrhCiPRjg/U1m4E4hYebaesNmCw3R6N/RTA==
-X-Received: by 2002:a05:6638:d4d:b0:333:1aea:4b9f with SMTP id d13-20020a0566380d4d00b003331aea4b9fmr3988177jak.149.1655245676867;
-        Tue, 14 Jun 2022 15:27:56 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id s4-20020a056e02020400b002d3da8e4af5sm6212682ilr.23.2022.06.14.15.27.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 15:27:56 -0700 (PDT)
-Received: (nullmailer pid 2841909 invoked by uid 1000);
-        Tue, 14 Jun 2022 22:27:54 -0000
-Date:   Tue, 14 Jun 2022 16:27:54 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 17/23] dt-bindings: ata: ahci: Add DWC AHCI SATA
- controller DT schema
-Message-ID: <20220614222754.GA2830345-robh@kernel.org>
-References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
- <20220610081801.11854-18-Sergey.Semin@baikalelectronics.ru>
+        Tue, 14 Jun 2022 18:28:44 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D677E4D9DF;
+        Tue, 14 Jun 2022 15:28:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655245721; x=1686781721;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TXsGVyUodPcbLb1MebJjc7VpvV7kUIfbb97MlIz1RY0=;
+  b=Fse21qLtixeT0LXxOOFwVxUaWPcowaUPqxUs0bODWpcOOb+uRK43GA6b
+   ST1P2HCbJYhwBH3p5O/siq8dw+a05l6gPoI13/sQXwaZWFL1XerXtWSBV
+   zANLYwnHoDnZMP3XrjnznKxXcWgfCakEnngJaPPRopSC/lG7TwixoBjSk
+   w=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Jun 2022 15:28:37 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 15:28:36 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 14 Jun 2022 15:28:36 -0700
+Received: from [10.110.74.141] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 14 Jun
+ 2022 15:28:35 -0700
+Message-ID: <5afe209a-31d8-25d3-d087-2ff85eace182@quicinc.com>
+Date:   Tue, 14 Jun 2022 15:28:34 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610081801.11854-18-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v6] drm/msm/dp: force link training for display resolution
+ change
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
+        <daniel@ffwll.ch>, <dianders@chromium.org>,
+        <dmitry.baryshkov@linaro.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1655240702-12230-1-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n52EAyTcQd6CiwXT1T658C-b+2r14BK_3-tf-ZiJdzqaAw@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAE-0n52EAyTcQd6CiwXT1T658C-b+2r14BK_3-tf-ZiJdzqaAw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,222 +74,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:17:55AM +0300, Serge Semin wrote:
-> Synopsys AHCI SATA controller is mainly compatible with the generic AHCI
-> SATA controller except a few peculiarities and the platform environment
-> requirements. In particular it can have one or two reference clocks to
-> feed up its AXI/AHB interface and SATA PHYs domain and at least one reset
-> control for the application clock domain. In addition to that the DMA
-> interface of each port can be tuned up to work with the predefined maximum
-> data chunk size. Note unlike generic AHCI controller DWC AHCI can't have
-> more than 8 ports. All of that is reflected in the new DWC AHCI SATA
-> device DT binding.
-> 
-> Note the DWC AHCI SATA controller DT-schema has been created in a way so
-> to be reused for the vendor-specific DT-schemas (see for example the
-> "snps,dwc-ahci" compatible string binding). One of which we are about to
-> introduce.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v2:
-> - Replace min/max constraints of the snps,{tx,rx}-ts-max property with
->   enum [ 1, 2, 4, ..., 1024 ]. (@Rob)
-> 
-> Changelog v4:
-> - Decrease the "additionalProperties" property identation otherwise it's
->   percieved as the node property instead of the key one. (@Rob)
-> - Use the ahci-port properties definition from the AHCI common schema
->   in order to extend it with DWC AHCI SATA port properties. (@Rob)
-> - Remove the Hannes' rb tag since the patch content has changed.
-> ---
->  .../bindings/ata/ahci-platform.yaml           |   8 --
->  .../bindings/ata/snps,dwc-ahci.yaml           | 129 ++++++++++++++++++
->  2 files changed, 129 insertions(+), 8 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-> index e19cf9828e68..7dc2a2e8f598 100644
-> --- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-> +++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-> @@ -30,8 +30,6 @@ select:
->            - marvell,armada-3700-ahci
->            - marvell,armada-8k-ahci
->            - marvell,berlin2q-ahci
-> -          - snps,dwc-ahci
-> -          - snps,spear-ahci
->    required:
->      - compatible
->  
-> @@ -48,17 +46,11 @@ properties:
->                - marvell,berlin2-ahci
->                - marvell,berlin2q-ahci
->            - const: generic-ahci
-> -      - items:
-> -          - enum:
-> -              - rockchip,rk3568-dwc-ahci
-> -          - const: snps,dwc-ahci
->        - enum:
->            - cavium,octeon-7130-ahci
->            - hisilicon,hisi-ahci
->            - ibm,476gtr-ahci
->            - marvell,armada-3700-ahci
-> -          - snps,dwc-ahci
-> -          - snps,spear-ahci
->  
->    reg:
->      minItems: 1
-> diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> new file mode 100644
-> index 000000000000..af78f6c9b857
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml
-> @@ -0,0 +1,129 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/ata/snps,dwc-ahci.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Synopsys DWC AHCI SATA controller
-> +
-> +maintainers:
-> +  - Serge Semin <fancer.lancer@gmail.com>
-> +
-> +description:
-> +  This document defines device tree bindings for the Synopsys DWC
-> +  implementation of the AHCI SATA controller.
-> +
-> +allOf:
-> +  - $ref: ahci-common.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - description: Synopsys AHCI SATA-compatible devices
-> +        contains:
-> +          const: snps,dwc-ahci
-> +      - description: SPEAr1340 AHCI SATA device
-> +        const: snps,spear-ahci
-> +      - description: Rockhip RK3568 ahci controller
-> +        const: rockchip,rk3568-dwc-ahci
 
-This is never true because there is a fallback. We should keep what we 
-had before.
+On 6/14/2022 2:59 PM, Stephen Boyd wrote:
+> Quoting Kuogee Hsieh (2022-06-14 14:05:02)
+>> Display resolution change is implemented through drm modeset. Older
+>> modeset (resolution) has to be disabled first before newer modeset
+>> (resolution) can be enabled. Display disable will turn off both
+>> pixel clock and main link clock so that main link have to be
+>> re-trained during display enable to have new video stream flow
+>> again. At current implementation, display enable function manually
+>> kicks up irq_hpd_handle which will read panel link status and start
+>> link training if link status is not in sync state.
+>>
+>> However, there is rare case that a particular panel links status keep
+>> staying in sync for some period of time after main link had been shut
+>> down previously at display disabled. In this case, main link retraining
+>> will not be executed by irq_hdp_handle(). Hence video stream of newer
+>> display resolution will fail to be transmitted to panel due to main
+>> link is not in sync between host and panel.
+>>
+>> This patch will bypass irq_hpd_hanle() in favor of directly call
+> s/hanle/handle/
+>
+>> dp_ctrl_on_stream() to always perform link training in regardless of
+>> main link status. So that no unexpected exception resolution change
+>> failure cases will happen. Also this implementation are more efficient
+>> than manual kicking off irq_hpd_handle function.
+>>
+>> Changes in v2:
+>> -- set force_link_train flag on DP only (is_edp == false)
+>>
+>> Changes in v3:
+>> -- revise commit  text
+>> -- add Fixes tag
+>>
+>> Changes in v4:
+>> -- revise commit  text
+>>
+>> Changes in v5:
+>> -- fix spelling at commit text
+>>
+>> Changes in v6:
+>> -- split dp_ctrl_on_stream() for phy test case
+>> -- revise commit text for modeset
+>>
+>> Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
+>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/dp/dp_ctrl.c    | 31 +++++++++++++++++++++++--------
+>>   drivers/gpu/drm/msm/dp/dp_ctrl.h    |  3 ++-
+>>   drivers/gpu/drm/msm/dp/dp_display.c | 13 ++++++-------
+>>   3 files changed, 31 insertions(+), 16 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> index af7a80c..cb9c7af 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+>> @@ -1807,7 +1807,27 @@ static int dp_ctrl_link_retrain(struct dp_ctrl_private *ctrl)
+>>          return dp_ctrl_setup_main_link(ctrl, &training_step);
+>>   }
+>>
+>> -int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>> +int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
+>> +{
+>> +       int ret = 0;
+> Drop assignment please.
+>
+>> +       struct dp_ctrl_private *ctrl;
+>> +
+>> +       ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
+>> +
+>> +       ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
+>> +
+>> +       ret = dp_ctrl_enable_stream_clocks(ctrl);
+>> +       if (ret) {
+>> +               DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
+>> +               return ret;
+>> +       }
+>> +
+>> +       dp_ctrl_send_phy_test_pattern(ctrl);
+> None of this code needs to be run in the normal display on case?
+>
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
+>>   {
+>>          int ret = 0;
+>>          bool mainlink_ready = false;
+>> @@ -1843,12 +1863,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+>>                  goto end;
+>>          }
+>>
+>> -       if (ctrl->link->sink_request & DP_TEST_LINK_PHY_TEST_PATTERN) {
+>> -               dp_ctrl_send_phy_test_pattern(ctrl);
+>> -               return 0;
+>> -       }
+>> -
+>> -       if (!dp_ctrl_channel_eq_ok(ctrl))
+>> +       if (force_link_train || !dp_ctrl_channel_eq_ok(ctrl))
+>>                  dp_ctrl_link_retrain(ctrl);
+>>
+>>          /* stop txing train pattern to end link training */
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+>> index c388323..b6d25ab 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>> @@ -1688,10 +1689,12 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+>>
+>>          state =  dp_display->hpd_state;
+>>
+>> -       if (state == ST_DISPLAY_OFF)
+>> +       if (state == ST_DISPLAY_OFF) {
+>>                  dp_display_host_phy_init(dp_display);
+>> +               force_link_train = true;
+>> +       }
+>>
+>> -       dp_display_enable(dp_display, 0);
+>> +       dp_display_enable(dp_display, force_link_train);
+> Do we need to pass it from here? Why can't dp_display_enable() simply
+> check for 'state == ST_DISPLAY_OFF' and then force retrain the link?
 
+can we keep this as it is?
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    description:
-> +      Basic DWC AHCI SATA clock sources like application AXI/AHB BIU clock
-> +      and embedded PHYs reference clock together with vendor-specific set
-> +      of clocks.
-> +    minItems: 1
-> +    maxItems: 4
-> +
-> +  clock-names:
-> +    contains:
-> +      anyOf:
-> +        - description: Application AXI/AHB BIU clock source
-> +          enum:
-> +            - aclk
-> +            - sata
-> +        - description: SATA Ports reference clock
-> +          enum:
-> +            - ref
-> +            - sata_ref
-> +
-> +  resets:
-> +    description:
-> +      At least basic core and application clock domains reset is normally
-> +      supported by the DWC AHCI SATA controller. Some platform specific
-> +      clocks can be also specified though.
+it is more readable that we do need force link re-training due to 
+ST_DISPLAY_OFF at top level.
 
-s/clocks/resets/ ?
+Also we only need to do (state == ST_DISPLAY_OFF) checking one time.
 
-This allows any number of resets which isn't great. I think this schema 
-should just be the 'simple' cases where there's only 1 reset and 1 
-clock (or how many the DWC block actually has if you have that info). 
-More complicated cases get there own schema.
-
-> +
-> +  reset-names:
-> +    contains:
-> +      description: Core and application clock domains reset control
-> +      const: arst
-> +
-> +patternProperties:
-> +  "^sata-port@[0-9a-e]$":
-> +    $ref: '#/$defs/dwc-ahci-port'
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +$defs:
-> +  dwc-ahci-port:
-> +    $ref: /schemas/ata/ahci-common.yaml#/$defs/ahci-port
-> +
-> +    properties:
-> +      reg:
-> +        minimum: 0
-> +        maximum: 7
-> +
-> +      snps,tx-ts-max:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        description: Maximal size of Tx DMA transactions in FIFO words
-> +        enum: [ 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 ]
-> +
-> +      snps,rx-ts-max:
-> +        $ref: /schemas/types.yaml#/definitions/uint32
-> +        description: Maximal size of Rx DMA transactions in FIFO words
-> +        enum: [ 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 ]
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +    #include <dt-bindings/ata/ahci.h>
-> +
-> +    sata@122f0000 {
-> +      compatible = "snps,dwc-ahci";
-> +      reg = <0x122F0000 0x1ff>;
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      interrupts = <GIC_SPI 115 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +      clocks = <&clock1>, <&clock2>;
-> +      clock-names = "aclk", "ref";
-> +
-> +      phys = <&sata_phy>;
-> +      phy-names = "sata-phy";
-> +
-> +      ports-implemented = <0x1>;
-> +
-> +      sata-port@0 {
-> +        reg = <0>;
-> +
-> +        hba-port-cap = <HBA_PORT_FBSCP>;
-> +
-> +        snps,tx-ts-max = <512>;
-> +        snps,rx-ts-max = <512>;
-> +      };
-> +    };
-> +...
-> -- 
-> 2.35.1
-> 
-> 

@@ -2,160 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE0D54B25B
+	by mail.lfdr.de (Postfix) with ESMTP id 15C6C54B25A
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 15:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242608AbiFNNeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 09:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51702 "EHLO
+        id S245606AbiFNNe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 09:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238861AbiFNNej (ORCPT
+        with ESMTP id S244577AbiFNNe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 09:34:39 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE201C11E
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 06:34:37 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-f2a4c51c45so12455714fac.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 06:34:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=wxZe6L1nXRSo/rEGlh3/Z3W3UQpOfnPlrbhGyQa89iM=;
-        b=jdQoiAUs5HNMpbnUDsHeNGxCy0MwUrPaxuGGOAdUM+86D1Y7rB3cS3ljEDYsFxMxqJ
-         t5dYo0O/MYdnpJsS8rMfgx3VHrFbB9mfgTFu/5X2LO+yCB8F3i6VvxfYQJXCLvmzfkTT
-         7iMrS8UbMonnfudG0pz45vZDCSrmEIk4AjBpLX1LjtE0BZIHEUpUk0k6Jw8+Yh+gXjn9
-         1eVNNOmS0Q8k2BzyfyWW5e7b2YnGJZBmkpkV37g1TsSztBt97JoGBYWo+BERGWcHKJMm
-         /futwy78sj59wVyLT/3C3SQREcMoUQqqESHMXMjDn4xsNlw9p2fC+VBK2WiXiR+QUCaY
-         XC3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=wxZe6L1nXRSo/rEGlh3/Z3W3UQpOfnPlrbhGyQa89iM=;
-        b=w0JoPeMKaNUttPjawTquwO2KhoFFZLYEroi03zn5NBDHVeIcSbtxeQQrLaccPwjbmw
-         vjzoeIWRfX4Rpm96A+PtC+EYl1R//Yfm/ZRYUkuf83uXjgyC2jl1xCY8v0+qUHcp0bg3
-         7iyRU0cYWvKNYjOyhpfx7lV0QsbvMykgq6Ewk+XXQLCiFOROPrUZIz+a37EKzDE7IMyv
-         tYRqR0+HN4VnwtxgM2aCdXzeGjIQIMcPMEypVQ2Br/mW5QfPp3+G4FCKwTKDDJin50kp
-         ZzwFq7htsaLMBbLzAIeBdvyPIO1ztf2Er8XnP2OHwyQtSfRrXnEl2MVC1yi56jxHL+OU
-         rXKg==
-X-Gm-Message-State: AJIora9uOMIsRt3UzOMhrw/UBoiIunE6mvrdqtcnUXT/V3qnOowlWXLZ
-        17Lfa9CMKoBSO3nj5y6AQb2Y0eijieK9es9c31sBow==
-X-Google-Smtp-Source: AGRyM1shSsjH9+nQeZGkuBjftOK2ByQh7wQgjTsQ2WG9AHGsBGGVqz3ZiPR2LHS1CCcjcG2DhVb2fuuoiEZuLK8ri38=
-X-Received: by 2002:a05:6870:a198:b0:100:ed11:2fcc with SMTP id
- a24-20020a056870a19800b00100ed112fccmr2470639oaf.50.1655213676772; Tue, 14
- Jun 2022 06:34:36 -0700 (PDT)
+        Tue, 14 Jun 2022 09:34:56 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA211C121;
+        Tue, 14 Jun 2022 06:34:55 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LMq8l6mqqzRjR5;
+        Tue, 14 Jun 2022 21:31:35 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 14 Jun 2022 21:34:53 +0800
+Subject: Re: [PATCH -next] selinux: Fix memleak in security_read_state_kernel
+To:     Ondrej Mosnacek <omosnace@redhat.com>
+CC:     Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>,
+        <michalorzel.eng@gmail.com>, Austin Kim <austin.kim@lge.com>,
+        SElinux list <selinux@vger.kernel.org>,
+        Linux kernel mailing list <linux-kernel@vger.kernel.org>
+References: <20220613135953.135998-1-xiujianfeng@huawei.com>
+ <CAFqZXNvHB0cftgbK+mScbZbcO71OLpXrBMxWAx1z1eB27mm8Cw@mail.gmail.com>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+Message-ID: <f7151722-6450-7efd-1e3d-e31245dc3da2@huawei.com>
+Date:   Tue, 14 Jun 2022 21:34:53 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-References: <20220607104015.2126118-1-poprdi@google.com> <CAPUC6bJbVMPn1FMLYnXg2GUX4ikesMSRjj=oPOOrS5H2DOx_bA@mail.gmail.com>
-In-Reply-To: <CAPUC6bJbVMPn1FMLYnXg2GUX4ikesMSRjj=oPOOrS5H2DOx_bA@mail.gmail.com>
-From:   =?UTF-8?Q?Tam=C3=A1s_Koczka?= <poprdi@google.com>
-Date:   Tue, 14 Jun 2022 15:34:25 +0200
-Message-ID: <CAPUC6b+xMnk8VDGv_7p9j4GHD75FrxG3hWKpTSF2zHj508=x9A@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: Collect kcov coverage from hci_rx_work
-To:     Marcel Holtmann <marcel@holtmann.org>
-Cc:     Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andy Nguyen <theflow@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <CAFqZXNvHB0cftgbK+mScbZbcO71OLpXrBMxWAx1z1eB27mm8Cw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Marcel,
 
-I hope this was the change you originally requested, and I did not
-misunderstand anything, but if you need any additional modification to
-the code or the commit, please feel free to let me know!
-
-Thank you,
-Tamas
-
-On Tue, Jun 7, 2022 at 1:44 PM Tam=C3=A1s Koczka <poprdi@google.com> wrote:
+在 2022/6/14 20:57, Ondrej Mosnacek 写道:
+> On Mon, Jun 13, 2022 at 4:02 PM Xiu Jianfeng <xiujianfeng@huawei.com> wrote:
+>> In this function, it directly returns the result of __security_read_policy
+>> without freeing the allocated memory in *data, cause memory leak issue,
+>> so free the memory if __security_read_policy failed.
+>>
+>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>> ---
+>>   security/selinux/ss/services.c | 9 ++++++++-
+>>   1 file changed, 8 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/security/selinux/ss/services.c b/security/selinux/ss/services.c
+>> index 69b2734311a6..fe5fcf571c56 100644
+>> --- a/security/selinux/ss/services.c
+>> +++ b/security/selinux/ss/services.c
+>> @@ -4048,6 +4048,7 @@ int security_read_policy(struct selinux_state *state,
+>>   int security_read_state_kernel(struct selinux_state *state,
+>>                                 void **data, size_t *len)
+>>   {
+>> +       int err;
+>>          struct selinux_policy *policy;
+>>
+>>          policy = rcu_dereference_protected(
+>> @@ -4060,5 +4061,11 @@ int security_read_state_kernel(struct selinux_state *state,
+>>          if (!*data)
+>>                  return -ENOMEM;
+>>
+>> -       return __security_read_policy(policy, *data, len);
+>> +       err = __security_read_policy(policy, *data, len);
+>> +       if (err) {
+>> +               vfree(*data);
+>> +               *data = NULL;
+>> +               *len = 0;
+>> +       }
+>> +       return err;
+>>   }
+>> --
+>> 2.17.1
+>>
+> security_read_policy() defined a few lines above has the same pattern
+> (just with vmalloc_user() in place of vmalloc()). Would you like to
+> send another patch to fix that function as well?
+No problem, patch already sent.
 >
-> Hello Marcel,
->
-> I added some comments into the code about what the kcov_remote calls do a=
-nd
-> why they were implemented and I also added some reasoning to the commit
-> message.
->
-> I did not mention in the commit but these functions only run if the kerne=
-l
-> is compiled with CONFIG_KCOV.
->
-> Thank you again for reviewing the patch!
->
-> --
-> Tamas
->
-> On Tue, Jun 7, 2022 at 12:40 PM Tamas Koczka <poprdi@google.com> wrote:
-> >
-> > Annotate hci_rx_work() with kcov_remote_start() and kcov_remote_stop()
-> > calls, so remote KCOV coverage is collected while processing the rx_q
-> > queue which is the main incoming Bluetooth packet queue.
-> >
-> > Coverage is associated with the thread which created the packet skb.
-> >
-> > The collected extra coverage helps kernel fuzzing efforts in finding
-> > vulnerabilities.
-> >
-> > Signed-off-by: Tamas Koczka <poprdi@google.com>
-> > ---
-> > Changelog since v1:
-> >  - add comment about why kcov_remote functions are called
-> >
-> > v1: https://lore.kernel.org/all/20220517094532.2729049-1-poprdi@google.=
-com/
-> >
-> >  net/bluetooth/hci_core.c | 10 +++++++++-
-> >  1 file changed, 9 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> > index 45c2dd2e1590..0af43844c55a 100644
-> > --- a/net/bluetooth/hci_core.c
-> > +++ b/net/bluetooth/hci_core.c
-> > @@ -29,6 +29,7 @@
-> >  #include <linux/rfkill.h>
-> >  #include <linux/debugfs.h>
-> >  #include <linux/crypto.h>
-> > +#include <linux/kcov.h>
-> >  #include <linux/property.h>
-> >  #include <linux/suspend.h>
-> >  #include <linux/wait.h>
-> > @@ -3780,7 +3781,14 @@ static void hci_rx_work(struct work_struct *work=
-)
-> >
-> >         BT_DBG("%s", hdev->name);
-> >
-> > -       while ((skb =3D skb_dequeue(&hdev->rx_q))) {
-> > +       /* The kcov_remote functions used for collecting packet parsing
-> > +        * coverage information from this background thread and associa=
-te
-> > +        * the coverage with the syscall's thread which originally inje=
-cted
-> > +        * the packet. This helps fuzzing the kernel.
-> > +        */
-> > +       for (; (skb =3D skb_dequeue(&hdev->rx_q)); kcov_remote_stop()) =
-{
-> > +               kcov_remote_start_common(skb_get_kcov_handle(skb));
-> > +
-> >                 /* Send copy to monitor */
-> >                 hci_send_to_monitor(hdev, skb);
-> >
-> > --
-> > 2.36.1.255.ge46751e96f-goog
-> >

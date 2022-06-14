@@ -2,119 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8407B54AAEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:49:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4020E54AAE9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 09:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354618AbiFNHs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 03:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37432 "EHLO
+        id S1354851AbiFNHst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 03:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353068AbiFNHsY (ORCPT
+        with ESMTP id S1353011AbiFNHsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 03:48:24 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BED7F3E0F4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:48:22 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 7FE4D1F90C;
-        Tue, 14 Jun 2022 07:48:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655192901; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Tue, 14 Jun 2022 03:48:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 61E8A3EAA3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655192922;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=vmDK7ZYK4AL37+SEeqVJBV/ltfSvnAp1okhtoRMfG/M=;
-        b=KbJ0eW5Hdov+/dcJi0R+DP7RhTeXmL8Q7iSh4uJhvJL2OCSX6cymIh9SqlBSrrwr7STzpD
-        EIXFK/gHr15xzlZEYqCruRh+vuF85w04e//pLP1U4zX4bJpd9oSKMDZRJ1GWgKU1a5oDZh
-        N73wt4ADuGFJlf1K+00uSzBSIXf8sAA=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 662472C141;
-        Tue, 14 Jun 2022 07:48:21 +0000 (UTC)
-Date:   Tue, 14 Jun 2022 09:48:20 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        Zackary Liu <zackary.liu.pro@gmail.com>
-Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm/oom_kill: break evaluation when a task has been
- selected
-Message-ID: <Yqg9RMslRT4ip2a1@dhcp22.suse.cz>
-References: <YpcZFvVZRPTyTQ7s@dhcp22.suse.cz>
- <6BC32F66-2AC4-450D-90D5-B7A09455B617@getmailspring.com>
- <Yp272UqXecNsmC1z@dhcp22.suse.cz>
+        bh=pA9hWNFeXf3Ws8HBvV+hgwjcVRJHqFaY7TkNSW+q34Y=;
+        b=QoobN0GnxeZh/4xkqay/0DTuao72eWYj302PvKS2o4siM4rNHiw8jfkBLqk5xwAzhifz2M
+        2tLBZKdhjMqTzA3+KO5Q7SltIpThQFCWUDgEZR+71dQyBe3jpKPzPjBfK5DMxPaUTv6Bih
+        MTcLw+AMNyt8LzppzNgP7IOwPQj9p90=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-644-HPctgxlAN8yJqRZY8HovEg-1; Tue, 14 Jun 2022 03:48:40 -0400
+X-MC-Unique: HPctgxlAN8yJqRZY8HovEg-1
+Received: by mail-ej1-f71.google.com with SMTP id k7-20020a1709062a4700b006fe92440164so2513506eje.23
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 00:48:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=pA9hWNFeXf3Ws8HBvV+hgwjcVRJHqFaY7TkNSW+q34Y=;
+        b=Z367pjeIWm83CPVkns/yzRLygKqeHCl6SzP/OJjOcATr/KurQ2wEBdu0ghrKfPWfGJ
+         KumeK10hhXUmWvNnC2354TBMEzQWYhVzp8rhh3Bj8WxHjR6i/ABPmNU212zDyG//jpe5
+         bxPdQ3O8j0nM3j4aTdIgoKKkncfV+rZD7x6HpHSLyGRp4nML842o8AKtRxyMA9fpq62E
+         PMiFLdxlQh9ruBrTUxfSG5qLeSGJgo3W9TGKQoxceRS9y13cbdi3r0CJTH/6Itrf9eTU
+         DY4wuj956Hbp/rXgRKCPdtQMN/SqJ5EIwFJjHduiOOq54GJjl/nrCWfhEJGDx4VV+jMY
+         f0Ng==
+X-Gm-Message-State: AJIora9MXQuwiLGv67n3dbNTl7e6i20EiHTF39xYFGW5vpT/Iz824ppj
+        wFR7TLAqLjivh6ZAZ4rWyrc1nuU72xiTOl3Pw/8kLcuoUqyKi6EP6ec/2Az2DcWwAjB3R4TQhO/
+        gn2ATHr+fGDkVilFUq1uXdgLa
+X-Received: by 2002:a05:6402:5384:b0:431:6d84:b451 with SMTP id ew4-20020a056402538400b004316d84b451mr4299284edb.46.1655192918268;
+        Tue, 14 Jun 2022 00:48:38 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzP9bNFT/YiQLWZHW1O9vZ21ws6w7/jitcSKem//QoUBDC+1oG4tlyeyJ5BHfZ4fUU8Wr3ZaQ==
+X-Received: by 2002:a05:6402:5384:b0:431:6d84:b451 with SMTP id ew4-20020a056402538400b004316d84b451mr4299270edb.46.1655192918087;
+        Tue, 14 Jun 2022 00:48:38 -0700 (PDT)
+Received: from gator (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
+        by smtp.gmail.com with ESMTPSA id y18-20020aa7ce92000000b0042dc882c823sm6586576edv.70.2022.06.14.00.48.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 00:48:37 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 09:48:35 +0200
+From:   Andrew Jones <drjones@redhat.com>
+To:     shaoqin.huang@intel.com
+Cc:     pbonzini@redhat.com, Shuah Khan <shuah@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Peter Gonda <pgonda@google.com>,
+        David Dunn <daviddunn@google.com>, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: Remove the mismatched parameter comments
+Message-ID: <20220614074835.qto55feu74ionlh5@gator>
+References: <20220614224126.211054-1-shaoqin.huang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yp272UqXecNsmC1z@dhcp22.suse.cz>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220614224126.211054-1-shaoqin.huang@intel.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 06-06-22 10:33:30, Michal Hocko wrote:
-> On Sat 04-06-22 18:35:19, Zackary Liu wrote:
-> > 
-> > On Jun 1 2022, at 3:45 pm, Michal Hocko <mhocko@suse.com> wrote:
-> > 
-> > > On Sat 14-05-22 15:52:28, Zhaoyu Liu wrote:
-> > >> oom points no longer need to be calculated if a task is oom_task_origin(),
-> > >> so return 1 to stop the oom_evaluate_task().
-> > > 
-> > > This doesn't really explain why this is really desired. Is this a fix,
-> > > optimization?
-> > > 
-> > > Please also note that this change has some side effects. For one, the
-> > > task marked as oom origin will get killed even if there is still a
-> > > pending oom victim which hasn't been fully dismantled. Is this
-> > > intentional?
-> > 
-> > Thank you very much for reminding.
-> > 
-> > From my point of view, the victim was marked in the last oom, and now it
-> > has entered the oom again, which means that the system still has no
-> > deprecated memory available.
+On Tue, Jun 14, 2022 at 04:41:19PM -0600, shaoqin.huang@intel.com wrote:
+> From: Shaoqin Huang <shaoqin.huang@intel.com>
 > 
-> This is not an unusual situation. OOM victims can take some time to die
-> and release their memory. The oom_reaper is there to fast forward that
-> process and guarantee a forward progress. But this can still take some
-> time. Our general policy is to back off when there is an alive oom
-> victim encountered. Have a look at the tsk_is_oom_victim test in
-> oom_evaluate_task. For that heuristic to be effective the whole task
-> list (wether the global one or memcg) has to be evaluated.
+> There are some parameter being removed in function but the parameter
+> comments still exist, so remove them.
 > 
-> > In order to ensure that the system can
-> > return to normal as soon as possible, killing the origin task
-> > immediately should be A good choice, and the role of this patch is to
-> > end oom_evaluate_task and return true as soon as the origin task is found.
+> Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
+> ---
+>  tools/testing/selftests/kvm/lib/kvm_util.c | 3 ---
+>  1 file changed, 3 deletions(-)
 > 
-> Could you be more specific how does this patch guarantees a forward
-> progress? What is the actual usecase that benefits from this change?
-> 
-> These are all important information for future reference. Please note I
-> am not saying the patch is wrong. I just still do not see why it is
-> useful.
-> 
-> > Maybe this patch is not the optimal solution, it has a trade-off.
-> 
-> If there are trade-offs, please document them in the changelog.
-> 
-> The way I see it is that oom_task_origin heuristic has been introduced
-> to help killing swapoff operation because the swapped out memory doesn't
-> fit into memory. This is a very reasonable thing to do in general but it
-> also represents an early failure visible to the userspace. If there is a
-> pre-existing oom victim then I would argue that we should try to avoid
-> the failure.
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 1665a220abcb..58fdc82b20f4 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -1336,8 +1336,6 @@ static vm_vaddr_t vm_vaddr_unused_gap(struct kvm_vm *vm, size_t sz,
+>   *   vm - Virtual Machine
+>   *   sz - Size in bytes
+>   *   vaddr_min - Minimum starting virtual address
+> - *   data_memslot - Memory region slot for data pages
+> - *   pgd_memslot - Memory region slot for new virtual translation tables
+>   *
+>   * Output Args: None
+>   *
+> @@ -1423,7 +1421,6 @@ vm_vaddr_t vm_vaddr_alloc_page(struct kvm_vm *vm)
+>   *   vaddr - Virtuall address to map
+>   *   paddr - VM Physical Address
+>   *   npages - The number of pages to map
+> - *   pgd_memslot - Memory region slot for new virtual translation tables
+>   *
+>   * Output Args: None
+>   *
+> -- 
+> 2.30.2
+>
 
-Andrew, please drop this patch from your tree. I do not see any real
-justification here.
+Hi Shaoqin,
 
-Thanks!
--- 
-Michal Hocko
-SUSE Labs
+Please check kvm/queue, the extra parameter comments have already been
+removed.
+
+Thanks,
+drew 
+

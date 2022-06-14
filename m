@@ -2,103 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEEE54BD94
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 317F154BD9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 00:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235677AbiFNWYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 18:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48186 "EHLO
+        id S245277AbiFNW0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 18:26:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242406AbiFNWX6 (ORCPT
+        with ESMTP id S233939AbiFNW0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 18:23:58 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72A34D607;
-        Tue, 14 Jun 2022 15:23:57 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d5so6287555plo.12;
-        Tue, 14 Jun 2022 15:23:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=HeXZ13GHuZAsU9fsNJvqXv4g/jBPWfplGywa/jhxuTI=;
-        b=o2ue+YzgKM4bUAY8JOZNrYh823YWVTilZM0rpjm6ClgI1+sWhL6cadfwb0XwY67FiM
-         PFHGU/FugpYrrZdXZd7oigrgqm+kDXpbCD4UA/h1O+Hb2Ql96xIXX3mP5hEguoIbAnbg
-         DK1oLnnyrYrHQH4+VvufqQayCC8+4LgZploYTGE3MlIMqISQzjiPcvMzfI1As/RQzpyc
-         aBTQdNNTFBvzBadduo5wjWvO2ePnGmlFvLlN6kMSWPMaE8o8qO65rgvsAdtj7ky3BSYv
-         4313a68XGAO0IDEwJL7teD6KXpLahjDaDeyOKE0cFWQ0kHvaWAAa9EPurz5VH/r9Ly1b
-         CN2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=HeXZ13GHuZAsU9fsNJvqXv4g/jBPWfplGywa/jhxuTI=;
-        b=eUqbLju//qceYS7oflNMND6N9RU9jH9VWPzeeKpEUB/50zfbbw3/zCiXSUEeVGJKKT
-         jz2LYWyLE/iTgNU6puKqSYImYmwu01Q8p+W8JHjVN3nP38LyheiEGS9FZKeyunUQVykT
-         Bfzt4t/xXIYGmDaFySP0Cf0YO3Qq15P42A0KRhiutZPOgVwSGP+x42Fr+ijFEVyNMPdE
-         iP98ig7fdHIujopyi0SKSiDryUa0L3bRE+HuubmctOS8kmMYy30IqmVCia5yZZS9Oos+
-         K5P0gRegeTLe79cyY9Nr2vgQ13fDodrFfB8LojR48xQnBOSwkMOJVfu8NpPTKxOX2tPv
-         56Qw==
-X-Gm-Message-State: AJIora8hWx3JELHoZm6jYuuThczICBOK1VJ7alJi6HpZukaPG8W86ux5
-        CcZ1OQU85kiH7UT61BB0tJe5SWrb6NA=
-X-Google-Smtp-Source: ABdhPJyfpbXPRxfN+lPKFOZGceKmNmcnrOD5rKJ2WS8Qbxq9ZREYOf3jx4fUQ+AOQrZBsHdKwqTbSA==
-X-Received: by 2002:a17:903:1248:b0:168:d2ba:ee71 with SMTP id u8-20020a170903124800b00168d2baee71mr6592785plh.150.1655245437074;
-        Tue, 14 Jun 2022 15:23:57 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id c137-20020a63358f000000b00408c56d3379sm145585pga.74.2022.06.14.15.23.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 15:23:56 -0700 (PDT)
-Message-ID: <50336991-c4ae-8edc-8ce7-929d0f48062d@gmail.com>
-Date:   Tue, 14 Jun 2022 15:23:55 -0700
+        Tue, 14 Jun 2022 18:26:08 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE8F4D616
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 15:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655245566; x=1686781566;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=V/U0UGWsGGGf1nHKbOmX9I1mE/XGx/BcO0xINFHGrNA=;
+  b=JtL8Am0bLdcxGyd+w9a11/2AXAXUm8e4r6YOGSpKUWJow69pRv86kfke
+   H8P5dAF6cOkAg5hOvxieWVjAgb3qp6W95yO8FNtZEGuUTzdZN3EZN31f5
+   2vV+nDLw6xqSjiN7JMEDfAZGSR8+qSGxg/OsHn6Gz8Drg8djzVydFsk9W
+   dyd1uA3y8UywmEA6a0QQNpwX1FzUJCaZejfXeYYxnbVpvA4EyBdSQdeIU
+   Z1lhfcpXnvQ+jIu7PdFcttAdHseuZ/EBQJl8F3qofFRkNilLMmnvZBY4T
+   YJV4NUnA3C1Yv/2NJ2WTvnkJs5hXCwRYStxHjf/15LOlTdcEqYHnDrlC+
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="259217320"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="259217320"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 15:26:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="588724624"
+Received: from b04f130c83f2.jf.intel.com ([10.165.154.98])
+  by fmsmga007.fm.intel.com with ESMTP; 14 Jun 2022 15:26:05 -0700
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Tim Chen <tim.c.chen@linux.intel.com>, Wei Xu <weixugc@google.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Shakeel Butt <shakeelb@google.com>
+Subject: [RFC PATCH 0/3] Cgroup accounting of memory tier usage 
+Date:   Tue, 14 Jun 2022 15:25:32 -0700
+Message-Id: <cover.1655242024.git.tim.c.chen@linux.intel.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 5.18 00/11] 5.18.5-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220614183720.861582392@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220614183720.861582392@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/22 11:40, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.5 release.
-> There are 11 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.5-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+For controlling usage of a top tiered memory by a cgroup, accounting
+of top tier memory usage is needed.  This patch set implements the
+following:
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Patch 1 introduces interface and simple implementation to retrieve
+	cgroup tiered memory usage
+Patch 2 introduces more efficient accounting with top tier memory page counter 
+Patch 3 provides a sysfs interface to repot the the top tiered memory
+	usage.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+The patchset works with Aneesh's v6 memory-tiering implementation [1].
+It is a preparatory patch set before introducing features to
+control top tiered memory in cgroups.
+
+I'll like to first get feedback to see if 
+(1) Controllng the topmost tiered memory is enough 
+or
+(2) Multiple tiers at the top levels need to be grouped into "toptier"
+or
+(3) There are use cases not covered by (1) and (2). 
+
+Thanks.
+
+Tim
+
+[1] https://lore.kernel.org/linux-mm/20220610135229.182859-1-aneesh.kumar@linux.ibm.com/ 
+
+Tim Chen (3):
+  mm/memory-tiers Add functions for tier memory usage in a cgroup
+  mm/memory-tiers: Use page counter to track toptier memory usage
+  mm/memory-tiers: Show toptier memory usage for cgroup
+
+ include/linux/memcontrol.h   |  1 +
+ include/linux/memory-tiers.h |  2 +
+ mm/memcontrol.c              | 86 +++++++++++++++++++++++++++++++++++-
+ mm/memory-tiers.c            |  3 +-
+ 4 files changed, 89 insertions(+), 3 deletions(-)
+
 -- 
-Florian
+2.35.1
+

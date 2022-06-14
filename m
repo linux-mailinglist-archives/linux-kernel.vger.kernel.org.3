@@ -2,123 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB51054BC64
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABF5F54BC80
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357876AbiFNVD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 17:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
+        id S239402AbiFNVFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 17:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357710AbiFNVDw (ORCPT
+        with ESMTP id S233205AbiFNVFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 17:03:52 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA10506C2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:03:48 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d5so6149494plo.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 14:03:48 -0700 (PDT)
+        Tue, 14 Jun 2022 17:05:13 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED63506C2;
+        Tue, 14 Jun 2022 14:05:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=54uqX4hoxceYxZbvXXXTQIRCQh50Z99ozZMeQkD5dEg=;
-        b=KPGKRgHC5n8hWs2HP0HefSE6DkYDIETw7epRbgNMqeA2V9Lv/O6MTXFZpSwfhZrQSx
-         pPHYr/9NXuMF2wPXKlCtcPkRQmGoW8YTg7ZUFh0VFPchZdwTfzhVCshMqbJG5riAQPLI
-         PDYS8v64XEw8vsdnYaJea9nU/dMobg8aXd1k2lnipdWh0We3aElzh6C9CzlZwQ0UtXbT
-         MJ0dT5ahLlIXRIUOxz9SHanzYNlA3G71tKHRa2If59GERiWa/uSJTf+Ao2aVEv4KVzDi
-         okFAfbBrEPXKHtHBp1hmSlUpbIzsL/v5P4mCeivarjnOxmlGAYh3OUtav88xmr2MRQCf
-         Jksw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=54uqX4hoxceYxZbvXXXTQIRCQh50Z99ozZMeQkD5dEg=;
-        b=HoFioczc9rX+X0MjZnbW51mgCejmZvl/uZyqZ85KiKYXYvB1nV8HzZLI7EelDTI5m6
-         yDoJQhLeaiaxRCXBTjBAZDiUqn6YHyjZUxwI3SEf+cKJw03C2i8SGs/vnysoBLJLz8em
-         1JiMCR2QrjN308Q3zbYpYXmjlhiZ0OpTVeZPOeutBrK8HHGolWk5jOhTF/x/zzk2rip/
-         txyzNaL8IMnzRhqRPh4F+M/X7ryU/OnNyhJeHWEu5sUC9m4iRqmqkxn4NFP3qOS/H3Sk
-         7GY2WwTWl7n3y5/faSaN79/Qt6ER+osM6aW/UvIGcgc9fsRRjYUNDtU9GgVordOMJsJ1
-         /Ssw==
-X-Gm-Message-State: AJIora/UHzOTnE9LR5+kA79IWIpvmYldgqUfZYpQyU+tZZb3zRaljNjo
-        bAeB+hhc0AnMMybebHaSs4UPMg==
-X-Google-Smtp-Source: AGRyM1uhtOpnkODqEAnt2BMBBTumHS2aKQXcRkaESL5xgjTuUoibnJg//T9j+N0OhBrTniTj1c+NWw==
-X-Received: by 2002:a17:903:2291:b0:167:59ad:52e8 with SMTP id b17-20020a170903229100b0016759ad52e8mr6373890plh.121.1655240628282;
-        Tue, 14 Jun 2022 14:03:48 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id b7-20020a1709027e0700b001635a8f9dfdsm59307plm.26.2022.06.14.14.03.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 14:03:47 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Jerome NEANNE <jneanne@baylibre.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org, nm@ti.com,
-        kristo@kernel.org, will@kernel.org, lee.jones@linaro.org,
-        jneanne@baylibre.com
-Cc:     narmstrong@baylibre.com, msp@baylibre.com, j-keerthy@ti.com,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [RFC PATCH 2/5] mfd: drivers: Add TI TPS65219 PMIC support
-In-Reply-To: <20220613090604.9975-3-jneanne@baylibre.com>
-References: <20220613090604.9975-1-jneanne@baylibre.com>
- <20220613090604.9975-3-jneanne@baylibre.com>
-Date:   Tue, 14 Jun 2022 14:03:46 -0700
-Message-ID: <7hy1xznej1.fsf@baylibre.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1655240712; x=1686776712;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=zHNPbzh4HbMwesIl6KtegtOdmncuo8oybAEWfwrDZ6Y=;
+  b=mOmJwOMB1dmZDVfbArnG/fIZDEqx6mvXYf8wrrtVaLaYq8D/fa+ra1qo
+   9RIoCuICuMebxyqTQhW0Njo0LbMB0w0QweNdUVTZ3NODFJI4e4l35PHIn
+   DL84BRdhfT38GRa6imF6P2wuDNP3xji96FGBsDNK4M8w8LHeKeABlnYJA
+   I=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 14 Jun 2022 14:05:12 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 14:05:11 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 14 Jun 2022 14:05:10 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 14 Jun 2022 14:05:10 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v6] drm/msm/dp: force link training for display resolution change
+Date:   Tue, 14 Jun 2022 14:05:02 -0700
+Message-ID: <1655240702-12230-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jerome NEANNE <jneanne@baylibre.com> writes:
+Display resolution change is implemented through drm modeset. Older
+modeset (resolution) has to be disabled first before newer modeset
+(resolution) can be enabled. Display disable will turn off both
+pixel clock and main link clock so that main link have to be
+re-trained during display enable to have new video stream flow
+again. At current implementation, display enable function manually
+kicks up irq_hpd_handle which will read panel link status and start
+link training if link status is not in sync state.
 
-> The TPS65219 is a power management IC PMIC designed
-> to supply a wide range of SoCs
-> in both portable and stationary applications.
-> Any SoC can control TPS65219 over a standard I2C interface.
->
-> It contains the following components:
-> - Regulators.
-> - Over Temperature warning and Shut down.
-> - GPIOs
-> - Multi Function Pins (MFP)
->
-> This patch adds support for tps65219 mfd device. At this time only
-> the functionalities listed below are made available:
->
-> - Regulators probe and functionalities
-> - warm and cold reset support
-> - SW shutdown support
->
-> Signed-off-by: Jerome NEANNE <jneanne@baylibre.com>
+However, there is rare case that a particular panel links status keep
+staying in sync for some period of time after main link had been shut
+down previously at display disabled. In this case, main link retraining
+will not be executed by irq_hdp_handle(). Hence video stream of newer
+display resolution will fail to be transmitted to panel due to main
+link is not in sync between host and panel.
 
-[...]
+This patch will bypass irq_hpd_hanle() in favor of directly call
+dp_ctrl_on_stream() to always perform link training in regardless of
+main link status. So that no unexpected exception resolution change
+failure cases will happen. Also this implementation are more efficient
+than manual kicking off irq_hpd_handle function.
 
-> +/**
-> + * pmic_rst_restart: trig tps65219 reset to SOC.
-> + *
-> + * Trigged via notifier
-> + */
-> +static int pmic_rst_restart(struct notifier_block *this,
-> +			  unsigned long mode, void *cmd)
-> +{
-> +	struct tps65219 *tps;
-> +
-> +	tps = container_of(this, struct tps65219, nb);
-> +	if (tps != NULL) {
-> +		if (WARMNCOLD)
+Changes in v2:
+-- set force_link_train flag on DP only (is_edp == false)
 
-This value is hard-coded to 1 in the header, so war reset will always be
-done.  
+Changes in v3:
+-- revise commit  text
+-- add Fixes tag
 
-> +			tps65219_warm_reset(tps);
-> +		else
-> +			tps65219_cold_reset(tps);
+Changes in v4:
+-- revise commit  text
 
-Doesn't the reboot_notifier get a value like REBOOT_WARM,
-REBOOT_COLD etc (c.f. enum in linux/reboot.h)  so you could properly select?
+Changes in v5:
+-- fix spelling at commit text
 
-Kevin
+Changes in v6:
+-- split dp_ctrl_on_stream() for phy test case
+-- revise commit text for modeset
+
+Fixes: 62671d2ef24b ("drm/msm/dp: fixes wrong connection state caused by failure of link train")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+---
+ drivers/gpu/drm/msm/dp/dp_ctrl.c    | 31 +++++++++++++++++++++++--------
+ drivers/gpu/drm/msm/dp/dp_ctrl.h    |  3 ++-
+ drivers/gpu/drm/msm/dp/dp_display.c | 13 ++++++-------
+ 3 files changed, 31 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.c b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+index af7a80c..cb9c7af 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.c
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.c
+@@ -1551,7 +1551,7 @@ static int dp_ctrl_process_phy_test_request(struct dp_ctrl_private *ctrl)
+ 
+ 	ret = dp_ctrl_on_link(&ctrl->dp_ctrl);
+ 	if (!ret)
+-		ret = dp_ctrl_on_stream(&ctrl->dp_ctrl);
++		ret = dp_ctrl_on_stream_phy_test_report(&ctrl->dp_ctrl);
+ 	else
+ 		DRM_ERROR("failed to enable DP link controller\n");
+ 
+@@ -1807,7 +1807,27 @@ static int dp_ctrl_link_retrain(struct dp_ctrl_private *ctrl)
+ 	return dp_ctrl_setup_main_link(ctrl, &training_step);
+ }
+ 
+-int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
++int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl)
++{
++	int ret = 0;
++	struct dp_ctrl_private *ctrl;
++
++	ctrl = container_of(dp_ctrl, struct dp_ctrl_private, dp_ctrl);
++
++	ctrl->dp_ctrl.pixel_rate = ctrl->panel->dp_mode.drm_mode.clock;
++
++	ret = dp_ctrl_enable_stream_clocks(ctrl);
++	if (ret) {
++		DRM_ERROR("Failed to start pixel clocks. ret=%d\n", ret);
++		return ret;
++	}
++
++	dp_ctrl_send_phy_test_pattern(ctrl);
++
++	return 0;
++}
++
++int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train)
+ {
+ 	int ret = 0;
+ 	bool mainlink_ready = false;
+@@ -1843,12 +1863,7 @@ int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl)
+ 		goto end;
+ 	}
+ 
+-	if (ctrl->link->sink_request & DP_TEST_LINK_PHY_TEST_PATTERN) {
+-		dp_ctrl_send_phy_test_pattern(ctrl);
+-		return 0;
+-	}
+-
+-	if (!dp_ctrl_channel_eq_ok(ctrl))
++	if (force_link_train || !dp_ctrl_channel_eq_ok(ctrl))
+ 		dp_ctrl_link_retrain(ctrl);
+ 
+ 	/* stop txing train pattern to end link training */
+diff --git a/drivers/gpu/drm/msm/dp/dp_ctrl.h b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+index 0745fde..9a39b00 100644
+--- a/drivers/gpu/drm/msm/dp/dp_ctrl.h
++++ b/drivers/gpu/drm/msm/dp/dp_ctrl.h
+@@ -21,7 +21,8 @@ struct dp_ctrl {
+ };
+ 
+ int dp_ctrl_on_link(struct dp_ctrl *dp_ctrl);
+-int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl);
++int dp_ctrl_on_stream(struct dp_ctrl *dp_ctrl, bool force_link_train);
++int dp_ctrl_on_stream_phy_test_report(struct dp_ctrl *dp_ctrl);
+ int dp_ctrl_off_link_stream(struct dp_ctrl *dp_ctrl);
+ int dp_ctrl_off_link(struct dp_ctrl *dp_ctrl);
+ int dp_ctrl_off(struct dp_ctrl *dp_ctrl);
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index c388323..b6d25ab 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -872,7 +872,7 @@ static int dp_display_enable(struct dp_display_private *dp, u32 data)
+ 		return 0;
+ 	}
+ 
+-	rc = dp_ctrl_on_stream(dp->ctrl);
++	rc = dp_ctrl_on_stream(dp->ctrl, data);
+ 	if (!rc)
+ 		dp_display->power_on = true;
+ 
+@@ -1654,6 +1654,7 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+ 	int rc = 0;
+ 	struct dp_display_private *dp_display;
+ 	u32 state;
++	bool force_link_train = false;
+ 
+ 	dp_display = container_of(dp, struct dp_display_private, dp_display);
+ 	if (!dp_display->dp_mode.drm_mode.clock) {
+@@ -1688,10 +1689,12 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+ 
+ 	state =  dp_display->hpd_state;
+ 
+-	if (state == ST_DISPLAY_OFF)
++	if (state == ST_DISPLAY_OFF) {
+ 		dp_display_host_phy_init(dp_display);
++		force_link_train = true;
++	}
+ 
+-	dp_display_enable(dp_display, 0);
++	dp_display_enable(dp_display, force_link_train);
+ 
+ 	rc = dp_display_post_enable(dp);
+ 	if (rc) {
+@@ -1700,10 +1703,6 @@ void dp_bridge_enable(struct drm_bridge *drm_bridge)
+ 		dp_display_unprepare(dp);
+ 	}
+ 
+-	/* manual kick off plug event to train link */
+-	if (state == ST_DISPLAY_OFF)
+-		dp_add_event(dp_display, EV_IRQ_HPD_INT, 0, 0);
+-
+ 	/* completed connection */
+ 	dp_display->hpd_state = ST_CONNECTED;
+ 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+

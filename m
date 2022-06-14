@@ -2,351 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2494954B118
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BABE54B07A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 14:24:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243495AbiFNMal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 08:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
+        id S232141AbiFNMXj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 08:23:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356858AbiFNM3i (ORCPT
+        with ESMTP id S230343AbiFNMXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 08:29:38 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AEDB2459B;
-        Tue, 14 Jun 2022 05:29:36 -0700 (PDT)
-Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LMnmj33QMzDqsq;
-        Tue, 14 Jun 2022 20:29:09 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 14 Jun 2022 20:29:34 +0800
-Received: from huawei.com (10.67.165.24) by dggpeml100012.china.huawei.com
- (7.185.36.121) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 14 Jun
- 2022 20:29:34 +0800
-From:   Kai Ye <yekai13@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <herbert@gondor.apana.org.au>
-CC:     <linux-crypto@vger.kernel.org>,
-        <linux-accelerators@lists.ozlabs.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        <zhangfei.gao@linaro.org>, <wangzhou1@hisilicon.com>,
-        <yekai13@huawei.com>
-Subject: [PATCH 3/3] crypto: hisilicon/qm - defining the device isolation strategy
-Date:   Tue, 14 Jun 2022 20:23:11 +0800
-Message-ID: <20220614122311.824-7-yekai13@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220614122311.824-1-yekai13@huawei.com>
-References: <20220614122311.824-1-yekai13@huawei.com>
+        Tue, 14 Jun 2022 08:23:38 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294CE1F2CA;
+        Tue, 14 Jun 2022 05:23:36 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 9FC5F21A66;
+        Tue, 14 Jun 2022 12:23:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655209415; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cytmGLkOXP0ZKr75iGxDdhwnxTw03pqO4oTaHscD8us=;
+        b=Y997rf9wM+mMkcXEZvmkhYR8CN3MIE9GMweLOZSWiflnDZT6Qg92Dy2UJXifLckTpdKuBu
+        F170nZv90IUnj2MeGFjB+vTofOYBepCXv/CkJlcDeSCD9FAL2z65B44yeC1JzxUITZlndE
+        hKzHBR0CsR+cNk8aDSPAyv63o6hRPzg=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 231A52C141;
+        Tue, 14 Jun 2022 12:23:35 +0000 (UTC)
+Date:   Tue, 14 Jun 2022 14:23:32 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Alexandru Elisei <alexandru.elisei@arm.com>, jack@suse.cz
+Cc:     sunjunchao2870@gmail.com, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, keescook@chromium.org, anton@enomsg.org,
+        ccross@android.com, tony.luck@intel.com, heiko@sntech.de,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, maco@android.com, hch@lst.de,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org
+Subject: Re: [BUG] rockpro64 board hangs in console_init() after commit
+ 10e14073107d
+Message-ID: <Yqh9xIwBVcabpSLe@alley>
+References: <Yqdry+IghSWnJ6pe@monolith.localdoman>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yqdry+IghSWnJ6pe@monolith.localdoman>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Define the device isolation strategy by the device driver. if the
-AER error frequency exceeds the value of setting for a certain
-period of time, The device will not be available in user space. The VF
-device use the PF device isolation strategy. All the hardware errors
-are processed by PF driver.
+On Mon 2022-06-13 17:54:35, Alexandru Elisei wrote:
+> Hi,
+> 
+> (Apologies for the long To: list, I've added everyone that
+> scripts/get_maintainer.pl listed for fs/{fs-writeback,inode}.c, for the
+> rockchip boards, for printk.c and for the tty layer)
+> 
+> When booting a kernel built from tag v5.19-rc2, my rockpro64-v2 hangs at
+> boot with this log:
+> 
+> [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd034]
+> [    0.000000] Linux version 5.19.0-rc2 (alex@redacted) (aarch64-linux-gnu-gcc (GCC) 12.1.0, GNU ld (GNU Binutils) 2.38) #90 SMP PREEMPT Mon Jun 13 17:13:12 BST 2022
+> [    0.000000] Machine model: Pine64 RockPro64 v2.0
+> [    0.000000] efi: UEFI not found.
+> [    0.000000] earlycon: uart0 at MMIO32 0x00000000ff1a0000 (options '1500000n8')
+> [    0.000000] printk: bootconsole [uart0] enabled
+> [    0.000000] NUMA: No NUMA configuration found
+> [    0.000000] NUMA: Faking a node at [mem 0x0000000000200000-0x00000000f7ffffff]
+> [    0.000000] NUMA: NODE_DATA [mem 0xf77dc140-0xf77ddfff]
+> [    0.000000] Zone ranges:
+> [    0.000000]   DMA      [mem 0x0000000000200000-0x00000000f7ffffff]
+> [    0.000000]   DMA32    empty
+> [    0.000000]   Normal   empty
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000000200000-0x00000000f7ffffff]
+> [    0.000000] Initmem setup node 0 [mem 0x0000000000200000-0x00000000f7ffffff]
+> [    0.000000] On node 0, zone DMA: 512 pages in unavailable ranges
+> [    0.000000] cma: Reserved 32 MiB at 0x00000000f0000000
+> [    0.000000] psci: probing for conduit method from DT.
+> [    0.000000] psci: PSCIv1.1 detected in firmware.
+> [    0.000000] psci: Using standard PSCI v0.2 function IDs
+> [    0.000000] psci: MIGRATE_INFO_TYPE not supported.
+> [    0.000000] psci: SMC Calling Convention v1.2
+> [    0.000000] percpu: Embedded 20 pages/cpu s41768 r8192 d31960 u81920
+> [    0.000000] Detected VIPT I-cache on CPU0
+> [    0.000000] CPU features: detected: GIC system register CPU interface
+> [    0.000000] CPU features: detected: ARM erratum 845719
+> [    0.000000] Fallback order for Node 0: 0
+> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 999432
+> [    0.000000] Policy zone: DMA
+> [    0.000000] Kernel command line: root=PARTUUID=7f4aab92-69d8-47f3-be10-624da40a71f9 rw earlycon rootwait
+> [    0.000000] Dentry cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
+> [    0.000000] Inode-cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+> [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+> [    0.000000] Memory: 3915796K/4061184K available (15552K kernel code, 2758K rwdata, 8668K rodata, 6336K init, 564K bss, 112620K reserved, 32768K cma-reserved)
+> [    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=6, Nodes=1
+> [    0.000000] rcu: Preemptible hierarchical RCU implementation.
+> [    0.000000] rcu: 	RCU event tracing is enabled.
+> [    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=6.
+> [    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+> [    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=6
+> [    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+> [    0.000000] GICv3: GIC: Using split EOI/Deactivate mode
+> [    0.000000] GICv3: 256 SPIs implemented
+> [    0.000000] GICv3: 0 Extended SPIs implemented
+> [    0.000000] Root IRQ handler: gic_handle_irq
+> [    0.000000] GICv3: GICv3 features: 16 PPIs
+> [    0.000000] GICv3: CPU0: found redistributor 0 region 0:0x00000000fef00000
+> [    0.000000] ITS [mem 0xfee20000-0xfee3ffff]
+> [    0.000000] ITS@0x00000000fee20000: allocated 65536 Devices @480000 (flat, esz 8, psz 64K, shr 0)
+> [    0.000000] ITS: using cache flushing for cmd queue
+> [    0.000000] GICv3: using LPI property table @0x0000000000440000
+> [    0.000000] GIC: using cache flushing for LPI property table
+> [    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0000000000450000
+> [    0.000000] GICv3: GIC: PPI partition interrupt-partition-0[0] { /cpus/cpu@0[0] /cpus/cpu@1[1] /cpus/cpu@2[2] /cpus/cpu@3[3] }
+> [    0.000000] GICv3: GIC: PPI partition interrupt-partition-1[1] { /cpus/cpu@100[4] /cpus/cpu@101[5] }
+> [    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+> [    0.000000] arch_timer: cp15 timer(s) running at 24.00MHz (phys).
+> [    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0x588fe9dc0, max_idle_ns: 440795202592 ns
+> [    0.000001] sched_clock: 56 bits at 24MHz, resolution 41ns, wraps every 4398046511097ns
+> [    0.005107] Console: colour dummy device 80x25
+> [    0.005549] printk: console [tty0] enabled
+> [    0.005956] printk: bootconsole [uart0] disabled
+> 
+> Config can be found at [1] (expires after 6 months). I've also built the
+> kernel with gcc 10.3.1 [2] (aarch64-none-linux-gnu), same issue.
+> 
+> I've bisected the build failure to commit 10e14073107d ("writeback: Fix
+> inode->i_io_list not be protected by inode->i_lock error"); I've confirmed
+> that that commit is responsible by successfully booting the board with a
+> kernel built from v5.19-rc2 + the above commit reverted.
 
-Signed-off-by: Kai Ye <yekai13@huawei.com>
----
- drivers/crypto/hisilicon/qm.c | 155 +++++++++++++++++++++++++++++++---
- include/linux/hisi_acc_qm.h   |   9 ++
- 2 files changed, 152 insertions(+), 12 deletions(-)
+It is strange. I can't see how consoles are related to filesystem
+writeback.
 
-diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-index b4ca2eb034d7..391d83929ad2 100644
---- a/drivers/crypto/hisilicon/qm.c
-+++ b/drivers/crypto/hisilicon/qm.c
-@@ -12,7 +12,6 @@
- #include <linux/pm_runtime.h>
- #include <linux/seq_file.h>
- #include <linux/slab.h>
--#include <linux/uacce.h>
- #include <linux/uaccess.h>
- #include <uapi/misc/uacce/hisi_qm.h>
- #include <linux/hisi_acc_qm.h>
-@@ -417,6 +416,16 @@ struct hisi_qm_resource {
- 	struct list_head list;
- };
- 
-+/**
-+ * struct qm_hw_err - structure of describes the device err
-+ * @list: hardware error list
-+ * @tick_stamp: timestamp when the error occurred
-+ */
-+struct qm_hw_err {
-+	struct list_head list;
-+	unsigned long long tick_stamp;
-+};
-+
- struct hisi_qm_hw_ops {
- 	int (*get_vft)(struct hisi_qm *qm, u32 *base, u32 *number);
- 	void (*qm_db)(struct hisi_qm *qm, u16 qn,
-@@ -3265,6 +3274,7 @@ static int hisi_qm_uacce_get_queue(struct uacce_device *uacce,
- 	qp->event_cb = qm_qp_event_notifier;
- 	qp->pasid = arg;
- 	qp->is_in_kernel = false;
-+	atomic_inc(&qm->uacce_ref);
- 
- 	return 0;
- }
-@@ -3272,7 +3282,9 @@ static int hisi_qm_uacce_get_queue(struct uacce_device *uacce,
- static void hisi_qm_uacce_put_queue(struct uacce_queue *q)
- {
- 	struct hisi_qp *qp = q->priv;
-+	struct hisi_qm *qm = qp->qm;
- 
-+	atomic_dec(&qm->uacce_ref);
- 	hisi_qm_cache_wb(qp->qm);
- 	hisi_qm_release_qp(qp);
- }
-@@ -3397,6 +3409,102 @@ static long hisi_qm_uacce_ioctl(struct uacce_queue *q, unsigned int cmd,
- 	return 0;
- }
- 
-+/**
-+ * qm_hw_err_isolate() - Try to isolate the uacce device with its VFs
-+ * @qm: The qm which we want to configure.
-+ *
-+ * according to user's configuration of isolation strategy. Warning: this
-+ * API should be called while there is no user on the device, or the users
-+ * on this device are suspended by slot resetting preparation of PCI AER.
-+ */
-+static int qm_hw_err_isolate(struct hisi_qm *qm)
-+{
-+	struct qm_hw_err *err, *tmp, *hw_err;
-+	struct qm_err_isolate *isolate;
-+	u32 count = 0;
-+
-+	isolate = &qm->isolate_data;
-+
-+#define SECONDS_PER_HOUR	3600
-+
-+	/* All the hw errs are processed by PF driver */
-+	if (qm->uacce->is_vf || atomic_read(&isolate->is_isolate) ||
-+		!isolate->hw_err_isolate_hz)
-+		return 0;
-+
-+	hw_err = kzalloc(sizeof(*hw_err), GFP_ATOMIC);
-+	if (!hw_err)
-+		return -ENOMEM;
-+	hw_err->tick_stamp = jiffies;
-+	list_for_each_entry_safe(err, tmp, &qm->uacce_hw_errs, list) {
-+		if ((hw_err->tick_stamp - err->tick_stamp) / HZ >
-+		    SECONDS_PER_HOUR) {
-+			list_del(&err->list);
-+			kfree(err);
-+		} else {
-+			count++;
-+		}
-+	}
-+	list_add(&hw_err->list, &qm->uacce_hw_errs);
-+
-+	if (count >= isolate->hw_err_isolate_hz)
-+		atomic_set(&isolate->is_isolate, 1);
-+
-+	return 0;
-+}
-+
-+static void qm_hw_err_destroy(struct hisi_qm *qm)
-+{
-+	struct qm_hw_err *err, *tmp;
-+
-+	list_for_each_entry_safe(err, tmp, &qm->uacce_hw_errs, list) {
-+		list_del(&err->list);
-+		kfree(err);
-+	}
-+}
-+
-+static enum uacce_dev_state hisi_qm_get_isolate_state(struct uacce_device *uacce)
-+{
-+	struct hisi_qm *qm = uacce->priv;
-+	struct hisi_qm *pf_qm;
-+
-+	if (uacce->is_vf) {
-+		pf_qm = pci_get_drvdata(pci_physfn(qm->pdev));
-+		qm->isolate_data.is_isolate = pf_qm->isolate_data.is_isolate;
-+	}
-+
-+	return atomic_read(&qm->isolate_data.is_isolate) ?
-+			UACCE_DEV_ISOLATE : UACCE_DEV_NORMAL;
-+}
-+
-+static int hisi_qm_isolate_strategy_write(struct uacce_device *uacce,
-+						const char *buf)
-+{
-+	struct hisi_qm *qm = uacce->priv;
-+	unsigned long val = 0;
-+
-+#define MAX_ISOLATE_STRATEGY	65535
-+
-+	if (atomic_read(&qm->uacce_ref))
-+		return -EBUSY;
-+
-+	/* must be set by PF */
-+	if (atomic_read(&qm->isolate_data.is_isolate) || uacce->is_vf)
-+		return -EINVAL;
-+
-+	if (kstrtoul(buf, 0, &val) < 0)
-+		return -EINVAL;
-+
-+	if (val > MAX_ISOLATE_STRATEGY)
-+		return -EINVAL;
-+
-+	qm->isolate_data.hw_err_isolate_hz = val;
-+	dev_info(&qm->pdev->dev,
-+		"the value of isolate_strategy is set to %lu.\n", val);
-+
-+	return 0;
-+}
-+
- static const struct uacce_ops uacce_qm_ops = {
- 	.get_available_instances = hisi_qm_get_available_instances,
- 	.get_queue = hisi_qm_uacce_get_queue,
-@@ -3405,9 +3513,22 @@ static const struct uacce_ops uacce_qm_ops = {
- 	.stop_queue = hisi_qm_uacce_stop_queue,
- 	.mmap = hisi_qm_uacce_mmap,
- 	.ioctl = hisi_qm_uacce_ioctl,
-+	.get_isolate_state = hisi_qm_get_isolate_state,
- 	.is_q_updated = hisi_qm_is_q_updated,
-+	.isolate_strategy_write = hisi_qm_isolate_strategy_write,
- };
- 
-+static void qm_remove_uacce(struct hisi_qm *qm)
-+{
-+	struct uacce_device *uacce = qm->uacce;
-+
-+	if (qm->use_sva) {
-+		qm_hw_err_destroy(qm);
-+		uacce_remove(uacce);
-+		qm->uacce = NULL;
-+	}
-+}
-+
- static int qm_alloc_uacce(struct hisi_qm *qm)
- {
- 	struct pci_dev *pdev = qm->pdev;
-@@ -3420,6 +3541,7 @@ static int qm_alloc_uacce(struct hisi_qm *qm)
- 	};
- 	int ret;
- 
-+	INIT_LIST_HEAD(&qm->uacce_hw_errs);
- 	ret = strscpy(interface.name, dev_driver_string(&pdev->dev),
- 		      sizeof(interface.name));
- 	if (ret < 0)
-@@ -3433,8 +3555,7 @@ static int qm_alloc_uacce(struct hisi_qm *qm)
- 		qm->use_sva = true;
- 	} else {
- 		/* only consider sva case */
--		uacce_remove(uacce);
--		qm->uacce = NULL;
-+		qm_remove_uacce(qm);
- 		return -EINVAL;
- 	}
- 
-@@ -5074,6 +5195,12 @@ static int qm_controller_reset_prepare(struct hisi_qm *qm)
- 		return ret;
- 	}
- 
-+	if (qm->use_sva) {
-+		ret = qm_hw_err_isolate(qm);
-+		if (ret)
-+			pci_err(pdev, "failed to isolate hw err!\n");
-+	}
-+
- 	ret = qm_wait_vf_prepare_finish(qm);
- 	if (ret)
- 		pci_err(pdev, "failed to stop by vfs in soft reset!\n");
-@@ -5401,19 +5528,24 @@ static int qm_controller_reset(struct hisi_qm *qm)
- 	ret = qm_soft_reset(qm);
- 	if (ret) {
- 		pci_err(pdev, "Controller reset failed (%d)\n", ret);
--		qm_reset_bit_clear(qm);
--		return ret;
-+		goto err_reset;
- 	}
- 
- 	ret = qm_controller_reset_done(qm);
--	if (ret) {
--		qm_reset_bit_clear(qm);
--		return ret;
--	}
-+	if (ret)
-+		goto err_reset;
- 
- 	pci_info(pdev, "Controller reset complete\n");
--
- 	return 0;
-+
-+err_reset:
-+	pci_err(pdev, "Controller reset failed (%d)\n", ret);
-+	qm_reset_bit_clear(qm);
-+
-+	/* if resetting fails, isolate the device */
-+	if (qm->use_sva && !qm->uacce->is_vf)
-+		atomic_set(&qm->isolate_data.is_isolate, 1);
-+	return ret;
- }
- 
- /**
-@@ -6186,8 +6318,7 @@ int hisi_qm_init(struct hisi_qm *qm)
- 
- err_alloc_uacce:
- 	if (qm->use_sva) {
--		uacce_remove(qm->uacce);
--		qm->uacce = NULL;
-+		qm_remove_uacce(qm);
- 	}
- err_irq_register:
- 	qm_irq_unregister(qm);
-diff --git a/include/linux/hisi_acc_qm.h b/include/linux/hisi_acc_qm.h
-index 6cabafffd0dd..c090aaaf9974 100644
---- a/include/linux/hisi_acc_qm.h
-+++ b/include/linux/hisi_acc_qm.h
-@@ -8,6 +8,7 @@
- #include <linux/iopoll.h>
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/uacce.h>
- 
- #define QM_QNUM_V1			4096
- #define QM_QNUM_V2			1024
-@@ -265,6 +266,11 @@ struct hisi_qm_list {
- 	void (*unregister_from_crypto)(struct hisi_qm *qm);
- };
- 
-+struct qm_err_isolate {
-+	u32 hw_err_isolate_hz;	/* user cfg freq which triggers isolation */
-+	atomic_t is_isolate;
-+};
-+
- struct hisi_qm {
- 	enum qm_hw_ver ver;
- 	enum qm_fun_type fun_type;
-@@ -329,6 +335,9 @@ struct hisi_qm {
- 	struct qm_shaper_factor *factor;
- 	u32 mb_qos;
- 	u32 type_rate;
-+	struct list_head uacce_hw_errs;
-+	atomic_t uacce_ref; /* reference of the uacce */
-+	struct qm_err_isolate isolate_data;
- };
- 
- struct hisi_qp_status {
--- 
-2.33.0
+Anyway, the commit 10e14073107d ("writeback: Fix inode->i_io_list not
+be protected by inode->i_lock error") modifies some locking and
+might be source of possible deadlocks.
 
+I am not familiar with the fs code. But I noticed the following.
+The patch adds:
+
++               if (!was_dirty) {
++                       wb = locked_inode_to_wb_and_lock_list(inode);
++                       spin_lock(&inode->i_lock);
+
+And locked_inode_to_wb_and_lock_list() is defined this way:
+
+/**
+ * locked_inode_to_wb_and_lock_list - determine a locked inode's wb and lock it
+ * @inode: inode of interest with i_lock held
+ *
+ * Returns @inode's wb with its list_lock held.  @inode->i_lock must be
+ * held on entry and is released on return.  The returned wb is guaranteed
+ * to stay @inode's associated wb until its list_lock is released.
+ */
+static struct bdi_writeback *
+locked_inode_to_wb_and_lock_list(struct inode *inode)
+	__releases(&inode->i_lock)
+	__acquires(&wb->list_lock)
+{
+	while (true) {
+		struct bdi_writeback *wb = inode_to_wb(inode);
+
+		/*
+		 * inode_to_wb() association is protected by both
+		 * @inode->i_lock and @wb->list_lock but list_lock nests
+		 * outside i_lock.  Drop i_lock and verify that the
+		 * association hasn't changed after acquiring list_lock.
+		 */
+		wb_get(wb);
+		spin_unlock(&inode->i_lock);
+
+It expects that inode->i_lock is taken before. But the problematic
+commit takes it later. It might mess the lock and cause a deadlock.
+
+Jack?
+
+
+> I tried to do some investigating, it seems that the kernel is stuck at
+> printk.c::console_init() -> drivers/tty/vt/vt.c::con_init() ->
+> printk.c::register_console() -> unregister_console() -> console_lock().
+> This has been determined by adding pr_info statements.
+
+So, you tried something like:
+
+int unregister_console(struct console *console)
+{
+	struct task_struct *thd;
+	struct console *con;
+	int res;
+
+	con_printk(KERN_INFO, console, "disabled\n");
+[...]
+
++	pr_info("Stage 1\n");
+	console_lock();
++	pr_info("Stage 2\n");
+
+[...]
+
+	console_unlock();
++	pr_info("Stage 3\n");
+[...]
+}
+
+And "Stage 1" was the last message on the console ?
+
+Does the system boot when you avoid "earlycon" parameter?
+
+
+> I've booted a kernel compiled with CONFIG_PROVE_LOCKING=y, as the offending
+> commit fiddles with locks, but no splat was produced that would explain the
+> hang. I've also tried to boot a v5,19-rc2 kernel on my odroid-c4, the board
+> is booting just fine, so I'm guessing it only affects of subset of arm64
+> boards.
+
+You might try to switch the order of console_init() and lockdep_init()
+in start_kernel() in init/main.c
+
+Best Regards,
+Petr

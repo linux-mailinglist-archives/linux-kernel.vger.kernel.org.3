@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B4854BB3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0302A54BB4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 22:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357012AbiFNUHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 16:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42280 "EHLO
+        id S1356810AbiFNUIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 16:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351733AbiFNUHe (ORCPT
+        with ESMTP id S1352187AbiFNUHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:07:34 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846325F4F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:07:26 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id c11-20020a17090a4d0b00b001e4e081d525so8643475pjg.7
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:07:26 -0700 (PDT)
+        Tue, 14 Jun 2022 16:07:35 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A31EB7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:07:28 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-2fed274f3fbso33959717b3.17
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:07:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=/Py9Wl5goNG9EkafS3McJwH0IeUf3VIZaz2X9X8WLpo=;
-        b=UDJlKpJOmkqypxjrLa7Npl/zLUFzASy7rj0pC/Jb0WCdVMh8xrKERa5N7sAKFQ5l01
-         a95GCVmTMRuVq070UaKKxwcSu3NEkA8xGX/2K4qW2IiqD0I1JZD3nfWdKzMsyF2KOBdc
-         IYk0lizeekO8DOxdbYVBT1z8BJrJl06o1A0Si8kOAP7pJxqMk84ub2SMQuvkUKSfzVx7
-         wXPPRzmZLnp4Qv5HF7Au65eHTmhXUsIV5wJ3JoUSgjHNmKgVJB95diRRu77bzYYoyJPM
-         zxLjBBXuEx9J6V0ayjToVGDaVo8+CGoEWv8jNjCQp7I1ghKa1b98qpVR3PTLrwdHIYcK
-         /ExQ==
+        bh=kVwV6JYFJ6utxVeswV5UZJLPrp6uZhhdEbw3jp8RhEE=;
+        b=WI/GojvuQE25iMByhGawtFgC8pDFtglByVBkcrSCmBzHfBVX+b9wbBRUbJMiZ24cpn
+         ict/0+XoxFi4p6RzUhvABJQHpIDoeOGvungKIIDC3E8TUJQihcTHQ4b982kAS5ID4WTo
+         OlMVSzBbgZl9UfkHgGavgVsEwPs02h9fU5J6Lac2SL5N2YCiX10U1j1ktDFwT/T5dnIY
+         UdQ3UJF1EWMg68JGoF5JtLPbVWOOq0eAPsYrirzA+ViZAReYmzMeRx9Pc1LMn3kxmxv/
+         44wsd5zQp3i01Ncrz+g1qChrthvY2A1TgkFisK9VNa1L3yD3t/U9clbsWH61dGkFMtGb
+         drAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=/Py9Wl5goNG9EkafS3McJwH0IeUf3VIZaz2X9X8WLpo=;
-        b=FtztAs49EF82b8GuZvjgzUkCmfE/zAilrb/b2lTkRJhJ7W/nWP7S+NnGZHgZJjvvGg
-         GMMzeH1wqysnQbZSaQFGpEIsTe4+f5IO/I6Q2OQs/G2UQkw2VTmArlnlJJiI2XkccGX+
-         /daEDOC+RTTsK7zpkQMy/W/kriAVPpVSrHfl3vxjOBOwTiVfAqPrjVyN+c0wM8BhqJQu
-         B0DFpGaFBugS2a1HQuji1Ve+pVoRlhm35BPmXkMZeLCnhk9PtiHEDWc9js7XFPggfXhR
-         mxJkYe+Yi5ofUkhUIZG36xpHxtL44ai3KRaZOEATKlUhgrtcSm+4vLTDByUyrXsGi+zl
-         4lTQ==
-X-Gm-Message-State: AJIora9Rugk6r/QhOVgxvFbpDBKYB+Is1hETKIKY3Y+80za3pRuCGVVx
-        1r2nLBCmo4di2sY2T5ell12EKWqKy4M=
-X-Google-Smtp-Source: AGRyM1sotNG6tjyoxS7kiO4PovYl0UZv23UCjHzxQyjTWMOc6aF2Af5Ca5lzgT1YeCt1ZTBSvaftpXBbWTk=
+        bh=kVwV6JYFJ6utxVeswV5UZJLPrp6uZhhdEbw3jp8RhEE=;
+        b=v7nLwlN+vzouW537JJTu2NnyctzAEW9ezI69/dHOHfnpSX8EToQoiK30zTAQIpfOis
+         neqLQ369HTp7Bd720dNAjy1LKtrVvFeSLvu9il9ttWfTYvSB5Xo9DlSXrIXcM7fqT30r
+         f47VcTQtn79y8ypUv68i0XmlMYXPAV5tgaonIZ7QGhsaVv13KYjYsulDUsicKhVVs332
+         +WJaeqbbTgKw+wd1aOegItsOZygNYrXJRX2csayBSf9hgc2TpPL3j23HcwIvb/nqau9F
+         nQf2H512ezJ78HIRk5NwRsplvS9P2TVZN6cNG50t0HpaJE+aKHR5f4+kbJW4qCVKdAOt
+         897w==
+X-Gm-Message-State: AJIora8jVdKIuWf6wQ/OQvWW166ECD4U3NxEGQ6f2QfLwyhAZLGwK8wU
+        ihABI8NG7NQKsnuCZpXKUefR4DPRTZc=
+X-Google-Smtp-Source: AGRyM1tChiJEQJlnuBJBQoShmjkNfYkRf+ieBtVl8lBlIfxB/XmyQmKWhT+UtRF6beTnzZgrsKWhdYNrXrg=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:90a:178f:b0:1e3:3ba:c185 with SMTP id
- q15-20020a17090a178f00b001e303bac185mr192336pja.1.1655237245815; Tue, 14 Jun
- 2022 13:07:25 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a0d:eb08:0:b0:30c:2f46:f7aa with SMTP id
+ u8-20020a0deb08000000b0030c2f46f7aamr7552327ywe.299.1655237247728; Tue, 14
+ Jun 2022 13:07:27 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 20:06:32 +0000
+Date:   Tue, 14 Jun 2022 20:06:33 +0000
 In-Reply-To: <20220614200707.3315957-1-seanjc@google.com>
-Message-Id: <20220614200707.3315957-8-seanjc@google.com>
+Message-Id: <20220614200707.3315957-9-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220614200707.3315957-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH v2 07/42] KVM: selftests: Use kvm_cpu_has() to query PDCM in
+Subject: [PATCH v2 08/42] KVM: selftests: Drop redundant vcpu_set_cpuid() from
  PMU selftest
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
@@ -64,70 +64,50 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use kvm_cpu_has() in the PMU test to query PDCM support instead of open
-coding equivalent functionality using kvm_get_supported_cpuid_index().
-
-No functional change intended.
+Drop a redundant vcpu_set_cpuid() from the PMU test.  The vCPU's CPUID is
+set to KVM's supported CPUID by vm_create_with_one_vcpu(), which was also
+true back when the helper was named vm_create_default().
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/include/x86_64/processor.h | 1 +
- tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c | 7 ++-----
- 2 files changed, 3 insertions(+), 5 deletions(-)
+ tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index e1f9aa34f90a..9fe2a9534686 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -79,6 +79,7 @@ struct kvm_x86_cpu_feature {
- #define	X86_FEATURE_MWAIT		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 3)
- #define	X86_FEATURE_VMX			KVM_X86_CPU_FEATURE(0x1, 0, ECX, 5)
- #define	X86_FEATURE_SMX			KVM_X86_CPU_FEATURE(0x1, 0, ECX, 6)
-+#define	X86_FEATURE_PDCM		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 15)
- #define	X86_FEATURE_PCID		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 17)
- #define	X86_FEATURE_MOVBE		KVM_X86_CPU_FEATURE(0x1, 0, ECX, 22)
- #define	X86_FEATURE_TSC_DEADLINE_TIMER	KVM_X86_CPU_FEATURE(0x1, 0, ECX, 24)
 diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-index eb592fae44ef..667d48e8c1e0 100644
+index 667d48e8c1e0..dc3869d5aff0 100644
 --- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-@@ -17,7 +17,6 @@
- #include "kvm_util.h"
- #include "vmx.h"
+@@ -53,7 +53,6 @@ static void guest_code(void)
  
--#define X86_FEATURE_PDCM	(1<<15)
- #define PMU_CAP_FW_WRITES	(1ULL << 13)
- #define PMU_CAP_LBR_FMT		0x3f
- 
-@@ -55,7 +54,6 @@ static void guest_code(void)
  int main(int argc, char *argv[])
  {
- 	struct kvm_cpuid2 *cpuid;
--	struct kvm_cpuid_entry2 *entry_1_0;
+-	struct kvm_cpuid2 *cpuid;
  	struct kvm_cpuid_entry2 *entry_a_0;
  	struct kvm_vm *vm;
  	struct kvm_vcpu *vcpu;
-@@ -70,11 +68,10 @@ int main(int argc, char *argv[])
+@@ -66,7 +65,6 @@ int main(int argc, char *argv[])
+ 
+ 	/* Create VM */
  	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
- 	cpuid = kvm_get_supported_cpuid();
+-	cpuid = kvm_get_supported_cpuid();
  
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_PDCM));
-+
- 	TEST_REQUIRE(kvm_get_cpuid_max_basic() >= 0xa);
--
--	entry_1_0 = kvm_get_supported_cpuid_index(1, 0);
- 	entry_a_0 = kvm_get_supported_cpuid_index(0xa, 0);
--	TEST_REQUIRE(entry_1_0->ecx & X86_FEATURE_PDCM);
+ 	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_PDCM));
  
- 	eax.full = entry_a_0->eax;
+@@ -77,7 +75,6 @@ int main(int argc, char *argv[])
  	__TEST_REQUIRE(eax.split.version_id, "PMU is not supported by the vCPU");
+ 
+ 	/* testcase 1, set capabilities when we have PDCM bit */
+-	vcpu_set_cpuid(vcpu, cpuid);
+ 	vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_FW_WRITES);
+ 
+ 	/* check capabilities can be retrieved with KVM_GET_MSR */
 -- 
 2.36.1.476.g0c4daa206d-goog
 

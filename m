@@ -2,86 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3231254A37B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A670B54A382
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 03:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234612AbiFNBPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 21:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51758 "EHLO
+        id S240088AbiFNBQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 21:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiFNBO7 (ORCPT
+        with ESMTP id S235476AbiFNBQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 21:14:59 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 690E820F73
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 18:14:58 -0700 (PDT)
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B923520C29A6;
-        Mon, 13 Jun 2022 18:14:57 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B923520C29A6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1655169298;
-        bh=jv9RhEpcUlvGbL9sQ7elV4SIcD7tvGoqa9vr/gW0wBY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IuMF/Gj6OCjwCm1oyiAXJeUN4MMtG+TIxmT7cyh6m1sPL8INXRIPEPydjL6j+B1pw
-         4QF2jdYTH2aulyWdGA+3BUKkgiHnZHmhs8/OvXzhWc51r/1iKxB3IowBg5zxs8uTy8
-         zt6HbBnQwYRrJvOaUnkM70BzBWr5DjxViV8L9IOo=
-Date:   Mon, 13 Jun 2022 20:14:55 -0500
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Dominique Martinet <asmadeus@codewreck.org>
-Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
-        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/06] fid refcounting improvements and fixes
-Message-ID: <20220614011455.GJ7401@sequoia>
-References: <20220612085330.1451496-1-asmadeus@codewreck.org>
- <20220613202053.GI7401@sequoia>
- <YqelZWe4BJfDkYEd@codewreck.org>
+        Mon, 13 Jun 2022 21:16:04 -0400
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14AC26112
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Jun 2022 18:16:03 -0700 (PDT)
+X-QQ-mid: bizesmtp90t1655169342tijaaqxk
+Received: from localhost.localdomain ( [58.240.82.166])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 14 Jun 2022 09:15:31 +0800 (CST)
+X-QQ-SSF: 01400000000000G0Q000000A0000000
+X-QQ-FEAT: sAyD0HLl0PAuQOTlQ+tOB27hOHnIdlm//flRfwqXgXhtH9Hgz8VbEkCTjUllm
+        2+OouONG9yKMJ3jCRrRkBZEGz+JIVPuyhRGN+/mbDChOgx4c35tvpguY/vCqaEhbp7EcICx
+        3aRH7P0GBWPefeoMr2CBMx41e/dok1TQrLR1zTXwAvRhjXY1jaeaSpOgoGFVV7byUefuGmQ
+        lxAiPHgwCvQQFjRnRUA9I2OlA3aE2dPpAPzvACb4mnF30lSyG7/TfXkX+L4fiPEg2tzVvKB
+        cZakLygrGWFuzqhaowRAkM7+g1QnB5SxVGPDGLJAijKUxovXrT8JtwY3g4vcgBXE+IcU6Yv
+        9WShbRc/CJX83N/+NDHR7NTwzWZRQ==
+X-QQ-GoodBg: 1
+From:   Meng Tang <tangmeng@uniontech.com>
+To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Cc:     Vinicius Costa Gomes <vinicius.gomes@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Meng Tang <tangmeng@uniontech.com>
+Subject: [PATCH 5.10 1/2] commit 1d71eb53e451 ("Revert "PCI: Make pci_enable_ptm() private"")
+Date:   Tue, 14 Jun 2022 09:15:27 +0800
+Message-Id: <20220614011528.32118-1-tangmeng@uniontech.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqelZWe4BJfDkYEd@codewreck.org>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybgforeign:qybgforeign10
+X-QQ-Bgrelay: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-14 06:00:21, Dominique Martinet wrote:
-> Tyler Hicks wrote on Mon, Jun 13, 2022 at 03:20:53PM -0500:
-> > On 2022-06-12 17:53:23, Dominique Martinet wrote:
-> > > @@ -222,7 +221,8 @@ static struct p9_fid *v9fs_fid_lookup_with_uid(struct dentry *dentry,
-> > >                  * We need to hold rename lock when doing a multipath
-> > >                  * walk to ensure none of the patch component change
-> > >                  */
-> > > -               fid = p9_client_walk(old_fid, l, &wnames[i], clone);
-> > > +               fid = p9_client_walk(old_fid, l, &wnames[i],
-> > > +                                    old_fid == root_fid /* clone */);
-> > 
-> > This is no problem at all. The rebased patches look good to me. Squash
-> > your fix to my fix and it should be ready to go.
-> 
-> Thanks for all your reviews :)
-> I've rebased my branch if you want to check:
-> https://github.com/martinetd/linux/commits/9p-next
+From: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 
-I've diffed the individual patches from before and after the rebase. It
-all looks great to me.
+Make pci_enable_ptm() accessible from the drivers.
 
-> We've just started a cycle so I'll submit the first three patches (fixes
-> to stable) next week, and the rest for when 5.20 cycle starts.
+Exposing this to the driver enables the driver to use the
+'ptm_enabled' field of 'pci_dev' to check if PTM is enabled or not.
 
-That sounds like the right plan to me.
+This reverts commit ac6c26da29c1 ("PCI: Make pci_enable_ptm() private").
 
-> Feel free to remind me if it looks like I forgot.
+In the 5.10 kernel version, even to the latest confirmed version,
+the following error will still be reported when I225-V network card
+is used.
 
-Will do!
+kernel: [    1.031581] igc: probe of 0000:01:00.0 failed with error -2
+kernel: [    1.066574] igc: probe of 0000:02:00.0 failed with error -2
+kernel: [    1.096152] igc: probe of 0000:03:00.0 failed with error -2
+kernel: [    1.127251] igc: probe of 0000:04:00.0 failed with error -2
 
-Tyler
+Even though I confirmed that 7c496de538eebd8212dc2a3c9a468386b2640d4
+and 47bca7de6a4fb8dcb564c7ca4d885c91ed19e03 have been merged into the
+kernel 5.10, the bug is still occurred, and the
+"commit 1b5d73fb8624 ("igc: Enable PCIe PTM")" can fixes it.
 
-> -- 
-> Dominique
-> 
+And this patch is the pre-patch of
+1b5d73fb862414106cf270a1a7300ce8ae77de83.
+
+Signed-off-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+---
+ drivers/pci/pci.h   | 3 ---
+ include/linux/pci.h | 7 +++++++
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/pci/pci.h b/drivers/pci/pci.h
+index a96dc6f53076..4084764bf0b1 100644
+--- a/drivers/pci/pci.h
++++ b/drivers/pci/pci.h
+@@ -585,11 +585,8 @@ static inline void pcie_ecrc_get_policy(char *str) { }
+ 
+ #ifdef CONFIG_PCIE_PTM
+ void pci_ptm_init(struct pci_dev *dev);
+-int pci_enable_ptm(struct pci_dev *dev, u8 *granularity);
+ #else
+ static inline void pci_ptm_init(struct pci_dev *dev) { }
+-static inline int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
+-{ return -EINVAL; }
+ #endif
+ 
+ struct pci_dev_reset_methods {
+diff --git a/include/linux/pci.h b/include/linux/pci.h
+index bc5a1150f072..692ce678c5f1 100644
+--- a/include/linux/pci.h
++++ b/include/linux/pci.h
+@@ -1599,6 +1599,13 @@ static inline bool pci_aer_available(void) { return false; }
+ 
+ bool pci_ats_disabled(void);
+ 
++#ifdef CONFIG_PCIE_PTM
++int pci_enable_ptm(struct pci_dev *dev, u8 *granularity);
++#else
++static inline int pci_enable_ptm(struct pci_dev *dev, u8 *granularity)
++{ return -EINVAL; }
++#endif
++
+ void pci_cfg_access_lock(struct pci_dev *dev);
+ bool pci_cfg_access_trylock(struct pci_dev *dev);
+ void pci_cfg_access_unlock(struct pci_dev *dev);
+-- 
+2.20.1
+
+
+

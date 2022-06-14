@@ -2,108 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2DB54B75E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC63D54B762
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244157AbiFNRKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 13:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        id S245018AbiFNRL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 13:11:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244387AbiFNRKp (ORCPT
+        with ESMTP id S1344371AbiFNRLv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 13:10:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D33E201A4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655226644;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wdTx0UxZNie9egiNrklzoc2+ItGio2T/VUZ8M/iIzT0=;
-        b=T4ggdqZRc+h6MPK9LpxEa1PBObhZjdQQ5IktKoU/aDp8ZgqzLlFUbxO0zoYqHR4e5GQXxq
-        ROhnA0gH+YFG0tQGrNWStPg4zoIaUnhk4l7YN8dtd5SROBqg9y5TUiXgsAVNkhCATz6M5f
-        QUDI3HKWVTr5xYUTiOBGu0s59+dLyLg=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-436-PY3QEOCLMyimevHu1Sw1pQ-1; Tue, 14 Jun 2022 13:10:42 -0400
-X-MC-Unique: PY3QEOCLMyimevHu1Sw1pQ-1
-Received: by mail-wm1-f71.google.com with SMTP id j20-20020a05600c1c1400b0039c747a1e5aso5075951wms.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:10:42 -0700 (PDT)
+        Tue, 14 Jun 2022 13:11:51 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FE221265
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:11:50 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id j20so10479275ljg.8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:11:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hyAFd7sRCaU+w7b+0hvxe+0ICDGoRhy4smmcnlfnVf8=;
+        b=VVS3gab1omADGHC2/BM3jOV1A6eY4GdNrthiz8+wp8S5cMIFr2uLLkmB9rWypRLBGh
+         CRxK1pt/YGuuK56vtZsvD/CNMXbTrPe44abbnBJSPlaV01HMvRdyVC7/7MaSsSEpfN7s
+         VDYCYJeggFAC7pCVElIRie85ffAJzopAS55ANKLnocre+BCSHOgwqfWQCRJcTPWE4Isn
+         EMA4XWOG5gWQCH1wII6Qhfdp2vMCpX6b1JJNwkUqT158J1cG33IKcVtKEJAS5U2wsbnf
+         ewajr7lOHPJhZ8+i/OX/prvULKZVaxQeqwV/q5JhEUl6DvRw7s02/8LnPBl0C23kEfKq
+         mpiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wdTx0UxZNie9egiNrklzoc2+ItGio2T/VUZ8M/iIzT0=;
-        b=GpzTOSb/ImaPphFEW+La7hDFzhzmu18xIq/R5C+uurzdFTmEJ1OV8Tfrr7DSd1bQ6q
-         q/rMQIlg/aTP0rUgMTUDeHguHeO6aAP/aMosqLg5gT6msRShdFMrXGw1nDUa4aDAzkpX
-         +d3qpvu0b6PLiFlWp2wbZ+jwyo4M80vuIz6yodDyjzOzczMb+EkGlDEgCHnnb6nKHZuP
-         jQBnHl1Q9ceIfipAHU1ydnWBBp0erlEFBd/2PsSQzXEBXzIOPCbxVYwFO22oVkTlAgeN
-         HDbqjHwci0ZfXJb8Kt/XDMEVsWs/a1zQhiZnNCxbsuZF/j4khWNfAuklKllTmBNw+yUZ
-         lj3Q==
-X-Gm-Message-State: AJIora9oDwjtGt+QNESueIwYWG53r576v+c3lESOj6sXo7yu1rk+wQlt
-        vFZD25d3fXn5zmealLk8LnYCeR4Ur6hxooUqUZX7yT7lxfigbq3kb3csVoEqp18y7k/OAgjrkm7
-        Kpq6KOKvcKgo+BR7Iw4CaRjfF
-X-Received: by 2002:a5d:5222:0:b0:213:b7f7:58fe with SMTP id i2-20020a5d5222000000b00213b7f758femr5502059wra.620.1655226641542;
-        Tue, 14 Jun 2022 10:10:41 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1t9/AkMew9VeDM8YYt21zvgf/5/6NovrH8S/spj9cUNFHVR2U9Nsa7Do36pfJPc1RFOGvs39g==
-X-Received: by 2002:a5d:5222:0:b0:213:b7f7:58fe with SMTP id i2-20020a5d5222000000b00213b7f758femr5502044wra.620.1655226641339;
-        Tue, 14 Jun 2022 10:10:41 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id r20-20020a05600c35d400b0039c1396b495sm14287976wmq.9.2022.06.14.10.10.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 10:10:40 -0700 (PDT)
-Message-ID: <25edd702-3364-921c-2bcf-015fd86296c4@redhat.com>
-Date:   Tue, 14 Jun 2022 19:10:30 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hyAFd7sRCaU+w7b+0hvxe+0ICDGoRhy4smmcnlfnVf8=;
+        b=tzv6LRaC/bWBthChqx5hp9NmluWH3UaGhBVxhoHEY2aFA+bW8GNvo4y2IR7nU4w86Q
+         IYXgm8nyuPU5YIbhdDOVocRTfc6ZA5EAWa2nSYG7tOArbnHlflOnw06SzQ3psdf5iLfO
+         nJvYFBNT8eEWjr7+wkxObAJsjJjoMzZiXaGB/uAvnrLebgaqhjaO/lWV+7bn9PQIt/gQ
+         g5pgCeV7W1tRhfzi5yE1/IyvGiCe6cu009q3KpU0vP0+5Pu7pZEJp5BxrZSG6ytJjsMg
+         9tRvXL1OEIhfRyCTCPSt9XO06Vd6tMOORNd51d924YeXlLjb6PY2ZRpg0+orDxPJ2X+L
+         1KWQ==
+X-Gm-Message-State: AJIora9m5NpTil5D33Bof4yvPh18srSs7xPjFna3nzJGYotC4+exj4dX
+        QSlFY0REP+2MR88sdZzHnG5l+2HfQ3jWgSbQtsD2wA==
+X-Google-Smtp-Source: AGRyM1t/zo81ZsO+O0ZI1OPCqjgaCdubDxR4EFdi0YVKZ7767whrD8qazGD2NsdH5B4zjqm8DDOFG4TjN6wHpKoUiwY=
+X-Received: by 2002:a2e:8e98:0:b0:255:9d3d:bac3 with SMTP id
+ z24-20020a2e8e98000000b002559d3dbac3mr3037050ljk.103.1655226708884; Tue, 14
+ Jun 2022 10:11:48 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/8] KVM: x86/mmu: Drop unused CMPXCHG macro from
- paging_tmpl.h
-Content-Language: en-US
-To:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20220613225723.2734132-1-seanjc@google.com>
- <20220613225723.2734132-2-seanjc@google.com>
- <CAJhGHyDjFCJdRjdV-W5+reg-3jiwJAqeCQ7A-vdUqt+dToJBdA@mail.gmail.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <CAJhGHyDjFCJdRjdV-W5+reg-3jiwJAqeCQ7A-vdUqt+dToJBdA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220614144853.3693273-1-glider@google.com> <CAHk-=whaWnwB8guceg8V=bA1adv74GNaMk2FEu+YQkBKUqxVoA@mail.gmail.com>
+In-Reply-To: <CAHk-=whaWnwB8guceg8V=bA1adv74GNaMk2FEu+YQkBKUqxVoA@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 14 Jun 2022 10:11:37 -0700
+Message-ID: <CAKwvOd=SotrVcZshzGzsMprkORkVXFwYc-3mREkJSDCQ1nvbFw@mail.gmail.com>
+Subject: Re: [PATCH] [RFC] Initialization of unused function parameters
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vitaly Buka <vitalybuka@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-toolchains <linux-toolchains@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/22 04:13, Lai Jiangshan wrote:
-> On Tue, Jun 14, 2022 at 6:59 AM Sean Christopherson <seanjc@google.com> wrote:
->>
->> Drop the CMPXCHG macro from paging_tmpl.h, it's no longer used now that
->> KVM uses a common uaccess helper to do 8-byte CMPXCHG.
->>
->> Fixes: f122dfe44768 ("KVM: x86: Use __try_cmpxchg_user() to update guest PTE A/D bits")
->> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> 
-> 
-> In https://lore.kernel.org/lkml/20220605063417.308311-2-jiangshanlai@gmail.com/
-> two other unused macros are also removed.
-> 
+On Tue, Jun 14, 2022 at 9:48 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Tue, Jun 14, 2022 at 7:49 AM Alexander Potapenko <glider@google.com> wrote:
+> >
+> > The bigger question I want to raise here is whether we want to
+> > discourage passing uninitialized variables to functions in the kernel
+> > altogether.
+>
+> I'm assuming you mean pass by reference.
+>
+> Some functions are really fundamentally about initializing things, and
+> expect uninitialized allocations.
+>
+> Obviously the traditional example of this is "memset()", and that one
+> can be special-cased as obvious, but we probably have a ton of wrapper
+> things like that.
+>
+> IOW, things like just "snprintf()" etc is fundamentally passed an
+> uninitialized buffer, because the whole point is that it will write to
+> that buffer.
+>
+> And no, we don't want to initialize it, since the buffer may be big
+> (on purpose).
+>
+> Now, for *small* things (like that "pointer to inode") that aren't
+> some kind of array or big structure, I think it might be good to
+> perhaps be stricter. But even there we do have cases where we pass
+> things by reference because the function is explicitly designed to
+> initialize the value: the argument isn't really "an argument", it's a
+> "second return value".
+>
+> But always initializing in the caller sounds stupid and
+> counter-productive, since the point is to initialize by calling the
+> helper function (think things like returning a "cookie" or similar:
+> initializing the cookie to NULL in the caller is just plain _wrong_.
+>
+> What I think might be a good model is to be able to mark such
+> arguments as "must be initialized by callee".
 
-Queued that one, thanks!
+Yeah, being able to enforce that would be nice.
 
-Paolo
+Now that we have clang's static analyzer wired up (commit 6ad7cbc01527
+("Makefile: Add clang-tidy and static analyzer support to makefile")),
+Intel's 0day bot has been reporting cases it finds for some classes of
+warnings.  There's been a few interesting (to me) cases where these
+"init" routines would conditionally initialize a "second return value"
+but the caller either did not do return value checking or the callee
+was not marked __must_check (or both).
 
+As with -Wsometimes-uninitialized, my experience has been that folks
+consistently get error handling/exceptional cases wrong in so far as
+passing unitialized values later.  Clang's -Wsometimes-uninitialized
+is intra-proceedural, so doesn't catch the problems with "init"
+routines. Clang's static analyzer is interproceedural; the trade off
+being the time the analysis takes.
+
+Maybe a new function parameter attribute would be nice?
+
+#define __must_init __attribute__((must_init))
+int init (int * __must_init x) {
+// ^ warning: function parameter x marked '__attribute__((must_init))'
+not unconditionally initialized
+  if (stars_dont_align) {
+    return -42;
+  }
+  *x = 42;
+  return 0;
+}
+void foo (void) {  int x; init(&x); /* use of x without fear */ }
+
+
+>
+> So then the rule could be that small arguments passed by reference
+> have to be either initialized by the caller, or the argument must have
+> that "initialized by callee" attribute, and then the initialization
+> would be enforced in the callee instead.
+>
+> But making the rule be that the caller *always* has to initialize
+> sounds really wrong to me.
+>
+>              Linus
+
+
+
+-- 
+Thanks,
+~Nick Desaulniers

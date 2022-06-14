@@ -2,152 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E78B354B503
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A2AF54B4FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356959AbiFNPnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
+        id S244857AbiFNPn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345961AbiFNPnA (ORCPT
+        with ESMTP id S237232AbiFNPny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:43:00 -0400
-Received: from smtpout1.mo528.mail-out.ovh.net (smtpout1.mo528.mail-out.ovh.net [46.105.34.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0942039813;
-        Tue, 14 Jun 2022 08:42:58 -0700 (PDT)
-Received: from pro2.mail.ovh.net (unknown [10.108.16.169])
-        by mo528.mail-out.ovh.net (Postfix) with ESMTPS id 4DA7E10C19235;
-        Tue, 14 Jun 2022 17:42:57 +0200 (CEST)
-Received: from localhost.localdomain (88.161.25.233) by DAG1EX2.emp2.local
- (172.16.2.2) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Tue, 14 Jun
- 2022 17:42:56 +0200
-From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-To:     <pavel@ucw.cz>, <krzk+dt@kernel.org>, <andy.shevchenko@gmail.com>
-CC:     <robh+dt@kernel.org>, <linux-leds@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Subject: [PATCH v5 3/3] leds: tlc5925: Add support for non blocking operations
-Date:   Tue, 14 Jun 2022 17:42:45 +0200
-Message-ID: <20220614154245.354167-4-jjhiblot@traphandler.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220614154245.354167-1-jjhiblot@traphandler.com>
-References: <20220614154245.354167-1-jjhiblot@traphandler.com>
+        Tue, 14 Jun 2022 11:43:54 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8522C366B7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:43:53 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id o17so8072084pla.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 08:43:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=v7R3AU8eay3jFLbgOIExfUOsI5EdQhSbQRsdrHwotJw=;
+        b=ehHmS6K8XnQ2SrjXe0GbtBVb7v2r/7AcW7sIGGWUjjSMTDgZG99AgHzHG+emgMuy78
+         oJg0pzPpvCtiu3YGgen4uTSgcaIQrSr23K6ULxNbRwaPO6Yv/2KLZXVbn7tBDmMEA+JB
+         /OEgfzksSH1MA4vy1vX+tyavgxHUWffoUJgQft6aRg+kifewPpPNV53IAZXgkNQBHTWY
+         Ql4t/SIvDY0bHTODMSic0GJaxZI6gfqzTzQMvW4xvnj/rmFRw+k9nbzv081yS6sEUTLa
+         VSazk4yWTKuGPfHB+dJmXxfbDPgU54AVHMrrKLFMMzFiEc/Rb9mMF6g9UULaB5YLhewT
+         nzjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=v7R3AU8eay3jFLbgOIExfUOsI5EdQhSbQRsdrHwotJw=;
+        b=zS9N7qHT+ZiFm4vpmVhcJOamp7avwOQJ/Ablsb+5nUJrpASawO2fKzDonAgSgEbeZN
+         fBSoKL3TxR0sW9jbHARUrcMuBd6FFgFwoRzzjcJiDGqdchGSqV4vDr+F4IQD8JmocnrD
+         hKaqddxscvdgoLjx9wWHgsAcO2Yfe29TQ4svPK/oKKM9lW17cFFAjkbxTR2fz316XY9G
+         XTLsbktnN/yJpIZSRGctNbE1BMBCI0O9iU62bNnSRzDaRZ/RNxje8Tgpbbgu9VHBtCjH
+         MDUsCUIwL2UlVAP4XxTfiNyuhRrS1zr3HmBzm1WbuYWcv2/quLbFRaiUA5C/DQldhbfB
+         GFNQ==
+X-Gm-Message-State: AJIora+OrfJU6xtq5yU8ToQCB4XFkQN07GML58NpGIdDpZQ9UGVzLxVj
+        ni4PtjLzcHCdyJUoI1X81EN3Yw==
+X-Google-Smtp-Source: AGRyM1sSpS8ksQoeFsAiBuqnaVFCfTWw36cqGK81vkz64eI2RfYURAd4rfysk6IagqiDsDg27788vA==
+X-Received: by 2002:a17:90a:fd0d:b0:1ea:b661:4fa1 with SMTP id cv13-20020a17090afd0d00b001eab6614fa1mr5238743pjb.46.1655221432801;
+        Tue, 14 Jun 2022 08:43:52 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id v11-20020a1709028d8b00b00165105518f6sm7390006plo.287.2022.06.14.08.43.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 08:43:52 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 15:43:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-efi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        brijesh.ksingh@gmail.com, tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com
+Subject: Re: [PATCH v12 19/46] x86/kernel: Make the .bss..decrypted section
+ shared in RMP table
+Message-ID: <YqistMvngNKEJu2o@google.com>
+References: <20220307213356.2797205-1-brijesh.singh@amd.com>
+ <20220307213356.2797205-20-brijesh.singh@amd.com>
+ <YqfabnTRxFSM+LoX@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [88.161.25.233]
-X-ClientProxiedBy: DAG1EX2.emp2.local (172.16.2.2) To DAG1EX2.emp2.local
- (172.16.2.2)
-X-Ovh-Tracer-Id: 12430216448895826395
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: 0
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrudduledgledtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucenucfjughrpefhvfevufffkffojghfggfgtghisehtkeertdertddtnecuhfhrohhmpeflvggrnhdqlfgrtghquhgvshcujfhisghlohhtuceojhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmqeenucggtffrrghtthgvrhhnpeduteevleevvefggfdvueffffejhfehheeuiedtgedtjeeghfehueduudegfeefueenucfkpheptddrtddrtddrtddpkeekrdduiedurddvhedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhrohdvrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepjhhjhhhisghlohhtsehtrhgrphhhrghnughlvghrrdgtohhmpdhnsggprhgtphhtthhopedupdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdfovfetjfhoshhtpehmohehvdek
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqfabnTRxFSM+LoX@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Settings multiple LEDs in a row can be a slow operation because of the
-time required to acquire the bus and prepare the transfer.
-And, in most cases, it is not required that the operation is synchronous.
-Implementing the non-blocking brightness_set() for such cases.
-A work queue is used to perform the actual SPI transfer.
+On Tue, Jun 14, 2022, Sean Christopherson wrote:
+> s/Brijesh/Michael
+> 
+> On Mon, Mar 07, 2022, Brijesh Singh wrote:
+> > The encryption attribute for the .bss..decrypted section is cleared in the
+> > initial page table build. This is because the section contains the data
+> > that need to be shared between the guest and the hypervisor.
+> > 
+> > When SEV-SNP is active, just clearing the encryption attribute in the
+> > page table is not enough. The page state need to be updated in the RMP
+> > table.
+> > 
+> > Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> > ---
+> >  arch/x86/kernel/head64.c | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
+> > 
+> > diff --git a/arch/x86/kernel/head64.c b/arch/x86/kernel/head64.c
+> > index 83514b9827e6..656d2f3e2cf0 100644
+> > --- a/arch/x86/kernel/head64.c
+> > +++ b/arch/x86/kernel/head64.c
+> > @@ -143,7 +143,20 @@ static unsigned long __head sme_postprocess_startup(struct boot_params *bp, pmdv
+> >  	if (sme_get_me_mask()) {
+> >  		vaddr = (unsigned long)__start_bss_decrypted;
+> >  		vaddr_end = (unsigned long)__end_bss_decrypted;
+> > +
+> >  		for (; vaddr < vaddr_end; vaddr += PMD_SIZE) {
+> > +			/*
+> > +			 * On SNP, transition the page to shared in the RMP table so that
+> > +			 * it is consistent with the page table attribute change.
+> > +			 *
+> > +			 * __start_bss_decrypted has a virtual address in the high range
+> > +			 * mapping (kernel .text). PVALIDATE, by way of
+> > +			 * early_snp_set_memory_shared(), requires a valid virtual
+> > +			 * address but the kernel is currently running off of the identity
+> > +			 * mapping so use __pa() to get a *currently* valid virtual address.
+> > +			 */
+> > +			early_snp_set_memory_shared(__pa(vaddr), __pa(vaddr), PTRS_PER_PMD);
+> 
+> This breaks SME on Rome and Milan when compiling with clang-13.  I haven't been
+> able to figure out exactly what goes wrong.  printk isn't functional at this point,
+> and interactive debug during boot on our test systems is beyond me.  I can't even
+> verify that the bug is specific to clang because the draconian build system for our
+> test systems apparently is stuck pointing at gcc-4.9.
+> 
+> I suspect the issue is related to relocation and/or encrypting memory, as skipping
+> the call to early_snp_set_memory_shared() if SNP isn't active masks the issue.
+> I've dug through the assembly and haven't spotted a smoking gun, e.g. no obvious
+> use of absolute addresses.
+> 
+> Forcing a VM through the same path doesn't fail.  I can't test an SEV guest at the
+> moment because INIT_EX is also broken.
 
-The blocking method is still available in case someone needs to perform
-this operation synchronously (ie by calling led_set_brightness_sync()).
+The SEV INIT_EX was a PEBKAC issue.  An SEV guest boots just fine with a clang-built
+kernel, so either it's a finnicky relocation issue or something specific to SME.
 
-Signed-off-by: Jean-Jacques Hiblot <jjhiblot@traphandler.com>
----
- drivers/leds/leds-tlc5925.c | 38 +++++++++++++++++++++++++++++++++++--
- 1 file changed, 36 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/leds/leds-tlc5925.c b/drivers/leds/leds-tlc5925.c
-index 2fb91d9767aa..786497c84ca4 100644
---- a/drivers/leds/leds-tlc5925.c
-+++ b/drivers/leds/leds-tlc5925.c
-@@ -16,6 +16,7 @@
- #include <linux/module.h>
- #include <linux/property.h>
- #include <linux/types.h>
-+#include <linux/workqueue.h>
- #include <linux/spi/spi.h>
- #include <linux/gpio/consumer.h>
- 
-@@ -27,10 +28,25 @@ struct single_led_priv {
- struct tlc5925_leds_priv {
- 	int max_num_leds;
- 	unsigned long *state;
-+	struct spi_device *spi;
-+	struct work_struct xmit_work;
- 	struct single_led_priv leds[];
- };
- 
--static int tlc5925_brightness_set_blocking(struct led_classdev *cdev,
-+static int xmit(struct tlc5925_leds_priv *priv)
-+{
-+	return spi_write(priv->spi, priv->state, BITS_TO_BYTES(priv->max_num_leds));
-+}
-+
-+static void xmit_work(struct work_struct *ws)
-+{
-+	struct tlc5925_leds_priv *priv =
-+		container_of(ws, struct tlc5925_leds_priv, xmit_work);
-+
-+	xmit(priv);
-+};
-+
-+static void tlc5925_brightness_set(struct led_classdev *cdev,
- 					    enum led_brightness brightness)
- {
- 	struct spi_device *spi = to_spi_device(cdev->dev->parent);
-@@ -41,9 +57,23 @@ static int tlc5925_brightness_set_blocking(struct led_classdev *cdev,
- 
- 	assign_bit(index, priv->state, !!brightness);
- 
--	return spi_write(spi, priv->state, BITS_TO_BYTES(priv->max_num_leds));
-+	schedule_work(&priv->xmit_work);
- }
- 
-+static int tlc5925_brightness_set_blocking(struct led_classdev *cdev,
-+					    enum led_brightness brightness)
-+{
-+	struct spi_device *spi = to_spi_device(cdev->dev->parent);
-+	struct tlc5925_leds_priv *priv = spi_get_drvdata(spi);
-+	struct single_led_priv *led =
-+		container_of(cdev, struct single_led_priv, cdev);
-+	int index = led->idx;
-+
-+	assign_bit(index, priv->state, !!brightness);
-+
-+	cancel_work_sync(&priv->xmit_work);
-+	return xmit(priv);
-+}
- static int tlc5925_probe(struct spi_device *spi)
- {
- 	struct device *dev = &spi->dev;
-@@ -83,6 +113,9 @@ static int tlc5925_probe(struct spi_device *spi)
- 	if (!priv->state)
- 		return -ENOMEM;
- 
-+	priv->spi = spi;
-+	INIT_WORK(&priv->xmit_work, xmit_work);
-+
- 	priv->max_num_leds = max_num_leds;
- 
- 	device_for_each_child_node(dev, child) {
-@@ -103,6 +136,7 @@ static int tlc5925_probe(struct spi_device *spi)
- 		cdev = &(priv->leds[count].cdev);
- 		cdev->brightness = LED_OFF;
- 		cdev->max_brightness = 1;
-+		cdev->brightness_set = tlc5925_brightness_set;
- 		cdev->brightness_set_blocking = tlc5925_brightness_set_blocking;
- 
- 		ret = devm_led_classdev_register_ext(dev, cdev, &init_data);
--- 
-2.25.1
-
+> The crash incurs a very, very slow reboot, and I was out of cycles to work on this
+> about three hours ago.  If someone on the AMD side can repro, it would be much
+> appreciated.

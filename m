@@ -2,99 +2,261 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE83854B477
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:20:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECFE654B47C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 17:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356619AbiFNPS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 11:18:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
+        id S1356645AbiFNPUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 11:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343593AbiFNPSz (ORCPT
+        with ESMTP id S235225AbiFNPUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 11:18:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A9D2F38C;
-        Tue, 14 Jun 2022 08:18:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Jun 2022 11:20:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F1031358;
+        Tue, 14 Jun 2022 08:20:01 -0700 (PDT)
+Received: from [IPV6:2a01:e0a:120:3210:4a7b:8d3a:acaa:ec46] (unknown [IPv6:2a01:e0a:120:3210:4a7b:8d3a:acaa:ec46])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D647B81983;
-        Tue, 14 Jun 2022 15:18:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9EBFC3411C;
-        Tue, 14 Jun 2022 15:18:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655219932;
-        bh=J2nvep70ztufiXjK8zkqurUdHaOco9RVIdWlW0n//ik=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ZipO5ZUCf6/omUHuCtPPDid9mJmPTsQbtBfZJv3CZXICjksUqnCCcTqGd0Caj5S0Y
-         er2IByOB7/FLY9qdimOGr/UILfocQXjY4bADekWWr7aKPuF34r/XJwbt2kf448nwiK
-         viNdfrEyxe3GtZAEVGN9hIkgJnnSsLjTxRsB8SS/JyRoQ3RHVGcsFZOtrxbpmpRWTM
-         iO9JPu2qKHF759X/LF5VjZzuf/nbgEmU46wlwuA57QGeJhTGsTlqPJYk/ZhXPWY/iX
-         J9dVcNzzU5V6PB+vw/o0FAKkpG7rpBfszgE9g9sE0H5/1LCLppVXb0IeUHnmXE99TZ
-         4O4CL1BXKDO5A==
-Date:   Tue, 14 Jun 2022 10:18:50 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Ferry Toth <ftoth@exalondelft.nl>
-Subject: Re: [PATCH v1 1/1] x86/PCI: Disable e820 usage for the resource
- allocation
-Message-ID: <20220614151850.GA756316@bhelgaas>
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7D48C66016B6;
+        Tue, 14 Jun 2022 16:19:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655220000;
+        bh=FLW3rBQJG448Plypio646nbZo8pZ8RL4jC5iqbrceSg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ic9Lhc6v6UArFD38yUoCYxHOWaTtaRst0ve5YFMs8Q6Cqv4O3D0bVyk39wyHixrCS
+         8Xd6ocDOIS1jTgP0blCdQ04gxqJyZBhZya/zGFp/EDyp5Ww3xVUv53TZh3LXt15zJh
+         qcfS23F9HLg5DxGcsL+TMociIwpRp1N2JbSWq3nUa6Ptk/D5Aa4RDteVnON8g0HN7w
+         4foA79x4hWviqS2oDmt14QTuiOi+IQS0qCR/MASBw6RE9lD7nPSaGoUqFq7gJj1qz5
+         rZ4PS8nnV47Er/s+GlZ/IX6V2wau+vi1TRp7l6lYzIW9DYbFuzMKgNgAxjcdLlOYJF
+         ocJT26ujbd1Vg==
+Message-ID: <b1618d76-4548-0bd2-0140-eddc0afde2d3@collabora.com>
+Date:   Tue, 14 Jun 2022 17:19:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqh3PtENhktETx4S@smile.fi.intel.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v8 15/17] media: uapi: HEVC: fix padding in v4l2 control
+ structures
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil@xs4all.nl>, mchehab@kernel.org,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        gregkh@linuxfoundation.org, mripard@kernel.org,
+        paul.kocialkowski@bootlin.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        kernel@collabora.com
+References: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
+ <20220614083614.240641-16-benjamin.gaignard@collabora.com>
+ <0c656c92-f029-bc02-6026-23649836d080@xs4all.nl>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+In-Reply-To: <0c656c92-f029-bc02-6026-23649836d080@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 02:55:42PM +0300, Andy Shevchenko wrote:
-> On Mon, Jun 13, 2022 at 05:35:20PM -0500, Bjorn Helgaas wrote:
-> > On Mon, Jun 13, 2022 at 11:16:41PM +0300, Andy Shevchenko wrote:
-> > > The resource management improve for PCI on x86 broke booting of Intel MID
-> > > platforms. It seems that the current code removes all available resources
-> > > from the list and none of the PCI device may be initialized. Restore the
-> > > old behaviour by force disabling the e820 usage for the resource allocation.
-> > > 
-> > > Fixes: 4c5e242d3e93 ("x86/PCI: Clip only host bridge windows for E820 regions")
-> > > Depends-on: fa6dae5d8208 ("x86/PCI: Add kernel cmdline options to use/ignore E820 reserved regions")
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > 
-> > Yeah, I blew it with 4c5e242d3e93.  Can you provide more details on
-> > how the MID platforms broke?
-> 
-> It's not so easy. The breakage seems affects the console driver and earlycon
-> doesn't work. erlyprintk doesn't support 32-bit MMIO addresses (again,
-> addresses, not data size). That said, there is nothing to show at all.
-> 
-> What I did, I have bisected to your patch, commented out the call and instead
-> added a printk() to see what it does, and it basically removed all resources
-> listed in _CRS.
-> 
-> > Since you set "pci_use_e820 = false" for
-> > MID below, I assume MID doesn't depend on the e820 clipping and thus
-> > should not break if we turn off clipping by default in 2023 as in
-> > 0ae084d5a674 ("x86/PCI: Disable E820 reserved region clipping starting
-> > in 2023").
-> 
-> > But it'd be nice to see the dmesg log and make sure.
-> 
-> Nothing to provide (see above why), sorry.
 
-A dmesg log with a working kernel, especially from one with Hans'
-revert, which might have a little more logging about clipping, might
-have enough info to help figure this out.
+Le 14/06/2022 à 16:09, Hans Verkuil a écrit :
+> On 6/14/22 10:36, Benjamin Gaignard wrote:
+>> Fix padding where needed to remove holes and stay align on cache boundaries
+> align -> aligned
+>
+>> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+>> ---
+>>   .../media/v4l/ext-ctrls-codec.rst             |  6 +++---
+>>   drivers/media/v4l2-core/v4l2-ctrls-core.c     |  9 ---------
+>>   include/media/hevc-ctrls.h                    | 19 ++++++++++++-------
+>>   3 files changed, 15 insertions(+), 19 deletions(-)
+>>
+>> diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>> index 05228e280f66..48a8825a001b 100644
+>> --- a/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>> +++ b/Documentation/userspace-api/media/v4l/ext-ctrls-codec.rst
+>> @@ -3509,9 +3509,6 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>       * - __u8
+>>         - ``num_active_dpb_entries``
+>>         - The number of entries in ``dpb``.
+>> -    * - struct :c:type:`v4l2_hevc_dpb_entry`
+>> -      - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+>> -      - The decoded picture buffer, for meta-data about reference frames.
+>>       * - __u8
+>>         - ``num_poc_st_curr_before``
+>>         - The number of reference pictures in the short-term set that come before
+>> @@ -3535,6 +3532,9 @@ enum v4l2_mpeg_video_hevc_size_of_length_field -
+>>         - ``poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+>>         - PocLtCurr as described in section 8.3.2 "Decoding process for reference
+>>           picture set": provides the index of the long term references in DPB array.
+>> +    * - struct :c:type:`v4l2_hevc_dpb_entry`
+>> +      - ``dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX]``
+>> +      - The decoded picture buffer, for meta-data about reference frames.
+>>       * - __u64
+>>         - ``flags``
+>>         - See :ref:`Decode Parameters Flags <hevc_decode_params_flags>`
+>> diff --git a/drivers/media/v4l2-core/v4l2-ctrls-core.c b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+>> index c5c5407584ff..fb68786c498b 100644
+>> --- a/drivers/media/v4l2-core/v4l2-ctrls-core.c
+>> +++ b/drivers/media/v4l2-core/v4l2-ctrls-core.c
+>> @@ -824,20 +824,11 @@ static int std_validate_compound(const struct v4l2_ctrl *ctrl, u32 idx,
+>>   		if (p_hevc_decode_params->num_active_dpb_entries >
+>>   		    V4L2_HEVC_DPB_ENTRIES_NUM_MAX)
+>>   			return -EINVAL;
+>> -
+>> -		for (i = 0; i < p_hevc_decode_params->num_active_dpb_entries;
+>> -		     i++) {
+>> -			struct v4l2_hevc_dpb_entry *dpb_entry =
+>> -				&p_hevc_decode_params->dpb[i];
+>> -
+>> -			zero_padding(*dpb_entry);
+>> -		}
+>>   		break;
+>>   
+>>   	case V4L2_CTRL_TYPE_HEVC_SLICE_PARAMS:
+>>   		p_hevc_slice_params = p;
+>>   
+>> -		zero_padding(p_hevc_slice_params->pred_weight_table);
+>>   		zero_padding(*p_hevc_slice_params);
+>>   		break;
+>>   
+>> diff --git a/include/media/hevc-ctrls.h b/include/media/hevc-ctrls.h
+>> index efc0412ac41e..9abca1a75bd4 100644
+>> --- a/include/media/hevc-ctrls.h
+>> +++ b/include/media/hevc-ctrls.h
+>> @@ -133,7 +133,9 @@ struct v4l2_ctrl_hevc_sps {
+>>   	__u8	chroma_format_idc;
+>>   	__u8	sps_max_sub_layers_minus1;
+>>   
+>> +	__u8	reserved[6];
+>>   	__u64	flags;
+>> +	__u8	padding[24];
+> Why are there 24 padding bytes at the end? For future use? If so, what is
+> the rationale for '24'? Is it likely that new fields will be added in future
+> HEVC revisions? Or is it in case we forget something?
+>
+> It's missing kerneldoc comments as well: it should state that the application
+> must zero this.
+>
+> Why mix 'reserved' with 'padding'? It's odd to see both names in a single
+> struct.
+>
+> In any case, this patch goes beyond 'fixing padding', it is doing more.
+>
+> If you really want to add space for future use at the end of structs,
+> then do that in a separate patch together with a rationale for it.
 
-Bjorn
+I have used reserved fields in the middle of the structure to align the other
+fields like show by pahole.
+padding fields are there to be aligned on cache boundaries at the end of the
+structures.
+I don't plan to use in near future but trying to be future proof (maybe over
+doing here...)
+
+Regards,
+Benjamin
+
+>
+> Regards,
+>
+> 	Hans
+>
+>>   };
+>>   
+>>   #define V4L2_HEVC_PPS_FLAG_DEPENDENT_SLICE_SEGMENT_ENABLED	(1ULL << 0)
+>> @@ -210,9 +212,10 @@ struct v4l2_ctrl_hevc_pps {
+>>   	__s8	pps_beta_offset_div2;
+>>   	__s8	pps_tc_offset_div2;
+>>   	__u8	log2_parallel_merge_level_minus2;
+>> +	__u8	reserved[9];
+>>   
+>> -	__u8	padding[4];
+>>   	__u64	flags;
+>> +	__u8	padding[56];
+>>   };
+>>   
+>>   #define V4L2_HEVC_DPB_ENTRY_LONG_TERM_REFERENCE	0x01
+>> @@ -245,8 +248,8 @@ struct v4l2_hevc_dpb_entry {
+>>   	__u64	timestamp;
+>>   	__u8	flags;
+>>   	__u8	field_pic;
+>> +	__u16	reserved;
+>>   	__s32	pic_order_cnt_val;
+>> -	__u8	padding[2];
+>>   };
+>>   
+>>   /**
+>> @@ -285,8 +288,6 @@ struct v4l2_hevc_pred_weight_table {
+>>   	__s8	delta_chroma_weight_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX][2];
+>>   	__s8	chroma_offset_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX][2];
+>>   
+>> -	__u8	padding[6];
+>> -
+>>   	__u8	luma_log2_weight_denom;
+>>   	__s8	delta_chroma_log2_weight_denom;
+>>   };
+>> @@ -381,18 +382,20 @@ struct v4l2_ctrl_hevc_slice_params {
+>>   	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Picture timing SEI message */
+>>   	__u8	pic_struct;
+>>   
+>> +	__u8	reserved0[3];
+>>   	/* ISO/IEC 23008-2, ITU-T Rec. H.265: General slice segment header */
+>>   	__u32	slice_segment_addr;
+>>   	__u8	ref_idx_l0[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>>   	__u8	ref_idx_l1[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>>   	__u16	short_term_ref_pic_set_size;
+>>   	__u16	long_term_ref_pic_set_size;
+>> -	__u8	padding;
+>>   
+>>   	/* ISO/IEC 23008-2, ITU-T Rec. H.265: Weighted prediction parameter */
+>>   	struct v4l2_hevc_pred_weight_table pred_weight_table;
+>>   
+>> +	__u8	reserved1[2];
+>>   	__u64	flags;
+>> +	__u8	padding[40];
+>>   };
+>>   
+>>   #define V4L2_HEVC_DECODE_PARAM_FLAG_IRAP_PIC		0x1
+>> @@ -408,7 +411,6 @@ struct v4l2_ctrl_hevc_slice_params {
+>>    * @long_term_ref_pic_set_size: specifies the size of long-term reference
+>>    *				pictures set include in the SPS of the first slice
+>>    * @num_active_dpb_entries: the number of entries in dpb
+>> - * @dpb: the decoded picture buffer, for meta-data about reference frames
+>>    * @num_poc_st_curr_before: the number of reference pictures in the short-term
+>>    *			    set that come before the current frame
+>>    * @num_poc_st_curr_after: the number of reference pictures in the short-term
+>> @@ -419,6 +421,7 @@ struct v4l2_ctrl_hevc_slice_params {
+>>    * @poc_st_curr_after: provides the index of the short term after references
+>>    *		       in DPB array
+>>    * @poc_lt_curr: provides the index of the long term references in DPB array
+>> + * @dpb: the decoded picture buffer, for meta-data about reference frames
+>>    * @flags: see V4L2_HEVC_DECODE_PARAM_FLAG_{}
+>>    */
+>>   struct v4l2_ctrl_hevc_decode_params {
+>> @@ -426,14 +429,16 @@ struct v4l2_ctrl_hevc_decode_params {
+>>   	__u16	short_term_ref_pic_set_size;
+>>   	__u16	long_term_ref_pic_set_size;
+>>   	__u8	num_active_dpb_entries;
+>> -	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>>   	__u8	num_poc_st_curr_before;
+>>   	__u8	num_poc_st_curr_after;
+>>   	__u8	num_poc_lt_curr;
+>>   	__u8	poc_st_curr_before[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>>   	__u8	poc_st_curr_after[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>>   	__u8	poc_lt_curr[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>> +	__u8	reserved[4];
+>> +	struct	v4l2_hevc_dpb_entry dpb[V4L2_HEVC_DPB_ENTRIES_NUM_MAX];
+>>   	__u64	flags;
+>> +	__u8	padding[56];
+>>   };
+>>   
+>>   /**

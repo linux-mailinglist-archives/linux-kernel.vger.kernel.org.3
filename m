@@ -2,408 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BF754B394
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A51654B3F2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 16:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352699AbiFNOm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 10:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37878 "EHLO
+        id S1355050AbiFNOnW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 10:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245165AbiFNOmY (ORCPT
+        with ESMTP id S236671AbiFNOnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 10:42:24 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4E852DD44;
-        Tue, 14 Jun 2022 07:42:19 -0700 (PDT)
+        Tue, 14 Jun 2022 10:43:15 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B8F1A395
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 07:43:09 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25EBYGvv028312;
+        Tue, 14 Jun 2022 14:42:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=WZLWm2GRDxVCnTzecoazH8KRURQbZ9zm2EbOl26CxGI=;
+ b=g/NRIjRogFWKhLGHwl9dMyNeQ2M+si73k9m5ZwQGmDQU8FfKg/T64BPxdgyMsvRw9vPV
+ QZEm7KAXXUE3PhxSfxNsZ0US7Z1xmpeD68G/pvjIOyoB05Q9qnE2A+JcsAs3KOZTZKJ7
+ ak1hdZm1ZwIHGc4+Wv7XoGUKH+dG4TosRpti6dGXd426/BeGIoVQryJMXn9Hj7oFPMDr
+ lf44Uti5l9NyZxHhP/WyxwI7ct30SwxunE9I3gQi/0yNWc2DWv455HC33ECN25Je1G3j
+ euuLOBGFLDVvjKyceLrb28LNa+AdoWpBJqNNF1m9TWUT/HALV8V6pg3KdrmBX0hP4fSD Fw== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gmjns60ys-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jun 2022 14:42:59 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25EEaNFT010415;
+        Tue, 14 Jun 2022 14:42:58 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2103.outbound.protection.outlook.com [104.47.70.103])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3gpr296y39-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jun 2022 14:42:58 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WmN6wYvzChi37Ht9NCabYjPS7UoywPUIOQSiycT9Q97EfckEyTxm33jOLBpn6Wi56MwWXe7dFwB6Cm+VqcNTAKJvcLJr1xyFjvkUSO1H6/7ZmH0ROSyLXnOCj5YQZJj3KM4BNVOENqveJbpc2hgoxEAvfsNOlcLp4p7gqdY+ggaL69n87wUJpY+RSwsynD8NS2X80Nus/7Cqn99r7a87QYU+Ip3aesezeK0Gz1UpudI+7b20DlTjvmCBnXndiTkaCTPn68J0mndQtI5rA/lEzGAVyYQyCAcvs3zMrd36/B0KW3CzzYh/yUOJfz69u5tOGUPAxD8BA2qXIM9vP/gOmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WZLWm2GRDxVCnTzecoazH8KRURQbZ9zm2EbOl26CxGI=;
+ b=kZubjUKTqVSxiMor1VARR2ZRRMoTyrKx+L1x/5BGXxQ5V+X+r4pWGa7dq2EDFG7Vrf5Qv3/bSPiMqQNaRfh7CYBAEU5J0WbJiv+1lNPWsLQNGB+Vzuw+GSuuUwB1oAFlDD3gfT4T4yYKYQn50uOQg/82Pd9Nd+1EnOlBAWd4JcsaGqV/F883or83YSI2V68DjQNz0FOxC2Dn4347OnxjA7JCWDoe88QME9Lqlhs0wrfnHonhW2vm41iQwPF4UYXvkOvq817v9JhY6saRm4YBp+AVntL6oBkAffpqEf99gL+Uy8NNkDgEcKa193UaO4Hp3ZwnaXtxa/kLTKjcwED3ZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655217739; x=1686753739;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=K6oM96E6SfR/lD7GDXpDLEdUjIue0J60OpH991R6D4U=;
-  b=mh1hDRiJDtNc8PZYA3HHxzcczsudNehcqmkWKpwoVGV9jiVx8dO0vqzi
-   tlPdzW388XMG88/ergPEgabFdT5rkhcfv3CDqCVUkqabUK2xEDyQrEFFu
-   m/EvR24Xus3DEwjrjm9S35EfgRQTFTgtsBwUUaKR/x24k3MIlrP1G4jCI
-   M=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 14 Jun 2022 07:42:19 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 07:42:18 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 14 Jun 2022 07:42:17 -0700
-Received: from [10.216.20.153] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 14 Jun
- 2022 07:42:10 -0700
-Message-ID: <0a4de64d-aed7-f1cf-584a-bd8616a69ca3@quicinc.com>
-Date:   Tue, 14 Jun 2022 20:12:05 +0530
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WZLWm2GRDxVCnTzecoazH8KRURQbZ9zm2EbOl26CxGI=;
+ b=RKEjf607994JyEPOdiJDO5uBZCZOS8q+ZkFVfjsNkIH4oF3lnVlaaPc7QVgjh7pL87d9YKwFfDd2wSwrdNvb/XKjB3XTd+u1AdKFq74XGFbFjCDQFU3n6+UaFqolFL99YoEz5kHoUOAaxnB6JNs4RcCfBX9cXE8uB471HeXI8Lk=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by CH0PR10MB5244.namprd10.prod.outlook.com
+ (2603:10b6:610:d9::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Tue, 14 Jun
+ 2022 14:42:57 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::5020:9b82:5917:40b%6]) with mapi id 15.20.5332.020; Tue, 14 Jun 2022
+ 14:42:57 +0000
+Date:   Tue, 14 Jun 2022 17:42:45 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     daniel watson <ozzloy@challenge-bot.com>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] staging: r8188eu: remove leading '_' on
+ _rtw_IOL_append_WB_cmd
+Message-ID: <20220614091654.GI2146@kadam>
+References: <cover.1655171591.git.ozzloy@challenge-bot.com>
+ <a1596a62d8e63afbe6a645919a349a8402277c5f.1655171591.git.ozzloy@challenge-bot.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a1596a62d8e63afbe6a645919a349a8402277c5f.1655171591.git.ozzloy@challenge-bot.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: MRXP264CA0044.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:14::32) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH v3] drm/msm: Avoid unclocked GMU register access in 6xx
- gpu_busy
-Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Jordan Crouse <jordan@cosmicpenguin.net>
-CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Eric Anholt" <eric@anholt.net>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Sean Paul <sean@poorly.run>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Yangtao Li <tiny.windzz@gmail.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220609170859.v3.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <20220609170859.v3.1.Ie846c5352bc307ee4248d7cab998ab3016b85d06@changeid>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 94b59a3c-ab21-499c-c1ee-08da4e142bd5
+X-MS-TrafficTypeDiagnostic: CH0PR10MB5244:EE_
+X-Microsoft-Antispam-PRVS: <CH0PR10MB52444E7D104F396A0B05ED818EAA9@CH0PR10MB5244.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fyWKkepCFDrBzORNGu+VsR7u7iS3f0/K0cm91ILyVtT3M3g2RWwx1Vv6PHjiqNNMTOiOOS/wF2Xm0VOISShtoliJS6bjhWa0dAnaQTJnpfqRSuuSIn5lJRpZPMH05FsMZ8kob39x26+aoBe/en7HBjZsvypr1Bot/eeQdZTdubzIvjRfQhiz0N4Irjf8sCbwLZJ1ac796idmFTTUwN2PcAJTXrI3IzO/MItD/2YhERdiCwZd3lXVUbxOekF8CU1TLykgUfAcZam3vIbGNR6tN8Z3NWHl2SpRbMXpfkyXFbijJbUOkg/meNtyrixQUREM5nXCYpBnMIHuylVpbPJhXvQWA5bjlgYvdPKHiAYini/B14EM9womBoSOrM4QyWyL7NIbRvEhAxCwiUPU5zFuPVNRwC3vXiII1irzuxZzgjPnacvl0zjyOqCkkndMRqKHCdZR+WLJkp4Nn7oS0jHLKBw2RZeONurnQISUexChyYEzsGkEpQG6xAXSdW63qoLtbCQ2zqBAhhM78UI7vMNfl4FJM9fmVLEJ6ImbrSJ9uTdXF0DaHJjxxrhpWGUrhd4Y2/gsaruXg1iqiytL0Ak/VVLI31KopJeNVTxS018r+B/smpBg5+H7thpswYSaQ5VzF3HMpXAK6pj+fxCrQuIN5+VY7Jg8UVUjTzkGBpbCCEHCNHc5MZ54hKs63+1oPyx6XLDuDDvs5oG6t6A/KqMeHA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(26005)(6512007)(38350700002)(9686003)(6666004)(38100700002)(6486002)(66946007)(6506007)(83380400001)(52116002)(4744005)(44832011)(5660300002)(33716001)(33656002)(6916009)(66476007)(2906002)(8676002)(54906003)(316002)(1076003)(186003)(508600001)(8936002)(4326008)(86362001)(66556008);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vOY+3IpMOqi5Jmyn6H6u6gOx11mOmsWZwB7quZf5cMvA0/SlBMRb0UtY6A0h?=
+ =?us-ascii?Q?OkVGBKzdCdHUOJKFeHjJW8GaUyY+GIL73w6bUr908GxLNHeU6zRhbCLNqmXs?=
+ =?us-ascii?Q?Is1bsRfMhb0EFBTE7yAIyAsvzv1CFBzuA1CF8qA4UBODiiJOIZSmOQsRP2UR?=
+ =?us-ascii?Q?Bqfd/PrcCkkWrzJ7Oc08G2RsZkw5xpD7a0YX/SklIlm6bK68iRupG9qvDsoo?=
+ =?us-ascii?Q?3eC0xhbhX4WLDDaYs780TTvjQFxW7aoyR3vOG92DUYNJU2ph6DQSgTTT9PHo?=
+ =?us-ascii?Q?jaz7LASKEpJvhvERSzazvFriqAUybxufeBGxJ+RfJQYkTKahd65TjcWMua9o?=
+ =?us-ascii?Q?2LyEzwgqh2b4WybPMuPiNlGsSuFEBgk8KyX349scoZkrwesZ7wip7lMnRHbd?=
+ =?us-ascii?Q?/ozb8btb/NnH5Q8djQYCEQJ8kcaTbWsZAXN/sn9R3nqgFALQmK8v78YAB4rt?=
+ =?us-ascii?Q?WR8k9Uo7Z+IuGaxxW6+2VQfu8TMXbEu5wjZgZsAP3zrfaQVr/8qcZa/HlHr2?=
+ =?us-ascii?Q?6XtehkuzIOqAJSbKHdmDiSzZcja+eWi5G1Ei/0OMZ9mdIf9KbKMylpDOY4e5?=
+ =?us-ascii?Q?a4CDZj5rJDFwzxQoGb36iCNaNyaTPuU/WzH9fVVwYeZTJjq04l2ItkBrMEKr?=
+ =?us-ascii?Q?1/rhtwUYzgJMdR/ilO5mNraFJfH3gooDrCViOQ4HNJmLMxbl7zAXrxKw79cO?=
+ =?us-ascii?Q?fqblST/ailCqh9jucUB9eBbE3bQydG2tJFfDybfW/BSDURc+XTRbK8TIoiU/?=
+ =?us-ascii?Q?3nQRw3noR36St8Vu4YOkSfsLCRGwhNLka9wni9l0fbyIPMU76IUGA1Rih6DI?=
+ =?us-ascii?Q?eKUrk7niWTWuG2Xj2nClWWSpXV9DGXUBLFZaBw9x/kaqoZjhAm0We7KrfOAN?=
+ =?us-ascii?Q?Kd0mFxeNNGX2rY6+Ay8TrgB6ncHGk6halKoNEs49Ydtr79DCGtzu/S/M4scZ?=
+ =?us-ascii?Q?DrVoixvu+FCTJI8NEWiEtTWHEcIr1uEndtLVLiWzz0MZsSQ1klaRdqqr1bL5?=
+ =?us-ascii?Q?EimPgR0Js2/qmf3uzGK7o/G9fFPoULbjhDiaBpZ84o9KThiwYeRKOC2ieSnK?=
+ =?us-ascii?Q?VH5lWie1C8pRfOgbTEvB54aMFhC7T9CTFxGSE0qSuFrVVF9EWeYkb141I9Hd?=
+ =?us-ascii?Q?nmsHtElj8TRrh9sfniQz5W9zV47rIdft7Le2PyvtbG04N0YhTENMGGBc6iGW?=
+ =?us-ascii?Q?3qtMyWhz/Q61MQHQFgfWoRHAcdbyDJNGPUciJzStdO95FCmJoOI06zVh6h9B?=
+ =?us-ascii?Q?YUpvvrA+I0it+YFsgb3jcaYz7Oa32dW+jO6IHCaqoG4ge14vzzpsQInvcJb6?=
+ =?us-ascii?Q?kUMXb0gSvAAb7uxNvrT5hC5/P+Kd+Qf0eYYM3lQI4YvAeDZOrjaLBdiyw1k8?=
+ =?us-ascii?Q?oAcSEPe34bD4w7acVMeXtgAgyPG8SCkMLEBZC9lEfimyYJuZ7L5Ve5Xaf+Td?=
+ =?us-ascii?Q?SNqzjoMkwQrA81ZjaGkiau+jSGoHHuCPzgLoceAR+5kq6tTR4PuCpOPBRZ7e?=
+ =?us-ascii?Q?ntDaryYtG1rb1mgetjq5ezuiPfUTyoybrqK2SfdWZWj/Komjp7bBZ92qjKQ4?=
+ =?us-ascii?Q?ff5BjPt6Sebfo5Ty/+6ItLcgKtHqVHnX7QZyhLJ1eOfFWP+UHbIMlHJGdI2d?=
+ =?us-ascii?Q?SXDbkaJ9OdhyxSlbIsXnm0ccRhYSEno4ZdxgjZVI/4RejfnENVYzfeKVgKI5?=
+ =?us-ascii?Q?uS8dXI4fn8ruV5oJYeiTkSC926wfxwH8w8ROE8U5I4yML9YgJdXGOZh9t5Km?=
+ =?us-ascii?Q?27XB1xnXcHtq2As1nZGmerwTLlBlbpQ=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 94b59a3c-ab21-499c-c1ee-08da4e142bd5
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2022 14:42:57.0900
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rSGvaoR6cMe/MGTn3h0K6jTnC/E/vThTZC44txi/rQCn4Pz02Eyr5Tt8WU8hpaBm0OA9qBmKT56phRzjKOaBOwwrQAdTIpDNysooBOXRcfI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5244
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
+ definitions=2022-06-14_05:2022-06-13,2022-06-14 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 adultscore=0
+ mlxlogscore=836 phishscore=0 malwarescore=0 bulkscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206140057
+X-Proofpoint-GUID: RkPOlgEbnKYYTo1-zlr7YCKx5CfiNiN5
+X-Proofpoint-ORIG-GUID: RkPOlgEbnKYYTo1-zlr7YCKx5CfiNiN5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/10/2022 5:39 AM, Douglas Anderson wrote:
-> >From testing on sc7180-trogdor devices, reading the GMU registers
-> needs the GMU clocks to be enabled. Those clocks get turned on in
-> a6xx_gmu_resume(). Confusingly enough, that function is called as a
-> result of the runtime_pm of the GPU "struct device", not the GMU
-> "struct device". Unfortunately the current a6xx_gpu_busy() grabs a
-> reference to the GMU's "struct device".
->
-> The fact that we were grabbing the wrong reference was easily seen to
-> cause crashes that happen if we change the GPU's pm_runtime usage to
-> not use autosuspend. It's also believed to cause some long tail GPU
-> crashes even with autosuspend.
->
-> We could look at changing it so that we do pm_runtime_get_if_in_use()
-> on the GPU's "struct device", but then we run into a different
-> problem. pm_runtime_get_if_in_use() will return 0 for the GPU's
-> "struct device" the whole time when we're in the "autosuspend
-> delay". That is, when we drop the last reference to the GPU but we're
-> waiting a period before actually suspending then we'll think the GPU
-> is off. One reason that's bad is that if the GPU didn't actually turn
-> off then the cycle counter doesn't lose state and that throws off all
-> of our calculations.
->
-> Let's change the code to keep track of the suspend state of
-> devfreq. msm_devfreq_suspend() is always called before we actually
-> suspend the GPU and msm_devfreq_resume() after we resume it. This
-> means we can use the suspended state to know if we're powered or not.
->
-> NOTE: one might wonder when exactly our status function is called when
-> devfreq is supposed to be disabled. The stack crawl I captured was:
->    msm_devfreq_get_dev_status
->    devfreq_simple_ondemand_func
->    devfreq_update_target
->    qos_notifier_call
->    qos_max_notifier_call
->    blocking_notifier_call_chain
->    pm_qos_update_target
->    freq_qos_apply
->    apply_constraint
->    __dev_pm_qos_update_request
->    dev_pm_qos_update_request
->    msm_devfreq_idle_work
->
-> Fixes: eadf79286a4b ("drm/msm: Check for powered down HW in the devfreq callbacks")
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+On Mon, Jun 13, 2022 at 07:07:30PM -0700, daniel watson wrote:
+> From: Daniel Watson <ozzloy@challenge-bot.com>
+> 
+> name the function rtw_IOL_append_WB_cmd and call it directly,
+> instead of using wrapper macro
+> 
+> delete wrapper macro, which is not needed
+> 
+> NOTE: code compiles, not tested on hardware
+
+Don't put this kind of comment in the commit message.  Put it under the
+--- cut off line.
+
+> 
+> Signed-off-by: Daniel Watson <ozzloy@challenge-bot.com>
 > ---
->
-> Changes in v3:
-> - Totally rewrote to not use the pm_runtime functions.
-> - Moved the code to be common for all adreno GPUs.
->
-> Changes in v2:
-> - Move the set_freq runtime pm grab to the GPU file.
-> - Use <= for the pm_runtime test, not ==.
->
->   drivers/gpu/drm/msm/adreno/a5xx_gpu.c |  8 ------
->   drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 13 ++++-----
->   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 12 +++------
->   drivers/gpu/drm/msm/adreno/a6xx_gpu.h |  3 ++-
->   drivers/gpu/drm/msm/msm_gpu.h         |  9 ++++++-
->   drivers/gpu/drm/msm/msm_gpu_devfreq.c | 39 +++++++++++++++++++++------
->   6 files changed, 51 insertions(+), 33 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-> index c424e9a37669..3dcec7acb384 100644
-> --- a/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a5xx_gpu.c
-> @@ -1666,18 +1666,10 @@ static u64 a5xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
->   {
->   	u64 busy_cycles;
->   
-> -	/* Only read the gpu busy if the hardware is already active */
-> -	if (pm_runtime_get_if_in_use(&gpu->pdev->dev) == 0) {
-> -		*out_sample_rate = 1;
-> -		return 0;
-> -	}
-> -
->   	busy_cycles = gpu_read64(gpu, REG_A5XX_RBBM_PERFCTR_RBBM_0_LO,
->   			REG_A5XX_RBBM_PERFCTR_RBBM_0_HI);
->   	*out_sample_rate = clk_get_rate(gpu->core_clk);
->   
-> -	pm_runtime_put(&gpu->pdev->dev);
-> -
->   	return busy_cycles;
->   }
->   
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> index 9f76f5b15759..dc715d88ff21 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-> @@ -102,7 +102,8 @@ bool a6xx_gmu_gx_is_on(struct a6xx_gmu *gmu)
->   		A6XX_GMU_SPTPRAC_PWR_CLK_STATUS_GX_HM_CLK_OFF));
->   }
->   
-> -void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
-> +void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-> +		       bool suspended)
->   {
->   	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
->   	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
-> @@ -127,15 +128,16 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
->   
->   	/*
->   	 * This can get called from devfreq while the hardware is idle. Don't
-> -	 * bring up the power if it isn't already active
-> +	 * bring up the power if it isn't already active. All we're doing here
-> +	 * is updating the frequency so that when we come back online we're at
-> +	 * the right rate.
->   	 */
-> -	if (pm_runtime_get_if_in_use(gmu->dev) == 0)
-> +	if (suspended)
->   		return;
->   
->   	if (!gmu->legacy) {
->   		a6xx_hfi_set_freq(gmu, perf_index);
->   		dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
-> -		pm_runtime_put(gmu->dev);
->   		return;
->   	}
->   
-> @@ -159,7 +161,6 @@ void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
->   		dev_err(gmu->dev, "GMU set GPU frequency error: %d\n", ret);
->   
->   	dev_pm_opp_set_opp(&gpu->pdev->dev, opp);
-> -	pm_runtime_put(gmu->dev);
->   }
->   
->   unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu)
-> @@ -895,7 +896,7 @@ static void a6xx_gmu_set_initial_freq(struct msm_gpu *gpu, struct a6xx_gmu *gmu)
->   		return;
->   
->   	gmu->freq = 0; /* so a6xx_gmu_set_freq() doesn't exit early */
-> -	a6xx_gmu_set_freq(gpu, gpu_opp);
-> +	a6xx_gmu_set_freq(gpu, gpu_opp, false);
->   	dev_pm_opp_put(gpu_opp);
->   }
->   
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> index 42ed9a3c4905..8c02a67f29f2 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> @@ -1658,27 +1658,21 @@ static u64 a6xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
->   	/* 19.2MHz */
->   	*out_sample_rate = 19200000;
->   
-> -	/* Only read the gpu busy if the hardware is already active */
-> -	if (pm_runtime_get_if_in_use(a6xx_gpu->gmu.dev) == 0)
-> -		return 0;
-> -
->   	busy_cycles = gmu_read64(&a6xx_gpu->gmu,
->   			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_L,
->   			REG_A6XX_GMU_CX_GMU_POWER_COUNTER_XOCLK_0_H);
->   
-> -
-> -	pm_runtime_put(a6xx_gpu->gmu.dev);
-> -
->   	return busy_cycles;
->   }
->   
-> -static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp)
-> +static void a6xx_gpu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-> +			      bool suspended)
->   {
->   	struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
->   	struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
->   
->   	mutex_lock(&a6xx_gpu->gmu.lock);
-> -	a6xx_gmu_set_freq(gpu, opp);
-> +	a6xx_gmu_set_freq(gpu, opp, suspended);
->   	mutex_unlock(&a6xx_gpu->gmu.lock);
->   }
->   
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
-> index 86e0a7c3fe6d..ab853f61db63 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.h
-> @@ -77,7 +77,8 @@ void a6xx_gmu_clear_oob(struct a6xx_gmu *gmu, enum a6xx_gmu_oob_state state);
->   int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node);
->   void a6xx_gmu_remove(struct a6xx_gpu *a6xx_gpu);
->   
-> -void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp);
-> +void a6xx_gmu_set_freq(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-> +		       bool suspended);
->   unsigned long a6xx_gmu_get_freq(struct msm_gpu *gpu);
->   
->   void a6xx_show(struct msm_gpu *gpu, struct msm_gpu_state *state,
-> diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-> index 6def00883046..7ced1a30d4e8 100644
-> --- a/drivers/gpu/drm/msm/msm_gpu.h
-> +++ b/drivers/gpu/drm/msm/msm_gpu.h
-> @@ -68,7 +68,8 @@ struct msm_gpu_funcs {
->   	struct msm_gpu_state *(*gpu_state_get)(struct msm_gpu *gpu);
->   	int (*gpu_state_put)(struct msm_gpu_state *state);
->   	unsigned long (*gpu_get_freq)(struct msm_gpu *gpu);
-> -	void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp);
-> +	void (*gpu_set_freq)(struct msm_gpu *gpu, struct dev_pm_opp *opp,
-> +			     bool suspended);
->   	struct msm_gem_address_space *(*create_address_space)
->   		(struct msm_gpu *gpu, struct platform_device *pdev);
->   	struct msm_gem_address_space *(*create_private_address_space)
-> @@ -92,6 +93,9 @@ struct msm_gpu_devfreq {
->   	/** devfreq: devfreq instance */
->   	struct devfreq *devfreq;
->   
-> +	/** lock: lock for "suspended", "busy_cycles", and "time" */
-> +	struct mutex lock;
-> +
->   	/**
->   	 * idle_constraint:
->   	 *
-> @@ -135,6 +139,9 @@ struct msm_gpu_devfreq {
->   	 * elapsed
->   	 */
->   	struct msm_hrtimer_work boost_work;
-> +
-> +	/** suspended: tracks if we're suspended */
-> +	bool suspended;
->   };
->   
->   struct msm_gpu {
-> diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-> index d2539ca78c29..ea94bc18e72e 100644
-> --- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-> +++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-> @@ -20,6 +20,7 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
->   		u32 flags)
->   {
->   	struct msm_gpu *gpu = dev_to_gpu(dev);
-> +	struct msm_gpu_devfreq *df = &gpu->devfreq;
->   	struct dev_pm_opp *opp;
->   
->   	/*
-> @@ -32,10 +33,13 @@ static int msm_devfreq_target(struct device *dev, unsigned long *freq,
->   
->   	trace_msm_gpu_freq_change(dev_pm_opp_get_freq(opp));
->   
-> -	if (gpu->funcs->gpu_set_freq)
-> -		gpu->funcs->gpu_set_freq(gpu, opp);
-> -	else
-> +	if (gpu->funcs->gpu_set_freq) {
-> +		mutex_lock(&df->lock);
-> +		gpu->funcs->gpu_set_freq(gpu, opp, df->suspended);
-> +		mutex_unlock(&df->lock);
-> +	} else {
->   		clk_set_rate(gpu->core_clk, *freq);
-> +	}
->   
->   	dev_pm_opp_put(opp);
->   
-> @@ -58,15 +62,24 @@ static void get_raw_dev_status(struct msm_gpu *gpu,
->   	unsigned long sample_rate;
->   	ktime_t time;
->   
-> +	mutex_lock(&df->lock);
-> +
->   	status->current_frequency = get_freq(gpu);
-> -	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
->   	time = ktime_get();
-> -
-> -	busy_time = busy_cycles - df->busy_cycles;
->   	status->total_time = ktime_us_delta(time, df->time);
-> +	df->time = time;
->   
-> +	if (df->suspended) {
-> +		mutex_unlock(&df->lock);
-> +		status->busy_time = 0;
-> +		return;
-> +	}
-> +
-> +	busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
-> +	busy_time = busy_cycles - df->busy_cycles;
->   	df->busy_cycles = busy_cycles;
-> -	df->time = time;
-> +
-> +	mutex_unlock(&df->lock);
->   
->   	busy_time *= USEC_PER_SEC;
->   	do_div(busy_time, sample_rate);
-> @@ -175,6 +188,8 @@ void msm_devfreq_init(struct msm_gpu *gpu)
->   	if (!gpu->funcs->gpu_busy)
->   		return;
->   
-> +	mutex_init(&df->lock);
-> +
->   	dev_pm_qos_add_request(&gpu->pdev->dev, &df->idle_freq,
->   			       DEV_PM_QOS_MAX_FREQUENCY,
->   			       PM_QOS_MAX_FREQUENCY_DEFAULT_VALUE);
-> @@ -244,12 +259,16 @@ void msm_devfreq_cleanup(struct msm_gpu *gpu)
->   void msm_devfreq_resume(struct msm_gpu *gpu)
->   {
->   	struct msm_gpu_devfreq *df = &gpu->devfreq;
-> +	unsigned long sample_rate;
->   
->   	if (!has_devfreq(gpu))
->   		return;
->   
-> -	df->busy_cycles = 0;
-> +	mutex_lock(&df->lock);
-> +	df->busy_cycles = gpu->funcs->gpu_busy(gpu, &sample_rate);
->   	df->time = ktime_get();
-> +	df->suspended = false;
-> +	mutex_unlock(&df->lock);
->   
->   	devfreq_resume_device(df->devfreq);
->   }
-> @@ -261,6 +280,10 @@ void msm_devfreq_suspend(struct msm_gpu *gpu)
->   	if (!has_devfreq(gpu))
->   		return;
->   
-> +	mutex_lock(&df->lock);
-> +	df->suspended = true;
-> +	mutex_unlock(&df->lock);
-> +
->   	devfreq_suspend_device(df->devfreq);
->   
->   	cancel_idle_work(df);
+  ^^^
+Here.
 
-nit: in the commit subject: 6xx -> a6xx
+You don't even really need to tell us that you compiled the code,
+because we take that as a given.
 
-Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+regards,
+dan carpenter
 
-
--Akhil.
 

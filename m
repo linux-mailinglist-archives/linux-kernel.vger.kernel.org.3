@@ -2,166 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CF454BC77
+	by mail.lfdr.de (Postfix) with ESMTP id 123EE54BC76
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 23:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351831AbiFNVAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 17:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
+        id S1352420AbiFNVAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 17:00:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239118AbiFNU76 (ORCPT
+        with ESMTP id S245736AbiFNVAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 16:59:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605CD50056
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:59:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 03189B81B7F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 20:59:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA4C9C341C4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 20:59:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655240394;
-        bh=9wZk9MRpUMnrGZbQcUwmuX/7Qeydrlw5OKktQernftE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sIwDRA2Vra2dKTCg1DafT8ciCfbsFmCy/4ggHE0w4hDjeAbryOsCZvHwd7s4LYrJC
-         RASdznOBdSMKuP1HZx3N5LDRcRg5QZzJX/ZhmraXzSOpJV+Dnq1Fq8dNFlzAIPdlKj
-         uozMksen4aiuIii2IV54Nm3xvOzJjHHbLOVgd6M8BPv8mQc01tS4EqZLTesOG9Ebcu
-         X1LTLzO7C4Z9x3sS1MfNuors/XgMUqnnuflvEWXW3BZcA3JWBdxKrUGmnsBU1UYSw5
-         gySRzGesBFaWCOLwCchPoQL+xtWWai64eXMIZX5iM0zl4ssRfXthevO9q8WhM/q44E
-         Sq/WGvjZxKdfw==
-Received: by mail-lf1-f51.google.com with SMTP id c2so15907218lfk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 13:59:54 -0700 (PDT)
-X-Gm-Message-State: AJIora+yJbUoE2cAusxhqgEhp0Gyja9swgIAib9V6l657t5qtJ7NrxfO
-        NFu+WYKTKgI0xkZ9C077hCRyi0WdEGcqLFiIzm3pMg==
-X-Google-Smtp-Source: AGRyM1sCbLW6pqrjCLadGc9nlr9/fXFl71CEbENKqHrt6kXBGBmrjtgceQq2RtPH/Uy7fk0amoBaU8MzH9G8H+xSOgs=
-X-Received: by 2002:ac2:57c4:0:b0:479:7d52:a5a2 with SMTP id
- k4-20020ac257c4000000b004797d52a5a2mr4201442lfo.173.1655240392630; Tue, 14
- Jun 2022 13:59:52 -0700 (PDT)
+        Tue, 14 Jun 2022 17:00:39 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1A650068;
+        Tue, 14 Jun 2022 14:00:38 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id n18so8752767plg.5;
+        Tue, 14 Jun 2022 14:00:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ABIwjsN01avoXfixhqq/nhjZOdRVdPjlrbZog4E+a0w=;
+        b=SXD+jodpYCjHDny4B7tRwLnzq4pE6143JPpRCp4NCkoL7nzyoQmGQmw7OmUiSiNC6m
+         oCCGfwwNMef3wp7EGzL46Y52yIGsrTz0lJvJGL4Dsh+PXKONnBETq9QoP1miLi/Qs6e9
+         UzDzVtbDFQ2SJJuXFIkexc/7N969vfzXVSMvo0syt5UKGhul3LN1vJb6l0Z8jX/EbjrZ
+         2zFMg1fOeFsX4LKGQ8fG9L2M2CCu1YXjCOtkjMKA8Z87H2FUBVPVv2cAExZmrg4h1pNA
+         hdVzdgnLdKFAYvIARiZ6fJmEYv0GaM6pL2ZjYDHaU/zhWH8bZ4VzXhAEnUI2mjf1+Gya
+         Utdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ABIwjsN01avoXfixhqq/nhjZOdRVdPjlrbZog4E+a0w=;
+        b=N+sgkUQHC1HCVfN3oN2hqya4Mr+kQHlx6Uok3uPTyJegB4N77XKS7ZuPahb1PkTFdC
+         K8Y3FG6BRzGfAA5Bj7+BNLnHKVvFT66sdczU8lgsyrxRsGjsxFX6MBb1rP/x5rMblvYc
+         o6e2/HJHo9Am+qdjRHhRJKjaWOmZgnhBP/cy/+oU1kSOdNuX0LnZWt1FRLinUNOB97eA
+         Ea3SnZ2FvLVmJXrIjF4EOk0bqGZXvZQZC4AMlmPz8f2vWz5B/p91yAtq380CZPgyXPhh
+         VkHN2H4sUvF+v0omLPvS3otsh+Efw7yM1HMbzxaMdwGvxz8elOHRrPkNb0yZlNxGFvgL
+         dXpw==
+X-Gm-Message-State: AJIora+OvjNc0gFOKGn5ShQmmY3ELgDSS384WaHvMZKj39BSNp3oOSdY
+        vvSFALMBxTJVi1EqF4Wh+AU=
+X-Google-Smtp-Source: AGRyM1uXICEcEKElb5h6IOEsUSAw3dY1Pt+rc53YxufnNf9GLR0TeRwtnHO5tz/ZtIUz46pEPUoGKw==
+X-Received: by 2002:a17:90b:4c06:b0:1e3:17fa:e387 with SMTP id na6-20020a17090b4c0600b001e317fae387mr6469302pjb.53.1655240437933;
+        Tue, 14 Jun 2022 14:00:37 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id a15-20020a1709027e4f00b00161e50e2245sm7701671pln.178.2022.06.14.14.00.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Jun 2022 14:00:37 -0700 (PDT)
+Message-ID: <8156508f-71d5-3ed5-ccba-bed6062fdbf3@gmail.com>
+Date:   Tue, 14 Jun 2022 14:00:35 -0700
 MIME-Version: 1.0
-References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
- <CAGtprH_83CEC0U-cBR2FzHsxbwbGn0QJ87WFNOEet8sineOcbQ@mail.gmail.com>
- <20220607065749.GA1513445@chaop.bj.intel.com> <CAA03e5H_vOQS-qdZgacnmqP5T5jJLnEfm44yfRzJQ2KVu0Br+Q@mail.gmail.com>
- <20220608021820.GA1548172@chaop.bj.intel.com> <CAGtprH8xyf07jMN7ubTC__BvDj+z41uVGRiCJ7Rc5cv3KWg03w@mail.gmail.com>
- <YqJYEheLiGI4KqXF@google.com> <20220614072800.GB1783435@chaop.bj.intel.com>
- <CALCETrWw=Q=1AKW0Jcj3ZGscjyjDJXAjuxOnQx_sabQ6ZtS-wg@mail.gmail.com> <Yqjcx6u0KJcJuZfI@google.com>
-In-Reply-To: <Yqjcx6u0KJcJuZfI@google.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Tue, 14 Jun 2022 13:59:41 -0700
-X-Gmail-Original-Message-ID: <CALCETrUdGoZ2yUnNGbxJ-Xr3KD7QhTi-ddhS8AUMjFyJM5pDfA@mail.gmail.com>
-Message-ID: <CALCETrUdGoZ2yUnNGbxJ-Xr3KD7QhTi-ddhS8AUMjFyJM5pDfA@mail.gmail.com>
-Subject: Re: [PATCH v6 0/8] KVM: mm: fd-based approach for supporting KVM
- guest private memory
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Marc Orr <marcorr@google.com>, kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86 <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Jun Nakajima <jun.nakajima@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 4.9 00/20] 4.9.319-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220614183722.061550591@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220614183722.061550591@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 12:09 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Tue, Jun 14, 2022, Andy Lutomirski wrote:
-> > On Tue, Jun 14, 2022 at 12:32 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> > >
-> > > On Thu, Jun 09, 2022 at 08:29:06PM +0000, Sean Christopherson wrote:
-> > > > On Wed, Jun 08, 2022, Vishal Annapurve wrote:
-> > > >
-> > > > One argument is that userspace can simply rely on cgroups to detect misbehaving
-> > > > guests, but (a) those types of OOMs will be a nightmare to debug and (b) an OOM
-> > > > kill from the host is typically considered a _host_ issue and will be treated as
-> > > > a missed SLO.
-> > > >
-> > > > An idea for handling this in the kernel without too much complexity would be to
-> > > > add F_SEAL_FAULT_ALLOCATIONS (terrible name) that would prevent page faults from
-> > > > allocating pages, i.e. holes can only be filled by an explicit fallocate().  Minor
-> > > > faults, e.g. due to NUMA balancing stupidity, and major faults due to swap would
-> > > > still work, but writes to previously unreserved/unallocated memory would get a
-> > > > SIGSEGV on something it has mapped.  That would allow the userspace VMM to prevent
-> > > > unintentional allocations without having to coordinate unmapping/remapping across
-> > > > multiple processes.
-> > >
-> > > Since this is mainly for shared memory and the motivation is catching
-> > > misbehaved access, can we use mprotect(PROT_NONE) for this? We can mark
-> > > those range backed by private fd as PROT_NONE during the conversion so
-> > > subsequence misbehaved accesses will be blocked instead of causing double
-> > > allocation silently.
->
-> PROT_NONE, a.k.a. mprotect(), has the same vma downsides as munmap().
->
-> > This patch series is fairly close to implementing a rather more
-> > efficient solution.  I'm not familiar enough with hypervisor userspace
-> > to really know if this would work, but:
-> >
-> > What if shared guest memory could also be file-backed, either in the
-> > same fd or with a second fd covering the shared portion of a memslot?
-> > This would allow changes to the backing store (punching holes, etc) to
-> > be some without mmap_lock or host-userspace TLB flushes?  Depending on
-> > what the guest is doing with its shared memory, userspace might need
-> > the memory mapped or it might not.
->
-> That's what I'm angling for with the F_SEAL_FAULT_ALLOCATIONS idea.  The issue,
-> unless I'm misreading code, is that punching a hole in the shared memory backing
-> store doesn't prevent reallocating that hole on fault, i.e. a helper process that
-> keeps a valid mapping of guest shared memory can silently fill the hole.
->
-> What we're hoping to achieve is a way to prevent allocating memory without a very
-> explicit action from userspace, e.g. fallocate().
+On 6/14/22 11:39, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.319 release.
+> There are 20 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.319-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Ah, I misunderstood.  I thought your goal was to mmap it and prevent
-page faults from allocating.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-It is indeed the case (and has been since before quite a few of us
-were born) that a hole in a sparse file is logically just a bunch of
-zeros.  A way to make a file for which a hole is an actual hole seems
-like it would solve this problem nicely.  It could also be solved more
-specifically for KVM by making sure that the private/shared mode that
-userspace programs is strict enough to prevent accidental allocations
--- if a GPA is definitively private, shared, neither, or (potentially,
-on TDX only) both, then a page that *isn't* shared will never be
-accidentally allocated by KVM.  If the shared backing is not mmapped,
-it also won't be accidentally allocated by host userspace on a stray
-or careless write.
-
-
---Andy
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

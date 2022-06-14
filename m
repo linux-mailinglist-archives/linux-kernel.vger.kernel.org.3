@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0C8D54BE53
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 01:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9470054BE54
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 01:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344857AbiFNXdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 19:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53768 "EHLO
+        id S232615AbiFNXds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 19:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237006AbiFNXdh (ORCPT
+        with ESMTP id S238508AbiFNXdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 19:33:37 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C345A4C7B8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:33:36 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id il9-20020a17090b164900b001e31dd8be25so279739pjb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:33:36 -0700 (PDT)
+        Tue, 14 Jun 2022 19:33:39 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C21B94C7BA
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:33:38 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id z9-20020a170903018900b00168b66bbde2so5573701plg.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 16:33:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=reply-to:date:in-reply-to:message-id:mime-version:references
          :subject:from:to:cc;
-        bh=F1mEM+Sk9NhfTo4twLztO1JRBfAv8ACvHFu9EdejiLQ=;
-        b=VCGcEXx6TRJZH//+muwGLcl6V0jHbZuGFGc8YXZJ4kBFZP4jqYV6ZgfGDkNne2UzJK
-         H1oNBWP5SHUxaD639jUs+Art971dPO2rn6nVQ+ODbYbTVvr+cuItW16sUj4mno2uNgge
-         3OTQPpWcC4sTW2GpGb1WFdwD0FYHe+rWzviyvseevbydMKqgEKzkX9PcJ9H3867eDuRN
-         wzjHY4wzhUmN2FPNsg8w44UL6uWY5t5R6nOnh5o3vnYOzkEJnbBuhz//WC1FvbTwrVoQ
-         2nrMBYIL/QOxcNKUP5MANf4BwctetfiWipAPKw36djGRx5SmbiTkpbq8LPQm4e2kVur7
-         J0/g==
+        bh=66YOE3D++YjiCQYAOPbfPb7xNbNJtfXwRmXra4+Vga0=;
+        b=XkSOxZVNtKRdwlCMG2Rkoe9pWC1o3+MtsPxenAFTOIWjAp8pAzo9ptSTAPINXlQdZI
+         PGIBIy5g3ssWdKHmjSlmfKvbTjvhVRvrWE2KGeczKLOj/Sema0dIb9phYdk7m6o4/WQc
+         W2/0+ZCuVJQ+L3vAnl3N17NpF37zpaIijGPyKGnBynV6z5+i/vj9m0v2p3MlsuKVYetD
+         Mwpftm7Wz5yvnyHCCM7rrTcijxdJ390lTSlNFAsERaq1YZ4IFNAIC6viSYFB7Wldcdga
+         rapmU4xoXd6ztMR9ukJ4TqxYXBqhJ+EZk39WcJyNz2vyoJb5i7SunvqXxTa9ejkAEZXD
+         n3Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:reply-to:date:in-reply-to:message-id
          :mime-version:references:subject:from:to:cc;
-        bh=F1mEM+Sk9NhfTo4twLztO1JRBfAv8ACvHFu9EdejiLQ=;
-        b=BSTYSng3v/OcajqAWNNBLk3pod+36lgWnezYQrsUnTlaoCVGpdpADxm61kH+b7pGYP
-         l1urXEl+8QacpHydBJpG1/rNbPhbP+BQVAjfg6bZuw+l6MTieBVMjXpjjewHGJ7Wwk0T
-         mbVdtmcT91AroF7CN3fIiTgw5pe061oPBm3YJ9Qce0SbwwjeKjl1EG5fF3ppf17qC2Kg
-         hqzQSPtBJjPjDY68nYWn2bZfdqXmOrtroNOa8xJ1oXZFSzTslarRpFwxXkqIUlfMkXwE
-         YScmKA1/hEmyXP+4G5981wLkJRNafKgzX0RdwwRrZ86uxTnxCve/R/y8oBwKrgdwN5Y+
-         iySA==
-X-Gm-Message-State: AOAM530e+4fA/vZqVD0Co0J0eXdv2lvW5V0PK+9ZtBHIDTYsngxKDP3Q
-        vRRmU+gI1/bVeKCu6Pm/Woytkg3Wn5E=
-X-Google-Smtp-Source: ABdhPJwaYznr7aIlMCIFr+HBjFPK2thAUaXhCVe8WPr/90jqP0ecaVZ6zGrXdaKmd62aPfo843OWpII8UDE=
+        bh=66YOE3D++YjiCQYAOPbfPb7xNbNJtfXwRmXra4+Vga0=;
+        b=xpxXf8b2/4oG+p2BhGbMNjZiu4hggNVvuanXoFTzsmSFaJcAhqW1MOIe6ZkvSRYU4f
+         5tkSsWIC58I4ikD1uJ8w2hTGDj4kIs86RDd7zizE0u7ewMhJSg1PuRS6QLen38a0mtrA
+         nlK8cnkrcm1SqUQDbwPgl92iVeOyynWYBAvo8IerI4k85mddhWSpb/afNZV0FKcowXFW
+         OOfE1/EA5e+bEQa6VS6sfORreTNgqb/nm3kBpumhDhBoRPRQdvEnjb5wXtdsAc6nNx11
+         +BDD7DI6GAMTo6FeRsnvN9u+dc42x3X3kmWzf4N9w61aNZm6cFf8R/7LIIScw5unw1N1
+         qjBg==
+X-Gm-Message-State: AOAM530286mM68oItA8HpGeBXRVH+Jmw/Q2ROjzIlJYuu8X/kX6RYHo/
+        03IQAjDJNA+L94wQLMMJEFJv4d9LDR8=
+X-Google-Smtp-Source: ABdhPJyWMZ015MfiUWvGXN7mMPeXD9z9UC8xpj7UH7wHuSJ60ScAFr35PWhit6iSa+I1bttdCV63Z5TIcu4=
 X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:1387:b0:51c:2712:7859 with SMTP id
- t7-20020a056a00138700b0051c27127859mr6973184pfg.38.1655249616263; Tue, 14 Jun
- 2022 16:33:36 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:3491:b0:51c:1d3b:b0b0 with SMTP id
+ cp17-20020a056a00349100b0051c1d3bb0b0mr6890353pfb.68.1655249618275; Tue, 14
+ Jun 2022 16:33:38 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 14 Jun 2022 23:33:21 +0000
+Date:   Tue, 14 Jun 2022 23:33:22 +0000
 In-Reply-To: <20220614233328.3896033-1-seanjc@google.com>
-Message-Id: <20220614233328.3896033-2-seanjc@google.com>
+Message-Id: <20220614233328.3896033-3-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220614233328.3896033-1-seanjc@google.com>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH v2 1/8] KVM: x86/mmu: Drop unused CMPXCHG macro from paging_tmpl.h
+Subject: [PATCH v2 2/8] KVM: VMX: Refactor 32-bit PSE PT creation to avoid
+ using MMU macro
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -67,64 +68,40 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+Compute the number of PTEs to be filled for the 32-bit PSE page tables
+using the page size and the size of each entry.  While using the MMU's
+PT32_ENT_PER_PAGE macro is arguably better in isolation, removing VMX's
+usage will allow a future namespacing cleanup to move the guest page
+table macros into paging_tmpl.h, out of the reach of code that isn't
+directly related to shadow paging.
 
-Drop the CMPXCHG macro from paging_tmpl.h, it's no longer used now that
-KVM uses a common uaccess helper to do 8-byte CMPXCHG.
+No functional change intended.
 
-Fixes: f122dfe44768 ("KVM: x86: Use __try_cmpxchg_user() to update guest PTE A/D bits")
-Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
-[sean: drop only CMPXCHG, update changelog accordingly]
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu/paging_tmpl.h | 6 ------
- 1 file changed, 6 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-index fe35d8fd3276..f595c4b8657f 100644
---- a/arch/x86/kvm/mmu/paging_tmpl.h
-+++ b/arch/x86/kvm/mmu/paging_tmpl.h
-@@ -34,7 +34,6 @@
- 	#define PT_HAVE_ACCESSED_DIRTY(mmu) true
- 	#ifdef CONFIG_X86_64
- 	#define PT_MAX_FULL_LEVELS PT64_ROOT_MAX_LEVEL
--	#define CMPXCHG "cmpxchgq"
- 	#else
- 	#define PT_MAX_FULL_LEVELS 2
- 	#endif
-@@ -51,7 +50,6 @@
- 	#define PT_GUEST_DIRTY_SHIFT PT_DIRTY_SHIFT
- 	#define PT_GUEST_ACCESSED_SHIFT PT_ACCESSED_SHIFT
- 	#define PT_HAVE_ACCESSED_DIRTY(mmu) true
--	#define CMPXCHG "cmpxchgl"
- #elif PTTYPE == PTTYPE_EPT
- 	#define pt_element_t u64
- 	#define guest_walker guest_walkerEPT
-@@ -64,9 +62,6 @@
- 	#define PT_GUEST_DIRTY_SHIFT 9
- 	#define PT_GUEST_ACCESSED_SHIFT 8
- 	#define PT_HAVE_ACCESSED_DIRTY(mmu) (!(mmu)->cpu_role.base.ad_disabled)
--	#ifdef CONFIG_X86_64
--	#define CMPXCHG "cmpxchgq"
--	#endif
- 	#define PT_MAX_FULL_LEVELS PT64_ROOT_MAX_LEVEL
- #else
- 	#error Invalid PTTYPE value
-@@ -1100,7 +1095,6 @@ static int FNAME(sync_page)(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp)
- #undef PT_MAX_FULL_LEVELS
- #undef gpte_to_gfn
- #undef gpte_to_gfn_lvl
--#undef CMPXCHG
- #undef PT_GUEST_ACCESSED_MASK
- #undef PT_GUEST_DIRTY_MASK
- #undef PT_GUEST_DIRTY_SHIFT
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 5e14e4c40007..b774f8c1b952 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -3704,7 +3704,7 @@ static int init_rmode_identity_map(struct kvm *kvm)
+ 	}
+ 
+ 	/* Set up identity-mapping pagetable for EPT in real mode */
+-	for (i = 0; i < PT32_ENT_PER_PAGE; i++) {
++	for (i = 0; i < (PAGE_SIZE / sizeof(tmp)); i++) {
+ 		tmp = (i << 22) + (_PAGE_PRESENT | _PAGE_RW | _PAGE_USER |
+ 			_PAGE_ACCESSED | _PAGE_DIRTY | _PAGE_PSE);
+ 		if (__copy_to_user(uaddr + i * sizeof(tmp), &tmp, sizeof(tmp))) {
 -- 
 2.36.1.476.g0c4daa206d-goog
 

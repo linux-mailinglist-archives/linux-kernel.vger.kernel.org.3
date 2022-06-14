@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CEA254AD97
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BDA54AD9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 11:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242531AbiFNJto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 05:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
+        id S242759AbiFNJtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 05:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234257AbiFNJtb (ORCPT
+        with ESMTP id S241742AbiFNJth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 05:49:31 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3063B42EFC;
-        Tue, 14 Jun 2022 02:49:31 -0700 (PDT)
+        Tue, 14 Jun 2022 05:49:37 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABB543394;
+        Tue, 14 Jun 2022 02:49:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655200171; x=1686736171;
+  t=1655200176; x=1686736176;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version;
-  bh=Ge0H3IzoHNfcDLKiIy4JmD90MJ6Xmwr2vMtYbuZUgyY=;
-  b=kzOlsqFsKsqi/tmhTSeHnJQcb2+nKeQYVd4ooYj6gg7Jou5pq1leEi2w
-   mVb5/Q5hi9c81YtfnQRGxVPoEwufnLUxty+skGzhxS2Kz9v2jqQY1PxEV
-   RmMxyy9AcRvIlFPs9/mV8BtRLATZ15PwK2xE3vvLZYNlzAfQ9/w7vQkNS
-   A=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 14 Jun 2022 02:49:31 -0700
+  bh=ABpkWzVGoM7qa1eaR8tSh6LGSWXPe0Z0OYHhFzc33qk=;
+  b=PMJoXRbMcn2apMqniMyfjGDlopSO4wBHWVU5WEx9hmTgH65ePgNnMNkJ
+   i6IE7I7Ngzlv8Bs/rxmb1eCj5VoNQnku19QEWPIt93W8CqJePYQNf/aG+
+   Eze+JNXww7zwdKRWMhmGe7b1uSZ2xgErAKmM1uEbkoBY7hiFLZMB+8U9n
+   g=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 14 Jun 2022 02:49:35 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 02:49:30 -0700
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 02:49:35 -0700
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 14 Jun 2022 02:49:30 -0700
+ 15.2.986.22; Tue, 14 Jun 2022 02:49:34 -0700
 Received: from c-skakit-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 14 Jun 2022 02:49:25 -0700
+ 15.2.986.22; Tue, 14 Jun 2022 02:49:30 -0700
 From:   Satya Priya <quic_c_skakit@quicinc.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -49,9 +49,9 @@ CC:     Lee Jones <lee.jones@linaro.org>,
         <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
         <quic_jprakash@quicinc.com>,
         Satya Priya <quic_c_skakit@quicinc.com>
-Subject: [PATCH V15 5/9] mfd: pm8008: Remove the regmap member from pm8008_data struct
-Date:   Tue, 14 Jun 2022 15:18:27 +0530
-Message-ID: <1655200111-18357-6-git-send-email-quic_c_skakit@quicinc.com>
+Subject: [PATCH V15 6/9] mfd: pm8008: Use i2c_new_dummy_device() API
+Date:   Tue, 14 Jun 2022 15:18:28 +0530
+Message-ID: <1655200111-18357-7-git-send-email-quic_c_skakit@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1655200111-18357-1-git-send-email-quic_c_skakit@quicinc.com>
 References: <1655200111-18357-1-git-send-email-quic_c_skakit@quicinc.com>
@@ -70,10 +70,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the regmap member from pm8008_data struct as it is
-not used outside of probe. Add a local variable for regmap
-and pass it to the pm8008_probe_irq_peripherals()
-API in pm8008_probe.
+Use i2c_new_dummy_device() to register pm8008-regulator
+client present at a different address space, instead of
+defining a separate DT node. This avoids calling the probe
+twice for the same chip, once for each client pm8008-infra
+and pm8008-regulator.
+
+As a part of this define pm8008_regmap_init() to do regmap
+init for both the clients and define pm8008_get_regmap() to
+pass the regmap to the regulator driver.
 
 Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
 Reviewed-by: Stephen Boyd <swboyd@chromium.org>
@@ -87,104 +92,107 @@ Changes in V14:
 Changes in V13:
  - None.
 
- drivers/mfd/qcom-pm8008.c | 22 +++++++++++-----------
- 1 file changed, 11 insertions(+), 11 deletions(-)
+ drivers/mfd/qcom-pm8008.c       | 34 ++++++++++++++++++++++++++++++++--
+ include/linux/mfd/qcom_pm8008.h |  9 +++++++++
+ 2 files changed, 41 insertions(+), 2 deletions(-)
+ create mode 100644 include/linux/mfd/qcom_pm8008.h
 
 diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
-index 5a670b0..569ffd50 100644
+index 569ffd50..55e2a8e 100644
 --- a/drivers/mfd/qcom-pm8008.c
 +++ b/drivers/mfd/qcom-pm8008.c
-@@ -57,7 +57,6 @@ enum {
+@@ -9,6 +9,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/irq.h>
+ #include <linux/irqdomain.h>
++#include <linux/mfd/qcom_pm8008.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+ #include <linux/of_platform.h>
+@@ -57,6 +58,7 @@ enum {
  
  struct pm8008_data {
  	struct device *dev;
--	struct regmap *regmap;
++	struct regmap *regulators_regmap;
  	int irq;
  	struct regmap_irq_chip_data *irq_data;
  };
-@@ -151,7 +150,7 @@ static struct regmap_config qcom_mfd_regmap_cfg = {
+@@ -150,6 +152,12 @@ static struct regmap_config qcom_mfd_regmap_cfg = {
  	.max_register	= 0xFFFF,
  };
  
--static int pm8008_init(struct pm8008_data *chip)
-+static int pm8008_init(struct regmap *regmap)
++struct regmap *pm8008_get_regmap(const struct pm8008_data *chip)
++{
++	return chip->regulators_regmap;
++}
++EXPORT_SYMBOL_GPL(pm8008_get_regmap);
++
+ static int pm8008_init(struct regmap *regmap)
  {
  	int rc;
- 
-@@ -161,32 +160,32 @@ static int pm8008_init(struct pm8008_data *chip)
- 	 * This is required to enable the writing of TYPE registers in
- 	 * regmap_irq_sync_unlock().
- 	 */
--	rc = regmap_write(chip->regmap,
-+	rc = regmap_write(regmap,
- 			 (PM8008_TEMP_ALARM_ADDR | INT_SET_TYPE_OFFSET),
- 			 BIT(0));
- 	if (rc)
- 		return rc;
- 
- 	/* Do the same for GPIO1 and GPIO2 peripherals */
--	rc = regmap_write(chip->regmap,
-+	rc = regmap_write(regmap,
- 			 (PM8008_GPIO1_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
- 	if (rc)
- 		return rc;
- 
--	rc = regmap_write(chip->regmap,
-+	rc = regmap_write(regmap,
- 			 (PM8008_GPIO2_ADDR | INT_SET_TYPE_OFFSET), BIT(0));
- 
- 	return rc;
+@@ -217,11 +225,25 @@ static int pm8008_probe_irq_peripherals(struct pm8008_data *chip,
+ 	return 0;
  }
  
- static int pm8008_probe_irq_peripherals(struct pm8008_data *chip,
--					int client_irq)
-+					struct regmap *regmap, int client_irq)
++static struct regmap *pm8008_regmap_init(struct i2c_client *client,
++							struct pm8008_data *chip)
++{
++	struct regmap *regmap;
++
++	regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg);
++	if (!regmap)
++		return NULL;
++
++	i2c_set_clientdata(client, chip);
++	return regmap;
++}
++
+ static int pm8008_probe(struct i2c_client *client)
  {
- 	int rc, i;
- 	struct regmap_irq_type *type;
- 	struct regmap_irq_chip_data *irq_data;
- 
--	rc = pm8008_init(chip);
-+	rc = pm8008_init(regmap);
- 	if (rc) {
- 		dev_err(chip->dev, "Init failed: %d\n", rc);
- 		return rc;
-@@ -208,7 +207,7 @@ static int pm8008_probe_irq_peripherals(struct pm8008_data *chip,
- 				IRQ_TYPE_LEVEL_HIGH | IRQ_TYPE_LEVEL_LOW);
- 	}
- 
--	rc = devm_regmap_add_irq_chip(chip->dev, chip->regmap, client_irq,
-+	rc = devm_regmap_add_irq_chip(chip->dev, regmap, client_irq,
- 			IRQF_SHARED, 0, &pm8008_irq_chip, &irq_data);
- 	if (rc) {
- 		dev_err(chip->dev, "Failed to add IRQ chip: %d\n", rc);
-@@ -223,14 +222,15 @@ static int pm8008_probe(struct i2c_client *client)
  	int rc;
  	struct pm8008_data *chip;
  	struct gpio_desc *reset_gpio;
-+	struct regmap *regmap;
++	struct i2c_client *regulators_client;
+ 	struct regmap *regmap;
  
  	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
- 	if (!chip)
+@@ -229,11 +251,19 @@ static int pm8008_probe(struct i2c_client *client)
  		return -ENOMEM;
  
  	chip->dev = &client->dev;
--	chip->regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg);
--	if (!chip->regmap)
-+	regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg);
-+	if (!regmap)
+-	regmap = devm_regmap_init_i2c(client, &qcom_mfd_regmap_cfg);
++	regmap = pm8008_regmap_init(client, chip);
+ 	if (!regmap)
  		return -ENODEV;
  
- 	i2c_set_clientdata(client, chip);
-@@ -240,7 +240,7 @@ static int pm8008_probe(struct i2c_client *client)
- 		return PTR_ERR(reset_gpio);
+-	i2c_set_clientdata(client, chip);
++	regulators_client = i2c_new_dummy_device(client->adapter, client->addr + 1);
++	if (IS_ERR(regulators_client)) {
++		dev_err(&client->dev, "can't attach client\n");
++		return PTR_ERR(regulators_client);
++	}
++
++	chip->regulators_regmap = pm8008_regmap_init(regulators_client, chip);
++	if (!chip->regulators_regmap)
++		return -ENODEV;
  
- 	if (of_property_read_bool(chip->dev->of_node, "interrupt-controller")) {
--		rc = pm8008_probe_irq_peripherals(chip, client->irq);
-+		rc = pm8008_probe_irq_peripherals(chip, regmap, client->irq);
- 		if (rc)
- 			dev_err(chip->dev, "Failed to probe irq periphs: %d\n", rc);
- 	}
+ 	reset_gpio = devm_gpiod_get(chip->dev, "reset", GPIOD_OUT_LOW);
+ 	if (IS_ERR(reset_gpio))
+diff --git a/include/linux/mfd/qcom_pm8008.h b/include/linux/mfd/qcom_pm8008.h
+new file mode 100644
+index 0000000..3814bff
+--- /dev/null
++++ b/include/linux/mfd/qcom_pm8008.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++// Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
++#ifndef __QCOM_PM8008_H__
++#define __QCOM_PM8008_H__
++
++struct pm8008_data;
++struct regmap *pm8008_get_regmap(const struct pm8008_data *chip);
++
++#endif
 -- 
 2.7.4
 

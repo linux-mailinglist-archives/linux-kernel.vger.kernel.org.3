@@ -2,77 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1941654A8E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 07:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E5154A8EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 07:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242010AbiFNFtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 01:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52846 "EHLO
+        id S242742AbiFNFxx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 01:53:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240810AbiFNFtV (ORCPT
+        with ESMTP id S232833AbiFNFxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 01:49:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400743A70A;
-        Mon, 13 Jun 2022 22:49:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8E52B80D47;
-        Tue, 14 Jun 2022 05:49:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24DAFC3411B;
-        Tue, 14 Jun 2022 05:49:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655185758;
-        bh=R+0qAAX6efv+AygD/S2OgXLLIy/Y/Bbh3wzi0ZGiAWQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PYNoPUtL9o4blp5GFVcqKknV93aauo63yGEnKIVW30K7HR/1jkDXld2d/XUhxx6/2
-         239sw6OgsseZPYwoxf+GT3DKTYlqIcPibec6wchik4vBaRsXllag2VIz0DPZjEpah2
-         yRvOqdBds2oqlZC4fmDYQv/WSMEAWOG3HBLObpjFRlykmKy95Gku+w77MOGKLYDxTy
-         qZ8WhEnd9eavxACzB+XBITuOTmBK4sS87kRdCSuEoB+pWIEvoqHQT2R3DAg3E0v5uO
-         sIsdRkmRM/VGX8V8mnxPb+1d6DE4PG1YkZOjC4vztpSEbOY5iu5v9DTcNLTISR1vYg
-         t5QOZCjsc0QPg==
-Date:   Mon, 13 Jun 2022 22:49:17 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Mark Mentovai <mark@moxienet.com>
-Subject: Re: [net-next PATCH 2/2] net: ethernet: stmmac: reset force speed
- bit for ipq806x
-Message-ID: <20220613224917.325aca0a@kernel.org>
-In-Reply-To: <20220609002831.24236-2-ansuelsmth@gmail.com>
-References: <20220609002831.24236-1-ansuelsmth@gmail.com>
-        <20220609002831.24236-2-ansuelsmth@gmail.com>
+        Tue, 14 Jun 2022 01:53:51 -0400
+Received: from conuserg-07.nifty.com (conuserg-07.nifty.com [210.131.2.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A341D311;
+        Mon, 13 Jun 2022 22:53:49 -0700 (PDT)
+Received: from grover.sesame (133-32-177-133.west.xps.vectant.ne.jp [133.32.177.133]) (authenticated)
+        by conuserg-07.nifty.com with ESMTP id 25E5qNim019312;
+        Tue, 14 Jun 2022 14:52:23 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-07.nifty.com 25E5qNim019312
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1655185943;
+        bh=JjvmcElNPYiIuoDQ6WQQO7xgfdH+JttvtH56H6zA87U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=q/lihoFxy7Qb/WR5tZDIEDAx5biV5XbRsOVnjZiJk+cSu8IbrnVXypbuG0snPl9VJ
+         +DnQamGqI88D5y6vnMBpMqsxesMwtII/vGPfPjDGf9DSCRiBprmJKarB8zG1dwDG9P
+         1B6eJE6qxa1wvgNr2h/4tIuGihZAmHJhJEsZLGDrIsL3SHEnSXrdwUBMiYsDFPGZqZ
+         DOhnMLh5y8bmwB9Ud8eW7JQrsWaOHA0cfXQQu4vgYdw4GwL4AEFVjgeyWCc98Mka/6
+         oioEUab+C8em/lyPbJ56OR2nMOUm5rUIKC0ryY5g2n2q+770ADH/dHZ/mGaY/KivFu
+         G0bsdEYQTzs8A==
+X-Nifty-SrcIP: [133.32.177.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] kbuild: remove sed command from cmd_ar_builtin
+Date:   Tue, 14 Jun 2022 14:51:49 +0900
+Message-Id: <20220614055149.1900535-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  9 Jun 2022 02:28:31 +0200 Christian 'Ansuel' Marangi wrote:
-> +	dn = of_get_child_by_name(pdev->dev.of_node, "fixed-link");
-> +	ret = of_property_read_u32(dn, "speed", &link_speed);
-> +	if (ret) {
-> +		dev_err(dev, "found fixed-link node with no speed");
-> +		return ret;
+Replace a pipeline of echo and sed with printf to decrease process forks.
 
-Doesn't this return potentially leak the reference on dn?
-You move the of_node_put() right before the if (ret) {
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-> +	}
-> +
-> +	of_node_put(dn);
+Changes in v2:
+  - Avoid the pipeline if there is no object to put in the archive
+
+ scripts/Makefile.build | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index cac070aee791..784f46d41959 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -358,9 +358,8 @@ $(subdir-modorder): $(obj)/%/modules.order: $(obj)/% ;
+ 
+ quiet_cmd_ar_builtin = AR      $@
+       cmd_ar_builtin = rm -f $@; \
+-		echo $(patsubst $(obj)/%,%,$(real-prereqs)) | \
+-		sed -E 's:([^ ]+):$(obj)/\1:g' | \
+-		xargs $(AR) cDPrST $@
++	$(if $(real-prereqs), printf "$(obj)/%s " $(patsubst $(obj)/%,%,$(real-prereqs)) | xargs) \
++	$(AR) cDPrST $@
+ 
+ $(obj)/built-in.a: $(real-obj-y) FORCE
+ 	$(call if_changed,ar_builtin)
+-- 
+2.32.0
+

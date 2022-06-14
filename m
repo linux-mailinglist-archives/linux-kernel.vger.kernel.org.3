@@ -2,410 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFF754A319
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C586854A31F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 02:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235703AbiFNAOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Jun 2022 20:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39064 "EHLO
+        id S240607AbiFNAVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Jun 2022 20:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiFNAOo (ORCPT
+        with ESMTP id S230272AbiFNAVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Jun 2022 20:14:44 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2076.outbound.protection.outlook.com [40.107.220.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE9531916;
-        Mon, 13 Jun 2022 17:14:41 -0700 (PDT)
+        Mon, 13 Jun 2022 20:21:33 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2047.outbound.protection.outlook.com [40.107.223.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F1AD2314F;
+        Mon, 13 Jun 2022 17:21:31 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GE4+pJz0iV0OgftYuR8oB+YGvHhz4OiCAUUGGm6f3hT8N7CysaVwekOK1rq4QhQWmVrZbyuMWg4y01SDe6nZfvsVE1Bnfn2HUbcq5t85e1GqRRoSOMEMFDb+HKcmNkRTmtLUVojChW0ymkGBeohL20AS9V9avOxbpyXH3Ggf8XVkJC7tTf20gia9Pwx0EMg3UZk+awFjaGtbPkICqT2K71fE1fVeEFgVnoRe+N+xnNMulPK/WW0AR/1blxIcGsuFQ6kU+Twy2KwcoHy9ZZo3hgUwz3M7rPgriObQMlKWrRZNtLGh1kXLduYWRHadABk2lD2canidP9sIulqStUtFaw==
+ b=fY3zDCvzO1upNxJIxpFPZH5YEc5uWt/ldxWJj0MqZ8UiMxtlmUqJ/pVRJXILoqaWDRZ83xi4jJMQhDh2zwYrdwwlAs9Do9rWLai5SjCED92BvQx7I/+9jOkWHIEGRzo/kVnbGVH2OhhB0E1rVGeXfJsAeRY4L6TmxuyfUKWSPLmKdlaXLDkbpz1zTlty4Hgu07/UQa90+f4ctct3/+usJ/ZH4X1zLVv0FDfExUqXY0w+G/5k/YISm2Gxb5Z+SWPYX4MsK/TXZWo0/7pj0YT9AS1Eaof2/6qpOP7dzQ41IgcWvN80ez0oIuG+VvM3DLEkANWhr6AIw0Eiebf7dqsMog==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NSeDNKRGGMHl7uHaPIzHvAHYCAcwJm2KVE6grmKU8VE=;
- b=WJ03VBHDKKnnAOzYT4pCfQjovEapj+okXo4ubx9/6FMrCic90RtYwpLl+1N2gCtgEN6EoauUROM2UTgOcB5PnPLG/4S657iFI90I3EctsVaOWGC4h5B/q8wn8aVeI7A6Tgf47j4NSg4yvED5FNBFSqkaqQv2a74aLctSmhkWRvQVKwe4zGODmnFVDTHuDFFiTn1W2qM9XRvFP3aWakHLR3Tq8ghW1vIRJTtiwn9pJMmRoiZmMXIw80VGFeu7FIeVeD4zjAd7o+mB2udUOoHWtyccQQoopYAghs3n2k8gZVQprkerRAUrAhWj2j0xV1rU5GMSsPsYK9RcxLMpQmcpFQ==
+ bh=KnZmZsinsso3errp/WXeQwVC/7Z6BG3l/m32W7RWYmc=;
+ b=LjRXqHJ1TgPUUT7vDShD8TCVUBoovj23nllsknt2rymBH7yJBzqU3Y1LJii1tTeM7IP+ppyZtHYurnQ4mzCHBgro7HZQr6LmmMYvdFj7YGKFztP4WJ+phk8OzmMurQJbkWPGzuefINOXcJcxQh1ukb5dj3Vl2F5TmP6cWZ+kHeJezIrjtyVP7Lx/+D60D9+vnmDAH9ukFcIbIi7SHhQk79Cir9dMAeya9i6qIKsZ+gOvgF+Wdp7IK+jgWkm/YaOlJz8DrOkaQ7KvBEy5QxGqR97rfFOxDIpjpXTZcWWuGLRqbNEMrg7IUg+yDG9GSh6ED+Iy3TqOxPVi8vDhwxmn+A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NSeDNKRGGMHl7uHaPIzHvAHYCAcwJm2KVE6grmKU8VE=;
- b=ULU729JO8arsAlyMiN/f9xSrLFZlpf81jMzXHGOhT9dT6pkU/qOCqQdy2tBUjPBSRwNgSdnVDhjzE+ikBxYESfy6mJlwaXq4yTD8RX2qWzCZ8tDS1XW29KMgExJOkV0CabrDRFfSmiEHVm6cKfYrOYwxWP0GOUmoPd7Rz59H17xOy5broxkxuf+lXRwUDOVgjeqtRWRFK+o2KJzfAIRe963lY9FfLS1g30rLfi0w65OiEnGa9vUPlFJEn9NAS8TzLK8675fK43lIiFaAoqHOG7WZRiC0KVmIH7puQ8yGmyRMFQa4j+L4FxLI7jx/GtiROtWRbakPnIJ8ISvrUaubPA==
+ bh=KnZmZsinsso3errp/WXeQwVC/7Z6BG3l/m32W7RWYmc=;
+ b=OBtcgy/w9i5x8TVJPPw4k20JOOLCZj0wGRdh2HMncv0etmucNCohc2Mfq2R8WBtj+vdVbSxJVtP32sytO+0byVqBFccFGCFY2k+uKOrGzm7BDjDtF4t3X3qU0bINzC1OcGHxFkxLaRouQnOWGidVaKGL1b2s85sQyKvMZpTQ0rc=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com (2603:10b6:8:73::18) by
- SJ1PR12MB6338.namprd12.prod.outlook.com (2603:10b6:a03:455::19) with
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
+ by MWHPR12MB1552.namprd12.prod.outlook.com (2603:10b6:301:a::23) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.20; Tue, 14 Jun
- 2022 00:14:40 +0000
-Received: from DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::2030:d898:6e2f:3471]) by DS7PR12MB5744.namprd12.prod.outlook.com
- ([fe80::2030:d898:6e2f:3471%7]) with mapi id 15.20.5332.017; Tue, 14 Jun 2022
- 00:14:39 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+ 2022 00:21:23 +0000
+Received: from SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::810a:e508:3491:1b93]) by SN6PR12MB2767.namprd12.prod.outlook.com
+ ([fe80::810a:e508:3491:1b93%2]) with mapi id 15.20.5332.020; Tue, 14 Jun 2022
+ 00:21:22 +0000
+Message-ID: <ee1a829f-9a89-e447-d182-877d4033c96a@amd.com>
+Date:   Tue, 14 Jun 2022 00:21:16 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH Part2 v5 23/45] KVM: SVM: Add KVM_SNP_INIT command
+Content-Language: en-US
+To:     Alper Gun <alpergun@google.com>
+Cc:     Brijesh Singh <brijesh.singh@amd.com>, Ashish.Kalra@amd.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Joerg Roedel <jroedel@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>, Peter Gonda <pgonda@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
         Vlastimil Babka <vbabka@suse.cz>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org, huanyi.xj@alibaba-inc.com,
-        zjb194813@alibaba-inc.com, tianhu.hh@alibaba-inc.com,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Laura Abbott <labbott@redhat.com>
-Subject: Re: [RESEND PATCH] mm: page_alloc: validate buddy before check the
- migratetype
-Date:   Mon, 13 Jun 2022 20:14:36 -0400
-X-Mailer: MailMate (1.14r5883)
-Message-ID: <435B45C3-E6A5-43B2-A5A2-318C748691FC@nvidia.com>
-In-Reply-To: <CAJF2gTSsaaseds=T_y-Ddt5Np2rYhk3ENumzSZDZUSXFwT3u-g@mail.gmail.com>
-References: <20220613131046.3009889-1-xianting.tian@linux.alibaba.com>
- <0262A4FB-5A9B-47D3-8F1A-995509F56279@nvidia.com>
- <CAJF2gTQGXAubtas4wAzrg298dGQJntu38X48V2OzcK8xZ_vPJg@mail.gmail.com>
- <D667F530-E286-4E75-B7CE-63E120E440C8@nvidia.com>
- <CAJF2gTSsaaseds=T_y-Ddt5Np2rYhk3ENumzSZDZUSXFwT3u-g@mail.gmail.com>
-Content-Type: multipart/signed;
- boundary="=_MailMate_E133FCE1-A8E8-45AB-BB0D-17B9488A3C6D_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL1PR13CA0145.namprd13.prod.outlook.com
- (2603:10b6:208:2bb::30) To DS7PR12MB5744.namprd12.prod.outlook.com
- (2603:10b6:8:73::18)
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>, tony.luck@intel.com,
+        Marc Orr <marcorr@google.com>,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        Pavan Kumar Paluri <papaluri@amd.com>
+References: <20210820155918.7518-1-brijesh.singh@amd.com>
+ <20210820155918.7518-24-brijesh.singh@amd.com>
+ <CABpDEukdrEbXjOF_QuZqUMQndYx=zVM4s2o-oN_wb2L_HCrONg@mail.gmail.com>
+ <1cadca0d-c3dc-68ed-075f-f88ccb0ccc0a@amd.com>
+ <CABpDEun0rjrNVCGZDXd8SO3tfZi-2ku3mit2XMGLwCsijbF9tg@mail.gmail.com>
+From:   Ashish Kalra <ashkalra@amd.com>
+In-Reply-To: <CABpDEun0rjrNVCGZDXd8SO3tfZi-2ku3mit2XMGLwCsijbF9tg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR19CA0019.namprd19.prod.outlook.com
+ (2603:10b6:208:178::32) To SN6PR12MB2767.namprd12.prod.outlook.com
+ (2603:10b6:805:75::23)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4a34709a-ba82-4663-7b28-08da4d9adf70
-X-MS-TrafficTypeDiagnostic: SJ1PR12MB6338:EE_
-X-Microsoft-Antispam-PRVS: <SJ1PR12MB63387D4177D3BC3EB1B0A1A3C2AA9@SJ1PR12MB6338.namprd12.prod.outlook.com>
+X-MS-Office365-Filtering-Correlation-Id: 3d83a4eb-78d6-4bd6-7266-08da4d9bcfb1
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1552:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB15521D0FE2EB3F39276238E78EAA9@MWHPR12MB1552.namprd12.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: X5dPkwetwLNei7n044Mk5iIamBoGC0UlsA46FFqGPpaLpax7ucOwZPrdk8bNecxWZm45pPLD0Y5ZJXJBF35mCZSuyplOCv0o7km2FGCKrQiJBwJpRzunyjrEBHCAqyqV/awlLHk/h3d4EWVnv7rPF51zC3MWwcDWm7u6Nz6UX93se1jwapwvj5iQpVMsEpeBWY++Pdw2GDE5sSNGr4dp/ZuUtz/a3mh5k4YSEIKF/lQ0TdvEM3nZbSLANzcgVCG3yOTZD6qLchcsniHkPRlNoNIpzBRdgRpSfo5y/r2tfqYRnBpX0CWL+OuE6vdFzk9VXI7gvAiMBg9Txp0Zo6fFP4/Nrmcia1HJV+OwXJeNkWxhpvSq4boH4l9EmCZ6l3vKTN9ZXNwDdWplOAO8ckUbwexmeEa8tb+oyTkKZy/0HNiWck+E3ghuWFzj3ELkc2cimT7Hqf04K3prZxrt05TJpQQfLNgPKB81dkN8aKKfdnmd1+yySaubvexuSSSEz4m9GE6KWhr6gYCcsXsnTcwWzWi7NdTW/CioKe0IrGsoDW6BK7OPJpGAcGjTS061vI25sxFg0e5oPj20zFLvz996959hsoCjoVAMwjIA5Bk5Z1y68dcGh2umUo57dcHM6YXSkz+LFEKv4rQlW+Kx8L23E0vsgk6vZh0r6qOy41TMOM1Oi1JIiNsmmoPZxqMsR0pzjjgt2JE5uCV9cyjxPF83xUHzqWAXJ4YG2awNuKjsKR4I0MZzwqPKIYp4bxgvcPtalERkzNAw+PW9RljyRppgKcUi/ElMSS2Oyj/sC57JRRYUsqZ800qWB8oAZve433MX
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB5744.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(316002)(54906003)(6916009)(21480400003)(36756003)(53546011)(66946007)(66476007)(4326008)(15650500001)(33656002)(38100700002)(2906002)(66556008)(86362001)(6666004)(8676002)(8936002)(966005)(6486002)(6512007)(2616005)(83380400001)(26005)(508600001)(33964004)(235185007)(7416002)(5660300002)(6506007)(186003)(72826004)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: MWeuJuuyRYJ6sI5hLdcvSSHLfuiio+KXQhzdphvTJNGaU+5AaEtSS8leKj2p1Fzebh6URq23GLRhG6Hx5cJFy2USLW49tmvIWTpXl7wVcw1PoZ/STWrtWRzhgjsyPstZdDIrqODaSMUwIn7tVpTnO++2o0feuua5e6xvK7W6hy01QO8Sy8/Oj+n2J33ZNtorAABc3G4uZS1sjIvu8+3SnD4J57/mf1VF3vtq5Yfu+Xae4AXyxnEdyZ3BkRdAsyt1cfV+5hrGkgJLXPbgKU1qrri7lMyg5IdYBQv8QdN4q0EuL37ENMs9zkG5imghbo03Av7QSHUSN2cNVfSVODElMd2aSbZnaT8LA2V/EPWaOltQMqnJMHXqlNS1UHTswFcG6jcFk0pzl6FoKldn/2jt09RP4uJB5Bmx8K1Fv/t5jvY8t7bPqCOEELePlmNaKrlUowJUojEHAdLG4HfQnS5PMBwzftk9Eu0CRAOpAkAhZARvZbVV90tZSl9j0ucE5DYp2JPcd05edUaQ3UHyk4k1K7BSwOTl4JjUg5EbiBUkdzULPW/PlmO6o9nJbFjIPXSnL4eAtSlnenW45YhotHsefGCe2h/AWo/CRkBS45yYE8LvBoYxICavS2l5bA/oHWQf88f11a4Mp6vGs0HCb313q47AFT7hbyWrfZg7AjhEo/PPf/YxNwhEXbvnydNBMDrla5GSMQ4bWAVe8WBbEpiWvmjAR/cUOUY4M95z97YkfTA5YYHVEgXtg7k9a1DjmGrz
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(36756003)(4326008)(8676002)(31686004)(7416002)(7406005)(5660300002)(66556008)(66476007)(66946007)(6486002)(316002)(2906002)(8936002)(31696002)(6916009)(186003)(508600001)(54906003)(2616005)(6666004)(53546011)(6506007)(6512007)(83380400001)(38100700002)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TUg0VjQwVkRPL0tkS05YR3BGUkNpMFZqMzV1UkJ6am1HUHpMOTdSWmUvZkln?=
- =?utf-8?B?SE9XZzJMZnA4cmNkU0gwRVpYVjVTbUYxWUJMRzhhZWlVUkZqdThMSzFpbEVx?=
- =?utf-8?B?VEd1ZC90cVgwNy8za1daWko0em5NeWsyQStNSDlnRHFaK016TzlMblVVM0pR?=
- =?utf-8?B?TWo1S0IxYmV1RTZCTmR5ZFk3Wk9FZkhuTFpoWk1NeEZmdmNPbXR6NnVYN3Rp?=
- =?utf-8?B?WkNZcHRyeFVsazBhOExZdHA4WmVDbjU3bytEMmIxYkRZc3I0cU0zMDFwT0Jj?=
- =?utf-8?B?Z24wZVFzcm40RkNKNWJPaXZPMG9KZ2dWTVN2QmVHMW9Ga2VHSndRamhIY1pz?=
- =?utf-8?B?bVNTLzlNWEt6S2Z3UE5rbzRwbjJ2UVZBVCtXQmVhZ21DNVNxdE9nYkFDVHVy?=
- =?utf-8?B?RkdGWHNHLzVjZnVJSlhpcUptR0pKais5QzI4bGN6akNSa2NvK3B3TmNySDRF?=
- =?utf-8?B?QzkrNkVqUVRxakZRMnprOUh6eUczZ05DTEFaUTMwZXFuVHlzemVMUWRPSUgr?=
- =?utf-8?B?NGN6NlRSeGlBZy9JQ0Z1dFNDT2Mwakd0VEZwWjd3ajFTVkZJT0JSa1dXS002?=
- =?utf-8?B?ZHJZaVJLMmVUOWRXUG1uK3lOZkZiOWtqZ2g4aG4ySXBtSU9JVG5lTHpaWXlx?=
- =?utf-8?B?akN0ekNNaFBGaU44dXBjaXVMd043cjR6cjJUWm1nWmhUVURNS2x0a2pIN3h5?=
- =?utf-8?B?V01tUE84TUxqZHRpVUtkWTd4L0NZWHBrQ3ZuMUZWTnJCdzYxdnJFL3hFdkpw?=
- =?utf-8?B?ZVN2aHRTRnd2RnIvbXdvWmdmU3d2RFhOd1RnWWhienF0ZTNLbWxqTTkzd0R6?=
- =?utf-8?B?TW0rZmtJOFZZS0ZyS0hSN3FjNVp1Tnh6L2RoWm0wV0dCMFFaeVVTVm5KK2Uz?=
- =?utf-8?B?MitKZTZ6aEFLc2ZCQzR5T01lVHlGTFNFZ0ZlV0VadWdmNVVNMVY2ZTU5a0J6?=
- =?utf-8?B?RW5wMm44bTZxbDlLKzFmL0hiWXNtNEVCYVExTW1ERkZkYlkyeVpFYTNYSDFY?=
- =?utf-8?B?amVORXcrUllHa0NNeEZIM3JvamJyUFhmTGV4RDB2TXpzd2pSeVlqcDFhTUFa?=
- =?utf-8?B?SFp5QzNBbHFNVmVqc3NWUUZzc0ZLSnJ6YjJqUGNSNkVqV0RoSVd5aGhwank4?=
- =?utf-8?B?eW1UQWdoQlJHZzBad2IwZmVFbzFNbDhHeFFjVXM0Y1RJcUVoTllyRTBUMGJt?=
- =?utf-8?B?dVdRbWZjWndiZFd2c3hKSEw0SUxDejRRdjRtNzZLNkZiWGVQMk5pcVFlbTQ0?=
- =?utf-8?B?ZkltR2dXc3VXSlBtREZ4b283Ukc5N1U2L2dxVkNuL3RMYmI3aGxMWFBadTdl?=
- =?utf-8?B?SmtsQWEvclF4T3pXaFo5L0llNkxhVTNpTkh3VWhlSXduQW1CVHBKbDVWZWZJ?=
- =?utf-8?B?T1VsN2tmNVcrRDhRb3FWelVXYmV6Z3NsOWNwVHhtSVdFSDZUaHFXdktJK25Y?=
- =?utf-8?B?MkxON3p5cTU3NE1mVU8wWTZMb2l0ZmRKMVVKN0djQkt6c09IWExUbkJZMW50?=
- =?utf-8?B?TjhQdVJXbUhSZTQ4NkVwUS9sV29wY2NSQXRUaWlUNXpvUFYvN2FHN2Uya1Nk?=
- =?utf-8?B?OTRZOUZnS0tpem1vaGZsY1F2b0dza25uZXMxK3g5YTJrVEx0bmc2YnhObEU4?=
- =?utf-8?B?UzdZemVGd2VQMHBqaDh5YjhHN1FxTjBNaXRJdE1xY25WUFFFSEpPbHQxeUpO?=
- =?utf-8?B?VGMzaU15MGdmdXFJcGp5ZjJtYndjVlVNdG4xaWlSU1NMcXdjYjlxdnFQYW5j?=
- =?utf-8?B?SGIvQ2JrL1Z0Vmk1b1VTMTdVd2dBRlQ2VnU2STdOR2F4NitrNkRaWDVGYTFO?=
- =?utf-8?B?RkJjVCtodE1FdE0zeS9Rc3NGcjZqa1JXK05qT3JBZUtLMVVVbENRK1RtVDQv?=
- =?utf-8?B?bmRORUI1T3VCVW9zcElHWXM4OFFyN0NzTHRvN0ZXaGxVaksrODd6aDBNN0Jy?=
- =?utf-8?B?SjdmRmVnWE5TNWcxeDFKUUdJMjdrR1pxZENGQW5zOWk2Sk91Q2d0M25wRU41?=
- =?utf-8?B?UmJtY1hHc01lMlVwR1FqY1NFS2JuOXlvWmtwKzZSYlB4dzVZblAybFNnWUsr?=
- =?utf-8?B?NnRwK3RlN0lkeXQ5a0t6LzV6azAzOFowSGczck5BU0phZ0hKZVNBVXNTSkNv?=
- =?utf-8?B?bk1HQzg3RUFLS09obFdEcjh1dzFmVnoxckZ1cVNKQlNmOXRpenBxRVo1Z2tT?=
- =?utf-8?B?SlN3N1FMempIbktPaGlwdHRqS0sxMkNzbVJIQ0lFUDk1djBiVzRwWTZYYkFC?=
- =?utf-8?B?L2sxKy9HbmJGSGVVWVFCVWlaQ1hqbUNZanB5cXJNekErdVdHL2JseENkYUJQ?=
- =?utf-8?B?L1FSUy93NFJJU3NvMkk1a2l1a3lEc1hqb1h1MHFpSUdyTWlQWEpZdz09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a34709a-ba82-4663-7b28-08da4d9adf70
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB5744.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZG9jOVl4VFFzcEN3UXpqdDliZStGMWsyd2ZlWlY4WUZ4TnVTVUh0TEQ0Yjlp?=
+ =?utf-8?B?cjFSOEE2NHo1Zy9IQURGUmNFdkJhVG9mY29EZU9Mak0zREt3L2tVQXYzU1NL?=
+ =?utf-8?B?eXdmS2tETWh2UTk3UElKSlVTNzN4SE0xR3dVYnhNOHZoMFRjQUNrcy92N1E1?=
+ =?utf-8?B?VXZLY054dGtneW43OUY2MkFsbTNyQW05aERCNGo4QUxudWdyZ29JK2dnaHJS?=
+ =?utf-8?B?N0dWemoxY1hEeGphaXdBSFhQVzFKSmFIVG05STVROEF1b0tsRkpwRnBnZVdo?=
+ =?utf-8?B?azEzLzdCNHhOZ09ZUmJ4UnBlLzY0RmVVeGRqeVFSNllteTZwQktGSzJJT3RU?=
+ =?utf-8?B?YnMyMTFSb1NSbmVyT3I2V21MSW8rbEwxYzY1ZTQ1cTRFcWRseDV3eStxVlpW?=
+ =?utf-8?B?SHljeVZOQ01ndVRjUkxicjNLV2xRWTdlVWJZejQvbEE5VGVKbVl3YkdVVHE2?=
+ =?utf-8?B?T3lMMm9ncDRIMEtCdTNmc1lOVzNFaDZobktLdEQ0WG5kTlJwUFN2N3UwWnFT?=
+ =?utf-8?B?U0pUcnFhaVpuVFpDcmswRXh5N3JrSTl4MmVDSTd6QTFKYjY1RWxVdDQ5RzZH?=
+ =?utf-8?B?SDM1REM5NTVqUEFzTEQydnZ3MW5wUmlxRkpuaEd6UlVsMXdTd0haWVdhRzMx?=
+ =?utf-8?B?SDdNd3FGc2prTzUzK2ZqZnZoWkpwcFVWd0V5MmJWZGdCaHJ2MzNLam5UalFu?=
+ =?utf-8?B?dUxwbExIZ1ZoVXVNeHF3alVRcHVRdndPQytuZFNtdDkzUDY3cTVPb0Z6TG1U?=
+ =?utf-8?B?cHYyT2FVL1d3SE1aM2hTeWlBR0NZbEdVQmRSaldROUhQa1VCOWVZUEpZbkZz?=
+ =?utf-8?B?bmw2WW1raC9sY1lnQWZmQTBxQi90ODJMWGJ1K2RlVVhGZlFLOW5NOE5PckM3?=
+ =?utf-8?B?Y0VmZ3BBREIzL2c1VXM3ZjRyUEdDL3QzVFBtQVhYOUtpV3FuV2NVSXZYM1RE?=
+ =?utf-8?B?NGd5c2s3bXc3YUNjUHhDTTdZM2Qxc2Q3RS9vWVNublRjbVFxenJqOWIxcFRa?=
+ =?utf-8?B?R2tidGNIQVZ0aVFmb1R2ZlBkbzdqVGJOckxUQmJYZTYzcFpyZmk5K3BHNlNR?=
+ =?utf-8?B?WjJWaUN1bzNTMGJIQmpaVGV4UEF3b1VRZjhHbXhhMXc3ODJJS0pJejFvY1ps?=
+ =?utf-8?B?bm5INkw1dEVpZ01JaHBFcHRtait1VGxLWFk5YTdTZy9IcEVBWnBoVCtHQ3Z4?=
+ =?utf-8?B?UTgvSEF5Ym9EaGVUNUI1SFc1c0dEem9rZXIyRjYzRUhCdXVXYlVLMHZEQ1l6?=
+ =?utf-8?B?VXh4RTAzdGJYN3orY1l1QzVzb0tROUxvR0hjbmpvdTlta05TejYvZEovbXdG?=
+ =?utf-8?B?R05UMGhuNnREZVl3dUw5UXJ2UnR0NStnR1B0R0VLRXkwbkxNRUZwZXl4YWk4?=
+ =?utf-8?B?RElGWWY5aEQ2VFNKekk4cTVNQ1NGS1VCa28wbVNIUGxsZzd6K015Umd6cUl1?=
+ =?utf-8?B?M2YzMGI5V0lrQjhuQnJicXA3TytZWkJPb2YxWHRSN29kY0Q2alNqTnd1dTBS?=
+ =?utf-8?B?Sy9QenFIbUQxbzRSTHAwZFRGZmlHbEdxZGo3VnBiazMyUlZ3VmFzRnNOYUtV?=
+ =?utf-8?B?aklTbS9scG5kcVBJczh4VnZzYTY0Tm5FRHVvNW1GY0hvNjZSNzhQTU8zWXox?=
+ =?utf-8?B?NndGL0ZzZnN3UWgvVE1ycTR6WkMvTDZmSmY4UEV4MzJMMnMxa3g4TEdkNGtK?=
+ =?utf-8?B?LzBmUHhuaWVtOVNaWXBhVnFzVXdicXRRM1p4aVZieGJzeGd0L09VK3IxY1BJ?=
+ =?utf-8?B?Q2ZxMjZPa0t6UURyZUVyUmpoQjNjOUNZQmsvYnlmZGk2WURYSHord2dVNHIr?=
+ =?utf-8?B?bWtES0Q3K3BNellzYUxtV1hmSStrZTVFVGhhekhHMWc2K0w4MFZQaDY1Z29Z?=
+ =?utf-8?B?MEhwZTg2VFZ2OXl0ZVFBMVMwZnB3R2Z4QkZZdGVSbk9xcEx6L0p3S2lEUjl2?=
+ =?utf-8?B?N29EK1g0Nm54NmlHSUhldVJRd01wUUQyZGZuSGtkczk3NEJWRCtlVkhEMjMw?=
+ =?utf-8?B?S3hVeGdlTlRKcWZrWUdmaTVDbXBlWHJwVGN4eFZTSm8xS05LUEovR1EvdWR2?=
+ =?utf-8?B?S3hpUmJyTklLMXFXbUYrK21vYTRLMXM4TXdmK2xXSmdERkhtM3J4UmFQN2Nz?=
+ =?utf-8?B?OTVjOFpvUExWbVRQZ3ZSbzJWS0MzUTJYMEhGYzlOczlXZ042cTE4SHFxUW4z?=
+ =?utf-8?B?aXBodm5DSGpMZ0pVd0dPRElCSGp0M0V4NFppTXo4R2Nic1hBSWMrWXhQd3Rz?=
+ =?utf-8?B?LzBsZ1RUbnAwMVlNejR1amtvaUcwYjU3QjVOZUFUSVN6V2IrQzE5c2FvVHNW?=
+ =?utf-8?B?THVCTkFEYitQTW16WFk4MFRhMElWQk53cGZuanE2QVFhNE8xR1d3QT09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d83a4eb-78d6-4bd6-7266-08da4d9bcfb1
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2022 00:14:39.7526
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jun 2022 00:21:22.8316
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rlj3pKRGNd3G1pmucLi5/5413BBdmUXz+cW1QmCww4EgULfQmN4ch5qMnQAfkVyk
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6338
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: obNi8Bh1gyecFZQ2S7Q9T845A1uehELk+zRFmpHtFqnKUFtoM+1bWcc/cOIblOkhsWUeAZGzvddm6Gzc/sGV3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1552
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_E133FCE1-A8E8-45AB-BB0D-17B9488A3C6D_=
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
 
-On 13 Jun 2022, at 19:47, Guo Ren wrote:
-
-> On Tue, Jun 14, 2022 at 3:49 AM Zi Yan <ziy@nvidia.com> wrote:
+On 6/13/22 23:33, Alper Gun wrote:
+> On Mon, Jun 13, 2022 at 4:15 PM Ashish Kalra <ashkalra@amd.com> wrote:
+>> Hello Alper,
 >>
->> On 13 Jun 2022, at 12:32, Guo Ren wrote:
+>> On 6/13/22 20:58, Alper Gun wrote:
+>>> static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>>>>    {
+>>>> +       bool es_active = (argp->id == KVM_SEV_ES_INIT || argp->id == KVM_SEV_SNP_INIT);
+>>>>           struct kvm_sev_info *sev = &to_kvm_svm(kvm)->sev_info;
+>>>> -       bool es_active = argp->id == KVM_SEV_ES_INIT;
+>>>> +       bool snp_active = argp->id == KVM_SEV_SNP_INIT;
+>>>>           int asid, ret;
+>>>>
+>>>>           if (kvm->created_vcpus)
+>>>> @@ -249,12 +269,22 @@ static int sev_guest_init(struct kvm *kvm, struct kvm_sev_cmd *argp)
+>>>>                   return ret;
+>>>>
+>>>>           sev->es_active = es_active;
+>>>> +       sev->snp_active = snp_active;
+>>>>           asid = sev_asid_new(sev);
+>>>>           if (asid < 0)
+>>>>                   goto e_no_asid;
+>>>>           sev->asid = asid;
+>>>>
+>>>> -       ret = sev_platform_init(&argp->error);
+>>>> +       if (snp_active) {
+>>>> +               ret = verify_snp_init_flags(kvm, argp);
+>>>> +               if (ret)
+>>>> +                       goto e_free;
+>>>> +
+>>>> +               ret = sev_snp_init(&argp->error);
+>>>> +       } else {
+>>>> +               ret = sev_platform_init(&argp->error);
+>>> After SEV INIT_EX support patches, SEV may be initialized in the platform late.
+>>> In my tests, if SEV has not been initialized in the platform yet, SNP
+>>> VMs fail with SEV_DF_FLUSH required error. I tried calling
+>>> SEV_DF_FLUSH right after the SNP platform init but this time it failed
+>>> later on the SNP launch update command with SEV_RET_INVALID_PARAM
+>>> error. Looks like there is another dependency on SEV platform
+>>> initialization.
+>>>
+>>> Calling sev_platform_init for SNP VMs fixes the problem in our tests.
+>> Trying to get some more context for this issue.
 >>
->>> On Mon, Jun 13, 2022 at 11:23 PM Zi Yan <ziy@nvidia.com> wrote:
->>>>
->>>> Hi Xianting,
->>>>
->>>> Thanks for your patch.
->>>>
->>>> On 13 Jun 2022, at 9:10, Xianting Tian wrote:
->>>>
->>>>> Commit 787af64d05cd ("mm: page_alloc: validate buddy before check i=
-ts migratetype.")
->>>>> added buddy check code. But unfortunately, this fix isn't backporte=
-d to
->>>>> linux-5.17.y and the former stable branches. The reason is it added=
- wrong
->>>>> fixes message:
->>>>>      Fixes: 1dd214b8f21c ("mm: page_alloc: avoid merging non-fallba=
-ckable
->>>>>                          pageblocks with others")
->>>>
->>>> No, the Fixes tag is right. The commit above does need to validate b=
-uddy.
->>> I think Xianting is right. The =E2=80=9CFixes:" tag is not accurate a=
-nd the
->>> page_is_buddy() is necessary here.
->>>
->>> This patch could be applied to the early version of the stable tree
->>> (eg: Linux-5.10.y, not the master tree)
+>> When you say after SEV_INIT_EX support patches, SEV may be initialized
+>> in the platform late, do you mean sev_pci_init()->sev_snp_init() ...
+>> sev_platform_init() code path has still not executed on the host BSP ?
 >>
->> This is quite misleading. Commit 787af64d05cd applies does not mean it=
- is
->> intended to fix the preexisting bug. Also it does not apply cleanly
->> to commit d9dddbf55667, there is a clear indentation mismatch. At best=
-,
->> you can say the way of 787af64d05cd fixing 1dd214b8f21c also fixes d9d=
-ddbf55667.
->> There is no way you can apply 787af64d05cd to earlier trees and call i=
-t a day.
->>
->> You can mention 787af64d05cd that it fixes a bug in 1dd214b8f21c and t=
-here is
->> a similar bug in d9dddbf55667 that can be fixed in a similar way too. =
-Saying
->> the fixes message is wrong just misleads people, making them think the=
-re is
->> no bug in 1dd214b8f21c. We need to be clear about this.
-> First, d9dddbf55667 is earlier than 1dd214b8f21c in Linus tree. The
-> origin fixes could cover the Linux-5.0.y tree if they give the
-> accurate commit number and that is the cause we want to point out.
-
-Yes, I got that d9dddbf55667 is earlier and commit 787af64d05cd fixes
-the issue introduced by d9dddbf55667. But my point is that 787af64d05cd
-is not intended to fix d9dddbf55667 and saying it has a wrong fixes
-message is misleading. This is the point I want to make.
-
+> Correct, INIT_EX requires the file system to be ready and there is a
+> ccp module param to call it only when needed.
 >
-> Second, if the patch is for d9dddbf55667 then it could cover any tree
-> in the stable repo. Actually, we only know Linux-5.10.y has the
-> problem.
-
-But it is not and does not apply to d9dddbf55667 cleanly.
-
+> MODULE_PARM_DESC(psp_init_on_probe, " if true, the PSP will be
+> initialized on module init. Else the PSP will be initialized on the
+> first command requiring it");
 >
-> Maybe, Gregkh could help to direct us on how to deal with the issue:
-> (Fixup a bug which only belongs to the former stable branch.)
+> If this module param is false, it won't initialize SEV on the platform
+> until the first SEV VM.
 >
+Ok, that makes sense.
 
-I think you just need to send this patch without saying =E2=80=9Ccommit
-787af64d05cd fixes message is wrong=E2=80=9D would be a good start. You a=
-lso
-need extra fix to mm/page_isolation.c for kernels between 5.15 and 5.17
-(inclusive). So there will need to be two patches:
+So the fix will be to call sev_platform_init() unconditionally here in 
+sev_guest_init(), and both sev_snp_init() and sev_platform_init() are 
+protected from being called again, so there won't be any issues if these 
+functions are invoked again at SNP/SEV VM launch if they have been 
+invoked earlier during module init.
 
-1) your patch to stable tree prior to 5.15 and
+Thanks, Ashish
 
-2) your patch with an additional mm/page_isolation.c fix to stable tree
-between 5.15 and 5.17.
-
->>
->> Also, you will need to fix the mm/page_isolation.c code too to make th=
-is patch
->> complete, unless you can show that PFN=3D0x1000 is never going to be e=
-ncountered
->> in the mm/page_isolation.c code I mentioned below.
-> No, we needn't fix mm/page_isolation.c in linux-5.10.y, because it had
-> pfn_valid_within(buddy_pfn) check after __find_buddy_pfn() to prevent
-> buddy_pfn=3D0.
-> The root cause comes from __find_buddy_pfn():
-> return page_pfn ^ (1 << order);
-
-Right. But pfn_valid_within() was removed since 5.15. So your fix is
-required for kernels between 5.15 and 5.17 (inclusive).
-
->
-> When page_pfn is the same as the order size, it will return the
-> previous buddy not the next. That is the only exception for this
-> algorithm, right?
->
->
->
->
-> In fact, the bug is a very long time to reproduce and is not easy to
-> debug, so we want to contribute it to the community to prevent other
-> guys from wasting time. Although there is no new patch at all.
-
-Thanks for your reporting and sending out the patch. I really
-appreciate it. We definitely need your inputs. Throughout the email
-thread, I am trying to help you clarify the bug and how to fix it
-properly:
-
-1. The commit 787af64d05cd does not apply cleanly to commits
-d9dddbf55667, meaning you cannot just cherry-pick that commit to
-fix the issue. That is why we need your patch to fix the issue.
-And saying it has a wrong fixes message in this patch=E2=80=99s git log i=
-s
-misleading.
-
-2. For kernels between 5.15 and 5.17 (inclusive), an additional fix
-to mm/page_isolation.c is also needed, since pfn_valid_within() was
-removed since 5.15 and the issue can appear during page isolation.
-
-3. For kernels before 5.15, this patch will apply.
-
->
->>
->>>
->>>>
->>>>> Actually, this issue is involved by commit:
->>>>>      commit d9dddbf55667 ("mm/page_alloc: prevent merging between i=
-solated and other pageblocks")
->>>>>
->>>>> For RISC-V arch, the first 2M is reserved for sbi, so the start PFN=
- is 512,
->>>>> but it got buddy PFN 0 for PFN 0x2000:
->>>>>      0 =3D 0x2000 ^ (1 << 12)
->>>>> With the illegal buddy PFN 0, it got an illegal buddy page, which c=
-aused
->>>>> crash in __get_pfnblock_flags_mask().
->>>>
->>>> It seems that the RISC-V arch reveals a similar bug from d9dddbf5566=
-7.
->>>> Basically, this bug will only happen when PFN=3D0x2000 is merging up=
- and
->>>> there are some isolated pageblocks.
->>> Not PFN=3D0x2000, it's PFN=3D0x1000, I guess.
->>>
->>> RISC-V's first 2MB RAM could reserve for opensbi, so it would have
->>> riscv_pfn_base=3D512 and mem_map began with 512th PFN when
->>> CONFIG_FLATMEM=3Dy.
->>> (Also, csky has the same issue: a non-zero pfn_base in some scenarios=
-=2E)
->>>
->>> But __find_buddy_pfn algorithm thinks the start address is 0, it coul=
-d
->>> get 0 pfn or less than the pfn_base value. We need another check to
->>> prevent that.
->>>
->>>>
->>>> BTW, what does first reserved 2MB imply? All 4KB pages from first 2M=
-B are
->>>> set to PageReserved?
->>>>
->>>>>
->>>>> With the patch, it can avoid the calling of get_pageblock_migratety=
-pe() if
->>>>> it isn't buddy page.
->>>>
->>>> You might miss the __find_buddy_pfn() caller in unset_migratetype_is=
-olate()
->>>> from mm/page_isolation.c, if you are talking about linux-5.17.y and =
-former
->>>> version. There, page_is_buddy() is also not called and is_migrate_is=
-olate_page()
->>>> is called, which calls get_pageblock_migratetype() too.
->>>>
->>>>>
->>>>> Fixes: d9dddbf55667 ("mm/page_alloc: prevent merging between isolat=
-ed and other pageblocks")
->>>>> Cc: stable@vger.kernel.org
->>>>> Reported-by: zjb194813@alibaba-inc.com
->>>>> Reported-by: tianhu.hh@alibaba-inc.com
->>>>> Signed-off-by: Xianting Tian <xianting.tian@linux.alibaba.com>
->>>>> ---
->>>>>  mm/page_alloc.c | 3 +++
->>>>>  1 file changed, 3 insertions(+)
->>>>>
->>>>> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
->>>>> index b1caa1c6c887..5b423caa68fd 100644
->>>>> --- a/mm/page_alloc.c
->>>>> +++ b/mm/page_alloc.c
->>>>> @@ -1129,6 +1129,9 @@ static inline void __free_one_page(struct pag=
-e *page,
->>>>>
->>>>>                       buddy_pfn =3D __find_buddy_pfn(pfn, order);
->>>>>                       buddy =3D page + (buddy_pfn - pfn);
->>>>> +
->>>>> +                     if (!page_is_buddy(page, buddy, order))
->>>>> +                             goto done_merging;
->>>>>                       buddy_mt =3D get_pageblock_migratetype(buddy)=
-;
->>>>>
->>>>>                       if (migratetype !=3D buddy_mt
->>>>> --
->>>>> 2.17.1
->>>>
->>>> --
->>>> Best Regards,
->>>> Yan, Zi
->>>
->>>
->>>
->>> --
->>> Best Regards
->>>  Guo Ren
->>>
->>> ML: https://lore.kernel.org/linux-csky/
->>
->> --
->> Best Regards,
->> Yan, Zi
->
->
->
-> -- =
-
-> Best Regards
->  Guo Ren
->
-> ML: https://lore.kernel.org/linux-csky/
-
---
-Best Regards,
-Yan, Zi
-
---=_MailMate_E133FCE1-A8E8-45AB-BB0D-17B9488A3C6D_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmKn0u0PHHppeUBudmlk
-aWEuY29tAAoJEJ2yUfNrYfqK8CcQAKE59rmqKVsp44VmXx/OxJPqqqmeIMs9ZRiQ
-Io8qwpb57sh+vwWeHcI3RikWsNvfcECCVQ0dgHwM32NZAdl3XT7f+e1ufaoRRUMZ
-H8roNF06NqWE34+k7TPRvNByRQhRZdu7iuJcCr+xF3a8XNc85A2IxHLlZJGOzDxE
-y7cWrBrrIJs58xP294cRGN9Nc2ZS9UjOTiMpN6PeqfJLfh6ruoAIv8JKDRhf9ckV
-fOaRR+nZQdBa+XBx7mz7uSLU1J3fjdOxCrRsFMKQv5p4PjRAD11JZ9pQ1dRFmqLd
-WPqNWdz37jmQpEATBBBBGlYRazLHAqQ2rUJpOaLy0w3qzsrqeTC846fE6VUkncBY
-pHM8UjPuT6auBGHjp9hI7x92gNA5d9ModqnG4ahS+DBYzI7PqNN24aMHrR8eRJKm
-Uh8vlb+McK0hq9VfKZ6SLQfJQisDPwPdaewezcZSHJb7vWUTZ+f8lPY7x67Nezcv
-FbPlO+Qx04fCYjKlf62Z/JUpq+sy1LbiyZBijF3Y4cERcYR21/05cGnXD+INeBts
-+dNLGacYiETYoaft5iVAnXkyYtng4ZBqXzSz/0G2q707kziL8xY6YIn7/a/+UMo1
-smu/yxep/DcLrCulXDyGr0uxDrnZyIo7LkrTywBDDHrHFC94Ul+FLEWZGMwvWLIP
-o29BWob3
-=NSir
------END PGP SIGNATURE-----
-
---=_MailMate_E133FCE1-A8E8-45AB-BB0D-17B9488A3C6D_=--

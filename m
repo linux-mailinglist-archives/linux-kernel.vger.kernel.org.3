@@ -2,99 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F02054B765
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72EC754B76C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Jun 2022 19:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344298AbiFNRND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 13:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
+        id S238826AbiFNROa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 13:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344232AbiFNRM5 (ORCPT
+        with ESMTP id S234159AbiFNRO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 13:12:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 058DC1FA6A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:12:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655226771;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BfrhtGAtLvOb91U5Caoxz7ToRMTUo4BX498hJvwylV4=;
-        b=Wpdb598WVOBu+1TrrRVISryupR1ZzrUGnlOKcmh8bXvLR0du9uXq/Yi+FOiKEpuaL3mXqK
-        b4cCsDhKJdLYuQsxn4oX22kVYZHLcG2EFzDUPa3LZ4s+itYd9XRSp7QCtDYXRYC9zGjrW9
-        0+VHx+nxy59BD18WcrNaeDHeMw6So4s=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-235-fRGIY-fGNX-rI-fXCIL86w-1; Tue, 14 Jun 2022 13:12:50 -0400
-X-MC-Unique: fRGIY-fGNX-rI-fXCIL86w-1
-Received: by mail-wm1-f71.google.com with SMTP id k16-20020a7bc310000000b0038e6cf00439so5100608wmj.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:12:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BfrhtGAtLvOb91U5Caoxz7ToRMTUo4BX498hJvwylV4=;
-        b=EGZtFyGEOQDi2QpI0C4Essg23umxBjdTc0OCaodz46tKezmTtEgCw/+uJDHK/0v8a+
-         +6bqK5JU6/oCP0C59Qqfjj1b1/vKmeQoa3hhvaomIdHU7it9ciHLXkH0h6Tuo68X9ZpO
-         8GnQojQIDl583qpHqRKnrKBFIPz7pp+2ruj+R/PHqtpZEq4kHxpO06nvka4f84CQbU2a
-         966Cu87xVmKePRuwE75VDlSgN0LFkQoRnGxQdwObXFdfSE/2i1x+peBfJ0Mxar/3MAYE
-         nMvgIRTykNTHCAIoPbrl+PKp2ZzoiFE8aulXB4c5DTgzmAcCrQgoZ/Mnw0hJVaNIOcor
-         Ng+A==
-X-Gm-Message-State: AOAM531Wez72vT3YQjoH9ttJHFvEmX/kxHLw0fM/6142H9dkIlybWRqY
-        8nZcr67/sCywpIuk/xZEaq9cfgeCWw5axn6B0wJeH1Trf9GTz+5l/u9jgemj51LpsbJE9N5Wm4C
-        YiUj4FsCgvzT6iMGkWMRPMoFk
-X-Received: by 2002:a05:600c:3d99:b0:39c:55ba:ecc3 with SMTP id bi25-20020a05600c3d9900b0039c55baecc3mr5382962wmb.42.1655226768597;
-        Tue, 14 Jun 2022 10:12:48 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzxzHRj9jPybDShmEzjDSQmNckyNLR7TmjRU0BvivRa22+pBhTAlu7GJThPLg9tZdNRpxpyEQ==
-X-Received: by 2002:a05:600c:3d99:b0:39c:55ba:ecc3 with SMTP id bi25-20020a05600c3d9900b0039c55baecc3mr5382934wmb.42.1655226768288;
-        Tue, 14 Jun 2022 10:12:48 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id g15-20020a05600c4ecf00b0039c4945c753sm19088159wmq.39.2022.06.14.10.12.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 10:12:47 -0700 (PDT)
-Message-ID: <25293823-222b-274a-c2b5-63a5558b02d8@redhat.com>
-Date:   Tue, 14 Jun 2022 19:12:46 +0200
+        Tue, 14 Jun 2022 13:14:28 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0b-0016f401.pphosted.com [67.231.156.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8257A20BDA
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 10:14:27 -0700 (PDT)
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25ECbBRf019264;
+        Tue, 14 Jun 2022 10:14:07 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=7HzzTqBLPZRMlE54+zdUF1g5ucRjNNc3WOeK/gofv9o=;
+ b=XG5hul8d0cGrRTHGBiWkgg+ttfCPImVQ8zDPltrlb1Vbxp8UZ0I+efzPwtKCzAoye3SR
+ o0XHpOeLYP565HHmHfdAXItZ/mPnzHd2lLTLFW4YH3cFBEAwarImO5/OtQ/EZ/GhCQUb
+ pe2AD15KErbwfVNmtct/Is9gFUVJEO95uR/qr5t/RVjz233K5NkCu4GaBeNzjYFZ4Xfr
+ uUyR0OyS7jnGAUWIj2nXnz3p4KsFrXoVh9k1MSt+GD3+8Ev0PeJ3DFLdQIUZano99I/d
+ NxvQ3MOpFkxmJqqryDX7M4dlLzh8t/J9ofI85D6WocjwpqePTPLE0cgShNvBZClXcKNl BA== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3gmtjp4p9p-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 14 Jun 2022 10:14:07 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 14 Jun
+ 2022 10:14:04 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 14 Jun 2022 10:14:04 -0700
+Received: from sbr2s-27.caveonetworks.com (unknown [10.110.140.94])
+        by maili.marvell.com (Postfix) with ESMTP id 07E6C3F7090;
+        Tue, 14 Jun 2022 10:14:04 -0700 (PDT)
+From:   Tanmay Jagdale <tanmay@marvell.com>
+To:     <will@kernel.org>, <mark.rutland@arm.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <sgoutham@marvell.com>,
+        <lcherian@marvell.com>, <bbhushan2@marvell.com>,
+        Tanmay Jagdale <tanmay@marvell.com>
+Subject: [PATCH] perf/marvell_cn10k: Fix TAD PMU register offset
+Date:   Tue, 14 Jun 2022 17:13:56 +0000
+Message-ID: <20220614171356.773967-1-tanmay@marvell.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/8] KVM: x86/mmu: Drop unused CMPXCHG macro from
- paging_tmpl.h
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "open list:KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)" 
-        <kvm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-References: <20220613225723.2734132-1-seanjc@google.com>
- <20220613225723.2734132-2-seanjc@google.com>
- <CAJhGHyDjFCJdRjdV-W5+reg-3jiwJAqeCQ7A-vdUqt+dToJBdA@mail.gmail.com>
- <YqibwNj8ihL3vbel@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YqibwNj8ihL3vbel@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: 9kmRv0qqqLKWt8nU6lj870Y0CNUWmZ3I
+X-Proofpoint-ORIG-GUID: 9kmRv0qqqLKWt8nU6lj870Y0CNUWmZ3I
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-14_06,2022-06-13_01,2022-02-23_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/14/22 16:31, Sean Christopherson wrote:
-> I'd prefer to keep them around as it allows using them to generate the other masks
-> that are used.
+The existing offset of TAD_PRF and TAD_PFC registers are incorrect.
+Hence, fix with the right register offsets.
 
-Ok, I see what you're doing in patch 6.  Yeah, I'll wait for v2.
+Also, drop read of TAD_PRF register in tad_pmu_event_counter_start()
+since we don't have to preserve any bit fields and always write
+an updated value.
 
-Paolo
+Signed-off-by: Tanmay Jagdale <tanmay@marvell.com>
+---
+ drivers/perf/marvell_cn10k_tad_pmu.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/perf/marvell_cn10k_tad_pmu.c b/drivers/perf/marvell_cn10k_tad_pmu.c
+index 282d3a071a67..664d49d5979e 100644
+--- a/drivers/perf/marvell_cn10k_tad_pmu.c
++++ b/drivers/perf/marvell_cn10k_tad_pmu.c
+@@ -18,9 +18,9 @@
+ #include <linux/perf_event.h>
+ #include <linux/platform_device.h>
+ 
+-#define TAD_PFC_OFFSET		0x0
++#define TAD_PFC_OFFSET		0x800
+ #define TAD_PFC(counter)	(TAD_PFC_OFFSET | (counter << 3))
+-#define TAD_PRF_OFFSET		0x100
++#define TAD_PRF_OFFSET		0x900
+ #define TAD_PRF(counter)	(TAD_PRF_OFFSET | (counter << 3))
+ #define TAD_PRF_CNTSEL_MASK	0xFF
+ #define TAD_MAX_COUNTERS	8
+@@ -100,9 +100,7 @@ static void tad_pmu_event_counter_start(struct perf_event *event, int flags)
+ 	 * which sets TAD()_PRF()[CNTSEL] != 0
+ 	 */
+ 	for (i = 0; i < tad_pmu->region_cnt; i++) {
+-		reg_val = readq_relaxed(tad_pmu->regions[i].base +
+-					TAD_PRF(counter_idx));
+-		reg_val |= (event_idx & 0xFF);
++		reg_val = event_idx & 0xFF;
+ 		writeq_relaxed(reg_val,	tad_pmu->regions[i].base +
+ 			       TAD_PRF(counter_idx));
+ 	}
+-- 
+2.34.1
 

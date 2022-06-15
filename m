@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98CEF54CF3A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:00:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA1E54CF3C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356219AbiFOQ75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
+        id S1355438AbiFORAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353898AbiFOQ7k (ORCPT
+        with ESMTP id S1354614AbiFOQ7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:59:40 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B9D2E084
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:59:39 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id y196so11978214pfb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:59:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=yR38ccdgKnrRjCuDMGRCE5StIBkp839XVZD0RSnVzf0=;
-        b=mZ1yiu1IsEYQaQrG5j1bdIMF5bbDREHPevOeyc9afs1CwmgonhuFmXsEpg4vOeAoSq
-         CrNh0td8hESqycp8HYBKyyngs6nnWGF0S+idzEirlllrqh2xXLt4DQ7femi9mtzOrPjo
-         0nr65KZRfv3gnnycRkG7whM7CXy940pf6ziwUOqCvhUcycJfXl7e5iMzPpycMXE2E4ch
-         7aQibgDpWn0faHZXH8AZ8S/bbqHhI+KQB1PoNwGuZfgVhwRRkaSGiCG4jyDwzFJtcIbL
-         ZnbWlg2aszRV9Fdmj6kerAK78BxXbl/wFX1x8Hprd86ihXM9Lhmyv9a9DFC89fLoqxMb
-         lT1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=yR38ccdgKnrRjCuDMGRCE5StIBkp839XVZD0RSnVzf0=;
-        b=rY5cl20qVzjkRvzFRPakZUiBdGiFrb0SRmn1SWrRnfgfEZ+KLDFIn7hh0HiTC0L06n
-         RHQ8t+YxTHus8LM4WBB+AVHMDW2UjMShOKsA2Z8+4+kkgDhxITvD5r/7pxKhbhNy4DK2
-         RShWYGeb/Ve4iGVdgE3nWSskOGrttGDgvPMq50nkbF4f3fuopMn9fbIelWzaLj/o9DYL
-         5IDRoQvw3J1Fpbp6mWZ6TKyBvfp9wBte0rXCYe1WiQWk8j1WfQdrMr4GyFnyUrgJYGuS
-         fKNsRfM5kbGE9Jqo8AQcLDxMhqYJAq4Nm8EnlozPG3OAgcrBSloFpyeXvJbCLa7tR5eH
-         6M8w==
-X-Gm-Message-State: AJIora9z8NlAl6iIpe3BVHleGY8mt1pRLXFIHiPkihwWFIhji9VA8Kdx
-        MGQVvZWomN+nV2jR5GjRTT4rdA==
-X-Google-Smtp-Source: AGRyM1tieMSlqX6r3NjvN0HfQkohWMO5hBXzzB79TBsSneWc0a35yqQgGYx+GpFcZK/sqhz8LqrfcQ==
-X-Received: by 2002:aa7:98cd:0:b0:520:5200:1c07 with SMTP id e13-20020aa798cd000000b0052052001c07mr518649pfm.13.1655312378945;
-        Wed, 15 Jun 2022 09:59:38 -0700 (PDT)
-Received: from localhost.localdomain ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id s194-20020a6377cb000000b003fd1111d73csm10618513pgc.4.2022.06.15.09.59.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 09:59:38 -0700 (PDT)
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     mka@chromium.org, evgreen@chromium.org, bjorn.andersson@linaro.org,
-        quic_cpratapa@quicinc.com, quic_avuyyuru@quicinc.com,
-        quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
-        elder@kernel.org, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 5/5] net: ipa: move more code out of gsi_channel_update()
-Date:   Wed, 15 Jun 2022 11:59:29 -0500
-Message-Id: <20220615165929.5924-6-elder@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220615165929.5924-1-elder@linaro.org>
-References: <20220615165929.5924-1-elder@linaro.org>
+        Wed, 15 Jun 2022 12:59:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0B52E084;
+        Wed, 15 Jun 2022 09:59:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5270B82064;
+        Wed, 15 Jun 2022 16:59:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FC3EC34115;
+        Wed, 15 Jun 2022 16:59:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655312379;
+        bh=KWnr7zKayHkj/bptj3o4m8ElFwkJYwNaweEzW4q39qc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r2wTB4JQblWFkfakKnpJ2eoRfcr7H0w7Uu0reDePp/jUvg9kdvPzcr7cxKg7314kE
+         QisQDdxPYHVMQj9JgNvlKt8zWvcV0cLZYMALPwO4DUKC5caWc9+vK172UKZhYkY1kI
+         0SDOP88vmVxt7MqBRihPvYqkUB/vRffM00B0RqrPAHBUBJb+98a9RNjmuU8xdQIJ+4
+         lTi6919QQZdi9ZDJcznHuV8jbouEHE6EnxEEvqwmAtz1sIRBc5wrofGSjofMf1mZcz
+         qru12F3WCV7t4aaM4Ukr5cUGlo+HQ2hD+bpoVDwlaOc/EG4hDrlr8WB8rkB+AxwdEp
+         pgVPT+jQ5zG6A==
+Date:   Wed, 15 Jun 2022 17:59:33 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Li Chen <lchen.firstlove@zohomail.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-gpio <linux-gpio@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        linux-sunxi <linux-sunxi@lists.linux.dev>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Subject: Re: [PATCH v3 0/4] Add regmap_field helpers for simple bit operations
+Message-ID: <YqoP9TwprnV3QKKT@sirena.org.uk>
+References: <180e702a15f.e737e37e45859.3135149506136486394@zohomail.com>
+ <180eef39205.122d47c8260721.2430302798386025245@zohomail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="8vCp03ihxJubD2IF"
+Content-Disposition: inline
+In-Reply-To: <180eef39205.122d47c8260721.2430302798386025245@zohomail.com>
+X-Cookie: byob, v:
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,109 +69,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the processing done for TX channels in gsi_channel_update()
-into gsi_evt_ring_rx_update().  The called function is called for
-both RX and TX channels, so rename it to be gsi_evt_ring_update().
-As a result, this code no longer assumes events in an event ring are
-associated with just one channel.
 
-Because all events in a ring are handled in that function, we can
-move the call to gsi_trans_move_complete() there, and can ring the
-event ring doorbell there as well after all new events in the ring
-have been processed.
+--8vCp03ihxJubD2IF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Alex Elder <elder@linaro.org>
----
- drivers/net/ipa/gsi.c | 34 ++++++++++++++++++++--------------
- 1 file changed, 20 insertions(+), 14 deletions(-)
+On Sun, May 22, 2022 at 08:26:21PM -0700, Li Chen wrote:
+> From: Li Chen <lchen@ambarella.com>
+>=20
+> This series proposes to add simple bit operations for setting, clearing
+> and testing specific bits with regmap_field.
 
-diff --git a/drivers/net/ipa/gsi.c b/drivers/net/ipa/gsi.c
-index d08f3e73d51fc..4e46974a69ecd 100644
---- a/drivers/net/ipa/gsi.c
-+++ b/drivers/net/ipa/gsi.c
-@@ -1344,7 +1344,7 @@ gsi_event_trans(struct gsi *gsi, struct gsi_event *event)
- }
- 
- /**
-- * gsi_evt_ring_rx_update() - Record lengths of received data
-+ * gsi_evt_ring_update() - Update transaction state from hardware
-  * @gsi:		GSI pointer
-  * @evt_ring_id:	Event ring ID
-  * @index:		Event index in ring reported by hardware
-@@ -1353,6 +1353,10 @@ gsi_event_trans(struct gsi *gsi, struct gsi_event *event)
-  * the buffer.  Every event has a transaction associated with it, and here
-  * we update transactions to record their actual received lengths.
-  *
-+ * When an event for a TX channel arrives we use information in the
-+ * transaction to report the number of requests and bytes have been
-+ * transferred.
-+ *
-  * This function is called whenever we learn that the GSI hardware has filled
-  * new events since the last time we checked.  The ring's index field tells
-  * the first entry in need of processing.  The index provided is the
-@@ -1363,7 +1367,7 @@ gsi_event_trans(struct gsi *gsi, struct gsi_event *event)
-  *
-  * Note that @index always refers to an element *within* the event ring.
-  */
--static void gsi_evt_ring_rx_update(struct gsi *gsi, u32 evt_ring_id, u32 index)
-+static void gsi_evt_ring_update(struct gsi *gsi, u32 evt_ring_id, u32 index)
- {
- 	struct gsi_evt_ring *evt_ring = &gsi->evt_ring[evt_ring_id];
- 	struct gsi_ring *ring = &evt_ring->ring;
-@@ -1372,10 +1376,12 @@ static void gsi_evt_ring_rx_update(struct gsi *gsi, u32 evt_ring_id, u32 index)
- 	u32 event_avail;
- 	u32 old_index;
- 
--	/* We'll start with the oldest un-processed event.  RX channels
--	 * replenish receive buffers in single-TRE transactions, so we
--	 * can just map that event to its transaction.  Transactions
--	 * associated with completion events are consecutive.
-+	/* Starting with the oldest un-processed event, determine which
-+	 * transaction (and which channel) is associated with the event.
-+	 * For RX channels, update each completed transaction with the
-+	 * number of bytes that were actually received.  For TX channels
-+	 * associated with a network device, report to the network stack
-+	 * the number of transfers and bytes this completion represents.
- 	 */
- 	old_index = ring->index;
- 	event = gsi_ring_virt(ring, old_index);
-@@ -1394,6 +1400,10 @@ static void gsi_evt_ring_rx_update(struct gsi *gsi, u32 evt_ring_id, u32 index)
- 
- 		if (trans->direction == DMA_FROM_DEVICE)
- 			trans->len = __le16_to_cpu(event->len);
-+		else
-+			gsi_trans_tx_completed(trans);
-+
-+		gsi_trans_move_complete(trans);
- 
- 		/* Move on to the next event and transaction */
- 		if (--event_avail)
-@@ -1401,6 +1411,9 @@ static void gsi_evt_ring_rx_update(struct gsi *gsi, u32 evt_ring_id, u32 index)
- 		else
- 			event = gsi_ring_virt(ring, 0);
- 	} while (event != event_done);
-+
-+	/* Tell the hardware we've handled these events */
-+	gsi_evt_ring_doorbell(gsi, evt_ring_id, index);
- }
- 
- /* Initialize a ring, including allocating DMA memory for its entries */
-@@ -1499,14 +1512,7 @@ static struct gsi_trans *gsi_channel_update(struct gsi_channel *channel)
- 	 * the number of transactions and bytes this completion represents
- 	 * up the network stack.
- 	 */
--	if (channel->toward_ipa)
--		gsi_trans_tx_completed(trans);
--	gsi_evt_ring_rx_update(gsi, evt_ring_id, index);
--
--	gsi_trans_move_complete(trans);
--
--	/* Tell the hardware we've handled these events */
--	gsi_evt_ring_doorbell(gsi, evt_ring_id, index);
-+	gsi_evt_ring_update(gsi, evt_ring_id, index);
- 
- 	return gsi_channel_trans_complete(channel);
- }
--- 
-2.34.1
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
 
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git tags/r=
+egmap-field-bit-helpers
+
+for you to fetch changes up to f67be8b7ee90c292948c3ec6395673963cccaee6:
+
+  regmap: provide regmap_field helpers for simple bit operations (2022-06-1=
+5 11:17:45 +0100)
+
+----------------------------------------------------------------
+regmap: Add regmap_field helpers for simple bit operations
+
+Add simple bit operations for setting, clearing and testing specific
+bits with regmap_field.
+
+----------------------------------------------------------------
+Li Chen (1):
+      regmap: provide regmap_field helpers for simple bit operations
+
+ drivers/base/regmap/regmap.c | 22 ++++++++++++++++++++++
+ include/linux/regmap.h       | 37 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 59 insertions(+)
+
+--8vCp03ihxJubD2IF
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKqD/QACgkQJNaLcl1U
+h9BYTQf7ByrrGDk9xfzsyQSGRgkL7VEe23NCIXLyPoMeg//wswaCgsNiNWEiMoah
+1Xv2W8g0Q8GGxCbdQAd1VdKYfNOUJqoymIp6o/IXUrlYWq5nd4Z5lFLfndUpK/WE
+HhKYQGisytJvsv6CbVzevjwpq1Rhp5jt76BhLW1rUHTrAm9OW2nb5LjaKZTk1sfg
+LJ7HYYdIsYVG+XRmxsONwbTWTi8S5Fpt8cF/mVZ77cPAx2XoD7E79ezUDDL+fxN4
+T/2CTOrZ3UxHvXOScTMe7tWcDLyBQHaQQBk2FmwanrVAObSrQiDRB0kaSzOkIq3g
+GdwousE4cr5Ig/D5jt/wkr8WecpqJA==
+=mt42
+-----END PGP SIGNATURE-----
+
+--8vCp03ihxJubD2IF--

@@ -2,228 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19BF554D404
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B2154D405
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343736AbiFOV4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 17:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
+        id S1349751AbiFOV5M convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Jun 2022 17:57:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346441AbiFOV4g (ORCPT
+        with ESMTP id S1346784AbiFOV5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 17:56:36 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755A244A3A;
-        Wed, 15 Jun 2022 14:56:32 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id h23so14780985ljl.3;
-        Wed, 15 Jun 2022 14:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fj3idR9ITxtyBkLb8C2yMHLKLG7IMAyqge6auz8Xoso=;
-        b=geZQgQBfPs0gt1EhAThZmGnVf/B3qlss07EEfs+bWEivxL+jVVax1x5tGlhx01mFYw
-         DbKXjki82pi2wpCiZI+fzhyvX/0mfO7O01D1Qo0d30opmIYIiyRlN3lD4YEz/2wKN4N2
-         g6nCcz1iKJXIMmgAazAi8u7IQZaZi3Fd8hbp8n0C2QnAcdXxPHdVpd4+Tw3P1HCyN8NK
-         4hgwx6/fkgc3JYyTW6RuaxBsZET5mbscooRHtEIfkEuLppcEdcSRcaJ9OeKoW8kkAW3v
-         3xhbgd39xeFzTnlX5YN5eonge/RAqdoy4ToKN+fiJfs06Hi+kAhg84bFRnHnuE2zwfW1
-         4J6A==
+        Wed, 15 Jun 2022 17:57:09 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B734924D;
+        Wed, 15 Jun 2022 14:57:08 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id i25so4224634oii.7;
+        Wed, 15 Jun 2022 14:57:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fj3idR9ITxtyBkLb8C2yMHLKLG7IMAyqge6auz8Xoso=;
-        b=eXSn6lx13dW59tiWuYkqg1GB5Wzq2msQj5GU0fATLfyHIuqOIYpb21BjqAtEbWg6w3
-         zv94r64VxEPoK+DZPcVdEsbrjEMSSxwC1bgkGq5Ilf2KrxXIS+m+rerwm5BCGfTXcnuX
-         dCTg450gLrxNmUM5XQT82NfLtCXz1cJXz5yJgyyrCVEb6IbNM+DM2Jsa3A8RCD1a7BPa
-         wCHXoGcUIfhLcN6QeFF8uaoeZ0kdaPfGZp59yDryzXDLhdN+Rlr1qxARyAdTJ8///3sG
-         0pK+bgQZTZGn5tDO1hu2GMX0cR3IU0zoMIZ1Bb7iUK/gDI/LUyZtnfvYrSbvPCJi7/mZ
-         cQCQ==
-X-Gm-Message-State: AJIora8bpLUVNoOlqB678vRcA7l9wn7QcWEQRsaKVimoVZb68gxJp4v3
-        jOyvuQABxz2oejKfzeUs2fQ=
-X-Google-Smtp-Source: AGRyM1ssSQMkRSYZ0vv7iOqWHBgvY/2JNmKnl/GQF59+6dI9uvS6E33ao5FwJXCzISRaT6udDukahg==
-X-Received: by 2002:a2e:508:0:b0:255:66fb:9fce with SMTP id 8-20020a2e0508000000b0025566fb9fcemr950322ljf.171.1655330190775;
-        Wed, 15 Jun 2022 14:56:30 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id b13-20020a2eb90d000000b0025587b872cesm2516ljb.70.2022.06.15.14.56.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 14:56:30 -0700 (PDT)
-Date:   Thu, 16 Jun 2022 00:56:28 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 11/23] dt-bindings: ata: ahci: Add platform capability
- properties
-Message-ID: <20220615215628.m5pgnys7acmkhslg@mobilestation>
-References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
- <20220610081801.11854-12-Sergey.Semin@baikalelectronics.ru>
- <20220614221917.GA2824584-robh@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=NfJNqYnHg5jT84TKlwHYypRpT48LvHsRNmVuy2m2v4U=;
+        b=wYeF8l0qC+IcpMO6hWb35lH1oLW1QTmgCxWicgjFILfkJ2d/F1DnGW2ipAgJGfpvaC
+         oiDOnTCCIK0/zmJ++tAA80KjrIYIHN1ExUu2ZIqHW2s/ZcNv+3JSly+liwTb57fagJg0
+         4cwyAeoN43oEHHZ/27q0jqp5ASMI2DN1To8KWi/28e7tor/J39UHN5TzGvw2INVjJ0ma
+         1WJwCUIKqQVYzMjg5Ng9DoTJTaV+7TWOZVMJ4mDEGYzZB05kn/fHGlL+6YjBc2oNL3bK
+         TuB+5SDM0o5VakJoW2g6N0OmS4KhHcm9ShVNAS166c89LuO3Clg8I8Bpe1umEbLLtKDt
+         hVXA==
+X-Gm-Message-State: AJIora8JFxZEN8DwNMFuG5q+i7HhwWFIPjaIN1FO9kXGst24O5Pm2YXb
+        4SpGMCM9x9L1cDVrwcOJR9lccfBeiyh3jXYR3KNAO5e8C+s=
+X-Google-Smtp-Source: AGRyM1tLEPNDQx/1p/3aUZgmNvB9cB6wTgPhLrf2o1sWbOmJ8VklkTjJ2IjHHfBgp1nDWFK9Qd58NyXSwC/+s2JYg8k=
+X-Received: by 2002:aca:bb56:0:b0:32f:2160:bfd8 with SMTP id
+ l83-20020acabb56000000b0032f2160bfd8mr958031oif.92.1655330227860; Wed, 15 Jun
+ 2022 14:57:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614221917.GA2824584-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220613094605.208401-1-yangjihong1@huawei.com>
+ <20220613094605.208401-10-yangjihong1@huawei.com> <CAM9d7cijyKgCt7su96yM9OWgHP5Hh1UMQh+iBskO+m+rb_y5ww@mail.gmail.com>
+ <81afcdb8-0bbf-a28b-d944-770ca3de0397@huawei.com>
+In-Reply-To: <81afcdb8-0bbf-a28b-d944-770ca3de0397@huawei.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 15 Jun 2022 14:56:56 -0700
+Message-ID: <CAM9d7ciZqe76dsF2peo55nDwWSyQEKw1+5TT67gzdWMu2M1POA@mail.gmail.com>
+Subject: Re: [RFC 09/13] perf kwork: Add workqueue report support
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 04:19:17PM -0600, Rob Herring wrote:
-> On Fri, Jun 10, 2022 at 11:17:49AM +0300, Serge Semin wrote:
-> > In case if the platform doesn't have BIOS or a comprehensive firmware
-> > installed then the HBA capability flags will be left uninitialized. As a
-> > good alternative we suggest to define the DT-properties with the AHCI
-> > platform capabilities describing all the HW-init flags of the
-> > corresponding capability register. Luckily there aren't too many of them.
-> > SSS - Staggered Spin-up support and MPS - Mechanical Presence Switch
-> > support determine the corresponding feature availability for the whole HBA
-> > by means of the "hba-cap" property. Each port can have the "hba-port-cap"
-> > property initialized indicating that the port supports some of the next
-> > functionalities: HPCP - HotPlug capable port, MPSP - Mechanical Presence
-> > Switch attached to a port, CPD - Cold Plug detection, ESP - External SATA
-> > Port (eSATA), FBSCP - FIS-based switching capable port.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > 
-> > ---
-> > 
-> > Changelog v4:
-> > - Fix some misspelling in the patch log.
-> > - Convert the boolean properties to the bitfield properties. (@Rob)
-> > - Remove Hannes' rb tag due to the patch content change.
-> > ---
-> >  .../devicetree/bindings/ata/ahci-common.yaml  | 16 +++++++++++++++
-> >  .../bindings/ata/ahci-platform.yaml           | 10 ++++++++++
-> >  include/dt-bindings/ata/ahci.h                | 20 +++++++++++++++++++
-> >  3 files changed, 46 insertions(+)
-> >  create mode 100644 include/dt-bindings/ata/ahci.h
-> > 
-> > diff --git a/Documentation/devicetree/bindings/ata/ahci-common.yaml b/Documentation/devicetree/bindings/ata/ahci-common.yaml
-> > index 12a97b56226f..94d72aeaad0f 100644
-> > --- a/Documentation/devicetree/bindings/ata/ahci-common.yaml
-> > +++ b/Documentation/devicetree/bindings/ata/ahci-common.yaml
-> > @@ -58,6 +58,14 @@ properties:
-> >    phy-names:
-> >      const: sata-phy
-> >  
-> > +  hba-cap:
-> > +    $ref: '/schemas/types.yaml#/definitions/uint32'
-> > +    description:
-> > +      Bitfield of the HBA generic platform capabilities like Staggered
-> > +      Spin-up or Mechanical Presence Switch support. It can be used to
-> > +      appropriately initialize the HWinit fields of the HBA CAP register
-> > +      in case if the system firmware hasn't done it.
-> > +
-> >    ports-implemented:
-> >      $ref: '/schemas/types.yaml#/definitions/uint32'
-> >      description:
-> > @@ -101,6 +109,14 @@ $defs:
-> >        target-supply:
-> >          description: Power regulator for SATA port target device
-> >  
-> > +      hba-port-cap:
-> > +        $ref: '/schemas/types.yaml#/definitions/uint32'
-> > +        description:
-> > +          Bitfield of the HBA port-specific platform capabilities like Hot
-> > +          plugging, eSATA, FIS-based Switching, etc (see AHCI specification
-> > +          for details). It can be used to initialize the HWinit fields of
-> > +          the PxCMD register in case if the system firmware hasn't done it.
-> > +
-> >      required:
-> >        - reg
-> >  
-> > diff --git a/Documentation/devicetree/bindings/ata/ahci-platform.yaml b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-> > index 15be98e0385b..e19cf9828e68 100644
-> > --- a/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-> > +++ b/Documentation/devicetree/bindings/ata/ahci-platform.yaml
-> > @@ -111,6 +111,8 @@ examples:
-> >    - |
-> >      #include <dt-bindings/interrupt-controller/arm-gic.h>
-> >      #include <dt-bindings/clock/berlin2q.h>
-> > +    #include <dt-bindings/ata/ahci.h>
-> > +
-> >      sata@f7e90000 {
-> >          compatible = "marvell,berlin2q-ahci", "generic-ahci";
-> >          reg = <0xf7e90000 0x1000>;
-> > @@ -119,15 +121,23 @@ examples:
-> >          #address-cells = <1>;
-> >          #size-cells = <0>;
-> >  
-> > +        hba-cap = <HBA_SMPS>;
-> > +
-> >          sata0: sata-port@0 {
-> >              reg = <0>;
-> > +
-> >              phys = <&sata_phy 0>;
-> >              target-supply = <&reg_sata0>;
-> > +
-> > +            hba-port-cap = <(HBA_PORT_FBSCP | HBA_PORT_ESP)>;
-> >          };
-> >  
-> >          sata1: sata-port@1 {
-> >              reg = <1>;
-> > +
-> >              phys = <&sata_phy 1>;
-> >              target-supply = <&reg_sata1>;
-> > +
-> > +            hba-port-cap = <(HBA_PORT_HPCP | HBA_PORT_MPSP | HBA_PORT_FBSCP)>;
-> >          };
-> >      };
-> > diff --git a/include/dt-bindings/ata/ahci.h b/include/dt-bindings/ata/ahci.h
-> > new file mode 100644
-> > index 000000000000..6841caebcedf
-> > --- /dev/null
-> > +++ b/include/dt-bindings/ata/ahci.h
-> > @@ -0,0 +1,20 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> 
+On Tue, Jun 14, 2022 at 8:22 PM Yang Jihong <yangjihong1@huawei.com> wrote:
+>
+> Hello,
+>
+> On 2022/6/15 5:54, Namhyung Kim wrote:
+> > On Mon, Jun 13, 2022 at 2:48 AM Yang Jihong <yangjihong1@huawei.com> wrote:
+> >>
+> >> Implements workqueue report function.
+> >>
+> >> test case:
+> >>
+> >>    # perf kwork -k workqueue rep
+> >>
+> >>      Kwork Name                | Cpu  | Total Runtime | Frequency | Max runtime   | Max runtime start   | Max runtime end     |
+> >>     ---------------------------------------------------------------------------------------------------------------------------
+> >>      (w)0xffffffff83e09fa0     | 0001 |   2152.678 ms |       194 |     12.376 ms |    2059361.546621 s |    2059361.558997 s |
+> >>      (w)0xffff888332fea180     | 0000 |     17.125 ms |       301 |      1.018 ms |    2059358.441070 s |    2059358.442089 s |
+> >>      (w)0xffff8881035a83d8     | 0007 |      7.556 ms |         3 |      3.212 ms |    2059362.614643 s |    2059362.617855 s |
+> >>      (w)0xffff888102fc14a0     | 0002 |      7.080 ms |         5 |      1.962 ms |    2059365.421753 s |    2059365.423714 s |
+> >>      (w)0xffffffff82f7da00     | 0000 |      4.277 ms |         7 |      3.778 ms |    2059360.851063 s |    2059360.854841 s |
+> >>      (w)0xffffffff8305d680     | 0006 |      1.796 ms |         1 |      1.796 ms |    2059360.046818 s |    2059360.048613 s |
+> >>      (w)0xffff8883339e9040     | 0005 |      1.659 ms |         2 |      1.619 ms |    2059361.266051 s |    2059361.267670 s |
+> >>      (w)0xffff888333de9040     | 0007 |      1.121 ms |         5 |      0.783 ms |    2059368.238059 s |    2059368.238842 s |
+> >>      (w)0xffff888332fe9040     | 0000 |      0.990 ms |         4 |      0.911 ms |    2059359.604075 s |    2059359.604986 s |
+> >>      (w)0xffff8883331e9040     | 0001 |      0.244 ms |         6 |      0.046 ms |    2059362.689277 s |    2059362.689323 s |
+> >>      (w)0xffff888102e44400     | 0007 |      0.239 ms |         2 |      0.137 ms |    2059363.117537 s |    2059363.117674 s |
+> >>      (w)0xffff8883333ea180     | 0002 |      0.141 ms |         5 |      0.049 ms |    2059365.423784 s |    2059365.423833 s |
+> >>      (w)0xffffffff83062f28     | 0006 |      0.084 ms |         2 |      0.047 ms |    2059358.208033 s |    2059358.208080 s |
+> >>      (w)0xffffffff8305ca48     | 0003 |      0.078 ms |         2 |      0.041 ms |    2059361.071371 s |    2059361.071412 s |
+> >>      (w)0xffff8883337e9040     | 0004 |      0.062 ms |         1 |      0.062 ms |    2059362.605723 s |    2059362.605785 s |
+> >>      (w)0xffff8881035a81e8     | 0001 |      0.056 ms |         1 |      0.056 ms |    2059363.118231 s |    2059363.118287 s |
+> >>      (w)0xffff8883335e9040     | 0003 |      0.026 ms |         1 |      0.026 ms |    2059358.573397 s |    2059358.573423 s |
+> >>      (w)0xffffffff83062e70     | 0006 |      0.023 ms |         1 |      0.023 ms |    2059368.398864 s |    2059368.398888 s |
+> >>      (w)0xffffffff83e06480     | 0002 |      0.000 ms |         1 |      0.000 ms |    2059359.986792 s |    2059359.986792 s |
+> >
+> > Using "function" in the tracepoint and symbolizing it would be
+> > far more intuitive.
+> >
+> OK，This is a simplified version that will be improved in the next
+> version, and I'd like to add the following features:
+> 1. Supports the kthread profile.
 
-> Dual license.
+Could you elaborate more?
 
-Ok.
+> 2. Save runtime and latency in kernel using ebpf(similar to "perf
+> record: Implement off-cpu profiling with BPF") . This reduces the number
+> of interruptions caused by writing files to hard disks, which is closer
+> to the actual scenario.
 
-> 
-> With that,
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
+Sounds great.
 
-Thanks.
+>
+> This RFC is sent to discuss to see if this function is useful to the
+> community and can be accepted by the community. :)
 
--Sergey
+Yeah I think it'd be useful.
 
-> 
-> > +/*
-> > + * This header provides constants for most AHCI bindings.
-> > + */
-> > +
-> > +#ifndef _DT_BINDINGS_ATA_AHCI_H
-> > +#define _DT_BINDINGS_ATA_AHCI_H
-> > +
-> > +/* Host Bus Adapter generic platform capabilities */
-> > +#define HBA_SSS		(1 << 27)
-> > +#define HBA_SMPS	(1 << 28)
-> > +
-> > +/* Host Bus Adapter port-specific platform capabilities */
-> > +#define HBA_PORT_HPCP	(1 << 18)
-> > +#define HBA_PORT_MPSP	(1 << 19)
-> > +#define HBA_PORT_CPD	(1 << 20)
-> > +#define HBA_PORT_ESP	(1 << 21)
-> > +#define HBA_PORT_FBSCP	(1 << 22)
-> > +
-> > +#endif
-> > -- 
-> > 2.35.1
-> > 
-> > 
+Thanks,
+Namhyung

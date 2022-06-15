@@ -2,130 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D0E54CCA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F0E54CCAA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238853AbiFOPZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47066 "EHLO
+        id S1347388AbiFOP0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:26:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234890AbiFOPZX (ORCPT
+        with ESMTP id S232034AbiFOP0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:25:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 030192F39E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:25:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655306722;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YSV8Fve0PWJWjvGISeUvIz6MGKTc1wSANb5wMGR0pmg=;
-        b=amiZr5UC1nInramqDbMkS2BnIxw4xVKb7jikw8W9Ul1/KK0+Wea4bjzh7SlWDmljErkEQ8
-        1BdYeOoGbP5mFcHPLuFvgrGhApJnmo5aEi7vZRPr9aWvZkoEEjiDzgWi9a2YComLI3h35G
-        E1Bc0n38yf419kMZRn8p4izBKJWcqtg=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-21-aVLJAIv1MJOw7JaCufoBQw-1; Wed, 15 Jun 2022 11:25:20 -0400
-X-MC-Unique: aVLJAIv1MJOw7JaCufoBQw-1
-Received: by mail-il1-f200.google.com with SMTP id e4-20020a056e020b2400b002d5509de6f3so8609016ilu.6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:25:20 -0700 (PDT)
+        Wed, 15 Jun 2022 11:26:37 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C32B3190B;
+        Wed, 15 Jun 2022 08:26:36 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id gl15so23964844ejb.4;
+        Wed, 15 Jun 2022 08:26:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=O3GV4KDQaQ+ciIcjNnKo5j9SK/xK0/b4h2zbURGQkVM=;
+        b=eVHx6qGDOqI5RK1OuDadP/4IsU3fiKXgXKj70+5YHr13vVwI3B5hVy9/+MTeZRGhOj
+         wu7FoDGoswg8sLQAHNgrh/ynHD5OxdGbaw9LV6FCB0PHkC+HO7vAdGS45kMiMlbbDjK7
+         96AHXch4I3UixCGWTr+a89332jr4w6BHCyAEjU9cpO7px8j9qqJ7GQHUipyIlQLfFfwu
+         rnM3fDIn9ydJwRVfwHoyAHZVV75KmSSSF3fFnOh6pORXi0JOKUAIP1IxYkbK4z9j0uj9
+         zWSsLYWaGxCD5TjDMrwwd2AjOtpxANnv3IuPvwZu9BAi4yxmf/gRHnKJVtkPJAtDr3hU
+         diEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YSV8Fve0PWJWjvGISeUvIz6MGKTc1wSANb5wMGR0pmg=;
-        b=aqp67/d/KB8G3FtEQQ+XuO97C5gun1yALhxbxLhCRgOuVLL9uqJewIqWO+97Y3GGAl
-         37PJKCY3lO+d0QQRdTuqw9K4IlGIfJyf4aVWgCblc/izpp4Ajp9jBmKPrDgph+PSK/yb
-         xw90rynn5Bsi5cZAgh8PmHVTa+rLxxjySYy8EEm40MxPLerb7P3kNfWl7FjBnn0bNMsG
-         gTFr8ctIRJ6Grb0PB2cwd4Por6QXkMMV8pfc3hlydYHNgrqbNzA5GSFCsKVHp0YcshXM
-         uhpmsDV1+iGbn7Ytg1JBJadek4NHpw1hZX7RnFgly8kKNAQwxVJXhl+KFKzaGZPOmFg9
-         p0lg==
-X-Gm-Message-State: AJIora+fvRamMsfTHEufjEt64r58esfOSx0ClVNsFglzL53UfIgTo6Jk
-        AMy690G/4B8biVqZwlxyJd1mHrilI0EEivCpBTCSQmJH0UanQ1ZOaYOWca8p9kF8BNvkGEVBxEh
-        u278x3a5BLELW/Fviawg9zCpt
-X-Received: by 2002:a05:6638:3389:b0:331:f5e7:7dda with SMTP id h9-20020a056638338900b00331f5e77ddamr141591jav.93.1655306720032;
-        Wed, 15 Jun 2022 08:25:20 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1slD1TjvGX5JJWBPTslwwpNrUl1Q6gp1EonDIoeya0vuNqPpOHgr5IBRc0spdE9e/6rqYU6cA==
-X-Received: by 2002:a05:6638:3389:b0:331:f5e7:7dda with SMTP id h9-20020a056638338900b00331f5e77ddamr141568jav.93.1655306719806;
-        Wed, 15 Jun 2022 08:25:19 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id f16-20020a056638119000b00331f32a48fdsm4372036jas.11.2022.06.15.08.25.18
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=O3GV4KDQaQ+ciIcjNnKo5j9SK/xK0/b4h2zbURGQkVM=;
+        b=JzrMdC+IVJhxMWXCr6xTOyh/w9DMManlnG+1l8Fk/EmoN40/xzTKKHKdtGa7RNOZnU
+         Qztfj1YatGR3wTXS7DjzawRHTrTJajXPNcYnX8kyZq/NvpHOpnFm/ZWNQk6p5iTeejwR
+         ia91+Dk74Zmw+K1o9m/bOF8OgG3yGMpFy30yzq07nZlyx86bzKf3Ob04ic1EDF72leyn
+         uTP4oizJS2b1OwW2aWikUWUiv9tD8AEItt5G3UYZ86LefU4jGqL987amFUSKG/Pe1OkW
+         XXLhEQxjlQ+/B/tkngLCRFlv5czAa9BLTpYmUYwjYB7lRfa2ySZv74esozfAnhRGOs+x
+         L9iw==
+X-Gm-Message-State: AJIora8kn0Ry0B/7LCJ2buzVHjPDVqmXAlulzsZq9rXWjgZpRVisDvEo
+        /U6RiGgyJV8yVhsTyVkzcFnoy+Z+ZHNh/g==
+X-Google-Smtp-Source: AGRyM1thqj4yMRWakdDLzYMZleVB0/alF5mZ3B6n8DGxpm4shTJgajLkOG7u7tJWSk2w8mVuiK3rXA==
+X-Received: by 2002:a17:906:4a13:b0:715:85cc:9224 with SMTP id w19-20020a1709064a1300b0071585cc9224mr308015eju.267.1655306794753;
+        Wed, 15 Jun 2022 08:26:34 -0700 (PDT)
+Received: from debianHome.localdomain (dynamic-077-003-151-196.77.3.pool.telefonica.de. [77.3.151.196])
+        by smtp.gmail.com with ESMTPSA id v14-20020aa7d9ce000000b0042bc97322desm9501224eds.43.2022.06.15.08.26.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 08:25:19 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 11:25:17 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Peter Collingbourne <pcc@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: Re: [PATCH v3] mm/mprotect: try avoiding write faults for exclusive
- anonymous pages when changing protection
-Message-ID: <Yqn53TimQq33BanG@xz-m1.local>
-References: <20220614093629.76309-1-david@redhat.com>
+        Wed, 15 Jun 2022 08:26:34 -0700 (PDT)
+From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+To:     selinux@vger.kernel.org
+Cc:     Serge Hallyn <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 2/8] capability: use new capable_any functionality
+Date:   Wed, 15 Jun 2022 17:26:16 +0200
+Message-Id: <20220615152623.311223-1-cgzones@googlemail.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220502160030.131168-8-cgzones@googlemail.com>
+References: <20220502160030.131168-8-cgzones@googlemail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220614093629.76309-1-david@redhat.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 11:36:29AM +0200, David Hildenbrand wrote:
-> Similar to our MM_CP_DIRTY_ACCT handling for shared, writable mappings, we
-> can try mapping anonymous pages in a private writable mapping writable if
-> they are exclusive, the PTE is already dirty, and no special handling
-> applies. Mapping the anonymous page writable is essentially the same thing
-> the write fault handler would do in this case.
-> 
-> Special handling is required for uffd-wp and softdirty tracking, so take
-> care of that properly. Also, leave PROT_NONE handling alone for now;
-> in the future, we could similarly extend the logic in do_numa_page() or
-> use pte_mk_savedwrite() here.
-> 
-> While this improves mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE)
-> performance, it should also be a valuable optimization for uffd-wp, when
-> un-protecting.
-> 
-> This has been previously suggested by Peter Collingbourne in [1],
-> relevant in the context of the Scudo memory allocator, before we had
-> PageAnonExclusive.
-> 
-> This commit doesn't add the same handling for PMDs (i.e., anonymous THP,
-> anonymous hugetlb); benchmark results from Andrea indicate that there
-> are minor performance gains, so it's might still be valuable to streamline
-> that logic for all anonymous pages in the future.
-> 
-> As we now also set MM_CP_DIRTY_ACCT for private mappings, let's rename
-> it to MM_CP_TRY_CHANGE_WRITABLE, to make it clearer what's actually
-> happening.
+Use the new added capable_any function in appropriate cases, where a
+task is required to have any of two capabilities.
 
-I'm personally not sure why DIRTY_ACCT cannot be applied to private
-mappings; it sounds not only for shared but a common thing.  I also don't
-know whether "change writable" could be misread too anyway. Say, we're
-never changing RO->RW mappings with this flag, but only try to unprotect
-the page proactively when proper, from that POV Nadav's suggestion seems
-slightly better on using "unprotect".
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+---
+v3:
+  - rename to capable_any()
+  - simplify checkpoint_restore_ns_capable()
+---
+ include/linux/capability.h | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-No strong opinion, the patch looks correct to me, and thanks for providing
-the new test results,
-
-Acked-by: Peter Xu <peterx@redhat.com>
-
+diff --git a/include/linux/capability.h b/include/linux/capability.h
+index 7316d5339a6e..092cb9773079 100644
+--- a/include/linux/capability.h
++++ b/include/linux/capability.h
+@@ -266,18 +266,17 @@ extern bool file_ns_capable(const struct file *file, struct user_namespace *ns,
+ extern bool ptracer_capable(struct task_struct *tsk, struct user_namespace *ns);
+ static inline bool perfmon_capable(void)
+ {
+-	return capable(CAP_PERFMON) || capable(CAP_SYS_ADMIN);
++	return capable_any(CAP_PERFMON, CAP_SYS_ADMIN);
+ }
+ 
+ static inline bool bpf_capable(void)
+ {
+-	return capable(CAP_BPF) || capable(CAP_SYS_ADMIN);
++	return capable_any(CAP_BPF, CAP_SYS_ADMIN);
+ }
+ 
+ static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
+ {
+-	return ns_capable(ns, CAP_CHECKPOINT_RESTORE) ||
+-		ns_capable(ns, CAP_SYS_ADMIN);
++	return ns_capable_any(ns, CAP_CHECKPOINT_RESTORE, CAP_SYS_ADMIN);
+ }
+ 
+ /* audit system wants to get cap info from files as well */
 -- 
-Peter Xu
+2.36.1
 

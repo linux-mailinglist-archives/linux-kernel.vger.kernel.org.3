@@ -2,103 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50E8E54BF40
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 03:29:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C22BC54BF43
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 03:30:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238832AbiFOB3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 21:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59586 "EHLO
+        id S240711AbiFOBaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 21:30:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiFOB3F (ORCPT
+        with ESMTP id S229908AbiFOBaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 21:29:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABC792DAAE
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 18:29:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655256543;
+        Tue, 14 Jun 2022 21:30:00 -0400
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D796A2FFDD;
+        Tue, 14 Jun 2022 18:29:58 -0700 (PDT)
+MIME-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1655256596;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=gPcslwf6/5AipVOiJxjFuNmMuJiLjP5Ai/xX9fViRS4=;
-        b=QQbe3riAOnysT+McwsCYR7Jyb8wsIGxw0xHpuuwGxDvnfL07OpA2GcdlJt73su7ULDMVJs
-        pBGne0MMx/OjS1c+f9I8qBWpOzkmDSoyY4iVsGJgeKM4J3jhnt3ItQn8z/JXzc98UVcRiL
-        MsVXOP/B3BBLDgk1C1fBhYlxajhAZhI=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-aQfEcPsEOPueazRk0aUN3Q-1; Tue, 14 Jun 2022 21:29:02 -0400
-X-MC-Unique: aQfEcPsEOPueazRk0aUN3Q-1
-Received: by mail-lj1-f200.google.com with SMTP id b26-20020a2e989a000000b002556f92fa13so1557754ljj.15
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 18:29:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=gPcslwf6/5AipVOiJxjFuNmMuJiLjP5Ai/xX9fViRS4=;
-        b=pwUJJl8ka1/9qj5CouNOYHEMM/D5eiZl5rp+0kYhedaU2ehYt5lSEuSOAU+V+2dE5E
-         ZFQTHVMrGbOZAY7C182jelohgIZq6rBA0jNYpTbnhbYvrVQkHztuYDJeuNgI7DgRJjqf
-         2I8uKMGRTNMJz81hQLUoO6lBP4ssLxbggVsEnQxNpDrwjIG/zI/Pwtrt5c4bt9d8/de6
-         C3il8ZTp980Ml4CSMZCGPB5UbZ6LneZ7LFyC62eazGGTbGkQpvoHRRxk11Qri33l0ZQw
-         JsfnBVb//RJEROYZqnBy+uNGq0LwEACV8b3nqh/zGY6Ixfnb8WGi/h8i6tI6HdtCGom5
-         YaGw==
-X-Gm-Message-State: AJIora9fYQdm0biSqTkUesTwMn3geA5WPzgga8Lwbaxvb8YNrba4WyAT
-        6zNdH9BGnBf6FW2TrZEn8Ytv7/RVHHmHsL13Vvla8c377dZbK9mVJoYZBscpPb7TzXz+6vsspWr
-        swk9ecy0L1OVfj6/TN+mD6v7WvehCEFO5EM/KJTic
-X-Received: by 2002:a19:4352:0:b0:479:5d1:3fef with SMTP id m18-20020a194352000000b0047905d13fefmr4549844lfj.411.1655256541077;
-        Tue, 14 Jun 2022 18:29:01 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzy6G17S6B/NL5asgkhJ3N6qCPtMcJgm4jIUP9oxu6MOto7+cw1fHjnYuylfVl22jAQ1SwvKuEFSnQqUE0b/Qw=
-X-Received: by 2002:a19:4352:0:b0:479:5d1:3fef with SMTP id
- m18-20020a194352000000b0047905d13fefmr4549812lfj.411.1655256540740; Tue, 14
- Jun 2022 18:29:00 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220526124338.36247-1-eperezma@redhat.com> <PH0PR12MB54819C6C6DAF6572AEADC1AEDCD99@PH0PR12MB5481.namprd12.prod.outlook.com>
- <20220527065442-mutt-send-email-mst@kernel.org> <CACGkMEubfv_OJOsJ_ROgei41Qx4mPO0Xz8rMVnO8aPFiEqr8rA@mail.gmail.com>
- <PH0PR12MB5481695930E7548BAAF1B0D9DCDC9@PH0PR12MB5481.namprd12.prod.outlook.com>
- <CACGkMEsSKF_MyLgFdzVROptS3PCcp1y865znLWgnzq9L7CpFVQ@mail.gmail.com>
- <PH0PR12MB5481CAA3F57892FF7F05B004DCDF9@PH0PR12MB5481.namprd12.prod.outlook.com>
- <CACGkMEsJJL34iUYQMxHguOV2cQ7rts+hRG5Gp3XKCGuqNdnNQg@mail.gmail.com>
- <PH0PR12MB5481D099A324C91DAF01259BDCDE9@PH0PR12MB5481.namprd12.prod.outlook.com>
- <CACGkMEueG76L8H+F70D=T5kjK_+J68ARNQmQQo51rq3CfcOdRA@mail.gmail.com> <PH0PR12MB5481994AF05D3B4999EC1F0EDCAD9@PH0PR12MB5481.namprd12.prod.outlook.com>
-In-Reply-To: <PH0PR12MB5481994AF05D3B4999EC1F0EDCAD9@PH0PR12MB5481.namprd12.prod.outlook.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Wed, 15 Jun 2022 09:28:49 +0800
-Message-ID: <CACGkMEtRTyymit=Zmwwcq0jNan-_C9p70vcLP0g7XmwQiOjUbw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] Implement vdpasim stop operation
-To:     Parav Pandit <parav@nvidia.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "martinh@xilinx.com" <martinh@xilinx.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "martinpo@xilinx.com" <martinpo@xilinx.com>,
-        "lvivier@redhat.com" <lvivier@redhat.com>,
-        "pabloc@xilinx.com" <pabloc@xilinx.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        Zhu Lingshan <lingshan.zhu@intel.com>,
-        "Piotr.Uminski@intel.com" <Piotr.Uminski@intel.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        "ecree.xilinx@gmail.com" <ecree.xilinx@gmail.com>,
-        "gautam.dawar@amd.com" <gautam.dawar@amd.com>,
-        "habetsm.xilinx@gmail.com" <habetsm.xilinx@gmail.com>,
-        "tanuj.kamde@amd.com" <tanuj.kamde@amd.com>,
-        "hanand@xilinx.com" <hanand@xilinx.com>,
-        "dinang@xilinx.com" <dinang@xilinx.com>,
-        Longpeng <longpeng2@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        bh=lY2dF29RfMCDJraWHniXeH1mqvCo+dEuz2ZfjUE/Dcg=;
+        b=MXK61xNGGQMAFxUfmB3NYrHxRlNudq9bfJtI9vOj/CkKRvBdsNSpALpFiNLhqtm2qOl45X
+        Y0U9PKV/5pakKkgGRKJm5LVsZbXpDqk9PpOpJ0fZZST/ROKr0sBM4EqFW9tsXi7BLhiXYM
+        ftUDHugZqh5L+QM5Zsk747Y00bgLBPU=
+Date:   Wed, 15 Jun 2022 01:29:55 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   "Yajun Deng" <yajun.deng@linux.dev>
+Message-ID: <f1cdd17717cef7ec33af096e104db03c@linux.dev>
+Subject: Re: [PATCH] perf/core: fix perf_event_mux_interval_ms when set
+ zero
+To:     "Namhyung Kim" <namhyung@kernel.org>
+Cc:     "Peter Zijlstra" <peterz@infradead.org>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+        "Jiri Olsa" <jolsa@kernel.org>,
+        "Stephane Eranian" <eranian@google.com>,
+        "linux-perf-users" <linux-perf-users@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>
+In-Reply-To: <CAM9d7cj4=3DNz=kKhVbx0uKYwbbaQF6ZdjkezKPdT67j8rcEMg@mail.gmail.com>
+References: <CAM9d7cj4=3DNz=kKhVbx0uKYwbbaQF6ZdjkezKPdT67j8rcEMg@mail.gmail.com>
+ <20220614103751.1395645-1-yajun.deng@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,137 +59,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 8:10 AM Parav Pandit <parav@nvidia.com> wrote:
->
->
->
-> > From: Jason Wang <jasowang@redhat.com>
-> > Sent: Wednesday, June 1, 2022 11:54 PM
-> >
-> > On Thu, Jun 2, 2022 at 10:59 AM Parav Pandit <parav@nvidia.com> wrote:
-> > >
-> > >
-> > > > From: Jason Wang <jasowang@redhat.com>
-> > > > Sent: Wednesday, June 1, 2022 10:00 PM
-> > > >
-> > > > On Thu, Jun 2, 2022 at 2:58 AM Parav Pandit <parav@nvidia.com> wrote:
-> > > > >
-> > > > >
-> > > > > > From: Jason Wang <jasowang@redhat.com>
-> > > > > > Sent: Tuesday, May 31, 2022 10:42 PM
-> > > > > >
-> > > > > > Well, the ability to query the virtqueue state was proposed as
-> > > > > > another feature (Eugenio, please correct me). This should be
-> > > > > > sufficient for making virtio-net to be live migrated.
-> > > > > >
-> > > > > The device is stopped, it won't answer to this special vq config done
-> > here.
-> > > >
-> > > > This depends on the definition of the stop. Any query to the device
-> > > > state should be allowed otherwise it's meaningless for us.
-> > > >
-> > > > > Programming all of these using cfg registers doesn't scale for
-> > > > > on-chip
-> > > > memory and for the speed.
-> > > >
-> > > > Well, they are orthogonal and what I want to say is, we should first
-> > > > define the semantics of stop and state of the virtqueue.
-> > > >
-> > > > Such a facility could be accessed by either transport specific
-> > > > method or admin virtqueue, it totally depends on the hardware
-> > architecture of the vendor.
-> > > >
-> > > I find it hard to believe that a vendor can implement a CVQ but not AQ and
-> > chose to expose tens of hundreds of registers.
-> > > But maybe, it fits some specific hw.
-> >
-> > You can have a look at the ifcvf dpdk driver as an example.
-> >
-> Ifcvf is an example of using registers.
-> It is not an answer why AQ is hard for it. :)
-
-Well, it's an example of how vDPA is implemented. I think we agree
-that for vDPA, vendors have the flexibility to implement their
-perferrable datapath.
-
-> virtio spec has definition of queue now and implementing yet another queue shouldn't be a problem.
->
-> So far no one seem to have problem with the additional queue.
-> So I take it as AQ is ok.
->
-> > But another thing that is unrelated to hardware architecture is the nesting
-> > support. Having admin virtqueue in a nesting environment looks like an
-> > overkill. Presenting a register in L1 and map it to L0's admin should be good
-> > enough.
-> So may be a optimized interface can be added that fits nested env.
-> At this point in time real users that we heard are interested in non-nested use cases. Let's enable them first.
-
-That's fine. For nests, it's actually really easy, just adding an
-interface within the existing transport should be sufficient.
-
->
->
-> >
-> > >
-> > > I like to learn the advantages of such method other than simplicity.
-> > >
-> > > We can clearly that we are shifting away from such PCI registers with SIOV,
-> > IMS and other scalable solutions.
-> > > virtio drifting in reverse direction by introducing more registers as
-> > transport.
-> > > I expect it to an optional transport like AQ.
-> >
-> > Actually, I had a proposal of using admin virtqueue as a transport, it's
-> > designed to be SIOV/IMS capable. And it's not hard to extend it with the
-> > state/stop support etc.
-> >
-> > >
-> > > > >
-> > > > > Next would be to program hundreds of statistics of the 64 VQs
-> > > > > through a
-> > > > giant PCI config space register in some busy polling scheme.
-> > > >
-> > > > We don't need giant config space, and this method has been
-> > > > implemented by some vDPA vendors.
-> > > >
-> > > There are tens of 64-bit counters per VQs. These needs to programmed on
-> > destination side.
-> > > Programming these via registers requires exposing them on the registers.
-> > > In one of the proposals, I see them being queried via CVQ from the device.
-> >
-> > I didn't see a proposal like this. And I don't think querying general virtio state
-> > like idx with a device specific CVQ is a good design.
-> >
-> My example was not for the idx. But for VQ statistics that is queried via CVQ.
->
-> > >
-> > > Programming them via cfg registers requires large cfg space or synchronous
-> > programming until receiving ACK from it.
-> > > This means one entry at a time...
-> > >
-> > > Programming them via CVQ needs replicate and align cmd values etc on all
-> > device types. All duplicate and hard to maintain.
-> > >
-> > >
-> > > > >
-> > > > > I can clearly see how all these are inefficient for faster LM.
-> > > > > We need an efficient AQ to proceed with at minimum.
-> > > >
-> > > > I'm fine with admin virtqueue, but the stop and state are orthogonal to
-> > that.
-> > > > And using admin virtqueue for stop/state will be more natural if we
-> > > > use admin virtqueue as a transport.
-> > > Ok.
-> > > We should have defined it bit earlier that all vendors can use. :(
-> >
-> > I agree.
->
-> I remember few months back, you acked in the weekly meeting that TC has approved the AQ direction.
-> And we are still in this circle of debating the AQ.
-
-I think not. Just to make sure we are on the same page, the proposal
-here is for vDPA, and hope it can provide forward compatibility to
-virtio. So in the context of vDPA, admin virtqueue is not a must.
-
-Thanks
-
+June 15, 2022 6:08 AM, "Namhyung Kim" <namhyung@kernel.org> wrote:=0A=0A>=
+ Hello,=0A> =0A> On Tue, Jun 14, 2022 at 3:38 AM Yajun Deng <yajun.deng@l=
+inux.dev> wrote:=0A> =0A>> The perf_event_mux_interval_ms is set to zero =
+or one by default.=0A> =0A> I see that __perf_mux_hrtimer_init() sets it =
+to PERF_CPU_HRTIMER=0A> if it's less than 1.=0A> =0AYes, pmu->hrtimer_int=
+erval_ms was set to PERF_CPU_HRTIMER, but perf_event_mux_interval_ms didn=
+'t.=0AWe can execute 'cat /sys/devices/intel_pt/perf_event_mux_interval_m=
+s' see that.=0A=0A> Thanks,=0A> Namhyung=0A> =0A>> It can't change back w=
+hen someone changes it from zero to another=0A>> value.=0A>> =0A>> Make p=
+erf_event_mux_interval_ms to PERF_CPU_HRTIMER when set zero.=0A>> =0A>> F=
+ixes: 62b856397927 ("perf: Add sysfs entry to adjust multiplexing interva=
+l per PMU")=0A>> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>=0A>> --=
+-=0A>> kernel/events/core.c | 5 ++++-=0A>> 1 file changed, 4 insertions(+=
+), 1 deletion(-)=0A>> =0A>> diff --git a/kernel/events/core.c b/kernel/ev=
+ents/core.c=0A>> index 61ad10862c21..73c8c7462bbf 100644=0A>> --- a/kerne=
+l/events/core.c=0A>> +++ b/kernel/events/core.c=0A>> @@ -10954,9 +10954,1=
+2 @@ perf_event_mux_interval_ms_store(struct device *dev,=0A>> if (ret)=
+=0A>> return ret;=0A>> =0A>> - if (timer < 1)=0A>> + if (timer < 0)=0A>> =
+return -EINVAL;=0A>> =0A>> + if (timer < 1)=0A>> + timer =3D PERF_CPU_HRT=
+IMER;=0A>> +=0A>> /* same value, noting to do */=0A>> if (timer =3D=3D pm=
+u->hrtimer_interval_ms)=0A>> return count;=0A>> --=0A>> 2.25.1

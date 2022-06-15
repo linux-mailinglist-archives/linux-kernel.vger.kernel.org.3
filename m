@@ -2,144 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA8554C600
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C24454C646
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347513AbiFOKYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44474 "EHLO
+        id S1348698AbiFOKdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:33:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347519AbiFOKYA (ORCPT
+        with ESMTP id S1348678AbiFOKdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:24:00 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FE761129;
-        Wed, 15 Jun 2022 03:23:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655288639; x=1686824639;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HquhvexWsP/f5gyfcKiimGA3mEzHOd3dzsAoIQLW4hk=;
-  b=MhAG4ihaQAWOQCsXGwEim98sVcWMtqzvTdE1Ge+g4gCLUKvp6pDBntTg
-   tX29IKV6H6wCXtyM6ZYd08JgOHWv4K1iN7Zl9p1neX1bADudh4zXcuOQO
-   ebEovQtJbfbN2+Qrztmvv3pLOLUyWDGZnoNEcGIZGFNnFqDhjXz0AJq3O
-   CfAtFJ1DOF4WvixThaEnIZaeloQuiRfSBlVchuFAKanla43CTavdmckFL
-   JYtNgjCnHJUukonTNm6DjqqjFpA1hXC7wVEqe1zMb4iEUacH7L6V2V9Xc
-   s2etVTyUiRM1myt4CKBD7IAqr0WxaA4roOQ5vusJuYBv9al0Id/T/j262
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="261937221"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="261937221"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 03:23:58 -0700
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="674421180"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 03:23:56 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o1QBl-000dIK-SV;
-        Wed, 15 Jun 2022 13:23:53 +0300
-Date:   Wed, 15 Jun 2022 13:23:53 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCHv3 1/2] i2c: designware: introduce a custom scl recovery
- for SoCFPGA platforms
-Message-ID: <YqmzOT7wyCzj1mtw@smile.fi.intel.com>
-References: <20220613210032.773826-1-dinguyen@kernel.org>
- <YqmyD2w5iriUYpQf@smile.fi.intel.com>
+        Wed, 15 Jun 2022 06:33:33 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BED54ECF7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:33:22 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LNM862vtmzDrDr;
+        Wed, 15 Jun 2022 18:32:54 +0800 (CST)
+Received: from huawei.com (10.175.112.208) by kwepemi500016.china.huawei.com
+ (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 15 Jun
+ 2022 18:33:19 +0800
+From:   Zhou Guanghui <zhouguanghui1@huawei.com>
+To:     <akpm@linux-foundation.org>, <rppt@kernel.org>, <will@kernel.org>,
+        <anshuman.khandual@arm.com>, <darren@os.amperecomputing.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>, <xuqiang36@huawei.com>,
+        <zhouguanghui1@huawei.com>
+Subject: [PATCH v5] memblock,arm64: Expand the static memblock memory table
+Date:   Wed, 15 Jun 2022 10:27:42 +0000
+Message-ID: <20220615102742.96450-1-zhouguanghui1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqmyD2w5iriUYpQf@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.112.208]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 01:18:55PM +0300, Andy Shevchenko wrote:
-> On Mon, Jun 13, 2022 at 04:00:31PM -0500, Dinh Nguyen wrote:
+In a system(Huawei Ascend ARM64 SoC) using HBM, a multi-bit ECC error
+occurs, and the BIOS will mark the corresponding area (for example, 2 MB)
+as unusable. When the system restarts next time, these areas are not
+reported or reported as EFI_UNUSABLE_MEMORY. Both cases lead to an
+increase in the number of memblocks, whereas EFI_UNUSABLE_MEMORY
+leads to a larger number of memblocks.
 
+For example, if the EFI_UNUSABLE_MEMORY type is reported:
+...
+memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
+memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
+memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
+memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
+memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
+memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
+memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
+memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
+memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
+...
 
-The below won't fly, see my corrections below.
+The EFI memory map is parsed to construct the memblock arrays before
+the memblock arrays can be resized. As the result, memory regions
+beyond INIT_MEMBLOCK_REGIONS are lost.
 
-> static int i2c_dw_init_socfpga_recovery_info(struct dw_i2c_dev *dev,
-> 					     struct i2c_bus_recovery_info *rinfo)
-> {
-> 	rinfo->recover_bus = i2c_socfpga_scl_recovery;
-> 	return 0;
+Add a new macro INIT_MEMBLOCK_MEMORY_REGTIONS to replace
+INIT_MEMBLOCK_REGTIONS to define the size of the static memblock.memory
+array.
 
-	return 1;
+Allow overriding memblock.memory array size with architecture defined
+INIT_MEMBLOCK_MEMORY_REGIONS and make arm64 to set
+INIT_MEMBLOCK_MEMORY_REGIONS to 1024 when CONFIG_EFI is enabled.
 
-> }
-> 
-> static int i2c_dw_init_generic_recovery_info(struct dw_i2c_dev *dev,
-> 					     struct i2c_bus_recovery_info *rinfo)
-> {
-> 	struct i2c_adapter *adap = &dev->adapter;
-> 	struct gpio_desc *gpio;
-> 
-> 	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
-> 	if (IS_ERR_OR_NULL(gpio))
-> 		return PTR_ERR_OR_ZERO(gpio);
-> 
-> 	rinfo->scl_gpiod = gpio;
-> 
-> 	gpio = devm_gpiod_get_optional(dev->dev, "sda", GPIOD_IN);
-> 	if (IS_ERR(gpio))
-> 		return PTR_ERR(gpio);
-> 	rinfo->sda_gpiod = gpio;
-> 
-> 	rinfo->recover_bus = i2c_generic_scl_recovery;
-> 
-> 	dev_info(dev->dev, "running with gpio recovery mode! scl%s",
-> 		 rinfo->sda_gpiod ? ",sda" : "");
-> 
-> 	return 0;
+Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+Tested-by: Darren Hart <darren@os.amperecomputing.com>
+---
+ arch/arm64/include/asm/memory.h |  9 +++++++++
+ mm/memblock.c                   | 14 +++++++++-----
+ 2 files changed, 18 insertions(+), 5 deletions(-)
 
-	return 1;
-
-> }
-> 
-> static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
-> {
-> 	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
-> 	struct i2c_adapter *adap = &dev->adapter;
-> 	int ret;
-> 
-> 	switch (dev->flags & MODEL_MASK) {
-> 	case MODEL_SOCFPGA:
-> 		ret = i2c_dw_init_socfpga_recovery_info(dev, rinfo);
-> 		break;
-> 	default:
-> 		ret = i2c_dw_init_generic_recovery_info(dev, rinfo);
-> 		break;
-> 	}
-> 	if (ret)
-
-	/* The recovery is optional, that's why 0 should be returned to the caller */
-	if (ret <= 0)
-
-> 		return ret;
-> 
-> 	rinfo->prepare_recovery = i2c_dw_prepare_recovery;
-> 	rinfo->unprepare_recovery = i2c_dw_unprepare_recovery;
-> 	adap->bus_recovery_info = rinfo;
-> 
-> 	return 0;
-> }
-
+diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
+index 0af70d9abede..ce8614fa376a 100644
+--- a/arch/arm64/include/asm/memory.h
++++ b/arch/arm64/include/asm/memory.h
+@@ -364,6 +364,15 @@ void dump_mem_limit(void);
+ # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
+ #endif
+ 
++/*
++ * memory regions which marked with flag MEMBLOCK_NOMAP(for example, the memory
++ * of the EFI_UNUSABLE_MEMORY type) may divide a continuous memory block into
++ * multiple parts. As a result, the number of memory regions is large.
++ */
++#ifdef CONFIG_EFI
++#define INIT_MEMBLOCK_MEMORY_REGIONS	(INIT_MEMBLOCK_REGIONS * 8)
++#endif
++
+ #include <asm-generic/memory_model.h>
+ 
+ #endif /* __ASM_MEMORY_H */
+diff --git a/mm/memblock.c b/mm/memblock.c
+index e4f03a6e8e56..7c63571a69d7 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -29,6 +29,10 @@
+ # define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
+ #endif
+ 
++#ifndef INIT_MEMBLOCK_MEMORY_REGIONS
++#define INIT_MEMBLOCK_MEMORY_REGIONS		INIT_MEMBLOCK_REGIONS
++#endif
++
+ /**
+  * DOC: memblock overview
+  *
+@@ -55,9 +59,9 @@
+  * the allocator metadata. The "memory" and "reserved" types are nicely
+  * wrapped with struct memblock. This structure is statically
+  * initialized at build time. The region arrays are initially sized to
+- * %INIT_MEMBLOCK_REGIONS for "memory" and %INIT_MEMBLOCK_RESERVED_REGIONS
+- * for "reserved". The region array for "physmem" is initially sized to
+- * %INIT_PHYSMEM_REGIONS.
++ * %INIT_MEMBLOCK_MEMORY_REGIONS for "memory" and
++ * %INIT_MEMBLOCK_RESERVED_REGIONS for "reserved". The region array
++ * for "physmem" is initially sized to %INIT_PHYSMEM_REGIONS.
+  * The memblock_allow_resize() enables automatic resizing of the region
+  * arrays during addition of new regions. This feature should be used
+  * with care so that memory allocated for the region array will not
+@@ -102,7 +106,7 @@ unsigned long min_low_pfn;
+ unsigned long max_pfn;
+ unsigned long long max_possible_pfn;
+ 
+-static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_REGIONS] __initdata_memblock;
++static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_MEMORY_REGIONS] __initdata_memblock;
+ static struct memblock_region memblock_reserved_init_regions[INIT_MEMBLOCK_RESERVED_REGIONS] __initdata_memblock;
+ #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
+ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS];
+@@ -111,7 +115,7 @@ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS
+ struct memblock memblock __initdata_memblock = {
+ 	.memory.regions		= memblock_memory_init_regions,
+ 	.memory.cnt		= 1,	/* empty dummy entry */
+-	.memory.max		= INIT_MEMBLOCK_REGIONS,
++	.memory.max		= INIT_MEMBLOCK_MEMORY_REGIONS,
+ 	.memory.name		= "memory",
+ 
+ 	.reserved.regions	= memblock_reserved_init_regions,
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.17.1
 

@@ -2,1137 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56A454CD24
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B07FE54CD34
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351437AbiFOPe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59710 "EHLO
+        id S1352734AbiFOPku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349522AbiFOPez (ORCPT
+        with ESMTP id S234880AbiFOPks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:34:55 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7BC25EBA
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:34:52 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id m24so15860504wrb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:34:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WzSpCkVH7AzuRGjb5EFzZoP7/cZ5hbcdd8afVI0voK0=;
-        b=kiqCLeFfrHAv+Phqt2F0YYdKBfC+iwUAfQuX8NSqPtlEA0A7U6pTcqKCHCriQ8xJEK
-         30PhYCaEa7j+00nuTgXI67t81KUo6N6aT6la6ydogTGFQgheiWzgR8dYLB9L8+d0WhJq
-         8QWXu0OKF3+/5B21ycpk1FkYS6THjEQQROJ+TwbkTPoyRhoXBoc+7joaNPU1mcxr5bf2
-         Xyh3UtDAb8Y/F2U9nt+YDxHftzEnJ9K+iFewlqDhFTLivvDAQ37jd8fQWmZjYiTzZDBf
-         jYF+LTyO+ToJSTMtHX1TtsQl4rvoZGaM7WeC8sh35Vd/OOqqtQfrpm6DlycL6BNvIuVP
-         5eoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WzSpCkVH7AzuRGjb5EFzZoP7/cZ5hbcdd8afVI0voK0=;
-        b=vzIQ2JitbxKJ9QVOJ2zHYqzh8uufUbH0cCh6rwlIPLXHXZLNlrnT7SHd25+LZ9OeER
-         ndvuz2IjflW21re+ffbhMlNxNXMOLyJHm72Tl6iWLl2YZiVRX0r+ObP2dAFxBUxAb7Ru
-         MSj9TcUhL01LfhhAy2+90wz6nXCw7LlQhC9oJDr0TCzZsmV03th7O3fmKUPjp/1ajx4N
-         HrfeizT/2x1KdrJ+97REXdCrVAXW+dBotYOsJUX+GiURk8Xq4MKYdVdriiZKE/aW2W9/
-         s+WOIzL9G4uwp1uC8y8XlrNJHe7z0B6i4V3iw7s95Ctw0tFhm245Mg59f863m814gdxW
-         risQ==
-X-Gm-Message-State: AJIora+XpnQobImaIb8yx7y8muFHyl6LPlfCzhc2KzH+5FQ4h71H6FpV
-        hNXyNDAbWI7W8njYG8qgByfzOcJxw0iNEwUiqbC2Rg==
-X-Google-Smtp-Source: AGRyM1tZQFI8fG4XyLT4B0A7crRtpNvyg1fQvi8CL5XB6kxQDmN1C7iFU4zaNgsJbUb+1S2n2rPeFEagYBFmfwvPqNA=
-X-Received: by 2002:a5d:598e:0:b0:219:ea16:5a2a with SMTP id
- n14-20020a5d598e000000b00219ea165a2amr352027wri.343.1655307290612; Wed, 15
- Jun 2022 08:34:50 -0700 (PDT)
+        Wed, 15 Jun 2022 11:40:48 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2060.outbound.protection.outlook.com [40.107.237.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA75338BC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:40:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eU1ZRac8VeW8WGm28Ivsj4vHD1xZV/qAEKf1fQMAMRF5hRN8RSGx8qsuZ8rFBkgjFjKZ+V6fKfcVyaZuVr862dxpu2/NLIZnk0H0LBC2aCma9LrBkIkEl/yvnWJrWDlRvraPBJAZaz9mLcxWmKVvfIXD17cgN3/Y3eERRxNM99+f2DQVZkkXZ3r83cpzGxSXvsQYQ43zJQfW8l3YsUDjCjBR+ci9PUOizy+dldFBpfqm2aU8orTi8MxshJthh9mHzAHhI70AXIOk6y0AV29GEK6yz2dEp6xF9Ek6odnJYjnl4O7kQKyABrCN8Q/FF4JO4sI0dwUNnqcin4EUzxdmmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=J47cnYrqTtlN+w2CVfxXCyyzg3OqyjFfRcWBC9fQ2RU=;
+ b=gqKjicMCgAdhnt59F6ca4PjX55NczFTyRXks66bl5VWQiS4surghlJ40AuKYSvdvu8lZXrQTo+O8Q56P/TcqUtVlRWHgAlcBsor1mIiG4qbUvsKPWYZg4aDIgbgvRUpGYQnL+2Lt1enSrRWe1qXOS97sngxlhOfYNKaymNjiSTjYhcDN4mtnB58NfhRSfi5HCgjncVfpVruy3Dg7vNqF0XuoXe7tFDEZZhQPe80pjhSMCLTgoPLSn0+gUgLvrfZ9YbW0IzA98RFAMYy+JAObwLDILncWwRf4bDv9MbWx4rsaU0syTPr5DNU2rpDL4Z7kUsyzC92n/HN4iWAdjn1EdQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=J47cnYrqTtlN+w2CVfxXCyyzg3OqyjFfRcWBC9fQ2RU=;
+ b=oQnytG4BUOsGgmWETDe/uHLLquLFN30mQHDqLR4I4a+qZGdohGXjBQUoIY7ZOReiWkcmmUB72vSSWwk8xD+CMrsDLJRNlhlDNDWLBoZUDeOx6aP3Lx+AsebZTAFhRv97RZ7xco8zY7Aem1o+vk82NLTmjpWgWnsPA7F3/nvjXC9OPNDPJG/ThxYDKFNC4KZOKAVhPLX/Qm531xCi4xi6ovXfJgQ3bW2lTvLRtc84NhssTi36Sv+78wE/H4PTFlWmIMPgQVwm92gQTGngNo0xjqHVBiZS4nmYRslPAzWfpPOMU8BrPNxTTx2oO9GHrN+EVbJ+g3F16vI1PiVwop7atg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH2PR12MB4181.namprd12.prod.outlook.com (2603:10b6:610:a8::16)
+ by MWHPR12MB1549.namprd12.prod.outlook.com (2603:10b6:301:10::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.15; Wed, 15 Jun
+ 2022 15:40:44 +0000
+Received: from CH2PR12MB4181.namprd12.prod.outlook.com
+ ([fe80::b991:fe0d:8981:90bd]) by CH2PR12MB4181.namprd12.prod.outlook.com
+ ([fe80::b991:fe0d:8981:90bd%9]) with mapi id 15.20.5332.022; Wed, 15 Jun 2022
+ 15:40:42 +0000
+Date:   Wed, 15 Jun 2022 12:40:40 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Joao Martins <joao.m.martins@oracle.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCHES 1/2] iommu: Add RCU-protected page free support
+Message-ID: <20220615154040.GA4927@nvidia.com>
+References: <20220609070811.902868-1-baolu.lu@linux.intel.com>
+ <20220609124934.GZ1343366@nvidia.com>
+ <bbada5b7-737f-03dd-7d42-2ebad442a2bb@linux.intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bbada5b7-737f-03dd-7d42-2ebad442a2bb@linux.intel.com>
+X-ClientProxiedBy: MWHPR11CA0015.namprd11.prod.outlook.com
+ (2603:10b6:301:1::25) To CH2PR12MB4181.namprd12.prod.outlook.com
+ (2603:10b6:610:a8::16)
 MIME-Version: 1.0
-References: <20220615060354.1763693-1-irogers@google.com> <482ed1f6-af6f-b5cd-393f-77d91f24af9d@intel.com>
-In-Reply-To: <482ed1f6-af6f-b5cd-393f-77d91f24af9d@intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 15 Jun 2022 08:34:37 -0700
-Message-ID: <CAP-5=fWp7NifZm4B_xgnPURxsFbdUPnsyfgLaNQeOBSs+v99YQ@mail.gmail.com>
-Subject: Re: [PATCH] perf io: Make open and read calls more robust
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Song Liu <songliubraving@fb.com>, Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        German Gomez <german.gomez@arm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Denis Nikitin <denik@chromium.org>,
-        Lexi Shao <shaolexi@huawei.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        Fangrui Song <maskray@google.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 822dd8f9-4709-4a4e-a8e4-08da4ee567f2
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1549:EE_
+X-Microsoft-Antispam-PRVS: <MWHPR12MB15499E861017BDFB7B31AEF7C2AD9@MWHPR12MB1549.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Unbyos5XhBzoayb15Fmc7XNtVzNXJXwxQYPkU2zAmi25wgEQgl1q12gri4+4AmJz7kYGgnUQj0yGIfiB0vyKtqxOtsggoaYLQzAEDm6KXK5dbWDVsg8Wv+Oue1/9eWb7jcysEaMLGQqOsFPH8elwwHYNl0rKKVY2h8RjHqsBfhiyzZbnOu7zsRYu2v8JPaC9/bfLNPp2BWWznhTeirwr17jb9meIYDm8lgaTfXQyj7Xbk2RjTqgCz2d9HzL+EhK+T69BwQq22pHVOdGTDZ5zfjagymcmXW7XVuZAHzu9XMjl0HyinNFDpUxdTmjgeyHJH7r7clwuYVz49yD1SRubslOXzbuj/ZQytSsRz5vCvRMcFmh/bXHr38eKNHpmG9G3ZQU+KtN2l/Xx8yU8J7vFeJvTc7bMUN3zus5EfJ8I8hTt1aty50EIbO5TcXrppmBFrym2QgPrnGUkKgv7f/4MJcQJR2sSfkgGYfDRM5lvXAn0qz+sdPlRXboo3WfVPXgDwIMxEKx1o20CjqT8Lrr8AqukBFxZt9PeBMQYl49Ze4wPBdLqpr8+SjWVZ5mUMzmicyPypK6eG1pwi9xOvuVwrOxckq894M0wl/aBS2b/vvfZKZ8PdcK5dnIR32ynrJ41UbJ5k/eSBpA/Vz87KoFlEg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB4181.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(6512007)(53546011)(8936002)(36756003)(38100700002)(186003)(7416002)(1076003)(6506007)(26005)(33656002)(2616005)(6916009)(316002)(4744005)(2906002)(66946007)(86362001)(66556008)(4326008)(8676002)(5660300002)(6486002)(508600001)(54906003)(66476007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IFXLDkxKoDhL8b2ahMdQybYLuQQAAhx5R9f4NilC9CGlaS2Pt5yZlC9ReEmd?=
+ =?us-ascii?Q?X8/x4BWl57yM8KctTAbZep1IiKZxqTPoHCVFCFmN2KC4GsjtLZqpqp7lo0aC?=
+ =?us-ascii?Q?4yAG+V1vdQ04lG9Piog7lPU9FUyLEzximBWDEHA90B8OOcriezrPffqf+fjG?=
+ =?us-ascii?Q?3TwtvJgThDImNpZ39ZWOV2hfbu88yk1o4AHr8u1cW3hD63kM6xGqRoE146kP?=
+ =?us-ascii?Q?Vb7zPGaZG0g9zfcUeyl7qJY7tNtagtFZLh5xgK8GHa7L6SPatxQKntQzvVre?=
+ =?us-ascii?Q?DW210Q5sfbnPGztO6OXem9cyDHjuoH0ljDY73oDSuOJ72oxMU1ZmYhLIglrv?=
+ =?us-ascii?Q?rg1ypCMLAVaM1N9n7jmeKv5xdG2XUkhGrsKy705g4TOE21YR31/eV/SZTxvj?=
+ =?us-ascii?Q?RdNicURbjEEV4AVvUVAMRVIih5HyT4It35vHRdxp4clcJlQvkykA3BdMd+nW?=
+ =?us-ascii?Q?IYeHn9zV91tbOVYA2IU7tGukPDPFXaawen6cqZFPjDwELrD5ZZZG6H56guXe?=
+ =?us-ascii?Q?f8C6wT8tYetI1H6ucmCQvIk1tl5u+tfa7mW6paSbGHBRo/358IEBME8Kqfr2?=
+ =?us-ascii?Q?j+PqV3dh7oLXSdMdvB6i3Le+2TWu5Rnnd/M1gprKwewovVVYcA+1q1+Q2KNa?=
+ =?us-ascii?Q?8IqoXlCfnqe+ecQqU604/FesryzOzaZ0SGjbKsxTrHFWOoqGmjLh6TBZWrt8?=
+ =?us-ascii?Q?6oC9XyJ/Ja55rlyynoLtojh+W88I6ieBjPx9MCoZuBJkAaQ+cZRIXrnyt0pt?=
+ =?us-ascii?Q?NOVCmhclOfKm0cx0RqjhUDhKYPsxF94DQXfjTAqosqcLYsXHoCoE4AeWse9c?=
+ =?us-ascii?Q?SLW0QF8DSn4e00uK3d2YuLDZ4qcGpYRBVTjzsRc6IjJLGC52ef+LbOVNXz5N?=
+ =?us-ascii?Q?ZL1goijtUozl9AXGLfuPgJxxpWBpPnunLLNaS3Pk0cGDeMMFRfS80vx0wej4?=
+ =?us-ascii?Q?3Wrrvjf+zhDXAqLc71k2Exb7uJxVz1vhnOK08osyvWq8Lk/ngNEOBrmFrTCw?=
+ =?us-ascii?Q?NiIFPewIF3Lml0w8CkAsb/HKmINfCmP3CGicNjgDImnW2pVUnJTeIP4a6Y45?=
+ =?us-ascii?Q?5tEYjRzwQShF8jQLSSyglN4QihelbtJf8zG0PrtNH4/jrC+u6yewkpKhRiXG?=
+ =?us-ascii?Q?wo15E9pG2pqPS68bYsN8lj4uNtaPaAHZG52aH1V66YccsbMyADC4ttf5GkkD?=
+ =?us-ascii?Q?Apf7yXQB0UTHMOd+luuns8AXBnhSAVxS39ilHuGcHHjUcleL2FaUbNPk2f7v?=
+ =?us-ascii?Q?lAHLHWmF6EZbQm8bLbzKhPxi46yLkI7jX6f2hwjDGondQWidDMWSTkemGfbp?=
+ =?us-ascii?Q?g8Qa3EO9/Ya+LOEmy/8WdNwtCwUzK/vpID1go+D65yWpck5ZUgC6DlBVX9mF?=
+ =?us-ascii?Q?fSl+63WBiTX5/bEavY3Vm+2OADk7kNp/GTPC07KconryEac1/bJQEyYZgT1a?=
+ =?us-ascii?Q?aZ844QT+eXPVgKrC1+liSomNQNb1aJtR2y+eds2BKL3Q7it2oq7Jcp09i58S?=
+ =?us-ascii?Q?X6ZDQssiSD1wNheB39mjYZS66lE1LqYbPTzf6g446eXrCltXGoWAXvIrXBFJ?=
+ =?us-ascii?Q?/qhUAuvNggSXo2DTNM4O4JZ6VzKVOU3Laio56TMnEQF/LUlS2d1DED8JFY+c?=
+ =?us-ascii?Q?EiwFVuWJzPJHZ2PuiqCh8pjNRR5ayveTbbV6KQCpmH6bm9PA36iJl+8HuD10?=
+ =?us-ascii?Q?ZzmmQwXjzTd90Zxigyx5d0iyDaSh36sDpyY8U3IW3FRQQhLNznUSw3t+xUaG?=
+ =?us-ascii?Q?+/Xy5iwhOQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 822dd8f9-4709-4a4e-a8e4-08da4ee567f2
+X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB4181.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 15:40:42.6498
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SQog0rVwAVGxLc97QcGgXwyWzuXEkNfMgHvQyz+uda+oHsCI5f6E7vNBgNgs8Cqd
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1549
+X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 11:51 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 15/06/22 09:03, Ian Rogers wrote:
-> > Wrap open and read calls with TEMP_FAILURE_RETRY in case a signal
-> > causes the syscall to need to restart.
->
-> Please expand on why you want this change.  Can you give an example
-> of where it makes a difference?
+On Fri, Jun 10, 2022 at 01:37:20PM +0800, Baolu Lu wrote:
+> On 2022/6/9 20:49, Jason Gunthorpe wrote:
+> > > +void iommu_free_pgtbl_pages(struct iommu_domain *domain,
+> > > +			    struct list_head *pages)
+> > > +{
+> > > +	struct page *page, *next;
+> > > +
+> > > +	if (!domain->concurrent_traversal) {
+> > > +		put_pages_list(pages);
+> > > +		return;
+> > > +	}
+> > > +
+> > > +	list_for_each_entry_safe(page, next, pages, lru) {
+> > > +		list_del(&page->lru);
+> > > +		call_rcu(&page->rcu_head, pgtble_page_free_rcu);
+> > > +	}
+> > It seems OK, but I wonder if there is benifit to using
+> > put_pages_list() from the rcu callback
+> 
+> The price is that we need to allocate a "struct list_head" and free it
+> in the rcu callback as well. Currently the list_head is sitting in the
+> stack.
 
-As we can get signals pretty much anywhere in the code many syscalls
-are robust to this:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/builtin-record.c?h=perf/core#n311
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/builtin-record.c?h=perf/core#n372
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/builtin-record.c?h=perf/core#n1585
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/builtin-record.c?h=perf/core#n2502
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/builtin-top.c?h=perf/core#n707
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/copyfile.c?h=perf/core#n59
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/evlist.c?h=perf/core#n1966
+You'd have to use a different struct page layout so that the list_head
+was in the struct page and didn't overlap with the rcu_head
 
-But as this change shows there are a large number that are not. They
-will get EINTR and turn it into a failure which really isn't one.
-Making an example of this is near impossible as you need to arrange
-the signal delivery very carefully. I am however motivated to do this
-as we're seeing missing events when running perf in fleetwide
-profiling and I wish to discount EINTR as a cause.
-
-> It looks pretty ugly so maybe making replacement functions or macros
-> is better e.g.
->
-> #define open_retry(a, ...)                                 \
->     ({ long int __result;                                  \
->        do __result = (long int) open((a), ##__VA_ARGS__);  \
->        while (__result == -1L && errno == EINTR);          \
->        __result; })
-
-As open is a user land thing there is no Linux precedent to follow
-here. TEMP_FAILURE_RETRY is the general norm, and I'd like to see it
-used when a raw system call is made. ie, if you want open_retry:
-
-#define open_retry(a, ...) TEMP_FAILURE_RETRY(open((a), ##__VA_ARGS__))
-
-I don't think we need to be in the game of reinventing
-TEMP_FAILURE_RETRY. I think we can follow on from this change with
-changes not to use raw open and read calls, instead preferring some of
-our existing EINTR robust reads like readn, etc. Doing that is beyond
-the scope of what this change is trying to do.
-
-Thanks,
-Ian
-
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/lib/api/io.h                       |  3 ++-
-> >  tools/lib/symbol/kallsyms.c              |  4 ++-
-> >  tools/perf/builtin-daemon.c              | 19 +++++++-------
-> >  tools/perf/builtin-ftrace.c              | 18 ++++++-------
-> >  tools/perf/builtin-inject.c              |  2 +-
-> >  tools/perf/builtin-kvm.c                 |  2 +-
-> >  tools/perf/builtin-record.c              |  6 ++---
-> >  tools/perf/builtin-sched.c               |  2 +-
-> >  tools/perf/builtin-script.c              |  2 +-
-> >  tools/perf/util/copyfile.c               |  2 +-
-> >  tools/perf/util/data.c                   | 11 ++++----
-> >  tools/perf/util/dso.c                    |  6 ++---
-> >  tools/perf/util/evlist.c                 |  6 ++---
-> >  tools/perf/util/lzma.c                   |  4 +--
-> >  tools/perf/util/namespaces.c             |  5 ++--
-> >  tools/perf/util/parse-events.c           |  6 ++---
-> >  tools/perf/util/pmu.c                    | 12 ++++-----
-> >  tools/perf/util/probe-event.c            |  4 +--
-> >  tools/perf/util/probe-file.c             | 10 ++++----
-> >  tools/perf/util/session.c                |  2 +-
-> >  tools/perf/util/symbol-elf.c             | 32 ++++++++++++------------
-> >  tools/perf/util/symbol-minimal.c         |  6 ++---
-> >  tools/perf/util/symbol.c                 |  4 +--
-> >  tools/perf/util/synthetic-events.c       |  7 +++---
-> >  tools/perf/util/trace-event-info.c       |  6 ++---
-> >  tools/perf/util/trace-event-read.c       |  5 ++--
-> >  tools/perf/util/unwind-libunwind-local.c |  4 +--
-> >  tools/perf/util/zlib.c                   |  5 ++--
-> >  28 files changed, 102 insertions(+), 93 deletions(-)
-> >
-> > diff --git a/tools/lib/api/io.h b/tools/lib/api/io.h
-> > index 777c20f6b604..b292bbd39fb0 100644
-> > --- a/tools/lib/api/io.h
-> > +++ b/tools/lib/api/io.h
-> > @@ -7,6 +7,7 @@
-> >  #ifndef __API_IO__
-> >  #define __API_IO__
-> >
-> > +#include <errno.h>
-> >  #include <stdlib.h>
-> >  #include <unistd.h>
-> >
-> > @@ -45,7 +46,7 @@ static inline int io__get_char(struct io *io)
-> >               return -1;
-> >
-> >       if (ptr == io->end) {
-> > -             ssize_t n = read(io->fd, io->buf, io->buf_len);
-> > +             ssize_t n = TEMP_FAILURE_RETRY(read(io->fd, io->buf, io->buf_len));
-> >
-> >               if (n <= 0) {
-> >                       io->eof = true;
-> > diff --git a/tools/lib/symbol/kallsyms.c b/tools/lib/symbol/kallsyms.c
-> > index e335ac2b9e19..5436c038c379 100644
-> > --- a/tools/lib/symbol/kallsyms.c
-> > +++ b/tools/lib/symbol/kallsyms.c
-> > @@ -3,7 +3,9 @@
-> >  #include "api/io.h"
-> >  #include <stdio.h>
-> >  #include <sys/stat.h>
-> > +#include <errno.h>
-> >  #include <fcntl.h>
-> > +#include <unistd.h>
-> >
-> >  u8 kallsyms2elf_type(char type)
-> >  {
-> > @@ -36,7 +38,7 @@ int kallsyms__parse(const char *filename, void *arg,
-> >       char bf[BUFSIZ];
-> >       int err;
-> >
-> > -     io.fd = open(filename, O_RDONLY, 0);
-> > +     io.fd = TEMP_FAILURE_RETRY(open(filename, O_RDONLY, 0));
-> >
-> >       if (io.fd < 0)
-> >               return -1;
-> > diff --git a/tools/perf/builtin-daemon.c b/tools/perf/builtin-daemon.c
-> > index 6cb3f6cc36d0..d4e1a5636056 100644
-> > --- a/tools/perf/builtin-daemon.c
-> > +++ b/tools/perf/builtin-daemon.c
-> > @@ -351,7 +351,7 @@ static int daemon_session__run(struct daemon_session *session,
-> >               return -1;
-> >       }
-> >
-> > -     fd = open("/dev/null", O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open("/dev/null", O_RDONLY));
-> >       if (fd < 0) {
-> >               perror("failed: open /dev/null");
-> >               return -1;
-> > @@ -360,7 +360,7 @@ static int daemon_session__run(struct daemon_session *session,
-> >       dup2(fd, 0);
-> >       close(fd);
-> >
-> > -     fd = open(SESSION_OUTPUT, O_RDWR|O_CREAT|O_TRUNC, 0644);
-> > +     fd = TEMP_FAILURE_RETRY(open(SESSION_OUTPUT, O_RDWR|O_CREAT|O_TRUNC, 0644));
-> >       if (fd < 0) {
-> >               perror("failed: open session output");
-> >               return -1;
-> > @@ -405,7 +405,8 @@ static pid_t handle_signalfd(struct daemon *daemon)
-> >        * coalesced in kernel and we can receive only single signal even
-> >        * if multiple SIGCHLD were generated.
-> >        */
-> > -     err = read(daemon->signal_fd, &si, sizeof(struct signalfd_siginfo));
-> > +     err = TEMP_FAILURE_RETRY(read(daemon->signal_fd, &si,
-> > +                                   sizeof(struct signalfd_siginfo)));
-> >       if (err != sizeof(struct signalfd_siginfo)) {
-> >               pr_err("failed to read signal fd\n");
-> >               return -1;
-> > @@ -522,7 +523,7 @@ static int daemon_session__control(struct daemon_session *session,
-> >       scnprintf(control_path, sizeof(control_path), "%s/%s",
-> >                 session->base, SESSION_CONTROL);
-> >
-> > -     control = open(control_path, O_WRONLY|O_NONBLOCK);
-> > +     control = TEMP_FAILURE_RETRY(open(control_path, O_WRONLY|O_NONBLOCK));
-> >       if (!control)
-> >               return -1;
-> >
-> > @@ -531,7 +532,7 @@ static int daemon_session__control(struct daemon_session *session,
-> >               scnprintf(ack_path, sizeof(ack_path), "%s/%s",
-> >                         session->base, SESSION_ACK);
-> >
-> > -             ack = open(ack_path, O_RDONLY, O_NONBLOCK);
-> > +             ack = TEMP_FAILURE_RETRY(open(ack_path, O_RDONLY, O_NONBLOCK));
-> >               if (!ack) {
-> >                       close(control);
-> >                       return -1;
-> > @@ -564,7 +565,7 @@ static int daemon_session__control(struct daemon_session *session,
-> >               goto out;
-> >       }
-> >
-> > -     err = read(ack, buf, sizeof(buf));
-> > +     err = TEMP_FAILURE_RETRY(read(ack, buf, sizeof(buf)));
-> >       if (err > 0)
-> >               ret = strcmp(buf, "ack\n");
-> >       else
-> > @@ -1078,7 +1079,7 @@ static int handle_config_changes(struct daemon *daemon, int conf_fd,
-> >       ssize_t len;
-> >
-> >       while (!(*config_changed)) {
-> > -             len = read(conf_fd, buf, sizeof(buf));
-> > +             len = TEMP_FAILURE_RETRY(read(conf_fd, buf, sizeof(buf)));
-> >               if (len == -1) {
-> >                       if (errno != EAGAIN) {
-> >                               perror("failed: read");
-> > @@ -1147,7 +1148,7 @@ static int check_lock(struct daemon *daemon)
-> >
-> >       scnprintf(path, sizeof(path), "%s/lock", daemon->base);
-> >
-> > -     fd = open(path, O_RDWR|O_CREAT|O_CLOEXEC, 0640);
-> > +     fd = TEMP_FAILURE_RETRY(open(path, O_RDWR|O_CREAT|O_CLOEXEC, 0640));
-> >       if (fd < 0)
-> >               return -1;
-> >
-> > @@ -1201,7 +1202,7 @@ static int go_background(struct daemon *daemon)
-> >               return -1;
-> >       }
-> >
-> > -     fd = open("output", O_RDWR|O_CREAT|O_TRUNC, 0644);
-> > +     fd = TEMP_FAILURE_RETRY(open("output", O_RDWR|O_CREAT|O_TRUNC, 0644));
-> >       if (fd < 0) {
-> >               perror("failed: open");
-> >               return -1;
-> > diff --git a/tools/perf/builtin-ftrace.c b/tools/perf/builtin-ftrace.c
-> > index 7de07bb16d23..7553e20f38b2 100644
-> > --- a/tools/perf/builtin-ftrace.c
-> > +++ b/tools/perf/builtin-ftrace.c
-> > @@ -79,7 +79,7 @@ static int __write_tracing_file(const char *name, const char *val, bool append)
-> >       else
-> >               flags |= O_TRUNC;
-> >
-> > -     fd = open(file, flags);
-> > +     fd = TEMP_FAILURE_RETRY(open(file, flags));
-> >       if (fd < 0) {
-> >               pr_debug("cannot open tracing file: %s: %s\n",
-> >                        name, str_error_r(errno, errbuf, sizeof(errbuf)));
-> > @@ -132,7 +132,7 @@ static int read_tracing_file_to_stdout(const char *name)
-> >               return -1;
-> >       }
-> >
-> > -     fd = open(file, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(file, O_RDONLY));
-> >       if (fd < 0) {
-> >               pr_debug("cannot open tracing file: %s: %s\n",
-> >                        name, str_error_r(errno, buf, sizeof(buf)));
-> > @@ -141,7 +141,7 @@ static int read_tracing_file_to_stdout(const char *name)
-> >
-> >       /* read contents to stdout */
-> >       while (true) {
-> > -             int n = read(fd, buf, sizeof(buf));
-> > +             int n = TEMP_FAILURE_RETRY(read(fd, buf, sizeof(buf)));
-> >               if (n == 0)
-> >                       break;
-> >               else if (n < 0)
-> > @@ -608,7 +608,7 @@ static int __cmd_ftrace(struct perf_ftrace *ftrace)
-> >               goto out_reset;
-> >       }
-> >
-> > -     trace_fd = open(trace_file, O_RDONLY);
-> > +     trace_fd = TEMP_FAILURE_RETRY(open(trace_file, O_RDONLY));
-> >
-> >       put_tracing_file(trace_file);
-> >
-> > @@ -645,7 +645,7 @@ static int __cmd_ftrace(struct perf_ftrace *ftrace)
-> >                       break;
-> >
-> >               if (pollfd.revents & POLLIN) {
-> > -                     int n = read(trace_fd, buf, sizeof(buf));
-> > +                     int n = TEMP_FAILURE_RETRY(read(trace_fd, buf, sizeof(buf)));
-> >                       if (n < 0)
-> >                               break;
-> >                       if (fwrite(buf, n, 1, stdout) != 1)
-> > @@ -665,7 +665,7 @@ static int __cmd_ftrace(struct perf_ftrace *ftrace)
-> >
-> >       /* read remaining buffer contents */
-> >       while (true) {
-> > -             int n = read(trace_fd, buf, sizeof(buf));
-> > +             int n = TEMP_FAILURE_RETRY(read(trace_fd, buf, sizeof(buf)));
-> >               if (n <= 0)
-> >                       break;
-> >               if (fwrite(buf, n, 1, stdout) != 1)
-> > @@ -826,7 +826,7 @@ static int prepare_func_latency(struct perf_ftrace *ftrace)
-> >               return -1;
-> >       }
-> >
-> > -     fd = open(trace_file, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(trace_file, O_RDONLY));
-> >       if (fd < 0)
-> >               pr_err("failed to open trace_pipe\n");
-> >
-> > @@ -913,7 +913,7 @@ static int __cmd_latency(struct perf_ftrace *ftrace)
-> >                       break;
-> >
-> >               if (pollfd.revents & POLLIN) {
-> > -                     int n = read(trace_fd, buf, sizeof(buf) - 1);
-> > +                     int n = TEMP_FAILURE_RETRY(read(trace_fd, buf, sizeof(buf) - 1));
-> >                       if (n < 0)
-> >                               break;
-> >
-> > @@ -931,7 +931,7 @@ static int __cmd_latency(struct perf_ftrace *ftrace)
-> >
-> >       /* read remaining buffer contents */
-> >       while (!ftrace->target.use_bpf) {
-> > -             int n = read(trace_fd, buf, sizeof(buf) - 1);
-> > +             int n = TEMP_FAILURE_RETRY(read(trace_fd, buf, sizeof(buf) - 1));
-> >               if (n <= 0)
-> >                       break;
-> >               make_histogram(buckets, buf, n, line, ftrace->use_nsec);
-> > diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-> > index a75bf11585b5..960b4a50583e 100644
-> > --- a/tools/perf/builtin-inject.c
-> > +++ b/tools/perf/builtin-inject.c
-> > @@ -155,7 +155,7 @@ static int copy_bytes(struct perf_inject *inject, int fd, off_t size)
-> >       int ret;
-> >
-> >       while (size > 0) {
-> > -             ssz = read(fd, buf, min(size, (off_t)sizeof(buf)));
-> > +             ssz = TEMP_FAILURE_RETRY(read(fd, buf, min(size, (off_t)sizeof(buf))));
-> >               if (ssz < 0)
-> >                       return -errno;
-> >               ret = output_bytes(inject, buf, ssz);
-> > diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
-> > index 3696ae97f149..4dd8292d1941 100644
-> > --- a/tools/perf/builtin-kvm.c
-> > +++ b/tools/perf/builtin-kvm.c
-> > @@ -880,7 +880,7 @@ static int perf_kvm__handle_timerfd(struct perf_kvm_stat *kvm)
-> >       uint64_t c;
-> >       int rc;
-> >
-> > -     rc = read(kvm->timerfd, &c, sizeof(uint64_t));
-> > +     rc = TEMP_FAILURE_RETRY(read(kvm->timerfd, &c, sizeof(uint64_t)));
-> >       if (rc < 0) {
-> >               if (errno == EAGAIN)
-> >                       return 0;
-> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> > index 9a71f0330137..361610bc96b6 100644
-> > --- a/tools/perf/builtin-record.c
-> > +++ b/tools/perf/builtin-record.c
-> > @@ -902,7 +902,7 @@ static bool record__kcore_readable(struct machine *machine)
-> >
-> >       scnprintf(kcore, sizeof(kcore), "%s/proc/kcore", machine->root_dir);
-> >
-> > -     fd = open(kcore, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(kcore, O_RDONLY));
-> >       if (fd < 0)
-> >               return false;
-> >
-> > @@ -2049,7 +2049,7 @@ static int record__terminate_thread(struct record_thread *thread_data)
-> >
-> >       close(thread_data->pipes.msg[1]);
-> >       thread_data->pipes.msg[1] = -1;
-> > -     err = read(thread_data->pipes.ack[0], &ack, sizeof(ack));
-> > +     err = TEMP_FAILURE_RETRY(read(thread_data->pipes.ack[0], &ack, sizeof(ack)));
-> >       if (err > 0)
-> >               pr_debug2("threads[%d]: sent %s\n", tid, thread_msg_tags[ack]);
-> >       else
-> > @@ -2097,7 +2097,7 @@ static int record__start_threads(struct record *rec)
-> >                       goto out_err;
-> >               }
-> >
-> > -             err = read(thread_data[t].pipes.ack[0], &msg, sizeof(msg));
-> > +             err = TEMP_FAILURE_RETRY(read(thread_data[t].pipes.ack[0], &msg, sizeof(msg)));
-> >               if (err > 0)
-> >                       pr_debug2("threads[%d]: sent %s\n", rec->thread_data[t].tid,
-> >                                 thread_msg_tags[msg]);
-> > diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
-> > index 646bd938927a..149787268d02 100644
-> > --- a/tools/perf/builtin-sched.c
-> > +++ b/tools/perf/builtin-sched.c
-> > @@ -604,7 +604,7 @@ static u64 get_cpu_usage_nsec_self(int fd)
-> >       u64 runtime;
-> >       int ret;
-> >
-> > -     ret = read(fd, &runtime, sizeof(runtime));
-> > +     ret = TEMP_FAILURE_RETRY(read(fd, &runtime, sizeof(runtime)));
-> >       BUG_ON(ret != sizeof(runtime));
-> >
-> >       return runtime;
-> > diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> > index c689054002cc..844f5350bfdf 100644
-> > --- a/tools/perf/builtin-script.c
-> > +++ b/tools/perf/builtin-script.c
-> > @@ -4207,7 +4207,7 @@ int cmd_script(int argc, const char **argv)
-> >                       goto out_delete;
-> >               }
-> >
-> > -             input = open(data.path, O_RDONLY);      /* input_name */
-> > +             input = TEMP_FAILURE_RETRY(open(data.path, O_RDONLY));  /* input_name */
-> >               if (input < 0) {
-> >                       err = -errno;
-> >                       perror("failed to open file");
-> > diff --git a/tools/perf/util/copyfile.c b/tools/perf/util/copyfile.c
-> > index 47e03de7c235..c7bff4943936 100644
-> > --- a/tools/perf/util/copyfile.c
-> > +++ b/tools/perf/util/copyfile.c
-> > @@ -112,7 +112,7 @@ static int copyfile_mode_ns(const char *from, const char *to, mode_t mode,
-> >               goto out_close_to;
-> >
-> >       nsinfo__mountns_enter(nsi, &nsc);
-> > -     fromfd = open(from, O_RDONLY);
-> > +     fromfd = TEMP_FAILURE_RETRY(open(from, O_RDONLY));
-> >       nsinfo__mountns_exit(&nsc);
-> >       if (fromfd < 0)
-> >               goto out_close_to;
-> > diff --git a/tools/perf/util/data.c b/tools/perf/util/data.c
-> > index caabeac24c69..a9066a3d914f 100644
-> > --- a/tools/perf/util/data.c
-> > +++ b/tools/perf/util/data.c
-> > @@ -53,7 +53,8 @@ int perf_data__create_dir(struct perf_data *data, int nr)
-> >                       goto out_err;
-> >               }
-> >
-> > -             ret = open(file->path, O_RDWR|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
-> > +             ret = TEMP_FAILURE_RETRY(open(file->path, O_RDWR|O_CREAT|O_TRUNC,
-> > +                                           S_IRUSR|S_IWUSR));
-> >               if (ret < 0) {
-> >                       ret = -errno;
-> >                       goto out_err;
-> > @@ -123,7 +124,7 @@ int perf_data__open_dir(struct perf_data *data)
-> >               if (!file->path)
-> >                       goto out_err;
-> >
-> > -             ret = open(file->path, O_RDONLY);
-> > +             ret = TEMP_FAILURE_RETRY(open(file->path, O_RDONLY));
-> >               if (ret < 0)
-> >                       goto out_err;
-> >
-> > @@ -248,7 +249,7 @@ static int open_file_read(struct perf_data *data)
-> >       int fd;
-> >       char sbuf[STRERR_BUFSIZE];
-> >
-> > -     fd = open(data->file.path, flags);
-> > +     fd = TEMP_FAILURE_RETRY(open(data->file.path, flags));
-> >       if (fd < 0) {
-> >               int err = errno;
-> >
-> > @@ -288,8 +289,8 @@ static int open_file_write(struct perf_data *data)
-> >       int fd;
-> >       char sbuf[STRERR_BUFSIZE];
-> >
-> > -     fd = open(data->file.path, O_CREAT|O_RDWR|O_TRUNC|O_CLOEXEC,
-> > -               S_IRUSR|S_IWUSR);
-> > +     fd = TEMP_FAILURE_RETRY(open(data->file.path, O_CREAT|O_RDWR|O_TRUNC|O_CLOEXEC,
-> > +                                  S_IRUSR|S_IWUSR));
-> >
-> >       if (fd < 0)
-> >               pr_err("failed to open %s : %s\n", data->file.path,
-> > diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
-> > index 5ac13958d1bd..40befa2429f9 100644
-> > --- a/tools/perf/util/dso.c
-> > +++ b/tools/perf/util/dso.c
-> > @@ -300,7 +300,7 @@ int filename__decompress(const char *name, char *pathname,
-> >        * descriptor to the uncompressed file.
-> >        */
-> >       if (!compressions[comp].is_compressed(name))
-> > -             return open(name, O_RDONLY);
-> > +             return TEMP_FAILURE_RETRY(open(name, O_RDONLY));
-> >
-> >       fd = mkstemp(tmpbuf);
-> >       if (fd < 0) {
-> > @@ -476,7 +476,7 @@ static int do_open(char *name)
-> >       char sbuf[STRERR_BUFSIZE];
-> >
-> >       do {
-> > -             fd = open(name, O_RDONLY|O_CLOEXEC);
-> > +             fd = TEMP_FAILURE_RETRY(open(name, O_RDONLY|O_CLOEXEC));
-> >               if (fd >= 0)
-> >                       return fd;
-> >
-> > @@ -898,7 +898,7 @@ static ssize_t file_read(struct dso *dso, struct machine *machine,
-> >               goto out;
-> >       }
-> >
-> > -     ret = pread(dso->data.fd, data, DSO__DATA_CACHE_SIZE, offset);
-> > +     ret = TEMP_FAILURE_RETRY(pread(dso->data.fd, data, DSO__DATA_CACHE_SIZE, offset));
-> >  out:
-> >       pthread_mutex_unlock(&dso__data_open_lock);
-> >       return ret;
-> > diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> > index 48af7d379d82..ba0dcdf91120 100644
-> > --- a/tools/perf/util/evlist.c
-> > +++ b/tools/perf/util/evlist.c
-> > @@ -1440,7 +1440,7 @@ int evlist__prepare_workload(struct evlist *evlist, struct target *target, const
-> >               /*
-> >                * Wait until the parent tells us to go.
-> >                */
-> > -             ret = read(go_pipe[0], &bf, 1);
-> > +             ret = TEMP_FAILURE_RETRY(read(go_pipe[0], &bf, 1));
-> >               /*
-> >                * The parent will ask for the execvp() to be performed by
-> >                * writing exactly one byte, in workload.cork_fd, usually via
-> > @@ -1837,7 +1837,7 @@ static int evlist__parse_control_fifo(const char *str, int *ctl_fd, int *ctl_fd_
-> >        * O_RDWR avoids POLLHUPs which is necessary to allow the other
-> >        * end of a FIFO to be repeatedly opened and closed.
-> >        */
-> > -     fd = open(s, O_RDWR | O_NONBLOCK | O_CLOEXEC);
-> > +     fd = TEMP_FAILURE_RETRY(open(s, O_RDWR | O_NONBLOCK | O_CLOEXEC));
-> >       if (fd < 0) {
-> >               pr_err("Failed to open '%s'\n", s);
-> >               ret = -errno;
-> > @@ -1848,7 +1848,7 @@ static int evlist__parse_control_fifo(const char *str, int *ctl_fd, int *ctl_fd_
-> >
-> >       if (p && *++p) {
-> >               /* O_RDWR | O_NONBLOCK means the other end need not be open */
-> > -             fd = open(p, O_RDWR | O_NONBLOCK | O_CLOEXEC);
-> > +             fd = TEMP_FAILURE_RETRY(open(p, O_RDWR | O_NONBLOCK | O_CLOEXEC));
-> >               if (fd < 0) {
-> >                       pr_err("Failed to open '%s'\n", p);
-> >                       ret = -errno;
-> > diff --git a/tools/perf/util/lzma.c b/tools/perf/util/lzma.c
-> > index 51424cdc3b68..93e0a6a53e28 100644
-> > --- a/tools/perf/util/lzma.c
-> > +++ b/tools/perf/util/lzma.c
-> > @@ -109,7 +109,7 @@ int lzma_decompress_to_file(const char *input, int output_fd)
-> >
-> >  bool lzma_is_compressed(const char *input)
-> >  {
-> > -     int fd = open(input, O_RDONLY);
-> > +     int fd = TEMP_FAILURE_RETRY(open(input, O_RDONLY));
-> >       const uint8_t magic[6] = { 0xFD, '7', 'z', 'X', 'Z', 0x00 };
-> >       char buf[6] = { 0 };
-> >       ssize_t rc;
-> > @@ -117,7 +117,7 @@ bool lzma_is_compressed(const char *input)
-> >       if (fd < 0)
-> >               return -1;
-> >
-> > -     rc = read(fd, buf, sizeof(buf));
-> > +     rc = TEMP_FAILURE_RETRY(read(fd, buf, sizeof(buf)));
-> >       close(fd);
-> >       return rc == sizeof(buf) ?
-> >              memcmp(buf, magic, sizeof(buf)) == 0 : false;
-> > diff --git a/tools/perf/util/namespaces.c b/tools/perf/util/namespaces.c
-> > index dd536220cdb9..89edfba6af06 100644
-> > --- a/tools/perf/util/namespaces.c
-> > +++ b/tools/perf/util/namespaces.c
-> > @@ -9,6 +9,7 @@
-> >  #include "get_current_dir_name.h"
-> >  #include <sys/types.h>
-> >  #include <sys/stat.h>
-> > +#include <errno.h>
-> >  #include <fcntl.h>
-> >  #include <limits.h>
-> >  #include <sched.h>
-> > @@ -266,11 +267,11 @@ void nsinfo__mountns_enter(struct nsinfo *nsi,
-> >       if (!oldcwd)
-> >               return;
-> >
-> > -     oldns = open(curpath, O_RDONLY);
-> > +     oldns = TEMP_FAILURE_RETRY(open(curpath, O_RDONLY));
-> >       if (oldns < 0)
-> >               goto errout;
-> >
-> > -     newns = open(nsi->mntns_path, O_RDONLY);
-> > +     newns = TEMP_FAILURE_RETRY(open(nsi->mntns_path, O_RDONLY));
-> >       if (newns < 0)
-> >               goto errout;
-> >
-> > diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-> > index 7ed235740431..75f8f2e44195 100644
-> > --- a/tools/perf/util/parse-events.c
-> > +++ b/tools/perf/util/parse-events.c
-> > @@ -189,7 +189,7 @@ static int tp_event_has_id(const char *dir_path, struct dirent *evt_dir)
-> >       int fd;
-> >
-> >       snprintf(evt_path, MAXPATHLEN, "%s/%s/id", dir_path, evt_dir->d_name);
-> > -     fd = open(evt_path, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(evt_path, O_RDONLY));
-> >       if (fd < 0)
-> >               return -EINVAL;
-> >       close(fd);
-> > @@ -233,10 +233,10 @@ struct tracepoint_path *tracepoint_id_to_path(u64 config)
-> >
-> >                       scnprintf(evt_path, MAXPATHLEN, "%s/%s/id", dir_path,
-> >                                 evt_dirent->d_name);
-> > -                     fd = open(evt_path, O_RDONLY);
-> > +                     fd = TEMP_FAILURE_RETRY(open(evt_path, O_RDONLY));
-> >                       if (fd < 0)
-> >                               continue;
-> > -                     if (read(fd, id_buf, sizeof(id_buf)) < 0) {
-> > +                     if (TEMP_FAILURE_RETRY(read(fd, id_buf, sizeof(id_buf))) < 0) {
-> >                               close(fd);
-> >                               continue;
-> >                       }
-> > diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-> > index 9a1c7e63e663..59252cfc2b5b 100644
-> > --- a/tools/perf/util/pmu.c
-> > +++ b/tools/perf/util/pmu.c
-> > @@ -154,14 +154,14 @@ static int perf_pmu__parse_scale(struct perf_pmu_alias *alias, char *dir, char *
-> >
-> >       scnprintf(path, PATH_MAX, "%s/%s.scale", dir, name);
-> >
-> > -     fd = open(path, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(path, O_RDONLY));
-> >       if (fd == -1)
-> >               return -1;
-> >
-> >       if (fstat(fd, &st) < 0)
-> >               goto error;
-> >
-> > -     sret = read(fd, scale, sizeof(scale)-1);
-> > +     sret = TEMP_FAILURE_RETRY(read(fd, scale, sizeof(scale)-1));
-> >       if (sret < 0)
-> >               goto error;
-> >
-> > @@ -184,11 +184,11 @@ static int perf_pmu__parse_unit(struct perf_pmu_alias *alias, char *dir, char *n
-> >
-> >       scnprintf(path, PATH_MAX, "%s/%s.unit", dir, name);
-> >
-> > -     fd = open(path, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(path, O_RDONLY));
-> >       if (fd == -1)
-> >               return -1;
-> >
-> > -     sret = read(fd, alias->unit, UNIT_MAX_LEN);
-> > +     sret = TEMP_FAILURE_RETRY(read(fd, alias->unit, UNIT_MAX_LEN));
-> >       if (sret < 0)
-> >               goto error;
-> >
-> > @@ -214,7 +214,7 @@ perf_pmu__parse_per_pkg(struct perf_pmu_alias *alias, char *dir, char *name)
-> >
-> >       scnprintf(path, PATH_MAX, "%s/%s.per-pkg", dir, name);
-> >
-> > -     fd = open(path, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(path, O_RDONLY));
-> >       if (fd == -1)
-> >               return -1;
-> >
-> > @@ -232,7 +232,7 @@ static int perf_pmu__parse_snapshot(struct perf_pmu_alias *alias,
-> >
-> >       scnprintf(path, PATH_MAX, "%s/%s.snapshot", dir, name);
-> >
-> > -     fd = open(path, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(path, O_RDONLY));
-> >       if (fd == -1)
-> >               return -1;
-> >
-> > diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
-> > index 062b5cbe67af..7838889f55df 100644
-> > --- a/tools/perf/util/probe-event.c
-> > +++ b/tools/perf/util/probe-event.c
-> > @@ -276,7 +276,7 @@ static char *find_module_name(const char *module)
-> >       char *mod_name = NULL;
-> >       int name_offset;
-> >
-> > -     fd = open(module, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(module, O_RDONLY));
-> >       if (fd < 0)
-> >               return NULL;
-> >
-> > @@ -598,7 +598,7 @@ static int get_text_start_address(const char *exec, u64 *address,
-> >       struct nscookie nsc;
-> >
-> >       nsinfo__mountns_enter(nsi, &nsc);
-> > -     fd = open(exec, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(exec, O_RDONLY));
-> >       nsinfo__mountns_exit(&nsc);
-> >       if (fd < 0)
-> >               return -errno;
-> > diff --git a/tools/perf/util/probe-file.c b/tools/perf/util/probe-file.c
-> > index 3d50de3217d5..b788932656e8 100644
-> > --- a/tools/perf/util/probe-file.c
-> > +++ b/tools/perf/util/probe-file.c
-> > @@ -115,9 +115,9 @@ int open_trace_file(const char *trace_file, bool readwrite)
-> >       if (ret >= 0) {
-> >               pr_debug("Opening %s write=%d\n", buf, readwrite);
-> >               if (readwrite && !probe_event_dry_run)
-> > -                     ret = open(buf, O_RDWR | O_APPEND, 0);
-> > +                     ret = TEMP_FAILURE_RETRY(open(buf, O_RDWR | O_APPEND, 0));
-> >               else
-> > -                     ret = open(buf, O_RDONLY, 0);
-> > +                     ret = TEMP_FAILURE_RETRY(open(buf, O_RDONLY, 0));
-> >
-> >               if (ret < 0)
-> >                       ret = -errno;
-> > @@ -180,7 +180,7 @@ struct strlist *probe_file__get_rawlist(int fd)
-> >       if (sl == NULL)
-> >               return NULL;
-> >
-> > -     fddup = dup(fd);
-> > +     fddup = TEMP_FAILURE_RETRY(dup(fd));
-> >       if (fddup < 0)
-> >               goto out_free_sl;
-> >
-> > @@ -498,7 +498,7 @@ static int probe_cache__open(struct probe_cache *pcache, const char *target,
-> >       }
-> >
-> >       snprintf(cpath, PATH_MAX, "%s/probes", dir_name);
-> > -     fd = open(cpath, O_CREAT | O_RDWR, 0644);
-> > +     fd = TEMP_FAILURE_RETRY(open(cpath, O_CREAT | O_RDWR, 0644));
-> >       if (fd < 0)
-> >               pr_debug("Failed to open cache(%d): %s\n", fd, cpath);
-> >       free(dir_name);
-> > @@ -514,7 +514,7 @@ static int probe_cache__load(struct probe_cache *pcache)
-> >       int ret = 0, fddup;
-> >       FILE *fp;
-> >
-> > -     fddup = dup(pcache->fd);
-> > +     fddup = TEMP_FAILURE_RETRY(dup(pcache->fd));
-> >       if (fddup < 0)
-> >               return -errno;
-> >       fp = fdopen(fddup, "r");
-> > diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
-> > index 0acb9de54b06..b2fc389cc530 100644
-> > --- a/tools/perf/util/session.c
-> > +++ b/tools/perf/util/session.c
-> > @@ -384,7 +384,7 @@ static int skipn(int fd, off_t n)
-> >       ssize_t ret;
-> >
-> >       while (n > 0) {
-> > -             ret = read(fd, buf, min(n, (off_t)sizeof(buf)));
-> > +             ret = TEMP_FAILURE_RETRY(read(fd, buf, min(n, (off_t)sizeof(buf))));
-> >               if (ret <= 0)
-> >                       return ret;
-> >               n -= ret;
-> > diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-> > index ecd377938eea..02556070a2ce 100644
-> > --- a/tools/perf/util/symbol-elf.c
-> > +++ b/tools/perf/util/symbol-elf.c
-> > @@ -577,7 +577,7 @@ static int read_build_id(const char *filename, struct build_id *bid)
-> >       if (size < BUILD_ID_SIZE)
-> >               goto out;
-> >
-> > -     fd = open(filename, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(filename, O_RDONLY));
-> >       if (fd < 0)
-> >               goto out;
-> >
-> > @@ -638,7 +638,7 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid)
-> >       size_t size = sizeof(bid->data);
-> >       int fd, err = -1;
-> >
-> > -     fd = open(filename, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(filename, O_RDONLY));
-> >       if (fd < 0)
-> >               goto out;
-> >
-> > @@ -647,24 +647,24 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid)
-> >               GElf_Nhdr nhdr;
-> >               size_t namesz, descsz;
-> >
-> > -             if (read(fd, &nhdr, sizeof(nhdr)) != sizeof(nhdr))
-> > +             if (TEMP_FAILURE_RETRY(read(fd, &nhdr, sizeof(nhdr))) != sizeof(nhdr))
-> >                       break;
-> >
-> >               namesz = NOTE_ALIGN(nhdr.n_namesz);
-> >               descsz = NOTE_ALIGN(nhdr.n_descsz);
-> >               if (nhdr.n_type == NT_GNU_BUILD_ID &&
-> >                   nhdr.n_namesz == sizeof("GNU")) {
-> > -                     if (read(fd, bf, namesz) != (ssize_t)namesz)
-> > +                     if (TEMP_FAILURE_RETRY(read(fd, bf, namesz)) != (ssize_t)namesz)
-> >                               break;
-> >                       if (memcmp(bf, "GNU", sizeof("GNU")) == 0) {
-> >                               size_t sz = min(descsz, size);
-> > -                             if (read(fd, bid->data, sz) == (ssize_t)sz) {
-> > +                             if (TEMP_FAILURE_RETRY(read(fd, bid->data, sz)) == (ssize_t)sz) {
-> >                                       memset(bid->data + sz, 0, size - sz);
-> >                                       bid->size = sz;
-> >                                       err = 0;
-> >                                       break;
-> >                               }
-> > -                     } else if (read(fd, bf, descsz) != (ssize_t)descsz)
-> > +                     } else if (TEMP_FAILURE_RETRY(read(fd, bf, descsz)) != (ssize_t)descsz)
-> >                               break;
-> >               } else {
-> >                       int n = namesz + descsz;
-> > @@ -674,7 +674,7 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid)
-> >                               pr_debug("%s: truncating reading of build id in sysfs file %s: n_namesz=%u, n_descsz=%u.\n",
-> >                                        __func__, filename, nhdr.n_namesz, nhdr.n_descsz);
-> >                       }
-> > -                     if (read(fd, bf, n) != n)
-> > +                     if (TEMP_FAILURE_RETRY(read(fd, bf, n)) != n)
-> >                               break;
-> >               }
-> >       }
-> > @@ -732,7 +732,7 @@ int filename__read_debuglink(const char *filename, char *debuglink,
-> >       Elf_Scn *sec;
-> >       Elf_Kind ek;
-> >
-> > -     fd = open(filename, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(filename, O_RDONLY));
-> >       if (fd < 0)
-> >               goto out;
-> >
-> > @@ -844,7 +844,7 @@ int symsrc__init(struct symsrc *ss, struct dso *dso, const char *name,
-> >
-> >               type = dso->symtab_type;
-> >       } else {
-> > -             fd = open(name, O_RDONLY);
-> > +             fd = TEMP_FAILURE_RETRY(open(name, O_RDONLY));
-> >               if (fd < 0) {
-> >                       dso->load_errno = errno;
-> >                       return -1;
-> > @@ -1454,7 +1454,7 @@ static int copy_bytes(int from, off_t from_offs, int to, off_t to_offs, u64 len)
-> >               if (len < n)
-> >                       n = len;
-> >               /* Use read because mmap won't work on proc files */
-> > -             r = read(from, buf, n);
-> > +             r = TEMP_FAILURE_RETRY(read(from, buf, n));
-> >               if (r < 0)
-> >                       goto out;
-> >               if (!r)
-> > @@ -1485,7 +1485,7 @@ static int kcore__open(struct kcore *kcore, const char *filename)
-> >  {
-> >       GElf_Ehdr *ehdr;
-> >
-> > -     kcore->fd = open(filename, O_RDONLY);
-> > +     kcore->fd = TEMP_FAILURE_RETRY(open(filename, O_RDONLY));
-> >       if (kcore->fd == -1)
-> >               return -1;
-> >
-> > @@ -1518,7 +1518,7 @@ static int kcore__init(struct kcore *kcore, char *filename, int elfclass,
-> >       if (temp)
-> >               kcore->fd = mkstemp(filename);
-> >       else
-> > -             kcore->fd = open(filename, O_WRONLY | O_CREAT | O_EXCL, 0400);
-> > +             kcore->fd = TEMP_FAILURE_RETRY(open(filename, O_WRONLY | O_CREAT | O_EXCL, 0400));
-> >       if (kcore->fd == -1)
-> >               return -1;
-> >
-> > @@ -1966,7 +1966,7 @@ static int kcore_copy__compare_fds(int from, int to)
-> >
-> >       while (1) {
-> >               /* Use read because mmap won't work on proc files */
-> > -             ret = read(from, buf_from, page_size);
-> > +             ret = TEMP_FAILURE_RETRY(read(from, buf_from, page_size));
-> >               if (ret < 0)
-> >                       goto out;
-> >
-> > @@ -1994,11 +1994,11 @@ static int kcore_copy__compare_files(const char *from_filename,
-> >  {
-> >       int from, to, err = -1;
-> >
-> > -     from = open(from_filename, O_RDONLY);
-> > +     from = TEMP_FAILURE_RETRY(open(from_filename, O_RDONLY));
-> >       if (from < 0)
-> >               return -1;
-> >
-> > -     to = open(to_filename, O_RDONLY);
-> > +     to = TEMP_FAILURE_RETRY(open(to_filename, O_RDONLY));
-> >       if (to < 0)
-> >               goto out_close_from;
-> >
-> > @@ -2419,7 +2419,7 @@ int get_sdt_note_list(struct list_head *head, const char *target)
-> >       Elf *elf;
-> >       int fd, ret;
-> >
-> > -     fd = open(target, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(target, O_RDONLY));
-> >       if (fd < 0)
-> >               return -EBADF;
-> >
-> > diff --git a/tools/perf/util/symbol-minimal.c b/tools/perf/util/symbol-minimal.c
-> > index f9eb0bee7f15..7e25d476b1b2 100644
-> > --- a/tools/perf/util/symbol-minimal.c
-> > +++ b/tools/perf/util/symbol-minimal.c
-> > @@ -230,7 +230,7 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid)
-> >       size_t buf_size;
-> >       void *buf;
-> >
-> > -     fd = open(filename, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(filename, O_RDONLY));
-> >       if (fd < 0)
-> >               return -1;
-> >
-> > @@ -242,7 +242,7 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid)
-> >       if (buf == NULL)
-> >               goto out;
-> >
-> > -     if (read(fd, buf, buf_size) != (ssize_t) buf_size)
-> > +     if (TEMP_FAILURE_RETRY(read(fd, buf, buf_size)) != (ssize_t) buf_size)
-> >               goto out_free;
-> >
-> >       ret = read_build_id(buf, buf_size, bid, false);
-> > @@ -256,7 +256,7 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid)
-> >  int symsrc__init(struct symsrc *ss, struct dso *dso, const char *name,
-> >                enum dso_binary_type type)
-> >  {
-> > -     int fd = open(name, O_RDONLY);
-> > +     int fd = TEMP_FAILURE_RETRY(open(name, O_RDONLY));
-> >       if (fd < 0)
-> >               goto out_errno;
-> >
-> > diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-> > index f72baf636724..5212667ea67d 100644
-> > --- a/tools/perf/util/symbol.c
-> > +++ b/tools/perf/util/symbol.c
-> > @@ -1335,7 +1335,7 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
-> >       md.dso = dso;
-> >       INIT_LIST_HEAD(&md.maps);
-> >
-> > -     fd = open(kcore_filename, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(kcore_filename, O_RDONLY));
-> >       if (fd < 0) {
-> >               pr_debug("Failed to open %s. Note /proc/kcore requires CAP_SYS_RAWIO capability to access.\n",
-> >                        kcore_filename);
-> > @@ -2156,7 +2156,7 @@ static int find_matching_kcore(struct map *map, char *dir, size_t dir_sz)
-> >   */
-> >  static bool filename__readable(const char *file)
-> >  {
-> > -     int fd = open(file, O_RDONLY);
-> > +     int fd = TEMP_FAILURE_RETRY(open(file, O_RDONLY));
-> >       if (fd < 0)
-> >               return false;
-> >       close(fd);
-> > diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
-> > index 76beda3e1a10..9dcc268bd69c 100644
-> > --- a/tools/perf/util/synthetic-events.c
-> > +++ b/tools/perf/util/synthetic-events.c
-> > @@ -40,6 +40,7 @@
-> >  #include <api/io.h>
-> >  #include <sys/types.h>
-> >  #include <sys/stat.h>
-> > +#include <errno.h>
-> >  #include <fcntl.h>
-> >  #include <unistd.h>
-> >
-> > @@ -86,13 +87,13 @@ static int perf_event__get_comm_ids(pid_t pid, pid_t tid, char *comm, size_t len
-> >       else
-> >               snprintf(bf, sizeof(bf), "/proc/%d/status", tid);
-> >
-> > -     fd = open(bf, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(bf, O_RDONLY));
-> >       if (fd < 0) {
-> >               pr_debug("couldn't open %s\n", bf);
-> >               return -1;
-> >       }
-> >
-> > -     n = read(fd, bf, sizeof(bf) - 1);
-> > +     n = TEMP_FAILURE_RETRY(read(fd, bf, sizeof(bf) - 1));
-> >       close(fd);
-> >       if (n <= 0) {
-> >               pr_warning("Couldn't get COMM, tigd and ppid for pid %d\n",
-> > @@ -410,7 +411,7 @@ int perf_event__synthesize_mmap_events(struct perf_tool *tool,
-> >       snprintf(bf, sizeof(bf), "%s/proc/%d/task/%d/maps",
-> >               machine->root_dir, pid, pid);
-> >
-> > -     io.fd = open(bf, O_RDONLY, 0);
-> > +     io.fd = TEMP_FAILURE_RETRY(open(bf, O_RDONLY, 0));
-> >       if (io.fd < 0) {
-> >               /*
-> >                * We raced with a task exiting - just return:
-> > diff --git a/tools/perf/util/trace-event-info.c b/tools/perf/util/trace-event-info.c
-> > index a65f65d0857e..c917a4217c6f 100644
-> > --- a/tools/perf/util/trace-event-info.c
-> > +++ b/tools/perf/util/trace-event-info.c
-> > @@ -48,7 +48,7 @@ static int record_file(const char *file, ssize_t hdr_sz)
-> >       int r, fd;
-> >       int err = -EIO;
-> >
-> > -     fd = open(file, O_RDONLY);
-> > +     fd = TEMP_FAILURE_RETRY(open(file, O_RDONLY));
-> >       if (fd < 0) {
-> >               pr_debug("Can't read '%s'", file);
-> >               return -errno;
-> > @@ -61,7 +61,7 @@ static int record_file(const char *file, ssize_t hdr_sz)
-> >       }
-> >
-> >       do {
-> > -             r = read(fd, buf, BUFSIZ);
-> > +             r = TEMP_FAILURE_RETRY(read(fd, buf, BUFSIZ));
-> >               if (r > 0) {
-> >                       size += r;
-> >                       if (write(output_fd, buf, r) != r)
-> > @@ -519,7 +519,7 @@ struct tracing_data *tracing_data_get(struct list_head *pattrs,
-> >                       return NULL;
-> >               }
-> >
-> > -             temp_fd = open(tdata->temp_file, O_RDWR);
-> > +             temp_fd = TEMP_FAILURE_RETRY(open(tdata->temp_file, O_RDWR));
-> >               if (temp_fd < 0) {
-> >                       pr_debug("Can't read '%s'", tdata->temp_file);
-> >                       free(tdata);
-> > diff --git a/tools/perf/util/trace-event-read.c b/tools/perf/util/trace-event-read.c
-> > index 8a01af783310..7086770ec225 100644
-> > --- a/tools/perf/util/trace-event-read.c
-> > +++ b/tools/perf/util/trace-event-read.c
-> > @@ -11,6 +11,7 @@
-> >  #include <sys/stat.h>
-> >  #include <sys/wait.h>
-> >  #include <sys/mman.h>
-> > +#include <errno.h>
-> >  #include <fcntl.h>
-> >  #include <unistd.h>
-> >  #include <errno.h>
-> > @@ -28,7 +29,7 @@ static int __do_read(int fd, void *buf, int size)
-> >       int rsize = size;
-> >
-> >       while (size) {
-> > -             int ret = read(fd, buf, size);
-> > +             int ret = TEMP_FAILURE_RETRY(read(fd, buf, size));
-> >
-> >               if (ret <= 0)
-> >                       return -1;
-> > @@ -105,7 +106,7 @@ static char *read_string(void)
-> >       char c;
-> >
-> >       for (;;) {
-> > -             r = read(input_fd, &c, 1);
-> > +             r = TEMP_FAILURE_RETRY(read(input_fd, &c, 1));
-> >               if (r < 0) {
-> >                       pr_debug("reading input file");
-> >                       goto out;
-> > diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
-> > index 37622699c91a..2ece387a73c6 100644
-> > --- a/tools/perf/util/unwind-libunwind-local.c
-> > +++ b/tools/perf/util/unwind-libunwind-local.c
-> > @@ -362,7 +362,7 @@ static int read_unwind_spec_debug_frame(struct dso *dso,
-> >               }
-> >
-> >               if (ofs <= 0) {
-> > -                     fd = open(dso->symsrc_filename, O_RDONLY);
-> > +                     fd = TEMP_FAILURE_RETRY(open(dso->symsrc_filename, O_RDONLY));
-> >                       if (fd >= 0) {
-> >                               ofs = elf_section_offset(fd, ".debug_frame");
-> >                               close(fd);
-> > @@ -377,7 +377,7 @@ static int read_unwind_spec_debug_frame(struct dso *dso,
-> >                               dso, DSO_BINARY_TYPE__DEBUGLINK,
-> >                               machine->root_dir, debuglink, PATH_MAX);
-> >                       if (!ret) {
-> > -                             fd = open(debuglink, O_RDONLY);
-> > +                             fd = TEMP_FAILURE_RETRY(open(debuglink, O_RDONLY));
-> >                               if (fd >= 0) {
-> >                                       ofs = elf_section_offset(fd,
-> >                                                       ".debug_frame");
-> > diff --git a/tools/perf/util/zlib.c b/tools/perf/util/zlib.c
-> > index 78d2297c1b67..f4563ea094c8 100644
-> > --- a/tools/perf/util/zlib.c
-> > +++ b/tools/perf/util/zlib.c
-> > @@ -1,4 +1,5 @@
-> >  // SPDX-License-Identifier: GPL-2.0
-> > +#include <errno.h>
-> >  #include <fcntl.h>
-> >  #include <stdio.h>
-> >  #include <string.h>
-> > @@ -82,7 +83,7 @@ int gzip_decompress_to_file(const char *input, int output_fd)
-> >
-> >  bool gzip_is_compressed(const char *input)
-> >  {
-> > -     int fd = open(input, O_RDONLY);
-> > +     int fd = TEMP_FAILURE_RETRY(open(input, O_RDONLY));
-> >       const uint8_t magic[2] = { 0x1f, 0x8b };
-> >       char buf[2] = { 0 };
-> >       ssize_t rc;
-> > @@ -90,7 +91,7 @@ bool gzip_is_compressed(const char *input)
-> >       if (fd < 0)
-> >               return -1;
-> >
-> > -     rc = read(fd, buf, sizeof(buf));
-> > +     rc = TEMP_FAILURE_RETRY(read(fd, buf, sizeof(buf)));
-> >       close(fd);
-> >       return rc == sizeof(buf) ?
-> >              memcmp(buf, magic, sizeof(buf)) == 0 : false;
->
+Jason

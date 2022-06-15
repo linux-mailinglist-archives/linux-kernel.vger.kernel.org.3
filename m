@@ -2,75 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE2DA54D1D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:44:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA36754D1DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:45:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349849AbiFOTnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 15:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
+        id S1350292AbiFOTov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:44:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347040AbiFOTnU (ORCPT
+        with ESMTP id S244636AbiFOTos (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:43:20 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B210F3337C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:43:19 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id t3-20020a17090a510300b001ea87ef9a3dso2966312pjh.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:43:19 -0700 (PDT)
+        Wed, 15 Jun 2022 15:44:48 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874773CFF2;
+        Wed, 15 Jun 2022 12:44:46 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id y19so25255434ejq.6;
+        Wed, 15 Jun 2022 12:44:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=kHvqhKfwkSYWgIBUppKUElAVHImwDcI/W0up7OF2SsA=;
-        b=d8fhnbfaPrU2+uiC85kAcwxMXgjbGT6e60zD5sDwnLTPVfIebFu6ujW9v9D+HIGGOX
-         xflERCHkkCdL6KPdIzK3ICCUzEE16RQdKOmBPJ3R/J+eNXsLcSyoz505OO6p/QlV6GGq
-         O7GdyXYdHJHTW6y4bqizczAP5tht6h9enLmvovAeH8e7S6lsohw2nwxdAgJrAEjATyrO
-         39e7MHMhOFj0i5Sg+2FAilC8MCeGfop0VNkaHbxw00EJYAN38OfK5WqyIYIxmpSZJRlP
-         zO3c63Nkit4qySkdilxmHbNCW7pl3DKS0cgNLR2e9VlE+UFuGHSyqDdQ9ib7JbiS0zaq
-         vVkA==
+        h=from:to:cc:subject:date:message-id;
+        bh=767OJrCK8HUadii808hVEy3GxcnvixklGPCO6V3YD5M=;
+        b=jFT/VeSc63iFgMPMb2xRcBbUCqXUnEZl1E1MVx1Yd2xAmk3ax4Uy65On/y29eZkoe2
+         EPvPLMkZIFEBJbO/DrmTsslXpsOfH14CWV/xGigqff7/K3B/BKmC5+61MIvtfT+WZpjS
+         RMqvC0cMMqe3uUD7OFBaas6cXGWaO+EzMk6KMymXcRzGsE2Ww5xjysjW4+PrZDjsV9tO
+         FyodoLXWhR4ioUoNG6krEdVinHpphmZO+IZVKrD8eX7Le1gfbzgMifUy58g6drBSSZ2S
+         x61qQcs/hRho1FhiO1lqm+d0Zm+1hEgLk1/ro/pRLJUSHwdfNL+b8dGXulEQO0kLlMeF
+         JTgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=kHvqhKfwkSYWgIBUppKUElAVHImwDcI/W0up7OF2SsA=;
-        b=QEOa+COcBscH8T8aQTvNEDVAH/UDejIB2Bzv5DAxV/GcgB+uuagvYCRFQSl+clbaYq
-         dP67e9a45DLTSMHoe6t2vktFhltVe9tJoDtTHrA3wgeJY/0hee3H+w+AgunV7tN1Ji70
-         efBKWPkVBMrNrVAoxrAW+jwxK62WU0zT92mqNVhU+nISJw4nRq8NtYOyVBMyYicfpVkj
-         8i2Wu+05BQqNTzGQh0BHcUxkivo4Pw5NKqXwWafPy9bf12iHGmcQgt9FOpJv1cGmqG/Y
-         YHD1DMk7WlA4ObdTDX10OKfgRuro5RRRBwB1Ovlw8ooHBKXbiw5NUBQ5xXPYIdJ/y3hz
-         r0Nw==
-X-Gm-Message-State: AJIora/wMegpOh9o3Z9cMsaoeF3fnZXa7kZCa7DzolUfy/dBx0mSQeDR
-        yQaiJxLGLvtEdj3A72wBu7RNwB4DzEF647NCdw==
-X-Google-Smtp-Source: AGRyM1shG8emlCgSYivx4aQKJnMn5syrlXGqEVVXxeJCFmVaj5cPb6f5lDMlXZ/WAUQr34McbttygOFSiSmZedGVCrU=
-X-Received: by 2002:a17:902:ce88:b0:163:dbd5:9797 with SMTP id
- f8-20020a170902ce8800b00163dbd59797mr1207473plg.82.1655322199133; Wed, 15 Jun
- 2022 12:43:19 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a17:90a:bf93:0:0:0:0 with HTTP; Wed, 15 Jun 2022 12:43:18
- -0700 (PDT)
-Reply-To: peterwhite202101@gmail.com
-From:   Peter White <peterwhite20211@gmail.com>
-Date:   Wed, 15 Jun 2022 19:43:18 +0000
-Message-ID: <CA+xfdp==zhwiG1dD-yoj0po=FytaAL_ZiPeAyxm0Y4LVUx0qaQ@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.6 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=767OJrCK8HUadii808hVEy3GxcnvixklGPCO6V3YD5M=;
+        b=JTmCa6eiGmslLdPSH13yTsPqBSFxejnZGs3LDQDP3lvNlwQRvKZD8JoqpjIUKIyJ8J
+         TWjP/KiVMvIg6At1lFJqBaUDf5p20iIOL7X9Dk0j0V/YIuZfLP+fDz8s0WBg1SN//UQ4
+         RoHYxwUkbSEu+1WM/ofEtW+sbYvm9cUspjsYPhQ0k6RwcLWRwFnP8Luo1HEKyu+JhKwD
+         fCelDcnl91ljatE7WsSJqTgjeDIImEp8sa92eONoriTRBXfXFuDvTpJVE/8ZfeIdNhpu
+         sdEo+xgchPj8CcYoj3sCBzkmi660gxESY7boB6n6PjhMomHWorrI5jn86Hfm8MFVhauJ
+         D3zQ==
+X-Gm-Message-State: AJIora/XOIE4tDxeWB68p3NvAKJRl4H7Ug64vRw9SP6rcvKMx6TAX2pf
+        gwk5FlB+xIOWQCNMgF4lmzomSot8muE=
+X-Google-Smtp-Source: AGRyM1sgGqJHUeVw3u3W7rE3sqf5Kp8zpWdfvFHOMgDNOhP8CojDYKciFvgC5O7XXJFBkGcWqg0OLw==
+X-Received: by 2002:a17:907:c71b:b0:718:d0a2:a447 with SMTP id ty27-20020a170907c71b00b00718d0a2a447mr1266043ejc.157.1655322284933;
+        Wed, 15 Jun 2022 12:44:44 -0700 (PDT)
+Received: from felia.fritz.box (200116b826878200b4eabc3163d51ca4.dip.versatel-1u1.de. [2001:16b8:2687:8200:b4ea:bc31:63d5:1ca4])
+        by smtp.gmail.com with ESMTPSA id i24-20020a05640200d800b0042dcac2afc6sm29565edu.72.2022.06.15.12.44.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 12:44:44 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Neal Liu <neal_liu@aspeedtech.com>, linux-aspeed@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: Repair file entry in ASPEED USB UDC DRIVER
+Date:   Wed, 15 Jun 2022 21:44:09 +0200
+Message-Id: <20220615194409.11875-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings from here.
+Commit 055276c13205 ("usb: gadget: add Aspeed ast2600 udc driver") adds
+the section ASPEED USB UDC DRIVER with a file entry to aspeed,udc.yaml,
+but then, commit 0dde9a46a2cf ("dt-bindings: usb: add documentation for
+aspeed udc") actually adds a device tree binding aspeed,ast2600-udc.yaml.
 
-I want to know if this email address is still valid to write to you.
-There is something important I would like to discuss with you.
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+broken reference.
 
-Thank you
+Repair the reference to the actually added file in ASPEED USB UDC DRIVER.
 
-Mr. Peter White
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Neal, please ack.
+Greg, please pick this minor non-urgent clean-up patch in your usb-next tree.
+
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index d9c3576b082f..8830d1adb23b 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3144,7 +3144,7 @@ ASPEED USB UDC DRIVER
+ M:	Neal Liu <neal_liu@aspeedtech.com>
+ L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
+ S:	Maintained
+-F:	Documentation/devicetree/bindings/usb/aspeed,udc.yaml
++F:	Documentation/devicetree/bindings/usb/aspeed,ast2600-udc.yaml
+ F:	drivers/usb/gadget/udc/aspeed_udc.c
+ 
+ ASUS NOTEBOOKS AND EEEPC ACPI/WMI EXTRAS DRIVERS
+-- 
+2.17.1
+

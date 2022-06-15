@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C662F54BFD1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1169754BFD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242271AbiFOCud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 22:50:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38296 "EHLO
+        id S1345616AbiFOCvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 22:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbiFOCuc (ORCPT
+        with ESMTP id S233181AbiFOCvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 22:50:32 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE96329C88
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 19:50:30 -0700 (PDT)
-Received: from [10.20.42.13] (unknown [10.20.42.13])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxL93uSKliVdVCAA--.5387S3;
-        Wed, 15 Jun 2022 10:50:22 +0800 (CST)
-Subject: Re: [PATCH RFC V3 00/11] irqchip: Add LoongArch-related irqchip
- drivers
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-References: <1654956155-936-1-git-send-email-lvjianmin@loongson.cn>
- <87pmjbp5yh.wl-maz@kernel.org>
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-Message-ID: <2367ae84-9f3f-716b-2172-e2d8e30cb241@loongson.cn>
-Date:   Wed, 15 Jun 2022 10:50:22 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 14 Jun 2022 22:51:35 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6EE2AC70;
+        Tue, 14 Jun 2022 19:51:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655261495; x=1686797495;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xlvoYMRrFROAq8lxJcU7JJSApZCF7NO92GYSAv0vikg=;
+  b=Iw1ftnb0ZB1MjQrk88XcMqoT+PFY9ZvYfp1iKvpTw6DhvXD77dkMKh2w
+   fw0AUfbYRysYbceetqbAnjHywXf/nh9DYc/GTeD1KAmIekAQUFPNzkClt
+   2CtrP2OvVUnqZogAFplKPb26v3x0v4X0kaeG31HedzuHbJm2Eh4LC0Hhc
+   BVu+JxCbyVFi0jr2FAE3cV+/e7dOqpP4TG7gegeb7/dYl1tdc5oI522t5
+   31oQOETv7aTR2/LKsRRTxt26XoEea+MIehcigQdLrRwISMT7iJWcRmcpe
+   /Z1VoShHdDs0OFsfzBzkmFflT03o9gSqtsyicjdYkUWE1CBdq1A2zotkF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="340474710"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="340474710"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 19:51:34 -0700
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="640734272"
+Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 19:51:32 -0700
+Date:   Wed, 15 Jun 2022 10:51:19 +0800
+From:   Chao Gao <chao.gao@intel.com>
+To:     Kechen Lu <kechenl@nvidia.com>
+Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, somduttar@nvidia.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 4/7] KVM: x86: Let userspace re-enable previously
+ disabled exits
+Message-ID: <20220615025114.GB7808@gao-cwp>
+References: <20220615011622.136646-1-kechenl@nvidia.com>
+ <20220615011622.136646-5-kechenl@nvidia.com>
 MIME-Version: 1.0
-In-Reply-To: <87pmjbp5yh.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9DxL93uSKliVdVCAA--.5387S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJw4kKr1rGFWDXryrtFWkZwb_yoW5KF1fpF
-        s3Wayjkr4DGrWxJwn8uF18Cry8urZxtFZrJayFqry7Cr9Ygr1xGF10kFZ0k39rArn3KFy2
-        vrZagaykGa1DZFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxV
-        WxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2Wl
-        Yx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbV
-        WUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07Al
-        zVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615011622.136646-5-kechenl@nvidia.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,92 +63,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/6/15 上午12:25, Marc Zyngier wrote:
-> On Sat, 11 Jun 2022 15:02:35 +0100,
-> Jianmin Lv <lvjianmin@loongson.cn> wrote:
->>
->> LoongArch is a new RISC ISA, which is a bit like MIPS or RISC-V.
->> LoongArch includes a reduced 32-bit version (LA32R), a standard 32-bit
->> version (LA32S) and a 64-bit version (LA64). LoongArch use ACPI as its
->> boot protocol LoongArch-specific interrupt controllers (similar to APIC)
->> are already added in the ACPI Specification 6.5(which may be published in
->> early June this year and the board is reviewing the draft).
+On Tue, Jun 14, 2022 at 06:16:19PM -0700, Kechen Lu wrote:
+>From: Sean Christopherson <seanjc@google.com>
+>
+>Add an OVERRIDE flag to KVM_CAP_X86_DISABLE_EXITS allow userspace to
+>re-enable exits and/or override previous settings.  There's no real use
+>case for the the per-VM ioctl, but a future per-vCPU variant wants to let
+>userspace toggle interception while the vCPU is running; add the OVERRIDE
+>functionality now to provide consistent between between the per-VM and
+>per-vCPU variants.
+>
+>Signed-off-by: Sean Christopherson <seanjc@google.com>
+>---
+> Documentation/virt/kvm/api.rst |  5 +++++
+> arch/x86/kvm/x86.c             | 39 +++++++++++++++++++++++-----------
+> include/uapi/linux/kvm.h       |  4 +++-
+> 3 files changed, 35 insertions(+), 13 deletions(-)
+>
+>diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+>index d0d8749591a8..89e13b6783b5 100644
+>--- a/Documentation/virt/kvm/api.rst
+>+++ b/Documentation/virt/kvm/api.rst
+>@@ -6941,6 +6941,7 @@ Valid bits in args[0] are::
+>   #define KVM_X86_DISABLE_EXITS_HLT              (1 << 1)
+>   #define KVM_X86_DISABLE_EXITS_PAUSE            (1 << 2)
+>   #define KVM_X86_DISABLE_EXITS_CSTATE           (1 << 3)
+>+  #define KVM_X86_DISABLE_EXITS_OVERRIDE         (1ull << 63)
 > 
-> Can you please make an effort to send patches in coherent way? Here's
-> what I see in my email reader:
+> Enabling this capability on a VM provides userspace with a way to no
+> longer intercept some instructions for improved latency in some
+>@@ -6949,6 +6950,10 @@ physical CPUs.  More bits can be added in the future; userspace can
+> just pass the KVM_CHECK_EXTENSION result to KVM_ENABLE_CAP to disable
+> all such vmexits.
 > 
-> [PATCH RFC V2 00/10] irqchip: Add LoongArch-related irqchip drivers
-> +[PATCH RFC V3 01/11] APCI: irq: Add support for multiple GSI domains
-> +[PATCH RFC V3 02/11] genirq/generic_chip: export irq_unmap_generic_chip
-> +[PATCH RFC V3 03/11] irqchip: Adjust Kconfig for Loongson
-> +[PATCH RFC V3 04/11] irqchip: Add LoongArch CPU interrupt controller support
-> \[PATCH RFC V3 05/11] irqchip: create library file for LoongArch irqchip driver
-> [PATCH RFC V3 06/11] irqchip/loongson-pch-pic: Add ACPI init support
-> +[PATCH RFC V3 07/11] irqchip/loongson-pch-msi: Add ACPI init support
-> +[PATCH RFC V3 08/11] irqchip/loongson-htvec: Add ACPI init support
-> +[PATCH RFC V3 09/11] irqchip/loongson-liointc: Add ACPI init support
-> +[PATCH RFC V3 10/11] irqchip: Add Loongson Extended I/O interrupt controller support
-> \[PATCH RFC V3 11/11] irqchip: Add Loongson PCH LPC controller support
-> [PATCH RFC V3 00/11] irqchip: Add LoongArch-related irqchip drivers
+>+By default, this capability only disables exits.  To re-enable an exit, or to
+>+override previous settings, userspace can set KVM_X86_DISABLE_EXITS_OVERRIDE,
+>+in which case KVM will enable/disable according to the mask (a '1' == disable).
+>+
+> Do not enable KVM_FEATURE_PV_UNHALT if you disable HLT exits.
 > 
-> Three threads, with inconsistent version numbers, inconsistent patch
-> numbering, with a split in the middle, and this final cover letter
-> that isn't followed by anything.  If you make a mistake, that's
-> fine. Fix it, and resend the series properly, possibly with a new
-> version number. Pro tip: you should only use 'git send-email', and
-> only once to send all your patches after having written the cover
-> letter. If you have to do anything else, you're doing something
-> wrong.
+> 7.14 KVM_CAP_S390_HPAGE_1M
+>diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+>index f31ebbb1b94f..7cc8ac550bc7 100644
+>--- a/arch/x86/kvm/x86.c
+>+++ b/arch/x86/kvm/x86.c
+>@@ -4201,11 +4201,10 @@ static inline bool kvm_can_mwait_in_guest(void)
 > 
+> static u64 kvm_get_allowed_disable_exits(void)
+> {
+>-	u64 r = KVM_X86_DISABLE_EXITS_HLT | KVM_X86_DISABLE_EXITS_PAUSE |
+>-		KVM_X86_DISABLE_EXITS_CSTATE;
+>+	u64 r = KVM_X86_DISABLE_VALID_EXITS;
+> 
+>-	if(kvm_can_mwait_in_guest())
+>-		r |= KVM_X86_DISABLE_EXITS_MWAIT;
+>+	if (!kvm_can_mwait_in_guest())
+>+		r &= ~KVM_X86_DISABLE_EXITS_MWAIT;
 
-Yes, Marc, thanks for your guidance. It's my mistake that I sent an old 
-cover letter when sending the patch series， so I sent a correct cover 
-letter after I found the mistake. I'll do it carefully in future.
-
-> Also, please drop this 'RFC', as we're way past the RFC stage (to me,
-> RFC means "I don't know what I'm doing yet, this is not ready to be
-> merged").
-> 
-
-Ok, I'll resend the series properly without 'RFC'.
-
-
-> [...]
-> 
->> Jianmin Lv (10):
->>    APCI: irq: Add support for multiple GSI domains
-> 
-> I'm usually not too attached to authorship, but I definitely wrote
-> that one, and that casts some doubt on the authorship of all the
-> patches. For example, patch #4 has:
-> 
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-> 
-> but doesn't list Huacai Chen as the author. Either they are, and the
-> patch needs a From: line like in patch #3, or this is co-developed,
-> and you need the Co-Developed: tag ([1] has all the details).
-> 
-
-Thanks for your guidance again, I'm so sorry and please forgive
-my ignorance about these rules. I'll do it as your guidance here
-in future.
-
-
-> I'll go and review the actual patches before the end of the week, but
-> you definitely need to address the patch attributions in this series.
-> 
-
-Ok, I'll address the patch attributions in this series as soon as
-possible and resend it.
-
-
-> Thanks,
-> 
-> 	M.
-> 
-> [1] Documentation/process/submitting-patches.rst
-> 
-
+This hunk looks like a fix to patch 3; it can be squashed into that patch.

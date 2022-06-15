@@ -2,129 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3181054C721
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:04:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AFBC54C722
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345260AbiFOLEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 07:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55548 "EHLO
+        id S1347232AbiFOLFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 07:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345158AbiFOLEn (ORCPT
+        with ESMTP id S1349226AbiFOLEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:04:43 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6EF5401D;
-        Wed, 15 Jun 2022 04:04:16 -0700 (PDT)
+        Wed, 15 Jun 2022 07:04:47 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117B711A3D
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 04:04:35 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id u18so10123367plb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 04:04:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1655291056; x=1686827056;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BikRfTtyNSP6EN+fSel6ObjJyNkgPpPQ+YreNW/Ar5k=;
-  b=BGR4ssMjZlScEOQC36jMEl3MC4jQkj+BHadR3L7CIgIhWbMRGRIKBmLw
-   XYFtSdGKBRyc4O8giZn15cA/Jkp2irWwepU9usYfgqVBv1l1N/DLkyjNh
-   t7MJrhn3VLr39Jy6zUZJfhYRLc4dQaDgLPi6L7x3iT/AfVrtsyTPDsl+d
-   g=;
-Received: from unknown (HELO ironmsg01-sd.qualcomm.com) ([10.53.140.141])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Jun 2022 04:04:16 -0700
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg01-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 04:04:16 -0700
-Received: from [10.50.37.107] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 15 Jun
- 2022 04:04:12 -0700
-Message-ID: <39a16f7b-ef12-4cb2-b8fd-d79b8fdf9ebe@quicinc.com>
-Date:   Wed, 15 Jun 2022 16:34:08 +0530
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=T824YRyWbY8QMwmDAOdeOrXAS4lOWMO5bv33bcKaW7M=;
+        b=7k0x2XCq3c+fO57mLWxyW3hIRphZs6qRafxHeFqwN6WujzbKD2zGN3SOtovrXLKgzM
+         WmD21sQigiQQXmu3CRxkLilzT39tnuFDZfFTYahh83+0Qb00MasNXGLYfbCgjBI4HLf+
+         PVSVLC2n8rCGc0P1fq1xDHDyfqJ6vjrYVhtOcfHM05QUZJwGfhuixYo/cmO/inIwPKII
+         WeYU64MyfllBmx53oSXWEWsBU4NbbjdyGaGVB+4XgZ0x/2i4mGQ/Cs+tbSIU3Q/SRpAV
+         82pfRdxx7TxB1lWM1lZziARVfujowqge99iYdGMjGNmunykqNTr4zdyA2LE5F5ic5gH3
+         MgxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=T824YRyWbY8QMwmDAOdeOrXAS4lOWMO5bv33bcKaW7M=;
+        b=UMNTMcdUPvj7CGq/16OBg+kBJjbXpoSsrE3HMZ4nezMuY10CCY6G/QIyItj2vPV9Ym
+         Xyrf4Icf8XkhJWpqo5cvOzAjM/OyS6t96PmQhXRW2k7HIIAIsreG3+M+S5wnKC06vgb9
+         sR19kcBXwlaFQDMXhCVPyWvqnLk/KF2yRkMGxqsf4iVDKUz94lwwm64jn6NXdmwwlKxo
+         s2uMZI3G5MRF6ef11p3RpdC+rDKCXFxRXayZFf4PnytbndNxl0PLEeVud6l/XatOKrTe
+         6Sfb5AH51yiZC6eWSNsoWIul3OcU4kCJQ/IPWnDUXz34nCn8Qr9vWxDNV3ithEm0/yRQ
+         3CWw==
+X-Gm-Message-State: AJIora/nA99cGwdVbGOPGrbv2m+/5JeaMrrlKDkMi7FSJGbtNfiMszH2
+        IrS3g27GXwwt0ovaTFyPZiqYjv8CxyH32A==
+X-Google-Smtp-Source: AGRyM1t5eoWtX6J8r3c+wvPvgRu3y+yh8lij5bXtDZ8bbbUbfVBMy8KPtTccm7534wzKi0hhYKIX1Q==
+X-Received: by 2002:a17:90b:4a8c:b0:1e2:f378:631d with SMTP id lp12-20020a17090b4a8c00b001e2f378631dmr9590261pjb.58.1655291074460;
+        Wed, 15 Jun 2022 04:04:34 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id e7-20020a170902784700b00163c6ac211fsm9009421pln.111.2022.06.15.04.04.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 04:04:34 -0700 (PDT)
+Message-ID: <6d214e48-721d-c9b8-f900-c23d6cbe9324@kernel.dk>
+Date:   Wed, 15 Jun 2022 05:04:32 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: Commit 282d8998e997 (srcu: Prevent expedited GPs and blocking
- readers from consuming CPU) cause qemu boot slow
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 2/2] nvme: Report model,sn,fw,pci device information
+ during init
 Content-Language: en-US
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>,
-        <paulmck@kernel.org>, zhangfei <zhangfei.gao@linaro.org>
-CC:     Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "mtosatti@redhat.com" <mtosatti@redhat.com>,
-        Auger Eric <eric.auger@redhat.com>,
-        "chenxiang (M)" <chenxiang66@hisilicon.com>
-References: <tencent_E306F58EAEC1D188ED6D5F358A269F34C707@qq.com>
- <20220613035711.GY1790663@paulmck-ThinkPad-P17-Gen-1>
- <20220613041652.GA3976000@paulmck-ThinkPad-P17-Gen-1>
- <tencent_F82250B6E3D51A9AC0D2BE1AE43A4E060909@qq.com>
- <20220613121831.GA1790663@paulmck-ThinkPad-P17-Gen-1>
- <tencent_65C7D0A04984EDB6A79A5E5379DA7E835206@qq.com>
- <20220613145900.GC1790663@paulmck-ThinkPad-P17-Gen-1>
- <7b6c983b21d44119b61716a66de397ed@huawei.com>
- <f9684a69-5467-a440-abd1-7cf5ad3a81f7@quicinc.com>
- <tencent_8FD344DA7FC376C7D1204604DA7689DA4906@qq.com>
- <20220614141712.GR1790663@paulmck-ThinkPad-P17-Gen-1>
- <tencent_DFF5A6C9352C76C00C7E46E06F2BA945350A@qq.com>
- <042142db-aab2-fc4a-c1a5-371223c80440@quicinc.com>
- <7f6d9360-9254-88d6-fb34-13f248d2e542@redhat.com>
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-In-Reply-To: <7f6d9360-9254-88d6-fb34-13f248d2e542@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Christoph Hellwig <hch@lst.de>, Erwan Velu <erwanaliasr1@gmail.com>
+Cc:     Keith Busch <kbusch@kernel.org>, Erwan Velu <e.velu@criteo.com>,
+        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
+        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220614210902.744318-1-e.velu@criteo.com>
+ <20220614210902.744318-2-e.velu@criteo.com>
+ <Yqj94JXMwjrdSbqG@kbusch-mbp.dhcp.thefacebook.com>
+ <20220615053729.GA21858@lst.de>
+ <CAL2JzuwnZhMgaVQ0=LAYfe6pWnxGLgR_b4xdF_==F3vL_Hh=gw@mail.gmail.com>
+ <20220615105316.GA7911@lst.de>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220615105316.GA7911@lst.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/15/2022 4:20 PM, Paolo Bonzini wrote:
-> On 6/15/22 12:40, Neeraj Upadhyay wrote:
+On 6/15/22 4:53 AM, Christoph Hellwig wrote:
+> On Wed, Jun 15, 2022 at 09:57:05AM +0200, Erwan Velu wrote:
+>>> I would much prefer to not print it all.  The Linux boot is way to spammy
+>>> to start with and this doesn't add any real value.
+>>>
 >>
->> This is useful data, thanks! Did you get chance to check between 100 
->> and 1000, to narrow down further, from which point (does need to be 
->> exact value) between 100 and 1000,  you start seeing degradation at, 
->> for ex. 250, 500 , ...?
->>
->> Is it also possible to try experiment 10 and 11 with below diff.
->> What I have done in below diff is, call srcu_get_delay() only once
->> in try_check_zero() (and not for every loop iteration); also
->> retry with a different delay for the extra iteration which is done
->> when srcu_get_delay(ssp) returns 0.
->>
->> Once we have this data, can you also try by changing 
->> SRCU_RETRY_CHECK_LONG_DELAY   to 100, on top of below diff.
->>
->> #define SRCU_RETRY_CHECK_LONG_DELAY  100
+>> I know the boot is a bit spammy but when systems crash because of nvme
+>> drives, that's very handy to get a trace showing who was the culprit and
+>> what drive is installed (including the fw version which is usually a major
+>> source of troubles).
 > 
-> Is there any data that you would like me to gather from the KVM side, 
-> for example with respect to how much it takes to do synchronize_srcu() 
-> on an unpatched kernel, or the duration of the read-sides?
-> 
+> Well, usually they are all the same or a very small set of different
+> SKUs compared to the total number of drives.
 
-Hi Paolo,
+Agree that we don't want to add unnecessary spam to the boot messages,
+and we don't need tons of lines like eg SCSI does. But it does seem
+handy to have a single line of the basic model/fw/sn for each drive
+along with the enumeration we already print.
 
-Thanks! I think synchronize_srcu() time and read side duration will 
-help. Given that changing SRCU_MAX_NODELAY_PHASE value has impact
-on the boot time (and SRCU_MAX_NODELAY_PHASE impact is dependent on 
-duration of SRCU read side duration), this information will be helpful 
-to get more understanding of the scenario.
+-- 
+Jens Axboe
 
-
-Thanks
-Neeraj
-
-> Thanks,
-> 
-> Paolo
-> 

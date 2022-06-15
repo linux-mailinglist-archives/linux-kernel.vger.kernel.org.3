@@ -2,74 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E7E54C29B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B703C54C29E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244336AbiFOH0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 03:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
+        id S1346705AbiFOHaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 03:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiFOH0Q (ORCPT
+        with ESMTP id S230151AbiFOHaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 03:26:16 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CDA4738C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:26:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2A6651F899;
-        Wed, 15 Jun 2022 07:26:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655277974; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k3JeAaNVMF2xcanrQW/ZU6P2wx6xjXOxRPoxu/fL7xo=;
-        b=CWENStBe3S+ypC1pbgUlWdhbv5lC2N5znwoBetrptGqdKk7kSpc+w8CdeyLvR7YHb11yoM
-        Zd6mIxtcoPkiDRbgXiXkDFD1n8UvbefsP0nRUr1G6Qd0MhpHeg7vytyU8mC/7FRr2oC9Un
-        qgW5XRpqXMhL4+ssYJCTPPHrQXcMHVU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655277974;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=k3JeAaNVMF2xcanrQW/ZU6P2wx6xjXOxRPoxu/fL7xo=;
-        b=qWPFWW7LTMeR+CrzetQcyDIjcVJ+5V4M6S69lSahvkWBEpBTHup1JvscXvpLzG4xhcDT13
-        bavSiyvbQdHEa+Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 043FE139F3;
-        Wed, 15 Jun 2022 07:26:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id S0AkAJaJqWICBQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 15 Jun 2022 07:26:14 +0000
-Message-ID: <3c899066-d85d-3bd7-5b13-d5228b7aeb93@suse.cz>
-Date:   Wed, 15 Jun 2022 09:26:13 +0200
+        Wed, 15 Jun 2022 03:30:07 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D139E35ABD
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655278206; x=1686814206;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=oJhwgduglW2gSNuC/lHAqS10Yt1YgHiV4JJ04xDXpvY=;
+  b=Hp50Jjf+PjnJbGpmu4b49nwpbm2d/jX5SXvaCnUqN9xySOv35+BqoxhD
+   eMfsyEQ+DhscgdmqMWeTkzFREAgGpwUGFYuD1+bklx3reouAi7tsAJW0H
+   B78RcBiYOlhFn6C2pbkn0511UoR8p+NFtEWUTwLfnFV1PBfnwBKpP6bRT
+   KPijBEw8wsU8EnKPw7iYrclXQiO/sKqYV312MBFPlcYom75K18P04z+cz
+   Roibv25BG1gBR6XWQO/8rx7QI7WY9IqStvj2YzK3Rz3nzFuNTTz1H/VdI
+   L5pHQoUGLKz8MMv7T319hpVwBDqxfUnamqvjFGtHjRnBPVSYR6kRrnXsY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="258719096"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="258719096"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 00:30:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="687151244"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 15 Jun 2022 00:30:05 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1NTY-000MfN-MI;
+        Wed, 15 Jun 2022 07:30:04 +0000
+Date:   Wed, 15 Jun 2022 15:29:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexey Kardashevskiy <aik@ozlabs.ru>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: arch/powerpc/kvm/book3s_hv_rm_xics.c:482:15: warning: no previous
+ prototype for 'xics_rm_h_xirr_x'
+Message-ID: <202206151538.1X8LPqy9-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] mm/slub: Simplify __kmem_cache_alias()
-Content-Language: en-US
-To:     sxwjean@me.com, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, iamjoonsoo.kim@lge.com,
-        akpm@linux-foundation.org, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Xiongwei Song <xiongwei.song@windriver.com>
-References: <20220531005550.10613-1-sxwjean@me.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220531005550.10613-1-sxwjean@me.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,44 +62,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/31/22 02:55, sxwjean@me.com wrote:
-> From: Xiongwei Song <xiongwei.song@windriver.com>
-> 
-> There is no need to do anything if sysfs_slab_alias() return nonzero
-> value after getting a mergeable cache.
-> 
-> Signed-off-by: Xiongwei Song <xiongwei.song@windriver.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   018ab4fabddd94f1c96f3b59e180691b9e88d5d8
+commit: b22af9041927075b82bcaf4b6c7a354688198d47 KVM: PPC: Book3s: Remove real mode interrupt controller hcalls handlers
+date:   4 weeks ago
+config: powerpc64-randconfig-r021-20220615 (https://download.01.org/0day-ci/archive/20220615/202206151538.1X8LPqy9-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b22af9041927075b82bcaf4b6c7a354688198d47
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b22af9041927075b82bcaf4b6c7a354688198d47
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kvm/
 
-Thanks, added to slab/for-5.20/cleanup
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> ---
->  mm/slub.c | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index d8d5abf49f5f..9444277d669a 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -4861,6 +4861,9 @@ __kmem_cache_alias(const char *name, unsigned int size, unsigned int align,
->  
->  	s = find_mergeable(size, align, flags, name, ctor);
->  	if (s) {
-> +		if (sysfs_slab_alias(s, name))
-> +			return NULL;
-> +
->  		s->refcount++;
->  
->  		/*
-> @@ -4869,11 +4872,6 @@ __kmem_cache_alias(const char *name, unsigned int size, unsigned int align,
->  		 */
->  		s->object_size = max(s->object_size, size);
->  		s->inuse = max(s->inuse, ALIGN(size, sizeof(void *)));
-> -
-> -		if (sysfs_slab_alias(s, name)) {
-> -			s->refcount--;
-> -			s = NULL;
-> -		}
->  	}
->  
->  	return s;
+All warnings (new ones prefixed by >>):
 
+>> arch/powerpc/kvm/book3s_hv_rm_xics.c:482:15: warning: no previous prototype for 'xics_rm_h_xirr_x' [-Wmissing-prototypes]
+     482 | unsigned long xics_rm_h_xirr_x(struct kvm_vcpu *vcpu)
+         |               ^~~~~~~~~~~~~~~~
+
+
+vim +/xics_rm_h_xirr_x +482 arch/powerpc/kvm/book3s_hv_rm_xics.c
+
+   481	
+ > 482	unsigned long xics_rm_h_xirr_x(struct kvm_vcpu *vcpu)
+   483	{
+   484		vcpu->arch.regs.gpr[5] = get_tb();
+   485		return xics_rm_h_xirr(vcpu);
+   486	}
+   487	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

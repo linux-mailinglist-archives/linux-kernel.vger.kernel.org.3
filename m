@@ -2,209 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC15E54C96D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6852C54C971
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348710AbiFONJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 09:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47106 "EHLO
+        id S242888AbiFONKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 09:10:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234938AbiFONJP (ORCPT
+        with ESMTP id S233309AbiFONKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 09:09:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F312122297;
-        Wed, 15 Jun 2022 06:09:13 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA4071570;
-        Wed, 15 Jun 2022 06:09:13 -0700 (PDT)
-Received: from e127744.arm.com (unknown [10.57.84.186])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id ABE563F66F;
-        Wed, 15 Jun 2022 06:09:11 -0700 (PDT)
-From:   German Gomez <german.gomez@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     German Gomez <german.gomez@arm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>
-Subject: [PATCH] perf test: Add test for branch stack sampling
-Date:   Wed, 15 Jun 2022 14:09:01 +0100
-Message-Id: <20220615130901.1151397-2-german.gomez@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220615130901.1151397-1-german.gomez@arm.com>
-References: <20220615130901.1151397-1-german.gomez@arm.com>
+        Wed, 15 Jun 2022 09:10:32 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F9F24084
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:10:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655298628; x=1686834628;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=49iVnIBH2iZUFVwoFe1umaO203mLoJXO8qFijdhPPbM=;
+  b=F2iVngdVStwwwRWa87iUVrCMrnbpBCKyjJ1/hxAlxenfW/GEJ93wU/Z2
+   JzNdiW+60mSwc0YW8cJXUAOLkiMYLtEyNvRlgDrUqshbZqzrRjzz3c71t
+   qU9hC4dMEx42Emd9SPHewL3uHbp7UQ9DHxUI4u0kpDg9Y2DB3Ce4p3YUq
+   YFwQMlOCdbgBcSfuGRBXl39zkA7Bm0yRC1NIHzuN9+PVUJcIAdSKvHeUF
+   NDi8tTzRZHGffVvvQYe8IIVQ5bQXYjvR+a7LMCCbWyTDHhDjCd0mVJi4d
+   Umn8vobZMOwfWZsdFpgy+BTK19UO3wR0l5RKVp+rXcmrofNotyEnU0RJY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="279672546"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="279672546"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 06:10:25 -0700
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="589105904"
+Received: from leitan-mobl.ccr.corp.intel.com (HELO [10.255.31.142]) ([10.255.31.142])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 06:10:21 -0700
+Message-ID: <b11b7cca-9e39-ac60-57a9-4e7049579221@linux.intel.com>
+Date:   Wed, 15 Jun 2022 21:10:19 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 03/12] iommu/vt-d: Remove clearing translation data in
+ disable_dmar_iommu()
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20220614025137.1632762-1-baolu.lu@linux.intel.com>
+ <20220614025137.1632762-4-baolu.lu@linux.intel.com>
+ <BN9PR11MB52762E7602FFF7EE4B52AC888CAA9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <28161d94-6f2d-700f-853d-53b42f4d00d0@linux.intel.com>
+ <BN9PR11MB5276A9FB934BC5F6FA55D4958CAD9@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <BN9PR11MB5276A9FB934BC5F6FA55D4958CAD9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a self test for branch stack sampling, to check that we get the
-expected branch types, and filters behave as expected.
+On 2022/6/15 14:22, Tian, Kevin wrote:
+>> From: Baolu Lu <baolu.lu@linux.intel.com>
+>> Sent: Tuesday, June 14, 2022 3:21 PM
+>>
+>> On 2022/6/14 14:49, Tian, Kevin wrote:
+>>>> From: Lu Baolu<baolu.lu@linux.intel.com>
+>>>> Sent: Tuesday, June 14, 2022 10:51 AM
+>>>>
+>>>> The disable_dmar_iommu() is called when IOMMU initialization fails or
+>>>> the IOMMU is hot-removed from the system. In both cases, there is no
+>>>> need to clear the IOMMU translation data structures for devices.
+>>>>
+>>>> On the initialization path, the device probing only happens after the
+>>>> IOMMU is initialized successfully, hence there're no translation data
+>>>> structures.
+>>> Out of curiosity. With kexec the IOMMU may contain stale mappings
+>>> from the old kernel. Then is it meaningful to disable IOMMU after the
+>>> new kernel fails to initialize it properly?
+>>
+>> For kexec kernel, if the IOMMU is detected to be pre-enabled, the IOMMU
+>> driver will try to copy tables from the old kernel. If copying table
+>> fails, the IOMMU driver will disable IOMMU and do the normal
+>> initialization.
+>>
+> 
+> What about an error occurred after copying table in the initialization
+> path? The new kernel will be in a state assuming iommu is disabled
+> but it is still enabled using an old mapping for certain devices...
+>   
 
-Suggested-by: Anshuman Khandual <anshuman.khandual@arm.com>
-Signed-off-by: German Gomez <german.gomez@arm.com>
----
- tools/perf/tests/shell/lib/brstack/main.h | 16 +++++
- tools/perf/tests/shell/lib/brstack/test.c | 24 +++++++
- tools/perf/tests/shell/test_brstack.sh    | 86 +++++++++++++++++++++++
- 3 files changed, 126 insertions(+)
- create mode 100644 tools/perf/tests/shell/lib/brstack/main.h
- create mode 100644 tools/perf/tests/shell/lib/brstack/test.c
- create mode 100755 tools/perf/tests/shell/test_brstack.sh
+If copying table failed, the translation will be disabled and a clean
+root table will be used.
 
-diff --git a/tools/perf/tests/shell/lib/brstack/main.h b/tools/perf/tests/shell/lib/brstack/main.h
-new file mode 100644
-index 000000000..94d2665ec
---- /dev/null
-+++ b/tools/perf/tests/shell/lib/brstack/main.h
-@@ -0,0 +1,16 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define BENCH_RUNS 99999
-+
-+void bench(void);
-+
-+int main(void)
-+{
-+	int cnt = 0;
-+
-+	while (1) {
-+		if ((cnt++) > BENCH_RUNS)
-+			break;
-+		bench();		/* call */
-+	}				/* branch (uncond) */
-+	return 0;
-+}
-diff --git a/tools/perf/tests/shell/lib/brstack/test.c b/tools/perf/tests/shell/lib/brstack/test.c
-new file mode 100644
-index 000000000..8a2308901
---- /dev/null
-+++ b/tools/perf/tests/shell/lib/brstack/test.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "main.h"
-+
-+int cnt;
-+
-+void bar(void)
-+{
-+}				/* return */
-+
-+void foo(void)
-+{
-+	bar();			/* call */
-+}				/* return */
-+
-+void bench(void)
-+{
-+	void (*foo_ind)(void) = foo;
-+
-+	if ((cnt++) % 3)	/* branch (cond) */
-+		foo();		/* call */
-+
-+	bar();			/* call */
-+	foo_ind();		/* call (ind) */
-+}
-diff --git a/tools/perf/tests/shell/test_brstack.sh b/tools/perf/tests/shell/test_brstack.sh
-new file mode 100755
-index 000000000..2b1a1b20a
---- /dev/null
-+++ b/tools/perf/tests/shell/test_brstack.sh
-@@ -0,0 +1,86 @@
-+#!/bin/sh
-+# Check branch stack sampling
-+
-+# SPDX-License-Identifier: GPL-2.0
-+# German Gomez <german.gomez@arm.com>, 2022
-+
-+set -e
-+
-+# we need a C compiler to build the test programs
-+# so bail if none is found
-+if ! [ -x "$(command -v cc)" ]; then
-+	echo "failed: no compiler, install gcc"
-+	exit 2
-+fi
-+
-+# skip the test if the hardware doesn't support branch stack sampling
-+perf record -b -o- -- true > /dev/null || exit 2
-+
-+TMPDIR=$(mktemp -d /tmp/__perf_test.program.XXXXX)
-+
-+cleanup() {
-+	rm -rf $TMPDIR
-+}
-+
-+trap cleanup exit term int
-+
-+test_user_branches() {
-+	echo
-+	echo "Testing user branch stack sampling"
-+	echo
-+
-+	cc -fno-inline -g "$(dirname $0)/lib/brstack/test.c" -o $TMPDIR/a.out
-+
-+	perf record -o $TMPDIR/perf.data -q --branch-filter any,save_type,u -- $TMPDIR/a.out
-+	perf script -i $TMPDIR/perf.data --fields brstacksym | xargs -n1 > $TMPDIR/perf.script
-+
-+	# example of branch entries:
-+	# 	foo+0x14/bar+0x40/P/-/-/0/CALL
-+
-+	set -x
-+	egrep -m1 "^bench\+[^ ]*/foo\+[^ ]*/IND_CALL$"	$TMPDIR/perf.script
-+	egrep -m1 "^foo\+[^ ]*/bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
-+	egrep -m1 "^bench\+[^ ]*/foo\+[^ ]*/CALL$"	$TMPDIR/perf.script
-+	egrep -m1 "^bench\+[^ ]*/bar\+[^ ]*/CALL$"	$TMPDIR/perf.script
-+	egrep -m1 "^bar\+[^ ]*/foo\+[^ ]*/RET$"		$TMPDIR/perf.script
-+	egrep -m1 "^foo\+[^ ]*/bench\+[^ ]*/RET$"	$TMPDIR/perf.script
-+	egrep -m1 "^bench\+[^ ]*/bench\+[^ ]*/COND$"	$TMPDIR/perf.script
-+	egrep -m1 "^main\+[^ ]*/main\+[^ ]*/UNCOND$"	$TMPDIR/perf.script
-+	set +x
-+
-+	# some branch types are still not being tested:
-+	# IND COND_CALL COND_RET SYSCALL SYSRET IRQ SERROR NO_TX
-+}
-+
-+test_filter() {
-+	local filter=$1
-+	local expect=$2
-+
-+	echo
-+	echo "Testing branch stack filtering permutation ($filter,$expect)"
-+	echo
-+
-+	cc -fno-inline -g "$(dirname $0)/lib/brstack/test.c" -o $TMPDIR/a.out
-+
-+	perf record -o $TMPDIR/perf.data -q --branch-filter $filter,save_type,u -- $TMPDIR/a.out
-+	perf script -i $TMPDIR/perf.data --fields brstack | xargs -n1 > $TMPDIR/perf.script
-+
-+	# fail if we find any branch type that doesn't match any of the expected ones
-+	# also consider UNKNOWN branch types (-)
-+	if egrep -vm1 "^[^ ]*/($expect|-|( *))$" $TMPDIR/perf.script; then
-+		return 1
-+	fi
-+}
-+
-+test_user_branches
-+
-+# first argument <arg0> is the argument passed to "--branch-stack <arg0>,save_type,u"
-+# second argument are the expected branch types for the given filter
-+test_filter "any_call"	"CALL|IND_CALL|COND_CALL|SYSCALL|IRQ|FAULT_DATA|FAULT_INST"
-+test_filter "call"	"CALL|SYSCALL"
-+test_filter "cond"	"COND"
-+test_filter "any_ret"	"RET|COND_RET|SYSRET|ERET"
-+
-+test_filter "call,cond"		"CALL|SYSCALL|COND"
-+test_filter "any_call,cond"		"CALL|IND_CALL|COND_CALL|IRQ|FAULT_DATA|FAULT_INST|SYSCALL|COND"
-+test_filter "cond,any_call,any_ret"	"COND|CALL|IND_CALL|COND_CALL|SYSCALL|IRQ|FAULT_DATA|FAULT_INST|RET|COND_RET|SYSRET|ERET"
--- 
-2.25.1
+if (translation_pre_enabled(iommu)) {
+         pr_info("Translation already enabled - trying to copy 
+translation structures\n");
 
+         ret = copy_translation_tables(iommu);
+         if (ret) {
+                 /*
+                  * We found the IOMMU with translation
+                  * enabled - but failed to copy over the
+                  * old root-entry table. Try to proceed
+                  * by disabling translation now and
+                  * allocating a clean root-entry table.
+                  * This might cause DMAR faults, but
+                  * probably the dump will still succeed.
+                  */
+                 pr_err("Failed to copy translation tables from previous 
+kernel for %s\n",
+                        iommu->name);
+                 iommu_disable_translation(iommu);
+                 clear_translation_pre_enabled(iommu);
+         } else {
+                 pr_info("Copied translation tables from previous kernel 
+for %s\n",
+                         iommu->name);
+         }
+}
+
+Best regards,
+baolu

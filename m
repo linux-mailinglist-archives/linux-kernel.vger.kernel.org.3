@@ -2,142 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5E454BEF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 02:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA9154BEFA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 02:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242216AbiFOA4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 20:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34220 "EHLO
+        id S241202AbiFOA7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 20:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242061AbiFOA4e (ORCPT
+        with ESMTP id S235447AbiFOA7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 20:56:34 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D6D4D637
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 17:56:32 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id e80so11164297iof.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 17:56:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tKyg93cuOsjgX3SRfMau9CFkIFtGcca71X1GBGA/twA=;
-        b=MQ6LtxZjQfWtQHpWV47vomiQdfj6L27c0TRvC+C0M3zjA6uTx0gi+PucQ1P8g5G2lR
-         9s4oKj6dTne6zg91Xlovn8GYKkSwHJeIPuUHrS1pUHw5ghOP87l97ghNFoSKJ9mSge+C
-         bEQwt8e/oxql3neQNhMMlLVpRMWR+eKrArWle1YkBw/jEN5CSb4b5l9idUba5IPyPKb0
-         CFV2ZKNqCNOx/k7mUFmt6iaI8e4IO9X74o7exY4nB9pCR4mfCHevtOig8n3yuIL7806C
-         CdcyhTYbMciQTpJrRaO0LMoQaewg3RhKTqCq5trGPrCnzKvs17mUU2qQfL/AQFilLOPc
-         mU4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tKyg93cuOsjgX3SRfMau9CFkIFtGcca71X1GBGA/twA=;
-        b=kPQDV3Ylhgwf8MkCWSm4aMeu983HzGLZ/DyCDrVCbRmqOjVnGfN3pU09d0/Os6JUf8
-         OSBLetuMKf8Pm0m9fHzi4jLfbfVUreGFIVN3FH0TsigpgxxgN24+rbuLqsQIoEjIJk16
-         LrNuFz/Ofsg2TRwX/XO0RNkqRQs+Qzsb2UGnB8AMT0hg3y0NMnWa415rFnT4nrMa3BYR
-         UtItdVRSteuWvq8JKTKDTlOto43G9v62mLb58Qx9wBggDvvPEbY99Jmd8nY+hEsPUJgQ
-         tPW+L83IX/xphILff3wtH3v5LiCJ+UNFGJB05/LRcwmhD6CHnkyQC79iral3ZfKmOCcA
-         R3Eg==
-X-Gm-Message-State: AOAM531EcXwvwiCvspv5smiv4MXTHD9jtqcyqHFjKyohLGBLR0lBFQCT
-        F7pTlVwkshFlwN4ZHWB8BEUqE8gAGyAAgsSlT3I99g==
-X-Google-Smtp-Source: ABdhPJwWsIjLEnNLsaAhJ8A6hUvciYK/wN9so24tP4f0QVi5UXzjajeATgovbKX1vhEiDkTp95uLVXPznXV5ZJFVHys=
-X-Received: by 2002:a6b:bac1:0:b0:669:b1fe:58e4 with SMTP id
- k184-20020a6bbac1000000b00669b1fe58e4mr3965351iof.171.1655254591967; Tue, 14
- Jun 2022 17:56:31 -0700 (PDT)
+        Tue, 14 Jun 2022 20:59:52 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97322C678;
+        Tue, 14 Jun 2022 17:59:50 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0VGQ60SH_1655254787;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VGQ60SH_1655254787)
+          by smtp.aliyun-inc.com;
+          Wed, 15 Jun 2022 08:59:47 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     mchehab@kernel.org
+Cc:     matthias.bgg@gmail.com, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] media: mediatek: vcodec: remove unneeded semicolon
+Date:   Wed, 15 Jun 2022 08:59:46 +0800
+Message-Id: <20220615005946.17196-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20220601210951.3916598-1-axelrasmussen@google.com>
- <20220601210951.3916598-3-axelrasmussen@google.com> <20220613145540.1c9f7750092911bae1332b92@linux-foundation.org>
- <Yqe6R+XSH+nFc8se@xz-m1.local> <CAJHvVchdmV42qCgO6j=zGBi0DeVcvW1OC88rHUP6V66Fg3CSww@mail.gmail.com>
- <C1C5939A-B7D2-49E7-B18B-EE7FEFE9C924@vmware.com>
-In-Reply-To: <C1C5939A-B7D2-49E7-B18B-EE7FEFE9C924@vmware.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Tue, 14 Jun 2022 17:55:55 -0700
-Message-ID: <CAJHvVche7ZKOpO=8PY2frtJ5nHyzo=Yt+qT1OmYg8ZOUujkPfA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/6] userfaultfd: add /dev/userfaultfd for fine grained
- access control
-To:     Nadav Amit <namit@vmware.com>
-Cc:     Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Charan Teja Reddy <charante@codeaurora.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        zhangyi <yi.zhang@huawei.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 5:10 PM Nadav Amit <namit@vmware.com> wrote:
->
-> On Jun 13, 2022, at 3:38 PM, Axel Rasmussen <axelrasmussen@google.com> wrote:
->
-> > On Mon, Jun 13, 2022 at 3:29 PM Peter Xu <peterx@redhat.com> wrote:
-> >> On Mon, Jun 13, 2022 at 02:55:40PM -0700, Andrew Morton wrote:
-> >>> On Wed,  1 Jun 2022 14:09:47 -0700 Axel Rasmussen <axelrasmussen@google.com> wrote:
-> >>>
-> >>>> To achieve this, add a /dev/userfaultfd misc device. This device
-> >>>> provides an alternative to the userfaultfd(2) syscall for the creation
-> >>>> of new userfaultfds. The idea is, any userfaultfds created this way will
-> >>>> be able to handle kernel faults, without the caller having any special
-> >>>> capabilities. Access to this mechanism is instead restricted using e.g.
-> >>>> standard filesystem permissions.
-> >>>
-> >>> The use of a /dev node isn't pretty.  Why can't this be done by
-> >>> tweaking sys_userfaultfd() or by adding a sys_userfaultfd2()?
-> >
-> > I think for any approach involving syscalls, we need to be able to
-> > control access to who can call a syscall. Maybe there's another way
-> > I'm not aware of, but I think today the only mechanism to do this is
-> > capabilities. I proposed adding a CAP_USERFAULTFD for this purpose,
-> > but that approach was rejected [1]. So, I'm not sure of another way
-> > besides using a device node.
-> >
-> > One thing that could potentially make this cleaner is, as one LWN
-> > commenter pointed out, we could have open() on /dev/userfaultfd just
-> > return a new userfaultfd directly, instead of this multi-step process
-> > of open /dev/userfaultfd, NEW ioctl, then you get a userfaultfd. When
-> > I wrote this originally it wasn't clear to me how to get that to
-> > happen - open() doesn't directly return the result of our custom open
-> > function pointer, as far as I can tell - but it could be investigated.
->
-> If this direction is pursued, I think that it would be better to set it as
-> /proc/[pid]/userfaultfd, which would allow remote monitors (processes) to
-> hook into userfaultfd of remote processes. I have a patch for that which
-> extends userfaultfd syscall, but /proc/[pid]/userfaultfd may be cleaner.
+Eliminate the following coccicheck warning:
+./drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c:71:2-3: Unneeded semicolon
 
-Hmm, one thing I'm unsure about -
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-If a process is able to control another process' memory like this,
-then this seems like exactly what CAP_SYS_PTRACE is intended to deal
-with, right? So I'm not sure this case is directly related to the one
-I'm trying to address.
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+index 61412d0eeb33..eb4be41b41b0 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+@@ -68,7 +68,7 @@ static bool mtk_vdec_get_cap_fmt(struct mtk_vcodec_ctx *ctx, int format_index)
+ 	default:
+ 		ret = true;
+ 		break;
+-	};
++	}
+ 
+ 	return ret;
+ }
+-- 
+2.20.1.7.g153144c
 
-This also seems distinct to me versus the existing way you'd do this,
-which is open a userfaultfd and register a shared memory region, and
-then fork(). Now you can control your child's memory with userfaultfd.
-But, attaching to some other, previously-unrelated process with
-/proc/[pid]/userfaultfd seems like a clear case for CAP_SYS_PTRACE.
-
->

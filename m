@@ -2,137 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9566954D558
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 01:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC15254D566
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 01:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347385AbiFOXba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 19:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
+        id S1350417AbiFOXdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 19:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350010AbiFOXb1 (ORCPT
+        with ESMTP id S241580AbiFOXdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 19:31:27 -0400
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDE70140DC
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:31:25 -0700 (PDT)
-Received: from epcas2p4.samsung.com (unknown [182.195.41.56])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20220615233124epoutp026c3577ec8c63f27115cb3f869f9c0f10~47zdsviTl0781607816epoutp028
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 23:31:24 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20220615233124epoutp026c3577ec8c63f27115cb3f869f9c0f10~47zdsviTl0781607816epoutp028
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1655335884;
-        bh=oBv8FzAUp/cn8TFUjbVFXThtO0fiAmUlx69xO+lEKCc=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=pKJtBznFNI/7F3W6DuH3s9dflVN+wyKJjRCLaEQHVc1DmHwxBzVrZO3pivxFXq/pj
-         sxSoLUc95j7wXORjaff08hrVr+LUKxlXwU6ilHKuWTpzmP+VSFtIUomjS850dKkR6N
-         92lryeeNS52ZGlBVzMk7xfT+Yw99lDQisLGB5LuQ=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20220615233123epcas2p2f1953317984d901160c0652cc4cb06ae~47zdGtSC50212002120epcas2p2D;
-        Wed, 15 Jun 2022 23:31:23 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.90]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4LNhQM1VXyz4x9Q0; Wed, 15 Jun
-        2022 23:31:23 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        13.68.09694.BCB6AA26; Thu, 16 Jun 2022 08:31:23 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-        20220615233122epcas2p43646a7b07e34e14187dbecb15a6ac7c7~47zcE0HFt2589425894epcas2p4J;
-        Wed, 15 Jun 2022 23:31:22 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220615233122epsmtrp2858ee391ba68e7dda12d483e0becf724~47zcDvfxU1290312903epsmtrp2S;
-        Wed, 15 Jun 2022 23:31:22 +0000 (GMT)
-X-AuditID: b6c32a48-47fff700000025de-fe-62aa6bcbd754
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C6.DB.11276.ACB6AA26; Thu, 16 Jun 2022 08:31:22 +0900 (KST)
-Received: from KORCO082417 (unknown [10.229.8.121]) by epsmtip2.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20220615233122epsmtip2639df4e24cf182e548dfe4e55c64ffe4~47zb5T2fe2583125831epsmtip2h;
-        Wed, 15 Jun 2022 23:31:22 +0000 (GMT)
-From:   "Chanho Park" <chanho61.park@samsung.com>
-To:     "'Alim Akhtar'" <alim.akhtar@samsung.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <linux-phy@lists.infradead.org>
-Cc:     <beanhuo@micron.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <avri.altman@wdc.com>, <bvanassche@acm.org>,
-        <martin.petersen@oracle.com>, <linux-samsung-soc@vger.kernel.org>
-In-Reply-To: <20220615121204.16642-2-alim.akhtar@samsung.com>
-Subject: RE: [PATCH 2/3] ufs: host: ufs-exynos: use already existing define
-Date:   Thu, 16 Jun 2022 08:31:22 +0900
-Message-ID: <000901d88110$05d8e530$118aaf90$@samsung.com>
+        Wed, 15 Jun 2022 19:33:50 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3022519028
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:33:48 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id g4so659549wrh.11
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:33:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=g5KefneXJrDvqUoqQmaGedJ+cFbJAO8aiLnwLvVjblw=;
+        b=Lh822BC9eea8HopwavAIKCLZVPWprgw7IeIQ1CPIO02Fjto9URIyONCey0O0zTlvTB
+         P8OWW3c4B5VM6qMwDT1o1WL6oH1qlnGFIRBKoOQavee0kV/ReunaoQVy/a4dRatCioVV
+         mQuTbqEffYYrORVnq9DnCUdOZ8jonrpLxgf5kchPKePUG/5FG/eOL4PEUipaCh52kpuT
+         FatM0xmTJJqcWZm+RDcgF7r3iBuoQa4ci/bOFsXd0a8wIXxMcCUp015KpMKwogQ2mmGW
+         4Qibi3CMBlesvOFXBq57pOZmozoKS4VX45mpQu4Twor6aje2GpkT30fDuR1t3jRa5Fmi
+         fEtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=g5KefneXJrDvqUoqQmaGedJ+cFbJAO8aiLnwLvVjblw=;
+        b=G2nqBarY6g8goQfJRapksLiw6dLRwuKx9fhUofUlD5a5s5gO/czJ7VZAvdQyFJkmhj
+         AnnW/oN1oV382mK9Xvpzl0JmSO5c/AooTHUPaTSHBpZ/d9VxFp7B5qTzLV+9W8htD8n0
+         NBu78nNbMpNKneWAeNwrjokq50lpv/xprVTgTZhN15R1QZtscXhAO4MNfaMukxlsXHoH
+         U4+XKdGCmygn1ibOsXIHazdV4ZS/NGZYBm73eM4k9JXgUYyz+x5MtHCow22YQce7OJHa
+         v/tlsKAwCDGFnXNvOb4Zg6Orc4Dqu/tCDbCZ0BgczZcF1hMA3n8EjMqaOvCRgeoq+QZD
+         A/og==
+X-Gm-Message-State: AJIora8yE5qr8JNEMgSrpUB4HDrA4WXFG+PbvFfuuViS64RK1mGdiiC3
+        eLcCPmVQLgKk9I6PE78CQ3mQFN1lxKKF+0jir4O5Q43MntSE
+X-Google-Smtp-Source: AGRyM1sY3fekgthl8FSRwVjkGPBP5d0/rq2O0Lip1IvTEQzV7E45c/TYtF7WDlgop3djBs+KrCf0YffQXZ5d7TTHF9g=
+X-Received: by 2002:a05:6000:1447:b0:21a:278a:181c with SMTP id
+ v7-20020a056000144700b0021a278a181cmr2021261wrx.161.1655336026705; Wed, 15
+ Jun 2022 16:33:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQHvmU5DcyiwlSK20wvy0jCKBqg0HwHuD7sgAcDWRyutBXYMoA==
-Content-Language: ko
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFJsWRmVeSWpSXmKPExsWy7bCmhe7p7FVJBgvOsFo8mLeNzeLlz6ts
-        FgcfdrJYTPvwk9mi78VDZotNj6+xWlzeNYfNYsKqbywWM87vY7Lovr6DzWL58X9MDtwel694
-        e9y5tofNY/OSeo/v6zvYPD4+vcXi0bdlFaPH501yHu0HupkCOKKybTJSE1NSixRS85LzUzLz
-        0m2VvIPjneNNzQwMdQ0tLcyVFPISc1NtlVx8AnTdMnOA7lRSKEvMKQUKBSQWFyvp29kU5ZeW
-        pCpk5BeX2CqlFqTkFJgX6BUn5haX5qXr5aWWWBkaGBiZAhUmZGfMevyHueAyU8X0+efZGxgn
-        MnUxcnJICJhI7L17g62LkYtDSGAHo8THuz9ZIZxPjBKfl+5jgnC+MUpcP72ZDaalb9IxRojE
-        XkaJW08nQPW/YJRoevGVBaSKTUBf4mXHNrBZIiCDP6/4xALiMAtsZJTobdwKVsUpYCvxfe0K
-        RhBbWMBb4vDRdWBxFgFViat7ZzGD2LwClhIrVy9mgbAFJU7OfAJmMwvIS2x/O4cZ4iYFiZ9P
-        l7GC2CICThJNR1YwQdSISMzubGMGWSwhcIZD4uHCvUC3cgA5LhJts9UheoUlXh3fwg5hS0l8
-        frcX6s9iiaWzPjFB9DYwSlze9gsqYSwx61k7I8gcZgFNifW79CFGKkscuQV1Gp9Ex+G/7BBh
-        XomONiGIRnWJA9uns0DYshLdcz6zTmBUmoXksVlIHpuF5IFZCLsWMLKsYhRLLSjOTU8tNiow
-        gUd3cn7uJkZwItby2ME4++0HvUOMTByMhxglOJiVRHjNglcmCfGmJFZWpRblxxeV5qQWH2I0
-        BQb1RGYp0eR8YC7IK4k3NLE0MDEzMzQ3MjUwVxLn9UrZkCgkkJ5YkpqdmlqQWgTTx8TBKdXA
-        ZK9ld3rL841yrfMOBorxy2782GtVuaBd2+7Twv37+rZxrW5qOnTzzDv+lEt7rhqt0LY/WPp+
-        9rWryyctVbiatlDt6vNNO+dFnOWduyXL7IPjo1SDHRWnTQImO5689sZhalB/mUpEStzPeTdb
-        5gU7LuOYFPuB7+wX88CzDzbwXrZKj995p6VNf2LIjBSrPck/c9l3/+p8O7Vmjsusw3OcS96E
-        SSjb8lY/L355XfaKE4PJAsmO6fx3qhb6n3i9YW5Pn/XluLL6jJL20CtnPbdx/Z2x4OHEJN3m
-        9GNZa+/ufe+/bpJvxINFnToyfqtTZu44v1DRr5311YMlCuU/TqWfjhI8sSy9T2Lar8VmR6y5
-        bqcosRRnJBpqMRcVJwIAF90H300EAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrOIsWRmVeSWpSXmKPExsWy7bCSvO6p7FVJBm27lSwezNvGZvHy51U2
-        i4MPO1kspn34yWzR9+Ihs8Wmx9dYLS7vmsNmMWHVNxaLGef3MVl0X9/BZrH8+D8mB26Py1e8
-        Pe5c28PmsXlJvcf39R1sHh+f3mLx6NuyitHj8yY5j/YD3UwBHFFcNimpOZllqUX6dglcGbMe
-        /2EuuMxUMX3+efYGxolMXYycHBICJhJ9k44xdjFycQgJ7GaUaJu0mhUiISvx7N0OdghbWOJ+
-        yxFWiKJnjBL3Xv1hA0mwCehLvOzYBpYQEdgD1D3vFDuIwyywnVFi4+ILLBAt+xklOpuvg7Vw
-        CthKfF+7ghHEFhbwljh8dB0LiM0ioCpxde8sZhCbV8BSYuXqxSwQtqDEyZlPwGxmAW2Jpzef
-        QtnyEtvfzmGGuE9B4ufTZWB3iwg4STQdWcEEUSMiMbuzjXkCo/AsJKNmIRk1C8moWUhaFjCy
-        rGKUTC0ozk3PLTYsMMxLLdcrTswtLs1L10vOz93ECI5LLc0djNtXfdA7xMjEwXiIUYKDWUmE
-        1yx4ZZIQb0piZVVqUX58UWlOavEhRmkOFiVx3gtdJ+OFBNITS1KzU1MLUotgskwcnFINTDo5
-        jae79501XTtXc0Z5kmrzzenFEUqz/94Q7Av9E3hh13rDwwLLZyz9UfY5y9Y85O9zr72OUn/P
-        6ixcO+nUfEPWHRpTswXXlqxQeVwTm740bFHfXrE/c868KD9wUvz/jIt3plTZF3HITEw56vzv
-        eWBGecSbcK9dV1bwH7riX79iQu7n61OuiGWsNt/sEMqsosLHt9nc5OK2f6UrxG4ZvLw8IVdY
-        q9b7BpNO1PvVCWeit/Ztlb5xpYY5MX7HWsOIcyoFm1t8gjPYtvZWTzw/0bT7n8+hnR3PNmxZ
-        9iGr0DHg+Y5VOfXc7SlBomurAmY5i97MLD0T6xyqf2WCyKJLM4WibxhYVm/70/ReXOFLeZES
-        S3FGoqEWc1FxIgDN5d+POgMAAA==
-X-CMS-MailID: 20220615233122epcas2p43646a7b07e34e14187dbecb15a6ac7c7
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220615121511epcas5p2d5afbc65ba52aa74cd18834ba771f718
-References: <20220615121204.16642-1-alim.akhtar@samsung.com>
-        <CGME20220615121511epcas5p2d5afbc65ba52aa74cd18834ba771f718@epcas5p2.samsung.com>
-        <20220615121204.16642-2-alim.akhtar@samsung.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220615154432.314974-1-cgzones@googlemail.com>
+In-Reply-To: <20220615154432.314974-1-cgzones@googlemail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Wed, 15 Jun 2022 19:33:35 -0400
+Message-ID: <CAHC9VhT2nwdhhQg4Ak8sKV5YSAhRP=0XECyOkPE0=bAdKPvnhQ@mail.gmail.com>
+Subject: Re: [PATCH] audit: free module name
+To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
+Cc:     Eric Paris <eparis@redhat.com>,
+        Richard Guy Briggs <rgb@redhat.com>, linux-audit@redhat.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Subject: [PATCH 2/3] ufs: host: ufs-exynos: use already existing define
-> 
-> UFS core already uses RX_MIN_ACTIVATETIME_CAPABILITY macro, let's use the
-> same in driver as well instead of having a different macro name for the
-> same offset.
-> 
+On Wed, Jun 15, 2022 at 11:44 AM Christian G=C3=B6ttsche
+<cgzones@googlemail.com> wrote:
+>
+> Reset the type of the record last as the helper `audit_free_module()`
+> depends on it.
+>
+>     unreferenced object 0xffff888153b707f0 (size 16):
+>       comm "modprobe", pid 1319, jiffies 4295110033 (age 1083.016s)
+>       hex dump (first 16 bytes):
+>         62 69 6e 66 6d 74 5f 6d 69 73 63 00 6b 6b 6b a5  binfmt_misc.kkk.
+>       backtrace:
+>         [<ffffffffa07dbf9b>] kstrdup+0x2b/0x50
+>         [<ffffffffa04b0a9d>] __audit_log_kern_module+0x4d/0xf0
+>         [<ffffffffa03b6664>] load_module+0x9d4/0x2e10
+>         [<ffffffffa03b8f44>] __do_sys_finit_module+0x114/0x1b0
+>         [<ffffffffa1f47124>] do_syscall_64+0x34/0x80
+>         [<ffffffffa200007e>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>
+> Fixes: 12c5e81d3fd0 ("audit: prepare audit_context for use in calling con=
+texts beyond syscalls")
+> Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> ---
+>  kernel/auditsc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Chanho Park <chanho61.park@samsung.com>
+Thanks Christian, I just merged this into audit/stable-5.19 and I'll
+send this up to Linus as soon as the automated tests finish their
+runs.
 
-Best Regards,
-Chanho Park
-
+--=20
+paul-moore.com

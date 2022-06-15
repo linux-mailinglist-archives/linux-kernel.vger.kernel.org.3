@@ -2,192 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE93B54CD04
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2711754CD0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:33:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240100AbiFOPcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
+        id S243794AbiFOPdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234666AbiFOPcF (ORCPT
+        with ESMTP id S232554AbiFOPc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:32:05 -0400
-Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1749A12AC3;
-        Wed, 15 Jun 2022 08:32:04 -0700 (PDT)
-Received: by mail-io1-f48.google.com with SMTP id 19so13016453iou.12;
-        Wed, 15 Jun 2022 08:32:04 -0700 (PDT)
+        Wed, 15 Jun 2022 11:32:57 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A243CE3C;
+        Wed, 15 Jun 2022 08:32:56 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id h23so19523304lfe.4;
+        Wed, 15 Jun 2022 08:32:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sDmJ/1hH1Y7P0JPg/pBSMltfD0etiGQmhyhqG4Y659s=;
+        b=WZSiAgrTPdJWnSQsprhjOtMAW9x0/89CYUZm658X4gAh00Bgmui+kAIB5ifmDiTA4W
+         4vkkITzB10/9xlS5pOdSjkEtSxghcrBwW1eojcx2cy0TUZEh7RiYzPM9VP2gss4IUtaq
+         HO0+DfNgBCFDQIKxcsPxrn4OL0lIu3mM2I12t+1C17SzW1kOIW5hckqAmhss5xSXHWE9
+         G/hNBehy6nd8SV+tGJl11bJhccW5JpDsANDa7DlCWmrrgelabJvmO2FPaa1v9M3gk8TL
+         Zl5libbYG739FoWfQgfPt354GCW+ospzDSVi6r8JT+ena5yoeKNLDOjr5wz07fz++4Ir
+         +MfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=q8c2xxYz3j26DYod3eaaMN2lLSN9Ym6PyBo4ziuyZyk=;
-        b=jVjAog30zbKSBZl7ydPao7MZNwJV3EiXV0aWnIyTVc607gtPEhcrenDZLhd0lSE1tS
-         QlM3ksDLH1dbKN/Ge91vwNhIzrH5b8zsxrGBCXII2ONjoBXVLTauGSpysVnRzZDe8t10
-         7UshVrEiiy2Y492XxQTbG30gP7fWJf/uJm+7pmonV/UXYYJxlQPXi06g66FhP8NxOwU5
-         5HH34ysOXXG0e5gSGuuwp4LBwxfwceT858BhushIayFfvX52IFSiiNUb0fAImDl2L1cy
-         0xhYctE8QJ/rxH8PbLkQOqiR+xDekelxNOYAdQ5DJrQhoOYKN9h6FgTL82DQHM3+O1QV
-         kBZw==
-X-Gm-Message-State: AJIora8rd+F65e2juDQaAT8X3GhMR6CYFMrlOUbWvcaeBfLfqSO8EeR+
-        um+jJTcGjjP/cRvg9GUmcg==
-X-Google-Smtp-Source: AGRyM1vZP1cpJh4LaQGtt0wTsnkyOry95Uj+prwRnysLP55TGjTCNDh9AJ78t39ZVGZhWD6AGPALWg==
-X-Received: by 2002:a6b:f00e:0:b0:66a:4a4a:8506 with SMTP id w14-20020a6bf00e000000b0066a4a4a8506mr168845ioc.42.1655307123240;
-        Wed, 15 Jun 2022 08:32:03 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id u11-20020a02aa8b000000b0032e1e0ac289sm6289840jai.8.2022.06.15.08.32.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 08:32:02 -0700 (PDT)
-Received: (nullmailer pid 1290906 invoked by uid 1000);
-        Wed, 15 Jun 2022 15:32:01 -0000
-Date:   Wed, 15 Jun 2022 09:32:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 07/17] dt-bindings: PCI: dwc: Add
- interrupts/interrupt-names common properties
-Message-ID: <20220615153201.GB1069883-robh@kernel.org>
-References: <20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru>
- <20220610085706.15741-8-Sergey.Semin@baikalelectronics.ru>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sDmJ/1hH1Y7P0JPg/pBSMltfD0etiGQmhyhqG4Y659s=;
+        b=mix0XkGDRfofw6I/pOY+J5OJrVKnMzzo+0imAvnuh+SNbqtQTfbyhnncHjiQskN/NK
+         dGuWuJtWJNLAgiM4ELabIa4K/2F9sym4awEepZs4RgY4U38WdC0IywvbFwzP18WSslvf
+         mzG3y0N+dyQquuStJ5WZDL5GATHatgulzFXCJ4lpBpRvrCdQvFVmQGzECQX1XsMiZA5B
+         BBWO00kT9ZcoCo7JDrCzZytaAKQWcU4mfYjD9Ly7nMbDTnECV6SqkHr5ZEfuMRWLdWhO
+         fgvBp7lOpt95ueg2As3aafKGVO8wW1MJ0byIJCa5sb85scF9m9S53XdIE34cCQ09d9jy
+         uFtA==
+X-Gm-Message-State: AJIora+IZmkuWihSKQvw/xKN7OWU3AgPMRCheK8HXyouU1NlgxlvSQ2d
+        2k/bMPgP+qjjATU3lsa4UetIDKjdhAso4eyhGEU=
+X-Google-Smtp-Source: AGRyM1tG1+t0l4Tw3Ckll7X3C6ctah44JTSkdCmL6yK6uylgTgTXwvdzDr0mEdzwcTP3/GXA2CosJRFvobfIvlqak0c=
+X-Received: by 2002:a05:6512:68b:b0:479:40e9:2940 with SMTP id
+ t11-20020a056512068b00b0047940e92940mr30622lfe.381.1655307174922; Wed, 15 Jun
+ 2022 08:32:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610085706.15741-8-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20220609150851.23084-1-max.oss.09@gmail.com> <20220609150851.23084-6-max.oss.09@gmail.com>
+ <CAMuHMdUf=VnqePKB=0eJC4GxZipQLD8BKMiv5PBW8Fz+zUv6-Q@mail.gmail.com>
+In-Reply-To: <CAMuHMdUf=VnqePKB=0eJC4GxZipQLD8BKMiv5PBW8Fz+zUv6-Q@mail.gmail.com>
+From:   Max Krummenacher <max.oss.09@gmail.com>
+Date:   Wed, 15 Jun 2022 17:32:43 +0200
+Message-ID: <CAEHkU3U+Ahk1eyw-dWYM2Egt8xvhyM6piEHbSSq=dyZstomHcg@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 5/5] ARM64: verdin-imx8mm: use regulator power
+ domain to model sleep-moci
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:56:55AM +0300, Serge Semin wrote:
-> Currently the 'interrupts' and 'interrupt-names' are defined being too
-> generic to really describe any actual IRQ interface. Moreover the DW PCIe
-> End-point devices are left with no IRQ signals. All of that can be fixed
-> by adding the IRQ-related properties to the common DW PCIe DT-schema and
-> defining a common and device-specific set of the IRQ names in accordance
-> with the hardware reference manual. Seeing there are common and dedicated
-> IRQ signals for DW PCIe Root Port and End-point controllers we suggest to
-> split the IRQ names up into two sets: common definitions available in the
-> snps,dw-pcie-common.yaml schema and Root Port specific names defined in
-> the snps,dw-pcie.yaml schema. The former one will be applied to both DW
-> PCIe RP and EP controllers, while the later one - for the RP only.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v3:
-> - This is a new patch unpinned from the next one:
->   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
->   by the Rob' request. (@Rob)
-> ---
->  .../bindings/pci/snps,dw-pcie-common.yaml     | 51 +++++++++++++++
->  .../bindings/pci/snps,dw-pcie-ep.yaml         | 17 +++++
->  .../devicetree/bindings/pci/snps,dw-pcie.yaml | 63 ++++++++++++++++++-
->  3 files changed, 128 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> index b2fbe886981b..0a524e916a9f 100644
-> --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> @@ -17,6 +17,25 @@ description:
->  select: false
->  
->  properties:
-> +  interrupts:
-> +    description:
-> +      There are two main sub-blocks which are normally capable of
-> +      generating interrupts. It's System Information Interface and MSI
-> +      interface. While the former one has some common for the Host and
-> +      Endpoint controllers IRQ-signals, the later interface is obviously
-> +      Root Complex specific since it's responsible for the incoming MSI
-> +      messages signalling. The System Information IRQ signals are mainly
-> +      responsible for reporting the generic PCIe hierarchy and Root
-> +      Complex events like VPD IO request, general AER, PME, Hot-plug, link
-> +      bandwidth change, link equalization request, INTx asserted/deasserted
-> +      Message detection, embedded DMA Tx/Rx/Error.
-> +    minItems: 1
-> +    maxItems: 26
-> +
-> +  interrupt-names:
-> +    minItems: 1
-> +    maxItems: 26
-> +
->    phys:
->      description:
->        There can be up to the number of possible lanes PHYs specified.
-> @@ -91,4 +110,36 @@ properties:
->  
->  additionalProperties: true
->  
-> +definitions:
+Hi
 
-$defs:
+On Tue, Jun 14, 2022 at 9:29 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Max,
+>
+> On Thu, Jun 9, 2022 at 5:16 PM Max Krummenacher <max.oss.09@gmail.com> wrote:
+> > From: Max Krummenacher <max.krummenacher@toradex.com>
+> >
+> > The Verdin CTRL_SLEEP_MOCI# pin signals the carrier board that the module
+> > is in sleep and it may switch off unneeded power.
+> >
+> > Control this pin with a regulator power domain controller which uses a
+> > fixed regulator with a gpio enable.
+> >
+> > Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+>
+> Thanks for your patch!
+>
+> > --- a/arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin-dahlia.dtsi
+> > @@ -92,6 +92,7 @@
+> >
+> >  /* Verdin PCIE_1 */
+> >  &pcie0 {
+> > +       power-domains = <&pd_sleep_moci>;
+>
+> This overrides "power-domains = <&pgc_pcie>;" from imx8mm.dtsi...
+>
+> >         status = "okay";
+> >  };
+>
+> > --- a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
+> > @@ -53,6 +53,14 @@
+> >                 };
+> >         };
+> >
+> > +       pd_sleep_moci: power-domain-sleep-moci {
+> > +               compatible = "regulator-pm-pd";
+> > +               label = "pd_sleep_moci";
+> > +               power-domains = <&pgc_pcie>;
+>
+> ... and here you work around that by re-binding <&pgc_pcie>.
+>
+> I think you:
+>   1. must not override the power-domains property for pcie0, as
+>      conceptually, the PCIe bus is still in the on-SoC power
+>      domain. What if some lanes are connected to devices in
+>      pd_sleep_moci, but other lanes are not?
+>   2. should only use pd_sleep_moci for the off-chip devices that
+>       are actually controlled by the corresponding regulator.
 
-But I suppose this is the applying fixups or not issue. That's certainly 
-not behavior we should rely on. If we need a way to specify applying 
-fixups or not, we should do that. But really I'd prefer not to need 
-that.
+I fully agree.
+I wanted to send along the implementation commits for the power
+domain controller something which actually uses it and which
+did work in my testing.
+That is why I marked this as RFC and I know that more
+work is needed.
 
-> +  interrupt-names:
-> +    description:
-> +      IRQ signal names common for the DWC PCIe Root Port and Endpoint
-> +      controllers.
-> +    oneOf:
-> +      - description:
-> +          Controller request to read or write virtual product data
-> +          from/to the VPD capability registers.
-> +        const: vpd
-> +      - description:
-> +          Link Equalization Request flag is set in the Link Status 2
-> +          register (applicable if the corresponding IRQ is enabled in
-> +          the Link Control 3 register).
-> +        const: l_eq
-> +      - description:
-> +          Indicates that the eDMA Tx/Rx transfer is complete or that an
-> +          error has occurred on the corresponding channel. eDMA can have
-> +          eight Tx (Write) and Rx (Read) eDMA channels thus supporting up
-> +          to 16 IRQ signals all together. Write eDMA channels shall go
-> +          first in the ordered row as per default edma_int[*] bus setup.
-> +        pattern: '^dma([0-9]|1[0-5])?$'
-> +      - description:
-> +          PCIe protocol correctable error or a Data Path protection
-> +          correctable error is detected by the automotive/safety
-> +          feature.
-> +        const: sft_ce
-> +      - description:
-> +          Indicates that the internal safety mechanism detected and
-> +          uncorrectable error.
-> +        const: sft_ue
+Cheers
+Max
 
-I still don't really like this pattern. My first read of it makes me 
-think only 1 interrupt is supported, and I have to go look that this is 
-referenced from 'items'.
-
-Could we do a lot more with json-schema like you have? Yes, but the 
-schemas are optimized for simplicity and a relatively fixed pattern of 
-what's allowed as json-schema is new to most folks. It's also easy to 
-create things that simply don't work (silently). Just reviewing this 
-series is hard.
-
-This series is trying to do lots of things. Refactoring, adding 
-constraints, and adding a new binding. I would split it up if you want 
-to make progress.
-
-Rob
+>
+> > +               power-supply = <&reg_sleep_moci>;
+> > +               #power-domain-cells = <0>;
+> > +       };
+> > +
+> >         /* Carrier Board Supplies */
+> >         reg_1p8v: regulator-1p8v {
+> >                 compatible = "regulator-fixed";
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds

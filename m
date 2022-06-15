@@ -2,126 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3678554CD15
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF34C54CD20
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348689AbiFOPd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
+        id S1349508AbiFOPeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346834AbiFOPdx (ORCPT
+        with ESMTP id S1348988AbiFOPeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:33:53 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DA02251F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:33:50 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id i17-20020a7bc951000000b0039c4760ec3fso2384191wml.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:33:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J5eKPAN5lqKWqHRVMFEt8bECLi2YfU3n/Xvj8y2gEBE=;
-        b=Zv2JhKlV+WgmpireahD92+ZSg2KnCdRZZvKLhjp5oxI5lNh/Plc3RXY+mQgK5+7Vg0
-         YcEbwmKcYO+eUdZVm8cnx1XTn3jFZkr+/y958BJAt6RHw6tO4gb/qGpriKZF4237xYW8
-         XdcUnlcVAybauV76RUaKKOU+9Jk1HAP8Ybq8jFsO4UP/QfChfQnRT6ZMjB1JSUkSG5A+
-         eeKIxvMjnfgD/uvv36ColBnfjqbtL+d7YJ45Q6RgQZkCXiULCPAF4BJO7j+EvyygfMPL
-         eLCZ6VWgFpV+KubW52X0faomk4hEuBQnOj14ASkrNV4X772O83FKpX8IgKteHTah4Jpx
-         0t5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J5eKPAN5lqKWqHRVMFEt8bECLi2YfU3n/Xvj8y2gEBE=;
-        b=mstMSBu8VpitBWyaUb0lxaAlJqbcjzJnIdMcafx4gWXErpgZCDSemkcwAx3iRDke87
-         rrj3w5EHizDdeZZMC1R76MsOELuqV/2t8wqVN84eI1V1i63E2BfSX5TrxzH3n4b8ZEZc
-         NUATh8e3xAHFZOx1bXrTgyQdaGEPgngl8mR32UmUHWYcrDAscd/VzOZeg2lwoLUXQ/ez
-         /cmimkJZzm4JiaaCWXMV0RvR7C8QsuRxCbpYvkTscreaz5byA6IAOEo9Sj5cpC64vPrz
-         KL+G4rISSji8XM5xJaT7xGYSb8meoZWj2QeQjoWjXcmSogSlF+4BbZTquk0nnbSM5RrV
-         DKJA==
-X-Gm-Message-State: AJIora/oY5AHInhGCwHUWiy58+LAfmwXlahm2M2p6ppINyPXXwuAkTL/
-        5pbCccKXy/SRo+qvUw/3uO/MHISedHekMYW6mggQ
-X-Google-Smtp-Source: AGRyM1tbSXhyojX0sdqJuy36Y8CiIJerDEBwNNO0en1/SGp4CFCRbzqu86TVD3k4/Lh2/5SBr3CWSXHz2TZ3Gh292cQ=
-X-Received: by 2002:a05:600c:1d91:b0:39c:544b:abdd with SMTP id
- p17-20020a05600c1d9100b0039c544babddmr20003wms.70.1655307229181; Wed, 15 Jun
- 2022 08:33:49 -0700 (PDT)
+        Wed, 15 Jun 2022 11:34:15 -0400
+Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DAA7B2251F;
+        Wed, 15 Jun 2022 08:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=qA/Mf
+        K70pcaP6AdlLT8hpxzBJq/0hmiFokmu1lnak5Y=; b=kdp19rkbRAjsm89x+oNg/
+        9HneJ0oosgWT6JsWkGvnpa07MAO+P331qVi9niDbbh49ppafRhliZoQ05WkMKbUq
+        HSOw230L2Vx9Q5ErHtL2nbJLzuREMN7Q9QYSZ0sFesVScuwDe2dtJqorZ5pQdcbV
+        U3Frp0AWT66w7laTINfDus=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp10 (Coremail) with SMTP id NuRpCgD3+0PT+6liQETOEg--.51059S2;
+        Wed, 15 Jun 2022 23:33:41 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     john@phrozen.org, tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        windhl@126.com
+Subject: [PATCH] mips: lantiq: Add missing of_node_put() in irq.c
+Date:   Wed, 15 Jun 2022 23:33:39 +0800
+Message-Id: <20220615153339.3970658-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220608150942.776446-1-fred@cloudflare.com> <87tu8oze94.fsf@email.froward.int.ebiederm.org>
- <e1b62234-9b8a-e7c2-2946-5ef9f6f23a08@cloudflare.com> <87y1xzyhub.fsf@email.froward.int.ebiederm.org>
- <859cb593-9e96-5846-2191-6613677b07c5@cloudflare.com> <87o7yvxl4x.fsf@email.froward.int.ebiederm.org>
- <9ed91f15-420c-3db6-8b3b-85438b02bf97@cloudflare.com> <20220615103031.qkzae4xr34wysj4b@wittgenstein>
- <CAHC9VhR8yPHZb2sCu4JGgXOSs7rudm=9opB+-LsG6_Lta9466A@mail.gmail.com> <CALrw=nGZtrNYn+CV+Q_w-2=Va_9m3C8PDvvPtd01d0tS=2NMWQ@mail.gmail.com>
-In-Reply-To: <CALrw=nGZtrNYn+CV+Q_w-2=Va_9m3C8PDvvPtd01d0tS=2NMWQ@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 15 Jun 2022 11:33:38 -0400
-Message-ID: <CAHC9VhRSzXeAZmBdNSAFEh=6XR57ecO7Ov+6BV9b0xVN1YR_Qw@mail.gmail.com>
-Subject: Re: [PATCH v3] cred: Propagate security_prepare_creds() error code
-To:     Ignat Korchagin <ignat@cloudflare.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Frederick Lawler <fred@cloudflare.com>,
-        linux-doc@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>, linux-aio@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-cachefs@redhat.com,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
-        linux-unionfs@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, serge@hallyn.com, amir73il@gmail.com,
-        kernel-team <kernel-team@cloudflare.com>,
-        Jeff Moyer <jmoyer@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NuRpCgD3+0PT+6liQETOEg--.51059S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrZr1rCry8Gw45uFykCFy7GFg_yoWDGFXEg3
+        WIgr9rG3yrJ3WrJrZruw4agFs8A397WFyrA3Z2yFySy3W3A3WDtr47Jr17A3yUXF4SvFW5
+        Cr1Dur4Yvw429jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRK0eHtUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2hUhF1uwMNZANgAAsC
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 11:06 AM Ignat Korchagin <ignat@cloudflare.com> wrote:
-> On Wed, Jun 15, 2022 at 3:14 PM Paul Moore <paul@paul-moore.com> wrote:
-> > On Wed, Jun 15, 2022 at 6:30 AM Christian Brauner <brauner@kernel.org> wrote:
+In icu_of_init(), of_find_compatible_node() will return a node
+pointer with refcount incremented. We should use of_node_put()
+when it is not used anymore.
 
-...
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/mips/lantiq/irq.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> > > Fwiw, from this commit it wasn't very clear what you wanted to achieve
-> > > with this. It might be worth considering adding a new security hook for
-> > > this. Within msft it recently came up SELinux might have an interest in
-> > > something like this as well.
-> >
-> > Just to clarify things a bit, I believe SELinux would have an interest
-> > in a LSM hook capable of implementing an access control point for user
-> > namespaces regardless of Microsoft's current needs.  I suspect due to
-> > the security relevant nature of user namespaces most other LSMs would
-> > be interested as well; it seems like a well crafted hook would be
-> > welcome by most folks I think.
->
-> Just to get the full picture: is there actually a good reason not to
-> make this hook support this scenario? I understand it was not
-> originally intended for this, but it is well positioned in the code,
-> covers multiple subsystems (not only user namespaces), doesn't require
-> changing the LSM interface and it already does the job - just the
-> kernel internals need to respect the error code better. What bad
-> things can happen if we extend its use case to not only allocate
-> resources in LSMs?
-
-My concern is that the security_prepare_creds() hook, while only
-called from two different functions, ends up being called for a
-variety of different uses (look at the prepare_creds() and
-perpare_kernel_cred() callers) and I think it would be a challenge to
-identify the proper calling context in the LSM hook implementation
-given the current hook parameters.  One might be able to modify the
-hook to pass the necessary information, but I don't think that would
-be any cleaner than adding a userns specific hook.  I'm also guessing
-that the modified security_prepare_creds() hook implementations would
-also be more likely to encounter future maintenance issues as
-overriding credentials in the kernel seems only to be increasing, and
-each future caller would risk using the modified hook wrong by passing
-the wrong context and triggering the wrong behavior in the LSM.
-
+diff --git a/arch/mips/lantiq/irq.c b/arch/mips/lantiq/irq.c
+index b732495f138a..62f1b20a2169 100644
+--- a/arch/mips/lantiq/irq.c
++++ b/arch/mips/lantiq/irq.c
+@@ -396,6 +396,9 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
+ 
+ 		ret = of_property_read_u32_array(eiu_node, "lantiq,eiu-irqs",
+ 						ltq_eiu_irq, exin_avail);
++						
++		of_node_put(eiu_node);
++						
+ 		if (ret)
+ 			panic("failed to load external irq resources");
+ 
+@@ -409,6 +412,9 @@ int __init icu_of_init(struct device_node *node, struct device_node *parent)
+ 			panic("Failed to remap eiu memory");
+ 	}
+ 
++	/* if eiu_node&of_address_to_resource */
++	of_node_put(eiu_node);
++
+ 	return 0;
+ }
+ 
 -- 
-paul-moore.com
+2.25.1
+

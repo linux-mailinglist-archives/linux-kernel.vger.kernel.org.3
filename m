@@ -2,68 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE7E54CF47
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E140B54CF4C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345812AbiFORBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S1357265AbiFORCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355510AbiFORAx (ORCPT
+        with ESMTP id S1357291AbiFORBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:00:53 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3324EF43
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:00:44 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id u99so21564880ybi.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:00:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=EeKp0clsQUA6dW+6qFFUJzrEz+TdOTimew8JgR0bKMA=;
-        b=et/V+90f7nKKr5S5V5II7K0Z18Ceqm9B2OWuHnT5qV224pqU2c6OfRTYEhEYlbJ3cw
-         RnQHWw8DvH4t+NcjNGh9D/zVQcpZCNqTLMmGATmElkNq0TMm0Jwup31R4E/PaofbwfGZ
-         +8Z9iXoKGewQwyULPEwSnqOh7CE25+9MDvy081U1bBdwwC3xfOE3ncIe62F5JtLVICD6
-         28NcVbwUhcmxTg7t0/+iLluLd/DAthY1Ccvkh+7dxVHLMFkonydf6t2mSzJlr/KpMaer
-         5d9Bgwidf0j0IQ6ebNG/o8YQvba9f4hNnmEue1FBwwThM3cZjahvoA8xM7BYyT7zaC+m
-         jMNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=EeKp0clsQUA6dW+6qFFUJzrEz+TdOTimew8JgR0bKMA=;
-        b=nlolHFQLSOY0MP1ITNQC4M/Mu5vRBKsJ3OUNF8f8aQWDyKonWZ0cq1imWfERJa836R
-         WNzDrHDNbx4mxroFIVBlpMRfmL0VrAEP1h6dvGYilB8RU8qS6aVEJ5WPRMi6IrqWMBSK
-         7z0YDa97UtsFH0qi/yZXWglA9rzCQKcwrr4T4Tyh44BnbyQlC8+Yszof1Q7QwYkhyef8
-         IU6IsoXoZJR/TpZYkxLSgznGsLxWw57j/vzeJZhALsYlsnKHJs//vhfEFbm9QUZdbltg
-         k9DPt9nsu5QkzME0CNG6CO7nvsxLANRVas0ro+WvcrHX9ZPP1bydzCCCB/aftw5+L1lv
-         r5bg==
-X-Gm-Message-State: AJIora+QXH4DDW5fyLc3UpQJy4bWVSZLx1LqNV0SSLj83Dqo2ku+aKK2
-        K3CguTkDijT1OCIYJbAn8OoWuPgAxVZNKFT9xfORLg==
-X-Google-Smtp-Source: AGRyM1v2b3hA54fgRS4NKBKo+CNA62mj2BxK70qeaNL2CHESAP83JfajfFeLqwxjrTeSqYQze1aVU28N+x8laK8Zxw8=
-X-Received: by 2002:a25:b51:0:b0:663:4ff1:d20d with SMTP id
- 78-20020a250b51000000b006634ff1d20dmr851309ybl.608.1655312443024; Wed, 15 Jun
- 2022 10:00:43 -0700 (PDT)
+        Wed, 15 Jun 2022 13:01:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0339650058
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:01:47 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D3C80153B;
+        Wed, 15 Jun 2022 10:01:46 -0700 (PDT)
+Received: from bogus (unknown [10.57.11.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1FC1D3F73B;
+        Wed, 15 Jun 2022 10:01:43 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 18:00:33 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        linux-kernel@vger.kernel.org, Atish Patra <atishp@atishpatra.org>,
+        Atish Patra <atishp@rivosinc.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Qing Wang <wangqing@vivo.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v3 15/16] arch_topology: Set cluster identifier in each
+ core/thread from /cpu-map
+Message-ID: <20220615170033.q4og4pnmpwdg3l2g@bogus>
+References: <20220525081416.3306043-12-sudeep.holla@arm.com>
+ <20220525081416.3306043-13-sudeep.holla@arm.com>
+ <20220525081416.3306043-14-sudeep.holla@arm.com>
+ <20220525081416.3306043-15-sudeep.holla@arm.com>
+ <20220525081416.3306043-16-sudeep.holla@arm.com>
+ <947470ba-35fc-3c72-d01b-c0a7337216a2@arm.com>
+ <20220606102159.dduxmvq4m2fm6gks@bogus>
+ <CAKfTPtB8iPzEXipsJqNtd9-aJMKx-FAaiGMzOg58HgRQuo39iA@mail.gmail.com>
+ <20220610102753.virkx47uyfsojol6@bogus>
+ <CAKfTPtD==UMjbSGHvKxT_z=LyvsJt=UCHsqkbgVnagbn5Aqpcw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220614183720.512073672@linuxfoundation.org>
-In-Reply-To: <20220614183720.512073672@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 15 Jun 2022 22:30:31 +0530
-Message-ID: <CA+G9fYvfof7stwFYqyy9fFLGB4+MHYWYPVt3XSiT3teHNdR+SQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/11] 5.15.48-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtD==UMjbSGHvKxT_z=LyvsJt=UCHsqkbgVnagbn5Aqpcw@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,135 +58,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Jun 2022 at 00:15, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Please note until we agree on unified view for hardware topology, I will
+temporarily ignore any scheduler domain related issues/concerns as this
+thread/discussion is mixing up too much IMO. I am not ignoring sched_domain
+concerns, but deferring it until we agree on the hardware topology view
+which is user visible and how that impacts sched domain topology can be
+considered soon following that.
+
+On Tue, Jun 14, 2022 at 07:59:23PM +0200, Vincent Guittot wrote:
+> On Fri, 10 Jun 2022 at 12:27, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> >
+> > On Fri, Jun 10, 2022 at 12:08:44PM +0200, Vincent Guittot wrote:
+> > > On Mon, 6 Jun 2022 at 12:22, Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > > >
+> >
+> > [...]
+> >
+> > > > Why ? Are you suggesting that we shouldn't present the hardware cluster
+> > > > to the topology because of the above reason ? If so, sorry that is not a
+> > > > valid reason. We could add login to return NULL or appropriate value
+> > > > needed in cpu_clustergroup_mask id it matches MC level mask if we can't
+> > > > deal that in generic scheduler code. But the topology code can't be
+> > > > compromised for that reason as it is user visible.
+> > >
+> > > I tend to agree with Dietmar. The legacy use of cluster node in DT
+> > > refers to the dynamiQ or legacy b.L cluster which is also aligned to
+> > > the LLC and the MC scheduling level. The new cluster level that has
+> > > been introduced recently does not target this level but some
+> > > intermediate levels either inside like for the kupeng920 or the v9
+> > > complex or outside like for the ampere altra. So I would say that
+> > > there is one cluster node level in DT that refers to the same MC/LLC
+> > > level and only an additional child/parent cluster node should be used
+> > > to fill the clustergroup_mask.
+> > >
+> >
+> > Again I completely disagree. Let us look at the problems separately.
+> > The hardware topology that some of the tools like lscpu and lstopo expects
+> > what the hardware looks like and not the scheduler's view of the hardware.
+> > So the topology masks that gets exposed to the user-space needs fixing
+> > even today. I have reports from various tooling people about the same.
+> > E.g. Juno getting exposed as dual socket system is utter non-sense.
+> >
+> > Yes scheduler uses most of the topology masks as is but that is not a must.
+> > There are these *group_mask functions that can implement what scheduler
+> > needs to be fed.
+> >
+> > I am not sure why the 2 issues are getting mixed up and that is the main
+> > reason why I jumped into this to make sure the topology masks are
+> > not tampered based on the way it needs to be used for scheduler.
+> >
+> > Both ACPI and DT on a platform must present exact same hardware topology
+> > to the user-space, there is no space for argument there.
 >
-> This is the start of the stable review cycle for the 5.15.48 release.
-> There are 11 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> But that's exactly my point there:
+> ACPI doesn't show the dynamiQ level anywhere but only the llc which
+> are the same and your patch makes the dynamiQ level visible for DT in
+> addition to llc
 >
-> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> Anything received after that time might be too late.
+
+Sorry if I am missing something obvious here, but both ACPI and DT has no
+special representation for dynamiQ clusters and hence it is impossible to
+deduce the same from either DT or ACPI. Can you provide some details
+or example as what you are referring as dynamiQ. Also what you mean by
+dynamiQ not shown on ACPI while shown with DT systems. If there is any
+discrepancies, we need to fix.
+
+Now, what I refer as discrepancy for example on Juno is below:
+(value read from a subset of per cpu sysfs files)
+cpu                     0       1       2       3       4       5
+cluster_id              -1      -1      -1      -1      -1      -1
+physical_package_id     1       0       0       1       1       1
+cluster_cpus_list       0       1       2       3       4       5
+package_cpus_list       0,3-5   1-2     1-2     0,3-5   0,3-5   0,3-5
+
+The above one is for DT which is wrong in all the 4 entries above.
+The below one is on ACPI and after applying my series on Juno.
+
+cpu                     0       1       2       3       4       5
+cluster_id              1       0       0       1       1       1
+physical_package_id     0       0       0       0       0       0
+cluster_cpus_list       0,3-5   1-2     1-2     0,3-5   0,3-5   0,3-5
+package_cpus_list       0-5     0-5     0-5     0-5     0-5     0-5
+
+This matches the expectation from the various userspace tools like lscpu,
+lstopo,..etc.
+
+> >
+> > > IIUC, we don't describe the dynamiQ level in ACPI which  uses cache
+> > > topology instead to define cpu_coregroup_mask whereas DT described the
+> > > dynamiQ instead of using cache topology. If you use cache topology
+> > > now, then you should skip the dynamiQ
+> > >
+> >
+> > Yes, unless someone can work out a binding to represent that and convince
+> > DT maintainers ;).
+> >
+> > > Finally, even if CLS and MC have the same scheduling behavior for now,
+> > > they might ends up with different scheduling properties which would
+> > > mean that replacing MC level by CLS one for current SoC would become
+> > > wrong
+> > >
+> >
+> > Again as I mentioned to Dietmar, that is something we can and must deal with
+> > in those *group_mask and not expect topology mask to be altered to meet
+> > CLS/MC or whatever sched domains needs. Sorry, that is my strong opinion
+> > as the topology is already user-space visible and (tooling) people are
+> > complaining that DT systems are broken and doesn't match ACPI systems.
+> 
+> again, your proposal doesn't help here because the DT will show a
+> level that doesn't appears in ACPI
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.48-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Which level exactly ? It matches exactly for Juno, the sysfs files are
+exact match after my changes. Again don't mix the scheduler domains for
+arguments here.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > So unless someone gives me non-scheduler and topology specific reasons
+> > to change that, sorry but my opinion on this matter is not going to change ;).
+> >
+> > You will get this view of topology, find a way to manage with all those
+> > *group_mask functions. By the way it is already handled for ACPI systems,
+> 
+> AFAICT, no it's not, the cluster described in ACPI is not the dynamiQ
+> level that you make now visible to DT
 
-## Build
-* kernel: 5.15.48-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 2e65f63d5e2c817d883c4c8df2010aa23bd07ea4
-* git describe: v5.15.47-12-g2e65f63d5e2c
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.47-12-g2e65f63d5e2c
+Again, no. There is no binding for dynamiQ level either in DT or ACPI and
+hence there is no way it can become visible on DT. So I have no idea why
+there is a thought process or assumption about existence of dynamiQ level
+in the DT. It doesn't exist. If that is wrong, can you point me to the
+bindings as well as existing device tree ? If you are referring to the
+phantom domains Dietmar mentioned in earlier threads, then they don't exist.
+It is made up and one need to get the bindings pushed before we can address
+such a system.
 
-## Test Regressions (compared to v5.15.40-103-g293cfb310f44)
-No test regressions found.
-
-## Metric Regressions (compared to v5.15.40-103-g293cfb310f44)
-No metric regressions found.
-
-## Test Fixes (compared to v5.15.40-103-g293cfb310f44)
-No test fixes found.
-
-## Metric Fixes (compared to v5.15.40-103-g293cfb310f44)
-No metric fixes found.
-
-## Test result summary
-total: 127914, pass: 114505, fail: 268, skip: 12412, xfail: 729
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 319 total, 316 passed, 3 failed
-* arm64: 64 total, 64 passed, 0 failed
-* i386: 57 total, 50 passed, 7 failed
-* mips: 41 total, 38 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 59 total, 56 passed, 3 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 26 total, 23 passed, 3 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x86_64: 62 total, 61 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-cap_bounds-tests
-* ltp-commands
-* ltp-commands-tests
-* ltp-containers
-* ltp-containers-tests
-* ltp-controllers
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps
-* ltp-filecaps-tests
-* ltp-fs
-* ltp-fs-tests
-* ltp-fs_bind
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple
-* ltp-fs_perms_simple-tests
-* ltp-fsx
-* ltp-fsx-tests
-* ltp-hugetlb
-* ltp-hugetlb-tests
-* ltp-io
-* ltp-io-tests
-* ltp-ipc
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits
-* ltp-securebits-tests
-* ltp-smoke
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-- 
+Regards,
+Sudeep

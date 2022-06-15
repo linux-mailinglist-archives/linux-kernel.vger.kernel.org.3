@@ -2,199 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D33854CC31
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EEB54CC33
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344788AbiFOPGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:06:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
+        id S239492AbiFOPHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345955AbiFOPGU (ORCPT
+        with ESMTP id S238011AbiFOPHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:06:20 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226CD3B016
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:06:18 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id p1so8948422ilj.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:06:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j6yW8cSNxyHcKGLBH/RzzZpKDGH+HEQvUp5OHLJ1vSg=;
-        b=nHFIWSpabtnN+Um1pljyrhwwDAfJjxUkuJ6rvWuwYZgQx3aHiUVOzZBoQ315+IY0IK
-         y9sYTVz0n6GHUXTI1hng+qIVv9i00u8NOVnfVbThgFFOBxMJPVRnOoLGZMJaolcOFg0W
-         l4S0cC3C+ob82bPzHmurYZcuzY3FwqJYYvn3E=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j6yW8cSNxyHcKGLBH/RzzZpKDGH+HEQvUp5OHLJ1vSg=;
-        b=JSoVwsQ3laiKLcA5M/xgR2kPftLFZGoNurPuSP17bvOqUL8RC/3TTXQOsv5AQ3jkD+
-         ARqkMloipCQaPE4fI4xY2PzAh3MG9W91wyk+NBuK39WMovpq3j6WPD1J46+m3GXHnNBc
-         BwuV1Nuw0Pete0YXc74hr27sl03kpYt1g7qVzSC/NngjizjDGjaji4QCpZrP5ufSGY12
-         0U3jEvfmDlHeonfMCT2Jc8A0O7PPAxrXIjFyZB+8+NCPh6Bn3Q9zteiRpXlXZc3gp48L
-         WxjGL9vbISSv0G1FsJCTm0Yc3GTKNXiwbmhvXgIXyw4+3nT0CzD1dcW8hQ7TnRXqtRHL
-         S8iw==
-X-Gm-Message-State: AJIora/G42aY9jV2AtDvcosIpmeCWNQN8QGdVc+/pnWUMklKVlDO7cFX
-        iw+T7wL61iSAqk9l4nKMbXpfkVtIwjPultrXUCI2Ag==
-X-Google-Smtp-Source: AGRyM1vl6hb3B14OhbZ5pyrW5E0uvZJEWyTkyieVnvYbDV9l4KSiSfWp3W3NzE6bbMlKOpxyW1c3ccvo1VZk+jYZkps=
-X-Received: by 2002:a05:6e02:1747:b0:2d3:e571:5058 with SMTP id
- y7-20020a056e02174700b002d3e5715058mr142461ill.309.1655305577283; Wed, 15 Jun
- 2022 08:06:17 -0700 (PDT)
+        Wed, 15 Jun 2022 11:07:49 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586D0BE28;
+        Wed, 15 Jun 2022 08:07:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655305668; x=1686841668;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CXQFgUFtaJrmqb7dbdE8TtUh3d8InjWxzbzSrWOzXFg=;
+  b=jicdFCU1THDmB2kmETTcLs6Xtsn3HA3EMDkqeCW4WMID3Kx7HwX/ThSc
+   oeYC7Z7lxKtMTqUWWD3fPjp959ugaIVAaoSqsuL5Wtv4XIOjgt7Foqvuh
+   AJterXlvPQabgTapmF0qe/S0V5aCZnuS55ufzlzZLh998Q3d3+reZQxep
+   3NRmBaDOAQ8723XjW8n3wDGOcOkCvSmKLzIQpiJYHt5nuqTO4dWElg20f
+   wgbULT4cuDNF4Xy1NiQRjpHbN83DC9SuxmM2jx2ATj1TUPOnPZvQJCsCs
+   sY/GBiVLWCT2+M6h6PniVqWroP7r1uezOtWmdtYUNwfZTNEpWPs9sD7Qq
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="279039943"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="279039943"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 08:07:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="583248668"
+Received: from zxingrtx.sh.intel.com ([10.239.159.110])
+  by orsmga007.jf.intel.com with ESMTP; 15 Jun 2022 08:07:44 -0700
+From:   zhengjun.xing@linux.intel.com
+To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@kernel.org, namhyung@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        irogers@google.com, ak@linux.intel.com, kan.liang@linux.intel.com,
+        zhengjun.xing@linux.intel.com
+Subject: [PATCH] perf record: Support "--cputype" option for hybrid events
+Date:   Wed, 15 Jun 2022 23:08:23 +0800
+Message-Id: <20220615150823.2230349-1-zhengjun.xing@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220608150942.776446-1-fred@cloudflare.com> <87tu8oze94.fsf@email.froward.int.ebiederm.org>
- <e1b62234-9b8a-e7c2-2946-5ef9f6f23a08@cloudflare.com> <87y1xzyhub.fsf@email.froward.int.ebiederm.org>
- <859cb593-9e96-5846-2191-6613677b07c5@cloudflare.com> <87o7yvxl4x.fsf@email.froward.int.ebiederm.org>
- <9ed91f15-420c-3db6-8b3b-85438b02bf97@cloudflare.com> <20220615103031.qkzae4xr34wysj4b@wittgenstein>
- <CAHC9VhR8yPHZb2sCu4JGgXOSs7rudm=9opB+-LsG6_Lta9466A@mail.gmail.com>
-In-Reply-To: <CAHC9VhR8yPHZb2sCu4JGgXOSs7rudm=9opB+-LsG6_Lta9466A@mail.gmail.com>
-From:   Ignat Korchagin <ignat@cloudflare.com>
-Date:   Wed, 15 Jun 2022 16:06:06 +0100
-Message-ID: <CALrw=nGZtrNYn+CV+Q_w-2=Va_9m3C8PDvvPtd01d0tS=2NMWQ@mail.gmail.com>
-Subject: Re: [PATCH v3] cred: Propagate security_prepare_creds() error code
-To:     Paul Moore <paul@paul-moore.com>,
-        Christian Brauner <brauner@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Frederick Lawler <fred@cloudflare.com>, linux-doc@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>, linux-aio@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-cachefs@redhat.com,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
-        linux-unionfs@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        netdev <netdev@vger.kernel.org>, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, serge@hallyn.com, amir73il@gmail.com,
-        kernel-team <kernel-team@cloudflare.com>,
-        Jeff Moyer <jmoyer@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 3:14 PM Paul Moore <paul@paul-moore.com> wrote:
->
-> On Wed, Jun 15, 2022 at 6:30 AM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > On Tue, Jun 14, 2022 at 01:59:08PM -0500, Frederick Lawler wrote:
-> > > On 6/14/22 11:30 AM, Eric W. Biederman wrote:
-> > > > Frederick Lawler <fred@cloudflare.com> writes:
-> > > >
-> > > > > On 6/13/22 11:44 PM, Eric W. Biederman wrote:
-> > > > > > Frederick Lawler <fred@cloudflare.com> writes:
-> > > > > >
-> > > > > > > Hi Eric,
-> > > > > > >
-> > > > > > > On 6/13/22 12:04 PM, Eric W. Biederman wrote:
-> > > > > > > > Frederick Lawler <fred@cloudflare.com> writes:
-> > > > > > > >
-> > > > > > > > > While experimenting with the security_prepare_creds() LSM hook, we
-> > > > > > > > > noticed that our EPERM error code was not propagated up the callstack.
-> > > > > > > > > Instead ENOMEM is always returned.  As a result, some tools may send a
-> > > > > > > > > confusing error message to the user:
-> > > > > > > > >
-> > > > > > > > > $ unshare -rU
-> > > > > > > > > unshare: unshare failed: Cannot allocate memory
-> > > > > > > > >
-> > > > > > > > > A user would think that the system didn't have enough memory, when
-> > > > > > > > > instead the action was denied.
-> > > > > > > > >
-> > > > > > > > > This problem occurs because prepare_creds() and prepare_kernel_cred()
-> > > > > > > > > return NULL when security_prepare_creds() returns an error code. Later,
-> > > > > > > > > functions calling prepare_creds() and prepare_kernel_cred() return
-> > > > > > > > > ENOMEM because they assume that a NULL meant there was no memory
-> > > > > > > > > allocated.
-> > > > > > > > >
-> > > > > > > > > Fix this by propagating an error code from security_prepare_creds() up
-> > > > > > > > > the callstack.
-> > > > > > > > Why would it make sense for security_prepare_creds to return an error
-> > > > > > > > code other than ENOMEM?
-> > > > > > > >    > That seems a bit of a violation of what that function is supposed to do
-> > > > > > > >
-> > > > > > >
-> > > > > > > The API allows LSM authors to decide what error code is returned from the
-> > > > > > > cred_prepare hook. security_task_alloc() is a similar hook, and has its return
-> > > > > > > code propagated.
-> > > > > > It is not an api.  It is an implementation detail of the linux kernel.
-> > > > > > It is a set of convenient functions that do a job.
-> > > > > > The general rule is we don't support cases without an in-tree user.  I
-> > > > > > don't see an in-tree user.
-> > > > > >
-> > > > > > > I'm proposing we follow security_task_allocs() pattern, and add visibility for
-> > > > > > > failure cases in prepare_creds().
-> > > > > > I am asking why we would want to.  Especially as it is not an API, and I
-> > > > > > don't see any good reason for anything but an -ENOMEM failure to be
-> > > > > > supported.
-> > > > > >
-> > > > > We're writing a LSM BPF policy, and not a new LSM. Our policy aims to solve
-> > > > > unprivileged unshare, similar to Debian's patch [1]. We're in a position such
-> > > > > that we can't use that patch because we can't block _all_ of our applications
-> > > > > from performing an unshare. We prefer a granular approach. LSM BPF seems like a
-> > > > > good choice.
-> > > >
-> > > > I am quite puzzled why doesn't /proc/sys/user/max_user_namespaces work
-> > > > for you?
-> > > >
-> > >
-> > > We have the following requirements:
-> > >
-> > > 1. Allow list criteria
-> > > 2. root user must be able to create namespaces whenever
-> > > 3. Everything else not in 1 & 2 must be denied
-> > >
-> > > We use per task attributes to determine whether or not we allow/deny the
-> > > current call to unshare().
-> > >
-> > > /proc/sys/user/max_user_namespaces limits are a bit broad for this level of
-> > > detail.
-> > >
-> > > > > Because LSM BPF exposes these hooks, we should probably treat them as an
-> > > > > API. From that perspective, userspace expects unshare to return a EPERM
-> > > > > when the call is denied permissions.
-> > > >
-> > > > The BPF code gets to be treated as a out of tree kernel module.
-> > > >
-> > > > > > Without an in-tree user that cares it is probably better to go the
-> > > > > > opposite direction and remove the possibility of return anything but
-> > > > > > memory allocation failure.  That will make it clearer to implementors
-> > > > > > that a general error code is not supported and this is not a location
-> > > > > > to implement policy, this is only a hook to allocate state for the LSM.
-> > > > > >
-> > > > >
-> > > > > That's a good point, and it's possible we're using the wrong hook for the
-> > > > > policy. Do you know of other hooks we can look into?
-> >
-> > Fwiw, from this commit it wasn't very clear what you wanted to achieve
-> > with this. It might be worth considering adding a new security hook for
-> > this. Within msft it recently came up SELinux might have an interest in
-> > something like this as well.
->
-> Just to clarify things a bit, I believe SELinux would have an interest
-> in a LSM hook capable of implementing an access control point for user
-> namespaces regardless of Microsoft's current needs.  I suspect due to
-> the security relevant nature of user namespaces most other LSMs would
-> be interested as well; it seems like a well crafted hook would be
-> welcome by most folks I think.
->
-> --
-> paul-moore.com
+From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
 
-Just to get the full picture: is there actually a good reason not to
-make this hook support this scenario? I understand it was not
-originally intended for this, but it is well positioned in the code,
-covers multiple subsystems (not only user namespaces), doesn't require
-changing the LSM interface and it already does the job - just the
-kernel internals need to respect the error code better. What bad
-things can happen if we extend its use case to not only allocate
-resources in LSMs?
+perf stat already has the "--cputype" option to enable events only on the
+specified PMU for the hybrid platform, this commit extends the "--cputype"
+support to perf record.
 
-After all, the original Linus email introducing Linux stated that
-Linux was not intended to be a great OS, but here we are :)
+Without "--cputype", it reports events for both cpu_core and cpu_atom.
 
-Ignat
+ # ./perf record  -e cycles -a sleep 1 | ./perf report
+
+ # To display the perf.data header info, please use --header/--header-only options.
+ #
+ [ perf record: Woken up 1 times to write data ]
+ [ perf record: Captured and wrote 0.000 MB (null) ]
+ #
+ # Total Lost Samples: 0
+ #
+ # Samples: 335  of event 'cpu_core/cycles/'
+ # Event count (approx.): 35855267
+ #
+ # Overhead  Command          Shared Object      Symbol
+ # ........  ...............  .................  .........................................
+ #
+     10.31%  swapper          [kernel.kallsyms]  [k] poll_idle
+      9.42%  swapper          [kernel.kallsyms]  [k] menu_select
+      ...    ...               ...               ... ...
+
+ # Samples: 61  of event 'cpu_atom/cycles/'
+ # Event count (approx.): 16453825
+ #
+ # Overhead  Command        Shared Object      Symbol
+ # ........  .............  .................  ......................................
+ #
+     26.36%  snapd          [unknown]          [.] 0x0000563cc6d03841
+      7.43%  migration/13   [kernel.kallsyms]  [k] update_sd_lb_stats.constprop.0
+      ...    ...            ...                ... ...
+
+With "--cputype", it reports events only for the specified PMU.
+
+ # ./perf record --cputype core  -e cycles -a sleep 1 | ./perf report
+
+ # To display the perf.data header info, please use --header/--header-only options.
+ #
+ [ perf record: Woken up 1 times to write data ]
+ [ perf record: Captured and wrote 0.000 MB (null) ]
+ #
+ # Total Lost Samples: 0
+ #
+ # Samples: 221  of event 'cpu_core/cycles/'
+ # Event count (approx.): 27121818
+ #
+ # Overhead  Command          Shared Object      Symbol
+ # ........  ...............  .................  .........................................
+ #
+     11.24%  swapper          [kernel.kallsyms]  [k] e1000_irq_enable
+      7.77%  swapper          [kernel.kallsyms]  [k] mwait_idle_with_hints.constprop.0
+      ...    ...              ...                ... ...
+
+Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+---
+ tools/perf/Documentation/perf-record.txt |  4 ++++
+ tools/perf/builtin-record.c              |  3 +++
+ tools/perf/builtin-stat.c                | 20 --------------------
+ tools/perf/util/pmu-hybrid.c             | 19 +++++++++++++++++++
+ tools/perf/util/pmu-hybrid.h             |  2 ++
+ 5 files changed, 28 insertions(+), 20 deletions(-)
+
+diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+index cf8ad50f3de1..ba8d680da1ac 100644
+--- a/tools/perf/Documentation/perf-record.txt
++++ b/tools/perf/Documentation/perf-record.txt
+@@ -402,6 +402,10 @@ Enable weightened sampling. An additional weight is recorded per sample and can
+ displayed with the weight and local_weight sort keys.  This currently works for TSX
+ abort events and some memory events in precise mode on modern Intel CPUs.
+ 
++--cputype::
++Only enable events on applying cpu with this type for hybrid platform(e.g. core or atom).
++For non-hybrid events, it should be no effect.
++
+ --namespaces::
+ Record events of type PERF_RECORD_NAMESPACES.  This enables 'cgroup_id' sort key.
+ 
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index 9a71f0330137..e1edd4e98358 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -3183,6 +3183,9 @@ static struct option __record_options[] = {
+ 	OPT_INCR('v', "verbose", &verbose,
+ 		    "be more verbose (show counter open errors, etc)"),
+ 	OPT_BOOLEAN('q', "quiet", &quiet, "don't print any message"),
++	OPT_CALLBACK(0, "cputype", &record.evlist, "hybrid cpu type",
++		     "Only enable events on applying cpu with this type for hybrid platform (e.g. core or atom)",
++		     parse_hybrid_type),
+ 	OPT_BOOLEAN('s', "stat", &record.opts.inherit_stat,
+ 		    "per thread counts"),
+ 	OPT_BOOLEAN('d', "data", &record.opts.sample_address, "Record the sample addresses"),
+diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+index 4ce87a8eb7d7..0d95b29273f4 100644
+--- a/tools/perf/builtin-stat.c
++++ b/tools/perf/builtin-stat.c
+@@ -1184,26 +1184,6 @@ static int parse_stat_cgroups(const struct option *opt,
+ 	return parse_cgroups(opt, str, unset);
+ }
+ 
+-static int parse_hybrid_type(const struct option *opt,
+-			     const char *str,
+-			     int unset __maybe_unused)
+-{
+-	struct evlist *evlist = *(struct evlist **)opt->value;
+-
+-	if (!list_empty(&evlist->core.entries)) {
+-		fprintf(stderr, "Must define cputype before events/metrics\n");
+-		return -1;
+-	}
+-
+-	evlist->hybrid_pmu_name = perf_pmu__hybrid_type_to_pmu(str);
+-	if (!evlist->hybrid_pmu_name) {
+-		fprintf(stderr, "--cputype %s is not supported!\n", str);
+-		return -1;
+-	}
+-
+-	return 0;
+-}
+-
+ static struct option stat_options[] = {
+ 	OPT_BOOLEAN('T', "transaction", &transaction_run,
+ 		    "hardware transaction statistics"),
+diff --git a/tools/perf/util/pmu-hybrid.c b/tools/perf/util/pmu-hybrid.c
+index f51ccaac60ee..5c490b5201b7 100644
+--- a/tools/perf/util/pmu-hybrid.c
++++ b/tools/perf/util/pmu-hybrid.c
+@@ -13,6 +13,7 @@
+ #include <stdarg.h>
+ #include <locale.h>
+ #include <api/fs/fs.h>
++#include "util/evlist.h"
+ #include "fncache.h"
+ #include "pmu-hybrid.h"
+ 
+@@ -87,3 +88,21 @@ char *perf_pmu__hybrid_type_to_pmu(const char *type)
+ 	free(pmu_name);
+ 	return NULL;
+ }
++
++int parse_hybrid_type(const struct option *opt, const char *str, int unset __maybe_unused)
++{
++	struct evlist *evlist = *(struct evlist **)opt->value;
++
++	if (!list_empty(&evlist->core.entries)) {
++		fprintf(stderr, "Must define cputype before events/metrics\n");
++		return -1;
++	}
++
++	evlist->hybrid_pmu_name = perf_pmu__hybrid_type_to_pmu(str);
++	if (!evlist->hybrid_pmu_name) {
++		fprintf(stderr, "--cputype %s is not supported!\n", str);
++		return -1;
++	}
++
++	return 0;
++}
+diff --git a/tools/perf/util/pmu-hybrid.h b/tools/perf/util/pmu-hybrid.h
+index 2b186c26a43e..26101f134a3a 100644
+--- a/tools/perf/util/pmu-hybrid.h
++++ b/tools/perf/util/pmu-hybrid.h
+@@ -5,6 +5,7 @@
+ #include <linux/perf_event.h>
+ #include <linux/compiler.h>
+ #include <linux/list.h>
++#include <subcmd/parse-options.h>
+ #include <stdbool.h>
+ #include "pmu.h"
+ 
+@@ -18,6 +19,7 @@ bool perf_pmu__hybrid_mounted(const char *name);
+ struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name);
+ bool perf_pmu__is_hybrid(const char *name);
+ char *perf_pmu__hybrid_type_to_pmu(const char *type);
++int parse_hybrid_type(const struct option *opt, const char *str, int unset __maybe_unused);
+ 
+ static inline int perf_pmu__hybrid_pmu_num(void)
+ {
+-- 
+2.25.1
+

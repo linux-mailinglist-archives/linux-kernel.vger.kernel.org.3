@@ -2,151 +2,302 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F6CF54D098
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B22D54D0A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350196AbiFOSDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 14:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46382 "EHLO
+        id S1358286AbiFOSGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 14:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349342AbiFOSDI (ORCPT
+        with ESMTP id S1358274AbiFOSGL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:03:08 -0400
-Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2914525EB7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:03:07 -0700 (PDT)
-Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-10113b4c2b5so15833032fac.6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:03:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=t06Whp8J1p63OOXUI0W1zpEYnP4NO86mmZ4mk1dCZBM=;
-        b=YvcDqM7MBtAzPErRZDMbs6OrvTj+QYa+beHr6a1/MPFMs36i4IHHwhi/HrIonOHZ5B
-         hAUWJL3EbN6PE/e8P4Z81X6QJIsNKjUjHq19oEJRFL71hOOBmhYR+56JNNHhAWSN505e
-         Nz/TMvVRs9UNYU48UyVN9DOAZQ90/tRCME+jo9JP1s89FnySs++DfspxfIqCKmzeGvQ+
-         c3/JaoohIEjh16DUNRuaWmdkgUVAZYJ+3hmyBoaLBWEni6QCiIzg8W7Ps3Moz17GYXDX
-         hORteutp7s4Wt1czjZDn+3iZMk9sBrTpR6ZxA5go2qgomPRSoP5I2UfKO3mLRTKU1mBQ
-         UUMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=t06Whp8J1p63OOXUI0W1zpEYnP4NO86mmZ4mk1dCZBM=;
-        b=t6EAQ5TuxZS0GeA3axToldXvHgkkm0X61VS4j9f4I8LoE4tEwosiJ7mm40+cZ3X/Xg
-         wWspZufV+xNeI4eBSFZGCoLLa7i5trAR3RZR45TqivWwACCnDOaGmlXlJjt+MpL2WPGb
-         Bzd/PXurkmD35TYaNICUXVQmUFRMu9+j9T7QBJLI88FdHGUFOMlKDBA2vfN3nRDc0Hl6
-         RxiCvAxQsAXLq83SMgR9mOo22B49SSr5Blq/xZEImV2vJKLU0YWQcUDkdBFvaYSjlS3B
-         kbt8Pn6I0jGQsMhhqxWctEXgsdNIkHgBMJc8wqkklWhbBaNoss6aOKecgdvrKLUjX7Iw
-         Qdow==
-X-Gm-Message-State: AJIora+Zi0cu2Fzy29+ErZyagggJ4e4iNdb9dEc6aWq3NCzUNC42tMrb
-        n33r1Cbvl73mnwyL8yD2DAqUXA==
-X-Google-Smtp-Source: AGRyM1tzJ8Etjk9NLHG0a4rnjXGH2j3pVNbLOrclTtBfeP2QVF6H/r8tCJsVdlCCmanAzxOmg7ofJw==
-X-Received: by 2002:a05:6870:73cc:b0:f5:ff37:ab8e with SMTP id a12-20020a05687073cc00b000f5ff37ab8emr6016895oan.153.1655316186084;
-        Wed, 15 Jun 2022 11:03:06 -0700 (PDT)
-Received: from [192.168.11.16] (cpe-173-173-107-246.satx.res.rr.com. [173.173.107.246])
-        by smtp.gmail.com with ESMTPSA id q15-20020a056830232f00b0060c030fae2asm6385436otg.54.2022.06.15.11.03.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 11:03:05 -0700 (PDT)
-Message-ID: <0eb804a6-050e-5f69-48bb-27a8c41da108@kali.org>
-Date:   Wed, 15 Jun 2022 13:03:03 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.10.0
-Subject: Re: [PATCH 1/2] drm/msm: Drop update_fences()
-Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Wed, 15 Jun 2022 14:06:11 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA1F53712;
+        Wed, 15 Jun 2022 11:06:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655316369; x=1686852369;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=oml5B62dn7UDV1+g+16PPIzyQLSPNDYzBKpji+5qvnM=;
+  b=VwkoSZpRk3mlYo+rB0ZdTrdMc161nRtlSx0/NRXPUuSHhsZbFWSu0eGp
+   dHokMSLFN0ke1F3dDLcyL9c1Eoyy678P3sGdaKRQUA1oO5wSLxEJENnmD
+   CS3Ki0iitVmwtstl3IwedY4nenWchybtt8DIOXvatFDoBHzKCLY52D0TM
+   wFRxS+4sigG2ly2/tDXlPC8rb/r3f30+F+F05Qwv073+KOGu3d5vrtKcb
+   Y8LMRHjZo7V85alFGkec5V2WZySNzWFwkOhXsMJbzUL2lrXqhXs08ejlU
+   gtbTQv0GnQeDV9uH7mpwDw9eLMfI7lQd6vfwoU/ZyumA0ccTTN+PJMEBi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="304494466"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="304494466"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 11:03:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="713056955"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 15 Jun 2022 11:03:25 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1XMS-000N53-Vw;
+        Wed, 15 Jun 2022 18:03:24 +0000
+Date:   Thu, 16 Jun 2022 02:03:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
+        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
+        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
+        Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
         Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220615150107.2969593-1-robdclark@gmail.com>
-From:   Steev Klimaszewski <steev@kali.org>
-In-Reply-To: <20220615150107.2969593-1-robdclark@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Airlie <airlied@linux.ie>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        michal.winiarski@intel.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com
+Cc:     kbuild-all@lists.01.org,
+        =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 05/10] drm: selftest: convert drm_format selftest to KUnit
+Message-ID: <202206160150.au7H8kxK-lkp@intel.com>
+References: <20220615135824.15522-6-maira.canal@usp.br>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220615135824.15522-6-maira.canal@usp.br>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi "Maíra,
 
-On 6/15/22 10:01 AM, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
->
-> I noticed while looking at some traces, that we could miss calls to
-> msm_update_fence(), as the irq could have raced with retire_submits()
-> which could have already popped the last submit on a ring out of the
-> queue of in-flight submits.  But walking the list of submits in the
-> irq handler isn't really needed, as dma_fence_is_signaled() will dtrt.
-> So lets just drop it entirely.
->
-> Reported-by: Steev Klimaszewski <steev@kali.org>
-> Fixes: 95d1deb02a9c ("drm/msm/gem: Add fenced vma unpin")
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->   drivers/gpu/drm/msm/msm_gpu.c | 22 ++--------------------
->   1 file changed, 2 insertions(+), 20 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-> index e59a757578df..b61078f0cd0f 100644
-> --- a/drivers/gpu/drm/msm/msm_gpu.c
-> +++ b/drivers/gpu/drm/msm/msm_gpu.c
-> @@ -176,24 +176,6 @@ int msm_gpu_hw_init(struct msm_gpu *gpu)
->   	return ret;
->   }
->   
-> -static void update_fences(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
-> -		uint32_t fence)
-> -{
-> -	struct msm_gem_submit *submit;
-> -	unsigned long flags;
-> -
-> -	spin_lock_irqsave(&ring->submit_lock, flags);
-> -	list_for_each_entry(submit, &ring->submits, node) {
-> -		if (fence_after(submit->seqno, fence))
-> -			break;
-> -
-> -		msm_update_fence(submit->ring->fctx,
-> -			submit->hw_fence->seqno);
-> -		dma_fence_signal(submit->hw_fence);
-> -	}
-> -	spin_unlock_irqrestore(&ring->submit_lock, flags);
-> -}
-> -
->   #ifdef CONFIG_DEV_COREDUMP
->   static ssize_t msm_gpu_devcoredump_read(char *buffer, loff_t offset,
->   		size_t count, void *data, size_t datalen)
-> @@ -450,7 +432,7 @@ static void recover_worker(struct kthread_work *work)
->   		if (ring == cur_ring)
->   			fence++;
->   
-> -		update_fences(gpu, ring, fence);
-> +		msm_update_fence(ring->fctx, fence);
->   	}
->   
->   	if (msm_gpu_active(gpu)) {
-> @@ -753,7 +735,7 @@ void msm_gpu_retire(struct msm_gpu *gpu)
->   	int i;
->   
->   	for (i = 0; i < gpu->nr_rings; i++)
-> -		update_fences(gpu, gpu->rb[i], gpu->rb[i]->memptrs->fence);
-> +		msm_update_fence(gpu->rb[i]->fctx, gpu->rb[i]->memptrs->fence);
->   
->   	kthread_queue_work(gpu->worker, &gpu->retire_work);
->   	update_sw_cntrs(gpu);
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on linus/master v5.19-rc2 next-20220615]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ma-ra-Canal/drm-selftest-Convert-to-KUnit/20220615-220404
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220616/202206160150.au7H8kxK-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/ab0435b88de6bc132f814d07fce5bf1f964da00c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ma-ra-Canal/drm-selftest-Convert-to-KUnit/20220615-220404
+        git checkout ab0435b88de6bc132f814d07fce5bf1f964da00c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/tests/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/gpu/drm/tests/test-drm_format.c: In function 'igt_check_drm_format_min_pitch':
+>> drivers/gpu/drm/tests/test-drm_format.c:268:1: warning: the frame size of 2572 bytes is larger than 2048 bytes [-Wframe-larger-than=]
+     268 | }
+         | ^
 
 
-Tested on the Lenovo Yoga C630
+vim +268 drivers/gpu/drm/tests/test-drm_format.c
 
-Tested-by: Steev Klimaszewski <steev@kali.org>
+    90	
+    91	static void igt_check_drm_format_min_pitch(struct kunit *test)
+    92	{
+    93		const struct drm_format_info *info = NULL;
+    94	
+    95		/* Test invalid arguments */
+    96		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
+    97		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
+    98		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
+    99	
+   100		/* Test 1 plane 8 bits per pixel format */
+   101		info = drm_format_info(DRM_FORMAT_RGB332);
+   102		KUNIT_EXPECT_TRUE(test, info);
+   103		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
+   104		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
+   105		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
+   106	
+   107		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 1);
+   108		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 2);
+   109		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 640);
+   110		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 1024);
+   111		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 1920);
+   112		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 4096);
+   113		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 671);
+   114		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
+   115				(uint64_t)UINT_MAX);
+   116		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
+   117				(uint64_t)(UINT_MAX - 1));
+   118	
+   119		/* Test 1 plane 16 bits per pixel format */
+   120		info = drm_format_info(DRM_FORMAT_XRGB4444);
+   121		KUNIT_EXPECT_TRUE(test, info);
+   122		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
+   123		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
+   124		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
+   125	
+   126		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 2);
+   127		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 4);
+   128		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 1280);
+   129		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 2048);
+   130		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 3840);
+   131		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 8192);
+   132		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 1342);
+   133		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
+   134				(uint64_t)UINT_MAX * 2);
+   135		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
+   136				(uint64_t)(UINT_MAX - 1) * 2);
+   137	
+   138		/* Test 1 plane 24 bits per pixel format */
+   139		info = drm_format_info(DRM_FORMAT_RGB888);
+   140		KUNIT_EXPECT_TRUE(test, info);
+   141		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
+   142		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
+   143		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
+   144	
+   145		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 3);
+   146		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 6);
+   147		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 1920);
+   148		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 3072);
+   149		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 5760);
+   150		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 12288);
+   151		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 2013);
+   152		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
+   153				(uint64_t)UINT_MAX * 3);
+   154		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
+   155				(uint64_t)(UINT_MAX - 1) * 3);
+   156	
+   157		/* Test 1 plane 32 bits per pixel format */
+   158		info = drm_format_info(DRM_FORMAT_ABGR8888);
+   159		KUNIT_EXPECT_TRUE(test, info);
+   160		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
+   161		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
+   162		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
+   163	
+   164		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 4);
+   165		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 8);
+   166		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 2560);
+   167		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 4096);
+   168		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 7680);
+   169		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 16384);
+   170		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 2684);
+   171		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
+   172				(uint64_t)UINT_MAX * 4);
+   173		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
+   174				(uint64_t)(UINT_MAX - 1) * 4);
+   175	
+   176		/* Test 2 planes format */
+   177		info = drm_format_info(DRM_FORMAT_NV12);
+   178		KUNIT_EXPECT_TRUE(test, info);
+   179		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
+   180		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
+   181		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
+   182		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 2, 0));
+   183	
+   184		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 1);
+   185		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 1), 2);
+   186		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 2);
+   187		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 1), 2);
+   188		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 640);
+   189		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 320), 640);
+   190		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 1024);
+   191		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 512), 1024);
+   192		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 1920);
+   193		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 960), 1920);
+   194		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 4096);
+   195		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 2048), 4096);
+   196		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 671);
+   197		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 336), 672);
+   198		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
+   199				(uint64_t)UINT_MAX);
+   200		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, UINT_MAX / 2 + 1),
+   201				(uint64_t)UINT_MAX + 1);
+   202		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1)),
+   203				(uint64_t)(UINT_MAX - 1));
+   204		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, (UINT_MAX - 1) /  2),
+   205				(uint64_t)(UINT_MAX - 1));
+   206	
+   207		/* Test 3 planes 8 bits per pixel format */
+   208		info = drm_format_info(DRM_FORMAT_YUV422);
+   209		KUNIT_EXPECT_TRUE(test, info);
+   210		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
+   211		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
+   212		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 2, 0));
+   213		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
+   214		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 3, 0));
+   215	
+   216		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 1);
+   217		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 1), 1);
+   218		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 1), 1);
+   219		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 2);
+   220		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 2), 2);
+   221		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 2), 2);
+   222		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 640);
+   223		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 320), 320);
+   224		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 320), 320);
+   225		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 1024);
+   226		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 512), 512);
+   227		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 512), 512);
+   228		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 1920);
+   229		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 960), 960);
+   230		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 960), 960);
+   231		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 4096);
+   232		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 2048), 2048);
+   233		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 2048), 2048);
+   234		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 671);
+   235		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, 336), 336);
+   236		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, 336), 336);
+   237		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
+   238				(uint64_t)UINT_MAX);
+   239		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, UINT_MAX / 2 + 1),
+   240				(uint64_t)UINT_MAX / 2 + 1);
+   241		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, UINT_MAX / 2 + 1),
+   242				(uint64_t)UINT_MAX / 2 + 1);
+   243		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, (UINT_MAX - 1) / 2),
+   244				(uint64_t)(UINT_MAX - 1) / 2);
+   245		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 1, (UINT_MAX - 1) / 2),
+   246				(uint64_t)(UINT_MAX - 1) / 2);
+   247		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 2, (UINT_MAX - 1) / 2),
+   248				(uint64_t)(UINT_MAX - 1) / 2);
+   249	
+   250		/* Test tiled format */
+   251		info = drm_format_info(DRM_FORMAT_X0L2);
+   252		KUNIT_EXPECT_TRUE(test, info);
+   253		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 0, 0));
+   254		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, -1, 0));
+   255		KUNIT_EXPECT_FALSE(test, drm_format_info_min_pitch(info, 1, 0));
+   256	
+   257		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1), 2);
+   258		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 2), 4);
+   259		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 640), 1280);
+   260		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1024), 2048);
+   261		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 1920), 3840);
+   262		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 4096), 8192);
+   263		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, 671), 1342);
+   264		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX),
+   265				(uint64_t)UINT_MAX * 2);
+   266		KUNIT_EXPECT_EQ(test, drm_format_info_min_pitch(info, 0, UINT_MAX - 1),
+   267				(uint64_t)(UINT_MAX - 1) * 2);
+ > 268	}
+   269	
 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

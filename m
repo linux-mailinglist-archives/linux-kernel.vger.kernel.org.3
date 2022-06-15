@@ -2,113 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7FA54BF56
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 03:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26A154BF5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 03:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244589AbiFOBj0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 21:39:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
+        id S240009AbiFOBlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 21:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238027AbiFOBjP (ORCPT
+        with ESMTP id S232340AbiFOBlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 21:39:15 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 055A633A25
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 18:39:09 -0700 (PDT)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP046OKliBLNCAA--.5517S4;
-        Wed, 15 Jun 2022 09:39:08 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>
-Cc:     Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>, Jun Yi <yijun@loongson.cn>,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/2] LoongArch: No need to call RESTORE_ALL_AND_RET for all syscalls
-Date:   Wed, 15 Jun 2022 09:39:05 +0800
-Message-Id: <1655257145-24140-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1655257145-24140-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1655257145-24140-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf9DxP046OKliBLNCAA--.5517S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF1rXw4UCF47tr1xur4kJFb_yoW8WFW7p3
-        ZrZFn7tr40gr93A34ayryxurZFyanrGa129FsFkryruw1kXr98ZFyvva4DtF12yw48KrW0
-        ga4rGwnIgFyUXwUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUBv14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jryl82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4U
-        JwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_KwCF04
-        k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18
-        MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr4
-        1lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l
-        IxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4
-        A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU7nYwUUUUU=
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 14 Jun 2022 21:41:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E3B992EA03
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 18:41:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655257295;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Tjo7rOXFgcmcCqbuVi40NzVO+eoWKTNwC6WBHBvxqjA=;
+        b=aHMUHpFye5gClM9ExNn3egqUSLdsrtBJY7+0TX8yYT72t9p6tq00eFYlwCGqDcg8LTHheb
+        miVH7tMRVhF8LiUPivga15vY2aOnZZkTsFxTSnY0lxDygIfFQRKSC1N1O8FslviV+vl00V
+        MlkBuDwg25szkPyLgra4Qv3hDhi2RLY=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-125-EDB-UyjuPS6i7BCBEXcYng-1; Tue, 14 Jun 2022 21:41:31 -0400
+X-MC-Unique: EDB-UyjuPS6i7BCBEXcYng-1
+Received: by mail-lf1-f69.google.com with SMTP id p36-20020a05651213a400b004779d806c13so5327029lfa.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 18:41:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Tjo7rOXFgcmcCqbuVi40NzVO+eoWKTNwC6WBHBvxqjA=;
+        b=eD6kDZjG/XgyI6GFPPBc2spm/gN881j0JDArd31pNS3VOPYOTp3MnA622GJSIDmtMW
+         nLPrYDNl+LdCek3dLTAKkom73n++ThQeA+88Vw/VPnA2eu3hP1H0mcVykw8lTA9h8j9g
+         88eGSsgNKfCsDxN3f0fA/vgLZgIHIq39TP2Q6QJIFd087QGddacnnSMeP/X/ZZa/ddvD
+         5JV6Gp80O3JrERHdaCpuobMOD2kbgsMvxZanW54EXZ3HY1BdIlXzBpF9vdKhqu/iNpg1
+         IUcrvq1X9kZmiJZ64kl++w6XgJTgd6ch2HrKiIPAbNMFx1RzVIrE7YAzfdx+SpRPgznK
+         Nlag==
+X-Gm-Message-State: AOAM533O83vOSU+YjbMVtU/xvJuqMWjBnvXQvQxpqcujY3eAqBL87isi
+        jqLpZeRulEzSMsxtOO40l0p3SLCXrHDU2mrfaXow2CRbmJFaLxe+noRrUNXLNTxW3dgoCuhDiuh
+        +XUjtBQkPX1nOpg0xriLwLRTNL+1mrTpUWMDQ22NI
+X-Received: by 2002:a05:6512:5cc:b0:47a:bf7:f1ab with SMTP id o12-20020a05651205cc00b0047a0bf7f1abmr4782678lfo.397.1655257289803;
+        Tue, 14 Jun 2022 18:41:29 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tDV4hBFtKl8kADWcRc+MNJ9+9+kb+tRZy9v8Ps88kwY81XvKzLZe8MX1RGaJY/cunkIjz4qJ9rGU/f6NhQ3Q4=
+X-Received: by 2002:a05:6512:5cc:b0:47a:bf7:f1ab with SMTP id
+ o12-20020a05651205cc00b0047a0bf7f1abmr4782662lfo.397.1655257289594; Tue, 14
+ Jun 2022 18:41:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <CACGkMEtRP+0Xy63g0SF_y1avv=3rFv6P9+Z7kp9XBS5d+_py8w@mail.gmail.com>
+ <20220613023337-mutt-send-email-mst@kernel.org> <CACGkMEs05ZisiPW+7H6Omp80MzmZWZCpc1mf5Vd99C3H-KUtgA@mail.gmail.com>
+ <20220613041416-mutt-send-email-mst@kernel.org> <CACGkMEsT_fWdPxN1cTWOX=vu-ntp3Xo4j46-ZKALeSXr7DmJFQ@mail.gmail.com>
+ <20220613045606-mutt-send-email-mst@kernel.org> <CACGkMEtAQck7Nr6SP_pD0MGT3njnwZSyT=xPyYzUU3c5GNNM_w@mail.gmail.com>
+ <CACGkMEvUFJkC=mnvL2PSH6-3RMcJUk84f-9X46JVcj2vTAr4SQ@mail.gmail.com>
+ <20220613052644-mutt-send-email-mst@kernel.org> <CACGkMEstGvhETXThuwO+tLVBuRgQb8uC_6DdAM8ZxOi5UKBRbg@mail.gmail.com>
+ <Yqi7UhasBDPKCpuV@e120937-lin>
+In-Reply-To: <Yqi7UhasBDPKCpuV@e120937-lin>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Wed, 15 Jun 2022 09:41:18 +0800
+Message-ID: <CACGkMEv2A7ZHQTrdg9H=xZScAf2DE=Dguaz60ykd4KQGNLrn2Q@mail.gmail.com>
+Subject: Re: [PATCH V6 8/9] virtio: harden vring IRQ
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-s390@vger.kernel.org, conghui.chen@intel.com,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        netdev <netdev@vger.kernel.org>, pankaj.gupta.linux@gmail.com,
+        sudeep.holla@arm.com, Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In handle_syscall, it is unnecessary to call RESTORE_ALL_AND_RET for all
-syscalls, clone and clone3 should call RESTORE_STATIC_SOME_AND_RET, and
-the other syscalls should call RESTORE_SOME_AND_RET.
+On Wed, Jun 15, 2022 at 12:46 AM Cristian Marussi
+<cristian.marussi@arm.com> wrote:
+>
+> On Tue, Jun 14, 2022 at 03:40:21PM +0800, Jason Wang wrote:
+> > On Mon, Jun 13, 2022 at 5:28 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > >
+>
+> Hi Jason,
+>
+> > > On Mon, Jun 13, 2022 at 05:14:59PM +0800, Jason Wang wrote:
+> > > > On Mon, Jun 13, 2022 at 5:08 PM Jason Wang <jasowang@redhat.com> wrote:
+> > > > >
+> > > > > On Mon, Jun 13, 2022 at 4:59 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > >
+> > > > > > On Mon, Jun 13, 2022 at 04:51:08PM +0800, Jason Wang wrote:
+> > > > > > > On Mon, Jun 13, 2022 at 4:19 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > >
+> > > > > > > > On Mon, Jun 13, 2022 at 04:07:09PM +0800, Jason Wang wrote:
+> > > > > > > > > On Mon, Jun 13, 2022 at 3:23 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > > > >
+> > > > > > > > > > On Mon, Jun 13, 2022 at 01:26:59PM +0800, Jason Wang wrote:
+> > > > > > > > > > > On Sat, Jun 11, 2022 at 1:12 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > > > > > > > > > >
+> > > > > > > > > > > > On Fri, May 27, 2022 at 02:01:19PM +0800, Jason Wang wrote:
+> > > > > > > > > > > > > This is a rework on the previous IRQ hardening that is done for
+> > > > > > > > > > > > > virtio-pci where several drawbacks were found and were reverted:
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > 1) try to use IRQF_NO_AUTOEN which is not friendly to affinity managed IRQ
+> > > > > > > > > > > > >    that is used by some device such as virtio-blk
+> > > > > > > > > > > > > 2) done only for PCI transport
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > The vq->broken is re-used in this patch for implementing the IRQ
+> > > > > > > > > > > > > hardening. The vq->broken is set to true during both initialization
+> > > > > > > > > > > > > and reset. And the vq->broken is set to false in
+> > > > > > > > > > > > > virtio_device_ready(). Then vring_interrupt() can check and return
+> > > > > > > > > > > > > when vq->broken is true. And in this case, switch to return IRQ_NONE
+> > > > > > > > > > > > > to let the interrupt core aware of such invalid interrupt to prevent
+> > > > > > > > > > > > > IRQ storm.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > The reason of using a per queue variable instead of a per device one
+> > > > > > > > > > > > > is that we may need it for per queue reset hardening in the future.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Note that the hardening is only done for vring interrupt since the
+> > > > > > > > > > > > > config interrupt hardening is already done in commit 22b7050a024d7
+> > > > > > > > > > > > > ("virtio: defer config changed notifications"). But the method that is
+> > > > > > > > > > > > > used by config interrupt can't be reused by the vring interrupt
+> > > > > > > > > > > > > handler because it uses spinlock to do the synchronization which is
+> > > > > > > > > > > > > expensive.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > Cc: Thomas Gleixner <tglx@linutronix.de>
+> > > > > > > > > > > > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > > > > > > > > > > > Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> > > > > > > > > > > > > Cc: Marc Zyngier <maz@kernel.org>
+> > > > > > > > > > > > > Cc: Halil Pasic <pasic@linux.ibm.com>
+> > > > > > > > > > > > > Cc: Cornelia Huck <cohuck@redhat.com>
+> > > > > > > > > > > > > Cc: Vineeth Vijayan <vneethv@linux.ibm.com>
+> > > > > > > > > > > > > Cc: Peter Oberparleiter <oberpar@linux.ibm.com>
+> > > > > > > > > > > > > Cc: linux-s390@vger.kernel.org
+> > > > > > > > > > > > > Signed-off-by: Jason Wang <jasowang@redhat.com>
+> > > > > > > > > > > >
+> > > > > > > > > > > >
+> > > > > > > > > > > > Jason, I am really concerned by all the fallout.
+> > > > > > > > > > > > I propose adding a flag to suppress the hardening -
+> > > > > > > > > > > > this will be a debugging aid and a work around for
+> > > > > > > > > > > > users if we find more buggy drivers.
+> > > > > > > > > > > >
+> > > > > > > > > > > > suppress_interrupt_hardening ?
+> > > > > > > > > > >
+> > > > > > > > > > > I can post a patch but I'm afraid if we disable it by default, it
+> > > > > > > > > > > won't be used by the users so there's no way for us to receive the bug
+> > > > > > > > > > > report. Or we need a plan to enable it by default.
+> > > > > > > > > > >
+> > > > > > > > > > > It's rc2, how about waiting for 1 and 2 rc? Or it looks better if we
+> > > > > > > > > > > simply warn instead of disable it by default.
+> > > > > > > > > > >
+> > > > > > > > > > > Thanks
+> > > > > > > > > >
+> > > > > > > > > > I meant more like a flag in struct virtio_driver.
+> > > > > > > > > > For now, could you audit all drivers which don't call _ready?
+> > > > > > > > > > I found 5 of these:
+> > > > > > > > > >
+> > > > > > > > > > drivers/bluetooth/virtio_bt.c
+> > > > > > > > >
+> > > > > > > > > This driver seems to be fine, it doesn't use the device/vq in its probe().
+> > > > > > > >
+> > > > > > > >
+> > > > > > > > But it calls hci_register_dev and that in turn queues all kind of
+> > > > > > > > work. Also, can linux start using the device immediately after
+> > > > > > > > it's registered?
+> > > > > > >
+> > > > > > > So I think the driver is allowed to queue before DRIVER_OK.
+> > > > > >
+> > > > > > it's not allowed to kick
+> > > > >
+> > > > > Yes.
+> > > > >
+> > > > > >
+> > > > > > > If yes,
+> > > > > > > the only side effect is the delay of the tx interrupt after DRIVER_OK
+> > > > > > > for a well behaved device.
+> > > > > >
+> > > > > > your patches drop the interrupt though, it won't be just delayed.
+> > > > >
+> > > > > For a well behaved device, it can only trigger the interrupt after DRIVER_OK.
+> > > > >
+> > > > > So for virtio bt, it works like:
+> > > > >
+> > > > > 1) driver queue buffer and kick
+> > > > > 2) driver set DRIVER_OK
+> > > > > 3) device start to process the buffer
+> > > > > 4) device send an notification
+> > > > >
+> > > > > The only risk is that the virtqueue could be filled before DRIVER_OK,
+> > > > > or anything I missed?
+> > > >
+> > > > btw, hci has an open and close method and we do rx refill in
+> > > > hdev->open, so we're probably fine here.
+> > > >
+> > > > Thanks
+> > >
+> > >
+> > > Sounds good. Now to audit the rest of them from this POV ;)
+> >
+> > Adding maintainers.
+> >
+> > >
+> > >  drivers/i2c/busses/i2c-virtio.c
+> >
+> > It looks to me the device could be used immediately after
+> > i2c_add_adapter() return. So we probably need to add
+> > virtio_device_ready() before that. Fortunately, there's no rx vq in
+> > i2c and the callback looks safe if the callback is called before the
+> > i2c registration and after virtio_device_ready().
+> >
+> > >  drivers/net/caif/caif_virtio.c
+> >
+> > A networking device, RX is backed by vringh so we don't need to
+> > refill. TX is backed by virtio and is available until ndo_open. So
+> > it's fine to let the core to set DRIVER_OK after probe().
+> >
+> > >  drivers/nvdimm/virtio_pmem.c
+> >
+> > It doesn't use interrupt so far, so it has nothing to do with the IRQ hardening.
+> >
+> > But the device could be used by the subsystem immediately after
+> > nvdimm_pmem_region_create(), this means the flush could be issued
+> > before DRIVER_OK. We need virtio_device_ready() before. We don't have
+> > a RX virtqueue and the callback looks safe if the callback is called
+> > after virtio_device_ready() but before the nvdimm region creating.
+> >
+> > And it looks to me there's a race between the assignment of
+> > provider_data and virtio_pmem_flush(). If the flush was issued before
+> > the assignment we will end up with a NULL pointer dereference. This is
+> > something we need to fix.
+> >
+> > >  arm_scmi
+> >
+> > It looks to me the singleton device could be used by SCMI immediately after
+> >
+> >         /* Ensure initialized scmi_vdev is visible */
+> >         smp_store_mb(scmi_vdev, vdev);
+> >
+> > So we probably need to do virtio_device_ready() before that. It has an
+> > optional rx queue but the filling is done after the above assignment,
+> > so it's safe. And the callback looks safe is a callback is triggered
+> > after virtio_device_ready() buy before the above assignment.
+> >
+>
+> I wanted to give it a go at this series testing it on the context of
+> SCMI but it does not apply
+>
+> - not on a v5.18:
+>
+> 17:33 $ git rebase -i v5.18
+> 17:33 $ git am ./v6_20220527_jasowang_rework_on_the_irq_hardening_of_virtio.mbx
+> Applying: virtio: use virtio_device_ready() in virtio_device_restore()
+> Applying: virtio: use virtio_reset_device() when possible
+> Applying: virtio: introduce config op to synchronize vring callbacks
+> Applying: virtio-pci: implement synchronize_cbs()
+> Applying: virtio-mmio: implement synchronize_cbs()
+> error: patch failed: drivers/virtio/virtio_mmio.c:345
+> error: drivers/virtio/virtio_mmio.c: patch does not apply
+> Patch failed at 0005 virtio-mmio: implement synchronize_cbs()
+>
+> - neither on a v5.19-rc2:
+>
+> 17:33 $ git rebase -i v5.19-rc2
+> 17:35 $ git am ./v6_20220527_jasowang_rework_on_the_irq_hardening_of_virtio.mbx
+> Applying: virtio: use virtio_device_ready() in virtio_device_restore()
+> error: patch failed: drivers/virtio/virtio.c:526
+> error: drivers/virtio/virtio.c: patch does not apply
+> Patch failed at 0001 virtio: use virtio_device_ready() in
+> virtio_device_restore()
+> hint: Use 'git am --show-current-patch=diff' to see the failed patch
+> When you have resolved this problem, run "git am --continue".
+>
+> ... what I should take as base ?
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/include/asm/stackframe.h | 10 ++++++++++
- arch/loongarch/kernel/entry.S           | 12 +++++++++++-
- 2 files changed, 21 insertions(+), 1 deletion(-)
+It should have already been included in rc2, so there's no need to
+apply patch manually.
 
-diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
-index 4ca9530..9869b39 100644
---- a/arch/loongarch/include/asm/stackframe.h
-+++ b/arch/loongarch/include/asm/stackframe.h
-@@ -216,4 +216,14 @@
- 	RESTORE_SP_AND_RET \docfi
- 	.endm
- 
-+	.macro	RESTORE_STATIC_SOME_AND_RET docfi=0
-+	RESTORE_STATIC \docfi
-+	RESTORE_SOME \docfi
-+	RESTORE_SP_AND_RET \docfi
-+	.endm
-+
-+	.macro	RESTORE_SOME_AND_RET docfi=0
-+	RESTORE_SOME \docfi
-+	RESTORE_SP_AND_RET \docfi
-+	.endm
- #endif /* _ASM_STACKFRAME_H */
-diff --git a/arch/loongarch/kernel/entry.S b/arch/loongarch/kernel/entry.S
-index 551b6ec..8176094 100644
---- a/arch/loongarch/kernel/entry.S
-+++ b/arch/loongarch/kernel/entry.S
-@@ -78,7 +78,17 @@ SYM_FUNC_START(handle_syscall)
- 	move	a0, sp
- 	bl	do_syscall
- 
--	RESTORE_ALL_AND_RET
-+	/*
-+	 * Syscall number held in a7.
-+	 * If syscall number is __NR_clone and __NR_clone3, call RESTORE_STATIC_SOME_AND_RET.
-+	 */
-+	li.w	t3, __NR_clone
-+	beq	a7, t3, 3f
-+	li.w	t3, __NR_clone3
-+	beq	a7, t3, 3f
-+	RESTORE_SOME_AND_RET
-+3:
-+	RESTORE_STATIC_SOME_AND_RET
- SYM_FUNC_END(handle_syscall)
- 
- SYM_CODE_START(ret_from_fork)
--- 
-2.1.0
+Thanks
+
+>
+> Thanks,
+> Cristian
+>
 

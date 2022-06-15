@@ -2,46 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E138254C2DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9022854C2DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241944AbiFOHr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 03:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
+        id S243477AbiFOHsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 03:48:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241113AbiFOHrw (ORCPT
+        with ESMTP id S243507AbiFOHsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 03:47:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC8D5E004;
-        Wed, 15 Jun 2022 00:47:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 74B81153B;
-        Wed, 15 Jun 2022 00:47:48 -0700 (PDT)
-Received: from [10.57.38.196] (unknown [10.57.38.196])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4CB3A3F66F;
-        Wed, 15 Jun 2022 00:47:46 -0700 (PDT)
-Message-ID: <21eb45a4-de6c-58f4-6649-4491c00cc464@arm.com>
-Date:   Wed, 15 Jun 2022 08:47:43 +0100
+        Wed, 15 Jun 2022 03:48:08 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47E727B22
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:48:04 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LNHRd1chpz1KB3H;
+        Wed, 15 Jun 2022 15:46:05 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 15 Jun 2022 15:48:02 +0800
+Subject: Re: [PATCH 5/7] mm/khugepaged: use helper macro __ATTR_RW
+To:     Zach O'Keefe <zokeefe@google.com>
+CC:     <akpm@linux-foundation.org>, <aarcange@redhat.com>,
+        <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
+        <neilb@suse.de>, <apopple@nvidia.com>, <david@redhat.com>,
+        <surenb@google.com>, <peterx@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220611084731.55155-1-linmiaohe@huawei.com>
+ <20220611084731.55155-6-linmiaohe@huawei.com> <Yqkn65gGKfQE1Lg1@google.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <c40ba4b2-706e-8e74-7fee-f0f31d38a1ff@huawei.com>
+Date:   Wed, 15 Jun 2022 15:48:01 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 0/4] Thermal cpufreq & devfreq cooling minor clean-ups
+In-Reply-To: <Yqkn65gGKfQE1Lg1@google.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     amitk@kernel.org, rui.zhang@intel.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com, rostedt@goodmis.org,
-        mingo@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220613124327.30766-1-lukasz.luba@arm.com>
- <92f56aed-e6cd-c65b-f42f-5bd1e07b90c5@arm.com>
- <80516a8d-80b2-9c96-3ac8-4f2e6e6e851d@linaro.org>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <80516a8d-80b2-9c96-3ac8-4f2e6e6e851d@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,51 +54,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/14/22 19:26, Daniel Lezcano wrote:
-> On 14/06/2022 14:51, Lukasz Luba wrote:
->> Hi Daniel,
+On 2022/6/15 8:29, Zach O'Keefe wrote:
+> On 11 Jun 16:47, Miaohe Lin wrote:
+>> Use helper macro __ATTR_RW to define the khugepaged attributes. Minor
+>> readability improvement.
+>>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>>  mm/khugepaged.c | 37 +++++++++++++++----------------------
+>>  1 file changed, 15 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+>> index 8e6fad7c7bd9..142e26e4bdbf 100644
+>> --- a/mm/khugepaged.c
+>> +++ b/mm/khugepaged.c
+>> @@ -147,8 +147,7 @@ static ssize_t scan_sleep_millisecs_store(struct kobject *kobj,
+>>  	return count;
+>>  }
+>>  static struct kobj_attribute scan_sleep_millisecs_attr =
+>> -	__ATTR(scan_sleep_millisecs, 0644, scan_sleep_millisecs_show,
+>> -	       scan_sleep_millisecs_store);
+>> +	__ATTR_RW(scan_sleep_millisecs);
+>>  
+>>  static ssize_t alloc_sleep_millisecs_show(struct kobject *kobj,
+>>  					  struct kobj_attribute *attr,
+>> @@ -175,8 +174,7 @@ static ssize_t alloc_sleep_millisecs_store(struct kobject *kobj,
+>>  	return count;
+>>  }
+>>  static struct kobj_attribute alloc_sleep_millisecs_attr =
+>> -	__ATTR(alloc_sleep_millisecs, 0644, alloc_sleep_millisecs_show,
+>> -	       alloc_sleep_millisecs_store);
+>> +	__ATTR_RW(alloc_sleep_millisecs);
+>>  
+>>  static ssize_t pages_to_scan_show(struct kobject *kobj,
+>>  				  struct kobj_attribute *attr,
+>> @@ -200,8 +198,7 @@ static ssize_t pages_to_scan_store(struct kobject *kobj,
+>>  	return count;
+>>  }
+>>  static struct kobj_attribute pages_to_scan_attr =
+>> -	__ATTR(pages_to_scan, 0644, pages_to_scan_show,
+>> -	       pages_to_scan_store);
+>> +	__ATTR_RW(pages_to_scan);
+>>  
+>>  static ssize_t pages_collapsed_show(struct kobject *kobj,
+>>  				    struct kobj_attribute *attr,
+>> @@ -221,13 +218,13 @@ static ssize_t full_scans_show(struct kobject *kobj,
+>>  static struct kobj_attribute full_scans_attr =
+>>  	__ATTR_RO(full_scans);
+>>  
+>> -static ssize_t khugepaged_defrag_show(struct kobject *kobj,
+>> +static ssize_t defrag_show(struct kobject *kobj,
+>>  				      struct kobj_attribute *attr, char *buf)
+>>  {
+>>  	return single_hugepage_flag_show(kobj, attr, buf,
+>>  					 TRANSPARENT_HUGEPAGE_DEFRAG_KHUGEPAGED_FLAG);
+>>  }
+>> -static ssize_t khugepaged_defrag_store(struct kobject *kobj,
+>> +static ssize_t defrag_store(struct kobject *kobj,
+>>  				       struct kobj_attribute *attr,
+>>  				       const char *buf, size_t count)
+>>  {
+>> @@ -235,8 +232,7 @@ static ssize_t khugepaged_defrag_store(struct kobject *kobj,
+>>  				 TRANSPARENT_HUGEPAGE_DEFRAG_KHUGEPAGED_FLAG);
+>>  }
+>>  static struct kobj_attribute khugepaged_defrag_attr =
+>> -	__ATTR(defrag, 0644, khugepaged_defrag_show,
+>> -	       khugepaged_defrag_store);
+>> +	__ATTR_RW(defrag);
+>>  
+>>  /*
+>>   * max_ptes_none controls if khugepaged should collapse hugepages over
+>> @@ -246,13 +242,13 @@ static struct kobj_attribute khugepaged_defrag_attr =
+>>   * runs. Increasing max_ptes_none will instead potentially reduce the
+>>   * free memory in the system during the khugepaged scan.
+>>   */
+>> -static ssize_t khugepaged_max_ptes_none_show(struct kobject *kobj,
+>> +static ssize_t max_ptes_none_show(struct kobject *kobj,
+>>  					     struct kobj_attribute *attr,
+>>  					     char *buf)
+>>  {
+>>  	return sysfs_emit(buf, "%u\n", khugepaged_max_ptes_none);
+>>  }
+>> -static ssize_t khugepaged_max_ptes_none_store(struct kobject *kobj,
+>> +static ssize_t max_ptes_none_store(struct kobject *kobj,
+>>  					      struct kobj_attribute *attr,
+>>  					      const char *buf, size_t count)
+>>  {
+>> @@ -268,17 +264,16 @@ static ssize_t khugepaged_max_ptes_none_store(struct kobject *kobj,
+>>  	return count;
+>>  }
+>>  static struct kobj_attribute khugepaged_max_ptes_none_attr =
+>> -	__ATTR(max_ptes_none, 0644, khugepaged_max_ptes_none_show,
+>> -	       khugepaged_max_ptes_none_store);
+>> +	__ATTR_RW(max_ptes_none);
+>>  
+>> -static ssize_t khugepaged_max_ptes_swap_show(struct kobject *kobj,
+>> +static ssize_t max_ptes_swap_show(struct kobject *kobj,
+>>  					     struct kobj_attribute *attr,
+>>  					     char *buf)
+>>  {
+>>  	return sysfs_emit(buf, "%u\n", khugepaged_max_ptes_swap);
+>>  }
+>>  
+>> -static ssize_t khugepaged_max_ptes_swap_store(struct kobject *kobj,
+>> +static ssize_t max_ptes_swap_store(struct kobject *kobj,
+>>  					      struct kobj_attribute *attr,
+>>  					      const char *buf, size_t count)
+>>  {
+>> @@ -295,17 +290,16 @@ static ssize_t khugepaged_max_ptes_swap_store(struct kobject *kobj,
+>>  }
+>>  
+>>  static struct kobj_attribute khugepaged_max_ptes_swap_attr =
+>> -	__ATTR(max_ptes_swap, 0644, khugepaged_max_ptes_swap_show,
+>> -	       khugepaged_max_ptes_swap_store);
+>> +	__ATTR_RW(max_ptes_swap);
+>>  
+>> -static ssize_t khugepaged_max_ptes_shared_show(struct kobject *kobj,
+>> +static ssize_t max_ptes_shared_show(struct kobject *kobj,
+>>  					       struct kobj_attribute *attr,
+>>  					       char *buf)
+>>  {
+>>  	return sysfs_emit(buf, "%u\n", khugepaged_max_ptes_shared);
+>>  }
+>>  
+>> -static ssize_t khugepaged_max_ptes_shared_store(struct kobject *kobj,
+>> +static ssize_t max_ptes_shared_store(struct kobject *kobj,
+>>  					      struct kobj_attribute *attr,
+>>  					      const char *buf, size_t count)
+>>  {
+>> @@ -322,8 +316,7 @@ static ssize_t khugepaged_max_ptes_shared_store(struct kobject *kobj,
+>>  }
+>>  
+>>  static struct kobj_attribute khugepaged_max_ptes_shared_attr =
+>> -	__ATTR(max_ptes_shared, 0644, khugepaged_max_ptes_shared_show,
+>> -	       khugepaged_max_ptes_shared_store);
+>> +	__ATTR_RW(max_ptes_shared);
+>>  
+>>  static struct attribute *khugepaged_attr[] = {
+>>  	&khugepaged_defrag_attr.attr,
+>> -- 
+>> 2.23.0
 >>
 >>
->> On 6/13/22 13:43, Lukasz Luba wrote:
->>> Hi all,
->>>
->>> This is v2 of some minor clean-ups for the thermal cpufreq and devfreq
->>> cooling code.
->>>
->>> Changes:
->>> v2:
->>> - extened the cpufreq_cooling_device with private ops field, to not 
->>> waste
->>>    memory and simplify allocation/free code (Viresh)
->>> - added devfreq_cooling clean-up to align with cpufreq cooling code
->>> - added ACKs from Viresh for patch 2/4 and path 3/4
->>> - added missing maintainers of tracing to CC list
->>>
->>> Regards,
->>> Lukasz
->>>
->>> Lukasz Luba (4):
->>>    thermal: cpufreq_cooling: Use private callback ops for each cooling
->>>      device
->>>    thermal: cpufreq_cooling : Refactor thermal_power_cpu_get_power
->>>      tracing
->>>    thermal: cpufreq_cooling: Update outdated comments
->>>    thermal: devfreq_cooling: Extend the devfreq_cooling_device with ops
->>>
->>>   drivers/thermal/cpufreq_cooling.c | 77 ++++++++++---------------------
->>>   drivers/thermal/devfreq_cooling.c | 27 ++++-------
->>>   include/trace/events/thermal.h    | 28 ++++-------
->>>   3 files changed, 42 insertions(+), 90 deletions(-)
->>>
->>
->> Could you have a look and take the patches into your tree, please?
->> The 3 of 4 patches got ACKs, the last one is devfreq cooling, which
->> is pretty minor change.
 > 
-> Applied, thanks
+> For function names that changed, can we align args that don't fit on opening
+> line with the opening brace?
+
+Sorry, I forgot to fit on opening line with the opening brace and checkpatch.pl didn't
+complain about it. Will fix these and similar case in another thread. Many thanks for
+your review and comment!
+
 > 
+> Thanks,
+> Zach
+> .
 > 
 
-Thanks Daniel!

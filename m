@@ -2,192 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C07554CC38
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F329A54CC3A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235211AbiFOPJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
+        id S239390AbiFOPKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbiFOPJ3 (ORCPT
+        with ESMTP id S232920AbiFOPKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:09:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA6372409C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:09:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D81C153B;
-        Wed, 15 Jun 2022 08:09:27 -0700 (PDT)
-Received: from [10.57.7.82] (unknown [10.57.7.82])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5E0DA3F7F5;
-        Wed, 15 Jun 2022 08:09:26 -0700 (PDT)
-Message-ID: <da9cca0a-ec5b-2e73-9de0-a930f7d947b2@arm.com>
-Date:   Wed, 15 Jun 2022 16:09:24 +0100
+        Wed, 15 Jun 2022 11:10:13 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2082.outbound.protection.outlook.com [40.107.237.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15E03136A;
+        Wed, 15 Jun 2022 08:10:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cxr2IrYPSL8xTxwKGEcpAW+VXfePKpwO/XIobbDhEWAWxiBwrWSHCUr1IHB9ETaBw2XExB16rBU5M8vbm0w1CXtrqu6I++0/I4r5saS8NpYPXRW2kTtvkVZWvlZcTZ09lEONDPp7ZwtBu17vHs5mecofGQuPnBfB2+YSdiZjuQo5VrNpwwlWRi8iRKAMYm3kIHmX67Zwxb7tgXhOh8+i/wleZXB/fSy19XVag1SCtg6MrUHy68UsEIjKcnmqjZGhKYEQoy1q9GdJRNEUPYcMqsWc6nJEAA2Ww1yBZVPT6rFdWCVGkMYtDnftCuTWZl85YxqEp8Z133Qw/Q6FZ/T9nw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Sb9/To5FprBt50yMAtHhBdm0ff5DnmrhCVTcePy2LLM=;
+ b=mtw09XYI/jPUD57TDOFTUJfaoyVRt9cWGI+d8iYtihXDhoi3yymBFb4/TnJRXixlxahfhFohRosnlOCjLeZ3Y8HyE/lKe1hYSX4Tke1vT/y3rpgw1NAwrHXf7xK1RisW2ntzp8iLZ71zYgXFzeOwRqcWAxyj1e0X+XRAuugbkZ6UzsDnRVa4OkeVrPOxRZammGJ/sGIVjJqTCEVpawW54/0BFkL70M4qirwml3atPCZBl9qpZIay1bw3AWSJGNweEx3bMeYCkj0dqha6/aij75sgqfbUr4UuOg+LG3YvhajHrlZpFYvr/0zFFjGqPxBbYtvLHkJGBVIHtn1Zal1G9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=precisionplanting.com; dmarc=pass action=none
+ header.from=precisionplanting.com; dkim=pass header.d=precisionplanting.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=precisionplanting365.onmicrosoft.com;
+ s=selector1-precisionplanting365-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Sb9/To5FprBt50yMAtHhBdm0ff5DnmrhCVTcePy2LLM=;
+ b=Pic5XGCvDbXtqrz4RdCkJUYZ+YLQqjKu3kuT5mS3ulaFmJu7WBRL10c0zDFIKdXHoB2d5SRgd7aWZ0VSgk+fwJsrVEI0EEQssOVqHxVSfkbC1eThTo3rHejSWy0iKPVWaDdqVpk1QuTjbzDNLO9fVTegRtiwwbmzqcTuAqvQyPU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=precisionplanting.com;
+Received: from SA1PR22MB3196.namprd22.prod.outlook.com (2603:10b6:806:22b::8)
+ by SA0PR22MB2272.namprd22.prod.outlook.com (2603:10b6:806:81::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Wed, 15 Jun
+ 2022 15:10:09 +0000
+Received: from SA1PR22MB3196.namprd22.prod.outlook.com
+ ([fe80::24b0:19e9:a42d:60b0]) by SA1PR22MB3196.namprd22.prod.outlook.com
+ ([fe80::24b0:19e9:a42d:60b0%5]) with mapi id 15.20.5332.020; Wed, 15 Jun 2022
+ 15:10:09 +0000
+From:   David Owens <dowens@precisionplanting.com>
+To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@bitmer.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     David Owens <dowens@precisionplanting.com>,
+        alsa-devel@alsa-project.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ASoC: ti: omap-mcbsp: duplicate sysfs error
+Date:   Wed, 15 Jun 2022 10:09:55 -0500
+Message-Id: <20220615150955.4140789-1-dowens@precisionplanting.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-ClientProxiedBy: CH2PR16CA0017.namprd16.prod.outlook.com
+ (2603:10b6:610:50::27) To SA1PR22MB3196.namprd22.prod.outlook.com
+ (2603:10b6:806:22b::8)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RESEND PATCH v8 01/11] iommu: Add DMA ownership management
- interfaces
-Content-Language: en-GB
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-References: <20220418005000.897664-1-baolu.lu@linux.intel.com>
- <20220418005000.897664-2-baolu.lu@linux.intel.com>
- <10eaa3b1-4cf7-a7b6-a7f6-111a486a343a@arm.com>
- <54159102-42f8-e5dc-5099-1d5d4dbbfc65@arm.com>
-From:   Steven Price <steven.price@arm.com>
-In-Reply-To: <54159102-42f8-e5dc-5099-1d5d4dbbfc65@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 50f1bd85-8e5f-4a05-cded-08da4ee12324
+X-MS-TrafficTypeDiagnostic: SA0PR22MB2272:EE_
+X-Microsoft-Antispam-PRVS: <SA0PR22MB2272E82ABEB8D2A68131B1C7C0AD9@SA0PR22MB2272.namprd22.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NmBhTzbFQY4sfJnfaJUEV7tiEOIX8QvxfkJzE2X7Saoji8Y3PybfMTn+te6X8WMFAa3yMx9SEvd45IhI4wddjaCGgczTUGh3uRfLK7jIipbUbF1LXvkbvCMyY6k28mM/8kwhfCxrKdx0dTLjzWgiaMjvij3UBaOYcE0F/WP7QKgkwFetN7VmCJr0W3qT81/bWUSZDnroBVfk2o0//9GahtN8puX0w48U/7sPKZrAM+TbUdKZ/7WjRmoFJNaLif6b7oUH9rhYBqtdlhSSybAa2PTAQSUbP2Y29G2oOBZVz7b3sh+z+SHdV5dWmIwJTyAW1Z3vgrx8hLT1TU7Nn6qTP1iemX/M3joYif6QDZREGY7h1fwbIDIGNGsfKZXVGxL9pO58EvxvX5OLGU4luKkBMN9oNA5QUilWDxMm+Ilv//RrxhxIepwt6suWWiSlBNU+1HALaTbbIiw4YRkdcgu44dKjTyxK5eYrkmkxtW+7SvfHYsEFrYIvNvwxqP3gchqxRYhob7Q+iuRMrJ7z3xVkp0vTWSFhGIAkSWsBLDfY2z0HW01FGmHvCKiF1f8hW4NqaPmyOZEvZUcPxHpoJnC/xXWUoqs7zni637esTn7gh836aFx79RrtF07oFpc2YjZUV9FttY3u10NCj2fNNl+rJw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR22MB3196.namprd22.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(366004)(136003)(346002)(39850400004)(66574015)(38100700002)(1076003)(186003)(86362001)(2616005)(41300700001)(66556008)(66946007)(66476007)(4326008)(36756003)(316002)(110136005)(8676002)(8936002)(6666004)(508600001)(6486002)(52116002)(6512007)(5660300002)(83380400001)(6506007)(2906002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3SyuF8hYys3+byyz5Cx2CiaFDDfL+efum7ORRGESXB3bOZK6krNRqJOoxTMw?=
+ =?us-ascii?Q?cFjvsxfsCT0au9elLJDKeTtmfOc2nf43DTUxf91DrbCgrOWhLic/gQ49qHIJ?=
+ =?us-ascii?Q?nid+5eQ2d12FM1XPDQlZa0UjlsMa9mthlg9Y1fwLDWxwpHsaA/Q67JZOW75d?=
+ =?us-ascii?Q?fZMeVEwTdWLVagNYceFWT2P1wtATlSv8pNg/HW3bro1Gw2aPTS0g61mgBhQR?=
+ =?us-ascii?Q?ZsXCpN40rE+hNJeNjapLd+FrB34ACbuiktepvuWud7LOWd2KVd7S4MoyTQOT?=
+ =?us-ascii?Q?cZIOttzcUT3X9hrRyjRs6SGfzCwoyC/bYpixd/m05PeFt+vPZELFxN2HStcc?=
+ =?us-ascii?Q?bBqrkjBjA9XOtznD3+u9WtaxAbeDVUqIN2zXp2IbXmpLKlIOZTx7bOqwQyqO?=
+ =?us-ascii?Q?nFlCxzPNsYn+spMAmqCFxyy/Om7rL7bKy6I1mi+5spzK5peoujgbmfWd2MlN?=
+ =?us-ascii?Q?HyMu/bTI9yl3e6Ir4nCWifH0Tg6fctrwtSZ3CkhauIZ1HTJBHzSdGl4qP3eg?=
+ =?us-ascii?Q?fKnmMloldx1sh/BNLLpbzkmUrdgpJS2ETdWu70CboER1FxUWdm1f/01twC+d?=
+ =?us-ascii?Q?3FGXKhfpx75S9YkRvcjYJT7HYlB1A6LDOu9kAIlTrjv7agSldp1+cib8wzOu?=
+ =?us-ascii?Q?Vv63rx9TYXYZTv/QVVzxj1vNm8ZZX/KTgKR+wFC1WXAADakeg7Ih7ZxYT2aE?=
+ =?us-ascii?Q?jbl8io48Szj1ytGyRCG+GgKVzoSF5pT3yrL3nNYcqxnRtd17S1MhoLCfuGcm?=
+ =?us-ascii?Q?K5xruYXXrzoaKPbbVA5/S5pn6fWdfQUURtEvjFVoa7g/yMIITUwV96Jf0KTc?=
+ =?us-ascii?Q?LAuDfnOobcn4WIVb2FmgHtp1kJxX2HP/JAJPP84J38mw+IdEo6PUPFO4sOZ3?=
+ =?us-ascii?Q?p7pN4jEsS2HU15jfELAF/p1G7VdwdRd0Y0P+tsQ4Uf0cKId1FjxHCchPBWv1?=
+ =?us-ascii?Q?3z5Yw9wdX5qb9FSGE5SKtY4fZSwk0I5PdEqSjjn4zpwCbxrS5x1u+cFz2qNW?=
+ =?us-ascii?Q?r1oUlqSKmQcLqiLMH4S5F/bPAVtHhD9b78yTPcuhLwgLGDEJOxtvsQPmyfvZ?=
+ =?us-ascii?Q?w8FY+xtfWKbTbmY3AAxsWWodS3qXnq7+mhQJy568rBV9EDfqZNKdWD3rI6Vu?=
+ =?us-ascii?Q?TY6k24hnZuqrJOtOFgzsblNmNBhKmQG1lQVA3GBNc25m3wMbMeDIo1adkkV4?=
+ =?us-ascii?Q?igFfR1HAHhkUKjknHh+UXnRzz+SBaC8fZtQYsK8fdc53F6J9XbxgBrEpiK76?=
+ =?us-ascii?Q?jee8KEVFi3by7nL6NypztZSYcYyU5w+7EVlMvh1LLZdoUAzuVtNjCxWrul7l?=
+ =?us-ascii?Q?6r+ZSapjcB8PiCVNFY8mDMdDhGP2hC82Y5G5U1Xyl6sz2su1lZ9FT6A2hr/R?=
+ =?us-ascii?Q?cVAbfFsOwuYbs+JEmWG6yMNdHHo8VQdEdojnghK9FMQ27S8185n3Mm8RETbv?=
+ =?us-ascii?Q?iXBvUIZOTdK6XHJwHG/QPezxHKKQ8dfJXeHU0ga1kn+CUgL0hDwgjpnJEyTK?=
+ =?us-ascii?Q?hUmHGfcSwalXFqhhf5Oap2a6KoNdXBG9Lh+sz1hQ2bYgp/Ky7ZvXHw0HtdkA?=
+ =?us-ascii?Q?FIfUXpa9dzhDS7uS4vpwWUKCE92dt8TF+cVv9uBO8SD7r5h4oJekWpxTqwX0?=
+ =?us-ascii?Q?/FjlJTCrqojkSszcBpeAAxE3yT+p+Oc5N5eMO5zLtnLEV2rKmnsP/8wsjfdu?=
+ =?us-ascii?Q?UO8/76jf6O7At+e1hS3BGQgqNg0uXWUeExh5uBvOX+qAlQuO0pGmt6WXFlc/?=
+ =?us-ascii?Q?lK2pB+l4A+nFO/J0JA+GeVR9isXa0I0QV5A1Vz81kKNx8P/astulfHGQS0Kh?=
+X-MS-Exchange-AntiSpam-MessageData-1: +RYWQAs9P0AQ4Z6rcA3L8s1jRR3YpE2qNMJqqRGcXMkvC4eijbgIpziu
+X-OriginatorOrg: precisionplanting.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 50f1bd85-8e5f-4a05-cded-08da4ee12324
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR22MB3196.namprd22.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 15:10:09.1975
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: aa593af2-61f8-4d4f-988a-e9c4c02b7f57
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9VM8QXTR3RfDRihYPmm0JrXqmpiQnfqGP5Hp53ExJfh1LLx7KXnCSvOZc4Gn/efIAwABTSczairyG4PxC35S1OXzqAz31FtEqyKNcNVbBgQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR22MB2272
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/06/2022 11:57, Robin Murphy wrote:
-> On 2022-06-15 10:53, Steven Price wrote:
->> On 18/04/2022 01:49, Lu Baolu wrote:
->>> Multiple devices may be placed in the same IOMMU group because they
->>> cannot be isolated from each other. These devices must either be
->>> entirely under kernel control or userspace control, never a mixture.
->>>
->>> This adds dma ownership management in iommu core and exposes several
->>> interfaces for the device drivers and the device userspace assignment
->>> framework (i.e. VFIO), so that any conflict between user and kernel
->>> controlled dma could be detected at the beginning.
->>>
->>> The device driver oriented interfaces are,
->>>
->>>     int iommu_device_use_default_domain(struct device *dev);
->>>     void iommu_device_unuse_default_domain(struct device *dev);
->>>
->>> By calling iommu_device_use_default_domain(), the device driver tells
->>> the iommu layer that the device dma is handled through the kernel DMA
->>> APIs. The iommu layer will manage the IOVA and use the default domain
->>> for DMA address translation.
->>>
->>> The device user-space assignment framework oriented interfaces are,
->>>
->>>     int iommu_group_claim_dma_owner(struct iommu_group *group,
->>>                     void *owner);
->>>     void iommu_group_release_dma_owner(struct iommu_group *group);
->>>     bool iommu_group_dma_owner_claimed(struct iommu_group *group);
->>>
->>> The device userspace assignment must be disallowed if the DMA owner
->>> claiming interface returns failure.
->>>
->>> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
->>> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
->>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
->>> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
->>
->> I'm seeing a regression that I've bisected to this commit on a Firefly
->> RK3288 board. The display driver fails to probe properly because
->> __iommu_attach_group() returns -EBUSY. This causes long hangs and splats
->> as the display flips timeout.
->>
->> The call stack to __iommu_attach_group() is:
->>
->>   __iommu_attach_group from iommu_attach_device+0x64/0xb4
->>   iommu_attach_device from rockchip_drm_dma_attach_device+0x20/0x50
->>   rockchip_drm_dma_attach_device from vop_crtc_atomic_enable+0x10c/0xa64
->>   vop_crtc_atomic_enable from
->> drm_atomic_helper_commit_modeset_enables+0xa8/0x290
->>   drm_atomic_helper_commit_modeset_enables from
->> drm_atomic_helper_commit_tail_rpm+0x44/0x8c
->>   drm_atomic_helper_commit_tail_rpm from commit_tail+0x9c/0x180
->>   commit_tail from drm_atomic_helper_commit+0x164/0x18c
->>   drm_atomic_helper_commit from drm_atomic_commit+0xac/0xe4
->>   drm_atomic_commit from drm_client_modeset_commit_atomic+0x23c/0x284
->>   drm_client_modeset_commit_atomic from
->> drm_client_modeset_commit_locked+0x60/0x1c8
->>   drm_client_modeset_commit_locked from
->> drm_client_modeset_commit+0x24/0x40
->>   drm_client_modeset_commit from drm_fb_helper_set_par+0xb8/0xf8
->>   drm_fb_helper_set_par from drm_fb_helper_hotplug_event.part.0+0xa8/0xc0
->>   drm_fb_helper_hotplug_event.part.0 from output_poll_execute+0xb8/0x224
->>
->>> @@ -2109,7 +2115,7 @@ static int __iommu_attach_group(struct
->>> iommu_domain *domain,
->>>   {
->>>       int ret;
->>>   -    if (group->default_domain && group->domain !=
->>> group->default_domain)
->>> +    if (group->domain && group->domain != group->default_domain)
->>>           return -EBUSY;
->>>         ret = __iommu_group_for_each_dev(group, domain,
->>
->> Reverting this 'fixes' the problem for me. The follow up 0286300e6045
->> ("iommu: iommu_group_claim_dma_owner() must always assign a domain")
->> doesn't help.
->>
->> Adding some debug printks I can see that domain is a valid pointer, but
->> both default_domain and blocking_domain are NULL.
->>
->> I'm using the DTB from the kernel tree (rk3288-firefly.dtb).
->>
->> Any ideas?
-> 
-> Hmm, TBH I'm not sure how that worked previously... it'll be complaining
-> because the ARM DMA domain is still attached, but even when the attach
-> goes ahead and replaces the ARM domain with the driver's new one, it's
-> not using the special arm_iommu_detach_device() interface anywhere so
-> the device would still be left with the wrong DMA ops :/
-> 
-> I guess the most pragmatic option is probably to give rockchip-drm a
-> similar bodge to exynos and tegra, to explicitly remove the ARM domain
-> before attaching its own.
+Convert to managed versions of sysfs and clk allocation to simplify
+unbinding and error handling in probe.  Managed sysfs node
+creation specifically addresses the following error seen the second time
+probe is attempted after sdma_pcm_platform_register() previously requsted
+probe deferral:
 
-A bodge like below indeed 'fixes' the problem:
+sysfs: cannot create duplicate filename '/devices/platform/68000000.ocp/490=
+22000.mcbsp/max_tx_thres'
 
----8<---
-diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-index 67d38f53d3e5..cbc6a5121296 100644
---- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-+++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
-@@ -23,6 +23,14 @@
- #include <drm/drm_probe_helper.h>
- #include <drm/drm_vblank.h>
- 
-+#if defined(CONFIG_ARM_DMA_USE_IOMMU)
-+#include <asm/dma-iommu.h>
-+#else
-+#define arm_iommu_detach_device(...)	({ })
-+#define arm_iommu_release_mapping(...)	({ })
-+#define to_dma_iommu_mapping(dev) NULL
-+#endif
-+
- #include "rockchip_drm_drv.h"
- #include "rockchip_drm_fb.h"
- #include "rockchip_drm_gem.h"
-@@ -49,6 +57,14 @@ int rockchip_drm_dma_attach_device(struct drm_device *drm_dev,
- 	if (!private->domain)
- 		return 0;
- 
-+	if (IS_ENABLED(CONFIG_ARM_DMA_USE_IOMMU)) {
-+		struct dma_iommu_mapping *mapping = to_dma_iommu_mapping(dev);
-+		if (mapping) {
-+			arm_iommu_detach_device(dev);
-+			arm_iommu_release_mapping(mapping);
-+		}
-+	}
-+
- 	ret = iommu_attach_device(private->domain, dev);
- 	if (ret) {
- 		DRM_DEV_ERROR(dev, "Failed to attach iommu device\n");
----8<---
+Signed-off-by: David Owens <dowens@precisionplanting.com>
+---
+ sound/soc/ti/omap-mcbsp-priv.h |  2 --
+ sound/soc/ti/omap-mcbsp-st.c   | 21 ++++-----------------
+ sound/soc/ti/omap-mcbsp.c      | 26 ++++----------------------
+ 3 files changed, 8 insertions(+), 41 deletions(-)
 
-I'll type up a proper commit message and see what the DRM maintainers think.
+diff --git a/sound/soc/ti/omap-mcbsp-priv.h b/sound/soc/ti/omap-mcbsp-priv.=
+h
+index 7865cda4bf0a..da519ea1f303 100644
+--- a/sound/soc/ti/omap-mcbsp-priv.h
++++ b/sound/soc/ti/omap-mcbsp-priv.h
+@@ -316,8 +316,6 @@ static inline int omap_mcbsp_read(struct omap_mcbsp *mc=
+bsp, u16 reg,
 
-Thanks,
+ /* Sidetone specific API */
+ int omap_mcbsp_st_init(struct platform_device *pdev);
+-void omap_mcbsp_st_cleanup(struct platform_device *pdev);
+-
+ int omap_mcbsp_st_start(struct omap_mcbsp *mcbsp);
+ int omap_mcbsp_st_stop(struct omap_mcbsp *mcbsp);
 
-Steve
+diff --git a/sound/soc/ti/omap-mcbsp-st.c b/sound/soc/ti/omap-mcbsp-st.c
+index 0bc7d26c660a..402a57a502e6 100644
+--- a/sound/soc/ti/omap-mcbsp-st.c
++++ b/sound/soc/ti/omap-mcbsp-st.c
+@@ -292,14 +292,11 @@ static ssize_t st_taps_store(struct device *dev,
+
+ static DEVICE_ATTR_RW(st_taps);
+
+-static const struct attribute *sidetone_attrs[] =3D {
++static struct attribute *sidetone_attrs[] =3D {
+        &dev_attr_st_taps.attr,
+        NULL,
+ };
+-
+-static const struct attribute_group sidetone_attr_group =3D {
+-       .attrs =3D (struct attribute **)sidetone_attrs,
+-};
++ATTRIBUTE_GROUPS(sidetone);
+
+ int omap_mcbsp_st_start(struct omap_mcbsp *mcbsp)
+ {
+@@ -347,7 +344,7 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
+        if (!st_data)
+                return -ENOMEM;
+
+-       st_data->mcbsp_iclk =3D clk_get(mcbsp->dev, "ick");
++       st_data->mcbsp_iclk =3D devm_clk_get(mcbsp->dev, "ick");
+        if (IS_ERR(st_data->mcbsp_iclk)) {
+                dev_warn(mcbsp->dev,
+                         "Failed to get ick, sidetone might be broken\n");
+@@ -359,7 +356,7 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
+        if (!st_data->io_base_st)
+                return -ENOMEM;
+
+-       ret =3D sysfs_create_group(&mcbsp->dev->kobj, &sidetone_attr_group)=
+;
++       ret =3D devm_device_add_group(mcbsp->dev, &sidetone_group);
+        if (ret)
+                return ret;
+
+@@ -368,16 +365,6 @@ int omap_mcbsp_st_init(struct platform_device *pdev)
+        return 0;
+ }
+
+-void omap_mcbsp_st_cleanup(struct platform_device *pdev)
+-{
+-       struct omap_mcbsp *mcbsp =3D platform_get_drvdata(pdev);
+-
+-       if (mcbsp->st_data) {
+-               sysfs_remove_group(&mcbsp->dev->kobj, &sidetone_attr_group)=
+;
+-               clk_put(mcbsp->st_data->mcbsp_iclk);
+-       }
+-}
+-
+ static int omap_mcbsp_st_info_volsw(struct snd_kcontrol *kcontrol,
+                                    struct snd_ctl_elem_info *uinfo)
+ {
+diff --git a/sound/soc/ti/omap-mcbsp.c b/sound/soc/ti/omap-mcbsp.c
+index 4479d74f0a45..395493a2d965 100644
+--- a/sound/soc/ti/omap-mcbsp.c
++++ b/sound/soc/ti/omap-mcbsp.c
+@@ -595,16 +595,13 @@ static ssize_t dma_op_mode_store(struct device *dev,
+
+ static DEVICE_ATTR_RW(dma_op_mode);
+
+-static const struct attribute *additional_attrs[] =3D {
++static struct attribute *additional_attrs[] =3D {
+        &dev_attr_max_tx_thres.attr,
+        &dev_attr_max_rx_thres.attr,
+        &dev_attr_dma_op_mode.attr,
+        NULL,
+ };
+-
+-static const struct attribute_group additional_attr_group =3D {
+-       .attrs =3D (struct attribute **)additional_attrs,
+-};
++ATTRIBUTE_GROUPS(additional);
+
+ /*
+  * McBSP1 and McBSP3 are directly mapped on 1610 and 1510.
+@@ -702,8 +699,7 @@ static int omap_mcbsp_init(struct platform_device *pdev=
+)
+                mcbsp->max_tx_thres =3D max_thres(mcbsp) - 0x10;
+                mcbsp->max_rx_thres =3D max_thres(mcbsp) - 0x10;
+
+-               ret =3D sysfs_create_group(&mcbsp->dev->kobj,
+-                                        &additional_attr_group);
++               ret =3D devm_device_add_group(mcbsp->dev, &additional_group=
+);
+                if (ret) {
+                        dev_err(mcbsp->dev,
+                                "Unable to create additional controls\n");
+@@ -711,16 +707,7 @@ static int omap_mcbsp_init(struct platform_device *pde=
+v)
+                }
+        }
+
+-       ret =3D omap_mcbsp_st_init(pdev);
+-       if (ret)
+-               goto err_st;
+-
+-       return 0;
+-
+-err_st:
+-       if (mcbsp->pdata->buffer_size)
+-               sysfs_remove_group(&mcbsp->dev->kobj, &additional_attr_grou=
+p);
+-       return ret;
++       return omap_mcbsp_st_init(pdev);
+ }
+
+ /*
+@@ -1431,11 +1418,6 @@ static int asoc_mcbsp_remove(struct platform_device =
+*pdev)
+        if (cpu_latency_qos_request_active(&mcbsp->pm_qos_req))
+                cpu_latency_qos_remove_request(&mcbsp->pm_qos_req);
+
+-       if (mcbsp->pdata->buffer_size)
+-               sysfs_remove_group(&mcbsp->dev->kobj, &additional_attr_grou=
+p);
+-
+-       omap_mcbsp_st_cleanup(pdev);
+-
+        return 0;
+ }
+
+--
+2.34.1
+
+This email is intended solely for the use of the individual to whom it is a=
+ddressed and may contain confidential and/or privileged material. Any views=
+ or opinions presented are solely those of the author and do not necessaril=
+y represent those of Precision Planting. If you are not the intended recipi=
+ent, be advised that you have received this email in error and that any use=
+, dissemination, forwarding, printing, or copying of this email is strictly=
+ prohibited. Neither AGCO nor the sender accepts any responsibility for vir=
+uses, and it is your responsibility to scan, and virus check the e-mail and=
+ its attachment(s) (if any).

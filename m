@@ -2,139 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DF054BEC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 02:34:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C5F54BEC3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 02:34:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237338AbiFOAeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 20:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
+        id S237529AbiFOAeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 20:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229862AbiFOAeA (ORCPT
+        with ESMTP id S232753AbiFOAed (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 20:34:00 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4284434B95;
-        Tue, 14 Jun 2022 17:33:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655253239; x=1686789239;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hGcqanuZpHzm7Jkcjrifztv7rwms6hKEm7vjoZb9GZc=;
-  b=ZgwfLcrBaQsC5d+2GuN5iuUFhk8fjHLf/EEDk371RK+Dctfp8jA2NiYJ
-   RBoHO8kHNCHsLChR8fDUBxexP2TgCCARRG4MRsFuKNMUi39cfXCE+E2i2
-   PyTOV02iEqq17pDnyh3mIZykSWmWRynHdhzkTlUwF4BN1YJ+w2T4b/zxv
-   1w1FIsI6vsN6vmArIw0fsTwttBWsJ+uQkOx2L/aeD8EzEgAyqNlS4PWtC
-   Y2KlpWXGKealz30GBbENCo1CdypHRA4/Mb2BlcgWmERlXdJ/oxYGl9l4i
-   wdssYOUYP/8O2Zr2/TI+dGPaYP2tR4NH9fnFMgcsuAiUW1Tpf7QgL8pDD
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="279822856"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="279822856"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 17:33:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="686978922"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Jun 2022 17:33:56 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1Gyp-000MQh-Dl;
-        Wed, 15 Jun 2022 00:33:55 +0000
-Date:   Wed, 15 Jun 2022 08:33:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     ChenXiaoSong <chenxiaosong2@huawei.com>,
-        trond.myklebust@hammerspace.com, anna@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-nfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, chenxiaosong2@huawei.com,
-        liuyongqiang13@huawei.com, yi.zhang@huawei.com,
-        zhangxiaoxu5@huawei.com
-Subject: Re: [PATCH -next,v2] NFS: report and clear ENOSPC/EFBIG/EDQUOT
- writeback error on close() file
-Message-ID: <202206150810.4h1FZM2Z-lkp@intel.com>
-References: <20220614152817.271507-1-chenxiaosong2@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614152817.271507-1-chenxiaosong2@huawei.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 14 Jun 2022 20:34:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0889435DDF;
+        Tue, 14 Jun 2022 17:34:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 615C461939;
+        Wed, 15 Jun 2022 00:34:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BB1AC3411B;
+        Wed, 15 Jun 2022 00:34:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655253269;
+        bh=Yz13IgKOC0iptK56o8LR0wiHGkxHflnnEptjcBA8JLw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tmV7wIidivjbcMYZ1hU1aTj9NB/A1MRCBVya/3tpreqni8hYFTx913TzD1NS8JXzo
+         7yfglVwuTvYpw2EBONC4IqG7Qtnl28CanSp6+3xRhBnJG6By8uYCcvThL1H0kyaOIb
+         Y1TG1oVICzZ69U54EejXLTINvPLTLZ0MhanhQosB3nppl1C96/A2bGlpoySXWo61s+
+         tdzeedOKE9kJl8OO1hWVBeLNBSntRl7/wS8d2mNyV2LezzrsgBr75Jd95vG4vKbrM/
+         KQ79GkATvcNvu3c3s6SUp9oEnpDqkpo4QUN4W5MVZ5cUtfx4xPmuUS8ERy9NG/KjHg
+         Dh2sVTlY4r3Zg==
+Date:   Wed, 15 Jun 2022 09:34:24 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Chuang W <nashuiliang@gmail.com>
+Cc:     stable@vger.kernel.org,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kprobes: Rollback post_handler on failed arm_kprobe()
+Message-Id: <20220615093424.961cfa58eae0a8ce601e7af6@kernel.org>
+In-Reply-To: <20220614090633.43832-1-nashuiliang@gmail.com>
+References: <20220614090633.43832-1-nashuiliang@gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi ChenXiaoSong,
+Hi Chuang,
 
-Thank you for the patch! Perhaps something to improve:
+On Tue, 14 Jun 2022 17:06:33 +0800
+Chuang W <nashuiliang@gmail.com> wrote:
 
-[auto build test WARNING on v5.19-rc2]
-[also build test WARNING on next-20220614]
-[cannot apply to trondmy-nfs/linux-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> In a scenario where livepatch and aggrprobe coexist, if arm_kprobe()
+> returns an error, ap.post_handler, while has been modified to
+> p.post_handler, is not rolled back.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/ChenXiaoSong/NFS-report-and-clear-ENOSPC-EFBIG-EDQUOT-writeback-error-on-close-file/20220614-231738
-base:    b13baccc3850ca8b8cccbf8ed9912dbaa0fdf7f3
-config: nios2-defconfig (https://download.01.org/0day-ci/archive/20220615/202206150810.4h1FZM2Z-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f65252667ed27ca5a3e7f2182d1819d009dc98d7
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review ChenXiaoSong/NFS-report-and-clear-ENOSPC-EFBIG-EDQUOT-writeback-error-on-close-file/20220614-231738
-        git checkout f65252667ed27ca5a3e7f2182d1819d009dc98d7
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash fs/nfs/
+Would you mean 'coexist' on the same function?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> When ap.post_handler is not NULL (not rolled back), the caller (e.g.
+> register_kprobe/enable_kprobe) of arm_kprobe_ftrace() will always fail.
 
-All warnings (new ones prefixed by >>):
+It seems this explanation and the actual code does not
+match. Can you tell me what actually you observed?
 
-   fs/nfs/file.c: In function 'nfs_file_flush':
->> fs/nfs/file.c:155:17: warning: ignoring return value of 'file_check_and_advance_wb_err' declared with attribute 'warn_unused_result' [-Wunused-result]
-     155 |                 file_check_and_advance_wb_err(file);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Thank you,
 
+> 
+> Fixes: 12310e343755 ("kprobes: Propagate error from arm_kprobe_ftrace()")
+> Signed-off-by: Chuang W <nashuiliang@gmail.com>
+> Cc: <stable@vger.kernel.org>
+> ---
+>  kernel/kprobes.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index f214f8c088ed..0610b02a3a05 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -1300,6 +1300,7 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+>  {
+>  	int ret = 0;
+>  	struct kprobe *ap = orig_p;
+> +	kprobe_post_handler_t old_post_handler = NULL;
+>  
+>  	cpus_read_lock();
+>  
+> @@ -1351,6 +1352,9 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+>  
+>  	/* Copy the insn slot of 'p' to 'ap'. */
+>  	copy_kprobe(ap, p);
+> +
+> +	/* save the old post_handler */
+> +	old_post_handler = ap->post_handler;
+>  	ret = add_new_kprobe(ap, p);
+>  
+>  out:
+> @@ -1365,6 +1369,7 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+>  			ret = arm_kprobe(ap);
+>  			if (ret) {
+>  				ap->flags |= KPROBE_FLAG_DISABLED;
+> +				ap->post_handler = old_post_handler;
+>  				list_del_rcu(&p->list);
+>  				synchronize_rcu();
+>  			}
+> -- 
+> 2.34.1
+> 
 
-vim +155 fs/nfs/file.c
-
-   133	
-   134	/*
-   135	 * Flush all dirty pages, and check for write errors.
-   136	 */
-   137	static int
-   138	nfs_file_flush(struct file *file, fl_owner_t id)
-   139	{
-   140		struct inode	*inode = file_inode(file);
-   141		errseq_t since, error;
-   142	
-   143		dprintk("NFS: flush(%pD2)\n", file);
-   144	
-   145		nfs_inc_stats(inode, NFSIOS_VFSFLUSH);
-   146		if ((file->f_mode & FMODE_WRITE) == 0)
-   147			return 0;
-   148	
-   149		/* Flush writes to the server and return any errors */
-   150		since = filemap_sample_wb_err(file->f_mapping);
-   151		nfs_wb_all(inode);
-   152		error = filemap_check_wb_err(file->f_mapping, since);
-   153	
-   154		if (nfs_should_clear_wb_err(error))
- > 155			file_check_and_advance_wb_err(file);
-   156	
-   157		return error;
-   158	}
-   159	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Masami Hiramatsu (Google) <mhiramat@kernel.org>

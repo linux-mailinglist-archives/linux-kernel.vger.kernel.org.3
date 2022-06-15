@@ -2,55 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE0754C966
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF8854C968
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:04:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348230AbiFONC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 09:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
+        id S1348227AbiFONEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 09:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345762AbiFONC4 (ORCPT
+        with ESMTP id S1346889AbiFONEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 09:02:56 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0B61CFE8;
-        Wed, 15 Jun 2022 06:02:53 -0700 (PDT)
-Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LNQT12VsPz67PwL;
-        Wed, 15 Jun 2022 21:02:45 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 15 Jun 2022 15:02:51 +0200
-Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 15 Jun
- 2022 14:02:50 +0100
-Date:   Wed, 15 Jun 2022 14:02:49 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Kai Ye via Linux-accelerators 
-        <linux-accelerators@lists.ozlabs.org>
-CC:     Kai Ye <yekai13@huawei.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <linuxarm@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <wangzhou1@hisilicon.com>,
-        <linux-crypto@vger.kernel.org>, <zhangfei.gao@linaro.org>
-Subject: Re: [PATCH v2 3/3] crypto: hisilicon/qm - defining the device
- isolation strategy
-Message-ID: <20220615140249.000077f8@Huawei.com>
-In-Reply-To: <20220614122943.1406-4-yekai13@huawei.com>
-References: <20220614122943.1406-1-yekai13@huawei.com>
-        <20220614122943.1406-4-yekai13@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Wed, 15 Jun 2022 09:04:36 -0400
+Received: from mail-m964.mail.126.com (mail-m964.mail.126.com [123.126.96.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E324BC5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:04:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=GlgJr
+        jeg/CBr0HUGVAWv37hbOz7nXbo7LjovdWwvOH8=; b=AhDUc/UaRBRkd5DD0Z+1K
+        MuM2Y3k8gTD+pwycRwoKgn+15YeDruNuFExAI+9T2PPunoGXKy8LPHOOw/DUfRMV
+        LTGTw0gl1byPHb37ZGDzw2MYf1giPy1QKaY/Udo7qMOc8f+K1tGhhqJMylNTtmZU
+        YSxOf5mW63SCp0cVu4+XUw=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp9 (Coremail) with SMTP id NeRpCgDX2a6f2KliVkMvEw--.52482S2;
+        Wed, 15 Jun 2022 21:03:28 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     monstr@monstr.eu, wangxiang@cdjrlc.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        windhl@126.com
+Subject: [PATCH] arch: microblaze: pci: Add missing of_node_put() in xilinx_pci.c
+Date:   Wed, 15 Jun 2022 21:03:26 +0800
+Message-Id: <20220615130326.3966842-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NeRpCgDX2a6f2KliVkMvEw--.52482S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7JFyUCr15GrW3ZryDJF17trb_yoWkWrgEgw
+        1fWFWfCrW8Zry7CrsFvr43A3s8AayxGwn0gF1xtF17ta47GFnIkrykA39xGry8ur4YqrW7
+        CrWqqF47ZF129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_5l1JUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2gAhF1uwMNV9LQAAsy
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,242 +51,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Jun 2022 20:29:40 +0800
-Kai Ye via Linux-accelerators <linux-accelerators@lists.ozlabs.org> wrote:
+In xilinx_pci_init(), of_find_matching_node() will return a node
+pointer with refcount incremented. We should use of_node_put() in
+fail path or when it is not used anymore.
 
-> Define the device isolation strategy by the device driver. if the
-> AER error frequency exceeds the value of setting for a certain
-> period of time, The device will not be available in user space. The VF
-> device use the PF device isolation strategy. All the hardware errors
-> are processed by PF driver.
-> 
-> Signed-off-by: Kai Ye <yekai13@huawei.com>
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/microblaze/pci/xilinx_pci.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-I'll try and avoid duplicating Greg's feedback but might well overlap a bit!
-
-> ---
->  drivers/crypto/hisilicon/qm.c | 157 +++++++++++++++++++++++++++++++---
->  include/linux/hisi_acc_qm.h   |   9 ++
->  2 files changed, 152 insertions(+), 14 deletions(-)
-> 
-> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-> index ad83c194d664..47c41fa52693 100644
-> --- a/drivers/crypto/hisilicon/qm.c
-> +++ b/drivers/crypto/hisilicon/qm.c
-> @@ -12,7 +12,6 @@
->  #include <linux/pm_runtime.h>
->  #include <linux/seq_file.h>
->  #include <linux/slab.h>
-> -#include <linux/uacce.h>
-
-I assume you do this because you are now relying on hisi_acc_qm.h including
-uacce.h?   Generally it is better to include most headers that we use
-directly so it this still uses stuff from uacce.h then keep the include.
-
->  #include <linux/uaccess.h>
->  #include <uapi/misc/uacce/hisi_qm.h>
->  #include <linux/hisi_acc_qm.h>
-> @@ -417,6 +416,16 @@ struct hisi_qm_resource {
->  	struct list_head list;
->  };
->  
-> +/**
-> + * struct qm_hw_err - structure of describes the device err
-> + * @list: hardware error list
-> + * @tick_stamp: timestamp when the error occurred
-
-tick?   Perhaps just call it timestamp if that is what it is...
-
-
-> + */
-> +struct qm_hw_err {
-> +	struct list_head list;
-> +	unsigned long long tick_stamp;
-> +};
-> +
-
->  
-> +/**
-> + * qm_hw_err_isolate() - Try to isolate the uacce device with its VFs
-> + * @qm: The qm which we want to configure.
-> + *
-> + * according to user's configuration of isolation strategy. Warning: this
-
-Rewrite to make it full sentence.
-
-> + * API should be called while there is no user on the device, or the users
-> + * on this device are suspended by slot resetting preparation of PCI AER.
-> + */
-> +static int qm_hw_err_isolate(struct hisi_qm *qm)
-> +{
-> +	struct qm_hw_err *err, *tmp, *hw_err;
-> +	struct qm_err_isolate *isolate;
-> +	u32 count = 0;
-> +
-> +	isolate = &qm->isolate_data;
-> +
-> +#define SECONDS_PER_HOUR	3600
-> +
-> +	/* All the hw errs are processed by PF driver */
-> +	if (qm->uacce->is_vf || atomic_read(&isolate->is_isolate) ||
-> +		!isolate->hw_err_isolate_hz)
-> +		return 0;
-> +
-> +	hw_err = kzalloc(sizeof(*hw_err), GFP_ATOMIC);
-> +	if (!hw_err)
-> +		return -ENOMEM;
-blank line here to separate error handling from next bit of code.
+diff --git a/arch/microblaze/pci/xilinx_pci.c b/arch/microblaze/pci/xilinx_pci.c
+index f4cb86fffcee..018d91bdcbb9 100644
+--- a/arch/microblaze/pci/xilinx_pci.c
++++ b/arch/microblaze/pci/xilinx_pci.c
+@@ -132,13 +132,13 @@ void __init xilinx_pci_init(void)
  
-> +	hw_err->tick_stamp = jiffies;
-> +	list_for_each_entry_safe(err, tmp, &qm->uacce_hw_errs, list) {
-
-These are ordered (I think). Could take advantage of that by
-maintaining count of elements in parallel to the list then walking
-list in right direction + stop when you reach last one to need
-deleting.
-
-
-> +		if ((hw_err->tick_stamp - err->tick_stamp) / HZ >
-> +		    SECONDS_PER_HOUR) {
-> +			list_del(&err->list);
-> +			kfree(err);
-> +		} else {
-> +			count++;
-> +		}
-> +	}
-> +	list_add(&hw_err->list, &qm->uacce_hw_errs);
-> +
-> +	if (count >= isolate->hw_err_isolate_hz)
-> +		atomic_set(&isolate->is_isolate, 1);
-> +
-> +	return 0;
-> +}
-> +
-
-...
-
-> +static int hisi_qm_isolate_strategy_write(struct uacce_device *uacce,
-> +						const char *buf)
-> +{
-> +	struct hisi_qm *qm = uacce->priv;
-> +	unsigned long val = 0;
-> +
-> +#define MAX_ISOLATE_STRATEGY	65535
-> +
-> +	if (atomic_read(&qm->uacce_ref))
-> +		return -EBUSY;
-> +
-> +	/* must be set by PF */
-> +	if (atomic_read(&qm->isolate_data.is_isolate) || uacce->is_vf)
-
-Why is the file visible on the vf?  Hide it or don't register it for vfs.
-
-> +		return -EINVAL;
-> +
-> +	if (kstrtoul(buf, 0, &val) < 0)
-> +		return -EINVAL;
-> +
-> +	if (val > MAX_ISOLATE_STRATEGY)
-> +		return -EINVAL;
-> +
-> +	qm->isolate_data.hw_err_isolate_hz = val;
-> +	dev_info(&qm->pdev->dev,
-> +		"the value of isolate_strategy is set to %lu.\n", val);
-
-This is just noise in the log.  If someone wants to check they should read
-the sysfs file back and it reflect the new state.
-
-> +
-> +	return 0;
-> +}
-> +
-
-...
-
->  static int qm_alloc_uacce(struct hisi_qm *qm)
->  {
->  	struct pci_dev *pdev = qm->pdev;
-> @@ -3433,6 +3554,7 @@ static int qm_alloc_uacce(struct hisi_qm *qm)
->  	};
->  	int ret;
->  
-> +	INIT_LIST_HEAD(&qm->uacce_hw_errs);
->  	ret = strscpy(interface.name, dev_driver_string(&pdev->dev),
->  		      sizeof(interface.name));
->  	if (ret < 0)
-> @@ -3446,8 +3568,7 @@ static int qm_alloc_uacce(struct hisi_qm *qm)
->  		qm->use_sva = true;
->  	} else {
->  		/* only consider sva case */
-> -		uacce_remove(uacce);
-> -		qm->uacce = NULL;
-> +		qm_remove_uacce(qm);
->  		return -EINVAL;
->  	}
->  
-> @@ -5109,6 +5230,12 @@ static int qm_controller_reset_prepare(struct hisi_qm *qm)
->  		return ret;
->  	}
->  
-> +	if (qm->use_sva) {
-> +		ret = qm_hw_err_isolate(qm);
-> +		if (ret)
-> +			pci_err(pdev, "failed to isolate hw err!\n");
-> +	}
-> +
->  	ret = qm_wait_vf_prepare_finish(qm);
->  	if (ret)
->  		pci_err(pdev, "failed to stop by vfs in soft reset!\n");
-> @@ -5436,19 +5563,24 @@ static int qm_controller_reset(struct hisi_qm *qm)
->  	ret = qm_soft_reset(qm);
->  	if (ret) {
->  		pci_err(pdev, "Controller reset failed (%d)\n", ret);
-
-This is printed below as well - probably best to drop this one and then you
-can remove the brackets as well.
-
-> -		qm_reset_bit_clear(qm);
-> -		return ret;
-> +		goto err_reset;
->  	}
->  
->  	ret = qm_controller_reset_done(qm);
-> -	if (ret) {
-> -		qm_reset_bit_clear(qm);
-> -		return ret;
-> -	}
-> +	if (ret)
-> +		goto err_reset;
->  
->  	pci_info(pdev, "Controller reset complete\n");
-> -
-
-Avoid noise via white space changes like this.  The white space was
-good and generally don't change white space in a patch doing anything else.
-
->  	return 0;
-> +
-> +err_reset:
-> +	pci_err(pdev, "Controller reset failed (%d)\n", ret);
-> +	qm_reset_bit_clear(qm);
-> +
-> +	/* if resetting fails, isolate the device */
-> +	if (qm->use_sva && !qm->uacce->is_vf)
-> +		atomic_set(&qm->isolate_data.is_isolate, 1);
-> +	return ret;
->  }
->  
->  /**
-> @@ -6246,10 +6378,7 @@ int hisi_qm_init(struct hisi_qm *qm)
->  err_free_qm_memory:
->  	hisi_qm_memory_uninit(qm);
->  err_alloc_uacce:
-> -	if (qm->use_sva) {
-> -		uacce_remove(qm->uacce);
-> -		qm->uacce = NULL;
-> -	}
-> +	qm_remove_uacce(qm);
->  err_irq_register:
->  	qm_irq_unregister(qm);
->  err_pci_init:
+ 	if (of_address_to_resource(pci_node, 0, &r)) {
+ 		pr_err("xilinx-pci: cannot resolve base address\n");
+-		return;
++		goto out_put;
+ 	}
+ 
+ 	hose = pcibios_alloc_controller(pci_node);
+ 	if (!hose) {
+ 		pr_err("xilinx-pci: pcibios_alloc_controller() failed\n");
+-		return;
++		goto out_put;
+ 	}
+ 
+ 	/* Setup config space */
+@@ -167,4 +167,7 @@ void __init xilinx_pci_init(void)
+ 
+ 	pr_info("xilinx-pci: Registered PCI host bridge\n");
+ 	xilinx_early_pci_scan(hose);
++	
++out_put:
++	of_node_put(pci_node);
+ }
+-- 
+2.25.1
 

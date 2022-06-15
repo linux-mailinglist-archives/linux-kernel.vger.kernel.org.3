@@ -2,131 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62F054D04C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9011454D075
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:55:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349731AbiFORrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:47:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        id S1355730AbiFORzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243182AbiFORrN (ORCPT
+        with ESMTP id S235028AbiFORzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:47:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C59C54037
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:47:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655315232; x=1686851232;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9HiCA51SRONvHgM/bRjjatEdWaF6sXtZEEtO7ayhDgs=;
-  b=IxRxdE2WoGwsNDIxGwjeIHsPaWhzjLjBYgEbC0SRKZTiTtTrS22CQ0Fc
-   OyL/tgkzBqheaWxM8wXTt/LhIXCH3HeMSl0gkIjpS/xWhXk+qSHl6G+/B
-   8DfAyCucHDEjsQianide3ujfkvppGdV86+P5fYm0L4VIEpK6HqID0U1XP
-   AaOTZsVyCZafdNy5I1rTjtR0nNgtegOkStqrIyRKYWBbSqy3CMo9RjPT3
-   MZceYf3tNZNz3haC723eHnYen1YgVKqZujYi5uhn4DRadyM5rQvpmKrdo
-   k9wQbHSZPH0VObSHoMbOcFdbjZcT7Dtmd1+hTvIH9fSBmMcdE65yuR2id
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="280085794"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="280085794"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 10:47:11 -0700
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="536143684"
-Received: from schen9-mobl.amr.corp.intel.com ([10.209.78.147])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 10:47:11 -0700
-Message-ID: <64e3e50508b0bf27ed5d6957161e2b3631c1164b.camel@linux.intel.com>
-Subject: Re: [RFC PATCH 0/3] Cgroup accounting of memory tier usage
-From:   Tim Chen <tim.c.chen@linux.intel.com>
-To:     Ying Huang <ying.huang@intel.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Shakeel Butt <shakeelb@google.com>
-Date:   Wed, 15 Jun 2022 10:47:11 -0700
-In-Reply-To: <68b6a7e92d48a3285a5707378459bb9ae805f333.camel@intel.com>
-References: <cover.1655242024.git.tim.c.chen@linux.intel.com>
-         <68b6a7e92d48a3285a5707378459bb9ae805f333.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+        Wed, 15 Jun 2022 13:55:47 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670FD44766
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:55:46 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id r24so1956763ljn.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:55:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7N8FxBu6DA6O7mEvFYXStFEfAYN9n61bDy3OwBXjJ0o=;
+        b=JHdk1N03ADEWzySRt7KcxOBPuZaGFXA/8Xyn6d2SSlY9ihVTM6DTBbu1drTtrmQ+M1
+         8RPbl/vwMUwgaM0Na3DeW4R1DvZyVGTsvcipdrdnr6LbuwHnx+DPjFA6rx07XSw0xDHv
+         KK/3LfmRBtp3+hX2z93IpwI50ZnSgl482NCGQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7N8FxBu6DA6O7mEvFYXStFEfAYN9n61bDy3OwBXjJ0o=;
+        b=fqigjnnn1LqGWasd6PRLzgbO+MoZfEJJye76RODrmSDe76ftkWXYBKDnGqoxeSQwvc
+         p0T1hRWPbyjo3Cw24ZGqXvT77zWCkRcKtwQ64gnU6NaAObp9aOp7v1DBa0BI1kcvPqXI
+         ee9fV+yozhbY5CRG/5uX8ed0jtCKgJE4HRP50hyOtCxXzjxnSL7lw+ExgcpCyFC0ItjV
+         N6bh4o9rX8tVsBSwE29tv8ciO8bzdmG3xCcBKTJX0Fu7jSXkNZdBnN9S0AOHgDn9GpCU
+         JQDas4mh7xcvRyTJggAi/qdEVsbnsvcPCxE6jMxkcJzE9wvFFlKD9Bo9Z7WxN1jeWO5T
+         54Fg==
+X-Gm-Message-State: AJIora9Vi4otNgLJpbALmtuvDVH2Q7g2Cuy1OIS7FKQsEyaS4HP5vtr4
+        ofdEOJcYLKHqqIPxURkZvakPvOT48Ubx2R7v46c=
+X-Google-Smtp-Source: AGRyM1usq6rOnpKVnohX3RfJzcFbjacxYyo1QSxQi8IxyaWhI3JVOuBe+zfnFh1b5GZqxodmV+BC1w==
+X-Received: by 2002:a2e:9a8b:0:b0:255:5c14:a90 with SMTP id p11-20020a2e9a8b000000b002555c140a90mr512828lji.137.1655315744482;
+        Wed, 15 Jun 2022 10:55:44 -0700 (PDT)
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
+        by smtp.gmail.com with ESMTPSA id u24-20020ac25198000000b00477cab33759sm1880398lfi.256.2022.06.15.10.55.44
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 10:55:44 -0700 (PDT)
+Received: by mail-lj1-f171.google.com with SMTP id c30so14118935ljr.9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:55:44 -0700 (PDT)
+X-Received: by 2002:a5d:414d:0:b0:213:be00:a35 with SMTP id
+ c13-20020a5d414d000000b00213be000a35mr875787wrq.97.1655315251112; Wed, 15 Jun
+ 2022 10:47:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220615162805.27962-1-pmladek@suse.com> <20220615162805.27962-2-pmladek@suse.com>
+In-Reply-To: <20220615162805.27962-2-pmladek@suse.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 15 Jun 2022 10:47:14 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com>
+Message-ID: <CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] printk: Block console kthreads when direct printing
+ will be required
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>, zhouzhouyi@gmail.com,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rcu <rcu@vger.kernel.org>, linux-rockchip@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-15 at 12:58 +0800, Ying Huang wrote:
-> On Tue, 2022-06-14 at 15:25 -0700, Tim Chen wrote:
-> > For controlling usage of a top tiered memory by a cgroup, accounting
-> > of top tier memory usage is needed.  This patch set implements the
-> > following:
-> > 
-> > Patch 1 introduces interface and simple implementation to retrieve
-> > 	cgroup tiered memory usage
-> > Patch 2 introduces more efficient accounting with top tier memory page counter 
-> > Patch 3 provides a sysfs interface to repot the the top tiered memory
-> > 	usage.
-> > 
-> > The patchset works with Aneesh's v6 memory-tiering implementation [1].
-> > It is a preparatory patch set before introducing features to
-> > control top tiered memory in cgroups.
-> > 
-> > I'll like to first get feedback to see if 
-> > (1) Controllng the topmost tiered memory is enough 
-> > or
-> > (2) Multiple tiers at the top levels need to be grouped into "toptier"
-> > or
-> 
-> If we combine top-N tiers, I think the better name could be "fast-tier",
-> in contrast to "slow-tier".
-> 
+On Wed, Jun 15, 2022 at 9:28 AM Petr Mladek <pmladek@suse.com> wrote:
+>
+> BugLink: https://lore.kernel.org/r/20220610205038.GA3050413@paulmck-ThinkPad-P17-Gen-1
+> BugLink: https://lore.kernel.org/r/CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com
 
-I can see use cases for grouping tiers. For example, it makese sense for HBM and 
-DRAM tiers be grouped together into a "fast-tier-group".
+Other thread discussion about this exact thing:
 
-To make things simple, we can define any tiers above or equal
-to the rank of DRAM will belong to this fast-tier-group.
+   https://lore.kernel.org/all/CAHk-=wgzRUT1fBpuz3xcN+YdsX0SxqOzHWRtj0ReHpUBb5TKbA@mail.gmail.com/
 
-An implication for page promotion/demotion is it needs
-to take tier grouping into consideration.  You want to demote
-pages away from current tier-group.  For example,
-you want to demote HBM (fast-tier-group) into PMEM (slow-tier-group)
-instead of into DRAM (fast-tier-group).  
+please stop making up random tags that make no sense.
 
-The question is whether fast/slow tier groups are sufficient.
-Or you need fast/slow/slower groups?
+Just use "Link:"
 
-> > (3) There are use cases not covered by (1) and (2). 
-> 
-> Is it necessary to control memory usage of each tier (except the
-> lowest/slowest)?  I am not the right person to answer the question, but
-> I want to ask it.
-> 
+Look at that first one (I didn't even bother following the second
+one). The "bug" part is not even the most important part.
 
-I have the same question.
+The reason to follow that link is all the discussion, the test-patch,
+and the confirmation from Paul that "yup, that patch solves the
+problem for me".
 
-Tim
+It's extra context to the commit, in case somebody wants to know the
+history. The "bug" part is (and always should be) already explained in
+the commit message, there's absolutely no point in adding soem extra
+noise to the "Link:" tag.
 
+And if the only reason for "BugLink:" to exist is to show "look, this
+tag actually contains relevant and interesting information", then the
+solution to THAT problem is to not have the links that are useless and
+pointless in the first place.
 
+Put another way: if you want to distinguish useless links from useful
+ones, just do it by not including the useless ones.
+
+Ok?
+
+                   Linus

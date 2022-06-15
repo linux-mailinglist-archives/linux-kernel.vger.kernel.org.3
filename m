@@ -2,128 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F02454CF01
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E854F54CF09
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245744AbiFOQrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
+        id S1345920AbiFOQss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245195AbiFOQrh (ORCPT
+        with ESMTP id S1346020AbiFOQsa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:47:37 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C97A12080;
-        Wed, 15 Jun 2022 09:47:34 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id i64so11945637pfc.8;
-        Wed, 15 Jun 2022 09:47:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9LNaObpm8Up+d88THK7j7rjplRd3qN/NAg8yWi2diNY=;
-        b=SEzTgTqa1tibXsbn9UFQMy9G1j3oY2LzsGeP1/MsJ5JJXf0sd7nyHGFUJ6/LOFFYdY
-         H4EyGJK07bylBZJ7bWTbCDXGivk/AHDglGYTakidrgvK7ug3j2zUIb4bIjMmAUVf7T7X
-         A7r2GSjnNOIRo9mArxNglUNnA141QT33PijaYjcvmcidjrfJppErZnv1ZExyZ+zbgvE8
-         t+qt4QFLbrXBcns+UIsJXSJPv6aEX6xvL2dnHhguwHn28wfAF2b9jFg+tHQDnSb+Ps3n
-         ftojStBruMb0ksJ36aCYFYwIfEoPTvtvpcrm0hxN8ngBIL51TfQKLIYq727o9PXGuNi+
-         PPCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=9LNaObpm8Up+d88THK7j7rjplRd3qN/NAg8yWi2diNY=;
-        b=vcIi4+W29e9ymxXoV4LjDdpP1bDVO/45i1f9CG6npbLfYKxPcA1oMKj4csdDVpo3tc
-         JYJCJO8/ELPUPL5JDvrgvnRSAMTfK8beNAF7AP5pUK7Az5mqUeEAZRshBij1H6jEn3pR
-         Tq9GtosPO5nDEikxKAxtHFYc235Eg5FvwRavIb9ybT8+rY2OsiFF2HMDvOTEj9A2+/td
-         09vfCVXMAvIreuQsmxX295e1XD+WNfVJmvKCxSvfy7q/EKik0yi+7WNDWNEUZEphoMQN
-         TMMDIH62fd7wXuxQ9NzlzvIhjQ1j9L49lZhfLW5PRGrPzFQKGYMG1MRfXwhXNvyNYWtq
-         SJFw==
-X-Gm-Message-State: AJIora/j7yPwLZSkONMPxe0tbHa/JD+WYNt5XC7lzcMc6+L/xEEdOTP9
-        QXlPtVhiKwJ9KzxJPH88BOE=
-X-Google-Smtp-Source: AGRyM1u3viDRQjQA5a9+XRpLEHSUbaKAGBHEbFtATV5l0RU0mettXUmjuzH+0a0EmpJMHBNq6wak1g==
-X-Received: by 2002:a05:6a00:1690:b0:517:cc9e:3e2d with SMTP id k16-20020a056a00169000b00517cc9e3e2dmr527231pfc.0.1655311653545;
-        Wed, 15 Jun 2022 09:47:33 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:aa45:48f4:5c45:8d55])
-        by smtp.gmail.com with ESMTPSA id l1-20020a17090a384100b001e307d66123sm2024477pjf.25.2022.06.15.09.47.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 09:47:32 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Wed, 15 Jun 2022 09:47:30 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     umgwanakikbuti@gmail.com, bigeasy@linutronix.de,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        regressions@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Nitin Gupta <ngupta@vflare.org>
-Subject: Re: qemu-arm: zram: mkfs.ext4 : Unable to handle kernel NULL pointer
- dereference at virtual address 00000140
-Message-ID: <YqoNIgqYl8lWRFTZ@google.com>
-References: <CA+G9fYsjn0zySHU4YYNJWAgkABuJuKtHty7ELHmN-+30VYgCDA@mail.gmail.com>
- <Yp/kpPA7GdbArXDo@google.com>
- <YqAL+HeZDk5Wug28@google.com>
- <YqAMmTiwcyS3Ttla@google.com>
- <YqANP1K/6oRNCUKZ@google.com>
- <YqBRZcsfrRMZXMCC@google.com>
- <CA+G9fYvjpCOcTVdpnHTOWaf3KcDeTM3Njn_NnXvU37ppoHH5uw@mail.gmail.com>
- <YqbtH9F47dkZghJ7@google.com>
- <Yqdqfz4Ycbg33k1R@google.com>
- <Yqf+PC+cKePAsaNI@google.com>
+        Wed, 15 Jun 2022 12:48:30 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEBA2D1E1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655311705; x=1686847705;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OfS6ZHaUOYog/sAEZDCGNaILBuwuoT9tIprfON7Rpuw=;
+  b=C2XtdLNUoNYpntSaMIDE72u+LW3O5TjrmtHLsXoJNoVlizRBu0iYDmBZ
+   nUvKnjYPw81amIUYkuh5Prf34Ppa+C762nzc4HvT6DYRq8e474S8JJkal
+   VEXeecR4sTVp9MahNzjUZy5eMyo/hGLAheHwcLT9r1huq7nF/dX/owKZ4
+   +q1HakcHqoi63sWb/Y6cM5LQH77/4cdsXLPSzRMNTzAtuy/bc+JoENYpk
+   3snhPpEva6l7B99u5oJpsr0do0olvOOWuaK0L+/GuFf2Vuxrwp6yuCjBW
+   zYuBCTyv/yWfX/ZmNn3SDT18GHo1Bndk0EyOZiSGkGvJyy4RKqyE/5Xr/
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="304462023"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="304462023"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 09:48:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="652754019"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 15 Jun 2022 09:48:23 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1WBq-000N1J-Vl;
+        Wed, 15 Jun 2022 16:48:22 +0000
+Date:   Thu, 16 Jun 2022 00:47:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:for-next/kspp-fam1] BUILD SUCCESS
+ e244fb51a70a474ea78f4b8dff47eff37f0723d6
+Message-ID: <62aa0d25.neLHnmHnKugFBjpO%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yqf+PC+cKePAsaNI@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 12:19:24PM +0900, Sergey Senozhatsky wrote:
-> On (22/06/13 09:49), Minchan Kim wrote:
-> > > Many thanks for the tests.
-> > > 
-> > > Quite honestly I was hoping that the patch would not help :) Well, ok,
-> > > we now know that it's mapping area lock and the lockdep part of its
-> > > memory is zero-ed out. The question is - "why?" It really should not
-> > > be zeroed out.
-> > 
-> > Ccing Mike and Sebastian who are author/expert of the culprit patch
-> > 
-> > Naresh found zsmalloc crashed on the testing [1] and confirmed
-> > that Sergey's patch[2] fixed the problem.
-> > However, I don't understand why we need reinit the local_lock
-> > on cpu_up handler[3].
-> > 
-> > Could you guys shed some light?
-> 
-> My guess is that it's either something very specific to Naresh's arch/config
-> or a bug somewhere, which memset() per-CPU memory. Not sure how to track it
-> down. KASAN maybe?
-> 
-> We certainly don't expect that
-> 
-> 	static DEFINE_PER_CPU(struct mapping_area, zs_map_area) = {
-> 	        .lock   = INIT_LOCAL_LOCK(lock),
-> 	};
-> 
-> would produce un-initialized dep_map. So I guess we start off with a
-> valid per-CPU lock, but then it somehow gets zeroed-out.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git for-next/kspp-fam1
+branch HEAD: e244fb51a70a474ea78f4b8dff47eff37f0723d6  i40e: Replace one-element array with flexible-array member in struct i40e_package_header
 
-Yes, I don't think we need to reinitialize the local_lock.
+elapsed time: 1383m
 
-Naresh, we believe the patch Sergey provided for the test
-was just band aid to hide the problem.
+configs tested: 87
+configs skipped: 3
 
-Could you please try to bisect it?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+sparc                            allyesconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a015-20220613
+x86_64               randconfig-a014-20220613
+x86_64               randconfig-a011-20220613
+x86_64               randconfig-a016-20220613
+x86_64               randconfig-a012-20220613
+x86_64               randconfig-a013-20220613
+i386                 randconfig-a012-20220613
+i386                 randconfig-a013-20220613
+i386                 randconfig-a011-20220613
+i386                 randconfig-a014-20220613
+i386                 randconfig-a016-20220613
+i386                 randconfig-a015-20220613
+arc                  randconfig-r043-20220613
+riscv                randconfig-r042-20220613
+s390                 randconfig-r044-20220613
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                               rhel-8.3
+x86_64                                  kexec
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-syz
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+x86_64               randconfig-a002-20220613
+x86_64               randconfig-a001-20220613
+x86_64               randconfig-a003-20220613
+x86_64               randconfig-a004-20220613
+x86_64               randconfig-a005-20220613
+x86_64               randconfig-a006-20220613
+i386                 randconfig-a002-20220613
+i386                 randconfig-a003-20220613
+i386                 randconfig-a001-20220613
+i386                 randconfig-a005-20220613
+i386                 randconfig-a004-20220613
+i386                 randconfig-a006-20220613
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+hexagon              randconfig-r041-20220613
+hexagon              randconfig-r045-20220613
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

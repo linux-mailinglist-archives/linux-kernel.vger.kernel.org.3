@@ -2,141 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB8D54C034
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 05:31:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4D254C040
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 05:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243324AbiFODbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 23:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
+        id S1345624AbiFODkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 23:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242442AbiFODbF (ORCPT
+        with ESMTP id S229924AbiFODkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 23:31:05 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EC74EDC5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 20:31:04 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id l204so18302371ybf.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 20:31:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Vigeld65CL0SN6yz+TUV7phZIEBTM594whgcU4O9Tq0=;
-        b=cbh5N9vZrOzrArx1r7lElQ6dOfbHyzkcC+XKhe05J8yj7B42NshNOzN3+5K/gPNxWa
-         hio9scvKQ78f8X9UuvuPGO3mAh5YtXgArVHFjoqdEHuytZFdMil8WkUpAJlyFN8HxGOG
-         xFYCRdyGpbS/I9UueW9t4ojGax/8ucR5kkDm+4S6nxaFevTny6TYtkhLn7hYrX9S6pCc
-         GG5au9XN1cyamsjsIn/8aMOTu6qNAj77XMYGKBipPanpcXvDaP8UgZVKTBJpMcIba6dw
-         aBzgI9SX88OBzcIm4eiGFPStVecT4SlH9z/mvwSvDsLogCSYx3gGaG+chxucS72nhNTH
-         k1gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Vigeld65CL0SN6yz+TUV7phZIEBTM594whgcU4O9Tq0=;
-        b=FFpyJdH/2Kt1bdD2J26TpZ9/T+VKcBVo9Mh9v/lDxuu1x2Vhg5C9yjXk8dlaZkZ3NT
-         K0Y9M3soHO6SUCckAFtChpEkzjYYDfahm1d3ZFRDq613cY5kmY3Rhup6lfn3jsCZrxXH
-         +UrE2PxoKYv1u6lKfKzYb69dtxKLNvxhn69HGXdXQmZN/U0z5gxi9oowubL8qi6aoPHy
-         8/WvUP7xhR7pJrfc54u6qLtXbfuWDm9+vZKoXAlslNnxiJgt0IeOVSHithqCwSXINYB9
-         C4Gu1OEYXdLSC12QhQ2m4NXaowBiseo2DcWqLdAHWB0KLu/WEyVZJ1kCb0w1TVzH5n3K
-         Rh5g==
-X-Gm-Message-State: AJIora9A82nENrSFJEZVbHdx9LaqX1KSN769i6TIn4fboRb3uTLlWAhm
-        2BldGt3kZ5Rs6j0z4F0jKc8cXJF4i87eqxlqk9k=
-X-Google-Smtp-Source: AGRyM1tz4e9RDBI7VVrR7qNP1lsk+P8mmG3Hd6lz28U3OXQ9cKA2rhHX9XYQV3pc6cP0V2rBDkNfLbNaX22mlkCDkIM=
-X-Received: by 2002:a05:6902:28c:b0:664:85df:5f31 with SMTP id
- v12-20020a056902028c00b0066485df5f31mr8253009ybh.38.1655263863497; Tue, 14
- Jun 2022 20:31:03 -0700 (PDT)
+        Tue, 14 Jun 2022 23:40:02 -0400
+Received: from mx1.cqplus1.com (unknown [113.204.237.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 262674D9D3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 20:39:42 -0700 (PDT)
+X-MailGates: (flag:1,DYNAMIC,RELAY,NOHOST,LAN:PASS)(compute_score:DELIVE
+        R,40,3)
+Received: from 172.27.96.203
+        by mx1.cqplus1.com with MailGates ESMTP Server V5.0(28649:0:AUTH_RELAY)
+        (envelope-from <qinjian@cqplus1.com>); Wed, 15 Jun 2022 11:31:54 +0800 (CST)
+Received: from CQEXMAIL01.cqplus1.com (172.27.96.203) by
+ CQEXMAIL01.cqplus1.com (172.27.96.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.6; Wed, 15 Jun 2022 11:31:50 +0800
+Received: from CQEXMAIL01.cqplus1.com ([::1]) by CQEXMAIL01.cqplus1.com
+ ([::1]) with mapi id 15.01.2507.006; Wed, 15 Jun 2022 11:31:50 +0800
+From:   =?utf-8?B?cWluamlhblvopoPlgaVd?= <qinjian@cqplus1.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Russell King - ARM Linux <linux@armlinux.org.uk>,
+        Olof Johansson <olof@lixom.net>, SoC Team <soc@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        DTML <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>
+Subject: RE: [PATCH v18 10/10] ARM: dts: Add Sunplus SP7021-Demo-V3 board
+ device tree
+Thread-Topic: [PATCH v18 10/10] ARM: dts: Add Sunplus SP7021-Demo-V3 board
+ device tree
+Thread-Index: AQHYf8r27MMUrQucmUWH+5A1oaj77q1OMQ+AgAGftCA=
+Date:   Wed, 15 Jun 2022 03:31:50 +0000
+Message-ID: <f19b479d70704784ae5fb00ca610fda3@cqplus1.com>
+References: <cover.1655194858.git.qinjian@cqplus1.com>
+ <0574ed0ad1e9ec4c12645fe2d2dde8f701d285e5.1655194858.git.qinjian@cqplus1.com>
+ <CAK8P3a0XgDS-iJEfOrTjTRGODosxj0gc748PAH_hc534DkyswQ@mail.gmail.com>
+In-Reply-To: <CAK8P3a0XgDS-iJEfOrTjTRGODosxj0gc748PAH_hc534DkyswQ@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.28.110.18]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20220614144443.6566-1-wuchi.zero@gmail.com> <YqiiC+4xES0DoV7X@kroah.com>
-In-Reply-To: <YqiiC+4xES0DoV7X@kroah.com>
-From:   chi wu <wuchi.zero@gmail.com>
-Date:   Wed, 15 Jun 2022 11:30:51 +0800
-Message-ID: <CA+tQmHAJbqDenRE47OacSurF5HZ-XWHu6dRBf+A=UqbhiLomAA@mail.gmail.com>
-Subject: Re: [PATCH] lib/klist: Remove mb() before wake_up_process
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     alexios.zavras@intel.com, allison@lohutok.net, armijn@tjaldur.nl,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> =E4=BA=8E2022=E5=B9=B46=E6=9C=8814=E6=
-=97=A5=E5=91=A8=E4=BA=8C 22:58=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Tue, Jun 14, 2022 at 10:44:43PM +0800, wuchi wrote:
-> > Function wake_up_process always executes a general memory barrier,
-> > so remove the mb() before it.
->
-> Really?  On all systems?  I do not see that, where does it happen?
->
-As I understand it, it is on all systems.  Please help correct the
-mistake, thanks.
-
-1. Follow  Documentation/memory-barriers.txt  line 2128 ~ 2278,
-especially line 2187 ~ 2202 snippet:
-        A general memory barrier is executed by wake_up() if it wakes
-something up.
-        If it doesn't wake anything up then a memory barrier may or may not=
- be
-        executed; you must not rely on it. The barrier occurs before
-the task state
-        is accessed, in particular, it sits between the STORE to
-indicate the event
-        and the STORE to set TASK_RUNNING:
-         CPU 1 (Sleeper)                                       CPU 2 (Waker=
-)
-        =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-        set_current_state();                                   STORE
-event_indicated
-            smp_store_mb();                                   wake_up();
-                STORE current->state                           ...
-                <general barrier>
-<general barrier>
-[*1-1*]
-         LOAD event_indicated                                  if
-((LOAD task->state) & TASK_NORMAL)
-
-            STORE task->state
-        where "task" is the thread being woken up and it equals CPU
-1's "current".
-
-2. Follow code wake_up_process in kernel/sched/core.c
-    wake_up_process
-        try_to_wake_up
-            ....
-            raw_spin_lock_irqsave                   [*2-1*]
-            smp_mb__after_spinlock                [*2-2*]
-            ....
-
-[*2-1*] and [*2-2*] will match [*1-1*], though smp_mb__after_spinlock
-does nothing on most architectures,
-but the architectures implement ACQUIRE with an smp_mb() after the
-LL/SC loop, Following include/linux/spinlock.h
-line 172 ~ 178.
-
-3. Following lib/klist.c
-klist_release and klist_remove conform to model "SLEEP AND WAKE-UP
-FUNCTIONS" in  Documentation/memory-barriers.txt,
-so we do as the patch show.
-
-> > Signed-off-by: wuchi <wuchi.zero@gmail.com>
->
-> We need a "real name" for commits.
->
-> How did you test this patch?
-
-Sorry, I didn't. Just found the mb before wake_up_process could be
-remove when reading the code,
-Maybe you can view this as a question I asked.
-
-thanks for your time
+PiANCj4gSSdsbCB3YWl0IGZvciBhIGZpbmFsIEFjayBmcm9tIEtyenlzenRvZiBiZWZvcmUgYXBw
+bHlpbmcgdGhpcy4NCj4gDQo+IA0KPiBBIGZldyBtb3JlIGRldGFpbHMgSSBub3RpY2VkOg0KPiAN
+Cj4gDQo+ID4gKy8gew0KPiA+ICsgICAgICAgY29tcGF0aWJsZSA9ICJzdW5wbHVzLHNwNzAyMSI7
+DQo+ID4gKyAgICAgICBtb2RlbCA9ICJTdW5wbHVzIFNQNzAyMSI7DQo+ID4gKw0KPiA+ICsgICAg
+ICAgYWxpYXNlcyB7DQo+ID4gKyAgICAgICAgICAgICAgIHNlcmlhbDAgPSAmdWFydDA7DQo+ID4g
+KyAgICAgICAgICAgICAgIHNlcmlhbDEgPSAmdWFydDE7DQo+ID4gKyAgICAgICAgICAgICAgIHNl
+cmlhbDIgPSAmdWFydDI7DQo+ID4gKyAgICAgICAgICAgICAgIHNlcmlhbDMgPSAmdWFydDM7DQo+
+ID4gKyAgICAgICAgICAgICAgIHNlcmlhbDQgPSAmdWFydDQ7DQo+ID4gKyAgICAgICB9Ow0KPiAN
+Cj4gU29tZSBvZiB0aGVzZSBhcmUgZGlzYWJsZWQsIHByZXN1bWFibHkgYmVjYXVzZSB0aGV5IGFy
+ZSBub3QNCj4gYWN0dWFsbHkgY29ubmVjdGVkIG9uIGFsbCBib2FyZHMuIEJldHRlciBtb3ZlIHRo
+ZSBhbGlhc2VzIHRvIHRoZSAuZHRzIGZpbGUNCj4gYW5kIG9ubHkgbGlzdCB0aGUgcG9ydHMgdGhh
+dCBhcmUgaW4gZmFjdCB1c2VkLCB1c2luZyB0aGUgbnVtYmVyaW5nIHRoYXQNCj4gbWF0Y2hlcyB0
+aGUgbGFiZWxzIG9uIHRoZSBib2FyZCwgbm90IHRoZSBudW1iZXJzIGluc2lkZSBvZiB0aGUgU29D
+DQo+IA0KPiA+ICsNCj4gPiArICAgICAgIHNvYyB7DQo+ID4gKyAgICAgICAgICAgICAgIGNvbXBh
+dGlibGUgPSAic2ltcGxlLWJ1cyI7DQo+ID4gKyAgICAgICAgICAgICAgICNhZGRyZXNzLWNlbGxz
+ID0gPDE+Ow0KPiA+ICsgICAgICAgICAgICAgICAjc2l6ZS1jZWxscyA9IDwxPjsNCj4gPiArICAg
+ICAgICAgICAgICAgcmFuZ2VzOw0KPiA+ICsgICAgICAgICAgICAgICBpbnRlcnJ1cHQtcGFyZW50
+ID0gPCZpbnRjPjsNCj4gPiArDQo+ID4gKyAgICAgICAgICAgICAgIGludGM6IGludGVycnVwdC1j
+b250cm9sbGVyQDljMDAwNzgwIHsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICBjb21wYXRp
+YmxlID0gInN1bnBsdXMsc3A3MDIxLWludGMiOw0KPiA+ICsgICAgICAgICAgICAgICAgICAgICAg
+IHJlZyA9IDwweDljMDAwNzgwIDB4ODA+LCA8MHg5YzAwMGE4MCAweDgwPjsNCj4gPiArICAgICAg
+ICAgICAgICAgICAgICAgICBpbnRlcnJ1cHQtY29udHJvbGxlcjsNCj4gPiArICAgICAgICAgICAg
+ICAgICAgICAgICAjaW50ZXJydXB0LWNlbGxzID0gPDI+Ow0KPiA+ICsgICAgICAgICAgICAgICB9
+Ow0KPiANCj4gQWxsIGNoaWxkIG5vZGVzIGJlbG93IC9zb2MgaGF2ZSByZWdpc3RlcnMgaW4gdGhl
+IDB4OWMwMDAwMDAgcmFuZ2UuIEkgd291bGQNCj4gc3VnZ2VzdCB5b3UgdXNlIGEgbWF0Y2hpbmcg
+J3JhbmdlcycgcHJvcGVydHkgdG8gdHJhbnNsYXRlIHRoZXNlIGludG8gYQ0KPiB6ZXJvLWJhc2Vk
+DQo+IGFkZHJlc3MgbGlrZQ0KPiANCj4gL3NvYyB7DQo+ICAgICAgICByYW5nZXMgPSA8MCAweDlj
+MDAwMDAwIDB4MTAwMDA+Ow0KPiANCj4gICAgICAgaW50ZXJydXB0LWNvbnRyb2xsZXJANzgwIHsN
+Cj4gICAgICAgICAgICAgIHJlZyA9IDwweDc4MCAweDgwPiwgPDB4YTgwIDB4ODA+Ow0KPiAgICAg
+ICAgICAgICAgLi4uDQo+ICAgICAgIH07DQo+IH07DQo+IA0KPiA+ICsgICAgICAgICAgICAgICBj
+bGtjOiBjbG9jay1jb250cm9sbGVyQDljMDAwMDA0IHsNCj4gPiArICAgICAgICAgICAgICAgICAg
+ICAgICBjb21wYXRpYmxlID0gInN1bnBsdXMsc3A3MDIxLWNsa2MiOw0KPiA+ICsgICAgICAgICAg
+ICAgICAgICAgICAgIHJlZyA9IDwweDljMDAwMDA0IDB4Mjg+LA0KPiA+ICsgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgIDwweDljMDAwMjAwIDB4NDQ+LA0KPiA+ICsgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIDwweDljMDAwMjY4IDB4MDQ+Ow0KPiA+ICsgICAgICAgICAgICAgICAgICAg
+ICAgIGNsb2NrcyA9IDwmZXh0Y2xrPjsNCj4gPiArICAgICAgICAgICAgICAgICAgICAgICAjY2xv
+Y2stY2VsbHMgPSA8MT47DQo+ID4gKyAgICAgICAgICAgICAgIH07DQo+ID4gKw0KPiA+ICsgICAg
+ICAgICAgICAgICByc3RjOiByZXNldEA5YzAwMDA1NCB7DQo+ID4gKyAgICAgICAgICAgICAgICAg
+ICAgICAgY29tcGF0aWJsZSA9ICJzdW5wbHVzLHNwNzAyMS1yZXNldCI7DQo+ID4gKyAgICAgICAg
+ICAgICAgICAgICAgICAgcmVnID0gPDB4OWMwMDAwNTQgMHgyOD47DQo+ID4gKyAgICAgICAgICAg
+ICAgICAgICAgICAgI3Jlc2V0LWNlbGxzID0gPDE+Ow0KPiA+ICsgICAgICAgICAgICAgICB9Ow0K
+PiANCj4gDQo+IE1heWJlIHNvcnQgdGhlIG5vZGVzIGJ5IGFkZHJlc3MsIG9yIHBvc3NpYmx5IGJ5
+IG5hbWUuDQo+IA0KPiAgICAgICAgQXJuZA0KDQpUaGFua3MgZm9yIHlvdXIgY29tbWVudHMsIEkn
+bGwgZml4IHRoZXNlIGluIG5leHQgcGF0Y2guDQoNCg==

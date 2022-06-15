@@ -2,162 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C24454C646
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BCC954C60B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348698AbiFOKdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
+        id S243327AbiFOK2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348678AbiFOKdd (ORCPT
+        with ESMTP id S1343591AbiFOK2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:33:33 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BED54ECF7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:33:22 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LNM862vtmzDrDr;
-        Wed, 15 Jun 2022 18:32:54 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by kwepemi500016.china.huawei.com
- (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 15 Jun
- 2022 18:33:19 +0800
-From:   Zhou Guanghui <zhouguanghui1@huawei.com>
-To:     <akpm@linux-foundation.org>, <rppt@kernel.org>, <will@kernel.org>,
-        <anshuman.khandual@arm.com>, <darren@os.amperecomputing.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>, <xuqiang36@huawei.com>,
-        <zhouguanghui1@huawei.com>
-Subject: [PATCH v5] memblock,arm64: Expand the static memblock memory table
-Date:   Wed, 15 Jun 2022 10:27:42 +0000
-Message-ID: <20220615102742.96450-1-zhouguanghui1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 15 Jun 2022 06:28:06 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AE3101FE
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:28:01 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id y13-20020a17090a154d00b001eaaa3b9b8dso1614231pja.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:28:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=znEIzE4EgTWOiFZf5Cm3kxNmUH6IPbVNQv1UUuyV/Hc=;
+        b=qV9h/UpNmydq91H3mP6CVU6NclHsJYkwfhKtoANC/6Tu2zBT/yPUPmiRQaF/d90inO
+         tLv2mruFsa6BwzQwqBzSb2nHAcMM6DnbKRwhwxKDO7XOk7s6jDF5FQCSFAz3pJTuJYEl
+         p2TF12/VNwu5xzgYtkfUEeoSclxn2LgsBLG7z+Rp6npZcXpPOUXF9pjLz4NSabazZOe+
+         2wDQv+4nzLsoXymU0D+hO3piw8G3YSlQbtdeFRfSvTR/V4Hady+iSnrLrgyJxXL4sPPD
+         T+9JSIndQ/pgJqevcyDY0DpGxLlZyJNy2NOiPEZ151KZXZSntI6fZMjO2fYbx554bdOz
+         iwAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=znEIzE4EgTWOiFZf5Cm3kxNmUH6IPbVNQv1UUuyV/Hc=;
+        b=dMtDpMYrAPf7p3inR1vO8rRqcBSPpA0EsVmhurkbcxRiZV7UR1tG0ajSdGub1JLLex
+         Hdyd+zQeOzbndlai4WDbi2aPFog0ef8g5m7ZpZ/rWhog0afgAPZ3C0OXv0H3MuVr8MPf
+         sjlvJJUqpcWNazwDumn5iBSdFHeSsU6z5rX9eH1f88al0MGQqIBhC7QjbYMFRPaQmAzA
+         IM37dC6+ebxvov6aGBtyEsninEvn6KagPbtNpNLZzptrbHUFjuYIVUUAulrLAfe59ksK
+         miD8vs5G8b2dz8b4AxblNNJN2/HAUS8FzuVw3ZNoUtsqfdbIMlvQbRWUYpNSfVz/8ip3
+         vbuA==
+X-Gm-Message-State: AJIora8PPXs2InI16a9uS7VSpVTmVS/s25tjJ/wMvOsKzRQizK67KBlO
+        lyJuJ1rnfNOMJHaCQiGZK+I=
+X-Google-Smtp-Source: AGRyM1uylrZN/TnBR+RkyEvlG9LSFkRtn1a0pXgqvgeKkHmp20cQHxemz9ZiU5FVzwHH9jENOzszIw==
+X-Received: by 2002:a17:903:41c6:b0:164:1050:49ac with SMTP id u6-20020a17090341c600b00164105049acmr8762042ple.138.1655288881189;
+        Wed, 15 Jun 2022 03:28:01 -0700 (PDT)
+Received: from localhost ([122.183.153.161])
+        by smtp.gmail.com with ESMTPSA id g2-20020aa78182000000b0051bf246ca2bsm9407279pfi.100.2022.06.15.03.27.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 03:28:00 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 12:27:57 +0200
+From:   Pankaj Raghav <pankydev8@gmail.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "R, Monish Kumar" <monish.kumar.r@intel.com>,
+        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "alan.adamson@oracle.com" <alan.adamson@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Yi Zhang <yi.zhang@redhat.com>,
+        Keith Busch <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
+        "Rao, Abhijeet" <abhijeet.rao@intel.com>
+Subject: Re: 2 second nvme initialization delay regression in 5.18 [Was: Re:
+ [bug report]nvme0: Admin Cmd(0x6), I/O Error (sct 0x0 / sc 0x2) MORE DNR
+ observed during blktests]
+Message-ID: <20220615102757.ugvs6vdxf66nrmyn@quentin>
+References: <CAHj4cs_iC+FE8ZAXXZPeia1V3ZX7zRbeASdOP_8c7DLiFozNfA@mail.gmail.com>
+ <Ykyf5Zuz1W8yHhNY@zx2c4.com>
+ <CAHmME9pwz4q0m-pSUy7ReWu4nNzxySNcYZrqyDZiTuGxHN=1NQ@mail.gmail.com>
+ <CAHmME9o-orF52HzkT80054e3Op5fLOcTHb-KHpvvU7H3FpAJ7A@mail.gmail.com>
+ <SA2PR11MB5115DCE45778910C96813CA1C3A79@SA2PR11MB5115.namprd11.prod.outlook.com>
+ <YqG/pybFg0P5yQ9a@zx2c4.com>
+ <20220610061449.GD24331@lst.de>
+ <YqMMo2Dv9SZRtR7B@zx2c4.com>
+ <20220613135549.GA1714@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220613135549.GA1714@lst.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a system(Huawei Ascend ARM64 SoC) using HBM, a multi-bit ECC error
-occurs, and the BIOS will mark the corresponding area (for example, 2 MB)
-as unusable. When the system restarts next time, these areas are not
-reported or reported as EFI_UNUSABLE_MEMORY. Both cases lead to an
-increase in the number of memblocks, whereas EFI_UNUSABLE_MEMORY
-leads to a larger number of memblocks.
-
-For example, if the EFI_UNUSABLE_MEMORY type is reported:
-...
-memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
-memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
-memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
-memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
-memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
-memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
-memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
-memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
-...
-
-The EFI memory map is parsed to construct the memblock arrays before
-the memblock arrays can be resized. As the result, memory regions
-beyond INIT_MEMBLOCK_REGIONS are lost.
-
-Add a new macro INIT_MEMBLOCK_MEMORY_REGTIONS to replace
-INIT_MEMBLOCK_REGTIONS to define the size of the static memblock.memory
-array.
-
-Allow overriding memblock.memory array size with architecture defined
-INIT_MEMBLOCK_MEMORY_REGIONS and make arm64 to set
-INIT_MEMBLOCK_MEMORY_REGIONS to 1024 when CONFIG_EFI is enabled.
-
-Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
-Tested-by: Darren Hart <darren@os.amperecomputing.com>
----
- arch/arm64/include/asm/memory.h |  9 +++++++++
- mm/memblock.c                   | 14 +++++++++-----
- 2 files changed, 18 insertions(+), 5 deletions(-)
-
-diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
-index 0af70d9abede..ce8614fa376a 100644
---- a/arch/arm64/include/asm/memory.h
-+++ b/arch/arm64/include/asm/memory.h
-@@ -364,6 +364,15 @@ void dump_mem_limit(void);
- # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
- #endif
- 
-+/*
-+ * memory regions which marked with flag MEMBLOCK_NOMAP(for example, the memory
-+ * of the EFI_UNUSABLE_MEMORY type) may divide a continuous memory block into
-+ * multiple parts. As a result, the number of memory regions is large.
-+ */
-+#ifdef CONFIG_EFI
-+#define INIT_MEMBLOCK_MEMORY_REGIONS	(INIT_MEMBLOCK_REGIONS * 8)
-+#endif
-+
- #include <asm-generic/memory_model.h>
- 
- #endif /* __ASM_MEMORY_H */
-diff --git a/mm/memblock.c b/mm/memblock.c
-index e4f03a6e8e56..7c63571a69d7 100644
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -29,6 +29,10 @@
- # define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
- #endif
- 
-+#ifndef INIT_MEMBLOCK_MEMORY_REGIONS
-+#define INIT_MEMBLOCK_MEMORY_REGIONS		INIT_MEMBLOCK_REGIONS
-+#endif
-+
- /**
-  * DOC: memblock overview
-  *
-@@ -55,9 +59,9 @@
-  * the allocator metadata. The "memory" and "reserved" types are nicely
-  * wrapped with struct memblock. This structure is statically
-  * initialized at build time. The region arrays are initially sized to
-- * %INIT_MEMBLOCK_REGIONS for "memory" and %INIT_MEMBLOCK_RESERVED_REGIONS
-- * for "reserved". The region array for "physmem" is initially sized to
-- * %INIT_PHYSMEM_REGIONS.
-+ * %INIT_MEMBLOCK_MEMORY_REGIONS for "memory" and
-+ * %INIT_MEMBLOCK_RESERVED_REGIONS for "reserved". The region array
-+ * for "physmem" is initially sized to %INIT_PHYSMEM_REGIONS.
-  * The memblock_allow_resize() enables automatic resizing of the region
-  * arrays during addition of new regions. This feature should be used
-  * with care so that memory allocated for the region array will not
-@@ -102,7 +106,7 @@ unsigned long min_low_pfn;
- unsigned long max_pfn;
- unsigned long long max_possible_pfn;
- 
--static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_REGIONS] __initdata_memblock;
-+static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_MEMORY_REGIONS] __initdata_memblock;
- static struct memblock_region memblock_reserved_init_regions[INIT_MEMBLOCK_RESERVED_REGIONS] __initdata_memblock;
- #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
- static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS];
-@@ -111,7 +115,7 @@ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS
- struct memblock memblock __initdata_memblock = {
- 	.memory.regions		= memblock_memory_init_regions,
- 	.memory.cnt		= 1,	/* empty dummy entry */
--	.memory.max		= INIT_MEMBLOCK_REGIONS,
-+	.memory.max		= INIT_MEMBLOCK_MEMORY_REGIONS,
- 	.memory.name		= "memory",
- 
- 	.reserved.regions	= memblock_reserved_init_regions,
--- 
-2.17.1
-
+Hi Christoph,
+On Mon, Jun 13, 2022 at 03:55:49PM +0200, Christoph Hellwig wrote:
+> It all appears as PCIe, but the pci_dev has an is_thunderbolt flag.
+> 
+> Thanks to both of you for the information.  I'd like to wait until the
+> end of the week or so if we can hear something from Samsung, and if we
+> don't we'll have to quirk based on the model number.
+Our FW team has started looking into the issue. They said they will try
+to come up with a solution before 5.20. If not, we can add this quirk
+based on the FW ver. and a proper solution can be added by 5.21.
+> 

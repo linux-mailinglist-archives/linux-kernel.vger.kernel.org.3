@@ -2,87 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF35E54D026
+	by mail.lfdr.de (Postfix) with ESMTP id 8694254D025
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349699AbiFORj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
+        id S1357714AbiFORjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244729AbiFORjZ (ORCPT
+        with ESMTP id S244107AbiFORjo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:39:25 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E4352B3E;
-        Wed, 15 Jun 2022 10:39:24 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id 187so12057057pfu.9;
-        Wed, 15 Jun 2022 10:39:24 -0700 (PDT)
+        Wed, 15 Jun 2022 13:39:44 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECED852E52
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:39:43 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id y6so6420891pfr.13
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:39:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=c5/V956sTxH14N5WfQvdhuuD83UaRrnJTRkjjl46oig=;
-        b=QQxr/HV2Xq+o2keHb2P9sbONd3hshCUCGKrbI4IH74HH91fGQbBT4nSiFnnMh6eiXL
-         9RgN2+ZcrGVxdq101fCKPiDj2bUwu1um4flN/aXufprtQKVsqXgmUSGTbb5Zcfg45gvT
-         a+cYmo/vKOzC4rhL2N85QMY9QE+MpATZXcq+ZPRreMQBFUtYoYFT+25tPtSs2DlyYi4A
-         j7JlMVXDmRvmwzKoqyy0l6ujecb8y7gxHuwuoj3KfowWPs7BilG5XIvMs1eAMj1TQy0V
-         PKv33SBIHJ/Kv0gbBNw8LOwyY7LS9BSff21GDIUeMKnpRgi15wdjMEU4StMeoRiAm43W
-         q8ww==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=JIGNx3dxDBXAJBCjmLCOBkusT3zHmoO5EB6WelB8/B4=;
+        b=oUnFHZqLgzAe8XdtP8xIy+iktAr8OgZ4tDzEeFSBmBvpgqj5WAhI+pSU3KD2EHL4MU
+         Fx70SswIOfEmaDuHutuxmIs8RnsZ5Ask4k7KmE76D6HqBiQFmPX6vJ6Etu3JGb04jsvZ
+         0S6FvLFPnTJbFXSqt+DjJZwAKP30H/aWT4wqfQlj2JfFf+6c+T5RC6BCqpgSpJ/DMVTM
+         Ak4XK9T5z5jR7V7tC9BYqOyv3Yb3SLxTdK119Ac8ejXjJZ9WQULAo8ZLLMZ6q6Dp+7zJ
+         iS2jrR3zlapsYE/y8XadnHxa6za+sH7sOnGte3ZwBME5awCGiRETJliB+l76OoUIILPq
+         KaIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=c5/V956sTxH14N5WfQvdhuuD83UaRrnJTRkjjl46oig=;
-        b=oFK/2LBRTjA45lMuV3a9Z+7MMch2uyoiS/GdF4XxwX8NweG5fYXMoPrYnWhfQgguNL
-         VE8xr0He+RJT8Vm2jRDjE5Yu36ThZ3WQbJVA672mbV4iCG/LJUF+cV2mCiIY2o1lvBiI
-         +un8QDHj0Awfv0afqs0e3RuS2S8Yku+SLGv0kvQ6ITwhSIeBEX+1nQV0mQAQHcaIgZQF
-         ML0jQadz1uxaW+nL7BBV1lHEsQyVejb0OFxD7T+glSFdNSH494SZkPOmzSZSYPfEbG2x
-         MexU6A5MLqK5b5rTx0BEtjssrhv1Kos37DiO8Sdv14ToB1ou7LH5iSfVTRGAXERMLqIp
-         qoIA==
-X-Gm-Message-State: AJIora9bg9RRTHtpZLHdFOJieuZdddo+gLzFxH8FaSvieGIWYd9xM9lZ
-        6mwAZafZxvGqvSgvcvnIZKlHIFloeyU=
-X-Google-Smtp-Source: AGRyM1uiwP2cE1rNpILNRZ+HagwzlwEGLBZecc2WxRPoIGxYYANuDSl5kEt4iqixaVRIGYdLwkut3w==
-X-Received: by 2002:a63:5703:0:b0:408:b2c3:8df9 with SMTP id l3-20020a635703000000b00408b2c38df9mr755123pgb.247.1655314763709;
-        Wed, 15 Jun 2022 10:39:23 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id g1-20020a17090adac100b001e67e01158fsm2107461pjx.30.2022.06.15.10.39.22
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=JIGNx3dxDBXAJBCjmLCOBkusT3zHmoO5EB6WelB8/B4=;
+        b=8Ik0JfW7FDjvuKhUw6xIhewN3oy+4Z/g1g3eFfYU1s9lngx0PebOOCuB5+gFmxhYTF
+         3iut3TaSu7Q/BI1d0S7fzyagOhYbxkK0wZd2rABISQtrKnwArPJ6QBnnVzA6MP2O6sX7
+         DMaIZLaBHYuqt/Jk/zEhij+QHTzHMgrg3FbySJBiIIZyu+MNiBodASIK7FYrfYbbI1lW
+         SdiVAuZP6E8b7RVLWH67LPkPwTdegtFmNW38l/VIAe0j73DAzmrhakOb/DoUo9+Hlgqx
+         6xTnHjPsD3DXZBAMtAQEs0a4eJiCgal9LHD2lEyBUWjfroPfGy/jv52yQ7aQpMYUl3FY
+         LlLg==
+X-Gm-Message-State: AJIora8hzid8MDTLJc0QsxrUNvoqhSx39gFHxdZcOnCEnvXhJi+mb3Im
+        sHwY743dW4P7N6WS2f8dvYrM
+X-Google-Smtp-Source: AGRyM1vxpaSwdX+YrOVTzPhfpPmR3ZUlbCHDtX94AFzFgX6H6IowGyl2HG3yxhPrt495b2UfJjSbzg==
+X-Received: by 2002:a63:1152:0:b0:3fd:b58f:5be7 with SMTP id 18-20020a631152000000b003fdb58f5be7mr825255pgr.164.1655314783415;
+        Wed, 15 Jun 2022 10:39:43 -0700 (PDT)
+Received: from thinkpad ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id t188-20020a6281c5000000b0051ba7515e0dsm7247196pfd.54.2022.06.15.10.39.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 10:39:23 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Linux ARM List <linux-arm-kernel@lists.infradead.org>
-Cc:     anand.gore@broadcom.com, dan.beygelman@broadcom.com,
-        joel.peshkin@broadcom.com, samyon.furman@broadcom.com,
-        kursad.oney@broadcom.com, philippe.reynes@softathome.com,
-        tomer.yacoby@broadcom.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: arm64: Add BCM6813 SoC
-Date:   Wed, 15 Jun 2022 10:39:22 -0700
-Message-Id: <20220615173922.1991276-1-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220610001534.14275-2-william.zhang@broadcom.com>
-References: <20220610001534.14275-1-william.zhang@broadcom.com> <20220610001534.14275-2-william.zhang@broadcom.com>
+        Wed, 15 Jun 2022 10:39:42 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 23:09:41 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krishna chaitanya chundru <quic_krichai@quicinc.com>
+Cc:     helgaas@kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, swboyd@chromium.org,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
+        Rajat Jain <rajatja@google.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Subject: Re: [PATCH v5] PCI/ASPM: Update LTR threshold based upon reported
+ max latencies
+Message-ID: <20220615173941.GC3606@thinkpad>
+References: <1654242861-15695-1-git-send-email-quic_krichai@quicinc.com>
+ <1654837710-30561-1-git-send-email-quic_krichai@quicinc.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <1654837710-30561-1-git-send-email-quic_krichai@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu,  9 Jun 2022 17:15:32 -0700, William Zhang <william.zhang@broadcom.com> wrote:
-> Add BCM6813 SoC device tree description to bcmbca binding document.
+On Fri, Jun 10, 2022 at 10:38:28AM +0530, Krishna chaitanya chundru wrote:
+> From: Prasad Malisetty <quic_pmaliset@quicinc.com>
 > 
-> Signed-off-by: William Zhang <william.zhang@broadcom.com>
-> ---
+> In ASPM driver, LTR threshold scale and value are updated based on
+> tcommon_mode and t_poweron values. In kioxia NVMe L1.2 is failing due to
+> LTR threshold scale and value are greater values than max snoop/non-snoop
+> value.
+> 
+> Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
+> reported snoop/no-snoop values is greather than or equal to
+> LTR_L1.2_THRESHOLD value.
+> 
+> Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
+> Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
---
-Florian
+Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Thanks,
+Mani
+
+> ---
+> 
+> I am taking this patch forward as prasad is no more working with our org.
+> Changes since v4:
+> 	- Replaced conditional statements with min and max.
+> changes since v3:
+> 	- Changed the logic to include this condition "snoop/nosnoop
+> 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
+> Changes since v2:
+> 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
+> Changes since v1:
+> 	- Added missing variable declaration in v1 patch
+> ---
+>  drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> index a96b742..676c03e 100644
+> --- a/drivers/pci/pcie/aspm.c
+> +++ b/drivers/pci/pcie/aspm.c
+> @@ -461,14 +461,36 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+>  {
+>  	struct pci_dev *child = link->downstream, *parent = link->pdev;
+>  	u32 val1, val2, scale1, scale2;
+> +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
+>  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
+>  	u32 ctl1 = 0, ctl2 = 0;
+>  	u32 pctl1, pctl2, cctl1, cctl2;
+>  	u32 pl1_2_enables, cl1_2_enables;
+> +	u16 ltr;
+> +	u16 max_snoop_lat, max_nosnoop_lat;
+>  
+>  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
+>  		return;
+>  
+> +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
+> +	if (!ltr)
+> +		return;
+> +
+> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
+> +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
+> +
+> +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+> +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
+> +
+> +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
+> +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
+> +
+> +	/* choose the greater max scale value between snoop and no snoop value*/
+> +	max_scale = max(max_snp_scale, max_nsnp_scale);
+> +
+> +	/* choose the greater max value between snoop and no snoop scales */
+> +	max_val = max(max_snp_val, max_nsnp_val);
+> +
+>  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
+>  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+>  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
+> @@ -501,6 +523,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
+>  	 */
+>  	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
+>  	encode_l12_threshold(l1_2_threshold, &scale, &value);
+> +
+> +	/*
+> +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
+> +	 * snoop/no-snoop values are greather than or equal to LTR_L1.2_THRESHOLD value.
+> +	 */
+> +	scale = min(scale, max_scale);
+> +	value = min(value, max_val);
+> +
+>  	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
+>  
+>  	/* Some broken devices only support dword access to L1 SS */
+> -- 
+> 2.7.4
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்

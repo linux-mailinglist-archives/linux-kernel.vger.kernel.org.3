@@ -2,75 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080E654D49F
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F3D54D4A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241949AbiFOWeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 18:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52126 "EHLO
+        id S1347100AbiFOWgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 18:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245457AbiFOWeZ (ORCPT
+        with ESMTP id S239638AbiFOWgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 18:34:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 85DB15534A
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:34:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655332463;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3n2HbXmLj/4iA1gztBdMVQdKSzJcFH9E6p9we0kk/8k=;
-        b=IW0x+sFlCXJonh/1H/c2tqAOajslUBHBGN8f8puS0HSHGGVeYSiYE+x+cCSWAzIGVi4DYu
-        JbNR2QMh/MUjl4wSWkSmJx3iGCLCAtLIjn9A9aaE7syCK993STjGOYPbjKKQbdtWuXIpCJ
-        wJ75hMoEr+1nVfd78P2cccV0lrU2s2A=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-160-6dykG-VpPDu_2Dzp8y3jmA-1; Wed, 15 Jun 2022 18:34:20 -0400
-X-MC-Unique: 6dykG-VpPDu_2Dzp8y3jmA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F5A53802B94;
-        Wed, 15 Jun 2022 22:34:20 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.62])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1A67540C141F;
-        Wed, 15 Jun 2022 22:34:18 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <YqleGzRD4ax4msjL@gondor.apana.org.au>
-References: <YqleGzRD4ax4msjL@gondor.apana.org.au> <165515741424.1554877.9363755381201121213.stgit@warthog.procyon.org.uk>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     dhowells@redhat.com, Simo Sorce <simo@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] certs: Add FIPS self-test for signature verification
+        Wed, 15 Jun 2022 18:36:03 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62983554B3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:36:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655332563; x=1686868563;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=K+tbkvL1oKMTgWEY19vttlX70wCWiady0HY8d7vx3+Y=;
+  b=A6iF0kRJxPCcKFWugRdykuCV7NngawNjtts1mz8klHZ9jCBWbAxrzeV9
+   ecGv3xZDNRER42nfakLzrbzV/7axrh+kOmRpl9a8frS1YDEJ9IuaOamJ9
+   iTCfrXmYO05alQ3qs8krS8QLItNRie4Xb3FqZACRzc3VC2WGSZnoT2hUK
+   kTJng5VTCdU99cBDanm1/2/n9ROFH0bya4RA1xCEhXa16V1sOqIot1J3E
+   Rl5JCiPLWlMJgkXgY3ojjwh5MRyhtXCjnJiouRshw0cpFU9urBn6RtAFM
+   2deTVJBpTXWodD/mzCKpIL32tH/1zuADOiFLruX62y9Pd85nQbPeBkdGv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="304553454"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="304553454"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 15:36:03 -0700
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="559401664"
+Received: from mjortiz-mobl.amr.corp.intel.com (HELO [10.212.185.241]) ([10.212.185.241])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 15:36:02 -0700
+Message-ID: <184456a7-fd03-c3c6-3d4f-4f770e2e8b31@intel.com>
+Date:   Wed, 15 Jun 2022 15:36:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2689860.1655332458.1@warthog.procyon.org.uk>
-Date:   Wed, 15 Jun 2022 23:34:18 +0100
-Message-ID: <2689861.1655332458@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCHv4 3/3] x86/tdx: Handle load_unaligned_zeropad() page-cross
+ to a shared page
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org, ak@linux.intel.com,
+        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        thomas.lendacky@amd.com, x86@kernel.org
+References: <20220614120135.14812-1-kirill.shutemov@linux.intel.com>
+ <20220614120135.14812-4-kirill.shutemov@linux.intel.com>
+ <2a6e0dbb-89e3-9735-de20-132992d699b4@intel.com>
+ <20220615223251.bm4q24pnwkv37w2q@black.fi.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220615223251.bm4q24pnwkv37w2q@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Herbert Xu <herbert@gondor.apana.org.au> wrote:
+On 6/15/22 15:32, Kirill A. Shutemov wrote:
+>>>         /*
+>>>          * Reject EPT violation #VEs that split pages.
+>>>          *
+>>>          * MMIO accesses are supposed to be naturally aligned and therefore
+>>>          * never cross page boundaries. Seeing split page accesses indicates
+>>>          * a bug or a load_unaligned_zeropad() that stepped into an MMIO page.
+>>>          *
+>>>          * load_unaligned_zeropad() will recover using exception fixups.
+>>>          */
+> Looks good, thanks.
 
-> It looks OK to me.
+I've got that snippet and a few other things staged here:
 
-Can I put that down as a Reviewed-by?
+> https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/log/?h=testme
 
-Thanks,
-David
-
+Could you take a quick look through before I push them somewhere for real?

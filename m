@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F21A54C82A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:10:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 502EF54C82E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:10:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238480AbiFOMKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 08:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
+        id S1346377AbiFOMKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 08:10:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244316AbiFOMKI (ORCPT
+        with ESMTP id S244316AbiFOMKR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:10:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D43D40A20
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 05:10:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655295006;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cyh9GNwkSeiWX8VVWJet6cmrStrv1Y1BhHYKMAKCy08=;
-        b=emlce3TqKLnqU2SyJDNjeKBUYXkzTxEpem4+eClKQPYQaywZRvVSmkx1tOt9UoItwX3DLT
-        MKtDZs7JOe7U0wdC73eOriGDSbZcgPYvFedAjsSY4AaJKvyuVBQY+VxETdV1JXsKGoQU+u
-        /yRJ+u7palo1PGgM0klAYnw4pJrnEjo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-671-qMxrQmILM5iZiNK2sMN74g-1; Wed, 15 Jun 2022 08:10:03 -0400
-X-MC-Unique: qMxrQmILM5iZiNK2sMN74g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 15 Jun 2022 08:10:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58EC527EB;
+        Wed, 15 Jun 2022 05:10:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DE8A28115B1;
-        Wed, 15 Jun 2022 12:10:02 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 56C971415106;
-        Wed, 15 Jun 2022 12:10:02 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Aaron Lewis <aaronlewis@google.com>
-Subject: Re: [PATCH] KVM: VMX: Skip filter updates for MSRs that KVM is already intercepting
-Date:   Wed, 15 Jun 2022 08:10:02 -0400
-Message-Id: <20220615121002.1660139-1-pbonzini@redhat.com>
-In-Reply-To: <20220610214140.612025-1-seanjc@google.com>
-References: 
+        by ams.source.kernel.org (Postfix) with ESMTPS id 486E8B81D91;
+        Wed, 15 Jun 2022 12:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id C276DC3411C;
+        Wed, 15 Jun 2022 12:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655295013;
+        bh=bTou62QWZdbZMc3bBGGn2RsEUYdnLH3B0MG5HhHnQEs=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uvMs1Y39Z0nQXHAyn1E+FCkU4Ti0pRtFm7FKgNDCJgw7vW0Xnr2vrAmNIvzjuElah
+         eInaeH5HmGGodBGGF58Pj7zikaupvi/jf85KeEbHoWT2Kh8yZfxkiuxo2+3kdol3Cz
+         dnBmwsRBxxBaLvPyyuAqutKG7npFWeTgo0763ZKEU7gdwt1NnS2DQqgXoKbgbwh/5j
+         f8O48OFU7STgtxu7MN0VsNfZIL7dGtjkYPRH+ssURrEJqM8/Eg4m/c8wfjVmmVA6ZB
+         OkjzDZTLCfZggEn4D4Hi04hqI5RZ8wfhgCGmc06s4QNUIAinL+w9fBnOyyDi0Oy9C2
+         mFf6A4p+7g4+w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A990EE73854;
+        Wed, 15 Jun 2022 12:10:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Subject: Re: [PATCH V2] bcm63xx_enet: switch to napi_build_skb() to reuse
+ skbuff_heads
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165529501369.14672.6535099604436772744.git-patchwork-notify@kernel.org>
+Date:   Wed, 15 Jun 2022 12:10:13 +0000
+References: <20220615060922.3402-1-liew.s.piaw@gmail.com>
+In-Reply-To: <20220615060922.3402-1-liew.s.piaw@gmail.com>
+To:     Sieng Piaw Liew <liew.s.piaw@gmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,8 +59,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Queued, thanks.
+Hello:
 
-Paolo
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 15 Jun 2022 14:09:22 +0800 you wrote:
+> napi_build_skb() reuses NAPI skbuff_head cache in order to save some
+> cycles on freeing/allocating skbuff_heads on every new Rx or completed
+> Tx.
+> Use napi_consume_skb() to feed the cache with skbuff_heads of completed
+> Tx so it's never empty.
+> 
+> Signed-off-by: Sieng Piaw Liew <liew.s.piaw@gmail.com>
+> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [V2] bcm63xx_enet: switch to napi_build_skb() to reuse skbuff_heads
+    https://git.kernel.org/netdev/net-next/c/c63c615e22eb
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 

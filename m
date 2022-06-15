@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8795C54D09D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A82D354D0A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358122AbiFOSFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 14:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
+        id S1358237AbiFOSGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 14:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349342AbiFOSFg (ORCPT
+        with ESMTP id S1349342AbiFOSGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:05:36 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29918377DD
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:05:35 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id r82so21817348ybc.13
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:05:35 -0700 (PDT)
+        Wed, 15 Jun 2022 14:06:06 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0009F5046A
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:06:01 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id p13so21930229ybm.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:06:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=wCIq2pEscSFloWLAAVKf+NRJrk/xfcyCBv54BmH8NfA=;
-        b=Wz2Kt29jm2EOKKJp4dD6OTULRmnhk2QqQQs7YauX7UC/YXFBpYNyYtxMFyz7YUk/hi
-         FwIJHabc3XXyJJdaxlc2z8iTsrHVfbrmx5Zao/gl3TghFf7XWmWo9ggUXpLtdxW95DyF
-         4L5XU+9zUFLmw6VZajzaOJCIRyfnTpf4Huny0=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LWoNMw+t5sISDKPfmS/uBjaE6K11uOqPgrXVRArfKdA=;
+        b=ff5DI+ro3jbKitYSIhf9pNkWiGw74HA3Bev6bXhgRe5lNgjAsd+iH40hcRxs7KoiK2
+         l2atdhEuA03Nu7T9WjopOFxG+qTHb/tmlHzx4YQ37W70dHi4ZQtIqtivnkWgpglVj0Oa
+         6PVmfQLEADLqcMq89dENw8FVQjAdmxyymwVeiFV4ZSvnJZ0fKqwEiw97D3QkplESbw9U
+         oXvUKZQUM4GtO+5q8Su+dZqJwBDmT31T+9/6P3nLNlJhQ8G4jwzGwa81dOAJ2PUn/PWH
+         6bPdoVo2cLzXEFqGkYBWuJgaJaFIuGGryPqsdXHW+YW/ZMoIGx2eKqGABsmYMtX+tuJO
+         tdtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=wCIq2pEscSFloWLAAVKf+NRJrk/xfcyCBv54BmH8NfA=;
-        b=RdahbbYWCA64eng9vXpKwdngKMAjo8FpJBVHebu/CVXlh3s8T6pfdUi+NF3vblalpZ
-         5iBhozUzGyxTNbYU6nMROC9DLaLBSWakO/Yu96iq86l2GXFO9R/HBiHcv7IdRnrqvigC
-         9qkbudusj3LwZ1tDTXMNz4uYQjNhe+2Leykad/Zm8AmWAKzzOfWr0jgUeUJR1OIe1KYW
-         iphGnKRtAK2Ki+VxHbc4uSpyVKB9zStdMqSvfMze/eIY08Z3gHbILg2hYay6OhFmPyB7
-         HRU9HnWAEoO0tkQbU896fk2bbAgZvo8wEm+uPfXVBIdlh5KBgu4+UXlkJSuaMcMQCSe0
-         11Kw==
-X-Gm-Message-State: AJIora/r4sjDjWSYxgwvd78CVY9QQxwNhuy6V307MdK6XG/CjT2Oq04w
-        XRFkdnUm4yfh5kMxSNmBb74SFeAAQb7j5NSK21bVXQ==
-X-Google-Smtp-Source: AGRyM1saVtovw0G7v6o+EaC89C36m3EEfWY4LF5dLaYUH6oWqmG5EBMjeM2Y2lf1+zFMHrmCzc2gi1APoEqil9rfOlo=
-X-Received: by 2002:a25:906:0:b0:65c:b361:80fd with SMTP id
- 6-20020a250906000000b0065cb36180fdmr1117997ybj.197.1655316334384; Wed, 15 Jun
- 2022 11:05:34 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LWoNMw+t5sISDKPfmS/uBjaE6K11uOqPgrXVRArfKdA=;
+        b=Gb/pYmbtBaOiwVypukWvE/BP6761MSs5Bm2xixH+2zn0IFdnshn8nYRyH4uZ3YDrh/
+         Xd9tLZJYTknyYN0oRJPxB35xP+wgDSCmOh2oAEEXi75MArTN5kHcRIsl6uvv+PHBvXZb
+         6MTLTw75lA4VdnS6LoeQ3ZweEQNu++7TrEaEk/p+UbSoskzj+Zv52Hc/kky+7ZLt9lXr
+         5BXn1nhMrzJWHFYDglAkr0vR5r/rIP4XlUr/ZA2hFEa+rYI6rLDLxX9EpCesMdkt3knT
+         300+kOxqugjMOr3jcRmhXjomZq89RmRe9gvXURovMRFVkVAdhxrd4g7nHJgX+6dn3X5f
+         Gp4g==
+X-Gm-Message-State: AJIora8liTC90GQjmPXzRcjKAkEzCxrYr4bbxYmSiFN02z89EDOTj8sm
+        QcPey8y8Cc3QH0KqbpjZOqoogfIFKjTv2xx5b7PRhw==
+X-Google-Smtp-Source: AGRyM1vRbuit8z7ENCK6VzmAG6N9BoA8xgYpdSwHjzW9Fxdf9zHlYAVzuowAMUgsb6pFz0IwfLCCwNkEYfr+MIEX20M=
+X-Received: by 2002:a25:a286:0:b0:664:862a:f693 with SMTP id
+ c6-20020a25a286000000b00664862af693mr1115170ybi.389.1655316361012; Wed, 15
+ Jun 2022 11:06:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220526220018.3334775-1-dualli@chromium.org> <YpBmmVa+09ZhP9LH@kroah.com>
-In-Reply-To: <YpBmmVa+09ZhP9LH@kroah.com>
-From:   Li Li <dualli@chromium.org>
-Date:   Wed, 15 Jun 2022 11:05:23 -0700
-Message-ID: <CANBPYPg_cpaTCcJ=5b3j3L3KHg=D7Xnj14wkHq5YMznu=3en8g@mail.gmail.com>
-Subject: Re: [RESEND PATCH v3 0/1] Binder: add TF_UPDATE_TXN to replace
- outdated txn
-To:     Greg KH <gregkh@linuxfoundation.org>, Li Li <dualli@google.com>,
-        Todd Kjos <tkjos@google.com>,
-        Christian Brauner <christian@brauner.io>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        "open list:ANDROID DRIVERS" <devel@driverdev.osuosl.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Martijn Coenen <maco@google.com>,
-        Hridya Valsaraju <hridya@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Android Kernel Team <kernel-team@android.com>
+References: <20220614183720.928818645@linuxfoundation.org>
+In-Reply-To: <20220614183720.928818645@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 15 Jun 2022 23:35:50 +0530
+Message-ID: <CA+G9fYsZArO68-ewBJgBikh6K9e4hE2PrD9H7bWUbzuxpBpTHg@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/16] 4.19.248-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,116 +71,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 26, 2022 at 10:50 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+On Wed, 15 Jun 2022 at 00:12, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Thu, May 26, 2022 at 03:00:17PM -0700, Li Li wrote:
-> > From: Li Li <dualli@google.com>
-> >
-> > Resend [Patch v3] with cover letter in case my previous email failed
-> > to reach the maillist (no comments for 2 weeks).
-> >
-> > The previous comments of the old patch can be found at the following link:
-> > https://lore.kernel.org/lkml/CANBPYPjkNWsO94nuG1TkR1DgK2W2kBxiJTriyVB7S3czHTZ1Yg@mail.gmail.com/
-> >
-> > I copy and paste the key information here for your convenience.
-> >
-> > * Question #1
-> >
-> > Note, your subject does not say what TF_UPDATE_TXN is, so it's a bit
-> > hard to determine what is happening here.  Can you clean that up a bit
-> > and sumarize what this new addition does?
-> > How was this tested?
-> >
-> > * Answer #1 ===
-> >
-> > A more descriptive summary has been added to the new version of patch.
-> >
-> > *  Question #2
-> >
-> > How was this tested?
-> >
-> > * Answer #2
-> >
-> > Old kernel: without this TF_UPDATE_TXN patch
-> > New kernel: with this TF_UPDATE_TXN patch
-> > Old apps: without setting TF_UPDATE_TXN
-> > New apps: if (flags & TF_ONE_WAY) flags |= TF_UPDATE_TXN;
-> >
-> > 1. Compatibility: New kernel + Old apps, to verify the original
-> > behavior doesn't change;
-> >
-> > 2. Compatibility: Old kernel + New apps, to verify the original
-> > behavior doesn't change;
-> >
-> > 3. Unit test: New kernel + New apps, to verify the outdated oneway
-> > binder transaction is actually superseded by the latest one (by
-> > enabling BINDER_DEBUG logs);
-> >
-> > 4. Stress test: New kernel + New apps sending oneway binder
-> > transactions repeatedly, to verify the size of the available async
-> > binder buffer over time, and if the transactions fail as before
-> > (due to async buffer running out).
-> >
-> > * Question #3
-> >
-> > Did checkpatch pass this?  Please always use --strict and fix up all the
-> > issues that it reports as this is not a normal kernel coding style.
-> >
-> > * Answer #3
-> >
-> > Yes, the latest version has passed "./scripts/checkpatch.pl --strict"
-> >
-> > * Changelog
-> >
-> > v3:
-> >   - Add this changelog required by "The canonical patch format"
-> > v2:
-> >   - Fix alignment warnings reported by checkpatch --strict
-> >   - Add descriptive summary in patch subject
-> >
-> > Li Li (1):
-> >   Binder: add TF_UPDATE_TXN to replace outdated txn
-> >
-> >  drivers/android/binder.c            | 85 ++++++++++++++++++++++++++++-
-> >  drivers/android/binder_trace.h      |  4 ++
-> >  include/uapi/linux/android/binder.h |  1 +
-> >  3 files changed, 87 insertions(+), 3 deletions(-)
-> >
-> > --
-> > 2.36.1.124.g0e6072fb45-goog
-> >
-> > _______________________________________________
-> > devel mailing list
-> > devel@linuxdriverproject.org
-> > http://driverdev.linuxdriverproject.org/mailman/listinfo/driverdev-devel
+> This is the start of the stable review cycle for the 4.19.248 release.
+> There are 16 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
+> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
+> Anything received after that time might be too late.
 >
-> Hi,
->
-> This is the friendly semi-automated patch-bot of Greg Kroah-Hartman.
-> You have sent him a patch that has triggered this response.
->
-> Right now, the development tree you have sent a patch for is "closed"
-> due to the timing of the merge window.  Don't worry, the patch(es) you
-> have sent are not lost, and will be looked at after the merge window is
-> over (after the -rc1 kernel is released by Linus).
->
-> So thank you for your patience and your patches will be reviewed at this
-> later time, you do not have to do anything further, this is just a short
-> note to let you know the patch status and so you don't worry they didn't
-> make it through.
-
-Hi Greg and all reviewers,
-
-The rc-1 has been released for some days. Do I need to resend the patch
-v3 [1] again to the maillist? Please let me know what I should do next to
-have it reviewed. Thanks!
-
-[1]:
-[RESEND PATCH v3 0/1] Binder: add TF_UPDATE_TXN to replace outdated txn
-https://lore.kernel.org/lkml/20220526220018.3334775-1-dualli@chromium.org/
-
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.248-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
 >
 > thanks,
 >
-> greg k-h's patch email bot
+> greg k-h
+
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 4.19.248-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: 3a3ddc084a29f6b9346b3f7de410b1c5353cbcd0
+* git describe: v4.19.247-17-g3a3ddc084a29
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.247-17-g3a3ddc084a29
+
+## Test Regressions (compared to v4.19.247)
+No test regressions found.
+
+## Metric Regressions (compared to v4.19.247)
+No metric regressions found.
+
+## Test Fixes (compared to v4.19.247)
+No test fixes found.
+
+## Metric Fixes (compared to v4.19.247)
+No metric fixes found.
+
+## Test result summary
+total: 103967, pass: 92252, fail: 235, skip: 10777, xfail: 703
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 298 total, 292 passed, 6 failed
+* arm64: 56 total, 54 passed, 2 failed
+* i386: 27 total, 23 passed, 4 failed
+* mips: 27 total, 27 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 55 total, 54 passed, 1 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 53 total, 51 passed, 2 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-cap_bounds-tests
+* ltp-commands
+* ltp-commands-tests
+* ltp-containers
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps
+* ltp-filecaps-tests
+* ltp-fs
+* ltp-fs-tests
+* ltp-fs_bind
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple
+* ltp-fs_perms_simple-tests
+* ltp-fsx
+* ltp-fsx-tests
+* ltp-hugetlb
+* ltp-hugetlb-tests
+* ltp-io
+* ltp-io-tests
+* ltp-ipc
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-pty-tests
+* ltp-sched
+* ltp-sched-tests
+* ltp-securebits
+* ltp-securebits-tests
+* ltp-smoke
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,132 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0465254C52A
+	by mail.lfdr.de (Postfix) with ESMTP id A6B7E54C52C
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346920AbiFOJxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
+        id S241386AbiFOJxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346931AbiFOJxZ (ORCPT
+        with ESMTP id S1346983AbiFOJx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:53:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF6745067;
+        Wed, 15 Jun 2022 05:53:26 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD04444A3A
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:53:24 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B68F7152B;
         Wed, 15 Jun 2022 02:53:24 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25F8Begt002412;
-        Wed, 15 Jun 2022 09:53:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ycRGs3DCD3L/JxYFtY4JF9d5o99iJE2z5YQkWg9ugKk=;
- b=P/T0kjImwOuyv8dRZlp/cLDL8w9yMpcW5WJWzyNL7LVsR3AFFMdJ/Na0EWvWABythwZV
- p7LC+AZoBa7YciNAOXpUJ0xrNC7paIeyY02yAx29AOLLmvDgN/+dltKrqM6+fAXbXgcW
- qsUHHciSLqDfg22GSeGKWNu3ZzoNFLpMKMmVLZx8XAPYEbx8VoCHabaRXrypgDmfqpPE
- 1xb7Qo/6RzHRjic1AXt7MRmA8J6kuCki3IqlNDo00uX/mHDLMIRfBIvCTJi1Eo+I8fIp
- b2ndqbKc6LTtJHj2JCESPLuBLP5/wfZ0mXSBC9jhaN6eTd2QqujtDqxpjYsWl3O92P6U Jw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gpq77venu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jun 2022 09:53:24 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25F9noUW011264;
-        Wed, 15 Jun 2022 09:53:24 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gpq77ven4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jun 2022 09:53:23 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25F9oGC5006016;
-        Wed, 15 Jun 2022 09:53:21 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma05fra.de.ibm.com with ESMTP id 3gmjp94bdy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jun 2022 09:53:21 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25F9rIT617891808
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jun 2022 09:53:18 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 22D06AE04D;
-        Wed, 15 Jun 2022 09:53:18 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A093FAE045;
-        Wed, 15 Jun 2022 09:53:17 +0000 (GMT)
-Received: from [9.145.158.83] (unknown [9.145.158.83])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Jun 2022 09:53:17 +0000 (GMT)
-Message-ID: <bcbfcc87-aef4-d151-8e34-4646f1533c25@linux.ibm.com>
-Date:   Wed, 15 Jun 2022 11:53:17 +0200
+Received: from [10.57.7.82] (unknown [10.57.7.82])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3BD563F792;
+        Wed, 15 Jun 2022 02:53:23 -0700 (PDT)
+Message-ID: <10eaa3b1-4cf7-a7b6-a7f6-111a486a343a@arm.com>
+Date:   Wed, 15 Jun 2022 10:53:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v11 07/19] KVM: s390: pv: module parameter to fence
- asynchronous destroy
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
-        david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        mimu@linux.ibm.com, nrb@linux.ibm.com
-References: <20220603065645.10019-1-imbrenda@linux.ibm.com>
- <20220603065645.10019-8-imbrenda@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20220603065645.10019-8-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/91.9.1
+From:   Steven Price <steven.price@arm.com>
+Subject: Re: [RESEND PATCH v8 01/11] iommu: Add DMA ownership management
+ interfaces
+To:     Lu Baolu <baolu.lu@linux.intel.com>, Joerg Roedel <joro@8bytes.org>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        Robin Murphy <robin.murphy@arm.com>
+References: <20220418005000.897664-1-baolu.lu@linux.intel.com>
+ <20220418005000.897664-2-baolu.lu@linux.intel.com>
+Content-Language: en-GB
+In-Reply-To: <20220418005000.897664-2-baolu.lu@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _rGPktb8Y2SkRvbuV74qrAj6w4SyO8z3
-X-Proofpoint-GUID: N6BCO0CaEOnyEJw7GVyjKw8ORPlQGhKw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-15_03,2022-06-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- malwarescore=0 impostorscore=0 suspectscore=0 phishscore=0
- priorityscore=1501 adultscore=0 clxscore=1011 spamscore=0 bulkscore=0
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2204290000 definitions=main-2206150036
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/22 08:56, Claudio Imbrenda wrote:
-> Add the module parameter "async_destroy", to allow the asynchronous
-> destroy mechanism to be switched off.  This might be useful for
-> debugging purposes.
+On 18/04/2022 01:49, Lu Baolu wrote:
+> Multiple devices may be placed in the same IOMMU group because they
+> cannot be isolated from each other. These devices must either be
+> entirely under kernel control or userspace control, never a mixture.
 > 
-> The parameter is enabled by default.
+> This adds dma ownership management in iommu core and exposes several
+> interfaces for the device drivers and the device userspace assignment
+> framework (i.e. VFIO), so that any conflict between user and kernel
+> controlled dma could be detected at the beginning.
 > 
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-
-Normally this would be one of the last patches in the series, no?
-
-> ---
->   arch/s390/kvm/kvm-s390.c | 5 +++++
->   1 file changed, 5 insertions(+)
+> The device driver oriented interfaces are,
 > 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 76ad6408cb2c..49e27b5d7c3a 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -206,6 +206,11 @@ unsigned int diag9c_forwarding_hz;
->   module_param(diag9c_forwarding_hz, uint, 0644);
->   MODULE_PARM_DESC(diag9c_forwarding_hz, "Maximum diag9c forwarding per second, 0 to turn off");
->   
-> +/* allow asynchronous deinit for protected guests, enable by default */
-> +static int async_destroy = 1;
-> +module_param(async_destroy, int, 0444);
-> +MODULE_PARM_DESC(async_destroy, "Asynchronous destroy for protected guests");
-> +
->   /*
->    * For now we handle at most 16 double words as this is what the s390 base
->    * kernel handles and stores in the prefix page. If we ever need to go beyond
+> 	int iommu_device_use_default_domain(struct device *dev);
+> 	void iommu_device_unuse_default_domain(struct device *dev);
+> 
+> By calling iommu_device_use_default_domain(), the device driver tells
+> the iommu layer that the device dma is handled through the kernel DMA
+> APIs. The iommu layer will manage the IOVA and use the default domain
+> for DMA address translation.
+> 
+> The device user-space assignment framework oriented interfaces are,
+> 
+> 	int iommu_group_claim_dma_owner(struct iommu_group *group,
+> 					void *owner);
+> 	void iommu_group_release_dma_owner(struct iommu_group *group);
+> 	bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+> 
+> The device userspace assignment must be disallowed if the DMA owner
+> claiming interface returns failure.
+> 
+> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
 
+I'm seeing a regression that I've bisected to this commit on a Firefly
+RK3288 board. The display driver fails to probe properly because
+__iommu_attach_group() returns -EBUSY. This causes long hangs and splats
+as the display flips timeout.
+
+The call stack to __iommu_attach_group() is:
+
+ __iommu_attach_group from iommu_attach_device+0x64/0xb4
+ iommu_attach_device from rockchip_drm_dma_attach_device+0x20/0x50
+ rockchip_drm_dma_attach_device from vop_crtc_atomic_enable+0x10c/0xa64
+ vop_crtc_atomic_enable from drm_atomic_helper_commit_modeset_enables+0xa8/0x290
+ drm_atomic_helper_commit_modeset_enables from drm_atomic_helper_commit_tail_rpm+0x44/0x8c
+ drm_atomic_helper_commit_tail_rpm from commit_tail+0x9c/0x180
+ commit_tail from drm_atomic_helper_commit+0x164/0x18c
+ drm_atomic_helper_commit from drm_atomic_commit+0xac/0xe4
+ drm_atomic_commit from drm_client_modeset_commit_atomic+0x23c/0x284
+ drm_client_modeset_commit_atomic from drm_client_modeset_commit_locked+0x60/0x1c8
+ drm_client_modeset_commit_locked from drm_client_modeset_commit+0x24/0x40
+ drm_client_modeset_commit from drm_fb_helper_set_par+0xb8/0xf8
+ drm_fb_helper_set_par from drm_fb_helper_hotplug_event.part.0+0xa8/0xc0
+ drm_fb_helper_hotplug_event.part.0 from output_poll_execute+0xb8/0x224
+
+> @@ -2109,7 +2115,7 @@ static int __iommu_attach_group(struct iommu_domain *domain,
+>  {
+>  	int ret;
+>  
+> -	if (group->default_domain && group->domain != group->default_domain)
+> +	if (group->domain && group->domain != group->default_domain)
+>  		return -EBUSY;
+>  
+>  	ret = __iommu_group_for_each_dev(group, domain,
+
+Reverting this 'fixes' the problem for me. The follow up 0286300e6045
+("iommu: iommu_group_claim_dma_owner() must always assign a domain")
+doesn't help.
+
+Adding some debug printks I can see that domain is a valid pointer, but
+both default_domain and blocking_domain are NULL.
+
+I'm using the DTB from the kernel tree (rk3288-firefly.dtb).
+
+Any ideas?
+
+Thanks,
+
+Steve

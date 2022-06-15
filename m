@@ -2,145 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B86654D410
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:59:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB5854D41B
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350121AbiFOV7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 17:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
+        id S1349008AbiFOWBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 18:01:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347212AbiFOV7m (ORCPT
+        with ESMTP id S235490AbiFOWBd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 17:59:42 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05hn2215.outbound.protection.outlook.com [52.100.175.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA64B53C76
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:59:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Botejk7ZBRXDu3gwvAmGuSmPDYmDdXo1oKoXNzKNrwklhmJKAAmB/u1uD4oM906gdQJyAzEZ/8fF+ZWMTWSX60FsG5l2LUP94qYy/4/2Reght3Ac1y/Pr3LLwvASVOxQ2CGdKzpmMpRukISYAHCP9yoN4ndTn1oECZ3m+g2p9Ts2Rq2oy8nNA4p0rlepZJ9sBXI3Vzr0hpv//2nedHsXNpV9i5hMgKHy8a8sirqUkvF1O2abP2KzKA0Qu+k7oN94jCI8HrdaZ8fOeS0V9tBHPsyBTLy2H426U77ZffRob/mAREKR1elaXo/rz9kHcnK32IqzdI9J2bAp3UiWDWDBqQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lQsm62DnO3DRMaTO7/AWxijWtNxIrL/VW/Qe6xhipJU=;
- b=NoR0IUOvea0jTxp3abTjVX2xobn2TO5yNaVFkG+7GUoDtbYQYF/Ffg839hdmsRsWAipLzffULcP8oqfCpTIUs5qhxatXxxkKTRvTopWJ2dDXZxYMj3Tgq28BfaEjkfzYPnrTtGC5sILq2H4GR3IbQXBtyjy0od+t/jlKYExhXwRzU6bkPRlHb6+Q+/3QXFIGmRKCEZA1lokfzctFLrzQn1m3PcGuF2K9TWKcBw912gCsXL3XK+Md+WYN5RNQ+NxUJDPleULvFA+1XXQt0VaBJ0hnQiLPt114AygPz6e7sV8Ej7eAiyqnyBTwcez6Qu7NsEGsCkqavfkBl82rjwvWtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=permerror (sender ip
- is 91.151.71.70) smtp.rcpttodomain=vger.kernel.org
- smtp.mailfrom=solairedirect.co.za; dmarc=none action=none
- header.from=solairedirect.co.za; dkim=none (message not signed); arc=none
+        Wed, 15 Jun 2022 18:01:33 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A7D55490;
+        Wed, 15 Jun 2022 15:01:33 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id y13-20020a17090a154d00b001eaaa3b9b8dso36746pja.2;
+        Wed, 15 Jun 2022 15:01:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=solairdirect.onmicrosoft.com; s=selector1-solairdirect-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lQsm62DnO3DRMaTO7/AWxijWtNxIrL/VW/Qe6xhipJU=;
- b=5spVSMf1phG9K/gfNTv1qGkKsMO2PAguCpF+aws1oMSvZ8RNfq4euu6Vts69HDkJwCPz0Xnze5l/vN6bZmIw5XT+qrVe+aAnemeytj7KjQVjIbSfQTR8KcnEqcW/4oAPm1UZw4cVlaxC0Rs1RD+gumWI2lARdzmHVwGxFb7NZEw=
-Received: from DB6PR0601CA0013.eurprd06.prod.outlook.com (2603:10a6:4:7b::23)
- by VI1PR0601MB2062.eurprd06.prod.outlook.com (2603:10a6:800:2e::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.15; Wed, 15 Jun
- 2022 21:59:38 +0000
-Received: from DB5EUR01FT086.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:4:7b:cafe::41) by DB6PR0601CA0013.outlook.office365.com
- (2603:10a6:4:7b::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14 via Frontend
- Transport; Wed, 15 Jun 2022 21:59:38 +0000
-X-MS-Exchange-Authentication-Results: spf=permerror (sender IP is
- 91.151.71.70) smtp.mailfrom=solairedirect.co.za; dkim=none (message not
- signed) header.d=none;dmarc=none action=none header.from=solairedirect.co.za;
-Received-SPF: PermError (protection.outlook.com: domain of solairedirect.co.za
- used an invalid SPF mechanism)
-Received: from SDSV152-VM.solairedirect.lan (91.151.71.70) by
- DB5EUR01FT086.mail.protection.outlook.com (10.152.5.118) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5353.14 via Frontend Transport; Wed, 15 Jun 2022 21:59:37 +0000
-Received: from [206.72.197.122] ([206.72.197.122] unverified) by SDSV152-VM.solairedirect.lan with Microsoft SMTPSVC(8.5.9600.16384);
-         Thu, 16 Jun 2022 00:00:12 +0200
-Content-Type: text/plain; charset="iso-8859-1"
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Jw0DXKgtV9MyiD0A+UBYYijA5y5Gd/3cuiWJODz/nhc=;
+        b=Nvl/qY2zmd7vo0xkTo4tZVDlMbCFFb/K0xrF6Cr6g57ZMpXqDqoL4T0vusq5ygQHNT
+         Lmi4L1A2/XifKYHoSqvPrnl1bS5zhetTjyEp7TBjVVuOpq0G2cAtaDalU7ku1kWRoDT9
+         7bC6vEpDgeEjcqdcmkhkQIywYRus5u1XRFrmK30rjA4UQCEBWDEX5YQynzBSjS7ho0rp
+         78jjCE16pAJZzpXeyoVQAhrjjN37kQrEY40XYucaYjTNb3eAynn5W50lXYPjbDkBcbil
+         VDmJPu4tEnurhsOlhpkJlS2LjjX+TO1tNw8G0cOBtym+rVA2ZI2UIAdDcKaXv3/bgL8g
+         wUrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Jw0DXKgtV9MyiD0A+UBYYijA5y5Gd/3cuiWJODz/nhc=;
+        b=jW4A2tJWC+bEN6sr6qipC+t2jOw+vXZLJeItKUn5TKlh91FMt66DQKhdQhfIxSxH1a
+         3sLPq+YLuKEku0F8q+w6o1xdVD1ulHloVgg4AsveNQApvSFRsW8EZ77AnCYuDJnMxcEt
+         vmpTKzI+m6ac5aL7qNEFFx53qtWDh8vjky9OOQvZWw1gTPToapWK7RToEyas9A6h98FU
+         yDbap6TZJ6FhzXGidkhroXwEuulsMg5yjH2uBS8i5xOnpXxcdoK7hvuDMSWWX6ue8QL7
+         OkVaPyqSLh21qsrs38FwMXQPZR0KSHzc9rw4b7EGFBBSFdkZK8osGjzZIeJcI55gYUsp
+         vtiA==
+X-Gm-Message-State: AJIora+/yhsSgLvJEGqmk1NNwHtPg83dgk/hpFs5YOeafNAtNyX3YgsF
+        u6O/e3tP807v2vG+ZEKM6eg=
+X-Google-Smtp-Source: AGRyM1tMcNpTwEJC6el5Vb99RGU8zajOmd8ZSA2FftyoKPPcoddBy3gehpv08bNIenTp5kRpT1u6uQ==
+X-Received: by 2002:a17:903:248:b0:168:cf03:eefe with SMTP id j8-20020a170903024800b00168cf03eefemr1414916plh.124.1655330492461;
+        Wed, 15 Jun 2022 15:01:32 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b001663e1881ecsm80590plk.306.2022.06.15.15.01.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 15:01:31 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 15 Jun 2022 15:01:30 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 4.9 00/20] 4.9.319-rc1 review
+Message-ID: <20220615220130.GA1229939@roeck-us.net>
+References: <20220614183722.061550591@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Hi
-To:     linux-kernel@vger.kernel.org
-From:   "Emerald Johansson" <marketing@solairedirect.co.za>
-Date:   Wed, 15 Jun 2022 17:59:34 -0400
-Reply-To: emjo680@gmail.com
-Message-ID: <SDSV152-VMux8d25zwh00047017@SDSV152-VM.solairedirect.lan>
-X-OriginalArrivalTime: 15 Jun 2022 22:00:12.0511 (UTC) FILETIME=[497AF6F0:01D88103]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7bd5113f-22f9-4ed9-daec-08da4f1a573d
-X-MS-TrafficTypeDiagnostic: VI1PR0601MB2062:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR0601MB2062237B270C224B272714FDEBAD9@VI1PR0601MB2062.eurprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?lEbTFHqnTmrIhXGfSU2ApOEqT/SeW+IFZzVtkgqJcWI08iFJCf6DSULozF?=
- =?iso-8859-1?Q?NrHaEEC181nfiSICORFs2avj+frL510kElWCd1kJy8E0XBNQ13VgerbijA?=
- =?iso-8859-1?Q?h9eWVjRhYxi7tjDyniTEyitfXkU7dqN8m6wluzbbXzpDaKmlXUbb41vIZB?=
- =?iso-8859-1?Q?PBu3s7tzdkeVftRYUCh/OX4+5nBrlY4nHyXm7SaScxjBeioYR+RuevvPNg?=
- =?iso-8859-1?Q?jh7WK2uA9ywHIylonpzTZW9NQ1AC80KBUbBGbVLTyFXhNKhKEkWLLtIM39?=
- =?iso-8859-1?Q?yIgBONWlrfrsc+E0Ad8vSQvp0w0PJ8EFdtYR2JMR68AQeZ8iClEKKGi6Cs?=
- =?iso-8859-1?Q?tBm4aC5+hTjBILJnccyBUSd87DcjsVaZrFvurGMjmQqpJcxvvnoWdbp15/?=
- =?iso-8859-1?Q?BNeaXB6KAmLm+ZUUj3utYLBvv2/tdXrmGuynbeyyYqDqF9umUGiuAphiPU?=
- =?iso-8859-1?Q?UyeLO3sbVDqIwNc6POW5NMZD50iYLdrJsO614u1HYyxsJrjI0/fjEvLUv4?=
- =?iso-8859-1?Q?SqPzhmdA2JeqiHfBFkz4VyK+x2qiDKqPRWplNiaAWkT5dyTGLgcyi746jo?=
- =?iso-8859-1?Q?qmPKwpESA5lLflvSVgtYrIPtOKXPJK7l8XAfpq024tIQaQc+Xa/OGN4ehL?=
- =?iso-8859-1?Q?9MmfnPKjQoMSNaR2TKzATZWQLVZugv3ccjajP4gE6vurcJcoCDdVGnZ4ol?=
- =?iso-8859-1?Q?14h1PzfeqFQLsVz4mLjwNvebsa7p23R0cQtl8HUFnAp6ECi1gjH8n6fBoo?=
- =?iso-8859-1?Q?jdFWtICsIJUJkFILnr9kSCQmu0SxBMkk5LgOzCf+zNqHg/nj2QIuCvoLZ9?=
- =?iso-8859-1?Q?sI2tK+OYBG3FhIIBPpF2y0gIRr7K46ZyGAkSTSnuF8bHYCP1hAkb0WW7OD?=
- =?iso-8859-1?Q?W6WTwmSEg8n9NuQ9mRA7l4JnzDesEMmcmHaJZ3SkxBqn1qyuk/YtDsX/T4?=
- =?iso-8859-1?Q?Jh6U/A65sPJymqVQ8hs476BzAfgHBDylDEH3L03Tf4aQ2CSHuLbRR4xJQ7?=
- =?iso-8859-1?Q?3+k2NDlsNgcNAsqMnL0T2Njt4HL4AjrGbiPgXKkejrv5ezlV3rGf+38JP5?=
- =?iso-8859-1?Q?R8Qd+ZcSf29Z/j3DBTVHH/0=3D?=
-X-Forefront-Antispam-Report: CIP:91.151.71.70;CTRY:FR;LANG:en;SCL:5;SRV:;IPV:CAL;SFV:SPM;H:SDSV152-VM.solairedirect.lan;PTR:undef-71-70.c-si.fr;CAT:OSPM;SFS:(13230016)(136003)(39860400002)(346002)(396003)(40470700004)(36840700001)(46966006)(82310400005)(40480700001)(40460700003)(956004)(41300700001)(9686003)(6916009)(47076005)(186003)(2906002)(81166007)(8936002)(336012)(70586007)(70206006)(8676002)(4744005)(7116003)(2860700004)(5660300002)(508600001)(356005)(6666004)(316002)(36860700001)(26005)(3480700007)(86362001)(16900700008);DIR:OUT;SFP:1501;
-X-OriginatorOrg: solairedirect.co.za
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 21:59:37.6668
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bd5113f-22f9-4ed9-daec-08da4f1a573d
-X-MS-Exchange-CrossTenant-Id: 1c138fa9-0b91-4473-baea-5be5feac0f7e
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=1c138fa9-0b91-4473-baea-5be5feac0f7e;Ip=[91.151.71.70];Helo=[SDSV152-VM.solairedirect.lan]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT086.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0601MB2062
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [52.100.175.215 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4836]
-        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
-        *      [52.100.175.215 listed in wl.mailspike.net]
-        *  1.3 RCVD_IN_VALIDITY_RPBL RBL: Relay in Validity RPBL,
-        *      https://senderscore.org/blocklistlookup/
-        *      [52.100.175.215 listed in bl.score.senderscore.com]
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        *  0.0 T_SPF_PERMERROR SPF: test of record failed (permerror)
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [emjo680[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  1.0 FORGED_SPF_HELO No description available.
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614183722.061550591@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I hope that you are at your best and doing well. The purpose of this letter=
- is seeking for a pen pal like friendship and I'd love to and be honored to=
- be friends with you if you do not mind.. If the Idea sounds OK with you, j=
-ust say yes and we can take it on from there. I look forward to hear hearin=
-g from you.. My name is Emerald From Sweden 36 years , this will mean a lot=
- to me to hear back from you.
+On Tue, Jun 14, 2022 at 08:39:43PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.319 release.
+> There are 20 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
+> Anything received after that time might be too late.
+> 
 
-Warm Regards.
+Build results:
+	total: 164 pass: 164 fail: 0
+Qemu test results:
+	total: 397 pass: 397 fail: 0
 
-Emerald
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter

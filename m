@@ -2,105 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8075054C45D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF3354C461
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:11:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240563AbiFOJK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        id S1344096AbiFOJLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238242AbiFOJKv (ORCPT
+        with ESMTP id S1344055AbiFOJLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:10:51 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA1611C26;
-        Wed, 15 Jun 2022 02:10:50 -0700 (PDT)
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LNKH65t0Wz1K9xV;
-        Wed, 15 Jun 2022 17:08:50 +0800 (CST)
-Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 15 Jun 2022 17:10:48 +0800
-Received: from [10.67.103.212] (10.67.103.212) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 15 Jun 2022 17:10:48 +0800
-Subject: Re: [PATCH v2 3/3] crypto: hisilicon/qm - defining the device
- isolation strategy
-To:     Greg KH <gregkh@linuxfoundation.org>
-References: <20220614122943.1406-1-yekai13@huawei.com>
- <20220614122943.1406-4-yekai13@huawei.com> <YqiCaTAaRoq7c0y0@kroah.com>
- <b597023a-5569-f4be-1e30-78d0d961dfdc@huawei.com>
- <YqiNHOfXHRtaQyZV@kroah.com>
-CC:     <herbert@gondor.apana.org.au>, <linux-crypto@vger.kernel.org>,
-        <linux-accelerators@lists.ozlabs.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        <zhangfei.gao@linaro.org>, <wangzhou1@hisilicon.com>
-From:   "yekai(A)" <yekai13@huawei.com>
-Message-ID: <ed292f66-fcec-3803-4f29-b94e60ee913e@huawei.com>
-Date:   Wed, 15 Jun 2022 17:10:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Wed, 15 Jun 2022 05:11:07 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A000D1EEE6;
+        Wed, 15 Jun 2022 02:11:06 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id 68so8244902qkk.9;
+        Wed, 15 Jun 2022 02:11:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fzuzNj3cCEjxWnQR4aBrGmsmoYEYXTl1hettMgyzjzA=;
+        b=YI05pBCixSzZBIyVUbC7Dd+txjlFAIvNixYy8Axk9a4lvS14lKGjFh3l8CY15IwqPF
+         SjiWWiEDh6+q/4JvBc+rrDUdVUiE3VgrXplapycOFzyDjUYXwvfGxforrlUI62XJ4u92
+         uRquyPaK9HFyKUrzl85HeQwzuXnnQI7uNn+RaPX41RT4+ySH8NsQTGMlIiE7/VT5QaeZ
+         ZYwWTnd1u05GoIW8bC8URXXiFJ6NELp/Ja8B5AI+Qx9u4fdEJwOejxD/uakKcPzNlrOh
+         HamzA8I0+xNLGNifQDRJF0YtjQCAO4/cnJwYQRUq55anDPxngtHRHgawU2XpvuKVW+Jc
+         Hq0w==
+X-Gm-Message-State: AOAM531GFoAxS+PAXmVzQr9LSG0mXPkI1bsYuaEL8f6bztVF2aPYsM0B
+        3hc5nkjiZs4zpKBSUGiHXjeUsf9RS4i1sA==
+X-Google-Smtp-Source: ABdhPJweeTcUHTr0iGazn5JxGX0pb0TZhYbxC1wdCDy5K4OnEUVWxKmK1HO1gwPPc7sY3/2gpf07Ew==
+X-Received: by 2002:a05:620a:12ed:b0:6a6:b27e:a030 with SMTP id f13-20020a05620a12ed00b006a6b27ea030mr7222960qkl.659.1655284265553;
+        Wed, 15 Jun 2022 02:11:05 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id bl19-20020a05620a1a9300b0069fc13ce20asm10867159qkb.59.2022.06.15.02.11.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 02:11:05 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id p13so19463216ybm.1;
+        Wed, 15 Jun 2022 02:11:05 -0700 (PDT)
+X-Received: by 2002:a05:6902:120e:b0:634:6f29:6b84 with SMTP id
+ s14-20020a056902120e00b006346f296b84mr9584271ybu.604.1655284264985; Wed, 15
+ Jun 2022 02:11:04 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YqiNHOfXHRtaQyZV@kroah.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.212]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220614193005.2652-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220614193005.2652-1-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 15 Jun 2022 11:10:54 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWPz=areGSfTtSa74ubeUAMBtDmS+RyaX8+Uh8edm7eTA@mail.gmail.com>
+Message-ID: <CAMuHMdWPz=areGSfTtSa74ubeUAMBtDmS+RyaX8+Uh8edm7eTA@mail.gmail.com>
+Subject: Re: [PATCH v2] arm64: dts: renesas: spider-cpu: Enable SCIF0 on
+ second connector
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 14, 2022 at 9:30 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> The schematics label it as SCIF0 debug port.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>
+> Change since v1: added alias
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v5.20.
 
-On 2022/6/14 21:29, Greg KH wrote:
-> On Tue, Jun 14, 2022 at 09:24:08PM +0800, yekai(A) wrote:
->>>>  struct hisi_qm {
->>>>  	enum qm_hw_ver ver;
->>>>  	enum qm_fun_type fun_type;
->>>> @@ -335,6 +341,9 @@ struct hisi_qm {
->>>>  	struct qm_shaper_factor *factor;
->>>>  	u32 mb_qos;
->>>>  	u32 type_rate;
->>>> +	struct list_head uacce_hw_errs;
->>>> +	atomic_t uacce_ref; /* reference of the uacce */
->>>
->>> That is not how reference counts work, sorry.  Please use 'struct kref'
->>> for a real reference count, never roll your own.
->>>
->>> thanks,
->>>
->>> greg k-h
->>> .
->>>
->>
->> this atomic_t reference is lightweight than 'struct kref',
->
-> It's the same size, why would it be "lighter"?  Why do you need it to be
-> lighter, what performance issue is there with a kref?
->
->> this reference
->> means whether the task is running. So would it be better to use atomic_t
->> reference?
->
-> I do not know, as "running or not running" is a state, not a count or a
-> reference.  why does this have to be atomic at all?
->
-> thanks,
->
-> greg k-h
-> .
->
+Gr{oetje,eeting}s,
 
-I will use 'qm_state' instead of reference count by zhangfei Gao's opinion.
+                        Geert
 
-Thanks
-Kai
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

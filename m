@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD7354D1DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42FA454D1E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349716AbiFOToq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 15:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S1350306AbiFOTqv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:46:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244636AbiFOToo (ORCPT
+        with ESMTP id S244636AbiFOTqt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:44:44 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D513BF9F;
-        Wed, 15 Jun 2022 12:44:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=d/o5WdCpTeAaM6xLD3aXnZ6/ErJV7ziaxEi+U3WrQwE=; b=dOxybcqMn8pSrgy5H2UXrkD7Nd
-        EKCijLQNCTS5VUigHRJEnIfdJSng2uhQTyswS7XOAezoBxwwHiY4L9GotkSh3/MjvVZ3Us3o8k2Vy
-        kGEF6VstuRvtGOT3k0Pp4Qv3T2Y5NJ+YYLOMPcLtJcu5oqFRsfxMc/yOrAmj4gBJ9gpEYll8vvWXO
-        Nf6EjBkF+2HLi/ugUXcGMU63LhnoesdswatbEyjGUAAnm3us2C/7xjZTbifvglrsabY8spFWjlqAR
-        ZtWFXwDjWxM5yLvSHsslKYqtGHG+ioqTe+8hizctOs5BFiE36j6RhXBjkX3pZAGx0jyUL07FcJE56
-        FEiGf29g==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1YwO-008D1G-0q; Wed, 15 Jun 2022 19:44:36 +0000
-Message-ID: <fb53cab1-f693-5309-e06a-0fe0fc932c2c@infradead.org>
-Date:   Wed, 15 Jun 2022 12:44:30 -0700
+        Wed, 15 Jun 2022 15:46:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE8F54BE9;
+        Wed, 15 Jun 2022 12:46:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5461C60C32;
+        Wed, 15 Jun 2022 19:46:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4532C341C0;
+        Wed, 15 Jun 2022 19:46:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655322407;
+        bh=nOopfbmMyE0zFSTGtfblVa/zt6IbMPT2M5vyvVqxC5U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=nkWj9LfdIx6JvO6oHl690f+EQlTF17ydQgfzXPAWXAo0DSHZlOK+Kqs+8WYA8mq3f
+         7gX46Xr0YGAUjYyWIlFcQgWnSb/u4L7BVMrAFUYOd/I1oZpO65eoRM6I5FR71JY4vl
+         XPySLRD+shq5NFDfeyTP2stBiEv3h2ESeq9l24LsRZYu0zewefobGoeMPNNkvYP2wo
+         hKcZ82b5JaYW10RdqEbMSgrMkvh1wiWn1EeOd5v+862g2qgAQ8xXtDcg7s1AYFX+84
+         TIFLlC5tbvCuWUznULVZNfpwS6KCfSHKnZHipgPT8T3rmtmZhSsXDm7/iOynAzpXJU
+         ATUES8wzHzJoA==
+Received: by mail-vk1-f174.google.com with SMTP id c11so4647773vkn.5;
+        Wed, 15 Jun 2022 12:46:47 -0700 (PDT)
+X-Gm-Message-State: AJIora8os1VPqroVHgUKnySi3/wRxJ6EAkUqbQ6EbB+u2nLNTOUaPBsL
+        nM1RbqHRKoi8FtThKVXsX2pL4Z8TnpuJdkNrGQ==
+X-Google-Smtp-Source: AGRyM1spP8wpUv515CCMbtNvuylDnX5ozPVOexUvJfKJpfu+CcNlYJMF+vd1Acbtc6mwAep1k0kVJcWbjEQpD/ZgXDg=
+X-Received: by 2002:a1f:a1c6:0:b0:35e:3f6a:b8b8 with SMTP id
+ k189-20020a1fa1c6000000b0035e3f6ab8b8mr898915vke.26.1655322406702; Wed, 15
+ Jun 2022 12:46:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: linux-next: Tree for Jun 15
- (drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c)
-Content-Language: en-US
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20220615160116.528c324b@canb.auug.org.au>
- <d1a48a84-6d07-e8f7-5fd8-d24a7a1cf187@infradead.org>
- <CADnq5_N6gfaPfZJAX4+poWFFruxNdFKZqzXZXosj1A55e-O1mA@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CADnq5_N6gfaPfZJAX4+poWFFruxNdFKZqzXZXosj1A55e-O1mA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <30d95df2-c3b-b3e3-d65e-c6be0355fb1@maine.edu>
+In-Reply-To: <30d95df2-c3b-b3e3-d65e-c6be0355fb1@maine.edu>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 15 Jun 2022 13:46:35 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL+0z1vc+T+9m-faoM-4W=x=7-UBu5=S-QGjTwU2biGNw@mail.gmail.com>
+Message-ID: <CAL_JsqL+0z1vc+T+9m-faoM-4W=x=7-UBu5=S-QGjTwU2biGNw@mail.gmail.com>
+Subject: Re: [perf] why is /proc/sys/kernel/perf_user_access ARM64 only?
+To:     Vince Weaver <vincent.weaver@maine.edu>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,61 +71,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 15, 2022 at 11:57 AM Vince Weaver <vincent.weaver@maine.edu> wrote:
+>
+>
+> Just wasted a lot of time tracking down why rdpmc() event reading wasn't
+> working on an ARM64 machine.
+>
+> It turns out ARM64 has added a custom
+>         "/proc/sys/kernel/perf_user_access"
+> to control rdpmc access, but only on ARM64.
+>         e2012600810c9ded81f6f63a8d04781be3c300ad
+>
+> Why is this ARM64-only?  Why isn't this generic perf infrastructure?
 
+Adding it on x86 would break users at least if default off.
 
-On 6/15/22 12:28, Alex Deucher wrote:
-> On Wed, Jun 15, 2022 at 3:01 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->>
->>
->> On 6/14/22 23:01, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Changes since 20220614:
->>>
->>
->> on i386:
->> # CONFIG_DEBUG_FS is not set
->>
->>
->> ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function ‘amdgpu_dm_crtc_late_register’:
->> ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6599:2: error: implicit declaration of function ‘crtc_debugfs_init’; did you mean ‘amdgpu_debugfs_init’? [-Werror=implicit-function-declaration]
->>   crtc_debugfs_init(crtc);
->>   ^~~~~~~~~~~~~~~~~
->>   amdgpu_debugfs_init
->>
->>
->> Full randconfig file is attached.
-> 
-> I tried building with your config and I can't repro this.  As Harry
-> noted, that function and the whole secure display feature depend on
-> debugfs.  It should never be built without CONFIG_DEBUG_FS.  See
-> drivers/gpu/drm/amd/display/Kconfig:
+> How is this different from the existing
+>         /sys/bus/event_source/devices/cpu/rdpmc
+> tooling?
 
-Did you try building with today's linux-next tree?
-(whatever is in it)
+big.LITTLE
 
-I have seen this build error multiple times so it shouldn't
-be so difficult to repro it.
+We need a single point of control. Otherwise, there's dealing with
+mismatched state of multiple PMUs.
 
+> Also, when user events are disabled, why is the ARMv8 PMU not disabling
+> the cap_user_rdpmc bit in the perf mmap() page?
 
->> config DRM_AMD_SECURE_DISPLAY
->>         bool "Enable secure display support"
->>         default n
->>         depends on DEBUG_FS
->>         depends on DRM_AMD_DC_DCN
->>         help
->>             Choose this option if you want to
->>             support secure display
->>
->>             This option enables the calculation
->>             of crc of specific region via debugfs.
->>             Cooperate with specific DMCU FW.
-> 
-> amdgpu_dm_crtc_late_register is guarded by
-> CONIG_DRM_AMD_SECURE_DISPLAY.  It's not clear to me how we could hit
-> this.
+Humm, maybe that should be changed. The current behavior of
+cap_user_rdpmc is static for the event and set means user access may
+be enabled at some point. Several factors can still prevent userspace
+from getting an event index. A counter couldn't be allocated or
+perf_user_access is disabled.
 
+Should the event open fail if perf_user_access is disabled? Current
+operation is it isn't considered and perf_user_access can change while
+the event is opened.
 
--- 
-~Randy
+> rdpmc was trouble before, but now it's an even bigger
+> architecture-dependent mess just trying to figure out if the feature is
+> enabled or not.
+
+The thing is that x86 started with access being wide open and has
+since been trying to lock things down without breaking userspace. It
+still has questionable uses enabled which complicates the
+implementation. For arm, we're starting with access being an explicit
+request on open and only for task bound events. If there's a real need
+for other scenarios, then we can revisit that.
+
+Rob

@@ -2,92 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C4554D4B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC8754D4AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350247AbiFOWnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 18:43:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
+        id S1347927AbiFOWnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 18:43:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237675AbiFOWnl (ORCPT
+        with ESMTP id S237675AbiFOWnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 18:43:41 -0400
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1363954BD7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:43:40 -0700 (PDT)
-Received: by mail-ua1-x929.google.com with SMTP id h21so3533728uaw.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:43:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2XObwvEIRFeSUPWlsccqJL2V2/Mvgt3nETnC1b9HKa8=;
-        b=S2S/srd6++j7u7iD7ddlh75/PimyvVkw3xD/iReZx2VdakC+JjCSDBCASxeIHuv3V1
-         v+/dVFIS1Utv6mw9teyrxzcYyDxI7VofJ4oyO6GAUplv10+0M5XXrevWfmgSicsnWWFP
-         6a6FoXCgRLMDABe7hpmFkTJhwRj0JvpEG3N2C8lQkn9FQRrl6IdGuOIT6e7rjyomtpAc
-         NfI6pE8pnIpMEJpgG0lC/bDDw9h0VMc9QWZG8Gs4Iz0i4IEe1pH4oSzcPrQJRgNBrKnm
-         dkeBB4ax2K9f6UGVaK/PjM8jJyuxd2rJVuAu+hDcAdGOqwH/JM8t7kJbxnI80FPQaK3E
-         UlxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2XObwvEIRFeSUPWlsccqJL2V2/Mvgt3nETnC1b9HKa8=;
-        b=T87wxEEATyJjeV5Ijhw8Knhw1nDLgvO0JpisqhaXfyIlj40Lx0W3hNr2uDbx43ySv7
-         cNwWEgXnuuORoD668FQgsOqRoAuqRJET7b1xq15giyGHp5B6lGGQ/Uzl5JwMrprbz8Kv
-         WIj9xNrorQSJc9uo9ABkHT6BtgG8fG78KJHFTn7yAYD6wqdgmzF6Rc37pBZXlsmE/npP
-         hoJzYM5RuWAP6Q2z3ge4yLERb9gp+aZmGbXaC36NtyGenvqYNbmgvi2kCqxbUDBhIYKG
-         nN/gECR2yZvsUqZmptv+1L4By11hknYlw6V12dA9SYGQlBII7TFEVQ7rtkkid6tjqR6H
-         ys1g==
-X-Gm-Message-State: AJIora9E9e76suYrtNXlBpwPByP+EGisr9VjOpRC9/5XByq0yOpcWzUk
-        UauyyTRo0mWuWeuOEslCgVhbBzd8f/wgsPEYHyi58A==
-X-Google-Smtp-Source: AGRyM1sJtiK4/NKr4JQEU3uA4VG/CjXI1G2Sh5Ajk9EO+Ng8ddNV3vNXEvLWkGBvxbnZlQvEuR4WKiIkRwH7f2u+jdc=
-X-Received: by 2002:ab0:5781:0:b0:37b:de3d:5d4e with SMTP id
- x1-20020ab05781000000b0037bde3d5d4emr1042184uaa.1.1655333019050; Wed, 15 Jun
- 2022 15:43:39 -0700 (PDT)
+        Wed, 15 Jun 2022 18:43:04 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7DC3B3E3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:43:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655332983; x=1686868983;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GOkKIF1zj4v3HvWCe1Wl62pksKaDezBETS9z2NLNPsw=;
+  b=dpSO5bwBCez9tzCVvujrP//3OAFBjTUB7739GI0erLcboqdmjLlnwmBD
+   +0o4+XUjAdCtpv1WtxddWv9erwP9MI+IerP/UAhYAdFlMQ4ls4iSGDqgz
+   Zgskd/s8BXRF13MDxenibpN1tmDfVDVkh3CuekCI2MPOhRybDjKicHcc0
+   AV3IScUZDcSXrCLMjsGBzeZifJTr35aWZs0KJeCt+ooq4qxdeeJeKWEyK
+   uabsyn3UpzGm8N3g/3XGi8YHiKv0316j4XwPKJt8c0i99D4UfBHur8ex4
+   u7mDni0GLXgsD89BTTeb/6Udn/9Qx/HpUoS2q+kKohBPT2Vxt+T3VJBLO
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="304554766"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="304554766"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 15:43:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="618667193"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 15 Jun 2022 15:42:59 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1000)
+        id BA860109; Thu, 16 Jun 2022 01:43:03 +0300 (EEST)
+Date:   Thu, 16 Jun 2022 01:43:03 +0300
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org, ak@linux.intel.com,
+        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        thomas.lendacky@amd.com, x86@kernel.org
+Subject: Re: [PATCHv4 3/3] x86/tdx: Handle load_unaligned_zeropad()
+ page-cross to a shared page
+Message-ID: <20220615224303.el4qtowheu2rgpdn@black.fi.intel.com>
+References: <20220614120135.14812-1-kirill.shutemov@linux.intel.com>
+ <20220614120135.14812-4-kirill.shutemov@linux.intel.com>
+ <051fd468-11e6-308b-66c8-4de16ff80deb@intel.com>
+ <20220615171042.oeumb3vs3ttu4rvd@black.fi.intel.com>
+ <1d190555-2bb1-e483-2405-e28ddabead07@intel.com>
 MIME-Version: 1.0
-References: <20220613125622.18628-1-mgorman@techsingularity.net> <20220613125622.18628-8-mgorman@techsingularity.net>
-In-Reply-To: <20220613125622.18628-8-mgorman@techsingularity.net>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Wed, 15 Jun 2022 16:43:03 -0600
-Message-ID: <CAOUHufZwT+x3UG9guoyheUsR6rhvqMSH-n+-zWzdFUiO4_ZtCQ@mail.gmail.com>
-Subject: Re: [PATCH 7/7] mm/page_alloc: Replace local_lock with normal spinlock
-To:     Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d190555-2bb1-e483-2405-e28ddabead07@intel.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 8:54 AM Mel Gorman <mgorman@techsingularity.net> wrote:
-...
+On Wed, Jun 15, 2022 at 02:55:13PM -0700, Dave Hansen wrote:
+> On 6/15/22 10:10, Kirill A. Shutemov wrote:
+> >> I thought this whole exercise was kicked off by hitting this in testing.
+> >>  Am I remembering this wrong?
+> >>
+> >>> https://lore.kernel.org/all/20220517153444.11195-10-kirill.shutemov@linux.intel.com/
+> >> Says:
+> >>
+> >>> This is an actual, real-world problem which was discovered during TDX
+> >>> testing.
+> >> Or were you considering this a different problem somehow?
+> > They are different.
+> > 
+> > The patch by the link addresses issue of load_unaligned_zeropad() stepping
+> > onto unaccepted memory. This was triggered in practice.
+> 
+> OK, so we've got two problems both triggered by
+> load_unaligned_zeropad(), but where the fixes are different.  We
+> actually hit the "unaccepted memory one" in testing, but that made us
+> think about other problems in the area and that's where this one came up.
 
-> +#define pcpu_spin_trylock_irqsave(type, member, ptr, flags)            \
-> +({                                                                     \
-> +       type *_ret;                                                     \
-> +       pcpu_task_pin();                                                \
-> +       _ret = this_cpu_ptr(ptr);                                       \
-> +       if (!spin_trylock_irqsave(&_ret->member, flags))                \
-> +               _ret = NULL;                                            \
+I will reword it like this:
 
-I'm getting "BUG: sleeping function called from invalid context" with
-mm-everything-2022-06-14-19-05.
+	The issue was discovered by analysis after triggering other issue with
+	load_unaligned_zeropad().
 
-Perhaps missing a pcpu_task_unpin() here?
+Works for you?
 
-> +       _ret;                                                           \
-> +})
+-- 
+ Kirill A. Shutemov

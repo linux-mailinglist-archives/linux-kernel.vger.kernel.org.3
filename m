@@ -2,114 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD6B54C4CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A84C54C4D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:37:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348373AbiFOJhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47078 "EHLO
+        id S1348402AbiFOJhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347380AbiFOJhS (ORCPT
+        with ESMTP id S1348395AbiFOJhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:37:18 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA92D3BA61;
-        Wed, 15 Jun 2022 02:37:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1655285834; x=1686821834;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sXjo+CBZcLczWq1l68m95bjBeMb9Ku4hb9i+j3EAZTw=;
-  b=1H+4jVag5mIvJpt1OG0/HQ6o7rkKheWxuMKohdKIX0kM+itDL8CVuRMA
-   YOlBfks/h/Gfio4Nw/AY4Dxbg/63jIt3YUU3jJGKDpvrOLoawuJErunxD
-   4H5l7z8GdFyeGuqxWt+sXZ2BgWEqVUQnUn2RftI3tQUdndjPnEpr/0isK
-   yc5Oje+NvaHVjFs7GxJBrDiFfz3VATQswKnimAPU4tW2NdzGrd0FWJEZm
-   BrFPBv13sLm0/hJHm+2YmcUW3IK34iMKAyqVlzX5/GT6cECnyBNoblK92
-   b0nLgX34m1GtV9+6oTsdqHeJFx0sSdRmEB7xFNQXq36z3PQYgLpPc9I04
-   g==;
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="160408543"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2022 02:37:13 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.17; Wed, 15 Jun 2022 02:36:58 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 15 Jun 2022 02:36:58 -0700
-Date:   Wed, 15 Jun 2022 15:06:56 +0530
-From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
-        <lxu@maxlinear.com>, <richardcochran@gmail.com>,
-        <UNGLinuxDriver@microchip.com>, <Ian.Saturley@microchip.com>
-Subject: Re: [PATCH net-next 3/5] net: lan743x: Add support to SGMII block
- access functions
-Message-ID: <20220615093656.tahj3ncojeh6slmq@microsemi.com>
-References: <20220614103424.58971-1-Raju.Lakkaraju@microchip.com>
- <20220614103424.58971-4-Raju.Lakkaraju@microchip.com>
- <Yqj3qpq5Ew+JT+28@lunn.ch>
+        Wed, 15 Jun 2022 05:37:41 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC7118E22
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:37:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=A8JpapYC9DelarnKbCdnoE7ZcbxO
+        YJ05XpvR+2l5gBg=; b=G2Ew7R4b/D5LfmUTEhl28PVvQMGOpJJ2e6agJM9JyyzS
+        jz+33i3y7zb57Gb0YQ8BgPjvuNqXCDHHN8KLIC6U8L+AGR5hZS06OhGLSG9wGPBV
+        Kyy2TU2vX7/t4giZdAJ8WGOA+0lK04DUmcSKk9CANMqtVEEDamkN48zYyU0ZxGU=
+Received: (qmail 2061927 invoked from network); 15 Jun 2022 11:37:33 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Jun 2022 11:37:33 +0200
+X-UD-Smtp-Session: l3s3148p1@YqUORXnhbj9ZD+7R
+Date:   Wed, 15 Jun 2022 11:37:29 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] arm64: dts: renesas: spider-cpu: Switch from SCIF3
+ to HSCIF0
+Message-ID: <YqmoWYARVsXos3me@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220613131033.10053-1-wsa+renesas@sang-engineering.com>
+ <20220613131033.10053-2-wsa+renesas@sang-engineering.com>
+ <CAMuHMdX-56GZmZJ-JvkFvZ6NsozsamtoKURPzsS-3+AYtZBhFQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="UDCmEr49IhCpzjc2"
 Content-Disposition: inline
-In-Reply-To: <Yqj3qpq5Ew+JT+28@lunn.ch>
-User-Agent: NeoMutt/20180716-255-141487
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdX-56GZmZJ-JvkFvZ6NsozsamtoKURPzsS-3+AYtZBhFQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
 
-Thank you for review comments.
+--UDCmEr49IhCpzjc2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The 06/14/2022 23:03, Andrew Lunn wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> On Tue, Jun 14, 2022 at 04:04:22PM +0530, Raju Lakkaraju wrote:
-> > Add SGMII access read and write functions
-> >
-> > Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-> > ---
-> >  drivers/net/ethernet/microchip/lan743x_main.c | 69 +++++++++++++++++++
-> >  drivers/net/ethernet/microchip/lan743x_main.h | 12 ++++
-> >  2 files changed, 81 insertions(+)
-> >
-> > diff --git a/drivers/net/ethernet/microchip/lan743x_main.c b/drivers/net/ethernet/microchip/lan743x_main.c
-> > index 6352cba19691..e496769efb54 100644
-> > --- a/drivers/net/ethernet/microchip/lan743x_main.c
-> > +++ b/drivers/net/ethernet/microchip/lan743x_main.c
-> > @@ -909,6 +909,74 @@ static int lan743x_mdiobus_c45_write(struct mii_bus *bus,
-> >       return ret;
-> >  }
-> >
-> > +static int lan743x_sgmii_wait_till_not_busy(struct lan743x_adapter *adapter)
-> > +{
-> > +     u32 data;
-> > +     int ret;
-> > +
-> > +     ret = readx_poll_timeout(LAN743X_CSR_READ_OP, SGMII_ACC, data,
-> > +                              !(data & SGMII_ACC_SGMII_BZY_), 100, 1000000);
-> > +     if (unlikely(ret < 0))
-> 
-> unlikely() seems pointless here. You have just done a blocking poll,
-> so you don't care about high performance, this is not the fast path.
-> 
->    Andrew
+Hi Geert,
 
-Accepted. 
-I will remove the unlinkely().
+> I.e. the U-Boot on the Spider in Magnus' lab has "baudrate=115200"
+> in its environment, while I can read the output from ICUMXA Loader
+> to U-Boot, and Linux just fine.
 
--- 
+Earlier U-Boot may have no HSCIF support. Recent ones have and the
+installer suggests to set baudrate to highspeed. ICUMXA loaders never
+worked for me in 115200.
 
-Thanks,
-Raju
+I can keep my patch local if you prefer 115200.
 
+
+--UDCmEr49IhCpzjc2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKpqFUACgkQFA3kzBSg
+KbZofg//cx3mCefnMBfyXbcioFsitCVQyAiT8kaeNlh19E52D1Nn0gpOqr4XV1hn
+k+1SwLQem8+GPiuDgDWEATcnL43zMibpWR2PTAc4n4hfk8o6sFCZ9ukv3wbJuqPa
+xA/uUE/KwX8Kpoj8+mYC+ZG+yHwPJPGYKvzz2Hbz4kcwpnTCH131hzOYmr65/Tya
+LzMkQ4vyDjY7UEbyfh3qGc2hcyPfL9Sb0ksSwQA/3vwHp89SZY1pIeTp5pXCVFQX
+CylLTOUdCrJpPl5bioPDqZ380zEKHAyKzM5Chy5wSstzlNIS11lEr27zigZGqdNt
+c+Og9gpUK+rDPccN0DPulH4+w7uj9XcMCBWz3LaI1XusK83kxt0spEjl6CYtW31X
+Q/JuyIiY4TQAPxaaBoHyE/NSgeAAj6UVvtV4UYKzX1g3vruoZP8q2G89XTFVa2y7
+d7FO/02padMh7EitomAi9S9TVEEqCVwFBB5EobXA9b/1hKk+/BY7hFvQvyyi/Mu6
+tutYpluRyAlsO0qp8AWnPGd2N8rP1BuZpjbViomo3jQJzJUk9uD0kRa6EIDxp7F2
+xwtPTAfPyrlv7oYsLiXtgw0eO19iJxMALSBMbRdWpFuldxJ2nBe4PT3dzNu8GGEo
+UujKBi3PKmVuNrlfwmNKgh6r0xYFRp97HBfcV2fsSxjhPILDW1E=
+=m8gc
+-----END PGP SIGNATURE-----
+
+--UDCmEr49IhCpzjc2--

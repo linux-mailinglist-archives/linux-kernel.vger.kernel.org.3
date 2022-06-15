@@ -2,211 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9022854C2DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A6854C2E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243477AbiFOHsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 03:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
+        id S238132AbiFOHwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 03:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243507AbiFOHsI (ORCPT
+        with ESMTP id S234935AbiFOHw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 03:48:08 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47E727B22
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:48:04 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LNHRd1chpz1KB3H;
-        Wed, 15 Jun 2022 15:46:05 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 15 Jun 2022 15:48:02 +0800
-Subject: Re: [PATCH 5/7] mm/khugepaged: use helper macro __ATTR_RW
-To:     Zach O'Keefe <zokeefe@google.com>
-CC:     <akpm@linux-foundation.org>, <aarcange@redhat.com>,
-        <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
-        <neilb@suse.de>, <apopple@nvidia.com>, <david@redhat.com>,
-        <surenb@google.com>, <peterx@redhat.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220611084731.55155-1-linmiaohe@huawei.com>
- <20220611084731.55155-6-linmiaohe@huawei.com> <Yqkn65gGKfQE1Lg1@google.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <c40ba4b2-706e-8e74-7fee-f0f31d38a1ff@huawei.com>
-Date:   Wed, 15 Jun 2022 15:48:01 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 15 Jun 2022 03:52:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81D8F55
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:52:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F31A61917
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:52:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED225C3411C;
+        Wed, 15 Jun 2022 07:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655279544;
+        bh=/Cq8JxWDGWPl1V210SZ7wqDAk1YugafyAPEyJX3tbh4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WbXfnxamMI9lriVQxFHGz+SDHAV/InUwRvxz9w+8yPYsVUbPEZC9X+nw40fofM1jP
+         dNldOC17X30lLDafgiwlqAUgKqjfYVUwcJxgj9fpSlPBquLHfAvEWSENSW/MV/BnjW
+         TbJmhDmNRRDEc7U0TuIMkgQqxdadP+3msiO+mwmn+BXhqQ253EIxokGRNJfD6QkNWV
+         ieGANqzWz677uZiaLRBiahDa+Wz7y+gFcv+WF5gpf1dm6765hDMARgcG8e6N+1knT4
+         wjMHUUPuVNfktVIJM/m3X0rHPSzaNb+xHMjnwkLQopi1DvZwS/Wc52y8HvzsUXiWLi
+         LcsRhjzywnBnQ==
+Date:   Wed, 15 Jun 2022 09:52:19 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Andrei Vagin <avagin@gmail.com>, linux-kernel@vger.kernel.org,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Florian Weimer <fweimer@redhat.com>, linux-mm@kvack.org,
+        Eric Biederman <ebiederm@xmission.com>
+Subject: Re: [PATCH 1/2] fs/exec: allow to unshare a time namespace on
+ vfork+exec
+Message-ID: <20220615075219.5cvoc3py3zdm74oo@wittgenstein>
+References: <20220613060723.197407-1-avagin@gmail.com>
+ <202206141412.2B0732FF6C@keescook>
 MIME-Version: 1.0
-In-Reply-To: <Yqkn65gGKfQE1Lg1@google.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202206141412.2B0732FF6C@keescook>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/15 8:29, Zach O'Keefe wrote:
-> On 11 Jun 16:47, Miaohe Lin wrote:
->> Use helper macro __ATTR_RW to define the khugepaged attributes. Minor
->> readability improvement.
->>
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
->>  mm/khugepaged.c | 37 +++++++++++++++----------------------
->>  1 file changed, 15 insertions(+), 22 deletions(-)
->>
->> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
->> index 8e6fad7c7bd9..142e26e4bdbf 100644
->> --- a/mm/khugepaged.c
->> +++ b/mm/khugepaged.c
->> @@ -147,8 +147,7 @@ static ssize_t scan_sleep_millisecs_store(struct kobject *kobj,
->>  	return count;
->>  }
->>  static struct kobj_attribute scan_sleep_millisecs_attr =
->> -	__ATTR(scan_sleep_millisecs, 0644, scan_sleep_millisecs_show,
->> -	       scan_sleep_millisecs_store);
->> +	__ATTR_RW(scan_sleep_millisecs);
->>  
->>  static ssize_t alloc_sleep_millisecs_show(struct kobject *kobj,
->>  					  struct kobj_attribute *attr,
->> @@ -175,8 +174,7 @@ static ssize_t alloc_sleep_millisecs_store(struct kobject *kobj,
->>  	return count;
->>  }
->>  static struct kobj_attribute alloc_sleep_millisecs_attr =
->> -	__ATTR(alloc_sleep_millisecs, 0644, alloc_sleep_millisecs_show,
->> -	       alloc_sleep_millisecs_store);
->> +	__ATTR_RW(alloc_sleep_millisecs);
->>  
->>  static ssize_t pages_to_scan_show(struct kobject *kobj,
->>  				  struct kobj_attribute *attr,
->> @@ -200,8 +198,7 @@ static ssize_t pages_to_scan_store(struct kobject *kobj,
->>  	return count;
->>  }
->>  static struct kobj_attribute pages_to_scan_attr =
->> -	__ATTR(pages_to_scan, 0644, pages_to_scan_show,
->> -	       pages_to_scan_store);
->> +	__ATTR_RW(pages_to_scan);
->>  
->>  static ssize_t pages_collapsed_show(struct kobject *kobj,
->>  				    struct kobj_attribute *attr,
->> @@ -221,13 +218,13 @@ static ssize_t full_scans_show(struct kobject *kobj,
->>  static struct kobj_attribute full_scans_attr =
->>  	__ATTR_RO(full_scans);
->>  
->> -static ssize_t khugepaged_defrag_show(struct kobject *kobj,
->> +static ssize_t defrag_show(struct kobject *kobj,
->>  				      struct kobj_attribute *attr, char *buf)
->>  {
->>  	return single_hugepage_flag_show(kobj, attr, buf,
->>  					 TRANSPARENT_HUGEPAGE_DEFRAG_KHUGEPAGED_FLAG);
->>  }
->> -static ssize_t khugepaged_defrag_store(struct kobject *kobj,
->> +static ssize_t defrag_store(struct kobject *kobj,
->>  				       struct kobj_attribute *attr,
->>  				       const char *buf, size_t count)
->>  {
->> @@ -235,8 +232,7 @@ static ssize_t khugepaged_defrag_store(struct kobject *kobj,
->>  				 TRANSPARENT_HUGEPAGE_DEFRAG_KHUGEPAGED_FLAG);
->>  }
->>  static struct kobj_attribute khugepaged_defrag_attr =
->> -	__ATTR(defrag, 0644, khugepaged_defrag_show,
->> -	       khugepaged_defrag_store);
->> +	__ATTR_RW(defrag);
->>  
->>  /*
->>   * max_ptes_none controls if khugepaged should collapse hugepages over
->> @@ -246,13 +242,13 @@ static struct kobj_attribute khugepaged_defrag_attr =
->>   * runs. Increasing max_ptes_none will instead potentially reduce the
->>   * free memory in the system during the khugepaged scan.
->>   */
->> -static ssize_t khugepaged_max_ptes_none_show(struct kobject *kobj,
->> +static ssize_t max_ptes_none_show(struct kobject *kobj,
->>  					     struct kobj_attribute *attr,
->>  					     char *buf)
->>  {
->>  	return sysfs_emit(buf, "%u\n", khugepaged_max_ptes_none);
->>  }
->> -static ssize_t khugepaged_max_ptes_none_store(struct kobject *kobj,
->> +static ssize_t max_ptes_none_store(struct kobject *kobj,
->>  					      struct kobj_attribute *attr,
->>  					      const char *buf, size_t count)
->>  {
->> @@ -268,17 +264,16 @@ static ssize_t khugepaged_max_ptes_none_store(struct kobject *kobj,
->>  	return count;
->>  }
->>  static struct kobj_attribute khugepaged_max_ptes_none_attr =
->> -	__ATTR(max_ptes_none, 0644, khugepaged_max_ptes_none_show,
->> -	       khugepaged_max_ptes_none_store);
->> +	__ATTR_RW(max_ptes_none);
->>  
->> -static ssize_t khugepaged_max_ptes_swap_show(struct kobject *kobj,
->> +static ssize_t max_ptes_swap_show(struct kobject *kobj,
->>  					     struct kobj_attribute *attr,
->>  					     char *buf)
->>  {
->>  	return sysfs_emit(buf, "%u\n", khugepaged_max_ptes_swap);
->>  }
->>  
->> -static ssize_t khugepaged_max_ptes_swap_store(struct kobject *kobj,
->> +static ssize_t max_ptes_swap_store(struct kobject *kobj,
->>  					      struct kobj_attribute *attr,
->>  					      const char *buf, size_t count)
->>  {
->> @@ -295,17 +290,16 @@ static ssize_t khugepaged_max_ptes_swap_store(struct kobject *kobj,
->>  }
->>  
->>  static struct kobj_attribute khugepaged_max_ptes_swap_attr =
->> -	__ATTR(max_ptes_swap, 0644, khugepaged_max_ptes_swap_show,
->> -	       khugepaged_max_ptes_swap_store);
->> +	__ATTR_RW(max_ptes_swap);
->>  
->> -static ssize_t khugepaged_max_ptes_shared_show(struct kobject *kobj,
->> +static ssize_t max_ptes_shared_show(struct kobject *kobj,
->>  					       struct kobj_attribute *attr,
->>  					       char *buf)
->>  {
->>  	return sysfs_emit(buf, "%u\n", khugepaged_max_ptes_shared);
->>  }
->>  
->> -static ssize_t khugepaged_max_ptes_shared_store(struct kobject *kobj,
->> +static ssize_t max_ptes_shared_store(struct kobject *kobj,
->>  					      struct kobj_attribute *attr,
->>  					      const char *buf, size_t count)
->>  {
->> @@ -322,8 +316,7 @@ static ssize_t khugepaged_max_ptes_shared_store(struct kobject *kobj,
->>  }
->>  
->>  static struct kobj_attribute khugepaged_max_ptes_shared_attr =
->> -	__ATTR(max_ptes_shared, 0644, khugepaged_max_ptes_shared_show,
->> -	       khugepaged_max_ptes_shared_store);
->> +	__ATTR_RW(max_ptes_shared);
->>  
->>  static struct attribute *khugepaged_attr[] = {
->>  	&khugepaged_defrag_attr.attr,
->> -- 
->> 2.23.0
->>
->>
+On Tue, Jun 14, 2022 at 02:14:35PM -0700, Kees Cook wrote:
+> On Sun, Jun 12, 2022 at 11:07:22PM -0700, Andrei Vagin wrote:
+> > Right now, a new process can't be forked in another time namespace
+> > if it shares mm with its parent. It is prohibited, because each time
+> > namespace has its own vvar page that is mapped into a process address
+> > space.
+> > 
+> > When a process calls exec, it gets a new mm and so it could be "legal"
+> > to switch time namespace in that case. This was not implemented and
+> > now if we want to do this, we need to add another clone flag to not
+> > break backward compatibility.
+> > 
+> > We don't have any user requests to switch times on exec except the
+> > vfork+exec combination, so there is no reason to add a new clone flag.
+> > As for vfork+exec, this should be safe to allow switching timens with
+> > the current clone flag. Right now, vfork (CLONE_VFORK | CLONE_VM) fails
+> > if a child is forked into another time namespace. With this change,
+> > vfork creates a new process in parent's timens, and the following exec
+> > does the actual switch to the target time namespace.
 > 
-> For function names that changed, can we align args that don't fit on opening
-> line with the opening brace?
-
-Sorry, I forgot to fit on opening line with the opening brace and checkpatch.pl didn't
-complain about it. Will fix these and similar case in another thread. Many thanks for
-your review and comment!
-
+> This seems like a very special case. None of the other namespaces do
+> this, do they?
 > 
-> Thanks,
-> Zach
-> .
-> 
+> How is CLONE_NEWTIME supposed to be used today?
 
+Time namespaces are similar to pid namespaces. If a process calls
+unshare(CLONE_NEWTIME) it will not change into a new time namespace.
+Only the children of the process will.
+
+You can also see this via /proc/<pid>/ns/time and
+/proc/<pid>/ns/time_for_children. After an unshare(CLONE_NEWTIME)
+/proc/<pid>/ns/time will be unchanged while
+/proc/<pid>/ns/time_for_children will reference a new time namespace.
+
+So if the process now calls fork() the child will be placed in a new
+time namespace.
+
+As Andrei correctly points out in the commit message each time namespace
+gets it's own vvar page mapped into the process address space.
+Consequently calls to clone*() with CLONE_VM will need to fail because
+it would alter the parent's mm as well. That includes vfork() which is
+roughly just CLONE_VM | CLONE_VFORK.
+
+fork() remains unaffected. So anything that implements a process
+launcher using vfork() needs to implement a fork() fallback after vfork
+failure() in case the original process has unshared a new time
+namespace.
+
+As posix spawn is implemented using vfork() we would force glibc to
+implement a fork() fallback and enforce the introducing of a lot of
+complexity to work around this.
+
+I think the proposal here makes sense and allows us to avoid introducing
+yet another clone flag. For vfork() it also makes sense because the
+calling process is suspended until exec or exit so the semantics between
+fork() and clone*() are sufficiently distinct to justify this
+difference. Iow, vfork() is distinctly targeted at enforcing an exec*
+call already anyway.
+
+Christian

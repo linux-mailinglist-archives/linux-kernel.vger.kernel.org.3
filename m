@@ -2,183 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A573154CAFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E5F54CB05
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348687AbiFOOO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 10:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59498 "EHLO
+        id S235081AbiFOOQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 10:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235833AbiFOOOx (ORCPT
+        with ESMTP id S232345AbiFOOQU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 10:14:53 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8103879E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:14:51 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id s1so15555181wra.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:14:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TmFspR35i19OaG7kIq4BfP3Z5+5KHooJY8o+wf2Eu7g=;
-        b=hnjS0y0DJB+Pgxck/o6M0KR1CyJPsNohu8wEV1ngzYEvfR3BNgdCgc8bBCjYcSn/q2
-         LGrABHBIuN5wiJVr3vFBZSQoyuo+ow5O4zy8y+xuerraxDm52W00Ql6GN8mxJBK7Aged
-         DMepzdaFMPS1SBM8wU0DjvHn5zjVaCWGHNtmseACjEovZd9TfrOheGRLWXnnpvnFbk3L
-         Oh5JBbb6A+TcxaBr62FlW4W2kMYFlFl4qBPFa5Vljf/kfuiWpPulvsvFhKfMVnlp7H1I
-         /Ewf9GWseGoqqzdlh7+S2YPdnfxgjB6XJIAkXpRzobHf9nGOIaKrkjPQFKm48HdjqWaG
-         xCzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TmFspR35i19OaG7kIq4BfP3Z5+5KHooJY8o+wf2Eu7g=;
-        b=6hXQjpEy0fTqWXNgP487A1D2CO5QiI2pVhd9UpVBWPekqG+C6rxX7bwebas9z1Lx7F
-         8yuas7Q8p5f7DOY0iEeXaIadil7i9/KMZ/FnRJafssXqKe1CjRvifzr8pWQxmW6tsOsh
-         MRbC/0l38E534hx3uUyMCQNzRkhR7vQzBsfcnEgk4DT3zadR9OdI0uzP+v+AuTHM2sYP
-         XuUyHLYGJMxDKHfNSK6MwQtsOc3jH/M3KLTUKjQgaxnusgpH4QDrGft7qLWm6nMeytXJ
-         h0/0hFxfcHtu2U3ZzA74jYAlbsr8Fxx2tVt1GKPe0Da31358qdNyVrgQHGi21W2s5fQe
-         +xWg==
-X-Gm-Message-State: AJIora8EC9zbzOKTTZSZsI/VtViluxj1/Wk9+F8yms96cljBja14Hs0v
-        BSeRNshpquY4wWEsZGp1B4lOCql804s/OF1zxKM4
-X-Google-Smtp-Source: AGRyM1shZLCqZkkSojukqCXaW+5XT6IN8fQuWUaigb52d2YijY5GHtpeOYg1i3lr6LTItEcWJJFmcKwvqWFcwysL51U=
-X-Received: by 2002:a05:6000:1447:b0:21a:278a:181c with SMTP id
- v7-20020a056000144700b0021a278a181cmr27393wrx.161.1655302489487; Wed, 15 Jun
- 2022 07:14:49 -0700 (PDT)
+        Wed, 15 Jun 2022 10:16:20 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7705B36312
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:16:19 -0700 (PDT)
+Received: (qmail 674306 invoked by uid 1000); 15 Jun 2022 10:16:18 -0400
+Date:   Wed, 15 Jun 2022 10:16:18 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>
+Cc:     llvm@lists.linux.dev, linux-toolchains@vger.kernel.org,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: Re: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
+Message-ID: <YqnpshlsAHg7Uf9G@rowland.harvard.edu>
+References: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
 MIME-Version: 1.0
-References: <20220608150942.776446-1-fred@cloudflare.com> <87tu8oze94.fsf@email.froward.int.ebiederm.org>
- <e1b62234-9b8a-e7c2-2946-5ef9f6f23a08@cloudflare.com> <87y1xzyhub.fsf@email.froward.int.ebiederm.org>
- <859cb593-9e96-5846-2191-6613677b07c5@cloudflare.com> <87o7yvxl4x.fsf@email.froward.int.ebiederm.org>
- <9ed91f15-420c-3db6-8b3b-85438b02bf97@cloudflare.com> <20220615103031.qkzae4xr34wysj4b@wittgenstein>
-In-Reply-To: <20220615103031.qkzae4xr34wysj4b@wittgenstein>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 15 Jun 2022 10:14:38 -0400
-Message-ID: <CAHC9VhR8yPHZb2sCu4JGgXOSs7rudm=9opB+-LsG6_Lta9466A@mail.gmail.com>
-Subject: Re: [PATCH v3] cred: Propagate security_prepare_creds() error code
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Frederick Lawler <fred@cloudflare.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-aio@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-cachefs@redhat.com, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org, linux-mm@kvack.org,
-        linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-security-module@vger.kernel.org, netdev@vger.kernel.org,
-        keyrings@vger.kernel.org, selinux@vger.kernel.org,
-        serge@hallyn.com, amir73il@gmail.com, kernel-team@cloudflare.com,
-        Jeff Moyer <jmoyer@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 6:30 AM Christian Brauner <brauner@kernel.org> wrote:
->
-> On Tue, Jun 14, 2022 at 01:59:08PM -0500, Frederick Lawler wrote:
-> > On 6/14/22 11:30 AM, Eric W. Biederman wrote:
-> > > Frederick Lawler <fred@cloudflare.com> writes:
-> > >
-> > > > On 6/13/22 11:44 PM, Eric W. Biederman wrote:
-> > > > > Frederick Lawler <fred@cloudflare.com> writes:
-> > > > >
-> > > > > > Hi Eric,
-> > > > > >
-> > > > > > On 6/13/22 12:04 PM, Eric W. Biederman wrote:
-> > > > > > > Frederick Lawler <fred@cloudflare.com> writes:
-> > > > > > >
-> > > > > > > > While experimenting with the security_prepare_creds() LSM hook, we
-> > > > > > > > noticed that our EPERM error code was not propagated up the callstack.
-> > > > > > > > Instead ENOMEM is always returned.  As a result, some tools may send a
-> > > > > > > > confusing error message to the user:
-> > > > > > > >
-> > > > > > > > $ unshare -rU
-> > > > > > > > unshare: unshare failed: Cannot allocate memory
-> > > > > > > >
-> > > > > > > > A user would think that the system didn't have enough memory, when
-> > > > > > > > instead the action was denied.
-> > > > > > > >
-> > > > > > > > This problem occurs because prepare_creds() and prepare_kernel_cred()
-> > > > > > > > return NULL when security_prepare_creds() returns an error code. Later,
-> > > > > > > > functions calling prepare_creds() and prepare_kernel_cred() return
-> > > > > > > > ENOMEM because they assume that a NULL meant there was no memory
-> > > > > > > > allocated.
-> > > > > > > >
-> > > > > > > > Fix this by propagating an error code from security_prepare_creds() up
-> > > > > > > > the callstack.
-> > > > > > > Why would it make sense for security_prepare_creds to return an error
-> > > > > > > code other than ENOMEM?
-> > > > > > >    > That seems a bit of a violation of what that function is supposed to do
-> > > > > > >
-> > > > > >
-> > > > > > The API allows LSM authors to decide what error code is returned from the
-> > > > > > cred_prepare hook. security_task_alloc() is a similar hook, and has its return
-> > > > > > code propagated.
-> > > > > It is not an api.  It is an implementation detail of the linux kernel.
-> > > > > It is a set of convenient functions that do a job.
-> > > > > The general rule is we don't support cases without an in-tree user.  I
-> > > > > don't see an in-tree user.
-> > > > >
-> > > > > > I'm proposing we follow security_task_allocs() pattern, and add visibility for
-> > > > > > failure cases in prepare_creds().
-> > > > > I am asking why we would want to.  Especially as it is not an API, and I
-> > > > > don't see any good reason for anything but an -ENOMEM failure to be
-> > > > > supported.
-> > > > >
-> > > > We're writing a LSM BPF policy, and not a new LSM. Our policy aims to solve
-> > > > unprivileged unshare, similar to Debian's patch [1]. We're in a position such
-> > > > that we can't use that patch because we can't block _all_ of our applications
-> > > > from performing an unshare. We prefer a granular approach. LSM BPF seems like a
-> > > > good choice.
-> > >
-> > > I am quite puzzled why doesn't /proc/sys/user/max_user_namespaces work
-> > > for you?
-> > >
-> >
-> > We have the following requirements:
-> >
-> > 1. Allow list criteria
-> > 2. root user must be able to create namespaces whenever
-> > 3. Everything else not in 1 & 2 must be denied
-> >
-> > We use per task attributes to determine whether or not we allow/deny the
-> > current call to unshare().
-> >
-> > /proc/sys/user/max_user_namespaces limits are a bit broad for this level of
-> > detail.
-> >
-> > > > Because LSM BPF exposes these hooks, we should probably treat them as an
-> > > > API. From that perspective, userspace expects unshare to return a EPERM
-> > > > when the call is denied permissions.
-> > >
-> > > The BPF code gets to be treated as a out of tree kernel module.
-> > >
-> > > > > Without an in-tree user that cares it is probably better to go the
-> > > > > opposite direction and remove the possibility of return anything but
-> > > > > memory allocation failure.  That will make it clearer to implementors
-> > > > > that a general error code is not supported and this is not a location
-> > > > > to implement policy, this is only a hook to allocate state for the LSM.
-> > > > >
-> > > >
-> > > > That's a good point, and it's possible we're using the wrong hook for the
-> > > > policy. Do you know of other hooks we can look into?
->
-> Fwiw, from this commit it wasn't very clear what you wanted to achieve
-> with this. It might be worth considering adding a new security hook for
-> this. Within msft it recently came up SELinux might have an interest in
-> something like this as well.
+On Wed, Jun 15, 2022 at 11:43:29AM +0000, Paul Heidekrüger wrote:
+> Hi all,
+> 
+> I have been confused by explanation.txt's definition of control
+> dependencies:
+> 
+> > Finally, a read event and another memory access event are linked by a
+> > control dependency if the value obtained by the read affects whether
+> > the second event is executed at all.
+> 
+> I'll go into the following:
+> 
+> ====
+> 1. "At all", to me, is misleading
+>   1.1 The code which confused me
+>   1.2 The traditional definition via post-dominance doesn't work either
+> 2. Solution
+> ====
+> 
+> 1. "At all", to me, is misleading:
+> 
+> "At all" to me suggests a question for which we require a definitive
+> "yes" or "no" answer: given a programme and an input, can a certain
+> piece of code be executed? Can we always answer this this question?
+> Doesn't this sound similar to the halting problem?
 
-Just to clarify things a bit, I believe SELinux would have an interest
-in a LSM hook capable of implementing an access control point for user
-namespaces regardless of Microsoft's current needs.  I suspect due to
-the security relevant nature of user namespaces most other LSMs would
-be interested as well; it seems like a well crafted hook would be
-welcome by most folks I think.
+No.  You're not thinking about this the right way.
 
--- 
-paul-moore.com
+The point of view we take in this document and in the LKMM is not like 
+the view in a static analysis of a program.  It is a dynamic analysis of 
+one particular execution of a program.  The halting problem does not 
+apply.  Note for instance that explanation.txt talks about "events" 
+rather than instructions or pieces of code.
+
+(The single-execution-at-a-time point of view has its own limitations, 
+which do have some adverse affects on the LKMM.  But we don't want to 
+exceed the capabilities of the herd7 tool.)
+
+> 1.1 The Example which confused me:
+> 
+> For the dependency checker project [1], I've been thinking about
+> tracking dependency chains in code, and I stumbled upon the following
+> edge case, which made me question the "at all" part of the current
+> definition. The below C-code is derived from some optimised kernel code
+> in LLVM intermediate representation (IR) I encountered:
+> 
+> > int *x, *y;
+> >
+> > int foo()
+> > {
+> > /* More code */
+> >
+> > 	 loop:
+> > 		/* More code */
+> >
+> > 	 	if(READ_ONCE(x)) {
+> > 	 		WRITE_ONCE(y, 42);
+> > 	 		return 0;
+> > 	 	}
+> >
+> > 		/* More code */
+> >
+> > 	 	goto loop;
+> >
+> >       /* More code */
+> > }
+> 
+> Assuming that foo() will return, the READ_ONCE() does not determine
+> whether the WRITE_ONCE() will be executed __at all__, as it will be
+> executed exactly when the function returns, instead, it determines
+> __when__ the WRITE_ONCE() will be executed.
+
+But what if your assumption is wrong?
+
+In any case, your question displays an incorrect viewpoint.  For 
+instance, the READ_ONCE() does not count as a single event.  Rather, 
+each iteration through the loop executes a separate instance of the 
+READ_ONCE(), and each instance counts as its own event.  Think of events 
+not as static entities in the program source but instead as the items in 
+the queue that gets fed into the CPU's execution unit at run time.
+
+Strictly speaking, one could say there is a control dependency from each 
+of these READ_ONCE() events to the final WRITE_ONCE().  However the LKMM 
+takes a more limited viewpoint, saying that a dependency from a load to 
+the controlling expression of an "if" statement only affects the 
+execution of the events corresponding to statements lying statically in 
+the two arms of the "if".  In your example the "if" has a single arm, 
+and so only the access in that arm is considered to have a control 
+dependency from the preceding instance of the READ_ONCE().  And it 
+doesn't have a control dependency from any of the earlier iterations of 
+the READ_ONCE(), because it doesn't lie in any of the arms of the 
+earlier iterations of the "if".
+
+> 1.2. The definition via post-dominance doesn't work either:
+> 
+> I have seen control dependencies being defined in terms of the first
+> basic block that post-dominates the basic block of the if-condition,
+> that is the first basic block control flow must take to reach the
+> function return regardless of what the if condition returned.
+> 
+> E.g. [2] defines control dependencies as follows:
+> 
+> > A statement y is said to be control dependent on another statement x
+> > if (1) there exists a nontrivial path from x to y such that every
+> > statement z != x in the path is post-dominated by y, and (2) x is not
+> > post-dominated by y.
+> 
+> Again, this definition doesn't work for the example above. As the basic
+> block of the if branch trivially post-dominates any other basic block,
+> because it contains the function return.
+
+Again, not applicable as basic blocks, multiple paths, and so on belong 
+to static analysis.
+
+> 2. Solution:
+> 
+> The definition I came up with instead is the following:
+> 
+> > A basic block B is control-dependent on a basic block A if
+> > B is reachable from A, but control flow can take a path through A
+> > which avoids B. The scope of a control dependency ends at the first
+> > basic block where all control flow paths running through A meet.
+> 
+> Note that this allows control dependencies to remain "unresolved".
+> 
+> I'm happy to submit a patch which covers more of what I mentioned above
+> as part of explanation.txt, but figured that in the spirit of keeping
+> things simple, leaving out "at all" might be enough?
+> 
+> What do you think?
+
+Not so good.  A better description would be that there is a control 
+dependency from a read event X to a memory access event Y if there is a 
+dependency (data or address) from X to the conditional branch event of 
+an "if" statement which contains Y in one of its arms.  And similarly 
+for "switch" statements.
+
+Alan
+
+> Many thanks,
+> Paul
+> 
+> [1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/T/#u
+> [2]: Optimizing Compilers for Modern Architectures: A Dependence-Based
+> Approach, Randy Allen, Ken Kennedy, 2002, p. 350
+> 
+> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+> Cc: Marco Elver <elver@google.com>
+> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+> Cc: Martin Fink <martin.fink@in.tum.de>
+> ---
+>  tools/memory-model/Documentation/explanation.txt | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+> index ee819a402b69..42af7ed91313 100644
+> --- a/tools/memory-model/Documentation/explanation.txt
+> +++ b/tools/memory-model/Documentation/explanation.txt
+> @@ -466,7 +466,7 @@ pointer.
+>  
+>  Finally, a read event and another memory access event are linked by a
+>  control dependency if the value obtained by the read affects whether
+> -the second event is executed at all.  Simple example:
+> +the second event is executed.  Simple example:
+>  
+>  	int x, y;
+>  
+> -- 
+> 2.35.1
+> 

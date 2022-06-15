@@ -2,113 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A11F54C9E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25ABE54C9E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:33:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348894AbiFONdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 09:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
+        id S1348796AbiFONdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 09:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348796AbiFONdb (ORCPT
+        with ESMTP id S1351382AbiFONdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 09:33:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4FA21A069
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:33:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655300009;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ElUN8T1cq4s61Ms7BHHS//RviJNChfZk2AevhepNuYw=;
-        b=h92EeXjqIOQc5YHSXVrRtbhSaOZ0W2s7t5zAFcUSCBvWXpXarAIV1lbjhMagZ88fpkVfCV
-        +3KHEKqImIKNRMg5+qO8KYtebzY+H6nSknsJcIxuPxa/bgDuu+LAanwv19+oRCS9wvOy1l
-        NWEA9tQ+1Ze1ubWP5BfCl9E7KkhX1uk=
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
- [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-640-bi9YTVieMGCZUWSN6FtBtg-1; Wed, 15 Jun 2022 09:33:28 -0400
-X-MC-Unique: bi9YTVieMGCZUWSN6FtBtg-1
-Received: by mail-pj1-f69.google.com with SMTP id lk16-20020a17090b33d000b001e68a9ac3a1so1382496pjb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:33:28 -0700 (PDT)
+        Wed, 15 Jun 2022 09:33:49 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9909836161;
+        Wed, 15 Jun 2022 06:33:46 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id d23so8744487qke.0;
+        Wed, 15 Jun 2022 06:33:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ElUN8T1cq4s61Ms7BHHS//RviJNChfZk2AevhepNuYw=;
-        b=ukHGv6XqL0MIMFelaZeDWAWbM7LT2PHMx3TL7dyFHpQHVj4GuZl+uMtVCjpvCb3RUH
-         DHfEVYsgYEFuNp28T4M6T28EitrpuDv1wxg+9vikyHjbEElpTG9AUN+ZqDG9fnxO1zh4
-         FI0D0ga4ugA+aRJZjuCcuH4X9clUHfbFJ9m7Uj2hGV6tocoxQtJnHZo7ot159nApTLeZ
-         YApiTcLTVijddojcRQ3tTXHoDw5GNcgS5Vt0YgygRc/+2mcboJkZf8uzsu1XFGcGDHRU
-         vJFHQrMrsQIwvsscEjELF3Bwil+QVhDHvSyqAyD3fShNix873cU3pZBMdRhRJciLAtVe
-         2wBQ==
-X-Gm-Message-State: AJIora8RcDzBikkqC9y5jDzzUz6XGZyA3q/w6whz9cxd8sh1aBvlS0f3
-        4qz7I1IJomTwtA+v8jmdhI9Mgiq3EPaD6EpjFeP9/WjeOS19+Hmx0BABi3FKEy8KYI8AkP3XRQb
-        tyPRX+KHt5Xa6dU7s9OgXffBz
-X-Received: by 2002:a17:90b:3805:b0:1e6:85aa:51b with SMTP id mq5-20020a17090b380500b001e685aa051bmr10306064pjb.182.1655300007350;
-        Wed, 15 Jun 2022 06:33:27 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1tb4/p2f7hRkF6jlREKWV12KxvmfuJQQVpA3aDNFZ/uwNnmlZ5qNGCW6kdfHFSMs79ONcrXXg==
-X-Received: by 2002:a17:90b:3805:b0:1e6:85aa:51b with SMTP id mq5-20020a17090b380500b001e685aa051bmr10306047pjb.182.1655300007115;
-        Wed, 15 Jun 2022 06:33:27 -0700 (PDT)
-Received: from [192.168.1.219] (180-150-90-198.b4965a.per.nbn.aussiebb.net. [180.150.90.198])
-        by smtp.gmail.com with ESMTPSA id l21-20020a17090a409500b001e85f38bc79sm1742359pjg.41.2022.06.15.06.33.24
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pCKyWx8csaPOZiwVdiAanKrrMm8ghNkRwANxa87W2Oc=;
+        b=RgI4zc8uCUPGknLSpTSdiSR06Hzkbu0MCwTEpmrs6F/gbBumih2SiMY3ZhTXU7iZ3c
+         GXY99uWfLPAeuQSbL2yZJGDNUlRl1EKrainB0SUNCXKpSBcaRrtnGOHSB8Mvic5Pr0Tj
+         4Es+lmAFqjlkofumRmzEuWUnOyNotWQ8gfGWyw25eJJru1RoiL1elolIEboZBMrYEYIc
+         ckW3SfXU2kODVwp2hkQiJZyKTFaDVjutyRf3wwUkX3CO3/ei51dc+5v0RoQ+cd9nx1Eb
+         J6E2rFR+0O53qrr6PJHV+LGxWw2HBL28Q6DGDcFInakbn5azbVPqhT25EdkQbMxwpVdc
+         IEqg==
+X-Gm-Message-State: AJIora8mfaffOCCQjy95zXxur34l6VYe+I8IY9v/Zv0gckhvZ8Sk+3+/
+        X7pK2bG4GrugbHeLxZfh1slQN2vxXSVZYg==
+X-Google-Smtp-Source: AGRyM1vJVuYn/eVytR7ZATOFYPWj890NIqQneR/fTIlXZmtI60URaNKg3VAhAuoc3XAwdzFSpbfJdw==
+X-Received: by 2002:a05:620a:15ed:b0:6a9:78fa:cca6 with SMTP id p13-20020a05620a15ed00b006a978facca6mr3637090qkm.129.1655300025538;
+        Wed, 15 Jun 2022 06:33:45 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id v12-20020a05620a440c00b0069fc13ce23dsm12901998qkp.110.2022.06.15.06.33.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 06:33:26 -0700 (PDT)
-Message-ID: <f032daae-3820-9ded-9865-69b35e6b2cad@redhat.com>
-Date:   Wed, 15 Jun 2022 21:33:22 +0800
+        Wed, 15 Jun 2022 06:33:45 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id t1so20567365ybd.2;
+        Wed, 15 Jun 2022 06:33:45 -0700 (PDT)
+X-Received: by 2002:a25:d748:0:b0:65c:6b00:55af with SMTP id
+ o69-20020a25d748000000b0065c6b0055afmr9852542ybg.365.1655300024964; Wed, 15
+ Jun 2022 06:33:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH 1/3] radix-tree: propagate all tags in idr tree
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>,
-        Brian Foster <bfoster@redhat.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        onestero@redhat.com
-References: <20220614180949.102914-1-bfoster@redhat.com>
- <20220614180949.102914-2-bfoster@redhat.com> <Yqm+jmkDA+um2+hd@infradead.org>
-From:   Ian Kent <ikent@redhat.com>
-In-Reply-To: <Yqm+jmkDA+um2+hd@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220525151355.24175-1-wsa+renesas@sang-engineering.com>
+ <YqZDAiB/taLwmamr@shikoro> <CAMuHMdWO0zgmRKMpcSXSdshj6Fh8uu3Ch_FCVDEocdaVPaAUUQ@mail.gmail.com>
+ <YqcCdipmKU90Kq1c@shikoro>
+In-Reply-To: <YqcCdipmKU90Kq1c@shikoro>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 15 Jun 2022 15:33:33 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWiQ3yLX+o+DXysqy=P8=QHBRrfnGzgCTsJ5DdHPWshWg@mail.gmail.com>
+Message-ID: <CAMuHMdWiQ3yLX+o+DXysqy=P8=QHBRrfnGzgCTsJ5DdHPWshWg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: renesas: r8a779f0: Add thermal support
+To:     Wolfram Sang <wsa@kernel.org>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linh Phung <linh.phung.jy@renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Wolfram,
 
-On 15/6/22 19:12, Christoph Hellwig wrote:
-> On Tue, Jun 14, 2022 at 02:09:47PM -0400, Brian Foster wrote:
->> The IDR tree has hardcoded tag propagation logic to handle the
->> internal IDR_FREE tag and ignore all others. Fix up the hardcoded
->> logic to support additional tags.
->>
->> This is specifically to support a new internal IDR_TGID radix tree
->> tag used to improve search efficiency of pids with associated
->> PIDTYPE_TGID tasks within a pid namespace.
-> Wouldn't it make sense to switch over to an xarray here rather
-> then adding new features to the radix tree?
+On Mon, Jun 13, 2022 at 11:25 AM Wolfram Sang <wsa@kernel.org> wrote:
+> > No need to resend, I can fix that while applying.
 >
-Might be a dumb question but ...
+> Thanks!
+>
+> > Unless you want to make other changes, which I believe is not the case,
+> > as only the DT bindings patch needed a new version?
+>
+> Nope, no changes needed.
 
+Actually other changes are needed, as "make dtbs_check" complains,
+rightfully:
 
-How would the, essentially sparse, pid type PIDTYPE_TGID pids
+    arm64/boot/dts/renesas/r8a779f0-spider.dtb: thermal-zones:
+'sensor-thermal1', 'sensor-thermal2', 'sensor-thermal3' do not match
+any of the regexes: '^[a-zA-Z][a-zA-Z0-9\\-]{1,12}-thermal$',
+'pinctrl-[0-9]+'
+            From schema:
+Documentation/devicetree/bindings/thermal/thermal-zones.yaml
 
-traversal get benefits from an xarray?
+As I have already queued this patch, I will amend the commit, by
+changing the node names to sensor[123]-thermal.
 
+Gr{oetje,eeting}s,
 
- From what I have seen the searching isn't the real problem, it's the
+                        Geert
 
-traversal (that, at the moment, does a search 'and' a traversal over
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-a lot of pids to get a relatively small number of them).
-
-Ian
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

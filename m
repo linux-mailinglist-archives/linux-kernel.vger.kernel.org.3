@@ -2,126 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E5654D142
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D38C54D14B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350862AbiFOS5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 14:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35650 "EHLO
+        id S1348943AbiFOTBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349137AbiFOS5S (ORCPT
+        with ESMTP id S239945AbiFOTB2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:57:18 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 676A541F92
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:57:17 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id y15-20020a17090a474f00b001eac1991515so1435966pjg.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:57:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=JOfZ+gB0dYMw5zlfGsNpFQnCHYNIGhGPLB/fJ5JUiU8=;
-        b=SmOp6Z2zPaMf+7HW3xlQs45Fjh1wQY3JcE955U5EzRHsTUkE/IVL5RlhOgVgPtTUSd
-         40TLB+kwbienuX8Dx2E0wGxELrUEYzz+rLJg+3O0i9zwkTixcET9vp4JBVjxgbrJBAnu
-         +cYumohJ/0Z1hODaPf0Ii6qP1SyuhGSKXz4inlCZbL9c2knCQta/33jC2LQmQ/aeD1/y
-         Tnpe70f0H+Jx5LGBbpe/TeG9QpvYq8ogcKYRc6PcX+ZPg4yqL5EsPmDFbBWLlmCrK4+l
-         wTu6a0wUtxmkc1JTA20jJsnPffMTnk8/bBUa5UdrL8N2SVS1KlYBk5kkxZrRKRWiYilI
-         BvRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=JOfZ+gB0dYMw5zlfGsNpFQnCHYNIGhGPLB/fJ5JUiU8=;
-        b=XuXFQq/MobRm8eIUdVDMVcIVAyk540u1ZrtUFwiP1WkR+nalqPCTXb4vNsOq7LWEgK
-         Avdjj5dx1W/G28DrDrTfjCYqYHxc6mKfExdr/t2gD45U1oGVG7j6i1davUwryhwVrR43
-         rEMTDI8yVK05QaCazBlRqAIu5RiTqHf1rZc+TcMlVGfTQVxCgMXRHFTQk6KIBBkeSHkD
-         HqagYzQ/rBWTTg8w23S2v4hNKBIrr5+nyvYvxxTWgChNjPbujIx5RaKdLGuVibIpiQFW
-         4rkk5zZYIqPn9CRC8Zas8BJ5Xmc0dxJ4wOKCpykduksEkWwUO19MhBVt4Su6gCiHwyhO
-         1hQw==
-X-Gm-Message-State: AJIora9NIZ5eRbP3s4ZTqcrQTfu6/iAb3p4wI1SOof9aFNnG0XbEEEhs
-        tx0FNya88KK0XjBNNzi1oHiGPtuKst4/
-X-Google-Smtp-Source: AGRyM1tnQw7CJaekFPc8SBXFz+VUADNRt0rkCQV5Q4hm28pSqTrYYIgOQmS9We429pxh9Gldc5o2PJ/GLIXf
-X-Received: from rananta-virt.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1bcc])
- (user=rananta job=sendgmr) by 2002:a17:902:74c3:b0:167:6811:40 with SMTP id
- f3-20020a17090274c300b0016768110040mr1022512plt.120.1655319436857; Wed, 15
- Jun 2022 11:57:16 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 18:57:06 +0000
-Message-Id: <20220615185706.1099208-1-rananta@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
-Subject: [PATCH] selftests: KVM: Handle compiler optimizations in ucall
-From:   Raghavendra Rao Ananta <rananta@google.com>
-To:     Marc Zyngier <maz@kernel.org>, Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        Raghavendra Rao Anata <rananta@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 15 Jun 2022 15:01:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E2A5003C;
+        Wed, 15 Jun 2022 12:01:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 719D4B81D81;
+        Wed, 15 Jun 2022 19:01:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DD46C34115;
+        Wed, 15 Jun 2022 19:01:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655319685;
+        bh=Qy3C78QNyFeJXZqCKviEM5fZjl3ArDFvWJxIFv9WMmc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=p93f1K/23X5iAmwtne1iGvfX+uBZTya3MQCvxjhSUx4Mkv9s1RO0h23hv8ky52TMP
+         nYw8uPPZ9m1E7C8P9Jju3eUcALOL9OBbmVR7LzdFk+mYb062/vTiSoGLPp87tP6MH0
+         7/IC70HJX5GNLc/+TZzBhSjEogUyFdlrSTvfFlRM1122VgNeftbEc152Buo86BrvBM
+         4W4R+rvD41wjQf25Smm8MQTP+7N1GuoT6ShttHTq4ciMvnsC2/COijRUs/NqN37ocN
+         TBSftnGvXsR2+Y8liZHcVAdpH4LxSf9Rb1jFDERxGigJq1ZYcqcIrxtEf6zQy4XDuo
+         OUMofXLpgEevA==
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [GIT PULL] tpmdd updates for v5.19-rc3
+Date:   Wed, 15 Jun 2022 21:59:12 +0300
+Message-Id: <20220615185912.40987-1-jarkko@kernel.org>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The selftests, when built with newer versions of clang, is found
-to have over optimized guests' ucall() function, and eliminating
-the stores for uc.cmd (perhaps due to no immediate readers). This
-resulted in the userspace side always reading a value of '0', and
-causing multiple test failures.
+The following changes since commit 979086f5e0066b4eff66e1eee123da228489985c:
 
-As a result, prevent the compiler from optimizing the stores in
-ucall() with WRITE_ONCE().
+  Merge tag 'fs.fixes.v5.19-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux (2022-06-15 09:04:55 -0700)
 
-Suggested-by: Ricardo Koller <ricarkol@google.com>
-Suggested-by: Reiji Watanabe <reijiw@google.com>
-Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
----
- tools/testing/selftests/kvm/lib/aarch64/ucall.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+are available in the Git repository at:
 
-diff --git a/tools/testing/selftests/kvm/lib/aarch64/ucall.c b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-index e0b0164e9af8..be1d9728c4ce 100644
---- a/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-+++ b/tools/testing/selftests/kvm/lib/aarch64/ucall.c
-@@ -73,20 +73,19 @@ void ucall_uninit(struct kvm_vm *vm)
- 
- void ucall(uint64_t cmd, int nargs, ...)
- {
--	struct ucall uc = {
--		.cmd = cmd,
--	};
-+	struct ucall uc = {};
- 	va_list va;
- 	int i;
- 
-+	WRITE_ONCE(uc.cmd, cmd);
- 	nargs = nargs <= UCALL_MAX_ARGS ? nargs : UCALL_MAX_ARGS;
- 
- 	va_start(va, nargs);
- 	for (i = 0; i < nargs; ++i)
--		uc.args[i] = va_arg(va, uint64_t);
-+		WRITE_ONCE(uc.args[i], va_arg(va, uint64_t));
- 	va_end(va);
- 
--	*ucall_exit_mmio_addr = (vm_vaddr_t)&uc;
-+	WRITE_ONCE(*ucall_exit_mmio_addr, (vm_vaddr_t)&uc);
- }
- 
- uint64_t get_ucall(struct kvm_vm *vm, uint32_t vcpu_id, struct ucall *uc)
--- 
-2.36.1.476.g0c4daa206d-goog
+  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-v5.19-rc3
 
+for you to fetch changes up to 27b5b22d252c6d71a2a37a4bdf18d0be6d25ee5a:
+
+  certs: fix and refactor CONFIG_SYSTEM_BLACKLIST_HASH_LIST build (2022-06-15 21:52:32 +0300)
+
+----------------------------------------------------------------
+Hi,
+
+Two fixes for rc1 PR.
+
+BR, Jarkko
+
+----------------------------------------------------------------
+Masahiro Yamada (2):
+      certs/blacklist_hashes.c: fix const confusion in certs blacklist
+      certs: fix and refactor CONFIG_SYSTEM_BLACKLIST_HASH_LIST build
+
+ certs/.gitignore         |  2 +-
+ certs/Makefile           | 20 ++++++++++----------
+ certs/blacklist_hashes.c |  4 ++--
+ 3 files changed, 13 insertions(+), 13 deletions(-)

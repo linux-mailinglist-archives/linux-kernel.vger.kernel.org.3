@@ -2,54 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE8C54C2D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95CA454C2D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:47:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245326AbiFOHoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 03:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52188 "EHLO
+        id S243100AbiFOHq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 03:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346795AbiFOHoK (ORCPT
+        with ESMTP id S230318AbiFOHqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 03:44:10 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFD63FDA5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:44:09 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LNHM54571z1K9tw;
-        Wed, 15 Jun 2022 15:42:09 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 15 Jun 2022 15:44:06 +0800
-Subject: Re: [PATCH] mm/page_alloc: make calling prep_compound_head more
- reliable
-To:     Matthew Wilcox <willy@infradead.org>
-CC:     Joao Martins <joao.m.martins@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>
-References: <20220607144157.36411-1-linmiaohe@huawei.com>
- <20220607113257.84b1bdd993f19be26b8c4944@linux-foundation.org>
- <65e5da9c-32d1-17d7-d8c6-96cbfac23fec@oracle.com>
- <4a30f026-789a-9235-2fbd-f553e4d7b45d@huawei.com>
- <YqiJaOiGnUzzB1+W@casper.infradead.org>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <40a07ce5-414a-a3b8-53ee-6c348635f03a@huawei.com>
-Date:   Wed, 15 Jun 2022 15:44:06 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 15 Jun 2022 03:46:54 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64E7D40A08
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:46:53 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2ef5380669cso52531437b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:46:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6TunYOqloBF4qLChlgaS7iv3LW3vD06QMv7vYl8gqBE=;
+        b=i2CcqUtrsIDkjaoSSAE5LJhiUeUlJuVADv1ngNNW36lXa09SoQcpveMkDEKuHpN1nK
+         OSTwc5GQA1cqqaDU8xoKdGf4VNibWkBZs9lkprQc81915FZ28b+H0OiKrwIrp8m9ecHh
+         OiQMFa6k9NgB2vpeqWO5iSFhzJOjrI3JaCBFzs55F40LdKMNz+QMAItb9zjeLNzsMn82
+         i9IFvhjQDrz11c26V+4BzMXa+YIGzcEq276G5oduvKPOYUdPT3NvAs3AAmiF2gLaCs6C
+         uNxnPmdvvksW8dsvscU7IRW0MAWz7UOtkH/7pQAMI8UW5cdoHzte4JFOFBr4G+NekyNW
+         bpDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6TunYOqloBF4qLChlgaS7iv3LW3vD06QMv7vYl8gqBE=;
+        b=GPDNNuT/euLuDvdxYv3hFU2nvmXwE1rH1ef8QPpHp5OcCJA6nDfji67L5mq+NUf2Jx
+         YWTjfk68Q8i98kEeDd6seYwlTc71zd1TaL1LBC7uMOs+/eJoNzRmuifEyrNChenf5KNF
+         47Py88YX4H/JEfKCFSdXBndFylSsCkizxVGTsidOaLNdAGZCtRteVuzHKMCf6mkiMnN9
+         YuEjO/u+ib9SEiwjvTa87Ovvja6XN+zj587TP/4NECjlzNwlvFSHdKxage12pMraFaZR
+         2F0pD1CqIucVUm06vi/Dd9OW4hXxiKngbsoGhJpKOlR4xyBXxw4IQVdfzUYoIU4SuoWf
+         4hcA==
+X-Gm-Message-State: AJIora9TmJKDy8s8OjWPcLlc5ULfQ1D+ldspMdwn473JpI6R0yEtNL2k
+        iyPBO643RfF6b8VaRkp6pgCXWmLo/3oFad9k8abOGQ==
+X-Google-Smtp-Source: AGRyM1saOw0vSmHtMDdGxukVnu8JafJ/oalySrc+hOJX6qe5P1u/hURE3aR4FUFhUD6VGWIdDVu0+xbTE+as4/0CPac=
+X-Received: by 2002:a81:3a12:0:b0:314:6097:b801 with SMTP id
+ h18-20020a813a12000000b003146097b801mr7498148ywa.512.1655279212429; Wed, 15
+ Jun 2022 00:46:52 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YqiJaOiGnUzzB1+W@casper.infradead.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
+ <20220610113427.908751-3-alexandr.lobakin@intel.com> <YqNMO0ioGzJ1IkoA@smile.fi.intel.com>
+ <22042c14bc6a437d9c6b235fbfa32c8a@intel.com> <CANpmjNNZAeMQjzNyXLeKY4cp_m-xJBU1vs7PgT+7_sJwxtEEAg@mail.gmail.com>
+ <20220613141947.1176100-1-alexandr.lobakin@intel.com> <CANpmjNM0noP8ieQztyEvijz+MG-cDxxmfwaX_QTpnyT5G33EGA@mail.gmail.com>
+ <YqlITqttNYqT/xpN@yury-laptop>
+In-Reply-To: <YqlITqttNYqT/xpN@yury-laptop>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 15 Jun 2022 09:46:15 +0200
+Message-ID: <CANpmjNMd+r9Hq+vwWGoNhOg_W=x3Umo+i14TRvEMz6PhcHgXWQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] bitops: always define asm-generic non-atomic bitops
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Borislav Petkov <bp@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
+        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
+        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
+        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
+        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
+        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,66 +92,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/14 21:13, Matthew Wilcox wrote:
-> On Wed, Jun 08, 2022 at 08:17:35PM +0800, Miaohe Lin wrote:
->> +++ b/mm/page_alloc.c
->> @@ -6771,13 +6771,18 @@ static void __ref memmap_init_compound(struct page *head,
->>                 set_page_count(page, 0);
->>
->>                 /*
->> -                * The first tail page stores compound_mapcount_ptr() and
->> -                * compound_order() and the second tail page stores
->> -                * compound_pincount_ptr(). Call prep_compound_head() after
->> -                * the first and second tail pages have been initialized to
->> -                * not have the data overwritten.
->> +                * The first tail page stores compound_mapcount_ptr(),
->> +                * compound_order() and compound_pincount_ptr(). Call
->> +                * prep_compound_head() after the first tail page have
->> +                * been initialized to not have the data overwritten.
->> +                *
->> +                * Note the idea to make this right after we initialize
->> +                * the offending tail pages is trying to take advantage
->> +                * of the likelihood of those tail struct pages being
->> +                * cached given that we will read them right after in
->> +                * prep_compound_head().
-> 
-> It's not that we'll read them again, it's that the cacheline will still
-> be in cache, and therefore dirty.
+On Wed, 15 Jun 2022 at 04:47, Yury Norov <yury.norov@gmail.com> wrote:
+>
+> On Mon, Jun 13, 2022 at 04:33:17PM +0200, Marco Elver wrote:
+> > On Mon, 13 Jun 2022 at 16:21, Alexander Lobakin
+> > <alexandr.lobakin@intel.com> wrote:
+> > >
+> > > From: Marco Elver <elver@google.com>
+> > > Date: Fri, 10 Jun 2022 18:32:36 +0200
+> > >
+> > > > On Fri, 10 Jun 2022 at 18:02, Luck, Tony <tony.luck@intel.com> wrote:
+> > > > >
+> > > > > > > +/**
+> > > > > > > + * generic_test_bit - Determine whether a bit is set
+> > > > > > > + * @nr: bit number to test
+> > > > > > > + * @addr: Address to start counting from
+> > > > > > > + */
+> > > > > >
+> > > > > > Shouldn't we add in this or in separate patch a big NOTE to explain that this
+> > > > > > is actually atomic and must be kept as a such?
+> > > > >
+> > > > > "atomic" isn't really the right word. The volatile access makes sure that the
+> > > > > compiler does the test at the point that the source code asked, and doesn't
+> > > > > move it before/after other operations.
+> > > >
+> > > > It's listed in Documentation/atomic_bitops.txt.
+> > >
+> > > Oh, so my memory was actually correct that I saw it in the docs
+> > > somewhere.
+> > > WDYT, should I mention this here in the code (block comment) as well
+> > > that it's atomic and must not lose `volatile` as Andy suggested or
+> > > it's sufficient to have it in the docs (+ it's not underscored)?
+> >
+> > Perhaps a quick comment in the code (not kerneldoc above) will be
+> > sufficient, with reference to Documentation/atomic_bitops.txt.
+>
+> If it may help, we can do:
+>
+> /*
+>  * Bit testing is a naturally atomic operation because bit is
+>  * a minimal quantum of information.
+>  */
+> #define __test_bit test_bit
 
-Thanks for pointing this out.
+That's redundant and we'll end up with a random mix of both.
 
-> 
-> Honestly, I don't think we need this extra explanation in a comment.
-> Just change the first paragraph to reflect reality and leave it at that.
+What'd be more interesting is having a __test_bit without the volatile
+that allows compilers to optimize things more. But I think that also
+becomes mostly redundant with the optimizations that this series seeks
+out to do.
 
-Will do it in next version if prep_compound_head is not moved outside loop.
-
-> 
->>                  */
->> -               if (pfn == head_pfn + 2)
->> +               if (unlikely(pfn == head_pfn + 1))
-> 
-> We definitely don't need the unlikely here.
-
-Could you please give me a more detailed explanation? IIUC, the above if condition
-will only meet at a probability of 1/512. So unlikely tells the compiler to do some
-optimization around it. Or am I miss something?
-
-Thanks!
-
-> 
->>                         prep_compound_head(head, order);
->>         }
->>  }
->>
->> Or am I miss something?
->>
->> Thanks!
->>
->>> .
->>>
->>
-> 
-> .
-> 
-
+The distinction is ever so subtle, and clever compilers *will* break
+concurrent code in ways that are rather hard to imagine:
+https://lwn.net/Articles/793253/

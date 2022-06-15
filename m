@@ -2,147 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADC254C7A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:44:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F96E54C7AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347361AbiFOLoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 07:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
+        id S1347399AbiFOLn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 07:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345347AbiFOLnf (ORCPT
+        with ESMTP id S1347117AbiFOLno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:43:35 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9875B22BDF;
-        Wed, 15 Jun 2022 04:43:33 -0700 (PDT)
-X-UUID: 9c29b81c6b584b1c85b8406c888a4a2c-20220615
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:d05bd642-51b7-4179-969c-359d3066bf4a,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:fba955f6-e099-41ba-a32c-13b8bfe63214,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: 9c29b81c6b584b1c85b8406c888a4a2c-20220615
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <yunfei.dong@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1633028829; Wed, 15 Jun 2022 19:43:27 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 15 Jun 2022 19:43:26 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 15 Jun 2022 19:43:25 +0800
-Message-ID: <3e084cf745e1425084186368c867f54b54c91ce6.camel@mediatek.com>
-Subject: Re: [PATCH v4, 0/3] add h264 decoder driver for mt8186
-From:   "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>
-CC:     George Sun <george.sun@mediatek.com>,
-        Xiaoyong Lu <xiaoyong.lu@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        "Fritz Koenig" <frkoenig@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        "Steve Cho" <stevecho@chromium.org>, <linux-media@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 15 Jun 2022 19:43:25 +0800
-In-Reply-To: <5316234cef174e49110f949991ef71c578a3478e.camel@ndufresne.ca>
-References: <20220512034620.30500-1-yunfei.dong@mediatek.com>
-         <edbb4605c9e30329d2f5a4ff738571acb6b91f1f.camel@ndufresne.ca>
-         <5316234cef174e49110f949991ef71c578a3478e.camel@ndufresne.ca>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 15 Jun 2022 07:43:44 -0400
+Received: from mailout3.rbg.tum.de (mailout3.rbg.tum.de [131.159.0.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB5927CF6;
+        Wed, 15 Jun 2022 04:43:43 -0700 (PDT)
+Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
+        by mailout3.rbg.tum.de (Postfix) with ESMTPS id 3D867100241;
+        Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
+        s=20220209; t=1655293421;
+        bh=2kjF4oxVy3r0fd0SR9Tiy0/qNbtSE87Bz7BjdDbE1WQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NQ3JEMN2ZHuNO/jk9Av7B/H/0KpYlcVLlKXKDbQyjFUGHSs9eA9lMK8Lb5Slu6MdY
+         HcTOP24C86scrmcGGk01sFNf5waZuYfo0K92v+lEx6j2EFBxU6rqq3RmGOzrcfu0m3
+         hA/W9Q7JcCktMgWsoA4AP/p4CRaZz1jgznKU8IAd6uN9NTQwaHKiKLXZAoGFXruKg+
+         7vbzwsy69l+TbNglfkS+nBbSJPe2tw3NYT13otO1+Ca4Dn6otyByXM0zhnI1rqfS4W
+         kWyMb7r4EliCIh4QwQdEJS00rR1dWRg/4hM1staWVoKKc2EAFsRIF1x0aygVIyunKK
+         pX9cOhuqMCCtw==
+Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
+        id 3D0B1DD; Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
+Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 198DED6;
+        Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
+Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
+        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 14250CE;
+        Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
+Received: by mail.in.tum.de (Postfix, from userid 112)
+        id 087424A0220; Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
+Received: (Authenticated sender: heidekrp)
+        by mail.in.tum.de (Postfix) with ESMTPSA id A477F4A01E7;
+        Wed, 15 Jun 2022 13:43:40 +0200 (CEST)
+        (Extended-Queue-bit xtech_ko@fff.in.tum.de)
+From:   =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
+To:     llvm@lists.linux.dev, linux-toolchains@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Cc:     Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
+        Martin Fink <martin.fink@in.tum.de>
+Subject: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
+Date:   Wed, 15 Jun 2022 11:43:29 +0000
+Message-Id: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nicolas,
+Hi all,
 
-Thanks for your comments.
-On Tue, 2022-06-14 at 13:46 -0400, Nicolas Dufresne wrote:
-> Le lundi 13 juin 2022 à 16:10 -0400, Nicolas Dufresne a écrit :
-> > Le jeudi 12 mai 2022 à 11:46 +0800, Yunfei Dong a écrit :
-> > > Firstly, add mt8186 compatible and private data, then add
-> > > document for
-> > > compatible "mediatek,mt8186-vcodec-dec". For mt8186 is single
-> > > core
-> > > architecture, need to add new interface for h264 hardware
-> > > decoder.
-> > 
-> > Would be nice to take the habit of sharing fluster score for this
-> > new HW, I
-> > would expect no less then what the numbers you'd get from running
-> > over MT8195 or
-> > 92, remains nice to demonstrate that this was tested and document
-> > any oops along
-> > the way.
-> > > 
-> > > Patche 1 add mt8186 compatible and private data.
-> > > Patche 2 add mt8186 compatible document.
-> > > Patche 3 add h264 single core driver.
-> > > ---
-> > > This patch depends on "support for MT8192 decoder"[1]
-> > > 
-> > > [1]  
-> > > https://patchwork.kernel.org/project/linux-mediatek/cover/20220512021950.29087-1-yunfei.dong@mediatek.com/
-> 
-> I forgot earlier, but I suppose this will also depends on an scp.img
-> firmware ?
-> If so, any linux-firmware submission to link to ?
-> 
-For the tast/cts/gts test are coming to the end, after all ec patches
-are merged, I will upstream scp.img
+I have been confused by explanation.txt's definition of control
+dependencies:
 
-Best Regards,
-Yunfei Dong
-> > > ---
-> > > changed with v3:
-> > > - fix __iomem not reasonable, align share memory to dram.
-> > > changed with v2:
-> > > - fix sparse and smatch check fail for patch 3
-> > > changed with v1:
-> > > - rebase driver to the latest media_stage.
-> > > ---
-> > > Yunfei Dong (3):
-> > >   dt-bindings: media: mediatek: vcodec: Adds decoder dt-bindings
-> > > for
-> > >     mt8186
-> > >   media: mediatek: vcodec: Support MT8186
-> > >   media: mediatek: vcodec: add h264 decoder driver for mt8186
-> > > 
-> > >  .../media/mediatek,vcodec-subdev-decoder.yaml |   4 +-
-> > >  .../platform/mediatek/vcodec/mtk_vcodec_dec.h |   1 +
-> > >  .../mediatek/vcodec/mtk_vcodec_dec_drv.c      |   4 +
-> > >  .../vcodec/mtk_vcodec_dec_stateless.c         |  19 ++
-> > >  .../vcodec/vdec/vdec_h264_req_multi_if.c      | 177
-> > > +++++++++++++++++-
-> > >  5 files changed, 203 insertions(+), 2 deletions(-)
-> > > 
-> 
-> 
+> Finally, a read event and another memory access event are linked by a
+> control dependency if the value obtained by the read affects whether
+> the second event is executed at all.
+
+I'll go into the following:
+
+====
+1. "At all", to me, is misleading
+  1.1 The code which confused me
+  1.2 The traditional definition via post-dominance doesn't work either
+2. Solution
+====
+
+1. "At all", to me, is misleading:
+
+"At all" to me suggests a question for which we require a definitive
+"yes" or "no" answer: given a programme and an input, can a certain
+piece of code be executed? Can we always answer this this question?
+Doesn't this sound similar to the halting problem?
+
+1.1 The Example which confused me:
+
+For the dependency checker project [1], I've been thinking about
+tracking dependency chains in code, and I stumbled upon the following
+edge case, which made me question the "at all" part of the current
+definition. The below C-code is derived from some optimised kernel code
+in LLVM intermediate representation (IR) I encountered:
+
+> int *x, *y;
+>
+> int foo()
+> {
+> /* More code */
+>
+> 	 loop:
+> 		/* More code */
+>
+> 	 	if(READ_ONCE(x)) {
+> 	 		WRITE_ONCE(y, 42);
+> 	 		return 0;
+> 	 	}
+>
+> 		/* More code */
+>
+> 	 	goto loop;
+>
+>       /* More code */
+> }
+
+Assuming that foo() will return, the READ_ONCE() does not determine
+whether the WRITE_ONCE() will be executed __at all__, as it will be
+executed exactly when the function returns, instead, it determines
+__when__ the WRITE_ONCE() will be executed.
+
+1.2. The definition via post-dominance doesn't work either:
+
+I have seen control dependencies being defined in terms of the first
+basic block that post-dominates the basic block of the if-condition,
+that is the first basic block control flow must take to reach the
+function return regardless of what the if condition returned.
+
+E.g. [2] defines control dependencies as follows:
+
+> A statement y is said to be control dependent on another statement x
+> if (1) there exists a nontrivial path from x to y such that every
+> statement z != x in the path is post-dominated by y, and (2) x is not
+> post-dominated by y.
+
+Again, this definition doesn't work for the example above. As the basic
+block of the if branch trivially post-dominates any other basic block,
+because it contains the function return.
+
+2. Solution:
+
+The definition I came up with instead is the following:
+
+> A basic block B is control-dependent on a basic block A if
+> B is reachable from A, but control flow can take a path through A
+> which avoids B. The scope of a control dependency ends at the first
+> basic block where all control flow paths running through A meet.
+
+Note that this allows control dependencies to remain "unresolved".
+
+I'm happy to submit a patch which covers more of what I mentioned above
+as part of explanation.txt, but figured that in the spirit of keeping
+things simple, leaving out "at all" might be enough?
+
+What do you think?
+
+Many thanks,
+Paul
+
+[1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/T/#u
+[2]: Optimizing Compilers for Modern Architectures: A Dependence-Based
+Approach, Randy Allen, Ken Kennedy, 2002, p. 350
+
+Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
+Cc: Marco Elver <elver@google.com>
+Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
+Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
+Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
+Cc: Martin Fink <martin.fink@in.tum.de>
+---
+ tools/memory-model/Documentation/explanation.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
+index ee819a402b69..42af7ed91313 100644
+--- a/tools/memory-model/Documentation/explanation.txt
++++ b/tools/memory-model/Documentation/explanation.txt
+@@ -466,7 +466,7 @@ pointer.
+ 
+ Finally, a read event and another memory access event are linked by a
+ control dependency if the value obtained by the read affects whether
+-the second event is executed at all.  Simple example:
++the second event is executed.  Simple example:
+ 
+ 	int x, y;
+ 
+-- 
+2.35.1
 

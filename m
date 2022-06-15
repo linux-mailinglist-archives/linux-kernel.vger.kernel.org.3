@@ -2,113 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966AA54D3D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7629154D3D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:39:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349623AbiFOVgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 17:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
+        id S1349738AbiFOVjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 17:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346434AbiFOVgC (ORCPT
+        with ESMTP id S1349421AbiFOVjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 17:36:02 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB7B56381
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:36:02 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id u18so11499330plb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:36:02 -0700 (PDT)
+        Wed, 15 Jun 2022 17:39:00 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF24381A9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:39:00 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id k7so2131089plg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:39:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=liEq3vTBzjbeEOgGm9j8jdSvHDZIAOUrgNJBC9Mei7k=;
-        b=SfpbG/R/1cL+p415YQgXtEAqXlPY2tWuY5j5/RzVTJWFDAclmh8IcA35qoSdcVUE8B
-         V1IfBRuDWrn5+htxaFyyCjh7MDMNohRxD8EZFppRYvipzz4fF3iBlYQ3eJBlCYgS6fwi
-         z7vu8Itu7b8j/HYfaqt2UW71Ad2XAzi+Kn2Owajt8QvGnU/KbznSzR+88BkMTvJmmPoh
-         l9/75WwY9Lsx3z5EMeN6IPpCq71SEwAAsZz5QB4GGZ7KM/1+BVb2rMqVmg7bH7qUbeiP
-         RQTy/CkiAcQO7mMpQILl9QUoPhtPCFfOp9Eqw7GzoRiO9Wuy2K+C26KkxgB2LJIx2pg+
-         urPQ==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gC84s41Zaxxa1lPfDnoe4PzMOU98OViDZBtfZzfaxqE=;
+        b=hak3x7CQPOZ17oTZdiDXTakM0+LsHCGPgAKyehraVf4cuOt1nroXU1A3ocqe5bqgoq
+         pRTnUTa68gzzNmy9DT6XQmey0U5d1UgEWvxtjuA/oT4yvVwO1+cKscli/cnB+CBHGxVY
+         TnkTIw6VwwcS6Ui4ak7hreRoJwj0vBEwwXF5NYgGV9Kuuy8NeUVHrMRK7rMTyGJ8aZRD
+         /ZJbcvYTkf38YAOYAUcZU8Yl79oYJbmfjKogdOGadPfO+Tx4fViND3cTScC98H6yZh6m
+         WVjObg0be3Ij9xFgNxZgA4UncoAbJEXGy1LGLgg1acVjeNDVhxIao8m7XKVLxVsPbalw
+         PXmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=liEq3vTBzjbeEOgGm9j8jdSvHDZIAOUrgNJBC9Mei7k=;
-        b=dHhmD5nx/m3ITW/LvHzaMLlKke88X3VHbBR9IS+zExyHij23qZTt4tMD9LqFChJ/hB
-         DjiuOfNgEhhIZOCGoQen1xMeZk9NoILS33lEo8/CeqVSyfIJXH2kEz+rAEDEQYXUkfId
-         Z9s2Z8Dc+Y1kFsifqXfqxus27P/WXJ3BU5UhniQKDDKdP95OKi/Z/N6droWw0drrtbLt
-         ul3fwFqmCxNWnS2HkXfGsBWY0vME6ZRCamafnJxQmmCptQRviW5SSz/XJviu2ItjP4dj
-         9lhoYe+r1UixxBYJrrEaOHFgZCaaVa4jci1AAkTazGiJOZVRqb89fzIweeAHGbFcOeOp
-         hndw==
-X-Gm-Message-State: AJIora+UFQ490QUblbiZKIIPj/FLRU38tN+UVrQDocz6RvCJa0jl9qdg
-        mJj45nlecNg8EURAKAOQu3WGHMtJ8WbRg6SmcVQ=
-X-Google-Smtp-Source: AGRyM1v9bzZXIMQlrwrf3iX44DrRyXyp98zyb72ewbQ0053q7cZtMja4mrbigfHdyi9NBRoH9cWxHDN3rdfrMd54uaI=
-X-Received: by 2002:a17:902:8492:b0:167:6cbf:145b with SMTP id
- c18-20020a170902849200b001676cbf145bmr1750643plo.26.1655328961593; Wed, 15
- Jun 2022 14:36:01 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gC84s41Zaxxa1lPfDnoe4PzMOU98OViDZBtfZzfaxqE=;
+        b=lsO5weBEs4epHpNlMBGNs6Sbow1+uNJaElHjmzeqxIYkFDsIp8MwI7Sl47ymPeRWON
+         aQTCvKaUFLPc84f/1f5daqGImr5oMPKrredBzcNf1BRv8gRBZDZuUfUAkhrg7mLS6+Ck
+         mJmlhjKUFlG4F6NaYTKNMeWQE0WnU4hMQL01ff7OIeMBjLHNwiRBFC3CqETIBFCKt5b5
+         p67VxmwRZiT5/jMEWemoTHXDm5iNFsVrz8zaJztsTjcuHGMfXs1AwaTaEEt14sB39azG
+         Y+l9yoypV28Wh/4DNqyzIQ6Y9E9F3tkuFNZlBV4nK2Pw0FUJPpdj6AMpVXIhsBl8oPGB
+         eN/g==
+X-Gm-Message-State: AJIora/1uwB780poOqoDLjJDCz8zudmGRRZ7VDJ/XFEiw62/xgNvnqOk
+        LVrX5j3JbbEP7iOARkJrfO/dW1xa7tFwQ9Hm
+X-Google-Smtp-Source: AGRyM1vK4XSotEPkhRtgiK9nP+9n2opB+jjdjVDdP638l86ZVB2PevwkmqsA9lvLXKLEbH6TR0GS6w==
+X-Received: by 2002:a17:90b:1bc1:b0:1e6:9a00:5d63 with SMTP id oa1-20020a17090b1bc100b001e69a005d63mr12160399pjb.154.1655329139462;
+        Wed, 15 Jun 2022 14:38:59 -0700 (PDT)
+Received: from daolu.ba.rivosinc.com ([66.220.2.162])
+        by smtp.gmail.com with ESMTPSA id je11-20020a170903264b00b0016223016d79sm100757plb.90.2022.06.15.14.38.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 14:38:58 -0700 (PDT)
+From:   Dao Lu <daolu@rivosinc.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Dao Lu <daolu@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Ard Biesheuvel <ardb@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Tong Tiangen <tongtiangen@huawei.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Changbin Du <changbin.du@intel.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        linux-riscv@lists.infradead.org (open list:RISC-V ARCHITECTURE),
+        linux-efi@vger.kernel.org (open list:EXTENSIBLE FIRMWARE INTERFACE
+        (EFI))
+Subject: [PATCH] arch/riscv: Add support for STACKLEAK gcc plugin
+Date:   Wed, 15 Jun 2022 14:38:29 -0700
+Message-Id: <20220615213834.3116135-1-daolu@rivosinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220611084731.55155-1-linmiaohe@huawei.com> <20220611084731.55155-7-linmiaohe@huawei.com>
-In-Reply-To: <20220611084731.55155-7-linmiaohe@huawei.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 15 Jun 2022 14:35:49 -0700
-Message-ID: <CAHbLzkp98QWpUJOB0ytBZrycp=dBNckjc3fH5NCNTUvtaVcW_g@mail.gmail.com>
-Subject: Re: [PATCH 6/7] mm/khugepaged: remove unneeded return value of khugepaged_add_pte_mapped_thp()
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Howells <dhowells@redhat.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 1:47 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
->
-> The return value of khugepaged_add_pte_mapped_thp() is always 0 and also
-> ignored. Remove it to clean up the code.
->
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+This adds support for STACKLEAK gcc plugin to ricv by implementing
+stackleak_check_alloca, based heavily on the arm64 version, and adding
+the two helpers used by the stackleak common code:
+current_top_of_stack() and on_thread_stack(). This also adds the missing
+helper functions for riscv, on_stack() and on_task_stack().
+Additionally, this disables the plugin for EFI stub code for riscv.
 
-Reviewed-by: Yang Shi <shy828301@gmail.com>
+Signed-off-by: Dao Lu <daolu@rivosinc.com>
+---
+ arch/riscv/Kconfig                    |  1 +
+ arch/riscv/include/asm/processor.h    | 18 ++++++++++++++++++
+ arch/riscv/include/asm/stacktrace.h   | 27 +++++++++++++++++++++++++++
+ arch/riscv/kernel/entry.S             |  3 +++
+ drivers/firmware/efi/libstub/Makefile |  2 +-
+ 5 files changed, 50 insertions(+), 1 deletion(-)
 
-> ---
->  mm/khugepaged.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 142e26e4bdbf..ee0a719c8be9 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -1372,7 +1372,7 @@ static void collect_mm_slot(struct mm_slot *mm_slot)
->   * Notify khugepaged that given addr of the mm is pte-mapped THP. Then
->   * khugepaged should try to collapse the page table.
->   */
-> -static int khugepaged_add_pte_mapped_thp(struct mm_struct *mm,
-> +static void khugepaged_add_pte_mapped_thp(struct mm_struct *mm,
->                                          unsigned long addr)
->  {
->         struct mm_slot *mm_slot;
-> @@ -1384,7 +1384,6 @@ static int khugepaged_add_pte_mapped_thp(struct mm_struct *mm,
->         if (likely(mm_slot && mm_slot->nr_pte_mapped_thp < MAX_PTE_MAPPED_THP))
->                 mm_slot->pte_mapped_thp[mm_slot->nr_pte_mapped_thp++] = addr;
->         spin_unlock(&khugepaged_mm_lock);
-> -       return 0;
->  }
->
->  static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *vma,
-> --
-> 2.23.0
->
->
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index c22f58155948..22aa146acd25 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -80,6 +80,7 @@ config RISCV
+ 	select HAVE_ARCH_MMAP_RND_BITS if MMU
+ 	select HAVE_ARCH_MMAP_RND_COMPAT_BITS if COMPAT
+ 	select HAVE_ARCH_SECCOMP_FILTER
++	select HAVE_ARCH_STACKLEAK
+ 	select HAVE_ARCH_TRACEHOOK
+ 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE if 64BIT && MMU
+ 	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
+diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/processor.h
+index 21c8072dce17..3a7505ab7f58 100644
+--- a/arch/riscv/include/asm/processor.h
++++ b/arch/riscv/include/asm/processor.h
+@@ -85,6 +85,24 @@ int riscv_of_parent_hartid(struct device_node *node);
+ extern void riscv_fill_hwcap(void);
+ extern int arch_dup_task_struct(struct task_struct *dst, struct task_struct *src);
+ 
++/*
++ * For CONFIG_GCC_PLUGIN_STACKLEAK
++ *
++ * These need to be macros because otherwise we get stuck in a nightmare
++ * of header definitions for the use of task_stack_page.
++ */
++
++struct stack_info {
++	unsigned long low;
++	unsigned long high;
++};
++
++/*
++ * The top of the current task's task stack
++ */
++#define current_top_of_stack()	((unsigned long)current->stack + THREAD_SIZE)
++#define on_thread_stack()	(on_task_stack(current, current_stack_pointer, 1, NULL))
++
+ #endif /* __ASSEMBLY__ */
+ 
+ #endif /* _ASM_RISCV_PROCESSOR_H */
+diff --git a/arch/riscv/include/asm/stacktrace.h b/arch/riscv/include/asm/stacktrace.h
+index 3450c1912afd..afb66b677b6a 100644
+--- a/arch/riscv/include/asm/stacktrace.h
++++ b/arch/riscv/include/asm/stacktrace.h
+@@ -16,4 +16,31 @@ extern void notrace walk_stackframe(struct task_struct *task, struct pt_regs *re
+ extern void dump_backtrace(struct pt_regs *regs, struct task_struct *task,
+ 			   const char *loglvl);
+ 
++static inline bool on_stack(unsigned long sp, unsigned long size,
++			    unsigned long low, unsigned long high,
++			    struct stack_info *info)
++{
++	if (!low)
++		return false;
++
++	if (sp < low || sp + size < sp || sp + size > high)
++		return false;
++
++	if (info) {
++		info->low = low;
++		info->high = high;
++	}
++	return true;
++}
++
++static inline bool on_task_stack(const struct task_struct *tsk,
++				 unsigned long sp, unsigned long size,
++				 struct stack_info *info)
++{
++	unsigned long low = (unsigned long)task_stack_page(tsk);
++	unsigned long high = low + THREAD_SIZE;
++
++	return on_stack(sp, size, low, high, info);
++}
++
+ #endif /* _ASM_RISCV_STACKTRACE_H */
+diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+index 2e5b88ca11ce..65d441cb560f 100644
+--- a/arch/riscv/kernel/entry.S
++++ b/arch/riscv/kernel/entry.S
+@@ -264,6 +264,9 @@ ret_from_exception:
+ 	bnez s0, resume_kernel
+ 
+ resume_userspace:
++#ifdef CONFIG_GCC_PLUGIN_STACKLEAK
++	call stackleak_erase
++#endif
+ 	/* Interrupts must be disabled here so flags are checked atomically */
+ 	REG_L s0, TASK_TI_FLAGS(tp) /* current_thread_info->flags */
+ 	andi s1, s0, _TIF_WORK_MASK
+diff --git a/drivers/firmware/efi/libstub/Makefile b/drivers/firmware/efi/libstub/Makefile
+index d0537573501e..5e1fc4f82883 100644
+--- a/drivers/firmware/efi/libstub/Makefile
++++ b/drivers/firmware/efi/libstub/Makefile
+@@ -25,7 +25,7 @@ cflags-$(CONFIG_ARM)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+ 				   -fno-builtin -fpic \
+ 				   $(call cc-option,-mno-single-pic-base)
+ cflags-$(CONFIG_RISCV)		:= $(subst $(CC_FLAGS_FTRACE),,$(KBUILD_CFLAGS)) \
+-				   -fpic
++				   -fpic $(DISABLE_STACKLEAK_PLUGIN)
+ 
+ cflags-$(CONFIG_EFI_GENERIC_STUB) += -I$(srctree)/scripts/dtc/libfdt
+ 
+-- 
+2.25.1
+

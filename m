@@ -2,135 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA11B54D05B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A914854D05D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357946AbiFORtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
+        id S1349729AbiFORuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349807AbiFORto (ORCPT
+        with ESMTP id S1349651AbiFORuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:49:44 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31B253C6A
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:49:43 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id m14so631406plg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:49:43 -0700 (PDT)
+        Wed, 15 Jun 2022 13:50:19 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E022A53E0A
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:50:18 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id z17so12083852pff.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:50:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dxrmruEpWBNiTsmU9GR+aa+oV3xQ62ui5IIhqC69qf8=;
-        b=oSwJGIdXlNb+VrbuYmZwvyElIOUy4rGhZWi9fpnNu7FdojLUivZ9i9L6uCNrU1Q2Tt
-         n/umCEZoSGR98dFxtDgCa0LxlgZ9bijRCQ55rtowXl8EC3TqVq+jPeu//Cj7zgmt8m1e
-         J3SzRHof8qUJZRSNPbtdyldeQgWjUx0XXXEnjZVIdFcul9WhGd5KohnAx3x6+Z9Nw085
-         splTHWs/8MyWm/5nCOEX7GmRPNXJOzcAOQOvwjXvgaafaQmuGfAYoGB4b6Q4kGu2+L+H
-         YO48rjoxrLwHF4FiOy+0pGcKCU2NwBtEG3nGADtL3TsIxtRHxTzqOj4A+gVQlraXs54X
-         NeyQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=1jMu+lGlLUwxIWSFxtxOqoxXa/O8y+ZJH6Jya8QmVS4=;
+        b=i9YjTi5IhhH6B1eVTcD7vZp7dzPi7c05gv6//PZkCoCOEIvpGuYvj3dEghm9izJvC2
+         8OUWFh2YvuBTdcjTU372xEWxRV1lUYPQRcXz7SxgYhN+Ab1txjF7N3MRHK3Lh45OjTSL
+         Ase4zsKsalkoKI4I9LHqh9NuddjJSdL/HSR1GdOBTcmILZPrSYoqf45z2INpMZ5ZIdwh
+         zr8ZK/Nz1w06bwVKiH7sR9I2YBfmO/BCf6mJ7fpFJC12BwKVkRGmpUBYwWac/qSjd+lo
+         WNCfJFIN339BbeVXAngEtr2RGmA5EM0UIYG+lR0iO8WMBILzOElXhZBOd23GfmSBvHDG
+         M4hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dxrmruEpWBNiTsmU9GR+aa+oV3xQ62ui5IIhqC69qf8=;
-        b=1a9KHhE816+y6f2jgprW0ebxKlita19zXmvK+Ymk9fehB1205Fav1nyp55GIc2wEUG
-         foi7EDwEEzP0dJ5eNlo67yo3F4RERXqVytAxN6KWOEOxi39zf8WI36wNXs33rk9M2MS6
-         FfumnWlHui64MkQ2f4q6QJ38k+/60CNjCbdPUf695IJCpDLr4fG0Uy9yNjxapNAn27h3
-         V84k/FCHL8Jk+b4X/tt21s4ipAazXgDe54F5lkpidFq80WldNw5RSXde/Wt+ejP0CYHG
-         0PUcLomGnDCkYSb3OMUv3sEfIVdHADeFqQT6yiMnsd8aaw01FWfBmIAEx8zro4lD5DSJ
-         I6xQ==
-X-Gm-Message-State: AJIora8J9A0HBasfXi21n1QEQ7RCCff9Ry6H7MBSRKE90aTca8gHNqJg
-        RVoL68UYP4jNnJHCjPFr2qUa0s3dGfPUQMcJ6bY=
-X-Google-Smtp-Source: AGRyM1t2UBoLW2+ZbOanhvdwi+5bEkgN330M33Qf7uZdt3DeTPdlzbfwnL3AI5QNLUWCgXCTjJNJAHNq2KUJq5jePI4=
-X-Received: by 2002:a17:90a:ce84:b0:1e4:d803:fad with SMTP id
- g4-20020a17090ace8400b001e4d8030fadmr11754466pju.99.1655315382973; Wed, 15
- Jun 2022 10:49:42 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1jMu+lGlLUwxIWSFxtxOqoxXa/O8y+ZJH6Jya8QmVS4=;
+        b=hwrQyr7iIzryi8sB/Jsx4oqauOPpZnDjB9Oo63BCZCGOgEuA5dRsZmalWtJLPIcQ51
+         Bz22/yGauGmLeWwC989MyaMfdPHGqkLevBIVwNjkQzTaENJR1B1oXwee3DA5qb5Y+7YZ
+         6GyMO/wJluaZj6YPG4WFE8pVTXxYWEzLXZ9HMmRss8SlNbcYniP3K7hpBELdzCot+Z/s
+         q0MV8AiUUxU3Elz3gVFc0SaTWuD6NogESd+51Wj4/HY6/JIztrDmOJezRlMuAyV1SAv/
+         RGPmQBliuhcsLqQq7Fphy6gzZxSs7d0FzSgPcgPlj1WWPSLCgUMnclUASVmfzeKhKQzK
+         ncWQ==
+X-Gm-Message-State: AJIora+NNeQALnj37Dkz8ZBelO6ElAUSg84rpgxVDNDpjKdWHqG0ooWB
+        03s601dZi2DCeaE+s9OCq9OiJw==
+X-Google-Smtp-Source: AGRyM1tgx5wd//aRy3L6R0T8NZ35VS+4Jjjtdj74hI5yzt3PaMKVofPzTq+GGVbzPuXw0Vby1azuDw==
+X-Received: by 2002:a65:6b8a:0:b0:3db:7dc5:fec2 with SMTP id d10-20020a656b8a000000b003db7dc5fec2mr788601pgw.223.1655315418377;
+        Wed, 15 Jun 2022 10:50:18 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id br8-20020a056a00440800b00518a473265csm10034338pfb.217.2022.06.15.10.50.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 10:50:17 -0700 (PDT)
+Message-ID: <717ad899-31ad-5e70-b299-ffb8ca287071@linaro.org>
+Date:   Wed, 15 Jun 2022 10:50:17 -0700
 MIME-Version: 1.0
-References: <20220611084731.55155-1-linmiaohe@huawei.com> <20220611084731.55155-3-linmiaohe@huawei.com>
-In-Reply-To: <20220611084731.55155-3-linmiaohe@huawei.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 15 Jun 2022 10:49:30 -0700
-Message-ID: <CAHbLzkpc8ag7MkY_D17U1B7SjZFO2Bss8rVVj-scMOC8ttqxEg@mail.gmail.com>
-Subject: Re: [PATCH 2/7] mm/khugepaged: stop swapping in page when
- VM_FAULT_RETRY occurs
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Howells <dhowells@redhat.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH 1/3] dt-bindings: clock: add pcm reset for ipq806x lcc
+Content-Language: en-US
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20220615163408.30154-1-ansuelsmth@gmail.com>
+ <a92fe431-a995-4c7f-b90b-8e80298bc71a@linaro.org>
+ <62aa1b41.1c69fb81.95632.5b71@mx.google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <62aa1b41.1c69fb81.95632.5b71@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 1:47 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
->
-> When do_swap_page returns VM_FAULT_RETRY, we do not retry here and thus
-> swap entry will remain in pagetable. This will result in later failure.
-> So stop swapping in pages in this case to save cpu cycles.
->
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  mm/khugepaged.c | 19 ++++++++-----------
->  1 file changed, 8 insertions(+), 11 deletions(-)
->
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 73570dfffcec..a8adb2d1e9c6 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -1003,19 +1003,16 @@ static bool __collapse_huge_page_swapin(struct mm_struct *mm,
->                 swapped_in++;
->                 ret = do_swap_page(&vmf);
->
-> -               /* do_swap_page returns VM_FAULT_RETRY with released mmap_lock */
-> +               /*
-> +                * do_swap_page returns VM_FAULT_RETRY with released mmap_lock.
-> +                * Note we treat VM_FAULT_RETRY as VM_FAULT_ERROR here because
-> +                * we do not retry here and swap entry will remain in pagetable
-> +                * resulting in later failure.
+On 15/06/2022 09:53, Ansuel Smith wrote:
+> On Wed, Jun 15, 2022 at 10:43:10AM -0700, Krzysztof Kozlowski wrote:
+>> On 15/06/2022 09:34, Christian 'Ansuel' Marangi wrote:
+>>> Add pcm reset define for ipq806x lcc.
+>>>
+>>> Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+>> To prevent any confusion about identities (we have strict rules about
+>> these), I need to ask - who uses this email address?
+>>
+>> https://lore.kernel.org/all/?q=ansuelsmth%40gmail.com
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> Same person. Started using extended name, wanted to do this change from
+> a long time but all the patch were already pushed so I couldn't change
+> it since they were already proposed and on the various mailing list.
 
-Yeah, it makes sense.
+Previously "Ansuel Smith" was used entirely, without any parts of this
+name. Here 'Ansuel' appears in quotes, which usually is used for nicknames.
 
-> +                */
->                 if (ret & VM_FAULT_RETRY) {
->                         mmap_read_lock(mm);
+Is "Ansuel Smith" your real name or a nickname? What do you mean by
+"extended name"?
 
-A further optimization, you should not need to relock mmap_lock. You
-may consider returning a different value or passing in *locked and
-setting it to false, then check this value in the caller to skip
-unlock.
 
-> -                       if (hugepage_vma_revalidate(mm, haddr, &vma)) {
-> -                               /* vma is no longer available, don't continue to swapin */
-> -                               trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
-> -                               return false;
-> -                       }
-> -                       /* check if the pmd is still valid */
-> -                       if (mm_find_pmd(mm, haddr) != pmd) {
-> -                               trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
-> -                               return false;
-> -                       }
-> +                       trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
-> +                       return false;
->                 }
->                 if (ret & VM_FAULT_ERROR) {
->                         trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
-
-And I think "swapped_in++" needs to be moved after error handling.
-
-> --
-> 2.23.0
->
->
+Best regards,
+Krzysztof

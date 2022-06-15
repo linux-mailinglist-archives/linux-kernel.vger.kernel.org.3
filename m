@@ -2,212 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F96E54C7AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7E054C7B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:48:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347399AbiFOLn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 07:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44782 "EHLO
+        id S243983AbiFOLr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 07:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347117AbiFOLno (ORCPT
+        with ESMTP id S237723AbiFOLru (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:43:44 -0400
-Received: from mailout3.rbg.tum.de (mailout3.rbg.tum.de [131.159.0.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB5927CF6;
-        Wed, 15 Jun 2022 04:43:43 -0700 (PDT)
-Received: from mailrelay1.rbg.tum.de (mailrelay1.in.tum.de [131.159.254.14])
-        by mailout3.rbg.tum.de (Postfix) with ESMTPS id 3D867100241;
-        Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=in.tum.de;
-        s=20220209; t=1655293421;
-        bh=2kjF4oxVy3r0fd0SR9Tiy0/qNbtSE87Bz7BjdDbE1WQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=NQ3JEMN2ZHuNO/jk9Av7B/H/0KpYlcVLlKXKDbQyjFUGHSs9eA9lMK8Lb5Slu6MdY
-         HcTOP24C86scrmcGGk01sFNf5waZuYfo0K92v+lEx6j2EFBxU6rqq3RmGOzrcfu0m3
-         hA/W9Q7JcCktMgWsoA4AP/p4CRaZz1jgznKU8IAd6uN9NTQwaHKiKLXZAoGFXruKg+
-         7vbzwsy69l+TbNglfkS+nBbSJPe2tw3NYT13otO1+Ca4Dn6otyByXM0zhnI1rqfS4W
-         kWyMb7r4EliCIh4QwQdEJS00rR1dWRg/4hM1staWVoKKc2EAFsRIF1x0aygVIyunKK
-         pX9cOhuqMCCtw==
-Received: by mailrelay1.rbg.tum.de (Postfix, from userid 112)
-        id 3D0B1DD; Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
-Received: from mailrelay1.rbg.tum.de (localhost [127.0.0.1])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTP id 198DED6;
-        Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
-Received: from mail.in.tum.de (vmrbg426.in.tum.de [131.159.0.73])
-        by mailrelay1.rbg.tum.de (Postfix) with ESMTPS id 14250CE;
-        Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
-Received: by mail.in.tum.de (Postfix, from userid 112)
-        id 087424A0220; Wed, 15 Jun 2022 13:43:41 +0200 (CEST)
-Received: (Authenticated sender: heidekrp)
-        by mail.in.tum.de (Postfix) with ESMTPSA id A477F4A01E7;
-        Wed, 15 Jun 2022 13:43:40 +0200 (CEST)
-        (Extended-Queue-bit xtech_ko@fff.in.tum.de)
-From:   =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>
-To:     llvm@lists.linux.dev, linux-toolchains@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        =?UTF-8?q?Paul=20Heidekr=C3=BCger?= <paul.heidekrueger@in.tum.de>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: [PATCH RFC] tools/memory-model: Adjust ctrl dependency definition
-Date:   Wed, 15 Jun 2022 11:43:29 +0000
-Message-Id: <20220615114330.2573952-1-paul.heidekrueger@in.tum.de>
+        Wed, 15 Jun 2022 07:47:50 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9171E25EAE;
+        Wed, 15 Jun 2022 04:47:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655293668; x=1686829668;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=QbIkcyUw/L14+nIayRRYoRVuzlGbZsXJBtcZC1EJL9o=;
+  b=YHpKRDPJyQnqZEzFRFYRevwBwirC+xV1rwYc/00wzqiDanFyrfqTGsAt
+   jAH+vGLh9+k3GCaXCRiC7EC4i+Znw9ZliCeDoHR9SDF3F5jDhpm4TB3Zm
+   vWEvhwfo37rakcc3FSR6aUkzBQTrNBnVXsOGZYH9A2+fA9LEGT/g+EHr1
+   uJ162YbkdAcHdhZxZWcGcNzboxZMG7iCsGu5Juv0gJef6s7Jss0jv1omv
+   T+q/wFrJ/dFftRzQYI6Kx9zcUxzSxYSYNSvnPTCyiHgmhv2dlSsR1rIUB
+   10iPxytcw90NMfcw8hSve7jomOLKCa4x9G2zswbklWCbYu4VTIbyBfqmQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="267621696"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="267621696"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 04:47:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="618424942"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 15 Jun 2022 04:47:46 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 3C8BA18F; Wed, 15 Jun 2022 14:47:50 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Gwendal Grignou <gwendal@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: [PATCH v2 1/2] iio: proximity: sx_common: Don't use IIO device for properties
+Date:   Wed, 15 Jun 2022 14:47:45 +0300
+Message-Id: <20220615114746.2767-1-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+It's not correct to use artificial device created by IIO core to
+retrieve device properties. Even ->get_default_reg() callback
+takes a simple struct device pointer which suggests it wants to
+operate on the real device.
 
-I have been confused by explanation.txt's definition of control
-dependencies:
+Correct this by replacing pointer to IIO device by a real device
+pointer in the caller of ->get_default_reg().
 
-> Finally, a read event and another memory access event are linked by a
-> control dependency if the value obtained by the read affects whether
-> the second event is executed at all.
-
-I'll go into the following:
-
-====
-1. "At all", to me, is misleading
-  1.1 The code which confused me
-  1.2 The traditional definition via post-dominance doesn't work either
-2. Solution
-====
-
-1. "At all", to me, is misleading:
-
-"At all" to me suggests a question for which we require a definitive
-"yes" or "no" answer: given a programme and an input, can a certain
-piece of code be executed? Can we always answer this this question?
-Doesn't this sound similar to the halting problem?
-
-1.1 The Example which confused me:
-
-For the dependency checker project [1], I've been thinking about
-tracking dependency chains in code, and I stumbled upon the following
-edge case, which made me question the "at all" part of the current
-definition. The below C-code is derived from some optimised kernel code
-in LLVM intermediate representation (IR) I encountered:
-
-> int *x, *y;
->
-> int foo()
-> {
-> /* More code */
->
-> 	 loop:
-> 		/* More code */
->
-> 	 	if(READ_ONCE(x)) {
-> 	 		WRITE_ONCE(y, 42);
-> 	 		return 0;
-> 	 	}
->
-> 		/* More code */
->
-> 	 	goto loop;
->
->       /* More code */
-> }
-
-Assuming that foo() will return, the READ_ONCE() does not determine
-whether the WRITE_ONCE() will be executed __at all__, as it will be
-executed exactly when the function returns, instead, it determines
-__when__ the WRITE_ONCE() will be executed.
-
-1.2. The definition via post-dominance doesn't work either:
-
-I have seen control dependencies being defined in terms of the first
-basic block that post-dominates the basic block of the if-condition,
-that is the first basic block control flow must take to reach the
-function return regardless of what the if condition returned.
-
-E.g. [2] defines control dependencies as follows:
-
-> A statement y is said to be control dependent on another statement x
-> if (1) there exists a nontrivial path from x to y such that every
-> statement z != x in the path is post-dominated by y, and (2) x is not
-> post-dominated by y.
-
-Again, this definition doesn't work for the example above. As the basic
-block of the if branch trivially post-dominates any other basic block,
-because it contains the function return.
-
-2. Solution:
-
-The definition I came up with instead is the following:
-
-> A basic block B is control-dependent on a basic block A if
-> B is reachable from A, but control flow can take a path through A
-> which avoids B. The scope of a control dependency ends at the first
-> basic block where all control flow paths running through A meet.
-
-Note that this allows control dependencies to remain "unresolved".
-
-I'm happy to submit a patch which covers more of what I mentioned above
-as part of explanation.txt, but figured that in the spirit of keeping
-things simple, leaving out "at all" might be enough?
-
-What do you think?
-
-Many thanks,
-Paul
-
-[1]: https://lore.kernel.org/all/Yk7%2FT8BJITwz+Og1@Pauls-MacBook-Pro.local/T/#u
-[2]: Optimizing Compilers for Modern Architectures: A Dependence-Based
-Approach, Randy Allen, Ken Kennedy, 2002, p. 350
-
-Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-Cc: Marco Elver <elver@google.com>
-Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
-Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
-Cc: Martin Fink <martin.fink@in.tum.de>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- tools/memory-model/Documentation/explanation.txt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v2: new patch (necessary prerequisite for the following change)
+ drivers/iio/proximity/sx_common.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-index ee819a402b69..42af7ed91313 100644
---- a/tools/memory-model/Documentation/explanation.txt
-+++ b/tools/memory-model/Documentation/explanation.txt
-@@ -466,7 +466,7 @@ pointer.
+diff --git a/drivers/iio/proximity/sx_common.c b/drivers/iio/proximity/sx_common.c
+index 8ad814d96b7e..9f2e47385198 100644
+--- a/drivers/iio/proximity/sx_common.c
++++ b/drivers/iio/proximity/sx_common.c
+@@ -434,7 +434,7 @@ static void sx_common_regulator_disable(void *_data)
  
- Finally, a read event and another memory access event are linked by a
- control dependency if the value obtained by the read affects whether
--the second event is executed at all.  Simple example:
-+the second event is executed.  Simple example:
+ #define SX_COMMON_SOFT_RESET				0xde
  
- 	int x, y;
+-static int sx_common_init_device(struct iio_dev *indio_dev)
++static int sx_common_init_device(struct device *dev, struct iio_dev *indio_dev)
+ {
+ 	struct sx_common_data *data = iio_priv(indio_dev);
+ 	struct sx_common_reg_default tmp;
+@@ -456,8 +456,7 @@ static int sx_common_init_device(struct iio_dev *indio_dev)
+ 
+ 	/* Program defaults from constant or BIOS. */
+ 	for (i = 0; i < data->chip_info->num_default_regs; i++) {
+-		initval = data->chip_info->ops.get_default_reg(&indio_dev->dev,
+-							       i, &tmp);
++		initval = data->chip_info->ops.get_default_reg(dev, i, &tmp);
+ 		ret = regmap_write(data->regmap, initval->reg, initval->def);
+ 		if (ret)
+ 			return ret;
+@@ -530,7 +529,7 @@ int sx_common_probe(struct i2c_client *client,
+ 
+ 	i2c_set_clientdata(client, indio_dev);
+ 
+-	ret = sx_common_init_device(indio_dev);
++	ret = sx_common_init_device(dev, indio_dev);
+ 	if (ret)
+ 		return dev_err_probe(dev, ret, "Unable to initialize sensor\n");
  
 -- 
 2.35.1

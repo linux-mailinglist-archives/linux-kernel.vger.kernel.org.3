@@ -2,101 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA36754D1DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD7354D1DB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350292AbiFOTov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 15:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46618 "EHLO
+        id S1349716AbiFOToq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244636AbiFOTos (ORCPT
+        with ESMTP id S244636AbiFOToo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:44:48 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874773CFF2;
-        Wed, 15 Jun 2022 12:44:46 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id y19so25255434ejq.6;
-        Wed, 15 Jun 2022 12:44:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=767OJrCK8HUadii808hVEy3GxcnvixklGPCO6V3YD5M=;
-        b=jFT/VeSc63iFgMPMb2xRcBbUCqXUnEZl1E1MVx1Yd2xAmk3ax4Uy65On/y29eZkoe2
-         EPvPLMkZIFEBJbO/DrmTsslXpsOfH14CWV/xGigqff7/K3B/BKmC5+61MIvtfT+WZpjS
-         RMqvC0cMMqe3uUD7OFBaas6cXGWaO+EzMk6KMymXcRzGsE2Ww5xjysjW4+PrZDjsV9tO
-         FyodoLXWhR4ioUoNG6krEdVinHpphmZO+IZVKrD8eX7Le1gfbzgMifUy58g6drBSSZ2S
-         x61qQcs/hRho1FhiO1lqm+d0Zm+1hEgLk1/ro/pRLJUSHwdfNL+b8dGXulEQO0kLlMeF
-         JTgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=767OJrCK8HUadii808hVEy3GxcnvixklGPCO6V3YD5M=;
-        b=JTmCa6eiGmslLdPSH13yTsPqBSFxejnZGs3LDQDP3lvNlwQRvKZD8JoqpjIUKIyJ8J
-         TWjP/KiVMvIg6At1lFJqBaUDf5p20iIOL7X9Dk0j0V/YIuZfLP+fDz8s0WBg1SN//UQ4
-         RoHYxwUkbSEu+1WM/ofEtW+sbYvm9cUspjsYPhQ0k6RwcLWRwFnP8Luo1HEKyu+JhKwD
-         fCelDcnl91ljatE7WsSJqTgjeDIImEp8sa92eONoriTRBXfXFuDvTpJVE/8ZfeIdNhpu
-         sdEo+xgchPj8CcYoj3sCBzkmi660gxESY7boB6n6PjhMomHWorrI5jn86Hfm8MFVhauJ
-         D3zQ==
-X-Gm-Message-State: AJIora/XOIE4tDxeWB68p3NvAKJRl4H7Ug64vRw9SP6rcvKMx6TAX2pf
-        gwk5FlB+xIOWQCNMgF4lmzomSot8muE=
-X-Google-Smtp-Source: AGRyM1sgGqJHUeVw3u3W7rE3sqf5Kp8zpWdfvFHOMgDNOhP8CojDYKciFvgC5O7XXJFBkGcWqg0OLw==
-X-Received: by 2002:a17:907:c71b:b0:718:d0a2:a447 with SMTP id ty27-20020a170907c71b00b00718d0a2a447mr1266043ejc.157.1655322284933;
-        Wed, 15 Jun 2022 12:44:44 -0700 (PDT)
-Received: from felia.fritz.box (200116b826878200b4eabc3163d51ca4.dip.versatel-1u1.de. [2001:16b8:2687:8200:b4ea:bc31:63d5:1ca4])
-        by smtp.gmail.com with ESMTPSA id i24-20020a05640200d800b0042dcac2afc6sm29565edu.72.2022.06.15.12.44.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 12:44:44 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Neal Liu <neal_liu@aspeedtech.com>, linux-aspeed@lists.ozlabs.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] MAINTAINERS: Repair file entry in ASPEED USB UDC DRIVER
-Date:   Wed, 15 Jun 2022 21:44:09 +0200
-Message-Id: <20220615194409.11875-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 15 Jun 2022 15:44:44 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D513BF9F;
+        Wed, 15 Jun 2022 12:44:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=d/o5WdCpTeAaM6xLD3aXnZ6/ErJV7ziaxEi+U3WrQwE=; b=dOxybcqMn8pSrgy5H2UXrkD7Nd
+        EKCijLQNCTS5VUigHRJEnIfdJSng2uhQTyswS7XOAezoBxwwHiY4L9GotkSh3/MjvVZ3Us3o8k2Vy
+        kGEF6VstuRvtGOT3k0Pp4Qv3T2Y5NJ+YYLOMPcLtJcu5oqFRsfxMc/yOrAmj4gBJ9gpEYll8vvWXO
+        Nf6EjBkF+2HLi/ugUXcGMU63LhnoesdswatbEyjGUAAnm3us2C/7xjZTbifvglrsabY8spFWjlqAR
+        ZtWFXwDjWxM5yLvSHsslKYqtGHG+ioqTe+8hizctOs5BFiE36j6RhXBjkX3pZAGx0jyUL07FcJE56
+        FEiGf29g==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1YwO-008D1G-0q; Wed, 15 Jun 2022 19:44:36 +0000
+Message-ID: <fb53cab1-f693-5309-e06a-0fe0fc932c2c@infradead.org>
+Date:   Wed, 15 Jun 2022 12:44:30 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: linux-next: Tree for Jun 15
+ (drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c)
+Content-Language: en-US
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+References: <20220615160116.528c324b@canb.auug.org.au>
+ <d1a48a84-6d07-e8f7-5fd8-d24a7a1cf187@infradead.org>
+ <CADnq5_N6gfaPfZJAX4+poWFFruxNdFKZqzXZXosj1A55e-O1mA@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CADnq5_N6gfaPfZJAX4+poWFFruxNdFKZqzXZXosj1A55e-O1mA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 055276c13205 ("usb: gadget: add Aspeed ast2600 udc driver") adds
-the section ASPEED USB UDC DRIVER with a file entry to aspeed,udc.yaml,
-but then, commit 0dde9a46a2cf ("dt-bindings: usb: add documentation for
-aspeed udc") actually adds a device tree binding aspeed,ast2600-udc.yaml.
 
-Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-broken reference.
 
-Repair the reference to the actually added file in ASPEED USB UDC DRIVER.
+On 6/15/22 12:28, Alex Deucher wrote:
+> On Wed, Jun 15, 2022 at 3:01 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>>
+>>
+>> On 6/14/22 23:01, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> Changes since 20220614:
+>>>
+>>
+>> on i386:
+>> # CONFIG_DEBUG_FS is not set
+>>
+>>
+>> ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function ‘amdgpu_dm_crtc_late_register’:
+>> ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6599:2: error: implicit declaration of function ‘crtc_debugfs_init’; did you mean ‘amdgpu_debugfs_init’? [-Werror=implicit-function-declaration]
+>>   crtc_debugfs_init(crtc);
+>>   ^~~~~~~~~~~~~~~~~
+>>   amdgpu_debugfs_init
+>>
+>>
+>> Full randconfig file is attached.
+> 
+> I tried building with your config and I can't repro this.  As Harry
+> noted, that function and the whole secure display feature depend on
+> debugfs.  It should never be built without CONFIG_DEBUG_FS.  See
+> drivers/gpu/drm/amd/display/Kconfig:
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Neal, please ack.
-Greg, please pick this minor non-urgent clean-up patch in your usb-next tree.
+Did you try building with today's linux-next tree?
+(whatever is in it)
 
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I have seen this build error multiple times so it shouldn't
+be so difficult to repro it.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d9c3576b082f..8830d1adb23b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3144,7 +3144,7 @@ ASPEED USB UDC DRIVER
- M:	Neal Liu <neal_liu@aspeedtech.com>
- L:	linux-aspeed@lists.ozlabs.org (moderated for non-subscribers)
- S:	Maintained
--F:	Documentation/devicetree/bindings/usb/aspeed,udc.yaml
-+F:	Documentation/devicetree/bindings/usb/aspeed,ast2600-udc.yaml
- F:	drivers/usb/gadget/udc/aspeed_udc.c
- 
- ASUS NOTEBOOKS AND EEEPC ACPI/WMI EXTRAS DRIVERS
+
+>> config DRM_AMD_SECURE_DISPLAY
+>>         bool "Enable secure display support"
+>>         default n
+>>         depends on DEBUG_FS
+>>         depends on DRM_AMD_DC_DCN
+>>         help
+>>             Choose this option if you want to
+>>             support secure display
+>>
+>>             This option enables the calculation
+>>             of crc of specific region via debugfs.
+>>             Cooperate with specific DMCU FW.
+> 
+> amdgpu_dm_crtc_late_register is guarded by
+> CONIG_DRM_AMD_SECURE_DISPLAY.  It's not clear to me how we could hit
+> this.
+
+
 -- 
-2.17.1
-
+~Randy

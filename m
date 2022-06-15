@@ -2,72 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F5254C3DF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 10:46:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 588C554C3AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 10:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346523AbiFOIpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 04:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47808 "EHLO
+        id S232101AbiFOIke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 04:40:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244794AbiFOIoT (ORCPT
+        with ESMTP id S243967AbiFOIk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 04:44:19 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88877443E6;
-        Wed, 15 Jun 2022 01:44:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655282658; x=1686818658;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=1ppb5FxYShlXnSIAV6m7rwzN8W1OiV0FA7dnw79u850=;
-  b=VOY48dJ9MhrgSgexS8JPulAJhW17xnnYRISY3I4yul7gjWcEPq/DVtFq
-   R6JhVCb8bWaW4g33mdYN4H907NLbTrRPPPFr+Qoda7nH6HIauis9XRudG
-   pdDlg/wHURXeJqobNgyrHAgpwsgCqMKHJiSqODLH/Yw1Lk9Ka5ndAwX/6
-   4UhkynJlhvQf3/2Mpy0NM0ctCsONZhgTx+Br0suFwd1ceuUplwe/Gqxnq
-   zEfwhqJXtDPF35eqIg7XeC6kGiDZN+gVZZD2/XUykVoRGQDo398nANUAX
-   DxF/pnMLwyspadV+nCpp1/N8w05kqR1sppBSsKNnLh8uxeV6gPBanvY4l
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="258737038"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="258737038"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 01:44:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="712849505"
-Received: from p12hl98bong5.png.intel.com ([10.158.65.178])
-  by orsmga004.jf.intel.com with ESMTP; 15 Jun 2022 01:44:13 -0700
-From:   Ong Boon Leong <boon.leong.ong@intel.com>
-To:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <Jose.Abreu@synopsys.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Emilio Riva <emilio.riva@ericsson.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>
-Subject: [PATCH net-next v5 5/5] net: stmmac: make mdio register skips PHY scanning for fixed-link
-Date:   Wed, 15 Jun 2022 16:39:08 +0800
-Message-Id: <20220615083908.1651975-6-boon.leong.ong@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220615083908.1651975-1-boon.leong.ong@intel.com>
-References: <20220615083908.1651975-1-boon.leong.ong@intel.com>
+        Wed, 15 Jun 2022 04:40:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35CF24A908
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 01:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655282426;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MqlUuq6oOctC8KD1R2eZd0GMgzvzvS5A75XzekWYOhU=;
+        b=RGYuxvpQy1swqI1i8eGMV8AMANUllKUe/1hlYUqmZcb/yhOiQgl9/0j8/hl2Rmn+j45iRm
+        xoqVW8A3sZh7OYlKEDKtdF93PaPeSvEaGG8+NwKZ24njjXOw0t7m9ePXOOZDhVGsgfFi2X
+        pr2x7yY7DzH26oJD4seI0lVa2+iDdOw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-619-DLiF25J4OEmEVqLmiL1YFw-1; Wed, 15 Jun 2022 04:40:20 -0400
+X-MC-Unique: DLiF25J4OEmEVqLmiL1YFw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5305F185A7BA;
+        Wed, 15 Jun 2022 08:40:20 +0000 (UTC)
+Received: from fedora (unknown [10.40.194.133])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5308A492CA6;
+        Wed, 15 Jun 2022 08:40:19 +0000 (UTC)
+Date:   Wed, 15 Jun 2022 10:40:17 +0200
+From:   Lukas Czerner <lczerner@redhat.com>
+To:     Jinke Han <hanjinke.666@bytedance.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ext4: fix trim range leak
+Message-ID: <20220615084017.xwexup5ckrrpevhe@fedora>
+References: <20220614044647.21846-1-hanjinke.666@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220614044647.21846-1-hanjinke.666@bytedance.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,85 +60,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-stmmac_mdio_register() lacks fixed-link consideration and only skip PHY
-scanning if it has done DT style PHY discovery. So, for DT or ACPI _DSD
-setting of fixed-link, the PHY scanning should not happen.
+On Tue, Jun 14, 2022 at 12:46:47PM +0800, Jinke Han wrote:
+> From: hanjinke <hanjinke.666@bytedance.com>
+> 
+> When release group lock, a large number of blocks may be alloc from
+> the group(e.g. not from the rest of target trim range). This may
+> lead end of the loop and leave the rest of trim range unprocessed.
 
-v2: fix incorrect order related to fwnode that is not caught in non-DT
-    platform.
+Hi,
 
-Tested-by: Emilio Riva <emilio.riva@ericsson.com>
-Signed-off-by: Ong Boon Leong <boon.leong.ong@intel.com>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 12 +++++++-----
- drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c | 14 ++++++++++++++
- 2 files changed, 21 insertions(+), 5 deletions(-)
+you're correct. Indeed it's possible to miss some of the blocks this
+way.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 73cae2938f6..50867e5d0d9 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -1142,18 +1142,20 @@ static void stmmac_check_pcs_mode(struct stmmac_priv *priv)
- static int stmmac_init_phy(struct net_device *dev)
- {
- 	struct stmmac_priv *priv = netdev_priv(dev);
--	struct device_node *node;
-+	struct fwnode_handle *fwnode;
- 	int ret;
- 
--	node = priv->plat->phylink_node;
-+	fwnode = of_fwnode_handle(priv->plat->phylink_node);
-+	if (!fwnode)
-+		fwnode = dev_fwnode(priv->device);
- 
--	if (node)
--		ret = phylink_of_phy_connect(priv->phylink, node, 0);
-+	if (fwnode)
-+		ret = phylink_fwnode_phy_connect(priv->phylink, fwnode, 0);
- 
- 	/* Some DT bindings do not set-up the PHY handle. Let's try to
- 	 * manually parse it
- 	 */
--	if (!node || ret) {
-+	if (!fwnode || ret) {
- 		int addr = priv->plat->phy_addr;
- 		struct phy_device *phydev;
- 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-index 03d3d1f7aa4..5f177ea8072 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_mdio.c
-@@ -434,9 +434,11 @@ int stmmac_mdio_register(struct net_device *ndev)
- 	int err = 0;
- 	struct mii_bus *new_bus;
- 	struct stmmac_priv *priv = netdev_priv(ndev);
-+	struct fwnode_handle *fwnode = of_fwnode_handle(priv->plat->phylink_node);
- 	struct stmmac_mdio_bus_data *mdio_bus_data = priv->plat->mdio_bus_data;
- 	struct device_node *mdio_node = priv->plat->mdio_node;
- 	struct device *dev = ndev->dev.parent;
-+	struct fwnode_handle *fixed_node;
- 	int addr, found, max_addr;
- 
- 	if (!mdio_bus_data)
-@@ -490,6 +492,18 @@ int stmmac_mdio_register(struct net_device *ndev)
- 	if (priv->plat->has_xgmac)
- 		stmmac_xgmac2_mdio_read(new_bus, 0, MII_ADDR_C45);
- 
-+	/* If fixed-link is set, skip PHY scanning */
-+	if (!fwnode)
-+		fwnode = dev_fwnode(priv->device);
-+
-+	if (fwnode) {
-+		fixed_node = fwnode_get_named_child_node(fwnode, "fixed-link");
-+		if (fixed_node) {
-+			fwnode_handle_put(fixed_node);
-+			goto bus_register_done;
-+		}
-+	}
-+
- 	if (priv->plat->phy_node || mdio_node)
- 		goto bus_register_done;
- 
--- 
-2.25.1
+But I wonder how much of a problem this actually is? I'd think that the
+optimization you just took out is very usefull, especially with larger
+minlen and more fragmented free space it'll save us a lot of cycles.
+Do you have any performance numbers for this change?
+
+Perhaps we don't have to remove it completely, rather zero the
+free_count every time bb_free changes? Would that be worth it?
+
+-Lukas
+
+> 
+> Signed-off-by: hanjinke <hanjinke.666@bytedance.com>
+> ---
+>  fs/ext4/mballoc.c | 6 +-----
+>  1 file changed, 1 insertion(+), 5 deletions(-)
+> 
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 9f12f29bc346..45eb9ee20947 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -6345,14 +6345,13 @@ static int ext4_try_to_trim_range(struct super_block *sb,
+>  __acquires(ext4_group_lock_ptr(sb, e4b->bd_group))
+>  __releases(ext4_group_lock_ptr(sb, e4b->bd_group))
+>  {
+> -	ext4_grpblk_t next, count, free_count;
+> +	ext4_grpblk_t next, count;
+>  	void *bitmap;
+>  
+>  	bitmap = e4b->bd_bitmap;
+>  	start = (e4b->bd_info->bb_first_free > start) ?
+>  		e4b->bd_info->bb_first_free : start;
+>  	count = 0;
+> -	free_count = 0;
+>  
+>  	while (start <= max) {
+>  		start = mb_find_next_zero_bit(bitmap, max + 1, start);
+> @@ -6367,7 +6366,6 @@ __releases(ext4_group_lock_ptr(sb, e4b->bd_group))
+>  				break;
+>  			count += next - start;
+>  		}
+> -		free_count += next - start;
+>  		start = next + 1;
+>  
+>  		if (fatal_signal_pending(current)) {
+> @@ -6381,8 +6379,6 @@ __releases(ext4_group_lock_ptr(sb, e4b->bd_group))
+>  			ext4_lock_group(sb, e4b->bd_group);
+>  		}
+>  
+> -		if ((e4b->bd_info->bb_free - free_count) < minblocks)
+> -			break;
+>  	}
+>  
+>  	return count;
+> -- 
+> 2.20.1
+> 
 

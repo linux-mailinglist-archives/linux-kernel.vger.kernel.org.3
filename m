@@ -2,122 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1169754BFD2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 231A454BFE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:58:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345616AbiFOCvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 22:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
+        id S1345756AbiFOC5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 22:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233181AbiFOCvf (ORCPT
+        with ESMTP id S237203AbiFOC5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 22:51:35 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6EE2AC70;
-        Tue, 14 Jun 2022 19:51:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655261495; x=1686797495;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xlvoYMRrFROAq8lxJcU7JJSApZCF7NO92GYSAv0vikg=;
-  b=Iw1ftnb0ZB1MjQrk88XcMqoT+PFY9ZvYfp1iKvpTw6DhvXD77dkMKh2w
-   fw0AUfbYRysYbceetqbAnjHywXf/nh9DYc/GTeD1KAmIekAQUFPNzkClt
-   2CtrP2OvVUnqZogAFplKPb26v3x0v4X0kaeG31HedzuHbJm2Eh4LC0Hhc
-   BVu+JxCbyVFi0jr2FAE3cV+/e7dOqpP4TG7gegeb7/dYl1tdc5oI522t5
-   31oQOETv7aTR2/LKsRRTxt26XoEea+MIehcigQdLrRwISMT7iJWcRmcpe
-   /Z1VoShHdDs0OFsfzBzkmFflT03o9gSqtsyicjdYkUWE1CBdq1A2zotkF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="340474710"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="340474710"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 19:51:34 -0700
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="640734272"
-Received: from gao-cwp.sh.intel.com (HELO gao-cwp) ([10.239.159.23])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 19:51:32 -0700
-Date:   Wed, 15 Jun 2022 10:51:19 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Kechen Lu <kechenl@nvidia.com>
-Cc:     kvm@vger.kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, somduttar@nvidia.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v3 4/7] KVM: x86: Let userspace re-enable previously
- disabled exits
-Message-ID: <20220615025114.GB7808@gao-cwp>
-References: <20220615011622.136646-1-kechenl@nvidia.com>
- <20220615011622.136646-5-kechenl@nvidia.com>
+        Tue, 14 Jun 2022 22:57:47 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187DB248DA;
+        Tue, 14 Jun 2022 19:57:46 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id x75so7822576qkb.12;
+        Tue, 14 Jun 2022 19:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ls3qnOc3Y8ik7fKx57iztJUjc3L1QowbApEutA1WMAM=;
+        b=D+5npGiiuE3tRYO8NhlD6qhHvcccG8Vxfnv6wfrSVuKzX7LyVC4KT9zql8SPiKUIxI
+         8FNDjNNBwMD/dn55TSvmtyrbYhBz+80Pg17k0lWHU6mKosqKTeGKv2N80Uy5nUKXpjLb
+         HqPsQ9rHG6pk693Wuq5M7P/HHFcaAqU3Mnw15XB9A7Cy4pqAs0912OYP7J1EQMKE9Pbz
+         Ko4FsA2HMLxcR+DQLSYuI1U13ZqSIcAblkDZ+u02usZBsfMDi3kb3Si39YITI3LczE0V
+         g2OuLpHyxbiURFKAfc13ksdi0gTez8MJ+lkA51ElWu50xSz4Q3cmIwWwjJxDMpukzg4p
+         qtWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ls3qnOc3Y8ik7fKx57iztJUjc3L1QowbApEutA1WMAM=;
+        b=FzoxvHRBfenEW9AICCuLSMPlmrczpmXpuPPTHXCUiKcmCfWFZJ8yMl5Ui7C7w9v7dz
+         WhVrwWULx56KXYx+lBEnw/xvci+7NWBPx3j1rgs+IlZ8oJRmbxIrJrMGI1wh87N1f8/K
+         JE33xrWtTvPH8nHg2AZmbtmQD6fk3S16CHOaW/WDapGftN3XOR+RERX3eu7K9hMQGpX+
+         MT7YfxTzwqSrjMvCT0lynIiAMXM0Kp0ywFt9+vM7rmOj/w910Qb3k1h3va30lU6qqTtv
+         X2g/U6yXtLAG9nO8Mz5vPkUYSgJJId933Bx+PqVgIvaFuJv7EviObVkdCixC5IN3Nz9r
+         2QDw==
+X-Gm-Message-State: AOAM530fjfRRgi1dQqHliNxW8q2UmfRX1NeqWii1DzbqnuDEOrlZjUWR
+        MQTwhWt3a6AAC3vwjtUnP/s=
+X-Google-Smtp-Source: ABdhPJwV9cU/wWxXkh2q4YyhQFXlXjXiQMMsoxo4sdQjN2TqrKDzK/oA8wxG66gqqSjqKy4P1WAP1A==
+X-Received: by 2002:a05:620a:17ac:b0:6a7:5a21:8cbb with SMTP id ay44-20020a05620a17ac00b006a75a218cbbmr6528178qkb.570.1655261865117;
+        Tue, 14 Jun 2022 19:57:45 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:6d39:b768:5789:ec2a])
+        by smtp.gmail.com with ESMTPSA id n7-20020a37a407000000b006a66f3d3708sm10044500qke.129.2022.06.14.19.57.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 19:57:44 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 19:57:43 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] bitops: define const_*() versions of the
+ non-atomics
+Message-ID: <YqlKpwjQ4Hu+Lr8u@yury-laptop>
+References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
+ <20220610113427.908751-5-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220615011622.136646-5-kechenl@nvidia.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220610113427.908751-5-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 06:16:19PM -0700, Kechen Lu wrote:
->From: Sean Christopherson <seanjc@google.com>
->
->Add an OVERRIDE flag to KVM_CAP_X86_DISABLE_EXITS allow userspace to
->re-enable exits and/or override previous settings.  There's no real use
->case for the the per-VM ioctl, but a future per-vCPU variant wants to let
->userspace toggle interception while the vCPU is running; add the OVERRIDE
->functionality now to provide consistent between between the per-VM and
->per-vCPU variants.
->
->Signed-off-by: Sean Christopherson <seanjc@google.com>
->---
-> Documentation/virt/kvm/api.rst |  5 +++++
-> arch/x86/kvm/x86.c             | 39 +++++++++++++++++++++++-----------
-> include/uapi/linux/kvm.h       |  4 +++-
-> 3 files changed, 35 insertions(+), 13 deletions(-)
->
->diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
->index d0d8749591a8..89e13b6783b5 100644
->--- a/Documentation/virt/kvm/api.rst
->+++ b/Documentation/virt/kvm/api.rst
->@@ -6941,6 +6941,7 @@ Valid bits in args[0] are::
->   #define KVM_X86_DISABLE_EXITS_HLT              (1 << 1)
->   #define KVM_X86_DISABLE_EXITS_PAUSE            (1 << 2)
->   #define KVM_X86_DISABLE_EXITS_CSTATE           (1 << 3)
->+  #define KVM_X86_DISABLE_EXITS_OVERRIDE         (1ull << 63)
-> 
-> Enabling this capability on a VM provides userspace with a way to no
-> longer intercept some instructions for improved latency in some
->@@ -6949,6 +6950,10 @@ physical CPUs.  More bits can be added in the future; userspace can
-> just pass the KVM_CHECK_EXTENSION result to KVM_ENABLE_CAP to disable
-> all such vmexits.
-> 
->+By default, this capability only disables exits.  To re-enable an exit, or to
->+override previous settings, userspace can set KVM_X86_DISABLE_EXITS_OVERRIDE,
->+in which case KVM will enable/disable according to the mask (a '1' == disable).
->+
-> Do not enable KVM_FEATURE_PV_UNHALT if you disable HLT exits.
-> 
-> 7.14 KVM_CAP_S390_HPAGE_1M
->diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->index f31ebbb1b94f..7cc8ac550bc7 100644
->--- a/arch/x86/kvm/x86.c
->+++ b/arch/x86/kvm/x86.c
->@@ -4201,11 +4201,10 @@ static inline bool kvm_can_mwait_in_guest(void)
-> 
-> static u64 kvm_get_allowed_disable_exits(void)
-> {
->-	u64 r = KVM_X86_DISABLE_EXITS_HLT | KVM_X86_DISABLE_EXITS_PAUSE |
->-		KVM_X86_DISABLE_EXITS_CSTATE;
->+	u64 r = KVM_X86_DISABLE_VALID_EXITS;
-> 
->-	if(kvm_can_mwait_in_guest())
->-		r |= KVM_X86_DISABLE_EXITS_MWAIT;
->+	if (!kvm_can_mwait_in_guest())
->+		r &= ~KVM_X86_DISABLE_EXITS_MWAIT;
+On Fri, Jun 10, 2022 at 01:34:25PM +0200, Alexander Lobakin wrote:
+> Define const_*() variants of the non-atomic bitops to be used when
+> the input arguments are compile-time constants, so that the compiler
+> will be always to resolve those to compile-time constants as well.
 
-This hunk looks like a fix to patch 3; it can be squashed into that patch.
+will be always able?
+
+> Those are mostly direct aliases for generic_*() with one exception
+> for const_test_bit(): the original one is declared atomic-safe and
+> thus doesn't discard the `volatile` qualifier, so in order to let
+> optimize the code, define it separately disregarding the qualifier.
+> Add them to the compile-time type checks as well just in case.
+> 
+> Suggested-by: Marco Elver <elver@google.com>
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> ---
+>  .../asm-generic/bitops/generic-non-atomic.h   | 31 +++++++++++++++++++
+>  include/linux/bitops.h                        |  3 +-
+>  2 files changed, 33 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/asm-generic/bitops/generic-non-atomic.h b/include/asm-generic/bitops/generic-non-atomic.h
+> index 3ce0fa0ab35f..9a77babfff35 100644
+> --- a/include/asm-generic/bitops/generic-non-atomic.h
+> +++ b/include/asm-generic/bitops/generic-non-atomic.h
+> @@ -121,4 +121,35 @@ generic_test_bit(unsigned long nr, const volatile unsigned long *addr)
+>  	return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
+>  }
+>  
+> +/*
+> + * const_*() definitions provide good compile-time optimizations when
+> + * the passed arguments can be resolved at compile time.
+> + */
+> +#define const___set_bit			generic___set_bit
+> +#define const___clear_bit		generic___clear_bit
+> +#define const___change_bit		generic___change_bit
+> +#define const___test_and_set_bit	generic___test_and_set_bit
+> +#define const___test_and_clear_bit	generic___test_and_clear_bit
+> +#define const___test_and_change_bit	generic___test_and_change_bit
+> +
+> +/**
+> + * const_test_bit - Determine whether a bit is set
+> + * @nr: bit number to test
+> + * @addr: Address to start counting from
+> + *
+> + * A version of generic_test_bit() which discards the `volatile` qualifier to
+> + * allow the compiler to optimize code harder. Non-atomic and to be used only
+> + * for testing compile-time constants, e.g. from the corresponding macro, or
+> + * when you really know what you are doing.
+
+Not sure I understand the last sentence... Can you please rephrase?
+
+> + */
+> +static __always_inline bool
+> +const_test_bit(unsigned long nr, const volatile unsigned long *addr)
+> +{
+> +	const unsigned long *p = (const unsigned long *)addr + BIT_WORD(nr);
+> +	unsigned long mask = BIT_MASK(nr);
+> +	unsigned long val = *p;
+> +
+> +	return !!(val & mask);
+> +}
+> +
+>  #endif /* __ASM_GENERIC_BITOPS_GENERIC_NON_ATOMIC_H */
+> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
+> index 87087454a288..51c22b8667b4 100644
+> --- a/include/linux/bitops.h
+> +++ b/include/linux/bitops.h
+> @@ -36,7 +36,8 @@ extern unsigned long __sw_hweight64(__u64 w);
+>  
+>  /* Check that the bitops prototypes are sane */
+>  #define __check_bitop_pr(name)						\
+> -	static_assert(__same_type(arch_##name, generic_##name) &&	\
+> +	static_assert(__same_type(const_##name, generic_##name) &&	\
+> +		      __same_type(arch_##name, generic_##name) &&	\
+>  		      __same_type(name, generic_##name))
+>  
+>  __check_bitop_pr(__set_bit);
+> -- 
+> 2.36.1

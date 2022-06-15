@@ -2,144 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C461754D331
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 476D854D33F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347010AbiFOVAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 17:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
+        id S1347225AbiFOVDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 17:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236331AbiFOVAL (ORCPT
+        with ESMTP id S238652AbiFOVDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 17:00:11 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB0255222
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655326810; x=1686862810;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=IRFJBh+zoP1ebZry6XfT/kFqI5RhbjM1nScJRBf3RrE=;
-  b=kErM1cVXR5WCKpBWyOirExR9Xl3qtzKzWZ2ZuG0SlGaekhrtSyGBhoIe
-   ylUzPzRdbASBg/0yajqpkrlfFI52VPe+SUoaFqp5ggsKkZ8VuQw700fDh
-   VcVyCRZl45MylPohnyrEc6jkoiGUR5byKywq5s5KHwSB4e2Ff+UML3BAO
-   txDXKEyWNFS18bEFPFUaj45HG2H2MjasCexqd7h+tE8ihfjyu69dVUi9m
-   DQnuTW3apphh3CghdE0nz+lLsOpRUhVsnCBPIJ+Aor44lAPrnDxZiuvB0
-   HH+vXQs7iyy1Fso++Te01fXJ9+TF8RJjrUb3llg6skP1dzl3TwNn97U4u
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="279152128"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="279152128"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 13:59:50 -0700
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="612910288"
-Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 13:59:50 -0700
-Date:   Wed, 15 Jun 2022 13:59:33 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Martin Fernandez <martin.fernandez@eclypsium.com>
-Cc:     Daniel Gutson <daniel.gutson@eclypsium.com>,
-        Richard Hughes <hughsient@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alex Bazhaniuk <alex.bazhaniuk@eclypsium.com>
-Subject: Re: [PATCH] x86/cpuinfo: Clear X86_FEATURE_TME if TME/MKTME is
- disabled by BIOS
-Message-ID: <20220615205933.GA1524841@alison-desk>
-References: <20220614210217.1940563-1-martin.fernandez@eclypsium.com>
- <20220615190519.GA1524500@alison-desk>
- <CAD2FfiGxy=9ARK5FT_iaLACZSzR+R4crmGJv7T+v_w3+ktOzCQ@mail.gmail.com>
- <20220615195425.GA1524649@alison-desk>
- <CAFmMkTGFpehSFOsnDuQN4aTnwfgYGwTbGBxtvUU_byDcoRVPPA@mail.gmail.com>
- <CAKgze5aQsh2VY4tjsDco_Wc6CTU+KXZM3bhFR+73AVp3gLWHuA@mail.gmail.com>
+        Wed, 15 Jun 2022 17:03:39 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8579822B09;
+        Wed, 15 Jun 2022 14:03:37 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id u12so25561918eja.8;
+        Wed, 15 Jun 2022 14:03:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=QMtHOMo+8qE0RSnYUYqgyS9H/EQU4IxoFkbD/BPHHpk=;
+        b=ALoNaGq6uYDwu3mHR+4ht21bLCGaceAYhxytYokUfM0qMhABffCfE0ao8TNxJkGQhD
+         f9WtdUxQj3qrX47MGWQF8R3yqeXZUnUiPTesI38ZDgv4jQsDSBp7czovrHNhMpHyunkW
+         khrPchZXODC6mjPDJcQiEgNt5N272/O4zFOpnmtoEHDMGmsZWthCzGZ/bT5U8gxs+x1E
+         PJkfSdXaV3q0sXB5bdUQhdk6+a8/BXoC2maEyLVCWpewQivKvx4lb4NToSchY/KX8YVu
+         dqYS7z6/5gaMRRS60ue4qGqgGxcKH1ICLmelQu88r3Pibs+DRFEFvcIG1bPFtTcQO3j+
+         EqlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QMtHOMo+8qE0RSnYUYqgyS9H/EQU4IxoFkbD/BPHHpk=;
+        b=8PnXYpjkgIx8Xd5XfwjdM3cOHiBNqHelqQ/NG3V8j6aNjKzuzgKWyowE9cUHk/bRKu
+         GuoNQa4sWIM0U+SoZloEIUeRV9lpHwyzENgC8SMB+jrd0Xq73Mtwls1OJddlYKH5a5Q5
+         ojtoXY61lAup7YctNFUpZAr4HhtBlHYrioCK30cqxOr8N/ALDdpH+BmADdNVyDKvGPPO
+         lY0b4FcFJ5R1lx/Gt58p+dupSdctCEc8fOfpAiFRG5EUQ8ROIYGVvJqfqP6gjsy3LaYW
+         O35cOwtHisjl08cyFPS2ws2Gz1l3dU+5ZniBI1mvaUtjhsgJGITGy9fIA172hGV70X/1
+         0S/Q==
+X-Gm-Message-State: AJIora8hWUtQogEaOVbVBtkV+wbeAJlA4boRHTn/OuiPdBMD2W6QMZcq
+        QhOqBEFtmXt5brwznPI1Kys=
+X-Google-Smtp-Source: AGRyM1trMAzAQ9+Js49r5u3UiSDSwgAQJ3W9Q2pdhRYNnZ3OLxU3R6JQ1m9kN7o+oE9qUNQo/vKaaQ==
+X-Received: by 2002:a17:906:728f:b0:711:f680:3c83 with SMTP id b15-20020a170906728f00b00711f6803c83mr1592062ejl.122.1655327015930;
+        Wed, 15 Jun 2022 14:03:35 -0700 (PDT)
+Received: from debian64.daheim (p5b0d7b96.dip0.t-ipconnect.de. [91.13.123.150])
+        by smtp.gmail.com with ESMTPSA id ee15-20020a056402290f00b0042dd3bf1403sm171524edb.54.2022.06.15.14.03.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 14:03:35 -0700 (PDT)
+Received: from localhost.daheim ([127.0.0.1])
+        by debian64.daheim with esmtp (Exim 4.95)
+        (envelope-from <chunkeey@gmail.com>)
+        id 1o1YIM-0004jB-Bk;
+        Wed, 15 Jun 2022 23:03:34 +0200
+Message-ID: <df6b487b-b8b7-44fc-7c2d-e6fd15072c14@gmail.com>
+Date:   Wed, 15 Jun 2022 23:03:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2] p54: Fix an error handling path in p54spi_probe()
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "John W. Linville" <linville@tuxdriver.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-janitors@vger.kernel.org,
+        Christian Lamparter <chunkeey@web.de>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>
+References: <297d2547ff2ee627731662abceeab9dbdaf23231.1655068321.git.christophe.jaillet@wanadoo.fr>
+ <CAAd0S9DgctqyRx+ppfT6dNntUR-cpySnsYaL=unboQ+qTK2wGQ@mail.gmail.com>
+ <f13c3976-2ba0-e16d-0853-5b5b1be16d11@wanadoo.fr>
+From:   Christian Lamparter <chunkeey@gmail.com>
+In-Reply-To: <f13c3976-2ba0-e16d-0853-5b5b1be16d11@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKgze5aQsh2VY4tjsDco_Wc6CTU+KXZM3bhFR+73AVp3gLWHuA@mail.gmail.com>
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 05:48:34PM -0300, Martin Fernandez wrote:
-> On 6/15/22, Daniel Gutson <daniel.gutson@eclypsium.com> wrote:
-> > On Wed, Jun 15, 2022 at 4:54 PM Alison Schofield
-> > <alison.schofield@intel.com> wrote:
-> >>
-> >> On Wed, Jun 15, 2022 at 08:34:58PM +0100, Richard Hughes wrote:
-> >> > On Wed, 15 Jun 2022 at 20:06, Alison Schofield
-> >> > <alison.schofield@intel.com> wrote:
-> >> > > My first reaction is lying about the cpuinfo is not a soln, since
-> >> > > it creates a problem for a users currently relying on cpuinfo to be
-> >> > > the source of truth for TME.
-> >> >
-> >> > I think you have to qualify "source of truth". At the moment the CPU
-> >> > reports "Yes! I support TME!" and then for one reason or another the
-> >> > platform turns it off and actually there's no memory encryption of
-> >> > your secrets at all. There's seemingly no userspace way of telling if
-> >> > TME is actually active. We were told that we shouldn't export the
-> >> > "platform has disabled a CPU feature" in sysfs and just to clear the
-> >> > cpuid flag that gets exported (like AMD is currently doing) which is
-> >> > what Martin proposed here. Programs want to know the true CPU
-> >> > capability can do __get_cpuid_count() like they can for the SME/SEV
-> >> > capabilities.
-> >> >
-> >> Disagree on sending folks to use __get_cpuid_count() when they already
-> >> have cpuinfo.
-> >>
-> >> Why is a sysfs entry TME-enabled 0/1 a bad thing?
-> >
-> > :)))
-> > This was my very first patch, and I got half of the community complaining
-> > It was so long ago that I don't recall everything, maybe Mart�n does?
-> > or Richard?
+On 13/06/2022 22:57, Christophe JAILLET wrote:
+> Le 13/06/2022 à 22:02, Christian Lamparter a écrit :
+>> On Sun, Jun 12, 2022 at 11:12 PM Christophe JAILLET
+>> <christophe.jaillet@wanadoo.fr> wrote:
+>>>
+>>> If an error occurs after a successful call to p54spi_request_firmware(), it
+>>> must be undone by a corresponding release_firmware() as already done in
+>>> the error handling path of p54spi_request_firmware() and in the .remove()
+>>> function.
+>>>
+>>> Add the missing call in the error handling path and remove it from
+>>> p54spi_request_firmware() now that it is the responsibility of the caller
+>>> to release the firmawre
+>>
+>> that last word hast a typo:  firmware. (maybe Kalle can fix this in post).
 > 
-> The discussion triggered the fact that checking that TME is active is
-> not enough to tell if memory is being encrypted or not (which we
-> thought it was true by that time), and that triggered a series of patches to
-> address the other checks required, which is currently going nowhere
-> [1].
+> More or less the same typo twice in a row... _Embarrassed_
 > 
-> The sysfs _wasn't_ discarded perse, but since Boris suggested the
-> change in cpuinfo (several times now that I recalled that Daniel patch
-> [2]) I think that is cleaner, besides the backwards compatibility.
+>>
+>>> Fixes: cd8d3d321285 ("p54spi: p54spi driver")
+>>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> Acked-by: Christian Lamparter <chunkeey@gmail.com>
+>> (Though, v1 was fine too.)
+>>> ---
+>>> v2: reduce diffstat and take advantage on the fact that release_firmware()
+>>> checks for NULL
+>>
+>> Heh, ok ;) . Now that I see it,  the "ret = p54_parse_firmware(...); ... "
+>> could have been replaced with "return p54_parse_firmware(dev, priv->firmware);"
+>> so the p54spi.c could shrink another 5-6 lines.
+>>
+>> I think leaving p54spi_request_firmware() callee to deal with
+>> releasing the firmware
+>> in the error case as well is nicer because it gets rid of a "but in
+>> this case" complexity.
 > 
-> [1] https://lore.kernel.org/linux-efi/20220429201717.1946178-1-martin.fernandez@eclypsium.com/
 > 
-> [2] https://lkml.iu.edu/hypermail/linux/kernel/2006.2/05231.html
-> 
+> Take the one you consider being the best one.
 
-Martin,
-The commit message here seemed to assume that we've all been following
-along on this journey with you. Perhaps a commit message that explains
-the need and includes alternatives considered/rejected. Links are good!
-Alison
+well said!
 
+> 
+> If it deserves a v3 to axe some lines of code, 
+> I can do it but, as said previously,
+> v1 is for me the cleaner and more future proof.
 
-> >> It can be documented
-> >> to have the same meaning as the log message.
-> >>
-> >> You keep referring to AMD. How is their exception documented?
-> >>
-> >> Alison
-> >>
-> >> > > Are we to tell them to go look in the
-> >> > > log now, because fwupd folks didn't want to ;)
-> >> >
-> >> > We're not telling anyone to use the log; grepping megabytes of
-> >> > unformatted kernel logs is a terrible (and slow) way to get one
-> >> > boolean value.
-> >> >
-> >> > Richard.
-> >
+Gee, that last sentence about "future proof" is daring.
+I don't know what's up on the horizon. For my part, I've been devresing
+parts of carl9170 and now thinking about it. Because the various
+request_firmware*() functions could be a target for devres too.
+A driver usually loads the firmware in .probe(). It stays around because
+of .suspend()+.resume() and gets freed by .release().
+With devresing up request_firmware(), that release_firmware() would be
+rendered obsolete in all of p54* cases.
+
+There must be something that I have missed? right?
+
+It's because there's already an extensive list of managed interfaces:
+<https://www.kernel.org/doc/html/latest/driver-api/driver-model/devres.html>
+But the firmware_class is not on it. Does somebody know the presumably
+"very good" reason why not? I can't believe that this hasn't been done yet.
+
+Regards,
+Christian

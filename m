@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E39954CEB3
+	by mail.lfdr.de (Postfix) with ESMTP id 56C3454CEB4
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356481AbiFOQcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:32:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
+        id S1356639AbiFOQc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355839AbiFOQce (ORCPT
+        with ESMTP id S1356085AbiFOQcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:32:34 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A25F32;
-        Wed, 15 Jun 2022 09:32:32 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id r1so10840198plo.10;
-        Wed, 15 Jun 2022 09:32:32 -0700 (PDT)
+        Wed, 15 Jun 2022 12:32:36 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F22CC0;
+        Wed, 15 Jun 2022 09:32:33 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id z17so11904985pff.7;
+        Wed, 15 Jun 2022 09:32:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=g0LEEWlXezf+DhFRy9/pJdwTKt3G7SKknYeUYVPZCxM=;
-        b=gJuHVdi6Ti69f8k/SlQXnh47mkTQADBNZoRt93YNZljieaGute7CEd85HbP3/Lq0wS
-         GqsGLEYp1+/OK+1q4dELM4L2DXm85LLmoqmB7Is7WHECpcbtHIcy2noI979okT4ye8MM
-         rm5+FNM+xn/qpRbU6AQxBjoeHScabwaRtIUULaf7vuJFu+aA/PLvNgFEtk4wPFae790i
-         ef75F3pH1dcExyVIMaHh/F+DpPhLLQQzqDYmgGOJXPI48TdP/RrenEf3dYvqkBBvsbJR
-         dbLil3WXKCe0TQRqLwdsS6nsN+O4PXfzKGs2RFBZcPquIRlvbLYlrRBVCCkK7q7Q7wGR
-         MJZg==
+        bh=8SkyHaY2ESEPTAByhn+IX0xpGHJKHXbmPFnrcF1ASi0=;
+        b=lCT+U+Qf8LYIoflC2zGpkmB3Y97bo/boDaQ3TaXkc1vxGNJ4MFUfER6NetrVzbt1BI
+         v+Vjpt4hNGWomAMvhzBwmiFGJYwXezL/ZVMULKtUlTHzScprp4gYqVXmJYJBa5uATn1y
+         2tTd7hHu2CfLilToJHN70ujht/yUt3+Cd5UGY7LyEpQ5/5+ytEf3ncoNSCdjfnbFSBAl
+         PDN9lyyk55wH3UPuGMpR/dLPEbyj3nA9NvkDsKJnx/c3PLVtBxFI8SvyjOKTghxYHIb1
+         XGwGdmi8ANsRSVgrsF608bqhtMeKuHNfst8McG26DdrMzIhVSbimDX2X+5yRFkt0ET+r
+         Jj8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=g0LEEWlXezf+DhFRy9/pJdwTKt3G7SKknYeUYVPZCxM=;
-        b=W6OFexr2X6XdTjsbnOzJCIJfTgvUGQn6UqyetY8zeAcYrodqfiYMjg0Ws8i2Hu4jxn
-         GZcqifDq0NzPOBDVQf3HAdw7lCOupC3olhRUrW0tBiRtCh/Ew9jUIYsKJ+t7qpHSeEhX
-         LHPwya/Q89rwEjrlLF4pPL5IlYNsMnUy9kFsjjHLYFaUt1mQA5910GQs9Sgmky5seieV
-         8VIeFl3lrVL5pEj2h1ejg0CccfAeMq8VyyCIS0b4KE+7fmN124uyoBGI0tgVOLdnIGvV
-         4Lx2Pts7qXmmqWeWTRZgVv04Xx2qJwJfTu8mSU7in8CXgGLnE6G5iPNHcNDA6hPgahmj
-         CEDg==
-X-Gm-Message-State: AJIora/95sCOTpFIKiV1I4leTXGAFM/G0xV3yi5dqduMmNswSAjTHASC
-        oXByhGNttNPZNPicqnPxNqI=
-X-Google-Smtp-Source: AGRyM1tXYCUbi3hdkahvHXXQxj/n2yEqmpnM0U3PsQEJFkXZBmNM/Qv4llH5lWFX+IFFfRNBykY0Ag==
-X-Received: by 2002:a17:902:da88:b0:167:5b56:8edb with SMTP id j8-20020a170902da8800b001675b568edbmr455594plx.71.1655310751504;
-        Wed, 15 Jun 2022 09:32:31 -0700 (PDT)
+        bh=8SkyHaY2ESEPTAByhn+IX0xpGHJKHXbmPFnrcF1ASi0=;
+        b=HnIs1WnBzi21DH2OqXkmaFul73jfw8JYJfddWQW/Osus5r4n3WIfoPv1Oyx1dau9d4
+         OpeRvELjaRl4Lx2DHND/9C0y3HDA+w7lOyooL0hIiuzg4vFX7BoevUnuzkzkiBPAERZR
+         +CpXnb2fBcTtJCxa2aJg15gW2ixIlpTqdMe7/ckedJtqiZWwtgkRushbHs0bJuBUuZ1+
+         4Z13vQscxxuljre0yAVgON4svdELjLFEVN8HGZh4YPSnpUi/O/xwz0fwBy2EM5d+eiR3
+         FyF+zORovwgWypH61ESGYhz3UU6xz0mhuv0e8mOI/4bLq2qYy+eN1QXRTjEmDbNDaWrK
+         MHtg==
+X-Gm-Message-State: AJIora+dYntTZpcmylgXw9ZH91551mBJDuOaLiX+qdn6SCZTjFZ3Ci7/
+        mJfijAhwhhSehcTJUaOu2KTY4Tet8bgrag==
+X-Google-Smtp-Source: AGRyM1teZ2alxYJQMbnnnMcxDdFWU6Nu9XInUyvXwwU61qLTE/qb+sdNDlTpHDwP4a/CRvuBp3HAiQ==
+X-Received: by 2002:a05:6a00:15c6:b0:51c:61bb:a62d with SMTP id o6-20020a056a0015c600b0051c61bba62dmr444558pfu.30.1655310752521;
+        Wed, 15 Jun 2022 09:32:32 -0700 (PDT)
 Received: from balhae.corp.google.com ([2620:15c:2c1:200:6b99:92ca:1efa:c0fb])
-        by smtp.gmail.com with ESMTPSA id q23-20020a170902edd700b00168bffd39a1sm9583881plk.143.2022.06.15.09.32.30
+        by smtp.gmail.com with ESMTPSA id q23-20020a170902edd700b00168bffd39a1sm9583881plk.143.2022.06.15.09.32.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 09:32:30 -0700 (PDT)
+        Wed, 15 Jun 2022 09:32:32 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -60,9 +60,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Waiman Long <longman@redhat.com>,
         Boqun Feng <boqun.feng@gmail.com>,
         Davidlohr Bueso <dave@stgolabs.net>
-Subject: [PATCH 4/7] perf lock: Add lock contention tracepoints record support
-Date:   Wed, 15 Jun 2022 09:32:19 -0700
-Message-Id: <20220615163222.1275500-5-namhyung@kernel.org>
+Subject: [PATCH 5/7] perf lock: Handle lock contention tracepoints
+Date:   Wed, 15 Jun 2022 09:32:20 -0700
+Message-Id: <20220615163222.1275500-6-namhyung@kernel.org>
 X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 In-Reply-To: <20220615163222.1275500-1-namhyung@kernel.org>
 References: <20220615163222.1275500-1-namhyung@kernel.org>
@@ -79,150 +79,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When LOCKDEP and LOCK_STAT events are not available, it falls back to
-record the new lock contention tracepoints.
+When the lock contention events are used, there's no tracking of
+acquire and release.  So the state machine is simplified to use
+UNINITIALIZED -> CONTENDED -> ACQUIRED only.
 
+Note that CONTENDED state is re-entrant since mutex locks can hit two
+or more consecutive contention_begin events for optimistic spinning
+and sleep.
+
+Acked-by: Ian Rogers <irogers@google.com>
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/builtin-lock.c | 76 +++++++++++++++++++++++++++++++++++----
- 1 file changed, 69 insertions(+), 7 deletions(-)
+ tools/perf/builtin-lock.c | 137 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 137 insertions(+)
 
 diff --git a/tools/perf/builtin-lock.c b/tools/perf/builtin-lock.c
-index 2337b09dd2cd..9e3b90cac505 100644
+index 9e3b90cac505..546dad1963c8 100644
 --- a/tools/perf/builtin-lock.c
 +++ b/tools/perf/builtin-lock.c
-@@ -516,17 +516,29 @@ static struct lock_stat *lock_stat_findnew(u64 addr, const char *name)
+@@ -483,6 +483,18 @@ static struct lock_stat *pop_from_result(void)
+ 	return container_of(node, struct lock_stat, rb);
  }
  
- struct trace_lock_handler {
-+	/* it's used on CONFIG_LOCKDEP */
- 	int (*acquire_event)(struct evsel *evsel,
- 			     struct perf_sample *sample);
- 
-+	/* it's used on CONFIG_LOCKDEP && CONFIG_LOCK_STAT */
- 	int (*acquired_event)(struct evsel *evsel,
- 			      struct perf_sample *sample);
- 
-+	/* it's used on CONFIG_LOCKDEP && CONFIG_LOCK_STAT */
- 	int (*contended_event)(struct evsel *evsel,
- 			       struct perf_sample *sample);
- 
-+	/* it's used on CONFIG_LOCKDEP */
- 	int (*release_event)(struct evsel *evsel,
- 			     struct perf_sample *sample);
++static struct lock_stat *lock_stat_find(u64 addr)
++{
++	struct hlist_head *entry = lockhashentry(addr);
++	struct lock_stat *ret;
 +
-+	/* it's used when CONFIG_LOCKDEP is off */
-+	int (*contention_begin_event)(struct evsel *evsel,
-+				      struct perf_sample *sample);
++	hlist_for_each_entry(ret, entry, hash_entry) {
++		if (ret->addr == addr)
++			return ret;
++	}
++	return NULL;
++}
 +
-+	/* it's used when CONFIG_LOCKDEP is off */
-+	int (*contention_end_event)(struct evsel *evsel,
-+				    struct perf_sample *sample);
- };
- 
- static struct lock_seq_stat *get_seq(struct thread_stat *ts, u64 addr)
-@@ -854,6 +866,20 @@ static int evsel__process_lock_release(struct evsel *evsel, struct perf_sample *
+ static struct lock_stat *lock_stat_findnew(u64 addr, const char *name)
+ {
+ 	struct hlist_head *entry = lockhashentry(addr);
+@@ -827,6 +839,124 @@ static int report_lock_release_event(struct evsel *evsel,
  	return 0;
  }
  
-+static int evsel__process_contention_begin(struct evsel *evsel, struct perf_sample *sample)
++static int report_lock_contention_begin_event(struct evsel *evsel,
++					      struct perf_sample *sample)
 +{
-+	if (trace_handler->contention_begin_event)
-+		return trace_handler->contention_begin_event(evsel, sample);
-+	return 0;
-+}
++	struct lock_stat *ls;
++	struct thread_stat *ts;
++	struct lock_seq_stat *seq;
++	u64 addr = evsel__intval(evsel, sample, "lock_addr");
 +
-+static int evsel__process_contention_end(struct evsel *evsel, struct perf_sample *sample)
-+{
-+	if (trace_handler->contention_end_event)
-+		return trace_handler->contention_end_event(evsel, sample);
-+	return 0;
-+}
++	if (show_thread_stats)
++		addr = sample->tid;
 +
- static void print_bad_events(int bad, int total)
- {
- 	/* Output for debug, this have to be removed */
-@@ -1062,6 +1088,11 @@ static const struct evsel_str_handler lock_tracepoints[] = {
- 	{ "lock:lock_release",	 evsel__process_lock_release,   }, /* CONFIG_LOCKDEP */
- };
- 
-+static const struct evsel_str_handler contention_tracepoints[] = {
-+	{ "lock:contention_begin", evsel__process_contention_begin, },
-+	{ "lock:contention_end",   evsel__process_contention_end,   },
-+};
++	ls = lock_stat_findnew(addr, "No name");
++	if (!ls)
++		return -ENOMEM;
 +
- static bool force;
- 
- static int __cmd_report(bool display_info)
-@@ -1125,20 +1156,41 @@ static int __cmd_record(int argc, const char **argv)
- 		"record", "-R", "-m", "1024", "-c", "1", "--synth", "task",
- 	};
- 	unsigned int rec_argc, i, j, ret;
-+	unsigned int nr_tracepoints;
- 	const char **rec_argv;
-+	bool has_lock_stat = true;
- 
- 	for (i = 0; i < ARRAY_SIZE(lock_tracepoints); i++) {
- 		if (!is_valid_tracepoint(lock_tracepoints[i].name)) {
--				pr_err("tracepoint %s is not enabled. "
--				       "Are CONFIG_LOCKDEP and CONFIG_LOCK_STAT enabled?\n",
--				       lock_tracepoints[i].name);
--				return 1;
-+			pr_debug("tracepoint %s is not enabled. "
-+				 "Are CONFIG_LOCKDEP and CONFIG_LOCK_STAT enabled?\n",
-+				 lock_tracepoints[i].name);
-+			has_lock_stat = false;
-+			break;
++	ts = thread_stat_findnew(sample->tid);
++	if (!ts)
++		return -ENOMEM;
++
++	seq = get_seq(ts, addr);
++	if (!seq)
++		return -ENOMEM;
++
++	switch (seq->state) {
++	case SEQ_STATE_UNINITIALIZED:
++	case SEQ_STATE_ACQUIRED:
++		break;
++	case SEQ_STATE_CONTENDED:
++		/*
++		 * It can have nested contention begin with mutex spinning,
++		 * then we would use the original contention begin event and
++		 * ignore the second one.
++		 */
++		goto end;
++	case SEQ_STATE_ACQUIRING:
++	case SEQ_STATE_READ_ACQUIRED:
++	case SEQ_STATE_RELEASED:
++		/* broken lock sequence */
++		if (!ls->broken) {
++			ls->broken = 1;
++			bad_hist[BROKEN_CONTENDED]++;
 +		}
++		list_del_init(&seq->list);
++		free(seq);
++		goto end;
++	default:
++		BUG_ON("Unknown state of lock sequence found!\n");
++		break;
 +	}
 +
-+	if (has_lock_stat)
-+		goto setup_args;
++	if (seq->state != SEQ_STATE_CONTENDED) {
++		seq->state = SEQ_STATE_CONTENDED;
++		seq->prev_event_time = sample->time;
++		ls->nr_contended++;
++	}
++end:
++	return 0;
++}
 +
-+	for (i = 0; i < ARRAY_SIZE(contention_tracepoints); i++) {
-+		if (!is_valid_tracepoint(contention_tracepoints[i].name)) {
-+			pr_err("tracepoint %s is not enabled.\n",
-+			       contention_tracepoints[i].name);
-+			return 1;
- 		}
++static int report_lock_contention_end_event(struct evsel *evsel,
++					    struct perf_sample *sample)
++{
++	struct lock_stat *ls;
++	struct thread_stat *ts;
++	struct lock_seq_stat *seq;
++	u64 contended_term;
++	u64 addr = evsel__intval(evsel, sample, "lock_addr");
++
++	if (show_thread_stats)
++		addr = sample->tid;
++
++	ls = lock_stat_find(addr);
++	if (!ls)
++		return 0;
++
++	ts = thread_stat_find(sample->tid);
++	if (!ts)
++		return 0;
++
++	seq = get_seq(ts, addr);
++	if (!seq)
++		return -ENOMEM;
++
++	switch (seq->state) {
++	case SEQ_STATE_UNINITIALIZED:
++		goto end;
++	case SEQ_STATE_CONTENDED:
++		contended_term = sample->time - seq->prev_event_time;
++		ls->wait_time_total += contended_term;
++		if (contended_term < ls->wait_time_min)
++			ls->wait_time_min = contended_term;
++		if (ls->wait_time_max < contended_term)
++			ls->wait_time_max = contended_term;
++		break;
++	case SEQ_STATE_ACQUIRING:
++	case SEQ_STATE_ACQUIRED:
++	case SEQ_STATE_READ_ACQUIRED:
++	case SEQ_STATE_RELEASED:
++		/* broken lock sequence */
++		if (!ls->broken) {
++			ls->broken = 1;
++			bad_hist[BROKEN_ACQUIRED]++;
++		}
++		list_del_init(&seq->list);
++		free(seq);
++		goto end;
++	default:
++		BUG_ON("Unknown state of lock sequence found!\n");
++		break;
++	}
++
++	seq->state = SEQ_STATE_ACQUIRED;
++	ls->nr_acquired++;
++	ls->avg_wait_time = ls->wait_time_total/ls->nr_acquired;
++end:
++	return 0;
++}
++
+ /* lock oriented handlers */
+ /* TODO: handlers for CPU oriented, thread oriented */
+ static struct trace_lock_handler report_lock_ops  = {
+@@ -834,6 +964,8 @@ static struct trace_lock_handler report_lock_ops  = {
+ 	.acquired_event		= report_lock_acquired_event,
+ 	.contended_event	= report_lock_contended_event,
+ 	.release_event		= report_lock_release_event,
++	.contention_begin_event	= report_lock_contention_begin_event,
++	.contention_end_event	= report_lock_contention_end_event,
+ };
+ 
+ static struct trace_lock_handler *trace_handler;
+@@ -1126,6 +1258,11 @@ static int __cmd_report(bool display_info)
+ 		goto out_delete;
  	}
  
-+setup_args:
- 	rec_argc = ARRAY_SIZE(record_args) + argc - 1;
++	if (perf_session__set_tracepoints_handlers(session, contention_tracepoints)) {
++		pr_err("Initializing perf session tracepoint handlers failed\n");
++		goto out_delete;
++	}
 +
-+	if (has_lock_stat)
-+		nr_tracepoints = ARRAY_SIZE(lock_tracepoints);
-+	else
-+		nr_tracepoints = ARRAY_SIZE(contention_tracepoints);
-+
- 	/* factor of 2 is for -e in front of each tracepoint */
--	rec_argc += 2 * ARRAY_SIZE(lock_tracepoints);
-+	rec_argc += 2 * nr_tracepoints;
+ 	if (setup_output_field(output_fields))
+ 		goto out_delete;
  
- 	rec_argv = calloc(rec_argc + 1, sizeof(char *));
- 	if (!rec_argv)
-@@ -1147,9 +1199,19 @@ static int __cmd_record(int argc, const char **argv)
- 	for (i = 0; i < ARRAY_SIZE(record_args); i++)
- 		rec_argv[i] = strdup(record_args[i]);
- 
--	for (j = 0; j < ARRAY_SIZE(lock_tracepoints); j++) {
-+	for (j = 0; j < nr_tracepoints; j++) {
-+		const char *ev_name;
-+
-+		if (has_lock_stat)
-+			ev_name = strdup(lock_tracepoints[j].name);
-+		else
-+			ev_name = strdup(contention_tracepoints[j].name);
-+
-+		if (!ev_name)
-+			return -ENOMEM;
-+
- 		rec_argv[i++] = "-e";
--		rec_argv[i++] = strdup(lock_tracepoints[j].name);
-+		rec_argv[i++] = ev_name;
- 	}
- 
- 	for (j = 1; j < (unsigned int)argc; j++, i++)
 -- 
 2.36.1.476.g0c4daa206d-goog
 

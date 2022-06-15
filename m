@@ -2,113 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3F354C802
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A881D54C809
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346373AbiFOL6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 07:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
+        id S241464AbiFOMAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 08:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347359AbiFOL6H (ORCPT
+        with ESMTP id S237953AbiFOMAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:58:07 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CDC43EFD;
-        Wed, 15 Jun 2022 04:57:53 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id gd1so11050294pjb.2;
-        Wed, 15 Jun 2022 04:57:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=i636qZX1XUJL64KaFSEZhJIdXHSV4bN2JFKGrjkd9cw=;
-        b=g0SKckdrJXJipUchvC6EH5Zqlze9ZyoA55jeu32NxP8oWaMzrN0OrPI2TZj/A+uPQh
-         b+XuQzuRKFyzGLbdIUc2aAElCsUgNf4VirTSGGTUSjXL66RrG9QedelLoeb0ziHW6Cga
-         EPry8muruUpAymHvukYyERRn5wRWBcjheHkq3UZ3ZcmIEEvY9s3ApXDxVd7L64NiI0SL
-         HDo/mC5NIr4WpUwCiBCINPBPE+0glvgRZtydXk7P0UqXU1ZPrDKOJpLW53fUcz5Mh9HV
-         R9ZfurUXR3Yq3CC/isP1KZlShgzogYeseZR4RAWsu8UELmLpZrgK0lQ7oauhofnvAyCo
-         Ne8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=i636qZX1XUJL64KaFSEZhJIdXHSV4bN2JFKGrjkd9cw=;
-        b=F8JZfFpGtF5JGUG6unFyK76h2byQhQY75XZ9Pf8Dfk7TmveTwPqx15DGkKD6Bqps9R
-         ycFOxBPAusTIO+Q1ypXhphaXthpT7Gc7f/nf/5dHveyxaafufd8lm8/8Df0bDPaWCEX3
-         1KgFym0dLlcU32qsz1mo5VE2vXaxA5+FDSjn2OQBuBsLbLRdk1UmF0Vm1CQAtErtzue6
-         MWEMhKYJazQjPyXhGN79Fw/TAhKSynB56porylVhHhCY1ypGLBiYPs3OfsWmkycvxEP3
-         ZpczwtU/qxNHql6k8JkkUvXKxcfOJNbdf/Nkgevxc4fRoltIA++opuRlYjmKgBZEyFmv
-         g+9Q==
-X-Gm-Message-State: AJIora/KVMbu08SXeBjcdY4FGmbPHNSxgwLgrBoi/KerL6m4tO3iPcAN
-        Xr8chkqpExj7NJF2rGU5V6s=
-X-Google-Smtp-Source: AGRyM1umPHRM4uAZYg6+aQw1SXCjLeOnysP4L7Vv7YUu8PTQ3tt9953k/BflC6xS1kZT+q0CvrwoMA==
-X-Received: by 2002:a17:90a:6941:b0:1e2:f37a:f889 with SMTP id j1-20020a17090a694100b001e2f37af889mr10017682pjm.160.1655294272665;
-        Wed, 15 Jun 2022 04:57:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id q23-20020a170902edd700b00168bffd39a1sm9152915plk.143.2022.06.15.04.57.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 04:57:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4a6e1547-cdcb-81ae-79fd-b0e56fca2f76@roeck-us.net>
-Date:   Wed, 15 Jun 2022 04:57:49 -0700
+        Wed, 15 Jun 2022 08:00:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3F45400E;
+        Wed, 15 Jun 2022 05:00:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E9E11B81D6D;
+        Wed, 15 Jun 2022 12:00:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7A162C341C0;
+        Wed, 15 Jun 2022 12:00:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655294413;
+        bh=3gCDG7Gl/RH/Ua80/Mre5ueekp+PMkzJsmoVDTmq3tw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ijCFy8Qbpetd2i9X7VMeJwxUwQuPZxW1+vP2HbLXHyvuEnqt7HEvQsNDAHJNQempt
+         HygmeAvP3NTgmLuC3El/dBNVMTCYPDBLjjxZpxowW7BGGw/A2B74ZWCbPZGU43yBrl
+         hIYtrI4kj9NawWVGnECq4lkMyp1UEzlyjHAx0HdZrn/65ikCB+GHgbMGZS7mKs07m7
+         /cS8dbQU0sloypU1d7nHqky9kg/uQUB9fGdvrFy3hCCXaCac+t3h0T7xf1KhfIOsMB
+         gjWtJgCKq2T2JbjnFMjSdBOdUyDeNBInchBu4jZlOoFGVETB3F2P4NDkX4pvYazi0y
+         T9dP6CfHOqRRw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 599EAE6D466;
+        Wed, 15 Jun 2022 12:00:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] hwmon: (asus-ec-sensors) add missing comma in board name
- list.
-Content-Language: en-US
-To:     Eugene Shalygin <eugene.shalygin@gmail.com>
-Cc:     Michael Carns <mike@carns.com>, Jean Delvare <jdelvare@suse.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220615104520.35687-1-eugene.shalygin@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220615104520.35687-1-eugene.shalygin@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: don't check skb_count twice
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165529441336.9723.13573073281613758442.git-patchwork-notify@kernel.org>
+Date:   Wed, 15 Jun 2022 12:00:13 +0000
+References: <20220615032426.17214-1-liew.s.piaw@gmail.com>
+In-Reply-To: <20220615032426.17214-1-liew.s.piaw@gmail.com>
+To:     Sieng Piaw Liew <liew.s.piaw@gmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/22 03:45, Eugene Shalygin wrote:
-> From: Michael Carns <mike@carns.com>
+Hello:
+
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
+
+On Wed, 15 Jun 2022 11:24:26 +0800 you wrote:
+> NAPI cache skb_count is being checked twice without condition. Change to
+> checking the second time only if the first check is run.
 > 
-> This fixes a regression introduced by commit 5b4285c57b6f
-> ("hwmon: (asus-ec-sensors) fix Formula VIII definition")
-> where coma lead to concatenating board names and broke module
-> loading for C8H.
-> 
-> Signed-off-by: Michael Carns <mike@carns.com>
-> Signed-off-by: Eugene Shalygin <eugene.shalygin@gmail.com>
-
-We have a Fixes: tag for such purposes. Please use it.
-
-Thanks,
-Guenter
-
+> Signed-off-by: Sieng Piaw Liew <liew.s.piaw@gmail.com>
 > ---
->   drivers/hwmon/asus-ec-sensors.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hwmon/asus-ec-sensors.c b/drivers/hwmon/asus-ec-sensors.c
-> index 886a71b4c64e..19d3ca71b360 100644
-> --- a/drivers/hwmon/asus-ec-sensors.c
-> +++ b/drivers/hwmon/asus-ec-sensors.c
-> @@ -268,7 +268,7 @@ static const struct ec_board_info board_info[] = {
->   	},
->   	{
->   		.board_names = {
-> -			"ROG CROSSHAIR VIII FORMULA"
-> +			"ROG CROSSHAIR VIII FORMULA",
->   			"ROG CROSSHAIR VIII HERO",
->   			"ROG CROSSHAIR VIII HERO (WI-FI)",
->   		},
+>  net/core/skbuff.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+
+Here is the summary with links:
+  - net: don't check skb_count twice
+    https://git.kernel.org/netdev/net-next/c/49ae83fc4fd0
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

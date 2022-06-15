@@ -2,36 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F7C54C067
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 05:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F1254C063
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 05:54:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352859AbiFODwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 23:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
+        id S1352644AbiFODwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 23:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244658AbiFODv7 (ORCPT
+        with ESMTP id S1346111AbiFODwB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 23:51:59 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010065006D;
-        Tue, 14 Jun 2022 20:51:55 -0700 (PDT)
-X-UUID: e0973e7c3c5047c6b21b980d395990f9-20220615
+        Tue, 14 Jun 2022 23:52:01 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78B985002E;
+        Tue, 14 Jun 2022 20:51:58 -0700 (PDT)
+X-UUID: 823a7cd24eba443c81cc0c95e053d7bc-20220615
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:301d5296-3dbb-442a-b87d-d1ab1c74e7c0,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:-5
-X-CID-META: VersionHash:b14ad71,CLOUDID:cd3b42f6-e099-41ba-a32c-13b8bfe63214,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: e0973e7c3c5047c6b21b980d395990f9-20220615
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+X-CID-O-INFO: VERSION:1.1.6,REQID:62344b9c-a37d-44fb-ae46-6e79443d713e,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Release_Ham,AC
+        TION:release,TS:95
+X-CID-INFO: VERSION:1.1.6,REQID:62344b9c-a37d-44fb-ae46-6e79443d713e,OB:0,LOB:
+        0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,RULE:Spam_GS981B3D,AC
+        TION:quarantine,TS:95
+X-CID-META: VersionHash:b14ad71,CLOUDID:09998548-4c92-421c-ad91-b806c0f58b2a,C
+        OID:0863c9100277,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 823a7cd24eba443c81cc0c95e053d7bc-20220615
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
         (envelope-from <stanley.chu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1242386970; Wed, 15 Jun 2022 11:51:50 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2136744953; Wed, 15 Jun 2022 11:51:50 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 15 Jun 2022 11:51:48 +0800
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 15 Jun 2022 11:51:48 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
  Transport; Wed, 15 Jun 2022 11:51:48 +0800
@@ -47,9 +50,9 @@ CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
         <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
         <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
         <stanley.chu@mediatek.com>
-Subject: [PATCH v4 09/10] scsi: ufs: Export regulator functions
-Date:   Wed, 15 Jun 2022 11:51:45 +0800
-Message-ID: <20220615035146.20964-10-stanley.chu@mediatek.com>
+Subject: [PATCH v4 10/10] scsi: ufs-mediatek: Support multiple VCC sources
+Date:   Wed, 15 Jun 2022 11:51:46 +0800
+Message-ID: <20220615035146.20964-11-stanley.chu@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20220615035146.20964-1-stanley.chu@mediatek.com>
 References: <20220615035146.20964-1-stanley.chu@mediatek.com>
@@ -65,90 +68,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Export below regulator functions to allow vendors to
-customize regulator configuration in their own platforms.
+Support multiple VCC source in MediaTek UFS platforms.
 
-int ufshcd_populate_vreg(struct device *dev, const char *name,
-                         struct ufs_vreg **out_vreg);
-int ufshcd_get_vreg(struct device *dev, struct ufs_vreg *vreg);
+Two options are provided and distinguished by specific
+device tree attributes as below examples,
 
+[Option 1: By numbering]
+mediatek,ufs-vcc-by-num;
+vcc-opt1-supply = <&mt6373_vbuck4_ufs>;
+vcc-opt2-supply = <&mt6363_vemc>;
+
+[Option 2: By UFS version]
+mediatek,ufs-vcc-by-ver;
+vcc-ufs3-supply = <&mt6373_vbuck4_ufs>;
+
+Signed-off-by: Alice Chao <alice.chao@mediatek.com>
+Signed-off-by: Peter Wang <peter.wang@mediatek.com>
 Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
 ---
- drivers/ufs/core/ufshcd.c        | 3 ++-
- drivers/ufs/host/ufshcd-pltfrm.c | 5 +++--
- drivers/ufs/host/ufshcd-pltfrm.h | 2 ++
- include/ufs/ufshcd.h             | 2 ++
- 4 files changed, 9 insertions(+), 3 deletions(-)
+ drivers/ufs/host/ufs-mediatek.c | 46 +++++++++++++++++++++++++++++++++
+ drivers/ufs/host/ufs-mediatek.h | 14 ++++++++++
+ 2 files changed, 60 insertions(+)
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 0d16739c67bb..8131a75e41e5 100755
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -8408,7 +8408,7 @@ static int ufshcd_setup_hba_vreg(struct ufs_hba *hba, bool on)
- 	return ufshcd_toggle_vreg(hba->dev, info->vdd_hba, on);
+diff --git a/drivers/ufs/host/ufs-mediatek.c b/drivers/ufs/host/ufs-mediatek.c
+index e756aba45acd..df6f77aacdc3 100755
+--- a/drivers/ufs/host/ufs-mediatek.c
++++ b/drivers/ufs/host/ufs-mediatek.c
+@@ -669,6 +669,50 @@ static u32 ufs_mtk_get_ufs_hci_version(struct ufs_hba *hba)
+ 	return hba->ufs_version;
  }
  
--static int ufshcd_get_vreg(struct device *dev, struct ufs_vreg *vreg)
-+int ufshcd_get_vreg(struct device *dev, struct ufs_vreg *vreg)
- {
- 	int ret = 0;
++#define MAX_VCC_NAME 30
++static int ufs_mtk_vreg_fix_vcc(struct ufs_hba *hba)
++{
++	struct ufs_vreg_info *info = &hba->vreg_info;
++	struct device_node *np = hba->dev->of_node;
++	struct device *dev = hba->dev;
++	char vcc_name[MAX_VCC_NAME];
++	struct arm_smccc_res res;
++	int err = 0;
++	int ver;
++
++	if (hba->vreg_info.vcc)
++		return 0;
++
++	if (of_property_read_bool(np, "mediatek,ufs-vcc-by-num")) {
++		ufs_mtk_get_vcc_num(res);
++		if (res.a1 > UFS_VCC_NONE && res.a1 < UFS_VCC_MAX)
++			snprintf(vcc_name, MAX_VCC_NAME, "vcc-opt%u", res.a1);
++		else
++			return -ENODEV;
++	} else if (of_property_read_bool(np, "mediatek,ufs-vcc-by-ver")) {
++		ver = (hba->dev_info.wspecversion & 0xF00) >> 8;
++		snprintf(vcc_name, MAX_VCC_NAME, "vcc-ufs%u", ver);
++	} else {
++		return 0;
++	}
++
++	err = ufshcd_populate_vreg(dev, vcc_name, &info->vcc);
++	if (err)
++		return err;
++
++	err = ufshcd_get_vreg(dev, info->vcc);
++	if (err)
++		return err;
++
++	err = regulator_enable(info->vcc->reg);
++	if (!err) {
++		info->vcc->enabled = true;
++		dev_info(dev, "%s: %s enabled\n", __func__, vcc_name);
++	}
++
++	return err;
++}
++
+ /**
+  * ufs_mtk_init - find other essential mmio bases
+  * @hba: host controller instance
+@@ -1180,6 +1224,8 @@ static int ufs_mtk_apply_dev_quirks(struct ufs_hba *hba)
+ 		ufs_mtk_setup_ref_clk_wait_us(hba,
+ 					      REFCLK_DEFAULT_WAIT_US);
  
-@@ -8424,6 +8424,7 @@ static int ufshcd_get_vreg(struct device *dev, struct ufs_vreg *vreg)
- out:
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(ufshcd_get_vreg);
- 
- static int ufshcd_init_vreg(struct ufs_hba *hba)
- {
-diff --git a/drivers/ufs/host/ufshcd-pltfrm.c b/drivers/ufs/host/ufshcd-pltfrm.c
-index e7332cc65b1f..2dd9c660531b 100755
---- a/drivers/ufs/host/ufshcd-pltfrm.c
-+++ b/drivers/ufs/host/ufshcd-pltfrm.c
-@@ -109,8 +109,8 @@ static int ufshcd_parse_clock_info(struct ufs_hba *hba)
- }
- 
- #define MAX_PROP_SIZE 32
--static int ufshcd_populate_vreg(struct device *dev, const char *name,
--		struct ufs_vreg **out_vreg)
-+int ufshcd_populate_vreg(struct device *dev, const char *name,
-+			 struct ufs_vreg **out_vreg)
- {
- 	char prop_name[MAX_PROP_SIZE];
- 	struct ufs_vreg *vreg = NULL;
-@@ -145,6 +145,7 @@ static int ufshcd_populate_vreg(struct device *dev, const char *name,
- 	*out_vreg = vreg;
++	ufs_mtk_vreg_fix_vcc(hba);
++
  	return 0;
  }
-+EXPORT_SYMBOL_GPL(ufshcd_populate_vreg);
  
- /**
-  * ufshcd_parse_regulator_info - get regulator info from device tree
-diff --git a/drivers/ufs/host/ufshcd-pltfrm.h b/drivers/ufs/host/ufshcd-pltfrm.h
-index 43c2e412bd99..5130c9471dc2 100755
---- a/drivers/ufs/host/ufshcd-pltfrm.h
-+++ b/drivers/ufs/host/ufshcd-pltfrm.h
-@@ -32,5 +32,7 @@ void ufshcd_init_pwr_dev_param(struct ufs_dev_params *dev_param);
- int ufshcd_pltfrm_init(struct platform_device *pdev,
- 		       const struct ufs_hba_variant_ops *vops);
- void ufshcd_pltfrm_shutdown(struct platform_device *pdev);
-+int ufshcd_populate_vreg(struct device *dev, const char *name,
-+			 struct ufs_vreg **out_vreg);
+diff --git a/drivers/ufs/host/ufs-mediatek.h b/drivers/ufs/host/ufs-mediatek.h
+index 5c6101ac518f..49a2137fb251 100755
+--- a/drivers/ufs/host/ufs-mediatek.h
++++ b/drivers/ufs/host/ufs-mediatek.h
+@@ -83,6 +83,7 @@ enum {
+ #define UFS_MTK_SIP_DEVICE_RESET          BIT(1)
+ #define UFS_MTK_SIP_CRYPTO_CTRL           BIT(2)
+ #define UFS_MTK_SIP_REF_CLK_NOTIFICATION  BIT(3)
++#define UFS_MTK_SIP_GET_VCC_NUM           BIT(6)
+ #define UFS_MTK_SIP_DEVICE_PWR_CTRL       BIT(7)
  
- #endif /* UFSHCD_PLTFRM_H_ */
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index aa778418703f..18eb253cfd91 100755
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1187,6 +1187,8 @@ void ufshcd_map_desc_id_to_length(struct ufs_hba *hba, enum desc_idn desc_id,
+ /*
+@@ -144,6 +145,16 @@ struct ufs_mtk_host {
+ 	u32 ip_ver;
+ };
  
- u32 ufshcd_get_local_unipro_ver(struct ufs_hba *hba);
- 
-+int ufshcd_get_vreg(struct device *dev, struct ufs_vreg *vreg);
++/*
++ * Multi-VCC by Numbering
++ */
++enum ufs_mtk_vcc_num {
++	UFS_VCC_NONE = 0,
++	UFS_VCC_1,
++	UFS_VCC_2,
++	UFS_VCC_MAX
++};
 +
- int ufshcd_send_uic_cmd(struct ufs_hba *hba, struct uic_command *uic_cmd);
+ /*
+  * SMC call wrapper function
+  */
+@@ -183,6 +194,9 @@ static void _ufs_mtk_smc(struct ufs_mtk_smc_arg s)
+ #define ufs_mtk_device_reset_ctrl(high, res) \
+ 	ufs_mtk_smc(UFS_MTK_SIP_DEVICE_RESET, &(res), high)
  
- int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
++#define ufs_mtk_get_vcc_num(res) \
++	ufs_mtk_smc(UFS_MTK_SIP_GET_VCC_NUM, &(res))
++
+ #define ufs_mtk_device_pwr_ctrl(on, ufs_ver, res) \
+ 	ufs_mtk_smc(UFS_MTK_SIP_DEVICE_PWR_CTRL, &(res), on, ufs_ver)
+ 
 -- 
 2.18.0
 

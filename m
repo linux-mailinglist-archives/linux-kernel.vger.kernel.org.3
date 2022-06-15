@@ -2,155 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476D854D33F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:03:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA5554D347
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347225AbiFOVDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 17:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
+        id S1345033AbiFOVFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 17:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238652AbiFOVDj (ORCPT
+        with ESMTP id S1344656AbiFOVFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 17:03:39 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8579822B09;
-        Wed, 15 Jun 2022 14:03:37 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id u12so25561918eja.8;
-        Wed, 15 Jun 2022 14:03:37 -0700 (PDT)
+        Wed, 15 Jun 2022 17:05:16 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B155229838
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:05:15 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so3321122pjm.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:05:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=QMtHOMo+8qE0RSnYUYqgyS9H/EQU4IxoFkbD/BPHHpk=;
-        b=ALoNaGq6uYDwu3mHR+4ht21bLCGaceAYhxytYokUfM0qMhABffCfE0ao8TNxJkGQhD
-         f9WtdUxQj3qrX47MGWQF8R3yqeXZUnUiPTesI38ZDgv4jQsDSBp7czovrHNhMpHyunkW
-         khrPchZXODC6mjPDJcQiEgNt5N272/O4zFOpnmtoEHDMGmsZWthCzGZ/bT5U8gxs+x1E
-         PJkfSdXaV3q0sXB5bdUQhdk6+a8/BXoC2maEyLVCWpewQivKvx4lb4NToSchY/KX8YVu
-         dqYS7z6/5gaMRRS60ue4qGqgGxcKH1ICLmelQu88r3Pibs+DRFEFvcIG1bPFtTcQO3j+
-         EqlA==
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=nSPGzfTdZ9LfoOSqIU6EOVEMTSn+8rXd/OcMmHhdRhA=;
+        b=SOMOfzNOEUkBuuBnOrR5RTa6rJffV6+Ngvrq9Yo+bQvLfiiuKPusw6MyqE2JjFK791
+         cu/E/2IDmPD/mfDAsU0A+uJvql58unDxr1ovqwFEfTHzBoULxjdbACa2fl0KBjXJVZP8
+         1wiGEJRBTny54swVMGmUotUJuI6S2TnDHt4lRZvq1V77GQoPYQD6iRdiPLvtMGoQSHUO
+         jC5BCI5T+P+2UwY5eBkJnOTZKmp8UaiZ/0mn1Fjp6JkJT98uQIG+pXXcejb4Od6y1+Q2
+         W4ZK+y7h+roufFwASTDkiZPldmpc9fW3WmW0v31OUBYpSvLixEdF80nsWaQUmwdGe/VC
+         C1JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+         :content-language:to:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=QMtHOMo+8qE0RSnYUYqgyS9H/EQU4IxoFkbD/BPHHpk=;
-        b=8PnXYpjkgIx8Xd5XfwjdM3cOHiBNqHelqQ/NG3V8j6aNjKzuzgKWyowE9cUHk/bRKu
-         GuoNQa4sWIM0U+SoZloEIUeRV9lpHwyzENgC8SMB+jrd0Xq73Mtwls1OJddlYKH5a5Q5
-         ojtoXY61lAup7YctNFUpZAr4HhtBlHYrioCK30cqxOr8N/ALDdpH+BmADdNVyDKvGPPO
-         lY0b4FcFJ5R1lx/Gt58p+dupSdctCEc8fOfpAiFRG5EUQ8ROIYGVvJqfqP6gjsy3LaYW
-         O35cOwtHisjl08cyFPS2ws2Gz1l3dU+5ZniBI1mvaUtjhsgJGITGy9fIA172hGV70X/1
-         0S/Q==
-X-Gm-Message-State: AJIora8hWUtQogEaOVbVBtkV+wbeAJlA4boRHTn/OuiPdBMD2W6QMZcq
-        QhOqBEFtmXt5brwznPI1Kys=
-X-Google-Smtp-Source: AGRyM1trMAzAQ9+Js49r5u3UiSDSwgAQJ3W9Q2pdhRYNnZ3OLxU3R6JQ1m9kN7o+oE9qUNQo/vKaaQ==
-X-Received: by 2002:a17:906:728f:b0:711:f680:3c83 with SMTP id b15-20020a170906728f00b00711f6803c83mr1592062ejl.122.1655327015930;
-        Wed, 15 Jun 2022 14:03:35 -0700 (PDT)
-Received: from debian64.daheim (p5b0d7b96.dip0.t-ipconnect.de. [91.13.123.150])
-        by smtp.gmail.com with ESMTPSA id ee15-20020a056402290f00b0042dd3bf1403sm171524edb.54.2022.06.15.14.03.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 14:03:35 -0700 (PDT)
-Received: from localhost.daheim ([127.0.0.1])
-        by debian64.daheim with esmtp (Exim 4.95)
-        (envelope-from <chunkeey@gmail.com>)
-        id 1o1YIM-0004jB-Bk;
-        Wed, 15 Jun 2022 23:03:34 +0200
-Message-ID: <df6b487b-b8b7-44fc-7c2d-e6fd15072c14@gmail.com>
-Date:   Wed, 15 Jun 2022 23:03:34 +0200
+        bh=nSPGzfTdZ9LfoOSqIU6EOVEMTSn+8rXd/OcMmHhdRhA=;
+        b=r5IGyi0c/bRvxieAqHwGwtQ4HP1Lh3zN0eQahDy8guRd+HFZ+kCM6/eV6ogKFYz1sR
+         6a3pnITX49cOHdBuHe1/Ei36r0RlRyYCKD/ehVkQsPeAIAJZ0oL4GN41wQgju2p3ZDcg
+         3Qv9teNOjKU7tEbXbaMEQiXpH57qAhMWYNmL02I/cHmDWEIV27RkZXPsYHrAC925WEpH
+         dAJj2Z3NulYfURWZ42DHJj+X55FtCTecVZHKbYMwETrnFFKQd7UXydI55VU6bFohwmsq
+         VPqLGNLzoHUOSldrgMfPZ5coThegusYy3e/2japjrpUoP5wZKI+5+jjE67VfV0PMqVrT
+         O0nA==
+X-Gm-Message-State: AJIora8dafr364mzF2eGxSMMAQPGX40NzztQ0ELCWdxlezUNodo5kesa
+        bGJRG/rExfPjRQVSQXaEtHNBwQ==
+X-Google-Smtp-Source: AGRyM1toehBrqqaMQr374mrNlBFnfbhQiBAgvhLstQXz4lea94d8XdLlbwxJ4Mn+NBAsGnu054oJHA==
+X-Received: by 2002:a17:902:d2c9:b0:167:1195:3a41 with SMTP id n9-20020a170902d2c900b0016711953a41mr1424179plc.126.1655327115240;
+        Wed, 15 Jun 2022 14:05:15 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id w9-20020a17090a780900b001ead46e77e2sm39944pjk.13.2022.06.15.14.05.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 14:05:14 -0700 (PDT)
+Message-ID: <7cc9c5d2-0c42-f24f-1611-0190b24504be@linaro.org>
+Date:   Wed, 15 Jun 2022 14:05:14 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v2] p54: Fix an error handling path in p54spi_probe()
+Subject: Re: [PATCH] dt-bindings: dma: rework qcom,adm Documentation to yaml
+ schema
 Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        Christian Lamparter <chunkeey@web.de>,
-        linux-wireless <linux-wireless@vger.kernel.org>,
-        Netdev <netdev@vger.kernel.org>
-References: <297d2547ff2ee627731662abceeab9dbdaf23231.1655068321.git.christophe.jaillet@wanadoo.fr>
- <CAAd0S9DgctqyRx+ppfT6dNntUR-cpySnsYaL=unboQ+qTK2wGQ@mail.gmail.com>
- <f13c3976-2ba0-e16d-0853-5b5b1be16d11@wanadoo.fr>
-From:   Christian Lamparter <chunkeey@gmail.com>
-In-Reply-To: <f13c3976-2ba0-e16d-0853-5b5b1be16d11@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220615175043.20166-1-ansuelsmth@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220615175043.20166-1-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/06/2022 22:57, Christophe JAILLET wrote:
-> Le 13/06/2022 à 22:02, Christian Lamparter a écrit :
->> On Sun, Jun 12, 2022 at 11:12 PM Christophe JAILLET
->> <christophe.jaillet@wanadoo.fr> wrote:
->>>
->>> If an error occurs after a successful call to p54spi_request_firmware(), it
->>> must be undone by a corresponding release_firmware() as already done in
->>> the error handling path of p54spi_request_firmware() and in the .remove()
->>> function.
->>>
->>> Add the missing call in the error handling path and remove it from
->>> p54spi_request_firmware() now that it is the responsibility of the caller
->>> to release the firmawre
->>
->> that last word hast a typo:  firmware. (maybe Kalle can fix this in post).
+On 15/06/2022 10:50, Christian 'Ansuel' Marangi wrote:
+> Rework the qcom,adm Documentation to yaml schema.
+> This is not a pure conversion since originally the driver has changed
+> implementation for the #dma-cells and was wrong from the start.
+> Also the driver now handles the common DMA clients implementation with
+> the first cell that denotes the channel number and nothing else since
+> the client will have to provide the crci information via other means.
 > 
-> More or less the same typo twice in a row... _Embarrassed_
+> Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+
+Drop the quotes please.
+
+As discussed in other patch - trust for me is broken and I have no clue
+which identity is real.
+
+> ---
+>  .../devicetree/bindings/dma/qcom,adm.yaml     | 95 +++++++++++++++++++
+>  .../devicetree/bindings/dma/qcom_adm.txt      | 61 ------------
+>  2 files changed, 95 insertions(+), 61 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/dma/qcom,adm.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/dma/qcom_adm.txt
 > 
->>
->>> Fixes: cd8d3d321285 ("p54spi: p54spi driver")
->>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> Acked-by: Christian Lamparter <chunkeey@gmail.com>
->> (Though, v1 was fine too.)
->>> ---
->>> v2: reduce diffstat and take advantage on the fact that release_firmware()
->>> checks for NULL
->>
->> Heh, ok ;) . Now that I see it,  the "ret = p54_parse_firmware(...); ... "
->> could have been replaced with "return p54_parse_firmware(dev, priv->firmware);"
->> so the p54spi.c could shrink another 5-6 lines.
->>
->> I think leaving p54spi_request_firmware() callee to deal with
->> releasing the firmware
->> in the error case as well is nicer because it gets rid of a "but in
->> this case" complexity.
-> 
-> 
-> Take the one you consider being the best one.
+> diff --git a/Documentation/devicetree/bindings/dma/qcom,adm.yaml b/Documentation/devicetree/bindings/dma/qcom,adm.yaml
+> new file mode 100644
+> index 000000000000..77096a7c9405
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/dma/qcom,adm.yaml
+> @@ -0,0 +1,95 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/dma/qcom,adm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm ADM DMA Controller
+> +
+> +maintainers:
+> +  - Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
 
-well said!
+Add Bjorn here.
 
-> 
-> If it deserves a v3 to axe some lines of code, 
-> I can do it but, as said previously,
-> v1 is for me the cleaner and more future proof.
+> +
 
-Gee, that last sentence about "future proof" is daring.
-I don't know what's up on the horizon. For my part, I've been devresing
-parts of carl9170 and now thinking about it. Because the various
-request_firmware*() functions could be a target for devres too.
-A driver usually loads the firmware in .probe(). It stays around because
-of .suspend()+.resume() and gets freed by .release().
-With devresing up request_firmware(), that release_firmware() would be
-rendered obsolete in all of p54* cases.
 
-There must be something that I have missed? right?
-
-It's because there's already an extensive list of managed interfaces:
-<https://www.kernel.org/doc/html/latest/driver-api/driver-model/devres.html>
-But the firmware_class is not on it. Does somebody know the presumably
-"very good" reason why not? I can't believe that this hasn't been done yet.
-
-Regards,
-Christian
+Best regards,
+Krzysztof

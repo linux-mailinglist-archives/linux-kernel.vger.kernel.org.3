@@ -2,117 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9383854C525
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0465254C52A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346292AbiFOJwy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:52:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
+        id S1346920AbiFOJxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236849AbiFOJwx (ORCPT
+        with ESMTP id S1346931AbiFOJxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:52:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10ECE167FB;
-        Wed, 15 Jun 2022 02:52:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2594152B;
-        Wed, 15 Jun 2022 02:52:51 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.38.208])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C56BF3F792;
-        Wed, 15 Jun 2022 02:52:49 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 10:52:41 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH 3/3] jump_label: make initial NOP patching the special
- case
-Message-ID: <Yqmr6fvu4OYkarCm@FVFF77S0Q05N>
-References: <20220608104512.1176209-1-ardb@kernel.org>
- <20220608104512.1176209-4-ardb@kernel.org>
+        Wed, 15 Jun 2022 05:53:25 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF6745067;
+        Wed, 15 Jun 2022 02:53:24 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25F8Begt002412;
+        Wed, 15 Jun 2022 09:53:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ycRGs3DCD3L/JxYFtY4JF9d5o99iJE2z5YQkWg9ugKk=;
+ b=P/T0kjImwOuyv8dRZlp/cLDL8w9yMpcW5WJWzyNL7LVsR3AFFMdJ/Na0EWvWABythwZV
+ p7LC+AZoBa7YciNAOXpUJ0xrNC7paIeyY02yAx29AOLLmvDgN/+dltKrqM6+fAXbXgcW
+ qsUHHciSLqDfg22GSeGKWNu3ZzoNFLpMKMmVLZx8XAPYEbx8VoCHabaRXrypgDmfqpPE
+ 1xb7Qo/6RzHRjic1AXt7MRmA8J6kuCki3IqlNDo00uX/mHDLMIRfBIvCTJi1Eo+I8fIp
+ b2ndqbKc6LTtJHj2JCESPLuBLP5/wfZ0mXSBC9jhaN6eTd2QqujtDqxpjYsWl3O92P6U Jw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gpq77venu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Jun 2022 09:53:24 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25F9noUW011264;
+        Wed, 15 Jun 2022 09:53:24 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gpq77ven4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Jun 2022 09:53:23 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25F9oGC5006016;
+        Wed, 15 Jun 2022 09:53:21 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma05fra.de.ibm.com with ESMTP id 3gmjp94bdy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 15 Jun 2022 09:53:21 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25F9rIT617891808
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Jun 2022 09:53:18 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 22D06AE04D;
+        Wed, 15 Jun 2022 09:53:18 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A093FAE045;
+        Wed, 15 Jun 2022 09:53:17 +0000 (GMT)
+Received: from [9.145.158.83] (unknown [9.145.158.83])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 15 Jun 2022 09:53:17 +0000 (GMT)
+Message-ID: <bcbfcc87-aef4-d151-8e34-4646f1533c25@linux.ibm.com>
+Date:   Wed, 15 Jun 2022 11:53:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220608104512.1176209-4-ardb@kernel.org>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v11 07/19] KVM: s390: pv: module parameter to fence
+ asynchronous destroy
+Content-Language: en-US
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
+        david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        mimu@linux.ibm.com, nrb@linux.ibm.com
+References: <20220603065645.10019-1-imbrenda@linux.ibm.com>
+ <20220603065645.10019-8-imbrenda@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20220603065645.10019-8-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _rGPktb8Y2SkRvbuV74qrAj6w4SyO8z3
+X-Proofpoint-GUID: N6BCO0CaEOnyEJw7GVyjKw8ORPlQGhKw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
+ definitions=2022-06-15_03,2022-06-13_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ malwarescore=0 impostorscore=0 suspectscore=0 phishscore=0
+ priorityscore=1501 adultscore=0 clxscore=1011 spamscore=0 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2204290000 definitions=main-2206150036
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 08, 2022 at 12:45:12PM +0200, Ard Biesheuvel wrote:
-> Instead of defaulting to patching NOP opcodes at init time, and leaving
-> it to the architectures to override this if this is not needed, switch
-> to a model where doing nothing is the default. This is the common case
-> by far, as only MIPS requires NOP patching at init time. On all other
-> architectures, the correct encodings are emitted by the compiler and so
-> no initial patching is needed.
+On 6/3/22 08:56, Claudio Imbrenda wrote:
+> Add the module parameter "async_destroy", to allow the asynchronous
+> destroy mechanism to be switched off.  This might be useful for
+> debugging purposes.
 > 
-> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> The parameter is enabled by default.
+> 
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+
+Normally this would be one of the last patches in the series, no?
+
 > ---
->  Documentation/staging/static-keys.rst |  3 ---
->  arch/arc/kernel/jump_label.c          | 13 -------------
->  arch/arm/kernel/jump_label.c          |  6 ------
->  arch/arm64/kernel/jump_label.c        | 11 -----------
->  arch/mips/include/asm/jump_label.h    |  2 ++
->  arch/parisc/kernel/jump_label.c       | 11 -----------
->  arch/riscv/kernel/jump_label.c        | 12 ------------
->  arch/s390/kernel/jump_label.c         |  5 -----
->  arch/x86/kernel/jump_label.c          | 13 -------------
->  kernel/jump_label.c                   | 14 +++-----------
->  10 files changed, 5 insertions(+), 85 deletions(-)
+>   arch/s390/kvm/kvm-s390.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> index 76ad6408cb2c..49e27b5d7c3a 100644
+> --- a/arch/s390/kvm/kvm-s390.c
+> +++ b/arch/s390/kvm/kvm-s390.c
+> @@ -206,6 +206,11 @@ unsigned int diag9c_forwarding_hz;
+>   module_param(diag9c_forwarding_hz, uint, 0644);
+>   MODULE_PARM_DESC(diag9c_forwarding_hz, "Maximum diag9c forwarding per second, 0 to turn off");
+>   
+> +/* allow asynchronous deinit for protected guests, enable by default */
+> +static int async_destroy = 1;
+> +module_param(async_destroy, int, 0444);
+> +MODULE_PARM_DESC(async_destroy, "Asynchronous destroy for protected guests");
+> +
+>   /*
+>    * For now we handle at most 16 double words as this is what the s390 base
+>    * kernel handles and stores in the prefix page. If we ever need to go beyond
 
-I have one minor comment below, but either way this is a nice cleanup (and I'm
-always happy to see __weak functions disappear), so FWIW:
-
-  Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-[...]
-
-> diff --git a/kernel/jump_label.c b/kernel/jump_label.c
-> index b1ac2948be79..ff8576c00893 100644
-> --- a/kernel/jump_label.c
-> +++ b/kernel/jump_label.c
-> @@ -332,17 +332,9 @@ static int __jump_label_text_reserved(struct jump_entry *iter_start,
->  	return 0;
->  }
->  
-> -/*
-> - * Update code which is definitely not currently executing.
-> - * Architectures which need heavyweight synchronization to modify
-> - * running code can override this to make the non-live update case
-> - * cheaper.
-> - */
-> -void __weak __init_or_module arch_jump_label_transform_static(struct jump_entry *entry,
-> -					    enum jump_label_type type)
-> -{
-> -	arch_jump_label_transform(entry, type);
-> -}
-> +#ifndef arch_jump_label_transform_static
-> +#define arch_jump_label_transform_static(entry, type)
-> +#endif
-
-It might be slightly better to make this a static inline stub so that we always
-get the compiler to type-check it, e.g.
-
-| #ifndef arch_jump_label_transform_static
-| static inline void arch_jump_label_transform_static(struct jump_entry *entry,
-| 						    enum jump_label_type type)
-| {
-| 	/* nothing to do on most architectures */
-| }
-| #define arch_jump_label_transform_static arch_jump_label_transform_static
-| #endif
-
-Mark.

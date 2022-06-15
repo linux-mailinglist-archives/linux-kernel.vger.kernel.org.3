@@ -2,96 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E24AE54CB2C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:23:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5116154CB33
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347705AbiFOOWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 10:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38752 "EHLO
+        id S1348165AbiFOOX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 10:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242702AbiFOOWt (ORCPT
+        with ESMTP id S1347618AbiFOOX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 10:22:49 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52C7A19032;
-        Wed, 15 Jun 2022 07:22:48 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id v1so23505165ejg.13;
-        Wed, 15 Jun 2022 07:22:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+cDSM19XhnVItQmXe2GXVbX8IiIZwrvghbIjLeWagA4=;
-        b=T/uAnd4NRj5HaHVJL/NGW4xzIHjJ88SjHm1ylY4aca+8D6wfooiNh1pXFcmjxgVI5z
-         oxoPES4Ga1RtHrg8cGHFuHkSH2f+OhwSwGTCIdhsCCYLUsxNmdilDkXJBny9cRAXwPZM
-         bj8r9HZgGjAb5+5ooOWAC5V7AY+rgW6aZYN3JDn47Ts9R2AcZjZ3lDBwe9qmz0FuX73b
-         Jfcp3Lz9OOReArTRl64Lor4pK9Gl2b8EG10faardk619owy9Pnf2EMV3tb3R3xjJeKiM
-         R/q+Fh8c24KmtesrDZVl0JNopM0eMSrF15SULsMSyCvI4x6xfOthaOBHNdHq8n4QMJq9
-         RjNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+cDSM19XhnVItQmXe2GXVbX8IiIZwrvghbIjLeWagA4=;
-        b=iR9HA6qDl5ORUUI5komj3rPxPDhC2uDdggll+bqqT3fIJ//PwTVqG9L4w785s86W62
-         GvWoBG4Ut8pfatPbVkwx0oXNSTgcMuM/WC8mnXXekoq1D2nQACHbQgnpNpy8xRTf0DvS
-         B7KSjrNRRLRD2mPd6LL3gjqo+DBpfwwnPyiYR6KAuDmbyyZysnOHWywP4S0l3LmKu7M0
-         tMPrixn/0Bpy989+s8WBiyr1H3ip/phKqx17DkkPt8ZiLU1Oz9jBVdeKcC7WTIZmt1Mz
-         IGmU6V7Ag1P94L8DO9FEM37Nt1ofeLINWyTvF/FYw/iTnfJ0Y1gaZXY0f2pRjCkjdr8M
-         eqvQ==
-X-Gm-Message-State: AJIora+vjnWdyEw2stzALAror+DUUFiV6Y6HqSGWOCjFAHeN8NrPZQwc
-        W/bHwPmKYkdH5wy8qoSbIDdAbkK9FOO60dU+kCA=
-X-Google-Smtp-Source: AGRyM1tK+gakBdNkEl/BCl5Wp6p+/qyTwlR5zO3bm+xtxartwOdF0AEvujrW1NR3rivDizKoWarT6AlmcqwpahefijQ=
-X-Received: by 2002:a17:907:2d8d:b0:711:d1bd:d738 with SMTP id
- gt13-20020a1709072d8d00b00711d1bdd738mr70128ejc.658.1655302966907; Wed, 15
- Jun 2022 07:22:46 -0700 (PDT)
-MIME-Version: 1.0
-References: <1655179884-12278-1-git-send-email-shengjiu.wang@nxp.com> <1655179884-12278-6-git-send-email-shengjiu.wang@nxp.com>
-In-Reply-To: <1655179884-12278-6-git-send-email-shengjiu.wang@nxp.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Wed, 15 Jun 2022 11:22:38 -0300
-Message-ID: <CAOMZO5BRVBawK2PRvTazkQf-wExOuni9qD76Ha3FYmZZQyPRsg@mail.gmail.com>
-Subject: Re: [PATCH 5/7] ASoC: fsl_sai: Move res variable to be global
-To:     Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc:     Nicolin Chen <nicoleotsuka@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Linux-ALSA <alsa-devel@alsa-project.org>,
+        Wed, 15 Jun 2022 10:23:57 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4411027FEC;
+        Wed, 15 Jun 2022 07:23:56 -0700 (PDT)
+Received: from notapiano (pool-98-113-53-228.nycmny.fios.verizon.net [98.113.53.228])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8E4356601705;
+        Wed, 15 Jun 2022 15:23:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1655303034;
+        bh=eLJb9neGlwiL1HzETCo8YiMDWAxEGSgUuJk+Ye9uRwU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ax6+sknRobFBT30rXJImWD36z3nQJuklAWV7ro+vnA9M6NpGXdUzCiXt2/IX9WX/i
+         KgCg6cVMRYsmxtZE7eRnEvQ4NbUERs6rB39KxieYX1PgecbqEpj8toatfI9l4nHXUk
+         J7QZq1C6rsPcs1Z/j9MStiz+Q6DgTHHGnN78OhkRCZT95/JwNqljX+va0PUWYce1Bx
+         JVi8s3dMLy/xcYttTBiUBkcWIbSRFcZlApHEx7VG1MXFDlIZxi9yMQ686/uyIGO1Uf
+         madLazEw/8ZHrKuDVwO1iNEDGGJNhLXZXXxDUYfWeccEr2LfonoA9UcK3n1J1pFdnc
+         3rtc2rh63HZFw==
+Date:   Wed, 15 Jun 2022 10:23:49 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Sean Wang <sean.wang@mediatek.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 0/2] MT8192 pinctrl properties adjustments
+Message-ID: <20220615142349.qgxsnaln7mtbhgur@notapiano>
+References: <20220531221954.160036-1-nfraprado@collabora.com>
+ <CACRpkdYe=qhUvyCw-xKRUihWiaezaEyQdHFhPt2aD6bmkWTpBw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdYe=qhUvyCw-xKRUihWiaezaEyQdHFhPt2aD6bmkWTpBw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shengjiu,
+On Wed, Jun 15, 2022 at 03:31:00PM +0200, Linus Walleij wrote:
+> On Wed, Jun 1, 2022 at 12:19 AM Nícolas F. R. A. Prado
+> <nfraprado@collabora.com> wrote:
+> 
+> > The two patches in this series substitute properties in the mt8192
+> > pinctrl dt-binding for ones which have a clearer meaning and are more
+> > standardized. At this point there's no DT using the mt8192 pinctrl
+> > binding, so if such changes are to be made, they need to happen now.
+> >
+> > v1: https://lore.kernel.org/linux-mediatek/20220525155714.1837360-1-nfraprado@collabora.com/
+> >
+> > Changes in v2:
+> > - Dropped Fixes tags
+> > - Added 'if' blocks to enforce mutual exclusion of properties
+> 
+> This does not apply on the current pinctrl devel branch:
+> https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git/log/?h=devel
+> 
+> Could you please rebase onto my branch and resend as v3?
 
-On Tue, Jun 14, 2022 at 1:25 AM Shengjiu Wang <shengjiu.wang@nxp.com> wrote:
->
-> The resource info need to be accessed by hw_params()
-> function for multi fifo case, the start address may
-> be not the FIFO0. So move it to be global first.
+Hi Linus,
 
-Actually, it is not global. It is being added as a member of struct fsl_sai.
+I checked out your branch locally and was able to apply the patch cleanly. Maybe
+you haven't pushed out all your local changes to that branch yet? Otherwise let
+me know and I'll send a rebased v3 to see if it helps in some way.
 
-Please rephrase the Subject to:
+Thanks,
+Nícolas
 
-ASoC: fsl_sai: Make res a member of struct fsl_sai
-
-and then in the commit log:
-
-"So move it to be a member of struct fsl_sai."
+> 
+> Yours,
+> Linus Walleij

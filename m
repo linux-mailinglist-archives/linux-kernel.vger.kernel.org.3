@@ -2,101 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5932D54CF85
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55AAD54CF7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353908AbiFOROJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51278 "EHLO
+        id S1355712AbiFORNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357676AbiFORNr (ORCPT
+        with ESMTP id S232819AbiFORNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:13:47 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A0F1AF04
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:13:46 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id x4so11993352pfj.10
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=2hy2Qkd4xSuW4p+5Dl7PR+SUIjoj02p8RkTpyxOOHqo=;
-        b=MIBH7WuXuo8XsYajlXRYGYomRcjkj6nPW/WNdlCyCciKwmkvzYPIwiUtu3Qe629RgZ
-         cuZ+zyqFYzWMeEFMfJdGt0BHvJjKgqniKy+bjOBj6jDlMyWtrs3W0Kv7ICDIf+bPGVQu
-         YKSqWlun8uCo52RezaVUDBTIzQJ0dRW3jXZr/cRhhFeI3XTfNXAi5Fm4tPE/WNES69zR
-         z81w78Yli3gGEzD34bUQx0paNeHz/lAx8+6t53Y0vstuIrX5MZl1i1yT+KyK+JNu2m9q
-         JCaaGDzWFoBHOjvizAqml7ahRmwIaspthWws+j4MfxDyF8u7+zgD9rKYNV1mLWk2GK6i
-         xkmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=2hy2Qkd4xSuW4p+5Dl7PR+SUIjoj02p8RkTpyxOOHqo=;
-        b=hXZRjZ6AYqPFE9lkS3l4wuxtDiNWysHJvh1AgapIfYW9TJzqx1X1OU8guqbmgoO2Z4
-         7lnim/cUQgiQNAujr0jIPG5V26MoWUsih2dd5RiEQUfuiKBxx/CZQ6Mw90KyYLEvAFkS
-         c0miS2eQj1SgmYNxubxf3jLL095pow4hRwReenKAE61aCRKb2k/jzghAQPkfqSyVgXrP
-         PL/d8BvHL3ta5ZdTl86TVQ0X0jbgm/NIQ4/R+V03dFjskKJ/q1+HK3N9Gsw2JSfa6MZr
-         hdIzWRevNIKMTOS7+LQFS9hLGw3KrGXclvO0tk1CQFyAjpxfixueuAc9SueXsvw0SXwN
-         Wrjw==
-X-Gm-Message-State: AJIora82Egi4H3cUs7Wz5barlv9Qfghiv+6y42CxdRFaMvUpnof7aker
-        /DNVFpxxVSXs32waQWsGGzremS9tUayOdvhfX7DlPw==
-X-Google-Smtp-Source: AGRyM1uDSl1WVzfzUp2fssJ9HirywV+QKxtYdrezojo5TjTmtib/dvB0jLtBLE0xMnYmMStriT3vSKgQ4Fy4j6rlNt0=
-X-Received: by 2002:a62:7c14:0:b0:51b:9d03:a4c7 with SMTP id
- x20-20020a627c14000000b0051b9d03a4c7mr395031pfc.74.1655313225618; Wed, 15 Jun
- 2022 10:13:45 -0700 (PDT)
+        Wed, 15 Jun 2022 13:13:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F471F62A;
+        Wed, 15 Jun 2022 10:13:15 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id D50EC1F96C;
+        Wed, 15 Jun 2022 17:13:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655313193; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8CivEbm1eQi+6T7TD7NaoGDD1tb2zmymQeNybmz0yHg=;
+        b=aHExjNRAIBAuMFp4cvmZuCx8Veb4Ll79aAL2k9p+y75mUzQuOt8x5CzZqM3YCBg7rHdMKu
+        M/pzatmmlNob7/NoVzZRa+wAjRm5Ah5AiU3EzwhuYg+lYoKqYBERGlNBPVNzz9F5R5QpQs
+        w5isb8ydQA24NpKth03GJXMPx//yDBM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655313193;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8CivEbm1eQi+6T7TD7NaoGDD1tb2zmymQeNybmz0yHg=;
+        b=XSwputMt4tdWK70Xtwr3duiDh7aZGJwQKTyi+RvDZ7+jaI4TddgO7J+3Jm3/ZrXpMjZI6q
+        SeVXixep3fRystBQ==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id B6CB52C141;
+        Wed, 15 Jun 2022 17:13:13 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 2AACDA062E; Wed, 15 Jun 2022 19:13:13 +0200 (CEST)
+Date:   Wed, 15 Jun 2022 19:13:13 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     jack@suse.cz, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] ext2: fix fs corruption when trying to remove a
+ non-empty directory with IO error
+Message-ID: <20220615171313.fnfn6cnozn76cmrl@quack3.lan>
+References: <20220615090010.1544152-1-yebin10@huawei.com>
 MIME-Version: 1.0
-References: <20220522162802.208275-1-luca@z3ntu.xyz> <20220522162802.208275-11-luca@z3ntu.xyz>
- <Yqjti8s06LIfTE52@shikoro>
-In-Reply-To: <Yqjti8s06LIfTE52@shikoro>
-From:   Loic Poulain <loic.poulain@linaro.org>
-Date:   Wed, 15 Jun 2022 19:13:09 +0200
-Message-ID: <CAMZdPi_c931ejPA2Nkim1cwBS9sdcTNnfUEvUOvFSsfrdN18AQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 10/14] i2c: qcom-cci: add msm8974 compatible
-To:     Wolfram Sang <wsa@kernel.org>, Luca Weiss <luca@z3ntu.xyz>,
-        linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        matti.lehtimaki@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615090010.1544152-1-yebin10@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Jun 2022 at 22:20, Wolfram Sang <wsa@kernel.org> wrote:
->
-> On Sun, May 22, 2022 at 06:27:58PM +0200, Luca Weiss wrote:
-> > From: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
-> >
-> > MSM8974 CCI is the same as MSM8916 except it has two masters.
-> >
-> > Signed-off-by: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > ---
-> > To note, the cci_v1_5_data variable name is just a bit arbitrary and
-> > isn't meant to reflect IP version "1.5". I'd be happy to change the
-> > variable name to something else.
->
-> Loic, Robert: I know this series is marked RFC, but the I2C patches
-> adding a new SoC to the driver are maybe interesting already?
+On Wed 15-06-22 17:00:10, Ye Bin wrote:
+> We got issue as follows:
+> [home]# mount  /dev/sdd  test
+> [home]# cd test
+> [test]# ls
+> dir1  lost+found
+> [test]# rmdir  dir1
+> ext2_empty_dir: inject fault
+> [test]# ls
+> lost+found
+> [test]# cd ..
+> [home]# umount test
+> [home]# fsck.ext2 -fn  /dev/sdd
+> e2fsck 1.42.9 (28-Dec-2013)
+> Pass 1: Checking inodes, blocks, and sizes
+> Inode 4065, i_size is 0, should be 1024.  Fix? no
+> 
+> Pass 2: Checking directory structure
+> Pass 3: Checking directory connectivity
+> Unconnected directory inode 4065 (/???)
+> Connect to /lost+found? no
+> 
+> '..' in ... (4065) is / (2), should be <The NULL inode> (0).
+> Fix? no
+> 
+> Pass 4: Checking reference counts
+> Inode 2 ref count is 3, should be 4.  Fix? no
+> 
+> Inode 4065 ref count is 2, should be 3.  Fix? no
+> 
+> Pass 5: Checking group summary information
+> 
+> /dev/sdd: ********** WARNING: Filesystem still has errors **********
+> 
+> /dev/sdd: 14/128016 files (0.0% non-contiguous), 18477/512000 blocks
+> 
+> Reason is same with commit 7aab5c84a0f6. We can't assume directory
+> is empty when read directory entry failed.
+> 
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-Yes I agree, no objection to get them.
+Honestly, I'm not very much concerned about corrupting the filesystem more
+when we've got EIO for metadata but OK, probably what you propose is a
+saner choice. I've added the patch to my tree.
 
-Regards,
-Loic
+								Honza
+
+> ---
+>  fs/ext2/dir.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/ext2/dir.c b/fs/ext2/dir.c
+> index 3bd5772b401b..8f597753ac12 100644
+> --- a/fs/ext2/dir.c
+> +++ b/fs/ext2/dir.c
+> @@ -672,17 +672,14 @@ int ext2_empty_dir (struct inode * inode)
+>  	void *page_addr = NULL;
+>  	struct page *page = NULL;
+>  	unsigned long i, npages = dir_pages(inode);
+> -	int dir_has_error = 0;
+>  
+>  	for (i = 0; i < npages; i++) {
+>  		char *kaddr;
+>  		ext2_dirent * de;
+> -		page = ext2_get_page(inode, i, dir_has_error, &page_addr);
+> +		page = ext2_get_page(inode, i, 0, &page_addr);
+>  
+> -		if (IS_ERR(page)) {
+> -			dir_has_error = 1;
+> -			continue;
+> -		}
+> +		if (IS_ERR(page))
+> +			goto not_empty;
+>  
+>  		kaddr = page_addr;
+>  		de = (ext2_dirent *)kaddr;
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

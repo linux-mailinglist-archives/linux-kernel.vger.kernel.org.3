@@ -2,76 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD3854C43C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 470CE54C43A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiFOJFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
+        id S239117AbiFOJFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233761AbiFOJFr (ORCPT
+        with ESMTP id S230240AbiFOJFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:05:47 -0400
-Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEF1C3A734
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:05:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=m3QcT
-        W/lZeAJnaksoHMUlocc+Y9Uw/FS+TMacmhO/3E=; b=UiNo61SD8RKmWL2GiBMrk
-        ZIXdsDgyhjkCuktOBDp8bb3E+dG1aavOuZU+P1MuKZ9aRMPiSPR95244O1tUz+Lu
-        p6RTNviBzKinR0GF8fxlmq+TjPd8QMdZDykMlb31njKvvvPSk0VpFU0L0HF4gaSx
-        26w5PG5TN+CrYkdiHq+dSU=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp8 (Coremail) with SMTP id NORpCgA3JGnPoKli0ReSFg--.42622S2;
-        Wed, 15 Jun 2022 17:05:19 +0800 (CST)
-From:   heliang <windhl@126.com>
-To:     linus.walleij@linaro.org, linux@armlinux.org.uk
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        windhl@126.com
-Subject: [PATCH] arch: arm: mach-versatile: Add missing of_node_put in integrator.c
-Date:   Wed, 15 Jun 2022 17:05:17 +0800
-Message-Id: <20220615090517.3961621-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Jun 2022 05:05:23 -0400
+Received: from mail.toke.dk (mail.toke.dk [IPv6:2a0c:4d80:42:2001::664])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0FB3980F;
+        Wed, 15 Jun 2022 02:05:22 -0700 (PDT)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
+        t=1655283921; bh=mZJkc3EtpYZjHnwrFglpnwJJ1Hj8zbOLiuV4Bh+jD24=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=rTztdNLj2oECJXYk09U7wcYFzV90dyQIpL+L/VaZhamY54SGd3n4uQL2C/WlNctWU
+         6ZXx0QFdfMO1/NTh4MN/MnQKB+Ijwx83f6Zqx9dXS7FMxjgJ+6AzP1bcNmn4gNmyOz
+         AK7rP5M/PhBdHWEsNZdk69NrWn741jrwF+2RnSx53RBlZg4CYsnoHWu11V78zOARY5
+         uPMKw4cxbDj5LOiB+BJ0aTFwOPpNFN1p2uOKQFKCdbZ994eIdIXWG2qqjVVey2JnYS
+         JYH2N9qa8D0uC4748Rfzkq74mox10F2ONbrWza91LMwlJfprFJw90ljJmdU1toN2jp
+         pQZRQ4eCMDhwA==
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Pavel Skripkin <paskripkin@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzbot+03110230a11411024147@syzkaller.appspotmail.com,
+        syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotmail.com
+Subject: Re: [PATCH v6 1/2] ath9k: fix use-after-free in ath9k_hif_usb_rx_cb
+In-Reply-To: <87k09ipfl9.fsf@kernel.org>
+References: <d57bbedc857950659bfacac0ab48790c1eda00c8.1655145743.git.paskripkin@gmail.com>
+ <87o7yvzf33.fsf@toke.dk> <87k09ipfl9.fsf@kernel.org>
+Date:   Wed, 15 Jun 2022 11:05:20 +0200
+X-Clacks-Overhead: GNU Terry Pratchett
+Message-ID: <87tu8mxpnz.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NORpCgA3JGnPoKli0ReSFg--.42622S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7JFyUCr15GrW3ZryfKr47XFb_yoWxtwc_t3
-        Z2g3ykJrn5Ja1IvryDCr4akry7Zwn7GrsYgry8Ar17G34aqr17Cr4vqryIk348uwnrKrW7
-        X397Ar1av3Wa9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_znQ7UUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi7Q8hF1pEAM8zhAAAsy
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUSPICIOUS_RECIPS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In cm_init(), of_find_matching_node() will return a node pointer with
-refcount incremented. We should use of_node_put() when the pointer is
-not used anymore.
+Kalle Valo <kvalo@kernel.org> writes:
 
-Signed-off-by: heliang <windhl@126.com>
----
- arch/arm/mach-versatile/integrator.c | 1 +
- 1 file changed, 1 insertion(+)
+> Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk> writes:
+>
+>> Pavel Skripkin <paskripkin@gmail.com> writes:
+>>
+>>> Syzbot reported use-after-free Read in ath9k_hif_usb_rx_cb() [0]. The
+>>> problem was in incorrect htc_handle->drv_priv initialization.
+>>>
+>>> Probable call trace which can trigger use-after-free:
+>>>
+>>> ath9k_htc_probe_device()
+>>>   /* htc_handle->drv_priv =3D priv; */
+>>>   ath9k_htc_wait_for_target()      <--- Failed
+>>>   ieee80211_free_hw()		   <--- priv pointer is freed
+>>>
+>>> <IRQ>
+>>> ...
+>>> ath9k_hif_usb_rx_cb()
+>>>   ath9k_hif_usb_rx_stream()
+>>>    RX_STAT_INC()		<--- htc_handle->drv_priv access
+>>>
+>>> In order to not add fancy protection for drv_priv we can move
+>>> htc_handle->drv_priv initialization at the end of the
+>>> ath9k_htc_probe_device() and add helper macro to make
+>>> all *_STAT_* macros NULL safe, since syzbot has reported related NULL
+>>> deref in that macros [1]
+>>>
+>>> Link: https://syzkaller.appspot.com/bug?id=3D6ead44e37afb6866ac0c7dd121=
+b4ce07cb665f60 [0]
+>>> Link: https://syzkaller.appspot.com/bug?id=3Db8101ffcec107c0567a0cd8acb=
+bacec91e9ee8de [1]
+>>> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
+>>> Reported-and-tested-by: syzbot+03110230a11411024147@syzkaller.appspotma=
+il.com
+>>> Reported-and-tested-by: syzbot+c6dde1f690b60e0b9fbe@syzkaller.appspotma=
+il.com
+>>> Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+>>
+>> Alright, since we've heard no more objections and the status quo is
+>> definitely broken, let's get this merged and we can follow up with any
+>> other fixes as necessary...
+>>
+>> Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>
+>
+> I'm wondering should these go to -rc or -next? Has anyone actually
+> tested these with real hardware? (syzbot testing does not count) With
+> the past bad experience with syzbot fixes I'm leaning towards -next to
+> have more time to fix any regressions.
 
-diff --git a/arch/arm/mach-versatile/integrator.c b/arch/arm/mach-versatile/integrator.c
-index fdf9c4db08a7..fba19357171a 100644
---- a/arch/arm/mach-versatile/integrator.c
-+++ b/arch/arm/mach-versatile/integrator.c
-@@ -76,6 +76,7 @@ void cm_init(void)
- 		return;
- 	}
- 	cm_base = of_iomap(cm, 0);
-+	of_node_put(cm);
- 	if (!cm_base) {
- 		pr_crit("could not remap core module\n");
- 		return;
--- 
-2.25.1
+Hmm, good question. From Takashi's comment on v5, it seems like distros
+are going to backport it anyway, so in that sense it probably doesn't
+matter that much?
 
+In any case I think it has a fairly low probability of breaking real
+users' setup (how often is that error path on setup even hit?), but I'm
+OK with it going to -next to be doubleplus-sure :)
+
+-Toke

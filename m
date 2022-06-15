@@ -2,129 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1575554D430
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30DC754D433
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244325AbiFOWEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 18:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
+        id S1344621AbiFOWEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 18:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237003AbiFOWEC (ORCPT
+        with ESMTP id S242770AbiFOWEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 18:04:02 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C1C562FD
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:04:01 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id 63so10307705qva.10
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:04:01 -0700 (PDT)
+        Wed, 15 Jun 2022 18:04:16 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E6A5639E;
+        Wed, 15 Jun 2022 15:04:12 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id t3-20020a17090a510300b001ea87ef9a3dso23244pjh.4;
+        Wed, 15 Jun 2022 15:04:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=MDS3WvI4YFumw+J0nlIpDcy+57+C4g6hoEFp0Oh4Mbg=;
-        b=O9OEQD+3doDW4twViBJqKk381w6PggzugLkS97+21OVsnkhC0nfJtzXv5lm4qbDsC5
-         IS+eEHNp6HiDpVKbh4nx0CZ8XX/jCYEbl2IBOR1UypJVQFcQP575bN9jQhVlRBzkHUbg
-         RSrH5xfRkBFhcV7XfWX4bjfAHdJItUW+gud4jZVDnl6/zL1zT8yvFVgZiVYZnhV8lNWO
-         ARDX0GWzX3qwrKLVBy6+3wB0VgU1QvFu0lWUn0b1M2570s3nVAPr7+rvYDDR4UECV1N7
-         /IAB505xt90CQD/0ERtLzv9EJ9aICAOS1NMo0bnXUqqJC8nttVFJUaY1cLnT7GK8ni31
-         0NMQ==
+        bh=B/lcBT2zvh9WH/SWJfT0cjMqf3IsmHgiP49j/MJgSQw=;
+        b=Y+XeMqiwcoCfW0R+mi7lzArSd2bf0V48ufIARR2I+vKwQp8IlJ0Vw6QwlOxSkDrk3J
+         djHgvjiNNrENZ5qof4vLgJag7T6nFwwPXwZub6Txansde63YVs9DtKrUWwJd3Mh0RoEP
+         pHF1v6BoHEgnSaXspMC7XotRM191gSPjlVgWzvDiU1VTkZS/qk5c/N0Vltg3KL8ZX6bm
+         rvjRDsKRWovSVUjPLks0ZU8BckoF3cg1Na/LvTfL/EjB+xlDKquSvZpSJvswDHbC5suo
+         z0bPXuObocdaHNa533FPnmW1VUgJggrwFLFRJnMToEkrq3kbaxrSuCyRb5Zn90k1xVjv
+         PjhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MDS3WvI4YFumw+J0nlIpDcy+57+C4g6hoEFp0Oh4Mbg=;
-        b=rJ+0QVYDXDXXk/AcY3DrPbWyrxKA23/HbjqGAG4GuPzkbNMJmnUSEhXSWl+8E4KOQG
-         fTCYeVnKNSfDMznhEsgQ0S//wQwV1AvY9B0eBZSCUmKM5cdy3Uz3hoVpDYsyw7noDRe0
-         2K5y9BJvj7ywJImlr2OpHOBWV81nrgOgs3zvEBLQXVJLVPybWxS2BkvA4iZeOltIbjgk
-         5p1TnlEjM7OdcUMEK0BQn444V17C70/+RB6F489auiyMjeObwA2Pg0hHFAmQoVlVLHel
-         RJgq7gbz2PYJrqnVBZsBSE8WZ1QwzTQi0qJiLPxj2yWK0mQM9gmPHOu/8bzNE7OrG+0T
-         zL3w==
-X-Gm-Message-State: AJIora94CKfLTwkAGhA0biKHHKIdksiPq+JGrLduNdfC0W8v6VGqDwyE
-        xJzVMkbhJBddN/sXNTl+nFY9IQ==
-X-Google-Smtp-Source: AGRyM1sTWN3zHfbnxs6htd3ILckH8IVVrl/qj0Zod43G89DucO6m1YRA1RVicFHe/gmSCv5FKj3Pig==
-X-Received: by 2002:ac8:598d:0:b0:305:25ad:2f1e with SMTP id e13-20020ac8598d000000b0030525ad2f1emr1553022qte.237.1655330640212;
-        Wed, 15 Jun 2022 15:04:00 -0700 (PDT)
-Received: from fedora ([23.82.142.207])
-        by smtp.gmail.com with ESMTPSA id ay15-20020a05622a228f00b00304ee15be24sm288340qtb.11.2022.06.15.15.03.59
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=B/lcBT2zvh9WH/SWJfT0cjMqf3IsmHgiP49j/MJgSQw=;
+        b=p1m9Mp3q6Gcz+PNslh4N1ycd5rFQXbki8VK3n5Li6igbF4qpIYxx0+Dcc9byQ7N5qJ
+         YiwtMwvMaoBBNpNYY5wJge2R4+FhYuQjGNxHo5uQtwGUe+T5/K9/+5hN2Yd1fSrjRsMl
+         KP5xtku6/+SleCw6ygW2l79lYpgDu+E9L4XZxiplUIs8ivg59WgkW9w/r2qE6cxyzEm9
+         yTaGV85NpD1rrfl0mPawlgie2KeW77u+9WBoJbZT+SPjhkqOVZsvJQMIVWgHWF2ynfDr
+         jd6nucw9WCQxTYcS3SAp+M4qeh8aKPjXEHG2nG9lZNzDkYzjwtGyLzh+11t2Y9COZX3G
+         XItA==
+X-Gm-Message-State: AJIora8lO7EbLQ3ysbXQxE/8WKrhEcw7+3rsdH/eZ6neRpX79/cNRJjx
+        Oz6Ib6iwAcggyNEtpsFWlQ4=
+X-Google-Smtp-Source: AGRyM1vA76/F9uVYj1UN9pwyypo3U+tX9PWxxkFENMXnlDieKnUsQGYdIvpPByWeqf2nYc/Z0w5G7Q==
+X-Received: by 2002:a17:902:f606:b0:168:ecca:44e with SMTP id n6-20020a170902f60600b00168ecca044emr1396112plg.144.1655330652392;
+        Wed, 15 Jun 2022 15:04:12 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id v125-20020a626183000000b0051bed79a5e6sm131249pfb.90.2022.06.15.15.04.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 15:03:59 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 18:03:57 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Zhi Song <zhi.song@bytedance.com>
-Cc:     vilhelm.gray@gmail.com, gregkh@linuxfoundation.org,
-        rafael@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] isa: put_device after failing to device_register
-Message-ID: <YqpXTVZmhOpBWt47@fedora>
-References: <20220615151558.1766067-1-zhi.song@bytedance.com>
+        Wed, 15 Jun 2022 15:04:11 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 15 Jun 2022 15:04:10 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.18 00/11] 5.18.5-rc1 review
+Message-ID: <20220615220410.GG1229939@roeck-us.net>
+References: <20220614183720.861582392@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4XgcVqWqYeVvtZwk"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220615151558.1766067-1-zhi.song@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220614183720.861582392@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 14, 2022 at 08:40:37PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.5 release.
+> There are 11 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
+> Anything received after that time might be too late.
+> 
 
---4XgcVqWqYeVvtZwk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Build results:
+	total: 154 pass: 154 fail: 0
+Qemu test results:
+	total: 489 pass: 489 fail: 0
 
-On Wed, Jun 15, 2022 at 11:15:58PM +0800, Zhi Song wrote:
-> device_register() is used to register a device with the system.
-> We need to call put_device() to give up the reference initialized
-> in device_register() when it returns an error and this will clean
-> up correctly.
->=20
-> Fixes: a5117ba7da37 ("Driver model: add ISA bus")
-> Signed-off-by: Zhi Song <zhi.song@bytedance.com>
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-Acked-by: William Breathitt Gray <william.gray@linaro.org>
-
-> ---
-> V1 -> V2: Fix up the changelog text correct.
-> V2 -> V3: Add a fixes tag line specifying the commit where this bug was
-> introduced.
-> ---
->  drivers/base/isa.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/base/isa.c b/drivers/base/isa.c
-> index 55e3ee2da98f..cf88f3d77b7d 100644
-> --- a/drivers/base/isa.c
-> +++ b/drivers/base/isa.c
-> @@ -173,8 +173,10 @@ static int __init isa_bus_init(void)
->  	error =3D bus_register(&isa_bus_type);
->  	if (!error) {
->  		error =3D device_register(&isa_bus);
-> -		if (error)
-> +		if (error) {
-> +			put_device(&isa_bus);
->  			bus_unregister(&isa_bus_type);
-> +		}
->  	}
->  	return error;
->  }
-> --=20
-> 2.30.2
->=20
-
---4XgcVqWqYeVvtZwk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYqpXTQAKCRC1SFbKvhIj
-K6oXAP9it6dONEFz8UMcG7tUCX+3SEGP0ZawFZUyA5G96L4FFwD+PYlhIrkL26NI
-tT8nZDnbDHp2q7d0ZykuRCSpLU8VmQs=
-=p1DT
------END PGP SIGNATURE-----
-
---4XgcVqWqYeVvtZwk--
+Guenter

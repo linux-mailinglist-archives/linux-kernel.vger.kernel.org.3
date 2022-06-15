@@ -2,134 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9D954D1AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D73054D1B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347429AbiFOTez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 15:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37346 "EHLO
+        id S1348030AbiFOTfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiFOTex (ORCPT
+        with ESMTP id S1348662AbiFOTfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:34:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 551A829815
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:34:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655321688;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=80vStOZaBcAfkx2F0Vpvkz4FvyHsZJU8xm8Q9HsP33Q=;
-        b=PXWTFV70O/33G9oRs2cBlzV45OpK4RZolbxld+yvh1D5vGk694aQ1a1BRUEtewowAopzb0
-        skmPEcukXkILSCNx+6j8cux8VgWN8Qd9Wvs1RmWaZwmfrwM72FD5X3pAl5aqIS6KSFdAcM
-        KLXNijptvClTj+rE3G+6tsdWR7BGq7k=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-398-46_Z9Y9QPZGUQQYvBMOz2g-1; Wed, 15 Jun 2022 15:34:47 -0400
-X-MC-Unique: 46_Z9Y9QPZGUQQYvBMOz2g-1
-Received: by mail-ed1-f71.google.com with SMTP id i20-20020a50fd14000000b0042dd305d0f7so9278488eds.18
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:34:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=80vStOZaBcAfkx2F0Vpvkz4FvyHsZJU8xm8Q9HsP33Q=;
-        b=GT8gSndwQPGhoH8/W5VguIlOqWgnNQh1TqBo5NsmiJdOsxVZ39n5CSNei5L7sZ+FJ4
-         N0LFGYsAh7tCjp9asYfuqhPk+a4Jl92ILcl6AiV249WHtATMoqFMh0WJvVvmnfTDlj5A
-         FOxToz/VNnFX4VISRCSL7rOheLZSIL9mEv+D/feASo6D4Bf4GR+WCfDbiZX0RLBytpbe
-         KKHGhayT83e8NlLH089zll2zSPyo6C+e4CLfHYIfnSD2MpgvBXDWzF5bEW9njG0voqcn
-         wn2bVYy+cc/Dd2EHHBODxp5r+zeOFQodWNi7+qAeGj0l5OZKc+YhzKdXhoev10ObFlMR
-         YbuQ==
-X-Gm-Message-State: AJIora8RRcfaJ5hnxzOpGqKrCfUY42yReSliYBcZmsZpgu0pVLRZ7rDK
-        /B/yz+29OXFVF2rpO+ZpEA+cqazEhmID7dfmt2CenRJCpQbQW9rjnfKii6p3npyO74fmheLRIOr
-        HDFCncvaC6tXbn431t5wbIbBg
-X-Received: by 2002:aa7:d8d8:0:b0:42d:dbb0:f05b with SMTP id k24-20020aa7d8d8000000b0042ddbb0f05bmr1729861eds.82.1655321686044;
-        Wed, 15 Jun 2022 12:34:46 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uMO7lU8SUzHOQRcWKOZNG4+RppmgPyLrEcObB5bwCLKVADj9bSdRBnn93QIuhb8xvFTgERQA==
-X-Received: by 2002:aa7:d8d8:0:b0:42d:dbb0:f05b with SMTP id k24-20020aa7d8d8000000b0042ddbb0f05bmr1729853eds.82.1655321685899;
-        Wed, 15 Jun 2022 12:34:45 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id r4-20020aa7cb84000000b0042dc9aafbfbsm32277edt.39.2022.06.15.12.34.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 12:34:45 -0700 (PDT)
-Message-ID: <982a47a2-8340-a9e6-0a44-b132b94e0b52@redhat.com>
-Date:   Wed, 15 Jun 2022 21:34:44 +0200
+        Wed, 15 Jun 2022 15:35:34 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C051544F9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:35:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655321730; x=1686857730;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0/C2T5/7z7iM43H25C9V8DQyg7z7scPmR21lboW0i50=;
+  b=i+c/kD9hsQ59YpJBb34VY66DRTRbksRsZMw4AB3utIzFNHWwP6FzMAiA
+   fZAvrnQrcoXm+EGkyjk+s86OuiMyvYnkKgWSgQ+NgxFiULG87b4ovh8o7
+   6h2CnBxOzLLJEoMtV9jKlP0xulICGRgHcGyw7kvKzAbHOly4lVPIjh2ta
+   vHlNsR5IjLuTFFvQHPeB8AvgCKBC3dSqsTpwrZLxTjOdKiE9FmdcaN9KY
+   47nRnpvL6P+j98Go4/2/16s7zc6B4J9iytK9dPeTDu8uar79lE44MoG2G
+   KAFawmeZgrThWwoHEkQtwiH8Pix8DDcM/RSX18lnS9+3AIIhNcuS1V/JL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="267774623"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="267774623"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 12:35:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="713091951"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 15 Jun 2022 12:35:28 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1YnX-000N8X-CZ;
+        Wed, 15 Jun 2022 19:35:27 +0000
+Date:   Thu, 16 Jun 2022 03:34:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Edward Wu <edwardwu@realtek.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        surenb@google.com, minchan@google.com, edwardwu@realtek.com
+Subject: Re: [PATCH] mm: cma: sync everything after EBUSY
+Message-ID: <202206160330.nZiFjZFG-lkp@intel.com>
+References: <20220615021504.23358-1-edwardwu@realtek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] vboxsf: Directly use ida_alloc()/free()
-Content-Language: en-US
-To:     Bo Liu <liubo03@inspur.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220615062930.2893-1-liubo03@inspur.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220615062930.2893-1-liubo03@inspur.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615021504.23358-1-edwardwu@realtek.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Edward,
 
-On 6/15/22 08:29, Bo Liu wrote:
-> Use ida_alloc()/ida_free() instead of
-> ida_simple_get()/ida_simple_remove().
-> The latter is deprecated and more verbose.
-> 
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
+Thank you for the patch! Perhaps something to improve:
 
-Thanks, patch looks good to me:
+[auto build test WARNING on akpm-mm/mm-everything]
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Edward-Wu/mm-cma-sync-everything-after-EBUSY/20220615-101716
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20220616/202206160330.nZiFjZFG-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ef04552ed13eb371365fcc55c7ae1e5c3c211168
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Edward-Wu/mm-cma-sync-everything-after-EBUSY/20220615-101716
+        git checkout ef04552ed13eb371365fcc55c7ae1e5c3c211168
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
 
-Regards,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Hans
+All warnings (new ones prefixed by >>):
 
-> ---
->  fs/vboxsf/super.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/vboxsf/super.c b/fs/vboxsf/super.c
-> index d2f6df69f611..24ef7ddecf89 100644
-> --- a/fs/vboxsf/super.c
-> +++ b/fs/vboxsf/super.c
-> @@ -155,7 +155,7 @@ static int vboxsf_fill_super(struct super_block *sb, struct fs_context *fc)
->  		}
->  	}
->  
-> -	sbi->bdi_id = ida_simple_get(&vboxsf_bdi_ida, 0, 0, GFP_KERNEL);
-> +	sbi->bdi_id = ida_alloc(&vboxsf_bdi_ida, GFP_KERNEL);
->  	if (sbi->bdi_id < 0) {
->  		err = sbi->bdi_id;
->  		goto fail_free;
-> @@ -221,7 +221,7 @@ static int vboxsf_fill_super(struct super_block *sb, struct fs_context *fc)
->  	vboxsf_unmap_folder(sbi->root);
->  fail_free:
->  	if (sbi->bdi_id >= 0)
-> -		ida_simple_remove(&vboxsf_bdi_ida, sbi->bdi_id);
-> +		ida_free(&vboxsf_bdi_ida, sbi->bdi_id);
->  	if (sbi->nls)
->  		unload_nls(sbi->nls);
->  	idr_destroy(&sbi->ino_idr);
-> @@ -268,7 +268,7 @@ static void vboxsf_put_super(struct super_block *sb)
->  
->  	vboxsf_unmap_folder(sbi->root);
->  	if (sbi->bdi_id >= 0)
-> -		ida_simple_remove(&vboxsf_bdi_ida, sbi->bdi_id);
-> +		ida_free(&vboxsf_bdi_ida, sbi->bdi_id);
->  	if (sbi->nls)
->  		unload_nls(sbi->nls);
->  
+>> mm/cma.c:415:6: warning: no previous prototype for 'cma_sync_work' [-Wmissing-prototypes]
+     415 | void cma_sync_work(struct work_struct *work)
+         |      ^~~~~~~~~~~~~
+>> mm/cma.c:422:6: warning: no previous prototype for 'cma_ebusy_sync_pinned_pages' [-Wmissing-prototypes]
+     422 | void cma_ebusy_sync_pinned_pages(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+vim +/cma_sync_work +415 mm/cma.c
+
+   414	
+ > 415	void cma_sync_work(struct work_struct *work)
+   416	{
+   417		ksys_sync();
+   418		kfree(work);
+   419		pr_debug("%s(): EBUSY Sync complete\n", __func__);
+   420	}
+   421	
+ > 422	void cma_ebusy_sync_pinned_pages(void)
+   423	{
+   424		struct work_struct *work;
+   425	
+   426		work = kmalloc(sizeof(*work), GFP_ATOMIC);
+   427		if (work) {
+   428			INIT_WORK(work, cma_sync_work);
+   429			schedule_work(work);
+   430		}
+   431	}
+   432	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

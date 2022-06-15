@@ -2,47 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE85654CEA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE5754CEA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:30:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343951AbiFOQ3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
+        id S1349422AbiFOQaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234917AbiFOQ3q (ORCPT
+        with ESMTP id S234917AbiFOQaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:29:46 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 356023A721
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:29:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E47B153B;
-        Wed, 15 Jun 2022 09:29:45 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BFE0A3F7F5;
-        Wed, 15 Jun 2022 09:29:43 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 17:29:41 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, etienne.carriere@linaro.org,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
-Subject: Re: [PATCH 11/22] firmware: arm_scmi: Add SCMIv3.1 extended names
- protocols support
-Message-ID: <YqoI5hYa97nZwUjl@e120937-lin>
-References: <20220330150551.2573938-1-cristian.marussi@arm.com>
- <20220330150551.2573938-12-cristian.marussi@arm.com>
- <6f865d7f-fde8-d923-3c7e-d12bfbc370a6@gmail.com>
- <YqmVsMGgxKuIT5rx@e120937-lin>
- <Yqmo/BiIR4gku0Y+@e120937-lin>
- <c787dfe6-9639-8797-d07a-048c5ec69ddf@gmail.com>
+        Wed, 15 Jun 2022 12:30:07 -0400
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970373CA73;
+        Wed, 15 Jun 2022 09:30:06 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id s1so9185098ilj.0;
+        Wed, 15 Jun 2022 09:30:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Yjh1+r7kQKkklBAX8yt4ws0m3hqB7N6WBb2gIQuSFOk=;
+        b=Pk/RCFm1tYc85Xx1TpHMfBLo6a4Kl7vUnokDRgpLWXJ8k+xfXc4i31TJ0jXCaztjR6
+         yS7NIEt8gwHBds/qOc5NGq0z2x9PiEV8P4rFmz3g6lhUEYQ2fFM4TskZskODQkgmQc2b
+         YQelQhcS1F1PXwi4Dyty/5kOn7P9X1knyjRgJ07f4ZGEcORqfRTqKNIQIzX2gxpa1YlP
+         qEzokWYUS2YAl3VHRQr5LMVjd0ah+VwA4Gvp03zaoNdhmNkC2oi7f+Du7sBcWEyxhAdr
+         v5U3UYw0bp6BZrHxvmGqN1PoRiY2lO9YGoUT/0bWnvOjKuE4kWGJacNQfD4taKHm9q7A
+         pqPA==
+X-Gm-Message-State: AJIora/Kad33BxqGgh2m5YF9TptCI6JW9zH5kvAm9IhVB+69cqXOql0/
+        dbcYht0518Pq8V1n4f4oLA==
+X-Google-Smtp-Source: AGRyM1tU2NMW3KY2z9dvAu+gMiHcE3NGahsP0X2Zu86k3z+l6tTjVbND7nRlT6zHhpafdmi8QTCg3A==
+X-Received: by 2002:a92:cd41:0:b0:2d6:6553:db13 with SMTP id v1-20020a92cd41000000b002d66553db13mr355984ilq.307.1655310605859;
+        Wed, 15 Jun 2022 09:30:05 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id c26-20020a02c9da000000b0032e2dce10aesm6296145jap.160.2022.06.15.09.30.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 09:30:05 -0700 (PDT)
+Received: (nullmailer pid 1393969 invoked by uid 1000);
+        Wed, 15 Jun 2022 16:30:03 -0000
+Date:   Wed, 15 Jun 2022 10:30:03 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Frank Li <Frank.Li@nxp.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        devicetree@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Serge Semin <fancer.lancer@gmail.com>
+Subject: Re: [PATCH v3 02/17] dt-bindings: PCI: dwc: Remove bus node from the
+ examples
+Message-ID: <20220615163003.GA1393851-robh@kernel.org>
+References: <20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610085706.15741-3-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c787dfe6-9639-8797-d07a-048c5ec69ddf@gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220610085706.15741-3-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,75 +75,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 09:10:03AM -0700, Florian Fainelli wrote:
-> On 6/15/22 02:40, Cristian Marussi wrote:
-> > On Wed, Jun 15, 2022 at 09:18:03AM +0100, Cristian Marussi wrote:
-> > > On Wed, Jun 15, 2022 at 05:45:11AM +0200, Florian Fainelli wrote:
-> > > > 
-> > > > 
-> > > > On 3/30/2022 5:05 PM, Cristian Marussi wrote:
-> > > > > Using the common protocol helper implementation add support for all new
-> > > > > SCMIv3.1 extended names commands related to all protocols with the
-> > > > > exception of SENSOR_AXIS_GET_NAME.
-> > > > > 
-> > > > > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > > > 
-> > > > This causes the following splat on a platform where regulators fail to
-> > > > initialize:
-> > > > 
-> > > 
-> > > Hi Florian,
-> > > 
-> > > thanks for the report.
-> > > 
-> > > It seems a memory error while allocating so it was not meant to be
-> > > solved by the fixes, anyway, I've never seen this splat in my testing
-> > > and at first sight I cannot see anything wrong in the devm_k* calls
-> > > inside scmi_voltage_protocol_init...is there any particular config in
-> > > your setup ?
-> > > 
-> > > Moreover, the WARNING line 5402 seems to match v5.19-rc1 and it has
-> > > slightly changed with -rc-1, so I'll try rebasing on that at first and
-> > > see if I can reproduce the issue locally.
-> > > 
-> > 
-> > I just re-tested the series rebased on v519-rc1 plus fixes and I cannot
-> > reproduce in my setup with a few (~9) good and bad voltage domains.
-> > 
-> > How many voltage domains are advertised by the platform in your setup ?
+On Fri, 10 Jun 2022 11:56:50 +0300, Serge Semin wrote:
+> It's absolutely redundant seeing by default each node is embedded into its
+> own example-X node with address and size cells set to 1.
 > 
-> There are 11 voltage regulators on this platform, and of course, now that I
-> am trying to reproduce the splat I reported I just cannot anymore... I will
-> let you know if there is anything that needs to be done. Thanks for being
-> responsive as usual!
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Changelog v3:
+> - This is a new patch unpinned from the next one:
+>   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
+>   by the Rob' request. (@Rob)
+> ---
+>  .../bindings/pci/snps,dw-pcie-ep.yaml         | 16 ++++-----
+>  .../devicetree/bindings/pci/snps,dw-pcie.yaml | 35 ++++++++++---------
+>  2 files changed, 24 insertions(+), 27 deletions(-)
+> 
 
-... you're welcome...
-
-I'm trying to figure out where an abnormal mem request could happen...
-
-can you try adding this (for brutal debugging) when you try ?
-(...just to rule out funny fw replies.... :D)
-
-Thanks,
-Cristian
-
---->8----
-
-diff --git a/drivers/firmware/arm_scmi/voltage.c b/drivers/firmware/arm_scmi/voltage.c
-index 895741b66f5a..fd841292df5c 100644
---- a/drivers/firmware/arm_scmi/voltage.c
-+++ b/drivers/firmware/arm_scmi/voltage.c
-@@ -108,6 +108,9 @@ static int scmi_init_voltage_levels(struct device *dev,
-                return -EINVAL;
-        }
- 
-+       dev_info(dev, "num_returned:%d  num_remaining:%d\n",
-+                num_returned, num_remaining);
-+
-        v->levels_uv = devm_kcalloc(dev, num_levels, sizeof(u32), GFP_KERNEL);
-        if (!v->levels_uv)
-                return -ENOMEM;
-
-
-> -- 
-> Florian
+Reviewed-by: Rob Herring <robh@kernel.org>

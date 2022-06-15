@@ -2,1217 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA4554C28E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E5454C298
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243404AbiFOHVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 03:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
+        id S243716AbiFOHZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 03:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235803AbiFOHVG (ORCPT
+        with ESMTP id S232467AbiFOHZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 03:21:06 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938F543AC3;
-        Wed, 15 Jun 2022 00:21:02 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25F6rFNp005431;
-        Wed, 15 Jun 2022 07:20:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=loztZ/g3OyyCQWLE4tdUB8PdGklazx9FQN8w5eASFNA=;
- b=Lkojo4Ahlfn/s6YBeLmmsY+byaEojvMJoQa2OS/pf/uuNdyNdB9KopNmyUCPVcnTKlb9
- 8Pm/XsuFY/7ApKiuc/Uqbb9e3UDRxWtzpm4W5qfawDbrS/f8c9g/slDtSh+tv91T9SOy
- JCDmW+1i85H91ig2YzFRHziU3VameYl05n9IUU0PVOQBxbpbh7631m11xqdYBOyLMro9
- ksXVynHclKYHFrUjA5EQXsMXSgfr9SYyidgvNH8rHxmJIWBlsw53QcRYUEYA3huFIiL4
- 9CrkyRMFPL1AlPcmTGxv0GQnLB6j4sfgV7dJUtI9twePmKVzrhYcR/u1s6QW44wycW9Z NQ== 
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gq72jd21d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jun 2022 07:20:57 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25F7KPpm031289;
-        Wed, 15 Jun 2022 07:20:55 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06ams.nl.ibm.com with ESMTP id 3gmjajde3s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jun 2022 07:20:55 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25F7KqMl21823990
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jun 2022 07:20:52 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F00F352059;
-        Wed, 15 Jun 2022 07:20:51 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 9D3405204F;
-        Wed, 15 Jun 2022 07:20:51 +0000 (GMT)
-From:   Thomas Richter <tmricht@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
-Subject: [PATCH] perf list: Add PMU pai_crypto event description for IBM z16
-Date:   Wed, 15 Jun 2022 09:20:43 +0200
-Message-Id: <20220615072043.2978743-1-tmricht@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
+        Wed, 15 Jun 2022 03:25:11 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D4746B0C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:25:10 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id a10so5808368wmj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:25:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=NGo4rRV+VZvdT0hcJzW6pnymtoNuY20VyL3BfwK+vsQ=;
+        b=PPDREC5zr0fQXQ7G6MaJZgrNi8eSCMpiZLg0TLXmzGOZkcQ5lnGffm023x8RCrxWnm
+         0RHnRsCqEQzwRyNVN+EB6znWpMbNwxPeK4kIENpN1ToeaJOJtChy43E4gtApGwIt1YuI
+         xISMw3GYeul6bBNJp0m8wvNTxY8bjsBTz6OHqjPv0UGy1Y/r/Xzp1XCeOuE8k5LlY2XI
+         GBC3UFDN9aI+z1txwK0jrMlSQnOLOJUJqbTHRgybPZKzFfSI/ygaSlIhzbi4y4+NLHfV
+         YxvcwyVon3TauHB+J6R0ejkDHVM7UNHoeQR1Jat8mgf7qHjLK5BzGB4rs9X4dkDbQZm+
+         bK5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NGo4rRV+VZvdT0hcJzW6pnymtoNuY20VyL3BfwK+vsQ=;
+        b=qOQg4vzVdfxfs6zhPMw/ENI56Ej4bP+7V01x3KFd1q/ktJufiEatTYFqIiKgm91qQl
+         cqnA0RX9F5SCt6RQOS4GyYb4Z6/nqFRgAQe25676zMiHCdGXOfg24ROAUub42n6eT0XM
+         7RJ4qEP1dR6aAjU1s22/GrToIRYvLLyxfHPECd6NWIxVH0Yzv0UT4DFqioZajZlTDAW1
+         QHuxoYNJEyXhy7ClfJZoU7XRxmn1l0CrMb3HbbTtOCu7Hxkyj8423+025OZ1GAt/si0j
+         15BU7kCPcvmOh3dzEa5m79JSMXMT9XTwiL/osTf8weIliAIKZAuFPy4Ef2EW4TMRMPh2
+         LFGQ==
+X-Gm-Message-State: AOAM530HkVyhSN7JJhkCO3/P9Uj8w7XUZTFKLnnolFNh41UVZe6AFXvG
+        wnPm+KIxG3Z7vVPXeLr6KKgHAA==
+X-Google-Smtp-Source: ABdhPJwYNKUeEBAZ4RUybATyRa6XP/R3ueVtMBVOx8BZh7j60wFKsSS2DRvlG4SBSF0xBFk6Exup1A==
+X-Received: by 2002:a7b:ce85:0:b0:39c:4b2e:fd26 with SMTP id q5-20020a7bce85000000b0039c4b2efd26mr8388758wmj.114.1655277908515;
+        Wed, 15 Jun 2022 00:25:08 -0700 (PDT)
+Received: from [10.205.160.53] ([95.83.233.54])
+        by smtp.gmail.com with ESMTPSA id k11-20020a056000004b00b0020d02262664sm13919956wrx.25.2022.06.15.00.25.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 00:25:07 -0700 (PDT)
+Message-ID: <8293b455-1150-edb5-9005-fda4f2d2971b@conchuod.ie>
+Date:   Wed, 15 Jun 2022 08:23:34 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: kQgJYSzjD0TkA4BlKJBxHCBCY1cCPvGT
-X-Proofpoint-GUID: kQgJYSzjD0TkA4BlKJBxHCBCY1cCPvGT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-15_03,2022-06-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 bulkscore=0 phishscore=0 suspectscore=0 impostorscore=0
- lowpriorityscore=0 spamscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206150024
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/5] dt-bindings: pwm: Add Mstar MSC313e PWM devicetree
+ bindings documentation
+Content-Language: en-US
+To:     Romain Perier <romain.perier@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220615070813.7720-1-romain.perier@gmail.com>
+ <20220615070813.7720-2-romain.perier@gmail.com>
+From:   Conor Dooley <mail@conchuod.ie>
+In-Reply-To: <20220615070813.7720-2-romain.perier@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the event description for the IBM z16 pai_crypto PMU released with
-commit 1bf54f32f525 ("s390/pai: Add support for cryptography counters")
+On 15/06/2022 08:08, Romain Perier wrote:
+> This adds the documentation for the devicetree bindings of the Mstar
+> MSC313e RTC driver, it includes MSC313e SoCs and SSD20xd.
 
-The document SA22-7832-13 "z/Architecture Principles of Operation",
-published May, 2022, contains the description of the
-Processor Activity Instrumentation Facility and the cryptography
-counter set., See Pages 5-110 to 5-113.
+I figure the RTC is a copy paste error?
 
-Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-Acked-by: Sumanth Korikkar <sumanthk@linux.ibm.com>
----
- .../perf/pmu-events/arch/s390/cf_z16/pai.json | 1101 +++++++++++++++++
- tools/perf/pmu-events/jevents.c               |    1 +
- 2 files changed, 1102 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/s390/cf_z16/pai.json
-
-diff --git a/tools/perf/pmu-events/arch/s390/cf_z16/pai.json b/tools/perf/pmu-events/arch/s390/cf_z16/pai.json
-new file mode 100644
-index 000000000000..cf8563d059b9
---- /dev/null
-+++ b/tools/perf/pmu-events/arch/s390/cf_z16/pai.json
-@@ -0,0 +1,1101 @@
-+[
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4096",
-+		"EventName": "CRYPTO_ALL",
-+		"BriefDescription": "CRYPTO ALL",
-+		"PublicDescription": "Sums of all non zero cryptography counters"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4097",
-+		"EventName": "KM_DEA",
-+		"BriefDescription": "KM DEA",
-+		"PublicDescription": "KM-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4098",
-+		"EventName": "KM_TDEA_128",
-+		"BriefDescription": "KM TDEA 128",
-+		"PublicDescription": "KM-TDEA-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4099",
-+		"EventName": "KM_TDEA_192",
-+		"BriefDescription": "KM TDEA 192",
-+		"PublicDescription": "KM-TDEA-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4100",
-+		"EventName": "KM_ENCRYPTED_DEA",
-+		"BriefDescription": "KM ENCRYPTED DEA",
-+		"PublicDescription": "KM-Encrypted-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4101",
-+		"EventName": "KM_ENCRYPTED_TDEA_128",
-+		"BriefDescription": "KM ENCRYPTED TDEA 128",
-+		"PublicDescription": "KM-Encrypted-TDEA-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4102",
-+		"EventName": "KM_ENCRYPTED_TDEA_192",
-+		"BriefDescription": "KM ENCRYPTED TDEA 192",
-+		"PublicDescription": "KM-Encrypted-TDEA-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4103",
-+		"EventName": "KM_AES_128",
-+		"BriefDescription": "KM AES 128",
-+		"PublicDescription": "KM-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4104",
-+		"EventName": "KM_AES_192",
-+		"BriefDescription": "KM AES 192",
-+		"PublicDescription": "KM-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4105",
-+		"EventName": "KM_AES_256",
-+		"BriefDescription": "KM AES 256",
-+		"PublicDescription": "KM-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4106",
-+		"EventName": "KM_ENCRYPTED_AES_128",
-+		"BriefDescription": "KM ENCRYPTED AES 128",
-+		"PublicDescription": "KM-Encrypted-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4107",
-+		"EventName": "KM_ENCRYPTED_AES_192",
-+		"BriefDescription": "KM ENCRYPTED AES 192",
-+		"PublicDescription": "KM-Encrypted-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4108",
-+		"EventName": "KM_ENCRYPTED_AES_256",
-+		"BriefDescription": "KM ENCRYPTED AES 256",
-+		"PublicDescription": "KM-Encrypted-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4109",
-+		"EventName": "KM_XTS_AES_128",
-+		"BriefDescription": "KM XTS AES 128",
-+		"PublicDescription": "KM-XTS-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4110",
-+		"EventName": "KM_XTS_AES_256",
-+		"BriefDescription": "KM XTS AES 256",
-+		"PublicDescription": "KM-XTS-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4111",
-+		"EventName": "KM_XTS_ENCRYPTED_AES_128",
-+		"BriefDescription": "KM XTS ENCRYPTED AES 128",
-+		"PublicDescription": "KM-XTS-Encrypted-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4112",
-+		"EventName": "KM_XTS_ENCRYPTED_AES_256",
-+		"BriefDescription": "KM XTS ENCRYPTED AES 256",
-+		"PublicDescription": "KM-XTS-Encrypted-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4113",
-+		"EventName": "KMC_DEA",
-+		"BriefDescription": "KMC DEA",
-+		"PublicDescription": "KMC-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4114",
-+		"EventName": "KMC_TDEA_128",
-+		"BriefDescription": "KMC TDEA 128",
-+		"PublicDescription": "KMC-TDEA-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4115",
-+		"EventName": "KMC_TDEA_192",
-+		"BriefDescription": "KMC TDEA 192",
-+		"PublicDescription": "KMC-TDEA-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4116",
-+		"EventName": "KMC_ENCRYPTED_DEA",
-+		"BriefDescription": "KMC ENCRYPTED DEA",
-+		"PublicDescription": "KMC-Encrypted-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4117",
-+		"EventName": "KMC_ENCRYPTED_TDEA_128",
-+		"BriefDescription": "KMC ENCRYPTED TDEA 128",
-+		"PublicDescription": "KMC-Encrypted-TDEA-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4118",
-+		"EventName": "KMC_ENCRYPTED_TDEA_192",
-+		"BriefDescription": "KMC ENCRYPTED TDEA 192",
-+		"PublicDescription": "KMC-Encrypted-TDEA-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4119",
-+		"EventName": "KMC_AES_128",
-+		"BriefDescription": "KMC AES 128",
-+		"PublicDescription": "KMC-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4120",
-+		"EventName": "KMC_AES_192",
-+		"BriefDescription": "KMC AES 192",
-+		"PublicDescription": "KMC-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4121",
-+		"EventName": "KMC_AES_256",
-+		"BriefDescription": "KMC AES 256",
-+		"PublicDescription": "KMC-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4122",
-+		"EventName": "KMC_ENCRYPTED_AES_128",
-+		"BriefDescription": "KMC ENCRYPTED AES 128",
-+		"PublicDescription": "KMC-Encrypted-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4123",
-+		"EventName": "KMC_ENCRYPTED_AES_192",
-+		"BriefDescription": "KMC ENCRYPTED AES 192",
-+		"PublicDescription": "KMC-Encrypted-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4124",
-+		"EventName": "KMC_ENCRYPTED_AES_256",
-+		"BriefDescription": "KMC ENCRYPTED AES 256",
-+		"PublicDescription": "KMC-Encrypted-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4125",
-+		"EventName": "KMC_PRNG",
-+		"BriefDescription": "KMC PRNG",
-+		"PublicDescription": "KMC-PRNG function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4126",
-+		"EventName": "KMA_GCM_AES_128",
-+		"BriefDescription": "KMA GCM AES 128",
-+		"PublicDescription": "KMA-GCM-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4127",
-+		"EventName": "KMA_GCM_AES_192",
-+		"BriefDescription": "KMA GCM AES 192",
-+		"PublicDescription": "KMA-GCM-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4128",
-+		"EventName": "KMA_GCM_AES_256",
-+		"BriefDescription": "KMA GCM AES 256",
-+		"PublicDescription": "KMA-GCM-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4129",
-+		"EventName": "KMA_GCM_ENCRYPTED_AES_128",
-+		"BriefDescription": "KMA GCM ENCRYPTED AES 128",
-+		"PublicDescription": "KMA-GCM-Encrypted-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4130",
-+		"EventName": "KMA_GCM_ENCRYPTED_AES_192",
-+		"BriefDescription": "KMA GCM ENCRYPTED AES 192",
-+		"PublicDescription": "KMA-GCM-Encrypted-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4131",
-+		"EventName": "KMA_GCM_ENCRYPTED_AES_256",
-+		"BriefDescription": "KMA GCM ENCRYPTED AES 256",
-+		"PublicDescription": "KMA-GCM-Encrypted-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4132",
-+		"EventName": "KMF_DEA",
-+		"BriefDescription": "KMF DEA",
-+		"PublicDescription": "KMF-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4133",
-+		"EventName": "KMF_TDEA_128",
-+		"BriefDescription": "KMF TDEA 128",
-+		"PublicDescription": "KMF-TDEA-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4134",
-+		"EventName": "KMF_TDEA_192",
-+		"BriefDescription": "KMF TDEA 192",
-+		"PublicDescription": "KMF-TDEA-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4135",
-+		"EventName": "KMF_ENCRYPTED_DEA",
-+		"BriefDescription": "KMF ENCRYPTED DEA",
-+		"PublicDescription": "KMF-Encrypted-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4136",
-+		"EventName": "KMF_ENCRYPTED_TDEA_128",
-+		"BriefDescription": "KMF ENCRYPTED TDEA 128",
-+		"PublicDescription": "KMF-Encrypted-TDEA-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4137",
-+		"EventName": "KMF_ENCRYPTED_TDEA_192",
-+		"BriefDescription": "KMF ENCRYPTED TDEA 192",
-+		"PublicDescription": "KMF-Encrypted-TDEA-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4138",
-+		"EventName": "KMF_AES_128",
-+		"BriefDescription": "KMF AES 128",
-+		"PublicDescription": "KMF-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4139",
-+		"EventName": "KMF_AES_192",
-+		"BriefDescription": "KMF AES 192",
-+		"PublicDescription": "KMF-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4140",
-+		"EventName": "KMF_AES_256",
-+		"BriefDescription": "KMF AES 256",
-+		"PublicDescription": "KMF-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4141",
-+		"EventName": "KMF_ENCRYPTED_AES_128",
-+		"BriefDescription": "KMF ENCRYPTED AES 128",
-+		"PublicDescription": "KMF-Encrypted-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4142",
-+		"EventName": "KMF_ENCRYPTED_AES_192",
-+		"BriefDescription": "KMF ENCRYPTED AES 192",
-+		"PublicDescription": "KMF-Encrypted-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4143",
-+		"EventName": "KMF_ENCRYPTED_AES_256",
-+		"BriefDescription": "KMF ENCRYPTED AES 256",
-+		"PublicDescription": "KMF-Encrypted-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4144",
-+		"EventName": "KMCTR_DEA",
-+		"BriefDescription": "KMCTR DEA",
-+		"PublicDescription": "KMCTR-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4145",
-+		"EventName": "KMCTR_TDEA_128",
-+		"BriefDescription": "KMCTR TDEA 128",
-+		"PublicDescription": "KMCTR-TDEA-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4146",
-+		"EventName": "KMCTR_TDEA_192",
-+		"BriefDescription": "KMCTR TDEA 192",
-+		"PublicDescription": "KMCTR-TDEA-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4147",
-+		"EventName": "KMCTR_ENCRYPTED_DEA",
-+		"BriefDescription": "KMCTR ENCRYPTED DEA",
-+		"PublicDescription": "KMCTR-Encrypted-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4148",
-+		"EventName": "KMCTR_ENCRYPTED_TDEA_128",
-+		"BriefDescription": "KMCTR ENCRYPTED TDEA 128",
-+		"PublicDescription": "KMCTR-Encrypted-TDEA-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4149",
-+		"EventName": "KMCTR_ENCRYPTED_TDEA_192",
-+		"BriefDescription": "KMCTR ENCRYPTED TDEA 192",
-+		"PublicDescription": "KMCTR-Encrypted-TDEA-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4150",
-+		"EventName": "KMCTR_AES_128",
-+		"BriefDescription": "KMCTR AES 128",
-+		"PublicDescription": "KMCTR-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4151",
-+		"EventName": "KMCTR_AES_192",
-+		"BriefDescription": "KMCTR AES 192",
-+		"PublicDescription": "KMCTR-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4152",
-+		"EventName": "KMCTR_AES_256",
-+		"BriefDescription": "KMCTR AES 256",
-+		"PublicDescription": "KMCTR-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4153",
-+		"EventName": "KMCTR_ENCRYPTED_AES_128",
-+		"BriefDescription": "KMCTR ENCRYPTED AES 128",
-+		"PublicDescription": "KMCTR-Encrypted-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4154",
-+		"EventName": "KMCTR_ENCRYPTED_AES_192",
-+		"BriefDescription": "KMCTR ENCRYPTED AES 192",
-+		"PublicDescription": "KMCTR-Encrypted-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4155",
-+		"EventName": "KMCTR_ENCRYPTED_AES_256",
-+		"BriefDescription": "KMCTR ENCRYPTED AES 256",
-+		"PublicDescription": "KMCTR-Encrypted-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4156",
-+		"EventName": "KMO_DEA",
-+		"BriefDescription": "KMO DEA",
-+		"PublicDescription": "KMO-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4157",
-+		"EventName": "KMO_TDEA_128",
-+		"BriefDescription": "KMO TDEA 128",
-+		"PublicDescription": "KMO-TDEA-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4158",
-+		"EventName": "KMO_TDEA_192",
-+		"BriefDescription": "KMO TDEA 192",
-+		"PublicDescription": "KMO-TDEA-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4159",
-+		"EventName": "KMO_ENCRYPTED_DEA",
-+		"BriefDescription": "KMO ENCRYPTED DEA",
-+		"PublicDescription": "KMO-Encrypted-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4160",
-+		"EventName": "KMO_ENCRYPTED_TDEA_128",
-+		"BriefDescription": "KMO ENCRYPTED TDEA 128",
-+		"PublicDescription": "KMO-Encrypted-TDEA-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4161",
-+		"EventName": "KMO_ENCRYPTED_TDEA_192",
-+		"BriefDescription": "KMO ENCRYPTED TDEA 192",
-+		"PublicDescription": "KMO-Encrypted-TDEA-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4162",
-+		"EventName": "KMO_AES_128",
-+		"BriefDescription": "KMO AES 128",
-+		"PublicDescription": "KMO-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4163",
-+		"EventName": "KMO_AES_192",
-+		"BriefDescription": "KMO AES 192",
-+		"PublicDescription": "KMO-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4164",
-+		"EventName": "KMO_AES_256",
-+		"BriefDescription": "KMO AES 256",
-+		"PublicDescription": "KMO-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4165",
-+		"EventName": "KMO_ENCRYPTED_AES_128",
-+		"BriefDescription": "KMO ENCRYPTED AES 128",
-+		"PublicDescription": "KMO-Encrypted-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4166",
-+		"EventName": "KMO_ENCRYPTED_AES_192",
-+		"BriefDescription": "KMO ENCRYPTED AES 192",
-+		"PublicDescription": "KMO-Encrypted-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4167",
-+		"EventName": "KMO_ENCRYPTED_AES_256",
-+		"BriefDescription": "KMO ENCRYPTED AES 256",
-+		"PublicDescription": "KMO-Encrypted-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4168",
-+		"EventName": "KIMD_SHA_1",
-+		"BriefDescription": "KIMD SHA 1",
-+		"PublicDescription": "KIMD-SHA-1 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4169",
-+		"EventName": "KIMD_SHA_256",
-+		"BriefDescription": "KIMD SHA 256",
-+		"PublicDescription": "KIMD-SHA-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4170",
-+		"EventName": "KIMD_SHA_512",
-+		"BriefDescription": "KIMD SHA 512",
-+		"PublicDescription": "KIMD-SHA-512 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4171",
-+		"EventName": "KIMD_SHA3_224",
-+		"BriefDescription": "KIMD SHA3 224",
-+		"PublicDescription": "KIMD-SHA3-224 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4172",
-+		"EventName": "KIMD_SHA3_256",
-+		"BriefDescription": "KIMD SHA3 256",
-+		"PublicDescription": "KIMD-SHA3-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4173",
-+		"EventName": "KIMD_SHA3_384",
-+		"BriefDescription": "KIMD SHA3 384",
-+		"PublicDescription": "KIMD-SHA3-384 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4174",
-+		"EventName": "KIMD_SHA3_512",
-+		"BriefDescription": "KIMD SHA3 512",
-+		"PublicDescription": "KIMD-SHA3-512 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4175",
-+		"EventName": "KIMD_SHAKE_128",
-+		"BriefDescription": "KIMD SHAKE 128",
-+		"PublicDescription": "KIMD-SHAKE-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4176",
-+		"EventName": "KIMD_SHAKE_256",
-+		"BriefDescription": "KIMD SHAKE 256",
-+		"PublicDescription": "KIMD-SHAKE-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4177",
-+		"EventName": "KIMD_GHASH",
-+		"BriefDescription": "KIMD GHASH",
-+		"PublicDescription": "KIMD-GHASH function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4178",
-+		"EventName": "KLMD_SHA_1",
-+		"BriefDescription": "KLMD SHA 1",
-+		"PublicDescription": "KLMD-SHA-1 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4179",
-+		"EventName": "KLMD_SHA_256",
-+		"BriefDescription": "KLMD SHA 256",
-+		"PublicDescription": "KLMD-SHA-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4180",
-+		"EventName": "KLMD_SHA_512",
-+		"BriefDescription": "KLMD SHA 512",
-+		"PublicDescription": "KLMD-SHA-512 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4181",
-+		"EventName": "KLMD_SHA3_224",
-+		"BriefDescription": "KLMD SHA3 224",
-+		"PublicDescription": "KLMD-SHA3-224 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4182",
-+		"EventName": "KLMD_SHA3_256",
-+		"BriefDescription": "KLMD SHA3 256",
-+		"PublicDescription": "KLMD-SHA3-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4183",
-+		"EventName": "KLMD_SHA3_384",
-+		"BriefDescription": "KLMD SHA3 384",
-+		"PublicDescription": "KLMD-SHA3-384 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4184",
-+		"EventName": "KLMD_SHA3_512",
-+		"BriefDescription": "KLMD SHA3 512",
-+		"PublicDescription": "KLMD-SHA3-512 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4185",
-+		"EventName": "KLMD_SHAKE_128",
-+		"BriefDescription": "KLMD SHAKE 128",
-+		"PublicDescription": "KLMD-SHAKE-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4186",
-+		"EventName": "KLMD_SHAKE_256",
-+		"BriefDescription": "KLMD SHAKE 256",
-+		"PublicDescription": "KLMD-SHAKE-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4187",
-+		"EventName": "KMAC_DEA",
-+		"BriefDescription": "KMAC DEA",
-+		"PublicDescription": "KMAC-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4188",
-+		"EventName": "KMAC_TDEA_128",
-+		"BriefDescription": "KMAC TDEA 128",
-+		"PublicDescription": "KMAC-TDEA-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4189",
-+		"EventName": "KMAC_TDEA_192",
-+		"BriefDescription": "KMAC TDEA 192",
-+		"PublicDescription": "KMAC-TDEA-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4190",
-+		"EventName": "KMAC_ENCRYPTED_DEA",
-+		"BriefDescription": "KMAC ENCRYPTED DEA",
-+		"PublicDescription": "KMAC-Encrypted-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4191",
-+		"EventName": "KMAC_ENCRYPTED_TDEA_128",
-+		"BriefDescription": "KMAC ENCRYPTED TDEA 128",
-+		"PublicDescription": "KMAC-Encrypted-TDEA-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4192",
-+		"EventName": "KMAC_ENCRYPTED_TDEA_192",
-+		"BriefDescription": "KMAC ENCRYPTED TDEA 192",
-+		"PublicDescription": "KMAC-Encrypted-TDEA-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4193",
-+		"EventName": "KMAC_AES_128",
-+		"BriefDescription": "KMAC AES 128",
-+		"PublicDescription": "KMAC-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4194",
-+		"EventName": "KMAC_AES_192",
-+		"BriefDescription": "KMAC AES 192",
-+		"PublicDescription": "KMAC-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4195",
-+		"EventName": "KMAC_AES_256",
-+		"BriefDescription": "KMAC AES 256",
-+		"PublicDescription": "KMAC-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4196",
-+		"EventName": "KMAC_ENCRYPTED_AES_128",
-+		"BriefDescription": "KMAC ENCRYPTED AES 128",
-+		"PublicDescription": "KMAC-Encrypted-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4197",
-+		"EventName": "KMAC_ENCRYPTED_AES_192",
-+		"BriefDescription": "KMAC ENCRYPTED AES 192",
-+		"PublicDescription": "KMAC-Encrypted-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4198",
-+		"EventName": "KMAC_ENCRYPTED_AES_256",
-+		"BriefDescription": "KMAC ENCRYPTED AES 256",
-+		"PublicDescription": "KMAC-Encrypted-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4199",
-+		"EventName": "PCC_COMPUTE_LAST_BLOCK_CMAC_USING_DEA",
-+		"BriefDescription": "PCC COMPUTE LAST BLOCK CMAC USING DEA",
-+		"PublicDescription": "PCC-Compute-Last-Block-CMAC-Using-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4200",
-+		"EventName": "PCC_COMPUTE_LAST_BLOCK_CMAC_USING_TDEA_128",
-+		"BriefDescription": "PCC COMPUTE LAST BLOCK CMAC USING TDEA 128",
-+		"PublicDescription": "PCC-Compute-Last-Block-CMAC-Using-TDEA-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4201",
-+		"EventName": "PCC_COMPUTE_LAST_BLOCK_CMAC_USING_TDEA_192",
-+		"BriefDescription": "PCC COMPUTE LAST BLOCK CMAC USING TDEA 192",
-+		"PublicDescription": "PCC-Compute-Last-Block-CMAC-Using-TDEA-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4202",
-+		"EventName": "PCC_COMPUTE_LAST_BLOCK_CMAC_USING_ENCRYPTED_DEA",
-+		"BriefDescription": "PCC COMPUTE LAST BLOCK CMAC USING ENCRYPTED DEA",
-+		"PublicDescription": "PCC-Compute-Last-Block-CMAC-Using-Encrypted-DEA function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4203",
-+		"EventName": "PCC_COMPUTE_LAST_BLOCK_CMAC_USING_ENCRYPTED_TDEA_128",
-+		"BriefDescription": "PCC COMPUTE LAST BLOCK CMAC USING ENCRYPTED TDEA 128",
-+		"PublicDescription": "PCC-Compute-Last-Block-CMAC-Using-Encrypted-TDEA- 128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4204",
-+		"EventName": "PCC_COMPUTE_LAST_BLOCK_CMAC_USING_ENCRYPTED_TDEA_192",
-+		"BriefDescription": "PCC COMPUTE LAST BLOCK CMAC USING ENCRYPTED TDEA 192",
-+		"PublicDescription": "PCC-Compute-Last-Block-CMAC-Using-Encrypted-TDEA- 192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4205",
-+		"EventName": "PCC_COMPUTE_LAST_BLOCK_CMAC_USING_AES_128",
-+		"BriefDescription": "PCC COMPUTE LAST BLOCK CMAC USING AES 128",
-+		"PublicDescription": "PCC-Compute-Last-Block-CMAC-Using-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4206",
-+		"EventName": "PCC_COMPUTE_LAST_BLOCK_CMAC_USING_AES_192",
-+		"BriefDescription": "PCC COMPUTE LAST BLOCK CMAC USING AES 192",
-+		"PublicDescription": "PCC-Compute-Last-Block-CMAC-Using-AES-192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4207",
-+		"EventName": "PCC_COMPUTE_LAST_BLOCK_CMAC_USING_AES_256",
-+		"BriefDescription": "PCC COMPUTE LAST BLOCK CMAC USING AES 256",
-+		"PublicDescription": "PCC-Compute-Last-Block-CMAC-Using-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4208",
-+		"EventName": "PCC_COMPUTE_LAST_BLOCK_CMAC_USING_ENCRYPTED_AES_128",
-+		"BriefDescription": "PCC COMPUTE LAST BLOCK CMAC USING ENCRYPTED AES 128",
-+		"PublicDescription": "PCC-Compute-Last-Block-CMAC-Using-Encrypted-AES- 128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4209",
-+		"EventName": "PCC_COMPUTE_LAST_BLOCK_CMAC_USING_ENCRYPTED_AES_192",
-+		"BriefDescription": "PCC COMPUTE LAST BLOCK CMAC USING ENCRYPTED AES 192",
-+		"PublicDescription": "PCC-Compute-Last-Block-CMAC-Using-Encrypted-AES- 192 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4210",
-+		"EventName": "PCC_COMPUTE_LAST_BLOCK_CMAC_USING_ENCRYPTED_AES_256A",
-+		"BriefDescription": "PCC COMPUTE LAST BLOCK CMAC USING ENCRYPTED AES 256A",
-+		"PublicDescription": "PCC-Compute-Last-Block-CMAC-Using-Encrypted-AES- 256A function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4211",
-+		"EventName": "PCC_COMPUTE_XTS_PARAMETER_USING_AES_128",
-+		"BriefDescription": "PCC COMPUTE XTS PARAMETER USING AES 128",
-+		"PublicDescription": "PCC-Compute-XTS-Parameter-Using-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4212",
-+		"EventName": "PCC_COMPUTE_XTS_PARAMETER_USING_AES_256",
-+		"BriefDescription": "PCC COMPUTE XTS PARAMETER USING AES 256",
-+		"PublicDescription": "PCC-Compute-XTS-Parameter-Using-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4213",
-+		"EventName": "PCC_COMPUTE_XTS_PARAMETER_USING_ENCRYPTED_AES_128",
-+		"BriefDescription": "PCC COMPUTE XTS PARAMETER USING ENCRYPTED AES 128",
-+		"PublicDescription": "PCC-Compute-XTS-Parameter-Using-Encrypted-AES-128 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4214",
-+		"EventName": "PCC_COMPUTE_XTS_PARAMETER_USING_ENCRYPTED_AES_256",
-+		"BriefDescription": "PCC COMPUTE XTS PARAMETER USING ENCRYPTED AES 256",
-+		"PublicDescription": "PCC-Compute-XTS-Parameter-Using-Encrypted-AES-256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4215",
-+		"EventName": "PCC_SCALAR_MULTIPLY_P256",
-+		"BriefDescription": "PCC SCALAR MULTIPLY P256",
-+		"PublicDescription": "PCC-Scalar-Multiply-P256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4216",
-+		"EventName": "PCC_SCALAR_MULTIPLY_P384",
-+		"BriefDescription": "PCC SCALAR MULTIPLY P384",
-+		"PublicDescription": "PCC-Scalar-Multiply-P384 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4217",
-+		"EventName": "PCC_SCALAR_MULTIPLY_P521",
-+		"BriefDescription": "PCC SCALAR MULTIPLY P521",
-+		"PublicDescription": "PCC-Scalar-Multiply-P521 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4218",
-+		"EventName": "PCC_SCALAR_MULTIPLY_ED25519",
-+		"BriefDescription": "PCC SCALAR MULTIPLY ED25519",
-+		"PublicDescription": "PCC-Scalar-Multiply-Ed25519 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4219",
-+		"EventName": "PCC_SCALAR_MULTIPLY_ED448",
-+		"BriefDescription": "PCC SCALAR MULTIPLY ED448",
-+		"PublicDescription": "PCC-Scalar-Multiply-Ed448 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4220",
-+		"EventName": "PCC_SCALAR_MULTIPLY_X25519",
-+		"BriefDescription": "PCC SCALAR MULTIPLY X25519",
-+		"PublicDescription": "PCC-Scalar-Multiply-X25519 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4221",
-+		"EventName": "PCC_SCALAR_MULTIPLY_X448",
-+		"BriefDescription": "PCC SCALAR MULTIPLY X448",
-+		"PublicDescription": "PCC-Scalar-Multiply-X448 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4222",
-+		"EventName": "PRNO_SHA_512_DRNG",
-+		"BriefDescription": "PRNO SHA 512 DRNG",
-+		"PublicDescription": "PRNO-SHA-512-DRNG function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4223",
-+		"EventName": "PRNO_TRNG_QUERY_RAW_TO_CONDITIONED_RATIO",
-+		"BriefDescription": "PRNO TRNG QUERY RAW TO CONDITIONED RATIO",
-+		"PublicDescription": "PRNO-TRNG-Query-Raw-to-Conditioned-Ratio function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4224",
-+		"EventName": "PRNO_TRNG",
-+		"BriefDescription": "PRNO TRNG",
-+		"PublicDescription": "PRNO-TRNG function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4225",
-+		"EventName": "KDSA_ECDSA_VERIFY_P256",
-+		"BriefDescription": "KDSA ECDSA VERIFY P256",
-+		"PublicDescription": "KDSA-ECDSA-Verify-P256 function ending with CC=0 or CC=2"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4226",
-+		"EventName": "KDSA_ECDSA_VERIFY_P384",
-+		"BriefDescription": "KDSA ECDSA VERIFY P384",
-+		"PublicDescription": "KDSA-ECDSA-Verify-P384 function ending with CC=0 or CC=2"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4227",
-+		"EventName": "KDSA_ECDSA_VERIFY_P521",
-+		"BriefDescription": "KDSA ECDSA VERIFY P521",
-+		"PublicDescription": "KDSA-ECDSA-Verify-P521 function ending with CC=0 or CC=2"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4228",
-+		"EventName": "KDSA_ECDSA_SIGN_P256",
-+		"BriefDescription": "KDSA ECDSA SIGN P256",
-+		"PublicDescription": "KDSA-ECDSA-Sign-P256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4229",
-+		"EventName": "KDSA_ECDSA_SIGN_P384",
-+		"BriefDescription": "KDSA ECDSA SIGN P384",
-+		"PublicDescription": "KDSA-ECDSA-Sign-P384 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4230",
-+		"EventName": "KDSA_ECDSA_SIGN_P521",
-+		"BriefDescription": "KDSA ECDSA SIGN P521",
-+		"PublicDescription": "KDSA-ECDSA-Sign-P521 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4231",
-+		"EventName": "KDSA_ENCRYPTED_ECDSA_SIGN_P256",
-+		"BriefDescription": "KDSA ENCRYPTED ECDSA SIGN P256",
-+		"PublicDescription": "KDSA-Encrypted-ECDSA-Sign-P256 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4232",
-+		"EventName": "KDSA_ENCRYPTED_ECDSA_SIGN_P384",
-+		"BriefDescription": "KDSA ENCRYPTED ECDSA SIGN P384",
-+		"PublicDescription": "KDSA-Encrypted-ECDSA-Sign-P384 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4233",
-+		"EventName": "KDSA_ENCRYPTED_ECDSA_SIGN_P521",
-+		"BriefDescription": "KDSA ENCRYPTED ECDSA SIGN P521",
-+		"PublicDescription": "KDSA-Encrypted-ECDSA-Sign-P521 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4234",
-+		"EventName": "KDSA_EDDSA_VERIFY_ED25519",
-+		"BriefDescription": "KDSA EDDSA VERIFY ED25519",
-+		"PublicDescription": "KDSA-EdDSA-Verify-Ed25519 function ending with CC=0 or CC=2"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4235",
-+		"EventName": "KDSA_EDDSA_VERIFY_ED448",
-+		"BriefDescription": "KDSA EDDSA VERIFY ED448",
-+		"PublicDescription": "KDSA-EdDSA-Verify-Ed448 function ending with CC=0 or CC=2"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4236",
-+		"EventName": "KDSA_EDDSA_SIGN_ED25519",
-+		"BriefDescription": "KDSA EDDSA SIGN ED25519",
-+		"PublicDescription": "KDSA-EdDSA-Sign-Ed25519 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4237",
-+		"EventName": "KDSA_EDDSA_SIGN_ED448",
-+		"BriefDescription": "KDSA EDDSA SIGN ED448",
-+		"PublicDescription": "KDSA-EdDSA-Sign-Ed448 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4238",
-+		"EventName": "KDSA_ENCRYPTED_EDDSA_SIGN_ED25519",
-+		"BriefDescription": "KDSA ENCRYPTED EDDSA SIGN ED25519",
-+		"PublicDescription": "KDSA-Encrypted-EdDSA-Sign-Ed25519 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4239",
-+		"EventName": "KDSA_ENCRYPTED_EDDSA_SIGN_ED448",
-+		"BriefDescription": "KDSA ENCRYPTED EDDSA SIGN ED448",
-+		"PublicDescription": "KDSA-Encrypted-EdDSA-Sign-Ed448 function ending with CC=0"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4240",
-+		"EventName": "PCKMO_ENCRYPT_DEA_KEY",
-+		"BriefDescription": "PCKMO ENCRYPT DEA KEY",
-+		"PublicDescription": "PCKMO-Encrypt-DEA-key function"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4241",
-+		"EventName": "PCKMO_ENCRYPT_TDEA_128_KEY",
-+		"BriefDescription": "PCKMO ENCRYPT TDEA 128 KEY",
-+		"PublicDescription": "PCKMO-Encrypt-TDEA-128-key function"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4242",
-+		"EventName": "PCKMO_ENCRYPT_TDEA_192_KEY",
-+		"BriefDescription": "PCKMO ENCRYPT TDEA 192 KEY",
-+		"PublicDescription": "PCKMO-Encrypt-TDEA-192-key function"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4243",
-+		"EventName": "PCKMO_ENCRYPT_AES_128_KEY",
-+		"BriefDescription": "PCKMO ENCRYPT AES 128 KEY",
-+		"PublicDescription": "PCKMO-Encrypt-AES-128-key function"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4244",
-+		"EventName": "PCKMO_ENCRYPT_AES_192_KEY",
-+		"BriefDescription": "PCKMO ENCRYPT AES 192 KEY",
-+		"PublicDescription": "PCKMO-Encrypt-AES-192-key function"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4245",
-+		"EventName": "PCKMO_ENCRYPT_AES_256_KEY",
-+		"BriefDescription": "PCKMO ENCRYPT AES 256 KEY",
-+		"PublicDescription": "PCKMO-Encrypt-AES-256-key function"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4246",
-+		"EventName": "PCKMO_ENCRYPT_ECC_P256_KEY",
-+		"BriefDescription": "PCKMO ENCRYPT ECC P256 KEY",
-+		"PublicDescription": "PCKMO-Encrypt-ECC-P256-key function"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4247",
-+		"EventName": "PCKMO_ENCRYPT_ECC_P384_KEY",
-+		"BriefDescription": "PCKMO ENCRYPT ECC P384 KEY",
-+		"PublicDescription": "PCKMO-Encrypt-ECC-P384-key function"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4248",
-+		"EventName": "PCKMO_ENCRYPT_ECC_P521_KEY",
-+		"BriefDescription": "PCKMO ENCRYPT ECC P521 KEY",
-+		"PublicDescription": "PCKMO-Encrypt-ECC-P521-key function"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4249",
-+		"EventName": "PCKMO_ENCRYPT_ECC_ED25519_KEY",
-+		"BriefDescription": "PCKMO ENCRYPT ECC ED25519 KEY",
-+		"PublicDescription": "PCKMO-Encrypt-ECC-Ed25519-key function"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4250",
-+		"EventName": "PCKMO_ENCRYPT_ECC_ED448_KEY",
-+		"BriefDescription": "PCKMO ENCRYPT ECC ED448 KEY",
-+		"PublicDescription": "PCKMO-Encrypt-ECC-Ed448-key function"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4251",
-+		"EventName": "IBM_RESERVED_155",
-+		"BriefDescription": "IBM RESERVED_155",
-+		"PublicDescription": "Reserved for IBM use"
-+	},
-+	{
-+		"Unit": "PAI-CRYPTO",
-+		"EventCode": "4252",
-+		"EventName": "IBM_RESERVED_156",
-+		"BriefDescription": "IBM RESERVED_156",
-+		"PublicDescription": "Reserved for IBM use"
-+	}
-+]
-diff --git a/tools/perf/pmu-events/jevents.c b/tools/perf/pmu-events/jevents.c
-index e597e4bac90f..12e31773ab1f 100644
---- a/tools/perf/pmu-events/jevents.c
-+++ b/tools/perf/pmu-events/jevents.c
-@@ -246,6 +246,7 @@ static struct map {
- 	{ "iMPH-U", "uncore_arb" },
- 	{ "CPU-M-CF", "cpum_cf" },
- 	{ "CPU-M-SF", "cpum_sf" },
-+	{ "PAI-CRYPTO", "pai_crypto" },
- 	{ "UPI LL", "uncore_upi" },
- 	{ "hisi_sicl,cpa", "hisi_sicl,cpa"},
- 	{ "hisi_sccl,ddrc", "hisi_sccl,ddrc" },
--- 
-2.36.1
-
+> 
+> Signed-off-by: Romain Perier <romain.perier@gmail.com>
+> ---
+>   .../bindings/pwm/mstar,msc313e-pwm.yaml       | 47 +++++++++++++++++++
+>   1 file changed, 47 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/pwm/mstar,msc313e-pwm.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pwm/mstar,msc313e-pwm.yaml b/Documentation/devicetree/bindings/pwm/mstar,msc313e-pwm.yaml
+> new file mode 100644
+> index 000000000000..82f2357db085
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pwm/mstar,msc313e-pwm.yaml
+> @@ -0,0 +1,47 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pwm/mstar,msc313e-pwm.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Mstar MSC313e PWM controller
+> +
+> +allOf:
+> +  - $ref: "pwm.yaml#"
+> +
+> +maintainers:
+> +  - Daniel Palmer <daniel@0x0f.com>
+> +  - Romain Perier <romain.perier@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +        - enum:
+> +          - mstar,msc313e-pwm
+> +          - mstar,ssd20xd-pwm
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  "#pwm-cells":
+> +    const: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    pwm: pwm@3400 {
+> +      compatible = "mstar,msc313e-pwm";
+> +      reg = <0x3400 0x400>;
+> +      #pwm-cells = <2>;
+> +      clocks = <&xtal_div2>;
+> +    };

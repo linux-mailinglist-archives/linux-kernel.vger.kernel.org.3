@@ -2,82 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AAA54D132
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7EC54D13A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358150AbiFOSwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 14:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S1344065AbiFOSyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 14:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358430AbiFOSws (ORCPT
+        with ESMTP id S1358485AbiFOSyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:52:48 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7788024BF0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:52:47 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id t3-20020a17090a510300b001ea87ef9a3dso2858001pjh.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:52:47 -0700 (PDT)
+        Wed, 15 Jun 2022 14:54:10 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82DA381A2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:54:08 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id a2so20311701lfg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:54:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=semihalf.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+plJLyc6BfesKBMfyYWeTBRHfNx/06Fk1S03G42Wxl4=;
-        b=mOjsn2omSJQYO+C6R1n+7Va36LEjp++XQfMZQgxSRdbtYoqgUjImwjvbQoccczC3ou
-         OK/8E3yx+flabo4DNZPP1FDlsfa/wuavvcUMnn3Sltx0t+EsgbhR+8+fUuzNZZ0hYpzq
-         SKKwvjXO9r8BlrtMxm+PVmnl7H+JWP6Jbc+dqBFR9NJ3BLGG9GSTUN4I54zr56QOoCKs
-         4ungpINDDzuBJYu67AZtMp+9+o8ePw72rKL7PRdNedynU/LKR0Hl6T+u58qaycxXX29C
-         QmvgsP/EpuWm5ZCAsm28B+TL8NqUFxoWWIONQQdGxDFOmalbPBJSnIbD4uHP9QeY+U6o
-         MH8A==
+         :cc:content-transfer-encoding;
+        bh=R/+J1Y9yB1sPzolzla9qc2fDqAKL6OPTM1OdQs0CRno=;
+        b=abcd5znL1a7ok4I0g4GWuTjmiANg0iKDQGwuE8doxfsT9kdULYDdRiGccgJroEls8X
+         5xxZ8c5rwhA/zDqfvtRxTYIP5tKxBkenLEJWpclHtYqcMmHK2uWBV5hfIs0kRo7LEfbt
+         tMGhhPywkfqrfCOHEVHsbf6UtAOSJVXPOkoy4/k2815rrk9vAmRWXWK2HhxteiU/wkww
+         44eCjmP4UoMmiJFizXetKCX9q31AmKP1NgwtXf+uNkb1VeyaQ1V0Hct4EyPLVHQNq+wd
+         0QF+UxZGiWL2qZCF4My/2/U9LTnK3jD4sVBeSS9XopFiK2K4V6xWIYuWYAcSfFSMU5l2
+         BWBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+plJLyc6BfesKBMfyYWeTBRHfNx/06Fk1S03G42Wxl4=;
-        b=Szqo4sg3zlHfnekU1166hSKG0wXPmd5tI9fRTLqqKhNwueA3hDPAWPUmcuswZtTduV
-         xbxVsZP9jhJBtT9go78TsdW7F6nNmyNYAD006d9m186cRv1tt4T3g6SwFmNJwfzU0d2t
-         8zy0k3IlF/I+KInW+B4Qa+V64xgco7FPVbzMIGb4bMH9iK1eCf2+9WBcwIs7b88Dkvz/
-         0KwO+6b/+abHfm3jVaQY53D5Lc3jXUCBWcQVKKZXz3KzT/7kTwcn0PXmwqPoZKSm0AL2
-         +Mu2fo0BApGbPZeOKfCM7DxvOEb6sBvsbENp6MNRInSSS9n2AbhzataInL32c3NhuwjG
-         hjDg==
-X-Gm-Message-State: AJIora/19FMjFvuZxqsoFiYYorInPxvDrQFCI2wXlDYJL4WQ57C8+2Q0
-        5DH5R6+qLGNq/SmtaIPGA5ohZ819RsmEF+oQmug=
-X-Google-Smtp-Source: AGRyM1uv162bCxcjTyRBxlF1tp1Zb5MwY4voLjUmqFzFiEHVLDBOmRp1rYP5BwTpxmjAgvK+XJFsN6S0SJ3kInFRCT4=
-X-Received: by 2002:a17:90b:4ac9:b0:1e3:1dca:d995 with SMTP id
- mh9-20020a17090b4ac900b001e31dcad995mr856644pjb.111.1655319167029; Wed, 15
- Jun 2022 11:52:47 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=R/+J1Y9yB1sPzolzla9qc2fDqAKL6OPTM1OdQs0CRno=;
+        b=K15crrWAL5dMQXrRCVgltbVwaNCFlcVyyZhGfxrmQOR8tMyTOlYgUzNb1ymE8YpM8u
+         Qg+8LVyV2ry59Qy+PbGu/gBFujRKAEl12lyWbwmWhBvNk+iJz/2IDvceQYpgFwJxf01S
+         lemZotjePEi4S1tKcjFZFAXWag/bCx8TpPd2I365NSV/7kMvCrtQdwraa8WYVRnQlLIZ
+         WoJp14liP5w0dDrIn1gNaU1iosqGCKH5Dwkdx4dW4BaIVNYixy/gGr0nGX/MzgJA8wa+
+         SAgYDOehwJ6LQohQ2+pZRp9hLR7LuiiFksJqJ9LLp29qbPAm7brquslQ+4J3N4gF16tQ
+         RXNA==
+X-Gm-Message-State: AJIora9oQeuXQNzbQFPd/TU+e5SHiZ5OS7WfAHXrS+hBWEHK7WkrbhVe
+        WzDRh4rDwwRkqu9QNFr7Sy4pH5HIbOfSbaXkSyfPIw==
+X-Google-Smtp-Source: AGRyM1vZyfNc9JAgC9nEBUVD0Y6H2PaXy7vuk+wdCfIJrdMLJd38EgjmEGlXRwPi+0wxDf1+ARhAiqhg2XaBUYJM7vo=
+X-Received: by 2002:a05:6512:2087:b0:479:1615:3afe with SMTP id
+ t7-20020a056512208700b0047916153afemr509273lfr.114.1655319247144; Wed, 15 Jun
+ 2022 11:54:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220615180213.760756-1-e.velu@criteo.com> <YqonwfjE8BL6Xowf@kbusch-mbp>
-In-Reply-To: <YqonwfjE8BL6Xowf@kbusch-mbp>
-From:   Erwan Velu <erwanaliasr1@gmail.com>
-Date:   Wed, 15 Jun 2022 20:52:35 +0200
-Message-ID: <CAL2Jzux0ZnrJRocxj3X8YVwAb56krPtHUtKDnNqCURUJzgPoag@mail.gmail.com>
-Subject: Re: [PATCH] nvme: Report model,sn,fw,pci device information during init
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Erwan Velu <e.velu@criteo.com>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20220609110337.1238762-1-jaz@semihalf.com> <20220609110337.1238762-2-jaz@semihalf.com>
+ <YqIJ8HtdqnoVzfQD@google.com> <CAH76GKNRDXAyGYvs2ji5Phu=5YPW8+SV8-6TLjizBRzTCnEROg@mail.gmail.com>
+ <YqNVYz4+yVbWnmNv@google.com>
+In-Reply-To: <YqNVYz4+yVbWnmNv@google.com>
+From:   Grzegorz Jaszczyk <jaz@semihalf.com>
+Date:   Wed, 15 Jun 2022 20:53:56 +0200
+Message-ID: <CAH76GKNSfaHwpy46r1WWTVgnsuijqcHe=H5nvUTUUs1UbdZvkQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle state
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, Dmytro Maluka <dmy@semihalf.com>,
+        Zide Chen <zide.chen@intel.corp-partner.google.com>,
+        Peter Fang <peter.fang@intel.corp-partner.google.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sachi King <nakato@nakato.io>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        David Dunn <daviddunn@google.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
+        <linux-pm@vger.kernel.org>, Dominik Behr <dbehr@google.com>,
+        Dmitry Torokhov <dtor@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
+pt., 10 cze 2022 o 16:30 Sean Christopherson <seanjc@google.com> napisa=C5=
+=82(a):
+>
+> On Fri, Jun 10, 2022, Grzegorz Jaszczyk wrote:
+> > czw., 9 cze 2022 o 16:55 Sean Christopherson <seanjc@google.com> napisa=
+=C5=82(a):
+> > Above could be actually prevented if the VMM had control over the
+> > guest resumption. E.g. after VMM receives notification about guest
+> > entering s2idle state, it would park the vCPU actually preventing it
+> > from exiting s2idle without VMM intervention.
+>
+> Ah, so you avoid races by assuming the VM wakes itself from s2idle any ti=
+me a vCPU
+> is run, even if the vCPU doesn't actually have a wake event.  That would =
+be very
+> useful info to put in the changelog.
 
-> The PCI_ID: print is misleading. That format usually indicates VID:DID, but
-> you're printing VID:SSVID.
-True.
+Just to clarify: I assumed that the VM may wake from s2idle any time a
+vCPU is running and got a wake event. So going back to the previous
+example:
+1. VM0 enters s2idle
+2. VMM gets notification about VM0 is in s2idle and during this
+notification handling, the vCPU notifying about s2idle is not running
+(we are in the middle of handling vCPU exit in VMM). So even if some
+wakeup event will arrive it couldn't allow that vCPU to exit the
+s2idle. This pending wakeup event wouldn't wakeup the VM0 until VMM
+unpark the vCPU and VMM has control over it.
 
-> This is also very similar to the recently introduced nvme_print_device_info(),
-> but that one removes the annoying trailing spaces if they exist. I guess if
-> we're going this direction, just use that print, but change it from dev_err to
-> dev_info, and remove the call on global id collision detection.
-Oh I missed it.
-Shall I provide a patch for nvme-5.19 or wait until the next window ?
+>
+> > > > +static void s2idle_hypervisor_notify(void)
+> > > > +{
+> > > > +     if (static_cpu_has(X86_FEATURE_HYPERVISOR))
+> > > > +             kvm_hypercall0(KVM_HC_SYSTEM_S2IDLE);
+> > >
+> > > Checking the HYPERVISOR flag is not remotely sufficient.  The hypervi=
+sor may not
+> > > be KVM, and if it is KVM, it may be an older version of KVM that does=
+n't support
+> > > the hypercall.  The latter scenario won't be fatal unless KVM has bee=
+n modified,
+> > > but blindly doing a hypercall for a different hypervisor could have d=
+isastrous
+> > > results, e.g. the registers ABIs are different, so the above will mak=
+e a random
+> > > request depending on what is in other GPRs.
+> >
+> > Good point: we've actually thought about not confusing/breaking VMMs
+> > so I've introduced KVM_CAP_X86_SYSTEM_S2IDLE VM capability in the
+> > second patch, but not breaking different hypervisors is another story.
+> > Would hiding it under new 's2idle_notify_kvm' module parameter work
+> > for upstream?:
+>
+> No, enumerating support via KVM_CPUID_FEATURES is the correct way to do s=
+omething
+> like this, e.g. see KVM_FEATURE_CLOCKSOURCE2.  But honestly I wouldn't sp=
+end too
+> much time understanding how all of that works, because I still feel quite=
+ strongly
+> that getting KVM involved is completely unnecessary.  A solution that isn=
+'t KVM
+> specific is preferable as it can then be implemented by any VMM that enum=
+erates
+> s2idle support to the guest.
+
+Sure, thank you for the explanation and an example.
+
+>
+> > > The bigger question is, why is KVM involved at all?  KVM is just a du=
+mb pipe out
+> > > to userspace, and not a very good one at that.  There are multiple we=
+ll established
+> > > ways to communicate with the VMM without custom hypercalls.
+> >
+> > Could you please kindly advise about the recommended way of
+> > communication with VMM, taking into account that we want to send this
+> > notification just before entering s2idle state (please see also answer
+> > to next comment), which is at a very late stage of the suspend process
+> > with a lot of functionality already suspended?
+>
+> MMIO or PIO for the actual exit, there's nothing special about hypercalls=
+.  As for
+> enumerating to the guest that it should do something, why not add a new A=
+CPI_LPS0_*
+> function?  E.g. something like
+>
+> static void s2idle_hypervisor_notify(void)
+> {
+>         if (lps0_dsm_func_mask > 0)
+>                 acpi_sleep_run_lps0_dsm(ACPI_LPS0_EXIT_HYPERVISOR_NOTIFY
+>                                         lps0_dsm_func_mask, lps0_dsm_guid=
+);
+> }
+
+Great, thank you for your suggestion! I will try this approach and
+come back. Since this will be the main change in the next version,
+will it be ok for you to add Suggested-by: Sean Christopherson
+<seanjc@google.com> tag?
+
+Best regards,
+Grzegorz

@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 966FF54D4B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99EA54D4B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350299AbiFOWoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 18:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
+        id S1350327AbiFOWpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 18:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350327AbiFOWob (ORCPT
+        with ESMTP id S237675AbiFOWpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 18:44:31 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4185F56390
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:44:30 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31332df12a6so75694687b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:44:30 -0700 (PDT)
+        Wed, 15 Jun 2022 18:45:43 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3E1562EF
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:45:42 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id k2so23010872ybj.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:45:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4tavlAUV9j8wy9Y5ZQvNo9SbXkg+xPmAoMXm4I/5xKc=;
-        b=aZNQ5xMgIiG+HULjGPsz/c4fuu1pIiVq25bbPs0kP7PT4TVBMUXWXxCb+XdLlboNiS
-         BY1QO9YbEkE1ucrqKunLlScMzaeQjou00OCPBM4w+t5MZQLjUIxAd7DQQBe7lKb1FOG+
-         c5NGYsihwrfO1Ad6GDXI18YoVHjQaZ+S2FCfah4pFm6qevntRpdMtuxzgJO8y299+li5
-         Gqz5VJ4/8kRzkg8gMQO32Vz1ItJbqloXo35C1YbgSSBn/9u/TCyYr1NOYhdJhHFkYht2
-         DpG6H7EHtm3JLFKAXgoVXB5PaPGNQANnNBqDYGif7OcNDRf0fXUlmM6+kwFRCJtliAI8
-         CZoA==
+        bh=X8+a2zZKIj/GtmJwqSU0W0MYPsjmVC81gP6O4UILy8o=;
+        b=XJnEYrchJw1Rq4K5WVjj7rOzvRPpNcNN1PQ9tSQfa2mwqPWQvqYrJmRQsqkT+SYSrJ
+         WjLbN9YHasQIXtLcYr/dbvtQg47a42VWIaLJCt9aQSC382uStfHdNaOWZydyAFUl2o2w
+         bcCrCZflksICSsl6dPkg1PD50oNnFImak6uzMlrTJ4y6jlIHlCs5wrterWRjk91Tg58V
+         fuFbX09HHdPLtB7idWYkSLDBa71Cd/2j4QgMhjeD/T4YGse+VrNlmKlC8qf/SDR8aPmu
+         yWQkauon+RqSgnzg7nNR250SpKVcd17669CfwbRI2kFMA1QwhfjjUO52p0xqiLV5GvE+
+         Qg5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4tavlAUV9j8wy9Y5ZQvNo9SbXkg+xPmAoMXm4I/5xKc=;
-        b=oHHHzDRlV4zGfLmUZ1oVkTlMU8CYGrcendGEWbLQOW3GIOvymM9sGliU8bSeeVWHP/
-         vccphKwAsMBYg+ZTRnKXsmqz7voZ3I42qXvjvwqq5f3WKC3yT4XkV5CHdvuR/6YFFac1
-         6Mim0BbeZ616UF4rI4P+nIhepG/RDTg7sNE85UgHLlakKf/QyH38UzmPhMPyW2tlCi7U
-         TNEXcZhGVNQLmlfz7TXKGkOtASmmtVdcJLF1+z1b7s2y+nMbycu0ncXIPasGGbzclp5T
-         q+0RLnaxUSVLRPwMjI4CMdVmJuOCjpLnvTy5V//SzZeQtjfOEUKyAbSnOIDaHqA5WVrg
-         Nk/A==
-X-Gm-Message-State: AJIora9bQI2b+OUyxAg92vwk2HSTOhAgBMSv8844GyxG/MCpv/aoHfwW
-        4LNRUYwra1c3T/sNVNy6Bc5ZFdKl+9QVGTJL9WBN2g==
-X-Google-Smtp-Source: AGRyM1stRFtj29Af2h8WR1JcITwxs/W78sA8TWkUE/45znWIrRL39l5SwaqbU8gHEq2Pk+V2tvNYYWtmYMer5uWOrHY=
-X-Received: by 2002:a81:8707:0:b0:314:1c64:eb4d with SMTP id
- x7-20020a818707000000b003141c64eb4dmr2323993ywf.86.1655333069287; Wed, 15 Jun
- 2022 15:44:29 -0700 (PDT)
+        bh=X8+a2zZKIj/GtmJwqSU0W0MYPsjmVC81gP6O4UILy8o=;
+        b=KAmGk99zXyELiYVNrTUBqrZEyK/y1r/2UYt134fFvynfPiLeip9QLNLFUSqa+1Er7y
+         rdeydsUZTE2JplVKPXsVziJZP8d/fpyN2QVLbghdStToMiJt+jihtEsvQ4m9efovLbZO
+         NllQeNJ9lC9O4aPM12DJYSWvgKhkYmMB/2rvuKEFHgCUJ1+KmLCN9GQJD9TYfF33LFcW
+         Un36wyWu1V0+aDxpYiNQhpj76tB5NJ3+1+rN+4TgzVU8uBgvMYnbU8Ujqn+hU7rF7/2g
+         WKCKrj31vE2B2AdT1iFQFAL7MyKU2k98T5v6ozBX9wZHXEssjW3KTSLD+MTllnR6RZeE
+         b1hA==
+X-Gm-Message-State: AJIora+ttIAK4dUaHRQvqwmHxI6QHBNhyC1X+KGyATAyFIXK0IMZWusg
+        dZriIuMIKF05//w+hFaq4Q3aLt/DjW5HOyMelTo2bg==
+X-Google-Smtp-Source: AGRyM1s8FY2JLJ8TIScIkSnOgk4Fe+EfkTNwdHsakv9y09Lu53/E22zOkARaMvgTwZauohkpcn6k3wuHT1ndZvFuLRA=
+X-Received: by 2002:a25:bed0:0:b0:664:b4af:5bc9 with SMTP id
+ k16-20020a25bed0000000b00664b4af5bc9mr2281060ybm.424.1655333141514; Wed, 15
+ Jun 2022 15:45:41 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220525081416.3306043-12-sudeep.holla@arm.com>
  <20220525081416.3306043-13-sudeep.holla@arm.com> <20220525081416.3306043-14-sudeep.holla@arm.com>
@@ -55,8 +55,8 @@ References: <20220525081416.3306043-12-sudeep.holla@arm.com>
  <20220615170033.q4og4pnmpwdg3l2g@bogus>
 In-Reply-To: <20220615170033.q4og4pnmpwdg3l2g@bogus>
 From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 16 Jun 2022 00:44:17 +0200
-Message-ID: <CAKfTPtCeox-qjaoXqOawaghZDwsKBF6FBPENFtsQSb2r6JPy2w@mail.gmail.com>
+Date:   Thu, 16 Jun 2022 00:45:29 +0200
+Message-ID: <CAKfTPtA9jHpRzd=czTvLo9vYFoaDSg79WuW2K5utZ5q4xVvdMw@mail.gmail.com>
 Subject: Re: [PATCH v3 15/16] arch_topology: Set cluster identifier in each
  core/thread from /cpu-map
 To:     Sudeep Holla <sudeep.holla@arm.com>
@@ -86,6 +86,10 @@ On Wed, 15 Jun 2022 at 19:01, Sudeep Holla <sudeep.holla@arm.com> wrote:
 > concerns, but deferring it until we agree on the hardware topology view
 > which is user visible and how that impacts sched domain topology can be
 > considered soon following that.
+
+On my side, what i'm really interested in, it's the hardware topology
+reported to the scheduler
+
 >
 > On Tue, Jun 14, 2022 at 07:59:23PM +0200, Vincent Guittot wrote:
 > > On Fri, 10 Jun 2022 at 12:27, Sudeep Holla <sudeep.holla@arm.com> wrote:
@@ -144,16 +148,6 @@ On Wed, 15 Jun 2022 at 19:01, Sudeep Holla <sudeep.holla@arm.com> wrote:
 > or example as what you are referring as dynamiQ. Also what you mean by
 > dynamiQ not shown on ACPI while shown with DT systems. If there is any
 > discrepancies, we need to fix.
-
-The cpu-map node in DT is following the dynamiQ or the legacy
-big.LITTLE topology. As an example  the hikey6220 has 2 clusters, the
-hikey960 has 2 clusters that reflect big.LITTLE and the sdm845 has one
-cluster that reflects the dynamiQ cluster.
-
-now my mistake is to have made the assumption that core_sibling is
-arch_topology was used to reflect the cores sharing cache but after
-looking more deeply in the code it seems to be a lucky coincidence
-
 >
 > Now, what I refer as discrepancy for example on Juno is below:
 > (value read from a subset of per cpu sysfs files)

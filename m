@@ -2,136 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D718A54C668
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4B8454C66D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348553AbiFOKoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
+        id S1347064AbiFOKo6 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Jun 2022 06:44:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348428AbiFOKnw (ORCPT
+        with ESMTP id S233065AbiFOKo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:43:52 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF6814D9EF
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:43:51 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id m24so14756608wrb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:43:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CFylUOlVtQDlx55PEHRrX05zrzK1yc2bhHxx/T3f6Z8=;
-        b=PIMDjKJsYqfZ/MR+nIeXqfEbPhyPUEGwCQsm2aotfcuPAZq6NmTU4aZkr/FnQ2RtaC
-         bLG0ePy5JoUOkpK0Hgyb6hria385dOG0ajyrpmHm7n411b8jCNi6ADtRahHAUTZtj84n
-         0bJ2T9Qwkedt4a80F6o6sJ2jRiX7Wyuw5dD1sSWy4CxR7ILPNA8ThGbLL8+ZbPyAW/fu
-         2qvoXa5KLE3jbm5MaH3Lluj0vPVMs2/mhslVP7iV4FjbdNBSxJ3zROnog6TqyVrQSPnG
-         0JkqsuCJlOIHX5FqYBne+NkgeIYqDbRKBmBqIMHKQ9Fir1D2NDivmY+jU+4FSRKyivep
-         vOOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CFylUOlVtQDlx55PEHRrX05zrzK1yc2bhHxx/T3f6Z8=;
-        b=PbOGJ953xK2BEVsfm9qD609Z5OgX0jr125f6fmzlVlKmUgi21P1q8wG/lLhXk53RSw
-         0EIh2wUfZP51XLrRKmbfKeDjyigRrDHJos7PTbTj+SecBsFfxx1OtaPvWJ/ZYoyNjTKw
-         lM0f3PpYPiJQOQxDaM4t3xuqzz7csAcg09ZBMBX+6cHqvlfSDPt3S+3Q7qdfBF8GY8aI
-         gsdyAjX3YArfCUnvQKod+0bMzhn4jHdRSyPldli6SZ9oqcfUhCcnv7BXdoruDXkybmqT
-         YonBdbqzJQ+asj9h7EdKhgdU/Lxnl8+Jp1xlSCckt3fA51k5TvFyZn3WJUAO5eCAGwsB
-         rVHg==
-X-Gm-Message-State: AJIora8gvQUDmUlk1Re+ViDxJrZah01/fxIWGziHJ9mnwumw+klC3R4f
-        AIFWcv7EuvqDRF+bvOFXjz+HMQMifdC0bj3u
-X-Google-Smtp-Source: AGRyM1smox36WFgJH+GSvQeBUMdLufHU5UiXHoLYWTrtDiU8P2L0iHq5w0nIj35jNFBsQlGgf0DzVQ==
-X-Received: by 2002:a5d:4a4c:0:b0:210:28d4:58a1 with SMTP id v12-20020a5d4a4c000000b0021028d458a1mr9594042wrs.339.1655289830384;
-        Wed, 15 Jun 2022 03:43:50 -0700 (PDT)
-Received: from [10.205.160.53] ([95.83.233.54])
-        by smtp.gmail.com with ESMTPSA id l12-20020a5d674c000000b002185d79dc7fsm14269528wrw.75.2022.06.15.03.43.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 03:43:49 -0700 (PDT)
-Message-ID: <aa7254a0-c7ce-3092-2da6-020ffef80142@conchuod.ie>
-Date:   Wed, 15 Jun 2022 11:42:16 +0100
+        Wed, 15 Jun 2022 06:44:56 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B2A44ECF7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:44:55 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-15-KgCYn3nfPo6x7IeS2ioUCw-1; Wed, 15 Jun 2022 11:44:52 +0100
+X-MC-Unique: KgCYn3nfPo6x7IeS2ioUCw-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Wed, 15 Jun 2022 11:44:50 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Wed, 15 Jun 2022 11:44:50 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Ian Rogers' <rogers.email@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        "Kan Liang" <kan.liang@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        "Zhengjun Xing" <zhengjun.xing@linux.intel.com>,
+        Felix Fietkau <nbd@nbd.name>, Qi Liu <liuqi115@huawei.com>,
+        Like Xu <likexu@tencent.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "Nick Forrington" <nick.forrington@arm.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "James Clark" <james.clark@arm.com>,
+        Andrew Kilroy <andrew.kilroy@arm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>, Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "ananth.narayan@amd.com" <ananth.narayan@amd.com>,
+        "ravi.bangoria@amd.com" <ravi.bangoria@amd.com>,
+        "santosh.shukla@amd.com" <santosh.shukla@amd.com>,
+        "sandipan.das@amd.com" <sandipan.das@amd.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Kshipra Bopardikar <kshipra.bopardikar@intel.com>
+CC:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Subject: RE: [PATCH v4 3/4] perf jevents: Switch build to use jevents.py
+Thread-Topic: [PATCH v4 3/4] perf jevents: Switch build to use jevents.py
+Thread-Index: AQHYgGTBf2pcanF4ukiDhmkMwHDNNq1QRgsQ
+Date:   Wed, 15 Jun 2022 10:44:50 +0000
+Message-ID: <9951ad2acd3d4454b39c4862da75d913@AcuMS.aculab.com>
+References: <20220615030438.51477-1-irogers@google.com>
+ <20220615030438.51477-4-irogers@google.com>
+In-Reply-To: <20220615030438.51477-4-irogers@google.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] [Re-PATCH] arch: arm: mach-pxa: Add missing of_node_put
- in irq.c
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     heliang <windhl@126.com>, daniel@zonque.org,
-        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
-        linux@armlinux.org.uk
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220615103332.3963303-1-windhl@126.com>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <20220615103332.3963303-1-windhl@126.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 15/06/2022 11:33, heliang wrote:
-> [PATCH] [Re-PATCH] arch: arm: mach-pxa: Add missing of_node_put in irq.c
-
-You mean [PATCH v2]? Pass -v N arg to format-patch & it'll do it
-for you.
-
-> In pxa_dt_irq_init(), of_find_matching_node() will return a node
-> pointer with refcount incremented. We should use of_node_put in
-> fail path or when it is not used anymore. This goto-label patch
-> style is advised by Daniel.
+From: Ian Rogers
+> Sent: 15 June 2022 04:05
 > 
-> Signed-off-by: heliang <windhl@126.com>
-
-On all these patches, is "heliang" your (full) real name?
-See:
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#developer-s-certificate-of-origin-1-1
-
-> ---
-
-It's helpful to put a changelog here too for what changed since v1
-
->   arch/arm/mach-pxa/irq.c | 9 ++++++---
->   1 file changed, 6 insertions(+), 3 deletions(-)
+> Generate pmu-events.c using jevents.py rather than the binary built from
+> jevents.c. Add a new config variable NO_JEVENTS that is set when there
+> is no architecture json or an appropriate python interpreter isn't present.
+> When NO_JEVENTS is defined the file pmu-events/empty-pmu-events.c is copied
+> and used as the pmu-events.c file.
 > 
-> diff --git a/arch/arm/mach-pxa/irq.c b/arch/arm/mach-pxa/irq.c
-> index 96f33ef1d9ea..338356b9f37c 100644
-> --- a/arch/arm/mach-pxa/irq.c
-> +++ b/arch/arm/mach-pxa/irq.c
-> @@ -247,13 +247,13 @@ void __init pxa_dt_irq_init(int (*fn)(struct irq_data *, unsigned int))
->   				   &pxa_internal_irq_nr);
->   	if (ret) {
->   		pr_err("Not found marvell,intc-nr-irqs property\n");
-> -		return;
-> +		goto out_put;
->   	}
->   
->   	ret = of_address_to_resource(node, 0, &res);
->   	if (ret < 0) {
->   		pr_err("No registers defined for node\n");
-> -		return;
-> +		goto out_put;
->   	}
->   	pxa_irq_base = io_p2v(res.start);
->   
-> @@ -263,9 +263,12 @@ void __init pxa_dt_irq_init(int (*fn)(struct irq_data *, unsigned int))
->   	ret = irq_alloc_descs(-1, 0, pxa_internal_irq_nr, 0);
->   	if (ret < 0) {
->   		pr_err("Failed to allocate IRQ numbers\n");
-> -		return;
-> +		goto out_put;
->   	}
->   
->   	pxa_init_irq_common(node, pxa_internal_irq_nr, fn);
-> +	
-> +out_put:
-> +	of_node_put(node);	
->   }
->   #endif /* CONFIG_OF */
+...
+> +    # jevents.py uses f-strings present in Python 3.6 released in Dec. 2016.
+> +    JEVENTS_PYTHON_GOOD := $(shell $(PYTHON) -c 'import sys;print("1" if(sys.version_info.major >= 3
+> and sys.version_info.minor >= 6) else "0")')
+
+You probably want a "2>/dev/null" in there.
+
+I also think I remember seeing a `which python` in one of these patches.
+'which' is a bourne shell script that is trying to emulate a csh builtin.
+It can't actually work, and ISTR one of the distros might be
+trying to remove it.
+In a traditional bourne shell you should use `type python`, the posix
+equivalent (which any shell written in the last 30 years out to get
+right) is `command -V python`.
+Both type and command have to be shell builtins.
+Although I suspect some shells get command -V wrong.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

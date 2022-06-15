@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D0054C7E3
+	by mail.lfdr.de (Postfix) with ESMTP id E828954C7E4
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348320AbiFOLwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 07:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
+        id S1348205AbiFOLvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 07:51:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347290AbiFOLvI (ORCPT
+        with ESMTP id S1347300AbiFOLvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Jun 2022 07:51:08 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16D5517FA;
-        Wed, 15 Jun 2022 04:51:04 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id y19so22704033ejq.6;
-        Wed, 15 Jun 2022 04:51:04 -0700 (PDT)
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE54C4AE32;
+        Wed, 15 Jun 2022 04:51:05 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 25so15703736edw.8;
+        Wed, 15 Jun 2022 04:51:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=zSTuZ2t7hCCrfuAfUAIkWHaObpQDE2fE3zF2HruldLs=;
-        b=ln5FWn0385Z1emtIsEMSvzyPVQj600V8Xddp7sktlEE2o0X5IHEEJe+zZcziBxAeaI
-         L079l5X5V8ABLgSAXShBMGIzRZTiZuo00hC+3agDHrNUITGdlo9DCBHbiLswo4IbNTTo
-         W5pYechsn0C/VJHhuN1tsacXFrakv968FofRMYMl5lCkTHroC7wUi44O16uwCWLLmaTn
-         8++7kO4iu2SIgSwXgFhY8SrbLKho9wIEVsAnW+hUZ8UqPYOTfZDbW6tbIN0Afn5zatrL
-         ioD5wWGvfonA3lLir+iFYUffgxw0LnsctVE634zARgMy4K+YjY4iWUQ3CV+OcIdy6A8j
-         vsBQ==
+        bh=BlGiQlFBs9Y0ysQYN1E7ZEh7FdwsGrUOirxOgzSRDic=;
+        b=Vh83g9Cg69Mzkod0rYD8INfjqhWynhwdmyIH2T2drWRXicHIm/Zg3YGG63d+leBafL
+         xGaw+JmzVLzue115lu70DpqHF1CLGbhXOx/nvqSZbow8rBBYkHMPawqsD1fZF0p4kx5E
+         rNic7d5yTG//oHbSSw7kIT9wNHBMKfBTijhE54NWL2Maz5qbfTximhYTVn2CmNdPjf1n
+         Rmu6DADdiUO3H6dp777yOpitN+1h5LKQCn15jN1vQ2NRrXZ4qBoGHJfSjCN/ckwiBRaP
+         kUQ4Vtthc5kfFl2hpT+mBhwBQRsA2rO/U+7fFmlWowevA6sHVL8WSeh3LXMLQf/ielYw
+         sj8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=zSTuZ2t7hCCrfuAfUAIkWHaObpQDE2fE3zF2HruldLs=;
-        b=VNYxX4638yJu2LCtqG5qfTDJ5DGddbOyi2aDgg0LUgBNT+6jTcJ5EvkJtg1hgBLpOk
-         GRZp606sDyERm5xDQ8ZCOLLLKW7czQxalDFeuOqrTcjCy5Kn6+brG97h9wekJVQE1d/W
-         Jp0WAUO6BkiJIIOAVoDw7mxprmFlFJzzGi6AubNHCWGQ3WDNcnAY82E456ne4apsUe4z
-         +RyMFaHJN3RKW605hjmVcVuUwRf/xPnpLHb8drcxs7XMXMaV7MsfvM1/KCj+9XfbGD5O
-         +yCxpXOERheSv8KxJWUndTXqvt7GS46LpyfgKHOBArVRerq+S8svg7/vkVLi2yfp9Bmt
-         mMUw==
-X-Gm-Message-State: AOAM530XrOsWzVho8ENb6w+zoyKjjK6xvTVajRSp7Z1RtJX8pP5JP4XJ
-        aV4A+Bm21R1WRf+m8ipTJyw=
-X-Google-Smtp-Source: ABdhPJw7wppeArZ3rP5GRFzy41nguU3d/FX10LZVO5qLp4RlXIHWhjbGmzhHxVTVml/slX4PPyi8nA==
-X-Received: by 2002:a17:907:3e82:b0:6ff:1e04:a365 with SMTP id hs2-20020a1709073e8200b006ff1e04a365mr8581673ejc.617.1655293863270;
-        Wed, 15 Jun 2022 04:51:03 -0700 (PDT)
+        bh=BlGiQlFBs9Y0ysQYN1E7ZEh7FdwsGrUOirxOgzSRDic=;
+        b=NaxT/iMYg7VMTenz0BYG30yDUSQMhHyisCFK6ufUQoKzSkJqtp5wCF2ZalZNoiwkZc
+         ftcX5deaoGxgq613y/A6Ez6ZSbPuC6+o+yPyIGIKtSa1n8vCnDbjPPgdf7QHwStPIf4m
+         GpwSW4Uek9SgbpzLcCeHvb7Ul8kVJza7yfEUFnGdnQ9hHfSr5PsoMDxm8O9xZJB+sZSJ
+         5455uxS7J/iOQkdhNRMBZY+ylRpsa86g8HLj9PMDDOkkw8C7c48UySTMVmkHF6HjK2Bd
+         zPdOoGV+QYo8nCGx+eTPO/xU/Vxm1ONQd6VIKxktEe3fMXPS8GP+CljvhTR2oPhzpxSL
+         q80Q==
+X-Gm-Message-State: AOAM530HSTmBXckzT4/Bn00aRbhReOakuP8M3MxAk4rZXpWr9DbpbdUy
+        nErm46mPAlB0AV8PKCtqwiFwavidOV51+w==
+X-Google-Smtp-Source: ABdhPJz9S9PWBAk8rH7sYkTGOj+ge72aDAqj13TtYIlCQj7iYKKydxgnkmOGK52xGlgpxS2z7m+aHA==
+X-Received: by 2002:a05:6402:40c6:b0:42f:9ff8:62f8 with SMTP id z6-20020a05640240c600b0042f9ff862f8mr12180177edb.95.1655293864380;
+        Wed, 15 Jun 2022 04:51:04 -0700 (PDT)
 Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
-        by smtp.gmail.com with ESMTPSA id t6-20020a17090616c600b00715a02874acsm4561158ejd.35.2022.06.15.04.51.02
+        by smtp.gmail.com with ESMTPSA id t6-20020a17090616c600b00715a02874acsm4561158ejd.35.2022.06.15.04.51.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 04:51:02 -0700 (PDT)
+        Wed, 15 Jun 2022 04:51:03 -0700 (PDT)
 From:   Max Krummenacher <max.oss.09@gmail.com>
 To:     max.krummenacher@toradex.com
 Cc:     Fabio Estevam <festevam@gmail.com>,
@@ -58,9 +58,9 @@ Cc:     Fabio Estevam <festevam@gmail.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 16/18] ARM: dts: imx6q-apalis: backlight pwm: Simplify inverted backlight
-Date:   Wed, 15 Jun 2022 13:50:04 +0200
-Message-Id: <20220615115006.45672-17-max.oss.09@gmail.com>
+Subject: [PATCH v2 17/18] ARM: dts: imx6q-apalis: backlight pwm: Adapt brightness steps
+Date:   Wed, 15 Jun 2022 13:50:05 +0200
+Message-Id: <20220615115006.45672-18-max.oss.09@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220615115006.45672-1-max.oss.09@gmail.com>
 References: <20220615115006.45672-1-max.oss.09@gmail.com>
@@ -78,67 +78,32 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Max Krummenacher <max.krummenacher@toradex.com>
 
-Set #pwm-cells to the default 3 to gain access to the parameter
-which allows inverting the PWM signal. This is useful to specify
-a backlight which has its highest brightness at 0.
-
-With the change to use the PWM with inverted polarity the PWM signal
-is inverted to how it was before this patch.
-This changes the meaning of the values in the brightness-levels
-property. I.e. the duty-cycle changes from x/255 to (255-x)/255.
-Keeping the brightness-levels will then have a big brightness
-jump from 0 to 127 duty cycle, the other 6 steps will then be
-barely noticeable.
-
-Change the brightness-levels to provide the same brightness-levels
-as before.
+Adapt the brightness steps as the backlight doesn't light up
+for very low duty cycles.
 
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 ---
 
 (no changes since v1)
 
- arch/arm/boot/dts/imx6qdl-apalis.dtsi | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ arch/arm/boot/dts/imx6qdl-apalis.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-index 4ff46ffd2300..c134e71f2a09 100644
+index c134e71f2a09..1144e4d106f0 100644
 --- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
 +++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-@@ -6,6 +6,7 @@
-  */
- 
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/pwm/pwm.h>
- 
- / {
- 	model = "Toradex Apalis iMX6Q/D Module";
-@@ -19,13 +20,13 @@
+@@ -20,8 +20,8 @@
  
  	backlight: backlight {
  		compatible = "pwm-backlight";
-+		brightness-levels = <0 4 8 16 32 64 128 255>;
-+		default-brightness-level = <6>;
-+		enable-gpios = <&gpio3 13 GPIO_ACTIVE_HIGH>;
+-		brightness-levels = <0 4 8 16 32 64 128 255>;
+-		default-brightness-level = <6>;
++		brightness-levels = <0 45 63 88 119 158 203 255>;
++		default-brightness-level = <4>;
+ 		enable-gpios = <&gpio3 13 GPIO_ACTIVE_HIGH>;
  		pinctrl-names = "default";
  		pinctrl-0 = <&pinctrl_gpio_bl_on>;
--		brightness-levels = <0 127 191 223 239 247 251 255>;
--		default-brightness-level = <1>;
--		enable-gpios = <&gpio3 13 GPIO_ACTIVE_HIGH>;
- 		power-supply = <&reg_module_3v3>;
--		pwms = <&pwm4 0 5000000>;
-+		pwms = <&pwm4 0 5000000 PWM_POLARITY_INVERTED>;
- 		status = "disabled";
- 	};
- 
-@@ -776,7 +777,6 @@
- };
- 
- &pwm4 {
--	#pwm-cells = <2>;
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_pwm4>;
- 	status = "disabled";
 -- 
 2.20.1
 

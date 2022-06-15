@@ -2,109 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3B6454C489
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C876554C48D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345104AbiFOJXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
+        id S241597AbiFOJYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240896AbiFOJXB (ORCPT
+        with ESMTP id S232109AbiFOJY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:23:01 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34ED413D74;
-        Wed, 15 Jun 2022 02:23:00 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id c21so14538049wrb.1;
-        Wed, 15 Jun 2022 02:23:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=BWokWoGaQLe1EbuiSilnXY0apKkI0jKMPtA3Kn6isHA=;
-        b=ipViYCb+P4rh8xv6TlwmObrD0Up/yKbF4T0+7OYWFUJU+io7YVtDN0KrDt7paZgNgZ
-         GWQn9LnoR7wLEqASJK3eYZ4A+j74lnYykZsqRzvjsfceNgihkeZtBQRUz/VzHz3VGhIf
-         rrDJWcO+/uYRl1DunKwDzNCDqqlTuSRQO/wF9ClhwYTw1WgS7lagXcdsjRDxE+KORlzO
-         ikNFkTdLleuqBP++m7mrX/VOfTtmn2h29gCzdniEIHeWrtFXDSxyYYQ5hPYo/MSIWdGN
-         WcPV5bETyzaW+EXDiAcPkuq0PoNkQ/YBWzpnVErvczuRgr9BI4nbHKf1VKhoduxa5RwX
-         rEGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=BWokWoGaQLe1EbuiSilnXY0apKkI0jKMPtA3Kn6isHA=;
-        b=4jiC457t8lvA3RP86WZ4GRB+7AQuMK5Vd+1d30bESiKMjPPazk+7J/Jc/41ZUmSq2t
-         NFTHRnK0vF07/77XqxglUQ8x2fPGjNcwVz2E3aTDDQZwLdn2qjqZRx197WT30KFwxNCk
-         YxuiHkBLFXtukNmptflTuiBVGX/8Boo2iRanugd5oKc1G2z5zBvQJKKfl5PFn0YzPr7I
-         ObJKFSoj05nuoPDHpn1O71WsvVVh4miwjwJtZiixVUTuEeoQ+m3v84bApkGEUYsXQ3ca
-         PSUE09azoTW5X4NsvNS6MlNOx3dThH336nBujdb1bosEqNJ1GoDmCU6g9BjZGwEPDnvi
-         nmxw==
-X-Gm-Message-State: AJIora8HjaqsxFXP1aQKwRtSYMLh36GE4Qqe8K/z080lfTOBN1YtAzLb
-        8Fi0tkCUTFatM9bn8ZuEDYU=
-X-Google-Smtp-Source: AGRyM1ub0Gdi1PzS48n/pcjCVJ2Egf304c5j9WLTJwpx6g93vJuX92umgZLUpJ4m33kXFYLTsp3Iww==
-X-Received: by 2002:a5d:5452:0:b0:216:f80e:f7c6 with SMTP id w18-20020a5d5452000000b00216f80ef7c6mr8883061wrv.472.1655284978687;
-        Wed, 15 Jun 2022 02:22:58 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id bg9-20020a05600c3c8900b0039c45fc58c4sm1910694wmb.21.2022.06.15.02.22.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 02:22:58 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 10:22:56 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.4 00/15] 5.4.199-rc1 review
-Message-ID: <Yqmk8DRLrZMVTj00@debian>
-References: <20220614183721.656018793@linuxfoundation.org>
+        Wed, 15 Jun 2022 05:24:26 -0400
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153F315726
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:24:24 -0700 (PDT)
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 25F9O0B1025279
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 18:24:01 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 25F9O0B1025279
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1655285041;
+        bh=z11ovVAKqI6ZA7KGXOW96R1KX78wxZ9sWHcYkCBNvWg=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ApQ8fSYtWZBsD7TbE6Ktx2ZrVkQyDEepc6TLORaln5uOlE9z6x8Pys64Uuqt/4Hx0
+         eSXlBMR7sJoLVjsw5oAUTjE0OJjJJJVx7TGeRyxRGG1ZJ7tw7He73J8M90jDcWtEU0
+         +ZwPmJ0QxCClZ3WdbGAShZREpuD0c0Pi6VOq31tg1KzcHONPaQfHbVL4MptqEL6yP/
+         GUyz8E4q9Fs2NeKEUQnXZtOOMK0M4teDpbbIhtKQvCYxyX08APMxj6IL1TXym6IUHd
+         qh3Hd9c2BIobtwgt19gYjztzCXqJzN/rDEcfiIrCULo43gf5jQilvENycbiaMVefA7
+         97kGQg4RYUK4w==
+X-Nifty-SrcIP: [209.85.221.54]
+Received: by mail-wr1-f54.google.com with SMTP id o8so14520603wro.3
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:24:01 -0700 (PDT)
+X-Gm-Message-State: AJIora/bucf5LQlD2DAt/X/BifGhfzPxaDy9MH3oiIYCCDQTY/qyvIcE
+        eOeHyi1XQmzXUc9Y4U8NlXJkuISR9+5I2HtXYvI=
+X-Google-Smtp-Source: AGRyM1sqFYEVeX64ueL9l7/Y7mETTav4VvtRR1t9Qr1JlCTC/16FkyM+glftepeHKk6lexJFVxZcY9atNgWvoVVAmUM=
+X-Received: by 2002:a05:6000:156d:b0:210:3135:ce1c with SMTP id
+ 13-20020a056000156d00b002103135ce1cmr9167065wrz.409.1655285039469; Wed, 15
+ Jun 2022 02:23:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614183721.656018793@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220615063315.279489-1-jhubbard@nvidia.com>
+In-Reply-To: <20220615063315.279489-1-jhubbard@nvidia.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 15 Jun 2022 18:23:22 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARsHxH1LF8Pq70EMAYW-p1btgAVC1cJMOkXSTjW5LZuKA@mail.gmail.com>
+Message-ID: <CAK7LNARsHxH1LF8Pq70EMAYW-p1btgAVC1cJMOkXSTjW5LZuKA@mail.gmail.com>
+Subject: Re: [PATCH] gen_compile_commands: fix overlooked module files
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, Jason Gunthorpe <jgg@nvidia.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Wed, Jun 15, 2022 at 3:33 PM John Hubbard <jhubbard@nvidia.com> wrote:
+>
+> scripts/clang-tools/gen_compile_commands.py incorrectly assumes that
+> each .mod file only contains one line.
 
-On Tue, Jun 14, 2022 at 08:40:09PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.199 release.
-> There are 15 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> Anything received after that time might be too late.
+Thanks for catching this.
 
-Build test (gcc version 11.3.1 20220612):
-mips: 65 configs -> no failure
-arm: 106 configs -> no failure
-arm64: 2 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+That assumption was correct until recently.
+  The first line contained member objects.
+  The second line, if CONFIG_TRIM_UNUSED_KSYMS=y, contained unresolved symbols
 
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1332
+Commit 9413e7640564 ("kbuild: split the second line of *.mod into *.usyms")
+changed the format of *.mod so member objects are listed per-line.
 
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
---
-Regards
-Sudip
+
+> In fact, such files contain one
+> entry per line, and for some subsystems, there can be many, many lines.
+> For example, Nouveau has 762 entries, but only the first entry was being
+> processed. This problem causes clangd to fail to provide references and
+> definitions for valid files that are part of the current kernel
+> configuration.
+>
+> This problem only occurs when using Kbuild to generate, like this:
+>
+>    make CC=clang compile_commands.json
+>
+> It does not occur if you just run gen_compile_commands.py "bare", like
+> this (below):
+>
+>    scripts/clang-tools/gen_compile_commands.py/gen_compile_commands.py .
+>
+> Fix this by fully processing each .mod file. This fix causes the number
+> of build commands that clangd finds in my kernel build (these numbers
+> are heavily dependent upon .config), from 2848 to 5292, which is an 85%
+> increase.
+>
+> Fixes: ecca4fea1ede4 ("gen_compile_commands: support *.o, *.a, modules.order in positional argument")
+
+This should be
+
+Fixes: 9413e7640564 ("kbuild: split the second line of *.mod into *.usyms")
+
+
+Can you update the commit log?
+
+
+> Cc: Masahiro Yamada <masahiroy@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  scripts/clang-tools/gen_compile_commands.py | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+>
+> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
+> index 1d1bde1fd45e..53590e886889 100755
+> --- a/scripts/clang-tools/gen_compile_commands.py
+> +++ b/scripts/clang-tools/gen_compile_commands.py
+> @@ -157,10 +157,11 @@ def cmdfiles_for_modorder(modorder):
+>              if ext != '.ko':
+>                  sys.exit('{}: module path must end with .ko'.format(ko))
+>              mod = base + '.mod'
+> -           # The first line of *.mod lists the objects that compose the module.
+> +           # Read from *.mod, to get a list of objects that compose the module.
+>              with open(mod) as m:
+> -                for obj in m.readline().split():
+> -                    yield to_cmdfile(obj)
+> +                for line in m.readlines():
+
+
+                    for line in m:
+
+is simpler, (and maybe will work more efficiently).
+
+
+One more note, the 'line' iterator is shadowing (overwriting)
+the outer 'line' iterator, which has been used a few lines above.
+
+    with open(modorder) as f:
+        for line in f:
+
+
+
+Maybe, it is safer to use a different name for the inner iterator
+because shadowing does not work in Python.
+
+
+
+
+
+> +                    for obj in line.split():
+
+This loop is unneeded because each line
+contains only one word.
+.rstpip() will do.
+
+
+
+To sum up, this part can be simpler,
+for example like this:
+
+           # Read from *.mod, to get a list of objects that compose the module.
+            with open(mod) as m:
+                for line2 in m:
+                    yield to_cmdfile(line2.rstrip())
+
+
+
+
+
+> +                        yield to_cmdfile(obj)
+>
+>
+>  def process_line(root_directory, command_prefix, file_path):
+> --
+> 2.36.1
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada

@@ -2,179 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 337DB54C818
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28E8354C81D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348220AbiFOMFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 08:05:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
+        id S1348287AbiFOMGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 08:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245324AbiFOMFB (ORCPT
+        with ESMTP id S1348230AbiFOMGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:05:01 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on20601.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::601])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEF9192AF;
-        Wed, 15 Jun 2022 05:04:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F9Hb070d+w3xFgfv1MBBjcFo5SQormwm/nhKRfg993lIe/v2Kh7QETYjDWgsI8oTaUPzWrpUOaH2tufcDy2EiqVQom5LsCRbi95LLMyfrr3sDnCe82T/pXGBDqZi+RrSnWNcr7CVXIIhbM75pP+pHJf8X09T/lTZnrnxbNHoXQt0zOeTtNTJgltbxo3o8cG8ifeMKMj8D4rUyQZi9FMjNCnFYqHNeWqqGLpm7vhH1uDh6es6bUedDT+6FSbOpBcz3MGZoEpwHnzc5dnnSUPM5BpcP816yF4RyVa+Afu14wB350hUwBazaX3wS1ksUdVl//N/qs+V1k7FhEl74p/nIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oY6Y9tTRPt1As/37WX9h3tbLhcri9p+W1gqG0hS0LCU=;
- b=LCYHQiSpQu/FwYI8kZ/8wAusI+g3TaZey/ghu79BNay4mr8YjpOK7DLv5tdopxG8SgM/+AXH3CGxbgIv6D67ZptY4UM/wjIyhS6gNMx3aOyGxq9y5wLwYfXFIZlmuKQdFDCIv+/YAg4UyzOBvWDiWVcchFjZXLPkBT9d4ejXBfH5sTWxrNdeVCmhUxQdB76AGlWFcAaGrxwMcH0jMkm/B0llbwlUF/GAPk2Uwd0L2eaZ5DR30JDhmjn5Xi6WDR3zKUBbzO9TsKOPCy1uSAk2/Z7nsQhi4EmZFZDI6pBQDsmUanNHwkAK5UNvO6ZGWVpnQ7qdous3Lr6IsLvHMn57fg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oY6Y9tTRPt1As/37WX9h3tbLhcri9p+W1gqG0hS0LCU=;
- b=t+x9XQa6P69u2Cz2v63vBOVO6LUTGcGraRpGrLXorYalr3WAyWgmVvzj0tYCOWNhO9rYlS7OOAAEuzBHUD4vgDyD5fxZ/N3lHDkNrRO9YxN8CpHfnmmyvMtyk01Kb9vI9u5SNlK17klhCB4syi387l3g11b4s2WasR/XwB5vYGo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL3PR12MB6449.namprd12.prod.outlook.com (2603:10b6:208:3b8::6)
- by DM5PR12MB1865.namprd12.prod.outlook.com (2603:10b6:3:10b::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.16; Wed, 15 Jun
- 2022 12:04:55 +0000
-Received: from BL3PR12MB6449.namprd12.prod.outlook.com
- ([fe80::5552:c915:15f5:cb5b]) by BL3PR12MB6449.namprd12.prod.outlook.com
- ([fe80::5552:c915:15f5:cb5b%9]) with mapi id 15.20.5332.022; Wed, 15 Jun 2022
- 12:04:55 +0000
-Message-ID: <442c7cb4-7ec5-bf34-b9d6-ce9480b4b491@amd.com>
-Date:   Wed, 15 Jun 2022 17:34:46 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH V2] selftests/vm: Add protection_keys tests to run_vmtests
-Content-Language: en-US
-To:     Shuah Khan <skhan@linuxfoundation.org>, akpm@linux-foundation.org,
-        shuah@kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220610090704.296-1-kalpana.shetty@amd.com>
- <8e7fca3a-096c-7d6c-e43b-9292995ab970@linuxfoundation.org>
- <e1703fcf-c5e2-70b1-cae2-30330108ad26@amd.com>
- <2f157493-02ed-4bc8-6624-b7d077c0d5af@linuxfoundation.org>
-From:   "Shetty, Kalpana" <kalpana.shetty@amd.com>
-In-Reply-To: <2f157493-02ed-4bc8-6624-b7d077c0d5af@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0193.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:be::22) To BL3PR12MB6449.namprd12.prod.outlook.com
- (2603:10b6:208:3b8::6)
+        Wed, 15 Jun 2022 08:06:22 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D02937ABF
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 05:06:21 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id q13-20020a5d9f0d000000b00669c03397f7so5939225iot.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 05:06:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=SQRqdyBS5GYy4GpODuyHGqNva931cnDO98b1lW741uo=;
+        b=VVhHW1bwtUQ5NXlnGzIE8MltoFam37Ppz22pZdEpiMqPrBihKTgflQBlGN7hwlnNhZ
+         cb5+3G0EVA2GtCTYb4WClcqAeQqBwW8IQ1JTEKTOzYS7Ym5wly2BV/ca2mAaP5XMtmQl
+         cQXtBvdl8eRn9DGcBLI7lF2GxPH3OB7jh8YsCFIsw+VHHSjgdTA2Zob7cl2Hsaih1soA
+         hfBWXSgF0RynKg4ABjndxiNiU4Op3ncAH6FdPlV+NN9Zmce0kmx7nRbz1jVo4BCvzIKS
+         Fil0PzevavypCGU85+ITzR+PK/IsKugjvxszqHWFcPUwrXc9GBVmuDsYVeUdTV58os4e
+         d6Bg==
+X-Gm-Message-State: AJIora+pgWG/h6GHAOBkVsGH0etIXHExbJ2sexuiDEKl0VFi7MsvQ0MG
+        E0vs5BtFePNPTs/R6b3/NZRtmoxADQFXZDy9Q4WFRfdqKj5R
+X-Google-Smtp-Source: AGRyM1vgz6DywQ5LIER5aht2TYbGKL63x0LF8UTr2RJ9mHbfUwMViiUuObKfS5XlRwO4oPduneVXeTRKIXwSv1vkKTm5G1Iipqv8
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1e6dc810-7cdc-4766-fd8c-08da4ec742b2
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1865:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB186580E967F612B02AFCFC6A8CAD9@DM5PR12MB1865.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iGcpgqsN0PI252sYswAMT6njUlBaKyrP6PUplutwQWv5gnS8cUfLPT67wR7vuQdV/NrN7zHLz87MZFKexj8LWCRqg3e7dOH8sX89o9RQyKyLiaUoZr4J2ptqfT1RILt9wVqW6LQXrdBWNMdfU4kvM18ozNeoj8zxvPsYdYAj7Mti4SQthbojdR/k5NV40N+X4enmcX6BuUj6PASs99o3KN8A0xFCJov56yIOpq0Q3TQk7/CYDz25iyOAF/yTq20d1mIbbQw0bOl2jjoBJjQ3vrvL4ygobrifqOInW/0/3JtVBHBOYaTmjXa+tGiWRnBSvYwnbQ0nuEmWyDVcoeCvqSqQQ/9A3iT/LiMw527Vq+WFDo03evbbflmVLaYYAKPvkyeZkwgrjrKy9DBydJjEUPyBdrjf4Uk7dVnsHhNoU8wP2UH6yY0VRm9kL59ny5z7ea7g6HSLGJTikIuvnNsMRPGL01BedZxNvjU2RNsLNj5+c6iqn/uOx8VpnEMJyGgzuD30aRujipJsm16e/X7VP4amJX7wMn4YQJsUCrrB5cNdfUXoqo6fWarhVWlFLYiDra13fGgPyVe0m7TPVCTn0YOeEtZThZDGTkySTcHdyEAwd9HaU18yUeMZPO+q/cBFRR/FnzU5T0UA9Q/9gNibOxITmytPRrM9B2DBR9649qmS4HLGTiDMAYhmrAAoxn0sfgfs05TqqOAHxx23nF5hca3hIPXYkjYQEN362D9ad9s=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL3PR12MB6449.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(6666004)(2906002)(53546011)(8936002)(6506007)(508600001)(6486002)(5660300002)(26005)(66946007)(6512007)(38100700002)(186003)(31696002)(86362001)(36756003)(66556008)(316002)(66476007)(8676002)(31686004)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eG9FbFkyb2FGK0drczFtb0syTG00YXUzRk1zV0R0elo0WHBHSE9EZjNwQzFj?=
- =?utf-8?B?eGhIb0lvaElRVEx0VzlWRzFNWmxBa1VEVG9iZXRyeTJyTU5ML2NJRlQvRU4x?=
- =?utf-8?B?N1Q2RFFKSVdPdTVvbnY5NFVzcyt0SXU2T1AxZ1hFYUtxRlhWVXNlM3RiaHhX?=
- =?utf-8?B?VkNMbkttT3h3clRKbG5BcnRONlgva0ZPYVJPTnN6d0U0TU9KL1oyd29aMWJ3?=
- =?utf-8?B?QXAxKzJsVGd4NjB6ZFNXdlFIWEt4R3VrSm1zRGNiTUFUTlhOUktYL2NHaGxG?=
- =?utf-8?B?b2RCZy94cjJ1SXoxZ282SythTzJQelhTZ2NFLzQvR2EzU1puRW8xN2VmUVRu?=
- =?utf-8?B?V0diN3hGelQ5TTM3SzhESzU5dUZlbnhEbjdoZkcweWtrYkZ4VHlTa1NYRDFN?=
- =?utf-8?B?M1BXMTcwcjZQSEFEeXNTOGwvUWVzNmFySXZpRzhVb2ZyT1hvQ3NXTTAwaElk?=
- =?utf-8?B?S2JacEc1ZzNqd1NDKy9lOHNseCs5cFJXUGxYZ2M4TURhQ2ozbFYzd28waGt5?=
- =?utf-8?B?ZlAwYXFaa2ZQREs4Q1R5Yk04Z1hOK21LaXdBQmovVTJ2L3NDdlNtMERwaFR3?=
- =?utf-8?B?OHZkUmtETFcrUjUzbkJ0TzB5S2I0bFV5NzBRR3VaZVQrazVHaGpCQzYwWU1O?=
- =?utf-8?B?TmJ6OU4wU0orSVJRZEljNzJuSnp3QTU1dmRnM0xTMlo0OVFNcG10ZkY0ZkdY?=
- =?utf-8?B?VDBHTFZOWUx0NCtQSGROdzg2aU4yZGx3QzY3TUxDbkhTWjNobnlpVFRwZkQv?=
- =?utf-8?B?d09rYXNtcGZ6ZkplMmlESFhKZTVtSmt2WU02aldWdFB3UUlRM3hPSXJCTTRa?=
- =?utf-8?B?eG8ySmxHVTZ1RXNZcjlUSkpOUFRnQ2JhYjFsc2JTQ3pDWHo0Rjc3dHBMREtT?=
- =?utf-8?B?T2hRRlRsYjhiV2NCb3owNy9laXM3WmZCa2ZUNm9iVVZMeUVoSGNPNmxxQnpk?=
- =?utf-8?B?L2hSazN4RVRud0RrZklUMHQrdFIwR1lKK2VJSjJybE9CU0k4cVlxTHFWemVW?=
- =?utf-8?B?Rk1yNzVVZUhjWEpOTnNvUkdqN1VHUTZQMlFHWXF5QmVZaEtkWlhUdFYyUGxD?=
- =?utf-8?B?d1BNZTM3ZkF2dGYybmZsVmtPMjNhTHNmMTRWdFA5ZHpWY3IyMU43UGcvNGtP?=
- =?utf-8?B?cTVFRkNTWUJrakZLK3VyWVRwUDUzVklkY25kSU1KcXdQUi9QZ29KNUFoRmxt?=
- =?utf-8?B?V3FUYTdiNDhkWjI3YnUwa3FDOUczN0dPMElDdTFVbXBCTHFYdk53a2NUYXN0?=
- =?utf-8?B?Nm0xTU1vcjl3VlVYaS9NK1NhNWVqWWdPQVJXeFJKQ2l3SG5nelR3TDhXRXEv?=
- =?utf-8?B?c3g0Mm1IVEJmMmo5RlRHQXk0UGVHclZiVFUwOXcvekJiUlZGcnJpajErRGFQ?=
- =?utf-8?B?U2NiM21aNlRqemVQSEVFSUZZQ1F0aG93bUtzNzhjS25oYmtJUVlOZ1pGWHJr?=
- =?utf-8?B?UlllR29rbGlEWmRxV3YxUUpFOXM5M0tIUUNmMXR6WldBQkFjbDRtZ1QzT3RN?=
- =?utf-8?B?QTVHVW94QXBseVc3aWJsaTBDYWkxOEFLajdRVU9kVEFPbW9yOTB3Vm1YVXhz?=
- =?utf-8?B?VkVIM2xLbVVrcG5KZlhDNlJIOWMyRHhDdmJXdmFuMCtSSEw4ZmttWGlXL2ZB?=
- =?utf-8?B?cVhIZ3pQd0IyTG5XZDVoQmtIenloOEUwY3pVY1lhZEE4cXhmamoxK1RqeVB6?=
- =?utf-8?B?Y3VSSTYzQ0FpaU9rMFNSVHJicWc0dnZFV2RsRVU3Ni9ERkI0aFI5S3ZXcGZU?=
- =?utf-8?B?Y0RaTzU2S3F1Y1VYbG1oRDJsYWxwRkphVCtkSjBYTzYzTHU4bTNUZXNVb25M?=
- =?utf-8?B?bnVHVjFCRDFyWFkwQW9LMkxKOURUMzRRcnNiWkVDNU9LVFl5K1NjYW92Y2dx?=
- =?utf-8?B?OW05RGhWcXFTTGN6cFdTNlJLaU4yS0VURzZoOVZ0UU9iakpIZFhUcWthaS9O?=
- =?utf-8?B?Qm9wbm8yUHk0QUs3azNGa2l1bjJGZDV2L3NQa1RMWmZmM1FSMGNNdDBUOHNB?=
- =?utf-8?B?WmQ4eGZvQ0E0bk9kb2pEV0ZwK2l2MW42SWw1VVcwS1ZLNnZmZW5QMjhTaFAv?=
- =?utf-8?B?WW0rTDhnWGJZLzNNclFTNzQyamdpcEJrQllRY283ZTZWMDBQRTE2UDVvOEM2?=
- =?utf-8?B?aDNKeUtNckVKQWtqeXpZdTZmMVlzWjA1cmFETms1Y2h3bCtZRFkwc2o1NFl1?=
- =?utf-8?B?TTlLUCtzdCtRQkdmTjlERzBZc1dmSXU2K0dyYnN2NVZhSUl0QUlsWmd0RGRo?=
- =?utf-8?B?dThSUFRwcHE3dzVibXRqR0g2cXovb3owb051cjRrdEJtdmkrNE9RaWFzWG5u?=
- =?utf-8?B?aitYRk1ocUVnK3hkU2lEaXBudVhBMFFCaThtVmhXUk9VSzRZWkZxUT09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e6dc810-7cdc-4766-fd8c-08da4ec742b2
-X-MS-Exchange-CrossTenant-AuthSource: BL3PR12MB6449.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 12:04:55.3799
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kQSFUpAFFjR+TuT8OJj72+SPzLiDfIlqLR4RVyfkEKuzyaYFR+pmL3cUwrJ7SG4+tN+4CrnIlPQgR4v2En96Vg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1865
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a92:c94e:0:b0:2d3:be50:3e2f with SMTP id
+ i14-20020a92c94e000000b002d3be503e2fmr5821129ilq.143.1655294780765; Wed, 15
+ Jun 2022 05:06:20 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 05:06:20 -0700
+In-Reply-To: <0000000000002ecf9805df3af808@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000067fcb705e17b59da@google.com>
+Subject: Re: [syzbot] KASAN: slab-out-of-bounds Read in cttimeout_net_exit
+From:   syzbot <syzbot+92968395eedbdbd3617d@syzkaller.appspotmail.com>
+To:     coreteam@netfilter.org, davem@davemloft.net, edumazet@google.com,
+        fw@strlen.de, kadlec@netfilter.org, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, pabeni@redhat.com,
+        pablo@netfilter.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
-On 6/14/2022 10:50 PM, Shuah Khan wrote:
-> On 6/14/22 6:15 AM, Shetty, Kalpana wrote:
->>
->> On 6/14/2022 3:14 AM, Shuah Khan wrote:
->>> On 6/10/22 3:07 AM, Kalpana Shetty wrote:
->>>> Adding "protected_keys" tests to "run_vmtests.sh" would help out to 
->>>> run all VM related tests
->>>> from a single shell script.
->>>>
->>>
->>> Makes sense - can you explain why you can't just run
->>> protection_keys_32 without checks? 
->>
->> Yes; we can run protection_keys_32 without check.
->>
->>
->>> Why are you checking for VADDR64? 
->>
->> The check is added to ensure if the system is in 64-bit mode before 
->> executing 64-bit binary.
->>
->>
->
-> Okay. protection_keys_32 will only be built on 32-bit system and.
-> protection_keys_64 on 64-bit system.
+HEAD commit:    6ac6dc746d70 Merge branch 'mlx5-next' of git://git.kernel...
+git tree:       net-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15095107f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=20ac3e0ebf0db3bd
+dashboard link: https://syzkaller.appspot.com/bug?extid=92968395eedbdbd3617d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12e777bff00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12613a87f00000
 
-On 64-bit system, we get both 32-bit and 64-bit binary.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+92968395eedbdbd3617d@syzkaller.appspotmail.com
 
-
->
-> Won't it be better to check if binary exists and run either _32 or
-> _64 instead of checking for VADDR64?
-
-makes sense;
-
-In this case on 64-bit platform we would run both _32 and _64 and this 
-should be fine.
-
-
-> thanks,
-> -- Shuah
-
-Thanks,
-
-Kalpana
+general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 1 PID: 11 Comm: kworker/u4:1 Not tainted 5.19.0-rc1-syzkaller-00373-g6ac6dc746d70 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: netns cleanup_net
+RIP: 0010:__list_del_entry_valid+0x81/0xf0 lib/list_debug.c:51
+Code: 0f 84 b5 a6 41 05 48 b8 22 01 00 00 00 00 ad de 49 39 c4 0f 84 b6 a6 41 05 48 b8 00 00 00 00 00 fc ff df 4c 89 e2 48 c1 ea 03 <80> 3c 02 00 75 51 49 8b 14 24 48 39 ea 0f 85 6a a6 41 05 49 8d 7d
+RSP: 0018:ffffc90000107bc0 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffff88801759b310 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff879e16e1 RDI: ffff88801759b328
+RBP: ffff88801759b320 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffff88801759b328
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f5555f6a01d CR3: 0000000074e46000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __list_del_entry include/linux/list.h:134 [inline]
+ list_del include/linux/list.h:148 [inline]
+ cttimeout_net_exit+0x211/0x540 net/netfilter/nfnetlink_cttimeout.c:618
+ ops_exit_list+0xb0/0x170 net/core/net_namespace.c:162
+ cleanup_net+0x4ea/0xb00 net/core/net_namespace.c:594
+ process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e9/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__list_del_entry_valid+0x81/0xf0 lib/list_debug.c:51
+Code: 0f 84 b5 a6 41 05 48 b8 22 01 00 00 00 00 ad de 49 39 c4 0f 84 b6 a6 41 05 48 b8 00 00 00 00 00 fc ff df 4c 89 e2 48 c1 ea 03 <80> 3c 02 00 75 51 49 8b 14 24 48 39 ea 0f 85 6a a6 41 05 49 8d 7d
+RSP: 0018:ffffc90000107bc0 EFLAGS: 00010246
+RAX: dffffc0000000000 RBX: ffff88801759b310 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: ffffffff879e16e1 RDI: ffff88801759b328
+RBP: ffff88801759b320 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000000
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffff88801759b328
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f5555f6a01d CR3: 0000000025f1e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	0f 84 b5 a6 41 05    	je     0x541a6bb
+   6:	48 b8 22 01 00 00 00 	movabs $0xdead000000000122,%rax
+   d:	00 ad de
+  10:	49 39 c4             	cmp    %rax,%r12
+  13:	0f 84 b6 a6 41 05    	je     0x541a6cf
+  19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  20:	fc ff df
+  23:	4c 89 e2             	mov    %r12,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	75 51                	jne    0x81
+  30:	49 8b 14 24          	mov    (%r12),%rdx
+  34:	48 39 ea             	cmp    %rbp,%rdx
+  37:	0f 85 6a a6 41 05    	jne    0x541a6a7
+  3d:	49                   	rex.WB
+  3e:	8d                   	.byte 0x8d
+  3f:	7d                   	.byte 0x7d
 

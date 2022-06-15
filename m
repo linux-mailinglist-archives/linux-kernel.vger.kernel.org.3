@@ -2,89 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8927B54CF0E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF58F54CF0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349095AbiFOQvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
+        id S1344363AbiFOQvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348943AbiFOQvQ (ORCPT
+        with ESMTP id S237952AbiFOQvD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:51:16 -0400
-Received: from m1550.mail.126.com (m1550.mail.126.com [220.181.15.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9E713FD8E
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=tGRkU
-        DKjq6HJmp5eOv3l/7ThtDQMpkNYLD2KIN1UUMA=; b=ADq1oJ35FqWmxH2xgTPz6
-        M02uMmPNRlKPWrouWXdsiYWGKILMRugPB2B/ynKhwV5uQBlFtDDracwdnfDrjmFZ
-        5nGpWKa9Yy2tKv0LCQTOib9XKgGCtwkyzMG/oaxTNLO6aPZDtIH4G3oHH0rmUFEg
-        LIoUWV5IJMCRD6g1M82jAE=
-Received: from windhl$126.com ( [123.112.70.164] ) by ajax-webmail-wmsvr50
- (Coremail) ; Thu, 16 Jun 2022 00:50:16 +0800 (CST)
-X-Originating-IP: [123.112.70.164]
-Date:   Thu, 16 Jun 2022 00:50:16 +0800 (CST)
-From:   =?GBK?B?us3BwQ==?= <windhl@126.com>
-To:     "Rob Herring" <robh@kernel.org>
-Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "X86 ML" <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        "Frank Rowand" <frank.rowand@sony.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re:Re: [PATCH] arch: x86: kernel: Add missing of_node_put() in
- devicetree.c
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 126com
-In-Reply-To: <CAL_JsqLfzz=Pxk=GaOyLpDf1u5WaMGE=UYSVf4MCp+7RRQSBeg@mail.gmail.com>
-References: <20220615150325.3969911-1-windhl@126.com>
- <CAL_JsqLfzz=Pxk=GaOyLpDf1u5WaMGE=UYSVf4MCp+7RRQSBeg@mail.gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Wed, 15 Jun 2022 12:51:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D84340EC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:51:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42520619C0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:51:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74B0EC34115;
+        Wed, 15 Jun 2022 16:51:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655311861;
+        bh=hviysRKzBUvS5pn/sCyEVL+jhAwvyptL0s0z7P87qp8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HK0i2Gqw/eh/nvCxEP74o3yAHAesP2mLLk4ZCJEAfLWPSPRN/38Z5VENaXft/NVqK
+         4TnzQSGLmHOkLThunEjUWHR1YfwhWablzW/5xT9UDrplw9iXgW51UzTJXfJb35XKho
+         +mDrk8tBqzbjeFWuI700AN+6T4pMSsZH7EbztTQ0oRqdASnv/a8XSNLVvDVWmwsEgA
+         EfbBsoCZNUs7h5rafqjpZJNBBIU2kBWIG05yjfcz/wGhcmk8PMFVebMLdk3QIEjNR8
+         wYdy8BplSoOmQ/tfiejedqZcBG85FFsEg+5799AE/u9Fxj/Gg1IJmWXVJTnsJHm8RI
+         M28utpvFAgYFA==
+Date:   Wed, 15 Jun 2022 09:50:59 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Ren Zhijie <renzhijie2@huawei.com>
+Cc:     chao@kernel.org, daehojeong@google.com,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next] f2fs: fix build error too many arguments to
+ functions
+Message-ID: <YqoN8wZDJJUN4IDQ@google.com>
+References: <20220615070422.214106-1-renzhijie2@huawei.com>
 MIME-Version: 1.0
-Message-ID: <525fcb48.8d90.1816845d84e.Coremail.windhl@126.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: MsqowAAnffHIDapi1i03AA--.50013W
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuAghF2JVj4Rz2gAAsT
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220615070422.214106-1-renzhijie2@huawei.com>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CgpIaSwgcm9iLCB0aGFua3MgZm9yIHlvdXIgcmVwbHkuCgpUaGUgb2ZfZmluZF94eCB3aWxsIGlu
-Y3JlYXNlIHRoZSByZWZjb3VudGVyIGZvciB0aGUgbG9jYWwgcmVmZXJlbmNlLCBzbyB3aGVuIAp0
-aGUgZnVuY3Rpb24gcmV0dXJuLCB3ZSBuZWVkIGEgZGVjcmVhc2UgZm9yIHRoZSBkZXN0cm95IG9m
-IHRoZSBsb2NhbCByZWZlcmVuY2UuClRoZSBkZXZpY2Ugd2lsbCBub3QgYmUgZnJlZWQgYXMgaXRz
-IHJlZmNvdW50ZXIgd2lsbCBiZSBzdXJlIGxhcmdlciB0aGFuIDAgd2hlbiAKdGhlIGZ1bmN0aW9u
-IHJldHVybnMuCgpBbGwgd2UgbmVlZCBpcyB0byBrZWVwIHRoZSByZWZjb3VudGluZyBiYWxhbmNl
-LCByaWdodD8KCgoKCkF0IDIwMjItMDYtMTYgMDA6MjY6MTYsICJSb2IgSGVycmluZyIgPHJvYmhA
-a2VybmVsLm9yZz4gd3JvdGU6Cj5PbiBXZWQsIEp1biAxNSwgMjAyMiBhdCA5OjAzIEFNIExpYW5n
-IEhlIDx3aW5kaGxAMTI2LmNvbT4gd3JvdGU6Cj4+Cj4+IEluIGR0Yl9zZXR1cF9ocGV0KCksIG9m
-X2ZpbmRfY29tcGF0aWJsZV9ub2RlKCkgd2lsbCByZXR1cm4gYSBub2RlCj4+IHBvaW50ZXIgd2l0
-aCByZWZjb3VudCBpbmNyZW1lbnRlZC4gV2Ugc2hvdWxkIHVzZSBvZl9ub2RlX3B1dCgpIHdoZW4g
-aXQKPj4gaXMgbm90IHVzZWQgYW55bW9yZS4KPj4KPj4gU2lnbmVkLW9mZi1ieTogTGlhbmcgSGUg
-PHdpbmRobEAxMjYuY29tPgo+PiAtLS0KPj4gIGFyY2gveDg2L2tlcm5lbC9kZXZpY2V0cmVlLmMg
-fCAzICsrKwo+PiAgMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKQo+Pgo+PiBkaWZmIC0t
-Z2l0IGEvYXJjaC94ODYva2VybmVsL2RldmljZXRyZWUuYyBiL2FyY2gveDg2L2tlcm5lbC9kZXZp
-Y2V0cmVlLmMKPj4gaW5kZXggNWNkNTFmMjVmNDQ2Li42YTM4NjQyNGRkZjcgMTAwNjQ0Cj4+IC0t
-LSBhL2FyY2gveDg2L2tlcm5lbC9kZXZpY2V0cmVlLmMKPj4gKysrIGIvYXJjaC94ODYva2VybmVs
-L2RldmljZXRyZWUuYwo+PiBAQCAtMTIwLDYgKzEyMCw5IEBAIHN0YXRpYyB2b2lkIF9faW5pdCBk
-dGJfc2V0dXBfaHBldCh2b2lkKQo+PiAgICAgICAgIGlmICghZG4pCj4+ICAgICAgICAgICAgICAg
-ICByZXR1cm47Cj4+ICAgICAgICAgcmV0ID0gb2ZfYWRkcmVzc190b19yZXNvdXJjZShkbiwgMCwg
-JnIpOwo+PiArCj4+ICsgICAgICAgb2Zfbm9kZV9wdXQoZG4pOwo+PiArCj4KPllvdSBkb24ndCB3
-YW50IGEgcHV0IG9uIHN1Y2Nlc3MuIElmIHlvdSBhcmUgdXNpbmcgdGhlIGRldmljZSwgdGhlbiB5
-b3UKPndhbnQgdG8gaG9sZCBhIHJlZmVyZW5jZSB0byBpdC4KPgo+SSB3b3VsZCBndWVzcyB0aGF0
-IGlmIHlvdSBoYXZlIGFuIGVycm9yIGhlcmUgYW5kIGRvbid0IGhhdmUgeW91cgo+dGltZXIsIHlv
-dSdyZSBub3QgZ29pbmcgdG8gZmluaXNoIGJvb3RpbmcgYW55d2F5cy4KPgo+RmluYWxseSwgd291
-bGRuJ3QgZHRiX2xhcGljX3NldHVwKCkgYW5kIGR0Yl9hZGRfaW9hcGljKCkgYWxzbyBuZWVkIGEK
-PnNpbWlsYXIgY2hhbmdlPyBCdXQgYWdhaW4sIGlmIHRob3NlIGFyZW4ndCBpbml0aWFsaXplZCwg
-eW91IHByb2JhYmx5Cj5hcmVuJ3QgZ2V0dGluZyB2ZXJ5IGZhci4KPgo+Cj4+ICAgICAgICAgaWYg
-KHJldCkgewo+PiAgICAgICAgICAgICAgICAgV0FSTl9PTigxKTsKPj4gICAgICAgICAgICAgICAg
-IHJldHVybjsKPj4gLS0KPj4gMi4yNS4xCj4+Cg==
+Thanks, but I deqeued the buggy patch, so expect to get the right change
+later.
+
+On 06/15, Ren Zhijie wrote:
+> If CONFIG_F2FS_FS_COMPRESSION is not set.
+> 
+> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-, will be failed, like this:
+> fs/f2fs/data.c: In function ‘f2fs_finish_read_bio’:
+> fs/f2fs/data.c:136:5: error: too many arguments to function ‘f2fs_end_read_compressed_page’
+>      f2fs_end_read_compressed_page(page, true, 0,
+>      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> In file included from fs/f2fs/data.c:25:0:
+> fs/f2fs/f2fs.h:4228:20: note: declared here
+>  static inline void f2fs_end_read_compressed_page(struct page *page,
+>                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> fs/f2fs/data.c:138:4: error: too many arguments to function ‘f2fs_put_page_dic’
+>     f2fs_put_page_dic(page, in_softirq);
+>     ^~~~~~~~~~~~~~~~~
+> In file included from fs/f2fs/data.c:25:0:
+> fs/f2fs/f2fs.h:4233:20: note: declared here
+>  static inline void f2fs_put_page_dic(struct page *page)
+>                     ^~~~~~~~~~~~~~~~~
+> fs/f2fs/data.c: In function ‘f2fs_handle_step_decompress’:
+> fs/f2fs/data.c:241:4: error: too many arguments to function ‘f2fs_end_read_compressed_page’
+>     f2fs_end_read_compressed_page(page, PageError(page),
+>     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> In file included from fs/f2fs/data.c:25:0:
+> fs/f2fs/f2fs.h:4228:20: note: declared here
+>  static inline void f2fs_end_read_compressed_page(struct page *page,
+>                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> make[2]: *** [fs/f2fs/data.o] Error 1
+> make[2]: *** Waiting for unfinished jobs....
+> make[1]: *** [fs/f2fs] Error 2
+> 
+> Since commit 1b565702dffe ("f2fs: handle decompress only post processing in softirq") 
+> had changed the definition of function "f2fs_end_read_compressed_page()" and "f2fs_put_page_dic()",
+> but forgot the other definitions in f2fs.h warpped by #else /* CONFIG_F2FS_FS_COMPRESSION */.
+> 
+> Reported-by: Hulk Robot <hulkci@huawei.com>
+> Fixes: 1b565702dffe("f2fs: handle decompress only post processing in softirq")
+> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
+> ---
+>  fs/f2fs/f2fs.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index b42fcca030e2..0811a9335dde 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -4225,12 +4225,12 @@ static inline struct page *f2fs_compress_control_page(struct page *page)
+>  static inline int f2fs_init_compress_mempool(void) { return 0; }
+>  static inline void f2fs_destroy_compress_mempool(void) { }
+>  static inline void f2fs_decompress_cluster(struct decompress_io_ctx *dic) { }
+> -static inline void f2fs_end_read_compressed_page(struct page *page,
+> -						bool failed, block_t blkaddr)
+> +static inline void f2fs_end_read_compressed_page(struct page *page, bool failed,
+> +				block_t blkaddr, bool in_softirq)
+>  {
+>  	WARN_ON_ONCE(1);
+>  }
+> -static inline void f2fs_put_page_dic(struct page *page)
+> +static inline void f2fs_put_page_dic(struct page *page, bool in_softirq)
+>  {
+>  	WARN_ON_ONCE(1);
+>  }
+> -- 
+> 2.17.1

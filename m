@@ -2,76 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92D9154C9DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D44AB54C9C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348074AbiFONcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 09:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
+        id S1346448AbiFON2T convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Jun 2022 09:28:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232167AbiFONcd (ORCPT
+        with ESMTP id S243950AbiFON2R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 09:32:33 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E9CE8D;
-        Wed, 15 Jun 2022 06:32:29 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 53C1221BE5;
-        Wed, 15 Jun 2022 13:32:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655299948;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S/tGbpsZILsyT+4JiLY1z0j09F2IF5Ha2IdUcm9f6Go=;
-        b=lD+X+LL1FqMRYhO8fVEadn2UF+Vir0hKKoCW928nMS7EHwh7snjGaXa6UhPt8SgHK5BskQ
-        RRo2rPMTef8Ub570KCOuFK33q+o8feTLLDeHtFblpDGvdjYA93tQidsPLmQXNeP2p/NaPj
-        dUnwXEg6Fl40dO3NqANcNU9XEeDxfTw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655299948;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=S/tGbpsZILsyT+4JiLY1z0j09F2IF5Ha2IdUcm9f6Go=;
-        b=8wjB1b8Fn492B9OYxkfzewXGMgZIKva33go1IP7d9FAgW78ZNSrmIiCp8nJ+QbdVC2wQ6j
-        z4WwX4bBoj6ZV1Dg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 34E5713A35;
-        Wed, 15 Jun 2022 13:32:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Q+jlC2zfqWJ5JgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Wed, 15 Jun 2022 13:32:28 +0000
-Date:   Wed, 15 Jun 2022 15:27:54 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] btrfs: Replace kmap() with kmap_local_page() in zstd.c
-Message-ID: <20220615132754.GX20633@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220611135203.27992-1-fmdefrancesco@gmail.com>
- <1936552.usQuhbGJ8B@opensuse>
- <20220614142521.GN20633@twin.jikos.cz>
- <8952566.CDJkKcVGEf@opensuse>
- <YqjAVq+1PIpVIr0p@iweiny-desk3>
+        Wed, 15 Jun 2022 09:28:17 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664771CFE1;
+        Wed, 15 Jun 2022 06:28:15 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 5A8301C0BC8; Wed, 15 Jun 2022 15:28:12 +0200 (CEST)
+Date:   Wed, 15 Jun 2022 15:28:09 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Samuel Holland <samuel@sholland.org>, Ondrej Jirman <x@xff.cz>,
+        Martijn Braam <martijn@brixit.nl>
+Subject: Re: [PATCH 1/2] dt-bindings: arm: rockchip: Add PinePhone Pro
+ bindings
+Message-ID: <20220615132809.GA1429@bug>
+References: <20220529031705.278631-1-tom@tom-fitzhenry.me.uk>
+ <20220529031705.278631-2-tom@tom-fitzhenry.me.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YqjAVq+1PIpVIr0p@iweiny-desk3>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20220529031705.278631-2-tom@tom-fitzhenry.me.uk>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,41 +47,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 10:07:34AM -0700, Ira Weiny wrote:
-> On Tue, Jun 14, 2022 at 06:28:48PM +0200, Fabio M. De Francesco wrote:
-> > On martedì 14 giugno 2022 16:25:21 CEST David Sterba wrote:
-> > > On Tue, Jun 14, 2022 at 01:22:50AM +0200, Fabio M. De Francesco wrote:
-> > > > On lunedì 13 giugno 2022 20:39:13 CEST David Sterba wrote:
-> > > > > On Sat, Jun 11, 2022 at 03:52:03PM +0200, Fabio M. De Francesco 
-> 
-> > > > A better solution is changing the prototype of __kunmap_local(); I
-> > > > suppose that Andrew won't object, but who knows?
-> > > > 
-> > > > (+Cc Andrew Morton).
-> > > > 
-> > > > I was waiting for your comments. At now I've done about 15 conversions 
-> > > > across the kernel but it's the first time I had to pass a pointer to 
-> > const 
-> > > > void to kunmap_local(). Therefore, I was not sure if changing the API 
-> > were 
-> > > > better suited (however I have already discussed this with Ira).
-> > > 
-> > > IMHO it should be fixed in the API.
-> > > 
-> > I agree with you in full.
-> > 
-> > At the same time when you sent this email I submitted a patch to change 
-> > kunmap_local() and kunmap_atomic().
-> > 
-> > After Andrew takes them I'll send v2 of this patch to zstd.c without those 
-> > unnecessary casts.
-> 
-> David,
-> 
-> Would you be willing to take this through your tree as a pre-patch to the kmap
-> changes in btrfs?
-> 
-> That would be easier for Fabio and probably you and Andrew in the long run.
+Hi!
 
-Yes, no problem. I could probably send all the kmap conversions after
-tests so it does not need to wait until the next cycle.
+> Document board compatible names for Pine64 PinePhonePro.
+> 
+> https://wiki.pine64.org/wiki/PinePhone_Pro
+> 
+> Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+
+It makes sense to get this reviewed early, because Rob's ack is needed here, right?
+
+> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
+> @@ -489,6 +489,11 @@ properties:
+>            - const: pine64,pinenote
+>            - const: rockchip,rk3566
+>  
+> +      - description: Pine64 PinePhonePro
+> +        items:
+> +          - const: pine64-pinephone-pro
+
+This should be pine64,... right?
+
+Best regards,
+									Pavel
+
+
+-- 
+(english) http://www.livejournal.com/~pavelmachek
+(cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html

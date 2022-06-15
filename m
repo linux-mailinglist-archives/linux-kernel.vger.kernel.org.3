@@ -2,73 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0C054CF83
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F8954CF87
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356957AbiFOROM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:14:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
+        id S1345162AbiFOROe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357979AbiFOROB (ORCPT
+        with ESMTP id S1357484AbiFORO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:14:01 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC5D1A828
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:14:00 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id 3-20020a17090a174300b001e426a02ac5so2741527pjm.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:14:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=NpbkGIIAT9U+dUlMWmDOrmdJZkG9VKb6160l0wJULSU=;
-        b=IM78OQJNArX9cZ/L3qOPxd2HTvfuMrK0kXUFCb1vzwMzpsuFbJEfuerjHEhXIjdou/
-         VLRZ+81OdjXf65hLqU2yr0HqMMRDEbiwhvpaOeRqErjLr9JOtY6RLyv39G81IXL03DS2
-         OxmAHvbzanywYIaY9S/SQ9Rn9m1qFKN17n00KGmg3FrqQ+8xRp5MThDZSZHUsghju+p3
-         SdPlLfMxnE8Jt/6rNKnO1GfW4WfFlZR6++e1JDYbNckLusfl2INx/7C4DLTail+GYf13
-         mfxzeOjfN2GIp644lw4s5z0Tv90iwcGpXCUZF8og+YDWEcG2Obnc9uXZLgNAVK7rZzoX
-         JNVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=NpbkGIIAT9U+dUlMWmDOrmdJZkG9VKb6160l0wJULSU=;
-        b=an4ELncynPsQUypG3TvjM5Rym5ow5aV33qR/B62OK0C14VSPKLyuY4Ek1IjI2W3L3Q
-         CzL6niJwDsAJB79vw9GzjOCq1FCtLbBDJGHONjS3k8RcD2JZ3PSRJUEuC3NqlGHJS9mL
-         VioJXGMjrcs4HZFbFLXozkmOyUBsNG2h2VN+reBO4ysPGfuZsYrzbd3IR5eRuAGzHq0S
-         HCCVP7Q4G5zB9pJbwJ9gZjVXrM2wPtofCjLUETaaF9f9hAwhDwTR/SdOH36jbbAlZlsj
-         QTDfdpC8BkK+t8pS9zbWMAHXIMCnuYMKYpvC/V0BU6v80W2694H1UxepJF2u3S9Qy7nH
-         adDw==
-X-Gm-Message-State: AJIora+oKV3jSWWul6xLd9IJD0ervcKHgxCX8HPxC4ZQ97ObuxD5BODc
-        3XY/Hz3Nt6SdG5ODWn7UdO2a0g==
-X-Google-Smtp-Source: AGRyM1vyYhE47wnJ4w8exikqpAv43fy9wiWJLEqNdCJVP7Gs0YisdsJCe8kE464+tKvoj30lI4wFzw==
-X-Received: by 2002:a17:903:234a:b0:167:997f:bc4c with SMTP id c10-20020a170903234a00b00167997fbc4cmr382877plh.120.1655313239421;
-        Wed, 15 Jun 2022 10:13:59 -0700 (PDT)
-Received: from google.com (55.212.185.35.bc.googleusercontent.com. [35.185.212.55])
-        by smtp.gmail.com with ESMTPSA id o10-20020a170902778a00b0015e8d4eb282sm9565242pll.204.2022.06.15.10.13.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 10:13:58 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 10:13:55 -0700
-From:   Zach O'Keefe <zokeefe@google.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     akpm@linux-foundation.org, aarcange@redhat.com,
-        willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
-        neilb@suse.de, apopple@nvidia.com, david@redhat.com,
-        surenb@google.com, peterx@redhat.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 7/7] mm/khugepaged: try to free transhuge swapcache when
- possible
-Message-ID: <YqoTU7SNM7d3MlNs@google.com>
-References: <20220611084731.55155-1-linmiaohe@huawei.com>
- <20220611084731.55155-8-linmiaohe@huawei.com>
+        Wed, 15 Jun 2022 13:14:26 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA63425595
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:14:25 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BC787153B;
+        Wed, 15 Jun 2022 10:14:25 -0700 (PDT)
+Received: from [10.57.82.209] (unknown [10.57.82.209])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8FAB23F73B;
+        Wed, 15 Jun 2022 10:14:23 -0700 (PDT)
+Message-ID: <949c22c4-5f64-47cf-673c-14fcadcc1d27@arm.com>
+Date:   Wed, 15 Jun 2022 18:14:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220611084731.55155-8-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v9 2/3] iommu/mediatek: Rename MTK_IOMMU_TLB_ADDR to
+ MTK_IOMMU_ADDR
+Content-Language: en-GB
+To:     yf.wang@mediatek.com, Yong Wu <yong.wu@mediatek.com>,
+        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "open list:MEDIATEK IOMMU DRIVER" <iommu@lists.linux-foundation.org>,
+        "moderated list:MEDIATEK IOMMU DRIVER" 
+        <linux-mediatek@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     wsd_upstream@mediatek.com, Libo Kang <Libo.Kang@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ning Li <ning.li@mediatek.com>
+References: <20220615161224.6923-1-yf.wang@mediatek.com>
+ <20220615161224.6923-3-yf.wang@mediatek.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220615161224.6923-3-yf.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,90 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11 Jun 16:47, Miaohe Lin wrote:
-> Transhuge swapcaches won't be freed in __collapse_huge_page_copy().
-> It's because release_pte_page() is not called for these pages and
-> thus free_page_and_swap_cache can't grab the page lock. These pages
-> won't be freed from swap cache even if we are the only user until
-> next time reclaim. It shouldn't hurt indeed, but we could try to
-> free these pages to save more memory for system.
+On 2022-06-15 17:12, yf.wang--- via iommu wrote:
+> From: Yunfei Wang <yf.wang@mediatek.com>
 > 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> Rename MTK_IOMMU_TLB_ADDR to MTK_IOMMU_ADDR, and update MTK_IOMMU_ADDR
+> definition for better generality.
+> 
+> Signed-off-by: Ning Li <ning.li@mediatek.com>
+> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
 > ---
->  include/linux/swap.h | 5 +++++
->  mm/khugepaged.c      | 1 +
->  mm/swap.h            | 5 -----
->  3 files changed, 6 insertions(+), 5 deletions(-)
+>   drivers/iommu/mtk_iommu.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> diff --git a/include/linux/swap.h b/include/linux/swap.h
-> index 8672a7123ccd..ccb83b12b724 100644
-> --- a/include/linux/swap.h
-> +++ b/include/linux/swap.h
-> @@ -456,6 +456,7 @@ static inline unsigned long total_swapcache_pages(void)
->  	return global_node_page_state(NR_SWAPCACHE);
->  }
->  
-> +extern void free_swap_cache(struct page *page);
->  extern void free_page_and_swap_cache(struct page *);
->  extern void free_pages_and_swap_cache(struct page **, int);
->  /* linux/mm/swapfile.c */
-> @@ -540,6 +541,10 @@ static inline void put_swap_device(struct swap_info_struct *si)
->  /* used to sanity check ptes in zap_pte_range when CONFIG_SWAP=0 */
->  #define free_swap_and_cache(e) is_pfn_swap_entry(e)
->  
-> +static inline void free_swap_cache(struct page *page)
-> +{
-> +}
-> +
->  static inline int add_swap_count_continuation(swp_entry_t swp, gfp_t gfp_mask)
->  {
->  	return 0;
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index ee0a719c8be9..52109ad13f78 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -756,6 +756,7 @@ static void __collapse_huge_page_copy(pte_t *pte, struct page *page,
->  	list_for_each_entry_safe(src_page, tmp, compound_pagelist, lru) {
->  		list_del(&src_page->lru);
->  		release_pte_page(src_page);
-> +		free_swap_cache(src_page);
->  	}
->  }
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index bb9dd92c9898..3d62399e8865 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -265,8 +265,8 @@ static const struct iommu_ops mtk_iommu_ops;
+>   
+>   static int mtk_iommu_hw_init(const struct mtk_iommu_data *data, unsigned int bankid);
+>   
+> -#define MTK_IOMMU_TLB_ADDR(iova) ({					\
+> -	dma_addr_t _addr = iova;					\
+> +#define MTK_IOMMU_ADDR(addr) ({						\
+> +	unsigned long long _addr = addr;				\
 
-Aside: in __collapse_huge_page_isolate() (and also here) why can't we just check
-PageCompound(page) && page == compound_head(page) to only act on compound pages
-once? AFAIK this would alleviate this compound_pagelist business..
+If phys_addr_t is 64-bit, then dma_addr_t is also 64-bit, so there is no 
+loss of generality from using an appropriate type - IOVAs have to fit 
+into dma_addr_t for iommu-dma, after all. However, since IOVAs also have 
+to fit into unsigned long in the general IOMMU API, as "addr" is here, 
+then this is still just as broken for 32-bit LPAE as the existing code is.
 
-Anyways, as-is, free_page_and_swap_cache() won't be able to do
-try_to_free_swap(), since it can't grab page lock, put it will call put_page().
-I think (?) the last page ref might be dropped in release_pte_page(), so should
-free_swap_cache() come before it?
+Thanks,
+Robin.
 
->  
-> diff --git a/mm/swap.h b/mm/swap.h
-> index 0193797b0c92..863f6086c916 100644
-> --- a/mm/swap.h
-> +++ b/mm/swap.h
-> @@ -41,7 +41,6 @@ void __delete_from_swap_cache(struct page *page,
->  void delete_from_swap_cache(struct page *page);
->  void clear_shadow_from_swap_cache(int type, unsigned long begin,
->  				  unsigned long end);
-> -void free_swap_cache(struct page *page);
->  struct page *lookup_swap_cache(swp_entry_t entry,
->  			       struct vm_area_struct *vma,
->  			       unsigned long addr);
-> @@ -81,10 +80,6 @@ static inline struct address_space *swap_address_space(swp_entry_t entry)
->  	return NULL;
->  }
->  
-> -static inline void free_swap_cache(struct page *page)
-> -{
-> -}
-> -
->  static inline void show_swap_cache_info(void)
->  {
->  }
-> -- 
-> 2.23.0
-> 
-> 
+>   	((lower_32_bits(_addr) & GENMASK(31, 12)) | upper_32_bits(_addr));\
+>   })
+>   
+> @@ -381,8 +381,8 @@ static void mtk_iommu_tlb_flush_range_sync(unsigned long iova, size_t size,
+>   		writel_relaxed(F_INVLD_EN1 | F_INVLD_EN0,
+>   			       base + data->plat_data->inv_sel_reg);
+>   
+> -		writel_relaxed(MTK_IOMMU_TLB_ADDR(iova), base + REG_MMU_INVLD_START_A);
+> -		writel_relaxed(MTK_IOMMU_TLB_ADDR(iova + size - 1),
+> +		writel_relaxed(MTK_IOMMU_ADDR(iova), base + REG_MMU_INVLD_START_A);
+> +		writel_relaxed(MTK_IOMMU_ADDR(iova + size - 1),
+>   			       base + REG_MMU_INVLD_END_A);
+>   		writel_relaxed(F_MMU_INV_RANGE, base + REG_MMU_INVALIDATE);
+>   

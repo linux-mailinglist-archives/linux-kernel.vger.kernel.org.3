@@ -2,113 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A015454D3FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F05654D3FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:55:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347554AbiFOVzP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Jun 2022 17:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
+        id S1348674AbiFOVzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 17:55:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235490AbiFOVzN (ORCPT
+        with ESMTP id S1347869AbiFOVzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 17:55:13 -0400
-Received: from sender4-of-o58.zoho.com (sender4-of-o58.zoho.com [136.143.188.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A237C3587F;
-        Wed, 15 Jun 2022 14:55:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1655330094; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=CKvoztOljuknIFBKSeem8IkvDo9RD2xKXZDj2C7I7vBPzCH4fqnAbLwblTBKUj/m+zGA8mWRCaqmsc1UG2MHPxNLGyYxMr2vDFwVOmKV54M3vwjxso6/P4nEScedPcWz1McEmrBJiJVQOd1HSzlmPa02XvkJpPQxdPafxYx9vk0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1655330094; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=aJJwsD70Ns0x7M5O0VL7TTcu4LfnesfafLmWP9UWs38=; 
-        b=FnGboAsQPLdV7Y0SJsgoFQmD5/CK87GSKom+bbSJ98EoaSI7XyFjjngw0/zfDzUiGu3TnANHctwoJYf8/MXWN6UnW04hER3Qtf4HZF7DDk2NdaUI3c8TIqs7+faUdM/ud7QLNtd6YB1kRNEAG4Ng4Fq4Xf/nfpvAwTFTel7x5nw=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        spf=pass  smtp.mailfrom=linux@mniewoehner.de;
-        dmarc=pass header.from=<linux@mniewoehner.de>
-Received: from z3r0.lan (185.31.62.161 [185.31.62.161]) by mx.zohomail.com
-        with SMTPS id 1655330093198200.5141202854353; Wed, 15 Jun 2022 14:54:53 -0700 (PDT)
-Message-ID: <c610a318258198f72a53541c551c0c595a205329.camel@mniewoehner.de>
-Subject: Re: [PATCH v5 10/10] tpm, tpm_tis: Enable interrupt test
-From:   Michael =?ISO-8859-1?Q?Niew=F6hner?= <linux@mniewoehner.de>
-To:     Jarkko Sakkinen <jarkko@kernel.org>, LinoSanfilippo@gmx.de,
-        James.Bottomley@hansenpartnership.com,
-        twawrzynczak <twawrzynczak@chromium.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, lukas@wunner.de, p.rosenberger@kunbus.com
-In-Reply-To: <YqokW/cNLrrsZ2ib@iki.fi>
-References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
-         <20220610110846.8307-11-LinoSanfilippo@gmx.de> <YqokW/cNLrrsZ2ib@iki.fi>
-Content-Type: text/plain; charset="UTF-8"
-Date:   Wed, 15 Jun 2022 23:54:49 +0200
+        Wed, 15 Jun 2022 17:55:17 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0EF3BBCB
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:55:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655330116; x=1686866116;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2C9vYUhv5jL2K5xzRH45goeY7fn47lkvkQBHQ5F3nCE=;
+  b=DmJqBheUUnVN2mhPBs24RslqFUtDWTwG/ep3/xwBEmT622ETCyIt1cZO
+   VFpki4bWqbMj4WvjK0wUte4x5K4pX0st/ySL4HCBGqh7Vkaa/twNQ2ZuW
+   fdqU1J6pUPg3PJaYIlqWKxeItVRS9R3Y2NjkKSV5UBD25G9cnTWUQOhpv
+   pYvU9s3XWrtsnDFIh14gwT8gX+Y7q3NCdZ4ER3wNo4/wb3m27Rg1GUtiT
+   p3cMwaBbeADee3HhON+p2/ZVM+BHpH4p/74wb0nsHi/4iZXfx2X7Vv7Hg
+   40aKAUf8Rw7lDM4qTIeUz9VO5JoERHM1LLGaPxWgBrKeegcPuy4LHFMKQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="343068095"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="343068095"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 14:55:13 -0700
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="559385208"
+Received: from mjortiz-mobl.amr.corp.intel.com (HELO [10.212.185.241]) ([10.212.185.241])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 14:55:13 -0700
+Message-ID: <1d190555-2bb1-e483-2405-e28ddabead07@intel.com>
+Date:   Wed, 15 Jun 2022 14:55:13 -0700
 MIME-Version: 1.0
-User-Agent: Evolution 3.42.2 
-Content-Transfer-Encoding: 8BIT
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_ADSP_ALL,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCHv4 3/3] x86/tdx: Handle load_unaligned_zeropad() page-cross
+ to a shared page
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org, ak@linux.intel.com,
+        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
+        thomas.lendacky@amd.com, x86@kernel.org
+References: <20220614120135.14812-1-kirill.shutemov@linux.intel.com>
+ <20220614120135.14812-4-kirill.shutemov@linux.intel.com>
+ <051fd468-11e6-308b-66c8-4de16ff80deb@intel.com>
+ <20220615171042.oeumb3vs3ttu4rvd@black.fi.intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20220615171042.oeumb3vs3ttu4rvd@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-06-15 at 21:26 +0300, Jarkko Sakkinen wrote:
-> On Fri, Jun 10, 2022 at 01:08:46PM +0200, LinoSanfilippo@gmx.de wrote:
-> > From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> > 
-> > The test for interrupts in tpm_tis_send() is skipped if the flag
-> > TPM_CHIP_FLAG_IRQ is not set. Since the current code never sets the flag
-> > initially the test is never executed.
-> > 
-> > Fix this by setting the flag in tpm_tis_gen_interrupt() right after
-> > interrupts have been enabled.
-> > 
-> > Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> > ---
-> >  drivers/char/tpm/tpm_tis_core.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> > 
-> > diff --git a/drivers/char/tpm/tpm_tis_core.c
-> > b/drivers/char/tpm/tpm_tis_core.c
-> > index e5edf745fb23..be229c173f10 100644
-> > --- a/drivers/char/tpm/tpm_tis_core.c
-> > +++ b/drivers/char/tpm/tpm_tis_core.c
-> > @@ -774,11 +774,16 @@ static int tpm_tis_gen_interrupt(struct tpm_chip
-> > *chip)
-> >         if (ret < 0)
-> >                 return ret;
-> >  
-> > +       chip->flags |= TPM_CHIP_FLAG_IRQ;
-> > +
-> >         if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> >                 ret = tpm2_get_tpm_pt(chip, 0x100, &cap2, desc);
-> >         else
-> >                 ret = tpm1_getcap(chip, TPM_CAP_PROP_TIS_TIMEOUT, &cap,
-> > desc, 0);
-> >  
-> > +       if (ret)
-> > +               chip->flags &= ~TPM_CHIP_FLAG_IRQ;
-> > +
-> >         release_locality(chip, 0);
-> >  
-> >         return ret;
-> > -- 
-> > 2.36.1
-> > 
+On 6/15/22 10:10, Kirill A. Shutemov wrote:
+>> I thought this whole exercise was kicked off by hitting this in testing.
+>>  Am I remembering this wrong?
+>>
+>>> https://lore.kernel.org/all/20220517153444.11195-10-kirill.shutemov@linux.intel.com/
+>> Says:
+>>
+>>> This is an actual, real-world problem which was discovered during TDX
+>>> testing.
+>> Or were you considering this a different problem somehow?
+> They are different.
 > 
-> James, do you have a chance to test this on your side? Thanks.
-> 
-> BR, Jarkko
+> The patch by the link addresses issue of load_unaligned_zeropad() stepping
+> onto unaccepted memory. This was triggered in practice.
 
-Hi guys,
-
-for me this series causes boot problems - somehow feels like an interrupt
-storm...
-Not sure yet, which commit is causing that. I'll do more testing tomorrow.
-@Tim could you test on any of your devices, please?
-
-BR
-Michael
+OK, so we've got two problems both triggered by
+load_unaligned_zeropad(), but where the fixes are different.  We
+actually hit the "unaccepted memory one" in testing, but that made us
+think about other problems in the area and that's where this one came up.
 

@@ -2,229 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D37FF54C694
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:57:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B462354C697
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244158AbiFOK5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:57:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
+        id S244039AbiFOK6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:58:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiFOK5s (ORCPT
+        with ESMTP id S1343824AbiFOK5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:57:48 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EEBDEAF;
-        Wed, 15 Jun 2022 03:57:47 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25FAjZea013337;
-        Wed, 15 Jun 2022 10:57:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=g1MH1lD9lSASGfKsGojD8dasTA48Ndut4rKpN38EaBU=;
- b=pM7LzvkkIPYsfUTrZ43aasdhW5miScsgvjR5TfwkoY0p+Vgj4JzAUiTyf7jp8kLJBL3b
- V9FFHAaqnr1QfHHGozB3H9vpsSZ8zhiej/0JIYw0GSxs4fsiufKxLwG0UNVgojtk3VHN
- 1BMIwCdcqI/2A7elbE6sTML9vGOlJTLOhJMFE/ZUn8xrMYtslAFh9xdeglbYDbvI9i3F
- tqIJHyr89Xfdjx23T8RjTLqCnHHsQ2HdURkXdi1miAkLYkdZjziG55rwIWgKpoBKLi7e
- B07KjbL2ynUSTUWPHe/540UY+RFQn3by9JqH/tNSAc7nK6+6mulD7JS5H/sXJ3JpwPxN 7Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gq72jj0nx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jun 2022 10:57:46 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25FAq0dF018185;
-        Wed, 15 Jun 2022 10:57:46 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gq72jj0n9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jun 2022 10:57:46 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25FAoNUf003697;
-        Wed, 15 Jun 2022 10:57:43 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma02fra.de.ibm.com with ESMTP id 3gmjp94daj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jun 2022 10:57:43 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25FAve2E14811564
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jun 2022 10:57:40 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8EEBAAE051;
-        Wed, 15 Jun 2022 10:57:40 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 12C7BAE04D;
-        Wed, 15 Jun 2022 10:57:40 +0000 (GMT)
-Received: from [9.145.158.83] (unknown [9.145.158.83])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Jun 2022 10:57:39 +0000 (GMT)
-Message-ID: <44b2b227-9757-b7a2-41a0-cbea0e2bbbdc@linux.ibm.com>
-Date:   Wed, 15 Jun 2022 12:57:39 +0200
+        Wed, 15 Jun 2022 06:57:54 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0A95252A9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:57:53 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43DBA152B;
+        Wed, 15 Jun 2022 03:57:53 -0700 (PDT)
+Received: from [10.57.82.209] (unknown [10.57.82.209])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 75E743F66F;
+        Wed, 15 Jun 2022 03:57:51 -0700 (PDT)
+Message-ID: <54159102-42f8-e5dc-5099-1d5d4dbbfc65@arm.com>
+Date:   Wed, 15 Jun 2022 11:57:45 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v11 14/19] KVM: s390: pv: cleanup leftover protected VMs
- if needed
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc:     kvm@vger.kernel.org, borntraeger@de.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        mimu@linux.ibm.com, nrb@linux.ibm.com
-References: <20220603065645.10019-1-imbrenda@linux.ibm.com>
- <20220603065645.10019-15-imbrenda@linux.ibm.com>
- <0a13397a-86e0-7c25-0044-7a5733f61730@linux.ibm.com>
- <20220615121916.77b039af@p-imbrenda>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20220615121916.77b039af@p-imbrenda>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [RESEND PATCH v8 01/11] iommu: Add DMA ownership management
+ interfaces
+Content-Language: en-GB
+To:     Steven Price <steven.price@arm.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20220418005000.897664-1-baolu.lu@linux.intel.com>
+ <20220418005000.897664-2-baolu.lu@linux.intel.com>
+ <10eaa3b1-4cf7-a7b6-a7f6-111a486a343a@arm.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <10eaa3b1-4cf7-a7b6-a7f6-111a486a343a@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: i4yZzUtJe-mhEBpZPae4WlFmHhMsenp1
-X-Proofpoint-GUID: t9sKh_6yDq8-ytKxYkladr3V8aXUWa7D
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-15_03,2022-06-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 bulkscore=0 phishscore=0 suspectscore=0 impostorscore=0
- lowpriorityscore=0 spamscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206150040
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/22 12:19, Claudio Imbrenda wrote:
-> On Wed, 15 Jun 2022 11:59:36 +0200
-> Janosch Frank <frankja@linux.ibm.com> wrote:
-> 
->> On 6/3/22 08:56, Claudio Imbrenda wrote:
->>> In upcoming patches it will be possible to start tearing down a
->>> protected VM, and finish the teardown concurrently in a different
->>> thread.
+On 2022-06-15 10:53, Steven Price wrote:
+> On 18/04/2022 01:49, Lu Baolu wrote:
+>> Multiple devices may be placed in the same IOMMU group because they
+>> cannot be isolated from each other. These devices must either be
+>> entirely under kernel control or userspace control, never a mixture.
 >>
->> s/,/
->> s/the/its/
-> 
-> will fix
-> 
+>> This adds dma ownership management in iommu core and exposes several
+>> interfaces for the device drivers and the device userspace assignment
+>> framework (i.e. VFIO), so that any conflict between user and kernel
+>> controlled dma could be detected at the beginning.
 >>
->>>
->>> Protected VMs that are pending for tear down ("leftover") need to be
->>> cleaned properly when the userspace process (e.g. qemu) terminates.
->>>
->>> This patch makes sure that all "leftover" protected VMs are always
->>> properly torn down.
+>> The device driver oriented interfaces are,
 >>
->> So we're handling the kvm_arch_destroy_vm() case here, right?
-> 
-> yes
-> 
->> Maybe add that in a more prominent way and rework the subject:
+>> 	int iommu_device_use_default_domain(struct device *dev);
+>> 	void iommu_device_unuse_default_domain(struct device *dev);
 >>
->> KVM: s390: pv: cleanup leftover PV VM shells on VM shutdown
-> 
-> ok, I'll change the description and rework the subject
-> 
+>> By calling iommu_device_use_default_domain(), the device driver tells
+>> the iommu layer that the device dma is handled through the kernel DMA
+>> APIs. The iommu layer will manage the IOVA and use the default domain
+>> for DMA address translation.
 >>
->>>
->>> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
->>> ---
->>>    arch/s390/include/asm/kvm_host.h |   2 +
->>>    arch/s390/kvm/kvm-s390.c         |   2 +
->>>    arch/s390/kvm/pv.c               | 109 ++++++++++++++++++++++++++++---
->>>    3 files changed, 104 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/arch/s390/include/asm/kvm_host.h b/arch/s390/include/asm/kvm_host.h
->>> index 5824efe5fc9d..cca8e05e0a71 100644
->>> --- a/arch/s390/include/asm/kvm_host.h
->>> +++ b/arch/s390/include/asm/kvm_host.h
->>> @@ -924,6 +924,8 @@ struct kvm_s390_pv {
->>>    	u64 guest_len;
->>>    	unsigned long stor_base;
->>>    	void *stor_var;
->>> +	void *prepared_for_async_deinit;
->>> +	struct list_head need_cleanup;
->>>    	struct mmu_notifier mmu_notifier;
->>>    };
->>>    
->>> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
->>> index fe1fa896def7..369de8377116 100644
->>> --- a/arch/s390/kvm/kvm-s390.c
->>> +++ b/arch/s390/kvm/kvm-s390.c
->>> @@ -2890,6 +2890,8 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
->>>    	kvm_s390_vsie_init(kvm);
->>>    	if (use_gisa)
->>>    		kvm_s390_gisa_init(kvm);
->>> +	INIT_LIST_HEAD(&kvm->arch.pv.need_cleanup);
->>> +	kvm->arch.pv.prepared_for_async_deinit = NULL;
->>>    	KVM_EVENT(3, "vm 0x%pK created by pid %u", kvm, current->pid);
->>>    
->>>    	return 0;
->>> diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
->>> index 6cffea26c47f..8471c17d538c 100644
->>> --- a/arch/s390/kvm/pv.c
->>> +++ b/arch/s390/kvm/pv.c
->>> @@ -17,6 +17,19 @@
->>>    #include <linux/mmu_notifier.h>
->>>    #include "kvm-s390.h"
->>>    
->>> +/**
->>> + * @struct leftover_pv_vm
+>> The device user-space assignment framework oriented interfaces are,
 >>
->> Any other ideas on naming these VMs?
-> 
-> not really
-> 
->> Also I'd turn that around: pv_vm_leftover
-> 
-> I mean, it's a leftover protected VM, it felt more natural to name it
-> that way
-> 
+>> 	int iommu_group_claim_dma_owner(struct iommu_group *group,
+>> 					void *owner);
+>> 	void iommu_group_release_dma_owner(struct iommu_group *group);
+>> 	bool iommu_group_dma_owner_claimed(struct iommu_group *group);
 >>
->>> + * Represents a "leftover" protected VM that is still registered with the
->>> + * Ultravisor, but which does not correspond any longer to an active KVM VM.
->>> + */
->>> +struct leftover_pv_vm {
->>> +	struct list_head list;
->>> +	unsigned long old_gmap_table;
->>> +	u64 handle;
->>> +	void *stor_var;
->>> +	unsigned long stor_base;
->>> +};
->>> +
+>> The device userspace assignment must be disallowed if the DMA owner
+>> claiming interface returns failure.
 >>
->> I think we should switch this patch and the next one and add this struct
->> to the next patch. The list work below makes more sense once the next
->> patch has been read.
+>> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+>> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
 > 
-> but the next patch will leave leftovers in some circumstances, and
-> those won't be cleaned up without this patch.
+> I'm seeing a regression that I've bisected to this commit on a Firefly
+> RK3288 board. The display driver fails to probe properly because
+> __iommu_attach_group() returns -EBUSY. This causes long hangs and splats
+> as the display flips timeout.
 > 
-> having this patch first means that when the next patch is applied, the
-> leftovers are already taken care of
+> The call stack to __iommu_attach_group() is:
+> 
+>   __iommu_attach_group from iommu_attach_device+0x64/0xb4
+>   iommu_attach_device from rockchip_drm_dma_attach_device+0x20/0x50
+>   rockchip_drm_dma_attach_device from vop_crtc_atomic_enable+0x10c/0xa64
+>   vop_crtc_atomic_enable from drm_atomic_helper_commit_modeset_enables+0xa8/0x290
+>   drm_atomic_helper_commit_modeset_enables from drm_atomic_helper_commit_tail_rpm+0x44/0x8c
+>   drm_atomic_helper_commit_tail_rpm from commit_tail+0x9c/0x180
+>   commit_tail from drm_atomic_helper_commit+0x164/0x18c
+>   drm_atomic_helper_commit from drm_atomic_commit+0xac/0xe4
+>   drm_atomic_commit from drm_client_modeset_commit_atomic+0x23c/0x284
+>   drm_client_modeset_commit_atomic from drm_client_modeset_commit_locked+0x60/0x1c8
+>   drm_client_modeset_commit_locked from drm_client_modeset_commit+0x24/0x40
+>   drm_client_modeset_commit from drm_fb_helper_set_par+0xb8/0xf8
+>   drm_fb_helper_set_par from drm_fb_helper_hotplug_event.part.0+0xa8/0xc0
+>   drm_fb_helper_hotplug_event.part.0 from output_poll_execute+0xb8/0x224
+> 
+>> @@ -2109,7 +2115,7 @@ static int __iommu_attach_group(struct iommu_domain *domain,
+>>   {
+>>   	int ret;
+>>   
+>> -	if (group->default_domain && group->domain != group->default_domain)
+>> +	if (group->domain && group->domain != group->default_domain)
+>>   		return -EBUSY;
+>>   
+>>   	ret = __iommu_group_for_each_dev(group, domain,
+> 
+> Reverting this 'fixes' the problem for me. The follow up 0286300e6045
+> ("iommu: iommu_group_claim_dma_owner() must always assign a domain")
+> doesn't help.
+> 
+> Adding some debug printks I can see that domain is a valid pointer, but
+> both default_domain and blocking_domain are NULL.
+> 
+> I'm using the DTB from the kernel tree (rk3288-firefly.dtb).
+> 
+> Any ideas?
 
-Then I opt for squashing the patch.
+Hmm, TBH I'm not sure how that worked previously... it'll be complaining 
+because the ARM DMA domain is still attached, but even when the attach 
+goes ahead and replaces the ARM domain with the driver's new one, it's 
+not using the special arm_iommu_detach_device() interface anywhere so 
+the device would still be left with the wrong DMA ops :/
 
-Without the next patch prepared_for_async_deinit will always be NULL and 
-this code is completely unneeded, no?
+I guess the most pragmatic option is probably to give rockchip-drm a 
+similar bodge to exynos and tegra, to explicitly remove the ARM domain 
+before attaching its own.
 
-> 
->>>    static void kvm_s390_clear_pv_state(struct kvm *kvm)
->>>    {
->>>    	kvm->arch.pv.handle = 0;
->>> @@ -158,23 +171,88 @@ static int kvm_s390_pv_alloc_vm(struct kvm *kvm)
->>>    	return -ENOMEM;
->>>    }
->>>      
->>
->>>      
->>
-> 
-
+Thanks,
+Robin.

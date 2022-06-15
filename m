@@ -2,232 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 037DD54CE36
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:15:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD2A54CE6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:19:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356291AbiFOQOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39834 "EHLO
+        id S1353431AbiFOQSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348685AbiFOQMx (ORCPT
+        with ESMTP id S1344737AbiFOQR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:12:53 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C9A6479;
-        Wed, 15 Jun 2022 09:12:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Cc:To:From:content-disposition;
-        bh=X1Y+xHoeQH3UW63rjymiD/emNoqwBnemSVoIxTF9EbY=; b=iKgX6plSnGYTUQgEz3h2eQ8oq4
-        FGlAIFJWTusbVwsUGEKQv5w3YldIr+Zb7y9e5Tci57QG4okfn/WNYoSJSPedAWtRsJ317QnqZ3tYN
-        B1fywGUu5iwDLF9GPEgBC7jVnfl/bzFg+cc/N6mZ6JQngmxQwJYFT1EsGSRC6XIG1doRvnySpVRU/
-        tzfXsXC/u1Ur26GJQGnmxT26Dpy7yBQ61LA/ooaFX1WIMUL63WFzcYKEzecykYtWm5V8bVzy+p78C
-        Z+iMAawOzUWIvBjOXPztbfswoP+njdZ1jiGYb3TqxWthTb6w8cx/ik5VmwwPqeARrQ2tc76XIBIjc
-        0eUneuvg==;
-Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
-        by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1o1VdO-0084iQ-Ox; Wed, 15 Jun 2022 10:12:47 -0600
-Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1o1VdJ-0004b4-QT; Wed, 15 Jun 2022 10:12:41 -0600
-From:   Logan Gunthorpe <logang@deltatee.com>
-To:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org
-Cc:     Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>
-Date:   Wed, 15 Jun 2022 10:12:33 -0600
-Message-Id: <20220615161233.17527-22-logang@deltatee.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220615161233.17527-1-logang@deltatee.com>
-References: <20220615161233.17527-1-logang@deltatee.com>
+        Wed, 15 Jun 2022 12:17:58 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6C836329
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:16:18 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4LNVlj0ys5z9t9B;
+        Wed, 15 Jun 2022 18:15:45 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id m8iRP6BVB3VD; Wed, 15 Jun 2022 18:15:45 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4LNVlj017Cz9t97;
+        Wed, 15 Jun 2022 18:15:45 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id E4E128B781;
+        Wed, 15 Jun 2022 18:15:44 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id cUVnCcrq-hje; Wed, 15 Jun 2022 18:15:44 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.202.102])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9E5AC8B763;
+        Wed, 15 Jun 2022 18:15:44 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 25FGFMtW366790
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 15 Jun 2022 18:15:22 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 25FGFIr9366775;
+        Wed, 15 Jun 2022 18:15:18 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] powerpc: Merge hardirq stack and softirq stack
+Date:   Wed, 15 Jun 2022 18:15:09 +0200
+Message-Id: <b684cd5c9a6f98f8ab9a2ca3431d9a4065e07f38.1655309696.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1655309708; l=4828; s=20211009; h=from:subject:message-id; bh=IxZGcSZLaOsSuMMfNuONYPIsJXKwVaC5dmV8z+ZWEWU=; b=Fg3n8XdaxBDwLeCOfuoCMm3CiFNqlLuMm8iWw3vMFevBGm0gvsYZw2IL2gV1iJKRQSRqWs+vc0FW Sb4UR0r2DWCstTflycqj9MWD7ofBwBdA438QP34IQxkClZ5Mfp58
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 172.16.1.31
-X-SA-Exim-Rcpt-To: linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, iommu@lists.linux-foundation.org, sbates@raithlin.com, hch@lst.de, jgg@ziepe.ca, christian.koenig@amd.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, jason@jlekstrand.net, dave.hansen@linux.intel.com, helgaas@kernel.org, dan.j.williams@intel.com, dave.b.minturn@intel.com, jianxin.xiong@intel.com, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, jhubbard@nvidia.com, rcampbell@nvidia.com, logang@deltatee.com
-X-SA-Exim-Mail-From: gunthorp@deltatee.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v7 21/21] nvme-pci: allow mmaping the CMB in userspace
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow userspace to obtain CMB memory by mmaping the controller's
-char device. The mmap call allocates and returns a hunk of CMB memory,
-(the offset is ignored) so userspace does not have control over the
-address within the CMB.
+__do_IRQ() doesn't switch on hardirq stack if we are on softirq stack.
 
-A VMA allocated in this way will only be usable by drivers that set
-FOLL_PCI_P2PDMA when calling GUP. And inter-device support will be
-checked the first time the pages are mapped for DMA.
+do_softirq() bail out early without doing anything when already in
+an interrupt.
 
-Currently this is only supported by O_DIRECT to an PCI NVMe device
-or through the NVMe passthrough IOCTL.
+invoke_softirq() is on task_stack when it calls do_softirq_own_stack().
 
-Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+So there are neither situation where we switch from hardirq stack to
+softirq stack nor from softirq stack to hardirq stack.
+
+It is therefore not necessary to have two stacks because they are
+never used at the same time.
+
+Merge both stacks into a new one called normirq_ctx.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- drivers/nvme/host/core.c | 35 +++++++++++++++++++++++++++++++----
- drivers/nvme/host/nvme.h |  3 +++
- drivers/nvme/host/pci.c  | 23 +++++++++++++++++++++++
- 3 files changed, 57 insertions(+), 4 deletions(-)
+ arch/powerpc/include/asm/irq.h |  3 +--
+ arch/powerpc/kernel/irq.c      | 18 +++++++-----------
+ arch/powerpc/kernel/process.c  |  6 +-----
+ arch/powerpc/kernel/setup_32.c |  6 ++----
+ arch/powerpc/kernel/setup_64.c |  6 ++----
+ 5 files changed, 13 insertions(+), 26 deletions(-)
 
-diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
-index d6e76f2dc293..23fe4b544bf1 100644
---- a/drivers/nvme/host/core.c
-+++ b/drivers/nvme/host/core.c
-@@ -3166,6 +3166,7 @@ static int nvme_dev_open(struct inode *inode, struct file *file)
- {
- 	struct nvme_ctrl *ctrl =
- 		container_of(inode->i_cdev, struct nvme_ctrl, cdev);
-+	int ret = -EINVAL;
- 
- 	switch (ctrl->state) {
- 	case NVME_CTRL_LIVE:
-@@ -3175,13 +3176,25 @@ static int nvme_dev_open(struct inode *inode, struct file *file)
- 	}
- 
- 	nvme_get_ctrl(ctrl);
--	if (!try_module_get(ctrl->ops->module)) {
--		nvme_put_ctrl(ctrl);
--		return -EINVAL;
--	}
-+	if (!try_module_get(ctrl->ops->module))
-+		goto err_put_ctrl;
- 
- 	file->private_data = ctrl;
-+
-+	if (ctrl->ops->cdev_file_open) {
-+		ret = ctrl->ops->cdev_file_open(ctrl, file);
-+		if (ret)
-+			goto err_put_mod;
-+	}
-+
- 	return 0;
-+
-+err_put_mod:
-+	module_put(ctrl->ops->module);
-+err_put_ctrl:
-+	nvme_put_ctrl(ctrl);
-+	return ret;
-+
- }
- 
- static int nvme_dev_release(struct inode *inode, struct file *file)
-@@ -3189,11 +3202,24 @@ static int nvme_dev_release(struct inode *inode, struct file *file)
- 	struct nvme_ctrl *ctrl =
- 		container_of(inode->i_cdev, struct nvme_ctrl, cdev);
- 
-+	if (ctrl->ops->cdev_file_release)
-+		ctrl->ops->cdev_file_release(file);
-+
- 	module_put(ctrl->ops->module);
- 	nvme_put_ctrl(ctrl);
- 	return 0;
- }
- 
-+static int nvme_dev_mmap(struct file *file, struct vm_area_struct *vma)
-+{
-+	struct nvme_ctrl *ctrl = file->private_data;
-+
-+	if (!ctrl->ops->mmap_cmb)
-+		return -ENODEV;
-+
-+	return ctrl->ops->mmap_cmb(ctrl, vma);
-+}
-+
- static const struct file_operations nvme_dev_fops = {
- 	.owner		= THIS_MODULE,
- 	.open		= nvme_dev_open,
-@@ -3201,6 +3227,7 @@ static const struct file_operations nvme_dev_fops = {
- 	.unlocked_ioctl	= nvme_dev_ioctl,
- 	.compat_ioctl	= compat_ptr_ioctl,
- 	.uring_cmd	= nvme_dev_uring_cmd,
-+	.mmap		= nvme_dev_mmap,
- };
- 
- static ssize_t nvme_sysfs_reset(struct device *dev,
-diff --git a/drivers/nvme/host/nvme.h b/drivers/nvme/host/nvme.h
-index 957f79420cf3..44ff05d8e24d 100644
---- a/drivers/nvme/host/nvme.h
-+++ b/drivers/nvme/host/nvme.h
-@@ -503,6 +503,9 @@ struct nvme_ctrl_ops {
- 	void (*delete_ctrl)(struct nvme_ctrl *ctrl);
- 	int (*get_address)(struct nvme_ctrl *ctrl, char *buf, int size);
- 	bool (*supports_pci_p2pdma)(struct nvme_ctrl *ctrl);
-+	int (*cdev_file_open)(struct nvme_ctrl *ctrl, struct file *file);
-+	void (*cdev_file_release)(struct file *file);
-+	int (*mmap_cmb)(struct nvme_ctrl *ctrl, struct vm_area_struct *vma);
- };
- 
+diff --git a/arch/powerpc/include/asm/irq.h b/arch/powerpc/include/asm/irq.h
+index 13f0409dd617..03de3fe3488c 100644
+--- a/arch/powerpc/include/asm/irq.h
++++ b/arch/powerpc/include/asm/irq.h
+@@ -49,8 +49,7 @@ extern void *mcheckirq_ctx[NR_CPUS];
  /*
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 52b52a7efa9a..8ef3752b7ddb 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -2972,6 +2972,26 @@ static bool nvme_pci_supports_pci_p2pdma(struct nvme_ctrl *ctrl)
- 	return dma_pci_p2pdma_supported(dev->dev);
+  * Per-cpu stacks for handling hard and soft interrupts.
+  */
+-extern void *hardirq_ctx[NR_CPUS];
+-extern void *softirq_ctx[NR_CPUS];
++extern void *normirq_ctx[NR_CPUS];
+ 
+ void __do_IRQ(struct pt_regs *regs);
+ extern void __init init_IRQ(void);
+diff --git a/arch/powerpc/kernel/irq.c b/arch/powerpc/kernel/irq.c
+index dd09919c3c66..7c0455cd7aae 100644
+--- a/arch/powerpc/kernel/irq.c
++++ b/arch/powerpc/kernel/irq.c
+@@ -683,17 +683,16 @@ void __do_irq(struct pt_regs *regs)
+ void __do_IRQ(struct pt_regs *regs)
+ {
+ 	struct pt_regs *old_regs = set_irq_regs(regs);
+-	void *cursp, *irqsp, *sirqsp;
++	void *cursp, *irqsp;
+ 
+ 	/* Switch to the irq stack to handle this */
+ 	cursp = (void *)(current_stack_pointer & ~(THREAD_SIZE - 1));
+-	irqsp = hardirq_ctx[raw_smp_processor_id()];
+-	sirqsp = softirq_ctx[raw_smp_processor_id()];
++	irqsp = normirq_ctx[raw_smp_processor_id()];
+ 
+ 	check_stack_overflow();
+ 
+ 	/* Already there ? */
+-	if (unlikely(cursp == irqsp || cursp == sirqsp)) {
++	if (unlikely(cursp == irqsp)) {
+ 		__do_irq(regs);
+ 		set_irq_regs(old_regs);
+ 		return;
+@@ -719,10 +718,8 @@ static void __init vmap_irqstack_init(void)
+ {
+ 	int i;
+ 
+-	for_each_possible_cpu(i) {
+-		softirq_ctx[i] = alloc_vm_stack();
+-		hardirq_ctx[i] = alloc_vm_stack();
+-	}
++	for_each_possible_cpu(i)
++		normirq_ctx[i] = alloc_vm_stack();
  }
  
-+static int nvme_pci_cdev_file_open(struct nvme_ctrl *ctrl, struct file *file)
-+{
-+	struct pci_dev *pdev = to_pci_dev(to_nvme_dev(ctrl)->dev);
-+
-+	return pci_p2pdma_file_open(pdev, file);
-+}
-+
-+static void nvme_pci_cdev_file_release(struct file *file)
-+{
-+	pci_p2pdma_file_release(file);
-+}
-+
-+static int nvme_pci_mmap_cmb(struct nvme_ctrl *ctrl,
-+			     struct vm_area_struct *vma)
-+{
-+	struct pci_dev *pdev = to_pci_dev(to_nvme_dev(ctrl)->dev);
-+
-+	return pci_mmap_p2pmem(pdev, vma);
-+}
-+
- static const struct nvme_ctrl_ops nvme_pci_ctrl_ops = {
- 	.name			= "pcie",
- 	.module			= THIS_MODULE,
-@@ -2983,6 +3003,9 @@ static const struct nvme_ctrl_ops nvme_pci_ctrl_ops = {
- 	.submit_async_event	= nvme_pci_submit_async_event,
- 	.get_address		= nvme_pci_get_address,
- 	.supports_pci_p2pdma	= nvme_pci_supports_pci_p2pdma,
-+	.cdev_file_open		= nvme_pci_cdev_file_open,
-+	.cdev_file_release	= nvme_pci_cdev_file_release,
-+	.mmap_cmb		= nvme_pci_mmap_cmb,
- };
  
- static int nvme_dev_map(struct nvme_dev *dev)
+@@ -744,12 +741,11 @@ void    *dbgirq_ctx[NR_CPUS] __read_mostly;
+ void *mcheckirq_ctx[NR_CPUS] __read_mostly;
+ #endif
+ 
+-void *softirq_ctx[NR_CPUS] __read_mostly;
+-void *hardirq_ctx[NR_CPUS] __read_mostly;
++void *normirq_ctx[NR_CPUS] __read_mostly;
+ 
+ void do_softirq_own_stack(void)
+ {
+-	call_do_softirq(softirq_ctx[smp_processor_id()]);
++	call_do_softirq(normirq_ctx[smp_processor_id()]);
+ }
+ 
+ irq_hw_number_t virq_to_hw(unsigned int virq)
+diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.c
+index ee0433809621..4b724d86ed9d 100644
+--- a/arch/powerpc/kernel/process.c
++++ b/arch/powerpc/kernel/process.c
+@@ -2089,11 +2089,7 @@ static inline int valid_irq_stack(unsigned long sp, struct task_struct *p,
+ 	unsigned long stack_page;
+ 	unsigned long cpu = task_cpu(p);
+ 
+-	stack_page = (unsigned long)hardirq_ctx[cpu];
+-	if (sp >= stack_page && sp <= stack_page + THREAD_SIZE - nbytes)
+-		return 1;
+-
+-	stack_page = (unsigned long)softirq_ctx[cpu];
++	stack_page = (unsigned long)normirq_ctx[cpu];
+ 	if (sp >= stack_page && sp <= stack_page + THREAD_SIZE - nbytes)
+ 		return 1;
+ 
+diff --git a/arch/powerpc/kernel/setup_32.c b/arch/powerpc/kernel/setup_32.c
+index 813261789303..cad0e4fbdd4b 100644
+--- a/arch/powerpc/kernel/setup_32.c
++++ b/arch/powerpc/kernel/setup_32.c
+@@ -158,10 +158,8 @@ void __init irqstack_early_init(void)
+ 
+ 	/* interrupt stacks must be in lowmem, we get that for free on ppc32
+ 	 * as the memblock is limited to lowmem by default */
+-	for_each_possible_cpu(i) {
+-		softirq_ctx[i] = alloc_stack();
+-		hardirq_ctx[i] = alloc_stack();
+-	}
++	for_each_possible_cpu(i)
++		normirq_ctx[i] = alloc_stack();
+ }
+ 
+ #ifdef CONFIG_VMAP_STACK
+diff --git a/arch/powerpc/kernel/setup_64.c b/arch/powerpc/kernel/setup_64.c
+index 5761f08dae95..70ba227d13fc 100644
+--- a/arch/powerpc/kernel/setup_64.c
++++ b/arch/powerpc/kernel/setup_64.c
+@@ -718,10 +718,8 @@ void __init irqstack_early_init(void)
+ 	 * cannot afford to take SLB misses on them. They are not
+ 	 * accessed in realmode.
+ 	 */
+-	for_each_possible_cpu(i) {
+-		softirq_ctx[i] = alloc_stack(limit, i);
+-		hardirq_ctx[i] = alloc_stack(limit, i);
+-	}
++	for_each_possible_cpu(i)
++		normirq_ctx[i] = alloc_stack(limit, i);
+ }
+ 
+ #ifdef CONFIG_PPC_BOOK3E
 -- 
-2.30.2
+2.36.1
 

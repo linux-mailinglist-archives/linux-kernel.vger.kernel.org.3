@@ -2,226 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8265254C3FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 10:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5FF54C40C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 10:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346830AbiFOIwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 04:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
+        id S1343964AbiFOI4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 04:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232170AbiFOIwQ (ORCPT
+        with ESMTP id S235386AbiFOI4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 04:52:16 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9C349CA5;
-        Wed, 15 Jun 2022 01:52:15 -0700 (PDT)
-Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LNJt54MHKz67sVG;
-        Wed, 15 Jun 2022 16:50:37 +0800 (CST)
-Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
- fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Wed, 15 Jun 2022 10:52:13 +0200
-Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
- (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 15 Jun
- 2022 09:52:12 +0100
-Date:   Wed, 15 Jun 2022 09:52:11 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Kai Ye via Linux-accelerators 
-        <linux-accelerators@lists.ozlabs.org>
-CC:     Kai Ye <yekai13@huawei.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <linuxarm@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <wangzhou1@hisilicon.com>,
-        <linux-crypto@vger.kernel.org>, <zhangfei.gao@linaro.org>
-Subject: Re: [PATCH v2 1/3] uacce: supports device isolation feature
-Message-ID: <20220615095211.00000889@Huawei.com>
-In-Reply-To: <20220614122943.1406-2-yekai13@huawei.com>
-References: <20220614122943.1406-1-yekai13@huawei.com>
-        <20220614122943.1406-2-yekai13@huawei.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Wed, 15 Jun 2022 04:56:49 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDC43CA65;
+        Wed, 15 Jun 2022 01:56:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655283409; x=1686819409;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=YUylNu9M17rCKFlfGnkhsZRqok22qMLdjCA7fnGzy7c=;
+  b=NbZ9+CyUHocvHsi1PmjXztgbRL/+O1bDVGGI05z1EkSy0Vy2ko/5OUs0
+   dux/8ByjCtROh3Oc3sJ8661OT5u1TTPS6nE3fPZN90fzZJ/St6ickxo64
+   ed5H/jHlGzmyZAGCXfD9QtXzPwmWtnzzR59OUOhG9HKHwD7dOwOYmBTRD
+   ejtuqDSYxlkf4w7BxogzdRPmZ04m98fURnREiaGyAdP3g/pKil6kAiQH1
+   hJ+Kq+wLaVEFBQFLvwwRR6TNjj8rC8i/fHm8wg+FDnjQcoBofeQ7VBSsG
+   7x+D+b6t2zZdUy0dKM8PQJSePwbusSQnr3MC2fz9SBMu8eb413Sy8jhjd
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="277679791"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="277679791"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 01:56:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="589000276"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by fmsmga007.fm.intel.com with ESMTP; 15 Jun 2022 01:56:38 -0700
+Date:   Wed, 15 Jun 2022 16:53:16 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Gupta, Pankaj" <pankaj.gupta@amd.com>,
+        Vishal Annapurve <vannapurve@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jun Nakajima <jun.nakajima@intel.com>, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com
+Subject: Re: [PATCH v6 3/8] mm/memfd: Introduce MFD_INACCESSIBLE flag
+Message-ID: <20220615085316.GA1823790@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220519153713.819591-1-chao.p.peng@linux.intel.com>
+ <20220519153713.819591-4-chao.p.peng@linux.intel.com>
+ <CAGtprH8EMsPMMoOEzjRu0SMVKT0RqmkLk=n+6uXkBA6-wiRtUA@mail.gmail.com>
+ <20220601101747.GA1255243@chaop.bj.intel.com>
+ <1f1b17e8-a16d-c029-88e0-01f522cc077a@amd.com>
+ <20220602100733.GA1296997@chaop.bj.intel.com>
+ <YqjuUngpVg8cZTD/@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
- lhreml710-chm.china.huawei.com (10.201.108.61)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqjuUngpVg8cZTD/@google.com>
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Jun 2022 20:29:38 +0800
-Kai Ye via Linux-accelerators <linux-accelerators@lists.ozlabs.org> wrote:
-
-> UACCE add the hardware error isolation API. Users can configure
-> the error frequency threshold by this vfs node. This API interface
-> certainly supports the configuration of user protocol strategy. Then
-> parse it inside the device driver. UACCE only reports the device
-> isolate state. When the error frequency is exceeded, the device
-> will be isolated. The isolation strategy should be defined in each
-> driver module.
+On Tue, Jun 14, 2022 at 08:23:46PM +0000, Sean Christopherson wrote:
+> On Thu, Jun 02, 2022, Chao Peng wrote:
+> > On Wed, Jun 01, 2022 at 02:11:42PM +0200, Gupta, Pankaj wrote:
+> > > 
+> > > > > > Introduce a new memfd_create() flag indicating the content of the
+> > > > > > created memfd is inaccessible from userspace through ordinary MMU
+> > > > > > access (e.g., read/write/mmap). However, the file content can be
+> > > > > > accessed via a different mechanism (e.g. KVM MMU) indirectly.
+> > > > > > 
+> > > > > 
+> > > > > SEV, TDX, pkvm and software-only VMs seem to have usecases to set up
+> > > > > initial guest boot memory with the needed blobs.
+> > > > > TDX already supports a KVM IOCTL to transfer contents to private
+> > > > > memory using the TDX module but rest of the implementations will need
+> > > > > to invent
+> > > > > a way to do this.
+> > > > 
+> > > > There are some discussions in https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2022%2F5%2F9%2F1292&amp;data=05%7C01%7Cpankaj.gupta%40amd.com%7Cb81ef334e2dd44c6143308da43b87d17%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637896756895977587%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=oQbM2Hj7GlhJTwnTM%2FPnwsfJlmTL7JR9ULBysAqm6V8%3D&amp;reserved=0
+> > > > already. I somehow agree with Sean. TDX is using an dedicated ioctl to
+> > > > copy guest boot memory to private fd so the rest can do that similarly.
+> > > > The concern is the performance (extra memcpy) but it's trivial since the
+> > > > initial guest payload is usually optimized in size.
+> > > > 
+> > > > > 
+> > > > > Is there a plan to support a common implementation for either allowing
+> > > > > initial write access from userspace to private fd or adding a KVM
+> > > > > IOCTL to transfer contents to such a file,
+> > > > > as part of this series through future revisions?
+> > > > 
+> > > > Indeed, adding pre-boot private memory populating on current design
+> > > > isn't impossible, but there are still some opens, e.g. how to expose
+> > > > private fd to userspace for access, pKVM and CC usages may have
+> > > > different requirements. Before that's well-studied I would tend to not
+> > > > add that and instead use an ioctl to copy. Whether we need a generic
+> > > > ioctl or feature-specific ioctl, I don't have strong opinion here.
+> > > > Current TDX uses a feature-specific ioctl so it's not covered in this
+> > > > series.
+> > > 
+> > > Common function or ioctl to populate preboot private memory actually makes
+> > > sense.
+> > > 
+> > > Sorry, did not follow much of TDX code yet, Is it possible to filter out
+> > > the current TDX specific ioctl to common function so that it can be used by
+> > > other technologies?
+> > 
+> > TDX code is here:
+> > https://patchwork.kernel.org/project/kvm/patch/70ed041fd47c1f7571aa259450b3f9244edda48d.1651774250.git.isaku.yamahata@intel.com/
+> > 
+> > AFAICS It might be possible to filter that out to a common function. But
+> > would like to hear from Paolo/Sean for their opinion.
 > 
-> Signed-off-by: Kai Ye <yekai13@huawei.com>
-> Reviewed-by: Zhou Wang <wangzhou1@hisilicon.com>
-> ---
->  drivers/misc/uacce/uacce.c | 37 +++++++++++++++++++++++++++++++++++++
->  include/linux/uacce.h      | 16 +++++++++++++---
->  2 files changed, 50 insertions(+), 3 deletions(-)
+> Eh, I wouldn't put too much effort into creating a common helper, I would be very
+> surprised if TDX and SNP can share a meaningful amount of code that isn't already
+> shared, e.g. provided by MMU helpers.
 > 
-> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
-> index b6219c6bfb48..525623215132 100644
-> --- a/drivers/misc/uacce/uacce.c
-> +++ b/drivers/misc/uacce/uacce.c
-> @@ -346,12 +346,47 @@ static ssize_t region_dus_size_show(struct device *dev,
->  		       uacce->qf_pg_num[UACCE_QFRT_DUS] << PAGE_SHIFT);
->  }
->  
-> +static ssize_t isolate_show(struct device *dev,
-> +			    struct device_attribute *attr, char *buf)
-> +{
-> +	struct uacce_device *uacce = to_uacce_device(dev);
-> +
-> +	return sysfs_emit(buf, "%d\n", uacce->ops->get_isolate_state(uacce));
-> +}
-> +
-> +static ssize_t isolate_strategy_show(struct device *dev,
-> +				     struct device_attribute *attr, char *buf)
-> +{
-> +	struct uacce_device *uacce = to_uacce_device(dev);
-> +
-> +	return sysfs_emit(buf, "%s\n", uacce->isolate_strategy);
-> +}
-> +
-> +static ssize_t isolate_strategy_store(struct device *dev,
-> +				      struct device_attribute *attr,
-> +				      const char *buf, size_t count)
-> +{
-> +	struct uacce_device *uacce = to_uacce_device(dev);
-> +	int ret;
-> +
-> +	if (!buf || sizeof(buf) > UACCE_MAX_ISOLATE_STRATEGY_LEN)
-> +		return -EINVAL;
-> +
-> +	memcpy(uacce->isolate_strategy, buf, strlen(buf));
-What if it's not a valid strategy for the driver?  We shouldn't
-store this until we know it's valid.
+> The only part I truly care about sharing is whatever ioctl(s) get added, i.e. I
+> don't want to end up with two ioctls that do the same thing for TDX vs. SNP.
 
-> +
-> +	ret = uacce->ops->isolate_strategy_write(uacce, buf);
-Having copied the buf into uacce, why pass it as well?
+OK, then that part would be better to be added in TDX or SNP series.
 
-My preference would be to pass buf and length and not do
-the memcpy in here.  Leave that choice to the driver.
-If this were a single value, it would be better stored
-as an integer than as a string.   Obviously that means
-you need an isolate_strategy_read() as well (that also
-solves the comment above about not storing what was written
-until we know it was valid.
-
-Thanks,
-
-Jonathan
-
-
-
-> +
-> +	return ret ? ret : count;
-> +}
-> +
->  static DEVICE_ATTR_RO(api);
->  static DEVICE_ATTR_RO(flags);
->  static DEVICE_ATTR_RO(available_instances);
->  static DEVICE_ATTR_RO(algorithms);
->  static DEVICE_ATTR_RO(region_mmio_size);
->  static DEVICE_ATTR_RO(region_dus_size);
-> +static DEVICE_ATTR_RO(isolate);
-> +static DEVICE_ATTR_RW(isolate_strategy);
->  
->  static struct attribute *uacce_dev_attrs[] = {
->  	&dev_attr_api.attr,
-> @@ -360,6 +395,8 @@ static struct attribute *uacce_dev_attrs[] = {
->  	&dev_attr_algorithms.attr,
->  	&dev_attr_region_mmio_size.attr,
->  	&dev_attr_region_dus_size.attr,
-> +	&dev_attr_isolate.attr,
-> +	&dev_attr_isolate_strategy.attr,
->  	NULL,
->  };
->  
-> diff --git a/include/linux/uacce.h b/include/linux/uacce.h
-> index 48e319f40275..0f7668bfa645 100644
-> --- a/include/linux/uacce.h
-> +++ b/include/linux/uacce.h
-> @@ -8,6 +8,7 @@
->  #define UACCE_NAME		"uacce"
->  #define UACCE_MAX_REGION	2
->  #define UACCE_MAX_NAME_SIZE	64
-> +#define UACCE_MAX_ISOLATE_STRATEGY_LEN	256
->  
->  struct uacce_queue;
->  struct uacce_device;
-> @@ -30,6 +31,8 @@ struct uacce_qfile_region {
->   * @is_q_updated: check whether the task is finished
->   * @mmap: mmap addresses of queue to user space
->   * @ioctl: ioctl for user space users of the queue
-> + * @get_isolate_state: get the device state after set the isolate strategy
-> + * @isolate_strategy_store: stored the isolate strategy to the device
->   */
->  struct uacce_ops {
->  	int (*get_available_instances)(struct uacce_device *uacce);
-> @@ -43,6 +46,8 @@ struct uacce_ops {
->  		    struct uacce_qfile_region *qfr);
->  	long (*ioctl)(struct uacce_queue *q, unsigned int cmd,
->  		      unsigned long arg);
-> +	enum uacce_dev_state (*get_isolate_state)(struct uacce_device *uacce);
-> +	int (*isolate_strategy_write)(struct uacce_device *uacce, const char *buf);
->  };
->  
->  /**
-> @@ -57,6 +62,12 @@ struct uacce_interface {
->  	const struct uacce_ops *ops;
->  };
->  
-> +enum uacce_dev_state {
-> +	UACCE_DEV_ERR = -1,
-> +	UACCE_DEV_NORMAL,
-> +	UACCE_DEV_ISOLATE,
-> +};
-> +
->  enum uacce_q_state {
->  	UACCE_Q_ZOMBIE = 0,
->  	UACCE_Q_INIT,
-> @@ -117,6 +128,7 @@ struct uacce_device {
->  	struct list_head queues;
->  	struct mutex queues_lock;
->  	struct inode *inode;
-> +	char isolate_strategy[UACCE_MAX_ISOLATE_STRATEGY_LEN];
->  };
->  
->  #if IS_ENABLED(CONFIG_UACCE)
-> @@ -125,7 +137,7 @@ struct uacce_device *uacce_alloc(struct device *parent,
->  				 struct uacce_interface *interface);
->  int uacce_register(struct uacce_device *uacce);
->  void uacce_remove(struct uacce_device *uacce);
-> -
-> +struct uacce_device *dev_to_uacce(struct device *dev);
->  #else /* CONFIG_UACCE */
->  
->  static inline
-> @@ -140,8 +152,6 @@ static inline int uacce_register(struct uacce_device *uacce)
->  	return -EINVAL;
->  }
->  
-> -static inline void uacce_remove(struct uacce_device *uacce) {}
-> -
->  #endif /* CONFIG_UACCE */
->  
->  #endif /* _LINUX_UACCE_H */
-
+Chao

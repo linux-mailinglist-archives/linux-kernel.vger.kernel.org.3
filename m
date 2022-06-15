@@ -2,88 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3FA754D168
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA6C54D16E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350133AbiFOTMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 15:12:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45988 "EHLO
+        id S1357582AbiFOTOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345414AbiFOTMh (ORCPT
+        with ESMTP id S1346482AbiFOTOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:12:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAEC65E3;
-        Wed, 15 Jun 2022 12:12:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A88760BAF;
-        Wed, 15 Jun 2022 19:12:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3635C34115;
-        Wed, 15 Jun 2022 19:12:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655320355;
-        bh=aBOcucEGYvvvWUKMiG7ck3GFTJH/y+rjo3oRAZKefCs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=L3qN7bWAFQSKXjkYhc9TwspKC2crGuSj7nyK7rS9UK1FSHsdpgcIogd/ldeF9WXP0
-         0KQuUQB2krRWqicXjNKySrPbr9t+einpWC6Tqmb+IOLPXNp1cphF1eXAUiXdrbZDhG
-         pbL3HAmeqwMKoCe2WtSkfeUGfHFCqgoGbmKDjtlLyFqPQd6j9li2KYRPKGFlixyW37
-         LB8W56550jbrJnJH0+tXAWw+0xDH6ToBnw2WmjQEY70bvhRoe9HCL2V3jxORBWnEy3
-         okXzIdOXzKzFXiBg5yWMUVNRoufipEpnCTPBI/vlVVM114mRep+SDp6D1miBbqxqn6
-         TijqHGg7j1xsA==
-Date:   Wed, 15 Jun 2022 20:12:26 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        "max.oss.09@gmail.com" <max.oss.09@gmail.com>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "khilman@kernel.org" <khilman@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain
- provider which controls
-Message-ID: <YqovGo+ozPMeUERo@sirena.org.uk>
-References: <20220609150851.23084-1-max.oss.09@gmail.com>
- <20220613191549.GA4092455-robh@kernel.org>
- <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
- <CAEHkU3VVM0zUsaKMUGeSzfbLmVJW6rqXGLv7TqaLTEQeXEVkUA@mail.gmail.com>
- <12e3bb72-af2d-653f-b342-c6b4d6a1f292@linaro.org>
- <ddbeba186bf662348e8594f322f750cf89326a66.camel@toradex.com>
- <dacd4a2d-a2b9-d2c2-4d47-f030dd01ee25@arm.com>
+        Wed, 15 Jun 2022 15:14:30 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0AFC2717E;
+        Wed, 15 Jun 2022 12:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655320469; x=1686856469;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NhJp3BBzKkSAhPSokH+1OsWLVBR4UOySK6LdL2s0mZE=;
+  b=cMXinJrEJN27++lHyA1YqpSCVBK+Vhrj9chtAWfkqP70FRy5MoVLwUEN
+   H4kklczd3R95qRBISQFdafBX0VCgiMbvbZeRr8Ax38OUvJ4xdGdFWMpm6
+   jmGmMRpa2VzIxFhJWWCI/dN8Cl1FRC7TTT+ttgkDy+j/mgVUoC7Pjd/fg
+   +Buo+EgG36+wOmZg8ttZxJmb8Gt2yb35MpuKmbo859wQEDKBRfIgKozoH
+   Au5zA6JGnFwHSaeMR2/TY3pVXVdxxXFKsPkFjqEe3NYu3yZopDLJteuA6
+   lL37OCKd3uEqCx19VQsObn0qj7WI7TheCw2VsWrhRfi7pfHTfKVTrOMfb
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="280116118"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="280116118"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 12:14:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="612884393"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 15 Jun 2022 12:14:27 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1YTC-000N7j-Nm;
+        Wed, 15 Jun 2022 19:14:26 +0000
+Date:   Thu, 16 Jun 2022 03:14:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>
+Cc:     kbuild-all@lists.01.org,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v2 1/2] pwm: add microchip soft ip corePWM driver
+Message-ID: <202206160239.6lkHbYaU-lkp@intel.com>
+References: <20220613111759.1550578-2-conor.dooley@microchip.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zB2UHw7muFO3meeO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dacd4a2d-a2b9-d2c2-4d47-f030dd01ee25@arm.com>
-X-Cookie: byob, v:
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220613111759.1550578-2-conor.dooley@microchip.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,51 +70,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Conor,
 
---zB2UHw7muFO3meeO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I love your patch! Yet something to improve:
 
-On Wed, Jun 15, 2022 at 07:24:50PM +0100, Robin Murphy wrote:
+[auto build test ERROR on thierry-reding-pwm/for-next]
+[also build test ERROR on linus/master v5.19-rc2 next-20220615]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> Multiple consumers sharing a voltage rail provided by a single regulator =
-is
-> so standard and well-supported that it barely seems worth pointing out, b=
-ut
-> for the avoidance of doubt I shall. Adding a new non-standard way to hide=
- a
-> specific subset of regulator functionality behind behind a magic driver
-> because it seems like slightly less work than handling it the well-known
-> established way sounds like a great recipe for technical debt and future
-> compatibility headaches. What if down the line you end up with a situation
-> where if device A is suspended, devices B and C are happy to save some po=
-wer
-> by running the "domain" at a lower voltage? Do we stubbornly start
-> duplicating more of the regulator framework in the magic power domain
-> driver, or is that the point where we have to switch all the consumers to
-> explicit supplies, and get to regret having "saved" that effort in the fi=
-rst
-> place...
+url:    https://github.com/intel-lab-lkp/linux/commits/Conor-Dooley/pwm-add-microchip-soft-ip-corePWM-driver/20220613-211851
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/thierry.reding/linux-pwm.git for-next
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20220616/202206160239.6lkHbYaU-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4451a8420f9fd16ee9a0801fcf02f1ec04bb8ab0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Conor-Dooley/pwm-add-microchip-soft-ip-corePWM-driver/20220613-211851
+        git checkout 4451a8420f9fd16ee9a0801fcf02f1ec04bb8ab0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
 
-We also loose the runtime validation that the supplies being described
-in the DT correspond to the hardware in any meaningful way which would
-also make it harder to transition to explicit control of the supplies
-further down the line. =20
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
---zB2UHw7muFO3meeO
-Content-Type: application/pgp-signature; name="signature.asc"
+All errors (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+   powerpc-linux-ld: drivers/pwm/pwm-microchip-core.o: in function `mchp_core_pwm_apply':
+>> pwm-microchip-core.c:(.text.mchp_core_pwm_apply+0x290): undefined reference to `__udivdi3'
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKqLxkACgkQJNaLcl1U
-h9A8oQf/Qy+hNv0kHNOoFGSq8IZn9KhUnfZ1urDwa0BVgVd9o3gGVjfyGo2DRi4w
-C1+ssj8EA61LDsquEBRULVokHyU9usYmXKfRJRHweArlWyZvbxoHvRfgk+kjCBhZ
-A/VYrv2LvZHpYzrAVeviYllJs+ZGCq2Y1wMw8cFP558j8z2o5tEAFMdbpJRJvPNy
-WeFvgrixx2yNQr0VgkCWr/RJ+vCY+80hgrhEWvJj6wEtIpGRqgoYbDw6LM9EU4Gu
-hmSPorQNZbFBVQ8Dk597Ffq90RK8Y9axZGn1FvqXx07s2CYdS/wn1QiZLWdrLOf8
-vpJIHU0pSsKo+plFfCiboC9PItlMLw==
-=ratS
------END PGP SIGNATURE-----
-
---zB2UHw7muFO3meeO--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

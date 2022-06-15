@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B32E654C5B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:18:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D590854C5BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:19:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343985AbiFOKS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35692 "EHLO
+        id S1345987AbiFOKTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:19:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiFOKS0 (ORCPT
+        with ESMTP id S229590AbiFOKTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:18:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3193DDCF;
-        Wed, 15 Jun 2022 03:18:24 -0700 (PDT)
-Received: from [IPV6:2a01:e0a:120:3210:7d5:f5ba:f463:c8a9] (unknown [IPv6:2a01:e0a:120:3210:7d5:f5ba:f463:c8a9])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6E9F066016CE;
-        Wed, 15 Jun 2022 11:18:22 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655288303;
-        bh=V7WoLBoKSld8AcdjidjXLlEz+rIIWI1rpx4mYKHlf0g=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ReXebInobCF2yiDjK2XUuvUxqMFi01BFGPAMRXga+6F4dbs8pKr5KXz9HRgMFlvZs
-         KKEBFogBRSo26pAUM5uPDye7G6ZZETtdx+Y5Vt4myNkWt/FaHCBNbjvNk1dqNFHBHI
-         mixs+XsKD6hGCPYITzZlHhpPTXxtHQD40fz7KPae+UUTwUy7TFMOaFLZXAfKkqUg15
-         cQg+2/qDifBjQfH+F1VTh4XB8tWlZxl5SVYtzeGmXOqC30GIHzqUksRn1LUR5gdQXs
-         r0yXGhvjcgNNnu24HvFsUy5pvlead/dHqNXnwJfW4qgDoIin4Y3D7rTIgAl7TRt1k4
-         LpcPKqQ+D2MOw==
-Message-ID: <6cb4ab4f-1132-f386-6dd0-bf4eeab4433c@collabora.com>
-Date:   Wed, 15 Jun 2022 12:18:19 +0200
+        Wed, 15 Jun 2022 06:19:01 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0266429;
+        Wed, 15 Jun 2022 03:19:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655288340; x=1686824340;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Fh8trV0hdIp/yCRR7UrJ8pnXnHW7iI9bN7gg83pe9U8=;
+  b=cYoUYy3OwisdCEkIBAMOIeuP/bJAhwT/9HPzu17lEaq1jQLqc/1gX9NT
+   VgirEe6RuWsYXWuSJu4b5TIQFio1SYZYFmrChOlsUxMk/sSSlJModWsXC
+   Q2/ZsjMDLimkx4JWuTnjL2BOeCHwMzUIjMa0akEx9xzlTRuO76BKgrzAK
+   qgBTYGhi8LO8TcLel7lRmN3AjvDguEZo20fO+mOY5Yy97rXpzXUQVUGMZ
+   i5v6Ig5kdIs0zDNAeZrDatqAApA/HGim9QXfDnK/qTeL6BlGfRZuZcYgS
+   9zGbK8bXVYO+2PKkfP2bP4yEhXfQaWZ8xaGFu3AZhb/x09vwwsepsIZo4
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="258760542"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="258760542"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 03:19:00 -0700
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="589036179"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 03:18:57 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1o1Q6x-000dI9-Cf;
+        Wed, 15 Jun 2022 13:18:55 +0300
+Date:   Wed, 15 Jun 2022 13:18:55 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dinh Nguyen <dinguyen@kernel.org>
+Cc:     jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCHv3 1/2] i2c: designware: introduce a custom scl recovery
+ for SoCFPGA platforms
+Message-ID: <YqmyD2w5iriUYpQf@smile.fi.intel.com>
+References: <20220613210032.773826-1-dinguyen@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v8 01/17] videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
-Content-Language: en-US
-To:     Hans Verkuil <hverkuil@xs4all.nl>, mchehab@kernel.org,
-        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
-        gregkh@linuxfoundation.org, mripard@kernel.org,
-        paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com, Hans Verkuil <hverkuil-cisco@xs4all.nl>
-References: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
- <20220614083614.240641-2-benjamin.gaignard@collabora.com>
- <63052d74-d3c7-a9cc-cb18-a58f8937ec06@xs4all.nl>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-In-Reply-To: <63052d74-d3c7-a9cc-cb18-a58f8937ec06@xs4all.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220613210032.773826-1-dinguyen@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,94 +66,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 13, 2022 at 04:00:31PM -0500, Dinh Nguyen wrote:
+> The I2C pins on the SoCFPGA platforms do not go through a GPIO module,
+> thus cannot be recovered by the default method of by doing a GPIO access.
+> Only a reset of the I2C IP block can a recovery be successful.
+> 
+> The assignment of the recover_bus needs to get done before the call to
+> devm_gpiod_get_optional(), otherwise, the assignment is not taking place
+> because of an error after returning from devm_gpiod_get_optional().
 
-Le 15/06/2022 à 11:33, Hans Verkuil a écrit :
-> Hi Benjamin,
->
-> On 6/14/22 10:35, Benjamin Gaignard wrote:
->> From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
->>
->> Add a new flag that indicates that this control is a dynamically sized
->> array. Also document this flag.
->>
->> Currently dynamically sized arrays are limited to one dimensional arrays,
->> but that might change in the future if there is a need for it.
->>
->> The initial use-case of dynamic arrays are stateless codecs. A frame
->> can be divided in many slices, so you want to provide an array containing
->> slice information for each slice. Typically the number of slices is small,
->> but the standard allow for hundreds or thousands of slices. Dynamic arrays
->> are a good solution since sizing the array for the worst case would waste
->> substantial amounts of memory.
->>
->> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
->> ---
->>   .../userspace-api/media/v4l/vidioc-queryctrl.rst          | 8 ++++++++
->>   include/uapi/linux/videodev2.h                            | 1 +
->>   2 files changed, 9 insertions(+)
->>
->> diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
->> index 88f630252d98..a20dfa2a933b 100644
->> --- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
->> +++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
->> @@ -625,6 +625,14 @@ See also the examples in :ref:`control`.
->>   	``V4L2_CTRL_FLAG_GRABBED`` flag when buffers are allocated or
->>   	streaming is in progress since most drivers do not support changing
->>   	the format in that case.
->> +    * - ``V4L2_CTRL_FLAG_DYNAMIC_ARRAY``
->> +      - 0x0800
->> +      - This control is a dynamically sized 1-dimensional array. It
->> +        behaves the same as a regular array, except that the number
->> +	of elements as reported by the ``elems`` field is between 1 and
->> +	``dims[0]``. So setting the control with a differently sized
->> +	array will change the ``elems`` field when the control is
->> +	queried afterwards.
-> I am proposing a change to the dynamic array implementation: initially
-> dynamic array controls start off as empty arrays (0 elements). This also
-> allows userspace to set a dynamic array control to an empty array.
->
-> It probably would also make sense to add a min_dyn_elems to set the minimum
-> allowed number of elements for a dynamic array. This would most likely be
-> either 0 or 1.
->
-> In the context of this HEVC series, does it help to allow empty dynamic arrays?
->
-> For V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS in particular it looks like
-> it would make sense since I think (correct me if I am wrong) there can be 0
-> entry point offsets. So with empty arrays supported would the field
-> num_entry_point_offsets still be needed?
+Thanks for an update!
+My comments below.
 
-yes it possible to have 0 entry point offsets in bitstream but in this case
-I think the stack won't use V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS because
-it have not data to send.
-I have introduce num_entry_point_offsets field because most of the drivers
-only need this information and not the full offsets array so I think it is needed.
-For now none of the drivers use V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS
-control, it is here to be future proof.
+...
 
-Regards,
-Benjamin
+> +static int i2c_socfpga_scl_recovery(struct i2c_adapter *adap)
+> +{
+> +	i2c_dw_prepare_recovery(adap);
+> +	i2c_dw_unprepare_recovery(adap);
 
->
-> If you want to test, then let me know and I mail a very simple patch adding
-> support for empty arrays (not yet min_dyn_elems, though).
->
-> Regards,
->
-> 	Hans
->
->>   
->>   Return Value
->>   ============
->> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
->> index 5311ac4fde35..9018aa984db3 100644
->> --- a/include/uapi/linux/videodev2.h
->> +++ b/include/uapi/linux/videodev2.h
->> @@ -1890,6 +1890,7 @@ struct v4l2_querymenu {
->>   #define V4L2_CTRL_FLAG_HAS_PAYLOAD	0x0100
->>   #define V4L2_CTRL_FLAG_EXECUTE_ON_WRITE	0x0200
->>   #define V4L2_CTRL_FLAG_MODIFY_LAYOUT	0x0400
->> +#define V4L2_CTRL_FLAG_DYNAMIC_ARRAY	0x0800
->>   
->>   /*  Query flags, to be ORed with the control ID */
->>   #define V4L2_CTRL_FLAG_NEXT_CTRL	0x80000000
+Can we use
+
+	struct i2c_bus_recovery_info *bri = adap->bus_recovery_info;
+
+	bri->prepare_recovery(adap);
+	bri->unprepare_recovery(adap);
+
+> +	return 0;
+> +}
+
+instead and...
+
+...
+
+>  static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+>  {
+>  	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
+>  	struct i2c_adapter *adap = &dev->adapter;
+>  	struct gpio_desc *gpio;
+>  
+> +	if ((dev->flags & MODEL_MASK) == MODEL_SOCFPGA) {
+> +		rinfo->recover_bus = i2c_socfpga_scl_recovery;
+> +		adap->bus_recovery_info = rinfo;
+> +	}
+> +
+>  	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
+>  	if (IS_ERR_OR_NULL(gpio))
+>  		return PTR_ERR_OR_ZERO(gpio);
+
+...this one to be transformed like (in a preparatory patch and in this one):
+
+static int i2c_dw_init_socfpga_recovery_info(struct dw_i2c_dev *dev,
+					     struct i2c_bus_recovery_info *rinfo)
+{
+	rinfo->recover_bus = i2c_socfpga_scl_recovery;
+	return 0;
+}
+
+static int i2c_dw_init_generic_recovery_info(struct dw_i2c_dev *dev,
+					     struct i2c_bus_recovery_info *rinfo)
+{
+	struct i2c_adapter *adap = &dev->adapter;
+	struct gpio_desc *gpio;
+
+	gpio = devm_gpiod_get_optional(dev->dev, "scl", GPIOD_OUT_HIGH);
+	if (IS_ERR_OR_NULL(gpio))
+		return PTR_ERR_OR_ZERO(gpio);
+
+	rinfo->scl_gpiod = gpio;
+
+	gpio = devm_gpiod_get_optional(dev->dev, "sda", GPIOD_IN);
+	if (IS_ERR(gpio))
+		return PTR_ERR(gpio);
+	rinfo->sda_gpiod = gpio;
+
+	rinfo->recover_bus = i2c_generic_scl_recovery;
+
+	dev_info(dev->dev, "running with gpio recovery mode! scl%s",
+		 rinfo->sda_gpiod ? ",sda" : "");
+
+	return 0;
+}
+
+static int i2c_dw_init_recovery_info(struct dw_i2c_dev *dev)
+{
+	struct i2c_bus_recovery_info *rinfo = &dev->rinfo;
+	struct i2c_adapter *adap = &dev->adapter;
+	int ret;
+
+	switch (dev->flags & MODEL_MASK) {
+	case MODEL_SOCFPGA:
+		ret = i2c_dw_init_socfpga_recovery_info(dev, rinfo);
+		break;
+	default:
+		ret = i2c_dw_init_generic_recovery_info(dev, rinfo);
+		break;
+	}
+	if (ret)
+		return ret;
+
+	rinfo->prepare_recovery = i2c_dw_prepare_recovery;
+	rinfo->unprepare_recovery = i2c_dw_unprepare_recovery;
+	adap->bus_recovery_info = rinfo;
+
+	return 0;
+}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

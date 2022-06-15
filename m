@@ -2,122 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D075654C826
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB4A54C829
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:10:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241474AbiFOMJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 08:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
+        id S244302AbiFOMJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 08:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235822AbiFOMJj (ORCPT
+        with ESMTP id S235822AbiFOMJz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:09:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB5946B10
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 05:09:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 36018B81D93
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:09:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5A62C341C0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:09:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655294975;
-        bh=wkqJ/T68k9r2Oy7BU+HQ4jeUyx1IPklxlT7PijJ0qno=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hBt3Uo2tvXWSIPqwv/rcfFfzw4wpkZe0NdighutShKy/XFepXHmGKfhpOAhcrLwE+
-         taYYa+aQMG0lR76MSX8kXzT/y0AXI3zot9Q+2g6exppRyo0EIkqVCoXZCZLf9DivHG
-         ljYfN30qUa6XOe65EtlPkcEaFvgUH0d5ZH1XHzhi2g/wH7ayjFNkBZNkEkcK6tgBnk
-         jEAmuctIBOBzAK2CPoRWUKHbJdaWIYFbmSxpYykG0IZwYNjX5zJjeO1Q5o1njuFv8D
-         WGQfXh0ytS8hRUveyO4X8+SU2LMi0T0QjKGzu3ZniBGrTdoGj19NJ7SRXaIMBiEYy/
-         ZWVl+MGVwqjKA==
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-313a8a8b95aso58822797b3.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 05:09:35 -0700 (PDT)
-X-Gm-Message-State: AJIora/GPXjX4QRVk+0lIjTHMGux60RHkBiMjGHkCT1m0ITq9YtW+z79
-        /UrUzAQM4a96FlSna+YCR7IT6BNPWzcYmNbQ9vQ=
-X-Google-Smtp-Source: AGRyM1v1gZhuyIQo1km9VW5YHgE9Bpwhdz8KfSM7SWxOvp4o1BPT2oLt9iJz8J4qcgAqPHbKBgqAXKr5A03/M/GsKic=
-X-Received: by 2002:a0d:d84d:0:b0:314:2bfd:ddf3 with SMTP id
- a74-20020a0dd84d000000b003142bfdddf3mr11531420ywe.347.1655294974785; Wed, 15
- Jun 2022 05:09:34 -0700 (PDT)
+        Wed, 15 Jun 2022 08:09:55 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95DA4ECC7;
+        Wed, 15 Jun 2022 05:09:54 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id u8so15051136wrm.13;
+        Wed, 15 Jun 2022 05:09:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=ufqEIhQJLn0a1lP22CtHnxpKmABhqIWqQFeboCEBeR8=;
+        b=NNQJ/jGhKFi3TLolVvv6p5vDCUgaeZ2UDfX5QF22P23d0rNi2IA+3xgJlttCAlAbei
+         rk6ebUX23qsziqFBje19orA87/iwUKsvIIxT1/tuq/V/zfiyuLMDGAhmMekYevaKip0L
+         VFsqyo2qSHzhQaaVho66mGEdQ0v3EV+MXT2CiOUY0RceDlRJUVuTteYygqy1hEhOnhDy
+         bDFcEuM9bSkckbpuY7bJcxBHX7aiGwNDqqmpKOCokXagegSOK3ZOIf+WH/TR6GhgAGAE
+         JXb9yVmULvi4y4ygg6OY6k3egdNzz9CQUgXR20nHtdlWgf58B33lpzamh5904JHegno4
+         8d3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=ufqEIhQJLn0a1lP22CtHnxpKmABhqIWqQFeboCEBeR8=;
+        b=PXcXzBJ8TsSyuTA5qHSrU42ASQ+T405gpVZ9gVRUU0xkpnJGU02er0RcTVY+ohYH9A
+         65mxtzrj/BmSLGzQA8ZLblA0CqCmblO+NL5BoHX9Lo/b717dJmtCIuCZGlgLyVmHFp6U
+         wJ625mKbUr4qIjUB7OZ2ea6MkxdFo2qT79OYlpCUBvh4uESZjaiUTOsdunsY8uUrCmze
+         ZqBlE+dKZYXmkRi1XdCTTF9mSnsTUEvFRpT2eFKyIp7MTXbzIwyxLXWkv2fERVqt3Nti
+         k1srIrf9hXONkf0zZejcFzGY0Lh8tYfFkIo0X4A0XT33TsYy8dp7ox9Tfp6eT52FMpBP
+         WVWw==
+X-Gm-Message-State: AJIora+e6jwdVJ8bCxRBWgBMlYWAOadZvFJRI18gTGLekKfck+wLEEWW
+        5c5REELFJWfqogomAXYBgAJpOtpKZ5wW8g==
+X-Google-Smtp-Source: AGRyM1spOOsJofsOCL+iHFbSiA5IRU/CCTL1EBYYpqTyOZwOes1IVw6CJtdit0i26miabw44PN2cEg==
+X-Received: by 2002:a05:6000:1542:b0:218:549a:2a8e with SMTP id 2-20020a056000154200b00218549a2a8emr9738727wry.314.1655294992184;
+        Wed, 15 Jun 2022 05:09:52 -0700 (PDT)
+Received: from [192.168.0.36] ([37.223.143.134])
+        by smtp.gmail.com with ESMTPSA id 64-20020a1c1943000000b0039c6390730bsm2249993wmz.29.2022.06.15.05.09.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 05:09:51 -0700 (PDT)
+Message-ID: <8b31b1d2-4ed7-11a1-2124-4641c8f3abcd@gmail.com>
+Date:   Wed, 15 Jun 2022 14:09:49 +0200
 MIME-Version: 1.0
-References: <CAFJhRnoEifeo0Tr2qfKD031C=9jYZ7oP3zSR9hFUmFp86Og7+Q@mail.gmail.com>
- <CAK8P3a1RVKLFT0aX38fJoFejgrq7VCz7auHjtsBB9W0rwnedCw@mail.gmail.com>
- <20220607163053.GD7074@brightrain.aerifal.cx> <CAFJhRnrWPC6pk67Xo9A9EeHFhoJCkE2PfwS4wFUep2JS3D9ujQ@mail.gmail.com>
- <CAK8P3a04TcLnhEE+MmQGOLU_AcVD5Rb+8vCKFSRF-zg33161ig@mail.gmail.com>
- <20220614170013.GH7074@brightrain.aerifal.cx> <CAK8P3a0d9hOuv+RiN_eQZtmfc7DCbJe6nEhL+W1AU2kFjiDZWw@mail.gmail.com>
- <20220614204900.GI7074@brightrain.aerifal.cx> <CAK8P3a0jk736rPueff--Uor=tHmicHZgoikrAsjp0DHxmkaiWg@mail.gmail.com>
- <20220614232826.GJ7074@brightrain.aerifal.cx>
-In-Reply-To: <20220614232826.GJ7074@brightrain.aerifal.cx>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Wed, 15 Jun 2022 14:09:16 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3WZB81QqAJF1zi0Lp0n2vKhjKhiCS4vcOoVi8jt-Y3aA@mail.gmail.com>
-Message-ID: <CAK8P3a3WZB81QqAJF1zi0Lp0n2vKhjKhiCS4vcOoVi8jt-Y3aA@mail.gmail.com>
-Subject: Re: [musl] Question about musl's time() implementation in time.c
-To:     musl@lists.openwall.com
-Cc:     John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Adhemerval Zanella <adhemerval.zanella@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, yong.wu@mediatek.com
+Cc:     joro@8bytes.org, will@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        krzysztof.kozlowski@linaro.org
+References: <20220609100802.54513-1-angelogioacchino.delregno@collabora.com>
+ <20220609100802.54513-7-angelogioacchino.delregno@collabora.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+Subject: Re: [PATCH v3 6/6] iommu: mtk_iommu: Lookup phandle to retrieve
+ syscon to pericfg
+In-Reply-To: <20220609100802.54513-7-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 1:28 AM Rich Felker <dalias@libc.org> wrote:
-> On Tue, Jun 14, 2022 at 11:11:32PM +0200, Arnd Bergmann wrote:
-> >
-> > The thing is that a lot of file systems would still behave the same way
-> > because they round times down to a filesystem specific resolution,
-> > often one microsecond or one second, while the kernel time accounting
-> > is in nanoseconds. There have been discussions about an interface
-> > to find out what the actual resolution on a given mount point is (similar
-> > to clock_getres), but that never made it in. The guarantees that you
-> > get from file systems at the moment are:
->
-> It's normal that they may be rounded down the the filesystem timestamp
-> granularity. I thought what was going on here was worse.
 
-It gets rounded down twice: first down to the start of the current
-timer tick, which is at an arbitrary nanosecond value in the past 10ms,
-and then to the resolution of the file system. The result is that the
-file timestamp can point to a slightly earlier value, up to max(timer tick
-cycle, fs resolution) before the actual nanosecond value. We don't
-advertise the granule of the file system though, so I would expect
-this to be within the expected behavior.
 
-> OK, the time syscall doing the wrong thing here (using a different
-> clock that's not correctly ordered with respect to CLOCK_REALTIME)
-> seems to be the worst problem here -- if I'm understanding it right.
-> The filesystem issue might be a non-issue if it's truly equivalent to
-> just having coarser fs timestamp granularity, which is allowed.
+On 09/06/2022 12:08, AngeloGioacchino Del Regno wrote:
+> On some SoCs (of which only MT8195 is supported at the time of writing),
+> the "R" and "W" (I/O) enable bits for the IOMMUs are in the pericfg_ao
+> register space and not in the IOMMU space: as it happened already with
+> infracfg, it is expected that this list will grow.
+> 
+> Instead of specifying pericfg compatibles on a per-SoC basis, following
+> what was done with infracfg, let's lookup the syscon by phandle instead.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>   drivers/iommu/mtk_iommu.c | 23 +++++++++++++----------
+>   1 file changed, 13 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index 90685946fcbe..0ea0848581e9 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -138,6 +138,8 @@
+>   /* PM and clock always on. e.g. infra iommu */
+>   #define PM_CLK_AO			BIT(15)
+>   #define IFA_IOMMU_PCIE_SUPPORT		BIT(16)
+> +/* IOMMU I/O (r/w) is enabled using PERICFG_IOMMU_1 register */
+> +#define HAS_PERI_IOMMU1_REG		BIT(17)
 
-Adding the kernel timekeeping maintainers to Cc. I think this is a
-reasonable argument, but it goes against the current behavior.
+ From what I can see MTK_IOMMU_TYPE_INFRA is only set in MT8195 which uses 
+pericfg. So we don't need a new flag here. For me the flag name 
+MTK_IOMMU_TYPE_INFRA was confusing as it has nothing to do with the use of 
+infracfg. I'll hijack this patch to provide some feedback on the actual code, 
+please see below.
 
-We have four implementations of the time() syscall that one would
-commonly encounter:
+>   
+>   #define MTK_IOMMU_HAS_FLAG_MASK(pdata, _x, mask)	\
+>   				((((pdata)->flags) & (mask)) == (_x))
+> @@ -187,7 +189,6 @@ struct mtk_iommu_plat_data {
+>   	u32			flags;
+>   	u32			inv_sel_reg;
+>   
+> -	char			*pericfg_comp_str;
+>   	struct list_head	*hw_list;
+>   	unsigned int		iova_region_nr;
+>   	const struct mtk_iommu_iova_region	*iova_region;
+> @@ -1218,14 +1219,16 @@ static int mtk_iommu_probe(struct platform_device *pdev)
+>   			goto out_runtime_disable;
+>   		}
+>   	} else if (MTK_IOMMU_IS_TYPE(data->plat_data, MTK_IOMMU_TYPE_INFRA) &&
+> -		   data->plat_data->pericfg_comp_str) {
 
-- The kernel syscall, using (effectively) CLOCK_REALTIME_COARSE
-- The kernel vdso, using (effectively) CLOCK_REALTIME_COARSE
-- The glibc interface, calling __clock_gettime64(CLOCK_REALTIME_COARSE, ...)
-- The musl interface, calling __clock_gettime64(CLOCK_REALTIME, ...)
+Check for pericfg_comp_str is not needed, we only have one platform that uses 
+MTK_IOMMU_TYPE_INFRA.
 
-So even if everyone agrees that the musl implementation is the
-correct one, I think both linux and glibc are more likely to stick with
-the traditional behavior to avoid breaking user space code such as the
-libc-test case that Zev brought up initially. At least Adhemerval's
-time() implementation in glibc[1] appears to have done this intentionally,
-while the Linux implementation has simply never changed this in an
-incompatible way since Linux-0.01 added time() and 0.99.13k added
-the high-resolution gettimeofday().
+> -		infracfg = syscon_regmap_lookup_by_compatible(data->plat_data->pericfg_comp_str);
 
-       Arnd
+We can do something like this to make the code clearer:
+data->pericfg = 
+syscon_regmap_lookup_by_compatible(data->plat_data->pericfg_comp_str);
+		if (IS_ERR(data->pericfg)) {
 
-[1] https://sourceware.org/git/?p=glibc.git;a=commitdiff;h=0d56378349
+Using infracfg variable here is confusing as it has nothing to do with infracfg 
+used with HAS_4GB_MODE flag.
+
+Regards,
+Matthias
+
+> -		if (IS_ERR(infracfg)) {
+> -			ret = PTR_ERR(infracfg);
+> -			goto out_runtime_disable;
+> +		   MTK_IOMMU_HAS_FLAG(data->plat_data, HAS_PERI_IOMMU1_REG)) {
+> +		data->pericfg = syscon_regmap_lookup_by_phandle(dev->of_node, "mediatek,pericfg");
+> +		if (IS_ERR(data->pericfg)) {
+> +			p = "mediatek,mt8195-pericfg_ao";
+> +			data->pericfg = syscon_regmap_lookup_by_compatible(p);
+> +			if (IS_ERR(data->pericfg)) {
+> +				ret = PTR_ERR(data->pericfg);
+> +				goto out_runtime_disable;
+> +			}
+>   		}
+> -
+> -		data->pericfg = infracfg;
+>   	}
+>   
+>   	platform_set_drvdata(pdev, data);
+> @@ -1484,8 +1487,8 @@ static const struct mtk_iommu_plat_data mt8192_data = {
+>   static const struct mtk_iommu_plat_data mt8195_data_infra = {
+>   	.m4u_plat	  = M4U_MT8195,
+>   	.flags            = WR_THROT_EN | DCM_DISABLE | STD_AXI_MODE | PM_CLK_AO |
+> -			    MTK_IOMMU_TYPE_INFRA | IFA_IOMMU_PCIE_SUPPORT,
+> -	.pericfg_comp_str = "mediatek,mt8195-pericfg_ao",
+> +			    HAS_PERI_IOMMU1_REG | MTK_IOMMU_TYPE_INFRA |
+> +			    IFA_IOMMU_PCIE_SUPPORT,
+>   	.inv_sel_reg      = REG_MMU_INV_SEL_GEN2,
+>   	.banks_num	  = 5,
+>   	.banks_enable     = {true, false, false, false, true},

@@ -2,123 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FACF54C466
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C8354C46C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347905AbiFOJPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54530 "EHLO
+        id S243934AbiFOJQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347678AbiFOJOS (ORCPT
+        with ESMTP id S1345533AbiFOJPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:14:18 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615EE38DAC
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:14:17 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id n18so9897891plg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:14:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=U5W+u2socUdfvA7Xut56xq8m0f3VViU7LDQmKDKAFUw=;
-        b=AuhzgNxfF4Wt8XjnPKCHtvnPTDkBF9j9nHeM3JacQLlyl4UesOejhMt+G6sv5jOza1
-         Ip1smplzqEW9tti/ZgM8KZ7wQq6oJO5Wd3QSQ6S2+pDFFvqFx+AqWLdAOO63jkSE5gZI
-         EKRXzrTPC61QKv/gkS+anhA9Ev6a9cfxgUdwD43YtoqPukJuA5Hq4wIXfzGtFke1zo5L
-         ZqazuW56GgUg4Elsv7veM5cpyfsKta6gqLyTuhM1PtMC8XNaO+r1TANLyJ6xD90goJmy
-         h1EHqcBvkgkeekeF9sIMqYr9Go8bpOcLDgiiqq6on37PuuWeRUZiMlYnIRLyninwm8Or
-         ATtA==
+        Wed, 15 Jun 2022 05:15:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F79B3FBEF
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:15:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655284535;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3ihw/tQZ7dDGm/WIN83Xbht+igW1FpV/t8X/MIkfZfY=;
+        b=IrrPBtXNe+3Qo08DOrwWmBxiyO6rigF0uSvDffdV/rnqsR/F8Axy/51ijQlVlwrZHWBkSz
+        ocmlGK7UW8CIaKxH+nb857QXhgo7gafUYZpVvLtuIV6YNamKfOsV2rNGiAjyoeJr1/2qjN
+        PN+UuDZ9FJSOOMeApTJfS4NrgCVLj7c=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-271-g2AZKlJIM5OvI36s9-eqFA-1; Wed, 15 Jun 2022 05:15:33 -0400
+X-MC-Unique: g2AZKlJIM5OvI36s9-eqFA-1
+Received: by mail-wm1-f72.google.com with SMTP id j31-20020a05600c1c1f00b0039c481c4664so4834672wms.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:15:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=U5W+u2socUdfvA7Xut56xq8m0f3VViU7LDQmKDKAFUw=;
-        b=keXnCZ8JJ27st0o56YhBGsmkx89Vl9vznW3IUWpfwUSpD6sWjMKT+7fYyIjFN2VYD6
-         0lMTqDwThDdiIwgP7dwDlGwNtJZIh3ZWlHuMTj+IlCpjTyLjWJtIlbfn+TdT1deOwT/K
-         v/bTnlHvQhy1GFB3UM9aXUZmBTxdWMYPQ9ztx6EunB35pdqUIvd7erQZaG4ATNWWE2i9
-         RqlJWZ8F2DRrDO3xpO4hDfvKE5Aof3woIcKpVE6Oe4IJpJAGiYrsKJgiB8uLnwyyPYzg
-         sUT009LndxecmpZMhFTOfkg9stC6+PFTIER05egx6v0kdMXXHZUFhJjg3dYKfxB/nrJQ
-         HDpg==
-X-Gm-Message-State: AJIora+LdKOxMyiJFSlW84s8G+jmsxWM3JNpi8z4ZLGYISt19MAu9azF
-        sNyXsxsTCUCWZs/x/5jqT/KW5w==
-X-Google-Smtp-Source: AGRyM1t/aeseBSMJUh1pB4pBXT7wadG652+Zr21QtvXUxfp40vVCbCLIM4o3ACzHMUvDYa13RC/Tgw==
-X-Received: by 2002:a17:902:6901:b0:168:9bb4:7adb with SMTP id j1-20020a170902690100b001689bb47adbmr8392907plk.147.1655284456709;
-        Wed, 15 Jun 2022 02:14:16 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s (n058152077182.netvigator.com. [58.152.77.182])
-        by smtp.gmail.com with ESMTPSA id h11-20020a170902f2cb00b00163aba9a2a5sm8717942plc.106.2022.06.15.02.14.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 02:14:15 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 17:14:06 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Carsten Haitzler <carsten.haitzler@foss.arm.com>
-Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
-        mike.leach@linaro.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org
-Subject: Re: [PATCH 2/3] perf test: Shell - only run .sh shell files to skip
- other files
-Message-ID: <20220615091406.GB121786@leoy-ThinkPad-X240s>
-References: <20220309122859.31487-1-carsten.haitzler@foss.arm.com>
- <20220309122859.31487-2-carsten.haitzler@foss.arm.com>
- <20220410022846.GB14326@leoy-ThinkPad-X240s>
- <9ab780aa-7e78-b0f9-21ed-cf30f41f8fab@foss.arm.com>
- <20220526101423.GB795802@leoy-ThinkPad-X240s>
- <ae8bdc2c-a444-74c1-70d5-c97d27b22ec5@foss.arm.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=3ihw/tQZ7dDGm/WIN83Xbht+igW1FpV/t8X/MIkfZfY=;
+        b=Lo6U+YCiqxwoK/L4lp2Qang84EakxvVuxr9W0KsOl0kMXyoQJnMb73Si5ejGj5emfq
+         M9GURgCyyhsygQ5emWpIvlvfs2onvi81t+9MIg8p3ql791888+i6YABeBiFItu66pH+8
+         McxmkuBgv1Z4SRXg+M/nuzHBSri3bsec6+pi0idsBCkplAnHDhzZnsj0D2IfDieXwah7
+         Mc1Y7Aaq3X4Sifr2dqVFSqc9nr8Fc2wkO1yPvCMw4W98gokINrSgO6qpg3IbrHhI+nYf
+         tdq8ec8mr0CNYSzSg9Ebr/yqPK4wuuDz2tD2JHpLBoyUDpgZVautEaG596LV7YRkZrsT
+         XbCA==
+X-Gm-Message-State: AJIora8AXtpe6UE55t2dR6yy51xYNyenqWG+rkfDLqV1jMMUGK28JlNl
+        Json7MQkJYgvNSFnG9aBLt6C2Ihs2983A/CzKLSW8FWCDzF1hUJfluxtpDGYYuEd6gvxc9ent5w
+        B06xKBahUMFW781fHrgAOppC/
+X-Received: by 2002:a05:6000:1a88:b0:218:4e7f:279d with SMTP id f8-20020a0560001a8800b002184e7f279dmr8860289wry.670.1655284532499;
+        Wed, 15 Jun 2022 02:15:32 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vsqXPRk9u33dyg66eh75muPwVuzV7/fWeHx+RGAoDtTJtfdtO8XKyNHzp5Sstm9f26pEFS3g==
+X-Received: by 2002:a05:6000:1a88:b0:218:4e7f:279d with SMTP id f8-20020a0560001a8800b002184e7f279dmr8860267wry.670.1655284532176;
+        Wed, 15 Jun 2022 02:15:32 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70a:2700:1d28:26c3:b272:fcc6? (p200300cbc70a27001d2826c3b272fcc6.dip0.t-ipconnect.de. [2003:cb:c70a:2700:1d28:26c3:b272:fcc6])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056000054200b0020c5253d8dcsm14055748wrf.40.2022.06.15.02.15.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 02:15:31 -0700 (PDT)
+Message-ID: <16297304-82d9-f62b-b87f-cc8d8fde9bd4@redhat.com>
+Date:   Wed, 15 Jun 2022 11:15:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ae8bdc2c-a444-74c1-70d5-c97d27b22ec5@foss.arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v1] MAINTAINERS: add MEMORY HOT(UN)PLUG section and add
+ myself as reviewer
+Content-Language: en-US
+To:     Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20220610101258.75738-1-david@redhat.com>
+ <72194595-a177-088d-28a9-0a24d4192777@redhat.com>
+ <20220614103842.af0c9a5434e3099cf9060cf5@linux-foundation.org>
+ <YqlaE/LYHwB0gpaW@localhost.localdomain>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YqlaE/LYHwB0gpaW@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 02:08:30PM +0100, Carsten Haitzler wrote:
-
-[...]
-
-> > If the condition checking gets complex, seems to me it is reasonable to
-> > use a static function (or a macro?) to encapsulate the logics.
+On 15.06.22 06:03, Oscar Salvador wrote:
+> On Tue, Jun 14, 2022 at 10:38:42AM -0700, Andrew Morton wrote:
+>> On Tue, 14 Jun 2022 08:58:55 +0200 David Hildenbrand <david@redhat.com> wrote:
+>> um, fine, no opinion really.  I think the main thing is to make
+>> get_maintainer.pl spit out all the suitable email addresses.
 > 
-> Well normally my rule i s - if it gets re-used then do it, otherwise it just
-> involves more indirection to follow. :) But regardless of that, given some
-> other things you ask for that kind of makes this discussion moot as it
-> requires much bigger wholesale changes to the test infra which will make
-> these patches a lot more work. I'll get to that later in mails.
-
-Your mentioned rule makes sense to me.
-
-> > > But one catch... it really should be is_non_hidden_exe_shell_script() as
-> > > it's checking that it's not a hidden file AND is a shell script. Or do I
-> > > keep the hidden file test outside of the function in the if? If we're nit
-> > > picking then I need to know exactly what you want here as your suggested
-> > > name is actually incorrect.
-> > 
-> > I personally prefer to use the condition:
-> > 
-> >    if (is_exe_shell_script() && ent->d_name[0] != '.')
-> >        do_something...
-> > 
-> > The reason is the function is_exe_shell_script() is more common and we
-> > use it easily in wider scope.
+> As already pointed out, David and I have already kind of acted as maintainers of
+> this aready already for quite some time, reviewing and contributing the most, so
+> it might make sense to just spell that out, so, without willing to step on
+> anyone's toes, what about this:
 > 
-> As above - will probably have to redo a lot of the test infra involving the
-> shell tests to handle some of your other requests, but if we don't go that
-> way, I have got where you want to go and I can do this.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1fc9ead83d2a..f5a746624a9f 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12857,6 +12857,18 @@ F:     include/linux/vmalloc.h
+>  F:     mm/
+>  F:     tools/testing/selftests/vm/
+>  
+> +MEMORY HOT(UN)PLUG
+> +M:     David Hildenbrand <david@redhat.com>
+> +M:     Oscar Salvador <osalvador@suse.de>
+> +L:     linux-mm@kvack.org
+> +S:     Maintained
+> +F:     Documentation/admin-guide/mm/memory-hotplug.rst
+> +F:     Documentation/core-api/memory-hotplug.rst
+> +F:     drivers/base/memory.c
+> +F:     include/linux/memory_hotplug.h
+> +F:     mm/memory_hotplug.c
+> +F:     tools/testing/selftests/memory-hotplug/
 
-To be honest, I am not sure if this patch is related with refactoring
-test infrastructure or not.  You could reconsider when you spin for next
-patch set (as you said, might refactor test infra).
+Fine with me to remove Andrew from that list because he's implicitly
+covering most stuff via the "MEMORY MANAGEMENT" section.
 
-In case you still want to keep this patch as it is, it would be fine for
-me and you could add my reviewed tag:
+@Andrew, whatever you prefer.
 
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
+Acked-by: David Hildenbrand <david@redhat.com>
 
+
+@Andrew, would it make sense to update the git tree in the "MEMORY
+MANAGEMENT" section now that mm-stable etc. resides on git.kernel.org ?
+
+
+-- 
 Thanks,
-Leo
+
+David / dhildenb
+

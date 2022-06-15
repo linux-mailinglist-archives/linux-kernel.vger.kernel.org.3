@@ -2,80 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0034A54C1BF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 08:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B96B654C1C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 08:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352508AbiFOGYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 02:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
+        id S1352746AbiFOGZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 02:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344650AbiFOGYH (ORCPT
+        with ESMTP id S1352299AbiFOGZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 02:24:07 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E770B27FEE
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 23:24:06 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-31336535373so51297497b3.2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 23:24:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LshRSzq22wtp4qhXs+/iZas8+X4eeCgZ5sV4MhFsw2w=;
-        b=luyrFMQUtVOGazWD1iq3vMXmKdEc5Z9Js2dg0RzKB7UAOL8BZ52UtgL/CXxEVKZVuw
-         Lk4Uf50DB2KCN4AdmvHrHj1dL0buHpaWhvQP2ITrsXjzfMfLafIeW+ByvnE87ylrbN96
-         NwgiKQIz2gnpUTJtwkHDdaMyi+OtlkO+HpgYQJA1Xb2gbQ0wx/i1jppcWMwFNPIic/BL
-         gHYZPBNIQEnouIR/kcjreA0RJP6sNCa0Cj7vrEecr1j2QTQoDizmKigSbHDaJYHag7vx
-         4kk8G8Q4AJJasQv7l8ujLQaoEfvqb6jDOCcGYTrSjw5pjx5idMc+9lQHaLuotaWJ/2ID
-         lxcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LshRSzq22wtp4qhXs+/iZas8+X4eeCgZ5sV4MhFsw2w=;
-        b=IbKk8I9yWQuUUsCl+n9V5HBukUFuDPQxySPf+OFvkXy0QhXFBxWPTeJIuXoJYfBi9d
-         2TUj2ZlJwahigM+tt79oRjdu/KaUSR6AKgCDO0gygx0en0lOSxxJF+Df3wB/h3PcmdCV
-         ChVBwStEgGPySsbXRDA/z3vqwvBzGCt6a0EoOhlOLsTks+z/aUs/OTcaYzCt0FdJTcb5
-         xJBjP5ptoPLHTX2xTLZsIs7fw1zEPW4OrHs+/3FeGl9MjSzr/LmaxL351H1bSE2Kba2u
-         i2gKw8Bvfm3ZmnOSv4V2SXK2u3n2oq991klBoJ2ivMZGfnQLdGkQEGQkrM48jqj3HG1P
-         Jdqw==
-X-Gm-Message-State: AJIora+VxS84I5CoP0dDtMCetIR9HqvBHFJZDNRBPBbB0qtkt/eCrOXS
-        4eImqcyJo8qo7Hwg8H3JoobZrp8UJ9m1JYqxoDk=
-X-Google-Smtp-Source: AGRyM1tAM6ElCRQ+uq7vQIdf64vAqhTVQNLn5SJ7tZ9sRuvacanhNpyrrq71qFzPCPyW5IbmrgmbXDkARvs8jenWC3E=
-X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
- 206-20020a810ad7000000b002e684de3223mr10019086ywk.209.1655274245807; Tue, 14
- Jun 2022 23:24:05 -0700 (PDT)
+        Wed, 15 Jun 2022 02:25:11 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 646ED2873A;
+        Tue, 14 Jun 2022 23:25:07 -0700 (PDT)
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id 218F180F1;
+        Wed, 15 Jun 2022 06:20:19 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/1] serial: core: Start managing serial controllers to enable runtime PM
+Date:   Wed, 15 Jun 2022 09:24:55 +0300
+Message-Id: <20220615062455.15490-1-tony@atomide.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <1654197833-25362-1-git-send-email-olekstysh@gmail.com>
-In-Reply-To: <1654197833-25362-1-git-send-email-olekstysh@gmail.com>
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-Date:   Wed, 15 Jun 2022 11:53:54 +0530
-Message-ID: <CAOh2x=kxpdisV+tqcYOoZGSKA8YjPMej+7u19Jpa1jmVcZCaxA@mail.gmail.com>
-Subject: Re: [PATCH V4 0/8] virtio: Solution to restrict memory access under
- Xen using xen-grant DMA-mapping layer
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-Cc:     xen-devel@lists.xenproject.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        virtualization@lists.linux-foundation.org, x86@kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>,
-        Bertrand Marquis <bertrand.marquis@arm.com>,
-        Wei Chen <Wei.Chen@arm.com>, Henry Wang <Henry.Wang@arm.com>,
-        Kaly Xin <Kaly.Xin@arm.com>, Jiamei Xie <Jiamei.Xie@arm.com>,
-        =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,50 +43,323 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Oleksandr,
+We want to enable runtime PM for serial port device drivers in a generic
+way. To do this, we want to have the serial core layer manage the
+registered serial port controllers. For runtime PM, we need a way to find
+the serial ports for each serial port controller device.
 
-On Mon, Jun 6, 2022 at 10:16 AM Oleksandr Tyshchenko
-<olekstysh@gmail.com> wrote:
-> The high level idea is to create new Xen=E2=80=99s grant table based DMA-=
-mapping layer for the guest Linux whose main
-> purpose is to provide a special 64-bit DMA address which is formed by usi=
-ng the grant reference (for a page
-> to be shared with the backend) with offset and setting the highest addres=
-s bit (this is for the backend to
-> be able to distinguish grant ref based DMA address from normal GPA). For =
-this to work we need the ability
-> to allocate contiguous (consecutive) grant references for multi-page allo=
-cations. And the backend then needs
-> to offer VIRTIO_F_ACCESS_PLATFORM and VIRTIO_F_VERSION_1 feature bits (it=
- must support virtio-mmio modern
-> transport for 64-bit addresses in the virtqueue).
+The serial core manages ports. Each serial controller can have multiple
+ports. As serial core has no struct device, and the serial port device
+drivers have their own driver data, we cannot currently start making
+use of serial core generic data easily without changing all the serial
+port device drivers.
 
-I was trying your series, from Linus's tree now and started seeing
-boot failures,
-failed to mount rootfs. And the reason probably is these messages:
+We could consider adding a serial core specific struct device. It would
+be a child of the serial port device, and would allow us eventually to use
+device_links to add generic runtime PM calls for example. But as the serial
+core layer is not a device driver, driver specific features would need to
+be added, and are probably not justified for a virtual device.
 
-[ 1.222498] virtio_scsi virtio1: device must provide VIRTIO_F_ACCESS_PLATFO=
-RM
-[ 1.316334] virtio_net virtio0: device must provide VIRTIO_F_ACCESS_PLATFOR=
-M
+Considering the above, let's improve the serial core layer so we can
+manage the serial port controllers better. Let's register the controllers
+with the serial core layer in addition to the serial ports.
 
-I understand from your email that the backends need to offer
-VIRTIO_F_ACCESS_PLATFORM flag now, but should this requirement be a
-bit soft ? I mean shouldn't we allow both types of backends to run with the=
- same
-kernel, ones that offer this feature and others that don't ? The ones that =
-don't
-offer the feature, should continue to work like they used to, i.e.
-without the restricted
-memory access feature.
+To find the serial ports for a controller based on struct device, let's
+add a new data structure for a serial_controller. Let's add the registered
+devices into a radix_tree so we can look up the controller easily even
+with many controllers registered. This allows us to keep track of the
+runtime PM state for each serial port controller device.
 
-I am testing Xen currently with help of Qemu  over my x86 desktop and
-these backends
-(scsi and net) are part of QEMU itself I think, and I don't really
-want to go and make the
-change there.
+As some serial port device drivers enable runtime PM in their probe before
+registering with the serial core layer, and some do not enable runtime PM
+at all currently, we need check the state in the serial core layer on
+uart_port_startup(). We need to also consider that a serial port device
+may have multiple ports.
 
-Thanks.
+Initially we just want to enable runtime PM for all the serial port
+controller devices. This allows us to add runtime PM calls and properly
+handle any errors without a need for serial layer specific runtime PM
+wrapper functions.
 
---
-Viresh
+After this patch no functional changes for the serial port device drivers
+are intended. For most cases, we just enable runtime PM and keep the
+runtime PM usage count until all the serial controller ports are
+unregistered. For drivers implementing runtime PM, we just keep track of
+the configuration.
+
+The serial core layer has the following use cases to deal with:
+
+- If a serial port device driver does not implement runtime PM, the
+  device state is set to active state, and the runtime PM usage count
+  is kept until the last port for a device is unregistered
+
+- If a serial port device driver implements runtime PM, the runtime PM
+  usage count is kept until the last port for the device is unregistered
+
+- If a serial port device driver implements runtime PM autosuspend,
+  autosuspend is not prevented. This currently gets set only for the
+  8250_omap driver to keep runtime PM working for it
+
+For system suspend, things should be mostly detached from the runtime PM.
+The serial port device drivers may call pm_runtime_force_suspend() and
+pm_runtime_force_resume() as needed.
+
+Suggested-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
+---
+
+Changes since v1:
+
+- Use kref as suggested by Andy
+
+- Fix memory leak on error as noted by Andy
+
+- Use use unsigned char for supports_autosuspend as suggested by Andy
+
+- Coding style improvments as suggested by Andy
+
+---
+ drivers/tty/serial/8250/8250_core.c |   1 +
+ drivers/tty/serial/8250/8250_omap.c |   1 +
+ drivers/tty/serial/serial_core.c    | 148 ++++++++++++++++++++++++++++
+ include/linux/serial_core.h         |   3 +
+ 4 files changed, 153 insertions(+)
+
+diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+--- a/drivers/tty/serial/8250/8250_core.c
++++ b/drivers/tty/serial/8250/8250_core.c
+@@ -995,6 +995,7 @@ int serial8250_register_8250_port(const struct uart_8250_port *up)
+ 		uart->port.regshift     = up->port.regshift;
+ 		uart->port.iotype       = up->port.iotype;
+ 		uart->port.flags        = up->port.flags | UPF_BOOT_AUTOCONF;
++		uart->port.supports_autosuspend = up->port.supports_autosuspend;
+ 		uart->bugs		= up->bugs;
+ 		uart->port.mapbase      = up->port.mapbase;
+ 		uart->port.mapsize      = up->port.mapsize;
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -1338,6 +1338,7 @@ static int omap8250_probe(struct platform_device *pdev)
+ 	up.rs485_start_tx = serial8250_em485_start_tx;
+ 	up.rs485_stop_tx = serial8250_em485_stop_tx;
+ 	up.port.has_sysrq = IS_ENABLED(CONFIG_SERIAL_8250_CONSOLE);
++	up.port.supports_autosuspend = 1;
+ 
+ 	ret = of_alias_get_id(np, "serial");
+ 	if (ret < 0) {
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -16,7 +16,9 @@
+ #include <linux/console.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/of.h>
++#include <linux/pm_runtime.h>
+ #include <linux/proc_fs.h>
++#include <linux/radix-tree.h>
+ #include <linux/seq_file.h>
+ #include <linux/device.h>
+ #include <linux/serial.h> /* for serial_state and serial_icounter_struct */
+@@ -30,6 +32,25 @@
+ #include <linux/irq.h>
+ #include <linux/uaccess.h>
+ 
++/*
++ * Serial port device specific data for serial core.
++ *
++ * Each port device can have multiple ports with struct uart_state allocated
++ * for each port. The array of ports is kept in struct uart_driver.
++ */
++struct serial_controller {
++	struct device *dev;			/* Serial port device */
++	struct uart_driver *drv;		/* For port specific uart_state */
++	struct kref ref;			/* Enable count for runtime PM */
++	unsigned long implements_pm_runtime:1;
++	unsigned long supports_autosuspend:1;
++};
++
++/*
++ * Serial core port device instances. Update protected by port_mutex.
++ */
++static RADIX_TREE(serial_core_devices, GFP_NOWAIT);
++
+ /*
+  * This is used to lock changes in serial line configuration.
+  */
+@@ -175,6 +196,125 @@ static void uart_port_dtr_rts(struct uart_port *uport, int raise)
+ 		uart_clear_mctrl(uport, TIOCM_DTR | TIOCM_RTS);
+ }
+ 
++/* Called from uart_add_one_port() with port_mutex held */
++static int serial_core_pm_runtime_start(struct uart_port *port)
++{
++	struct uart_state *state = port->state;
++	struct serial_controller *controller = state->controller;
++	struct device *dev = port->dev;
++	int ret = 0;
++
++	if (kref_get_unless_zero(&controller->ref))
++		return 0;
++
++	/* Init controller device on first reference */
++	kref_init(&controller->ref);
++
++	/* Always enable autosuspend and consider child devices for serdev */
++	pm_runtime_use_autosuspend(dev);
++	pm_suspend_ignore_children(dev, false);
++
++	/*
++	 * If the port driver did not enable runtime PM in probe, do it now.
++	 * Devices that did not enable runtime PM get set active so we can
++	 * properly handle the returned errors for runtime PM calls.
++	 */
++	if (!pm_runtime_enabled(dev)) {
++		pm_runtime_set_active(dev);
++		pm_runtime_enable(dev);
++	} else {
++		controller->implements_pm_runtime = 1;
++	}
++
++	/*
++	 * Keep the port device enabled unless autosuspend is supported.
++	 * Released on port shutdown.
++	 */
++	if (!controller->supports_autosuspend) {
++		ret = pm_runtime_resume_and_get(dev);
++		if (ret < 0) {
++			pm_runtime_dont_use_autosuspend(dev);
++			pm_runtime_disable(dev);
++		}
++	}
++
++	return ret;
++}
++
++/* Clean up the runtime PM settings done on serial_core_register_port() */
++static void serial_core_pm_runtime_cleanup(struct kref *ref)
++{
++	struct serial_controller *controller =
++		 container_of(ref, struct serial_controller, ref);
++	struct device *dev = controller->dev;
++
++	pm_runtime_dont_use_autosuspend(dev);
++	pm_suspend_ignore_children(dev, true);
++	if (!controller->supports_autosuspend)
++		pm_runtime_put_sync(dev);
++	if (!controller->implements_pm_runtime) {
++		pm_runtime_set_suspended(dev);
++		pm_runtime_disable(dev);
++	}
++}
++
++/* Called from uart_remove_one_port() and on error path with port_mutex held */
++static void serial_core_unregister_port(struct uart_port *port)
++{
++	unsigned long idx = (unsigned long)port->dev;
++	struct serial_controller *controller;
++
++	/* Check for a registered controller, no struct device early on */
++	controller = radix_tree_lookup(&serial_core_devices, idx);
++	if (!controller)
++		return;
++
++	kref_put(&controller->ref, serial_core_pm_runtime_cleanup);
++
++	controller = radix_tree_delete(&serial_core_devices, idx);
++	kfree(controller);
++}
++
++/* Called from uart_add_one_port() with port_mutex held */
++static int serial_core_register_port(struct uart_port *port,
++				     struct uart_driver *drv)
++{
++	unsigned long idx = (unsigned long)port->dev;
++	struct serial_controller *controller;
++	int ret;
++
++	if (!idx)
++		return 0;
++
++	controller = radix_tree_lookup(&serial_core_devices, idx);
++	if (controller) {
++		port->state->controller = controller;
++		WARN_ON(port->supports_autosuspend != controller->supports_autosuspend);
++		return serial_core_pm_runtime_start(port);
++	}
++
++	controller = kzalloc(sizeof(*controller), GFP_KERNEL);
++	if (!controller)
++		return -ENOMEM;
++
++	controller->drv = drv;
++	controller->dev = port->dev;
++	controller->supports_autosuspend = port->supports_autosuspend;
++	port->state->controller = controller;
++
++	ret = radix_tree_insert(&serial_core_devices, idx, controller);
++	if (ret) {
++		kfree(controller);
++		return ret;
++	}
++
++	ret = serial_core_pm_runtime_start(port);
++	if (ret < 0)
++		serial_core_unregister_port(port);
++
++	return ret;
++}
++
+ /*
+  * Startup the port.  This will be called once per open.  All calls
+  * will be serialised by the per-port mutex.
+@@ -2956,6 +3096,10 @@ int uart_add_one_port(struct uart_driver *drv, struct uart_port *uport)
+ 		goto out;
+ 	}
+ 
++	ret = serial_core_register_port(uport, drv);
++	if (ret)
++		goto out;
++
+ 	/*
+ 	 * If this port is in use as a console then the spinlock is already
+ 	 * initialised.
+@@ -2979,6 +3123,7 @@ int uart_add_one_port(struct uart_driver *drv, struct uart_port *uport)
+ 				    GFP_KERNEL);
+ 	if (!uport->tty_groups) {
+ 		ret = -ENOMEM;
++		serial_core_unregister_port(uport);
+ 		goto out;
+ 	}
+ 	uport->tty_groups[0] = &tty_dev_attr_group;
+@@ -3048,6 +3193,9 @@ int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
+ 		goto out;
+ 	}
+ 	uport->flags |= UPF_DEAD;
++
++	serial_core_unregister_port(uport);
++
+ 	mutex_unlock(&port->mutex);
+ 
+ 	/*
+diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -250,6 +250,7 @@ struct uart_port {
+ 	unsigned char		hub6;			/* this should be in the 8250 driver */
+ 	unsigned char		suspended;
+ 	unsigned char		console_reinit;
++	unsigned char		supports_autosuspend;
+ 	const char		*name;			/* port name */
+ 	struct attribute_group	*attr_group;		/* port specific attributes */
+ 	const struct attribute_group **tty_groups;	/* all attributes (serial core use only) */
+@@ -285,6 +286,8 @@ enum uart_pm_state {
+  * This is the state information which is persistent across opens.
+  */
+ struct uart_state {
++	struct serial_controller *controller;
++
+ 	struct tty_port		port;
+ 
+ 	enum uart_pm_state	pm_state;
+-- 
+2.36.1

@@ -2,147 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E5454C298
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F19BC54C2FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243716AbiFOHZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 03:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35334 "EHLO
+        id S1343990AbiFOHzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 03:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232467AbiFOHZL (ORCPT
+        with ESMTP id S1345611AbiFOHzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 03:25:11 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D4746B0C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:25:10 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id a10so5808368wmj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:25:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=NGo4rRV+VZvdT0hcJzW6pnymtoNuY20VyL3BfwK+vsQ=;
-        b=PPDREC5zr0fQXQ7G6MaJZgrNi8eSCMpiZLg0TLXmzGOZkcQ5lnGffm023x8RCrxWnm
-         0RHnRsCqEQzwRyNVN+EB6znWpMbNwxPeK4kIENpN1ToeaJOJtChy43E4gtApGwIt1YuI
-         xISMw3GYeul6bBNJp0m8wvNTxY8bjsBTz6OHqjPv0UGy1Y/r/Xzp1XCeOuE8k5LlY2XI
-         GBC3UFDN9aI+z1txwK0jrMlSQnOLOJUJqbTHRgybPZKzFfSI/ygaSlIhzbi4y4+NLHfV
-         YxvcwyVon3TauHB+J6R0ejkDHVM7UNHoeQR1Jat8mgf7qHjLK5BzGB4rs9X4dkDbQZm+
-         bK5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=NGo4rRV+VZvdT0hcJzW6pnymtoNuY20VyL3BfwK+vsQ=;
-        b=qOQg4vzVdfxfs6zhPMw/ENI56Ej4bP+7V01x3KFd1q/ktJufiEatTYFqIiKgm91qQl
-         cqnA0RX9F5SCt6RQOS4GyYb4Z6/nqFRgAQe25676zMiHCdGXOfg24ROAUub42n6eT0XM
-         7RJ4qEP1dR6aAjU1s22/GrToIRYvLLyxfHPECd6NWIxVH0Yzv0UT4DFqioZajZlTDAW1
-         QHuxoYNJEyXhy7ClfJZoU7XRxmn1l0CrMb3HbbTtOCu7Hxkyj8423+025OZ1GAt/si0j
-         15BU7kCPcvmOh3dzEa5m79JSMXMT9XTwiL/osTf8weIliAIKZAuFPy4Ef2EW4TMRMPh2
-         LFGQ==
-X-Gm-Message-State: AOAM530HkVyhSN7JJhkCO3/P9Uj8w7XUZTFKLnnolFNh41UVZe6AFXvG
-        wnPm+KIxG3Z7vVPXeLr6KKgHAA==
-X-Google-Smtp-Source: ABdhPJwYNKUeEBAZ4RUybATyRa6XP/R3ueVtMBVOx8BZh7j60wFKsSS2DRvlG4SBSF0xBFk6Exup1A==
-X-Received: by 2002:a7b:ce85:0:b0:39c:4b2e:fd26 with SMTP id q5-20020a7bce85000000b0039c4b2efd26mr8388758wmj.114.1655277908515;
-        Wed, 15 Jun 2022 00:25:08 -0700 (PDT)
-Received: from [10.205.160.53] ([95.83.233.54])
-        by smtp.gmail.com with ESMTPSA id k11-20020a056000004b00b0020d02262664sm13919956wrx.25.2022.06.15.00.25.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 00:25:07 -0700 (PDT)
-Message-ID: <8293b455-1150-edb5-9005-fda4f2d2971b@conchuod.ie>
-Date:   Wed, 15 Jun 2022 08:23:34 +0100
+        Wed, 15 Jun 2022 03:55:03 -0400
+X-Greylist: delayed 1833 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Jun 2022 00:54:55 PDT
+Received: from m15114.mail.126.com (m15114.mail.126.com [220.181.15.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5E3D483AE
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 00:54:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=87keS
+        6uBfC+apPlQLJjIZduN5M2vxYxrur70owcFKC8=; b=UDpocjkK4sVBDsZgmtVKH
+        17U1gXLYVAz/4vezd8EGpUPe8K19QhcJh53FeEnzJ5382lV6jYtOTsQxw3dX5mnN
+        wZ05Xp21HZjRi84eQnCVf0CN+LGIO5pAAgjxsQ4mEAriIMTmMSLijCfy1Xss35G4
+        t3DlWibgivJ86MCvF7+eZs=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp7 (Coremail) with SMTP id DsmowAAXWvkYialip3paDQ--.36376S2;
+        Wed, 15 Jun 2022 15:24:09 +0800 (CST)
+From:   heliang <windhl@126.com>
+To:     lpieralisi@kernel.org, pali@kernel.org
+Cc:     linux-kernel@vger.kernel.org, windhl@126.com
+Subject: [PATCH] bus: mvebu-mbus: Add missing of_node_put in fail path
+Date:   Wed, 15 Jun 2022 15:24:07 +0800
+Message-Id: <20220615072407.3959470-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH 1/5] dt-bindings: pwm: Add Mstar MSC313e PWM devicetree
- bindings documentation
-Content-Language: en-US
-To:     Romain Perier <romain.perier@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220615070813.7720-1-romain.perier@gmail.com>
- <20220615070813.7720-2-romain.perier@gmail.com>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <20220615070813.7720-2-romain.perier@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DsmowAAXWvkYialip3paDQ--.36376S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CrW8Gw43tF4UKr47JFyrWFg_yoW8Jw18pF
+        W7WrWayry0qr4fXFsYy343WFW3KFn7WrWq9FsFk3ZxAa13XFyUJ3y7C34rZF95AFyF9w15
+        tr1Uta1xWF97JF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UY_MfUUUUU=
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi2hkhF1uwMNN+PwAAs8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/06/2022 08:08, Romain Perier wrote:
-> This adds the documentation for the devicetree bindings of the Mstar
-> MSC313e RTC driver, it includes MSC313e SoCs and SSD20xd.
+In mvebu_mbus_dt_init, of_find_matching_node_and_match() and
+of_find_node_by_phandle() will return node pointer with refcounter
+incremented. We should use of_node_put in fail path.
 
-I figure the RTC is a copy paste error?
+Signed-off-by: heliang <windhl@126.com>
+---
+ drivers/bus/mvebu-mbus.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> 
-> Signed-off-by: Romain Perier <romain.perier@gmail.com>
-> ---
->   .../bindings/pwm/mstar,msc313e-pwm.yaml       | 47 +++++++++++++++++++
->   1 file changed, 47 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/pwm/mstar,msc313e-pwm.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/pwm/mstar,msc313e-pwm.yaml b/Documentation/devicetree/bindings/pwm/mstar,msc313e-pwm.yaml
-> new file mode 100644
-> index 000000000000..82f2357db085
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/pwm/mstar,msc313e-pwm.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/pwm/mstar,msc313e-pwm.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mstar MSC313e PWM controller
-> +
-> +allOf:
-> +  - $ref: "pwm.yaml#"
-> +
-> +maintainers:
-> +  - Daniel Palmer <daniel@0x0f.com>
-> +  - Romain Perier <romain.perier@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +        - enum:
-> +          - mstar,msc313e-pwm
-> +          - mstar,ssd20xd-pwm
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  "#pwm-cells":
-> +    const: 2
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    pwm: pwm@3400 {
-> +      compatible = "mstar,msc313e-pwm";
-> +      reg = <0x3400 0x400>;
-> +      #pwm-cells = <2>;
-> +      clocks = <&xtal_div2>;
-> +    };
+diff --git a/drivers/bus/mvebu-mbus.c b/drivers/bus/mvebu-mbus.c
+index db612045616f..7b16ede5097f 100644
+--- a/drivers/bus/mvebu-mbus.c
++++ b/drivers/bus/mvebu-mbus.c
+@@ -1327,22 +1327,28 @@ int __init mvebu_mbus_dt_init(bool is_coherent)
+ 
+ 	prop = of_get_property(np, "controller", NULL);
+ 	if (!prop) {
++		of_node_put(np);
+ 		pr_err("required 'controller' property missing\n");
+ 		return -EINVAL;
+ 	}
+ 
+ 	controller = of_find_node_by_phandle(be32_to_cpup(prop));
+ 	if (!controller) {
++		of_node_put(np);
+ 		pr_err("could not find an 'mbus-controller' node\n");
+ 		return -ENODEV;
+ 	}
+ 
+ 	if (of_address_to_resource(controller, 0, &mbuswins_res)) {
++		of_node_put(np);
++		of_node_put(controller);
+ 		pr_err("cannot get MBUS register address\n");
+ 		return -EINVAL;
+ 	}
+ 
+ 	if (of_address_to_resource(controller, 1, &sdramwins_res)) {
++		of_node_put(np);
++		of_node_put(controller);
+ 		pr_err("cannot get SDRAM register address\n");
+ 		return -EINVAL;
+ 	}
+-- 
+2.25.1
+

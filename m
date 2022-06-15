@@ -2,190 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE15F54D2E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3161C54D2E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233585AbiFOUup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 16:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45158 "EHLO
+        id S1346681AbiFOUur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 16:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346441AbiFOUum (ORCPT
+        with ESMTP id S1345229AbiFOUup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 16:50:42 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E0E54FBA
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 13:50:39 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id x62so17871000ede.10
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 13:50:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/ZXBUIxqBm6uyxBilji48aCf+mfxOLYDgSX9YlArqBA=;
-        b=AFFih5W0o5aUzvDXTiceCSYg5SE+KN4Yx/De279r5ciZaqpBDyOcqdcdiC/LzqV8X7
-         PnPCsy33DMFoDcZ7lX5DenjOwjeThgwf0pGPiQEXOQItddk3Tlgedzx2cbX0jUNvLB3w
-         sQ1VEU9OpHcvPRde5hjUjGOVAQf2t6G+9qNUpMIfhW+FWNkET5vk2prshkwnufPPgtnE
-         XjynoDPD6y9WLVXlrYy1kvocieuQnhn8FhZUbWJo6uHGqHanWuzqhopJrvo8sUzSSex5
-         W16BuQjhUbt4tVZ3SaoojwtiDamYTkHE5UnPO7ToVWD+YS+3Vur7hYHI99lH3fYB7luI
-         KBCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/ZXBUIxqBm6uyxBilji48aCf+mfxOLYDgSX9YlArqBA=;
-        b=FoOrBrNeSPMuPvLrdmjVs9c3JBL3T8m5mULZKjBedOxYohHIz19tTsnShpLEyDOVgB
-         c+AIfF/ThVThVOFc4MvoOAopBbIsOgHSaPXZy2YbOpjKORfMpy9C5i00+iO22rnBMef9
-         rBKBBS56Fo3Dxz6yn34/XU5yoV5G4TH3u21qaHqw1x57BgWsRd3P4B1xoK6D4O5cfG/h
-         h8/UIDP4q8B8JQ+qqg5ethhopScb4vW0lXC4C5saVTVyPvoj1eD0g4Yp6Q0QWyATzLu3
-         BGrfEi0jFcpznoz4Nsguro+J1zGZcieBo1ChVdDWgEPiQGkS2Zf59BAePxzRVPIMdfiV
-         gqjQ==
-X-Gm-Message-State: AJIora8Lz7UXKx/Y+3InYqQQhWVrOl9Jj49KJebbzUs5SdhsMVYLunH2
-        RxwcdoTV242vRGq7MkorhRoSQleJ0ADin5P5jHsGIg==
-X-Google-Smtp-Source: AGRyM1ssS+sc685rYaHH2KgSnyCXAfvHgnC+e/hU1VF6fIg3/zRUdW2cKIeWjcO13qpLymSmg3T/6J3aZ8/+k+qRu8Q=
-X-Received: by 2002:a05:6402:3688:b0:42d:d3ba:4725 with SMTP id
- ej8-20020a056402368800b0042dd3ba4725mr2144623edb.212.1655326237916; Wed, 15
- Jun 2022 13:50:37 -0700 (PDT)
+        Wed, 15 Jun 2022 16:50:45 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6076054FB8;
+        Wed, 15 Jun 2022 13:50:44 -0700 (PDT)
+Received: from [192.168.254.32] (unknown [47.189.24.195])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 4EBE220C3239;
+        Wed, 15 Jun 2022 13:50:43 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 4EBE220C3239
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1655326244;
+        bh=g9704SjoKYmdPNDdsnilrDNVoFNTzb9pQq5FDWCboIk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CdpzSuhYdpPjRSdBKuc4tFQ2xeCwmjUl5arBWWMfq7WF6Dbrb/ZuupbR+7A7RrSu1
+         3w16/w8IReQMB2GF7bl5KZg4sgfw4FpHFQxovdKDtdpQXrhSxc3drB4yxVaSbT/NbJ
+         SzWgEfKyR/m8b+BAmY3xBw7XgHUv5oI/zv+RozRY=
+Message-ID: <0f673713-ce37-1328-59da-2d623a6627e9@linux.microsoft.com>
+Date:   Wed, 15 Jun 2022 15:50:42 -0500
 MIME-Version: 1.0
-References: <20220615051248.1628156-1-tzungbi@kernel.org> <20220615051248.1628156-6-tzungbi@kernel.org>
-In-Reply-To: <20220615051248.1628156-6-tzungbi@kernel.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Wed, 15 Jun 2022 13:50:26 -0700
-Message-ID: <CABXOdTeYf=KsaMeEMOcevRjitvkLDKPeTELfDSmCxyG0OWWjgQ@mail.gmail.com>
-Subject: Re: [PATCH 05/11] platform/chrome: cros_ec_proto: separate cros_ec_wait_until_complete()
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        "open list:CHROME HARDWARE PLATFORM SUPPORT" 
-        <chrome-platform@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RFC PATCH v2 00/20] arm64: livepatch: Use ORC for dynamic frame
+ pointer validation
+Content-Language: en-US
+To:     Mark Rutland <mark.rutland@arm.com>,
+        "Ivan T. Ivanov" <iivanov@suse.de>
+Cc:     jpoimboe@redhat.com, peterz@infradead.org, chenzhongjin@huawei.com,
+        broonie@kernel.org, nobuta.keiya@fujitsu.com,
+        sjitindarsingh@gmail.com, catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <e81e773678f88f7c2ff7480e2eb096973ec198db>
+ <20220524001637.1707472-1-madvenka@linux.microsoft.com>
+ <20220615121844.34v7cos5kcz2hufk@suse> <YqngltNLQJl67yu0@FVFF77S0Q05N>
+From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+In-Reply-To: <YqngltNLQJl67yu0@FVFF77S0Q05N>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-21.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 10:13 PM Tzung-Bi Shih <tzungbi@kernel.org> wrote:
->
-> EC returns EC_RES_IN_PROGRESS if the host command needs more time to
-> complete.  Whenever receives the return code, cros_ec_send_command()
-> sends EC_CMD_GET_COMMS_STATUS to query the command status.
->
-> Separate cros_ec_wait_until_complete() from cros_ec_send_command().
-> It sends EC_CMD_GET_COMMS_STATUS and waits until the previous command
-> was completed, or encountered error, or timed out.
->
-> Signed-off-by: Tzung-Bi Shih <tzungbi@kernel.org>
-> ---
->  drivers/platform/chrome/cros_ec_proto.c | 75 ++++++++++++-------------
->  1 file changed, 36 insertions(+), 39 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> index 0cec013be3d3..466ecb063bd6 100644
-> --- a/drivers/platform/chrome/cros_ec_proto.c
-> +++ b/drivers/platform/chrome/cros_ec_proto.c
-> @@ -134,53 +134,50 @@ static int cros_ec_xfer_command(struct cros_ec_device *ec_dev, struct cros_ec_co
->         return ret;
->  }
->
-> -static int cros_ec_send_command(struct cros_ec_device *ec_dev, struct cros_ec_command *msg)
-> +static int cros_ec_wait_until_complete(struct cros_ec_device *ec_dev, uint32_t *result)
->  {
-> -       int ret = cros_ec_xfer_command(ec_dev, msg);
-> +       struct cros_ec_command *msg;
-> +       struct ec_response_get_comms_status *status;
-> +       int ret = 0, i;
-> +
-> +       msg = kzalloc(sizeof(*msg) + sizeof(*status), GFP_KERNEL);
-> +       if (!msg)
-> +               return -ENOMEM;
->
-> -       if (msg->result == EC_RES_IN_PROGRESS) {
-> -               int i;
-> -               struct cros_ec_command *status_msg;
-> -               struct ec_response_get_comms_status *status;
-> +       msg->command = EC_CMD_GET_COMMS_STATUS;
-> +       msg->insize = sizeof(*status);
->
-> -               status_msg = kmalloc(sizeof(*status_msg) + sizeof(*status),
-> -                                    GFP_KERNEL);
-> -               if (!status_msg)
-> -                       return -ENOMEM;
-> +       status = (struct ec_response_get_comms_status *)msg->data;
->
-> -               status_msg->version = 0;
-> -               status_msg->command = EC_CMD_GET_COMMS_STATUS;
-> -               status_msg->insize = sizeof(*status);
-> -               status_msg->outsize = 0;
-> +       /* Query the EC's status until it's no longer busy or we encounter an error. */
-> +       for (i = 0; i < EC_COMMAND_RETRIES; ++i) {
-> +               usleep_range(10000, 11000);
->
-> -               /*
-> -                * Query the EC's status until it's no longer busy or
-> -                * we encounter an error.
-> -                */
-> -               for (i = 0; i < EC_COMMAND_RETRIES; i++) {
-> -                       usleep_range(10000, 11000);
-> -
-> -                       trace_cros_ec_request_start(status_msg);
-> -                       ret = (*xfer_fxn)(ec_dev, status_msg);
-> -                       trace_cros_ec_request_done(status_msg, ret);
 
-I'll have to spend more time on this; I don't immediately see (from
-the diff) the replacement for the traces, and I don't see what
-happened with xfer_fxn.
 
-Guenter
+On 6/15/22 08:37, Mark Rutland wrote:
+> On Wed, Jun 15, 2022 at 03:18:44PM +0300, Ivan T. Ivanov wrote:
+>> I have run following [1] livepatch tests on kernel build from your repository.
+>> Overall results looks good, but when I run klp_tc_13.shI there is something which
+>> I still can not understand completely. It is because of kaslr.
+>>
+>> [   36.817617] livepatch: enabling patch 'klp_tc_13_livepatch'
+>> [   36.819602] branch_imm_common: offset out of range
+>> [   36.820113] branch_imm_common: offset out of range
+>> [   36.820643] ------------[ ftrace bug ]------------
+>> [   36.821172] ftrace failed to modify
+>> [   36.821173] [<ffffdde931176804>] orig_do_read_active_livepatch_id+0x4/0xa8 [klp_test_support_mod]
+>> [   36.822465]  actual:   e4:01:00:94
+>> [   36.822821] Updating ftrace call site to call a different ftrace function
+>> [   36.823537] ftrace record flags: e4000002
+>> [   36.823953]  (2) R
+>> [   36.823953]  expected tramp: ffffdde96882e224
+>> [   36.824619] ------------[ cut here ]------------
+>> [   36.825125] WARNING: CPU: 0 PID: 950 at kernel/trace/ftrace.c:2085 ftrace_bug+0x98/0x280
+>> [   36.826027] Modules linked in: klp_tc_13_livepatch(OK+) klp_test_support_mod(O) crct10dif_ce
+>> [   36.826943] CPU: 0 PID: 950 Comm: insmod Tainted: G           O  K   5.18.0-rc1-00020-g1ffee6fdcfda #39
+>> [   36.827987] Hardware name: linux,dummy-virt (DT)
+>> [   36.828546] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+>> [   36.829348] pc : ftrace_bug+0x98/0x280
+>> [   36.829790] lr : ftrace_bug+0x228/0x280
+>> [   36.830224] sp : ffff8000084038e0
+>> [   36.830620] x29: ffff8000084038e0 x28: ffff00000485a920 x27: ffffdde931176804
+>> [   36.831419] x26: ffffdde93117d1a0 x25: ffff00000485a900 x24: ffffdde96aea1000
+>> [   36.832226] x23: 0000000000000000 x22: 0000000000000001 x21: ffffdde96a124da0
+>> [   36.833024] x20: ffff0000045620f0 x19: ffffdde96b54a358 x18: ffffffffffffffff
+>> [   36.833818] x17: 5b20386178302f34 x16: 78302b64695f6863 x15: ffffdde96a3078f8
+>> [   36.834621] x14: 0000000000000000 x13: 3432326532383836 x12: ffffdde96ae9b3d8
+>> [   36.835425] x11: 0000000000000001 x10: 0000000000000001 x9 : ffffdde96891305c
+>> [   36.836221] x8 : c0000000ffffefff x7 : 0000000000017fe8 x6 : ffffdde96ae83398
+>> [   36.837023] x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 00000000ffffefff
+>> [   36.837836] x2 : e32439832ffb9700 x1 : 0000000000000000 x0 : 0000000000000022
+>> [   36.838635] Call trace:
+>> [   36.838923]  ftrace_bug+0x98/0x280
+>> [   36.839319]  ftrace_replace_code+0xa0/0xb8
+>> [   36.839768]  ftrace_modify_all_code+0xc0/0x160
+>> [   36.840273]  arch_ftrace_update_code+0x14/0x20
+>> [   36.840780]  ftrace_run_update_code+0x24/0x78
+>> [   36.841283]  ftrace_startup_enable+0x50/0x60
+>> [   36.841781]  ftrace_startup+0xb4/0x178
+>> [   36.842214]  register_ftrace_function+0x68/0x88
+>> [   36.842738]  klp_patch_object+0x1c8/0x330
+>> [   36.843196]  klp_enable_patch+0x468/0x828
+> 
+> IIUC that splat specifically is due to ftrace_modify_call() missing module PLT lookups.
+> 
+> That should be fixed by:
+> 
+>   https://lore.kernel.org/all/20220614080944.1349146-3-mark.rutland@arm.com/
+> 
+> I have not looked at the rest of this series (yet).
+> 
+> Thanks,
+> Mark.
 
-> -                       if (ret == -EAGAIN)
-> -                               continue;
-> -                       if (ret < 0)
-> -                               break;
-> -
-> -                       msg->result = status_msg->result;
-> -                       if (status_msg->result != EC_RES_SUCCESS)
-> -                               break;
-> -
-> -                       status = (struct ec_response_get_comms_status *)
-> -                                status_msg->data;
-> -                       if (!(status->flags & EC_COMMS_STATUS_PROCESSING))
-> -                               break;
-> -               }
-> +               ret = cros_ec_xfer_command(ec_dev, msg);
-> +               if (ret == -EAGAIN)
-> +                       continue;
-> +               if (ret < 0)
-> +                       break;
-> +
-> +               *result = msg->result;
-> +               if (msg->result != EC_RES_SUCCESS)
-> +                       break;
->
-> -               kfree(status_msg);
-> +               if (!(status->flags & EC_COMMS_STATUS_PROCESSING))
-> +                       break;
->         }
->
-> +       kfree(msg);
-> +       return ret;
-> +}
-> +
-> +static int cros_ec_send_command(struct cros_ec_device *ec_dev, struct cros_ec_command *msg)
-> +{
-> +       int ret = cros_ec_xfer_command(ec_dev, msg);
-> +
-> +       if (msg->result == EC_RES_IN_PROGRESS)
-> +               ret = cros_ec_wait_until_complete(ec_dev, &msg->result);
-> +
->         return ret;
->  }
->
-> --
-> 2.36.1.476.g0c4daa206d-goog
->
+Thank you so much, Mark!
+
+I will include this in my patch series until it is upstream.
+
+Madhavan

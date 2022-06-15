@@ -2,101 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF2654CD0B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 024B454CD05
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231337AbiFOPcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
+        id S237136AbiFOPb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354552AbiFOPb2 (ORCPT
+        with ESMTP id S233389AbiFOPba (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:31:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755F62632;
-        Wed, 15 Jun 2022 08:31:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04405616B5;
-        Wed, 15 Jun 2022 15:31:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20695C34115;
-        Wed, 15 Jun 2022 15:31:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655307081;
-        bh=r+yRrxHClzv1P38azR8w13O3Oa7kVO4IL+igkr/tjqg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=NsRoNoq8fE3qubujywO1GcEOTOQeZqx6h1IKN9ZdyW1BfyjX8+3S9GHfirXsE52Zk
-         poqn+5/PPTm0kG4HgW0EbqyJssvgQUfkjUdfoVoQYmO5jrET8HQHq20D9vqx404hZs
-         eyztWGEjNJ7EZYyLa2Dr3JY2xNe1O3Zaw5UbDHAzEczTRMa1u1rUiqDCySwh4Ow6tL
-         RcQy/emi+IQy9h2d5B4kZD2vGXPxcfGbmQBtwvgN1p86y4nd1ZYkhVSMVrnIuvjvqv
-         nRFYEy2X4GTfz0CI0GmNS8PPBycVtoYixfiKfThx8DlVuim19gfzF6lmKFZWZkPPiN
-         xbw7eQaRXz9Pw==
-Date:   Wed, 15 Jun 2022 10:31:19 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Felix Fietkau <nbd@nbd.name>
-Cc:     Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        John Crispin <john@phrozen.org>, Rob Herring <robh@kernel.org>,
-        linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH RESEND v10 1/3] dt-bindings: PCI: Add support for Airoha
- EN7532
-Message-ID: <20220615153119.GA940910@bhelgaas>
+        Wed, 15 Jun 2022 11:31:30 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4DF12AC3;
+        Wed, 15 Jun 2022 08:31:28 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id s135so11677481pgs.10;
+        Wed, 15 Jun 2022 08:31:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=d+jcg+yQkcd4AGPUxYLrsPCSzfjF9FdPwsOM6g8sZGs=;
+        b=PU4FEktVQQ69fhiR8mld02ZkLi3ZfKd/3pEPa9FjJeSdkdMG2IamU6PVK4g/bzuART
+         DSAHxd5dRMzQ9gymQgjGAuvTv2nbR5bbN9LTVKc2es7FMKC/AKZNU/4M7nd1sDvfK15K
+         R/FiCaBnd6t6HDQmEd0prI/eoeFH/z4GdobJWhlDSmG1Xms5NkWG9SnWD3QMGvJWhR5A
+         k5GyMO4eTRjYXPoib9EB3jlhn51jCkym3qqqW0a43eLLiP24W+ZpCvTqe5BUM80coHcX
+         FzDad8SLoC0FnSSql8ol+RXpAV+QZuXQRxhcX/2bh+4tvU5yKiDUBDk7JFOUP5SHnm/n
+         2zbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=d+jcg+yQkcd4AGPUxYLrsPCSzfjF9FdPwsOM6g8sZGs=;
+        b=ea6u/AXJkTSl4AFUL7hRMOTeUp7JG9d6H7siNEK9Vmgt5339062U4jkCok1vxz1TXI
+         qjpw+pcLSoZkT5He4KcL9mramzFJI5SbFJoE/yIUgWvkzE27JuL1m3Y1d/h/QB5mVMEt
+         41t28TOehgCbunvzcVaSBi650vIoQtPLMNSZhYSBSqDNSmARliEFG4bVTxLIN0eilZ2h
+         1y3lwovezYB4uK9/ciLWAsSMsE6wgfy70JQ/D7bUoJqHWkLwi1fBij6mVE7he7y3VI1X
+         ebZNBFBioGnK3OiOTHVPIpui7VH5o5gzVbfacQl+Qdhzt4pKR2mhL9p5XA8Ss3mmMBjy
+         7JCQ==
+X-Gm-Message-State: AJIora/N8yWMRUYzxonwnfrkVckyxTYZyK8Yd6C3dKSy/XykKAhc0uEY
+        4Rt4gm3FHKizy3Gwa2UeH1A=
+X-Google-Smtp-Source: AGRyM1tlW73seD5ob9qWb4lvQw81CBNamFfcz8HzIWN8fF3E6YS7xWhQNOzLJdnxNQh7zQ8a0DOuyg==
+X-Received: by 2002:a63:f156:0:b0:3ab:ada6:b463 with SMTP id o22-20020a63f156000000b003abada6b463mr324159pgk.462.1655307087744;
+        Wed, 15 Jun 2022 08:31:27 -0700 (PDT)
+Received: from localhost ([2406:7400:63:5d34:e6c2:4c64:12ae:aa11])
+        by smtp.gmail.com with ESMTPSA id p5-20020a170903248500b0015e8d4eb1c8sm5810122plw.18.2022.06.15.08.31.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 08:31:27 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 21:01:23 +0530
+From:   Ritesh Harjani <ritesh.list@gmail.com>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz
+Subject: Re: [PATCH -next] ext4: fix bug_on in ext4_iomap_begin as race
+ between bmap and write
+Message-ID: <20220615153123.ab32zt75q7yn7jc5@riteshh-domain>
+References: <20220615135850.1961759-1-yebin10@huawei.com>
+ <20220615152139.vp64tnv46enwnfcs@riteshh-domain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220615125335.96089-1-nbd@nbd.name>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220615152139.vp64tnv46enwnfcs@riteshh-domain>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 02:53:33PM +0200, Felix Fietkau wrote:
-> From: John Crispin <john@phrozen.org>
-> 
-> EN7532 is an ARM based platform SoC integrating the same PCIe IP as
-> MT7622, add a binding for it.
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: John Crispin <john@phrozen.org>
-> Signed-off-by: Felix Fietkau <nbd@nbd.name>
+On 22/06/15 08:51PM, Ritesh Harjani wrote:
+> On 22/06/15 09:58PM, Ye Bin wrote:
+> > We got issue as follows:
+> > ------------[ cut here ]------------
+> > WARNING: CPU: 3 PID: 9310 at fs/ext4/inode.c:3441 ext4_iomap_begin+0x182/0x5d0
+> > RIP: 0010:ext4_iomap_begin+0x182/0x5d0
+> > RSP: 0018:ffff88812460fa08 EFLAGS: 00010293
+> > RAX: ffff88811f168000 RBX: 0000000000000000 RCX: ffffffff97793c12
+> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
+> > RBP: ffff88812c669160 R08: ffff88811f168000 R09: ffffed10258cd20f
+> > R10: ffff88812c669077 R11: ffffed10258cd20e R12: 0000000000000001
+> > R13: 00000000000000a4 R14: 000000000000000c R15: ffff88812c6691ee
+> > FS:  00007fd0d6ff3740(0000) GS:ffff8883af180000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00007fd0d6dda290 CR3: 0000000104a62000 CR4: 00000000000006e0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > Call Trace:
+> >  iomap_apply+0x119/0x570
+> >  iomap_bmap+0x124/0x150
+> >  ext4_bmap+0x14f/0x250
+> >  bmap+0x55/0x80
+> >  do_vfs_ioctl+0x952/0xbd0
+> >  __x64_sys_ioctl+0xc6/0x170
+> >  do_syscall_64+0x33/0x40
+> >  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> >
+> > Above issue may happen as follows:
+> >           bmap                    write
+> > bmap
+> >   ext4_bmap
+> >     iomap_bmap
+> >       ext4_iomap_begin
+> >                             ext4_file_write_iter
+> > 			      ext4_buffered_write_iter
+> > 			        generic_perform_write
+> > 				  ext4_da_write_begin
+> > 				    ext4_da_write_inline_data_begin
+> > 				      ext4_prepare_inline_data
+> > 				        ext4_create_inline_data
+> > 					  ext4_set_inode_flag(inode,
+> > 						EXT4_INODE_INLINE_DATA);
+> >       if (WARN_ON_ONCE(ext4_has_inline_data(inode))) ->trigger bug_on
+> >
+> > To solved above issue hold inode lock in ext4_bamp.
+> 											^^^ ext4_bmap()
+>
+> I checked the paths where bmap() kernel api can be called i.e. from jbd2/fc and
+> generic_swapfile_activate() (apart from ioctl())
+> For jbd2, it will be called with j_inode within bmap(), hence taking a inode lock
+> of the inode passed within ext4_bmap() (j_inode in this case) should be safe here.
+> Same goes with swapfile path as well.
+>
+> However I feel maybe we should hold inode_lock_shared() since there is no
+> block/extent map layout changes that can happen via ext4_bmap().
+> Hence read lock is what IMO should be used here.
 
-Applied patches 1 & 2 to pci/ctrl/mediatek for v5.20, thanks!
+On second thoughts, shoudn't we use ext4_iomap_report_ops here?
+Can't recollect why we didn't use ext4_iomap_report_ops for iomap_bmap() in the
+first place. Should be good to verify it once.
 
-I assume patch 3 for:
+-ritesh
 
-  arch/arm/boot/dts/en7523-evb.dts
-  arch/arm/boot/dts/en7523.dtsi
 
-needs to go through an ARM tree, right?
-
-> ---
->  Documentation/devicetree/bindings/pci/mediatek-pcie.txt | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie.txt b/Documentation/devicetree/bindings/pci/mediatek-pcie.txt
-> index 57ae73462272..684227522267 100644
-> --- a/Documentation/devicetree/bindings/pci/mediatek-pcie.txt
-> +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie.txt
-> @@ -7,6 +7,7 @@ Required properties:
->  	"mediatek,mt7622-pcie"
->  	"mediatek,mt7623-pcie"
->  	"mediatek,mt7629-pcie"
-> +	"airoha,en7523-pcie"
->  - device_type: Must be "pci"
->  - reg: Base addresses and lengths of the root ports.
->  - reg-names: Names of the above areas to use during resource lookup.
-> -- 
-> 2.36.1
-> 
+>
+> -ritesh
+>
+>
+> >
+> > Signed-off-by: Ye Bin <yebin10@huawei.com>
+> > ---
+> >  fs/ext4/inode.c | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+> > index 53877ffe3c41..f4a95c80f644 100644
+> > --- a/fs/ext4/inode.c
+> > +++ b/fs/ext4/inode.c
+> > @@ -3142,13 +3142,15 @@ static sector_t ext4_bmap(struct address_space *mapping, sector_t block)
+> >  {
+> >  	struct inode *inode = mapping->host;
+> >  	journal_t *journal;
+> > +	sector_t ret = 0;
+> >  	int err;
+> >
+> > +	inode_lock(inode);
+> >  	/*
+> >  	 * We can get here for an inline file via the FIBMAP ioctl
+> >  	 */
+> >  	if (ext4_has_inline_data(inode))
+> > -		return 0;
+> > +		goto out;
+> >
+> >  	if (mapping_tagged(mapping, PAGECACHE_TAG_DIRTY) &&
+> >  			test_opt(inode->i_sb, DELALLOC)) {
+> > @@ -3187,10 +3189,14 @@ static sector_t ext4_bmap(struct address_space *mapping, sector_t block)
+> >  		jbd2_journal_unlock_updates(journal);
+> >
+> >  		if (err)
+> > -			return 0;
+> > +			goto out;
+> >  	}
+> >
+> > -	return iomap_bmap(mapping, block, &ext4_iomap_ops);
+> > +	ret = iomap_bmap(mapping, block, &ext4_iomap_ops);
+> > +
+> > +out:
+> > +	inode_unlock(inode);
+> > +	return ret;
+> >  }
+> >
+> >  static int ext4_read_folio(struct file *file, struct folio *folio)
+> > --
+> > 2.31.1
+> >

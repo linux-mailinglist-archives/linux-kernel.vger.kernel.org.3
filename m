@@ -2,134 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4122254C4B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2255F54C4BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347939AbiFOJdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
+        id S1347964AbiFOJek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347835AbiFOJd2 (ORCPT
+        with ESMTP id S242322AbiFOJei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:33:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64621902F;
-        Wed, 15 Jun 2022 02:33:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6056FB81D2C;
-        Wed, 15 Jun 2022 09:33:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 056B6C34115;
-        Wed, 15 Jun 2022 09:33:20 +0000 (UTC)
-Message-ID: <63052d74-d3c7-a9cc-cb18-a58f8937ec06@xs4all.nl>
-Date:   Wed, 15 Jun 2022 11:33:19 +0200
+        Wed, 15 Jun 2022 05:34:38 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0D0220E1;
+        Wed, 15 Jun 2022 02:34:37 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4LNKrK43bBzDqt9;
+        Wed, 15 Jun 2022 17:34:09 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 15 Jun 2022 17:34:35 +0800
+Subject: Re: [PATCH -next] selinux: Fix potential memory leak in
+ selinux_add_opt
+To:     Paul Moore <paul@paul-moore.com>
+CC:     <stephen.smalley.work@gmail.com>, <eparis@parisplace.org>,
+        <omosnace@redhat.com>, <selinux@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220611090550.135674-1-xiujianfeng@huawei.com>
+ <CAHC9VhSwYdrHw8jNYxWApPYMjnmX-ZDN1=CzmRBeS1HoL-KOOA@mail.gmail.com>
+ <c54658e5-f0bd-b3f6-3cf8-d7d0e8b1c4df@huawei.com>
+ <CAHC9VhTkfBm8zCDw=m+jaDZW15LB+bRJ5+ymxsSJKW=V645S2g@mail.gmail.com>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+Message-ID: <d7947bfd-b8f4-9ca5-ad1d-ce9489f6ab4e@huawei.com>
+Date:   Wed, 15 Jun 2022 17:34:35 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v8 01/17] videodev2.h: add V4L2_CTRL_FLAG_DYNAMIC_ARRAY
-Content-Language: en-US
-To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        mchehab@kernel.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com, wens@csie.org,
-        jernej.skrabec@gmail.com, samuel@sholland.org,
-        nicolas.dufresne@collabora.com, andrzej.p@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        kernel@collabora.com, Hans Verkuil <hverkuil-cisco@xs4all.nl>
-References: <20220614083614.240641-1-benjamin.gaignard@collabora.com>
- <20220614083614.240641-2-benjamin.gaignard@collabora.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20220614083614.240641-2-benjamin.gaignard@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAHC9VhTkfBm8zCDw=m+jaDZW15LB+bRJ5+ymxsSJKW=V645S2g@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
 
-On 6/14/22 10:35, Benjamin Gaignard wrote:
-> From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> 
-> Add a new flag that indicates that this control is a dynamically sized
-> array. Also document this flag.
-> 
-> Currently dynamically sized arrays are limited to one dimensional arrays,
-> but that might change in the future if there is a need for it.
-> 
-> The initial use-case of dynamic arrays are stateless codecs. A frame
-> can be divided in many slices, so you want to provide an array containing
-> slice information for each slice. Typically the number of slices is small,
-> but the standard allow for hundreds or thousands of slices. Dynamic arrays
-> are a good solution since sizing the array for the worst case would waste
-> substantial amounts of memory.
-> 
-> Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-> ---
->  .../userspace-api/media/v4l/vidioc-queryctrl.rst          | 8 ++++++++
->  include/uapi/linux/videodev2.h                            | 1 +
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-> index 88f630252d98..a20dfa2a933b 100644
-> --- a/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-> +++ b/Documentation/userspace-api/media/v4l/vidioc-queryctrl.rst
-> @@ -625,6 +625,14 @@ See also the examples in :ref:`control`.
->  	``V4L2_CTRL_FLAG_GRABBED`` flag when buffers are allocated or
->  	streaming is in progress since most drivers do not support changing
->  	the format in that case.
-> +    * - ``V4L2_CTRL_FLAG_DYNAMIC_ARRAY``
-> +      - 0x0800
-> +      - This control is a dynamically sized 1-dimensional array. It
-> +        behaves the same as a regular array, except that the number
-> +	of elements as reported by the ``elems`` field is between 1 and
-> +	``dims[0]``. So setting the control with a differently sized
-> +	array will change the ``elems`` field when the control is
-> +	queried afterwards.
+在 2022/6/15 9:17, Paul Moore 写道:
+> On Mon, Jun 13, 2022 at 9:18 PM xiujianfeng <xiujianfeng@huawei.com> wrote:
+>> 在 2022/6/14 4:22, Paul Moore 写道:
+>>> On Sat, Jun 11, 2022 at 5:07 AM Xiu Jianfeng <xiujianfeng@huawei.com> wrote:
+>>>> In the entry of selinux_add_opt, *mnt_opts may be assigned to new
+>>>> allocated memory, and also may be freed and reset at the end of the
+>>>> function. however, if security_context_str_to_sid failed, it returns
+>>>> directly and skips the procedure for free and reset, even if it may be
+>>>> handled at the caller of this function, It is better to handle it
+>>>> inside.
+>>>>
+>>>> Fixes: 70f4169ab421 ("selinux: parse contexts for mount options early")
+>>>> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+>>>> ---
+>>>>    security/selinux/hooks.c | 12 +++++++-----
+>>>>    1 file changed, 7 insertions(+), 5 deletions(-)
+>>> Have you actually observed a memory leak from the selinux_mnt_opts
+>>> allocation in selinux_add_opt()?
+>>>
+>>> The selinux_add_opt() function has two callers:
+>>> selinux_sb_eat_lsm_opts() and selinux_fs_context_parse_param().  The
+>>> former cleans up the selinux_mnt_opts allocation it its error handler
+>>> while the latter will end up calling
+>>> security_free_mnt_opts()/selinux_free_mnt_opts() to free the
+>>> fs_context:security when the fs_context is destroyed.
+>>>
+>>> This patch shouldn't be necessary.
+>> I may not have made it clear, I said potential means may have a third
+>> caller in the future.
+> Let's not worry about it.  If you wanted to add a comment header to
+> the function (see selinux_skb_peerlbl_sid() for an example) to make it
+> clear that callers are responsible for cleaning up @mnt_opts on error
+> I think that would be okay ... although even that is going to be a
+> problem in the new mount API case where selinux_add_opt() is going to
+> be called multiple times.
+>
+>> I think the error handler as following is not necessary:
+>>
+>> err:
+>>           if (is_alloc_opts) {
+>>                   kfree(opts);
+>>                   *mnt_opts = NULL;
+>>           }
+>>
+>> otherwise, some error paths goto err label while others don't, It's
+>> confusing.
+> That's a fair point.  Looking at the patch which added it, we should
+> probably also return EINVAL when @s is NULL instead of ENOMEM.  In
+> fact, in all the cases where we currently jump to @err, I think we are
+> guaranteed that @is_alloc_opts is false as it requires a previously
+> populated @opts.
+>
+> If you want to submit another patch, I would suggest doing the
+> following in the patch:
+>
+> 1. Change the @s NULL check to return -EINVAL when @s is NULL.
+> 2. Allocate @opts/@mnt_opts if NULL, but don't call kfree() on the
+> object in case of error.  The new mount API will cleanup when it is
+> done and selinux_sb_eat_lsm_opts() will cleanup on error.
+>
+> If you don't have time to put together a patch for this, let me know and I will.
 
-I am proposing a change to the dynamic array implementation: initially
-dynamic array controls start off as empty arrays (0 elements). This also
-allows userspace to set a dynamic array control to an empty array.
+no problem, I will do it, thanks for your suggestion.
 
-It probably would also make sense to add a min_dyn_elems to set the minimum
-allowed number of elements for a dynamic array. This would most likely be
-either 0 or 1.
-
-In the context of this HEVC series, does it help to allow empty dynamic arrays?
-
-For V4L2_CID_STATELESS_HEVC_ENTRY_POINT_OFFSETS in particular it looks like
-it would make sense since I think (correct me if I am wrong) there can be 0
-entry point offsets. So with empty arrays supported would the field
-num_entry_point_offsets still be needed?
-
-If you want to test, then let me know and I mail a very simple patch adding
-support for empty arrays (not yet min_dyn_elems, though).
-
-Regards,
-
-	Hans
-
->  
->  Return Value
->  ============
-> diff --git a/include/uapi/linux/videodev2.h b/include/uapi/linux/videodev2.h
-> index 5311ac4fde35..9018aa984db3 100644
-> --- a/include/uapi/linux/videodev2.h
-> +++ b/include/uapi/linux/videodev2.h
-> @@ -1890,6 +1890,7 @@ struct v4l2_querymenu {
->  #define V4L2_CTRL_FLAG_HAS_PAYLOAD	0x0100
->  #define V4L2_CTRL_FLAG_EXECUTE_ON_WRITE	0x0200
->  #define V4L2_CTRL_FLAG_MODIFY_LAYOUT	0x0400
-> +#define V4L2_CTRL_FLAG_DYNAMIC_ARRAY	0x0800
->  
->  /*  Query flags, to be ORed with the control ID */
->  #define V4L2_CTRL_FLAG_NEXT_CTRL	0x80000000
+>

@@ -2,45 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1727054C4E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:41:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D22954C4E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346258AbiFOJlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52294 "EHLO
+        id S1344777AbiFOJlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345740AbiFOJkw (ORCPT
+        with ESMTP id S1346319AbiFOJlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:40:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B890B40E6B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:40:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 92532152B;
-        Wed, 15 Jun 2022 02:40:51 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4245C3F66F;
-        Wed, 15 Jun 2022 02:40:50 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 10:40:40 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, etienne.carriere@linaro.org,
-        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
-Subject: Re: [PATCH 11/22] firmware: arm_scmi: Add SCMIv3.1 extended names
- protocols support
-Message-ID: <Yqmo/BiIR4gku0Y+@e120937-lin>
-References: <20220330150551.2573938-1-cristian.marussi@arm.com>
- <20220330150551.2573938-12-cristian.marussi@arm.com>
- <6f865d7f-fde8-d923-3c7e-d12bfbc370a6@gmail.com>
- <YqmVsMGgxKuIT5rx@e120937-lin>
+        Wed, 15 Jun 2022 05:41:51 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484833ED3A;
+        Wed, 15 Jun 2022 02:41:50 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D149F1F984;
+        Wed, 15 Jun 2022 09:41:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655286108; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6f7LmKgyp4C8f+DMh1UfRQSRSKDECQlQXNjM/3tlkyo=;
+        b=rPB+1CRTKgd1xPx+KfMeX7FH++oXL054wTxWh/VeuqEnfRgUvdFyCoe1i9QT9dZHb7dN6+
+        SEfh9+QHmzs6BFs0HZFap5dhkOAXUqM/Ow7idrU6Y7xzs5Hd7xFvHEWCN+1HyzTxHbrLPF
+        8eDixoxZXMqwKeUHQaWnpB6468MAj8U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655286108;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6f7LmKgyp4C8f+DMh1UfRQSRSKDECQlQXNjM/3tlkyo=;
+        b=ZSz1y2A0+YrDzowCa3edbEWx/AQMWCa3u9CIIgE0Er5JfKqm+Hk5k6lZYIMcbnYtrImkfG
+        ebyR0VSchAMrRNDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 88596139F3;
+        Wed, 15 Jun 2022 09:41:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id CLd7IFypqWIFRQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Wed, 15 Jun 2022 09:41:48 +0000
+Message-ID: <9a4a9afe-bbe1-4cb3-713b-f1e4e6d2a049@suse.cz>
+Date:   Wed, 15 Jun 2022 11:41:48 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqmVsMGgxKuIT5rx@e120937-lin>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH mm v6] mm/tracing: add 'accounted' entry into output of
+ allocation tracepoints
+Content-Language: en-US
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Michal Hocko <mhocko@suse.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>, cgroups@vger.kernel.org
+References: <c1676616-1405-5bcb-af02-c1e9cc83dace@openvz.org>
+ <c418ed25-65fe-f623-fbf8-1676528859ed@openvz.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <c418ed25-65fe-f623-fbf8-1676528859ed@openvz.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,104 +88,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 09:18:03AM +0100, Cristian Marussi wrote:
-> On Wed, Jun 15, 2022 at 05:45:11AM +0200, Florian Fainelli wrote:
-> > 
-> > 
-> > On 3/30/2022 5:05 PM, Cristian Marussi wrote:
-> > > Using the common protocol helper implementation add support for all new
-> > > SCMIv3.1 extended names commands related to all protocols with the
-> > > exception of SENSOR_AXIS_GET_NAME.
-> > > 
-> > > Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-> > 
-> > This causes the following splat on a platform where regulators fail to
-> > initialize:
-> > 
+On 6/3/22 05:21, Vasily Averin wrote:
+> Slab caches marked with SLAB_ACCOUNT force accounting for every
+> allocation from this cache even if __GFP_ACCOUNT flag is not passed.
+> Unfortunately, at the moment this flag is not visible in ftrace output,
+> and this makes it difficult to analyze the accounted allocations.
 > 
-> Hi Florian,
+> This patch adds boolean "accounted" entry into trace output,
+> and set it to 'true' for calls used __GFP_ACCOUNT flag and
+> for allocations from caches marked with SLAB_ACCOUNT.
+> Set it to 'false' if accounting is disabled in configs.
 > 
-> thanks for the report.
-> 
-> It seems a memory error while allocating so it was not meant to be
-> solved by the fixes, anyway, I've never seen this splat in my testing
-> and at first sight I cannot see anything wrong in the devm_k* calls
-> inside scmi_voltage_protocol_init...is there any particular config in
-> your setup ?
-> 
-> Moreover, the WARNING line 5402 seems to match v5.19-rc1 and it has
-> slightly changed with -rc-1, so I'll try rebasing on that at first and
-> see if I can reproduce the issue locally.
-> 
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
+> Acked-by: Shakeel Butt <shakeelb@google.com>
+> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Acked-by: Muchun Song <songmuchun@bytedance.com>
+> Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 
-I just re-tested the series rebased on v519-rc1 plus fixes and I cannot
-reproduce in my setup with a few (~9) good and bad voltage domains.
-
-How many voltage domains are advertised by the platform in your setup ?
-
-Thanks,
-Cristian
+Thanks, added to slab/for-5.20/tracing
 
 > 
-> > [    0.603737] ------------[ cut here ]------------
-> > [    0.603752] WARNING: CPU: 1 PID: 1 at mm/page_alloc.c:5402
-> > __alloc_pages+0x6c/0x184
-> > [    0.603797] Modules linked in:
-> > [    0.603809] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
-> > 5.19.0-rc1-g44dbdf3bb3f4 #42
-> > [    0.603818] Hardware name: BCX972160SV (DT)
-> > [    0.603825] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS
-> > BTYPE=--)
-> > [    0.603834] pc : __alloc_pages+0x6c/0x184
-> > [    0.603841] lr : kmalloc_order+0x40/0x88
-> > [    0.603851] sp : ffffffc00a40b850
-> > [    0.603856] x29: ffffffc00a40b850 x28: 0000000000000000 x27:
-> > ffffffc008d60404
-> > [    0.603867] x26: ffffff80c1e3e1a8 x25: ffffffc00877bd78 x24:
-> > 0000000000000058
-> > [    0.603878] x23: ffffffc0081921a8 x22: ffffffc008cb04b0 x21:
-> > 0000000000000000
-> > [    0.603889] x20: 000000000000000b x19: 000000000000000b x18:
-> > 0000000000000000
-> > [    0.603900] x17: 0000000000000001 x16: 0000000100000000 x15:
-> > 000000000000000a
-> > [    0.603911] x14: 0000000000000000 x13: ffffff80c1e3c20a x12:
-> > ffffffffffffffff
-> > [    0.603922] x11: 0000000000000020 x10: 0000000000000880 x9 :
-> > ffffffc008159dac
-> > [    0.603932] x8 : ffffff80c02708e0 x7 : 0000000000000004 x6 :
-> > 000000000041a880
-> > [    0.603943] x5 : 0000000000000001 x4 : ffffff8000000000 x3 :
-> > 0000000000000000
-> > [    0.603954] x2 : 0000000000000000 x1 : 0000000000000001 x0 :
-> > ffffffc00a32d3f2
-> > [    0.603965] Call trace:
-> > [    0.603970]  __alloc_pages+0x6c/0x184
-> > [    0.603977]  kmalloc_order+0x40/0x88
-> > [    0.603984]  kmalloc_order_trace+0x30/0xd0
-> > [    0.603992]  __kmalloc_track_caller+0x64/0x19c
-> > [    0.603999]  devm_kmalloc+0x5c/0xe0
-> > [    0.604009]  scmi_voltage_protocol_init+0x14c/0x2f4
-> > [    0.604020]  scmi_get_protocol_instance+0x128/0x1f4
-> > [    0.604030]  scmi_devm_protocol_get+0x64/0xc8
-> > [    0.604037]  scmi_regulator_probe+0x5c/0x42c
-> > [    0.604049]  scmi_dev_probe+0x28/0x38
-> > [    0.604056]  really_probe+0x1b8/0x380
-> > [    0.604065]  __driver_probe_device+0x14c/0x164
-> > [    0.604073]  driver_probe_device+0x48/0xe0
-> > [    0.604080]  __driver_attach+0x160/0x170
-> > [    0.604087]  bus_for_each_dev+0x78/0xb8
-> > [    0.604095]  driver_attach+0x28/0x30
-> > [    0.604101]  bus_add_driver+0xf4/0x208
-> > [    0.604108]  driver_register+0xb4/0xf0
-> > [    0.604116]  scmi_driver_register+0x5c/0xa4
-> > [    0.604123]  scmi_drv_init+0x28/0x30
-> > [    0.604132]  do_one_initcall+0x80/0x1a4
-> > [    0.604141]  kernel_init_freeable+0x220/0x23c
-> > [    0.604149]  kernel_init+0x28/0x128
-> > [    0.604158]  ret_from_fork+0x10/0x20
-> > [    0.604166] ---[ end trace 0000000000000000 ]---
-> > [    0.604194] scmi-regulator: probe of scmi_dev.2 failed with error -12
-> > [    0.604792] arm-scmi brcm_scmi@0: Failed. SCMI protocol 22 not active.
-> > -- 
-> > Florian
+> ---
+> v6:
+>  1) subject changed from "tracing:" to "mm/tracing:"
+>  2) set flag to 'false' if accounting is disabled in configs
+
+Looks like you forgot the kmem_alloc_node variant, fixed up locally:
+
+--- a/include/trace/events/kmem.h
++++ b/include/trace/events/kmem.h
+@@ -94,8 +94,9 @@ DECLARE_EVENT_CLASS(kmem_alloc_node,
+                __entry->bytes_alloc    = bytes_alloc;
+                __entry->gfp_flags      = (__force unsigned long)gfp_flags;
+                __entry->node           = node;
+-               __entry->accounted      = (gfp_flags & __GFP_ACCOUNT) ||
+-                                         (s && s->flags & SLAB_ACCOUNT);
++               __entry->accounted      = IS_ENABLED(CONFIG_MEMCG_KMEM) ?
++                                         ((gfp_flags & __GFP_ACCOUNT) ||
++                                         (s && s->flags & SLAB_ACCOUNT)) : false;
+        ),
+ 
+        TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s node=%d accounted=%s",

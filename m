@@ -2,86 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E8B54D562
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 01:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD6AD54D56D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 01:41:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237157AbiFOXew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 19:34:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
+        id S1346524AbiFOXkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 19:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350553AbiFOXev (ORCPT
+        with ESMTP id S230172AbiFOXkx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 19:34:51 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13FF51A077
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:34:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655336089; x=1686872089;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FVibG3O2Jo4wE/8uawKSqXUP1QevxdRcM/UXljHqIJU=;
-  b=BHRmxsMg380f1oJMBB9HtZ4qpNP3bQEB4V1fj83+PAFOWktIPAPsArKB
-   1CivRE9WAD1CRkGymR/6NL6J2BX6MyLHJZkndyys1Aoh+n3T7EyBvpN0l
-   ysxyF7cgWfkGwaCuI7OcNxxCqIueX51BwKUggPq1GI156NFC8XoSlCQTA
-   EGc8YiUUa5S9lb4rM/DrlPNihIJeXw2qbq9B5Cm3aEhAsargLPeFrKOep
-   5pEXxc/l05pG8WMf/4zH6pQn3/erYm8CXf+1riZNIMOXtFrSPseWnRLIl
-   n7Vdh+7Q5wlmeODnS2bMawfp4gNsUtWv7ERVOlyXfeTKLQacdaYABQ8g6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="277920172"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="277920172"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 16:34:48 -0700
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="559425521"
-Received: from mjortiz-mobl.amr.corp.intel.com (HELO [10.212.185.241]) ([10.212.185.241])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 16:34:48 -0700
-Message-ID: <db63853f-dbd8-7593-032d-e674046bff8e@intel.com>
-Date:   Wed, 15 Jun 2022 16:34:48 -0700
+        Wed, 15 Jun 2022 19:40:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CFA136332;
+        Wed, 15 Jun 2022 16:40:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17DC261A25;
+        Wed, 15 Jun 2022 23:40:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EE0AC3411A;
+        Wed, 15 Jun 2022 23:40:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655336451;
+        bh=oSj2REQ5qGLGBBrSe5qR+g1EGWydDN+7KvkPWe4Dyo4=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=LUW1bMXvrBoJoj1dB2FuYZFam/bHc7Ly+IxnWxq6Eb8tkpXlgcaemVUcTi8TY4Mj6
+         uHZLAofAPPPATkiVmcMgvzpBt62ULG6W6WGlXSJGSocKm3EFl3Z8hx0RCnMvyecbzY
+         WLLEW+JmY1nObyduCjwaVJfMU8rdhhVpDjLZzvIU4VvLwXf8/ZlyeF1dtohOyzFKSu
+         y8zUBntYlUWGr/91mAzroQtwqdOzKbJoEawyIF/BwKQoECNk0wFztH29gRlL7r4aN8
+         oOZ6g0VIMBXuP+1EKhMpG4IYmehNZyQ2KnPhCGHeYpGcIPz9M6QPoCSvKLbOoywOEW
+         VU8wLej/gSrQQ==
+Date:   Wed, 15 Jun 2022 16:40:42 -0700 (PDT)
+From:   Stefano Stabellini <sstabellini@kernel.org>
+X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
+To:     Juergen Gross <jgross@suse.com>
+cc:     xen-devel@lists.xenproject.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: Re: [PATCH] xen: don't require virtio with grants for non-PV
+ guests
+In-Reply-To: <20220615084835.27113-1-jgross@suse.com>
+Message-ID: <alpine.DEB.2.22.394.2206151336230.2430546@ubuntu-linux-20-04-desktop>
+References: <20220615084835.27113-1-jgross@suse.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCHv4 3/3] x86/tdx: Handle load_unaligned_zeropad() page-cross
- to a shared page
-Content-Language: en-US
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org
-Cc:     ak@linux.intel.com, dan.j.williams@intel.com, david@redhat.com,
-        hpa@zytor.com, linux-kernel@vger.kernel.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        thomas.lendacky@amd.com, x86@kernel.org
-References: <20220614120135.14812-1-kirill.shutemov@linux.intel.com>
- <20220614120135.14812-4-kirill.shutemov@linux.intel.com>
- <20220615225200.lflv4tbqus6lnj5u@black.fi.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220615225200.lflv4tbqus6lnj5u@black.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/22 15:52, Kirill A. Shutemov wrote:
->> +	vaddr = (unsigned long)insn_get_addr_ref(&insn, regs);
->> +	if (vaddr / PAGE_SIZE != (vaddr + size) / PAGE_SIZE)
-> Oops. I just realized it has off-by-one. It supposed to be:
+On Wed, 15 Jun 2022, Juergen Gross wrote:
+> Commit fa1f57421e0b ("xen/virtio: Enable restricted memory access using
+> Xen grant mappings") introduced a new requirement for using virtio
+> devices: the backend now needs to support the VIRTIO_F_ACCESS_PLATFORM
+> feature.
 > 
-> 	if (vaddr / PAGE_SIZE != (vaddr + size - 1) / PAGE_SIZE)
+> This is an undue requirement for non-PV guests, as those can be operated
+> with existing backends without any problem, as long as those backends
+> are running in dom0.
+> 
+> Per default allow virtio devices without grant support for non-PV
+> guests.
+> 
+> The setting can be overridden by using the new "xen_virtio_grant"
+> command line parameter.
+> 
+> Add a new config item to always force use of grants for virtio.
+> 
+> Fixes: fa1f57421e0b ("xen/virtio: Enable restricted memory access using Xen grant mappings")
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> ---
+>  .../admin-guide/kernel-parameters.txt         |  6 +++++
+>  drivers/xen/Kconfig                           |  9 ++++++++
+>  drivers/xen/grant-dma-ops.c                   | 22 +++++++++++++++++++
+>  include/xen/xen.h                             | 12 +++++-----
+>  4 files changed, 42 insertions(+), 7 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 8090130b544b..7960480c6fe4 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -6695,6 +6695,12 @@
+>  			improve timer resolution at the expense of processing
+>  			more timer interrupts.
+>  
+> +	xen_virtio_grant= [XEN]
+> +			Control whether virtio devices are required to use
+> +			grants when running as a Xen guest. The default is
+> +			"yes" for PV guests or when the kernel has been built
+> +			with CONFIG_XEN_VIRTIO_FORCE_GRANT set.
+> +
+>  	xen.balloon_boot_timeout= [XEN]
+>  			The time (in seconds) to wait before giving up to boot
+>  			in case initial ballooning fails to free enough memory.
+> diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
+> index bfd5f4f706bc..a65bd92121a5 100644
+> --- a/drivers/xen/Kconfig
+> +++ b/drivers/xen/Kconfig
+> @@ -355,4 +355,13 @@ config XEN_VIRTIO
+>  
+>  	  If in doubt, say n.
+>  
+> +config XEN_VIRTIO_FORCE_GRANT
+> +	bool "Require Xen virtio support to use grants"
+> +	depends on XEN_VIRTIO
+> +	help
+> +	  Require virtio for Xen guests to use grant mappings.
+> +	  This will avoid the need to give the backend the right to map all
+> +	  of the guest memory. This will need support on the backend side
+> +	  (e.g. qemu or kernel, depending on the virtio device types used).
+> +
+>  endmenu
+> diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
+> index fc0142484001..d1fae789dfad 100644
+> --- a/drivers/xen/grant-dma-ops.c
+> +++ b/drivers/xen/grant-dma-ops.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/dma-map-ops.h>
+>  #include <linux/of.h>
+>  #include <linux/pfn.h>
+> +#include <linux/platform-feature.h>
+>  #include <linux/xarray.h>
+>  #include <xen/xen.h>
+>  #include <xen/xen-ops.h>
+> @@ -27,6 +28,27 @@ static DEFINE_XARRAY(xen_grant_dma_devices);
+>  
+>  #define XEN_GRANT_DMA_ADDR_OFF	(1ULL << 63)
+>  
+> +static bool __initdata xen_virtio_grants;
+> +static bool __initdata xen_virtio_grants_set;
+> +static __init int parse_use_grants(char *arg)
+> +{
+> +	if (!strcmp(arg, "yes"))
+> +		xen_virtio_grants = true;
+> +	else if (!strcmp(arg, "no"))
+> +		xen_virtio_grants = false;
+> +	xen_virtio_grants_set = true;
+> +
+> +	return 0;
+> +}
+> +early_param("xen_virtio_grant", parse_use_grants);
+> +
+> +void xen_set_restricted_virtio_memory_access(void)
+> +{
+> +	if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) || xen_virtio_grants ||
+> +	    (!xen_virtio_grants_set && xen_pv_domain()))
+> +		platform_set(PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS);
+> +}
 
-That was bugging me.  Glad you caught this.
+I agree with Christoph on this.
 
-Wouldn't this be more obviously correct?
+On ARM all guests are HVM guests. Unless I am reading this wrongly, with
+this check, the user needs to pass the xen_virtio_grant command line
+option or add CONFIG_XEN_VIRTIO_FORCE_GRANT to the build to use virtio
+with grants. Instead, it should be automatic.
 
-	if (ALIGN_DOWN(vaddr,        PAGE_SIZE) !=
-	    ALIGN_DOWN(vaddr + size, PAGE_SIZE))
-		...
+I am not against adding new command line or compile-time options. But
+on ARM we already have all the information we need in device tree with
+"iommus" and "xen,grant-dma". We don't need anything more.
 
-I don't think we have a PAGE_ALIGN_DOWN().
+On ARM if "xen,grant-dma" is present we need to enable
+PLATFORM_VIRTIO_RESTRICTED_MEM_ACCESS, otherwise we don't.
+
+So I think it should be something like the appended (untested):
+
+- on ARM we call xen_set_restricted_virtio_memory_access if
+  xen,grant-dma is present in device tree
+- on x86 ideally we would have something like xen,grant-dma in a Xen
+  ACPI table, but for now:
+    - always restrict for PV guests (no change)
+    - only restrict for HVM guests if a new cmdline option is passed
+    - so the command line option is only for Xen x86 HVM guests
+    - no need for another build-time option
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 2522b11e593f..cdd13d08f836 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6730,6 +6730,10 @@
+ 			improve timer resolution at the expense of processing
+ 			more timer interrupts.
+ 
++	xen_virtio_grant= [X86,XEN]
++			Control whether virtio devices are required to use
++			grants when running as a Xen HVM guest.
++
+ 	xen.balloon_boot_timeout= [XEN]
+ 			The time (in seconds) to wait before giving up to boot
+ 			in case initial ballooning fails to free enough memory.
+diff --git a/arch/arm/xen/enlighten.c b/arch/arm/xen/enlighten.c
+index 1f9c3ba32833..07eb69f9e7df 100644
+--- a/arch/arm/xen/enlighten.c
++++ b/arch/arm/xen/enlighten.c
+@@ -443,8 +443,6 @@ static int __init xen_guest_init(void)
+ 	if (!xen_domain())
+ 		return 0;
+ 
+-	xen_set_restricted_virtio_memory_access();
+-
+ 	if (!acpi_disabled)
+ 		xen_acpi_guest_init();
+ 	else
+diff --git a/arch/x86/xen/enlighten_hvm.c b/arch/x86/xen/enlighten_hvm.c
+index 8b71b1dd7639..66b1d9d3d950 100644
+--- a/arch/x86/xen/enlighten_hvm.c
++++ b/arch/x86/xen/enlighten_hvm.c
+@@ -189,13 +189,27 @@ static int xen_cpu_dead_hvm(unsigned int cpu)
+ }
+ 
+ static bool no_vector_callback __initdata;
++static bool __initdata xen_virtio_grants;
++static bool __initdata xen_virtio_grants_set;
++static __init int parse_use_grants(char *arg)
++{
++	if (!strcmp(arg, "yes"))
++		xen_virtio_grants = true;
++	else if (!strcmp(arg, "no"))
++		xen_virtio_grants = false;
++	xen_virtio_grants_set = true;
++
++	return 0;
++}
++early_param("xen_virtio_grant", parse_use_grants);
+ 
+ static void __init xen_hvm_guest_init(void)
+ {
+ 	if (xen_pv_domain())
+ 		return;
+ 
+-	xen_set_restricted_virtio_memory_access();
++	if (xen_virtio_grant)
++		xen_set_restricted_virtio_memory_access();
+ 
+ 	init_hvm_pv_info();
+ 
+diff --git a/drivers/xen/grant-dma-iommu.c b/drivers/xen/grant-dma-iommu.c
+index 16b8bc0c0b33..b43a8906ef64 100644
+--- a/drivers/xen/grant-dma-iommu.c
++++ b/drivers/xen/grant-dma-iommu.c
+@@ -40,6 +40,7 @@ static int grant_dma_iommu_probe(struct platform_device *pdev)
+ 		return ret;
+ 
+ 	platform_set_drvdata(pdev, mmu);
++	xen_set_restricted_virtio_memory_access();
+ 
+ 	return 0;
+ }

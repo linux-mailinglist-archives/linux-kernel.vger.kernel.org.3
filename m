@@ -2,277 +2,298 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6F254C963
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:02:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE0754C966
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347273AbiFONCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 09:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
+        id S1348230AbiFONC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 09:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346507AbiFONCq (ORCPT
+        with ESMTP id S1345762AbiFONC4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 09:02:46 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EA7220ED
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:02:45 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 123so11312558pgb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:02:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ihd5+hUtvMSLtuKfDaBmqf+iFGL/F4FFdcsqC/XAKrg=;
-        b=zKf5WOiOffG3FL22AFbalEIXBXG/f5mpymPpP3V7+AvI9Z0Yw+5U39mzeGwOKMi80A
-         cqvH6NeTrZD/HwUZJAnDNWcedJz2btUmxZzE12K77R9qyQBHM9dnjqsIoBVoXUXWlFVB
-         GsjiMoO9xOpPXQVskNfqBq/CnRGUwowE0h3a2CHfBTrdMS0Qn2n8A4c3eEAo2ROmgx2B
-         BaGxQIsdmgVCLNhwzdyaJ6iCgp6y8kY8gJzZo+fWfs0OiG5Bdqb94VM51WYeI9iudR4j
-         TmnfuKIYC1MZfkM5wp8QlcAC05hI33+FIyHqK0bGPERbIXrH/qULlrNylTX1E10Gr8fK
-         tZbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ihd5+hUtvMSLtuKfDaBmqf+iFGL/F4FFdcsqC/XAKrg=;
-        b=yXe8Xhc6MZMdJ9YG7gjZny2ZZQVkZgiMjn9hTPxPfyrlXZETCLl8hXep+8KQvH8Wba
-         rPuCDaep8ish4tWNqoj3K2UxiAx3ZC2oiH8dspq0M3bceEfV55OyV9SzYcD9aUXOjNNN
-         JvH9a5aIdM7SZqQcYbv0BM+dP+U+LteTXn4pwXsDPwaTe/HutrcrA0jkyJNkRr/AjKVm
-         Dz0nn5Ny9J1CN4w+P6XJikdpAx2xrJXzOKIpcSlmZhqXc6FhBw14rfU/4hjlhVRVmFtR
-         HxxT6GiZL08r8U6vS/fRKm3NOjPt+ZVJwlbJUH+PGxq0cVepdRV1XPvP+WHeKFn3VQup
-         yDiQ==
-X-Gm-Message-State: AJIora8B4s7+rlZsnIg+OuZDVwg9e/hnVYBeF25xvLYeF6rBGabLGoaP
-        gUYYN/zEPUpDAfKfRvxiEB7fXg==
-X-Google-Smtp-Source: AGRyM1sld9ZspHUBSDSjpTYavqq/+/cl7SS9nh2jH2uUJ9kiojPH+vhlg710WLM7IDzDL7NfkG4EXg==
-X-Received: by 2002:a63:9043:0:b0:408:a759:2234 with SMTP id a64-20020a639043000000b00408a7592234mr7191498pge.304.1655298164667;
-        Wed, 15 Jun 2022 06:02:44 -0700 (PDT)
-Received: from localhost ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id s3-20020a170903200300b001678e9670d8sm9178088pla.2.2022.06.15.06.02.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 06:02:44 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 21:02:37 +0800
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, paulmck@kernel.org,
-        mike.kravetz@oracle.com, osalvador@suse.de,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com
-Subject: Re: [PATCH v2 1/2] mm: memory_hotplug: enumerate all supported
- section flags
-Message-ID: <YqnYbcvenPs5Xqa5@FVFYT0MHHV2J.usts.net>
-References: <20220520025538.21144-1-songmuchun@bytedance.com>
- <20220520025538.21144-2-songmuchun@bytedance.com>
- <62aef8a9-aa21-37ec-83b5-9dd9fc729890@redhat.com>
+        Wed, 15 Jun 2022 09:02:56 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0B61CFE8;
+        Wed, 15 Jun 2022 06:02:53 -0700 (PDT)
+Received: from fraeml742-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LNQT12VsPz67PwL;
+        Wed, 15 Jun 2022 21:02:45 +0800 (CST)
+Received: from lhreml710-chm.china.huawei.com (10.201.108.61) by
+ fraeml742-chm.china.huawei.com (10.206.15.223) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 15 Jun 2022 15:02:51 +0200
+Received: from localhost (10.202.226.42) by lhreml710-chm.china.huawei.com
+ (10.201.108.61) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 15 Jun
+ 2022 14:02:50 +0100
+Date:   Wed, 15 Jun 2022 14:02:49 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Kai Ye via Linux-accelerators 
+        <linux-accelerators@lists.ozlabs.org>
+CC:     Kai Ye <yekai13@huawei.com>, <gregkh@linuxfoundation.org>,
+        <herbert@gondor.apana.org.au>, <linuxarm@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <wangzhou1@hisilicon.com>,
+        <linux-crypto@vger.kernel.org>, <zhangfei.gao@linaro.org>
+Subject: Re: [PATCH v2 3/3] crypto: hisilicon/qm - defining the device
+ isolation strategy
+Message-ID: <20220615140249.000077f8@Huawei.com>
+In-Reply-To: <20220614122943.1406-4-yekai13@huawei.com>
+References: <20220614122943.1406-1-yekai13@huawei.com>
+        <20220614122943.1406-4-yekai13@huawei.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <62aef8a9-aa21-37ec-83b5-9dd9fc729890@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhreml739-chm.china.huawei.com (10.201.108.189) To
+ lhreml710-chm.china.huawei.com (10.201.108.61)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 11:35:09AM +0200, David Hildenbrand wrote:
-> On 20.05.22 04:55, Muchun Song wrote:
-> > We are almost running out of section flags, only one bit is available in
-> > the worst case (powerpc with 256k pages).  However, there are still some
-> > free bits (in ->section_mem_map) on other architectures (e.g. x86_64 has
-> > 10 bits available, arm64 has 8 bits available with worst case of 64K
-> > pages).  We have hard coded those numbers in code, it is inconvenient to
-> > use those bits on other architectures except powerpc.  So transfer those
-> > section flags to enumeration to make it easy to add new section flags in
-> > the future.  Also, move SECTION_TAINT_ZONE_DEVICE into the scope of
-> > CONFIG_ZONE_DEVICE to save a bit on non-zone-device case.
-> > 
-> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> 
-> Sorry for the late reply. This looks overly complicated to me.
-> 
-> IOW, staring at that patch I don't quite like what I am seeing.
-> 
-> 
-> Something like the following is *a lot* easier to read than some
-> MAPPER macro magic. What speaks against it?
->
+On Tue, 14 Jun 2022 20:29:40 +0800
+Kai Ye via Linux-accelerators <linux-accelerators@lists.ozlabs.org> wrote:
 
-Thanks for taking a look.
-
-Yeah, it is more readable. This question is also raised by Oscar.
-I pasted the reply to here.
-
-"
-Yeah, it's a little complicated. All the magic aims to generate
-two enumeration from one MAPPER(xxx, config), one is SECTION_xxx_SHIFT,
-another is SECTION_xxx = BIT(SECTION_xxx_SHIFT) if the 'config' is
-configured. If we want to add a new flag, like the follow patch, just
-one line could do that.
-
-  MAPPER(CANNOT_OPTIMIZE_VMEMMAP, CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP)
-
-Without those magic, we have to add 4 lines like follows to do the
-similar thing.
-
-  #ifdef CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-        SECTION_CANNOT_OPTIMIZE_VMEMMAP_SHIFT,
-  #define SECTION_CANNOT_OPTIMIZE_VMEMMAP BIT(SECTION_CANNOT_OPTIMIZE_VMEMMAP_SHIFT)
-  #endif
-
-I admit it is more clear but not simplified as above approach.
-"
-
-Both two approaches are fine to me. I can switch to the following approach
-seems you think the following one is better.
-
-Thanks.
-
-> /*
->  * Section bits use the lower unused bits in the ->section_mem_map
->  */
-> enum {
-> 	SECTION_MARKED_PRESENT_BIT = 0,
-> 	SECTION_HAS_MEM_MAP_BIT,
-> 	...
-> #ifdef ZONE_DEVICE
-> 	SECTION_TAINT_ZONE_DEVICE_BIT
-> #endif
-> }
+> Define the device isolation strategy by the device driver. if the
+> AER error frequency exceeds the value of setting for a certain
+> period of time, The device will not be available in user space. The VF
+> device use the PF device isolation strategy. All the hardware errors
+> are processed by PF driver.
 > 
-> #define SECTION_MARKED_PRESENT	   (1ULL << SECTION_MARKED_PRESENT_BIT)
-> ...
-> #ifdef ZONE_DEVICE
-> #define SECTION_TAINT_ZONE_DEVICE  (1ULL << SECTION_TAINT_ZONE_DEVICE_BIT)
-> #endif /* ZONE_DEVICE */
+> Signed-off-by: Kai Ye <yekai13@huawei.com>
+
+I'll try and avoid duplicating Greg's feedback but might well overlap a bit!
+
+> ---
+>  drivers/crypto/hisilicon/qm.c | 157 +++++++++++++++++++++++++++++++---
+>  include/linux/hisi_acc_qm.h   |   9 ++
+>  2 files changed, 152 insertions(+), 14 deletions(-)
 > 
-> 
-> 
-> > ---
-> >  include/linux/kconfig.h |  1 +
-> >  include/linux/mmzone.h  | 54 +++++++++++++++++++++++++++++++++++++++++--------
-> >  mm/memory_hotplug.c     |  6 ++++++
-> >  3 files changed, 53 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/include/linux/kconfig.h b/include/linux/kconfig.h
-> > index 20d1079e92b4..7044032b9f42 100644
-> > --- a/include/linux/kconfig.h
-> > +++ b/include/linux/kconfig.h
-> > @@ -10,6 +10,7 @@
-> >  #define __LITTLE_ENDIAN 1234
-> >  #endif
-> >  
-> > +#define __ARG_PLACEHOLDER_ 0,
-> >  #define __ARG_PLACEHOLDER_1 0,
-> >  #define __take_second_arg(__ignored, val, ...) val
-> >  
-> > diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> > index 299259cfe462..2cf2a76535ab 100644
-> > --- a/include/linux/mmzone.h
-> > +++ b/include/linux/mmzone.h
-> > @@ -1422,16 +1422,47 @@ extern size_t mem_section_usage_size(void);
-> >   *      (equal SECTION_SIZE_BITS - PAGE_SHIFT), and the
-> >   *      worst combination is powerpc with 256k pages,
-> >   *      which results in PFN_SECTION_SHIFT equal 6.
-> > - * To sum it up, at least 6 bits are available.
-> > + * To sum it up, at least 6 bits are available on all architectures.
-> > + * However, we can exceed 6 bits on some other architectures except
-> > + * powerpc (e.g. 15 bits are available on x86_64, 13 bits are available
-> > + * with the worst case of 64K pages on arm64) if we make sure the
-> > + * exceeded bit is not applicable to powerpc.
-> >   */
-> > -#define SECTION_MARKED_PRESENT		(1UL<<0)
-> > -#define SECTION_HAS_MEM_MAP		(1UL<<1)
-> > -#define SECTION_IS_ONLINE		(1UL<<2)
-> > -#define SECTION_IS_EARLY		(1UL<<3)
-> > -#define SECTION_TAINT_ZONE_DEVICE	(1UL<<4)
-> > -#define SECTION_MAP_LAST_BIT		(1UL<<5)
-> > +#define ENUM_SECTION_FLAG(MAPPER)						\
-> > +	MAPPER(MARKED_PRESENT)							\
-> > +	MAPPER(HAS_MEM_MAP)							\
-> > +	MAPPER(IS_ONLINE)							\
-> > +	MAPPER(IS_EARLY)							\
-> > +	MAPPER(TAINT_ZONE_DEVICE, CONFIG_ZONE_DEVICE)				\
-> > +	MAPPER(MAP_LAST_BIT)
-> > +
-> > +#define __SECTION_SHIFT_FLAG_MAPPER_0(x)
-> > +#define __SECTION_SHIFT_FLAG_MAPPER_1(x)	SECTION_##x##_SHIFT,
-> > +#define __SECTION_SHIFT_FLAG_MAPPER(x, ...)	\
-> > +	__PASTE(__SECTION_SHIFT_FLAG_MAPPER_, IS_ENABLED(__VA_ARGS__))(x)
-> > +
-> > +#define __SECTION_FLAG_MAPPER_0(x)
-> > +#define __SECTION_FLAG_MAPPER_1(x)		SECTION_##x = BIT(SECTION_##x##_SHIFT),
-> > +#define __SECTION_FLAG_MAPPER(x, ...)		\
-> > +	__PASTE(__SECTION_FLAG_MAPPER_, IS_ENABLED(__VA_ARGS__))(x)
-> > +
-> > +enum {
-> > +	/*
-> > +	 * Generate a series of enumeration flags like SECTION_$name_SHIFT.
-> > +	 * Each entry in ENUM_SECTION_FLAG() macro will be generated to one
-> > +	 * enumeration iff the 2nd parameter of MAPPER() is defined or absent.
-> > +	 * The $name comes from the 1st parameter of MAPPER() macro.
-> > +	 */
-> > +	ENUM_SECTION_FLAG(__SECTION_SHIFT_FLAG_MAPPER)
-> > +	/*
-> > +	 * Generate a series of enumeration flags like:
-> > +	 *   SECTION_$name = BIT(SECTION_$name_SHIFT)
-> > +	 */
-> > +	ENUM_SECTION_FLAG(__SECTION_FLAG_MAPPER)
-> > +};
-> > +
-> >  #define SECTION_MAP_MASK		(~(SECTION_MAP_LAST_BIT-1))
-> > -#define SECTION_NID_SHIFT		6
-> > +#define SECTION_NID_SHIFT		SECTION_MAP_LAST_BIT_SHIFT
-> >  
-> >  static inline struct page *__section_mem_map_addr(struct mem_section *section)
-> >  {
-> > @@ -1470,12 +1501,19 @@ static inline int online_section(struct mem_section *section)
-> >  	return (section && (section->section_mem_map & SECTION_IS_ONLINE));
-> >  }
-> >  
-> > +#ifdef CONFIG_ZONE_DEVICE
-> >  static inline int online_device_section(struct mem_section *section)
-> >  {
-> >  	unsigned long flags = SECTION_IS_ONLINE | SECTION_TAINT_ZONE_DEVICE;
-> >  
-> >  	return section && ((section->section_mem_map & flags) == flags);
-> >  }
-> > +#else
-> > +static inline int online_device_section(struct mem_section *section)
-> > +{
-> > +	return 0;
-> > +}
-> > +#endif
-> >  
-> >  static inline int online_section_nr(unsigned long nr)
-> >  {
-> > diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> > index 1213d0c67a53..3b360eda933f 100644
-> > --- a/mm/memory_hotplug.c
-> > +++ b/mm/memory_hotplug.c
-> > @@ -672,12 +672,18 @@ static void __meminit resize_pgdat_range(struct pglist_data *pgdat, unsigned lon
-> >  
-> >  }
-> >  
-> > +#ifdef CONFIG_ZONE_DEVICE
-> >  static void section_taint_zone_device(unsigned long pfn)
-> >  {
-> >  	struct mem_section *ms = __pfn_to_section(pfn);
-> >  
-> >  	ms->section_mem_map |= SECTION_TAINT_ZONE_DEVICE;
-> >  }
-> > +#else
-> > +static inline void section_taint_zone_device(unsigned long pfn)
-> > +{
-> > +}
-> > +#endif
-> >  
-> >  /*
-> >   * Associate the pfn range with the given zone, initializing the memmaps
-> 
-> 
-> -- 
-> Thanks,
-> 
-> David / dhildenb
-> 
-> 
+> diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+> index ad83c194d664..47c41fa52693 100644
+> --- a/drivers/crypto/hisilicon/qm.c
+> +++ b/drivers/crypto/hisilicon/qm.c
+> @@ -12,7 +12,6 @@
+>  #include <linux/pm_runtime.h>
+>  #include <linux/seq_file.h>
+>  #include <linux/slab.h>
+> -#include <linux/uacce.h>
+
+I assume you do this because you are now relying on hisi_acc_qm.h including
+uacce.h?   Generally it is better to include most headers that we use
+directly so it this still uses stuff from uacce.h then keep the include.
+
+>  #include <linux/uaccess.h>
+>  #include <uapi/misc/uacce/hisi_qm.h>
+>  #include <linux/hisi_acc_qm.h>
+> @@ -417,6 +416,16 @@ struct hisi_qm_resource {
+>  	struct list_head list;
+>  };
+>  
+> +/**
+> + * struct qm_hw_err - structure of describes the device err
+> + * @list: hardware error list
+> + * @tick_stamp: timestamp when the error occurred
+
+tick?   Perhaps just call it timestamp if that is what it is...
+
+
+> + */
+> +struct qm_hw_err {
+> +	struct list_head list;
+> +	unsigned long long tick_stamp;
+> +};
+> +
+
+>  
+> +/**
+> + * qm_hw_err_isolate() - Try to isolate the uacce device with its VFs
+> + * @qm: The qm which we want to configure.
+> + *
+> + * according to user's configuration of isolation strategy. Warning: this
+
+Rewrite to make it full sentence.
+
+> + * API should be called while there is no user on the device, or the users
+> + * on this device are suspended by slot resetting preparation of PCI AER.
+> + */
+> +static int qm_hw_err_isolate(struct hisi_qm *qm)
+> +{
+> +	struct qm_hw_err *err, *tmp, *hw_err;
+> +	struct qm_err_isolate *isolate;
+> +	u32 count = 0;
+> +
+> +	isolate = &qm->isolate_data;
+> +
+> +#define SECONDS_PER_HOUR	3600
+> +
+> +	/* All the hw errs are processed by PF driver */
+> +	if (qm->uacce->is_vf || atomic_read(&isolate->is_isolate) ||
+> +		!isolate->hw_err_isolate_hz)
+> +		return 0;
+> +
+> +	hw_err = kzalloc(sizeof(*hw_err), GFP_ATOMIC);
+> +	if (!hw_err)
+> +		return -ENOMEM;
+blank line here to separate error handling from next bit of code.
+ 
+> +	hw_err->tick_stamp = jiffies;
+> +	list_for_each_entry_safe(err, tmp, &qm->uacce_hw_errs, list) {
+
+These are ordered (I think). Could take advantage of that by
+maintaining count of elements in parallel to the list then walking
+list in right direction + stop when you reach last one to need
+deleting.
+
+
+> +		if ((hw_err->tick_stamp - err->tick_stamp) / HZ >
+> +		    SECONDS_PER_HOUR) {
+> +			list_del(&err->list);
+> +			kfree(err);
+> +		} else {
+> +			count++;
+> +		}
+> +	}
+> +	list_add(&hw_err->list, &qm->uacce_hw_errs);
+> +
+> +	if (count >= isolate->hw_err_isolate_hz)
+> +		atomic_set(&isolate->is_isolate, 1);
+> +
+> +	return 0;
+> +}
+> +
+
+...
+
+> +static int hisi_qm_isolate_strategy_write(struct uacce_device *uacce,
+> +						const char *buf)
+> +{
+> +	struct hisi_qm *qm = uacce->priv;
+> +	unsigned long val = 0;
+> +
+> +#define MAX_ISOLATE_STRATEGY	65535
+> +
+> +	if (atomic_read(&qm->uacce_ref))
+> +		return -EBUSY;
+> +
+> +	/* must be set by PF */
+> +	if (atomic_read(&qm->isolate_data.is_isolate) || uacce->is_vf)
+
+Why is the file visible on the vf?  Hide it or don't register it for vfs.
+
+> +		return -EINVAL;
+> +
+> +	if (kstrtoul(buf, 0, &val) < 0)
+> +		return -EINVAL;
+> +
+> +	if (val > MAX_ISOLATE_STRATEGY)
+> +		return -EINVAL;
+> +
+> +	qm->isolate_data.hw_err_isolate_hz = val;
+> +	dev_info(&qm->pdev->dev,
+> +		"the value of isolate_strategy is set to %lu.\n", val);
+
+This is just noise in the log.  If someone wants to check they should read
+the sysfs file back and it reflect the new state.
+
+> +
+> +	return 0;
+> +}
+> +
+
+...
+
+>  static int qm_alloc_uacce(struct hisi_qm *qm)
+>  {
+>  	struct pci_dev *pdev = qm->pdev;
+> @@ -3433,6 +3554,7 @@ static int qm_alloc_uacce(struct hisi_qm *qm)
+>  	};
+>  	int ret;
+>  
+> +	INIT_LIST_HEAD(&qm->uacce_hw_errs);
+>  	ret = strscpy(interface.name, dev_driver_string(&pdev->dev),
+>  		      sizeof(interface.name));
+>  	if (ret < 0)
+> @@ -3446,8 +3568,7 @@ static int qm_alloc_uacce(struct hisi_qm *qm)
+>  		qm->use_sva = true;
+>  	} else {
+>  		/* only consider sva case */
+> -		uacce_remove(uacce);
+> -		qm->uacce = NULL;
+> +		qm_remove_uacce(qm);
+>  		return -EINVAL;
+>  	}
+>  
+> @@ -5109,6 +5230,12 @@ static int qm_controller_reset_prepare(struct hisi_qm *qm)
+>  		return ret;
+>  	}
+>  
+> +	if (qm->use_sva) {
+> +		ret = qm_hw_err_isolate(qm);
+> +		if (ret)
+> +			pci_err(pdev, "failed to isolate hw err!\n");
+> +	}
+> +
+>  	ret = qm_wait_vf_prepare_finish(qm);
+>  	if (ret)
+>  		pci_err(pdev, "failed to stop by vfs in soft reset!\n");
+> @@ -5436,19 +5563,24 @@ static int qm_controller_reset(struct hisi_qm *qm)
+>  	ret = qm_soft_reset(qm);
+>  	if (ret) {
+>  		pci_err(pdev, "Controller reset failed (%d)\n", ret);
+
+This is printed below as well - probably best to drop this one and then you
+can remove the brackets as well.
+
+> -		qm_reset_bit_clear(qm);
+> -		return ret;
+> +		goto err_reset;
+>  	}
+>  
+>  	ret = qm_controller_reset_done(qm);
+> -	if (ret) {
+> -		qm_reset_bit_clear(qm);
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		goto err_reset;
+>  
+>  	pci_info(pdev, "Controller reset complete\n");
+> -
+
+Avoid noise via white space changes like this.  The white space was
+good and generally don't change white space in a patch doing anything else.
+
+>  	return 0;
+> +
+> +err_reset:
+> +	pci_err(pdev, "Controller reset failed (%d)\n", ret);
+> +	qm_reset_bit_clear(qm);
+> +
+> +	/* if resetting fails, isolate the device */
+> +	if (qm->use_sva && !qm->uacce->is_vf)
+> +		atomic_set(&qm->isolate_data.is_isolate, 1);
+> +	return ret;
+>  }
+>  
+>  /**
+> @@ -6246,10 +6378,7 @@ int hisi_qm_init(struct hisi_qm *qm)
+>  err_free_qm_memory:
+>  	hisi_qm_memory_uninit(qm);
+>  err_alloc_uacce:
+> -	if (qm->use_sva) {
+> -		uacce_remove(qm->uacce);
+> -		qm->uacce = NULL;
+> -	}
+> +	qm_remove_uacce(qm);
+>  err_irq_register:
+>  	qm_irq_unregister(qm);
+>  err_pci_init:
+

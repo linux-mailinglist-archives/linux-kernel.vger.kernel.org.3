@@ -2,309 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C1DD54BF2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 03:18:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F79854BF31
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 03:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237660AbiFOBSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 21:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
+        id S1345423AbiFOBSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 21:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244004AbiFOBRs (ORCPT
+        with ESMTP id S1345289AbiFOBSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 21:17:48 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2087.outbound.protection.outlook.com [40.107.94.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD71186C4;
-        Tue, 14 Jun 2022 18:17:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DpdCPWxLw+Rx2XeuvoD7pY0c+VUhTSPSTTEkN6Ip9LlMHrAk2NQICc1XcOVFBnuIKRQ0EXds/7yrg0mF3UPWe5C9UqGXbioN/9sJWqYKqQ4HGTCFxR4qbal602PYTz/oFd5pCnpbQXGXTBuz+RaI/NLE1dZB7xDrP6AMogoKDOb1nNUysxAhAl5CMHH82N7Bk2p3wP3JED+gVwmgEJr+WODludgEFdP2hZKt5cP9wACzju7exu4SMKzOpt7Q4mp3jlNdk3fXimiUphlzW4XTMKrzJzLFfeej3KGA3Nop4jwJp5nuRgZjJ2eQ+til7TYGJaA+2Zsznlvh3g5uVl5oWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YgO2osWC8XTZczE4S5VSh8NkUm635zDBZziOwh1CC70=;
- b=jvwkjr5QefA56JpttbZmVuS1VlHlkWb1GtH8rUMqj/7PWFKcAWR8M5AsT4fQwSp1uuWP5ZYrTLdnVn6ZiCDpH65oF7ji0aUWHhgXcIRPQL7FpL3eahuJBjTF3h9kOaJqmmcyGEOmMDgsDADWwST3qRBPxctFOSFt7DFEK4OsPpP/oeO8VtEXDlrLpT0dLFqt+B8OtUR1p/niiJ6ogqLk2ULegeXu/jUVCDGMsoH7U/WRiRfGDkwtJcPvcRhrhXjv4xQ7s1TNbYqwQtg9F0MfxSAI0e78jZdf7FkVNEtVaAeVmXTfIEypJ/QixuDVs8g6ChDjy64pjBWN6Alp4KU+ag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YgO2osWC8XTZczE4S5VSh8NkUm635zDBZziOwh1CC70=;
- b=niQd/92JOM2nFEqVItB0ufThACKcGis4bqmMPWTzDurS3Gl3Nh2IL/ohoGpOFpXQ3y9LX5NP1/IcIlUH8ojsF4lHVOSQ4z/pn+fSwD0D3asmANOk5lyLyAdy0s6tbzuzlbyiUZXpASSD1/aHVUQyzD+sB5FDkRhV39eDK2TySM5FHo6xXktEYE8fNomH59lnCiWk+7rrcWIxiddpBTBji5J3Y6W+IXje/zHJNGi3yagYkJg+W4y/NHGHi0S5HnQ8fkstaS8mG6E9rb43rYubn1mmSIwWZlxiVHmNun8IkW+tsnHNi0FXFSNCbCDQ0Rnh2+zp+UWwJ8YtVaimPtKETQ==
-Received: from DM3PR11CA0007.namprd11.prod.outlook.com (2603:10b6:0:54::17) by
- DM6PR12MB4545.namprd12.prod.outlook.com (2603:10b6:5:2a3::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5332.12; Wed, 15 Jun 2022 01:17:28 +0000
-Received: from DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
- (2603:10b6:0:54:cafe::ad) by DM3PR11CA0007.outlook.office365.com
- (2603:10b6:0:54::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.13 via Frontend
- Transport; Wed, 15 Jun 2022 01:17:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.234) by
- DM6NAM11FT025.mail.protection.outlook.com (10.13.172.197) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5332.12 via Frontend Transport; Wed, 15 Jun 2022 01:17:27 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Wed, 15 Jun
- 2022 01:17:26 +0000
-Received: from foundations-user-AS-2114GT-DNR-C1-NC24B.nvidia.com
- (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 14 Jun 2022 18:17:25 -0700
-From:   Kechen Lu <kechenl@nvidia.com>
-To:     <kvm@vger.kernel.org>, <pbonzini@redhat.com>, <seanjc@google.com>
-CC:     <vkuznets@redhat.com>, <somduttar@nvidia.com>,
-        <kechenl@nvidia.com>, <linux-kernel@vger.kernel.org>
-Subject: [RFC PATCH v3 7/7] KVM: selftests: Add tests for VM and vCPU cap KVM_CAP_X86_DISABLE_EXITS
-Date:   Tue, 14 Jun 2022 18:16:22 -0700
-Message-ID: <20220615011622.136646-8-kechenl@nvidia.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220615011622.136646-1-kechenl@nvidia.com>
-References: <20220615011622.136646-1-kechenl@nvidia.com>
+        Tue, 14 Jun 2022 21:18:43 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293FC2A274
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 18:18:10 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id a10so5519317wmj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 18:18:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=K7pGdzJdqHuYwS1bYbVurI6uCtk6tWf/NxPbeZGPiKk=;
+        b=GJSIGAWb4wWJ8zVfW/PVsPdfLVoxFfdu+fX7vMMLELUREnwZiwyQ63nvuzC4+1dz/J
+         atxtgSdFQZlpQffy1/MdOu+imIksqdVQVno/DmT95AU2hx80ZyxLX1LBxM8Hhwkg4Q+i
+         fDbskaRzFIkDCRNqr9wjyHTFmGon1p/QhKDN0Gp1pjo2PFxXfrIrnthi6MqS70DykRMw
+         qlsV5DUsfLB1NzaOOIGp4I5B9yjAVqWbKQCVjJqDfO3DMX/WbZnwqj2FTd25oyCcJuNQ
+         9mhHNH9tgK7JGoAzzzXpitwQcA9W+KyO0Tc6hK5tE4NrIafd2trDuR8hf9SgSP7R4fF9
+         srqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=K7pGdzJdqHuYwS1bYbVurI6uCtk6tWf/NxPbeZGPiKk=;
+        b=dN6XfhiyQ6SIvDkgTSKjAN3IZSGYI/dozI8+0VkvAomUgZVnJyFs/0tJVu3aqwLG6J
+         6a/xCt4v4eHEa4AQaE7YMiWVwzVCZiGP4lpCrJeDsxWGiGDmJ0W1M2xlxB6vgcSwGH/N
+         KP5yQKgaYOQxHtfPy4XGR8FEnxkNnlEeFyC1ufnE3Wy6+kKby241wHYDCn+cYzqShBRZ
+         ZqvNDhzaBIMMBkyLdOz6Xcxpg0Y0W/whJdxCvNGnYK5irYCDXbgR17XyPcpOTioQrc11
+         1QiMqBqGvqMv+9WBu02OMRpYcDe53tkR6/VUMaUox1j0VQYrEeBigEUo82DnaRWOsDxV
+         neAA==
+X-Gm-Message-State: AOAM533gHFIOkT4rRJMj3OzFgnKAM4DpOj31RQaWp8zfd6IAMGKaqcTi
+        Mor1rPr9CoP5GAMkavCtLjvYFBu1gOk2COXjAexmjbT+1g==
+X-Google-Smtp-Source: ABdhPJzq0py4jwRNDajc+XMV6fU5cc1yxRWaEgccOkiLbfpdOU8rMLWl3D6nw1mmBwN641Lc+w/Ngmp6j05FQilyTWU=
+X-Received: by 2002:a7b:c38b:0:b0:39c:6964:34a2 with SMTP id
+ s11-20020a7bc38b000000b0039c696434a2mr6921750wmj.165.1655255881271; Tue, 14
+ Jun 2022 18:18:01 -0700 (PDT)
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9916ea44-6b51-4326-8427-08da4e6cd000
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4545:EE_
-X-Microsoft-Antispam-PRVS: <DM6PR12MB45456DBEFC748A691EB073BDCAAD9@DM6PR12MB4545.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MDhi29E9cNZQ6xXNxPqFbVE/iWvnL3U7w1+AoL3r3WRsf3OeI/l2/lCPfRqf5oJsQoEGAx6CqlQm6PD1nK7+VcaAKi/5UA+PqdzuWCjzCGOP0Sy49GziCAvZp3MvWYqS4S4vNBmhikzhKTz2qQpUWAypZZVHvs3TG+wCZSn06tmVw08+J87EXydNsoKbqaWgQwob9Kd9mSN9ZX8fAz+erAKADpCPQiCqJ6DN8bQqwfL/CgG1hn3c6nAFBebz2e52dnq4h+ze38hhyNs9j+/hi6rhETmPfUkpLiKyHl79jadEbw31RCAo32S3Tx7E06r8gEN6rG4d+jceB8Lfmuw9SyuXG5TQyF/rD2fTl/7o5uqDnyiKMh0+YJhCidtp0+5Z5oYrKTViiCEh/W8722Tq5vIhXtUQv5H+kWFC9oHC/GoZuh2OOZPya3VYbnLCJbK+B4d/q2Y9lfi9tGbfYuUZYsmP0oSztgAcZEOBy19SJ048bBGXTM7n/kV8mn67HV7SzJe5R072myKgEZNX7TDp3w2UylIY/WXcq+X6m6Qqhb8j7kt5j4MkafIWVdlC/IVuvxt5CimVR0b8QrWu0dQQOev6t1+r2CnPeOKJesguSwPnJqVC2G+94izdkcUCUMnugm1WfsA00x6rH3HgzngEfG8Mr9BQeW2+kUh0OhK1SSudqPDaow5ob0INAl491mcyJfYDcBHo9jADWC76drMXQw==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(46966006)(40470700004)(36840700001)(26005)(316002)(508600001)(54906003)(110136005)(2616005)(86362001)(82310400005)(7696005)(6666004)(356005)(81166007)(36860700001)(40460700003)(16526019)(186003)(336012)(47076005)(426003)(83380400001)(1076003)(70586007)(70206006)(36756003)(4326008)(8676002)(8936002)(5660300002)(2906002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 01:17:27.8069
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9916ea44-6b51-4326-8427-08da4e6cd000
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4545
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220611090550.135674-1-xiujianfeng@huawei.com>
+ <CAHC9VhSwYdrHw8jNYxWApPYMjnmX-ZDN1=CzmRBeS1HoL-KOOA@mail.gmail.com> <c54658e5-f0bd-b3f6-3cf8-d7d0e8b1c4df@huawei.com>
+In-Reply-To: <c54658e5-f0bd-b3f6-3cf8-d7d0e8b1c4df@huawei.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 14 Jun 2022 21:17:50 -0400
+Message-ID: <CAHC9VhTkfBm8zCDw=m+jaDZW15LB+bRJ5+ymxsSJKW=V645S2g@mail.gmail.com>
+Subject: Re: [PATCH -next] selinux: Fix potential memory leak in selinux_add_opt
+To:     xiujianfeng <xiujianfeng@huawei.com>
+Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        omosnace@redhat.com, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tests for KVM cap KVM_CAP_X86_DISABLE_EXITS overriding flags
-in VM and vCPU scope both works as expected.
+On Mon, Jun 13, 2022 at 9:18 PM xiujianfeng <xiujianfeng@huawei.com> wrote:
+> =E5=9C=A8 2022/6/14 4:22, Paul Moore =E5=86=99=E9=81=93:
+> > On Sat, Jun 11, 2022 at 5:07 AM Xiu Jianfeng <xiujianfeng@huawei.com> w=
+rote:
+> >> In the entry of selinux_add_opt, *mnt_opts may be assigned to new
+> >> allocated memory, and also may be freed and reset at the end of the
+> >> function. however, if security_context_str_to_sid failed, it returns
+> >> directly and skips the procedure for free and reset, even if it may be
+> >> handled at the caller of this function, It is better to handle it
+> >> inside.
+> >>
+> >> Fixes: 70f4169ab421 ("selinux: parse contexts for mount options early"=
+)
+> >> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> >> ---
+> >>   security/selinux/hooks.c | 12 +++++++-----
+> >>   1 file changed, 7 insertions(+), 5 deletions(-)
+> > Have you actually observed a memory leak from the selinux_mnt_opts
+> > allocation in selinux_add_opt()?
+> >
+> > The selinux_add_opt() function has two callers:
+> > selinux_sb_eat_lsm_opts() and selinux_fs_context_parse_param().  The
+> > former cleans up the selinux_mnt_opts allocation it its error handler
+> > while the latter will end up calling
+> > security_free_mnt_opts()/selinux_free_mnt_opts() to free the
+> > fs_context:security when the fs_context is destroyed.
+> >
+> > This patch shouldn't be necessary.
+>
+> I may not have made it clear, I said potential means may have a third
+> caller in the future.
 
-Signed-off-by: Kechen Lu <kechenl@nvidia.com>
----
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/include/x86_64/svm_util.h   |   1 +
- .../selftests/kvm/x86_64/disable_exits_test.c | 147 ++++++++++++++++++
- 4 files changed, 150 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/disable_exits_test.c
+Let's not worry about it.  If you wanted to add a comment header to
+the function (see selinux_skb_peerlbl_sid() for an example) to make it
+clear that callers are responsible for cleaning up @mnt_opts on error
+I think that would be okay ... although even that is going to be a
+problem in the new mount API case where selinux_add_opt() is going to
+be called multiple times.
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 4509a3a7eeae..2b50170db9b2 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -15,6 +15,7 @@
- /x86_64/cpuid_test
- /x86_64/cr4_cpuid_sync_test
- /x86_64/debug_regs
-+/x86_64/disable_exits_test
- /x86_64/evmcs_test
- /x86_64/emulator_error_test
- /x86_64/fix_hypercall_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 22423c871ed6..de11d1f95700 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -115,6 +115,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/xen_shinfo_test
- TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
- TEST_GEN_PROGS_x86_64 += x86_64/sev_migrate_tests
- TEST_GEN_PROGS_x86_64 += x86_64/amx_test
-+TEST_GEN_PROGS_x86_64 += x86_64/disable_exits_test
- TEST_GEN_PROGS_x86_64 += access_tracking_perf_test
- TEST_GEN_PROGS_x86_64 += demand_paging_test
- TEST_GEN_PROGS_x86_64 += dirty_log_test
-diff --git a/tools/testing/selftests/kvm/include/x86_64/svm_util.h b/tools/testing/selftests/kvm/include/x86_64/svm_util.h
-index a25aabd8f5e7..d8cad1cff578 100644
---- a/tools/testing/selftests/kvm/include/x86_64/svm_util.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/svm_util.h
-@@ -17,6 +17,7 @@
- #define CPUID_SVM		BIT_ULL(CPUID_SVM_BIT)
- 
- #define SVM_EXIT_MSR		0x07c
-+#define SVM_EXIT_HLT		0x078
- #define SVM_EXIT_VMMCALL	0x081
- 
- struct svm_test_data {
-diff --git a/tools/testing/selftests/kvm/x86_64/disable_exits_test.c b/tools/testing/selftests/kvm/x86_64/disable_exits_test.c
-new file mode 100644
-index 000000000000..8ca427357ed0
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/disable_exits_test.c
-@@ -0,0 +1,147 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Test per-VM and per-vCPU disable exits cap
-+ *
-+ */
-+
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <sys/ioctl.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "svm_util.h"
-+#include "vmx.h"
-+#include "processor.h"
-+
-+#define VCPU_ID_1 0
-+#define VCPU_ID_2 1
-+
-+static void guest_code_exits(void) {
-+	asm volatile("sti; hlt; cli");
-+}
-+
-+/* Set debug control for trapped instruction exiting to userspace */
-+static void vcpu_set_debug_exit_userspace(struct kvm_vm *vm, int vcpuid,
-+		struct kvm_guest_debug *debug) {
-+	memset(debug, 0, sizeof(*debug));
-+	debug->control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_EXIT_USERSPACE;
-+	vcpu_set_guest_debug(vm, VCPU_ID_1, debug);
-+}
-+
-+static void test_vm_cap_disable_exits(void) {
-+	struct kvm_enable_cap cap = {
-+		.cap = KVM_CAP_X86_DISABLE_EXITS,
-+		.args[0] = KVM_X86_DISABLE_EXITS_HLT|KVM_X86_DISABLE_EXITS_OVERRIDE,
-+	};
-+	struct kvm_guest_debug debug;
-+	struct kvm_vm *vm;
-+	struct kvm_run *run;
-+
-+	/* Create VM */
-+	vm = vm_create_without_vcpus(VM_MODE_DEFAULT, DEFAULT_GUEST_PHY_PAGES);
-+
-+	/* Test Case #1
-+	 * Default without disabling HLT exits in VM scope
-+	 */
-+	vm_vcpu_add_default(vm, VCPU_ID_1, (void *)guest_code_exits);
-+	vcpu_set_debug_exit_userspace(vm, VCPU_ID_1, &debug);
-+	run = vcpu_state(vm, VCPU_ID_1);
-+	vcpu_run(vm, VCPU_ID_1);
-+	/* Exit reason should be HLT */
-+	if (is_amd_cpu())
-+		TEST_ASSERT(run->hw.hardware_exit_reason == SVM_EXIT_HLT,
-+			"Got exit_reason other than HLT: 0x%llx\n",
-+			run->hw.hardware_exit_reason);
-+	else
-+		TEST_ASSERT(run->hw.hardware_exit_reason == EXIT_REASON_HLT,
-+			"Got exit_reason other than HLT: 0x%llx\n",
-+			run->hw.hardware_exit_reason);
-+
-+	/* Test Case #2
-+	 * Disabling HLT exits in VM scope
-+	 */
-+	vm_vcpu_add_default(vm, VCPU_ID_2, (void *)guest_code_exits);
-+	vcpu_set_debug_exit_userspace(vm, VCPU_ID_2, &debug);
-+	run = vcpu_state(vm, VCPU_ID_2);
-+	/* Set VM scoped cap arg
-+	 * KVM_X86_DISABLE_EXITS_HLT|KVM_X86_DISABLE_EXITS_OVERRIDE
-+	 * after vCPUs creation so requiring override flag
-+	 */
-+	TEST_ASSERT(!vm_enable_cap(vm, &cap), "Failed to set KVM_CAP_X86_DISABLE_EXITS");
-+	vcpu_run(vm, VCPU_ID_2);
-+	/* Exit reason should not be HLT, would finish the guest
-+	 * running and exit (e.g. SVM_EXIT_SHUTDOWN)
-+	 */
-+	if (is_amd_cpu())
-+		TEST_ASSERT(run->hw.hardware_exit_reason != SVM_EXIT_HLT,
-+			"Got exit_reason other than HLT: 0x%llx\n",
-+			run->hw.hardware_exit_reason);
-+	else
-+		TEST_ASSERT(run->hw.hardware_exit_reason != EXIT_REASON_HLT,
-+			"Got exit_reason other than HLT: 0x%llx\n",
-+			run->hw.hardware_exit_reason);
-+
-+	kvm_vm_free(vm);
-+}
-+
-+static void test_vcpu_cap_disable_exits(void) {
-+	struct kvm_enable_cap cap = {
-+		.cap = KVM_CAP_X86_DISABLE_EXITS,
-+		.args[0] = KVM_X86_DISABLE_EXITS_HLT|KVM_X86_DISABLE_EXITS_OVERRIDE,
-+	};
-+	struct kvm_guest_debug debug;
-+	struct kvm_vm *vm;
-+	struct kvm_run *run;
-+
-+	/* Create VM */
-+	vm = vm_create_without_vcpus(VM_MODE_DEFAULT, DEFAULT_GUEST_PHY_PAGES);
-+	vm_vcpu_add_default(vm, VCPU_ID_1, (void *)guest_code_exits);
-+	vcpu_set_debug_exit_userspace(vm, VCPU_ID_1, &debug);
-+	vm_vcpu_add_default(vm, VCPU_ID_2, (void *)guest_code_exits);
-+	vcpu_set_debug_exit_userspace(vm, VCPU_ID_2, &debug);
-+	/* Set vCPU 2 scoped cap arg
-+	 * KVM_X86_DISABLE_EXITS_HLT|KVM_X86_DISABLE_EXITS_OVERRIDE
-+	 */
-+	TEST_ASSERT(!vcpu_enable_cap(vm, VCPU_ID_2, &cap), "Failed to set KVM_CAP_X86_DISABLE_EXITS");
-+
-+	/* Test Case #3
-+	 * Default without disabling HLT exits in this vCPU 1
-+	 */
-+	run = vcpu_state(vm, VCPU_ID_1);
-+	vcpu_run(vm, VCPU_ID_1);
-+	/* Exit reason should be HLT */
-+	if (is_amd_cpu())
-+		TEST_ASSERT(run->hw.hardware_exit_reason == SVM_EXIT_HLT,
-+			"Got exit_reason other than HLT: 0x%llx\n",
-+			run->hw.hardware_exit_reason);
-+	else
-+		TEST_ASSERT(run->hw.hardware_exit_reason == EXIT_REASON_HLT,
-+			"Got exit_reason other than HLT: 0x%llx\n",
-+			run->hw.hardware_exit_reason);
-+
-+	/* Test Case #4
-+	 * Disabling HLT exits in vCPU 2
-+	 */
-+	run = vcpu_state(vm, VCPU_ID_2);
-+	vcpu_run(vm, VCPU_ID_2);
-+	/* Exit reason should not be HLT, would finish the guest
-+	 * running and exit (e.g. SVM_EXIT_SHUTDOWN)
-+	 */
-+	if (is_amd_cpu())
-+		TEST_ASSERT(run->hw.hardware_exit_reason != SVM_EXIT_HLT,
-+			"Got exit_reason other than HLT: 0x%llx\n",
-+			run->hw.hardware_exit_reason);
-+	else
-+		TEST_ASSERT(run->hw.hardware_exit_reason != EXIT_REASON_HLT,
-+			"Got exit_reason other than HLT: 0x%llx\n",
-+			run->hw.hardware_exit_reason);
-+
-+	kvm_vm_free(vm);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	test_vm_cap_disable_exits();
-+	test_vcpu_cap_disable_exits();
-+	return 0;
-+}
--- 
-2.32.0
+> I think the error handler as following is not necessary:
+>
+> err:
+>          if (is_alloc_opts) {
+>                  kfree(opts);
+>                  *mnt_opts =3D NULL;
+>          }
+>
+> otherwise, some error paths goto err label while others don't, It's
+> confusing.
 
+That's a fair point.  Looking at the patch which added it, we should
+probably also return EINVAL when @s is NULL instead of ENOMEM.  In
+fact, in all the cases where we currently jump to @err, I think we are
+guaranteed that @is_alloc_opts is false as it requires a previously
+populated @opts.
+
+If you want to submit another patch, I would suggest doing the
+following in the patch:
+
+1. Change the @s NULL check to return -EINVAL when @s is NULL.
+2. Allocate @opts/@mnt_opts if NULL, but don't call kfree() on the
+object in case of error.  The new mount API will cleanup when it is
+done and selinux_sb_eat_lsm_opts() will cleanup on error.
+
+If you don't have time to put together a patch for this, let me know and I =
+will.
+
+--=20
+paul-moore.com

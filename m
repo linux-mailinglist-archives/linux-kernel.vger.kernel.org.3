@@ -2,157 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD4A654BFFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 05:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62B7654C001
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 05:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240298AbiFODHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 23:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51512 "EHLO
+        id S1345811AbiFODJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 23:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231722AbiFODG5 (ORCPT
+        with ESMTP id S231685AbiFODJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 23:06:57 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5333C4B846;
-        Tue, 14 Jun 2022 20:06:51 -0700 (PDT)
-X-UUID: d4359e43390542e3a412e5f3f9e7e785-20220615
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:6fac960f-eae7-4e47-aba4-4f6689ee5700,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:ae2640f6-e099-41ba-a32c-13b8bfe63214,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: d4359e43390542e3a412e5f3f9e7e785-20220615
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1589099927; Wed, 15 Jun 2022 11:06:47 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 15 Jun 2022 11:06:45 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.3 via Frontend
- Transport; Wed, 15 Jun 2022 11:06:45 +0800
-Message-ID: <6efcd9fbd86e923d2b124f7a97e8e3b8ddece252.camel@mediatek.com>
-Subject: Re: [PATCH v11 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 15 Jun 2022 11:06:45 +0800
-In-Reply-To: <20220610105522.13449-6-rex-bc.chen@mediatek.com>
-References: <20220610105522.13449-1-rex-bc.chen@mediatek.com>
-         <20220610105522.13449-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 14 Jun 2022 23:09:30 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6AF4C413;
+        Tue, 14 Jun 2022 20:09:29 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id m20so20568619ejj.10;
+        Tue, 14 Jun 2022 20:09:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=PZdjTiMB2cT7RGXSEMxyEsUGs5PUBdVqhv7g3Zq8KIQ=;
+        b=ODtrmNvbPKBXS+8TmcmX9gSI0b/1rw5ShjzVEGHpDFOfb5gzZc8QDbKvBKq69s4gMk
+         Dk/VIY3wPaTpiBO2wcoF+vf5sNBmbiE1ehJ7Z9/uXAFfzQl/zm5Fl+vTiBb+6t/BBdph
+         OfCkaFmQ8HPlBYvS6XxYdOh5vIHFY6LuzjIHvMskTGtUWFzZRqC3JbJ3iGNlq/sri341
+         H9idDSn0UYljrmS5W/FZo+R+U8eIpjy2xau2GBe6rCXicmufxMk9XsWTDB52eQeW9cZz
+         A1NUhi6EOKFk8xF2ESSbDDNruSaCsZtv4LpM6eqRQSEpIeLVrcpugg80kvctQXF7tM6h
+         AcAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PZdjTiMB2cT7RGXSEMxyEsUGs5PUBdVqhv7g3Zq8KIQ=;
+        b=FRww7QBc1WutBsmHJfAX/QeqTNoPwS/S6zxdhj16kUjN6qp1g2k73/uWXEzW6NeFqN
+         xCqFQ8SoIYpM0FvVEN7eN+4gEBl1B2jZvfh/GrLcEiJcRq4gtnypQzqU9vKa2ejDIoXt
+         ofkOKLBeTh3iCdI0eteZukl8Pb52GsF0NfhzeCqQJJAMF/OTmHSmncnjU5qHOZNxkKRh
+         RIzQU0B+kjsubpr246Xc8GXEG4lmnMYRMwkQ1nkcfJbatox9WIkVsrI0EpEp+mceJrIC
+         EkA42hNxka/dVLLGtXoFW6//hT5xctPW4OXkz3lxXOv45eTN9NoH3G8w3BJi+83aaKnX
+         r0Mg==
+X-Gm-Message-State: AOAM530fadI3QeOVZgW7N84Bwxi+Ab0RyAJJAuKhQ+eh9Mg5xyvYedWX
+        gxb9dg2L6I64G4kza0zZkaFDhABlvTWMTThnwW0=
+X-Google-Smtp-Source: ABdhPJxt9GVPA9DjVN9pjyBVoaZOf5BMUo0nAuBMyDRzbdXHIL3molT65W9iQPzeBKVpMYv9c28iqyLgPEvmJ4M12Ck=
+X-Received: by 2002:a17:906:649b:b0:711:fde7:be43 with SMTP id
+ e27-20020a170906649b00b00711fde7be43mr7174456ejm.294.1655262567782; Tue, 14
+ Jun 2022 20:09:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220614090633.43832-1-nashuiliang@gmail.com> <20220615093424.961cfa58eae0a8ce601e7af6@kernel.org>
+In-Reply-To: <20220615093424.961cfa58eae0a8ce601e7af6@kernel.org>
+From:   chuang <nashuiliang@gmail.com>
+Date:   Wed, 15 Jun 2022 11:09:16 +0800
+Message-ID: <CACueBy7Q6TenVFGau7Y+8nuo9ZLqruC1Pijw1YuMgyOUhjULMA@mail.gmail.com>
+Subject: Re: [PATCH] kprobes: Rollback post_handler on failed arm_kprobe()
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     stable@vger.kernel.org,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ingo Molnar <mingo@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+On Wed, Jun 15, 2022 at 8:34 AM Masami Hiramatsu <mhiramat@kernel.org> wrote:
+>
+> Hi Chuang,
+>
+> On Tue, 14 Jun 2022 17:06:33 +0800
+> Chuang W <nashuiliang@gmail.com> wrote:
+>
+> > In a scenario where livepatch and aggrprobe coexist, if arm_kprobe()
+> > returns an error, ap.post_handler, while has been modified to
+> > p.post_handler, is not rolled back.
+>
+> Would you mean 'coexist' on the same function?
 
-On Fri, 2022-06-10 at 18:55 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> ---
+Yes, It's the same function.
 
-[snip]
+>
+> >
+> > When ap.post_handler is not NULL (not rolled back), the caller (e.g.
+> > register_kprobe/enable_kprobe) of arm_kprobe_ftrace() will always fail.
+>
+> It seems this explanation and the actual code does not
+> match. Can you tell me what actually you observed?
+>
+> Thank you,
+>
 
-> +
-> +static int mtk_dp_parse_capabilities(struct mtk_dp *mtk_dp)
-> +{
-> +	u8 val;
-> +	struct mtk_dp_train_info *train_info = &mtk_dp->train_info;
-> +
-> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_SET_POWER,
-> DP_SET_POWER_D0);
-> +	usleep_range(2000, 5000);
-> +
-> +	drm_dp_read_dpcd_caps(&mtk_dp->aux, mtk_dp->rx_cap);
-> +
-> +	mtk_dp->rx_cap[DP_TRAINING_AUX_RD_INTERVAL] &=
-> DP_TRAINING_AUX_RD_MASK;
-> +
-> +	train_info->link_rate = min_t(int, mtk_dp->max_linkrate,
-> +				      mtk_dp->rx_cap[mtk_dp-
-> >max_linkrate]);
-> +	train_info->lane_count = min_t(int, mtk_dp->max_lanes,
-> +				       drm_dp_max_lane_count(mtk_dp-
-> >rx_cap));
-> +
-> +	train_info->tps3 = drm_dp_tps3_supported(mtk_dp->rx_cap);
-> +	train_info->tps4 = drm_dp_tps4_supported(mtk_dp->rx_cap);
-> +
-> +	train_info->sink_ssc = !!(mtk_dp->rx_cap[DP_MAX_DOWNSPREAD] &
-> +				  DP_MAX_DOWNSPREAD_0_5);
+I briefly describe the steps involved, a patch (kprobes: Rollback
+kprobe flags on failed arm_kprobe,
+https://lore.kernel.org/all/20220612213156.1323776351ee1be3cabc7fcc@kernel.org/T/)
+must be added, otherwise it will panic:
 
-I think this is redundant because next statement would set sink_scc to
-false.
+1) add a livepatch
 
-Regards,
-CK
+$ insmod livepatch-XXX.ko
 
-> +
-> +	train_info->sink_ssc = false;
-> +
-> +	drm_dp_dpcd_readb(&mtk_dp->aux, DP_MSTM_CAP, &val);
-> +	if (val & DP_MST_CAP) {
-> +		/* Clear DP_DEVICE_SERVICE_IRQ_VECTOR_ESI0 */
-> +		drm_dp_dpcd_readb(&mtk_dp->aux,
-> +				  DP_DEVICE_SERVICE_IRQ_VECTOR_ESI0,
-> &val);
-> +		if (val)
-> +			drm_dp_dpcd_writeb(&mtk_dp->aux,
-> +					   DP_DEVICE_SERVICE_IRQ_VECTOR
-> _ESI0,
-> +					   val);
-> +	}
-> +
-> +	return 0;
-> +}
+2) add a kprobe using tracefs API
 
+$ echo 'p:mykprobe XXX' > /sys/kernel/debug/tracing/kprobe_events
+
+At this time, XXX is a simple kprobe, kprobe->post_handler = NULL.
+
+3) add a second kprobe using raw kprobe API (i.e. register_kprobe),
+the new kprobe->post_handler != NULL
+
+$ insmod kprobe_XXX.ko
+$ insmod: ERROR: could not insert module kprobe_XXX.ko: Device or resource busy
+
+This will fail (as expected). However, XXX is modified to an
+aggrprobe. agKprobe->post_handler = aggr_post_handler, it's not rolled
+back on failed arm_kprobe().
+
+4) add a third kprobe using bpftrace/bcc tool
+
+$ bpftrace -e 'kprobe:XXX {printf("%s", kstack());}'
+Attaching 1 probe...
+perf_event_open(/sys/kernel/debug/tracing/events/kprobes/p_XXX_0_1_bcc_440/id):
+Device or resource busy
+Error attaching probe: 'kprobe:blkcg_destroy_blkgs'
+$ bpftrace -e 'kprobe:XXX {printf("%s", kstack());}'
+Attaching 1 probe...
+perf_event_open(/sys/kernel/debug/tracing/events/kprobes/p_XXX_0_1_bcc_440/id):
+Device or resource busy
+Error attaching probe: 'kprobe:blkcg_destroy_blkgs'
+
+This will always fail (not as expected).
+
+> >
+> > Fixes: 12310e343755 ("kprobes: Propagate error from arm_kprobe_ftrace()")
+> > Signed-off-by: Chuang W <nashuiliang@gmail.com>
+> > Cc: <stable@vger.kernel.org>
+> > ---
+> >  kernel/kprobes.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> > index f214f8c088ed..0610b02a3a05 100644
+> > --- a/kernel/kprobes.c
+> > +++ b/kernel/kprobes.c
+> > @@ -1300,6 +1300,7 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+> >  {
+> >       int ret = 0;
+> >       struct kprobe *ap = orig_p;
+> > +     kprobe_post_handler_t old_post_handler = NULL;
+> >
+> >       cpus_read_lock();
+> >
+> > @@ -1351,6 +1352,9 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+> >
+> >       /* Copy the insn slot of 'p' to 'ap'. */
+> >       copy_kprobe(ap, p);
+> > +
+> > +     /* save the old post_handler */
+> > +     old_post_handler = ap->post_handler;
+> >       ret = add_new_kprobe(ap, p);
+> >
+> >  out:
+> > @@ -1365,6 +1369,7 @@ static int register_aggr_kprobe(struct kprobe *orig_p, struct kprobe *p)
+> >                       ret = arm_kprobe(ap);
+> >                       if (ret) {
+> >                               ap->flags |= KPROBE_FLAG_DISABLED;
+> > +                             ap->post_handler = old_post_handler;
+> >                               list_del_rcu(&p->list);
+> >                               synchronize_rcu();
+> >                       }
+> > --
+> > 2.34.1
+> >
+>
+>
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>

@@ -2,164 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3865E54D203
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:52:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B890754D207
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349843AbiFOTwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 15:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51714 "EHLO
+        id S1347348AbiFOTwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348008AbiFOTwS (ORCPT
+        with ESMTP id S1343917AbiFOTwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:52:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3625031353
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:52:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655322736;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YRLwzrcO75eUkj7xSmsgTB+2q1qWebaIXpEC9jk4So8=;
-        b=Ogu6nhQ13tKLMrDnM1qkFk5UHUVy+sehHrQ8qtpVCmpz9N9yjqt5jRF/Ep3ZgyoKcC5XN7
-        xogaMt7jQZ6vik+tGkCFEGKgd+xkKTwggLqACildC1+IkD6sqGxG91ZDxN7Pqkwy7I3QDt
-        pbMqTuPRdmaKasPfG4Xw0PtPwy0KoUU=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-516-E6l0hePEN_iRQSw2LdiPWA-1; Wed, 15 Jun 2022 15:52:14 -0400
-X-MC-Unique: E6l0hePEN_iRQSw2LdiPWA-1
-Received: by mail-wm1-f71.google.com with SMTP id v125-20020a1cac83000000b0039c832fbd02so1745350wme.4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:52:14 -0700 (PDT)
+        Wed, 15 Jun 2022 15:52:33 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529A7D81;
+        Wed, 15 Jun 2022 12:52:31 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id v22so22372101ybd.5;
+        Wed, 15 Jun 2022 12:52:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=YRLwzrcO75eUkj7xSmsgTB+2q1qWebaIXpEC9jk4So8=;
-        b=B+jN/NSYhmWSJL55F+bgPhLJ/34hLO+UTIRkdx4VcNh0RYcMq7baipji/nRhwwy3qT
-         zEMYUK0sKqFEEXG1UzUMldWHZGDU6fk2xSiNzyhIlrs3DXpHHcki0vvXJo+pvxj898z4
-         ZY6Wg8ubTQGGtLFHGFdNQ4vrGXXMYNxWdKNuaPT7WOALr74Vau1yUkFYW4i4ePEDHICV
-         XNxwv/E4dyioOYZW8uEJ6rFScOs5krVbDN6rBcgM2J65Q2pAXz0do8m+4B7rS0MBVfuV
-         HcA0x+2G5tbd7mr75roLQJYq5Oca0tVZrTXnSe8Zn//4NXbdBcVJ/40NTkMn6PCONinM
-         jQ2Q==
-X-Gm-Message-State: AJIora8iMya2kYn+XE+gnst7xdRLzqN15F5iYtSDMNioHlwPfZDrF8JC
-        Nd2wa29ndkUSbpGRdDYRKyLvzRFUcmR/dFWBgjnG4oocfg90XuAYajO9mqdh3OIXQf+jtN2+v9w
-        Sik/xmZL0Zt6pZvg+nlv7LSM2
-X-Received: by 2002:adf:f385:0:b0:213:bb0e:383a with SMTP id m5-20020adff385000000b00213bb0e383amr1320017wro.481.1655322733545;
-        Wed, 15 Jun 2022 12:52:13 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1uLuCrcc2dD7oeLp1sOoZuvyfwuwYmCD090QJLv13+V/Kkg/fUSiN7SqNEnaj6HOVRhsUTsgg==
-X-Received: by 2002:adf:f385:0:b0:213:bb0e:383a with SMTP id m5-20020adff385000000b00213bb0e383amr1319996wro.481.1655322733286;
-        Wed, 15 Jun 2022 12:52:13 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70a:2700:1d28:26c3:b272:fcc6? (p200300cbc70a27001d2826c3b272fcc6.dip0.t-ipconnect.de. [2003:cb:c70a:2700:1d28:26c3:b272:fcc6])
-        by smtp.gmail.com with ESMTPSA id d9-20020a5d6449000000b002101ed6e70fsm15466874wrw.37.2022.06.15.12.52.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 12:52:12 -0700 (PDT)
-Message-ID: <3f190cd4-df87-feeb-bae4-56348498fa82@redhat.com>
-Date:   Wed, 15 Jun 2022 21:52:11 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mL9akpVVZ4tEzNekwbjZgLIJgiBmLezCfn7/cgOspMQ=;
+        b=WTt/+ZRr+Mm+q7tKoJiaPW2HT4+9IFUK0PZFU1rbiY2QdpZwke6Ek9VilKanhUhVVs
+         1MUV+ALCpnC0Mp9202mcsVOSDetHm+bTKA40ZNi91AgARWHiTpHMGUOHT8/FnIN31SIV
+         OAq5B3kpi9HDf+5DCzQ7KkLQ5sVV3jEEu1rcRpHQ5mmVSvEWlEFhUlDgtedEY9SgyJmQ
+         rbq+XolDRdo5fRmRJFQEZ64NEYK28kMpaFC6kFWka9N+VUpJohwINIdc3wnfOeZxhAx+
+         TZAv2gRDB3iKVbXCwrFIHpmPJHTskok6R1qAdqvz6hi8Zf2M2l27VkOutYgUVqMWCfES
+         1y4g==
+X-Gm-Message-State: AJIora/JsnsH/s6kVF7bTKq/tGOJxTbm8r9t4yMIj1D+JYG0HHcxFkTl
+        DT+zHf4sQlVpShtGH7QQNzeqhOQx5byE5nDbFOA=
+X-Google-Smtp-Source: AGRyM1sF+FBhgh0k43sS5ry6Ox06fy9vYOfaKhwdj6kn6fPKiE+CPeLL04/IuPY068Cde/SdzOSdQg3fFpFDF6iy/GU=
+X-Received: by 2002:a25:d748:0:b0:65c:6b00:55af with SMTP id
+ o69-20020a25d748000000b0065c6b0055afmr1534149ybg.365.1655322750507; Wed, 15
+ Jun 2022 12:52:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Peter Collingbourne <pcc@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mel Gorman <mgorman@techsingularity.net>
-References: <20220614093629.76309-1-david@redhat.com>
- <Yqn53TimQq33BanG@xz-m1.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3] mm/mprotect: try avoiding write faults for exclusive
- anonymous pages when changing protection
-In-Reply-To: <Yqn53TimQq33BanG@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1843211.tdWV9SEqCh@kreacher> <2653857.mvXUDI8C0e@kreacher>
+ <2851774.e9J7NaK4W3@kreacher> <YqglkQZxAagb8ln/@lahna> <CAJZ5v0jBLNpXpVn=WBm1rLxDkPFNo=UqsfDnuWS9hD=CRDPbsQ@mail.gmail.com>
+ <Yql74qs6nYwRaQYf@lahna>
+In-Reply-To: <Yql74qs6nYwRaQYf@lahna>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 15 Jun 2022 21:52:19 +0200
+Message-ID: <CAJZ5v0jM=cUEmABWeV2=v8etXRWLT=GE_FhV1CYRfNrv72CkkA@mail.gmail.com>
+Subject: Re: [PATCH v2 04/16] thunderbolt: ACPI: Replace tb_acpi_find_port()
+ with acpi_find_child_by_adr()
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        "open list:ULTRA-WIDEBAND (UWB) SUBSYSTEM:" 
+        <linux-usb@vger.kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15.06.22 17:25, Peter Xu wrote:
-> On Tue, Jun 14, 2022 at 11:36:29AM +0200, David Hildenbrand wrote:
->> Similar to our MM_CP_DIRTY_ACCT handling for shared, writable mappings, we
->> can try mapping anonymous pages in a private writable mapping writable if
->> they are exclusive, the PTE is already dirty, and no special handling
->> applies. Mapping the anonymous page writable is essentially the same thing
->> the write fault handler would do in this case.
->>
->> Special handling is required for uffd-wp and softdirty tracking, so take
->> care of that properly. Also, leave PROT_NONE handling alone for now;
->> in the future, we could similarly extend the logic in do_numa_page() or
->> use pte_mk_savedwrite() here.
->>
->> While this improves mprotect(PROT_READ)+mprotect(PROT_READ|PROT_WRITE)
->> performance, it should also be a valuable optimization for uffd-wp, when
->> un-protecting.
->>
->> This has been previously suggested by Peter Collingbourne in [1],
->> relevant in the context of the Scudo memory allocator, before we had
->> PageAnonExclusive.
->>
->> This commit doesn't add the same handling for PMDs (i.e., anonymous THP,
->> anonymous hugetlb); benchmark results from Andrea indicate that there
->> are minor performance gains, so it's might still be valuable to streamline
->> that logic for all anonymous pages in the future.
->>
->> As we now also set MM_CP_DIRTY_ACCT for private mappings, let's rename
->> it to MM_CP_TRY_CHANGE_WRITABLE, to make it clearer what's actually
->> happening.
-> 
-> I'm personally not sure why DIRTY_ACCT cannot be applied to private
-> mappings; it sounds not only for shared but a common thing.  I also don't
+On Wed, Jun 15, 2022 at 8:27 AM Mika Westerberg
+<mika.westerberg@linux.intel.com> wrote:
+>
+> On Tue, Jun 14, 2022 at 08:25:53PM +0200, Rafael J. Wysocki wrote:
+> > Hi Mika,
+> >
+> > On Tue, Jun 14, 2022 at 8:07 AM Mika Westerberg
+> > <mika.westerberg@linux.intel.com> wrote:
+> > >
+> > > Hi Rafael,
+> > >
+> > > On Mon, Jun 13, 2022 at 08:11:36PM +0200, Rafael J. Wysocki wrote:
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > Use acpi_find_child_by_adr() to find the child matching a given bus
+> > > > address instead of tb_acpi_find_port() that walks the list of children
+> > > > of an ACPI device directly for this purpose and drop the latter.
+> > > >
+> > > > Apart from simplifying the code, this will help to eliminate the
+> > > > children list head from struct acpi_device as it is redundant and it
+> > > > is used in questionable ways in some places (in particular, locking is
+> > > > needed for walking the list pointed to it safely, but it is often
+> > > > missing).
+> > > >
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > ---
+> > > >
+> > > > v1 -> v2:
+> > > >    * Drop tb_acpi_find_port() (Heikki, Andy).
+> > > >    * Change the subject accordingly
+> > > >
+> > > > ---
+> > > >  drivers/thunderbolt/acpi.c |   27 ++++-----------------------
+> > > >  1 file changed, 4 insertions(+), 23 deletions(-)
+> > > >
+> > > > Index: linux-pm/drivers/thunderbolt/acpi.c
+> > > > ===================================================================
+> > > > --- linux-pm.orig/drivers/thunderbolt/acpi.c
+> > > > +++ linux-pm/drivers/thunderbolt/acpi.c
+> > > > @@ -301,26 +301,6 @@ static bool tb_acpi_bus_match(struct dev
+> > > >       return tb_is_switch(dev) || tb_is_usb4_port_device(dev);
+> > > >  }
+> > > >
+> > > > -static struct acpi_device *tb_acpi_find_port(struct acpi_device *adev,
+> > > > -                                          const struct tb_port *port)
+> > > > -{
+> > > > -     struct acpi_device *port_adev;
+> > > > -
+> > > > -     if (!adev)
+> > > > -             return NULL;
+> > > > -
+> > > > -     /*
+> > > > -      * Device routers exists under the downstream facing USB4 port
+> > > > -      * of the parent router. Their _ADR is always 0.
+> > > > -      */
+> > > > -     list_for_each_entry(port_adev, &adev->children, node) {
+> > > > -             if (acpi_device_adr(port_adev) == port->port)
+> > > > -                     return port_adev;
+> > > > -     }
+> > > > -
+> > > > -     return NULL;
+> > > > -}
+> > > > -
+> > > >  static struct acpi_device *tb_acpi_switch_find_companion(struct tb_switch *sw)
+> > > >  {
+> > > >       struct acpi_device *adev = NULL;
+> > > > @@ -331,7 +311,8 @@ static struct acpi_device *tb_acpi_switc
+> > > >               struct tb_port *port = tb_port_at(tb_route(sw), parent_sw);
+> > > >               struct acpi_device *port_adev;
+> > > >
+> > > > -             port_adev = tb_acpi_find_port(ACPI_COMPANION(&parent_sw->dev), port);
+> > > > +             port_adev = acpi_find_child_by_adr(ACPI_COMPANION(&parent_sw->dev),
+> > > > +                                                port->port);
+> > > >               if (port_adev)
+> > > >                       adev = acpi_find_child_device(port_adev, 0, false);
+> > > >       } else {
+> > > > @@ -364,8 +345,8 @@ static struct acpi_device *tb_acpi_find_
+> > > >       if (tb_is_switch(dev))
+> > > >               return tb_acpi_switch_find_companion(tb_to_switch(dev));
+> > > >       else if (tb_is_usb4_port_device(dev))
+> > > > -             return tb_acpi_find_port(ACPI_COMPANION(dev->parent),
+> > > > -                                      tb_to_usb4_port_device(dev)->port);
+> > >
+> > > Can you move the above comment here too?
+> >
+> > Do you mean to move the comment from tb_acpi_find_port() right here or
+> > before the if (tb_is_switch(dev)) line above?
+> >
+> > I think that tb_acpi_switch_find_companion() would be a better place
+> > for that comment.  At least it would match the code passing 0 to
+> > acpi_find_child_device() in there.
+>
+> Yes, I agree (as long as the comment stays somewhere close ;-))
 
-TBH, I think the name is just absolutely unclear in that context.
+OK, I'll move it to tb_acpi_switch_find_companion() then.
 
-> know whether "change writable" could be misread too anyway. Say, we're
-> never changing RO->RW mappings with this flag, but only try to unprotect
-> the page proactively when proper, from that POV Nadav's suggestion seems
-> slightly better on using "unprotect".
-
-write unprotection is a change from RO->RW, so I don't immediately see
-the difference.
-
-Anyhow, I don't like the sounding of TRY_WRITE_UNPROTECT.
-
-I made it match the function name that I had:
-
-MM_CP_TRY_CHANGE_WRITABLE
--> !pte_write()?
- -> can_change_pte_writable() ?
-  ->pte_mkwrite()
-
-Maybe MM_CP_TRY_MAKE_WRITABLE / MM_CP_TRY_MAKE_PTE_WRITABLE is clearer?
-
-Open for suggestions because I'm apparently not the bast at naming
-things either.
-
-> 
-> No strong opinion, the patch looks correct to me, and thanks for providing
-> the new test results,
-> 
-> Acked-by: Peter Xu <peterx@redhat.com>
-> 
-
-Thanks Peter!
-
--- 
-Thanks,
-
-David / dhildenb
-
+Thanks!

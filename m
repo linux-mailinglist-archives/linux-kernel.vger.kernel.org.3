@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D44AB54C9C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6624554C9C7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346448AbiFON2T convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Jun 2022 09:28:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S1348032AbiFON3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 09:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243950AbiFON2R (ORCPT
+        with ESMTP id S1348446AbiFON2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 09:28:17 -0400
+        Wed, 15 Jun 2022 09:28:33 -0400
 Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664771CFE1;
-        Wed, 15 Jun 2022 06:28:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308952F02D;
+        Wed, 15 Jun 2022 06:28:32 -0700 (PDT)
 Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 5A8301C0BC8; Wed, 15 Jun 2022 15:28:12 +0200 (CEST)
-Date:   Wed, 15 Jun 2022 15:28:09 +0200
+        id F25FC1C0BC8; Wed, 15 Jun 2022 15:28:30 +0200 (CEST)
+Date:   Wed, 15 Jun 2022 15:28:27 +0200
 From:   Pavel Machek <pavel@ucw.cz>
 To:     Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -26,17 +26,17 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Samuel Holland <samuel@sholland.org>, Ondrej Jirman <x@xff.cz>,
-        Martijn Braam <martijn@brixit.nl>
-Subject: Re: [PATCH 1/2] dt-bindings: arm: rockchip: Add PinePhone Pro
- bindings
-Message-ID: <20220615132809.GA1429@bug>
+        Martijn Braam <martijn@brixit.nl>,
+        Ondrej Jirman <megous@megous.com>
+Subject: Re: [PATCH 2/2] arm64: dts: rockchip: Add initial support for Pine64
+ PinePhone Pro
+Message-ID: <20220615132827.GB1429@bug>
 References: <20220529031705.278631-1-tom@tom-fitzhenry.me.uk>
- <20220529031705.278631-2-tom@tom-fitzhenry.me.uk>
+ <20220529031705.278631-3-tom@tom-fitzhenry.me.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20220529031705.278631-2-tom@tom-fitzhenry.me.uk>
+In-Reply-To: <20220529031705.278631-3-tom@tom-fitzhenry.me.uk>
 User-Agent: Mutt/1.5.23 (2014-03-12)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -49,28 +49,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi!
 
-> Document board compatible names for Pine64 PinePhonePro.
-> 
-> https://wiki.pine64.org/wiki/PinePhone_Pro
-> 
-> Signed-off-by: Tom Fitzhenry <tom@tom-fitzhenry.me.uk>
+> +	// Per "RK 3399 SARADC", page 8.
+> +	adc-keys {
+> +		compatible = "adc-keys";
+> +		io-channels = <&saradc 1>;
+> +		io-channel-names = "buttons";
+> +		keyup-threshold-microvolt = <1600000>;
+> +		poll-interval = <100>;
+> +
+> +		button-up {
+> +			label = "Volume Up";
+> +			linux,code = <KEY_VOLUMEUP>;
+> +			press-threshold-microvolt = <100000>;
+> +		};
+> +
+> +		button-down {
+> +			label = "Volume Down";
+> +			linux,code = <KEY_VOLUMEDOWN>;
+> +			press-threshold-microvolt = <300000>;
+> +		};
+> +	};
 
-It makes sense to get this reviewed early, because Rob's ack is needed here, right?
+Wow. Quite a hack...
 
-> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-> @@ -489,6 +489,11 @@ properties:
->            - const: pine64,pinenote
->            - const: rockchip,rk3566
->  
-> +      - description: Pine64 PinePhonePro
-> +        items:
-> +          - const: pine64-pinephone-pro
 
-This should be pine64,... right?
+> +	// Per "RK3399 GPIO", page 11.
+> +	leds {
+> +		compatible = "gpio-leds";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&red_led_pin &green_led_pin &blue_led_pin>;
+
+
+> + led-standby { + color = <LED_COLOR_ID_RED>; + default-state = "off"; + function = 
+
+I wish LED was connected to PWM, not to simple GPIO...
+
+Plus, it is really one RGB LED, right? It should be handled as such.
 
 Best regards,
-									Pavel
-
+								Pavel
 
 -- 
 (english) http://www.livejournal.com/~pavelmachek

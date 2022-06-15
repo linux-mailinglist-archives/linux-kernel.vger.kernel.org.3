@@ -2,115 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA5C54CDBD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:04:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4241A54CDC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243695AbiFOQEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60060 "EHLO
+        id S244556AbiFOQGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232197AbiFOQEx (ORCPT
+        with ESMTP id S242285AbiFOQGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:04:53 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ACD2255BE
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:04:51 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id o33-20020a17090a0a2400b001ea806e48c6so2476629pjo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:04:51 -0700 (PDT)
+        Wed, 15 Jun 2022 12:06:35 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3ADA26107;
+        Wed, 15 Jun 2022 09:06:33 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id n28so16867461edb.9;
+        Wed, 15 Jun 2022 09:06:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ePN6l7qq+5+AEApPN8ZIDny0v2CL19RcX8ZdNrMR7lM=;
-        b=aqM0+dFn+nn8gN9lgLMZUiyexrJiMRh9URiP1j+pSR5rH9FkZgHYRqWHAGfoOH7H/o
-         apqcb2Dt7BbllawEZXVjxmkejglQNMu8/m/ujk9rvIJO/2nl+oTm2L5DVPcLrN1HKfOj
-         bHAGlIQLWJssv8v2uPJdpwtXpYuCnhLLi1buEkKltNqWnc3wbTTrjB2zJhfAL11UH+CV
-         qbsmGDz4A0Ueag0lhEd2Dr+4z4HJ1BHWv8YWg2vD3pOsABM1ZdIkjDWkeoWUFl9QVlI7
-         6S6DAA+GJZm+8R4kiejkyXWgiRXnUGU4gp6fZAMJYI3csPLiA3mgAwppGQ44fA8W5EXb
-         O62w==
+         :cc;
+        bh=pXS0aT6oKrgt+wAGQWlhcoc2V0p+1GRf7Bzb7hg9RUU=;
+        b=AfYY+Zcyr4X/wQLS9cumgixTsRJXeDO4jnisVql6ac/4Mxyu4XTZfzsn9TmRs1KhSN
+         0noSP6ut+v17MTpoQ56tMXnh9XKpqSqhF7tly5JEFbs4gsvcV6XmkgOZFdw1Rh6eFv9Y
+         Hm0x7YrxYUL1QPD2Rv7DhVEvxp3ylCcS6kMhs1cSWF+ywTVjo76ailnhE4YGDhLa1MtT
+         zFzZDpYL//bN0YbFEwA8Djkmg+tAmWpLFTef9RlLy0ceoMlCuRjM7VHPFHnQQEtaHIFS
+         RZ6meqNdGHpOQHnAiaH3e36cemNc3NUJQp6w5hvTrq4JSfo+Cqaq+Ke8R5A9DzEBbxiv
+         dwSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ePN6l7qq+5+AEApPN8ZIDny0v2CL19RcX8ZdNrMR7lM=;
-        b=SfbheBBzXbMyhEpmiVS8qMecX5CsiVjp6uBQ7BCsYYCQ9A+yxAN0ZCvFrgEoSysnpb
-         swGMy81a5ZeydHd6OcEJUX9VuyJRAh6FNAwTWSbcDYaM0IyXk6IXd8ZNcWdfYD6DBPUh
-         hVr9Q1aQ2eswruABXJmrxMFFn6Wu8atopobPcUPNeMHY5EmTCjEGMMuFlaPe35rCEljq
-         hnVe0KI5DqzFJlD+BqmrnBqUhgZ2V0uhE7FVLpAXt3LzcSIo2oXctl0hrX+FsSc/ineC
-         mx318KOR0DmGCsvWNT/Hq3ixMnxCKsYR38+y6FsDre19eh9sr0YGzGcmA5JM1K/ps4pL
-         e2oA==
-X-Gm-Message-State: AJIora9JQB1Osy7kFXRZY4PM0apjRim7WwMeVizVJKaH+XuEMGfTXrrh
-        PBHIbqOCmsled7YqUMTSlhDNroUhUlNXwwRHo2Rf3A==
-X-Google-Smtp-Source: AGRyM1vn/ajc9Zhrglm4j7l6bDUl6hYAdrUf3Sb59Qp8Lv5t13DLZGtXd5FnN6EgUEj2g6o4jDoor9Cr7RKIsPEATO4=
-X-Received: by 2002:a17:902:f353:b0:167:7bc1:b1b9 with SMTP id
- q19-20020a170902f35300b001677bc1b1b9mr84680ple.117.1655309090641; Wed, 15 Jun
- 2022 09:04:50 -0700 (PDT)
+         :message-id:subject:to:cc;
+        bh=pXS0aT6oKrgt+wAGQWlhcoc2V0p+1GRf7Bzb7hg9RUU=;
+        b=fZSU7muwo/1z/oe56FN+uf++C+pN20L3DPH7IkCO4gNQ8dh4bTpwyEvVNOS+KCXW1v
+         rHhYqjR0wk7tnXv+IHnvKWGHlgvhHK6jBRpi2twilm9MP9SDE01wSqSGHM7lt2f5ZTr8
+         RNJk5BRe7jsNhijlsu0FJEFMn4oJB93MOeA2dHxslpWW6rM1Gk1wOqroF5QAjzpCdddw
+         0PaKsn6AM1eEO+q90i7mhXNMU42xMElqhXwmf6RNpFEC8HdCnxGWy/4t2ckL/wwToc9i
+         nEb4z9xeaco7jXlDKCQ/qo3wpV5z4om/8ExSuFVSHO1bbHZ8/wmgNoexdtM30iFRA2YO
+         wgWg==
+X-Gm-Message-State: AJIora+YPRmBMOWeGB0XcnImFfJ8IXCqdDWAIuElSI8JSIZaPvzymLfe
+        Y2SW8/tg/yOBEeQlrZYRzXnIv4yu90vBW5AWP/U=
+X-Google-Smtp-Source: AGRyM1vrIZr7/YFqT5rqJqYLhrMK/jlDc0zz1cmqjCxlOy1tYwlEjtqiZz2MGYBJMCNVN8y6sWROvnhNCxlpm6sRQEA=
+X-Received: by 2002:aa7:d481:0:b0:42d:d5fd:f963 with SMTP id
+ b1-20020aa7d481000000b0042dd5fdf963mr538297edr.209.1655309192276; Wed, 15 Jun
+ 2022 09:06:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220613163705.1531721-1-nfraprado@collabora.com> <9c8c712c-75d1-bd0f-0205-be769ce5e83d@collabora.com>
-In-Reply-To: <9c8c712c-75d1-bd0f-0205-be769ce5e83d@collabora.com>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Wed, 15 Jun 2022 18:04:39 +0200
-Message-ID: <CAG3jFysv_LSM2+j5jWmC-zM-jik0WdGjE7Mwm=quAabG_LzB6A@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge: anx7625: Zero error variable when panel
- bridge not present
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, kernel@collabora.com,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tzung-Bi Shih <tzungbi@google.com>,
-        Xin Ji <xji@analogixsemi.com>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
+References: <20220615154918.521687-1-jjhiblot@traphandler.com> <20220615154918.521687-5-jjhiblot@traphandler.com>
+In-Reply-To: <20220615154918.521687-5-jjhiblot@traphandler.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 15 Jun 2022 18:05:55 +0200
+Message-ID: <CAHp75VeLSzuufTzyxND-p4798CLZyGRb+xETaWAP-5zayx7Ldw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] leds: Add a multicolor LED driver to group
+ monochromatic LEDs
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        johan+linaro@kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Jun 2022 at 09:52, AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
+On Wed, Jun 15, 2022 at 5:49 PM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
 >
-> Il 13/06/22 18:37, N=C3=ADcolas F. R. A. Prado ha scritto:
-> > While parsing the DT, the anx7625 driver checks for the presence of a
-> > panel bridge on endpoint 1. If it is missing, pdata->panel_bridge store=
-s
-> > the error pointer and the function returns successfully without first
-> > cleaning that variable. This is an issue since other functions later
-> > check for the presence of a panel bridge by testing the trueness of tha=
-t
-> > variable.
-> >
-> > In order to ensure proper behavior, zero out pdata->panel_bridge before
-> > returning when no panel bridge is found.
-> >
-> > Fixes: 9e82ea0fb1df ("drm/bridge: anx7625: switch to devm_drm_of_get_br=
-idge")
-> > Signed-off-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
-> >
->
-> I would've preferred s/zero out/cleanup/g but it's also fine as you wrote=
- it.
-> Besides, good catch!
->
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
-ora.com>
->
+> By allowing to group multiple monochrome LED into multicolor LEDs,
+> all involved LEDs can be controlled in-sync. This enables using effects
+> using triggers, etc.
 
-Applied to drm-misc-next
+...
+
+> +#include <linux/err.h>
+> +#include <linux/led-class-multicolor.h>
+> +#include <linux/leds.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/property.h>
+
+Missed math.h
+
+...
+
+> +static int iterate_subleds(struct device *dev, struct led_mcg_priv *priv,
+> +                          struct fwnode_handle *mcnode)
+
+Use namespace even for static functions (think about tracing, for example).
+
+led_mcg_iterave_subleds
+
+> +{
+> +       struct mc_subled *subled = priv->mc_cdev.subled_info;
+> +       struct fwnode_handle *fwnode;
+> +       int ret;
+> +
+> +       /* iterate over the nodes inside the multi-led node */
+> +       fwnode_for_each_child_node(mcnode, fwnode) {
+> +               u32 color;
+> +               struct led_classdev *led_cdev;
+> +
+> +               led_cdev = devm_fwnode_led_get(dev, fwnode, 0);
+> +               if (IS_ERR(led_cdev)) {
+
+> +                       ret = PTR_ERR(led_cdev);
+> +                       dev_err(dev, "unable to request LED: %d\n", ret);
+
+ret = dev_err_probe(...);
+
+> +                       goto release_fwnode;
+> +               }
+> +               priv->monochromatics[priv->mc_cdev.num_colors] = led_cdev;
+> +
+> +               ret = fwnode_property_read_u32(fwnode, "color", &color);
+> +               if (ret) {
+> +                       dev_err(dev, "cannot read color: %d\n", ret);
+> +                       goto release_fwnode;
+> +               }
+> +               subled[priv->mc_cdev.num_colors].color_index = color;
+> +
+> +               /* Make the sysfs of the monochromatic LED read-only */
+> +               led_cdev->flags |= LED_SYSFS_DISABLE;
+> +
+> +               priv->mc_cdev.num_colors++;
+> +       }
+> +
+> +       return 0;
+> +
+> +release_fwnode:
+> +       fwnode_handle_put(fwnode);
+> +       return ret;
+> +}
+
+...
+
+> +       /* count the nodes inside the multi-led node */
+> +       fwnode_for_each_child_node(mcnode, fwnode)
+> +               count++;
+
+Don't we have a _count API? Hmm... Indeed, we have it only for a
+device and not for fwnode...
+
+...
+
+> +       priv = devm_kzalloc(&pdev->dev,
+> +                           struct_size(priv, monochromatics, count),
+> +                           GFP_KERNEL);
+> +       if (!priv) {
+> +               ret = -ENOMEM;
+> +               goto release_mcnode;
+
+This is the wrong order. You shouldn't mix non-devm_ APIs with devm_
+like this. devm_ calls always should be first. You have two options
+(at least?): 1) drop devm_ and switch to plain error handling and
+->remove(); 2) make devm_ wrappers for the certain calls.
+
+> +       }
+
+...
+
+> +       if (ret) {
+> +               dev_err(&pdev->dev,
+> +                       "failed to register multicolor led for %s: %d\n",
+> +                       cdev->name, ret);
+
+Taking into account above,
+return dev_err_probe(...);
+
+> +               goto release_mcnode;
+> +       }
+
+-- 
+With Best Regards,
+Andy Shevchenko

@@ -2,201 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 658B454CC7B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE9554CC7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347532AbiFOPQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
+        id S1348061AbiFOPRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347151AbiFOPQa (ORCPT
+        with ESMTP id S1347151AbiFOPRN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:16:30 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334243DA46
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:16:29 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id a10so6492168wmj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:16:29 -0700 (PDT)
+        Wed, 15 Jun 2022 11:17:13 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55CF93D1D2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:17:09 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id h19so12593980wrc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:17:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Wau0fGW8yZsKjnuoyb0VTR4qVyMVH48h3qQAcCmJxHM=;
-        b=gsDwJdxlq2oa/E5drVyaHd8AqIB5EsHJGZX+yJs4Bh3IZRZWhyJg1tzAiW9vxJl9/Q
-         I6bZWcAHui00mntM2ACoE/BL7ZEWL8139NyKHCSm8617afMK4Qeclks5GiCSExeiU6QX
-         YOaHEWYs3I3Hy3jaUMZzD7qnubmVcnZR/NDqb/+uIGuUaw2hDDyLoyP5qkD1GvKWhAUq
-         D1AXeoyOXog3gnba1I1g82Fzhom0FNx8iA6Uw1p3+kcd+hf9bvi1GtqbfUn9njQEvqDm
-         FiY1W9rhvE/Z600Vn+e3KWPJ+NcO0SSJof7Hrm/ZFynpXA4M3t1Sc0kVO+U1Gzj+5tOg
-         l9ig==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Vvxf8KlSr0ZVRSgLE+viuGfqiYUL867BC1Qcel1jf2Q=;
+        b=GEMTMBYeJoJqX8s26fdaEEzaxqmr0OjcZ/ETLkbHSqp12148poShzWT+nvXFcGBtun
+         yRnS0XoQL1xVkD2YXR+5YZd6wo8Fwx4sItIrJApJ3+mcTv1lSCCf5vcDmHrLvbWFIKvb
+         hhQTq/JDNyosK6xQqBnJUXfJH8DOsMHseZWRiYkl1qtUk6KSo29qrN5YI2SNusR2C4KD
+         dmes5PkjPD5gg2UJY9kzX3BIUGUk0qIM7L1nEWiXF9vyVN2YgUqLQ9ILoM2aMbUI1hir
+         IrkcVgyg4WEf0zbXLeiHz+y7K6NZn8dMp4p5UMoikyPJtUKiYCAq6DUJKpeJvUPki7W3
+         zYrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Wau0fGW8yZsKjnuoyb0VTR4qVyMVH48h3qQAcCmJxHM=;
-        b=SoTsQOCp730YNUjDmgbRd/n2+iFAqc55a7IiAqQrMWV+XP+RjTau3QcecFlxWejIuj
-         K1aI7GvWdIYFz3KcIOmqG0SzgT/i7Iqd6S2SJe8cnLE0hE+RDvqgPUi2PC9SETdX0VeO
-         lXCONgw1AspgIqwoQgMDOQgPID++qBPpQ/VuMeVZNHgFA8IA5poEaSDDI6Vul/gg7jO7
-         BPy6Mv0/xzZMgJe1tLTJAJ0DxBDlzOQrn97hVgpw4rZ8VM2FfuctSSWl9vxjX8gW6H8T
-         FnILTbpYba6SvTfZIl33j0yCnyDzG3cvKz+SowaApHAqYiVJXEx0PxWt7rrlOjyWoWG+
-         RrRA==
-X-Gm-Message-State: AJIora9kDfQtqokG+hgdx7q4rkd3SUMegBLFAUWUyLx6QKPJ1qWiuC+G
-        /tGPw9XW8mER7liYyMpJDjhGPg==
-X-Google-Smtp-Source: AGRyM1vZvWOxzMMfyRsf49tj6gKTfsbDDI74LUEsue+sAc2CHuDIhWC6vvd1UMApy4oTjuKCS103AA==
-X-Received: by 2002:a1c:29c1:0:b0:39d:86c0:3ece with SMTP id p184-20020a1c29c1000000b0039d86c03ecemr9939wmp.138.1655306187683;
-        Wed, 15 Jun 2022 08:16:27 -0700 (PDT)
-Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id q16-20020a5d5750000000b0020e63ab5d78sm14781591wrw.26.2022.06.15.08.16.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 08:16:26 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 16:16:02 +0100
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     Zhangfei Gao <zhangfei.gao@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Wangzhou <wangzhou1@hisilicon.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-accelerators@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        Yang Shen <shenyang39@huawei.com>
-Subject: Re: [PATCH] uacce: fix concurrency of fops_open and uacce_remove
-Message-ID: <Yqn3spLZHpAkQ9Us@myrica>
-References: <20220610123423.27496-1-zhangfei.gao@linaro.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Vvxf8KlSr0ZVRSgLE+viuGfqiYUL867BC1Qcel1jf2Q=;
+        b=Eqqn/x7BJ+89ZGrYatOgMBZXFSWIUo6oRuiXxBIyAqXL7B8JSdbd4yQx0Jt+XdQ7qi
+         fK1z+Tli8Oy78AN0dBz0GoPPmElJLU6XS5xUJxZp4omJiZQDeum5oUqZ/7GVBq3byMZ5
+         GY4D8c8UJ0bnV/04OksvLB0LKZVHOB66WTp47AMrQrKD2TS2LWiD16vMT+7acfjjpaIS
+         RqfbmCZKBlU3+gy2gDLMjV+62fqU0Wkb0VsbZoQOB/Fc8x7hKYheOZbxLmvnL/u6LhsT
+         MVXy/TrxstaGBt/gdyG9p0hpYX8DalIijbYjOrttBnwGbEeE7q/iaH/E7JBKj0Fybwkv
+         cpMg==
+X-Gm-Message-State: AJIora8Mm9YsAcJuS+fABJ54oWoNsVcyGxc97U6hQoAwI4wi7Cysc46V
+        /UjYq9SphL3NpygCbsoeWqoxw1f+Bb+UMJBlimhhFg==
+X-Google-Smtp-Source: AGRyM1uV0/TnCCC9vUDVQzVqxqGoC9H1FzouHTEPOyFtLfkjXcB+OqFE+WURMKtbiig/6NgrlT6mS3TfTPw+yvjaoa8=
+X-Received: by 2002:a05:6000:1a8d:b0:219:e3f2:c092 with SMTP id
+ f13-20020a0560001a8d00b00219e3f2c092mr288061wry.375.1655306227590; Wed, 15
+ Jun 2022 08:17:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610123423.27496-1-zhangfei.gao@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220615150823.2230349-1-zhengjun.xing@linux.intel.com>
+In-Reply-To: <20220615150823.2230349-1-zhengjun.xing@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 15 Jun 2022 08:16:54 -0700
+Message-ID: <CAP-5=fVnD=jiSav=UAV9E_mc8XtcHad107ww8JSeiJ2y4ucxDw@mail.gmail.com>
+Subject: Re: [PATCH] perf record: Support "--cputype" option for hybrid events
+To:     zhengjun.xing@linux.intel.com
+Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, ak@linux.intel.com,
+        kan.liang@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jun 15, 2022 at 8:07 AM <zhengjun.xing@linux.intel.com> wrote:
+>
+> From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+>
+> perf stat already has the "--cputype" option to enable events only on the
+> specified PMU for the hybrid platform, this commit extends the "--cputype"
+> support to perf record.
+>
+> Without "--cputype", it reports events for both cpu_core and cpu_atom.
+>
+>  # ./perf record  -e cycles -a sleep 1 | ./perf report
+>
+>  # To display the perf.data header info, please use --header/--header-only options.
+>  #
+>  [ perf record: Woken up 1 times to write data ]
+>  [ perf record: Captured and wrote 0.000 MB (null) ]
+>  #
+>  # Total Lost Samples: 0
+>  #
+>  # Samples: 335  of event 'cpu_core/cycles/'
+>  # Event count (approx.): 35855267
+>  #
+>  # Overhead  Command          Shared Object      Symbol
+>  # ........  ...............  .................  .........................................
+>  #
+>      10.31%  swapper          [kernel.kallsyms]  [k] poll_idle
+>       9.42%  swapper          [kernel.kallsyms]  [k] menu_select
+>       ...    ...               ...               ... ...
+>
+>  # Samples: 61  of event 'cpu_atom/cycles/'
+>  # Event count (approx.): 16453825
+>  #
+>  # Overhead  Command        Shared Object      Symbol
+>  # ........  .............  .................  ......................................
+>  #
+>      26.36%  snapd          [unknown]          [.] 0x0000563cc6d03841
+>       7.43%  migration/13   [kernel.kallsyms]  [k] update_sd_lb_stats.constprop.0
+>       ...    ...            ...                ... ...
+>
+> With "--cputype", it reports events only for the specified PMU.
+>
+>  # ./perf record --cputype core  -e cycles -a sleep 1 | ./perf report
+>
+>  # To display the perf.data header info, please use --header/--header-only options.
+>  #
+>  [ perf record: Woken up 1 times to write data ]
+>  [ perf record: Captured and wrote 0.000 MB (null) ]
+>  #
+>  # Total Lost Samples: 0
+>  #
+>  # Samples: 221  of event 'cpu_core/cycles/'
+>  # Event count (approx.): 27121818
+>  #
+>  # Overhead  Command          Shared Object      Symbol
+>  # ........  ...............  .................  .........................................
+>  #
+>      11.24%  swapper          [kernel.kallsyms]  [k] e1000_irq_enable
+>       7.77%  swapper          [kernel.kallsyms]  [k] mwait_idle_with_hints.constprop.0
+>       ...    ...              ...                ... ...
 
-On Fri, Jun 10, 2022 at 08:34:23PM +0800, Zhangfei Gao wrote:
-> The uacce parent's module can be removed when uacce is working,
-> which may cause troubles.
-> 
-> If rmmod/uacce_remove happens just after fops_open: bind_queue,
-> the uacce_remove can not remove the bound queue since it is not
-> added to the queue list yet, which blocks the uacce_disable_sva.
-> 
-> Change queues_lock area to make sure the bound queue is added to
-> the list thereby can be searched in uacce_remove.
-> 
-> And uacce->parent->driver is checked immediately in case rmmod is
-> just happening.
-> 
-> Also the parent driver must always stop DMA before calling
-> uacce_remove.
-> 
-> Signed-off-by: Yang Shen <shenyang39@huawei.com>
-> Signed-off-by: Zhangfei Gao <zhangfei.gao@linaro.org>
-> ---
->  drivers/misc/uacce/uacce.c | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
-> index 281c54003edc..b6219c6bfb48 100644
-> --- a/drivers/misc/uacce/uacce.c
-> +++ b/drivers/misc/uacce/uacce.c
-> @@ -136,9 +136,16 @@ static int uacce_fops_open(struct inode *inode, struct file *filep)
->  	if (!q)
->  		return -ENOMEM;
->  
-> +	mutex_lock(&uacce->queues_lock);
-> +
-> +	if (!uacce->parent->driver) {
-
-I don't think this is useful, because the core clears parent->driver after
-having run uacce_remove():
-
-  rmmod hisi_zip		open()
-   ...				 uacce_fops_open()
-   __device_release_driver()	  ...
-    pci_device_remove()
-     hisi_zip_remove()
-      hisi_qm_uninit()
-       uacce_remove()
-        ...			  ...
-   				  mutex_lock(uacce->queues_lock)
-    ...				  if (!uacce->parent->driver)
-    device_unbind_cleanup()	  /* driver still valid, proceed */
-     dev->driver = NULL
-
-Since uacce_remove() disabled SVA, the following uacce_bind_queue() will
-fail anyway. However, if uacce->flags does not have UACCE_DEV_SVA set,
-we'll proceed further and call uacce->ops->get_queue(), which does not
-exist anymore since the parent module is gone.
-
-I think we need the global uacce_mutex to serialize uacce_remove() and
-uacce_fops_open(). uacce_remove() would do everything, including
-xa_erase(), while holding that mutex. And uacce_fops_open() would try to
-obtain the uacce object from the xarray while holding the mutex, which
-fails if the uacce object is being removed.
+This is already possible by having the PMU name as part of the event,
+cpu_atom/cycles/ or cpu_core/cycles/. I don't know why we're adding
+"hybrid" all over the code base, I wish it would stop. You are asking
+for an option here for an implied PMU for events that don't specify a
+PMU. The option should be called --pmutype and consider all PMUs. We
+should remove the "hybrid" PMU list and make all of the "hybrid" code
+generic.
 
 Thanks,
-Jean
+Ian
 
-> +		ret = -ENODEV;
-> +		goto out_with_lock;
-> +	}
+> Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> ---
+>  tools/perf/Documentation/perf-record.txt |  4 ++++
+>  tools/perf/builtin-record.c              |  3 +++
+>  tools/perf/builtin-stat.c                | 20 --------------------
+>  tools/perf/util/pmu-hybrid.c             | 19 +++++++++++++++++++
+>  tools/perf/util/pmu-hybrid.h             |  2 ++
+>  5 files changed, 28 insertions(+), 20 deletions(-)
+>
+> diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
+> index cf8ad50f3de1..ba8d680da1ac 100644
+> --- a/tools/perf/Documentation/perf-record.txt
+> +++ b/tools/perf/Documentation/perf-record.txt
+> @@ -402,6 +402,10 @@ Enable weightened sampling. An additional weight is recorded per sample and can
+>  displayed with the weight and local_weight sort keys.  This currently works for TSX
+>  abort events and some memory events in precise mode on modern Intel CPUs.
+>
+> +--cputype::
+> +Only enable events on applying cpu with this type for hybrid platform(e.g. core or atom).
+> +For non-hybrid events, it should be no effect.
 > +
->  	ret = uacce_bind_queue(uacce, q);
->  	if (ret)
-> -		goto out_with_mem;
-> +		goto out_with_lock;
->  
->  	q->uacce = uacce;
->  
-> @@ -153,7 +160,6 @@ static int uacce_fops_open(struct inode *inode, struct file *filep)
->  	uacce->inode = inode;
->  	q->state = UACCE_Q_INIT;
->  
-> -	mutex_lock(&uacce->queues_lock);
->  	list_add(&q->list, &uacce->queues);
->  	mutex_unlock(&uacce->queues_lock);
->  
-> @@ -161,7 +167,8 @@ static int uacce_fops_open(struct inode *inode, struct file *filep)
->  
->  out_with_bond:
->  	uacce_unbind_queue(q);
-> -out_with_mem:
-> +out_with_lock:
-> +	mutex_unlock(&uacce->queues_lock);
->  	kfree(q);
->  	return ret;
+>  --namespaces::
+>  Record events of type PERF_RECORD_NAMESPACES.  This enables 'cgroup_id' sort key.
+>
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index 9a71f0330137..e1edd4e98358 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -3183,6 +3183,9 @@ static struct option __record_options[] = {
+>         OPT_INCR('v', "verbose", &verbose,
+>                     "be more verbose (show counter open errors, etc)"),
+>         OPT_BOOLEAN('q', "quiet", &quiet, "don't print any message"),
+> +       OPT_CALLBACK(0, "cputype", &record.evlist, "hybrid cpu type",
+> +                    "Only enable events on applying cpu with this type for hybrid platform (e.g. core or atom)",
+> +                    parse_hybrid_type),
+>         OPT_BOOLEAN('s', "stat", &record.opts.inherit_stat,
+>                     "per thread counts"),
+>         OPT_BOOLEAN('d', "data", &record.opts.sample_address, "Record the sample addresses"),
+> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> index 4ce87a8eb7d7..0d95b29273f4 100644
+> --- a/tools/perf/builtin-stat.c
+> +++ b/tools/perf/builtin-stat.c
+> @@ -1184,26 +1184,6 @@ static int parse_stat_cgroups(const struct option *opt,
+>         return parse_cgroups(opt, str, unset);
 >  }
-> @@ -171,10 +178,10 @@ static int uacce_fops_release(struct inode *inode, struct file *filep)
->  	struct uacce_queue *q = filep->private_data;
->  
->  	mutex_lock(&q->uacce->queues_lock);
-> -	list_del(&q->list);
-> -	mutex_unlock(&q->uacce->queues_lock);
->  	uacce_put_queue(q);
->  	uacce_unbind_queue(q);
-> +	list_del(&q->list);
-> +	mutex_unlock(&q->uacce->queues_lock);
->  	kfree(q);
->  
->  	return 0;
-> @@ -513,10 +520,10 @@ void uacce_remove(struct uacce_device *uacce)
->  		uacce_put_queue(q);
->  		uacce_unbind_queue(q);
->  	}
-> -	mutex_unlock(&uacce->queues_lock);
->  
->  	/* disable sva now since no opened queues */
->  	uacce_disable_sva(uacce);
-> +	mutex_unlock(&uacce->queues_lock);
->  
->  	if (uacce->cdev)
->  		cdev_device_del(uacce->cdev, &uacce->dev);
-> -- 
-> 2.36.1
-> 
+>
+> -static int parse_hybrid_type(const struct option *opt,
+> -                            const char *str,
+> -                            int unset __maybe_unused)
+> -{
+> -       struct evlist *evlist = *(struct evlist **)opt->value;
+> -
+> -       if (!list_empty(&evlist->core.entries)) {
+> -               fprintf(stderr, "Must define cputype before events/metrics\n");
+> -               return -1;
+> -       }
+> -
+> -       evlist->hybrid_pmu_name = perf_pmu__hybrid_type_to_pmu(str);
+> -       if (!evlist->hybrid_pmu_name) {
+> -               fprintf(stderr, "--cputype %s is not supported!\n", str);
+> -               return -1;
+> -       }
+> -
+> -       return 0;
+> -}
+> -
+>  static struct option stat_options[] = {
+>         OPT_BOOLEAN('T', "transaction", &transaction_run,
+>                     "hardware transaction statistics"),
+> diff --git a/tools/perf/util/pmu-hybrid.c b/tools/perf/util/pmu-hybrid.c
+> index f51ccaac60ee..5c490b5201b7 100644
+> --- a/tools/perf/util/pmu-hybrid.c
+> +++ b/tools/perf/util/pmu-hybrid.c
+> @@ -13,6 +13,7 @@
+>  #include <stdarg.h>
+>  #include <locale.h>
+>  #include <api/fs/fs.h>
+> +#include "util/evlist.h"
+>  #include "fncache.h"
+>  #include "pmu-hybrid.h"
+>
+> @@ -87,3 +88,21 @@ char *perf_pmu__hybrid_type_to_pmu(const char *type)
+>         free(pmu_name);
+>         return NULL;
+>  }
+> +
+> +int parse_hybrid_type(const struct option *opt, const char *str, int unset __maybe_unused)
+> +{
+> +       struct evlist *evlist = *(struct evlist **)opt->value;
+> +
+> +       if (!list_empty(&evlist->core.entries)) {
+> +               fprintf(stderr, "Must define cputype before events/metrics\n");
+> +               return -1;
+> +       }
+> +
+> +       evlist->hybrid_pmu_name = perf_pmu__hybrid_type_to_pmu(str);
+> +       if (!evlist->hybrid_pmu_name) {
+> +               fprintf(stderr, "--cputype %s is not supported!\n", str);
+> +               return -1;
+> +       }
+> +
+> +       return 0;
+> +}
+> diff --git a/tools/perf/util/pmu-hybrid.h b/tools/perf/util/pmu-hybrid.h
+> index 2b186c26a43e..26101f134a3a 100644
+> --- a/tools/perf/util/pmu-hybrid.h
+> +++ b/tools/perf/util/pmu-hybrid.h
+> @@ -5,6 +5,7 @@
+>  #include <linux/perf_event.h>
+>  #include <linux/compiler.h>
+>  #include <linux/list.h>
+> +#include <subcmd/parse-options.h>
+>  #include <stdbool.h>
+>  #include "pmu.h"
+>
+> @@ -18,6 +19,7 @@ bool perf_pmu__hybrid_mounted(const char *name);
+>  struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name);
+>  bool perf_pmu__is_hybrid(const char *name);
+>  char *perf_pmu__hybrid_type_to_pmu(const char *type);
+> +int parse_hybrid_type(const struct option *opt, const char *str, int unset __maybe_unused);
+>
+>  static inline int perf_pmu__hybrid_pmu_num(void)
+>  {
+> --
+> 2.25.1
+>

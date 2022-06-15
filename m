@@ -2,175 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6559254CA78
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:57:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC04454CA68
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:55:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353663AbiFON5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 09:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S1350563AbiFONzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 09:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240208AbiFON5A (ORCPT
+        with ESMTP id S1349036AbiFONzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 09:57:00 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE3827B12;
-        Wed, 15 Jun 2022 06:56:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655301419; x=1686837419;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=l3Dz9pCGYsKL9M71ANGJFS/yhgtgmIg63N13O2SpgOE=;
-  b=ZIWSrq97lWkxdwWPN3eRZs8ibstsomDnaF3tgvvIEHOvnq1xblOCBrCp
-   yk5n80X3PULcZ7WzqL9rQzrdP+t/gG5jhMkIXhb0DZYLlqw0KtqoHxg1g
-   M9+RGxjdrYrjV+cVsvtVrcEqv1QXat75qk2orzn/iCY3T1iEr0nunDk0P
-   a98fp6N4xWTpZGaqosb7MECLSJG/66B71mhSQ7frw9gvmpIZjyyEqYV72
-   YGNPTGgLlZXqAQvELv5WIGBhbPgh+WSERTM2vkRx/N/dFcQEtrsAdoubK
-   +NledGY7xj20xztT7FGKKbcsybIsXEL10tpCYoX681H2ZWtK8GB+Y4Tlu
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="277760300"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="277760300"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 06:56:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="727403523"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Jun 2022 06:56:53 -0700
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 25FDupkt019852;
-        Wed, 15 Jun 2022 14:56:51 +0100
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] bitops: define const_*() versions of the non-atomics
-Date:   Wed, 15 Jun 2022 15:55:06 +0200
-Message-Id: <20220615135506.1264880-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <YqlKpwjQ4Hu+Lr8u@yury-laptop>
-References: <20220610113427.908751-1-alexandr.lobakin@intel.com> <20220610113427.908751-5-alexandr.lobakin@intel.com> <YqlKpwjQ4Hu+Lr8u@yury-laptop>
+        Wed, 15 Jun 2022 09:55:36 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647A825C6C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:55:34 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id x138so11496896pfc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:55:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=cBZGCZ1ZBD21PpBDQ3oItDkWcZgN/+XlTCNT19zbuNY=;
+        b=E/drkdPuRhwd4tbccr4C5OiRxOF3aIEi2beGOFn6UFNSZh4UOnzHmpzTPrkO3J8VJN
+         DdAyNFnsGZ6WwMlKc2we2gtNQdkhp2fj4BraSY2xjqvg7W8sqZXOPAAIm0wNiIRrzS+M
+         PKN9OZ87Wl8SJ9nvZ3zI1Ksl4tZjGkti6ObhdXVv3QkK06oXXcrzzmkD6s/xFnECJl6f
+         mxn10PNOb5rHvHoREP5SBseDSeegDp58LCk+fEE7pvdyoeyjVImRWhY4/ObxpSbSX232
+         UDwRd/vYxUe5V3BNuvx07oxZ1WDu5RMzQM0U+H+xs/wpYD8LAOka9woYtDqKsr9/9p5w
+         2XRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=cBZGCZ1ZBD21PpBDQ3oItDkWcZgN/+XlTCNT19zbuNY=;
+        b=yre3E2ppJxiA7CNdvT+kwFwOJ5ZykO7o2Qgr3Aixsg8WE7/l3FmIZJJmIJYHoKX1ag
+         eXxN41+kDts/JswnQny/2GwZMpqwtpgUFgtFLdltI0AnAm42eOSHksJ3KfJydmj2RfU9
+         2GrIG7wFxbYh7rwJIK1jGaDuS0LO9gAU8mXk/qHuqjmDFHWMaV06T4B8MQ9m7lPecDJF
+         6xNAr3OrczUOV6LsNiLLC2E/kHjtiMAhKCaHz2sVx9Al9gZcaPufUbwfooQ1fQOTGSbS
+         50AGynWIj0+vH5qVEaRHkfmUimV07XrBE9yczdOUDXySy1IRhF30i6Ouo9F1J4vcSHOm
+         W6Jg==
+X-Gm-Message-State: AOAM531wAGv8oK76phR3mSdIU05+DeOhb+Y68qW7syP1QOL1qIfOyADc
+        BNUy1BJDpX9KFNex0ti+cvcKEQ==
+X-Google-Smtp-Source: ABdhPJyQkbB2LQNHeu3UBJJJCpRcvXSS8IW5H88xJG+NEaavS1oX6TfXL8dR804vTQgNf9ND0U++Hw==
+X-Received: by 2002:aa7:98cd:0:b0:520:5200:1c07 with SMTP id e13-20020aa798cd000000b0052052001c07mr10012950pfm.13.1655301333698;
+        Wed, 15 Jun 2022 06:55:33 -0700 (PDT)
+Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
+        by smtp.gmail.com with ESMTPSA id s2-20020a17090302c200b00168d9630b49sm7240585plk.307.2022.06.15.06.55.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 06:55:33 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 13:55:29 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] KVM: x86: Drop @vcpu parameter from
+ kvm_x86_ops.hwapic_isr_update()
+Message-ID: <Yqnk0dBO9ILywV3R@google.com>
+References: <20220614230548.3852141-1-seanjc@google.com>
+ <20220614230548.3852141-3-seanjc@google.com>
+ <c7f07be6-3674-4553-0ae9-548886ba9b6f@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c7f07be6-3674-4553-0ae9-548886ba9b6f@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yury Norov <yury.norov@gmail.com>
-Date: Tue, 14 Jun 2022 19:57:43 -0700
-
-> On Fri, Jun 10, 2022 at 01:34:25PM +0200, Alexander Lobakin wrote:
-> > Define const_*() variants of the non-atomic bitops to be used when
-> > the input arguments are compile-time constants, so that the compiler
-> > will be always to resolve those to compile-time constants as well.
-> 
-> will be always able?
-
-Right, ooops.
-
-> 
-> > Those are mostly direct aliases for generic_*() with one exception
-> > for const_test_bit(): the original one is declared atomic-safe and
-> > thus doesn't discard the `volatile` qualifier, so in order to let
-> > optimize the code, define it separately disregarding the qualifier.
-> > Add them to the compile-time type checks as well just in case.
+On Wed, Jun 15, 2022, Paolo Bonzini wrote:
+> On 6/15/22 01:05, Sean Christopherson wrote:
+> > Drop the unused @vcpu parameter from hwapic_isr_update().  AMD/AVIC is
+> > unlikely to implement the helper, and VMX/APICv doesn't need the vCPU as
+> > it operates on the current VMCS.  The result is somewhat odd, but allows
+> > for a decent amount of (future) cleanup in the APIC code.
 > > 
-> > Suggested-by: Marco Elver <elver@google.com>
-> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > ---
-> >  .../asm-generic/bitops/generic-non-atomic.h   | 31 +++++++++++++++++++
-> >  include/linux/bitops.h                        |  3 +-
-> >  2 files changed, 33 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/include/asm-generic/bitops/generic-non-atomic.h b/include/asm-generic/bitops/generic-non-atomic.h
-> > index 3ce0fa0ab35f..9a77babfff35 100644
-> > --- a/include/asm-generic/bitops/generic-non-atomic.h
-> > +++ b/include/asm-generic/bitops/generic-non-atomic.h
-> > @@ -121,4 +121,35 @@ generic_test_bit(unsigned long nr, const volatile unsigned long *addr)
-> >  	return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
-> >  }
-> >  
-> > +/*
-> > + * const_*() definitions provide good compile-time optimizations when
-> > + * the passed arguments can be resolved at compile time.
-> > + */
-> > +#define const___set_bit			generic___set_bit
-> > +#define const___clear_bit		generic___clear_bit
-> > +#define const___change_bit		generic___change_bit
-> > +#define const___test_and_set_bit	generic___test_and_set_bit
-> > +#define const___test_and_clear_bit	generic___test_and_clear_bit
-> > +#define const___test_and_change_bit	generic___test_and_change_bit
-> > +
-> > +/**
-> > + * const_test_bit - Determine whether a bit is set
-> > + * @nr: bit number to test
-> > + * @addr: Address to start counting from
-> > + *
-> > + * A version of generic_test_bit() which discards the `volatile` qualifier to
-> > + * allow the compiler to optimize code harder. Non-atomic and to be used only
-> > + * for testing compile-time constants, e.g. from the corresponding macro, or
-> > + * when you really know what you are doing.
+> > No functional change intended.
 > 
-> Not sure I understand the last sentence... Can you please rephrase?
+> Yeah, that's a bit odd; what it saves is essentially the apic->vcpu
+> dereference.  I don't really like it, so if you want to have a v2 that
+> passes the struct kvm_lapic* instead (which is free and keeps irr/isr
+> functions consistent), I'll gladly switch.  But I _have_ queued the series
+> in the meanwhile, so that's a good reason to ignore me.
 
-I basically want to tell that there potentinally might be cases for
-using those outside of the actual macros from 6/6. But it might be
-redundant at all to mention this.
-
-> 
-> > + */
-> > +static __always_inline bool
-> > +const_test_bit(unsigned long nr, const volatile unsigned long *addr)
-> > +{
-> > +	const unsigned long *p = (const unsigned long *)addr + BIT_WORD(nr);
-> > +	unsigned long mask = BIT_MASK(nr);
-> > +	unsigned long val = *p;
-> > +
-> > +	return !!(val & mask);
-> > +}
-> > +
-> >  #endif /* __ASM_GENERIC_BITOPS_GENERIC_NON_ATOMIC_H */
-> > diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-> > index 87087454a288..51c22b8667b4 100644
-> > --- a/include/linux/bitops.h
-> > +++ b/include/linux/bitops.h
-> > @@ -36,7 +36,8 @@ extern unsigned long __sw_hweight64(__u64 w);
-> >  
-> >  /* Check that the bitops prototypes are sane */
-> >  #define __check_bitop_pr(name)						\
-> > -	static_assert(__same_type(arch_##name, generic_##name) &&	\
-> > +	static_assert(__same_type(const_##name, generic_##name) &&	\
-> > +		      __same_type(arch_##name, generic_##name) &&	\
-> >  		      __same_type(name, generic_##name))
-> >  
-> >  __check_bitop_pr(__set_bit);
-> > -- 
-> > 2.36.1
-
-Thanks,
-Olek
+I'll send a v2 and just drop the patch.  Looking at it again, it's still very odd
+and I oversold the cleanup.   And the affected paths are either unlikely() or the
+even slower RESET / SET_STATE flows.

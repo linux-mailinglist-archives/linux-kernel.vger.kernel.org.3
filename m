@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D5754D06F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09A254D07E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349902AbiFORyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:54:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
+        id S1348298AbiFOR5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235028AbiFORyV (ORCPT
+        with ESMTP id S1346190AbiFOR5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:54:21 -0400
-Received: from hi1smtp01.de.adit-jv.com (smtp1.de.adit-jv.com [93.241.18.167])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6634E26117;
-        Wed, 15 Jun 2022 10:54:20 -0700 (PDT)
-Received: from hi2exch02.adit-jv.com (hi2exch02.adit-jv.com [10.72.92.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by hi1smtp01.de.adit-jv.com (Postfix) with ESMTPS id 33E96520291;
-        Wed, 15 Jun 2022 19:54:18 +0200 (CEST)
-Received: from lxhi-065 (10.72.94.5) by hi2exch02.adit-jv.com (10.72.92.28)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2308.27; Wed, 15 Jun
- 2022 19:54:17 +0200
-Date:   Wed, 15 Jun 2022 19:54:12 +0200
-From:   Eugeniu Rosca <erosca@de.adit-jv.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>
-CC:     <viro@zeniv.linux.org.uk>, <linux-security-module@vger.kernel.org>,
-        <linux-integrity@vger.kernel.org>, <initramfs@vger.kernel.org>,
-        <linux-api@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bug-cpio@gnu.org>,
-        <silviu.vlasceanu@huawei.com>, <dmitry.kasatkin@huawei.com>,
-        <takondra@cisco.com>, <kamensky@cisco.com>, <hpa@zytor.com>,
-        <arnd@arndb.de>, <rob@landley.net>, <james.w.mcmechan@gmail.com>,
-        <niveditas98@gmail.com>, Dirk Behme <dirk.behme@de.bosch.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Eugeniu Rosca <roscaeugeniu@gmail.com>
-Subject: Re: [PATCH v4 1/3] initramfs: add file metadata
-Message-ID: <20220615175412.GA7029@lxhi-065>
-References: <20190523121803.21638-1-roberto.sassu@huawei.com>
- <20190523121803.21638-2-roberto.sassu@huawei.com>
+        Wed, 15 Jun 2022 13:57:15 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C6E544CC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:57:14 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-2ef5380669cso68907607b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RZ4j6+UZQmxdYRalU5SjpHfrfkE6Udb2BhN1j/8KSKg=;
+        b=KF4FZg8X4Jv4NMEZAKO/4taSUCxS43l1wQWkaiLCXkLec5w4y6eWd9rpbEnxn1j4wx
+         jSL8yRwL+mEoHeNkWi2ky7kVV35/AOjtxxNe6GOQJBFMUZhAAf1vtQThEWkUqYSPEX7k
+         2w+6fdLpUBQFPhuyZSm0R5sj1UjeAUPRQZeSGHrq4R+c+DWRi/mL730vjiVyi9sxqM9i
+         Wl9/JTJXIXwVAt1HWeulmXZRamc07/gX9ZapXpAhFehJEsfZ8a1T5A5VMFeGkVOcYKWE
+         /wQHuyeof+qT42qYRvavigeXQeU8xu8zpdnXRlFhiozyP6CwYG2B8S6JrqnPlgCJFe6u
+         W0Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RZ4j6+UZQmxdYRalU5SjpHfrfkE6Udb2BhN1j/8KSKg=;
+        b=i3v68+bVFD23dga+4B/wDUCZXqLX9ul4OCuDuMl4Yx4xrGMNZRvJ+ko1NVIOuszx4E
+         fLoApwV77iGDAGlmdTXNJS/PiKXlAxo7cqf+buQxPTeoB8+0dJFiBkodP4TC/WYHzrD0
+         fwKfeKhoRUEkN+vl8RAVSp2w2HnvUwIRIwdDztujnWSV0ODex3wqMAgPWa+JA8IS8jA3
+         HPMMQBhAYYgprxuPQNGTyYotcYbhZ4/HnBzHkEmwdO8r8xfjKxEEyQ+Tzex6Hr5t/aWs
+         rDg6z1Hj0ZbQd4sPhFfS0o4YwH5kakm3gSd4+/FqWnNn4/smRlBFSo/wn/wR42CYcL1N
+         nyYw==
+X-Gm-Message-State: AJIora9S0GZyRAY4DDEqvkjDPe9RBb6H91iXW9YNUwGbLRkPAHB/x/NI
+        Ok8mS22L2EHBd+5fwZhWIUqUSwDTpMvFmaIPEGjH+yxWudhtdS+6
+X-Google-Smtp-Source: AGRyM1uSg4FBVLtypacBG1ovM8+4v+aoJP/1QA/fc/TH2gumJq3Sfr6vgDtYLnuEdjSiVBOr0kL2aB8yLMxpetozh1Y=
+X-Received: by 2002:a05:690c:442:b0:313:fb25:3a6a with SMTP id
+ bj2-20020a05690c044200b00313fb253a6amr980054ywb.376.1655315833863; Wed, 15
+ Jun 2022 10:57:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20190523121803.21638-2-roberto.sassu@huawei.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.72.94.5]
-X-ClientProxiedBy: hi2exch02.adit-jv.com (10.72.92.28) To
- hi2exch02.adit-jv.com (10.72.92.28)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220614183719.878453780@linuxfoundation.org>
+In-Reply-To: <20220614183719.878453780@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 15 Jun 2022 23:27:02 +0530
+Message-ID: <CA+G9fYt_7QO+ZLMxPg-xbYgOtCZ0UPdgrKB4wYM2m_jY3zxRRg@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/11] 5.10.123-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,70 +71,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Roberto,
-Hello Mimi,
+On Wed, 15 Jun 2022 at 00:15, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.123 release.
+> There are 11 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.123-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Thu, May 23, 2019 at 02:18:01PM +0200, Roberto Sassu wrote:
-> From: Mimi Zohar <zohar@linux.vnet.ibm.com>
-> 
-> This patch adds metadata to a file from a supplied buffer. The buffer might
-> contains multiple metadata records. The format of each record is:
-> 
-> <metadata len (ASCII, 8 chars)><version><type><metadata>
-> 
-> For now, only the TYPE_XATTR metadata type is supported. The specific
-> format of this metadata type is:
-> 
-> <xattr #N name>\0<xattr #N value>
-> 
-> [kamensky: fixed restoring of xattrs for symbolic links by using
->            sys_lsetxattr() instead of sys_setxattr()]
-> 
-> [sassu: removed state management, kept only do_setxattrs(), added support
->         for generic file metadata, replaced sys_lsetxattr() with
->         vfs_setxattr(), added check for entry_size, added check for
->         hdr->c_size, replaced strlen() with strnlen(); moved do_setxattrs()
->         before do_name()]
-> 
-> Signed-off-by: Mimi Zohar <zohar@linux.vnet.ibm.com>
-> Signed-off-by: Victor Kamensky <kamensky@cisco.com>
-> Signed-off-by: Taras Kondratiuk <takondra@cisco.com>
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  include/linux/initramfs.h | 21 ++++++++++
->  init/initramfs.c          | 88 ++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 107 insertions(+), 2 deletions(-)
->  create mode 100644 include/linux/initramfs.h
 
-[..]
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> +static int __init do_setxattrs(char *pathname, char *buf, size_t size)
-> +{
-> +	struct path path;
-> +	char *xattr_name, *xattr_value;
-> +	size_t xattr_name_size, xattr_value_size;
-> +	int ret;
-> +
-> +	xattr_name = buf;
-> +	xattr_name_size = strnlen(xattr_name, size);
-> +	if (xattr_name_size == size) {
-> +		error("malformed xattrs");
-> +		return -EINVAL;
-> +	}
-> +
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-[..]
+## Build
+* kernel: 5.10.123-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: f67ea0f670870facb37c20f19e483ec74a2cba63
+* git describe: v5.10.122-12-gf67ea0f67087
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.122-12-gf67ea0f67087
 
-> +
-> +		switch (hdr->c_type) {
-> +		case TYPE_XATTR:
-> +			do_setxattrs(pathname, buf + sizeof(*hdr),
-> +				     entry_size - sizeof(*hdr));
+## Test Regressions (compared to v5.10.118)
+No test regressions found.
 
-Is it on purpose not to check the return value of do_setxattrs?
+## Metric Regressions (compared to v5.10.118)
+No metric regressions found.
 
-I think I would have more comfort and piece of mind if I knew
-the return value is properly checked and acted upon. Otherwise,
-why returning an int from within do_setxattrs() at all?
+## Test Fixes (compared to v5.10.118)
+No test fixes found.
 
-BR, Eugeniu
+## Metric Fixes (compared to v5.10.118)
+No metric fixes found.
+
+## Test result summary
+total: 123351, pass: 110941, fail: 243, skip: 11563, xfail: 604
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 314 total, 314 passed, 0 failed
+* arm64: 58 total, 58 passed, 0 failed
+* i386: 52 total, 49 passed, 3 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 51 total, 51 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 21 total, 21 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 56 total, 55 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-cap_bounds-tests
+* ltp-commands
+* ltp-commands-tests
+* ltp-containers
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps
+* ltp-filecaps-tests
+* ltp-fs
+* ltp-fs-tests
+* ltp-fs_bind
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple
+* ltp-fs_perms_simple-tests
+* ltp-fsx
+* ltp-fsx-tests
+* ltp-hugetlb
+* ltp-hugetlb-tests
+* ltp-io
+* ltp-io-tests
+* ltp-ipc
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits
+* ltp-securebits-tests
+* ltp-smoke
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

@@ -2,510 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C4B754C76B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:25:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E421E54C6FA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347328AbiFOLZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 07:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
+        id S1354465AbiFOLCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 07:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345469AbiFOLYy (ORCPT
+        with ESMTP id S1353964AbiFOLBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:24:54 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235893617E;
-        Wed, 15 Jun 2022 04:24:48 -0700 (PDT)
+        Wed, 15 Jun 2022 07:01:45 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0BB53A60
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 04:01:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=zw1eOcZbZJJwTaAYBOsApq4q/0Xwt8mw17q4k5iWqU0=;
-        b=VzSuWc6RH/cWwb0Lb5tS2dCsr+xXu1aJeusRN3ydSClDbjYf6mvQhD0POAD+LB3BhIjEPajQu3wTQ
-         7a9bnRUcJ45PDfNCd5IyaENFYbITiaYvEGai918tN8hCLAUZTb+wrNJl4hWDwWgHkw/ry4nWJ5U36j
-         tOMw6CbJ4GH9eRCCji7U3v+ShnSXOt2mlilmQ6ikSaxJdW7Gcq7xYE9s/mP/JZrbeHUOo9quYuSQgo
-         +qANBGD3M3MQDmcn70x5Pq6LPucH20PeTMw4D1v/dC96R08wcdDFycz7PFc+sAYQgJYoX29ltXlWm9
-         YcPJIyJ20SJEY0/hQW2F73eABFH7Rmg==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.3.1424, Stamp: 3], Multi: [Enabled, t: (0.000012,0.038765)], BW: [Enabled, t: (0.000020,0.000001)], RTDA: [Enabled, t: (0.077959), Hit: No, Details: v2.40.0; Id: 15.52k1bd.1g5jhna17.n53t; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from localhost.localdomain ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Wed, 15 Jun 2022 14:24:33 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, corbet@lwn.net
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        Conor.Dooley@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-fpga@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, system@metrotek.ru,
-        Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v19 3/4] fpga: microchip-spi: add Microchip MPF FPGA manager
-Date:   Wed, 15 Jun 2022 14:01:36 +0300
-Message-Id: <20220615110137.21902-4-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220615110137.21902-1-i.bornyakov@metrotek.ru>
-References: <20220615110137.21902-1-i.bornyakov@metrotek.ru>
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655290903; x=1686826903;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NX4SXzXOcEm6Wa/wGxya5bBYUkYI+YwahbjUCLImppA=;
+  b=Y6J3DmMLb29RSEJXZvpkX99FsW3N5rgWtDNUB/vqgelW0N7fCd7HPM3f
+   +W6LPKwOC75UcC83CdLYE0R7J7yv2SPnn4Ch79h3S1YcvdT2MoHjUICrx
+   vKZlJpQBXM3FOFbVpIZ1huRnPm5eFbZY8U8uufdifQBbOQWBgAGUEnA/p
+   CQro+4GASnrtNpRlWRlK/RTBT7ofyIrNQHggeP/5lIBaWcXZmwq70dTX+
+   a4h7HXyo8249dKb75PCwHmomWa0HZcW2mOAvuPTYoKSBtwhqnzYv2bV81
+   7VcjBFnvMuou4t/GuelZ0h/ZkXfXvWM9SFQSPiXHyPLG0KiNFdzS/hCVN
+   g==;
+X-IronPort-AV: E=Sophos;i="5.91,302,1647273600"; 
+   d="scan'208";a="208069841"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Jun 2022 19:01:42 +0800
+IronPort-SDR: pP58WgwrU5S+8UsAbPTJ/Uvpcrbw+Z5i93SMhfThOA48PH04CSL7DTr0QTCYRlslILAtqx2tVw
+ NkmD6S3uOx7dLii9oJPd0pxVP8IDcoRJkjXFMYBOJ7V5KeeVKUsD3SbjSHnk7TqFfW7wiM7nBL
+ +qu+e5w+MQdByrAU+Sf9ihdLzOKcBXHNWaRba0snmCAEgWcp2DmTcC6bO1p7wtQoVJm6AM0b7z
+ I3b/FC4B+1Tq4uxdmGPw3gAqvbyPS0KDCBb181YXB3Ffz5c2mlCljABJNnUqL+i+5Wyw29qE+o
+ uzA6lHrH2NUfvZlpNnxJQ8xM
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jun 2022 03:20:07 -0700
+IronPort-SDR: Kz/0/4cZDB6cgyl0WGcOcEhQ1294ENv6WRJ9LR6Aumknmpz5kTj1vCUbmG7+pSx8zYHoFnx906
+ eWwfMXwfT6ZAJNwJUDei/D1E2OPFo4pN2AWkskuQC1RpHlcMZP3DRyWq5OyNj9DA2qvvjoZPS9
+ PrsDNxQDykseF+ERlgnQgiTWXOFJB1calmzv9qJP/gaNsboS2oQmLEpFiAoKrdJS2wFT3Q1mht
+ Mz0sy7c/1F92LlOT9RMduLHWG4oHK4ClnSbnidyZgNu6FgNFpFAUuipT4hpk0jzirDafjoV1SR
+ QOc=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jun 2022 04:01:42 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LNMnL0j6pz1SVp2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 04:01:41 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655290901; x=1657882902; bh=NX4SXzXOcEm6Wa/wGxya5bBYUkYI+Ywahbj
+        UCLImppA=; b=T6O853cQSCc1Q4cmoll53tWhQlua3CRnPGD/JHULr+pEpWjg8h7
+        0Xgdl1p1eKFllYxujnUn3MuRx05W5yg4eH94W33801uIFWBS8B9RszzJp2zORP9p
+        HVZSGFXj5JVVwR10o2jqDeBJ5IvVQgbePcZUasIHK8IWm6QmBkd4ZdVkji1cMrkl
+        ydZnuHIvZc3PW48cZj3PH/YYcej3sIF68hcr6jxIE1o8HHqMzHXNmreRtF4+ubtW
+        VpLV2MkpVYtuubSm3kEQhuLMCm+BwvB4svyqyRNH9MUWiG5kh8MJfbVqki9g9R0O
+        4fondWDP/36O5pyKLGIwjOL7J83eecHT3LA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id GkISh8sXw48z for <linux-kernel@vger.kernel.org>;
+        Wed, 15 Jun 2022 04:01:41 -0700 (PDT)
+Received: from [10.225.163.82] (unknown [10.225.163.82])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LNMnG1fD0z1Rvlc;
+        Wed, 15 Jun 2022 04:01:38 -0700 (PDT)
+Message-ID: <f7b586a3-5370-f3b9-72dc-f9bea0b63f1f@opensource.wdc.com>
+Date:   Wed, 15 Jun 2022 20:01:36 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [dm-devel] [PATCH v7 12/13] dm: call dm_zone_endio after the
+ target endio callback for zoned devices
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, hch@lst.de,
+        snitzer@redhat.com, axboe@kernel.dk
+Cc:     bvanassche@acm.org, pankydev8@gmail.com, gost.dev@samsung.com,
+        jiangbo.365@bytedance.com, linux-nvme@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        dm-devel@redhat.com, jonathan.derrick@linux.dev,
+        Johannes.Thumshirn@wdc.com, dsterba@suse.com, jaegeuk@kernel.org
+References: <20220615101920.329421-1-p.raghav@samsung.com>
+ <CGME20220615102007eucas1p1106f9520e2a86beb3792107dffd8071b@eucas1p1.samsung.com>
+ <20220615101920.329421-13-p.raghav@samsung.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220615101920.329421-13-p.raghav@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to the FPGA manager for programming Microchip Polarfire
-FPGAs over slave SPI interface with .dat formatted bitsream image.
+On 6/15/22 19:19, Pankaj Raghav wrote:
+> dm_zone_endio() updates the bi_sector of orig bio for zoned devices that
+> uses either native append or append emulation and it is called before the
+> endio of the target. But target endio can still update the clone bio
+> after dm_zone_endio is called, thereby, the orig bio does not contain
+> the updated information anymore. Call dm_zone_endio for zoned devices
+> after calling the target's endio function
+> 
+> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+> ---
+> @Damien and @Hannes: I couldn't come up with a testcase that uses endio callback and
+> zone append or append emulation for zoned devices to test for
+> regression in this change. It would be great if you can suggest
+> something. This change is required for the npo2 target as we update the
+> clone bio sector in the endio callback function and the orig bio should
+> be updated only after the endio callback for zone appends.
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Tested-by: Conor Dooley <conor.dooley@microchip.com>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
----
- drivers/fpga/Kconfig         |   8 +
- drivers/fpga/Makefile        |   1 +
- drivers/fpga/microchip-spi.c | 397 +++++++++++++++++++++++++++++++++++
- 3 files changed, 406 insertions(+)
- create mode 100644 drivers/fpga/microchip-spi.c
+Running zonefs tests on top of dm-crypt will exercise DM zone append
+emulation.
 
-diff --git a/drivers/fpga/Kconfig b/drivers/fpga/Kconfig
-index 0831eecc9a09..6c416955da53 100644
---- a/drivers/fpga/Kconfig
-+++ b/drivers/fpga/Kconfig
-@@ -255,4 +255,12 @@ config FPGA_M10_BMC_SEC_UPDATE
- 	  (BMC) and provides support for secure updates for the BMC image,
- 	  the FPGA image, the Root Entry Hashes, etc.
- 
-+config FPGA_MGR_MICROCHIP_SPI
-+	tristate "Microchip Polarfire SPI FPGA manager"
-+	depends on SPI
-+	help
-+	  FPGA manager driver support for Microchip Polarfire FPGAs
-+	  programming over slave SPI interface with .dat formatted
-+	  bitstream image.
-+
- endif # FPGA
-diff --git a/drivers/fpga/Makefile b/drivers/fpga/Makefile
-index 139ac1b573d3..42ae8b58abce 100644
---- a/drivers/fpga/Makefile
-+++ b/drivers/fpga/Makefile
-@@ -19,6 +19,7 @@ obj-$(CONFIG_FPGA_MGR_XILINX_SPI)	+= xilinx-spi.o
- obj-$(CONFIG_FPGA_MGR_ZYNQ_FPGA)	+= zynq-fpga.o
- obj-$(CONFIG_FPGA_MGR_ZYNQMP_FPGA)	+= zynqmp-fpga.o
- obj-$(CONFIG_FPGA_MGR_VERSAL_FPGA)	+= versal-fpga.o
-+obj-$(CONFIG_FPGA_MGR_MICROCHIP_SPI)	+= microchip-spi.o
- obj-$(CONFIG_ALTERA_PR_IP_CORE)		+= altera-pr-ip-core.o
- obj-$(CONFIG_ALTERA_PR_IP_CORE_PLAT)	+= altera-pr-ip-core-plat.o
- 
-diff --git a/drivers/fpga/microchip-spi.c b/drivers/fpga/microchip-spi.c
-new file mode 100644
-index 000000000000..980590593d83
---- /dev/null
-+++ b/drivers/fpga/microchip-spi.c
-@@ -0,0 +1,397 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Microchip Polarfire FPGA programming over slave SPI interface.
-+ */
-+
-+#include <asm/unaligned.h>
-+#include <linux/delay.h>
-+#include <linux/fpga/fpga-mgr.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/spi/spi.h>
-+
-+#define	MPF_SPI_ISC_ENABLE	0x0B
-+#define	MPF_SPI_ISC_DISABLE	0x0C
-+#define	MPF_SPI_READ_STATUS	0x00
-+#define	MPF_SPI_READ_DATA	0x01
-+#define	MPF_SPI_FRAME_INIT	0xAE
-+#define	MPF_SPI_FRAME		0xEE
-+#define	MPF_SPI_PRG_MODE	0x01
-+#define	MPF_SPI_RELEASE		0x23
-+
-+#define	MPF_SPI_FRAME_SIZE	16
-+
-+#define	MPF_HEADER_SIZE_OFFSET	24
-+#define	MPF_DATA_SIZE_OFFSET	55
-+
-+#define	MPF_LOOKUP_TABLE_RECORD_SIZE		9
-+#define	MPF_LOOKUP_TABLE_BLOCK_ID_OFFSET	0
-+#define	MPF_LOOKUP_TABLE_BLOCK_START_OFFSET	1
-+
-+#define	MPF_COMPONENTS_SIZE_ID	5
-+#define	MPF_BITSTREAM_ID	8
-+
-+#define	MPF_BITS_PER_COMPONENT_SIZE	22
-+
-+#define	MPF_STATUS_POLL_RETRIES		10000
-+#define	MPF_STATUS_BUSY			BIT(0)
-+#define	MPF_STATUS_READY		BIT(1)
-+#define	MPF_STATUS_SPI_VIOLATION	BIT(2)
-+#define	MPF_STATUS_SPI_ERROR		BIT(3)
-+
-+struct mpf_priv {
-+	struct spi_device *spi;
-+	bool program_mode;
-+};
-+
-+static int mpf_read_status(struct spi_device *spi)
-+{
-+	u8 status = 0, status_command = MPF_SPI_READ_STATUS;
-+	struct spi_transfer xfers[2] = { 0 };
-+	int ret;
-+
-+	/*
-+	 * HW status is returned on MISO in the first byte after CS went
-+	 * active. However, first reading can be inadequate, so we submit
-+	 * two identical SPI transfers and use result of the later one.
-+	 */
-+	xfers[0].tx_buf = &status_command;
-+	xfers[1].tx_buf = &status_command;
-+	xfers[0].rx_buf = &status;
-+	xfers[1].rx_buf = &status;
-+	xfers[0].len = 1;
-+	xfers[1].len = 1;
-+	xfers[0].cs_change = 1;
-+
-+	ret = spi_sync_transfer(spi, xfers, 2);
-+
-+	if ((status & MPF_STATUS_SPI_VIOLATION) ||
-+	    (status & MPF_STATUS_SPI_ERROR))
-+		ret = -EIO;
-+
-+	return ret ? : status;
-+}
-+
-+static enum fpga_mgr_states mpf_ops_state(struct fpga_manager *mgr)
-+{
-+	struct mpf_priv *priv = mgr->priv;
-+	struct spi_device *spi;
-+	bool program_mode;
-+	int status;
-+
-+	spi = priv->spi;
-+	program_mode = priv->program_mode;
-+	status = mpf_read_status(spi);
-+
-+	if (!program_mode && !status)
-+		return FPGA_MGR_STATE_OPERATING;
-+
-+	return FPGA_MGR_STATE_UNKNOWN;
-+}
-+
-+static int mpf_ops_parse_header(struct fpga_manager *mgr,
-+				struct fpga_image_info *info,
-+				const char *buf, size_t count)
-+{
-+	size_t component_size_byte_num, component_size_byte_off,
-+	       components_size_start, bitstream_start,
-+	       block_id_offset, block_start_offset;
-+	u8 header_size, blocks_num, block_id;
-+	u32 block_start, component_size;
-+	u16 components_num, i;
-+
-+	if (!buf) {
-+		dev_err(&mgr->dev, "Image buffer is not provided\n");
-+		return -EINVAL;
-+	}
-+
-+	header_size = *(buf + MPF_HEADER_SIZE_OFFSET);
-+	if (header_size > count) {
-+		info->header_size = header_size;
-+		return -EAGAIN;
-+	}
-+
-+	/*
-+	 * Go through look-up table to find out where actual bitstream starts
-+	 * and where sizes of components of the bitstream lies.
-+	 */
-+	blocks_num = *(buf + header_size - 1);
-+	block_id_offset = header_size + MPF_LOOKUP_TABLE_BLOCK_ID_OFFSET;
-+	block_start_offset = header_size + MPF_LOOKUP_TABLE_BLOCK_START_OFFSET;
-+
-+	header_size += blocks_num * MPF_LOOKUP_TABLE_RECORD_SIZE;
-+	if (header_size > count) {
-+		info->header_size = header_size;
-+		return -EAGAIN;
-+	}
-+
-+	components_size_start = 0;
-+	bitstream_start = 0;
-+
-+	while (blocks_num--) {
-+		block_id = *(buf + block_id_offset);
-+		block_start = get_unaligned_le32(buf + block_start_offset);
-+
-+		switch (block_id) {
-+		case MPF_BITSTREAM_ID:
-+			bitstream_start = block_start;
-+			info->header_size = block_start;
-+			if (block_start > count)
-+				return -EAGAIN;
-+
-+			break;
-+		case MPF_COMPONENTS_SIZE_ID:
-+			components_size_start = block_start;
-+			break;
-+		default:
-+			break;
-+		}
-+
-+		if (bitstream_start && components_size_start)
-+			break;
-+
-+		block_id_offset += MPF_LOOKUP_TABLE_RECORD_SIZE;
-+		block_start_offset += MPF_LOOKUP_TABLE_RECORD_SIZE;
-+	}
-+
-+	if (!bitstream_start || !components_size_start) {
-+		dev_err(&mgr->dev, "Failed to parse header look-up table\n");
-+		return -EFAULT;
-+	}
-+
-+	/*
-+	 * Parse bitstream size.
-+	 * Sizes of components of the bitstream are 22-bits long placed next
-+	 * to each other. Image header should be extended by now up to where
-+	 * actual bitstream starts, so no need for overflow check anymore.
-+	 */
-+	components_num = get_unaligned_le16(buf + MPF_DATA_SIZE_OFFSET);
-+
-+	for (i = 0; i < components_num; i++) {
-+		component_size_byte_num =
-+			(i * MPF_BITS_PER_COMPONENT_SIZE) / BITS_PER_BYTE;
-+		component_size_byte_off =
-+			(i * MPF_BITS_PER_COMPONENT_SIZE) % BITS_PER_BYTE;
-+
-+		component_size = get_unaligned_le32(buf +
-+						    components_size_start +
-+						    component_size_byte_num);
-+		component_size >>= component_size_byte_off;
-+		component_size &= GENMASK(MPF_BITS_PER_COMPONENT_SIZE - 1, 0);
-+
-+		info->data_size += component_size * MPF_SPI_FRAME_SIZE;
-+	}
-+
-+	return 0;
-+}
-+
-+/* Poll HW status until busy bit is cleared and mask bits are set. */
-+static int mpf_poll_status(struct spi_device *spi, u8 mask)
-+{
-+	int status, retries = MPF_STATUS_POLL_RETRIES;
-+
-+	while (retries--) {
-+		status = mpf_read_status(spi);
-+		if (status < 0)
-+			return status;
-+
-+		if (status & MPF_STATUS_BUSY)
-+			continue;
-+
-+		if (!mask || (status & mask))
-+			return status;
-+	}
-+
-+	return -EBUSY;
-+}
-+
-+static int mpf_spi_write(struct spi_device *spi, const void *buf, size_t buf_size)
-+{
-+	int status = mpf_poll_status(spi, 0);
-+
-+	if (status < 0)
-+		return status;
-+
-+	return spi_write(spi, buf, buf_size);
-+}
-+
-+static int mpf_spi_write_then_read(struct spi_device *spi,
-+				   const void *txbuf, size_t txbuf_size,
-+				   void *rxbuf, size_t rxbuf_size)
-+{
-+	const u8 read_command[] = { MPF_SPI_READ_DATA };
-+	int ret;
-+
-+	ret = mpf_spi_write(spi, txbuf, txbuf_size);
-+	if (ret)
-+		return ret;
-+
-+	ret = mpf_poll_status(spi, MPF_STATUS_READY);
-+	if (ret < 0)
-+		return ret;
-+
-+	return spi_write_then_read(spi, read_command, sizeof(read_command),
-+				   rxbuf, rxbuf_size);
-+}
-+
-+static int mpf_ops_write_init(struct fpga_manager *mgr,
-+			      struct fpga_image_info *info, const char *buf,
-+			      size_t count)
-+{
-+	const u8 program_mode[] = { MPF_SPI_FRAME_INIT, MPF_SPI_PRG_MODE };
-+	const u8 isc_en_command[] = { MPF_SPI_ISC_ENABLE };
-+	struct mpf_priv *priv = mgr->priv;
-+	struct device *dev = &mgr->dev;
-+	struct spi_device *spi;
-+	u32 isc_ret = 0;
-+	int ret;
-+
-+	if (info->flags & FPGA_MGR_PARTIAL_RECONFIG) {
-+		dev_err(dev, "Partial reconfiguration is not supported\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	spi = priv->spi;
-+
-+	ret = mpf_spi_write_then_read(spi, isc_en_command, sizeof(isc_en_command),
-+				      &isc_ret, sizeof(isc_ret));
-+	if (ret || isc_ret) {
-+		dev_err(dev, "Failed to enable ISC: spi_ret %d, isc_ret %u\n",
-+			ret, isc_ret);
-+		return -EFAULT;
-+	}
-+
-+	ret = mpf_spi_write(spi, program_mode, sizeof(program_mode));
-+	if (ret) {
-+		dev_err(dev, "Failed to enter program mode: %d\n", ret);
-+		return ret;
-+	}
-+
-+	priv->program_mode = true;
-+
-+	return 0;
-+}
-+
-+static int mpf_ops_write(struct fpga_manager *mgr, const char *buf, size_t count)
-+{
-+	u8 spi_frame_command[] = { MPF_SPI_FRAME };
-+	struct spi_transfer xfers[2] = { 0 };
-+	struct mpf_priv *priv = mgr->priv;
-+	struct device *dev = &mgr->dev;
-+	struct spi_device *spi;
-+	int ret, i;
-+
-+	if (count % MPF_SPI_FRAME_SIZE) {
-+		dev_err(dev, "Bitstream size is not a multiple of %d\n",
-+			MPF_SPI_FRAME_SIZE);
-+		return -EINVAL;
-+	}
-+
-+	spi = priv->spi;
-+
-+	xfers[0].tx_buf = spi_frame_command;
-+	xfers[0].len = sizeof(spi_frame_command);
-+
-+	for (i = 0; i < count / MPF_SPI_FRAME_SIZE; i++) {
-+		xfers[1].tx_buf = buf + i * MPF_SPI_FRAME_SIZE;
-+		xfers[1].len = MPF_SPI_FRAME_SIZE;
-+
-+		ret = mpf_poll_status(spi, 0);
-+		if (ret >= 0)
-+			ret = spi_sync_transfer(spi, xfers, ARRAY_SIZE(xfers));
-+
-+		if (ret) {
-+			dev_err(dev, "Failed to write bitstream frame %d/%zu\n",
-+				i, count / MPF_SPI_FRAME_SIZE);
-+			return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int mpf_ops_write_complete(struct fpga_manager *mgr,
-+				  struct fpga_image_info *info)
-+{
-+	const u8 isc_dis_command[] = { MPF_SPI_ISC_DISABLE };
-+	const u8 release_command[] = { MPF_SPI_RELEASE };
-+	struct mpf_priv *priv = mgr->priv;
-+	struct device *dev = &mgr->dev;
-+	struct spi_device *spi;
-+	int ret;
-+
-+	spi = priv->spi;
-+
-+	ret = mpf_spi_write(spi, isc_dis_command, sizeof(isc_dis_command));
-+	if (ret) {
-+		dev_err(dev, "Failed to disable ISC: %d\n", ret);
-+		return ret;
-+	}
-+
-+	usleep_range(1000, 2000);
-+
-+	ret = mpf_spi_write(spi, release_command, sizeof(release_command));
-+	if (ret) {
-+		dev_err(dev, "Failed to exit program mode: %d\n", ret);
-+		return ret;
-+	}
-+
-+	priv->program_mode = false;
-+
-+	return 0;
-+}
-+
-+static const struct fpga_manager_ops mpf_ops = {
-+	.state = mpf_ops_state,
-+	.initial_header_size = 71,
-+	.parse_header = mpf_ops_parse_header,
-+	.write_init = mpf_ops_write_init,
-+	.write = mpf_ops_write,
-+	.write_complete = mpf_ops_write_complete,
-+};
-+
-+static int mpf_probe(struct spi_device *spi)
-+{
-+	struct device *dev = &spi->dev;
-+	struct fpga_manager *mgr;
-+	struct mpf_priv *priv;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->spi = spi;
-+
-+	mgr = devm_fpga_mgr_register(dev, "Microchip Polarfire SPI FPGA Manager",
-+				     &mpf_ops, priv);
-+
-+	return PTR_ERR_OR_ZERO(mgr);
-+}
-+
-+static const struct spi_device_id mpf_spi_ids[] = {
-+	{ .name = "mpf-spi-fpga-mgr", },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(spi, mpf_spi_ids);
-+
-+#if IS_ENABLED(CONFIG_OF)
-+static const struct of_device_id mpf_of_ids[] = {
-+	{ .compatible = "microchip,mpf-spi-fpga-mgr" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, mpf_of_ids);
-+#endif /* IS_ENABLED(CONFIG_OF) */
-+
-+static struct spi_driver mpf_driver = {
-+	.probe = mpf_probe,
-+	.id_table = mpf_spi_ids,
-+	.driver = {
-+		.name = "microchip_mpf_spi_fpga_mgr",
-+		.of_match_table = of_match_ptr(mpf_of_ids),
-+	},
-+};
-+
-+module_spi_driver(mpf_driver);
-+
-+MODULE_DESCRIPTION("Microchip Polarfire SPI FPGA Manager");
-+MODULE_LICENSE("GPL");
+> 
+>  drivers/md/dm.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/md/dm.c b/drivers/md/dm.c
+> index 3f17fe1de..3a74e1038 100644
+> --- a/drivers/md/dm.c
+> +++ b/drivers/md/dm.c
+> @@ -1025,10 +1025,6 @@ static void clone_endio(struct bio *bio)
+>  			disable_write_zeroes(md);
+>  	}
+>  
+> -	if (static_branch_unlikely(&zoned_enabled) &&
+> -	    unlikely(blk_queue_is_zoned(bdev_get_queue(bio->bi_bdev))))
+> -		dm_zone_endio(io, bio);
+> -
+>  	if (endio) {
+>  		int r = endio(ti, bio, &error);
+>  		switch (r) {
+> @@ -1057,6 +1053,10 @@ static void clone_endio(struct bio *bio)
+>  		}
+>  	}
+>  
+> +	if (static_branch_unlikely(&zoned_enabled) &&
+> +	    unlikely(blk_queue_is_zoned(bdev_get_queue(bio->bi_bdev))))
+
+blk_queue_is_zoned(bdev_get_queue(bio->bi_bdev))) ->
+bdev_is_zoned(bio->bi_bdev)
+
+> +		dm_zone_endio(io, bio);
+> +
+>  	if (static_branch_unlikely(&swap_bios_enabled) &&
+>  	    unlikely(swap_bios_limit(ti, bio)))
+>  		up(&md->swap_bios_semaphore);
+
+
 -- 
-2.35.1
-
-
+Damien Le Moal
+Western Digital Research

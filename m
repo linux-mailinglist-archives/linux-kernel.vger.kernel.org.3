@@ -2,141 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90E154BF9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:15:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC60854BFA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240293AbiFOCPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 22:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
+        id S243014AbiFOCUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 22:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiFOCPv (ORCPT
+        with ESMTP id S229924AbiFOCUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 22:15:51 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D966748E6F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 19:15:41 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 25F2FBDr8007761, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 25F2FBDr8007761
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 15 Jun 2022 10:15:11 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Wed, 15 Jun 2022 10:15:11 +0800
-Received: from localhost.localdomain (172.21.177.191) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.21; Wed, 15 Jun 2022 10:15:11 +0800
-From:   Edward Wu <edwardwu@realtek.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <surenb@google.com>, <minchan@google.com>, <edwardwu@realtek.com>
-Subject: [PATCH] mm: cma: sync everything after EBUSY
-Date:   Wed, 15 Jun 2022 10:15:04 +0800
-Message-ID: <20220615021504.23358-1-edwardwu@realtek.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 14 Jun 2022 22:20:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29A7240BC;
+        Tue, 14 Jun 2022 19:20:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CDA760ABC;
+        Wed, 15 Jun 2022 02:20:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AE1C7C3411D;
+        Wed, 15 Jun 2022 02:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655259613;
+        bh=uPEEwjLiSZlWAzbmcpBvclNzANe0R8TJss1a0eazzDc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=G4DnXh2r5eBbYX0V086xH8wd6wX9ZBon9nV7uCVn9MYLCQemTjEcSwIfxR7N+QMqc
+         mWlA6Gj3dDl7L5nubP/EIbEIjb8j0IqmhGMq7pD0SPDBVPG2zfV253//K1tT6kikqU
+         ZCaPGbGr8Xa3XxKz1EJKOjgx6vVtE/tCLpYxtHZir4T8a5xVQY5aHb9avLuKFNQhBx
+         cBUq8nXkiqhlGvsQlGCyMvjz07SCOrDY/exLYbNLvOGblzrS+4KHzOGvLjYLsnxkg7
+         caPtfFyzqeYjNoaP2r+hL23UNzL7JxczSuvSyRPya1wwEZB6jfgP13jR1psyS6VfEK
+         KJ/3QJ67Wt5Bw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9089DE6D482;
+        Wed, 15 Jun 2022 02:20:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.21.177.191]
-X-ClientProxiedBy: RTEXH36504.realtek.com.tw (172.21.6.27) To
- RTEXMBS03.realtek.com.tw (172.21.6.96)
-X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: trusted connection
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Deterministic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 06/15/2022 01:58:00
-X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
- rules found
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzYvMTQgpFWkyCAxMDowMDowMA==?=
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
-X-KSE-Attachment-Filter-Triggered-Rules: Clean
-X-KSE-Attachment-Filter-Triggered-Filters: Clean
-X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: bgmac: Fix an erroneous kfree() in bgmac_remove()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165525961358.10274.17222690616315537427.git-patchwork-notify@kernel.org>
+Date:   Wed, 15 Jun 2022 02:20:13 +0000
+References: <a026153108dd21239036a032b95c25b5cece253b.1655153616.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <a026153108dd21239036a032b95c25b5cece253b.1655153616.git.christophe.jaillet@wanadoo.fr>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     rafal@milecki.pl, bcm-kernel-feedback-list@broadcom.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, f.fainelli@gmail.com,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        netdev@vger.kernel.org
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since file-backed memory on CMA area could take long-term pinning.
+Hello:
 
-By Minchan Kim's debug commit 151e084af494 ("mm: page_alloc:
-dump migrate-failed pages only at -EBUSY")
-We know the pinned page comes from buffer_head, ext4 journal, FS metadata.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Sync everything after EBUSY that can unpin most file-system pages.
-And raise the success rate at next time try.
+On Mon, 13 Jun 2022 22:53:50 +0200 you wrote:
+> 'bgmac' is part of a managed resource allocated with bgmac_alloc(). It
+> should not be freed explicitly.
+> 
+> Remove the erroneous kfree() from the .remove() function.
+> 
+> Fixes: 34a5102c3235 ("net: bgmac: allocate struct bgmac just once & don't copy it"
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> 
+> [...]
 
-Signed-off-by: Edward Wu <edwardwu@realtek.com>
----
- mm/cma.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+Here is the summary with links:
+  - net: bgmac: Fix an erroneous kfree() in bgmac_remove()
+    https://git.kernel.org/netdev/net/c/d7dd6eccfbc9
 
-diff --git a/mm/cma.c b/mm/cma.c
-index eaa4b5c920a2..eefd725064e1 100644
---- a/mm/cma.c
-+++ b/mm/cma.c
-@@ -31,6 +31,7 @@
- #include <linux/highmem.h>
- #include <linux/io.h>
- #include <linux/kmemleak.h>
-+#include <linux/syscalls.h>
- #include <trace/events/cma.h>
- 
- #include "cma.h"
-@@ -410,6 +411,24 @@ static void cma_debug_show_areas(struct cma *cma)
- static inline void cma_debug_show_areas(struct cma *cma) { }
- #endif
- 
-+void cma_sync_work(struct work_struct *work)
-+{
-+	ksys_sync();
-+	kfree(work);
-+	pr_debug("%s(): EBUSY Sync complete\n", __func__);
-+}
-+
-+void cma_ebusy_sync_pinned_pages(void)
-+{
-+	struct work_struct *work;
-+
-+	work = kmalloc(sizeof(*work), GFP_ATOMIC);
-+	if (work) {
-+		INIT_WORK(work, cma_sync_work);
-+		schedule_work(work);
-+	}
-+}
-+
- /**
-  * cma_alloc() - allocate pages from contiguous area
-  * @cma:   Contiguous memory region for which the allocation is performed.
-@@ -430,6 +449,7 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
- 	unsigned long i;
- 	struct page *page = NULL;
- 	int ret = -ENOMEM;
-+	bool sys_synchronized = false;
- 
- 	if (!cma || !cma->count || !cma->bitmap)
- 		goto out;
-@@ -480,6 +500,11 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
- 		if (ret != -EBUSY)
- 			break;
- 
-+		if (!sys_synchronized) {
-+			sys_synchronized = true;
-+			cma_ebusy_sync_pinned_pages();
-+		}
-+
- 		pr_debug("%s(): memory range at %p is busy, retrying\n",
- 			 __func__, pfn_to_page(pfn));
- 
+You are awesome, thank you!
 -- 
-2.17.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

@@ -2,81 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975A054D179
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6ED54D17B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:20:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236400AbiFOTTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 15:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S243483AbiFOTUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiFOTTD (ORCPT
+        with ESMTP id S236585AbiFOTUU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:19:03 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACC7B3A1A0;
-        Wed, 15 Jun 2022 12:19:02 -0700 (PDT)
-Received: from [192.168.254.32] (unknown [47.189.24.195])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 0FE6A20C3239;
-        Wed, 15 Jun 2022 12:19:01 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0FE6A20C3239
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1655320741;
-        bh=P855J7pf3ewIUtrhK1hWBmF29lom3t1KgcuEvkxebuc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pOmKYo3IPTir0+5ozXAufh+VdyvmhMdSCspGc9BfccOXahk5hUqc43WF7dg49miGc
-         0Nx6OZVNweibfIAqrrW1kbrtZwaTM8by7akWeMkZpSfXq2GxI0G3wksWJpe962+QZp
-         w0XRyd9dLrUCTkpWiwl01XdG6XObLHde1r3nEPGc=
-Message-ID: <8d890e05-f22f-8165-72db-d96b51d9589a@linux.microsoft.com>
-Date:   Wed, 15 Jun 2022 14:19:00 -0500
+        Wed, 15 Jun 2022 15:20:20 -0400
+Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4533CFDE
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:20:19 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id 1YYroIQkl26JC1YYro1i2w; Wed, 15 Jun 2022 21:20:18 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Wed, 15 Jun 2022 21:20:18 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <dc2fc881-9895-eb47-dc4f-6ab2213e6eac@wanadoo.fr>
+Date:   Wed, 15 Jun 2022 21:20:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.9.1
-Subject: Re: [PATCH v14 0/7] arm64: Reorganize the unwinder and implement
- stack trace reliability checks
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     mark.rutland@arm.com, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <f460a35f88195413bcf7305e5083480aab3ca858>
- <20220413140528.3815-1-madvenka@linux.microsoft.com>
- <YqjKBF1dNKbTZrpY@sirena.org.uk>
-From:   "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-In-Reply-To: <YqjKBF1dNKbTZrpY@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-21.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] vboxsf: Directly use ida_alloc()/free()
+Content-Language: fr
+To:     Bo Liu <liubo03@inspur.com>, hdegoede@redhat.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220615062930.2893-1-liubo03@inspur.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220615062930.2893-1-liubo03@inspur.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/14/22 12:48, Mark Brown wrote:
-> On Wed, Apr 13, 2022 at 09:05:21AM -0500, madvenka@linux.microsoft.com wrote:
->> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
->>
->> I have rebased this patch series on top of this branch:
->>
->> 	arm64/stacktrace/cleanups
->>
->> in Mark Rutland's fork of Linux. The branch contains a set of patches
->> from Mark and me for reliable stack trace.
+Le 15/06/2022 à 08:29, Bo Liu a écrit :
+> Use ida_alloc()/ida_free() instead of
+> ida_simple_get()/ida_simple_remove().
+> The latter is deprecated and more verbose.
 > 
-> Do you have any plans to resend this based on v5.19-rcN?  I know you
-> were waiting for some more review feedback but everyone's review queues
-> will most likely have been flushed with the new release so it'll need a
-> resend.  I was half thinking about some related stuff so I went to apply
-> these but saw there's some small conflicts.
+> Signed-off-by: Bo Liu <liubo03@inspur.com>
 
-I will look at resending based on v5.19-rcN ASAP.
+Hi,
+for what it's worth:
 
-Madhavan
+Reviewed-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+
+> ---
+>   fs/vboxsf/super.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/vboxsf/super.c b/fs/vboxsf/super.c
+> index d2f6df69f611..24ef7ddecf89 100644
+> --- a/fs/vboxsf/super.c
+> +++ b/fs/vboxsf/super.c
+> @@ -155,7 +155,7 @@ static int vboxsf_fill_super(struct super_block *sb, struct fs_context *fc)
+>   		}
+>   	}
+>   
+> -	sbi->bdi_id = ida_simple_get(&vboxsf_bdi_ida, 0, 0, GFP_KERNEL);
+> +	sbi->bdi_id = ida_alloc(&vboxsf_bdi_ida, GFP_KERNEL);
+>   	if (sbi->bdi_id < 0) {
+>   		err = sbi->bdi_id;
+>   		goto fail_free;
+> @@ -221,7 +221,7 @@ static int vboxsf_fill_super(struct super_block *sb, struct fs_context *fc)
+>   	vboxsf_unmap_folder(sbi->root);
+>   fail_free:
+>   	if (sbi->bdi_id >= 0)
+> -		ida_simple_remove(&vboxsf_bdi_ida, sbi->bdi_id);
+> +		ida_free(&vboxsf_bdi_ida, sbi->bdi_id);
+>   	if (sbi->nls)
+>   		unload_nls(sbi->nls);
+>   	idr_destroy(&sbi->ino_idr);
+> @@ -268,7 +268,7 @@ static void vboxsf_put_super(struct super_block *sb)
+>   
+>   	vboxsf_unmap_folder(sbi->root);
+>   	if (sbi->bdi_id >= 0)
+> -		ida_simple_remove(&vboxsf_bdi_ida, sbi->bdi_id);
+> +		ida_free(&vboxsf_bdi_ida, sbi->bdi_id);
+>   	if (sbi->nls)
+>   		unload_nls(sbi->nls);
+>   
+

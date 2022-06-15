@@ -2,144 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2270554C125
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 07:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13EB354C128
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 07:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237797AbiFOFaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 01:30:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52338 "EHLO
+        id S241103AbiFOFbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 01:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiFOFaA (ORCPT
+        with ESMTP id S234510AbiFOFbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 01:30:00 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4931A49937;
-        Tue, 14 Jun 2022 22:29:59 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id u12so20965843eja.8;
-        Tue, 14 Jun 2022 22:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=JIWkiD2gp+DIgZxu8gKOEwEpgQ5/8fbIKpBeO6X4A6Y=;
-        b=hwECM+53CVSf51IQ6pQMNyVuwW269uKlYHDfaAtqb/U8PafUKk+ORP/TmMgQsgYmoF
-         0PUSzwNQuXGCiSlf27SiPK6C08J6W85qbr6VfOBOc8bZ8inlYzp0faqG8DXQ/WUTfcdi
-         1pRq8aglD/nu4d6+kAzx/oYYjHOdBP++YBYv1ua0BdLRvj93XgbZxX5HVECeBSb4MdBv
-         ubegmtRNBVhfT3icGdh+OkmQEd/9epG6UQejAsD590cQrpXaNG+zHDXaPcJizstK0cec
-         TbFwZP0dEAHXnXS+yv1t60CD3anvCsakpJImS4WCYl9179sN7cC2M4eBAqE6u0l9xqXn
-         swYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JIWkiD2gp+DIgZxu8gKOEwEpgQ5/8fbIKpBeO6X4A6Y=;
-        b=flCeLDfcMDiooZ3pgjgvzEIABgIX9C2vYi65YfYtYmCF7nmywVrSRDWdjo1Qs25Lig
-         nZ1Dsh5P1vzC9mPGrj/uW+LoOoobrvPRGUo6K74OcG1tx7W1Z9QMR/8ApTWM+/H0YX1q
-         nroL9LOyUIIBJ3XOnpaaTxZ2355LullXZodc8Owqr2NdSdkUb9iSoZu5rjccR36TobV6
-         L85eKsS+Gc9vGl4nMw8OpZ/YwprNF/1aq+wZzcYKU34e7cqwRYoRO9nMc3vJxkP8+hvh
-         ysaJmlEoNVNf7eBz2PJJOya7CSd8BPlt7xbsPjZd2llCxCkNNg20mvelAiwQtruYudBD
-         9rGg==
-X-Gm-Message-State: AJIora9RW8Kndak8mL+MEbE2AWByo5WDqo+TmKINGM8tbKqBZIveGZz1
-        iFk7MUZf8W6yI//ZXZfEEYo=
-X-Google-Smtp-Source: AGRyM1vOxWpwOvHY531EZDcFsmLeInua4DAR00pDq3a/iwIic7gxOq6uSLiFrvNwTyn2QtaDZAL71A==
-X-Received: by 2002:a17:907:9605:b0:6f5:c66:7c13 with SMTP id gb5-20020a170907960500b006f50c667c13mr7101498ejc.66.1655270997850;
-        Tue, 14 Jun 2022 22:29:57 -0700 (PDT)
-Received: from opensuse.localnet (host-87-16-96-199.retail.telecomitalia.it. [87.16.96.199])
-        by smtp.gmail.com with ESMTPSA id i2-20020a170906444200b006fed8dfcf78sm5832838ejp.225.2022.06.14.22.29.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 22:29:56 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     David Sterba <dsterba@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Ira Weiny <ira.weiny@intel.com>, dsterba@suse.cz,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        Nick Terrell <terrelln@fb.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Filipe Manana <fdmanana@kernel.org>
-Subject: Re: [PATCH] btrfs: Replace kmap() with kmap_local_page() in zstd.c
-Date:   Wed, 15 Jun 2022 07:29:55 +0200
-Message-ID: <3619537.MHq7AAxBmi@opensuse>
-In-Reply-To: <YqjAVq+1PIpVIr0p@iweiny-desk3>
-References: <20220611135203.27992-1-fmdefrancesco@gmail.com> <8952566.CDJkKcVGEf@opensuse> <YqjAVq+1PIpVIr0p@iweiny-desk3>
+        Wed, 15 Jun 2022 01:31:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2992E49C99;
+        Tue, 14 Jun 2022 22:31:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0BDAB81C36;
+        Wed, 15 Jun 2022 05:31:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 645AFC34115;
+        Wed, 15 Jun 2022 05:31:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655271071;
+        bh=UP9/PPlSi1ds0ci9Dk+oUiyvyIrwws3/Ir1Z5PIAGWQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=epqJaVYUaaMbXOx6dxJme+50GCKJAN4hmd5ydrTMcFCZlBo2stNqNuemRouFNq3tJ
+         seV6Df3/hG0OxFbINgCBRbEDAuzC3sWMlmPDjEeyVH8yspGMNrkD9vnGZ3jGo1aMdF
+         WPUbnybKGsI8+bJg3BFaEW/lSvXsGWzvfnlI61Dxpc4f0VybKTBeXPVJdTf65SKRpt
+         p0LIdJp9HYocDl3zqK+Yd0rP3JjxQAxUb3CBzTMsCwF73VFwWfOmp0OCtGaz+mDUpa
+         D449yXNvobGB3j6Hqqmtc819Xed4vlDnRsPemlzYBkfTVjg7TJFCs6EeHz7+aXAxxC
+         Oivda28Tyf4Bw==
+Date:   Tue, 14 Jun 2022 22:31:09 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH RESEND net-next v7 05/16] net: pcs: add Renesas MII
+ converter driver
+Message-ID: <20220614223109.603935fb@kernel.org>
+In-Reply-To: <20220610103712.550644-6-clement.leger@bootlin.com>
+References: <20220610103712.550644-1-clement.leger@bootlin.com>
+        <20220610103712.550644-6-clement.leger@bootlin.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=C3=AC 14 giugno 2022 19:07:34 CEST Ira Weiny wrote:
-> On Tue, Jun 14, 2022 at 06:28:48PM +0200, Fabio M. De Francesco wrote:
-> > On marted=C3=AC 14 giugno 2022 16:25:21 CEST David Sterba wrote:
-> > > On Tue, Jun 14, 2022 at 01:22:50AM +0200, Fabio M. De Francesco=20
-wrote:
-> > > > On luned=C3=AC 13 giugno 2022 20:39:13 CEST David Sterba wrote:
-> > > > > On Sat, Jun 11, 2022 at 03:52:03PM +0200, Fabio M. De Francesco=20
-> > >=20
+On Fri, 10 Jun 2022 12:37:01 +0200 Cl=C3=A9ment L=C3=A9ger wrote:
+> Subject: [PATCH RESEND net-next v7 05/16] net: pcs: add Renesas MII conve=
+rter driver
 >=20
-> [snip]
->=20
-> > > > A better solution is changing the prototype of __kunmap_local(); I
-> > > > suppose that Andrew won't object, but who knows?
-> > > >=20
-> > > > (+Cc Andrew Morton).
-> > > >=20
-> > > > I was waiting for your comments. At now I've done about 15=20
-conversions=20
-> > > > across the kernel but it's the first time I had to pass a pointer=20
-to=20
-> > const=20
-> > > > void to kunmap_local(). Therefore, I was not sure if changing the=20
-API=20
-> > were=20
-> > > > better suited (however I have already discussed this with Ira).
-> > >=20
-> > > IMHO it should be fixed in the API.
-> > >=20
-> > I agree with you in full.
-> >=20
-> > At the same time when you sent this email I submitted a patch to change=
-=20
-> > kunmap_local() and kunmap_atomic().
-> >=20
-> > After Andrew takes them I'll send v2 of this patch to zstd.c without=20
-those=20
-> > unnecessary casts.
->=20
-> David,
->=20
-> Would you be willing to take this through your tree as a pre-patch to the=
-=20
-kmap
-> changes in btrfs?
->=20
-> That would be easier for Fabio and probably you and Andrew in the long=20
-run.
->=20
-> Ira
+> Add a PCS driver for the MII converter that is present on the Renesas
+> RZ/N1 SoC. This MII converter is reponsible for converting MII to
+> RMII/RGMII or act as a MII pass-trough. Exposing it as a PCS allows to
+> reuse it in both the switch driver and the stmmac driver. Currently,
+> this driver only allows the PCS to be used by the dual Cortex-A7
+> subsystem since the register locking system is not used.
 
-David,
+Could someone with MII &| PCS knowledge cast an eye over this code?
+All I can do is point out error path issues...
 
-Please drop the first version of the changes[1] to the API and instead take=
-=20
-my second version.[2] I've only reworked the commit message (and subject,=20
-but this was involuntary) to make explicit that the fundamental reason=20
-behind these changes are semantic correctness.
+> +struct phylink_pcs *miic_create(struct device *dev, struct device_node *=
+np)
+> +{
+> +	struct platform_device *pdev;
+> +	struct miic_port *miic_port;
+> +	struct device_node *pcs_np;
+> +	struct miic *miic;
+> +	u32 port;
+> +
+> +	if (!of_device_is_available(np))
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	if (of_property_read_u32(np, "reg", &port))
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	if (port > MIIC_MAX_NR_PORTS || port < 1)
+> +		return ERR_PTR(-EINVAL);
+> +
+> +	/* The PCS pdev is attached to the parent node */
+> +	pcs_np =3D of_get_parent(np);
 
-Thanks,
+of_get_parent()? ..
 
-=46abio
+> +	if (!pcs_np)
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	if (!of_device_is_available(pcs_np))
+> +		return ERR_PTR(-ENODEV);
 
-[1] https://lore.kernel.org/lkml/20220614142531.16478-1-fmdefrancesco@gmail=
-=2Ecom/
+.. more like of_leak_parent()
 
-[2] https://lore.kernel.org/lkml/20220615051256.31466-1-fmdefrancesco@gmail=
-=2Ecom/
+> +	pdev =3D of_find_device_by_node(pcs_np);
+> +	if (!pdev || !platform_get_drvdata(pdev))
+> +		return ERR_PTR(-EPROBE_DEFER);
+> +
+> +	miic_port =3D kzalloc(sizeof(*miic_port), GFP_KERNEL);
+> +	if (!miic_port)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	miic =3D platform_get_drvdata(pdev);
+> +	device_link_add(dev, miic->dev, DL_FLAG_AUTOREMOVE_CONSUMER);
+> +
+> +	miic_port->miic =3D miic;
+> +	miic_port->port =3D port - 1;
+> +	miic_port->pcs.ops =3D &miic_phylink_ops;
+> +
+> +	return &miic_port->pcs;
+> +}
+> +EXPORT_SYMBOL(miic_create);
 
+> +static int miic_parse_dt(struct device *dev, u32 *mode_cfg)
+> +{
+> +	s8 dt_val[MIIC_MODCTRL_CONF_CONV_NUM];
+> +	struct device_node *np =3D dev->of_node;
+> +	struct device_node *conv;
+> +	u32 conf;
+> +	int port;
+> +
+> +	memset(dt_val, MIIC_MODCTRL_CONF_NONE, sizeof(dt_val));
+> +
+> +	of_property_read_u32(np, "renesas,miic-switch-portin", &conf);
+> +	dt_val[0] =3D conf;
+> +
+> +	for_each_child_of_node(np, conv) {
+> +		if (of_property_read_u32(conv, "reg", &port))
+> +			continue;
+> +
+> +		if (!of_device_is_available(conv))
+> +			continue;
+> +
+> +		if (of_property_read_u32(conv, "renesas,miic-input", &conf) =3D=3D 0)
+> +			dt_val[port] =3D conf;
+> +
+> +		of_node_put(conv);
 
+Don't these iteration functions put() the current before taking the
+next one all by themselves? Or is there supposed to be a "break" here?
 
+> +	}
+> +
+> +	return miic_match_dt_conf(dev, dt_val, mode_cfg);
+> +}

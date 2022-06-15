@@ -2,54 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DEC554C1B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 08:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5CD54C1B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 08:22:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350663AbiFOGKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 02:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S1351653AbiFOGMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 02:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346313AbiFOGKE (ORCPT
+        with ESMTP id S235477AbiFOGMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 02:10:04 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 546E3275E0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 23:10:02 -0700 (PDT)
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9DxP0ywd6livyZDAA--.5882S4;
-        Wed, 15 Jun 2022 14:09:55 +0800 (CST)
-From:   Jianmin Lv <lvjianmin@loongson.cn>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Hanjun Guo <guohanjun@huawei.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V12 10/10] irqchip: Add Loongson PCH LPC controller support
-Date:   Wed, 15 Jun 2022 14:09:50 +0800
-Message-Id: <1655273390-27904-3-git-send-email-lvjianmin@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1655273390-27904-1-git-send-email-lvjianmin@loongson.cn>
-References: <1655273390-27904-1-git-send-email-lvjianmin@loongson.cn>
-X-CM-TRANSID: AQAAf9DxP0ywd6livyZDAA--.5882S4
-X-Coremail-Antispam: 1UD129KBjvJXoW3JFW8Ar15Wr1fJr47KryfWFg_yoW3Gw4UpF
-        W3u3yayr48JF4jvw4kCa4UZrW3Zwn7Kayjka93G343Jr9rC34kKFn2yF9rZFsrArWagF4a
-        yFZ0yFW8CF15CaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkCb7Iv0xC_Kw4lb4IE77IF4wAFc2x0x2IEx4CE42xK8VAvwI8I
-        cIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2
-        AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v2
-        6r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80
-        ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4
-        AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k2
-        0xvE74AGY7Cv6cx26ryrJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUqs2-DU
-        UUU
-X-CM-SenderInfo: 5oymxthqpl0qxorr0wxvrqhubq/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Wed, 15 Jun 2022 02:12:32 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D44192AF
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 23:12:31 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id x138so10494243pfc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 23:12:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9Tdsc7ElAP0+huyaWwaYeur9yVzd2yI+7V/8yx/aIBc=;
+        b=cLbNc3PAW59J4cj7Cb+E+uurhiCojwSgdCshxrzx/lLIQJaZiylX06qW0HYo8cMKe7
+         EjJCA77ZwuPokDJt8wyixdlfI5Q5vbrF42Q3uZzBpT5ieD7uIq+4EeYm5LJavU/mqK7y
+         JEyyUErnN+Phxr/OAtaT/Vhv+R3xqd0sUG92kSREMcoRQ5H6Jv3ZlEXLZ9mK82tcLuR3
+         Ola+5DFuKW6zMXI7gQUh4XlV+SmjVbxFZCDOaOEtrkSAHMH2/z19fM+uLD35fwGCUd4H
+         OeGHG60335MkX5CbugMYZokC3MBnkT4NOoTWQHmL18oSjBY1ctJNXksUUkQTaHIs5zbx
+         iXmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=9Tdsc7ElAP0+huyaWwaYeur9yVzd2yI+7V/8yx/aIBc=;
+        b=I0EUR4zqEoc3mY6jFaqrEvt/yWRnUFxlNFAFIWpOoVA1HS+68pbduokk7rXsb02KEm
+         8QcVP04q0kI86UOLIOdxl9bLPj2hGz7dG3J2rk6waU/84XF+iQvgYBMVMYjEkqk1+wsl
+         PUW1jH+amSipaSFuN7lQCTvTzxcrAxCIOmZOG/DAUVCsqkkvBEkM//VbUhd75IJe1wtp
+         jSxmJEKJHbxHuWTqOn568wr0hdWS/NGKxsvVJS22Fys6WwfKdL1PC3tTBIlE+VuWLT2k
+         ffNsdjPrDwhqgN5DY00eDUAdymrG0L1Wf8/Dn3gPrSA32/1z6w91i9P1R6ZttbTzQjE4
+         Xy/A==
+X-Gm-Message-State: AOAM5302U+3vDLjsV1dN0/t/772FluvLivxzDRBx6ivWTzbySJpGCOhM
+        Tb3/ukeKTNzazXP1r7/YRrY=
+X-Google-Smtp-Source: ABdhPJxfUICQhXQB6709mzdivAeSAnfNAjz10sNmqLBJvDbJkhwyOdBzhVj1+P4qXCtk4LpR3N6Rag==
+X-Received: by 2002:a63:6806:0:b0:3fc:3b43:52d5 with SMTP id d6-20020a636806000000b003fc3b4352d5mr7576994pgc.319.1655273550299;
+        Tue, 14 Jun 2022 23:12:30 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::4:7e4d])
+        by smtp.gmail.com with ESMTPSA id n23-20020aa78a57000000b0051c01aa7d31sm8761660pfa.46.2022.06.14.23.12.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 23:12:28 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 14 Jun 2022 20:12:27 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 1/4] kernfs: make ->attr.open RCU protected.
+Message-ID: <Yql4S8+I8nDX0QA6@slm.duckdns.org>
+References: <20220614070346.810168-1-imran.f.khan@oracle.com>
+ <20220614070346.810168-2-imran.f.khan@oracle.com>
+ <Yqi1RVRK2XahPWlg@slm.duckdns.org>
+ <89ca35ba-0290-b155-b290-5e70efafa9bb@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <89ca35ba-0290-b155-b290-5e70efafa9bb@oracle.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,262 +75,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Huacai Chen <chenhuacai@loongson.cn>
+On Wed, Jun 15, 2022 at 12:13:48PM +1000, Imran Khan wrote:
+> Full patch-set will avoid this small conflict. I hope sending full
+> patch-set is okay for this time. The full patch-set (v7) is available at [1]
 
-PCH-LPC stands for "LPC Interrupts" that described in Section 24.3 of
-"Loongson 7A1000 Bridge User Manual". For more information please refer
-Documentation/loongarch/irq-chip-model.rst.
+It's just easier to focus on a single patch when repatedly iterating on it
+like this. It's easy to repost the whole thing when the patch is settled. It
+becomes a bit tiring to keep reposting essentially the same patchset over
+and over again.
 
-Change-Id: I51195274342ff51d5f5c99fe84d325a12d55509f
-Co-developed-by: Jianmin Lv <lvjianmin@loongson.cn>
-Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- drivers/irqchip/Kconfig                |   8 ++
- drivers/irqchip/Makefile               |   1 +
- drivers/irqchip/irq-loongson-pch-lpc.c | 202 +++++++++++++++++++++++++++++++++
- 3 files changed, 211 insertions(+)
- create mode 100644 drivers/irqchip/irq-loongson-pch-lpc.c
+Thanks.
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 0a39aee..f363b94d 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -611,6 +611,14 @@ config LOONGSON_PCH_MSI
- 	help
- 	  Support for the Loongson PCH MSI Controller.
- 
-+config LOONGSON_PCH_LPC
-+	bool "Loongson PCH LPC Controller"
-+	depends on MACH_LOONGSON64
-+	default (MACH_LOONGSON64 && LOONGARCH)
-+	select IRQ_DOMAIN_HIERARCHY
-+	help
-+	  Support for the Loongson PCH LPC Controller.
-+
- config MST_IRQ
- 	bool "MStar Interrupt Controller"
- 	depends on ARCH_MEDIATEK || ARCH_MSTARV7 || COMPILE_TEST
-diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-index e32a8b9..81977be 100644
---- a/drivers/irqchip/Makefile
-+++ b/drivers/irqchip/Makefile
-@@ -110,6 +110,7 @@ obj-$(CONFIG_LOONGSON_HTPIC)		+= irq-loongson-htpic.o
- obj-$(CONFIG_LOONGSON_HTVEC)		+= irq-loongson-htvec.o
- obj-$(CONFIG_LOONGSON_PCH_PIC)		+= irq-loongson-pch-pic.o
- obj-$(CONFIG_LOONGSON_PCH_MSI)		+= irq-loongson-pch-msi.o
-+obj-$(CONFIG_LOONGSON_PCH_LPC)		+= irq-loongson-pch-lpc.o
- obj-$(CONFIG_MST_IRQ)			+= irq-mst-intc.o
- obj-$(CONFIG_SL28CPLD_INTC)		+= irq-sl28cpld.o
- obj-$(CONFIG_MACH_REALTEK_RTL)		+= irq-realtek-rtl.o
-diff --git a/drivers/irqchip/irq-loongson-pch-lpc.c b/drivers/irqchip/irq-loongson-pch-lpc.c
-new file mode 100644
-index 0000000..568fba7
---- /dev/null
-+++ b/drivers/irqchip/irq-loongson-pch-lpc.c
-@@ -0,0 +1,202 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Loongson LPC Interrupt Controller support
-+ *
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+
-+#define pr_fmt(fmt) "lpc: " fmt
-+
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/irqchip.h>
-+#include <linux/irqchip/chained_irq.h>
-+#include <linux/irqdomain.h>
-+#include <linux/kernel.h>
-+#include "irq-loongarch-pic-common.h"
-+
-+/* Registers */
-+#define LPC_INT_CTL		0x00
-+#define LPC_INT_ENA		0x04
-+#define LPC_INT_STS		0x08
-+#define LPC_INT_CLR		0x0c
-+#define LPC_INT_POL		0x10
-+#define LPC_COUNT		16
-+
-+struct pch_lpc {
-+	void __iomem		*base;
-+	struct irq_domain	*lpc_domain;
-+	raw_spinlock_t		lpc_lock;
-+	u32			saved_reg_ctl;
-+	u32			saved_reg_ena;
-+	u32			saved_reg_pol;
-+};
-+
-+static void ack_lpc_irq(struct irq_data *d)
-+{
-+	unsigned long flags;
-+	struct pch_lpc *priv = d->domain->host_data;
-+
-+	raw_spin_lock_irqsave(&priv->lpc_lock, flags);
-+	writel(0x1 << d->hwirq, priv->base + LPC_INT_CLR);
-+	raw_spin_unlock_irqrestore(&priv->lpc_lock, flags);
-+}
-+static void mask_lpc_irq(struct irq_data *d)
-+{
-+	unsigned long flags;
-+	struct pch_lpc *priv = d->domain->host_data;
-+
-+	raw_spin_lock_irqsave(&priv->lpc_lock, flags);
-+	writel(readl(priv->base + LPC_INT_ENA) & (~(0x1 << (d->hwirq))),
-+			priv->base + LPC_INT_ENA);
-+	raw_spin_unlock_irqrestore(&priv->lpc_lock, flags);
-+}
-+
-+static void unmask_lpc_irq(struct irq_data *d)
-+{
-+	unsigned long flags;
-+	struct pch_lpc *priv = d->domain->host_data;
-+
-+	raw_spin_lock_irqsave(&priv->lpc_lock, flags);
-+	writel(readl(priv->base + LPC_INT_ENA) | (0x1 << (d->hwirq)),
-+			priv->base + LPC_INT_ENA);
-+	raw_spin_unlock_irqrestore(&priv->lpc_lock, flags);
-+}
-+
-+static int lpc_set_type(struct irq_data *d, unsigned int type)
-+{
-+	u32 val;
-+	u32 mask = 0x1 << (d->hwirq);
-+	struct pch_lpc *priv = d->domain->host_data;
-+
-+	if (!(type & IRQ_TYPE_LEVEL_MASK))
-+		return 0;
-+
-+	val = readl(priv->base + LPC_INT_POL);
-+
-+	if (type == IRQ_TYPE_LEVEL_HIGH)
-+		val |= mask;
-+	else
-+		val &= ~mask;
-+
-+	writel(val, priv->base + LPC_INT_POL);
-+
-+	return 0;
-+}
-+
-+static struct irq_chip pch_lpc_irq_chip = {
-+	.name			= "PCH LPC",
-+	.irq_mask		= mask_lpc_irq,
-+	.irq_unmask		= unmask_lpc_irq,
-+	.irq_ack		= ack_lpc_irq,
-+	.irq_set_type		= lpc_set_type,
-+	.flags			= IRQCHIP_SKIP_SET_WAKE,
-+};
-+
-+static void lpc_irq_dispatch(struct irq_desc *desc)
-+{
-+	u32 pending, bit, virq;
-+	struct irq_chip *chip = irq_desc_get_chip(desc);
-+	struct pch_lpc *priv = irq_desc_get_handler_data(desc);
-+
-+	chained_irq_enter(chip, desc);
-+
-+	pending = readl(priv->base + LPC_INT_ENA);
-+	pending &= readl(priv->base + LPC_INT_STS);
-+	if (!pending)
-+		spurious_interrupt();
-+
-+	while (pending) {
-+		bit = __ffs(pending);
-+		virq = irq_linear_revmap(priv->lpc_domain, bit);
-+
-+		generic_handle_irq(bit);
-+		pending &= ~BIT(bit);
-+	}
-+	chained_irq_exit(chip, desc);
-+}
-+
-+static int pch_lpc_map(struct irq_domain *d, unsigned int irq,
-+			irq_hw_number_t hw)
-+{
-+	irq_set_chip_and_handler(irq, &pch_lpc_irq_chip, handle_level_irq);
-+	return 0;
-+}
-+
-+static const struct irq_domain_ops pch_lpc_domain_ops = {
-+	.map 		= pch_lpc_map,
-+	.translate	= irq_domain_translate_twocell,
-+};
-+
-+static void pch_lpc_reset(struct pch_lpc *priv)
-+{
-+	/* Enable the LPC interrupt, bit31: en  bit30: edge */
-+	writel(0x80000000, priv->base + LPC_INT_CTL);
-+	writel(0, priv->base + LPC_INT_ENA);
-+	/* Clear all 18-bit interrpt bit */
-+	writel(0x3ffff, priv->base + LPC_INT_CLR);
-+}
-+
-+static int pch_lpc_disabled(struct pch_lpc *priv)
-+{
-+	return (readl(priv->base + LPC_INT_ENA) == 0xffffffff) &&
-+			(readl(priv->base + LPC_INT_STS) == 0xffffffff);
-+}
-+
-+int __init pch_lpc_acpi_init(struct irq_domain *parent,
-+					struct acpi_madt_lpc_pic *acpi_pchlpc)
-+{
-+	int parent_irq;
-+	struct pch_lpc *priv;
-+	struct irq_fwspec fwspec;
-+	struct fwnode_handle *irq_handle;
-+
-+	if (!acpi_pchlpc)
-+		return -EINVAL;
-+
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	raw_spin_lock_init(&priv->lpc_lock);
-+
-+	priv->base = ioremap(acpi_pchlpc->address, acpi_pchlpc->size);
-+	if (!priv->base)
-+		goto free_priv;
-+
-+	if (pch_lpc_disabled(priv)) {
-+		pr_err("Failed to get LPC status\n");
-+		goto iounmap_base;
-+	}
-+
-+	irq_handle = irq_domain_alloc_named_fwnode("lpcintc");
-+	if (!irq_handle) {
-+		pr_err("Unable to allocate domain handle\n");
-+		goto iounmap_base;
-+	}
-+
-+	priv->lpc_domain = irq_domain_create_linear(irq_handle, LPC_COUNT,
-+					&pch_lpc_domain_ops, priv);
-+	if (!priv->lpc_domain) {
-+		pr_err("Failed to create IRQ domain\n");
-+		goto iounmap_base;
-+	}
-+	pch_lpc_reset(priv);
-+
-+	fwspec.fwnode = parent->fwnode;
-+	fwspec.param[0] = acpi_pchlpc->cascade;
-+	fwspec.param[1] = IRQ_TYPE_LEVEL_HIGH;
-+	fwspec.param_count = 2;
-+	parent_irq = irq_create_fwspec_mapping(&fwspec);
-+	irq_set_chained_handler_and_data(parent_irq, lpc_irq_dispatch, priv);
-+
-+	pch_lpc_handle = irq_handle;
-+	return 0;
-+
-+iounmap_base:
-+	iounmap(priv->base);
-+free_priv:
-+	kfree(priv);
-+
-+	return -ENOMEM;
-+}
 -- 
-1.8.3.1
-
+tejun

@@ -2,106 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F175554D3AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2F5954D3AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349781AbiFOV1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 17:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50862 "EHLO
+        id S1347860AbiFOV1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 17:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349710AbiFOV1l (ORCPT
+        with ESMTP id S237423AbiFOV11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 17:27:41 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BFC167C7;
-        Wed, 15 Jun 2022 14:27:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655328434;
-        bh=sewS1k19E5zNFt7guGx8ADD0uovsZroqX/MykOeNoAw=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=ZaY29LgSeKsC0VKC0SfEO8gCT/mbD6Qy/5eG//rKUlfwQK32wCZyAB8p4+MeiczAs
-         wEnfd+sTmcT94yqzlRVJePYywnp5EvPECoxAhy5pRe56snX/8JFtBBgpCsKSUAfHNV
-         jL/7QpKzQmAvk0RCH/rLb4FqlMv8n1jXIqjxFB38=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx105
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1MsHru-1nhIVP2ZLu-00tnF1; Wed, 15
- Jun 2022 23:27:14 +0200
-Message-ID: <00bbda63-dc00-05c0-4244-343352591d98@gmx.com>
-Date:   Thu, 16 Jun 2022 05:27:04 +0800
+        Wed, 15 Jun 2022 17:27:27 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AE575621D
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:27:25 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id w17so9469752wrg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:27:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BPF4o7sLOFsJSmN4SPO/juaDAdyVg3hHUH3VwC4Ah5A=;
+        b=As3v3yyTP4c1H2WamQXtagSPpLm/T0AQiRpx/sXZPbAFz4c8+7Itm/3B5JI9Wot1Jk
+         atgSKcsRE61zeiY2qhpUF7E9U68/F02Be2/SobaFyjxRdddBOS+Im3Ddofr7E+WLpB3O
+         ucpqHRbcGc7QPWlQKqZzbKrxQymh4Qfq9kOPY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BPF4o7sLOFsJSmN4SPO/juaDAdyVg3hHUH3VwC4Ah5A=;
+        b=YHnCdN3TkePCid6kt2xp6Qj4i9Cow4ZP78g/Mt0tjJGEGEg91oMv4qk6llcCVUbLSW
+         yMq12LY4zX89E0FZzlsPd1vFP96VgBqvI/FpCpXqrXemuvATIUV6CLiWL3bStwwZxfiD
+         cF5KQVJ3niniDQe/ePkJV4zlZlNu81kPe+wYnVz0Vs4xVQejVb2HP4g7cvw0Xlyncj74
+         IGtG0qIEvbxxPsHVc8DYBvha4MHuj6eyblMSlhIJxfkTxEnSdkrFinUbsLvunDrBMOln
+         6oPyyEB8MuM9L6IIxWxoVNAD3Acja1pTjuZH5JrkS79rc2L0Fn5KORtRNfmu5c830oPT
+         3ykQ==
+X-Gm-Message-State: AJIora89FWexhNU4QVhZXsADM8cKqkocXlIcAgRjC8ZtIPUV/4D/yWIN
+        jPLjU7rdzg1EWLazBxx2x5PXTU4qWKClLzgyETKN/Q==
+X-Google-Smtp-Source: AGRyM1v4ANlH7LhwVu51I3oLbGKooh3SiqVw+IV+zQM6Y1o8c0uh0vN8qrZnqVKOlQmoljFG+KZvCPvNV1gfuyTpoPk=
+X-Received: by 2002:adf:d1c2:0:b0:218:5736:63d9 with SMTP id
+ b2-20020adfd1c2000000b00218573663d9mr1544472wrd.667.1655328443819; Wed, 15
+ Jun 2022 14:27:23 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [syzbot] KASAN: use-after-free Read in copy_page_from_iter_atomic
- (2)
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     dsterba@suse.cz,
-        syzbot <syzbot+d2dd123304b4ae59f1bd@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, clm@fb.com, dsterba@suse.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org
-References: <0000000000003ce9d105e0db53c8@google.com>
- <00000000000085068105e112a117@google.com>
- <20220613193912.GI20633@twin.jikos.cz> <20220614071757.GA1207@lst.de>
- <2cc67037-cf90-cca2-1655-46b92b43eba8@gmx.com>
- <20220615132147.GA18252@lst.de>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-In-Reply-To: <20220615132147.GA18252@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:GzvWUv7j+dS6fGBh0O76pQHRuv0QctvPBDKfUco4+Y/GlL/5y5g
- BXHYTJT9fnyYxlKhn1+btWdWvWOiF9BDnLfCq+EChmasKSAq6b9B1pCQq6ZQASuejlOodGV
- HN32edj0jLN7bwq3m5m0D0pObpIh6RNHWquJ644IBNrDdnIdMTXGq0sbFfGfNtFwiDuTyIw
- bbtKn1jfl54A+36cVRM4w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:lmKkDBBaQN4=:jf9gSILfZGEkHNseXPaNRe
- PvP7u+k40FY2CY2c0qVJJZBB/SSwTJDnZaUJ+SDpqeZrdOVsk4C8rtHyoZ8VARRoOxw5VTHmO
- Ccz1d/+zDolUMSDJN/JxkTSUDCi2OKfQeM8YN7zQyU1v+Pg8h/hVzRfH+sXiLqZHpm7yImcXe
- Zns22cRY5ahuRaE2oWaY1UC1+UNPve57Dv7F1pFGJQVGEqTOvkI1xzJuM8qT/ieBd55fD/oAs
- +55imKkenFxKoBNFuRBqJtrb98zaAbF0NbNBl5pktTcEOsz1cjYh4KKWMFNa5qnu3lHRVjFW3
- ONRUrJDpOunQSHpCP8sruk9PrSwAmxUHeIWZdGTY7XIfJUMs/ISyhdsYDW1cMmK2JGnUtyp0q
- /5fzm0FFf6xdr6G9q4cwF1q2jsuHIV+y7uKkqGyNicAXak9LPk7aXkU6Mnw0WYUKFdBmMPYTJ
- 8TvJRrLCXnJB4RQGlAe2KNe3jelUpxv0Ei6DJqn7gTb5tiESBPwTu7NHZ7EcZ+io2rjhfrJ7y
- Y/FP/JpHG1b//XFXHUbQTCvbMJ/43T/wrLGtw3wwa2RDgtWGdP+XwIGL5sAlQODdEKXMR2hxa
- L6yL2jOirN64cSOHfNuQ5aHJ9fhfqmezh1imJwI7+nWdkjiKYZMgucyVWFqTwZAyclAj4jLka
- eSVL2A07OUVdeB6IDpq4LW4KFqX+HFtZD566Dw61X8vjl4W2kSyTdZknPV/eatpzAEQKJ+YA3
- +wvPTCK/09H35naTvpU8cdM9FDkWK2rEQHZZpBSlCC0D6F+x3GT0XL2fj+v9j+51RUk2Q4Hbc
- ByLPN/HiArHr1xbq6ktyJEjpMmjMQMv30Vq/4BM6ZqJty8OHCs7dnwqBo1RxgcaDcglFBAy6r
- Wwsy3UqRjM3N3/IsstSmsF1f112zJKzsOYGBVU4n+YxJgSKiRC7yDB2VPVt3e6jdeK3Y8m5gg
- qq53Pz/u7c4wKhvf5ASPAnB2ygA748E+2SLwxVHmnm0UFKhZJCJA+GnZsL21qOCyZ6N0bei8M
- QRln+yhh05sPLbVNlsPEmewJAHICI57FsNDrKog79AJsQEEtviKYHZqb1O8GsrBevAn4KBoZi
- Xr+vzv/l0huLKyq0FCz7buQROHIxWvDxZDm22i6sWCwe/AwVl79didzmQ==
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAODwPW9E8wWwxbYKyf4_-JFb4F-JSmLR3qOF_iudjX0f9ndF0A@mail.gmail.com>
+ <CAODwPW8fiFSNehZbZDdR9kjHxohLGiyE7edU=Opy0xV_P8JbEQ@mail.gmail.com> <CAD=FV=XAYUx9OKLxThQxYr02ZE+7Rjw0VnSsxg7kfPCBG38FZw@mail.gmail.com>
+In-Reply-To: <CAD=FV=XAYUx9OKLxThQxYr02ZE+7Rjw0VnSsxg7kfPCBG38FZw@mail.gmail.com>
+From:   Julius Werner <jwerner@chromium.org>
+Date:   Wed, 15 Jun 2022 14:27:12 -0700
+Message-ID: <CAODwPW_6A3kcmTLHVnH19bdYKpVBadAcDk5g-qxuju04uPRcMg@mail.gmail.com>
+Subject: Re: [RFC] Correct memory layout reporting for "jedec,lpddr2" and
+ related bindings
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Julius Werner <jwerner@chromium.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Jian-Jia Su <jjsu@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Nikola Milosavljevic <mnidza@outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/6/15 21:21, Christoph Hellwig wrote:
-> On Tue, Jun 14, 2022 at 04:50:22PM +0800, Qu Wenruo wrote:
->> The same way as data?
->>
->> map-logical to find the location of a mirror, write 4 bytes of zero int=
-o
->> the location, then call it a day.
->>
->> Although for metadata, you may want to choose a metadata that would
->> definitely get read.
->> Thus tree root is a good candidate.
+> Two comments about the above:
 >
-> And how do I find out the logic address of the tree root?
+> 1. It seems like the top-level node should have a compatible of some
+> type. Without that I guess you're just relying on people to find it
+> based on the name of the node?
+>
+> 2. Why not put the `channel-io-width` property in the channel? Then
+> you don't need to repeat it for each rank that's under the channel?
 
-For tree root, "btrfs ins dump-super <dev> | grep '^root\s'.
+Yes, we could do it that way. That seemed a bit more complicated to
+me, but if there's precedent for that in other devices it's probably
+the right thing.
 
-For other tree blocks, "btrfs ins dump-tree <dev>" then with other other
-keywords to grab.
+> 1. In the above the two ranks are in series, right? ...with a chip
+> select to select rank0 vs rank1? From how SPI works I'd expect that to
+> be represented using "reg", AKA:
 
-Thanks,
-Qu
+I wouldn't call it "in series" (rank is just a separate dimension of
+its own, in my mental model) but yes, if you think they should also be
+named with a property inside the node (and not just distinguished by
+node name), we can do that. Using "reg" for this feels a bit odd to
+me, but if that's common device tree practice we can do it that way.
+
+> 2. I guess if you had two things in parallel you'd want to know how?
+> Maybe if you had 4 8-bit chips connected to a 32-bit channel maybe
+> it'd look like this: [...]
+
+I think the channel-io-width mechanism is sufficient to distinguish
+this (by dividing by io-width), so I don't think there's anything to
+gain from listing each of these parallel chips separately. This also
+more closely reflects the way the memory training firmware that's
+writing these entries actually sees the system. The way I understand
+it, from the memory controller's perspective there's actually no
+difference between talking to a single 32-bit chip or two 16-bit chips
+in parallel -- there's no difference in register settings or anything,
+both software and hardware are totally unaware of this. This is all
+just implemented by wiring the respective components together
+correctly in the board layout (split the DQ pins between the two
+chips, and short all the other pins like clock and chip select
+together). When reading the mode register value, the controller only
+reads the first chip's register (which is connected to DQ[0:7]). When
+writing a mode register, the one Write Mode Register cycle will write
+all chips at once (because the written value is transferred through
+the column address pins which are shorted together between all chips).
+So if we were to pretend in the FDT that we had separate density and
+io-width values for each chip, that's kinda disingenuous, because the
+firmware can only read one of them and just assumes that it applies to
+all chips in parallel on that channel. The only way the firmware could
+know how many chips there are in parallel would also be by dividing
+the width of its channel by the io-width reported by the chip -- so I
+think it would be more honest there to just report those two "original
+source" values to the kernel / userspace and let them make that
+deduction themselves if they care to.
+
+> ...and I guess you could have things that include serial and parallel hookups...
+
+Sorry, just to avoid having more confusion here: there is no "serial"
+dimension to this as far as I'm aware (in my original email I called
+the "several chips per channel" thing "in series", but you are right
+that it would really be more accurate to call it "in parallel").
+There's only three dimensions: a) multiple channels (totally separate
+sets of pins coming out of the controller), b) multiple chips per
+channel (splitting e.g. 32 pins from the controller onto two 16-pin
+parts), and c) multiple ranks within each chip (which chip select pin
+is asserted in each access cycle).
+
+> > > This would be describing a dual-channel, dual-rank layout where each
+> > > 32-bit channel is connected to two 16-bit LPDDR chips in series. The
+> > > total capacity would be (2048 Mbits * (32/16) chips + 1024 Mbits *
+> > > (32/16) chips) * 2 channels = 12Gbits.
+>
+> Just to make sure I'm understanding things: in your hypothetical
+> example we're effectively wasting half of the SDRAM bandwidth of the
+> controller, right? So while what you describe is legal you'd get a
+> much more performant system by hooking the two big chips in parallel
+> on one channel and the two small chips in parallel on the other
+> channel. That would effectively give you a 64-bit wide bus as opposed
+> to the 32-bit wide bus that you describe.
+
+No, I don't think you're wasting bandwidth. In my example the
+controller has two 32-bit channels, so it always uses 64 bits of
+bandwidth in total. There's no asymmetry in the "chips per channel"
+dimension in my example (maybe that was a misunderstanding due to our
+different use of "in series" vs "in parallel") -- in fact, there can
+never be asymmetry in that dimension, when you split a channel onto
+more than one chip then those chips always must be exactly equal in
+geometry and timings (because, as mentioned above, they all get
+initialized the same way with parallel Write Mode Register commands).
+Asymmetry can only come in at the rank or channel dimension.
+(Asymmetry there may have a minor performance penalty since you'd be
+limiting the amount of rank or channel interleaving the controller can
+do, but it would be an indirect penalty that depends on the access
+pattern and not be anywhere near as bad as "half the bandwidth".)
+
+Anyway, whether it's a good idea or not, these parts definitely do
+exist and get sold that way. I can't find an example with a public
+datasheet right now, but e.g. the MT53E1536M32DDNQ-046 WT:A part
+offers two 16-bit channels that have two ranks each, where rank 0 is 8
+Gbits and rank 1 is 16 Gbits for each channel (6 GB part in total).
+
+> I'm happy to let others chime in, but one way to do this would be to
+> put the super common properties (density, width, etc) in a common file
+> and have it "included" by everyone else. See
+> `bindings/spi/spi-controller.yaml` and then see how all the SPI
+> controllers "reference" that.
+
+Okay, that should work. I don't think there would be any differences
+other than the compatible strings right now (and maybe which values
+are valid for each property... not sure if that can be distinguished
+while still including shared definitions?), but I can write them as
+three dummy binding files that contain nothing but a compatible string
+and an include.

@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD24354C7E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:51:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0970B54C7E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:52:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347561AbiFOLvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 07:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
+        id S1347673AbiFOLwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 07:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245587AbiFOLvG (ORCPT
+        with ESMTP id S1347248AbiFOLvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:51:06 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF624F1C9;
+        Wed, 15 Jun 2022 07:51:08 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8184F1F7;
+        Wed, 15 Jun 2022 04:51:01 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id s12so22725715ejx.3;
         Wed, 15 Jun 2022 04:51:00 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id kq6so22683633ejb.11;
-        Wed, 15 Jun 2022 04:50:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=9f66p0kMBxY73E/g74soR57z54u2uiQJKAItmpu/tNI=;
-        b=GSbiBARVuzeZzIQ5z37nKh8xLbVn6DtsFP8tGnr0Bssj8MHIPnvcL1QLB4Ld9Ox/Xa
-         v4bEOJ9KAwgqHxCXpLdQs8GgkJAnn43O+qhpB7gbfJa/tU3fDY5o2nzqo6eyxykknhki
-         UClmEgrnZ1003yRiH78VsiAroWIQ1j0Jd/NbWJI++9a/q12FbJ4q76ZOaHubmxOD6lGU
-         0jf8GhdjbN3jAGWimhGcb1hEA2YYZSG0a8WBHLFXL3jMLQczRe0AndhvFXWjhEhDFnrV
-         yB3MX+d+6UemvLQvTeVu1P7oQa/4XInFw+rKOBlDGcD5TsEJhjByHzApjosuxE1yyuOV
-         pP5g==
+        bh=hG0DQrrpzmf9pK0gpz+otWlL1eUOYhl7swC6XNn6u3Y=;
+        b=TvI48J5Y9XPIJ7/pmfaUV+mPUivD0/X0C1W+6tVLYxiVx8EHhs8ztVAdra6t3ef4xi
+         wOXijsGvskxYvyPjSkNqgwtZA/oasUeJa9p2UUvqvaQfv+B56QEWyEtmvEvuEiIwbmln
+         dQh8cv7So0S0Z/6YR2AjxMceXUETP4AL/KlA3dR4ZWRcizZeYgxJWNgHK+hITZAcjhPl
+         aMOYgqQn7ok+CyPbE8FLlskKr5cZE63PWxVHTYrPJclwyjME4ZyoXzf5JU5XvTvzOQ/4
+         5oDLYKJiGIhUjfmWIGK0DjZpBrFUs6WiAG0k3lwWDIkZfTRUi2yUdRl99+HhbLszFUnH
+         oVig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=9f66p0kMBxY73E/g74soR57z54u2uiQJKAItmpu/tNI=;
-        b=k32m+k9dMd8MDv6U8vgLBQjLmF2YXa9d+VcyW/HECZo5Br5DDB8VaOLPLxQmnYWt17
-         v6ycrLOe3U4GrFy/J3JuWSVW9daO3vKi5pnmeEqx9fPmPf/owkL2S1PsjwhnkWDaoEni
-         AFGBswjKVQ4TMM+S/4nbOC9haa232+b5293kHyhZCi4hZpW5jV+KtAqdWVunXvii1911
-         rntzMfW/hioVpOIAWSv8YUAxWz3i+NvCbSdb+2R2NEuz1Y2ateZPaC2+n0/Hltk+QnhL
-         gC7L1+w54/5KmygoeQY2+KtwwvcmcIE8+1p/iA+aJXLBp4kN+uGPKl/D5w+REWiY0p3m
-         3lLw==
-X-Gm-Message-State: AOAM530coPEFlVpUoEMHll/E5df9lovrTDVfKjE5E34UoFojnbeejVEO
-        VJFEy/TO3WW9Eq73eRVPOQr89VcgSpNYmQ==
-X-Google-Smtp-Source: ABdhPJw3exQGUeLKVBnRIM/7t4HtLaPBNv5i593bexm9gnEmX098Wg1uqI9aXC/jZlj737x5fNriOg==
-X-Received: by 2002:a17:906:7007:b0:6ff:8028:42e with SMTP id n7-20020a170906700700b006ff8028042emr8206934ejj.278.1655293859642;
-        Wed, 15 Jun 2022 04:50:59 -0700 (PDT)
+        bh=hG0DQrrpzmf9pK0gpz+otWlL1eUOYhl7swC6XNn6u3Y=;
+        b=CRQbGWxB3nUT+rhJUlFTpeTuEGugxHDVqJHwh02K+OrumJN5sqC0BTlmBaSlKSYHbP
+         x5l227YhG5eR6BBOM2xOMORJIlYZfDV8jYxRJyVb0k6cam1PUPNK29wdVU84HH6kwAbf
+         Cz8irNuBD5OTWEuA6UZLLvRSzMSWhPQrAW4545VgKr0WTvSDS2tAHii6ONPm3FF2+PHU
+         HKiKJHdTWCL2Ey8tvKJSvJMFoUq7S1OIfCQB/gWIL63MO9VQ732hyVFijsDSJdj2b6dE
+         P9RkzXc5Ep4Pic6+6mWChYmeM4Xcii59wOI0ewMFUjT2SvnVvZkyNLExppsSUyEP3m26
+         hZfw==
+X-Gm-Message-State: AOAM531VmLMbxLprwu6NG5eNFEXO8xQOLGMVysBvFV0e0UshPzCaVYT+
+        FRysIMei8ETHUmgKQWUJOng=
+X-Google-Smtp-Source: ABdhPJxJav8egmgVGQfvwcuVGKlHqlncBGrHi9htRZb+7ISkG3FS6UxcPQrrfBXt5LALzOvVII6ZXw==
+X-Received: by 2002:a17:906:3c07:b0:718:e1a7:b834 with SMTP id h7-20020a1709063c0700b00718e1a7b834mr4802775ejg.635.1655293860677;
+        Wed, 15 Jun 2022 04:51:00 -0700 (PDT)
 Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
-        by smtp.gmail.com with ESMTPSA id t6-20020a17090616c600b00715a02874acsm4561158ejd.35.2022.06.15.04.50.58
+        by smtp.gmail.com with ESMTPSA id t6-20020a17090616c600b00715a02874acsm4561158ejd.35.2022.06.15.04.50.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 04:50:59 -0700 (PDT)
+        Wed, 15 Jun 2022 04:51:00 -0700 (PDT)
 From:   Max Krummenacher <max.oss.09@gmail.com>
 To:     max.krummenacher@toradex.com
-Cc:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
+Cc:     Denys Drozdov <denys.drozdov@toradex.com>,
         Fabio Estevam <festevam@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         NXP Linux Team <linux-imx@nxp.com>,
@@ -59,9 +59,9 @@ Cc:     Oleksandr Suvorov <oleksandr.suvorov@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 13/18] ARM: dts: imx6q-apalis: Add adv7280 video input
-Date:   Wed, 15 Jun 2022 13:50:01 +0200
-Message-Id: <20220615115006.45672-14-max.oss.09@gmail.com>
+Subject: [PATCH v2 14/18] ARM: dts: imx6q-apalis: Clean-up sd card support
+Date:   Wed, 15 Jun 2022 13:50:02 +0200
+Message-Id: <20220615115006.45672-15-max.oss.09@gmail.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20220615115006.45672-1-max.oss.09@gmail.com>
 References: <20220615115006.45672-1-max.oss.09@gmail.com>
@@ -77,74 +77,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
+From: Denys Drozdov <denys.drozdov@toradex.com>
 
-The Apalis iMX6 modules allow connecting a parallel video input.
-Add support for our ADV7280 video input module but have it disabled.
-This allows to enable it in an overlay per the current system
-configuration.
+Configure SOM DTSI to 8-bit, card detect in the SoM dtsi as this is
+the Apalis family default functionality.
+Limit the interface to 4-bit only on the Ixora V1.1 carrier boards.
 
-Signed-off-by: Oleksandr Suvorov <oleksandr.suvorov@toradex.com>
+Signed-off-by: Denys Drozdov <denys.drozdov@toradex.com>
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
-
 ---
 
-Changes in v2:
-- Added "adv,force-bt656-4" property as suggested by Fabio.
-  Note: in my PAL setup I didn't see any noticable change.
+(no changes since v1)
 
- arch/arm/boot/dts/imx6qdl-apalis.dtsi | 31 +++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ arch/arm/boot/dts/imx6q-apalis-eval.dts       | 3 ---
+ arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts | 1 -
+ arch/arm/boot/dts/imx6qdl-apalis.dtsi         | 3 ++-
+ 3 files changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-index bbd838acb8d6..6d072aa87952 100644
---- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
-@@ -432,6 +432,21 @@
- 			  "MXM3_215";
+diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
+index eeb20d7a637d..19aaffd71f3d 100644
+--- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
++++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
+@@ -158,9 +158,6 @@
+ 
+ /* MMC1 */
+ &usdhc1 {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_usdhc1_4bit &pinctrl_usdhc1_8bit &pinctrl_mmc_cd>;
+-	cd-gpios = <&gpio4 20 GPIO_ACTIVE_LOW>;
+ 	status = "okay";
  };
  
-+&gpr {
-+	ipu1_csi0_mux {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		status = "disabled";
-+
-+		port@1 {
-+			reg = <1>;
-+			ipu1_csi0_mux_from_parallel_sensor: endpoint {
-+				remote-endpoint = <&adv7280_to_ipu1_csi0_mux>;
-+			};
-+		};
-+	};
-+};
-+
- &fec {
+diff --git a/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts b/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
+index b254e96d194a..2d0324103804 100644
+--- a/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
++++ b/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
+@@ -175,7 +175,6 @@
+ &usdhc1 {
  	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_enet>;
-@@ -657,6 +672,22 @@
- 	sda-gpios = <&gpio3 18 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
- 	status = "disabled";
- 
-+	adv_7280: adv7280@21 {
-+		compatible = "adi,adv7280";
-+		adv,force-bt656-4;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_ipu1_csi0>;
-+		reg = <0x21>;
-+		status = "disabled";
-+
-+		port {
-+			adv7280_to_ipu1_csi0_mux: endpoint {
-+				bus-width = <8>;
-+				remote-endpoint = <&ipu1_csi0_mux_from_parallel_sensor>;
-+			};
-+		};
-+	};
-+
- 	ov5640_csi_cam: ov5640_mipi@3c {
- 		compatible = "ovti,ov5640";
- 		AVDD-supply = <&reg_ov5640_2v8_a_vdd>;
+ 	pinctrl-0 = <&pinctrl_usdhc1_4bit &pinctrl_mmc_cd>;
+-	cd-gpios = <&gpio4 20 GPIO_ACTIVE_LOW>;
+ 	bus-width = <4>;
+ 	status = "okay";
+ };
+diff --git a/arch/arm/boot/dts/imx6qdl-apalis.dtsi b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+index 6d072aa87952..4ff46ffd2300 100644
+--- a/arch/arm/boot/dts/imx6qdl-apalis.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-apalis.dtsi
+@@ -832,7 +832,8 @@
+ /* MMC1 */
+ &usdhc1 {
+ 	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_usdhc1_4bit &pinctrl_usdhc1_8bit>;
++	pinctrl-0 = <&pinctrl_usdhc1_4bit &pinctrl_usdhc1_8bit &pinctrl_mmc_cd>;
++	cd-gpios = <&gpio4 20 GPIO_ACTIVE_LOW>;
+ 	vqmmc-supply = <&reg_module_3v3>;
+ 	bus-width = <8>;
+ 	disable-wp;
 -- 
 2.20.1
 

@@ -2,110 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D961954C9EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:36:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9960E54C9EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:35:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352698AbiFONgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 09:36:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
+        id S1352421AbiFONfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 09:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352387AbiFONgK (ORCPT
+        with ESMTP id S234457AbiFONfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 09:36:10 -0400
-Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0569E3631F
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:36:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cQlyO
-        FmjcZobR7aTYosEqngYYxcwcNKmc5B9Yt/7tqc=; b=EJ4GIwj73lWbbNMkOT38h
-        zKj2yF8qwKAnjjRTaXESc12YN+7K3IpNxXQjFsX4MuYZ8TNBCVVqoNexX0WBIvcR
-        MYE6/Fe7GuguFE3WgiafKbt4I9peEHniJGDacoRG5p7gwnV69z31QIIURu+l0coq
-        9SpHuBAde37EnwTrQRJvIk=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp2 (Coremail) with SMTP id DMmowADH0wbV36liBxg5DQ--.45191S2;
-        Wed, 15 Jun 2022 21:34:14 +0800 (CST)
-From:   Liang He <windhl@126.com>
-To:     dinguyen@kernel.org, bp@alien8.de, mchehab@kernel.org,
-        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org
-Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Liang He <windhl@126.com>
-Subject: [PATCH] drivers: edac: Add missing of_node_put() in altera_edac.c
-Date:   Wed, 15 Jun 2022 21:34:13 +0800
-Message-Id: <20220615133413.3967379-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Jun 2022 09:35:40 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C50235DEC;
+        Wed, 15 Jun 2022 06:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=k/zQupm933CmyzuMuKQ5Pb2iFZ/vMndU5RNv3Bx/QGM=; b=NfisZ+MxgdT+zEE6yIaknzVni+
+        jt+9MUhobgv4PyvKmYyaTJxghnZ0x1NsR3giqBCBVoPrlrchsaNvcDHJk/sHrTIROPyCDT5AINmPv
+        33oq3m4K187tXCtZUIb3t7+Oby4Q3aOrVeb7eZRRByGjxJNsvUtsHcNSzcWW82l6P15mr6KElEPWS
+        bCJ+4z+OM4vkUGjjqPArkFAsk0TLdgKGraAmH152H7g0jFXZ1pSmHf2SgtFIdBu0B/FDyeDcklTD9
+        uruJBQdpPiybTdDyvZr5w0krSXXMVJBm21iJ+Yp92fZSXO9iUKq5RFUP/bEuU0ZtXxThyxN4CMu1k
+        OjJBMAxQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1TBI-00EjsX-Bw; Wed, 15 Jun 2022 13:35:36 +0000
+Date:   Wed, 15 Jun 2022 06:35:36 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] scsi: support packing multi-segment in UNMAP command
+Message-ID: <YqngKHnfVIzq7Pgr@infradead.org>
+References: <20220615132846.2232920-1-chao@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DMmowADH0wbV36liBxg5DQ--.45191S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr1kJF4UCFy3GF13Aw43Jrb_yoW8AF15pF
-        48Ka90yFWIyr15WF1qv3Z5Zay5Xw1vv3y8urySy392kFsrJ3yvqryjvFZIyas8ArWrZ3y3
-        Xw4jy3yfC3WUCw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR-_-dUUUUU=
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizhYhF18RPTFd9QAAsE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615132846.2232920-1-chao@kernel.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In altr_portb_setup(), of_find_compatible_node() will return a node
-pointer with refcount incremented. We should use of_node_put() in
-fail path or when it is not used anymore.
+On Wed, Jun 15, 2022 at 09:28:46PM +0800, Chao Yu wrote:
+> As SPEC describes that it can support unmapping one or more LBA range
 
-Signed-off-by: Liang He <windhl@126.com>
----
- drivers/edac/altera_edac.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+s/SPEC/<insert SPC reference here>/
 
-diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-index e7e8e624a436..f035d131751c 100644
---- a/drivers/edac/altera_edac.c
-+++ b/drivers/edac/altera_edac.c
-@@ -1528,7 +1528,8 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
- 		edac_printk(KERN_ERR, EDAC_DEVICE,
- 			    "%s: Unable to allocate PortB EDAC device\n",
- 			    ecc_name);
--		return -ENOMEM;
-+		rc = -ENOMEM;
-+		goto out_put;
- 	}
- 
- 	/* Initialize the PortB EDAC device structure from PortA structure */
-@@ -1536,7 +1537,10 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
- 	*altdev = *device;
- 
- 	if (!devres_open_group(&altdev->ddev, altr_portb_setup, GFP_KERNEL))
--		return -ENOMEM;
-+	{
-+		rc = -ENOMEM;
-+		goto out_put;
-+	}
- 
- 	/* Update PortB specific values */
- 	altdev->edac_dev_name = ecc_name;
-@@ -1605,6 +1609,9 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
- 		rc = -ENOMEM;
- 		goto err_release_group_1;
- 	}
-+	
-+	of_node_put(np);
-+	
- 	altr_create_edacdev_dbgfs(dci, prv);
- 
- 	list_add(&altdev->next, &altdev->edac->a10_ecc_devices);
-@@ -1618,6 +1625,8 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
- 	devres_release_group(&altdev->ddev, altr_portb_setup);
- 	edac_printk(KERN_ERR, EDAC_DEVICE,
- 		    "%s:Error setting up EDAC device: %d\n", ecc_name, rc);
-+out_put:
-+    of_node_put(np);	
- 	return rc;
- }
- 
--- 
-2.25.1
+>  {
+>  	struct scsi_device *sdp = cmd->device;
+>  	struct request *rq = scsi_cmd_to_rq(cmd);
+> +	struct bio *bio;
+>  	struct scsi_disk *sdkp = scsi_disk(rq->q->disk);
+> +	unsigned short segments = blk_rq_nr_discard_segments(rq);
+> +	unsigned int data_len = 8 + 16 * segments, i = 0;
+>  	char *buf;
+
+Nit: for readability I'd move the bio declaration just above the buf
+line.
+
+> +
+> +	__rq_for_each_bio(bio, rq) {
+> +		u64 lba = sectors_to_logical(sdp, bio->bi_iter.bi_sector);
+> +		u32 nr_blocks = sectors_to_logical(sdp, bio_sectors(bio));
+> +
+> +		put_unaligned_be64(lba, &buf[8 + 16 * i]);
+> +		put_unaligned_be32(nr_blocks, &buf[8 + 16 * i + 8]);
+
+Can we have a local variable here?
+
+	unsigned int data_offset = 8;
+
+	....
+
+		put_unaligned_be64(lba, &buf[data_offset]);
+		put_unaligned_be64(lba, &buf[data_offset + 8]);
+		data_offset += 16;
+	}
 

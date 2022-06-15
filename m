@@ -2,111 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEEEF54BF11
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 03:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7890E54BF14
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 03:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbiFOBGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 21:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
+        id S237063AbiFOBIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 21:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbiFOBGo (ORCPT
+        with ESMTP id S231489AbiFOBIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 21:06:44 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608D03EBA4;
-        Tue, 14 Jun 2022 18:06:44 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 31so8360125pgv.11;
-        Tue, 14 Jun 2022 18:06:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=hsIakku4FnVx99K8632PhAPuzZKXQqxNFY60mWq6fhY=;
-        b=PZtwOpTSO8PjeTx6/6jNFf+M4XWpL8halrvUQJjg8NTHIByf/qy+RGIEjbmGMJq+d7
-         zuMqo/2vMqMYH2tLYpZrPFoPmZnSuzhbxymRY7ZV8+ugj5Jd6EGFRHEGtjRDsYoUJ4sm
-         aeGOr3WJO827uNDIQh1i4FRbvlNot95n/LcEx+jnzavIwhFn5bg7bi+lJRVppzE220ua
-         kkqLDgnD9hBc4T1MGUGc7eKu62A5RbgTJi+nJMUKaDgckC/iQh6zmCJFUBdRhv5YoP/u
-         VcGAgTigIIgXZ7t3BaF1PFIquuynKMtr41a8W7BiiMJttzkopQQpw3kwwpM7Qfp7FHj8
-         J0ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=hsIakku4FnVx99K8632PhAPuzZKXQqxNFY60mWq6fhY=;
-        b=5hS2oYeHDrd2ntfLlNsxLjXw0kUEAEJhpqH80hQm1IXdb8+D9fqWLq3wmkI6yCk8Ol
-         sUsediadt+7qrqTAqAjQIx4+0vEW4Dd6xwwgdCsK4lapjQZCCyuEu//8ns+pA0mQN4Sm
-         mb4GG/+VEQ8ihEts2B8/hl+XPAOj0p+KmNJ0gX0TAbsxAThRSEmg/kuVUUj70w5iOzwk
-         NS8noR4UX5ZUbdORCKEUSA8IBvlas/21C896Z6NNtnovgo/Z7Fe+lTRVjb0eFNvWjQ6M
-         F+HOLsmzbgbpjWlHShL0UdmqwEXy4zC1zBngwHhbvs8kcDEGbfJMli+xoN3TJRKr3Iwd
-         7lHA==
-X-Gm-Message-State: AOAM530B0zXCou34luKZILSAYh/GIacm5e07GMbvxNkTjaMCiYmfL1yO
-        R8WFppmNNWx4II2/xtT63s/jbp9Ue20=
-X-Google-Smtp-Source: ABdhPJxNlZaPX57z0XJyh3gcPU4N3Iqz2gzpfXQUutDHW8rM86PpNhgK8+6Ksu19MbeMEVwsVTx0xg==
-X-Received: by 2002:a63:5fc3:0:b0:3fd:f15d:5df6 with SMTP id t186-20020a635fc3000000b003fdf15d5df6mr6512040pgb.573.1655255203857;
-        Tue, 14 Jun 2022 18:06:43 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-7.three.co.id. [180.214.232.7])
-        by smtp.gmail.com with ESMTPSA id v11-20020a1709028d8b00b001616e19537esm7821759plo.213.2022.06.14.18.06.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jun 2022 18:06:42 -0700 (PDT)
-Message-ID: <94468546-5571-b61f-0d98-8501626e30e3@gmail.com>
-Date:   Wed, 15 Jun 2022 08:06:37 +0700
+        Tue, 14 Jun 2022 21:08:10 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B74183A2;
+        Tue, 14 Jun 2022 18:08:08 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4LN6Xc4TcCzRjXR;
+        Wed, 15 Jun 2022 09:04:48 +0800 (CST)
+Received: from dggpeml100012.china.huawei.com (7.185.36.121) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 15 Jun 2022 09:07:58 +0800
+Received: from [10.67.103.212] (10.67.103.212) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 15 Jun 2022 09:07:57 +0800
+Subject: Re: [PATCH 1/3] uacce: supports device isolation feature
+To:     Zhangfei Gao <zhangfei.gao@linaro.org>,
+        <gregkh@linuxfoundation.org>, <herbert@gondor.apana.org.au>
+References: <20220614122943.1406-1-yekai13@huawei.com>
+ <20220614122943.1406-5-yekai13@huawei.com>
+ <452a54f0-27ce-6c0d-da56-883b0204f57c@linaro.org>
+CC:     <linux-crypto@vger.kernel.org>,
+        <linux-accelerators@lists.ozlabs.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+        <wangzhou1@hisilicon.com>
+From:   "yekai(A)" <yekai13@huawei.com>
+Message-ID: <3422d14f-abf2-68d6-0923-1b62ec2abb17@huawei.com>
+Date:   Wed, 15 Jun 2022 09:07:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 5.18 01/11] Documentation: Add documentation for Processor
- MMIO Stale Data
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-References: <20220614183720.861582392@linuxfoundation.org>
- <20220614183721.248466580@linuxfoundation.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220614183721.248466580@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <452a54f0-27ce-6c0d-da56-883b0204f57c@linaro.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.212]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/22 01:40, Greg Kroah-Hartman wrote:
-> +  .. list-table::
-> +
-> +     * - 'Not affected'
-> +       - The processor is not vulnerable
-> +     * - 'Vulnerable'
-> +       - The processor is vulnerable, but no mitigation enabled
-> +     * - 'Vulnerable: Clear CPU buffers attempted, no microcode'
-> +       - The processor is vulnerable, but microcode is not updated. The
-> +         mitigation is enabled on a best effort basis.
-> +     * - 'Mitigation: Clear CPU buffers'
-> +       - The processor is vulnerable and the CPU buffer clearing mitigation is
-> +         enabled.
-> +
-> +If the processor is vulnerable then the following information is appended to
-> +the above information:
-> +
-> +  ========================  ===========================================
-> +  'SMT vulnerable'          SMT is enabled
-> +  'SMT disabled'            SMT is disabled
-> +  'SMT Host state unknown'  Kernel runs in a VM, Host SMT state unknown
-> +  ========================  ===========================================
-> +
 
-Why is list-table used in sysfs table instead of usual ASCII table in SMT
-vulnerabilities list above? I think using ASCII table in both cases is enough
-for the purpose.
 
--- 
-An old man doll... just what I always wanted! - Clara
+On 2022/6/14 22:14, Zhangfei Gao wrote:
+>
+>
+> On 2022/6/14 下午8:29, Kai Ye wrote:
+>> UACCE add the hardware error isolation API. Users can configure
+>> the error frequency threshold by this vfs node. This API interface
+>> certainly supports the configuration of user protocol strategy. Then
+>> parse it inside the device driver. UACCE only reports the device
+>> isolate state. When the error frequency is exceeded, the device
+>> will be isolated. The isolation strategy should be defined in each
+>> driver module.
+>>
+>> Signed-off-by: Kai Ye <yekai13@huawei.com>
+>> Reviewed-by: Zhou Wang <wangzhou1@hisilicon.com>
+>> ---
+>>   drivers/misc/uacce/uacce.c | 51 ++++++++++++++++++++++++++++++++++++++
+>>   include/linux/uacce.h      | 15 ++++++++++-
+>>   2 files changed, 65 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
+>> index b6219c6bfb48..4d9d9aeb145a 100644
+>> --- a/drivers/misc/uacce/uacce.c
+>> +++ b/drivers/misc/uacce/uacce.c
+>> @@ -12,6 +12,20 @@ static dev_t uacce_devt;
+>>   static DEFINE_MUTEX(uacce_mutex);
+>>   static DEFINE_XARRAY_ALLOC(uacce_xa);
+>>   +static int cdev_get(struct device *dev, void *data)
+>> +{
+>> +    struct uacce_device *uacce;
+>> +    struct device **t_dev = data;
+>> +
+>> +    uacce = container_of(dev, struct uacce_device, dev);
+>> +    if (uacce->parent == *t_dev) {
+>> +        *t_dev = dev;
+>> +        return 1;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>>   static int uacce_start_queue(struct uacce_queue *q)
+>>   {
+>>       int ret = 0;
+>> @@ -346,12 +360,47 @@ static ssize_t region_dus_size_show(struct
+>> device *dev,
+>>                  uacce->qf_pg_num[UACCE_QFRT_DUS] << PAGE_SHIFT);
+>>   }
+>>   +static ssize_t isolate_show(struct device *dev,
+>> +                struct device_attribute *attr, char *buf)
+>> +{
+>> +    struct uacce_device *uacce = to_uacce_device(dev);
+>> +
+>> +    return sysfs_emit(buf, "%d\n",
+>> uacce->ops->get_isolate_state(uacce));
+> Are these two isolate ops  required or optional?
+> Do we need consider NULL pointer?
+>
+> Thanks
+> .
+>
+
+Yes, need to consider NULL pointer.
+
+Thanks
+kai

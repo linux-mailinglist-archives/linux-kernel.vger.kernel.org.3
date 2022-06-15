@@ -2,140 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A50F54D32E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:59:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 903CB54D325
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343634AbiFOU6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 16:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
+        id S1350147AbiFOU6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 16:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349765AbiFOU6P (ORCPT
+        with ESMTP id S1349740AbiFOU6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 16:58:15 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111211117C
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 13:58:10 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id s37so9819258pfg.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 13:58:10 -0700 (PDT)
+        Wed, 15 Jun 2022 16:58:25 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D783EE01C;
+        Wed, 15 Jun 2022 13:58:23 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id w20so20719741lfa.11;
+        Wed, 15 Jun 2022 13:58:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3DBLU8nISIrYTBK8k6DcAIb8oRhQQh+dzHePuisDgWw=;
-        b=K24g/lp0GAYbpVQo8ffvCiVoK+NofOFqwuVsXiGGu5CBJ4sNRZ8/bce7zFuzF54uu/
-         0i2IjAF0NYQK4gdnJmXxrZi38QR9r8Y86zP27hydPWeIOKd3NFUvqJXA6RpF0O08RRv5
-         nea7yOhOu8VrTW6W+jFQWsMJ9IdLTsIFZFvQ+Y1cnH0KFnarEq4IwnzxG98KdoIkOmp+
-         2xL4pc1WfSSw5NflXAB7KxcGUn+0F/d3P9HS7ttjRi4wr/UERRi1Tb7kFPyGOEYDgLkD
-         yRf8y8q7QGnDz5qxromfsCTalsHFoia4QiMizrBPmLxfyBJubSVyoeXOcC3+dVK7n1p5
-         kIGw==
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=YHkVcZcapgrq+x05D7RsWPsdaTufeMbFq41xO3naPPo=;
+        b=fw27TONpdNc68v0SIqqXR74uavoS0smeRRHwI/m7lMWREdY+KTy4GA3YFBoo9QSIqw
+         oOOuGS9VWVmUa/lj/HFdJsPsA5tDkr0fvdIGRaMJP97qw3jeE0GJ8IUKNomxEexcoENH
+         BeLnJJ95rc5BkT+NsMcqLUdxLX9Tk+FSl8xk/kqdrR4D97M8BVtpr0Kv+uSLIKWu1jRf
+         h3c0U/bA0LVsZPARWudbPkeHqcCwwg0ybAvj4Z9UwIz+wyc/6/RSpW4gIk/TgBq3Kbuf
+         TEsm2/k0DflGOVvbWMIk3FfrZqAheovTj9v0PFO0lim/CrjjmmZ/N4Y464SH6eIYayKm
+         j1zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3DBLU8nISIrYTBK8k6DcAIb8oRhQQh+dzHePuisDgWw=;
-        b=WBbWOKF+zuOglS/up2bdkhfchG3DYjlaXyGm8KEDaVvQML9HDzP+aXvabQktz27wvZ
-         KohHqR/uxDrboIEDg2BBUO0tkUgmicskPDkbzvMVHVFJdEognvDDIzWqQjoQsomAxSFE
-         UcqXRCh8bOJGZHXLXMolsPsb+Zb1I6qY5jlBOX22i7vTJFIH1eJnE2t++vlcXJfWFbGr
-         GtySz3GaGZdILgKPrPVjMToKYSA9uJeKd56mesGiwt6m2E0GIKpLHqSOjzDEE9iX3Uo0
-         KknWcxyTkaUozsJPZSNdtWkBHKOFcJTo3vlOU1HZ1ME7IFbjeM+DOcHF5XbN+tWijSzo
-         biuw==
-X-Gm-Message-State: AJIora+SkiDJPS6xkKBwmgECW8SfMXYdG8cdKklNzDRe5S54mmZhJgF7
-        ZMLj7dXOs5yPWKhTuZGX+vsmHw==
-X-Google-Smtp-Source: AGRyM1sURT8l4Y+xwDaCXscmfLCsHvqJ63+ufGKTkBJlmbmd+0N7utxS/KDWcHHPQYICiTqtfN5cgg==
-X-Received: by 2002:aa7:82ca:0:b0:51b:cf43:d00a with SMTP id f10-20020aa782ca000000b0051bcf43d00amr1348872pfn.58.1655326688844;
-        Wed, 15 Jun 2022 13:58:08 -0700 (PDT)
-Received: from [172.22.33.138] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id z9-20020a1709027e8900b0015e8d4eb209sm74146pla.83.2022.06.15.13.58.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 13:58:08 -0700 (PDT)
-Message-ID: <add7aa29-d49d-8d3b-06d1-2275660fc7e7@linaro.org>
-Date:   Wed, 15 Jun 2022 13:58:06 -0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=YHkVcZcapgrq+x05D7RsWPsdaTufeMbFq41xO3naPPo=;
+        b=H7FHOmMtur0dukCxyuTI6tGrCFuESU0h/etMvXBWVRUuqanElm17SJE19rOtJ+JX58
+         E0ExxueflW0WtUtv7/ooYA8ItHA57Ljyc/oMO4rQxYJYfVioR1Po1zmlK/s1WMQxGPzb
+         nYZxZtDns/IyBmka9ytJjBLoMCqHGTuvKo7xv5m63T14seIUX3ELO3SQHS7Xh+IXusF7
+         LR0140ncW/oL9POuWKUm/2pHhD6iiQm6IZ/uVRr9Z8nGzly/q8xfPCc3EO0I+gmQh0gA
+         xre7BMT/CuVNFEvggeZ/CA25Oukz0C91hBD6WzLUmwOYvMeaLchJT+sQChEO35gYjZya
+         EQnA==
+X-Gm-Message-State: AJIora9JG51jw7pBQK/1GGFivU5KRtCIOf7bgvb79QkKaXFVfkA7TYwX
+        MbHKc7zpza62fhmGH34v3sg=
+X-Google-Smtp-Source: AGRyM1vTVX7Wn1vQHuKb0FjphhadAW3sNTj+3aQQu2P/WhWKfnU42vseAltEUbX1dYROiudbz0X9Jg==
+X-Received: by 2002:a05:6512:68e:b0:47d:ae64:fcf4 with SMTP id t14-20020a056512068e00b0047dae64fcf4mr747871lfe.685.1655326702146;
+        Wed, 15 Jun 2022 13:58:22 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id a11-20020a2eb16b000000b00253d4db8a92sm1743441ljm.63.2022.06.15.13.58.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 13:58:21 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 23:58:19 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 12/23] ata: libahci: Extend port-cmd flags set with
+ port capabilities
+Message-ID: <20220615205819.uiqptkqm5qfdvrbj@mobilestation>
+References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610081801.11854-13-Sergey.Semin@baikalelectronics.ru>
+ <d06e9910-527e-cfa2-f2df-737fb4799fe5@opensource.wdc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [v2,2/4] Input: mt-matrix-keypad: Add Bosch mt matrix keypad
- driver
-Content-Language: en-US
-To:     Gireesh.Hiremath@in.bosch.com, krzysztof.kozlowski+dt@linaro.org
-Cc:     m.felsch@pengutronix.de, linux-omap@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-input@vger.kernel.org, bcousson@baylibre.com,
-        tony@atomide.com, robh+dt@kernel.org, dmitry.torokhov@gmail.com,
-        mkorpershoek@baylibre.com, davidgow@google.com,
-        swboyd@chromium.org, fengping.yu@mediatek.com,
-        y.oudjana@protonmail.com, rdunlap@infradead.org,
-        colin.king@intel.com, sjoerd.simons@collabora.co.uk,
-        VinayKumar.Shettar@in.bosch.com,
-        Govindaraji.Sivanantham@in.bosch.com, anaclaudia.dias@de.bosch.com
-References: <20220506072737.1590-2-Gireesh.Hiremath@in.bosch.com>
- <20220613080638.1339-1-Gireesh.Hiremath@in.bosch.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220613080638.1339-1-Gireesh.Hiremath@in.bosch.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d06e9910-527e-cfa2-f2df-737fb4799fe5@opensource.wdc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/06/2022 01:06, Gireesh.Hiremath@in.bosch.com wrote:
-> From: Gireesh Hiremath <Gireesh.Hiremath@in.bosch.com>
+On Tue, Jun 14, 2022 at 05:32:41PM +0900, Damien Le Moal wrote:
+> On 6/10/22 17:17, Serge Semin wrote:
+> > Currently not all of the Port-specific capabilities listed in the
 > 
-> Hi Krzysztof,
+> s/listed/are listed
 > 
->> You wrote pretty long message explaining how the device works, but I
->> still do not see the answer to questions - why it cannot be part of
->> matrix keypad?
+> > PORT_CMD-enumeration. Let's extend that set with the Cold Presence
+> > Detection and Mechanical Presence Switch attached to the Port flags [1] so
+> > to closeup the set of the platform-specific port-capabilities flags.  Note
+> > these flags are supposed to be set by the platform firmware if there is
+> > one. Alternatively as we are about to do they can be set by means of the
+> > OF properties.
+> > 
+> > While at it replace PORT_IRQ_DEV_ILCK with PORT_IRQ_DMPS and fix the
+> > comment there. In accordance with [2] that IRQ flag is supposed to
+> > indicate the state of the signal coming from the Mechanical Presence
+> > Switch.
+> > 
+> > [1] Serial ATA AHCI 1.3.1 Specification, p.27
+> > [2] Serial ATA AHCI 1.3.1 Specification, p.24, p.88
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Reviewed-by: Hannes Reinecke <hare@suse.de>
+> > 
+> > ---
+> > 
+> > Changelog v4:
+> > - Fix the DMPS macros name in the patch log. (@Sergei Shtylyov)
+> > ---
+> >  drivers/ata/ahci.h | 7 ++++++-
+> >  1 file changed, 6 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
+> > index 7d834deefeb9..f501531bd1b3 100644
+> > --- a/drivers/ata/ahci.h
+> > +++ b/drivers/ata/ahci.h
+> > @@ -138,7 +138,7 @@ enum {
+> >  	PORT_IRQ_BAD_PMP	= (1 << 23), /* incorrect port multiplier */
+> >  
+> >  	PORT_IRQ_PHYRDY		= (1 << 22), /* PhyRdy changed */
+> > -	PORT_IRQ_DEV_ILCK	= (1 << 7), /* device interlock */
+> > +	PORT_IRQ_DMPS		= (1 << 7), /* mechanical presence status */
+> >  	PORT_IRQ_CONNECT	= (1 << 6), /* port connect change status */
+> >  	PORT_IRQ_SG_DONE	= (1 << 5), /* descriptor processed */
+> >  	PORT_IRQ_UNK_FIS	= (1 << 4), /* unknown FIS rx'd */
+> > @@ -166,6 +166,8 @@ enum {
+> >  	PORT_CMD_ATAPI		= (1 << 24), /* Device is ATAPI */
+> >  	PORT_CMD_FBSCP		= (1 << 22), /* FBS Capable Port */
+> >  	PORT_CMD_ESP		= (1 << 21), /* External Sata Port */
+> > +	PORT_CMD_CPD		= (1 << 20), /* Cold Presence Detection */
+> > +	PORT_CMD_MPSP		= (1 << 19), /* Mechanical Presence Switch */
+> >  	PORT_CMD_HPCP		= (1 << 18), /* HotPlug Capable Port */
+> >  	PORT_CMD_PMP		= (1 << 17), /* PMP attached */
+> >  	PORT_CMD_LIST_ON	= (1 << 15), /* cmd list DMA engine running */
+> > @@ -181,6 +183,9 @@ enum {
+> >  	PORT_CMD_ICC_PARTIAL	= (0x2 << 28), /* Put i/f in partial state */
+> >  	PORT_CMD_ICC_SLUMBER	= (0x6 << 28), /* Put i/f in slumber state */
+> >  
+> > +	PORT_CMD_CAP		= PORT_CMD_HPCP | PORT_CMD_MPSP |
+> > +				  PORT_CMD_CPD | PORT_CMD_ESP | PORT_CMD_FBSCP,
 > 
-> Following are the difference between matrix keypad and Bosch keypad
-> make us to add another keypad driver.
-> 
-> matrix keypad:
-> 	- By hardware schematic, a column GPIO line will intersect only
-> 	  with row GPIO lines, not with the other column GPIO lines
-> 	- so, row and column GPIO property are fixed, because of this
-> 	- key scanning work based on interrupt mode
-> 	- and key press is determined based on setting column as output,
-> 	  row GPIO as input and set interrupt to monitor the changes in state,
-> 	  serve the key pressed in ISR
-> 
-> Bosch keypad:
->     - By hardware schematic column GPIO line can intersect with row GPIO line
-> 	  as well as other column GPIO lines
-> 	- so, all GPIO act as row as well as column, because of this
-> 	- key scanning based on polling mode
-> 	- a key pressed is determined by setting one of GPIO line as output and
-> 	  other as input and poll for change in the state of input GPIO lines.
-> 	  Setting one of a GPIO line as output and remaining GPIO lines as input is on
-> 	  round robin bases.
 
-Which is still not the answer "why it cannot be part of matrix keypad?".
-To me looks similar enough, although maybe not exactly superset of the
-other.
+> What is this one for ? A comment above it would be nice.
 
->>
->> "It looks like this driver has smaller number of features than
->> matrix-keypad, so it should be integrated into the matrix-keypad.
->> matrix-keypad features are superset to this one."
->>
->> "But anyway this should be just merged into matrix-keypad. It's a
->> simpler set of that binding."
+Isn't it obviously inferrable from the definition and the item name?
+
+-Sergey
+
 > 
-> This keypad driver specific to Bosch measuring tool or similar devices.
-> Please let me know to send latest patch which resolves build warning
-> and gpiod API support.
-
-That's a poor reason not to merge into existing driver... I am sorry,
-but our entire Linux kernel concept is to integrate, not duplicate. If
-each of vendors wanted their own feature, we would have unmanageable
-monstrosity with millions of drivers doing almost the same...
-
-
-Best regards,
-Krzysztof
+> > +
+> >  	/* PORT_FBS bits */
+> >  	PORT_FBS_DWE_OFFSET	= 16, /* FBS device with error offset */
+> >  	PORT_FBS_ADO_OFFSET	= 12, /* FBS active dev optimization offset */
+> 
+> 
+> -- 
+> Damien Le Moal
+> Western Digital Research

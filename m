@@ -2,103 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6C654D54C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 01:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81DF854D55D
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 01:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350415AbiFOXbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 19:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        id S1350110AbiFOXbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 19:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350313AbiFOXaz (ORCPT
+        with ESMTP id S1350013AbiFOXav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 19:30:55 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4AAD192B5;
-        Wed, 15 Jun 2022 16:30:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1655335828;
-        bh=fJpKWfjPw4yXjZfJL9Hj+n1PhzBhGLJ/rI0WGDhjV10=;
-        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
-        b=fPleUF/dvG/B264MG/yMH+rR5Jmzxn8IjIDQG/Cknbe++ffCrZ73KrBavOstOipYN
-         Ez9LN4pkzwge+tZhFF/9Jp/rPnxySAT1BY+VuPfLf9nkG9cTiaHdSM8ZhA78RTWJdQ
-         92JySZ85qrcP1UtiJSnz0z9cEMRb7WGkcZIq48Fs=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.33] ([46.223.2.17]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MgNh1-1nVapf18Ih-00hs0W; Thu, 16
- Jun 2022 01:30:28 +0200
-Subject: Re: [PATCH v5 10/10] tpm, tpm_tis: Enable interrupt test
-To:     =?UTF-8?Q?Michael_Niew=c3=b6hner?= <linux@mniewoehner.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        James.Bottomley@hansenpartnership.com,
-        twawrzynczak <twawrzynczak@chromium.org>
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        l.sanfilippo@kunbus.com, lukas@wunner.de, p.rosenberger@kunbus.com
-References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
- <20220610110846.8307-11-LinoSanfilippo@gmx.de> <YqokW/cNLrrsZ2ib@iki.fi>
- <c610a318258198f72a53541c551c0c595a205329.camel@mniewoehner.de>
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Message-ID: <1c90aba2-5874-7251-ff19-4b6c5bc19962@gmx.de>
-Date:   Thu, 16 Jun 2022 01:30:27 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 15 Jun 2022 19:30:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C9917A8B;
+        Wed, 15 Jun 2022 16:30:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3ADB0B821A6;
+        Wed, 15 Jun 2022 23:30:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 896C9C3411A;
+        Wed, 15 Jun 2022 23:30:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655335836;
+        bh=NkGdwcHxieMFTnxcLUDpVG1NsmlVZE1ng59v2HePfHs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=fZ7NOe2wEdNeY2Sxi+NzxnePqsVz7AOn0lEgBd27kAkCQHO2AHr3vjNKWatx4cUkt
+         zdDdDuuH0Vdx98KO07Ctd40jiedhbAT0EPsD9HDTkJUXz1TLf7ubc7aSghroYa8E/8
+         g/ARZ+xDANnbeM0p3tjWpFW96jTqvv+CdtKUaFvN/qlMiUOSx0zkbh7k3Ff6N/57UY
+         lbZAz6B/xhCZupXRGzNtFkCVEClabozaXN9iuKWPwwsBwqVqWSStWekLlsmKjN2DOB
+         AeuOuZ1rPo4D6Xuw4BmTpMI8hwOccMoIcSyJ0K0Nz/Nr+K7u2VNf5Bn9WOLmJjj6qH
+         MaunSnULKDWZQ==
+Date:   Wed, 15 Jun 2022 18:30:34 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>
+Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com, Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v12 09/13] PCI: imx6: Turn off regulator when system is
+ in suspend mode
+Message-ID: <20220615233034.GA1056086@bhelgaas>
 MIME-Version: 1.0
-In-Reply-To: <c610a318258198f72a53541c551c0c595a205329.camel@mniewoehner.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:5bqKLG2yEju7Htztep1S9suzxDRr+iP1xCUz8I/lQbOfh2BQlrH
- 00Jp6iWqNJ2qivU2uQarqDTD5yYoQxbITOAGj+dGND2s0IbGhU8EXtoJQVjvTXXnDci9iEV
- uSxXT8/Trp2ErIHmNmYXgoVq9geoqQrKHGuDLAb/EVDA+EnIUh0rnhQUUFf5/cBGYmfeAhK
- V/C+Opa1KXzSA8mNNAX1w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3QSQ0IEDTlQ=:lPhR7H2yO8iwLtr++qAWBt
- BBg4aYW02FEwlc7lLcbtfRWoj4peT1VBoigPX4Ueqek7pNWi4Mfvf0f0F2TXAlkwpOaQnCOF0
- +ReANXjQLyT6gp4vbUsi5YzJctQi9abzG0dy8pntdOkfP/vJu+kH8/266UkQeMh+xzShpnKY1
- XkFKMHbP6phqL4Dm0mr+qYsDQY9xh+tsMdwiExjFPyj62A28uYff+bTnqJLJEioYUwVt6tuzU
- NXNqcp/Yx+k6KXXCFLZSy47MKs3QsKHqVGZYYfgP4s2trEJb6RRiGkAcf/Mzcvw6wpADQIBUU
- Aro/tp5BR6RAuSzazgTCppKce5U9t680ygtnuwigFHT832ETshOlbUWfD8bgzmxOvK4gfFsmo
- LMBAcd8NzV5tTthm80P2iV6xIhnjpn4xK1/i7P/x+XHguT/9JU1hXXYx7t0qtTK1zgFQS1GlM
- FZFMh+foi+IQFqeB5C+DR6go2Lf+VU729eXITkPlYFM5Sw8uuJW9XFXMAtSmvrpvWOuBLHLkA
- er3TwH4XJeKAYSRSDjrcTgzmMoB9AgXGYcDy/Q99OFwDJYrW+mKcU/giv7oVcoKnysfPWfvY0
- IsN2xzVTojRbYHDm7Wg3tImDoYkkpv1F608Fl5p+rtSQb68L2JDbQYvQ/lGMP0GuRj5shkYJO
- 7RmwnxZnAl+6TYgAcX8DH4rYAN+p5YgNR6ZkzcOVyRyJ7X7BReAWFOWvEA1edkpM3+RNrPIEz
- 38NG1PJGJZUX6Chu2Kdpn3eYuoRWo83+vTBf7fufQo9TfQFMcReRu6jkFzCobQ80j4XLcSFbl
- Vo96yWQpyca0xAVIeSyXzUg9c4SXXa7ZUUF74hcKsjFYzmLc1HrSqml9dKrtS7TOjDYy+WcyV
- FEf14Q+83W4XkW6COzCLoC25kfKyoJhzuvLfPr4uD+W3bTiSvY0LMYYPh++G0HYS5iSP3Pems
- i9wKfV2RS/9zowi5hcmREA/taE5j+lnE3m7odh7YR/sMynxkVm+rja1HqFImi7viuduL6QYC5
- b72k5lEwyvjpBYPXxribSMPNC3YZbwQdU9z9rmtlSp0m0j6woc9hTKHEH+0YaqMimiizmUsKM
- 9vxB3kWLIR2Ak5n9i+kG+2R35jAL0Mz/HL4y9VnqF0guImj6bTFFr7Y1w==
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615231551.1054753-10-helgaas@kernel.org>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Jun 15, 2022 at 06:15:47PM -0500, Bjorn Helgaas wrote:
+> From: Richard Zhu <hongxing.zhu@nxp.com>
+> 
+> The driver should undo any enables it did itself. The regulator disable
+> shouldn't be basing decisions on regulator_is_enabled().
+> 
+> Move the regulator_disable to the suspend function, turn off regulator when
+> the system is in suspend mode.
+> 
+> To keep the balance of the regulator usage counter, disable the regulator
+> in shutdown.
+> 
+> Link: https://lore.kernel.org/r/1655189942-12678-6-git-send-email-hongxing.z
+> hu@nxp.com
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> ---
+>  drivers/pci/controller/dwc/pci-imx6.c | 19 +++++++------------
+>  1 file changed, 7 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+> index 6eddd0b5f628..537b8a2e0e3b 100644
+> --- a/drivers/pci/controller/dwc/pci-imx6.c
+> +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> @@ -670,8 +670,6 @@ static void imx6_pcie_clk_disable(struct imx6_pcie *imx6_pcie)
+>  
+>  static void imx6_pcie_assert_core_reset(struct imx6_pcie *imx6_pcie)
+>  {
+> -	struct device *dev = imx6_pcie->pci->dev;
+> -
+>  	switch (imx6_pcie->drvdata->variant) {
+>  	case IMX7D:
+>  	case IMX8MQ:
+> @@ -702,14 +700,6 @@ static void imx6_pcie_assert_core_reset(struct imx6_pcie *imx6_pcie)
+>  		break;
+>  	}
+>  
+> -	if (imx6_pcie->vpcie && regulator_is_enabled(imx6_pcie->vpcie) > 0) {
+> -		int ret = regulator_disable(imx6_pcie->vpcie);
+> -
+> -		if (ret)
+> -			dev_err(dev, "failed to disable vpcie regulator: %d\n",
+> -				ret);
+> -	}
+> -
+>  	/* Some boards don't have PCIe reset GPIO. */
+>  	if (gpio_is_valid(imx6_pcie->reset_gpio))
+>  		gpio_set_value_cansleep(imx6_pcie->reset_gpio,
+> @@ -722,7 +712,7 @@ static int imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
+>  	struct device *dev = pci->dev;
+>  	int ret, err;
+>  
+> -	if (imx6_pcie->vpcie && !regulator_is_enabled(imx6_pcie->vpcie)) {
+> +	if (imx6_pcie->vpcie) {
+>  		ret = regulator_enable(imx6_pcie->vpcie);
+>  		if (ret) {
+>  			dev_err(dev, "failed to enable vpcie regulator: %d\n",
+> @@ -796,7 +786,7 @@ static int imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
+>  	return 0;
+>  
+>  err_clks:
+> -	if (imx6_pcie->vpcie && regulator_is_enabled(imx6_pcie->vpcie) > 0) {
+> +	if (imx6_pcie->vpcie) {
+>  		ret = regulator_disable(imx6_pcie->vpcie);
+>  		if (ret)
+>  			dev_err(dev, "failed to disable vpcie regulator: %d\n",
+> @@ -1023,6 +1013,9 @@ static int imx6_pcie_suspend_noirq(struct device *dev)
+>  		break;
+>  	}
+>  
+> +	if (imx6_pcie->vpcie)
+> +		regulator_disable(imx6_pcie->vpcie);
 
-Hi Michael,
+This is a little bit ugly because imx6_pcie_suspend_noirq() and
+imx6_pcie_resume_noirq() are not symmetric.
 
-On 15.06.22 at 23:54, Michael Niew=C3=B6hner wrote:
+We call regulator_disable() directly here in
+imx6_pcie_suspend_noirq(), but the corresponding regulator_enable() is
+buried in imx6_pcie_deassert_core_reset().
 
->
-> Hi guys,
->
-> for me this series causes boot problems - somehow feels like an interrup=
-t
-> storm...
+It would be nicer if the suspend and resume paths looked more similar,
+as rockchip_pcie_suspend_noirq() and rockchip_pcie_resume_noirq() do,
+for example.
 
-
-Thanks for this info. Which hardware do you use?
-
-> Not sure yet, which commit is causing that
-> @Tim could you test on any of your devices, please?
->
-> BR
-> Michael
->
-
-Regards,
-Lino
+>  	return 0;
+>  }
+>  
+> @@ -1269,6 +1262,8 @@ static void imx6_pcie_shutdown(struct platform_device *pdev)
+>  
+>  	/* bring down link, so bootloader gets clean state in case of reboot */
+>  	imx6_pcie_assert_core_reset(imx6_pcie);
+> +	if (imx6_pcie->vpcie)
+> +		regulator_disable(imx6_pcie->vpcie);
+>  }
+>  
+>  static const struct imx6_pcie_drvdata drvdata[] = {
+> -- 
+> 2.25.1
+> 
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

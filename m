@@ -2,96 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0D9B54C443
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45FBE54C44E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243932AbiFOJGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
+        id S1346785AbiFOJIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235935AbiFOJGo (ORCPT
+        with ESMTP id S1344115AbiFOJHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:06:44 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026A83A739;
-        Wed, 15 Jun 2022 02:06:44 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso1493358pjl.3;
-        Wed, 15 Jun 2022 02:06:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CXhk1iX0j0cRqg2v0/nsYGsi9fNJeaTXvM2J8kFqgnw=;
-        b=WO8UeaeHx+RhZcSEPzoaksikiXQ9T7WphV+R1vGRRs3nlkWoc5v4wulx/FNc8t3pP8
-         XuTkj6FgHuPaVqR6MoGRmTHN4s/l+VvZoZlBT/Mz+48tkA3cQ4FmhGsaLTSlfakAu9Pt
-         7nAI8YlZEFr6szqo8htQ9ckwMilAH4klEhKLCt414X1vDZgbSylJOEgHbvE75CCrpZuQ
-         KnHhLNHyYf4tWFYIvtdU/IHuTz/DfACAAdBTUqZTHnG+36pEmTprmzjmoW6RCvab0keB
-         R/Zndm5RoqphpRT9MLeykyYaW28D4AZIHqqxg6iv47N9UDo7qyBSBXMMO6hZi29RVqHy
-         t9/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CXhk1iX0j0cRqg2v0/nsYGsi9fNJeaTXvM2J8kFqgnw=;
-        b=l+ExGAU0Q51pb51dP1mxqQyctfduPHEJ87h4jzwPwisEdASOvWAKlCO7NP/Bes50Xl
-         vUOt8f7xgbgI0qnqKEIzI3TKY73WTWnTLedcLKrSxrphNuVgqjHXMnzGCze+eC/hZDfX
-         axnXrUZ5OUnOVYoc6xczl/xvnXjtdywyM1c2oezNRFmzuFJJYHj8EzAPjLegyF19iEPq
-         omSbXLbZJNfXUzzX8qtiNalitY1FAgeF1sFmSuaUZfr1lmPa/eN28jI6ColRq778Pvl3
-         eewe9eXcQsxQhmaiHBiwfJcCaoTEGKlUtNvCoRjuwqzgnniu6BhPDAoFeIdcI8lS+2IJ
-         B41g==
-X-Gm-Message-State: AJIora9VVZtXFGgEWIRjHprpl7w4Nt78htWCoO1keueSzKAY6pU1rfMA
-        7OX7LHueCz+YCSrTXf9DEdE=
-X-Google-Smtp-Source: AGRyM1sU0k3W0fNgy4AXqClk96xssdjDtPCRN9ULmCaXODsIJrzLySWTaMsU/e4EIMNIu1dSxiNjVQ==
-X-Received: by 2002:a17:902:f64c:b0:156:7ceb:b579 with SMTP id m12-20020a170902f64c00b001567cebb579mr8327611plg.73.1655284003404;
-        Wed, 15 Jun 2022 02:06:43 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.111])
-        by smtp.gmail.com with ESMTPSA id p10-20020a62b80a000000b0050dc76281aasm9227748pfe.132.2022.06.15.02.06.41
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 15 Jun 2022 02:06:42 -0700 (PDT)
-From:   korantwork@gmail.com
-To:     dave.hansen@linux.intel.com, tglx@linutronix.de
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        trivial@kernel.org, Xinghui Li <korantli@tencent.com>
-Subject: [PATCH] x86,iommu:cleanup misleading comment about SWIOTLB turned off by IOMMU
-Date:   Wed, 15 Jun 2022 17:06:39 +0800
-Message-Id: <20220615090639.34402-1-korantwork@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 15 Jun 2022 05:07:48 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D61318;
+        Wed, 15 Jun 2022 02:07:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655284045; x=1686820045;
+  h=from:to:subject:date:message-id:in-reply-to:references:
+   mime-version:content-transfer-encoding;
+  bh=HAnzpIYqjQ6/BJ8qJrY4ssrEeQWRAxVZqY91Bj00quk=;
+  b=UbyCqL0kst1AJK10Ey8C94DyQUx9HHEr3s2j6v31SS2FlH9zf8Rh3z/s
+   S19f6FpFr/4jm/BHYBrL+i2kRW/n+0pWMO89SssTv1XAxGzCRhTLnwKXG
+   jNxwJfxt2KBeJydwHM7qTyxrq2jq55WDkNf046WrUxwfuex6QborXl1sT
+   8KkPS+qyxisBEIOH3/+oqEy3aXa5SmsYZEquauILJk8tGBDJsMMrAVB7T
+   QIHxhk283Qe0lRaMXzLAwqVeaPKme3kA1cYIuTzQsievj8xju8IFAYDO0
+   Q5bJK165t/4sNb9DT+GoQSUGBL86VwDmgQET3jhWJnOyKy1xlMhVZYdAE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="276464684"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="276464684"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 02:07:25 -0700
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="830934154"
+Received: from mgrymel-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.41.34])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 02:07:23 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] serial: 8250: Fix __stop_tx() & DMA Tx restart races
+Date:   Wed, 15 Jun 2022 12:06:49 +0300
+Message-Id: <20220615090651.15340-2-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220615090651.15340-1-ilpo.jarvinen@linux.intel.com>
+References: <20220615090651.15340-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xinghui Li <korantli@tencent.com>
+Commit e8ffbb71f783 ("serial: 8250: use THRE & __stop_tx also with
+DMA") changed __dma_tx_complete() to enable THRI that is cleared in
+__stop_tx() once THRE is asserted as UART runs out bits to transmit. It
+is possible, however, that more data arrives in between in which case
+serial8250_tx_dma() resumes Tx. THRI is not supposed to be on during
+DMA Tx because DMA is based on completion handler, therefore THRI must
+be cleared unconditionally in serial8250_tx_dma().
 
-According to commit 327d5b2fee91 ("iommu/vt-d: Allow 32bit devices to
-uses DMA domain"), SWIOTLB could be enable even IOMMU exist.This comment
-could mislead developer that there is an error enabling SWIOTLB when
-they enable IOMMU.
+When Tx is about to start, another race window exists with
+serial8250_handle_irq() leading to a call into __stop_tx() while the
+Tx has already been resumed:
 
-Signed-off-by: Xinghui Li <korantli@tencent.com>
+__tx_complete():
+  -> spin_lock(port->lock)
+  -> dma->tx_running = 0
+  -> serial8250_set_THRI()
+  -> spin_unlock(port->lock)
+
+uart_start():
+				serial8250_handle_irq():
+  -> spin_lock(port->lock)
+  -> serial8250_tx_dma():
+    -> dma->tx_running = 1
+  -> spin_unlock(port->lock)
+				  -> spin_lock(port->lock)
+				  -> __stop_tx()
+
+Close this race by checking !dma->tx_running before calling into
+__stop_tx().
+
+Fixes: e8ffbb71f783 ("serial: 8250: use THRE & __stop_tx also with DMA")
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- arch/x86/kernel/pci-dma.c | 1 -
- 1 file changed, 1 deletion(-)
+ drivers/tty/serial/8250/8250_dma.c  | 6 +++---
+ drivers/tty/serial/8250/8250_port.c | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/x86/kernel/pci-dma.c b/arch/x86/kernel/pci-dma.c
-index 30bbe4abb5d6..c0434abf7e09 100644
---- a/arch/x86/kernel/pci-dma.c
-+++ b/arch/x86/kernel/pci-dma.c
-@@ -193,7 +193,6 @@ static int __init pci_iommu_init(void)
- 	x86_init.iommu.iommu_init();
+diff --git a/drivers/tty/serial/8250/8250_dma.c b/drivers/tty/serial/8250/8250_dma.c
+index 7133fceed35e..a8dba4a0a8fb 100644
+--- a/drivers/tty/serial/8250/8250_dma.c
++++ b/drivers/tty/serial/8250/8250_dma.c
+@@ -106,10 +106,10 @@ int serial8250_tx_dma(struct uart_8250_port *p)
+ 				   UART_XMIT_SIZE, DMA_TO_DEVICE);
  
- #ifdef CONFIG_SWIOTLB
--	/* An IOMMU turned us off. */
- 	if (x86_swiotlb_enable) {
- 		pr_info("PCI-DMA: Using software bounce buffering for IO (SWIOTLB)\n");
- 		swiotlb_print_info();
+ 	dma_async_issue_pending(dma->txchan);
+-	if (dma->tx_err) {
++	serial8250_clear_THRI(p);
++	if (dma->tx_err)
+ 		dma->tx_err = 0;
+-		serial8250_clear_THRI(p);
+-	}
++
+ 	return 0;
+ err:
+ 	dma->tx_err = 1;
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index 953b0fadfd4c..684a1f1fd686 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1936,7 +1936,7 @@ int serial8250_handle_irq(struct uart_port *port, unsigned int iir)
+ 	if ((status & UART_LSR_THRE) && (up->ier & UART_IER_THRI)) {
+ 		if (!up->dma || up->dma->tx_err)
+ 			serial8250_tx_chars(up);
+-		else
++		else if (!up->dma->tx_running)
+ 			__stop_tx(up);
+ 	}
+ 
 -- 
-2.25.1
+2.30.2
 

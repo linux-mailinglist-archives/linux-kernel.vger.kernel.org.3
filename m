@@ -2,129 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C62A454CB74
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73AC54CB8B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245344AbiFOOhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 10:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51390 "EHLO
+        id S1345234AbiFOOjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 10:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiFOOhJ (ORCPT
+        with ESMTP id S1345057AbiFOOjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 10:37:09 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615113B567;
-        Wed, 15 Jun 2022 07:37:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=saG5sDrVw9Zr0xvtzKbdVeuNnQ3Z6A05xiDq4AzD6dg=; b=bj1K2vKmeUI35w3WQw2RkLX1ip
-        QCEaDPfkJlTI0mlAWH5qdVUCTCBvOh2OgJPA/Qa2CT7CPAj1Q5XMiFlSSiWVG14WOOF8TBkW9C8DB
-        smp0xoEry+r3xyzto66f5nl3HyiSHbc0k8xZYj5h3FUvwCfsfaTk7bkzWV7D47207xO7HNu5g4FiG
-        R0fNxeFhwAmmLmrKbEPXG5brlpPDUOBQfVgtPTNRYEV2l21il8F42ETOfD+HoC/5qjClPhEbDsQSM
-        7I8v8lhqeRHkRZEvifGEzh3KJY4kpRdBL11eBdkZnqmC/4L86Lt6dmyhY2QRPhCjV60mCS/pK7EVK
-        pqDqcbCA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1U8j-0017Zi-CF; Wed, 15 Jun 2022 14:37:01 +0000
-Date:   Wed, 15 Jun 2022 15:37:01 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-doc@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] Documentation: highmem: Use literal block for
- *kmap_local_folio() example
-Message-ID: <YqnujWdTA+QSdMHJ@casper.infradead.org>
-References: <20220615101509.516520-1-bagasdotme@gmail.com>
+        Wed, 15 Jun 2022 10:39:45 -0400
+Received: from m15111.mail.126.com (m15111.mail.126.com [220.181.15.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 55D7BB7EC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:39:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=hq6nR
+        WglAhr8vPBtxEwx7KGRHjG1FojbJfx83gxT5cs=; b=cOcgvf8FsunlcPHnMZEVf
+        B6oZq7JtwSMRZgNmRtwc1RMzQZHIcPozdoHgVF3S5iLozU9zbrIGK25BcB84/H1I
+        wQQjGRIRexqv/K+I1WwijbMmeIPdigbqZjJGKVxJWsVMa/Trtq2+VAGiTrKIXqWF
+        Y/dzmVdJ+Chm9Ut20SrCKY=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp1 (Coremail) with SMTP id C8mowADHzCiP7qlinPC3EQ--.44190S2;
+        Wed, 15 Jun 2022 22:37:03 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     agust@denx.de, mpe@ellerman.id.au, benh@kernel.crashing.org,
+        paulus@samba.org, ulia.Lawall@inria.fr, nick.child@ibm.com
+Cc:     joel@jms.id.au, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, windhl@126.com
+Subject: [PATCH] arch: powerpc: platforms: 512x: Add missing of_node_put()
+Date:   Wed, 15 Jun 2022 22:37:03 +0800
+Message-Id: <20220615143703.3968898-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615101509.516520-1-bagasdotme@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: C8mowADHzCiP7qlinPC3EQ--.44190S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKF4xWFy7Kr4rZF4ftw17GFg_yoWfCrXEya
+        yIqa1jkrWkJrsayr1DZr1Y9ryak3sxCa98X340q3WxJw15Xw43JrnFqrsFv3WUWFW2k39x
+        JFWDGw1aya4akjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xREPl1tUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi7RAhF1pEAND77wAAsR
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 05:15:10PM +0700, Bagas Sanjaya wrote:
-> These warnings above are due to comments in code example of
-> kmap_atomic() inside kernel-doc comment of *kmap_local_folio() are enclosed
+In mpc5121_clk_init(), of_find_compatible_node() will return a
+node pointer with refcount incremented. We should use of_node_put()
+when it is not used anymore.
 
-You still seem to think this has something to do with kmap_local_folio().
-It has nothing to do with kmap_local_folio().  Your next version of this
-patch should not mention kmap_local_folio() anywhere.
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/powerpc/platforms/512x/clock-commonclk.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> by double dash (--) instead of prefixed with C comment symbol (//).
-> 
-> Fix these warnings by indenting the code example with literal block
-> indentation and prefixing comments inside the example with C comment
-> symbol.
-> 
-> Fixes: 85a85e7601263f ("Documentation/vm: move "Using kmap-atomic" to highmem.h")
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Ira Weiny <ira.weiny@intel.com>
-> Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
-> Cc: "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  Changes since v1 [1]:
->    - Point that the code example is for kmap_atomic() (suggested by
->      Matthew Wilcox)
->    - Use C comments instead of Unix shell comments prefix (suggested by
->      Ira Weiny)
-> 
->  [1]: https://lore.kernel.org/linux-doc/20220614123115.522131-1-bagasdotme@gmail.com/
->  
->  include/linux/highmem.h | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-> index 3af34de54330cb..56d6a019653489 100644
-> --- a/include/linux/highmem.h
-> +++ b/include/linux/highmem.h
-> @@ -149,19 +149,19 @@ static inline void *kmap_local_folio(struct folio *folio, size_t offset);
->   * It is used in atomic context when code wants to access the contents of a
->   * page that might be allocated from high memory (see __GFP_HIGHMEM), for
->   * example a page in the pagecache.  The API has two functions, and they
-> - * can be used in a manner similar to the following:
-> + * can be used in a manner similar to the following::
->   *
-> - * -- Find the page of interest. --
-> - * struct page *page = find_get_page(mapping, offset);
-> + *   // Find the page of interest.
-> + *   struct page *page = find_get_page(mapping, offset);
->   *
-> - * -- Gain access to the contents of that page. --
-> - * void *vaddr = kmap_atomic(page);
-> + *   // Gain access to the contents of that page.
-> + *   void *vaddr = kmap_atomic(page);
->   *
-> - * -- Do something to the contents of that page. --
-> - * memset(vaddr, 0, PAGE_SIZE);
-> + *   // Do something to the contents of that page.
-> + *   memset(vaddr, 0, PAGE_SIZE);
->   *
-> - * -- Unmap that page. --
-> - * kunmap_atomic(vaddr);
-> + *   // Unmap that page.
-> + *   kunmap_atomic(vaddr);
->   *
->   * Note that the kunmap_atomic() call takes the result of the kmap_atomic()
->   * call, not the argument.
-> 
-> base-commit: 018ab4fabddd94f1c96f3b59e180691b9e88d5d8
-> -- 
-> An old man doll... just what I always wanted! - Clara
-> 
-> 
+diff --git a/arch/powerpc/platforms/512x/clock-commonclk.c b/arch/powerpc/platforms/512x/clock-commonclk.c
+index 0652c7e69225..ca475462e95b 100644
+--- a/arch/powerpc/platforms/512x/clock-commonclk.c
++++ b/arch/powerpc/platforms/512x/clock-commonclk.c
+@@ -1208,6 +1208,8 @@ int __init mpc5121_clk_init(void)
+ 	/* register as an OF clock provider */
+ 	mpc5121_clk_register_of_provider(clk_np);
+ 
++	of_node_put(clk_np);
++
+ 	/*
+ 	 * unbreak not yet adjusted peripheral drivers during migration
+ 	 * towards fully operational common clock support, and allow
+-- 
+2.25.1
+

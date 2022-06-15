@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F048254CB19
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED9254CB22
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346573AbiFOOUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 10:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35370 "EHLO
+        id S1349388AbiFOOU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 10:20:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345175AbiFOOT5 (ORCPT
+        with ESMTP id S1347762AbiFOOUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 10:19:57 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEA843EF5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:19:45 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id c4so19129645lfj.12
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:19:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc:from
-         :subject:content-transfer-encoding;
-        bh=A9RmSO/OHnan4DfbcCHEVVY9M4r3MnYRFQBaUW6bNWA=;
-        b=MNuMF3PuaRY/+6YKpSGtGwP/4IuvRcZKjZOwztV73IB8RG1NWUXPWaU2BFUwCr5ux6
-         nBrrd+8xchQCtImhgEfLaO4XTIbMV5XSVMTLk6ED6SSBDT0nTF4DGaiqTC5iP57OnHyd
-         UnMT+znTe8UDArIKd/v8jCrb2b01rK/7rRWt77ff2CTsrz/hjzgoF/Q79oG63L1TXG8b
-         ODyf6yIpWkuPxejCxOUmlcetemEUmOZJ/PHWn0J42S4FAhLHKTsGRd/YiVUb0Kd/SYd7
-         u2l+ZoFA8i/WTSrXUIWOCnXlVFg0Im6YEETIIqQZfPzvhp+69RfGTUlaHICOsYkfT2DP
-         jaMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:from:subject:content-transfer-encoding;
-        bh=A9RmSO/OHnan4DfbcCHEVVY9M4r3MnYRFQBaUW6bNWA=;
-        b=h7G+PwIq8xzcFQXbfFRs5nPhZhOEnaXuRdw9RjPYcJXn9te24866406xxQcWDN5UKP
-         dsfo1+MH4pfYtO8DdygY8TMFSpswkXJWE9xta15ulKDlSHwMS+1YspcgzOCX+fuVTpqa
-         3Q2AnRzxZTDObGWTSMRrVW1D2G3pq5/OXp5SFL/z9Z+B+ZKo0ATtkLSAeGCnZh4SAPop
-         wRRqMhcooWo1l/FTs80c+P4Dr5goQfTJ6yVeb/RAgOII6rE5dsZQiLiqNMN5PJ5fWmNX
-         PGwPXruK2U+vYI9vm0mYTtWjyJIG6h1VHEGJdyzMN9Amkg8J5pcEVC3kb293vtY1DYfR
-         tIDA==
-X-Gm-Message-State: AJIora8d6ItrQGQ6jCnIEk3ko3I7Fu0YDnPt+SGtI820FOSJj2d4cpIR
-        TYQizbXf+8VBzBhaMj887k7/HA==
-X-Google-Smtp-Source: AGRyM1ugCc/2OaezlkOsaaKljgQlyk2WvF+Ik7GaQdltNSp7JiRkOQRFbTxT/C1eeTM0SUyJMfAG8w==
-X-Received: by 2002:ac2:58d6:0:b0:479:5b9:74a with SMTP id u22-20020ac258d6000000b0047905b9074amr6019118lfo.551.1655302783810;
-        Wed, 15 Jun 2022 07:19:43 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id v5-20020ac258e5000000b0047255d210fcsm1818418lfo.43.2022.06.15.07.19.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 07:19:43 -0700 (PDT)
-Message-ID: <5dbc0159-cb33-db5b-20cc-05f3027af15e@linaro.org>
-Date:   Wed, 15 Jun 2022 17:19:42 +0300
+        Wed, 15 Jun 2022 10:20:51 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB29935A97;
+        Wed, 15 Jun 2022 07:20:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655302822; x=1686838822;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BKDMg8fI4/oxE7Ct5GmeyilLeRcSIf/mmkwDwOrZrs4=;
+  b=Np2qGOeiYtkc96s3V/SkabOv6grGMngz+uIUgNj0MIsQ7p9JJ/P4YvkD
+   pZAWo1FGbSKGgaFrCuiGYLY8tn1Oq1mToKh1TKHABdRNTEaLNkwIh3PsC
+   ULUYbqv6qSD6NVpaWExqm9uSfJAmonS8L1+046KU3Oixhbdir1Ppd8skj
+   Rvnt5PG0nd/X6fCTupuOlrX7P2S2nGdbzVBjgp+w2C4Si1qzB83wudVWl
+   +HJsyZTpHlvac8I435rlwjqc5wUWTXCWr5sYJ/mrF1ToiJczFB0NHw3md
+   gqgu/OCnBTTsj+LDeZRmceW7WvsWu4qdCZRy7PG8yqeVRbexzNRuNCv2F
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="280012571"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="280012571"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 07:20:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="727417450"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 15 Jun 2022 07:20:18 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1TsX-000MvF-LV;
+        Wed, 15 Jun 2022 14:20:17 +0000
+Date:   Wed, 15 Jun 2022 22:19:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pankaj Raghav <p.raghav@samsung.com>, hch@lst.de,
+        snitzer@redhat.com, damien.lemoal@opensource.wdc.com,
+        axboe@kernel.dk
+Cc:     kbuild-all@lists.01.org, bvanassche@acm.org,
+        linux-kernel@vger.kernel.org, jiangbo.365@bytedance.com,
+        hare@suse.de, pankydev8@gmail.com, dm-devel@redhat.com,
+        jonathan.derrick@linux.dev, gost.dev@samsung.com, dsterba@suse.com,
+        jaegeuk@kernel.org, linux-nvme@lists.infradead.org,
+        Johannes.Thumshirn@wdc.com, linux-block@vger.kernel.org,
+        Pankaj Raghav <p.raghav@samsung.com>,
+        Damien Le Moal <damien.lemoal@wdc.com>
+Subject: Re: [PATCH v7 13/13] dm: add non power of 2 zoned target
+Message-ID: <202206152257.pnoPyl7X-lkp@intel.com>
+References: <20220615101920.329421-14-p.raghav@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Content-Language: en-GB
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Please add another drm/msm tree to the linux-next
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615101920.329421-14-p.raghav@samsung.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,25 +72,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+Hi Pankaj,
 
-I would appreciate if you could add
+Thank you for the patch! Perhaps something to improve:
 
-https://gitlab.freedesktop.org/lumag/msm.git msm-next-lumag
+[auto build test WARNING on axboe-block/for-next]
+[also build test WARNING on device-mapper-dm/for-next linus/master v5.19-rc2 next-20220615]
+[cannot apply to song-md/md-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-to the linux-next tree.
+url:    https://github.com/intel-lab-lkp/linux/commits/Pankaj-Raghav/block-make-blkdev_nr_zones-and-blk_queue_zone_no-generic-for-npo2-zsze/20220615-191927
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20220615/202206152257.pnoPyl7X-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.3.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/add4ab54d5b34d4a2f91f241007f23a56c164fb3
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Pankaj-Raghav/block-make-blkdev_nr_zones-and-blk_queue_zone_no-generic-for-npo2-zsze/20220615-191927
+        git checkout add4ab54d5b34d4a2f91f241007f23a56c164fb3
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-This tree is a part of drm/msm maintenance structure. As a co-maintainer 
-I collect and test display patches, while Rob concenctrates on GPU part 
-of the driver. Later during the release cycle these patchesare pulled by 
-Rob Clark directly into msm-next.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-During last cycle Rob suggested adding this tree to the linux-next 
-effort, so that the patches receive better integration testing during 
-the Linux development cycle.
+All warnings (new ones prefixed by >>):
 
-Thanks!
+   drivers/md/dm-zoned-npo2-target.c: In function 'dmz_npo2_ctr':
+>> drivers/md/dm-zoned-npo2-target.c:62:13: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
+      62 |         int ret = 0;
+         |             ^~~
+
+
+vim +/ret +62 drivers/md/dm-zoned-npo2-target.c
+
+    53	
+    54	/*
+    55	 * <dev-path>
+    56	 * This target works on the complete zoned device. Partial mapping is not
+    57	 * supported
+    58	 */
+    59	static int dmz_npo2_ctr(struct dm_target *ti, unsigned int argc, char **argv)
+    60	{
+    61		struct dmz_npo2_target *dmh = NULL;
+  > 62		int ret = 0;
+    63		sector_t zsze;
+    64		sector_t disk_size;
+    65	
+    66		if (argc < 1)
+    67			return -EINVAL;
+    68	
+    69		dmh = kmalloc(sizeof(*dmh), GFP_KERNEL);
+    70		if (!dmh)
+    71			return -ENOMEM;
+    72	
+    73		ret = dm_get_device(ti, argv[0], dm_table_get_mode(ti->table),
+    74				    &dmh->dev);
+    75	
+    76		zsze = blk_queue_zone_sectors(bdev_get_queue(dmh->dev->bdev));
+    77	
+    78		disk_size = get_capacity(dmh->dev->bdev->bd_disk);
+    79	
+    80		if (ti->len != disk_size || ti->begin) {
+    81			DMERR("%pg Partial mapping of the target not supported",
+    82			      dmh->dev->bdev);
+    83			return -EINVAL;
+    84		}
+    85	
+    86		if (is_power_of_2(zsze)) {
+    87			DMERR("%pg zone size is power of 2", dmh->dev->bdev);
+    88			return -EINVAL;
+    89		}
+    90	
+    91		dmh->zsze = zsze;
+    92		dmh->zsze_po2 = 1 << get_count_order_long(zsze);
+    93		dmh->zsze_diff = dmh->zsze_po2 - dmh->zsze;
+    94	
+    95		ti->private = dmh;
+    96		ti->num_flush_bios = 1;
+    97		ti->num_discard_bios = 1;
+    98		ti->num_secure_erase_bios = 1;
+    99		ti->num_write_zeroes_bios = 1;
+   100	
+   101		dmh->nr_zones = npo2_zone_no(dmh, ti->len);
+   102		ti->len = dmh->zsze_po2 * dmh->nr_zones;
+   103	
+   104		return 0;
+   105	}
+   106	
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://01.org/lkp

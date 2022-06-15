@@ -2,109 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8994054CD95
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:54:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C6654CD96
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345080AbiFOPyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        id S1345955AbiFOPzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344198AbiFOPyh (ORCPT
+        with ESMTP id S1346021AbiFOPy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:54:37 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482F22FFF0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:54:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655308476; x=1686844476;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qDm82Al5RdY5yk2Sk8uLzqG18X3zOv/St63Fun4bYIA=;
-  b=VP6yeWoSsGTucRRysjSIUBPmzjpDO3solq2OY7A0YQvPk4S8OpmRw/wb
-   TN/ippkcS8W6KafxFfOqLM/9LkoISKW0EmC9mukZrXoL1M3Btor31l4Fw
-   /OvBfajJ+znxlvLhVswrEM5Rv3OgHNtfxdkgeWE71OMWskr/gueFBRsQy
-   ES1mtx3qIxKnSEImb7PajtUWieMwzNwE34Zrkbrd66zr+Lmt3kDxqsn2t
-   a4YaNrR6fKE19wlvVzxkRnTjDReka0CHuktklPZA42urpTkPnUsiZbVqE
-   QKaJkG4eqZZTVFb6Dve+cQSZdd7SacVrajN7rmNWwmO6IlydudJMYaGhf
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="340665774"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="340665774"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 08:54:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="652727965"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 15 Jun 2022 08:54:32 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 67A85109; Wed, 15 Jun 2022 18:54:36 +0300 (EEST)
-Date:   Wed, 15 Jun 2022 18:54:36 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "peterz@infradead.org" <peterz@infradead.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "andreyknvl@gmail.com" <andreyknvl@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "dvyukov@google.com" <dvyukov@google.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "ryabinin.a.a@gmail.com" <ryabinin.a.a@gmail.com>,
-        "glider@google.com" <glider@google.com>
-Subject: Re: [PATCHv3 4/8] x86/mm: Handle LAM on context switch
-Message-ID: <20220615155436.5fvosccsqbpscli4@black.fi.intel.com>
-References: <20220610143527.22974-1-kirill.shutemov@linux.intel.com>
- <20220610143527.22974-5-kirill.shutemov@linux.intel.com>
- <d1a5615633f5e0376d7a75c1d8d12bbd89a7a63e.camel@intel.com>
+        Wed, 15 Jun 2022 11:54:57 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021632FFF6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:54:56 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id i15so10792208plr.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:54:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mreepqnLlPZFVd8ASkU0Ah/jZvsfiVvVvF1zUpWRDWE=;
+        b=JIbS8nIuSpRIHU9HEZsMsxG7Z9HpGeMR+yEAX7PcKh1qcZUZJgrABhPr7cNjSPWBAo
+         zkZEFqL87RspX0bf4C2GtOJqzslKAtf9wMVKrq1OahdWXuOnbJlOO0dyUiaWQ12UFlE2
+         vfgJUmrj/frlTbhNf275MjeH0dqVYGt4rRph69QzliWw1BB43Dp4C3ZmhjcxW6mmr3J8
+         jF4QQRfUxa4WtQRikKKYjDfh3dBeAr8gDfQv9LUlfo5tRIYym9bHTJbA4AVtFr6wbeP/
+         7PHOs1bbn9TlZYYEp91Y6aqC/s9wEsr/aRebszXSM1Sj9Mjb7XezngLrKsszMjNNo+Rs
+         z4bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mreepqnLlPZFVd8ASkU0Ah/jZvsfiVvVvF1zUpWRDWE=;
+        b=NeG9R/sPSNOGlAkPXD7Pkg8cRa0QOQKGcLamvKl0WBVVQI8M+sGBOAuyhwZSsyF7bF
+         f6qSxSw8jtrKyY/qikQEOagd5KbiVB7HnrXzDtmpf+ght3RYSIp2G5i0o3ss1mRl3Fv9
+         lgCkq5LwzXu42wEQPL6/75zRYVFIu/ZL+nT/hFK6CG5VRetJ2bNz1tEQfphfEJoLLuz2
+         jAI3NzxQ+bDrkzG+P2KcFj+HBrkQCwefqAl4oNqogFgNA24ImMO2leiXMBKfj7Lce15r
+         wBGrH2SsUJozjB/jQZL7FyeyiFOfKI6Z6PwZv9aCrIHVmbeOxg/gkE63ktELq3dKh/yq
+         Ey3A==
+X-Gm-Message-State: AJIora/UNQdni19jKrL5+IbVoQTRuYNwcghqKqfiI00TDUuJ76eiMGeL
+        57Q1Lc7I2yXKg0NeRvkYFC+5tQ==
+X-Google-Smtp-Source: AGRyM1vQqRMnufvqMyDdXnDthwID1ZqRrTeVfioKLhTf97yBKB0/HBAXmIsWBSBAL2cB5rQ8vyymvg==
+X-Received: by 2002:a17:902:d64a:b0:168:fc10:7f5f with SMTP id y10-20020a170902d64a00b00168fc107f5fmr297189plh.123.1655308495831;
+        Wed, 15 Jun 2022 08:54:55 -0700 (PDT)
+Received: from google.com (55.212.185.35.bc.googleusercontent.com. [35.185.212.55])
+        by smtp.gmail.com with ESMTPSA id f187-20020a636ac4000000b00405306de2c2sm8522756pgc.65.2022.06.15.08.54.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 08:54:55 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 08:54:49 -0700
+From:   Zach O'Keefe <zokeefe@google.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     akpm@linux-foundation.org, aarcange@redhat.com,
+        willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
+        neilb@suse.de, apopple@nvidia.com, david@redhat.com,
+        surenb@google.com, peterx@redhat.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/7] mm/khugepaged: minor cleanup for collapse_file
+Message-ID: <YqoAydWk/IcMp5d2@google.com>
+References: <20220611084731.55155-1-linmiaohe@huawei.com>
+ <20220611084731.55155-5-linmiaohe@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d1a5615633f5e0376d7a75c1d8d12bbd89a7a63e.camel@intel.com>
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220611084731.55155-5-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:55:02PM +0000, Edgecombe, Rick P wrote:
-> On Fri, 2022-06-10 at 17:35 +0300, Kirill A. Shutemov wrote:
-> > @@ -687,6 +716,7 @@ void initialize_tlbstate_and_flush(void)
-> >         struct mm_struct *mm = this_cpu_read(cpu_tlbstate.loaded_mm);
-> >         u64 tlb_gen = atomic64_read(&init_mm.context.tlb_gen);
-> >         unsigned long cr3 = __read_cr3();
-> > +       u64 lam = cr3 & (X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
-> >  
-> >         /* Assert that CR3 already references the right mm. */
-> >         WARN_ON((cr3 & CR3_ADDR_MASK) != __pa(mm->pgd));
-> > @@ -700,7 +730,7 @@ void initialize_tlbstate_and_flush(void)
-> >                 !(cr4_read_shadow() & X86_CR4_PCIDE));
-> >  
-> >         /* Force ASID 0 and force a TLB flush. */
-> > -       write_cr3(build_cr3(mm->pgd, 0));
-> > +       write_cr3(build_cr3(mm->pgd, 0, lam));
-> >  
+On 11 Jun 16:47, Miaohe Lin wrote:
+> nr_none is always 0 for non-shmem case because the page can be read from
+> the backend store. So when nr_none ! = 0, it must be in is_shmem case.
+> Also only adjust the nrpages and uncharge shmem when nr_none != 0 to save
+> cpu cycles.
 > 
-> Can you explain why to keep the lam bits that were in CR3 here? It
-> seems to be worried some CR3 bits got changed and need to be set to a
-> known state. Why not take them from the MM?
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
+>  mm/khugepaged.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 > 
-> Also, it warns if the cr3 pfn doesn't match the mm pgd, should it warn
-> if cr3 lam bits don't match the MM's copy?
+> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> index 1b5dd3820eac..8e6fad7c7bd9 100644
+> --- a/mm/khugepaged.c
+> +++ b/mm/khugepaged.c
+> @@ -1885,8 +1885,7 @@ static void collapse_file(struct mm_struct *mm,
+>  
+>  	if (nr_none) {
+>  		__mod_lruvec_page_state(new_page, NR_FILE_PAGES, nr_none);
+> -		if (is_shmem)
+> -			__mod_lruvec_page_state(new_page, NR_SHMEM, nr_none);
+> +		__mod_lruvec_page_state(new_page, NR_SHMEM, nr_none);
+>  	}
 
-You are right, taking LAM mode from init_mm is more correct. And we need
-to update tlbstate with the new LAM mode. 
 
-I think both CR3 and init_mm should LAM disabled here as we are bringing
-CPU up. I'll add WARN_ON().
+Might be worth a small comment here - even though folks can see in above code
+that this is only incremented in shmem path, might be nice to say why it's
+always 0 for non-shmem (or conversely, why it's only possible to be non 0 on
+shmem).
 
--- 
- Kirill A. Shutemov
+>  
+>  	/* Join all the small entries into a single multi-index entry */
+> @@ -1950,10 +1949,10 @@ static void collapse_file(struct mm_struct *mm,
+>  
+>  		/* Something went wrong: roll back page cache changes */
+>  		xas_lock_irq(&xas);
+> -		mapping->nrpages -= nr_none;
+> -
+> -		if (is_shmem)
+> +		if (nr_none) {
+> +			mapping->nrpages -= nr_none;
+>  			shmem_uncharge(mapping->host, nr_none);
+> +		}
+>  
+>  		xas_set(&xas, start);
+>  		xas_for_each(&xas, page, end - 1) {
+> -- 
+> 2.23.0
+> 
+> 
+
+Otherwise,
+
+Reviewed-by: Zach O'Keefe <zokeefe@google.com>

@@ -2,73 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7382454C0FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 07:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8293354C0FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 07:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242754AbiFOE7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 00:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
+        id S235839AbiFOFAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 01:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237310AbiFOE67 (ORCPT
+        with ESMTP id S242811AbiFOFAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 00:58:59 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50A83B016
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 21:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655269138; x=1686805138;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dw66JPwioy0ZxhOB3enfq+e+5LXA5Jwr+DWaxTerOp4=;
-  b=fOnK8idtLMzvqr7FJXNpTZqhEYJ6/yPmaCoaVoq69NfQXaypCPvdHosZ
-   vPTMIwyVqIzZ2ZMoWBWKEtHHkDxe6Yq1x4aSHtu6NxA3ZQQp9QXMaLWul
-   NmdJJk3Kl57JXZzVOLizbExNuQRgDX7HYYlJvC8hl0ZVofxzJpjtq7NsI
-   dfAJont/pbSNpx2rTPUmT78JDCKrdga0cRWfR1TMvgqi7O+VVTvJ2rljd
-   Y0yrrkT+4ONmXwalSyWMZU1A+xx2FG4ji1ktMP1DuyPzpI7eHMT/oJ4AU
-   5+zSEzoUlTXFzwIn5oVsboNBx9lgcEQoUHf+75vxfXyyDGttVrprf72LV
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="340498688"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="340498688"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 21:58:58 -0700
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="640781265"
-Received: from yutang-mobl.ccr.corp.intel.com ([10.254.214.55])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 21:58:53 -0700
-Message-ID: <68b6a7e92d48a3285a5707378459bb9ae805f333.camel@intel.com>
-Subject: Re: [RFC PATCH 0/3] Cgroup accounting of memory tier usage
-From:   Ying Huang <ying.huang@intel.com>
-To:     Tim Chen <tim.c.chen@linux.intel.com>, linux-mm@kvack.org,
-        akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Brice Goglin <brice.goglin@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Feng Tang <feng.tang@intel.com>,
-        Jagdish Gediya <jvgediya@linux.ibm.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        David Rientjes <rientjes@google.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
-        Shakeel Butt <shakeelb@google.com>
-Date:   Wed, 15 Jun 2022 12:58:50 +0800
-In-Reply-To: <cover.1655242024.git.tim.c.chen@linux.intel.com>
-References: <cover.1655242024.git.tim.c.chen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Wed, 15 Jun 2022 01:00:01 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4734742A1A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 22:00:00 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id o6so9464434plg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 22:00:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sx5jo/gbFVJjPOu+uKpvsodcdaX5x99B9E4XzLwdmWE=;
+        b=OQ8sG8CIkLtszKiLLTbek6gsfIzVYrVUnGvHrzhqIDwP1bxZlqzHk9XdeP8wt0c/Yo
+         w7T145mRWtwh46Siau1jtn/tXHZ5BvJkUFRHuU4sd9Z1mQn+9yzZ0uxsLTlMOwVR/MmJ
+         eXnAJ4qILZOQRhwW3RZhCXP00VewUqcKlZoq8iKpqds4bqmNwDRnWnrWfPlo3rMoXwnP
+         8IZ912AjBBZVMJbCQi9boHwjt/ndymi58Ov+67xEO9O4bFc3efq/9axTkfpw+ZalR/qI
+         Wiy7locTtxA2D+9KrzK50zSxCqDd2+OjPPwNBRMZrs4dzGEF98HXoJN93j/PTi01RiN6
+         NoJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sx5jo/gbFVJjPOu+uKpvsodcdaX5x99B9E4XzLwdmWE=;
+        b=wSbZpFWDoiW/+qyQE2l0aEV8/rd/u/em2fdTPbiyEfszGpuBjs6erK7MZxLXdCr8Bn
+         HeiFoUNE+cVgtoN4Rxg4fvBZEjJ5VIKY9JlWTlRKBNE2+yrJKleGAYuxh1QYB9lD50ZM
+         1lwGgZt89NlrZgeL/dxHlb/JGOl0nhGuRW8TAssZYYnOHcPUpDm9YppSTYcq7dzUw7MF
+         c59ZS/2whWBUDvAT3E/dq7HD+M0QhOasc5K+eAbqavwGUuCRmX1xznL2S3AvwyHzkoNT
+         y9mD09pUl1EcDjiVfpmB2JY6WczA/iMn6T72TehW6RljqXhah2VdNl4xT9RS5kd0NUN3
+         ULlA==
+X-Gm-Message-State: AJIora9xJtgOxYw+YLeVU7xP0nmr+lPT//BpWehbONrS/fR9/oMLVaPC
+        ygrdYQqzyTVktmEy3ToaUNNAfypv/3W3GQ==
+X-Google-Smtp-Source: AGRyM1u2vA9N4bZpg7V9qLUF19XkH2La7QrUIbQA654KDtyevtqXUBfRbeaRFA6ZFNCrblKGfgwQxg==
+X-Received: by 2002:a17:902:8e8b:b0:168:a135:d636 with SMTP id bg11-20020a1709028e8b00b00168a135d636mr7343989plb.140.1655269199764;
+        Tue, 14 Jun 2022 21:59:59 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id f13-20020a170902684d00b0015e8d4eb26csm8154990pln.182.2022.06.14.21.59.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 21:59:59 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 10:29:57 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V2 2/3] cpufreq: Panic if policy is active in
+ cpufreq_policy_free()
+Message-ID: <20220615045957.55ocdyddcac3vwct@vireshk-i7>
+References: <8c3d50faf8811e86136fb3f9c459e43fc3c50bc0.1653565641.git.viresh.kumar@linaro.org>
+ <426bf6edc80b2e944d459fa7b8dffbe8b73bb3d9.1653623526.git.viresh.kumar@linaro.org>
+ <CAJZ5v0gswDEdK9-gC1dPr9BFPv3G9rs+JYe-7=1JZ11OMoBb-g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0gswDEdK9-gC1dPr9BFPv3G9rs+JYe-7=1JZ11OMoBb-g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,55 +75,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-14 at 15:25 -0700, Tim Chen wrote:
-> For controlling usage of a top tiered memory by a cgroup, accounting
-> of top tier memory usage is needed.  This patch set implements the
-> following:
+On 14-06-22, 15:59, Rafael J. Wysocki wrote:
+> On Fri, May 27, 2022 at 5:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > With the new design in place, to avoid potential races show() and
+> > store() callbacks check if the policy is active or not before proceeding
+> > any further. And in order to guarantee that cpufreq_policy_free() must
+> > be called after clearing the policy->cpus mask, i.e. by marking it
+> > inactive.
+> >
+> > Lets make sure we don't get a bug around this later and catch this early
+> > by putting a BUG_ON() within cpufreq_policy_free().
+> >
+> > Also update cpufreq_online() a bit to make sure we clear the cpus mask
+> > for each error case before calling cpufreq_policy_free().
+> >
+> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > ---
+> > V2: Update cpufreq_online() and changelog.
+> >
+> >  drivers/cpufreq/cpufreq.c | 9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index e24aa5d4bca5..0f8245731783 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -1284,6 +1284,12 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+> >         unsigned long flags;
+> >         int cpu;
+> >
+> > +       /*
+> > +        * The callers must ensure the policy is inactive by now, to avoid any
+> > +        * races with show()/store() callbacks.
+> > +        */
+> > +       BUG_ON(!policy_is_inactive(policy));
 > 
-> Patch 1 introduces interface and simple implementation to retrieve
-> 	cgroup tiered memory usage
-> Patch 2 introduces more efficient accounting with top tier memory page counter 
-> Patch 3 provides a sysfs interface to repot the the top tiered memory
-> 	usage.
+> I'm not a super-big fan of this change.
 > 
-> The patchset works with Aneesh's v6 memory-tiering implementation [1].
-> It is a preparatory patch set before introducing features to
-> control top tiered memory in cgroups.
+> First off, crashing the kernel outright here because of possible races
+> appears a bit excessive to me.
 > 
-> I'll like to first get feedback to see if 
-> (1) Controllng the topmost tiered memory is enough 
-> or
-> (2) Multiple tiers at the top levels need to be grouped into "toptier"
-> or
+> Second, it looks like we are worrying about the code running before
+> the wait_for_completion() call in cpufreq_policy_put_kobj(), because
+> after that call no one can be running show() or store().  So why don't
+> we reorder the wait_for_completion() call with respect to the code in
+> question instead?
 
-If we combine top-N tiers, I think the better name could be "fast-tier",
-in contrast to "slow-tier".
+No, I am not worrying about that race. I am just trying to make sure some change
+in future doesn't break this assumption (that policy should be inactive by this
+point). That's all. It all looks good for now.
 
-> (3) There are use cases not covered by (1) and (2). 
+May be a WARN instead of BUG if we don't want to crash.
 
-Is it necessary to control memory usage of each tier (except the
-lowest/slowest)?  I am not the right person to answer the question, but
-I want to ask it.
-
-Best Regards,
-Huang, Ying
-
-> Thanks.
-> 
-> Tim
-> 
-> [1] https://lore.kernel.org/linux-mm/20220610135229.182859-1-aneesh.kumar@linux.ibm.com/ 
-> 
-> Tim Chen (3):
->   mm/memory-tiers Add functions for tier memory usage in a cgroup
->   mm/memory-tiers: Use page counter to track toptier memory usage
->   mm/memory-tiers: Show toptier memory usage for cgroup
-> 
->  include/linux/memcontrol.h   |  1 +
->  include/linux/memory-tiers.h |  2 +
->  mm/memcontrol.c              | 86 +++++++++++++++++++++++++++++++++++-
->  mm/memory-tiers.c            |  3 +-
->  4 files changed, 89 insertions(+), 3 deletions(-)
-> 
-
-
+-- 
+viresh

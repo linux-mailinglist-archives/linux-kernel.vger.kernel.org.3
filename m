@@ -2,185 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AAA554D131
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2AAA54D132
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349926AbiFOSwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 14:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S1358150AbiFOSwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 14:52:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345773AbiFOSwb (ORCPT
+        with ESMTP id S1358430AbiFOSws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:52:31 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8788FB7D4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:52:28 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id v17-20020a17090a899100b001ead067eaf9so3008211pjn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:52:28 -0700 (PDT)
+        Wed, 15 Jun 2022 14:52:48 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7788024BF0
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:52:47 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id t3-20020a17090a510300b001ea87ef9a3dso2858001pjh.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:52:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ip6O/g5R03OCVltlbCtU+5cNEdXFPPe5H228MiaYA54=;
-        b=lOk5DXWpZ/5yg/QJeC1fv4OQ+BlA5jw4LoBTEhsvILo+7JcOiIR9HM4x8sIlgpwGgq
-         Ov4JFYoP/vAK2N5ObPEQsaXgKv52yMz8RjdnJGXTqfNKFiwSCXhzGAJPpVxanddGWhDK
-         H9DgpK242qy6TXGFZtQ0cIQWQawJ6FdP5cJoihcYmpxivo3cmDOqrREg817DgxnspZfF
-         EuKR0Kja2TEHOL+nLbcdDumqSjLW3eUTSCRL2c6bH4fEDABBQviTt4zTyBaSCVSToFJ5
-         3fUAlQaXuybCF8/E9JxFJWTZ+IGL6ZavRwa4NT1uyWM6YqSDD88vMTlPMfYPlVsCl1Oz
-         7u4g==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+plJLyc6BfesKBMfyYWeTBRHfNx/06Fk1S03G42Wxl4=;
+        b=mOjsn2omSJQYO+C6R1n+7Va36LEjp++XQfMZQgxSRdbtYoqgUjImwjvbQoccczC3ou
+         OK/8E3yx+flabo4DNZPP1FDlsfa/wuavvcUMnn3Sltx0t+EsgbhR+8+fUuzNZZ0hYpzq
+         SKKwvjXO9r8BlrtMxm+PVmnl7H+JWP6Jbc+dqBFR9NJ3BLGG9GSTUN4I54zr56QOoCKs
+         4ungpINDDzuBJYu67AZtMp+9+o8ePw72rKL7PRdNedynU/LKR0Hl6T+u58qaycxXX29C
+         QmvgsP/EpuWm5ZCAsm28B+TL8NqUFxoWWIONQQdGxDFOmalbPBJSnIbD4uHP9QeY+U6o
+         MH8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ip6O/g5R03OCVltlbCtU+5cNEdXFPPe5H228MiaYA54=;
-        b=qozOa7tyPGn0odrR6qLIiJGtMNTqGMh7qy+ngp1kTRiNvvpdZr3m1GLlqj9kaXPLf6
-         2z7Fl0WxPPD7ZslpkAGkFaXkS6sFx4ImjPeXfNsSoo7LENuXNi/e5NRcs/FEAYrYjb2q
-         klJpJWTyQOumgt1F982P2J+nU98TZe8/B/VXy2OD7tqbI6DJ8QN+n8kRWuBOsHzfR0Nv
-         WbvaSGN7vkLZYQIRaV5NkYyt9wnuszVFpREOO3GK7otvnpjbicr79igPzRZskt1rCIWh
-         gUZQw8PRWmWwaDBzxq77cZ6mpgvRwZVHX9m73fMHiz6Cv1q4y6hN0JQkvSKKIRq/FVRS
-         2mTQ==
-X-Gm-Message-State: AJIora9P+QJhkWIc3JmCgjaZtfteO5N6WVOAhP0fMP1bAe5Hf6kfFDD1
-        Oew2RKUV4aFRjEeZvVyW9HXBzM0xL4NC0g==
-X-Google-Smtp-Source: AGRyM1utEtd0UqhSJPN62EAFwSGgD1yGz0iJFyjfshJNTVSgJkkmGTW9enltsodEoMPCbOR6dbx+ww==
-X-Received: by 2002:a17:902:ed53:b0:166:3e43:7522 with SMTP id y19-20020a170902ed5300b001663e437522mr1145403plb.170.1655319147675;
-        Wed, 15 Jun 2022 11:52:27 -0700 (PDT)
-Received: from google.com (123.65.230.35.bc.googleusercontent.com. [35.230.65.123])
-        by smtp.gmail.com with ESMTPSA id q6-20020a170902a3c600b00163f7935772sm9707823plb.46.2022.06.15.11.52.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 11:52:27 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 18:52:22 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH 1/2] KVM: vmx, pmu: accept 0 for absent MSRs when
- host-initiated
-Message-ID: <YqoqZjH+yjYJTxmT@google.com>
-References: <20220531175450.295552-1-pbonzini@redhat.com>
- <20220531175450.295552-2-pbonzini@redhat.com>
- <YpZgU+vfjkRuHZZR@google.com>
- <ce2b4fed-3d9e-a179-a907-5b8e09511b7d@gmail.com>
- <YpeWPAHNhQQ/lRKF@google.com>
- <cbb9a8b5-f31f-dd3b-3278-01f12d935ebe@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+plJLyc6BfesKBMfyYWeTBRHfNx/06Fk1S03G42Wxl4=;
+        b=Szqo4sg3zlHfnekU1166hSKG0wXPmd5tI9fRTLqqKhNwueA3hDPAWPUmcuswZtTduV
+         xbxVsZP9jhJBtT9go78TsdW7F6nNmyNYAD006d9m186cRv1tt4T3g6SwFmNJwfzU0d2t
+         8zy0k3IlF/I+KInW+B4Qa+V64xgco7FPVbzMIGb4bMH9iK1eCf2+9WBcwIs7b88Dkvz/
+         0KwO+6b/+abHfm3jVaQY53D5Lc3jXUCBWcQVKKZXz3KzT/7kTwcn0PXmwqPoZKSm0AL2
+         +Mu2fo0BApGbPZeOKfCM7DxvOEb6sBvsbENp6MNRInSSS9n2AbhzataInL32c3NhuwjG
+         hjDg==
+X-Gm-Message-State: AJIora/19FMjFvuZxqsoFiYYorInPxvDrQFCI2wXlDYJL4WQ57C8+2Q0
+        5DH5R6+qLGNq/SmtaIPGA5ohZ819RsmEF+oQmug=
+X-Google-Smtp-Source: AGRyM1uv162bCxcjTyRBxlF1tp1Zb5MwY4voLjUmqFzFiEHVLDBOmRp1rYP5BwTpxmjAgvK+XJFsN6S0SJ3kInFRCT4=
+X-Received: by 2002:a17:90b:4ac9:b0:1e3:1dca:d995 with SMTP id
+ mh9-20020a17090b4ac900b001e31dcad995mr856644pjb.111.1655319167029; Wed, 15
+ Jun 2022 11:52:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cbb9a8b5-f31f-dd3b-3278-01f12d935ebe@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220615180213.760756-1-e.velu@criteo.com> <YqonwfjE8BL6Xowf@kbusch-mbp>
+In-Reply-To: <YqonwfjE8BL6Xowf@kbusch-mbp>
+From:   Erwan Velu <erwanaliasr1@gmail.com>
+Date:   Wed, 15 Jun 2022 20:52:35 +0200
+Message-ID: <CAL2Jzux0ZnrJRocxj3X8YVwAb56krPtHUtKDnNqCURUJzgPoag@mail.gmail.com>
+Subject: Re: [PATCH] nvme: Report model,sn,fw,pci device information during init
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     Erwan Velu <e.velu@criteo.com>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 02, 2022, Like Xu wrote:
-> Thanks for your sincerity, always.
-> 
-> On 2/6/2022 12:39 am, Sean Christopherson wrote:
-> > On Wed, Jun 01, 2022, Like Xu wrote:
-> > > On 1/6/2022 2:37 am, Sean Christopherson wrote:
-> > > > Can we just punt this out of kvm/queue until its been properly reviewed?  At the
-> > > > barest of glances, there are multiple flaws that should block this from being
-> > > 
-> > > TBH, our reviewers' attention could not be focused on these patches until the
-> > > day it was ready to be ravaged. "Try to accept" is a good thing, and things need
-> > > to move forward, not simply be abandoned to the side.
-> > 
-> > I strongly disagree, to put it mildly.  Accepting flawed, buggy code because
-> > reviewers and maintainers are overloaded does not solve anything, it only makes
-> > the problem worse.  More than likely, the submitter(s) has moved on to writing
-> > the next pile of patches, while the same set of people that are trying to review
-> > submissions are left to pick up the pieces.  There are numerous examples of
-> > accepting code without (IMO) proper review and tests costing us dearly in the
-> > long run.
-> 
-> I actually agree and understand the situation of maintainers/reviewers.
-> No one wants to maintain flawed code, especially in this community
-> where the majority of previous contributors disappeared after the code
-> was merged in. The existing heavy maintenance burden is already visible.
-> 
-> Thus we may have a maintainer/reviewers scalability issue. Due to missing
-> trust, competence or mastery of rules, most of the patches sent to the list
-> have no one to point out their flaws.
+[...]
 
-Then write tests and run the ones that already exist.  Relying purely on reviewers
-to detect flaws does not and cannot scale.  I agree that we currently have a
-scalability issue, but I have different views on how to improve things.
+> The PCI_ID: print is misleading. That format usually indicates VID:DID, but
+> you're printing VID:SSVID.
+True.
 
-> I have privately received many complaints about the indifference of our
-> community, which is distressing.
-> 
-> To improve that, I propose to add "let's try to accept" before "queued, thanks".
-> 
-> Obviously, "try to accept" is not a 100% commitment and it will fail with high
-> probability, but such a stance (along with standard clarifications and requirements)
-> from reviewers and maintainers will make the contributors more concerned,
-> attract potential volunteers, and focus the efforts of our nominated reviewers.
-> 
-> Such moves include explicit acceptance or rejection, a "try to accept" response
-> from some key persons (even if it ends up being a failure), or a separate
-> git branch,
-> but please, don't leave a lasting silence, especially for those big series.
-
-I completely agree on needing better transparency for the lifecycle of patches  
-going through the KVM tree.  First and foremost, there need to be formal, documented 
-rules for the "official" kvm/* branches, e.g. everything in kvm/queue passes ABC
-tests, everything in kvm/next also passes XYZ tests.  That would also be a good 
-place to document expectations, how things works, etc...
-
-At that point, I think we could add e.g. kvm/pending to hold patches that have  
-gotten the "queued, thanks" but haven't yet passed testing to get all the way to
-kvm/queue.  In theory, that would eliminate, or at least significantly reduce, the
-non-trivial time gap between applying them locally and actually pushing to kvm/queue.
-
-I'll work on writing rules+documentation and getting buy-in from Paolo.
-
-That said, I'm still opposed to pivoting to a "let's try to accept" approach.
-IMO, a major part of the problem is lack of testcases and lack of _running_ what
-tests we do have.  To be blunt, it's beyond frustrating infuriating that a series
-that's at v12 breaks _existing_ KVM-Unit-Tests on any AMD host.  And that same
-series wasn't accompanied by any new testcases.
-
-Yes, a kvm/pending or whatever would help mitigate such issues, but that doesn't
-fundamentally reduce the burden put on maintainers/reviewers.  Basic issues such
-as breaking KUT should be caught before a series is posted.  I realize there are
-exceptions, e.g. folks from Intel and AMD may not have access to the right
-hardware, but given that you're also posting AMD specific patches, I don't think
-that exception applies here.  And yes, mistakes will happen, I've certainly been
-guilty of my share, but I fully expect any such mistakes to be caught well before
-getting to v12.
-
-The other way to reduce maintainer/reviewer burden is by writing thorough testcases.
-A thorough, well-documented test not only proves that the code works, it also shows
-to reviewiers that the developer actually considered edge cases and helps expedite
-the process of thinking through such edge cases.  E.g. taking arch LBRs as an
-example, a test that actually visited every edge in KVM's state machine for enabling
-and disabling MSR intercepts would improve confidence that the code is correct and
-would greatly help reviewers understand the various combinations and transitions.
-
-I fully realize that writing tests is not glamorous, and that some of KVM's tooling
-and infrastructure is lacking, but IMO having contributors truly buy-in to writing
-tests for testing's sake instead of viewing writing tests as a necessary evil to get
-accepted upstream would go a long, long way to helping improve the overall velocity
-of KVM development.
-
-> Similar moves will increase transparency in decision making to reward and
-> attract a steady stream of high quality trusted contributors to do more and more
-> for our community and their employers (if any).
-> 
-> > 
-> > If people want their code to be merged more quickly, then they can do so by
-> > helping address the underlying problems, e.g. write tests that actually try to
-> > break their feature instead of doing the bare minimum, review each others code,
-> > clean up the existing code (and tests!), etc...  There's a reason vPMU features
-> > tend to not get a lot of reviews; KVM doesn't even get the basics right, so there's
-> > not a lot of interest in trying to enable fancy, complex features.
-> 
-> I'd like know more about "KVM doesn't even get the basics right" on vPMU. :D
-
-https://lore.kernel.org/all/CABOYuvbPL0DeEgV4gsC+v786xfBAo3T6+7XQr7cVVzbaoFoEAg@mail.gmail.com
-https://lore.kernel.org/all/YofCfNsl6O45hYr0@google.com
+> This is also very similar to the recently introduced nvme_print_device_info(),
+> but that one removes the annoying trailing spaces if they exist. I guess if
+> we're going this direction, just use that print, but change it from dev_err to
+> dev_info, and remove the call on global id collision detection.
+Oh I missed it.
+Shall I provide a patch for nvme-5.19 or wait until the next window ?

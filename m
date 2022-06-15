@@ -2,81 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7236054C4F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B430454C516
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347443AbiFOJpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
+        id S1347154AbiFOJte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346676AbiFOJpd (ORCPT
+        with ESMTP id S1347658AbiFOJtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:45:33 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D164A457A4;
-        Wed, 15 Jun 2022 02:45:32 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id x5so15307014edi.2;
-        Wed, 15 Jun 2022 02:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Az0IhgLrluMj3GRMffnnHU8dn9q2U05jVmkW4Ha7TmE=;
-        b=AAdkjP7lcrPBx8gbayY/ZnxUVDiPwnG7RR/E+4eAm/ZkE5RPmKMfJILidca5QQG9Pp
-         0xxBOBvj5R5ENPB0HcUNSO2lqBA32wLjJgbyhQKiNM9HVCJiC8wxO3GMATzu8EaEQS+O
-         0IJVXu8bnIUmjuHC5D5t6HvBzdo4l2jOLpSqBYBMLSiWzRdYj+RyXSIMGgTomCw/A7dc
-         NoNOI5vlPg3qYbBtXhrE1rNIwprT3x6WT9lbI3rTIjXDmp03khoVmMIflnqHuz80eCMc
-         hC15UYCHEZftLZ4bf2G6WVJKnfQoHx2B6AxXIhXVt70pf7t1tnRjysjSU4rjAeHtBgUw
-         wHJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Az0IhgLrluMj3GRMffnnHU8dn9q2U05jVmkW4Ha7TmE=;
-        b=x1F7eh0DvLtNpB9pzL+q7A4cZ6qmYTxi7HUBnpS5416tB8vMBPvmQu7m1TZ10LuVLS
-         h/+jHau+DmBcy2K52U1eLLbyDGNiTyFN+Danm1m2x60FUXxVLZh+FoUd83y+kyE3v58m
-         tWn8kUt06BZWSCmflKTU+sqxHPrX7KGbLMTm5sr3R5leEs7gDHzVbKvxCAVDQZzYPdtc
-         0VC5q9CiegZeA1OMeW2yKDxbwxBdAuPWaprmDX25rtLuI7/z+YMq/dwa3h16lG/MdZsZ
-         HXqNQjEhw0W7dwDTkOmkNeu+RBZmfLZ3FlnxyaI1Od8510RhC7CL4QBUePWpXT02WdLl
-         YEVw==
-X-Gm-Message-State: AOAM533t4JDOx7Q5ZGDhI86GD7bmdtHKTuH1d//3iu/wGoh1Y/LLsPCQ
-        QAkZq0feaqumtH4++Twe1VI2DZ5VO1272FQP3eU=
-X-Google-Smtp-Source: ABdhPJxof2Sz5oKQSk9HGgbwC1neNDYJeVkSg4FYD0XcviuLrBhBP3hRVoRp/nnzwuYiqDs8yDRpnVsVgEaVnHTxTB4=
-X-Received: by 2002:aa7:d481:0:b0:42d:d5fd:f963 with SMTP id
- b1-20020aa7d481000000b0042dd5fdf963mr11526488edr.209.1655286331287; Wed, 15
- Jun 2022 02:45:31 -0700 (PDT)
+        Wed, 15 Jun 2022 05:49:31 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF8549695;
+        Wed, 15 Jun 2022 02:49:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655286569; x=1686822569;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fgoP/mzTE5gjuDZ8g87/11obiI4NZu5ZOraq//7+Q64=;
+  b=JocYUTMKdwhiWynLO13suZIe9lUH5gs9DtMczfQOPoD6anOd1cw+xy6k
+   NwPVZ/t0pI82uEO07/oR6gS9PJZosa5kXya7QKH4io2mhIKqECsIYjuyQ
+   ZuTNk+oBF8mrUU/LWABE+vaV9Pq3Gv5wo8Cj1j+Ze9pDlTJ0xz0mhXOrs
+   EnIpC+wBnix3KjVkF+ZghfbmhhTricdpda4MTq0AHV1SgD1f/ifRVQGFo
+   uj+qrm+Y9pbawIabWFg1MSyZpkDO94yqZC7bW36qD1A1JWSUcZ9pdEylR
+   jZFKK9keXMsXGF+3Ka3DqhIi1V3Lp4G03XwUObZA4Hp09L57R6mDMdu0E
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="365250969"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="365250969"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 02:49:29 -0700
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="618386934"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 02:49:24 -0700
+Received: by lahna (sSMTP sendmail emulation); Wed, 15 Jun 2022 12:49:22 +0300
+Date:   Wed, 15 Jun 2022 12:49:22 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     "Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco)" 
+        <oocheret@cisco.com>
+Cc:     "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "michael@walle.cc" <michael@walle.cc>,
+        "richard@nod.at" <richard@nod.at>,
+        "vigneshr@ti.com" <vigneshr@ti.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "mauro.lima@eclypsium.com" <mauro.lima@eclypsium.com>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>
+Subject: Re: [PATCH] mtd: spi-nor: handle unsupported FSR opcodes properly
+Message-ID: <YqmrIsOEsFoKTwEK@lahna>
+References: <YmZUCIE/ND82BlNh@lahna>
+ <20220610191548.3626218-1-oocheret@cisco.com>
+ <YqbWt9f3of+7Z76e@lahna>
+ <BYAPR11MB27570F2863F7BCDFE629B3DFCDAA9@BYAPR11MB2757.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <cover.1654118389.git.william.gray@linaro.org> <a2dca9435f7f1f727c696a1faa0ab9e27927f9f3.1654118389.git.william.gray@linaro.org>
-In-Reply-To: <a2dca9435f7f1f727c696a1faa0ab9e27927f9f3.1654118389.git.william.gray@linaro.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 15 Jun 2022 11:44:54 +0200
-Message-ID: <CAHp75VepZ8P_cqnN8qJ_Wb=xM0LW3y-a22tv1otDReFSqRDFYA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] iio: adc: stx104: Implement and utilize register structures
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR11MB27570F2863F7BCDFE629B3DFCDAA9@BYAPR11MB2757.namprd11.prod.outlook.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 6, 2022 at 4:27 PM William Breathitt Gray
-<william.gray@linaro.org> wrote:
->
-> Reduce magic numbers and improve code readability by implementing and
-> utilizing named register data structures.
+Hi,
 
-Can we consider using regmap APIs instead?
+On Tue, Jun 14, 2022 at 05:56:54PM +0000, Oleksandr Ocheretnyi -X (oocheret - GLOBALLOGIC INC at Cisco) wrote:
+>    Hello Mika,
+> 
+>    in my case (I work with memory chip n25q128a13 for recent kernels) I'm
+>    getting return value -ENOTSUPP from spi_mem_exec_op() call in the
+>    micron_st_nor_read_fsr() method
+>    [[1]https://elixir.bootlin.com/linux/v5.19-rc2/source/drivers/spi/spi-m
+>    em.c#L326]. So I decided to provide the same errorcode to
+>    intel_spi_hw_cycle() method because older kernel versions throw the
+>    error there. It is fine to use -EOPNOTSUPP return value instead.
+> 
+>    I suspect we need to cover both cases to check -ENOTSUPP as well as
+>    -EOPNOTSUPP to let the driver work properly.
+> 
+>    if (ret == -ENOTSUPP || ret == -EOPNOTSUPP)
 
-
--- 
-With Best Regards,
-Andy Shevchenko
+I think we should follow the same in the Intel driver and return
+-ENOTSUPP too.

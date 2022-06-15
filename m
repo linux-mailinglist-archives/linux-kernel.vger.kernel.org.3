@@ -2,104 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0358154C13B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 07:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813A054C142
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 07:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345534AbiFOFiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 01:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
+        id S1345288AbiFOFkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 01:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244624AbiFOFiK (ORCPT
+        with ESMTP id S229595AbiFOFkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 01:38:10 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCD43EF09;
-        Tue, 14 Jun 2022 22:38:08 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LNDbw10hwz4xYC;
-        Wed, 15 Jun 2022 15:38:04 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1655271484;
-        bh=LJmba7LF6BiTkgk1BjCNqHyaUX+gSnrZ4yOg/s+noRo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tC8Lv2v8MXCM5rM0cCxSeW2kEzEL0L0K9IFiHpjVv7Tf9CudPwIbltUvQt2q1zD8H
-         BLOuAc+x2NJnsPeHt4pcpKSsg1xQN9sw2Bw2nYIyfpUD109z0Ai45yGCaPJOT/7i5S
-         +Cty3/d8JlKys8poFw2zBxzSQXPcWfsHdE54vDH2MqVOinaL0MBeqOxR/kYaZB0fui
-         sQoChlBhZ4c/mHIqD2FtJD1wTItGcxQqNsDYxcQ4g30AHXatf5qGHXANYdQTJT7+ks
-         PGoBNZZtHUuTIM9HxAsVyccOucvgtLjyZRVwgEtq92FWhi/S/dMY69/8U7syNLEu5s
-         kHzxdplxr7ypw==
-Date:   Wed, 15 Jun 2022 15:38:02 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the rcu tree
-Message-ID: <20220615153802.49eeb827@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0r44u2Bs/.HD3IWKdSYNMdJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 15 Jun 2022 01:40:21 -0400
+Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 31ACE4A3C3;
+        Tue, 14 Jun 2022 22:40:20 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id E30811E80D27;
+        Wed, 15 Jun 2022 13:38:51 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id J5ZCcSn-ymiE; Wed, 15 Jun 2022 13:38:49 +0800 (CST)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        (Authenticated sender: yuzhe@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id 6322C1E80CFF;
+        Wed, 15 Jun 2022 13:38:48 +0800 (CST)
+From:   Yu ZHe <yuzhe@nfschina.com>
+To:     trond.myklebust@hammerspace.com, anna@kernel.org
+Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        liqiong@nfschina.com, yuzhe <yuzhe@nfschina.com>
+Subject: [PATCH] nfs: remove unnecessary (void*) conversions.
+Date:   Wed, 15 Jun 2022 13:39:24 +0800
+Message-Id: <20220615053924.829-1-yuzhe@nfschina.com>
+X-Mailer: git-send-email 2.11.0
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/0r44u2Bs/.HD3IWKdSYNMdJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: yuzhe <yuzhe@nfschina.com>
 
-Hi all,
+remove unnecessary void* type castings.
 
-After merging the rcu tree, today's linux-next build (htmldocs) produced
-this warning:
+Signed-off-by: yuzhe <yuzhe@nfschina.com>
+---
+ fs/nfs/inode.c      | 6 +++---
+ fs/nfs/nfs42xattr.c | 2 +-
+ fs/nfs/nfs4idmap.c  | 2 +-
+ fs/nfs/nfs4proc.c   | 4 ++--
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-Documentation/RCU/Design/Requirements/Requirements.rst:2220: WARNING: Malfo=
-rmed table.
+diff --git a/fs/nfs/inode.c b/fs/nfs/inode.c
+index b4e46b0ffa2d..a3a88fd09809 100644
+--- a/fs/nfs/inode.c
++++ b/fs/nfs/inode.c
+@@ -318,7 +318,7 @@ struct nfs_find_desc {
+ static int
+ nfs_find_actor(struct inode *inode, void *opaque)
+ {
+-	struct nfs_find_desc	*desc = (struct nfs_find_desc *)opaque;
++	struct nfs_find_desc	*desc = opaque;
+ 	struct nfs_fh		*fh = desc->fh;
+ 	struct nfs_fattr	*fattr = desc->fattr;
+ 
+@@ -336,7 +336,7 @@ nfs_find_actor(struct inode *inode, void *opaque)
+ static int
+ nfs_init_locked(struct inode *inode, void *opaque)
+ {
+-	struct nfs_find_desc	*desc = (struct nfs_find_desc *)opaque;
++	struct nfs_find_desc	*desc = opaque;
+ 	struct nfs_fattr	*fattr = desc->fattr;
+ 
+ 	set_nfs_fileid(inode, fattr->fileid);
+@@ -2270,7 +2270,7 @@ static inline void nfs4_init_once(struct nfs_inode *nfsi)
+ 
+ static void init_once(void *foo)
+ {
+-	struct nfs_inode *nfsi = (struct nfs_inode *) foo;
++	struct nfs_inode *nfsi = foo;
+ 
+ 	inode_init_once(&nfsi->vfs_inode);
+ 	INIT_LIST_HEAD(&nfsi->open_files);
+diff --git a/fs/nfs/nfs42xattr.c b/fs/nfs/nfs42xattr.c
+index e7b34f7e0614..f10ea5652037 100644
+--- a/fs/nfs/nfs42xattr.c
++++ b/fs/nfs/nfs42xattr.c
+@@ -981,7 +981,7 @@ nfs4_xattr_entry_count(struct shrinker *shrink, struct shrink_control *sc)
+ 
+ static void nfs4_xattr_cache_init_once(void *p)
+ {
+-	struct nfs4_xattr_cache *cache = (struct nfs4_xattr_cache *)p;
++	struct nfs4_xattr_cache *cache = p;
+ 
+ 	spin_lock_init(&cache->listxattr_lock);
+ 	atomic_long_set(&cache->nent, 0);
+diff --git a/fs/nfs/nfs4idmap.c b/fs/nfs/nfs4idmap.c
+index f331866dd418..01e54dd9301c 100644
+--- a/fs/nfs/nfs4idmap.c
++++ b/fs/nfs/nfs4idmap.c
+@@ -585,7 +585,7 @@ static int nfs_idmap_legacy_upcall(struct key *authkey, void *aux)
+ 	struct request_key_auth *rka = get_request_key_auth(authkey);
+ 	struct rpc_pipe_msg *msg;
+ 	struct idmap_msg *im;
+-	struct idmap *idmap = (struct idmap *)aux;
++	struct idmap *idmap = aux;
+ 	struct key *key = rka->target_key;
+ 	int ret = -ENOKEY;
+ 
+diff --git a/fs/nfs/nfs4proc.c b/fs/nfs/nfs4proc.c
+index c0fdcf8c0032..937e379c9906 100644
+--- a/fs/nfs/nfs4proc.c
++++ b/fs/nfs/nfs4proc.c
+@@ -6601,7 +6601,7 @@ static void nfs4_delegreturn_prepare(struct rpc_task *task, void *data)
+ 	struct nfs4_delegreturndata *d_data;
+ 	struct pnfs_layout_hdr *lo;
+ 
+-	d_data = (struct nfs4_delegreturndata *)data;
++	d_data = data;
+ 
+ 	if (!d_data->lr.roc && nfs4_wait_on_layoutreturn(d_data->inode, task)) {
+ 		nfs4_sequence_done(task, &d_data->res.seq_res);
+@@ -8894,7 +8894,7 @@ int nfs4_proc_exchange_id(struct nfs_client *clp, const struct cred *cred)
+ void nfs4_test_session_trunk(struct rpc_clnt *clnt, struct rpc_xprt *xprt,
+ 			    void *data)
+ {
+-	struct nfs4_add_xprt_data *adata = (struct nfs4_add_xprt_data *)data;
++	struct nfs4_add_xprt_data *adata = data;
+ 	struct rpc_task *task;
+ 	int status;
+ 
+-- 
+2.11.0
 
-+-----------------------------------------------------------------------+
-| **Quick Quiz**:                                                       |
-+-----------------------------------------------------------------------+
-| But what if my driver has a hardware interrupt handler that can run   |
-| for many seconds? I cannot invoke schedule() from an hardware         |
-| interrupt handler, after all!                                         |
-+-----------------------------------------------------------------------+
-| **Answer**:                                                           |
-+-----------------------------------------------------------------------+
-| One approach is to do ``ct_irq_exit();ct_irq_enter();`` every so    |
-| often. But given that long-running interrupt handlers can cause other |
-| problems, not least for response time, shouldn't you work to keep     |
-| your interrupt handler's runtime within reasonable bounds?            |
-+-----------------------------------------------------------------------+
-
-Introduced by commit
-
-  6c5218715286 ("context_tracking: Take IRQ eqs entrypoints over RCU")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/0r44u2Bs/.HD3IWKdSYNMdJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKpcDoACgkQAVBC80lX
-0GzFsAgAkGhhz2ZZIXxCq2Xe9ORs+uEtwBJ04ATVlOsfPdjKAobhRikUnTp9nb2c
-JE5NGjwO7jN8rOmVo1ggOxdT4K7DfoFqzqLo4SQvFB8Kb7aeyzNMVhRI1YDNBlHZ
-ddAbXGWMQwh7AwJlpvArEMTKcyy0OrGivXNAf3xPZejhrTeh+6MEaa6HG9hv0xCl
-9B3MW3Z5314t9zS6i7cYRb2ppFl9Ldj+3Hq+bVJ3xzMUIVivaQfJ8/SZR7LSteOe
-+HP4R3jdvau9lSluG0tlejtvOzzeeLpjWRE4r5TbX6G2G1NvoIj9A9o7Ez37aiu7
-0zOH8ejKM+wvFKakAVap2qmHIvvxCA==
-=nsO0
------END PGP SIGNATURE-----
-
---Sig_/0r44u2Bs/.HD3IWKdSYNMdJ--

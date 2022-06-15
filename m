@@ -2,78 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A252F54CCC4
+	by mail.lfdr.de (Postfix) with ESMTP id E97A154CCC5
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:27:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239191AbiFOP1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48394 "EHLO
+        id S1352157AbiFOP11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352075AbiFOP1A (ORCPT
+        with ESMTP id S1352074AbiFOP1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Jun 2022 11:27:00 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81B141627;
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE39241622;
         Wed, 15 Jun 2022 08:26:53 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 25so16659798edw.8;
+Received: by mail-ed1-x52b.google.com with SMTP id o10so16704547edi.1;
         Wed, 15 Jun 2022 08:26:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=aD3KXmUM+TaBN7hTJKm0rCjbZHzjs5kWkG6RSEVpXOI=;
-        b=QvQ5VGcFr3+d2na6CeGcuynBeqUgn5YRGegdzwJhioXwEFEzc+XR9PMm5p2dqnqEc7
-         cbChMICejcuvR/cTVgcIEKdNk3MnPwurGtd8G35rcBqgrGhW8hvxOPJVtjuYSDVwjWI9
-         PDhMpk83kLOecZk+Y6JGAo6t7mY2cUKMtJ1h+6BghNLyPe3uEXtswic3XIqt3LDs2kNX
-         U272LCFRIFsKKpo+dw8PGEfK6+xtAKfBYCe8cqylBeqT/X0qGRxZGATSIEk0MbkEXoMP
-         Zw0yZTJpmLpyNbPTfivAW64sdto/rSYETIKc1y7VbUyMbRCFrAJAU60mV+gmH6vjNdNJ
-         adrA==
+        bh=WeBacwC7QoG4uHMYPIBhJXRexZhC0Zyxi68OZuIzOYs=;
+        b=p/inubw9GuUiAitKwaHB86XBjWAoYQBbzVCdsy//hGtr/nQ14zEoYEuMidA06nRvTE
+         edmThp4AlrlXzBUSdccI3+mGZxbWZi/qY9qysZ40/VQ0SG23ZZoC2D7BJC9Wr5L7XHYQ
+         2ySwJ5VIapL+UemMXrkUUdzs8rQ785G6S5ZleB6bJY6sgOnEL0T9Y9tkcWYdJ3rNL/p/
+         B+hIZDoTOd50pH34Ei0bzfh4AcK92h8qxU7SlsqH3Nn1S5ToL7tX6sxpErZ4xmY2ygo5
+         rTGRDJThjnhg0S/o2V8Wyy+GgADl29W7A56EmrN5VykmNle/XcE5z4hM3dxmzpfVqvlL
+         /T8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=aD3KXmUM+TaBN7hTJKm0rCjbZHzjs5kWkG6RSEVpXOI=;
-        b=Nc0cN9qcFZyfG0njTNZTYgRlCwg4q3gNyYK8NL1vmsbDL1C7fVFsSjlr83LPw4OQsm
-         JlyPoQWgHCgRH4zFpPZj5gDBRTn1EQarZlYSIsXeykDW/bX0ux66w8UC/FoHTo5MBxpI
-         2tFqd4ry1kjNvzqL7Q/2bvRa77rAAP1zQ/79R1bn3GERqVn340bmaxDdK68JoBdLEZ4Y
-         ZZJLqkKEfObfk8pWK7rMKl3tEW74oI0qb/55Uc6GGxeoV7+931I+oJOmHO0UMr+aY2i5
-         k8wnoDLBEF0XDd4rNZYySkVmMRwFbaGrgQlJjq8d1pOcCTIQ65lH0/En+3M8CQpgua/u
-         yhyQ==
-X-Gm-Message-State: AJIora+Xm7zLb68OyEqFE+K/fYxTAni32urT4FIicIdR0FCsXGPDytrs
-        eU3pbwvs7pPOtCREtwLaE02sWyC1gGXsyA==
-X-Google-Smtp-Source: AGRyM1sEZmu+MTQbIwUzGr+8J42hYq6zjx150kpTt+7z4b6FMHkhpZ4n4pFUNtXVbDWR2eg/fg0Buw==
-X-Received: by 2002:a05:6402:2708:b0:431:45d1:3aa0 with SMTP id y8-20020a056402270800b0043145d13aa0mr332419edd.408.1655306812318;
-        Wed, 15 Jun 2022 08:26:52 -0700 (PDT)
+        bh=WeBacwC7QoG4uHMYPIBhJXRexZhC0Zyxi68OZuIzOYs=;
+        b=yGdHCHLxMWvfcybddIkupwHsNAxN8Dev0X0P6GjrracX4PsIY/UlrjHwtWNsumAl4L
+         10oa2B7PqY09622ZYU4hnNWNYl58k4700BxC1xI76kYV3e1oUDp+H5ZE0ta4qWbhqkvi
+         WQEqF7ItvSBkad/pew+Mw9jsT9rJMt88LYuMHZb1GI7VVXuVHEu73C7rp3NQUluvjcAJ
+         E1e69D7B67IkZAe1l/m42YnOnXY9RtI6/zm4jyIgycM2CgEhZQdt+yaE2wDnALIvDu5V
+         Iu6F11HJv4ltkndT6EOLVvpzK0U6kPc5wSaHyb8NpylPYucNKY5AccjPg5gIAHJX0bKm
+         173A==
+X-Gm-Message-State: AJIora870cu3LIQACsjvgzY5hQ+0NnbgRuYjleN2lBMF1XlHz04RPT3Z
+        0JwMsxCDHr83JWQsso9Ovx988nTSWTX1/w==
+X-Google-Smtp-Source: AGRyM1v6VpM3Yfy9b6yYhk8AqVkrGFLmAa1XteahlY/B+xc2h2zsyvQyXPezo4hsPHNVXXDGxiACvQ==
+X-Received: by 2002:a05:6402:195:b0:431:5499:35eb with SMTP id r21-20020a056402019500b00431549935ebmr343888edv.346.1655306813348;
+        Wed, 15 Jun 2022 08:26:53 -0700 (PDT)
 Received: from debianHome.localdomain (dynamic-077-003-151-196.77.3.pool.telefonica.de. [77.3.151.196])
-        by smtp.gmail.com with ESMTPSA id v14-20020aa7d9ce000000b0042bc97322desm9501224eds.43.2022.06.15.08.26.51
+        by smtp.gmail.com with ESMTPSA id v14-20020aa7d9ce000000b0042bc97322desm9501224eds.43.2022.06.15.08.26.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 08:26:51 -0700 (PDT)
+        Wed, 15 Jun 2022 08:26:52 -0700 (PDT)
 From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
 To:     selinux@vger.kernel.org
 Cc:     Serge Hallyn <serge@hallyn.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Nikolay Aleksandrov <nikolay@nvidia.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Ziyang Xuan <william.xuanziyang@huawei.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Wei Wang <weiwan@google.com>, Yangbo Lu <yangbo.lu@nxp.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Richard Palethorpe <rpalethorpe@suse.com>,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wpan@vger.kernel.org
-Subject: [PATCH v3 8/8] net: use new capable_any functionality
-Date:   Wed, 15 Jun 2022 17:26:22 +0200
-Message-Id: <20220615152623.311223-7-cgzones@googlemail.com>
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 1/8] capability: add any wrapper to test for multiple caps with exactly one audit message
+Date:   Wed, 15 Jun 2022 17:26:23 +0200
+Message-Id: <20220615152623.311223-8-cgzones@googlemail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220615152623.311223-1-cgzones@googlemail.com>
 References: <20220502160030.131168-8-cgzones@googlemail.com>
@@ -91,147 +72,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the new added capable_any function in appropriate cases, where a
-task is required to have any of two capabilities.
+Add the interfaces `capable_any()` and `ns_capable_any()` as an
+alternative to multiple `capable()`/`ns_capable()` calls, like
+`capable_any(CAP_SYS_NICE, CAP_SYS_ADMIN)` instead of
+`capable(CAP_SYS_NICE) || capable(CAP_SYS_ADMIN)`.
 
-Reorder CAP_SYS_ADMIN last.
+`capable_any()`/`ns_capable_any()` will in particular generate exactly
+one audit message, either for the left most capability in effect or, if
+the task has none, the first one.
+
+This is especially helpful with regard to SELinux, where each audit
+message about a not allowed capability will create an AVC denial.
+Using this function with the least invasive capability as left most
+argument (e.g. CAP_SYS_NICE before CAP_SYS_ADMIN) enables policy writers
+to only allow the least invasive one and SELinux domains pass this check
+with only capability:sys_nice or capability:sys_admin allowed without
+any AVC denial message.
 
 Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+
 ---
 v3:
-  - rename to capable_any()
-  - make use of ns_capable_any
+   - rename to capable_any()
+   - fix typo in function documentation
+   - add ns_capable_any()
+v2:
+   avoid varargs and fix to two capabilities; capable_or3() can be added
+   later if needed
 ---
- net/caif/caif_socket.c   |  2 +-
- net/core/sock.c          | 12 ++++--------
- net/ieee802154/socket.c  |  6 ++----
- net/ipv4/ip_sockglue.c   |  3 +--
- net/ipv6/ipv6_sockglue.c |  3 +--
- net/unix/scm.c           |  2 +-
- 6 files changed, 10 insertions(+), 18 deletions(-)
+ include/linux/capability.h | 10 +++++++
+ kernel/capability.c        | 53 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 63 insertions(+)
 
-diff --git a/net/caif/caif_socket.c b/net/caif/caif_socket.c
-index 251e666ba9a2..2d3df7658e04 100644
---- a/net/caif/caif_socket.c
-+++ b/net/caif/caif_socket.c
-@@ -1036,7 +1036,7 @@ static int caif_create(struct net *net, struct socket *sock, int protocol,
- 		.usersize = sizeof_field(struct caifsock, conn_req.param)
- 	};
- 
--	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_NET_ADMIN))
-+	if (!capable_any(CAP_NET_ADMIN, CAP_SYS_ADMIN))
- 		return -EPERM;
- 	/*
- 	 * The sock->type specifies the socket type to use.
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 2ff40dd0a7a6..6b04301982d8 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1163,8 +1163,7 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
- 
- 	case SO_PRIORITY:
- 		if ((val >= 0 && val <= 6) ||
--		    ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) ||
--		    ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
-+		    ns_capable_any(sock_net(sk)->user_ns, CAP_NET_RAW, CAP_NET_ADMIN))
- 			sk->sk_priority = val;
- 		else
- 			ret = -EPERM;
-@@ -1309,8 +1308,7 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
- 			clear_bit(SOCK_PASSSEC, &sock->flags);
- 		break;
- 	case SO_MARK:
--		if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
--		    !ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
-+		if (!ns_capable_any(sock_net(sk)->user_ns, CAP_NET_RAW, CAP_NET_ADMIN)) {
- 			ret = -EPERM;
- 			break;
- 		}
-@@ -1318,8 +1316,7 @@ int sock_setsockopt(struct socket *sock, int level, int optname,
- 		__sock_set_mark(sk, val);
- 		break;
- 	case SO_RCVMARK:
--		if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
--		    !ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
-+		if (!ns_capable_any(sock_net(sk)->user_ns, CAP_NET_RAW, CAP_NET_ADMIN)) {
- 			ret = -EPERM;
- 			break;
- 		}
-@@ -2680,8 +2677,7 @@ int __sock_cmsg_send(struct sock *sk, struct msghdr *msg, struct cmsghdr *cmsg,
- 
- 	switch (cmsg->cmsg_type) {
- 	case SO_MARK:
--		if (!ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
--		    !ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN))
-+		if (!ns_capable_any(sock_net(sk)->user_ns, CAP_NET_RAW, CAP_NET_ADMIN))
- 			return -EPERM;
- 		if (cmsg->cmsg_len != CMSG_LEN(sizeof(u32)))
- 			return -EINVAL;
-diff --git a/net/ieee802154/socket.c b/net/ieee802154/socket.c
-index 718fb77bb372..882483602c27 100644
---- a/net/ieee802154/socket.c
-+++ b/net/ieee802154/socket.c
-@@ -894,8 +894,7 @@ static int dgram_setsockopt(struct sock *sk, int level, int optname,
- 		ro->want_lqi = !!val;
- 		break;
- 	case WPAN_SECURITY:
--		if (!ns_capable(net->user_ns, CAP_NET_ADMIN) &&
--		    !ns_capable(net->user_ns, CAP_NET_RAW)) {
-+		if (!ns_capable_any(net->user_ns, CAP_NET_RAW, CAP_NET_ADMIN)) {
- 			err = -EPERM;
- 			break;
- 		}
-@@ -918,8 +917,7 @@ static int dgram_setsockopt(struct sock *sk, int level, int optname,
- 		}
- 		break;
- 	case WPAN_SECURITY_LEVEL:
--		if (!ns_capable(net->user_ns, CAP_NET_ADMIN) &&
--		    !ns_capable(net->user_ns, CAP_NET_RAW)) {
-+		if (!ns_capable_any(net->user_ns, CAP_NET_RAW, CAP_NET_ADMIN)) {
- 			err = -EPERM;
- 			break;
- 		}
-diff --git a/net/ipv4/ip_sockglue.c b/net/ipv4/ip_sockglue.c
-index 445a9ecaefa1..2da0a450edf6 100644
---- a/net/ipv4/ip_sockglue.c
-+++ b/net/ipv4/ip_sockglue.c
-@@ -1339,8 +1339,7 @@ static int do_ip_setsockopt(struct sock *sk, int level, int optname,
- 		break;
- 
- 	case IP_TRANSPARENT:
--		if (!!val && !ns_capable(sock_net(sk)->user_ns, CAP_NET_RAW) &&
--		    !ns_capable(sock_net(sk)->user_ns, CAP_NET_ADMIN)) {
-+		if (!!val && !ns_capable_any(sock_net(sk)->user_ns, CAP_NET_RAW, CAP_NET_ADMIN)) {
- 			err = -EPERM;
- 			break;
- 		}
-diff --git a/net/ipv6/ipv6_sockglue.c b/net/ipv6/ipv6_sockglue.c
-index 222f6bf220ba..25babd7ce844 100644
---- a/net/ipv6/ipv6_sockglue.c
-+++ b/net/ipv6/ipv6_sockglue.c
-@@ -634,8 +634,7 @@ static int do_ipv6_setsockopt(struct sock *sk, int level, int optname,
- 		break;
- 
- 	case IPV6_TRANSPARENT:
--		if (valbool && !ns_capable(net->user_ns, CAP_NET_RAW) &&
--		    !ns_capable(net->user_ns, CAP_NET_ADMIN)) {
-+		if (valbool && !ns_capable_any(net->user_ns, CAP_NET_RAW, CAP_NET_ADMIN)) {
- 			retv = -EPERM;
- 			break;
- 		}
-diff --git a/net/unix/scm.c b/net/unix/scm.c
-index aa27a02478dc..6c47baf04d7d 100644
---- a/net/unix/scm.c
-+++ b/net/unix/scm.c
-@@ -99,7 +99,7 @@ static inline bool too_many_unix_fds(struct task_struct *p)
- 	struct user_struct *user = current_user();
- 
- 	if (unlikely(user->unix_inflight > task_rlimit(p, RLIMIT_NOFILE)))
--		return !capable(CAP_SYS_RESOURCE) && !capable(CAP_SYS_ADMIN);
-+		return !capable_any(CAP_SYS_RESOURCE, CAP_SYS_ADMIN);
- 	return false;
+diff --git a/include/linux/capability.h b/include/linux/capability.h
+index 65efb74c3585..7316d5339a6e 100644
+--- a/include/linux/capability.h
++++ b/include/linux/capability.h
+@@ -208,7 +208,9 @@ extern bool has_capability_noaudit(struct task_struct *t, int cap);
+ extern bool has_ns_capability_noaudit(struct task_struct *t,
+ 				      struct user_namespace *ns, int cap);
+ extern bool capable(int cap);
++extern bool capable_any(int cap1, int cap2);
+ extern bool ns_capable(struct user_namespace *ns, int cap);
++extern bool ns_capable_any(struct user_namespace *ns, int cap1, int cap2);
+ extern bool ns_capable_noaudit(struct user_namespace *ns, int cap);
+ extern bool ns_capable_setid(struct user_namespace *ns, int cap);
+ #else
+@@ -234,10 +236,18 @@ static inline bool capable(int cap)
+ {
+ 	return true;
  }
++static inline bool capable_any(int cap1, int cap2)
++{
++	return true;
++}
+ static inline bool ns_capable(struct user_namespace *ns, int cap)
+ {
+ 	return true;
+ }
++static inline bool ns_capable_any(struct user_namespace *ns, int cap1, int cap2)
++{
++	return true;
++}
+ static inline bool ns_capable_noaudit(struct user_namespace *ns, int cap)
+ {
+ 	return true;
+diff --git a/kernel/capability.c b/kernel/capability.c
+index 765194f5d678..ab9b889c3f4d 100644
+--- a/kernel/capability.c
++++ b/kernel/capability.c
+@@ -435,6 +435,59 @@ bool ns_capable_setid(struct user_namespace *ns, int cap)
+ }
+ EXPORT_SYMBOL(ns_capable_setid);
  
++/**
++ * ns_capable_any - Determine if the current task has one of two superior capabilities in effect
++ * @ns:  The usernamespace we want the capability in
++ * @cap1: The capabilities to be tested for first
++ * @cap2: The capabilities to be tested for secondly
++ *
++ * Return true if the current task has at least one of the two given superior
++ * capabilities currently available for use, false if not.
++ *
++ * In contrast to or'ing capable() this call will create exactly one audit
++ * message, either for @cap1, if it is granted or both are not permitted,
++ * or @cap2, if it is granted while the other one is not.
++ *
++ * The capabilities should be ordered from least to most invasive, i.e. CAP_SYS_ADMIN last.
++ *
++ * This sets PF_SUPERPRIV on the task if the capability is available on the
++ * assumption that it's about to be used.
++ */
++bool ns_capable_any(struct user_namespace *ns, int cap1, int cap2)
++{
++	if (ns_capable_noaudit(ns, cap1))
++		return ns_capable(ns, cap1);
++
++	if (ns_capable_noaudit(ns, cap2))
++		return ns_capable(ns, cap2);
++
++	return ns_capable(ns, cap1);
++}
++EXPORT_SYMBOL(ns_capable_any);
++
++/**
++ * capable_any - Determine if the current task has one of two superior capabilities in effect
++ * @cap1: The capabilities to be tested for first
++ * @cap2: The capabilities to be tested for secondly
++ *
++ * Return true if the current task has at least one of the two given superior
++ * capabilities currently available for use, false if not.
++ *
++ * In contrast to or'ing capable() this call will create exactly one audit
++ * message, either for @cap1, if it is granted or both are not permitted,
++ * or @cap2, if it is granted while the other one is not.
++ *
++ * The capabilities should be ordered from least to most invasive, i.e. CAP_SYS_ADMIN last.
++ *
++ * This sets PF_SUPERPRIV on the task if the capability is available on the
++ * assumption that it's about to be used.
++ */
++bool capable_any(int cap1, int cap2)
++{
++	return ns_capable_any(&init_user_ns, cap1, cap2);
++}
++EXPORT_SYMBOL(capable_any);
++
+ /**
+  * capable - Determine if the current task has a superior capability in effect
+  * @cap: The capability to be tested for
 -- 
 2.36.1
 

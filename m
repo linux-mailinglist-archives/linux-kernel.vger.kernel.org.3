@@ -2,98 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F3754C576
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C3854C583
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:09:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343974AbiFOKHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
+        id S240596AbiFOKJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244130AbiFOKHu (ORCPT
+        with ESMTP id S1344457AbiFOKJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:07:50 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28BE81573A
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:07:48 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id x5so15391825edi.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LNaRZAAN8AQp34o+sHE3iUIn/YiSWmS1n1lw97oIgFA=;
-        b=A0X/bur5kYMMgmug+4K7M5IpnQh7ai6WzFGP4oGeu/nE9QPqxcIJXTNIdeiIDJKVZc
-         fKgNik1or3ZzwzV3qCjmGpOYeDb5iGtin+1pszNMqlx8Mg46++M/lkahFPwiYM7udSVO
-         aUedJxbOsVLjsBGIb4pHF7pWJZBEVYk/9IlPKlMxVvVpuET/2Fy/bCELSMaYTwq4bVdp
-         02BgG1NaeRhoRYeGx1KMsb0LUQ6DM28BQWayLpg6g9PK0bgW+lhrNz/OY988BTcs5SKS
-         KaW+9sMjKfLZPDRp1lmCbktDhgWdlduqaSoYdOLBUaRGI5xxjNERMIqT5tComS5WKP28
-         LyWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=LNaRZAAN8AQp34o+sHE3iUIn/YiSWmS1n1lw97oIgFA=;
-        b=eKRdyqkjmOWecLszTmSyganz2KIeIjUQKGqASq+DxmVd5GWsLlmGQPWw1hxbw+auvo
-         vluJU56YHxr8xM2XCiHVOweV/7cSXtHSzkYeIH63Yt68iecSvK8kuC+MRgAuRgIDU2cj
-         CfIBWCdnlXiNUGpfbyPE0RsU2AP/kbWFq18J5lejUrjHc90gqLwaJKnoAQe7qlJuKu+A
-         MbdhCRtnzokzKHQ5+6wk+UAqrREPemGdPbp1gbpNspvAx/S64DstC4/lXKrNROZjLQXn
-         r535QtRzsOPBN2J6gcIH1NX52+OM3FtP2yi0E57t6JAxdSFllRhP+S6rX6SatkE4LBoo
-         GA1A==
-X-Gm-Message-State: AOAM5318szOTUebxwiXmsTBcCQmVkIZ6ZkpOL4NO5UBLtWBROThEpwGk
-        0Jz3606HgMUYBG0rDruxHuWaW4W3uA2MIZsH
-X-Google-Smtp-Source: ABdhPJxcuuXNOG//lHLsVT8puGu/dXgDiLnOzHFWkvfJ4bfo01U7ywzMRT8kI9C780uGj0k+zExLTg==
-X-Received: by 2002:a05:6402:51d4:b0:42f:b38d:dbb9 with SMTP id r20-20020a05640251d400b0042fb38ddbb9mr11701287edd.255.1655287666543;
-        Wed, 15 Jun 2022 03:07:46 -0700 (PDT)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id fd8-20020a1709072a0800b00718e4e64b7bsm1049801ejc.79.2022.06.15.03.07.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 03:07:46 -0700 (PDT)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v3 0/3] regulator: userspace consumer DT support
-Date:   Wed, 15 Jun 2022 12:07:40 +0200
-Message-Id: <20220615100743.1706968-1-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.35.3
+        Wed, 15 Jun 2022 06:09:43 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C587D49271
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:09:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=ONJnBXu6t4zF8NFHPUMTOY/c4b3k
+        CKbK/S/MH3jepMo=; b=zvrfXKeOW4l0ubRQcvx6RZ39t/9w00DZSEy6CJn8yqWl
+        e8uJf8AUcamd7DZCpbuEawNVFPUXhkuj1ukGv2fkdFZT/+TGkPtdGXKYw6xA2U3a
+        TcRNXgb593WpgGlaNpSgtkgZhAmAbwKzsParp/WzdTxhYwKHDO6qlcgycwGS1KE=
+Received: (qmail 2072654 invoked from network); 15 Jun 2022 12:09:39 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 15 Jun 2022 12:09:39 +0200
+X-UD-Smtp-Session: l3s3148p1@0cYUuHnhYW1ZD+7R
+Date:   Wed, 15 Jun 2022 12:09:39 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 2/2] dt-bindings: thermal: rcar-gen3-thermal: Add
+ r8a779f0 support
+Message-ID: <Yqmv4/zZrCM3PCns@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220610201701.7946-1-wsa+renesas@sang-engineering.com>
+ <20220610201701.7946-2-wsa+renesas@sang-engineering.com>
+ <CAMuHMdW3uxQHk6SBX5MqnZsYqwY8p+0wmD6gHwS3ESUrkmpWkQ@mail.gmail.com>
+ <YqjtBQdzexzCRrmq@shikoro>
+ <CAMuHMdUTR8+8TbM_AaMXk96adHvdp_Oof8v48_zCY+R5FsOLnQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Wx79W/Vpvtk065FE"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUTR8+8TbM_AaMXk96adHvdp_Oof8v48_zCY+R5FsOLnQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add devicetree support of the userspace consumer driver.
-The supply names for this driver is provided through DT regulator-names
-& regulator handle can be acquired.
-Driver events can be received from sysfs.
 
-Optionally use sysfs notify to catch driver events into userspace application.
-This enables userspace application to monitor events & handle them
-appropriately.
-
-Laxman Dewangan (1):
-  regulator: userspace-consumer: Add devicetree support
-
-Naresh Solanki (1):
-  dt-bindings: regulator: add bindings for userspace-consumer
-
-Patrick Rudolph (1):
-  regulator: userspace consumer: Add Notification support
-
- .../regulator/userspace-consumer.yaml         |  66 ++++++++++++
- drivers/regulator/userspace-consumer.c        | 100 +++++++++++++++++-
- include/linux/regulator/userspace-consumer.h  |   1 +
- 3 files changed, 165 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/regulator/userspace-consumer.yaml
+--Wx79W/Vpvtk065FE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 
-base-commit: 018ab4fabddd94f1c96f3b59e180691b9e88d5d8
--- 
-2.35.3
+> > > What about splitting this in two separate checks at the top level:
+> > >   - one for regs (R-Car V3U vs. the world), and
+> > >   - a second for interrupts (R-Car V3U+S4-8 vs. the world)?
+> >
+> > This task seems too much for my YAML-foo :( I couldn't get it to work.
+> > Can we leave it as-is for now?
+>=20
+> You just need an allOf with two if statements, cfr. e.g.
+> Documentation/devicetree/bindings/media/renesas,vin.yaml?
 
+First, I don't think the negative logic is as bad here because there is
+no 'else' block which is far away. Second, I think we need a 'not'
+anyhow because the condition is:
+	'if not r8a779f0 then required interrupts'
+
+Third, I still think we can fix it incrementally later if we want. The
+new board has enough issues to take care of. For now, I'd rather
+investigate those than YAML ;)
+
+
+--Wx79W/Vpvtk065FE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmKpr98ACgkQFA3kzBSg
+KbZS3A//Vv1st2Dr/K5iI3fgTRG5fR5kAvsNf1rSb2Oa6Vfr0qL2KNeWKOhVwnFH
+n8R4myFDto8c5Exs3p9vuyVDGizGQlPfBxk6C2QX0kVW/AA0QDgbxFStfvkEQr64
+SubiEf0eGY3ds+7PG+nk21GBqn//sna1k0SdOxKpEADj5R3HCJRqaN1v4FPiwZ23
+74GbZsbns997EW5XjU6FwrTQV6TidTGjLTl5+DnnR9OVOV8WVsSBnphShl0RdOv1
+Gs7i3JqKRKG7iN6xU+4ZfPhyNBB7iW0VaXBpcCOikhMxwD5QzBCim7vx5HPRIjCm
+HAGSgSnBSbnRcnGkEEiAP+2LIif9g9nn9ST1QSQYUS57iIuZIGw2G+5kXABem4LB
+OwcUMUAnrMxnrjYA2L43qDjHQVxT4Na0CI+qtxShvrGgTWTB7zX54AI02FMUiQcM
+12RwN+Jy8tnd1bSKPSAzqQaxe5BQpPPJjK7YAe8hr24lJpXxdZmz0HsCWDCNCbw7
+fNFcB3i7CWDr3U+QXjQbuupHCrD/CL/SHkB//N+cx/UqqFGyIIf7en6HZJl1+fB7
+cfUHZQg25PcpVh3dER5SvWysS+fhfO18Lja4xxVP+G3EtStY01rQm9kSUHHFQbJy
+ZB89mXAo5b/wiDYHqKd6nHEZhlxeTOegKbHA4J3kf2MTWSOvHRQ=
+=9reG
+-----END PGP SIGNATURE-----
+
+--Wx79W/Vpvtk065FE--

@@ -2,97 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C4454D4C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8286D54D4CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:51:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350409AbiFOWu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 18:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
+        id S1350499AbiFOWvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 18:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245662AbiFOWux (ORCPT
+        with ESMTP id S245662AbiFOWvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 18:50:53 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D62F5639B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:50:52 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id i64so12712779pfc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:50:52 -0700 (PDT)
+        Wed, 15 Jun 2022 18:51:31 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2144F56413
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:51:28 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id b8so18189367edj.11
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:51:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=pqrs.dk; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=1ZARD2x9eyZCfZ+dfh8M5Up8qD+yjJUJ9LiMSuxfBxc=;
-        b=Wdp8mX+AR4ZI/kD3Vg8QMEIVmxFDmiI0nCE1j53DTe8civ2SPRVmf5GxqWZAlwsyms
-         pizsy28ib0PLBfaVK802MueQHaccUnBGFKFJW4z8Ocm1qolB4HDuPp9GyGie4KPz2E8T
-         R9o8yvCI3csyeCXJ5cMX+ynSPp6SoRiAnE1xw=
+        bh=tPsP8lL9NuXNrNI5NEN8Nvv2AZwUgDAprPUJsytkX4Q=;
+        b=NcSgiVPdPKjLcBoPu9yqS5k5D/0TkxyvnlV4DWpuVcmi/omtnGP4bwkaF5leTdeyEw
+         rIxlHryw5qgyoPRsUeIy/0cv1c4bQpKgg2KbZc3x7L7EqBIF8Rvsf5BRtn5UFm5GXCHH
+         iMU2yO+bNsOq4fWQ6kg4PX2qMRJk+Z9wChrdA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=1ZARD2x9eyZCfZ+dfh8M5Up8qD+yjJUJ9LiMSuxfBxc=;
-        b=p40si3gj/XVEnJ6q0jH5Uxe95cWeo3j8UoiAVjIuQnThp5yI+QET95nwG3xVe2YGDd
-         INqWlMJ+8nMyAawGR3IQDPE58dKBiJy5wrsmfuBQ/jUMCJTlRTvqr0tQ8Sv1VCuxXqo3
-         U9+6hT1oQdd3ZZhwMJCn2g94VV8HLXLANDef5LmYHhd94J/+p2RDCGO0yqpT2WHQ6vTL
-         K0rbhe+24qJSvwfRl/6KM4QVQBSPGXNDPUoFRwQqFdgc6ugzjHqSsie7E16ThEyYju8S
-         MTNc5EhvNUnEPcgs5w9J0hb++bOHSDyq7Blc725nhfA6ZMaWYMMaL7m8SHt0gZfTFI2D
-         g0cA==
-X-Gm-Message-State: AJIora/S2EaAihRdRigmN6AUROtc4IU22uSGA7SlR2k8UOh3UQQ7U9Q+
-        1XoGq0cHbgPZwcwsz9fbIgsS7Q==
-X-Google-Smtp-Source: AGRyM1tGVOD1GtPWD2tbra8HbW1Im7OvjyBC8ay7TuKXFTeOXbBqDacgQPiqzfvBAk5iNHcRuKtekA==
-X-Received: by 2002:a05:6a00:4515:b0:522:cc82:79d2 with SMTP id cw21-20020a056a00451500b00522cc8279d2mr1681189pfb.61.1655333451924;
-        Wed, 15 Jun 2022 15:50:51 -0700 (PDT)
-Received: from localhost ([2620:15c:202:200:6db4:3c00:379:4cf6])
-        by smtp.gmail.com with UTF8SMTPSA id h189-20020a62dec6000000b0050dc762813csm177651pfg.22.2022.06.15.15.50.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 15:50:51 -0700 (PDT)
-From:   Micah Morton <mortonm@chromium.org>
-To:     linux-security-module@vger.kernel.org
-Cc:     keescook@chromium.org, jmorris@namei.org, serge@hallyn.com,
-        linux-kernel@vger.kernel.org, Micah Morton <mortonm@chromium.org>
-Subject: [PATCH 1/3] LSM: SafeSetID: fix userns bug in selftest
-Date:   Wed, 15 Jun 2022 15:50:44 -0700
-Message-Id: <20220615225044.706911-1-mortonm@chromium.org>
-X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
+        bh=tPsP8lL9NuXNrNI5NEN8Nvv2AZwUgDAprPUJsytkX4Q=;
+        b=ujmXkj0UO1rgf9QWomHDi+g61o/GBTMiV/aU5B9QKKyP/hpM7A+y9yE5gc0Sb48BbE
+         jeVMGL82+h467DOvkI4ujmSPCDfiPSF1S88W7MZ1xnawRf4XTp5rNq5zoLUbqY4ZBohi
+         Fgh7McqBQlMz5xtDRGjF/O6AsuQwMwn2qpQj4sQVdxblYnzIG3KHM11UH9EDjifK561t
+         NIAMN4DdG9YyfDBHQ8KzL3Lvk02EtmcQXTgmNKGh1UrNE8THgKjHl5jjuKVPs3I2bMWn
+         F2lMR7Kj1x85jVe6t2GZXGjrlRbACJ3ds+XqjEvmTJ//+9AxFOyM6OCf7XCeqAL0ZMdB
+         QG2w==
+X-Gm-Message-State: AJIora8pyqp5o6wqNVZHGxwNQFyyoncdC05sSxlcISBdSKIIPJxcvSry
+        N6DCKiLK8zfJ+/bSu7rx0MoZ+A==
+X-Google-Smtp-Source: AGRyM1uI8mzkAgmDLu3URMLN1Jch/JNWM4zKs9Nweb9iNAe3IEGO0BL+83LBx/9MsNAeOthHpP2uJg==
+X-Received: by 2002:a05:6402:2381:b0:42d:c8fe:d7fe with SMTP id j1-20020a056402238100b0042dc8fed7femr2695591eda.248.1655333486710;
+        Wed, 15 Jun 2022 15:51:26 -0700 (PDT)
+Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
+        by smtp.gmail.com with ESMTPSA id h23-20020aa7c617000000b0042e21f8c412sm371506edq.42.2022.06.15.15.51.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 15:51:25 -0700 (PDT)
+From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
+To:     hauke@hauke-m.de, Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v3 0/5] net: dsa: realtek: rtl8365mb: improve handling of PHY modes
+Date:   Thu, 16 Jun 2022 00:51:10 +0200
+Message-Id: <20220615225116.432283-1-alvin@pqrs.dk>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not sure how this bug got in here but its been there since the original
-merge. I think I tested the code on a system that wouldn't let me
-clone() with CLONE_NEWUSER flag set so had to comment out these
-test_userns invocations.
+From: Alvin Šipraga <alsi@bang-olufsen.dk>
 
-Trying to map UID 0 inside the userns to UID 0 outside will never work,
-even with CAP_SETUID. The code is supposed to test whether we can map
-UID 0 in the userns to the UID of the parent process (the one with
-CAP_SETUID that is writing the /proc/[pid]/uid_map file).
+This series introduces some minor cleanup of the driver and improves the
+handling of PHY interface modes to break the assumption that CPU ports
+are always over an external interface, and the assumption that user
+ports are always using an internal PHY.
 
-Signed-off-by: Micah Morton <mortonm@chromium.org>
----
- tools/testing/selftests/safesetid/safesetid-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes v2 -> v3:
 
-diff --git a/tools/testing/selftests/safesetid/safesetid-test.c b/tools/testing/selftests/safesetid/safesetid-test.c
-index 4b809c93ba36..111dcbcc0491 100644
---- a/tools/testing/selftests/safesetid/safesetid-test.c
-+++ b/tools/testing/selftests/safesetid/safesetid-test.c
-@@ -194,7 +194,7 @@ static bool test_userns(bool expect_success)
- 			printf("preparing file name string failed");
- 			return false;
- 		}
--		success = write_file(map_file_name, "0 0 1", uid);
-+		success = write_file(map_file_name, "0 %d 1", uid);
- 		return success == expect_success;
- 	}
- 
+ - rebased on net-next
+
+ - no code change
+
+ - patch 5: reworded the last paragraph based on Russel's feedback;
+   hopefully it is clear now that my intent is just to fix the
+   semantics, and that the new "feature" of treating ports with external
+   interfaces as user ports, or ports with internal PHY as CPU ports, is
+   just a side-effect of this fix - I make no claim as to the utility of
+   such configurations and just note that they are permissible as far as
+   the hardware is concerned
+
+ - patch 5: added Luiz and Russel's Acked-by
+
+Changes v1 -> v2:
+
+ - patches 1-4: no code change
+
+ - add Luiz' reviewed-by to some of the patches
+
+ - patch 5: put the chip_infos into a static array and get rid of the
+   switch in the detect function; also remove the macros for various
+   chip ID/versions and embed them directly into the array
+
+ - patch 5: use array of size 3 rather than flexible array for extints
+   in the chip_info struct; gcc complained about initialization of
+   flexible array members in a nested context, and anyway, we know that
+   the max number of external interfaces is 3
+
+
+Alvin Šipraga (5):
+  net: dsa: realtek: rtl8365mb: rename macro RTL8367RB -> RTL8367RB_VB
+  net: dsa: realtek: rtl8365mb: remove port_mask private data member
+  net: dsa: realtek: rtl8365mb: correct the max number of ports
+  net: dsa: realtek: rtl8365mb: remove learn_limit_max private data
+    member
+  net: dsa: realtek: rtl8365mb: handle PHY interface modes correctly
+
+ drivers/net/dsa/realtek/rtl8365mb.c | 299 ++++++++++++++++------------
+ 1 file changed, 177 insertions(+), 122 deletions(-)
+
 -- 
-2.36.1.476.g0c4daa206d-goog
+2.36.1
 

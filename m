@@ -2,120 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F412A54D0AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BA2254D093
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:02:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358398AbiFOSIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 14:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S1348083AbiFOSCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 14:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357824AbiFOSIZ (ORCPT
+        with ESMTP id S1345270AbiFOSCh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:08:25 -0400
-X-Greylist: delayed 392 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Jun 2022 11:08:20 PDT
-Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41C22CDDF;
-        Wed, 15 Jun 2022 11:08:20 -0700 (PDT)
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4LNY612pVczB6;
-        Wed, 15 Jun 2022 20:01:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1655316105; bh=Qlj8vZLxK6jMlUOlp+k6Y3l54kWTL/nElyfzEw7brv8=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=VvFyJEA/pCKMQ4hK9Fktm+97n7S48+Diqj/v6IpTq00nWkdEOw6mfdyKnlecsJD6j
-         jYzFD8s3vVEUihEuGVsw4fqrNGF9KaYemSmRRLFK2ztQsUM6q0IRiO6se0QeBLPYBJ
-         q4c01+aztUsDRFBUa/RBMZxf0mOPddVbIix9X3E7iqa/oO7s1DV2s9Bg5Qb0jFsDUU
-         dqJfRfnkrPczbTdavLgGS+EV2XIQGaEO7AH459cels2qnfovIdtPVWKDCupYDiC6uu
-         gCx/xZvAiIDjL58PNXgWAoG2zHj+vbuRRlRrXcntbT4s1L1rlIsdM9+SlE5VstLMuW
-         c2qkRaYfcSQNA==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.6 at mail
-Date:   Wed, 15 Jun 2022 20:01:41 +0200
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] i2c: core: fix potential use-after-free on adapter
- removal
-Message-ID: <YqoehVjd5qgEYSen@qmqm.qmqm.pl>
-References: <a9dc272e4e06db661125b7b4c330821b532afc4d.1642209079.git.mirq-linux@rere.qmqm.pl>
- <YqjlZuFGl0dAUZyd@shikoro>
+        Wed, 15 Jun 2022 14:02:37 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAA6C41
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:02:35 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id h19so13171562wrc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:02:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iUGfvUGZJFkqQvb1BclrKM+Qvg6hWolmp/RDxiXQRbw=;
+        b=AK1QgD+vMnL2s8hn9Rs7Vedj1AIZHfjCE2hIxnYHZJ4lpUmCgjvWKXcbzGC8iVj8MV
+         gQzwhhIoRxdRNJBLgJcnwggEFdzOg68MZFxyGd/Gets0UhBNf8F78pDCqYu/2ZIbqvRX
+         uQd3LV/cqOjfgOJ1h0a92XH8ALQooef0NKdiWAM4qYi/4rV6h2RA/nCWB5KP9P5vIdy2
+         7Hf2EwO8+Dzxpfp1SpMBaG0PT1sbf1laNy0di+tuatKxFTxNSAADG517SvwPo6l+uMJE
+         p18g+/3gyt+PkYwF85WZ1Fgq+RDEYbQIdPqAC/3DwyfnpCrtdKLjca+CDPBMTrufkQTK
+         ZMlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iUGfvUGZJFkqQvb1BclrKM+Qvg6hWolmp/RDxiXQRbw=;
+        b=aXpaav9pMNX0YOc4WxRhKcMLNII6d+HsuboDBUyLhYlkBUf+1ddwwDZLXxiyB6dtqB
+         mDsM5Vzwv3cGhj6/mkeOXbVy9bnTET0bAetukcr7MjPChWOwQmk+K5upD3ZCz6vJsLqe
+         4IGNDxO7SkEqwL65LBxCAwJOVAmhDVWz60yYWh6zDY05GSqMap90r9avZ4qVF7MfljHb
+         wXO9Qg5Za1s+a1wMUgEM8KhqiphH5npxcit8R31yFt8S998e8EBOgShHjyrDz9LLff96
+         dQZGhzNXTMcmAwUoJEr62ZdRrIlEjTMLl0r60N70SB/a8fijsUxlk3/7kzdCe4aDaV1z
+         Bitw==
+X-Gm-Message-State: AJIora8UL1EgMBvbV+lu8Eu+sYFIMNAqyj0fiMCZkAWgqslYRJrvBsRc
+        C5cgSDA5vXC3vp9/8pmHwRs=
+X-Google-Smtp-Source: AGRyM1v+Y9UjdqeP6KstzWoGGotBF3Gc8+ogji3NL81O9ayyefisQ0VVM/Stqp8PFsrCdpygu6PVCw==
+X-Received: by 2002:a05:6000:1f85:b0:21a:14a0:b03b with SMTP id bw5-20020a0560001f8500b0021a14a0b03bmr961332wrb.355.1655316153785;
+        Wed, 15 Jun 2022 11:02:33 -0700 (PDT)
+Received: from laptop.. (82-64-133-20.subs.proxad.net. [82.64.133.20])
+        by smtp.gmail.com with ESMTPSA id i30-20020a1c541e000000b0039c15861001sm3113050wmb.21.2022.06.15.11.02.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 11:02:32 -0700 (PDT)
+From:   Erwan Velu <erwanaliasr1@gmail.com>
+X-Google-Original-From: Erwan Velu <e.velu@criteo.com>
+Cc:     Erwan Velu <e.velu@criteo.com>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org (open list:NVM EXPRESS DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] nvme: Report model,sn,fw,pci device information during init
+Date:   Wed, 15 Jun 2022 20:02:13 +0200
+Message-Id: <20220615180213.760756-1-e.velu@criteo.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YqjlZuFGl0dAUZyd@shikoro>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 09:45:42PM +0200, Wolfram Sang wrote:
-> Hi Micha³,
-> 
-> I finally had a look at your patch...
-> 
-> > put_device(&adap->dev) might free the memory pointed to by `adap`,
-> > so we shouldn't read adap->owner after that.
-> > 
-> > Fix by saving module pointer before calling put_device().
-> 
-> ... and found a different approach for this problem from 2019:
-> 
-> http://patchwork.ozlabs.org/project/linux-i2c/patch/1577439272-10362-1-git-send-email-vulab@iscas.ac.cn/
-> 
-> I think this is also proper. I found other subsystems in the kernel
-> first putting the module, then the device. Do you see problems with the
-> above patch?
-> 
-> Thanks for looking into the issue!
+SCSI-based device get their identify properties being printed when initialized like :
 
-Hi!
+[    1.245357] scsi 0:0:0:0: Direct-Access     ATA      HGST HTE721010A9 A3M0 PQ: 0 ANSI: 5
 
-I looked briefly at the kobject machinery and it seems to ignore module
-dependencies. So while both approaches might work, I'd usually reverse
-the order the init code is using: in this case module_get+device_get,
-so on release: device_put+module_put. I don't know what keeps the kernel
-from unloading the module after module_put() and before the function
-returns, but I assume that would blow up for both patches.
+When initializing nvme devices, no identification message is reported
+making difficult to identify them during the boot process. If the system
+crashes during boot process or if the init phase fail, it could be very diffcult
+to identify the faulty disk.
 
-Best Regards
-Micha³ Miros³aw
+This patch reports model, serial, firmware version and pci information
+as soon as possible making this early identifying task possible.
 
-> > 
-> > Signed-off-by: Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
-> > ---
-> >  drivers/i2c/i2c-core-base.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> > index 2c59dd748a49..5d694f8ce9ef 100644
-> > --- a/drivers/i2c/i2c-core-base.c
-> > +++ b/drivers/i2c/i2c-core-base.c
-> > @@ -2464,11 +2464,14 @@ EXPORT_SYMBOL(i2c_get_adapter);
-> >  
-> >  void i2c_put_adapter(struct i2c_adapter *adap)
-> >  {
-> > +	struct module *owner;
-> > +
-> >  	if (!adap)
-> >  		return;
-> >  
-> > +	owner = adap->owner;
-> >  	put_device(&adap->dev);
-> > -	module_put(adap->owner);
-> > +	module_put(owner);
-> >  }
-> >  EXPORT_SYMBOL(i2c_put_adapter);
-> >  
-> > -- 
-> > 2.30.2
-> > 
+Reporting the serial has the interest of being able to ensure which
+physical drive is concerned if a hardware replacement is required and
+host features the exact same drive multiple times.
 
+A typical output looks like:
+[    0.383353] nvme nvme0: pci function 0000:00:03.0
+[    0.418184] nvme nvme0: MODEL:QEMU NVMe Ctrl                          SN:deadbeef            FW:1.0     PCI_ID:1b36:1af4
+[    0.422020] nvme nvme0: 1/0/0 default/read/poll queues
 
+Signed-off-by: Erwan Velu <e.velu@criteo.com>
+---
+ drivers/nvme/host/core.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index 24165daee3c8..0922b7a470b1 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -2987,6 +2987,14 @@ static int nvme_init_identify(struct nvme_ctrl *ctrl)
+ 	if (!ctrl->identified) {
+ 		unsigned int i;
+ 
++		/* Reporting model, serial, firmware and pci info */
++		dev_info(ctrl->device, "MODEL:%.*s SN:%.*s FW:%.*s PCI_ID:%04x:%04x\n",
++				(int)sizeof(id->mn), id->mn,
++				(int)sizeof(id->sn),id->sn,
++				(int)sizeof(id->fr), id->fr,
++				le16_to_cpu(id->vid),
++				le16_to_cpu(id->ssvid));
++
+ 		ret = nvme_init_subsystem(ctrl, id);
+ 		if (ret)
+ 			goto out_free;
 -- 
-Micha³ Miros³aw
+2.35.3
+

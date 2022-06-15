@@ -2,262 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5E654CF4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:03:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8646954CF54
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357242AbiFORDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39972 "EHLO
+        id S243320AbiFORDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356968AbiFORDc (ORCPT
+        with ESMTP id S1349413AbiFORDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:03:32 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60947344D8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:03:29 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43A99153B;
-        Wed, 15 Jun 2022 10:03:29 -0700 (PDT)
-Received: from [10.57.82.209] (unknown [10.57.82.209])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 82F6C3F73B;
-        Wed, 15 Jun 2022 10:03:26 -0700 (PDT)
-Message-ID: <5083aed9-fa31-b91c-6ca6-29dbc4d0807a@arm.com>
-Date:   Wed, 15 Jun 2022 18:03:21 +0100
+        Wed, 15 Jun 2022 13:03:50 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB8349FBD
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:03:49 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 123so11922997pgb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:03:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=jm8MXeLlqii/5FydlD1v6Lz5nQdsR6MGCoUfpwdjuNk=;
+        b=nJ7IBklLOjSLfSLdY4vTZXUDIYuZj/tb2ZQ6grZIWomT9q+Y0cfAHg8MuwR1zW66Di
+         9sWtqG8qOKOpNHtF5fFCqEgdehoqdQYcjEkuoMRk28hhxdGcVk5NTSTlTpiPwsubMzE3
+         xJuHLjAtQXc+MP/UEBzdS+0u18cszg5Q2NIrTUxm+2JSckbgTGvyCxGgW55/s+NObRcf
+         +gg2jvj8mdR1Kjm+kitaTa2wqMrstENtJ3xcAR8eBEe4/TwfI57AtUzWFKtQDRATq3KS
+         PGfLU9F8i/ygnIIluwOQjLi88kopb048g6yzFYgSMrqw8tl/lsfUu/CV8jp3Jrj7vjH9
+         p7xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=jm8MXeLlqii/5FydlD1v6Lz5nQdsR6MGCoUfpwdjuNk=;
+        b=6vpRx+/3b2hzSVmZYqZ4botrpUCx7Vr6ChbcXBBZaKLnItNTdU0+z8XvhER0ItLiwE
+         b46tVCJ7WFpEdz6rjwbCjA7BuScG1t/m2t2+8tMmBs18p2dEPq28OTdQvsyloMSw0Yjd
+         MRJ6Fw3Slj7YFXSetaS/e6KNnT5YAP18n5QXmaiv5zJXWlpuk9CMfJj1qHOf7lgiVYZi
+         YdiwvEJcL/T42yx3R3H7fc1qzjt2HbT02OhPVRZLW9jM0LYI9erOLC9gsjCKWkqlOJ76
+         +t08xoyTqp8ftUj7Brzyw2jgDNUEzxOKtX/gLQE5WvOYjISbVmGxJDkNOLLzpAKYj/6c
+         93Zg==
+X-Gm-Message-State: AJIora9PdkecVb4U4ua7Xgvn7LfqL0FmFdI4rMS+pjDZ1ALECwJ6T159
+        Y7YUG86HvWCVvJvfu6uoqn2mSg==
+X-Google-Smtp-Source: AGRyM1seg5navj/ZgOXJ4HUS+Haip8l+eCz7SNp77yxaZukUbdDEw7wI4SvjvZRO87I5ID1vQOtNQA==
+X-Received: by 2002:a05:6a00:1344:b0:51b:e3b5:54e2 with SMTP id k4-20020a056a00134400b0051be3b554e2mr588044pfu.6.1655312628981;
+        Wed, 15 Jun 2022 10:03:48 -0700 (PDT)
+Received: from [172.22.33.138] ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id v8-20020a17090a778800b001eab0a27d92sm2002742pjk.51.2022.06.15.10.03.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 10:03:48 -0700 (PDT)
+Message-ID: <e6e478a5-9080-fb2f-9ccd-2490cdfab4c7@linaro.org>
+Date:   Wed, 15 Jun 2022 10:03:46 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH v9 1/3] iommu/io-pgtable-arm-v7s: Add a quirk to allow
- pgtable PA up to 35bit
-Content-Language: en-GB
-To:     yf.wang@mediatek.com, Will Deacon <will@kernel.org>,
-        Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Georgi Djakov <quic_c_gdjako@quicinc.com>,
-        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
-        Ning Li <ning.li@mediatek.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        "moderated list:ARM SMMU DRIVERS" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>
-Cc:     wsd_upstream@mediatek.com, Libo Kang <Libo.Kang@mediatek.com>,
-        Yong Wu <Yong.Wu@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>
-References: <20220615161224.6923-1-yf.wang@mediatek.com>
- <20220615161224.6923-2-yf.wang@mediatek.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220615161224.6923-2-yf.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: [PATCH v2 12/20] dt-bindings: reset: npcm: Add support for
+ NPCM8XX
+Content-Language: en-US
+To:     Tomer Maimon <tmaimon77@gmail.com>
+Cc:     Avi Fishman <avifishman70@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Robert Hancock <robert.hancock@calian.com>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        LINUXWATCHDOG <linux-watchdog@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20220608095623.22327-1-tmaimon77@gmail.com>
+ <20220608095623.22327-13-tmaimon77@gmail.com>
+ <add025b6-c622-b204-d39e-67b31878d37f@linaro.org>
+ <CAP6Zq1iDbB+X5QPE4Nsqk4nV41bZiVzQZExS1pQTuKEBz-iYew@mail.gmail.com>
+ <381ff739-e898-8812-d549-df7101f0eaa2@linaro.org>
+ <CAP6Zq1j=x3OcOPSOjJJmOcze7ziM=oWcKdbYzoHhGnvZipu_UQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAP6Zq1j=x3OcOPSOjJJmOcze7ziM=oWcKdbYzoHhGnvZipu_UQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-06-15 17:12, yf.wang@mediatek.com wrote:
-> From: Yunfei Wang <yf.wang@mediatek.com>
+On 13/06/2022 02:25, Tomer Maimon wrote:
+> Hi Krzysztof,
 > 
-> Single memory zone feature will remove ZONE_DMA32 and ZONE_DMA and
-> cause pgtable PA size larger than 32bit.
+> Thanks for your clarification.
 > 
-> Since Mediatek IOMMU hardware support at most 35bit PA in pgtable,
-> so add a quirk to allow the PA of pgtables support up to bit35.
-> 
-> Signed-off-by: Ning Li <ning.li@mediatek.com>
-> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
-> ---
->   drivers/iommu/io-pgtable-arm-v7s.c | 58 +++++++++++++++++++++++-------
->   include/linux/io-pgtable.h         | 17 +++++----
->   2 files changed, 56 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/iommu/io-pgtable-arm-v7s.c b/drivers/iommu/io-pgtable-arm-v7s.c
-> index be066c1503d3..39e5503ac75a 100644
-> --- a/drivers/iommu/io-pgtable-arm-v7s.c
-> +++ b/drivers/iommu/io-pgtable-arm-v7s.c
-> @@ -182,14 +182,8 @@ static bool arm_v7s_is_mtk_enabled(struct io_pgtable_cfg *cfg)
->   		(cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_EXT);
->   }
->   
-> -static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
-> -				    struct io_pgtable_cfg *cfg)
-> +static arm_v7s_iopte to_mtk_iopte(phys_addr_t paddr, arm_v7s_iopte pte)
->   {
-> -	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
-> -
-> -	if (!arm_v7s_is_mtk_enabled(cfg))
-> -		return pte;
-> -
->   	if (paddr & BIT_ULL(32))
->   		pte |= ARM_V7S_ATTR_MTK_PA_BIT32;
->   	if (paddr & BIT_ULL(33))
-> @@ -199,6 +193,17 @@ static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
->   	return pte;
->   }
->   
-> +static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
-> +				    struct io_pgtable_cfg *cfg)
-> +{
-> +	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
-> +
-> +	if (arm_v7s_is_mtk_enabled(cfg))
-> +		return to_mtk_iopte(paddr, pte);
-> +
-> +	return pte;
-> +}
-> +
->   static phys_addr_t iopte_to_paddr(arm_v7s_iopte pte, int lvl,
->   				  struct io_pgtable_cfg *cfg)
->   {
-> @@ -240,10 +245,17 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
->   	dma_addr_t dma;
->   	size_t size = ARM_V7S_TABLE_SIZE(lvl, cfg);
->   	void *table = NULL;
-> +	gfp_t gfp_l1;
-> +
-> +	/*
-> +	 * ARM_MTK_TTBR_EXT extend the translation table base support all
-> +	 * memory address.
-> +	 */
-> +	gfp_l1 = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
-> +		 GFP_KERNEL : ARM_V7S_TABLE_GFP_DMA;
->   
->   	if (lvl == 1)
-> -		table = (void *)__get_free_pages(
-> -			__GFP_ZERO | ARM_V7S_TABLE_GFP_DMA, get_order(size));
-> +		table = (void *)__get_free_pages(gfp_l1 | __GFP_ZERO, get_order(size));
->   	else if (lvl == 2)
->   		table = kmem_cache_zalloc(data->l2_tables, gfp);
->   
-> @@ -251,7 +263,8 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
->   		return NULL;
->   
->   	phys = virt_to_phys(table);
-> -	if (phys != (arm_v7s_iopte)phys) {
-> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
-> +	    phys >= (1ULL << cfg->oas) : phys != (arm_v7s_iopte)phys) {
+> We can remove the dt-binding file and use numbers in the DTS,
+> appreciate if you can answer few additional questions:
+> 1. Do you suggest adding all NPCM reset values to the NPCM reset
+> document or the reset values should describe in the module
+> documentation that uses it?
 
-Given that the comment above says it supports all of memory, how would 
-phys >= (1ULL << cfg->oas) ever be true?
+What is "NPCM reset document"? Are these reset values anyhow different
+than interrupts or pins?
 
->   		/* Doesn't fit in PTE */
->   		dev_err(dev, "Page table does not fit in PTE: %pa", &phys);
->   		goto out_free;
-> @@ -457,9 +470,14 @@ static arm_v7s_iopte arm_v7s_install_table(arm_v7s_iopte *table,
->   					   arm_v7s_iopte curr,
->   					   struct io_pgtable_cfg *cfg)
->   {
-> +	phys_addr_t phys = virt_to_phys(table);
->   	arm_v7s_iopte old, new;
->   
-> -	new = virt_to_phys(table) | ARM_V7S_PTE_TYPE_TABLE;
-> +	new = phys | ARM_V7S_PTE_TYPE_TABLE;
-> +
-> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
-> +		new = to_mtk_iopte(phys, new);
-> +
->   	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_NS)
->   		new |= ARM_V7S_ATTR_NS_TABLE;
->   
-> @@ -779,6 +797,7 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
->   						void *cookie)
->   {
->   	struct arm_v7s_io_pgtable *data;
-> +	slab_flags_t slab_flag;
->   
->   	if (cfg->ias > (arm_v7s_is_mtk_enabled(cfg) ? 34 : ARM_V7S_ADDR_BITS))
->   		return NULL;
-> @@ -788,7 +807,8 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
->   
->   	if (cfg->quirks & ~(IO_PGTABLE_QUIRK_ARM_NS |
->   			    IO_PGTABLE_QUIRK_NO_PERMS |
-> -			    IO_PGTABLE_QUIRK_ARM_MTK_EXT))
-> +			    IO_PGTABLE_QUIRK_ARM_MTK_EXT |
-> +			    IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT))
->   		return NULL;
->   
->   	/* If ARM_MTK_4GB is enabled, the NO_PERMS is also expected. */
-> @@ -796,15 +816,27 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
->   	    !(cfg->quirks & IO_PGTABLE_QUIRK_NO_PERMS))
->   			return NULL;
->   
-> +	if ((cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT) &&
-> +	    !arm_v7s_is_mtk_enabled(cfg))
-> +		return NULL;
-> +
->   	data = kmalloc(sizeof(*data), GFP_KERNEL);
->   	if (!data)
->   		return NULL;
->   
->   	spin_lock_init(&data->split_lock);
-> +
-> +	/*
-> +	 * ARM_MTK_TTBR_EXT extend the translation table base support all
-> +	 * memory address.
-> +	 */
-> +	slab_flag = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
-> +		    0 : ARM_V7S_TABLE_SLAB_FLAGS;
-> +
->   	data->l2_tables = kmem_cache_create("io-pgtable_armv7s_l2",
->   					    ARM_V7S_TABLE_SIZE(2, cfg),
->   					    ARM_V7S_TABLE_SIZE(2, cfg),
-> -					    ARM_V7S_TABLE_SLAB_FLAGS, NULL);
-> +					    slab_flag, NULL);
->   	if (!data->l2_tables)
->   		goto out_free_data;
->   
-> diff --git a/include/linux/io-pgtable.h b/include/linux/io-pgtable.h
-> index 86af6f0a00a2..c9189716f6bd 100644
-> --- a/include/linux/io-pgtable.h
-> +++ b/include/linux/io-pgtable.h
-> @@ -74,17 +74,22 @@ struct io_pgtable_cfg {
->   	 *	to support up to 35 bits PA where the bit32, bit33 and bit34 are
->   	 *	encoded in the bit9, bit4 and bit5 of the PTE respectively.
->   	 *
-> +	 * IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT: (ARM v7s format) MediaTek IOMMUs
-> +	 *	extend the translation table base support up to 35 bits PA, the
-> +	 *	encoding format is same with IO_PGTABLE_QUIRK_ARM_MTK_EXT.
-> +	 *
->   	 * IO_PGTABLE_QUIRK_ARM_TTBR1: (ARM LPAE format) Configure the table
->   	 *	for use in the upper half of a split address space.
->   	 *
->   	 * IO_PGTABLE_QUIRK_ARM_OUTER_WBWA: Override the outer-cacheability
->   	 *	attributes set in the TCR for a non-coherent page-table walker.
->   	 */
-> -	#define IO_PGTABLE_QUIRK_ARM_NS		BIT(0)
-> -	#define IO_PGTABLE_QUIRK_NO_PERMS	BIT(1)
-> -	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT	BIT(3)
-> -	#define IO_PGTABLE_QUIRK_ARM_TTBR1	BIT(5)
-> -	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA	BIT(6)
-> +	#define IO_PGTABLE_QUIRK_ARM_NS			BIT(0)
-> +	#define IO_PGTABLE_QUIRK_NO_PERMS		BIT(1)
-> +	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT		BIT(3)
-> +	#define IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT	BIT(4)
-> +	#define IO_PGTABLE_QUIRK_ARM_TTBR1		BIT(5)
-> +	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA		BIT(6)
->   	unsigned long			quirks;
->   	unsigned long			pgsize_bitmap;
->   	unsigned int			ias;
-> @@ -122,7 +127,7 @@ struct io_pgtable_cfg {
->   		} arm_lpae_s2_cfg;
->   
->   		struct {
-> -			u32	ttbr;
-> +			u64	ttbr;
+> 2. Some of the NPCM7XX document modules describe the reset value they
+> use from the dt-binding for example:
+> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/iio/adc/nuvoton%2Cnpcm750-adc.yaml#L61
 
-The point of this is to return an encoded TTBR register value, not a raw 
-base address. I see from the other patches that your register is still 
-32 bits, so I'd prefer to follow the standard pattern and not need this 
-change.
+This is NPCM750
 
-Thanks,
-Robin.
+> If we remove the NPCM8XX dt-binding file should we describe the
+> NPCM8XX values in the NPCM-ADC document file?
 
->   			u32	tcr;
->   			u32	nmrr;
->   			u32	prrr;
+What is NPCM-ADC document file? What do you want to describe there?
+Again - how is it different than interrupts?
+
+
+
+Best regards,
+Krzysztof

@@ -2,113 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886FC54D4E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E7054D4E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:59:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354993AbiFOW6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 18:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
+        id S1350639AbiFOW6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 18:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354724AbiFOW6n (ORCPT
+        with ESMTP id S235334AbiFOW6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 18:58:43 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDD21FA49
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:58:36 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id v14so17204851wra.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:58:36 -0700 (PDT)
+        Wed, 15 Jun 2022 18:58:52 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BF420F5A
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:58:52 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id h1so11602841plf.11
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:58:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=W7d59e8cLd9zR8JBI8Qug1RRbOtLsaHXxn7NGGAbfac=;
-        b=8FEQ/rKC2z2qweHx7AbNnl2OYRuMQjwUirgjoVVMGbDTTjJdWJhGsVCJJYtp5+5eK4
-         XtelcaIv34qF0q9Qht2XX40NUplwFjmE4HSeV9obfyTk/EG2SiYkSsY+o+KaMg8vZ7wI
-         cPdHFWwmLlrRt8JVt5BVzHT83TUcwfR8gYt6STFWC5FVCK9OdeLtCOuNFlD/ydgiWPN7
-         FIxA+8CsKA9MkkwAHKLeHqcf5aIkmWD4sVM32RDt5XFgw5cWWNNKxVW1VI6j2/6kMn15
-         onIlZFHJAhSSPm1pKn7i+uPJ2VlO5crOq9hJmTNO54fY0IBK2HjT49IkScVZEC5lbWF+
-         nFBw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=Ld59Qfu20d2ESfU2Lxz+USUdXMklgpmY/S6pk/mnFLY=;
+        b=gBwPsVatjxS9weLN66T4RryZfn5kIP607soCOV5eWG5WJN654g2C5f1ZghN+wj+XB4
+         rHRIaeEj69bfku2LYHMzg5+VEK21A5dDckPf6nMOFpdCmPB3ZjwfkV6jxfMI2Eo+xhuW
+         U78fT6NQhv/ujXEkbwVNT4J1gb7EyFrgr26qmCFQNRHV+6881XeyiZfGi3t2iRlpbsfN
+         xiEmgMc7WPxp5JEW3ntRNbLzB6JN3jL3n59kN70ofCrmx5PieDQGE+stNBzjyoTJOhUD
+         MJvcgLV+78tc20eG/AZ9UV13DnVSY0HMrgfnU1D45uSMogNe+9lkqyTB8WD4+xoF8oYX
+         UU9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=W7d59e8cLd9zR8JBI8Qug1RRbOtLsaHXxn7NGGAbfac=;
-        b=0dJwbqZ6i1rcz0MWO8Mnnd5nR/b9ofVh1brDAmBOfj57SE8V6vDmMYgaoZ0o51+CZ8
-         9AG4/6koxR/Da+GsjRj2I7SyfR089lnabX+tc1hEpMEn5wprRbmDopg6/4knNht3EcTi
-         fwmPjyH6D7THPkU9YgReWsZLJm8RmD8QNeuatlsQ2q9dKwQBfeIKDak48GDDv06xZsaw
-         Jpltz5hdnnUpc5AsPWvpO+fTSbhRDoKhYx3VWmb7aWP6gJUK7iEjoXq1Pec2MjcxEFrY
-         VSVJBZ5b/F/fDavjGfpv8UWTbp/6d3jElGi9CJgo6jWGjRkJXq+/ioHhtURQA2eqlt8W
-         Hd2Q==
-X-Gm-Message-State: AJIora+kECNLtN1+kF5QMA44afz3keEkRbI/+4fa6Uo+Em0mkZX8A0Ku
-        3HZ+3SUew/oZR9ladHMhBUnOzgIR95kL2+Cuph9M
-X-Google-Smtp-Source: AGRyM1tR/8FwEvyL+Y8ZCasyw/O1y6VLQFDMk+WfCNi0tijbHrlOJ8pcBy3IJBRxFdOtz1bgY0/pm6gf+ypXk07cW+Q=
-X-Received: by 2002:a05:6000:230:b0:210:31ca:28b8 with SMTP id
- l16-20020a056000023000b0021031ca28b8mr1923497wrz.538.1655333914698; Wed, 15
- Jun 2022 15:58:34 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Ld59Qfu20d2ESfU2Lxz+USUdXMklgpmY/S6pk/mnFLY=;
+        b=NaGcSm9t77P8R5PlGmJXj2DCdtvoWmehIVMDWv3hLKq/EyYszEkknVh6YTNyp/MqdK
+         44oTp7t7NI6aYpCYAPlRMGf0p3WiC5feXZIxZfZKoj+IZi/WMmb+L4RBRzCCuV5C8aeX
+         0NF2IxcyKKFJBMneFQaxts/8I1lZ7Rstu9Ep0TqpsquYVd5zrm5ypO2lB1BkDR2vxMLJ
+         +6wi82cZ5CCV3hZjHp+V82NBvWAbhxJSJcF1fS1143is+Wh9NA2Ln9fMeaTP2VFOsX98
+         W1uH5fgH8U1LXnaV4FU1x4Y+mbZexsgLfNk6w/1yeV1qi1hMUrBJsDB8iothCMSa7e1P
+         RcWg==
+X-Gm-Message-State: AJIora+sNFv/HQdbwdCTtqwQVKnxv723PvPhEidZFcrLdAhb46SXBf0K
+        ow/JK3GGatuJ2pLt21/Mm0A=
+X-Google-Smtp-Source: AGRyM1vgbsrQhqMpkMSviBhKgcYYvOXD0y7diJYaFLa8rfozMNLuRVJbPo/7Fz/1gVp+LKsHA5J3Xw==
+X-Received: by 2002:a17:90b:4acb:b0:1e8:67df:6c61 with SMTP id mh11-20020a17090b4acb00b001e867df6c61mr12658419pjb.224.1655333931437;
+        Wed, 15 Jun 2022 15:58:51 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id u15-20020a170902714f00b00168c1668a49sm164631plm.85.2022.06.15.15.58.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 15:58:50 -0700 (PDT)
+Message-ID: <d72f2787-c41b-4933-a017-911232ff2f7f@gmail.com>
+Date:   Wed, 15 Jun 2022 15:58:49 -0700
 MIME-Version: 1.0
-References: <20220614132333.143042-1-xiujianfeng@huawei.com>
- <CAHC9VhQdfPBn4kbY0xRPaCvNBJJGdQQe_90A4Hhdsj6gVr6pAQ@mail.gmail.com> <CAFqZXNswaUiHNZA65GCsgB7GNLm6tc2OFXsQrTWxBTfWviQ8+g@mail.gmail.com>
-In-Reply-To: <CAFqZXNswaUiHNZA65GCsgB7GNLm6tc2OFXsQrTWxBTfWviQ8+g@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 15 Jun 2022 18:58:23 -0400
-Message-ID: <CAHC9VhTjaVN1anR34s5foehSMzz1s-xXY8JZ1k44MzSqCi2_EQ@mail.gmail.com>
-Subject: Re: [PATCH -next] selinux: Fix memleak in security_read_policy
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        Austin Kim <austin.kim@lge.com>, michalorzel.eng@gmail.com,
-        SElinux list <selinux@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 11/22] firmware: arm_scmi: Add SCMIv3.1 extended names
+ protocols support
+Content-Language: en-US
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, etienne.carriere@linaro.org,
+        vincent.guittot@linaro.org, souvik.chakravarty@arm.com
+References: <20220330150551.2573938-1-cristian.marussi@arm.com>
+ <20220330150551.2573938-12-cristian.marussi@arm.com>
+ <6f865d7f-fde8-d923-3c7e-d12bfbc370a6@gmail.com>
+ <YqmVsMGgxKuIT5rx@e120937-lin> <Yqmo/BiIR4gku0Y+@e120937-lin>
+ <c787dfe6-9639-8797-d07a-048c5ec69ddf@gmail.com>
+ <YqoI5hYa97nZwUjl@e120937-lin>
+ <f194f9b6-578d-ae08-16c3-6d464da10452@gmail.com>
+ <YqoXgsbg6t46rZeI@e120937-lin>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <YqoXgsbg6t46rZeI@e120937-lin>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 6:04 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
-> On Wed, Jun 15, 2022 at 4:03 AM Paul Moore <paul@paul-moore.com> wrote:
-> > On Tue, Jun 14, 2022 at 9:25 AM Xiu Jianfeng <xiujianfeng@huawei.com> wrote:
-> > >
-> > > In this function, it directly returns the result of __security_read_policy
-> > > without freeing the allocated memory in *data, cause memory leak issue,
-> > > so free the memory if __security_read_policy failed.
-> > >
-> > > Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> > > ---
-> > >  security/selinux/ss/services.c | 9 ++++++++-
-> > >  1 file changed, 8 insertions(+), 1 deletion(-)
-> >
-> > This is another case where there is not actually a memory leak as the
-> > only caller of security_read_policy() is sel_open_policy() which will
-> > free the buffer it passes to security_read_policy() on error.
-> >
-> > If you want you could add a comment to security_read_policy()
-> > indicating that the caller is responsible for freeing the memory.
->
-> Can we please not have two almost identical functions with different
-> cleanup conventions? Please let's either make both functions guarantee
-> cleanup on error or neither of them (adapting the caller(s) and
-> comments accordingly).
+On 6/15/22 10:32, Cristian Marussi wrote:
+> 
+> Ok, this was another place where a reply carrying a consistent number of
+> non-segmented entries could trigger an jumbo-request to kmalloc...
+> 
+> ..maybe this is where a transient fw issue can reply with a dramatic
+> numbers of possible (non-segmented) levels (num_returned+num_remaining)
+> 
+> (I filter out replies carrying descriptors for segmented voltage-levels
+> that does not come in triplets (returned:3  remaining:0) since they are out
+> of spec...but I just hit today on another fw sending such out of spec
+> reply for clocks and I will relax such req probably not to break too
+> many out-of-spec blobs out in the wild :P)
+> 
+> So let me know if got new splats...
 
-Priorities Ondrej, priorities.
+This turned out to be a nice firmware bug, someone *cough* *cough* 
+decided to add some extra "protection" using a temporary buffer and they 
+completely forgot the newly added voltage domain service, so we would 
+just return stale information, wonderful. This is now fixed.
 
-Every patch posted to the list has a time and effort cost associated
-with it, and between reviewing other more important patches and
-working on a proper SCTP/SELinux fix, I simply don't have the cycles
-to spend doing the back-and-forth on a patch like this to fix a memory
-leak that doesn't exist.  It definitely isn't because I don't think
-the code could be improved, it is just that there are only so many
-hours in a day and I need to prioritize actual bugs and important new
-features that people want merged.
-
-... oh, and I need to reply to the complaints too, that's always the
-highlight of my day.
-
+Thanks a lot for your responsiveness and support.
 -- 
-paul-moore.com
+Florian

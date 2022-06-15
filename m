@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6EE54C3A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 10:39:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B550254C32E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 10:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346055AbiFOIjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 04:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
+        id S241337AbiFOILu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 04:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344209AbiFOIjX (ORCPT
+        with ESMTP id S236475AbiFOILr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 04:39:23 -0400
-X-Greylist: delayed 1818 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Jun 2022 01:39:22 PDT
-Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7002E49FBB
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 01:39:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8Ns5g
-        EvAuYDLgBXJtS39BSCUULDUrj3lCfWZde535H0=; b=hiLSDZZ4hjxsiAobnepTn
-        C85dzbrrR9y7nxXfbvMui9qnhjleTGNyk6M3LO7DxGWDZP/K+JltmgUrC9N57LR4
-        HX718EYg1wv9xxfwhSZjMY0KJIDI18mxOn2TOq/Yp62UP4KXBPAzTChiEnU4rf/Z
-        j2m40D32QKtqKJInLg2Uik=
-Received: from localhost.localdomain (unknown [124.16.139.61])
-        by smtp10 (Coremail) with SMTP id NuRpCgDX1UmQk6liKTWxEg--.34720S2;
-        Wed, 15 Jun 2022 16:08:49 +0800 (CST)
-From:   heliang <windhl@126.com>
-To:     linux@armlinux.org.uk
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        windhl@126.com
-Subject: [PATCH] arm: mm: Add missing of_node_put()
-Date:   Wed, 15 Jun 2022 16:08:46 +0800
-Message-Id: <20220615080846.3960101-1-windhl@126.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Jun 2022 04:11:47 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B402AE02;
+        Wed, 15 Jun 2022 01:11:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4C4FCCE1D62;
+        Wed, 15 Jun 2022 08:11:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 353B6C34115;
+        Wed, 15 Jun 2022 08:11:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655280703;
+        bh=G8h+IDpJR0CvhZVQBHmA8xXUGMUALrZIeamkPUOOwAc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=J6Y3XOcwoC/TgUHQEi+SmCxARb6tPwZNqAYZg5XUTUI3Q/ll5OApOdFtKbROVKu0J
+         G3wBk9/2zrpVCGzGGdhz1ESbgkoh73YGsKSRIOJUxvsHV+/K5Zd6avT4WMepRjY9H4
+         wamp6FUhQPTuGWEhQiYvx6IJuRvj3n1pbZp2ZHUm41s47toXZ4TP69nqNoX31VqQXs
+         PJkwswu6LBuH667SA02KF13mHrfORzWm/2zDlI2HgW90bjJCTh4CmOq+CyWlVyareR
+         TNZ8wmpjenOnCxxJfBdf7GMJYbuk/uABYuIiv48owX1ckCCiZaFExYBEBPHV4h2PdO
+         DbPuKfjHUQGOA==
+Message-ID: <5fdec03e-efb6-554b-55b3-49e7e7f2be5e@kernel.org>
+Date:   Wed, 15 Jun 2022 16:11:36 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NuRpCgDX1UmQk6liKTWxEg--.34720S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWruw4DJFyrZr45tFyxZFW7XFb_yoW3AwcEvF
-        1Iq3W3JrWrGF1xXF4kuF43CF1DCws8Cr1fXr1fZr17Gr1UZrWUXrZ8trn7tr1qgrWj9rW3
-        JrZ5Xr42vw4agjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRuHq73UUUUU==
-X-Originating-IP: [124.16.139.61]
-X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgEhF1-HZTUE4wAAsC
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [f2fs-dev] [PATCH v2 14/19] f2fs: Convert to
+ filemap_migrate_folio()
+Content-Language: en-US
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org
+Cc:     linux-aio@kvack.org, linux-nfs@vger.kernel.org,
+        cluster-devel@redhat.com, linux-ntfs-dev@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-block@vger.kernel.org, linux-mm@kvack.org,
+        linux-mtd@lists.infradead.org, ocfs2-devel@oss.oracle.com,
+        linux-ext4@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xfs@vger.kernel.org, linux-btrfs@vger.kernel.org
+References: <20220608150249.3033815-1-willy@infradead.org>
+ <20220608150249.3033815-15-willy@infradead.org>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20220608150249.3033815-15-willy@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In feroceon_of_init, we use of_find_matching_node() to get a node
-pointer with refcount incremented. We should use of_node_put() when
-it is not used anymore.
+On 2022/6/8 23:02, Matthew Wilcox (Oracle) wrote:
+> filemap_migrate_folio() fits f2fs's needs perfectly.
+> 
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-Signed-off-by: heliang <windhl@126.com>
----
- arch/arm/mm/cache-feroceon-l2.c | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Chao Yu <chao@kernel.org>
 
-diff --git a/arch/arm/mm/cache-feroceon-l2.c b/arch/arm/mm/cache-feroceon-l2.c
-index 5c1b7a7b9af6..a10c4be14087 100644
---- a/arch/arm/mm/cache-feroceon-l2.c
-+++ b/arch/arm/mm/cache-feroceon-l2.c
-@@ -376,6 +376,7 @@ int __init feroceon_of_init(void)
- 	node = of_find_matching_node(NULL, feroceon_ids);
- 	if (node && of_device_is_compatible(node, "marvell,kirkwood-cache")) {
- 		base = of_iomap(node, 0);
-+		of_node_put(node);
- 		if (!base)
- 			return -ENOMEM;
- 
--- 
-2.25.1
-
+Thanks,

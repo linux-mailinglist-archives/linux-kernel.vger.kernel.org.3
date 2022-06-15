@@ -2,248 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8565554CE5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 065A554CE7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243286AbiFOQOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
+        id S1354944AbiFOQTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348785AbiFOQMy (ORCPT
+        with ESMTP id S1354639AbiFOQTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:12:54 -0400
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C02B21813;
-        Wed, 15 Jun 2022 09:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Cc:To:From:content-disposition;
-        bh=DdZTvd3yBCTOLfdH85j+eUYcuinHr6KLhT1SRgVQVD0=; b=HIHDMfL5brPKgsuHPyRaaOLIQG
-        Re/GuSfaJP+xJ8dav+q+G6pnRKbJ3UUU56fV8zFqNSNQIf5mSZ5s3GNtGQKSZk0Es4MbL8pPjMTfi
-        DBL5pXyKNE/AbsOV6KZB02bJay7RCSe8ImtccTN0aoZG0rYmSDxUZ2L0GzDQuizWJNbBBRiBCWSay
-        0Fb5+WuBsVf1w7qupINs5imSr+fBwB66tuFbwF/lhDT2zjFY7b+Nfo6CfbtJTjP4nuujpoP4fY6xG
-        L0BIrMURi6lyD1m87JeM+HqTB1aazkonUzXWq92MsaAZ3cJ4kL/eLh22mHgCsADJ/Pgig5PIiAaNU
-        jrcBTAIA==;
-Received: from cgy1-donard.priv.deltatee.com ([172.16.1.31])
-        by ale.deltatee.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1o1VdR-0084iP-SZ; Wed, 15 Jun 2022 10:12:51 -0600
-Received: from gunthorp by cgy1-donard.priv.deltatee.com with local (Exim 4.94.2)
-        (envelope-from <gunthorp@deltatee.com>)
-        id 1o1VdH-0004aC-K7; Wed, 15 Jun 2022 10:12:39 -0600
-From:   Logan Gunthorpe <logang@deltatee.com>
-To:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, iommu@lists.linux-foundation.org
-Cc:     Stephen Bates <sbates@raithlin.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Date:   Wed, 15 Jun 2022 10:12:20 -0600
-Message-Id: <20220615161233.17527-9-logang@deltatee.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220615161233.17527-1-logang@deltatee.com>
-References: <20220615161233.17527-1-logang@deltatee.com>
+        Wed, 15 Jun 2022 12:19:33 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA662B9F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:19:27 -0700 (PDT)
+X-UUID: c25ad704b75c4c4ab2cd41e453c1260a-20220616
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:38dcb69f-46e7-45c6-90a0-1ca54b3dae67,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:96ae9e48-4c92-421c-ad91-b806c0f58b2a,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: c25ad704b75c4c4ab2cd41e453c1260a-20220616
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <yf.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 548218086; Thu, 16 Jun 2022 00:19:21 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 16 Jun 2022 00:19:20 +0800
+Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.3 via Frontend Transport; Thu, 16 Jun 2022 00:19:19 +0800
+From:   <yf.wang@mediatek.com>
+To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        "Joerg Roedel" <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Georgi Djakov" <quic_c_gdjako@quicinc.com>,
+        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
+        Ning Li <ning.li@mediatek.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Yunfei Wang <yf.wang@mediatek.com>,
+        "moderated list:ARM SMMU DRIVERS" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+CC:     <wsd_upstream@mediatek.com>, Libo Kang <Libo.Kang@mediatek.com>,
+        Yong Wu <Yong.Wu@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>
+Subject: [PATCH v9 1/3] iommu/io-pgtable-arm-v7s: Add a quirk to allow pgtable PA up to 35bit
+Date:   Thu, 16 Jun 2022 00:12:21 +0800
+Message-ID: <20220615161224.6923-2-yf.wang@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220615161224.6923-1-yf.wang@mediatek.com>
+References: <20220615161224.6923-1-yf.wang@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 172.16.1.31
-X-SA-Exim-Rcpt-To: linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, iommu@lists.linux-foundation.org, sbates@raithlin.com, hch@lst.de, jgg@ziepe.ca, christian.koenig@amd.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, jason@jlekstrand.net, dave.hansen@linux.intel.com, helgaas@kernel.org, dan.j.williams@intel.com, dave.b.minturn@intel.com, jianxin.xiong@intel.com, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, logang@deltatee.com, jhubbard@nvidia.com, rcampbell@nvidia.com, jgg@nvidia.com
-X-SA-Exim-Mail-From: gunthorp@deltatee.com
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v7 08/21] iommu/dma: support PCI P2PDMA pages in dma-iommu map_sg
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a PCI P2PDMA page is seen, set the IOVA length of the segment
-to zero so that it is not mapped into the IOVA. Then, in finalise_sg(),
-apply the appropriate bus address to the segment. The IOVA is not
-created if the scatterlist only consists of P2PDMA pages.
+From: Yunfei Wang <yf.wang@mediatek.com>
 
-A P2PDMA page may have three possible outcomes when being mapped:
-  1) If the data path between the two devices doesn't go through
-     the root port, then it should be mapped with a PCI bus address
-  2) If the data path goes through the host bridge, it should be mapped
-     normally with an IOMMU IOVA.
-  3) It is not possible for the two devices to communicate and thus
-     the mapping operation should fail (and it will return -EREMOTEIO).
+Single memory zone feature will remove ZONE_DMA32 and ZONE_DMA and
+cause pgtable PA size larger than 32bit.
 
-Similar to dma-direct, the sg_dma_mark_pci_p2pdma() flag is used to
-indicate bus address segments. On unmap, P2PDMA segments are skipped
-over when determining the start and end IOVA addresses.
+Since Mediatek IOMMU hardware support at most 35bit PA in pgtable,
+so add a quirk to allow the PA of pgtables support up to bit35.
 
-With this change, the flags variable in the dma_map_ops is set to
-DMA_F_PCI_P2PDMA_SUPPORTED to indicate support for P2PDMA pages.
-
-Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Ning Li <ning.li@mediatek.com>
+Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
 ---
- drivers/iommu/dma-iommu.c | 68 +++++++++++++++++++++++++++++++++++----
- 1 file changed, 61 insertions(+), 7 deletions(-)
+ drivers/iommu/io-pgtable-arm-v7s.c | 58 +++++++++++++++++++++++-------
+ include/linux/io-pgtable.h         | 17 +++++----
+ 2 files changed, 56 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
-index f90251572a5d..b01ca0c6a7ab 100644
---- a/drivers/iommu/dma-iommu.c
-+++ b/drivers/iommu/dma-iommu.c
-@@ -21,6 +21,7 @@
- #include <linux/iova.h>
- #include <linux/irq.h>
- #include <linux/list_sort.h>
-+#include <linux/memremap.h>
- #include <linux/mm.h>
- #include <linux/mutex.h>
- #include <linux/pci.h>
-@@ -1062,6 +1063,16 @@ static int __finalise_sg(struct device *dev, struct scatterlist *sg, int nents,
- 		sg_dma_address(s) = DMA_MAPPING_ERROR;
- 		sg_dma_len(s) = 0;
- 
-+		if (is_pci_p2pdma_page(sg_page(s)) && !s_iova_len) {
-+			if (i > 0)
-+				cur = sg_next(cur);
-+
-+			pci_p2pdma_map_bus_segment(s, cur);
-+			count++;
-+			cur_len = 0;
-+			continue;
-+		}
-+
- 		/*
- 		 * Now fill in the real DMA data. If...
- 		 * - there is a valid output segment to append to
-@@ -1158,6 +1169,8 @@ static int iommu_dma_map_sg(struct device *dev, struct scatterlist *sg,
- 	struct iova_domain *iovad = &cookie->iovad;
- 	struct scatterlist *s, *prev = NULL;
- 	int prot = dma_info_to_prot(dir, dev_is_dma_coherent(dev), attrs);
-+	struct dev_pagemap *pgmap = NULL;
-+	enum pci_p2pdma_map_type map_type;
- 	dma_addr_t iova;
- 	size_t iova_len = 0;
- 	unsigned long mask = dma_get_seg_boundary(dev);
-@@ -1193,6 +1206,35 @@ static int iommu_dma_map_sg(struct device *dev, struct scatterlist *sg,
- 		s_length = iova_align(iovad, s_length + s_iova_off);
- 		s->length = s_length;
- 
-+		if (is_pci_p2pdma_page(sg_page(s))) {
-+			if (sg_page(s)->pgmap != pgmap) {
-+				pgmap = sg_page(s)->pgmap;
-+				map_type = pci_p2pdma_map_type(pgmap, dev);
-+			}
-+
-+			switch (map_type) {
-+			case PCI_P2PDMA_MAP_BUS_ADDR:
-+				/*
-+				 * A zero length will be ignored by
-+				 * iommu_map_sg() and then can be detected
-+				 * in __finalise_sg() to actually map the
-+				 * bus address.
-+				 */
-+				s->length = 0;
-+				continue;
-+			case PCI_P2PDMA_MAP_THRU_HOST_BRIDGE:
-+				/*
-+				 * Mapping through host bridge should be
-+				 * mapped with regular IOVAs, thus we
-+				 * do nothing here and continue below.
-+				 */
-+				break;
-+			default:
-+				ret = -EREMOTEIO;
-+				goto out_restore_sg;
-+			}
-+		}
-+
- 		/*
- 		 * Due to the alignment of our single IOVA allocation, we can
- 		 * depend on these assumptions about the segment boundary mask:
-@@ -1215,6 +1257,9 @@ static int iommu_dma_map_sg(struct device *dev, struct scatterlist *sg,
- 		prev = s;
- 	}
- 
-+	if (!iova_len)
-+		return __finalise_sg(dev, sg, nents, 0);
-+
- 	iova = iommu_dma_alloc_iova(domain, iova_len, dma_get_mask(dev), dev);
- 	if (!iova) {
- 		ret = -ENOMEM;
-@@ -1236,7 +1281,7 @@ static int iommu_dma_map_sg(struct device *dev, struct scatterlist *sg,
- out_restore_sg:
- 	__invalidate_sg(sg, nents);
- out:
--	if (ret != -ENOMEM)
-+	if (ret != -ENOMEM && ret != -EREMOTEIO)
- 		return -EINVAL;
- 	return ret;
+diff --git a/drivers/iommu/io-pgtable-arm-v7s.c b/drivers/iommu/io-pgtable-arm-v7s.c
+index be066c1503d3..39e5503ac75a 100644
+--- a/drivers/iommu/io-pgtable-arm-v7s.c
++++ b/drivers/iommu/io-pgtable-arm-v7s.c
+@@ -182,14 +182,8 @@ static bool arm_v7s_is_mtk_enabled(struct io_pgtable_cfg *cfg)
+ 		(cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_EXT);
  }
-@@ -1244,7 +1289,7 @@ static int iommu_dma_map_sg(struct device *dev, struct scatterlist *sg,
- static void iommu_dma_unmap_sg(struct device *dev, struct scatterlist *sg,
- 		int nents, enum dma_data_direction dir, unsigned long attrs)
+ 
+-static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
+-				    struct io_pgtable_cfg *cfg)
++static arm_v7s_iopte to_mtk_iopte(phys_addr_t paddr, arm_v7s_iopte pte)
  {
--	dma_addr_t start, end;
-+	dma_addr_t end, start = DMA_MAPPING_ERROR;
- 	struct scatterlist *tmp;
- 	int i;
+-	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
+-
+-	if (!arm_v7s_is_mtk_enabled(cfg))
+-		return pte;
+-
+ 	if (paddr & BIT_ULL(32))
+ 		pte |= ARM_V7S_ATTR_MTK_PA_BIT32;
+ 	if (paddr & BIT_ULL(33))
+@@ -199,6 +193,17 @@ static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
+ 	return pte;
+ }
  
-@@ -1260,14 +1305,22 @@ static void iommu_dma_unmap_sg(struct device *dev, struct scatterlist *sg,
- 	 * The scatterlist segments are mapped into a single
- 	 * contiguous IOVA allocation, so this is incredibly easy.
++static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
++				    struct io_pgtable_cfg *cfg)
++{
++	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
++
++	if (arm_v7s_is_mtk_enabled(cfg))
++		return to_mtk_iopte(paddr, pte);
++
++	return pte;
++}
++
+ static phys_addr_t iopte_to_paddr(arm_v7s_iopte pte, int lvl,
+ 				  struct io_pgtable_cfg *cfg)
+ {
+@@ -240,10 +245,17 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
+ 	dma_addr_t dma;
+ 	size_t size = ARM_V7S_TABLE_SIZE(lvl, cfg);
+ 	void *table = NULL;
++	gfp_t gfp_l1;
++
++	/*
++	 * ARM_MTK_TTBR_EXT extend the translation table base support all
++	 * memory address.
++	 */
++	gfp_l1 = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
++		 GFP_KERNEL : ARM_V7S_TABLE_GFP_DMA;
+ 
+ 	if (lvl == 1)
+-		table = (void *)__get_free_pages(
+-			__GFP_ZERO | ARM_V7S_TABLE_GFP_DMA, get_order(size));
++		table = (void *)__get_free_pages(gfp_l1 | __GFP_ZERO, get_order(size));
+ 	else if (lvl == 2)
+ 		table = kmem_cache_zalloc(data->l2_tables, gfp);
+ 
+@@ -251,7 +263,8 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
+ 		return NULL;
+ 
+ 	phys = virt_to_phys(table);
+-	if (phys != (arm_v7s_iopte)phys) {
++	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
++	    phys >= (1ULL << cfg->oas) : phys != (arm_v7s_iopte)phys) {
+ 		/* Doesn't fit in PTE */
+ 		dev_err(dev, "Page table does not fit in PTE: %pa", &phys);
+ 		goto out_free;
+@@ -457,9 +470,14 @@ static arm_v7s_iopte arm_v7s_install_table(arm_v7s_iopte *table,
+ 					   arm_v7s_iopte curr,
+ 					   struct io_pgtable_cfg *cfg)
+ {
++	phys_addr_t phys = virt_to_phys(table);
+ 	arm_v7s_iopte old, new;
+ 
+-	new = virt_to_phys(table) | ARM_V7S_PTE_TYPE_TABLE;
++	new = phys | ARM_V7S_PTE_TYPE_TABLE;
++
++	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
++		new = to_mtk_iopte(phys, new);
++
+ 	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_NS)
+ 		new |= ARM_V7S_ATTR_NS_TABLE;
+ 
+@@ -779,6 +797,7 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+ 						void *cookie)
+ {
+ 	struct arm_v7s_io_pgtable *data;
++	slab_flags_t slab_flag;
+ 
+ 	if (cfg->ias > (arm_v7s_is_mtk_enabled(cfg) ? 34 : ARM_V7S_ADDR_BITS))
+ 		return NULL;
+@@ -788,7 +807,8 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+ 
+ 	if (cfg->quirks & ~(IO_PGTABLE_QUIRK_ARM_NS |
+ 			    IO_PGTABLE_QUIRK_NO_PERMS |
+-			    IO_PGTABLE_QUIRK_ARM_MTK_EXT))
++			    IO_PGTABLE_QUIRK_ARM_MTK_EXT |
++			    IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT))
+ 		return NULL;
+ 
+ 	/* If ARM_MTK_4GB is enabled, the NO_PERMS is also expected. */
+@@ -796,15 +816,27 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+ 	    !(cfg->quirks & IO_PGTABLE_QUIRK_NO_PERMS))
+ 			return NULL;
+ 
++	if ((cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT) &&
++	    !arm_v7s_is_mtk_enabled(cfg))
++		return NULL;
++
+ 	data = kmalloc(sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+ 		return NULL;
+ 
+ 	spin_lock_init(&data->split_lock);
++
++	/*
++	 * ARM_MTK_TTBR_EXT extend the translation table base support all
++	 * memory address.
++	 */
++	slab_flag = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
++		    0 : ARM_V7S_TABLE_SLAB_FLAGS;
++
+ 	data->l2_tables = kmem_cache_create("io-pgtable_armv7s_l2",
+ 					    ARM_V7S_TABLE_SIZE(2, cfg),
+ 					    ARM_V7S_TABLE_SIZE(2, cfg),
+-					    ARM_V7S_TABLE_SLAB_FLAGS, NULL);
++					    slab_flag, NULL);
+ 	if (!data->l2_tables)
+ 		goto out_free_data;
+ 
+diff --git a/include/linux/io-pgtable.h b/include/linux/io-pgtable.h
+index 86af6f0a00a2..c9189716f6bd 100644
+--- a/include/linux/io-pgtable.h
++++ b/include/linux/io-pgtable.h
+@@ -74,17 +74,22 @@ struct io_pgtable_cfg {
+ 	 *	to support up to 35 bits PA where the bit32, bit33 and bit34 are
+ 	 *	encoded in the bit9, bit4 and bit5 of the PTE respectively.
+ 	 *
++	 * IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT: (ARM v7s format) MediaTek IOMMUs
++	 *	extend the translation table base support up to 35 bits PA, the
++	 *	encoding format is same with IO_PGTABLE_QUIRK_ARM_MTK_EXT.
++	 *
+ 	 * IO_PGTABLE_QUIRK_ARM_TTBR1: (ARM LPAE format) Configure the table
+ 	 *	for use in the upper half of a split address space.
+ 	 *
+ 	 * IO_PGTABLE_QUIRK_ARM_OUTER_WBWA: Override the outer-cacheability
+ 	 *	attributes set in the TCR for a non-coherent page-table walker.
  	 */
--	start = sg_dma_address(sg);
--	for_each_sg(sg_next(sg), tmp, nents - 1, i) {
-+	for_each_sg(sg, tmp, nents, i) {
-+		if (sg_is_dma_bus_address(tmp)) {
-+			sg_dma_unmark_bus_address(tmp);
-+			continue;
-+		}
- 		if (sg_dma_len(tmp) == 0)
- 			break;
--		sg = tmp;
-+
-+		if (start == DMA_MAPPING_ERROR)
-+			start = sg_dma_address(tmp);
-+
-+		end = sg_dma_address(tmp) + sg_dma_len(tmp);
- 	}
--	end = sg_dma_address(sg) + sg_dma_len(sg);
--	__iommu_dma_unmap(dev, start, end - start);
-+
-+	if (start != DMA_MAPPING_ERROR)
-+		__iommu_dma_unmap(dev, start, end - start);
- }
+-	#define IO_PGTABLE_QUIRK_ARM_NS		BIT(0)
+-	#define IO_PGTABLE_QUIRK_NO_PERMS	BIT(1)
+-	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT	BIT(3)
+-	#define IO_PGTABLE_QUIRK_ARM_TTBR1	BIT(5)
+-	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA	BIT(6)
++	#define IO_PGTABLE_QUIRK_ARM_NS			BIT(0)
++	#define IO_PGTABLE_QUIRK_NO_PERMS		BIT(1)
++	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT		BIT(3)
++	#define IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT	BIT(4)
++	#define IO_PGTABLE_QUIRK_ARM_TTBR1		BIT(5)
++	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA		BIT(6)
+ 	unsigned long			quirks;
+ 	unsigned long			pgsize_bitmap;
+ 	unsigned int			ias;
+@@ -122,7 +127,7 @@ struct io_pgtable_cfg {
+ 		} arm_lpae_s2_cfg;
  
- static dma_addr_t iommu_dma_map_resource(struct device *dev, phys_addr_t phys,
-@@ -1460,6 +1513,7 @@ static unsigned long iommu_dma_get_merge_boundary(struct device *dev)
- }
- 
- static const struct dma_map_ops iommu_dma_ops = {
-+	.flags			= DMA_F_PCI_P2PDMA_SUPPORTED,
- 	.alloc			= iommu_dma_alloc,
- 	.free			= iommu_dma_free,
- 	.alloc_pages		= dma_common_alloc_pages,
+ 		struct {
+-			u32	ttbr;
++			u64	ttbr;
+ 			u32	tcr;
+ 			u32	nmrr;
+ 			u32	prrr;
 -- 
-2.30.2
+2.18.0
 

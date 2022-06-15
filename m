@@ -2,168 +2,369 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231A454BFE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:58:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38CCB54BFE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345756AbiFOC5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 22:57:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
+        id S1345772AbiFOC6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 22:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237203AbiFOC5r (ORCPT
+        with ESMTP id S237203AbiFOC6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 22:57:47 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 187DB248DA;
-        Tue, 14 Jun 2022 19:57:46 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id x75so7822576qkb.12;
-        Tue, 14 Jun 2022 19:57:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ls3qnOc3Y8ik7fKx57iztJUjc3L1QowbApEutA1WMAM=;
-        b=D+5npGiiuE3tRYO8NhlD6qhHvcccG8Vxfnv6wfrSVuKzX7LyVC4KT9zql8SPiKUIxI
-         8FNDjNNBwMD/dn55TSvmtyrbYhBz+80Pg17k0lWHU6mKosqKTeGKv2N80Uy5nUKXpjLb
-         HqPsQ9rHG6pk693Wuq5M7P/HHFcaAqU3Mnw15XB9A7Cy4pqAs0912OYP7J1EQMKE9Pbz
-         Ko4FsA2HMLxcR+DQLSYuI1U13ZqSIcAblkDZ+u02usZBsfMDi3kb3Si39YITI3LczE0V
-         g2OuLpHyxbiURFKAfc13ksdi0gTez8MJ+lkA51ElWu50xSz4Q3cmIwWwjJxDMpukzg4p
-         qtWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ls3qnOc3Y8ik7fKx57iztJUjc3L1QowbApEutA1WMAM=;
-        b=FzoxvHRBfenEW9AICCuLSMPlmrczpmXpuPPTHXCUiKcmCfWFZJ8yMl5Ui7C7w9v7dz
-         WhVrwWULx56KXYx+lBEnw/xvci+7NWBPx3j1rgs+IlZ8oJRmbxIrJrMGI1wh87N1f8/K
-         JE33xrWtTvPH8nHg2AZmbtmQD6fk3S16CHOaW/WDapGftN3XOR+RERX3eu7K9hMQGpX+
-         MT7YfxTzwqSrjMvCT0lynIiAMXM0Kp0ywFt9+vM7rmOj/w910Qb3k1h3va30lU6qqTtv
-         X2g/U6yXtLAG9nO8Mz5vPkUYSgJJId933Bx+PqVgIvaFuJv7EviObVkdCixC5IN3Nz9r
-         2QDw==
-X-Gm-Message-State: AOAM530fjfRRgi1dQqHliNxW8q2UmfRX1NeqWii1DzbqnuDEOrlZjUWR
-        MQTwhWt3a6AAC3vwjtUnP/s=
-X-Google-Smtp-Source: ABdhPJwV9cU/wWxXkh2q4YyhQFXlXjXiQMMsoxo4sdQjN2TqrKDzK/oA8wxG66gqqSjqKy4P1WAP1A==
-X-Received: by 2002:a05:620a:17ac:b0:6a7:5a21:8cbb with SMTP id ay44-20020a05620a17ac00b006a75a218cbbmr6528178qkb.570.1655261865117;
-        Tue, 14 Jun 2022 19:57:45 -0700 (PDT)
-Received: from localhost ([2601:4c1:c100:1230:6d39:b768:5789:ec2a])
-        by smtp.gmail.com with ESMTPSA id n7-20020a37a407000000b006a66f3d3708sm10044500qke.129.2022.06.14.19.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 19:57:44 -0700 (PDT)
-Date:   Tue, 14 Jun 2022 19:57:43 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] bitops: define const_*() versions of the
- non-atomics
-Message-ID: <YqlKpwjQ4Hu+Lr8u@yury-laptop>
-References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
- <20220610113427.908751-5-alexandr.lobakin@intel.com>
+        Tue, 14 Jun 2022 22:58:46 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639B846164;
+        Tue, 14 Jun 2022 19:58:44 -0700 (PDT)
+X-UUID: bc846e8ad3a949549d4a55b3584c5b25-20220615
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.6,REQID:48c969ea-f9ce-42a5-8d7e-419e3c7a0c34,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:b14ad71,CLOUDID:32a73ff6-e099-41ba-a32c-13b8bfe63214,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,QS:nil,BEC:nil,COL:0
+X-UUID: bc846e8ad3a949549d4a55b3584c5b25-20220615
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+        (envelope-from <ck.hu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 611290286; Wed, 15 Jun 2022 10:58:39 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 15 Jun 2022 10:58:37 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 15 Jun 2022 10:58:37 +0800
+Message-ID: <d5416a2f2a655f6574b17597fdc22615fe2fc22a.camel@mediatek.com>
+Subject: Re: [PATCH v11 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
+ driver
+From:   CK Hu <ck.hu@mediatek.com>
+To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
+        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
+        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
+        <airlied@linux.ie>
+CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
+        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <dri-devel@lists.freedesktop.org>,
+        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-fbdev@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Date:   Wed, 15 Jun 2022 10:58:37 +0800
+In-Reply-To: <20220610105522.13449-6-rex-bc.chen@mediatek.com>
+References: <20220610105522.13449-1-rex-bc.chen@mediatek.com>
+         <20220610105522.13449-6-rex-bc.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610113427.908751-5-alexandr.lobakin@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 01:34:25PM +0200, Alexander Lobakin wrote:
-> Define const_*() variants of the non-atomic bitops to be used when
-> the input arguments are compile-time constants, so that the compiler
-> will be always to resolve those to compile-time constants as well.
+Hi, Bo-Chen:
 
-will be always able?
-
-> Those are mostly direct aliases for generic_*() with one exception
-> for const_test_bit(): the original one is declared atomic-safe and
-> thus doesn't discard the `volatile` qualifier, so in order to let
-> optimize the code, define it separately disregarding the qualifier.
-> Add them to the compile-time type checks as well just in case.
+On Fri, 2022-06-10 at 18:55 +0800, Bo-Chen Chen wrote:
+> From: Markus Schneider-Pargmann <msp@baylibre.com>
 > 
-> Suggested-by: Marco Elver <elver@google.com>
-> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> This patch adds a embedded displayport driver for the MediaTek mt8195
+> SoC.
+> 
+> It supports the MT8195, the embedded DisplayPort units. It offers
+> DisplayPort 1.4 with up to 4 lanes.
+> 
+> The driver creates a child device for the phy. The child device will
+> never exist without the parent being active. As they are sharing a
+> register range, the parent passes a regmap pointer to the child so
+> that
+> both can work with the same register range. The phy driver sets
+> device
+> data that is read by the parent to get the phy device that can be
+> used
+> to control the phy properties.
+> 
+> This driver is based on an initial version by
+> Jitao shi <jitao.shi@mediatek.com>
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
+> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
+> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
 > ---
->  .../asm-generic/bitops/generic-non-atomic.h   | 31 +++++++++++++++++++
->  include/linux/bitops.h                        |  3 +-
->  2 files changed, 33 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/asm-generic/bitops/generic-non-atomic.h b/include/asm-generic/bitops/generic-non-atomic.h
-> index 3ce0fa0ab35f..9a77babfff35 100644
-> --- a/include/asm-generic/bitops/generic-non-atomic.h
-> +++ b/include/asm-generic/bitops/generic-non-atomic.h
-> @@ -121,4 +121,35 @@ generic_test_bit(unsigned long nr, const volatile unsigned long *addr)
->  	return 1UL & (addr[BIT_WORD(nr)] >> (nr & (BITS_PER_LONG-1)));
->  }
->  
-> +/*
-> + * const_*() definitions provide good compile-time optimizations when
-> + * the passed arguments can be resolved at compile time.
-> + */
-> +#define const___set_bit			generic___set_bit
-> +#define const___clear_bit		generic___clear_bit
-> +#define const___change_bit		generic___change_bit
-> +#define const___test_and_set_bit	generic___test_and_set_bit
-> +#define const___test_and_clear_bit	generic___test_and_clear_bit
-> +#define const___test_and_change_bit	generic___test_and_change_bit
+
+[snip]
+
 > +
-> +/**
-> + * const_test_bit - Determine whether a bit is set
-> + * @nr: bit number to test
-> + * @addr: Address to start counting from
-> + *
-> + * A version of generic_test_bit() which discards the `volatile` qualifier to
-> + * allow the compiler to optimize code harder. Non-atomic and to be used only
-> + * for testing compile-time constants, e.g. from the corresponding macro, or
-> + * when you really know what you are doing.
-
-Not sure I understand the last sentence... Can you please rephrase?
-
-> + */
-> +static __always_inline bool
-> +const_test_bit(unsigned long nr, const volatile unsigned long *addr)
+> +static int mtk_dp_train_flow(struct mtk_dp *mtk_dp, u8
+> target_link_rate,
+> +			     u8 target_lane_count)
 > +{
-> +	const unsigned long *p = (const unsigned long *)addr + BIT_WORD(nr);
-> +	unsigned long mask = BIT_MASK(nr);
-> +	unsigned long val = *p;
+> +	u8 lane_adjust[2] = {};
+> +	bool pass_tps1 = false;
+> +	bool pass_tps2_3 = false;
+> +	int train_retries;
+> +	int status_control;
+> +	int iteration_count;
+> +	int ret;
+> +	u8 prev_lane_adjust;
 > +
-> +	return !!(val & mask);
+> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_LINK_BW_SET,
+> target_link_rate);
+> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_LANE_COUNT_SET,
+> +			   target_lane_count |
+> DP_LANE_COUNT_ENHANCED_FRAME_EN);
+> +
+> +	if (mtk_dp->train_info.sink_ssc)
+> +		drm_dp_dpcd_writeb(&mtk_dp->aux, DP_DOWNSPREAD_CTRL,
+> +				   DP_SPREAD_AMP_0_5);
+> +
+> +	train_retries = 0;
+> +	status_control = 0;
+> +	iteration_count = 1;
+> +	prev_lane_adjust = 0xFF;
+> +
+> +	mtk_dp_set_lanes(mtk_dp, target_lane_count / 2);
+> +	ret = mtk_dp_phy_configure(mtk_dp, target_link_rate,
+> target_lane_count);
+> +	if (ret)
+> +		return -EINVAL;
+> +
+> +	dev_dbg(mtk_dp->dev,
+> +		"Link train target_link_rate = 0x%x, target_lane_count
+> = 0x%x\n",
+> +		target_link_rate, target_lane_count);
+> +
+> +	do {
+> +		train_retries++;
+> +		if (!mtk_dp->train_info.cable_plugged_in ||
+> +		    mtk_dp->train_info.irq_sta.hpd_disconnect) {
+
+In mtk_dp_hpd_isr_handler(), train_info.irq_sta.hpd_disconnect would
+finally be set to false, so you need not to check it here. So remove it
+here.
+
+> +			return -ENODEV;
+> +		}
+> +
+> +		if (mtk_dp->train_state < MTK_DP_TRAIN_STATE_TRAINING)
+> +			return -EAGAIN;
+> +
+> +		if (!pass_tps1) {
+> +			ret = mtk_dp_train_tps_1(mtk_dp,
+> target_lane_count,
+> +						 &iteration_count,
+> lane_adjust,
+> +						 &status_control,
+> +						 &prev_lane_adjust);
+> +			if (!ret) {
+> +				pass_tps1 = true;
+> +				train_retries = 0;
+> +			} else if (ret == -EINVAL) {
+> +				break;
+> +			}
+> +		} else {
+> +			ret = mtk_dp_train_tps_2_3(mtk_dp,
+> target_link_rate,
+> +						   target_lane_count,
+> +						   &iteration_count,
+> +						   lane_adjust,
+> &status_control,
+> +						   &prev_lane_adjust);
+> +			if (!ret) {
+> +				pass_tps2_3 = true;
+> +				break;
+> +			} else if (ret == -EINVAL) {
+> +				break;
+> +			}
+> +		}
+> +
+> +		drm_dp_dpcd_read(&mtk_dp->aux,
+> DP_ADJUST_REQUEST_LANE0_1,
+> +				 lane_adjust, sizeof(lane_adjust));
+> +		mtk_dp_train_update_swing_pre(mtk_dp,
+> target_lane_count,
+> +					      lane_adjust);
+> +	} while (train_retries < MTK_DP_TRAIN_RETRY_LIMIT &&
+> +		 iteration_count < MTK_DP_TRAIN_MAX_ITERATIONS);
+> +
+> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_TRAINING_PATTERN_SET,
+> +			   DP_TRAINING_PATTERN_DISABLE);
+> +	ret = mtk_dp_train_set_pattern(mtk_dp, 0);
+> +	if (ret)
+> +		return -EINVAL;
+> +
+> +	if (!pass_tps2_3)
+> +		return -ETIMEDOUT;
+> +
+> +	mtk_dp->train_info.link_rate = target_link_rate;
+> +	mtk_dp->train_info.lane_count = target_lane_count;
+> +
+> +	mtk_dp_training_set_scramble(mtk_dp, true);
+> +
+> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_LANE_COUNT_SET,
+> +			   target_lane_count |
+> +				   DP_LANE_COUNT_ENHANCED_FRAME_EN);
+> +	mtk_dp_set_enhanced_frame_mode(mtk_dp, true);
+> +
+> +	return ret;
 > +}
 > +
->  #endif /* __ASM_GENERIC_BITOPS_GENERIC_NON_ATOMIC_H */
-> diff --git a/include/linux/bitops.h b/include/linux/bitops.h
-> index 87087454a288..51c22b8667b4 100644
-> --- a/include/linux/bitops.h
-> +++ b/include/linux/bitops.h
-> @@ -36,7 +36,8 @@ extern unsigned long __sw_hweight64(__u64 w);
->  
->  /* Check that the bitops prototypes are sane */
->  #define __check_bitop_pr(name)						\
-> -	static_assert(__same_type(arch_##name, generic_##name) &&	\
-> +	static_assert(__same_type(const_##name, generic_##name) &&	\
-> +		      __same_type(arch_##name, generic_##name) &&	\
->  		      __same_type(name, generic_##name))
->  
->  __check_bitop_pr(__set_bit);
-> -- 
-> 2.36.1
+
+[snip]
+
+> +
+> +/*
+> + * We need to handle HPD signal in eDP even though eDP is a always
+> connected
+> + * device. Besides connected status, there is another feature for
+> HPD signal -
+> + * HPD pulse: it presents an IRQ from sink devices to source devices
+> (Refer to
+> + * 5.1.4 of DP1.4 spec).
+> + */
+> +static irqreturn_t mtk_dp_hpd_isr_handler(struct mtk_dp *mtk_dp)
+> +{
+> +	bool connected;
+> +	u32 irq_status = mtk_dp_swirq_get_clear(mtk_dp) |
+> +			 mtk_dp_hwirq_get_clear(mtk_dp);
+> +	struct mtk_dp_train_info *train_info = &mtk_dp->train_info;
+> +
+> +	if (irq_status & MTK_DP_HPD_INTERRUPT)
+> +		train_info->irq_sta.hpd_inerrupt = true;
+> +	if (irq_status & MTK_DP_HPD_CONNECT)
+> +		train_info->irq_sta.hpd_connect = true;
+> +	if (irq_status & MTK_DP_HPD_DISCONNECT)
+> +		train_info->irq_sta.hpd_disconnect = true;
+> +
+
+train_info->irq_sta.hpd_connect is used only in this function, so let
+hpd_connect to be local variable.
+
+> +	if (!irq_status)
+> +		return IRQ_HANDLED;
+> +
+> +	connected = mtk_dp_plug_state(mtk_dp);
+> +	if (connected || !train_info->cable_plugged_in)
+> +		train_info->irq_sta.hpd_disconnect  = false;
+> +	else if (!connected || train_info->cable_plugged_in)
+> +		train_info->irq_sta.hpd_connect = false;
+> +
+> +	if (!(train_info->irq_sta.hpd_connect ||
+> +	      train_info->irq_sta.hpd_disconnect))
+> +		return IRQ_WAKE_THREAD;
+> +
+> +	if (train_info->irq_sta.hpd_connect) {
+> +		train_info->irq_sta.hpd_connect = false;
+> +		train_info->cable_plugged_in = true;
+> +	} else {
+> +		train_info->irq_sta.hpd_disconnect = false;
+> +		train_info->cable_plugged_in = false;
+> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_TRAINING;
+> +	}
+> +	train_info->cable_state_change = true;
+> +
+> +	return IRQ_WAKE_THREAD;
+> +}
+> +
+
+[snip]
+
+> +
+> +static ssize_t mtk_dp_aux_transfer(struct drm_dp_aux *mtk_aux,
+> +				   struct drm_dp_aux_msg *msg)
+> +{
+> +	struct mtk_dp *mtk_dp;
+> +	bool is_read;
+> +	u8 request;
+> +	size_t accessed_bytes = 0;
+> +	int ret = 0;
+> +
+> +	mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
+> +
+> +	if (!mtk_dp->train_info.cable_plugged_in ||
+> +	    mtk_dp->train_info.irq_sta.hpd_disconnect) {
+
+In mtk_dp_hpd_isr_handler(), train_info.irq_sta.hpd_disconnect would
+finally be set to false, so you need not to check it here. So remove it
+here.
+
+Regards,
+CK
+
+> +		ret = -EAGAIN;
+> +		goto err;
+> +	}
+> +
+> +	switch (msg->request) {
+> +	case DP_AUX_I2C_MOT:
+> +	case DP_AUX_I2C_WRITE:
+> +	case DP_AUX_NATIVE_WRITE:
+> +	case DP_AUX_I2C_WRITE_STATUS_UPDATE:
+> +	case DP_AUX_I2C_WRITE_STATUS_UPDATE | DP_AUX_I2C_MOT:
+> +		request = msg->request &
+> ~DP_AUX_I2C_WRITE_STATUS_UPDATE;
+> +		is_read = false;
+> +		break;
+> +	case DP_AUX_I2C_READ:
+> +	case DP_AUX_NATIVE_READ:
+> +	case DP_AUX_I2C_READ | DP_AUX_I2C_MOT:
+> +		request = msg->request;
+> +		is_read = true;
+> +		break;
+> +	default:
+> +		drm_err(mtk_aux->drm_dev, "invalid aux cmd = %d\n",
+> +			msg->request);
+> +		ret = -EINVAL;
+> +		goto err;
+> +	}
+> +
+> +	if (msg->size == 0) {
+> +		ret = mtk_dp_aux_do_transfer(mtk_dp, is_read, request,
+> +					     msg->address +
+> accessed_bytes,
+> +					     msg->buffer +
+> accessed_bytes, 0);
+> +	} else {
+> +		while (accessed_bytes < msg->size) {
+> +			size_t to_access =
+> +				min_t(size_t, DP_AUX_MAX_PAYLOAD_BYTES,
+> +				      msg->size - accessed_bytes);
+> +
+> +			ret = mtk_dp_aux_do_transfer(mtk_dp, is_read,
+> request,
+> +						     msg->address +
+> accessed_bytes,
+> +						     msg->buffer +
+> accessed_bytes,
+> +						     to_access);
+> +
+> +			if (ret) {
+> +				drm_info(mtk_dp->drm_dev,
+> +					 "Failed to do AUX transfer:
+> %d\n", ret);
+> +				break;
+> +			}
+> +			accessed_bytes += to_access;
+> +		}
+> +	}
+> +err:
+> +	if (ret) {
+> +		msg->reply = DP_AUX_NATIVE_REPLY_NACK |
+> DP_AUX_I2C_REPLY_NACK;
+> +		return ret;
+> +	}
+> +
+> +	msg->reply = DP_AUX_NATIVE_REPLY_ACK | DP_AUX_I2C_REPLY_ACK;
+> +	return msg->size;
+> +}
+> +
+

@@ -2,104 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4925E54D48C
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE2D054D481
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350137AbiFOWZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 18:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        id S1350141AbiFOWYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 18:24:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348838AbiFOWZQ (ORCPT
+        with ESMTP id S243581AbiFOWY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 18:25:16 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062142FFF2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:25:15 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id u12so25870722eja.8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:25:14 -0700 (PDT)
+        Wed, 15 Jun 2022 18:24:28 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CA6D2F027
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:24:28 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id o17so11574443pla.6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:24:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=EqzQW4bvuiA6pvJtGB4rjgOdvlv8E2OoMiyxcMbYrTc=;
-        b=JSDW99nkzGyW3xICFnKaivNYgZ++b2aFROAcUyNdGBKm2s/+IJcAqkaFBg0XmZ2/at
-         edM8wEefSZDksc/lyQB8aMS2rfc9PHBogmCkD0C28dfFHNWeHdX2doEMJ2WflhmFU6T5
-         blyVH1ZWFdRN/Ja1usyOpD77t4Gzm8VRRbVYxcznxBulPSb2Rg4XrbBthfBXfH3v6Wf5
-         4+gtdlhnHVpbJJ6lTB5wI7oyMLMavx+gBQ0uW6j/E6LKOih2kqRk1EiTCGWrocgUDsTJ
-         pe8/Vzs97c3I+qE2ezj9xETPih6I6gJesyK/m3sf7ZybpEZiCtO4vJjtL42JwFhjEExG
-         r0rA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=uLEDL+G7aX3Y4fRU26LLhNvvGtvMvsrcMGTR1rtP7yw=;
+        b=DTJF3smWA3fB95jgkWeMgAeL3z2fFHk8fPHUNEallNDdQff3BPuIcBZS65ZbGBPUXE
+         K6BOf3/c2HA+EFOtIuA+4DajkWGkAzMQmZeFz2jKNsM4hfaGAPiXCWlPadUXuzDTRnoI
+         5Jt7riLi+7en25sCaSe8ZlYJ4cSXRdC1Vyxf7RUHS8uGg2SzfkxnsOr9+1jAnQEIk7TL
+         1pkdH0HOOKTr1NWiSFW3u7QG+uol9RhSdTluUF1Cj6vP5+yL/pDTlqwaBjjoyWk5zd8u
+         evUfILLDx8rbTd29hitOx5f87S0CYWd3ZPpYWIVzsTuXC34ir4vWVGv0pfGro8jz7KmU
+         XOJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=EqzQW4bvuiA6pvJtGB4rjgOdvlv8E2OoMiyxcMbYrTc=;
-        b=rXu6MJBuo1Hzt7bU4tuezWecGRMDKDGqNA7ahV3bOQMW/L8baaxY7QD7/HpZsWh5Ho
-         KEk5a7DwFaXRYhIGQGJ250lAgBFnDw4UglanTQHRAFM0W6z/vAX2KjJ7g6YjDFC8LGb7
-         enwo6Hjv+Ck8dnTNb9JcPSgsSv50/SEBbyr6qAELP5FO84euZN1y3GHVyF5Xlkv1y1WQ
-         noLyXl1X6H+R+HX25Gb0kIOL1E4OokcmocccbcprmB8w1IDhS9PmZJctn/t+crIXqjCg
-         uy7ebLnYHNGNwHexUSP62NvK6auG6RO5IL3yHo0hxiPZ7j4cMbcjlmJ75QOdCbdxmHQR
-         j42A==
-X-Gm-Message-State: AJIora+9uhFxQ7ALZzfkTmMA1xWQX6SbBcbILSM7CYa0HThjhiO1H1KB
-        5HszlqKx5WNvY3jbbFKaZZU=
-X-Google-Smtp-Source: AGRyM1vecP0FSol4KwYKeB+9vu236BPxycyySMJXvkigqrEt5XtwuYhjnuoaB3hP+TSVK07JAymodQ==
-X-Received: by 2002:a17:906:14d5:b0:711:c55a:998 with SMTP id y21-20020a17090614d500b00711c55a0998mr1798067ejc.708.1655331913477;
-        Wed, 15 Jun 2022 15:25:13 -0700 (PDT)
-Received: from debian.home (90-180-208-18.rcn.o2.cz. [90.180.208.18])
-        by smtp.gmail.com with ESMTPSA id y3-20020a056402358300b0042dc25fdf5bsm350427edc.29.2022.06.15.15.25.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 15 Jun 2022 15:25:13 -0700 (PDT)
-From:   Jiri Vanek <jirivanek1@gmail.com>
-To:     Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>
-Cc:     Vinay Simha B N <simhavcs@gmail.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jiri Vanek <jirivanek1@gmail.com>
-Subject: [PATCH 2/2] drm/bridge/tc358775: Fix DSI clock division for vsync delay calculation
-Date:   Thu, 16 Jun 2022 00:22:21 +0200
-Message-Id: <20220615222221.1501-3-jirivanek1@gmail.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <20220615222221.1501-1-jirivanek1@gmail.com>
-References: <20220615222221.1501-1-jirivanek1@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=uLEDL+G7aX3Y4fRU26LLhNvvGtvMvsrcMGTR1rtP7yw=;
+        b=nF7IoZkNPe581LbqZGaJOR0V9Mh/Fc46hCmKtFFYISFfckrhFGTcxJVy9Z3fd2r9vs
+         vQ4KLcszqpcUGsDCT8cBiQ0p7brJVO9PXg0OxwWqeaJb8/M9MUNBiAHMVAAjyx4HZ0KH
+         /QONlrS0mOXfZpirUVqsek4eR0p6tQt9yieYfQjcwOB7cXz7q9VKBKNX6AjLxQU2Z+y3
+         wGo5pE6gNHNtN03+6znIYPdXqVBkCtChKM/nEHjniwmC8tlDwAFM8VGn4RNP/TzasIIy
+         GC1+khBQmnLW6Henay+3sfxJ9KE/uUgQJqBtI67zBLJynWxfDQQulov+m51ydVSs8rwv
+         yTaA==
+X-Gm-Message-State: AJIora8+kz4GvspAspIE3giYyhtUllCL+d5uFN1y651Sn7TlJqL8r8Il
+        TRQODL1fOmKe9Z1799e0L6UD4w==
+X-Google-Smtp-Source: AGRyM1twcw/WY5Xe4Nnxhw4M0Mco1frKQyTuE637zz53WB/TZIzLMkuT2IwpfthyharuE1mZ8MJLtg==
+X-Received: by 2002:a17:90b:11c5:b0:1ea:9747:28ba with SMTP id gv5-20020a17090b11c500b001ea974728bamr12696060pjb.22.1655331867581;
+        Wed, 15 Jun 2022 15:24:27 -0700 (PDT)
+Received: from google.com ([192.77.111.2])
+        by smtp.gmail.com with ESMTPSA id p9-20020a62b809000000b0051c79bd5047sm128311pfe.139.2022.06.15.15.24.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 15:24:27 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 23:24:24 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Fabien Parent <fparent@baylibre.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] dt-bindings: mfd: mt6397: add binding for MT6357
+Message-ID: <YqpcGLIhD2FsPLdi@google.com>
+References: <20220531124959.202787-1-fparent@baylibre.com>
+ <20220531124959.202787-2-fparent@baylibre.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220531124959.202787-2-fparent@baylibre.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the same PCLK divide option (divide DSI clock to generate pixel clock)
-which is set to LVDS Configuration Register (LVCFG) also for a VSync delay
-calculation. Without this change an auxiliary variable could underflow
-during the calculation for some dual-link LVDS panels and then calculated
-VSync delay is wrong. This leads to a shifted picture on a panel.
+On Tue, 31 May 2022, Fabien Parent wrote:
 
-Tested-by: Jiri Vanek <jirivanek1@gmail.com>
-Signed-off-by: Jiri Vanek <jirivanek1@gmail.com>
----
- drivers/gpu/drm/bridge/tc358775.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Add binding documentation for the MT6357 PMIC.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/mt6397.txt | 1 +
+>  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/bridge/tc358775.c b/drivers/gpu/drm/bridge/tc358775.c
-index cd2721ab02a9..fecb8558b49a 100644
---- a/drivers/gpu/drm/bridge/tc358775.c
-+++ b/drivers/gpu/drm/bridge/tc358775.c
-@@ -430,7 +430,7 @@ static void tc_bridge_enable(struct drm_bridge *bridge)
- 		val = TC358775_VPCTRL_MSF(1);
- 
- 	dsiclk = mode->crtc_clock * 3 * tc->bpc / tc->num_dsi_lanes / 1000;
--	clkdiv = dsiclk / DIVIDE_BY_3 * tc->lvds_link;
-+	clkdiv = dsiclk / (tc->lvds_link == DUAL_LINK ? DIVIDE_BY_6 : DIVIDE_BY_3);
- 	byteclk = dsiclk / 4;
- 	t1 = hactive * (tc->bpc * 3 / 8) / tc->num_dsi_lanes;
- 	t2 = ((100000 / clkdiv)) * (hactive + hback_porch + hsync_len + hfront_porch) / 1000;
+Doesn't seem to apply.
+
 -- 
-2.30.2
-
+Lee Jones [李琼斯]
+Principal Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

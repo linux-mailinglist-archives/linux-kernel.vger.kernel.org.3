@@ -2,56 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA48354C686
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:53:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0E7154C68D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347333AbiFOKxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46860 "EHLO
+        id S231497AbiFOKyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243714AbiFOKx0 (ORCPT
+        with ESMTP id S233661AbiFOKyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:53:26 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EDD50B25
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:53:22 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 2919A68AA6; Wed, 15 Jun 2022 12:53:17 +0200 (CEST)
-Date:   Wed, 15 Jun 2022 12:53:16 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Erwan Velu <erwanaliasr1@gmail.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>,
-        Erwan Velu <e.velu@criteo.com>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] nvme: Report model,sn,fw,pci device information
- during init
-Message-ID: <20220615105316.GA7911@lst.de>
-References: <20220614210902.744318-1-e.velu@criteo.com> <20220614210902.744318-2-e.velu@criteo.com> <Yqj94JXMwjrdSbqG@kbusch-mbp.dhcp.thefacebook.com> <20220615053729.GA21858@lst.de> <CAL2JzuwnZhMgaVQ0=LAYfe6pWnxGLgR_b4xdF_==F3vL_Hh=gw@mail.gmail.com>
+        Wed, 15 Jun 2022 06:54:33 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE0B522CC;
+        Wed, 15 Jun 2022 03:54:32 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id n10so22419155ejk.5;
+        Wed, 15 Jun 2022 03:54:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FvMKd4KKRKUMir0Cr403t8MbrCd1Ebi5CzetpJyqwmk=;
+        b=ZNvLP6IHrqVdFY3IjQ/DXgKkdf/o6QPFiEhs9XBpiDx/cg+mFrkcEY2/wj4q7Yjy7Q
+         NQZKPEhh1bfnic6ztJsfARTmk5XkQznDD6ixRqviVECVIBZeN+p3NySev8u1Nvn3iLXy
+         aBa6suCcTktw0V6DewfH+zfxdKcR/XvWIvT8qHdM1DxPilxbscG0g/iXCe5Hyjdij5tb
+         L/zsIYL+9whzJ04F8rcFhNlwOk1C0WJ2NndUyEEgf2UCC/8/W/kV8BukZwViai0SKBnY
+         Fe8JILq424z/wNbtR/g1KVAT5Tut7Tgy1QCop9Y1LjxmxtPRk6MY8IR9O0dtGmSPb3rV
+         wOlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FvMKd4KKRKUMir0Cr403t8MbrCd1Ebi5CzetpJyqwmk=;
+        b=ezxbIu4yOWJIn6ftXE94NxZUwFq1ix6bts6DOc+YoAA0OSroyq+6gpypwpeY40Syzi
+         jKYcNRYyHIt67lI+u705oQJikd7ryPMmz38AJ/auRSm01UZlQRKeTW6pe1bT3cH2vxXH
+         6c78OYNjFQCytt4X3qDSe/ct8/2PQnwC0lihHqOIt66NoemvqT09F05lQ3h3D9penlD7
+         MrgLrPChyqhbn599PFhfhUICkH663gZjf4B6JdRL4yPL0BL5+OV03CJTghTdBKp5+Sry
+         AMKgKTnyO8Q1RoZwxUaiUGaCHjaOj15xlDcH7lgQghk71x5Mpwy8hZk/I/i3R9+5b3E8
+         dxmw==
+X-Gm-Message-State: AOAM530vHjpAWLFSVivG/A29tviB/IGsljLqvBpDKTwJqQOhHavKS3l6
+        23RIxqh8RUOOWAmNLHgdwdxpHrfw8mgVQgGRGBrHl0RWXoNUTg==
+X-Google-Smtp-Source: AGRyM1sfDJWK0pt/4Gdwh45Wsy2UAp27zdAMS37AdAo5twCBdpgKzBsztxZO7KUaHq9wCFPtSHHeSyqQoEpWnqzEfqo=
+X-Received: by 2002:a17:906:a202:b0:711:29a:c96c with SMTP id
+ r2-20020a170906a20200b00711029ac96cmr8495653ejy.407.1655290471155; Wed, 15
+ Jun 2022 03:54:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL2JzuwnZhMgaVQ0=LAYfe6pWnxGLgR_b4xdF_==F3vL_Hh=gw@mail.gmail.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20200821181433.17653-8-kenneth.t.chan@gmail.com>
+ <20220612090507.20648-1-stefan.seyfried@googlemail.com> <20220612090507.20648-3-stefan.seyfried@googlemail.com>
+In-Reply-To: <20220612090507.20648-3-stefan.seyfried@googlemail.com>
+From:   Kenneth Chan <kenneth.t.chan@gmail.com>
+Date:   Wed, 15 Jun 2022 18:53:52 +0800
+Message-ID: <CAPqSeKuubG0Q2BhsYz+MbLi_ViU97whTzwVaUQOf7OvLSb4bFg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] platform/x86: panasonic-laptop: allow to use all hotkeys
+To:     stefan.seyfried@googlemail.com
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stefan Seyfried <seife+kernel@b1-systems.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 09:57:05AM +0200, Erwan Velu wrote:
-> > I would much prefer to not print it all.  The Linux boot is way to spammy
-> > to start with and this doesn't add any real value.
-> >
-> 
-> I know the boot is a bit spammy but when systems crash because of nvme
-> drives, that's very handy to get a trace showing who was the culprit and
-> what drive is installed (including the fw version which is usually a major
-> source of troubles).
+I'm resending it due to reported spam. I forgot to turn off HTML
+formatting. My bad.
 
-Well, usually they are all the same or a very small set of different
-SKUs compared to the total number of drives.
+Thanks for the patches.
+
+> From: Stefan Seyfried <seife+kernel@b1-systems.com>
+>
+> commit ed83c9171829 broke the hotkeys on my Toughbook CF-51.
+> I'm questioning the general validity of that commit, but as I only
+> have a single machine to test, add a module parameter to allow making
+> it work at runtime.
+
+I can confirm that as soon as the hotkey_input option is enabled (at
+least on my aged CF-W5) it reports the ACPI event twice. Unfortunately
+it's the only machine I have for testing. Unless we have a bigger
+sample base, making it a module_param is a safe choice.
+
+Otherwise the patches look good to me.
+
+Reviewed-by: Kenneth Chan <kenneth.t.chan@gmail.com>
+
+--
+Kenneth

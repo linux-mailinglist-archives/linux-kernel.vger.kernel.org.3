@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D0B654D012
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6814954D00C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349864AbiFOReC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
+        id S1356189AbiFOReG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357877AbiFORdl (ORCPT
+        with ESMTP id S1357880AbiFORdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Jun 2022 13:33:41 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7814F455
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48F24F9D4
         for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655314409; x=1686850409;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+MKeBdQz1ajkRhqL3VBuYBCksZz92U5jphtv50ui+cU=;
-  b=ZI4aDJxM1wubyNnxLla1bpPOLrP2R0nHUIo6EOot/iz/fNPgtVm4WixX
-   1LLMj9NmhoSCLTNkPITKYeJ5d5H2ofGKHZl+mnKp/DyLcjE1jWMf+lIHq
-   02txjxqRejW90f1MG98Cq5UAxb/6rG4aW+IPwgqrgo0UDWHfIZpmpZl6L
-   zzvHuAuAmLi7A9RcM4pY9RTzD2otry7+GDfq6n1y4g8Xi6XEmBK/Zi1Bt
-   SyyS1EG+cafmz34evSiXnw4c40q4QKurX1G5YImKX/avXQsDPdIcFZQrL
-   WcrFGyCt/AHAzxhC1gJFPe4Od2EI1rRZSInxhgDJBEVoqC0BVCLhjKgV1
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="258902412"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="258902412"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 10:33:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="572430235"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 15 Jun 2022 10:33:24 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1WtQ-000N3J-36;
-        Wed, 15 Jun 2022 17:33:24 +0000
-Date:   Thu, 16 Jun 2022 01:32:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Kees Cook <keescook@chromium.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Ira Weiny <ira.weiny@intel.com>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        David Sterba <dsterba@suse.cz>
-Subject: Re: [PATCH] highmem: Make __kunmap_{local,atomic}() take "const void
- *"
-Message-ID: <202206160154.0Asirpka-lkp@intel.com>
-References: <20220614142531.16478-1-fmdefrancesco@gmail.com>
+Received: by mail-lf1-x12c.google.com with SMTP id w20so19973032lfa.11
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:33:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=S72eeZ+Row01YghjpUmWYlpXnQzipZvAzNu3EG7dF00=;
+        b=BR3qLXEgSSszCU9YWAmUJhaphZlQ5NrNHteiKYjbK+3eDpYdpbKiVLT1w/vldEp4pX
+         +HF40JInhIku0OCm/pOdQei11tBJSd/sRQUSYNpM6UN/1BGD3idJgDsdLM4C0SRFCv6E
+         HoNKUp07pwCmLjoXQeiU114Pm9YDXswIn+4NLoS5hgo/iZEL57b2eJBPA3PM/6xysOVY
+         mMge2aJD8FyIUZWDSDDQish4QwCdUPY6yELRZnKF3XriuSWdtZviiqnIRlJQrWUdKyOF
+         jaIQfrEi6tdUacNli3heJhT73rzaeOu0mQ2qGtRexeFU8mNVMfB8LBgSLG7kNKAA31DF
+         RkFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=S72eeZ+Row01YghjpUmWYlpXnQzipZvAzNu3EG7dF00=;
+        b=Awf4c4FN8F0uEipHD3NvfXTn5GTAcid8+xSXeMJLcHSkdjNf7NmIazN6TW5/4Wkq/M
+         UzC9kPPNvQZuqKjDtzl8oqr5PQz3yD8gQoZYf5uoI5EI8Foz+GesDKDWOQq4Lh3geZP8
+         RkmhXbDqIRnTD1SAEuvaZBJNOs/QMlpEhTACyIkwMJwXrYrozlrirYxTEGucaatE3Q4C
+         kwBGGjObvGoNvHTPn8oFCKAQAgTgCAr4uPFmWtV6PpANFjNwGsfJU0v73R/f2UrcImoT
+         7VZ6Zl0MXFob/Z8YawRHVlQQ5dKvh4fUdlGrOoQtwQ5OmCBUyHH8sKeb7yvgr5262J0b
+         dRgw==
+X-Gm-Message-State: AJIora8WWk1J2uIT2sEzINNkDgosERp1HAHYo5YIo3bHkD0xM6PZudX5
+        r5qYKXTfNJVJ9TwGtQiax6ug0Ol3E7Mujk4oPde9DKL4ToztUA==
+X-Google-Smtp-Source: AGRyM1sA46kWiGsTwyik4A+h6I0Rt4vExcza34+hBCc/jIKpPP4aUs4AgBut2tMlPe1cEUer3DeVSKylq48GsEqiYSw=
+X-Received: by 2002:a05:6512:1047:b0:479:2308:ac0b with SMTP id
+ c7-20020a056512104700b004792308ac0bmr349197lfb.167.1655314408139; Wed, 15 Jun
+ 2022 10:33:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614142531.16478-1-fmdefrancesco@gmail.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220609112239.18911-1-mengqi.zhang@mediatek.com>
+In-Reply-To: <20220609112239.18911-1-mengqi.zhang@mediatek.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 15 Jun 2022 10:32:52 -0700
+Message-ID: <CAPDyKFrBWBKJvLZaZOgK9K3Td0ZNq_0vP=K5ERjja3OnQFCsNA@mail.gmail.com>
+Subject: Re: [RESEND V2] mmc: mediatek: wait dma stop bit reset to 0
+To:     Mengqi Zhang <mengqi.zhang@mediatek.com>
+Cc:     chaotian.jing@mediatek.com, matthias.bgg@gmail.com,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wenbin.mei@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,90 +68,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Fabio,
+On Thu, 9 Jun 2022 at 04:22, Mengqi Zhang <mengqi.zhang@mediatek.com> wrote:
+>
+> MediaTek IP requires that after dma stop, it need to wait this dma stop
+> bit auto-reset to 0. When bus is in high loading state, it will take a
+> while for the dma stop complete. If there is no waiting operation here,
+> when program runs to clear fifo and reset, bus will hang.
+>
+> In addition, there should be no return in msdc_data_xfer_next() if
+> there is data need be transferred, because no matter what error occurs
+> here, it should continue to excute to the following mmc_request_done.
+> Otherwise the core layer may wait complete forever.
+>
+> Signed-off-by: Mengqi Zhang <mengqi.zhang@mediatek.com>
 
-Thank you for the patch! Yet something to improve:
+Applied for fixes and by adding a stable tag, thanks!
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on linus/master v5.19-rc2 next-20220615]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Fabio-M-De-Francesco/highmem-Make-__kunmap_-local-atomic-take-const-void/20220614-222749
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: parisc-allyesconfig (https://download.01.org/0day-ci/archive/20220616/202206160154.0Asirpka-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.3.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/558ba1aeb12cc7940165f07160e51afb0bc1a64b
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Fabio-M-De-Francesco/highmem-Make-__kunmap_-local-atomic-take-const-void/20220614-222749
-        git checkout 558ba1aeb12cc7940165f07160e51afb0bc1a64b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/highmem.h:13,
-                    from include/linux/bvec.h:10,
-                    from include/linux/skbuff.h:17,
-                    from drivers/net/wwan/t7xx/t7xx_hif_cldma.h:25,
-                    from drivers/net/wwan/t7xx/t7xx_modem_ops.h:25,
-                    from drivers/net/wwan/t7xx/t7xx_pci.c:39:
-   include/linux/highmem-internal.h: In function '__kunmap_local':
->> include/linux/highmem-internal.h:203:31: error: passing argument 1 of 'kunmap_flush_on_unmap' discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
-     203 |         kunmap_flush_on_unmap(addr);
-         |                               ^~~~
-   In file included from include/linux/cacheflush.h:5,
-                    from include/linux/highmem.h:8,
-                    from include/linux/bvec.h:10,
-                    from include/linux/skbuff.h:17,
-                    from drivers/net/wwan/t7xx/t7xx_hif_cldma.h:25,
-                    from drivers/net/wwan/t7xx/t7xx_modem_ops.h:25,
-                    from drivers/net/wwan/t7xx/t7xx_pci.c:39:
-   arch/parisc/include/asm/cacheflush.h:78:48: note: expected 'void *' but argument is of type 'const void *'
-      78 | static inline void kunmap_flush_on_unmap(void *addr)
-         |                                          ~~~~~~^~~~
-   In file included from include/linux/highmem.h:13,
-                    from include/linux/bvec.h:10,
-                    from include/linux/skbuff.h:17,
-                    from drivers/net/wwan/t7xx/t7xx_hif_cldma.h:25,
-                    from drivers/net/wwan/t7xx/t7xx_modem_ops.h:25,
-                    from drivers/net/wwan/t7xx/t7xx_pci.c:39:
-   include/linux/highmem-internal.h: In function '__kunmap_atomic':
-   include/linux/highmem-internal.h:230:31: error: passing argument 1 of 'kunmap_flush_on_unmap' discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
-     230 |         kunmap_flush_on_unmap(addr);
-         |                               ^~~~
-   In file included from include/linux/cacheflush.h:5,
-                    from include/linux/highmem.h:8,
-                    from include/linux/bvec.h:10,
-                    from include/linux/skbuff.h:17,
-                    from drivers/net/wwan/t7xx/t7xx_hif_cldma.h:25,
-                    from drivers/net/wwan/t7xx/t7xx_modem_ops.h:25,
-                    from drivers/net/wwan/t7xx/t7xx_pci.c:39:
-   arch/parisc/include/asm/cacheflush.h:78:48: note: expected 'void *' but argument is of type 'const void *'
-      78 | static inline void kunmap_flush_on_unmap(void *addr)
-         |                                          ~~~~~~^~~~
-   cc1: all warnings being treated as errors
+Kind regards
+Uffe
 
 
-vim +203 include/linux/highmem-internal.h
-
-f3ba3c710ac5a3 Thomas Gleixner       2020-11-18  199  
-558ba1aeb12cc7 Fabio M. De Francesco 2022-06-14  200  static inline void __kunmap_local(const void *addr)
-f3ba3c710ac5a3 Thomas Gleixner       2020-11-18  201  {
-f3ba3c710ac5a3 Thomas Gleixner       2020-11-18  202  #ifdef ARCH_HAS_FLUSH_ON_KUNMAP
-f3ba3c710ac5a3 Thomas Gleixner       2020-11-18 @203  	kunmap_flush_on_unmap(addr);
-f3ba3c710ac5a3 Thomas Gleixner       2020-11-18  204  #endif
-f3ba3c710ac5a3 Thomas Gleixner       2020-11-18  205  }
-f3ba3c710ac5a3 Thomas Gleixner       2020-11-18  206  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> ---
+>  drivers/mmc/host/mtk-sd.c | 20 ++++++++++++--------
+>  1 file changed, 12 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
+> index 195dc897188b..9da4489dc345 100644
+> --- a/drivers/mmc/host/mtk-sd.c
+> +++ b/drivers/mmc/host/mtk-sd.c
+> @@ -1356,7 +1356,7 @@ static void msdc_data_xfer_next(struct msdc_host *host, struct mmc_request *mrq)
+>                 msdc_request_done(host, mrq);
+>  }
+>
+> -static bool msdc_data_xfer_done(struct msdc_host *host, u32 events,
+> +static void msdc_data_xfer_done(struct msdc_host *host, u32 events,
+>                                 struct mmc_request *mrq, struct mmc_data *data)
+>  {
+>         struct mmc_command *stop;
+> @@ -1376,7 +1376,7 @@ static bool msdc_data_xfer_done(struct msdc_host *host, u32 events,
+>         spin_unlock_irqrestore(&host->lock, flags);
+>
+>         if (done)
+> -               return true;
+> +               return;
+>         stop = data->stop;
+>
+>         if (check_data || (stop && stop->error)) {
+> @@ -1385,12 +1385,15 @@ static bool msdc_data_xfer_done(struct msdc_host *host, u32 events,
+>                 sdr_set_field(host->base + MSDC_DMA_CTRL, MSDC_DMA_CTRL_STOP,
+>                                 1);
+>
+> +               ret = readl_poll_timeout_atomic(host->base + MSDC_DMA_CTRL, val,
+> +                                               !(val & MSDC_DMA_CTRL_STOP), 1, 20000);
+> +               if (ret)
+> +                       dev_dbg(host->dev, "DMA stop timed out\n");
+> +
+>                 ret = readl_poll_timeout_atomic(host->base + MSDC_DMA_CFG, val,
+>                                                 !(val & MSDC_DMA_CFG_STS), 1, 20000);
+> -               if (ret) {
+> -                       dev_dbg(host->dev, "DMA stop timed out\n");
+> -                       return false;
+> -               }
+> +               if (ret)
+> +                       dev_dbg(host->dev, "DMA inactive timed out\n");
+>
+>                 sdr_clr_bits(host->base + MSDC_INTEN, data_ints_mask);
+>                 dev_dbg(host->dev, "DMA stop\n");
+> @@ -1415,9 +1418,7 @@ static bool msdc_data_xfer_done(struct msdc_host *host, u32 events,
+>                 }
+>
+>                 msdc_data_xfer_next(host, mrq);
+> -               done = true;
+>         }
+> -       return done;
+>  }
+>
+>  static void msdc_set_buswidth(struct msdc_host *host, u32 width)
+> @@ -2416,6 +2417,9 @@ static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
+>         if (recovery) {
+>                 sdr_set_field(host->base + MSDC_DMA_CTRL,
+>                               MSDC_DMA_CTRL_STOP, 1);
+> +               if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CTRL, val,
+> +                       !(val & MSDC_DMA_CTRL_STOP), 1, 3000)))
+> +                       return;
+>                 if (WARN_ON(readl_poll_timeout(host->base + MSDC_DMA_CFG, val,
+>                         !(val & MSDC_DMA_CFG_STS), 1, 3000)))
+>                         return;
+> --
+> 2.25.1
+>

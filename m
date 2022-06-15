@@ -2,246 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9EEB54CC33
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C07554CC38
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239492AbiFOPHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
+        id S235211AbiFOPJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238011AbiFOPHt (ORCPT
+        with ESMTP id S232920AbiFOPJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:07:49 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586D0BE28;
-        Wed, 15 Jun 2022 08:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655305668; x=1686841668;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=CXQFgUFtaJrmqb7dbdE8TtUh3d8InjWxzbzSrWOzXFg=;
-  b=jicdFCU1THDmB2kmETTcLs6Xtsn3HA3EMDkqeCW4WMID3Kx7HwX/ThSc
-   oeYC7Z7lxKtMTqUWWD3fPjp959ugaIVAaoSqsuL5Wtv4XIOjgt7Foqvuh
-   AJterXlvPQabgTapmF0qe/S0V5aCZnuS55ufzlzZLh998Q3d3+reZQxep
-   3NRmBaDOAQ8723XjW8n3wDGOcOkCvSmKLzIQpiJYHt5nuqTO4dWElg20f
-   wgbULT4cuDNF4Xy1NiQRjpHbN83DC9SuxmM2jx2ATj1TUPOnPZvQJCsCs
-   sY/GBiVLWCT2+M6h6PniVqWroP7r1uezOtWmdtYUNwfZTNEpWPs9sD7Qq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="279039943"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="279039943"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 08:07:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="583248668"
-Received: from zxingrtx.sh.intel.com ([10.239.159.110])
-  by orsmga007.jf.intel.com with ESMTP; 15 Jun 2022 08:07:44 -0700
-From:   zhengjun.xing@linux.intel.com
-To:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        alexander.shishkin@intel.com, jolsa@kernel.org, namhyung@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        irogers@google.com, ak@linux.intel.com, kan.liang@linux.intel.com,
-        zhengjun.xing@linux.intel.com
-Subject: [PATCH] perf record: Support "--cputype" option for hybrid events
-Date:   Wed, 15 Jun 2022 23:08:23 +0800
-Message-Id: <20220615150823.2230349-1-zhengjun.xing@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 15 Jun 2022 11:09:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA6372409C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:09:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9D81C153B;
+        Wed, 15 Jun 2022 08:09:27 -0700 (PDT)
+Received: from [10.57.7.82] (unknown [10.57.7.82])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5E0DA3F7F5;
+        Wed, 15 Jun 2022 08:09:26 -0700 (PDT)
+Message-ID: <da9cca0a-ec5b-2e73-9de0-a930f7d947b2@arm.com>
+Date:   Wed, 15 Jun 2022 16:09:24 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RESEND PATCH v8 01/11] iommu: Add DMA ownership management
+ interfaces
+Content-Language: en-GB
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+References: <20220418005000.897664-1-baolu.lu@linux.intel.com>
+ <20220418005000.897664-2-baolu.lu@linux.intel.com>
+ <10eaa3b1-4cf7-a7b6-a7f6-111a486a343a@arm.com>
+ <54159102-42f8-e5dc-5099-1d5d4dbbfc65@arm.com>
+From:   Steven Price <steven.price@arm.com>
+In-Reply-To: <54159102-42f8-e5dc-5099-1d5d4dbbfc65@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengjun Xing <zhengjun.xing@linux.intel.com>
+On 15/06/2022 11:57, Robin Murphy wrote:
+> On 2022-06-15 10:53, Steven Price wrote:
+>> On 18/04/2022 01:49, Lu Baolu wrote:
+>>> Multiple devices may be placed in the same IOMMU group because they
+>>> cannot be isolated from each other. These devices must either be
+>>> entirely under kernel control or userspace control, never a mixture.
+>>>
+>>> This adds dma ownership management in iommu core and exposes several
+>>> interfaces for the device drivers and the device userspace assignment
+>>> framework (i.e. VFIO), so that any conflict between user and kernel
+>>> controlled dma could be detected at the beginning.
+>>>
+>>> The device driver oriented interfaces are,
+>>>
+>>>     int iommu_device_use_default_domain(struct device *dev);
+>>>     void iommu_device_unuse_default_domain(struct device *dev);
+>>>
+>>> By calling iommu_device_use_default_domain(), the device driver tells
+>>> the iommu layer that the device dma is handled through the kernel DMA
+>>> APIs. The iommu layer will manage the IOVA and use the default domain
+>>> for DMA address translation.
+>>>
+>>> The device user-space assignment framework oriented interfaces are,
+>>>
+>>>     int iommu_group_claim_dma_owner(struct iommu_group *group,
+>>>                     void *owner);
+>>>     void iommu_group_release_dma_owner(struct iommu_group *group);
+>>>     bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+>>>
+>>> The device userspace assignment must be disallowed if the DMA owner
+>>> claiming interface returns failure.
+>>>
+>>> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+>>> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
+>>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>>> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+>>
+>> I'm seeing a regression that I've bisected to this commit on a Firefly
+>> RK3288 board. The display driver fails to probe properly because
+>> __iommu_attach_group() returns -EBUSY. This causes long hangs and splats
+>> as the display flips timeout.
+>>
+>> The call stack to __iommu_attach_group() is:
+>>
+>>   __iommu_attach_group from iommu_attach_device+0x64/0xb4
+>>   iommu_attach_device from rockchip_drm_dma_attach_device+0x20/0x50
+>>   rockchip_drm_dma_attach_device from vop_crtc_atomic_enable+0x10c/0xa64
+>>   vop_crtc_atomic_enable from
+>> drm_atomic_helper_commit_modeset_enables+0xa8/0x290
+>>   drm_atomic_helper_commit_modeset_enables from
+>> drm_atomic_helper_commit_tail_rpm+0x44/0x8c
+>>   drm_atomic_helper_commit_tail_rpm from commit_tail+0x9c/0x180
+>>   commit_tail from drm_atomic_helper_commit+0x164/0x18c
+>>   drm_atomic_helper_commit from drm_atomic_commit+0xac/0xe4
+>>   drm_atomic_commit from drm_client_modeset_commit_atomic+0x23c/0x284
+>>   drm_client_modeset_commit_atomic from
+>> drm_client_modeset_commit_locked+0x60/0x1c8
+>>   drm_client_modeset_commit_locked from
+>> drm_client_modeset_commit+0x24/0x40
+>>   drm_client_modeset_commit from drm_fb_helper_set_par+0xb8/0xf8
+>>   drm_fb_helper_set_par from drm_fb_helper_hotplug_event.part.0+0xa8/0xc0
+>>   drm_fb_helper_hotplug_event.part.0 from output_poll_execute+0xb8/0x224
+>>
+>>> @@ -2109,7 +2115,7 @@ static int __iommu_attach_group(struct
+>>> iommu_domain *domain,
+>>>   {
+>>>       int ret;
+>>>   -    if (group->default_domain && group->domain !=
+>>> group->default_domain)
+>>> +    if (group->domain && group->domain != group->default_domain)
+>>>           return -EBUSY;
+>>>         ret = __iommu_group_for_each_dev(group, domain,
+>>
+>> Reverting this 'fixes' the problem for me. The follow up 0286300e6045
+>> ("iommu: iommu_group_claim_dma_owner() must always assign a domain")
+>> doesn't help.
+>>
+>> Adding some debug printks I can see that domain is a valid pointer, but
+>> both default_domain and blocking_domain are NULL.
+>>
+>> I'm using the DTB from the kernel tree (rk3288-firefly.dtb).
+>>
+>> Any ideas?
+> 
+> Hmm, TBH I'm not sure how that worked previously... it'll be complaining
+> because the ARM DMA domain is still attached, but even when the attach
+> goes ahead and replaces the ARM domain with the driver's new one, it's
+> not using the special arm_iommu_detach_device() interface anywhere so
+> the device would still be left with the wrong DMA ops :/
+> 
+> I guess the most pragmatic option is probably to give rockchip-drm a
+> similar bodge to exynos and tegra, to explicitly remove the ARM domain
+> before attaching its own.
 
-perf stat already has the "--cputype" option to enable events only on the
-specified PMU for the hybrid platform, this commit extends the "--cputype"
-support to perf record.
+A bodge like below indeed 'fixes' the problem:
 
-Without "--cputype", it reports events for both cpu_core and cpu_atom.
-
- # ./perf record  -e cycles -a sleep 1 | ./perf report
-
- # To display the perf.data header info, please use --header/--header-only options.
- #
- [ perf record: Woken up 1 times to write data ]
- [ perf record: Captured and wrote 0.000 MB (null) ]
- #
- # Total Lost Samples: 0
- #
- # Samples: 335  of event 'cpu_core/cycles/'
- # Event count (approx.): 35855267
- #
- # Overhead  Command          Shared Object      Symbol
- # ........  ...............  .................  .........................................
- #
-     10.31%  swapper          [kernel.kallsyms]  [k] poll_idle
-      9.42%  swapper          [kernel.kallsyms]  [k] menu_select
-      ...    ...               ...               ... ...
-
- # Samples: 61  of event 'cpu_atom/cycles/'
- # Event count (approx.): 16453825
- #
- # Overhead  Command        Shared Object      Symbol
- # ........  .............  .................  ......................................
- #
-     26.36%  snapd          [unknown]          [.] 0x0000563cc6d03841
-      7.43%  migration/13   [kernel.kallsyms]  [k] update_sd_lb_stats.constprop.0
-      ...    ...            ...                ... ...
-
-With "--cputype", it reports events only for the specified PMU.
-
- # ./perf record --cputype core  -e cycles -a sleep 1 | ./perf report
-
- # To display the perf.data header info, please use --header/--header-only options.
- #
- [ perf record: Woken up 1 times to write data ]
- [ perf record: Captured and wrote 0.000 MB (null) ]
- #
- # Total Lost Samples: 0
- #
- # Samples: 221  of event 'cpu_core/cycles/'
- # Event count (approx.): 27121818
- #
- # Overhead  Command          Shared Object      Symbol
- # ........  ...............  .................  .........................................
- #
-     11.24%  swapper          [kernel.kallsyms]  [k] e1000_irq_enable
-      7.77%  swapper          [kernel.kallsyms]  [k] mwait_idle_with_hints.constprop.0
-      ...    ...              ...                ... ...
-
-Signed-off-by: Zhengjun Xing <zhengjun.xing@linux.intel.com>
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
----
- tools/perf/Documentation/perf-record.txt |  4 ++++
- tools/perf/builtin-record.c              |  3 +++
- tools/perf/builtin-stat.c                | 20 --------------------
- tools/perf/util/pmu-hybrid.c             | 19 +++++++++++++++++++
- tools/perf/util/pmu-hybrid.h             |  2 ++
- 5 files changed, 28 insertions(+), 20 deletions(-)
-
-diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
-index cf8ad50f3de1..ba8d680da1ac 100644
---- a/tools/perf/Documentation/perf-record.txt
-+++ b/tools/perf/Documentation/perf-record.txt
-@@ -402,6 +402,10 @@ Enable weightened sampling. An additional weight is recorded per sample and can
- displayed with the weight and local_weight sort keys.  This currently works for TSX
- abort events and some memory events in precise mode on modern Intel CPUs.
+---8<---
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+index 67d38f53d3e5..cbc6a5121296 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+@@ -23,6 +23,14 @@
+ #include <drm/drm_probe_helper.h>
+ #include <drm/drm_vblank.h>
  
-+--cputype::
-+Only enable events on applying cpu with this type for hybrid platform(e.g. core or atom).
-+For non-hybrid events, it should be no effect.
++#if defined(CONFIG_ARM_DMA_USE_IOMMU)
++#include <asm/dma-iommu.h>
++#else
++#define arm_iommu_detach_device(...)	({ })
++#define arm_iommu_release_mapping(...)	({ })
++#define to_dma_iommu_mapping(dev) NULL
++#endif
 +
- --namespaces::
- Record events of type PERF_RECORD_NAMESPACES.  This enables 'cgroup_id' sort key.
+ #include "rockchip_drm_drv.h"
+ #include "rockchip_drm_fb.h"
+ #include "rockchip_drm_gem.h"
+@@ -49,6 +57,14 @@ int rockchip_drm_dma_attach_device(struct drm_device *drm_dev,
+ 	if (!private->domain)
+ 		return 0;
  
-diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-index 9a71f0330137..e1edd4e98358 100644
---- a/tools/perf/builtin-record.c
-+++ b/tools/perf/builtin-record.c
-@@ -3183,6 +3183,9 @@ static struct option __record_options[] = {
- 	OPT_INCR('v', "verbose", &verbose,
- 		    "be more verbose (show counter open errors, etc)"),
- 	OPT_BOOLEAN('q', "quiet", &quiet, "don't print any message"),
-+	OPT_CALLBACK(0, "cputype", &record.evlist, "hybrid cpu type",
-+		     "Only enable events on applying cpu with this type for hybrid platform (e.g. core or atom)",
-+		     parse_hybrid_type),
- 	OPT_BOOLEAN('s', "stat", &record.opts.inherit_stat,
- 		    "per thread counts"),
- 	OPT_BOOLEAN('d', "data", &record.opts.sample_address, "Record the sample addresses"),
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index 4ce87a8eb7d7..0d95b29273f4 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -1184,26 +1184,6 @@ static int parse_stat_cgroups(const struct option *opt,
- 	return parse_cgroups(opt, str, unset);
- }
- 
--static int parse_hybrid_type(const struct option *opt,
--			     const char *str,
--			     int unset __maybe_unused)
--{
--	struct evlist *evlist = *(struct evlist **)opt->value;
--
--	if (!list_empty(&evlist->core.entries)) {
--		fprintf(stderr, "Must define cputype before events/metrics\n");
--		return -1;
--	}
--
--	evlist->hybrid_pmu_name = perf_pmu__hybrid_type_to_pmu(str);
--	if (!evlist->hybrid_pmu_name) {
--		fprintf(stderr, "--cputype %s is not supported!\n", str);
--		return -1;
--	}
--
--	return 0;
--}
--
- static struct option stat_options[] = {
- 	OPT_BOOLEAN('T', "transaction", &transaction_run,
- 		    "hardware transaction statistics"),
-diff --git a/tools/perf/util/pmu-hybrid.c b/tools/perf/util/pmu-hybrid.c
-index f51ccaac60ee..5c490b5201b7 100644
---- a/tools/perf/util/pmu-hybrid.c
-+++ b/tools/perf/util/pmu-hybrid.c
-@@ -13,6 +13,7 @@
- #include <stdarg.h>
- #include <locale.h>
- #include <api/fs/fs.h>
-+#include "util/evlist.h"
- #include "fncache.h"
- #include "pmu-hybrid.h"
- 
-@@ -87,3 +88,21 @@ char *perf_pmu__hybrid_type_to_pmu(const char *type)
- 	free(pmu_name);
- 	return NULL;
- }
-+
-+int parse_hybrid_type(const struct option *opt, const char *str, int unset __maybe_unused)
-+{
-+	struct evlist *evlist = *(struct evlist **)opt->value;
-+
-+	if (!list_empty(&evlist->core.entries)) {
-+		fprintf(stderr, "Must define cputype before events/metrics\n");
-+		return -1;
++	if (IS_ENABLED(CONFIG_ARM_DMA_USE_IOMMU)) {
++		struct dma_iommu_mapping *mapping = to_dma_iommu_mapping(dev);
++		if (mapping) {
++			arm_iommu_detach_device(dev);
++			arm_iommu_release_mapping(mapping);
++		}
 +	}
 +
-+	evlist->hybrid_pmu_name = perf_pmu__hybrid_type_to_pmu(str);
-+	if (!evlist->hybrid_pmu_name) {
-+		fprintf(stderr, "--cputype %s is not supported!\n", str);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-diff --git a/tools/perf/util/pmu-hybrid.h b/tools/perf/util/pmu-hybrid.h
-index 2b186c26a43e..26101f134a3a 100644
---- a/tools/perf/util/pmu-hybrid.h
-+++ b/tools/perf/util/pmu-hybrid.h
-@@ -5,6 +5,7 @@
- #include <linux/perf_event.h>
- #include <linux/compiler.h>
- #include <linux/list.h>
-+#include <subcmd/parse-options.h>
- #include <stdbool.h>
- #include "pmu.h"
- 
-@@ -18,6 +19,7 @@ bool perf_pmu__hybrid_mounted(const char *name);
- struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name);
- bool perf_pmu__is_hybrid(const char *name);
- char *perf_pmu__hybrid_type_to_pmu(const char *type);
-+int parse_hybrid_type(const struct option *opt, const char *str, int unset __maybe_unused);
- 
- static inline int perf_pmu__hybrid_pmu_num(void)
- {
--- 
-2.25.1
+ 	ret = iommu_attach_device(private->domain, dev);
+ 	if (ret) {
+ 		DRM_DEV_ERROR(dev, "Failed to attach iommu device\n");
+---8<---
 
+I'll type up a proper commit message and see what the DRM maintainers think.
+
+Thanks,
+
+Steve

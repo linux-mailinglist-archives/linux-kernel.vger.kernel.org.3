@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 376E954C111
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 07:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C163554C10D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 07:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344757AbiFOFNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 01:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
+        id S1345703AbiFOFPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 01:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233958AbiFOFNH (ORCPT
+        with ESMTP id S235251AbiFOFP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 01:13:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4C225EA9;
-        Tue, 14 Jun 2022 22:13:06 -0700 (PDT)
+        Wed, 15 Jun 2022 01:15:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A08E2FE78;
+        Tue, 14 Jun 2022 22:15:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B5DD61690;
-        Wed, 15 Jun 2022 05:13:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35617C341C4;
-        Wed, 15 Jun 2022 05:13:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4B7D0B81BF1;
+        Wed, 15 Jun 2022 05:15:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F23C34115;
+        Wed, 15 Jun 2022 05:15:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655269984;
-        bh=tOUHCnRD2qpFsF/6tTi/ZdtHNkm1pbLqUvuCuMU2AxM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Y8yxhcDfSUPamWsXkqOweap8OdyfaPcJqsiUwE33JM4ttlcD2I2Arv4cmbnghs3f9
-         8k006K7xi0K03LE5Z3XCN39sNA4z6OjPy6p0pktpvJWgo05h6BiLs9UEg/SE6rA2vh
-         iVRIupriW3Cv24H+K+gJ1RSD+cTUC0OPomVLzC6VP2qtlZEvIaJaU6N4Eu1HDuWgq+
-         iTK0V2S5F1vF3sfLaFOZgUtkoppODAqsrhP4WLel/9l1fQNgb1AGxUgdxa18oCwsoI
-         nVBNtb73zlZcfu2FV1Ll5h/x57E+fRTmy/7lrnOu2tm9qoYeYhCOdOsN//i2IEfbfW
-         4NnHNPs/iVdVA==
-Date:   Tue, 14 Jun 2022 22:13:03 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v1] ARM: dts: at91: ksz9477_evb: fix port/phy validation
-Message-ID: <20220614221303.37b0700b@kernel.org>
-In-Reply-To: <20220610081621.584393-1-o.rempel@pengutronix.de>
-References: <20220610081621.584393-1-o.rempel@pengutronix.de>
+        s=k20201202; t=1655270122;
+        bh=l7Ooh1K8E7d1b4QbCo+pmpsWrgYmk62wXLDqM7Ns1G0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=FEbBm0MVASqmsGMDxLQiPui09BE4UmwquG7QBPWHfj/FkL8OxEbTm90Iv89eu2Vhk
+         1uRAFgS4m/kp+eKXJYzpKOY7c/emgpeRdwqziicWg/ta7Lp47ALJGCCR6R6AOfOwve
+         llI4iYGRfjU5criKVMfoOhgmHj5r5I6Bu4qfSrSqNVVJ9mtKpP00uEGcgCzzE87sj6
+         hpUNBuxFSh8G1t/artem+HM4aCOUaUoj8ownZv+aOOxsgCOssA6aHDxs6vqD0pTHCV
+         jM/GXmiXCuaZPsJHH2XfIE2t43kFZJVtEs+yEZkLBnz+xC50T8k6L8nLjVaM5UO95n
+         GmIx7SviGMOEQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id A0F6C5C0BCC; Tue, 14 Jun 2022 22:15:21 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 22:15:21 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     zhouzhouyi@gmail.com
+Cc:     john.ogness@linutronix.de, pmladek@suse.com, dave@stgolabs.net,
+        josh@joshtriplett.org, linux-kernel@vger.kernel.org,
+        rcu@vger.kernel.org
+Subject: Re: [PATCH linux-next] RFC: torture: add pr_flush to flush the
+ results to console
+Message-ID: <20220615051521.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220615003733.16447-1-zhouzhouyi@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615003733.16447-1-zhouzhouyi@gmail.com>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -61,14 +59,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Jun 2022 10:16:21 +0200 Oleksij Rempel wrote:
-> Latest drivers version requires phy-mode to be set. Otherwise we will
-> use "NA" mode and the switch driver will invalidate this port mode.
->=20
-> Fixes: 65ac79e18120 ("net: dsa: microchip: add the phylink get_caps")
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+On Wed, Jun 15, 2022 at 08:37:33AM +0800, zhouzhouyi@gmail.com wrote:
+> From: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> 
+> currently tools/testing/selftests/rcutorture/bin/torture.sh reports
+> false positve because of kthread printing.
+> 
+> Commit "printk: add functions to prefer direct printing" (2bb2b7b57f812)
+> have added functions to prefer direct printing activated for the primary
+> import messages.
+> 
+> Meanwhile adding printk_prefer_direct_enter/exit to
+> torture_cleanup_begin/end still can't eliminate the false positives
+> for a hundred percent.
+> 
+> This patch add pr_flush to torture_cleanup_end because the latter
+> is sleepable.
+> 
+> Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> Tested-by: Zhouyi Zhou <zhouzhouyi@gmail.com> 
 
-This got an Awaiting Upstream in patchwork along the way, but based on
-Krzysztof's comment I think net is right here. So it's commit
-56315b6bf7fc ("ARM: dts: at91: ksz9477_evb: fix port/phy validation")
-in net now =F0=9F=A4=B7
+Just the one Signed-off-by suffices.  ;-)
+
+> ---
+>  kernel/torture.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/kernel/torture.c b/kernel/torture.c
+> index 789aeb0e1159..b51e42463a67 100644
+> --- a/kernel/torture.c
+> +++ b/kernel/torture.c
+> @@ -878,6 +878,7 @@ void torture_cleanup_end(void)
+>  	mutex_lock(&fullstop_mutex);
+>  	torture_type = NULL;
+>  	mutex_unlock(&fullstop_mutex);
+> +	pr_flush(1000, true);
+
+But in this case, the kernel keeps on running, correct?  So won't the
+output appear over time?  All of printk()'s kthreads are still running
+after all.
+
+Or do you have a use case that requires that the output appear sooner
+than it does?  If so, please let me know what that is.
+
+							Thanx, Paul
+
+>  }
+>  EXPORT_SYMBOL_GPL(torture_cleanup_end);
+>  
+> -- 
+> 2.25.1
+> 

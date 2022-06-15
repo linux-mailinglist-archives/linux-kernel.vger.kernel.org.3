@@ -2,453 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725EB54C675
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADDB454C679
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347571AbiFOKr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41604 "EHLO
+        id S239779AbiFOKtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347173AbiFOKr4 (ORCPT
+        with ESMTP id S231751AbiFOKs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:47:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7186B11C1B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:47:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9AD82B81CFB
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:47:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6CB0C3411C;
-        Wed, 15 Jun 2022 10:47:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1655290070;
-        bh=7yKIsz2DOQ6ZDm3v1kgaIoyLB3quEDaqeNVdRLaqmW4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EQolA9BlWos+aVVYCyuZL9AGim9qQN28aFbdoRqBOU2iByz0MLDFZYMRwonl4KjIr
-         g9/m6YSKz4QtWxsBJZov+9TBOMKXQln7CWD0RL5/UG37xyqL6aBmNfSpHlWPh43Lez
-         bhE5XV/oklWiSmJPWpvBzjJeEpcXMEA8HoqsHaio=
-Date:   Wed, 15 Jun 2022 12:47:45 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Ojas Sinha <sinhaojas67@gmail.com>
-Cc:     jirislaby@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drivers/tty: Fix code style errors in amiserial.c
-Message-ID: <Yqm40b3BibeVU8IA@kroah.com>
-References: <20220615103601.131489-1-sinhaojas67@gmail.com>
+        Wed, 15 Jun 2022 06:48:59 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020B82A70C;
+        Wed, 15 Jun 2022 03:48:57 -0700 (PDT)
+Received: from mail-yb1-f179.google.com ([209.85.219.179]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MGxYh-1nxFil0Gzj-00E60P; Wed, 15 Jun 2022 12:48:56 +0200
+Received: by mail-yb1-f179.google.com with SMTP id v22so19819945ybd.5;
+        Wed, 15 Jun 2022 03:48:55 -0700 (PDT)
+X-Gm-Message-State: AJIora/iITwL+uF19vruls4Ek9yJDMJfC/zgF+RI+5bouyNNY7OVUj15
+        RGdSEPSW3iCwrgX3OthdLbpA3Pp8H0sdjTHMAHA=
+X-Google-Smtp-Source: AGRyM1uLqkPKf59kwWCfljCBm5ZT7yCtwMl287dtrHSeVzKGWx3HCjXOif/E5TiMEJFGlLgyI6MBZ9ti+zoKUOOst6I=
+X-Received: by 2002:a05:6902:1023:b0:665:12c1:b44d with SMTP id
+ x3-20020a056902102300b0066512c1b44dmr9891763ybt.472.1655290134824; Wed, 15
+ Jun 2022 03:48:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615103601.131489-1-sinhaojas67@gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+G9fYtE0FmFgocYChrJrJc1Pcw+fc5yt8nHwTW7JPcZT=qH+w@mail.gmail.com>
+In-Reply-To: <CA+G9fYtE0FmFgocYChrJrJc1Pcw+fc5yt8nHwTW7JPcZT=qH+w@mail.gmail.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 15 Jun 2022 12:48:38 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a1h6wmoaw_tLiTMGsurPnHjsNvghSe_bppmscr7+04RmA@mail.gmail.com>
+Message-ID: <CAK8P3a1h6wmoaw_tLiTMGsurPnHjsNvghSe_bppmscr7+04RmA@mail.gmail.com>
+Subject: Re: [next] arm64: db410c: Internal error: Oops: 96000004 - pc : sysfs_kf_seq_show
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        regressions@lists.linux.dev,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Tejun Heo <tj@kernel.org>, Hao Luo <haoluo@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Nicolas Dechesne <nicolas.dechesne@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:WR/zOe2camCiQ/MEbHVScBABNnFWSi/ah7Zc+8D8RFgz6h6Vizr
+ knX7qMJp+Aq65mYNWOyOMlxLm97hhsALZz8oQ0B0C2GvkTcUtqCVJ7+YfXBlK4jd8FSZnun
+ SW89BEJoXwA9c6sD1aSG6yzxoqHTtImrBlMe0Ke5+vkFKOrdvdT0k6q0uO+TIu/qhosoAE5
+ YVhjUC0mOCYIH5x3w9/4Q==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:n4oOLRuN4U8=:BanP6d97XxKbyd2k183s7Q
+ tSLwmrAiU8Wo+2kIAyN4Ezoawo01xngKaBCTEq6W9uRpowNxREfhpURyxpMRhybLGdqbKpoAt
+ A7iEEQKzxpHPJYd1pmQLDwmUr+tA0ibkKGGW5j3YlMjn33vGYZt3m35TNo0wMD5miEG3294CI
+ Ee5gEE4iHn3UYOkI7rHRfHQu+m9oN3K2GluVyugTBK5iKcQ/Q5zeJGQqa6o1DJfmrVUvqykvB
+ N+rYmZ4FvWizXSI6mtNbutyz54Z+y+nnsJmQ7oN9jpvtgf9OoSw88fAC4aFHD+VStoA1zrDeb
+ hJYdaD1vxM5xi1AN1VJ4DUzq3fiSCPHBlVU1RSufsCVQVJM8e7qOlAbjUi5E3AxK0FolWbR+r
+ lmLYhO0bJRkXfZu5PSlS+ikJWGL05POZ3l+CVqmj3FMGXr90UNHpRRNeVFCiv8M4UVAiWvcsd
+ oLHQWoB1iodDGIkMdA7Sw/oQT02weQct1GWiq+NDxc86SKiDxnLWy2HhPswMkhCrkAUaG4fDg
+ PfKFXlwrkY5ENHMgtFIZgFf3Bz6OZ2+DyNCLvlmNQ6PSbyzSyveAnD3b7KEcWn2lsPFNg6V3r
+ 0fiPIfBaBAQFBKPuq3CdAwEXRcGiMpJqHx2bWmKdW88l2aZxNqTr8H89QYL1sArEVIizu3e8N
+ B4ie8fvPUIP6e6zZUA57ypvqXsnSfVsGYGI9XyFpeVOZH6ETqRRX6x7KlVVu7qoK5AkHHUSdv
+ ePq87qT7MZHVOJfc90wy6RPdIle69Bsu++/S2S8FWowE/knxz9dp+HXk8xEu0YNpjm/a6MV1E
+ o0akesXFE9v/FoPiqTcTlZHyjCf8OC7q3j3rNzicj3fN2dpxgXGIXP1dybD0vyLizL+YQgDnF
+ Tanui0avuD3AL21+YtFA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 04:06:01PM +0530, Ojas Sinha wrote:
-> Signed-off-by: Ojas Sinha <sinhaojas67@gmail.com>
-> ---
->  drivers/tty/amiserial.c | 154 ++++++++++++++++++++--------------------
->  1 file changed, 77 insertions(+), 77 deletions(-)
-> 
-> diff --git a/drivers/tty/amiserial.c b/drivers/tty/amiserial.c
-> index afb2d373dd47..6eb57677cbba 100644
-> --- a/drivers/tty/amiserial.c
-> +++ b/drivers/tty/amiserial.c
-> @@ -17,7 +17,7 @@
->   * Richard Lucock 28/12/99
->   *
->   *  Copyright (C) 1991, 1992  Linus Torvalds
-> - *  Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997, 
-> + *  Copyright (C) 1992, 1993, 1994, 1995, 1996, 1997,
->   * 		1998, 1999  Theodore Ts'o
->   *
->   */
-> @@ -175,7 +175,7 @@ static void rs_start(struct tty_struct *tty)
->  
->  static void receive_chars(struct serial_state *info)
->  {
-> -        int status;
-> +	int status;
->  	int serdatr;
->  	unsigned char ch, flag;
->  	struct	async_icount *icount;
-> @@ -189,9 +189,9 @@ static void receive_chars(struct serial_state *info)
->  	amiga_custom.intreq = IF_RBF;
->  	mb();
->  
-> -	if((serdatr & 0x1ff) == 0)
-> +	if ((serdatr & 0x1ff) == 0)
->  	    status |= UART_LSR_BI;
-> -	if(serdatr & SDR_OVRUN)
-> +	if (serdatr & SDR_OVRUN)
->  	    status |= UART_LSR_OE;
->  
->  	ch = serdatr & 0xff;
-> @@ -266,7 +266,7 @@ static void transmit_chars(struct serial_state *info)
->  	amiga_custom.intreq = IF_TBE;
->  	mb();
->  	if (info->x_char) {
-> -	        amiga_custom.serdat = info->x_char | 0x100;
-> +		amiga_custom.serdat = info->x_char | 0x100;
->  		mb();
->  		info->icount.tx++;
->  		info->x_char = 0;
-> @@ -276,7 +276,7 @@ static void transmit_chars(struct serial_state *info)
->  	    || info->tport.tty->flow.stopped
->  	    || info->tport.tty->hw_stopped) {
->  		info->IER &= ~UART_IER_THRI;
-> -	        amiga_custom.intena = IF_TBE;
-> +		amiga_custom.intena = IF_TBE;
->  		mb();
->  		return;
->  	}
-> @@ -295,7 +295,7 @@ static void transmit_chars(struct serial_state *info)
->  	printk("THRE...");
->  #endif
->  	if (info->xmit.head == info->xmit.tail) {
-> -	        amiga_custom.intena = IF_TBE;
-> +		amiga_custom.intena = IF_TBE;
->  		mb();
->  		info->IER &= ~UART_IER_THRI;
->  	}
-> @@ -373,15 +373,15 @@ static void check_modem_status(struct serial_state *info)
->  	}
->  }
->  
-> -static irqreturn_t ser_vbl_int( int irq, void *data)
-> +static irqreturn_t ser_vbl_int(int irq, void *data)
->  {
-> -        /* vbl is just a periodic interrupt we tie into to update modem status */
-> +	/* vbl is just a periodic interrupt we tie into to update modem status */
->  	struct serial_state *info = data;
->  	/*
->  	 * TBD - is it better to unregister from this interrupt or to
->  	 * ignore it if MSI is clear ?
->  	 */
-> -	if(info->IER & UART_IER_MSI)
-> +	if (info->IER & UART_IER_MSI)
->  	  check_modem_status(info);
->  	return IRQ_HANDLED;
->  }
-> @@ -443,7 +443,7 @@ static int startup(struct tty_struct *tty, struct serial_state *info)
->  {
->  	struct tty_port *port = &info->tport;
->  	unsigned long flags;
-> -	int	retval=0;
-> +	int	retval = 0;
->  	unsigned long page;
->  
->  	page = get_zeroed_page(GFP_KERNEL);
-> @@ -664,7 +664,7 @@ static void change_speed(struct tty_struct *tty, struct serial_state *info,
->  	if (I_IGNBRK(tty)) {
->  		info->ignore_status_mask |= UART_LSR_BI;
->  		/*
-> -		 * If we're ignore parity and break indicators, ignore 
-> +		 * If we're ignore parity and break indicators, ignore
->  		 * overruns too.  (For real raw support).
->  		 */
->  		if (I_IGNPAR(tty))
-> @@ -685,7 +685,7 @@ static void change_speed(struct tty_struct *tty, struct serial_state *info,
->  
->  	/* Enable or disable parity bit */
->  
-> -	if(cval & UART_LCR_PARITY)
-> +	if (cval & UART_LCR_PARITY)
->  	  serper |= (SERPER_PARENB);
->  
->  	amiga_custom.serper = serper;
-> @@ -740,7 +740,7 @@ static void rs_flush_chars(struct tty_struct *tty)
->  	local_irq_restore(flags);
->  }
->  
-> -static int rs_write(struct tty_struct * tty, const unsigned char *buf, int count)
-> +static int rs_write(struct tty_struct *tty, const unsigned char *buf, int count)
->  {
->  	int	c, ret = 0;
->  	struct serial_state *info = tty->driver_data;
-> @@ -816,15 +816,15 @@ static void rs_flush_buffer(struct tty_struct *tty)
->  static void rs_send_xchar(struct tty_struct *tty, char ch)
->  {
->  	struct serial_state *info = tty->driver_data;
-> -        unsigned long flags;
-> +	unsigned long flags;
->  
->  	info->x_char = ch;
->  	if (ch) {
->  		/* Make sure transmit interrupts are on */
->  
-> -	        /* Check this ! */
-> -	        local_irq_save(flags);
-> -		if(!(amiga_custom.intenar & IF_TBE)) {
-> +		/* Check this ! */
-> +		local_irq_save(flags);
-> +		if (!(amiga_custom.intenar & IF_TBE)) {
->  		    amiga_custom.intena = IF_SETCLR | IF_TBE;
->  		    mb();
->  		    /* set a pending Tx Interrupt, transmitter should restart now */
-> @@ -840,12 +840,12 @@ static void rs_send_xchar(struct tty_struct *tty, char ch)
->  /*
->   * ------------------------------------------------------------
->   * rs_throttle()
-> - * 
-> + *
->   * This routine is called by the upper-layer tty layer to signal that
->   * incoming characters should be throttled.
->   * ------------------------------------------------------------
->   */
-> -static void rs_throttle(struct tty_struct * tty)
-> +static void rs_throttle(struct tty_struct *tty)
->  {
->  	struct serial_state *info = tty->driver_data;
->  	unsigned long flags;
-> @@ -864,7 +864,7 @@ static void rs_throttle(struct tty_struct * tty)
->  	local_irq_restore(flags);
->  }
->  
-> -static void rs_unthrottle(struct tty_struct * tty)
-> +static void rs_unthrottle(struct tty_struct *tty)
->  {
->  	struct serial_state *info = tty->driver_data;
->  	unsigned long flags;
-> @@ -990,7 +990,7 @@ static int set_serial_info(struct tty_struct *tty, struct serial_struct *ss)
->   * 	    release the bus after transmitting. This must be done when
->   * 	    the transmit shift register is empty, not be done when the
->   * 	    transmit holding register is empty.  This functionality
-> - * 	    allows an RS485 driver to be written in user space. 
-> + * 	    allows an RS485 driver to be written in user space.
->   */
->  static int get_lsr_info(struct serial_state *info, unsigned int __user *value)
->  {
-> @@ -1117,54 +1117,54 @@ static int rs_ioctl(struct tty_struct *tty,
->  	}
->  
->  	switch (cmd) {
-> -		case TIOCSERCONFIG:
-> -			return 0;
-> +	case TIOCSERCONFIG:
-> +		return 0;
->  
-> -		case TIOCSERGETLSR: /* Get line status register */
-> -			return get_lsr_info(info, argp);
-> +	case TIOCSERGETLSR: /* Get line status register */
-> +		return get_lsr_info(info, argp);
->  
-> -		/*
-> -		 * Wait for any of the 4 modem inputs (DCD,RI,DSR,CTS) to change
-> -		 * - mask passed in arg for lines of interest
-> - 		 *   (use |'ed TIOCM_RNG/DSR/CD/CTS for masking)
-> -		 * Caller should use TIOCGICOUNT to see which one it was
-> -		 */
-> -		case TIOCMIWAIT:
-> +	/*
-> +	 * Wait for any of the 4 modem inputs (DCD,RI,DSR,CTS) to change
-> +	 * - mask passed in arg for lines of interest
-> + 	 *   (use |'ed TIOCM_RNG/DSR/CD/CTS for masking)
-> +	 * Caller should use TIOCGICOUNT to see which one it was
-> +	 */
-> +	case TIOCMIWAIT:
-> +		local_irq_save(flags);
-> +		/* note the counters on entry */
-> +		cprev = info->icount;
-> +		local_irq_restore(flags);
-> +		while (1) {
-> +			prepare_to_wait(&info->tport.delta_msr_wait,
-> +					&wait, TASK_INTERRUPTIBLE);
->  			local_irq_save(flags);
-> -			/* note the counters on entry */
-> -			cprev = info->icount;
-> +			cnow = info->icount; /* atomic copy */
->  			local_irq_restore(flags);
-> -			while (1) {
-> -				prepare_to_wait(&info->tport.delta_msr_wait,
-> -						&wait, TASK_INTERRUPTIBLE);
-> -				local_irq_save(flags);
-> -				cnow = info->icount; /* atomic copy */
-> -				local_irq_restore(flags);
-> -				if (cnow.rng == cprev.rng && cnow.dsr == cprev.dsr && 
-> -				    cnow.dcd == cprev.dcd && cnow.cts == cprev.cts) {
-> -					ret = -EIO; /* no change => error */
-> -					break;
-> -				}
-> -				if ( ((arg & TIOCM_RNG) && (cnow.rng != cprev.rng)) ||
-> -				     ((arg & TIOCM_DSR) && (cnow.dsr != cprev.dsr)) ||
-> -				     ((arg & TIOCM_CD)  && (cnow.dcd != cprev.dcd)) ||
-> -				     ((arg & TIOCM_CTS) && (cnow.cts != cprev.cts)) ) {
-> -					ret = 0;
-> -					break;
-> -				}
-> -				schedule();
-> -				/* see if a signal did it */
-> -				if (signal_pending(current)) {
-> -					ret = -ERESTARTSYS;
-> -					break;
-> -				}
-> -				cprev = cnow;
-> +			if (cnow.rng == cprev.rng && cnow.dsr == cprev.dsr &&
-> +			    cnow.dcd == cprev.dcd && cnow.cts == cprev.cts) {
-> +				ret = -EIO; /* no change => error */
-> +				break;
-> +			}
-> +			if (((arg & TIOCM_RNG) && (cnow.rng != cprev.rng)) ||
-> +			     ((arg & TIOCM_DSR) && (cnow.dsr != cprev.dsr)) ||
-> +			     ((arg & TIOCM_CD)  && (cnow.dcd != cprev.dcd)) ||
-> +			     ((arg & TIOCM_CTS) && (cnow.cts != cprev.cts))) {
-> +				ret = 0;
-> +				break;
->  			}
-> -			finish_wait(&info->tport.delta_msr_wait, &wait);
-> -			return ret;
-> +			schedule();
-> +			/* see if a signal did it */
-> +			if (signal_pending(current)) {
-> +				ret = -ERESTARTSYS;
-> +				break;
-> +			}
-> +			cprev = cnow;
-> +		}
-> +		finish_wait(&info->tport.delta_msr_wait, &wait);
-> +		return ret;
->  
-> -		default:
-> -			return -ENOIOCTLCMD;
-> +	default:
-> +		return -ENOIOCTLCMD;
->  		}
->  	return 0;
->  }
-> @@ -1216,14 +1216,14 @@ static void rs_set_termios(struct tty_struct *tty, struct ktermios *old_termios)
->  /*
->   * ------------------------------------------------------------
->   * rs_close()
-> - * 
-> + *
->   * This routine is called when the serial port gets closed.  First, we
->   * wait for the last remaining data to be sent.  Then, we unlink its
->   * async structure from the interrupt chain if necessary, and we free
->   * that IRQ if nothing is left in the chain.
->   * ------------------------------------------------------------
->   */
-> -static void rs_close(struct tty_struct *tty, struct file * filp)
-> +static void rs_close(struct tty_struct *tty, struct file *filp)
->  {
->  	struct serial_state *state = tty->driver_data;
->  	struct tty_port *port = &state->tport;
-> @@ -1239,8 +1239,8 @@ static void rs_close(struct tty_struct *tty, struct file * filp)
->  	 */
->  	state->read_status_mask &= ~UART_LSR_DR;
->  	if (tty_port_initialized(port)) {
-> -	        /* disable receive interrupts */
-> -	        amiga_custom.intena = IF_RBF;
-> +		/* disable receive interrupts */
-> +		amiga_custom.intena = IF_RBF;
->  		mb();
->  		/* clear any pending receive interrupt */
->  		amiga_custom.intreq = IF_RBF;
-> @@ -1255,7 +1255,7 @@ static void rs_close(struct tty_struct *tty, struct file * filp)
->  	}
->  	shutdown(tty, state);
->  	rs_flush_buffer(tty);
-> -		
-> +
->  	tty_ldisc_flush(tty);
->  	port->tty = NULL;
->  
-> @@ -1277,7 +1277,7 @@ static void rs_wait_until_sent(struct tty_struct *tty, int timeout)
->  	 * Set the check interval to be 1/5 of the estimated time to
->  	 * send a single character, and make it at least 1.  The check
->  	 * interval should also be less than the timeout.
-> -	 * 
-> +	 *
->  	 * Note: we have to use pretty tight timings here to satisfy
->  	 * the NIST-PCTS.
->  	 */
-> @@ -1302,7 +1302,7 @@ static void rs_wait_until_sent(struct tty_struct *tty, int timeout)
->  	printk("In rs_wait_until_sent(%d) check=%lu...", timeout, char_time);
->  	printk("jiff=%lu...", jiffies);
->  #endif
-> -	while(!((lsr = amiga_custom.serdatr) & SDR_TSRE)) {
-> +	while (!((lsr = amiga_custom.serdatr) & SDR_TSRE)) {
->  #ifdef SERIAL_DEBUG_RS_WAIT_UNTIL_SENT
->  		printk("serdatr = %d (jiff=%lu)...", lsr, jiffies);
->  #endif
-> @@ -1340,7 +1340,7 @@ static void rs_hangup(struct tty_struct *tty)
->   * the IRQ chain.   It also performs the serial-specific
->   * initialization for the tty structure.
->   */
-> -static int rs_open(struct tty_struct *tty, struct file * filp)
-> +static int rs_open(struct tty_struct *tty, struct file *filp)
->  {
->  	struct tty_port *port = tty->port;
->  	struct serial_state *info = container_of(port, struct serial_state,
-> @@ -1378,15 +1378,15 @@ static inline void line_info(struct seq_file *m, int line,
->  
->  	stat_buf[0] = 0;
->  	stat_buf[1] = 0;
-> -	if(!(control & SER_RTS))
-> +	if (!(control & SER_RTS))
->  		strcat(stat_buf, "|RTS");
-> -	if(!(status & SER_CTS))
-> +	if (!(status & SER_CTS))
->  		strcat(stat_buf, "|CTS");
-> -	if(!(control & SER_DTR))
-> +	if (!(control & SER_DTR))
->  		strcat(stat_buf, "|DTR");
-> -	if(!(status & SER_DSR))
-> +	if (!(status & SER_DSR))
->  		strcat(stat_buf, "|DSR");
-> -	if(!(status & SER_DCD))
-> +	if (!(status & SER_DCD))
->  		strcat(stat_buf, "|CD");
->  
->  	if (state->quot)
-> -- 
-> 2.36.1
-> 
+On Tue, Jun 14, 2022 at 10:57 PM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> Following kernel crash reported while booting arm64 db410c board with
+> Linux next-20220614 [1] kfence enabled on this kernel.
+>
+> CONFIG_KFENCE=y
+>
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Hi,
+Did it work on older linux-next kernels with KFENCE enabled, or did you
+just start enabling it?
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+>
+> Boot log:
+> ---------
+> [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd030]
+> [    0.000000] Linux version 5.19.0-rc2-next-20220614
+> (tuxmake@tuxmake) (aarch64-linux-gnu-gcc (Debian 11.3.0-3) 11.3.0, GNU
+> ld (GNU Binutils for Debian) 2.38) #1 SMP PREEMPT @1655189659
+> [    0.000000] Machine model: Qualcomm Technologies, Inc. APQ 8016 SBC
+> [    0.000000] efi: UEFI not found.
+> [    0.000000] [Firmware Bug]: Kernel image misaligned at boot, please
+> fix your bootloader!
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+This is probably unrelated, but try updating your boot loader to get rid of
+this warning.
 
-- Your patch did many different things all at once, making it difficult
-  to review.  All Linux kernel patches need to only do one thing at a
-  time.  If you need to do multiple things (such as clean up all coding
-  style issues in a file/driver), do it in a sequence of patches, each
-  one doing only one thing.  This will make it easier to review the
-  patches to ensure that they are correct, and to help alleviate any
-  merge issues that larger patches can cause.
+> <trim>
+> [    0.000000] kfence: initialized - using 2097152 bytes for 255
+> objects at 0x(____ptrval____)-0x(____ptrval____)
+> <trim>
+> [   11.317288] Unable to handle kernel NULL pointer dereference at
+> virtual address 0000000000000000
+> [   11.317361] Mem abort info:
+> [   11.317906] Unable to handle kernel paging request at virtual
+> address 0000000029f63007
+> [   11.328825] Unable to handle kernel NULL pointer dereference at
+> virtual address 0000000000000009
+> [   11.334704]   ESR = 0x0000000096000004
+> [   11.343115] Unable to handle kernel NULL pointer dereference at
+> virtual address 0000000000000000
+> [   11.357163] Mem abort info:
+> [   11.357217]   ESR = 0x0000000096000004
+> [   11.359935] Mem abort info:
+> [   11.369085] Mem abort info:
+> [   11.369138]   ESR = 0x0000000096000004
+> [   11.373564]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [   11.374530]   SET = 0, FnV = 0
+> [   11.382591]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [   11.382864]   SET = 0, FnV = 0
+> [   11.400484]   ESR = 0x0000000096000004
+> [   11.411713]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [   11.411776]   SET = 0, FnV = 0
+> [   11.422177]   EA = 0, S1PTW = 0
+> [   11.422234]   FSC = 0x04: level 0 translation fault
+> [   11.422724]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [   11.424129] Data abort info:
+> [   11.428397]   EA = 0, S1PTW = 0
+> [   11.428416]   FSC = 0x04: level 0 translation fault
+> [   11.428427] Data abort info:
+> [   11.428434]   ISV = 0, ISS = 0x00000004
+> [   11.428442]   CM = 0, WnR = 0
+> [   11.428451] user pgtable: 4k pages, 48-bit VAs, pgdp=00000000854b8000
+> [   11.428464] [0000000029f63007] pgd=0000000000000000, p4d=0000000000000000
+> [   11.428494] Internal error: Oops: 96000004 [#1] PREEMPT SMP
+> [   11.428503] Modules linked in: venus_enc venus_dec
+> videobuf2_dma_contig crct10dif_ce adv7511(+) cec qcom_wcnss_pil
+> snd_soc_msm8916_analog qcom_pon qcom_spmi_temp_alarm rtc_pm8xxx
+> qcom_spmi_vadc snd_soc_lpass_apq8016 qcom_vadc_common
+> snd_soc_msm8916_digital snd_soc_lpass_cpu snd_soc_apq8016_sbc
+> snd_soc_lpass_platform qcom_q6v5_mss snd_soc_qcom_common qcom_pil_info
+> msm qcom_camss qcom_q6v5 gpu_sched qcom_sysmon drm_dp_aux_bus
+> venus_core qcom_common videobuf2_dma_sg v4l2_mem2mem v4l2_fwnode
+> qcom_glink_smem v4l2_async videobuf2_memops qmi_helpers videobuf2_v4l2
+> mdt_loader qnoc_msm8916 drm_display_helper videobuf2_common
+> i2c_qcom_cci qcom_rng qcom_stats icc_smd_rpm rfkill display_connector
+> drm_kms_helper drm socinfo rmtfs_mem qrtr fuse
+> [   11.428683] CPU: 3 PID: 312 Comm: systemd-udevd Tainted: G        W
+>         5.19.0-rc2-next-20220614 #1
+> [   11.428694] Hardware name: Qualcomm Technologies, Inc. APQ 8016 SBC (DT)
+> [   11.428699] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   11.428709] pc : sysfs_kf_seq_show+0x3c/0x130
+> [   11.428724] lr : kernfs_seq_show+0x38/0x44
+> [   11.428735] sp : ffff80000b7ebbf0
+> [   11.428739] x29: ffff80000b7ebbf0 x28: 0000000000000001 x27: 0000000000400cc0
+> [   11.428753] x26: 000000007ffff000 x25: ffff000005581290 x24: ffff000005581280
+> [   11.428767] x23: 0000000000000000 x22: ffff0000056dd520 x21: ffff000004413d00
+> [   11.428780] x20: 0000000029f62fff x19: ffff000005581258 x18: 0000000000000000
+> [   11.428793] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+> [   11.428806] x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+> [   11.428819] x11: 0000000000000000 x10: 0000000000000000 x9 : ffff8000084b0ca8
+> [   11.428832] x8 : 0000000000000000 x7 : 0000000000000200 x6 : 0000000000000000
+> [   11.428845] x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff000004413d00
+> [   11.428857] x2 : ffff8000084b2e64 x1 : 0000000000000001 x0 : ffff000002368a00
 
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what is needed in order to
-  properly describe the change.
+It appears that kobj->ktype is x20 here, which is a user space address
+(0x29f62fff),
+reading ->sysfs_ops at offset 8 from that causes a trap.
 
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what a proper Subject: line should
-  look like.
+static const struct sysfs_ops *sysfs_file_ops(struct kernfs_node *kn)
+{
+        struct kobject *kobj = kn->parent->priv;
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+        if (kn->flags & KERNFS_LOCKDEP)
+                lockdep_assert_held(kn);
+        return kobj->ktype ? kobj->ktype->sysfs_ops : NULL;
+}
+static int sysfs_kf_seq_show(struct seq_file *sf, void *v)
+{
+        struct kernfs_open_file *of = sf->private;
+        struct kobject *kobj = of->kn->parent->priv;
+        const struct sysfs_ops *ops = sysfs_file_ops(of->kn);
+...
 
-thanks,
+ffff800008432e64 <sysfs_kf_seq_show>:
+ffff800008432e64:       d503245f        bti     c
+ffff800008432e68:       d503201f        nop
+ffff800008432e6c:       d503201f        nop
+ffff800008432e70:       d503233f        paciasp
+ffff800008432e74:       a9bd7bfd        stp     x29, x30, [sp, #-48]!
+ffff800008432e78:       910003fd        mov     x29, sp
+ffff800008432e7c:       a90153f3        stp     x19, x20, [sp, #16]
+ffff800008432e80:       aa0003f3        mov     x19, x0
+ffff800008432e84:       a9025bf5        stp     x21, x22, [sp, #32]
+ffff800008432e88:       f9403815        ldr     x21, [x0, #112]  # of
+= sf->private
+ffff800008432e8c:       f94002a0        ldr     x0, [x21] # of->kn
+ffff800008432e90:       f9400400        ldr     x0, [x0, #8]  # kn->parent
+ffff800008432e94:       f9403016        ldr     x22, [x0, #96] # kobj
+= parent->priv
+ffff800008432e98:       f94016d4        ldr     x20, [x22, #40] # kobj-> ktype
+ffff800008432e9c:       b4000054        cbz     x20, ffff800008432ea4
+<sysfs_kf_seq_show+0x40>
+ffff800008432ea0:       f9400694        ldr     x20, [x20, #8] #
+ktype->sysfs_ops, traps
+...
 
-greg k-h's patch email bot
+        Arnd

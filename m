@@ -2,217 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A42954D304
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:54:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A3054D2F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348477AbiFOUwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 16:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
+        id S1348631AbiFOUxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 16:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344323AbiFOUwi (ORCPT
+        with ESMTP id S1349323AbiFOUxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 16:52:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564C76410;
-        Wed, 15 Jun 2022 13:52:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E4456600BE;
-        Wed, 15 Jun 2022 20:52:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACAABC3411A;
-        Wed, 15 Jun 2022 20:52:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655326356;
-        bh=ZGcb3PGvlAe9puTJZg4fg6hIdYh2HuJAfIX8EE3UMf4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cUqBYHjzDCCLDQo5p26m8y0p9kaave6tro87nDQfMKZUV7fkSZIrVKY4O+C59CHpZ
-         ghWZbhomF5Kg15o5VcTSZ/TTru4Ct4VCihKw5XwYOlz6b8/QRY5mXK9GFZ254wvYYb
-         NeUP9NcXkpxlo/wZQu08QOadA5Ro/RPwVG/Iu2drGkNr45tFhvCvoKoauwnhWFA4Nh
-         e0R3YkYd3213mtYsPVkM7Ynoa3f2FZLlrrgK1Z6TtUrP4j7hByeC1Ei5DG31FkIm2+
-         MgGJ2UguqqMwBRmnNmFv9/Ae71VDH7q2qN6mK52Qv3wApBWVKCwgtbJs35cAWk4rY6
-         jXHJ4duDvUgzQ==
-Date:   Wed, 15 Jun 2022 13:52:34 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Bhanuprakash Modem <bhanuprakash.modem@intel.com>
-Subject: Re: linux-next: Tree for Jun 15
- (drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c)
-Message-ID: <YqpGknQvigfwZU6b@dev-arch.thelio-3990X>
-References: <20220615160116.528c324b@canb.auug.org.au>
- <d1a48a84-6d07-e8f7-5fd8-d24a7a1cf187@infradead.org>
- <CADnq5_N6gfaPfZJAX4+poWFFruxNdFKZqzXZXosj1A55e-O1mA@mail.gmail.com>
- <YqpACmvbwiEcUfta@dev-arch.thelio-3990X>
- <CADnq5_OnrxUiM+aTWRLjixp=vY6adV3w4p2cfTkdS32uq_UsiQ@mail.gmail.com>
+        Wed, 15 Jun 2022 16:53:34 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0ED054FA6;
+        Wed, 15 Jun 2022 13:53:32 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id c2so20811929lfk.0;
+        Wed, 15 Jun 2022 13:53:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dkNLjdDW3Fz/m7M441ZwWT9nGf+j42bVYyQKzjzvhUs=;
+        b=nyhckwPzYvb5+DY7chXK08bpIkP5CR0LjriS4B82ISsX9equWKiptiscQ9eRxWMKtj
+         k2SUVn3ZcCRcWEjCPmW/R4jsaQ0SzJ+zdGDYFkhCdGx3PU+CEluPuePcpULVe4NEbsvD
+         2v6N4iS8qH6gt9ZfZjsJy+fpuS6RJ+YWcmdP0gROM5lIXmTgANry/M07Df0z/+Zu7ejG
+         6tEQXc1stzbOEISFZHTNnZQnr9MIyrikEUiNO4KRgdhc82kDzLh28vJE3XGiSrDrSSP0
+         3n2nK18z0ckgsbnoB/RtgNRUUKm1z4TULbLOsQyOJrOD59p+613VtvJpI0+70aXfl3Lu
+         x5+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dkNLjdDW3Fz/m7M441ZwWT9nGf+j42bVYyQKzjzvhUs=;
+        b=Jsva56ilnqudemQY3Fw8qnDxcn7+1hGXAzhsA+oU3AL2b66V4x0tnbQj+OZfIG0/mW
+         Uzn5zyYHaTqI9t27xRFNqbu4TDf/LSBwaHKJsUmg/cp5XwAEg9LS0JpO7x3+WkxwTzJB
+         IE7dDQqtDyCVTqLcnLnYUZz5RE/4/BFynXdfs2l/uDffauZX87avzQXqbapeJhObR/VT
+         7YmeCHrU5qeVtRbCmSWCWaKh/FjWz2t7u2jjSsSHiAQE6zVsR6RSWrZb+FAVNUds+qNI
+         glEkhyP5CSameuNOveWtk2cf1ChCCCuhKxOp2M3yKUJSptkjbyjqy5R3C0oSJhZOYTWC
+         RM9A==
+X-Gm-Message-State: AJIora9TKzpLmQHmKSS6ORO+Pe0/MQz9aRrpR67Ty+GXJdkpc6l3omta
+        IK7nYQHCo7KsPTWEQu6dBtE=
+X-Google-Smtp-Source: AGRyM1u51hJv1mQ/ajBoNSZ6zc7XEpSrk9yR0l23nwS1A6zSYkrB4ctYGJDOTzdXXP7wlbkJl672rQ==
+X-Received: by 2002:a19:2d51:0:b0:479:1269:a146 with SMTP id t17-20020a192d51000000b004791269a146mr780304lft.572.1655326411015;
+        Wed, 15 Jun 2022 13:53:31 -0700 (PDT)
+Received: from mobilestation ([95.79.189.214])
+        by smtp.gmail.com with ESMTPSA id t20-20020a056512069400b004795311530asm1911636lfe.209.2022.06.15.13.53.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 13:53:30 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 23:53:28 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 08/23] ata: libahci_platform: Sanity check the DT
+ child nodes number
+Message-ID: <20220615205328.chwruabvksdbnaex@mobilestation>
+References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610081801.11854-9-Sergey.Semin@baikalelectronics.ru>
+ <c388835e-3bc1-a69c-82a7-6036c7adec1b@opensource.wdc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADnq5_OnrxUiM+aTWRLjixp=vY6adV3w4p2cfTkdS32uq_UsiQ@mail.gmail.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <c388835e-3bc1-a69c-82a7-6036c7adec1b@opensource.wdc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 04:45:16PM -0400, Alex Deucher wrote:
-> On Wed, Jun 15, 2022 at 4:24 PM Nathan Chancellor <nathan@kernel.org> wrote:
-> >
-> > On Wed, Jun 15, 2022 at 03:28:52PM -0400, Alex Deucher wrote:
-> > > On Wed, Jun 15, 2022 at 3:01 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> > > >
-> > > >
-> > > >
-> > > > On 6/14/22 23:01, Stephen Rothwell wrote:
-> > > > > Hi all,
-> > > > >
-> > > > > Changes since 20220614:
-> > > > >
-> > > >
-> > > > on i386:
-> > > > # CONFIG_DEBUG_FS is not set
-> > > >
-> > > >
-> > > > ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function ‘amdgpu_dm_crtc_late_register’:
-> > > > ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6599:2: error: implicit declaration of function ‘crtc_debugfs_init’; did you mean ‘amdgpu_debugfs_init’? [-Werror=implicit-function-declaration]
-> > > >   crtc_debugfs_init(crtc);
-> > > >   ^~~~~~~~~~~~~~~~~
-> > > >   amdgpu_debugfs_init
-> > > >
-> > > >
-> > > > Full randconfig file is attached.
-> > >
-> > > I tried building with your config and I can't repro this.  As Harry
-> > > noted, that function and the whole secure display feature depend on
-> > > debugfs.  It should never be built without CONFIG_DEBUG_FS.  See
-> > > drivers/gpu/drm/amd/display/Kconfig:
-> > >
-> > > > config DRM_AMD_SECURE_DISPLAY
-> > > >         bool "Enable secure display support"
-> > > >         default n
-> > > >         depends on DEBUG_FS
-> > > >         depends on DRM_AMD_DC_DCN
-> > > >         help
-> > > >             Choose this option if you want to
-> > > >             support secure display
-> > > >
-> > > >             This option enables the calculation
-> > > >             of crc of specific region via debugfs.
-> > > >             Cooperate with specific DMCU FW.
-> > >
-> > > amdgpu_dm_crtc_late_register is guarded by
-> > > CONIG_DRM_AMD_SECURE_DISPLAY.  It's not clear to me how we could hit
-> > > this.
-> >
-> > I think the problem is that you are not looking at the right tree.
-> >
-> > The kernel test robot reported [1] [2] this error is caused by commit
-> > 4cd79f614b50 ("drm/amd/display: Move connector debugfs to drm"), which
-> > is in the drm-misc tree on the drm-misc-next branch. That change removes
-> > the #ifdef around amdgpu_dm_crtc_late_register(), meaning that
-> > crtc_debugfs_init() can be called without CONFIG_DRM_AMD_SECURE_DISPLAY
-> > and CONFIG_DEBUG_FS.
-> >
-> >   $ git show -s --format='%h ("%s")'
-> >   abf0ba5a34ea ("drm/bridge: it6505: Add missing CRYPTO_HASH dependency")
-> >
-> >   $ make -skj"$(nproc)" ARCH=x86_64 mrproper defconfig
-> >
-> >   $ scripts/config -d BLK_DEV_IO_TRACE -d DEBUG_FS -e DRM_AMDGPU
-> >
-> >   $ make -skj"$(nproc)" ARCH=x86_64 olddefconfig drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.o
-> >   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In function ‘amdgpu_dm_crtc_late_register’:
-> >   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6622:9: error: implicit declaration of function ‘crtc_debugfs_init’; did you mean ‘amdgpu_debugfs_init’? [-Werror=implicit-function-declaration]
-> >    6622 |         crtc_debugfs_init(crtc);
-> >         |         ^~~~~~~~~~~~~~~~~
-> >         |         amdgpu_debugfs_init
-> >   cc1: all warnings being treated as errors
-> >
-> > Contrast that with the current top of your tree:
-> >
-> >   $ git show -s --format='%h ("%s")'
-> >   c435f61d0eb3 ("drm/amd/display: Drop unnecessary guard from DC resource")
-> >
-> >   $ make -skj"$(nproc)" ARCH=x86_64 mrproper defconfig
-> >
-> >   $ scripts/config -d BLK_DEV_IO_TRACE -d DEBUG_FS -e DRM_AMDGPU
-> >
-> >   $ make -skj"$(nproc)" ARCH=x86_64 olddefconfig drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.o
-> >
-> >   $ echo $?
-> >   0
-> >
-> > Randy's patch [3] seems like it should resolve the issue just fine but
-> > it needs to be applied to drm-misc-next, not the amdgpu tree.
+On Tue, Jun 14, 2022 at 05:23:33PM +0900, Damien Le Moal wrote:
+> On 6/10/22 17:17, Serge Semin wrote:
+> > Having greater than AHCI_MAX_PORTS (32) ports detected isn't that critical
+> > from the further AHCI-platform initialization point of view since
+> > exceeding the ports upper limit will cause allocating more resources than
+> > will be used afterwards. But detecting too many child DT-nodes doesn't
+> > seem right since it's very unlikely to have it on an ordinary platform. In
+> > accordance with the AHCI specification there can't be more than 32 ports
+> > implemented at least due to having the CAP.NP field of 5 bits wide and the
+> > PI register of dword size. Thus if such situation is found the DTB must
+> > have been corrupted and the data read from it shouldn't be reliable. Let's
+> > consider that as an erroneous situation and halt further resources
+> > allocation.
+> > 
+> > Note it's logically more correct to have the nports set only after the
+> > initialization value is checked for being sane. So while at it let's make
+> > sure nports is assigned with a correct value.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Reviewed-by: Hannes Reinecke <hare@suse.de>
+> > 
+> > ---
+> > 
+> > Changelog v2:
+> > - Drop the else word from the child_nodes value checking if-else-if
+> >   statement (@Damien) and convert the after-else part into the ternary
+> >   operator-based statement.
+> > 
+> > Changelog v4:
+> > - Fix some logical mistakes in the patch log. (@Sergei Shtylyov)
+> > ---
+> >  drivers/ata/libahci_platform.c | 13 ++++++++++---
+> >  1 file changed, 10 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
+> > index 814804582d1d..8aed7b29c7ab 100644
+> > --- a/drivers/ata/libahci_platform.c
+> > +++ b/drivers/ata/libahci_platform.c
+> > @@ -451,15 +451,22 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
+> >  		}
+> >  	}
+> >  
+> > -	hpriv->nports = child_nodes = of_get_child_count(dev->of_node);
+> > +	/*
+> > +	 * Too many sub-nodes most likely means having something wrong with
+> > +	 * the firmware.
+> > +	 */
+> > +	child_nodes = of_get_child_count(dev->of_node);
+> > +	if (child_nodes > AHCI_MAX_PORTS) {
+> > +		rc = -EINVAL;
+> > +		goto err_out;
+> > +	}
+> >  
+> >  	/*
+> >  	 * If no sub-node was found, we still need to set nports to
+> >  	 * one in order to be able to use the
+> >  	 * ahci_platform_[en|dis]able_[phys|regulators] functions.
+> >  	 */
+> > -	if (!child_nodes)
+> > -		hpriv->nports = 1;
+> > +	hpriv->nports = child_nodes ?: 1;
 > 
-> Thanks for tracking this down.  I think something like the attached
-> patch is cleaner since the whole thing is only valid for debugfs.
 
-Makes sense! I tested the below patch with and without DEBUG_FS and saw
-no errors.
+> This change is not necessary and makes the code far less easy to read.
 
-> From b0bcacd86344998e0ca757f89c6c4cd3b6298999 Mon Sep 17 00:00:00 2001
-> From: Alex Deucher <alexander.deucher@amd.com>
-> Date: Wed, 15 Jun 2022 16:40:39 -0400
-> Subject: [PATCH] drm/amdgpu/display: fix build when CONFIG_DEBUG_FS is not set
+elaborate please. What change? What part of this change makes the code
+less easy to read?
+
+-Sergey
+
 > 
-> amdgpu_dm_crtc_late_register is only used when CONFIG_DEBUG_FS
-> so make it dependent on that.
+> >  
+> >  	hpriv->phys = devm_kcalloc(dev, hpriv->nports, sizeof(*hpriv->phys), GFP_KERNEL);
+> >  	if (!hpriv->phys) {
 > 
-> Fixes: 4cd79f614b50 ("drm/amd/display: Move connector debugfs to drm")
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-
-Tested-by: Nathan Chancellor <nathan@kernel.org> # build
-
-> Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-> ---
->  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 4 ++++
->  1 file changed, 4 insertions(+)
 > 
-> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> index c9004f7e700d..33cd7a3d4ecb 100644
-> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> @@ -6594,12 +6594,14 @@ dm_crtc_duplicate_state(struct drm_crtc *crtc)
->  	return &state->base;
->  }
->  
-> +#ifdef CONFIG_DEBUG_FS
->  static int amdgpu_dm_crtc_late_register(struct drm_crtc *crtc)
->  {
->  	crtc_debugfs_init(crtc);
->  
->  	return 0;
->  }
-> +#endif
->  
->  static inline int dm_set_vupdate_irq(struct drm_crtc *crtc, bool enable)
->  {
-> @@ -6693,7 +6695,9 @@ static const struct drm_crtc_funcs amdgpu_dm_crtc_funcs = {
->  	.enable_vblank = dm_enable_vblank,
->  	.disable_vblank = dm_disable_vblank,
->  	.get_vblank_timestamp = drm_crtc_vblank_helper_get_vblank_timestamp,
-> +#if defined(CONFIG_DEBUG_FS)
->  	.late_register = amdgpu_dm_crtc_late_register,
-> +#endif
->  };
->  
->  static enum drm_connector_status
 > -- 
-> 2.35.3
-> 
-
+> Damien Le Moal
+> Western Digital Research

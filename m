@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 123DE54C961
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6F254C963
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345746AbiFONCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 09:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
+        id S1347273AbiFONCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 09:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346242AbiFONCb (ORCPT
+        with ESMTP id S1346507AbiFONCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 09:02:31 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D30595A6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655298150; x=1686834150;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9aFgN11zv32epzY4IsX2SnErbjKpIlBDe1HikVsn+0U=;
-  b=LQXTLOxF4unUQnOQYNk9Pc2R8WlDQASeZg4Gi15t15k5Vcb4YpUTUUHy
-   oMI6vB8QKgpHNMXM6K9EUr09P+buvYhXDeqrV/cZiPGE8GQSb6hW3sxT9
-   7S6JBP8/HxZWVPQlXITwLeyhO+DFMtrCc73XmZhrgxSlkZduLKgJEddHh
-   rSz9t9bhhuxc1NdzKSMS/WmZOnIW5HcN7AO/dnOotNvG9gQOMEMZC/KsH
-   lISDk+VUt7oGeNXqMgvoM9XoqxjRa4/mG+VFM+xhRDcz6346+++1DIpME
-   SHmwKJIf9VwyJNHYoL/kNqrHjkIn1TbRqnitdkkO66UVoCpB13T9vVrkW
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="267641909"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="267641909"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 06:02:29 -0700
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="589103071"
-Received: from leitan-mobl.ccr.corp.intel.com (HELO [10.255.31.142]) ([10.255.31.142])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 06:02:27 -0700
-Message-ID: <08fd79a1-0117-42bb-9105-c8ff400fb7df@linux.intel.com>
-Date:   Wed, 15 Jun 2022 21:02:25 +0800
+        Wed, 15 Jun 2022 09:02:46 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56EA7220ED
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:02:45 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 123so11312558pgb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:02:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ihd5+hUtvMSLtuKfDaBmqf+iFGL/F4FFdcsqC/XAKrg=;
+        b=zKf5WOiOffG3FL22AFbalEIXBXG/f5mpymPpP3V7+AvI9Z0Yw+5U39mzeGwOKMi80A
+         cqvH6NeTrZD/HwUZJAnDNWcedJz2btUmxZzE12K77R9qyQBHM9dnjqsIoBVoXUXWlFVB
+         GsjiMoO9xOpPXQVskNfqBq/CnRGUwowE0h3a2CHfBTrdMS0Qn2n8A4c3eEAo2ROmgx2B
+         BaGxQIsdmgVCLNhwzdyaJ6iCgp6y8kY8gJzZo+fWfs0OiG5Bdqb94VM51WYeI9iudR4j
+         TmnfuKIYC1MZfkM5wp8QlcAC05hI33+FIyHqK0bGPERbIXrH/qULlrNylTX1E10Gr8fK
+         tZbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ihd5+hUtvMSLtuKfDaBmqf+iFGL/F4FFdcsqC/XAKrg=;
+        b=yXe8Xhc6MZMdJ9YG7gjZny2ZZQVkZgiMjn9hTPxPfyrlXZETCLl8hXep+8KQvH8Wba
+         rPuCDaep8ish4tWNqoj3K2UxiAx3ZC2oiH8dspq0M3bceEfV55OyV9SzYcD9aUXOjNNN
+         JvH9a5aIdM7SZqQcYbv0BM+dP+U+LteTXn4pwXsDPwaTe/HutrcrA0jkyJNkRr/AjKVm
+         Dz0nn5Ny9J1CN4w+P6XJikdpAx2xrJXzOKIpcSlmZhqXc6FhBw14rfU/4hjlhVRVmFtR
+         HxxT6GiZL08r8U6vS/fRKm3NOjPt+ZVJwlbJUH+PGxq0cVepdRV1XPvP+WHeKFn3VQup
+         yDiQ==
+X-Gm-Message-State: AJIora8B4s7+rlZsnIg+OuZDVwg9e/hnVYBeF25xvLYeF6rBGabLGoaP
+        gUYYN/zEPUpDAfKfRvxiEB7fXg==
+X-Google-Smtp-Source: AGRyM1sld9ZspHUBSDSjpTYavqq/+/cl7SS9nh2jH2uUJ9kiojPH+vhlg710WLM7IDzDL7NfkG4EXg==
+X-Received: by 2002:a63:9043:0:b0:408:a759:2234 with SMTP id a64-20020a639043000000b00408a7592234mr7191498pge.304.1655298164667;
+        Wed, 15 Jun 2022 06:02:44 -0700 (PDT)
+Received: from localhost ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id s3-20020a170903200300b001678e9670d8sm9178088pla.2.2022.06.15.06.02.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 06:02:44 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 21:02:37 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     corbet@lwn.net, akpm@linux-foundation.org, paulmck@kernel.org,
+        mike.kravetz@oracle.com, osalvador@suse.de,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, duanxiongchun@bytedance.com, smuchun@gmail.com
+Subject: Re: [PATCH v2 1/2] mm: memory_hotplug: enumerate all supported
+ section flags
+Message-ID: <YqnYbcvenPs5Xqa5@FVFYT0MHHV2J.usts.net>
+References: <20220520025538.21144-1-songmuchun@bytedance.com>
+ <20220520025538.21144-2-songmuchun@bytedance.com>
+ <62aef8a9-aa21-37ec-83b5-9dd9fc729890@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 01/12] iommu/vt-d: debugfs: Remove device_domain_lock
- usage
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jason Gunthorpe <jgg@nvidia.com>
-References: <20220614025137.1632762-1-baolu.lu@linux.intel.com>
- <20220614025137.1632762-2-baolu.lu@linux.intel.com>
- <BN9PR11MB527680C1957C0E29E8AE85168CAA9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <4f6f7bb9-5ea4-b466-7a59-62ebd5bc2cf7@linux.intel.com>
- <BN9PR11MB52769385E96377F5FD8CE2928CAD9@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB52769385E96377F5FD8CE2928CAD9@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62aef8a9-aa21-37ec-83b5-9dd9fc729890@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,122 +74,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/6/15 14:13, Tian, Kevin wrote:
->> From: Baolu Lu<baolu.lu@linux.intel.com>
->> Sent: Wednesday, June 15, 2022 9:54 AM
->>
->> On 2022/6/14 14:43, Tian, Kevin wrote:
->>>> From: Lu Baolu<baolu.lu@linux.intel.com>
->>>> Sent: Tuesday, June 14, 2022 10:51 AM
->>>>
->>>> The domain_translation_struct debugfs node is used to dump the DMAR
->>>> page
->>>> tables for the PCI devices. It potentially races with setting domains to
->>>> devices. The existing code uses a global spinlock device_domain_lock to
->>>> avoid the races, but this is problematical as this lock is only used to
->>>> protect the device tracking lists of each domain.
->>> is it really problematic at this point? Before following patches are applied
->>> using device_domain_lock should have similar effect as holding the group
->>> lock.
->>>
->>> Here it might make more sense to just focus on removing the use of
->>> device_domain_lock outside of iommu.c. Just that using group lock is
->>> cleaner and more compatible to following cleanups.
->>>
->>> and it's worth mentioning that racing with page table updates is out
->>> of the scope of this series. Probably also add a comment in the code
->>> to clarify this point.
->>>
->> Hi Kevin,
->>
->> How do you like below updated patch?
-> Yes, this is better.
+On Wed, Jun 15, 2022 at 11:35:09AM +0200, David Hildenbrand wrote:
+> On 20.05.22 04:55, Muchun Song wrote:
+> > We are almost running out of section flags, only one bit is available in
+> > the worst case (powerpc with 256k pages).  However, there are still some
+> > free bits (in ->section_mem_map) on other architectures (e.g. x86_64 has
+> > 10 bits available, arm64 has 8 bits available with worst case of 64K
+> > pages).  We have hard coded those numbers in code, it is inconvenient to
+> > use those bits on other architectures except powerpc.  So transfer those
+> > section flags to enumeration to make it easy to add new section flags in
+> > the future.  Also, move SECTION_TAINT_ZONE_DEVICE into the scope of
+> > CONFIG_ZONE_DEVICE to save a bit on non-zone-device case.
+> > 
+> > Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 > 
->>   From cecc9a0623780a11c4ea4d0a15aa6187f01541c4 Mon Sep 17 00:00:00
->> 2001
->> From: Lu Baolu<baolu.lu@linux.intel.com>
->> Date: Sun, 29 May 2022 10:18:56 +0800
->> Subject: [PATCH 1/1] iommu/vt-d: debugfs: Remove device_domain_lock
->> usage
->>
->> The domain_translation_struct debugfs node is used to dump the DMAR
->> page
->> tables for the PCI devices. It potentially races with setting domains to
->> devices. The existing code uses the global spinlock device_domain_lock to
->> avoid the races.
->>
->> This removes the use of device_domain_lock outside of iommu.c by replacing
->> it with the group mutex lock. Using the group mutex lock is cleaner and
->> more compatible to following cleanups.
->>
->> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
->> ---
->>    drivers/iommu/intel/debugfs.c | 42 +++++++++++++++++++++++++----------
->>    drivers/iommu/intel/iommu.c   |  2 +-
->>    drivers/iommu/intel/iommu.h   |  1 -
->>    3 files changed, 31 insertions(+), 14 deletions(-)
->>
->> diff --git a/drivers/iommu/intel/debugfs.c b/drivers/iommu/intel/debugfs.c
->> index d927ef10641b..f4acd8993f60 100644
->> --- a/drivers/iommu/intel/debugfs.c
->> +++ b/drivers/iommu/intel/debugfs.c
->> @@ -342,13 +342,13 @@ static void pgtable_walk_level(struct seq_file *m,
->> struct dma_pte *pde,
->>    	}
->>    }
->>
->> -static int show_device_domain_translation(struct device *dev, void *data)
->> +static int __show_device_domain_translation(struct device *dev, void *data)
->>    {
->> -	struct device_domain_info *info = dev_iommu_priv_get(dev);
->> -	struct dmar_domain *domain = info->domain;
->> +	struct dmar_domain *domain;
->>    	struct seq_file *m = data;
->>    	u64 path[6] = { 0 };
->>
->> +	domain = to_dmar_domain(iommu_get_domain_for_dev(dev));
->>    	if (!domain)
->>    		return 0;
->>
->> @@ -359,20 +359,38 @@ static int show_device_domain_translation(struct
->> device *dev, void *data)
->>    	pgtable_walk_level(m, domain->pgd, domain->agaw + 2, 0, path);
->>    	seq_putc(m, '\n');
->>
->> -	return 0;
->> +	return 1;
->>    }
->>
->> -static int domain_translation_struct_show(struct seq_file *m, void *unused)
->> +static int show_device_domain_translation(struct device *dev, void *data)
->>    {
->> -	unsigned long flags;
->> -	int ret;
->> +	struct iommu_group *group;
->>
->> -	spin_lock_irqsave(&device_domain_lock, flags);
->> -	ret = bus_for_each_dev(&pci_bus_type, NULL, m,
->> -			       show_device_domain_translation);
->> -	spin_unlock_irqrestore(&device_domain_lock, flags);
->> +	group = iommu_group_get(dev);
->> +	if (group) {
->> +		/*
->> +		 * The group->mutex is held across the callback, which will
->> +		 * block calls to iommu_attach/detach_group/device. Hence,
->> +		 * the domain of the device will not change during traversal.
->> +		 *
->> +		 * All devices in an iommu group share a single domain,
->> hence
->> +		 * we only dump the domain of the first device. Even though,
-> bus_for_each_dev() will still lead to duplicated dump in the same group
-> but probably we can leave with it for a debug interface.
+> Sorry for the late reply. This looks overly complicated to me.
 > 
+> IOW, staring at that patch I don't quite like what I am seeing.
+> 
+> 
+> Something like the following is *a lot* easier to read than some
+> MAPPER macro magic. What speaks against it?
+>
 
-Yes. This is what it was. Ideally we could walk the iommu groups and
-dump the device names belonging to the group and it's domain mappings,
-but I was not willing to add any helpers in the iommu core just for a
-debugfs use.
+Thanks for taking a look.
 
----
-Best regards,
-baolu
+Yeah, it is more readable. This question is also raised by Oscar.
+I pasted the reply to here.
+
+"
+Yeah, it's a little complicated. All the magic aims to generate
+two enumeration from one MAPPER(xxx, config), one is SECTION_xxx_SHIFT,
+another is SECTION_xxx = BIT(SECTION_xxx_SHIFT) if the 'config' is
+configured. If we want to add a new flag, like the follow patch, just
+one line could do that.
+
+  MAPPER(CANNOT_OPTIMIZE_VMEMMAP, CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP)
+
+Without those magic, we have to add 4 lines like follows to do the
+similar thing.
+
+  #ifdef CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
+        SECTION_CANNOT_OPTIMIZE_VMEMMAP_SHIFT,
+  #define SECTION_CANNOT_OPTIMIZE_VMEMMAP BIT(SECTION_CANNOT_OPTIMIZE_VMEMMAP_SHIFT)
+  #endif
+
+I admit it is more clear but not simplified as above approach.
+"
+
+Both two approaches are fine to me. I can switch to the following approach
+seems you think the following one is better.
+
+Thanks.
+
+> /*
+>  * Section bits use the lower unused bits in the ->section_mem_map
+>  */
+> enum {
+> 	SECTION_MARKED_PRESENT_BIT = 0,
+> 	SECTION_HAS_MEM_MAP_BIT,
+> 	...
+> #ifdef ZONE_DEVICE
+> 	SECTION_TAINT_ZONE_DEVICE_BIT
+> #endif
+> }
+> 
+> #define SECTION_MARKED_PRESENT	   (1ULL << SECTION_MARKED_PRESENT_BIT)
+> ...
+> #ifdef ZONE_DEVICE
+> #define SECTION_TAINT_ZONE_DEVICE  (1ULL << SECTION_TAINT_ZONE_DEVICE_BIT)
+> #endif /* ZONE_DEVICE */
+> 
+> 
+> 
+> > ---
+> >  include/linux/kconfig.h |  1 +
+> >  include/linux/mmzone.h  | 54 +++++++++++++++++++++++++++++++++++++++++--------
+> >  mm/memory_hotplug.c     |  6 ++++++
+> >  3 files changed, 53 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/include/linux/kconfig.h b/include/linux/kconfig.h
+> > index 20d1079e92b4..7044032b9f42 100644
+> > --- a/include/linux/kconfig.h
+> > +++ b/include/linux/kconfig.h
+> > @@ -10,6 +10,7 @@
+> >  #define __LITTLE_ENDIAN 1234
+> >  #endif
+> >  
+> > +#define __ARG_PLACEHOLDER_ 0,
+> >  #define __ARG_PLACEHOLDER_1 0,
+> >  #define __take_second_arg(__ignored, val, ...) val
+> >  
+> > diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> > index 299259cfe462..2cf2a76535ab 100644
+> > --- a/include/linux/mmzone.h
+> > +++ b/include/linux/mmzone.h
+> > @@ -1422,16 +1422,47 @@ extern size_t mem_section_usage_size(void);
+> >   *      (equal SECTION_SIZE_BITS - PAGE_SHIFT), and the
+> >   *      worst combination is powerpc with 256k pages,
+> >   *      which results in PFN_SECTION_SHIFT equal 6.
+> > - * To sum it up, at least 6 bits are available.
+> > + * To sum it up, at least 6 bits are available on all architectures.
+> > + * However, we can exceed 6 bits on some other architectures except
+> > + * powerpc (e.g. 15 bits are available on x86_64, 13 bits are available
+> > + * with the worst case of 64K pages on arm64) if we make sure the
+> > + * exceeded bit is not applicable to powerpc.
+> >   */
+> > -#define SECTION_MARKED_PRESENT		(1UL<<0)
+> > -#define SECTION_HAS_MEM_MAP		(1UL<<1)
+> > -#define SECTION_IS_ONLINE		(1UL<<2)
+> > -#define SECTION_IS_EARLY		(1UL<<3)
+> > -#define SECTION_TAINT_ZONE_DEVICE	(1UL<<4)
+> > -#define SECTION_MAP_LAST_BIT		(1UL<<5)
+> > +#define ENUM_SECTION_FLAG(MAPPER)						\
+> > +	MAPPER(MARKED_PRESENT)							\
+> > +	MAPPER(HAS_MEM_MAP)							\
+> > +	MAPPER(IS_ONLINE)							\
+> > +	MAPPER(IS_EARLY)							\
+> > +	MAPPER(TAINT_ZONE_DEVICE, CONFIG_ZONE_DEVICE)				\
+> > +	MAPPER(MAP_LAST_BIT)
+> > +
+> > +#define __SECTION_SHIFT_FLAG_MAPPER_0(x)
+> > +#define __SECTION_SHIFT_FLAG_MAPPER_1(x)	SECTION_##x##_SHIFT,
+> > +#define __SECTION_SHIFT_FLAG_MAPPER(x, ...)	\
+> > +	__PASTE(__SECTION_SHIFT_FLAG_MAPPER_, IS_ENABLED(__VA_ARGS__))(x)
+> > +
+> > +#define __SECTION_FLAG_MAPPER_0(x)
+> > +#define __SECTION_FLAG_MAPPER_1(x)		SECTION_##x = BIT(SECTION_##x##_SHIFT),
+> > +#define __SECTION_FLAG_MAPPER(x, ...)		\
+> > +	__PASTE(__SECTION_FLAG_MAPPER_, IS_ENABLED(__VA_ARGS__))(x)
+> > +
+> > +enum {
+> > +	/*
+> > +	 * Generate a series of enumeration flags like SECTION_$name_SHIFT.
+> > +	 * Each entry in ENUM_SECTION_FLAG() macro will be generated to one
+> > +	 * enumeration iff the 2nd parameter of MAPPER() is defined or absent.
+> > +	 * The $name comes from the 1st parameter of MAPPER() macro.
+> > +	 */
+> > +	ENUM_SECTION_FLAG(__SECTION_SHIFT_FLAG_MAPPER)
+> > +	/*
+> > +	 * Generate a series of enumeration flags like:
+> > +	 *   SECTION_$name = BIT(SECTION_$name_SHIFT)
+> > +	 */
+> > +	ENUM_SECTION_FLAG(__SECTION_FLAG_MAPPER)
+> > +};
+> > +
+> >  #define SECTION_MAP_MASK		(~(SECTION_MAP_LAST_BIT-1))
+> > -#define SECTION_NID_SHIFT		6
+> > +#define SECTION_NID_SHIFT		SECTION_MAP_LAST_BIT_SHIFT
+> >  
+> >  static inline struct page *__section_mem_map_addr(struct mem_section *section)
+> >  {
+> > @@ -1470,12 +1501,19 @@ static inline int online_section(struct mem_section *section)
+> >  	return (section && (section->section_mem_map & SECTION_IS_ONLINE));
+> >  }
+> >  
+> > +#ifdef CONFIG_ZONE_DEVICE
+> >  static inline int online_device_section(struct mem_section *section)
+> >  {
+> >  	unsigned long flags = SECTION_IS_ONLINE | SECTION_TAINT_ZONE_DEVICE;
+> >  
+> >  	return section && ((section->section_mem_map & flags) == flags);
+> >  }
+> > +#else
+> > +static inline int online_device_section(struct mem_section *section)
+> > +{
+> > +	return 0;
+> > +}
+> > +#endif
+> >  
+> >  static inline int online_section_nr(unsigned long nr)
+> >  {
+> > diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+> > index 1213d0c67a53..3b360eda933f 100644
+> > --- a/mm/memory_hotplug.c
+> > +++ b/mm/memory_hotplug.c
+> > @@ -672,12 +672,18 @@ static void __meminit resize_pgdat_range(struct pglist_data *pgdat, unsigned lon
+> >  
+> >  }
+> >  
+> > +#ifdef CONFIG_ZONE_DEVICE
+> >  static void section_taint_zone_device(unsigned long pfn)
+> >  {
+> >  	struct mem_section *ms = __pfn_to_section(pfn);
+> >  
+> >  	ms->section_mem_map |= SECTION_TAINT_ZONE_DEVICE;
+> >  }
+> > +#else
+> > +static inline void section_taint_zone_device(unsigned long pfn)
+> > +{
+> > +}
+> > +#endif
+> >  
+> >  /*
+> >   * Associate the pfn range with the given zone, initializing the memmaps
+> 
+> 
+> -- 
+> Thanks,
+> 
+> David / dhildenb
+> 
+> 

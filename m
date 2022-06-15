@@ -2,105 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953BD54C5EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1589354C5F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347981AbiFOKVj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:21:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
+        id S1347768AbiFOKWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347946AbiFOKUs (ORCPT
+        with ESMTP id S242728AbiFOKVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:20:48 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7464E397;
-        Wed, 15 Jun 2022 03:20:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=OTj5z30HkEHTzFiSxL8zrtVzrsYfnlyDuMzdm361bU0=; b=HCUls9LzF3Ps7n0VKUrnzevomJ
-        ia+L7aZ6++crtm+I+wasUYBWPh4AONMp82XIzv46xzbr01uby2v9ZiREiWfuzUzGt3xvdb+xXDpTx
-        Ys5ExBktr3NiVd3FTPKxiQFYFafBmQzU4CmKSgypkau70lUhzVwL4xFYfp13PoBtiK60KPa2492ik
-        EWetzqpBqWUpLY9Rd0yKtpw/HIuYRRbaE11vYU5KnLQVEh6T62LQ0SJ8Saj/n4m0NN/8Rb1trWyy8
-        ujTRzVQCCrKXBehhcJBgGpLLblOsGcwZPb8tcKk5+Lnp+vGBLVChofkwqzoA6VvFvPZEmEY5SC/7Y
-        XIDLNMTA==;
-Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1Q7n-000yG9-2r; Wed, 15 Jun 2022 10:19:47 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E9F553007C6;
-        Wed, 15 Jun 2022 12:19:45 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D38BF201A4F6D; Wed, 15 Jun 2022 12:19:45 +0200 (CEST)
-Date:   Wed, 15 Jun 2022 12:19:45 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv7 05/14] x86/boot: Add infrastructure required for
- unaccepted memory support
-Message-ID: <YqmyQZa4CTHkH3gT@hirez.programming.kicks-ass.net>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-6-kirill.shutemov@linux.intel.com>
+        Wed, 15 Jun 2022 06:21:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20EFA5130A;
+        Wed, 15 Jun 2022 03:20:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 626BDCE1EAF;
+        Wed, 15 Jun 2022 10:20:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A222FC3411C;
+        Wed, 15 Jun 2022 10:20:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655288435;
+        bh=ADWNwalPsj7wlzAK4STHI1I3vbvADJHLuzQJhszxX8c=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Y7wogYQbzqKyD6JEqXbaMxzp/l8MWvg+8x9iOIJ+wpI+Ktjxakhgy/0uDZVfe/73b
+         Aq+okQgvH8mxgO8oRvY+kYStktMkS3/ksME5k6wZoo/WN5cgyUgeXEWDLIFRn4gMtZ
+         vIQEymiSa90u/BGkczf9XwvnVz4N2tpkuHjTf7YEnaAufwbuXcH0ym6IaIwYvhF0b1
+         7ygSeQoPdgvK/1avI8sHeS8nRRAZ0pucud/TEcCijnRkUp8e5K+o8ypNiR2QsKkyz+
+         oSdFGBlTJMRVEtLSQSdbHiwCjJVt5UvyBKm8GBE2b25/2Qs3eNrg18F4/1fxaX8D6Y
+         lnsfzZkCSi6bw==
+Received: by mail-ot1-f50.google.com with SMTP id s20-20020a056830439400b0060c3e43b548so8499707otv.7;
+        Wed, 15 Jun 2022 03:20:35 -0700 (PDT)
+X-Gm-Message-State: AOAM5306pP1JuWW0En0s8WX5ZOa74779Pa/KGiSFZvHv1GTKr7GePTH+
+        dy6vQS+vm5aNs5eJUujddrZdv5vJJliFKv7s/5c=
+X-Google-Smtp-Source: ABdhPJwWPYfdpESn/ZfR63iU+BQ4uVPMs4SdDmopyiZZb6tFOGP0dMOcdj9I8c73xtXC57WSh/UYFNp5DHskI5jx+vs=
+X-Received: by 2002:a9d:37a3:0:b0:60c:5427:1f56 with SMTP id
+ x32-20020a9d37a3000000b0060c54271f56mr3970819otb.71.1655288434829; Wed, 15
+ Jun 2022 03:20:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614120231.48165-6-kirill.shutemov@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220608104512.1176209-1-ardb@kernel.org> <20220608104512.1176209-4-ardb@kernel.org>
+ <Yqmr6fvu4OYkarCm@FVFF77S0Q05N> <YqmvL2Biw3TnIl7a@hirez.programming.kicks-ass.net>
+In-Reply-To: <YqmvL2Biw3TnIl7a@hirez.programming.kicks-ass.net>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 15 Jun 2022 12:20:23 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXHUQMA5A54KnVDR+dbwVv+H25xCJyUBpTkrYF7FgpNr8w@mail.gmail.com>
+Message-ID: <CAMj1kXHUQMA5A54KnVDR+dbwVv+H25xCJyUBpTkrYF7FgpNr8w@mail.gmail.com>
+Subject: Re: [PATCH 3/3] jump_label: make initial NOP patching the special case
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        "open list:S390" <linux-s390@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 03:02:22PM +0300, Kirill A. Shutemov wrote:
-> Pull functionality from the main kernel headers and lib/ that is
-> required for unaccepted memory support.
-> 
-> This is preparatory patch. The users for the functionality will come in
-> following patches.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> ---
->  arch/x86/boot/bitops.h                   | 40 ++++++++++++
->  arch/x86/boot/compressed/align.h         | 14 +++++
->  arch/x86/boot/compressed/bitmap.c        | 43 +++++++++++++
->  arch/x86/boot/compressed/bitmap.h        | 49 +++++++++++++++
->  arch/x86/boot/compressed/bits.h          | 36 +++++++++++
->  arch/x86/boot/compressed/compiler.h      |  9 +++
->  arch/x86/boot/compressed/find.c          | 54 ++++++++++++++++
->  arch/x86/boot/compressed/find.h          | 80 ++++++++++++++++++++++++
->  arch/x86/boot/compressed/math.h          | 37 +++++++++++
->  arch/x86/boot/compressed/minmax.h        | 61 ++++++++++++++++++
->  arch/x86/boot/compressed/pgtable_types.h | 25 ++++++++
+On Wed, 15 Jun 2022 at 12:06, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Wed, Jun 15, 2022 at 10:52:41AM +0100, Mark Rutland wrote:
+> > On Wed, Jun 08, 2022 at 12:45:12PM +0200, Ard Biesheuvel wrote:
+> > > Instead of defaulting to patching NOP opcodes at init time, and leaving
+> > > it to the architectures to override this if this is not needed, switch
+> > > to a model where doing nothing is the default. This is the common case
+> > > by far, as only MIPS requires NOP patching at init time. On all other
+> > > architectures, the correct encodings are emitted by the compiler and so
+> > > no initial patching is needed.
+> > >
+> > > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > > ---
+> > >  Documentation/staging/static-keys.rst |  3 ---
+> > >  arch/arc/kernel/jump_label.c          | 13 -------------
+> > >  arch/arm/kernel/jump_label.c          |  6 ------
+> > >  arch/arm64/kernel/jump_label.c        | 11 -----------
+> > >  arch/mips/include/asm/jump_label.h    |  2 ++
+> > >  arch/parisc/kernel/jump_label.c       | 11 -----------
+> > >  arch/riscv/kernel/jump_label.c        | 12 ------------
+> > >  arch/s390/kernel/jump_label.c         |  5 -----
+> > >  arch/x86/kernel/jump_label.c          | 13 -------------
+> > >  kernel/jump_label.c                   | 14 +++-----------
+> > >  10 files changed, 5 insertions(+), 85 deletions(-)
+> >
+> > I have one minor comment below, but either way this is a nice cleanup (and I'm
+> > always happy to see __weak functions disappear), so FWIW:
+>
+> (I've got a new found hatred for __weak after having had to fix so many
+> objtool issues with it, so yeah, that).
+>
+> >
+> >   Acked-by: Mark Rutland <mark.rutland@arm.com>
+>
+> With the thing Mark pointed out fixed:
+>
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>
+> (although, I'll probably be the one to eventually apply these I suppose,
+> unless they're needed in a different tree?)
 
-That's quite a lot of duplicated code; is there really no way so share
-this?
+Not really - this just came up when Jason was looking into how to
+enable jump labels extremely early on every single architecture, but
+fortunately, that issue got fixed in a different way.
+
+I'll respin and resend and leave it to you to apply them whenever convenient.

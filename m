@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA54D54C938
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3EF54C93D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348607AbiFOMyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 08:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
+        id S1349348AbiFOMyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 08:54:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350237AbiFOMx5 (ORCPT
+        with ESMTP id S1349376AbiFOMyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:53:57 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7D731918;
-        Wed, 15 Jun 2022 05:53:56 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6956C1F88E;
-        Wed, 15 Jun 2022 12:53:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655297635; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PLZICg7uteGrNkus+TkltCr/ZYre6VfA0dO/FQY4hBw=;
-        b=p+YUDTvyU1YaKkaZw0bO9m/mkJG6yTT5UQ8s2qYt7VfrHo5y0N6yJd5AlmCyxpCFa5W0ki
-        zztrz/qRxcccaMvVVuTlgx8PZZ/Bi8HnqZjITC2X5UCQ//IeXslo6hT2R/T3SQ91CnH4lM
-        15mWzbHHC1chKY4HQubgTCBa5gsTJ1s=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3061913A35;
-        Wed, 15 Jun 2022 12:53:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id IB41CmPWqWLzFgAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 15 Jun 2022 12:53:55 +0000
-Message-ID: <ab0653bc-7728-e24c-5d83-78cee135528c@suse.com>
-Date:   Wed, 15 Jun 2022 14:53:54 +0200
+        Wed, 15 Jun 2022 08:54:07 -0400
+Received: from heian.cn.fujitsu.com (mail.cn.fujitsu.com [183.91.158.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD04C2DD5F;
+        Wed, 15 Jun 2022 05:54:04 -0700 (PDT)
+IronPort-Data: =?us-ascii?q?A9a23=3A7AsUtKId1AvLrT49FE+RupQlxSXFcZb7ZxGrkP8?=
+ =?us-ascii?q?bfHDo0Dkr02BTnWVNUWrQaPqNYWqjKNoib4u3pE4Gv8fVmoNqS1BcGVNFFSwT8?=
+ =?us-ascii?q?ZWfbTi6wuYcBwvLd4ubChsPA/w2MrEsF+hpCC+MzvuRGuK59yMkj/nRHuOU5NP?=
+ =?us-ascii?q?sYUideyc1EU/Ntjozw4bVsqYw6TSIK1vlVeHa+qUzC3f5s9JACV/43orYwP9ZU?=
+ =?us-ascii?q?FsejxtD1rA2TagjUFYzDBD5BrpHTU26ByOQroW5goeHq+j/ILGRpgs1/j8mDJW?=
+ =?us-ascii?q?rj7T6blYXBLXVOGBiiFIPA+773EcE/Xd0j87XN9JFAatToy+UltZq2ZNDs4esY?=
+ =?us-ascii?q?Qk0PKzQg/lbWB5de817FfQcpO6YcCnl4KR/yGWDKRMA2c5GAEgoPIEw9PxwBGZ?=
+ =?us-ascii?q?U//0EbjsKa3irh+m26LO9RPNliskqII/sJox3kn1py3fbS+knRZTCSqDRzd5ew?=
+ =?us-ascii?q?Do0wMtJGJ72a8gGbjxgRBfNeRtCPhEQEp1WtOOpgGTvNjhdgFGLrKE0pW/Jw2R?=
+ =?us-ascii?q?Z1qbhMd/QUtiLXtlO2EKZoH/WuWj0HHkyNtWZxHyO8m+EgfXGlif2HokVEdWQ8?=
+ =?us-ascii?q?v9snU3WyHcfBQMbUXOlrvSjzE2zQdRSLwoT4CVGhawz8lG7C9rwRRu1pFaasRM?=
+ =?us-ascii?q?GHdldCes37EeK0KW8ywKYAHUUCy5Pc/Q4u8IsAz8nzFmEm5XuHzMHjVE/YRpx7?=
+ =?us-ascii?q?Z/N9XXrZ3dTdjREOEc5ocI+y4GLiOkOYtjnFL6PyJKIs+A=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AMlXlkql4KcWskQNZcoFR3X7Hn73pDfIQ3DAb?=
+ =?us-ascii?q?v31ZSRFFG/Fw9vre+MjzsCWYtN9/Yh8dcK+7UpVoLUm8yXcX2/h1AV7BZniEhI?=
+ =?us-ascii?q?LAFugLgrcKqAeQeREWmNQ86Y5QN4B6CPDVSWNxlNvG5mCDeOoI8Z2q97+JiI7l?=
+ =?us-ascii?q?o0tQcQ=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.88,333,1635177600"; 
+   d="scan'208";a="124979929"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 15 Jun 2022 20:54:03 +0800
+Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
+        by cn.fujitsu.com (Postfix) with ESMTP id D8E334D1719F;
+        Wed, 15 Jun 2022 20:54:02 +0800 (CST)
+Received: from G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) by
+ G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Wed, 15 Jun 2022 20:54:04 +0800
+Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
+ G08CNEXJMPEKD02.g08.fujitsu.local (10.167.33.202) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Wed, 15 Jun 2022 20:54:02 +0800
+Received: from irides.mr.mr (10.167.225.141) by
+ G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Wed, 15 Jun 2022 20:54:02 +0800
+From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
+        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
+        <linux-fsdevel@vger.kernel.org>
+CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
+        <david@fromorbit.com>, <hch@infradead.org>, <jane.chu@oracle.com>
+Subject: [RFC PATCH v3] mm, pmem, xfs: Introduce MF_MEM_REMOVE for unbind
+Date:   Wed, 15 Jun 2022 20:54:00 +0800
+Message-ID: <20220615125400.880067-1-ruansy.fnst@fujitsu.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220410171623.3788004-1-ruansy.fnst@fujitsu.com>
+References: <20220410171623.3788004-1-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     xen-devel@lists.xenproject.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-References: <20220615084835.27113-1-jgross@suse.com>
- <YqnBZhiLOHnoalbC@infradead.org>
- <9b9785f5-085b-0882-177f-d8418c366beb@suse.com>
- <YqnCZ+EKZeZ5AEnr@infradead.org>
- <c5a521e0-26b1-b1d6-7f7d-00aa9b4b1e0e@suse.com>
- <YqnIWCXxsGzkfQp7@infradead.org>
-From:   Juergen Gross <jgross@suse.com>
-Subject: Re: [PATCH] xen: don't require virtio with grants for non-PV guests
-In-Reply-To: <YqnIWCXxsGzkfQp7@infradead.org>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------bCUY8BhvhKPVYA0Vkiaf5GOk"
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: D8E334D1719F.A2FA5
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: ruansy.fnst@fujitsu.com
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,120 +75,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------bCUY8BhvhKPVYA0Vkiaf5GOk
-Content-Type: multipart/mixed; boundary="------------bJYoAtcPkRBUuSODuR5n1ait";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: xen-devel@lists.xenproject.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Message-ID: <ab0653bc-7728-e24c-5d83-78cee135528c@suse.com>
-Subject: Re: [PATCH] xen: don't require virtio with grants for non-PV guests
-References: <20220615084835.27113-1-jgross@suse.com>
- <YqnBZhiLOHnoalbC@infradead.org>
- <9b9785f5-085b-0882-177f-d8418c366beb@suse.com>
- <YqnCZ+EKZeZ5AEnr@infradead.org>
- <c5a521e0-26b1-b1d6-7f7d-00aa9b4b1e0e@suse.com>
- <YqnIWCXxsGzkfQp7@infradead.org>
-In-Reply-To: <YqnIWCXxsGzkfQp7@infradead.org>
+This patch is inspired by Dan's "mm, dax, pmem: Introduce
+dev_pagemap_failure()"[1].  With the help of dax_holder and
+->notify_failure() mechanism, the pmem driver is able to ask filesystem
+(or mapped device) on it to unmap all files in use and notify processes
+who are using those files.
 
---------------bJYoAtcPkRBUuSODuR5n1ait
-Content-Type: multipart/mixed; boundary="------------kckpb9DKnPpfXEBq0EuR6m7l"
+Call trace:
+trigger unbind
+ -> unbind_store()
+  -> ... (skip)
+   -> devres_release_all()   # was pmem driver ->remove() in v1
+    -> kill_dax()
+     -> dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_REMOVE)
+      -> xfs_dax_notify_failure()
 
---------------kckpb9DKnPpfXEBq0EuR6m7l
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Introduce MF_MEM_REMOVE to let filesystem know this is a remove event.
+So do not shutdown filesystem directly if something not supported, or if
+failure range includes metadata area.  Make sure all files and processes
+are handled correctly.
 
-T24gMTUuMDYuMjIgMTM6NTQsIENocmlzdG9waCBIZWxsd2lnIHdyb3RlOg0KPiBPbiBXZWQs
-IEp1biAxNSwgMjAyMiBhdCAwMTozOTowMVBNICswMjAwLCBKdWVyZ2VuIEdyb3NzIHdyb3Rl
-Og0KPj4gTm8sIGl0IGRvZXNuJ3QuIEknbSB3b3JraW5nIG9uIGEgcWVtdSBwYXRjaCBzZXJp
-ZXMgZW5hYmxpbmcgdGhlIHFlbXUNCj4+IGJhc2VkIGJhY2tlbmRzIHRvIHN1cHBvcnQgZ3Jh
-bnRzIHdpdGggdmlydGlvLiBUaGUgY29kZSBpcyB3b3JraW5nIGZpbmUNCj4+IG9uIHg4Niwg
-dG9vIChhcGFydCBmcm9tIHRoZSBmYWN0IHRoYXQgdGhlIGJhY2tlbmRzIGFyZW4ndCByZWFk
-eSB5ZXQpLg0KPiANCj4gVGhlIGNvZGUgcmlnaHQgbm93IGluIG1haW5saW5lIG9ubHkgZXZl
-ciBzZXRzIHRoZSBvcHMgZm9yIERNQS4gIFNvDQo+IEkgY2FuJ3Qgc2VlIGhvdyB5b3UgY291
-bGQgbWFrZSBpdCB3b3JrLg0KDQpBaCwgeW91IGFyZSByaWdodC4gSSB3YXMgdXNpbmcgYSBn
-dWVzdCB3aXRoIGFuIG9sZGVyIHZlcnNpb24gb2YgdGhlIHNlcmllcy4NClNvcnJ5IGZvciB0
-aGUgbm9pc2UuDQoNCg0KSnVlcmdlbg0K
---------------kckpb9DKnPpfXEBq0EuR6m7l
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+[1]: https://lore.kernel.org/linux-mm/161604050314.1463742.14151665140035795571.stgit@dwillia2-desk3.amr.corp.intel.com/
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+==
+Changes since v2:
+  1. Rebased on next-20220615
 
---------------kckpb9DKnPpfXEBq0EuR6m7l--
+Changes since v1:
+  1. Drop the needless change of moving {kill,put}_dax()
+  2. Rebased on '[PATCHSETS] v14 fsdax-rmap + v11 fsdax-reflink'[2]
 
---------------bJYoAtcPkRBUuSODuR5n1ait--
+---
+ drivers/dax/super.c         | 2 +-
+ fs/xfs/xfs_notify_failure.c | 6 +++++-
+ include/linux/mm.h          | 1 +
+ 3 files changed, 7 insertions(+), 2 deletions(-)
 
---------------bCUY8BhvhKPVYA0Vkiaf5GOk
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+diff --git a/drivers/dax/super.c b/drivers/dax/super.c
+index 9b5e2a5eb0ae..d4bc83159d46 100644
+--- a/drivers/dax/super.c
++++ b/drivers/dax/super.c
+@@ -323,7 +323,7 @@ void kill_dax(struct dax_device *dax_dev)
+ 		return;
+ 
+ 	if (dax_dev->holder_data != NULL)
+-		dax_holder_notify_failure(dax_dev, 0, U64_MAX, 0);
++		dax_holder_notify_failure(dax_dev, 0, U64_MAX, MF_MEM_REMOVE);
+ 
+ 	clear_bit(DAXDEV_ALIVE, &dax_dev->flags);
+ 	synchronize_srcu(&dax_srcu);
+diff --git a/fs/xfs/xfs_notify_failure.c b/fs/xfs/xfs_notify_failure.c
+index aa8dc27c599c..91d3f05d4241 100644
+--- a/fs/xfs/xfs_notify_failure.c
++++ b/fs/xfs/xfs_notify_failure.c
+@@ -73,7 +73,9 @@ xfs_dax_failure_fn(
+ 	struct failure_info		*notify = data;
+ 	int				error = 0;
+ 
+-	if (XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
++	/* Do not shutdown so early when device is to be removed */
++	if (!(notify->mf_flags & MF_MEM_REMOVE) ||
++	    XFS_RMAP_NON_INODE_OWNER(rec->rm_owner) ||
+ 	    (rec->rm_flags & (XFS_RMAP_ATTR_FORK | XFS_RMAP_BMBT_BLOCK))) {
+ 		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
+ 		return -EFSCORRUPTED;
+@@ -182,6 +184,8 @@ xfs_dax_notify_failure(
+ 
+ 	if (mp->m_logdev_targp && mp->m_logdev_targp->bt_daxdev == dax_dev &&
+ 	    mp->m_logdev_targp != mp->m_ddev_targp) {
++		if (mf_flags & MF_MEM_REMOVE)
++			return -EOPNOTSUPP;
+ 		xfs_err(mp, "ondisk log corrupt, shutting down fs!");
+ 		xfs_force_shutdown(mp, SHUTDOWN_CORRUPT_ONDISK);
+ 		return -EFSCORRUPTED;
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 623c2ee8330a..bbeb31883362 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3249,6 +3249,7 @@ enum mf_flags {
+ 	MF_SOFT_OFFLINE = 1 << 3,
+ 	MF_UNPOISON = 1 << 4,
+ 	MF_NO_RETRY = 1 << 5,
++	MF_MEM_REMOVE = 1 << 6,
+ };
+ int mf_dax_kill_procs(struct address_space *mapping, pgoff_t index,
+ 		      unsigned long count, int mf_flags);
+-- 
+2.36.1
 
------BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmKp1mIFAwAAAAAACgkQsN6d1ii/Ey+J
-FAgAhuZtO01u/6KCQl0hcc36qfENJd+p4klPGlJisL+gbDez8fKGAGOGaXpG8HpoaLmbevtFLh5V
-m3czisUFvhjMNlW4if4JtMNMCAtopicTLUCzGEjDdA9fzPv4/e7jNoXj4/XibNeJE9Cc5+W5Z5HV
-CX4j6vTmMgdpDOBHdaDlfXQc8sdib6dHqUbnmEqKQzXXj65ihWbIPuzZ5k7PNkB8opNuBWAX64m4
-I9PIggUJvEVBxWcNP+Tu7diz5AKOvoBjZopkfv/PSQQJ0YvXldKtLp+nL5BABw2yCb8Ey8JdJ+1J
-TRoUWqYc8PNe3H8pkmjOigIIvieWWHSsJIOtr9XRxg==
-=lckF
------END PGP SIGNATURE-----
 
---------------bCUY8BhvhKPVYA0Vkiaf5GOk--

@@ -2,135 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A08254CB1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 623BA54CB1C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237231AbiFOOUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 10:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
+        id S1347958AbiFOOUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 10:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245383AbiFOOTm (ORCPT
+        with ESMTP id S245182AbiFOOT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 10:19:42 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2045.outbound.protection.outlook.com [40.107.236.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4CC35A97
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:19:41 -0700 (PDT)
+        Wed, 15 Jun 2022 10:19:57 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5584506C
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:19:51 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25FDrsVx015214;
+        Wed, 15 Jun 2022 14:19:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=corp-2021-07-09;
+ bh=gX1hXPuRmRG9uD4uV8G5RZNXTlWniom2HjbDN8MHq60=;
+ b=HWvrJ3fjm1Cr0ozgDmzzBnBV7IoASnGl+mBemYNBxFlAa3UO7CByjyRXEtI0dPUgMMSz
+ mSiOpzWprDN5hCXLqQl+QHyTNJKS6KDKGdnAugxmbTqhlo8jTSu67/EewheB/LSsWWxz
+ eJnFwFenTt1sKq5pm5vex/hliBAy8bRY/FLEW/L6sU8bs5DvlkfmXq5S//XVX9IE2Dt1
+ 0A2jbotHISxK4sf0YqE7U/3x/3PBEcFgpcELbwWrq8KkpiWKIqBeNCUWqxWRiPTNBfaO
+ CbgAe/4wzO7xXgNQvbmRO3L08EIoxuHY2OsxKK6e8U/xFjA/O00f5ggSnHANlMpLJfiN tw== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3gmhn0gsfv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Jun 2022 14:19:40 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 25FDtnhe031252;
+        Wed, 15 Jun 2022 14:19:40 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2049.outbound.protection.outlook.com [104.47.57.49])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3gpr7p2nrp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 15 Jun 2022 14:19:40 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mpgB7E9nXTCfOj8AwHBbm5lt/v/NCT58aXdC05CFvs3ANEhHHNMID5jFPqPL42P8zhO8ICv77XViA2BVKhWfeBfVGsHAx1MBs8kh6PVuO44jpoVs43UEbZ6fXZWkz6A871dSfUyMNbeAwELRXvUhxqPQ54wt32dnu68AkZLjfq7XqsvtVVxksw5/73sKGoHJPGa8bqTJyZJtyELpOBNUO/BttaZhLN2yIfM+gOVkIdjbfj6sqvFQ51RxAVEjclJZXQ+sALraoZfw7uih+N5C5S44NEGSXa9Yz9hYy5oc9XgHEp4ld1Z+w5mMUMCcI1mOLOFEAeKxqDMmFW2eSlXgiQ==
+ b=Eb4NKf8aIZxDzS7SPbD3GaPpd5ho6bIPNT4DnNFC8KKUQWggSo3zNHnYLjvdlox4EzQHa1J2vx/xJSMbPkDhUKE4Elg1F5y5hiO5VA2FgizLjRQb4Xu+x9UVKlFHxdmfOxyFONw3t+R+nQQZcZAgiBgNomfph4/ECNhVu9VMCODiauvDNJARZv/LfDAo0CmRnWeUwEbUzKPPktl2si6rVHNzFPPyab3QZm4gHo8EMKeHXOaAz8j+JjeJVT2s7NzpkGB+JjUerecJUhW5yuGgP6qKmQYcngCDmvNgVkfjsLca/O2lKoAqIZWIT4gqXI8svpX5KP6yRLIaA/fkNvBdeg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=N8V2a/b+RHTC1x1yqqz1bp/oNRNGEY7qglKPC4ni/60=;
- b=FjylNxD0YHbRnntG5Zsbx2fBRRF2Nr1v8LxwsQrrm0Ao/b9UN88xMzQLgFH+ZjTFcFhBQMKz9B/2e5NiWnyzB+Fb1jYW8sJAsJxjiRKtmnBlty+iBkJ8snAecM78cNHA/ae0Hhn4Qu14BWGDbKH0x/vNHLueU02Uar5Q/PNnDzAT9nivoQS6vvK9fY8bAgXs8nvKe+fzpd4OjDVD8XDkEQ8WMdozgn4ghmH61dWNteGrdhWl9rzvh7puljK7bo0tAClFUZsezhSluRhot3YGRm8E1HWp7J8Hp5b9OJn9fuHYMhQoL8Uf6lCPnRu/Js+FCqtZqhbohxNcEWr57q/YQw==
+ bh=gX1hXPuRmRG9uD4uV8G5RZNXTlWniom2HjbDN8MHq60=;
+ b=R/D4H7CYTr13mViVVKl1O6wr43EXn//BRvzrh9BAYqxa3go/mJB0R5uyr03lU+S4RRjhN8VfwG2khU1QjJvWqJYI2EoU87tepyDv22VeAJzW06NMkfxMSNMRbScGspi0YoCAf2WWZZFDRyJtzNTpNVPl611tiuvX5Su+l5eOWVterNXlpjG3KDBcIWo1BE4DMYYnLrxriH2f4NodN1bdTGXyQdmqL7FFqFuAVc0W7r3aWyExqlxWg6uVwF8DCo7eY+IC7e9vMToFRGKQP7PpufyLVzRAtOvnq2vWVghdqOPlDsni9EFM/B8k9YX55HB+V+t+8I/crgk34mnISrx05Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=N8V2a/b+RHTC1x1yqqz1bp/oNRNGEY7qglKPC4ni/60=;
- b=BhUCReBAJMz6ZJofxZECWkXa4oTxB5xrlSQROXECrAchCSAg4tAF1Hf/ZjMFiZNLwT0A66ye8CwfpPPDEqJPraEtlkPi8Xtamibn6Tvlab/UNGX5opr/SHkJ6CDbTb3H05ej+QlVU0ehEjLhokv5/dARhyz+iKpYm1/0qdciFXc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SN1PR12MB2381.namprd12.prod.outlook.com (2603:10b6:802:2f::13)
- by CY4PR12MB1781.namprd12.prod.outlook.com (2603:10b6:903:122::11) with
+ bh=gX1hXPuRmRG9uD4uV8G5RZNXTlWniom2HjbDN8MHq60=;
+ b=jaVZSF6dNrcED73iJiUIIX42hEP833R6VgG9vJXwZcWlCWqI5V2+xnVeaoIsN4fyA/MCKTWibMwux3seQm1ciOD0yU3Ll0hOJSacsVh9CazkYDTbPoBrvjqO9w8zO+jENId7L6hGDxbLn/uQVjXlhgBGlxyL/3kWPNylJjoBXbs=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by MN2PR10MB3342.namprd10.prod.outlook.com (2603:10b6:208:12b::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.15; Wed, 15 Jun
  2022 14:19:38 +0000
-Received: from SN1PR12MB2381.namprd12.prod.outlook.com
- ([fe80::e5ad:dd49:ae41:bc97]) by SN1PR12MB2381.namprd12.prod.outlook.com
- ([fe80::e5ad:dd49:ae41:bc97%6]) with mapi id 15.20.5332.022; Wed, 15 Jun 2022
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::e1df:2e42:6674:313e]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::e1df:2e42:6674:313e%7]) with mapi id 15.20.5332.013; Wed, 15 Jun 2022
  14:19:38 +0000
-Message-ID: <e000b124-afd4-28e1-fde2-393b0e38ce19@amd.com>
-Date:   Wed, 15 Jun 2022 19:49:22 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v4 1/2] sched: Add per_cpu cluster domain info and
- cpus_share_resources API
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Qian Cai <quic_qiancai@quicinc.com>
+CC:     Yu Zhao <yuzhao@google.com>
+Subject: [PATCH Fix 0/3] Maple tree spanning fixes
+Thread-Topic: [PATCH Fix 0/3] Maple tree spanning fixes
+Thread-Index: AQHYgMLyoo6n1x1hHkKVRf7SBK+7aA==
+Date:   Wed, 15 Jun 2022 14:19:38 +0000
+Message-ID: <20220615141921.417598-1-Liam.Howlett@oracle.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Yicong Yang <yangyicong@hisilicon.com>, peterz@infradead.org,
-        mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, tim.c.chen@linux.intel.com,
-        gautham.shenoy@amd.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, prime.zeng@huawei.com,
-        jonathan.cameron@huawei.com, ego@linux.vnet.ibm.com,
-        srikar@linux.vnet.ibm.com, linuxarm@huawei.com, 21cnbao@gmail.com,
-        guodong.xu@linaro.org, hesham.almatary@huawei.com,
-        john.garry@huawei.com, shenyang39@huawei.com
-References: <20220609120622.47724-1-yangyicong@hisilicon.com>
- <20220609120622.47724-2-yangyicong@hisilicon.com>
-From:   K Prateek Nayak <kprateek.nayak@amd.com>
-In-Reply-To: <20220609120622.47724-2-yangyicong@hisilicon.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0181.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:be::14) To SN1PR12MB2381.namprd12.prod.outlook.com
- (2603:10b6:802:2f::13)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: git-send-email 2.35.1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e32a7937-0a71-4e22-28ad-08da4eda14bf
+x-ms-traffictypediagnostic: MN2PR10MB3342:EE_
+x-microsoft-antispam-prvs: <MN2PR10MB33421C9EDC8C8EA17A231AB8FDAD9@MN2PR10MB3342.namprd10.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: S/kDUVvZFZwR5FSC2JV0D3K/VbObMKqLUwrUjPzIK8Sp6Be4ORxHC2H0CI/n3pHDIT7kzfBwDhjHNTp+y2JS82QZjkFHaexj3PkNOyHxpfkR+GWC5DRtPzCyLvLm5qegCEiThZMUUTbjwkmnb4J8DIhwAiBJkBQ4H1saCj3bG6ALGkk0DDfAWd1kP4VXr2McrKfBvBkYruCCoqEfEs48ttucwWqvpupR+RcrlEK29W8HhYawPksmRc0E0rxI+Wmy3rWkrj5wxI5QGaerRKUJB+nEqE2t66P48TVXx1l04s+NjKFnERzYDuQCAdKcNgYV7RrkDY/TxdEGp+Lp8+BS+JP3LsSt3tOtv426Gi3o4jN4c/J6xmRGkdmOZhvl0S8JTTaYyU6MFuJubPyAB0M3TWD0KH/CkBsNFeh70Wbs7tsnKAyDpR5w3L45Be2vrNm6IiRnUA4icthxyf/26ed/IPYQ+85y8YjgJbD0PQzUhlNFL/tQsTllhOSIq5C2Wx77hPdKsd9CZBGjCP/5UU59XsMeAQvWxdVZF8/8zY4S/X7TA3OHCjIicesjUGXMrW0nMlS1qX1/QmCsHwmTCGfpuv9bKeeCqcm2mleorwj5TuxPi8FPQRJ1YdaOABXb89XNPlbns3XYvTyzI3M4SvFdRFCvvAd1trINfNvvTqkqfiAeP/+YQH2Ofclrr//LjlHBka7n9U9DAGoB/asECQv22g==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(4744005)(86362001)(316002)(122000001)(110136005)(38100700002)(186003)(5660300002)(4326008)(8936002)(2906002)(71200400001)(38070700005)(66556008)(64756008)(66476007)(8676002)(66446008)(6506007)(76116006)(91956017)(26005)(6512007)(508600001)(83380400001)(6486002)(1076003)(36756003)(44832011)(2616005)(66946007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?GidClaTKngrbJXWWz1eCfsN6vTwigsMXoFppyuHsQmlOBMDSnR4ypFTIYn?=
+ =?iso-8859-1?Q?Z7K4mZRPIjfDb52shNW0dAu6z6GoNt7Md+SAkKXTPgOoPQDaI5xdjM/iUp?=
+ =?iso-8859-1?Q?d9hdUQLfmIgHixd5XbyhxPYbgsRB24AeW8na6voJV78qyzFJ2l2orAa64M?=
+ =?iso-8859-1?Q?fhOxks6ZlT7fWVpd1n002cZmAIwpL4Dv95GhsV1RJtet0lMo8Tb9VA8Omk?=
+ =?iso-8859-1?Q?y3qeZ2j8pgf1i/4ELuwhdld89RCJvx4CtUuktDIHnhnfz0u/h7Sde9W43n?=
+ =?iso-8859-1?Q?lYJNrI3TsGziBIz0Aux+3G3j+Ke9O+lbys0Nqw2GOs3N3tN2Sm/5xapKis?=
+ =?iso-8859-1?Q?9AF2zbdUEL5vIkGoS6UfNaPQmJfG+156XgU2wv8GT7ortGWHfWAytZDCWl?=
+ =?iso-8859-1?Q?lKdxVxOxHBPwKEtWK1iVfsJ3t1YZMKD8TcIo/Hk8sIeY1BDbNdJ7PpkyoA?=
+ =?iso-8859-1?Q?MhJHTKwk/NMJaWiZEWcFaLp37pkLIqLmmfPQnKaIFgfaMgmTAN+yOB0xFA?=
+ =?iso-8859-1?Q?P+7hXFvr1yjX2CQW4FSQnK1vBMqYrGCb70jIwoSPfNqQNJNXqCjv+oU6iu?=
+ =?iso-8859-1?Q?zJLXI85KILyI2yRWJfg3aKiVfKclCUoRcYsu79GtvqZxGoKoKRjwXHhLdg?=
+ =?iso-8859-1?Q?P9KEJMQ2bKhgNXrSxIweEKXiTD34HPQ9Tsj/g6Z0BdFm3bRJLfl17O10aX?=
+ =?iso-8859-1?Q?wC+sbRvGBgzxrg4eSnjG/f7jAgiK3qHjvmh8UC8YrwwCTx0E1I9JdGxHpl?=
+ =?iso-8859-1?Q?+IwhNK/5IFWU7HZDlJkZaJZOVJ+tCBecLhZgrDwe6Z+84cRjc5vTKSeaEv?=
+ =?iso-8859-1?Q?C/rzH+NM+PUfpFibEk8ajPoLAXiJkr1HOTEmYoYPIkZeGQqEKD/KIM+M0c?=
+ =?iso-8859-1?Q?nUc+k0wA2MaGQdxQGpSFhstJE9KG91jeJy/TM972vWEDMCE4y3XMcjedKa?=
+ =?iso-8859-1?Q?iQCS1IZRErEanqs8IMxZ+bMMLAq0T+vwPl4Jg1BypPL97Xf7jDCVzGepWo?=
+ =?iso-8859-1?Q?BeRipmZmODiNXGZv6nTglba7ULeqVmxBWAKfAVh82v8YHpbmr5harP0BMw?=
+ =?iso-8859-1?Q?YYdWha7Q/2W9kapD14M+y59Sb+ccwk3ZHYzMIGcqNC6g6f1rGoDdKeWyyL?=
+ =?iso-8859-1?Q?9OVTL9PRW4K4+O7zrlnhbsQd3fFDbZX6vbmXzqUBxTdC3X5bomN8HH7J8G?=
+ =?iso-8859-1?Q?UoDqbmLolgXKROeWYD+N2CgaI6GJuyOQBSGGLLpITYzGiNB/7uRdvGBksj?=
+ =?iso-8859-1?Q?vt/3EQxS/A9TzYvSkDpX8U+O8IyXmVVsFq/QP3au+EHkAYL1shpOSpRO+x?=
+ =?iso-8859-1?Q?1+QzsfTo0jZNHfOlpVmSsAcSrNtTraqBG7O5zcuAu1xgVnzZuIpYnNx8QF?=
+ =?iso-8859-1?Q?A62EUHe787ANVCkFVOVr9aecHAlyglXkW9jLd7KnHP12ENsZZIMhTWtbJ1?=
+ =?iso-8859-1?Q?8cojnNkqXti4dZTwIayqp5b9ATkAbR8+Riku239+SvHuqmFj19QEN/LFRN?=
+ =?iso-8859-1?Q?vvxqSmSHJ5I2OhJrYOBWjRBfsNX6r/TvR0vZDKUXMVqhvFgDZu8LHDqPMb?=
+ =?iso-8859-1?Q?cFen3Xek4mKQJ55XkNcTTtsRGuVoT0KbXlEREQr/zWeMFtwiVmxVmaDSkS?=
+ =?iso-8859-1?Q?QNvgc2AmKY0vcA6wV836wN+7CYvS6xCSB8BhlJXVvsDJbyu4KHJKx7IkIk?=
+ =?iso-8859-1?Q?T+piw+tZTlwIiwMZ32o4DMreOe2vENhsqbtX4OL8PVrR04/s9zwEhd9ReG?=
+ =?iso-8859-1?Q?+T6ZIsyMMBuHLTAG61UI5fvZtXBkZeVLgUhaSV8nGqA0mxZ/rlpov0FiSr?=
+ =?iso-8859-1?Q?2pP2akB9cxQEGlcZA9xdR4qZkc1gWvw=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 221c702a-7223-4208-2581-08da4eda1465
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1781:EE_
-X-Microsoft-Antispam-PRVS: <CY4PR12MB178117D0B3C9DF223D66486798AD9@CY4PR12MB1781.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZU8dMc4/WZpzgJt6vqVWQePUlms89umCK4FWCvia59UdK41RvqLUkGKQHWdxWzJHZkMUIvxrOLNAU5Z4XqGklBAFaTf5e31AeOtB1BUqIMXS6C/031U7sjtY6FzlKfsba29n33QEX7E5onaIHyaS9fOc+i85Esmfo7OGDvHg8C8rPLUCsgs0twafV0pJdApeHCC+BqtRX3wf+/iBaFGI5fybsmvUZ62OtPDCPqaLyDyKezffWLGpHBHG95dyD2F9BWRLVZmy0+ZkmBCGpnFrv2IzdsJQ5/LN1VyB5Pw8iZ2quXlP8f2EvDblBzLLVX95KxnzqA0Qo09x/ZdKbm/lifY2+ZII9DFa944Qv8Nx/7td/nXNhMbe2Q0roHoV4V8x87wuX09hWyMIUKmPPN/YMzrt+RZ4j78N+O11MjR0CcW7/LTMOVIHedXz1OBEXh6k+zyzK+BxK1ZYS+yT2MyuhRXxiIdA3eOEWMzv0968k/rad7SgmWEHmFQqA4tVszeSxvo53lHxcQxKcC3URx3SyQ5MnUgfSZehr96NgApCxqXkzUx6rBgT/dV8lqD7YCi1SRcaSIK8FgBV61EGGN64sotJqSWTI6wlgdS8Y5ClJiIamTUrRjXjhTE/lRHKi7UjQK2lLKKIFmH5mOWX5p7f4WkXFKIhhOU239jnm8/m+9AwlTbrAjy6nFzwkr5A9UPzgs1xOEzbXOr14hyNo41FHa4Me79+AXt7AF2MVXd7EQEw8kZvvM8IvM0KOy5sjWIBJaXsRGo0WL+aFYLgp1eGkBdfXg6fRJ7EUp00AsP5flXwTq8smWmznHuTo4XMpjjv
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN1PR12MB2381.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(53546011)(186003)(2616005)(6506007)(66556008)(316002)(26005)(31696002)(38100700002)(6512007)(83380400001)(6666004)(7416002)(8936002)(5660300002)(36756003)(86362001)(31686004)(4326008)(66946007)(6486002)(508600001)(2906002)(8676002)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TVo1WDJKQ0I0SlVVT2Z5VFh6UllNYzhHUGVnajRaK2tCRVJrQXF3YjFnd2tG?=
- =?utf-8?B?RmhJOGVObWk1YlFFOUZvZ0k1Mk81WDRXQlU4MlpFTCtZL0o1eEVwYjRRbHY1?=
- =?utf-8?B?V3RycURGa1JCWTFiSVlBblBtZnpBaGZRYWhTSXNDOFBBOHBMQ3RiQ1loYjgy?=
- =?utf-8?B?a1FCcmtpalh6ZGlaT1NYQnNuR09Xa1pidWI1NVNRQ3h5dTludkVvempad0RS?=
- =?utf-8?B?YnJhN1hTRzVjOTlwVDJSY3J2Kzd0UXdUWkhObklIYmpNZDV1dWRKWE5WL3Na?=
- =?utf-8?B?bkZRUlFCNnRkemQrSHpMS2FHbkRVcHBxUDhneGJqVVJNbW54cTlQNnpkODJK?=
- =?utf-8?B?NytwY2JHUGs4SzMxSDZIZUVXMm1QekJJdnNTVVlJdzh2TjdSSDdSK0dFeXBr?=
- =?utf-8?B?YXc5ZWFVc1ZSc2c3aW5Cbk1tMW9kZ3pxajNNcWxtamROQTlzazlSQUZJOVFw?=
- =?utf-8?B?N04vLzN1OXJxdzhETWJTakIrNGFncmFpUExjaTRFUUVMdElmZEp0ZERxTC9k?=
- =?utf-8?B?ZHRrMVJjeE9oS255OEZSa2lmMWJIYXRMY3dxZk01LzlnTnRyUFIxVVVEUktr?=
- =?utf-8?B?MkdtWG1Ec0lYYnd5TEpjZWxDVlpRRkp1TVJtc1VaVURYWHUzeHpUMWxuWFJv?=
- =?utf-8?B?MFI2ZnN4RmQxeExDZU03cUIzcGFsTHkzOVh4b2RneCtzMjNSU0dTL2dhSkN2?=
- =?utf-8?B?WmF2N3JkcjdGUkw1YVFOVFlzRW5oZ1JRRGpFVUp3Ni93c2FvTCszc2VraG52?=
- =?utf-8?B?RWkyU0hIWm1ZaG9OYXNFbGIzRXRYeTF5Ykx5TndtbVg0YTNXaDc4ZlBkZndv?=
- =?utf-8?B?MXRHZ2EwaDE4ZFN6d3F2QWo0U2djN0RtdUVHWlpXWjRjNHhjdC9PQUpTWkdS?=
- =?utf-8?B?VTdLNE1ROEFVeTVORHhoT2NZWDBjUHVNb1dzbEYyKzJkTEprVm9iYmx2NW9m?=
- =?utf-8?B?Snpib1ZaRytBN2VabDBBcFdOQndtbFc1dCthSkJHbW85ZnIzNHhxUmhBSEc2?=
- =?utf-8?B?VVA5Q0hQQWlZRU05UmtEbm9FMm5EZVZndzczTG0yUGFwZWtHTWxSZjJYcksx?=
- =?utf-8?B?czlwZENOV2g0bC9keFE5eW5STTVZRFhXMXhKTnJ5SHFGMys0UmwrU0hQdGFP?=
- =?utf-8?B?UlM5NjVCbXhSOUwrd3RhUGwyZDFBV01zN0hwOGE4UXRvaWlhWFBSVDFFeVMr?=
- =?utf-8?B?VWhXcHhUWjZ2Sk5mdElGK1hCc21Ba2FWWnR6SCtUam96ODFzMEVlajJMS2ZJ?=
- =?utf-8?B?a3pjWmRZb2tqbEhXVFNGS3dKNGtGU2s5U2pkNTBtc2RybVRWTHF5ODhZYVZX?=
- =?utf-8?B?YXZRMVJpb1JpdzdJOGppRzd6WHVRemdObXRaMzlyYmIvL1UwVmFqaDNvZkdG?=
- =?utf-8?B?ckM3L0xiYnN6QlZpZzhya3l2cXg4NDdNek1xNkNjZXFkNWFqTFZQU2REWUFi?=
- =?utf-8?B?RlpWcXZIbTZKUjMyNHhPUG5aWHpwcnVyRC8rcnd6SUs0TGxwUmhqbXc4ZUFa?=
- =?utf-8?B?UklWZzdubU53SHRWK0xKVUZGbVcyS0VoTms4VkRhd2JpczVXY3hGSndHS3VO?=
- =?utf-8?B?UG9Sc2cxbDdIL2FKSjV5YXlzSWVNL2RoMGUxNHUwMkdjNVl4ZWdLQ3h0ZWpS?=
- =?utf-8?B?WFRyVDhvVGNXOVdRTndLK2NpWWtEUTBVaVlVMGlGYUtRMEpYeitMM2NTeGZY?=
- =?utf-8?B?VXRZSnVwQUZpRGNFeUFVVkhyZWJEU3dDaFM4bS9NcEw4TUdUMis5aFBneHNM?=
- =?utf-8?B?S2JTUm5SZnFUeTQ0M2JEeS95eFhJN1RyQllSUlBoZlRqdnRvU25yeTZlN2Uy?=
- =?utf-8?B?NGlMbkFGbkJhTHNPek9HM2YzbFhUMHI2L0FBcEh0TUgzUDVUYXl4VVI1QVVD?=
- =?utf-8?B?cVQ2dHFjSEVrVGRBalhJL1ZscllJMytHYllsaHAvYXkzcFo4UmJTWWZEdU5G?=
- =?utf-8?B?dWFyMGpGNmxtM1kyUFNaamZicGF6TEdnRlNxSGlzcHEwMFBQOExRRUg2Qncz?=
- =?utf-8?B?V2FnbUMwVUcwUjUyN2xtSktrWmJmVCs2YlhRcFZKRk8rVFNXL24xMXNYRGd0?=
- =?utf-8?B?ZjJGeFZiYUQ5NDcxN3JrSGp3RGpEN08yQ2xXN213WlhFZHJ2N2FwZlkwWDhl?=
- =?utf-8?B?SWpqcFNORlYwYmF0TEZsMFc4K3FvT3hkbTNpTSt2eitSZmJ3SjFEQzdleXJ2?=
- =?utf-8?B?YkNqa3lOS2YyOHBvVERNSnVwM3E0NTA3VGlzUXhRQlUxcTZyd1phblluYnRi?=
- =?utf-8?B?RlZIV1gwQVpTdEpBeFAxVnlSSWNuYXdRYnJMZnhxL0k2dnFjZUNYVkVGR1pD?=
- =?utf-8?B?TXJyUDd5TTdYMnd0cHJ4UURsSFpHRW1OekY2UW4rbTN2eUJvQWFwZz09?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 221c702a-7223-4208-2581-08da4eda1465
-X-MS-Exchange-CrossTenant-AuthSource: SN1PR12MB2381.namprd12.prod.outlook.com
+X-OriginatorOrg: oracle.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 14:19:38.2575
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e32a7937-0a71-4e22-28ad-08da4eda14bf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2022 14:19:38.3630
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NbvYhRPBb/vNUxwJosyjJPC24RlbntMNsB4aKxoVjtcjbZRZkXJdSwNo2JSSX+lKnS7NY3E5e1ryQKXoO98DoQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1781
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: B39EYc3Xna8Mgn14cNnS3q/E/664WC2Hjq/Y+yj7bBfdf58ojSFFiH2h/DqOLjd5nTx+vxh77YDzjT4dn1tiUg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR10MB3342
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.517,18.0.874
+ definitions=2022-06-15_04:2022-06-15,2022-06-15 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 suspectscore=0 mlxlogscore=815 spamscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2204290000
+ definitions=main-2206150056
+X-Proofpoint-GUID: WFArCfaUBHqnzsNsZrEneivUhpK57IMG
+X-Proofpoint-ORIG-GUID: WFArCfaUBHqnzsNsZrEneivUhpK57IMG
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -138,231 +152,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yicong,
+Andrew,
 
-I replied to the v3 of the series by mistake!
-(https://lore.kernel.org/lkml/0b065646-5b05-cbdb-b20c-e1dfef3f4d79@amd.com/)
-But rest assured all the analysis discussed there was done with
-the v4 patch series. I'll add the same observations below so we
-can continue discussion on v4.
+Please apply these to the maple tree series.  The first two should be
+applied after 0f3ee6b87b "maple_tree: cleanup for checkpatch" and the
+last patch should go after 17c9912bc09d "test_maple_tree: add null
+expansion tests".
 
-We are observing some serious regression with tbench with this patch
-series applied. The issue doesn't seem to be related to the actual 
-functionality of the patch but how the patch changes the per CPU
-variable layout.
+Thanks,
+Liam
 
-Discussed below are the results from running tbench on a dual
-socket Zen3 (2 x 64C/128T) configured in different NPS modes.
+Liam R. Howlett (3):
+  maple_tree: Fix mt_destroy_walk() on full non-leaf non-alloc nodes
+  maple_tree: Change spanning store to work on larger trees
+  test_maple_tree: Add tests for preallocations and large spanning
+    writes
 
-NPS Modes are used to logically divide single socket into
-multiple NUMA region.
-Following is the NUMA configuration for each NPS mode on the system:
+ lib/maple_tree.c      | 315 +++++++++++++++++++++++++++---------------
+ lib/test_maple_tree.c | 277 +++++++++++++++++++++++++++++++++++++
+ 2 files changed, 480 insertions(+), 112 deletions(-)
 
-NPS1: Each socket is a NUMA node.
-    Total 2 NUMA nodes in the dual socket machine.
-
-    Node 0: 0-63,   128-191
-    Node 1: 64-127, 192-255
-
-NPS2: Each socket is further logically divided into 2 NUMA regions.
-    Total 4 NUMA nodes exist over 2 socket.
-   
-    Node 0: 0-31,   128-159
-    Node 1: 32-63,  160-191
-    Node 2: 64-95,  192-223
-    Node 3: 96-127, 223-255
-
-NPS4: Each socket is logically divided into 4 NUMA regions.
-    Total 8 NUMA nodes exist over 2 socket.
-   
-    Node 0: 0-15,    128-143
-    Node 1: 16-31,   144-159
-    Node 2: 32-47,   160-175
-    Node 3: 48-63,   176-191
-    Node 4: 64-79,   192-207
-    Node 5: 80-95,   208-223
-    Node 6: 96-111,  223-231
-    Node 7: 112-127, 232-255
-
-Benchmark Results:
-
-Kernel versions:
-- tip:      5.19.0-rc2 tip sched/core
-- cluster:  5.19.0-rc2 tip sched/core + both the patches of the series
-
-When we started testing, the tip was at:
-commit: f3dd3f674555 "sched: Remove the limitation of WF_ON_CPU on wakelist if wakee cpu is idle"
-
-* - Data points of concern
-
-~~~~~~
-tbench
-~~~~~~
-
-NPS1
-
-Clients:       tip                     cluster
-    1    444.41 (0.00 pct)       439.27 (-1.15 pct)
-    2    879.23 (0.00 pct)       831.49 (-5.42 pct)     *
-    4    1648.83 (0.00 pct)      1608.07 (-2.47 pct)
-    8    3263.81 (0.00 pct)      3086.81 (-5.42 pct)    *
-   16    6011.19 (0.00 pct)      5360.28 (-10.82 pct)   *
-   32    12058.31 (0.00 pct)     8769.08 (-27.27 pct)   *
-   64    21258.21 (0.00 pct)     19021.09 (-10.52 pct)  *
-  128    30795.27 (0.00 pct)     30861.34 (0.21 pct)
-  256    25138.43 (0.00 pct)     24711.90 (-1.69 pct)
-  512    51287.93 (0.00 pct)     51855.55 (1.10 pct)
- 1024    53176.97 (0.00 pct)     52554.55 (-1.17 pct)
-
-NPS2
-
-Clients:       tip                     cluster
-    1    445.45 (0.00 pct)       441.75 (-0.83 pct)
-    2    869.24 (0.00 pct)       845.61 (-2.71 pct)
-    4    1644.28 (0.00 pct)      1586.49 (-3.51 pct)
-    8    3120.83 (0.00 pct)      2967.01 (-4.92 pct) 	*
-   16    5972.29 (0.00 pct)      5208.58 (-12.78 pct)   *
-   32    11776.38 (0.00 pct)     10229.53 (-13.13 pct)  *
-   64    20933.15 (0.00 pct)     17033.45 (-18.62 pct)  *
-  128    32195.00 (0.00 pct)     29507.85 (-8.34 pct)   *
-  256    24641.52 (0.00 pct)     27225.00 (10.48 pct)
-  512    50806.96 (0.00 pct)     51377.50 (1.12 pct)
- 1024    51993.96 (0.00 pct)     50773.35 (-2.34 pct)
-
-NPS4
-
-Clients:      tip                   cluster
-    1    442.10 (0.00 pct)       435.06 (-1.59 pct)
-    2    870.94 (0.00 pct)       858.64 (-1.41 pct)
-    4    1615.30 (0.00 pct)      1607.27 (-0.49 pct)
-    8    3195.95 (0.00 pct)      3020.63 (-5.48 pct)    *
-   16    5937.41 (0.00 pct)      5719.87 (-3.66 pct)
-   32    11800.41 (0.00 pct)     11229.65 (-4.83 pct)	*
-   64    20844.71 (0.00 pct)     20432.79 (-1.97 pct)
-  128    31003.62 (0.00 pct)     29441.20 (-5.03 pct)   *
-  256    27476.37 (0.00 pct)     25857.30 (-5.89 pct)   * [Know to have run to run variance]
-  512    52276.72 (0.00 pct)     51659.16 (-1.18 pct)
- 1024    51372.10 (0.00 pct)     51026.87 (-0.67 pct)
-
-Note: tbench results for 256 workers are known to have
-run to run variation on the test machine. Any regression
-seen for the data point can be safely ignored.
-
-The behavior is consistent for both tip and patched kernel
-across multiple runs of tbench.
-
-~~~~~~~~~~~~~~~~~~~~
-Analysis done so far
-~~~~~~~~~~~~~~~~~~~~
-
-To root cause this issue quicker, we have focused on 8 to 64 clients
-data points with the machine running in NPS1 mode.
-
-- Even on disabling HW prefetcher, the behavior remains consistent
-  signifying HW prefetcher is not the cause of the problem.
-
-- Bisecting:
-
-When we ran the tests with only Patch 1 of the series, the
-regression was visible and the numbers were worse.
-
-Clients:       tip                     cluster              Patch 1 Only
-    8    3263.81 (0.00 pct)      3086.81 (-5.42 pct)     3018.63 (-7.51 pct)
-   16    6011.19 (0.00 pct)      5360.28 (-10.82 pct)    4869.26 (-18.99 pct)
-   32    12058.31 (0.00 pct)     8769.08 (-27.27 pct)    8159.60 (-32.33 pct)
-   64    21258.21 (0.00 pct)     19021.09 (-10.52 pct)   13161.92 (-38.08 pct)
-
-We further bisected the hunks to narrow down the cause to the per CPU
-variable declarations. 
-
-
-On 6/9/2022 5:36 PM, Yicong Yang wrote:
-> 
-> [..snip..]
->
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index 01259611beb9..b9bcfcf8d14d 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -1753,7 +1753,9 @@ static inline struct sched_domain *lowest_flag_domain(int cpu, int flag)
->  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_llc);
->  DECLARE_PER_CPU(int, sd_llc_size);
->  DECLARE_PER_CPU(int, sd_llc_id);
-> +DECLARE_PER_CPU(int, sd_share_id);
->  DECLARE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
-> +DECLARE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
-
-The main reason for the regression seems to be the above declarations.
-The regression seem to go away if we do one of the following:
-
-- Declare sd_share_id and sd_cluster using DECLARE_PER_CPU_READ_MOSTLY()
-  instead of DECLARE_PER_CPU() and change the corresponding definition
-  below to DEFINE_PER_CPU_READ_MOSTLY().
-
-  Clients:       tip                     Patch 1           Patch 1 (READ_MOSTLY)
-    8      3255.69 (0.00 pct)      3018.63 (-7.28 pct)     3237.33 (-0.56 pct)
-   16      6092.67 (0.00 pct)      4869.26 (-20.08 pct)    5914.53 (-2.92 pct)
-   32      11156.56 (0.00 pct)     8159.60 (-26.86 pct)    11536.05 (3.40 pct)
-   64      21019.97 (0.00 pct)     13161.92 (-37.38 pct)   21162.33 (0.67 pct)
-
-- Convert sd_share_id and sd_cluster to static arrays.
-  
-  Clients:       tip                    Patch 1            Patch 1 (Static Array)
-    8      3255.69 (0.00 pct)      3018.63 (-7.28 pct)     3203.27 (-1.61 pct)
-   16      6092.67 (0.00 pct)      4869.26 (-20.08 pct)    6198.35 (1.73 pct)
-   32      11156.56 (0.00 pct)     8159.60 (-26.86 pct)    11385.76 (2.05 pct)
-   64      21019.97 (0.00 pct)     13161.92 (-37.38 pct)   21919.80 (4.28 pct)
-
-- Move the declarations of sd_share_id and sd_cluster to the top
-
-  Clients:       tip                    Patch 1            Patch 1 (Declarion on Top)
-    8      3255.69 (0.00 pct)      3018.63 (-7.28 pct)     3072.30 (-5.63 pct)
-   16      6092.67 (0.00 pct)      4869.26 (-20.08 pct)    5586.59 (-8.30 pct)
-   32      11156.56 (0.00 pct)     8159.60 (-26.86 pct)    11184.17 (0.24 pct)
-   64      21019.97 (0.00 pct)     13161.92 (-37.38 pct)   20289.70 (-3.47 pct)
-
-Unfortunately, none of these are complete solutions. For example, using
-DECLARE_PER_CPU_READ_MOSTLY() with both patches applied reduces the regression
-but doesn't eliminate it entirely:
-
-   Clients:     tip                     cluster           cluster (READ_MOSTLY)  
-    1      444.41 (0.00 pct)       439.27 (-1.15 pct)      435.95 (-1.90 pct)
-    2      879.23 (0.00 pct)       831.49 (-5.42 pct)      842.09 (-4.22 pct)
-    4      1648.83 (0.00 pct)      1608.07 (-2.47 pct)     1598.77 (-3.03 pct)
-    8      3263.81 (0.00 pct)      3086.81 (-5.42 pct)     3090.86 (-5.29 pct)	*
-   16      6011.19 (0.00 pct)      5360.28 (-10.82 pct)    5360.28 (-10.82 pct)	*
-   32      12058.31 (0.00 pct)     8769.08 (-27.27 pct)    11083.66 (-8.08 pct)	*
-   64      21258.21 (0.00 pct)     19021.09 (-10.52 pct)   20984.30 (-1.28 pct)
-  128      30795.27 (0.00 pct)     30861.34 (0.21 pct)     30735.20 (-0.19 pct)
-  256      25138.43 (0.00 pct)     24711.90 (-1.69 pct)    24021.21 (-4.44 pct)
-  512      51287.93 (0.00 pct)     51855.55 (1.10 pct)     51672.73 (0.75 pct)
- 1024      53176.97 (0.00 pct)     52554.55 (-1.17 pct)    52620.02 (-1.04 pct)
-
-We are still trying to root cause the underlying issue that
-brought about such drastic regression in tbench performance. 
-
->  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_numa);
->  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
->  DECLARE_PER_CPU(struct sched_domain __rcu *, sd_asym_cpucapacity);
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index 05b6c2ad90b9..0595827d481d 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -664,6 +664,8 @@ static void destroy_sched_domains(struct sched_domain *sd)
->  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_llc);
->  DEFINE_PER_CPU(int, sd_llc_size);
->  DEFINE_PER_CPU(int, sd_llc_id);
-> +DEFINE_PER_CPU(int, sd_share_id);
-> +DEFINE_PER_CPU(struct sched_domain __rcu *, sd_cluster);
->  DEFINE_PER_CPU(struct sched_domain_shared __rcu *, sd_llc_shared);
->  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_numa);
->  DEFINE_PER_CPU(struct sched_domain __rcu *, sd_asym_packing);
->
->  [..snip..]
->
-
-We would like some time to investigate this issue and root cause
-the reason for this regression.
---
-Thanks and Regards,
-Prateek
+--=20
+2.35.1

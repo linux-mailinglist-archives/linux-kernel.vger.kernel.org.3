@@ -2,96 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C65154D1B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C2F54D1B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347911AbiFOTfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 15:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
+        id S1348904AbiFOTgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347369AbiFOTfO (ORCPT
+        with ESMTP id S1348581AbiFOTge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:35:14 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928F1340D1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:35:11 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id y29so14409189ljd.7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:35:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sD8IqB97I70LoLibTMokNd39/3wgDdyCaZhezBKenf0=;
-        b=DyKH3kucgWByYnRSwlcv/ad2v9o/FLycAER5k5b3kHFwFUzuAEgM23y4XArIqyzH/V
-         YTF9V80+outxXkkLFijzi+R+8GJYb515k3NH5VTRI5wUqc+/6nfYqtPy7VvQG88ylx82
-         DcDdtvG3cCEBeDOtI8QnddDLFhP+34VHvs/p1PCc+D7YfBYqTZyWdvi87+axb2jxAA/V
-         Cp690LwLvz6+qpkvDid858R6u5J39vw/uN0/uY1QMq6euonnAErJN2p8wiUoo2aQEUu0
-         OofPnvvA+7VrlGlep8QvvPrBzZXFa8ugfSNgo91+BJOqHjnfpf+RzCSPsVuUGLEKBgrh
-         YgvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sD8IqB97I70LoLibTMokNd39/3wgDdyCaZhezBKenf0=;
-        b=JaxbkJ498318BZBJWvJVquanbFtWvmGQCIl6iNvU4HryzU01nXEFFn4HuX4ycvWYiT
-         Ia9CjRPi9OUlbiItHFNTQ6vG3/2nCmKCoiLwDENLpb5RvSZQ4tTb0WKQuJE5T3aOPhKC
-         5lxrvdkbsmnAl6SKaXSd9Bbh/WoP8T4TTP/KfdHdBe1VuxsfBnlwXKg7or1YoV+VghcE
-         qxqlKPcAtIF0xzbFLF+rL6Ih1OzrG4oQLzxIe1fLhqgDlVuPr+k2CpR5kWeZQY1ib2uM
-         pOlnfz+oHqZE8AzbybNEs9OjTKANDDmLO4F4KC2jcISfQkp+VsqCEXl7nhCFW1Jalvnq
-         U+fQ==
-X-Gm-Message-State: AJIora9mkbTLKYzkWbup8GCwF9k12YaBM0/iC3oowAdOXnTcmp0ZAxrW
-        14h2B0yTXI09TgAW3D8sJxnsQ6EP1BjWnU4U3TM=
-X-Google-Smtp-Source: AGRyM1sWxw7zY1g4d0407a5YHUWym6xAHli3VBmZQqGYIY+b5c8KMHy0x1k5bXN8j9IAxZwjGPXjwFnDf4WDXVkzER4=
-X-Received: by 2002:a05:651c:a04:b0:255:bf2e:72b9 with SMTP id
- k4-20020a05651c0a0400b00255bf2e72b9mr686193ljq.333.1655321709803; Wed, 15 Jun
- 2022 12:35:09 -0700 (PDT)
+        Wed, 15 Jun 2022 15:36:34 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C4A517FC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:36:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655321794; x=1686857794;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=912lfXbA2TMPI9StUYSbZRvoS20Y8/6I5QT4A9WD3PA=;
+  b=RwWrE5/98QicvV5JLILsh2+UTX7m5CClkCW2e0+RvB9AaMfAEcPaaNfM
+   oXEljB0o54VG1KQBj4E36AYTO213gPvHhet9lo1yhWotf4fCR2X3cL6fa
+   gF1nO1EpfZ3KBvl2N3TAososbtW+A5zVMGLWdEgiTgueX0jfpeY8Pk1p5
+   V9jbzwBfa/3ZZQZ8kI7h41oleUlH1k+MKdeuj3PogZ6Bc2dIEW0h8nn2u
+   86vjOW4himj/F22gIUhpxVsfirk4t7L3JyJ/EGUaWEgNrlkVXdysUZkTx
+   yUEjBns2cg2IsvkaLTQSIQX80wCakVjJgRliqsAbfQrKSJLFlz6O8HDxB
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="280119953"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="280119953"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 12:36:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="652835775"
+Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 15 Jun 2022 12:36:28 -0700
+Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1o1YoV-000N8b-Dn;
+        Wed, 15 Jun 2022 19:36:27 +0000
+Date:   Thu, 16 Jun 2022 03:35:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 84bf7291902acff4b946fc591c499fc3eb88ce47
+Message-ID: <62aa3488.7yXIqbi8talaYM8B%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20220614210217.1940563-1-martin.fernandez@eclypsium.com> <20220615190519.GA1524500@alison-desk>
-In-Reply-To: <20220615190519.GA1524500@alison-desk>
-From:   Richard Hughes <hughsient@gmail.com>
-Date:   Wed, 15 Jun 2022 20:34:58 +0100
-Message-ID: <CAD2FfiGxy=9ARK5FT_iaLACZSzR+R4crmGJv7T+v_w3+ktOzCQ@mail.gmail.com>
-Subject: Re: [PATCH] x86/cpuinfo: Clear X86_FEATURE_TME if TME/MKTME is
- disabled by BIOS
-To:     Alison Schofield <alison.schofield@intel.com>
-Cc:     Martin Fernandez <martin.fernandez@eclypsium.com>,
-        linux-kernel@vger.kernel.org, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, mingo@redhat.com,
-        tglx@linutronix.de, daniel.gutson@eclypsium.com,
-        alex.bazhaniuk@eclypsium.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Jun 2022 at 20:06, Alison Schofield
-<alison.schofield@intel.com> wrote:
-> My first reaction is lying about the cpuinfo is not a soln, since
-> it creates a problem for a users currently relying on cpuinfo to be
-> the source of truth for TME.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 84bf7291902acff4b946fc591c499fc3eb88ce47  Merge branch into tip/master: 'x86/mm'
 
-I think you have to qualify "source of truth". At the moment the CPU
-reports "Yes! I support TME!" and then for one reason or another the
-platform turns it off and actually there's no memory encryption of
-your secrets at all. There's seemingly no userspace way of telling if
-TME is actually active. We were told that we shouldn't export the
-"platform has disabled a CPU feature" in sysfs and just to clear the
-cpuid flag that gets exported (like AMD is currently doing) which is
-what Martin proposed here. Programs want to know the true CPU
-capability can do __get_cpuid_count() like they can for the SME/SEV
-capabilities.
+elapsed time: 728m
 
-> Are we to tell them to go look in the
-> log now, because fwupd folks didn't want to ;)
+configs tested: 55
+configs skipped: 3
 
-We're not telling anyone to use the log; grepping megabytes of
-unformatted kernel logs is a terrible (and slow) way to get one
-boolean value.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Richard.
+gcc tested configs:
+arm                              allmodconfig
+arm                              allyesconfig
+arm                                 defconfig
+arm64                               defconfig
+arm64                            allyesconfig
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nios2                               defconfig
+arc                              allyesconfig
+alpha                               defconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                            allyesconfig
+arc                                 defconfig
+h8300                            allyesconfig
+sh                               allmodconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+parisc64                            defconfig
+s390                             allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+powerpc                          allyesconfig
+riscv                             allnoconfig
+riscv                            allyesconfig
+riscv                            allmodconfig
+riscv                    nommu_k210_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_virt_defconfig
+riscv                               defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                                  kexec
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

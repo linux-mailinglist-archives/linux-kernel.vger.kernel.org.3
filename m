@@ -2,200 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82D354D0A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B283754D0A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:07:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358237AbiFOSGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 14:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
+        id S1354455AbiFOSHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 14:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349342AbiFOSGG (ORCPT
+        with ESMTP id S1346928AbiFOSHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:06:06 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0009F5046A
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:06:01 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id p13so21930229ybm.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:06:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LWoNMw+t5sISDKPfmS/uBjaE6K11uOqPgrXVRArfKdA=;
-        b=ff5DI+ro3jbKitYSIhf9pNkWiGw74HA3Bev6bXhgRe5lNgjAsd+iH40hcRxs7KoiK2
-         l2atdhEuA03Nu7T9WjopOFxG+qTHb/tmlHzx4YQ37W70dHi4ZQtIqtivnkWgpglVj0Oa
-         6PVmfQLEADLqcMq89dENw8FVQjAdmxyymwVeiFV4ZSvnJZ0fKqwEiw97D3QkplESbw9U
-         oXvUKZQUM4GtO+5q8Su+dZqJwBDmT31T+9/6P3nLNlJhQ8G4jwzGwa81dOAJ2PUn/PWH
-         6bPdoVo2cLzXEFqGkYBWuJgaJaFIuGGryPqsdXHW+YW/ZMoIGx2eKqGABsmYMtX+tuJO
-         tdtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LWoNMw+t5sISDKPfmS/uBjaE6K11uOqPgrXVRArfKdA=;
-        b=Gb/pYmbtBaOiwVypukWvE/BP6761MSs5Bm2xixH+2zn0IFdnshn8nYRyH4uZ3YDrh/
-         Xd9tLZJYTknyYN0oRJPxB35xP+wgDSCmOh2oAEEXi75MArTN5kHcRIsl6uvv+PHBvXZb
-         6MTLTw75lA4VdnS6LoeQ3ZweEQNu++7TrEaEk/p+UbSoskzj+Zv52Hc/kky+7ZLt9lXr
-         5BXn1nhMrzJWHFYDglAkr0vR5r/rIP4XlUr/ZA2hFEa+rYI6rLDLxX9EpCesMdkt3knT
-         300+kOxqugjMOr3jcRmhXjomZq89RmRe9gvXURovMRFVkVAdhxrd4g7nHJgX+6dn3X5f
-         Gp4g==
-X-Gm-Message-State: AJIora8liTC90GQjmPXzRcjKAkEzCxrYr4bbxYmSiFN02z89EDOTj8sm
-        QcPey8y8Cc3QH0KqbpjZOqoogfIFKjTv2xx5b7PRhw==
-X-Google-Smtp-Source: AGRyM1vRbuit8z7ENCK6VzmAG6N9BoA8xgYpdSwHjzW9Fxdf9zHlYAVzuowAMUgsb6pFz0IwfLCCwNkEYfr+MIEX20M=
-X-Received: by 2002:a25:a286:0:b0:664:862a:f693 with SMTP id
- c6-20020a25a286000000b00664862af693mr1115170ybi.389.1655316361012; Wed, 15
- Jun 2022 11:06:01 -0700 (PDT)
+        Wed, 15 Jun 2022 14:07:02 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC30D50B25;
+        Wed, 15 Jun 2022 11:07:00 -0700 (PDT)
+Received: from [127.0.0.1] (nyx.walle.cc [158.255.213.36])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id B221F221D4;
+        Wed, 15 Jun 2022 20:06:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1655316417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X31Y0rQlpQau1yeSY1ewrfTTggu40SW7YZpoP18Nyc4=;
+        b=OYz6MguMMV3tV9zA8VtMkNpupo/XoNdrSezibyu9AwYYzlewf9Hez4YMuVDHDz4Cds2khU
+        plTm2VquklTTvnLjD4bam0yzvWGufT3IaxfwAJRrzVOCljFuIYwhYLGBkrw5337vST1zxN
+        IRtqmDNFGhS9FxsTaSwFM2BTvxXYEBo=
+Date:   Wed, 15 Jun 2022 20:06:49 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+CC:     brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org, jic23@kernel.org,
+        lee.jones@linaro.org, sre@kernel.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, lgirdwood@gmail.com, lars@metafoo.de,
+        rafael@kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/10] pinctrl: Add AXP192 pin control driver
+User-Agent: K-9 Mail for Android
+In-Reply-To: <CACRpkdbObQ5WrzVC_xYobJPSBVSMyaz0HHXesLP+g1HCzCGJtQ@mail.gmail.com>
+References: <20220603135714.12007-1-aidanmacdonald.0x0@gmail.com> <20220603135714.12007-11-aidanmacdonald.0x0@gmail.com> <CACRpkdbObQ5WrzVC_xYobJPSBVSMyaz0HHXesLP+g1HCzCGJtQ@mail.gmail.com>
+Message-ID: <A3444B9B-FDCD-4292-9DE4-D7DBC9DFA597@walle.cc>
 MIME-Version: 1.0
-References: <20220614183720.928818645@linuxfoundation.org>
-In-Reply-To: <20220614183720.928818645@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 15 Jun 2022 23:35:50 +0530
-Message-ID: <CA+G9fYsZArO68-ewBJgBikh6K9e4hE2PrD9H7bWUbzuxpBpTHg@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/16] 4.19.248-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Jun 2022 at 00:12, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Am 15=2E Juni 2022 15:44:04 OEZ schrieb Linus Walleij <linus=2Ewalleij@lina=
+ro=2Eorg>:
+>On Fri, Jun 3, 2022 at 3:56 PM Aidan MacDonald
+><aidanmacdonald=2E0x0@gmail=2Ecom> wrote:
 >
-> This is the start of the stable review cycle for the 4.19.248 release.
-> There are 16 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+>> The AXP192 PMIC's GPIO registers are much different from the GPIO
+>> registers of the AXP20x and AXP813 PMICs supported by the existing
+>> pinctrl-axp209 driver=2E It makes more sense to add a new driver for
+>> the AXP192, rather than add support in the existing axp20x driver=2E
+>>
+>> The pinctrl-axp192 driver is considerably more flexible in terms of
+>> register layout and should be able to support other X-Powers PMICs=2E
+>> Interrupts and pull down resistor configuration are supported too=2E
+>>
+>> Signed-off-by: Aidan MacDonald <aidanmacdonald=2E0x0@gmail=2Ecom>
 >
-> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> Anything received after that time might be too late.
+>Looks good to me (TM) but I'd like Michael Walle to take a look
+>to check if this is one of those drivers that could make use of
+>gpio-regmap=2Ec CONFIG_GPIO_REGMAP to make it even
+>simpler=2E
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.248-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+>Yours,
+>Linus Walleij
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+FWIW, I can look at it at the end of next week=2E I'm on vacation=2E
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 4.19.248-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: 3a3ddc084a29f6b9346b3f7de410b1c5353cbcd0
-* git describe: v4.19.247-17-g3a3ddc084a29
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.247-17-g3a3ddc084a29
-
-## Test Regressions (compared to v4.19.247)
-No test regressions found.
-
-## Metric Regressions (compared to v4.19.247)
-No metric regressions found.
-
-## Test Fixes (compared to v4.19.247)
-No test fixes found.
-
-## Metric Fixes (compared to v4.19.247)
-No metric fixes found.
-
-## Test result summary
-total: 103967, pass: 92252, fail: 235, skip: 10777, xfail: 703
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 298 total, 292 passed, 6 failed
-* arm64: 56 total, 54 passed, 2 failed
-* i386: 27 total, 23 passed, 4 failed
-* mips: 27 total, 27 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 55 total, 54 passed, 1 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 53 total, 51 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-cap_bounds-tests
-* ltp-commands
-* ltp-commands-tests
-* ltp-containers
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps
-* ltp-filecaps-tests
-* ltp-fs
-* ltp-fs-tests
-* ltp-fs_bind
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple
-* ltp-fs_perms_simple-tests
-* ltp-fsx
-* ltp-fsx-tests
-* ltp-hugetlb
-* ltp-hugetlb-tests
-* ltp-io
-* ltp-io-tests
-* ltp-ipc
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-pty-tests
-* ltp-sched
-* ltp-sched-tests
-* ltp-securebits
-* ltp-securebits-tests
-* ltp-smoke
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+-michael 

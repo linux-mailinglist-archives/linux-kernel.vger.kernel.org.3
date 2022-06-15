@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF89D54C103
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 07:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4710054C104
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 07:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242338AbiFOFIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 01:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33836 "EHLO
+        id S242599AbiFOFJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 01:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233958AbiFOFIL (ORCPT
+        with ESMTP id S233958AbiFOFJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 01:08:11 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A495719F89;
-        Tue, 14 Jun 2022 22:08:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655269689; x=1686805689;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8W6+BS5zW2ikAODP0FdofqAW5wGMZqw2O6tgAoEQX+k=;
-  b=OyeIfBy9vzTOnbt1scKaqBNaEvgz60bNL1AVqJgbMCI7UatRz3/CH47J
-   D+D6kTcud6v16UqVLOKfMDgxchwlqlMz7gLzAEjVBR/k0LOOX5KxZNk0G
-   WnpEm/4nRCTv/mV683P9/aYehtaG3cfVIGkQfmwHsEzWdhKxipuDIJIhy
-   8BgfTkh+AG/82ohd1s6Fi3dVwlNrxqHqS3jb6cc3gdzTLMioqp5p5MACi
-   lCSPPHrBb8wDzEK8WoRePFhx/JlBwnQ5N+AkdQ+vdgsx0bunZMZqGePy1
-   3j2f5X1URWZ03CH+v80iKh03K0GTM+vH/h8YEuVVXJ4p1xxfjdiIBqZu9
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="259296007"
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="259296007"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 22:08:09 -0700
-X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
-   d="scan'208";a="588897117"
-Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 22:08:09 -0700
-Date:   Tue, 14 Jun 2022 22:07:52 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     "Weiny, Ira" <ira.weiny@intel.com>
-Cc:     "Williams, Dan J" <dan.j.williams@intel.com>,
-        "Verma, Vishal L" <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] cxl/mbox: Add GET_POISON_LIST mailbox command support
-Message-ID: <20220615050752.GA1521419@alison-desk>
-References: <cover.1655250669.git.alison.schofield@intel.com>
- <382a9c35ef43e89db85670637d88371f9197b7a2.1655250669.git.alison.schofield@intel.com>
- <YqlQgbDUTJ6k9UBY@iweiny-desk3>
+        Wed, 15 Jun 2022 01:09:54 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202DC1A061;
+        Tue, 14 Jun 2022 22:09:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 84BDCCE1B8E;
+        Wed, 15 Jun 2022 05:09:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67EFBC34115;
+        Wed, 15 Jun 2022 05:09:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655269789;
+        bh=oOgS5P11N6XuYBqlsXOue8yUYaaDwNGTpTh6ZXQNHDU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GdCqQGMCOgreR5Edikv2b71DjwqxZj9+TGPq5JmwyjQhd/Q8bMiNoIOufntN7cDBh
+         +QVrtzuE64IWuKyQ7vsZ+yAgczEmEQL/LiTbgRohj5LqCoisjsF80uhQcjIiLyy0kP
+         EOuX5VqW58TP0J08gZa9EnYCY8ZrXqWO0AOww3EUz6biBm9eFEBdwP4JGZNeLZIDF8
+         ygPksm2dk5m2QPKOrJZrGb7nnwFnO2obgcFQH2Pt0wjV09oQKC+JH9najlBDqyp0sD
+         4ChPvvCsya8PLUjMmb7to+v/wFYhMQu8ScduFguJ6XP0SJp/FeDgQhfVBrhb7ZJXEj
+         YdiwpXFc45JQQ==
+Date:   Tue, 14 Jun 2022 22:09:48 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Michal Kubecek <mkubecek@suse.cz>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v1 1/1] net: phy: add remote fault support
+Message-ID: <20220614220948.5f0b4827@kernel.org>
+In-Reply-To: <YqlUCtJhR1Iw3o3F@lunn.ch>
+References: <20220608093403.3999446-1-o.rempel@pengutronix.de>
+        <YqS+zYHf6eHMWJlD@lunn.ch>
+        <20220613125552.GA4536@pengutronix.de>
+        <YqdQJepq3Klvr5n5@lunn.ch>
+        <20220614185221.79983e9b@kernel.org>
+        <YqlUCtJhR1Iw3o3F@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YqlQgbDUTJ6k9UBY@iweiny-desk3>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,159 +65,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 08:22:41PM -0700, Ira Weiny wrote:
-
-Thanks for the review Ira...
-
-> On Tue, Jun 14, 2022 at 05:10:27PM -0700, Alison Schofield wrote:
-> > From: Alison Schofield <alison.schofield@intel.com>
+On Wed, 15 Jun 2022 05:37:46 +0200 Andrew Lunn wrote:
+> > Does this dovetail well with ETHTOOL_A_LINKSTATE_EXT_STATE /
+> > ETHTOOL_A_LINKSTATE_EXT_SUBSTATE ?
 > > 
-
-snip
-
-> > 
-> > diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-> > index 60d10ee1e7fc..29cf0459b44a 100644
-> > --- a/drivers/cxl/cxlmem.h
-> > +++ b/drivers/cxl/cxlmem.h
-> > @@ -174,6 +174,7 @@ struct cxl_endpoint_dvsec_info {
-> >   *                (CXL 2.0 8.2.8.4.3 Mailbox Capabilities Register)
-> >   * @lsa_size: Size of Label Storage Area
-> >   *                (CXL 2.0 8.2.9.5.1.1 Identify Memory Device)
-> > + * @poison_max_mer: maximum Media Error Records tracked in Poison List
+> > That's where people who read extended link state out of FW put it
+> > (and therefore it's read only now).  
 > 
-> Does not match the member name below.
-Got it! I intended to drop the _mer.
+> I did wonder about that. But this is to do with autoneg which is part
+> of ksetting. Firmware hindered MAC drivers also support ksetting
+> set/get.  This patchset is also opening the door to more information
+> which is passed via autoneg. It can also contain the ID the link peer
+> PHY, etc. This is all part of 802.3, where as
+> ETHTOOL_A_LINKSTATE_EXT_STATE tends to be whatever the firmware
+> offers, not something covered by a standard.
 
-> 
-> Ira
-> 
-> >   * @mbox_mutex: Mutex to synchronize mailbox access.
-> >   * @firmware_version: Firmware version for the memory device.
-> >   * @enabled_cmds: Hardware commands found enabled in CEL.
-> > @@ -204,6 +205,7 @@ struct cxl_dev_state {
-> >  
-> >  	size_t payload_size;
-> >  	size_t lsa_size;
-> > +	u32 poison_max;
-> >  	struct mutex mbox_mutex; /* Protects device mailbox and firmware */
-> >  	char firmware_version[0x10];
-> >  	DECLARE_BITMAP(enabled_cmds, CXL_MEM_COMMAND_ID_MAX);
+I see, yeah, I think you're right.
 
-snip
-
-> > +int cxl_mem_get_poison_list(struct device *dev)
-> > +{
-> > +	struct cxl_memdev *cxlmd = to_cxl_memdev(dev);
-> > +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
-> > +	struct cxl_mbox_poison_payload_out *po;
-> > +	struct cxl_mbox_poison_payload_in pi;
-> > +	int nr_records = 0;
-> > +	int rc, i;
-> > +
-> > +	if (range_len(&cxlds->pmem_range)) {
-> > +		pi.offset = cpu_to_le64(cxlds->pmem_range.start);
-> > +		pi.length = cpu_to_le64(range_len(&cxlds->pmem_range));
-> > +	} else {
-> > +		return -ENXIO;
-> > +	}
-> > +
-> > +	po = kvmalloc(cxlds->payload_size, GFP_KERNEL);
-> > +	if (!po)
-> > +		return -ENOMEM;
-> > +
-> > +	do {
-> > +		rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_GET_POISON, &pi,
-> > +				       sizeof(pi), po, cxlds->payload_size);
-> > +		if (rc)
-> > +			goto out;
-> > +
-> > +		if (po->flags & CXL_POISON_FLAG_OVERFLOW) {
-> > +			time64_t o_time = le64_to_cpu(po->overflow_timestamp);
-> > +
-> > +			dev_err(dev, "Poison list overflow at %ptTs UTC\n",
-> > +				&o_time);
-> > +			rc = -ENXIO;
-> > +			goto out;
-> 
-> I guess the idea is that this return will trigger something else will clear the list,
-> rebuild the list, and perform a scan media request?
-> 
-Per CXL Spec 8.2.9.5.4.1: The poison list may be incomplete when the list
-has overflowed. User can perform a Scan Media to try to clear and rebuild
-the list, with no guarantee that the overflow will not recur.
-
-So yes to what you are saying. This return value should indicate to
-user space that a Scan Media should be issued. Issuing the Scan Media
-to the device does lead the device to rebuild it's list, as you say.
-Also, when we get the Scan Media results, the device is able to report
-partial results and tell the host to collect the error records, and
-then restart the scan, get results again, and on and on until the scan
-is complete.
-
-Perhaps a clarification - there is not a logical pairing of Scan Media
-followed by Get Poison List.  Scan Media followed by Get Scan Media
-Results is the logical pairing. Get Poison List is getting a snapshot
-of the poison list at a point in time. The device adds DPAs to the list
-when the device detects poison, some devices run their own backround
-scans and add to the poison list, and then there are the user initiated
-actions (Scan Media and Poison Inject) that can affect the list.
-
-> I'm just wondering if this loop should continue to clear the list and then let
-> something else do the scan media request?
-
-It's not like the _MORE status where the device is telling the host to
-come back and gather more. I think the action of failing, and letting
-user initiated a Scan Media is correct course here.
-
-So, this response got kind of long winded. As you can see, especially
-if one looks in the spec as I know you are, there are additional
-commands that need to be implemented to complete the ARS feature set.
-And, of course, we'll offer user space tooling (NDCTL and libcxl).
-
-> 
-> Other than that question and the above typo.  Looks good!
-> 
-> Ira
-> 
-> > +		}
-> > +
-> > +		if (po->flags & CXL_POISON_FLAG_SCANNING) {
-> > +			dev_err(dev, "Scan Media in Progress\n");
-> > +			rc = -EBUSY;
-> > +			goto out;
-> > +		}
-> > +
-> > +		for (i = 0; i < le16_to_cpu(po->count); i++) {
-> > +			u64 addr = le64_to_cpu(po->record[i].address);
-> > +			u32 len = le32_to_cpu(po->record[i].length);
-> > +			int source = FIELD_GET(CXL_POISON_SOURCE_MASK, addr);
-> > +
-> > +			if (!CXL_POISON_SOURCE_VALID(source)) {
-> > +				dev_dbg(dev, "Invalid poison source %d",
-> > +					source);
-> > +				source = CXL_POISON_SOURCE_INVALID;
-> > +			}
-> > +
-> > +			trace_cxl_poison_list(dev, source, addr, len);
-> > +		}
-> > +
-> > +		/* Protect against an uncleared _FLAG_MORE */
-> > +		nr_records = nr_records + le16_to_cpu(po->count);
-> > +		if (nr_records >= cxlds->poison_max)
-> > +			goto out;
-> > +
-> > +	} while (po->flags & CXL_POISON_FLAG_MORE);
-> > +
-> > +out:
-> > +	kvfree(po);
-> > +	return rc;
-> > +}
-> > +EXPORT_SYMBOL_NS_GPL(cxl_mem_get_poison_list, CXL);
-> > +
-> >  struct cxl_dev_state *cxl_dev_state_create(struct device *dev)
-> >  {
-> >  	struct cxl_dev_state *cxlds;
-> > -- 
-> > 2.31.1
-> > 
+But I'm missing the bigger picture. I'm unclear on who is supposed 
+to be setting the fault user space or kernel / device?
+Reading the codes it seems like most of them are hardware related,
+and would get set by the kernel? Or are they expected to be set
+by user space based on SQI / tests etc.?
+Even for testing kernel can set it when it changes oper_state of 
+the device.

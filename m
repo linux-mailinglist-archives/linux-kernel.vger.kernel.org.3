@@ -2,147 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C48B54CBF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:56:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A1C54CC00
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344084AbiFOOz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 10:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44564 "EHLO
+        id S235778AbiFOO6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 10:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237373AbiFOOzx (ORCPT
+        with ESMTP id S231737AbiFOO6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 10:55:53 -0400
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EFB34B97;
-        Wed, 15 Jun 2022 07:55:53 -0700 (PDT)
-Received: by mail-il1-f175.google.com with SMTP id u2so8956898iln.2;
-        Wed, 15 Jun 2022 07:55:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6pQnGfDjQoVp1rvU8e66nOIjBm74uZi19jZ+eXE+30s=;
-        b=hx0f080zKcMVwRqLouxWGSBra8ogU2IRzWSq2FiGKaQcfKt2n3ojnEV7piiUY6F2e5
-         dm3cmLr/GoBRkaWiFbY7+OS1uF+wYPPZcMum3pYnN+jf/WgBonp8Cjj3V5HIAfq39I+h
-         gNE+tLiaNNohHSxfyusl0hDXnHXP2BPUynpWF5owhBq8GWJoT788Ij++Q4wwzC90Tyus
-         mVrSMYS3LOAcPqhO95c6s0e+EssVIZCxokrPCNWgCiBtd0KUSrHFNLpkOMAgCFcn5xo/
-         CXxiph8ybZU4r6YPdX+QlyiPDyPmTs36FprFRqBYV9dz3pNLdRgA+uE0adnNcqa8oxWf
-         SJ4Q==
-X-Gm-Message-State: AJIora8qzWTbJkc0k7NNtdR0mT2siblX85F2V6d6gvry88hNnTjXFFs2
-        Ngt3I30QHg64YPn+YZGd3ps5kvL2Sw==
-X-Google-Smtp-Source: AGRyM1v9D2xwxPLO3fWw6MLNBK1h8w8DrYTqErV5QnXKIatPBOp5wzKqusY55yPT3X8yHzscU6+Q/A==
-X-Received: by 2002:a92:c54a:0:b0:2d3:b2ac:eb with SMTP id a10-20020a92c54a000000b002d3b2ac00ebmr113927ilj.323.1655304952460;
-        Wed, 15 Jun 2022 07:55:52 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.251])
-        by smtp.gmail.com with ESMTPSA id 126-20020a6b1484000000b00665714766a2sm6882497iou.47.2022.06.15.07.55.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 07:55:52 -0700 (PDT)
-Received: (nullmailer pid 1139633 invoked by uid 1000);
-        Wed, 15 Jun 2022 14:55:50 -0000
-Date:   Wed, 15 Jun 2022 08:55:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 04/17] dt-bindings: PCI: dwc: Add max-link-speed
- common property
-Message-ID: <20220615145550.GA1069883-robh@kernel.org>
-References: <20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru>
- <20220610085706.15741-5-Sergey.Semin@baikalelectronics.ru>
+        Wed, 15 Jun 2022 10:58:34 -0400
+Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 93C7E35841
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 07:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=0jHX1
+        o4T3dntA4QQGKBVqsC0i9BdSq13vyJ3pRtuELc=; b=jo77HEeM5iwfk8mkwfhif
+        aiqq26y6WzJjk4uwj2CPx9ecJiJqBaj0jvzwd1LhTbBogRGsimK2Fo7DMT8EvghO
+        rV1N98RNCAdtiv5AChaUgilxPwZHGATPj/SE3O1NUbDMdV4tJzh/PaN3OEqEgRqN
+        Y0Uycx8sLVmWlTpLM5+iIA=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp2 (Coremail) with SMTP id DMmowAD3IQVo86liwUE+DQ--.47882S2;
+        Wed, 15 Jun 2022 22:57:44 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     linux@armlinux.org.uk, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        windhl@126.com
+Subject: [PATCH] arm: mach-imx: Add missing of_node_put() in cpu-imx5.c
+Date:   Wed, 15 Jun 2022 22:57:43 +0800
+Message-Id: <20220615145743.3969705-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610085706.15741-5-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DMmowAD3IQVo86liwUE+DQ--.47882S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWruF4rJryfZr43Cw45XryxXwb_yoWxKrX_t3
+        WfW3srJFWrJF4FvryUua1rWF4Fqws3Wr1rXFyIya1Yk3yqvrnxCrnFv3WIqry7Zr1agFW5
+        WF9rCr4Ykw1YkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRMpnQ3UUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgMhF1-HZTdFJwACsF
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 11:56:52AM +0300, Serge Semin wrote:
-> In accordance with [1] DW PCIe controllers support up to Gen5 link speed.
-> Let's add the max-link-speed property upper bound to 5 then. The DT
-> bindings of the particular devices are expected to setup more strict
-> constraint on that parameter.
-> 
-> [1] Synopsys DesignWare Cores PCI Express Controller Databook, Version
-> 5.40a, March 2019, p. 27
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v3:
-> - This is a new patch unpinned from the next one:
->   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
->   by the Rob' request. (@Rob)
-> ---
->  Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml | 3 +++
->  Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml     | 2 ++
->  Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml        | 1 +
->  3 files changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> index 627a5d6625ba..b2fbe886981b 100644
-> --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
-> @@ -45,6 +45,9 @@ properties:
->        the peripheral devices available on the PCIe bus.
->      maxItems: 1
->  
-> +  max-link-speed:
-> +    maximum: 5
+In imx5_read_srev_reg(), of_find_compatible_node() will return a
+node pointer with refcount incremented. We should use of_node_put()
+when it is not used anymore.
 
-Unless the default is less than the max, shouldn't the max here be 1 
-less than the h/w max?
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/arm/mach-imx/cpu-imx5.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> +
->    num-lanes:
->      description:
->        Number of PCIe link lanes to use. Can be omitted should the already
-> diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
-> index dcd521aed213..fc3b5d4ac245 100644
-> --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
-> +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-ep.yaml
-> @@ -55,4 +55,6 @@ examples:
->  
->        phys = <&pcie_phy0>, <&pcie_phy1>, <&pcie_phy2>, <&pcie_phy3>;
->        phy-names = "pcie0", "pcie1", "pcie2", "pcie3";
-> +
-> +      max-link-speed = <3>;
->      };
-> diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-> index 4a5c8b933b52..01cedf51e0f8 100644
-> --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie.yaml
-> @@ -74,4 +74,5 @@ examples:
->        phy-names = "pcie";
->  
->        num-lanes = <1>;
-> +      max-link-speed = <3>;
+diff --git a/arch/arm/mach-imx/cpu-imx5.c b/arch/arm/mach-imx/cpu-imx5.c
+index ad56263778f9..103bf5be9b1b 100644
+--- a/arch/arm/mach-imx/cpu-imx5.c
++++ b/arch/arm/mach-imx/cpu-imx5.c
+@@ -30,6 +30,8 @@ static u32 imx5_read_srev_reg(const char *compat)
+ 	iim_base = of_iomap(np, 0);
+ 	WARN_ON(!iim_base);
+ 
++	of_node_put(np);
++
+ 	srev = readl(iim_base + IIM_SREV) & 0xff;
+ 
+ 	iounmap(iim_base);
+-- 
+2.25.1
 
-This should give you an error because pci-bus.yaml only goes up to 4. 
-
-I'm not really sure that limiting it in the common schema is too useful. 
-We're going to be updating it one step at a time. Limiting it is really 
-only helpful for specific implementations.
-
-Patch 1 didn't apply for me, so none of the checks ran.
-
-Rob

@@ -2,95 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB73754D3E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:44:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93CDC54D3ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347718AbiFOVoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 17:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
+        id S1344083AbiFOVrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 17:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241445AbiFOVoI (ORCPT
+        with ESMTP id S243995AbiFOVrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 17:44:08 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432DA31931
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:44:08 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id y13-20020a17090a154d00b001eaaa3b9b8dso3245448pja.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:44:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=gZ3udpFK2SaT9vmCeYN/wpvWhWsIcBFwQfLTZsfUbnc=;
-        b=C3ad6DKQHGNJK4jz3m6jxUEqWb680HAOKQA466+BxsDOB1m0gXHK5Vx6KI2rYILqMa
-         upDdvO0Qc4ZWYw9C/78Vg6pJFI/djX6YJpJRyYQHOjokBwIWUERWWDDGjUptbm1dw91Z
-         vriyGs9Mzp891tyKVDuMfVKFX3d9LEGVg0yw2NMrQJcXfwfaZMyiCXIlyVd0x80b+03P
-         hd5RNg5ZyEeN1hr2ixSV3Nl2lA2QMjDIR4ACuoVzuc2iGz4vixcDbTLhkJat+Zp7c3MJ
-         3rHiFF78Kdm1l+OKUr6krR9jtshunqBVgr0ydrygYJ0bikFwDzJmA9r861lpYfBWF3sn
-         bIjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=gZ3udpFK2SaT9vmCeYN/wpvWhWsIcBFwQfLTZsfUbnc=;
-        b=eAjNRWCjBf3YwkY19G6MgCQlZKvV2o4nqe251IcWlbV/7xncMnMUs5YHQlFvIg7a1T
-         NM0cRvaga25H+XGoHctFWzmjJD1M7ocIqbcPBqYLQ8G/Lk5mB8fbg9i4RU4lxpwRQ+J0
-         5KF9R0hGtLsY6P5tjfvLW2yhgVc1qaPrS074jjFzqjG71Ewisyo8GAqAd9923XC9L+ob
-         0q0Zc3grsor/6Lqzsg80notpPlHZcXqUCjfzi+GcP9XOytJyfxf6QCndmZND8E48luZU
-         84jMRqz6mYzBGYvlRLqH3zAXsgyOVpBzSRHHV9bCPCj5eL7wFyT5XaD9F9/ZwRlNqRYi
-         hkNw==
-X-Gm-Message-State: AJIora8vvIwL1V03EiOOJMYBDWG3bAWPjMMdwDHw1V8rQtZ4UN3Gf1mw
-        s44H4lge9pe9IsRfFA852Ts1Dw==
-X-Google-Smtp-Source: AGRyM1ssuxbEJkVMFnpbyqduhBRlE67GpHDcR94vAKkxGGt1An8/zFE12jM3dTNF/3KStbYKvU4yog==
-X-Received: by 2002:a17:90a:5ae1:b0:1db:d0a4:30a4 with SMTP id n88-20020a17090a5ae100b001dbd0a430a4mr1554816pji.128.1655329447759;
-        Wed, 15 Jun 2022 14:44:07 -0700 (PDT)
-Received: from google.com ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id i66-20020a62c145000000b00518950bfc82sm134050pfg.10.2022.06.15.14.44.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 14:44:07 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 22:44:05 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Mallikarjun Kasoju <mkasoju@nvidia.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mfd: max77620: Fix refcount leak in
- max77620_initialise_fps
-Message-ID: <YqpSpYUg4BIiy2B7@google.com>
-References: <20220601043222.64441-1-linmq006@gmail.com>
+        Wed, 15 Jun 2022 17:47:35 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FB1B65;
+        Wed, 15 Jun 2022 14:47:33 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 84B061FA34;
+        Wed, 15 Jun 2022 21:47:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1655329652; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=89CXqCbcWeJccBkwcSVEPJeJy8Az1fwhDi+ncrVChzM=;
+        b=eMBCn7CtVihAlZKW/qaEL8rmGKPgFBhlKRKGxs4NIPSpFsL9dhkzPaIDw8SZQLPDbbXdci
+        bv/6g0IhypoyHQZdAPMnWxOCuynVc+Uz+infRzoCQzBVFN0XXuawZFxmAXa/dS6bqFeG82
+        rE49ucZA8cF01Y2TyQbVFhwwZAPkc6g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1655329652;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=89CXqCbcWeJccBkwcSVEPJeJy8Az1fwhDi+ncrVChzM=;
+        b=+q38inbsR4Eov72uC2BveZ7yYSmEQCt3DoHYTiQl+Y6/+jFxhCEnLylOnTPP7zcPu1RTjZ
+        nsbmLGdYH3dXQvAw==
+Received: from quack3.suse.cz (unknown [10.163.28.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 184D62C141;
+        Wed, 15 Jun 2022 21:47:32 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 5C055A062E; Wed, 15 Jun 2022 23:47:26 +0200 (CEST)
+Date:   Wed, 15 Jun 2022 23:47:26 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jan Kara <jack@suse.cz>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Thomas Backlund <tmb@tmb.nu>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        stable <stable@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Slade Watkins <slade@sladewatkins.com>
+Subject: Re: [PATCH 5.15 000/251] 5.15.47-rc2 review
+Message-ID: <20220615214726.iklfsv676ked4z7u@quack3.lan>
+References: <bd80cd0d-a364-4ebd-2a89-933f79eaf4c7@tmb.nu>
+ <CAHk-=wix7+mGzS-hANyk7DZsZ1NgGMHjPzSQKggEomYrRCrP_Q@mail.gmail.com>
+ <CAHk-=wgfFhwMP0=QQY_iZvf0kveR5=VGK919Ayn+ZSUADs9mag@mail.gmail.com>
+ <20220615110022.yifrsvzxjsz2wky5@quack3.lan>
+ <20220615133845.o2lzfe5s4dzdfvtg@quack3.lan>
+ <20220615180026.GA2146974@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220601043222.64441-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220615180026.GA2146974@roeck-us.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 01 Jun 2022, Miaoqian Lin wrote:
-
-> of_get_child_by_name() returns a node pointer with refcount
-> incremented, we should use of_node_put() on it when not need anymore.
-> Add missing of_node_put() to avoid refcount leak.
+On Wed 15-06-22 11:00:26, Guenter Roeck wrote:
+> On Wed, Jun 15, 2022 at 03:38:45PM +0200, Jan Kara wrote:
+> > On Wed 15-06-22 13:00:22, Jan Kara wrote:
+> > > On Tue 14-06-22 12:00:22, Linus Torvalds wrote:
+> > > > On Tue, Jun 14, 2022 at 11:51 AM Linus Torvalds
+> > > > <torvalds@linux-foundation.org> wrote:
+> > > > >
+> > > > > Or just make sure that noop_backing_dev_info is fully initialized
+> > > > > before it's used.
+> > > > 
+> > > > I don't see any real reason why that
+> > > > 
+> > > >     err = bdi_init(&noop_backing_dev_info);
+> > > > 
+> > > > couldn't just be done very early. Maybe as the first call in
+> > > > driver_init(), before the whole devtmpfs_init() etc.
+> > > 
+> > > I've checked the dependencies and cgroups (which are the only non-trivial
+> > > dependency besides per-CPU infrastructure) are initialized early enough so
+> > > it should work fine. So let's try that.
+> > 
+> > Attached patch boots for me. Guys, who was able to reproduce the failure: Can
+> > you please confirm this patch fixes your problem?
+> > 
 > 
-> Fixes: 327156c59360 ("mfd: max77620: Add core driver for MAX77620/MAX20024")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/mfd/max77620.c | 2 ++
->  1 file changed, 2 insertions(+)
+> It does for me.
 
-Applied, thanks.
+Thanks for confirmation! I'll send the patch with proper tags etc. and also
+push it to Linus if nobody objects.
 
+								Honza
 -- 
-Lee Jones [李琼斯]
-Principal Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

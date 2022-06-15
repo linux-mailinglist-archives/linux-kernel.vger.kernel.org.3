@@ -2,105 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF5554C8A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC1454C8AC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347557AbiFOMgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 08:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40272 "EHLO
+        id S1348789AbiFOMhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 08:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234067AbiFOMgs (ORCPT
+        with ESMTP id S244779AbiFOMhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:36:48 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB6530553;
-        Wed, 15 Jun 2022 05:36:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=5lqEWJkgj4WjPMuFW/4um7Uq+N/W4NBmyjYBaPvODgA=; b=vWlkI0pgs/XEbRElbcbobR9x5/
-        xOMvayvrru8rGx8BcLb04qvMiqqgkWMhtELlE4vNY+qjLMUxNgEEtWtO/hhcWMSO1EWZEFWr8Q0cm
-        3X17/GtHvRwQu5tuf61wACBzsaHS6LYnEgLUfWJnKqmT+ZvKfU5wl9HgNWHHz5exLvNRwqen5Mw0s
-        V2SrBaA7jP3eptFp4KZ0GhER5exyexHNggeQ46b7nfFNmWWf6nYA+/f5Qq2nT44bguo8RTby7aAqT
-        tNrnkBN90FHFkyE92627IAlUPwaStfjnQHApd1ZZY00MMAldfbrikKBIA4BocCzFLvD+VwdtQhIHY
-        WRZM8qkw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1o1SGG-0013CA-8o; Wed, 15 Jun 2022 12:36:40 +0000
-Date:   Wed, 15 Jun 2022 13:36:40 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Yin Fengwei <fengwei.yin@intel.com>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org
-Subject: Re: [LKP] Re: [mm/readahead] 793917d997: fio.read_iops -18.8%
- regression
-Message-ID: <YqnSWMQN58xBUEt/@casper.infradead.org>
-References: <20220418144234.GD25584@xsang-OptiPlex-9020>
- <Yl2bKRcRqbcMmhji@casper.infradead.org>
- <1e8deaea-5a05-1846-d51c-b834beb9f23e@intel.com>
+        Wed, 15 Jun 2022 08:37:10 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87ABB31383;
+        Wed, 15 Jun 2022 05:37:09 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id m20so22907933ejj.10;
+        Wed, 15 Jun 2022 05:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=U/WQo9UxHiAIQSpHuTEJOdPrvxBtqOsfkDuOHXT4fi8=;
+        b=mynfaxJn8Yi4N5AnFgJURBMSq6edLrV6kfdVtE/cTBvkdGR+1pymZMt5tGuslErUc2
+         fRWug5XbN8UZArtXaKxYC3oA4rAwvVN2XAfs/LE1iG9Rz3rIxQGoamNeSjojOF4IJnMR
+         6gktE1M0kPpQlCQDrshBcfIUd1PwGbANqs7GxEgEPq2m4lA9LdIQ65vRI4ZSsY3SUVIA
+         2NxU16tB//7HH+axMHn1ncxoepAmd6+Z4qnqqHgtn11LjRzJS9SRA95u28jWQCH2mJwk
+         bo+dhvfMOTVGOfxr8jFs4NUIkWSsTVuKFjK4UNBkcI7RYBw3TDIZdzDNRxtc4HDzNY+g
+         RK1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=U/WQo9UxHiAIQSpHuTEJOdPrvxBtqOsfkDuOHXT4fi8=;
+        b=RfQ3ZhwdmaDJS0fxFZWUxmr88hweV5VW9qbhgjrYnV6rb2Lk7gq1bfB8WcJ0Xt8abb
+         z+obPJc1KPr4wBtj9gYTa3NveKrb4dxzoOzCFk6nhRQ/13arazg8L4Eipc71YGf2UUsm
+         8TZdF//1C1cP9Z/Zt8R4Mp4XTGDi/Fwb8Psdz97XBxCsZvZVGh3HIXjEARfdIn0M9ilD
+         h202RYnBUTn/Yid+Ra1vnJ6/h36kCrBRg6JnapbIGLN6Y8pQi+/oISpJZF4bVPNGL7ts
+         7nm+DIv4aouU+v4vvHswn+XzAX0RM2HBm5j8R3lWXGZfJAIr7j3v2i6xavy2fBY/3FfJ
+         knTA==
+X-Gm-Message-State: AJIora+0uIXTzBXEmSfb5vc4BV962AkmV+MjaHKlPxmTvHs3Yqval6BN
+        lSLhOdkA9OzhWXEwsNXEnomSls1CAznQoiByC1k=
+X-Google-Smtp-Source: ABdhPJylDinb4fCzaItR8dWPh3GXyvMp29GxcUN2YDleOJDJHdNjuEmPigJmt+Ifl8rLUqLlWoaEZioBql0P4yFAOg0=
+X-Received: by 2002:a17:906:73d2:b0:716:14a4:43d with SMTP id
+ n18-20020a17090673d200b0071614a4043dmr8559822ejl.434.1655296627996; Wed, 15
+ Jun 2022 05:37:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1e8deaea-5a05-1846-d51c-b834beb9f23e@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220615003733.16447-1-zhouzhouyi@gmail.com> <20220615051521.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220615051521.GH1790663@paulmck-ThinkPad-P17-Gen-1>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Wed, 15 Jun 2022 20:36:54 +0800
+Message-ID: <CAABZP2wCos5xupRQ2LbJtaLVN1a7i0D5kwaVTq9DEov8C46Gkw@mail.gmail.com>
+Subject: Re: [PATCH linux-next] RFC: torture: add pr_flush to flush the
+ results to console
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     john.ogness@linutronix.de, pmladek@suse.com, dave@stgolabs.net,
+        Josh Triplett <josh@joshtriplett.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        rcu <rcu@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 02:38:24PM +0800, Yin Fengwei wrote:
-> On 4/19/2022 1:08 AM, Matthew Wilcox wrote:
-> > 
-> > I'm on holiday today, but adding linux-fsdevel and linux-mm so relevant
-> > people know about this.
-> > 
-> > Don't focus on the 18% regression, focus on the 240% improvement on the
-> > other benchmark ;-)
-> > 
-> > Seriously, someone (probably me) needs to dig into what the benchmark
-> > is doing and understand whether there's a way to avoid (or decide this
-> > regression isn't relevant) while keeping the performance gains elsewhere.
-> With:
-> commit b9ff43dd27434dbd850b908e2e0e1f6e794efd9b
-> Author: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Date:   Wed Apr 27 17:01:28 2022 -0400
-> 
->     mm/readahead: Fix readahead with large folios
-> 
-> the regression is almost gone:
+On Wed, Jun 15, 2022 at 1:15 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Wed, Jun 15, 2022 at 08:37:33AM +0800, zhouzhouyi@gmail.com wrote:
+> > From: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> >
+> > currently tools/testing/selftests/rcutorture/bin/torture.sh reports
+> > false positve because of kthread printing.
+> >
+> > Commit "printk: add functions to prefer direct printing" (2bb2b7b57f812)
+> > have added functions to prefer direct printing activated for the primary
+> > import messages.
+> >
+> > Meanwhile adding printk_prefer_direct_enter/exit to
+> > torture_cleanup_begin/end still can't eliminate the false positives
+> > for a hundred percent.
+> >
+> > This patch add pr_flush to torture_cleanup_end because the latter
+> > is sleepable.
+> >
+> > Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> > Tested-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+>
+> Just the one Signed-off-by suffices.  ;-)
+Thank Paul for your guidance ;-)
+>
+> > ---
+> >  kernel/torture.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/kernel/torture.c b/kernel/torture.c
+> > index 789aeb0e1159..b51e42463a67 100644
+> > --- a/kernel/torture.c
+> > +++ b/kernel/torture.c
+> > @@ -878,6 +878,7 @@ void torture_cleanup_end(void)
+> >       mutex_lock(&fullstop_mutex);
+> >       torture_type = NULL;
+> >       mutex_unlock(&fullstop_mutex);
+> > +     pr_flush(1000, true);
+>
+> But in this case, the kernel keeps on running, correct?  So won't the
+> output appear over time?  All of printk()'s kthreads are still running
+> after all.
+I am doing research on linux-next following your guidance on my Dell
+PowerEdge R720 server:
+#git clone https://kernel.source.codeaurora.cn/pub/scm/linux/kernel/git/next/linux-next.git/
+#cd linux-next
+#./tools/testing/selftests/rcutorture/bin/torture.sh
+after about 14 hours, the test result show that there have been about
+17 failures, I examine the corresponding console.log, and find the
+failures are caused by following reason:
+before the message output by
+rcu/lock/scf_torture_print_module_parms(cur_ops, "End of test:
+SUCCESS") has reached serial console, torture_shutdown invoked
+kernel_power_off(),
+so the message "End of test: SUCCESS" has not chance of reaching
+console.log of host machine.
 
-That makes sense.  I did think at the time that this was probably the
-cause of the problem.
+Then I add printk_prefer_direct_enter/exit to
+torture_cleanup_begin/end, again I invoke
+#./tools/testing/selftests/rcutorture/bin/torture.sh
+after about 14 hours, the test result show that there have been about
+5 failures,
 
-> commit:
->   18788cfa236967741b83db1035ab24539e2a21bb
->   b9ff43dd27434dbd850b908e2e0e1f6e794efd9b
-> 
-> 18788cfa23696774 b9ff43dd27434dbd850b908e2e0
-> ---------------- ---------------------------
->        fail:runs  %reproduction    fail:runs
->            |             |             |
->        4698:9       -36360%        1426:3     dmesg.timestamp:last
->        3027:9       -22105%        1037:3     kmsg.timestamp:last
->          %stddev     %change         %stddev
->              \          |                \
->       0.39 ±253%      -0.3        0.09 ±104%  fio.latency_1000us%
->       0.00 ±141%      +0.0        0.01        fio.latency_100ms%
->      56.60 ±  5%     +10.3       66.92 ±  8%  fio.latency_10ms%
->      15.65 ± 22%      -1.3       14.39 ± 17%  fio.latency_20ms%
->       1.46 ±106%      -0.5        0.95 ± 72%  fio.latency_2ms%
->      25.81 ± 25%      -9.2       16.59 ± 18%  fio.latency_4ms%
->       0.09 ± 44%      +0.9        1.04 ± 22%  fio.latency_50ms%
->       0.00 ±282%      +0.0        0.02 ±141%  fio.latency_750us%
->      13422 ±  6%      -1.4%      13233        fio.read_bw_MBps   <-----
+Then I add a debug statement after
+rcu/lock/scf_torture_print_module_parms(cur_ops, "End of test:
+SUCCESS") which sends the debug string ("hello world") to
+uart_console_write directly, again I invoke
+#./tools/testing/selftests/rcutorture/bin/torture.sh
+There is "hello world" in console.log but no "End of test" strings.
 
-A stddev of 6% and a decline of 1.4%?  How many tests did you run
-to make sure that this is a real decline and not fluctuation of
-one-quarter-of-one-standard-devisation?
+So I guess even with printk_prefer_direct_enter/exit to
+torture_cleanup_begin/end,  our main shutdown thread has failed in
+competition for console lock (printk.c):
+2401 if (console_trylock_spinning())
+2402     console_unlock();
 
+Then I add pr_flush to torture_cleanup_end
+#./tools/testing/selftests/rcutorture/bin/torture.sh
+after 14 hours
+all 49 tests are success
+>
+> Or do you have a use case that requires that the output appear sooner
+> than it does?  If so, please let me know what that is.
+Thank Paul for your patience,
+./tools/testing/selftests/rcutorture/bin/torture.sh is the only tool
+that I use.
+
+I am very interested in this topic, and very glad to do further
+experiments under your guidance ;-)
+
+Sincerely yours
+Thanks
+Zhouyi
+>
+>                                                         Thanx, Paul
+>
+> >  }
+> >  EXPORT_SYMBOL_GPL(torture_cleanup_end);
+> >
+> > --
+> > 2.25.1
+> >

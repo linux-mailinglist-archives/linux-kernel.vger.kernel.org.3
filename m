@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F96054C417
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 10:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C677754C41A
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346835AbiFOI7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 04:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36958 "EHLO
+        id S231907AbiFOJAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346642AbiFOI7d (ORCPT
+        with ESMTP id S1344502AbiFOJAD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 04:59:33 -0400
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98053193D;
-        Wed, 15 Jun 2022 01:59:30 -0700 (PDT)
-Received: by mail-qv1-f54.google.com with SMTP id p31so7220822qvp.5;
-        Wed, 15 Jun 2022 01:59:30 -0700 (PDT)
+        Wed, 15 Jun 2022 05:00:03 -0400
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E97A240A4;
+        Wed, 15 Jun 2022 02:00:02 -0700 (PDT)
+Received: by mail-qk1-f180.google.com with SMTP id b142so8258057qkg.2;
+        Wed, 15 Jun 2022 02:00:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4LGNHnzrTgoysDDqvGoC2cbC9qqf5MTo99yN/7m20Ys=;
-        b=qNtNcuRAThsgGLiMWs+QdTy7oh5iAq8eKbAllDfodM5wbg1IapXZHQ0Yedk9P0lm30
-         dHy5KRLelev4WQX9iLryOD6JsYrasFFp7i14uOyXm0A81jECZM4Rr9K4SFF9fxwab6Sm
-         ZskzKqc7XsFuzgTCBjLqsRTDTUL3+ZMzl7X4fkRm79CHLWxNBH8Pahy93qlhQ1+qMbE7
-         qFZjZJlOM7siLsojY08TL7Nc1Cusn0POePZqlkX5vNx41Gfprr1DQK3N0K+kTuhb/fWS
-         iy+j7okGdwDVlAZ/W6TW4CPE9qnULERBN7q0RLkmMSKZuyHjVhaEAJt/5brpDxOoxFtp
-         Stng==
-X-Gm-Message-State: AJIora/auv/tSqrcJ7ikX1g3LLL3gMwH1WfmsAuH6NdUHuUAKWzASVtG
-        PBdxiPFnhhxZPAOm5LeUraVZc9VYt5sefA==
-X-Google-Smtp-Source: AGRyM1sqc+Y2qZtgrAXHdI4Zwmty3GarZDfgG0WeKcFhHJMx/OtXQbic36LR/RKL6NaSQls7fBt8JA==
-X-Received: by 2002:a05:6214:3015:b0:46b:c894:a499 with SMTP id ke21-20020a056214301500b0046bc894a499mr6868441qvb.81.1655283569801;
-        Wed, 15 Jun 2022 01:59:29 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id br30-20020a05620a461e00b006a726b03ad1sm11914111qkb.52.2022.06.15.01.59.29
+        bh=zrrdL6cjB6w0MhOfJZE/2LfI4a2CPe5QZKVfSPZsjhs=;
+        b=3bnroyl5CZ902Vjh0DBx/OKtC1Kx//1wAIclGlU3daNSsGb5z8h+dGF82rQ6jmQSsz
+         9jwA5U5jrHfTTLNGQo7SHOvJBI3s4mRBrJGmqONp6su7qh7GpYreqoUJuGlJEaGSnkRL
+         qOeEjBL067Lskw6deF9DZIjGWrsclDPXgR5f8tXGJ0qBvHV66ADtPvbgethkxBlEVmbA
+         RtMx2hZD0zb7aoJi3AiCnIbaMsChxJUkkEUV8rkNayolbRj2Eo2Fqv6U33jElVqVrleD
+         EWwn4iCnKy2fY2x81tP53Z5a9Bsi3/nOXP/39kQvLIFgb44z2dqvXaPYeRKLIBLNX7Hf
+         J6hg==
+X-Gm-Message-State: AOAM531f+mV2Q+phwiQciD4LLz0J/XAkp9wgrdBsyHN9huZSsUCk/6Vt
+        7ap2ZHDlWMOdg555prroAdIEjXzWpKJfOQ==
+X-Google-Smtp-Source: ABdhPJyUqmSpi50NAJWeTVFlBuDCpMbY7ZsVecPVW6xlP+KNAnb6nO3zmXlxMXMYX6jGyWdZUIbAsw==
+X-Received: by 2002:a05:620a:4589:b0:6a6:ca11:7e75 with SMTP id bp9-20020a05620a458900b006a6ca117e75mr7199660qkb.693.1655283601453;
+        Wed, 15 Jun 2022 02:00:01 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id n1-20020a05620a294100b006a6b6638a59sm11538615qkp.53.2022.06.15.02.00.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 01:59:29 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-313a8a8b95aso54356147b3.5;
-        Wed, 15 Jun 2022 01:59:29 -0700 (PDT)
-X-Received: by 2002:a0d:e657:0:b0:314:7e4d:30a9 with SMTP id
- p84-20020a0de657000000b003147e4d30a9mr6072754ywe.316.1655283569213; Wed, 15
- Jun 2022 01:59:29 -0700 (PDT)
+        Wed, 15 Jun 2022 02:00:01 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id t32so19311137ybt.12;
+        Wed, 15 Jun 2022 02:00:01 -0700 (PDT)
+X-Received: by 2002:a25:d748:0:b0:65c:6b00:55af with SMTP id
+ o69-20020a25d748000000b0065c6b0055afmr8642665ybg.365.1655283600738; Wed, 15
+ Jun 2022 02:00:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220614095242.8264-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220614095242.8264-1-wsa+renesas@sang-engineering.com>
+References: <20220613134914.18655-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220613134914.18655-1-wsa+renesas@sang-engineering.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 15 Jun 2022 10:59:18 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU36tAerp7_DoMMAq9QowQMs6GOC5nM9H-PyD9qS8FwAw@mail.gmail.com>
-Message-ID: <CAMuHMdU36tAerp7_DoMMAq9QowQMs6GOC5nM9H-PyD9qS8FwAw@mail.gmail.com>
-Subject: Re: [PATCH v2] arm64: dts: renesas: r8a779f0: Add SCIF nodes
+Date:   Wed, 15 Jun 2022 10:59:49 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVcWxjBewZ=Cji1+N4pL-5efcBJ9e8R26rZnpA5ALRP8w@mail.gmail.com>
+Message-ID: <CAMuHMdVcWxjBewZ=Cji1+N4pL-5efcBJ9e8R26rZnpA5ALRP8w@mail.gmail.com>
+Subject: Re: [PATCH 1/3] arm64: dts: renesas: r8a779f0: Add DMA properties to SCIF3
 To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
 Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linh Phung <linh.phung.jy@renesas.com>,
         Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -70,18 +69,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 11:52 AM Wolfram Sang
+On Mon, Jun 13, 2022 at 3:49 PM Wolfram Sang
 <wsa+renesas@sang-engineering.com> wrote:
-> From: Linh Phung <linh.phung.jy@renesas.com>
->
-> Extracted from a bigger patch in the BSP, rebased, reg length corrected,
-> and DMA properties added.
->
-> Signed-off-by: Linh Phung <linh.phung.jy@renesas.com>
 > Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->
-> Change since v1: include all SCIF
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 i.e. will queue in renesas-devel for v5.20.

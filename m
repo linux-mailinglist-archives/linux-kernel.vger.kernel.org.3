@@ -2,123 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C170254CC3D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD9C54CC3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241601AbiFOPLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59756 "EHLO
+        id S242512AbiFOPLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232920AbiFOPLH (ORCPT
+        with ESMTP id S242206AbiFOPLS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:11:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13E0340C2;
-        Wed, 15 Jun 2022 08:11:05 -0700 (PDT)
+        Wed, 15 Jun 2022 11:11:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A0D366A7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:11:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 481C9B81ED1;
-        Wed, 15 Jun 2022 15:11:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E6EAC34115;
-        Wed, 15 Jun 2022 15:11:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655305862;
-        bh=8QqTc264OWMZ8sfVZ4CWeOAu41bS0EzhOXWhbFygifs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=LuUNSUq9DJXyVwzCzA1ADZiRM+aAgdaZ1rvQmPrrm6tOe703EoxSyzax9AD3Ob5Vx
-         1CYgRjxUkOFGBjdcbfHO7yOc2eJNLJlD9pN9sNfrYeL2CW40vZdgJIuKj8LzEwnjLX
-         mP1rH4ndRvrtzH/PmaXFpt9gDe/9swcMmY5QYZA725W4jcTrzhgx6fWvurGQKoN7Fw
-         ywtrKnyTDGSmz+OqGb+AXgcpmrljrVdq3yTHpoqZJVN2U7Hm2BxZEPHU9wBBGzWdHx
-         iaF/8OgA3TXGBP6GodtliG3GrAxuEpXt4qCdkGsOfaEucyhgVyPOly5ZhYhZD7CNyG
-         SJh55/XgsR06w==
-Date:   Wed, 15 Jun 2022 10:11:00 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH] x86/PCI: Revert: "Clip only host bridge windows for E820
- regions"
-Message-ID: <20220615151100.GA937185@bhelgaas>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22AD66146E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:11:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70D16C34115;
+        Wed, 15 Jun 2022 15:11:15 +0000 (UTC)
+Date:   Wed, 15 Jun 2022 16:11:11 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v2 3/3] mm/kmemleak: Prevent soft lockup in first object
+ iteration loop of kmemleak_scan()
+Message-ID: <Yqn2jxZhk5Neomu7@arm.com>
+References: <20220614220359.59282-1-longman@redhat.com>
+ <20220614220359.59282-4-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YqkeF2uqAyyxiZrQ@kbusch-mbp.dhcp.thefacebook.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220614220359.59282-4-longman@redhat.com>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 04:47:35PM -0700, Keith Busch wrote:
-> On Tue, Jun 14, 2022 at 06:01:28PM -0500, Bjorn Helgaas wrote:
-> > [+cc NVMe folks]
-> > 
-> > On Tue, Jun 14, 2022 at 07:49:27PM -0300, Guilherme G. Piccoli wrote:
-> > > On 14/06/2022 12:47, Hans de Goede wrote:
-> > > > [...]
-> > > > 
-> > > > Have you looked at the log of the failed boot in the Steam Deck kernel
-> > > > bugzilla? Everything there seems to work just fine and then the system
-> > > > just hangs. I think that maybe it cannot find its root disk, so maybe
-> > > > an NVME issue ?
-> > > 
-> > > *Exactly* that - NVMe device is the root disk, it cannot boot since the
-> > > device doesn't work, hence no rootfs =)
-> > 
-> > Beginning of thread: https://lore.kernel.org/r/20220612144325.85366-1-hdegoede@redhat.com
-> > 
-> > Steam Deck broke because we erroneously trimmed out the PCI host
-> > bridge window where BIOS had placed most devices, successfully
-> > reassigned all the PCI bridge windows and BARs, but some devices,
-> > apparently including NVMe, didn't work at the new addresses.
-> > 
-> > Do you NVMe folks know of gotchas in this area?  I want to know
-> > because we'd like to be able to move devices around someday to
-> > make room for hot-added devices.
-> > 
-> > This reassignment happened before drivers claimed the devices, so
-> > from a PCI point of view, I don't know why the NVMe device
-> > wouldn't work at the new address.
-> 
-> The probe status quickly returns ENODEV. Based on the output (we
-> don't log much, so this is just an educated guesss), I think that
-> means the driver read all F's from the status register, which
-> indicates we can't read it when using the reassigned memory window.
-> 
-> Why changing memory windows may not work tends to be platform or
-> device specific. Considering the renumbered windows didn't cause a
-> problem for other devices, it sounds like this nvme device may be
-> broken.
+On Tue, Jun 14, 2022 at 06:03:59PM -0400, Waiman Long wrote:
+> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+> index 7dd64139a7c7..abba063ae5ee 100644
+> --- a/mm/kmemleak.c
+> +++ b/mm/kmemleak.c
+> @@ -1417,12 +1417,16 @@ static void kmemleak_scan(void)
+>  	struct zone *zone;
+>  	int __maybe_unused i;
+>  	int new_leaks = 0;
+> +	int loop1_cnt = 0;
+>  
+>  	jiffies_last_scan = jiffies;
+>  
+>  	/* prepare the kmemleak_object's */
+>  	rcu_read_lock();
+>  	list_for_each_entry_rcu(object, &object_list, object_list) {
+> +		bool obj_pinned = false;
+> +
+> +		loop1_cnt++;
+>  		raw_spin_lock_irq(&object->lock);
+>  #ifdef DEBUG
+>  		/*
+> @@ -1437,10 +1441,32 @@ static void kmemleak_scan(void)
+>  #endif
+>  		/* reset the reference count (whiten the object) */
+>  		object->count = 0;
+> -		if (color_gray(object) && get_object(object))
+> +		if (color_gray(object) && get_object(object)) {
+>  			list_add_tail(&object->gray_list, &gray_list);
+> +			obj_pinned = true;
+> +		}
+>  
+>  		raw_spin_unlock_irq(&object->lock);
+> +
+> +		/*
+> +		 * Do a cond_resched() to avoid soft lockup every 64k objects.
+> +		 * Make sure a reference has been taken so that the object
+> +		 * won't go away without RCU read lock.
+> +		 */
+> +		if (!(loop1_cnt & 0xffff)) {
+> +			if (!obj_pinned && !get_object(object)) {
+> +				/* Try the next object instead */
+> +				loop1_cnt--;
+> +				continue;
+> +			}
 
-It sounds like you've seen this sort of problem before, so we
-shouldn't assume that it's safe to reassign BARs.
+With this trick we could probably get rid of rcu_read_lock() and take
+the kmemleak_lock instead. But that's for another patch.
 
-I think Windows supports rebalancing, but it does look like drivers
-have the ability to veto it:
+> +
+> +			rcu_read_unlock();
+> +			cond_resched();
+> +			rcu_read_lock();
 
-  https://docs.microsoft.com/en-us/windows-hardware/drivers/kernel/stopping-a-device-to-rebalance-resources
-  https://docs.microsoft.com/en-us/windows-hardware/drivers/wdf/the-pnp-manager-redistributes-system-resources
+cond_resched_rcu() to save a couple of lines?
 
-So I suppose if/when we support rebalancing, it'll have to be an
-opt-in thing for each driver.
+> +
+> +			if (!obj_pinned)
+> +				put_object(object);
+> +		}
+
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+
+Thanks.

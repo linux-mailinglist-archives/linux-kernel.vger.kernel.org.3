@@ -2,136 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B150F54CE8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A086E54CE8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355124AbiFOQVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
+        id S1355270AbiFOQW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:22:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232224AbiFOQVa (ORCPT
+        with ESMTP id S1349308AbiFOQWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:21:30 -0400
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAC139FD1;
-        Wed, 15 Jun 2022 09:21:29 -0700 (PDT)
-Received: by mail-pg1-f172.google.com with SMTP id 184so11791181pga.12;
-        Wed, 15 Jun 2022 09:21:29 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=oxwx2XCF+I1I4h/9eZc3yiqrH4E8gBYoc+9xhREdn5Y=;
-        b=CQhOQWWT+uBu3d7WHmxmNP04saC5VYeoZRnt5DSxhUjwBgW4j2GN/R+QbksL63Ide3
-         TwPgeRJJc96pzgmnsyW3y/FBD/JfFodYW9iAzbAOsS+oshqfNEkxxUZvAHSXsiLqoK3H
-         ITyWTSz3oarmdtBfoQn47beZy4X8p6jQdlMwEJDzoA87Wc3c3yua98e+tNtpZWTyPz37
-         dL6gzV8gvSp5WDcV5BAdA21VuCXXRfK6SLDuJglnH6VkuUtF7dpg6rxzVDAsoyaE55jA
-         ijJ5PBSN5meNQ4LDtZtb7tEL7Fsb9uSP5OcnuqR894OXsXhr7NyOSCXdb9wSohUZQsni
-         LnLQ==
-X-Gm-Message-State: AJIora8czxyHRqfXmnQXzfwYMD1tWNj3DK6z7+TQex1ZmFIZLqhQnpD6
-        o/IqLowrf7M8F30pgu0Q35M=
-X-Google-Smtp-Source: AGRyM1voI3CsDZUvl6kUayV5lUz/OC0ud0TYUc7dOhuNQy/iTKJCGRND7+ozOR8158DkbFk6UxzRxg==
-X-Received: by 2002:a05:6a00:4504:b0:51b:f04e:a130 with SMTP id cw4-20020a056a00450400b0051bf04ea130mr409348pfb.52.1655310088948;
-        Wed, 15 Jun 2022 09:21:28 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:36ac:cabd:84b2:80f6? ([2620:15c:211:201:36ac:cabd:84b2:80f6])
-        by smtp.gmail.com with ESMTPSA id m17-20020a056a00081100b0051b9c0af43dsm10224124pfk.155.2022.06.15.09.21.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 09:21:28 -0700 (PDT)
-Message-ID: <1c422582-b074-c15e-a2d2-94bddf089974@acm.org>
-Date:   Wed, 15 Jun 2022 09:21:27 -0700
+        Wed, 15 Jun 2022 12:22:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D276F5BE
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:22:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C2078B82041
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:22:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5632AC341C6
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:22:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655310139;
+        bh=x5bYjHYongCPN5AkxGevT43qqAhNw13qjohDvYSEt6s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Z3pbGo2dHwljZEDOHRG8WK81qcZ1mnMtijE8EiHKzgY2JiK+cIbocxwhWAURBzMiH
+         2twYFDz5AvmLcGwJqoB/YtFy7osgDxeiwqCmGi5WqcQX85UgtG52qhfntwO+loIh8B
+         xw+wSiizBnER6A55/FguhTi9SqSFd6r/aC1ITuL+XDIVM2pQs93Y4Y772PmUdmRgAB
+         PkviaJ3glM/5dQ4ln2gYWSpSHinFUEE9iP47x2UWrmAF5R0nnXULx58vmMbeWKI5A2
+         fLpcSPkHBWSMVPGR5tr9D8Y5yt6pzYcV3GusLkDWucuU1brYK74CiJcTh38tW9y5b5
+         YVzddt3rFbN2g==
+Received: by mail-vk1-f170.google.com with SMTP id x190so5618986vkc.9
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:22:19 -0700 (PDT)
+X-Gm-Message-State: AJIora9U7dGSf+EcTZlhQC59qS4L8GFSs1S2Vn5N7H5RhLt4HoCXgoUB
+        7GVw0fcg3/x9UWkewJk6n7JyCgDYdFLYHgqljw==
+X-Google-Smtp-Source: AGRyM1tvBszql/pKKLxkHsx1E9OjWr2NqUZxeyT4my9ToD0O0iOKD1Vexb6cgqCJUXZ26DU9PLA3+dlWw6nHn6aasRw=
+X-Received: by 2002:a1f:73c1:0:b0:35c:cb95:832 with SMTP id
+ o184-20020a1f73c1000000b0035ccb950832mr479289vkc.15.1655310138197; Wed, 15
+ Jun 2022 09:22:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3] scsi: support packing multi-segment in UNMAP command
-Content-Language: en-US
-To:     Chao Yu <chao@kernel.org>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220615153402.2233825-1-chao@kernel.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220615153402.2233825-1-chao@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220615150325.3969911-1-windhl@126.com> <c69f2023-f518-72cd-9991-c672b40d3767@intel.com>
+In-Reply-To: <c69f2023-f518-72cd-9991-c672b40d3767@intel.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 15 Jun 2022 10:22:06 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+-aJSzd6H5JdVZrTK2PHNbqAam_At8CuJ2NaxBhMns-A@mail.gmail.com>
+Message-ID: <CAL_Jsq+-aJSzd6H5JdVZrTK2PHNbqAam_At8CuJ2NaxBhMns-A@mail.gmail.com>
+Subject: Re: [PATCH] arch: x86: kernel: Add missing of_node_put() in devicetree.c
+To:     Dave Hansen <dave.hansen@intel.com>, Liang He <windhl@126.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Frank Rowand <frank.rowand@sony.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/22 08:34, Chao Yu wrote:
-> As SCSI SBC4 specification section 5.30.2 describes that it can
-> support unmapping one or more LBA range in single UNMAP command,
-> however, previously we only pack one LBA range in UNMAP command
-> by default no matter device gives the block limits that says it
-> can support in-batch UNMAP.
+On Wed, Jun 15, 2022 at 9:33 AM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 6/15/22 08:03, Liang He wrote:
+> > In dtb_setup_hpet(), of_find_compatible_node() will return a node
+> > pointer with refcount incremented. We should use of_node_put() when it
+> > is not used anymore.
+> >
+> > Signed-off-by: Liang He <windhl@126.com>
+>
+> Seems like:
+>
+> Fixes: ffb9fc68dff3 ("x86: dtb: Add device tree support for HPET")
+>
+> and would be appropriate, right?
+>
+> Also, how was this found, and what is the impact from not fixing it?
 
-The above sentence is too long. Please split it.
+No impact if the node is not dynamically removed. That's almost all
+cases except IBM pSeries cpu, memory, and pci. Overlays could change
+that, but their support in the kernel is limited.
 
-> This patch tries to set max_discard_segments config according to
-              ^^^^^^^^^^^^
-Consider changing "tries to set" into "sets".
+If it really mattered, we'd probably come up with a different way to
+do the refcounting as it is hard to get right. In fact, this fix is
+not right. Will reply with the right context.
 
-> block limits of device, and supports in-batch UNMAP.
-
-Consider changing "in-batch UNMAP" into "unmapping multiple LBA ranges 
-with a single UNMAP command".
-
-> +	blk_queue_max_discard_segments(q, sdkp->max_block_desc_count);
-
-sdkp->max_block_desc_count is 32 bits wide while 
-blk_queue_max_discard_segments() accepts an unsigned short as second 
-argument. So the value 0x10002 will be converted into 2, which is not 
-correct. Consider changing the second argument into min(U16_MAX, 
-sdkp->max_block_desc_count).
-
->   	sdkp->provisioning_mode = mode;
->   
->   	switch (mode) {
-> @@ -836,9 +837,10 @@ static blk_status_t sd_setup_unmap_cmnd(struct scsi_cmnd *cmd)
->   	struct scsi_device *sdp = cmd->device;
->   	struct request *rq = scsi_cmd_to_rq(cmd);
->   	struct scsi_disk *sdkp = scsi_disk(rq->q->disk);
-> -	u64 lba = sectors_to_logical(sdp, blk_rq_pos(rq));
-> -	u32 nr_blocks = sectors_to_logical(sdp, blk_rq_sectors(rq));
-> -	unsigned int data_len = 24;
-> +	unsigned short segments = blk_rq_nr_discard_segments(rq);
-> +	unsigned int data_len = 8 + 16 * segments;
-> +	unsigned int data_offset = 8;
-
-Please rename 'data_offset' into 'descriptor_offset' to match the SBC-4 
-terminology.
-
-> @@ -2870,9 +2879,9 @@ static void sd_read_block_limits(struct scsi_disk *sdkp)
->   			goto out;
->   
->   		lba_count = get_unaligned_be32(&vpd->data[20]);
-> -		desc_count = get_unaligned_be32(&vpd->data[24]);
-> +		sdkp->max_block_desc_count = get_unaligned_be32(&vpd->data[24]);
-
-Consider adding /* Extract the MAXIMUM UNMAP BLOCK DESCRIPTOR COUNT. */ 
-above the above statement.
-
-> diff --git a/drivers/scsi/sd.h b/drivers/scsi/sd.h
-> index 5eea762f84d1..bda9db5e2322 100644
-> --- a/drivers/scsi/sd.h
-> +++ b/drivers/scsi/sd.h
-> @@ -119,6 +119,7 @@ struct scsi_disk {
->   	u32		opt_xfer_blocks;
->   	u32		max_ws_blocks;
->   	u32		max_unmap_blocks;
-> +	u32		max_block_desc_count;
-
-I do not agree with the choice of the name of this member variable. The 
-name used in SBC-4 is "MAXIMUM UNMAP BLOCK DESCRIPTOR COUNT". Leaving 
-out "unmap" when abbreviating that description into a member name makes 
-it impossible to guess what the purpose of that member variable is.
-
-Thanks,
-
-Bart.
+> Was it causing horrible problems in production, or was it just something
+> that was found by inspection that's not causing any real problems in
+> practice?

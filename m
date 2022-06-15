@@ -2,95 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90BB354D424
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99A7254D427
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:02:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350267AbiFOWCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 18:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
+        id S1350257AbiFOWCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 18:02:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350243AbiFOWBy (ORCPT
+        with ESMTP id S1350313AbiFOWCJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 18:01:54 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E715856232;
-        Wed, 15 Jun 2022 15:01:53 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id r1so11510798plo.10;
-        Wed, 15 Jun 2022 15:01:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=LdrIZ4iMnUUYL89V6oxh1FZpJ4qOnn+bpJAvz85AHGQ=;
-        b=QHjZoS02t3PZt1aXfOc1DArtnEuR1dfQAl+sVIoM0BMkN/YjG+v5v78tt/gYSMJJ4O
-         q0Qxa1zLAXL6p1jmKATDMaZYkgAvEo5nPabj53j+VND/IcIYm8E1Un+mOPN0z7k/j6ss
-         wfHNwoFdIsu+qxi/Jdn6kvmvRf9PWLWxQUp0GXvtrtaX+sCccQs15OsMbWo7BeC4HVBI
-         tpVOeKAYArl2dqV2opv4Ba2MRG4HLeXBqpZBuPmajc8GYyar8xBEsI32mgp1HOMd65E8
-         R6HnjNcbap+w5/E+ekBVjNgSslpexmOXXEmom1N1Ut4TFVoF0xdFpHKZya6Tc4JWGmFH
-         1NoQ==
+        Wed, 15 Jun 2022 18:02:09 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A09562E4;
+        Wed, 15 Jun 2022 15:02:06 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-fe4ac3b87fso18305258fac.3;
+        Wed, 15 Jun 2022 15:02:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=LdrIZ4iMnUUYL89V6oxh1FZpJ4qOnn+bpJAvz85AHGQ=;
-        b=zOau3oUvxfQAcfyH22dP9JXAotBVY8VcHXY0f7QZVx3wxFjjmUczEFppeIsNJKqldS
-         dMCJABlWTQXZaUzwl9GOy7DBxQZrwEGKpLthnhzkDS2C0zhuRU2yqXmycSU7/J8m4tiv
-         kSH3wDYVNOdjY8b6itUaRQI27rDeidQ22YpFhv7XxbM1HnJmVhLhoskVJyYLUkKpnSDv
-         lh9tO79Uj/IO4QmllhWfAKWqVFt859rL0E1Neuz52caJZDJ6HHv3W9DkAZlYqW9bNR4q
-         fHhdu2qhQPaV265qUTs/PEY2NGRQ8p9cijtkkmEkSl2urGMHMYrmxFMEpgiqGUwji16L
-         bHDw==
-X-Gm-Message-State: AJIora/LvmzaUD5HEy2a+o849aMtxKP69rtWWhUNudkt99nVMQbBsN/N
-        fYWn31fu0vSaSAnUQbyoOAY=
-X-Google-Smtp-Source: AGRyM1uAawkjkKWXExk7RRzHck1At6okHekjVrsLfZ5FJRi/UUSiHSAIYO5MbfRuvUDDU4jlG83m2A==
-X-Received: by 2002:a17:902:d904:b0:163:dd91:87 with SMTP id c4-20020a170902d90400b00163dd910087mr1615418plz.34.1655330513011;
-        Wed, 15 Jun 2022 15:01:53 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p3-20020a170902780300b0015e8d4eb26esm103485pll.184.2022.06.15.15.01.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 15:01:52 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 15 Jun 2022 15:01:51 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.14 00/20] 4.14.284-rc1 review
-Message-ID: <20220615220151.GB1229939@roeck-us.net>
-References: <20220614183723.328825625@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MP7VotlrPEyj/O+W/dC48V8Z9sBFEGUxNcsRE9QzJ5s=;
+        b=5STeACigjbALQQ2433Mb+kalDCgCUlbXXdHzs6BIhUPD+kxQ1S4/Q7fIO9hoHVq/1a
+         2zD+FqFE6yeg0WCD8K+ZhdnOJCpR3q3tQ+zwPK1BTmZPJP+YMql89maUOCUvfVnRku+z
+         TghTjgJCOdsIQ0itK03M9/g5Vw+EGDBzSwWRDgQd2Q8ue5d8Qt3/yumKxAU2TQvYXtiX
+         2KILe4x6PZlmOfrZRfvxP/zNSdODpWddUK93Nl6SmLIkYoUOUJehT2y23JMxPxuqMeIG
+         C9XV9LJQwHmYzyEGJk+ac4Xkm+LOyEKV9v/sxdLUn2X+C6mVpqLTdnikk4VxTB9G8tHU
+         PULg==
+X-Gm-Message-State: AJIora9p1gfVA10hTruA/69Gs4T8oy7kyQC0TXq/KdajSBKcA5065cSO
+        YzVeO9ZusYwidr8kSrMBckviQY0EBb+SYaC1yhc=
+X-Google-Smtp-Source: AGRyM1vMuSb76jKXhHqf6SJ6Rmy3KOcpBgVTC5+7mAlBwDXHBEKUi0DNDKUOgg5/yNLeYZBVJX3l4hUFfiN3X9TUBLg=
+X-Received: by 2002:a05:6870:1cb:b0:fe:f0b:e0ac with SMTP id
+ n11-20020a05687001cb00b000fe0f0be0acmr6761958oad.5.1655330526165; Wed, 15 Jun
+ 2022 15:02:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220614183723.328825625@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+References: <20220613094605.208401-1-yangjihong1@huawei.com>
+ <20220613094605.208401-7-yangjihong1@huawei.com> <CAM9d7ci9R4=LuyDJAHSqtxc3nOZG+N8e7_WKJUKtL5j3xXqqtA@mail.gmail.com>
+ <2953080a-a1bd-0a1c-8466-96c4b58de2e6@huawei.com>
+In-Reply-To: <2953080a-a1bd-0a1c-8466-96c4b58de2e6@huawei.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 15 Jun 2022 15:01:55 -0700
+Message-ID: <CAM9d7ci2XGE6jTnN1UrM=v4E55KswwQHUxmgCL71LgaCn+cFVQ@mail.gmail.com>
+Subject: Re: [RFC 06/13] perf kwork: Implement perf kwork report
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 08:39:51PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.14.284 release.
-> There are 20 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
-> Anything received after that time might be too late.
-> 
+On Tue, Jun 14, 2022 at 8:12 PM Yang Jihong <yangjihong1@huawei.com> wrote:
+>
+> Hello,
+>
+> On 2022/6/15 5:49, Namhyung Kim wrote:
+> > On Mon, Jun 13, 2022 at 2:48 AM Yang Jihong <yangjihong1@huawei.com> wrote:
+> >>
+> >> Implements framework of perf kwork report, which is used to report time
+> >> properties such as run time and frequency:
+> >>
+> >> test case:
+> >>
+> >>    Kwork Name                | Cpu  | Avg delay     | Frequency | Max delay     | Max delay start     | Max delay end       |
+> >>   ---------------------------------------------------------------------------------------------------------------------------
+> >>   ---------------------------------------------------------------------------------------------------------------------------
+> >>
+> >> Since there are no report supported events, the output is empty.
+> >>
+> >> Briefly describe the data structure:
+> >> 1. "class" indicates event type. For example, irq and softiq correspond
+> >> to different types.
+> >> 2. "cluster" refers to a specific event corresponding to a type. For
+> >> example, RCU and TIMER in softirq correspond to different clusters,
+> >> which contains three types of events: raise, entry, and exit.
+> >
+> > I'm not good at naming but how about calling it "work" instead?
+> > It's all about kernel works anyway..
+> >
+> How about calling it "work_atoms" ?
+> Otherwise, "work" feels a little similar to kwork_class in the first step.
 
-Build results:
-	total: 170 pass: 170 fail: 0
-Qemu test results:
-	total: 424 pass: 424 fail: 0
+Didn't you already have "atom"?  I think we can have a hierarchy like
+class (IRQ) - work (eth0) - atom.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+Thanks,
+Namhyung

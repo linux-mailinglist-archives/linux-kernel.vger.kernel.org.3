@@ -2,106 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8E054C9E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:34:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D961954C9EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:36:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352231AbiFONd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 09:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41770 "EHLO
+        id S1352698AbiFONgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 09:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351648AbiFONdu (ORCPT
+        with ESMTP id S1352387AbiFONgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 09:33:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D61AD36326;
-        Wed, 15 Jun 2022 06:33:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44C0461A88;
-        Wed, 15 Jun 2022 13:33:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A97C5C3411C;
-        Wed, 15 Jun 2022 13:33:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655300028;
-        bh=GS3xnpuX97rLUj8LjHZuszylSXQMHB8JheJV7wdxaEA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=rsTfFz33tQEQiFCWsk+brsU8JETQeKOuqDYdhaqxsKFO5Z6TUOv7tKJTcqHPLck3l
-         SHQZj1cASBnSPeAc455Suy7V8dAafEvj9jC4P5vpgeRhfeRUCHGDUvjXmuamc78MbK
-         tuj2aQhArDpeH7lTVGj5CjaaffmfqxwXj/25Bb9yBq+zirO+rwkGJ9WGLlWylko7T2
-         EUtoF1nFceGrKxMW9wMjkQwm7si+P+xEuQn4+rkST0Atb50vlo4oXHhAhxgXOGKzqU
-         W7jDla0U9yTzmd1g/N5VkKEICs+KxWnYHnuYpmgAMqlrcCvgA9Gi2rrNG9iPCfQS1F
-         7gSLRWBOYBe5Q==
-Received: by mail-ua1-f45.google.com with SMTP id m10so4366191uao.11;
-        Wed, 15 Jun 2022 06:33:48 -0700 (PDT)
-X-Gm-Message-State: AJIora/lJvyVlw04hTl229w20iO5ZkW/scIp2kziuXDH+y9LjYkEXVpP
-        A0VvXnOtgRXUFt7Aq36ma4Ul5J8nRjim+F+IYA==
-X-Google-Smtp-Source: AGRyM1vl3rEMhCWrfabx4G8UW4agh58YWTqSIPnh7S7BgbjlFbw06IsA0c518VcVDpVFsYVBWjK1QQBn9lCsfe9pDjc=
-X-Received: by 2002:ab0:3407:0:b0:379:65f3:a39b with SMTP id
- z7-20020ab03407000000b0037965f3a39bmr4898428uap.63.1655300027658; Wed, 15 Jun
- 2022 06:33:47 -0700 (PDT)
+        Wed, 15 Jun 2022 09:36:10 -0400
+Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0569E3631F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:36:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cQlyO
+        FmjcZobR7aTYosEqngYYxcwcNKmc5B9Yt/7tqc=; b=EJ4GIwj73lWbbNMkOT38h
+        zKj2yF8qwKAnjjRTaXESc12YN+7K3IpNxXQjFsX4MuYZ8TNBCVVqoNexX0WBIvcR
+        MYE6/Fe7GuguFE3WgiafKbt4I9peEHniJGDacoRG5p7gwnV69z31QIIURu+l0coq
+        9SpHuBAde37EnwTrQRJvIk=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp2 (Coremail) with SMTP id DMmowADH0wbV36liBxg5DQ--.45191S2;
+        Wed, 15 Jun 2022 21:34:14 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     dinguyen@kernel.org, bp@alien8.de, mchehab@kernel.org,
+        tony.luck@intel.com, james.morse@arm.com, rric@kernel.org
+Cc:     linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liang He <windhl@126.com>
+Subject: [PATCH] drivers: edac: Add missing of_node_put() in altera_edac.c
+Date:   Wed, 15 Jun 2022 21:34:13 +0800
+Message-Id: <20220615133413.3967379-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220615071410.12499-1-piyush.mehta@xilinx.com>
-In-Reply-To: <20220615071410.12499-1-piyush.mehta@xilinx.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 15 Jun 2022 07:33:36 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+3oS=SB-TVH3JA7Jb8KDgQ8ek_KPJSQhL0mgiq4sjmyQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+3oS=SB-TVH3JA7Jb8KDgQ8ek_KPJSQhL0mgiq4sjmyQ@mail.gmail.com>
-Subject: Re: [PATCH V4] dt-bindings: ata: ahci-ceva: convert to yaml
-To:     Piyush Mehta <piyush.mehta@xilinx.com>
-Cc:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>, git <git@xilinx.com>,
-        Siva Durga Prasad Paladugu <sivadur@xilinx.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DMmowADH0wbV36liBxg5DQ--.45191S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr1kJF4UCFy3GF13Aw43Jrb_yoW8AF15pF
+        48Ka90yFWIyr15WF1qv3Z5Zay5Xw1vv3y8urySy392kFsrJ3yvqryjvFZIyas8ArWrZ3y3
+        Xw4jy3yfC3WUCw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zR-_-dUUUUU=
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizhYhF18RPTFd9QAAsE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 1:14 AM Piyush Mehta <piyush.mehta@xilinx.com> wrote:
->
-> Convert the ahci-ceva doc to yaml.
->
-> Signed-off-by: Piyush Mehta <piyush.mehta@xilinx.com>
-> ---
-> Changes for V2:
-> - Corrected the patch --prefix V3 to V2.
-> - Added Required properties.
->
-> Changes for V3:
-> - Skip patch --prefix [PATCH V3] as already sent.
->
-> Changes for V4:
-> - Addressed Rob review comments:-
->  - Update params description
->  - Removed description from common properties.
->  - Deleted deprecated property.
-> - Warning generated from: 'make dtbs_check'
->  - Thanks Rob: We are aware of these warnings,
->    but they are unrelated to this patch.
+In altr_portb_setup(), of_find_compatible_node() will return a node
+pointer with refcount incremented. We should use of_node_put() in
+fail path or when it is not used anymore.
 
-Huh? You are saying the dts files are wrong and should not have
-'iommus' or 'phy-names' properties? That doesn't seem likely for
-'iommus'. If the old binding was wrong, it is fine to add the
-properties in the conversion. Just note that in the commit message.
+Signed-off-by: Liang He <windhl@126.com>
+---
+ drivers/edac/altera_edac.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
+index e7e8e624a436..f035d131751c 100644
+--- a/drivers/edac/altera_edac.c
++++ b/drivers/edac/altera_edac.c
+@@ -1528,7 +1528,8 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
+ 		edac_printk(KERN_ERR, EDAC_DEVICE,
+ 			    "%s: Unable to allocate PortB EDAC device\n",
+ 			    ecc_name);
+-		return -ENOMEM;
++		rc = -ENOMEM;
++		goto out_put;
+ 	}
+ 
+ 	/* Initialize the PortB EDAC device structure from PortA structure */
+@@ -1536,7 +1537,10 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
+ 	*altdev = *device;
+ 
+ 	if (!devres_open_group(&altdev->ddev, altr_portb_setup, GFP_KERNEL))
+-		return -ENOMEM;
++	{
++		rc = -ENOMEM;
++		goto out_put;
++	}
+ 
+ 	/* Update PortB specific values */
+ 	altdev->edac_dev_name = ecc_name;
+@@ -1605,6 +1609,9 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
+ 		rc = -ENOMEM;
+ 		goto err_release_group_1;
+ 	}
++	
++	of_node_put(np);
++	
+ 	altr_create_edacdev_dbgfs(dci, prv);
+ 
+ 	list_add(&altdev->next, &altdev->edac->a10_ecc_devices);
+@@ -1618,6 +1625,8 @@ static int altr_portb_setup(struct altr_edac_device_dev *device)
+ 	devres_release_group(&altdev->ddev, altr_portb_setup);
+ 	edac_printk(KERN_ERR, EDAC_DEVICE,
+ 		    "%s:Error setting up EDAC device: %d\n", ecc_name, rc);
++out_put:
++    of_node_put(np);	
+ 	return rc;
+ }
+ 
+-- 
+2.25.1
 
-> ---
->  .../devicetree/bindings/ata/ahci-ceva.txt     |  63 ------
->  .../devicetree/bindings/ata/ahci-ceva.yaml    | 182 ++++++++++++++++++
->  2 files changed, 182 insertions(+), 63 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/ata/ahci-ceva.txt
->  create mode 100644 Documentation/devicetree/bindings/ata/ahci-ceva.yaml
-
-Also, rename to ceva,ahci-1v84.yaml for the filename.
-
-Rob

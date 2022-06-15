@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADE6854CA63
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E2254CA64
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348783AbiFONys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 09:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37384 "EHLO
+        id S1348941AbiFONyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 09:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345559AbiFONyk (ORCPT
+        with ESMTP id S1347675AbiFONyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 09:54:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E95AE46;
-        Wed, 15 Jun 2022 06:54:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 319A761B23;
-        Wed, 15 Jun 2022 13:54:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF57FC3411B;
-        Wed, 15 Jun 2022 13:54:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655301278;
-        bh=ekP0QNj5q0wLAX06GcBg0CJvxlJ3QpBhVkxB3X4207k=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=G1p69ZqU5KSno9XBwtkKDa3gaYtxzLf3SdqOfaLvjVFKW7NNno3JKa8DQcBGa7JK6
-         suJpslhmltYavZsPZ9EPCsftE8+daMIgpIDEckeobs8jF1Pz55Qck7A7JtQiKwiiR0
-         iKPZDYbxWlIB0QQtbirPdw9DW3kzDP2gUbLNro5mbR6Y/TgQfEdoAiN35EsW/QfoVL
-         /cnmpOjnKo8ppFazHzCKV1xMnymZQmkSIPImwC5sGv9AWe9kJNsDYcx7DIoYihUcBf
-         Pk1u06qUyB0pJOAYHt74blA37SXt1Z8ukCCWltImrpHxyhdwBxs5Z+GZ5N3uf7KGqt
-         VHeDV1KlY/Kdw==
-From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com, ckeepax@opensource.cirrus.com, tiwai@suse.com,
-        perex@perex.cz, spujar@nvidia.com
-Cc:     jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        thierry.reding@gmail.com
-In-Reply-To: <1655280277-4701-1-git-send-email-spujar@nvidia.com>
-References: <1655280277-4701-1-git-send-email-spujar@nvidia.com>
-Subject: Re: [PATCH] ASoC: tegra: Fix clock DAI format on Tegra210
-Message-Id: <165530127643.947339.2607790181344123264.b4-ty@kernel.org>
-Date:   Wed, 15 Jun 2022 14:54:36 +0100
+        Wed, 15 Jun 2022 09:54:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D71213D63
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:54:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E29CE153B;
+        Wed, 15 Jun 2022 06:54:42 -0700 (PDT)
+Received: from wubuntu (FVFF764EQ05P.cambridge.arm.com [10.1.32.43])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B6433F73B;
+        Wed, 15 Jun 2022 06:54:41 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 14:54:39 +0100
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     Xuewen Yan <xuewen.yan94@gmail.com>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>,
+        Xuewen Yan <xuewen.yan@unisoc.com>, dietmar.eggemann@arm.com,
+        rafael@kernel.org, viresh.kumar@linaro.org, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        di.shen@unisoc.com,
+        =?utf-8?B?546L56eRIChLZSBXYW5nKQ==?= <Ke.Wang@unisoc.com>
+Subject: Re: [PATCH] sched: Take thermal pressure into account when determine
+ rt fits capacity
+Message-ID: <20220615135439.cmdc5kw5dihonphy@wubuntu>
+References: <20220503144352.lxduzhl6jq6xdhw2@airbuntu>
+ <CAB8ipk--Y8HxetcmUhBmtWq6Mmd726QmDbcbibGLERJw_PUqkQ@mail.gmail.com>
+ <20220510145625.t5py7atlhgojsfyf@wubuntu>
+ <37357c86-bab7-d0c7-88d0-ace63ccdb6c8@arm.com>
+ <20220510184436.fdgzzcfqqevinx5p@wubuntu>
+ <0505936e-3746-4623-a967-103a0158bfbd@arm.com>
+ <CAB8ipk8RUsxYs6JdeMeUPADQRNqT=Jqz15ecwbzbf0RHUDqOXg@mail.gmail.com>
+ <20220514235513.jm7ul2y6uddj6eh2@airbuntu>
+ <20220615101316.tzexnp3dl2cqfbrj@wubuntu>
+ <CAB8ipk8tgKDeESzKGjts=8MVvb=bWr6WYN6xetczRRYp4sYWSA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAB8ipk8tgKDeESzKGjts=8MVvb=bWr6WYN6xetczRRYp4sYWSA@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,42 +57,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 15 Jun 2022 13:34:37 +0530, Sameer Pujar wrote:
-> I2S reset failures are seen on Tegra210 and later platforms. This indicates
-> absence of I2S bit clock, which is required to perform the reset operation.
-> Following failures are seen with I2S based tests on Tegra210 and later:
+On 06/15/22 19:17, Xuewen Yan wrote:
+> Hi Qais
 > 
->   tegra210-i2s 2901100.i2s: timeout: failed to reset I2S for playback
->   tegra210-i2s 2901100.i2s: ASoC: PRE_PMU: I2S2 RX event failed: -110
->   tegra210-i2s 2901100.i2s: timeout: failed to reset I2S for capture
->   tegra210-i2s 2901100.i2s: ASoC: PRE_PMU: I2S2 TX event failed: -110
-> 
-> [...]
+> Sorry for the late action.
+> I've had higher priority work lately and haven't had more energy to
+> work on the patch for a while.
 
-Applied to
+No problem.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+> Could you test the patch? I will also work on this patch asap.
 
-Thanks!
+I did run some tests on the patch. I wanted a confirmation it fixes your
+problem though before taking this any further.
 
-[1/1] ASoC: tegra: Fix clock DAI format on Tegra210
-      commit: 5983a8a4a4dc13b5f192212a5e744eb303cd65c2
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+Thanks
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+--
+Qais Yousef

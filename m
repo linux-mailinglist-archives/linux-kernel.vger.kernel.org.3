@@ -2,186 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4241A54CDC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00ACC54CDC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244556AbiFOQGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32942 "EHLO
+        id S235343AbiFOQG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242285AbiFOQGf (ORCPT
+        with ESMTP id S240929AbiFOQG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:06:35 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3ADA26107;
-        Wed, 15 Jun 2022 09:06:33 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id n28so16867461edb.9;
-        Wed, 15 Jun 2022 09:06:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pXS0aT6oKrgt+wAGQWlhcoc2V0p+1GRf7Bzb7hg9RUU=;
-        b=AfYY+Zcyr4X/wQLS9cumgixTsRJXeDO4jnisVql6ac/4Mxyu4XTZfzsn9TmRs1KhSN
-         0noSP6ut+v17MTpoQ56tMXnh9XKpqSqhF7tly5JEFbs4gsvcV6XmkgOZFdw1Rh6eFv9Y
-         Hm0x7YrxYUL1QPD2Rv7DhVEvxp3ylCcS6kMhs1cSWF+ywTVjo76ailnhE4YGDhLa1MtT
-         zFzZDpYL//bN0YbFEwA8Djkmg+tAmWpLFTef9RlLy0ceoMlCuRjM7VHPFHnQQEtaHIFS
-         RZ6meqNdGHpOQHnAiaH3e36cemNc3NUJQp6w5hvTrq4JSfo+Cqaq+Ke8R5A9DzEBbxiv
-         dwSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pXS0aT6oKrgt+wAGQWlhcoc2V0p+1GRf7Bzb7hg9RUU=;
-        b=fZSU7muwo/1z/oe56FN+uf++C+pN20L3DPH7IkCO4gNQ8dh4bTpwyEvVNOS+KCXW1v
-         rHhYqjR0wk7tnXv+IHnvKWGHlgvhHK6jBRpi2twilm9MP9SDE01wSqSGHM7lt2f5ZTr8
-         RNJk5BRe7jsNhijlsu0FJEFMn4oJB93MOeA2dHxslpWW6rM1Gk1wOqroF5QAjzpCdddw
-         0PaKsn6AM1eEO+q90i7mhXNMU42xMElqhXwmf6RNpFEC8HdCnxGWy/4t2ckL/wwToc9i
-         nEb4z9xeaco7jXlDKCQ/qo3wpV5z4om/8ExSuFVSHO1bbHZ8/wmgNoexdtM30iFRA2YO
-         wgWg==
-X-Gm-Message-State: AJIora+YPRmBMOWeGB0XcnImFfJ8IXCqdDWAIuElSI8JSIZaPvzymLfe
-        Y2SW8/tg/yOBEeQlrZYRzXnIv4yu90vBW5AWP/U=
-X-Google-Smtp-Source: AGRyM1vrIZr7/YFqT5rqJqYLhrMK/jlDc0zz1cmqjCxlOy1tYwlEjtqiZz2MGYBJMCNVN8y6sWROvnhNCxlpm6sRQEA=
-X-Received: by 2002:aa7:d481:0:b0:42d:d5fd:f963 with SMTP id
- b1-20020aa7d481000000b0042dd5fdf963mr538297edr.209.1655309192276; Wed, 15 Jun
- 2022 09:06:32 -0700 (PDT)
+        Wed, 15 Jun 2022 12:06:57 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E0927FF7;
+        Wed, 15 Jun 2022 09:06:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=0pNvw0AJcxHmfaL+wnn2XxzmONSyI3eLqIqKcEGrFlw=; b=WcWMflq4H7j2sfihg3TcYEVX0P
+        Uq635gc6KnkYqaXJG5B40FHlqXz2Npw+ty5+wnBhzUajcJZzyo8kZ4B0FxoQOLWX6gwZaA8r27CKG
+        Zf9fm7vsenwBF05ChbGAHVfadgmjpALv+hcB+vymHa4b3VBcdCoZo3F7UlE78nFYinH9zvbsXqDkp
+        5iub0T/QhUYuCZmbweUh/h/7MTrdMw2IXMpxX5a0tyLXGa0r3rct/jLuwbq6+NA0epnqqkJC+Pr60
+        6tyJHfW04fLihHOQHr6yn9D7nBHpYHlQFpc4gjP++oQ9AtwDwOjju4Ywqg3SF/Bb8CF+U36YJc7cu
+        puLPU5PQ==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1VX9-008ALV-3I; Wed, 15 Jun 2022 16:06:19 +0000
+Message-ID: <8b7841a9-9313-b1d5-8a80-a65cfa8e7b4d@infradead.org>
+Date:   Wed, 15 Jun 2022 09:06:05 -0700
 MIME-Version: 1.0
-References: <20220615154918.521687-1-jjhiblot@traphandler.com> <20220615154918.521687-5-jjhiblot@traphandler.com>
-In-Reply-To: <20220615154918.521687-5-jjhiblot@traphandler.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 15 Jun 2022 18:05:55 +0200
-Message-ID: <CAHp75VeLSzuufTzyxND-p4798CLZyGRb+xETaWAP-5zayx7Ldw@mail.gmail.com>
-Subject: Re: [PATCH 4/4] leds: Add a multicolor LED driver to group
- monochromatic LEDs
-To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v8 1/3] ipmi: ssif_bmc: Add SSIF BMC driver
+Content-Language: en-US
+To:     Quan Nguyen <quan@os.amperecomputing.com>,
+        Corey Minyard <minyard@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        johan+linaro@kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Wolfram Sang <wsa@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org
+Cc:     Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+References: <20220615090259.1121405-1-quan@os.amperecomputing.com>
+ <20220615090259.1121405-2-quan@os.amperecomputing.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220615090259.1121405-2-quan@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 5:49 PM Jean-Jacques Hiblot
-<jjhiblot@traphandler.com> wrote:
->
-> By allowing to group multiple monochrome LED into multicolor LEDs,
-> all involved LEDs can be controlled in-sync. This enables using effects
-> using triggers, etc.
 
-...
 
-> +#include <linux/err.h>
-> +#include <linux/led-class-multicolor.h>
-> +#include <linux/leds.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
+On 6/15/22 02:02, Quan Nguyen wrote:
+> diff --git a/drivers/char/ipmi/Kconfig b/drivers/char/ipmi/Kconfig
+> index b061e6b513ed..18a89093d64e 100644
+> --- a/drivers/char/ipmi/Kconfig
+> +++ b/drivers/char/ipmi/Kconfig
+> @@ -169,6 +169,17 @@ config ASPEED_BT_IPMI_BMC
+>  	  found on Aspeed SOCs (AST2400 and AST2500). The driver
+>  	  implements the BMC side of the BT interface.
+>  
+> +config SSIF_IPMI_BMC
+> +	tristate "SSIF IPMI BMC driver"
+> +	select I2C
 
-Missed math.h
+No. That should be:
+	depends on I2C
 
-...
+We don't select an entire subsystem just to satisfy one driver.
 
-> +static int iterate_subleds(struct device *dev, struct led_mcg_priv *priv,
-> +                          struct fwnode_handle *mcnode)
-
-Use namespace even for static functions (think about tracing, for example).
-
-led_mcg_iterave_subleds
-
-> +{
-> +       struct mc_subled *subled = priv->mc_cdev.subled_info;
-> +       struct fwnode_handle *fwnode;
-> +       int ret;
+> +	select I2C_SLAVE
+> +	help
+> +	  This enables the IPMI SMBus system interface (SSIF) at the
+> +	  management (BMC) side.
 > +
-> +       /* iterate over the nodes inside the multi-led node */
-> +       fwnode_for_each_child_node(mcnode, fwnode) {
-> +               u32 color;
-> +               struct led_classdev *led_cdev;
+> +	  The driver implements the BMC side of the SMBus system
+> +	  interface (SSIF).
 > +
-> +               led_cdev = devm_fwnode_led_get(dev, fwnode, 0);
-> +               if (IS_ERR(led_cdev)) {
 
-> +                       ret = PTR_ERR(led_cdev);
-> +                       dev_err(dev, "unable to request LED: %d\n", ret);
-
-ret = dev_err_probe(...);
-
-> +                       goto release_fwnode;
-> +               }
-> +               priv->monochromatics[priv->mc_cdev.num_colors] = led_cdev;
-> +
-> +               ret = fwnode_property_read_u32(fwnode, "color", &color);
-> +               if (ret) {
-> +                       dev_err(dev, "cannot read color: %d\n", ret);
-> +                       goto release_fwnode;
-> +               }
-> +               subled[priv->mc_cdev.num_colors].color_index = color;
-> +
-> +               /* Make the sysfs of the monochromatic LED read-only */
-> +               led_cdev->flags |= LED_SYSFS_DISABLE;
-> +
-> +               priv->mc_cdev.num_colors++;
-> +       }
-> +
-> +       return 0;
-> +
-> +release_fwnode:
-> +       fwnode_handle_put(fwnode);
-> +       return ret;
-> +}
-
-...
-
-> +       /* count the nodes inside the multi-led node */
-> +       fwnode_for_each_child_node(mcnode, fwnode)
-> +               count++;
-
-Don't we have a _count API? Hmm... Indeed, we have it only for a
-device and not for fwnode...
-
-...
-
-> +       priv = devm_kzalloc(&pdev->dev,
-> +                           struct_size(priv, monochromatics, count),
-> +                           GFP_KERNEL);
-> +       if (!priv) {
-> +               ret = -ENOMEM;
-> +               goto release_mcnode;
-
-This is the wrong order. You shouldn't mix non-devm_ APIs with devm_
-like this. devm_ calls always should be first. You have two options
-(at least?): 1) drop devm_ and switch to plain error handling and
-->remove(); 2) make devm_ wrappers for the certain calls.
-
-> +       }
-
-...
-
-> +       if (ret) {
-> +               dev_err(&pdev->dev,
-> +                       "failed to register multicolor led for %s: %d\n",
-> +                       cdev->name, ret);
-
-Taking into account above,
-return dev_err_probe(...);
-
-> +               goto release_mcnode;
-> +       }
-
+Thanks.
 -- 
-With Best Regards,
-Andy Shevchenko
+~Randy

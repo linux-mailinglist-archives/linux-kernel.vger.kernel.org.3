@@ -2,85 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D22954C4E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E7854C4EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344777AbiFOJlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
+        id S1346746AbiFOJnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346319AbiFOJlv (ORCPT
+        with ESMTP id S234353AbiFOJnP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:41:51 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484833ED3A;
-        Wed, 15 Jun 2022 02:41:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D149F1F984;
-        Wed, 15 Jun 2022 09:41:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655286108; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6f7LmKgyp4C8f+DMh1UfRQSRSKDECQlQXNjM/3tlkyo=;
-        b=rPB+1CRTKgd1xPx+KfMeX7FH++oXL054wTxWh/VeuqEnfRgUvdFyCoe1i9QT9dZHb7dN6+
-        SEfh9+QHmzs6BFs0HZFap5dhkOAXUqM/Ow7idrU6Y7xzs5Hd7xFvHEWCN+1HyzTxHbrLPF
-        8eDixoxZXMqwKeUHQaWnpB6468MAj8U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655286108;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6f7LmKgyp4C8f+DMh1UfRQSRSKDECQlQXNjM/3tlkyo=;
-        b=ZSz1y2A0+YrDzowCa3edbEWx/AQMWCa3u9CIIgE0Er5JfKqm+Hk5k6lZYIMcbnYtrImkfG
-        ebyR0VSchAMrRNDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 88596139F3;
-        Wed, 15 Jun 2022 09:41:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id CLd7IFypqWIFRQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 15 Jun 2022 09:41:48 +0000
-Message-ID: <9a4a9afe-bbe1-4cb3-713b-f1e4e6d2a049@suse.cz>
-Date:   Wed, 15 Jun 2022 11:41:48 +0200
+        Wed, 15 Jun 2022 05:43:15 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3D142A0B;
+        Wed, 15 Jun 2022 02:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1655286194; x=1686822194;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TdB7rxW9ngmUPbM9Ksn1bxzuws/RVhakXn65Pezg3GQ=;
+  b=wu5xzlNp2a6BMHAsoBB6qcGvkxRUEXVbB99tAlhi1kKV2F6UC7Rdz4XK
+   C4UOhA16crqe4kD+PSJy0lvD6kgyQmD5hQw3zVz6vMzi0bNsix4kKQtYj
+   QLKtQx5ApItUZ++e5pCBTmQSNuL3h9fH6QZrxenDJ0HF/4cMScRoFXkIK
+   Akv12RMmhdMxYcozuqzIEXVEQNh2rQKhto3kVxS1Yyj3O0F2TKYCsotxQ
+   jp5Esf34qhWjgCh8xk+rcGUfk4JIia/p/G0KxmRP+IJVrRTKSH+Bx4ald
+   HA9SJNtonUyEou9f7Ed/lMwuyjSdI6jebrApB/BM6zpcgQ20Oj9ir6M23
+   A==;
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="163440616"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2022 02:43:13 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 15 Jun 2022 02:43:13 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 15 Jun 2022 02:43:13 -0700
+Date:   Wed, 15 Jun 2022 15:13:12 +0530
+From:   Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
+        <lxu@maxlinear.com>, <richardcochran@gmail.com>,
+        <UNGLinuxDriver@microchip.com>, <Ian.Saturley@microchip.com>
+Subject: Re: [PATCH net-next 5/5] net: phy: add support to get Master-Slave
+ configuration
+Message-ID: <20220615094312.35xgnsyw64ogowa2@microsemi.com>
+References: <20220614103424.58971-1-Raju.Lakkaraju@microchip.com>
+ <20220614103424.58971-6-Raju.Lakkaraju@microchip.com>
+ <Yqj7x3b8nfG4GvIS@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH mm v6] mm/tracing: add 'accounted' entry into output of
- allocation tracepoints
-Content-Language: en-US
-To:     Vasily Averin <vvs@openvz.org>
-Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Michal Hocko <mhocko@suse.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Christoph Lameter <cl@linux.com>, cgroups@vger.kernel.org
-References: <c1676616-1405-5bcb-af02-c1e9cc83dace@openvz.org>
- <c418ed25-65fe-f623-fbf8-1676528859ed@openvz.org>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <c418ed25-65fe-f623-fbf8-1676528859ed@openvz.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <Yqj7x3b8nfG4GvIS@lunn.ch>
+User-Agent: NeoMutt/20180716-255-141487
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,44 +67,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/22 05:21, Vasily Averin wrote:
-> Slab caches marked with SLAB_ACCOUNT force accounting for every
-> allocation from this cache even if __GFP_ACCOUNT flag is not passed.
-> Unfortunately, at the moment this flag is not visible in ftrace output,
-> and this makes it difficult to analyze the accounted allocations.
+Hi Andrew,
+
+Thank you for review comments.
+
+The 06/14/2022 23:21, Andrew Lunn wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > 
-> This patch adds boolean "accounted" entry into trace output,
-> and set it to 'true' for calls used __GFP_ACCOUNT flag and
-> for allocations from caches marked with SLAB_ACCOUNT.
-> Set it to 'false' if accounting is disabled in configs.
+> On Tue, Jun 14, 2022 at 04:04:24PM +0530, Raju Lakkaraju wrote:
+> > Implement reporting the Master-Slave configuration and state
+> >
+> > Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+> > ---
+> >  drivers/net/phy/mxl-gpy.c | 55 +++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 55 insertions(+)
+> >
+> > diff --git a/drivers/net/phy/mxl-gpy.c b/drivers/net/phy/mxl-gpy.c
+> > index 5ce1bf03bbd7..cf625ced4ec1 100644
+> > --- a/drivers/net/phy/mxl-gpy.c
+> > +++ b/drivers/net/phy/mxl-gpy.c
+> > @@ -27,11 +27,19 @@
+> >  #define PHY_ID_GPY241BM              0x67C9DE80
+> >  #define PHY_ID_GPY245B               0x67C9DEC0
+> >
+> > +#define PHY_STD_GCTRL                0x09    /* Gbit ctrl */
+> > +#define PHY_STD_GSTAT                0x0A    /* Gbit status */
 > 
-> Signed-off-by: Vasily Averin <vvs@openvz.org>
-> Acked-by: Shakeel Butt <shakeelb@google.com>
-> Acked-by: Roman Gushchin <roman.gushchin@linux.dev>
-> Acked-by: Muchun Song <songmuchun@bytedance.com>
-> Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> #define MII_CTRL1000            0x09    /* 1000BASE-T control          */
+> #define MII_STAT1000            0x0a    /* 1000BASE-T status           */
+> 
+> from mii.h
+> 
 
-Thanks, added to slab/for-5.20/tracing
+I can use generic master-slave function.
+I will remove these changes
+
+> >  #define PHY_MIISTAT          0x18    /* MII state */
+> >  #define PHY_IMASK            0x19    /* interrupt mask */
+> >  #define PHY_ISTAT            0x1A    /* interrupt status */
+> >  #define PHY_FWV                      0x1E    /* firmware version */
+> >
+> > +#define PHY_STD_GCTRL_MS     BIT(11)
+> > +#define PHY_STD_GCTRL_MSEN   BIT(12)
+> > +
+> > +#define PHY_STD_GSTAT_MSRES  BIT(14)
+> > +#define PHY_STD_GSTAT_MSFAULT        BIT(15)
+> 
+> If the device is just following the standard, there should not be any
+> need to add defines, they should already exist. And if it does follow
+> the standard there are probably helpers you can use.
+> 
+
+Accepted. 
+Device following the standard. I will use generic master-slave function
+
+> >  #define PHY_MIISTAT_SPD_MASK GENMASK(2, 0)
+> >  #define PHY_MIISTAT_DPX              BIT(3)
+> >  #define PHY_MIISTAT_LS               BIT(10)
+> > @@ -160,6 +168,48 @@ static bool gpy_2500basex_chk(struct phy_device *phydev)
+> >       return true;
+> >  }
+> >
+> > +static int gpy_master_slave_cfg_get(struct phy_device *phydev)
+> > +{
+> > +     int state;
+> > +     int cfg;
+> > +     int ret;
+> > +
+> > +     ret = phy_read(phydev, PHY_STD_GCTRL);
+> > +     if (ret < 0) {
+> > +             phydev_err(phydev, "Error: MDIO register access failed: %d\n",
+> > +                        ret);
+> > +             return ret;
+> > +     }
+> > +
+> > +     if (ret & PHY_STD_GCTRL_MSEN)
+> > +             if (ret & PHY_STD_GCTRL_MS)
+> > +                     cfg = MASTER_SLAVE_CFG_MASTER_FORCE;
+> > +             else
+> > +                     cfg = MASTER_SLAVE_CFG_SLAVE_FORCE;
+> > +     else
+> > +             cfg = MASTER_SLAVE_CFG_MASTER_PREFERRED;
+> > +
+> > +     ret = phy_read(phydev, PHY_STD_GSTAT);
+> > +     if (ret < 0) {
+> > +             phydev_err(phydev, "Error: MDIO register access failed: %d\n",
+> > +                        ret);
+> > +             return ret;
+> > +     }
+> > +
+> > +     if (ret & PHY_STD_GSTAT_MSFAULT)
+> > +             state = MASTER_SLAVE_STATE_ERR;
+> > +     else
+> > +             if (ret & PHY_STD_GSTAT_MSRES)
+> > +                     state = MASTER_SLAVE_STATE_MASTER;
+> > +             else
+> > +                     state = MASTER_SLAVE_STATE_SLAVE;
+> > +
+> > +     phydev->master_slave_get = cfg;
+> > +     phydev->master_slave_state = state;
+> > +
+> > +     return 0;
+> 
+> Would genphy_read_master_slave() work?
+
+Yes. 
+I can use genphy_read_master_slave() function.
 
 > 
-> ---
-> v6:
->  1) subject changed from "tracing:" to "mm/tracing:"
->  2) set flag to 'false' if accounting is disabled in configs
+>       Andrew
 
-Looks like you forgot the kmem_alloc_node variant, fixed up locally:
+-- 
 
---- a/include/trace/events/kmem.h
-+++ b/include/trace/events/kmem.h
-@@ -94,8 +94,9 @@ DECLARE_EVENT_CLASS(kmem_alloc_node,
-                __entry->bytes_alloc    = bytes_alloc;
-                __entry->gfp_flags      = (__force unsigned long)gfp_flags;
-                __entry->node           = node;
--               __entry->accounted      = (gfp_flags & __GFP_ACCOUNT) ||
--                                         (s && s->flags & SLAB_ACCOUNT);
-+               __entry->accounted      = IS_ENABLED(CONFIG_MEMCG_KMEM) ?
-+                                         ((gfp_flags & __GFP_ACCOUNT) ||
-+                                         (s && s->flags & SLAB_ACCOUNT)) : false;
-        ),
- 
-        TP_printk("call_site=%pS ptr=%p bytes_req=%zu bytes_alloc=%zu gfp_flags=%s node=%d accounted=%s",
+Thanks,
+Raju
+

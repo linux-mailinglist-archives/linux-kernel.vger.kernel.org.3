@@ -2,189 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024B454CD05
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE93B54CD04
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237136AbiFOPb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53368 "EHLO
+        id S240100AbiFOPcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:32:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233389AbiFOPba (ORCPT
+        with ESMTP id S234666AbiFOPcF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:31:30 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B4DF12AC3;
-        Wed, 15 Jun 2022 08:31:28 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id s135so11677481pgs.10;
-        Wed, 15 Jun 2022 08:31:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=d+jcg+yQkcd4AGPUxYLrsPCSzfjF9FdPwsOM6g8sZGs=;
-        b=PU4FEktVQQ69fhiR8mld02ZkLi3ZfKd/3pEPa9FjJeSdkdMG2IamU6PVK4g/bzuART
-         DSAHxd5dRMzQ9gymQgjGAuvTv2nbR5bbN9LTVKc2es7FMKC/AKZNU/4M7nd1sDvfK15K
-         R/FiCaBnd6t6HDQmEd0prI/eoeFH/z4GdobJWhlDSmG1Xms5NkWG9SnWD3QMGvJWhR5A
-         k5GyMO4eTRjYXPoib9EB3jlhn51jCkym3qqqW0a43eLLiP24W+ZpCvTqe5BUM80coHcX
-         FzDad8SLoC0FnSSql8ol+RXpAV+QZuXQRxhcX/2bh+4tvU5yKiDUBDk7JFOUP5SHnm/n
-         2zbA==
+        Wed, 15 Jun 2022 11:32:05 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1749A12AC3;
+        Wed, 15 Jun 2022 08:32:04 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id 19so13016453iou.12;
+        Wed, 15 Jun 2022 08:32:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=d+jcg+yQkcd4AGPUxYLrsPCSzfjF9FdPwsOM6g8sZGs=;
-        b=ea6u/AXJkTSl4AFUL7hRMOTeUp7JG9d6H7siNEK9Vmgt5339062U4jkCok1vxz1TXI
-         qjpw+pcLSoZkT5He4KcL9mramzFJI5SbFJoE/yIUgWvkzE27JuL1m3Y1d/h/QB5mVMEt
-         41t28TOehgCbunvzcVaSBi650vIoQtPLMNSZhYSBSqDNSmARliEFG4bVTxLIN0eilZ2h
-         1y3lwovezYB4uK9/ciLWAsSMsE6wgfy70JQ/D7bUoJqHWkLwi1fBij6mVE7he7y3VI1X
-         ebZNBFBioGnK3OiOTHVPIpui7VH5o5gzVbfacQl+Qdhzt4pKR2mhL9p5XA8Ss3mmMBjy
-         7JCQ==
-X-Gm-Message-State: AJIora/N8yWMRUYzxonwnfrkVckyxTYZyK8Yd6C3dKSy/XykKAhc0uEY
-        4Rt4gm3FHKizy3Gwa2UeH1A=
-X-Google-Smtp-Source: AGRyM1tlW73seD5ob9qWb4lvQw81CBNamFfcz8HzIWN8fF3E6YS7xWhQNOzLJdnxNQh7zQ8a0DOuyg==
-X-Received: by 2002:a63:f156:0:b0:3ab:ada6:b463 with SMTP id o22-20020a63f156000000b003abada6b463mr324159pgk.462.1655307087744;
-        Wed, 15 Jun 2022 08:31:27 -0700 (PDT)
-Received: from localhost ([2406:7400:63:5d34:e6c2:4c64:12ae:aa11])
-        by smtp.gmail.com with ESMTPSA id p5-20020a170903248500b0015e8d4eb1c8sm5810122plw.18.2022.06.15.08.31.27
+        bh=q8c2xxYz3j26DYod3eaaMN2lLSN9Ym6PyBo4ziuyZyk=;
+        b=jVjAog30zbKSBZl7ydPao7MZNwJV3EiXV0aWnIyTVc607gtPEhcrenDZLhd0lSE1tS
+         QlM3ksDLH1dbKN/Ge91vwNhIzrH5b8zsxrGBCXII2ONjoBXVLTauGSpysVnRzZDe8t10
+         7UshVrEiiy2Y492XxQTbG30gP7fWJf/uJm+7pmonV/UXYYJxlQPXi06g66FhP8NxOwU5
+         5HH34ysOXXG0e5gSGuuwp4LBwxfwceT858BhushIayFfvX52IFSiiNUb0fAImDl2L1cy
+         0xhYctE8QJ/rxH8PbLkQOqiR+xDekelxNOYAdQ5DJrQhoOYKN9h6FgTL82DQHM3+O1QV
+         kBZw==
+X-Gm-Message-State: AJIora8rd+F65e2juDQaAT8X3GhMR6CYFMrlOUbWvcaeBfLfqSO8EeR+
+        um+jJTcGjjP/cRvg9GUmcg==
+X-Google-Smtp-Source: AGRyM1vZP1cpJh4LaQGtt0wTsnkyOry95Uj+prwRnysLP55TGjTCNDh9AJ78t39ZVGZhWD6AGPALWg==
+X-Received: by 2002:a6b:f00e:0:b0:66a:4a4a:8506 with SMTP id w14-20020a6bf00e000000b0066a4a4a8506mr168845ioc.42.1655307123240;
+        Wed, 15 Jun 2022 08:32:03 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.251])
+        by smtp.gmail.com with ESMTPSA id u11-20020a02aa8b000000b0032e1e0ac289sm6289840jai.8.2022.06.15.08.32.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 08:31:27 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 21:01:23 +0530
-From:   Ritesh Harjani <ritesh.list@gmail.com>
-To:     Ye Bin <yebin10@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz
-Subject: Re: [PATCH -next] ext4: fix bug_on in ext4_iomap_begin as race
- between bmap and write
-Message-ID: <20220615153123.ab32zt75q7yn7jc5@riteshh-domain>
-References: <20220615135850.1961759-1-yebin10@huawei.com>
- <20220615152139.vp64tnv46enwnfcs@riteshh-domain>
+        Wed, 15 Jun 2022 08:32:02 -0700 (PDT)
+Received: (nullmailer pid 1290906 invoked by uid 1000);
+        Wed, 15 Jun 2022 15:32:01 -0000
+Date:   Wed, 15 Jun 2022 09:32:01 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 07/17] dt-bindings: PCI: dwc: Add
+ interrupts/interrupt-names common properties
+Message-ID: <20220615153201.GB1069883-robh@kernel.org>
+References: <20220610085706.15741-1-Sergey.Semin@baikalelectronics.ru>
+ <20220610085706.15741-8-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220615152139.vp64tnv46enwnfcs@riteshh-domain>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220610085706.15741-8-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/15 08:51PM, Ritesh Harjani wrote:
-> On 22/06/15 09:58PM, Ye Bin wrote:
-> > We got issue as follows:
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 3 PID: 9310 at fs/ext4/inode.c:3441 ext4_iomap_begin+0x182/0x5d0
-> > RIP: 0010:ext4_iomap_begin+0x182/0x5d0
-> > RSP: 0018:ffff88812460fa08 EFLAGS: 00010293
-> > RAX: ffff88811f168000 RBX: 0000000000000000 RCX: ffffffff97793c12
-> > RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-> > RBP: ffff88812c669160 R08: ffff88811f168000 R09: ffffed10258cd20f
-> > R10: ffff88812c669077 R11: ffffed10258cd20e R12: 0000000000000001
-> > R13: 00000000000000a4 R14: 000000000000000c R15: ffff88812c6691ee
-> > FS:  00007fd0d6ff3740(0000) GS:ffff8883af180000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007fd0d6dda290 CR3: 0000000104a62000 CR4: 00000000000006e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  iomap_apply+0x119/0x570
-> >  iomap_bmap+0x124/0x150
-> >  ext4_bmap+0x14f/0x250
-> >  bmap+0x55/0x80
-> >  do_vfs_ioctl+0x952/0xbd0
-> >  __x64_sys_ioctl+0xc6/0x170
-> >  do_syscall_64+0x33/0x40
-> >  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> >
-> > Above issue may happen as follows:
-> >           bmap                    write
-> > bmap
-> >   ext4_bmap
-> >     iomap_bmap
-> >       ext4_iomap_begin
-> >                             ext4_file_write_iter
-> > 			      ext4_buffered_write_iter
-> > 			        generic_perform_write
-> > 				  ext4_da_write_begin
-> > 				    ext4_da_write_inline_data_begin
-> > 				      ext4_prepare_inline_data
-> > 				        ext4_create_inline_data
-> > 					  ext4_set_inode_flag(inode,
-> > 						EXT4_INODE_INLINE_DATA);
-> >       if (WARN_ON_ONCE(ext4_has_inline_data(inode))) ->trigger bug_on
-> >
-> > To solved above issue hold inode lock in ext4_bamp.
-> 											^^^ ext4_bmap()
->
-> I checked the paths where bmap() kernel api can be called i.e. from jbd2/fc and
-> generic_swapfile_activate() (apart from ioctl())
-> For jbd2, it will be called with j_inode within bmap(), hence taking a inode lock
-> of the inode passed within ext4_bmap() (j_inode in this case) should be safe here.
-> Same goes with swapfile path as well.
->
-> However I feel maybe we should hold inode_lock_shared() since there is no
-> block/extent map layout changes that can happen via ext4_bmap().
-> Hence read lock is what IMO should be used here.
+On Fri, Jun 10, 2022 at 11:56:55AM +0300, Serge Semin wrote:
+> Currently the 'interrupts' and 'interrupt-names' are defined being too
+> generic to really describe any actual IRQ interface. Moreover the DW PCIe
+> End-point devices are left with no IRQ signals. All of that can be fixed
+> by adding the IRQ-related properties to the common DW PCIe DT-schema and
+> defining a common and device-specific set of the IRQ names in accordance
+> with the hardware reference manual. Seeing there are common and dedicated
+> IRQ signals for DW PCIe Root Port and End-point controllers we suggest to
+> split the IRQ names up into two sets: common definitions available in the
+> snps,dw-pcie-common.yaml schema and Root Port specific names defined in
+> the snps,dw-pcie.yaml schema. The former one will be applied to both DW
+> PCIe RP and EP controllers, while the later one - for the RP only.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Changelog v3:
+> - This is a new patch unpinned from the next one:
+>   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
+>   by the Rob' request. (@Rob)
+> ---
+>  .../bindings/pci/snps,dw-pcie-common.yaml     | 51 +++++++++++++++
+>  .../bindings/pci/snps,dw-pcie-ep.yaml         | 17 +++++
+>  .../devicetree/bindings/pci/snps,dw-pcie.yaml | 63 ++++++++++++++++++-
+>  3 files changed, 128 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
+> index b2fbe886981b..0a524e916a9f 100644
+> --- a/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
+> +++ b/Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml
+> @@ -17,6 +17,25 @@ description:
+>  select: false
+>  
+>  properties:
+> +  interrupts:
+> +    description:
+> +      There are two main sub-blocks which are normally capable of
+> +      generating interrupts. It's System Information Interface and MSI
+> +      interface. While the former one has some common for the Host and
+> +      Endpoint controllers IRQ-signals, the later interface is obviously
+> +      Root Complex specific since it's responsible for the incoming MSI
+> +      messages signalling. The System Information IRQ signals are mainly
+> +      responsible for reporting the generic PCIe hierarchy and Root
+> +      Complex events like VPD IO request, general AER, PME, Hot-plug, link
+> +      bandwidth change, link equalization request, INTx asserted/deasserted
+> +      Message detection, embedded DMA Tx/Rx/Error.
+> +    minItems: 1
+> +    maxItems: 26
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    maxItems: 26
+> +
+>    phys:
+>      description:
+>        There can be up to the number of possible lanes PHYs specified.
+> @@ -91,4 +110,36 @@ properties:
+>  
+>  additionalProperties: true
+>  
+> +definitions:
 
-On second thoughts, shoudn't we use ext4_iomap_report_ops here?
-Can't recollect why we didn't use ext4_iomap_report_ops for iomap_bmap() in the
-first place. Should be good to verify it once.
+$defs:
 
--ritesh
+But I suppose this is the applying fixups or not issue. That's certainly 
+not behavior we should rely on. If we need a way to specify applying 
+fixups or not, we should do that. But really I'd prefer not to need 
+that.
 
+> +  interrupt-names:
+> +    description:
+> +      IRQ signal names common for the DWC PCIe Root Port and Endpoint
+> +      controllers.
+> +    oneOf:
+> +      - description:
+> +          Controller request to read or write virtual product data
+> +          from/to the VPD capability registers.
+> +        const: vpd
+> +      - description:
+> +          Link Equalization Request flag is set in the Link Status 2
+> +          register (applicable if the corresponding IRQ is enabled in
+> +          the Link Control 3 register).
+> +        const: l_eq
+> +      - description:
+> +          Indicates that the eDMA Tx/Rx transfer is complete or that an
+> +          error has occurred on the corresponding channel. eDMA can have
+> +          eight Tx (Write) and Rx (Read) eDMA channels thus supporting up
+> +          to 16 IRQ signals all together. Write eDMA channels shall go
+> +          first in the ordered row as per default edma_int[*] bus setup.
+> +        pattern: '^dma([0-9]|1[0-5])?$'
+> +      - description:
+> +          PCIe protocol correctable error or a Data Path protection
+> +          correctable error is detected by the automotive/safety
+> +          feature.
+> +        const: sft_ce
+> +      - description:
+> +          Indicates that the internal safety mechanism detected and
+> +          uncorrectable error.
+> +        const: sft_ue
 
->
-> -ritesh
->
->
-> >
-> > Signed-off-by: Ye Bin <yebin10@huawei.com>
-> > ---
-> >  fs/ext4/inode.c | 12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> > index 53877ffe3c41..f4a95c80f644 100644
-> > --- a/fs/ext4/inode.c
-> > +++ b/fs/ext4/inode.c
-> > @@ -3142,13 +3142,15 @@ static sector_t ext4_bmap(struct address_space *mapping, sector_t block)
-> >  {
-> >  	struct inode *inode = mapping->host;
-> >  	journal_t *journal;
-> > +	sector_t ret = 0;
-> >  	int err;
-> >
-> > +	inode_lock(inode);
-> >  	/*
-> >  	 * We can get here for an inline file via the FIBMAP ioctl
-> >  	 */
-> >  	if (ext4_has_inline_data(inode))
-> > -		return 0;
-> > +		goto out;
-> >
-> >  	if (mapping_tagged(mapping, PAGECACHE_TAG_DIRTY) &&
-> >  			test_opt(inode->i_sb, DELALLOC)) {
-> > @@ -3187,10 +3189,14 @@ static sector_t ext4_bmap(struct address_space *mapping, sector_t block)
-> >  		jbd2_journal_unlock_updates(journal);
-> >
-> >  		if (err)
-> > -			return 0;
-> > +			goto out;
-> >  	}
-> >
-> > -	return iomap_bmap(mapping, block, &ext4_iomap_ops);
-> > +	ret = iomap_bmap(mapping, block, &ext4_iomap_ops);
-> > +
-> > +out:
-> > +	inode_unlock(inode);
-> > +	return ret;
-> >  }
-> >
-> >  static int ext4_read_folio(struct file *file, struct folio *folio)
-> > --
-> > 2.31.1
-> >
+I still don't really like this pattern. My first read of it makes me 
+think only 1 interrupt is supported, and I have to go look that this is 
+referenced from 'items'.
+
+Could we do a lot more with json-schema like you have? Yes, but the 
+schemas are optimized for simplicity and a relatively fixed pattern of 
+what's allowed as json-schema is new to most folks. It's also easy to 
+create things that simply don't work (silently). Just reviewing this 
+series is hard.
+
+This series is trying to do lots of things. Refactoring, adding 
+constraints, and adding a new binding. I would split it up if you want 
+to make progress.
+
+Rob

@@ -2,133 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD5AF54D08D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:00:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A62654D092
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345592AbiFOSAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 14:00:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
+        id S1357903AbiFOSA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 14:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236325AbiFOSA3 (ORCPT
+        with ESMTP id S1347617AbiFOSAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:00:29 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DF02A718;
-        Wed, 15 Jun 2022 11:00:28 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id w21so12169579pfc.0;
-        Wed, 15 Jun 2022 11:00:28 -0700 (PDT)
+        Wed, 15 Jun 2022 14:00:53 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8DE352E41
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:00:51 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id t2so11061199pld.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 11:00:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qMYjlX/UBpwrjGqKKro02HBfwEFDYsK2XO45mdFo3rc=;
-        b=iWL6biHGhBZeoAug+7fTwhF5Z8oRPErcQ4qaaKocRXNdOEVfGRaDcnV7jYQW9IEYTc
-         J0TWgdDXdbgGuW4xxy1+AGRhWWuacHBD6yw73HBcyGBJk173czqkY4NdE9aj5/yu2ynt
-         NFn9TLNSeUYpuO/AgFOKym3dn0ls/qzUnA3fUU8MeXtP9PFHWstAdePV0a/9pCcnpMKw
-         nJpcLnP8AfxVDHLjl9KgCwBboOnYXbC25kiNPzskKdm2lzHtAXHZPJ3b1iFFnyMH0uHP
-         35ah/WzMPy7Suq7zlC+uR46IW58giQharwLIRdr3r7AR3PHXrTNSubXUCJWeH4UnwS8N
-         LsVQ==
+        d=semihalf.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=aKVoJG94TlRK1lO5EtxaMQBi2kCbacnBTEUYcvXReYs=;
+        b=FNCP2oYfZ40CEmxTy0qRZfyApcZ+1R96el63F2TOp0qXRzJnR18YS28i4ComAHwniE
+         NzTpAhKsSs6GfhSpMAsAxbNJupjAtzYcPojh6rHDREBCcik6J0UGscpWefqG+eMOycrr
+         aNexRCGLHPIzOHCw8RDDtF/Fgo2OCR6YPINhDQDEeoxo8cbnCZpBaY+kr2yrXknY/y1Z
+         zfx+ItNutvYmKUljGz5VBNfeGRdgaNZ+CJnsAfAr6ZB+wBvlE7tz22gcnBLKKfCg1Vig
+         RWkN5AS2C0LgtERETqvsbgVx5ftTRmODp8vNncg5KxCNG3Nyopz/Rx/p6HlmPiHQzMF9
+         OMBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=qMYjlX/UBpwrjGqKKro02HBfwEFDYsK2XO45mdFo3rc=;
-        b=cfJ0M2osXn8jcGBnuppK0G8PMfIJ0yU01KpTVQbjh9rfNz4iVp5miW39dKoQqzu3mt
-         tElOM57xphkh5oy3GrfeGlN41my1S8rkvXOv081QCYOvvH2caRyIBM0wbUXwaUlwDEi5
-         bJ/K0017ngbwaouXikYjQQNLMaNX+0TtynEJ+nYqw1Jgti1bwtbCdyGUTfQE+xQvSsOZ
-         35Z0qSnRBnpqWEGCjYbIEgLPc7oHN/CiRw7Ohn96Yhj0dDr1zYjfhfCb75JMIxI/k4Mk
-         UemnHJ333AsKRB6loEMQQuHVpvN4Uy4TqVKALfCMVJ9iHtY8nMKaDxUhQgY77p2MbHid
-         w/SA==
-X-Gm-Message-State: AJIora+u6c2BNrRDiPw3H4XuuPzA1OmXtWggzi9fXBVnu1kSliNPDYCk
-        fTDvJjOE2/4QxaCZxSxFlKFni+tMrTg=
-X-Google-Smtp-Source: AGRyM1s/f3aI6ssGuwvM1/e5X3UzRfBKmv9Krzu4r8jYIO/OY3lPSWmIxHHmAHSAkD7bBd/YaWUIkw==
-X-Received: by 2002:a63:6f8c:0:b0:408:bdc6:7726 with SMTP id k134-20020a636f8c000000b00408bdc67726mr916000pgc.110.1655316028285;
-        Wed, 15 Jun 2022 11:00:28 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m24-20020a170902bb9800b0016203a92865sm9605090pls.107.2022.06.15.11.00.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 11:00:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 15 Jun 2022 11:00:26 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Jan Kara <jack@suse.cz>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Backlund <tmb@tmb.nu>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Slade Watkins <slade@sladewatkins.com>
-Subject: Re: [PATCH 5.15 000/251] 5.15.47-rc2 review
-Message-ID: <20220615180026.GA2146974@roeck-us.net>
-References: <bd80cd0d-a364-4ebd-2a89-933f79eaf4c7@tmb.nu>
- <CAHk-=wix7+mGzS-hANyk7DZsZ1NgGMHjPzSQKggEomYrRCrP_Q@mail.gmail.com>
- <CAHk-=wgfFhwMP0=QQY_iZvf0kveR5=VGK919Ayn+ZSUADs9mag@mail.gmail.com>
- <20220615110022.yifrsvzxjsz2wky5@quack3.lan>
- <20220615133845.o2lzfe5s4dzdfvtg@quack3.lan>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=aKVoJG94TlRK1lO5EtxaMQBi2kCbacnBTEUYcvXReYs=;
+        b=5/GO5FXR3w2jIbRI4nKqE4mKI1nLFdt9eDVWTlEt1qcTUDO8aVERDpWYgMxxaa7mgi
+         Heg7JTySEOPCht0rPSeODGph24niVS6HGWw8nxSEluVANGmEnNhsFO0DDBOYjvBCEuEI
+         ZebCd+zNFkzB6mWz8iCgYSbEGG1CCxu4YoevyTECHZ0hI9dZ8Lg9sPUaFwNgYD/RDf8E
+         XWe5vdl+cckCU58foSsu6ZFTIu4Qqv0s8KCFpCbmmBBakKKP7xlUUWSiufGwUfhQ1V4w
+         5ygPMA5uajDYVHLn2We/LGvilaJNvhzwxTN7MVyvmwv3mn8f16GsUXnSTShCgd2Y9hQK
+         387g==
+X-Gm-Message-State: AJIora/p37oYZLjEFtxzCYO0XqHugB6niIJ5RHwKPNxEB4722893otui
+        Ym7iIBjcmPGBreaZVV1l8eXETSSn8Fazultr0YDvPg==
+X-Google-Smtp-Source: AGRyM1sMkrDeId7x/50KkjN7iA2jK8X0btO6512sJN4xGHhvO2BWqk0v85/hMP7+RYjUk3yjrmwAVc2SnFWgd5AdlWU=
+X-Received: by 2002:a17:90b:2247:b0:1e8:9f24:269a with SMTP id
+ hk7-20020a17090b224700b001e89f24269amr11622697pjb.14.1655316051101; Wed, 15
+ Jun 2022 11:00:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615133845.o2lzfe5s4dzdfvtg@quack3.lan>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220609110337.1238762-1-jaz@semihalf.com> <20220609110337.1238762-2-jaz@semihalf.com>
+ <f62ab257-b2e0-3097-e394-93a9e7a0d2bf@intel.com> <CAH76GKPo6VL33tBaZyszL8wvjpzJ7hjOg3o1JddaEnuGbwk=dQ@mail.gmail.com>
+ <2854ae00-e965-ab0f-80dd-6012ae36b271@intel.com> <7eb5313e-dea0-c73e-5467-d01f0ca0fc2d@amd.com>
+In-Reply-To: <7eb5313e-dea0-c73e-5467-d01f0ca0fc2d@amd.com>
+From:   Grzegorz Jaszczyk <jaz@semihalf.com>
+Date:   Wed, 15 Jun 2022 20:00:39 +0200
+Message-ID: <CAH76GKO-X-DrR=yAh3NpvAC_Spd_aJ8+yLTATm+c34iPShNttQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] x86: notify hypervisor about guest entering s2idle state
+To:     Mario Limonciello <mario.limonciello@amd.com>,
+        Dave Hansen <dave.hansen@intel.com>
+Cc:     linux-kernel@vger.kernel.org, Dmytro Maluka <dmy@semihalf.com>,
+        Zide Chen <zide.chen@intel.corp-partner.google.com>,
+        Peter Fang <peter.fang@intel.corp-partner.google.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Pratik Vishwakarma <Pratik.Vishwakarma@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sachi King <nakato@nakato.io>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        David Dunn <daviddunn@google.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        "open list:KERNEL VIRTUAL MACHINE (KVM)" <kvm@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        "open list:ACPI" <linux-acpi@vger.kernel.org>,
+        "open list:HIBERNATION (aka Software Suspend, aka swsusp)" 
+        <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 03:38:45PM +0200, Jan Kara wrote:
-> On Wed 15-06-22 13:00:22, Jan Kara wrote:
-> > On Tue 14-06-22 12:00:22, Linus Torvalds wrote:
-> > > On Tue, Jun 14, 2022 at 11:51 AM Linus Torvalds
-> > > <torvalds@linux-foundation.org> wrote:
-> > > >
-> > > > Or just make sure that noop_backing_dev_info is fully initialized
-> > > > before it's used.
-> > > 
-> > > I don't see any real reason why that
-> > > 
-> > >     err = bdi_init(&noop_backing_dev_info);
-> > > 
-> > > couldn't just be done very early. Maybe as the first call in
-> > > driver_init(), before the whole devtmpfs_init() etc.
-> > 
-> > I've checked the dependencies and cgroups (which are the only non-trivial
-> > dependency besides per-CPU infrastructure) are initialized early enough so
-> > it should work fine. So let's try that.
-> 
-> Attached patch boots for me. Guys, who was able to reproduce the failure: Can
-> you please confirm this patch fixes your problem?
-> 
+pon., 13 cze 2022 o 07:03 Mario Limonciello
+<mario.limonciello@amd.com> napisa=C5=82(a):
+>
+> On 6/10/22 07:49, Dave Hansen wrote:
+> > On 6/10/22 04:36, Grzegorz Jaszczyk wrote:
+> >> czw., 9 cze 2022 o 16:27 Dave Hansen <dave.hansen@intel.com> napisa=C5=
+=82(a):
+> >>> On 6/9/22 04:03, Grzegorz Jaszczyk wrote:
+> >>>> Co-developed-by: Peter Fang <peter.fang@intel.corp-partner.google.co=
+m>
+> >>>> Signed-off-by: Peter Fang <peter.fang@intel.corp-partner.google.com>
+> >>>> Co-developed-by: Tomasz Nowicki <tn@semihalf.com>
+> >>>> Signed-off-by: Tomasz Nowicki <tn@semihalf.com>
+> >>>> Signed-off-by: Zide Chen <zide.chen@intel.corp-partner.google.com>
+> >>>> Co-developed-by: Grzegorz Jaszczyk <jaz@semihalf.com>
+> >>>> Signed-off-by: Grzegorz Jaszczyk <jaz@semihalf.com>
+> >>>> ---
+> >>>>   Documentation/virt/kvm/x86/hypercalls.rst | 7 +++++++
+> >>>>   arch/x86/kvm/x86.c                        | 3 +++
+> >>>>   drivers/acpi/x86/s2idle.c                 | 8 ++++++++
+> >>>>   include/linux/suspend.h                   | 1 +
+> >>>>   include/uapi/linux/kvm_para.h             | 1 +
+> >>>>   kernel/power/suspend.c                    | 4 ++++
+> >>>>   6 files changed, 24 insertions(+)
+> >>> What's the deal with these emails?
+> >>>
+> >>>          zide.chen@intel.corp-partner.google.com
+> >>>
+> >>> I see a smattering of those in the git logs, but never for Intel folk=
+s.
+> >> I've kept emails as they were in the original patch and I do not think
+> >> I should change them. This is what Zide and Peter originally used.
+> >
+> > "Original patch"?  Where did you get this from?
+>
+> Is this perhaps coming from Chromium Gerrit?  If so, I think you should
+> include a link to the Gerrit code review discussion.
 
-It does for me.
+Yes, the original patch comes from chromium gerrit:
+https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/=
+3482475/4
+and after reworking but before sending to the mailing list, I've asked
+all involved guys for ack and it was done internally on gerrit:
+https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/=
+3666997
 
-> 								Honza
-> -- 
-> Jan Kara <jack@suse.com>
-> SUSE Labs, CR
+>
+> If it's not a public discussion/patch originally perhaps Suggested-by:
+> might be a better tag to use.
+>
+> >
+> >>> I'll also say that I'm a bit suspicious of a patch that includes 5
+> >>> authors for 24 lines of code.  Did it really take five of you to writ=
+e
+> >>> 24 lines of code?
+> >> This patch was built iteratively: original patch comes from Zide and
+> >> Peter, I've squashed it with Tomasz later changes and reworked by
+> >> myself for upstream. I didn't want to take credentials from any of the
+> >> above so ended up with Zide as an author and 3 co-developers. Please
+> >> let me know if that's an issue.
+> >
+> > It just looks awfully fishy.
+> >
+> > If it were me, and I'd put enough work into it to believe I deserved
+> > credit as an *author* (again, of ~13 lines of actual code), I'd probabl=
+y
+> > just zap all the other SoB's and mention them in the changelog.  I'd
+> > also explain where the code came from.
+> >
+> > Your text above wouldn't be horrible context to add to a cover letter.
 
-> From 8f998b182be7563fc92aa8914cc7d21f75a3c20e Mon Sep 17 00:00:00 2001
-> From: Jan Kara <jack@suse.cz>
-> Date: Wed, 15 Jun 2022 15:22:29 +0200
-> Subject: [PATCH] init: Initialized noop_backing_dev_info early
-> 
-> noop_backing_dev_info is used by superblocks of various
-> pseudofilesystems such as kdevtmpfs. Initialize it before the
-> filesystems get mounted.
-> 
-> Signed-off-by: Jan Kara <jack@suse.cz>
+Actually it may not be an issue for the next version since the
+suggested by Sean approach is quite different so I would most likely
+end up with reduced SoB/Co-dev-by in the next version.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+Best regards,
+Grzegorz

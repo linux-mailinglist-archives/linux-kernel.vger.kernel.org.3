@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1FA54CFDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C56754CED0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349614AbiFOR3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
+        id S1356704AbiFOQf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352759AbiFOR3a (ORCPT
+        with ESMTP id S239852AbiFOQfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:29:30 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5512434BB3;
-        Wed, 15 Jun 2022 10:29:28 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id l126-20020a1c2584000000b0039c1a10507fso1502450wml.1;
-        Wed, 15 Jun 2022 10:29:28 -0700 (PDT)
+        Wed, 15 Jun 2022 12:35:23 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5234E2D1E5;
+        Wed, 15 Jun 2022 09:35:23 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id v17-20020a17090a899100b001ead067eaf9so2672584pjn.0;
+        Wed, 15 Jun 2022 09:35:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:from:to:cc:subject:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=0mmtAiGES9hy6GbZr6mj1I/9d7FHTjal/1dcnEoMib4=;
-        b=d/ZM+qkibzc1FPpQIVKOPEDkTrF02xlafmgh2XMchXaJDbGefaV7FPRiq9MMt1jujY
-         6nuFUGuuXLbLBgp76pCx/O2r4cIN+CtcNgwKZwpVdzekFdRFqDd7O32A7p8UVj/A62n2
-         Xs6cMKvcbN5gyfoMnqEqagWnM3EnMXZvedk5xE7YpROhUtP/QqXRbL8czsAjvcFJvXuX
-         QANMtQIxUbMg9ZIuPF5DMRMVZ1WQzcr+DX0meZ2TE8KHPIMPWE1d0RQxcFL/aheiGAh7
-         jGGq9WheLGjRcC8FMRMWntkV4+X+jwEX9ITHj/a+kk694HVt/sU0fLCfSXmpuPfrVLhf
-         7FLg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NXNiK5CoOd5h/K567StuCdpvu1byZQqmWfR+aD9BoLg=;
+        b=m2hmwJKhxnLWptIU4bEaOprXB7AjROw7lct5pUQISGmydnU6CeitFPq3Qc9nBe1MQC
+         PaaVmblRPW/g2e460HEqDMv1JWHDx+leQItVlqmFT92ZIOQ4mFuHkp/67ZK/on2CWJ57
+         7cHTsZBoqA/i8uP47pfHx3HmdrA3/UMF6T5VWr7Saf5m5cn6uTuD64FNpK99mmvImEJp
+         Ccu3KzYFY84/TZ/XWD1T0TNUh7Ldx3ruUETmYEfqVSxkJQHNqP4xxrNI8YMsVfFxYGgb
+         FUoek2jo46bd3K8MhP0Z1sx8mK3GTsyfPGDDONzkL2tdDHbiUYLQTk06jL6veFjQXxIi
+         a0Nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=0mmtAiGES9hy6GbZr6mj1I/9d7FHTjal/1dcnEoMib4=;
-        b=nwHdYC9/mIhD8FirHKHPj4c4nnd0+B559Q/4QxUD3ssj3nZnA31QB02jbujUemqvcD
-         ULfVZYORrLdeXf2C+VHDGOOCd8Ga18XNPMlct5u8yU9I62v5hDNTyHNe8U5KTPT/64aH
-         +TcrLCq1AQXiKKm+eXA+O1Pa6RPiQiyJdb0srQJxWLEX5a0/fB9CFbS0u6Y3chnIJBFJ
-         wzElidQzFGwDxuAOAX1+AM1/qfFZFeCl87cknVMT1g1lQTTkD2UdlMZG73HnT5UyYnU6
-         mQ31hiH0hXpN2fIwyknlGSQjBDHaPxp1nkw9k5HRTJYZ2AZM8eYOxO3MZXsaVjZdL4L5
-         qLTw==
-X-Gm-Message-State: AJIora81U/mcQVvemJKY+BrB54JzsIMGORzf1zzRALDsi/bxQfNlCOhJ
-        9cqlXgbhuOwEMg9OCXuXfEa44yix9yk=
-X-Google-Smtp-Source: AGRyM1u6SrzeH7qCFw4qlFWwaZs3p9N6OsL/H2wxtO516NhvYU71hXSl0/p2IYSj34r7su/3P5K8qA==
-X-Received: by 2002:a05:600c:4e51:b0:39c:4f18:4c29 with SMTP id e17-20020a05600c4e5100b0039c4f184c29mr537734wmq.101.1655314166756;
-        Wed, 15 Jun 2022 10:29:26 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.gmail.com with ESMTPSA id t1-20020a5d6a41000000b00218468314d7sm15298550wrw.62.2022.06.15.10.29.25
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NXNiK5CoOd5h/K567StuCdpvu1byZQqmWfR+aD9BoLg=;
+        b=OofSNZQcoeSd8RrnHMylTElLrbBrcOuGEUO7Ux2GiMQp02MfVXhEFKavbS2fbhEMKp
+         VRkU6APmMi4f/KNTmwlX4Fx7NxyWiH1fcWx5NRcLWUMkjxOaGKmXnnWxt1IjbJ7QB0QW
+         8Wjf1dWLYg+sfZLigSIRXDnqLtJBfEW/Hh0Iu17s17Od0rqcFTm8bNrIEvN1Bka1LT3L
+         QQXnJOSU6oy6EiujBjNEonIFiGG/ERXJk4ZOwwslQDdDTT2Z+nenRE+irF+BQ+t6SJX+
+         a9sF7n2RivDWkslJdUSsmBk7NRGW+zz4PQPbeub93Jw/C1DZ/Dg11JZla3uxTu6A6iqZ
+         6FeA==
+X-Gm-Message-State: AJIora8GH9K/YB55TJJfrBJ+Bo0UYima68aGRVQJBg4ilp6KLgp6xiZh
+        YRhyRzEitI/VcShTs23UN2LIGQzGLYI=
+X-Google-Smtp-Source: AGRyM1tLwthhtZmarB0uyNajKCWDIJw6HY2FWPaSR5DXQjf5zLnQlXHmthoGVTwOVaURRNFowOIaPw==
+X-Received: by 2002:a17:90b:2349:b0:1e3:34f9:87e8 with SMTP id ms9-20020a17090b234900b001e334f987e8mr11146478pjb.217.1655310922780;
+        Wed, 15 Jun 2022 09:35:22 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id v15-20020a63bf0f000000b003fdb97e6961sm9909464pgf.28.2022.06.15.09.35.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 10:29:26 -0700 (PDT)
-Message-ID: <62aa16f6.1c69fb81.816fc.be7a@mx.google.com>
-X-Google-Original-Message-ID: <YqoKTt3G5+hXj2ET@Ansuel-xps.>
-Date:   Wed, 15 Jun 2022 18:35:26 +0200
-From:   Ansuel Smith <ansuelsmth@gmail.com>
-To:     Manivannan Sadhasivam <mani@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 2/3] mtd: nand: raw: qcom_nandc: add support for
- unprotected spare data pages
-References: <20220615000612.3119-1-ansuelsmth@gmail.com>
- <20220615000612.3119-3-ansuelsmth@gmail.com>
- <20220615172802.GB3606@thinkpad>
+        Wed, 15 Jun 2022 09:35:21 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Emma Anholt <emma@anholt.net>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/msm: Fix %d vs %u
+Date:   Wed, 15 Jun 2022 09:35:28 -0700
+Message-Id: <20220615163532.3013035-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220615172802.GB3606@thinkpad>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -83,156 +79,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 10:58:02PM +0530, Manivannan Sadhasivam wrote:
-> On Wed, Jun 15, 2022 at 02:06:11AM +0200, Ansuel Smith wrote:
-> > IPQ8064 nand have special pages where a different layout scheme is used.
-> > These special page are used by boot partition and on reading them
-> > lots of warning are reported about wrong ECC data and if written to
-> > results in broken data and not bootable device.
-> > 
-> > The layout scheme used by these special page consist in using 512 bytes
-> > as the codeword size (even for the last codeword) while writing to CFG0
-> > register. This forces the NAND controller to unprotect the 4 bytes of
-> > spare data.
-> > 
-> > Since the kernel is unaware of this different layout for these special
-> > page, it does try to protect the spare data too during read/write and
-> > warn about CRC errors.
-> > 
-> > Add support for this by permitting the user to declare these special
-> > pages in dts by declaring offset and size of the partition. The driver
-> > internally will convert these value to nand pages.
-> > 
-> > On user read/write the page is checked and if it's a boot page the
-> > correct layout is used.
-> > 
-> > Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> 
-> Just a few nitpicks below. With those fixed,
-> 
-> Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
-> 
-> Thanks,
-> Mani
->
+From: Rob Clark <robdclark@chromium.org>
 
-Sure! Thanks a lot for the various review. Will send v8 that should be
-the final version.
+In debugging fence rollover, I noticed that GPU state capture and
+devcore dumps were showing me negative fence numbers.  Let's fix that
+and some related signed vs unsigned confusion.
 
-> > ---
-> >  drivers/mtd/nand/raw/qcom_nandc.c | 203 +++++++++++++++++++++++++++++-
-> >  1 file changed, 198 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
-> > index f2990d721733..0dbfe32888ff 100644
-> > --- a/drivers/mtd/nand/raw/qcom_nandc.c
-> > +++ b/drivers/mtd/nand/raw/qcom_nandc.c
-> 
-> [...]
-> 
-> > +static bool qcom_nandc_is_boot_partition(struct qcom_nand_host *host, int page)
-> > +{
-> > +	struct qcom_nand_boot_partition *boot_partition;
-> > +	u32 start, end;
-> > +	int i;
-> > +
-> > +	/*
-> > +	 * Since the frequent access will be to the non-boot partitions like rootfs,
-> > +	 * optimize the page check by:
-> > +
-> 
-> Missing "*"
-> 
-> > +	 * 1. Checking if the page lies after the last boot partition.
-> > +	 * 2. Checking from the boot partition end.
-> > +	 */
-> > +
-> > +	/* First check the last boot partition */
-> > +	boot_partition = &host->boot_partitions[host->nr_boot_partitions - 1];
-> > +	start = boot_partition->page_offset;
-> > +	end = start + boot_partition->page_size;
-> > +
-> > +	/* Page is after the last boot partition end. This is NOT a boot partition */
-> > +	if (page > end)
-> > +		return false;
-> > +
-> > +	/* Actually check if it's a boot partition */
-> > +	if (page < end && page >= start)
-> > +		return true;
-> > +
-> > +	/* Check the other boot partition starting from the second-last partition */
-> 
-> s/boot partition/boot partitions
-> 
-> > +	for (i = host->nr_boot_partitions - 2; i >= 0; i--) {
-> > +		boot_partition = &host->boot_partitions[i];
-> > +		start = boot_partition->page_offset;
-> > +		end = start + boot_partition->page_size;
-> > +
-> > +		if (page < end && page >= start)
-> > +			return true;
-> > +	}
-> > +
-> > +	return false;
-> > +}
-> > +
-> > +static void
-> > +qcom_nandc_codeword_fixup(struct qcom_nand_host *host, int page)
-> 
-> As like other functions, please align the function on the same line
-> 
-> > +{
-> > +	bool codeword_fixup = qcom_nandc_is_boot_partition(host, page);
-> > +
-> > +	/* Skip conf write if we are already in the correct mode */
-> > +	if (codeword_fixup == host->codeword_fixup)
-> > +		return;
-> > +
-> > +	host->codeword_fixup = codeword_fixup;
-> > +
-> > +	host->cw_data = codeword_fixup ? 512 : 516;
-> > +	host->spare_bytes = host->cw_size - host->ecc_bytes_hw -
-> > +			    host->bbm_size - host->cw_data;
-> > +
-> > +	host->cfg0 &= ~(SPARE_SIZE_BYTES_MASK | UD_SIZE_BYTES_MASK);
-> > +	host->cfg0 |= host->spare_bytes << SPARE_SIZE_BYTES |
-> > +		      host->cw_data << UD_SIZE_BYTES;
-> > +
-> > +	host->ecc_bch_cfg &= ~ECC_NUM_DATA_BYTES_MASK;
-> > +	host->ecc_bch_cfg |= host->cw_data << ECC_NUM_DATA_BYTES;
-> > +	host->ecc_buf_cfg = (host->cw_data - 1) << NUM_STEPS;
-> > +}
-> 
-> [...]
-> 
-> > +static int qcom_nand_host_parse_boot_partitions(struct qcom_nand_controller *nandc,
-> > +						struct qcom_nand_host *host,
-> > +						struct device_node *dn)
-> > +{
-> > +	struct nand_chip *chip = &host->chip;
-> > +	struct mtd_info *mtd = nand_to_mtd(chip);
-> > +	struct qcom_nand_boot_partition *boot_partition;
-> > +	struct device *dev = nandc->dev;
-> > +	int partitions_count, i, j, ret;
-> > +
-> > +	if (!of_find_property(dn, "qcom,boot-partitions", NULL))
-> > +		return 0;
-> > +
-> > +	partitions_count = of_property_count_u32_elems(dn, "qcom,boot-partitions");
-> > +	if (partitions_count <= 0) {
-> > +		dev_err(dev, "Error parsing boot partition\n");
-> > +		if (partitions_count == 0)
-> > +			return -EINVAL;
-> > +		else
-> > +			return partitions_count;
-> 
-> 		return partitions_count ? partitions_count : -EINVAL;
-> 
-> Thanks,
-> Mani
-> 
-> -- 
-> மணிவண்ணன் சதாசிவம்
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+index dd044d557c7c..ce3b508b7c2b 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+@@ -790,11 +790,11 @@ void adreno_show(struct msm_gpu *gpu, struct msm_gpu_state *state,
+ 	for (i = 0; i < gpu->nr_rings; i++) {
+ 		drm_printf(p, "  - id: %d\n", i);
+ 		drm_printf(p, "    iova: 0x%016llx\n", state->ring[i].iova);
+-		drm_printf(p, "    last-fence: %d\n", state->ring[i].seqno);
+-		drm_printf(p, "    retired-fence: %d\n", state->ring[i].fence);
+-		drm_printf(p, "    rptr: %d\n", state->ring[i].rptr);
+-		drm_printf(p, "    wptr: %d\n", state->ring[i].wptr);
+-		drm_printf(p, "    size: %d\n", MSM_GPU_RINGBUFFER_SZ);
++		drm_printf(p, "    last-fence: %u\n", state->ring[i].seqno);
++		drm_printf(p, "    retired-fence: %u\n", state->ring[i].fence);
++		drm_printf(p, "    rptr: %u\n", state->ring[i].rptr);
++		drm_printf(p, "    wptr: %u\n", state->ring[i].wptr);
++		drm_printf(p, "    size: %u\n", MSM_GPU_RINGBUFFER_SZ);
+ 
+ 		adreno_show_object(p, &state->ring[i].data,
+ 			state->ring[i].data_size, &state->ring[i].encoded);
 -- 
-	Ansuel
+2.36.1
+

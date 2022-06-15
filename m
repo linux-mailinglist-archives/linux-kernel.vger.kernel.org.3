@@ -2,158 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8067F54D439
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:07:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B2554D43C
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:08:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346743AbiFOWGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 18:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S1349715AbiFOWID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 18:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238652AbiFOWGt (ORCPT
+        with ESMTP id S238652AbiFOWH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 18:06:49 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B23C563A5;
-        Wed, 15 Jun 2022 15:06:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655330808; x=1686866808;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1F3Ip+Ag85q874qUWiUpOUFx42ubled3GFsealoyUEY=;
-  b=jLUJsN6ZtepAXju18mabDHtlsOTrwJKoAAW2mOQN2BTvL6sUwJEBtQoK
-   VwUfv8n0XgmCPfVidAcYfvTeksy0A+wSwMeWhYpTnpZEpG0rH3tEiMtLD
-   /h/5V4UBSgnWoJWBcFUirJv4EGakYOpqAlzRU1sxeIloqmR+r+JoxWrmP
-   bCdNhFfIdttJSeXN2L70hUhnV395ufuwuKcHVeTxB67eagtVpFPHsOw7E
-   TB7QDdd0S2sbyWa+cVg7Lqj/9Ui1fkeIbz7BEY8t0qu2xu6Ue/QnFuG5D
-   93wBHdZIpT/mrnkxzwXjUbzgJqzRKqfcR7JegijcfjouYpmfF+3z8OYex
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="259573532"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="259573532"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 15:06:48 -0700
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="583398809"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 15:06:47 -0700
-Date:   Wed, 15 Jun 2022 15:06:46 -0700
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Darren Hart <darren@os.amperecomputing.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Doug Rady <dcrady@os.amperecomputing.com>
-Subject: Re: [PATCH] ACPI/APEI: Limit printable size of BERT table data
-Message-ID: <YqpX9npa/wR7mafR@agluck-desk3.sc.intel.com>
-References: <43dfaba0646d498fe94c1a8479b812346133f438.1646765290.git.darren@os.amperecomputing.com>
- <CAJZ5v0gMh2ed+ZWOnd-t_uTrZtm=AUfxOAkAKWT7WQK3=gf+7w@mail.gmail.com>
+        Wed, 15 Jun 2022 18:07:58 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853722673;
+        Wed, 15 Jun 2022 15:07:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1655330862;
+        bh=8zvgTqKZowSpOBFEUnhiFksEIfbT/Gv0cy1/m4B+SXc=;
+        h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=juahgP8nIUlVFRbBX44XcQ1Q7nDZ5Q5PkXd215yJl0rxaPddCY/7jAVwzkIede2i5
+         KVhWkFgG6wKhLQVbIShEkxltcKOZ+azV4YzaiLaL0MRkAGzYCWNEdK/QJwtab+ZiwI
+         jpkrNCijKVp9oJwbImPVy10QxWl4hS4jt0b50ZcI=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.0.33] ([46.223.2.17]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MzQgC-1noS4r3A36-00vP9A; Thu, 16
+ Jun 2022 00:07:41 +0200
+Subject: Re: [PATCH v5 05/10] tpm, tpm_tis: Store result of interrupt
+ capability query
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
+ <20220610110846.8307-6-LinoSanfilippo@gmx.de> <YqoiWdwcds6AZgoO@iki.fi>
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Message-ID: <2e4ab3f1-3bff-9c83-20d3-4eee10f8b412@gmx.de>
+Date:   Thu, 16 Jun 2022 00:07:41 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gMh2ed+ZWOnd-t_uTrZtm=AUfxOAkAKWT7WQK3=gf+7w@mail.gmail.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YqoiWdwcds6AZgoO@iki.fi>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:YXivV7v2VU7dH/KBpUThfqBN6lVUAHd/z1WmICVWlY4/OYFnO3G
+ VcUifnbJgooLr73v9QJdCNWKD0c5IO2rXEQs4h+c+wc2MD2CNa4gVHmM1pzTQXr78hyAsH7
+ ZIu31DisKcPK5Tkx9JUx8fIqpCka10/gXAtndb9d/k7Z/oZE2ehiVglkEMukQsufvgKe5YJ
+ 4LGB1Ly8LS6TBVWBz1vaA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1CFKf9Plo4I=:2JfZM/GVrl30fCo3PcvClj
+ yGz1phy3HNErg6KsaDPOgAhL2OR+J7T7DJmCGAihZwkSQb/OQG2ngSwtSS+XzZ7yNgY9ZP4tR
+ KOUha7Ds23LKhJJ1Mhis6opBaq95Tx5IvRACf107RWH5EERXBqkihStbZREiO+yb8OLnHtZ8U
+ pmzVUo/JtUNOEFgENpX7opv0vTsBwkleWgec5kvgHYvPXCsa68wlePVceFrCRTuXXfxPb1RGR
+ boqlpHjgk4Nc0OcfJggiyNF5WmCP+czQnfDLem6bmVKdCq3JZsJoK9xANy4xscfLplyN1UOvS
+ 3aSUNnB+7zybvUhOmJVNfoTOhDlz/2Rngbb1eaw8lCsHpiyaDbxrU0V60VofWjILYysY3BjnP
+ 2is3WFlfJN5BnIIErYEGTIozIrgwsCsZAPdbAnYPSuy0v6BbHGyn5rQ5oMlQ0uOyBVSyOZhEt
+ zsP6jyLIaKrNH+ceMWqr0c5qgt9K/s9tMs6uq3MG2/kWSq/WkJTzRW5fvu8hfysfBBB3OfyTI
+ j1zjrAWUSkCu1NClp+aSQ13o+/2em+ee49dkTCGDrfJCKGBhwEPar4cUs/6Fch2XRJnOMkh8y
+ cozllL2Ge8p9VLaea90FV71L2YbbreASSjqavaE6WkqIkNZo/q+GzKLb0nJ2N9j7W2uXMfktR
+ O7JRwY7/hbT/KVP8slTo44ywYmrroGzGqFUjVVU23dhJxYbyuaLkb1AnHxTo9Ws84muQNNioE
+ iTlN5dxhVQmBBHnsuKCQtNec6oQYrLwXztrZUP/ct7SQXz6H/dcZ9xW84MurkXJQmLPsgQpIJ
+ 3xl/BNPQT4ZKb+BopJAYA2FIE2eB4JPiY5GLrf+ix2phJ56E3hv7CPlJxijq6uTf9QDwTaBEl
+ UwVQTyoZvgHQ9kE4lZwoAmTxPx0gtfNQ2Tjx86T05ovow9Ox67OCpjDgV21jy5Hq41+O1srTv
+ /gZg4FNf0NKB0M7kQZe3brMoD5iXWFvIlhWHJXzqkiF1kQtwdIihhGFyQj7dnIQK5UEbtqMMe
+ ncrv9hDoiPuAzylE4j4R2XevRxvnX0toyO07IKMUOHAUAtjS3/Gnt8NbKGB6MuT+25uMI9mXG
+ AhVDD+RefTCnfvt0VW0261ufI3dg/TaIdupx1unmWEBASVAzh6WIGWndg==
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 09, 2022 at 07:42:26PM +0100, Rafael J. Wysocki wrote:
-> On Tue, Mar 8, 2022 at 7:51 PM Darren Hart
+On 15.06.22 at 20:18, Jarkko Sakkinen wrote:
+> On Fri, Jun 10, 2022 at 01:08:41PM +0200, LinoSanfilippo@gmx.de wrote:
+>> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>>
+>> According to the TPM Interface Specification (TIS) support for "stsVali=
+d"
+>> and "commandReady" interrupts is only optional.
+>> This has to be taken into account when handling the interrupts in funct=
+ions
+>> like wait_for_tpm_stat(). So query the set of supported interrupts and
+>> store it in a global variable so that it can be accessed later.
+>>
+>> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+>> ---
+>>  drivers/char/tpm/tpm_tis_core.c | 73 +++++++++++++++++----------------
+>>  drivers/char/tpm/tpm_tis_core.h |  1 +
+>>  2 files changed, 38 insertions(+), 36 deletions(-)
+>>
+>> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis=
+_core.c
+>> index 718525fcadc0..2f03fefa1706 100644
+>> --- a/drivers/char/tpm/tpm_tis_core.c
+>> +++ b/drivers/char/tpm/tpm_tis_core.c
+>> @@ -1007,8 +1007,39 @@ int tpm_tis_core_init(struct device *dev, struct=
+ tpm_tis_data *priv, int irq,
+>>  	if (rc < 0)
+>>  		goto out_err;
+>>
+>> -	intmask |=3D TPM_INTF_CMD_READY_INT | TPM_INTF_LOCALITY_CHANGE_INT |
+>> -		   TPM_INTF_DATA_AVAIL_INT | TPM_INTF_STS_VALID_INT;
+>> +	/* Figure out the capabilities */
+>> +	rc =3D tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfcaps)=
+;
+>> +	if (rc < 0)
+>> +		goto out_err;
+>> +
+>> +	dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
+>> +		intfcaps);
+>> +	if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
+>> +		dev_dbg(dev, "\tBurst Count Static\n");
+>> +	if (intfcaps & TPM_INTF_CMD_READY_INT) {
+>> +		intmask |=3D TPM_INTF_CMD_READY_INT;
+>> +		dev_dbg(dev, "\tCommand Ready Int Support\n");
+>> +	}
+>> +	if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
+>> +		dev_dbg(dev, "\tInterrupt Edge Falling\n");
+>> +	if (intfcaps & TPM_INTF_INT_EDGE_RISING)
+>> +		dev_dbg(dev, "\tInterrupt Edge Rising\n");
+>> +	if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
+>> +		dev_dbg(dev, "\tInterrupt Level Low\n");
+>> +	if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
+>> +		dev_dbg(dev, "\tInterrupt Level High\n");
+>> +	if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
+>> +		intmask |=3D TPM_INTF_LOCALITY_CHANGE_INT;
+>> +		dev_dbg(dev, "\tLocality Change Int Support\n");
+>> +	if (intfcaps & TPM_INTF_STS_VALID_INT) {
+>> +		intmask |=3D TPM_INTF_STS_VALID_INT;
+>> +		dev_dbg(dev, "\tSts Valid Int Support\n");
+>> +	}
+>> +	if (intfcaps & TPM_INTF_DATA_AVAIL_INT) {
+>> +		intmask |=3D TPM_INTF_DATA_AVAIL_INT;
+>> +		dev_dbg(dev, "\tData Avail Int Support\n");
+>> +	}
+>> +
+>>  	intmask &=3D ~TPM_GLOBAL_INT_ENABLE;
+>>
+>>  	rc =3D request_locality(chip, 0);
+>> @@ -1042,32 +1073,6 @@ int tpm_tis_core_init(struct device *dev, struct=
+ tpm_tis_data *priv, int irq,
+>>  		goto out_err;
+>>  	}
+>>
+>> -	/* Figure out the capabilities */
+>> -	rc =3D tpm_tis_read32(priv, TPM_INTF_CAPS(priv->locality), &intfcaps)=
+;
+>> -	if (rc < 0)
+>> -		goto out_err;
+>> -
+>> -	dev_dbg(dev, "TPM interface capabilities (0x%x):\n",
+>> -		intfcaps);
+>> -	if (intfcaps & TPM_INTF_BURST_COUNT_STATIC)
+>> -		dev_dbg(dev, "\tBurst Count Static\n");
+>> -	if (intfcaps & TPM_INTF_CMD_READY_INT)
+>> -		dev_dbg(dev, "\tCommand Ready Int Support\n");
+>> -	if (intfcaps & TPM_INTF_INT_EDGE_FALLING)
+>> -		dev_dbg(dev, "\tInterrupt Edge Falling\n");
+>> -	if (intfcaps & TPM_INTF_INT_EDGE_RISING)
+>> -		dev_dbg(dev, "\tInterrupt Edge Rising\n");
+>> -	if (intfcaps & TPM_INTF_INT_LEVEL_LOW)
+>> -		dev_dbg(dev, "\tInterrupt Level Low\n");
+>> -	if (intfcaps & TPM_INTF_INT_LEVEL_HIGH)
+>> -		dev_dbg(dev, "\tInterrupt Level High\n");
+>> -	if (intfcaps & TPM_INTF_LOCALITY_CHANGE_INT)
+>> -		dev_dbg(dev, "\tLocality Change Int Support\n");
+>> -	if (intfcaps & TPM_INTF_STS_VALID_INT)
+>> -		dev_dbg(dev, "\tSts Valid Int Support\n");
+>> -	if (intfcaps & TPM_INTF_DATA_AVAIL_INT)
+>> -		dev_dbg(dev, "\tData Avail Int Support\n");
+>> -
+>>  	/* INTERRUPT Setup */
+>>  	init_waitqueue_head(&priv->read_queue);
+>>  	init_waitqueue_head(&priv->int_queue);
+>> @@ -1098,7 +1103,9 @@ int tpm_tis_core_init(struct device *dev, struct =
+tpm_tis_data *priv, int irq,
+>>  		else
+>>  			tpm_tis_probe_irq(chip, intmask);
+>>
+>> -		if (!(chip->flags & TPM_CHIP_FLAG_IRQ)) {
+>> +		if (chip->flags & TPM_CHIP_FLAG_IRQ) {
+>> +			priv->irqs_in_use =3D intmask;
+>> +		} else {
+>>  			dev_err(&chip->dev, FW_BUG
+>>  					"TPM interrupt not working, polling instead\n");
+>>
+>> @@ -1145,13 +1152,7 @@ static void tpm_tis_reenable_interrupts(struct t=
+pm_chip *chip)
+>>  	if (rc < 0)
+>>  		goto out;
+>>
+>> -	rc =3D tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask)=
+;
+>> -	if (rc < 0)
+>> -		goto out;
+>> -
+>> -	intmask |=3D TPM_INTF_CMD_READY_INT
+>> -	    | TPM_INTF_LOCALITY_CHANGE_INT | TPM_INTF_DATA_AVAIL_INT
+>> -	    | TPM_INTF_STS_VALID_INT | TPM_GLOBAL_INT_ENABLE;
+>> +	intmask =3D priv->irqs_in_use | TPM_GLOBAL_INT_ENABLE;
+>>
+>>  	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+>>
+>> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis=
+_core.h
+>> index 0f29d0b68c3e..8e02faa4079d 100644
+>> --- a/drivers/char/tpm/tpm_tis_core.h
+>> +++ b/drivers/char/tpm/tpm_tis_core.h
+>> @@ -96,6 +96,7 @@ struct tpm_tis_data {
+>>  	u16 manufacturer_id;
+>>  	int locality;
+>>  	int irq;
+>> +	unsigned int irqs_in_use;
+>>  	unsigned long irqtest_flags;
+>>  	unsigned long flags;
+>>  	void __iomem *ilb_base_addr;
+>> --
+>> 2.36.1
+>>
+>
+> int_mask would be imho a better name.
+>
+> Can you squash this and the following patch? It's good to slice in
+> small patches but here I think it would make sense to tie the field
+> to use case, in order for it to make sense.
+>
 
-> Not that I have a particularly strong opinion here, but this looks
-> reasonable to me, so I've queued it up for 5.18.
-> 
-> APEI reviewers, please chime in if you disagree with the above.
+Sure, will do so.
 
-It looked reasonable to me when I skimmed it in March. But the
-reality check now needs cashing because some validation team
-here is complaining that they don't see any errors printed from
-their BERT tests. :-(
+Regards,
+Lino
 
-So I looked again. This test inside the loop seems bogus:
-
-	if (region_len < ACPI_BERT_PRINT_MAX_LEN) {
-
-because "region_len" isn't updated inside the loop. If it is too big
-then it will prevent Linux from printing any/all of the records in the
-BERT table (and the test could have been done before the loop).
-
-Maybe below patch is better? It avoids printing individual CPER
-records that are too large (checking estatus_len instead of region_len).
-
-I also added a limit to how many records to print (I randomly picked "5" as
-the limit ... the specific failing test only want to print one).
-
--Tony
-
-[I will write up a proper commit message and add a Signed-off-by if
-this looks to be a reasonable direction]
-
-diff --git a/drivers/acpi/apei/bert.c b/drivers/acpi/apei/bert.c
-index 598fd19b65fa..4e894a728c02 100644
---- a/drivers/acpi/apei/bert.c
-+++ b/drivers/acpi/apei/bert.c
-@@ -29,6 +29,8 @@
- 
- #undef pr_fmt
- #define pr_fmt(fmt) "BERT: " fmt
-+
-+#define ACPI_BERT_PRINT_MAX_RECORDS 5
- #define ACPI_BERT_PRINT_MAX_LEN 1024
- 
- static int bert_disable;
-@@ -39,6 +41,7 @@ static void __init bert_print_all(struct acpi_bert_region *region,
- 	struct acpi_hest_generic_status *estatus =
- 		(struct acpi_hest_generic_status *)region;
- 	int remain = region_len;
-+	int ncper = 0, skipped = 0;
- 	u32 estatus_len;
- 
- 	while (remain >= sizeof(struct acpi_bert_region)) {
-@@ -46,24 +49,23 @@ static void __init bert_print_all(struct acpi_bert_region *region,
- 		if (remain < estatus_len) {
- 			pr_err(FW_BUG "Truncated status block (length: %u).\n",
- 			       estatus_len);
--			return;
-+			break;
- 		}
- 
- 		/* No more error records. */
- 		if (!estatus->block_status)
--			return;
-+			break;
- 
- 		if (cper_estatus_check(estatus)) {
- 			pr_err(FW_BUG "Invalid error record.\n");
--			return;
-+			break;
- 		}
- 
- 		pr_info_once("Error records from previous boot:\n");
--		if (region_len < ACPI_BERT_PRINT_MAX_LEN)
-+		if (ncper++ < ACPI_BERT_PRINT_MAX_RECORDS && estatus_len < ACPI_BERT_PRINT_MAX_LEN)
- 			cper_estatus_print(KERN_INFO HW_ERR, estatus);
- 		else
--			pr_info_once("Max print length exceeded, table data is available at:\n"
--				     "/sys/firmware/acpi/tables/data/BERT");
-+			skipped++;
- 
- 		/*
- 		 * Because the boot error source is "one-time polled" type,
-@@ -75,6 +77,9 @@ static void __init bert_print_all(struct acpi_bert_region *region,
- 		estatus = (void *)estatus + estatus_len;
- 		remain -= estatus_len;
- 	}
-+	if (skipped)
-+		pr_info("Skipped %d error records, full table data is available at:\n"
-+			"/sys/firmware/acpi/tables/data/BERT", skipped);
- }
- 
- static int __init setup_bert_disable(char *str)

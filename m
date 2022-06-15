@@ -2,369 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CCB54BFE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D6F654BFED
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 04:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345772AbiFOC6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 22:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45480 "EHLO
+        id S1345822AbiFOC75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 22:59:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237203AbiFOC6q (ORCPT
+        with ESMTP id S233181AbiFOC7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 22:58:46 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639B846164;
-        Tue, 14 Jun 2022 19:58:44 -0700 (PDT)
-X-UUID: bc846e8ad3a949549d4a55b3584c5b25-20220615
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.6,REQID:48c969ea-f9ce-42a5-8d7e-419e3c7a0c34,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:b14ad71,CLOUDID:32a73ff6-e099-41ba-a32c-13b8bfe63214,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,QS:nil,BEC:nil,COL:0
-X-UUID: bc846e8ad3a949549d4a55b3584c5b25-20220615
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
-        (envelope-from <ck.hu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 611290286; Wed, 15 Jun 2022 10:58:39 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Wed, 15 Jun 2022 10:58:37 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 15 Jun 2022 10:58:37 +0800
-Message-ID: <d5416a2f2a655f6574b17597fdc22615fe2fc22a.camel@mediatek.com>
-Subject: Re: [PATCH v11 05/10] drm/mediatek: Add MT8195 Embedded DisplayPort
- driver
-From:   CK Hu <ck.hu@mediatek.com>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>, <chunkuang.hu@kernel.org>,
-        <p.zabel@pengutronix.de>, <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <mripard@kernel.org>,
-        <tzimmermann@suse.de>, <matthias.bgg@gmail.com>, <deller@gmx.de>,
-        <airlied@linux.ie>
-CC:     <msp@baylibre.com>, <granquet@baylibre.com>,
-        <jitao.shi@mediatek.com>, <wenst@chromium.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-fbdev@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Wed, 15 Jun 2022 10:58:37 +0800
-In-Reply-To: <20220610105522.13449-6-rex-bc.chen@mediatek.com>
-References: <20220610105522.13449-1-rex-bc.chen@mediatek.com>
-         <20220610105522.13449-6-rex-bc.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 14 Jun 2022 22:59:54 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576E746675;
+        Tue, 14 Jun 2022 19:59:53 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id l192so5692099qke.13;
+        Tue, 14 Jun 2022 19:59:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=C3J+GQznuUXQiI93tyU1L6VthWT10VpFAq9aJ2OnWJU=;
+        b=VxJHgVuTjo2QD8B+BMaw/XmEu/z4sSdLVz7HNg6xmOpYjwn3pGdVQI7lQCwRks73/I
+         1KjHe0NB2gRsWl4+hPX4OhKVJyktyBMLnd2LT8juToOmEO5i3rvmtB+++fza7ToBxrQt
+         5NeeJ5cakoQNoZB12wMYgYTCIU19/FDw+LH9tWV9R5EIoFyFTsq55nWj2KBAIR3OI5H+
+         79r9rrjnDPyu+IV8GJFsAIqE0Y6pADHlW6V4fwV5Vqk202mKvPwPgl/GwMyZE34t3EmT
+         QBZP0ntWkjGNdPep+XEH5HuL1rvtQ2KtDtr4AaudCmLcNdAcis2BQv5b5fLr4f7hSY1U
+         NrGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C3J+GQznuUXQiI93tyU1L6VthWT10VpFAq9aJ2OnWJU=;
+        b=MWNPOOz+GWlDIIBFITVJYDMPrYJ7YU6Hc90Kt/3t84QKN9EhLEGmN5k42zTwhPkj9h
+         BpYESyO8TC7R0wJPLKGpuU8E+1uH1iJQG7jSSo0fSTYGPYhtyM15hfHVFhNC47t404QK
+         af/gSiWZEEjy6kt3iC6MkN97IC3c2Bz5p5FIwQROmxi4XlVeVaDkTOx77pLuT0u81c+E
+         kj+b/xh6HnIlyyEdv4dcCMY1yKARItc2GUI4H934l80ogASZvlIW0Ft+es0FI6XkddSu
+         gjiSw3ebiI3sbi0T3DFpFnmO8PZ6r0O4iU6i5mV5uljOQHNaJ2QLsOQWuz3srZYtE3RV
+         8vuA==
+X-Gm-Message-State: AOAM530+BLm9DP8VkYsOGxy77lniAt19XfBGQmyAdKtULGhTFDG5Goqw
+        98Q6Db9woz2s9qifuiWkeLQ=
+X-Google-Smtp-Source: ABdhPJzU8UAXP0IkfOy4H9sUURlLpB9LpqUnFHG7i620UZ67oCnA8AaZDn3plz6a+1qNFEgF+ryr8g==
+X-Received: by 2002:a05:620a:2910:b0:6a6:bb03:ade0 with SMTP id m16-20020a05620a291000b006a6bb03ade0mr6544520qkp.655.1655261992417;
+        Tue, 14 Jun 2022 19:59:52 -0700 (PDT)
+Received: from localhost ([2601:4c1:c100:1230:6d39:b768:5789:ec2a])
+        by smtp.gmail.com with ESMTPSA id t16-20020ac87390000000b00304edcfa109sm8239554qtp.33.2022.06.14.19.59.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 19:59:52 -0700 (PDT)
+Date:   Tue, 14 Jun 2022 19:59:51 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matt Turner <mattst88@gmail.com>,
+        Brian Cain <bcain@quicinc.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
+        Tony Luck <tony.luck@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-alpha@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2 1/6] ia64, processor: fix -Wincompatible-pointer-types
+ in ia64_get_irr()
+Message-ID: <YqlLJ2IHAIn4kv8Z@yury-laptop>
+References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
+ <20220610113427.908751-2-alexandr.lobakin@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220610113427.908751-2-alexandr.lobakin@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Bo-Chen:
+On Fri, Jun 10, 2022 at 01:34:22PM +0200, Alexander Lobakin wrote:
+> test_bit(), as any other bitmap op, takes `unsigned long *` as a
+> second argument (pointer to the actual bitmap), as any bitmap
+> itself is an array of unsigned longs. However, the ia64_get_irr()
+> code passes a ref to `u64` as a second argument.
+> This works with the ia64 bitops implementation due to that they
+> have `void *` as the second argument and then cast it later on.
+> This works with the bitmap API itself due to that `unsigned long`
+> has the same size on ia64 as `u64` (`unsigned long long`), but
+> from the compiler PoV those two are different.
+> Define @irr as `unsigned long` to fix that. That implies no
+> functional changes. Has been hidden for 16 years!
+> 
+> Fixes: a58786917ce2 ("[IA64] avoid broken SAL_CACHE_FLUSH implementations")
+> Cc: stable@vger.kernel.org # 2.6.16+
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
 
-On Fri, 2022-06-10 at 18:55 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
-> 
-> This patch adds a embedded displayport driver for the MediaTek mt8195
-> SoC.
-> 
-> It supports the MT8195, the embedded DisplayPort units. It offers
-> DisplayPort 1.4 with up to 4 lanes.
-> 
-> The driver creates a child device for the phy. The child device will
-> never exist without the parent being active. As they are sharing a
-> register range, the parent passes a regmap pointer to the child so
-> that
-> both can work with the same register range. The phy driver sets
-> device
-> data that is read by the parent to get the phy device that can be
-> used
-> to control the phy properties.
-> 
-> This driver is based on an initial version by
-> Jitao shi <jitao.shi@mediatek.com>
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> [Bo-Chen: Cleanup the drivers and modify comments from reviewers]
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+Reviewed-by: Yury Norov <yury.norov@gmail.com>
+
 > ---
-
-[snip]
-
-> +
-> +static int mtk_dp_train_flow(struct mtk_dp *mtk_dp, u8
-> target_link_rate,
-> +			     u8 target_lane_count)
-> +{
-> +	u8 lane_adjust[2] = {};
-> +	bool pass_tps1 = false;
-> +	bool pass_tps2_3 = false;
-> +	int train_retries;
-> +	int status_control;
-> +	int iteration_count;
-> +	int ret;
-> +	u8 prev_lane_adjust;
-> +
-> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_LINK_BW_SET,
-> target_link_rate);
-> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_LANE_COUNT_SET,
-> +			   target_lane_count |
-> DP_LANE_COUNT_ENHANCED_FRAME_EN);
-> +
-> +	if (mtk_dp->train_info.sink_ssc)
-> +		drm_dp_dpcd_writeb(&mtk_dp->aux, DP_DOWNSPREAD_CTRL,
-> +				   DP_SPREAD_AMP_0_5);
-> +
-> +	train_retries = 0;
-> +	status_control = 0;
-> +	iteration_count = 1;
-> +	prev_lane_adjust = 0xFF;
-> +
-> +	mtk_dp_set_lanes(mtk_dp, target_lane_count / 2);
-> +	ret = mtk_dp_phy_configure(mtk_dp, target_link_rate,
-> target_lane_count);
-> +	if (ret)
-> +		return -EINVAL;
-> +
-> +	dev_dbg(mtk_dp->dev,
-> +		"Link train target_link_rate = 0x%x, target_lane_count
-> = 0x%x\n",
-> +		target_link_rate, target_lane_count);
-> +
-> +	do {
-> +		train_retries++;
-> +		if (!mtk_dp->train_info.cable_plugged_in ||
-> +		    mtk_dp->train_info.irq_sta.hpd_disconnect) {
-
-In mtk_dp_hpd_isr_handler(), train_info.irq_sta.hpd_disconnect would
-finally be set to false, so you need not to check it here. So remove it
-here.
-
-> +			return -ENODEV;
-> +		}
-> +
-> +		if (mtk_dp->train_state < MTK_DP_TRAIN_STATE_TRAINING)
-> +			return -EAGAIN;
-> +
-> +		if (!pass_tps1) {
-> +			ret = mtk_dp_train_tps_1(mtk_dp,
-> target_lane_count,
-> +						 &iteration_count,
-> lane_adjust,
-> +						 &status_control,
-> +						 &prev_lane_adjust);
-> +			if (!ret) {
-> +				pass_tps1 = true;
-> +				train_retries = 0;
-> +			} else if (ret == -EINVAL) {
-> +				break;
-> +			}
-> +		} else {
-> +			ret = mtk_dp_train_tps_2_3(mtk_dp,
-> target_link_rate,
-> +						   target_lane_count,
-> +						   &iteration_count,
-> +						   lane_adjust,
-> &status_control,
-> +						   &prev_lane_adjust);
-> +			if (!ret) {
-> +				pass_tps2_3 = true;
-> +				break;
-> +			} else if (ret == -EINVAL) {
-> +				break;
-> +			}
-> +		}
-> +
-> +		drm_dp_dpcd_read(&mtk_dp->aux,
-> DP_ADJUST_REQUEST_LANE0_1,
-> +				 lane_adjust, sizeof(lane_adjust));
-> +		mtk_dp_train_update_swing_pre(mtk_dp,
-> target_lane_count,
-> +					      lane_adjust);
-> +	} while (train_retries < MTK_DP_TRAIN_RETRY_LIMIT &&
-> +		 iteration_count < MTK_DP_TRAIN_MAX_ITERATIONS);
-> +
-> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_TRAINING_PATTERN_SET,
-> +			   DP_TRAINING_PATTERN_DISABLE);
-> +	ret = mtk_dp_train_set_pattern(mtk_dp, 0);
-> +	if (ret)
-> +		return -EINVAL;
-> +
-> +	if (!pass_tps2_3)
-> +		return -ETIMEDOUT;
-> +
-> +	mtk_dp->train_info.link_rate = target_link_rate;
-> +	mtk_dp->train_info.lane_count = target_lane_count;
-> +
-> +	mtk_dp_training_set_scramble(mtk_dp, true);
-> +
-> +	drm_dp_dpcd_writeb(&mtk_dp->aux, DP_LANE_COUNT_SET,
-> +			   target_lane_count |
-> +				   DP_LANE_COUNT_ENHANCED_FRAME_EN);
-> +	mtk_dp_set_enhanced_frame_mode(mtk_dp, true);
-> +
-> +	return ret;
-> +}
-> +
-
-[snip]
-
-> +
-> +/*
-> + * We need to handle HPD signal in eDP even though eDP is a always
-> connected
-> + * device. Besides connected status, there is another feature for
-> HPD signal -
-> + * HPD pulse: it presents an IRQ from sink devices to source devices
-> (Refer to
-> + * 5.1.4 of DP1.4 spec).
-> + */
-> +static irqreturn_t mtk_dp_hpd_isr_handler(struct mtk_dp *mtk_dp)
-> +{
-> +	bool connected;
-> +	u32 irq_status = mtk_dp_swirq_get_clear(mtk_dp) |
-> +			 mtk_dp_hwirq_get_clear(mtk_dp);
-> +	struct mtk_dp_train_info *train_info = &mtk_dp->train_info;
-> +
-> +	if (irq_status & MTK_DP_HPD_INTERRUPT)
-> +		train_info->irq_sta.hpd_inerrupt = true;
-> +	if (irq_status & MTK_DP_HPD_CONNECT)
-> +		train_info->irq_sta.hpd_connect = true;
-> +	if (irq_status & MTK_DP_HPD_DISCONNECT)
-> +		train_info->irq_sta.hpd_disconnect = true;
-> +
-
-train_info->irq_sta.hpd_connect is used only in this function, so let
-hpd_connect to be local variable.
-
-> +	if (!irq_status)
-> +		return IRQ_HANDLED;
-> +
-> +	connected = mtk_dp_plug_state(mtk_dp);
-> +	if (connected || !train_info->cable_plugged_in)
-> +		train_info->irq_sta.hpd_disconnect  = false;
-> +	else if (!connected || train_info->cable_plugged_in)
-> +		train_info->irq_sta.hpd_connect = false;
-> +
-> +	if (!(train_info->irq_sta.hpd_connect ||
-> +	      train_info->irq_sta.hpd_disconnect))
-> +		return IRQ_WAKE_THREAD;
-> +
-> +	if (train_info->irq_sta.hpd_connect) {
-> +		train_info->irq_sta.hpd_connect = false;
-> +		train_info->cable_plugged_in = true;
-> +	} else {
-> +		train_info->irq_sta.hpd_disconnect = false;
-> +		train_info->cable_plugged_in = false;
-> +		mtk_dp->train_state = MTK_DP_TRAIN_STATE_TRAINING;
-> +	}
-> +	train_info->cable_state_change = true;
-> +
-> +	return IRQ_WAKE_THREAD;
-> +}
-> +
-
-[snip]
-
-> +
-> +static ssize_t mtk_dp_aux_transfer(struct drm_dp_aux *mtk_aux,
-> +				   struct drm_dp_aux_msg *msg)
-> +{
-> +	struct mtk_dp *mtk_dp;
-> +	bool is_read;
-> +	u8 request;
-> +	size_t accessed_bytes = 0;
-> +	int ret = 0;
-> +
-> +	mtk_dp = container_of(mtk_aux, struct mtk_dp, aux);
-> +
-> +	if (!mtk_dp->train_info.cable_plugged_in ||
-> +	    mtk_dp->train_info.irq_sta.hpd_disconnect) {
-
-In mtk_dp_hpd_isr_handler(), train_info.irq_sta.hpd_disconnect would
-finally be set to false, so you need not to check it here. So remove it
-here.
-
-Regards,
-CK
-
-> +		ret = -EAGAIN;
-> +		goto err;
-> +	}
-> +
-> +	switch (msg->request) {
-> +	case DP_AUX_I2C_MOT:
-> +	case DP_AUX_I2C_WRITE:
-> +	case DP_AUX_NATIVE_WRITE:
-> +	case DP_AUX_I2C_WRITE_STATUS_UPDATE:
-> +	case DP_AUX_I2C_WRITE_STATUS_UPDATE | DP_AUX_I2C_MOT:
-> +		request = msg->request &
-> ~DP_AUX_I2C_WRITE_STATUS_UPDATE;
-> +		is_read = false;
-> +		break;
-> +	case DP_AUX_I2C_READ:
-> +	case DP_AUX_NATIVE_READ:
-> +	case DP_AUX_I2C_READ | DP_AUX_I2C_MOT:
-> +		request = msg->request;
-> +		is_read = true;
-> +		break;
-> +	default:
-> +		drm_err(mtk_aux->drm_dev, "invalid aux cmd = %d\n",
-> +			msg->request);
-> +		ret = -EINVAL;
-> +		goto err;
-> +	}
-> +
-> +	if (msg->size == 0) {
-> +		ret = mtk_dp_aux_do_transfer(mtk_dp, is_read, request,
-> +					     msg->address +
-> accessed_bytes,
-> +					     msg->buffer +
-> accessed_bytes, 0);
-> +	} else {
-> +		while (accessed_bytes < msg->size) {
-> +			size_t to_access =
-> +				min_t(size_t, DP_AUX_MAX_PAYLOAD_BYTES,
-> +				      msg->size - accessed_bytes);
-> +
-> +			ret = mtk_dp_aux_do_transfer(mtk_dp, is_read,
-> request,
-> +						     msg->address +
-> accessed_bytes,
-> +						     msg->buffer +
-> accessed_bytes,
-> +						     to_access);
-> +
-> +			if (ret) {
-> +				drm_info(mtk_dp->drm_dev,
-> +					 "Failed to do AUX transfer:
-> %d\n", ret);
-> +				break;
-> +			}
-> +			accessed_bytes += to_access;
-> +		}
-> +	}
-> +err:
-> +	if (ret) {
-> +		msg->reply = DP_AUX_NATIVE_REPLY_NACK |
-> DP_AUX_I2C_REPLY_NACK;
-> +		return ret;
-> +	}
-> +
-> +	msg->reply = DP_AUX_NATIVE_REPLY_ACK | DP_AUX_I2C_REPLY_ACK;
-> +	return msg->size;
-> +}
-> +
-
+>  arch/ia64/include/asm/processor.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/ia64/include/asm/processor.h b/arch/ia64/include/asm/processor.h
+> index 7cbce290f4e5..757c2f6d8d4b 100644
+> --- a/arch/ia64/include/asm/processor.h
+> +++ b/arch/ia64/include/asm/processor.h
+> @@ -538,7 +538,7 @@ ia64_get_irr(unsigned int vector)
+>  {
+>  	unsigned int reg = vector / 64;
+>  	unsigned int bit = vector % 64;
+> -	u64 irr;
+> +	unsigned long irr;
+>  
+>  	switch (reg) {
+>  	case 0: irr = ia64_getreg(_IA64_REG_CR_IRR0); break;
+> -- 
+> 2.36.1

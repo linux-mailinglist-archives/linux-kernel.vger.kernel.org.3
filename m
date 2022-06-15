@@ -2,120 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B92B54CD7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:52:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77CF254CD8C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243579AbiFOPw2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 15 Jun 2022 11:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46572 "EHLO
+        id S243755AbiFOPxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiFOPwT (ORCPT
+        with ESMTP id S237952AbiFOPxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:52:19 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06F07326F7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:52:16 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-152-_cqVfPGpOlGHZ7eUZ755_g-1; Wed, 15 Jun 2022 16:52:14 +0100
-X-MC-Unique: _cqVfPGpOlGHZ7eUZ755_g-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.36; Wed, 15 Jun 2022 16:52:11 +0100
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.036; Wed, 15 Jun 2022 16:52:11 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Alexander Lobakin' <alexandr.lobakin@intel.com>,
-        Yury Norov <yury.norov@gmail.com>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matt Turner <mattst88@gmail.com>,
-        Brian Cain <bcain@quicinc.com>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Kees Cook <keescook@chromium.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Marco Elver <elver@google.com>, Borislav Petkov <bp@suse.de>,
-        Tony Luck <tony.luck@intel.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 4/6] bitops: define const_*() versions of the
- non-atomics
-Thread-Topic: [PATCH v2 4/6] bitops: define const_*() versions of the
- non-atomics
-Thread-Index: AQHYgL/NSGjbw1zE9ky1U7EvBf8PSa1QnWmQ
-Date:   Wed, 15 Jun 2022 15:52:11 +0000
-Message-ID: <09c5a168af144f0f917f5f2f453e309a@AcuMS.aculab.com>
-References: <20220610113427.908751-1-alexandr.lobakin@intel.com>
- <20220610113427.908751-5-alexandr.lobakin@intel.com>
- <YqlKpwjQ4Hu+Lr8u@yury-laptop>
- <20220615135506.1264880-1-alexandr.lobakin@intel.com>
-In-Reply-To: <20220615135506.1264880-1-alexandr.lobakin@intel.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 15 Jun 2022 11:53:42 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A721D306;
+        Wed, 15 Jun 2022 08:53:40 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id fu3so24090072ejc.7;
+        Wed, 15 Jun 2022 08:53:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eDvK3aBrt95N9QEgQgB/5GPv5tA2EGWou9Hqc2Iu33o=;
+        b=qiGjVR0XEyraV6oGuMUGSEIQLVYoV/LyV8Bfjnx+H1BSCzN4RJIdPI67r33glFbZO3
+         jLet8kq9DZ8ic9339Wsx8huE6yMWk7a8nZqwAVEUZ8p4WeXFI5GdqdthPdhDzEtiqf7h
+         2AexV5b9ntWXG3KnrLPw++rDTtTet0JhGK2X4C+hR5Ex54PgDevowDp5bmJKXMzT3UT5
+         T8tC26xldPIRSih1J7OEs8kBD3MMe0FfiwT/D6OU4xVtQIW8tB015RsqnKmISfJjrYDP
+         3M685qpT+1GYpIJRdWOJ1sn+IWniql3UaQOEMUBl3U30HgocaLNsI8XfCcumkr0A6dS1
+         sCSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eDvK3aBrt95N9QEgQgB/5GPv5tA2EGWou9Hqc2Iu33o=;
+        b=cfS6KAUhR7G06+vIrF8lygzCsoz6Wh0peklX9wpSFpqQv2LhAL56Gbula/TX2PlN72
+         nkyp5o2UWcEoouWNo8zolNpI+lrn7UmFVg1PC9EIj8ezp1PEgAhIpsEFlsSk+0m4RoXD
+         /PGW0VI0j8V0/I6lHXuroQrdI2nlA2ZP1VoqL8OtHgLLzf8A/Rij9kCHi6pFOnA+jyZG
+         Gk10Rpo1zLz4RcdLBhbAUP2KaPvM5s/8SSdWz7xOb8gzj1HZPigGlTtZqizvez9kNFtU
+         tnlvvMJgpIWKi0Zksk0Iy/CzK6pZnw7DHmzxdNXYRhgz2D5xplxi5D10C1Clrxxv2/Lv
+         akPg==
+X-Gm-Message-State: AJIora+EPqhYdvDxi43Q5LTzHmWrOw7eN96+P8cKT73bh6WqvRRgkbRy
+        nV9R+qQ0aIW+xlwhG9HcuUyqYO/kHcwK0CxywZU=
+X-Google-Smtp-Source: AGRyM1u11HA4kMYRmtww2DDb3KC8BU9ZciwZJOd0e+NaqGGtUl2P3dlnAif/o4EVMYlYy4x2+WmSLC6Euag/NRehkz4=
+X-Received: by 2002:a17:906:434f:b0:711:eb76:c320 with SMTP id
+ z15-20020a170906434f00b00711eb76c320mr437434ejm.636.1655308418875; Wed, 15
+ Jun 2022 08:53:38 -0700 (PDT)
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220615154918.521687-1-jjhiblot@traphandler.com> <20220615154918.521687-2-jjhiblot@traphandler.com>
+In-Reply-To: <20220615154918.521687-2-jjhiblot@traphandler.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 15 Jun 2022 17:52:54 +0200
+Message-ID: <CAHp75VfR+mpMp6Q+30dvB=-RMdpdk1V-xsMqCb7=6XW0aT6grQ@mail.gmail.com>
+Subject: Re: [PATCH 1/4] leds: class: simplify the implementation of devm_of_led_get()
+To:     Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        johan+linaro@kernel.org,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linux LED Subsystem <linux-leds@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin
-> Sent: 15 June 2022 14:55
+On Wed, Jun 15, 2022 at 5:49 PM Jean-Jacques Hiblot
+<jjhiblot@traphandler.com> wrote:
+>
+> Use the devm_add_action_or_reset() helper.
+
 ...
-> > > +/**
-> > > + * const_test_bit - Determine whether a bit is set
-> > > + * @nr: bit number to test
-> > > + * @addr: Address to start counting from
-> > > + *
-> > > + * A version of generic_test_bit() which discards the `volatile` qualifier to
-> > > + * allow the compiler to optimize code harder. Non-atomic and to be used only
-> > > + * for testing compile-time constants, e.g. from the corresponding macro, or
-> > > + * when you really know what you are doing.
-> >
-> > Not sure I understand the last sentence... Can you please rephrase?
-> 
-> I basically want to tell that there potentinally might be cases for
-> using those outside of the actual macros from 6/6. But it might be
-> redundant at all to mention this.
 
-I bet that is a function has:
-	long bitmask;
-	...
-	if (test_bit(&bitmask, 12))
-then the 'volatile' forces the compiler to actually write the
-value out to memory (stack) instead of doing a register op.
+> @@ -20,8 +20,10 @@
+>  #include <linux/timer.h>
+>  #include <uapi/linux/uleds.h>
+>  #include <linux/of.h>
+> +#include <linux/acpi.h>
+>  #include "leds.h"
+>
+> +
+>  static struct class *leds_class;
+>
+>  static ssize_t brightness_show(struct device *dev,
 
-OTOH such code should be using &.
+Stray changes.
 
-	David
+...
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+> +       led_put((struct led_classdev *) cdev);
 
+Casting from/to void * is redundant.
+
+-- 
+With Best Regards,
+Andy Shevchenko

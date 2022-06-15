@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 823F954CFE1
+	by mail.lfdr.de (Postfix) with ESMTP id 39C2354CFE0
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357241AbiFORaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
+        id S1356772AbiFORaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242396AbiFOR3i (ORCPT
+        with ESMTP id S1349688AbiFOR3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:29:38 -0400
+        Wed, 15 Jun 2022 13:29:40 -0400
 Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A8E34BB3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:29:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7DA3FBFC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:29:39 -0700 (PDT)
 Received: by mail-pj1-x1029.google.com with SMTP id k5-20020a17090a404500b001e8875e6242so2670938pjg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:29:38 -0700 (PDT)
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:29:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=WrF836BhqYoAAQYNFMJen23eOl+F6zz51fEhzRe3ck4=;
-        b=jNiMa1EClCZmNoxHFwK9zkQt71WNj8eQXx1AtJzkARohOhJSxbNe9g9wKpdtMdMiFM
-         JUylBaxwrEsHZe9FDtW/ty8pZHqkoiXrCVnIf4XeVJdT7glhN+11Co4GX3RF1sUTcydf
-         V3HfSNZro9f+AcdFfuHK+L4B6g8H28LVBK/7P7o1JiWQR01uO+wBiMM/9HiCPM6SAMQx
-         d2a2Sz0T524tVIKdzfkdECmzkPJH8aXQXrXRWCyPKVJHg489kISeCmxjam/lwp9uY3TL
-         eupQy8+iv/QTL3N+W5Rklt4NRIJ/YA5TCnZRDnOfKJw5G4UK28mGTOs/faVfewTqkG2c
-         Oztw==
+        bh=0N0t9howdLfNntzOrT/sFPKbK6rgBL9c7HpeSr6Z4As=;
+        b=plkDnRo/ngAq2p1xXo+l6xL9fBjXBke5So1zG5HFSb5vJX4ot9uGcb0KUAHR+Ph+Ml
+         x9+sINiMQ0/2ZvfachaHAvl/wBQtjQzst7n7Vt7qQqMPyg5Ee6u3sIzzCasOKvESnXT/
+         yTC9rYAiCSHRW7KU07yE8dExF1o7McjKNNaRrAzG+Q69Jmj0VAlO1g8uYNrZR46TLcKI
+         TvEO/Z/yoWxuwYqMLnkn/ak0Ki9A7ZX4XqFuqOcLKWBLmVSiySfVp4lwB2GAUXZEpq0r
+         GLeKiHv1Ss/ZouDvybXXN6J2W+EFzaOMEa6Zo4xe7J+R2VeFBAILAsZ8oBsF9mSScg4H
+         P+lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=WrF836BhqYoAAQYNFMJen23eOl+F6zz51fEhzRe3ck4=;
-        b=6GYxj8c4efxyDZuscsY6CuorXXB84ETMOEBLdVV1kEfn5THX4LIApMSmxSldSNHzCL
-         jcDl5nRr7TtdklXetfpymE9/Q8hTBz3/Wj6/FoBI2asWQCRpgVQyJc8Naa6jbnfyQ6q6
-         S6VYnJkRkciARry/XywJCwX+ZA0YPSGguv6XRPwm/24zKwUwbzP9AR+oSbT+tpZMr7lo
-         YwNJXVZbhqxqxPKhCjOttyEScMvqJnFJ99z5bHduf147yh7JcGZrwuYZnWoXh7V4vRic
-         09o71ybsIq4PwuYHyt6RVDOgkCZWAR3DQMZsbt/fZpiyYepFes8+Nek3fZ7dwhrrDLWX
-         udCg==
-X-Gm-Message-State: AJIora8EZIxG179JGHE+y54cQzOYOGZZU7sdFmx8xeRM5pqQho6YwGRW
-        ItLWJHvCGzUjaaXeq9E99Z8=
-X-Google-Smtp-Source: AGRyM1vRDq5qAc7St9qdLuZS57haehWUHZEdEiVLV8l2rTbRMydreLZ77f4O354sxk37OOZMcG9tJw==
-X-Received: by 2002:a17:90b:4c4c:b0:1e8:6f9a:b642 with SMTP id np12-20020a17090b4c4c00b001e86f9ab642mr11434299pjb.21.1655314177666;
-        Wed, 15 Jun 2022 10:29:37 -0700 (PDT)
+        bh=0N0t9howdLfNntzOrT/sFPKbK6rgBL9c7HpeSr6Z4As=;
+        b=A421PQUk+H119AbQZ/SphmghQqo4YZ9LUkqn63AKi6aI3+/1m94PFJoASk1opdFsaa
+         ZXJjg0Yt1Q1T6J9OiublJ9JPpi806pH9RmNuiwQoOT6/zsnm1ZidI39o53Q62NnD3qzJ
+         xhmnPTBlPbUVGlI7RYjv9OTwdtdvGjWI5O+noojn67kwIe0XNYb0OuokVie0ih7MA7hi
+         lQjDtI7ddhHpXaW+FivjWFyh+BH8fPNYmp4382Kn/f47xE5Wt/+18M1ZhE7AONmLohu8
+         VB2IUewJczuLuJ4G1P5WOSAKSeeT0zgiSblx2uvQvHJLxPYbpFx1Hu4NhOVW3HNnPRdd
+         M+Yw==
+X-Gm-Message-State: AJIora+1eGwN/4vavtadjFyVdYsuF8Y47yRJqREJH0hY0g+rAS4Z3YeD
+        hZWBohU6kagbo4BqducX+mg=
+X-Google-Smtp-Source: AGRyM1uHc6Ah3zHBOP8Sn5+jQVN7TbPYQZ5uzgq4ONWj/a98/ypZEEKfD2jSWquQYwKo4HLyFsAIDA==
+X-Received: by 2002:a17:90b:304:b0:1e3:4489:193c with SMTP id ay4-20020a17090b030400b001e34489193cmr11441651pjb.78.1655314179550;
+        Wed, 15 Jun 2022 10:29:39 -0700 (PDT)
 Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
-        by smtp.gmail.com with ESMTPSA id w14-20020a1709029a8e00b001676f87473fsm9552244plp.302.2022.06.15.10.29.36
+        by smtp.gmail.com with ESMTPSA id w14-20020a1709029a8e00b001676f87473fsm9552244plp.302.2022.06.15.10.29.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 10:29:37 -0700 (PDT)
+        Wed, 15 Jun 2022 10:29:38 -0700 (PDT)
 From:   Yang Shi <shy828301@gmail.com>
 To:     vbabka@suse.cz, kirill.shutemov@linux.intel.com,
         willy@infradead.org, zokeefe@google.com, linmiaohe@huawei.com,
         akpm@linux-foundation.org
 Cc:     shy828301@gmail.com, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [v4 PATCH 3/7] mm: khugepaged: better comments for anon vma check in hugepage_vma_revalidate
-Date:   Wed, 15 Jun 2022 10:29:22 -0700
-Message-Id: <20220615172926.546974-4-shy828301@gmail.com>
+Subject: [v4 PATCH 4/7] mm: thp: kill transparent_hugepage_active()
+Date:   Wed, 15 Jun 2022 10:29:23 -0700
+Message-Id: <20220615172926.546974-5-shy828301@gmail.com>
 X-Mailer: git-send-email 2.26.3
 In-Reply-To: <20220615172926.546974-1-shy828301@gmail.com>
 References: <20220615172926.546974-1-shy828301@gmail.com>
@@ -72,37 +72,235 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The hugepage_vma_revalidate() needs to check if the vma is still
-anonymous vma or not since the address may be unmapped then remapped to
-file before khugepaged reaquired the mmap_lock.
+The transparent_hugepage_active() was introduced to show THP eligibility
+bit in smaps in proc, smaps is the only user.  But it actually does the
+similar check as hugepage_vma_check() which is used by khugepaged.  We
+definitely don't have to maintain two similar checks, so kill
+transparent_hugepage_active().
 
-The old comment is not quite helpful, elaborate this with better
-comment.
+This patch also fixed the wrong behavior for VM_NO_KHUGEPAGED vmas.
+
+Also move hugepage_vma_check() to huge_memory.c and huge_mm.h since it
+is not only for khugepaged anymore.
 
 Signed-off-by: Yang Shi <shy828301@gmail.com>
 ---
- mm/khugepaged.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ fs/proc/task_mmu.c         |  2 +-
+ include/linux/huge_mm.h    | 11 ++++++++-
+ include/linux/khugepaged.h |  2 --
+ mm/huge_memory.c           | 50 +++++++++++++++++++++++++++++++-------
+ mm/khugepaged.c            | 48 +++---------------------------------
+ 5 files changed, 56 insertions(+), 57 deletions(-)
 
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 37ccb5c9f4f8..39a40ec181e7 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -863,7 +863,7 @@ static int show_smap(struct seq_file *m, void *v)
+ 	__show_smap(m, &mss, false);
+ 
+ 	seq_printf(m, "THPeligible:    %d\n",
+-		   transparent_hugepage_active(vma));
++		   hugepage_vma_check(vma, vma->vm_flags, true));
+ 
+ 	if (arch_pkeys_enabled())
+ 		seq_printf(m, "ProtectionKey:  %8u\n", vma_pkey(vma));
+diff --git a/include/linux/huge_mm.h b/include/linux/huge_mm.h
+index 8a5a8bfce0f5..aeb13119ee28 100644
+--- a/include/linux/huge_mm.h
++++ b/include/linux/huge_mm.h
+@@ -202,7 +202,9 @@ static inline bool file_thp_enabled(struct vm_area_struct *vma)
+ 	       !inode_is_open_for_write(inode) && S_ISREG(inode->i_mode);
+ }
+ 
+-bool transparent_hugepage_active(struct vm_area_struct *vma);
++bool hugepage_vma_check(struct vm_area_struct *vma,
++			unsigned long vm_flags,
++			bool smaps);
+ 
+ #define transparent_hugepage_use_zero_page()				\
+ 	(transparent_hugepage_flags &					\
+@@ -368,6 +370,13 @@ static inline bool transhuge_vma_enabled(struct vm_area_struct *vma,
+ 	return false;
+ }
+ 
++static inline bool hugepage_vma_check(struct vm_area_struct *vma,
++				       unsigned long vm_flags,
++				       bool smaps)
++{
++	return false;
++}
++
+ static inline void prep_transhuge_page(struct page *page) {}
+ 
+ #define transparent_hugepage_flags 0UL
+diff --git a/include/linux/khugepaged.h b/include/linux/khugepaged.h
+index 31ca8a7f78f4..ea5fd4c398f7 100644
+--- a/include/linux/khugepaged.h
++++ b/include/linux/khugepaged.h
+@@ -10,8 +10,6 @@ extern struct attribute_group khugepaged_attr_group;
+ extern int khugepaged_init(void);
+ extern void khugepaged_destroy(void);
+ extern int start_stop_khugepaged(void);
+-extern bool hugepage_vma_check(struct vm_area_struct *vma,
+-			       unsigned long vm_flags);
+ extern void __khugepaged_enter(struct mm_struct *mm);
+ extern void __khugepaged_exit(struct mm_struct *mm);
+ extern void khugepaged_enter_vma(struct vm_area_struct *vma,
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index b530462c4493..a28c6100b491 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -69,21 +69,53 @@ static atomic_t huge_zero_refcount;
+ struct page *huge_zero_page __read_mostly;
+ unsigned long huge_zero_pfn __read_mostly = ~0UL;
+ 
+-bool transparent_hugepage_active(struct vm_area_struct *vma)
++bool hugepage_vma_check(struct vm_area_struct *vma,
++			unsigned long vm_flags,
++			bool smaps)
+ {
+-	/* The addr is used to check if the vma size fits */
+-	unsigned long addr = (vma->vm_end & HPAGE_PMD_MASK) - HPAGE_PMD_SIZE;
++	if (!transhuge_vma_enabled(vma, vm_flags))
++		return false;
++
++	if (vm_flags & VM_NO_KHUGEPAGED)
++		return false;
++
++	/* Don't run khugepaged against DAX vma */
++	if (vma_is_dax(vma))
++		return false;
+ 
+-	if (!transhuge_vma_suitable(vma, addr))
++	/* Check alignment for file vma and size for both file and anon vma */
++	if (!transhuge_vma_suitable(vma, (vma->vm_end - HPAGE_PMD_SIZE)))
+ 		return false;
+-	if (vma_is_anonymous(vma))
+-		return __transparent_hugepage_enabled(vma);
+-	if (vma_is_shmem(vma))
++
++	/* Enabled via shmem mount options or sysfs settings. */
++	if (shmem_file(vma->vm_file))
+ 		return shmem_huge_enabled(vma);
+-	if (transhuge_vma_enabled(vma, vma->vm_flags) && file_thp_enabled(vma))
++
++	if (!khugepaged_enabled())
++		return false;
++
++	/* THP settings require madvise. */
++	if (!(vm_flags & VM_HUGEPAGE) && !khugepaged_always())
++		return false;
++
++	/* Only regular file is valid */
++	if (file_thp_enabled(vma))
+ 		return true;
+ 
+-	return false;
++	if (!vma_is_anonymous(vma))
++		return false;
++
++	if (vma_is_temporary_stack(vma))
++		return false;
++
++	/*
++	 * THPeligible bit of smaps should show 1 for proper VMAs even
++	 * though anon_vma is not initialized yet.
++	 */
++	if (!vma->anon_vma)
++		return smaps;
++
++	return true;
+ }
+ 
+ static bool get_huge_zero_page(void)
 diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index db0b334a7d1f..5baa394e34c8 100644
+index 5baa394e34c8..3afd87f8c0b1 100644
 --- a/mm/khugepaged.c
 +++ b/mm/khugepaged.c
-@@ -960,7 +960,13 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
+@@ -437,46 +437,6 @@ static inline int khugepaged_test_exit(struct mm_struct *mm)
+ 	return atomic_read(&mm->mm_users) == 0;
+ }
+ 
+-bool hugepage_vma_check(struct vm_area_struct *vma,
+-			unsigned long vm_flags)
+-{
+-	if (!transhuge_vma_enabled(vma, vm_flags))
+-		return false;
+-
+-	if (vm_flags & VM_NO_KHUGEPAGED)
+-		return false;
+-
+-	/* Don't run khugepaged against DAX vma */
+-	if (vma_is_dax(vma))
+-		return false;
+-
+-	/* Check alignment for file vma and size for both file and anon vma */
+-	if (!transhuge_vma_suitable(vma, (vma->vm_end - HPAGE_PMD_SIZE)))
+-		return false;
+-
+-	/* Enabled via shmem mount options or sysfs settings. */
+-	if (shmem_file(vma->vm_file))
+-		return shmem_huge_enabled(vma);
+-
+-	if (!khugepaged_enabled())
+-		return false;
+-
+-	/* THP settings require madvise. */
+-	if (!(vm_flags & VM_HUGEPAGE) && !khugepaged_always())
+-		return false;
+-
+-	/* Only regular file is valid */
+-	if (file_thp_enabled(vma))
+-		return true;
+-
+-	if (!vma->anon_vma || !vma_is_anonymous(vma))
+-		return false;
+-	if (vma_is_temporary_stack(vma))
+-		return false;
+-
+-	return true;
+-}
+-
+ void __khugepaged_enter(struct mm_struct *mm)
+ {
+ 	struct mm_slot *mm_slot;
+@@ -513,7 +473,7 @@ void khugepaged_enter_vma(struct vm_area_struct *vma,
+ {
+ 	if (!test_bit(MMF_VM_HUGEPAGE, &vma->vm_mm->flags) &&
+ 	    khugepaged_enabled()) {
+-		if (hugepage_vma_check(vma, vm_flags))
++		if (hugepage_vma_check(vma, vm_flags, false))
+ 			__khugepaged_enter(vma->vm_mm);
+ 	}
+ }
+@@ -958,7 +918,7 @@ static int hugepage_vma_revalidate(struct mm_struct *mm, unsigned long address,
+ 
+ 	if (!transhuge_vma_suitable(vma, address))
  		return SCAN_ADDRESS_RANGE;
- 	if (!hugepage_vma_check(vma, vma->vm_flags))
+-	if (!hugepage_vma_check(vma, vma->vm_flags))
++	if (!hugepage_vma_check(vma, vma->vm_flags, false))
  		return SCAN_VMA_CHECK;
--	/* Anon VMA expected */
-+	/*
-+	 * Anon VMA expected, the address may be unmapped then
-+	 * remapped to file after khugepaged reaquired the mmap_lock.
-+	 *
-+	 * hugepage_vma_check may return true for qualified file
-+	 * vmas.
-+	 */
- 	if (!vma->anon_vma || !vma_is_anonymous(vma))
- 		return SCAN_VMA_CHECK;
- 	return 0;
+ 	/*
+ 	 * Anon VMA expected, the address may be unmapped then
+@@ -1448,7 +1408,7 @@ void collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr)
+ 	 * the valid THP. Add extra VM_HUGEPAGE so hugepage_vma_check()
+ 	 * will not fail the vma for missing VM_HUGEPAGE
+ 	 */
+-	if (!hugepage_vma_check(vma, vma->vm_flags | VM_HUGEPAGE))
++	if (!hugepage_vma_check(vma, vma->vm_flags | VM_HUGEPAGE, false))
+ 		return;
+ 
+ 	/* Keep pmd pgtable for uffd-wp; see comment in retract_page_tables() */
+@@ -2143,7 +2103,7 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages,
+ 			progress++;
+ 			break;
+ 		}
+-		if (!hugepage_vma_check(vma, vma->vm_flags)) {
++		if (!hugepage_vma_check(vma, vma->vm_flags, false)) {
+ skip:
+ 			progress++;
+ 			continue;
 -- 
 2.26.3
 

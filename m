@@ -2,167 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9579254CAC6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1784054CACE
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356068AbiFOODD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 10:03:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        id S1355984AbiFOODO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 10:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355945AbiFOOCq (ORCPT
+        with ESMTP id S1356291AbiFOOCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 10:02:46 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA045101D;
-        Wed, 15 Jun 2022 07:02:38 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 15 Jun 2022 10:02:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5DA2DE6;
+        Wed, 15 Jun 2022 07:02:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DF66B6601701;
-        Wed, 15 Jun 2022 15:02:15 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1655301738;
-        bh=A/jvOxm1ICij5K0mIG7oqF5iy6HOnMoo/iFg2qWHY+o=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Xp91NeW7/5pDED1maKh/hv/BrO3shNGUFb2jaEdMzphcwtcjlNybZ+ct8f3IwhDac
-         ZI/OWfjBpJZKrBoklAeASR8Tu7mCBjc99sYoSIPJ0Urj/ds4at6R0RGAq8X/YdOc9q
-         l8yW8bym5tB5LXyiaqIv4I/Cs1Ws8rhasaPXmj4yTo0/cc2I73wnpxAeUhobtyvtLD
-         jbRIWok6C3Y3BMSDsNsenU06cBgVOzTqVuBEsv0HUmYc2S++fOMctZZZKa+JFWCIpr
-         6zUxp6Q2kTv52QxFTODST5w3r1d0nHz3uRuPUXCICLdGey89ewVi2W6DwOfbxVW3VS
-         no6sEAK760B8w==
-Message-ID: <a64aa50e843967d691300af3cda27b85b8353f96.camel@collabora.com>
-Subject: Re: [V9,4/7] mtk-jpegenc: add jpegenc timeout func interface
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Irui Wang <irui.wang@mediatek.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        angelogioacchino.delregno@collabora.com, wenst@chromium.org
-Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Tomasz Figa <tfiga@chromium.org>, xia.jiang@mediatek.com,
-        maoguang.meng@mediatek.com, kyrie wu <kyrie.wu@mediatek.com>,
-        srv_heupstream@mediatek.com
-Date:   Wed, 15 Jun 2022 10:02:07 -0400
-In-Reply-To: <20220613032306.23237-5-irui.wang@mediatek.com>
-References: <20220613032306.23237-1-irui.wang@mediatek.com>
-         <20220613032306.23237-5-irui.wang@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1 (3.44.1-1.fc36) 
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA25161B7F;
+        Wed, 15 Jun 2022 14:02:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1849EC34115;
+        Wed, 15 Jun 2022 14:02:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655301740;
+        bh=4D0SVD6o9DZcpnaifdB+Joi2a7Df3F/4wIsCUGJrE10=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=hVuD5MPRuhChpPh7lk5G0SdbWiLGcFoRNYvmnQgMT7ENk3tvNDyEgkclsUMMGneCd
+         clT2YCjKwE6XPSJPdFWmOszhlvPPGX5+WatXZicOUF+nuwOzsQExEu95IeVzPU/AqE
+         BbnKySGMYzlrOzuTRkYBCu5bzlyyoJxSVlzafQAT6vIA+VNB/+S2eaOdsPrFqwjW1l
+         JJ6DxjHN9Z8mdId10gqXT6ZabWXlVDoJ1LDUBW/rU2If34q4bwOHj50rtkPwGLRfmK
+         IHxNG6yQCLtyOcKtEuxLg396K8deAtrRm07PkXUFbLQ2Ph3N6cV9L2qfQmUaUNsxpw
+         hAaW/A8NCBJ4Q==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id B958D5C013F; Wed, 15 Jun 2022 07:02:19 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 07:02:19 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: Re: [PATCH 2/2] rcu/kvfree: Introduce KFREE_DRAIN_JIFFIES_[MAX/MIN]
+ interval
+Message-ID: <20220615140219.GL1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220602080644.432156-2-urezki@gmail.com>
+ <20220604155108.GU1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YpxzB3/HRN/EEHa8@pc638.lan>
+ <20220607034710.GE1790663@paulmck-ThinkPad-P17-Gen-1>
+ <CA+KHdyXU1apQQbVVZ_zX7o86Qp-AQnif2u8aJFULqHNtfCGcSA@mail.gmail.com>
+ <YqN1QqRmPpchDm/k@google.com>
+ <YqcHrIMefthWe0t4@pc638.lan>
+ <YqgtuBXW5pW4ivD/@pc638.lan>
+ <20220615051205.GG1790663@paulmck-ThinkPad-P17-Gen-1>
+ <YqmLEPD2XVB3LPeA@pc638.lan>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YqmLEPD2XVB3LPeA@pc638.lan>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le lundi 13 juin 2022 =C3=A0 11:23 +0800, Irui Wang a =C3=A9crit=C2=A0:
-> From: kyrie wu <kyrie.wu@mediatek.com>
->=20
-> Generalizes jpegenc timeout func interfaces to handle HW timeout.
->=20
-> Signed-off-by: kyrie wu <kyrie.wu@mediatek.com>
-> ---
->  .../platform/mediatek/jpeg/mtk_jpeg_core.h    |  8 ++++++
->  .../platform/mediatek/jpeg/mtk_jpeg_enc_hw.c  | 25 +++++++++++++++++++
->  2 files changed, 33 insertions(+)
->=20
-> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h b/drive=
-rs/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-> index f6e980fde4ef..0683d80fcea5 100644
-> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.h
-> @@ -76,6 +76,12 @@ struct mtk_jpeg_variant {
->  	u32 cap_q_default_fourcc;
->  };
-> =20
-> +struct mtk_jpeg_hw_param {
-> +	struct vb2_v4l2_buffer *src_buffer;
-> +	struct vb2_v4l2_buffer *dst_buffer;
-> +	struct mtk_jpeg_ctx *curr_ctx;
-> +};
-> +
->  enum mtk_jpegenc_hw_id {
->  	MTK_JPEGENC_HW0,
->  	MTK_JPEGENC_HW1,
-> @@ -107,6 +113,8 @@ struct mtk_jpegenc_comp_dev {
->  	struct mtk_jpegenc_clk venc_clk;
->  	int jpegenc_irq;
->  	int hw_id;
-> +	struct delayed_work job_timeout_work;
-> +	struct mtk_jpeg_hw_param hw_param;
->  };
-> =20
->  /**
-> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c b/dri=
-vers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-> index 8ac6b031dcd4..99f3db2a393a 100644
-> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-> @@ -185,6 +185,26 @@ void mtk_jpeg_set_enc_params(struct mtk_jpeg_ctx *ct=
-x,  void __iomem *base)
->  }
->  EXPORT_SYMBOL_GPL(mtk_jpeg_set_enc_params);
-> =20
-> +static void mtk_jpegenc_timeout_work(struct work_struct *work)
-> +{
-> +	struct delayed_work *dly_work =3D to_delayed_work(work);
-> +	struct mtk_jpegenc_comp_dev *cjpeg =3D
-> +		container_of(dly_work,
-> +			     struct mtk_jpegenc_comp_dev,
-> +			     job_timeout_work);
-> +	enum vb2_buffer_state buf_state =3D VB2_BUF_STATE_ERROR;
-> +	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-> +
-> +	src_buf =3D cjpeg->hw_param.src_buffer;
-> +	dst_buf =3D cjpeg->hw_param.dst_buffer;
-> +	dst_buf->vb2_buf.timestamp =3D src_buf->vb2_buf.timestamp;
+On Wed, Jun 15, 2022 at 09:32:32AM +0200, Uladzislau Rezki wrote:
+> > On Tue, Jun 14, 2022 at 08:42:00AM +0200, Uladzislau Rezki wrote:
+> > > > Hello, Joel, Paul.
+> > > > 
+> > > > > Hi Vlad, Paul,
+> > > > > 
+> > > > > On Thu, Jun 09, 2022 at 03:10:57PM +0200, Uladzislau Rezki wrote:
+> > > > > > On Tue, Jun 7, 2022 at 5:47 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > > > > >
+> > > > > > > On Sun, Jun 05, 2022 at 11:10:31AM +0200, Uladzislau Rezki wrote:
+> > > > > > > > > On Thu, Jun 02, 2022 at 10:06:44AM +0200, Uladzislau Rezki (Sony) wrote:
+> > > > > > > > > > Currently the monitor work is scheduled with a fixed interval that
+> > > > > > > > > > is HZ/20 or each 50 milliseconds. The drawback of such approach is
+> > > > > > > > > > a low utilization of page slot in some scenarios. The page can store
+> > > > > > > > > > up to 512 records. For example on Android system it can look like:
+> > > > > > > > > >
+> > > > > > > > > > <snip>
+> > > > > > > > > >   kworker/3:0-13872   [003] .... 11286.007048: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=1
+> > > > > > > > > >   kworker/3:0-13872   [003] .... 11286.015638: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
+> > > > > > > > > >   kworker/1:2-20434   [001] .... 11286.051230: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
+> > > > > > > > > >   kworker/1:2-20434   [001] .... 11286.059322: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=2
+> > > > > > > > > >   kworker/0:1-20052   [000] .... 11286.095295: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=2
+> > > > > > > > > >   kworker/0:1-20052   [000] .... 11286.103418: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=1
+> > > > > > > > > >   kworker/2:3-14372   [002] .... 11286.135155: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=2
+> > > > > > > > > >   kworker/2:3-14372   [002] .... 11286.135198: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000044872ffd nr_records=1
+> > > > > > > > > >   kworker/1:2-20434   [001] .... 11286.155377: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=5
+> > > > > > > > > >   kworker/2:3-14372   [002] .... 11286.167181: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000026522604 nr_records=5
+> > > > > > > > > >   kworker/1:2-20434   [001] .... 11286.179202: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x000000008ef95e14 nr_records=1
+> > > > > > > > > >   kworker/2:3-14372   [002] .... 11286.187398: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000c597d297 nr_records=6
+> > > > > > > > > >   kworker/3:0-13872   [003] .... 11286.187445: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000050bf92e2 nr_records=3
+> > > > > > > > > >   kworker/1:2-20434   [001] .... 11286.198975: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x00000000cbcf05db nr_records=4
+> > > > > > > > > >   kworker/1:2-20434   [001] .... 11286.207203: rcu_invoke_kfree_bulk_callback: rcu_preempt bulk=0x0000000095ed6fca nr_records=4
+> > > > > > > > > > <snip>
+> > > > > > > > > >
+> > > > > > > > > > where a page only carries few records to reclaim a memory. In order to
+> > > > > > > > > > improve batching and make utilization more efficient the patch introduces
+> > > > > > > > > > a drain interval that can be set either to KFREE_DRAIN_JIFFIES_MAX or
+> > > > > > > > > > KFREE_DRAIN_JIFFIES_MIN. It is adjusted if a flood is detected, in this
+> > > > > > > > > > case a memory reclaim occurs more often whereas in mostly idle cases the
+> > > > > > > > > > interval is set to its maximum timeout that improves the utilization of
+> > > > > > > > > > page slots.
+> > > > > > > > > >
+> > > > > > > > > > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > > > > > > >
+> > > > > > > > > That does look like a problem well worth solving!
+> > > > > > > > >
+> > > > > > > > Agree, better ideas make better final solution :)
+> > > > > > > >
+> > > > > > > > >
+> > > > > > > > > But I am missing one thing. If we are having a callback flood, why do we
+> > > > > > > > > need a shorter timeout?
+> > > > > > > > >
+> > > > > > > > To offload faster, because otherwise we run into classical issue, it is a low
+> > > > > > > > memory condition state resulting in OOM.
+> > > > > > >
+> > > > > > > But doesn't each callback queued during the flood give us an opportunity
+> > > > > > > to react to the flood?  That will be way more fine-grained than any
+> > > > > > > reasonable timer, right?  Or am I missing something?
+> > > > > > >
+> > > > > > We can set the timer to zero or to current "jiffies" to initiate the
+> > > > > > offloading if the
+> > > > > > page is full. In that sense probably it make sense to propagate those two attr.
+> > > > > > to user space, so the user can configure min/max drain interval.
+> > > > > > 
+> > > > > > Or we can only deal with fixed interval exposed via sysfs to control it by user.
+> > > > > > In that case we can get rid of MIN one and just trigger a timer if the page is
+> > > > > > full. I think this approach is better.
+> > > > > 
+> > > > > Yes I also think triggering timer with zero-timeout is better. Can you (Vlad)
+> > > > > accomplish that by just calling the timer callback inline, instead of queuing
+> > > > > a timer? I imagine you would just do queue_work() instead of
+> > > > > queue_delayed_work() in this scenario.
+> > > > > 
+> > > > > > > I do agree that the action would often need to be indirect to avoid the
+> > > > > > > memory-allocation-state hassles, but we already can do that, either via
+> > > > > > > an extremely short-term hrtimer or something like irq-work.
+> > > > > > >
+> > > > > > > > > Wouldn't a check on the number of blocks queued be simpler, more direct,
+> > > > > > > > > and provide faster response to the start of a callback flood?
+> > > > > > > > >
+> > > > > > > > I rely on krcp->count because not always we can store the pointer in the page
+> > > > > > > > slots. We can not allocate a page in the caller context thus we use page-cache
+> > > > > > > > worker that fills the cache in normal context. While it populates the cache,
+> > > > > > > > pointers temporary are queued to the linked-list.
+> > > > > > > >
+> > > > > > > > Any thoughts?
+> > > > > > >
+> > > > > > > There are a great many ways to approach this.  One of them is to maintain
+> > > > > > > a per-CPU free-running counter of kvfree_rcu() calls, and to reset this
+> > > > > > > counter each jiffy.
+> > > > > > >
+> > > > > > > Or am I missing a trick here?
+> > > > > > >
+> > > > > > Do you mean to have a per-cpu timer that checks the per-cpu-freed counter
+> > > > > > and schedule the work when if it is needed? Or i have missed your point?
+> > > > > 
+> > > > > I think he (Paul) is describing the way 'flood detection' can work similar to how the
+> > > > > bypass list code is implemented. There he maintains a count which only if
+> > > > > exceeds a limit, will queue on to the bypass list.
+> > > > > 
+> > > > OK, i see that. We also do similar thing. We say it is a flood - when a
+> > > > page becomes full, so it is kind of threshold that we pass.
+> > > > 
+> > > > > This code:
+> > > > > 
+> > > > >         // If we have advanced to a new jiffy, reset counts to allow
+> > > > >         // moving back from ->nocb_bypass to ->cblist.
+> > > > >         if (j == rdp->nocb_nobypass_last) {
+> > > > >                 c = rdp->nocb_nobypass_count + 1;
+> > > > >         } else {
+> > > > >                 WRITE_ONCE(rdp->nocb_nobypass_last, j);
+> > > > >                 c = rdp->nocb_nobypass_count - nocb_nobypass_lim_per_jiffy;
+> > > > >                 if (ULONG_CMP_LT(rdp->nocb_nobypass_count,
+> > > > >                                  nocb_nobypass_lim_per_jiffy))
+> > > > >                         c = 0;
+> > > > >                 else if (c > nocb_nobypass_lim_per_jiffy)
+> > > > >                         c = nocb_nobypass_lim_per_jiffy;
+> > > > >         }
+> > > > >         WRITE_ONCE(rdp->nocb_nobypass_count, c);
+> > > > > 
+> > > > > 
+> > > > > Your (Vlad's) approach OTOH is also fine to me, you check if page is full and
+> > > > > make that as a 'flood is happening' detector.
+> > > > > 
+> > > > OK, thank you Joel. I also think, that way we improve batching and utilization
+> > > > of the page what is actually an intention of the patch in question.
+> > > > 
+> > > Paul, will you pick this patch?
+> > 
+> > I did pick up the first one:
+> > 
+> > 16224f4cdf03 ("rcu/kvfree: Remove useless monitor_todo flag")
+> > 
+> > On the second one, if you use page-fill as your flood detector, can't
+> > you simplify things by just using the one longer timeout, as discussed
+> > in this thread?
+> > 
+> > Or did I miss a turn somewhere?
+> > 
+> No, you did not :) Agreed i will simplify it with a one interval that
+> corresponding to 1 HZ. The flood is detected when a page is full. When
+> it occurs the work will be rearmed to be run asap. Will resend it.
 
-Another case for v4l2_m2m_buf_copy_metadata? As you know early the dst_buf,=
- you
-could do that once before you start the encoding, this could possibly remov=
-e the
-duplication.
+Very good, and looking forward to it!
 
-> +
-> +	mtk_jpeg_enc_reset(cjpeg->reg_base);
-> +	clk_disable_unprepare(cjpeg->venc_clk.clks->clk);
-> +	pm_runtime_put(cjpeg->dev);
-> +	v4l2_m2m_buf_done(src_buf, buf_state);
-> +}
-> +
->  static irqreturn_t mtk_jpegenc_hw_irq_handler(int irq, void *priv)
->  {
->  	struct vb2_v4l2_buffer *src_buf, *dst_buf;
-> @@ -196,6 +216,8 @@ static irqreturn_t mtk_jpegenc_hw_irq_handler(int irq=
-, void *priv)
->  	struct mtk_jpegenc_comp_dev *jpeg =3D priv;
->  	struct mtk_jpeg_dev *master_jpeg =3D jpeg->master_dev;
-> =20
-> +	cancel_delayed_work(&jpeg->job_timeout_work);
-> +
->  	irq_status =3D readl(jpeg->reg_base + JPEG_ENC_INT_STS) &
->  		JPEG_ENC_INT_STATUS_MASK_ALLIRQ;
->  	if (irq_status)
-> @@ -272,6 +294,9 @@ static int mtk_jpegenc_hw_probe(struct platform_devic=
-e *pdev)
->  	dev->plat_dev =3D pdev;
->  	dev->dev =3D &pdev->dev;
-> =20
-> +	INIT_DELAYED_WORK(&dev->job_timeout_work,
-> +			  mtk_jpegenc_timeout_work);
-> +
->  	jpegenc_clk =3D &dev->venc_clk;
-> =20
->  	jpegenc_clk->clk_num =3D devm_clk_bulk_get_all(&pdev->dev,
+> One thing that we have discussed, in case of flood we can minimize a
+> memory footprint by releasing the page directly from the our monitor
+> work if the grace period is passed for the all page slots. In that case
+> we do not need to move the page forward toward the RCU-core for later
+> reclaim.
+> 
+> But that is another patches. I will examine it when i return back from 
+> Norway.
 
+Agreed, those should be separate patches.
+
+							Thanx, Paul

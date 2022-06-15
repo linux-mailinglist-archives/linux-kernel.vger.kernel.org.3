@@ -2,83 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA86354C9EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF9354C9F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 15:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352753AbiFONgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 09:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
+        id S1348404AbiFONhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 09:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352387AbiFONgc (ORCPT
+        with ESMTP id S1348465AbiFONhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 09:36:32 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8880C369F5
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:36:30 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id kq6so23270158ejb.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:36:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9zWnIQisaB23D1MVkJ7LO1Hk7sla55AkBqlxsG0Kthk=;
-        b=DvQrJZOuXygLUHJr/UWGOxHJtFOET4POoEljY1Do+Nnqmr68OTk1L3WIgHJ5UVGARJ
-         Nrf/2YD5NtlIolg9/TqczLw9ELFHgikQ6bwDqUGcHrVU8r8xGembhNekxtGZAYc/ZMsm
-         w0II+sD69A1OUbKbLmBOceE/RXOy3t5uC2dYw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9zWnIQisaB23D1MVkJ7LO1Hk7sla55AkBqlxsG0Kthk=;
-        b=Gy1SeOLC7cg77jV3/6TKHx5DA+NUo4kUiOXKjGiizdo3GuYkve4SiAQxTyEE75uEDj
-         1f/M3Z95c4QWC1Oi7D3LmaaNv7a3f4e2ISTHN2mr99wpQ/wnIboYXFFbiY7NDuzZZAa5
-         F2kDpEkRsopqB73GGpc8HwyIBv6Y2uwYgY/2EiYGh0rgGc1F9B6EFeop4ZzDnK2JbT2Q
-         TSNYTrATnXLWcNIYoffIQBYMQwthcsFx22jyGZVp87Fl7HmmiHGVFKMAlPktjQuHcX9z
-         LlQNMH1asv5V+sOzzdPSR/VTLxO2XAmyPZGEH4IMKCPTEg1MUrB8WTPBDA+kOJE3cXJx
-         SEOA==
-X-Gm-Message-State: AOAM531gJkdTxGloScCXTJH1+BBttSJoihF5hsaK+fEdz2iYY1oh1D7s
-        TZxgvpA4gaBZhRm8fu43kxC2F2mmWeNcYnU3
-X-Google-Smtp-Source: ABdhPJyBJ+tbEYaIb7cx3UPVFe5WmYz7i9bjvpzU/QTjOBXNVk08kQODgGm1x+F5NksnirQbZDNzgw==
-X-Received: by 2002:a17:906:36c8:b0:718:d02b:479e with SMTP id b8-20020a17090636c800b00718d02b479emr8778574ejc.613.1655300188929;
-        Wed, 15 Jun 2022 06:36:28 -0700 (PDT)
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
-        by smtp.gmail.com with ESMTPSA id v14-20020a056402348e00b0042dc25fdf5bsm9669939edc.29.2022.06.15.06.36.26
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 06:36:27 -0700 (PDT)
-Received: by mail-wr1-f41.google.com with SMTP id h5so15475035wrb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 06:36:26 -0700 (PDT)
-X-Received: by 2002:a05:6000:1685:b0:218:45f0:5be6 with SMTP id
- y5-20020a056000168500b0021845f05be6mr10368799wrd.301.1655300186122; Wed, 15
- Jun 2022 06:36:26 -0700 (PDT)
+        Wed, 15 Jun 2022 09:37:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC6F9CE3;
+        Wed, 15 Jun 2022 06:37:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BF271153B;
+        Wed, 15 Jun 2022 06:37:32 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.38.208])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E3BB3F7F5;
+        Wed, 15 Jun 2022 06:37:30 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 14:37:26 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     "Ivan T. Ivanov" <iivanov@suse.de>
+Cc:     madvenka@linux.microsoft.com, jpoimboe@redhat.com,
+        peterz@infradead.org, chenzhongjin@huawei.com, broonie@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org,
+        jamorris@linux.microsoft.com, linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 00/20] arm64: livepatch: Use ORC for dynamic frame
+ pointer validation
+Message-ID: <YqngltNLQJl67yu0@FVFF77S0Q05N>
+References: <e81e773678f88f7c2ff7480e2eb096973ec198db>
+ <20220524001637.1707472-1-madvenka@linux.microsoft.com>
+ <20220615121844.34v7cos5kcz2hufk@suse>
 MIME-Version: 1.0
-References: <20220609072722.3488207-1-hsinyi@chromium.org> <CAJMQK-hg5kLUV=ZgVN5=qX=bRiBWx3O-4X9wPF6CwxpQVSuinA@mail.gmail.com>
-In-Reply-To: <CAJMQK-hg5kLUV=ZgVN5=qX=bRiBWx3O-4X9wPF6CwxpQVSuinA@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 15 Jun 2022 06:36:13 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XMjSu9pJHj+2L7vrVocDkn4+VcPQ07tNKZMfj4qUYgYA@mail.gmail.com>
-Message-ID: <CAD=FV=XMjSu9pJHj+2L7vrVocDkn4+VcPQ07tNKZMfj4qUYgYA@mail.gmail.com>
-Subject: Re: [PATCH v7 0/8] Add a panel API to set orientation properly
-To:     Hsin-Yi Wang <hsinyi@chromium.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220615121844.34v7cos5kcz2hufk@suse>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,46 +49,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jun 15, 2022 at 03:18:44PM +0300, Ivan T. Ivanov wrote:
+> I have run following [1] livepatch tests on kernel build from your repository.
+> Overall results looks good, but when I run klp_tc_13.shI there is something which
+> I still can not understand completely. It is because of kaslr.
+> 
+> [   36.817617] livepatch: enabling patch 'klp_tc_13_livepatch'
+> [   36.819602] branch_imm_common: offset out of range
+> [   36.820113] branch_imm_common: offset out of range
+> [   36.820643] ------------[ ftrace bug ]------------
+> [   36.821172] ftrace failed to modify
+> [   36.821173] [<ffffdde931176804>] orig_do_read_active_livepatch_id+0x4/0xa8 [klp_test_support_mod]
+> [   36.822465]  actual:   e4:01:00:94
+> [   36.822821] Updating ftrace call site to call a different ftrace function
+> [   36.823537] ftrace record flags: e4000002
+> [   36.823953]  (2) R
+> [   36.823953]  expected tramp: ffffdde96882e224
+> [   36.824619] ------------[ cut here ]------------
+> [   36.825125] WARNING: CPU: 0 PID: 950 at kernel/trace/ftrace.c:2085 ftrace_bug+0x98/0x280
+> [   36.826027] Modules linked in: klp_tc_13_livepatch(OK+) klp_test_support_mod(O) crct10dif_ce
+> [   36.826943] CPU: 0 PID: 950 Comm: insmod Tainted: G           O  K   5.18.0-rc1-00020-g1ffee6fdcfda #39
+> [   36.827987] Hardware name: linux,dummy-virt (DT)
+> [   36.828546] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   36.829348] pc : ftrace_bug+0x98/0x280
+> [   36.829790] lr : ftrace_bug+0x228/0x280
+> [   36.830224] sp : ffff8000084038e0
+> [   36.830620] x29: ffff8000084038e0 x28: ffff00000485a920 x27: ffffdde931176804
+> [   36.831419] x26: ffffdde93117d1a0 x25: ffff00000485a900 x24: ffffdde96aea1000
+> [   36.832226] x23: 0000000000000000 x22: 0000000000000001 x21: ffffdde96a124da0
+> [   36.833024] x20: ffff0000045620f0 x19: ffffdde96b54a358 x18: ffffffffffffffff
+> [   36.833818] x17: 5b20386178302f34 x16: 78302b64695f6863 x15: ffffdde96a3078f8
+> [   36.834621] x14: 0000000000000000 x13: 3432326532383836 x12: ffffdde96ae9b3d8
+> [   36.835425] x11: 0000000000000001 x10: 0000000000000001 x9 : ffffdde96891305c
+> [   36.836221] x8 : c0000000ffffefff x7 : 0000000000017fe8 x6 : ffffdde96ae83398
+> [   36.837023] x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 00000000ffffefff
+> [   36.837836] x2 : e32439832ffb9700 x1 : 0000000000000000 x0 : 0000000000000022
+> [   36.838635] Call trace:
+> [   36.838923]  ftrace_bug+0x98/0x280
+> [   36.839319]  ftrace_replace_code+0xa0/0xb8
+> [   36.839768]  ftrace_modify_all_code+0xc0/0x160
+> [   36.840273]  arch_ftrace_update_code+0x14/0x20
+> [   36.840780]  ftrace_run_update_code+0x24/0x78
+> [   36.841283]  ftrace_startup_enable+0x50/0x60
+> [   36.841781]  ftrace_startup+0xb4/0x178
+> [   36.842214]  register_ftrace_function+0x68/0x88
+> [   36.842738]  klp_patch_object+0x1c8/0x330
+> [   36.843196]  klp_enable_patch+0x468/0x828
 
-On Tue, Jun 14, 2022 at 10:50 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
->
-> On Thu, Jun 9, 2022 at 3:27 PM Hsin-Yi Wang <hsinyi@chromium.org> wrote:
-> >
-> > Panels usually call drm_connector_set_panel_orientation(), which is
-> > later than drm/kms driver calling drm_dev_register(). This leads to a
-> > WARN()[1].
-> >
-> > The orientation property is known earlier. For example, some panels
-> > parse the property through device tree during probe.
-> >
-> > The series add a panel API drm_connector_set_orientation_from_panel()
-> > for drm/kms drivers. The drivers can call the API to set panel's
-> > orientation before drm_dev_register().
-> >
-> > Panel needs to implement .get_orientation callback to return the property.
-> >
-> > [1] https://patchwork.kernel.org/project/linux-mediatek/patch/20220530081910.3947168-2-hsinyi@chromium.org/
-> >
-> > Hsin-Yi Wang (8):
-> >   drm/panel: Add an API to allow drm to set orientation from panel
-> >   drm/panel: boe-tv101wum-nl6: Implement .get_orientation callback
-> >   drm/panel: panel-edp: Implement .get_orientation callback
-> >   drm/panel: lvds: Implement .get_orientation callback
-> >   drm/panel: panel-simple: Implement .get_orientation callback
-> >   drm/panel: ili9881c: Implement .get_orientation callback
-> >   drm/panel: elida-kd35t133: Implement .get_orientation callback
-> >   drm: Config orientation property if panel provides it
-> >
-> hi Maintainers,
->
-> All the patches are reviewed. If there's no other comments, will this
-> series be picked? Thanks.
+IIUC that splat specifically is due to ftrace_modify_call() missing module PLT lookups.
 
-Unless someone beat me to it or yells, my plan was to land them to
-drm-misc-next next week. Since it touches core code I wanted to give a
-little extra time. Also at the moment patch #8 is all Chromium (all
-author and reviewers are chromium.org) at the moment so that's another
-reason to make sure it has sufficient time on the lists.
+That should be fixed by:
 
--Doug
+  https://lore.kernel.org/all/20220614080944.1349146-3-mark.rutland@arm.com/
+
+I have not looked at the rest of this series (yet).
+
+Thanks,
+Mark.

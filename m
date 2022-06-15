@@ -2,260 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF41254C69A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DE6D54C6C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345940AbiFOK6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
+        id S1347512AbiFOLAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 07:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242799AbiFOK6N (ORCPT
+        with ESMTP id S1348682AbiFOK7T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:58:13 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50FF9252A9;
-        Wed, 15 Jun 2022 03:58:08 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 25FAJX03011824;
-        Wed, 15 Jun 2022 10:58:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : to : cc : references : from : subject : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=C4vMRRi1D2cJwV0PhiCWcFn+hJT19+STCZkVDOc5sqU=;
- b=I/2iGZ0pvMREkFB6BwfZI/zLUACk6n67iRPHWN7wbgG7GTbE90FJBeWmm8FeHPXgJflH
- moBP+7V5VP5aT0gAhFUQuqqNrgIdoXREtpHvA3v1t6eyE38GQ0s+YG5mnGpaad9n5VMD
- 1ak+npE3Tcii8ytu0gISX4cvP/LkK+Jem29SPxH04eRBPkce9g7ukG7ojNFRBAjwff3k
- EvmA9C9FMxFqEunWx1+BFp3xBDQp1I3pSzy+aSnVVwM4RNd0C2XltfACyDsAZ7Ni+XWz
- lnW52fTFzRsQkqbSTtVuXhbL2wwJBPDnGnw1MlhzT6kIeDDy0WcHUiS619BQhvpsbI/V kA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gpr3g425r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jun 2022 10:58:07 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 25F8oVBN031273;
-        Wed, 15 Jun 2022 10:58:06 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3gpr3g4251-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jun 2022 10:58:06 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 25FAoknN009479;
-        Wed, 15 Jun 2022 10:58:04 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3gmjajdptj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 15 Jun 2022 10:58:04 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 25FAw1BH21758372
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 15 Jun 2022 10:58:01 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B85EBAE045;
-        Wed, 15 Jun 2022 10:58:01 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 0C598AE055;
-        Wed, 15 Jun 2022 10:58:01 +0000 (GMT)
-Received: from [9.145.158.83] (unknown [9.145.158.83])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 15 Jun 2022 10:58:00 +0000 (GMT)
-Message-ID: <60d0d472-ca46-7a34-c1a2-b4342a4eb9f7@linux.ibm.com>
-Date:   Wed, 15 Jun 2022 12:58:00 +0200
+        Wed, 15 Jun 2022 06:59:19 -0400
+Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10045.outbound.protection.outlook.com [40.107.1.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0939351E56;
+        Wed, 15 Jun 2022 03:59:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fwoB/w3QKhV8md6qpvC6+5Nfb2l9vKsB+VuzP+lT9OpVCWudoaZ9FTTn1PtFdN7oHYcxMedLwWFQ09iJScOQ8/1O8WTEQYz9iG2TvPyLdPlQfPtTz9GRmqJjPrPNxmyoqAbqNC3qcejcpyThLu3XLeiAqzsgBiqMLTHXoLzCgxebEasZ5HFPtaRrQRL6YpuLUt6f932toYpPqJpaOFfPr+WZKdb6NxCXpIYB7YIE93qqgXqUN4yh8xoikuLyBd3rTzv9UVcey78n2HRBkBZoDQprcrQs828dNIIEuPysQRTI0BTDOx4YeTEILEQhPtlhiMpHBw5/P7p8YixxhfvSZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yodX5fD3JvTU/tfcp8JwhxT0yehhXXM/g1Wl3LHcr70=;
+ b=CRX++ILwsSOfhyT4c7rEIyQPFIyrjxqncIopzHbkHWKt+t7zJSpTxkj8Rjuuvt6HNHjYhLlw/Bt7ssu7RYB8KgltacStrHbFpdivIrBZmBS9JklqwfTt7/EzYeTRGrUnAGMHD26XEE4Y45sl8c7xpJRZpxGK4qJOWz1LJMl2JwXllSsbwI3cDyYG5pN7Xc7uJ4ClW2oHLOtilYsbgt2XD/BeQFJxdlT5wJpdK/cSTmjcvkxiq92fwAUdkhlgGhSpW+/c/GTcMpmT5RhI0Sgm5NcNNS9hjgfQ5jYD9dd4mY3irMElIem116cCuz/mkgLmTwy9xU2aJ9uD3CF/o/pDcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yodX5fD3JvTU/tfcp8JwhxT0yehhXXM/g1Wl3LHcr70=;
+ b=MlINUrxpqPT84NwPR92dnU2Zkn8lDZJwkNnnytqYjEpAc6Vq/AQB84b44EkcwO1hMb1uq3R5Y1i203pJwwn7caxdBYbuWALmWlIA95/WVEsKWlMUqW5kJmlcoJl+99ZsuL0zpCiF20UNgK/YRo0z4wGwyv8RUy+IPgCzoIT1Z8M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com (2603:10a6:803:57::30)
+ by AM0PR0402MB3939.eurprd04.prod.outlook.com (2603:10a6:208:11::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.23; Wed, 15 Jun
+ 2022 10:59:15 +0000
+Received: from VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::7505:2581:368f:5619]) by VI1PR04MB5005.eurprd04.prod.outlook.com
+ ([fe80::7505:2581:368f:5619%5]) with mapi id 15.20.5332.022; Wed, 15 Jun 2022
+ 10:59:15 +0000
+From:   Viorel Suman <viorel.suman@nxp.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Stefan Agner <stefan@agner.ch>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Abel Vesa <abel.vesa@nxp.com>,
+        Viorel Suman <viorel.suman@nxp.com>,
+        Mirela Rabulea <mirela.rabulea@nxp.com>,
+        Liu Ying <victor.liu@nxp.com>,
+        Oliver Graute <oliver.graute@kococonnector.com>,
+        Peng Fan <peng.fan@nxp.com>, Shijie Qin <shijie.qin@nxp.com>,
+        Ming Qian <ming.qian@nxp.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     LnxNXP@nxp.com
+Subject: [PATCH v4 00/14] dt-bindings: arm: freescale: Switch fsl,scu from txt to yaml
+Date:   Wed, 15 Jun 2022 13:58:20 +0300
+Message-Id: <20220615105834.743045-1-viorel.suman@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM0PR02CA0159.eurprd02.prod.outlook.com
+ (2603:10a6:20b:28d::26) To VI1PR04MB5005.eurprd04.prod.outlook.com
+ (2603:10a6:803:57::30)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Content-Language: en-US
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
-        david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        mimu@linux.ibm.com, nrb@linux.ibm.com
-References: <20220603065645.10019-1-imbrenda@linux.ibm.com>
- <20220603065645.10019-16-imbrenda@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-Subject: Re: [PATCH v11 15/19] KVM: s390: pv: asynchronous destroy for reboot
-In-Reply-To: <20220603065645.10019-16-imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: sLkvmm6zY2Dj_-IB-x04UoqclrtDjlTw
-X-Proofpoint-GUID: DhV2RtsGLyCk748KZ6RxrBmkf9g6Qfcc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.874,Hydra:6.0.517,FMLib:17.11.64.514
- definitions=2022-06-15_03,2022-06-13_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 adultscore=0 phishscore=0 priorityscore=1501 clxscore=1015
- bulkscore=0 suspectscore=0 spamscore=0 mlxlogscore=999 mlxscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2204290000 definitions=main-2206150040
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: af110a09-b919-4a2f-4aec-08da4ebe161a
+X-MS-TrafficTypeDiagnostic: AM0PR0402MB3939:EE_
+X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
+X-Microsoft-Antispam-PRVS: <AM0PR0402MB3939157971D1AE817BF6EE3992AD9@AM0PR0402MB3939.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IJpBFoQDYpeWFqauJosZovu61aJuutkPSLZo1s2w2oDqKas0p5nQUjrq1th41SVS9cQJ/3oxau6IJhA0HmsFSRMSp7mXaLZr3THuY+67SEP7X3gRrEiHDDnoRonZ01Dj4AKh7cU+HxHUCU4Ai0yIkmkRe+SruUWtF1KMng4oSLpbulWkQhYoajNJ72z0c6eGBo4PL8sOiz6+werYdRDY8YWHHN1nwAd8rHg8pgE9QJBqx2MJzlyVy/1k6qTmqfhaqoJ4abcdjjqOl5GGJS7dkTg/lu7cFtKyLhrEARcM6kymtx0Rultcwbcj5QHduNprmAowPETAEFXASrlTqmp/w9gpnNixH9MJ/3pC+PTm44GYz/8CYkq5KAEO/vOAxHJLmcmUvEDchpj/RnKC4PssNTnyLzdTqKAv1r6EgvpkJ01XgOEKbRijBdyi66D2rGjVI7jXwficgFSHym5qHfmCrXvB5po/I1cdn6izClbs0JAodvBnFqPAC15so5N4wznrleJWZcCRV7by9cZkK7qEkiuoIw3Ba/C3MjaFYpjpngVTg09aFH39/ZO6ovGGXT9oqhdGIVkev9gN+1+Q5LLtpG9CbxJ/Uy5l30wyOTz2Mzy8TWoMRIkFXtO9kasccbj9wOpzNqZJYflaNtHXxXO9rtC6nD/g4UzMqxtPOdw2GiP/h2YCFdLbNGAyaZAK31j/EtizBV69AyH0q0rTSr9av8r0dIixtTP94rCDo0d28HfigYW3SrM5wkUc0AFIyjw4RnGcmWSSXrt75byyjQuboQXuNC9YVaizV9COAHRwQCW9y4rkXbFK1bJx35Mk2vxg
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB5005.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(4326008)(66556008)(66476007)(66946007)(8676002)(316002)(1076003)(2616005)(8936002)(26005)(6486002)(38100700002)(966005)(6512007)(508600001)(6666004)(38350700002)(6506007)(52116002)(86362001)(5660300002)(83380400001)(110136005)(921005)(2906002)(7406005)(7416002)(186003)(44832011)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?ZpKWIVth82fWWYG2tC1dCrqkjX6oRE3ndM/1hPzz50gpGLKBWOyboNawmy?=
+ =?iso-8859-1?Q?mjX7jl5SPK7FNax66D61ivLY+PiM/0mg7JUeOJU9Roa6dU5OmUSmJxi87+?=
+ =?iso-8859-1?Q?z3vgiCRyQJAT7BQNTbnlmH2fHwhRme9Rtk4PJ4hpb3gMRCqdXch+eY2fTu?=
+ =?iso-8859-1?Q?cJPQCiAbvzwx/AGu8t5KtmCH6Xq+us8ydMw6RhpY+tpUpmBgEnV+j5am14?=
+ =?iso-8859-1?Q?zC0ZQOe6ad5vrYPCNqC8yEgF3GFVLE6lIzV2/3snu3Q32P6un2HvaG47Eu?=
+ =?iso-8859-1?Q?5gDQkkIHXeh2jtj59+609rdYZUhKVtrxl9N1uTLgmV9pR19u2L6OCXP9wA?=
+ =?iso-8859-1?Q?3c4o1MxhpT36e3XaFVBtw4dMzUICBHjLQPti/fvBSDgvn2dVdFSu2Sk1Am?=
+ =?iso-8859-1?Q?Oz/uO91esUQb6OoMlJNC/p0ygqsJLtH0K4sdu/SWEB30+PIBBHRp80zr2x?=
+ =?iso-8859-1?Q?7ZEbAvxJwUtSx+LiRAtZczTX090EOfLccIwwCIMYG2MvDWKQFRLEFjEhOp?=
+ =?iso-8859-1?Q?ot16E9p+diNfZ1KCMuGzZKUXHg6Jf7ixzPebrLlvPvjou2UsD8sAQL+CbJ?=
+ =?iso-8859-1?Q?qLlI0EgTlK3lAvQlGcLRlT6sbtMqEcMEls4DdKHnL3yApUmlqUy+/F7ldz?=
+ =?iso-8859-1?Q?K24hM0FQsyZWDqGV3B3kivMymAb+7L0OqIlVIEVh8M0gQCL3G7v6zpImt2?=
+ =?iso-8859-1?Q?GOeYgEprqTFLIox8CMaNdewzycAlHWUcVtLI8+v6QtIzLFBcQZdC6T9F9D?=
+ =?iso-8859-1?Q?3/q+DfXX2+D89qL4tCB7TDLnTd9DOwrfvr2Y/rEf1Xe+AyTQ4LILwpPop8?=
+ =?iso-8859-1?Q?qQZ7g4PAEhUfQdBeAXBieydYuaKjF+n6S+O6ZNUNsXy8Jlcb4dgkjtbkMD?=
+ =?iso-8859-1?Q?BiAMt4v+L/4LADyfWsmfpU8iEQvuErZqqBicwO6BtrWX2aRW3p0KHANE2N?=
+ =?iso-8859-1?Q?f4L9px6mYkuu6LrnhaRr2kr5CGrmgny7eYxXDXiVTgE5bv2HE872KjayOQ?=
+ =?iso-8859-1?Q?MeODsv2w22RQ3eYLweQgO02YZcW8eMVSKMEGZvrRAycy/mzXtiTKuA8+hU?=
+ =?iso-8859-1?Q?XAnFt21kbR6Me+uzUoM7jqKIcRGsBwiepQajUImOEY5rpx2zoEjEiLAHqD?=
+ =?iso-8859-1?Q?wxJvBKdPNyihfJ9er/Gifzh0IN8Ua9pKmy9cQvusK/nVpo7ySq51GgB+Cg?=
+ =?iso-8859-1?Q?LkMNziODGmc+g7y55Ea7+H2yWttYTbVYafQUbMWuJRq8ZiilYISKudj2m2?=
+ =?iso-8859-1?Q?UkGiukkZsP2YZRM5RYOZXQwoR+KqE21WVUQuLnR8vUkfSTAj5mDftKpa02?=
+ =?iso-8859-1?Q?HXxQ1cGdynb5QiQ41IPMsOz8J7CJlDT+oAFb9+af3SThk1luTUCSHuznBf?=
+ =?iso-8859-1?Q?hcH/LCMKfTPYBE3Rt+sUasdVrRfcdOUp4RvqhDBiYCl1kjD/zt50XwTvxV?=
+ =?iso-8859-1?Q?FwReH2cwiUDgxwladwXjEKAvJ2JzMLAgeYUezXKxkMQ5dOvDReD3znDmR2?=
+ =?iso-8859-1?Q?6rPiWCACHW/pjTJRVN8OIilKXcmEPv5IHJCk0l+1uwiq+jpU64OK2ciX35?=
+ =?iso-8859-1?Q?3xyJyg6F9Uar5rydZ5RluaslQinWuWW7D1j53KO9mk+OCUCd1rZm3yv6t/?=
+ =?iso-8859-1?Q?9QjN67/JbWrEttWsJMzFityweEUUMCzVS2RwzTyCZ3khSyGtOz6bgXQcYA?=
+ =?iso-8859-1?Q?OoJAgITiocEIWwRvf53Wj/wB24U1C9nK08YUNk51Bk7V6u39dyHwozkBAT?=
+ =?iso-8859-1?Q?Zd6ghgKm0ynsRn91zDeOP3LiAe9EFgVp/sYFZLONz6glAewLA2p1LpDtMq?=
+ =?iso-8859-1?Q?nbW1bJ9aKw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: af110a09-b919-4a2f-4aec-08da4ebe161a
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB5005.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 10:59:14.9952
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HobKTj9eu3Se+csxHA7+1JamPFEsE8qcH4x1lqDwjbyLwO5RRT10z15zh5anq1LT7tkUZIs53YMiFlinaEVViw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR0402MB3939
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/3/22 08:56, Claudio Imbrenda wrote:
-> Until now, destroying a protected guest was an entirely synchronous
-> operation that could potentially take a very long time, depending on
-> the size of the guest, due to the time needed to clean up the address
-> space from protected pages.
-> 
-> This patch implements an asynchronous destroy mechanism, that allows a
-> protected guest to reboot significantly faster than previously.
-> 
-> This is achieved by clearing the pages of the old guest in background.
-> In case of reboot, the new guest will be able to run in the same
-> address space almost immediately.
-> 
-> The old protected guest is then only destroyed when all of its memory has
-> been destroyed or otherwise made non protected.
-> 
-> Two new PV commands are added for the KVM_S390_PV_COMMAND ioctl:
-> 
-> KVM_PV_ASYNC_DISABLE_PREPARE: prepares the current protected VM for
-> asynchronous teardown. The current VM will then continue immediately
-> as non-protected. If a protected VM had already been set aside without
-> starting the teardown process, this call will fail.
-> 
-> KVM_PV_ASYNC_DISABLE: tears down the protected VM previously set aside
-> for asynchronous teardown. This PV command should ideally be issued by
-> userspace from a separate thread. If a fatal signal is received (or the
-> process terminates naturally), the command will terminate immediately
-> without completing.
-> 
-> Leftover protected VMs are cleaned up when a KVM VM is torn down
-> normally (either via IOCTL or when the process terminates); this
-> cleanup has been implemented in a previous patch.
-> 
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> ---
->   arch/s390/kvm/kvm-s390.c |  34 +++++++++-
->   arch/s390/kvm/kvm-s390.h |   2 +
->   arch/s390/kvm/pv.c       | 131 +++++++++++++++++++++++++++++++++++++++
->   include/uapi/linux/kvm.h |   2 +
->   4 files changed, 166 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-> index 369de8377116..842419092c0c 100644
-> --- a/arch/s390/kvm/kvm-s390.c
-> +++ b/arch/s390/kvm/kvm-s390.c
-> @@ -2256,9 +2256,13 @@ static int kvm_s390_cpus_to_pv(struct kvm *kvm, u16 *rc, u16 *rrc)
->   
->   static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
->   {
-> +	const bool needslock = (cmd->cmd != KVM_PV_ASYNC_DISABLE);
-> +	void __user *argp = (void __user *)cmd->data;
->   	int r = 0;
->   	u16 dummy;
-> -	void __user *argp = (void __user *)cmd->data;
-> +
-> +	if (needslock)
-> +		mutex_lock(&kvm->lock);
->   
->   	switch (cmd->cmd) {
->   	case KVM_PV_ENABLE: {
-> @@ -2292,6 +2296,28 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
->   		set_bit(IRQ_PEND_EXT_SERVICE, &kvm->arch.float_int.masked_irqs);
->   		break;
->   	}
-> +	case KVM_PV_ASYNC_DISABLE_PREPARE:
-> +		r = -EINVAL;
-> +		if (!kvm_s390_pv_is_protected(kvm) || !async_destroy)
-> +			break;
-> +
-> +		r = kvm_s390_cpus_from_pv(kvm, &cmd->rc, &cmd->rrc);
-> +		/*
-> +		 * If a CPU could not be destroyed, destroy VM will also fail.
-> +		 * There is no point in trying to destroy it. Instead return
-> +		 * the rc and rrc from the first CPU that failed destroying.
-> +		 */
-> +		if (r)
-> +			break;
-> +		r = kvm_s390_pv_deinit_vm_async_prepare(kvm, &cmd->rc, &cmd->rrc);
-> +
-> +		/* no need to block service interrupts any more */
-> +		clear_bit(IRQ_PEND_EXT_SERVICE, &kvm->arch.float_int.masked_irqs);
-> +		break;
-> +	case KVM_PV_ASYNC_DISABLE:
-> +		/* This must not be called while holding kvm->lock */
-> +		r = kvm_s390_pv_deinit_vm_async(kvm, &cmd->rc, &cmd->rrc);
-> +		break;
->   	case KVM_PV_DISABLE: {
->   		r = -EINVAL;
->   		if (!kvm_s390_pv_is_protected(kvm))
-> @@ -2393,6 +2419,9 @@ static int kvm_s390_handle_pv(struct kvm *kvm, struct kvm_pv_cmd *cmd)
->   	default:
->   		r = -ENOTTY;
->   	}
-> +	if (needslock)
-> +		mutex_unlock(&kvm->lock);
-> +
->   	return r;
->   }
->   
-> @@ -2597,9 +2626,8 @@ long kvm_arch_vm_ioctl(struct file *filp,
->   			r = -EINVAL;
->   			break;
->   		}
-> -		mutex_lock(&kvm->lock);
-> +		/* must be called without kvm->lock */
->   		r = kvm_s390_handle_pv(kvm, &args);
-> -		mutex_unlock(&kvm->lock);
->   		if (copy_to_user(argp, &args, sizeof(args))) {
->   			r = -EFAULT;
->   			break;
-> diff --git a/arch/s390/kvm/kvm-s390.h b/arch/s390/kvm/kvm-s390.h
-> index d3abedafa7a8..d296afb6041c 100644
-> --- a/arch/s390/kvm/kvm-s390.h
-> +++ b/arch/s390/kvm/kvm-s390.h
-> @@ -243,6 +243,8 @@ static inline u32 kvm_s390_get_gisa_desc(struct kvm *kvm)
->   /* implemented in pv.c */
->   int kvm_s390_pv_destroy_cpu(struct kvm_vcpu *vcpu, u16 *rc, u16 *rrc);
->   int kvm_s390_pv_create_cpu(struct kvm_vcpu *vcpu, u16 *rc, u16 *rrc);
-> +int kvm_s390_pv_deinit_vm_async_prepare(struct kvm *kvm, u16 *rc, u16 *rrc);
-> +int kvm_s390_pv_deinit_vm_async(struct kvm *kvm, u16 *rc, u16 *rrc);
->   int kvm_s390_pv_deinit_vm(struct kvm *kvm, u16 *rc, u16 *rrc);
->   int kvm_s390_pv_init_vm(struct kvm *kvm, u16 *rc, u16 *rrc);
->   int kvm_s390_pv_set_sec_parms(struct kvm *kvm, void *hdr, u64 length, u16 *rc,
-> diff --git a/arch/s390/kvm/pv.c b/arch/s390/kvm/pv.c
-> index 8471c17d538c..ab06fa366e49 100644
-> --- a/arch/s390/kvm/pv.c
-> +++ b/arch/s390/kvm/pv.c
-> @@ -279,6 +279,137 @@ int kvm_s390_pv_deinit_vm(struct kvm *kvm, u16 *rc, u16 *rrc)
->   	return cc ? -EIO : 0;
->   }
->   
-> +/**
-> + * kvm_s390_destroy_lower_2g - Destroy the first 2GB of protected guest memory.
-> + * @kvm the VM whose memory is to be cleared.
-> + * Destroy the first 2GB of guest memory, to avoid prefix issues after reboot.
-> + */
-> +static void kvm_s390_destroy_lower_2g(struct kvm *kvm)
-> +{
-> +	struct kvm_memory_slot *slot;
-> +	unsigned long lim;
-> +	int srcu_idx;
-> +
-> +	srcu_idx = srcu_read_lock(&kvm->srcu);
-> +
-> +	/* Take the memslot containing guest absolute address 0 */
-> +	slot = gfn_to_memslot(kvm, 0);
-> +	/* Clear all slots that are completely below 2GB */
-> +	while (slot && slot->base_gfn + slot->npages < SZ_2G / PAGE_SIZE) {
-> +		lim = slot->userspace_addr + slot->npages * PAGE_SIZE;
-> +		s390_uv_destroy_range(kvm->mm, slot->userspace_addr, lim);
-> +		/* Take the next memslot */
-> +		slot = gfn_to_memslot(kvm, slot->base_gfn + slot->npages);
-> +	}
-> +	/* Last slot crosses the 2G boundary, clear only up to 2GB */
-> +	if (slot && slot->base_gfn < SZ_2G / PAGE_SIZE) {
-> +		lim = slot->userspace_addr + SZ_2G - slot->base_gfn * PAGE_SIZE;
-> +		s390_uv_destroy_range(kvm->mm, slot->userspace_addr, lim);
-> +	}
+Here is the v3:
+  https://lore.kernel.org/lkml/20220609143423.2839186-1-abel.vesa@nxp.com/
 
-Any reason why you split that up instead of always calculating a length 
-and using MIN()?
+Changes since v3:
+  * Examples included
+  * Included Abel's patches fixing thermal zone, keys and power controller names.
+
+Abel Vesa (14):
+  arm64: dts: freescale: imx8qxp: Fix thermal zone name for cpu0
+  dt-bindings: clk: imx: Add fsl,scu-clk yaml file
+  dt-bindings: pinctrl: imx: Add fsl,scu-iomux yaml file
+  dt-bindings: input: Add fsl,scu-key yaml file
+  dt-bindings: nvmem: Add fsl,scu-ocotp yaml file
+  dt-bindings: power: Add fsl,scu-pd yaml file
+  dt-bindings: rtc: Add fsl,scu-rtc yaml file
+  dt-bindings: thermal: Add fsl,scu-thermal yaml file
+  dt-bindings: watchdog: Add fsl,scu-wdt yaml file
+  dt-bindings: firmware: Add fsl,scu yaml file
+  arm64: dts: freescale: imx8: Fix power controller name
+  arm64: dts: freescale: imx8qxp: Add fallback compatible for clock
+    controller
+  arm64: dts: freescale: imx8qxp: Fix the keys node name
+  dt-bindings: arm: freescale: Remove fsl,scu txt file
+
+ .../bindings/arm/freescale/fsl,scu.txt        | 271 ------------------
+ .../bindings/clock/fsl,scu-clk.yaml           |  58 ++++
+ .../devicetree/bindings/firmware/fsl,scu.yaml | 170 +++++++++++
+ .../bindings/input/fsl,scu-key.yaml           |  39 +++
+ .../bindings/nvmem/fsl,scu-ocotp.yaml         |  49 ++++
+ .../bindings/pinctrl/fsl,scu-pinctrl.yaml     |  47 +++
+ .../devicetree/bindings/power/fsl,scu-pd.yaml |  41 +++
+ .../devicetree/bindings/rtc/fsl,scu-rtc.yaml  |  28 ++
+ .../bindings/thermal/fsl,scu-thermal.yaml     |  38 +++
+ .../bindings/watchdog/fsl,scu-wdt.yaml        |  35 +++
+ arch/arm64/boot/dts/freescale/imx8qm.dtsi     |   2 +-
+ arch/arm64/boot/dts/freescale/imx8qxp.dtsi    |   8 +-
+ 12 files changed, 510 insertions(+), 276 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/arm/freescale/fsl,scu.txt
+ create mode 100644 Documentation/devicetree/bindings/clock/fsl,scu-clk.yaml
+ create mode 100644 Documentation/devicetree/bindings/firmware/fsl,scu.yaml
+ create mode 100644 Documentation/devicetree/bindings/input/fsl,scu-key.yaml
+ create mode 100644 Documentation/devicetree/bindings/nvmem/fsl,scu-ocotp.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/fsl,scu-pinctrl.yaml
+ create mode 100644 Documentation/devicetree/bindings/power/fsl,scu-pd.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/fsl,scu-rtc.yaml
+ create mode 100644 Documentation/devicetree/bindings/thermal/fsl,scu-thermal.yaml
+ create mode 100644 Documentation/devicetree/bindings/watchdog/fsl,scu-wdt.yaml
+
+-- 
+2.25.1
 

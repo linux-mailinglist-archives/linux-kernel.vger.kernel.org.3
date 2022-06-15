@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F20354D3E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8522654D3E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:43:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347588AbiFOVle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 17:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33928 "EHLO
+        id S1345716AbiFOVnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 17:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347019AbiFOVlb (ORCPT
+        with ESMTP id S245376AbiFOVnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 17:41:31 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F6F56232
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:41:30 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id y6so524637plg.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:41:30 -0700 (PDT)
+        Wed, 15 Jun 2022 17:43:03 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF9631227
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:43:03 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id q12-20020a17090a304c00b001e2d4fb0eb4so3386496pjl.4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:43:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=8dWcLR0ZrLQZSCDJIe8I8UTiInH8Z6m2etiHt74njk8=;
-        b=YkaIP98uxenoicHUsjN7i3rddkaSiJYUoir0wuhlIOLfhbCB5o5JCguB9u8wExDAUI
-         r/iNkw1JmG/9doPE4C/ncdgKQ6IE/ty0fUdcSv0h872JAgdtgyV8mO3zTKTfwoPkSmNQ
-         eBbPhoQ1uziWgxh4xiM+1aGSPGtYRMwJPr9/R30sJarOA3Uu+0sFCd3NJ6EnnDGGRZo/
-         Zo1aDvkMxggrG4reqjA0LdFcFWq9DlX5YEas4On9WWe71azwDkXpM17O4Z30d+pIfynE
-         ln6AGiQUMyYdjUxki30H7/Dcz59y+LtVnQAMGxuM9zgKubw+DzynGFj2nkcnYPG74te1
-         X2Kg==
+        bh=WcjULP+xvRapFxRv0FaC6VPZV20BCthIO92kKFiQ9M0=;
+        b=B0XNk6D8/gn8a9uQq6IA6wE3unW212NQNc1cQ7qD+JTjkn1rfYHx6zE0/3HjpiSkCg
+         rkBrcV1VIEFW9BDgH3rI+yyJ6H0DNqc3yHSSy0SNBw1dCOMt9z1F/Hgek1me+rIr27IE
+         +jrW4QVidiYd361KRdfwHeez+SO0MONybOf4004hnfcLT3P/4gmT7iEXkX+NbONX7xA2
+         OR9FbegnF4PL9LZziDzPQaCytJfqj74oN6cEQh9iZhqlnVBBtZg6f2ZbL1G0sU3urVF/
+         w9RbvMqy0gH+GAbxBRWj+9CAz9L2SnU2UMjZFVJsJP6QagspO5iu1laFW7/rvX4OhhJ8
+         cZoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=8dWcLR0ZrLQZSCDJIe8I8UTiInH8Z6m2etiHt74njk8=;
-        b=qVXWeP1zHdZfJlts5igUnezTUdd0hymrTjylJL5ICWB9KsPNkjUkfGJLxmSMsPiVPE
-         d3WJlH8fbYEHYtaDUYfqQg/1hvZ/P/6Wk4iimY/LDbtNVy+q8EmDMSRd3aJS/w4AVlTV
-         uQ3DO68mVHkMWCs+f6tRuURDFpjySCCoLT4vu35g7ptkfW184R/frguENtADdk6N9beo
-         /1VrMgNP8//oWogs8a/P7lVLFEPelsyqLg1Ox0xr6tS0gLbIVJlaXZabbD75cq2gM6do
-         Ekb6iQ4aU2YsY6Z4165tg35a/FfNhdxhp6/Lgs450EKJwR8DnxuRq5KWohMBybEtF63k
-         kOzA==
-X-Gm-Message-State: AJIora8nzcK37DacLtwPviLeoSUFq26fkgLX8Hj6IzEHnDgC2jPkWbFD
-        VKa2avU8JePe0ikV7UH3FdnJ1Q==
-X-Google-Smtp-Source: AGRyM1v0KviAP1PW8KgEExGBe/JU7mf7xksWuzLnniQbv1H/38sCXHAxs6RJQgRmFDHTaD+Lrxr/iw==
-X-Received: by 2002:a17:90b:4a4c:b0:1e4:dcfc:e688 with SMTP id lb12-20020a17090b4a4c00b001e4dcfce688mr12391105pjb.38.1655329289707;
-        Wed, 15 Jun 2022 14:41:29 -0700 (PDT)
+        bh=WcjULP+xvRapFxRv0FaC6VPZV20BCthIO92kKFiQ9M0=;
+        b=xJCrR9CE/V6HeGWE8Y12CAj2aduh0YOzMsPUMkS7Jc2tbZaDZfLSEO7xvabGvJW8ie
+         6Z6CuZ1vVO7+swci/sr3Yynn0xsvyPN7SqjIPPqyiiU8KIJlQbkpApGxchTVMOKEADSi
+         Th+RuVeig0pJ/Ak7tQo1JigU1Z1mNRPOerPEdGXYExCSD8MVjQ7Y8DM77BwGOzYtd5sA
+         qBXQZ60C2b5xLb6Cf5ytm2dS1hHpWhHY8JU8U5qG+6pTGPPqusB2rRzd+ZYKHKgu90JN
+         F7NovtQSRG7iKs294epq7Q+FeXjxXbczA4rw1Az0CaH/ihvNcSuLyMXFa5NzSmP5Dstw
+         6c7Q==
+X-Gm-Message-State: AJIora8MJMM8wd+hUOUPLZaAaAi4/10b1CI2Rz2dHebMbaTajvOZO6Ex
+        +bqlCxwB2Pmv7WhVpwdtY2BIyQ==
+X-Google-Smtp-Source: AGRyM1vjV11bUqYxz/GH9vFdp7a7E9IJbTAEzFfMt7oHG+sL5zQpKHckTKh0WHupOxdErb81fpFqeQ==
+X-Received: by 2002:a17:903:28c:b0:167:6127:ed99 with SMTP id j12-20020a170903028c00b001676127ed99mr1369342plr.94.1655329382784;
+        Wed, 15 Jun 2022 14:43:02 -0700 (PDT)
 Received: from google.com ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id x13-20020a17090300cd00b00161455d8029sm117844plc.12.2022.06.15.14.41.28
+        by smtp.gmail.com with ESMTPSA id z15-20020aa7948f000000b0050dc7628178sm111221pfk.82.2022.06.15.14.43.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 14:41:29 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 22:41:26 +0100
+        Wed, 15 Jun 2022 14:43:02 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 22:43:00 +0100
 From:   Lee Jones <lee.jones@linaro.org>
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-iio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v14 02/10] mfd: qcom-spmi-pmic: expose the PMIC revid
- information to clients
-Message-ID: <YqpSBrfLz5mnM0kW@google.com>
-References: <20220429220904.137297-1-caleb.connolly@linaro.org>
- <20220429220904.137297-3-caleb.connolly@linaro.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: adjust file entry for max77693 dt after
+ merge conflict mess-up
+Message-ID: <YqpSZPr0a1raTRm6@google.com>
+References: <20220601073511.15721-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220429220904.137297-3-caleb.connolly@linaro.org>
+In-Reply-To: <20220601073511.15721-1-lukas.bulwahn@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -84,29 +72,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 29 Apr 2022, Caleb Connolly wrote:
+On Wed, 01 Jun 2022, Lukas Bulwahn wrote:
 
-> Some PMIC functions such as the RRADC need to be aware of the PMIC
-> chip revision information to implement errata or otherwise adjust
-> behaviour, export the PMIC information to enable this.
+> Commit b38213c6118b ("dt-bindings: mfd: maxim,max77693: Convert to
+> dtschema") converts max77693.txt to maxim,max77693.yaml and adjusts the
+> file entry in MAINTAINERS accordingly.
 > 
-> This is specifically required to enable the RRADC to adjust
-> coefficients based on which chip fab the PMIC was produced in,
-> this can vary per unique device and therefore has to be read at
-> runtime.
+> Unfortunately, the merge commit afb67df31a8c ("Merge branches [...] into
+> ibs-for-mfd-merged") resolves some conflict in MAINTAINERS in such a way
+> that the file entry for the converted text file max77693.txt, removed in
+> the commit above, is added back into MAINTAINERS.
 > 
-> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Remove the file entry to this converted text file in MAXIM PMIC AND MUIC
+> DRIVERS FOR EXYNOS BASED BOARDS.
+> 
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 > ---
->  drivers/mfd/qcom-spmi-pmic.c      | 265 ++++++++++++++++++++----------
->  include/soc/qcom/qcom-spmi-pmic.h |  60 +++++++
->  2 files changed, 235 insertions(+), 90 deletions(-)
->  create mode 100644 include/soc/qcom/qcom-spmi-pmic.h
+> Lee, please pick this minor non-urgent clean-up patch. Thanks.
+> 
+>  MAINTAINERS | 1 -
+>  1 file changed, 1 deletion(-)
 
-Once Jonathan's comments have been resolved:
-
-Acked-by: Lee Jones <lee.jones@linaro.org>
+Applied, thanks.
 
 -- 
 Lee Jones [李琼斯]

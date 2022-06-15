@@ -2,120 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9535A54CD5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAA1C54CD5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234139AbiFOPsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        id S236946AbiFOPsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbiFOPr7 (ORCPT
+        with ESMTP id S229662AbiFOPsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:47:59 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8DF220F9;
-        Wed, 15 Jun 2022 08:47:57 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id be31so19567197lfb.10;
-        Wed, 15 Jun 2022 08:47:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=VTCGWujNv4+ZeNU9inSiK0tI+fyoxm0X3NKXlbOy8Y8=;
-        b=GphwJd+LsGEWeN2UG4hGNyGvnzO74SuULFcCInrrgMlqBx8ENwGzXPt2mYReWKHevc
-         0XbVfNJOky5MmRd3j4yfAIyRzYLYgHv7/n0cn0R+GFOpDUVDUC81hCn2m1oE1UxPUoWo
-         +qgBpWgoy4aIdpBjLJl1r0T+ju62jYqHcOMRTctNqp2bWSn4QS6F2IVeElVNzK99mGrb
-         WoIIyfTwWKcNpy2mXR+SKnP/cc6nh07OU48gAhRTmgRycemIPRHP9oukemCczQWi7JJt
-         yTgLZ7YWzIi/Z/8M+yheAOjE60UQs2PPXenesWMsQyrdGX7sZMb2PDXbl3/Vz9sxlg/l
-         vnnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=VTCGWujNv4+ZeNU9inSiK0tI+fyoxm0X3NKXlbOy8Y8=;
-        b=DEBo60Z4mWTXRCwqSqA78/Xj2d0uFpLPkHmex1g0Uai12vfB5/QBKfoork7JAii79b
-         wRZw9U62kNqEuzQwnZ+idOTEyIVSnCHp47uft7Y/DLTtEmnraN5Titdg6UCb3IgP9ck+
-         Ox/K5QOT5XR+R02dK7sNbvGQ4WGoQ0TTEZwLkYKF/X0zG7K8l8rQYDpu5NDolQWPxA5o
-         qFKgswOTHLspd5NhG+fR2L+hzav9mSVZHPtOS+WQ0rhQ/FofhFfyBxuFfPy22xwrFCDj
-         x5HBRlN4mk3vmgX7mZOp8lySjMEL1OnkBbYUO3KBzejTrIu4oCM7G9ZWJG3UJNMBHcFJ
-         RtYQ==
-X-Gm-Message-State: AJIora+mgFLl9i7pS71BYyacZh6Mp6OMuk9r4mBVkCdMypVr/F563FFF
-        L2i/oLrzldSrjTwmZq1yV6s=
-X-Google-Smtp-Source: AGRyM1vcCVXtE8TdfCiHOURs9ffWBcnlUTL+yi36mILI8l9ZN3HWHOYcewv5RFV18a3Ky1FRl+oYTA==
-X-Received: by 2002:a05:6512:39cb:b0:47d:a4c6:40eb with SMTP id k11-20020a05651239cb00b0047da4c640ebmr62321lfu.597.1655308076206;
-        Wed, 15 Jun 2022 08:47:56 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id s15-20020a2e150f000000b0025567cf8633sm1710514ljd.85.2022.06.15.08.47.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 08:47:55 -0700 (PDT)
-Subject: Re: [PATCH] xen: don't require virtio with grants for non-PV guests
-To:     Juergen Gross <jgross@suse.com>
-Cc:     xen-devel@lists.xenproject.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-References: <20220615084835.27113-1-jgross@suse.com>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <6f5b1562-1270-5e83-bf9f-a9a7afc5a725@gmail.com>
-Date:   Wed, 15 Jun 2022 18:47:54 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 15 Jun 2022 11:48:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4B032E9E5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:48:49 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 89EF4153B;
+        Wed, 15 Jun 2022 08:48:49 -0700 (PDT)
+Received: from e122027.arm.com (unknown [10.57.7.82])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB7D33F7F5;
+        Wed, 15 Jun 2022 08:48:47 -0700 (PDT)
+From:   Steven Price <steven.price@arm.com>
+To:     =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Sandy Huang <hjc@rock-chips.com>
+Cc:     Steven Price <steven.price@arm.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: [PATCH] drm/rockchip: Detach from ARM DMA domain in attach_device
+Date:   Wed, 15 Jun 2022 16:48:30 +0100
+Message-Id: <20220615154830.555422-1-steven.price@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20220615084835.27113-1-jgross@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Since commit 1ea2a07a532b ("iommu: Add DMA ownership management
+interfaces") the Rockchip display driver on the Firefly RK3288 fails to
+initialise properly. This is because ARM DMA domain is still attached.
 
-On 15.06.22 11:48, Juergen Gross wrote:
+Let's follow the lead of exynos and tegra and add code to explicitly
+remove the ARM domain before attaching a new one.
 
-Hello Juergen
+Suggested-by: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Steven Price <steven.price@arm.com>
+---
+See also the thread[1] where I reported the regression.
 
-> Commit fa1f57421e0b ("xen/virtio: Enable restricted memory access using
-> Xen grant mappings") introduced a new requirement for using virtio
-> devices: the backend now needs to support the VIRTIO_F_ACCESS_PLATFORM
-> feature.
->
-> This is an undue requirement for non-PV guests, as those can be operated
-> with existing backends without any problem, as long as those backends
-> are running in dom0.
->
-> Per default allow virtio devices without grant support for non-PV
-> guests.
->
-> The setting can be overridden by using the new "xen_virtio_grant"
-> command line parameter.
->
-> Add a new config item to always force use of grants for virtio.
->
-> Fixes: fa1f57421e0b ("xen/virtio: Enable restricted memory access using Xen grant mappings")
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+[1] https://lore.kernel.org/linux-kernel/da9cca0a-ec5b-2e73-9de0-a930f7d947b2%40arm.com
+---
+ drivers/gpu/drm/rockchip/rockchip_drm_drv.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-Thank you for the fix.
-
-
-I have tested it on Arm64 guest (XEN_HVM_DOMAIN), it works.
-
-With the "__init" fix (pointed out by Viresh) applied you can add my:
-
-Tested-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com> #Arm64 only
-
-
-[snip]
-
-
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+index 67d38f53d3e5..13ed33e74457 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_drv.c
+@@ -23,6 +23,14 @@
+ #include <drm/drm_probe_helper.h>
+ #include <drm/drm_vblank.h>
+ 
++#if defined(CONFIG_ARM_DMA_USE_IOMMU)
++#include <asm/dma-iommu.h>
++#else
++#define arm_iommu_detach_device(...)	({ })
++#define arm_iommu_release_mapping(...)	({ })
++#define to_dma_iommu_mapping(dev) NULL
++#endif
++
+ #include "rockchip_drm_drv.h"
+ #include "rockchip_drm_fb.h"
+ #include "rockchip_drm_gem.h"
+@@ -49,6 +57,15 @@ int rockchip_drm_dma_attach_device(struct drm_device *drm_dev,
+ 	if (!private->domain)
+ 		return 0;
+ 
++	if (IS_ENABLED(CONFIG_ARM_DMA_USE_IOMMU)) {
++		struct dma_iommu_mapping *mapping = to_dma_iommu_mapping(dev);
++
++		if (mapping) {
++			arm_iommu_detach_device(dev);
++			arm_iommu_release_mapping(mapping);
++		}
++	}
++
+ 	ret = iommu_attach_device(private->domain, dev);
+ 	if (ret) {
+ 		DRM_DEV_ERROR(dev, "Failed to attach iommu device\n");
 -- 
-Regards,
-
-Oleksandr Tyshchenko
+2.25.1
 

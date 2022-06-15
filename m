@@ -2,117 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6678E54D081
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE8A54D088
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356589AbiFOR5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
+        id S1357701AbiFOR7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232471AbiFOR5f (ORCPT
+        with ESMTP id S1357888AbiFOR6O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:57:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB6A8544E1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655315843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IsV319NZNgDzu9DPo6i72lisoqYXO+k9cCPYQoqn8LA=;
-        b=ie8rU5LqrFcvh0XCli65VHPhDXo/FJPXc8sAQ5tG//OwzbW35OWCbi6d0r+MBUWfRWJPtB
-        mqcdFJtNbd9yrRbj7Jmmk6N6n0jvzuqRQpu8xq042LYjxApHog7EDsajr/X+3gVY2ko6ZF
-        jVNVMJo8dNWVoZSSfeMAzu24GUql8G8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-490-c2Q-mJ0zPsyh09IqDQBOCw-1; Wed, 15 Jun 2022 13:57:20 -0400
-X-MC-Unique: c2Q-mJ0zPsyh09IqDQBOCw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 511AC800971;
-        Wed, 15 Jun 2022 17:57:20 +0000 (UTC)
-Received: from horse.redhat.com (unknown [10.18.25.210])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 38C9F18EA9;
-        Wed, 15 Jun 2022 17:57:20 +0000 (UTC)
-Received: by horse.redhat.com (Postfix, from userid 10451)
-        id E9F252209F9; Wed, 15 Jun 2022 13:57:19 -0400 (EDT)
-Date:   Wed, 15 Jun 2022 13:57:19 -0400
-From:   Vivek Goyal <vgoyal@redhat.com>
-To:     Deming Wang <wangdeming@inspur.com>
-Cc:     stefanha@redhat.com, miklos@szeredi.hu,
-        virtualization@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtiofs: delete unused parameter for
- virtio_fs_cleanup_vqs
-Message-ID: <YqodfwS3KSVIaqKD@redhat.com>
-References: <20220610020838.1543-1-wangdeming@inspur.com>
+        Wed, 15 Jun 2022 13:58:14 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B9F2A413;
+        Wed, 15 Jun 2022 10:57:52 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id g16-20020a17090a7d1000b001ea9f820449so2823618pjl.5;
+        Wed, 15 Jun 2022 10:57:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:content-language:to
+         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=Pdm0v/eHuTn8EFkDzG/jFCh8QYUQn580u0Hjxv+TmSs=;
+        b=O6gq5i4RqzsvkWTYJsuMFS8kKcm670FI0T+LsWRMSujkkRhttepRtBbCuuV3sdBHxN
+         ZkKf9wTiZH+763xUbde92AiQDVe8Rkf4d/gLKDxvlYd0Uxi68FfSA5rHgmyJJSX26up8
+         uuQk//BHaJJJULhr8k+0pnWJTy4DAA4b66GUVVCAC9kbEJwzyBj/XsDcbRnZzy49agjI
+         mPKoDUTSTjacxo8afX8af66SfRrc1La9rhayTXyDofnCPzDCKIVLxFcjN1QeOImSTLAS
+         4d5otv6SXN9r5HnnYp1EzNpnAe4fM4/Ii7YdbbN8xeOr7bA2HBIJwf8meWNLqGce+jDS
+         VO1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=Pdm0v/eHuTn8EFkDzG/jFCh8QYUQn580u0Hjxv+TmSs=;
+        b=ykaqRWSSoTdhkDT7EdKVELiP917YlABZkdL3jnOraWJftSXye39adoHRO89okbhA4p
+         7ff8oFsEm8lH930X+jmRNvJ8HW9igVl3VaUn3B2H1L0KA3RSH2dACH0iVf0sw9FCgrCk
+         +iivZiIMmTw4k+loe45N+DJHjApBX5W+1Mn40ZtTkjwSyQe8kudkH9z+U5Zy1WRiW+Nr
+         thiX9Dl0apza57FiB3OuEuQGB93itnW48VbuFs+craSfAjAZfHIFBZ4xWf8sqoW/QlCh
+         caZXbGihq2I+9nrCa7FxRR4OoBws0J/gwib/XT73ofkq5IS9eoOr6j4FwmygY3hSejmT
+         p79Q==
+X-Gm-Message-State: AJIora9IytRHVlA8PDUGaYX6cTq6J4drYovVzMpuoTYlixGfsXFEdPId
+        QS680cu5MjGutd1ZiWzF9XI=
+X-Google-Smtp-Source: AGRyM1tYNZ3eEVpA869lUoIGayFw5Kmo3S5lbWkKwlKXn5LAschra1zSpqfs75aKZ+F5PiYuACDC8Q==
+X-Received: by 2002:a17:90b:4f4a:b0:1e3:49c9:aab0 with SMTP id pj10-20020a17090b4f4a00b001e349c9aab0mr11518167pjb.223.1655315871910;
+        Wed, 15 Jun 2022 10:57:51 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p5-20020a170903248500b0015e8d4eb1c8sm5961816plw.18.2022.06.15.10.57.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 10:57:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <01243e3e-f4d2-c1ba-98f5-db7bc0c62adc@roeck-us.net>
+Date:   Wed, 15 Jun 2022 10:57:49 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610020838.1543-1-wangdeming@inspur.com>
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Liang He <windhl@126.com>, tharvey@gateworks.com,
+        rjones@gateworks.com, jdelvare@suse.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220615151856.3970186-1-windhl@126.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH] drivers: hwmon: Add missing of_node_put() in gsc-hwmon.c
+In-Reply-To: <20220615151856.3970186-1-windhl@126.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 09, 2022 at 10:08:38PM -0400, Deming Wang wrote:
-> fs parameter not used. So, it needs to be deleted.
-> 
-> Signed-off-by: Deming Wang <wangdeming@inspur.com>
-
-Thanks Deming Wang for the patch. Good cleanup.
-
-Reviewed-by: Vivek Goyal <vgoyal@redhat.com>
-
-Thanks
-Vivek
-
+On 6/15/22 08:18, Liang He wrote:
+> In gsc_hwmon_get_devtree_pdata(), of_find_compatible_node() will return
+> a node pointer with refcount incremented. We should use of_node_put() in
+> fail path or when it is not used anymore.
+>  > Signed-off-by: Liang He <windhl@126.com>
 > ---
->  fs/fuse/virtio_fs.c | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
+
+Please use proper subject lines. Here it should have been
+
+hwmon: (gsc-hwmon) Add missing of_node_put()
+
+>   drivers/hwmon/gsc-hwmon.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/fs/fuse/virtio_fs.c b/fs/fuse/virtio_fs.c
-> index 8db53fa67359..0991199d19c1 100644
-> --- a/fs/fuse/virtio_fs.c
-> +++ b/fs/fuse/virtio_fs.c
-> @@ -741,8 +741,7 @@ static int virtio_fs_setup_vqs(struct virtio_device *vdev,
->  }
->  
->  /* Free virtqueues (device must already be reset) */
-> -static void virtio_fs_cleanup_vqs(struct virtio_device *vdev,
-> -				  struct virtio_fs *fs)
-> +static void virtio_fs_cleanup_vqs(struct virtio_device *vdev)
->  {
->  	vdev->config->del_vqs(vdev);
->  }
-> @@ -895,7 +894,7 @@ static int virtio_fs_probe(struct virtio_device *vdev)
->  
->  out_vqs:
->  	virtio_reset_device(vdev);
-> -	virtio_fs_cleanup_vqs(vdev, fs);
-> +	virtio_fs_cleanup_vqs(vdev);
->  	kfree(fs->vqs);
->  
->  out:
-> @@ -927,7 +926,7 @@ static void virtio_fs_remove(struct virtio_device *vdev)
->  	virtio_fs_stop_all_queues(fs);
->  	virtio_fs_drain_all_queues_locked(fs);
->  	virtio_reset_device(vdev);
-> -	virtio_fs_cleanup_vqs(vdev, fs);
-> +	virtio_fs_cleanup_vqs(vdev);
->  
->  	vdev->priv = NULL;
->  	/* Put device reference on virtio_fs object */
-> -- 
-> 2.27.0
-> 
+> diff --git a/drivers/hwmon/gsc-hwmon.c b/drivers/hwmon/gsc-hwmon.c
+> index 1fe37418ff46..34c20d13627a 100644
+> --- a/drivers/hwmon/gsc-hwmon.c
+> +++ b/drivers/hwmon/gsc-hwmon.c
+> @@ -268,10 +268,14 @@ gsc_hwmon_get_devtree_pdata(struct device *dev)
+>   
+>   	/* fan controller base address */
+>   	fan = of_find_compatible_node(dev->parent->of_node, NULL, "gw,gsc-fan");
+
+A single of_node_put(fan) here would have been be sufficient.
+
+> -	if (fan && of_property_read_u32(fan, "reg", &pdata->fan_base)) {
+> +	if (fan && of_property_read_u32(fan, "reg", &pdata->fan_base)) {		
+> +		of_node_put(fan);
+>   		dev_err(dev, "fan node without base\n");
+>   		return ERR_PTR(-EINVAL);
+>   	}
+> +	
+> +	/* if fan&&!of_property_read_u32 fail */
+
+This comment only adds confusion and does not add any value.
+
+Guenter
+
+> +	of_node_put(fan);
+>   
+>   	/* allocate structures for channels and count instances of each type */
+>   	device_for_each_child_node(dev, child) {
 

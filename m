@@ -2,95 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 271B054D53E
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 01:30:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EDF54D539
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 01:30:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348658AbiFOXYq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 19:24:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40318 "EHLO
+        id S245307AbiFOXZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 19:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242403AbiFOXYp (ORCPT
+        with ESMTP id S230172AbiFOXZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 19:24:45 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC99710FD8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:24:44 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id z17so7085146wmi.1
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:24:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Oh0CzsBK6XYUSBqF1cQtOHLaqbDSnG4wCRRP0RL1GWY=;
-        b=fwryWYy1j3kluVUxxG5tFQ3vYHpbqs9hgx4Jdj1WImsyQmO4FTGFa4hM1VabxWcMms
-         WojO6BK3Hsd5ZpJMYnTmbFv4nRhloIV5aNQRFeEz0P1QQaZ3IO8tgbpGhzb7hee9RpiY
-         76/9VoY0DBWkGkLyYJ7Ja5vJIarHTKlwS1eUY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Oh0CzsBK6XYUSBqF1cQtOHLaqbDSnG4wCRRP0RL1GWY=;
-        b=CHxCmV1o5CELXK2SbddwdFlqdgXXH6nSvgVcQWRvVi9MHE6k2VaVGBK2e9yrfk/hGO
-         GmoqphmDOgL5moJzrJGvEcSLjcBLhO/utFQa8YO16oXabyQYBAMRnlB2T9vv1Mj9ufjC
-         nlD3J33xECaGVMMxxU1G1NmzTi07kVb4ghWqmIcCvgCbRhlMHMxtwfVAIxaetuVxKVjs
-         jlm9BLVDhbiGJKFk8nDjWOrSTxambNjWD9EgAI7RODyFrae/OBgVZ3pIm2aounG39GRQ
-         qAQI8j5K4w14RDC2eZ5lG34HgE8HVUvz4lKt5FlsappohIS1DPT8N4nNOFN0/2LNsgiE
-         v26w==
-X-Gm-Message-State: AJIora+/4gkcwJj+ni/Z0EZ9vOyaE5sFfaTEApYo2LxHW4ys76fyyioZ
-        +xAsla0uoUdcLw4DGV+tbAhks587tiCM+6enrz0z8Q==
-X-Google-Smtp-Source: AGRyM1uj+gBu25gwQLFPBOZ5+Eln6z2RnmnhA3J7SVFKR/uvc0t7ylrZdMgeetRsu5LbUjgJ+JRDWKcrmpPXtYwXnNw=
-X-Received: by 2002:a05:600c:3792:b0:39c:6667:202 with SMTP id
- o18-20020a05600c379200b0039c66670202mr1876308wmr.104.1655335483162; Wed, 15
- Jun 2022 16:24:43 -0700 (PDT)
+        Wed, 15 Jun 2022 19:25:19 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F9810FFF
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:25:15 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.73 with qID 25FNP2Qg8014168, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.71/5.88) with ESMTPS id 25FNP2Qg8014168
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Thu, 16 Jun 2022 07:25:02 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Thu, 16 Jun 2022 07:25:02 +0800
+Received: from localhost.localdomain (172.21.177.191) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.21; Thu, 16 Jun 2022 07:25:01 +0800
+From:   Edward Wu <edwardwu@realtek.com>
+To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <surenb@google.com>, <minchan@google.com>, <edwardwu@realtek.com>
+Subject: [PATCH v2] mm: cma: sync everything after EBUSY
+Date:   Thu, 16 Jun 2022 07:24:55 +0800
+Message-ID: <20220615232455.26451-1-edwardwu@realtek.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220615021504.23358-1-edwardwu@realtek.com>
+References: <20220615021504.23358-1-edwardwu@realtek.com>
 MIME-Version: 1.0
-References: <CAODwPW9E8wWwxbYKyf4_-JFb4F-JSmLR3qOF_iudjX0f9ndF0A@mail.gmail.com>
- <CAODwPW8fiFSNehZbZDdR9kjHxohLGiyE7edU=Opy0xV_P8JbEQ@mail.gmail.com>
- <CAD=FV=XAYUx9OKLxThQxYr02ZE+7Rjw0VnSsxg7kfPCBG38FZw@mail.gmail.com>
- <CAODwPW_6A3kcmTLHVnH19bdYKpVBadAcDk5g-qxuju04uPRcMg@mail.gmail.com> <CAD=FV=UzsbwSbTc7LtsTj=wxj8A1MqmkVFt0XBrTdQ8pEhde=A@mail.gmail.com>
-In-Reply-To: <CAD=FV=UzsbwSbTc7LtsTj=wxj8A1MqmkVFt0XBrTdQ8pEhde=A@mail.gmail.com>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Wed, 15 Jun 2022 16:24:29 -0700
-Message-ID: <CAODwPW9DiWF2ffwBnw2rNhcV8rre=BzO9deEY_qXGvkWCPwe4A@mail.gmail.com>
-Subject: Re: [RFC] Correct memory layout reporting for "jedec,lpddr2" and
- related bindings
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Julius Werner <jwerner@chromium.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Jian-Jia Su <jjsu@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Nikola Milosavljevic <mnidza@outlook.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.21.177.191]
+X-ClientProxiedBy: RTEXH36504.realtek.com.tw (172.21.6.27) To
+ RTEXMBS03.realtek.com.tw (172.21.6.96)
+X-KSE-ServerInfo: RTEXMBS03.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: trusted connection
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Deterministic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 06/15/2022 23:03:00
+X-KSE-AttachmentFiltering-Interceptor-Info: no applicable attachment filtering
+ rules found
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: =?big5?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzYvMTUgpFWkyCAxMDowMTowMA==?=
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> OK, then what you have seems OK. Personally I guess I'd find it a
-> little less confusing if we described it as "num-chips" or something
-> like that.
+Since file-backed memory on CMA area could take long-term pinning.
 
-Yeah, we can do that too if people prefer that, that just means the
-firmware writing the entry needs to do that math. But while it makes
-the chips thing more obvious, it makes it less obvious what the actual
-memory channel width for the memory controller is, so I think it's
-sort of a trade-off either way (I feel like reporting the channel
-width would be closer to describing the raw topography as seen by
-memory training firmware, and leaving interpretations up to the
-kernel/userspace).
+By Minchan Kim's debug commit 151e084af494 ("mm: page_alloc:
+dump migrate-failed pages only at -EBUSY")
+We know the pinned page comes from buffer_head, ext4 journal, FS metadata.
 
-> They do have different sets of values valid for each property. The
-> properties are annoyingly not sorted consistently with each other, but
-> I think there are also different sets of properties aren't there? Like
-> I only see tRASmin-min-tck in the LPDDR2 one and not LPDDR3.
+Sync everything after EBUSY that can unpin most file-system pages.
+And raise the success rate at next time try.
 
-Okay, I haven't looked closely into the timing part. If there are
-notable differences, let's keep that separate.
+Link: https://lkml.kernel.org/r/20220615021504.23358-1-edwardwu@realtek.com
+Signed-off-by: Edward Wu <edwardwu@realtek.com>
+---
+v2:
+- Fix compile warning
+
+ mm/cma.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/mm/cma.c b/mm/cma.c
+index eaa4b5c920a2..28391f8ce0fd 100644
+--- a/mm/cma.c
++++ b/mm/cma.c
+@@ -31,6 +31,7 @@
+ #include <linux/highmem.h>
+ #include <linux/io.h>
+ #include <linux/kmemleak.h>
++#include <linux/syscalls.h>
+ #include <trace/events/cma.h>
+ 
+ #include "cma.h"
+@@ -410,6 +411,24 @@ static void cma_debug_show_areas(struct cma *cma)
+ static inline void cma_debug_show_areas(struct cma *cma) { }
+ #endif
+ 
++static inline void cma_sync_work(struct work_struct *work)
++{
++	ksys_sync();
++	kfree(work);
++	pr_debug("%s(): EBUSY Sync complete\n", __func__);
++}
++
++static void cma_ebusy_sync_pinned_pages(void)
++{
++	struct work_struct *work;
++
++	work = kmalloc(sizeof(*work), GFP_ATOMIC);
++	if (work) {
++		INIT_WORK(work, cma_sync_work);
++		schedule_work(work);
++	}
++}
++
+ /**
+  * cma_alloc() - allocate pages from contiguous area
+  * @cma:   Contiguous memory region for which the allocation is performed.
+@@ -430,6 +449,7 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
+ 	unsigned long i;
+ 	struct page *page = NULL;
+ 	int ret = -ENOMEM;
++	bool sys_synchronized = false;
+ 
+ 	if (!cma || !cma->count || !cma->bitmap)
+ 		goto out;
+@@ -480,6 +500,11 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
+ 		if (ret != -EBUSY)
+ 			break;
+ 
++		if (!sys_synchronized) {
++			sys_synchronized = true;
++			cma_ebusy_sync_pinned_pages();
++		}
++
+ 		pr_debug("%s(): memory range at %p is busy, retrying\n",
+ 			 __func__, pfn_to_page(pfn));
+ 
+-- 
+2.17.1
+

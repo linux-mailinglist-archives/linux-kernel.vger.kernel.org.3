@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5CD54C1B0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 08:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2280F54C1B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 08:22:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351653AbiFOGMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 02:12:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59582 "EHLO
+        id S1351979AbiFOGNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 02:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235477AbiFOGMc (ORCPT
+        with ESMTP id S235477AbiFOGNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 02:12:32 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D44192AF
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 23:12:31 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id x138so10494243pfc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 23:12:31 -0700 (PDT)
+        Wed, 15 Jun 2022 02:13:04 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7017FF02
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 23:13:00 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id gc3-20020a17090b310300b001e33092c737so1080124pjb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 23:13:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=9Tdsc7ElAP0+huyaWwaYeur9yVzd2yI+7V/8yx/aIBc=;
-        b=cLbNc3PAW59J4cj7Cb+E+uurhiCojwSgdCshxrzx/lLIQJaZiylX06qW0HYo8cMKe7
-         EjJCA77ZwuPokDJt8wyixdlfI5Q5vbrF42Q3uZzBpT5ieD7uIq+4EeYm5LJavU/mqK7y
-         JEyyUErnN+Phxr/OAtaT/Vhv+R3xqd0sUG92kSREMcoRQ5H6Jv3ZlEXLZ9mK82tcLuR3
-         Ola+5DFuKW6zMXI7gQUh4XlV+SmjVbxFZCDOaOEtrkSAHMH2/z19fM+uLD35fwGCUd4H
-         OeGHG60335MkX5CbugMYZokC3MBnkT4NOoTWQHmL18oSjBY1ctJNXksUUkQTaHIs5zbx
-         iXmw==
+        bh=hnoGBQrPK85JCgl7rQ6imQVPKzB/FybzwpvvNmXqIKY=;
+        b=WLMMRgsXjHgKczW//3IeInWXQPBfsmbj+BXYrzWq92EClweHfYIR7eZ6NbuyFl62/Y
+         6oRSnst+XAYUKcSaRqCmUnV0H5e5WH+cePk+Q5HY5pD9eWTZwE+sATWal8X03i8LUTTh
+         oimN8v4xKvy6HnJLNYVloGbg229q5KZJTh3cCR5M2FeP0Y02AAJBf6AGfiazK0vjFoqe
+         i5dxA6h83+ADSomF53F88KjY+ITVcB6z5GJVz+Sh5Fn1AM1eID8fv3QlEnWGKtcrm/Lx
+         FQkQzd7PNbiXvjQP5J8XfdiDdQDTQHQ/FwiD2vupF0AAb0VrFGPCak4vsOlXd34xjm+p
+         eHQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
          :references:mime-version:content-disposition:in-reply-to;
-        bh=9Tdsc7ElAP0+huyaWwaYeur9yVzd2yI+7V/8yx/aIBc=;
-        b=I0EUR4zqEoc3mY6jFaqrEvt/yWRnUFxlNFAFIWpOoVA1HS+68pbduokk7rXsb02KEm
-         8QcVP04q0kI86UOLIOdxl9bLPj2hGz7dG3J2rk6waU/84XF+iQvgYBMVMYjEkqk1+wsl
-         PUW1jH+amSipaSFuN7lQCTvTzxcrAxCIOmZOG/DAUVCsqkkvBEkM//VbUhd75IJe1wtp
-         jSxmJEKJHbxHuWTqOn568wr0hdWS/NGKxsvVJS22Fys6WwfKdL1PC3tTBIlE+VuWLT2k
-         ffNsdjPrDwhqgN5DY00eDUAdymrG0L1Wf8/Dn3gPrSA32/1z6w91i9P1R6ZttbTzQjE4
-         Xy/A==
-X-Gm-Message-State: AOAM5302U+3vDLjsV1dN0/t/772FluvLivxzDRBx6ivWTzbySJpGCOhM
-        Tb3/ukeKTNzazXP1r7/YRrY=
-X-Google-Smtp-Source: ABdhPJxfUICQhXQB6709mzdivAeSAnfNAjz10sNmqLBJvDbJkhwyOdBzhVj1+P4qXCtk4LpR3N6Rag==
-X-Received: by 2002:a63:6806:0:b0:3fc:3b43:52d5 with SMTP id d6-20020a636806000000b003fc3b4352d5mr7576994pgc.319.1655273550299;
-        Tue, 14 Jun 2022 23:12:30 -0700 (PDT)
+        bh=hnoGBQrPK85JCgl7rQ6imQVPKzB/FybzwpvvNmXqIKY=;
+        b=KXAqX1kZT9wjU7vsdI8sBlPkdHusQj7wtMo/6/+tBok/va1iKthPVk0+Xsc955SsC+
+         FwVid58vGG42NPkEZxiKRxnteohvcNcPcnpyrpaPDda2VXHQa5dsheFOEPpNyxk4Wuek
+         //dW6TmlN+FoLsS3Io1KBwv77XQCE5kpRoIT9738GisnD1O9k4KMKEDYC0JJdp2zHCai
+         O0dWOSua3RxpF0r+vcmSt6meEZ59h+WqDRvKXTPVxvk+CZH1mVkQc4mY0tSGqW2OI0Z3
+         6X6NJ0uxOaBVgYCJ7OsUnv806+15lZqgDkrF5AdQd4g/MNr2rwyuiIdoPFgdDvmfJfjw
+         5nQQ==
+X-Gm-Message-State: AJIora+lBIg53vHYo88xlZ6n3I4gD2w3ofegXQ3zFYp8RMdnyPqNzKxh
+        4HAvYZvAhG3iFVReVuAG15k=
+X-Google-Smtp-Source: AGRyM1su7WkTDtdDZg5ySULMFczN8ZxQyWjvbpgoTWXXpB5Fiv23RY6ojTEsW1X5b5BZFxZ0YtrC1A==
+X-Received: by 2002:a17:902:b689:b0:167:8b69:d1a7 with SMTP id c9-20020a170902b68900b001678b69d1a7mr7654020pls.156.1655273579783;
+        Tue, 14 Jun 2022 23:12:59 -0700 (PDT)
 Received: from localhost ([2620:10d:c090:400::4:7e4d])
-        by smtp.gmail.com with ESMTPSA id n23-20020aa78a57000000b0051c01aa7d31sm8761660pfa.46.2022.06.14.23.12.28
+        by smtp.gmail.com with ESMTPSA id w62-20020a628241000000b0051bfd13809fsm8808247pfd.119.2022.06.14.23.12.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jun 2022 23:12:28 -0700 (PDT)
+        Tue, 14 Jun 2022 23:12:59 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 14 Jun 2022 20:12:27 -1000
+Date:   Tue, 14 Jun 2022 20:12:57 -1000
 From:   Tejun Heo <tj@kernel.org>
 To:     Imran Khan <imran.f.khan@oracle.com>
 Cc:     gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/4] kernfs: make ->attr.open RCU protected.
-Message-ID: <Yql4S8+I8nDX0QA6@slm.duckdns.org>
-References: <20220614070346.810168-1-imran.f.khan@oracle.com>
- <20220614070346.810168-2-imran.f.khan@oracle.com>
- <Yqi1RVRK2XahPWlg@slm.duckdns.org>
- <89ca35ba-0290-b155-b290-5e70efafa9bb@oracle.com>
+Subject: Re: [PATCH v7 1/4] kernfs: make ->attr.open RCU protected.
+Message-ID: <Yql4aerFAHyp7ymB@slm.duckdns.org>
+References: <20220615021059.862643-1-imran.f.khan@oracle.com>
+ <20220615021059.862643-2-imran.f.khan@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <89ca35ba-0290-b155-b290-5e70efafa9bb@oracle.com>
+In-Reply-To: <20220615021059.862643-2-imran.f.khan@oracle.com>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -75,14 +73,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 12:13:48PM +1000, Imran Khan wrote:
-> Full patch-set will avoid this small conflict. I hope sending full
-> patch-set is okay for this time. The full patch-set (v7) is available at [1]
+On Wed, Jun 15, 2022 at 12:10:56PM +1000, Imran Khan wrote:
+> After removal of kernfs_open_node->refcnt in the previous patch,
+> kernfs_open_node_lock can be removed as well by making ->attr.open
+> RCU protected. kernfs_put_open_node can delegate freeing to ->attr.open
+> to RCU and other readers of ->attr.open can do so under rcu_read_(un)lock.
+> 
+> Suggested by: Al Viro <viro@zeniv.linux.org.uk>
+> Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
 
-It's just easier to focus on a single patch when repatedly iterating on it
-like this. It's easy to repost the whole thing when the patch is settled. It
-becomes a bit tiring to keep reposting essentially the same patchset over
-and over again.
+Acked-by: Tejun Heo <tj@kernel.org>
 
 Thanks.
 

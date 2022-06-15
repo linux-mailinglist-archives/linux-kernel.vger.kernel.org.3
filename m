@@ -2,103 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A7E54D0E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:27:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E78454D0DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349073AbiFOS05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 14:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
+        id S1358353AbiFOSZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 14:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242474AbiFOS0z (ORCPT
+        with ESMTP id S241899AbiFOSZB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:26:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0702C46CA2;
-        Wed, 15 Jun 2022 11:26:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B2F47B820BE;
-        Wed, 15 Jun 2022 18:26:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2465C34115;
-        Wed, 15 Jun 2022 18:26:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655317612;
-        bh=fRkYpPI/6cwJUF3rOB9VLtfSWvCjuLf4RTvivAv/DBk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HtDiTPjlMT83zHhELaNuA/+2c1NlwH5Ow5Rm8ZVZtoRg5o3/ZhroNh4y2vyZNzIRN
-         FE8V9FvXXCQgBiJeeSMGP5/pDfgIdgLn3LLAJktTzMK8nVIgSdbtMTvXnPM5yC0cAR
-         y1UQofHHjAb48UsyJ212i+uFOj5w0x8C9ou7iPh8fCDRiF8iu76zWIqrhwv+z5OkCc
-         ZgWAxxUeRlbgqbdPVOvY6Dg+sg7id/ce2aeFMv3ZRdEhnFtOOBgJY2qeMQUJIqDZBy
-         PMe/IdmNWhkT7ZaHbDdC/0vC3XUjMtmbCGbqa+SQl7HKqrUA2vmytkaenvorjvr78f
-         +4SNJuWrzVaxw==
-Date:   Wed, 15 Jun 2022 21:24:43 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     LinoSanfilippo@gmx.de
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: Re: [PATCH v5 08/10] tpm, tpm_tis: Request threaded interrupt handler
-Message-ID: <Yqoj6zaIrNB+aKph@iki.fi>
-References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
- <20220610110846.8307-9-LinoSanfilippo@gmx.de>
+        Wed, 15 Jun 2022 14:25:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88A4725588;
+        Wed, 15 Jun 2022 11:25:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6638D153B;
+        Wed, 15 Jun 2022 11:25:00 -0700 (PDT)
+Received: from [10.57.82.209] (unknown [10.57.82.209])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D9B243F73B;
+        Wed, 15 Jun 2022 11:24:55 -0700 (PDT)
+Message-ID: <dacd4a2d-a2b9-d2c2-4d47-f030dd01ee25@arm.com>
+Date:   Wed, 15 Jun 2022 19:24:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220610110846.8307-9-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
+ which controls
+Content-Language: en-GB
+To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        "max.oss.09@gmail.com" <max.oss.09@gmail.com>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        "geert@linux-m68k.org" <geert@linux-m68k.org>
+Cc:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
+        "vkoul@kernel.org" <vkoul@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "khilman@kernel.org" <khilman@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        "broonie@kernel.org" <broonie@kernel.org>
+References: <20220609150851.23084-1-max.oss.09@gmail.com>
+ <20220613191549.GA4092455-robh@kernel.org>
+ <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
+ <CAEHkU3VVM0zUsaKMUGeSzfbLmVJW6rqXGLv7TqaLTEQeXEVkUA@mail.gmail.com>
+ <12e3bb72-af2d-653f-b342-c6b4d6a1f292@linaro.org>
+ <ddbeba186bf662348e8594f322f750cf89326a66.camel@toradex.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <ddbeba186bf662348e8594f322f750cf89326a66.camel@toradex.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 01:08:44PM +0200, LinoSanfilippo@gmx.de wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+On 2022-06-15 18:31, Marcel Ziswiler wrote:
+> Hi
 > 
-> The TIS interrupt handler at least has to read and write the interrupt
-> status register. In case of SPI both operations result in a call to
-> tpm_tis_spi_transfer() which uses the bus_lock_mutex of the spi device
-> and thus must only be called from a sleepable context.
+> On Wed, 2022-06-15 at 10:15 -0700, Krzysztof Kozlowski wrote:
+>> On 15/06/2022 09:10, Max Krummenacher wrote:
+>>> Hi
+>>>
+>>> On Tue, Jun 14, 2022 at 9:22 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>>>
+>>>> Hi Rob,
+>>>>
+>>>> On Mon, Jun 13, 2022 at 9:15 PM Rob Herring <robh@kernel.org> wrote:
+>>>>> On Thu, Jun 09, 2022 at 05:08:46PM +0200, Max Krummenacher wrote:
+>>>>>> From: Max Krummenacher <max.krummenacher@toradex.com>
+>>>>>>
+>>>>>> its power enable by using a regulator.
+>>>>>>
+>>>>>> The currently implemented PM domain providers are all specific to
+>>>>>> a particular system on chip.
+>>>>>
+>>>>> Yes, power domains tend to be specific to an SoC... 'power-domains' is
+>>>>> supposed to be power islands in a chip. Linux 'PM domains' can be
+>>>>> anything...
+>>>
+>>> I don't see why such power islands should be restricted to a SoC. You can
+>>> build the exact same idea on a PCB or even more modular designs.
+>>
+>> In the SoC these power islands are more-or-less defined. These are real
+>> regions gated by some control knob.
+>>
+>> Calling few devices on a board "power domain" does not make it a power
+>> domain. There is no grouping, there is no control knob.
+>>
+>> Aren't you now re-implementing regulator supplies? How is this different
+>> than existing supplies?
 > 
-> To ensure this request a threaded interrupt handler.
+> I believe the biggest difference between power-domains and regulator-supplies lays in the former being driver
+> agnostic while the later is driver specific. Meaning with power-domains one can just add such arbitrary
+> structure to the device tree without any further driver specific changes/handling required. While with
+> regulator-supplies each and every driver actually needs to have driver specific handling thereof added. Or do I
+> miss anything?
 > 
-> Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the driver")
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index 0ef74979bc2c..8b5aa4fdbe92 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -794,8 +794,11 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
->  	int rc;
->  	u32 int_status;
->  
-> -	if (devm_request_irq(chip->dev.parent, irq, tis_int_handler, flags,
-> -			     dev_name(&chip->dev), chip) != 0) {
-> +
-> +	rc = devm_request_threaded_irq(chip->dev.parent, irq, NULL,
-> +				       tis_int_handler, IRQF_ONESHOT | flags,
-> +				       dev_name(&chip->dev), chip);
-> +	if (rc) {
->  		dev_info(&chip->dev, "Unable to request irq: %d for probe\n",
->  			 irq);
->  		return -1;
-> -- 
-> 2.36.1
-> 
+> We are really trying to model something where a single GPIO pin (via a GPIO regulator or whatever) can control
+> power to a variety of on-board peripherals. And, of course, we envision runtime PM actually making use of it
+> e.g. when doing suspend/resume.
 
-I actually would not add fixes tag to this because given that
-interrupt support is quite unusable, this should not cause any
-harm.
+FWIW, this really seems to beg the question of PM support in the drivers 
+for those peripherals. If they'll need to be modified to add 
+suspend/resume routines anyway, then adding a handful more lines to 
+control a supply regulator at the same time shouldn't be too big a deal. 
+Conversely, I'd be surprised if they *did* have PM support if there 
+wasn't already some way to make use of it.
 
-The code change itself is fine.
+Multiple consumers sharing a voltage rail provided by a single regulator 
+is so standard and well-supported that it barely seems worth pointing 
+out, but for the avoidance of doubt I shall. Adding a new non-standard 
+way to hide a specific subset of regulator functionality behind behind a 
+magic driver because it seems like slightly less work than handling it 
+the well-known established way sounds like a great recipe for technical 
+debt and future compatibility headaches. What if down the line you end 
+up with a situation where if device A is suspended, devices B and C are 
+happy to save some power by running the "domain" at a lower voltage? Do 
+we stubbornly start duplicating more of the regulator framework in the 
+magic power domain driver, or is that the point where we have to switch 
+all the consumers to explicit supplies, and get to regret having "saved" 
+that effort in the first place...
 
-BR, Jarkko
+Cheers,
+Robin.

@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775B554D2D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E066254D2DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347445AbiFOUpT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 16:45:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
+        id S1346239AbiFOUpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 16:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238164AbiFOUpP (ORCPT
+        with ESMTP id S1346510AbiFOUp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 16:45:15 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1D12CE2D;
-        Wed, 15 Jun 2022 13:45:13 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id h23so14615074ljl.3;
-        Wed, 15 Jun 2022 13:45:13 -0700 (PDT)
+        Wed, 15 Jun 2022 16:45:29 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25DD34677;
+        Wed, 15 Jun 2022 13:45:27 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id g9-20020a4adc89000000b0041bef879199so2308414oou.10;
+        Wed, 15 Jun 2022 13:45:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5h3h0ojea/V/Vb6J1m80YjDBkY9SwNaJhzgK7nDN9jc=;
-        b=EGSzFePXgCLDQMMmYU+A/8xzThfId/dsct6PuUYk4QIJwVUpkJdcGAUbq5XhsDaXVR
-         EZ5sh557OCbcMF00RxvZ9fr+l2uas+UJP7uKacB3XVuu65QcI4nipVPcT7TLfK+ng6Md
-         SjR3j/fXXY/AKKTPVASUqoFlZa9UH4FCRR/lzi2SLrG4ct4X0sLSTvMSkf3mqb5ak+6a
-         o820jU8Z+77oxmPxC1dtt1qhjMN4mbutJBDX+B4kFiwNsI7d2qLj4CKICBwGYBPKnTG0
-         +VGxFTpUecBmPWgLYO7EbKO7qyUAJLQrPx6WKg+2rwjaNevjFIny0+Erjas67Xz8H/gr
-         ofGw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xcXXEo50ke0CjTDo+NaIuCmfleDINQjvp5Fm6iMmoNs=;
+        b=oT02vXcWCCiAHE7yqPQmEo2y9Mcf4PTNfbKqTRW7sJRaVbmS9jNOmSErG+5tY599Bd
+         LgoVKu2wArDUWwWnADocI7TR5tZj8ytKk9MgwY9KyOZNC+IBDT+2jiy6z/VgUUUkN4hu
+         z0Se03YNpoSOSVF5gsdfM3fa44LBOWvwaDLsDJS7N0VFp4u+pag1w+uIaOWq6Xb+CwYR
+         jO36U4uaq9M279k7JqeIn92u5pSBmYfkGRFiDp9UoCL+IZP/Q4rScvZUXKLty2ciczxU
+         MUhEerA4+9yafkhy0UcVRyaKacxuHA1rSZUUUaiKYzbD4dCgm0OonB8eGxfzN+RbAz+L
+         5PHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5h3h0ojea/V/Vb6J1m80YjDBkY9SwNaJhzgK7nDN9jc=;
-        b=H2kF7vP1yoD/KjM3BXEZt7z7n4t5vVTqc4bb22JnT7CgI20yET1jw5UsJC89XPty99
-         AanGfr8RXaYihYhbO/MKNV8vxoHNnuHg9Te6lrxq1nUfic6kJ+Ls/QneOdQIzpXtgl/d
-         jnNzeBuWHVuux3g46cUvJ0bkes82nCIdl8ZcIZ54pdV7HHPbn3MILeNS/pIP5y7QCnlG
-         fDvFyefCLe78bvLCio0V5+DF55mCH8ShynrEjzh8JqloShWkIHa/PTBeSEHbdi5cpZq2
-         WSkWPcceraSkmkfPrrvF8URZBuikVvlXBBcp0pb2iam4ZEjAz7Wxe7JNMvKiiZuWKqGP
-         IBmw==
-X-Gm-Message-State: AJIora/pzek4VS6+aRlZlu+uRxzi11ZN4E99JtMIR+sLlqk9/5Eo8EpG
-        FZDiLkihHIVDY5a8zbhsRIUcSKCKkzPjgg==
-X-Google-Smtp-Source: AGRyM1v1T86xfgb4p/zngTUo4+PBpPqyKtcso2mDUygEhBID8S035JaN09cLtJMtzt6xwHAMBFjkAA==
-X-Received: by 2002:a2e:98d9:0:b0:255:85f4:14b5 with SMTP id s25-20020a2e98d9000000b0025585f414b5mr798284ljj.399.1655325911961;
-        Wed, 15 Jun 2022 13:45:11 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id br21-20020a056512401500b0047255d2114asm1906795lfb.121.2022.06.15.13.45.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 13:45:11 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 23:45:09 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 07/23] ata: libahci_platform: Convert to using devm
- bulk clocks API
-Message-ID: <20220615204509.siz54h4vbgvb3zkm@mobilestation>
-References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
- <20220610081801.11854-8-Sergey.Semin@baikalelectronics.ru>
- <3bf20887-6e2f-41f4-e4ec-5c2278f6cb18@opensource.wdc.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xcXXEo50ke0CjTDo+NaIuCmfleDINQjvp5Fm6iMmoNs=;
+        b=4qZIQ29xGoagfuVRaf0x7STWSMHOSTzYaVFCgTn0nfZpJEtJxSaMpq6Ua8ofC/+kIH
+         6hZTCjwiZVLsVJljzZDREhgvDQUK27lcND8uAZU3ffvjlfjUCV/fxZvoV9m37+u/TPtO
+         SK5+6pJhv3pREBLU5K78iQGPbnUcio4soQGXeGavc91OHWDgxAsCkO+hwWOuAvfgB8g9
+         /XPO102zUNtriXnPb+svZ7JBj601y0i9R260IMkjVZH+C4x/iceCgDK+uJpfZHA0XhxD
+         UXieMsr2BQkWQFteb34CrsOusAe9TQOwM1HhbR5HUxvH6nXlTNx34+ds+F+4oIn3oS3K
+         z/Mg==
+X-Gm-Message-State: AJIora8NH73ZQq5rtl+K0iI6F0uoYbgVEwNCPZDAdnhzdih6ZEAgt1Du
+        adIfXiZLY/JXwXPJYPqetO8DwnpOJcrXHmVby/94m8h2
+X-Google-Smtp-Source: AGRyM1vEqfTFGnhrliHzSYUkFFbVEaP5yl8JeNL/BM8B1dFcs+WmEJs0Y+3mnX/2mo+VxVsW1+gUrewNQbQalUF45Jg=
+X-Received: by 2002:a4a:458e:0:b0:41c:1d71:8ef with SMTP id
+ y136-20020a4a458e000000b0041c1d7108efmr705527ooa.23.1655325927149; Wed, 15
+ Jun 2022 13:45:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3bf20887-6e2f-41f4-e4ec-5c2278f6cb18@opensource.wdc.com>
+References: <20220615160116.528c324b@canb.auug.org.au> <d1a48a84-6d07-e8f7-5fd8-d24a7a1cf187@infradead.org>
+ <CADnq5_N6gfaPfZJAX4+poWFFruxNdFKZqzXZXosj1A55e-O1mA@mail.gmail.com> <YqpACmvbwiEcUfta@dev-arch.thelio-3990X>
+In-Reply-To: <YqpACmvbwiEcUfta@dev-arch.thelio-3990X>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 15 Jun 2022 16:45:16 -0400
+Message-ID: <CADnq5_OnrxUiM+aTWRLjixp=vY6adV3w4p2cfTkdS32uq_UsiQ@mail.gmail.com>
+Subject: Re: linux-next: Tree for Jun 15 (drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c)
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Bhanuprakash Modem <bhanuprakash.modem@intel.com>
+Content-Type: multipart/mixed; boundary="000000000000e04f2805e1829933"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -78,259 +75,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 05:22:02PM +0900, Damien Le Moal wrote:
-> On 6/10/22 17:17, Serge Semin wrote:
-> > In order to simplify the clock-related code there is a way to convert the
-> > current fixed clocks array into using the common bulk clocks kernel API
-> > with dynamic set of the clock handlers and device-managed clock-resource
-> > tracking. It's a bit tricky due to the complication coming from the
-> > requirement to support the platforms (da850, spear13xx) with the
-> > non-OF-based clock source, but still doable.
-> > 
-> > Before this modification there are two methods have been used to get the
-> > clocks connected to an AHCI device: clk_get() - to get the very first
-> > clock in the list and of_clk_get() - to get the rest of them. Basically
-> > the platforms with non-OF-based clocks definition could specify only a
-> > single reference clock source. The platforms with OF-hw clocks have been
-> > luckier and could setup up to AHCI_MAX_CLKS clocks. Such semantic can be
-> > retained with using devm_clk_bulk_get_all() to retrieve the clocks defined
-> > via the DT firmware and devm_clk_get_optional() otherwise. In both cases
-> > using the device-managed version of the methods will cause the automatic
-> > resources deallocation on the AHCI device removal event. The only
-> > complicated part in the suggested approach is the explicit allocation and
-> > initialization of the clk_bulk_data structure instance for the non-OF
-> > reference clocks. It's required in order to use the Bulk Clocks API for
-> > the both denoted cases of the clocks definition.
-> > 
-> > Note aside with the clock-related code reduction and natural
-> > simplification, there are several bonuses the suggested modification
-> > provides. First of all the limitation of having no greater than
-> > AHCI_MAX_CLKS clocks is now removed, since the devm_clk_bulk_get_all()
-> > method will allocate as many reference clocks data descriptors as there
-> > are clocks specified for the device. Secondly the clock names are
-> > auto-detected. So the LLDD (glue) drivers can make sure that the required
-> > clocks are specified just by checking the clock IDs in the clk_bulk_data
-> > array.  Thirdly using the handy Bulk Clocks kernel API improves the
-> > clocks-handling code readability. And the last but not least this
-> > modification implements a true optional clocks support to the
-> > ahci_platform_get_resources() method. Indeed the previous clocks getting
-> > procedure just stopped getting the clocks on any errors (aside from
-> > non-critical -EPROBE_DEFER) in a way so the callee wasn't even informed
-> > about abnormal loop termination. The new implementation lacks of such
-> > problem. The ahci_platform_get_resources() will return an error code if
-> > the corresponding clocks getting method ends execution abnormally.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Reviewed-by: Hannes Reinecke <hare@suse.de>
-> > 
-> > ---
-> > 
-> > Changelog v2:
-> > - Convert to checking the error-case first in the devm_clk_bulk_get_all()
-> >   method invocation. (@Damien)
-> > - Fix some grammar mistakes in the comments.
-> > ---
-> >  drivers/ata/ahci.h             |  4 +-
-> >  drivers/ata/libahci_platform.c | 84 ++++++++++++++++------------------
-> >  2 files changed, 41 insertions(+), 47 deletions(-)
-> > 
-> > diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
-> > index ad11a4c52fbe..c3770a19781b 100644
-> > --- a/drivers/ata/ahci.h
-> > +++ b/drivers/ata/ahci.h
-> > @@ -38,7 +38,6 @@
-> >  
-> >  enum {
-> >  	AHCI_MAX_PORTS		= 32,
-> > -	AHCI_MAX_CLKS		= 5,
-> >  	AHCI_MAX_SG		= 168, /* hardware max is 64K */
-> >  	AHCI_DMA_BOUNDARY	= 0xffffffff,
-> >  	AHCI_MAX_CMDS		= 32,
-> > @@ -339,7 +338,8 @@ struct ahci_host_priv {
-> >  	u32			em_msg_type;	/* EM message type */
-> >  	u32			remapped_nvme;	/* NVMe remapped device count */
-> >  	bool			got_runtime_pm; /* Did we do pm_runtime_get? */
-> > -	struct clk		*clks[AHCI_MAX_CLKS]; /* Optional */
-> > +	unsigned int		n_clks;
-> > +	struct clk_bulk_data	*clks;		/* Optional */
-> >  	struct reset_control	*rsts;		/* Optional */
-> >  	struct regulator	**target_pwrs;	/* Optional */
-> >  	struct regulator	*ahci_regulator;/* Optional */
-> > diff --git a/drivers/ata/libahci_platform.c b/drivers/ata/libahci_platform.c
-> > index 1e9e825d6cc5..814804582d1d 100644
-> > --- a/drivers/ata/libahci_platform.c
-> > +++ b/drivers/ata/libahci_platform.c
-> > @@ -8,6 +8,7 @@
-> >   *   Anton Vorontsov <avorontsov@ru.mvista.com>
-> >   */
-> >  
-> > +#include <linux/clk-provider.h>
-> >  #include <linux/clk.h>
-> >  #include <linux/kernel.h>
-> >  #include <linux/gfp.h>
-> > @@ -97,28 +98,14 @@ EXPORT_SYMBOL_GPL(ahci_platform_disable_phys);
-> >   * ahci_platform_enable_clks - Enable platform clocks
-> >   * @hpriv: host private area to store config values
-> >   *
-> > - * This function enables all the clks found in hpriv->clks, starting at
-> > - * index 0. If any clk fails to enable it disables all the clks already
-> > - * enabled in reverse order, and then returns an error.
-> > + * This function enables all the clks found for the AHCI device.
-> >   *
-> >   * RETURNS:
-> >   * 0 on success otherwise a negative error code
-> >   */
-> >  int ahci_platform_enable_clks(struct ahci_host_priv *hpriv)
-> >  {
-> > -	int c, rc;
-> > -
-> > -	for (c = 0; c < AHCI_MAX_CLKS && hpriv->clks[c]; c++) {
-> > -		rc = clk_prepare_enable(hpriv->clks[c]);
-> > -		if (rc)
-> > -			goto disable_unprepare_clk;
-> > -	}
-> > -	return 0;
-> > -
-> > -disable_unprepare_clk:
-> > -	while (--c >= 0)
-> > -		clk_disable_unprepare(hpriv->clks[c]);
-> > -	return rc;
-> > +	return clk_bulk_prepare_enable(hpriv->n_clks, hpriv->clks);
-> >  }
-> >  EXPORT_SYMBOL_GPL(ahci_platform_enable_clks);
-> >  
-> > @@ -126,16 +113,13 @@ EXPORT_SYMBOL_GPL(ahci_platform_enable_clks);
-> >   * ahci_platform_disable_clks - Disable platform clocks
-> >   * @hpriv: host private area to store config values
-> >   *
-> > - * This function disables all the clks found in hpriv->clks, in reverse
-> > - * order of ahci_platform_enable_clks (starting at the end of the array).
-> > + * This function disables all the clocks enabled before
-> > + * (bulk-clocks-disable function is supposed to do that in reverse
-> > + * from the enabling procedure order).
-> >   */
-> >  void ahci_platform_disable_clks(struct ahci_host_priv *hpriv)
-> >  {
-> > -	int c;
-> > -
-> > -	for (c = AHCI_MAX_CLKS - 1; c >= 0; c--)
-> > -		if (hpriv->clks[c])
-> > -			clk_disable_unprepare(hpriv->clks[c]);
-> > +	clk_bulk_disable_unprepare(hpriv->n_clks, hpriv->clks);
-> >  }
-> >  EXPORT_SYMBOL_GPL(ahci_platform_disable_clks);
-> >  
-> > @@ -292,8 +276,6 @@ static void ahci_platform_put_resources(struct device *dev, void *res)
-> >  		pm_runtime_disable(dev);
-> >  	}
-> >  
-> > -	for (c = 0; c < AHCI_MAX_CLKS && hpriv->clks[c]; c++)
-> > -		clk_put(hpriv->clks[c]);
-> >  	/*
-> >  	 * The regulators are tied to child node device and not to the
-> >  	 * SATA device itself. So we can't use devm for automatically
-> > @@ -374,8 +356,8 @@ static int ahci_platform_get_regulator(struct ahci_host_priv *hpriv, u32 port,
-> >   * 1) mmio registers (IORESOURCE_MEM 0, mandatory)
-> >   * 2) regulator for controlling the targets power (optional)
-> >   *    regulator for controlling the AHCI controller (optional)
-> > - * 3) 0 - AHCI_MAX_CLKS clocks, as specified in the devs devicetree node,
-> > - *    or for non devicetree enabled platforms a single clock
-> > + * 3) all clocks specified in the devicetree node, or a single
-> > + *    clock for non-OF platforms (optional)
-> >   * 4) resets, if flags has AHCI_PLATFORM_GET_RESETS (optional)
-> >   * 5) phys (optional)
-> >   *
-> > @@ -385,11 +367,10 @@ static int ahci_platform_get_regulator(struct ahci_host_priv *hpriv, u32 port,
-> >  struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
-> >  						   unsigned int flags)
-> >  {
-> > +	int child_nodes, rc = -ENOMEM, enabled_ports = 0;
-> >  	struct device *dev = &pdev->dev;
-> >  	struct ahci_host_priv *hpriv;
-> > -	struct clk *clk;
-> >  	struct device_node *child;
-> > -	int i, enabled_ports = 0, rc = -ENOMEM, child_nodes;
-> >  	u32 mask_port_map = 0;
-> >  
-> >  	if (!devres_open_group(dev, NULL, GFP_KERNEL))
-> > @@ -415,25 +396,38 @@ struct ahci_host_priv *ahci_platform_get_resources(struct platform_device *pdev,
-> >  		goto err_out;
-> >  	}
-> >  
-> > -	for (i = 0; i < AHCI_MAX_CLKS; i++) {
-> > +	/*
-> > +	 * Bulk clocks getting procedure can fail to find any clock due to
-> > +	 * running on a non-OF platform or due to the clocks being defined in
-> > +	 * bypass of the DT firmware (like da850, spear13xx). In that case we
-> > +	 * fallback to getting a single clock source right from the dev clocks
-> > +	 * list.
-> > +	 */
-> > +	rc = devm_clk_bulk_get_all(dev, &hpriv->clks);
-> > +	if (rc < 0)
-> > +		goto err_out;
-> > +
-> > +	if (rc > 0) {
-> > +		/* Got clocks in bulk */
-> > +		hpriv->n_clks = rc;
-> > +	} else {
-> >  		/*
-> > -		 * For now we must use clk_get(dev, NULL) for the first clock,
-> > -		 * because some platforms (da850, spear13xx) are not yet
-> > -		 * converted to use devicetree for clocks.  For new platforms
-> > -		 * this is equivalent to of_clk_get(dev->of_node, 0).
-> > +		 * No clock bulk found: fallback to manually getting
-> > +		 * the optional clock.
-> >  		 */
-> > -		if (i == 0)
-> > -			clk = clk_get(dev, NULL);
-> > -		else
-> > -			clk = of_clk_get(dev->of_node, i);
-> > -
-> > -		if (IS_ERR(clk)) {
-> > -			rc = PTR_ERR(clk);
-> > -			if (rc == -EPROBE_DEFER)
-> > -				goto err_out;
-> > -			break;
-> > +		hpriv->clks = devm_kzalloc(dev, sizeof(*hpriv->clks), GFP_KERNEL);
-> > +		if (!hpriv->clks) {
-> > +			rc = -ENOMEM;
-> > +			goto err_out;
-> > +		}
-> > +		hpriv->clks->clk = devm_clk_get_optional(dev, NULL);
+--000000000000e04f2805e1829933
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> > +		if (IS_ERR(hpriv->clks->clk)) {
-> > +			rc = PTR_ERR(hpriv->clks->clk);
-> > +			goto err_out;
-> > +		} else if (hpriv->clks->clk) {
-> 
-> Nit: the else is not needed here.
+On Wed, Jun 15, 2022 at 4:24 PM Nathan Chancellor <nathan@kernel.org> wrote=
+:
+>
+> On Wed, Jun 15, 2022 at 03:28:52PM -0400, Alex Deucher wrote:
+> > On Wed, Jun 15, 2022 at 3:01 PM Randy Dunlap <rdunlap@infradead.org> wr=
+ote:
+> > >
+> > >
+> > >
+> > > On 6/14/22 23:01, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > >
+> > > > Changes since 20220614:
+> > > >
+> > >
+> > > on i386:
+> > > # CONFIG_DEBUG_FS is not set
+> > >
+> > >
+> > > ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In fu=
+nction =E2=80=98amdgpu_dm_crtc_late_register=E2=80=99:
+> > > ../drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6599:2=
+: error: implicit declaration of function =E2=80=98crtc_debugfs_init=E2=80=
+=99; did you mean =E2=80=98amdgpu_debugfs_init=E2=80=99? [-Werror=3Dimplici=
+t-function-declaration]
+> > >   crtc_debugfs_init(crtc);
+> > >   ^~~~~~~~~~~~~~~~~
+> > >   amdgpu_debugfs_init
+> > >
+> > >
+> > > Full randconfig file is attached.
+> >
+> > I tried building with your config and I can't repro this.  As Harry
+> > noted, that function and the whole secure display feature depend on
+> > debugfs.  It should never be built without CONFIG_DEBUG_FS.  See
+> > drivers/gpu/drm/amd/display/Kconfig:
+> >
+> > > config DRM_AMD_SECURE_DISPLAY
+> > >         bool "Enable secure display support"
+> > >         default n
+> > >         depends on DEBUG_FS
+> > >         depends on DRM_AMD_DC_DCN
+> > >         help
+> > >             Choose this option if you want to
+> > >             support secure display
+> > >
+> > >             This option enables the calculation
+> > >             of crc of specific region via debugfs.
+> > >             Cooperate with specific DMCU FW.
+> >
+> > amdgpu_dm_crtc_late_register is guarded by
+> > CONIG_DRM_AMD_SECURE_DISPLAY.  It's not clear to me how we could hit
+> > this.
+>
+> I think the problem is that you are not looking at the right tree.
+>
+> The kernel test robot reported [1] [2] this error is caused by commit
+> 4cd79f614b50 ("drm/amd/display: Move connector debugfs to drm"), which
+> is in the drm-misc tree on the drm-misc-next branch. That change removes
+> the #ifdef around amdgpu_dm_crtc_late_register(), meaning that
+> crtc_debugfs_init() can be called without CONFIG_DRM_AMD_SECURE_DISPLAY
+> and CONFIG_DEBUG_FS.
+>
+>   $ git show -s --format=3D'%h ("%s")'
+>   abf0ba5a34ea ("drm/bridge: it6505: Add missing CRYPTO_HASH dependency")
+>
+>   $ make -skj"$(nproc)" ARCH=3Dx86_64 mrproper defconfig
+>
+>   $ scripts/config -d BLK_DEV_IO_TRACE -d DEBUG_FS -e DRM_AMDGPU
+>
+>   $ make -skj"$(nproc)" ARCH=3Dx86_64 olddefconfig drivers/gpu/drm/amd/am=
+dgpu/../display/amdgpu_dm/amdgpu_dm.o
+>   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c: In functio=
+n =E2=80=98amdgpu_dm_crtc_late_register=E2=80=99:
+>   drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:6622:9: err=
+or: implicit declaration of function =E2=80=98crtc_debugfs_init=E2=80=99; d=
+id you mean =E2=80=98amdgpu_debugfs_init=E2=80=99? [-Werror=3Dimplicit-func=
+tion-declaration]
+>    6622 |         crtc_debugfs_init(crtc);
+>         |         ^~~~~~~~~~~~~~~~~
+>         |         amdgpu_debugfs_init
+>   cc1: all warnings being treated as errors
+>
+> Contrast that with the current top of your tree:
+>
+>   $ git show -s --format=3D'%h ("%s")'
+>   c435f61d0eb3 ("drm/amd/display: Drop unnecessary guard from DC resource=
+")
+>
+>   $ make -skj"$(nproc)" ARCH=3Dx86_64 mrproper defconfig
+>
+>   $ scripts/config -d BLK_DEV_IO_TRACE -d DEBUG_FS -e DRM_AMDGPU
+>
+>   $ make -skj"$(nproc)" ARCH=3Dx86_64 olddefconfig drivers/gpu/drm/amd/am=
+dgpu/../display/amdgpu_dm/amdgpu_dm.o
+>
+>   $ echo $?
+>   0
+>
+> Randy's patch [3] seems like it should resolve the issue just fine but
+> it needs to be applied to drm-misc-next, not the amdgpu tree.
 
-Well, it depends on what you see behind it. I see many reasons to keep
-it and only one tiny reason to drop it. Keeping it will improve the
-code readability and maintainability like having a more natural
-execution flow representation, thus clearer read-flow (else part as
-exception to the if part), less modifications should the goto part is
-changed/removed, a more exact program flow representation can be used
-by the compiler for some internal optimizations, it's one line shorter
-than the case we no 'else' here. On the other hand indeed we can drop
-it since if the conditional statement is true, the code afterwards
-won't be executed due to the goto operator. But as I see it dropping
-the else operator won't improve anything, but vise-versa will worsen
-the code instead. So if I get to miss something please justify why you
-want it being dropped, otherwise I would rather preserve it.
+Thanks for tracking this down.  I think something like the attached
+patch is cleaner since the whole thing is only valid for debugfs.
 
--Sergey
+Alex
 
-> 
-> > +			hpriv->clks->id = __clk_get_name(hpriv->clks->clk);
-> > +			hpriv->n_clks = 1;
-> >  		}
-> > -		hpriv->clks[i] = clk;
-> >  	}
-> >  
-> >  	hpriv->ahci_regulator = devm_regulator_get(dev, "ahci");
-> 
-> 
-> -- 
-> Damien Le Moal
-> Western Digital Research
+
+>
+> [1]: https://lore.kernel.org/202205241843.8EWKesIA-lkp@intel.com/
+> [2]: https://lore.kernel.org/202205240207.KmDLuSrC-lkp@intel.com/
+> [3]: https://lore.kernel.org/20220614155726.26211-1-rdunlap@infradead.org=
+/
+>
+> Cheers,
+> Nathan
+
+--000000000000e04f2805e1829933
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="0001-drm-amdgpu-display-fix-build-when-CONFIG_DEBUG_FS-is.patch"
+Content-Disposition: attachment; 
+	filename="0001-drm-amdgpu-display-fix-build-when-CONFIG_DEBUG_FS-is.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l4g29tzt0>
+X-Attachment-Id: f_l4g29tzt0
+
+RnJvbSBiMGJjYWNkODYzNDQ5OThlMGNhNzU3Zjg5YzZjNGNkM2I2Mjk4OTk5IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBbGV4IERldWNoZXIgPGFsZXhhbmRlci5kZXVjaGVyQGFtZC5j
+b20+CkRhdGU6IFdlZCwgMTUgSnVuIDIwMjIgMTY6NDA6MzkgLTA0MDAKU3ViamVjdDogW1BBVENI
+XSBkcm0vYW1kZ3B1L2Rpc3BsYXk6IGZpeCBidWlsZCB3aGVuIENPTkZJR19ERUJVR19GUyBpcyBu
+b3Qgc2V0CgphbWRncHVfZG1fY3J0Y19sYXRlX3JlZ2lzdGVyIGlzIG9ubHkgdXNlZCB3aGVuIENP
+TkZJR19ERUJVR19GUwpzbyBtYWtlIGl0IGRlcGVuZGVudCBvbiB0aGF0LgoKRml4ZXM6IDRjZDc5
+ZjYxNGI1MCAoImRybS9hbWQvZGlzcGxheTogTW92ZSBjb25uZWN0b3IgZGVidWdmcyB0byBkcm0i
+KQpSZXBvcnRlZC1ieTogUmFuZHkgRHVubGFwIDxyZHVubGFwQGluZnJhZGVhZC5vcmc+ClJlcG9y
+dGVkLWJ5OiBOYXRoYW4gQ2hhbmNlbGxvciA8bmF0aGFuQGtlcm5lbC5vcmc+ClNpZ25lZC1vZmYt
+Ynk6IEFsZXggRGV1Y2hlciA8YWxleGFuZGVyLmRldWNoZXJAYW1kLmNvbT4KLS0tCiBkcml2ZXJz
+L2dwdS9kcm0vYW1kL2Rpc3BsYXkvYW1kZ3B1X2RtL2FtZGdwdV9kbS5jIHwgNCArKysrCiAxIGZp
+bGUgY2hhbmdlZCwgNCBpbnNlcnRpb25zKCspCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJt
+L2FtZC9kaXNwbGF5L2FtZGdwdV9kbS9hbWRncHVfZG0uYyBiL2RyaXZlcnMvZ3B1L2RybS9hbWQv
+ZGlzcGxheS9hbWRncHVfZG0vYW1kZ3B1X2RtLmMKaW5kZXggYzkwMDRmN2U3MDBkLi4zM2NkN2Ez
+ZDRlY2IgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvZ3B1L2RybS9hbWQvZGlzcGxheS9hbWRncHVfZG0v
+YW1kZ3B1X2RtLmMKKysrIGIvZHJpdmVycy9ncHUvZHJtL2FtZC9kaXNwbGF5L2FtZGdwdV9kbS9h
+bWRncHVfZG0uYwpAQCAtNjU5NCwxMiArNjU5NCwxNCBAQCBkbV9jcnRjX2R1cGxpY2F0ZV9zdGF0
+ZShzdHJ1Y3QgZHJtX2NydGMgKmNydGMpCiAJcmV0dXJuICZzdGF0ZS0+YmFzZTsKIH0KIAorI2lm
+ZGVmIENPTkZJR19ERUJVR19GUwogc3RhdGljIGludCBhbWRncHVfZG1fY3J0Y19sYXRlX3JlZ2lz
+dGVyKHN0cnVjdCBkcm1fY3J0YyAqY3J0YykKIHsKIAljcnRjX2RlYnVnZnNfaW5pdChjcnRjKTsK
+IAogCXJldHVybiAwOwogfQorI2VuZGlmCiAKIHN0YXRpYyBpbmxpbmUgaW50IGRtX3NldF92dXBk
+YXRlX2lycShzdHJ1Y3QgZHJtX2NydGMgKmNydGMsIGJvb2wgZW5hYmxlKQogewpAQCAtNjY5Myw3
+ICs2Njk1LDkgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCBkcm1fY3J0Y19mdW5jcyBhbWRncHVfZG1f
+Y3J0Y19mdW5jcyA9IHsKIAkuZW5hYmxlX3ZibGFuayA9IGRtX2VuYWJsZV92YmxhbmssCiAJLmRp
+c2FibGVfdmJsYW5rID0gZG1fZGlzYWJsZV92YmxhbmssCiAJLmdldF92YmxhbmtfdGltZXN0YW1w
+ID0gZHJtX2NydGNfdmJsYW5rX2hlbHBlcl9nZXRfdmJsYW5rX3RpbWVzdGFtcCwKKyNpZiBkZWZp
+bmVkKENPTkZJR19ERUJVR19GUykKIAkubGF0ZV9yZWdpc3RlciA9IGFtZGdwdV9kbV9jcnRjX2xh
+dGVfcmVnaXN0ZXIsCisjZW5kaWYKIH07CiAKIHN0YXRpYyBlbnVtIGRybV9jb25uZWN0b3Jfc3Rh
+dHVzCi0tIAoyLjM1LjMKCg==
+--000000000000e04f2805e1829933--

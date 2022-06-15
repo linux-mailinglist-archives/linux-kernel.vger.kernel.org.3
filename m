@@ -2,106 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8290054D061
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:51:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC1754D063
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358002AbiFORvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S1358016AbiFORve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:51:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344040AbiFORvU (ORCPT
+        with ESMTP id S242299AbiFORvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:51:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 77447541B6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:51:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1655315478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HtMhpUCqpIkD63jrk6cA07RN6K+czflVLeAIk1/ZIZQ=;
-        b=inm//HXgH90REqIX8BEAwl+j5JqRkYNG0O1vuNtkq7OahbFWcjLjr0SbKCiBtGsur0t7KK
-        tz7AenzzdGpqDZ3GjkodeIG5uqTq08R5TKwwvFLwlATddjx57WlKyvLMwFkbCCSPhcdiXm
-        mn51h30UXsFKD+s4Syp1n9ohkTFP3rI=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-135-Onor62rDPwOclqzomfN0fw-1; Wed, 15 Jun 2022 13:51:17 -0400
-X-MC-Unique: Onor62rDPwOclqzomfN0fw-1
-Received: by mail-io1-f71.google.com with SMTP id z19-20020a05660200d300b0066583f8cf2eso6454464ioe.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:51:16 -0700 (PDT)
+        Wed, 15 Jun 2022 13:51:31 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073DC544C1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:51:29 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id m14so635047plg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:51:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kpn2Q2CsireSptzmUqdySxnWjnGpd3Q3NSEkQU1AXEY=;
+        b=I4NZ826O2XxVNyXyxHS8+3OKpnYH2JJkLmwygLtw+BpcvgRcGWVOAtNSgP57L8I75l
+         v+N7dKJcZFX0jjwzdnu5SRk6q1mAJlegmNuAR3QCtZAeCFRSLxfDP/g9T/aEH7QCaCg1
+         pDy/Jnel+l4y6YXdRuoply+AI7cSElKHUpFTbUdpbNCghczWG7WTLPOLVrWOEXDWLM6+
+         uXQJ1iJj+Gsf0As3WrV0UcEBjvQjWmyjEvid8c+tb40fUpdpsRlqhdeBEhyDuGSXHZ+3
+         raV/Vl2R0x+XqGXVwDnucEbgR6m/OeK3oTZsXZ4FqQBPCiAl5ARzP+wHhEh+tMl0uYoU
+         HujA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=HtMhpUCqpIkD63jrk6cA07RN6K+czflVLeAIk1/ZIZQ=;
-        b=mO0ro0YzgjMGoaN/ySHNh2HzSZX5rd1/abwGKfFKgGofHCvHZyp8a7Ciyj1dWrU46x
-         qgNDmJdN7eeGTPe2uTi8HL27ds9ZmCQ1QRY/x7mtfRqwEyo4jFkacG4Vtf8tavPU0120
-         ncbqKIalRuYZK2GMKkZ9sEPPWm4VzURDUG8boC9Q3A3Gcio2mMsWdKhs8ll8o7DqHl6i
-         xnvQ3QjGN9mF/2PrCQM6sW2UuwEFeiWfE/fP4c0bjPSAigS8h8DocNxureNv969Xxebx
-         VOJqAFcvUM+/aw9Dz/nIX1FvWuTLG/eSlBuKA3knEG+PvR6xRsYsE7e+Fnm1ZAqKW7hB
-         L8EA==
-X-Gm-Message-State: AJIora/FUmVkpDOBdvLt2E2hzRDJyiw1Kl9Qfw5G9ZE859x1e388rWj7
-        9CxcgLVaMKK2szEQO7fsEwbNLQwt8gClnGagiNb3Qm4zZVgjtHqvBI01rqnGrhxMEoyVnwN+HuT
-        m6qGw2bQ8Dr2+aAgCyOZ/8JSl
-X-Received: by 2002:a05:6638:1301:b0:331:f2f0:a17e with SMTP id r1-20020a056638130100b00331f2f0a17emr459501jad.141.1655315476413;
-        Wed, 15 Jun 2022 10:51:16 -0700 (PDT)
-X-Google-Smtp-Source: AGRyM1vCFMxWhltw6eueHtpdeFczNKpggzjX1cqAIUE7MLPanSRiSr5V8MiQQmIzOwGvzB2WzRDkEA==
-X-Received: by 2002:a05:6638:1301:b0:331:f2f0:a17e with SMTP id r1-20020a056638130100b00331f2f0a17emr459493jad.141.1655315476235;
-        Wed, 15 Jun 2022 10:51:16 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id y24-20020a5d9158000000b00665770bcec5sm7139527ioq.49.2022.06.15.10.51.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 10:51:15 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 13:51:13 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [RFC PATCH 1/3] hugetlb: skip to end of PT page mapping when pte
- not present
-Message-ID: <YqocEWUWkr09RLuk@xz-m1.local>
-References: <20220527225849.284839-1-mike.kravetz@oracle.com>
- <20220527225849.284839-2-mike.kravetz@oracle.com>
- <YpUhe6BSfflOVz7b@xz-m1.local>
- <e9456223-c26a-4d49-2920-9a597a817190@oracle.com>
- <YqoWfcZXJ7NfJaYJ@monkey>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kpn2Q2CsireSptzmUqdySxnWjnGpd3Q3NSEkQU1AXEY=;
+        b=d4rNmwRJWebq5HfZEB6JzYxub5ZvNilFna7ma7NijCx4pXfcnGPf4DVLxaDrbeGDG/
+         lGpbUhLEOQgG3hPWNWwYotmolzIA4qMOBuLIiP3/Tto/Sk/tF1t/Vm8gMEBpvparBqtO
+         WCvspk/f38/iVVeGOGet4FyP06vgNQ+pOKyUVGgGRh3rNRyEqlK0HLQ0xy5Ya0/2Ft9B
+         93+2QsrQuKDiWECLeeQRqa1VQVaI90Tk1MlIs9UJydvBcyZXnpg9qyyNJFS0bFsLOC0A
+         /X17XrGe9TXF6fKxoVy09ZDVCJf1/faQaiBBmilMxZXM9qLxML8/zXqVHBsuXHYEKfIN
+         b9vw==
+X-Gm-Message-State: AJIora8cGrTxwbAyQyIzvYlSb4hvKER03CJ7Z7cFcBeQl1RkiwhVG4ZJ
+        ymX51wKP8BIqDBgizeX9OWXmxxjm2gJtGcP6CaQ=
+X-Google-Smtp-Source: AGRyM1s0onkd6H8EYWbqxfVIEQT4LwQoCoEnVoCVKtR+7/Xt45XQLNumd6t8f36YPumjGqvoiYv1no3bLjyDG11ZC/c=
+X-Received: by 2002:a17:903:32c4:b0:167:6e6f:204b with SMTP id
+ i4-20020a17090332c400b001676e6f204bmr682333plr.117.1655315489159; Wed, 15 Jun
+ 2022 10:51:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YqoWfcZXJ7NfJaYJ@monkey>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220611084731.55155-1-linmiaohe@huawei.com> <20220611084731.55155-3-linmiaohe@huawei.com>
+ <Yqn3WLLy+5MnqZn3@google.com>
+In-Reply-To: <Yqn3WLLy+5MnqZn3@google.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 15 Jun 2022 10:51:17 -0700
+Message-ID: <CAHbLzkrJJJHS-4MKPSdRsSjUwU-=q4y7xJfUx_ZRTohc034J_w@mail.gmail.com>
+Subject: Re: [PATCH 2/7] mm/khugepaged: stop swapping in page when
+ VM_FAULT_RETRY occurs
+To:     "Zach O'Keefe" <zokeefe@google.com>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Howells <dhowells@redhat.com>, NeilBrown <neilb@suse.de>,
+        Alistair Popple <apopple@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 10:27:25AM -0700, Mike Kravetz wrote:
-> In many cases, the hugetlb specific page table routines are the same as
-> the generic routines.  But, there are a few exceptions.  IMO, it would
-> be better to first try to cleanup and unify those routines.  That would
-> make changes to the walker routines less invasive and easier to
-> maintain.  I believe is other code that would benefit from such a
-> cleanup.  Unless there are strong objections, I suggest we move forward
-> with the optimization here and move the cleanup and possible walker
-> changes to a later series.
+On Wed, Jun 15, 2022 at 8:14 AM Zach O'Keefe <zokeefe@google.com> wrote:
+>
+> On 11 Jun 16:47, Miaohe Lin wrote:
+> > When do_swap_page returns VM_FAULT_RETRY, we do not retry here and thus
+> > swap entry will remain in pagetable. This will result in later failure.
+> > So stop swapping in pages in this case to save cpu cycles.
+> >
+> > Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> > ---
+> >  mm/khugepaged.c | 19 ++++++++-----------
+> >  1 file changed, 8 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+> > index 73570dfffcec..a8adb2d1e9c6 100644
+> > --- a/mm/khugepaged.c
+> > +++ b/mm/khugepaged.c
+> > @@ -1003,19 +1003,16 @@ static bool __collapse_huge_page_swapin(struct mm_struct *mm,
+> >               swapped_in++;
+> >               ret = do_swap_page(&vmf);
+> >
+> > -             /* do_swap_page returns VM_FAULT_RETRY with released mmap_lock */
+> > +             /*
+> > +              * do_swap_page returns VM_FAULT_RETRY with released mmap_lock.
+> > +              * Note we treat VM_FAULT_RETRY as VM_FAULT_ERROR here because
+> > +              * we do not retry here and swap entry will remain in pagetable
+> > +              * resulting in later failure.
+> > +              */
+> >               if (ret & VM_FAULT_RETRY) {
+> >                       mmap_read_lock(mm);
+> > -                     if (hugepage_vma_revalidate(mm, haddr, &vma)) {
+> > -                             /* vma is no longer available, don't continue to swapin */
+> > -                             trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
+> > -                             return false;
+> > -                     }
+> > -                     /* check if the pmd is still valid */
+> > -                     if (mm_find_pmd(mm, haddr) != pmd) {
+> > -                             trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
+> > -                             return false;
+> > -                     }
+> > +                     trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
+> > +                     return false;
+> >               }
+> >               if (ret & VM_FAULT_ERROR) {
+> >                       trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
+> > --
+> > 2.23.0
+> >
+> >
+>
+> I've convinced myself this is correct, but don't understand how we got here.
+> AFAICT, we've always continued to fault in pages, and, as you mention, don't
+> retry ones that have failed with VM_FAULT_RETRY - so
+> __collapse_huge_page_isolate() should fail. I don't think (?) there is any
+> benefit to continuing to swap if we don't handle VM_FAULT_RETRY appropriately.
+>
+> So, I think this change looks good from that perspective. I suppose the only
+> other question would be: should we handle the VM_FAULT_RETRY case? Maybe 1
+> additional attempt then fail? AFAIK, this mostly (?) happens when the page is
+> locked.  Maybe it's not worth the extra complexity though..
 
-No objection on my side, thanks Mike for trying to look into it.
+It should be unnecessary for khugepaged IMHO since it will scan all
+the valid mm periodically, so it will come back eventually.
 
--- 
-Peter Xu
-
+>

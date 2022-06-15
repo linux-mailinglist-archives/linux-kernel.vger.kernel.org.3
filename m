@@ -2,152 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 448FF54C0D2
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 06:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC63054C0D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 06:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239248AbiFOEhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 00:37:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
+        id S241848AbiFOEiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 00:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238793AbiFOEhq (ORCPT
+        with ESMTP id S241085AbiFOEiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 00:37:46 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2019.outbound.protection.outlook.com [40.92.53.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7E8FD3A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 21:37:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=in5GsPwxiBfe8+69xHKta3kVQH5SS9gAQL423htksFqgGJy52/xlCLaYZmC/vRE+GRH5gS2HOdAhARAPvbdvtYsufXT+8EMPQJt/8RSuxjBaRFTRilNL1P2rL7FbBDjH5O5UNOhuDIFV15/tJlaCwk+0RMhQhd7EflTVTR3f8rKJ5AiWEoPq0iwTe2dJI11hP9sZ7Qx9JFAnPs4luiVK5iwj7PFuHccIyCDa6NASDDJ6IlbgCmJPoX36SJOobVg8uhAhqfG2f+aji230tqpaQrLl7jzksSQDltGUa56kBH6zwWtF3QwsV2OFZc0+7JpftGnfZXH4r2yEIe9/Od9hHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iE6PuGEnY/Km1F5coy5BJCbr3V3bMoXrnriJjalRQbo=;
- b=GXe4StHQIckld8pKLDmu3XUtEWxGH9S37TgLuTM/DoJf4P5+47YrXnboRCyq8B2Jc1+uEZlzw7xhOYRZH0ik06mFSYvfJvf4Jd2ZLvFOkOdhLZwTTfs8bj60L39I6aggeTR0XvEyS2ZuYATeS6xyDg4ZAbF+LLGAyuajzTUeZJpkp+ChI0wmwoXl5ni+OF5XXl08Mv47L+AxmH23LXXuZktFgyWBrYHvzyjWqLTQRGDsSsz82AbLGDUq1IsrZQcpwm98hiz4MJoxsX7HfQGSfhhxqSS1T30inUB9HuOERC3LQlHDUmz1C4C9zYmnBagBtunJtxamO567hUE/RZIUGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iE6PuGEnY/Km1F5coy5BJCbr3V3bMoXrnriJjalRQbo=;
- b=ioEkd0nHYAU8N1Zi4IlxP/i9q6BGr5CcvxMYYzsLx4rxcp1MXV6rzGqADMnV9l8vqqQLi0C9pIUrHzVZo4/RMION0FFb6Cqa9CeDEL5EU3OaojWKPtDAMEngHPxWI+nAIZVIFFRCIMJ35VLSB7lG0Ewl74rRDiwqPsoXPaNmvH+ULsLjbFsrVdNBXR6jp5J4TbDs1x0oZwlxS1N4fvBoPd28MxVRJsGR/3k/XUbKQlyVPrenU80D71UzESyA/lfXaDZzlIlOnisust/syLqwQzHnAFIj7DLbSRu6RGBhHKzXkaNGOyfjO6j5yS7MzbzYc3EHu5GxTCgyhCIUYTbacA==
-Received: from SG2PR01MB2951.apcprd01.prod.exchangelabs.com
- (2603:1096:4:76::15) by HK0PR01MB2468.apcprd01.prod.exchangelabs.com
- (2603:1096:203:3c::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.21; Wed, 15 Jun
- 2022 04:37:40 +0000
-Received: from SG2PR01MB2951.apcprd01.prod.exchangelabs.com
- ([fe80::a1f7:b32:baa1:3d12]) by SG2PR01MB2951.apcprd01.prod.exchangelabs.com
- ([fe80::a1f7:b32:baa1:3d12%7]) with mapi id 15.20.5332.022; Wed, 15 Jun 2022
- 04:37:39 +0000
-From:   Wenhu Wang <wenhu.wang@hotmail.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>
-CC:     "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: =?utf-8?B?5Zue5aSNOiBbUEFUQ0ggMS8yXSBwb3dlcnBjOm1tOiBleHBvcnQgc3ltYm9s?=
- =?utf-8?Q?_ioremap=5Fcoherent?=
-Thread-Topic: [PATCH 1/2] powerpc:mm: export symbol ioremap_coherent
-Thread-Index: AQHYe+vtQWCn89Rsl0KhPJBUgnnCnK1Ov92AgAEqSWI=
-Date:   Wed, 15 Jun 2022 04:37:39 +0000
-Message-ID: <SG2PR01MB295141BF75DF5939CF9ACFA09FAD9@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
-References: <20220609102855.272270-1-wenhu.wang@hotmail.com>
- <SG2PR01MB2951EBFD4C4EB2A2519FF4199FA79@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
- <8735g7cym2.fsf@mpe.ellerman.id.au>
-In-Reply-To: <8735g7cym2.fsf@mpe.ellerman.id.au>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-x-tmn:  [kaZ0MUbuvQAPZe+CK3RkelPPfC8pcFui]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 28bdb4fc-80f8-4e94-1a5d-08da4e88c78b
-x-ms-traffictypediagnostic: HK0PR01MB2468:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: m9O7wIlhhmzSTsM6+pf/P2N7q9h7syBs2wptN7RI+J24Cm92wzlXNLvUjllQ7RtmNF2Vwg5UHd5IpRppkSo4Poa1cCsXfDbdBsRkICOKEB0vQs/1RxXTkIH2paQkH9XhrF7e17aoCPb84OeKVKJ3W5fayfl65a+3Qb4abmyfOea36i0HvAz7nMRMxqTexhSy1YdGIovDbbTaQASHJlRLy4YxoXUhGXRkHVVdDe0ud+h5CU+LN94Pf0tgjA6dSCYlH2AkHBAZsX4ElPfw5dniAzuHnJkXXfeVMoQOHpZzt8wVyBg2Y0pkZck3972PiGeo2dhHOOEn76RYYUBviKi1geXIcM7d1Bn07IVq3MiUx7bKcrwIKgrbMX9Q+KTunbxXadYWxGZvGw3TrkqI70rs6YAT85TbVDzFn+AsZAE2M6MJoNoF0Ka/Nnjchb9SRSocBiASU6AExFiNNX0MmoDyae3pKMJ/uUKlW/licGlRdJJ5JSMJEgdTEzhKvoTkzRmloHM1N43hE+mI8nFjtke+1l9ZOZmPGosBSOwFaceiYRWxDTcexAZ58mzqIw0wRvpFSFAhidDx59e/KULcnVwZuA==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dzZzRkIwMXpwOEdEOXE2c0hPaEU3VnQ3ZkJMUFNScjNsNVpKQUltOVYrVFdi?=
- =?utf-8?B?cFkvbktyaTloZEROUjJWd21Jd0QzMHhQeE5iZks3bUd2ZDdoUUZFL1llK3FP?=
- =?utf-8?B?OW9NR3YwbWE2Z2FxWkxVQ3dVLzljWTV2Vi9kVGN6VC9pUExpNkRoRkUrTG14?=
- =?utf-8?B?aTRObk93eW9QNTJKV0ZaOEFCRnZlWm5FZTZ5dFNFZlI3T1AzN0EwTGZRZnMz?=
- =?utf-8?B?SFl6OGpLd3ZWT2VLREpYRUxYYlRtd3dlQ0NKYnZMMnd5NEZ1YTZpc1piWUxo?=
- =?utf-8?B?cmNvb0J3SlBMZVplMUJ3QUhEckk1bHEvcHZKSExJZlN0QU9ieEpjd2cyMktC?=
- =?utf-8?B?RWJvODdWTnAzMTRTTFByYy9URTBtbHRiNE03RUc1S2Q1dUNWZ0ZSS21leUVm?=
- =?utf-8?B?WXF4VE03c3IvVEphZE0yVi9WL2RDYkQ4V3RxWStwRXBFeWZwdU1BQnFtTzY1?=
- =?utf-8?B?TWZaTEFHM001ZDJHUVBxUkgzWFhIRzl4aW0zNTVhTzhmTFNmclZBNmZwbDNR?=
- =?utf-8?B?REZBWGgxM1RqWDNUN3BwakM1YW1qN1FFM2cxMVRIZW1hWG53ZEswdGlEaGp0?=
- =?utf-8?B?VVJpY3I5a2xHQWFQeTJxUmwyUlB4WFNZNU94Q2JjekNTQ00zakpzTUQzOWUz?=
- =?utf-8?B?TVhEcGswaW5ROTRMODBMMkl2M3hpSU5Qd25KRXUrTkFzZHIrSHdpL3hBY0Rh?=
- =?utf-8?B?QmNsUEcxMWM2SEloc1VKWURDK050aVVjRFJlU3pPM0tVZ1VmTFROUW5vNGNF?=
- =?utf-8?B?UTdKRjduQkVIcU0xeExYejJ5NSszMmhqWi9pbS9SMlNDWVJ2SFNYMnI3UEpi?=
- =?utf-8?B?M1VESTErb3o3VndURnlqdnRYemJtakxVbEdRN1VoN0N1VFRCcmw4Uk1ndzNa?=
- =?utf-8?B?VnNZMmZaRnlMZUJreHhQRXdkamVBSVN4cnMrOEJvUVc5eHhzWW1nbGlKb0dU?=
- =?utf-8?B?d0UwVCtKakZBZXJBSGtINGZBM0VUMnpjbWRtQXNoaXJzc3pOYzRnK0g2Tktp?=
- =?utf-8?B?UHlkc0YxdWpYOXBuUE1NcHRoSnJiVVNNWHZhYXFCdlZXSGNwSUZ5R2JwMHR5?=
- =?utf-8?B?UkFsdU5HVGdIZW5GbUVuSHU5R0s4aDlpREpPbFhqT1JpN3JFNStqTmNWVDRV?=
- =?utf-8?B?cDdkQVBGTis1ekMra0xMSVVmMUpka2YwQk1UVjdCQnZTWEZ1K1ZDTkRvRTVk?=
- =?utf-8?B?QWlDNXF0S1gxRXJrWUxLQzcySkhhZjdrMVhiMTVZUVE2VkM1UnV5NUhxUGts?=
- =?utf-8?B?dloxbFlsSTEycVBRcytDMytSZVFyLzJXZmlxRFZHRUNEVjJLOFVzaUhCcFlp?=
- =?utf-8?B?dm5lY0hhaEovNXp2SllVZkQ1eGNvS3hYZ1NmOXVIVEdkd2dUZlpHdFBoV042?=
- =?utf-8?B?OEdENWdTdmdmWjRqTmdxcm51UGdIbjkrODlyN0hLRVpScEY2aTJhSERwWmFN?=
- =?utf-8?B?NW1PR1A0UEJ6ZnNKaGd2U1BwQzVYcjVhdkFNcjhmeGdEUVZKRXI3WnhQa1VR?=
- =?utf-8?B?L3N4OW9JTmNLc0U3bHdSc3U3WmI5T1Q1VVh4R3U2WXdxM2pOYzBWRnZZazNL?=
- =?utf-8?B?R3JETmI4QytYbkp5bmNhNFROdklaK3RNSXB0ZlExdmZjN1haaDlVbzJ2V05h?=
- =?utf-8?B?alJYd2h0MU54bWFQbS9WMUZlRkIxbHV6UTVNSXpRNWEyVkpuLzZnVU1SV3VY?=
- =?utf-8?B?c0JzR3NKUnY5OTBYQk1GNG9BQngzbmtDTThxaUJGOEZQSVowMHluUjZKUWFB?=
- =?utf-8?B?eHR1YmlBNXhkQjJwdDYzVFAwejVqNHIxWTlwRE1vcDBYMStaRTdGWHJ6QlJ3?=
- =?utf-8?B?K3I0WVZsRmVwdHNNdDhrK2lGTnZENWJjMXp3RGFBdCtneXl4bkpwcUVmUnVo?=
- =?utf-8?B?ckhrZExoM05TUFQ2bWl6WkR4Z3VhSzF3U3Z5NmFFWG9ObGhSckYvZ0MyQ1BF?=
- =?utf-8?Q?r81OmP+q8Ms=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 15 Jun 2022 00:38:05 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6377A13FA4;
+        Tue, 14 Jun 2022 21:38:03 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4LNCGb2LcBz4xYC;
+        Wed, 15 Jun 2022 14:37:59 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1655267879;
+        bh=N/laHczTPkQ+hC8gb6VyKTd7kKya2vOGZ3lodxaxbDI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Eli9kyHv89eHWXbnbeLNKLJMmEf0YaDlusv7paSQhLxwpvE/MZx2YJCHhPE0uCrpG
+         ToJ0ozuzOPMt0RLXn+cJkOKTJzvUmmsoPmucAoxN5lKXrLQB9CZuCN2T+P2CcIC4UV
+         gn7jvLsCMA8rG+H1Bg6e7ifYuybRDe7pC8UpoQm4s9x6CSqqFMJbywPE+iPEhrJ20p
+         hnKjhep/aVKEzMZq959tuBJAab1klwIeFeCWy/paVQlxng8+RBccsKO0Ub1I7GRjzp
+         XW4Y3dIBOTXSgx9nHbibwrnHuQn//9vpznEnPOfgO0JIvTbA8neRBQzEzIw36VU+6R
+         ACruV5X8AqKhg==
+Date:   Wed, 15 Jun 2022 14:37:58 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20220615143758.6139959f@canb.auug.org.au>
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-d8e84.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR01MB2951.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28bdb4fc-80f8-4e94-1a5d-08da4e88c78b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2022 04:37:39.6335
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR01MB2468
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/R1vv/6F8JPf43bxId6NJ8YN";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PuWPkeS7tuS6ujogTWljaGFlbCBFbGxlcm1hbiA8bXBlQGVsbGVybWFuLmlkLmF1Pgo+5Y+R6YCB
-5pe26Ze0OiAyMDIy5bm0NuaciDE05pelIDE4OjQ1Cj7mlLbku7bkuro6IFdhbmcgV2VuaHUgPHdl
-bmh1LndhbmdAaG90bWFpbC5jb20+OyBncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZyA8Z3JlZ2to
-QGxpbnV4Zm91bmRhdGlvbi5vcmc+OyBjaHJpc3RvcGhlLmxlcm95QGNzZ3JvdXAuZXUgPGNocmlz
-dG9waGUubGVyb3lAY3Nncm91cC5ldT4KPuaKhOmAgTogbGludXhwcGMtZGV2QGxpc3RzLm96bGFi
-cy5vcmcgPGxpbnV4cHBjLWRldkBsaXN0cy5vemxhYnMub3JnPjsgbGludXgta2VybmVsQHZnZXIu
-a2VybmVsLm9yZyA8bGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZz47IFdhbmcgV2VuaHUgPHdl
-bmh1LndhbmdAaG90bWFpbC5jb20+Cj7kuLvpopg6IFJlOiBbUEFUQ0ggMS8yXSBwb3dlcnBjOm1t
-OiBleHBvcnQgc3ltYm9sIGlvcmVtYXBfY29oZXJlbnQgCj7CoAo+V2FuZyBXZW5odSA8d2VuaHUu
-d2FuZ0Bob3RtYWlsLmNvbT4gd3JpdGVzOgo+PiBUaGUgZnVuY3Rpb24gaW9yZW1hcF9jb2hlcmVu
-dCBtYXkgYmUgY2FsbGVkIGJ5IG1vZHVsZXMgc3VjaCBhcwo+PiBmc2xfODV4eF9jYWNoZV9zcmFt
-LiBTbyBleHBvcnQgaXQgZm9yIGFjY2VzcyBpbiBvdGhlciBtb2R1bGVzLgo+Cj5pb3JlbWFwX2Nv
-aGVyZW50KCkgaXMgcG93ZXJwYyBzcGVjaWZpYywgYW5kIG9ubHkgaGFzIG9uZSBvdGhlciBjYWxs
-ZXIsCj5JJ2QgbGlrZSB0byByZW1vdmUgaXQuCj4KPkRvZXMgaW9yZW1hcF9jYWNoZSgpIHdvcmsg
-Zm9yIHlvdT8KPgoKWWVzLCBpdCB3b3Jrcy4gSSB3aWxsIHVwZGF0ZSBpbiB2MiB0byB1c2UgaW9y
-ZW1hcF9jYWNoZS4KSSB0ZXN0ZWQgYW5kIGNvbXBhcmVkIHRoZSBvdXRjb21lcyBvZiBpb3JlbWFw
-X2NhY2hlIGFuZCBpb3JlbWFwX2NvaGVyZW50LAphbmQgZm91bmQgdGhleSBlbmRlZCBzYW1lIHZh
-bHVlcy4KClRoYW5rcywKV2VuaHUKCj4KPj4gZGlmZiAtLWdpdCBhL2FyY2gvcG93ZXJwYy9tbS9p
-b3JlbWFwLmMgYi9hcmNoL3Bvd2VycGMvbW0vaW9yZW1hcC5jCj4+IGluZGV4IDRmMTI1MDRmYjQw
-NS4uMDhhMDBkYWNlZjBiIDEwMDY0NAo+PiAtLS0gYS9hcmNoL3Bvd2VycGMvbW0vaW9yZW1hcC5j
-Cj4+ICsrKyBiL2FyY2gvcG93ZXJwYy9tbS9pb3JlbWFwLmMKPj4gQEAgLTQwLDYgKzQwLDcgQEAg
-dm9pZCBfX2lvbWVtICppb3JlbWFwX2NvaGVyZW50KHBoeXNfYWRkcl90IGFkZHIsIHVuc2lnbmVk
-IGxvbmcgc2l6ZSkKPj7CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmV0dXJuIGlvd2Ff
-aW9yZW1hcChhZGRyLCBzaXplLCBwcm90LCBjYWxsZXIpOwo+PsKgwqDCoMKgwqDCoMKgIHJldHVy
-biBfX2lvcmVtYXBfY2FsbGVyKGFkZHIsIHNpemUsIHByb3QsIGNhbGxlcik7Cj4+wqAgfQo+PiAr
-RVhQT1JUX1NZTUJPTChpb3JlbWFwX2NvaGVyZW50KTsKPj7CoCAKPj7CoCB2b2lkIF9faW9tZW0g
-KmlvcmVtYXBfcHJvdChwaHlzX2FkZHJfdCBhZGRyLCB1bnNpZ25lZCBsb25nIHNpemUsIHVuc2ln
-bmVkIGxvbmcgZmxhZ3MpCj7CoCB7Cj4gLS0gCj4gMi4yNS4x
+--Sig_/R1vv/6F8JPf43bxId6NJ8YN
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
+
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_resource.c:1835:13: error:=
+ 'remove_hpo_dp_link_enc_from_ctx' defined but not used [-Werror=3Dunused-f=
+unction]
+ 1835 | static void remove_hpo_dp_link_enc_from_ctx(struct resource_context=
+ *res_ctx,=20
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+
+Caused by commit
+
+  4e1db0119c64 ("Revert "drm/amdgpu/display: Protect some functions with CO=
+NFIG_DRM_AMD_DC_DCN"")
+
+That function is only used when CONFIG_DRM_AMD_DC_DCN is set.
+
+I have reverted that commit for today.
+
+Could you please add an x86_64 allmodconfig build to your CI?
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/R1vv/6F8JPf43bxId6NJ8YN
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmKpYiYACgkQAVBC80lX
+0GyMUQf+I2OPb6dgTx66yB+H2kHRhl0t5PU/OTLOeB5owtJFeBHnrvEDMveXTdIx
+c8w/wayux17HaLKdmJ8pdXjCS/SwPoSGH83JbGvgIuNTApTagY+es2atuULmnakA
+VKlcKr+fA9VZkZynmMK3abWJmQUTs/vkvHP0lzwNvS3zdKJpeQn7nmJ3mzTqTq9W
+DaIkjNR1r5ZjEdlWhZTQjxq9+qfBP+JakxZNL++rdy8CEZ54i8pUcOUYaWtYMk4j
+w2XvWi67MefCCNo6LzOe2k5+NttAN+Z26+mLCagLsSHvpr2psI98aGQ0m5Borl4t
+00UFDOFqqt9RtQULBpNFycqOQP1Cow==
+=CsKE
+-----END PGP SIGNATURE-----
+
+--Sig_/R1vv/6F8JPf43bxId6NJ8YN--

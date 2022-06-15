@@ -2,104 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B198A54C7E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:52:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0554054C7F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:54:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347464AbiFOLwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 07:52:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
+        id S1347567AbiFOLyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 07:54:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347349AbiFOLvI (ORCPT
+        with ESMTP id S1348157AbiFOLyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:51:08 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3CB4C430
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 04:51:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655293866; x=1686829866;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JB6XDZr8/Vc4mPnXGbXPJVXKNM+3h3HjTJByMzOT75E=;
-  b=QNUHHyTU7eSZkiK/dQujhA8YS5LwFvzGTZmcCA+llRjHqGNmAxRDjhLB
-   zF7yvj2P4oHFi74qj9fT1oG7zVI2VX727/yp4/+oCyp3Sa6Ys2Ixlo6wa
-   zBY8Huso9k07UqiNfz1tC+fOpwWxCa4GZ28YB01XKWRD8t1gjaBif4DW3
-   2uT4HSnf3zXwB+2uCJA3gVGmZYUtAvxSPJ+NKtq/J+3p7GRC1gN7LYCSV
-   FQrJiVS43dFd/loFmumExYa8EoFpy1PZYLVXdBZKsNH6x2nD3c9UWbwI+
-   vIETYMb0FXibgRw5Xy1LxkxErqi/TvYT48kupeQZ+nhD7XuRRbqKbipxt
+        Wed, 15 Jun 2022 07:54:06 -0400
+Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88164226
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 04:54:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1655294046; x=1686830046;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=80Rp0zRg6bQP1I0DMDJ0rUfrw5zWcwXRBqMQRPk4k64=;
+  b=Edw9J0aRondOQi28vMXMC0LEt+dQMjP9UJdKV7PFFd1Gtiv4hFm1yQv3
+   BgVl1St4Dc3/ib9ouqDPnljgEOpbA44pX2vVOU9MRVzIBl/cdiZEXjHjk
+   HePmNH8VKQtJjUdt5xnWi4lH1qlN0xV0iYYEXl8ci2z6pxAxrJocmmcyy
+   ruXv6JbkChnQswPg/Jzwy7Dn4JIMyhsNny98Rxn9RElVjNj4AatjW2M9C
+   l2SQPFmPqEBZpL6aKLGJPwsdvgyuy0GdUov9RrBHwUDQ59YpinV8kQc/b
+   PDZ7eszCsf8DtxEewfrpqFSXxMXjBOOFlf42AKYpR1qLwY7kwtCQ9WXov
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="276507233"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="276507233"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 04:51:06 -0700
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="687266169"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 04:51:04 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1o1RY5-000dO3-T4;
-        Wed, 15 Jun 2022 14:51:01 +0300
-Date:   Wed, 15 Jun 2022 14:51:01 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Ferry Toth <ftoth@exalondelft.nl>
-Subject: Re: [PATCH v1 1/1] phy: ti: tusb1210: Don't check for write errors
- when powering on
-Message-ID: <YqnHpXvZJEfhX21/@smile.fi.intel.com>
-References: <20220613160848.82746-1-andriy.shevchenko@linux.intel.com>
- <bd21d5c6-ed5f-dd8c-f0bf-73f54ca8ee58@redhat.com>
- <YqiGocQ+vr9KjUHK@smile.fi.intel.com>
- <390cf16c-f07c-ebfc-08ad-25b242548953@redhat.com>
+X-IronPort-AV: E=Sophos;i="5.91,302,1647273600"; 
+   d="scan'208";a="203985813"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Jun 2022 19:54:04 +0800
+IronPort-SDR: EibKC1SpqjvzTxN1AODsueuZHGI2hAKZcDWEq3URc+uz8+Lzs74D1NAf7PpVFuLWJuAWWwptcT
+ snXMX2ailfqc82+md00l1FuZRyAnWtwgc2OXftj8NBqFr5vyllvSIK7yLayAqaEYDRLR7/G2co
+ ILntOBoZ5N3o3x4LeXhTbyCKwkeqWCkt33g+CFLisfVW8oPQzXPrRWQHOo79dHToaf+lxc8nRO
+ orMT8LyoHiun1UHsPiCT5BEyiCG19yFLDGqTEIGX85l45xX5kZd9MeZNuIdn66yaj5dhBmsV9h
+ bi4oOOayKj2YMBIwn1aIOa+M
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jun 2022 04:16:54 -0700
+IronPort-SDR: Jm1wZQyMisEkBiSelUacdx83uKyBU+omv6hMcSQGKLM6RXeLLoqAanka+PzfYEF1oEjXZ8sPsd
+ LjYrOj76IU8RG7vjky4tNNY6Ubjs4cnZ4zGrcP0nPjqzLLJhJhANwHi7pkzdD4poH2OAwfkt21
+ iT2yxZzBR/eNK//MfWoodFSb7ngDWezLVk3pUFRXEjvfv9eR6ng2pbbcsYwjD0GiHJzMYL5xxs
+ cXhVCES8v/f+Iyyb2fFufpkBc57PAM00sM5It+6ezM3UZFMwgKgC/0DNrtP7qVccnXgeG/n29w
+ M3o=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jun 2022 04:54:03 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LNNxk575vz1SVpC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 04:54:02 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1655294041; x=1657886042; bh=80Rp0zRg6bQP1I0DMDJ0rUfrw5zWcwXRBqM
+        QRPk4k64=; b=oRC+W6gVdo0i6iv8oDtPTvW66O4PvnMzjzNAeHtj9DV+xtMFNoO
+        vHU/zlPNO5e9MVo3nxodUtKSsjxQrFlLw4eYnsoNrEJLrQmRN0ZS6+uGj2rPGOyL
+        hHhfknJsZ4PikEmI8829Ximb9pWPUXUEwCr8VtC4OPwbwdxwdVIVtjbmdxwdZavS
+        eZmCHAuWD5VJr+GCTOgJXFgd3mBmIU37vlgCbuCG6/rfE8w0mWIvPpj3DnkcP6/d
+        2aCfwPBnPwK5b07kvsPT/G5xfoXDGtEDICLCwfmr2pWIoycruimfd1gTf3r8s0KO
+        GQpzoCSzZyF8xxeJym+xp39/nTJGnAizNQQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id mnuo7zeaHywA for <linux-kernel@vger.kernel.org>;
+        Wed, 15 Jun 2022 04:54:01 -0700 (PDT)
+Received: from [10.225.163.82] (unknown [10.225.163.82])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LNNxf0Tpcz1Rvlc;
+        Wed, 15 Jun 2022 04:53:57 -0700 (PDT)
+Message-ID: <064551fa-4575-87cb-d9da-90a34309f634@opensource.wdc.com>
+Date:   Wed, 15 Jun 2022 20:53:56 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <390cf16c-f07c-ebfc-08ad-25b242548953@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v7 10/13] dm-table: use bdev_is_zone_start helper in
+ device_area_is_invalid()
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, hch@lst.de,
+        snitzer@redhat.com, axboe@kernel.dk
+Cc:     bvanassche@acm.org, linux-kernel@vger.kernel.org,
+        jiangbo.365@bytedance.com, hare@suse.de, pankydev8@gmail.com,
+        dm-devel@redhat.com, jonathan.derrick@linux.dev,
+        gost.dev@samsung.com, dsterba@suse.com, jaegeuk@kernel.org,
+        linux-nvme@lists.infradead.org, Johannes.Thumshirn@wdc.com,
+        linux-block@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
+References: <20220615101920.329421-1-p.raghav@samsung.com>
+ <CGME20220615102000eucas1p27720aaa3c309327b2b9a33c5f840f498@eucas1p2.samsung.com>
+ <20220615101920.329421-11-p.raghav@samsung.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220615101920.329421-11-p.raghav@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 05:49:22PM +0200, Hans de Goede wrote:
-> On 6/14/22 15:01, Andy Shevchenko wrote:
-> > On Tue, Jun 14, 2022 at 01:23:21PM +0200, Hans de Goede wrote:
-> >> On 6/13/22 18:08, Andy Shevchenko wrote:
-
-...
-
-> > [   35.126397] tusb1210 dwc3.0.auto.ulpi: GPIO lookup for consumer reset
-> > [   35.126418] tusb1210 dwc3.0.auto.ulpi: using ACPI for GPIO lookup
-> > [   35.126455] tusb1210 dwc3.0.auto.ulpi: using lookup tables for GPIO lookup
-> > [   35.126465] tusb1210 dwc3.0.auto.ulpi: No GPIO consumer reset found
-> > [   35.126476] tusb1210 dwc3.0.auto.ulpi: GPIO lookup for consumer cs
-> > [   35.126485] tusb1210 dwc3.0.auto.ulpi: using ACPI for GPIO lookup
-> > [   35.126538] tusb1210 dwc3.0.auto.ulpi: using lookup tables for GPIO lookup
-> > [   35.126548] tusb1210 dwc3.0.auto.ulpi: No GPIO consumer cs found
-> > [   40.534107] tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41 to reg 0x80
-> > 
-> > (I put 5000 ms there to be sure)
-> > 
-> >> I'm fine with going with this workaround patch to fix things.
+On 6/15/22 19:19, Pankaj Raghav wrote:
+> Use bdev_is_zone_start() helper that uses generic calculation to check
+> for zone alignment instead of using po2 based alignment check.
 > 
-> Ok, so I guess we should just apply this workaround patch to make
-> the error non fatal. Still would be good to dig a little deeper one
-> of these days and see what is going on here...
+> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+> ---
+>  drivers/md/dm-table.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/md/dm-table.c b/drivers/md/dm-table.c
+> index bd539afbf..b553cdb6d 100644
+> --- a/drivers/md/dm-table.c
+> +++ b/drivers/md/dm-table.c
+> @@ -251,7 +251,7 @@ static int device_area_is_invalid(struct dm_target *ti, struct dm_dev *dev,
+>  	if (bdev_is_zoned(bdev)) {
+>  		unsigned int zone_sectors = bdev_zone_sectors(bdev);
+>  
+> -		if (start & (zone_sectors - 1)) {
+> +		if (blk_queue_is_zone_start(bdev_get_queue(bdev), start)) {
 
-Can you give a formal tag?
+This is wrong. And you are changing this to the correct test in the next
+patch.
+
+>  			DMWARN("%s: start=%llu not aligned to h/w zone size %u of %pg",
+>  			       dm_device_name(ti->table->md),
+>  			       (unsigned long long)start,
+> @@ -268,7 +268,7 @@ static int device_area_is_invalid(struct dm_target *ti, struct dm_dev *dev,
+>  		 * devices do not end up with a smaller zone in the middle of
+>  		 * the sector range.
+>  		 */
+> -		if (len & (zone_sectors - 1)) {
+> +		if (blk_queue_is_zone_start(bdev_get_queue(bdev), len)) {
+>  			DMWARN("%s: len=%llu not aligned to h/w zone size %u of %pg",
+>  			       dm_device_name(ti->table->md),
+>  			       (unsigned long long)len,
+
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Damien Le Moal
+Western Digital Research

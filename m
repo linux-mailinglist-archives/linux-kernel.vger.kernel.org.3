@@ -2,80 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F25654CEDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB2C54CEE3
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356952AbiFOQkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
+        id S1357081AbiFOQkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241710AbiFOQkI (ORCPT
+        with ESMTP id S1356968AbiFOQku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:40:08 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA5D4BFC9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:40:07 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id w20so19763679lfa.11
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=MWANSzdRAOWKpopzWH4swQNo/XxRIXruJcTbdkHnuFo=;
-        b=nqDPazFgESVPMchw5t1IyLKwSYffE31zuhyigqZoR0u6mWJ5lr0NxjOUBK3WHo8rAt
-         lw5lYUMeqvkvM9wee5LNtZMFA/ozRR3JKfgcdoEJWd+n/a/C311MNCxlBSHydx8/VWxX
-         eQ536sW66FtzcgyR57uRiUXDmqBfUk2qp/lxdnpk66AVQ590RbOxzfvnh8i9xccgOQjl
-         +BeoWeUL0P4hTo632fmXGZJcrMwwsv27jGNv9nju398+9CI2baFqkzNnOat0Kx65Adom
-         xpAnieakVJxYSAjEBMjHxXnxSskdIWPSl4dbTXZnihYWYkeX6+LKOUWgw0+v9tEb8+jI
-         sS4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=MWANSzdRAOWKpopzWH4swQNo/XxRIXruJcTbdkHnuFo=;
-        b=lIzRJqwI7JE9DYLMga0nVxsQWYufFD0MuURNug5ozgzaduQiZFj74VHOUnIqfIbMfJ
-         CCCGWFuAOXGMccxFwTnaWnvqRwFnmhrk9Y7fn6UsOv4yq+xJ8RvTTqPwKK3Vb54qT/3/
-         bap/kU9ekxLAPjy59GXGHn1E2T2veMXwg+rv66ug6mK3Ndnii0IVWodqaXjeqW3s31vD
-         GldyksS9Fys1ekEhOPhHTMN+J8vPAeOqcFGswEBEKUYSQ0TASyIhHlxodDaj08d1o2kt
-         0bHSOtrM5mGxcMmi68TTmplWrhHPBvJL9B4i8UkXhmPRsZ++D8pBSsqxKAGU0sXxUT/B
-         DxNw==
-X-Gm-Message-State: AJIora9WGEHUhjmTnRALVlpZP84cYOyJ1Fsd+hX+oWh1opf7Q9MDtdpY
-        xNSmtJSIL9tqvXxsu/xZyI4=
-X-Google-Smtp-Source: AGRyM1tajAVsOPq2QGMUHcUpNqZOlXppdM2bBQzKlxoCKdKoIfE+blT5jZUZrimz0oNBnRyTWdWwVw==
-X-Received: by 2002:a05:6512:3484:b0:47d:451e:3d53 with SMTP id v4-20020a056512348400b0047d451e3d53mr235059lfr.144.1655311205711;
-        Wed, 15 Jun 2022 09:40:05 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id u18-20020ac25192000000b0047255d211cesm1851391lfi.253.2022.06.15.09.40.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 09:40:05 -0700 (PDT)
-Subject: Re: [RFC PATCH 2/2] xen/grant-table: Use unpopulated DMAable pages
- instead of real RAM ones
-To:     Stefano Stabellini <sstabellini@kernel.org>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>
-References: <1652810658-27810-1-git-send-email-olekstysh@gmail.com>
- <1652810658-27810-3-git-send-email-olekstysh@gmail.com>
- <alpine.DEB.2.22.394.2206031348230.2783803@ubuntu-linux-20-04-desktop>
- <7f886dfb-2b42-bc70-d55f-14ecd8144e3e@gmail.com>
- <alpine.DEB.2.22.394.2206101644210.756493@ubuntu-linux-20-04-desktop>
- <1266f8cb-bbd6-d952-3108-89665ce76fec@gmail.com>
- <alpine.DEB.2.22.394.2206141748150.1837490@ubuntu-linux-20-04-desktop>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <9f1e4568-1cfd-e967-e54c-735bad1ea211@gmail.com>
-Date:   Wed, 15 Jun 2022 19:40:04 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 15 Jun 2022 12:40:50 -0400
+Received: from smtpq1.tb.ukmail.iss.as9143.net (smtpq1.tb.ukmail.iss.as9143.net [212.54.57.96])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFE004BBB4
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:40:48 -0700 (PDT)
+Received: from [212.54.57.112] (helo=csmtp8.tb.ukmail.iss.as9143.net)
+        by smtpq1.tb.ukmail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <zarniwhoop@ntlworld.com>)
+        id 1o1W4V-00030g-3i
+        for linux-kernel@vger.kernel.org; Wed, 15 Jun 2022 18:40:47 +0200
+Received: from llamedos.mydomain ([81.97.236.130])
+        by cmsmtp with ESMTPA
+        id 1W4UoXz0UPoCm1W4UospSt; Wed, 15 Jun 2022 18:40:47 +0200
+X-SourceIP: 81.97.236.130
+X-Authenticated-Sender: zarniwhoop@ntlworld.com
+X-Spam: 0
+X-Authority: v=2.4 cv=XaCaca15 c=1 sm=1 tr=0 ts=62aa0b8f cx=a_exe
+ a=OGiDJHazYrvzwCbh7ZIPzQ==:117 a=OGiDJHazYrvzwCbh7ZIPzQ==:17
+ a=IkcTkHD0fZMA:10 a=JPEYwPQDsx4A:10 a=VwQbUJbxAAAA:8 a=lAgNKBcoAAAA:8
+ a=QX4gbG5DAAAA:8 a=QyXUC8HyAAAA:8 a=e5mUnYsNAAAA:8 a=7PGKVeoXzDYJnXtM3nYA:9
+ a=QEXdDO2ut3YA:10 a=s7WzIJ968vAA:10 a=oEyQGRKERE8A:10 a=-FEs8UIgK8oA:10
+ a=AjGcO6oz07-iQ99wixmX:22 a=drE6d5tx1tjNRBs8zHOc:22 a=AbAUZ8qAyYyZVLSsDulk:22
+ a=Vxmtnl_E_bksehYqCbjh:22
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ntlworld.com;
+        s=meg.feb2017; t=1655311247;
+        bh=SxYWuqoWSJcMiUlxl/6yaopIwStLbUnQXsNuJ7YGflk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=wVeB1S5ZCONmilE8JHszuUox37Z5WX6TrtVBtxRC7AbvL0q0ApGe2LePyzSgm9cuH
+         xzSzQowN9GAPQGpHzAiSwMEF9SVZ6QxwiJeU9qIbZXoHouTUmSo+9b9sANeqPp0+46
+         MXcaorCOMGK8HnvzgobZOEvAEucbgZmPZRTuYZOMHfvQgsjc0UCctiVO5DwO+SeH0K
+         9xyj1Tu7MZtFBJk3yczUQQYQ37ev/UR9JmRwa3EQlE5/0dYQ9YyWUn65blyAdcv7GQ
+         CQJaZ1u6xbwQXUm6GDMLBseysajBh1lq6jwaQa+th3HVObBg8eik36L07/6RourNSv
+         U4B3XZSNN1Wgw==
+Received: by llamedos.mydomain (Postfix, from userid 1000)
+        id 4C0738DB5D; Wed, 15 Jun 2022 17:40:46 +0100 (BST)
+Date:   Wed, 15 Jun 2022 17:40:46 +0100
+From:   Ken Moffat <zarniwhoop@ntlworld.com>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     linux-kernel@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Subject: Re: regression, 5.19.0-rc1 not powering off when hibernated
+Message-ID: <YqoLjk8P+fChJ04m@llamedos.localdomain>
+References: <YqE22nS9k2+AldI6@llamedos.localdomain>
+ <84d01637-febb-f602-2d03-fe1600e85ae3@leemhuis.info>
+ <YqTPlGM9KQ0FqHdc@llamedos.localdomain>
+ <YqeUDpo+8RLVKH8r@llamedos.localdomain>
 MIME-Version: 1.0
-In-Reply-To: <alpine.DEB.2.22.394.2206141748150.1837490@ubuntu-linux-20-04-desktop>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Clacks-Overhead: GNU Terry Pratchett
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <YqeUDpo+8RLVKH8r@llamedos.localdomain>
+User-Agent: Mutt/2.2.3 (2022-04-12)
+X-CMAE-Envelope: MS4xfHeVLMzGsAe8cOz7ASAJ0c+HSnQiXsGdRPpKymio645sgvBftBDjOEsJ0B8eirB4JG1iDU9hgxzxPcj8olMEc6xx6qJZgfGX/e6SR6V6mmSewRBxnn1b
+ KM4YiVA2hOlALq6K8iA2Mytl4vGYwTnz+MDNPhfVNadg6gO4OBasHypRgzTpRNeOOOclBYhH+gxV8p5n+4LHnsfNDP7knhgoGcRc1ls0m8IN8HcftvMCdIUI
+ 0J/5dO91xwwL6fyfOWdn4ee9dM/URr57J0goC78oWNKYC8e5fqNbDDsJkmwN6A8SoGBUZOwLSM075GWNL+SMaHwSbX6MFby/j8+6x8A1FNdpmncFvmw1JiNk
+ MfKTNAUxbzB+eYKjo4UClM78d/iddpJjddMTgiaQoUT5okZm3gGh8Cw31ynvKxkKFdtN24ZH
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,166 +82,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 13, 2022 at 08:46:22PM +0100, Ken Moffat wrote:
 
-On 15.06.22 03:51, Stefano Stabellini wrote:
+Adding Dmitry because of git blame (details at end)
 
-Hello Stefano
+> On Sat, Jun 11, 2022 at 06:23:32PM +0100, Ken Moffat wrote:
+> > On Sat, Jun 11, 2022 at 03:53:44PM +0200, Thorsten Leemhuis wrote:
+> > > Hi, this is your Linux kernel regression tracker.
+> > > 
+> > > CCing the regression mailing list, as it should be in the loop for all
+> > > regressions, as explained here:
+> > > https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
+> > > Also CCing the hibernation maintainers and Linux-pm.
+> > > 
+> > > On 09.06.22 01:55, Ken Moffat wrote:
+> > > > Up to 5.18.0 hibernation has worked ok on my ryzen 5 3400G : screen
+> > > > blanks, disk activity for the write to swap, screen briefly has a
+> > > > trashed display, machine powers off.  When powering up from
+> > > > hibernation, after the saved files are loaded X starts with a
+> > > > briefly trashed display before my desktop reappears.
+> > > > 
+> > > > But with 5.19.0-rc1 the screen is blank throughtout the hibernation,
+> > > > and briefly when restoring (no complaint about that), but when
+> > > > hibernating it no longer powers off and I have to hold the on/off
+> > > > switch to power off.
+> > > > 
+> > > > Is this a known problem ?
+> > > 
+> > > Thanks for the report. Maybe the hibernation maintainers might know, but
+> > > often issues like this are caused by other things like drivers. If they
+> > > don#t have a idea, you likely need to do a bisection to get down to the
+> > > change that introduced this regressions.
+> > > 
+> > > Anyway: To be sure below issue doesn't fall through the cracks
+> > > unnoticed, I'm adding it to regzbot, my Linux kernel regression tracking
+> > > bot:
+> > > 
+> > > #regzbot ^introduced v5.18..v5.19-rc1
+> > > #regzbot title hibernate: Not powering off when hibernated
+> > > #regzbot ignore-activity
+> > > 
+> > > This isn't a regression? This issue or a fix for it are already
+> > > discussed somewhere else? It was fixed already? You want to clarify when
+> > > the regression started to happen? Or point out I got the title or
+> > > something else totally wrong? Then just reply -- ideally with also
+> > > telling regzbot about it, as explained here:
+> > > https://linux-regtracking.leemhuis.info/tracked-regression/
+> > > 
+> > > Reminder for developers: When fixing the issue, add 'Link:' tags
+> > > pointing to the report (the mail this one replied to), as the kernel's
+> > > documentation call for; above page explains why this is important for
+> > > tracked regressions.
+> > > 
+> > > Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> > > 
+> > > P.S.: As the Linux kernel's regression tracker I deal with a lot of
+> > > reports and sometimes miss something important when writing mails like
+> > > this. If that's the case here, don't hesitate to tell me in a public
+> > > reply, it's in everyone's interest to set the public record straight.
+> > 
+> > Thanks.  I've started to bisect, but I've got a lot else on and it
+> > might be a few days before I get a result.  All I know so far is
+> > that whatever got rid of the garbled screens was fine, and the
+> > problem seems to have arisen in the last 800+ commits for 5.19-rc1.
+> > 
+> I think I must have gone wrong somewhere in that bisection, it took
+> me through a load of habanalabs commits which were all good, and
+> blamed the merge which for this which *was* definitely bad, but seems
+> to have nothing related to the box not powering off on hibernation::
+> 
+Indeed, on the second attempt I've got a much more likely commit to
+blame:
 
-> On Tue, 14 Jun 2022, Oleksandr wrote:
->> On 11.06.22 02:55, Stefano Stabellini wrote:
->>
->> Hello Stefano
->>
->>> On Thu, 9 Jun 2022, Oleksandr wrote:
->>>> On 04.06.22 00:19, Stefano Stabellini wrote:
->>>> Hello Stefano
->>>>
->>>> Thank you for having a look and sorry for the late response.
->>>>
->>>>> On Tue, 17 May 2022, Oleksandr Tyshchenko wrote:
->>>>>> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->>>>>>
->>>>>> Depends on CONFIG_XEN_UNPOPULATED_ALLOC. If enabled then unpopulated
->>>>>> DMAable (contiguous) pages will be allocated for grant mapping into
->>>>>> instead of ballooning out real RAM pages.
->>>>>>
->>>>>> TODO: Fallback to real RAM pages if xen_alloc_unpopulated_dma_pages()
->>>>>> fails.
->>>>>>
->>>>>> Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
->>>>>> ---
->>>>>>     drivers/xen/grant-table.c | 27 +++++++++++++++++++++++++++
->>>>>>     1 file changed, 27 insertions(+)
->>>>>>
->>>>>> diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
->>>>>> index 8ccccac..2bb4392 100644
->>>>>> --- a/drivers/xen/grant-table.c
->>>>>> +++ b/drivers/xen/grant-table.c
->>>>>> @@ -864,6 +864,25 @@ EXPORT_SYMBOL_GPL(gnttab_free_pages);
->>>>>>      */
->>>>>>     int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args *args)
->>>>>>     {
->>>>>> +#ifdef CONFIG_XEN_UNPOPULATED_ALLOC
->>>>>> +	int ret;
->>>>> This is an alternative implementation of the same function.
->>>> Currently, yes.
->>>>
->>>>
->>>>>     If we are
->>>>> going to use #ifdef, then I would #ifdef the entire function, rather
->>>>> than just the body. Otherwise within the function body we can use
->>>>> IS_ENABLED.
->>>> Good point. Note, there is one missing thing in current patch which is
->>>> described in TODO.
->>>>
->>>> "Fallback to real RAM pages if xen_alloc_unpopulated_dma_pages() fails."
->>>> So I
->>>> will likely use IS_ENABLED within the function body.
->>>>
->>>> If CONFIG_XEN_UNPOPULATED_ALLOC is enabled then gnttab_dma_alloc_pages()
->>>> will
->>>> try to call xen_alloc_unpopulated_dma_pages() the first and if fails then
->>>> fallback to allocate RAM pages and balloon them out.
->>>>
->>>> One moment is not entirely clear to me. If we use fallback in
->>>> gnttab_dma_alloc_pages() then we must use fallback in
->>>> gnttab_dma_free_pages()
->>>> as well, we cannot use xen_free_unpopulated_dma_pages() for real RAM
->>>> pages.
->>>> The question is how to pass this information to the
->>>> gnttab_dma_free_pages()?
->>>> The first idea which comes to mind is to add a flag to struct
->>>> gnttab_dma_alloc_args...
->>>    You can check if the page is within the mhp_range range or part of
->>> iomem_resource? If not, you can free it as a normal page.
->>>
->>> If we do this, then the fallback is better implemented in
->>> unpopulated-alloc.c because that is the one that is aware about
->>> page addresses.
->>
->> I got your idea and agree this can work technically. Or if we finally decide
->> to use the second option (use "dma_pool" for all) in the first patch
->> "[RFC PATCH 1/2] xen/unpopulated-alloc: Introduce helpers for DMA allocations"
->> then we will likely be able to check whether a page in question
->> is within a "dma_pool" using gen_pool_has_addr().
->>
->> I am still wondering, can we avoid the fallback implementation in
->> unpopulated-alloc.c.
->> Because for that purpose we will need to pull more code into
->> unpopulated-alloc.c (to be more precise, almost everything which
->> gnttab_dma_free_pages() already has except gnttab_pages_clear_private()) and
->> pass more arguments to xen_free_unpopulated_dma_pages(). Also I might mistake,
->> but having a fallback split between grant-table.c (to allocate RAM pages in
->> gnttab_dma_alloc_pages()) and unpopulated-alloc.c (to free RAM pages in
->> xen_free_unpopulated_dma_pages()) would look a bit weird.
->>
->> I see two possible options for the fallback implementation in grant-table.c:
->> 1. (less preferable) by introducing new flag in struct gnttab_dma_alloc_args
->> 2. (more preferable) by guessing unpopulated (non real RAM) page using
->> is_zone_device_page(), etc
->>
->>
->> For example, with the second option the resulting code will look quite simple
->> (only build tested):
->>
->> diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
->> index 738029d..3bda71f 100644
->> --- a/drivers/xen/grant-table.c
->> +++ b/drivers/xen/grant-table.c
->> @@ -1047,6 +1047,23 @@ int gnttab_dma_alloc_pages(struct gnttab_dma_alloc_args
->> *args)
->>          size_t size;
->>          int i, ret;
->>
->> +       if (IS_ENABLED(CONFIG_XEN_UNPOPULATED_ALLOC)) {
->> +               ret = xen_alloc_unpopulated_dma_pages(args->dev,
->> args->nr_pages,
->> +                               args->pages);
->> +               if (ret < 0)
->> +                       goto fallback;
->> +
->> +               ret = gnttab_pages_set_private(args->nr_pages, args->pages);
->> +               if (ret < 0)
->> +                       goto fail;
->> +
->> +               args->vaddr = page_to_virt(args->pages[0]);
->> +               args->dev_bus_addr = page_to_phys(args->pages[0]);
->> +
->> +               return ret;
->> +       }
->> +
->> +fallback:
->>          size = args->nr_pages << PAGE_SHIFT;
->>          if (args->coherent)
->>                  args->vaddr = dma_alloc_coherent(args->dev, size,
->> @@ -1103,6 +1120,12 @@ int gnttab_dma_free_pages(struct gnttab_dma_alloc_args
->> *args)
->>
->>          gnttab_pages_clear_private(args->nr_pages, args->pages);
->>
->> +       if (IS_ENABLED(CONFIG_XEN_UNPOPULATED_ALLOC) &&
->> +                       is_zone_device_page(args->pages[0])) {
->> +               xen_free_unpopulated_dma_pages(args->dev, args->nr_pages,
->> args->pages);
->> +               return 0;
->> +       }
->> +
->>          for (i = 0; i < args->nr_pages; i++)
->>                  args->frames[i] = page_to_xen_pfn(args->pages[i]);
->>
->>
->> What do you think?
->   
-> I have another idea. Why don't we introduce a function implemented in
-> drivers/xen/unpopulated-alloc.c called is_xen_unpopulated_page() and
-> call it from here? is_xen_unpopulated_page can be implemented by using
-> gen_pool_has_addr.
+98f30d0ecf79da8cf17a171fa4cf6eda7ba4dd71 is the first bad commit
+commit 98f30d0ecf79da8cf17a171fa4cf6eda7ba4dd71
+Author: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Date:   Tue May 10 02:32:30 2022 +0300
 
-I like the idea, will do
+    ACPI: power: Switch to sys-off handler API
+    
+    Switch to sys-off API that replaces legacy pm_power_off callbacks,
+    allowing us to remove global pm_* variables and support chaining of
+    all restart and power-off modes consistently.
+    
+    Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+    Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
+Unsurprisingly, with this reverted 5.19-rc2 fails to build.
+
+ĸen
+
+Bisect log follows:
+
+git bisect start
+# good: [4b0986a3613c92f4ec1bdc7f60ec66fea135991f] Linux 5.18
+git bisect good 4b0986a3613c92f4ec1bdc7f60ec66fea135991f
+# bad: [f2906aa863381afb0015a9eb7fefad885d4e5a56] Linux 5.19-rc1
+git bisect bad f2906aa863381afb0015a9eb7fefad885d4e5a56
+# skip: [2518f226c60d8e04d18ba4295500a5b0b8ac7659] Merge tag 'drm-next-2022-05-25' of git://anongit.freedesktop.org/drm/drm
+git bisect skip 2518f226c60d8e04d18ba4295500a5b0b8ac7659
+# good: [8a87419481f2d51a7bd03617d363faf5f2b0e1b3] arm64: dts: mediatek: mt8195-demo: Remove input-name property
+git bisect good 8a87419481f2d51a7bd03617d363faf5f2b0e1b3
+# good: [0813aeee0d02d80912c86b2b3a1ebdb4ee4476ba] Merge branch 'tcp-pass-back-data-left-in-socket-after-receive' of git://git.kernel.org/pub/scm/linux/kernel/git/kuba/linux
+git bisect good 0813aeee0d02d80912c86b2b3a1ebdb4ee4476ba
+# good: [d7227785e384d4422b3ca189aa5bf19f462337cc] Merge tag 'sound-5.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound
+git bisect good d7227785e384d4422b3ca189aa5bf19f462337cc
+# good: [907bb57aa7b471872aab2f2e83e9713a145673f9] Merge tag 'pinctrl-v5.19-1' of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl
+git bisect good 907bb57aa7b471872aab2f2e83e9713a145673f9
+# bad: [5ac8bdb9ad47334a9590e29daf7e4149b0a34729] Merge tag 'io_uring-5.19-2022-06-02' of git://git.kernel.dk/linux-block
+git bisect bad 5ac8bdb9ad47334a9590e29daf7e4149b0a34729
+# bad: [35b51afd23c98e2f055ac563aca36173a12588b9] Merge tag 'riscv-for-linus-5.19-mw0' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux
+git bisect bad 35b51afd23c98e2f055ac563aca36173a12588b9
+# good: [c3a9a3c5f5590e85da15d6201e415ff636fe5670] Merge tag 'trace-tools-v5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace
+git bisect good c3a9a3c5f5590e85da15d6201e415ff636fe5670
+# bad: [1ff7bc3ba71d398d349c49103a3da34bb4ea02d1] Merge tag 'pm-5.19-rc1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+git bisect bad 1ff7bc3ba71d398d349c49103a3da34bb4ea02d1
+# good: [73d15ba6ba390caed47aa8885811d1cd7b4477f3] Merge tag 'mips_5.19' of git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux
+git bisect good 73d15ba6ba390caed47aa8885811d1cd7b4477f3
+# bad: [9f9c1f6844bdacb4a011cc69e19b929997038f4f] Merge branch 'pm-sysoff'
+git bisect bad 9f9c1f6844bdacb4a011cc69e19b929997038f4f
+# good: [22ffff6d21ebfcd6e722af5f6954ab97c726c3c8] Merge branch 'pm-opp'
+git bisect good 22ffff6d21ebfcd6e722af5f6954ab97c726c3c8
+# good: [9b0d0af145195cfd79210b805448a4bcc69f0e04] sh: Use do_kernel_power_off()
+git bisect good 9b0d0af145195cfd79210b805448a4bcc69f0e04
+# bad: [eae813b755c46c74d65f52fa6b0b1a5476e13551] soc/tegra: pmc: Use sys-off handler API to power off Nexus 7 properly
+git bisect bad eae813b755c46c74d65f52fa6b0b1a5476e13551
+# good: [bf8d73b934df8aa485dc4650d6d5dfe5a640af4b] memory: emif: Use kernel_can_power_off()
+git bisect good bf8d73b934df8aa485dc4650d6d5dfe5a640af4b
+# bad: [02a1124defc2571b81c054ae4c5481f1ac7ccf20] regulator: pfuze100: Use devm_register_sys_off_handler()
+git bisect bad 02a1124defc2571b81c054ae4c5481f1ac7ccf20
+# bad: [98f30d0ecf79da8cf17a171fa4cf6eda7ba4dd71] ACPI: power: Switch to sys-off handler API
+git bisect bad 98f30d0ecf79da8cf17a171fa4cf6eda7ba4dd71
+# first bad commit: [98f30d0ecf79da8cf17a171fa4cf6eda7ba4dd71] ACPI: power: Switch to sys-off handler API
 
 -- 
-Regards,
-
-Oleksandr Tyshchenko
-
+      Remembering The People's Republic of Treacle Mine Road.
+        Truth!  Justice!  Freedom!  Reasonably priced Love!
+                 And a Hard-boiled Egg!

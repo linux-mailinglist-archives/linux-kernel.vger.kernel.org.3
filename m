@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69CC054D0DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A7E54D0E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:27:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358258AbiFOSYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 14:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S1349073AbiFOS05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 14:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245078AbiFOSYX (ORCPT
+        with ESMTP id S242474AbiFOS0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:24:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CF5A252AC;
-        Wed, 15 Jun 2022 11:24:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2EF0153B;
-        Wed, 15 Jun 2022 11:24:21 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B39013F73B;
-        Wed, 15 Jun 2022 11:24:18 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 19:24:08 +0100
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        virtualization <virtualization@lists.linux-foundation.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        linux-s390@vger.kernel.org, conghui.chen@intel.com,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        netdev <netdev@vger.kernel.org>, pankaj.gupta.linux@gmail.com,
-        sudeep.holla@arm.com, Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: Re: [PATCH V6 8/9] virtio: harden vring IRQ
-Message-ID: <YqojyHuocSoZ0v/Y@e120937-lin>
-References: <CACGkMEs05ZisiPW+7H6Omp80MzmZWZCpc1mf5Vd99C3H-KUtgA@mail.gmail.com>
- <20220613041416-mutt-send-email-mst@kernel.org>
- <CACGkMEsT_fWdPxN1cTWOX=vu-ntp3Xo4j46-ZKALeSXr7DmJFQ@mail.gmail.com>
- <20220613045606-mutt-send-email-mst@kernel.org>
- <CACGkMEtAQck7Nr6SP_pD0MGT3njnwZSyT=xPyYzUU3c5GNNM_w@mail.gmail.com>
- <CACGkMEvUFJkC=mnvL2PSH6-3RMcJUk84f-9X46JVcj2vTAr4SQ@mail.gmail.com>
- <20220613052644-mutt-send-email-mst@kernel.org>
- <CACGkMEstGvhETXThuwO+tLVBuRgQb8uC_6DdAM8ZxOi5UKBRbg@mail.gmail.com>
- <Yqi7UhasBDPKCpuV@e120937-lin>
- <CACGkMEv2A7ZHQTrdg9H=xZScAf2DE=Dguaz60ykd4KQGNLrn2Q@mail.gmail.com>
+        Wed, 15 Jun 2022 14:26:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0702C46CA2;
+        Wed, 15 Jun 2022 11:26:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B2F47B820BE;
+        Wed, 15 Jun 2022 18:26:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2465C34115;
+        Wed, 15 Jun 2022 18:26:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655317612;
+        bh=fRkYpPI/6cwJUF3rOB9VLtfSWvCjuLf4RTvivAv/DBk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HtDiTPjlMT83zHhELaNuA/+2c1NlwH5Ow5Rm8ZVZtoRg5o3/ZhroNh4y2vyZNzIRN
+         FE8V9FvXXCQgBiJeeSMGP5/pDfgIdgLn3LLAJktTzMK8nVIgSdbtMTvXnPM5yC0cAR
+         y1UQofHHjAb48UsyJ212i+uFOj5w0x8C9ou7iPh8fCDRiF8iu76zWIqrhwv+z5OkCc
+         ZgWAxxUeRlbgqbdPVOvY6Dg+sg7id/ce2aeFMv3ZRdEhnFtOOBgJY2qeMQUJIqDZBy
+         PMe/IdmNWhkT7ZaHbDdC/0vC3XUjMtmbCGbqa+SQl7HKqrUA2vmytkaenvorjvr78f
+         +4SNJuWrzVaxw==
+Date:   Wed, 15 Jun 2022 21:24:43 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     LinoSanfilippo@gmx.de
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: Re: [PATCH v5 08/10] tpm, tpm_tis: Request threaded interrupt handler
+Message-ID: <Yqoj6zaIrNB+aKph@iki.fi>
+References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
+ <20220610110846.8307-9-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACGkMEv2A7ZHQTrdg9H=xZScAf2DE=Dguaz60ykd4KQGNLrn2Q@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220610110846.8307-9-LinoSanfilippo@gmx.de>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,80 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 09:41:18AM +0800, Jason Wang wrote:
-> On Wed, Jun 15, 2022 at 12:46 AM Cristian Marussi
-> <cristian.marussi@arm.com> wrote:
-
-Hi Jason,
-
-> >
-> > On Tue, Jun 14, 2022 at 03:40:21PM +0800, Jason Wang wrote:
-> > > On Mon, Jun 13, 2022 at 5:28 PM Michael S. Tsirkin <mst@redhat.com> wrote:
-> > > >
-> >
-
-[snip]
-
-> > >
-> > > >  arm_scmi
-> > >
-> > > It looks to me the singleton device could be used by SCMI immediately after
-> > >
-> > >         /* Ensure initialized scmi_vdev is visible */
-> > >         smp_store_mb(scmi_vdev, vdev);
-> > >
-> > > So we probably need to do virtio_device_ready() before that. It has an
-> > > optional rx queue but the filling is done after the above assignment,
-> > > so it's safe. And the callback looks safe is a callback is triggered
-> > > after virtio_device_ready() buy before the above assignment.
-> > >
-> >
-> > I wanted to give it a go at this series testing it on the context of
-> > SCMI but it does not apply
-> >
-> > - not on a v5.18:
-> >
-> > 17:33 $ git rebase -i v5.18
-> > 17:33 $ git am ./v6_20220527_jasowang_rework_on_the_irq_hardening_of_virtio.mbx
-> > Applying: virtio: use virtio_device_ready() in virtio_device_restore()
-> > Applying: virtio: use virtio_reset_device() when possible
-> > Applying: virtio: introduce config op to synchronize vring callbacks
-> > Applying: virtio-pci: implement synchronize_cbs()
-> > Applying: virtio-mmio: implement synchronize_cbs()
-> > error: patch failed: drivers/virtio/virtio_mmio.c:345
-> > error: drivers/virtio/virtio_mmio.c: patch does not apply
-> > Patch failed at 0005 virtio-mmio: implement synchronize_cbs()
-> >
-> > - neither on a v5.19-rc2:
-> >
-> > 17:33 $ git rebase -i v5.19-rc2
-> > 17:35 $ git am ./v6_20220527_jasowang_rework_on_the_irq_hardening_of_virtio.mbx
-> > Applying: virtio: use virtio_device_ready() in virtio_device_restore()
-> > error: patch failed: drivers/virtio/virtio.c:526
-> > error: drivers/virtio/virtio.c: patch does not apply
-> > Patch failed at 0001 virtio: use virtio_device_ready() in
-> > virtio_device_restore()
-> > hint: Use 'git am --show-current-patch=diff' to see the failed patch
-> > When you have resolved this problem, run "git am --continue".
-> >
-> > ... what I should take as base ?
+On Fri, Jun 10, 2022 at 01:08:44PM +0200, LinoSanfilippo@gmx.de wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 > 
-> It should have already been included in rc2, so there's no need to
-> apply patch manually.
+> The TIS interrupt handler at least has to read and write the interrupt
+> status register. In case of SPI both operations result in a call to
+> tpm_tis_spi_transfer() which uses the bus_lock_mutex of the spi device
+> and thus must only be called from a sleepable context.
+> 
+> To ensure this request a threaded interrupt handler.
+> 
+> Fixes: 1a339b658d9d ("tpm_tis_spi: Pass the SPI IRQ down to the driver")
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> ---
+>  drivers/char/tpm/tpm_tis_core.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 0ef74979bc2c..8b5aa4fdbe92 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -794,8 +794,11 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
+>  	int rc;
+>  	u32 int_status;
+>  
+> -	if (devm_request_irq(chip->dev.parent, irq, tis_int_handler, flags,
+> -			     dev_name(&chip->dev), chip) != 0) {
+> +
+> +	rc = devm_request_threaded_irq(chip->dev.parent, irq, NULL,
+> +				       tis_int_handler, IRQF_ONESHOT | flags,
+> +				       dev_name(&chip->dev), chip);
+> +	if (rc) {
+>  		dev_info(&chip->dev, "Unable to request irq: %d for probe\n",
+>  			 irq);
+>  		return -1;
+> -- 
+> 2.36.1
 > 
 
-I tested this series as included in v5.19-rc2 (WITHOUT adding a virtio_device_ready
-in SCMI virtio as you mentioned above ... if I got it right) and I have NOT seen any
-issue around SCMI virtio using my usual test setup (using both SCMI vqueues).
+I actually would not add fixes tag to this because given that
+interrupt support is quite unusable, this should not cause any
+harm.
 
-No anomalies even when using SCMI virtio in atomic/polling mode.
+The code change itself is fine.
 
-Adding a virtio_device_ready() at the end of the SCMI virtio probe()
-works fine either, it does not make any difference in my setup.
-(both using QEMU and kvmtool with this latter NOT supporting
- virtio_V1...not sure if it makes a difference but I thought was worth
- mentioning)
-
-Thanks,
-Cristian
-
+BR, Jarkko

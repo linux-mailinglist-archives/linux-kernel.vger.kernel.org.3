@@ -2,113 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC6054D175
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:17:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B17C154D177
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346668AbiFOTRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 15:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
+        id S234374AbiFOTSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350435AbiFOTRh (ORCPT
+        with ESMTP id S232127AbiFOTSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:17:37 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59661114
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:17:29 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so1630380wms.3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:17:29 -0700 (PDT)
+        Wed, 15 Jun 2022 15:18:54 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8F7396BB
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:18:50 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id p13so22249501ybm.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:18:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WokeiGFGpeZIK2Bw3DWQuKUULhCXjqLrynqg7U/lT60=;
-        b=SR8MV78tyhTMqw+44nI1gbqZe6tkNSi0Rj7xc12dy+aizdKo3M5SAdht6mLxut5shN
-         yx4N0cCwcXfCJ2W9DeH4ssJk+4gaeSzqg4GjzBg3eBikbvCDLQip6xFEb1q6wpps5oyC
-         pvJw/tFvV2byPErT+TjA0SB3wbN0HTwTMhaOjSO9kQurO/JeIaUTCHr6cyzVMttjW4+a
-         0WOci7LewHadYExXZp28c0T0MmPQnP6YXMEY9iuTf6QF8eCzETrwZ//jWdwItKsHGMLI
-         sFAc3eMHO1whjw6ocS6rCUqlbWo6hGqBCcmfSXAO97qKq2V+nDC+bfioo46K+clSCKL8
-         QuPA==
+         :cc:content-transfer-encoding;
+        bh=H12t+DHpyBhOw3R4oFHJncs9g9Nr7NDEBiREhzQ1jWc=;
+        b=ExYmd7/awgJyRNU3Y3Ai3d/7y2raEmJbvx1f8aokN6dwPhEfxj0A1OVBsXKi+7G2RV
+         5lUy0IaqLEzjQsu4BZsrdL1fcjEjwXT2WmD1ZTc3iT0CUreVOMRZ4OnamILI8Y36MIdW
+         71fTaNNBIRxbV+h6VqCO78bLshEAHc3miJahBhnUKir1KOQ2sPohAOXcN6bHXkzJKsct
+         UKOTivQMJuX3xWxgBkEOU68KzttnuBvDQ+eHAI9K8i4SVk7Dqq7W/FV3G5qoBjEvq3PH
+         FwPjxCz9ibthCUmQo6DVec+c4emmb9pTqY/tt7jGOEEdKZOtFiiZasgTqj2afpUw+o+F
+         9aVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WokeiGFGpeZIK2Bw3DWQuKUULhCXjqLrynqg7U/lT60=;
-        b=fC71w8j2uNdkeWPQo91Lx3u0oaCak/7C8Gp1nsyuC3/hwLpIT2fLlPlSCdiCqDSVjx
-         voZc51oCtCMDZfNzjxw0ECiGevpX2Xx30yBNP1HAvxjrdsc3IFZJy/iXH3fa4ZUehMif
-         2hlc3fsvBUViDgEg4lKT6kOvPkApIVcFGvu4RQmFcOsp1UaOOIdpF8ipAMaYJ2+TNDxt
-         9ZXMyX3ou5BN6UuXNI01bTN6CCxENDLHJ0qGdj75XvRzDcCFXRAT1GfoMPK2NFocB2Wi
-         xzFhaimF9F8wGnezC8pOPxBLCuuYzD/rkO6VrtuSkxMZcOnFGuU+dAXrakouyBYgEvZa
-         SEaQ==
-X-Gm-Message-State: AOAM5314qXSkMVpLcUb30JlTXcZg4/tTGx14FkFRBUSmX+kiedpOc5Fa
-        iHHWjNSuayVxRellogdiffeXeFCGiECLRLJmyt1a8g==
-X-Google-Smtp-Source: ABdhPJworp9viXk/WHpCD25DR2nT7xNLuW+tVK3iCexh5gH5SOr+pUYNSn3Nx4OlVezubrtNQXnSxfYBfOgGsx/+yZQ=
-X-Received: by 2002:a05:600c:19cb:b0:397:51db:446f with SMTP id
- u11-20020a05600c19cb00b0039751db446fmr11655881wmq.182.1655320647665; Wed, 15
- Jun 2022 12:17:27 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=H12t+DHpyBhOw3R4oFHJncs9g9Nr7NDEBiREhzQ1jWc=;
+        b=id4nvNdB5MZnkYgnNdXYEJe6e+zuanxg9VRM+C+ewHKk2YZ9r/emEJvmGvH/jWh9I1
+         n+6zM0jLYB9HOkvumg7tquFhqSKVghOn6wdwkdz+qTYxmQj24hYvRF9OsOdQdBlckDmz
+         CeP/JVQ6evebV2Obfxnufzi1M2CJJZyw1Nx9iyckQSbHShwIUVXAhLVuVAaxdonoTgmy
+         eAZJ9Xxnbo8QTFKnky4h7+ElUuCpjc/HIgm4NMGZSE+roCBkHOdwN2bMucD02GqZvyLB
+         UIBzrArxWL8Q/excNJFtvQwULePZk1l84l5Cus3bqo4d6+EMB/P04ozQzRaR1RJ5759l
+         oalQ==
+X-Gm-Message-State: AJIora/BWBDWOvSOPRQC2LHL/IL9DZmqI4j6hf+7ZJGQJFDNZIwCeWEQ
+        P4jEHFLZhxGx7ldoOGWsXrs3WKrhIPRVUGG7FzcUug==
+X-Google-Smtp-Source: AGRyM1ss0oJH0J3kS2j8J9C66FhtVMoaeocW0loaGvC+VbV7+FxsMqHLMSWJojsNu25QbMr4O1hu7I+yY/7DBn/7uWY=
+X-Received: by 2002:a25:3b52:0:b0:665:f89b:708b with SMTP id
+ i79-20020a253b52000000b00665f89b708bmr1391775yba.483.1655320729250; Wed, 15
+ Jun 2022 12:18:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220615060354.1763693-1-irogers@google.com> <11db049c-c288-71c2-de37-545fd695d486@linux.intel.com>
-In-Reply-To: <11db049c-c288-71c2-de37-545fd695d486@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 15 Jun 2022 12:17:15 -0700
-Message-ID: <CAP-5=fVAUGMENJhD9d7VA9TbO1JOLJhisDPymJZgW0zr7WDXNA@mail.gmail.com>
-Subject: Re: [PATCH] perf io: Make open and read calls more robust
-To:     Andi Kleen <ak@linux.intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
-        Riccardo Mancini <rickyman7@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Song Liu <songliubraving@fb.com>, Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.garry@huawei.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Zechuan Chen <chenzechuan1@huawei.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        German Gomez <german.gomez@arm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Denis Nikitin <denik@chromium.org>,
-        Lexi Shao <shaolexi@huawei.com>,
-        Michael Petlan <mpetlan@redhat.com>,
-        Remi Bernon <rbernon@codeweavers.com>,
-        Fangrui Song <maskray@google.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
+References: <20220614183721.656018793@linuxfoundation.org>
+In-Reply-To: <20220614183721.656018793@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 16 Jun 2022 00:48:38 +0530
+Message-ID: <CA+G9fYu0T78fGSRiaANnb5iyNhMNDDMrwuVcdcoLdOVrhL2F9g@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/15] 5.4.199-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 11:47 AM Andi Kleen <ak@linux.intel.com> wrote:
+On Wed, 15 Jun 2022 at 00:13, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
+> This is the start of the stable review cycle for the 5.4.199 release.
+> There are 15 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> On 6/14/2022 11:03 PM, Ian Rogers wrote:
-> > Wrap open and read calls with TEMP_FAILURE_RETRY in case a signal
-> > causes the syscall to need to restart.
+> Responses should be made by Thu, 16 Jun 2022 18:37:02 +0000.
+> Anything received after that time might be too late.
 >
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.199-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
 >
-> Why not just use SA_RESTART on the signals?
+> thanks,
+>
+> greg k-h
 
-As explained to Adrian, existing code is EINTR tolerant, some of the
-code is in libraries and for portability shouldn't assume SA_RESTART.
 
-Thanks,
-Ian
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
->
-> -Andi
->
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.4.199-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: d05ea6389e7ee572e3cf5bc2438811c06b8f7bc3
+* git describe: v5.4.198-16-gd05ea6389e7e
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
+98-16-gd05ea6389e7e
+
+## Test Regressions (compared to v5.4.198)
+No test regressions found.
+
+## Metric Regressions (compared to v5.4.198)
+No metric regressions found.
+
+## Test Fixes (compared to v5.4.198)
+No test fixes found.
+
+## Metric Fixes (compared to v5.4.198)
+No metric fixes found.
+
+## Test result summary
+total: 114397, pass: 101834, fail: 267, skip: 11254, xfail: 1042
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 313 total, 313 passed, 0 failed
+* arm64: 57 total, 53 passed, 4 failed
+* i386: 28 total, 25 passed, 3 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 54 passed, 0 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 55 total, 54 passed, 1 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-cap_bounds-tests
+* ltp-commands
+* ltp-commands-tests
+* ltp-containers
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps
+* ltp-filecaps-tests
+* ltp-fs
+* ltp-fs-tests
+* ltp-fs_bind
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple
+* ltp-fs_perms_simple-tests
+* ltp-fsx
+* ltp-fsx-tests
+* ltp-hugetlb
+* ltp-hugetlb-tests
+* ltp-io
+* ltp-io-tests
+* ltp-ipc
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-pty-tests
+* ltp-sched
+* ltp-sched-tests
+* ltp-securebits
+* ltp-securebits-tests
+* ltp-smoke
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

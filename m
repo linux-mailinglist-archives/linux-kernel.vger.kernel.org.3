@@ -2,64 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F079B54CF73
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:11:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BAD54CF7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349887AbiFORLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47202 "EHLO
+        id S1354934AbiFORMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:12:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349893AbiFORLP (ORCPT
+        with ESMTP id S1354874AbiFORMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:11:15 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865ED37030;
-        Wed, 15 Jun 2022 10:11:13 -0700 (PDT)
-Received: from mail-yw1-f182.google.com ([209.85.128.182]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1Mq1GE-1nNWpB25qM-00n9gs; Wed, 15 Jun 2022 19:11:11 +0200
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-30c2f288f13so67861787b3.7;
-        Wed, 15 Jun 2022 10:11:11 -0700 (PDT)
-X-Gm-Message-State: AJIora/rlb+NWD306CsbyXaTrpEm2MaSjjPlTW9SJHgaVl0e+n1O3JJO
-        viV+fllMntEFmER03N3ucaPsRsD27AY3SmienWE=
-X-Google-Smtp-Source: AGRyM1s3W6+RTfK/zAiliPN7FcciReD9VjO+i3WcmGbp18cByfoPRqrc8ENsSK2P9DenDeE70xoIIb/pLq9Mty4V7yU=
-X-Received: by 2002:a81:ad7:0:b0:2e6:84de:3223 with SMTP id
- 206-20020a810ad7000000b002e684de3223mr716680ywk.209.1655313070150; Wed, 15
- Jun 2022 10:11:10 -0700 (PDT)
+        Wed, 15 Jun 2022 13:12:03 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98495044E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:12:01 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id g186so11966661pgc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:12:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=3AyomL7Oc+DdUYdK158JFYS4POGAertrwHcZhI495qU=;
+        b=RaryPI0ZtjtKjxfcUL/BY2bKh6PbgJEUZfevFWvhuw0gKFSweI6+ekz1KnHX++ofzz
+         5lS36xmH1bEd3gfPv1owuiy3SfJqg8r9ePZ/AEmWwzUJ3gDPdM/oI4moUoe7n98TlSOM
+         FcPpuG17WcgLz5I1tQgFCLyMQr+2xpL93VFf7H6ynbM8R7uNMikDh4PyzBkvfbeJIXxD
+         GNjSpPppaEGtvDyI1to4njrRQmdHLZXmWbFanQ+9r6KHFW/SDCPVLpVMGsAMEg2zy298
+         beiA1ZrY5n2Njt7OABc/Eyo22CBSFtpDXcJ2a+dxKzEuWtwcsNc1p7htSXhJukYpcLYu
+         VWKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=3AyomL7Oc+DdUYdK158JFYS4POGAertrwHcZhI495qU=;
+        b=ni9wmAU8TigCvo09KMf3nmORdae0YOTRVwxDfVGi8ZmHcttoAv+gY1PL/iguSpDGn3
+         806uCSAx30uKughAXd7k9fWHtTZo9KElJHnX0BHmhPkXUJSF7i1WQVh7ozjMs4tqV+qP
+         R2bLcXkj/dF3JV0MYg/wbkkmBaZVaRDGWdSVlF3wktVr3ktYSDo1+OyrKb/lt8jqYCxG
+         xx2iCeBC0vUywimfYGFk9opnf+UEN+NGagsMAR+d5lK0cFuu+BuVSkfagCXlC8UCLfJt
+         k355BOMIloR4xBMu90N2Ap7CG2n2Z1LPMwsl5V2px75IL1fQun9SUm9FeefPWccNel0x
+         uSsA==
+X-Gm-Message-State: AJIora/DVU1G3lS4xG6+9tzJvJkAIc694ilbcyJ8Y6dlcp92jonT0c5d
+        y2H+2gyzs4+NNz8eZPU9/uS6bICuHc+Gr26cnWOH3w==
+X-Google-Smtp-Source: AGRyM1uA1LIViXu2DRXGg9esMg5JyGVlSdhSVJDitquFoXIzMZ+OJ2WuNj0EVeUj2Boh9KSivtt8Vaspthfz2HrD6vM=
+X-Received: by 2002:a62:7c14:0:b0:51b:9d03:a4c7 with SMTP id
+ x20-20020a627c14000000b0051b9d03a4c7mr387767pfc.74.1655313121181; Wed, 15 Jun
+ 2022 10:12:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220615160116.528c324b@canb.auug.org.au> <1f8095db-a08f-7b6b-2cee-f530d914b9f8@infradead.org>
-In-Reply-To: <1f8095db-a08f-7b6b-2cee-f530d914b9f8@infradead.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 15 Jun 2022 19:10:53 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2mQiWKyVux+bfAJiRH=72q76UTLZnBbPCLVFVoXpGfaw@mail.gmail.com>
-Message-ID: <CAK8P3a2mQiWKyVux+bfAJiRH=72q76UTLZnBbPCLVFVoXpGfaw@mail.gmail.com>
-Subject: Re: linux-next: Tree for Jun 15 (drivers/dma/apple-admac.c)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        dmaengine@vger.kernel.org
+References: <20220522162802.208275-1-luca@z3ntu.xyz> <20220522162802.208275-11-luca@z3ntu.xyz>
+In-Reply-To: <20220522162802.208275-11-luca@z3ntu.xyz>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Wed, 15 Jun 2022 19:11:25 +0200
+Message-ID: <CAMZdPi82+xW2yoKQrg61Mj_-kLCBbp=VDQNDDccQpv5=i_V6Vw@mail.gmail.com>
+Subject: Re: [RFC PATCH 10/14] i2c: qcom-cci: add msm8974 compatible
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Robert Foss <robert.foss@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        matti.lehtimaki@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:8pIB+MQNRZ+Q+hBsItMZ6JT391yz+hteDwMFY5EW6ObxEnIFl5O
- 6oRtSJ2yI4hxs4jw2fOm29S6PqLmXIuHbQ6VKPK7+7NaEjZnVPzghnB9HN4QRrwE2LyCmHX
- 0JJ2JEGvp6xjRukwnJRrwsH8kA6jTjl12N1X06uaIjXSkF54KTB15GIPYwTxTv+ABpd48cH
- A36gBReuikMbgyvA67H3Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:0fpu8GE+MPk=:PZKUHxggVN+/QafZ5AT864
- 4q79TtdYpTSElim4NShpZtJEe6BYE5gw14hlH2UjblVTY+UvkuBffVwIH1jV7ofxSC74xGf7b
- uNm42q+yf8nMEqiRqLzwYHCD8e2dheJ9AaGbxbrNQLIyEu44vYh7pOgBUAcvn+ulcJhDv3cA8
- m01Xonz+b0ct4IeMciV9Q7Ow5iTDhRXhg1sjSNRnTp4t+6zNnitnOKKkAdwxlTZWUe+Y7KbFH
- ed6ihFWtZBzbFRFeDEbMy8cHzvMIbgzAW7KwuZKp5WBCfpx89vREq3AXn+I162HZAwxT15nEP
- N4b2WMFC9t+O2eMWSDIY65SVPvUmfT48+rIXkmEfoU6KsdHhv/hpydZXJXkWbivSBjlpYUxkc
- p5Y3+BOW4BrSUSKFEewAnTuihANeR7jYluv3adrqKXp9P1+iADFy7VjRSUITyUl3R08IJmxP6
- CWeSEocVRKnIb5W7fR8c6Gj9kRJwUHdB4ecXsdRzkUxsxJTxSAdu4cMyx65v3S6QeZruopgCt
- iSvog88cmk/xV0EUrD32MKwxcrvfmOiUbMse3g5KoQ1OGdR7KCMwbtTpjTuf8Zy6aHKhG6vMe
- f60ZOPZZF1XUpEPzYqnqV5NspFtTk/3bzSTu9S7uy3XTKaVeqr3r+t2i5dKl+kRMNxy1z8bVQ
- Pca46HycgkvWl9+XQD49TmF3yHSQpEkGedXw7MSK1o9OoUY35cww3mxjxzqAf0XN5aHTtM6XE
- m0pPFYLejrBbUlKBFTju7ixiJJoFA1spIyRtXA==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,23 +77,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 6:28 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+On Sun, 22 May 2022 at 18:28, Luca Weiss <luca@z3ntu.xyz> wrote:
 >
+> From: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
 >
+> MSM8974 CCI is the same as MSM8916 except it has two masters.
 >
-> On 6/14/22 23:01, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > Changes since 20220614:
-> >
->
-> on i386:
->
-> ../drivers/dma/apple-admac.c: In function 'admac_cyclic_write_one_desc':
-> ../drivers/dma/apple-admac.c:213:22: warning: right shift count >= width of type [-Wshift-count-overflow]
->   writel_relaxed(addr >> 32,       ad->base + REG_DESC_WRITE(channo));
->                       ^
+> Signed-off-by: Matti Lehtim=C3=A4ki <matti.lehtimaki@gmail.com>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 
-This should probably use lower_32_bits()/upper_32_bits() then.
+Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
 
-       Arnd
+> ---
+> To note, the cci_v1_5_data variable name is just a bit arbitrary and
+> isn't meant to reflect IP version "1.5". I'd be happy to change the
+> variable name to something else.
+>
+>  drivers/i2c/busses/i2c-qcom-cci.c | 35 +++++++++++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>
+> diff --git a/drivers/i2c/busses/i2c-qcom-cci.c b/drivers/i2c/busses/i2c-q=
+com-cci.c
+> index 5c7cc862f08f..a68f17eb9dd0 100644
+> --- a/drivers/i2c/busses/i2c-qcom-cci.c
+> +++ b/drivers/i2c/busses/i2c-qcom-cci.c
+> @@ -725,6 +725,40 @@ static const struct cci_data cci_v1_data =3D {
+>         },
+>  };
+>
+> +static const struct cci_data cci_v1_5_data =3D {
+> +       .num_masters =3D 2,
+> +       .queue_size =3D { 64, 16 },
+> +       .quirks =3D {
+> +               .max_write_len =3D 10,
+> +               .max_read_len =3D 12,
+> +       },
+> +       .cci_clk_rate =3D  19200000,
+> +       .params[I2C_MODE_STANDARD] =3D {
+> +               .thigh =3D 78,
+> +               .tlow =3D 114,
+> +               .tsu_sto =3D 28,
+> +               .tsu_sta =3D 28,
+> +               .thd_dat =3D 10,
+> +               .thd_sta =3D 77,
+> +               .tbuf =3D 118,
+> +               .scl_stretch_en =3D 0,
+> +               .trdhld =3D 6,
+> +               .tsp =3D 1
+> +       },
+> +       .params[I2C_MODE_FAST] =3D {
+> +               .thigh =3D 20,
+> +               .tlow =3D 28,
+> +               .tsu_sto =3D 21,
+> +               .tsu_sta =3D 21,
+> +               .thd_dat =3D 13,
+> +               .thd_sta =3D 18,
+> +               .tbuf =3D 32,
+> +               .scl_stretch_en =3D 0,
+> +               .trdhld =3D 6,
+> +               .tsp =3D 3
+> +       },
+> +};
+> +
+>  static const struct cci_data cci_v2_data =3D {
+>         .num_masters =3D 2,
+>         .queue_size =3D { 64, 16 },
+> @@ -773,6 +807,7 @@ static const struct cci_data cci_v2_data =3D {
+>
+>  static const struct of_device_id cci_dt_match[] =3D {
+>         { .compatible =3D "qcom,msm8916-cci", .data =3D &cci_v1_data},
+> +       { .compatible =3D "qcom,msm8974-cci", .data =3D &cci_v1_5_data},
+>         { .compatible =3D "qcom,msm8996-cci", .data =3D &cci_v2_data},
+>         { .compatible =3D "qcom,sdm845-cci", .data =3D &cci_v2_data},
+>         { .compatible =3D "qcom,sm8250-cci", .data =3D &cci_v2_data},
+> --
+> 2.36.0
+>

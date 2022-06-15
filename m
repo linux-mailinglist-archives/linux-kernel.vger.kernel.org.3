@@ -2,106 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A1154D2DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:48:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6352554D2E0
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:49:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346290AbiFOUs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 16:48:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
+        id S1346274AbiFOUsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 16:48:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344323AbiFOUsY (ORCPT
+        with ESMTP id S1346329AbiFOUsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 16:48:24 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF2654BE9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 13:48:23 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id z14so8294780pgh.0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 13:48:23 -0700 (PDT)
+        Wed, 15 Jun 2022 16:48:40 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E5D54F80
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 13:48:36 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id l204so22537729ybf.10
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 13:48:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=c6+/MuYjgyn2udQAyYO1pcnAtH6vCX68BZVqdL6DnAM=;
-        b=cJX06OPiClEPKrxTiXas7HB6WtJRm9cySIHWVKh7Ki7j3H9kK2AFdp8Q1FguyRd58x
-         PaH1GoWdRDWmWvYK9aq02GYuLKlyPzPCiC/A0hNAHqw7XoGK2cbIiqa5oZeG98GmK33G
-         UvBGwf064e/kjFJVo8x/gssDvQGs6OtC4xZmpdY5EjSujvGQnLOhOe75SGsnbn6onlRZ
-         vCGCrcmmmIxGQ9v42+lPxCFsATzzGwavFuWZ2Q82aqm5WNb790TbSc1A6Y9wo3QK/QYf
-         19tRPPJ/Ai6gLmB9FsTwmcKiy6kaFR+c7wJs2RyhK8Ehe2mSkB/wRHeqe5IOAr3jotKW
-         fPMQ==
+        d=eclypsium.com; s=google;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=qa3tsYK2bljXrt3Mkxfz0grFVBOVa6KK4MmffPa/HZs=;
+        b=RX18XnnfqjfkM7VzGEEtNwFnp9OLKHeAAzouCcexVXysP2zke5k1vt4V+P62kKD1nx
+         TGGY6CwUOsIqQu7kYnQlucj4iszPS9+Q1PuHOCOFXWzBW4s6s521IumeVVkFLllSeaAJ
+         /Vsac2wvJ6G4zIQenT3j2ZhDPDn/Tpp+gd2no3DpbR6U6U6/+BgWYTo054K0966aKwvj
+         WcIr0GcR1pngLv0/yeHnjj48jx14ft+D/bQLBdOUGwu1HnynsZLXRg+uoYnnyAPTL7P8
+         krZcbM7mpBudQ3y8HAz5Z7P3zDEV6MFKqaLCnc45hfD2KLIJSZzeKA919PcsYRYJJi5e
+         8uTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=c6+/MuYjgyn2udQAyYO1pcnAtH6vCX68BZVqdL6DnAM=;
-        b=XETHKKU0EwCiyHFrZTV2/aEnRdgkl7XwzbrlwUeDj52uWo1c9oJpzY/uZqRReow/Em
-         JfG7cxeySglxfIoo/UvLVqSN1mLMoSV/CKvsVqYWEhCwqHRdILn+sir5G6BAokihioqb
-         vH2DfqDeNe0Oo+77MiDcCP4xCusXM8oVdpcEid4H8OCxTl+qgHVAnroIkDVNLrLgqEfr
-         5/VzBtFk7Soyt87Tu0B8NS2H5OPDUt/8CvQAxj3uZo/JptR3pGMSiMIkzbkXcunAB8om
-         vHoeYgJvNlNuQWg3jdO8qJd9Pd7lWY6g/D8/2Jlg2ikBB4mZr7Zm8u0pXiHYx68XHw5K
-         GZMA==
-X-Gm-Message-State: AJIora+t81lDoPiRzO+xPaCEhZ/VjpkFf6NVW9GUxGyXzX0yFw3cuXE1
-        30vXFBo2iznjFsgQ6V1qgGNnUQ==
-X-Google-Smtp-Source: AGRyM1vxUFh649IvXZavkwFGw+qBXaVL9n4KDXt80qmiBlcu4flgIbvfKkajNW5wqADIULcUT58ZmA==
-X-Received: by 2002:a05:6a00:26cf:b0:4f6:fc52:7b6a with SMTP id p15-20020a056a0026cf00b004f6fc527b6amr1389852pfw.39.1655326103240;
-        Wed, 15 Jun 2022 13:48:23 -0700 (PDT)
-Received: from [172.22.33.138] ([192.77.111.2])
-        by smtp.gmail.com with ESMTPSA id p18-20020a17090a931200b001e8875e3326sm2225563pjo.47.2022.06.15.13.48.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 13:48:22 -0700 (PDT)
-Message-ID: <b21dab64-1e5b-eaab-2e74-e95a22ca6e82@linaro.org>
-Date:   Wed, 15 Jun 2022 13:48:20 -0700
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=qa3tsYK2bljXrt3Mkxfz0grFVBOVa6KK4MmffPa/HZs=;
+        b=5Uxr09TiFLfEZdXAztqN8llcBgRimevgIuwrTGOzhNF2qCshIoUs3T+B/APGNs/XkZ
+         HbgK+YpeGFBuPdSbjHbVo9eBb1xOdj0H56oRDokl6w6KmwwBHrU//OvUaYpRlDvSK5v3
+         YWEWtoQt38rVTxKHn0TLXoTo8XQNcAKcn1vcH0Bl6krlpz77l+xQrRn6qXCC/N1hZlkd
+         djjHVGgsOvpC86QLAAtmzlpe7nVDJTzPQ85WVNyxr/T35Zm25kZBxi3TKnM5nJhj70mI
+         fPuRryeZ1oVfGBVDS9ItkGDG/JbuoZ/AVyTzFeDCvzRoUdRsXuu50Jqx+CLMZn1E1eBn
+         +Bjg==
+X-Gm-Message-State: AJIora+31ulr9zvvfuox8ie+gFAuCHSs5DqMHnwV1I1F8RdUSmxjKAYa
+        rO0bkKdEG0w1UDJKAY7ruvkrfbNiXzA6bTlFCkpHDg==
+X-Google-Smtp-Source: AGRyM1vsKJDK8HulI5fnoOJIzelifBQivxt1+XV6dPPW5onay514r37hk3mZP8WxEAAyZe2g4j8MQ/qUUNPZliuSu54=
+X-Received: by 2002:a5b:884:0:b0:65d:1c7c:4f33 with SMTP id
+ e4-20020a5b0884000000b0065d1c7c4f33mr1836464ybq.601.1655326115552; Wed, 15
+ Jun 2022 13:48:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
- which controls
-Content-Language: en-US
-To:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        "max.oss.09@gmail.com" <max.oss.09@gmail.com>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>
-Cc:     "linux-imx@nxp.com" <linux-imx@nxp.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "biju.das.jz@bp.renesas.com" <biju.das.jz@bp.renesas.com>,
-        "bjorn.andersson@linaro.org" <bjorn.andersson@linaro.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "vkoul@kernel.org" <vkoul@kernel.org>,
-        "geert+renesas@glider.be" <geert+renesas@glider.be>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "khilman@kernel.org" <khilman@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        Max Krummenacher <max.krummenacher@toradex.com>
-References: <20220609150851.23084-1-max.oss.09@gmail.com>
- <20220613191549.GA4092455-robh@kernel.org>
- <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
- <CAEHkU3VVM0zUsaKMUGeSzfbLmVJW6rqXGLv7TqaLTEQeXEVkUA@mail.gmail.com>
- <12e3bb72-af2d-653f-b342-c6b4d6a1f292@linaro.org>
- <ddbeba186bf662348e8594f322f750cf89326a66.camel@toradex.com>
- <df432e88-8688-c229-5ef0-8ba001b72908@linaro.org>
- <8decc5b6d1f0bc028d60d444d939da4408e756d3.camel@toradex.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <8decc5b6d1f0bc028d60d444d939da4408e756d3.camel@toradex.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a81:af52:0:0:0:0:0 with HTTP; Wed, 15 Jun 2022 13:48:34
+ -0700 (PDT)
+In-Reply-To: <CAFmMkTGFpehSFOsnDuQN4aTnwfgYGwTbGBxtvUU_byDcoRVPPA@mail.gmail.com>
+References: <20220614210217.1940563-1-martin.fernandez@eclypsium.com>
+ <20220615190519.GA1524500@alison-desk> <CAD2FfiGxy=9ARK5FT_iaLACZSzR+R4crmGJv7T+v_w3+ktOzCQ@mail.gmail.com>
+ <20220615195425.GA1524649@alison-desk> <CAFmMkTGFpehSFOsnDuQN4aTnwfgYGwTbGBxtvUU_byDcoRVPPA@mail.gmail.com>
+From:   Martin Fernandez <martin.fernandez@eclypsium.com>
+Date:   Wed, 15 Jun 2022 17:48:34 -0300
+Message-ID: <CAKgze5aQsh2VY4tjsDco_Wc6CTU+KXZM3bhFR+73AVp3gLWHuA@mail.gmail.com>
+Subject: Re: [PATCH] x86/cpuinfo: Clear X86_FEATURE_TME if TME/MKTME is
+ disabled by BIOS
+To:     Daniel Gutson <daniel.gutson@eclypsium.com>
+Cc:     Alison Schofield <alison.schofield@intel.com>,
+        Richard Hughes <hughsient@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alex Bazhaniuk <alex.bazhaniuk@eclypsium.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,103 +78,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/06/2022 11:13, Marcel Ziswiler wrote:
-> On Wed, 2022-06-15 at 10:37 -0700, Krzysztof Kozlowski wrote:
->> On 15/06/2022 10:31, Marcel Ziswiler wrote:
->>> Hi
->>>
->>> On Wed, 2022-06-15 at 10:15 -0700, Krzysztof Kozlowski wrote:
->>>> On 15/06/2022 09:10, Max Krummenacher wrote:
->>>>> Hi
->>>>>
->>>>> On Tue, Jun 14, 2022 at 9:22 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->>>>>>
->>>>>> Hi Rob,
->>>>>>
->>>>>> On Mon, Jun 13, 2022 at 9:15 PM Rob Herring <robh@kernel.org> wrote:
->>>>>>> On Thu, Jun 09, 2022 at 05:08:46PM +0200, Max Krummenacher wrote:
->>>>>>>> From: Max Krummenacher <max.krummenacher@toradex.com>
->>>>>>>>
->>>>>>>> its power enable by using a regulator.
->>>>>>>>
->>>>>>>> The currently implemented PM domain providers are all specific to
->>>>>>>> a particular system on chip.
->>>>>>>
->>>>>>> Yes, power domains tend to be specific to an SoC... 'power-domains' is
->>>>>>> supposed to be power islands in a chip. Linux 'PM domains' can be
->>>>>>> anything...
->>>>>
->>>>> I don't see why such power islands should be restricted to a SoC. You can
->>>>> build the exact same idea on a PCB or even more modular designs.
->>>>
->>>> In the SoC these power islands are more-or-less defined. These are real
->>>> regions gated by some control knob.
->>>>
->>>> Calling few devices on a board "power domain" does not make it a power
->>>> domain. There is no grouping, there is no control knob.
->>>>
->>>> Aren't you now re-implementing regulator supplies? How is this different
->>>> than existing supplies?
->>>
->>> I believe the biggest difference between power-domains and regulator-supplies lays in the former being
->>> driver
->>> agnostic while the later is driver specific. 
+On 6/15/22, Daniel Gutson <daniel.gutson@eclypsium.com> wrote:
+> On Wed, Jun 15, 2022 at 4:54 PM Alison Schofield
+> <alison.schofield@intel.com> wrote:
 >>
->> That's one way to look, but the other way (matching the bindings
->> purpose) is to look at hardware. You have physical wire / voltage rail
->> supply - use regulator supply. In the terms of the hardware - what is
->> that power domain? It's a concept, not a physical object.
-> 
-> Well, but how can that concept then exist within the SoC but not outside? I don't get it. Isn't it just the
-> exact same physical power gating thingy whether inside the SoC or on a PCB?
-> 
->>> Meaning with power-domains one can just add such arbitrary
->>> structure to the device tree without any further driver specific changes/handling required. While with
->>> regulator-supplies each and every driver actually needs to have driver specific handling thereof added. Or
->>> do I
->>> miss anything?
+>> On Wed, Jun 15, 2022 at 08:34:58PM +0100, Richard Hughes wrote:
+>> > On Wed, 15 Jun 2022 at 20:06, Alison Schofield
+>> > <alison.schofield@intel.com> wrote:
+>> > > My first reaction is lying about the cpuinfo is not a soln, since
+>> > > it creates a problem for a users currently relying on cpuinfo to be
+>> > > the source of truth for TME.
+>> >
+>> > I think you have to qualify "source of truth". At the moment the CPU
+>> > reports "Yes! I support TME!" and then for one reason or another the
+>> > platform turns it off and actually there's no memory encryption of
+>> > your secrets at all. There's seemingly no userspace way of telling if
+>> > TME is actually active. We were told that we shouldn't export the
+>> > "platform has disabled a CPU feature" in sysfs and just to clear the
+>> > cpuid flag that gets exported (like AMD is currently doing) which is
+>> > what Martin proposed here. Programs want to know the true CPU
+>> > capability can do __get_cpuid_count() like they can for the SME/SEV
+>> > capabilities.
+>> >
+>> Disagree on sending folks to use __get_cpuid_count() when they already
+>> have cpuinfo.
 >>
->> Thanks for clarification but I am not sure if it matches the purpose of
->> bindings and DTS. You can change the implementation as well to have
->> implicit regulators. No need for new bindings for that.
-> 
-> Okay, maybe that would also work, of course. So basically add a new binding 
+>> Why is a sysfs entry TME-enabled 0/1 a bad thing?
+>
+> :)))
+> This was my very first patch, and I got half of the community complaining
+> It was so long ago that I don't recall everything, maybe Mart=C3=ADn does=
+?
+> or Richard?
 
-That I did not propose. :) We have a binding for regulator supplies so
-you do no need a new one.
+The discussion triggered the fact that checking that TME is active is
+not enough to tell if memory is being encrypted or not (which we
+thought it was true by that time), and that triggered a series of patches t=
+o
+address the other checks required, which is currently going nowhere
+[1].
 
-> which allows adding regulators to
-> arbitrary nodes which then will be generically handled by e.g. runtime PM. Almost something like assigned-
-> clocks [1] you mean? I guess that could work. Remember that's why Max posted it as an RFC to get such feedback.
-> Thanks for further refining those ideas.
+The sysfs _wasn't_ discarded perse, but since Boris suggested the
+change in cpuinfo (several times now that I recalled that Daniel patch
+[2]) I think that is cleaner, besides the backwards compatibility.
 
-DTS and bindings describe here the hardware, so focus on that. Device is
-supplied by some regulator which I assume can be controlled by GPIO. I
-don't think you need new bindings for that.
+[1] https://lore.kernel.org/linux-efi/20220429201717.1946178-1-martin.ferna=
+ndez@eclypsium.com/
 
-Implementation of bindings, so Linux driver, is different thing.
+[2] https://lkml.iu.edu/hypermail/linux/kernel/2006.2/05231.html
 
-> 
->>> We are really trying to model something where a single GPIO pin (via a GPIO regulator or whatever) can
->>> control
->>> power to a variety of on-board peripherals. And, of course, we envision runtime PM actually making use of
->>> it
->>> e.g. when doing suspend/resume.
+>> It can be documented
+>> to have the same meaning as the log message.
 >>
->> And this GPIO pin controls what? Some power switch which cuts the power
->> of one regulator or many?
-> 
-> Well, that doesn't really matter. Resp. this part one should be able to sufficiently model using whatever
-> available regulator lore we already have (e.g. whatever delays/times).
-> 
->> If many different regulators, how do you
->> handle small differences in ramp up time?
-> 
-> Well, I don't think this is any different to any other regulator(s), not? Them HW folks will just need to tell
-> us some reasonable numbers for those delays/times.
-
-Probably... I just wonder how that would work in practice.
-
-
-Best regards,
-Krzysztof
+>> You keep referring to AMD. How is their exception documented?
+>>
+>> Alison
+>>
+>> > > Are we to tell them to go look in the
+>> > > log now, because fwupd folks didn't want to ;)
+>> >
+>> > We're not telling anyone to use the log; grepping megabytes of
+>> > unformatted kernel logs is a terrible (and slow) way to get one
+>> > boolean value.
+>> >
+>> > Richard.
+>

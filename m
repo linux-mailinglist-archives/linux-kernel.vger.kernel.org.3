@@ -2,62 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC9D54D1C5
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A5454D1CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346688AbiFOTlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 15:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42598 "EHLO
+        id S1350105AbiFOTlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbiFOTlI (ORCPT
+        with ESMTP id S1346484AbiFOTlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:41:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BE22E0B5;
-        Wed, 15 Jun 2022 12:41:04 -0700 (PDT)
+        Wed, 15 Jun 2022 15:41:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32ECE546B6;
+        Wed, 15 Jun 2022 12:41:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D93E60EB1;
-        Wed, 15 Jun 2022 19:41:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 016E2C34115;
-        Wed, 15 Jun 2022 19:41:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D779FB82145;
+        Wed, 15 Jun 2022 19:41:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6423AC3411E;
+        Wed, 15 Jun 2022 19:41:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655322063;
-        bh=RzP3qZTZJINHqTKFXOClmmCHrILPHRVdARLSckRDLu4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=sPr3tIrT00EMIjz/ONdLIRYJ+CB3UQOmsXySLdFOSmMVE2PIqmKgbXhYyH32JQZOj
-         f6o4nwcpo1SxAbGU4TcsxsaJ6rLXGSSmag8Q+kJlSv2x/nHwW+EXm33zaZiLMoVba/
-         XyUP4fWev//LsLGc6CqxUc/QPEU6VyFffwW010XBEEVSHnQG74LfDlu6/TyNaBRe/d
-         wL6xNNbxbp38Yf2kJrfPjTVJVyseia0LPYGREuqKzE/gtOt0X+Q0ErfsJ8F+n6qSfn
-         ZpyGr0xWlE/fK5Fwg/q4GZf76t52zYvIz156FNbzmt1ErWyOQlrDVbqYz25AxHW0Hq
-         Vzs4DM4Pq/Urg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E0890E73856;
-        Wed, 15 Jun 2022 19:41:02 +0000 (UTC)
-Subject: Re: [GIT PULL] tpmdd updates for v5.19-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20220615185912.40987-1-jarkko@kernel.org>
-References: <20220615185912.40987-1-jarkko@kernel.org>
-X-PR-Tracked-List-Id: <linux-security-module.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20220615185912.40987-1-jarkko@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-v5.19-rc3
-X-PR-Tracked-Commit-Id: 27b5b22d252c6d71a2a37a4bdf18d0be6d25ee5a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: afe9eb14ea1cbac5d91ca04eb64810d2d9fa22b0
-Message-Id: <165532206290.28565.8327730742132157264.pr-tracker-bot@kernel.org>
-Date:   Wed, 15 Jun 2022 19:41:02 +0000
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        David Howells <dhowells@redhat.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
+        s=k20201202; t=1655322091;
+        bh=UdusMzWPXrDP8gnWzMVcl30Dbm52/NoNK48rJ/3Zb6I=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=Tk77MQeNCxft+AMnrEQk3UadjI+HUjjKQfzeQnba/G+6wIbKFBmA6pqCgfw76oM06
+         jNT+JfAENHA+Z48QcAX4aIYZfx8xjwHi8TG9qq7gl848zcyiacs3KmrLv3csnnBIN0
+         HvrA8yiEIW1zS30b+yPNyqv8JVeJe0kRXa5oIcJlLSaPWlcZ2qzkq5+gskbWORniGV
+         G9fiqtywZANe6s9G732QnQxDU8Hiowhabbzw8CTdq5sSirhMjTZQbFlF0kZovMTXXM
+         LcnYUaIdjn6Dz4LPwcvmPFsCjD2UTZ4R63N+vBQnxmodmXc9ny1rR1TUvUzKJgA3F2
+         4FET9uKdnGrgA==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220612145955.385787-3-nikita@trvn.ru>
+References: <20220612145955.385787-1-nikita@trvn.ru> <20220612145955.385787-3-nikita@trvn.ru>
+Subject: Re: [PATCH v2 2/4] clk: qcom: clk-rcg2: Make sure to not write d=0 to the NMD register
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     bjorn.andersson@linaro.org, agross@kernel.org, tdas@codeaurora.org,
+        joonwoop@codeaurora.org, svarbanov@mm-sol.com,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Nikita Travkin <nikita@trvn.ru>
+To:     Nikita Travkin <nikita@trvn.ru>, linus.walleij@linaro.org,
+        mturquette@baylibre.com
+Date:   Wed, 15 Jun 2022 12:41:29 -0700
+User-Agent: alot/0.10
+Message-Id: <20220615194131.6423AC3411E@smtp.kernel.org>
 X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,15 +60,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Wed, 15 Jun 2022 21:59:12 +0300:
+Quoting Nikita Travkin (2022-06-12 07:59:53)
+> Sometimes calculation of d value may result in 0 because of the
+> rounding after integer division. This causes the following error:
+>=20
+> [  113.969689] camss_gp1_clk_src: rcg didn't update its configuration.
+> [  113.969754] WARNING: CPU: 3 PID: 35 at drivers/clk/qcom/clk-rcg2.c:122=
+ update_config+0xc8/0xdc
+>=20
+> Make sure that D value is never zero.
+>=20
+> Fixes: 7f891faf596e ("clk: qcom: clk-rcg2: Add support for duty-cycle for=
+ RCG")
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+>=20
+> ---
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpmdd-next-v5.19-rc3
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/afe9eb14ea1cbac5d91ca04eb64810d2d9fa22b0
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>

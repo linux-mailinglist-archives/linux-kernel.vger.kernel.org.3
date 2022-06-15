@@ -2,238 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B6354CE9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 215D654CEA1
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356044AbiFOQ2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59998 "EHLO
+        id S1355989AbiFOQ2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355717AbiFOQ2k (ORCPT
+        with ESMTP id S1352279AbiFOQ2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:28:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9719C2937D;
-        Wed, 15 Jun 2022 09:28:39 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 52AB41F95C;
-        Wed, 15 Jun 2022 16:28:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1655310518; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sRVZYO8u+2GaBZDjbgulOQw4vH+xb0fipLd/Fd2y5no=;
-        b=X3toKjCDbNw80V+NQoJvX5JRKMX4cFCbyF7og7xPPjMnpeaUfgQKlYedoXL67veGx6ItpT
-        HqkMRF2zeZ4TShn7mZ4RuNANXtDLMdXc9OCm7sQ1xuIiRBKQ4mSevfOrKlg63BAFBZG80/
-        ekRWqnkUwHrDV9ignxnR0VbrQGzvWXs=
-Received: from alley.suse.cz (unknown [10.100.201.202])
-        by relay2.suse.de (Postfix) with ESMTP id E517C2C141;
-        Wed, 15 Jun 2022 16:28:37 +0000 (UTC)
-From:   Petr Mladek <pmladek@suse.com>
-To:     John Ogness <john.ogness@linutronix.de>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>, frederic@kernel.org,
-        Peter Geis <pgwipeout@gmail.com>, zhouzhouyi@gmail.com,
-        dave@stgolabs.net, josh@joshtriplett.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        rcu@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>
-Subject: [PATCH 2/2] printk: Wait for the global console lock when the system is going down
-Date:   Wed, 15 Jun 2022 18:28:05 +0200
-Message-Id: <20220615162805.27962-3-pmladek@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220615162805.27962-1-pmladek@suse.com>
-References: <20220615162805.27962-1-pmladek@suse.com>
+        Wed, 15 Jun 2022 12:28:35 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9618B2937D;
+        Wed, 15 Jun 2022 09:28:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=QLrLutFCF/6krvgqQy1V+anw8vzmDDqVVQWXu6dHQBI=; b=ahTL5A/8lRfvOfzGz2hozhjzyR
+        oKgB9wtZ8W601SXKNSclYHxS9eqq7bxSPX+MAEUfJRsDyZ4iBdGCWsunOfqw10C+NICQffM+AeVi2
+        VR4kFIm7vK1neaBZcnpq5LiVl2WEt+e2JErA7Kpu4/do+Y17nd8KqONuAxijBpZrtci8Jki3mpzgE
+        dwpV5aZGxTVKUj2vN1LZskDVcLR4ipq3/YSq8qp8jUnH0DV+FEtLKovsv0NyAvG9xC6AM0BIRyUws
+        rygbDItAhKY1lOzt+9Rjg4bsWZf8GwDNxrwG522PEbARrZDgfobznVJi7SPcfjf27whR3RVQtlt4D
+        C6LLRylg==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1VsV-008Ab9-Qh; Wed, 15 Jun 2022 16:28:26 +0000
+Message-ID: <1f8095db-a08f-7b6b-2cee-f530d914b9f8@infradead.org>
+Date:   Wed, 15 Jun 2022 09:28:19 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: linux-next: Tree for Jun 15 (drivers/dma/apple-admac.c)
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Martin_Povi=c5=a1er?= <povik+lin@cutebit.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        dmaengine@vger.kernel.org
+References: <20220615160116.528c324b@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220615160116.528c324b@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are reports that the console kthreads block the global console
-lock when the system is going down, for example, reboot, panic.
 
-First part of the solution was to block kthreads in these problematic
-system states so they stopped handling newly added messages.
 
-Second part of the solution is to wait when for the kthreads when
-they are actively printing. It solves the problem when a message
-was printed before the system entered the problematic state and
-the kthreads managed to step in.
+On 6/14/22 23:01, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20220614:
+> 
 
-A busy waiting has to be used because panic() can be called in any
-context and in an unknown state of the scheduler.
+on i386:
 
-There must be a timeout because the kthread might get stuck or sleeping
-and never release the lock. The timeout 10s is an arbitrary value
-inspired by the softlockup timeout.
+../drivers/dma/apple-admac.c: In function 'admac_cyclic_write_one_desc':
+../drivers/dma/apple-admac.c:213:22: warning: right shift count >= width of type [-Wshift-count-overflow]
+  writel_relaxed(addr >> 32,       ad->base + REG_DESC_WRITE(channo));
+                      ^
 
-BugLink: https://lore.kernel.org/r/20220610205038.GA3050413@paulmck-ThinkPad-P17-Gen-1
-BugLink: https://lore.kernel.org/r/CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com
-Signed-off-by: Petr Mladek <pmladek@suse.com>
----
- include/linux/printk.h      |  5 +++++
- kernel/panic.c              |  2 ++
- kernel/printk/internal.h    |  2 ++
- kernel/printk/printk.c      |  4 ++++
- kernel/printk/printk_safe.c | 32 ++++++++++++++++++++++++++++++++
- kernel/reboot.c             |  2 ++
- 6 files changed, 47 insertions(+)
 
-diff --git a/include/linux/printk.h b/include/linux/printk.h
-index 10ec29bc0135..f88ec15f83dc 100644
---- a/include/linux/printk.h
-+++ b/include/linux/printk.h
-@@ -173,6 +173,7 @@ extern void printk_prefer_direct_enter(void);
- extern void printk_prefer_direct_exit(void);
- 
- extern bool pr_flush(int timeout_ms, bool reset_on_progress);
-+extern void try_block_console_kthreads(int timeout_ms);
- 
- /*
-  * Please don't use printk_ratelimit(), because it shares ratelimiting state
-@@ -237,6 +238,10 @@ static inline bool pr_flush(int timeout_ms, bool reset_on_progress)
- 	return true;
- }
- 
-+static inline void try_block_console_kthreads(int timeout_ms)
-+{
-+}
-+
- static inline int printk_ratelimit(void)
- {
- 	return 0;
-diff --git a/kernel/panic.c b/kernel/panic.c
-index a3c758dba15a..4cf13c37bd08 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -297,6 +297,7 @@ void panic(const char *fmt, ...)
- 		 * unfortunately means it may not be hardened to work in a
- 		 * panic situation.
- 		 */
-+		try_block_console_kthreads(10000);
- 		smp_send_stop();
- 	} else {
- 		/*
-@@ -304,6 +305,7 @@ void panic(const char *fmt, ...)
- 		 * kmsg_dump, we will need architecture dependent extra
- 		 * works in addition to stopping other CPUs.
- 		 */
-+		try_block_console_kthreads(10000);
- 		crash_smp_send_stop();
- 	}
- 
-diff --git a/kernel/printk/internal.h b/kernel/printk/internal.h
-index d947ca6c84f9..e7d8578860ad 100644
---- a/kernel/printk/internal.h
-+++ b/kernel/printk/internal.h
-@@ -20,6 +20,8 @@ enum printk_info_flags {
- 	LOG_CONT	= 8,	/* text is a fragment of a continuation line */
- };
- 
-+extern bool block_console_kthreads;
-+
- __printf(4, 0)
- int vprintk_store(int facility, int level,
- 		  const struct dev_printk_info *dev_info,
-diff --git a/kernel/printk/printk.c b/kernel/printk/printk.c
-index 45c6c2b0b104..b095fb5f5f61 100644
---- a/kernel/printk/printk.c
-+++ b/kernel/printk/printk.c
-@@ -250,6 +250,9 @@ static atomic_t console_kthreads_active = ATOMIC_INIT(0);
- #define console_kthread_printing_exit() \
- 	atomic_dec(&console_kthreads_active)
- 
-+/* Block console kthreads to avoid processing new messages. */
-+bool block_console_kthreads;
-+
- /*
-  * Helper macros to handle lockdep when locking/unlocking console_sem. We use
-  * macros instead of functions so that _RET_IP_ contains useful information.
-@@ -3730,6 +3733,7 @@ static bool printer_should_wake(struct console *con, u64 seq)
- 
- 	if (con->blocked ||
- 	    console_kthreads_atomically_blocked() ||
-+	    block_console_kthreads ||
- 	    system_state > SYSTEM_RUNNING ||
- 	    oops_in_progress) {
- 		return false;
-diff --git a/kernel/printk/printk_safe.c b/kernel/printk/printk_safe.c
-index ef0f9a2044da..caac4de1ea59 100644
---- a/kernel/printk/printk_safe.c
-+++ b/kernel/printk/printk_safe.c
-@@ -8,7 +8,9 @@
- #include <linux/smp.h>
- #include <linux/cpumask.h>
- #include <linux/printk.h>
-+#include <linux/console.h>
- #include <linux/kprobes.h>
-+#include <linux/delay.h>
- 
- #include "internal.h"
- 
-@@ -50,3 +52,33 @@ asmlinkage int vprintk(const char *fmt, va_list args)
- 	return vprintk_default(fmt, args);
- }
- EXPORT_SYMBOL(vprintk);
-+
-+/**
-+ * try_block_console_kthreads() - Try to block console kthreads and
-+ *	make the global console_lock() avaialble
-+ *
-+ * @timeout_ms:        The maximum time (in ms) to wait.
-+ *
-+ * Prevent console kthreads from starting processing new messages. Wait
-+ * until the global console_lock() become available.
-+ *
-+ * Context: Can be called in any context.
-+ */
-+void try_block_console_kthreads(int timeout_ms)
-+{
-+	block_console_kthreads = true;
-+
-+	/* Do not wait when the console lock could not be safely taken. */
-+	if (this_cpu_read(printk_context) || in_nmi())
-+		return;
-+
-+	while (timeout_ms > 0) {
-+		if (console_trylock()) {
-+			console_unlock();
-+			return;
-+		}
-+
-+		udelay(1000);
-+		timeout_ms -= 1;
-+	}
-+}
-diff --git a/kernel/reboot.c b/kernel/reboot.c
-index b5a71d1ff603..80564ffafabf 100644
---- a/kernel/reboot.c
-+++ b/kernel/reboot.c
-@@ -82,6 +82,7 @@ void kernel_restart_prepare(char *cmd)
- {
- 	blocking_notifier_call_chain(&reboot_notifier_list, SYS_RESTART, cmd);
- 	system_state = SYSTEM_RESTART;
-+	try_block_console_kthreads(10000);
- 	usermodehelper_disable();
- 	device_shutdown();
- }
-@@ -270,6 +271,7 @@ static void kernel_shutdown_prepare(enum system_states state)
- 	blocking_notifier_call_chain(&reboot_notifier_list,
- 		(state == SYSTEM_HALT) ? SYS_HALT : SYS_POWER_OFF, NULL);
- 	system_state = state;
-+	try_block_console_kthreads(10000);
- 	usermodehelper_disable();
- 	device_shutdown();
- }
 -- 
-2.35.3
-
+~Randy

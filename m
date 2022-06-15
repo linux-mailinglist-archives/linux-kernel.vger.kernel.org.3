@@ -2,135 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BAF654CF5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5E654CF4F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:03:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241557AbiFORFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
+        id S1357242AbiFORDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiFORFT (ORCPT
+        with ESMTP id S1356968AbiFORDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:05:19 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515B44F9D0;
-        Wed, 15 Jun 2022 10:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655312718; x=1686848718;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=1PYnn6PyVpQKqMIrBh21mNOeylsX7mB9wzgN758442Y=;
-  b=L40+lCJw4uClwzbOQzgvm+7d7jLAWagigTI/O6kauFmIkzB01zwoWPGJ
-   6t00BY4sH2J1rxK2xxWg9S0pQOK7coISzW5I9oPD21fk8fgRSngLDUNmG
-   dopKsDtEG+GT983exOqRQybv4bvx5yKkooGWLhZFNUFdSwzwDJRikBMN9
-   BmCKKts5VAfKJsqYCO4VBuVN+LH/qOwYp28qTnqqxeSoU6ukrI5iwZVe+
-   /tLDonfoVjMxs4WMb4TvFtwdns3/i3vzj3zi4LGbcOVswuuYTs05OeHFl
-   RhDflqA4fYcKxoah2hv22l6sd+2QVSbdW+q/7QqMsxtMsEDYzA4jJrTZV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="279752968"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="279752968"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 10:03:17 -0700
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="727500681"
-Received: from orsosgc001.jf.intel.com ([10.165.21.154])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 10:03:16 -0700
-Date:   Wed, 15 Jun 2022 10:03:15 -0700
-From:   Umesh Nerlige Ramappa <umesh.nerlige.ramappa@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     David Airlie <airlied@linux.ie>, dri-devel@lists.freedesktop.org,
-        Chris Wilson <chris.p.wilson@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Thomas =?utf-8?Q?Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Thomas Hellstrom <thomas.hellstrom@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        mauro.chehab@linux.intel.com,
-        =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [Intel-gfx] [PATCH 2/6] drm/i915/gt: Invalidate TLB of the OA
- unit at TLB invalidations
-Message-ID: <20220615170315.GK48807@orsosgc001.jf.intel.com>
-References: <cover.1655306128.git.mchehab@kernel.org>
- <653bf9815d562f02c7247c6b66b85b243f3172e7.1655306128.git.mchehab@kernel.org>
+        Wed, 15 Jun 2022 13:03:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60947344D8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:03:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 43A99153B;
+        Wed, 15 Jun 2022 10:03:29 -0700 (PDT)
+Received: from [10.57.82.209] (unknown [10.57.82.209])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 82F6C3F73B;
+        Wed, 15 Jun 2022 10:03:26 -0700 (PDT)
+Message-ID: <5083aed9-fa31-b91c-6ca6-29dbc4d0807a@arm.com>
+Date:   Wed, 15 Jun 2022 18:03:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <653bf9815d562f02c7247c6b66b85b243f3172e7.1655306128.git.mchehab@kernel.org>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v9 1/3] iommu/io-pgtable-arm-v7s: Add a quirk to allow
+ pgtable PA up to 35bit
+Content-Language: en-GB
+To:     yf.wang@mediatek.com, Will Deacon <will@kernel.org>,
+        Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Georgi Djakov <quic_c_gdjako@quicinc.com>,
+        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
+        Ning Li <ning.li@mediatek.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        "moderated list:ARM SMMU DRIVERS" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:IOMMU DRIVERS" <iommu@lists.linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Cc:     wsd_upstream@mediatek.com, Libo Kang <Libo.Kang@mediatek.com>,
+        Yong Wu <Yong.Wu@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>
+References: <20220615161224.6923-1-yf.wang@mediatek.com>
+ <20220615161224.6923-2-yf.wang@mediatek.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220615161224.6923-2-yf.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 04:27:36PM +0100, Mauro Carvalho Chehab wrote:
->From: Chris Wilson <chris.p.wilson@intel.com>
->
->On gen12 HW, ensure that the TLB of the OA unit is also invalidated
->as just invalidating the TLB of an engine is not enough.
->
->Fixes: 7938d61591d3 ("drm/i915: Flush TLBs before releasing backing store")
->
->Signed-off-by: Chris Wilson <chris.p.wilson@intel.com>
->Cc: Fei Yang <fei.yang@intel.com>
->Cc: Andi Shyti <andi.shyti@linux.intel.com>
->Cc: stable@vger.kernel.org
->Acked-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
->Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->---
->
->See [PATCH 0/6] at: https://lore.kernel.org/all/cover.1655306128.git.mchehab@kernel.org/
->
-> drivers/gpu/drm/i915/gt/intel_gt.c | 10 ++++++++++
-> 1 file changed, 10 insertions(+)
->
->diff --git a/drivers/gpu/drm/i915/gt/intel_gt.c b/drivers/gpu/drm/i915/gt/intel_gt.c
->index d5ed6a6ac67c..61b7ec5118f9 100644
->--- a/drivers/gpu/drm/i915/gt/intel_gt.c
->+++ b/drivers/gpu/drm/i915/gt/intel_gt.c
->@@ -10,6 +10,7 @@
-> #include "pxp/intel_pxp.h"
->
-> #include "i915_drv.h"
->+#include "i915_perf_oa_regs.h"
-> #include "intel_context.h"
-> #include "intel_engine_pm.h"
-> #include "intel_engine_regs.h"
->@@ -1259,6 +1260,15 @@ void intel_gt_invalidate_tlbs(struct intel_gt *gt)
-> 		awake |= engine->mask;
-> 	}
->
->+	/* Wa_2207587034:tgl,dg1,rkl,adl-s,adl-p */
->+	if (awake &&
->+	    (IS_TIGERLAKE(i915) ||
->+	     IS_DG1(i915) ||
->+	     IS_ROCKETLAKE(i915) ||
->+	     IS_ALDERLAKE_S(i915) ||
->+	     IS_ALDERLAKE_P(i915)))
->+		intel_uncore_write_fw(uncore, GEN12_OA_TLB_INV_CR, 1);
->+
+On 2022-06-15 17:12, yf.wang@mediatek.com wrote:
+> From: Yunfei Wang <yf.wang@mediatek.com>
+> 
+> Single memory zone feature will remove ZONE_DMA32 and ZONE_DMA and
+> cause pgtable PA size larger than 32bit.
+> 
+> Since Mediatek IOMMU hardware support at most 35bit PA in pgtable,
+> so add a quirk to allow the PA of pgtables support up to bit35.
+> 
+> Signed-off-by: Ning Li <ning.li@mediatek.com>
+> Signed-off-by: Yunfei Wang <yf.wang@mediatek.com>
+> ---
+>   drivers/iommu/io-pgtable-arm-v7s.c | 58 +++++++++++++++++++++++-------
+>   include/linux/io-pgtable.h         | 17 +++++----
+>   2 files changed, 56 insertions(+), 19 deletions(-)
+> 
+> diff --git a/drivers/iommu/io-pgtable-arm-v7s.c b/drivers/iommu/io-pgtable-arm-v7s.c
+> index be066c1503d3..39e5503ac75a 100644
+> --- a/drivers/iommu/io-pgtable-arm-v7s.c
+> +++ b/drivers/iommu/io-pgtable-arm-v7s.c
+> @@ -182,14 +182,8 @@ static bool arm_v7s_is_mtk_enabled(struct io_pgtable_cfg *cfg)
+>   		(cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_EXT);
+>   }
+>   
+> -static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
+> -				    struct io_pgtable_cfg *cfg)
+> +static arm_v7s_iopte to_mtk_iopte(phys_addr_t paddr, arm_v7s_iopte pte)
+>   {
+> -	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
+> -
+> -	if (!arm_v7s_is_mtk_enabled(cfg))
+> -		return pte;
+> -
+>   	if (paddr & BIT_ULL(32))
+>   		pte |= ARM_V7S_ATTR_MTK_PA_BIT32;
+>   	if (paddr & BIT_ULL(33))
+> @@ -199,6 +193,17 @@ static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
+>   	return pte;
+>   }
+>   
+> +static arm_v7s_iopte paddr_to_iopte(phys_addr_t paddr, int lvl,
+> +				    struct io_pgtable_cfg *cfg)
+> +{
+> +	arm_v7s_iopte pte = paddr & ARM_V7S_LVL_MASK(lvl);
+> +
+> +	if (arm_v7s_is_mtk_enabled(cfg))
+> +		return to_mtk_iopte(paddr, pte);
+> +
+> +	return pte;
+> +}
+> +
+>   static phys_addr_t iopte_to_paddr(arm_v7s_iopte pte, int lvl,
+>   				  struct io_pgtable_cfg *cfg)
+>   {
+> @@ -240,10 +245,17 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
+>   	dma_addr_t dma;
+>   	size_t size = ARM_V7S_TABLE_SIZE(lvl, cfg);
+>   	void *table = NULL;
+> +	gfp_t gfp_l1;
+> +
+> +	/*
+> +	 * ARM_MTK_TTBR_EXT extend the translation table base support all
+> +	 * memory address.
+> +	 */
+> +	gfp_l1 = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
+> +		 GFP_KERNEL : ARM_V7S_TABLE_GFP_DMA;
+>   
+>   	if (lvl == 1)
+> -		table = (void *)__get_free_pages(
+> -			__GFP_ZERO | ARM_V7S_TABLE_GFP_DMA, get_order(size));
+> +		table = (void *)__get_free_pages(gfp_l1 | __GFP_ZERO, get_order(size));
+>   	else if (lvl == 2)
+>   		table = kmem_cache_zalloc(data->l2_tables, gfp);
+>   
+> @@ -251,7 +263,8 @@ static void *__arm_v7s_alloc_table(int lvl, gfp_t gfp,
+>   		return NULL;
+>   
+>   	phys = virt_to_phys(table);
+> -	if (phys != (arm_v7s_iopte)phys) {
+> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
+> +	    phys >= (1ULL << cfg->oas) : phys != (arm_v7s_iopte)phys) {
 
-This patch can be dropped since this is being done in i915/i915_perf.c 
--> gen12_oa_disable and is synchronized with OA use cases.
+Given that the comment above says it supports all of memory, how would 
+phys >= (1ULL << cfg->oas) ever be true?
 
-Regards,
-Umesh
+>   		/* Doesn't fit in PTE */
+>   		dev_err(dev, "Page table does not fit in PTE: %pa", &phys);
+>   		goto out_free;
+> @@ -457,9 +470,14 @@ static arm_v7s_iopte arm_v7s_install_table(arm_v7s_iopte *table,
+>   					   arm_v7s_iopte curr,
+>   					   struct io_pgtable_cfg *cfg)
+>   {
+> +	phys_addr_t phys = virt_to_phys(table);
+>   	arm_v7s_iopte old, new;
+>   
+> -	new = virt_to_phys(table) | ARM_V7S_PTE_TYPE_TABLE;
+> +	new = phys | ARM_V7S_PTE_TYPE_TABLE;
+> +
+> +	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT)
+> +		new = to_mtk_iopte(phys, new);
+> +
+>   	if (cfg->quirks & IO_PGTABLE_QUIRK_ARM_NS)
+>   		new |= ARM_V7S_ATTR_NS_TABLE;
+>   
+> @@ -779,6 +797,7 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+>   						void *cookie)
+>   {
+>   	struct arm_v7s_io_pgtable *data;
+> +	slab_flags_t slab_flag;
+>   
+>   	if (cfg->ias > (arm_v7s_is_mtk_enabled(cfg) ? 34 : ARM_V7S_ADDR_BITS))
+>   		return NULL;
+> @@ -788,7 +807,8 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+>   
+>   	if (cfg->quirks & ~(IO_PGTABLE_QUIRK_ARM_NS |
+>   			    IO_PGTABLE_QUIRK_NO_PERMS |
+> -			    IO_PGTABLE_QUIRK_ARM_MTK_EXT))
+> +			    IO_PGTABLE_QUIRK_ARM_MTK_EXT |
+> +			    IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT))
+>   		return NULL;
+>   
+>   	/* If ARM_MTK_4GB is enabled, the NO_PERMS is also expected. */
+> @@ -796,15 +816,27 @@ static struct io_pgtable *arm_v7s_alloc_pgtable(struct io_pgtable_cfg *cfg,
+>   	    !(cfg->quirks & IO_PGTABLE_QUIRK_NO_PERMS))
+>   			return NULL;
+>   
+> +	if ((cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT) &&
+> +	    !arm_v7s_is_mtk_enabled(cfg))
+> +		return NULL;
+> +
+>   	data = kmalloc(sizeof(*data), GFP_KERNEL);
+>   	if (!data)
+>   		return NULL;
+>   
+>   	spin_lock_init(&data->split_lock);
+> +
+> +	/*
+> +	 * ARM_MTK_TTBR_EXT extend the translation table base support all
+> +	 * memory address.
+> +	 */
+> +	slab_flag = cfg->quirks & IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT ?
+> +		    0 : ARM_V7S_TABLE_SLAB_FLAGS;
+> +
+>   	data->l2_tables = kmem_cache_create("io-pgtable_armv7s_l2",
+>   					    ARM_V7S_TABLE_SIZE(2, cfg),
+>   					    ARM_V7S_TABLE_SIZE(2, cfg),
+> -					    ARM_V7S_TABLE_SLAB_FLAGS, NULL);
+> +					    slab_flag, NULL);
+>   	if (!data->l2_tables)
+>   		goto out_free_data;
+>   
+> diff --git a/include/linux/io-pgtable.h b/include/linux/io-pgtable.h
+> index 86af6f0a00a2..c9189716f6bd 100644
+> --- a/include/linux/io-pgtable.h
+> +++ b/include/linux/io-pgtable.h
+> @@ -74,17 +74,22 @@ struct io_pgtable_cfg {
+>   	 *	to support up to 35 bits PA where the bit32, bit33 and bit34 are
+>   	 *	encoded in the bit9, bit4 and bit5 of the PTE respectively.
+>   	 *
+> +	 * IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT: (ARM v7s format) MediaTek IOMMUs
+> +	 *	extend the translation table base support up to 35 bits PA, the
+> +	 *	encoding format is same with IO_PGTABLE_QUIRK_ARM_MTK_EXT.
+> +	 *
+>   	 * IO_PGTABLE_QUIRK_ARM_TTBR1: (ARM LPAE format) Configure the table
+>   	 *	for use in the upper half of a split address space.
+>   	 *
+>   	 * IO_PGTABLE_QUIRK_ARM_OUTER_WBWA: Override the outer-cacheability
+>   	 *	attributes set in the TCR for a non-coherent page-table walker.
+>   	 */
+> -	#define IO_PGTABLE_QUIRK_ARM_NS		BIT(0)
+> -	#define IO_PGTABLE_QUIRK_NO_PERMS	BIT(1)
+> -	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT	BIT(3)
+> -	#define IO_PGTABLE_QUIRK_ARM_TTBR1	BIT(5)
+> -	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA	BIT(6)
+> +	#define IO_PGTABLE_QUIRK_ARM_NS			BIT(0)
+> +	#define IO_PGTABLE_QUIRK_NO_PERMS		BIT(1)
+> +	#define IO_PGTABLE_QUIRK_ARM_MTK_EXT		BIT(3)
+> +	#define IO_PGTABLE_QUIRK_ARM_MTK_TTBR_EXT	BIT(4)
+> +	#define IO_PGTABLE_QUIRK_ARM_TTBR1		BIT(5)
+> +	#define IO_PGTABLE_QUIRK_ARM_OUTER_WBWA		BIT(6)
+>   	unsigned long			quirks;
+>   	unsigned long			pgsize_bitmap;
+>   	unsigned int			ias;
+> @@ -122,7 +127,7 @@ struct io_pgtable_cfg {
+>   		} arm_lpae_s2_cfg;
+>   
+>   		struct {
+> -			u32	ttbr;
+> +			u64	ttbr;
 
+The point of this is to return an encoded TTBR register value, not a raw 
+base address. I see from the other patches that your register is still 
+32 bits, so I'd prefer to follow the standard pattern and not need this 
+change.
 
-> 	for_each_engine_masked(engine, gt, awake, tmp) {
-> 		struct reg_and_bit rb;
->
->-- 
->2.36.1
->
+Thanks,
+Robin.
+
+>   			u32	tcr;
+>   			u32	nmrr;
+>   			u32	prrr;

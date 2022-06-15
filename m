@@ -2,215 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6382C54D28D
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:28:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD9D54D28F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346515AbiFOU2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 16:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
+        id S1346608AbiFOUaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 16:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346477AbiFOU21 (ORCPT
+        with ESMTP id S1346524AbiFOUaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 16:28:27 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E7B35ABE;
-        Wed, 15 Jun 2022 13:28:26 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id s12so25471393ejx.3;
-        Wed, 15 Jun 2022 13:28:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=8r+hzet5t8kQ9FT7Pu1Ip98hiFGbKJdzOlAKlpJMkVk=;
-        b=CyC4ObBITCEx03cJ+jHHKSflHxNM9MjGRpdEtxv5uX1nBpELCY85SMAVyymEE7lhxj
-         noa/brlVupI+G847Uer/1UtQOYKhP4AQJcUX9tm3dle2pFVKBnYcxrAd0vCVo04Lmb+f
-         w4UcRyvQUyz9AfxIpx49xKWt/zfKoO4g8gyaSMyk5qWokALZqJKtB8sstf6UHZZpxBQp
-         72gwHpcFohzN6o/QP+/l+xcc4Z4Uko8WuVhHc/uCCcsqvsCdHxsCCOUZ8SqmubdaMAJz
-         sX74eaqiVVp3aFw3lJYG3MPWIflWgY8myiSBd5caGXpM0wnaPNjDez+qIMnpdgu8D7a6
-         31kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=8r+hzet5t8kQ9FT7Pu1Ip98hiFGbKJdzOlAKlpJMkVk=;
-        b=lI07+NgjeixnKejTCGN4yfz476Z8JOB8vhKrZ9IOJuAO3SyDnD1ayu0fUPe9uE0Mfo
-         VLgAYNMAGK3b7gocIg0uh2lIf5alvKdP9CS61t4T/UcVfOZkWzXS1nYLsUj9FqTO5E7P
-         ri2rBFqO50eKqQ8ecwFwG+ViH3HPTGURIk8QPf72wCCew/o7F9cfv4kN82zmm0v9dcbQ
-         tDvwKP1QvQrEGlxViSMONWPx3xliJ3qYIopTIV7+fdQpRIrGcByovFghlxLvKl7x9KDB
-         bULJObPw8sYU1NCpWO4IN3G39hCCJwM/zCqcUu59EeC67qtJeYliQxsgmwbH+TAi+3dk
-         eNIQ==
-X-Gm-Message-State: AJIora8jf1Pv15tE1MiMfIeEf/mImZyzGiMwx9AfCKdjPrvmuLK9H4PQ
-        TqL0FxVge9YJfHLPZzXRkk6ie3RaySktQQwu4qIlb43gLJs=
-X-Google-Smtp-Source: AGRyM1tNPxpDe4mD8bUDD6pXlpxTktkWdlFC9EkAckW5lPQxZSrmplL55pnD0HYkRfFtMb4Nx+s1uwirup1f1SLqhvg=
-X-Received: by 2002:a17:907:c29:b0:704:fbb:1943 with SMTP id
- ga41-20020a1709070c2900b007040fbb1943mr1447349ejc.486.1655324905282; Wed, 15
- Jun 2022 13:28:25 -0700 (PDT)
+        Wed, 15 Jun 2022 16:30:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C60532EF;
+        Wed, 15 Jun 2022 13:30:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 96684B82178;
+        Wed, 15 Jun 2022 20:30:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31C55C3411B;
+        Wed, 15 Jun 2022 20:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655325016;
+        bh=AnXLp71TuqYK0g6z67fHoakYP3DmxNW4jxisvBDGrhY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=t/UqTHYSQXiQ3eZVd0rez2HL00OtT4f5LEJN6z0aag0h64JYXRj1s6oHM0B1BaYCU
+         isMQjs7OEvm8r5KXDsBen/8CsWNrl+PyHGkPyyhdHDinGnMcaoIywlnEjAReYKsLvu
+         N3LbF7J6n0DGQlt6zBEuMmRsWz1Snc/6rmWam1dp+SEm86seFWiZBVmeZX7N6WqZLG
+         A5ul0nfXV5zDqLz+Wbv5MrGcoxjpS6IP7X3iE7uz+ScZRAsdEKndwyX1iaZc3hhb2j
+         /AlhWuL5F+v8heMr7bFVEqT77u8GFVYbD18TGvvIldDzxESWzEC1uF4FhbJebQweu3
+         deDJ4QEhh06xQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id D5B7F5C027A; Wed, 15 Jun 2022 13:30:15 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 13:30:15 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+Subject: Re: Contextual conflict between kspp and rcu trees
+Message-ID: <20220615203015.GF1790663@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <Yqo5SequJuC2qX6S@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-References: <20220615003733.16447-1-zhouzhouyi@gmail.com> <20220615051521.GH1790663@paulmck-ThinkPad-P17-Gen-1>
- <CAABZP2wCos5xupRQ2LbJtaLVN1a7i0D5kwaVTq9DEov8C46Gkw@mail.gmail.com>
- <20220615135220.GI1790663@paulmck-ThinkPad-P17-Gen-1> <20220615190936.GA713726@paulmck-ThinkPad-P17-Gen-1>
-In-Reply-To: <20220615190936.GA713726@paulmck-ThinkPad-P17-Gen-1>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Thu, 16 Jun 2022 04:28:14 +0800
-Message-ID: <CAABZP2wstbe+Exa3NWWygOAF5S4BtHfgJcb_r78uz-jq2KtU9Q@mail.gmail.com>
-Subject: Re: [PATCH linux-next] RFC: torture: add pr_flush to flush the
- results to console
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     john.ogness@linutronix.de, pmladek@suse.com, dave@stgolabs.net,
-        Josh Triplett <josh@joshtriplett.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        rcu <rcu@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yqo5SequJuC2qX6S@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank Paul and Petr for your efforts!
+On Wed, Jun 15, 2022 at 12:55:53PM -0700, Nathan Chancellor wrote:
+> Hi Stephen et al.,
+> 
+> There is a contextual conflict between commit e1d337335207 ("cfi: Fix
+> __cfi_slowpath_diag RCU usage with cpuidle") in the kspp tree and commit
+> dcc0c11aa87b ("rcu/context-tracking: Remove rcu_irq_enter/exit()") in
+> the rcu tree, which is visible when building ARCH=arm64 defconfig +
+> CONFIG_LTO_CLANG_THIN=y + CONFIG_CFI_CLANG=y with clang:
+> 
+>   kernel/cfi.c:298:3: error: call to undeclared function 'rcu_irq_enter'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>                   rcu_irq_enter();
+>                   ^
+>   kernel/cfi.c:298:3: note: did you mean 'ct_irq_enter'?
+>   ./include/linux/context_tracking_irq.h:6:6: note: 'ct_irq_enter' declared here
+>   void ct_irq_enter(void);
+>        ^
+>   kernel/cfi.c:307:3: error: call to undeclared function 'rcu_irq_exit'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>                   rcu_irq_exit();
+>                   ^
+>   kernel/cfi.c:307:3: note: did you mean 'ct_irq_exit'?
+>   ./include/linux/context_tracking_irq.h:7:6: note: 'ct_irq_exit' declared here
+>   void ct_irq_exit(void);
+>        ^
+>   2 errors generated.
+> 
+> 
+> Per the above RCU commit and commit 6c5218715286 ("context_tracking:
+> Take IRQ eqs entrypoints over RCU"), it appears that the following diff
+> is the proper fix up. Would you mind applying it to the merge of
+> whichever tree comes second if possible? I did build and boot test it
+> but it would not be a bad idea for Sami and Frederic to verify that it
+> is correct so that Kees/Paul can mention it to Linus :)
 
-On Thu, Jun 16, 2022 at 3:09 AM Paul E. McKenney <paulmck@kernel.org> wrote:
->
-> On Wed, Jun 15, 2022 at 06:52:20AM -0700, Paul E. McKenney wrote:
-> > On Wed, Jun 15, 2022 at 08:36:54PM +0800, Zhouyi Zhou wrote:
-> > > On Wed, Jun 15, 2022 at 1:15 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> > > >
-> > > > On Wed, Jun 15, 2022 at 08:37:33AM +0800, zhouzhouyi@gmail.com wrote:
-> > > > > From: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> > > > >
-> > > > > currently tools/testing/selftests/rcutorture/bin/torture.sh reports
-> > > > > false positve because of kthread printing.
-> > > > >
-> > > > > Commit "printk: add functions to prefer direct printing" (2bb2b7b57f812)
-> > > > > have added functions to prefer direct printing activated for the primary
-> > > > > import messages.
-> > > > >
-> > > > > Meanwhile adding printk_prefer_direct_enter/exit to
-> > > > > torture_cleanup_begin/end still can't eliminate the false positives
-> > > > > for a hundred percent.
-> > > > >
-> > > > > This patch add pr_flush to torture_cleanup_end because the latter
-> > > > > is sleepable.
-> > > > >
-> > > > > Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> > > > > Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> > > > > Tested-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> > > >
-> > > > Just the one Signed-off-by suffices.  ;-)
-> > > Thank Paul for your guidance ;-)
-> > > >
-> > > > > ---
-> > > > >  kernel/torture.c | 1 +
-> > > > >  1 file changed, 1 insertion(+)
-> > > > >
-> > > > > diff --git a/kernel/torture.c b/kernel/torture.c
-> > > > > index 789aeb0e1159..b51e42463a67 100644
-> > > > > --- a/kernel/torture.c
-> > > > > +++ b/kernel/torture.c
-> > > > > @@ -878,6 +878,7 @@ void torture_cleanup_end(void)
-> > > > >       mutex_lock(&fullstop_mutex);
-> > > > >       torture_type = NULL;
-> > > > >       mutex_unlock(&fullstop_mutex);
-> > > > > +     pr_flush(1000, true);
-> > > >
-> > > > But in this case, the kernel keeps on running, correct?  So won't the
-> > > > output appear over time?  All of printk()'s kthreads are still running
-> > > > after all.
-> > > I am doing research on linux-next following your guidance on my Dell
-> > > PowerEdge R720 server:
-> > > #git clone https://kernel.source.codeaurora.cn/pub/scm/linux/kernel/git/next/linux-next.git/
-> > > #cd linux-next
-> > > #./tools/testing/selftests/rcutorture/bin/torture.sh
-> > > after about 14 hours, the test result show that there have been about
-> > > 17 failures, I examine the corresponding console.log, and find the
-> > > failures are caused by following reason:
-> > > before the message output by
-> > > rcu/lock/scf_torture_print_module_parms(cur_ops, "End of test:
-> > > SUCCESS") has reached serial console, torture_shutdown invoked
-> > > kernel_power_off(),
-> >
-> > Ah, got it!  And good show tracking this down, by the way.
-> >
-> > Does this workaround commit on -rcu do the trick for you?
-> >
-> > 704ae8dcda84 ("torture: Flush printk() buffers before powering off")
-> >
-> > The printk() guys are looking at fixes within the printk() system
-> > as well:
-> >
-> > https://lore.kernel.org/all/87tu8pgcj0.fsf@jogness.linutronix.de/
-> > https://lore.kernel.org/all/YqdSw%2FfJvnkRbjvc@alley/
->
-> And Petr has posted a more official fix, which I have queued on -rcu
-> for testing at branch pmladek.2022.06.15a.
-I am very happy to see the official fix, and start test it on my Dell
-server by invoking
-./tools/testing/selftests/rcutorture/bin/torture.sh
+Agreed on Frederic verifying it, but in the meantime, it looks good to
+me as well.
 
-It will take 12 hours for the above script to finish if the other guy
-who shares the server with me doesn't use it heavily ;-)
+							Thanx, Paul
 
-Thanks
-Sincerely yours
-Zhouyi
->
->                                                         Thanx, Paul
->
-> > > so the message "End of test: SUCCESS" has not chance of reaching
-> > > console.log of host machine.
-> > >
-> > > Then I add printk_prefer_direct_enter/exit to
-> > > torture_cleanup_begin/end, again I invoke
-> > > #./tools/testing/selftests/rcutorture/bin/torture.sh
-> > > after about 14 hours, the test result show that there have been about
-> > > 5 failures,
-> > >
-> > > Then I add a debug statement after
-> > > rcu/lock/scf_torture_print_module_parms(cur_ops, "End of test:
-> > > SUCCESS") which sends the debug string ("hello world") to
-> > > uart_console_write directly, again I invoke
-> > > #./tools/testing/selftests/rcutorture/bin/torture.sh
-> > > There is "hello world" in console.log but no "End of test" strings.
-> > >
-> > > So I guess even with printk_prefer_direct_enter/exit to
-> > > torture_cleanup_begin/end,  our main shutdown thread has failed in
-> > > competition for console lock (printk.c):
-> > > 2401 if (console_trylock_spinning())
-> > > 2402     console_unlock();
-> > >
-> > > Then I add pr_flush to torture_cleanup_end
-> > > #./tools/testing/selftests/rcutorture/bin/torture.sh
-> > > after 14 hours
-> > > all 49 tests are success
-> > > >
-> > > > Or do you have a use case that requires that the output appear sooner
-> > > > than it does?  If so, please let me know what that is.
-> > > Thank Paul for your patience,
-> > > ./tools/testing/selftests/rcutorture/bin/torture.sh is the only tool
-> > > that I use.
-> > >
-> > > I am very interested in this topic, and very glad to do further
-> > > experiments under your guidance ;-)
-> >
-> > Or are you already running with that commit or one of those patches?
-> > They are working reliably for me (so far, anyway), but maybe more is
-> > needed in some cases.
-> >
-> >                                                       Thanx, Paul
-> >
-> > > Sincerely yours
-> > > Thanks
-> > > Zhouyi
-> > > >
-> > > >                                                         Thanx, Paul
-> > > >
-> > > > >  }
-> > > > >  EXPORT_SYMBOL_GPL(torture_cleanup_end);
-> > > > >
-> > > > > --
-> > > > > 2.25.1
-> > > > >
+> Cheers,
+> Nathan
+> 
+> diff --git a/kernel/cfi.c b/kernel/cfi.c
+> index 08102d19ec15..2046276ee234 100644
+> --- a/kernel/cfi.c
+> +++ b/kernel/cfi.c
+> @@ -295,7 +295,7 @@ static inline cfi_check_fn find_check_fn(unsigned long ptr)
+>  	rcu_idle = !rcu_is_watching();
+>  	if (rcu_idle) {
+>  		local_irq_save(flags);
+> -		rcu_irq_enter();
+> +		ct_irq_enter();
+>  	}
+>  
+>  	if (IS_ENABLED(CONFIG_CFI_CLANG_SHADOW))
+> @@ -304,7 +304,7 @@ static inline cfi_check_fn find_check_fn(unsigned long ptr)
+>  		fn = find_module_check_fn(ptr);
+>  
+>  	if (rcu_idle) {
+> -		rcu_irq_exit();
+> +		ct_irq_exit();
+>  		local_irq_restore(flags);
+>  	}
+>  

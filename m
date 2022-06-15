@@ -2,206 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992BA54C0F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 06:58:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D80D554C0F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 06:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242498AbiFOE4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 00:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        id S242627AbiFOE4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 00:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242130AbiFOE4F (ORCPT
+        with ESMTP id S242397AbiFOE4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 00:56:05 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551C836692
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 21:56:04 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id DC95132002D8;
-        Wed, 15 Jun 2022 00:56:02 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Wed, 15 Jun 2022 00:56:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1655268962; x=1655355362; bh=ei
-        fZR+rkb7Pl0q/tlESZNdAQghMG8hJv8oUZqbBJ87E=; b=lpYhE3imjXxM9qpcvv
-        GfEKzM1NTLSHHUt9X/UJ4jm6+tfyGg1+kPGtsqGxiYbpdNwFolCYV0ajPaALUl9b
-        0+YshqjpPbpZC7HGxpVrCA6J/eebx4KHh22mImGdQKonAWOsE6JGnDuqa0C0L2EB
-        TsHhivo2OxxaOK5d1Jox9rG+ST4td5c5x49vo6JwNhZGMsF6ozc2c60WGeeg0mU2
-        BpIM2UkHNDCAHP49fQT31qfDozqJUaVGUllLMMk4+xN9mtpzGL6Lo6maF1Eo+6vy
-        QS57tAk9N8+n42D7Lc96IgQ/9++iG29LVrC4/FtZ07OoWHkNyRgceXKRboR/osZD
-        kiCw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1655268962; x=1655355362; bh=eifZR+rkb7Pl0
-        q/tlESZNdAQghMG8hJv8oUZqbBJ87E=; b=JYyxK58vtzSheCX2MFZUAvDd4PTLL
-        VotbJ0/5RWF1kqhVoAlqWe0FJIUk9YNCrYEC3T+AXaTinD3paF8awjsrbupi34gS
-        qPbpHB6cDDxsUVYeBStfdeFOIbKfR71ntPXXBNfX77qO/QWPHwSt/qAROorzgf70
-        cz3lsAI1tpx0CpAAUxdPFI8syF7LzWP2QK1QmUzui9VxixMRa+OuzovSD73Y6Nsm
-        VsSUclPEHRHSI0tMyWI4akzddgiytFJwPsEP1plw83Tm+MtI6QbLa5TPoZyRcJBH
-        +71iKnfO+AUebTBpsV4yiUA9l76IwWhwRjcJK0E+t7j4ZyFiEsZOtoyXw==
-X-ME-Sender: <xms:YmapYlVgBfaGZiPKAXTYx1q6taPqNOVE6cELlBGP_lJj2scjCjyMIA>
-    <xme:YmapYll-KGE00CeOOBSoCbMUCjyHlPOODzFwc8_PwnIdrQphyFZUdcE870ZXJFRKa
-    FVTdclU3-1wziMO1w>
-X-ME-Received: <xmr:YmapYhYaLl_fT1pOEmgBjFIQbXGYO-C8TaOMswfXTDLg0SwFOT1oPLkkg_I4aF2NFidcuwCPJd2NXHPAEEDkTHqcUVspPCf8fOB0eM78hB8xOY8JFdKqxXXiPiHl6hdwfvDySQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedruddvtddgkeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgepfeenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:YmapYoVLPFc7ASMMk4q4yGi8cE99f4O7zxrYlchb-6d0eQT4eQE_mg>
-    <xmx:YmapYvlpZYGdaRITDOe_YhhPj-G1ASaPUoSlOlBd4i0SYeJO30WDXw>
-    <xmx:YmapYldx1lWWij-l-c74IsqB0V8609kgMf3FSOjfDyuK6fQCwa_Vew>
-    <xmx:YmapYohXP9RsMXZfvzT5miVcyG2j_O-yASwz0kDt0Y-IxDJbxejd0Q>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Jun 2022 00:56:01 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH v2 6/6] drm/sun4i: sun8i-hdmi-phy: Group PHY ops functions by generation
-Date:   Tue, 14 Jun 2022 23:55:43 -0500
-Message-Id: <20220615045543.62813-7-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220615045543.62813-1-samuel@sholland.org>
-References: <20220615045543.62813-1-samuel@sholland.org>
+        Wed, 15 Jun 2022 00:56:13 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D5337003
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 21:56:12 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id 184so10331146pga.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Jun 2022 21:56:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6x1p/cHxOzHrXaTiqFWMaZjgSTu7MFxfKrtukk0Ctcc=;
+        b=FgH88KSnMz7Lni9M9mJ+gpGZvHZufaDlqff3aEelp0mrqNatoTJFWHAoMOm0MqP4OD
+         LD5I0POzKL1dSXFNwurSJFp1XWfZgyk1kBYMDhOqy/pflpKBZHZ9u0T/d+kNP//30ms4
+         C+7ixsTdShgBVwUOEglxjnxRrjEAAaaWDNl3/QcWS7IyuJa/59yaJ1FxXpvXojZEr6d9
+         RHOMKh+TYKLC9UEs/UjzX4OfM2vJHHIuIXF8YWv29z54xQ6mDxni5Vi9D0jcZAcTtbLz
+         WyIEz1QVuTmZ2KB/gj8zmumGE6jINtdP7EZpLZ3GtmCBM3bkQZflanp+ay2xtUTAQZaP
+         Hu3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6x1p/cHxOzHrXaTiqFWMaZjgSTu7MFxfKrtukk0Ctcc=;
+        b=Y0g7f2OlF7oA2aMeSPgKOpfZ85z77h6luNz6SAl0IO8/XPUWCWaYCXqmHEpwjtJUqF
+         RJvwNggNKjXW6/Lh/VUb/7HTjURxiyYnlIlREhGYltQhFjT3iottwgo1kdP6iUPMnQPw
+         +SIZlGOiG4tFFQ0ipDHJS2z6i+nluGS52ihL6ZpAkCCjUz3ACCLIRO2vptJQ+VTLvo5K
+         vJ+fN+h/xBUhIC2OSbXmweZwnisW4Cqcs9wok5N91K+su9Ootk9G6J0UqBH7W5njM9Qa
+         ccL1eE53szigt5oWFsfZrOrsQntsnHZhDzBxWCShEH5YeHoMKOF8mQMOTTLT/MvN0giP
+         ik2Q==
+X-Gm-Message-State: AOAM532nrYVo8vct4hiQESjV8rEnBRjcKCTWnzVZXKR0Zx+FcXDQfQoO
+        BHRwhRHmhEc257mxLsBI1oZ0vg==
+X-Google-Smtp-Source: ABdhPJwu24Nqyc94Rp20DIAhF45O/DYl99akByKaRyIrjnaeH6YZTymTppQh5tNgyehnPcZJihUJhA==
+X-Received: by 2002:a05:6a00:814:b0:51c:1878:4943 with SMTP id m20-20020a056a00081400b0051c18784943mr8129630pfk.62.1655268971775;
+        Tue, 14 Jun 2022 21:56:11 -0700 (PDT)
+Received: from localhost ([122.162.234.2])
+        by smtp.gmail.com with ESMTPSA id a11-20020a170902900b00b00168b113f222sm8127431plp.173.2022.06.14.21.56.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jun 2022 21:56:11 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 10:26:08 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Yi Yang <yiyang13@huawei.com>, Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next] cpufreq: Fix reserved space in cpufreq_show_cpus()
+Message-ID: <20220615045608.pwranz6b633xmymf@vireshk-i7>
+References: <20220521063534.138930-1-yiyang13@huawei.com>
+ <20220524071041.4aw3cfo3x5wphziy@vireshk-i7>
+ <CAJZ5v0jCx0v-Q2=aW4nSSAHHajUnLdVtQMe3w1cX1w-o=mSesg@mail.gmail.com>
+ <CAJZ5v0g-rCSd+S4YPBR8Jv2PqePhjQd0K97Rj2+TX3OrWAP0NA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0g-rCSd+S4YPBR8Jv2PqePhjQd0K97Rj2+TX3OrWAP0NA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the PHY ops are separated, sort them topologically, with the
-common sun8i_hdmi_phy_set_polarity helper at the top. No function
-contents are changed in this commit.
+On 14-06-22, 15:48, Rafael J. Wysocki wrote:
+> On Tue, Jun 14, 2022 at 3:37 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Tue, May 24, 2022 at 9:10 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > >
+> > > On 21-05-22, 14:35, Yi Yang wrote:
+> > > > Function scnprintf() would reserve space for the trailing '\0' and return
+> > > > value is the number of characters written into buf not including the
+> > > > trailing '\0'. internally meaning the next scnprintf() would write begin
+> > > > the trailing '\0'. The code specifying "PAGE_SIZE - i - 2" here is trying
+> > > > to reserve space for "\n\0" which would cause scnprintf() to reserve an
+> > > > additional byte making the tail of the buf looks like this: "\n\0\0".
+> > > > Thus. we should reserve only the space for one '\0'. passing in
+> > > > "PAGE_SIZE - i - 1".
+> > > >
+> > > > Additionally, each iteration would replace the trailing '\0' from the last
+> > > > iteration with a space, and append 4 additional bytes to the string making
+> > > > it a total of 5 additional bytes. That means we should stop printing into
+> > > > the buffer if the remaining size is less than 7 bytes(1 for the ' ', 4 for
+> > > > the %u and 2 for the tailing "\n\0")
+> > > >
+> > > > Signed-off-by: Yi Yang <yiyang13@huawei.com>
+> > > > ---
+> > > >  drivers/cpufreq/cpufreq.c | 6 +++---
+> > > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > > > index 1f6667ce43bd..60c005c9961e 100644
+> > > > --- a/drivers/cpufreq/cpufreq.c
+> > > > +++ b/drivers/cpufreq/cpufreq.c
+> > > > @@ -844,9 +844,9 @@ ssize_t cpufreq_show_cpus(const struct cpumask *mask, char *buf)
+> > > >
+> > > >       for_each_cpu(cpu, mask) {
+> > > >               if (i)
+> > > > -                     i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), " ");
+> > > > -             i += scnprintf(&buf[i], (PAGE_SIZE - i - 2), "%u", cpu);
+> > > > -             if (i >= (PAGE_SIZE - 5))
+> > > > +                     i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), " ");
+> > > > +             i += scnprintf(&buf[i], (PAGE_SIZE - i - 1), "%u", cpu);
+> > > > +             if (i >= (PAGE_SIZE - 6))
+> > > >                       break;
+> > > >       }
+> > > >       i += sprintf(&buf[i], "\n");
+> > >
+> > > Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> >
+> > Applied as 5.20 material, thanks!
+> 
+> And dropped, because it has been superseded by this one:
+> 
+> https://patchwork.kernel.org/project/linux-pm/patch/b9fa08171c09343ace94a7343553a4bee4695c90.1653565641.git.viresh.kumar@linaro.org/
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+The $Subject patch is still required AFAICT, it is fixing a different problem.
+Though it needs to be rebased on top of your branch now.
 
-(no changes since v1)
-
- drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c | 67 ++++++++++++--------------
- 1 file changed, 32 insertions(+), 35 deletions(-)
-
-diff --git a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c b/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-index f94c1ddddbad..ca53b5e9fffc 100644
---- a/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-+++ b/drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c
-@@ -124,7 +124,19 @@ static const struct dw_hdmi_phy_config sun50i_h6_phy_config[] = {
- };
- 
- static void sun8i_hdmi_phy_set_polarity(struct sun8i_hdmi_phy *phy,
--					const struct drm_display_mode *mode);
-+					const struct drm_display_mode *mode)
-+{
-+	u32 val = 0;
-+
-+	if (mode->flags & DRM_MODE_FLAG_NHSYNC)
-+		val |= SUN8I_HDMI_PHY_DBG_CTRL_POL_NHSYNC;
-+
-+	if (mode->flags & DRM_MODE_FLAG_NVSYNC)
-+		val |= SUN8I_HDMI_PHY_DBG_CTRL_POL_NVSYNC;
-+
-+	regmap_update_bits(phy->regs, SUN8I_HDMI_PHY_DBG_CTRL_REG,
-+			   SUN8I_HDMI_PHY_DBG_CTRL_POL_MASK, val);
-+};
- 
- static int sun8i_a83t_hdmi_phy_config(struct dw_hdmi *hdmi, void *data,
- 				      const struct drm_display_info *display,
-@@ -193,6 +205,25 @@ static int sun8i_a83t_hdmi_phy_config(struct dw_hdmi *hdmi, void *data,
- 	return 0;
- }
- 
-+static void sun8i_a83t_hdmi_phy_disable(struct dw_hdmi *hdmi, void *data)
-+{
-+	struct sun8i_hdmi_phy *phy = data;
-+
-+	dw_hdmi_phy_gen2_txpwron(hdmi, 0);
-+	dw_hdmi_phy_gen2_pddq(hdmi, 1);
-+
-+	regmap_update_bits(phy->regs, SUN8I_HDMI_PHY_REXT_CTRL_REG,
-+			   SUN8I_HDMI_PHY_REXT_CTRL_REXT_EN, 0);
-+}
-+
-+static const struct dw_hdmi_phy_ops sun8i_a83t_hdmi_phy_ops = {
-+	.init		= sun8i_a83t_hdmi_phy_config,
-+	.disable	= sun8i_a83t_hdmi_phy_disable,
-+	.read_hpd	= dw_hdmi_phy_read_hpd,
-+	.update_hpd	= dw_hdmi_phy_update_hpd,
-+	.setup_hpd	= dw_hdmi_phy_setup_hpd,
-+};
-+
- static int sun8i_h3_hdmi_phy_config(struct dw_hdmi *hdmi, void *data,
- 				    const struct drm_display_info *display,
- 				    const struct drm_display_mode *mode)
-@@ -348,32 +379,6 @@ static int sun8i_h3_hdmi_phy_config(struct dw_hdmi *hdmi, void *data,
- 	return 0;
- }
- 
--static void sun8i_hdmi_phy_set_polarity(struct sun8i_hdmi_phy *phy,
--					const struct drm_display_mode *mode)
--{
--	u32 val = 0;
--
--	if (mode->flags & DRM_MODE_FLAG_NHSYNC)
--		val |= SUN8I_HDMI_PHY_DBG_CTRL_POL_NHSYNC;
--
--	if (mode->flags & DRM_MODE_FLAG_NVSYNC)
--		val |= SUN8I_HDMI_PHY_DBG_CTRL_POL_NVSYNC;
--
--	regmap_update_bits(phy->regs, SUN8I_HDMI_PHY_DBG_CTRL_REG,
--			   SUN8I_HDMI_PHY_DBG_CTRL_POL_MASK, val);
--};
--
--static void sun8i_a83t_hdmi_phy_disable(struct dw_hdmi *hdmi, void *data)
--{
--	struct sun8i_hdmi_phy *phy = data;
--
--	dw_hdmi_phy_gen2_txpwron(hdmi, 0);
--	dw_hdmi_phy_gen2_pddq(hdmi, 1);
--
--	regmap_update_bits(phy->regs, SUN8I_HDMI_PHY_REXT_CTRL_REG,
--			   SUN8I_HDMI_PHY_REXT_CTRL_REXT_EN, 0);
--}
--
- static void sun8i_h3_hdmi_phy_disable(struct dw_hdmi *hdmi, void *data)
- {
- 	struct sun8i_hdmi_phy *phy = data;
-@@ -385,14 +390,6 @@ static void sun8i_h3_hdmi_phy_disable(struct dw_hdmi *hdmi, void *data)
- 	regmap_write(phy->regs, SUN8I_HDMI_PHY_PLL_CFG1_REG, 0);
- }
- 
--static const struct dw_hdmi_phy_ops sun8i_a83t_hdmi_phy_ops = {
--	.init		= sun8i_a83t_hdmi_phy_config,
--	.disable	= sun8i_a83t_hdmi_phy_disable,
--	.read_hpd	= dw_hdmi_phy_read_hpd,
--	.update_hpd	= dw_hdmi_phy_update_hpd,
--	.setup_hpd	= dw_hdmi_phy_setup_hpd,
--};
--
- static const struct dw_hdmi_phy_ops sun8i_h3_hdmi_phy_ops = {
- 	.init		= sun8i_h3_hdmi_phy_config,
- 	.disable	= sun8i_h3_hdmi_phy_disable,
 -- 
-2.35.1
-
+viresh

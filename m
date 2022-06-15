@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF4C54C015
+	by mail.lfdr.de (Postfix) with ESMTP id 575A754C016
 	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 05:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346160AbiFODTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Jun 2022 23:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S240984AbiFODTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Jun 2022 23:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346030AbiFODTH (ORCPT
+        with ESMTP id S1346045AbiFODTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Jun 2022 23:19:07 -0400
+        Tue, 14 Jun 2022 23:19:08 -0400
 Received: from EUR02-AM5-obe.outbound.protection.outlook.com (mail-eopbgr00042.outbound.protection.outlook.com [40.107.0.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670673DA4D;
-        Tue, 14 Jun 2022 20:19:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68DD46674;
+        Tue, 14 Jun 2022 20:19:07 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=noT3gBsEqXV5q/t5F2qTlMWvy+Lz2Gl/MVAU64NQVDGOpTl07gL1fThGMNN+rTmxgFFDs2lz95Q/w3HGU5L9b8qoHOvg1CMj3tPdP89w0VZD/gQDQs7tEXa/+S2yaQxqZ/ASP2ZsSInUMC6aEvTX/SdVjLYOA5E+m74paaR8lKsr0OQ3MyHLiIwGn2UZGtnNaYxPbDHlGtrgpObcMyLKeQJaJ8j3mNNe/Qv+wX5WnzDu71+nSUlAXD26nVbC2Pn85L2yz2WlBSISeKiixNbG5EFpIl25WPOkjKtriv+dmEVnAAVO+7Rf3f1wsV7dUlS56dycF+wq1ILPcOFv+fsatg==
+ b=YL5Sw+4da2OCVBdmdkP3JCB+/Xy1grIfjB+gy4H+dkz5yDbYUpI8wx/9RA9WN4y/Dtb+5gbEZ4xqW2UKO540vUAv6IcA3irnljTaoda3GNmj9JkO8nueRxCwbZ7u54cxW5duoOu/JV2aZ59Gdt2pi2grshfTlNOEU0MvpuwL8oVkX528pOPHHHaBzhZyzuvZGUOVR9OUwyolrmHZKEVRpItdVOS0cT4XWHmTfTcwXf8fSM5XtOsmJ9+/MlQF40XCmIuLBeXmd3mdTvJI3TNkoEXN5tnq77UXF6nVH9Yq/ms7q5zTQ4BEVn7jk1KSBqmjK+TqKDtpUb8SOxqMia/6hw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c0A3dvZmo0wb7QtLTcsiGhTA7NxPx0OfxPIUEQfQAL0=;
- b=QP/BLGExHbu+XPlnJuL/6+hvPrcnSLhkOcRv8+rDrxfY8w7r/0ODbJAaLKEo4YaDgk0tj8kZQ5F3w+r4erHT2N9VLbaBm1OtbVqOpXepi29EkeRhro5xMgA5Xhw6QkcBS4Xer/0iP8NoMmDUxcFXyGatnoBSZudxYYQCa8xzKzRVDGD6oruQe2bhiSyCDlNZ0aEKl4IViPS4m5B07qXLc0/wL2hh17zdLaXSLcLTb7oIisqUWjC7GRoSHBUDV7ezPECUti7vEnQz7I3/uJgpG5rysEpmAshlXOEdlkCwETISkL7/GovjvJ7gHXpqst/DyHHFu8YwrX9/IOfUIqnQqg==
+ bh=gXSbX9XhNhe4FjBB8+RMHxB6YN53l4UF07qi1HUuSs8=;
+ b=IXv14+7JECpbRId+GO/Ttavcx1PZk4kBtq7j8iKItkQer3PqmmeF1Efcx+BMfgNz+bxX5i80dufWAmECkstkgaTzA3hRzBC0+e7AWtKQdDGjMECBV9ZzvUdjIOiWhGXObCmwSK7W8OYOqyuUumU4+H3iUxc4GsW/ZfgZ3MDNuIcLM2YGSVhmgaVjcAfc4JR624HWrAarmMnp/MSuxr9TU5NMkOdhdeawskJ4V6JuI1V16kTzzeSJr5ASZyRJcgm6BIRYsmB9+JqLR4IPBCsHgZSVFJJwO0yerXrh8tyGZfefu4THeTRAHorsXdqCtNjaB7DK/Etzw/gWXSqj5gnf/A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
  dkim=pass header.d=oss.nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
  s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c0A3dvZmo0wb7QtLTcsiGhTA7NxPx0OfxPIUEQfQAL0=;
- b=XFfi/h+W+AdjgXokCCCAhLeh3jH59nqwXAz/KkPjz4d/eEKfqtdzo2183zUeeObPZ/Tyf0DfWegQVcaOZJYDfIMLZ6PraRgEbS5T6PGkEg+7syBsxXbf+pcgfupRd2LsmOB4XOwLfcftCWBq0FiNo5ExwTh2Yos65RNqM2p8Vzw=
+ bh=gXSbX9XhNhe4FjBB8+RMHxB6YN53l4UF07qi1HUuSs8=;
+ b=lO6gHe8fj+Hlqd3piygDt63O/c0wyxkmvhYtAT+lwXRgnTR+ou+hlNSXXuKdymTeakCx4BvBYKZcDFf6g0rm1kTBdTgFc/UKNfYIOIz0NdmzwKulSVS433CWhFHxvJYpVNrJK3zADczvUTjsiUgGY+z6lm2dUnPgc6+SOzwY7MQ=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=oss.nxp.com;
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
  by AS8PR04MB8817.eurprd04.prod.outlook.com (2603:10a6:20b:42c::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5353.14; Wed, 15 Jun
- 2022 03:19:04 +0000
+ 2022 03:19:06 +0000
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::a892:e4a9:4769:13a5]) by DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::a892:e4a9:4769:13a5%8]) with mapi id 15.20.5332.015; Wed, 15 Jun 2022
- 03:19:04 +0000
+ 03:19:06 +0000
 From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
 To:     bjorn.andersson@linaro.org, mathieu.poirier@linaro.org
 Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Peng Fan <peng.fan@nxp.com>
-Subject: [PATCH V5 1/2] remoteproc: introduce rproc features
-Date:   Wed, 15 Jun 2022 11:20:47 +0800
-Message-Id: <20220615032048.465486-2-peng.fan@oss.nxp.com>
+Subject: [PATCH V5 2/2] remoteproc: support attach recovery after rproc crash
+Date:   Wed, 15 Jun 2022 11:20:48 +0800
+Message-Id: <20220615032048.465486-3-peng.fan@oss.nxp.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220615032048.465486-1-peng.fan@oss.nxp.com>
 References: <20220615032048.465486-1-peng.fan@oss.nxp.com>
@@ -59,56 +59,56 @@ X-ClientProxiedBy: SG2PR01CA0168.apcprd01.prod.exchangelabs.com
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7154d4b7-7c2c-4cde-7b0f-08da4e7dcccc
+X-MS-Office365-Filtering-Correlation-Id: ea8b265c-7ce9-4611-17c0-08da4e7dce13
 X-MS-TrafficTypeDiagnostic: AS8PR04MB8817:EE_
 X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-Microsoft-Antispam-PRVS: <AS8PR04MB8817A99890EE87A29FC190B2C9AD9@AS8PR04MB8817.eurprd04.prod.outlook.com>
+X-Microsoft-Antispam-PRVS: <AS8PR04MB881799511984564CBE4500DCC9AD9@AS8PR04MB8817.eurprd04.prod.outlook.com>
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gvSNj9ogTq9Rt7x5NnHcItphPhm4kMVRXlvyMaxKuL9+n00+KfZkrVq8X1UzJGKDG2SCWnE+AcNQtTCqgdAWSoNjYQuJdF2yQDo0ejfN4Ev/yN2NoQyjR1rJGiZJQ8nLwCNAmoiSWhN49o+CMKWCvKPumKwddCMN9TNbx+NC7Byn6CtR5R5uh3krIbOUObcvnZbxZX/ov1E243aE7Iq6o+ZEWePUp0Nz+T2eW3OdMeb9uUeqkXYMF6EWTuGn27TAs5df4nKA6YSYVRbhV9zjdzoHxsbjYUsMtDABry1JT4jVAlSNfYn0Y+qHKhseiXWrX+cSeiXZ2992iWGCWKari5gtfBZ3ZeIAmZqjl8wN6GzjHIqMPMXeOcTJbv7j1EHRoHfpv6SfST58qZrc/YBiTQJXkkOuuqMnHqE+g3z1kJzCRXqU/Dn6Kizc69wgsR+95j7fUfLN6cKIFErKNYn9iW3RTxNxFflrhEwMt9bwg+iDWttIEi5n/7gKsrHCp32jEMow/GNDHofFiNcXRV0btire2ZmkEp4dlBis2sXgqROlpjJBQ5yp5uVLnP/XDE2CVLXMZcJa3pq64Pw5mhi7XoiPbgqKEr14ov/7k2u0Ot6eqyPQajLOlzL7rh/TrW/EqPp1Cb5nReOqnpZWExBiaoHBJTDFoTX854BddoplmYVf8pWzyYoSdOPut/c+DSjG6kfwrsck9xlMXBSi5hIxKg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(38100700002)(2906002)(6666004)(86362001)(52116002)(6506007)(6512007)(38350700002)(26005)(6486002)(508600001)(8936002)(5660300002)(2616005)(1076003)(186003)(316002)(66476007)(4326008)(8676002)(66556008)(66946007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: zkPQ5CQ01VRlaTGYkl0qUIYG5O9p1//KPsMvPosPmq+CZXwKNJ3LC+B8wZv5I2I+rpLrHl6WMuMe3ECbFxQbl7KakAKqi6QCkSZOSRJE2ptwzSmGHgGa7jyJ0CgJwFbn1yxnReWiuxBJxVT+758VS9asWMypxJwTA9oEKoG98t4KHAOEdQfkGh5sh59JkTSuB2v8R9TJqOLDDC3lRTbmh+SqqYTC/edzG7oCxqaVXpRlnsiI1O5Ie2T8Eb5DJVcKxens6W5z3vxRp/O+gCJsrGGCU7r+idqXDbDUtrM9sNIOlkMNK0zgf4UQTO/FsHD4r3Lfvd0D07zD76Zvoz3VtK/OfIAqA0bCf3T8oXBYfajV2CjvIrizvPOPbyecnf7/YOZ9fHh6H5e27tq9aSIH1hy39Te/44JC88+GQlyUjHUrfhAKy8wFWekWDqXvdMesbqZFBAGVr3HO/FCyB20twx+R/0H3hrxI/JfStAVdlsdV4Yi7dVmg07qkhHrAfhxwzZCh5/fiaAcjBRuO6xpK36/I2JuWaT4ZErlzyyWQI6ysCoSllwAbkgnCe5T0KzIMoz6NpFAIzzdqql1xKqqdT83fzCnH44lmq+E1g2FkqJlHjXALcp7u5G8sBX3jfzeYYzh+Mj8swadsY/Ch4H9vmRNjB4LEPvE5qlfYyTVyDu1wYOVzYh0IsPV0N+wKA8JLHUZl8Zkj9uM/5ZYVQGbCaQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(38100700002)(2906002)(6666004)(86362001)(52116002)(6506007)(6512007)(38350700002)(26005)(6486002)(508600001)(8936002)(5660300002)(83380400001)(2616005)(1076003)(186003)(316002)(66476007)(4326008)(8676002)(66556008)(66946007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KIJVXBLtdBC3wcwtyZrDPKmfAXQxFCI/EoXfJOi39e8/IJcGS+z6Y15tKaBF?=
- =?us-ascii?Q?M0XJrArSZW1cazAXqt3cTYgYVJgjb8fgXjYU38vMs1nwBkpwx3pxXby6lymE?=
- =?us-ascii?Q?aG9dWdCYjCbVRyKDzPRhgdZi/iOZRreBEIe2Fi90mRMDbY0mqTlmj1UP8xXV?=
- =?us-ascii?Q?wj3DXBE+ESoH/fwpASWrlzz932TWKv2seP7Htedf37h/8jUZDbHNpr3GAWF/?=
- =?us-ascii?Q?GlNzAm16gQjb4ZDfQFSn0tk0CM6PLcEmYIajSzfGVRfhmsqRiPVpKoXxwNBz?=
- =?us-ascii?Q?Ub7gNy/GZuIalEUrOhf/5wT02yapMUEGvgaQE7EKN24U32N6Vh6N6k1qBxQu?=
- =?us-ascii?Q?kcbZzEXMj92wyGiKUexs6YozIFB8HiCe8sOO54ibI0Vl0rlo6p2B1vnRU6K7?=
- =?us-ascii?Q?THxQ0QcXfTDRZPviZdqizArIxV+Z7fXAvNFZdeW9q72UDBvz3ec5osFZxUo+?=
- =?us-ascii?Q?GGdstMZfZoaGNQ5uAhAEITZp9iT5NSMpmcUrmKVRaTnZJx+t9CXxd0wzbfzz?=
- =?us-ascii?Q?tE1nOjzXdesZEdzJbfW01gt5Kok+QL8o2gFBbaeb9OrrIFmH7MMhBgn73Pr6?=
- =?us-ascii?Q?cZHTFOR401HtE0WqL2mDwXmZo1AsKxxWnNEmGwf/xMo0kOALcloUbA4pSx4Q?=
- =?us-ascii?Q?7ZExuxhWvRx93h36seFNDwiHUT0MjtE6YvvF67di7G7f0vpT2pcuQhgQx2d7?=
- =?us-ascii?Q?1A/ON+66Nra4UyFniBcQH81vd3BaTR/s9I1tTHKXF1Q1voihaVpmzLiUdKRs?=
- =?us-ascii?Q?13vXFesFW4fz3TJRMhviu1L4k0l8OzNxGDca4/mmsXkbBaPw4QHXZd/Fu5X0?=
- =?us-ascii?Q?Dp7oK46u52+bX0wSHwh0XfZeqsgSK2u7ayyZwrDNgNsMuo6YqD53jxrUIqhR?=
- =?us-ascii?Q?7BkVy4Yk0Vdov70/lGpSxyL2J/jAFA+3doWfF+Odj8LJ/lr8PeHNys4ANuSc?=
- =?us-ascii?Q?oRYBYTcR+OuAJ77Ppo8ZFJ36RoRNLDaCFp598lmCi0fKZwdwUXX93keazHfr?=
- =?us-ascii?Q?1M7WwJIi1NeO4e/MR9JjsYAkcM6pNNOFUtKDFJe7N/hUcKkhz1//OzNHNu72?=
- =?us-ascii?Q?ObDEt3l5ZlwseoUlLJnOQfHiBvn2xoPUVTdnJxgWonlJsR3ETjCqgo0f0Xud?=
- =?us-ascii?Q?+h4RFDBat7UsTqgSwVMwlodXewOzYe+vyH1HWw1dOBQtJzydOBuwGVscBMP0?=
- =?us-ascii?Q?6Cg00/1uI1lI6+5BnO7n6oKP+mpkDJFoGbkQPped37tFXYEu8xJr0UozZhDx?=
- =?us-ascii?Q?TuOxa4BiZwmIDD0GS1y8VuzQ7ADVk4KxF1E42ZVX+aqmRVujbpW8xShNghVI?=
- =?us-ascii?Q?JJYiAjCtaUOUb3mqnPaCStILG5dpmpubUZ2yRB/Vn1MoE9YZYNL3KLv8c6ql?=
- =?us-ascii?Q?q/aj4MEhiqvqg89wFNxmrpqKMgBD2kVvfe70B2kRC6FVuGvIFWm+K4WMCMU+?=
- =?us-ascii?Q?j0CoeIAFNB75miKvDe39J7WX7snwAgfG/QoWXrLyzH2GuWfzpCPerGRAfsDU?=
- =?us-ascii?Q?t8qi0V6lB7ghGVrin+qt7SC7RI1iJEigt46WyFnLl50HlErR5J4aJA2wRewm?=
- =?us-ascii?Q?T09AjkPVClE7gIAqNUKQlHLTrdl6HKw87hcRG5SsKqVc0viANHw+JTwvN7OS?=
- =?us-ascii?Q?MR6r0g2GMTm+mRTuQ8pChl8rnHiUjPbY1SIF09UQkWHh/S4BcKDMBjTgm66n?=
- =?us-ascii?Q?x7zSst5NDlIZvwNqAgawQMAxPXgCZnHVEXuprD2jwNnQUEJMK34+bW0yTNnL?=
- =?us-ascii?Q?gUJiBpOdWA=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?34YjhXeFhEz3EF5T5XUcuxSflLEUQAfzetouxV3gp+eX8zdQNLOZft9WTXxY?=
+ =?us-ascii?Q?KyDddb2Qhia+exC7oMaOgm48EdDuCdZ6R/Vs+KOiNDYjd/8zds6s46oGcwhm?=
+ =?us-ascii?Q?yKHZJZTV/tMP2pLhhGEfZs3jpZ/yflrP/MDEfFgWfdcX+q5SlibTi9BhNn/+?=
+ =?us-ascii?Q?jWmTLTquMneye2X2S4ZhOeedtsqjHhtKscVFwEROf9ObhN414up23IUsEr6I?=
+ =?us-ascii?Q?3ldVRy7nq8gO34VGvli3erYZXrNNI0t+w7jho/UJsAbLgbmUpIKIh2wlBYk7?=
+ =?us-ascii?Q?31PWFmB0/y4ecLfPsYDazA5WUZaXiTP9pPYbCtXhAavh042Au6t0V8OtIL/Y?=
+ =?us-ascii?Q?IQOH5Re+cusf1Q4pNjV2ijuPMkaen/v6r7y7sKj100bAnzjDv3ijU/OQ9zZl?=
+ =?us-ascii?Q?yNI12zKi3Q51YOMC6YTKWuTC8hy8xyPy9PrjaEBugqXzWchk/43ECwtbXoHq?=
+ =?us-ascii?Q?mhNQvsF3EwFv0/TxJPx7gbdq7qnvKS/IXujjPaUXRdRhaZFwViA366HvRfej?=
+ =?us-ascii?Q?gIeRBxegl5reDFUcAu6CCHxbR+Wm7/sCbx6KybhUxk36rXjbSjMaeh8zfz04?=
+ =?us-ascii?Q?5zmojx6ObMJwfIwGqc7sgSBU2SZzSyKJodxfA8LBAxntyIc+QboRandNAHMy?=
+ =?us-ascii?Q?JUJhd3AOoXRlqw2rHzxlrgv0IM3+Qh6bn9SbmHJpoKAHmOuE58/KYjCUVmRX?=
+ =?us-ascii?Q?rw6cbKpsg9tBKYgOJsNwBAF/dP2MQMGxYVOqGoJJOQHYLPSDHlW7hkfNbsEm?=
+ =?us-ascii?Q?+DHwaJbKy0GS91y1RHJE3FTvQfuDuBtv8E8OxFzxZl3Z8EVBDVs8HvgglPtP?=
+ =?us-ascii?Q?Y2Uf3BJzUg1OXlsPUM+gsSLh1UL5cW5vymSfT/26zDPPef2GAaVjgpOJI8Tp?=
+ =?us-ascii?Q?iC/jyOAP9cXLXUkIBCtn0tzjZtHItJm2XB64+gHHFo0dhJcau6/S9r8T9sp1?=
+ =?us-ascii?Q?zIxoh+zLXGFLtwsKr6uCZ+jInajckwauG/pKhL1uAPsjkrFhP/gha8zBWAar?=
+ =?us-ascii?Q?+tmBPzTICNjYIYVVo/wHq63XooNsoeCw+jX+wHGA8iABumv5LmAR5JssIqtt?=
+ =?us-ascii?Q?+bRNYK5+chc1wF+CqQRhy0c7zBbpOcguWI3aYaP59Pz0fouW9t9+tm5OMVco?=
+ =?us-ascii?Q?B3HrxIWMRgibSJfz9lsdzIAde+Xa58rOwSYCLdya8jQ3sWilb0dZ83WKzc8A?=
+ =?us-ascii?Q?aWJsIirANIKFVwdFbndjkUiRsFehJjFtRQmaH6aISp1aZ0f/WD5zd9+eN33l?=
+ =?us-ascii?Q?jWKTC19SOKj21Smhl+4X/USO0W0DsMiO8QqKrYEkUIHOL717e6Syp0jMsd/b?=
+ =?us-ascii?Q?3xkll1w8satmXpYdINo0CNaQvoMSnJlj+ok2BCBwPFqzrQdc1LGZFe0bKwHk?=
+ =?us-ascii?Q?MmGUXQMsyCZAl4HB+8z9E2ssvRy+2CpGQ+J5zNTjWiP6QukvoWD0vcg/+DSt?=
+ =?us-ascii?Q?PYdwfxTp+ifC2pUocnFtBOqfWKjz0MNoAZ3l1ths/88bzNlvz2kROV3vwL+H?=
+ =?us-ascii?Q?Gyp/z6HBL6/b+egZJ3YRi8biudnMvMk9ubjGJ12LVhm4JvPKzB+K3bI3ZoYk?=
+ =?us-ascii?Q?HW4zL+8tys44PG6kU4B43BycskBiYpj+Wb9NSdXv0MGlE2mElJJtQFc6Mrf4?=
+ =?us-ascii?Q?ryHg3ZEJW/5ce+dej3SqrzE2i9uZgEV7ihPDDJDYcYgAP1ivifASMtFZypFN?=
+ =?us-ascii?Q?/Tkprqza6YcDssFRw1CY9d8NF0rveD84ohIqjnG0lHKafljL+76kCdP0dGJD?=
+ =?us-ascii?Q?c8vKq3pw4w=3D=3D?=
 X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7154d4b7-7c2c-4cde-7b0f-08da4e7dcccc
+X-MS-Exchange-CrossTenant-Network-Message-Id: ea8b265c-7ce9-4611-17c0-08da4e7dce13
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 03:19:04.2208
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2022 03:19:06.3457
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HnE4tBYRJvkbEat61NJr8d2iIExtflnQ4/HnbAvWP+h+dm9CWgNMf9Bu9pExeGKVensMHXhdws/hpZM15PdMAA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: EN5q1vHipA27HRsBJuM5EVwlQewZcH3qiXXHD8g1eqSxOO2LA/TgLW137mKGZ8rCzjJ66EN56T+FMAzmbnvIAg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8817
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
@@ -121,87 +121,111 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Peng Fan <peng.fan@nxp.com>
 
-remote processor may support:
- - firmware recovery with help from main processor
- - self recovery without help from main processor
- - iommu
- - etc
+Current logic only support main processor to stop/start the remote
+processor after rproc crash. However to SoC, such as i.MX8QM/QXP, the
+remote processor could do attach recovery after crash and trigger watchdog
+reboot. It does not need main processor to load image, or stop/start M4
+core.
 
-Introduce rproc features could simplify code to avoid adding more bool
-flags
+Introduce two functions: rproc_attach_recovery, rproc_firmware_recovery
+for the two cases. Firmware recovery is as before, let main processor to
+help recovery, while attach recovery is recover itself withou help.
+To attach recovery, we only do detach and attach.
 
 Signed-off-by: Peng Fan <peng.fan@nxp.com>
 ---
- drivers/remoteproc/remoteproc_internal.h | 15 +++++++++++++++
- include/linux/remoteproc.h               | 15 +++++++++++++++
- 2 files changed, 30 insertions(+)
+ drivers/remoteproc/remoteproc_core.c | 64 +++++++++++++++++++---------
+ 1 file changed, 45 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/remoteproc/remoteproc_internal.h b/drivers/remoteproc/remoteproc_internal.h
-index 72d4d3d7d94d..82247cb5d0c2 100644
---- a/drivers/remoteproc/remoteproc_internal.h
-+++ b/drivers/remoteproc/remoteproc_internal.h
-@@ -24,6 +24,21 @@ struct rproc_debug_trace {
- 	struct rproc_mem_entry trace_mem;
- };
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index 02a04ab34a23..1c1c90176aff 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -1883,6 +1883,47 @@ static int __rproc_detach(struct rproc *rproc)
+ 	return 0;
+ }
  
-+static inline bool rproc_has_feature(struct rproc *rproc, unsigned int feature)
++static int rproc_attach_recovery(struct rproc *rproc)
 +{
-+	return test_bit(feature, rproc->features);
++	int ret;
++
++	mutex_unlock(&rproc->lock);
++	ret = __rproc_detach(rproc);
++	mutex_lock(&rproc->lock);
++	if (ret)
++		return ret;
++
++	return __rproc_attach(rproc);
 +}
 +
-+static inline int rproc_set_feature(struct rproc *rproc, unsigned int feature)
++static int rproc_firmware_recovery(struct rproc *rproc)
 +{
-+	if (feature >= RPROC_MAX_FEATURES)
-+		return -EINVAL;
++	const struct firmware *firmware_p;
++	struct device *dev = &rproc->dev;
++	int ret;
 +
-+	set_bit(feature, rproc->features);
++	ret = rproc_stop(rproc, true);
++	if (ret)
++		return ret;
 +
-+	return 0;
++	/* generate coredump */
++	rproc->ops->coredump(rproc);
++
++	/* load firmware */
++	ret = request_firmware(&firmware_p, rproc->firmware, dev);
++	if (ret < 0) {
++		dev_err(dev, "request_firmware failed: %d\n", ret);
++		return ret;
++	}
++
++	/* boot the remote processor up again */
++	ret = rproc_start(rproc, firmware_p);
++
++	release_firmware(firmware_p);
++
++	return ret;
 +}
-+
- /* from remoteproc_core.c */
- void rproc_release(struct kref *kref);
- irqreturn_t rproc_vq_interrupt(struct rproc *rproc, int vq_id);
-diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
-index 7c943f0a2fc4..96b65e7affda 100644
---- a/include/linux/remoteproc.h
-+++ b/include/linux/remoteproc.h
-@@ -489,6 +489,19 @@ struct rproc_dump_segment {
- 	loff_t offset;
- };
- 
-+/**
-+ * enum rproc_features - features supported
-+ *
-+ * @RPROC_FEAT_ATTACH_ON_RECOVERY: remote processor no need help from Linux
-+ *                                 to recover, such as firmware loading.
-+ *                                 Linux just need to attach after recovery.
-+ */
-+
-+enum rproc_features {
-+	RPROC_FEAT_ATTACH_ON_RECOVERY,
-+	RPROC_MAX_FEATURES,
-+};
 +
  /**
-  * struct rproc - represents a physical remote processor device
-  * @node: list node of this rproc object
-@@ -530,6 +543,7 @@ struct rproc_dump_segment {
-  * @elf_machine: firmware ELF machine
-  * @cdev: character device of the rproc
-  * @cdev_put_on_release: flag to indicate if remoteproc should be shutdown on @char_dev release
-+ * @features: indicate remoteproc features
+  * rproc_trigger_recovery() - recover a remoteproc
+  * @rproc: the remote processor
+@@ -1897,7 +1938,6 @@ static int __rproc_detach(struct rproc *rproc)
   */
- struct rproc {
- 	struct list_head node;
-@@ -570,6 +584,7 @@ struct rproc {
- 	u16 elf_machine;
- 	struct cdev cdev;
- 	bool cdev_put_on_release;
-+	DECLARE_BITMAP(features, RPROC_MAX_FEATURES);
- };
+ int rproc_trigger_recovery(struct rproc *rproc)
+ {
+-	const struct firmware *firmware_p;
+ 	struct device *dev = &rproc->dev;
+ 	int ret;
  
- /**
+@@ -1911,24 +1951,10 @@ int rproc_trigger_recovery(struct rproc *rproc)
+ 
+ 	dev_err(dev, "recovering %s\n", rproc->name);
+ 
+-	ret = rproc_stop(rproc, true);
+-	if (ret)
+-		goto unlock_mutex;
+-
+-	/* generate coredump */
+-	rproc->ops->coredump(rproc);
+-
+-	/* load firmware */
+-	ret = request_firmware(&firmware_p, rproc->firmware, dev);
+-	if (ret < 0) {
+-		dev_err(dev, "request_firmware failed: %d\n", ret);
+-		goto unlock_mutex;
+-	}
+-
+-	/* boot the remote processor up again */
+-	ret = rproc_start(rproc, firmware_p);
+-
+-	release_firmware(firmware_p);
++	if (rproc_has_feature(rproc, RPROC_FEAT_ATTACH_ON_RECOVERY))
++		ret = rproc_attach_recovery(rproc);
++	else
++		ret = rproc_firmware_recovery(rproc);
+ 
+ unlock_mutex:
+ 	mutex_unlock(&rproc->lock);
 -- 
 2.25.1
 

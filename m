@@ -2,161 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B030E54C477
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2658554C463
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242448AbiFOJRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:17:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57116 "EHLO
+        id S1344055AbiFOJNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347968AbiFOJRp (ORCPT
+        with ESMTP id S234067AbiFOJNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:17:45 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBD45FB7
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:17:41 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4LNKR13Wbhz1KB4G;
-        Wed, 15 Jun 2022 17:15:41 +0800 (CST)
-Received: from huawei.com (10.175.112.208) by kwepemi500016.china.huawei.com
- (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 15 Jun
- 2022 17:17:38 +0800
-From:   Zhou Guanghui <zhouguanghui1@huawei.com>
-To:     <akpm@linux-foundation.org>, <rppt@kernel.org>, <will@kernel.org>,
-        <anshuman.khandual@arm.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>, <xuqiang36@huawei.com>,
-        <zhouguanghui1@huawei.com>
-Subject: [PATCH v4] memblock,arm64: Expand the static memblock memory table
-Date:   Wed, 15 Jun 2022 09:12:01 +0000
-Message-ID: <20220615091201.88256-1-zhouguanghui1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Wed, 15 Jun 2022 05:13:20 -0400
+Received: from m15114.mail.126.com (m15114.mail.126.com [220.181.15.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 771E138DAC
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=/ZdML
+        VHVVBfA118OIj7yELcqrVyR5px2flvl70KNJJA=; b=GuKqFJqlftXaLQmuW9f26
+        zRy3oX5u2OiPvgxW2T/AswqaWn5giv+WRJdofXuZ2su7XKBXzr/qgoqMRDWZCn35
+        PS1E7zU34XGD+5WjQiS7HkkfcY/3tUrHOBUmF0Z67kbCDNXGsHzrFYfm7J2dz9Z9
+        BxYUyvODSRsFNDc/NZix7U=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp7 (Coremail) with SMTP id DsmowACX2_qIoqli66FfDQ--.38808S2;
+        Wed, 15 Jun 2022 17:12:42 +0800 (CST)
+From:   heliang <windhl@126.com>
+To:     daniel@zonque.org, haojian.zhuang@gmail.com,
+        robert.jarzmik@free.fr, linux@armlinux.org.uk
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        windhl@126.com
+Subject: [PATCH] arch: arm: mach-pxa: Add missing of_node_put in irq.c
+Date:   Wed, 15 Jun 2022 17:12:40 +0800
+Message-Id: <20220615091240.3961831-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.112.208]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DsmowACX2_qIoqli66FfDQ--.38808S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7JFyUCr15GrW3Zryfur1kAFb_yoW8JF45p3
+        y2934kJr18ur4I9a40yay8Z3yYyF40gF4jkF4ak3W7Jw48AayjqFW8Kr9xZ3Z8GFW8Xa1r
+        Ar4rJayxuF95CaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pE8uckUUUUU=
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbi3AohF1pEDuWEkwAAsC
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In a system(Huawei Ascend ARM64 SoC) using HBM, a multi-bit ECC error
-occurs, and the BIOS will mark the corresponding area (for example, 2 MB)
-as unusable. When the system restarts next time, these areas are not
-reported or reported as EFI_UNUSABLE_MEMORY. Both cases lead to an
-increase in the number of memblocks, whereas EFI_UNUSABLE_MEMORY
-leads to a larger number of memblocks.
+In pxa_dt_irq_init(), of_find_matching_node() will return a node
+pointer with refcount incremented. We should use of_node_put in
+fail path or when it is not used anymore.
 
-For example, if the EFI_UNUSABLE_MEMORY type is reported:
-...
-memory[0x92]    [0x0000200834a00000-0x0000200835bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
-memory[0x93]    [0x0000200835c00000-0x0000200835dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-memory[0x94]    [0x0000200835e00000-0x00002008367fffff], 0x0000000000a00000 bytes on node 7 flags: 0x0
-memory[0x95]    [0x0000200836800000-0x00002008369fffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-memory[0x96]    [0x0000200836a00000-0x0000200837bfffff], 0x0000000001200000 bytes on node 7 flags: 0x0
-memory[0x97]    [0x0000200837c00000-0x0000200837dfffff], 0x0000000000200000 bytes on node 7 flags: 0x4
-memory[0x98]    [0x0000200837e00000-0x000020087fffffff], 0x0000000048200000 bytes on node 7 flags: 0x0
-memory[0x99]    [0x0000200880000000-0x0000200bcfffffff], 0x0000000350000000 bytes on node 6 flags: 0x0
-memory[0x9a]    [0x0000200bd0000000-0x0000200bd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-memory[0x9b]    [0x0000200bd0200000-0x0000200bd07fffff], 0x0000000000600000 bytes on node 6 flags: 0x0
-memory[0x9c]    [0x0000200bd0800000-0x0000200bd09fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-memory[0x9d]    [0x0000200bd0a00000-0x0000200fcfffffff], 0x00000003ff600000 bytes on node 6 flags: 0x0
-memory[0x9e]    [0x0000200fd0000000-0x0000200fd01fffff], 0x0000000000200000 bytes on node 6 flags: 0x4
-memory[0x9f]    [0x0000200fd0200000-0x0000200fffffffff], 0x000000002fe00000 bytes on node 6 flags: 0x0
-...
-
-The EFI memory map is parsed to construct the memblock arrays before
-the memblock arrays can be resized. As the result, memory regions
-beyond INIT_MEMBLOCK_REGIONS are lost.
-
-Add a new macro INIT_MEMBLOCK_MEMORY_REGTIONS to replace
-INIT_MEMBLOCK_REGTIONS to define the size of the static memblock.memory
-array.
-
-Allow overriding memblock.memory array size with architecture defined
-INIT_MEMBLOCK_MEMORY_REGIONS and make arm64 to set
-INIT_MEMBLOCK_MEMORY_REGIONS to 1024 when CONFIG_EFI is enabled.
-
-Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+Signed-off-by: heliang <windhl@126.com>
 ---
- arch/arm64/include/asm/memory.h |  9 +++++++++
- mm/memblock.c                   | 14 +++++++++-----
- 2 files changed, 18 insertions(+), 5 deletions(-)
+ arch/arm/mach-pxa/irq.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/include/asm/memory.h b/arch/arm64/include/asm/memory.h
-index 0af70d9abede..ce8614fa376a 100644
---- a/arch/arm64/include/asm/memory.h
-+++ b/arch/arm64/include/asm/memory.h
-@@ -364,6 +364,15 @@ void dump_mem_limit(void);
- # define INIT_MEMBLOCK_RESERVED_REGIONS	(INIT_MEMBLOCK_REGIONS + NR_CPUS + 1)
- #endif
+diff --git a/arch/arm/mach-pxa/irq.c b/arch/arm/mach-pxa/irq.c
+index 96f33ef1d9ea..a81e9ffb77af 100644
+--- a/arch/arm/mach-pxa/irq.c
++++ b/arch/arm/mach-pxa/irq.c
+@@ -246,12 +246,14 @@ void __init pxa_dt_irq_init(int (*fn)(struct irq_data *, unsigned int))
+ 	ret = of_property_read_u32(node, "marvell,intc-nr-irqs",
+ 				   &pxa_internal_irq_nr);
+ 	if (ret) {
++		of_node_put(node);
+ 		pr_err("Not found marvell,intc-nr-irqs property\n");
+ 		return;
+ 	}
  
-+/*
-+ * memory regions which marked with flag MEMBLOCK_NOMAP(for example, the memory
-+ * of the EFI_UNUSABLE_MEMORY type) may divide a continuous memory block into
-+ * multiple parts. As a result, the number of memory regions is large.
-+ */
-+#ifdef CONFIG_EFI
-+#define INIT_MEMBLOCK_MEMORY_REGIONS	(INIT_MEMBLOCK_REGIONS * 8)
-+#endif
-+
- #include <asm-generic/memory_model.h>
+ 	ret = of_address_to_resource(node, 0, &res);
+ 	if (ret < 0) {
++		of_node_put(node);
+ 		pr_err("No registers defined for node\n");
+ 		return;
+ 	}
+@@ -262,10 +264,12 @@ void __init pxa_dt_irq_init(int (*fn)(struct irq_data *, unsigned int))
  
- #endif /* __ASM_MEMORY_H */
-diff --git a/mm/memblock.c b/mm/memblock.c
-index e4f03a6e8e56..7c63571a69d7 100644
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -29,6 +29,10 @@
- # define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
- #endif
+ 	ret = irq_alloc_descs(-1, 0, pxa_internal_irq_nr, 0);
+ 	if (ret < 0) {
++		of_node_put(node);
+ 		pr_err("Failed to allocate IRQ numbers\n");
+ 		return;
+ 	}
  
-+#ifndef INIT_MEMBLOCK_MEMORY_REGIONS
-+#define INIT_MEMBLOCK_MEMORY_REGIONS		INIT_MEMBLOCK_REGIONS
-+#endif
-+
- /**
-  * DOC: memblock overview
-  *
-@@ -55,9 +59,9 @@
-  * the allocator metadata. The "memory" and "reserved" types are nicely
-  * wrapped with struct memblock. This structure is statically
-  * initialized at build time. The region arrays are initially sized to
-- * %INIT_MEMBLOCK_REGIONS for "memory" and %INIT_MEMBLOCK_RESERVED_REGIONS
-- * for "reserved". The region array for "physmem" is initially sized to
-- * %INIT_PHYSMEM_REGIONS.
-+ * %INIT_MEMBLOCK_MEMORY_REGIONS for "memory" and
-+ * %INIT_MEMBLOCK_RESERVED_REGIONS for "reserved". The region array
-+ * for "physmem" is initially sized to %INIT_PHYSMEM_REGIONS.
-  * The memblock_allow_resize() enables automatic resizing of the region
-  * arrays during addition of new regions. This feature should be used
-  * with care so that memory allocated for the region array will not
-@@ -102,7 +106,7 @@ unsigned long min_low_pfn;
- unsigned long max_pfn;
- unsigned long long max_possible_pfn;
- 
--static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_REGIONS] __initdata_memblock;
-+static struct memblock_region memblock_memory_init_regions[INIT_MEMBLOCK_MEMORY_REGIONS] __initdata_memblock;
- static struct memblock_region memblock_reserved_init_regions[INIT_MEMBLOCK_RESERVED_REGIONS] __initdata_memblock;
- #ifdef CONFIG_HAVE_MEMBLOCK_PHYS_MAP
- static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS];
-@@ -111,7 +115,7 @@ static struct memblock_region memblock_physmem_init_regions[INIT_PHYSMEM_REGIONS
- struct memblock memblock __initdata_memblock = {
- 	.memory.regions		= memblock_memory_init_regions,
- 	.memory.cnt		= 1,	/* empty dummy entry */
--	.memory.max		= INIT_MEMBLOCK_REGIONS,
-+	.memory.max		= INIT_MEMBLOCK_MEMORY_REGIONS,
- 	.memory.name		= "memory",
- 
- 	.reserved.regions	= memblock_reserved_init_regions,
+ 	pxa_init_irq_common(node, pxa_internal_irq_nr, fn);
++	of_node_put(node);
+ }
+ #endif /* CONFIG_OF */
 -- 
-2.17.1
+2.25.1
 

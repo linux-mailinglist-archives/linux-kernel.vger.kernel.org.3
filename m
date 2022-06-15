@@ -2,55 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED65454D0E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69CC054D0DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 20:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358419AbiFOSZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 14:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37264 "EHLO
+        id S1358258AbiFOSYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 14:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245336AbiFOSZ3 (ORCPT
+        with ESMTP id S245078AbiFOSYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 14:25:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0748936694;
-        Wed, 15 Jun 2022 11:25:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D4BB61C36;
-        Wed, 15 Jun 2022 18:25:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39DD5C3411C;
-        Wed, 15 Jun 2022 18:25:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655317527;
-        bh=TKz+MoBx361FqhpuLU25ZFeB5xn7vox/KsAYOW8gYoM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RuS+3FA3y9QBVx67brxIF+rQqLzjj5xYhKIcjRZbyeLJIP8d2GU3goxuaJSPtV4RN
-         I1Z2hekRseMXkqOSGpCG4PXfmS3LnEGmK8RLyGDJto+TtU0i2m3uzYqYSuqcmIgPiC
-         toZopFtQ/LYS50vjwzFDrGv4gI+QgvwrpApDwMSlBpDe3KH2fouUWi6notXtZXqYne
-         Wn5RbsX28aM5t4vmuq8U0tRr12mJg4kA0SECJ3iB+fd9lVjlG0xgE5rqp3o+sQfeO7
-         Mbj/9j8Vxasuuu7uojzDfcBakdbNbqInV+i6dS3Rl7KyBuXZu+4yYtdRM8/H0wY680
-         wN8am1Z2u0NbQ==
-Date:   Wed, 15 Jun 2022 21:23:18 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     LinoSanfilippo@gmx.de
-Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, stefanb@linux.vnet.ibm.com,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: Re: [PATCH v5 07/10] tmp, tmp_tis: Implement usage counter for
- locality
-Message-ID: <Yqojlh5J0660gfaT@iki.fi>
-References: <20220610110846.8307-1-LinoSanfilippo@gmx.de>
- <20220610110846.8307-8-LinoSanfilippo@gmx.de>
+        Wed, 15 Jun 2022 14:24:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CF5A252AC;
+        Wed, 15 Jun 2022 11:24:22 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B2EF0153B;
+        Wed, 15 Jun 2022 11:24:21 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B39013F73B;
+        Wed, 15 Jun 2022 11:24:18 -0700 (PDT)
+Date:   Wed, 15 Jun 2022 19:24:08 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        eperezma <eperezma@redhat.com>, Cindy Lu <lulu@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        linux-s390@vger.kernel.org, conghui.chen@intel.com,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        netdev <netdev@vger.kernel.org>, pankaj.gupta.linux@gmail.com,
+        sudeep.holla@arm.com, Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+Subject: Re: [PATCH V6 8/9] virtio: harden vring IRQ
+Message-ID: <YqojyHuocSoZ0v/Y@e120937-lin>
+References: <CACGkMEs05ZisiPW+7H6Omp80MzmZWZCpc1mf5Vd99C3H-KUtgA@mail.gmail.com>
+ <20220613041416-mutt-send-email-mst@kernel.org>
+ <CACGkMEsT_fWdPxN1cTWOX=vu-ntp3Xo4j46-ZKALeSXr7DmJFQ@mail.gmail.com>
+ <20220613045606-mutt-send-email-mst@kernel.org>
+ <CACGkMEtAQck7Nr6SP_pD0MGT3njnwZSyT=xPyYzUU3c5GNNM_w@mail.gmail.com>
+ <CACGkMEvUFJkC=mnvL2PSH6-3RMcJUk84f-9X46JVcj2vTAr4SQ@mail.gmail.com>
+ <20220613052644-mutt-send-email-mst@kernel.org>
+ <CACGkMEstGvhETXThuwO+tLVBuRgQb8uC_6DdAM8ZxOi5UKBRbg@mail.gmail.com>
+ <Yqi7UhasBDPKCpuV@e120937-lin>
+ <CACGkMEv2A7ZHQTrdg9H=xZScAf2DE=Dguaz60ykd4KQGNLrn2Q@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220610110846.8307-8-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CACGkMEv2A7ZHQTrdg9H=xZScAf2DE=Dguaz60ykd4KQGNLrn2Q@mail.gmail.com>
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,112 +68,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 10, 2022 at 01:08:43PM +0200, LinoSanfilippo@gmx.de wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> 
-> Implement a usage counter for the (default) locality used by the TPM TIS
-> driver:
-> Request the locality from the TPM if it has not been claimed yet, otherwise
-> only increment the counter. Also release the locality if the counter is 0
-> otherwise only decrement the counter. Ensure thread-safety by protecting
-> the counter with a mutex.
-> 
-> This allows to request and release the locality from a thread and the
-> interrupt handler at the same time without the danger to interfere with
-> each other.
-> 
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 30 ++++++++++++++++++++++++++++--
->  drivers/char/tpm/tpm_tis_core.h |  2 ++
->  2 files changed, 30 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index 028bec44362d..0ef74979bc2c 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -158,16 +158,26 @@ static bool check_locality(struct tpm_chip *chip, int l)
->  	return false;
->  }
->  
-> +static int release_locality_locked(struct tpm_tis_data *priv, int l)
-> +{
-> +	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
+On Wed, Jun 15, 2022 at 09:41:18AM +0800, Jason Wang wrote:
+> On Wed, Jun 15, 2022 at 12:46 AM Cristian Marussi
+> <cristian.marussi@arm.com> wrote:
 
-nit: empty line here
+Hi Jason,
 
-Also it would not hurt to prefix it with tpm_tis.
+> >
+> > On Tue, Jun 14, 2022 at 03:40:21PM +0800, Jason Wang wrote:
+> > > On Mon, Jun 13, 2022 at 5:28 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> > > >
+> >
 
-This is for simple and practical reasons, like grepping. I don't
-mind if you do that also for other functions (if you want to).
+[snip]
 
-> +	return 0;
-> +}
-> +
->  static int release_locality(struct tpm_chip *chip, int l)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->  
-> -	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
-> +	mutex_lock(&priv->locality_count_mutex);
-> +	priv->locality_count--;
-> +	if (priv->locality_count == 0)
-> +		release_locality_locked(priv, l);
-> +	mutex_unlock(&priv->locality_count_mutex);
->  
->  	return 0;
->  }
->  
-> -static int request_locality(struct tpm_chip *chip, int l)
-> +static int request_locality_locked(struct tpm_chip *chip, int l)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
->  	unsigned long stop, timeout;
-> @@ -208,6 +218,20 @@ static int request_locality(struct tpm_chip *chip, int l)
->  	return -1;
->  }
->  
-> +static int request_locality(struct tpm_chip *chip, int l)
-> +{
-> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> +	int ret = 0;
-> +
-> +	mutex_lock(&priv->locality_count_mutex);
-> +	if (priv->locality_count == 0)
-> +		ret = request_locality_locked(chip, l);
-> +	if (!ret)
-> +		priv->locality_count++;
-> +	mutex_unlock(&priv->locality_count_mutex);
-> +	return ret;
-> +}
-> +
->  static u8 tpm_tis_status(struct tpm_chip *chip)
->  {
->  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> @@ -987,6 +1011,8 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  	priv->timeout_min = TPM_TIMEOUT_USECS_MIN;
->  	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
->  	priv->phy_ops = phy_ops;
-> +	priv->locality_count = 0;
-> +	mutex_init(&priv->locality_count_mutex);
->  
->  	dev_set_drvdata(&chip->dev, priv);
->  
-> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-> index 8e02faa4079d..e1871c482da2 100644
-> --- a/drivers/char/tpm/tpm_tis_core.h
-> +++ b/drivers/char/tpm/tpm_tis_core.h
-> @@ -94,6 +94,8 @@ enum tpm_tis_irqtest_flags {
->  
->  struct tpm_tis_data {
->  	u16 manufacturer_id;
-> +	struct mutex locality_count_mutex;
-> +	unsigned int locality_count;
->  	int locality;
->  	int irq;
->  	unsigned int irqs_in_use;
-> -- 
-> 2.36.1
+> > >
+> > > >  arm_scmi
+> > >
+> > > It looks to me the singleton device could be used by SCMI immediately after
+> > >
+> > >         /* Ensure initialized scmi_vdev is visible */
+> > >         smp_store_mb(scmi_vdev, vdev);
+> > >
+> > > So we probably need to do virtio_device_ready() before that. It has an
+> > > optional rx queue but the filling is done after the above assignment,
+> > > so it's safe. And the callback looks safe is a callback is triggered
+> > > after virtio_device_ready() buy before the above assignment.
+> > >
+> >
+> > I wanted to give it a go at this series testing it on the context of
+> > SCMI but it does not apply
+> >
+> > - not on a v5.18:
+> >
+> > 17:33 $ git rebase -i v5.18
+> > 17:33 $ git am ./v6_20220527_jasowang_rework_on_the_irq_hardening_of_virtio.mbx
+> > Applying: virtio: use virtio_device_ready() in virtio_device_restore()
+> > Applying: virtio: use virtio_reset_device() when possible
+> > Applying: virtio: introduce config op to synchronize vring callbacks
+> > Applying: virtio-pci: implement synchronize_cbs()
+> > Applying: virtio-mmio: implement synchronize_cbs()
+> > error: patch failed: drivers/virtio/virtio_mmio.c:345
+> > error: drivers/virtio/virtio_mmio.c: patch does not apply
+> > Patch failed at 0005 virtio-mmio: implement synchronize_cbs()
+> >
+> > - neither on a v5.19-rc2:
+> >
+> > 17:33 $ git rebase -i v5.19-rc2
+> > 17:35 $ git am ./v6_20220527_jasowang_rework_on_the_irq_hardening_of_virtio.mbx
+> > Applying: virtio: use virtio_device_ready() in virtio_device_restore()
+> > error: patch failed: drivers/virtio/virtio.c:526
+> > error: drivers/virtio/virtio.c: patch does not apply
+> > Patch failed at 0001 virtio: use virtio_device_ready() in
+> > virtio_device_restore()
+> > hint: Use 'git am --show-current-patch=diff' to see the failed patch
+> > When you have resolved this problem, run "git am --continue".
+> >
+> > ... what I should take as base ?
+> 
+> It should have already been included in rc2, so there's no need to
+> apply patch manually.
 > 
 
-BR, Jarkko
+I tested this series as included in v5.19-rc2 (WITHOUT adding a virtio_device_ready
+in SCMI virtio as you mentioned above ... if I got it right) and I have NOT seen any
+issue around SCMI virtio using my usual test setup (using both SCMI vqueues).
+
+No anomalies even when using SCMI virtio in atomic/polling mode.
+
+Adding a virtio_device_ready() at the end of the SCMI virtio probe()
+works fine either, it does not make any difference in my setup.
+(both using QEMU and kvmtool with this latter NOT supporting
+ virtio_V1...not sure if it makes a difference but I thought was worth
+ mentioning)
+
+Thanks,
+Cristian
+

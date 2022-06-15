@@ -2,105 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663C754C7FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A8A54C800
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 13:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347725AbiFOL4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 07:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57428 "EHLO
+        id S1345064AbiFOL5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 07:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347722AbiFOL4e (ORCPT
+        with ESMTP id S1344258AbiFOL5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 07:56:34 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1EE14099
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 04:56:30 -0700 (PDT)
+        Wed, 15 Jun 2022 07:57:43 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1341E3E0;
+        Wed, 15 Jun 2022 04:57:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1655294190; x=1686830190;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=hMa4C7BG2EJNxLf+4Ft9gsUe2natn5jOe4xtSlQ7Na0=;
-  b=k9XIHOxIKcfv/BfIByai6+exVkd7ki6rBhzX8pwbjpFh5mx4NYqJUbs8
-   xtne298w6BR6YZExRZP8XNwU/tCSouZLSxQCnbj1GwPvJpedAsWhSIJ6t
-   Syy2iMpXXUDnNJbOSIcZrXP/PsQKq0WVPuaAKe+A5DNGYCTf+KAmcTSMG
-   MkDE/AQ9DSIr7gxDB2gnEt0dQNdwGtdjlhiB+sphGOj60CRRoJnhUBenf
-   OiBq9Dn9Z5wjnX6VRZnMTO7yRdhLZEbo2CtkVTsys5MOrNfG91j2t2o9p
-   KJSqFlQByUak77rFvBSTfrJbGmlJB5DxaHieA7pa0CpabITHUL/UqK73E
-   A==;
-X-IronPort-AV: E=Sophos;i="5.91,302,1647273600"; 
-   d="scan'208";a="208073236"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 15 Jun 2022 19:56:29 +0800
-IronPort-SDR: df/r5LleIr9flh2U32KOnghLYgOuEX0ieQffTMF7jJA0GHH7q1dv1FDFBgSK9eoMxN2USc9LX0
- bLLiF9bk1oYxDv43K/2sT+xINGt80Z8KL9xVU7d1tJM6H3zpWf2GrJqm8amADHCQB/v+QjFsHi
- O59FOC8cqdkZJcZl9ogRngn/366uPOFpLzEouUplGhSVs8J0THup6EsVAaafB9XyMuXRswQiqp
- 3ShOY//Hl1gf1iwQPilA01Zdg6voGiduLfFiKl0kNm+HgEd/FwQ8shk5FiF7Vpk2t3Nz9yZd2k
- g9cMVsBZj7ueo+p8c1uwFjde
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jun 2022 04:14:54 -0700
-IronPort-SDR: Zl+jPsxiuaHkSU5S4HFzXV+H20lc+pQytXxJhwgBfAANDjqoijgBYn3v0BbnXwy5mh4Ib568mR
- CoqPhg7N4h0XDUkLL+8tGRoprHnGX6coe/wFlS5McXE7nbZGZjgopEKawAPklo+5lZPLZtZ+Ba
- kQTcIzUYT2c8ttulSXXcehl00L3kvvRR9zPEsGWlq/9tRHOukBcM1/9spcWlTdTCeCSUuBeqZS
- 47KCmcBrLGbnRjR533OWmS4ltZsoJVS4tlG/BON5KnZl6mgSQZTlhyfXbKsC2qpSySCA7wjlzr
- Nlw=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Jun 2022 04:56:30 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4LNP0Y4cYdz1Rvlx
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 04:56:29 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1655294188; x=1657886189; bh=hMa4C7BG2EJNxLf+4Ft9gsUe2natn5jOe4x
-        tSlQ7Na0=; b=O1jVeGEiQVMCIS3Ud8cDz9MljRd9D9VkkVpPn8F4R/P/kyxOED6
-        Nc12uVtcHw2LN2OIzYkqi6KYWbqHf+lTYHEgMoug1B6Hcrnd+IhpD1UQTufyUFLK
-        YuRWZWOu0FQ7+9HMX9pimVOfk14bQ1wsAkI7yjCT1I92CluihrxNC6lZxZn+6e/p
-        0QPs6Tds08jxxz+9d0cu+H2qFI+8l0NOroHVmXW57ZoNcd+YSIT2s8Z7YRsrO6eY
-        2X8s0YXwbZNIPF/FtVgKBsP4FMrW+zRwxfFvLTkHaT9tZpFq/I5QYXlRF4RWrl0A
-        stCWrg2hE+aFog4dpZeKIBkLNK5jjv3o7og==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id puXbhcyxouER for <linux-kernel@vger.kernel.org>;
-        Wed, 15 Jun 2022 04:56:28 -0700 (PDT)
-Received: from [10.225.163.82] (unknown [10.225.163.82])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4LNP0S6n1Sz1Rvlc;
-        Wed, 15 Jun 2022 04:56:24 -0700 (PDT)
-Message-ID: <4bafa68f-46b3-7a76-de70-377a0f9cf130@opensource.wdc.com>
-Date:   Wed, 15 Jun 2022 20:56:23 +0900
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1655294260; x=1686830260;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=EE+kpvIOpfMoKkfDccWIEyjvMG+xL0WToFuZoQ1xSAw=;
+  b=TcvnuO1WIeQb8WoumMCQwfeKTE7ROIgA4G8Mh99cPEapdUXR8d5eFeFt
+   X09KGAaTYL3+O+I6qfKTvtmJDHPe0lkJnBteyvX2bxyyR8og2i9P8b6TJ
+   XF1RAMlZIVSzSwL/n+dHVmObs+kgo+ir1HvtsTwbnukIfP4BqbEOgaBtZ
+   ZzsA/0mmivVFDUoVw+W+73Fywqn1k2Te9xtc+XK+I2pm7FgU8NmDZwxdV
+   c8EznUju0Z2bYfGxuKd61q/7bgxh2SI3LPoA5vxiDdyv2rTiEuI31AplS
+   e+WJ6b6FIPfUzoQWtcExJHqgZN4BHI6szvovH6ydAc7ez7E5joLyUaTFK
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="178050111"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 15 Jun 2022 04:57:39 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Wed, 15 Jun 2022 04:57:40 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Wed, 15 Jun 2022 04:57:40 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QN0OCuM/7uGye9fF7VDVdlIVvkuAQDn606rERt84GsSH5tSrW7m9RmXJSjnOkQrELsL3d9uGnw9ASbid6qeWfoF1cA97djLFSmEB7QTtBj9U4X3F6tk8jk0aB+eeJY0SeUhGswdh2GMgRN1phmnx1kLDQ7pY+CGt+f0/RlbqDAEmzaH5Xq3KQZBjhLLDQgmlaX6BiZpvvuSEhTtjvtMtPEU7DsudvJXHVmcx34kavK7kHApKHX1S7hbd63WZfszP/nSD8gpDF+kS68qY2yg9L/ZfUuNd0zwMKwTU16vnfbbr2rgZk3BJyW7hMScI+W8alC+uhThej1MCqi2REVizWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EE+kpvIOpfMoKkfDccWIEyjvMG+xL0WToFuZoQ1xSAw=;
+ b=dAr3hrcZRgTuFm3BiIkzEUvBan6vDI+lztZYVRIik7rXHf4UhvxQD9erIFlhu8lHMD+Rv4X16zMhvo+0zKwY7xEZp82Vr3DvXxOSgIn4v1+5FaEBOeX995JaF6r8QD08wrSgsKI7+gGAtf++vXCxMazWdffwRbwz0UIUX2RK5/ppF4bt3J/MIKzJtbDpObVpRlBHa/2EE1V3m6WMrrSkuJT0KqxLxLuhrr/YLxKcmkp93gs4NdZPqXUbYpCpyDioyUB2ywIK18/i4hE/d1b8SNggzeomBVB+okTNLrhjDzhkYQ8SSGAAc9Bs4cY/0M7/zTlPRaoRS8WjPma0UMxIxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EE+kpvIOpfMoKkfDccWIEyjvMG+xL0WToFuZoQ1xSAw=;
+ b=eyRn00vqnAwvAHnMVVNnkwYmSsJulvApLxfuhVz/vXS5rBxbOAvBxeS7SfP0L3rnhSPe61B6CsReOf2TTfKQAx5P6a9fLfDmxLguQiLSxhmi4E1NEjdFILxo3hsJkutTh8F02qTCkZethS0U0nQI+dOwdQRSDLUgTvE9Zt5KkeA=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by CH0PR11MB5723.namprd11.prod.outlook.com (2603:10b6:610:100::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Wed, 15 Jun
+ 2022 11:57:38 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::699b:5c23:de4f:2bfa]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::699b:5c23:de4f:2bfa%4]) with mapi id 15.20.5332.022; Wed, 15 Jun 2022
+ 11:57:37 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <broonie@kernel.org>
+CC:     <Daire.McNamara@microchip.com>, <Lewis.Hanly@microchip.com>,
+        <linux-riscv@lists.infradead.org>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dan.carpenter@oracle.com>
+Subject: Re: [PATCH] spi: microchip-core: fix passing zero to PTR_ERR warning
+Thread-Topic: [PATCH] spi: microchip-core: fix passing zero to PTR_ERR warning
+Thread-Index: AQHYgKu0NnUyv6HMX02qK3OEv15VZq1QWBQAgAAEXYA=
+Date:   Wed, 15 Jun 2022 11:57:37 +0000
+Message-ID: <7eda95bd-c7f5-767a-fe88-9f7109467cd8@microchip.com>
+References: <20220615113021.2493586-1-conor.dooley@microchip.com>
+ <YqnFLCbvrTxNbG1+@sirena.org.uk>
+In-Reply-To: <YqnFLCbvrTxNbG1+@sirena.org.uk>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: eebc063f-4eec-4330-f765-08da4ec63e22
+x-ms-traffictypediagnostic: CH0PR11MB5723:EE_
+x-microsoft-antispam-prvs: <CH0PR11MB5723B16B43EAB1343736F4AE98AD9@CH0PR11MB5723.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: pUGd9izrpit3zOznFgA0O+l5Sgk/NTEM4tdZBikJizLyTIop3pZrFddmEiqgWPNrqYUn/wZXvDPnXmW0CVlfzrQPolS4dfUHt6panxESUp1dVDqTIgvcTV/uYO27D3YNru4np0U1qGT59EqIIWsdY/TcJ4qCOv1yK/cex2xm3QQDERYrYM3NVfiMNAnKpPJs32w0z32hbauB8voh6lf4oUH92aquOVpWO97TeEUewWrjYwPivta0/UPP1UqHwGMywakdRB16vDEYsHCoEr4p4egWiw9fXf8TWCTPJAVRn0W0a0DT41OxIWtam4i6CeHAegfwPBZtnMGQ3LSqIRPmnKjNuyh7fWpPu3diNq9chusWJe/T+9QG0xEdAwGa5zuyhhR93lO0E+Ea+f5VLLDFR9phXX8zaWX5+grBm3VxQ7ZbTSfznIyHb1vWjUSIClM/AMXA7j4gaED4bGfwaXcUUacZ4SgQTQP55WodQYoPvwML8nHegjv0NvYquuKfelvH2zajY9IB5A626Z/WwcVz+e4dNkZXfR1t9rPSOFvE7LCprCcZ8srfaD9HgiI22rajRjNCiS0su6sz5NhEDmspAqUewMYewhJigcaK8/D6aIbzs56LiLOvQfchcqVt58NqXDOP7bcQCoyeQY5n/GqGouCZf+A8zKfjm0T0FF7PTvj55gDBl+5H1qfoCfMlKCA1mgtuEi5WK7S3pxursor/TalN31XDOukKs9TEcu7cGTtYpTJH4duHYs8jA4vSJjpTgWo4uI4HpXmCgXVQC+b5aSNd/VzZ2FwbZm9vAJXfOiVYflNeCzFCmGBHxj3o+JESa/yycJm/FOmEPTJiJ2YrlQGE9Rndh8Tq1RKbL+dcGlU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(186003)(6506007)(2906002)(4326008)(76116006)(8676002)(4744005)(8936002)(54906003)(53546011)(66476007)(2616005)(64756008)(31696002)(66946007)(66556008)(91956017)(26005)(31686004)(122000001)(316002)(66446008)(6512007)(966005)(508600001)(5660300002)(71200400001)(38070700005)(6486002)(86362001)(6916009)(38100700002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WXo0UElCamkvZWlzVXp1TGR3K2kvb21xbTM1TUZHUGFINFk1aENjTkxjOXQw?=
+ =?utf-8?B?aDdURStyYkFLTHRoYmtkWnB4aHBpV0lqdGs3MGlxdnhYRk9sc0Q1Z2J5dmwx?=
+ =?utf-8?B?YWMwQ3BpMmlDSDIyTFhNWUxDaVBoUW12Zm5uSlNaUlg0MitDM3J3R2wzaUFw?=
+ =?utf-8?B?UHpEN3BKZXJwWHdUWDIrWmJMQmcyVWJkYWpvUVVMN2lhM1Q3SGh2L05TdHhk?=
+ =?utf-8?B?OFlJb1ZBUUV6K2lrMVhDWkN2UzZvOUpPdDZhTExEaXVIOVFveUJiNllyZ2xq?=
+ =?utf-8?B?QS85TWRRZlVJdXBkSXRZcFIyNThxbUJKalo0alNrRTh5bUdFWERBTGxscFFB?=
+ =?utf-8?B?WWRLMGxQMFJnaVIyaU82UHQ1YzJueDVnZE4rMExaWXFJZWxjNTF2Z0pIb0xr?=
+ =?utf-8?B?am1FZGRRalRTOVQ5eDVjb1I4ZFBLOHVLbDYzS0JDdDMzWm4zdWpyRFdJcnlZ?=
+ =?utf-8?B?MU5ONmg5bVlCRGtDTmVkT0xUbmlVdVUrU1paZUlMdVdYQzRxbW1XU052Z3lK?=
+ =?utf-8?B?bWF0TjFhUGl4dnQwcUUzZUxDWklvZWRGbnNDc2tIa3d1akNERitNYzFGVTNp?=
+ =?utf-8?B?ZEQvKzBaK244ZGhqWWFvbkY2QklzSmhaWEI1cHFsQks5T1djZnY2UlBDRis0?=
+ =?utf-8?B?SEtXbFhoM0ZVc1ZMWXVzWGYwSzJvVTJveWpHSjJlMWZoQ0IvVm9Pd0NrcGlV?=
+ =?utf-8?B?RysrTmk3YzFrVU40N0d2K05nNFdDdmRHKzhlWGVjRkVDaitxOFJMcExQRjI5?=
+ =?utf-8?B?TWZaMTdyWTJxWWhhOCtqMGZWbGF3ZXVlQi9FNWFkWGx2SjFoVjFybktnMGZI?=
+ =?utf-8?B?a0VBeTg1bFV3OU9mM2tSMkE2dUFoM3VVOGRDNjNtWnpqZitZVmVzWlZaSkU3?=
+ =?utf-8?B?SzhkQ3FGa1hYejJYcU9aVzNOL2VqSXE3aTdueU44K1ZaNHRyaVY3c2EyWVZn?=
+ =?utf-8?B?bHFSa1M4UkZyRlFPNm1lZXRVWE5tWElXcU1UVjM5YkVnaFNrVFZLakN3ajA4?=
+ =?utf-8?B?enBlOHF1YlNsREhZTWZYY1g2ZnVHYnFCQndzaXhqbmJ1RlBjaGVDZXFVQzNY?=
+ =?utf-8?B?Wk5DVlFOK1VkNXdYVTZ2ZkVGaHl0Q1ppM25HZmxEbDEvSmxwZk5VbW50UmZv?=
+ =?utf-8?B?emNJNHRRMGx6Ry9Ud2U3L295K1EzNmh5R0hyQzhNeFZ2UVJpTm9hRTNDdFY5?=
+ =?utf-8?B?WnlVcWhUM3l3bEVlaUdya29sZ0F0amRFekFPVHRVM2d1enR2OXhnZkllaWtj?=
+ =?utf-8?B?L0s0NjFGVXdOMk5XT052R1RlNjFuMDZLUjVLNHpHN0wrK3NQVVBZUElrM0lq?=
+ =?utf-8?B?ekhhMDA4Qjd4OWJSM2UvOGhrUG41WitDVnM4MVNDcFhmZjBCZTQ0MkdyS0tO?=
+ =?utf-8?B?akRtNVEzTVhzdFhtRUtySkljWFMrTzVEM2dXdU5BcTNhYXZMbmw4TS9aRkMx?=
+ =?utf-8?B?dk5QQzRVeVB0blhQdDliYWZRdmw0dmRrUFR1WU9PSFBVdWFSZHppaTFiWEYy?=
+ =?utf-8?B?SG1zUlRrYVNheENXNjdXcXpIUHBVS0RibjJHdmhBZFhtcjQwdm5FZDJiaE42?=
+ =?utf-8?B?R1VmeE5scGFIWnFpZGFxanRIbksvZ1pnNlNXdW9NRUxvYi96a0FTOTRnMXhI?=
+ =?utf-8?B?Q0VHQWZnK3pZRWRTQmd5cGcvV0xuTllNWTRFc0FmMjJCRWxycE5aaGpxUk1w?=
+ =?utf-8?B?RXlma2lBRzV2TC8vUGZYQ000TkxldUtUV25zbjVYTEFyZWtrV1BsZk55Nloz?=
+ =?utf-8?B?blJTN01XUEtOalk5TjAwek9od3Y4ZDJzZlNFbXI1NStnNDJwcnZnL2dNS0V4?=
+ =?utf-8?B?eGs5aFZnWVBYSHdzTlNTWmFpd0tCT1BCcC9rSGVnaHlUZFYwTWh3RXh6ditK?=
+ =?utf-8?B?ZUkwMVh0dkczY2h3RlpYYTZkMS9mM2dCc2JneW1ldGxxeGlmak5OVlFycHRw?=
+ =?utf-8?B?T0d0ZXV1SDluSWZKWWNYSUFkSW1ZN0tCQkNoYjJUS0llSmEwMGN1ajRqVTJt?=
+ =?utf-8?B?Y2hKeC9raEMzdk94OXVvTlhwdit1NWxuUlVweXNMWTJHM3pTeEVQWGM0VWxZ?=
+ =?utf-8?B?ZzBHT3N6MnFhWkEzb1I5NXdJMmlHWjRpUFl2dGpZalR0cXFyRThBZnVRWjM2?=
+ =?utf-8?B?V0FNblYwaCtSdEhQbXp0YVpMdFFULzJTVzJpS1VnRFpKZ1FZNUh0aWg1MlBQ?=
+ =?utf-8?B?eHNBSGFMTEN4QXlBamRFMlM5Ykk1d1ZpZlQyYU14dy82N0haT3dLVWFrRUFK?=
+ =?utf-8?B?NnIyMEROTlc5OXJDN1Fkam1nYm84RURseDdNK2x5cWRHU0hQZjFLbDlSMVZF?=
+ =?utf-8?B?SjJrbmk2WGM4NlJwOS9OcERlYnZKRERWSVpkSHdoc3lHOFRWa3c3dz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8955B76780E21B4AA14AFAE9618AF07C@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH v7 06/13] null_blk: use zone_size_sects_shift for power of
- 2 zoned devices
-Content-Language: en-US
-To:     Pankaj Raghav <p.raghav@samsung.com>, hch@lst.de,
-        snitzer@redhat.com, axboe@kernel.dk
-Cc:     bvanassche@acm.org, linux-kernel@vger.kernel.org,
-        jiangbo.365@bytedance.com, hare@suse.de, pankydev8@gmail.com,
-        dm-devel@redhat.com, jonathan.derrick@linux.dev,
-        gost.dev@samsung.com, dsterba@suse.com, jaegeuk@kernel.org,
-        linux-nvme@lists.infradead.org, Johannes.Thumshirn@wdc.com,
-        linux-block@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Luis Chamberlain <mcgrof@kernel.org>
-References: <20220615101920.329421-1-p.raghav@samsung.com>
- <CGME20220615101945eucas1p16fa264e81d9b6027ff131dd311ed91e2@eucas1p1.samsung.com>
- <20220615101920.329421-7-p.raghav@samsung.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220615101920.329421-7-p.raghav@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eebc063f-4eec-4330-f765-08da4ec63e22
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2022 11:57:37.8847
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: SYpyFiqKGa+RCQz28+b3Spw+k6/fV7Spf3MHWhG3HWHW+jlQmZKtzfpLoc6ImP4KTuI6i8B6MXOeqdRkWPkxmiqzvHHAMyL4H2muSBvEu4M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5723
 X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,77 +160,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/22 19:19, Pankaj Raghav wrote:
-> Instead of doing is_power_of_2 and ilog2 operation for every IO, cache
-> the zone_size_sects_shift variable and use it for power of 2 zoned
-> devices.
-> 
-> This variable will be set to zero for non power of 2 zoned devices.
-> 
-> Suggested-by: Damien Le Moal <damien.lemoal@wdc.com>
-> Reviewed-by: Hannes Reinecke <hare@suse.de>
-> Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->  drivers/block/null_blk/null_blk.h |  6 ++++++
->  drivers/block/null_blk/zoned.c    | 11 ++++++++---
->  2 files changed, 14 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/block/null_blk/null_blk.h b/drivers/block/null_blk/null_blk.h
-> index 8359b4384..3bc7cbf25 100644
-> --- a/drivers/block/null_blk/null_blk.h
-> +++ b/drivers/block/null_blk/null_blk.h
-> @@ -83,6 +83,12 @@ struct nullb_device {
->  	unsigned int imp_close_zone_no;
->  	struct nullb_zone *zones;
->  	sector_t zone_size_sects;
-> +	/*
-> +	 * zone_size_sects_shift is only useful when the zone size is
-> +	 * power of 2. This variable is set to zero when zone size is non
-> +	 * power of 2.
-> +	 */
-> +	unsigned int zone_size_sects_shift;
->  	bool need_zone_res_mgmt;
->  	spinlock_t zone_res_lock;
->  
-> diff --git a/drivers/block/null_blk/zoned.c b/drivers/block/null_blk/zoned.c
-> index daf327015..5f929944b 100644
-> --- a/drivers/block/null_blk/zoned.c
-> +++ b/drivers/block/null_blk/zoned.c
-> @@ -16,8 +16,8 @@ static inline sector_t mb_to_sects(unsigned long mb)
->  
->  static inline unsigned int null_zone_no(struct nullb_device *dev, sector_t sect)
->  {
-> -	if (is_power_of_2(dev->zone_size_sects))
-> -		return sect >> ilog2(dev->zone_size_sects);
-> +	if (dev->zone_size_sects_shift)
-> +		return sect >> dev->zone_size_sects_shift;
->  
->  	return div64_u64(sect, dev->zone_size_sects);
->  }
-> @@ -85,9 +85,14 @@ int null_init_zoned_dev(struct nullb_device *dev, struct request_queue *q)
->  	zone_capacity_sects = mb_to_sects(dev->zone_capacity);
->  	dev_capacity_sects = mb_to_sects(dev->size);
->  	dev->zone_size_sects = mb_to_sects(dev->zone_size);
-> +
-> +	if (is_power_of_2(dev->zone_size_sects))
-> +		dev->zone_size_sects_shift = ilog2(dev->zone_size_sects);
-> +	else
-> +		dev->zone_size_sects_shift = 0;
-> +
->  	dev->nr_zones =	DIV_ROUND_UP_SECTOR_T(dev_capacity_sects,
->  					      dev->zone_size_sects);
-> -
-
-white line change.
-
-This patch should be squashed with the previous one.
-
->  	dev->zones = kvmalloc_array(dev->nr_zones, sizeof(struct nullb_zone),
->  				    GFP_KERNEL | __GFP_ZERO);
->  	if (!dev->zones)
-
-
--- 
-Damien Le Moal
-Western Digital Research
+T24gMTUvMDYvMjAyMiAxMjo0MCwgTWFyayBCcm93biB3cm90ZToNCj4gRVhURVJOQUwgRU1BSUw6
+IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25vdyB0
+aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBPbiBXZWQsIEp1biAxNSwgMjAyMiBhdCAxMjozMDoy
+MlBNICswMTAwLCBDb25vciBEb29sZXkgd3JvdGU6DQo+IA0KPj4gLSAgICAgICAgICAgICByZXQg
+PSBQVFJfRVJSKHNwaS0+Y2xrKTsNCj4+ICsgICAgICAgICAgICAgcmV0ID0gIXNwaS0+Y2xrID8g
+LUVOWElPIDogUFRSX0VSUihzcGktPmNsayk7DQo+IA0KPiBJIHRoaW5rIHlvdSdyZSBsb29raW5n
+IGZvciBQVFJfRVJSX09SX1pFUk8oKSBoZXJlPw0KDQpNYXliZSBJIGRvbid0IHVuZGVyc3RhbmQs
+IHNvIGxldCBtZSBleHBsYWluIHdoYXQgSSB0aGluayB5b3UncmUNCnN1Z2dlc3RpbmcgJiBtYXli
+ZSB5b3UgY2FuIGNvcnJlY3QgbWU6DQo+IC0gICAgICAgICAgICAgcmV0ID0gUFRSX0VSUihzcGkt
+PmNsayk7DQo+ICsgICAgICAgICAgICAgcmV0ID0gUFRSX0VSUl9PUl9aRVJPKHNwaS0+Y2xrKTsN
+Cg0KQnV0IGlmIHNwaS0+Y2xrIGlzIE5VTEwsIHRoaXMgd2lsbCByZXR1cm4gMCBmcm9tIHRoZSBw
+cm9iZQ0KcmF0aGVyIHRoYW4gcmV0dXJuaW5nIGFuIGVycm9yPw0KSWYgdGhhdCdzIG5vdCB3aGF0
+IHlvdSBtZWFudCwgbG1rDQpUaGFua3MsDQpDb25vci4NCg0KPiANCj4gDQo+IF9fX19fX19fX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fDQo+IGxpbnV4LXJpc2N2IG1haWxp
+bmcgbGlzdA0KPiBsaW51eC1yaXNjdkBsaXN0cy5pbmZyYWRlYWQub3JnDQo+IGh0dHA6Ly9saXN0
+cy5pbmZyYWRlYWQub3JnL21haWxtYW4vbGlzdGluZm8vbGludXgtcmlzY3YNCg0K

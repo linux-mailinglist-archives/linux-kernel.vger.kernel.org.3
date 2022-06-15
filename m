@@ -2,318 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB7154D376
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E829754D381
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347655AbiFOVQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 17:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41262 "EHLO
+        id S1349911AbiFOVRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 17:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237525AbiFOVQ0 (ORCPT
+        with ESMTP id S1349919AbiFOVRj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 17:16:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38065535B;
-        Wed, 15 Jun 2022 14:16:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B5B861587;
-        Wed, 15 Jun 2022 21:16:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29DABC3411A;
-        Wed, 15 Jun 2022 21:16:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655327783;
-        bh=EsKroJBZ7tfp1Hmc6iEWarYjfY2NCNFIVVURsC5wcwk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=XMBRODUIFQ5AsoFCRkThTmC4nRUwehZ3NrDVUmVIwfyupO0TzM5QWNwPkivvmOiCU
-         dzFpa+2LC5aZpCmw6SN4tAaZq/s1hgsStu8qJH3BCLInzdXL/KUxJal9FlyKHEqOyA
-         0TT+cNcOjyR6m+9+l6ueCdS48YjbLRP+QehZOxuHXMsqV4aRmNhsq/FMeKhqIlQ4GP
-         EgdwCaeuM9A2aP8S4h/viHEjp/lQAcQt+GZqZFoWMMbGWfoRuV+QJJRFqJ7uBzYjHw
-         6R/WVXUoCXdGDK3r6pWVAeHf8lIv3cZFwf8ACXGVRoOqdBF2apTMpEMi4pslnpMZ+h
-         NAfZ1zxPiyqUw==
-Date:   Thu, 16 Jun 2022 02:46:21 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     Qiang Yu <quic_qianyu@quicinc.com>, quic_hemantk@quicinc.com,
-        loic.poulain@linaro.org, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_cang@quicinc.com
-Subject: Re: [PATCH] bus: mhi: Disable IRQs instead of freeing them during
- power down
-Message-ID: <20220615211621.GD3606@thinkpad>
-References: <1654782215-70383-1-git-send-email-quic_qianyu@quicinc.com>
- <62d09e6f-9898-6233-dfd6-b5ba5d837571@quicinc.com>
- <9659ecb9-9727-a146-e286-d28d656483c3@quicinc.com>
- <9a11394d-f7df-e549-8afb-0834f7d30202@quicinc.com>
- <8eceb966-b5c1-8913-ac97-95348f92650d@quicinc.com>
- <b3f5e49d-8917-79ab-8f59-29ad6cec3973@quicinc.com>
+        Wed, 15 Jun 2022 17:17:39 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E43BF55
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:17:36 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id j39so12961460vsv.11
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:17:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GUIT1vqvv3V8seFbVZNTO1ARaGDvndthM8JRGSxc/J8=;
+        b=Cd8l/vOrCZXKD4K4O7qchiKbzPoQdmD0ecKW7uvFVl7QA65YwVBcmreew+2XisLyqy
+         lEFxpuAHeNK2zHj0xm6CjZEba8gwQxPndIEecdotsEbWARIY2NlArXGUg5mQOS/8WgIi
+         prp2Zo3q17hzLuPv21fyMDQYT8vHoMaT+M/aZnOnBDRDWZMV7tXpueRAGuVcG/Bojb6r
+         +ZPg+PJr7UB/GLJsjvgPa1AUl+UV5SRpGQsT2AWbPE28alngedUC5Dpu7GDMOxuas+I8
+         7JZV3Mpms/ySNWhZHd1734d8zJTInsdA+mgqVauFGblV/EurH+Pl5HOVve6RXG9NTmPS
+         WNsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GUIT1vqvv3V8seFbVZNTO1ARaGDvndthM8JRGSxc/J8=;
+        b=bF835Pzu9iiDT7JmQiWAOHNKSZMIyzIowZq4dshLshwjL4G8HJovgaUUNvQeyoBgqH
+         0/t9m+z5pUQFh1KzX3VlEixhuA380lLjtW3XZSVlMMRI+XpwE8mC0d3x2gG+yYs7+cZL
+         3du43qZVkJmYk7vVWZ+eVGu2OoT0l8qnTxqc9fqF0arbwEtVmypG5pKnSxIBi1mTAMP1
+         uXKikCQBfAZrXBqCpuy+Q8GWIRD6JnfAy+tLJd2LhbgrptP4YFDdw/nPcMbfNX2s1VF9
+         xIDVa1aZh6f0DBVwwUkajYL6juBsfFAaeHh8Un5sbMtEFTzxi+Vmj02uFBTHplPrA6Ll
+         BRnA==
+X-Gm-Message-State: AJIora+Nh7MeQ4bT7u+DfwZqQ0HrVIJJE1k3GEmSSwxfXOVKtziNcJNX
+        0yurpnSN3G2TsI/4pRmi4F+SWivKRu1RY4q5VPhX0w==
+X-Google-Smtp-Source: AGRyM1u2zBUmwdJorHNhqevYp67/A7UFgHfr7Vv12xghzQ4kvPK9NyVlY6UG2Kl9AQLkvr9hN48s78ryg31ErIoH0Xs=
+X-Received: by 2002:a67:f3d0:0:b0:34b:b52d:d676 with SMTP id
+ j16-20020a67f3d0000000b0034bb52dd676mr879697vsn.6.1655327855127; Wed, 15 Jun
+ 2022 14:17:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b3f5e49d-8917-79ab-8f59-29ad6cec3973@quicinc.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220504002554.654642-1-Liam.Howlett@oracle.com>
+ <20220504011345.662299-1-Liam.Howlett@oracle.com> <20220504011345.662299-13-Liam.Howlett@oracle.com>
+ <Yp3udPy0vuDK8khc@qian> <20220606161940.fh5edq5nyz4jru2u@revolver>
+ <Yp4uD8uWB3rit/Ee@qian> <CAOUHufZk+3xCqK38CuVdWg_ZiWaLyke+Y+=CYJpraET6nKQ=yQ@mail.gmail.com>
+ <CAOUHufbOz66HPebrCuJXfnfapY0qxu42-1Ppbti86Yii-GYsAQ@mail.gmail.com>
+ <20220615142508.mtp65w6tdiurtvcn@revolver> <CAOUHufaoZ99qkBfsRWwCAx6fspL5KJYgCGe=nOVR07_2dF6URQ@mail.gmail.com>
+ <20220615185500.i5bzt7srzm6q72na@revolver> <CAOUHufY5dBrNc81oDnmKSyRY2d3=e0CZJiXaOUBs=LFoUBDJUg@mail.gmail.com>
+In-Reply-To: <CAOUHufY5dBrNc81oDnmKSyRY2d3=e0CZJiXaOUBs=LFoUBDJUg@mail.gmail.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Wed, 15 Jun 2022 15:16:59 -0600
+Message-ID: <CAOUHufZa9G2VDHLPsNmp3yRyXqYCE-3-nT6P7+uf-gbgyOHXYQ@mail.gmail.com>
+Subject: Re: [PATCH v9 28/69] mm/mmap: reorganize munmap to use maple states
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     Qian Cai <quic_qiancai@quicinc.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 07:07:02AM -0600, Jeffrey Hugo wrote:
-> On 6/12/2022 7:48 PM, Qiang Yu wrote:
-> > 
-> > On 6/10/2022 10:00 PM, Jeffrey Hugo wrote:
-> > > On 6/9/2022 9:21 PM, Qiang Yu wrote:
-> > > > On 6/9/2022 9:54 PM, Jeffrey Hugo wrote:
-> > > > 
-> > > > > On 6/9/2022 7:43 AM, Qiang Yu wrote:
-> > > > > > EP tends to read MSI address/data once and cache them
-> > > > > > after BME is set.
-> > > > > > So host should avoid changing MSI address/data after BME is set.
-> > > > > > 
-> > > > > > In pci reset function, host invokes free_irq(), which also clears MSI
-> > > > > > address/data in EP's PCIe config space. If the invalid address/data
-> > > > > > are cached and used by EP, MSI triggered by EP wouldn't be received by
-> > > > > > host, because an invalid MSI data is sent to an invalid MSI address.
-> > > > > > 
-> > > > > > To fix this issue, after host runs request_irq() successfully during
-> > > > > > mhi driver probe, let's invoke enable_irq()/disable_irq() instead of
-> > > > > > request_irq()/free_irq() when we want to power on and power down MHI.
-> > > > > > Meanwhile, Host should invoke free_irq() when mhi host driver is
-> > > > > > removed.
-> > > > > 
-> > > > > I don't think this works for hotplug, nor cases where there
-> > > > > are multiple MHI devices on the system.
-> > > > > 
-> > > > > The EP shouldn't be caching this information for multiple
-> > > > > reasons. Masking the MSIs, disabling the MSIs, changing the
-> > > > > address when the affinity changes, etc.
-> > > > > 
-> > > > > It really feels like we are solving the problem in the wrong place.
-> > > > > 
-> > > > > Right now, this gets a NACK from me.
-> > > > > 
-> > > > After free_irq(), MSI is still enabled but MSI address and data
-> > > > are cleared. So there is a chance that device initiates MSI
-> > > > using zero address. How to fix this race conditions.
-> > > 
-> > > On what system is MSI still enabled?  I just removed the AIC100
-> > > controller on an random x86 system, and lspci is indicating MSIs are
-> > > disabled -
-> > > 
-> > > Capabilities: [50] MSI: Enable- Count=32/32 Maskable+ 64bit+
-> > 
-> > system: Ubuntu18.04, 5.4.0-89-generic,  Intel(R) Core(TM) i7-6700 CPU @
-> > 3.40GHz
-> > 
-> > After removing MHI driver, I also see MSI enable is cleared.  But I
-> > don't think free_irq clears it. I add log before free_irq and after
-> > free_irq as following show:
-> > 
-> > [62777.625111] msi cap before free irq
-> > [62777.625125] msi control=0x1bb, address=0xfee00318, data=0x0
-> > [62777.625301] msi cap after free irq
-> > [62777.625313] msi control=0x1bb, address=0x0, data=0x0
-> > [62777.625496] mhi-pci-generic 0000:01:00.0: mhi_pci_remove end of line,
-> > block 90 secs.
-> > # lspci -vvs 01:00.0
-> >          Capabilities: [50] MSI: Enable+ Count=8/32 Maskable+ 64bit+
-> >                  Address: 0000000000000000  Data: 0000
-> >                  Masking: ffffffff  Pending: 00000000
-> 
-> At this point, the MSI functionality is still enabled, but every MSI is
-> masked out (Masking), so per the PCIe spec, the endpoint may not trigger a
-> MSI to the host.  The device advertises that it supports maskable MSIs
-> (Maskable+), so this is appropiate.
-> 
-> If your device can still send a MSI at this point, then it violates the PCIe
-> spec.
-> 
-> disable_irq() will not help you with this as it will do the same thing.
-> 
-> I still think you are trying to fix an issue in the wrong location (host vs
-> EP), and causing additional issues by doing so.
-> 
+On Wed, Jun 15, 2022 at 1:05 PM Yu Zhao <yuzhao@google.com> wrote:
+>
+> On Wed, Jun 15, 2022 at 12:55 PM Liam Howlett <liam.howlett@oracle.com> wrote:
+> >
+> > * Yu Zhao <yuzhao@google.com> [220615 14:08]:
+> > > On Wed, Jun 15, 2022 at 8:25 AM Liam Howlett <liam.howlett@oracle.com> wrote:
+> > > >
+> > > > * Yu Zhao <yuzhao@google.com> [220611 17:50]:
+> > > > > On Sat, Jun 11, 2022 at 2:11 PM Yu Zhao <yuzhao@google.com> wrote:
+> > > > > >
+> > > > > > On Mon, Jun 6, 2022 at 10:40 AM Qian Cai <quic_qiancai@quicinc.com> wrote:
+> > > > > > >
+> > > > > > > On Mon, Jun 06, 2022 at 04:19:52PM +0000, Liam Howlett wrote:
+> > > > > > > > Does your syscall fuzzer create a reproducer?  This looks like arm64
+> > > > > > > > and says 5.18.0-next-20220603 again.  Was this bisected to the patch
+> > > > > > > > above?
+> > > > > > >
+> > > > > > > This was triggered by running the fuzzer over the weekend.
+> > > > > > >
+> > > > > > > $ trinity -C 160
+> > > > > > >
+> > > > > > > No bisection was done. It was only brought up here because the trace
+> > > > > > > pointed to do_mas_munmap() which was introduced here.
+> > > > > >
+> > > > > > Liam,
+> > > > > >
+> > > > > > I'm getting a similar crash on arm64 -- the allocator is madvise(),
+> > > > > > not mprotect(). Please take a look.
+> > > > >
+> > > > > Another crash on x86_64, which seems different:
+> > > >
+> > > > Thanks for this.  I was able to reproduce the other crashes that you and
+> > > > Qian reported.  I've sent out a patch set to Andrew to apply to the
+> > > > branch which includes the fix for them and an unrelated issue discovered
+> > > > when I wrote the testcases to cover what was going on here.
+> > >
+> > > Thanks. I'm restarting the test and will report the results in a few hours.
+> > >
+> > > > > BUG: KASAN: slab-out-of-bounds in mab_mas_cp+0x2d9/0x6c0
+> > > > > Write of size 136 at addr ffff88c5a2319c80 by task stress-ng/18461
+> > >                                                        ^^^^^^^^^
+> > >
+> > > > As for this crash, I was unable to reproduce and the code I just sent
+> > > > out changes this code a lot.  Was this running with "trinity -c madvise"
+> > > > or another use case/fuzzer?
+> > >
+> > > This is also stress-ng (same as the one on arm64). The test stopped
+> > > before it could try syzkaller (fuzzer).
+> >
+> > Thanks.  What are the arguments to stress-ng you use?  I've run
+> > "stress-ng --class vm -a 20 -t 600s --temp-path /tmp" until it OOMs on
+> > my vm, but it only has 8GB of ram.
+>
+> Yes, I used the same parameters with 512GB of RAM, and the kernel with
+> KASAN and other debug options.
 
-Irrespective of caching the MSI data in endpoint, I'd like to get rid of
-request_irq/free_irq during the mhi_{power_down/power_up} time. As like the MHI
-endpoint stack, we should just do disable/enable irq. Because, the MHI device
-may go down several times while running and we do not want to deallocate the
-IRQs all the time. And if the device gets removed, ultimately the MHI driver
-will get removed and we are fine while loading it back (even if MSI count
-changes).
+Sorry, Liam. I got the same crash :(
 
-I didn't had time to look into the patch in detail but I'm in favour of
-accepting the proposal.
+9d27f2f1487a (tag: mm-everything-2022-06-14-19-05, akpm/mm-everything)
+00d4d7b519d6 fs/userfaultfd: Fix vma iteration in mas_for_each() loop
+55140693394d maple_tree: Make mas_prealloc() error checking more generic
+2d7e7c2fcf16 maple_tree: Fix mt_destroy_walk() on full non-leaf non-alloc nodes
+4d4472148ccd maple_tree: Change spanning store to work on larger trees
+ea36bcc14c00 test_maple_tree: Add tests for preallocations and large
+spanning writes
+0d2aa86ead4f mm/mlock: Drop dead code in count_mm_mlocked_page_nr()
 
-@Jeff: Any specific issue you are seeing with hotplug etc...?
+==================================================================
+BUG: KASAN: slab-out-of-bounds in mab_mas_cp+0x2d9/0x6c0
+Write of size 136 at addr ffff88c35a3b9e80 by task stress-ng/19303
 
-Thanks,
-Mani
+CPU: 66 PID: 19303 Comm: stress-ng Tainted: G S        I       5.19.0-smp-DEV #1
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xc5/0xf4
+ print_address_description+0x7f/0x460
+ print_report+0x10b/0x240
+ ? mab_mas_cp+0x2d9/0x6c0
+ kasan_report+0xe6/0x110
+ ? mast_spanning_rebalance+0x2634/0x29b0
+ ? mab_mas_cp+0x2d9/0x6c0
+ kasan_check_range+0x2ef/0x310
+ ? mab_mas_cp+0x2d9/0x6c0
+ ? mab_mas_cp+0x2d9/0x6c0
+ memcpy+0x44/0x70
+ mab_mas_cp+0x2d9/0x6c0
+ mas_spanning_rebalance+0x1a3e/0x4f90
+ ? stack_trace_save+0xca/0x160
+ ? stack_trace_save+0xca/0x160
+ mas_wr_spanning_store+0x16c5/0x1b80
+ mas_wr_store_entry+0xbf9/0x12e0
+ mas_store_prealloc+0x205/0x3c0
+ do_mas_align_munmap+0x6cf/0xd10
+ do_mas_munmap+0x1bb/0x210
+ ? down_write_killable+0xa6/0x110
+ __vm_munmap+0x1c4/0x270
+ __x64_sys_munmap+0x60/0x70
+ do_syscall_64+0x44/0xa0
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
+RIP: 0033:0x589827
+Code: 00 00 00 48 c7 c2 98 ff ff ff f7 d8 64 89 02 48 c7 c0 ff ff ff
+ff eb 85 66 2e 0f 1f 84 00 00 00 00 00 90 b8 0b 00 00 00 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 c7 c1 98 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffee601ec08 EFLAGS: 00000206 ORIG_RAX: 000000000000000b
+RAX: ffffffffffffffda RBX: 0000400000000000 RCX: 0000000000589827
+RDX: 0000000000000000 RSI: 00007ffffffff000 RDI: 0000000000000000
+RBP: 00000000004cf000 R08: 00007ffee601ec40 R09: 0000000000923bf0
+R10: 0000000000000008 R11: 0000000000000206 R12: 0000000000001000
+R13: 00000000004cf040 R14: 0000000000000002 R15: 00007ffee601ed58
+ </TASK>
 
-> > [62868.692186] mhi-pci-generic 0000:01:00.0: mhi_pci_remove 90 sec expire.
-> > # lspci -vvs 01:00.0
-> >          Capabilities: [50] MSI: Enable- Count=8/32 Maskable+ 64bit+
-> >                  Address: 0000000000000000  Data: 0000
-> >                  Masking: 00000000  Pending: 00000000
-> > 
-> > I also add msleep() at last of remove callback to block the remove
-> > operation, then lspci shows MSI is still enabled  and after MHI driver
-> > is removed,
-> > 
-> > lspci shows MSI is disabled. It proves free_irq does not clear MSI
-> > enable, although I am not sure who does it (probably pci framework
-> > clears but I don 't find it).
-> > 
-> > I delete pci_free_irq_vectors() when I test.
-> > 
-> > > 
-> > > > Maybe EP should not cache MSI data and address. But I think this
-> > > > patch is necessary and we will talk with EP POC.
-> > > > 
-> > > > > > 
-> > > > > > Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
-> > > > > > ---
-> > > > > >   drivers/bus/mhi/host/init.c        | 31
-> > > > > > +++++++++++++++++++++++++++++++
-> > > > > >   drivers/bus/mhi/host/pci_generic.c |  2 ++
-> > > > > >   drivers/bus/mhi/host/pm.c          |  4 ++--
-> > > > > >   3 files changed, 35 insertions(+), 2 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
-> > > > > > index cbb86b2..48cb093 100644
-> > > > > > --- a/drivers/bus/mhi/host/init.c
-> > > > > > +++ b/drivers/bus/mhi/host/init.c
-> > > > > > @@ -18,6 +18,7 @@
-> > > > > >   #include <linux/slab.h>
-> > > > > >   #include <linux/vmalloc.h>
-> > > > > >   #include <linux/wait.h>
-> > > > > > +#include <linux/irq.h>
-> > > > > 
-> > > > > Should be in alphabetical order
-> > > > > 
-> > > > > >   #include "internal.h"
-> > > > > >     static DEFINE_IDA(mhi_controller_ida);
-> > > > > > @@ -168,6 +169,22 @@ int mhi_init_irq_setup(struct
-> > > > > > mhi_controller *mhi_cntrl)
-> > > > > >       unsigned long irq_flags = IRQF_SHARED | IRQF_NO_SUSPEND;
-> > > > > >       int i, ret;
-> > > > > >   +    /*
-> > > > > > +     * if irq[0] has action, it represents all MSI IRQs have been
-> > > > > > +     * requested, so we just need to enable them.
-> > > > > > +     */
-> > > > > 
-> > > > > This seems like an assumption about how the interrupts are
-> > > > > allocated and assigned that may not hold true for all
-> > > > > devices.
-> > > > 
-> > > > All interrupts are allocated and assigned together in
-> > > > mhi_pci_get_irqs() and mhi_init_irq_setup().
-> > > > 
-> > > > So I think if irq[0] has action, other irqs must be requested
-> > > > successfully. If any other msi request fail, irq[0] should have
-> > > > been freed.
-> > > > 
-> > > > > > +    if (irq_has_action(mhi_cntrl->irq[0])) {
-> > > > > > +        enable_irq(mhi_cntrl->irq[0]);
-> > > > > > +
-> > > > > > +        for (i = 0; i < mhi_cntrl->total_ev_rings; i++,
-> > > > > > mhi_event++) {
-> > > > > > +            if (mhi_event->offload_ev)
-> > > > > > +                continue;
-> > > > > > +
-> > > > > > + enable_irq(mhi_cntrl->irq[mhi_event->irq]);
-> > > > > > +        }
-> > > > > > +        return 0;
-> > > > > > +    }
-> > > > > > +
-> > > > > >       /* if controller driver has set irq_flags, use it */
-> > > > > >       if (mhi_cntrl->irq_flags)
-> > > > > >           irq_flags = mhi_cntrl->irq_flags;
-> > > > > > @@ -179,6 +196,11 @@ int mhi_init_irq_setup(struct
-> > > > > > mhi_controller *mhi_cntrl)
-> > > > > >                      "bhi", mhi_cntrl);
-> > > > > >       if (ret)
-> > > > > >           return ret;
-> > > > > > +    /*
-> > > > > > +     * IRQ marked IRQF_SHARED isn't recommended to use IRQ_NOAUTOEN,
-> > > > > > +     * so disable it explicitly.
-> > > > > > +     */
-> > > > > > +    disable_irq(mhi_cntrl->irq[0]);
-> > > > > >         for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
-> > > > > >           if (mhi_event->offload_ev)
-> > > > > > @@ -200,6 +222,8 @@ int mhi_init_irq_setup(struct
-> > > > > > mhi_controller *mhi_cntrl)
-> > > > > >                   mhi_cntrl->irq[mhi_event->irq], i);
-> > > > > >               goto error_request;
-> > > > > >           }
-> > > > > > +
-> > > > > > +        disable_irq(mhi_cntrl->irq[mhi_event->irq]);
-> > > > > >       }
-> > > > > >         return 0;
-> > > > > > @@ -1003,8 +1027,14 @@ int
-> > > > > > mhi_register_controller(struct mhi_controller
-> > > > > > *mhi_cntrl,
-> > > > > >         mhi_create_debugfs(mhi_cntrl);
-> > > > > >   +    ret = mhi_init_irq_setup(mhi_cntrl);
-> > > > > > +    if (ret)
-> > > > > > +        goto error_setup_irq;
-> > > > > > +
-> > > > > >       return 0;
-> > > > > >   +error_setup_irq:
-> > > > > > +    mhi_destroy_debugfs(mhi_cntrl);
-> > > > > >   err_release_dev:
-> > > > > >       put_device(&mhi_dev->dev);
-> > > > > >   err_ida_free:
-> > > > > > @@ -1027,6 +1057,7 @@ void
-> > > > > > mhi_unregister_controller(struct mhi_controller
-> > > > > > *mhi_cntrl)
-> > > > > >       struct mhi_chan *mhi_chan = mhi_cntrl->mhi_chan;
-> > > > > >       unsigned int i;
-> > > > > >   +    mhi_deinit_free_irq(mhi_cntrl);
-> > > > > >       mhi_destroy_debugfs(mhi_cntrl);
-> > > > > >         destroy_workqueue(mhi_cntrl->hiprio_wq);
-> > > > > > diff --git a/drivers/bus/mhi/host/pci_generic.c
-> > > > > > b/drivers/bus/mhi/host/pci_generic.c
-> > > > > > index 6fbc591..60020d0 100644
-> > > > > > --- a/drivers/bus/mhi/host/pci_generic.c
-> > > > > > +++ b/drivers/bus/mhi/host/pci_generic.c
-> > > > > > @@ -945,6 +945,8 @@ static void mhi_pci_remove(struct pci_dev *pdev)
-> > > > > >         mhi_unregister_controller(mhi_cntrl);
-> > > > > >       pci_disable_pcie_error_reporting(pdev);
-> > > > > > +
-> > > > > > +    pci_free_irq_vectors(pdev);
-> > > > > >   }
-> > > > > >     static void mhi_pci_shutdown(struct pci_dev *pdev)
-> > > > > > diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
-> > > > > > index dc2e8ff..190231c 100644
-> > > > > > --- a/drivers/bus/mhi/host/pm.c
-> > > > > > +++ b/drivers/bus/mhi/host/pm.c
-> > > > > > @@ -500,7 +500,7 @@ static void
-> > > > > > mhi_pm_disable_transition(struct mhi_controller
-> > > > > > *mhi_cntrl)
-> > > > > >       for (i = 0; i < mhi_cntrl->total_ev_rings; i++, mhi_event++) {
-> > > > > >           if (mhi_event->offload_ev)
-> > > > > >               continue;
-> > > > > > -        free_irq(mhi_cntrl->irq[mhi_event->irq], mhi_event);
-> > > > > > +        disable_irq(mhi_cntrl->irq[mhi_event->irq]);
-> > > > > >           tasklet_kill(&mhi_event->task);
-> > > > > >       }
-> > > > > >   @@ -1182,7 +1182,7 @@ void mhi_power_down(struct
-> > > > > > mhi_controller *mhi_cntrl, bool graceful)
-> > > > > >       /* Wait for shutdown to complete */
-> > > > > >       flush_work(&mhi_cntrl->st_worker);
-> > > > > >   -    free_irq(mhi_cntrl->irq[0], mhi_cntrl);
-> > > > > > +    disable_irq(mhi_cntrl->irq[0]);
-> > > > > >   }
-> > > > > >   EXPORT_SYMBOL_GPL(mhi_power_down);
-> > > > > 
-> > > 
-> 
+Allocated by task 19303:
+ __kasan_slab_alloc+0xaf/0xe0
+ kmem_cache_alloc_bulk+0x261/0x360
+ mas_alloc_nodes+0x2d7/0x4d0
+ mas_preallocate+0xe2/0x230
+ do_mas_align_munmap+0x1ce/0xd10
+ do_mas_munmap+0x1bb/0x210
+ __vm_munmap+0x1c4/0x270
+ __x64_sys_munmap+0x60/0x70
+ do_syscall_64+0x44/0xa0
+ entry_SYSCALL_64_after_hwframe+0x46/0xb0
 
--- 
-மணிவண்ணன் சதாசிவம்
+The buggy address belongs to the object at ffff88c35a3b9e00
+ which belongs to the cache maple_node of size 256
+The buggy address is located 128 bytes inside of
+ 256-byte region [ffff88c35a3b9e00, ffff88c35a3b9f00)
+
+The buggy address belongs to the physical page:
+page:00000000325428b6 refcount:1 mapcount:0 mapping:0000000000000000
+index:0x0 pfn:0x435a3b9
+flags: 0x1400000000000200(slab|node=1|zone=1)
+raw: 1400000000000200 ffffea010d71a5c8 ffffea010d71dec8 ffff88810004ff00
+raw: 0000000000000000 ffff88c35a3b9000 0000000100000008 0000000000000000
+page dumped because: kasan: bad access detected
+
+Memory state around the buggy address:
+ ffff88c35a3b9e00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff88c35a3b9e80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff88c35a3b9f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+                   ^
+ ffff88c35a3b9f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff88c35a3ba000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================

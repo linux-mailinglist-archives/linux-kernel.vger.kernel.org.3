@@ -2,99 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BCC954C60B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:28:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F83C54C619
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243327AbiFOK2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
+        id S1346106AbiFOK32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343591AbiFOK2G (ORCPT
+        with ESMTP id S1347582AbiFOK20 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:28:06 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91AE3101FE
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:28:01 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id y13-20020a17090a154d00b001eaaa3b9b8dso1614231pja.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:28:01 -0700 (PDT)
+        Wed, 15 Jun 2022 06:28:26 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17CEE13F49
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:28:23 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id fu17so7815005qtb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 03:28:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=znEIzE4EgTWOiFZf5Cm3kxNmUH6IPbVNQv1UUuyV/Hc=;
-        b=qV9h/UpNmydq91H3mP6CVU6NclHsJYkwfhKtoANC/6Tu2zBT/yPUPmiRQaF/d90inO
-         tLv2mruFsa6BwzQwqBzSb2nHAcMM6DnbKRwhwxKDO7XOk7s6jDF5FQCSFAz3pJTuJYEl
-         p2TF12/VNwu5xzgYtkfUEeoSclxn2LgsBLG7z+Rp6npZcXpPOUXF9pjLz4NSabazZOe+
-         2wDQv+4nzLsoXymU0D+hO3piw8G3YSlQbtdeFRfSvTR/V4Hady+iSnrLrgyJxXL4sPPD
-         T+9JSIndQ/pgJqevcyDY0DpGxLlZyJNy2NOiPEZ151KZXZSntI6fZMjO2fYbx554bdOz
-         iwAg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VRRIXOfBq1yQuH5EfBFqRJA+XF3LzpkQlfmJRxNlHxM=;
+        b=eTPtLP4NDpa8P0aI9dKapfMCGv9h90H8cChydbnDbXwDM3c9dFce+zWip7UvMIpzAj
+         MwWt4NSMWMqrTbGPwJOf7l27KNudx15eMZzj6SyR4Zlj5OpOoagmM2K/3bI+5LT3Niyi
+         h1vN0EW/aD3emP+jNz1Zcr7cozm+JkmhQecbNLlW+mU39R/LAtqcL2ahfL9sPHZJmXtA
+         n+McjAPLlSceH+/folG8esKMX+j5OcZkgls4MZ7OITX1SzUtIIuFxa5K+LPw/fz8Cv5V
+         vwmBMQsLsRdxHoNvxi45kD3Ty/9jaUWcXcCG6j3dwqXXCZ+czmFsSDp+cv482KfCuh2i
+         qjyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=znEIzE4EgTWOiFZf5Cm3kxNmUH6IPbVNQv1UUuyV/Hc=;
-        b=dMtDpMYrAPf7p3inR1vO8rRqcBSPpA0EsVmhurkbcxRiZV7UR1tG0ajSdGub1JLLex
-         Hdyd+zQeOzbndlai4WDbi2aPFog0ef8g5m7ZpZ/rWhog0afgAPZ3C0OXv0H3MuVr8MPf
-         sjlvJJUqpcWNazwDumn5iBSdFHeSsU6z5rX9eH1f88al0MGQqIBhC7QjbYMFRPaQmAzA
-         IM37dC6+ebxvov6aGBtyEsninEvn6KagPbtNpNLZzptrbHUFjuYIVUUAulrLAfe59ksK
-         miD8vs5G8b2dz8b4AxblNNJN2/HAUS8FzuVw3ZNoUtsqfdbIMlvQbRWUYpNSfVz/8ip3
-         vbuA==
-X-Gm-Message-State: AJIora8PPXs2InI16a9uS7VSpVTmVS/s25tjJ/wMvOsKzRQizK67KBlO
-        lyJuJ1rnfNOMJHaCQiGZK+I=
-X-Google-Smtp-Source: AGRyM1uylrZN/TnBR+RkyEvlG9LSFkRtn1a0pXgqvgeKkHmp20cQHxemz9ZiU5FVzwHH9jENOzszIw==
-X-Received: by 2002:a17:903:41c6:b0:164:1050:49ac with SMTP id u6-20020a17090341c600b00164105049acmr8762042ple.138.1655288881189;
-        Wed, 15 Jun 2022 03:28:01 -0700 (PDT)
-Received: from localhost ([122.183.153.161])
-        by smtp.gmail.com with ESMTPSA id g2-20020aa78182000000b0051bf246ca2bsm9407279pfi.100.2022.06.15.03.27.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 03:28:00 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 12:27:57 +0200
-From:   Pankaj Raghav <pankydev8@gmail.com>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "R, Monish Kumar" <monish.kumar.r@intel.com>,
-        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        "alan.adamson@oracle.com" <alan.adamson@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Yi Zhang <yi.zhang@redhat.com>,
-        Keith Busch <kbusch@kernel.org>, "axboe@fb.com" <axboe@fb.com>,
-        "Rao, Abhijeet" <abhijeet.rao@intel.com>
-Subject: Re: 2 second nvme initialization delay regression in 5.18 [Was: Re:
- [bug report]nvme0: Admin Cmd(0x6), I/O Error (sct 0x0 / sc 0x2) MORE DNR
- observed during blktests]
-Message-ID: <20220615102757.ugvs6vdxf66nrmyn@quentin>
-References: <CAHj4cs_iC+FE8ZAXXZPeia1V3ZX7zRbeASdOP_8c7DLiFozNfA@mail.gmail.com>
- <Ykyf5Zuz1W8yHhNY@zx2c4.com>
- <CAHmME9pwz4q0m-pSUy7ReWu4nNzxySNcYZrqyDZiTuGxHN=1NQ@mail.gmail.com>
- <CAHmME9o-orF52HzkT80054e3Op5fLOcTHb-KHpvvU7H3FpAJ7A@mail.gmail.com>
- <SA2PR11MB5115DCE45778910C96813CA1C3A79@SA2PR11MB5115.namprd11.prod.outlook.com>
- <YqG/pybFg0P5yQ9a@zx2c4.com>
- <20220610061449.GD24331@lst.de>
- <YqMMo2Dv9SZRtR7B@zx2c4.com>
- <20220613135549.GA1714@lst.de>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VRRIXOfBq1yQuH5EfBFqRJA+XF3LzpkQlfmJRxNlHxM=;
+        b=VaBRIEenyXpZkd2yJIy8SNrUdbZaKgZPosNwD2ErhlCjEb/cfPHwUu24nZVUv6QWwW
+         zgpYXTw3MojeqvKE5i4gWhk9w4m+HBt+ON3w7MKgobso5/Suv1jjHN6CAsCpGA5G+5St
+         bE4gTvih3cGy3/VH6Mk5XIiU37/z0uVhebiN+qhPgV0zDmub4sfio7sHxGU8gqiI8D3W
+         nOGt5Hay9efq49f3z+in2PAVPrghl5s0/s8GJW4tLs6dWMPFulbltFWfnD4vU9PdWFAi
+         CdIeB3RIawxmy2iRGLY1hKNPE8Ar//yYIWbdSpeKl47zu+UU0PU+4SCTWOcAemumyE1B
+         pRMw==
+X-Gm-Message-State: AOAM533qIWFl5T/oQ8Ouq+ug0xVoKSyrqxrLk+YoQnb3f+dtocMtlri4
+        2oZbVCB5r9NoGSptTSFS3vbq/hai1SfCQ2N2oP47LQ==
+X-Google-Smtp-Source: ABdhPJzgorGZ/k2s8/OSl6pg37NaKBcKW1yennvKVAegxKpGmun7X2J8lIgtj5Inxl+I5AXypY0S3fE/EQB34TCAN80=
+X-Received: by 2002:a05:622a:1351:b0:305:2e58:939 with SMTP id
+ w17-20020a05622a135100b003052e580939mr7765424qtk.295.1655288902992; Wed, 15
+ Jun 2022 03:28:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220613135549.GA1714@lst.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220614230136.3726047-1-emma@anholt.net> <20220614230136.3726047-2-emma@anholt.net>
+In-Reply-To: <20220614230136.3726047-2-emma@anholt.net>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Wed, 15 Jun 2022 13:28:12 +0300
+Message-ID: <CAA8EJpo=vLmsBRo16_xfbSdfFGvR1ocyuXm=2mqRR-9wyUESvw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sm8250: Enable per-process page tables.
+To:     Emma Anholt <emma@anholt.net>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        Jordan Crouse <jcrouse@codeaurora.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
+        iommu@lists.linux-foundation.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christoph,
-On Mon, Jun 13, 2022 at 03:55:49PM +0200, Christoph Hellwig wrote:
-> It all appears as PCIe, but the pci_dev has an is_thunderbolt flag.
-> 
-> Thanks to both of you for the information.  I'd like to wait until the
-> end of the week or so if we can hear something from Samsung, and if we
-> don't we'll have to quirk based on the model number.
-Our FW team has started looking into the issue. They said they will try
-to come up with a solution before 5.20. If not, we can add this quirk
-based on the FW ver. and a proper solution can be added by 5.21.
-> 
+On Wed, 15 Jun 2022 at 02:01, Emma Anholt <emma@anholt.net> wrote:
+>
+> This is an SMMU for the adreno gpu, and adding this compatible lets
+> the driver use per-fd page tables, which are required for security
+> between GPU clients.
+>
+> Signed-off-by: Emma Anholt <emma@anholt.net>
+> ---
+>
+> Tested with a full deqp-vk run on RB5, which did involve some iommu faults.
+>
+>  arch/arm64/boot/dts/qcom/sm8250.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> index a92230bec1dd..483c0e0f1d1a 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> @@ -2513,7 +2513,7 @@ gpucc: clock-controller@3d90000 {
+>                 };
+>
+>                 adreno_smmu: iommu@3da0000 {
+> -                       compatible = "qcom,sm8250-smmu-500", "arm,mmu-500";
+> +                       compatible = "qcom,sm8250-smmu-500", "arm,mmu-500", "qcom,adreno-smmu";
+
+I see that other dtsi files use a bit different order for the
+compatibility strings. They put "qcom,adreno-smmu" before
+"arm,mmu-500". Can we please follow them?
+
+With that fixed:
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+>                         reg = <0 0x03da0000 0 0x10000>;
+>                         #iommu-cells = <2>;
+>                         #global-interrupts = <2>;
+> --
+> 2.36.1
+>
+
+
+-- 
+With best wishes
+Dmitry

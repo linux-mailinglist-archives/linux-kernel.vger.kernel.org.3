@@ -2,42 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D28454C625
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC46454C5AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:16:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345921AbiFOKak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:30:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
+        id S244535AbiFOKQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346519AbiFOK3j (ORCPT
+        with ESMTP id S229590AbiFOKQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:29:39 -0400
-Received: from inva020.nxp.com (inva020.nxp.com [92.121.34.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FF8419B5;
-        Wed, 15 Jun 2022 03:29:38 -0700 (PDT)
-Received: from inva020.nxp.com (localhost [127.0.0.1])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 7C34B1A2991;
-        Wed, 15 Jun 2022 12:29:37 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva020.eu-rdc02.nxp.com (Postfix) with ESMTP id 453C41A28B0;
-        Wed, 15 Jun 2022 12:29:37 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id D5E601802205;
-        Wed, 15 Jun 2022 18:29:35 +0800 (+08)
-From:   Shengjiu Wang <shengjiu.wang@nxp.com>
-To:     robh+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     shengjiu.wang@gmail.com
-Subject: [PATCH 3/3] arm64: dts: imx8mn-evk: add bt-sco sound card support
-Date:   Wed, 15 Jun 2022 18:15:34 +0800
-Message-Id: <1655288134-14083-4-git-send-email-shengjiu.wang@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1655288134-14083-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1655288134-14083-1-git-send-email-shengjiu.wang@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        Wed, 15 Jun 2022 06:16:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF7037BF4;
+        Wed, 15 Jun 2022 03:16:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87DE960C70;
+        Wed, 15 Jun 2022 10:16:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB11C34115;
+        Wed, 15 Jun 2022 10:16:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1655288174;
+        bh=LzuKKmeaKzYyf1F4EGCFzObtFswa551XpejD5PM/0gU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=V2e4eedCwuT64uSq8EWZIlqOealrKlJhOjYwUPwzUjmJe3h1gZVozcylD0pHKd3xB
+         Ak6Oc8tweWPYhMTh9H3oadcrNqf+QiU9LPyAX/6yzLb9dednhlxc8YlZ9ce8PuC1Ja
+         NHZaZBVX97va3bcZW8Ev5S8x4pj3H+aSGwSujEXKe2YYokqjbd8o8kqjr+IR6la6s3
+         b+BdazS+sViwet2f8F/vjuwIdaqpG4Joh9L6TTujDPf1UclgVXVsul3UoHplJbGy38
+         U2r67XkRS9chQDQXsUdeJiHunFShBZ/xGbDIlCLcdCYRVMWuiRl/HXRfVkZxuaPp3H
+         f3taqgo3g7DTQ==
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-fe32122311so15874740fac.7;
+        Wed, 15 Jun 2022 03:16:13 -0700 (PDT)
+X-Gm-Message-State: AJIora+HD5Dw5zsrzOD9yOe2H3eSWf8FMogwYJhfqJoeB/wpjeY/apXX
+        0L4LqohiaEksf3oqP2Cs38MLpxhqC6LnnQOYEro=
+X-Google-Smtp-Source: AGRyM1uN/3D1+5Ut4Xt2mabIT0hR6gzAEW7Im9WVGqBeGn3OnhJh0XIUKAqRs97/yUL1cD2/EM5eYL4/9b9oQIafJWE=
+X-Received: by 2002:a05:6871:5c8:b0:f3:3c1c:126f with SMTP id
+ v8-20020a05687105c800b000f33c1c126fmr5067969oan.126.1655288162336; Wed, 15
+ Jun 2022 03:16:02 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220614092156.1972846-1-mawupeng1@huawei.com> <YqmQIpQ8hzxYkMv2@kernel.org>
+In-Reply-To: <YqmQIpQ8hzxYkMv2@kernel.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Wed, 15 Jun 2022 12:15:51 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGytXz7VZh3xR=Vj-Mo7q+Wu3NUsqU9MFhPStm2=c9khw@mail.gmail.com>
+Message-ID: <CAMj1kXGytXz7VZh3xR=Vj-Mo7q+Wu3NUsqU9MFhPStm2=c9khw@mail.gmail.com>
+Subject: Re: [PATCH v5 0/5] introduce mirrored memory support for arm64
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Wupeng Ma <mawupeng1@huawei.com>, Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Kees Cook <keescook@chromium.org>, songmuchun@bytedance.com,
+        Randy Dunlap <rdunlap@infradead.org>,
+        damien.lemoal@opensource.wdc.com,
+        Stephen Boyd <swboyd@chromium.org>,
+        Wei Liu <wei.liu@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>, gpiccoli@igalia.com,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        vijayb@linux.microsoft.com,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -46,88 +94,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bt-sco sound card, which supports wb profile as default
+On Wed, 15 Jun 2022 at 09:54, Mike Rapoport <rppt@kernel.org> wrote:
+>
+> On Tue, Jun 14, 2022 at 05:21:51PM +0800, Wupeng Ma wrote:
+> > From: Ma Wupeng <mawupeng1@huawei.com>
+> >
+> > Patch #1 introduce mirrored memory support form arm64.
+> > Patch #2-#4 fix some bugs for arm64 if memory reliable is enabled.
+> > Patch #5 disable mirror feature if kernelcore is not specified.
+> >
+> > Thanks to Ard Biesheuvel's hard work [1], now kernel will perfer mirrored
+> > memory if kaslr is enabled.
+> >
+> > [1] https://lore.kernel.org/linux-arm-kernel/CAMj1kXEPVEzMgOM4+Yj6PxHA-jFuDOAUdDJSiSxy_XaP4P7LSw@mail.gmail.com/T/
+> >
+> >
+> > Ma Wupeng (5):
+> >   efi: arm64: Introduce ability to find mirrored memory ranges
+> >   mm: Ratelimited mirrored memory related warning messages
+> >   mm: Limit warning message in vmemmap_verify() to once
+> >   arm64: mm: Only remove nomap flag for initrd
+> >   memblock: Disable mirror feature if kernelcore is not specified
+> >
+> >  arch/arm64/mm/init.c            |  2 +-
+> >  arch/x86/include/asm/efi.h      |  4 ----
+> >  arch/x86/platform/efi/efi.c     | 23 -----------------------
+> >  drivers/firmware/efi/efi-init.c |  1 +
+> >  drivers/firmware/efi/efi.c      | 23 +++++++++++++++++++++++
+> >  include/linux/efi.h             |  3 +++
+> >  mm/internal.h                   |  2 ++
+> >  mm/memblock.c                   |  7 +++++--
+> >  mm/page_alloc.c                 |  2 +-
+> >  mm/sparse-vmemmap.c             |  2 +-
+> >  10 files changed, 37 insertions(+), 32 deletions(-)
+>
+> For the series: Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+>
 
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi b/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-index d1f6cccfa00d..f0d6a3daca95 100644
---- a/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mn-evk.dtsi
-@@ -47,6 +47,11 @@
- 		linux,autosuspend-period = <125>;
- 	};
- 
-+	bt_sco_codec: bt_sco_codec {
-+		#sound-dai-cells = <1>;
-+		compatible = "linux,bt-sco";
-+	};
-+
- 	wm8524: audio-codec {
- 		#sound-dai-cells = <0>;
- 		compatible = "wlf,wm8524";
-@@ -57,6 +62,25 @@
- 		clock-names = "mclk";
- 	};
- 
-+	sound-bt-sco {
-+		compatible = "simple-audio-card";
-+		simple-audio-card,name = "bt-sco-audio";
-+		simple-audio-card,format = "dsp_a";
-+		simple-audio-card,bitclock-inversion;
-+		simple-audio-card,frame-master = <&btcpu>;
-+		simple-audio-card,bitclock-master = <&btcpu>;
-+
-+		btcpu: simple-audio-card,cpu {
-+			sound-dai = <&sai2>;
-+			dai-tdm-slot-num = <2>;
-+			dai-tdm-slot-width = <16>;
-+		};
-+
-+		simple-audio-card,codec {
-+			sound-dai = <&bt_sco_codec 1>;
-+		};
-+	};
-+
- 	sound-wm8524 {
- 		compatible = "fsl,imx-audio-wm8524";
- 		model = "wm8524-audio";
-@@ -183,6 +207,16 @@
- 	};
- };
- 
-+&sai2 {
-+	#sound-dai-cells = <0>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sai2>;
-+	assigned-clocks = <&clk IMX8MN_CLK_SAI2>;
-+	assigned-clock-parents = <&clk IMX8MN_AUDIO_PLL1_OUT>;
-+	assigned-clock-rates = <24576000>;
-+	status = "okay";
-+};
-+
- &sai3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_sai3>;
-@@ -354,6 +388,15 @@
- 		>;
- 	};
- 
-+	pinctrl_sai2: sai2grp {
-+		fsl,pins = <
-+			MX8MN_IOMUXC_SAI2_TXC_SAI2_TX_BCLK      0xd6
-+			MX8MN_IOMUXC_SAI2_TXFS_SAI2_TX_SYNC     0xd6
-+			MX8MN_IOMUXC_SAI2_TXD0_SAI2_TX_DATA0    0xd6
-+			MX8MN_IOMUXC_SAI2_RXD0_SAI2_RX_DATA0    0xd6
-+		>;
-+	};
-+
- 	pinctrl_sai3: sai3grp {
- 		fsl,pins = <
- 			MX8MN_IOMUXC_SAI3_TXFS_SAI3_TX_SYNC     0xd6
--- 
-2.17.1
-
+Thanks all, I've queued these up now.

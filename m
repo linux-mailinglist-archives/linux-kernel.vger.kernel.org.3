@@ -2,152 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D948854CDDE
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1420B54CDE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348362AbiFOQLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
+        id S1348378AbiFOQL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 12:11:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbiFOQLD (ORCPT
+        with ESMTP id S1348390AbiFOQLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:11:03 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D237534B91;
-        Wed, 15 Jun 2022 09:11:01 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id a29so19702439lfk.2;
-        Wed, 15 Jun 2022 09:11:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wvgXMUe19+tnC/niWqva2BYC9twBwMOusfC9xJToLc0=;
-        b=cACKFlgk0vAjggeOqDqPolXWI9jqe1mUvzJqF/4ZKnk8BJWFIT/PaEHnCC0SYy56Ap
-         nvSqh2iOZTc0A0gC7AATZVDIRIHTKX90DiHuGuJcrkq51uUmoVRmelpSD5ERp+tg+zxP
-         yMwlSu9O5T/7K4zw4TYs54hMoUDNTtjlJ88BPrZIbJajlzAp16Ygw/+iLgySCp4+Glro
-         48pFhIqHYpTN53/PcYy4/Qs5Ns3OfzD/D7QbKTYakwKoOP2wBFR/Q9zoLnISoKaaPtpN
-         fMXmgFvuKcfhW5akq2llkc7KM2jHRsKoFWu9VQxqOckQ+8flI2EV/K6DwpLg2qoDFZaB
-         4NxQ==
+        Wed, 15 Jun 2022 12:11:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECCC136321
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:11:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655309482;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SYwgKkQjGzy4vjuONVP2nbTWiQ6a3KB6AbIHQDB6eZ4=;
+        b=T8WvCSkzj5R+hWzsgqFYyRDJp25HS/U0Hn/fqbutfv5linOTmI7VnaFD2+hZGJWQBQwa7f
+        t2NhdZfcSNZMEX/TYNMkSHPtqZwV7f/S4nF701Tif1QlM6QnM3NhSPPvkXLGGwpQwQn+J3
+        Jh97/bhJAU1s9HohURjqIKG8qt6lv80=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-444-RtfK8PZwOLW7ypdWD0KvXw-1; Wed, 15 Jun 2022 12:11:20 -0400
+X-MC-Unique: RtfK8PZwOLW7ypdWD0KvXw-1
+Received: by mail-ed1-f72.google.com with SMTP id f9-20020a056402354900b0042ded146259so8925771edd.20
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:11:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wvgXMUe19+tnC/niWqva2BYC9twBwMOusfC9xJToLc0=;
-        b=FU/b/LfBB0AyqZBy4XfcAss+F8YrFt02qUmfwxAu+rTz8H33aW5Ij5W68x7bvuw4ys
-         Bj5W3kQkV/362etbONFhrrxzLH+WgE2SHlWZVtW9F9E79dmk9qERezwzJgp2fusWlaOS
-         rxRuYm0eWJdIqAUtWIFW+M9X0bp5lGM4h5f9NSgPj1bXjbnWzjn8FUp1AVvRqtBJg7pt
-         QVneKshm0LG3+Wu8U9o0ikoAXCcAiw1iHIX9crZQNpjdA0FKhob3dEaTx4477PmrB4kK
-         KKE8mh0ooyO8AlZYmdgizhw4ONgwILgYJgBeTian5MZy0Idesufhder0K/kGBQ5ICF/A
-         ndBQ==
-X-Gm-Message-State: AJIora/5Dn0kVPaVqlZm9T8rEaVEyzFnl3cm20+L/0VyHCXyj5MV9EYQ
-        aOSJ7O92UWpljFiduNz2YZ0ku0eebKr6155FiOk=
-X-Google-Smtp-Source: AGRyM1toftMNLI+bMk64j8iSZzr0cxrrxwAj4tiO2+SyjcwnLTdWx7aNT3elpx26GbmD++Ti33aZvgxhE2LTFoe48Ts=
-X-Received: by 2002:a19:9117:0:b0:47a:300:7506 with SMTP id
- t23-20020a199117000000b0047a03007506mr138552lfd.235.1655309460230; Wed, 15
- Jun 2022 09:11:00 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=SYwgKkQjGzy4vjuONVP2nbTWiQ6a3KB6AbIHQDB6eZ4=;
+        b=KFgrDqbb7OhNbw6/m//GBPD3aaV4/ayaXJCrQbKc2pH+1f9WIXKHJPlxG6rfSGXY5r
+         JCOlaaXNxY3ahDfjgIQ5g16esX6l6mFcBXPS/czWkQ9fgHyaqWRMTm8wtYXTAM6pg2uY
+         t8guGm1YHAwmbIekQ2C+g5/2o+hcHrwBRh+C4OBKNZxsvaWvYzQuybEHHCPGDY6wF4zz
+         RVRmeW8wGwdGL8mtTgPQBk2OKs9LXNaIXrnR/qgIsDQ7no4/RMttQM7d4ibrJyPBbvoI
+         Wyf/D/hfIJLLyQWqaPgxpqE0wyyOVZDSN8L+OICGFJj3KlsbzepfYjL3969J70qNmKsh
+         tD0g==
+X-Gm-Message-State: AJIora8PSWzcddZdPi1qFyrmA6+gqs8exk5SdKAvcWzIQ5V8X+s0mpwf
+        ZUWQfvBVlQgo2pLey0Y7PMGpGh8UT+LyP0XpMTfjhcsJzdBURxF7DYdAkjDDVgtQCppd3C+rPlP
+        2xJlaCja0crWbyvzau6ANcRju
+X-Received: by 2002:a05:6402:1c91:b0:42d:c9b6:506b with SMTP id cy17-20020a0564021c9100b0042dc9b6506bmr632079edb.166.1655309479619;
+        Wed, 15 Jun 2022 09:11:19 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1tAtdJfLowzWrTXaHYr/672zwCo8kH9O7E4MnmuGCakvRsxz/A0LCNz5NAEZ4eNEwjazTGy8w==
+X-Received: by 2002:a05:6402:1c91:b0:42d:c9b6:506b with SMTP id cy17-20020a0564021c9100b0042dc9b6506bmr632068edb.166.1655309479499;
+        Wed, 15 Jun 2022 09:11:19 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id bq15-20020a056402214f00b0042ab2127051sm9677479edb.64.2022.06.15.09.11.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 09:11:18 -0700 (PDT)
+Message-ID: <402d2059-d0ab-2229-870c-f511cd6f29ee@redhat.com>
+Date:   Wed, 15 Jun 2022 18:11:18 +0200
 MIME-Version: 1.0
-References: <20220609150851.23084-1-max.oss.09@gmail.com> <20220613191549.GA4092455-robh@kernel.org>
- <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
-In-Reply-To: <CAMuHMdU+aOw_D3SR6714U_i5WhE8S-FCLdPJaf_+Fncz4aH8VA@mail.gmail.com>
-From:   Max Krummenacher <max.oss.09@gmail.com>
-Date:   Wed, 15 Jun 2022 18:10:48 +0200
-Message-ID: <CAEHkU3VVM0zUsaKMUGeSzfbLmVJW6rqXGLv7TqaLTEQeXEVkUA@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] power: domain: Add driver for a PM domain provider
- which controls
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v1 1/1] phy: ti: tusb1210: Don't check for write errors
+ when powering on
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Ferry Toth <ftoth@exalondelft.nl>
+References: <20220613160848.82746-1-andriy.shevchenko@linux.intel.com>
+ <bd21d5c6-ed5f-dd8c-f0bf-73f54ca8ee58@redhat.com>
+ <YqiGocQ+vr9KjUHK@smile.fi.intel.com>
+ <390cf16c-f07c-ebfc-08ad-25b242548953@redhat.com>
+ <YqnHpXvZJEfhX21/@smile.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <YqnHpXvZJEfhX21/@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Hi,
 
-On Tue, Jun 14, 2022 at 9:22 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Rob,
->
-> On Mon, Jun 13, 2022 at 9:15 PM Rob Herring <robh@kernel.org> wrote:
-> > On Thu, Jun 09, 2022 at 05:08:46PM +0200, Max Krummenacher wrote:
-> > > From: Max Krummenacher <max.krummenacher@toradex.com>
-> > >
-> > > its power enable by using a regulator.
-> > >
-> > > The currently implemented PM domain providers are all specific to
-> > > a particular system on chip.
-> >
-> > Yes, power domains tend to be specific to an SoC... 'power-domains' is
-> > supposed to be power islands in a chip. Linux 'PM domains' can be
-> > anything...
+On 6/15/22 13:51, Andy Shevchenko wrote:
+> On Tue, Jun 14, 2022 at 05:49:22PM +0200, Hans de Goede wrote:
+>> On 6/14/22 15:01, Andy Shevchenko wrote:
+>>> On Tue, Jun 14, 2022 at 01:23:21PM +0200, Hans de Goede wrote:
+>>>> On 6/13/22 18:08, Andy Shevchenko wrote:
+> 
+> ...
+> 
+>>> [   35.126397] tusb1210 dwc3.0.auto.ulpi: GPIO lookup for consumer reset
+>>> [   35.126418] tusb1210 dwc3.0.auto.ulpi: using ACPI for GPIO lookup
+>>> [   35.126455] tusb1210 dwc3.0.auto.ulpi: using lookup tables for GPIO lookup
+>>> [   35.126465] tusb1210 dwc3.0.auto.ulpi: No GPIO consumer reset found
+>>> [   35.126476] tusb1210 dwc3.0.auto.ulpi: GPIO lookup for consumer cs
+>>> [   35.126485] tusb1210 dwc3.0.auto.ulpi: using ACPI for GPIO lookup
+>>> [   35.126538] tusb1210 dwc3.0.auto.ulpi: using lookup tables for GPIO lookup
+>>> [   35.126548] tusb1210 dwc3.0.auto.ulpi: No GPIO consumer cs found
+>>> [   40.534107] tusb1210 dwc3.0.auto.ulpi: error -110 writing val 0x41 to reg 0x80
+>>>
+>>> (I put 5000 ms there to be sure)
+>>>
+>>>> I'm fine with going with this workaround patch to fix things.
+>>
+>> Ok, so I guess we should just apply this workaround patch to make
+>> the error non fatal. Still would be good to dig a little deeper one
+>> of these days and see what is going on here...
+> 
+> Can you give a formal tag?
 
-I don't see why such power islands should be restricted to a SoC. You can
-build the exact same idea on a PCB or even more modular designs.
+Sure:
 
->
-> > > This allows to use the "regulator-pm-pd" driver with an arbitrary
-> > > device just by adding the 'power-domains' property to the devices
-> > > device tree node. However the device's dt-bindings schema likely does
-> > > not allow the property 'power-domains'.
-> > > One way to solve this would be to allow 'power-domains' globally
-> > > similarly how 'status' and other common properties are allowed as
-> > > implicit properties.
-> >
-> > No. For 'power-domains' bindings have to define how many there are and
-> > what each one is.
->
-> IMO "power-domains" are an integration feature, i.e. orthogonal to the
-> actual device that is part of the domain.  Hence the "power-domains"
-> property may appear everywhere.
->
-> It is actually the same for on-chip devices, as an IP core may be
-> reused on a new SoC that does have power or clock domains.  For
-> these, we managed to handle that fine because most devices do have
-> some form of family- or SoC-specific compatible values to control if
-> the power-domains property can be present/is required or not.
->
-> But for off-chip devices, the integrator (board designed) can do
-> whatever he wants.  Off-chip devices do have the advantage that it
-> is usually well documented which power supply (if there are multiple)
-> serves which purpose, which is not always clear for on-chip devices.
->
-> Gr{oetje,eeting}s,
->
->                         Geert
->
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
->
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
+Acked-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+

@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C8954CC04
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 16:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38A354CC0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244812AbiFOO7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 10:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
+        id S1343591AbiFOPBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242891AbiFOO7m (ORCPT
+        with ESMTP id S232920AbiFOPA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 10:59:42 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3489C101C9;
-        Wed, 15 Jun 2022 07:59:41 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id i81-20020a1c3b54000000b0039c76434147so1312622wma.1;
-        Wed, 15 Jun 2022 07:59:41 -0700 (PDT)
+        Wed, 15 Jun 2022 11:00:59 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747D137BD5;
+        Wed, 15 Jun 2022 08:00:58 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id z14so6730434pjb.4;
+        Wed, 15 Jun 2022 08:00:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6fopigGhBHUvToQDW8C96mevEAHmyd9RwH6T3VHGQno=;
-        b=aMm4UMWGVLS0PAt7bgDYcLdhm/CszdAgtdVdM0VB45miYsgwGwV09ga2eYkF4zV8yE
-         kUtl2fvYUcU7gIGTYYEkTyc6kdkn+RFFKlGwxZoASle2G2i0bcCNksb6K0Kc73gmP5qU
-         G1J8w5fZywh60Dj2gtTk22jbwzc1IhxKa5YXcVEdViPzZrOrJYAJu3ojR7mrJWPmlND2
-         2Z8qcYC60RFp6XpiM4BGr+2XVXKD1E7lHXhSAFHKx9eHClHe+2Un2u1GC2EzxzP1SIz4
-         Vw0e6Y3MBvEM+wL9S7jigJAfH3hZYTDU/M5Ys9NHbpq1jLpR21o0Agibudjy8rVbRB5P
-         ttjw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Fftyusq14pygoE98VFvLknKqjgDHop8Kgx2bJEg9loM=;
+        b=Dd3Vk1PDo0eKWLfXky6AqmbKiDsQNoKnePr1CSH3382YVX+2aZufcgim47ivxwg5DE
+         kDiDg+sLDTkhcTEfkvirUrkkwoJ+ppkuaGzEBuat0jMexCMf+Jx+iDGyqqRz7gu1/JVl
+         TartlMlP+t2GHtOzP4IMWy7ny70JiJ+z+iUe4YZ9GSyjIqLVo3UEWUfZe83dMJ4AmYyX
+         k5TVD4eemocFf9bWC+ljn8+B8cjvobhfXBee9TTDIZSCXc6jikLOjKbu6Q4R4gH53UtV
+         fet3ZKzxp7koEjzXrQqmm1lGxJLAGUvF24OY6Ov89HA1mF/zLkYITI7e5H8yq1BOqU4a
+         OQ4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6fopigGhBHUvToQDW8C96mevEAHmyd9RwH6T3VHGQno=;
-        b=AuNE7RmAzoU8Lw+WUN2rGqFLnHOvONFIQ2Cby88ZMTKvVn9z14s8EYUAK9LuPi5/Qj
-         LoPMCNyQ2PTKJbdkfKWOhi3t99N5EZWYhSQxSDhEUOTfcdp7WAg0D8yLJjB8DzE+coVr
-         j1jEzKq9cFbuQ6/mfXIibWlZPLVoK/FQK40VqFmeO+0OLPwOUJ9QOGQEIPmAo9clhZ+c
-         tl/eokvq6ybwo1C/EBSYojqpBpGuSk+qS/5LhO9zqsB57x6cg+LCyZT/TJzWvMnsoMaK
-         NHdSiPNUuqo+5guizgwWZ9YyUa2lcDfuJLp6nEAxNZglHZVrEY7XnwZgyZqr8k8nlmJs
-         I5yQ==
-X-Gm-Message-State: AOAM53083Y9txYq3TusVOlK3nRpV1jublYyEmSZuvjx1w+RvjrQLciG4
-        Rj0R8PhT/hNue8/sgi1bc+0uE5GiAq8EwlJxG80=
-X-Google-Smtp-Source: ABdhPJwOdzB0phMq92UxkYkA4A0DK81tSFVTV8Pe3y2MmItWnkJUarOsTTIAMYPDNE2/mS2V7lGTfJqzy/ONnv84lkk=
-X-Received: by 2002:a05:600c:4f96:b0:39c:951e:66b7 with SMTP id
- n22-20020a05600c4f9600b0039c951e66b7mr10636359wmq.84.1655305179680; Wed, 15
- Jun 2022 07:59:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220610172055.2337977-1-robdclark@gmail.com> <42e52572-726b-d94d-6523-7b42dbeecff1@kali.org>
-In-Reply-To: <42e52572-726b-d94d-6523-7b42dbeecff1@kali.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Fftyusq14pygoE98VFvLknKqjgDHop8Kgx2bJEg9loM=;
+        b=AS73zZCNmyq7J++7X6IcMfUkXetKaYFFyqcL2SeGR13CrIDv69hZ+EpcOdeEh6iaiR
+         zdnGC+w7ty3JlMq5WLOidsPxgAjxd9U4J6BdfK2jjR1ZRllFT8z08YMo2W0ajuV2u7Nh
+         V69lM0NwfX77K7XoD0GR2P+JZMwbezV27+ldvBn/KwveVZM4w0G4D2IQ7OjMjfIZysWH
+         nPKI9ssCxfF0EdNluctFw8l34EWgyZW/kYj3+G618IzQJfG2yFE9+s6G1H8uXKcP5yXW
+         fo0m8FzOnILL0DBykHsu2/1ZVJVSbfWCg7h7uZXAjqCnqbYx80vRbGhgK2eNsGJPgdWc
+         avzQ==
+X-Gm-Message-State: AJIora+Wac/sadfSImVEswk9G/ex5uFy0cIBHoJX92HfFxh2Nd94rKq8
+        9k5fvspGroml8U2MumxzUJY=
+X-Google-Smtp-Source: AGRyM1t6iYGPtiNKJylInJeuhNBnTKe4fKmcXmlacbZLF5hj1JNSIvXkPggEUHpPxBOzLLO8qeRYTA==
+X-Received: by 2002:a17:90a:b284:b0:1e3:826b:d11d with SMTP id c4-20020a17090ab28400b001e3826bd11dmr10881434pjr.79.1655305257874;
+        Wed, 15 Jun 2022 08:00:57 -0700 (PDT)
+Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
+        by smtp.gmail.com with ESMTPSA id z6-20020a1709027e8600b0015e8e7db067sm9485101pla.4.2022.06.15.08.00.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 08:00:56 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 15 Jun 2022 07:59:44 -0700
-Message-ID: <CAF6AEGuTw3fMaNbvkt9z3EWqjND2R3nrRu+PP=GVQjx+TW0N9w@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/gem: Drop early returns in close/purge vma
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         Rob Clark <robdclark@chromium.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Rob Clark <robdclark@gmail.com>,
         Abhinav Kumar <quic_abhinavk@quicinc.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
         Daniel Vetter <daniel@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/2] drm/msm: Drop update_fences()
+Date:   Wed, 15 Jun 2022 08:01:06 -0700
+Message-Id: <20220615150107.2969593-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,57 +75,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 11:16 AM Steev Klimaszewski <steev@kali.org> wrote:
->
-> Hi Rob,
->
-> On 6/10/22 12:20 PM, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > Keep the warn, but drop the early return.  If we do manage to hit this
-> > sort of issue, skipping the cleanup just makes things worse (dangling
-> > drm_mm_nodes when the msm_gem_vma is freed, etc).  Whereas the worst
-> > that happens if we tear down a mapping the GPU is accessing is that we
-> > get GPU iova faults, but otherwise the world keeps spinning.
-> >
+From: Rob Clark <robdclark@chromium.org>
 
-forgot this initially:
+I noticed while looking at some traces, that we could miss calls to
+msm_update_fence(), as the irq could have raced with retire_submits()
+which could have already popped the last submit on a ring out of the
+queue of in-flight submits.  But walking the list of submits in the
+irq handler isn't really needed, as dma_fence_is_signaled() will dtrt.
+So lets just drop it entirely.
 
 Reported-by: Steev Klimaszewski <steev@kali.org>
+Fixes: 95d1deb02a9c ("drm/msm/gem: Add fenced vma unpin")
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/msm_gpu.c | 22 ++--------------------
+ 1 file changed, 2 insertions(+), 20 deletions(-)
 
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >   drivers/gpu/drm/msm/msm_gem_vma.c | 6 ++----
-> >   1 file changed, 2 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/msm_gem_vma.c b/drivers/gpu/drm/msm/msm_gem_vma.c
-> > index 3c1dc9241831..c471aebcdbab 100644
-> > --- a/drivers/gpu/drm/msm/msm_gem_vma.c
-> > +++ b/drivers/gpu/drm/msm/msm_gem_vma.c
-> > @@ -62,8 +62,7 @@ void msm_gem_purge_vma(struct msm_gem_address_space *aspace,
-> >       unsigned size = vma->node.size;
-> >
-> >       /* Print a message if we try to purge a vma in use */
-> > -     if (GEM_WARN_ON(msm_gem_vma_inuse(vma)))
-> > -             return;
-> > +     GEM_WARN_ON(msm_gem_vma_inuse(vma));
-> >
-> >       /* Don't do anything if the memory isn't mapped */
-> >       if (!vma->mapped)
-> > @@ -128,8 +127,7 @@ msm_gem_map_vma(struct msm_gem_address_space *aspace,
-> >   void msm_gem_close_vma(struct msm_gem_address_space *aspace,
-> >               struct msm_gem_vma *vma)
-> >   {
-> > -     if (GEM_WARN_ON(msm_gem_vma_inuse(vma) || vma->mapped))
-> > -             return;
-> > +     GEM_WARN_ON(msm_gem_vma_inuse(vma) || vma->mapped);
-> >
-> >       spin_lock(&aspace->lock);
-> >       if (vma->iova)
->
-> I've seen the splat on the Lenovo Yoga C630 here, and have tested this
-> patch, and as described, the splat still happens, but the system is
-> still able to be used.
->
-> Tested-by: Steev Klimaszewski <steev@kali.org>
->
+diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+index e59a757578df..b61078f0cd0f 100644
+--- a/drivers/gpu/drm/msm/msm_gpu.c
++++ b/drivers/gpu/drm/msm/msm_gpu.c
+@@ -176,24 +176,6 @@ int msm_gpu_hw_init(struct msm_gpu *gpu)
+ 	return ret;
+ }
+ 
+-static void update_fences(struct msm_gpu *gpu, struct msm_ringbuffer *ring,
+-		uint32_t fence)
+-{
+-	struct msm_gem_submit *submit;
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&ring->submit_lock, flags);
+-	list_for_each_entry(submit, &ring->submits, node) {
+-		if (fence_after(submit->seqno, fence))
+-			break;
+-
+-		msm_update_fence(submit->ring->fctx,
+-			submit->hw_fence->seqno);
+-		dma_fence_signal(submit->hw_fence);
+-	}
+-	spin_unlock_irqrestore(&ring->submit_lock, flags);
+-}
+-
+ #ifdef CONFIG_DEV_COREDUMP
+ static ssize_t msm_gpu_devcoredump_read(char *buffer, loff_t offset,
+ 		size_t count, void *data, size_t datalen)
+@@ -450,7 +432,7 @@ static void recover_worker(struct kthread_work *work)
+ 		if (ring == cur_ring)
+ 			fence++;
+ 
+-		update_fences(gpu, ring, fence);
++		msm_update_fence(ring->fctx, fence);
+ 	}
+ 
+ 	if (msm_gpu_active(gpu)) {
+@@ -753,7 +735,7 @@ void msm_gpu_retire(struct msm_gpu *gpu)
+ 	int i;
+ 
+ 	for (i = 0; i < gpu->nr_rings; i++)
+-		update_fences(gpu, gpu->rb[i], gpu->rb[i]->memptrs->fence);
++		msm_update_fence(gpu->rb[i]->fctx, gpu->rb[i]->memptrs->fence);
+ 
+ 	kthread_queue_work(gpu->worker, &gpu->retire_work);
+ 	update_sw_cntrs(gpu);
+-- 
+2.36.1
+

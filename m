@@ -2,137 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BB4C54D047
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C62F054D04C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:47:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348579AbiFORpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
+        id S1349731AbiFORrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237761AbiFORpc (ORCPT
+        with ESMTP id S243182AbiFORrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:45:32 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80AED50B20
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:45:31 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id o17so11021048pla.6
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:45:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Fe8EEvsxcuFlTaSAhlke2tJTzd1QPZfoBRhxpqrEcBY=;
-        b=HUFXMp9Fe2wBsWcrnYV4XNbttCOGDLQv9gxEx/Tl1gbm5NWLzvXHgpk2FIAKJDXWhd
-         7gIIwQtqzi+rj1vNixhq42YWbZvJ5UiIuyS7sf8Tj85LeOR5iLOTdDDr/dh6l9QBC8l6
-         P3MUE/ravd5SdWUtzHu1s9K2LU8pI7T4m5Cmo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Fe8EEvsxcuFlTaSAhlke2tJTzd1QPZfoBRhxpqrEcBY=;
-        b=xgsmPavVbTEzxPHbZtKhE2tG8Z6xKQecm94fTLD+O+GUBgZeztlTNz90IBJ6c9QW+7
-         R9oMVasbsrmzl6/kb4dd3ki1iwSGvDfjAEKwyeSgBpLQ4L/prfJ0d0BrtXzIlYcyQlKa
-         zAWh9NtW6JqsTflj6mGeVbFZmthVrUazy7Nrw8jv0O22hRPJS1G8QwZ6BJ7FdlQjVhKf
-         SLcGr420ugeORoqlh/89inb660yjW9rhxXEIJGJtjnLkDri6nmJy2py+XxSr++My0Thr
-         3nVHPjbqOhZ8zyYo1YXnQf4YMjhtUsZm/cpA+Zgbq/FyoCZXoWtcxd7eD8AZO77LrVUf
-         3DdQ==
-X-Gm-Message-State: AJIora+tXCnbbpbvSSTprh9By5IJyMW1kGQQ21yO1Nv83xolVEl1WZQx
-        40cJxbEF8eJVdUf+geQj5Grsag==
-X-Google-Smtp-Source: AGRyM1uhLYsO6XiJfh2usxl7rJZLQZrZ2RxVgPyieYT3/FZ1ZlgdLeqQlHbgS4fl9ZLGquz8DIpYuQ==
-X-Received: by 2002:a17:903:1210:b0:168:dc70:e9d8 with SMTP id l16-20020a170903121000b00168dc70e9d8mr697417plh.92.1655315130979;
-        Wed, 15 Jun 2022 10:45:30 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d92-20020a17090a6f6500b001dfffd861cbsm2099412pjk.21.2022.06.15.10.45.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 10:45:30 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 10:45:29 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        David Gow <davidgow@google.com>
-Subject: Re: lib/overflow_kunit.c:644:1: warning: the frame size of 2832
- bytes is larger than 1024 bytes
-Message-ID: <202206151045.36F7623B@keescook>
-References: <202206120046.YKeKzlVN-lkp@intel.com>
- <CAGS_qxquSGoHD2NeRiS-basVg-nOP8s4kSGi90e2QuMc-Pt0Pg@mail.gmail.com>
+        Wed, 15 Jun 2022 13:47:13 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C59C54037
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:47:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655315232; x=1686851232;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=9HiCA51SRONvHgM/bRjjatEdWaF6sXtZEEtO7ayhDgs=;
+  b=IxRxdE2WoGwsNDIxGwjeIHsPaWhzjLjBYgEbC0SRKZTiTtTrS22CQ0Fc
+   OyL/tgkzBqheaWxM8wXTt/LhIXCH3HeMSl0gkIjpS/xWhXk+qSHl6G+/B
+   8DfAyCucHDEjsQianide3ujfkvppGdV86+P5fYm0L4VIEpK6HqID0U1XP
+   AaOTZsVyCZafdNy5I1rTjtR0nNgtegOkStqrIyRKYWBbSqy3CMo9RjPT3
+   MZceYf3tNZNz3haC723eHnYen1YgVKqZujYi5uhn4DRadyM5rQvpmKrdo
+   k9wQbHSZPH0VObSHoMbOcFdbjZcT7Dtmd1+hTvIH9fSBmMcdE65yuR2id
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="280085794"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="280085794"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 10:47:11 -0700
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="536143684"
+Received: from schen9-mobl.amr.corp.intel.com ([10.209.78.147])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 10:47:11 -0700
+Message-ID: <64e3e50508b0bf27ed5d6957161e2b3631c1164b.camel@linux.intel.com>
+Subject: Re: [RFC PATCH 0/3] Cgroup accounting of memory tier usage
+From:   Tim Chen <tim.c.chen@linux.intel.com>
+To:     Ying Huang <ying.huang@intel.com>, linux-mm@kvack.org,
+        akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Greg Thelen <gthelen@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Brice Goglin <brice.goglin@gmail.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Feng Tang <feng.tang@intel.com>,
+        Jagdish Gediya <jvgediya@linux.ibm.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        David Rientjes <rientjes@google.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Shakeel Butt <shakeelb@google.com>
+Date:   Wed, 15 Jun 2022 10:47:11 -0700
+In-Reply-To: <68b6a7e92d48a3285a5707378459bb9ae805f333.camel@intel.com>
+References: <cover.1655242024.git.tim.c.chen@linux.intel.com>
+         <68b6a7e92d48a3285a5707378459bb9ae805f333.camel@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGS_qxquSGoHD2NeRiS-basVg-nOP8s4kSGi90e2QuMc-Pt0Pg@mail.gmail.com>
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 13, 2022 at 10:55:02AM -0700, Daniel Latypov wrote:
-> On Sat, Jun 11, 2022 at 9:44 AM kernel test robot <lkp@intel.com> wrote:
-> >
-> > Hi Kees,
-> >
-> > First bad commit (maybe != root cause):
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   0885eacdc81f920c3e0554d5615e69a66504a28d
-> > commit: 617f55e20743fc50c989b498f9dee289eb644cfd lib: overflow: Convert to Kunit
-> > date:   3 months ago
-> > config: powerpc-buildonly-randconfig-r006-20220611 (https://download.01.org/0day-ci/archive/20220612/202206120046.YKeKzlVN-lkp@intel.com/config)
-> > compiler: powerpc-linux-gcc (GCC) 11.3.0
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=617f55e20743fc50c989b498f9dee289eb644cfd
-> >         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-> >         git fetch --no-tags linus master
-> >         git checkout 617f55e20743fc50c989b498f9dee289eb644cfd
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.3.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
-> >
-> > If you fix the issue, kindly add following tag where applicable
-> > Reported-by: kernel test robot <lkp@intel.com>
-> >
-> > All warnings (new ones prefixed by >>):
-> >
-> >    lib/overflow_kunit.c:191:19: warning: 's64_tests' defined but not used [-Wunused-const-variable=]
-> >      191 | DEFINE_TEST_ARRAY(s64) = {
-> >          |                   ^~~
-> >    lib/overflow_kunit.c:24:11: note: in definition of macro 'DEFINE_TEST_ARRAY'
-> >       24 |         } t ## _tests[]
-> >          |           ^
-> >    lib/overflow_kunit.c:94:19: warning: 'u64_tests' defined but not used [-Wunused-const-variable=]
-> >       94 | DEFINE_TEST_ARRAY(u64) = {
-> >          |                   ^~~
-> >    lib/overflow_kunit.c:24:11: note: in definition of macro 'DEFINE_TEST_ARRAY'
-> >       24 |         } t ## _tests[]
-> >          |           ^
-> >    lib/overflow_kunit.c: In function 'overflow_size_helpers_test':
-> > >> lib/overflow_kunit.c:644:1: warning: the frame size of 2832 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-> >      644 | }
-> >          | ^
-> >    lib/overflow_kunit.c: In function 'overflow_shift_test':
-> >    lib/overflow_kunit.c:451:1: warning: the frame size of 7232 bytes is larger than 1024 bytes [-Wframe-larger-than=]
-> >      451 | }
-> >          | ^
+On Wed, 2022-06-15 at 12:58 +0800, Ying Huang wrote:
+> On Tue, 2022-06-14 at 15:25 -0700, Tim Chen wrote:
+> > For controlling usage of a top tiered memory by a cgroup, accounting
+> > of top tier memory usage is needed.  This patch set implements the
+> > following:
+> > 
+> > Patch 1 introduces interface and simple implementation to retrieve
+> > 	cgroup tiered memory usage
+> > Patch 2 introduces more efficient accounting with top tier memory page counter 
+> > Patch 3 provides a sysfs interface to repot the the top tiered memory
+> > 	usage.
+> > 
+> > The patchset works with Aneesh's v6 memory-tiering implementation [1].
+> > It is a preparatory patch set before introducing features to
+> > control top tiered memory in cgroups.
+> > 
+> > I'll like to first get feedback to see if 
+> > (1) Controllng the topmost tiered memory is enough 
+> > or
+> > (2) Multiple tiers at the top levels need to be grouped into "toptier"
+> > or
 > 
-> I have an RFC series out to reduce the stack usage of KUNIT_EXPECT_*
-> even further, but they won't help enough here.
-> https://lore.kernel.org/linux-kselftest/20220525154442.1438081-1-dlatypov@google.com/
+> If we combine top-N tiers, I think the better name could be "fast-tier",
+> in contrast to "slow-tier".
 > 
-> So If we want to try and "fix" this, I think the only answer would be
-> to split up the test funcs as appropriate.
-> But I don't really know if that's warranted to fix this warning here,
-> which largely indicates a compiler quality problem over a code quality
-> one.
 
-I'm happy to review patches, but it does seem more like a compiler
-issue. Hmmm.
+I can see use cases for grouping tiers. For example, it makese sense for HBM and 
+DRAM tiers be grouped together into a "fast-tier-group".
 
--- 
-Kees Cook
+To make things simple, we can define any tiers above or equal
+to the rank of DRAM will belong to this fast-tier-group.
+
+An implication for page promotion/demotion is it needs
+to take tier grouping into consideration.  You want to demote
+pages away from current tier-group.  For example,
+you want to demote HBM (fast-tier-group) into PMEM (slow-tier-group)
+instead of into DRAM (fast-tier-group).  
+
+The question is whether fast/slow tier groups are sufficient.
+Or you need fast/slow/slower groups?
+
+> > (3) There are use cases not covered by (1) and (2). 
+> 
+> Is it necessary to control memory usage of each tier (except the
+> lowest/slowest)?  I am not the right person to answer the question, but
+> I want to ask it.
+> 
+
+I have the same question.
+
+Tim
+
+

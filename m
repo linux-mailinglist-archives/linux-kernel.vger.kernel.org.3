@@ -2,159 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F92C54CC20
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:04:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4E8F54CC21
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 17:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345550AbiFOPEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 11:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52670 "EHLO
+        id S1345474AbiFOPEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 11:04:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234402AbiFOPD7 (ORCPT
+        with ESMTP id S1345743AbiFOPEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 11:03:59 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B93635879
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:03:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1655305438; x=1686841438;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MHeoGg3PQPdP5VbC2PG27RoW1s04/Fz9tzoP6DSf9WQ=;
-  b=JRh1cvCqg6Y6SSEiaylHziC1kTCVQ2B5g1pxcHIEd5E21/wn0V1axMhr
-   6YLlPJlp5MdW1o651JH4BdNUtqcCxgs0Ay0mq+U5ViRN+/aTLRHaKZAa2
-   vTQixZTjeIa38wLJTSHNs5Ir512cWgQdk3lvfGu1LMI5nLZlgUwHn48+0
-   wHNYZT1VyIh8T8JHpkmw7egCiUixBsdqWJ1fFWGhiwFFN1O3v13M7TQd3
-   1mz04JrO+BE+tQ4nkmqQHLMCyuS3KfKtnj8vMB/xSvfzOYLoIHgFNcSOq
-   n/cT1tE+z4Vs+XTFjLA/3TtdwK7qQ9lJXQcFmrZYSG2Adb02+k9T14JDb
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="277784493"
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="277784493"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 08:03:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
-   d="scan'208";a="612778636"
-Received: from lkp-server01.sh.intel.com (HELO 60dabacc1df6) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 15 Jun 2022 08:03:19 -0700
-Received: from kbuild by 60dabacc1df6 with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1o1UYA-000MxD-PE;
-        Wed, 15 Jun 2022 15:03:18 +0000
-Date:   Wed, 15 Jun 2022 23:02:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ren Zhijie <renzhijie2@huawei.com>, jaegeuk@kernel.org,
-        chao@kernel.org, daehojeong@google.com
-Cc:     kbuild-all@lists.01.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Ren Zhijie <renzhijie2@huawei.com>
-Subject: Re: [PATCH -next] f2fs: fix build error too many arguments to
- functions
-Message-ID: <202206152345.By6X3FNj-lkp@intel.com>
-References: <20220615070422.214106-1-renzhijie2@huawei.com>
+        Wed, 15 Jun 2022 11:04:20 -0400
+Received: from m15112.mail.126.com (m15112.mail.126.com [220.181.15.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC74D3630E
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 08:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=20hDp
+        fKx7DlRW5HS+oU9NQcbLfsZNblgISuRP1uJhKs=; b=WiSwl0HtnDY+U/011fS5+
+        yh82ScEyPi1br2kNFdK153My4IvOuneeoYsht5KtJBwOdFcceNUlpD+9tZUMoqPv
+        6NjUjELQNsojOq0Vro9paUj/FEH08V8hTGw7a9su0rykjA2tOOKgbxoUpjBDEzeB
+        c7raTxTn2tvFKcnbAzJL00=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp2 (Coremail) with SMTP id DMmowADnOAS+9KliW3g+DQ--.47526S2;
+        Wed, 15 Jun 2022 23:03:27 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        robh@kernel.org, frank.rowand@sony.com
+Cc:     windhl@126.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] arch: x86: kernel: Add missing of_node_put() in devicetree.c
+Date:   Wed, 15 Jun 2022 23:03:25 +0800
+Message-Id: <20220615150325.3969911-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220615070422.214106-1-renzhijie2@huawei.com>
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DMmowADnOAS+9KliW3g+DQ--.47526S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GFWxXw1kXrykAF1xZrWkZwb_yoWxZFb_W3
+        WxWr48Crs5X3WSg39xCr4fWr13Zw1fKFZYyr1vqFs7Ar90qF45WFsIq3Wayrn3WFW8tFW5
+        ZrnxAFWqkw4jkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRMmhFDUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbiuAkhF2JVj4IGogABsY
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ren,
+In dtb_setup_hpet(), of_find_compatible_node() will return a node
+pointer with refcount incremented. We should use of_node_put() when it
+is not used anymore.
 
-Thank you for the patch! Yet something to improve:
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/x86/kernel/devicetree.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-[auto build test ERROR on next-20220615]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ren-Zhijie/f2fs-fix-build-error-too-many-arguments-to-functions/20220615-150808
-base:    6012273897fefb12566580efedee10bb06e5e6ed
-config: x86_64-rhel-8.3 (https://download.01.org/0day-ci/archive/20220615/202206152345.By6X3FNj-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/1832104c73270fad342bf40c089542083dca7585
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Ren-Zhijie/f2fs-fix-build-error-too-many-arguments-to-functions/20220615-150808
-        git checkout 1832104c73270fad342bf40c089542083dca7585
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/f2fs/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   fs/f2fs/data.c: In function 'f2fs_finish_read_bio':
->> fs/f2fs/data.c:136:33: error: too few arguments to function 'f2fs_end_read_compressed_page'
-     136 |                                 f2fs_end_read_compressed_page(page, true, 0);
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from fs/f2fs/data.c:25:
-   fs/f2fs/f2fs.h:4226:20: note: declared here
-    4226 | static inline void f2fs_end_read_compressed_page(struct page *page, bool failed,
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> fs/f2fs/data.c:137:25: error: too few arguments to function 'f2fs_put_page_dic'
-     137 |                         f2fs_put_page_dic(page);
-         |                         ^~~~~~~~~~~~~~~~~
-   In file included from fs/f2fs/data.c:25:
-   fs/f2fs/f2fs.h:4231:20: note: declared here
-    4231 | static inline void f2fs_put_page_dic(struct page *page, bool in_softirq)
-         |                    ^~~~~~~~~~~~~~~~~
-   fs/f2fs/data.c: In function 'f2fs_handle_step_decompress':
-   fs/f2fs/data.c:239:25: error: too few arguments to function 'f2fs_end_read_compressed_page'
-     239 |                         f2fs_end_read_compressed_page(page, PageError(page),
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from fs/f2fs/data.c:25:
-   fs/f2fs/f2fs.h:4226:20: note: declared here
-    4226 | static inline void f2fs_end_read_compressed_page(struct page *page, bool failed,
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/f2fs_end_read_compressed_page +136 fs/f2fs/data.c
-
-6dbb17961f46b2 Eric Biggers      2018-04-18  121  
-7f59b277f79e8a Eric Biggers      2021-01-04  122  static void f2fs_finish_read_bio(struct bio *bio)
-93dfe2ac516250 Jaegeuk Kim       2013-11-30  123  {
-6dbb17961f46b2 Eric Biggers      2018-04-18  124  	struct bio_vec *bv;
-6dc4f100c175dd Ming Lei          2019-02-15  125  	struct bvec_iter_all iter_all;
-93dfe2ac516250 Jaegeuk Kim       2013-11-30  126  
-7f59b277f79e8a Eric Biggers      2021-01-04  127  	/*
-7f59b277f79e8a Eric Biggers      2021-01-04  128  	 * Update and unlock the bio's pagecache pages, and put the
-7f59b277f79e8a Eric Biggers      2021-01-04  129  	 * decompression context for any compressed pages.
-7f59b277f79e8a Eric Biggers      2021-01-04  130  	 */
-2b070cfe582b8e Christoph Hellwig 2019-04-25  131  	bio_for_each_segment_all(bv, bio, iter_all) {
-7f59b277f79e8a Eric Biggers      2021-01-04  132  		struct page *page = bv->bv_page;
-6dbb17961f46b2 Eric Biggers      2018-04-18  133  
-7f59b277f79e8a Eric Biggers      2021-01-04  134  		if (f2fs_is_compressed_page(page)) {
-7f59b277f79e8a Eric Biggers      2021-01-04  135  			if (bio->bi_status)
-6ce19aff0b8cd3 Chao Yu           2021-05-20 @136  				f2fs_end_read_compressed_page(page, true, 0);
-7f59b277f79e8a Eric Biggers      2021-01-04 @137  			f2fs_put_page_dic(page);
-4c8ff7095bef64 Chao Yu           2019-11-01  138  			continue;
-4c8ff7095bef64 Chao Yu           2019-11-01  139  		}
-4c8ff7095bef64 Chao Yu           2019-11-01  140  
-7f59b277f79e8a Eric Biggers      2021-01-04  141  		/* PG_error was set if decryption or verity failed. */
-6dbb17961f46b2 Eric Biggers      2018-04-18  142  		if (bio->bi_status || PageError(page)) {
-6dbb17961f46b2 Eric Biggers      2018-04-18  143  			ClearPageUptodate(page);
-fb7d70db305a14 Jaegeuk Kim       2018-09-25  144  			/* will re-read again later */
-fb7d70db305a14 Jaegeuk Kim       2018-09-25  145  			ClearPageError(page);
-6dbb17961f46b2 Eric Biggers      2018-04-18  146  		} else {
-6dbb17961f46b2 Eric Biggers      2018-04-18  147  			SetPageUptodate(page);
-6dbb17961f46b2 Eric Biggers      2018-04-18  148  		}
-5f9abab42b60e6 Jaegeuk Kim       2018-10-16  149  		dec_page_count(F2FS_P_SB(page), __read_io_type(page));
-6dbb17961f46b2 Eric Biggers      2018-04-18  150  		unlock_page(page);
-6dbb17961f46b2 Eric Biggers      2018-04-18  151  	}
-79bbefb19f1359 Chao Yu           2020-03-23  152  
-7f59b277f79e8a Eric Biggers      2021-01-04  153  	if (bio->bi_private)
-7f59b277f79e8a Eric Biggers      2021-01-04  154  		mempool_free(bio->bi_private, bio_post_read_ctx_pool);
-7f59b277f79e8a Eric Biggers      2021-01-04  155  	bio_put(bio);
-4c8ff7095bef64 Chao Yu           2019-11-01  156  }
-4c8ff7095bef64 Chao Yu           2019-11-01  157  
-
+diff --git a/arch/x86/kernel/devicetree.c b/arch/x86/kernel/devicetree.c
+index 5cd51f25f446..6a386424ddf7 100644
+--- a/arch/x86/kernel/devicetree.c
++++ b/arch/x86/kernel/devicetree.c
+@@ -120,6 +120,9 @@ static void __init dtb_setup_hpet(void)
+ 	if (!dn)
+ 		return;
+ 	ret = of_address_to_resource(dn, 0, &r);
++	
++	of_node_put(dn);
++	
+ 	if (ret) {
+ 		WARN_ON(1);
+ 		return;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

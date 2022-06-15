@@ -2,125 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF58F54CF0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 18:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4CED54D053
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344363AbiFOQvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 12:51:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53958 "EHLO
+        id S1357624AbiFORrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237952AbiFOQvD (ORCPT
+        with ESMTP id S1349899AbiFORrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 12:51:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D84340EC
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 09:51:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 42520619C0
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 16:51:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74B0EC34115;
-        Wed, 15 Jun 2022 16:51:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655311861;
-        bh=hviysRKzBUvS5pn/sCyEVL+jhAwvyptL0s0z7P87qp8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HK0i2Gqw/eh/nvCxEP74o3yAHAesP2mLLk4ZCJEAfLWPSPRN/38Z5VENaXft/NVqK
-         4TnzQSGLmHOkLThunEjUWHR1YfwhWablzW/5xT9UDrplw9iXgW51UzTJXfJb35XKho
-         +mDrk8tBqzbjeFWuI700AN+6T4pMSsZH7EbztTQ0oRqdASnv/a8XSNLVvDVWmwsEgA
-         EfbBsoCZNUs7h5rafqjpZJNBBIU2kBWIG05yjfcz/wGhcmk8PMFVebMLdk3QIEjNR8
-         wYdy8BplSoOmQ/tfiejedqZcBG85FFsEg+5799AE/u9Fxj/Gg1IJmWXVJTnsJHm8RI
-         M28utpvFAgYFA==
-Date:   Wed, 15 Jun 2022 09:50:59 -0700
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Ren Zhijie <renzhijie2@huawei.com>
-Cc:     chao@kernel.org, daehojeong@google.com,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] f2fs: fix build error too many arguments to
- functions
-Message-ID: <YqoN8wZDJJUN4IDQ@google.com>
-References: <20220615070422.214106-1-renzhijie2@huawei.com>
+        Wed, 15 Jun 2022 13:47:48 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C442F1147F;
+        Wed, 15 Jun 2022 10:47:47 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id m24so16323263wrb.10;
+        Wed, 15 Jun 2022 10:47:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=UEplRBRe8Not6/N/87KHMRBTXuTr13tJIbM6hc9f8sQ=;
+        b=Px0sxprY8EaTIf37otn4bHLOMuOiouEYqETuqdXAoedA3jFIrkkKeHZvQZcfi6IDQd
+         +gPo6UtC+5oE4EUy+jA8XQ7k3lqlL722vCj/oANcJfB4eG3pUwsqRPv0uGe/HecIqW06
+         cSNnPJbGMJNoz1TcKBBRCF+5+Gy+Cravzkx4VbGZqli8BcwNbigqDx4TMiTrEehL3wXu
+         /D+jaAoPIZIEEgXk+EJBQxt2H4K1b7kI15klNggExGmPBJhVD7tPrtpUq9FphpwM1H+2
+         rWMXGX3cud6Dblde43mQIlZpBjDyX+LwEaufSxZUdSU0FK7uOYBP2vVcdz9tV4MoyFOx
+         aIxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=UEplRBRe8Not6/N/87KHMRBTXuTr13tJIbM6hc9f8sQ=;
+        b=XmkHLc8sQbZFr9+YfpUvC5ZH2Hs730EVQDCJXfaC4BlUx8++x44X979WJ4s0TAJEcf
+         czsDR6qCe9wnUxjxiDdhLWrNGMjlqo679z46Oa7fM9UHwFa3gTww8JQVgm1G6Itwr+M/
+         mdTBlLpMXq8xiCb5BwGgki6EZD1qqzSJhM7JK8V3HrWmZE9H2YLM2bvW/sORDZoc0oig
+         lzq1RJLQB3x87/qwijIk/z2JDOltq8t/LJNm2v6yj9rhMpd4wy4efYQAmjhUJgZ20oxo
+         pQctcnY0ZKJHdJHqVxWy6nI7KqBOCPVe7ddVTtomtBiFWsRmRgbnQ/aP+IO1APnnsscC
+         zddA==
+X-Gm-Message-State: AJIora9mYJz6gINCGfT/pH7z/3rHTopUqOAVwAyowjn4IwH/4UHSDIr8
+        V/LicxDMldimP+JMyy4OCeFowHQaquU=
+X-Google-Smtp-Source: AGRyM1sdCdaiNcC0qqAatgAXTIR/dGxEV0s1FBUtTraV7r7iycMccsJTIVFL8TKmFtDbKNmYjUCrwg==
+X-Received: by 2002:a05:6000:1548:b0:217:6480:e65 with SMTP id 8-20020a056000154800b0021764800e65mr934830wry.381.1655315266192;
+        Wed, 15 Jun 2022 10:47:46 -0700 (PDT)
+Received: from Ansuel-xps. (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
+        by smtp.gmail.com with ESMTPSA id l125-20020a1c2583000000b0039c4d9737f3sm3158157wml.34.2022.06.15.10.47.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 10:47:45 -0700 (PDT)
+Message-ID: <62aa1b41.1c69fb81.95632.5b71@mx.google.com>
+X-Google-Original-Message-ID: <YqoOmlGklknRj8Yf@Ansuel-xps.>
+Date:   Wed, 15 Jun 2022 18:53:46 +0200
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: clock: add pcm reset for ipq806x lcc
+References: <20220615163408.30154-1-ansuelsmth@gmail.com>
+ <a92fe431-a995-4c7f-b90b-8e80298bc71a@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220615070422.214106-1-renzhijie2@huawei.com>
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <a92fe431-a995-4c7f-b90b-8e80298bc71a@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks, but I deqeued the buggy patch, so expect to get the right change
-later.
+On Wed, Jun 15, 2022 at 10:43:10AM -0700, Krzysztof Kozlowski wrote:
+> On 15/06/2022 09:34, Christian 'Ansuel' Marangi wrote:
+> > Add pcm reset define for ipq806x lcc.
+> > 
+> > Signed-off-by: Christian 'Ansuel' Marangi <ansuelsmth@gmail.com>
+> To prevent any confusion about identities (we have strict rules about
+> these), I need to ask - who uses this email address?
+> 
+> https://lore.kernel.org/all/?q=ansuelsmth%40gmail.com
+> 
+> Best regards,
+> Krzysztof
 
-On 06/15, Ren Zhijie wrote:
-> If CONFIG_F2FS_FS_COMPRESSION is not set.
-> 
-> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-, will be failed, like this:
-> fs/f2fs/data.c: In function ‘f2fs_finish_read_bio’:
-> fs/f2fs/data.c:136:5: error: too many arguments to function ‘f2fs_end_read_compressed_page’
->      f2fs_end_read_compressed_page(page, true, 0,
->      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from fs/f2fs/data.c:25:0:
-> fs/f2fs/f2fs.h:4228:20: note: declared here
->  static inline void f2fs_end_read_compressed_page(struct page *page,
->                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> fs/f2fs/data.c:138:4: error: too many arguments to function ‘f2fs_put_page_dic’
->     f2fs_put_page_dic(page, in_softirq);
->     ^~~~~~~~~~~~~~~~~
-> In file included from fs/f2fs/data.c:25:0:
-> fs/f2fs/f2fs.h:4233:20: note: declared here
->  static inline void f2fs_put_page_dic(struct page *page)
->                     ^~~~~~~~~~~~~~~~~
-> fs/f2fs/data.c: In function ‘f2fs_handle_step_decompress’:
-> fs/f2fs/data.c:241:4: error: too many arguments to function ‘f2fs_end_read_compressed_page’
->     f2fs_end_read_compressed_page(page, PageError(page),
->     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In file included from fs/f2fs/data.c:25:0:
-> fs/f2fs/f2fs.h:4228:20: note: declared here
->  static inline void f2fs_end_read_compressed_page(struct page *page,
->                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> make[2]: *** [fs/f2fs/data.o] Error 1
-> make[2]: *** Waiting for unfinished jobs....
-> make[1]: *** [fs/f2fs] Error 2
-> 
-> Since commit 1b565702dffe ("f2fs: handle decompress only post processing in softirq") 
-> had changed the definition of function "f2fs_end_read_compressed_page()" and "f2fs_put_page_dic()",
-> but forgot the other definitions in f2fs.h warpped by #else /* CONFIG_F2FS_FS_COMPRESSION */.
-> 
-> Reported-by: Hulk Robot <hulkci@huawei.com>
-> Fixes: 1b565702dffe("f2fs: handle decompress only post processing in softirq")
-> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
-> ---
->  fs/f2fs/f2fs.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index b42fcca030e2..0811a9335dde 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -4225,12 +4225,12 @@ static inline struct page *f2fs_compress_control_page(struct page *page)
->  static inline int f2fs_init_compress_mempool(void) { return 0; }
->  static inline void f2fs_destroy_compress_mempool(void) { }
->  static inline void f2fs_decompress_cluster(struct decompress_io_ctx *dic) { }
-> -static inline void f2fs_end_read_compressed_page(struct page *page,
-> -						bool failed, block_t blkaddr)
-> +static inline void f2fs_end_read_compressed_page(struct page *page, bool failed,
-> +				block_t blkaddr, bool in_softirq)
->  {
->  	WARN_ON_ONCE(1);
->  }
-> -static inline void f2fs_put_page_dic(struct page *page)
-> +static inline void f2fs_put_page_dic(struct page *page, bool in_softirq)
->  {
->  	WARN_ON_ONCE(1);
->  }
-> -- 
-> 2.17.1
+Same person. Started using extended name, wanted to do this change from
+a long time but all the patch were already pushed so I couldn't change
+it since they were already proposed and on the various mailing list.
+
+-- 
+	Ansuel

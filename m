@@ -2,104 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4838154C8AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C08C954C8BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348802AbiFOMhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 08:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41712 "EHLO
+        id S1344113AbiFOMj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 08:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241638AbiFOMht (ORCPT
+        with ESMTP id S236110AbiFOMj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:37:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948EA24F39;
-        Wed, 15 Jun 2022 05:37:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4BAFEB81CD1;
-        Wed, 15 Jun 2022 12:37:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 263F9C34115;
-        Wed, 15 Jun 2022 12:37:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1655296665;
-        bh=4hVhluLtxcYUeJP9hL5fNVYu7o4eusq8ZzYiuhbcsyM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hgB8i7Y1m4ufqgINiikVCDZ7wOPU8NETuK2NkgvQLCbj5qcjzVo28O9BrEz81PxAo
-         CXIyGUj4BnYOX8JD80e9kqbZ3JOAikM/mpIMAS6LdaFEErd6IXz7vNv1gSHxqUNJYt
-         IduEPhxN1zdc0VhNgb/JWlI1/q1TpOw16E8ZzQgKQdEHvRNQS+LJycBU+04hTLgXiT
-         DXdF3Dqm9eqivxyPh/sI2T7+MRlZkI2qmN3EeOjt4UYEg8wpJ5/+HIIbtWKIxKtvAC
-         xG7e0MutP0kzic/BOdbIauRKt1OHjEqaLecMfS+UmnOR6rbkzpOpJI0xyCVqYtVgpZ
-         2fuD5hdfF3csA==
-Date:   Wed, 15 Jun 2022 13:37:40 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Conor.Dooley@microchip.com
-Cc:     Daire.McNamara@microchip.com, Lewis.Hanly@microchip.com,
-        linux-riscv@lists.infradead.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dan.carpenter@oracle.com
-Subject: Re: [PATCH] spi: microchip-core: fix passing zero to PTR_ERR warning
-Message-ID: <YqnSlIcAadwxt1Q5@sirena.org.uk>
-References: <20220615113021.2493586-1-conor.dooley@microchip.com>
- <YqnFLCbvrTxNbG1+@sirena.org.uk>
- <7eda95bd-c7f5-767a-fe88-9f7109467cd8@microchip.com>
+        Wed, 15 Jun 2022 08:39:56 -0400
+Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 358543F308
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 05:39:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=aGlwT
+        pJzDJp35gUCkFaGCu1AAXCT+U62kQKsYj5c2C0=; b=AwHCpk2FIq9EyzKxyneVF
+        M7nmt8aQnX8yADa7h/+p5/aT2UJMOokEUN1KhwFBXsUhMGPvaHTqsgTcZrQ2MdPR
+        Cy2Gb1LT8iOcQJyz7UKW22NhskkzOez5l4u9++EIlNCufHzy0AjFdgLDjn6MSdRk
+        84GevR0IgsQwV7+31WHf9M=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp3 (Coremail) with SMTP id DcmowAAHmJ3w0qli+QOKDQ--.43766S2;
+        Wed, 15 Jun 2022 20:39:13 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     vireshk@kernel.org, shiraz.linux.kernel@gmail.com, soc@kernel.org,
+        linux@armlinux.org.uk
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        windhl@126.com
+Subject: [PATCH] arch: arm: mach-spear: Add missing of_node_put() in time.c
+Date:   Wed, 15 Jun 2022 20:39:12 +0800
+Message-Id: <20220615123912.3965902-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="x91oVE/PcPTtCJq8"
-Content-Disposition: inline
-In-Reply-To: <7eda95bd-c7f5-767a-fe88-9f7109467cd8@microchip.com>
-X-Cookie: byob, v:
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcmowAAHmJ3w0qli+QOKDQ--.43766S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKFW3Gryxtr43tFy8AFWrXwb_yoWDXwc_GF
+        1xWa9xGr40gF1Uua9rua1fGwsFyw15Cr4xWFyxZ3W7Kayjvr1UCF1kt3429ry7Zw4YgrW8
+        tFWDCayayw129jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xREyCGUUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/1tbizhIhF18RPTEOUgAAs0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In spear_setup_of_timer(), of_find_matching_node() will return a
+node pointer with refcount incrementd. We should use of_node_put()
+in each fail path or when it is not used anymore.
 
---x91oVE/PcPTtCJq8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/arm/mach-spear/time.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-On Wed, Jun 15, 2022 at 11:57:37AM +0000, Conor.Dooley@microchip.com wrote:
-> On 15/06/2022 12:40, Mark Brown wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> > On Wed, Jun 15, 2022 at 12:30:22PM +0100, Conor Dooley wrote:
+diff --git a/arch/arm/mach-spear/time.c b/arch/arm/mach-spear/time.c
+index d1fdb6066f7b..a1b6635b4ecb 100644
+--- a/arch/arm/mach-spear/time.c
++++ b/arch/arm/mach-spear/time.c
+@@ -217,16 +217,20 @@ void __init spear_setup_of_timer(void)
+ 
+ 	irq = irq_of_parse_and_map(np, 0);
+ 	if (!irq) {
++		of_node_put(np);
+ 		pr_err("%s: No irq passed for timer via DT\n", __func__);
+ 		return;
+ 	}
+ 
+ 	gpt_base = of_iomap(np, 0);
+ 	if (!gpt_base) {
++		of_node_put(np);
+ 		pr_err("%s: of iomap failed\n", __func__);
+ 		return;
+ 	}
+-
++	
++	of_node_put(np);
++	
+ 	gpt_clk = clk_get_sys("gpt0", NULL);
+ 	if (IS_ERR(gpt_clk)) {
+ 		pr_err("%s:couldn't get clk for gpt\n", __func__);
+-- 
+2.25.1
 
-> >> -             ret = PTR_ERR(spi->clk);
-> >> +             ret = !spi->clk ? -ENXIO : PTR_ERR(spi->clk);
-
-> > I think you're looking for PTR_ERR_OR_ZERO() here?
-
-> Maybe I don't understand, so let me explain what I think you're
-> suggesting & maybe you can correct me:
-
-> > -             ret = PTR_ERR(spi->clk);
-> > +             ret = PTR_ERR_OR_ZERO(spi->clk);
-
-> But if spi->clk is NULL, this will return 0 from the probe
-> rather than returning an error?
-> If that's not what you meant, lmk
-
-Oh, hang on - what error conditions can clk_get() return 0 in?  The
-documentation doesn't mention any...
-
---x91oVE/PcPTtCJq8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmKp0pMACgkQJNaLcl1U
-h9Cnkwf/frE4cXtVXU1qGhaIP40Lw1jlf28yAxuK+pWDkVTrMB/XYrRIx0IeJuhj
-OOxtWWvD2LqknfmjqYULX2VTgLJ+AgD+bj2uDG2XFSW9nIE74WSte2jGPhAAlK1g
-IreVpgy0HXSUBoTjse+YFpVaECTjWpVtcPLKOZrhuJT/r+OFMQYwvlBG3p1YcVmH
-92C0k1tSsxv1ujR3UDNvyJUD2z8dbbD4ki8ouPntvyPlVovI3KTCl8C/Pc2rTVkt
-aaBRO9bWDsvxVcgWgUqM1V8geOOdaxGQiXaAeytJsZKsHYPbIlJFr6189QPxtvVj
-NBviWTjDtiPXjwEhAT/xnXRUGu9mOA==
-=+HQB
------END PGP SIGNATURE-----
-
---x91oVE/PcPTtCJq8--

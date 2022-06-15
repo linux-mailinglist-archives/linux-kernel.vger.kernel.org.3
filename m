@@ -2,119 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9011454D075
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:55:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5F554D04E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355730AbiFORzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39394 "EHLO
+        id S1357385AbiFORrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235028AbiFORzr (ORCPT
+        with ESMTP id S245041AbiFORr2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:55:47 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670FD44766
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:55:46 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id r24so1956763ljn.2
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:55:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=7N8FxBu6DA6O7mEvFYXStFEfAYN9n61bDy3OwBXjJ0o=;
-        b=JHdk1N03ADEWzySRt7KcxOBPuZaGFXA/8Xyn6d2SSlY9ihVTM6DTBbu1drTtrmQ+M1
-         8RPbl/vwMUwgaM0Na3DeW4R1DvZyVGTsvcipdrdnr6LbuwHnx+DPjFA6rx07XSw0xDHv
-         KK/3LfmRBtp3+hX2z93IpwI50ZnSgl482NCGQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=7N8FxBu6DA6O7mEvFYXStFEfAYN9n61bDy3OwBXjJ0o=;
-        b=fqigjnnn1LqGWasd6PRLzgbO+MoZfEJJye76RODrmSDe76ftkWXYBKDnGqoxeSQwvc
-         p0T1hRWPbyjo3Cw24ZGqXvT77zWCkRcKtwQ64gnU6NaAObp9aOp7v1DBa0BI1kcvPqXI
-         ee9fV+yozhbY5CRG/5uX8ed0jtCKgJE4HRP50hyOtCxXzjxnSL7lw+ExgcpCyFC0ItjV
-         N6bh4o9rX8tVsBSwE29tv8ciO8bzdmG3xCcBKTJX0Fu7jSXkNZdBnN9S0AOHgDn9GpCU
-         JQDas4mh7xcvRyTJggAi/qdEVsbnsvcPCxE6jMxkcJzE9wvFFlKD9Bo9Z7WxN1jeWO5T
-         54Fg==
-X-Gm-Message-State: AJIora9Vi4otNgLJpbALmtuvDVH2Q7g2Cuy1OIS7FKQsEyaS4HP5vtr4
-        ofdEOJcYLKHqqIPxURkZvakPvOT48Ubx2R7v46c=
-X-Google-Smtp-Source: AGRyM1usq6rOnpKVnohX3RfJzcFbjacxYyo1QSxQi8IxyaWhI3JVOuBe+zfnFh1b5GZqxodmV+BC1w==
-X-Received: by 2002:a2e:9a8b:0:b0:255:5c14:a90 with SMTP id p11-20020a2e9a8b000000b002555c140a90mr512828lji.137.1655315744482;
-        Wed, 15 Jun 2022 10:55:44 -0700 (PDT)
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com. [209.85.208.171])
-        by smtp.gmail.com with ESMTPSA id u24-20020ac25198000000b00477cab33759sm1880398lfi.256.2022.06.15.10.55.44
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 10:55:44 -0700 (PDT)
-Received: by mail-lj1-f171.google.com with SMTP id c30so14118935ljr.9
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:55:44 -0700 (PDT)
-X-Received: by 2002:a5d:414d:0:b0:213:be00:a35 with SMTP id
- c13-20020a5d414d000000b00213be000a35mr875787wrq.97.1655315251112; Wed, 15 Jun
- 2022 10:47:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220615162805.27962-1-pmladek@suse.com> <20220615162805.27962-2-pmladek@suse.com>
-In-Reply-To: <20220615162805.27962-2-pmladek@suse.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 15 Jun 2022 10:47:14 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com>
-Message-ID: <CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] printk: Block console kthreads when direct printing
- will be required
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>, zhouzhouyi@gmail.com,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Josh Triplett <josh@joshtriplett.org>,
-        rcu <rcu@vger.kernel.org>, linux-rockchip@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Wed, 15 Jun 2022 13:47:28 -0400
+Received: from proxima.lasnet.de (proxima.lasnet.de [IPv6:2a01:4f8:121:31eb:3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899F6229;
+        Wed, 15 Jun 2022 10:47:26 -0700 (PDT)
+Received: from [IPv6:2003:f8:3f08:ad00:4f10:e432:a44c:8e65] (p200300f83f08ad004f10e432a44c8e65.dip0.t-ipconnect.de [IPv6:2003:f8:3f08:ad00:4f10:e432:a44c:8e65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: jluebbe@lasnet.de)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id C6C94C0747;
+        Wed, 15 Jun 2022 19:47:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lasnet.de; s=2021;
+        t=1655315241;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9bz2STt3kmdDn2VeVPZgDH8qBkZlDCUWWkMWbxg3vV8=;
+        b=JXvpMPg5zJiUlnfeUG5vuPjKWS3deA/7wOON1oCwrC4EhjLjeBDdi1/RAN5Z4lj3VdNER9
+        p2Z6zB+JpIcMlMug3EuqosgSrBISYDBhUn2objvZiF5OifzA7AjN//b4DQGoBjzakkXEOs
+        /8A5itR9sR1UU8GumA5llZC2F2ga2URSMCuNT7ML7qtDuztN1ZSeVoW6s2YBw7osS+WNVe
+        aWEAoxLmOBlIgqBzz/HPuuDhDYqcl0t+yCTT5pzT2RQBS0cG8pQ1x1GjnjEMvo2RFtzFwb
+        OeD+zD0cF/n7Nri2QsFd7h094QFkDXbTvkX1FG1eTkcL/GBTojkn3xHDgY5Oaw==
+Message-ID: <3d0991cf30d6429e8dd059f7e0d1c54a2200c5a0.camel@lasnet.de>
+Subject: Re: [REGRESSION] connection timeout with routes to VRF
+From:   Jan Luebbe <jluebbe@lasnet.de>
+To:     David Ahern <dsahern@kernel.org>,
+        Robert Shearman <robertshearman@gmail.com>,
+        Andy Roulin <aroulin@nvidia.com>
+Cc:     Mike Manning <mvrmanning@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        regressions@lists.linux.dev,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Date:   Wed, 15 Jun 2022 19:47:44 +0200
+In-Reply-To: <6410890e-333d-5f0e-52f2-1041667c80f8@kernel.org>
+References: <a54c149aed38fded2d3b5fdb1a6c89e36a083b74.camel@lasnet.de>
+         <6410890e-333d-5f0e-52f2-1041667c80f8@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 9:28 AM Petr Mladek <pmladek@suse.com> wrote:
->
-> BugLink: https://lore.kernel.org/r/20220610205038.GA3050413@paulmck-ThinkPad-P17-Gen-1
-> BugLink: https://lore.kernel.org/r/CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com
+On Sat, 2022-06-11 at 10:44 -0600, David Ahern wrote:
+> On 6/11/22 5:14 AM, Jan Luebbe wrote:
+> > Hi,
+> > 
+> > TL;DR: We think we have found a regression in the handling of VRF route
+> > leaking
+> > caused by "net: allow binding socket in a VRF when there's an unbound
+> > socket"
+> > (3c82a21f4320).
+> 
+> This is the 3rd report in the past few months about this commit.
+> 
+> ...
 
-Other thread discussion about this exact thing:
+Hmm, I've not been able to find other reports. Could you point me to them?
 
-   https://lore.kernel.org/all/CAHk-=wgzRUT1fBpuz3xcN+YdsX0SxqOzHWRtj0ReHpUBb5TKbA@mail.gmail.com/
+> > 
+> > Our minimized test case looks like this:
+> >  ip rule add pref 32765 from all lookup local
+> >  ip rule del pref 0 from all lookup local
+> >  ip link add red type vrf table 1000
+> >  ip link set red up
+> >  ip route add vrf red unreachable default metric 8192
+> >  ip addr add dev red 172.16.0.1/24
+> >  ip route add 172.16.0.0/24 dev red
+> >  ip vrf exec red socat -dd TCP-LISTEN:1234,reuseaddr,fork SYSTEM:"echo
+> > connected" &
+> >  sleep 1
+> >  nc 172.16.0.1 1234 < /dev/null
+> > 
+> 
+> ...
+> Thanks for the detailed analysis and reproducer.
+> 
+> > 
+> > The partial revert
+> > diff --git a/include/net/inet_hashtables.h b/include/net/inet_hashtables.h
+> > index 98e1ec1a14f0..41e7f20d7e51 100644
+> > --- a/include/net/inet_hashtables.h
+> > +++ b/include/net/inet_hashtables.h
+> > @@ -310,8 +310,9 @@ static inline struct sock *inet_lookup_listener(struct
+> > net *net,
+> >  #define INET_MATCH(__sk, __net, __cookie, __saddr, __daddr, __ports, __dif,
+> > __sdif) \
+> >         (((__sk)->sk_portpair == (__ports))                     &&      \
+> >          ((__sk)->sk_addrpair == (__cookie))                    &&      \
+> > -        (((__sk)->sk_bound_dev_if == (__dif))                  ||      \
+> > -         ((__sk)->sk_bound_dev_if == (__sdif)))                &&      \
+> > +        (!(__sk)->sk_bound_dev_if      ||                              \
+> > +          ((__sk)->sk_bound_dev_if == (__dif))                 ||      \
+> > +          ((__sk)->sk_bound_dev_if == (__sdif)))               &&      \
+> >          net_eq(sock_net(__sk), (__net)))
+> >  #else /* 32-bit arch */
+> >  #define INET_ADDR_COOKIE(__name, __saddr, __daddr) \
+> > @@ -321,8 +322,9 @@ static inline struct sock *inet_lookup_listener(struct
+> > net *net,
+> >         (((__sk)->sk_portpair == (__ports))             &&              \
+> >          ((__sk)->sk_daddr      == (__saddr))           &&              \
+> >          ((__sk)->sk_rcv_saddr  == (__daddr))           &&              \
+> > -        (((__sk)->sk_bound_dev_if == (__dif))          ||              \
+> > -         ((__sk)->sk_bound_dev_if == (__sdif)))        &&              \
+> > +        (!(__sk)->sk_bound_dev_if      ||                              \
+> > +          ((__sk)->sk_bound_dev_if == (__dif))         ||              \
+> > +          ((__sk)->sk_bound_dev_if == (__sdif)))       &&              \
+> >          net_eq(sock_net(__sk), (__net)))
+> >  #endif /* 64-bit arch */
+> > 
+> > restores the original behavior when applied on v5.18. This doesn't apply
+> > directly on master, as the macro was replaced by an inline function in
+> > "inet:
+> > add READ_ONCE(sk->sk_bound_dev_if) in INET_MATCH()" (4915d50e300e).
+> > 
+> > I have to admit I don't quite understand 3c82a21f4320, so I'm not sure how
+> > to proceed. What would be broken by the partial revert above? Are there
+> > better ways to configure routing into the VRF than simply "ip route add
+> > 172.16.0.0/24 dev red" that still work?
+> > 
+> > Thanks,
+> > Jan
+> > 
+> > #regzbot introduced: 3c82a21f4320
+> > 
+> > 
+> > 
+> 
+> Andy Roulin suggested the same fix to the same problem a few weeks back.
+> Let's do it along with a test case in fcnl-test.sh which covers all of
+> these vrf permutations.
 
-please stop making up random tags that make no sense.
+Thanks! I'd be happy to test any patch in our real setup.
 
-Just use "Link:"
+Regards,
+Jan
 
-Look at that first one (I didn't even bother following the second
-one). The "bug" part is not even the most important part.
 
-The reason to follow that link is all the discussion, the test-patch,
-and the confirmation from Paul that "yup, that patch solves the
-problem for me".
-
-It's extra context to the commit, in case somebody wants to know the
-history. The "bug" part is (and always should be) already explained in
-the commit message, there's absolutely no point in adding soem extra
-noise to the "Link:" tag.
-
-And if the only reason for "BugLink:" to exist is to show "look, this
-tag actually contains relevant and interesting information", then the
-solution to THAT problem is to not have the links that are useless and
-pointless in the first place.
-
-Put another way: if you want to distinguish useless links from useful
-ones, just do it by not including the useless ones.
-
-Ok?
-
-                   Linus

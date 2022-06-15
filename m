@@ -2,92 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752B154D4C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C4454D4C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Jun 2022 00:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350376AbiFOWuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 18:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35548 "EHLO
+        id S1350409AbiFOWu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 18:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347059AbiFOWuP (ORCPT
+        with ESMTP id S245662AbiFOWux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 18:50:15 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44AF563BA
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:50:14 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id m32-20020a05600c3b2000b0039756bb41f2so1852017wms.3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:50:14 -0700 (PDT)
+        Wed, 15 Jun 2022 18:50:53 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D62F5639B
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:50:52 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id i64so12712779pfc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 15:50:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=slLd2M4FeFuQ75PNi/iVPJrjSxRl7uO5CbDqnGxyUvc=;
-        b=oTapA6GkI2BtG0p+MMpdoIzvXyo01oiPJm0f7r35RnvqMheuC3Y0SGUmKPcchEOI+l
-         X/IFrfA0r1Xdk90UO92fS1UZO2V3+Zxy+6T9BAbDWu+hT+onTeGkUdCjmkm2bGmbhs07
-         HAtDNgARdKzNUsUEzFroiT1zTwmmsCKyytd7VpnMbKQGuyV/PQrYeI3B4nG+/TL7RQEm
-         F9Hd98jHe2ijEcKuNbGaCVgWRgwv9zjssDDtWqnl4BXNGIdoMRO/pkueUFHBKQ/2yi+5
-         WitDbKslL4VTKOCKaGfrg+pxr3ZcD8wAKeSggMOH8Qli/c/5RLVemkbAlFq6MXMwLrMT
-         04oA==
+        bh=1ZARD2x9eyZCfZ+dfh8M5Up8qD+yjJUJ9LiMSuxfBxc=;
+        b=Wdp8mX+AR4ZI/kD3Vg8QMEIVmxFDmiI0nCE1j53DTe8civ2SPRVmf5GxqWZAlwsyms
+         pizsy28ib0PLBfaVK802MueQHaccUnBGFKFJW4z8Ocm1qolB4HDuPp9GyGie4KPz2E8T
+         R9o8yvCI3csyeCXJ5cMX+ynSPp6SoRiAnE1xw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=slLd2M4FeFuQ75PNi/iVPJrjSxRl7uO5CbDqnGxyUvc=;
-        b=rrxhf1DJzT7jvzojN8D1cks4iV+fFtG+qhuT9EGchA2wxI8+lwlrTHKCHDZSsNP5jC
-         Ov7t43Botff8GaDHPjoc/Eg2qJfmqDN6/Wet8D88eL0HbhUjA8KgN3woNalfL7yyRa9S
-         whKLmv4EF+53F7FIDgCPHtwmAukvATuhZe33svwQKB6TxY58CWugBRJxEKwqREPnfaZ4
-         yVfbGLSjujSwPWbBNup3PJ/Y/7im8hGECERvny38LjlLEy2pgVrf57ee4ii3tintHxHV
-         BYPx1+vVKMEDQ5dWZeGYUs2EucGr0UBhPYTtN3pqIZPhMjgsy/xxm7ECqo/J5RNoW3Sh
-         Dzug==
-X-Gm-Message-State: AJIora/My1QDeJf+AqQ39KgxozXbpAFcjSg3f0xWw3N0sSrCFlaxTZEm
-        hKhuiwnVFLi1FDHg22KDKlg=
-X-Google-Smtp-Source: AGRyM1tRcpj9XQ2aBF/NhWHk9JkyWVC+LaflvE+dirzykkZPI6kRXeb67v9goXcwEDacSvexR3ouUQ==
-X-Received: by 2002:a05:600c:3b8c:b0:39c:60e3:36db with SMTP id n12-20020a05600c3b8c00b0039c60e336dbmr1747400wms.77.1655333413253;
-        Wed, 15 Jun 2022 15:50:13 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-190.ip85.fastwebnet.it. [93.42.70.190])
-        by smtp.googlemail.com with ESMTPSA id h18-20020a5d4312000000b002167efdd549sm186571wrq.38.2022.06.15.15.50.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 15:50:12 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH] mailmap: add entry for Christian Marangi
-Date:   Thu, 16 Jun 2022 00:50:12 +0200
-Message-Id: <20220615225012.18782-1-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.36.1
+        bh=1ZARD2x9eyZCfZ+dfh8M5Up8qD+yjJUJ9LiMSuxfBxc=;
+        b=p40si3gj/XVEnJ6q0jH5Uxe95cWeo3j8UoiAVjIuQnThp5yI+QET95nwG3xVe2YGDd
+         INqWlMJ+8nMyAawGR3IQDPE58dKBiJy5wrsmfuBQ/jUMCJTlRTvqr0tQ8Sv1VCuxXqo3
+         U9+6hT1oQdd3ZZhwMJCn2g94VV8HLXLANDef5LmYHhd94J/+p2RDCGO0yqpT2WHQ6vTL
+         K0rbhe+24qJSvwfRl/6KM4QVQBSPGXNDPUoFRwQqFdgc6ugzjHqSsie7E16ThEyYju8S
+         MTNc5EhvNUnEPcgs5w9J0hb++bOHSDyq7Blc725nhfA6ZMaWYMMaL7m8SHt0gZfTFI2D
+         g0cA==
+X-Gm-Message-State: AJIora/S2EaAihRdRigmN6AUROtc4IU22uSGA7SlR2k8UOh3UQQ7U9Q+
+        1XoGq0cHbgPZwcwsz9fbIgsS7Q==
+X-Google-Smtp-Source: AGRyM1tGVOD1GtPWD2tbra8HbW1Im7OvjyBC8ay7TuKXFTeOXbBqDacgQPiqzfvBAk5iNHcRuKtekA==
+X-Received: by 2002:a05:6a00:4515:b0:522:cc82:79d2 with SMTP id cw21-20020a056a00451500b00522cc8279d2mr1681189pfb.61.1655333451924;
+        Wed, 15 Jun 2022 15:50:51 -0700 (PDT)
+Received: from localhost ([2620:15c:202:200:6db4:3c00:379:4cf6])
+        by smtp.gmail.com with UTF8SMTPSA id h189-20020a62dec6000000b0050dc762813csm177651pfg.22.2022.06.15.15.50.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 15:50:51 -0700 (PDT)
+From:   Micah Morton <mortonm@chromium.org>
+To:     linux-security-module@vger.kernel.org
+Cc:     keescook@chromium.org, jmorris@namei.org, serge@hallyn.com,
+        linux-kernel@vger.kernel.org, Micah Morton <mortonm@chromium.org>
+Subject: [PATCH 1/3] LSM: SafeSetID: fix userns bug in selftest
+Date:   Wed, 15 Jun 2022 15:50:44 -0700
+Message-Id: <20220615225044.706911-1-mortonm@chromium.org>
+X-Mailer: git-send-email 2.36.1.476.g0c4daa206d-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add entry to map ansuelsmth@gmail.com to the unique identity of
-Christian Marangi.
+Not sure how this bug got in here but its been there since the original
+merge. I think I tested the code on a system that wouldn't let me
+clone() with CLONE_NEWUSER flag set so had to comment out these
+test_userns invocations.
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Trying to map UID 0 inside the userns to UID 0 outside will never work,
+even with CAP_SETUID. The code is supposed to test whether we can map
+UID 0 in the userns to the UID of the parent process (the one with
+CAP_SETUID that is writing the /proc/[pid]/uid_map file).
+
+Signed-off-by: Micah Morton <mortonm@chromium.org>
 ---
- .mailmap | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/safesetid/safesetid-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/.mailmap b/.mailmap
-index dda0030573ca..2ed1cf869175 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -87,6 +87,7 @@ Christian Borntraeger <borntraeger@linux.ibm.com> <borntrae@de.ibm.com>
- Christian Brauner <brauner@kernel.org> <christian@brauner.io>
- Christian Brauner <brauner@kernel.org> <christian.brauner@canonical.com>
- Christian Brauner <brauner@kernel.org> <christian.brauner@ubuntu.com>
-+Christian Marangi <ansuelsmth@gmail.com>
- Christophe Ricard <christophe.ricard@gmail.com>
- Christoph Hellwig <hch@lst.de>
- Colin Ian King <colin.king@intel.com> <colin.king@canonical.com>
+diff --git a/tools/testing/selftests/safesetid/safesetid-test.c b/tools/testing/selftests/safesetid/safesetid-test.c
+index 4b809c93ba36..111dcbcc0491 100644
+--- a/tools/testing/selftests/safesetid/safesetid-test.c
++++ b/tools/testing/selftests/safesetid/safesetid-test.c
+@@ -194,7 +194,7 @@ static bool test_userns(bool expect_success)
+ 			printf("preparing file name string failed");
+ 			return false;
+ 		}
+-		success = write_file(map_file_name, "0 0 1", uid);
++		success = write_file(map_file_name, "0 %d 1", uid);
+ 		return success == expect_success;
+ 	}
+ 
 -- 
-2.36.1
+2.36.1.476.g0c4daa206d-goog
 

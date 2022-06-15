@@ -2,47 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B7E54C52C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5AA54C52F
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:53:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241386AbiFOJxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
+        id S1347194AbiFOJxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346983AbiFOJx0 (ORCPT
+        with ESMTP id S245608AbiFOJxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 05:53:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD04444A3A
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:53:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B68F7152B;
-        Wed, 15 Jun 2022 02:53:24 -0700 (PDT)
-Received: from [10.57.7.82] (unknown [10.57.7.82])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3BD563F792;
-        Wed, 15 Jun 2022 02:53:23 -0700 (PDT)
-Message-ID: <10eaa3b1-4cf7-a7b6-a7f6-111a486a343a@arm.com>
-Date:   Wed, 15 Jun 2022 10:53:21 +0100
+        Wed, 15 Jun 2022 05:53:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F17D245067
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:53:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1655286819;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Sw6uD4GNioRfBtX3jEJXdTt3T/W8UHiD+VjqDyMbLsw=;
+        b=cY7cjXYPO5ftx2yZdZCdgeesn6DPJS+2rI3uccKMCWDrgkyQdKC2edAk8N9v2LGhI8Fchp
+        6zgzm1rxc28zmxktn8VEfu5SSfSYbsAwB0szbcXfDkXPTF9imwcVv95ARc6LW0bwT6HyLM
+        b8Th59nIpD8etkof8O7Fdfjv8mDD0Pc=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-177-4P6tSLPSNX2K3kr7z6JVeg-1; Wed, 15 Jun 2022 05:53:35 -0400
+X-MC-Unique: 4P6tSLPSNX2K3kr7z6JVeg-1
+Received: by mail-wr1-f71.google.com with SMTP id i10-20020a5d55ca000000b002103d76ffcaso1711264wrw.17
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 02:53:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=Sw6uD4GNioRfBtX3jEJXdTt3T/W8UHiD+VjqDyMbLsw=;
+        b=ZG98uS795gphcxeaZhLtJwL6r0cuzlZ5sa4nSmo9hNFySWWBEUM5kJeGLoVizpRktb
+         /qiMeygv+opXAE1lzGLvCa2Sx5q1MpCm+RP0FnRokRu92OxlRQ+ia1vn6sOeQPDrC8PH
+         aU2vN0pKe+eZSTgAitFh+lWqG94+pRnQ29AD+tBv75euEuCgs9p4Rwvgo1uGO2TZUcPS
+         5tO94YwZ+68Yxf4foO1IBCd1nvB9jV93ZMbKseqADc6sFc7nXr4H1NvGESrHn9mjcmlg
+         AWRqD5BujA2S9nsLD58z1S97vhaE3cp5WkzDky17nssapbw/9kX0J787u2y1rXAIXflj
+         iD1Q==
+X-Gm-Message-State: AJIora+9IDd3h+BfRyPpJovsDTAophOU05aVmwAqkhebXy1UpaJ+GI/J
+        r2VUTwcAdJoXgBlfhiROkeoW6pYszMETk5jUAS0DLf1q7g63KwDepsHRTkoihRc+2ZWsQa8v2m1
+        EnOMzmjgszH0D3fIy1MgfrXTS
+X-Received: by 2002:a5d:54c3:0:b0:210:2a28:5666 with SMTP id x3-20020a5d54c3000000b002102a285666mr9020421wrv.345.1655286814572;
+        Wed, 15 Jun 2022 02:53:34 -0700 (PDT)
+X-Google-Smtp-Source: AGRyM1vWQshi2ag3X1ZGvSLVqvcGr6liU6e5hkf80ENh4j2nNiQ3afv4GT3be4CkAz8Cckl+MchtEw==
+X-Received: by 2002:a5d:54c3:0:b0:210:2a28:5666 with SMTP id x3-20020a5d54c3000000b002102a285666mr9020398wrv.345.1655286814297;
+        Wed, 15 Jun 2022 02:53:34 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70a:2700:1d28:26c3:b272:fcc6? (p200300cbc70a27001d2826c3b272fcc6.dip0.t-ipconnect.de. [2003:cb:c70a:2700:1d28:26c3:b272:fcc6])
+        by smtp.gmail.com with ESMTPSA id l39-20020a05600c1d2700b0039c95b31e66sm2130939wms.31.2022.06.15.02.53.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 02:53:33 -0700 (PDT)
+Message-ID: <1ef10873-c20f-afd8-e560-3b7fb5516f2b@redhat.com>
+Date:   Wed, 15 Jun 2022 11:53:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-From:   Steven Price <steven.price@arm.com>
-Subject: Re: [RESEND PATCH v8 01/11] iommu: Add DMA ownership management
- interfaces
-To:     Lu Baolu <baolu.lu@linux.intel.com>, Joerg Roedel <joro@8bytes.org>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        Robin Murphy <robin.murphy@arm.com>
-References: <20220418005000.897664-1-baolu.lu@linux.intel.com>
- <20220418005000.897664-2-baolu.lu@linux.intel.com>
-Content-Language: en-GB
-In-Reply-To: <20220418005000.897664-2-baolu.lu@linux.intel.com>
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v8 3/7] crash: add generic infrastructure for crash
+ hotplug support
+Content-Language: en-US
+To:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+References: <20220505184603.1548-1-eric.devolder@oracle.com>
+ <20220505184603.1548-4-eric.devolder@oracle.com>
+ <62089f7b-4a3e-7dc8-1cda-84583e19d6fd@redhat.com>
+ <e4120abd-c3ac-ee4d-1a0d-260126914b09@oracle.com>
+ <b38f4597-0d9b-5b17-0b24-13d99605fb69@redhat.com>
+ <24513679-d92d-ead1-2c1d-98db6a9bbdac@oracle.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <24513679-d92d-ead1-2c1d-98db6a9bbdac@oracle.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,84 +94,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/2022 01:49, Lu Baolu wrote:
-> Multiple devices may be placed in the same IOMMU group because they
-> cannot be isolated from each other. These devices must either be
-> entirely under kernel control or userspace control, never a mixture.
+On 01.06.22 00:25, Eric DeVolder wrote:
 > 
-> This adds dma ownership management in iommu core and exposes several
-> interfaces for the device drivers and the device userspace assignment
-> framework (i.e. VFIO), so that any conflict between user and kernel
-> controlled dma could be detected at the beginning.
 > 
-> The device driver oriented interfaces are,
+> On 5/31/22 08:15, David Hildenbrand wrote:
+>> On 12.05.22 18:10, Eric DeVolder wrote:
+>>> David,
+>>> Great questions! See inline responses below.
+>>> eric
+>>
+>> Sorry for the late reply, travel and vacation ...
+> No problem, greatly appreciate the feedback!
+> eric
 > 
-> 	int iommu_device_use_default_domain(struct device *dev);
-> 	void iommu_device_unuse_default_domain(struct device *dev);
+>>
+>>>>
+>>>>> +
+>>>>> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
+>>>>> +void __weak arch_crash_handle_hotplug_event(struct kimage *image,
+>>>>> +							unsigned int hp_action, unsigned int cpu)
+>>>>> +{
+>>>>> +	WARN(1, "crash hotplug handler not implemented");
+>>>>
+>>>>
+>>>> Won't that trigger on any arch that has CONFIG_HOTPLUG_CPU and CONFIG_MEMORY_HOTPLUG?
+>>>> I mean, you only implement it for x86 later in this series. Or what else stops this WARN from
+>>>> triggering?
+>>>>
+>>> You're correct. What about: printk_once(KERN_DEBUG "...") ?
+>>
+>> Why even bother about printing anything? If the feature is not
+>> supported, there should be some way for user space to figure out that it
+>> sill has to reload on hot(un)plug manually, no?
 > 
-> By calling iommu_device_use_default_domain(), the device driver tells
-> the iommu layer that the device dma is handled through the kernel DMA
-> APIs. The iommu layer will manage the IOVA and use the default domain
-> for DMA address translation.
-> 
-> The device user-space assignment framework oriented interfaces are,
-> 
-> 	int iommu_group_claim_dma_owner(struct iommu_group *group,
-> 					void *owner);
-> 	void iommu_group_release_dma_owner(struct iommu_group *group);
-> 	bool iommu_group_dma_owner_claimed(struct iommu_group *group);
-> 
-> The device userspace assignment must be disallowed if the DMA owner
-> claiming interface returns failure.
-> 
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Kevin Tian <kevin.tian@intel.com>
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+> I've changed this to WARN_ONCE(). If that isn't agreeable, I'll remove it.
 
-I'm seeing a regression that I've bisected to this commit on a Firefly
-RK3288 board. The display driver fails to probe properly because
-__iommu_attach_group() returns -EBUSY. This causes long hangs and splats
-as the display flips timeout.
+Please don't use WARN* on expected error paths.
 
-The call stack to __iommu_attach_group() is:
-
- __iommu_attach_group from iommu_attach_device+0x64/0xb4
- iommu_attach_device from rockchip_drm_dma_attach_device+0x20/0x50
- rockchip_drm_dma_attach_device from vop_crtc_atomic_enable+0x10c/0xa64
- vop_crtc_atomic_enable from drm_atomic_helper_commit_modeset_enables+0xa8/0x290
- drm_atomic_helper_commit_modeset_enables from drm_atomic_helper_commit_tail_rpm+0x44/0x8c
- drm_atomic_helper_commit_tail_rpm from commit_tail+0x9c/0x180
- commit_tail from drm_atomic_helper_commit+0x164/0x18c
- drm_atomic_helper_commit from drm_atomic_commit+0xac/0xe4
- drm_atomic_commit from drm_client_modeset_commit_atomic+0x23c/0x284
- drm_client_modeset_commit_atomic from drm_client_modeset_commit_locked+0x60/0x1c8
- drm_client_modeset_commit_locked from drm_client_modeset_commit+0x24/0x40
- drm_client_modeset_commit from drm_fb_helper_set_par+0xb8/0xf8
- drm_fb_helper_set_par from drm_fb_helper_hotplug_event.part.0+0xa8/0xc0
- drm_fb_helper_hotplug_event.part.0 from output_poll_execute+0xb8/0x224
-
-> @@ -2109,7 +2115,7 @@ static int __iommu_attach_group(struct iommu_domain *domain,
->  {
->  	int ret;
->  
-> -	if (group->default_domain && group->domain != group->default_domain)
-> +	if (group->domain && group->domain != group->default_domain)
->  		return -EBUSY;
->  
->  	ret = __iommu_group_for_each_dev(group, domain,
-
-Reverting this 'fixes' the problem for me. The follow up 0286300e6045
-("iommu: iommu_group_claim_dma_owner() must always assign a domain")
-doesn't help.
-
-Adding some debug printks I can see that domain is a valid pointer, but
-both default_domain and blocking_domain are NULL.
-
-I'm using the DTB from the kernel tree (rk3288-firefly.dtb).
-
-Any ideas?
-
+-- 
 Thanks,
 
-Steve
+David / dhildenb
+

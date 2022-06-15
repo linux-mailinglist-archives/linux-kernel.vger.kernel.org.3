@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AA5154C565
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E19D254C570
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 12:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244167AbiFOKEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 06:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48814 "EHLO
+        id S244746AbiFOKGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 06:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347207AbiFOKEl (ORCPT
+        with ESMTP id S238275AbiFOKGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 06:04:41 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA473BBF9;
-        Wed, 15 Jun 2022 03:04:40 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 060A31F8AA;
-        Wed, 15 Jun 2022 10:04:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1655287479; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tBBtOz7K9YiymUBEHKlogoH1FpxY6bRraUxdMFY2N0c=;
-        b=If4+KDuyGJu6SvM4LbZs1XQBCpPWPa2oAQf8dXy1jPIccOYPsl2PlLFgfHXVX28p3jqFfx
-        uHO2QEqgthieowR8BKU9w4RjGknoREGp39LjK0cW00OxWxXs26/RIdq3YxiGdFLe4Xvn5T
-        fwqhgZ3bOVmLdoXWqkMtNXEDb+VJSBU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1655287479;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tBBtOz7K9YiymUBEHKlogoH1FpxY6bRraUxdMFY2N0c=;
-        b=E4D+smZTgJuutRiSSDt+Et9RgerzFxvY90ADS4ZJNe8UmyrvtISuN7HiZrvSZMF/oI6z4+
-        g6gbbU6U2+ouvlBQ==
-Received: from quack3.suse.cz (unknown [10.163.28.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8616B2C141;
-        Wed, 15 Jun 2022 10:04:38 +0000 (UTC)
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id B8BF9A062E; Wed, 15 Jun 2022 12:04:32 +0200 (CEST)
-Date:   Wed, 15 Jun 2022 12:04:32 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas Backlund <tmb@tmb.nu>, Jan Kara <jack@suse.cz>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable <stable@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Slade Watkins <slade@sladewatkins.com>
-Subject: Re: [PATCH 5.15 000/251] 5.15.47-rc2 review
-Message-ID: <20220615100432.gd7jeeyjk3qyayyi@quack3.lan>
-References: <bd80cd0d-a364-4ebd-2a89-933f79eaf4c7@tmb.nu>
- <CAHk-=wix7+mGzS-hANyk7DZsZ1NgGMHjPzSQKggEomYrRCrP_Q@mail.gmail.com>
+        Wed, 15 Jun 2022 06:06:52 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E8E3BF8D;
+        Wed, 15 Jun 2022 03:06:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=X4eey67g7t7O8BPfmN7/7q5QPXgKgTakp0SBwPI8Wwc=; b=A9gwmKAW+XiQ9/DOSyqS8RJYDi
+        kLftzCd0j9LecehqiL/heefWcKRALCLCgCI6c1Tu5XFO6iOIW6t+mnQs40w8vhM6UYlb40E5XJBPF
+        lKAnJla+8pJmZnFEzggotql2iqWkR6j9Zs2v1tzI0Tv7jH5KJkwPqo+cyU5aKyalw/pGa4Reo+XZv
+        PEn0pc1fJcgZFYxVz0OgVmIKIZgY6CnfbUvLbCqdGhdjNewgT5wNDSwB5e7Lww1K+HxgKb148dm8C
+        JROyYYP3CAoRJLlfsHBxkBl9Nzc8osG+72C0hwxIGsRVAhBUjT7MU4jDf1dnmODn0sh/dPc9+WyRn
+        +zQOBI0Q==;
+Received: from dhcp-077-249-017-003.chello.nl ([77.249.17.3] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1o1Pv7-000xmS-0e; Wed, 15 Jun 2022 10:06:41 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4C5433001C3;
+        Wed, 15 Jun 2022 12:06:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1A817201A4F6D; Wed, 15 Jun 2022 12:06:39 +0200 (CEST)
+Date:   Wed, 15 Jun 2022 12:06:39 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH 3/3] jump_label: make initial NOP patching the special
+ case
+Message-ID: <YqmvL2Biw3TnIl7a@hirez.programming.kicks-ass.net>
+References: <20220608104512.1176209-1-ardb@kernel.org>
+ <20220608104512.1176209-4-ardb@kernel.org>
+ <Yqmr6fvu4OYkarCm@FVFF77S0Q05N>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wix7+mGzS-hANyk7DZsZ1NgGMHjPzSQKggEomYrRCrP_Q@mail.gmail.com>
+In-Reply-To: <Yqmr6fvu4OYkarCm@FVFF77S0Q05N>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,61 +67,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 14-06-22 11:51:35, Linus Torvalds wrote:
-> On Tue, Jun 14, 2022 at 11:20 AM Thomas Backlund <tmb@tmb.nu> wrote:
-> >
-> > I "think" this is the suggested fix:
-> >
-> > https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git/commit/?h=for_next&id=46b6418e26c7c26f98ff9c2c2310bce5ae2aa4dd
+On Wed, Jun 15, 2022 at 10:52:41AM +0100, Mark Rutland wrote:
+> On Wed, Jun 08, 2022 at 12:45:12PM +0200, Ard Biesheuvel wrote:
+> > Instead of defaulting to patching NOP opcodes at init time, and leaving
+> > it to the architectures to override this if this is not needed, switch
+> > to a model where doing nothing is the default. This is the common case
+> > by far, as only MIPS requires NOP patching at init time. On all other
+> > architectures, the correct encodings are emitted by the compiler and so
+> > no initial patching is needed.
+> > 
+> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> > ---
+> >  Documentation/staging/static-keys.rst |  3 ---
+> >  arch/arc/kernel/jump_label.c          | 13 -------------
+> >  arch/arm/kernel/jump_label.c          |  6 ------
+> >  arch/arm64/kernel/jump_label.c        | 11 -----------
+> >  arch/mips/include/asm/jump_label.h    |  2 ++
+> >  arch/parisc/kernel/jump_label.c       | 11 -----------
+> >  arch/riscv/kernel/jump_label.c        | 12 ------------
+> >  arch/s390/kernel/jump_label.c         |  5 -----
+> >  arch/x86/kernel/jump_label.c          | 13 -------------
+> >  kernel/jump_label.c                   | 14 +++-----------
+> >  10 files changed, 5 insertions(+), 85 deletions(-)
 > 
-> Ugh, this is just too ugly for words.
+> I have one minor comment below, but either way this is a nice cleanup (and I'm
+> always happy to see __weak functions disappear), so FWIW:
+
+(I've got a new found hatred for __weak after having had to fix so many
+objtool issues with it, so yeah, that).
+
 > 
-> That's not a fix. That's a "hide the problem" patch.
+>   Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-I agree it is papering over the real problem. I consider that a stopgap
-solution so that machines can boot until we find a cleaner solution.
+With the thing Mark pointed out fixed:
 
-> Now, admittedly clearly the "hide the problem" code already existed,
-> and was just moved earlier, but I really think this whole "we're
-> calling __mark_inode_dirty() on an inode that isn't even *initialized*
-> yet" is a much deeper issue, and shouldn't have some hacky work-around
-> in __mark_inode_dirty() that just happens to make it work.
-> 
-> I don't mind that patch per se - moving the code is fine.
-> 
-> But I *do* mind the patch when the reason is to hide that wrong
-> ordering of operations.
-> 
-> Now, maybe a proper fix might be to say that new_inode_pseudo() should
-> always initialize i_state to I_DIRTY_ALL or something like that. The
-> comment already says that they cannot participate in writeback, so
-> maybe they should be disabled that way (ie a pseudo inode is always
-> dirty and marking it dirty does nothing).
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Sadly it is not so simple. Firstly, new_inode_pseudo() gets used for all
-inodes (through new_inode()), secondly, tmpfs allocates fully standard
-inodes through new_inode() as any other filesystem. We could check
-writeback capabilities of the sb->s_bdi in new_inode_pseudo() but that
-would not work for inodes that will become block device inodes because
-blockdev_superblock has noop_backing_dev_info so we'd have to specialcase
-that. Overall it looks a bit hairy to my taste.
-
-> And then you get rid of the noop_backing_dev_info entirely.
-
-And this would be even more difficult because there are other places that
-expect there's *some* bdi associated with each sb.
-
-> Or just make sure that noop_backing_dev_info is fully initialized
-> before it's used.
-> 
-> Because I think the real problem here is that things have a pointer to
-> an uninitialized backing_dev_info.
-
-I fully agree with this. IMHO we need to initialize noop_backing_dev_info
-earlier but early init is not exactly my comfort zone so I have to verify
-whether various stuff in cgwb_bdi_init() is safe to call so early...
-
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+(although, I'll probably be the one to eventually apply these I suppose,
+unless they're needed in a different tree?)

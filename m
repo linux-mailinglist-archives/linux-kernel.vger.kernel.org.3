@@ -2,111 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F5554C8F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 572F454C901
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348931AbiFOMs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 08:48:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
+        id S1348998AbiFOMtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 08:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348826AbiFOMsZ (ORCPT
+        with ESMTP id S1348940AbiFOMtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:48:25 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 394E81758B
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 05:48:24 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id v8so2091503ljj.8
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 05:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=IKkEI1vEAYy+wKZ0nZJbXYdiseAo5I2B96TpHBLOCmU=;
-        b=dil/QRv2b/+pgYvnTk+wUqC3Cwp1uy4EqTIdoZshFp3gnU+y7nTLSEE8a+JCYTQdEX
-         UspKPIMjc2gz4WLI9G9hDJfvxvT7GmcfRNob78gK3lHxjkKZC1hxjnqsLZ4i/rdku/qK
-         TI9sBkSgPSOpBz8jNsWTfDakANzDLpS3/thSMQYt7lkVcQiggvUUcQN96w0D/CU1qf9w
-         Z+sgm+WzJEvK8AYrJiDeiNACECWIyr7c5Oi8gSgiF3B2qbigGRAqvoYOkpAwZjxiSFn8
-         co8Quua2Iq1d+BF/rUejm4SXYJTNRGY2oca8oOWPmGsegz+1iwQGURpzlOhonvv+70+l
-         hZXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IKkEI1vEAYy+wKZ0nZJbXYdiseAo5I2B96TpHBLOCmU=;
-        b=IVweYlvcnE6T3JODg0lKHLqCK/CpoaSWOf7d5Noc1y0svCHsWrub8PGSyN70slr7iW
-         FfAJrsAF0aJfKlGiMRO5GjTBRH7pyxVZZwapj7LLU1Ngm7q4IgcbavnQ8eeQqJAIfLPS
-         p2gdnao4L213jTbaICjwN0+svGPLHGoI9oV9gA/XlXaXDyf1S9L9bU6QsIdmi5pYrUM8
-         glKW/kDhg6UXB3Yn8I7YRXOJYm0gf/pgXEOev0Sys5a4fNRqvF8UZz7CyxflsY1c2rpr
-         b+eNBkK1s1L0MVlXKGghZLDaBtagbFNnNGPevDf3XQxsXo/GhIzi+8ba2NU2i83z+q4o
-         zkUQ==
-X-Gm-Message-State: AJIora+QysKS2n4yRHKIOq1c6mCs7bphMD1TlkH6hmIqSUYl9/Ry6X9K
-        ti662lS1GoeznTtCEesygf0RIA==
-X-Google-Smtp-Source: AGRyM1uetcxrCiKpy9pOfOUbCy/it8Y6OjjPF+K52yYDh1v5ozTUJOrEQmpJBZfAc5I/iizeKGJCLg==
-X-Received: by 2002:a2e:91c6:0:b0:259:1427:f85c with SMTP id u6-20020a2e91c6000000b002591427f85cmr5091572ljg.405.1655297302558;
-        Wed, 15 Jun 2022 05:48:22 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id y1-20020a199141000000b0047255d2119bsm1784208lfj.202.2022.06.15.05.48.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 05:48:21 -0700 (PDT)
-Message-ID: <6ad85a23-0156-2774-1215-ea02257cc107@linaro.org>
-Date:   Wed, 15 Jun 2022 15:48:21 +0300
+        Wed, 15 Jun 2022 08:49:01 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CF818E06;
+        Wed, 15 Jun 2022 05:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655297339; x=1686833339;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Lsr0reZ0ljc/IDxdZ6OVGhyBg7O/sLBaX8TSU3lbY7E=;
+  b=MLyYnuCn8wTc2HvPCzROwU2mTHlUTJRsBpv/EwOZgNcq4cYupuKXMefF
+   6WpbV2YuwBPGTpycHH5PU0PQt3QJdqwwJqSFdc7ZVOB/Em2Ve5nKzYR9M
+   AVZcnK1rGCVcXkVOKnbwB4A9Kwz7jc6MQ6BjJ1RZ5UYCLQG8Bke6WqOrJ
+   HaMs9M9glvmduQFyFeMGrtwZ3+zVyhEbrfRkKHMzcB11TTjhirxmGferK
+   q/epu4a1hC1XroM5nkM3SqKrK245JAH4Td7f376THmGBcYm33WPL9fjrU
+   yTPZCJSDuo3xJxwosVkwH8wcoEfgp40bRYeulSE+0+alSdf6wtuMFnIl0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="261973580"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="261973580"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 05:48:51 -0700
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="687288103"
+Received: from mgrymel-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.249.41.34])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 05:48:48 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v7 1/6] serial: 8250: make saved LSR larger
+Date:   Wed, 15 Jun 2022 15:48:24 +0300
+Message-Id: <20220615124829.34516-2-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20220615124829.34516-1-ilpo.jarvinen@linux.intel.com>
+References: <20220615124829.34516-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] drm/msm: Use div64_ul instead of do_div
-Content-Language: en-GB
-To:     Wan Jiabing <wanjiabing@vivo.com>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <sean@poorly.run>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20220426132126.686447-1-wanjiabing@vivo.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220426132126.686447-1-wanjiabing@vivo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/04/2022 16:21, Wan Jiabing wrote:
-> Fix following coccicheck warning:
-> drivers/gpu/drm/msm/msm_gpu_devfreq.c:72:1-7: WARNING: do_div() does a 64-by-32 division, please consider using div64_ul instead.
-> 
-> Use div64_ul instead of do_div to avoid a possible truncation.
-> 
-> Signed-off-by: Wan Jiabing <wanjiabing@vivo.com>
+DW flags address received as BIT(8) in LSR. In order to not lose that
+on read, enlarge lsr_saved_flags to u16.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Adjust lsr/status variables and related call chains to use u16.
+Technically, some of these type conversion would not be needed but it
+doesn't hurt to be consistent.
 
-> ---
->   drivers/gpu/drm/msm/msm_gpu_devfreq.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/msm_gpu_devfreq.c b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-> index d2539ca78c29..c2ea978c8921 100644
-> --- a/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-> +++ b/drivers/gpu/drm/msm/msm_gpu_devfreq.c
-> @@ -69,7 +69,7 @@ static void get_raw_dev_status(struct msm_gpu *gpu,
->   	df->time = time;
->   
->   	busy_time *= USEC_PER_SEC;
-> -	do_div(busy_time, sample_rate);
-> +	busy_time = div64_ul(busy_time, sample_rate);
->   	if (WARN_ON(busy_time > ~0LU))
->   		busy_time = ~0LU;
->   
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250.h         |  4 ++--
+ drivers/tty/serial/8250/8250_exar.c    |  2 +-
+ drivers/tty/serial/8250/8250_fsl.c     |  2 +-
+ drivers/tty/serial/8250/8250_ingenic.c |  2 +-
+ drivers/tty/serial/8250/8250_omap.c    |  7 +++----
+ drivers/tty/serial/8250/8250_port.c    | 17 +++++++++--------
+ include/linux/serial_8250.h            |  6 +++---
+ 7 files changed, 20 insertions(+), 20 deletions(-)
 
-
+diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
+index b120da57c61f..0ff5688ba90c 100644
+--- a/drivers/tty/serial/8250/8250.h
++++ b/drivers/tty/serial/8250/8250.h
+@@ -133,9 +133,9 @@ static inline void serial_out(struct uart_8250_port *up, int offset, int value)
+  *
+  *	Returns LSR value or'ed with the preserved flags (if any).
+  */
+-static inline unsigned int serial_lsr_in(struct uart_8250_port *up)
++static inline u16 serial_lsr_in(struct uart_8250_port *up)
+ {
+-	unsigned int lsr = up->lsr_saved_flags;
++	u16 lsr = up->lsr_saved_flags;
+ 
+ 	lsr |= serial_in(up, UART_LSR);
+ 	up->lsr_saved_flags = lsr & LSR_SAVE_FLAGS;
+diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250/8250_exar.c
+index 528779b40049..8be3c9ecd623 100644
+--- a/drivers/tty/serial/8250/8250_exar.c
++++ b/drivers/tty/serial/8250/8250_exar.c
+@@ -195,7 +195,7 @@ static int xr17v35x_startup(struct uart_port *port)
+ 
+ static void exar_shutdown(struct uart_port *port)
+ {
+-	unsigned char lsr;
++	u16 lsr;
+ 	bool tx_complete = false;
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	struct circ_buf *xmit = &port->state->xmit;
+diff --git a/drivers/tty/serial/8250/8250_fsl.c b/drivers/tty/serial/8250/8250_fsl.c
+index 9c01c531349d..e76b8bd3d4a1 100644
+--- a/drivers/tty/serial/8250/8250_fsl.c
++++ b/drivers/tty/serial/8250/8250_fsl.c
+@@ -25,7 +25,7 @@
+ 
+ int fsl8250_handle_irq(struct uart_port *port)
+ {
+-	unsigned char lsr, orig_lsr;
++	u16 lsr, orig_lsr;
+ 	unsigned long flags;
+ 	unsigned int iir;
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+diff --git a/drivers/tty/serial/8250/8250_ingenic.c b/drivers/tty/serial/8250/8250_ingenic.c
+index cff91aa03f29..2b2f5d8d24b9 100644
+--- a/drivers/tty/serial/8250/8250_ingenic.c
++++ b/drivers/tty/serial/8250/8250_ingenic.c
+@@ -54,7 +54,7 @@ static void early_out(struct uart_port *port, int offset, uint8_t value)
+ 
+ static void ingenic_early_console_putc(struct uart_port *port, unsigned char c)
+ {
+-	uint8_t lsr;
++	u16 lsr;
+ 
+ 	do {
+ 		lsr = early_in(port, UART_LSR);
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index ac8bfa042391..0dcecbbc3967 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -1115,8 +1115,7 @@ static bool handle_rx_dma(struct uart_8250_port *up, unsigned int iir)
+ 	return omap_8250_rx_dma(up);
+ }
+ 
+-static unsigned char omap_8250_handle_rx_dma(struct uart_8250_port *up,
+-					     u8 iir, unsigned char status)
++static u16 omap_8250_handle_rx_dma(struct uart_8250_port *up, u8 iir, u16 status)
+ {
+ 	if ((status & (UART_LSR_DR | UART_LSR_BI)) &&
+ 	    (iir & UART_IIR_RDI)) {
+@@ -1130,7 +1129,7 @@ static unsigned char omap_8250_handle_rx_dma(struct uart_8250_port *up,
+ }
+ 
+ static void am654_8250_handle_rx_dma(struct uart_8250_port *up, u8 iir,
+-				     unsigned char status)
++				     u16 status)
+ {
+ 	/*
+ 	 * Queue a new transfer if FIFO has data.
+@@ -1164,7 +1163,7 @@ static int omap_8250_dma_handle_irq(struct uart_port *port)
+ {
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	struct omap8250_priv *priv = up->port.private_data;
+-	unsigned char status;
++	u16 status;
+ 	u8 iir;
+ 
+ 	serial8250_rpm_get(up);
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index c860f5964138..f417c29507e1 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -1508,7 +1508,7 @@ static inline void __stop_tx(struct uart_8250_port *p)
+ 	struct uart_8250_em485 *em485 = p->em485;
+ 
+ 	if (em485) {
+-		unsigned char lsr = serial_lsr_in(p);
++		u16 lsr = serial_lsr_in(p);
+ 		u64 stop_delay = 0;
+ 
+ 		if (!(lsr & UART_LSR_THRE))
+@@ -1565,7 +1565,7 @@ static inline void __start_tx(struct uart_port *port)
+ 
+ 	if (serial8250_set_THRI(up)) {
+ 		if (up->bugs & UART_BUG_TXEN) {
+-			unsigned char lsr = serial_lsr_in(up);
++			u16 lsr = serial_lsr_in(up);
+ 
+ 			if (lsr & UART_LSR_THRE)
+ 				serial8250_tx_chars(up);
+@@ -1719,7 +1719,7 @@ static void serial8250_enable_ms(struct uart_port *port)
+ 	serial8250_rpm_put(up);
+ }
+ 
+-void serial8250_read_char(struct uart_8250_port *up, unsigned char lsr)
++void serial8250_read_char(struct uart_8250_port *up, u16 lsr)
+ {
+ 	struct uart_port *port = &up->port;
+ 	unsigned char ch;
+@@ -1788,7 +1788,7 @@ EXPORT_SYMBOL_GPL(serial8250_read_char);
+  * (such as THRE) because the LSR value might come from an already consumed
+  * character.
+  */
+-unsigned char serial8250_rx_chars(struct uart_8250_port *up, unsigned char lsr)
++u16 serial8250_rx_chars(struct uart_8250_port *up, u16 lsr)
+ {
+ 	struct uart_port *port = &up->port;
+ 	int max_count = 256;
+@@ -1908,7 +1908,7 @@ static bool handle_rx_dma(struct uart_8250_port *up, unsigned int iir)
+  */
+ int serial8250_handle_irq(struct uart_port *port, unsigned int iir)
+ {
+-	unsigned char status;
++	u16 status;
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	bool skip_rx = false;
+ 	unsigned long flags;
+@@ -1994,7 +1994,7 @@ static unsigned int serial8250_tx_empty(struct uart_port *port)
+ {
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	unsigned long flags;
+-	unsigned int lsr;
++	u16 lsr;
+ 
+ 	serial8250_rpm_get(up);
+ 
+@@ -2117,7 +2117,7 @@ static void wait_for_xmitr(struct uart_8250_port *up, int bits)
+ static int serial8250_get_poll_char(struct uart_port *port)
+ {
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+-	unsigned char lsr;
++	u16 lsr;
+ 	int status;
+ 
+ 	serial8250_rpm_get(up);
+@@ -2173,7 +2173,8 @@ int serial8250_do_startup(struct uart_port *port)
+ {
+ 	struct uart_8250_port *up = up_to_u8250p(port);
+ 	unsigned long flags;
+-	unsigned char lsr, iir;
++	unsigned char iir;
++	u16 lsr;
+ 	int retval;
+ 
+ 	if (!port->fifosize)
+diff --git a/include/linux/serial_8250.h b/include/linux/serial_8250.h
+index ff84a3ed10ea..4565f25ba9a2 100644
+--- a/include/linux/serial_8250.h
++++ b/include/linux/serial_8250.h
+@@ -119,7 +119,7 @@ struct uart_8250_port {
+ 	 * be immediately processed.
+ 	 */
+ #define LSR_SAVE_FLAGS UART_LSR_BRK_ERROR_BITS
+-	unsigned char		lsr_saved_flags;
++	u16			lsr_saved_flags;
+ #define MSR_SAVE_FLAGS UART_MSR_ANY_DELTA
+ 	unsigned char		msr_saved_flags;
+ 
+@@ -170,8 +170,8 @@ extern void serial8250_do_set_divisor(struct uart_port *port, unsigned int baud,
+ 				      unsigned int quot_frac);
+ extern int fsl8250_handle_irq(struct uart_port *port);
+ int serial8250_handle_irq(struct uart_port *port, unsigned int iir);
+-unsigned char serial8250_rx_chars(struct uart_8250_port *up, unsigned char lsr);
+-void serial8250_read_char(struct uart_8250_port *up, unsigned char lsr);
++u16 serial8250_rx_chars(struct uart_8250_port *up, u16 lsr);
++void serial8250_read_char(struct uart_8250_port *up, u16 lsr);
+ void serial8250_tx_chars(struct uart_8250_port *up);
+ unsigned int serial8250_modem_status(struct uart_8250_port *up);
+ void serial8250_init_port(struct uart_8250_port *up);
 -- 
-With best wishes
-Dmitry
+2.30.2
+

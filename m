@@ -2,123 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D26454C2A3
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F01E254C2B4
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 09:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241586AbiFOHcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 03:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
+        id S245552AbiFOHfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 03:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbiFOHcA (ORCPT
+        with ESMTP id S245205AbiFOHfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 03:32:00 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2E2473A0;
-        Wed, 15 Jun 2022 00:31:58 -0700 (PDT)
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4LNH7B4jvmz6GD9p;
-        Wed, 15 Jun 2022 15:31:50 +0800 (CST)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 15 Jun 2022 09:31:55 +0200
-Received: from [10.195.33.253] (10.195.33.253) by
- lhreml724-chm.china.huawei.com (10.201.108.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 15 Jun 2022 08:31:54 +0100
-Message-ID: <3a27b6ff-e495-8f11-6925-1487c9d14fa9@huawei.com>
-Date:   Wed, 15 Jun 2022 08:35:02 +0100
+        Wed, 15 Jun 2022 03:35:22 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2433F4756E;
+        Wed, 15 Jun 2022 00:35:21 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id j5-20020a05600c1c0500b0039c5dbbfa48so611343wms.5;
+        Wed, 15 Jun 2022 00:35:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6231YElwpY0EMQw/jVrtaouMPdsWUXcvBmdiLPb1PQ4=;
+        b=YQiPihd7vfYxTOea4eaxk6vyRopNf5N4OX8VEVZW9Fw7eCPaaCqHGtFLvvCJBB9xiW
+         +EPPQbDSQ/wjQjzo3tpHCC88vX0TwD7lYgbIL4PHfR3Lq+wl6lR7mx/HwhXhJ0jOkI+G
+         ancgT5HSvQ3NXGBNOS/EmXaOafJWmxgaruoOmCXsGeXJNrNuPdSI5UfSwXKiDvEmf41b
+         qqRBRXynxr9t3F2RCvq1z5QBX8AiTtbacCj/H4f/NRIfZ4jHabwBbmyHvE108rmMM2wz
+         XmE+PSUZo+8oOXmM+veBs66DFSyrtenU5aWWCNKbkYzcB6wB0HiNJXYcs6/VWZN4cI8q
+         vfaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6231YElwpY0EMQw/jVrtaouMPdsWUXcvBmdiLPb1PQ4=;
+        b=1Z48Api1k7kb+FV482jj0d46sqcfV8OtAfjcrZCBhgKJuytMEpKC1p2F9kB8uamgC4
+         x6dkMSMMO3bcoNsmR0QcRaIWbMfXr2tIvtr0d1X9npUrFODhkXvEjq25UMU/tv4DrTl0
+         vxdk97s6fauoU7CdiIuwSrSZIsERRbPdPQfFgqsxy6ZfNJQmdJnvxmvcto5TR40/c2hi
+         pMuenYJ9MtYL9OdIxuSs6dqaeyYJk0xIdCdpsDBmPC8iv/zO0cMDXkkHY/vkfLUiHmIj
+         cKaefpnnAzJfi5T9XsnnILHEnvRyX2uir4ls1aViIHm0SBLvzyzoargLIMrnVRJ2dsWO
+         U+kg==
+X-Gm-Message-State: AOAM531uAfT2roFh7DttIcWAStukLCRZJrZWhBQYaF8EodSKg37b7xIJ
+        mh9unOZWn95PSGpXV0RYjOCesmUBNGIQCfPG
+X-Google-Smtp-Source: ABdhPJxh39A5lnBvRYI/2TeMwxhzEyOmO3E10gV5vCOnbG6aQ091rRCB9B4vaiuLlJlnkIUtCS6w+w==
+X-Received: by 2002:a05:600c:1d1f:b0:39c:5350:c5a3 with SMTP id l31-20020a05600c1d1f00b0039c5350c5a3mr8084676wms.136.1655278519588;
+        Wed, 15 Jun 2022 00:35:19 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id m17-20020adfc591000000b0020fff0ea0a3sm14224612wrg.116.2022.06.15.00.35.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jun 2022 00:35:18 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Neal Liu <neal_liu@aspeedtech.com>,
+        Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        linux-aspeed@lists.ozlabs.org, linux-usb@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] usb: gadget: ast2600: Fix a couple of spelling mistakes
+Date:   Wed, 15 Jun 2022 08:35:18 +0100
+Message-Id: <20220615073518.192827-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH RFC v2 03/18] scsi: core: Implement reserved command
- handling
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>, <axboe@kernel.dk>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <brking@us.ibm.com>, <hare@suse.de>, <hch@lst.de>
-CC:     <linux-block@vger.kernel.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        <chenxiang66@hisilicon.com>
-References: <1654770559-101375-1-git-send-email-john.garry@huawei.com>
- <1654770559-101375-4-git-send-email-john.garry@huawei.com>
- <b4a0ede5-95a3-4388-e808-7627b5484d01@opensource.wdc.com>
- <9e89360d-3325-92af-0436-b34df748f3e2@acm.org>
- <e36bba7e-d78d-27b4-a0e2-9d921bc82f5d@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <e36bba7e-d78d-27b4-a0e2-9d921bc82f5d@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.195.33.253]
-X-ClientProxiedBy: lhreml746-chm.china.huawei.com (10.201.108.196) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/06/2022 00:43, Damien Le Moal wrote:
-> On 6/15/22 03:20, Bart Van Assche wrote:
->> On 6/13/22 00:01, Damien Le Moal wrote:
->>> On 6/9/22 19:29, John Garry wrote:
->>>> +	/*
->>>> +	 * This determines how many commands the HBA will set aside
->>>> +	 * for internal commands. This number will be added to
->>>> +	 * @can_queue to calcumate the maximum number of simultaneous
->>>
->>> s/calcumate/calculate
->>>
->>> But this is weird. For SATA, can_queue is 32. Having reserved commands,
->>> that number needs to stay the same. We cannot have more than 32 tags.
->>> I think keeping can_queue as the max queue depth with at most
->>> nr_reserved_cmds tags reserved is better.
->>>
->>>> +	 * commands sent to the host.
->>>> +	 */
->>>> +	int nr_reserved_cmds;
->>
->> +1 for Damien's request. I also prefer to keep can_queue as the maximum
->> queue depth, whether or not nr_reserved_cmds has been set.
-> 
-> For non SATA drives, I still think that is a good idea. However, for SATA,
-> we always have the internal tag command that is special. With John's
-> change, it would have to be reserved but that means we are down to 31 max
-> QD,
+There are a couple of spelling mistakes, one in a dev_warn message
+and another in a SETUP_DBG message. Fix these and remove an extraneous
+white space too.
 
-My intention is to keep regular tag depth at 32 for SATA. We add an 
-extra tag as a reserved tag. Indeed, this is called a 'tag', but it's 
-just really the placeholder for what will be the ATA_TAG_INTERNAL request.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/usb/gadget/udc/aspeed_udc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-About how we set scsi_host.can_queue, in this series we set .can_queue 
-as max regular tags, and the handling is as follows:
+diff --git a/drivers/usb/gadget/udc/aspeed_udc.c b/drivers/usb/gadget/udc/aspeed_udc.c
+index 1fc15228ff15..05cfcc4812b8 100644
+--- a/drivers/usb/gadget/udc/aspeed_udc.c
++++ b/drivers/usb/gadget/udc/aspeed_udc.c
+@@ -904,7 +904,7 @@ static void ast_udc_epn_handle_desc(struct ast_udc_dev *udc, u16 ep_num)
+ 	int i;
+ 
+ 	if (list_empty(&ep->queue)) {
+-		dev_warn(dev, "%s reqest queue empty !\n", ep->ep.name);
++		dev_warn(dev, "%s request queue empty!\n", ep->ep.name);
+ 		return;
+ 	}
+ 
+@@ -1036,7 +1036,7 @@ static void ast_udc_ep0_handle_setup(struct ast_udc_dev *udc)
+ 
+ 	memcpy_fromio(&crq, udc->creq, sizeof(crq));
+ 
+-	SETUP_DBG(udc, "SETEUP packet: %02x/%02x/%04x/%04x/%04x\n",
++	SETUP_DBG(udc, "SETUP packet: %02x/%02x/%04x/%04x/%04x\n",
+ 		  crq.bRequestType, crq.bRequest, le16_to_cpu(crq.wValue),
+ 		  le16_to_cpu(crq.wIndex), le16_to_cpu(crq.wLength));
+ 
+-- 
+2.35.3
 
-scsi_mq_setup_tags():
-tag_set->queue_depth = shost->can_queue + shost->nr_reserved_cmds
-tag_set->reserved_tags = shost->nr_reserved_cmds
-
-So we honour the rule that blk_mq_tag_set.queue_depth is the total tag 
-depth, including reserved.
-
-Incidentally I think Christoph prefers to keep .can_queue at total max 
-tags including reserved:
-https://lore.kernel.org/linux-scsi/337339b7-6f4a-a25c-f11c-7f701b42d6a8@suse.de/
-
-> so going backward several years... That internal tag for ATA does not
-> need to be reserved since this command is always used when the drive is
-> idle and no other NCQ commands are on-going.
-
-So do you mean that ATA_TAG_INTERNAL qc is used for other commands apart 
-from internal commands?
-
-> 
-> So the solution to all this is a likely a little more complicated if we
-> want to keep ATA max QD to 32.
-> 
-
-thanks,
-John

@@ -2,94 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6ED54D17B
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F019B54D17C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 21:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243483AbiFOTUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 15:20:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52288 "EHLO
+        id S244429AbiFOTUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 15:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236585AbiFOTUU (ORCPT
+        with ESMTP id S236585AbiFOTUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 15:20:20 -0400
-Received: from smtp.smtpout.orange.fr (smtp03.smtpout.orange.fr [80.12.242.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4533CFDE
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 12:20:19 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id 1YYroIQkl26JC1YYro1i2w; Wed, 15 Jun 2022 21:20:18 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Wed, 15 Jun 2022 21:20:18 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <dc2fc881-9895-eb47-dc4f-6ab2213e6eac@wanadoo.fr>
-Date:   Wed, 15 Jun 2022 21:20:17 +0200
+        Wed, 15 Jun 2022 15:20:41 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABDA43ED16;
+        Wed, 15 Jun 2022 12:20:39 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id DDCAE21AB8;
+        Wed, 15 Jun 2022 19:20:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1655320837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5XqRKdwqzkoEs3gZYQHX7eS05tMGf3VU2LSgLCmE/jM=;
+        b=F1AJkr9skRupqowd/XDIH5I4YmXy8U7D6FufHjWhAoLbDgWLr/RXc4WLwFqwd7PKg71aua
+        I7bHl+3jIatG0SzBdlSop+fvcFrjvPKm9ZHyBHsIAWPSwA5Ho78OKA2F85KGwYtd2u4WQk
+        VL8RQqHzgKfy+3crzWXzVTKSiVE1daQ=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 511AA2C141;
+        Wed, 15 Jun 2022 19:20:36 +0000 (UTC)
+Date:   Wed, 15 Jun 2022 21:20:33 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>, zhouzhouyi@gmail.com,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Josh Triplett <josh@joshtriplett.org>,
+        rcu <rcu@vger.kernel.org>, linux-rockchip@lists.infradead.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] printk: Block console kthreads when direct printing
+ will be required
+Message-ID: <YqoxAUwGx0AtxDXd@alley>
+References: <20220615162805.27962-1-pmladek@suse.com>
+ <20220615162805.27962-2-pmladek@suse.com>
+ <CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] vboxsf: Directly use ida_alloc()/free()
-Content-Language: fr
-To:     Bo Liu <liubo03@inspur.com>, hdegoede@redhat.com
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220615062930.2893-1-liubo03@inspur.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20220615062930.2893-1-liubo03@inspur.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 15/06/2022 à 08:29, Bo Liu a écrit :
-> Use ida_alloc()/ida_free() instead of
-> ida_simple_get()/ida_simple_remove().
-> The latter is deprecated and more verbose.
+On Wed 2022-06-15 10:47:14, Linus Torvalds wrote:
+> On Wed, Jun 15, 2022 at 9:28 AM Petr Mladek <pmladek@suse.com> wrote:
+> >
+> > BugLink: https://lore.kernel.org/r/20220610205038.GA3050413@paulmck-ThinkPad-P17-Gen-1
+> > BugLink: https://lore.kernel.org/r/CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com
 > 
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
-
-Hi,
-for what it's worth:
-
-Reviewed-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-
-> ---
->   fs/vboxsf/super.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
+> Other thread discussion about this exact thing:
 > 
-> diff --git a/fs/vboxsf/super.c b/fs/vboxsf/super.c
-> index d2f6df69f611..24ef7ddecf89 100644
-> --- a/fs/vboxsf/super.c
-> +++ b/fs/vboxsf/super.c
-> @@ -155,7 +155,7 @@ static int vboxsf_fill_super(struct super_block *sb, struct fs_context *fc)
->   		}
->   	}
->   
-> -	sbi->bdi_id = ida_simple_get(&vboxsf_bdi_ida, 0, 0, GFP_KERNEL);
-> +	sbi->bdi_id = ida_alloc(&vboxsf_bdi_ida, GFP_KERNEL);
->   	if (sbi->bdi_id < 0) {
->   		err = sbi->bdi_id;
->   		goto fail_free;
-> @@ -221,7 +221,7 @@ static int vboxsf_fill_super(struct super_block *sb, struct fs_context *fc)
->   	vboxsf_unmap_folder(sbi->root);
->   fail_free:
->   	if (sbi->bdi_id >= 0)
-> -		ida_simple_remove(&vboxsf_bdi_ida, sbi->bdi_id);
-> +		ida_free(&vboxsf_bdi_ida, sbi->bdi_id);
->   	if (sbi->nls)
->   		unload_nls(sbi->nls);
->   	idr_destroy(&sbi->ino_idr);
-> @@ -268,7 +268,7 @@ static void vboxsf_put_super(struct super_block *sb)
->   
->   	vboxsf_unmap_folder(sbi->root);
->   	if (sbi->bdi_id >= 0)
-> -		ida_simple_remove(&vboxsf_bdi_ida, sbi->bdi_id);
-> +		ida_free(&vboxsf_bdi_ida, sbi->bdi_id);
->   	if (sbi->nls)
->   		unload_nls(sbi->nls);
->   
+>    https://lore.kernel.org/all/CAHk-=wgzRUT1fBpuz3xcN+YdsX0SxqOzHWRtj0ReHpUBb5TKbA@mail.gmail.com/
+> 
+> please stop making up random tags that make no sense.
+> 
+> Just use "Link:"
+> 
+> Look at that first one (I didn't even bother following the second
+> one). The "bug" part is not even the most important part.
+> 
+> The reason to follow that link is all the discussion, the test-patch,
+> and the confirmation from Paul that "yup, that patch solves the
+> problem for me".
+> 
+> It's extra context to the commit, in case somebody wants to know the
+> history. The "bug" part is (and always should be) already explained in
+> the commit message, there's absolutely no point in adding soem extra
+> noise to the "Link:" tag.
+> 
+> And if the only reason for "BugLink:" to exist is to show "look, this
+> tag actually contains relevant and interesting information", then the
+> solution to THAT problem is to not have the links that are useless and
+> pointless in the first place.
+> 
+> Put another way: if you want to distinguish useless links from useful
+> ones, just do it by not including the useless ones.
+> 
+> Ok?
 
+Got it! I am going to use "Link:" instead.
+
+I just see how the discussion evolved at
+https://lore.kernel.org/all/CAHk-=wgzRUT1fBpuz3xcN+YdsX0SxqOzHWRtj0ReHpUBb5TKbA@mail.gmail.com/
+
+It is actually this exact discussion that confused me. I got the
+impression that BugLink was a commonly used tag. I see that
+I was too fast.
+
+Thanks for stopping me.
+
+Best Regards,
+Petr

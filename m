@@ -2,55 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E140B54CF4C
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C34054CF43
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357265AbiFORCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37138 "EHLO
+        id S1357189AbiFORBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357291AbiFORBs (ORCPT
+        with ESMTP id S1357174AbiFORBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:01:48 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0339650058
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:01:47 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D3C80153B;
-        Wed, 15 Jun 2022 10:01:46 -0700 (PDT)
-Received: from bogus (unknown [10.57.11.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1FC1D3F73B;
-        Wed, 15 Jun 2022 10:01:43 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 18:00:33 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        linux-kernel@vger.kernel.org, Atish Patra <atishp@atishpatra.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Qing Wang <wangqing@vivo.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v3 15/16] arch_topology: Set cluster identifier in each
- core/thread from /cpu-map
-Message-ID: <20220615170033.q4og4pnmpwdg3l2g@bogus>
-References: <20220525081416.3306043-12-sudeep.holla@arm.com>
- <20220525081416.3306043-13-sudeep.holla@arm.com>
- <20220525081416.3306043-14-sudeep.holla@arm.com>
- <20220525081416.3306043-15-sudeep.holla@arm.com>
- <20220525081416.3306043-16-sudeep.holla@arm.com>
- <947470ba-35fc-3c72-d01b-c0a7337216a2@arm.com>
- <20220606102159.dduxmvq4m2fm6gks@bogus>
- <CAKfTPtB8iPzEXipsJqNtd9-aJMKx-FAaiGMzOg58HgRQuo39iA@mail.gmail.com>
- <20220610102753.virkx47uyfsojol6@bogus>
- <CAKfTPtD==UMjbSGHvKxT_z=LyvsJt=UCHsqkbgVnagbn5Aqpcw@mail.gmail.com>
+        Wed, 15 Jun 2022 13:01:00 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D7284FC4F
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:01:00 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-30c2f288f13so67570577b3.7
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:01:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/r7XkSh5TUFeVMIe3mikVGP0QRjTftc0VpzQNshFaLA=;
+        b=YEY/aa02EjDu6Gde1XwVcHQ2DxuVZ2OBrNiKoejQ6TtQOhFwmhY/+9cbq0+Zp16lgL
+         kD0eDwPqS+oBorSD1W7GoPu2sDRE+nxUfCEwkCsccSZERq+ao/DOWBL9pvFtSCfC1EpI
+         87llx6q+yjmXGkCBE1CGNto4D1wXfUoFpyPr4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/r7XkSh5TUFeVMIe3mikVGP0QRjTftc0VpzQNshFaLA=;
+        b=iPXnMCQSq+bw0vhdnJK3rj/o8cGilFXG46DwG2Bs4PJMVql91aUAxDO9yiGGfMUGnx
+         IFzHO+Iv0UHpoNhwiQDufSbRWXvixD2UbiSZjevY3FAD3UXjZvx9uuPlJwXYMY2cs8t6
+         s36rssdeqtA5D8WNCfazoq1e2nWxGR/ONd2H1mOueLzlVbTFxHcI3kjAdC9/LrnOn5QO
+         w2gJnJNbzopEm51H+3UYG4W459zog/9RwB1JSmkMF+UZc3Uek0tcuCc9EGe33zWTgzLN
+         UYOonwZYEGTFXJO3iwFjYdDLyaxuj2Xa602fOh0rlKNch4RrABKRXUITkIaSdhm76X7E
+         V9oA==
+X-Gm-Message-State: AJIora8TCPbo87y33jQMGqwi3xW/Mn74ROhpiJYtD/s/kzt82aLJ5+x7
+        E/VsiOVhga5/17TKJmPq/3BJQ/7mKFZhHxZSlkzCOg==
+X-Google-Smtp-Source: AGRyM1vwSIJrbZk5hnWNUg96C0Ni2qFhhTib83BhjFCpBSWqIWSHHXOiLELU1pSyNWuERIOYn4A4WUHEnANs0z8CtuA=
+X-Received: by 2002:a0d:f882:0:b0:2f4:d830:6fd with SMTP id
+ i124-20020a0df882000000b002f4d83006fdmr656389ywf.387.1655312459179; Wed, 15
+ Jun 2022 10:00:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtD==UMjbSGHvKxT_z=LyvsJt=UCHsqkbgVnagbn5Aqpcw@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220609181106.3695103-1-pmalani@chromium.org>
+ <20220609181106.3695103-7-pmalani@chromium.org> <b3b9768d-e0d0-7132-5f50-dd6aa53a68ee@collabora.com>
+ <CACeCKaexczFCja_ndndb_A58yZYQ98rTtgY4vHMknENTLxBPPA@mail.gmail.com> <28135a2f-bf02-fd0b-e881-0ce9d68bd764@collabora.com>
+In-Reply-To: <28135a2f-bf02-fd0b-e881-0ce9d68bd764@collabora.com>
+From:   Prashant Malani <pmalani@chromium.org>
+Date:   Wed, 15 Jun 2022 10:00:48 -0700
+Message-ID: <CACeCKadK0A4YD6+Nu=j9dw-dkhkj4ShkpEpSqH_bODjn8wniMg@mail.gmail.com>
+Subject: Re: [PATCH v2 6/7] drm/bridge: anx7625: Register Type-C mode switches
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        heikki.krogerus@linux.intel.com,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        David Airlie <airlied@linux.ie>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Jonas Karlman <jonas@kwiboo.se>,
+        swboyd@chromium.org, Pin-Yen Lin <treapking@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Xin Ji <xji@analogixsemi.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,140 +87,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please note until we agree on unified view for hardware topology, I will
-temporarily ignore any scheduler domain related issues/concerns as this
-thread/discussion is mixing up too much IMO. I am not ignoring sched_domain
-concerns, but deferring it until we agree on the hardware topology view
-which is user visible and how that impacts sched domain topology can be
-considered soon following that.
-
-On Tue, Jun 14, 2022 at 07:59:23PM +0200, Vincent Guittot wrote:
-> On Fri, 10 Jun 2022 at 12:27, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > On Fri, Jun 10, 2022 at 12:08:44PM +0200, Vincent Guittot wrote:
-> > > On Mon, 6 Jun 2022 at 12:22, Sudeep Holla <sudeep.holla@arm.com> wrote:
-> > > >
-> >
-> > [...]
-> >
-> > > > Why ? Are you suggesting that we shouldn't present the hardware cluster
-> > > > to the topology because of the above reason ? If so, sorry that is not a
-> > > > valid reason. We could add login to return NULL or appropriate value
-> > > > needed in cpu_clustergroup_mask id it matches MC level mask if we can't
-> > > > deal that in generic scheduler code. But the topology code can't be
-> > > > compromised for that reason as it is user visible.
-> > >
-> > > I tend to agree with Dietmar. The legacy use of cluster node in DT
-> > > refers to the dynamiQ or legacy b.L cluster which is also aligned to
-> > > the LLC and the MC scheduling level. The new cluster level that has
-> > > been introduced recently does not target this level but some
-> > > intermediate levels either inside like for the kupeng920 or the v9
-> > > complex or outside like for the ampere altra. So I would say that
-> > > there is one cluster node level in DT that refers to the same MC/LLC
-> > > level and only an additional child/parent cluster node should be used
-> > > to fill the clustergroup_mask.
-> > >
-> >
-> > Again I completely disagree. Let us look at the problems separately.
-> > The hardware topology that some of the tools like lscpu and lstopo expects
-> > what the hardware looks like and not the scheduler's view of the hardware.
-> > So the topology masks that gets exposed to the user-space needs fixing
-> > even today. I have reports from various tooling people about the same.
-> > E.g. Juno getting exposed as dual socket system is utter non-sense.
-> >
-> > Yes scheduler uses most of the topology masks as is but that is not a must.
-> > There are these *group_mask functions that can implement what scheduler
-> > needs to be fed.
-> >
-> > I am not sure why the 2 issues are getting mixed up and that is the main
-> > reason why I jumped into this to make sure the topology masks are
-> > not tampered based on the way it needs to be used for scheduler.
-> >
-> > Both ACPI and DT on a platform must present exact same hardware topology
-> > to the user-space, there is no space for argument there.
+On Wed, Jun 15, 2022 at 1:45 AM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> But that's exactly my point there:
-> ACPI doesn't show the dynamiQ level anywhere but only the llc which
-> are the same and your patch makes the dynamiQ level visible for DT in
-> addition to llc
+> Il 14/06/22 18:57, Prashant Malani ha scritto:
+> > On Tue, Jun 14, 2022 at 1:18 AM AngeloGioacchino Del Regno
+> > <angelogioacchino.delregno@collabora.com> wrote:
+> >>
+> >> Il 09/06/22 20:09, Prashant Malani ha scritto:
+> >>> When the DT node has "switches" available, register a Type-C mode-switch
+> >>> for each listed "switch". This allows the driver to receive state
+> >>> information about what operating mode a Type-C port and its connected
+> >>> peripherals are in, as well as status information (like VDOs) related to
+> >>> that state.
+> >>>
+> >>> The callback function is currently a stub, but subsequent patches will
+> >>> implement the required functionality.
+> >>>
+> >>> Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> >>> ---
+> >>>
+> >>> Changes since v2:
+> >>> - No changes.
+> >>>
+> >>>    drivers/gpu/drm/bridge/analogix/anx7625.c | 73 +++++++++++++++++++++++
+> >>>    drivers/gpu/drm/bridge/analogix/anx7625.h |  6 ++
+> >>>    2 files changed, 79 insertions(+)
+> >>>
+> >>> diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> >>> index 07ed44c6b839..d41a21103bd3 100644
+> >>> --- a/drivers/gpu/drm/bridge/analogix/anx7625.c
+> >>> +++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+> >>> @@ -15,6 +15,7 @@
+> >>>    #include <linux/regulator/consumer.h>
+> >>>    #include <linux/slab.h>
+> >>>    #include <linux/types.h>
+> >>> +#include <linux/usb/typec_mux.h>
+> >>>    #include <linux/workqueue.h>
+> >>>
+> >>>    #include <linux/of_gpio.h>
+> >>> @@ -2581,9 +2582,59 @@ static void anx7625_runtime_disable(void *data)
+> >>>        pm_runtime_disable(data);
+> >>>    }
+> >>>
+> >>> +static int anx7625_typec_mux_set(struct typec_mux_dev *mux,
+> >>> +                              struct typec_mux_state *state)
+> >>> +{
+> >>> +     return 0;
+> >>> +}
+> >>> +
+> >>> +static int anx7625_register_mode_switch(struct device *dev, struct device_node *node,
+> >>> +                                     struct anx7625_data *ctx)
+> >>> +{
+> >>> +     struct anx7625_port_data *port_data;
+> >>> +     struct typec_mux_desc mux_desc = {};
+> >>> +     char name[32];
+> >>> +     u32 port_num;
+> >>> +     int ret;
+> >>> +
+> >>> +     ret = of_property_read_u32(node, "reg", &port_num);
+> >>> +     if (ret)
+> >>> +             return ret;
+> >>> +
+> >>> +     if (port_num >= ctx->num_typec_switches) {
+> >>> +             dev_err(dev, "Invalid port number specified: %d\n", port_num);
+> >>> +             return -EINVAL;
+> >>> +     }
+> >>> +
+> >>> +     port_data = &ctx->typec_ports[port_num];
+> >>> +     port_data->ctx = ctx;
+> >>> +     mux_desc.fwnode = &node->fwnode;
+> >>> +     mux_desc.drvdata = port_data;
+> >>> +     snprintf(name, sizeof(name), "%s-%u", node->name, port_num);
+> >>> +     mux_desc.name = name;
+> >>> +     mux_desc.set = anx7625_typec_mux_set;
+> >>> +
+> >>> +     port_data->typec_mux = typec_mux_register(dev, &mux_desc);
+> >>> +     if (IS_ERR(port_data->typec_mux)) {
+> >>> +             ret = PTR_ERR(port_data->typec_mux);
+> >>> +             dev_err(dev, "Mode switch register for port %d failed: %d", port_num, ret);
+> >>> +     }
+> >>
+> >> Please return 0 at the end of this function.
+> >>
+> >>          if (IS_ERR(....)) {
+> >>                  ......code......
+> >>                  return ret;
+> >>          }
+> >>
+> >>          return 0;
+> >> }
+> >
+> > May I ask why? We're not missing any return paths. I would rather we
+> > keep it as is (which has the valid return value).
+> >
 >
-
-Sorry if I am missing something obvious here, but both ACPI and DT has no
-special representation for dynamiQ clusters and hence it is impossible to
-deduce the same from either DT or ACPI. Can you provide some details
-or example as what you are referring as dynamiQ. Also what you mean by
-dynamiQ not shown on ACPI while shown with DT systems. If there is any
-discrepancies, we need to fix.
-
-Now, what I refer as discrepancy for example on Juno is below:
-(value read from a subset of per cpu sysfs files)
-cpu                     0       1       2       3       4       5
-cluster_id              -1      -1      -1      -1      -1      -1
-physical_package_id     1       0       0       1       1       1
-cluster_cpus_list       0       1       2       3       4       5
-package_cpus_list       0,3-5   1-2     1-2     0,3-5   0,3-5   0,3-5
-
-The above one is for DT which is wrong in all the 4 entries above.
-The below one is on ACPI and after applying my series on Juno.
-
-cpu                     0       1       2       3       4       5
-cluster_id              1       0       0       1       1       1
-physical_package_id     0       0       0       0       0       0
-cluster_cpus_list       0,3-5   1-2     1-2     0,3-5   0,3-5   0,3-5
-package_cpus_list       0-5     0-5     0-5     0-5     0-5     0-5
-
-This matches the expectation from the various userspace tools like lscpu,
-lstopo,..etc.
-
-> >
-> > > IIUC, we don't describe the dynamiQ level in ACPI which  uses cache
-> > > topology instead to define cpu_coregroup_mask whereas DT described the
-> > > dynamiQ instead of using cache topology. If you use cache topology
-> > > now, then you should skip the dynamiQ
-> > >
-> >
-> > Yes, unless someone can work out a binding to represent that and convince
-> > DT maintainers ;).
-> >
-> > > Finally, even if CLS and MC have the same scheduling behavior for now,
-> > > they might ends up with different scheduling properties which would
-> > > mean that replacing MC level by CLS one for current SoC would become
-> > > wrong
-> > >
-> >
-> > Again as I mentioned to Dietmar, that is something we can and must deal with
-> > in those *group_mask and not expect topology mask to be altered to meet
-> > CLS/MC or whatever sched domains needs. Sorry, that is my strong opinion
-> > as the topology is already user-space visible and (tooling) people are
-> > complaining that DT systems are broken and doesn't match ACPI systems.
-> 
-> again, your proposal doesn't help here because the DT will show a
-> level that doesn't appears in ACPI
+> I know that you're not missing any return paths.
 >
+> That's only because the proposed one is a common pattern in the kernel
+> and it's only for consistency.
 
-Which level exactly ? It matches exactly for Juno, the sysfs files are
-exact match after my changes. Again don't mix the scheduler domains for
-arguments here.
+Thanks for the additional details. Since this isn't addressing any
+specific bug, and I
+notice varied usages of "return ret" in this file itself [1][2], I'd
+prefer keeping it as is.
 
-> >
-> > So unless someone gives me non-scheduler and topology specific reasons
-> > to change that, sorry but my opinion on this matter is not going to change ;).
-> >
-> > You will get this view of topology, find a way to manage with all those
-> > *group_mask functions. By the way it is already handled for ACPI systems,
-> 
-> AFAICT, no it's not, the cluster described in ACPI is not the dynamiQ
-> level that you make now visible to DT
+[1]: https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/bridge/analogix/anx7625.c#L296
+[2]: https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/bridge/analogix/anx7625.c#L436
 
-Again, no. There is no binding for dynamiQ level either in DT or ACPI and
-hence there is no way it can become visible on DT. So I have no idea why
-there is a thought process or assumption about existence of dynamiQ level
-in the DT. It doesn't exist. If that is wrong, can you point me to the
-bindings as well as existing device tree ? If you are referring to the
-phantom domains Dietmar mentioned in earlier threads, then they don't exist.
-It is made up and one need to get the bindings pushed before we can address
-such a system.
-
--- 
-Regards,
-Sudeep
+>
+> Regards,
+> Angelo
+>

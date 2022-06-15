@@ -2,146 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 002B954C229
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 08:50:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9331454C230
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 08:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244544AbiFOGuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 02:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
+        id S238984AbiFOGvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 02:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243941AbiFOGt7 (ORCPT
+        with ESMTP id S234071AbiFOGvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 02:49:59 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120087.outbound.protection.outlook.com [40.107.12.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B66544A15;
-        Tue, 14 Jun 2022 23:49:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m2UelEh9ezB3yyvkGWE8pk6QKSUp0tTsA/EO7WExQywRktfTEqxj/B1Juifemngh0vo1qZDN98eoNJnGrfnstyLKSTHQMhx2yK3iO+9J5V05aWviU8piAWjjuQ7++1X4HiwuBnjzZKQ2MNkESSEaLUZcKJ4AxgE07CNxDtpQ9D7ZHv0EB78MXbghYLhKXEmbxxVxUaxt4OPqm6BfRX/zRbyi27Pk95Zd6WqzIalQcJF/I40eFLgjrp350Flh7D/aMHrSyRmeqcMBFfXztrMbRt6qWvmqoIwzRupOoxJbdmuCogUS1bNHGq1cCK2oMFuFVtKQYdWPKK+oINhrQt4h5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T1oHbjEXVC4CnzpaMPWSNOPasYiEM/tjlArrEg1TM1I=;
- b=NJjL0E4YvvHLvJOZx/NbYi0PaI8z6JMwMRkgOZDOU/FGZFlSPn75aOEm13r6yM+u7DtEvCGzQoRDzEXj2XFKmeoHsOzj0Fjml9IqaK312QPqE4XfoYxRCX6Ird4xzoLk0TFTv1TS4QBmZy10NIXGcufoMlEeRLv9drhrf89PUT6kUGurQOQSWFg3Dz9oH+tTTzNh0oR+4S4IPA3O7q5cHXR5q302N3tRR5PAdMwrLtlFpf4r5fdT3wKl/KryzRiWtVNqASrTU3Zu3nJAnX/NjOVmp2tg0XqBZdK5aHp0nwAuQpeuzfMgQ1UJ4kW+2edej8Oxe7XTJmMNFAenGGLZLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T1oHbjEXVC4CnzpaMPWSNOPasYiEM/tjlArrEg1TM1I=;
- b=Xrgrncgeblst8qtzqq+/GFBOAFkRhNwr6ZLOJkJXXV2oqTAJ9/bFYjp/cgQGO4XOQeThllaoOLb3Ush5nPqW5YjFWv1OYxnDAPfFydoXZfdTYohD3lz5m2Qz/+8X5xQ1xlU8KyrKRat8RwWccr4YfhxcHBWCfTgmhFupN6hg7I4dElNXTwzbr3CBhIzBKZSw0iOdjFX9tG8bCHjkCxxlyvs6XIcp0ECtjjCvLgynSoyhk9kkysrXLoEBR4+Mk7WFbTqoZ+aZ01FpSRYpJqqBusxIwjFNlFEfBQGifvL6uvjphinkUSdbt0e35Jso+RTEx9TVWzsDc6B+64w3T9VGVQ==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PAZP264MB2957.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1f7::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5332.12; Wed, 15 Jun
- 2022 06:49:56 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::b15e:862f:adf7:5356%5]) with mapi id 15.20.5353.014; Wed, 15 Jun 2022
- 06:49:55 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Wang Wenhu <wenhu.wang@hotmail.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "hao.wu@intel.com" <hao.wu@intel.com>,
-        "trix@redhat.com" <trix@redhat.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "yilun.xu@intel.com" <yilun.xu@intel.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>
-Subject: Re: [PATCHv2 2/2] uio:powerpc:mpc85xx: l2-cache-sram uio driver
- implementation
-Thread-Topic: [PATCHv2 2/2] uio:powerpc:mpc85xx: l2-cache-sram uio driver
- implementation
-Thread-Index: AQHYgH0Fgton8jz2zUOUJB5+ZqL8Jq1QB0IA
-Date:   Wed, 15 Jun 2022 06:49:55 +0000
-Message-ID: <8dc7a035-d8b1-f6f8-51ea-cc468ec49b46@csgroup.eu>
-References: <YqHy1uXwCLlJmftr@kroah.com>
- <20220615055735.53585-1-wenhu.wang@hotmail.com>
- <SG2PR01MB29513533A1EA32DCB00D10309FAD9@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
-In-Reply-To: <SG2PR01MB29513533A1EA32DCB00D10309FAD9@SG2PR01MB2951.apcprd01.prod.exchangelabs.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6f69fc4d-b90d-45c6-a3ee-08da4e9b41f0
-x-ms-traffictypediagnostic: PAZP264MB2957:EE_
-x-microsoft-antispam-prvs: <PAZP264MB29574B93E4890E9209961375EDAD9@PAZP264MB2957.FRAP264.PROD.OUTLOOK.COM>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9PVuIGsoiVr9MIJHdG8EVq9d36O/TdrZMqaEgbyd6GHzvaaTzhKgF0+NV/LFCWcqVRrFdVBuOk5Z66XMf7tKupDQJkY6pLRggEcDhTdcLOzxFzbmEu4vvNQOu8xhuwdB9wLmmVe7NPc+23RC/kG+QXPbM/2gBdly1I8W+8aoQAbvILGaac5tGaMU/PQQppyCadoQKCJzToIJSxkQCWGcoVuesUI+rX7Wu056Ps/RLi8pRoU46QXqphERWQGOVJM97gcGtYypMP6/alFXO0QvHyq+ukYhPvMHa27kFMj5fwD2JcTfdUS5GAA61K+7CsNd1oBf2tSWlceJR2geTzHvUTlluSjGXTJxeLJLfMqCnR3pke7q44B/bvLgPBVc/n4QEGrraaIvLrSkQ5sfcgY3nneX0ocoj/zpn7+SAYQCCwYXjrU15sbKTYC6EEJ9/+jGL1uk0vrKN5uWhdfZPQLBVctQam4AVAoXNVF3l0QMqAyd8mUDTKAiOJBijO2wwKyRi1SnfMjGl5UGRKOJcXPyg5HIyQgNkuTZVOC+jav9FobmXwzY1YgVf+oK37iTqttpkxtDUb9HW6ypQeOCKAQA2RCSf81En2KbTHWExT6jZmTfkeP8Q9Y0ghrE1XSwDVOA7QxFVcGKNYplyZFMFnTugh0Q2wEBsGlpP+LOJK8+EddsvpIfW9COOO23DZKF/8bKgnx8YxZY5MFjw0+bfzm+WSTHYVi3CC7b2zccU/HSI4tGIEpUeg1jq9DlEXtZH4dnbi+q636CdAeEhzY4abxszmo6GZFOvOoorKGeQy6ViTUhExRwyOcwciU/tpcN6wq+URB5D/WI4DWeMd+x8RW838UgHZYJyicBgWk1GEDx42C64uiHIFhVlE0xbwFejE9m
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(2906002)(86362001)(122000001)(921005)(966005)(6506007)(31686004)(6486002)(38070700005)(316002)(508600001)(83380400001)(66556008)(186003)(91956017)(31696002)(2616005)(76116006)(71200400001)(66946007)(66476007)(4326008)(44832011)(6512007)(64756008)(7416002)(38100700002)(30864003)(5660300002)(8936002)(36756003)(66446008)(66574015)(8676002)(110136005)(26005)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WEV5eEVnZk91cVhLUE5kZDhXeEJEbkpmQlp1bVczbnYwRUJMZlovY003dHlm?=
- =?utf-8?B?SlFaNHN6VnZEdlYwckMrL0tTaFg3aElBWFRIVHIrSnZPSkNqenFDUk5mc1ZN?=
- =?utf-8?B?WlpmSUpHYzNac3JkRGY2TUROM0FvOTl3TG5iOTZ2WGlDbGRpMC9EMkhOdm5h?=
- =?utf-8?B?bkxzRHZKVlQ0dDROcG1va2VwZDlXWDZQR1htUlNxUGQ2TW02cysrNkZEUGFl?=
- =?utf-8?B?Z1dZVm0xenpHSTBRdHdZK1J1c0l6MWtpVG1KbXpIeG5UR1VtaFI1RUdqOEQr?=
- =?utf-8?B?allpYmJBSzdjZnFoK2lRcEJ1aXozSUhZbTRVWDIwV2l1Wk82V1R6dytrbFZK?=
- =?utf-8?B?ek9nMTEyTTZVZDlmak1rSUlHV0EzcWxVbHl1QVJyWFIvRFdOTVkwRjk5ekhs?=
- =?utf-8?B?R2xlaVh1R1ZOTFlxcWVHcGFId2FkK1UyaHI0R3Iza3diVitYdHczZWx3SWs2?=
- =?utf-8?B?SE1rVlF1VjlJb2UzeHZqQ21OK0FSNzEzaWl5bW4vVHA5WnRxU3NnSnhrdTQy?=
- =?utf-8?B?TW5kZTU4QURVQ1A5MmJnUnlhZjB4bDRFUmNoeU9EOWpFcE52WTFFZ1FNOTNk?=
- =?utf-8?B?c0dNMHVnTHVUdlYxNTAwbkhlZy9BUnh2Q2llait5VTZRazEvRk0vdHd6bWp5?=
- =?utf-8?B?Z0hmTmJHbHhMRCtxd1hiZjJUck1LK3I1ZXhhZzBYakRhazh4WmtnVTRsTGlY?=
- =?utf-8?B?U21qbUxyd3JRMjhvdk1zeUNleFBuT2RCeEJhcVVYeVZ3alFFV0xWUTlMTSt5?=
- =?utf-8?B?VmFndmNQaXJxN0dUcGY3OEVJNEh1NEhCVW50cTd4U0JqbGkxczdCS3hoTG5r?=
- =?utf-8?B?dXZWOGlPZlpRUFFtVGJIOUJYN0pUUzhkWUlCUjVkVVNXc2FXZTJsU2NGV3Jx?=
- =?utf-8?B?SE5KODBBY0JuWWxSMFdGTXpCczZoMmhVRG43UGFtK1YzblVRSkNxSFk2bWRF?=
- =?utf-8?B?L1NLeHlkMFMrNDRNQ0tWVVdwVGtNV3EzcUg1QXBvbkRPRWlpcjM0eEZnVjhH?=
- =?utf-8?B?NDRWSitITytsLzZrUzlzWWF1L0xoNmRLVHNwUWYrbGF4MmtDdUNTUENCd3J6?=
- =?utf-8?B?OGJtVWJKRXVGT1JVRWJHaXNZZGZ1OG1nNjRTMHVBNG5GNFVPRHFuRWNCeXRL?=
- =?utf-8?B?SHBsZW11eXovd08xUVRHTm5NbERORVhnQi9ZVmxtd0k3TjVYbDY1MGlJdXMx?=
- =?utf-8?B?dUlDNnNGcGlDVnZHQTRlSXJHYmFrT1BtS0JMV0RWdHdUTDJXVGpFeldLLytw?=
- =?utf-8?B?bFoyUW52aWwwV3NQTEZrdzNEUTd6dWxrc092eGUyblVmUnhuRVhGU3hLVDIw?=
- =?utf-8?B?M09sb050V2d1bmVtcmRma1Q4QTMwdGJzdHB5ZGhzQk1ycWdtdHhVbnIzWHk2?=
- =?utf-8?B?YStuL1lWTm1zMjBQUWcrZEs1OXgzT095UDZ3cnJLYmViN0hXOGdQRHNqZmxl?=
- =?utf-8?B?REQ2eElsTG9vMUNoYW8xMDF3T0ZRSWY5VzFWd3hjeXNkUVdxRmtObFpuWGI3?=
- =?utf-8?B?YTY3OXJsT1BPWDJ5d1Nqem5CZVpZK1A4NkUrVU85aERnNmVWNkhhdnFpVFlx?=
- =?utf-8?B?aUdwaktwekhzUlRMc0ZMdDdvc0tUS3JPTWRWK1YwaUdYRTdyWXVOVW9aSFli?=
- =?utf-8?B?cWQ4a21oQXVxSnVqbFdweE5DckNxekNnYVg4ZU9GVjJ5OWZVSjFTdFpyZWIx?=
- =?utf-8?B?VWdscVJ2Z3FnSmNNUGNYaEpNVlh4RFJmTlFuZ2VvQXBiaG1QbzlEdVZrWWda?=
- =?utf-8?B?MnNiSDNVU2lWd2RNWXNVbDFtUERJWC9saWRQNFYraGZIdy9iMy82Z3ZlcW8r?=
- =?utf-8?B?R3U0R1hqbG9LVnV1ZWFpRWJnYTAraUZUOVcxcS8vQlpEY2hzN0ZGMGpEUGwv?=
- =?utf-8?B?Q0xOSmpUVmprSHZYMkZhL1h2YkRVWFB5OWRyUEZCV1o0cjFwV3ZvY2NRc1Jr?=
- =?utf-8?B?TGl3ZExOU0hpeVJobG9uZ0dBTjFRemltbkhxUCtHZlpwcjV4NXZhcCtlRUZx?=
- =?utf-8?B?b2gxajBEeFB3QXd2TjNMQWo3V1RLN05WZU5QUi9Zc1ZUQmR0YkVtZFJkMnJI?=
- =?utf-8?B?RmlFOVVLKzVrRVd3cEhRWUg5OWJqSGhJL1piZjR6SnJwYWpCNEtxNjRLYW9k?=
- =?utf-8?B?VUVYSFdEZ3djQU1LUEsxUEcyK0xlS29hcVgwSThOZ1k2TkY5Z0VQdkdwOUlz?=
- =?utf-8?B?YkRUSUxFRWtCcGI3Y2Iyb1dsa01Lam0xZmxMYmtja3VGKzFZcmQ3eGF0R2sx?=
- =?utf-8?B?d3lVSHdtQ3U5OUNVUGRTbDRHN01ObjRLMGNwRGIxUXMyaWtJVFlrQ3V6SEk4?=
- =?utf-8?B?V0dvRWJCa2gySDEwemU1UUdvcHlmSk92UHlCNUw2SFV1N28xTzJQWE1GTERK?=
- =?utf-8?Q?2OKvCTxvsltjKkqB9RFt/irD1IW+83UabiSE4?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <A5B4C3D4F5AA3742B343FF51C304F8B6@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Wed, 15 Jun 2022 02:51:05 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A135344A15;
+        Tue, 14 Jun 2022 23:51:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655275862; x=1686811862;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Kql89oEzPOhbcVc0Z3BIbsdYNPTvzel+dHrKHtLkc0s=;
+  b=D97vI94lxY1xZgyh7cYSenbg9Mc8FO1dKKi7N5bB07EjF3vFwPEVwwih
+   4Q56XHXklsywKAxWvBXBC98NEfN7hueHNbPhQeJJ4XhOwfq5e400mgK4C
+   NRWVGf/Io3NPvNpPWvzVONB/mdSOY3hithk0uo4TnsmTMZJkMhaWq6bTT
+   Kju8ji1E0hOKVSNhxa+dRqPxh3RMcwhp3J0xa1DVogfQq9n/DtBPECmLk
+   79JO/ogZhouM+c9jFobzcM7gNvA2jlTlx7J2ocuSlVDfrpHhVdtNwH3d4
+   TNxQqytQAaxGcRrxUWwTIZWwm7MznQbEiGrlbppV/gooUOcaCvpWkILxR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10378"; a="365207679"
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="365207679"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 23:51:02 -0700
+X-IronPort-AV: E=Sophos;i="5.91,300,1647327600"; 
+   d="scan'208";a="640826447"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.32.80])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2022 23:50:54 -0700
+Message-ID: <482ed1f6-af6f-b5cd-393f-77d91f24af9d@intel.com>
+Date:   Wed, 15 Jun 2022 09:50:49 +0300
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6f69fc4d-b90d-45c6-a3ee-08da4e9b41f0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Jun 2022 06:49:55.9377
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: G4IKGQg9est9nNu40RHancReFkgx4T5nwGQLUqnmyDB3TyyqfPIbkrKHhA4HgDQbTriicwzJvIl5jS/Xzh7kI5mar50m8bA3qSpwATEO90Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB2957
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.9.1
+Subject: Re: [PATCH] perf io: Make open and read calls more robust
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Alexey Bayduraev <alexey.v.bayduraev@linux.intel.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Song Liu <songliubraving@fb.com>, Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.garry@huawei.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Zechuan Chen <chenzechuan1@huawei.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        German Gomez <german.gomez@arm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Denis Nikitin <denik@chromium.org>,
+        Lexi Shao <shaolexi@huawei.com>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Remi Bernon <rbernon@codeweavers.com>,
+        Fangrui Song <maskray@google.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>
+References: <20220615060354.1763693-1-irogers@google.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20220615060354.1763693-1-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -149,291 +90,1013 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDE1LzA2LzIwMjIgw6AgMDc6NTcsIFdhbmcgV2VuaHUgYSDDqWNyaXTCoDoNCj4gRnJl
-ZXNjYWxlIG1wYzg1eHggbDItY2FjaGUgY291bGQgYmUgb3B0aW9uYWxseSBjb25maWd1cmVkIGFz
-IFNSQU0gcGFydGx5DQo+IG9yIGZ1bGx5LiBVc2VycyBjYW4gbWFrZSB1c2Ugb2YgaXQgYXMgYSBi
-bG9jayBvZiBpbmRlcGVuZGVudCBtZW1vcnkgdGhhdA0KPiBvZmZlcnMgc3BlY2lhbCB1c2FnZSwg
-c3VjaCBhcyBmb3IgZGVidWdpbmcgb3Igb3RoZXIgY3JpdGljYWwgc3RhdHVzIGluZm8NCj4gc3Rv
-cmFnZSwgd2hpY2gga2VlcHMgY29uc2lzdGVudGx5IGV2ZW4gd2hlbiB0aGUgd2hvbGUgc3lzdGVt
-IGNyYXNoZWQuDQo+IEFwcGxpY2F0aW9ucyBjYW4gbWFrZSB1c2Ugb2YgVUlPIGRyaXZlciB0byBh
-Y2Nlc3MgdGhlIFNSQU0gZnJvbSB1c2VyIGxldmVsLg0KPiANCj4gT25jZSB0aGVyZSB3YXMgYW5v
-dGhlciBkcml2ZXIgdmVyc2lvbiBmb3IgdGhlIGwyLWNhY2hlLXNyYW0gZm9yIFNSQU0gYWNjZXNz
-DQo+IGluIGtlcm5lbCBzcGFjZS4gSXQgaGFkIGJlZW4gcmVtb3ZlZCByZWNlbnRseS4NCj4gU2Vl
-OiBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9wb3dlcnBj
-L2xpbnV4LmdpdC9jb21taXQvP2lkPWRjMjFlZDJhZWY0MTUwZmMyZmNmNTgyMjdhNGZmMjQ1MDIw
-MTVjMDMNCj4gDQo+IFNpZ25lZC1vZmYtYnk6IFdhbmcgV2VuaHUgPHdlbmh1LndhbmdAaG90bWFp
-bC5jb20+DQo+IC0tLQ0KPiB2MjoNCj4gICAtIFVzZSBfX2JlMzIgaW5zdGVhZCBvZiB1MzIgZm9y
-IGJpZy1lbmRpYW4gZGF0YSBkZWNsYXJhdGlvbnM7DQoNCkkgZ2V0IHRoZSBmb2xsb3dpbmcgd2Fy
-bmluZ3Mgd2hpY2ggJ21ha2UgDQpkcml2ZXJzL3Vpby91aW9fZnNsXzg1eHhfY2FjaGVfc3JhbS5v
-IEM9MicNCg0KICAgQ0hFQ0sgICBkcml2ZXJzL3Vpby91aW9fZnNsXzg1eHhfY2FjaGVfc3JhbS5j
-DQpkcml2ZXJzL3Vpby91aW9fZnNsXzg1eHhfY2FjaGVfc3JhbS5jOjk2OjE5OiB3YXJuaW5nOiBp
-bmNvcnJlY3QgdHlwZSBpbiANCmFyZ3VtZW50IDEgKGRpZmZlcmVudCBiYXNlIHR5cGVzKQ0KZHJp
-dmVycy91aW8vdWlvX2ZzbF84NXh4X2NhY2hlX3NyYW0uYzo5NjoxOTogICAgZXhwZWN0ZWQgdW5z
-aWduZWQgaW50IA0Kdm9sYXRpbGUgW25vZGVyZWZdIFt1c2VydHlwZV0gX19pb21lbSAqYWRkcg0K
-ZHJpdmVycy91aW8vdWlvX2ZzbF84NXh4X2NhY2hlX3NyYW0uYzo5NjoxOTogICAgZ290IHJlc3Ry
-aWN0ZWQgX19iZTMyIA0KW25vZGVyZWZdIF9faW9tZW0gKg0KZHJpdmVycy91aW8vdWlvX2ZzbF84
-NXh4X2NhY2hlX3NyYW0uYzoxMDA6Mjc6IHdhcm5pbmc6IGluY29ycmVjdCB0eXBlIGluIA0KYXJn
-dW1lbnQgMSAoZGlmZmVyZW50IGJhc2UgdHlwZXMpDQpkcml2ZXJzL3Vpby91aW9fZnNsXzg1eHhf
-Y2FjaGVfc3JhbS5jOjEwMDoyNzogICAgZXhwZWN0ZWQgdW5zaWduZWQgaW50IA0Kdm9sYXRpbGUg
-W25vZGVyZWZdIFt1c2VydHlwZV0gX19pb21lbSAqYWRkcg0KZHJpdmVycy91aW8vdWlvX2ZzbF84
-NXh4X2NhY2hlX3NyYW0uYzoxMDA6Mjc6ICAgIGdvdCByZXN0cmljdGVkIF9fYmUzMiANCltub2Rl
-cmVmXSBfX2lvbWVtICoNCmRyaXZlcnMvdWlvL3Vpb19mc2xfODV4eF9jYWNoZV9zcmFtLmM6MTAy
-Ojk6IHdhcm5pbmc6IGluY29ycmVjdCB0eXBlIGluIA0KYXJndW1lbnQgMSAoZGlmZmVyZW50IGJh
-c2UgdHlwZXMpDQpkcml2ZXJzL3Vpby91aW9fZnNsXzg1eHhfY2FjaGVfc3JhbS5jOjEwMjo5OiAg
-ICBleHBlY3RlZCB1bnNpZ25lZCBpbnQgDQp2b2xhdGlsZSBbbm9kZXJlZl0gW3VzZXJ0eXBlXSBf
-X2lvbWVtICphZGRyDQpkcml2ZXJzL3Vpby91aW9fZnNsXzg1eHhfY2FjaGVfc3JhbS5jOjEwMjo5
-OiAgICBnb3QgcmVzdHJpY3RlZCBfX2JlMzIgDQpbbm9kZXJlZl0gX19pb21lbSAqDQpkcml2ZXJz
-L3Vpby91aW9fZnNsXzg1eHhfY2FjaGVfc3JhbS5jOjEwMjo5OiB3YXJuaW5nOiBpbmNvcnJlY3Qg
-dHlwZSBpbiANCmFyZ3VtZW50IDEgKGRpZmZlcmVudCBiYXNlIHR5cGVzKQ0KZHJpdmVycy91aW8v
-dWlvX2ZzbF84NXh4X2NhY2hlX3NyYW0uYzoxMDI6OTogICAgZXhwZWN0ZWQgdW5zaWduZWQgaW50
-IA0KY29uc3Qgdm9sYXRpbGUgW25vZGVyZWZdIFt1c2VydHlwZV0gX19pb21lbSAqYWRkcg0KZHJp
-dmVycy91aW8vdWlvX2ZzbF84NXh4X2NhY2hlX3NyYW0uYzoxMDI6OTogICAgZ290IHJlc3RyaWN0
-ZWQgX19iZTMyIA0KW25vZGVyZWZdIF9faW9tZW0gKg0KZHJpdmVycy91aW8vdWlvX2ZzbF84NXh4
-X2NhY2hlX3NyYW0uYzoxMDY6MTc6IHdhcm5pbmc6IGluY29ycmVjdCB0eXBlIGluIA0KYXJndW1l
-bnQgMSAoZGlmZmVyZW50IGJhc2UgdHlwZXMpDQpkcml2ZXJzL3Vpby91aW9fZnNsXzg1eHhfY2Fj
-aGVfc3JhbS5jOjEwNjoxNzogICAgZXhwZWN0ZWQgdW5zaWduZWQgaW50IA0Kdm9sYXRpbGUgW25v
-ZGVyZWZdIFt1c2VydHlwZV0gX19pb21lbSAqYWRkcg0KZHJpdmVycy91aW8vdWlvX2ZzbF84NXh4
-X2NhY2hlX3NyYW0uYzoxMDY6MTc6ICAgIGdvdCByZXN0cmljdGVkIF9fYmUzMiANCltub2RlcmVm
-XSBfX2lvbWVtICoNCmRyaXZlcnMvdWlvL3Vpb19mc2xfODV4eF9jYWNoZV9zcmFtLmM6MTA2OjE3
-OiB3YXJuaW5nOiBpbmNvcnJlY3QgdHlwZSBpbiANCmFyZ3VtZW50IDEgKGRpZmZlcmVudCBiYXNl
-IHR5cGVzKQ0KZHJpdmVycy91aW8vdWlvX2ZzbF84NXh4X2NhY2hlX3NyYW0uYzoxMDY6MTc6ICAg
-IGV4cGVjdGVkIHVuc2lnbmVkIGludCANCmNvbnN0IHZvbGF0aWxlIFtub2RlcmVmXSBbdXNlcnR5
-cGVdIF9faW9tZW0gKmFkZHINCmRyaXZlcnMvdWlvL3Vpb19mc2xfODV4eF9jYWNoZV9zcmFtLmM6
-MTA2OjE3OiAgICBnb3QgcmVzdHJpY3RlZCBfX2JlMzIgDQpbbm9kZXJlZl0gX19pb21lbSAqDQpk
-cml2ZXJzL3Vpby91aW9fZnNsXzg1eHhfY2FjaGVfc3JhbS5jOjExMDoxNzogd2FybmluZzogaW5j
-b3JyZWN0IHR5cGUgaW4gDQphcmd1bWVudCAxIChkaWZmZXJlbnQgYmFzZSB0eXBlcykNCmRyaXZl
-cnMvdWlvL3Vpb19mc2xfODV4eF9jYWNoZV9zcmFtLmM6MTEwOjE3OiAgICBleHBlY3RlZCB1bnNp
-Z25lZCBpbnQgDQp2b2xhdGlsZSBbbm9kZXJlZl0gW3VzZXJ0eXBlXSBfX2lvbWVtICphZGRyDQpk
-cml2ZXJzL3Vpby91aW9fZnNsXzg1eHhfY2FjaGVfc3JhbS5jOjExMDoxNzogICAgZ290IHJlc3Ry
-aWN0ZWQgX19iZTMyIA0KW25vZGVyZWZdIF9faW9tZW0gKg0KZHJpdmVycy91aW8vdWlvX2ZzbF84
-NXh4X2NhY2hlX3NyYW0uYzoxMTA6MTc6IHdhcm5pbmc6IGluY29ycmVjdCB0eXBlIGluIA0KYXJn
-dW1lbnQgMSAoZGlmZmVyZW50IGJhc2UgdHlwZXMpDQpkcml2ZXJzL3Vpby91aW9fZnNsXzg1eHhf
-Y2FjaGVfc3JhbS5jOjExMDoxNzogICAgZXhwZWN0ZWQgdW5zaWduZWQgaW50IA0KY29uc3Qgdm9s
-YXRpbGUgW25vZGVyZWZdIFt1c2VydHlwZV0gX19pb21lbSAqYWRkcg0KZHJpdmVycy91aW8vdWlv
-X2ZzbF84NXh4X2NhY2hlX3NyYW0uYzoxMTA6MTc6ICAgIGdvdCByZXN0cmljdGVkIF9fYmUzMiAN
-Cltub2RlcmVmXSBfX2lvbWVtICoNCmRyaXZlcnMvdWlvL3Vpb19mc2xfODV4eF9jYWNoZV9zcmFt
-LmM6MTE0OjE3OiB3YXJuaW5nOiBpbmNvcnJlY3QgdHlwZSBpbiANCmFyZ3VtZW50IDEgKGRpZmZl
-cmVudCBiYXNlIHR5cGVzKQ0KZHJpdmVycy91aW8vdWlvX2ZzbF84NXh4X2NhY2hlX3NyYW0uYzox
-MTQ6MTc6ICAgIGV4cGVjdGVkIHVuc2lnbmVkIGludCANCnZvbGF0aWxlIFtub2RlcmVmXSBbdXNl
-cnR5cGVdIF9faW9tZW0gKmFkZHINCmRyaXZlcnMvdWlvL3Vpb19mc2xfODV4eF9jYWNoZV9zcmFt
-LmM6MTE0OjE3OiAgICBnb3QgcmVzdHJpY3RlZCBfX2JlMzIgDQpbbm9kZXJlZl0gX19pb21lbSAq
-DQpkcml2ZXJzL3Vpby91aW9fZnNsXzg1eHhfY2FjaGVfc3JhbS5jOjExNDoxNzogd2FybmluZzog
-aW5jb3JyZWN0IHR5cGUgaW4gDQphcmd1bWVudCAxIChkaWZmZXJlbnQgYmFzZSB0eXBlcykNCmRy
-aXZlcnMvdWlvL3Vpb19mc2xfODV4eF9jYWNoZV9zcmFtLmM6MTE0OjE3OiAgICBleHBlY3RlZCB1
-bnNpZ25lZCBpbnQgDQpjb25zdCB2b2xhdGlsZSBbbm9kZXJlZl0gW3VzZXJ0eXBlXSBfX2lvbWVt
-ICphZGRyDQpkcml2ZXJzL3Vpby91aW9fZnNsXzg1eHhfY2FjaGVfc3JhbS5jOjExNDoxNzogICAg
-Z290IHJlc3RyaWN0ZWQgX19iZTMyIA0KW25vZGVyZWZdIF9faW9tZW0gKg0KZHJpdmVycy91aW8v
-dWlvX2ZzbF84NXh4X2NhY2hlX3NyYW0uYzoxMTk6MTc6IHdhcm5pbmc6IGluY29ycmVjdCB0eXBl
-IGluIA0KYXJndW1lbnQgMSAoZGlmZmVyZW50IGJhc2UgdHlwZXMpDQpkcml2ZXJzL3Vpby91aW9f
-ZnNsXzg1eHhfY2FjaGVfc3JhbS5jOjExOToxNzogICAgZXhwZWN0ZWQgdW5zaWduZWQgaW50IA0K
-dm9sYXRpbGUgW25vZGVyZWZdIFt1c2VydHlwZV0gX19pb21lbSAqYWRkcg0KZHJpdmVycy91aW8v
-dWlvX2ZzbF84NXh4X2NhY2hlX3NyYW0uYzoxMTk6MTc6ICAgIGdvdCByZXN0cmljdGVkIF9fYmUz
-MiANCltub2RlcmVmXSBfX2lvbWVtICoNCmRyaXZlcnMvdWlvL3Vpb19mc2xfODV4eF9jYWNoZV9z
-cmFtLmM6MTE5OjE3OiB3YXJuaW5nOiBpbmNvcnJlY3QgdHlwZSBpbiANCmFyZ3VtZW50IDEgKGRp
-ZmZlcmVudCBiYXNlIHR5cGVzKQ0KZHJpdmVycy91aW8vdWlvX2ZzbF84NXh4X2NhY2hlX3NyYW0u
-YzoxMTk6MTc6ICAgIGV4cGVjdGVkIHVuc2lnbmVkIGludCANCmNvbnN0IHZvbGF0aWxlIFtub2Rl
-cmVmXSBbdXNlcnR5cGVdIF9faW9tZW0gKmFkZHINCmRyaXZlcnMvdWlvL3Vpb19mc2xfODV4eF9j
-YWNoZV9zcmFtLmM6MTE5OjE3OiAgICBnb3QgcmVzdHJpY3RlZCBfX2JlMzIgDQpbbm9kZXJlZl0g
-X19pb21lbSAqDQoNCg0KPiAgIC0gVXNlIGdlbmVyaWMgaW9yZW1hcF9jYWNoZSBpbnN0ZWFkIG9m
-IGlvcmVtYXBfY29oZXJlbnQ7DQo+ICAgLSBQaHlzaWNhbCBhZGRyZXNzIHN1cHBvcnQgYm90aCAz
-MiBhbmQgNjQgYml0czsNCj4gICAtIEFkZHJlc3NlZCBzb21lIG90aGVyIGNvbW1lbnRzIGZyb20g
-R3JlZy4NCj4gLS0tDQo+ICAgZHJpdmVycy91aW8vS2NvbmZpZyAgICAgICAgICAgICAgICAgICB8
-ICAxNCArKw0KPiAgIGRyaXZlcnMvdWlvL01ha2VmaWxlICAgICAgICAgICAgICAgICAgfCAgIDEg
-Kw0KPiAgIGRyaXZlcnMvdWlvL3Vpb19mc2xfODV4eF9jYWNoZV9zcmFtLmMgfCAyODggKysrKysr
-KysrKysrKysrKysrKysrKysrKysNCj4gICAzIGZpbGVzIGNoYW5nZWQsIDMwMyBpbnNlcnRpb25z
-KCspDQo+ICAgY3JlYXRlIG1vZGUgMTAwNjQ0IGRyaXZlcnMvdWlvL3Vpb19mc2xfODV4eF9jYWNo
-ZV9zcmFtLmMNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3Vpby9LY29uZmlnIGIvZHJpdmVy
-cy91aW8vS2NvbmZpZw0KPiBpbmRleCAyZTE2YzUzMzhlNWIuLmY3NjA0NTg0YTEyYyAxMDA2NDQN
-Cj4gLS0tIGEvZHJpdmVycy91aW8vS2NvbmZpZw0KPiArKysgYi9kcml2ZXJzL3Vpby9LY29uZmln
-DQo+IEBAIC0xMDUsNiArMTA1LDIwIEBAIGNvbmZpZyBVSU9fTkVUWA0KPiAgIAkgIFRvIGNvbXBp
-bGUgdGhpcyBkcml2ZXIgYXMgYSBtb2R1bGUsIGNob29zZSBNIGhlcmU7IHRoZSBtb2R1bGUNCj4g
-ICAJICB3aWxsIGJlIGNhbGxlZCB1aW9fbmV0eC4NCj4gICANCj4gK2NvbmZpZyBVSU9fRlNMXzg1
-WFhfQ0FDSEVfU1JBTQ0KPiArCXRyaXN0YXRlICJGcmVlc2NhbGUgODV4eCBMMi1DYWNoZS1TUkFN
-IFVJTyBkcml2ZXIiDQo+ICsJZGVwZW5kcyBvbiBGU0xfU09DX0JPT0tFICYmIFBQQzMyDQo+ICsJ
-aGVscA0KPiArCSAgRHJpdmVyIGZvciB1c2VyIGxldmVsIGFjY2VzcyBvZiBmcmVlc2NhbGUgbXBj
-ODV4eCBsMi1jYWNoZS1zcmFtLg0KPiArDQo+ICsJICBGcmVlc2NhbGUncyBtcGM4NXh4IHByb3Zp
-ZGVzIGFuIG9wdGlvbiBvZiBjb25maWd1cmluZyBhIHBhcnQgb2YNCj4gKwkgIChvciBmdWxsKSBj
-YWNoZSBtZW1vcnkgYXMgU1JBTS4gVGhlIGRyaXZlciBkb2VzIHRoaXMgY29uZmlndXJpbmcNCj4g
-KwkgIHdvcmsgYW5kIGV4cG9ydHMgU1JBTSB0byB1c2VyLXNwYWNlIGZvciBhY2Nlc3MgZm9ybSB1
-c2VyIGxldmVsLg0KPiArCSAgVGhpcyBpcyBleHRyZW1lbHkgaGVscGZ1bCBmb3IgdXNlciBhcHBs
-aWNhdGlvbnMgdGhhdCByZXF1aXJlDQo+ICsJICBoaWdoIHBlcmZvcm1hbmNlIG1lbW9yeSBhY2Nl
-c3Nlcy4NCj4gKw0KPiArCSAgSWYgeW91IGRvbid0IGtub3cgd2hhdCB0byBkbyBoZXJlLCBzYXkg
-Ti4NCj4gKw0KPiAgIGNvbmZpZyBVSU9fRlNMX0VMQkNfR1BDTQ0KPiAgIAl0cmlzdGF0ZSAiZUxC
-Qy9HUENNIGRyaXZlciINCj4gICAJZGVwZW5kcyBvbiBGU0xfTEJDDQo+IGRpZmYgLS1naXQgYS9k
-cml2ZXJzL3Vpby9NYWtlZmlsZSBiL2RyaXZlcnMvdWlvL01ha2VmaWxlDQo+IGluZGV4IGYyZjQx
-NmExNDIyOC4uMWJhMDdkOTJhMWIxIDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL3Vpby9NYWtlZmls
-ZQ0KPiArKysgYi9kcml2ZXJzL3Vpby9NYWtlZmlsZQ0KPiBAQCAtMTIsMyArMTIsNCBAQCBvYmot
-JChDT05GSUdfVUlPX01GNjI0KSAgICAgICAgICs9IHVpb19tZjYyNC5vDQo+ICAgb2JqLSQoQ09O
-RklHX1VJT19GU0xfRUxCQ19HUENNKQkrPSB1aW9fZnNsX2VsYmNfZ3BjbS5vDQo+ICAgb2JqLSQo
-Q09ORklHX1VJT19IVl9HRU5FUklDKQkrPSB1aW9faHZfZ2VuZXJpYy5vDQo+ICAgb2JqLSQoQ09O
-RklHX1VJT19ERkwpCSs9IHVpb19kZmwubw0KPiArb2JqLSQoQ09ORklHX1VJT19GU0xfODVYWF9D
-QUNIRV9TUkFNKQkrPSB1aW9fZnNsXzg1eHhfY2FjaGVfc3JhbS5vDQo+IGRpZmYgLS1naXQgYS9k
-cml2ZXJzL3Vpby91aW9fZnNsXzg1eHhfY2FjaGVfc3JhbS5jIGIvZHJpdmVycy91aW8vdWlvX2Zz
-bF84NXh4X2NhY2hlX3NyYW0uYw0KPiBuZXcgZmlsZSBtb2RlIDEwMDY0NA0KPiBpbmRleCAwMDAw
-MDAwMDAwMDAuLjZmOTFiMGFhOTQ2Yg0KPiAtLS0gL2Rldi9udWxsDQo+ICsrKyBiL2RyaXZlcnMv
-dWlvL3Vpb19mc2xfODV4eF9jYWNoZV9zcmFtLmMNCj4gQEAgLTAsMCArMSwyODggQEANCj4gKy8v
-IFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wDQo+ICsvKg0KPiArICogQ29weXJpZ2h0
-IChDKSAyMDIyIFdhbmcgV2VuaHUgPHdlbmh1LndhbmdAaG90bWFpbC5jb20+DQo+ICsgKiBBbGwg
-cmlnaHRzIHJlc2VydmVkLg0KPiArICovDQo+ICsNCj4gKyNpbmNsdWRlIDxsaW51eC9wbGF0Zm9y
-bV9kZXZpY2UuaD4NCj4gKyNpbmNsdWRlIDxsaW51eC91aW9fZHJpdmVyLmg+DQo+ICsjaW5jbHVk
-ZSA8bGludXgvc3RyaW5naWZ5Lmg+DQo+ICsjaW5jbHVkZSA8bGludXgvbW9kdWxlLmg+DQo+ICsj
-aW5jbHVkZSA8bGludXgva2VybmVsLmg+DQo+ICsjaW5jbHVkZSA8bGludXgvb2ZfYWRkcmVzcy5o
-Pg0KPiArI2luY2x1ZGUgPGxpbnV4L2lvLmg+DQo+ICsNCj4gKyNkZWZpbmUgRFJJVkVSX05BTUUJ
-InVpb19tcGM4NXh4X2NhY2hlX3NyYW0iDQo+ICsjZGVmaW5lIFVJT19JTkZPX1ZFUgkiMC4wLjEi
-DQo+ICsjZGVmaW5lIFVJT19OQU1FCSJ1aW9fY2FjaGVfc3JhbSINCj4gKw0KPiArI2RlZmluZSBM
-MkNSX0wyRkkJCTB4NDAwMDAwMDAJLyogTDIgZmxhc2ggaW52YWxpZGF0ZSAqLw0KPiArI2RlZmlu
-ZSBMMkNSX0wySU8JCTB4MDAyMDAwMDAJLyogTDIgaW5zdHJ1Y3Rpb24gb25seSAqLw0KPiArI2Rl
-ZmluZSBMMkNSX1NSQU1fWkVSTwkJMHgwMDAwMDAwMAkvKiBMMlNSQU0gemVybyBzaXplICovDQo+
-ICsjZGVmaW5lIEwyQ1JfU1JBTV9GVUxMCQkweDAwMDEwMDAwCS8qIEwyU1JBTSBmdWxsIHNpemUg
-Ki8NCj4gKyNkZWZpbmUgTDJDUl9TUkFNX0hBTEYJCTB4MDAwMjAwMDAJLyogTDJTUkFNIGhhbGYg
-c2l6ZSAqLw0KPiArI2RlZmluZSBMMkNSX1NSQU1fVFdPX0hBTEZTCTB4MDAwMzAwMDAJLyogTDJT
-UkFNIHR3byBoYWxmIHNpemVzICovDQo+ICsjZGVmaW5lIEwyQ1JfU1JBTV9RVUFSVAkJMHgwMDA0
-MDAwMAkvKiBMMlNSQU0gb25lIHF1YXJ0ZXIgc2l6ZSAqLw0KPiArI2RlZmluZSBMMkNSX1NSQU1f
-VFdPX1FVQVJUUwkweDAwMDUwMDAwCS8qIEwyU1JBTSB0d28gcXVhcnRlciBzaXplICovDQo+ICsj
-ZGVmaW5lIEwyQ1JfU1JBTV9FSUdIVEgJMHgwMDA2MDAwMAkvKiBMMlNSQU0gb25lIGVpZ2h0aCBz
-aXplICovDQo+ICsjZGVmaW5lIEwyQ1JfU1JBTV9UV09fRUlHSFRICTB4MDAwNzAwMDAJLyogTDJT
-UkFNIHR3byBlaWdodGggc2l6ZSAqLw0KPiArDQo+ICsjZGVmaW5lIEwyU1JBTV9PUFRJTUFMX1Na
-X1NISUZUCTB4MDAwMDAwMDMJLyogT3B0aW11bSBzaXplIGZvciBMMlNSQU0gKi8NCj4gKw0KPiAr
-I2RlZmluZSBMMlNSQU1fQkFSX01TS19MTzE4CTB4RkZGRkMwMDAJLyogTG93ZXIgMTggYml0cyAq
-Lw0KPiArI2RlZmluZSBMMlNSQU1fQkFSRV9NU0tfSEk0CTB4MDAwMDAwMEYJLyogVXBwZXIgNCBi
-aXRzICovDQo+ICsNCj4gK2VudW0gY2FjaGVfc3JhbV9sb2NrX3dheXMgew0KPiArCUxPQ0tfV0FZ
-U19aRVJPCQk9IDAsDQo+ICsJTE9DS19XQVlTX0VJR0hUSAk9IDEsDQo+ICsJTE9DS19XQVlTX1RX
-T19FSUdIVEgJPSAyLA0KPiArCUxPQ0tfV0FZU19IQUxGCQk9IDQsDQo+ICsJTE9DS19XQVlTX0ZV
-TEwJCT0gOCwNCj4gK307DQo+ICsNCj4gK3N0cnVjdCBtcGM4NXh4X2wyY3RsciB7DQo+ICsJX19i
-ZTMyCWN0bDsJCS8qIDB4MDAwIC0gTDIgY29udHJvbCAqLw0KPiArCXU4CXJlczFbMHhDXTsNCj4g
-KwlfX2JlMzIJZXdhcjA7CQkvKiAweDAxMCAtIEV4dGVybmFsIHdyaXRlIGFkZHJlc3MgMCAqLw0K
-PiArCV9fYmUzMglld2FyZWEwOwkvKiAweDAxNCAtIEV4dGVybmFsIHdyaXRlIGFkZHJlc3MgZXh0
-ZW5kZWQgMCAqLw0KPiArCV9fYmUzMglld2NyMDsJCS8qIDB4MDE4IC0gRXh0ZXJuYWwgd3JpdGUg
-Y3RybCAqLw0KPiArCXU4CXJlczJbNF07DQo+ICsJX19iZTMyCWV3YXIxOwkJLyogMHgwMjAgLSBF
-eHRlcm5hbCB3cml0ZSBhZGRyZXNzIDEgKi8NCj4gKwlfX2JlMzIJZXdhcmVhMTsJLyogMHgwMjQg
-LSBFeHRlcm5hbCB3cml0ZSBhZGRyZXNzIGV4dGVuZGVkIDEgKi8NCj4gKwlfX2JlMzIJZXdjcjE7
-CQkvKiAweDAyOCAtIEV4dGVybmFsIHdyaXRlIGN0cmwgMSAqLw0KPiArCXU4CXJlczNbNF07DQo+
-ICsJX19iZTMyCWV3YXIyOwkJLyogMHgwMzAgLSBFeHRlcm5hbCB3cml0ZSBhZGRyZXNzIDIgKi8N
-Cj4gKwlfX2JlMzIJZXdhcmVhMjsJLyogMHgwMzQgLSBFeHRlcm5hbCB3cml0ZSBhZGRyZXNzIGV4
-dGVuZGVkIDIgKi8NCj4gKwlfX2JlMzIJZXdjcjI7CQkvKiAweDAzOCAtIEV4dGVybmFsIHdyaXRl
-IGN0cmwgMiAqLw0KPiArCXU4CXJlczRbNF07DQo+ICsJX19iZTMyCWV3YXIzOwkJLyogMHgwNDAg
-LSBFeHRlcm5hbCB3cml0ZSBhZGRyZXNzIDMgKi8NCj4gKwlfX2JlMzIJZXdhcmVhMzsJLyogMHgw
-NDQgLSBFeHRlcm5hbCB3cml0ZSBhZGRyZXNzIGV4dGVuZGVkIDMgKi8NCj4gKwlfX2JlMzIJZXdj
-cjM7CQkvKiAweDA0OCAtIEV4dGVybmFsIHdyaXRlIGN0cmwgMyAqLw0KPiArCXU4CXJlczVbMHhC
-NF07DQo+ICsJX19iZTMyCXNyYmFyMDsJCS8qIDB4MTAwIC0gU1JBTSBiYXNlIGFkZHJlc3MgMCAq
-Lw0KPiArCV9fYmUzMglzcmJhcmVhMDsJLyogMHgxMDQgLSBTUkFNIGJhc2UgYWRkciByZWcgZXh0
-IGFkZHJlc3MgMCAqLw0KPiArCV9fYmUzMglzcmJhcjE7CQkvKiAweDEwOCAtIFNSQU0gYmFzZSBh
-ZGRyZXNzIDEgKi8NCj4gKwlfX2JlMzIJc3JiYXJlYTE7CS8qIDB4MTBDIC0gU1JBTSBiYXNlIGFk
-ZHIgcmVnIGV4dCBhZGRyZXNzIDEgKi8NCj4gKwl1OAlyZXM2WzB4Q0YwXTsNCj4gKwlfX2JlMzIJ
-ZXJyaW5qaGk7CS8qIDB4RTAwIC0gRXJyb3IgaW5qZWN0aW9uIG1hc2sgaGlnaCAqLw0KPiArCV9f
-YmUzMgllcnJpbmpsbzsJLyogMHhFMDQgLSBFcnJvciBpbmplY3Rpb24gbWFzayBsb3cgKi8NCj4g
-KwlfX2JlMzIJZXJyaW5qY3RsOwkvKiAweEUwOCAtIEVycm9yIGluamVjdGlvbiB0YWcvZWNjIGNv
-bnRyb2wgKi8NCj4gKwl1OAlyZXM3WzB4MTRdOw0KPiArCV9fYmUzMgljYXB0ZGF0YWhpOwkvKiAw
-eEUyMCAtIEVycm9yIGRhdGEgaGlnaCBjYXB0dXJlICovDQo+ICsJX19iZTMyCWNhcHRkYXRhbG87
-CS8qIDB4RTI0IC0gRXJyb3IgZGF0YSBsb3cgY2FwdHVyZSAqLw0KPiArCV9fYmUzMgljYXB0ZWNj
-OwkvKiAweEUyOCAtIEVycm9yIHN5bmRyb21lICovDQo+ICsJdTgJcmVzOFsweDE0XTsNCj4gKwlf
-X2JlMzIJZXJyZGV0OwkJLyogMHhFNDAgLSBFcnJvciBkZXRlY3QgKi8NCj4gKwlfX2JlMzIJZXJy
-ZGlzOwkJLyogMHhFNDQgLSBFcnJvciBkaXNhYmxlICovDQo+ICsJX19iZTMyCWVycmludGVuOwkv
-KiAweEU0OCAtIEVycm9yIGludGVycnVwdCBlbmFibGUgKi8NCj4gKwlfX2JlMzIJZXJyYXR0cjsJ
-LyogMHhFNGMgLSBFcnJvciBhdHRyaWJ1dGUgY2FwdHVyZSAqLw0KPiArCV9fYmUzMgllcnJhZHJy
-bDsJLyogMHhFNTAgLSBFcnJvciBhZGRyZXNzIGNhcHR1cmUgbG93ICovDQo+ICsJX19iZTMyCWVy
-cmFkcnJoOwkvKiAweEU1NCAtIEVycm9yIGFkZHJlc3MgY2FwdHVyZSBoaWdoICovDQo+ICsJX19i
-ZTMyCWVycmN0bDsJCS8qIDB4RTU4IC0gRXJyb3IgY29udHJvbCAqLw0KPiArCXU4CXJlczlbMHgx
-QTRdOw0KPiArfTsNCj4gKw0KPiArc3RhdGljIGludCB1aW9fY2FjaGVfc3JhbV9zZXR1cChzdHJ1
-Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2LA0KPiArCQkJCXBoeXNfYWRkcl90IGJhc2UsIHU4IHdh
-eXMpDQo+ICt7DQo+ICsJc3RydWN0IG1wYzg1eHhfbDJjdGxyIF9faW9tZW0gKmwyY3RsciA9IG9m
-X2lvbWFwKHBkZXYtPmRldi5vZl9ub2RlLCAwKTsNCj4gKw0KPiArCWlmICghbDJjdGxyKSB7DQo+
-ICsJCWRldl9lcnIoJnBkZXYtPmRldiwgImNhbiBub3QgbWFwIGwyIGNvbnRyb2xsZXJcbiIpOw0K
-PiArCQlyZXR1cm4gLUVJTlZBTDsNCj4gKwl9DQo+ICsNCj4gKwkvKiB3cml0ZSBiaXRzWzAtMTdd
-IHRvIHNyYmFyMCAqLw0KPiArCW91dF9iZTMyKCZsMmN0bHItPnNyYmFyMCwgbG93ZXJfMzJfYml0
-cyhiYXNlKSAmIEwyU1JBTV9CQVJfTVNLX0xPMTgpOw0KPiArDQo+ICsJLyogd3JpdGUgYml0c1sx
-OC0yMV0gdG8gc3JiYXJlMCAqLw0KPiArCWlmIChJU19FTkFCTEVEKENPTkZJR19QSFlTXzY0QklU
-KSkNCj4gKwkJb3V0X2JlMzIoJmwyY3Rsci0+c3JiYXJlYTAsIHVwcGVyXzMyX2JpdHMoYmFzZSkg
-JiBMMlNSQU1fQkFSRV9NU0tfSEk0KTsNCj4gKw0KPiArCWNscnNldGJpdHNfYmUzMigmbDJjdGxy
-LT5jdGwsIEwyQ1JfTDJFLCBMMkNSX0wyRkkpOw0KPiArDQo+ICsJc3dpdGNoICh3YXlzKSB7DQo+
-ICsJY2FzZSBMT0NLX1dBWVNfRUlHSFRIOg0KPiArCQlzZXRiaXRzMzIoJmwyY3Rsci0+Y3RsLCBM
-MkNSX0wyRSB8IEwyQ1JfTDJGSSB8IEwyQ1JfU1JBTV9FSUdIVEgpOw0KPiArCQlicmVhazsNCj4g
-Kw0KPiArCWNhc2UgTE9DS19XQVlTX1RXT19FSUdIVEg6DQo+ICsJCXNldGJpdHMzMigmbDJjdGxy
-LT5jdGwsIEwyQ1JfTDJFIHwgTDJDUl9MMkZJIHwgTDJDUl9TUkFNX1FVQVJUKTsNCj4gKwkJYnJl
-YWs7DQo+ICsNCj4gKwljYXNlIExPQ0tfV0FZU19IQUxGOg0KPiArCQlzZXRiaXRzMzIoJmwyY3Rs
-ci0+Y3RsLCBMMkNSX0wyRSB8IEwyQ1JfTDJGSSB8IEwyQ1JfU1JBTV9IQUxGKTsNCj4gKwkJYnJl
-YWs7DQo+ICsNCj4gKwljYXNlIExPQ0tfV0FZU19GVUxMOg0KPiArCWRlZmF1bHQ6DQo+ICsJCXNl
-dGJpdHMzMigmbDJjdGxyLT5jdGwsIEwyQ1JfTDJFIHwgTDJDUl9MMkZJIHwgTDJDUl9TUkFNX0ZV
-TEwpOw0KPiArCQlicmVhazsNCj4gKwl9DQo+ICsJZWllaW8oKTsNCj4gKw0KPiArCXJldHVybiAw
-Ow0KPiArfQ0KPiArDQo+ICtzdGF0aWMgY29uc3Qgc3RydWN0IHZtX29wZXJhdGlvbnNfc3RydWN0
-IHVpb19jYWNoZV9zcmFtX3ZtX29wcyA9IHsNCj4gKwkuYWNjZXNzID0gZ2VuZXJpY19hY2Nlc3Nf
-cGh5cywNCj4gK307DQo+ICsNCj4gK3N0YXRpYyBpbnQgdWlvX2NhY2hlX3NyYW1fbW1hcChzdHJ1
-Y3QgdWlvX2luZm8gKmluZm8sDQo+ICsJCQkgICAgICAgc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2
-bWEpDQo+ICt7DQo+ICsJc3RydWN0IHVpb19tZW0gKm1lbSA9IGluZm8tPm1lbTsNCj4gKw0KPiAr
-CWlmIChtZW0tPmFkZHIgJiB+UEFHRV9NQVNLKQ0KPiArCQlyZXR1cm4gLUVOT0RFVjsNCj4gKw0K
-PiArCWlmICgodm1hLT52bV9lbmQgLSB2bWEtPnZtX3N0YXJ0ID4gbWVtLT5zaXplKSB8fA0KPiAr
-CSAgICAobWVtLT5zaXplID09IDApIHx8DQo+ICsJICAgIChtZW0tPm1lbXR5cGUgIT0gVUlPX01F
-TV9QSFlTKSkNCj4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+ICsNCj4gKwl2bWEtPnZtX29wcyA9ICZ1
-aW9fY2FjaGVfc3JhbV92bV9vcHM7DQo+ICsJdm1hLT52bV9wYWdlX3Byb3QgPSBwZ3Byb3RfY2Fj
-aGVkKHZtYS0+dm1fcGFnZV9wcm90KTsNCj4gKw0KPiArCXJldHVybiByZW1hcF9wZm5fcmFuZ2Uo
-dm1hLA0KPiArCQkJICAgICAgIHZtYS0+dm1fc3RhcnQsDQo+ICsJCQkgICAgICAgbWVtLT5hZGRy
-ID4+IFBBR0VfU0hJRlQsDQo+ICsJCQkgICAgICAgdm1hLT52bV9lbmQgLSB2bWEtPnZtX3N0YXJ0
-LA0KPiArCQkJICAgICAgIHZtYS0+dm1fcGFnZV9wcm90KTsNCj4gK30NCj4gKw0KPiArc3RhdGlj
-IGludCB1aW9fY2FjaGVfc3JhbV9wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0K
-PiArew0KPiArCXN0cnVjdCBkZXZpY2Vfbm9kZSAqbm9kZSA9IHBkZXYtPmRldi5vZl9ub2RlOw0K
-PiArCXN0cnVjdCB1aW9faW5mbyAqaW5mbzsNCj4gKwlzdHJ1Y3QgdWlvX21lbSAqdWlvbWVtOw0K
-PiArCWNvbnN0IGNoYXIgKmR0X25hbWU7DQo+ICsJdTMyIG1lbV9iYXNlXzMyOw0KPiArCXU2NCBt
-ZW1fYmFzZV82NDsNCj4gKwlwaHlzX2FkZHJfdCBtZW1fYmFzZTsNCj4gKwl1MzIgbDJjYWNoZV9z
-aXplOw0KPiArCXUzMiBtZW1fc2l6ZTsNCj4gKwl1MzIgcmVtOw0KPiArCXU4IHdheXM7DQo+ICsJ
-aW50IHJldDsNCj4gKw0KPiArCS8qIGFsbG9jIHVpb19pbmZvIGZvciBvbmUgZGV2aWNlICovDQo+
-ICsJaW5mbyA9IGRldm1fa3phbGxvYygmcGRldi0+ZGV2LCBzaXplb2YoKmluZm8pLCBHRlBfS0VS
-TkVMKTsNCj4gKwlpZiAoIWluZm8pDQo+ICsJCXJldHVybiAtRU5PTUVNOw0KPiArDQo+ICsJLyog
-Z2V0IG9wdGlvbmFsIHVpbyBuYW1lICovDQo+ICsJaWYgKG9mX3Byb3BlcnR5X3JlYWRfc3RyaW5n
-KG5vZGUsICJ1aW9fbmFtZSIsICZkdF9uYW1lKSkNCj4gKwkJZHRfbmFtZSA9IFVJT19OQU1FOw0K
-PiArDQo+ICsJaW5mby0+bmFtZSA9IGRldm1fa3N0cmR1cCgmcGRldi0+ZGV2LCBkdF9uYW1lLCBH
-RlBfS0VSTkVMKTsNCj4gKwlpZiAoIWluZm8tPm5hbWUpDQo+ICsJCXJldHVybiAtRU5PTUVNOw0K
-PiArDQo+ICsJcmV0ID0gb2ZfcHJvcGVydHlfcmVhZF91MzIobm9kZSwgImNhY2hlLW1lbS1zaXpl
-IiwgJm1lbV9zaXplKTsNCj4gKwlpZiAocmV0KSB7DQo+ICsJCWRldl9lcnIoJnBkZXYtPmRldiwg
-Im1pc3NpbmcgY2FjaGUtbWVtLXNpemVcbiIpOw0KPiArCQlyZXR1cm4gLUVJTlZBTDsNCj4gKwl9
-DQo+ICsNCj4gKw0KPiArCWlmIChJU19FTkFCTEVEKENPTkZJR19QSFlTXzY0QklUKSkgew0KPiAr
-CQlyZXQgPSBvZl9wcm9wZXJ0eV9yZWFkX3U2NChub2RlLCAiY2FjaGUtbWVtLWJhc2UiLCAmbWVt
-X2Jhc2VfNjQpOw0KPiArCQltZW1fYmFzZSA9IG1lbV9iYXNlXzY0Ow0KPiArCX0gZWxzZSB7DQo+
-ICsJCXJldCA9IG9mX3Byb3BlcnR5X3JlYWRfdTMyKG5vZGUsICJjYWNoZS1tZW0tYmFzZSIsICZt
-ZW1fYmFzZV8zMik7DQo+ICsJCW1lbV9iYXNlID0gbWVtX2Jhc2VfMzI7DQo+ICsJfQ0KPiArDQo+
-ICsJaWYgKHJldCkgew0KPiArCQlkZXZfZXJyKCZwZGV2LT5kZXYsICJtaXNzaW5nIGNhY2hlLW1l
-bS1iYXNlXG4iKTsNCj4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+ICsJfQ0KPiArDQo+ICsJaWYgKG1l
-bV9zaXplID09IDApIHsNCj4gKwkJZGV2X2VycigmcGRldi0+ZGV2LCAiY2FjaGUtbWVtLXNpemUg
-c2hvdWxkIG5vdCBiZSAwXG4iKTsNCj4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+ICsJfQ0KPiArDQo+
-ICsJcmV0ID0gb2ZfcHJvcGVydHlfcmVhZF91MzIobm9kZSwgImNhY2hlLXNpemUiLCAmbDJjYWNo
-ZV9zaXplKTsNCj4gKwlpZiAocmV0KSB7DQo+ICsJCWRldl9lcnIoJnBkZXYtPmRldiwgIm1pc3Np
-bmcgbDJjYWNoZS1zaXplXG4iKTsNCj4gKwkJcmV0dXJuIC1FSU5WQUw7DQo+ICsJfQ0KPiArDQo+
-ICsJcmVtID0gbDJjYWNoZV9zaXplICUgbWVtX3NpemU7DQo+ICsJd2F5cyA9IExPQ0tfV0FZU19G
-VUxMICogbWVtX3NpemUgLyBsMmNhY2hlX3NpemU7DQo+ICsJaWYgKHJlbSB8fCAod2F5cyAmICh3
-YXlzIC0gMSkpKSB7DQo+ICsJCWRldl9lcnIoJnBkZXYtPmRldiwgImlsbGVnYWwgY2FjaGUtc3Jh
-bS1zaXplIHBhcmFtZXRlclxuIik7DQo+ICsJCXJldHVybiAtRUlOVkFMOw0KPiArCX0NCj4gKw0K
-PiArCXJldCA9IHVpb19jYWNoZV9zcmFtX3NldHVwKHBkZXYsIG1lbV9iYXNlLCB3YXlzKTsNCj4g
-KwlpZiAocmV0KQ0KPiArCQlyZXR1cm4gcmV0Ow0KPiArDQo+ICsJaWYgKCFyZXF1ZXN0X21lbV9y
-ZWdpb24obWVtX2Jhc2UsIG1lbV9zaXplLCAiZnNsXzg1eHhfY2FjaGVfc3JhbSIpKSB7DQo+ICsJ
-CWRldl9lcnIoJnBkZXYtPmRldiwgInVpb19jYWNoZV9zcmFtIHJlcXVlc3QgbWVtb3J5IGZhaWxl
-ZFxuIik7DQo+ICsJCXJldCA9IC1FTlhJTzsNCj4gKwl9DQo+ICsNCj4gKwlpbmZvLT5pcnEgPSBV
-SU9fSVJRX05PTkU7DQo+ICsJaW5mby0+dmVyc2lvbiA9IFVJT19JTkZPX1ZFUjsNCj4gKwlpbmZv
-LT5tbWFwID0gdWlvX2NhY2hlX3NyYW1fbW1hcDsNCj4gKwl1aW9tZW0gPSBpbmZvLT5tZW07DQo+
-ICsJdWlvbWVtLT5tZW10eXBlID0gVUlPX01FTV9QSFlTOw0KPiArCXVpb21lbS0+YWRkciA9IG1l
-bV9iYXNlOw0KPiArCXVpb21lbS0+c2l6ZSA9IG1lbV9zaXplOw0KPiArCXVpb21lbS0+bmFtZSA9
-IGRldm1fa3N0cmR1cCgmcGRldi0+ZGV2LCBub2RlLT5uYW1lLCBHRlBfS0VSTkVMKTsNCj4gKwl1
-aW9tZW0tPmludGVybmFsX2FkZHIgPSBpb3JlbWFwX2NhY2hlKG1lbV9iYXNlLCBtZW1fc2l6ZSk7
-DQo+ICsJaWYgKCF1aW9tZW0tPmludGVybmFsX2FkZHIpIHsNCj4gKwkJZGV2X2VycigmcGRldi0+
-ZGV2LCAiY2FjaGUgaW9yZW1hcCBmYWlsZWRcbiIpOw0KPiArCQlyZXQgPSAtRU5PTUVNOw0KPiAr
-CX0NCj4gKw0KPiArCS8qIHJlZ2lzdGVyIHVpbyBkZXZpY2UgKi8NCj4gKwlpZiAodWlvX3JlZ2lz
-dGVyX2RldmljZSgmcGRldi0+ZGV2LCBpbmZvKSkgew0KPiArCQlkZXZfZXJyKCZwZGV2LT5kZXYs
-ICJlcnJvciB1aW8sY2FjaGUtc3JhbSByZWdpc3RyYXRpb24gZmFpbGVkXG4iKTsNCj4gKwkJcmV0
-ID0gLUVOT0RFVjsNCj4gKwkJZ290byBlcnJfb3V0Ow0KPiArCX0NCj4gKw0KPiArCXBsYXRmb3Jt
-X3NldF9kcnZkYXRhKHBkZXYsIGluZm8pOw0KPiArCXJldHVybiAwOw0KPiArDQo+ICtlcnJfb3V0
-Og0KPiArCWlvdW5tYXAoaW5mby0+bWVtWzBdLmludGVybmFsX2FkZHIpOw0KPiArCXJldHVybiBy
-ZXQ7DQo+ICt9DQo+ICsNCj4gK3N0YXRpYyBpbnQgdWlvX2NhY2hlX3NyYW1fcmVtb3ZlKHN0cnVj
-dCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ICt7DQo+ICsJc3RydWN0IHVpb19pbmZvICppbmZv
-ID0gcGxhdGZvcm1fZ2V0X2RydmRhdGEocGRldik7DQo+ICsNCj4gKwl1aW9fdW5yZWdpc3Rlcl9k
-ZXZpY2UoaW5mbyk7DQo+ICsJaW91bm1hcChpbmZvLT5tZW1bMF0uaW50ZXJuYWxfYWRkcik7DQo+
-ICsNCj4gKwlyZXR1cm4gMDsNCj4gK30NCj4gKw0KPiArc3RhdGljIGNvbnN0IHN0cnVjdCBvZl9k
-ZXZpY2VfaWQgdWlvX2NhY2hlX3NyYW1fb2ZfbWF0Y2hbXSA9IHsNCj4gKwl7IC5jb21wYXRpYmxl
-ID0gImZzbCxwMjAyMC1sMi1jYWNoZS1zcmFtLXVpbyIsIH0sDQo+ICsJe30NCj4gK307DQo+ICtN
-T0RVTEVfREVWSUNFX1RBQkxFKG9mLCB1aW9fY2FjaGVfc3JhbV9vZl9tYXRjaCk7DQo+ICsNCj4g
-K3N0YXRpYyBzdHJ1Y3QgcGxhdGZvcm1fZHJpdmVyIHVpb19mc2xfODV4eF9jYWNoZV9zcmFtID0g
-ew0KPiArCS5wcm9iZSA9IHVpb19jYWNoZV9zcmFtX3Byb2JlLA0KPiArCS5yZW1vdmUgPSB1aW9f
-Y2FjaGVfc3JhbV9yZW1vdmUsDQo+ICsJLmRyaXZlciA9IHsNCj4gKwkJLm5hbWUgPSBEUklWRVJf
-TkFNRSwNCj4gKwkJLm9mX21hdGNoX3RhYmxlCT0gdWlvX2NhY2hlX3NyYW1fb2ZfbWF0Y2gsDQo+
-ICsJfSwNCj4gK307DQo+ICsNCj4gK21vZHVsZV9wbGF0Zm9ybV9kcml2ZXIodWlvX2ZzbF84NXh4
-X2NhY2hlX3NyYW0pOw0KPiArDQo+ICtNT0RVTEVfQVVUSE9SKCJXYW5nIFdlbmh1IDx3ZW5odS53
-YW5nQGhvdG1haWwuY29tPiIpOw0KPiArTU9EVUxFX0RFU0NSSVBUSU9OKCJGcmVlc2NhbGUgTVBD
-ODV4eCBDYWNoZS1TUkFNIFVJTyBQbGF0Zm9ybSBEcml2ZXIiKTsNCj4gK01PRFVMRV9BTElBUygi
-cGxhdGZvcm06IiBEUklWRVJfTkFNRSk7DQo+ICtNT0RVTEVfTElDRU5TRSgiR1BMIik7
+On 15/06/22 09:03, Ian Rogers wrote:
+> Wrap open and read calls with TEMP_FAILURE_RETRY in case a signal
+> causes the syscall to need to restart.
+
+Please expand on why you want this change.  Can you give an example
+of where it makes a difference?
+
+It looks pretty ugly so maybe making replacement functions or macros
+is better e.g.
+
+#define open_retry(a, ...)                                 \
+    ({ long int __result;                                  \
+       do __result = (long int) open((a), ##__VA_ARGS__);  \
+       while (__result == -1L && errno == EINTR);          \
+       __result; })
+
+
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/lib/api/io.h                       |  3 ++-
+>  tools/lib/symbol/kallsyms.c              |  4 ++-
+>  tools/perf/builtin-daemon.c              | 19 +++++++-------
+>  tools/perf/builtin-ftrace.c              | 18 ++++++-------
+>  tools/perf/builtin-inject.c              |  2 +-
+>  tools/perf/builtin-kvm.c                 |  2 +-
+>  tools/perf/builtin-record.c              |  6 ++---
+>  tools/perf/builtin-sched.c               |  2 +-
+>  tools/perf/builtin-script.c              |  2 +-
+>  tools/perf/util/copyfile.c               |  2 +-
+>  tools/perf/util/data.c                   | 11 ++++----
+>  tools/perf/util/dso.c                    |  6 ++---
+>  tools/perf/util/evlist.c                 |  6 ++---
+>  tools/perf/util/lzma.c                   |  4 +--
+>  tools/perf/util/namespaces.c             |  5 ++--
+>  tools/perf/util/parse-events.c           |  6 ++---
+>  tools/perf/util/pmu.c                    | 12 ++++-----
+>  tools/perf/util/probe-event.c            |  4 +--
+>  tools/perf/util/probe-file.c             | 10 ++++----
+>  tools/perf/util/session.c                |  2 +-
+>  tools/perf/util/symbol-elf.c             | 32 ++++++++++++------------
+>  tools/perf/util/symbol-minimal.c         |  6 ++---
+>  tools/perf/util/symbol.c                 |  4 +--
+>  tools/perf/util/synthetic-events.c       |  7 +++---
+>  tools/perf/util/trace-event-info.c       |  6 ++---
+>  tools/perf/util/trace-event-read.c       |  5 ++--
+>  tools/perf/util/unwind-libunwind-local.c |  4 +--
+>  tools/perf/util/zlib.c                   |  5 ++--
+>  28 files changed, 102 insertions(+), 93 deletions(-)
+> 
+> diff --git a/tools/lib/api/io.h b/tools/lib/api/io.h
+> index 777c20f6b604..b292bbd39fb0 100644
+> --- a/tools/lib/api/io.h
+> +++ b/tools/lib/api/io.h
+> @@ -7,6 +7,7 @@
+>  #ifndef __API_IO__
+>  #define __API_IO__
+>  
+> +#include <errno.h>
+>  #include <stdlib.h>
+>  #include <unistd.h>
+>  
+> @@ -45,7 +46,7 @@ static inline int io__get_char(struct io *io)
+>  		return -1;
+>  
+>  	if (ptr == io->end) {
+> -		ssize_t n = read(io->fd, io->buf, io->buf_len);
+> +		ssize_t n = TEMP_FAILURE_RETRY(read(io->fd, io->buf, io->buf_len));
+>  
+>  		if (n <= 0) {
+>  			io->eof = true;
+> diff --git a/tools/lib/symbol/kallsyms.c b/tools/lib/symbol/kallsyms.c
+> index e335ac2b9e19..5436c038c379 100644
+> --- a/tools/lib/symbol/kallsyms.c
+> +++ b/tools/lib/symbol/kallsyms.c
+> @@ -3,7 +3,9 @@
+>  #include "api/io.h"
+>  #include <stdio.h>
+>  #include <sys/stat.h>
+> +#include <errno.h>
+>  #include <fcntl.h>
+> +#include <unistd.h>
+>  
+>  u8 kallsyms2elf_type(char type)
+>  {
+> @@ -36,7 +38,7 @@ int kallsyms__parse(const char *filename, void *arg,
+>  	char bf[BUFSIZ];
+>  	int err;
+>  
+> -	io.fd = open(filename, O_RDONLY, 0);
+> +	io.fd = TEMP_FAILURE_RETRY(open(filename, O_RDONLY, 0));
+>  
+>  	if (io.fd < 0)
+>  		return -1;
+> diff --git a/tools/perf/builtin-daemon.c b/tools/perf/builtin-daemon.c
+> index 6cb3f6cc36d0..d4e1a5636056 100644
+> --- a/tools/perf/builtin-daemon.c
+> +++ b/tools/perf/builtin-daemon.c
+> @@ -351,7 +351,7 @@ static int daemon_session__run(struct daemon_session *session,
+>  		return -1;
+>  	}
+>  
+> -	fd = open("/dev/null", O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open("/dev/null", O_RDONLY));
+>  	if (fd < 0) {
+>  		perror("failed: open /dev/null");
+>  		return -1;
+> @@ -360,7 +360,7 @@ static int daemon_session__run(struct daemon_session *session,
+>  	dup2(fd, 0);
+>  	close(fd);
+>  
+> -	fd = open(SESSION_OUTPUT, O_RDWR|O_CREAT|O_TRUNC, 0644);
+> +	fd = TEMP_FAILURE_RETRY(open(SESSION_OUTPUT, O_RDWR|O_CREAT|O_TRUNC, 0644));
+>  	if (fd < 0) {
+>  		perror("failed: open session output");
+>  		return -1;
+> @@ -405,7 +405,8 @@ static pid_t handle_signalfd(struct daemon *daemon)
+>  	 * coalesced in kernel and we can receive only single signal even
+>  	 * if multiple SIGCHLD were generated.
+>  	 */
+> -	err = read(daemon->signal_fd, &si, sizeof(struct signalfd_siginfo));
+> +	err = TEMP_FAILURE_RETRY(read(daemon->signal_fd, &si,
+> +				      sizeof(struct signalfd_siginfo)));
+>  	if (err != sizeof(struct signalfd_siginfo)) {
+>  		pr_err("failed to read signal fd\n");
+>  		return -1;
+> @@ -522,7 +523,7 @@ static int daemon_session__control(struct daemon_session *session,
+>  	scnprintf(control_path, sizeof(control_path), "%s/%s",
+>  		  session->base, SESSION_CONTROL);
+>  
+> -	control = open(control_path, O_WRONLY|O_NONBLOCK);
+> +	control = TEMP_FAILURE_RETRY(open(control_path, O_WRONLY|O_NONBLOCK));
+>  	if (!control)
+>  		return -1;
+>  
+> @@ -531,7 +532,7 @@ static int daemon_session__control(struct daemon_session *session,
+>  		scnprintf(ack_path, sizeof(ack_path), "%s/%s",
+>  			  session->base, SESSION_ACK);
+>  
+> -		ack = open(ack_path, O_RDONLY, O_NONBLOCK);
+> +		ack = TEMP_FAILURE_RETRY(open(ack_path, O_RDONLY, O_NONBLOCK));
+>  		if (!ack) {
+>  			close(control);
+>  			return -1;
+> @@ -564,7 +565,7 @@ static int daemon_session__control(struct daemon_session *session,
+>  		goto out;
+>  	}
+>  
+> -	err = read(ack, buf, sizeof(buf));
+> +	err = TEMP_FAILURE_RETRY(read(ack, buf, sizeof(buf)));
+>  	if (err > 0)
+>  		ret = strcmp(buf, "ack\n");
+>  	else
+> @@ -1078,7 +1079,7 @@ static int handle_config_changes(struct daemon *daemon, int conf_fd,
+>  	ssize_t len;
+>  
+>  	while (!(*config_changed)) {
+> -		len = read(conf_fd, buf, sizeof(buf));
+> +		len = TEMP_FAILURE_RETRY(read(conf_fd, buf, sizeof(buf)));
+>  		if (len == -1) {
+>  			if (errno != EAGAIN) {
+>  				perror("failed: read");
+> @@ -1147,7 +1148,7 @@ static int check_lock(struct daemon *daemon)
+>  
+>  	scnprintf(path, sizeof(path), "%s/lock", daemon->base);
+>  
+> -	fd = open(path, O_RDWR|O_CREAT|O_CLOEXEC, 0640);
+> +	fd = TEMP_FAILURE_RETRY(open(path, O_RDWR|O_CREAT|O_CLOEXEC, 0640));
+>  	if (fd < 0)
+>  		return -1;
+>  
+> @@ -1201,7 +1202,7 @@ static int go_background(struct daemon *daemon)
+>  		return -1;
+>  	}
+>  
+> -	fd = open("output", O_RDWR|O_CREAT|O_TRUNC, 0644);
+> +	fd = TEMP_FAILURE_RETRY(open("output", O_RDWR|O_CREAT|O_TRUNC, 0644));
+>  	if (fd < 0) {
+>  		perror("failed: open");
+>  		return -1;
+> diff --git a/tools/perf/builtin-ftrace.c b/tools/perf/builtin-ftrace.c
+> index 7de07bb16d23..7553e20f38b2 100644
+> --- a/tools/perf/builtin-ftrace.c
+> +++ b/tools/perf/builtin-ftrace.c
+> @@ -79,7 +79,7 @@ static int __write_tracing_file(const char *name, const char *val, bool append)
+>  	else
+>  		flags |= O_TRUNC;
+>  
+> -	fd = open(file, flags);
+> +	fd = TEMP_FAILURE_RETRY(open(file, flags));
+>  	if (fd < 0) {
+>  		pr_debug("cannot open tracing file: %s: %s\n",
+>  			 name, str_error_r(errno, errbuf, sizeof(errbuf)));
+> @@ -132,7 +132,7 @@ static int read_tracing_file_to_stdout(const char *name)
+>  		return -1;
+>  	}
+>  
+> -	fd = open(file, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(file, O_RDONLY));
+>  	if (fd < 0) {
+>  		pr_debug("cannot open tracing file: %s: %s\n",
+>  			 name, str_error_r(errno, buf, sizeof(buf)));
+> @@ -141,7 +141,7 @@ static int read_tracing_file_to_stdout(const char *name)
+>  
+>  	/* read contents to stdout */
+>  	while (true) {
+> -		int n = read(fd, buf, sizeof(buf));
+> +		int n = TEMP_FAILURE_RETRY(read(fd, buf, sizeof(buf)));
+>  		if (n == 0)
+>  			break;
+>  		else if (n < 0)
+> @@ -608,7 +608,7 @@ static int __cmd_ftrace(struct perf_ftrace *ftrace)
+>  		goto out_reset;
+>  	}
+>  
+> -	trace_fd = open(trace_file, O_RDONLY);
+> +	trace_fd = TEMP_FAILURE_RETRY(open(trace_file, O_RDONLY));
+>  
+>  	put_tracing_file(trace_file);
+>  
+> @@ -645,7 +645,7 @@ static int __cmd_ftrace(struct perf_ftrace *ftrace)
+>  			break;
+>  
+>  		if (pollfd.revents & POLLIN) {
+> -			int n = read(trace_fd, buf, sizeof(buf));
+> +			int n = TEMP_FAILURE_RETRY(read(trace_fd, buf, sizeof(buf)));
+>  			if (n < 0)
+>  				break;
+>  			if (fwrite(buf, n, 1, stdout) != 1)
+> @@ -665,7 +665,7 @@ static int __cmd_ftrace(struct perf_ftrace *ftrace)
+>  
+>  	/* read remaining buffer contents */
+>  	while (true) {
+> -		int n = read(trace_fd, buf, sizeof(buf));
+> +		int n = TEMP_FAILURE_RETRY(read(trace_fd, buf, sizeof(buf)));
+>  		if (n <= 0)
+>  			break;
+>  		if (fwrite(buf, n, 1, stdout) != 1)
+> @@ -826,7 +826,7 @@ static int prepare_func_latency(struct perf_ftrace *ftrace)
+>  		return -1;
+>  	}
+>  
+> -	fd = open(trace_file, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(trace_file, O_RDONLY));
+>  	if (fd < 0)
+>  		pr_err("failed to open trace_pipe\n");
+>  
+> @@ -913,7 +913,7 @@ static int __cmd_latency(struct perf_ftrace *ftrace)
+>  			break;
+>  
+>  		if (pollfd.revents & POLLIN) {
+> -			int n = read(trace_fd, buf, sizeof(buf) - 1);
+> +			int n = TEMP_FAILURE_RETRY(read(trace_fd, buf, sizeof(buf) - 1));
+>  			if (n < 0)
+>  				break;
+>  
+> @@ -931,7 +931,7 @@ static int __cmd_latency(struct perf_ftrace *ftrace)
+>  
+>  	/* read remaining buffer contents */
+>  	while (!ftrace->target.use_bpf) {
+> -		int n = read(trace_fd, buf, sizeof(buf) - 1);
+> +		int n = TEMP_FAILURE_RETRY(read(trace_fd, buf, sizeof(buf) - 1));
+>  		if (n <= 0)
+>  			break;
+>  		make_histogram(buckets, buf, n, line, ftrace->use_nsec);
+> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+> index a75bf11585b5..960b4a50583e 100644
+> --- a/tools/perf/builtin-inject.c
+> +++ b/tools/perf/builtin-inject.c
+> @@ -155,7 +155,7 @@ static int copy_bytes(struct perf_inject *inject, int fd, off_t size)
+>  	int ret;
+>  
+>  	while (size > 0) {
+> -		ssz = read(fd, buf, min(size, (off_t)sizeof(buf)));
+> +		ssz = TEMP_FAILURE_RETRY(read(fd, buf, min(size, (off_t)sizeof(buf))));
+>  		if (ssz < 0)
+>  			return -errno;
+>  		ret = output_bytes(inject, buf, ssz);
+> diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
+> index 3696ae97f149..4dd8292d1941 100644
+> --- a/tools/perf/builtin-kvm.c
+> +++ b/tools/perf/builtin-kvm.c
+> @@ -880,7 +880,7 @@ static int perf_kvm__handle_timerfd(struct perf_kvm_stat *kvm)
+>  	uint64_t c;
+>  	int rc;
+>  
+> -	rc = read(kvm->timerfd, &c, sizeof(uint64_t));
+> +	rc = TEMP_FAILURE_RETRY(read(kvm->timerfd, &c, sizeof(uint64_t)));
+>  	if (rc < 0) {
+>  		if (errno == EAGAIN)
+>  			return 0;
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index 9a71f0330137..361610bc96b6 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -902,7 +902,7 @@ static bool record__kcore_readable(struct machine *machine)
+>  
+>  	scnprintf(kcore, sizeof(kcore), "%s/proc/kcore", machine->root_dir);
+>  
+> -	fd = open(kcore, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(kcore, O_RDONLY));
+>  	if (fd < 0)
+>  		return false;
+>  
+> @@ -2049,7 +2049,7 @@ static int record__terminate_thread(struct record_thread *thread_data)
+>  
+>  	close(thread_data->pipes.msg[1]);
+>  	thread_data->pipes.msg[1] = -1;
+> -	err = read(thread_data->pipes.ack[0], &ack, sizeof(ack));
+> +	err = TEMP_FAILURE_RETRY(read(thread_data->pipes.ack[0], &ack, sizeof(ack)));
+>  	if (err > 0)
+>  		pr_debug2("threads[%d]: sent %s\n", tid, thread_msg_tags[ack]);
+>  	else
+> @@ -2097,7 +2097,7 @@ static int record__start_threads(struct record *rec)
+>  			goto out_err;
+>  		}
+>  
+> -		err = read(thread_data[t].pipes.ack[0], &msg, sizeof(msg));
+> +		err = TEMP_FAILURE_RETRY(read(thread_data[t].pipes.ack[0], &msg, sizeof(msg)));
+>  		if (err > 0)
+>  			pr_debug2("threads[%d]: sent %s\n", rec->thread_data[t].tid,
+>  				  thread_msg_tags[msg]);
+> diff --git a/tools/perf/builtin-sched.c b/tools/perf/builtin-sched.c
+> index 646bd938927a..149787268d02 100644
+> --- a/tools/perf/builtin-sched.c
+> +++ b/tools/perf/builtin-sched.c
+> @@ -604,7 +604,7 @@ static u64 get_cpu_usage_nsec_self(int fd)
+>  	u64 runtime;
+>  	int ret;
+>  
+> -	ret = read(fd, &runtime, sizeof(runtime));
+> +	ret = TEMP_FAILURE_RETRY(read(fd, &runtime, sizeof(runtime)));
+>  	BUG_ON(ret != sizeof(runtime));
+>  
+>  	return runtime;
+> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+> index c689054002cc..844f5350bfdf 100644
+> --- a/tools/perf/builtin-script.c
+> +++ b/tools/perf/builtin-script.c
+> @@ -4207,7 +4207,7 @@ int cmd_script(int argc, const char **argv)
+>  			goto out_delete;
+>  		}
+>  
+> -		input = open(data.path, O_RDONLY);	/* input_name */
+> +		input = TEMP_FAILURE_RETRY(open(data.path, O_RDONLY));	/* input_name */
+>  		if (input < 0) {
+>  			err = -errno;
+>  			perror("failed to open file");
+> diff --git a/tools/perf/util/copyfile.c b/tools/perf/util/copyfile.c
+> index 47e03de7c235..c7bff4943936 100644
+> --- a/tools/perf/util/copyfile.c
+> +++ b/tools/perf/util/copyfile.c
+> @@ -112,7 +112,7 @@ static int copyfile_mode_ns(const char *from, const char *to, mode_t mode,
+>  		goto out_close_to;
+>  
+>  	nsinfo__mountns_enter(nsi, &nsc);
+> -	fromfd = open(from, O_RDONLY);
+> +	fromfd = TEMP_FAILURE_RETRY(open(from, O_RDONLY));
+>  	nsinfo__mountns_exit(&nsc);
+>  	if (fromfd < 0)
+>  		goto out_close_to;
+> diff --git a/tools/perf/util/data.c b/tools/perf/util/data.c
+> index caabeac24c69..a9066a3d914f 100644
+> --- a/tools/perf/util/data.c
+> +++ b/tools/perf/util/data.c
+> @@ -53,7 +53,8 @@ int perf_data__create_dir(struct perf_data *data, int nr)
+>  			goto out_err;
+>  		}
+>  
+> -		ret = open(file->path, O_RDWR|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR);
+> +		ret = TEMP_FAILURE_RETRY(open(file->path, O_RDWR|O_CREAT|O_TRUNC,
+> +					      S_IRUSR|S_IWUSR));
+>  		if (ret < 0) {
+>  			ret = -errno;
+>  			goto out_err;
+> @@ -123,7 +124,7 @@ int perf_data__open_dir(struct perf_data *data)
+>  		if (!file->path)
+>  			goto out_err;
+>  
+> -		ret = open(file->path, O_RDONLY);
+> +		ret = TEMP_FAILURE_RETRY(open(file->path, O_RDONLY));
+>  		if (ret < 0)
+>  			goto out_err;
+>  
+> @@ -248,7 +249,7 @@ static int open_file_read(struct perf_data *data)
+>  	int fd;
+>  	char sbuf[STRERR_BUFSIZE];
+>  
+> -	fd = open(data->file.path, flags);
+> +	fd = TEMP_FAILURE_RETRY(open(data->file.path, flags));
+>  	if (fd < 0) {
+>  		int err = errno;
+>  
+> @@ -288,8 +289,8 @@ static int open_file_write(struct perf_data *data)
+>  	int fd;
+>  	char sbuf[STRERR_BUFSIZE];
+>  
+> -	fd = open(data->file.path, O_CREAT|O_RDWR|O_TRUNC|O_CLOEXEC,
+> -		  S_IRUSR|S_IWUSR);
+> +	fd = TEMP_FAILURE_RETRY(open(data->file.path, O_CREAT|O_RDWR|O_TRUNC|O_CLOEXEC,
+> +				     S_IRUSR|S_IWUSR));
+>  
+>  	if (fd < 0)
+>  		pr_err("failed to open %s : %s\n", data->file.path,
+> diff --git a/tools/perf/util/dso.c b/tools/perf/util/dso.c
+> index 5ac13958d1bd..40befa2429f9 100644
+> --- a/tools/perf/util/dso.c
+> +++ b/tools/perf/util/dso.c
+> @@ -300,7 +300,7 @@ int filename__decompress(const char *name, char *pathname,
+>  	 * descriptor to the uncompressed file.
+>  	 */
+>  	if (!compressions[comp].is_compressed(name))
+> -		return open(name, O_RDONLY);
+> +		return TEMP_FAILURE_RETRY(open(name, O_RDONLY));
+>  
+>  	fd = mkstemp(tmpbuf);
+>  	if (fd < 0) {
+> @@ -476,7 +476,7 @@ static int do_open(char *name)
+>  	char sbuf[STRERR_BUFSIZE];
+>  
+>  	do {
+> -		fd = open(name, O_RDONLY|O_CLOEXEC);
+> +		fd = TEMP_FAILURE_RETRY(open(name, O_RDONLY|O_CLOEXEC));
+>  		if (fd >= 0)
+>  			return fd;
+>  
+> @@ -898,7 +898,7 @@ static ssize_t file_read(struct dso *dso, struct machine *machine,
+>  		goto out;
+>  	}
+>  
+> -	ret = pread(dso->data.fd, data, DSO__DATA_CACHE_SIZE, offset);
+> +	ret = TEMP_FAILURE_RETRY(pread(dso->data.fd, data, DSO__DATA_CACHE_SIZE, offset));
+>  out:
+>  	pthread_mutex_unlock(&dso__data_open_lock);
+>  	return ret;
+> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> index 48af7d379d82..ba0dcdf91120 100644
+> --- a/tools/perf/util/evlist.c
+> +++ b/tools/perf/util/evlist.c
+> @@ -1440,7 +1440,7 @@ int evlist__prepare_workload(struct evlist *evlist, struct target *target, const
+>  		/*
+>  		 * Wait until the parent tells us to go.
+>  		 */
+> -		ret = read(go_pipe[0], &bf, 1);
+> +		ret = TEMP_FAILURE_RETRY(read(go_pipe[0], &bf, 1));
+>  		/*
+>  		 * The parent will ask for the execvp() to be performed by
+>  		 * writing exactly one byte, in workload.cork_fd, usually via
+> @@ -1837,7 +1837,7 @@ static int evlist__parse_control_fifo(const char *str, int *ctl_fd, int *ctl_fd_
+>  	 * O_RDWR avoids POLLHUPs which is necessary to allow the other
+>  	 * end of a FIFO to be repeatedly opened and closed.
+>  	 */
+> -	fd = open(s, O_RDWR | O_NONBLOCK | O_CLOEXEC);
+> +	fd = TEMP_FAILURE_RETRY(open(s, O_RDWR | O_NONBLOCK | O_CLOEXEC));
+>  	if (fd < 0) {
+>  		pr_err("Failed to open '%s'\n", s);
+>  		ret = -errno;
+> @@ -1848,7 +1848,7 @@ static int evlist__parse_control_fifo(const char *str, int *ctl_fd, int *ctl_fd_
+>  
+>  	if (p && *++p) {
+>  		/* O_RDWR | O_NONBLOCK means the other end need not be open */
+> -		fd = open(p, O_RDWR | O_NONBLOCK | O_CLOEXEC);
+> +		fd = TEMP_FAILURE_RETRY(open(p, O_RDWR | O_NONBLOCK | O_CLOEXEC));
+>  		if (fd < 0) {
+>  			pr_err("Failed to open '%s'\n", p);
+>  			ret = -errno;
+> diff --git a/tools/perf/util/lzma.c b/tools/perf/util/lzma.c
+> index 51424cdc3b68..93e0a6a53e28 100644
+> --- a/tools/perf/util/lzma.c
+> +++ b/tools/perf/util/lzma.c
+> @@ -109,7 +109,7 @@ int lzma_decompress_to_file(const char *input, int output_fd)
+>  
+>  bool lzma_is_compressed(const char *input)
+>  {
+> -	int fd = open(input, O_RDONLY);
+> +	int fd = TEMP_FAILURE_RETRY(open(input, O_RDONLY));
+>  	const uint8_t magic[6] = { 0xFD, '7', 'z', 'X', 'Z', 0x00 };
+>  	char buf[6] = { 0 };
+>  	ssize_t rc;
+> @@ -117,7 +117,7 @@ bool lzma_is_compressed(const char *input)
+>  	if (fd < 0)
+>  		return -1;
+>  
+> -	rc = read(fd, buf, sizeof(buf));
+> +	rc = TEMP_FAILURE_RETRY(read(fd, buf, sizeof(buf)));
+>  	close(fd);
+>  	return rc == sizeof(buf) ?
+>  	       memcmp(buf, magic, sizeof(buf)) == 0 : false;
+> diff --git a/tools/perf/util/namespaces.c b/tools/perf/util/namespaces.c
+> index dd536220cdb9..89edfba6af06 100644
+> --- a/tools/perf/util/namespaces.c
+> +++ b/tools/perf/util/namespaces.c
+> @@ -9,6 +9,7 @@
+>  #include "get_current_dir_name.h"
+>  #include <sys/types.h>
+>  #include <sys/stat.h>
+> +#include <errno.h>
+>  #include <fcntl.h>
+>  #include <limits.h>
+>  #include <sched.h>
+> @@ -266,11 +267,11 @@ void nsinfo__mountns_enter(struct nsinfo *nsi,
+>  	if (!oldcwd)
+>  		return;
+>  
+> -	oldns = open(curpath, O_RDONLY);
+> +	oldns = TEMP_FAILURE_RETRY(open(curpath, O_RDONLY));
+>  	if (oldns < 0)
+>  		goto errout;
+>  
+> -	newns = open(nsi->mntns_path, O_RDONLY);
+> +	newns = TEMP_FAILURE_RETRY(open(nsi->mntns_path, O_RDONLY));
+>  	if (newns < 0)
+>  		goto errout;
+>  
+> diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+> index 7ed235740431..75f8f2e44195 100644
+> --- a/tools/perf/util/parse-events.c
+> +++ b/tools/perf/util/parse-events.c
+> @@ -189,7 +189,7 @@ static int tp_event_has_id(const char *dir_path, struct dirent *evt_dir)
+>  	int fd;
+>  
+>  	snprintf(evt_path, MAXPATHLEN, "%s/%s/id", dir_path, evt_dir->d_name);
+> -	fd = open(evt_path, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(evt_path, O_RDONLY));
+>  	if (fd < 0)
+>  		return -EINVAL;
+>  	close(fd);
+> @@ -233,10 +233,10 @@ struct tracepoint_path *tracepoint_id_to_path(u64 config)
+>  
+>  			scnprintf(evt_path, MAXPATHLEN, "%s/%s/id", dir_path,
+>  				  evt_dirent->d_name);
+> -			fd = open(evt_path, O_RDONLY);
+> +			fd = TEMP_FAILURE_RETRY(open(evt_path, O_RDONLY));
+>  			if (fd < 0)
+>  				continue;
+> -			if (read(fd, id_buf, sizeof(id_buf)) < 0) {
+> +			if (TEMP_FAILURE_RETRY(read(fd, id_buf, sizeof(id_buf))) < 0) {
+>  				close(fd);
+>  				continue;
+>  			}
+> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> index 9a1c7e63e663..59252cfc2b5b 100644
+> --- a/tools/perf/util/pmu.c
+> +++ b/tools/perf/util/pmu.c
+> @@ -154,14 +154,14 @@ static int perf_pmu__parse_scale(struct perf_pmu_alias *alias, char *dir, char *
+>  
+>  	scnprintf(path, PATH_MAX, "%s/%s.scale", dir, name);
+>  
+> -	fd = open(path, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(path, O_RDONLY));
+>  	if (fd == -1)
+>  		return -1;
+>  
+>  	if (fstat(fd, &st) < 0)
+>  		goto error;
+>  
+> -	sret = read(fd, scale, sizeof(scale)-1);
+> +	sret = TEMP_FAILURE_RETRY(read(fd, scale, sizeof(scale)-1));
+>  	if (sret < 0)
+>  		goto error;
+>  
+> @@ -184,11 +184,11 @@ static int perf_pmu__parse_unit(struct perf_pmu_alias *alias, char *dir, char *n
+>  
+>  	scnprintf(path, PATH_MAX, "%s/%s.unit", dir, name);
+>  
+> -	fd = open(path, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(path, O_RDONLY));
+>  	if (fd == -1)
+>  		return -1;
+>  
+> -	sret = read(fd, alias->unit, UNIT_MAX_LEN);
+> +	sret = TEMP_FAILURE_RETRY(read(fd, alias->unit, UNIT_MAX_LEN));
+>  	if (sret < 0)
+>  		goto error;
+>  
+> @@ -214,7 +214,7 @@ perf_pmu__parse_per_pkg(struct perf_pmu_alias *alias, char *dir, char *name)
+>  
+>  	scnprintf(path, PATH_MAX, "%s/%s.per-pkg", dir, name);
+>  
+> -	fd = open(path, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(path, O_RDONLY));
+>  	if (fd == -1)
+>  		return -1;
+>  
+> @@ -232,7 +232,7 @@ static int perf_pmu__parse_snapshot(struct perf_pmu_alias *alias,
+>  
+>  	scnprintf(path, PATH_MAX, "%s/%s.snapshot", dir, name);
+>  
+> -	fd = open(path, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(path, O_RDONLY));
+>  	if (fd == -1)
+>  		return -1;
+>  
+> diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
+> index 062b5cbe67af..7838889f55df 100644
+> --- a/tools/perf/util/probe-event.c
+> +++ b/tools/perf/util/probe-event.c
+> @@ -276,7 +276,7 @@ static char *find_module_name(const char *module)
+>  	char *mod_name = NULL;
+>  	int name_offset;
+>  
+> -	fd = open(module, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(module, O_RDONLY));
+>  	if (fd < 0)
+>  		return NULL;
+>  
+> @@ -598,7 +598,7 @@ static int get_text_start_address(const char *exec, u64 *address,
+>  	struct nscookie nsc;
+>  
+>  	nsinfo__mountns_enter(nsi, &nsc);
+> -	fd = open(exec, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(exec, O_RDONLY));
+>  	nsinfo__mountns_exit(&nsc);
+>  	if (fd < 0)
+>  		return -errno;
+> diff --git a/tools/perf/util/probe-file.c b/tools/perf/util/probe-file.c
+> index 3d50de3217d5..b788932656e8 100644
+> --- a/tools/perf/util/probe-file.c
+> +++ b/tools/perf/util/probe-file.c
+> @@ -115,9 +115,9 @@ int open_trace_file(const char *trace_file, bool readwrite)
+>  	if (ret >= 0) {
+>  		pr_debug("Opening %s write=%d\n", buf, readwrite);
+>  		if (readwrite && !probe_event_dry_run)
+> -			ret = open(buf, O_RDWR | O_APPEND, 0);
+> +			ret = TEMP_FAILURE_RETRY(open(buf, O_RDWR | O_APPEND, 0));
+>  		else
+> -			ret = open(buf, O_RDONLY, 0);
+> +			ret = TEMP_FAILURE_RETRY(open(buf, O_RDONLY, 0));
+>  
+>  		if (ret < 0)
+>  			ret = -errno;
+> @@ -180,7 +180,7 @@ struct strlist *probe_file__get_rawlist(int fd)
+>  	if (sl == NULL)
+>  		return NULL;
+>  
+> -	fddup = dup(fd);
+> +	fddup = TEMP_FAILURE_RETRY(dup(fd));
+>  	if (fddup < 0)
+>  		goto out_free_sl;
+>  
+> @@ -498,7 +498,7 @@ static int probe_cache__open(struct probe_cache *pcache, const char *target,
+>  	}
+>  
+>  	snprintf(cpath, PATH_MAX, "%s/probes", dir_name);
+> -	fd = open(cpath, O_CREAT | O_RDWR, 0644);
+> +	fd = TEMP_FAILURE_RETRY(open(cpath, O_CREAT | O_RDWR, 0644));
+>  	if (fd < 0)
+>  		pr_debug("Failed to open cache(%d): %s\n", fd, cpath);
+>  	free(dir_name);
+> @@ -514,7 +514,7 @@ static int probe_cache__load(struct probe_cache *pcache)
+>  	int ret = 0, fddup;
+>  	FILE *fp;
+>  
+> -	fddup = dup(pcache->fd);
+> +	fddup = TEMP_FAILURE_RETRY(dup(pcache->fd));
+>  	if (fddup < 0)
+>  		return -errno;
+>  	fp = fdopen(fddup, "r");
+> diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+> index 0acb9de54b06..b2fc389cc530 100644
+> --- a/tools/perf/util/session.c
+> +++ b/tools/perf/util/session.c
+> @@ -384,7 +384,7 @@ static int skipn(int fd, off_t n)
+>  	ssize_t ret;
+>  
+>  	while (n > 0) {
+> -		ret = read(fd, buf, min(n, (off_t)sizeof(buf)));
+> +		ret = TEMP_FAILURE_RETRY(read(fd, buf, min(n, (off_t)sizeof(buf))));
+>  		if (ret <= 0)
+>  			return ret;
+>  		n -= ret;
+> diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
+> index ecd377938eea..02556070a2ce 100644
+> --- a/tools/perf/util/symbol-elf.c
+> +++ b/tools/perf/util/symbol-elf.c
+> @@ -577,7 +577,7 @@ static int read_build_id(const char *filename, struct build_id *bid)
+>  	if (size < BUILD_ID_SIZE)
+>  		goto out;
+>  
+> -	fd = open(filename, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(filename, O_RDONLY));
+>  	if (fd < 0)
+>  		goto out;
+>  
+> @@ -638,7 +638,7 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid)
+>  	size_t size = sizeof(bid->data);
+>  	int fd, err = -1;
+>  
+> -	fd = open(filename, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(filename, O_RDONLY));
+>  	if (fd < 0)
+>  		goto out;
+>  
+> @@ -647,24 +647,24 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid)
+>  		GElf_Nhdr nhdr;
+>  		size_t namesz, descsz;
+>  
+> -		if (read(fd, &nhdr, sizeof(nhdr)) != sizeof(nhdr))
+> +		if (TEMP_FAILURE_RETRY(read(fd, &nhdr, sizeof(nhdr))) != sizeof(nhdr))
+>  			break;
+>  
+>  		namesz = NOTE_ALIGN(nhdr.n_namesz);
+>  		descsz = NOTE_ALIGN(nhdr.n_descsz);
+>  		if (nhdr.n_type == NT_GNU_BUILD_ID &&
+>  		    nhdr.n_namesz == sizeof("GNU")) {
+> -			if (read(fd, bf, namesz) != (ssize_t)namesz)
+> +			if (TEMP_FAILURE_RETRY(read(fd, bf, namesz)) != (ssize_t)namesz)
+>  				break;
+>  			if (memcmp(bf, "GNU", sizeof("GNU")) == 0) {
+>  				size_t sz = min(descsz, size);
+> -				if (read(fd, bid->data, sz) == (ssize_t)sz) {
+> +				if (TEMP_FAILURE_RETRY(read(fd, bid->data, sz)) == (ssize_t)sz) {
+>  					memset(bid->data + sz, 0, size - sz);
+>  					bid->size = sz;
+>  					err = 0;
+>  					break;
+>  				}
+> -			} else if (read(fd, bf, descsz) != (ssize_t)descsz)
+> +			} else if (TEMP_FAILURE_RETRY(read(fd, bf, descsz)) != (ssize_t)descsz)
+>  				break;
+>  		} else {
+>  			int n = namesz + descsz;
+> @@ -674,7 +674,7 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid)
+>  				pr_debug("%s: truncating reading of build id in sysfs file %s: n_namesz=%u, n_descsz=%u.\n",
+>  					 __func__, filename, nhdr.n_namesz, nhdr.n_descsz);
+>  			}
+> -			if (read(fd, bf, n) != n)
+> +			if (TEMP_FAILURE_RETRY(read(fd, bf, n)) != n)
+>  				break;
+>  		}
+>  	}
+> @@ -732,7 +732,7 @@ int filename__read_debuglink(const char *filename, char *debuglink,
+>  	Elf_Scn *sec;
+>  	Elf_Kind ek;
+>  
+> -	fd = open(filename, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(filename, O_RDONLY));
+>  	if (fd < 0)
+>  		goto out;
+>  
+> @@ -844,7 +844,7 @@ int symsrc__init(struct symsrc *ss, struct dso *dso, const char *name,
+>  
+>  		type = dso->symtab_type;
+>  	} else {
+> -		fd = open(name, O_RDONLY);
+> +		fd = TEMP_FAILURE_RETRY(open(name, O_RDONLY));
+>  		if (fd < 0) {
+>  			dso->load_errno = errno;
+>  			return -1;
+> @@ -1454,7 +1454,7 @@ static int copy_bytes(int from, off_t from_offs, int to, off_t to_offs, u64 len)
+>  		if (len < n)
+>  			n = len;
+>  		/* Use read because mmap won't work on proc files */
+> -		r = read(from, buf, n);
+> +		r = TEMP_FAILURE_RETRY(read(from, buf, n));
+>  		if (r < 0)
+>  			goto out;
+>  		if (!r)
+> @@ -1485,7 +1485,7 @@ static int kcore__open(struct kcore *kcore, const char *filename)
+>  {
+>  	GElf_Ehdr *ehdr;
+>  
+> -	kcore->fd = open(filename, O_RDONLY);
+> +	kcore->fd = TEMP_FAILURE_RETRY(open(filename, O_RDONLY));
+>  	if (kcore->fd == -1)
+>  		return -1;
+>  
+> @@ -1518,7 +1518,7 @@ static int kcore__init(struct kcore *kcore, char *filename, int elfclass,
+>  	if (temp)
+>  		kcore->fd = mkstemp(filename);
+>  	else
+> -		kcore->fd = open(filename, O_WRONLY | O_CREAT | O_EXCL, 0400);
+> +		kcore->fd = TEMP_FAILURE_RETRY(open(filename, O_WRONLY | O_CREAT | O_EXCL, 0400));
+>  	if (kcore->fd == -1)
+>  		return -1;
+>  
+> @@ -1966,7 +1966,7 @@ static int kcore_copy__compare_fds(int from, int to)
+>  
+>  	while (1) {
+>  		/* Use read because mmap won't work on proc files */
+> -		ret = read(from, buf_from, page_size);
+> +		ret = TEMP_FAILURE_RETRY(read(from, buf_from, page_size));
+>  		if (ret < 0)
+>  			goto out;
+>  
+> @@ -1994,11 +1994,11 @@ static int kcore_copy__compare_files(const char *from_filename,
+>  {
+>  	int from, to, err = -1;
+>  
+> -	from = open(from_filename, O_RDONLY);
+> +	from = TEMP_FAILURE_RETRY(open(from_filename, O_RDONLY));
+>  	if (from < 0)
+>  		return -1;
+>  
+> -	to = open(to_filename, O_RDONLY);
+> +	to = TEMP_FAILURE_RETRY(open(to_filename, O_RDONLY));
+>  	if (to < 0)
+>  		goto out_close_from;
+>  
+> @@ -2419,7 +2419,7 @@ int get_sdt_note_list(struct list_head *head, const char *target)
+>  	Elf *elf;
+>  	int fd, ret;
+>  
+> -	fd = open(target, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(target, O_RDONLY));
+>  	if (fd < 0)
+>  		return -EBADF;
+>  
+> diff --git a/tools/perf/util/symbol-minimal.c b/tools/perf/util/symbol-minimal.c
+> index f9eb0bee7f15..7e25d476b1b2 100644
+> --- a/tools/perf/util/symbol-minimal.c
+> +++ b/tools/perf/util/symbol-minimal.c
+> @@ -230,7 +230,7 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid)
+>  	size_t buf_size;
+>  	void *buf;
+>  
+> -	fd = open(filename, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(filename, O_RDONLY));
+>  	if (fd < 0)
+>  		return -1;
+>  
+> @@ -242,7 +242,7 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid)
+>  	if (buf == NULL)
+>  		goto out;
+>  
+> -	if (read(fd, buf, buf_size) != (ssize_t) buf_size)
+> +	if (TEMP_FAILURE_RETRY(read(fd, buf, buf_size)) != (ssize_t) buf_size)
+>  		goto out_free;
+>  
+>  	ret = read_build_id(buf, buf_size, bid, false);
+> @@ -256,7 +256,7 @@ int sysfs__read_build_id(const char *filename, struct build_id *bid)
+>  int symsrc__init(struct symsrc *ss, struct dso *dso, const char *name,
+>  	         enum dso_binary_type type)
+>  {
+> -	int fd = open(name, O_RDONLY);
+> +	int fd = TEMP_FAILURE_RETRY(open(name, O_RDONLY));
+>  	if (fd < 0)
+>  		goto out_errno;
+>  
+> diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
+> index f72baf636724..5212667ea67d 100644
+> --- a/tools/perf/util/symbol.c
+> +++ b/tools/perf/util/symbol.c
+> @@ -1335,7 +1335,7 @@ static int dso__load_kcore(struct dso *dso, struct map *map,
+>  	md.dso = dso;
+>  	INIT_LIST_HEAD(&md.maps);
+>  
+> -	fd = open(kcore_filename, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(kcore_filename, O_RDONLY));
+>  	if (fd < 0) {
+>  		pr_debug("Failed to open %s. Note /proc/kcore requires CAP_SYS_RAWIO capability to access.\n",
+>  			 kcore_filename);
+> @@ -2156,7 +2156,7 @@ static int find_matching_kcore(struct map *map, char *dir, size_t dir_sz)
+>   */
+>  static bool filename__readable(const char *file)
+>  {
+> -	int fd = open(file, O_RDONLY);
+> +	int fd = TEMP_FAILURE_RETRY(open(file, O_RDONLY));
+>  	if (fd < 0)
+>  		return false;
+>  	close(fd);
+> diff --git a/tools/perf/util/synthetic-events.c b/tools/perf/util/synthetic-events.c
+> index 76beda3e1a10..9dcc268bd69c 100644
+> --- a/tools/perf/util/synthetic-events.c
+> +++ b/tools/perf/util/synthetic-events.c
+> @@ -40,6 +40,7 @@
+>  #include <api/io.h>
+>  #include <sys/types.h>
+>  #include <sys/stat.h>
+> +#include <errno.h>
+>  #include <fcntl.h>
+>  #include <unistd.h>
+>  
+> @@ -86,13 +87,13 @@ static int perf_event__get_comm_ids(pid_t pid, pid_t tid, char *comm, size_t len
+>  	else
+>  		snprintf(bf, sizeof(bf), "/proc/%d/status", tid);
+>  
+> -	fd = open(bf, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(bf, O_RDONLY));
+>  	if (fd < 0) {
+>  		pr_debug("couldn't open %s\n", bf);
+>  		return -1;
+>  	}
+>  
+> -	n = read(fd, bf, sizeof(bf) - 1);
+> +	n = TEMP_FAILURE_RETRY(read(fd, bf, sizeof(bf) - 1));
+>  	close(fd);
+>  	if (n <= 0) {
+>  		pr_warning("Couldn't get COMM, tigd and ppid for pid %d\n",
+> @@ -410,7 +411,7 @@ int perf_event__synthesize_mmap_events(struct perf_tool *tool,
+>  	snprintf(bf, sizeof(bf), "%s/proc/%d/task/%d/maps",
+>  		machine->root_dir, pid, pid);
+>  
+> -	io.fd = open(bf, O_RDONLY, 0);
+> +	io.fd = TEMP_FAILURE_RETRY(open(bf, O_RDONLY, 0));
+>  	if (io.fd < 0) {
+>  		/*
+>  		 * We raced with a task exiting - just return:
+> diff --git a/tools/perf/util/trace-event-info.c b/tools/perf/util/trace-event-info.c
+> index a65f65d0857e..c917a4217c6f 100644
+> --- a/tools/perf/util/trace-event-info.c
+> +++ b/tools/perf/util/trace-event-info.c
+> @@ -48,7 +48,7 @@ static int record_file(const char *file, ssize_t hdr_sz)
+>  	int r, fd;
+>  	int err = -EIO;
+>  
+> -	fd = open(file, O_RDONLY);
+> +	fd = TEMP_FAILURE_RETRY(open(file, O_RDONLY));
+>  	if (fd < 0) {
+>  		pr_debug("Can't read '%s'", file);
+>  		return -errno;
+> @@ -61,7 +61,7 @@ static int record_file(const char *file, ssize_t hdr_sz)
+>  	}
+>  
+>  	do {
+> -		r = read(fd, buf, BUFSIZ);
+> +		r = TEMP_FAILURE_RETRY(read(fd, buf, BUFSIZ));
+>  		if (r > 0) {
+>  			size += r;
+>  			if (write(output_fd, buf, r) != r)
+> @@ -519,7 +519,7 @@ struct tracing_data *tracing_data_get(struct list_head *pattrs,
+>  			return NULL;
+>  		}
+>  
+> -		temp_fd = open(tdata->temp_file, O_RDWR);
+> +		temp_fd = TEMP_FAILURE_RETRY(open(tdata->temp_file, O_RDWR));
+>  		if (temp_fd < 0) {
+>  			pr_debug("Can't read '%s'", tdata->temp_file);
+>  			free(tdata);
+> diff --git a/tools/perf/util/trace-event-read.c b/tools/perf/util/trace-event-read.c
+> index 8a01af783310..7086770ec225 100644
+> --- a/tools/perf/util/trace-event-read.c
+> +++ b/tools/perf/util/trace-event-read.c
+> @@ -11,6 +11,7 @@
+>  #include <sys/stat.h>
+>  #include <sys/wait.h>
+>  #include <sys/mman.h>
+> +#include <errno.h>
+>  #include <fcntl.h>
+>  #include <unistd.h>
+>  #include <errno.h>
+> @@ -28,7 +29,7 @@ static int __do_read(int fd, void *buf, int size)
+>  	int rsize = size;
+>  
+>  	while (size) {
+> -		int ret = read(fd, buf, size);
+> +		int ret = TEMP_FAILURE_RETRY(read(fd, buf, size));
+>  
+>  		if (ret <= 0)
+>  			return -1;
+> @@ -105,7 +106,7 @@ static char *read_string(void)
+>  	char c;
+>  
+>  	for (;;) {
+> -		r = read(input_fd, &c, 1);
+> +		r = TEMP_FAILURE_RETRY(read(input_fd, &c, 1));
+>  		if (r < 0) {
+>  			pr_debug("reading input file");
+>  			goto out;
+> diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
+> index 37622699c91a..2ece387a73c6 100644
+> --- a/tools/perf/util/unwind-libunwind-local.c
+> +++ b/tools/perf/util/unwind-libunwind-local.c
+> @@ -362,7 +362,7 @@ static int read_unwind_spec_debug_frame(struct dso *dso,
+>  		}
+>  
+>  		if (ofs <= 0) {
+> -			fd = open(dso->symsrc_filename, O_RDONLY);
+> +			fd = TEMP_FAILURE_RETRY(open(dso->symsrc_filename, O_RDONLY));
+>  			if (fd >= 0) {
+>  				ofs = elf_section_offset(fd, ".debug_frame");
+>  				close(fd);
+> @@ -377,7 +377,7 @@ static int read_unwind_spec_debug_frame(struct dso *dso,
+>  				dso, DSO_BINARY_TYPE__DEBUGLINK,
+>  				machine->root_dir, debuglink, PATH_MAX);
+>  			if (!ret) {
+> -				fd = open(debuglink, O_RDONLY);
+> +				fd = TEMP_FAILURE_RETRY(open(debuglink, O_RDONLY));
+>  				if (fd >= 0) {
+>  					ofs = elf_section_offset(fd,
+>  							".debug_frame");
+> diff --git a/tools/perf/util/zlib.c b/tools/perf/util/zlib.c
+> index 78d2297c1b67..f4563ea094c8 100644
+> --- a/tools/perf/util/zlib.c
+> +++ b/tools/perf/util/zlib.c
+> @@ -1,4 +1,5 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> +#include <errno.h>
+>  #include <fcntl.h>
+>  #include <stdio.h>
+>  #include <string.h>
+> @@ -82,7 +83,7 @@ int gzip_decompress_to_file(const char *input, int output_fd)
+>  
+>  bool gzip_is_compressed(const char *input)
+>  {
+> -	int fd = open(input, O_RDONLY);
+> +	int fd = TEMP_FAILURE_RETRY(open(input, O_RDONLY));
+>  	const uint8_t magic[2] = { 0x1f, 0x8b };
+>  	char buf[2] = { 0 };
+>  	ssize_t rc;
+> @@ -90,7 +91,7 @@ bool gzip_is_compressed(const char *input)
+>  	if (fd < 0)
+>  		return -1;
+>  
+> -	rc = read(fd, buf, sizeof(buf));
+> +	rc = TEMP_FAILURE_RETRY(read(fd, buf, sizeof(buf)));
+>  	close(fd);
+>  	return rc == sizeof(buf) ?
+>  	       memcmp(buf, magic, sizeof(buf)) == 0 : false;
+

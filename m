@@ -2,157 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 903CB54D325
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 22:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C461754D331
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 23:00:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350147AbiFOU6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 16:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
+        id S1347010AbiFOVAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 17:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349740AbiFOU6Z (ORCPT
+        with ESMTP id S236331AbiFOVAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 16:58:25 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D783EE01C;
-        Wed, 15 Jun 2022 13:58:23 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id w20so20719741lfa.11;
-        Wed, 15 Jun 2022 13:58:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YHkVcZcapgrq+x05D7RsWPsdaTufeMbFq41xO3naPPo=;
-        b=fw27TONpdNc68v0SIqqXR74uavoS0smeRRHwI/m7lMWREdY+KTy4GA3YFBoo9QSIqw
-         oOOuGS9VWVmUa/lj/HFdJsPsA5tDkr0fvdIGRaMJP97qw3jeE0GJ8IUKNomxEexcoENH
-         BeLnJJ95rc5BkT+NsMcqLUdxLX9Tk+FSl8xk/kqdrR4D97M8BVtpr0Kv+uSLIKWu1jRf
-         h3c0U/bA0LVsZPARWudbPkeHqcCwwg0ybAvj4Z9UwIz+wyc/6/RSpW4gIk/TgBq3Kbuf
-         TEsm2/k0DflGOVvbWMIk3FfrZqAheovTj9v0PFO0lim/CrjjmmZ/N4Y464SH6eIYayKm
-         j1zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YHkVcZcapgrq+x05D7RsWPsdaTufeMbFq41xO3naPPo=;
-        b=H7FHOmMtur0dukCxyuTI6tGrCFuESU0h/etMvXBWVRUuqanElm17SJE19rOtJ+JX58
-         E0ExxueflW0WtUtv7/ooYA8ItHA57Ljyc/oMO4rQxYJYfVioR1Po1zmlK/s1WMQxGPzb
-         nYZxZtDns/IyBmka9ytJjBLoMCqHGTuvKo7xv5m63T14seIUX3ELO3SQHS7Xh+IXusF7
-         LR0140ncW/oL9POuWKUm/2pHhD6iiQm6IZ/uVRr9Z8nGzly/q8xfPCc3EO0I+gmQh0gA
-         xre7BMT/CuVNFEvggeZ/CA25Oukz0C91hBD6WzLUmwOYvMeaLchJT+sQChEO35gYjZya
-         EQnA==
-X-Gm-Message-State: AJIora9JG51jw7pBQK/1GGFivU5KRtCIOf7bgvb79QkKaXFVfkA7TYwX
-        MbHKc7zpza62fhmGH34v3sg=
-X-Google-Smtp-Source: AGRyM1vTVX7Wn1vQHuKb0FjphhadAW3sNTj+3aQQu2P/WhWKfnU42vseAltEUbX1dYROiudbz0X9Jg==
-X-Received: by 2002:a05:6512:68e:b0:47d:ae64:fcf4 with SMTP id t14-20020a056512068e00b0047dae64fcf4mr747871lfe.685.1655326702146;
-        Wed, 15 Jun 2022 13:58:22 -0700 (PDT)
-Received: from mobilestation ([95.79.189.214])
-        by smtp.gmail.com with ESMTPSA id a11-20020a2eb16b000000b00253d4db8a92sm1743441ljm.63.2022.06.15.13.58.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jun 2022 13:58:21 -0700 (PDT)
-Date:   Wed, 15 Jun 2022 23:58:19 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 12/23] ata: libahci: Extend port-cmd flags set with
- port capabilities
-Message-ID: <20220615205819.uiqptkqm5qfdvrbj@mobilestation>
-References: <20220610081801.11854-1-Sergey.Semin@baikalelectronics.ru>
- <20220610081801.11854-13-Sergey.Semin@baikalelectronics.ru>
- <d06e9910-527e-cfa2-f2df-737fb4799fe5@opensource.wdc.com>
+        Wed, 15 Jun 2022 17:00:11 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCB0255222
+        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 14:00:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1655326810; x=1686862810;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=IRFJBh+zoP1ebZry6XfT/kFqI5RhbjM1nScJRBf3RrE=;
+  b=kErM1cVXR5WCKpBWyOirExR9Xl3qtzKzWZ2ZuG0SlGaekhrtSyGBhoIe
+   ylUzPzRdbASBg/0yajqpkrlfFI52VPe+SUoaFqp5ggsKkZ8VuQw700fDh
+   VcVyCRZl45MylPohnyrEc6jkoiGUR5byKywq5s5KHwSB4e2Ff+UML3BAO
+   txDXKEyWNFS18bEFPFUaj45HG2H2MjasCexqd7h+tE8ihfjyu69dVUi9m
+   DQnuTW3apphh3CghdE0nz+lLsOpRUhVsnCBPIJ+Aor44lAPrnDxZiuvB0
+   HH+vXQs7iyy1Fso++Te01fXJ9+TF8RJjrUb3llg6skP1dzl3TwNn97U4u
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10379"; a="279152128"
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="279152128"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 13:59:50 -0700
+X-IronPort-AV: E=Sophos;i="5.91,302,1647327600"; 
+   d="scan'208";a="612910288"
+Received: from alison-desk.jf.intel.com (HELO alison-desk) ([10.54.74.41])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2022 13:59:50 -0700
+Date:   Wed, 15 Jun 2022 13:59:33 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Martin Fernandez <martin.fernandez@eclypsium.com>
+Cc:     Daniel Gutson <daniel.gutson@eclypsium.com>,
+        Richard Hughes <hughsient@gmail.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alex Bazhaniuk <alex.bazhaniuk@eclypsium.com>
+Subject: Re: [PATCH] x86/cpuinfo: Clear X86_FEATURE_TME if TME/MKTME is
+ disabled by BIOS
+Message-ID: <20220615205933.GA1524841@alison-desk>
+References: <20220614210217.1940563-1-martin.fernandez@eclypsium.com>
+ <20220615190519.GA1524500@alison-desk>
+ <CAD2FfiGxy=9ARK5FT_iaLACZSzR+R4crmGJv7T+v_w3+ktOzCQ@mail.gmail.com>
+ <20220615195425.GA1524649@alison-desk>
+ <CAFmMkTGFpehSFOsnDuQN4aTnwfgYGwTbGBxtvUU_byDcoRVPPA@mail.gmail.com>
+ <CAKgze5aQsh2VY4tjsDco_Wc6CTU+KXZM3bhFR+73AVp3gLWHuA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <d06e9910-527e-cfa2-f2df-737fb4799fe5@opensource.wdc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKgze5aQsh2VY4tjsDco_Wc6CTU+KXZM3bhFR+73AVp3gLWHuA@mail.gmail.com>
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URI_DOTEDU autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 05:32:41PM +0900, Damien Le Moal wrote:
-> On 6/10/22 17:17, Serge Semin wrote:
-> > Currently not all of the Port-specific capabilities listed in the
+On Wed, Jun 15, 2022 at 05:48:34PM -0300, Martin Fernandez wrote:
+> On 6/15/22, Daniel Gutson <daniel.gutson@eclypsium.com> wrote:
+> > On Wed, Jun 15, 2022 at 4:54 PM Alison Schofield
+> > <alison.schofield@intel.com> wrote:
+> >>
+> >> On Wed, Jun 15, 2022 at 08:34:58PM +0100, Richard Hughes wrote:
+> >> > On Wed, 15 Jun 2022 at 20:06, Alison Schofield
+> >> > <alison.schofield@intel.com> wrote:
+> >> > > My first reaction is lying about the cpuinfo is not a soln, since
+> >> > > it creates a problem for a users currently relying on cpuinfo to be
+> >> > > the source of truth for TME.
+> >> >
+> >> > I think you have to qualify "source of truth". At the moment the CPU
+> >> > reports "Yes! I support TME!" and then for one reason or another the
+> >> > platform turns it off and actually there's no memory encryption of
+> >> > your secrets at all. There's seemingly no userspace way of telling if
+> >> > TME is actually active. We were told that we shouldn't export the
+> >> > "platform has disabled a CPU feature" in sysfs and just to clear the
+> >> > cpuid flag that gets exported (like AMD is currently doing) which is
+> >> > what Martin proposed here. Programs want to know the true CPU
+> >> > capability can do __get_cpuid_count() like they can for the SME/SEV
+> >> > capabilities.
+> >> >
+> >> Disagree on sending folks to use __get_cpuid_count() when they already
+> >> have cpuinfo.
+> >>
+> >> Why is a sysfs entry TME-enabled 0/1 a bad thing?
+> >
+> > :)))
+> > This was my very first patch, and I got half of the community complaining
+> > It was so long ago that I don't recall everything, maybe Martín does?
+> > or Richard?
 > 
-> s/listed/are listed
+> The discussion triggered the fact that checking that TME is active is
+> not enough to tell if memory is being encrypted or not (which we
+> thought it was true by that time), and that triggered a series of patches to
+> address the other checks required, which is currently going nowhere
+> [1].
 > 
-> > PORT_CMD-enumeration. Let's extend that set with the Cold Presence
-> > Detection and Mechanical Presence Switch attached to the Port flags [1] so
-> > to closeup the set of the platform-specific port-capabilities flags.  Note
-> > these flags are supposed to be set by the platform firmware if there is
-> > one. Alternatively as we are about to do they can be set by means of the
-> > OF properties.
-> > 
-> > While at it replace PORT_IRQ_DEV_ILCK with PORT_IRQ_DMPS and fix the
-> > comment there. In accordance with [2] that IRQ flag is supposed to
-> > indicate the state of the signal coming from the Mechanical Presence
-> > Switch.
-> > 
-> > [1] Serial ATA AHCI 1.3.1 Specification, p.27
-> > [2] Serial ATA AHCI 1.3.1 Specification, p.24, p.88
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Reviewed-by: Hannes Reinecke <hare@suse.de>
-> > 
-> > ---
-> > 
-> > Changelog v4:
-> > - Fix the DMPS macros name in the patch log. (@Sergei Shtylyov)
-> > ---
-> >  drivers/ata/ahci.h | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
-> > index 7d834deefeb9..f501531bd1b3 100644
-> > --- a/drivers/ata/ahci.h
-> > +++ b/drivers/ata/ahci.h
-> > @@ -138,7 +138,7 @@ enum {
-> >  	PORT_IRQ_BAD_PMP	= (1 << 23), /* incorrect port multiplier */
-> >  
-> >  	PORT_IRQ_PHYRDY		= (1 << 22), /* PhyRdy changed */
-> > -	PORT_IRQ_DEV_ILCK	= (1 << 7), /* device interlock */
-> > +	PORT_IRQ_DMPS		= (1 << 7), /* mechanical presence status */
-> >  	PORT_IRQ_CONNECT	= (1 << 6), /* port connect change status */
-> >  	PORT_IRQ_SG_DONE	= (1 << 5), /* descriptor processed */
-> >  	PORT_IRQ_UNK_FIS	= (1 << 4), /* unknown FIS rx'd */
-> > @@ -166,6 +166,8 @@ enum {
-> >  	PORT_CMD_ATAPI		= (1 << 24), /* Device is ATAPI */
-> >  	PORT_CMD_FBSCP		= (1 << 22), /* FBS Capable Port */
-> >  	PORT_CMD_ESP		= (1 << 21), /* External Sata Port */
-> > +	PORT_CMD_CPD		= (1 << 20), /* Cold Presence Detection */
-> > +	PORT_CMD_MPSP		= (1 << 19), /* Mechanical Presence Switch */
-> >  	PORT_CMD_HPCP		= (1 << 18), /* HotPlug Capable Port */
-> >  	PORT_CMD_PMP		= (1 << 17), /* PMP attached */
-> >  	PORT_CMD_LIST_ON	= (1 << 15), /* cmd list DMA engine running */
-> > @@ -181,6 +183,9 @@ enum {
-> >  	PORT_CMD_ICC_PARTIAL	= (0x2 << 28), /* Put i/f in partial state */
-> >  	PORT_CMD_ICC_SLUMBER	= (0x6 << 28), /* Put i/f in slumber state */
-> >  
-> > +	PORT_CMD_CAP		= PORT_CMD_HPCP | PORT_CMD_MPSP |
-> > +				  PORT_CMD_CPD | PORT_CMD_ESP | PORT_CMD_FBSCP,
+> The sysfs _wasn't_ discarded perse, but since Boris suggested the
+> change in cpuinfo (several times now that I recalled that Daniel patch
+> [2]) I think that is cleaner, besides the backwards compatibility.
+> 
+> [1] https://lore.kernel.org/linux-efi/20220429201717.1946178-1-martin.fernandez@eclypsium.com/
+> 
+> [2] https://lkml.iu.edu/hypermail/linux/kernel/2006.2/05231.html
 > 
 
-> What is this one for ? A comment above it would be nice.
+Martin,
+The commit message here seemed to assume that we've all been following
+along on this journey with you. Perhaps a commit message that explains
+the need and includes alternatives considered/rejected. Links are good!
+Alison
 
-Isn't it obviously inferrable from the definition and the item name?
 
--Sergey
-
-> 
-> > +
-> >  	/* PORT_FBS bits */
-> >  	PORT_FBS_DWE_OFFSET	= 16, /* FBS device with error offset */
-> >  	PORT_FBS_ADO_OFFSET	= 12, /* FBS active dev optimization offset */
-> 
-> 
-> -- 
-> Damien Le Moal
-> Western Digital Research
+> >> It can be documented
+> >> to have the same meaning as the log message.
+> >>
+> >> You keep referring to AMD. How is their exception documented?
+> >>
+> >> Alison
+> >>
+> >> > > Are we to tell them to go look in the
+> >> > > log now, because fwupd folks didn't want to ;)
+> >> >
+> >> > We're not telling anyone to use the log; grepping megabytes of
+> >> > unformatted kernel logs is a terrible (and slow) way to get one
+> >> > boolean value.
+> >> >
+> >> > Richard.
+> >

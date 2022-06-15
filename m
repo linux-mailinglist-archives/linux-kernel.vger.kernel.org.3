@@ -2,66 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B1E54C8CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BCAB54C8CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 14:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348060AbiFOMoJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 08:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
+        id S1348836AbiFOMoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 08:44:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348482AbiFOMoH (ORCPT
+        with ESMTP id S1348482AbiFOMoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 08:44:07 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07E93D492;
-        Wed, 15 Jun 2022 05:44:05 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id cn20so3544405edb.6;
-        Wed, 15 Jun 2022 05:44:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=R+RSNrE+veMSA+ePZlMwQAwMEyJDpDolrSZr72aOZFM=;
-        b=Zxhv82eURtXpHqgEW/OY2RIytXiBNvDtS22ktrAupK1xZ6PTsoxfSVboBB77Adz/Ym
-         svpO9WiPKmjvCg6E0DuLA/ICoIiBfnbeVbmax3EKTZTZ6E/vq7nJJUlQzKdAzH1ao63H
-         87ZR8hKBK2Zjk+/qMl7MgeuGSMb4ko8iBPqhYXzg1538cWUx0Vk+WgZmJLY/SqZ/vwco
-         /1d4ehisCAkgU57Qe1lPE1PgO3qMf6rPBl8p0AXvnOtQo6qd+6liYbFPEqstXXRjtrDk
-         w4OvkjMeuffrzeIdDBVLaJKfsqm+zYzJgW+OFz1hLvpxM+Gbv+ZlWQUBoYcSrABFuSHK
-         4STQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=R+RSNrE+veMSA+ePZlMwQAwMEyJDpDolrSZr72aOZFM=;
-        b=TKfDYUOZHOOVbc9zrUk7nwTgYG4+OSDuWQ0IYkjR9M43OsXXN/CRIPASn8MddN5xMz
-         +vZSxbOeTyd/VL4tYd476srSmO4A1Qj+WrH+VUbZc73qnR3YiBNc2HRSHKNd6sHa1SeQ
-         LBlUQyl0Cukya2VxRybwhebvA/Eq+qGC1cqeffGDqUZqNOclyzkxqQazLYqi6vRLWYXV
-         cKKlKa/I08MIykEv+H852NIiYeOM/hHDXTrmfzqISyVl7CgyQp7tlsrAjK6H13SJv0m2
-         S2UdPBSAw/IZnWLjJZsO0C749CyQVTNhqprMMEblvtb9HLt7P5miF+rPrQsWMEw3QMrD
-         HsCw==
-X-Gm-Message-State: AOAM531PBE1sVwNWuD95PMY4CG1VLJzIJk3qSNE66tMUvn/5Mh1l1kBW
-        WWyIXprN792xEXxOJQZ3OGBIxmiQ7CbgI87ij6I8ABy6rCgjwQ==
-X-Google-Smtp-Source: ABdhPJySOjKcWJFtK1r5qjaUa502RBxjj3CYN6y284bAlAp/TNyj9TCsqjTJjPXP8eqiWFEzZx/0jaRHcjt3rERGq/E=
-X-Received: by 2002:aa7:d481:0:b0:42d:d5fd:f963 with SMTP id
- b1-20020aa7d481000000b0042dd5fdf963mr12497438edr.209.1655297044080; Wed, 15
- Jun 2022 05:44:04 -0700 (PDT)
+        Wed, 15 Jun 2022 08:44:16 -0400
+Received: from m15113.mail.126.com (m15113.mail.126.com [220.181.15.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ECB0E3A181;
+        Wed, 15 Jun 2022 05:44:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=eZeXQ
+        LI0Qb9U+a8CP0CcBum5Wq7iRv3hWHUItekcgbM=; b=NU5wJtOPhFlFxXuCu6c2W
+        yZKYSv3repoQQPCo/npAdRpUfNFCSKjPuKsGjY2mjWIi9fTebn21pb9rKj5Nbhvl
+        xVy72B/SrHvVXG/10MQ9mkEEq7YEbBwNhxTOZM138pvsRn+Xu9OERLFRgWp6+2Sm
+        ELwfEZOPezc0QfwuLx1p58=
+Received: from localhost.localdomain (unknown [124.16.139.61])
+        by smtp3 (Coremail) with SMTP id DcmowADXb5EU1KliUUGKDQ--.43652S2;
+        Wed, 15 Jun 2022 20:44:04 +0800 (CST)
+From:   Liang He <windhl@126.com>
+To:     tsbogend@alpha.franken.de
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        windhl@126.com
+Subject: [PATCH] arch: mips: pic32: pic32mzda: Add missing of_node_put() in time.c
+Date:   Wed, 15 Jun 2022 20:44:02 +0800
+Message-Id: <20220615124402.3966099-1-windhl@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <cover.1654118389.git.william.gray@linaro.org> <a2dca9435f7f1f727c696a1faa0ab9e27927f9f3.1654118389.git.william.gray@linaro.org>
- <CAHp75VepZ8P_cqnN8qJ_Wb=xM0LW3y-a22tv1otDReFSqRDFYA@mail.gmail.com>
- <YqnIygHDSUbV5yws@fedora> <CAHp75Vcojz1d8uGcR5CMeSFcBDCxqzDbncU2Mp-LT4iDqw_+Pw@mail.gmail.com>
- <YqnOUlE1nEnCC44B@fedora>
-In-Reply-To: <YqnOUlE1nEnCC44B@fedora>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 15 Jun 2022 14:43:27 +0200
-Message-ID: <CAHp75Vd91GMGUJurGKi2Ve_GM13uLpQFaeYG8Q48yFA6Aq2_ow@mail.gmail.com>
-Subject: Re: [PATCH 1/2] iio: adc: stx104: Implement and utilize register structures
-To:     William Breathitt Gray <william.gray@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcmowADXb5EU1KliUUGKDQ--.43652S2
+X-Coremail-Antispam: 1Uf129KBjvdXoWrKFW3GryrZw4rGw4UXw4xJFb_yoW3JFb_Kr
+        n7Za1UZr43XFn8CrWI9w13J345Zw15Wr1S9rs2qF17Ar1Yy3sxWF4DJa4vkw129ayjyrW3
+        KrZxZryrAwsFyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_YFAtUUUUU==
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: hzlqvxbo6rjloofrz/xtbBGgUhF1-HZTacLQAAsT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,43 +51,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 15, 2022 at 2:19 PM William Breathitt Gray
-<william.gray@linaro.org> wrote:
-> On Wed, Jun 15, 2022 at 02:00:26PM +0200, Andy Shevchenko wrote:
-> > On Wed, Jun 15, 2022 at 1:55 PM William Breathitt Gray
-> > <william.gray@linaro.org> wrote:
-> > > On Wed, Jun 15, 2022 at 11:44:54AM +0200, Andy Shevchenko wrote:
-> > > > On Mon, Jun 6, 2022 at 4:27 PM William Breathitt Gray
-> > > > <william.gray@linaro.org> wrote:
-> > > > >
-> > > > > Reduce magic numbers and improve code readability by implementing and
-> > > > > utilizing named register data structures.
-> > > >
-> > > > Can we consider using regmap APIs instead?
-> >
-> > > The regmap API may be more appropriate here. I'll investigate and see if
-> > > I can convert this over to it.
-> >
-> > I just realized that this driver is for the old PC104 (like?) hardware
-> > that most likely uses IO ports, I don't remember if we have support
-> > for IO ports in regmap (MMIO -- yes for sure).
+In pic32_xlate_core_timer_irq(), of_find_matching_node() will return
+a node pointer with refcount incremented. We should use of_node_put()
+when it is not used anymore.
 
-> Hmm, I don't see IO ports mentioned in include/linux/regmap.h, so I
-> don't think the regmap API directly supports it (maybe someone familiar
-> with regmap knows). Although we do get a virtual mapping cookie via
-> ioport_map() in this driver, I don't know if we can pass that to the
-> regmap functions and have it actually work.
+Signed-off-by: Liang He <windhl@126.com>
+---
+ arch/mips/pic32/pic32mzda/time.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-The problem is with accessors which are inconsistent in regmap MMIO
-implementation. I think it should be converted to use
-ioreadXX()/iowriteXX() in all cases (currently only BE cases use
-them). Another variant is to provide read*_be() / write*_be() for all
-architectures, replace corresponding ops in regmap MMIO and introduce
-regmap IO with inX()/outX. The former seems to me the best option,
-while the latter is cleaner.
-
-+Cc: Mark if he knows more about this.
-
+diff --git a/arch/mips/pic32/pic32mzda/time.c b/arch/mips/pic32/pic32mzda/time.c
+index 7174e9abbb1b..c5b5343ca03c 100644
+--- a/arch/mips/pic32/pic32mzda/time.c
++++ b/arch/mips/pic32/pic32mzda/time.c
+@@ -32,6 +32,9 @@ static unsigned int pic32_xlate_core_timer_irq(void)
+ 		goto default_map;
+ 
+ 	irq = irq_of_parse_and_map(node, 0);
++	
++	of_node_put(node);
++	
+ 	if (!irq)
+ 		goto default_map;
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.25.1
+

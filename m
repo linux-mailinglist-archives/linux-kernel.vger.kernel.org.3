@@ -2,98 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C24F54C442
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D9B54C443
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 11:06:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238908AbiFOJGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 05:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45864 "EHLO
+        id S243932AbiFOJGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 05:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233761AbiFOJGo (ORCPT
+        with ESMTP id S235935AbiFOJGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 15 Jun 2022 05:06:44 -0400
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA563A1BA;
+Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026A83A739;
+        Wed, 15 Jun 2022 02:06:44 -0700 (PDT)
+Received: by mail-pj1-x1043.google.com with SMTP id v11-20020a17090a4ecb00b001e2c5b837ccso1493358pjl.3;
         Wed, 15 Jun 2022 02:06:43 -0700 (PDT)
-Received: by mail-qk1-f178.google.com with SMTP id d128so8259579qkg.8;
-        Wed, 15 Jun 2022 02:06:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CXhk1iX0j0cRqg2v0/nsYGsi9fNJeaTXvM2J8kFqgnw=;
+        b=WO8UeaeHx+RhZcSEPzoaksikiXQ9T7WphV+R1vGRRs3nlkWoc5v4wulx/FNc8t3pP8
+         XuTkj6FgHuPaVqR6MoGRmTHN4s/l+VvZoZlBT/Mz+48tkA3cQ4FmhGsaLTSlfakAu9Pt
+         7nAI8YlZEFr6szqo8htQ9ckwMilAH4klEhKLCt414X1vDZgbSylJOEgHbvE75CCrpZuQ
+         KnHhLNHyYf4tWFYIvtdU/IHuTz/DfACAAdBTUqZTHnG+36pEmTprmzjmoW6RCvab0keB
+         R/Zndm5RoqphpRT9MLeykyYaW28D4AZIHqqxg6iv47N9UDo7qyBSBXMMO6hZi29RVqHy
+         t9/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=O9DSawQVbU2xPshFF9LAgHn6cTfBWg4lJqDboKl63Hg=;
-        b=oxqXk1GPotv4YU4ONPmbtUoj3arBsFCU6pwpeZOcM4t43ARLZhv+hyPkZeJApQCjlh
-         vkxlG3GQj/a/WhWPMf92sPpMxin5CtIZ2sV5M0T7TBw5kakL8qNZlEIVurzkmyRDsboi
-         9JCqMSy6yEMxq3MuuPwqgwNDdjzTm6WAKJYwGHrXJWzhhR2tPfRSBAMOWWvjYYj1O50q
-         NKestzrZpfv+O8Irfi1a+FJarpVMwtursyFBffZbwNrhDQnMnPplcFpzeLH58W5eiTSL
-         LHqneS4awccgqn9eyiQGK2ETvrNpAx5QfQdwOLj0TiRWswbb+TDNLY556Vm8Z3iA7bCJ
-         O3jw==
-X-Gm-Message-State: AOAM531iNRLFNoaT2syP8mSHX7OgpT5kSXPDPRs37fE9Y8YglVKyRqp0
-        M2WTKek+1jmfrtn67KI52/u86xi/VJ0uMA==
-X-Google-Smtp-Source: ABdhPJzARmoMsvzNGtBILu67fu7FgK8+hvxemVQRuhqjVg/UAEqojxgNKy0AkUS1zhV/ikrNHtb1yQ==
-X-Received: by 2002:a05:620a:1324:b0:6a6:bc8e:e3cb with SMTP id p4-20020a05620a132400b006a6bc8ee3cbmr7500121qkj.130.1655284002612;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CXhk1iX0j0cRqg2v0/nsYGsi9fNJeaTXvM2J8kFqgnw=;
+        b=l+ExGAU0Q51pb51dP1mxqQyctfduPHEJ87h4jzwPwisEdASOvWAKlCO7NP/Bes50Xl
+         vUOt8f7xgbgI0qnqKEIzI3TKY73WTWnTLedcLKrSxrphNuVgqjHXMnzGCze+eC/hZDfX
+         axnXrUZ5OUnOVYoc6xczl/xvnXjtdywyM1c2oezNRFmzuFJJYHj8EzAPjLegyF19iEPq
+         omSbXLbZJNfXUzzX8qtiNalitY1FAgeF1sFmSuaUZfr1lmPa/eN28jI6ColRq778Pvl3
+         eewe9eXcQsxQhmaiHBiwfJcCaoTEGKlUtNvCoRjuwqzgnniu6BhPDAoFeIdcI8lS+2IJ
+         B41g==
+X-Gm-Message-State: AJIora9VVZtXFGgEWIRjHprpl7w4Nt78htWCoO1keueSzKAY6pU1rfMA
+        7OX7LHueCz+YCSrTXf9DEdE=
+X-Google-Smtp-Source: AGRyM1sU0k3W0fNgy4AXqClk96xssdjDtPCRN9ULmCaXODsIJrzLySWTaMsU/e4EIMNIu1dSxiNjVQ==
+X-Received: by 2002:a17:902:f64c:b0:156:7ceb:b579 with SMTP id m12-20020a170902f64c00b001567cebb579mr8327611plg.73.1655284003404;
+        Wed, 15 Jun 2022 02:06:43 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.111])
+        by smtp.gmail.com with ESMTPSA id p10-20020a62b80a000000b0050dc76281aasm9227748pfe.132.2022.06.15.02.06.41
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
         Wed, 15 Jun 2022 02:06:42 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id s22-20020a05620a0bd600b006a73ad95d40sm11984019qki.55.2022.06.15.02.06.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jun 2022 02:06:42 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-30fa61b1a83so55137797b3.0;
-        Wed, 15 Jun 2022 02:06:41 -0700 (PDT)
-X-Received: by 2002:a81:6c46:0:b0:315:bb1:6a21 with SMTP id
- h67-20020a816c46000000b003150bb16a21mr5651903ywc.283.1655284001657; Wed, 15
- Jun 2022 02:06:41 -0700 (PDT)
+From:   korantwork@gmail.com
+To:     dave.hansen@linux.intel.com, tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        trivial@kernel.org, Xinghui Li <korantli@tencent.com>
+Subject: [PATCH] x86,iommu:cleanup misleading comment about SWIOTLB turned off by IOMMU
+Date:   Wed, 15 Jun 2022 17:06:39 +0800
+Message-Id: <20220615090639.34402-1-korantwork@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220613131033.10053-1-wsa+renesas@sang-engineering.com> <20220613131033.10053-2-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220613131033.10053-2-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 15 Jun 2022 11:06:30 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX-56GZmZJ-JvkFvZ6NsozsamtoKURPzsS-3+AYtZBhFQ@mail.gmail.com>
-Message-ID: <CAMuHMdX-56GZmZJ-JvkFvZ6NsozsamtoKURPzsS-3+AYtZBhFQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: renesas: spider-cpu: Switch from SCIF3 to HSCIF0
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+From: Xinghui Li <korantli@tencent.com>
 
-Thanks for your patch!
+According to commit 327d5b2fee91 ("iommu/vt-d: Allow 32bit devices to
+uses DMA domain"), SWIOTLB could be enable even IOMMU exist.This comment
+could mislead developer that there is an error enabling SWIOTLB when
+they enable IOMMU.
 
-On Mon, Jun 13, 2022 at 3:10 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> Every loader before Linux utilizes HSCIF0 with a speed of 1843200bps.
-> Make Linux behave the same.
+Signed-off-by: Xinghui Li <korantli@tencent.com>
+---
+ arch/x86/kernel/pci-dma.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Is that true for all boards? Was there a firmware flag day?
-I.e. the U-Boot on the Spider in Magnus' lab has "baudrate=115200"
-in its environment, while I can read the output from ICUMXA Loader
-to U-Boot, and Linux just fine.
+diff --git a/arch/x86/kernel/pci-dma.c b/arch/x86/kernel/pci-dma.c
+index 30bbe4abb5d6..c0434abf7e09 100644
+--- a/arch/x86/kernel/pci-dma.c
++++ b/arch/x86/kernel/pci-dma.c
+@@ -193,7 +193,6 @@ static int __init pci_iommu_init(void)
+ 	x86_init.iommu.iommu_init();
+ 
+ #ifdef CONFIG_SWIOTLB
+-	/* An IOMMU turned us off. */
+ 	if (x86_swiotlb_enable) {
+ 		pr_info("PCI-DMA: Using software bounce buffering for IO (SWIOTLB)\n");
+ 		swiotlb_print_info();
+-- 
+2.25.1
 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

@@ -2,105 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D899E54D015
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1402B54D019
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Jun 2022 19:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356745AbiFORgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 15 Jun 2022 13:36:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S1347344AbiFORhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 15 Jun 2022 13:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241015AbiFORgD (ORCPT
+        with ESMTP id S244148AbiFORh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 15 Jun 2022 13:36:03 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947CF140D4
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:36:02 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id u37so3646645pfg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 15 Jun 2022 10:36:02 -0700 (PDT)
+        Wed, 15 Jun 2022 13:37:28 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710E24DF4E;
+        Wed, 15 Jun 2022 10:37:26 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id k7so1645717plg.7;
+        Wed, 15 Jun 2022 10:37:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Mi2I/nBbKUPGwcrimfjZmC5H+6RsJZl43u1D1xw78cY=;
-        b=B66OjH+4Usdm01B88GgTuR/lmUJB0yO00pSelOSh083ZtTXiu1AwQJlTqrIt7iN1o1
-         evsW15/3cKi/CZagQcCEfKXGJumsp1BU+poSvnEn7cudXQmxzKTD3QENL2y2T4976O9j
-         i0ZLhJ0ft2FkpnSj8IzCFrei8kQ9eKB5iSDLexX8j0vcevavvFerz2T3/3rwtxxgqMBm
-         rkj0Kj/vJ19f74xZFOAOJbeuBbmrJmGttzXqv6tyI0TprHd5JAFNP8rbnM7OdJ8RJEQ4
-         EeeHy39WCK+4xcmilNUWY3DRCFHBOtHPpU9yidhLR60eOltc3A8qXrlixHcMO4Mryy3L
-         RGRA==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AKaM03SJ597JVB1Pipkp8OU8PC118YiuD4mRMUlG+Bs=;
+        b=M/wpLHqdGUntdkNI6lOBiMNdFJGbEL4/0TkRYCDaumdmjwtxucbWiIqMspOVhJYGCY
+         xFNbZjff/47wKSedl/Ubf3lwnEUbXQ8uIV3xXLkYpUYwEfPL1oJdVzbKiWVqhz8uXn3U
+         585TQR53Gi1qb/z4BEWsYmV64gBvQ1a32VGCL5cGzsCEuGeURvaWTycYeLq6UFgOkbdn
+         8APFRokl1mblswXloleVQ7sV9FIDhnti+IJVwU0mTxk/AomhMd2rzsCJwDAsEMTUPx21
+         PWyvETdjF+jM5jH0m+aMkBXmjG38s1MkcUj4lhRsF6m/tHHz29FeCV8n2blV8BBex+oZ
+         aKGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Mi2I/nBbKUPGwcrimfjZmC5H+6RsJZl43u1D1xw78cY=;
-        b=MolDZc0fcOWytPj12uhrWIUYhT6h5XyXfSw5fcwolj3p8XfRBgx4hVKwQC3yNzspfL
-         aC60MAcoiuvi6VsO9wRhAz+gNOjIEGKN8CgcMq/JyZ1PRYqEQ0xzY9A5R4c1GlWJF8q/
-         JyO2xsMEuyhfzQOKg2FIreju3S1d/X//H5ii2QINoIQD0yEmRhkgPdyzuLxxEdqUhP3g
-         KAunEU7NloEo328GGfeO5C7FnYaTQaMRglOLEAeAD/vc5zeqb6kr9iX210SG4z2efXre
-         3WjI3sgmIfu9wt46UCfxyeKx6UganJvfTfej54P9rbRhm9VvRoCkli6FMWR/ezKsf65v
-         wnrA==
-X-Gm-Message-State: AJIora+eMpUOsObSigsecPI+fvhDZO6WbHy/bqSiJqb9NdbMcoFlbFR1
-        NMJXST7XN+rms0f2Ad4qKmFtW6LwsyJQ7D6No9s=
-X-Google-Smtp-Source: AGRyM1t1JjCHUP3dw4DmAlpOPQwoeQrKrh+19gynjKHWa0zTJBXh1GqCw/KHHovV3kRQib8Hapf/cxIRD+zNC/JSCDw=
-X-Received: by 2002:a05:6a00:2291:b0:51b:e4c5:627 with SMTP id
- f17-20020a056a00229100b0051be4c50627mr603454pfe.20.1655314562174; Wed, 15 Jun
- 2022 10:36:02 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AKaM03SJ597JVB1Pipkp8OU8PC118YiuD4mRMUlG+Bs=;
+        b=HePw7mhyUjEEqtHwDqkTns1F17nryAEQ/BMWheJnKfWC/agVbOaZUYYD7Yul+AMdBm
+         RH4Y/DwYGUiUiAa1ON3tn7UgkwhvJpBpQs+x3Cx+DWfIOJkDg8B2Dp3e/Bozoz7IJB+2
+         oFzZjnutKc3kfsFaxHAm4Osr8qG1ANxkyr7KNZCZuK8BwDOWY+y52rMrY6puhVr5Ay/y
+         UyI/g/e0LKmOxXMUPMz87TKlBZw5PBx/2sa+1SviVWDqp8eA98T1QEc2Iwj5cG8fJdws
+         iHp0HSRiTTJQXpGnxXsab1QDOPr1hvZ91pXs4c/EYc5p12cCqKnJOxHGIH8MJGRqgeW8
+         IQqg==
+X-Gm-Message-State: AJIora8vLdCPxO2dWUGkA/NKy4nftDMnUNKGgJ/L8a3ra5D9LV9uLdBz
+        ZPbC8vaHv2P7HtuhPepX1q6jVjHN3i4=
+X-Google-Smtp-Source: AGRyM1viQDtcrHegAll7Rzja0dhemTAUjiE72iEwyGxIP9Cq0FS+Xzh6g9pbqr9iY/9E3Zf0veBqzg==
+X-Received: by 2002:a17:903:2281:b0:167:56a9:935c with SMTP id b1-20020a170903228100b0016756a9935cmr727364plh.27.1655314645911;
+        Wed, 15 Jun 2022 10:37:25 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id jj18-20020a170903049200b001634d581adfsm9538863plb.157.2022.06.15.10.37.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jun 2022 10:37:25 -0700 (PDT)
+Message-ID: <ed476cf9-d7a7-d312-4574-ee41a86fab7b@gmail.com>
+Date:   Wed, 15 Jun 2022 10:37:24 -0700
 MIME-Version: 1.0
-References: <20220611084731.55155-1-linmiaohe@huawei.com> <20220611084731.55155-2-linmiaohe@huawei.com>
-In-Reply-To: <20220611084731.55155-2-linmiaohe@huawei.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 15 Jun 2022 10:35:49 -0700
-Message-ID: <CAHbLzkpNKcaa54=2kTBWfzB1VoagkncZV0XEef22tHpfT0fTHw@mail.gmail.com>
-Subject: Re: [PATCH 1/7] mm/khugepaged: remove unneeded shmem_huge_enabled() check
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Howells <dhowells@redhat.com>, NeilBrown <neilb@suse.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Peter Xu <peterx@redhat.com>, Linux MM <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH 1/3] dt-bindings: arm64: Add BCM6813 SoC
+Content-Language: en-US
+To:     William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     anand.gore@broadcom.com, f.fainelli@gmail.com,
+        dan.beygelman@broadcom.com, joel.peshkin@broadcom.com,
+        samyon.furman@broadcom.com,
+        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
+        kursad.oney@broadcom.com, philippe.reynes@softathome.com,
+        tomer.yacoby@broadcom.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220610001534.14275-1-william.zhang@broadcom.com>
+ <20220610001534.14275-2-william.zhang@broadcom.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220610001534.14275-2-william.zhang@broadcom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 11, 2022 at 1:47 AM Miaohe Lin <linmiaohe@huawei.com> wrote:
->
-> If we reach here, hugepage_vma_check() has already made sure that hugepage
-> is enabled for shmem. Remove this duplicated check.
->
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+On 6/9/22 17:15, William Zhang wrote:
+> Add BCM6813 SoC device tree description to bcmbca binding document.
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
 
-Reviewed-by: Yang Shi <shy828301@gmail.com>
-
-> ---
->  mm/khugepaged.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 476d79360101..73570dfffcec 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -2153,8 +2153,6 @@ static unsigned int khugepaged_scan_mm_slot(unsigned int pages,
->                 if (khugepaged_scan.address < hstart)
->                         khugepaged_scan.address = hstart;
->                 VM_BUG_ON(khugepaged_scan.address & ~HPAGE_PMD_MASK);
-> -               if (shmem_file(vma->vm_file) && !shmem_huge_enabled(vma))
-> -                       goto skip;
->
->                 while (khugepaged_scan.address < hend) {
->                         int ret;
-> --
-> 2.23.0
->
->
+Rob, Krzysztof, can I get an Ack from you so I can go ahead and apply 
+this series? Thanks!
+-- 
+Florian
